@@ -1,0 +1,229 @@
+{
+  "schema": "agi-alpha-cycle005-published-download-verification/v1",
+  "status": "PASS_PUBLISHED_ASSET_IN_SCOPE",
+  "asset_metadata": {
+    "release_id": 428461852,
+    "tag": "mechanism-completion-20261029-r1",
+    "target_commitish": "bef0b697206699330a158f1430fe3b3ca58c6d97",
+    "published_at": "2026-10-29T22:33:27Z",
+    "html_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/mechanism-completion-20261029-r1",
+    "immutable": false,
+    "assets": [
+      {
+        "id": 690116970,
+        "name": "AGI_ALPHA_Mechanism_Completion_005_source_evidence.zip",
+        "digest": "sha256:9e80e3708f430b0a5ac18c8580eb2320febb213cbda63cc7eaa00be81b78e95d",
+        "size": 5858230,
+        "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/download/mechanism-completion-20261029-r1/AGI_ALPHA_Mechanism_Completion_005_source_evidence.zip"
+      },
+      {
+        "id": 690116973,
+        "name": "ARCHIVE_QUALIFICATION.json",
+        "digest": "sha256:831436ae94191dd00c4bb4e75c8c0e9af4360297e65cd4bc160950595d667626",
+        "size": 1769,
+        "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/download/mechanism-completion-20261029-r1/ARCHIVE_QUALIFICATION.json"
+      },
+      {
+        "id": 690116971,
+        "name": "SHA256SUMS.txt",
+        "digest": "sha256:f7e00529548c4a5177743af4b2a15d46f9af90d1680c6072c87cf8e859e76942",
+        "size": 214,
+        "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/download/mechanism-completion-20261029-r1/SHA256SUMS.txt"
+      }
+    ]
+  },
+  "archive_path": "/tmp/alpha005-actual-published.zip",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "expected_github_digest": "sha256:9e80e3708f430b0a5ac18c8580eb2320febb213cbda63cc7eaa00be81b78e95d",
+  "source_freeze_sha256": "6606628dcd020dc735219186ba678ec0f4bb3d906ff689f5b896966406af4b40",
+  "checks": {
+    "independent_manifest": {
+      "passed": true,
+      "files": 5289
+    },
+    "trusted_fifty_builder_sources": {
+      "passed": true,
+      "files": 50
+    },
+    "no_git_or_ancestor_history": {
+      "passed": true,
+      "checked_ancestors": [
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/source",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c",
+        "/tmp",
+        "/"
+      ]
+    },
+    "owner_39_phase_sources_and_v2_pins": {
+      "passed": true,
+      "phase_files": 39,
+      "v2_files": 2,
+      "runtime_v2_sha256": "59ecf3024b4d7344d2297ed6b3fcdec3a8b04d7f883a9c9d50d5f14203538951",
+      "broad_certifier_sha256": "83391efeb99982c276e8662ead9d706be0c7ce02f8f0281c4e072d012ffe5b4d"
+    },
+    "extracted-module-origin": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-c",
+        "import pathlib,flywheel,mechanisms;r=pathlib.Path.cwd().resolve();assert pathlib.Path(flywheel.__file__).resolve().is_relative_to(r);assert pathlib.Path(mechanisms.__file__).resolve().is_relative_to(r);print(flywheel.__file__);print(mechanisms.__file__)"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.06471372999658342,
+      "log": "extracted-module-origin.log",
+      "log_sha256": "0d302f9a1ad9924ffa75ec13ff54f22ee8a736329fab2acee603e913c79cfc27",
+      "passed": true
+    },
+    "unit": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "returncode": 0,
+      "wall_seconds": 10.483074226001918,
+      "log": "unit.log",
+      "log_sha256": "ec7f90b3750af3bfe2270dc2eb34fece5c7979640a74e85d34635890308db6ff",
+      "passed": true
+    },
+    "verifier": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "verification",
+        "-v"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.21557910500268918,
+      "log": "verifier.log",
+      "log_sha256": "f5fe37ebc4574a231584d7c98eea7fb607c621e6f867e47360b054ca96afb283",
+      "passed": true
+    },
+    "documented-completion": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-I",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/source/run_completion.py",
+        "--output",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/documented-completion"
+      ],
+      "returncode": 0,
+      "wall_seconds": 43.58409830000164,
+      "log": "documented-completion.log",
+      "log_sha256": "cacf97f4a1d880ed6e53cb304a701c54409b784d75b1dea87f39c722e7d42340",
+      "passed": true
+    },
+    "P1-original-and-repaired": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/source/verification/cycle005_p1_regression.py",
+        "--root",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/source",
+        "--output",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/P1-regression"
+      ],
+      "returncode": 0,
+      "wall_seconds": 1.524390503000177,
+      "log": "P1-original-and-repaired.log",
+      "log_sha256": "1481727c6829848906c668a9fae4c4418e81ed2a550ac7d26d57df4affc232ca",
+      "passed": true
+    },
+    "original-edition-materialization": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-I",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/source/flywheel/legacy.py",
+        "--root",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/source",
+        "--output",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/edition001"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.21487330200034194,
+      "log": "original-edition-materialization.log",
+      "log_sha256": "b66472c78ea23f36c5723a949243e6c87986b3e37d0d88c8e8c855c0214a5c59",
+      "passed": true
+    },
+    "original-edition-check": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-I",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/edition001/verification/check_edition.py"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.06458327700238442,
+      "log": "original-edition-check.log",
+      "log_sha256": "e33c45606db778f9aad33e032b1140a285706ebb0d19d9566b1088f5c7156a1d",
+      "passed": true
+    },
+    "original-edition-replay": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-I",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/edition001/reproduce.py",
+        "--output",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/edition001-replay"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.6175441490049707,
+      "log": "original-edition-replay.log",
+      "log_sha256": "9338013ff86d7e28bdcf62dc72472317fa3f0c5263f65d528298bdeaa024367f",
+      "passed": true
+    },
+    "old22-materialization": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-I",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/source/flywheel/archive_v2.py",
+        "cycle004",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/source",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/edition004"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.11463930400350364,
+      "log": "old22-materialization.log",
+      "log_sha256": "3ac688acb55c1840af4651e10861067e07ebaf6deb07cea5f05119ca9617d910",
+      "passed": true
+    },
+    "old22-replay": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-I",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/edition004/run_cycle.py",
+        "--output",
+        "/tmp/agi-alpha-public-download-005-zxgo0d5c/edition004-replay"
+      ],
+      "returncode": 0,
+      "wall_seconds": 6.582476213996415,
+      "log": "old22-replay.log",
+      "log_sha256": "6acd13d675589443fe1096be9834f3a99c17b23fb313b30041c0b335cbe5e909",
+      "passed": true
+    },
+    "old_twentytwo_identity": {
+      "passed": true,
+      "files": 22
+    },
+    "all_original_payloads_unchanged_after_execution": {
+      "passed": true,
+      "files": 5289
+    }
+  },
+  "actual_archive_sha256": "9e80e3708f430b0a5ac18c8580eb2320febb213cbda63cc7eaa00be81b78e95d",
+  "archive_bytes": 5858230,
+  "isolated_stage": "/tmp/agi-alpha-public-download-005-zxgo0d5c",
+  "phase_replay_scope": "Not repeated here; exact 39 owner files and v2 pins verified. Source-matched clean-release CI runs the full owner replay separately.",
+  "passed": true,
+  "wall_seconds": 64.49232895900059,
+  "verifier_source_sha256": "feefd2e2d83db0990c2a369bcb4f7d9bbf2ff3589677178e04d3d35477143ca9",
+  "limits": [
+    "Exact downloaded asset, installed Python/dependencies and tested Linux host only.",
+    "No fresh scientific, economic or commercial claim; all source-case exposures preserved."
+  ]
+}
