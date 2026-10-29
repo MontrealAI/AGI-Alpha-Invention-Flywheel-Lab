@@ -4,7 +4,6 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
-import subprocess
 
 BASE = "c487e4741aa9d6f1a0928bc73d399d8a247b62e4"
 MANIFEST = "campaign/cycle-001/CLOSURE.json"
@@ -32,10 +31,12 @@ def _read(root, name, expected):
     if hashlib.sha256(raw).hexdigest() == expected:
         return raw, "current-tree"
     if name == ".github/workflows/campaign.yml":
-        found = subprocess.run(["git", "-C", str(root), "show", BASE + ":" + name],
-                               capture_output=True, timeout=10, check=False)
-        if found.returncode == 0 and hashlib.sha256(found.stdout).hexdigest() == expected:
-            return found.stdout, "frozen-git-object/" + BASE
+        historical = _safe(root, "historical/cycle-001/campaign-workflow.yml.txt")
+        if not historical.is_file():
+            raise ValueError("LEGACY_HISTORICAL_INPUT_MISSING " + name)
+        retained = historical.read_bytes()
+        if hashlib.sha256(retained).hexdigest() == expected:
+            return retained, "bundled-historical-snapshot/" + BASE
     raise ValueError("LEGACY_IDENTITY_MISMATCH " + name)
 
 

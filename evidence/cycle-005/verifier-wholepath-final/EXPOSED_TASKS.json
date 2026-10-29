@@ -1,0 +1,428 @@
+{
+  "development": {
+    "id": "verifier-005-target-90",
+    "phases": [
+      {
+        "id": "v90-f6d0a818",
+        "kind": "reserve",
+        "unit": "event",
+        "deps": []
+      },
+      {
+        "id": "v90-5c2e2c7d",
+        "kind": "capture",
+        "unit": "event",
+        "deps": [
+          "v90-f6d0a818"
+        ]
+      },
+      {
+        "id": "v90-11379e76",
+        "kind": "compute",
+        "unit": "event",
+        "deps": [
+          "v90-5c2e2c7d"
+        ]
+      },
+      {
+        "id": "v90-bb496cc1",
+        "kind": "commit",
+        "unit": "event",
+        "deps": [
+          "v90-11379e76",
+          "v90-f6d0a818"
+        ]
+      }
+    ],
+    "conditions": {
+      "failure": "catchable_exception",
+      "effects": "exclusive_local_output"
+    }
+  },
+  "donors": [
+    {
+      "id": "independent-supplied-transaction-fragment",
+      "nodes": [
+        {
+          "id": "custody",
+          "kind": "reserve",
+          "unit": "event"
+        },
+        {
+          "id": "first_mutation",
+          "kind": "capture",
+          "unit": "event"
+        },
+        {
+          "id": "productive_action",
+          "kind": "compute",
+          "unit": "event"
+        },
+        {
+          "id": "terminal_publication",
+          "kind": "commit",
+          "unit": "event"
+        }
+      ],
+      "relations": [
+        [
+          "custody",
+          "precedes",
+          "first_mutation"
+        ],
+        [
+          "first_mutation",
+          "precedes",
+          "productive_action"
+        ],
+        [
+          "productive_action",
+          "precedes",
+          "terminal_publication"
+        ]
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output"
+      },
+      "obligations": [
+        {
+          "kind": "protect",
+          "role_ids": [
+            "first_mutation"
+          ]
+        }
+      ],
+      "provenance": "Verifier supplies a disclosed partial source mechanism; matcher chooses the target role correspondence. No complete repair or operator is supplied."
+    }
+  ],
+  "fresh_successors": [
+    {
+      "id": "verifier-005-target-00",
+      "phases": [
+        {
+          "id": "v00-7bf4fe97",
+          "kind": "compute",
+          "unit": "event",
+          "deps": [
+            "v00-9aa6e7ba"
+          ]
+        },
+        {
+          "id": "v00-9aa6e7ba",
+          "kind": "capture",
+          "unit": "event",
+          "deps": [
+            "v00-e4cf8ef0"
+          ]
+        },
+        {
+          "id": "v00-c32a4eaf",
+          "kind": "commit",
+          "unit": "event",
+          "deps": [
+            "v00-7bf4fe97",
+            "v00-e4cf8ef0"
+          ]
+        },
+        {
+          "id": "v00-e4cf8ef0",
+          "kind": "reserve",
+          "unit": "event",
+          "deps": []
+        }
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output",
+        "target_boundary": "bounded-0"
+      }
+    },
+    {
+      "id": "verifier-005-target-01",
+      "phases": [
+        {
+          "id": "v01-6577d135",
+          "kind": "compute",
+          "unit": "event",
+          "deps": [
+            "v01-e3e22d48",
+            "v01-e61e507e"
+          ]
+        },
+        {
+          "id": "v01-e3e22d48",
+          "kind": "capture",
+          "unit": "event",
+          "deps": [
+            "v01-e61e507e"
+          ]
+        },
+        {
+          "id": "v01-e61e507e",
+          "kind": "reserve",
+          "unit": "event",
+          "deps": []
+        },
+        {
+          "id": "v01-f10ec77e",
+          "kind": "commit",
+          "unit": "event",
+          "deps": [
+            "v01-6577d135"
+          ]
+        }
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output",
+        "target_boundary": "bounded-1"
+      }
+    },
+    {
+      "id": "verifier-005-target-02",
+      "phases": [
+        {
+          "id": "v02-7382a677",
+          "kind": "reserve",
+          "unit": "event",
+          "deps": []
+        },
+        {
+          "id": "v02-039115c9",
+          "kind": "capture",
+          "unit": "event",
+          "deps": [
+            "v02-7382a677"
+          ]
+        },
+        {
+          "id": "v02-ac06f850",
+          "kind": "commit",
+          "unit": "event",
+          "deps": [
+            "v02-cd7a13ab"
+          ]
+        },
+        {
+          "id": "v02-cd7a13ab",
+          "kind": "compute",
+          "unit": "event",
+          "deps": [
+            "v02-039115c9"
+          ]
+        }
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output",
+        "target_boundary": "bounded-2"
+      }
+    },
+    {
+      "id": "verifier-005-target-03",
+      "phases": [
+        {
+          "id": "v03-13f03a85",
+          "kind": "reserve",
+          "unit": "event",
+          "deps": []
+        },
+        {
+          "id": "v03-4936d015",
+          "kind": "capture",
+          "unit": "event",
+          "deps": [
+            "v03-13f03a85"
+          ]
+        },
+        {
+          "id": "v03-11519e2a",
+          "kind": "commit",
+          "unit": "event",
+          "deps": [
+            "v03-36bef889",
+            "v03-13f03a85"
+          ]
+        },
+        {
+          "id": "v03-36bef889",
+          "kind": "compute",
+          "unit": "event",
+          "deps": [
+            "v03-4936d015",
+            "v03-13f03a85"
+          ]
+        }
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output",
+        "target_boundary": "bounded-0"
+      }
+    },
+    {
+      "id": "verifier-005-target-04",
+      "phases": [
+        {
+          "id": "v04-96c20a6a",
+          "kind": "reserve",
+          "unit": "event",
+          "deps": []
+        },
+        {
+          "id": "v04-c2a5530b",
+          "kind": "capture",
+          "unit": "event",
+          "deps": [
+            "v04-96c20a6a"
+          ]
+        },
+        {
+          "id": "v04-22cecd28",
+          "kind": "compute",
+          "unit": "event",
+          "deps": [
+            "v04-c2a5530b"
+          ]
+        },
+        {
+          "id": "v04-a96bfead",
+          "kind": "commit",
+          "unit": "event",
+          "deps": [
+            "v04-22cecd28"
+          ]
+        }
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output",
+        "target_boundary": "bounded-1"
+      }
+    },
+    {
+      "id": "verifier-005-target-05",
+      "phases": [
+        {
+          "id": "v05-d64a5614",
+          "kind": "compute",
+          "unit": "event",
+          "deps": [
+            "v05-f0a56bf8",
+            "v05-11c89088"
+          ]
+        },
+        {
+          "id": "v05-11c89088",
+          "kind": "reserve",
+          "unit": "event",
+          "deps": []
+        },
+        {
+          "id": "v05-23b9ef2f",
+          "kind": "commit",
+          "unit": "event",
+          "deps": [
+            "v05-d64a5614"
+          ]
+        },
+        {
+          "id": "v05-f0a56bf8",
+          "kind": "capture",
+          "unit": "event",
+          "deps": [
+            "v05-11c89088"
+          ]
+        }
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output",
+        "target_boundary": "bounded-2"
+      }
+    },
+    {
+      "id": "verifier-005-target-06",
+      "phases": [
+        {
+          "id": "v06-5f5281a2",
+          "kind": "compute",
+          "unit": "event",
+          "deps": [
+            "v06-982c7054"
+          ]
+        },
+        {
+          "id": "v06-e65a4029",
+          "kind": "commit",
+          "unit": "event",
+          "deps": [
+            "v06-5f5281a2",
+            "v06-a2394e82"
+          ]
+        },
+        {
+          "id": "v06-a2394e82",
+          "kind": "reserve",
+          "unit": "event",
+          "deps": []
+        },
+        {
+          "id": "v06-982c7054",
+          "kind": "capture",
+          "unit": "event",
+          "deps": [
+            "v06-a2394e82"
+          ]
+        }
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output",
+        "target_boundary": "bounded-0"
+      }
+    },
+    {
+      "id": "verifier-005-target-07",
+      "phases": [
+        {
+          "id": "v07-482e4e22",
+          "kind": "commit",
+          "unit": "event",
+          "deps": [
+            "v07-d1ac5884"
+          ]
+        },
+        {
+          "id": "v07-a9b6a9b4",
+          "kind": "capture",
+          "unit": "event",
+          "deps": [
+            "v07-ba38bee4"
+          ]
+        },
+        {
+          "id": "v07-d1ac5884",
+          "kind": "compute",
+          "unit": "event",
+          "deps": [
+            "v07-a9b6a9b4",
+            "v07-ba38bee4"
+          ]
+        },
+        {
+          "id": "v07-ba38bee4",
+          "kind": "reserve",
+          "unit": "event",
+          "deps": []
+        }
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output",
+        "target_boundary": "bounded-1"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1146 @@
+{
+  "mode": "inheritance",
+  "construction": {
+    "status": "constructed",
+    "program": {
+      "language": "event-plan/v1",
+      "order": [
+        "v02-7382a677",
+        "v02-039115c9",
+        "v02-cd7a13ab",
+        "v02-ac06f850"
+      ],
+      "protected": [
+        "v02-039115c9",
+        "v02-ac06f850",
+        "v02-cd7a13ab"
+      ],
+      "atomic": [
+        "v02-ac06f850"
+      ],
+      "compensations": {}
+    },
+    "attempts": [
+      {
+        "program": {
+          "language": "event-plan/v1",
+          "order": [
+            "v02-7382a677",
+            "v02-039115c9",
+            "v02-cd7a13ab",
+            "v02-ac06f850"
+          ],
+          "protected": [],
+          "atomic": [],
+          "compensations": {}
+        },
+        "violations": [
+          {
+            "kind": "protect",
+            "phase": "v02-039115c9"
+          },
+          {
+            "kind": "protect",
+            "phase": "v02-cd7a13ab"
+          },
+          {
+            "kind": "protect",
+            "phase": "v02-ac06f850"
+          },
+          {
+            "kind": "atomic_publish",
+            "phase": "v02-ac06f850"
+          }
+        ],
+        "delta": [],
+        "logical_cost": 0
+      },
+      {
+        "program": {
+          "language": "event-plan/v1",
+          "order": [
+            "v02-7382a677",
+            "v02-039115c9",
+            "v02-cd7a13ab",
+            "v02-ac06f850"
+          ],
+          "protected": [
+            "v02-039115c9"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "violations": [
+          {
+            "kind": "protect",
+            "phase": "v02-cd7a13ab"
+          },
+          {
+            "kind": "protect",
+            "phase": "v02-ac06f850"
+          },
+          {
+            "kind": "atomic_publish",
+            "phase": "v02-ac06f850"
+          }
+        ],
+        "delta": [
+          {
+            "repair": {
+              "kind": "protect",
+              "phase": "v02-039115c9"
+            },
+            "causal_closure": false
+          }
+        ],
+        "logical_cost": 1
+      },
+      {
+        "program": {
+          "language": "event-plan/v1",
+          "order": [
+            "v02-7382a677",
+            "v02-039115c9",
+            "v02-cd7a13ab",
+            "v02-ac06f850"
+          ],
+          "protected": [
+            "v02-039115c9",
+            "v02-cd7a13ab"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "violations": [
+          {
+            "kind": "protect",
+            "phase": "v02-ac06f850"
+          },
+          {
+            "kind": "atomic_publish",
+            "phase": "v02-ac06f850"
+          }
+        ],
+        "delta": [
+          {
+            "repair": {
+              "kind": "protect",
+              "phase": "v02-cd7a13ab"
+            },
+            "causal_closure": false
+          }
+        ],
+        "logical_cost": 2
+      },
+      {
+        "program": {
+          "language": "event-plan/v1",
+          "order": [
+            "v02-7382a677",
+            "v02-039115c9",
+            "v02-cd7a13ab",
+            "v02-ac06f850"
+          ],
+          "protected": [
+            "v02-039115c9",
+            "v02-ac06f850",
+            "v02-cd7a13ab"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "violations": [
+          {
+            "kind": "atomic_publish",
+            "phase": "v02-ac06f850"
+          }
+        ],
+        "delta": [
+          {
+            "repair": {
+              "kind": "protect",
+              "phase": "v02-ac06f850"
+            },
+            "causal_closure": false
+          }
+        ],
+        "logical_cost": 3
+      },
+      {
+        "program": {
+          "language": "event-plan/v1",
+          "order": [
+            "v02-7382a677",
+            "v02-039115c9",
+            "v02-cd7a13ab",
+            "v02-ac06f850"
+          ],
+          "protected": [
+            "v02-039115c9",
+            "v02-ac06f850",
+            "v02-cd7a13ab"
+          ],
+          "atomic": [
+            "v02-ac06f850"
+          ],
+          "compensations": {}
+        },
+        "violations": [],
+        "delta": [
+          {
+            "repair": {
+              "kind": "protect",
+              "phase": "v02-039115c9"
+            },
+            "complementary_bundle": true
+          },
+          {
+            "repair": {
+              "kind": "protect",
+              "phase": "v02-cd7a13ab"
+            },
+            "complementary_bundle": true
+          },
+          {
+            "repair": {
+              "kind": "protect",
+              "phase": "v02-ac06f850"
+            },
+            "complementary_bundle": true
+          },
+          {
+            "repair": {
+              "kind": "atomic_publish",
+              "phase": "v02-ac06f850"
+            },
+            "complementary_bundle": true
+          }
+        ],
+        "logical_cost": 5
+      }
+    ],
+    "obligations": [
+      {
+        "kind": "protect",
+        "phase_ids": [
+          "v02-039115c9"
+        ]
+      },
+      {
+        "kind": "protect",
+        "phase_ids": [
+          "v02-cd7a13ab"
+        ]
+      },
+      {
+        "kind": "protect",
+        "phase_ids": [
+          "v02-ac06f850"
+        ]
+      },
+      {
+        "kind": "atomic_publish",
+        "phase_ids": [
+          "v02-ac06f850"
+        ]
+      }
+    ],
+    "operator_trace": {
+      "rules": 4,
+      "matches": 4
+    },
+    "candidate_count": 5,
+    "search": "obligation-guided best-first typed graph rewrites; no permutations",
+    "novelty": "New composition within supplied grammar; no new primitive or unrestricted invention",
+    "effects": "Pure event-plan interpreter; actual file effects require trusted confined broker",
+    "memory_instantiation": {
+      "source_graph_id": "independent-supplied-transaction-fragment",
+      "mapping": {
+        "source": "independent-supplied-transaction-fragment",
+        "target": "verifier-005-target-02",
+        "source_graph": {
+          "conditions": {
+            "effects": "exclusive_local_output",
+            "failure": "catchable_exception"
+          },
+          "id": "independent-supplied-transaction-fragment",
+          "nodes": [
+            {
+              "id": "custody",
+              "kind": "reserve",
+              "unit": "event"
+            },
+            {
+              "id": "first_mutation",
+              "kind": "capture",
+              "unit": "event"
+            },
+            {
+              "id": "productive_action",
+              "kind": "compute",
+              "unit": "event"
+            },
+            {
+              "id": "terminal_publication",
+              "kind": "commit",
+              "unit": "event"
+            }
+          ],
+          "obligations": [
+            {
+              "kind": "protect",
+              "role_ids": [
+                "first_mutation"
+              ]
+            },
+            {
+              "kind": "protect",
+              "role_ids": [
+                "productive_action"
+              ]
+            },
+            {
+              "kind": "protect",
+              "role_ids": [
+                "terminal_publication"
+              ]
+            },
+            {
+              "kind": "atomic_publish",
+              "role_ids": [
+                "terminal_publication"
+              ]
+            }
+          ],
+          "provenance": "Verifier supplies a disclosed partial source mechanism; matcher chooses the target role correspondence. No complete repair or operator is supplied.",
+          "relations": [
+            [
+              "custody",
+              "precedes",
+              "first_mutation"
+            ],
+            [
+              "first_mutation",
+              "precedes",
+              "productive_action"
+            ],
+            [
+              "productive_action",
+              "precedes",
+              "terminal_publication"
+            ]
+          ]
+        },
+        "donor_graph": {
+          "conditions": {
+            "effects": "exclusive_local_output",
+            "failure": "catchable_exception"
+          },
+          "id": "independent-supplied-transaction-fragment",
+          "nodes": [
+            {
+              "id": "custody",
+              "kind": "reserve",
+              "unit": "event"
+            },
+            {
+              "id": "first_mutation",
+              "kind": "capture",
+              "unit": "event"
+            },
+            {
+              "id": "productive_action",
+              "kind": "compute",
+              "unit": "event"
+            },
+            {
+              "id": "terminal_publication",
+              "kind": "commit",
+              "unit": "event"
+            }
+          ],
+          "obligations": [
+            {
+              "kind": "protect",
+              "role_ids": [
+                "first_mutation"
+              ]
+            },
+            {
+              "kind": "protect",
+              "role_ids": [
+                "productive_action"
+              ]
+            },
+            {
+              "kind": "protect",
+              "role_ids": [
+                "terminal_publication"
+              ]
+            },
+            {
+              "kind": "atomic_publish",
+              "role_ids": [
+                "terminal_publication"
+              ]
+            }
+          ],
+          "provenance": "Verifier supplies a disclosed partial source mechanism; matcher chooses the target role correspondence. No complete repair or operator is supplied.",
+          "relations": [
+            [
+              "custody",
+              "precedes",
+              "first_mutation"
+            ],
+            [
+              "first_mutation",
+              "precedes",
+              "productive_action"
+            ],
+            [
+              "productive_action",
+              "precedes",
+              "terminal_publication"
+            ]
+          ]
+        },
+        "target_graph": {
+          "conditions": {
+            "effects": "exclusive_local_output",
+            "failure": "catchable_exception",
+            "target_boundary": "bounded-2"
+          },
+          "id": "verifier-005-target-02",
+          "nodes": [
+            {
+              "event": "v02-7382a677",
+              "id": "v02-7382a677",
+              "kind": "reserve",
+              "unit": "event"
+            },
+            {
+              "event": "v02-039115c9",
+              "id": "v02-039115c9",
+              "kind": "capture",
+              "unit": "event"
+            },
+            {
+              "event": "v02-ac06f850",
+              "id": "v02-ac06f850",
+              "kind": "commit",
+              "unit": "event"
+            },
+            {
+              "event": "v02-cd7a13ab",
+              "id": "v02-cd7a13ab",
+              "kind": "compute",
+              "unit": "event"
+            }
+          ],
+          "relations": [
+            [
+              "v02-7382a677",
+              "precedes",
+              "v02-039115c9"
+            ],
+            [
+              "v02-cd7a13ab",
+              "precedes",
+              "v02-ac06f850"
+            ],
+            [
+              "v02-039115c9",
+              "precedes",
+              "v02-cd7a13ab"
+            ]
+          ]
+        },
+        "role_map": {
+          "custody": "v02-7382a677",
+          "first_mutation": "v02-039115c9",
+          "productive_action": "v02-cd7a13ab",
+          "terminal_publication": "v02-ac06f850"
+        },
+        "mapped_roles": {
+          "custody": "v02-7382a677",
+          "first_mutation": "v02-039115c9",
+          "productive_action": "v02-cd7a13ab",
+          "terminal_publication": "v02-ac06f850"
+        },
+        "target_events": {
+          "custody": "v02-7382a677",
+          "first_mutation": "v02-039115c9",
+          "productive_action": "v02-cd7a13ab",
+          "terminal_publication": "v02-ac06f850"
+        },
+        "obligations": [
+          {
+            "kind": "protect",
+            "phase_ids": [
+              "v02-039115c9"
+            ],
+            "provenance": {
+              "origin": "structural-transfer-hypothesis",
+              "donor_id": "independent-supplied-transaction-fragment",
+              "target_id": "verifier-005-target-02",
+              "donor_sha256": "096ee445f9dde6d98ba68f49cc0800a95c1400b6cd2b7280b83fdb167f194f18",
+              "target_sha256": "84f6dfa75b08186869d329fed31d0d4fa7641805f39fbd09b3cf7010ae2b4b87",
+              "role_map_sha256": "85f9d97352c5703c106fd3fd972f8bd5cd586a5463cd25d2a0983fb22d8d6993"
+            }
+          },
+          {
+            "kind": "protect",
+            "phase_ids": [
+              "v02-cd7a13ab"
+            ],
+            "provenance": {
+              "origin": "structural-transfer-hypothesis",
+              "donor_id": "independent-supplied-transaction-fragment",
+              "target_id": "verifier-005-target-02",
+              "donor_sha256": "096ee445f9dde6d98ba68f49cc0800a95c1400b6cd2b7280b83fdb167f194f18",
+              "target_sha256": "84f6dfa75b08186869d329fed31d0d4fa7641805f39fbd09b3cf7010ae2b4b87",
+              "role_map_sha256": "85f9d97352c5703c106fd3fd972f8bd5cd586a5463cd25d2a0983fb22d8d6993"
+            }
+          },
+          {
+            "kind": "protect",
+            "phase_ids": [
+              "v02-ac06f850"
+            ],
+            "provenance": {
+              "origin": "structural-transfer-hypothesis",
+              "donor_id": "independent-supplied-transaction-fragment",
+              "target_id": "verifier-005-target-02",
+              "donor_sha256": "096ee445f9dde6d98ba68f49cc0800a95c1400b6cd2b7280b83fdb167f194f18",
+              "target_sha256": "84f6dfa75b08186869d329fed31d0d4fa7641805f39fbd09b3cf7010ae2b4b87",
+              "role_map_sha256": "85f9d97352c5703c106fd3fd972f8bd5cd586a5463cd25d2a0983fb22d8d6993"
+            }
+          },
+          {
+            "kind": "atomic_publish",
+            "phase_ids": [
+              "v02-ac06f850"
+            ],
+            "provenance": {
+              "origin": "structural-transfer-hypothesis",
+              "donor_id": "independent-supplied-transaction-fragment",
+              "target_id": "verifier-005-target-02",
+              "donor_sha256": "096ee445f9dde6d98ba68f49cc0800a95c1400b6cd2b7280b83fdb167f194f18",
+              "target_sha256": "84f6dfa75b08186869d329fed31d0d4fa7641805f39fbd09b3cf7010ae2b4b87",
+              "role_map_sha256": "85f9d97352c5703c106fd3fd972f8bd5cd586a5463cd25d2a0983fb22d8d6993"
+            }
+          }
+        ],
+        "strategy_recipe": [],
+        "preserved_relations": [
+          [
+            "v02-7382a677",
+            "precedes",
+            "v02-039115c9"
+          ],
+          [
+            "v02-039115c9",
+            "precedes",
+            "v02-cd7a13ab"
+          ],
+          [
+            "v02-cd7a13ab",
+            "precedes",
+            "v02-ac06f850"
+          ]
+        ],
+        "applicability": {
+          "conditions": {
+            "effects": "exclusive_local_output",
+            "failure": "catchable_exception"
+          },
+          "checked": true,
+          "status": "hypothesis-awaiting-execution"
+        },
+        "prediction": {
+          "obligation_event_sets": [
+            [
+              "v02-039115c9"
+            ],
+            [
+              "v02-cd7a13ab"
+            ],
+            [
+              "v02-ac06f850"
+            ],
+            [
+              "v02-ac06f850"
+            ]
+          ],
+          "claim": "The constructed target strategy must independently satisfy these transferred obligations."
+        },
+        "provenance": {
+          "origin": "structural-transfer-hypothesis",
+          "donor_id": "independent-supplied-transaction-fragment",
+          "target_id": "verifier-005-target-02",
+          "donor_sha256": "096ee445f9dde6d98ba68f49cc0800a95c1400b6cd2b7280b83fdb167f194f18",
+          "target_sha256": "84f6dfa75b08186869d329fed31d0d4fa7641805f39fbd09b3cf7010ae2b4b87",
+          "role_map_sha256": "85f9d97352c5703c106fd3fd972f8bd5cd586a5463cd25d2a0983fb22d8d6993"
+        }
+      },
+      "operator": {
+        "language": "event-plan-rewrite/v1",
+        "rules": [
+          {
+            "match": {
+              "kind": "capture",
+              "unit": "event",
+              "phase_ids": [
+                "v02-039115c9"
+              ]
+            },
+            "emit": {
+              "kind": "protect",
+              "phase_ids": [
+                "$match"
+              ]
+            }
+          },
+          {
+            "match": {
+              "kind": "compute",
+              "unit": "event",
+              "phase_ids": [
+                "v02-cd7a13ab"
+              ]
+            },
+            "emit": {
+              "kind": "protect",
+              "phase_ids": [
+                "$match"
+              ]
+            }
+          },
+          {
+            "match": {
+              "kind": "commit",
+              "unit": "event",
+              "phase_ids": [
+                "v02-ac06f850"
+              ]
+            },
+            "emit": {
+              "kind": "protect",
+              "phase_ids": [
+                "$match"
+              ]
+            }
+          },
+          {
+            "match": {
+              "kind": "commit",
+              "unit": "event",
+              "phase_ids": [
+                "v02-ac06f850"
+              ]
+            },
+            "emit": {
+              "kind": "atomic_publish",
+              "phase_ids": [
+                "$match"
+              ]
+            }
+          }
+        ],
+        "max_matches": 32
+      },
+      "record_sha256": "45eb5ba795ff4b2941ee9de58782379ac7da571a5dcac9538dae79ff2341dfc6",
+      "fresh_target": true,
+      "base_role_obligation_count": 1,
+      "learned_role_delta_count": 3
+    },
+    "memory": {
+      "id": "45eb5ba795ff4b2941ee9de58782379ac7da571a5dcac9538dae79ff2341dfc6",
+      "retrieval": {
+        "records": [
+          {
+            "id": "45eb5ba795ff4b2941ee9de58782379ac7da571a5dcac9538dae79ff2341dfc6",
+            "record": {
+              "applicability": {
+                "assumptions": [
+                  "Typed relation-preserving unique mapping",
+                  "Construction language and exact dependency hashes unchanged",
+                  "New task requires its own verification"
+                ],
+                "conditions": {
+                  "effects": "exclusive_local_output",
+                  "failure": "catchable_exception"
+                },
+                "failures": [],
+                "schema_version": 1,
+                "uncertainty": "Learned from one adjudicated repair; transfer and lifecycle advantage remain unproved"
+              },
+              "costs": {
+                "acquisition_cpu_seconds": 0.0007313209999999792,
+                "complete_cost_usd": null,
+                "development_trace_costs": {
+                  "cpu_seconds": 0.04989423200000001,
+                  "full_cost": null,
+                  "wall_seconds": 0.9040597189959954
+                }
+              },
+              "exposure": [
+                "verifier-005-target-90"
+              ],
+              "generative_operator": {
+                "language": "event-plan-rewrite-v1",
+                "program": {
+                  "base_role_obligations": [
+                    {
+                      "kind": "protect",
+                      "role_ids": [
+                        "first_mutation"
+                      ]
+                    }
+                  ],
+                  "max_matches": 32,
+                  "role_deltas": [
+                    {
+                      "kind": "protect",
+                      "role_ids": [
+                        "productive_action"
+                      ]
+                    },
+                    {
+                      "kind": "protect",
+                      "role_ids": [
+                        "terminal_publication"
+                      ]
+                    },
+                    {
+                      "kind": "atomic_publish",
+                      "role_ids": [
+                        "terminal_publication"
+                      ]
+                    }
+                  ],
+                  "source_graph": {
+                    "conditions": {
+                      "effects": "exclusive_local_output",
+                      "failure": "catchable_exception"
+                    },
+                    "id": "independent-supplied-transaction-fragment",
+                    "nodes": [
+                      {
+                        "id": "custody",
+                        "kind": "reserve",
+                        "unit": "event"
+                      },
+                      {
+                        "id": "first_mutation",
+                        "kind": "capture",
+                        "unit": "event"
+                      },
+                      {
+                        "id": "productive_action",
+                        "kind": "compute",
+                        "unit": "event"
+                      },
+                      {
+                        "id": "terminal_publication",
+                        "kind": "commit",
+                        "unit": "event"
+                      }
+                    ],
+                    "obligations": [
+                      {
+                        "kind": "protect",
+                        "role_ids": [
+                          "first_mutation"
+                        ]
+                      },
+                      {
+                        "kind": "protect",
+                        "role_ids": [
+                          "productive_action"
+                        ]
+                      },
+                      {
+                        "kind": "protect",
+                        "role_ids": [
+                          "terminal_publication"
+                        ]
+                      },
+                      {
+                        "kind": "atomic_publish",
+                        "role_ids": [
+                          "terminal_publication"
+                        ]
+                      }
+                    ],
+                    "provenance": "Verifier supplies a disclosed partial source mechanism; matcher chooses the target role correspondence. No complete repair or operator is supplied.",
+                    "relations": [
+                      [
+                        "custody",
+                        "precedes",
+                        "first_mutation"
+                      ],
+                      [
+                        "first_mutation",
+                        "precedes",
+                        "productive_action"
+                      ],
+                      [
+                        "productive_action",
+                        "precedes",
+                        "terminal_publication"
+                      ]
+                    ]
+                  }
+                }
+              },
+              "instrument": {
+                "path": "mechanisms/construct.py",
+                "sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7"
+              },
+              "provenance": {
+                "acquisition": "Before behavior and actual added protected/atomic events separately inverted through discovered structural role mapping; target event identifiers not retained in recipe",
+                "after_sha256": "e0bf106c4ee829f428da87935cfc592bf858738182419563b7853598e35e2ab9",
+                "before_sha256": "466d6b84b23911d2c1c5c1623fa026c6771e1e7844437f9b19fa91c1f8de01d8",
+                "dependency_sha256": {
+                  "flywheel/retention.py": "7d7587fd11bffebc7b4ab6a1118eda0a899094099949434722d1254e630973c7",
+                  "mechanisms/mapping.py": "66d66208ac731249217766785a7d22a5d255f3ab6729b71edd7139ef1ce1cc18",
+                  "mechanisms/memory.py": "980dd5aa4ec1cde79a63eb33d32683f797df23b936f11729a7b860323d90c148"
+                },
+                "mapping_sha256": "faf9d11edd0baf44819ccc50721307dfc2b60fa8c56d07dbbbe8e6e0f17d251f",
+                "obligations_sha256": "89e37828e59fc806a72bacd73cd31922245848407743b0cf4a5be5cba3c883f6",
+                "origin": "derived-from-verified-before-after-delta",
+                "task_id": "verifier-005-target-90",
+                "task_sha256": "1ea88758eeeceae7192e45d56a4a9acda9489cf4b5a39b24a5168e59306dde20",
+                "verification_scope": {
+                  "effect_scope": "exclusive_local_output",
+                  "invariants": [
+                    {
+                      "id": "interruption-record",
+                      "kind": "mark_after_reservation"
+                    },
+                    {
+                      "id": "no-false-completion",
+                      "kind": "no_commit_on_failure"
+                    }
+                  ]
+                }
+              },
+              "supersedes": [],
+              "verification": {
+                "receipt_sha256": "45adab6ac7a9fcb0689515b7c90f7a24c7c600397e934279a546f659c34187a2",
+                "status": "verified-in-scope"
+              }
+            }
+          }
+        ],
+        "refused": [],
+        "failures": []
+      },
+      "cpu_seconds": 0.0018118950000000078,
+      "donor_context_sha256": "6a67b5cc1f8338404327585f4658c1683a60ca4813f6e2c20bab4dbe7bf3af22"
+    }
+  },
+  "passed": true,
+  "verification": {
+    "passed": true,
+    "normal": {
+      "state": "COMPLETE",
+      "completed": true,
+      "directory_created": true,
+      "reserved": [
+        "v02-7382a677"
+      ],
+      "trace": [
+        "v02-7382a677",
+        "v02-039115c9",
+        "v02-cd7a13ab",
+        "v02-ac06f850"
+      ],
+      "interrupted_marker": false,
+      "partial_publication": false,
+      "complete_exists": true,
+      "files_sha256": {
+        "COMPLETE.json": "59d4a1f65654abb70711146370a1443f54eec09108c29283b463708db67ad45d",
+        "PENDING_COMPLETE.json": "59d4a1f65654abb70711146370a1443f54eec09108c29283b463708db67ad45d",
+        "phase-002.json": "1ec1261dbb91755c219ed48eacab54c41b2a293f5925dcf7788967fcd0661a3a",
+        "phase-001.json": "a0044b7c61bc26d8f46f0d339a534589fd762c078d8a950fac1331dd597c5129"
+      },
+      "compensated": []
+    },
+    "checks": [
+      {
+        "phase": "v02-7382a677",
+        "passed": true,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.11573169300390873,
+          "stdout_bytes": 444,
+          "stderr_bytes": 0,
+          "stdout_sha256": "75bcae81694a223b8302f4316ebaf8c54d54137affe55040636c85605b6c35e0",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [],
+              "state": "UNMARKED",
+              "completed": false,
+              "complete_exists": false,
+              "failure_at": "v02-7382a677",
+              "interrupted_marker": false,
+              "partial_publication": false,
+              "atomic_publication": true,
+              "reserved": [],
+              "compensated": [],
+              "directory_created": false
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 0.00011416999768698588,
+            "worker_cpu_seconds": 0.096667588,
+            "peak_rss_kib": 15104
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "b2efc8cd6b5e7ad8025dc4a3fa6722ec50e89d7269e381e588829f5a77575a62"
+        },
+        "actual": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": false,
+          "reserved": [],
+          "failure_at": "v02-7382a677",
+          "trace": [],
+          "interrupted_marker": false,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {}
+        }
+      },
+      {
+        "phase": "v02-039115c9",
+        "passed": true,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.12036959800025215,
+          "stdout_bytes": 472,
+          "stderr_bytes": 0,
+          "stdout_sha256": "9ae84c4b6c93dfd9337957d56a597bcc25a77404136419fed679061088004629",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "v02-7382a677"
+              ],
+              "state": "INCOMPLETE",
+              "completed": false,
+              "complete_exists": false,
+              "failure_at": "v02-039115c9",
+              "interrupted_marker": true,
+              "partial_publication": false,
+              "atomic_publication": true,
+              "reserved": [
+                "v02-7382a677"
+              ],
+              "compensated": [],
+              "directory_created": true
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 0.00010302599548595026,
+            "worker_cpu_seconds": 0.104246956,
+            "peak_rss_kib": 15104
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "1d9eb60caddf1ae5971133e66e71fa681617b4030132e36935c6bd2aaf6eaca2"
+        },
+        "actual": {
+          "state": "INCOMPLETE",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "v02-7382a677"
+          ],
+          "failure_at": "v02-039115c9",
+          "trace": [
+            "v02-7382a677"
+          ],
+          "interrupted_marker": true,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "INTERRUPTED.json": "79ccb3dd331b3d00b945021c3d28185ccfd464d2ec775636aa8735e8375d5c18",
+            "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+        }
+      },
+      {
+        "phase": "v02-cd7a13ab",
+        "passed": true,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.31743788000312634,
+          "stdout_bytes": 487,
+          "stderr_bytes": 0,
+          "stdout_sha256": "46bfcf4aa029257eea68f16f3de3cc5e81341b8c4fed616ace10a9d5d7e35043",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "v02-7382a677",
+                "v02-039115c9"
+              ],
+              "state": "INCOMPLETE",
+              "completed": false,
+              "complete_exists": false,
+              "failure_at": "v02-cd7a13ab",
+              "interrupted_marker": true,
+              "partial_publication": false,
+              "atomic_publication": true,
+              "reserved": [
+                "v02-7382a677"
+              ],
+              "compensated": [],
+              "directory_created": true
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 0.0008321350032929331,
+            "worker_cpu_seconds": 0.232677449,
+            "peak_rss_kib": 15104
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "dbbf660991bc9eb2d129b0421d091a9e44f82e441781fe13d32b20c61310c099"
+        },
+        "actual": {
+          "state": "INCOMPLETE",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "v02-7382a677"
+          ],
+          "failure_at": "v02-cd7a13ab",
+          "trace": [
+            "v02-7382a677",
+            "v02-039115c9"
+          ],
+          "interrupted_marker": true,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "INTERRUPTED.json": "f4efb30f5bb785b558a17bbfcd89d8f08490b9fc933a5c6f15e5a61271c713aa",
+            "phase-002.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-001.json": "a0044b7c61bc26d8f46f0d339a534589fd762c078d8a950fac1331dd597c5129"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+        }
+      },
+      {
+        "phase": "v02-ac06f850",
+        "passed": true,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.19537650699930964,
+          "stdout_bytes": 504,
+          "stderr_bytes": 0,
+          "stdout_sha256": "68c7e7c78237272bbe81f99e4f09fad14b6d786a49ae111d0651871fd7f277b9",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "v02-7382a677",
+                "v02-039115c9",
+                "v02-cd7a13ab"
+              ],
+              "state": "INCOMPLETE",
+              "completed": false,
+              "complete_exists": false,
+              "failure_at": "v02-ac06f850",
+              "interrupted_marker": true,
+              "partial_publication": false,
+              "atomic_publication": true,
+              "reserved": [
+                "v02-7382a677"
+              ],
+              "compensated": [],
+              "directory_created": true
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 0.00010474600276211277,
+            "worker_cpu_seconds": 0.176117199,
+            "peak_rss_kib": 15104
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "7eff6d1a9ba18b4b504035b5c8d28f450326228e77b2e782e55aaa68124e771a"
+        },
+        "actual": {
+          "state": "INCOMPLETE",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "v02-7382a677"
+          ],
+          "failure_at": "v02-ac06f850",
+          "trace": [
+            "v02-7382a677",
+            "v02-039115c9",
+            "v02-cd7a13ab"
+          ],
+          "interrupted_marker": true,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "INTERRUPTED.json": "e3fb756aab5b3c9037e38946a91022016b2addd685f1402b6e72551e4b35ff05",
+            "PENDING_COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-002.json": "1ec1261dbb91755c219ed48eacab54c41b2a293f5925dcf7788967fcd0661a3a",
+            "phase-001.json": "a0044b7c61bc26d8f46f0d339a534589fd762c078d8a950fac1331dd597c5129"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+        }
+      }
+    ],
+    "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+    "candidate_sha256": "86e732c74d9e59b375c487a16eab3242b6499cbe5d612e157e671039b7a9bd51",
+    "scope": "Catchable phase interruptions and normal dependency-ordered local-file effects"
+  },
+  "target_sha256": "82b6a912ff0f130939847256e580464fc85bf5c453bb8fdcf7bb94d6924d7c82",
+  "wall_seconds": 0.7946460050006863,
+  "complete_cost": null,
+  "acquisition_charged_separately": true,
+  "scope": "Fresh engineering task; a competent ordinary reuse/conventional tie remains a tie"
+}

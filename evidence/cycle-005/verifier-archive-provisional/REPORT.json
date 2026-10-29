@@ -1,0 +1,42 @@
+{
+  "schema": "agi-alpha-cycle005-independent-clean-archive/v1",
+  "archive_sha256": "e0da71e046185be656dd6e3df5e9e4da618286e375fff3bd5185b9c8ca76d167",
+  "archive_bytes": 2168440,
+  "manifest_sha256": "077d19041750da1a8e18ec39fa7569fc07fcbb7663c07d2553dbe745679f0e56",
+  "independently_verified_payload_files": 1137,
+  "checks": {
+    "no_git_source_tree": true,
+    "unit": {
+      "returncode": 0,
+      "log_sha256": "668e7d1e721bcfd917efd7e96e856e3f704238965e223769f24c1655dce04551",
+      "log": "clean-unit.log"
+    },
+    "historical_materialization": {
+      "returncode": 0,
+      "log_sha256": "c13f4de67a978baa6f132ca89c1dca1e27a81386e5c447af8ea51f3c7824786c",
+      "log": "cycle004-materialize.log"
+    },
+    "unchanged_cycle004_replay": {
+      "returncode": 0,
+      "log_sha256": "400e4a60b32b830d7a53fa51914d26036cde60518871d0485ec6cd53a8ff63c1",
+      "log": "cycle004-replay.log"
+    },
+    "corrupted_historical_source": {
+      "returncode": 1,
+      "log_sha256": "1cb364847d9a3af0aa9a7f5d4039e0bb1a4d99ca6dc8698c3cb83d1c590df538",
+      "log": "corrupt-historical.log"
+    },
+    "corrupted_refused_before_destination": true,
+    "missing_historical_source": {
+      "returncode": 1,
+      "log_sha256": "6a0570a888b8412b1888381b91e59db77e1556eaa7533e6900f45ee27b57b206",
+      "log": "missing-historical.log"
+    },
+    "missing_refused_before_destination": true
+  },
+  "passed": true,
+  "verifier_sha256": "9e064ba1f83b666944ca56d3901966a7d44c4de2c5119855307dd80620c74f5c",
+  "wall_seconds": 20.8799172440049,
+  "scope": "This exact ZIP and installed Python/dependencies. Provisional archive does not qualify later source. No .git, Git/network fallback or private working-tree source is used for replay.",
+  "confirmation_alpha_spent": 0
+}

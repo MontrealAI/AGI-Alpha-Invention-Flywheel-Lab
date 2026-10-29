@@ -1,0 +1,344 @@
+{
+  "mode": "reset",
+  "construction": {
+    "status": "constructed",
+    "program": {
+      "language": "event-plan/v1",
+      "order": [
+        "successor-renamed-permuted-allocate",
+        "successor-renamed-permuted-capture",
+        "successor-renamed-permuted-derive",
+        "successor-renamed-permuted-publish"
+      ],
+      "protected": [],
+      "atomic": [],
+      "compensations": {}
+    },
+    "attempts": [
+      {
+        "program": {
+          "language": "event-plan/v1",
+          "order": [
+            "successor-renamed-permuted-allocate",
+            "successor-renamed-permuted-capture",
+            "successor-renamed-permuted-derive",
+            "successor-renamed-permuted-publish"
+          ],
+          "protected": [],
+          "atomic": [],
+          "compensations": {}
+        },
+        "violations": [],
+        "delta": [],
+        "logical_cost": 0
+      }
+    ],
+    "obligations": [],
+    "operator_trace": {
+      "rules": 0,
+      "matches": 0
+    },
+    "candidate_count": 1,
+    "search": "obligation-guided best-first typed graph rewrites; no permutations",
+    "novelty": "New composition within supplied grammar; no new primitive or unrestricted invention",
+    "effects": "Pure event-plan interpreter; actual file effects require trusted confined broker"
+  },
+  "passed": false,
+  "verification": {
+    "passed": false,
+    "normal": {
+      "state": "COMPLETE",
+      "completed": true,
+      "directory_created": true,
+      "reserved": [
+        "successor-renamed-permuted-allocate"
+      ],
+      "trace": [
+        "successor-renamed-permuted-allocate",
+        "successor-renamed-permuted-capture",
+        "successor-renamed-permuted-derive",
+        "successor-renamed-permuted-publish"
+      ],
+      "interrupted_marker": false,
+      "partial_publication": false,
+      "complete_exists": true,
+      "files_sha256": {
+        "COMPLETE.json": "a48b230c6993fb87e0090fd4cc7711ead2c165e007a41fb1ef3d2477f88b1354",
+        "phase-002.json": "55a20394d395ea17d342e5e6ba071a62221434aae89a1414ef2f641cd3f7b4ea",
+        "phase-001.json": "f0fc044c6d1a1d7e976cd29022c0e17d587eaf04abc1dda8f24ec780b1100144"
+      },
+      "compensated": []
+    },
+    "checks": [
+      {
+        "phase": "successor-renamed-permuted-allocate",
+        "passed": true,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.1445745370001532,
+          "stdout_bytes": 467,
+          "stderr_bytes": 0,
+          "stdout_sha256": "3f6966e202a5abda1b318a9d4cf6949167073467076c032967cdcc6a56f72de6",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [],
+              "state": "UNMARKED",
+              "completed": false,
+              "complete_exists": false,
+              "failure_at": "successor-renamed-permuted-allocate",
+              "interrupted_marker": false,
+              "partial_publication": false,
+              "atomic_publication": true,
+              "reserved": [],
+              "compensated": [],
+              "directory_created": false
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 0.00024089699581963941,
+            "worker_cpu_seconds": 0.117583327,
+            "peak_rss_kib": 15104
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "664ab11db1d37b01d7ee6bd07455e1562d0ad6b413252455334d5cec60736657"
+        },
+        "actual": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": false,
+          "reserved": [],
+          "failure_at": "successor-renamed-permuted-allocate",
+          "trace": [],
+          "interrupted_marker": false,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {}
+        }
+      },
+      {
+        "phase": "successor-renamed-permuted-capture",
+        "passed": false,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.1339048440058832,
+          "stdout_bytes": 538,
+          "stderr_bytes": 0,
+          "stdout_sha256": "df335e513f0423de53021ed833f4190e4c9fa8537731c55f948bf9dcb906fdff",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "successor-renamed-permuted-allocate"
+              ],
+              "state": "UNMARKED",
+              "completed": false,
+              "complete_exists": false,
+              "failure_at": "successor-renamed-permuted-capture",
+              "interrupted_marker": false,
+              "partial_publication": false,
+              "atomic_publication": true,
+              "reserved": [
+                "successor-renamed-permuted-allocate"
+              ],
+              "compensated": [],
+              "directory_created": true
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 9.063600009540096e-05,
+            "worker_cpu_seconds": 0.119009595,
+            "peak_rss_kib": 15104
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "6653f157d59d6d8a44ade82c217a9960442c443428f0cc8958163986493495e8"
+        },
+        "actual": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "successor-renamed-permuted-allocate"
+          ],
+          "failure_at": "successor-renamed-permuted-capture",
+          "trace": [
+            "successor-renamed-permuted-allocate"
+          ],
+          "interrupted_marker": false,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+        }
+      },
+      {
+        "phase": "successor-renamed-permuted-derive",
+        "passed": false,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.19076862799556693,
+          "stdout_bytes": 576,
+          "stderr_bytes": 0,
+          "stdout_sha256": "ee390ed5e0d607723eacb78726c8ba98598a751144cd83a4de16b23dccd2e3ff",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "successor-renamed-permuted-allocate",
+                "successor-renamed-permuted-capture"
+              ],
+              "state": "UNMARKED",
+              "completed": false,
+              "complete_exists": false,
+              "failure_at": "successor-renamed-permuted-derive",
+              "interrupted_marker": false,
+              "partial_publication": false,
+              "atomic_publication": true,
+              "reserved": [
+                "successor-renamed-permuted-allocate"
+              ],
+              "compensated": [],
+              "directory_created": true
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 0.00010974799806717783,
+            "worker_cpu_seconds": 0.171187881,
+            "peak_rss_kib": 14872
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "b1f7dc8d76ebb8c79cbc6408d5fef4423d2a0e3809d6327576a0f89cf2bbd9fa"
+        },
+        "actual": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "successor-renamed-permuted-allocate"
+          ],
+          "failure_at": "successor-renamed-permuted-derive",
+          "trace": [
+            "successor-renamed-permuted-allocate",
+            "successor-renamed-permuted-capture"
+          ],
+          "interrupted_marker": false,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "phase-002.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-001.json": "f0fc044c6d1a1d7e976cd29022c0e17d587eaf04abc1dda8f24ec780b1100144"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+        }
+      },
+      {
+        "phase": "successor-renamed-permuted-publish",
+        "passed": false,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.14324099099758314,
+          "stdout_bytes": 613,
+          "stderr_bytes": 0,
+          "stdout_sha256": "e455e5e4bcdfed74a551f8d442818b2ee6619dfd751c5ae613e1594b53c70a0c",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "successor-renamed-permuted-allocate",
+                "successor-renamed-permuted-capture",
+                "successor-renamed-permuted-derive"
+              ],
+              "state": "UNMARKED",
+              "completed": false,
+              "complete_exists": true,
+              "failure_at": "successor-renamed-permuted-publish",
+              "interrupted_marker": false,
+              "partial_publication": true,
+              "atomic_publication": false,
+              "reserved": [
+                "successor-renamed-permuted-allocate"
+              ],
+              "compensated": [],
+              "directory_created": true
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 0.00036003199784317985,
+            "worker_cpu_seconds": 0.121222522,
+            "peak_rss_kib": 15104
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "770e8a19e29c16ef67020e4617289da21d3d97ce12c4aabf8de944d18ac66988"
+        },
+        "actual": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "successor-renamed-permuted-allocate"
+          ],
+          "failure_at": "successor-renamed-permuted-publish",
+          "trace": [
+            "successor-renamed-permuted-allocate",
+            "successor-renamed-permuted-capture",
+            "successor-renamed-permuted-derive"
+          ],
+          "interrupted_marker": false,
+          "partial_publication": true,
+          "complete_exists": true,
+          "files_sha256": {
+            "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-002.json": "55a20394d395ea17d342e5e6ba071a62221434aae89a1414ef2f641cd3f7b4ea",
+            "phase-001.json": "f0fc044c6d1a1d7e976cd29022c0e17d587eaf04abc1dda8f24ec780b1100144"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+        }
+      }
+    ],
+    "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+    "candidate_sha256": "cf2ec926ac7278f548ea6d300b329c5fbd6c3278e93f81366b9378e942569934",
+    "scope": "Catchable phase interruptions and normal dependency-ordered local-file effects"
+  },
+  "target_sha256": "67e0a9e5f5c266f3c1d585ba85b52b19a0e82dfaad9f7d62557231a72ab7748f",
+  "wall_seconds": 0.6351618379994761,
+  "complete_cost": null,
+  "acquisition_charged_separately": true,
+  "scope": "Fresh engineering task; a competent ordinary reuse/conventional tie remains a tie"
+}

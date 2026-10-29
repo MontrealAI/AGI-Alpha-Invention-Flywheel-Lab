@@ -1,0 +1,1454 @@
+{
+  "objections": [
+    {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "no_defect",
+      "claim_challenged": null,
+      "issue": {
+        "finding": "No defect established for the observed run and declared invariants.",
+        "kind": null,
+        "phase_ids": [],
+        "repairable": false
+      },
+      "evidence": {
+        "task": {
+          "id": "acquisition",
+          "phases": [
+            {
+              "id": "acquisition-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-capture",
+              "kind": "capture",
+              "deps": [
+                "acquisition-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-derive",
+              "kind": "compute",
+              "deps": [
+                "acquisition-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-publish",
+              "kind": "commit",
+              "deps": [
+                "acquisition-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "acquisition-allocate",
+            "acquisition-capture",
+            "acquisition-derive",
+            "acquisition-publish"
+          ],
+          "protected": [
+            "acquisition-capture"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": false,
+          "reserved": [],
+          "failure_at": "acquisition-allocate",
+          "trace": [],
+          "interrupted_marker": false,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {},
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "interruption-record",
+              "kind": "mark_after_reservation"
+            },
+            {
+              "id": "no-false-completion",
+              "kind": "no_commit_on_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "constructor": "31b1d3476ab94cb88da4eca7e86c0791e781f63c36b23c4b1692f2a1a10916ca",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "ecef9938f17a39802b7a424fb7f3fc3f986786444aec54d36ef452e1b358fb98",
+        "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+        "execution_sha256": "eaaf2f043cd6dd363921faef4d94221b2e846975240636ebd722f9f1eda68eea",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624"
+      },
+      "reproduction": {
+        "interrupt_at": "acquisition-allocate",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": null,
+      "severity": "undetermined",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "264f17067ad1e0bb73993a8ef9a392f1e50750329de76689a8fb68caa118daf0"
+    },
+    {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "no_defect",
+      "claim_challenged": null,
+      "issue": {
+        "finding": "No defect established for the observed run and declared invariants.",
+        "kind": null,
+        "phase_ids": [],
+        "repairable": false
+      },
+      "evidence": {
+        "task": {
+          "id": "acquisition",
+          "phases": [
+            {
+              "id": "acquisition-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-capture",
+              "kind": "capture",
+              "deps": [
+                "acquisition-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-derive",
+              "kind": "compute",
+              "deps": [
+                "acquisition-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-publish",
+              "kind": "commit",
+              "deps": [
+                "acquisition-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "acquisition-allocate",
+            "acquisition-capture",
+            "acquisition-derive",
+            "acquisition-publish"
+          ],
+          "protected": [
+            "acquisition-capture"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "INCOMPLETE",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "acquisition-allocate"
+          ],
+          "failure_at": "acquisition-capture",
+          "trace": [
+            "acquisition-allocate"
+          ],
+          "interrupted_marker": true,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "INTERRUPTED.json": "4bbbe3114377afe265e25ed7206122c3a337a613f90c3b65d6519866053a2d4e",
+            "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "interruption-record",
+              "kind": "mark_after_reservation"
+            },
+            {
+              "id": "no-false-completion",
+              "kind": "no_commit_on_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "constructor": "31b1d3476ab94cb88da4eca7e86c0791e781f63c36b23c4b1692f2a1a10916ca",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "ecef9938f17a39802b7a424fb7f3fc3f986786444aec54d36ef452e1b358fb98",
+        "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+        "execution_sha256": "27e3dc65b8bdf0f2b08f7c6471363ba1ad76c1552c62c7786db23e032b78c1bf",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624"
+      },
+      "reproduction": {
+        "interrupt_at": "acquisition-capture",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": null,
+      "severity": "undetermined",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "4613dce9060779ba509a4b918b55e537fcfbedd85180d1e7c708dddcf1a164fb"
+    },
+    {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "proposed",
+      "claim_challenged": "interruption-record",
+      "issue": {
+        "invariant_id": "interruption-record",
+        "kind": "mark_after_reservation",
+        "phase_ids": [
+          "acquisition-derive"
+        ],
+        "repairable": true,
+        "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+      },
+      "evidence": {
+        "task": {
+          "id": "acquisition",
+          "phases": [
+            {
+              "id": "acquisition-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-capture",
+              "kind": "capture",
+              "deps": [
+                "acquisition-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-derive",
+              "kind": "compute",
+              "deps": [
+                "acquisition-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-publish",
+              "kind": "commit",
+              "deps": [
+                "acquisition-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "acquisition-allocate",
+            "acquisition-capture",
+            "acquisition-derive",
+            "acquisition-publish"
+          ],
+          "protected": [
+            "acquisition-capture"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "acquisition-allocate"
+          ],
+          "failure_at": "acquisition-derive",
+          "trace": [
+            "acquisition-allocate",
+            "acquisition-capture"
+          ],
+          "interrupted_marker": false,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "phase-002.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-001.json": "2b2bfb97b844d85a2950cce4721136066e1cb62727e4c57d12a5ce16bc79f2e4"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "interruption-record",
+              "kind": "mark_after_reservation"
+            },
+            {
+              "id": "no-false-completion",
+              "kind": "no_commit_on_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "constructor": "31b1d3476ab94cb88da4eca7e86c0791e781f63c36b23c4b1692f2a1a10916ca",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "ecef9938f17a39802b7a424fb7f3fc3f986786444aec54d36ef452e1b358fb98",
+        "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+        "execution_sha256": "e56d3399ce512835678af5c6c677a1a250b9d191026e8758f4091c818d2f977b",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624"
+      },
+      "reproduction": {
+        "interrupt_at": "acquisition-derive",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": "An interrupted effect under established reservation lacks its required incomplete marker.",
+      "severity": "consequential",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "975958e93f7d5a6047c63524b7f5743e40aba426dc6b3505d4d9daf83b15d6b0"
+    },
+    {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "proposed",
+      "claim_challenged": "interruption-record",
+      "issue": {
+        "invariant_id": "interruption-record",
+        "kind": "mark_after_reservation",
+        "phase_ids": [
+          "acquisition-publish"
+        ],
+        "repairable": true,
+        "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+      },
+      "evidence": {
+        "task": {
+          "id": "acquisition",
+          "phases": [
+            {
+              "id": "acquisition-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-capture",
+              "kind": "capture",
+              "deps": [
+                "acquisition-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-derive",
+              "kind": "compute",
+              "deps": [
+                "acquisition-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-publish",
+              "kind": "commit",
+              "deps": [
+                "acquisition-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "acquisition-allocate",
+            "acquisition-capture",
+            "acquisition-derive",
+            "acquisition-publish"
+          ],
+          "protected": [
+            "acquisition-capture"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "acquisition-allocate"
+          ],
+          "failure_at": "acquisition-publish",
+          "trace": [
+            "acquisition-allocate",
+            "acquisition-capture",
+            "acquisition-derive"
+          ],
+          "interrupted_marker": false,
+          "partial_publication": true,
+          "complete_exists": true,
+          "files_sha256": {
+            "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-002.json": "c46810b9de1dbc4f8bd4e8b35cbd6efcc3e68b9dfb54c2de7a28aa94ecb6e89a",
+            "phase-001.json": "2b2bfb97b844d85a2950cce4721136066e1cb62727e4c57d12a5ce16bc79f2e4"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "interruption-record",
+              "kind": "mark_after_reservation"
+            },
+            {
+              "id": "no-false-completion",
+              "kind": "no_commit_on_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "constructor": "31b1d3476ab94cb88da4eca7e86c0791e781f63c36b23c4b1692f2a1a10916ca",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "ecef9938f17a39802b7a424fb7f3fc3f986786444aec54d36ef452e1b358fb98",
+        "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+        "execution_sha256": "a23ee7a87c6ed8d6fbea668a915baa64985ee8e1b3b19ea3bf35cbccb7123678",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624"
+      },
+      "reproduction": {
+        "interrupt_at": "acquisition-publish",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": "An interrupted effect under established reservation lacks its required incomplete marker.",
+      "severity": "consequential",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "4ba86998d3220673f5a63a555937e5779a533e2bbd0fdffdc33b174680fee8e0"
+    },
+    {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "proposed",
+      "claim_challenged": "no-false-completion",
+      "issue": {
+        "invariant_id": "no-false-completion",
+        "kind": "no_commit_on_failure",
+        "phase_ids": [
+          "acquisition-publish"
+        ],
+        "repairable": true,
+        "finding": "A failed execution exposes a successful or partial terminal publication.",
+        "repair_boundary": null
+      },
+      "evidence": {
+        "task": {
+          "id": "acquisition",
+          "phases": [
+            {
+              "id": "acquisition-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-capture",
+              "kind": "capture",
+              "deps": [
+                "acquisition-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-derive",
+              "kind": "compute",
+              "deps": [
+                "acquisition-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "acquisition-publish",
+              "kind": "commit",
+              "deps": [
+                "acquisition-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "acquisition-allocate",
+            "acquisition-capture",
+            "acquisition-derive",
+            "acquisition-publish"
+          ],
+          "protected": [
+            "acquisition-capture"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "acquisition-allocate"
+          ],
+          "failure_at": "acquisition-publish",
+          "trace": [
+            "acquisition-allocate",
+            "acquisition-capture",
+            "acquisition-derive"
+          ],
+          "interrupted_marker": false,
+          "partial_publication": true,
+          "complete_exists": true,
+          "files_sha256": {
+            "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-002.json": "c46810b9de1dbc4f8bd4e8b35cbd6efcc3e68b9dfb54c2de7a28aa94ecb6e89a",
+            "phase-001.json": "2b2bfb97b844d85a2950cce4721136066e1cb62727e4c57d12a5ce16bc79f2e4"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "interruption-record",
+              "kind": "mark_after_reservation"
+            },
+            {
+              "id": "no-false-completion",
+              "kind": "no_commit_on_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "constructor": "31b1d3476ab94cb88da4eca7e86c0791e781f63c36b23c4b1692f2a1a10916ca",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "ecef9938f17a39802b7a424fb7f3fc3f986786444aec54d36ef452e1b358fb98",
+        "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+        "execution_sha256": "a23ee7a87c6ed8d6fbea668a915baa64985ee8e1b3b19ea3bf35cbccb7123678",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624"
+      },
+      "reproduction": {
+        "interrupt_at": "acquisition-publish",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": "A failed execution exposes a successful or partial terminal publication.",
+      "severity": "consequential",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "11e6ea53b8cc86ec4b80f252a47eaf170a1a3bf9f74b33ac51fad2725f990d0f"
+    }
+  ],
+  "adjudications": [
+    {
+      "schema": "agi-alpha-criticism-adjudication/v1",
+      "objection": {
+        "schema": "agi-alpha-evidence-criticism/v1",
+        "status": "no_defect",
+        "claim_challenged": null,
+        "issue": {
+          "finding": "No defect established for the observed run and declared invariants.",
+          "kind": null,
+          "phase_ids": [],
+          "repairable": false
+        },
+        "evidence": {
+          "task": {
+            "id": "acquisition",
+            "phases": [
+              {
+                "id": "acquisition-allocate",
+                "kind": "reserve",
+                "deps": [],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-capture",
+                "kind": "capture",
+                "deps": [
+                  "acquisition-allocate"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-derive",
+                "kind": "compute",
+                "deps": [
+                  "acquisition-capture"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-publish",
+                "kind": "commit",
+                "deps": [
+                  "acquisition-derive"
+                ],
+                "unit": "event"
+              }
+            ],
+            "conditions": {
+              "failure": "catchable_exception",
+              "effects": "exclusive_local_output"
+            }
+          },
+          "candidate": {
+            "language": "event-plan/v1",
+            "order": [
+              "acquisition-allocate",
+              "acquisition-capture",
+              "acquisition-derive",
+              "acquisition-publish"
+            ],
+            "protected": [
+              "acquisition-capture"
+            ],
+            "atomic": [],
+            "compensations": {}
+          },
+          "execution": {
+            "state": "UNMARKED",
+            "completed": false,
+            "directory_created": false,
+            "reserved": [],
+            "failure_at": "acquisition-allocate",
+            "trace": [],
+            "interrupted_marker": false,
+            "partial_publication": false,
+            "complete_exists": false,
+            "files_sha256": {},
+            "interrupt_stage": "during"
+          },
+          "specification": {
+            "invariants": [
+              {
+                "id": "interruption-record",
+                "kind": "mark_after_reservation"
+              },
+              {
+                "id": "no-false-completion",
+                "kind": "no_commit_on_failure"
+              }
+            ],
+            "effect_scope": "exclusive_local_output"
+          },
+          "source_identity": {
+            "constructor": "31b1d3476ab94cb88da4eca7e86c0791e781f63c36b23c4b1692f2a1a10916ca",
+            "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+          }
+        },
+        "bindings": {
+          "task_sha256": "ecef9938f17a39802b7a424fb7f3fc3f986786444aec54d36ef452e1b358fb98",
+          "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+          "execution_sha256": "eaaf2f043cd6dd363921faef4d94221b2e846975240636ebd722f9f1eda68eea",
+          "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+          "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624"
+        },
+        "reproduction": {
+          "interrupt_at": "acquisition-allocate",
+          "interrupt_stage": "during"
+        },
+        "expected_failure": null,
+        "severity": "undetermined",
+        "uncertainty": "Single observed execution; a separate reproduction is required.",
+        "objection_sha256": "264f17067ad1e0bb73993a8ef9a392f1e50750329de76689a8fb68caa118daf0"
+      },
+      "status": "no_defect",
+      "reason": "NO_DEFECT_ESTABLISHED",
+      "independence": "Separate reproducer; shared host/libraries, not external certification.",
+      "reproduced_execution": {
+        "state": "UNMARKED",
+        "completed": false,
+        "directory_created": false,
+        "reserved": [],
+        "failure_at": "acquisition-allocate",
+        "trace": [],
+        "interrupted_marker": false,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {},
+        "interrupt_stage": "during"
+      },
+      "reproduced_execution_sha256": "eaaf2f043cd6dd363921faef4d94221b2e846975240636ebd722f9f1eda68eea",
+      "adjudication_sha256": "ca195062e7efe4b56d4129b321aa263492a6aefbbc7631de440de84b66446055"
+    },
+    {
+      "schema": "agi-alpha-criticism-adjudication/v1",
+      "objection": {
+        "schema": "agi-alpha-evidence-criticism/v1",
+        "status": "no_defect",
+        "claim_challenged": null,
+        "issue": {
+          "finding": "No defect established for the observed run and declared invariants.",
+          "kind": null,
+          "phase_ids": [],
+          "repairable": false
+        },
+        "evidence": {
+          "task": {
+            "id": "acquisition",
+            "phases": [
+              {
+                "id": "acquisition-allocate",
+                "kind": "reserve",
+                "deps": [],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-capture",
+                "kind": "capture",
+                "deps": [
+                  "acquisition-allocate"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-derive",
+                "kind": "compute",
+                "deps": [
+                  "acquisition-capture"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-publish",
+                "kind": "commit",
+                "deps": [
+                  "acquisition-derive"
+                ],
+                "unit": "event"
+              }
+            ],
+            "conditions": {
+              "failure": "catchable_exception",
+              "effects": "exclusive_local_output"
+            }
+          },
+          "candidate": {
+            "language": "event-plan/v1",
+            "order": [
+              "acquisition-allocate",
+              "acquisition-capture",
+              "acquisition-derive",
+              "acquisition-publish"
+            ],
+            "protected": [
+              "acquisition-capture"
+            ],
+            "atomic": [],
+            "compensations": {}
+          },
+          "execution": {
+            "state": "INCOMPLETE",
+            "completed": false,
+            "directory_created": true,
+            "reserved": [
+              "acquisition-allocate"
+            ],
+            "failure_at": "acquisition-capture",
+            "trace": [
+              "acquisition-allocate"
+            ],
+            "interrupted_marker": true,
+            "partial_publication": false,
+            "complete_exists": false,
+            "files_sha256": {
+              "INTERRUPTED.json": "4bbbe3114377afe265e25ed7206122c3a337a613f90c3b65d6519866053a2d4e",
+              "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "compensated": [],
+            "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+            "interrupt_stage": "during"
+          },
+          "specification": {
+            "invariants": [
+              {
+                "id": "interruption-record",
+                "kind": "mark_after_reservation"
+              },
+              {
+                "id": "no-false-completion",
+                "kind": "no_commit_on_failure"
+              }
+            ],
+            "effect_scope": "exclusive_local_output"
+          },
+          "source_identity": {
+            "constructor": "31b1d3476ab94cb88da4eca7e86c0791e781f63c36b23c4b1692f2a1a10916ca",
+            "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+          }
+        },
+        "bindings": {
+          "task_sha256": "ecef9938f17a39802b7a424fb7f3fc3f986786444aec54d36ef452e1b358fb98",
+          "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+          "execution_sha256": "27e3dc65b8bdf0f2b08f7c6471363ba1ad76c1552c62c7786db23e032b78c1bf",
+          "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+          "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624"
+        },
+        "reproduction": {
+          "interrupt_at": "acquisition-capture",
+          "interrupt_stage": "during"
+        },
+        "expected_failure": null,
+        "severity": "undetermined",
+        "uncertainty": "Single observed execution; a separate reproduction is required.",
+        "objection_sha256": "4613dce9060779ba509a4b918b55e537fcfbedd85180d1e7c708dddcf1a164fb"
+      },
+      "status": "no_defect",
+      "reason": "NO_DEFECT_ESTABLISHED",
+      "independence": "Separate reproducer; shared host/libraries, not external certification.",
+      "reproduced_execution": {
+        "state": "INCOMPLETE",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "acquisition-allocate"
+        ],
+        "failure_at": "acquisition-capture",
+        "trace": [
+          "acquisition-allocate"
+        ],
+        "interrupted_marker": true,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {
+          "INTERRUPTED.json": "4bbbe3114377afe265e25ed7206122c3a337a613f90c3b65d6519866053a2d4e",
+          "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+        "interrupt_stage": "during"
+      },
+      "reproduced_execution_sha256": "27e3dc65b8bdf0f2b08f7c6471363ba1ad76c1552c62c7786db23e032b78c1bf",
+      "adjudication_sha256": "5ef3d333edccb83ca4a64231628f264ecf0f1147832abecd41f0297a58fec0e9"
+    },
+    {
+      "schema": "agi-alpha-criticism-adjudication/v1",
+      "objection": {
+        "schema": "agi-alpha-evidence-criticism/v1",
+        "status": "proposed",
+        "claim_challenged": "interruption-record",
+        "issue": {
+          "invariant_id": "interruption-record",
+          "kind": "mark_after_reservation",
+          "phase_ids": [
+            "acquisition-derive"
+          ],
+          "repairable": true,
+          "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+        },
+        "evidence": {
+          "task": {
+            "id": "acquisition",
+            "phases": [
+              {
+                "id": "acquisition-allocate",
+                "kind": "reserve",
+                "deps": [],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-capture",
+                "kind": "capture",
+                "deps": [
+                  "acquisition-allocate"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-derive",
+                "kind": "compute",
+                "deps": [
+                  "acquisition-capture"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-publish",
+                "kind": "commit",
+                "deps": [
+                  "acquisition-derive"
+                ],
+                "unit": "event"
+              }
+            ],
+            "conditions": {
+              "failure": "catchable_exception",
+              "effects": "exclusive_local_output"
+            }
+          },
+          "candidate": {
+            "language": "event-plan/v1",
+            "order": [
+              "acquisition-allocate",
+              "acquisition-capture",
+              "acquisition-derive",
+              "acquisition-publish"
+            ],
+            "protected": [
+              "acquisition-capture"
+            ],
+            "atomic": [],
+            "compensations": {}
+          },
+          "execution": {
+            "state": "UNMARKED",
+            "completed": false,
+            "directory_created": true,
+            "reserved": [
+              "acquisition-allocate"
+            ],
+            "failure_at": "acquisition-derive",
+            "trace": [
+              "acquisition-allocate",
+              "acquisition-capture"
+            ],
+            "interrupted_marker": false,
+            "partial_publication": false,
+            "complete_exists": false,
+            "files_sha256": {
+              "phase-002.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "phase-001.json": "2b2bfb97b844d85a2950cce4721136066e1cb62727e4c57d12a5ce16bc79f2e4"
+            },
+            "compensated": [],
+            "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+            "interrupt_stage": "during"
+          },
+          "specification": {
+            "invariants": [
+              {
+                "id": "interruption-record",
+                "kind": "mark_after_reservation"
+              },
+              {
+                "id": "no-false-completion",
+                "kind": "no_commit_on_failure"
+              }
+            ],
+            "effect_scope": "exclusive_local_output"
+          },
+          "source_identity": {
+            "constructor": "31b1d3476ab94cb88da4eca7e86c0791e781f63c36b23c4b1692f2a1a10916ca",
+            "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+          }
+        },
+        "bindings": {
+          "task_sha256": "ecef9938f17a39802b7a424fb7f3fc3f986786444aec54d36ef452e1b358fb98",
+          "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+          "execution_sha256": "e56d3399ce512835678af5c6c677a1a250b9d191026e8758f4091c818d2f977b",
+          "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+          "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624"
+        },
+        "reproduction": {
+          "interrupt_at": "acquisition-derive",
+          "interrupt_stage": "during"
+        },
+        "expected_failure": "An interrupted effect under established reservation lacks its required incomplete marker.",
+        "severity": "consequential",
+        "uncertainty": "Single observed execution; a separate reproduction is required.",
+        "objection_sha256": "975958e93f7d5a6047c63524b7f5743e40aba426dc6b3505d4d9daf83b15d6b0"
+      },
+      "status": "established",
+      "reason": "CONSEQUENTIAL_DEFECT_REPRODUCED",
+      "independence": "Separate reproducer; shared host/libraries, not external certification.",
+      "reproduced_execution": {
+        "state": "UNMARKED",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "acquisition-allocate"
+        ],
+        "failure_at": "acquisition-derive",
+        "trace": [
+          "acquisition-allocate",
+          "acquisition-capture"
+        ],
+        "interrupted_marker": false,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {
+          "phase-002.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "phase-001.json": "2b2bfb97b844d85a2950cce4721136066e1cb62727e4c57d12a5ce16bc79f2e4"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+        "interrupt_stage": "during"
+      },
+      "reproduced_execution_sha256": "e56d3399ce512835678af5c6c677a1a250b9d191026e8758f4091c818d2f977b",
+      "established_issue": {
+        "invariant_id": "interruption-record",
+        "kind": "mark_after_reservation",
+        "phase_ids": [
+          "acquisition-derive"
+        ],
+        "repairable": true,
+        "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+      },
+      "adjudication_sha256": "e024618f135df2ef44d42b018fc534d1776d5456c295045ef98e2104b031b74a"
+    },
+    {
+      "schema": "agi-alpha-criticism-adjudication/v1",
+      "objection": {
+        "schema": "agi-alpha-evidence-criticism/v1",
+        "status": "proposed",
+        "claim_challenged": "interruption-record",
+        "issue": {
+          "invariant_id": "interruption-record",
+          "kind": "mark_after_reservation",
+          "phase_ids": [
+            "acquisition-publish"
+          ],
+          "repairable": true,
+          "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+        },
+        "evidence": {
+          "task": {
+            "id": "acquisition",
+            "phases": [
+              {
+                "id": "acquisition-allocate",
+                "kind": "reserve",
+                "deps": [],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-capture",
+                "kind": "capture",
+                "deps": [
+                  "acquisition-allocate"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-derive",
+                "kind": "compute",
+                "deps": [
+                  "acquisition-capture"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-publish",
+                "kind": "commit",
+                "deps": [
+                  "acquisition-derive"
+                ],
+                "unit": "event"
+              }
+            ],
+            "conditions": {
+              "failure": "catchable_exception",
+              "effects": "exclusive_local_output"
+            }
+          },
+          "candidate": {
+            "language": "event-plan/v1",
+            "order": [
+              "acquisition-allocate",
+              "acquisition-capture",
+              "acquisition-derive",
+              "acquisition-publish"
+            ],
+            "protected": [
+              "acquisition-capture"
+            ],
+            "atomic": [],
+            "compensations": {}
+          },
+          "execution": {
+            "state": "UNMARKED",
+            "completed": false,
+            "directory_created": true,
+            "reserved": [
+              "acquisition-allocate"
+            ],
+            "failure_at": "acquisition-publish",
+            "trace": [
+              "acquisition-allocate",
+              "acquisition-capture",
+              "acquisition-derive"
+            ],
+            "interrupted_marker": false,
+            "partial_publication": true,
+            "complete_exists": true,
+            "files_sha256": {
+              "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "phase-002.json": "c46810b9de1dbc4f8bd4e8b35cbd6efcc3e68b9dfb54c2de7a28aa94ecb6e89a",
+              "phase-001.json": "2b2bfb97b844d85a2950cce4721136066e1cb62727e4c57d12a5ce16bc79f2e4"
+            },
+            "compensated": [],
+            "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+            "interrupt_stage": "during"
+          },
+          "specification": {
+            "invariants": [
+              {
+                "id": "interruption-record",
+                "kind": "mark_after_reservation"
+              },
+              {
+                "id": "no-false-completion",
+                "kind": "no_commit_on_failure"
+              }
+            ],
+            "effect_scope": "exclusive_local_output"
+          },
+          "source_identity": {
+            "constructor": "31b1d3476ab94cb88da4eca7e86c0791e781f63c36b23c4b1692f2a1a10916ca",
+            "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+          }
+        },
+        "bindings": {
+          "task_sha256": "ecef9938f17a39802b7a424fb7f3fc3f986786444aec54d36ef452e1b358fb98",
+          "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+          "execution_sha256": "a23ee7a87c6ed8d6fbea668a915baa64985ee8e1b3b19ea3bf35cbccb7123678",
+          "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+          "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624"
+        },
+        "reproduction": {
+          "interrupt_at": "acquisition-publish",
+          "interrupt_stage": "during"
+        },
+        "expected_failure": "An interrupted effect under established reservation lacks its required incomplete marker.",
+        "severity": "consequential",
+        "uncertainty": "Single observed execution; a separate reproduction is required.",
+        "objection_sha256": "4ba86998d3220673f5a63a555937e5779a533e2bbd0fdffdc33b174680fee8e0"
+      },
+      "status": "established",
+      "reason": "CONSEQUENTIAL_DEFECT_REPRODUCED",
+      "independence": "Separate reproducer; shared host/libraries, not external certification.",
+      "reproduced_execution": {
+        "state": "UNMARKED",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "acquisition-allocate"
+        ],
+        "failure_at": "acquisition-publish",
+        "trace": [
+          "acquisition-allocate",
+          "acquisition-capture",
+          "acquisition-derive"
+        ],
+        "interrupted_marker": false,
+        "partial_publication": true,
+        "complete_exists": true,
+        "files_sha256": {
+          "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "phase-002.json": "c46810b9de1dbc4f8bd4e8b35cbd6efcc3e68b9dfb54c2de7a28aa94ecb6e89a",
+          "phase-001.json": "2b2bfb97b844d85a2950cce4721136066e1cb62727e4c57d12a5ce16bc79f2e4"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+        "interrupt_stage": "during"
+      },
+      "reproduced_execution_sha256": "a23ee7a87c6ed8d6fbea668a915baa64985ee8e1b3b19ea3bf35cbccb7123678",
+      "established_issue": {
+        "invariant_id": "interruption-record",
+        "kind": "mark_after_reservation",
+        "phase_ids": [
+          "acquisition-publish"
+        ],
+        "repairable": true,
+        "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+      },
+      "adjudication_sha256": "c71fa87e0241d8747e0bfacfc33e3507f8fc15f533a588884e4a77aee64614b2"
+    },
+    {
+      "schema": "agi-alpha-criticism-adjudication/v1",
+      "objection": {
+        "schema": "agi-alpha-evidence-criticism/v1",
+        "status": "proposed",
+        "claim_challenged": "no-false-completion",
+        "issue": {
+          "invariant_id": "no-false-completion",
+          "kind": "no_commit_on_failure",
+          "phase_ids": [
+            "acquisition-publish"
+          ],
+          "repairable": true,
+          "finding": "A failed execution exposes a successful or partial terminal publication.",
+          "repair_boundary": null
+        },
+        "evidence": {
+          "task": {
+            "id": "acquisition",
+            "phases": [
+              {
+                "id": "acquisition-allocate",
+                "kind": "reserve",
+                "deps": [],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-capture",
+                "kind": "capture",
+                "deps": [
+                  "acquisition-allocate"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-derive",
+                "kind": "compute",
+                "deps": [
+                  "acquisition-capture"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "acquisition-publish",
+                "kind": "commit",
+                "deps": [
+                  "acquisition-derive"
+                ],
+                "unit": "event"
+              }
+            ],
+            "conditions": {
+              "failure": "catchable_exception",
+              "effects": "exclusive_local_output"
+            }
+          },
+          "candidate": {
+            "language": "event-plan/v1",
+            "order": [
+              "acquisition-allocate",
+              "acquisition-capture",
+              "acquisition-derive",
+              "acquisition-publish"
+            ],
+            "protected": [
+              "acquisition-capture"
+            ],
+            "atomic": [],
+            "compensations": {}
+          },
+          "execution": {
+            "state": "UNMARKED",
+            "completed": false,
+            "directory_created": true,
+            "reserved": [
+              "acquisition-allocate"
+            ],
+            "failure_at": "acquisition-publish",
+            "trace": [
+              "acquisition-allocate",
+              "acquisition-capture",
+              "acquisition-derive"
+            ],
+            "interrupted_marker": false,
+            "partial_publication": true,
+            "complete_exists": true,
+            "files_sha256": {
+              "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "phase-002.json": "c46810b9de1dbc4f8bd4e8b35cbd6efcc3e68b9dfb54c2de7a28aa94ecb6e89a",
+              "phase-001.json": "2b2bfb97b844d85a2950cce4721136066e1cb62727e4c57d12a5ce16bc79f2e4"
+            },
+            "compensated": [],
+            "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+            "interrupt_stage": "during"
+          },
+          "specification": {
+            "invariants": [
+              {
+                "id": "interruption-record",
+                "kind": "mark_after_reservation"
+              },
+              {
+                "id": "no-false-completion",
+                "kind": "no_commit_on_failure"
+              }
+            ],
+            "effect_scope": "exclusive_local_output"
+          },
+          "source_identity": {
+            "constructor": "31b1d3476ab94cb88da4eca7e86c0791e781f63c36b23c4b1692f2a1a10916ca",
+            "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+          }
+        },
+        "bindings": {
+          "task_sha256": "ecef9938f17a39802b7a424fb7f3fc3f986786444aec54d36ef452e1b358fb98",
+          "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+          "execution_sha256": "a23ee7a87c6ed8d6fbea668a915baa64985ee8e1b3b19ea3bf35cbccb7123678",
+          "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+          "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624"
+        },
+        "reproduction": {
+          "interrupt_at": "acquisition-publish",
+          "interrupt_stage": "during"
+        },
+        "expected_failure": "A failed execution exposes a successful or partial terminal publication.",
+        "severity": "consequential",
+        "uncertainty": "Single observed execution; a separate reproduction is required.",
+        "objection_sha256": "11e6ea53b8cc86ec4b80f252a47eaf170a1a3bf9f74b33ac51fad2725f990d0f"
+      },
+      "status": "established",
+      "reason": "CONSEQUENTIAL_DEFECT_REPRODUCED",
+      "independence": "Separate reproducer; shared host/libraries, not external certification.",
+      "reproduced_execution": {
+        "state": "UNMARKED",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "acquisition-allocate"
+        ],
+        "failure_at": "acquisition-publish",
+        "trace": [
+          "acquisition-allocate",
+          "acquisition-capture",
+          "acquisition-derive"
+        ],
+        "interrupted_marker": false,
+        "partial_publication": true,
+        "complete_exists": true,
+        "files_sha256": {
+          "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "phase-002.json": "c46810b9de1dbc4f8bd4e8b35cbd6efcc3e68b9dfb54c2de7a28aa94ecb6e89a",
+          "phase-001.json": "2b2bfb97b844d85a2950cce4721136066e1cb62727e4c57d12a5ce16bc79f2e4"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+        "interrupt_stage": "during"
+      },
+      "reproduced_execution_sha256": "a23ee7a87c6ed8d6fbea668a915baa64985ee8e1b3b19ea3bf35cbccb7123678",
+      "established_issue": {
+        "invariant_id": "no-false-completion",
+        "kind": "no_commit_on_failure",
+        "phase_ids": [
+          "acquisition-publish"
+        ],
+        "repairable": true,
+        "finding": "A failed execution exposes a successful or partial terminal publication.",
+        "repair_boundary": null
+      },
+      "adjudication_sha256": "bcd0466b4161c210e7e5c1a14f36f99cda0db1c6a95e8991e252e2e8cdc096bf"
+    }
+  ],
+  "derived_obligations": [
+    {
+      "kind": "protect",
+      "phase_ids": [
+        "acquisition-derive"
+      ],
+      "status": "established",
+      "provenance": {
+        "status": "established",
+        "invariant_id": "interruption-record",
+        "adjudication_sha256": "e024618f135df2ef44d42b018fc534d1776d5456c295045ef98e2104b031b74a",
+        "objection_sha256": "975958e93f7d5a6047c63524b7f5743e40aba426dc6b3505d4d9daf83b15d6b0",
+        "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624",
+        "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "original_witness_sha256": "e56d3399ce512835678af5c6c677a1a250b9d191026e8758f4091c818d2f977b",
+        "reproduced_witness_sha256": "e56d3399ce512835678af5c6c677a1a250b9d191026e8758f4091c818d2f977b"
+      }
+    },
+    {
+      "kind": "protect",
+      "phase_ids": [
+        "acquisition-publish"
+      ],
+      "status": "established",
+      "provenance": {
+        "status": "established",
+        "invariant_id": "interruption-record",
+        "adjudication_sha256": "c71fa87e0241d8747e0bfacfc33e3507f8fc15f533a588884e4a77aee64614b2",
+        "objection_sha256": "4ba86998d3220673f5a63a555937e5779a533e2bbd0fdffdc33b174680fee8e0",
+        "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624",
+        "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "original_witness_sha256": "a23ee7a87c6ed8d6fbea668a915baa64985ee8e1b3b19ea3bf35cbccb7123678",
+        "reproduced_witness_sha256": "a23ee7a87c6ed8d6fbea668a915baa64985ee8e1b3b19ea3bf35cbccb7123678"
+      }
+    },
+    {
+      "kind": "atomic_publish",
+      "phase_ids": [
+        "acquisition-publish"
+      ],
+      "status": "established",
+      "provenance": {
+        "status": "established",
+        "invariant_id": "no-false-completion",
+        "adjudication_sha256": "bcd0466b4161c210e7e5c1a14f36f99cda0db1c6a95e8991e252e2e8cdc096bf",
+        "objection_sha256": "11e6ea53b8cc86ec4b80f252a47eaf170a1a3bf9f74b33ac51fad2725f990d0f",
+        "source_identity_sha256": "e51e52fe7afcff66594ffdbcdb0f23b41ee212a3063d603b4e07a3ae99f60624",
+        "candidate_sha256": "d9f383b5ceac5f364f70befd9cf5675aae1315b7639f8f07132cb485bc431047",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "original_witness_sha256": "a23ee7a87c6ed8d6fbea668a915baa64985ee8e1b3b19ea3bf35cbccb7123678",
+        "reproduced_witness_sha256": "a23ee7a87c6ed8d6fbea668a915baa64985ee8e1b3b19ea3bf35cbccb7123678"
+      }
+    }
+  ]
+}

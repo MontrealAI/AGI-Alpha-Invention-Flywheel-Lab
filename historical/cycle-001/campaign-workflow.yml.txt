@@ -1,0 +1,63 @@
+name: Bounded campaign qualification
+on:
+  pull_request:
+  push:
+    branches: [main, campaign/grid-screen-cycle-1]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - name: Source-matched tests and actual connected replay
+        run: |
+          python -m unittest discover -s tests -v
+          python -m unittest discover -s verification -v
+          python reproduce.py --output "$RUNNER_TEMP/campaign-replay"
+          python verification/probe_runner_identity.py --root . --output "$RUNNER_TEMP/identity-probe"
+          python verification/probe_added_source.py --root . --output "$RUNNER_TEMP/added-source-probe"
+          python verification/probe_worker_bounds.py --root . --output "$RUNNER_TEMP/bounds-probe"
+          python verification/check_edition.py
+  publish-research-edition:
+    needs: qualify
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Publish this experimental edition once
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          tag=study-first-campaign-20261029-r1
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo 'Existing edition retained unchanged.'
+            exit 0
+          fi
+          if git show-ref --verify --quiet "refs/tags/$tag"; then
+            echo 'Tag already exists without release; refuse reuse.' >&2
+            exit 1
+          fi
+          mkdir -p release-assets
+          git archive --format=zip --prefix=AGI_ALPHA_Cycle_001/ HEAD > release-assets/AGI_ALPHA_Cycle_001_source_evidence.zip
+          cp docs/research/cycle-001.pdf release-assets/
+          cp docs/research/cycle-001.tex release-assets/
+          cp docs/research/cycle-001.html release-assets/
+          sha256sum release-assets/* > release-assets/SHA256SUMS.txt
+          gh release create "$tag" release-assets/* --target "$GITHUB_SHA" --prerelease --title 'AGI ALPHA first campaign - experimental evidence edition 001' --notes-file campaign/cycle-001/RELEASE_NOTES.md

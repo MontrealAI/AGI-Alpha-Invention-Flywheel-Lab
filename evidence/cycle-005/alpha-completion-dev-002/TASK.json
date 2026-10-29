@@ -1,0 +1,149 @@
+{
+  "task": {
+    "id": "acquisition",
+    "phases": [
+      {
+        "id": "acquisition-allocate",
+        "kind": "reserve",
+        "deps": [],
+        "unit": "event"
+      },
+      {
+        "id": "acquisition-capture",
+        "kind": "capture",
+        "deps": [
+          "acquisition-allocate"
+        ],
+        "unit": "event"
+      },
+      {
+        "id": "acquisition-derive",
+        "kind": "compute",
+        "deps": [
+          "acquisition-capture"
+        ],
+        "unit": "event"
+      },
+      {
+        "id": "acquisition-publish",
+        "kind": "commit",
+        "deps": [
+          "acquisition-derive"
+        ],
+        "unit": "event"
+      }
+    ],
+    "conditions": {
+      "failure": "catchable_exception",
+      "effects": "exclusive_local_output"
+    }
+  },
+  "donors": [
+    {
+      "id": "transaction-role-fragment",
+      "nodes": [
+        {
+          "id": "allocate",
+          "kind": "reserve",
+          "unit": "event"
+        },
+        {
+          "id": "prepare",
+          "kind": "capture",
+          "unit": "event"
+        },
+        {
+          "id": "apply",
+          "kind": "compute",
+          "unit": "event"
+        },
+        {
+          "id": "commit",
+          "kind": "commit",
+          "unit": "event"
+        }
+      ],
+      "relations": [
+        [
+          "allocate",
+          "precedes",
+          "prepare"
+        ],
+        [
+          "prepare",
+          "precedes",
+          "apply"
+        ],
+        [
+          "apply",
+          "precedes",
+          "commit"
+        ]
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output"
+      },
+      "obligations": [
+        {
+          "kind": "protect",
+          "role_ids": [
+            "prepare"
+          ]
+        }
+      ],
+      "provenance": "Developer-authored partial transaction-role mechanism, not a discovered scientific principle"
+    }
+  ],
+  "target_graph": {
+    "conditions": {
+      "effects": "exclusive_local_output",
+      "failure": "catchable_exception"
+    },
+    "id": "acquisition",
+    "nodes": [
+      {
+        "event": "acquisition-allocate",
+        "id": "acquisition-allocate",
+        "kind": "reserve",
+        "unit": "event"
+      },
+      {
+        "event": "acquisition-capture",
+        "id": "acquisition-capture",
+        "kind": "capture",
+        "unit": "event"
+      },
+      {
+        "event": "acquisition-derive",
+        "id": "acquisition-derive",
+        "kind": "compute",
+        "unit": "event"
+      },
+      {
+        "event": "acquisition-publish",
+        "id": "acquisition-publish",
+        "kind": "commit",
+        "unit": "event"
+      }
+    ],
+    "relations": [
+      [
+        "acquisition-allocate",
+        "precedes",
+        "acquisition-capture"
+      ],
+      [
+        "acquisition-capture",
+        "precedes",
+        "acquisition-derive"
+      ],
+      [
+        "acquisition-derive",
+        "precedes",
+        "acquisition-publish"
+      ]
+    ]
+  },
+  "origin": "Supplied typed engineering semantics; mapping and rules constructed by actual runtime"
+}

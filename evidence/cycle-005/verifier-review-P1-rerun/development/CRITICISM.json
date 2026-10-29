@@ -1,0 +1,1457 @@
+{
+  "objections": [
+    {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "no_defect",
+      "claim_challenged": null,
+      "issue": {
+        "finding": "No defect established for the observed run and declared invariants.",
+        "kind": null,
+        "phase_ids": [],
+        "repairable": false
+      },
+      "evidence": {
+        "task": {
+          "id": "P1-repaired-independent",
+          "phases": [
+            {
+              "id": "P1-repaired-independent-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-capture",
+              "kind": "capture",
+              "deps": [
+                "P1-repaired-independent-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-derive",
+              "kind": "compute",
+              "deps": [
+                "P1-repaired-independent-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-publish",
+              "kind": "commit",
+              "deps": [
+                "P1-repaired-independent-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "P1-repaired-independent-allocate",
+            "P1-repaired-independent-capture",
+            "P1-repaired-independent-derive",
+            "P1-repaired-independent-publish"
+          ],
+          "protected": [
+            "P1-repaired-independent-capture"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": false,
+          "reserved": [],
+          "failure_at": "P1-repaired-independent-allocate",
+          "trace": [],
+          "interrupted_marker": false,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {},
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "interruption-record",
+              "kind": "mark_after_reservation"
+            },
+            {
+              "id": "no-false-completion",
+              "kind": "no_commit_on_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "constructor": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "1c589595ac6f1acd9a754d5ea6e453e164fe5a66816b81c31e8737ce28f35b78",
+        "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+        "execution_sha256": "ef7fe9d21106d4c3f9316395c713d18a6a95269564dd678d200a9d742da0da7d",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7"
+      },
+      "reproduction": {
+        "interrupt_at": "P1-repaired-independent-allocate",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": null,
+      "severity": "undetermined",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "2db3e9a865fc0a234d3e06583fc85d3625ae659bc1df2d1f890b3c1ca4ce8651"
+    },
+    {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "no_defect",
+      "claim_challenged": null,
+      "issue": {
+        "finding": "No defect established for the observed run and declared invariants.",
+        "kind": null,
+        "phase_ids": [],
+        "repairable": false
+      },
+      "evidence": {
+        "task": {
+          "id": "P1-repaired-independent",
+          "phases": [
+            {
+              "id": "P1-repaired-independent-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-capture",
+              "kind": "capture",
+              "deps": [
+                "P1-repaired-independent-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-derive",
+              "kind": "compute",
+              "deps": [
+                "P1-repaired-independent-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-publish",
+              "kind": "commit",
+              "deps": [
+                "P1-repaired-independent-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "P1-repaired-independent-allocate",
+            "P1-repaired-independent-capture",
+            "P1-repaired-independent-derive",
+            "P1-repaired-independent-publish"
+          ],
+          "protected": [
+            "P1-repaired-independent-capture"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "INCOMPLETE",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "P1-repaired-independent-allocate"
+          ],
+          "failure_at": "P1-repaired-independent-capture",
+          "trace": [
+            "P1-repaired-independent-allocate"
+          ],
+          "interrupted_marker": true,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "INTERRUPTED.json": "1eefeb32ee89f3561a3968ec620046b895829d6e9a9e1af5f56e443d0f376c63",
+            "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "interruption-record",
+              "kind": "mark_after_reservation"
+            },
+            {
+              "id": "no-false-completion",
+              "kind": "no_commit_on_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "constructor": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "1c589595ac6f1acd9a754d5ea6e453e164fe5a66816b81c31e8737ce28f35b78",
+        "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+        "execution_sha256": "3ae1d59c6adfa839bb77f5d2d8b3f86c258137a7334c696584011ff077921000",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7"
+      },
+      "reproduction": {
+        "interrupt_at": "P1-repaired-independent-capture",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": null,
+      "severity": "undetermined",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "2cd6c7a063b9df7933a3822f7be85fc14901ca0ea864a29730a44368af7f4db4"
+    },
+    {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "proposed",
+      "claim_challenged": "interruption-record",
+      "issue": {
+        "invariant_id": "interruption-record",
+        "kind": "mark_after_reservation",
+        "phase_ids": [
+          "P1-repaired-independent-derive"
+        ],
+        "repairable": true,
+        "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+      },
+      "evidence": {
+        "task": {
+          "id": "P1-repaired-independent",
+          "phases": [
+            {
+              "id": "P1-repaired-independent-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-capture",
+              "kind": "capture",
+              "deps": [
+                "P1-repaired-independent-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-derive",
+              "kind": "compute",
+              "deps": [
+                "P1-repaired-independent-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-publish",
+              "kind": "commit",
+              "deps": [
+                "P1-repaired-independent-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "P1-repaired-independent-allocate",
+            "P1-repaired-independent-capture",
+            "P1-repaired-independent-derive",
+            "P1-repaired-independent-publish"
+          ],
+          "protected": [
+            "P1-repaired-independent-capture"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "P1-repaired-independent-allocate"
+          ],
+          "failure_at": "P1-repaired-independent-derive",
+          "trace": [
+            "P1-repaired-independent-allocate",
+            "P1-repaired-independent-capture"
+          ],
+          "interrupted_marker": false,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "phase-002.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-001.json": "48ef963dbaca2b814c152ac390190e388c6e28bd82fc17ba86b0954bb8039d67"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "interruption-record",
+              "kind": "mark_after_reservation"
+            },
+            {
+              "id": "no-false-completion",
+              "kind": "no_commit_on_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "constructor": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "1c589595ac6f1acd9a754d5ea6e453e164fe5a66816b81c31e8737ce28f35b78",
+        "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+        "execution_sha256": "0b8aa34c7be2c72ad71f15bb63f05a585671df11d7540ab9a2c5f1dc5335daa7",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7"
+      },
+      "reproduction": {
+        "interrupt_at": "P1-repaired-independent-derive",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": "An interrupted effect under established reservation lacks its required incomplete marker.",
+      "severity": "consequential",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "0b8315a396e6d452c81a5abdac078faf267f5362664bb5fa136a162e21989b9b"
+    },
+    {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "proposed",
+      "claim_challenged": "interruption-record",
+      "issue": {
+        "invariant_id": "interruption-record",
+        "kind": "mark_after_reservation",
+        "phase_ids": [
+          "P1-repaired-independent-publish"
+        ],
+        "repairable": true,
+        "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+      },
+      "evidence": {
+        "task": {
+          "id": "P1-repaired-independent",
+          "phases": [
+            {
+              "id": "P1-repaired-independent-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-capture",
+              "kind": "capture",
+              "deps": [
+                "P1-repaired-independent-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-derive",
+              "kind": "compute",
+              "deps": [
+                "P1-repaired-independent-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-publish",
+              "kind": "commit",
+              "deps": [
+                "P1-repaired-independent-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "P1-repaired-independent-allocate",
+            "P1-repaired-independent-capture",
+            "P1-repaired-independent-derive",
+            "P1-repaired-independent-publish"
+          ],
+          "protected": [
+            "P1-repaired-independent-capture"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "P1-repaired-independent-allocate"
+          ],
+          "failure_at": "P1-repaired-independent-publish",
+          "trace": [
+            "P1-repaired-independent-allocate",
+            "P1-repaired-independent-capture",
+            "P1-repaired-independent-derive"
+          ],
+          "interrupted_marker": false,
+          "partial_publication": true,
+          "complete_exists": true,
+          "files_sha256": {
+            "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-002.json": "f54f17c3710b35df80a7ba4cd5c329ea735393c98d31db902b254e3893755e16",
+            "phase-001.json": "48ef963dbaca2b814c152ac390190e388c6e28bd82fc17ba86b0954bb8039d67"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "interruption-record",
+              "kind": "mark_after_reservation"
+            },
+            {
+              "id": "no-false-completion",
+              "kind": "no_commit_on_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "constructor": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "1c589595ac6f1acd9a754d5ea6e453e164fe5a66816b81c31e8737ce28f35b78",
+        "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+        "execution_sha256": "8110af7d3cef79cb71590520c98775c0a88e6c501886f34c2de2cb7543a08aec",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7"
+      },
+      "reproduction": {
+        "interrupt_at": "P1-repaired-independent-publish",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": "An interrupted effect under established reservation lacks its required incomplete marker.",
+      "severity": "consequential",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "70e5a4a82e54b5c95f26eadbdf49b50c42aa643cb225198a4e3a3eb1c66def29"
+    },
+    {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "proposed",
+      "claim_challenged": "no-false-completion",
+      "issue": {
+        "invariant_id": "no-false-completion",
+        "kind": "no_commit_on_failure",
+        "phase_ids": [
+          "P1-repaired-independent-publish"
+        ],
+        "repairable": true,
+        "finding": "A failed execution exposes a successful or partial terminal publication.",
+        "repair_boundary": null
+      },
+      "evidence": {
+        "task": {
+          "id": "P1-repaired-independent",
+          "phases": [
+            {
+              "id": "P1-repaired-independent-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-capture",
+              "kind": "capture",
+              "deps": [
+                "P1-repaired-independent-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-derive",
+              "kind": "compute",
+              "deps": [
+                "P1-repaired-independent-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-repaired-independent-publish",
+              "kind": "commit",
+              "deps": [
+                "P1-repaired-independent-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "P1-repaired-independent-allocate",
+            "P1-repaired-independent-capture",
+            "P1-repaired-independent-derive",
+            "P1-repaired-independent-publish"
+          ],
+          "protected": [
+            "P1-repaired-independent-capture"
+          ],
+          "atomic": [],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "P1-repaired-independent-allocate"
+          ],
+          "failure_at": "P1-repaired-independent-publish",
+          "trace": [
+            "P1-repaired-independent-allocate",
+            "P1-repaired-independent-capture",
+            "P1-repaired-independent-derive"
+          ],
+          "interrupted_marker": false,
+          "partial_publication": true,
+          "complete_exists": true,
+          "files_sha256": {
+            "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-002.json": "f54f17c3710b35df80a7ba4cd5c329ea735393c98d31db902b254e3893755e16",
+            "phase-001.json": "48ef963dbaca2b814c152ac390190e388c6e28bd82fc17ba86b0954bb8039d67"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "interruption-record",
+              "kind": "mark_after_reservation"
+            },
+            {
+              "id": "no-false-completion",
+              "kind": "no_commit_on_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "constructor": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "1c589595ac6f1acd9a754d5ea6e453e164fe5a66816b81c31e8737ce28f35b78",
+        "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+        "execution_sha256": "8110af7d3cef79cb71590520c98775c0a88e6c501886f34c2de2cb7543a08aec",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7"
+      },
+      "reproduction": {
+        "interrupt_at": "P1-repaired-independent-publish",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": "A failed execution exposes a successful or partial terminal publication.",
+      "severity": "consequential",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "273d71d605ed61374d2cbd2e3270bcc5168960d9dfa89a83541db6061bf872eb"
+    }
+  ],
+  "adjudications": [
+    {
+      "schema": "agi-alpha-criticism-adjudication/v1",
+      "objection": {
+        "schema": "agi-alpha-evidence-criticism/v1",
+        "status": "no_defect",
+        "claim_challenged": null,
+        "issue": {
+          "finding": "No defect established for the observed run and declared invariants.",
+          "kind": null,
+          "phase_ids": [],
+          "repairable": false
+        },
+        "evidence": {
+          "task": {
+            "id": "P1-repaired-independent",
+            "phases": [
+              {
+                "id": "P1-repaired-independent-allocate",
+                "kind": "reserve",
+                "deps": [],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-capture",
+                "kind": "capture",
+                "deps": [
+                  "P1-repaired-independent-allocate"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-derive",
+                "kind": "compute",
+                "deps": [
+                  "P1-repaired-independent-capture"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-publish",
+                "kind": "commit",
+                "deps": [
+                  "P1-repaired-independent-derive"
+                ],
+                "unit": "event"
+              }
+            ],
+            "conditions": {
+              "failure": "catchable_exception",
+              "effects": "exclusive_local_output"
+            }
+          },
+          "candidate": {
+            "language": "event-plan/v1",
+            "order": [
+              "P1-repaired-independent-allocate",
+              "P1-repaired-independent-capture",
+              "P1-repaired-independent-derive",
+              "P1-repaired-independent-publish"
+            ],
+            "protected": [
+              "P1-repaired-independent-capture"
+            ],
+            "atomic": [],
+            "compensations": {}
+          },
+          "execution": {
+            "state": "UNMARKED",
+            "completed": false,
+            "directory_created": false,
+            "reserved": [],
+            "failure_at": "P1-repaired-independent-allocate",
+            "trace": [],
+            "interrupted_marker": false,
+            "partial_publication": false,
+            "complete_exists": false,
+            "files_sha256": {},
+            "interrupt_stage": "during"
+          },
+          "specification": {
+            "invariants": [
+              {
+                "id": "interruption-record",
+                "kind": "mark_after_reservation"
+              },
+              {
+                "id": "no-false-completion",
+                "kind": "no_commit_on_failure"
+              }
+            ],
+            "effect_scope": "exclusive_local_output"
+          },
+          "source_identity": {
+            "constructor": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+            "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+          }
+        },
+        "bindings": {
+          "task_sha256": "1c589595ac6f1acd9a754d5ea6e453e164fe5a66816b81c31e8737ce28f35b78",
+          "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+          "execution_sha256": "ef7fe9d21106d4c3f9316395c713d18a6a95269564dd678d200a9d742da0da7d",
+          "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+          "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7"
+        },
+        "reproduction": {
+          "interrupt_at": "P1-repaired-independent-allocate",
+          "interrupt_stage": "during"
+        },
+        "expected_failure": null,
+        "severity": "undetermined",
+        "uncertainty": "Single observed execution; a separate reproduction is required.",
+        "objection_sha256": "2db3e9a865fc0a234d3e06583fc85d3625ae659bc1df2d1f890b3c1ca4ce8651"
+      },
+      "status": "no_defect",
+      "reason": "NO_DEFECT_ESTABLISHED",
+      "independence": "Separate reproducer; shared host/libraries, not external certification.",
+      "reproduced_execution": {
+        "state": "UNMARKED",
+        "completed": false,
+        "directory_created": false,
+        "reserved": [],
+        "failure_at": "P1-repaired-independent-allocate",
+        "trace": [],
+        "interrupted_marker": false,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {},
+        "interrupt_stage": "during"
+      },
+      "reproduced_execution_sha256": "ef7fe9d21106d4c3f9316395c713d18a6a95269564dd678d200a9d742da0da7d",
+      "adjudication_sha256": "2de080836bc1da1c0d33c8c1b1d2e4d007414e45dff468586bc0eedbbfa052f0"
+    },
+    {
+      "schema": "agi-alpha-criticism-adjudication/v1",
+      "objection": {
+        "schema": "agi-alpha-evidence-criticism/v1",
+        "status": "no_defect",
+        "claim_challenged": null,
+        "issue": {
+          "finding": "No defect established for the observed run and declared invariants.",
+          "kind": null,
+          "phase_ids": [],
+          "repairable": false
+        },
+        "evidence": {
+          "task": {
+            "id": "P1-repaired-independent",
+            "phases": [
+              {
+                "id": "P1-repaired-independent-allocate",
+                "kind": "reserve",
+                "deps": [],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-capture",
+                "kind": "capture",
+                "deps": [
+                  "P1-repaired-independent-allocate"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-derive",
+                "kind": "compute",
+                "deps": [
+                  "P1-repaired-independent-capture"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-publish",
+                "kind": "commit",
+                "deps": [
+                  "P1-repaired-independent-derive"
+                ],
+                "unit": "event"
+              }
+            ],
+            "conditions": {
+              "failure": "catchable_exception",
+              "effects": "exclusive_local_output"
+            }
+          },
+          "candidate": {
+            "language": "event-plan/v1",
+            "order": [
+              "P1-repaired-independent-allocate",
+              "P1-repaired-independent-capture",
+              "P1-repaired-independent-derive",
+              "P1-repaired-independent-publish"
+            ],
+            "protected": [
+              "P1-repaired-independent-capture"
+            ],
+            "atomic": [],
+            "compensations": {}
+          },
+          "execution": {
+            "state": "INCOMPLETE",
+            "completed": false,
+            "directory_created": true,
+            "reserved": [
+              "P1-repaired-independent-allocate"
+            ],
+            "failure_at": "P1-repaired-independent-capture",
+            "trace": [
+              "P1-repaired-independent-allocate"
+            ],
+            "interrupted_marker": true,
+            "partial_publication": false,
+            "complete_exists": false,
+            "files_sha256": {
+              "INTERRUPTED.json": "1eefeb32ee89f3561a3968ec620046b895829d6e9a9e1af5f56e443d0f376c63",
+              "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "compensated": [],
+            "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+            "interrupt_stage": "during"
+          },
+          "specification": {
+            "invariants": [
+              {
+                "id": "interruption-record",
+                "kind": "mark_after_reservation"
+              },
+              {
+                "id": "no-false-completion",
+                "kind": "no_commit_on_failure"
+              }
+            ],
+            "effect_scope": "exclusive_local_output"
+          },
+          "source_identity": {
+            "constructor": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+            "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+          }
+        },
+        "bindings": {
+          "task_sha256": "1c589595ac6f1acd9a754d5ea6e453e164fe5a66816b81c31e8737ce28f35b78",
+          "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+          "execution_sha256": "3ae1d59c6adfa839bb77f5d2d8b3f86c258137a7334c696584011ff077921000",
+          "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+          "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7"
+        },
+        "reproduction": {
+          "interrupt_at": "P1-repaired-independent-capture",
+          "interrupt_stage": "during"
+        },
+        "expected_failure": null,
+        "severity": "undetermined",
+        "uncertainty": "Single observed execution; a separate reproduction is required.",
+        "objection_sha256": "2cd6c7a063b9df7933a3822f7be85fc14901ca0ea864a29730a44368af7f4db4"
+      },
+      "status": "no_defect",
+      "reason": "NO_DEFECT_ESTABLISHED",
+      "independence": "Separate reproducer; shared host/libraries, not external certification.",
+      "reproduced_execution": {
+        "state": "INCOMPLETE",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "P1-repaired-independent-allocate"
+        ],
+        "failure_at": "P1-repaired-independent-capture",
+        "trace": [
+          "P1-repaired-independent-allocate"
+        ],
+        "interrupted_marker": true,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {
+          "INTERRUPTED.json": "1eefeb32ee89f3561a3968ec620046b895829d6e9a9e1af5f56e443d0f376c63",
+          "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+        "interrupt_stage": "during"
+      },
+      "reproduced_execution_sha256": "3ae1d59c6adfa839bb77f5d2d8b3f86c258137a7334c696584011ff077921000",
+      "adjudication_sha256": "f753bf55a07945ed285c1a97ae8f7252529c267a5d87c174b423d100e2a4c24d"
+    },
+    {
+      "schema": "agi-alpha-criticism-adjudication/v1",
+      "objection": {
+        "schema": "agi-alpha-evidence-criticism/v1",
+        "status": "proposed",
+        "claim_challenged": "interruption-record",
+        "issue": {
+          "invariant_id": "interruption-record",
+          "kind": "mark_after_reservation",
+          "phase_ids": [
+            "P1-repaired-independent-derive"
+          ],
+          "repairable": true,
+          "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+        },
+        "evidence": {
+          "task": {
+            "id": "P1-repaired-independent",
+            "phases": [
+              {
+                "id": "P1-repaired-independent-allocate",
+                "kind": "reserve",
+                "deps": [],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-capture",
+                "kind": "capture",
+                "deps": [
+                  "P1-repaired-independent-allocate"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-derive",
+                "kind": "compute",
+                "deps": [
+                  "P1-repaired-independent-capture"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-publish",
+                "kind": "commit",
+                "deps": [
+                  "P1-repaired-independent-derive"
+                ],
+                "unit": "event"
+              }
+            ],
+            "conditions": {
+              "failure": "catchable_exception",
+              "effects": "exclusive_local_output"
+            }
+          },
+          "candidate": {
+            "language": "event-plan/v1",
+            "order": [
+              "P1-repaired-independent-allocate",
+              "P1-repaired-independent-capture",
+              "P1-repaired-independent-derive",
+              "P1-repaired-independent-publish"
+            ],
+            "protected": [
+              "P1-repaired-independent-capture"
+            ],
+            "atomic": [],
+            "compensations": {}
+          },
+          "execution": {
+            "state": "UNMARKED",
+            "completed": false,
+            "directory_created": true,
+            "reserved": [
+              "P1-repaired-independent-allocate"
+            ],
+            "failure_at": "P1-repaired-independent-derive",
+            "trace": [
+              "P1-repaired-independent-allocate",
+              "P1-repaired-independent-capture"
+            ],
+            "interrupted_marker": false,
+            "partial_publication": false,
+            "complete_exists": false,
+            "files_sha256": {
+              "phase-002.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "phase-001.json": "48ef963dbaca2b814c152ac390190e388c6e28bd82fc17ba86b0954bb8039d67"
+            },
+            "compensated": [],
+            "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+            "interrupt_stage": "during"
+          },
+          "specification": {
+            "invariants": [
+              {
+                "id": "interruption-record",
+                "kind": "mark_after_reservation"
+              },
+              {
+                "id": "no-false-completion",
+                "kind": "no_commit_on_failure"
+              }
+            ],
+            "effect_scope": "exclusive_local_output"
+          },
+          "source_identity": {
+            "constructor": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+            "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+          }
+        },
+        "bindings": {
+          "task_sha256": "1c589595ac6f1acd9a754d5ea6e453e164fe5a66816b81c31e8737ce28f35b78",
+          "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+          "execution_sha256": "0b8aa34c7be2c72ad71f15bb63f05a585671df11d7540ab9a2c5f1dc5335daa7",
+          "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+          "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7"
+        },
+        "reproduction": {
+          "interrupt_at": "P1-repaired-independent-derive",
+          "interrupt_stage": "during"
+        },
+        "expected_failure": "An interrupted effect under established reservation lacks its required incomplete marker.",
+        "severity": "consequential",
+        "uncertainty": "Single observed execution; a separate reproduction is required.",
+        "objection_sha256": "0b8315a396e6d452c81a5abdac078faf267f5362664bb5fa136a162e21989b9b"
+      },
+      "status": "established",
+      "reason": "CONSEQUENTIAL_DEFECT_REPRODUCED",
+      "independence": "Separate reproducer; shared host/libraries, not external certification.",
+      "reproduced_execution": {
+        "state": "UNMARKED",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "P1-repaired-independent-allocate"
+        ],
+        "failure_at": "P1-repaired-independent-derive",
+        "trace": [
+          "P1-repaired-independent-allocate",
+          "P1-repaired-independent-capture"
+        ],
+        "interrupted_marker": false,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {
+          "phase-002.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "phase-001.json": "48ef963dbaca2b814c152ac390190e388c6e28bd82fc17ba86b0954bb8039d67"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+        "interrupt_stage": "during"
+      },
+      "reproduced_execution_sha256": "0b8aa34c7be2c72ad71f15bb63f05a585671df11d7540ab9a2c5f1dc5335daa7",
+      "established_issue": {
+        "invariant_id": "interruption-record",
+        "kind": "mark_after_reservation",
+        "phase_ids": [
+          "P1-repaired-independent-derive"
+        ],
+        "repairable": true,
+        "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+      },
+      "next_action": "derive_repair",
+      "adjudication_sha256": "fa001db187dc7dad35644d25c99f17a441b8bf5afe7276f52027c7e0bbb00486"
+    },
+    {
+      "schema": "agi-alpha-criticism-adjudication/v1",
+      "objection": {
+        "schema": "agi-alpha-evidence-criticism/v1",
+        "status": "proposed",
+        "claim_challenged": "interruption-record",
+        "issue": {
+          "invariant_id": "interruption-record",
+          "kind": "mark_after_reservation",
+          "phase_ids": [
+            "P1-repaired-independent-publish"
+          ],
+          "repairable": true,
+          "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+        },
+        "evidence": {
+          "task": {
+            "id": "P1-repaired-independent",
+            "phases": [
+              {
+                "id": "P1-repaired-independent-allocate",
+                "kind": "reserve",
+                "deps": [],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-capture",
+                "kind": "capture",
+                "deps": [
+                  "P1-repaired-independent-allocate"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-derive",
+                "kind": "compute",
+                "deps": [
+                  "P1-repaired-independent-capture"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-publish",
+                "kind": "commit",
+                "deps": [
+                  "P1-repaired-independent-derive"
+                ],
+                "unit": "event"
+              }
+            ],
+            "conditions": {
+              "failure": "catchable_exception",
+              "effects": "exclusive_local_output"
+            }
+          },
+          "candidate": {
+            "language": "event-plan/v1",
+            "order": [
+              "P1-repaired-independent-allocate",
+              "P1-repaired-independent-capture",
+              "P1-repaired-independent-derive",
+              "P1-repaired-independent-publish"
+            ],
+            "protected": [
+              "P1-repaired-independent-capture"
+            ],
+            "atomic": [],
+            "compensations": {}
+          },
+          "execution": {
+            "state": "UNMARKED",
+            "completed": false,
+            "directory_created": true,
+            "reserved": [
+              "P1-repaired-independent-allocate"
+            ],
+            "failure_at": "P1-repaired-independent-publish",
+            "trace": [
+              "P1-repaired-independent-allocate",
+              "P1-repaired-independent-capture",
+              "P1-repaired-independent-derive"
+            ],
+            "interrupted_marker": false,
+            "partial_publication": true,
+            "complete_exists": true,
+            "files_sha256": {
+              "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "phase-002.json": "f54f17c3710b35df80a7ba4cd5c329ea735393c98d31db902b254e3893755e16",
+              "phase-001.json": "48ef963dbaca2b814c152ac390190e388c6e28bd82fc17ba86b0954bb8039d67"
+            },
+            "compensated": [],
+            "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+            "interrupt_stage": "during"
+          },
+          "specification": {
+            "invariants": [
+              {
+                "id": "interruption-record",
+                "kind": "mark_after_reservation"
+              },
+              {
+                "id": "no-false-completion",
+                "kind": "no_commit_on_failure"
+              }
+            ],
+            "effect_scope": "exclusive_local_output"
+          },
+          "source_identity": {
+            "constructor": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+            "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+          }
+        },
+        "bindings": {
+          "task_sha256": "1c589595ac6f1acd9a754d5ea6e453e164fe5a66816b81c31e8737ce28f35b78",
+          "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+          "execution_sha256": "8110af7d3cef79cb71590520c98775c0a88e6c501886f34c2de2cb7543a08aec",
+          "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+          "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7"
+        },
+        "reproduction": {
+          "interrupt_at": "P1-repaired-independent-publish",
+          "interrupt_stage": "during"
+        },
+        "expected_failure": "An interrupted effect under established reservation lacks its required incomplete marker.",
+        "severity": "consequential",
+        "uncertainty": "Single observed execution; a separate reproduction is required.",
+        "objection_sha256": "70e5a4a82e54b5c95f26eadbdf49b50c42aa643cb225198a4e3a3eb1c66def29"
+      },
+      "status": "established",
+      "reason": "CONSEQUENTIAL_DEFECT_REPRODUCED",
+      "independence": "Separate reproducer; shared host/libraries, not external certification.",
+      "reproduced_execution": {
+        "state": "UNMARKED",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "P1-repaired-independent-allocate"
+        ],
+        "failure_at": "P1-repaired-independent-publish",
+        "trace": [
+          "P1-repaired-independent-allocate",
+          "P1-repaired-independent-capture",
+          "P1-repaired-independent-derive"
+        ],
+        "interrupted_marker": false,
+        "partial_publication": true,
+        "complete_exists": true,
+        "files_sha256": {
+          "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "phase-002.json": "f54f17c3710b35df80a7ba4cd5c329ea735393c98d31db902b254e3893755e16",
+          "phase-001.json": "48ef963dbaca2b814c152ac390190e388c6e28bd82fc17ba86b0954bb8039d67"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+        "interrupt_stage": "during"
+      },
+      "reproduced_execution_sha256": "8110af7d3cef79cb71590520c98775c0a88e6c501886f34c2de2cb7543a08aec",
+      "established_issue": {
+        "invariant_id": "interruption-record",
+        "kind": "mark_after_reservation",
+        "phase_ids": [
+          "P1-repaired-independent-publish"
+        ],
+        "repairable": true,
+        "finding": "An interrupted effect under established reservation lacks its required incomplete marker."
+      },
+      "next_action": "derive_repair",
+      "adjudication_sha256": "e35fece9e3fb0e661643a9142e4a206af1bd3b76c15d324e19e689a28f69f540"
+    },
+    {
+      "schema": "agi-alpha-criticism-adjudication/v1",
+      "objection": {
+        "schema": "agi-alpha-evidence-criticism/v1",
+        "status": "proposed",
+        "claim_challenged": "no-false-completion",
+        "issue": {
+          "invariant_id": "no-false-completion",
+          "kind": "no_commit_on_failure",
+          "phase_ids": [
+            "P1-repaired-independent-publish"
+          ],
+          "repairable": true,
+          "finding": "A failed execution exposes a successful or partial terminal publication.",
+          "repair_boundary": null
+        },
+        "evidence": {
+          "task": {
+            "id": "P1-repaired-independent",
+            "phases": [
+              {
+                "id": "P1-repaired-independent-allocate",
+                "kind": "reserve",
+                "deps": [],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-capture",
+                "kind": "capture",
+                "deps": [
+                  "P1-repaired-independent-allocate"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-derive",
+                "kind": "compute",
+                "deps": [
+                  "P1-repaired-independent-capture"
+                ],
+                "unit": "event"
+              },
+              {
+                "id": "P1-repaired-independent-publish",
+                "kind": "commit",
+                "deps": [
+                  "P1-repaired-independent-derive"
+                ],
+                "unit": "event"
+              }
+            ],
+            "conditions": {
+              "failure": "catchable_exception",
+              "effects": "exclusive_local_output"
+            }
+          },
+          "candidate": {
+            "language": "event-plan/v1",
+            "order": [
+              "P1-repaired-independent-allocate",
+              "P1-repaired-independent-capture",
+              "P1-repaired-independent-derive",
+              "P1-repaired-independent-publish"
+            ],
+            "protected": [
+              "P1-repaired-independent-capture"
+            ],
+            "atomic": [],
+            "compensations": {}
+          },
+          "execution": {
+            "state": "UNMARKED",
+            "completed": false,
+            "directory_created": true,
+            "reserved": [
+              "P1-repaired-independent-allocate"
+            ],
+            "failure_at": "P1-repaired-independent-publish",
+            "trace": [
+              "P1-repaired-independent-allocate",
+              "P1-repaired-independent-capture",
+              "P1-repaired-independent-derive"
+            ],
+            "interrupted_marker": false,
+            "partial_publication": true,
+            "complete_exists": true,
+            "files_sha256": {
+              "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "phase-002.json": "f54f17c3710b35df80a7ba4cd5c329ea735393c98d31db902b254e3893755e16",
+              "phase-001.json": "48ef963dbaca2b814c152ac390190e388c6e28bd82fc17ba86b0954bb8039d67"
+            },
+            "compensated": [],
+            "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+            "interrupt_stage": "during"
+          },
+          "specification": {
+            "invariants": [
+              {
+                "id": "interruption-record",
+                "kind": "mark_after_reservation"
+              },
+              {
+                "id": "no-false-completion",
+                "kind": "no_commit_on_failure"
+              }
+            ],
+            "effect_scope": "exclusive_local_output"
+          },
+          "source_identity": {
+            "constructor": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+            "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+          }
+        },
+        "bindings": {
+          "task_sha256": "1c589595ac6f1acd9a754d5ea6e453e164fe5a66816b81c31e8737ce28f35b78",
+          "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+          "execution_sha256": "8110af7d3cef79cb71590520c98775c0a88e6c501886f34c2de2cb7543a08aec",
+          "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+          "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7"
+        },
+        "reproduction": {
+          "interrupt_at": "P1-repaired-independent-publish",
+          "interrupt_stage": "during"
+        },
+        "expected_failure": "A failed execution exposes a successful or partial terminal publication.",
+        "severity": "consequential",
+        "uncertainty": "Single observed execution; a separate reproduction is required.",
+        "objection_sha256": "273d71d605ed61374d2cbd2e3270bcc5168960d9dfa89a83541db6061bf872eb"
+      },
+      "status": "established",
+      "reason": "CONSEQUENTIAL_DEFECT_REPRODUCED",
+      "independence": "Separate reproducer; shared host/libraries, not external certification.",
+      "reproduced_execution": {
+        "state": "UNMARKED",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "P1-repaired-independent-allocate"
+        ],
+        "failure_at": "P1-repaired-independent-publish",
+        "trace": [
+          "P1-repaired-independent-allocate",
+          "P1-repaired-independent-capture",
+          "P1-repaired-independent-derive"
+        ],
+        "interrupted_marker": false,
+        "partial_publication": true,
+        "complete_exists": true,
+        "files_sha256": {
+          "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "phase-002.json": "f54f17c3710b35df80a7ba4cd5c329ea735393c98d31db902b254e3893755e16",
+          "phase-001.json": "48ef963dbaca2b814c152ac390190e388c6e28bd82fc17ba86b0954bb8039d67"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+        "interrupt_stage": "during"
+      },
+      "reproduced_execution_sha256": "8110af7d3cef79cb71590520c98775c0a88e6c501886f34c2de2cb7543a08aec",
+      "established_issue": {
+        "invariant_id": "no-false-completion",
+        "kind": "no_commit_on_failure",
+        "phase_ids": [
+          "P1-repaired-independent-publish"
+        ],
+        "repairable": true,
+        "finding": "A failed execution exposes a successful or partial terminal publication.",
+        "repair_boundary": null
+      },
+      "next_action": "derive_repair",
+      "adjudication_sha256": "eeedae38f773f0da6b868846f24575c78b9406f69abc61474aa8bad70d945753"
+    }
+  ],
+  "derived_obligations": [
+    {
+      "kind": "protect",
+      "phase_ids": [
+        "P1-repaired-independent-derive"
+      ],
+      "status": "established",
+      "provenance": {
+        "status": "established",
+        "invariant_id": "interruption-record",
+        "adjudication_sha256": "fa001db187dc7dad35644d25c99f17a441b8bf5afe7276f52027c7e0bbb00486",
+        "objection_sha256": "0b8315a396e6d452c81a5abdac078faf267f5362664bb5fa136a162e21989b9b",
+        "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7",
+        "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "original_witness_sha256": "0b8aa34c7be2c72ad71f15bb63f05a585671df11d7540ab9a2c5f1dc5335daa7",
+        "reproduced_witness_sha256": "0b8aa34c7be2c72ad71f15bb63f05a585671df11d7540ab9a2c5f1dc5335daa7"
+      }
+    },
+    {
+      "kind": "protect",
+      "phase_ids": [
+        "P1-repaired-independent-publish"
+      ],
+      "status": "established",
+      "provenance": {
+        "status": "established",
+        "invariant_id": "interruption-record",
+        "adjudication_sha256": "e35fece9e3fb0e661643a9142e4a206af1bd3b76c15d324e19e689a28f69f540",
+        "objection_sha256": "70e5a4a82e54b5c95f26eadbdf49b50c42aa643cb225198a4e3a3eb1c66def29",
+        "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7",
+        "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "original_witness_sha256": "8110af7d3cef79cb71590520c98775c0a88e6c501886f34c2de2cb7543a08aec",
+        "reproduced_witness_sha256": "8110af7d3cef79cb71590520c98775c0a88e6c501886f34c2de2cb7543a08aec"
+      }
+    },
+    {
+      "kind": "atomic_publish",
+      "phase_ids": [
+        "P1-repaired-independent-publish"
+      ],
+      "status": "established",
+      "provenance": {
+        "status": "established",
+        "invariant_id": "no-false-completion",
+        "adjudication_sha256": "eeedae38f773f0da6b868846f24575c78b9406f69abc61474aa8bad70d945753",
+        "objection_sha256": "273d71d605ed61374d2cbd2e3270bcc5168960d9dfa89a83541db6061bf872eb",
+        "source_identity_sha256": "25d0e23cbe719e953fd167bb0e020bd1487c3a1bde9cfd6784b54b77112d36f7",
+        "candidate_sha256": "3f6bf8225687b70c46d33903b4ac4342919d96d912a724dff819d8a6b2cbf65a",
+        "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+        "original_witness_sha256": "8110af7d3cef79cb71590520c98775c0a88e6c501886f34c2de2cb7543a08aec",
+        "reproduced_witness_sha256": "8110af7d3cef79cb71590520c98775c0a88e6c501886f34c2de2cb7543a08aec"
+      }
+    }
+  ]
+}

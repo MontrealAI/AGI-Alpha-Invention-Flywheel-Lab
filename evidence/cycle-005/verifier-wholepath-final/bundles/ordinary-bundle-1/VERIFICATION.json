@@ -1,0 +1,295 @@
+{
+  "passed": false,
+  "normal": {
+    "state": "COMPLETE",
+    "completed": true,
+    "directory_created": true,
+    "reserved": [
+      "v71-7a0856b5"
+    ],
+    "trace": [
+      "v71-7a0856b5",
+      "v71-3f42d7bd",
+      "v71-b646a9fd",
+      "v71-57cba8ae"
+    ],
+    "interrupted_marker": false,
+    "partial_publication": false,
+    "complete_exists": true,
+    "files_sha256": {
+      "COMPLETE.json": "8d35469a41faa5a650f8f00c2c808ae91c1a18669e911cdb5f34aa92dc7a9d7a",
+      "phase-002.json": "de3a34e04bde411d207d28f77b3c84e8f34fd6197b81217b9215b2d75795ac29",
+      "phase-001.json": "be9f002cd8612a951fdb814c353a3deaaea92e6d8bd181768e02fb9fee3d8a4f"
+    },
+    "compensated": []
+  },
+  "checks": [
+    {
+      "phase": "v71-7a0856b5",
+      "passed": true,
+      "confined": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 5,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.0967596059999778,
+        "stdout_bytes": 444,
+        "stderr_bytes": 0,
+        "stdout_sha256": "3f20cf630a6a2f63dc382699b055bb8d11ec17fc726b294d79b76e2a17856685",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "trace": [],
+            "state": "UNMARKED",
+            "completed": false,
+            "complete_exists": false,
+            "failure_at": "v71-7a0856b5",
+            "interrupted_marker": false,
+            "partial_publication": false,
+            "atomic_publication": true,
+            "reserved": [],
+            "compensated": [],
+            "directory_created": false
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 0.00022508700203616172,
+          "worker_cpu_seconds": 0.085699893,
+          "peak_rss_kib": 15104
+        },
+        "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+        "input_sha256": "0b30a87fdbeebceeb4722c6498010b96003a3a7994fb44818cd8bf0d05f705ea"
+      },
+      "actual": {
+        "state": "UNMARKED",
+        "completed": false,
+        "directory_created": false,
+        "reserved": [],
+        "failure_at": "v71-7a0856b5",
+        "trace": [],
+        "interrupted_marker": false,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {}
+      }
+    },
+    {
+      "phase": "v71-3f42d7bd",
+      "passed": true,
+      "confined": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 5,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.08761770500132116,
+        "stdout_bytes": 471,
+        "stderr_bytes": 0,
+        "stdout_sha256": "c4bca9c6598fc6cdce0b290ba4e876a09e00d0f28ed5ff136afd460a84361df3",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "trace": [
+              "v71-7a0856b5"
+            ],
+            "state": "INCOMPLETE",
+            "completed": false,
+            "complete_exists": false,
+            "failure_at": "v71-3f42d7bd",
+            "interrupted_marker": true,
+            "partial_publication": false,
+            "atomic_publication": true,
+            "reserved": [
+              "v71-7a0856b5"
+            ],
+            "compensated": [],
+            "directory_created": true
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 9.268899884773418e-05,
+          "worker_cpu_seconds": 0.071651077,
+          "peak_rss_kib": 15104
+        },
+        "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+        "input_sha256": "e3cfad92a8edc5f218a20c5158f6656a7d56eefb03cd0d64af63a56fc2e16b71"
+      },
+      "actual": {
+        "state": "INCOMPLETE",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "v71-7a0856b5"
+        ],
+        "failure_at": "v71-3f42d7bd",
+        "trace": [
+          "v71-7a0856b5"
+        ],
+        "interrupted_marker": true,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {
+          "INTERRUPTED.json": "75aa956b3f11aac5dded1418570c8a98876c4352ea9f1de4acd19bb56bcf1989",
+          "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+      }
+    },
+    {
+      "phase": "v71-b646a9fd",
+      "passed": true,
+      "confined": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 5,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.09485876800317783,
+        "stdout_bytes": 488,
+        "stderr_bytes": 0,
+        "stdout_sha256": "b44bafaf689265a33b9fddd5692268b99aba81b2242b88d607c4975aea1dfe01",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "trace": [
+              "v71-7a0856b5",
+              "v71-3f42d7bd"
+            ],
+            "state": "INCOMPLETE",
+            "completed": false,
+            "complete_exists": false,
+            "failure_at": "v71-b646a9fd",
+            "interrupted_marker": true,
+            "partial_publication": false,
+            "atomic_publication": true,
+            "reserved": [
+              "v71-7a0856b5"
+            ],
+            "compensated": [],
+            "directory_created": true
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 0.00025940000341506675,
+          "worker_cpu_seconds": 0.083080179,
+          "peak_rss_kib": 15104
+        },
+        "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+        "input_sha256": "46eb929ee2203948a3c3436e62d90c1da6075f97ff97660f2f58c11aa3ef739d"
+      },
+      "actual": {
+        "state": "INCOMPLETE",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "v71-7a0856b5"
+        ],
+        "failure_at": "v71-b646a9fd",
+        "trace": [
+          "v71-7a0856b5",
+          "v71-3f42d7bd"
+        ],
+        "interrupted_marker": true,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {
+          "INTERRUPTED.json": "f1027bbc20e2f484fcc64f3b544ec14951059d0498c22a7b38842e8647d894ad",
+          "phase-002.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "phase-001.json": "be9f002cd8612a951fdb814c353a3deaaea92e6d8bd181768e02fb9fee3d8a4f"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+      }
+    },
+    {
+      "phase": "v71-57cba8ae",
+      "passed": false,
+      "confined": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 5,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.09869406100187916,
+        "stdout_bytes": 503,
+        "stderr_bytes": 0,
+        "stdout_sha256": "5e8102a78f8cca5176eae70ff8bc9fcf9bb7093834f2526e16dcf5afaec5a8ed",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "trace": [
+              "v71-7a0856b5",
+              "v71-3f42d7bd",
+              "v71-b646a9fd"
+            ],
+            "state": "INCOMPLETE",
+            "completed": false,
+            "complete_exists": true,
+            "failure_at": "v71-57cba8ae",
+            "interrupted_marker": true,
+            "partial_publication": true,
+            "atomic_publication": false,
+            "reserved": [
+              "v71-7a0856b5"
+            ],
+            "compensated": [],
+            "directory_created": true
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 0.00018213900330010802,
+          "worker_cpu_seconds": 0.085147355,
+          "peak_rss_kib": 15104
+        },
+        "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+        "input_sha256": "f1225d5dd3a140832fd1cd27dcbf49e02974c2172cfb0bcb60c2c692b64710f2"
+      },
+      "actual": {
+        "state": "INCOMPLETE",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "v71-7a0856b5"
+        ],
+        "failure_at": "v71-57cba8ae",
+        "trace": [
+          "v71-7a0856b5",
+          "v71-3f42d7bd",
+          "v71-b646a9fd"
+        ],
+        "interrupted_marker": true,
+        "partial_publication": true,
+        "complete_exists": true,
+        "files_sha256": {
+          "INTERRUPTED.json": "f4be424e7f9098caf10a10267c8a7cb0f4bcd6022bbf499c121cd00b8a6e96c8",
+          "COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "phase-002.json": "de3a34e04bde411d207d28f77b3c84e8f34fd6197b81217b9215b2d75795ac29",
+          "phase-001.json": "be9f002cd8612a951fdb814c353a3deaaea92e6d8bd181768e02fb9fee3d8a4f"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+      }
+    }
+  ],
+  "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf",
+  "candidate_sha256": "09ac2c7eec98ec82122499ccc77d4a94e2182fea3c2c49384811cf5897c8fbc7",
+  "scope": "Catchable phase interruptions and normal dependency-ordered local-file effects"
+}

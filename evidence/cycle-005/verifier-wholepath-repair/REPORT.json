@@ -1,0 +1,1144 @@
+{
+  "schema": "agi-alpha-cycle005-independent-wholepath/v1",
+  "freeze_sha256": "6606628dcd020dc735219186ba678ec0f4bb3d906ff689f5b896966406af4b40",
+  "protocol_sha256": "2435ffbfa46cbba96f5184d0eb0606bb20b4a97c883475d4b6758e0a6c7bfe64",
+  "addendum_sha256": "5baef3b9f8fd827dac1f9d6459615d6ec9af028fafc4361945e7bae0bb3b0f24",
+  "development_independent": {
+    "passed": true,
+    "errors": [],
+    "program_sha256": "37c6cb795d8fa80c78bb0d433fb3d804d68ede4d48f185cc28c39217cf92a445",
+    "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/development/after-check"
+  },
+  "acquired_record_id": "008686b9b5a0ea685f59d7286d892a70c7e690befee15ebeba97bb9c172a2cc6",
+  "fresh_cases": [
+    {
+      "task": {
+        "id": "verifier-005-target-00",
+        "phases": [
+          {
+            "id": "v00-2a597e3f",
+            "kind": "reserve",
+            "unit": "event",
+            "deps": []
+          },
+          {
+            "id": "v00-5a87522b",
+            "kind": "compute",
+            "unit": "event",
+            "deps": [
+              "v00-76665ae2"
+            ]
+          },
+          {
+            "id": "v00-76665ae2",
+            "kind": "capture",
+            "unit": "event",
+            "deps": [
+              "v00-2a597e3f"
+            ]
+          },
+          {
+            "id": "v00-f81f342d",
+            "kind": "commit",
+            "unit": "event",
+            "deps": [
+              "v00-5a87522b",
+              "v00-2a597e3f"
+            ]
+          }
+        ],
+        "conditions": {
+          "failure": "catchable_exception",
+          "effects": "exclusive_local_output",
+          "target_boundary": "bounded-0"
+        }
+      },
+      "arms": {
+        "inheritance": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "f6b30e9ed845e08e0274c919eaaf0d566ee7bc9447427e0f3a608a187af87331",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-00-inheritance/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-00-inheritance/RESULT.json",
+          "receipt_sha256": "ab8064cb224eaeebf0c82cd240c7c01ec2f4689dba1aa071ebe940acb729c4b1"
+        },
+        "ordinary": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "f6b30e9ed845e08e0274c919eaaf0d566ee7bc9447427e0f3a608a187af87331",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-00-ordinary/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-00-ordinary/RESULT.json",
+          "receipt_sha256": "68a934959ac813ed220d2c5ea4cf48a55da7cb9e258a8f3c4d050e3191efbb33"
+        },
+        "removed": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v00-5a87522b",
+              "CONFINED_INTERPRETER_FAILED:v00-5a87522b",
+              "UNSAFE_INTERRUPTION:v00-f81f342d",
+              "CONFINED_INTERPRETER_FAILED:v00-f81f342d"
+            ],
+            "program_sha256": "8221736d18eaf42ea6f9c1fb27c66388f13f8a2975e7d178c4ccfca358f11d73",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-00-removed/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-00-removed/RESULT.json",
+          "receipt_sha256": "d44593b028f12f23cff32e51bf4e0a98442b4e86bedf44787c42c1225a99b23d"
+        },
+        "conventional": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "0e22762cb0c4acfda2f5049595ae9454a786ad20cb687572d16f4b62f28bea62",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-00-conventional/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-00-conventional/RESULT.json",
+          "receipt_sha256": "7d8f717121014e23e44be54c5c12701c74b7e75fd3727b74c0c2a03118dd336e"
+        },
+        "reset": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v00-76665ae2",
+              "CONFINED_INTERPRETER_FAILED:v00-76665ae2",
+              "UNSAFE_INTERRUPTION:v00-5a87522b",
+              "CONFINED_INTERPRETER_FAILED:v00-5a87522b",
+              "UNSAFE_INTERRUPTION:v00-f81f342d",
+              "CONFINED_INTERPRETER_FAILED:v00-f81f342d"
+            ],
+            "program_sha256": "046bc87fc278e8e9f15ae0300c2d230c054b9dcbd40286ccbe25bc302f822ef3",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-00-reset/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-00-reset/RESULT.json",
+          "receipt_sha256": "14e586a65de741b7a7a178cb60b5010e3396e9ade1dc0e4ed3eed236b8d4fd9e"
+        }
+      }
+    },
+    {
+      "task": {
+        "id": "verifier-005-target-01",
+        "phases": [
+          {
+            "id": "v01-e70311c7",
+            "kind": "commit",
+            "unit": "event",
+            "deps": [
+              "v01-48fdb442"
+            ]
+          },
+          {
+            "id": "v01-11a1f786",
+            "kind": "reserve",
+            "unit": "event",
+            "deps": []
+          },
+          {
+            "id": "v01-48fdb442",
+            "kind": "compute",
+            "unit": "event",
+            "deps": [
+              "v01-1251a4e9",
+              "v01-11a1f786"
+            ]
+          },
+          {
+            "id": "v01-1251a4e9",
+            "kind": "capture",
+            "unit": "event",
+            "deps": [
+              "v01-11a1f786"
+            ]
+          }
+        ],
+        "conditions": {
+          "failure": "catchable_exception",
+          "effects": "exclusive_local_output",
+          "target_boundary": "bounded-1"
+        }
+      },
+      "arms": {
+        "inheritance": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "3c5135938e6a26acc0ede37b3194259fd3a1d12de6b0c59cb8624c00a2ee7f32",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-01-inheritance/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-01-inheritance/RESULT.json",
+          "receipt_sha256": "658c708e2de2fbabfeafaa8ee45ecc5c495b723a1305b5174f7650f89ed5355b"
+        },
+        "ordinary": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "3c5135938e6a26acc0ede37b3194259fd3a1d12de6b0c59cb8624c00a2ee7f32",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-01-ordinary/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-01-ordinary/RESULT.json",
+          "receipt_sha256": "2dbd391360d7555b05f81771a54fdcaeb85e72acc588f3bc5415a113962b8f9d"
+        },
+        "removed": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v01-48fdb442",
+              "CONFINED_INTERPRETER_FAILED:v01-48fdb442",
+              "UNSAFE_INTERRUPTION:v01-e70311c7",
+              "CONFINED_INTERPRETER_FAILED:v01-e70311c7"
+            ],
+            "program_sha256": "f5e6d8e940cceb64410a4950cef8938413acc3790132f8b7401d2d833a15e27a",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-01-removed/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-01-removed/RESULT.json",
+          "receipt_sha256": "ff4cce284ce27d52afcf3cf90506a5a76c330e86dca22fbc9cc7366c9a405002"
+        },
+        "conventional": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "27b37d5cd4207990adef025ec97e39f0b1fc457a5e6c96cc03eb20fedefc8aa0",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-01-conventional/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-01-conventional/RESULT.json",
+          "receipt_sha256": "230930fade6397ba69ea82f1e5785f680a15d6aeed151f73de76edd4a2e408a4"
+        },
+        "reset": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v01-1251a4e9",
+              "CONFINED_INTERPRETER_FAILED:v01-1251a4e9",
+              "UNSAFE_INTERRUPTION:v01-48fdb442",
+              "CONFINED_INTERPRETER_FAILED:v01-48fdb442",
+              "UNSAFE_INTERRUPTION:v01-e70311c7",
+              "CONFINED_INTERPRETER_FAILED:v01-e70311c7"
+            ],
+            "program_sha256": "d2accc7b9473b0ab4a5b88791239833ff43206774d913558ae63e32945a9a579",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-01-reset/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-01-reset/RESULT.json",
+          "receipt_sha256": "36f52b8e8f9c2892fa69a23bf33b1d8c524ef11f95718f649d8c3cdbfcbc9d13"
+        }
+      }
+    },
+    {
+      "task": {
+        "id": "verifier-005-target-02",
+        "phases": [
+          {
+            "id": "v02-5d7ee4ae",
+            "kind": "reserve",
+            "unit": "event",
+            "deps": []
+          },
+          {
+            "id": "v02-6f7e5673",
+            "kind": "compute",
+            "unit": "event",
+            "deps": [
+              "v02-3a85f638"
+            ]
+          },
+          {
+            "id": "v02-fc602c8d",
+            "kind": "commit",
+            "unit": "event",
+            "deps": [
+              "v02-6f7e5673"
+            ]
+          },
+          {
+            "id": "v02-3a85f638",
+            "kind": "capture",
+            "unit": "event",
+            "deps": [
+              "v02-5d7ee4ae"
+            ]
+          }
+        ],
+        "conditions": {
+          "failure": "catchable_exception",
+          "effects": "exclusive_local_output",
+          "target_boundary": "bounded-2"
+        }
+      },
+      "arms": {
+        "inheritance": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "c3ea4b5252e9c964c009b26cf363d252138f2da37c85b6473ca513e143bdd5e7",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-02-inheritance/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-02-inheritance/RESULT.json",
+          "receipt_sha256": "4d0f5f32230751270c51257eec397968f98dab8595b8e4a420e94bf040398432"
+        },
+        "ordinary": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "c3ea4b5252e9c964c009b26cf363d252138f2da37c85b6473ca513e143bdd5e7",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-02-ordinary/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-02-ordinary/RESULT.json",
+          "receipt_sha256": "3392b0627683e8e85bad271802b30c73f9deb4089addb403116e1543b3e7a784"
+        },
+        "removed": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v02-6f7e5673",
+              "CONFINED_INTERPRETER_FAILED:v02-6f7e5673",
+              "UNSAFE_INTERRUPTION:v02-fc602c8d",
+              "CONFINED_INTERPRETER_FAILED:v02-fc602c8d"
+            ],
+            "program_sha256": "ec51466adb7a3f6b411f0898f6ab7b77dea0b23b426bd0aec3f804289c2f46ac",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-02-removed/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-02-removed/RESULT.json",
+          "receipt_sha256": "f72256b786502b1933ceea7a5db586378256f969d93b6c36ed134ed846c10d02"
+        },
+        "conventional": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "8ffaed6a1567be72221edc35b872a81620f3b49294c2e363fa3f3094f4b5f482",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-02-conventional/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-02-conventional/RESULT.json",
+          "receipt_sha256": "3ad4193e37194afb745b4df039ff9df96d28db2ba2d035fdb2df1c01b289331d"
+        },
+        "reset": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v02-3a85f638",
+              "CONFINED_INTERPRETER_FAILED:v02-3a85f638",
+              "UNSAFE_INTERRUPTION:v02-6f7e5673",
+              "CONFINED_INTERPRETER_FAILED:v02-6f7e5673",
+              "UNSAFE_INTERRUPTION:v02-fc602c8d",
+              "CONFINED_INTERPRETER_FAILED:v02-fc602c8d"
+            ],
+            "program_sha256": "a4139db2304ff3708e720749f4d103b8c95118f855e8794e091c175587adec8d",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-02-reset/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-02-reset/RESULT.json",
+          "receipt_sha256": "c08450f53e0d35e7094a7ada40cf7250a8034d076cbd7083fbb8c134da80b3f0"
+        }
+      }
+    },
+    {
+      "task": {
+        "id": "verifier-005-target-03",
+        "phases": [
+          {
+            "id": "v03-4e78e99e",
+            "kind": "compute",
+            "unit": "event",
+            "deps": [
+              "v03-cedd9876",
+              "v03-b1bf0659"
+            ]
+          },
+          {
+            "id": "v03-b1bf0659",
+            "kind": "reserve",
+            "unit": "event",
+            "deps": []
+          },
+          {
+            "id": "v03-07bac19b",
+            "kind": "commit",
+            "unit": "event",
+            "deps": [
+              "v03-4e78e99e",
+              "v03-b1bf0659"
+            ]
+          },
+          {
+            "id": "v03-cedd9876",
+            "kind": "capture",
+            "unit": "event",
+            "deps": [
+              "v03-b1bf0659"
+            ]
+          }
+        ],
+        "conditions": {
+          "failure": "catchable_exception",
+          "effects": "exclusive_local_output",
+          "target_boundary": "bounded-0"
+        }
+      },
+      "arms": {
+        "inheritance": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "0bc7b385d680c1acd36ee41c39e158a9326d5d8562bad4a67a04acd998023801",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-03-inheritance/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-03-inheritance/RESULT.json",
+          "receipt_sha256": "25b7a8d5c851697b9ad6c7a80022e8d8174cbad2fc7c513852c31f24d8374e39"
+        },
+        "ordinary": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "0bc7b385d680c1acd36ee41c39e158a9326d5d8562bad4a67a04acd998023801",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-03-ordinary/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-03-ordinary/RESULT.json",
+          "receipt_sha256": "4253112cb17577814b996ebac5462945c5d071f5301633c5dc57e7e80d1d9d99"
+        },
+        "removed": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v03-4e78e99e",
+              "CONFINED_INTERPRETER_FAILED:v03-4e78e99e",
+              "UNSAFE_INTERRUPTION:v03-07bac19b",
+              "CONFINED_INTERPRETER_FAILED:v03-07bac19b"
+            ],
+            "program_sha256": "3cbaf83f6a1978073a803a60f37f41e471541e70552733067c85f424ecfb785f",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-03-removed/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-03-removed/RESULT.json",
+          "receipt_sha256": "dbf5f2399aa106d3af5da5a81f50983ae5570bbc0307e851c7e00ce2127bc3dc"
+        },
+        "conventional": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "937441354e92e9ad74def678a054eacafc5510c34c9a60e4621666c091ea5d9e",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-03-conventional/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-03-conventional/RESULT.json",
+          "receipt_sha256": "4d3fcb319153d0f9153ead6fcb4d6aa222f3ee954a260aaf72f7a6d1eadf4add"
+        },
+        "reset": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v03-cedd9876",
+              "CONFINED_INTERPRETER_FAILED:v03-cedd9876",
+              "UNSAFE_INTERRUPTION:v03-4e78e99e",
+              "CONFINED_INTERPRETER_FAILED:v03-4e78e99e",
+              "UNSAFE_INTERRUPTION:v03-07bac19b",
+              "CONFINED_INTERPRETER_FAILED:v03-07bac19b"
+            ],
+            "program_sha256": "1e68a3807b8383c5f53da0a2fe03e3f46179634ae5149102608efa05e9a73ca9",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-03-reset/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-03-reset/RESULT.json",
+          "receipt_sha256": "2ee72bddaf3634ed5788c017722dc284f03e4ebf4dfcdd15d613fc43c0262831"
+        }
+      }
+    },
+    {
+      "task": {
+        "id": "verifier-005-target-04",
+        "phases": [
+          {
+            "id": "v04-9fc72b13",
+            "kind": "capture",
+            "unit": "event",
+            "deps": [
+              "v04-edc86e28"
+            ]
+          },
+          {
+            "id": "v04-4bc224fa",
+            "kind": "compute",
+            "unit": "event",
+            "deps": [
+              "v04-9fc72b13"
+            ]
+          },
+          {
+            "id": "v04-c9b6c4fa",
+            "kind": "commit",
+            "unit": "event",
+            "deps": [
+              "v04-4bc224fa"
+            ]
+          },
+          {
+            "id": "v04-edc86e28",
+            "kind": "reserve",
+            "unit": "event",
+            "deps": []
+          }
+        ],
+        "conditions": {
+          "failure": "catchable_exception",
+          "effects": "exclusive_local_output",
+          "target_boundary": "bounded-1"
+        }
+      },
+      "arms": {
+        "inheritance": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "e93e491d45a7ada4357f80a73edce659377ce1f57ae37861eaccfc90e8f7d6da",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-04-inheritance/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-04-inheritance/RESULT.json",
+          "receipt_sha256": "fbf99d92f56f5620ae2bd405c3a8fae02125dc7e6032ff2d2a69c15d6d97cafe"
+        },
+        "ordinary": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "e93e491d45a7ada4357f80a73edce659377ce1f57ae37861eaccfc90e8f7d6da",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-04-ordinary/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-04-ordinary/RESULT.json",
+          "receipt_sha256": "ffb22b07c79f9961bccca89079877dffe5a211a62da0ec3ed4daad5e2fb7cbee"
+        },
+        "removed": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v04-4bc224fa",
+              "CONFINED_INTERPRETER_FAILED:v04-4bc224fa",
+              "UNSAFE_INTERRUPTION:v04-c9b6c4fa",
+              "CONFINED_INTERPRETER_FAILED:v04-c9b6c4fa"
+            ],
+            "program_sha256": "efc2985c08d6b2e8e413497e04776e918e24309dbae932267b9524eafc0086f9",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-04-removed/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-04-removed/RESULT.json",
+          "receipt_sha256": "3fb3e106a49264361fd0775ca1584723264f5adc5ef8d9b1a9b826ec87d1e0ab"
+        },
+        "conventional": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "e1eb8a4f0491b451152243d44ee8a219109f0f1f2017ed8215c9d34b4bca5e25",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-04-conventional/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-04-conventional/RESULT.json",
+          "receipt_sha256": "1c51e9234f2355c67358e3000f5a58ef8da5ff192c686472f0c3d87e229ce662"
+        },
+        "reset": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v04-9fc72b13",
+              "CONFINED_INTERPRETER_FAILED:v04-9fc72b13",
+              "UNSAFE_INTERRUPTION:v04-4bc224fa",
+              "CONFINED_INTERPRETER_FAILED:v04-4bc224fa",
+              "UNSAFE_INTERRUPTION:v04-c9b6c4fa",
+              "CONFINED_INTERPRETER_FAILED:v04-c9b6c4fa"
+            ],
+            "program_sha256": "26812caa6ca34f8815879d3ff38b5cc06d0ac5f7ed8856674308ad402f17ab70",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-04-reset/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-04-reset/RESULT.json",
+          "receipt_sha256": "844fd83363156c507a0a93dfad04a314a8a29486f43b540deaec20e8c4755bc1"
+        }
+      }
+    },
+    {
+      "task": {
+        "id": "verifier-005-target-05",
+        "phases": [
+          {
+            "id": "v05-751b0401",
+            "kind": "commit",
+            "unit": "event",
+            "deps": [
+              "v05-d4ff1a6d"
+            ]
+          },
+          {
+            "id": "v05-d4ff1a6d",
+            "kind": "compute",
+            "unit": "event",
+            "deps": [
+              "v05-84770c2d",
+              "v05-cceb1b27"
+            ]
+          },
+          {
+            "id": "v05-cceb1b27",
+            "kind": "reserve",
+            "unit": "event",
+            "deps": []
+          },
+          {
+            "id": "v05-84770c2d",
+            "kind": "capture",
+            "unit": "event",
+            "deps": [
+              "v05-cceb1b27"
+            ]
+          }
+        ],
+        "conditions": {
+          "failure": "catchable_exception",
+          "effects": "exclusive_local_output",
+          "target_boundary": "bounded-2"
+        }
+      },
+      "arms": {
+        "inheritance": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "8fce9cb924bf418fefe0ed74db54d2875643e3c7805bd1c1cbdb787ae3e94a77",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-05-inheritance/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-05-inheritance/RESULT.json",
+          "receipt_sha256": "5196928b4d5d9dc72c8499245b661b215c435083cf96c85548ebf170f617e3de"
+        },
+        "ordinary": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "8fce9cb924bf418fefe0ed74db54d2875643e3c7805bd1c1cbdb787ae3e94a77",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-05-ordinary/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-05-ordinary/RESULT.json",
+          "receipt_sha256": "64c988656cc5d46e97d97794272916e352f07fb4a29741ebe9148a1ac050ffcb"
+        },
+        "removed": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v05-d4ff1a6d",
+              "CONFINED_INTERPRETER_FAILED:v05-d4ff1a6d",
+              "UNSAFE_INTERRUPTION:v05-751b0401",
+              "CONFINED_INTERPRETER_FAILED:v05-751b0401"
+            ],
+            "program_sha256": "a704a5d43aa6205fba24d633c110351cb89d3c83fe6ce69814928f54c8d6adbe",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-05-removed/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-05-removed/RESULT.json",
+          "receipt_sha256": "e1ecbb74556c9f99e20ec7a8bd94a7f338461858d527fa39c3c7ff39ea0c398a"
+        },
+        "conventional": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "ef877e8fa45aa13c3371cf0ddbfa7e3ea24662243c69f9cee479ac911329faed",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-05-conventional/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-05-conventional/RESULT.json",
+          "receipt_sha256": "de71d4e3d2a89d741c2491ec9e1e2c6c9f27b3837f473e10e193997b146a3e60"
+        },
+        "reset": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v05-84770c2d",
+              "CONFINED_INTERPRETER_FAILED:v05-84770c2d",
+              "UNSAFE_INTERRUPTION:v05-d4ff1a6d",
+              "CONFINED_INTERPRETER_FAILED:v05-d4ff1a6d",
+              "UNSAFE_INTERRUPTION:v05-751b0401",
+              "CONFINED_INTERPRETER_FAILED:v05-751b0401"
+            ],
+            "program_sha256": "9f8eaa2a14ba5d29e6ce70606beaa3032da586dc8f08cf11a72ca4d2da810178",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-05-reset/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-05-reset/RESULT.json",
+          "receipt_sha256": "7f95b17bb9ed17d2fc6d1489ba5f00dcb31848e4f0ddae18a70478f413590fa1"
+        }
+      }
+    },
+    {
+      "task": {
+        "id": "verifier-005-target-06",
+        "phases": [
+          {
+            "id": "v06-33c05900",
+            "kind": "reserve",
+            "unit": "event",
+            "deps": []
+          },
+          {
+            "id": "v06-8da83c51",
+            "kind": "commit",
+            "unit": "event",
+            "deps": [
+              "v06-84a8d512",
+              "v06-33c05900"
+            ]
+          },
+          {
+            "id": "v06-84a8d512",
+            "kind": "compute",
+            "unit": "event",
+            "deps": [
+              "v06-bfa8d07e"
+            ]
+          },
+          {
+            "id": "v06-bfa8d07e",
+            "kind": "capture",
+            "unit": "event",
+            "deps": [
+              "v06-33c05900"
+            ]
+          }
+        ],
+        "conditions": {
+          "failure": "catchable_exception",
+          "effects": "exclusive_local_output",
+          "target_boundary": "bounded-0"
+        }
+      },
+      "arms": {
+        "inheritance": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "0f202c9f19a983e9e536f7ae9b27695eaabeee99d3c2128327cea6255811c827",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-06-inheritance/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-06-inheritance/RESULT.json",
+          "receipt_sha256": "72a69604ed349cc8935ec5f9ee5fddc9c2957f40eff9e9caf709a87c01004436"
+        },
+        "ordinary": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "0f202c9f19a983e9e536f7ae9b27695eaabeee99d3c2128327cea6255811c827",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-06-ordinary/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-06-ordinary/RESULT.json",
+          "receipt_sha256": "b521fb2dc24aca1662e08eedf0c73545f7fc80c82cb95083872b9aebcd5f025e"
+        },
+        "removed": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v06-84a8d512",
+              "CONFINED_INTERPRETER_FAILED:v06-84a8d512",
+              "UNSAFE_INTERRUPTION:v06-8da83c51",
+              "CONFINED_INTERPRETER_FAILED:v06-8da83c51"
+            ],
+            "program_sha256": "a17a8aabfaa4770131801745814fd06d5eba58c97f540ef433c13a0c1b859d59",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-06-removed/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-06-removed/RESULT.json",
+          "receipt_sha256": "033a7183a26cb0bcfde0219b689cdcfc49f2897d479e13e993a8d2d0fa9f6e8f"
+        },
+        "conventional": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "ee06c8afe5c6dba8e199de95e3b2c9e8a7a7c8352f2eaac533b18933463f6ed2",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-06-conventional/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-06-conventional/RESULT.json",
+          "receipt_sha256": "bee5301519c5f4d25e2fd32643349afcb3b59e67b91e60395465462c3b61c32f"
+        },
+        "reset": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v06-bfa8d07e",
+              "CONFINED_INTERPRETER_FAILED:v06-bfa8d07e",
+              "UNSAFE_INTERRUPTION:v06-84a8d512",
+              "CONFINED_INTERPRETER_FAILED:v06-84a8d512",
+              "UNSAFE_INTERRUPTION:v06-8da83c51",
+              "CONFINED_INTERPRETER_FAILED:v06-8da83c51"
+            ],
+            "program_sha256": "4a5cf0e8f18c2050c4f8fcfcd55abd8c2132fdac9c1b61381321f73b81b7db09",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-06-reset/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-06-reset/RESULT.json",
+          "receipt_sha256": "bcf5f1b3cff51d80b6c4ca72d0831c724262fd8512485d5f6017ef15d4451eb7"
+        }
+      }
+    },
+    {
+      "task": {
+        "id": "verifier-005-target-07",
+        "phases": [
+          {
+            "id": "v07-2dec8cfe",
+            "kind": "reserve",
+            "unit": "event",
+            "deps": []
+          },
+          {
+            "id": "v07-6f0dfccf",
+            "kind": "capture",
+            "unit": "event",
+            "deps": [
+              "v07-2dec8cfe"
+            ]
+          },
+          {
+            "id": "v07-2576208f",
+            "kind": "compute",
+            "unit": "event",
+            "deps": [
+              "v07-6f0dfccf",
+              "v07-2dec8cfe"
+            ]
+          },
+          {
+            "id": "v07-04ed8931",
+            "kind": "commit",
+            "unit": "event",
+            "deps": [
+              "v07-2576208f"
+            ]
+          }
+        ],
+        "conditions": {
+          "failure": "catchable_exception",
+          "effects": "exclusive_local_output",
+          "target_boundary": "bounded-1"
+        }
+      },
+      "arms": {
+        "inheritance": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "46bfe167988eadefe1cfcd899de659c015919fea302c7c8f071f306ea83e60a8",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-07-inheritance/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-07-inheritance/RESULT.json",
+          "receipt_sha256": "e5c074a4db565d566ad0dde1f501c01e4c82a58c4d0bf92b2b42c97665eef2a4"
+        },
+        "ordinary": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "46bfe167988eadefe1cfcd899de659c015919fea302c7c8f071f306ea83e60a8",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-07-ordinary/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-07-ordinary/RESULT.json",
+          "receipt_sha256": "ac1940438e4fad372e8602ea1b57834ba307bfc2d9c8037c7e3adc5482445b0f"
+        },
+        "removed": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v07-2576208f",
+              "CONFINED_INTERPRETER_FAILED:v07-2576208f",
+              "UNSAFE_INTERRUPTION:v07-04ed8931",
+              "CONFINED_INTERPRETER_FAILED:v07-04ed8931"
+            ],
+            "program_sha256": "93e62bf13a9ee82e08b3f3dba4dd6ac8efe0f1bcc2643ef9dc01abdbb8869a08",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-07-removed/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-07-removed/RESULT.json",
+          "receipt_sha256": "5af1b2efb717f52542e94e63d8c35b008364a15f5a68f3cb7b27ebbe1e2e5221"
+        },
+        "conventional": {
+          "reported_passed": true,
+          "independent": {
+            "passed": true,
+            "errors": [],
+            "program_sha256": "1e5b03db4b0ed0e022bf9f08a63d1176ddff3102b50d6930ce5a7f9c94d48fd6",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-07-conventional/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-07-conventional/RESULT.json",
+          "receipt_sha256": "cf442fd08a52edeadc3985bc31da552d67a632d6e2dd423fd90d16680eae79e6"
+        },
+        "reset": {
+          "reported_passed": false,
+          "independent": {
+            "passed": false,
+            "errors": [
+              "UNSAFE_INTERRUPTION:v07-6f0dfccf",
+              "CONFINED_INTERPRETER_FAILED:v07-6f0dfccf",
+              "UNSAFE_INTERRUPTION:v07-2576208f",
+              "CONFINED_INTERPRETER_FAILED:v07-2576208f",
+              "UNSAFE_INTERRUPTION:v07-04ed8931",
+              "CONFINED_INTERPRETER_FAILED:v07-04ed8931"
+            ],
+            "program_sha256": "5d0ae2f14d55f6024960b66488746e0a7c17b27105b8d0d93f0be8fa30c81e64",
+            "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/fresh-07-reset/checks"
+          },
+          "actual_retained_lineage": true,
+          "receipt": "fresh-07-reset/RESULT.json",
+          "receipt_sha256": "cd1560715a180c4c82706dfe5f1c8f78587dfdf58e67392781375df0ecad20e7"
+        }
+      }
+    }
+  ],
+  "scores_out_of_8": {
+    "inheritance": 8,
+    "ordinary": 8,
+    "removed": 0,
+    "conventional": 8,
+    "reset": 0
+  },
+  "controls": {
+    "no_mapping": {
+      "status": "refused",
+      "retained": null,
+      "scope": "Explicit structural-lineage admission gate; not a measured necessity of mapping for every useful solution."
+    },
+    "no_critic": {
+      "after_passed": false,
+      "retained": null
+    },
+    "changed_role_changes_actual_construction": true,
+    "critic_constraints_follow_multiple_witness_locations": true,
+    "witness_locations": [
+      "v90-60de7a51",
+      "v90-ae547fe7"
+    ],
+    "empty_memory_refuses_without_default_operator": true,
+    "incompatible_memory_scope_refused": true,
+    "incompatible_mapping_refused": true,
+    "duplicate_immutable": true,
+    "wrong_hash_acquisition_refused": true,
+    "corrupted_source_refused": true
+  },
+  "bundle_scores": {
+    "inheritance": [
+      {
+        "record_count": 0,
+        "record_ids": [],
+        "independent": {
+          "passed": false,
+          "errors": [
+            "UNSAFE_INTERRUPTION:v71-ffd9b729",
+            "CONFINED_INTERPRETER_FAILED:v71-ffd9b729",
+            "UNSAFE_INTERRUPTION:v71-35588dd7",
+            "CONFINED_INTERPRETER_FAILED:v71-35588dd7",
+            "UNSAFE_INTERRUPTION:v71-75b0d6c5",
+            "CONFINED_INTERPRETER_FAILED:v71-75b0d6c5"
+          ],
+          "program_sha256": "999b68efe1ffa9aee251be766a8faa54eee0d6473e666b9db73511fc0b4c0e3f",
+          "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/bundles/inheritance-bundle-0"
+        }
+      },
+      {
+        "record_count": 1,
+        "record_ids": [
+          "8989e8840d990e68da7d8cb61be74fe3f5ad37b6fb584744074bbf4606674e14"
+        ],
+        "independent": {
+          "passed": false,
+          "errors": [
+            "UNSAFE_INTERRUPTION:v71-35588dd7",
+            "CONFINED_INTERPRETER_FAILED:v71-35588dd7",
+            "UNSAFE_INTERRUPTION:v71-75b0d6c5",
+            "CONFINED_INTERPRETER_FAILED:v71-75b0d6c5"
+          ],
+          "program_sha256": "bb116292123384ed8fa72e309da9806167d9aabec9f5e989cbb72c0e8c78e354",
+          "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/bundles/inheritance-bundle-1"
+        }
+      },
+      {
+        "record_count": 1,
+        "record_ids": [
+          "f19857bb739072f6e73675679c3e5f02bbd95f30ef5811139c54e1943bbb143b"
+        ],
+        "independent": {
+          "passed": false,
+          "errors": [
+            "UNSAFE_INTERRUPTION:v71-75b0d6c5",
+            "CONFINED_INTERPRETER_FAILED:v71-75b0d6c5"
+          ],
+          "program_sha256": "1cb15b942f0181d323633f9df81f1ce42ef0a2113009dca96e6e5b766687b7c0",
+          "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/bundles/inheritance-bundle-2"
+        }
+      },
+      {
+        "record_count": 2,
+        "record_ids": [
+          "8989e8840d990e68da7d8cb61be74fe3f5ad37b6fb584744074bbf4606674e14",
+          "f19857bb739072f6e73675679c3e5f02bbd95f30ef5811139c54e1943bbb143b"
+        ],
+        "independent": {
+          "passed": true,
+          "errors": [],
+          "program_sha256": "179cadc01d3c117c50025b99e1bd7a0d22a078a0a6ab86fc5a7265785ae2e88e",
+          "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/bundles/inheritance-bundle-3"
+        }
+      }
+    ],
+    "ordinary": [
+      {
+        "record_count": 0,
+        "record_ids": [],
+        "independent": {
+          "passed": false,
+          "errors": [
+            "UNSAFE_INTERRUPTION:v71-ffd9b729",
+            "CONFINED_INTERPRETER_FAILED:v71-ffd9b729",
+            "UNSAFE_INTERRUPTION:v71-35588dd7",
+            "CONFINED_INTERPRETER_FAILED:v71-35588dd7",
+            "UNSAFE_INTERRUPTION:v71-75b0d6c5",
+            "CONFINED_INTERPRETER_FAILED:v71-75b0d6c5"
+          ],
+          "program_sha256": "999b68efe1ffa9aee251be766a8faa54eee0d6473e666b9db73511fc0b4c0e3f",
+          "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/bundles/ordinary-bundle-0"
+        }
+      },
+      {
+        "record_count": 1,
+        "record_ids": [
+          "8989e8840d990e68da7d8cb61be74fe3f5ad37b6fb584744074bbf4606674e14"
+        ],
+        "independent": {
+          "passed": false,
+          "errors": [
+            "UNSAFE_INTERRUPTION:v71-35588dd7",
+            "CONFINED_INTERPRETER_FAILED:v71-35588dd7",
+            "UNSAFE_INTERRUPTION:v71-75b0d6c5",
+            "CONFINED_INTERPRETER_FAILED:v71-75b0d6c5"
+          ],
+          "program_sha256": "bb116292123384ed8fa72e309da9806167d9aabec9f5e989cbb72c0e8c78e354",
+          "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/bundles/ordinary-bundle-1"
+        }
+      },
+      {
+        "record_count": 1,
+        "record_ids": [
+          "f19857bb739072f6e73675679c3e5f02bbd95f30ef5811139c54e1943bbb143b"
+        ],
+        "independent": {
+          "passed": false,
+          "errors": [
+            "UNSAFE_INTERRUPTION:v71-75b0d6c5",
+            "CONFINED_INTERPRETER_FAILED:v71-75b0d6c5"
+          ],
+          "program_sha256": "1cb15b942f0181d323633f9df81f1ce42ef0a2113009dca96e6e5b766687b7c0",
+          "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/bundles/ordinary-bundle-2"
+        }
+      },
+      {
+        "record_count": 2,
+        "record_ids": [
+          "8989e8840d990e68da7d8cb61be74fe3f5ad37b6fb584744074bbf4606674e14",
+          "f19857bb739072f6e73675679c3e5f02bbd95f30ef5811139c54e1943bbb143b"
+        ],
+        "independent": {
+          "passed": true,
+          "errors": [],
+          "program_sha256": "179cadc01d3c117c50025b99e1bd7a0d22a078a0a6ab86fc5a7265785ae2e88e",
+          "raw_check_root": "/workspace/scratch/681b6e3921b1/lab-completion/evidence/cycle-005/verifier-wholepath-repair/bundles/ordinary-bundle-3"
+        }
+      }
+    ]
+  },
+  "policy_cross_scores_out_of_8": {
+    "old/old": 0,
+    "old/new": 6,
+    "new/old": 0,
+    "new/new": 8
+  },
+  "enabling_receipt_sha256": "0fca02d0b30eb458648a280202c54eac1417b4cc2ec930ef3e097c860bb203ac",
+  "engineering_gates": {
+    "actual_development_acquisition": true,
+    "all_inherited_fresh_cases": true,
+    "actual_inherited_source_checked_lineage": true,
+    "equivalent_reuse_and_strong_controls": true,
+    "operator_removed_has_no_hidden_repair": true,
+    "role_sensitive_mapping": true,
+    "location_sensitive_critic": true,
+    "bundle_complementarity_actual": true,
+    "objective_preserving_actual_archive_enabling": true,
+    "negative_integrity_controls": true
+  },
+  "all_engineering_gates_passed": true,
+  "resources": {
+    "wall_seconds": 73.96950385699893,
+    "verifier_cpu_seconds": 7.004374704999999,
+    "child_cpu_seconds": 64.873667,
+    "complete_lifecycle_cost": null
+  },
+  "confirmation_alpha_spent": 0,
+  "limits": [
+    "Eight fresh label/order/extra-edge variants of one declared typed local-evidence family; no consequential scientific generalization.",
+    "Donor and grammar are supplied. The acquired role operator is actually constructed, stored, retrieved and instantiated; no literal evaluator operator is injected.",
+    "Equivalent ordinary reuse and competent conventional controls may tie. No complete-cost, learned discovery-policy, physical, buyer-demand or commercial-success claim.",
+    "Receipt hashes authenticate identity, not truth; acquisition relies on trusted pipeline-produced actual verifier artifacts, rechecked here from raw files.",
+    "Procedural separation only, sharing host, filesystem, models and libraries. Cases become exposed regressions on publication."
+  ]
+}
