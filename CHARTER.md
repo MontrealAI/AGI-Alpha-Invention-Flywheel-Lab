@@ -11,7 +11,7 @@ Discover consequential productive possibilities that ordinary opportunity search
 
 **Invent the possibility. Construct the missing means. Verify the transformation. Enable the next frontier.**
 
-The laboratory is now hosted at https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab. Its initial executable screen is a source-input validation and evidence-gap tool—not an autonomous opportunity discovery engine. It has not demonstrated forecast superiority, economic transformation, or a commercially successful flywheel.
+The laboratory is now hosted at https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab. A separately maintained executable kernel is being developed through its own reviewed integration. This charter does not certify any proposed experiment, forecast superiority, economic transformation or commercially successful flywheel.
 
 ## Blue Sky is the selection rule
 
@@ -88,14 +88,9 @@ The first substantive result must be an evidence-based decision about a conseque
 No new spending, paid APIs, customer outreach, real transactions, credential changes, deployment or release is authorized by this founding package. Commerce remains simulated. A resource allocation and necessary data rights must be established before a campaign starts. Never infer an actual cost of zero from a missing bill, or real willingness to pay from a generated buyer.
 
 The earlier repository and its evidence remain intact. This lab inherits the mission and supported knowledge, not an obligation to keep improving the same application.
-## Run the first evidence-gap screen
 
-This dependency-free program checks candidate structure and flags missing evidence, without pretending that an authored hypothesis is an observed business opportunity. It cannot autonomously research, score demand, or approve a commercial cohort.
+## From founding charter to executed evidence
 
-```bash
-python3 -m unittest discover -s tests -v
-python3 lab.py screen examples/possibilities.json --output /tmp/alpha-first-screen
-cat /tmp/alpha-first-screen/DECISION.md
-```
+The minimal executor, fixtures, and qualification belong to the separately maintained invention-loop implementation, not this policy contribution. Do not duplicate its `lab.py`, `tests/test_lab.py`, `.gitignore` or source ownership. Preserve genuine source/test continuity and run its documented commands on its **actual integrated source**.
 
-Replace illustrative candidates with sourced evidence before flagship selection. A distinct source-and-budget-approved campaign is required for substantive prospecting or confirmation.
+Before selecting a flagship, execute a sourced opportunity screen across at least three materially different consequential possibilities, with adversarial comparisons and a bounded resource allocation. A populated form is not evidence of customer demand, a negative baseline, new physics, or successor benefit.
