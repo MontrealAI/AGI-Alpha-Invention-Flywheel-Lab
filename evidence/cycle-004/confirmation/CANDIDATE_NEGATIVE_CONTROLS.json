@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "meaning": "Both derived negative controls were rejected by the unchanged exact verifier",
+  "original_projection_sha256": "fd341a7cb120f44949ebc06024f7d601aad07234d0e478b15f0af1b27c2b241f",
+  "script_sha256": "af8464c1bf872f1bc4d670e040ffa619c9341036f3c221444ef6399f15643d51",
+  "cases": [
+    {
+      "control": "all_physical_weights_zero",
+      "derived_input_sha256": "16917f64a9d63f0ac12d3e6a8a410a46c75b1b6c1659d535aad04df2be651b4a",
+      "status": "NOT_CERTIFIED",
+      "checks": {
+        "unit_normalization": true,
+        "disjoint_supports": true,
+        "union_support_distance_at_least3": true,
+        "common_exact_Z_and_ZZ_moments": true,
+        "physical_phase_is_fixed_logical_controlled_S": false
+      },
+      "failures": [
+        {
+          "check": "physical_phase_is_fixed_logical_controlled_S",
+          "witness": {
+            "logical": "11",
+            "bits": "000000111010100",
+            "actual_exponent": 0,
+            "required_exponent": 1
+          }
+        }
+      ]
+    },
+    {
+      "control": "missing_probability_mass",
+      "derived_input_sha256": "3d1e5e908bc2ba9761cc6a152aa368b064cce9cb5852175e6aad154fc225ea71",
+      "status": "NOT_CERTIFIED",
+      "checks": {
+        "unit_normalization": false,
+        "disjoint_supports": true,
+        "union_support_distance_at_least3": true,
+        "common_exact_Z_and_ZZ_moments": false,
+        "physical_phase_is_fixed_logical_controlled_S": true
+      },
+      "failures": [
+        {
+          "check": "unit_normalization",
+          "norms": [
+            "79/80",
+            "1",
+            "1",
+            "1"
+          ]
+        },
+        {
+          "check": "common_exact_Z_and_ZZ_moments",
+          "witness": {
+            "z_mask": "100000000000000",
+            "values": [
+              "-1/80",
+              "0",
+              "0",
+              "0"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

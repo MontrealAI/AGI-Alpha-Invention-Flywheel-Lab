@@ -1,0 +1,207 @@
+{
+  "completed_utc": "2026-10-29T20:59:48Z",
+  "script_sha256": "92b769df9b8b9c51343ca3f4cba3e3dd6d1efa8844d6a7dc61a332ab88c3c134",
+  "candidate_read": false,
+  "outer_paper_code": {
+    "n": 6,
+    "K": 4,
+    "orthonormal": true,
+    "Pauli_weight_detection": 1,
+    "exact_operators_checked": 19,
+    "logical_phase_exponents": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "first_next_weight_KL_failure": {
+      "Pauli": "X0X1",
+      "numerator_matrix": [
+        [
+          [
+            16,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            16,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            16,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      ],
+      "common_denominator": 16
+    }
+  },
+  "Steane_inner": {
+    "n": 7,
+    "K": 2,
+    "orthonormal": true,
+    "Pauli_weight_detection": 2,
+    "exact_operators_checked": 211,
+    "logical_phase_exponents": [
+      0,
+      1
+    ],
+    "first_next_weight_KL_failure": {
+      "Pauli": "X0X1X6",
+      "numerator_matrix": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            8,
+            0
+          ]
+        ],
+        [
+          [
+            8,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      ],
+      "common_denominator": 8
+    }
+  },
+  "composed_known_methods_control": {
+    "n": 42,
+    "K": 4,
+    "quantum_distance_lower_bound": 6,
+    "quantum_distance_exact": 6,
+    "method": "six outer physical qubits each replaced by one7-qubit Steane block",
+    "physical_weights": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "logical_phase_exponents": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "local_phase_gate_locations": 42,
+    "distance_upper_bound_witness": {
+      "physical_X_sites": [
+        0,
+        1,
+        6,
+        7,
+        8,
+        13
+      ],
+      "weight": 6,
+      "compressed_logical_matrix": "diag(1,1,1,0)",
+      "reason": "Steane X0X1X6 acts as inner logical X; two blocks lift the outer X0X1 witness"
+    },
+    "expanded42qubit_state_not_materialized": true,
+    "certification": "exact component checks above plus standard distance-product and gate-composition argument",
+    "encoder_syndrome_decoder_device_costs": "UNKNOWN"
+  }
+}

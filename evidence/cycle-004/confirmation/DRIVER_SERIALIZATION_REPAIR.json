@@ -1,0 +1,17 @@
+{
+  "schema": "driver-serialization-repair/v1",
+  "utc": "2026-10-29T20:47:57.027300+00:00",
+  "v1_source": "finish_confirmation_v1_preserved.py",
+  "v1_sha256": "1d5d6dbea17a3b8f62da222064c7998a51bab4f3983789a6aea3dd419fbc6942",
+  "v2_sha256": "3d84f240a3b5ce230810262b0318418d9404a287ca05b8f26d789280c10be76b",
+  "observed_failure": "json.dumps cannot serialize numpy.bool_ in encoder result after all242 process tests and native simulations completed",
+  "changes": [
+    "Convert numpy.bool_ to builtin bool only at report serialization boundary",
+    "Add --lab-root alias for --repo without changing selection or computation"
+  ],
+  "process_outcomes_exposed": true,
+  "candidate_or_frozen_verifier_or_thresholds_changed": false,
+  "fresh_statistical_confirmation_claim": false,
+  "preserved_partial_outputs": "process-run-01",
+  "rerun_output": "process-run-02"
+}
