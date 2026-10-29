@@ -1,0 +1,279 @@
+{
+  "schema": "agi-alpha-sandbox-qualification/v1",
+  "qualified": true,
+  "probes": {
+    "read": {
+      "passed": true,
+      "receipt": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 4,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.10031515300215688,
+        "stdout_bytes": 211,
+        "stderr_bytes": 0,
+        "stdout_sha256": "0c1a930faf4e04ad8713f9e04c416207a83ea803e8de75c00845e274d5959d2f",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "denied": true,
+            "errno": 1
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 2.5188004656229168e-05,
+          "worker_cpu_seconds": 0.08378982,
+          "peak_rss_kib": 12800
+        }
+      }
+    },
+    "write": {
+      "passed": true,
+      "receipt": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 4,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.0818262640023022,
+        "stdout_bytes": 211,
+        "stderr_bytes": 0,
+        "stdout_sha256": "a846e411f333cdd8be05b656372cc4865a4a41142ca14660c97cd47cec5fe212",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "denied": true,
+            "errno": 1
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 2.292100543854758e-05,
+          "worker_cpu_seconds": 0.071063285,
+          "peak_rss_kib": 12928
+        }
+      }
+    },
+    "network": {
+      "passed": true,
+      "receipt": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 4,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.09327328099607257,
+        "stdout_bytes": 211,
+        "stderr_bytes": 0,
+        "stdout_sha256": "8a0fd1fabd561dbc661f8802b5d0b0df9f2f652f2007b6b104ab34ce3376c2f4",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "denied": true,
+            "errno": 1
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 5.944800068391487e-05,
+          "worker_cpu_seconds": 0.077347585,
+          "peak_rss_kib": 12928
+        }
+      }
+    },
+    "exec": {
+      "passed": true,
+      "receipt": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 4,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.09299071600253228,
+        "stdout_bytes": 211,
+        "stderr_bytes": 0,
+        "stdout_sha256": "ef041bbe57d4a966a41b475c212bba78f4ddfd296c716ba897690cac0c431a9a",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "denied": true,
+            "errno": 1
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 4.230600461596623e-05,
+          "worker_cpu_seconds": 0.079352167,
+          "peak_rss_kib": 12928
+        }
+      }
+    },
+    "fork": {
+      "passed": true,
+      "receipt": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 4,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.09501796599943191,
+        "stdout_bytes": 211,
+        "stderr_bytes": 0,
+        "stdout_sha256": "9f947472e7c9792412efb71ada3b37705981caf8ef66e2dbf0d31357dc454459",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "denied": true,
+            "errno": 1
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 3.693799953907728e-05,
+          "worker_cpu_seconds": 0.081993849,
+          "peak_rss_kib": 12928
+        }
+      }
+    },
+    "environment": {
+      "passed": true,
+      "receipt": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 4,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.09439803200075403,
+        "stdout_bytes": 199,
+        "stderr_bytes": 0,
+        "stdout_sha256": "5c100eec294a9e413b45fdeccd509607b5c41831065811c1ef143350251ac262",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "empty": true
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 1.4213997928891331e-05,
+          "worker_cpu_seconds": 0.077936621,
+          "peak_rss_kib": 12928
+        }
+      }
+    },
+    "memory": {
+      "passed": true,
+      "receipt": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 4,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.08094224199885502,
+        "stdout_bytes": 201,
+        "stderr_bytes": 0,
+        "stdout_sha256": "82d94870d5f35c8c7db0c8eb7e1fa92ec8e9332d55040749ee15145441b56e88",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "bounded": true
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 2.5143999664578587e-05,
+          "worker_cpu_seconds": 0.068694063,
+          "peak_rss_kib": 12928
+        }
+      }
+    },
+    "output": {
+      "passed": true,
+      "receipt": {
+        "state": "OUTPUT_LIMIT",
+        "returncode": -9,
+        "limits": {
+          "wall_seconds": 4,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 4096,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.08978895600012038,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      }
+    },
+    "cpu": {
+      "passed": true,
+      "receipt": {
+        "state": "FAILED",
+        "returncode": -24,
+        "limits": {
+          "wall_seconds": 20,
+          "cpu_seconds": 1,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 1.548297569002898,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      }
+    },
+    "wall": {
+      "passed": true,
+      "receipt": {
+        "state": "WALL_LIMIT",
+        "returncode": -9,
+        "limits": {
+          "wall_seconds": 0.2,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.20219473299948731,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      }
+    }
+  },
+  "boundary": "This host, this Python and Linux seccomp; no external certification. No host files, network, processes or privilege effects after filtering.",
+  "trusted": [
+    "Linux kernel",
+    "libseccomp",
+    "Python runtime",
+    "sandbox supervisor"
+  ],
+  "sandbox_sha256": "103e2a8828a7aaf31faac475fb48ccbba1a685b4f64191dae4f6fbe8a9b6c7c8"
+}
