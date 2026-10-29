@@ -1,0 +1,9 @@
+{
+  "schema": "agi-alpha-runner-source-refusal-v1",
+  "lane": "development engineering correction; original defect already inspected; no statistical confirmation",
+  "original_runner_sha256": "83c40e579524f677a8b4d3f2eba898e3b55809b8f2c8359c4d29202e5dbdb45b",
+  "frozen_before_repaired_runner": true,
+  "acceptance": "A candidate-source identity mismatch must refuse before importing altered candidate code; the harmless candidate import marker must not be created. Any output state must remain incomplete, and prior evidence may not be overwritten.",
+  "probe": "Temporary copy of frozen repository closure with one harmless marker append in candidate module. Run original/corrected reproduction worker under same bounded trusted harness. No original source edits by verifier.",
+  "scope": "Source gate ordering and trusted closure integrity only; not qualified arbitrary generated-code sandboxing or network isolation."
+}
