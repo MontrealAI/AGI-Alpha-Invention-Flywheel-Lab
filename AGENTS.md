@@ -57,6 +57,7 @@ Keep at most one flagship and two explicitly bounded exploratory alternatives in
 ## Initial permissions
 
 This package authorizes no spending, paid provider calls, outreach, real commerce, credentials/wallet access, financial provisioning, production deployment, release, or modification of another repository. Existing separately granted permissions must be checked at use. No campaign has been launched and no candidate is admitted by these documents.
-## Initial executable tool
 
-`lab.py screen` validates three distinct authored possibilities, emits a hash-bound evidence-gap report, and refuses to claim an admitted cohort without external verification. The example hypotheses are fictional research directions, not a completed opportunity screen. Local unittest checks are engineering tests, not scientific confirmation. Keep the trusted owner README unchanged unless explicitly asked to update it.
+## Existing executable owner boundary
+
+The executable invention-loop kernel is maintained separately. This charter does not install a competing `lab.py` or tests. Coordinate its exact current branch, source, comparator and evidence before implementation. Do not silently relabel synthetic fixtures as commercial discoveries or circumvent release/approval rules by moving into a smaller repository.
