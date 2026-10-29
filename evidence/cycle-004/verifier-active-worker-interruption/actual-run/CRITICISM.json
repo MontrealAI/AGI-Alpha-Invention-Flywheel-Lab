@@ -1,0 +1,10 @@
+{
+  "claim": "Initialization interruptions preserve an incomplete marker",
+  "evidence": "evidence/cycle-004/verifier-legacy-interruption/report.json",
+  "candidate_sha256": "1e812332d6b8ed91d38970ae07fffde0cca0047730a1a8e3d5c9665f7de254e3",
+  "origin": "real pre-existing source defect; verifier fault-injection reproduces it",
+  "reproduction": "python verification/cycle004_probe_runner.py --runner reproduce.py --output NEW",
+  "expected_failure": "STARTED exists but no INTERRUPTED marker",
+  "severity": "evidence integrity",
+  "uncertainty": "Catchable interruption only, not SIGKILL/host durability"
+}

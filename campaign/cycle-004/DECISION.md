@@ -26,4 +26,6 @@ The next technical construction would have to produce a finite-gate-set fault-to
 
 **Decision:** retain and publish the usable ideal component and every negative result; do not promote it as the requested completed business or Blue Sky capability frontier. The missing device-qualified complete route and independently priced buyer contract are real access/participation boundaries. More papers, abstract market estimates or passing local tests do not cross them.
 
-Source/cost/exposure records: `ALLOCATION.json`, `CONSTRUCTION_PROTOCOL.json`, `CANDIDATE_FREEZE.json`, `MECHANISM_TRACE.md`, `COSTS.json`, `TRANSFER_PROTOCOL.json`, and `evidence/cycle-004/`. The final publication receipt records the exact replay, source head, CI and preserved historical edition identities.
+Source/cost/exposure records: `OPERATION_ALLOCATION.json`, `CONSTRUCTION_PROTOCOL.json`, `CANDIDATE_FREEZE.json`, `MECHANISM_TRACE.md`, `COSTS.json`, `TRANSFER_PROTOCOL.json`, and `evidence/cycle-004/`. The final publication receipt records the exact replay, source head, CI and preserved historical edition identities.
+
+The separately published mechanism pilot merged during operation review. Technical integration preserves its source/evidence and original `ALLOCATION.json`; the byte-identical operation allocation is now `OPERATION_ALLOCATION.json`. The primary replay distribution binds that relocated record. Both histories remain accessible, and no combined discovery-performance claim follows from putting their files in the same checkout.

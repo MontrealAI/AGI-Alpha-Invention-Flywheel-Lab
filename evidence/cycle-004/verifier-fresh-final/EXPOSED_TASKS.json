@@ -1,0 +1,234 @@
+[
+  {
+    "id": "artifact-publication/ordered",
+    "phases": [
+      "reserve",
+      "manifest",
+      "build",
+      "publish",
+      "complete"
+    ],
+    "dependencies": [
+      [
+        "reserve",
+        "manifest"
+      ],
+      [
+        "manifest",
+        "build"
+      ],
+      [
+        "build",
+        "publish"
+      ],
+      [
+        "publish",
+        "complete"
+      ]
+    ],
+    "family_scope": "Abstract evidence protocol; no real domain delivery is claimed."
+  },
+  {
+    "id": "artifact-publication/representation-permuted",
+    "phases": [
+      "complete",
+      "publish",
+      "build",
+      "manifest",
+      "reserve"
+    ],
+    "dependencies": [
+      [
+        "reserve",
+        "manifest"
+      ],
+      [
+        "manifest",
+        "build"
+      ],
+      [
+        "build",
+        "publish"
+      ],
+      [
+        "publish",
+        "complete"
+      ]
+    ],
+    "family_scope": "Abstract evidence protocol; no real domain delivery is claimed."
+  },
+  {
+    "id": "measurement-acquisition/ordered",
+    "phases": [
+      "reserve",
+      "start",
+      "work",
+      "manifest",
+      "complete"
+    ],
+    "dependencies": [
+      [
+        "reserve",
+        "start"
+      ],
+      [
+        "start",
+        "work"
+      ],
+      [
+        "work",
+        "manifest"
+      ],
+      [
+        "manifest",
+        "complete"
+      ]
+    ],
+    "family_scope": "Abstract evidence protocol; no real domain delivery is claimed."
+  },
+  {
+    "id": "measurement-acquisition/representation-permuted",
+    "phases": [
+      "complete",
+      "manifest",
+      "work",
+      "start",
+      "reserve"
+    ],
+    "dependencies": [
+      [
+        "reserve",
+        "start"
+      ],
+      [
+        "start",
+        "work"
+      ],
+      [
+        "work",
+        "manifest"
+      ],
+      [
+        "manifest",
+        "complete"
+      ]
+    ],
+    "family_scope": "Abstract evidence protocol; no real domain delivery is claimed."
+  },
+  {
+    "id": "checkpoint-export/ordered",
+    "phases": [
+      "reserve",
+      "start",
+      "build",
+      "publish",
+      "complete"
+    ],
+    "dependencies": [
+      [
+        "reserve",
+        "start"
+      ],
+      [
+        "start",
+        "build"
+      ],
+      [
+        "build",
+        "publish"
+      ],
+      [
+        "publish",
+        "complete"
+      ]
+    ],
+    "family_scope": "Abstract evidence protocol; no real domain delivery is claimed."
+  },
+  {
+    "id": "checkpoint-export/representation-permuted",
+    "phases": [
+      "complete",
+      "publish",
+      "build",
+      "start",
+      "reserve"
+    ],
+    "dependencies": [
+      [
+        "reserve",
+        "start"
+      ],
+      [
+        "start",
+        "build"
+      ],
+      [
+        "build",
+        "publish"
+      ],
+      [
+        "publish",
+        "complete"
+      ]
+    ],
+    "family_scope": "Abstract evidence protocol; no real domain delivery is claimed."
+  },
+  {
+    "id": "transaction-journal/ordered",
+    "phases": [
+      "reserve",
+      "manifest",
+      "work",
+      "publish",
+      "complete"
+    ],
+    "dependencies": [
+      [
+        "reserve",
+        "manifest"
+      ],
+      [
+        "manifest",
+        "work"
+      ],
+      [
+        "work",
+        "publish"
+      ],
+      [
+        "publish",
+        "complete"
+      ]
+    ],
+    "family_scope": "Abstract evidence protocol; no real domain delivery is claimed."
+  },
+  {
+    "id": "transaction-journal/representation-permuted",
+    "phases": [
+      "complete",
+      "publish",
+      "work",
+      "manifest",
+      "reserve"
+    ],
+    "dependencies": [
+      [
+        "reserve",
+        "manifest"
+      ],
+      [
+        "manifest",
+        "work"
+      ],
+      [
+        "work",
+        "publish"
+      ],
+      [
+        "publish",
+        "complete"
+      ]
+    ],
+    "family_scope": "Abstract evidence protocol; no real domain delivery is claimed."
+  }
+]

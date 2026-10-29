@@ -19,19 +19,28 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-      - run: python -m pip install -r requirements.txt
-      - name: Qualify the immutable negative-grid edition
+      - run: |
+          if test -f requirements-cycle004.txt; then
+            python -m pip install -r requirements-cycle004.txt
+          else
+            python -m pip install -r requirements.txt
+          fi
+      - name: Source-matched tests and actual connected replay
         run: |
-          mkdir -p "$RUNNER_TEMP/grid-edition"
-          git archive 0ca2ea08723f338efafb16b939c5b782d4f3794d | tar -x -C "$RUNNER_TEMP/grid-edition"
-          cd "$RUNNER_TEMP/grid-edition"
           python -m unittest discover -s tests -v
           python -m unittest discover -s verification -v
-          python reproduce.py --output "$RUNNER_TEMP/campaign-replay"
-          python verification/probe_runner_identity.py --root . --output "$RUNNER_TEMP/identity-probe"
-          python verification/probe_added_source.py --root . --output "$RUNNER_TEMP/added-source-probe"
-          python verification/probe_worker_bounds.py --root . --output "$RUNNER_TEMP/bounds-probe"
-          python verification/check_edition.py
+          python -m flywheel.legacy --root . --output "$RUNNER_TEMP/frozen-cycle-001"
+          python "$RUNNER_TEMP/frozen-cycle-001/reproduce.py" --output "$RUNNER_TEMP/campaign-replay"
+          python "$RUNNER_TEMP/frozen-cycle-001/verification/probe_runner_identity.py" --root "$RUNNER_TEMP/frozen-cycle-001" --output "$RUNNER_TEMP/identity-probe"
+          python "$RUNNER_TEMP/frozen-cycle-001/verification/probe_added_source.py" --root "$RUNNER_TEMP/frozen-cycle-001" --output "$RUNNER_TEMP/added-source-probe"
+          python "$RUNNER_TEMP/frozen-cycle-001/verification/probe_worker_bounds.py" --root "$RUNNER_TEMP/frozen-cycle-001" --output "$RUNNER_TEMP/bounds-probe"
+          python "$RUNNER_TEMP/frozen-cycle-001/verification/check_edition.py"
+          python run_cycle.py --output "$RUNNER_TEMP/connected-cycle-004"
+          python verification/cycle004_probe_runner.py --runner run_cycle.py --output "$RUNNER_TEMP/cycle004-initialization"
+          python verification/cycle004_completion.py --root . --output "$RUNNER_TEMP/cycle004-completion"
+          python verification/cycle004_active_interrupt.py --root . --output "$RUNNER_TEMP/cycle004-active-interruption"
+          python verification/cycle004_fresh.py --output "$RUNNER_TEMP/cycle004-exposed-regression"
+          python -m flywheel.metabolic_probe --output "$RUNNER_TEMP/cycle004-metabolic-replay"
   phase-code-qualification:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -59,6 +68,36 @@ jobs:
           name: phase-code-replay
           path: ${{ runner.temp }}/phase-code-replay
           if-no-files-found: error
+  publish-connected-checkpoint:
+    needs: [qualify, phase-code-qualification]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Publish immutable experimental checkpoint after qualification
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          tag=connected-pilot-20261029-r1
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo 'Existing connected checkpoint retained unchanged.'
+            exit 0
+          fi
+          if git show-ref --verify --quiet "refs/tags/$tag"; then
+            echo 'Tag exists without release; refuse reuse.' >&2
+            exit 1
+          fi
+          mkdir -p checkpoint-assets
+          git archive --format=zip --prefix=AGI_ALPHA_Connected_Pilot/ HEAD > checkpoint-assets/AGI_ALPHA_Connected_Pilot_source_evidence.zip
+          sha256sum checkpoint-assets/* > checkpoint-assets/SHA256SUMS.txt
+          gh release create "$tag" checkpoint-assets/* --target "$GITHUB_SHA" --prerelease --title 'AGI ALPHA connected pilot: conventional control wins' --notes-file campaign/cycle-004/RELEASE_NOTES.md
   publish-research-edition:
     needs: [qualify, phase-code-qualification]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
