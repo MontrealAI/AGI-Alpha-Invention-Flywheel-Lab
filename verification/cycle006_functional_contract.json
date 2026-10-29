@@ -1,0 +1,36 @@
+{
+  "schema": "agi-alpha/conditional-functional-contract006/v1",
+  "scope": "source-bound-pilot-report-delivery",
+  "requirements": [
+    "artifact-identity",
+    "receipt-identity",
+    "verifier-source-identity",
+    "frozen-obligations-identity",
+    "independent-scoped-acceptance"
+  ],
+  "verifier_source": {
+    "path": "verification/cycle006_confirm.py",
+    "sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+  },
+  "functional_obligations": {
+    "path": "verification/cycle006_functional_obligations.json",
+    "sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048"
+  },
+  "scenario": {
+    "currency": "simulated-microUSD",
+    "unit_price": 2000000,
+    "opening_capital": 20000000,
+    "working_capital": 1000000,
+    "cost_per_admitted_case": {
+      "discovery_and_failed_search": 10000,
+      "inference": 10000,
+      "data_network_storage": 10000,
+      "construction_integration": 10000,
+      "verification_repair": 10000,
+      "delivery_fees": 10000,
+      "maintenance_support": 10000,
+      "refunds_and_terminal_obligations": 10000
+    }
+  },
+  "commercial_cohort_admitted": false
+}
