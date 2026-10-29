@@ -1,0 +1,318 @@
+{
+  "old_policy_old_tools": {
+    "configuration": {
+      "language": "norman-residual-construction/v1",
+      "expressions": [],
+      "ridge": 1,
+      "symmetric": false,
+      "constraints": []
+    },
+    "artifact_sha256": "165b4f002649a9a25da777fed168de0b6d4c087be24ee28a14aefb73c77d36b4",
+    "artifact_file": "refitted-all-development/old_policy_old_tools.json",
+    "prediction_file": "refitted-all-development/old_policy_old_tools-predictions.npz",
+    "fallback": "No functionally admissible selected experiment; explicit conventional additive stopping",
+    "development_only_selection": true,
+    "protected_outcomes_used": false,
+    "extra_refit_scope": "One common all-development refit per arm after its matched search allowance; this cost is outside search and is explicitly charged by the enclosing resource receipt"
+  },
+  "old_policy_new_tools": {
+    "configuration": {
+      "constraints": [
+        {
+          "evidence_sha256": "a671d8db25ffe401b1ea18c0da30298815169a30fef2bc37dd24381d80de0898",
+          "kind": "exchange_symmetry",
+          "status": "established"
+        }
+      ],
+      "expressions": [
+        "b1",
+        [
+          "div",
+          [
+            "add",
+            "a0",
+            [
+              "sub",
+              "b2",
+              "a0"
+            ]
+          ],
+          "b0"
+        ],
+        [
+          "div",
+          [
+            "mul",
+            "a0",
+            -2.496
+          ],
+          "b0"
+        ],
+        [
+          "div",
+          [
+            "div",
+            "a0",
+            [
+              "div",
+              "a0",
+              "a2"
+            ]
+          ],
+          "b0"
+        ]
+      ],
+      "language": "norman-residual-construction/v1",
+      "ridge": 100,
+      "symmetric": true
+    },
+    "artifact_sha256": "9ed330235af9f49b736dd3fbafe1be76f41661c53f52f3c52809e7a0436d2632",
+    "artifact_file": "refitted-all-development/old_policy_new_tools.json",
+    "prediction_file": "refitted-all-development/old_policy_new_tools-predictions.npz",
+    "fallback": null,
+    "development_only_selection": true,
+    "protected_outcomes_used": false,
+    "extra_refit_scope": "One common all-development refit per arm after its matched search allowance; this cost is outside search and is explicitly charged by the enclosing resource receipt"
+  },
+  "new_policy_old_tools": {
+    "configuration": {
+      "language": "norman-residual-construction/v1",
+      "expressions": [],
+      "ridge": 1,
+      "symmetric": false,
+      "constraints": []
+    },
+    "artifact_sha256": "71f709e5a444580dc87c5091b5939b49bbc42705d6d8f62bdc42cd0cb4303c22",
+    "artifact_file": "refitted-all-development/new_policy_old_tools.json",
+    "prediction_file": "refitted-all-development/new_policy_old_tools-predictions.npz",
+    "fallback": "No functionally admissible selected experiment; explicit conventional additive stopping",
+    "development_only_selection": true,
+    "protected_outcomes_used": false,
+    "extra_refit_scope": "One common all-development refit per arm after its matched search allowance; this cost is outside search and is explicitly charged by the enclosing resource receipt"
+  },
+  "new_policy_new_tools": {
+    "configuration": {
+      "constraints": [
+        {
+          "evidence_sha256": "a671d8db25ffe401b1ea18c0da30298815169a30fef2bc37dd24381d80de0898",
+          "kind": "exchange_symmetry",
+          "status": "established"
+        }
+      ],
+      "expressions": [
+        "b1",
+        [
+          "div",
+          [
+            "add",
+            "a0",
+            [
+              "sub",
+              "b2",
+              "a0"
+            ]
+          ],
+          "b0"
+        ],
+        [
+          "div",
+          [
+            "mul",
+            "a0",
+            -2.496
+          ],
+          "b0"
+        ],
+        [
+          "div",
+          [
+            "div",
+            "a0",
+            [
+              "div",
+              "a0",
+              "a2"
+            ]
+          ],
+          "b0"
+        ]
+      ],
+      "language": "norman-residual-construction/v1",
+      "ridge": 100,
+      "symmetric": true
+    },
+    "artifact_sha256": "04110db74ed1e0e01f964a52f2dd4abd14748ecb68e515c2fe88af7a9738cc63",
+    "artifact_file": "refitted-all-development/new_policy_new_tools.json",
+    "prediction_file": "refitted-all-development/new_policy_new_tools-predictions.npz",
+    "fallback": null,
+    "development_only_selection": true,
+    "protected_outcomes_used": false,
+    "extra_refit_scope": "One common all-development refit per arm after its matched search allowance; this cost is outside search and is explicitly charged by the enclosing resource receipt"
+  },
+  "ordinary_equivalent": {
+    "configuration": {
+      "language": "norman-residual-construction/v1",
+      "expressions": [
+        "b1",
+        [
+          "div",
+          [
+            "add",
+            "a0",
+            [
+              "sub",
+              "b2",
+              "a0"
+            ]
+          ],
+          "b0"
+        ],
+        [
+          "div",
+          [
+            "mul",
+            "a0",
+            -2.496
+          ],
+          "b0"
+        ],
+        [
+          "div",
+          [
+            "div",
+            "a0",
+            [
+              "div",
+              "a0",
+              "a2"
+            ]
+          ],
+          "b0"
+        ]
+      ],
+      "ridge": 100,
+      "symmetric": true,
+      "constraints": [
+        {
+          "kind": "exchange_symmetry",
+          "status": "established",
+          "evidence_sha256": "a671d8db25ffe401b1ea18c0da30298815169a30fef2bc37dd24381d80de0898"
+        }
+      ]
+    },
+    "artifact_sha256": "16ffc700ac39464b0049917bf98ba18f5b762c6eba6776fdf4fa14deb4b8938e",
+    "artifact_file": "refitted-all-development/ordinary_equivalent.json",
+    "prediction_file": "refitted-all-development/ordinary_equivalent-predictions.npz",
+    "fallback": null,
+    "development_only_selection": true,
+    "protected_outcomes_used": false,
+    "extra_refit_scope": "One common all-development refit per arm after its matched search allowance; this cost is outside search and is explicitly charged by the enclosing resource receipt"
+  },
+  "operator_removed": {
+    "configuration": {
+      "language": "norman-residual-construction/v1",
+      "expressions": [],
+      "ridge": 1,
+      "symmetric": false,
+      "constraints": []
+    },
+    "artifact_sha256": "4ed5d0fdf7272fff5454e561550136ce043fd388483f49a23b1bb975b5a85177",
+    "artifact_file": "refitted-all-development/operator_removed.json",
+    "prediction_file": "refitted-all-development/operator_removed-predictions.npz",
+    "fallback": null,
+    "development_only_selection": true,
+    "protected_outcomes_used": false,
+    "extra_refit_scope": "One common all-development refit per arm after its matched search allowance; this cost is outside search and is explicitly charged by the enclosing resource receipt"
+  },
+  "frozen_initial": {
+    "configuration": {
+      "language": "norman-residual-construction/v1",
+      "expressions": [],
+      "ridge": 1,
+      "symmetric": false,
+      "constraints": []
+    },
+    "artifact_sha256": "77a6d4d946f889d1ef1387014bc43eb0d62ac0dd3602c4f5e965ceee1da18b07",
+    "artifact_file": "refitted-all-development/frozen_initial.json",
+    "prediction_file": "refitted-all-development/frozen_initial-predictions.npz",
+    "fallback": "No functionally admissible selected experiment; explicit conventional additive stopping",
+    "development_only_selection": true,
+    "protected_outcomes_used": false,
+    "extra_refit_scope": "One common all-development refit per arm after its matched search allowance; this cost is outside search and is explicitly charged by the enclosing resource receipt"
+  },
+  "reset_rebuild": {
+    "configuration": {
+      "language": "norman-residual-construction/v1",
+      "expressions": [],
+      "ridge": 1,
+      "symmetric": false,
+      "constraints": []
+    },
+    "artifact_sha256": "1252e7cf07dc585940935c24425090ad30ba96703f8b576523666a6f808d6ae5",
+    "artifact_file": "refitted-all-development/reset_rebuild.json",
+    "prediction_file": "refitted-all-development/reset_rebuild-predictions.npz",
+    "fallback": "No functionally admissible selected experiment; explicit conventional additive stopping",
+    "development_only_selection": true,
+    "protected_outcomes_used": false,
+    "extra_refit_scope": "One common all-development refit per arm after its matched search allowance; this cost is outside search and is explicitly charged by the enclosing resource receipt"
+  },
+  "history_best_conventional": {
+    "configuration": {
+      "constraints": [
+        {
+          "evidence_sha256": "a671d8db25ffe401b1ea18c0da30298815169a30fef2bc37dd24381d80de0898",
+          "kind": "exchange_symmetry",
+          "status": "established"
+        }
+      ],
+      "expressions": [
+        "b1",
+        [
+          "div",
+          [
+            "add",
+            "a0",
+            [
+              "sub",
+              "b2",
+              "a0"
+            ]
+          ],
+          "b0"
+        ],
+        [
+          "div",
+          [
+            "mul",
+            "a0",
+            -2.496
+          ],
+          "b0"
+        ],
+        [
+          "div",
+          [
+            "div",
+            "a0",
+            [
+              "div",
+              "a0",
+              "a2"
+            ]
+          ],
+          "b0"
+        ]
+      ],
+      "language": "norman-residual-construction/v1",
+      "ridge": 100,
+      "symmetric": true
+    },
+    "artifact_sha256": "7a7fea80c2bbf7322a99107db53338b86b8aa758e15546a23cf067e77a6e8154",
+    "artifact_file": "refitted-all-development/history_best_conventional.json",
+    "prediction_file": "refitted-all-development/history_best_conventional-predictions.npz",
+    "fallback": null,
+    "development_only_selection": true,
+    "protected_outcomes_used": false,
+    "extra_refit_scope": "One common all-development refit per arm after its matched search allowance; this cost is outside search and is explicitly charged by the enclosing resource receipt"
+  }
+}

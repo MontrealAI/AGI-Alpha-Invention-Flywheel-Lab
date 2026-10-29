@@ -1,0 +1,61 @@
+{
+  "schema": "agi-alpha-cycle006-active-worker-handshake/v3",
+  "passed": true,
+  "runner_sha256": "8cd5a0acfb20f98f9c95ec9126b3a9083ca3d61c924521c5a64a0deb4acdcfbf",
+  "verifier_sha256": "3ec83816e8dd03d4861dabbb39e88539bb1a75b3b6c74485c74dfd114cc35f55",
+  "historical_sources_verified": 22,
+  "handshake": {
+    "identity": {
+      "host_pid": 122414,
+      "namespace_pid": 6,
+      "namespace_index": 1,
+      "state": "R",
+      "parent_host_pid": 122413,
+      "start_ticks": 6208702
+    },
+    "stopped_state": {
+      "state": "T",
+      "parent_host_pid": 122413,
+      "start_ticks": 6208702
+    },
+    "sandbox_receipt_exists": true,
+    "report_absent": true,
+    "parent_live": true
+  },
+  "parent_returncode": -2,
+  "adopted_descendants_reaped": [],
+  "identified_worker_reaped": false,
+  "identity_bound_pidfd_exit_ready": true,
+  "identity_bound_pidfd_events": [
+    [
+      4,
+      17
+    ]
+  ],
+  "identified_worker_not_live": true,
+  "final_worker_proc_state": null,
+  "reaping_route": "No adoption required; identified worker exited and ECHILD establishes all descendants already reaped",
+  "no_children_after_reaping": true,
+  "interrupted_marker": true,
+  "complete_absent": true,
+  "restart_refused_unchanged": true,
+  "files_sha256": {
+    "INTERRUPTED.json": "c1679219251d40ab8765edbca9f0b7b4ebf61c6f0717eba6a9c5f25cb54b4dca",
+    "WORKER.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "SANDBOX.json": "3e4d0e4e25dc203b671ba3f8f692c0ca149c0903500b34adcea3c97f54d0438d",
+    "STARTED.json": "5be8dd8270a62a5858f07e19dbcc8bf6ff970458843ba03d408226faca5c7070"
+  },
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/tmp/cycle006-verifier-old004/run_cycle.py\", line 192, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/tmp/cycle006-verifier-old004/run_cycle.py\", line 177, in main\n    result = subprocess.run([sys.executable, '-I', str(ROOT / 'run_cycle.py'), '--worker', '--output', str(output)],\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 550, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 1209, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 2141, in _communicate\n    self.wait(timeout=self._remaining_time(endtime))\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 1264, in wait\n    return self._wait(timeout=timeout)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 2047, in _wait\n    time.sleep(delay)\nKeyboardInterrupt\n",
+  "restart_stderr": "Traceback (most recent call last):\n  File \"/tmp/cycle006-verifier-old004/run_cycle.py\", line 192, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/tmp/cycle006-verifier-old004/run_cycle.py\", line 173, in main\n    output.mkdir(parents=True, exist_ok=False)\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 1311, in mkdir\n    os.mkdir(self, mode)\nFileExistsError: [Errno 17] File exists: '/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/verifier-pr9-interruption/handshake-v3/actual-run'\n",
+  "resources": {
+    "wall_seconds": 3.5728050480029196,
+    "verifier_cpu_seconds": 0.150058802,
+    "child_cpu_seconds": 3.31676
+  },
+  "scope": "External SIGSTOP establishes an identity-bound live-worker barrier after sandbox initialization and before its final report; real SIGINT goes to the unchanged historical parent. Kernel pidfd readiness must prove that exact worker exited, procidentity must not be live, and ECHILD must establish all children reaped. Parent cleanup may legitimately reap its worker; any adopted descendants are also reaped. Marker/noCOMPLETE/unchangedreplay remain mandatory. Candidate source is unchanged.",
+  "limits": [
+    "Linux pidfd/proc/subreaper qualification; no host crash or storage durability claim.",
+    "Procedural verification shares host/model/libraries; no scientific or commercial inference."
+  ]
+}

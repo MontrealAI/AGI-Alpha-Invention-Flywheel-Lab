@@ -57,12 +57,14 @@ def build(markdown, manifest, destination):
                   '--metadata', 'date=' + declared.get('date', '29 October 2026'), '--variable', 'geometry:margin=1in', '--variable', 'fontsize:10pt',
                   '--variable', 'colorlinks=true', '--variable', 'linkcolor=Maroon', '--variable', 'urlcolor=Blue', '--variable', 'documentclass=article']
         subprocess.run(common + ['--to=latex', '--output', str(work / (stem + '.tex'))], check=True, timeout=30, env=env, cwd=ROOT)
+        tex = work / (stem + '.tex')
+        tex.write_text(re.sub(r'\\texttt\{([0-9a-f]{40,64})\}', lambda match: r'\nolinkurl{' + match.group(1) + '}', tex.read_text()))
         header = work / 'style.html'
         header.write_text('<style>body{max-width:78ch;margin:3rem auto;padding:0 1.2rem;font:17px/1.65 system-ui,sans-serif;color:#172033}h1,h2,h3{line-height:1.2;color:#162b4a}table{border-collapse:collapse;width:100%;font-size:.9em}td,th{padding:.5rem;border-bottom:1px solid #ccd3dc;text-align:left;vertical-align:top}code{overflow-wrap:anywhere}pre{overflow:auto;background:#f2f4f7;padding:1rem}a{color:#174b88}img{max-width:100%}@media print{body{max-width:none;margin:0}}</style>')
         subprocess.run(common + ['--to=html5', '--mathml', '--include-in-header', str(header), '--output', str(work / (stem + '.html'))], check=True, timeout=30, env=env, cwd=ROOT)
         with (work / 'compile.log').open('wb') as log:
             for _ in range(2):
-                subprocess.run(['pdflatex', '-interaction=nonstopmode', '-halt-on-error', '-file-line-error', stem + '.tex'], check=True,
+                subprocess.run(['pdflatex', '-no-shell-escape', '-interaction=nonstopmode', '-halt-on-error', '-file-line-error', stem + '.tex'], check=True,
                                stdout=log, stderr=subprocess.STDOUT, timeout=60, env=env, cwd=work)
         log = (work / (stem + '.log')).read_text(errors='replace')
         bad = [line for line in log.splitlines() if 'Overfull ' in line or 'undefined references' in line]

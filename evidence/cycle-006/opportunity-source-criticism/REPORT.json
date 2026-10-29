@@ -1,0 +1,40 @@
+{
+  "schema": "agi-alpha-published-source-criticism006/v1",
+  "source_sha256": "acfebab2a4004786c69dc212a6260ef22780e72f6fbb6696b94384b4276db8ac",
+  "source_revision": "bfa6eeea2bd145a1af2ec0127a2e808cc38456a9",
+  "claim_challenged": "The helper named se_gene_expr_for_condition implements an IID standard error, and its error invalidates published interaction labels.",
+  "source_expression": "sub_data.X.toarray().std(axis=0) / sub_data.shape[0]",
+  "numerical_reproduction": {
+    "values": [
+      0.0,
+      2.0,
+      4.0,
+      6.0
+    ],
+    "n": 4,
+    "population_sd": 2.23606797749979,
+    "published_formula": 0.5590169943749475,
+    "population_sd_over_sqrt_n": 1.118033988749895,
+    "underestimate_factor": 2.0
+  },
+  "adjudication": {
+    "helper_name_semantics": "ESTABLISHED_SCOPED_MISMATCH_TO_IID_SEM",
+    "published_interaction_label_consequence": "NOT_ESTABLISHED",
+    "reason": "The inspected notebook derives the labels from an empirical null of observed additive residuals rather than this SE helper. This diagnostic does not invalidate the paper conclusions.",
+    "empirical_label_path_observed": true
+  },
+  "corrective_constraint_authority": false,
+  "constructor_should_consume_as_established_label_defect": false,
+  "limits": [
+    "Numerical four-value check is a mathematical reproduction of the actual source formula, not a biological experiment.",
+    "IID cell assumptions are not guaranteed biological-replicate independence.",
+    "Source author did not supply this criticism; it was found by implementation-team inspection."
+  ],
+  "resources": {
+    "wall_seconds": 0.0019625120039563626,
+    "cpu_seconds": 0.001953384999999988,
+    "peak_rss_kib": 13184,
+    "model_calls": 0,
+    "complete_monetary_cost": null
+  }
+}

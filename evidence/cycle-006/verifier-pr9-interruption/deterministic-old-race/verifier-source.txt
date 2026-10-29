@@ -1,0 +1,93 @@
+"""Deterministic verifier-only scheduling witness for the old adoption heuristic."""
+import argparse
+import hashlib
+import importlib.util
+import json
+from pathlib import Path
+import resource
+import signal
+import subprocess
+import sys
+import time
+from unittest import mock
+
+from cycle006_active_interrupt import proc_state, worker_identity, verify_sources
+
+OLD_VERIFIER = "9fa998e8385a9019eadbf83f079cf06174f04ea8f8aad3d08c5a6101dd2e4c4a"
+
+
+def probe(root, original_verifier, output):
+    root, output = root.resolve(), output.resolve()
+    verify_sources(root)
+    raw = original_verifier.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != OLD_VERIFIER:
+        raise ValueError("ORIGINAL_VERIFIER_IDENTITY_MISMATCH")
+    output.mkdir(parents=True, exist_ok=False)
+    spec = importlib.util.spec_from_file_location("unchanged_old_active_interruption_verifier", original_verifier)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    original_send = subprocess.Popen.send_signal
+    schedule = []
+    started, cpu = time.monotonic(), time.process_time()
+    prior = resource.getrusage(resource.RUSAGE_CHILDREN)
+    actual = output / "original-harness" / "actual-run"
+    def scheduled_send(proc, sig):
+        if sig != signal.SIGINT or schedule:
+            return original_send(proc, sig)
+        identity = worker_identity(actual)
+        if not identity or (actual / "REPORT.json").exists():
+            raise RuntimeError("CONTROLLED_SCHEDULE_LIVE_WINDOW_NOT_ESTABLISHED")
+        original_send(proc, signal.SIGSTOP)
+        deadline = time.monotonic() + 3
+        while time.monotonic() < deadline:
+            state = proc_state(identity["parent_host_pid"])
+            if state and state["state"] in ("T", "t"):
+                break
+            time.sleep(.002)
+        else:
+            raise RuntimeError("CONTROLLED_PARENT_STOP_FAILED")
+        deadline = time.monotonic() + 10
+        while time.monotonic() < deadline:
+            state = proc_state(identity["host_pid"])
+            if (actual / "REPORT.json").exists() and state and state["start_ticks"] == identity["start_ticks"] and state["state"] == "Z":
+                break
+            time.sleep(.002)
+        else:
+            original_send(proc, signal.SIGCONT)
+            raise RuntimeError("CONTROLLED_WORKER_NORMAL_EXIT_NOT_OBSERVED")
+        schedule.append({"observation": "Original harness observed SANDBOX before REPORT with live worker",
+            "worker_identity": identity, "interposition": "Pause only the parent after its observation; allow unchanged worker to finish normally before delivering the requested parentSIGINT. Resume parent with pending SIGINT, so it can reap its own completed worker.",
+            "worker_normal_exit_observed_before_signal_delivery": state,
+            "report_exists_before_signal_delivery": (actual / "REPORT.json").exists()})
+        original_send(proc, signal.SIGINT)
+        original_send(proc, signal.SIGCONT)
+    with mock.patch.object(subprocess.Popen, "send_signal", scheduled_send):
+        result = module.probe(root, output / "original-harness")
+    useful = all(result[key] for key in ("triggered_after_worker_sandbox_receipt_before_report", "no_children_after_reaping",
+        "interrupted_marker", "complete_absent", "restart_refused_unchanged"))
+    usage = resource.getrusage(resource.RUSAGE_CHILDREN)
+    report = {"schema": "agi-alpha-cycle006-old-interruption-scheduling-regression/v1",
+        "original_verifier_sha256": OLD_VERIFIER, "runner_sha256": result["runner_sha256"],
+        "schedule": schedule, "original_result": result,
+        "all_useful_interruption_obligations_satisfied": useful,
+        "old_positive_adoption_heuristic_failed": not result["passed"] and not result["adopted_descendants_reaped"],
+        "established_harness_false_negative": bool(schedule) and useful and not result["passed"] and not result["adopted_descendants_reaped"],
+        "resources": {"wall_seconds": time.monotonic() - started, "verifier_cpu_seconds": time.process_time() - cpu,
+            "child_cpu_seconds": usage.ru_utime + usage.ru_stime - prior.ru_utime - prior.ru_stime},
+        "limits": ["Verifier-only deterministic scheduling interposition. No builder source or original verifier bytes change; this is not an uninstrumented repeat.",
+            "Establishes a possible original-harness race, not the exact unrecorded scheduling interleaving of PR9CI.",
+            "New handshake verifier retains positive adoption but guarantees an identified live stopped worker before SIGINT, eliminating this delivery-window ambiguity rather than weakening acceptance."]}
+    with (output / "REPORT.json").open("x") as stream:
+        json.dump(report, stream, indent=2); stream.write("\n")
+    return report
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=Path, required=True)
+    parser.add_argument("--original-verifier", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    result = probe(args.root, args.original_verifier, args.output)
+    print(json.dumps({"established_harness_false_negative": result["established_harness_false_negative"]}))
+    raise SystemExit(0 if result["established_harness_false_negative"] else 1)

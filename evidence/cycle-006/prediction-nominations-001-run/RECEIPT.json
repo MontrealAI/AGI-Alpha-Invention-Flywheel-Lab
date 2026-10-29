@@ -1,0 +1,66 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "prediction-nominations-001",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "experiments/norman006/nominate.py",
+    "--output",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/prediction-nominations-001-run/artifacts",
+    "--cross",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/wessels-policy-cross-001-run/artifacts",
+    "--producer-receipt",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/prediction-nominations-001-run/RECEIPT.json",
+    "--wessels-public",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/verifier-wessels-preparation-run/artifacts/public"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "experiments/norman006/nominate.py",
+    "--output",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/prediction-nominations-001-run/artifacts",
+    "--cross",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/wessels-policy-cross-001-run/artifacts",
+    "--producer-receipt",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/prediction-nominations-001-run/RECEIPT.json",
+    "--wessels-public",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/verifier-wessels-preparation-run/artifacts/public"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "experiments/norman006/nominate.py",
+    "--output",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/prediction-nominations-001-run/artifacts",
+    "--cross",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/wessels-policy-cross-001-run/artifacts",
+    "--producer-receipt",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/prediction-nominations-001-run/RECEIPT.json",
+    "--wessels-public",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/verifier-wessels-preparation-run/artifacts/public"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 180,
+    "cpu_seconds": 80,
+    "memory_bytes": 4294967296,
+    "output_bytes": 20971520,
+    "storage_bytes": 134217728
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 5.376490643000579,
+  "supervisor_cpu_seconds": 0.10552612900000001,
+  "waited_cpu_seconds": 5.372826999999999,
+  "descendant_survivors": false,
+  "output_bytes": 31376724,
+  "logs": {
+    "stdout.log": "b2dc1f1c76c21ed43b29e8b184a2b5e6bfefb4d35511d252c4e43c31b0577ae4",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

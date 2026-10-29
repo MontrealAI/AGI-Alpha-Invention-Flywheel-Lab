@@ -1,0 +1,22 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v1",
+  "run_id": "wessels-raw-source-002",
+  "command": [
+    "/tmp/alpha-psgrn006-env/bin/python",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/experiments/perturbseq006/fetch_wessels.py",
+    "--output",
+    "/tmp/alpha006-wessels-download-r2",
+    "--runtime-route",
+    "/tmp/alpha006-public-data-network-route.json"
+  ],
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 240,
+    "cpu_seconds": 25,
+    "memory_bytes": 4294967296,
+    "output_bytes": 300000000,
+    "storage_bytes": 300000000
+  },
+  "wrapper_sha256": "58171898be156b4f28abc7ff2fc586ba221a7ecb7800c22180176bca8433798c",
+  "state": "pending"
+}

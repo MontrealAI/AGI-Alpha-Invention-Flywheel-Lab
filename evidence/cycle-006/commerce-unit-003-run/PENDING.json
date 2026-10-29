@@ -1,0 +1,25 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v1",
+  "run_id": "commerce-unit-003",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_commerce006.py",
+    "-v"
+  ],
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 180,
+    "cpu_seconds": 20,
+    "memory_bytes": 1073741824,
+    "output_bytes": 20971520,
+    "storage_bytes": 52428800
+  },
+  "wrapper_sha256": "58171898be156b4f28abc7ff2fc586ba221a7ecb7800c22180176bca8433798c",
+  "state": "pending"
+}

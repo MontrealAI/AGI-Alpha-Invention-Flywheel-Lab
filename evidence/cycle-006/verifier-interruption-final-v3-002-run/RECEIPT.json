@@ -1,0 +1,54 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "verifier-interrupt-final-v3-002",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/cycle006_active_interrupt.py",
+    "--root",
+    "/tmp/cycle006-verifier-old004",
+    "--output",
+    "evidence/cycle-006/verifier-interruption-final-v3-002-run/artifacts"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/cycle006_active_interrupt.py",
+    "--root",
+    "/tmp/cycle006-verifier-old004",
+    "--output",
+    "evidence/cycle-006/verifier-interruption-final-v3-002-run/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/cycle006_active_interrupt.py",
+    "--root",
+    "/tmp/cycle006-verifier-old004",
+    "--output",
+    "evidence/cycle-006/verifier-interruption-final-v3-002-run/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 60,
+    "cpu_seconds": 180,
+    "memory_bytes": 1073741824,
+    "output_bytes": 20971520,
+    "storage_bytes": 20971520
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 5.001671049998549,
+  "supervisor_cpu_seconds": 0.118726693,
+  "waited_cpu_seconds": 4.973580999999999,
+  "descendant_survivors": false,
+  "output_bytes": 16460,
+  "logs": {
+    "stdout.log": "dc710c0e1ad4132800964440fdc9df68bb19928948187b1f2757edd68ea1e0ae",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

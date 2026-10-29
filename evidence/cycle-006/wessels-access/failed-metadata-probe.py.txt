@@ -1,0 +1,20 @@
+import sys,json,time,hashlib
+sys.path.insert(0,'experiments/perturbseq006')
+from range_hdf5 import RangeFile
+import h5py
+u='https://public-access-bucket-i9sdj34j.s3.amazonaws.com/cellsimbench-data/data/wessels23/wessels23_processed_complete.h5ad'
+t=time.monotonic();out={'url':u,'complete_file_hash_verified':False,'outcome_values_inspected':False}
+with RangeFile(u,2160011462,max_bytes=50000000) as r:
+ try:
+  with h5py.File(r,'r') as f:
+   out['root']=list(f.keys());out['uns_keys']=list(f['uns'].keys());out['uns_structure']={}
+   for k in f['uns']:
+    v=f['uns'][k]
+    if isinstance(v,h5py.Dataset):out['uns_structure'][k]={'shape':v.shape,'dtype':str(v.dtype)}
+    else:
+     out['uns_structure'][k]={kk:({'shape':v[kk].shape,'dtype':str(v[kk].dtype)} if isinstance(v[kk],h5py.Dataset) else {'keys':list(v[kk].keys())[:20],'count':len(v[kk])}) for kk in v}
+   out['obs_keys']=list(f['obs'].keys());out['var_keys']=list(f['var'].keys())
+ except Exception as e:out['error']={'type':type(e).__name__,'message':str(e)}
+ out['received_bytes']=r.received_bytes;out['range_receipts']=r.receipts
+out['wall_seconds']=time.monotonic()-t
+print(json.dumps(out,indent=2))

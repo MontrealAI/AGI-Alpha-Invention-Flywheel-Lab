@@ -1,0 +1,30 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "missing-no-reserve",
+  "requested_command": [
+    "/definitely/missing/alpha006-command"
+  ],
+  "normalized_command": null,
+  "command": null,
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "limits": {
+    "wall_seconds": 3,
+    "cpu_seconds": 2,
+    "memory_bytes": 134217728,
+    "output_bytes": 1048576,
+    "storage_bytes": 2097152
+  },
+  "state": "refused",
+  "exit_code": null,
+  "reason": "executable-preflight",
+  "error": {
+    "type": "ValueError",
+    "message": "RESOURCE_EXECUTABLE_UNAVAILABLE"
+  },
+  "reservation_created": false,
+  "wall_seconds": 7.937500049592927e-05,
+  "supervisor_cpu_seconds": 7.864700000000113e-05,
+  "waited_cpu_seconds": 0.0,
+  "aggregate_cpu_complete": false,
+  "scope": "No executable was launched and no reservation was requested; trusted-command wrapper, not a sandbox."
+}
