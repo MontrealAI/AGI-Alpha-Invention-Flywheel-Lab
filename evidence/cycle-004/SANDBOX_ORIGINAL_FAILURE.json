@@ -1,0 +1,32 @@
+{
+  "schema": "agi-alpha-sandbox-development-failure/v1",
+  "interpreter_source_sha256": "e0c8db73ec05351ea419b15dbb4c4279e05a978a9adee5e97e02dc61c41aa0b0",
+  "source_commit": "b2c24f9",
+  "observations": [
+    {
+      "test": "qualification.cpu",
+      "expected": "1 CPU-second should yield SIGXCPU before wall deadline",
+      "actual_state": "WALL_LIMIT",
+      "wall_seconds": 4.016529301996343,
+      "returncode": -9,
+      "qualified": false,
+      "consequence": "No effect escape; CPU-specific qualification unresolved under concurrent resource contention",
+      "repair": "Retain 1 CPU-second limit; extend only this diagnostic wall allowance to 20 seconds. Separate wall-limit probe remains 0.2 seconds."
+    },
+    {
+      "test": "test_supervisor_death_terminates_worker",
+      "actual_exception": "FileNotFoundError /proc/21/task/21/children",
+      "consequence": "Test assumed mounted proc PIDs matched local PID namespace; no parent-death conclusion from this failed test",
+      "repair": "Get child PID through supervisor IPC and temporarily adopt/reap grandchild with Linux child-subreaper after killing supervisor. No proc lookup."
+    }
+  ],
+  "status": "Preserved development failure; later passing run is separately recorded, not replacement evidence",
+  "effect_probes": [
+    "read EPERM",
+    "write EPERM",
+    "network EPERM",
+    "exec EPERM",
+    "fork EPERM"
+  ],
+  "external_certification": false
+}
