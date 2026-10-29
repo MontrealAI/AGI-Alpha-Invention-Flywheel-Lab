@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/tmp/cycle005-independent-archive-5lajz2rk/corrupt/flywheel/archive_v2.py", line 145, in <module>
+    main()
+  File "/tmp/cycle005-independent-archive-5lajz2rk/corrupt/flywheel/archive_v2.py", line 139, in main
+    result = {"build": build, "extract": extract, "cycle004": materialize_cycle004}[args.action](args.source, args.destination)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/cycle005-independent-archive-5lajz2rk/corrupt/flywheel/archive_v2.py", line 51, in materialize_cycle004
+    raw = _regular(root, "historical/cycle-004/files/" + name + ".txt")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/cycle005-independent-archive-5lajz2rk/corrupt/flywheel/archive_v2.py", line 34, in _regular
+    raise ValueError("HISTORICAL_INPUT_MISSING " + str(name))
+ValueError: HISTORICAL_INPUT_MISSING historical/cycle-004/files/flywheel/strategy.py.txt

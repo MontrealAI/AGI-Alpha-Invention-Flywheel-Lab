@@ -1,0 +1,84 @@
+{
+  "status": "constructed",
+  "program": {
+    "language": "event-plan/v1",
+    "order": [
+      "bundle-acquisition-allocate",
+      "bundle-acquisition-capture",
+      "bundle-acquisition-derive",
+      "bundle-acquisition-publish"
+    ],
+    "protected": [
+      "bundle-acquisition-capture"
+    ],
+    "atomic": [],
+    "compensations": {}
+  },
+  "attempts": [
+    {
+      "program": {
+        "language": "event-plan/v1",
+        "order": [
+          "bundle-acquisition-allocate",
+          "bundle-acquisition-capture",
+          "bundle-acquisition-derive",
+          "bundle-acquisition-publish"
+        ],
+        "protected": [],
+        "atomic": [],
+        "compensations": {}
+      },
+      "violations": [
+        {
+          "kind": "protect",
+          "phase": "bundle-acquisition-capture"
+        }
+      ],
+      "delta": [],
+      "logical_cost": 0
+    },
+    {
+      "program": {
+        "language": "event-plan/v1",
+        "order": [
+          "bundle-acquisition-allocate",
+          "bundle-acquisition-capture",
+          "bundle-acquisition-derive",
+          "bundle-acquisition-publish"
+        ],
+        "protected": [
+          "bundle-acquisition-capture"
+        ],
+        "atomic": [],
+        "compensations": {}
+      },
+      "violations": [],
+      "delta": [
+        {
+          "repair": {
+            "kind": "protect",
+            "phase": "bundle-acquisition-capture"
+          },
+          "causal_closure": false
+        }
+      ],
+      "logical_cost": 1
+    }
+  ],
+  "obligations": [
+    {
+      "kind": "protect",
+      "phase_ids": [
+        "bundle-acquisition-capture"
+      ]
+    }
+  ],
+  "operator_trace": {
+    "rules": 0,
+    "matches": 0
+  },
+  "candidate_count": 2,
+  "search": "obligation-guided best-first typed graph rewrites; no permutations",
+  "novelty": "New composition within supplied grammar; no new primitive or unrestricted invention",
+  "effects": "Pure event-plan interpreter; actual file effects require trusted confined broker"
+}
