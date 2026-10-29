@@ -42,6 +42,8 @@ When making an evaluable forecast, record its evidence cutoff, resolution condit
 
 ## Four mechanisms, one constructive loop
 
+The [nine mechanisms of Transformational Intelligence](MECHANISMS.md) expand this working core into problem reframing, enabling instruments, recursive improvement, foresight and economic/intellectual compounding. The reference also records the three conceptual breakthroughs and the network of complementary capabilities developed in the founding discussion.
+
 | Mechanism | Required work product |
 | --- | --- |
 | Cross-domain structural discovery | A donor-to-target mapping of causal relationships, constraints or invariants, with transfer conditions and a falsifying test. |

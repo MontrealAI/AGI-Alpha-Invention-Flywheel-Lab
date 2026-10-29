@@ -6,6 +6,8 @@ SUPER IMPORTANT: BLUE SKY. IMPORTANT: Beyond-Human Foresight.
 
 Read README.md and CHARTER.md. Build towards an invention-automation machine whose verified inventions help discover, construct and economically enable successors. Do not replace that objective with infrastructure completion, publication output or a familiar service merely because it is easy to implement.
 
+Read [MECHANISMS.md](MECHANISMS.md) for the nine mechanisms of Transformational Intelligence, their interactions and the fresh-successor tests needed to establish their contribution. Treat them as revisable investigative methods, not demonstrated achievements or a mandatory agent hierarchy.
+
 ## Before a campaign
 
 Identify the authorized purpose, permissions, resource allocation, existing commitments, exposed evidence and inherited claim history. A new repository does not replenish a previously exhausted allocation. If a new campaign allocation is absent, prepare a bounded proposal and do only independently permitted work; do not silently invent a budget.
