@@ -1,6 +1,8 @@
 import copy
 import json
 from pathlib import Path
+import hashlib
+import shutil
 import tempfile
 import unittest
 
@@ -58,6 +60,29 @@ class MemoryAcquisitionTests(unittest.TestCase):
         self.receipt["before_passed"] = True
         with self.assertRaisesRegex(ValueError, "VERIFIED_REPAIR_TRANSITION_REQUIRED"):
             self.acquire()
+
+    def test_verifier_source_is_pinned_and_mutation_refuses_reuse(self):
+        copied = Path(self.temporary.name) / "source"
+        for relative in ("mechanisms/construct.py", "mechanisms/mapping.py", "mechanisms/memory.py", "mechanisms/pipeline.py", "flywheel/retention.py"):
+            destination = copied / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(ROOT / relative, destination)
+        verifier = copied / "mechanisms/pipeline.py"
+        identity = {"path": "mechanisms/pipeline.py", "sha256": hashlib.sha256(verifier.read_bytes()).hexdigest()}
+        self.receipt["verifier_source"] = identity
+        retained = retain(self.memory, self.task, self.mapping, self.before, self.after, self.obligations, self.receipt, copied)
+        provenance = retained["record"]["provenance"]
+        self.assertEqual(provenance["receipt_verifier_source"], identity)
+        self.assertEqual(provenance["verifier_source"]["sha256"], identity["sha256"])
+        self.assertEqual(provenance["dependency_sha256"]["mechanisms/pipeline.py"], identity["sha256"])
+        self.assertEqual(generate(self.memory, self.target, [], copied, 64)["status"], "constructed")
+        with verifier.open("a") as stream:
+            stream.write("\nMUTATED_VERIFIER = True\n")
+        result = generate(self.memory, self.target, [], copied, 64)
+        self.assertEqual(result["status"], "refused")
+        self.assertEqual(result["memory"]["instantiation_refusals"][0]["reason"], "MEMORY_DEPENDENCY_MISMATCH mechanisms/pipeline.py")
+        with self.assertRaisesRegex(ValueError, "RECEIPT_VERIFIER_SOURCE_MISMATCH"):
+            acquire(self.task, self.mapping, self.before, self.after, self.obligations, self.receipt, copied)
 
     def test_store_retrieve_remap_and_competitive_equivalent_content(self):
         retained = retain(self.memory, self.task, self.mapping, self.before, self.after, self.obligations, self.receipt, ROOT)

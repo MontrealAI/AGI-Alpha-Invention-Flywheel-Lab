@@ -1,0 +1,444 @@
+{
+  "reports": [
+    {
+      "source": "transaction-role-fragment",
+      "target": "P1-repaired-independent",
+      "source_graph": {
+        "conditions": {
+          "effects": "exclusive_local_output",
+          "failure": "catchable_exception"
+        },
+        "id": "transaction-role-fragment",
+        "nodes": [
+          {
+            "id": "allocate",
+            "kind": "reserve",
+            "unit": "event"
+          },
+          {
+            "id": "prepare",
+            "kind": "capture",
+            "unit": "event"
+          },
+          {
+            "id": "apply",
+            "kind": "compute",
+            "unit": "event"
+          },
+          {
+            "id": "commit",
+            "kind": "commit",
+            "unit": "event"
+          }
+        ],
+        "obligations": [
+          {
+            "kind": "protect",
+            "role_ids": [
+              "prepare"
+            ]
+          }
+        ],
+        "provenance": "Developer-authored partial transaction-role mechanism, not a discovered scientific principle",
+        "relations": [
+          [
+            "allocate",
+            "precedes",
+            "prepare"
+          ],
+          [
+            "prepare",
+            "precedes",
+            "apply"
+          ],
+          [
+            "apply",
+            "precedes",
+            "commit"
+          ]
+        ]
+      },
+      "donor_graph": {
+        "conditions": {
+          "effects": "exclusive_local_output",
+          "failure": "catchable_exception"
+        },
+        "id": "transaction-role-fragment",
+        "nodes": [
+          {
+            "id": "allocate",
+            "kind": "reserve",
+            "unit": "event"
+          },
+          {
+            "id": "prepare",
+            "kind": "capture",
+            "unit": "event"
+          },
+          {
+            "id": "apply",
+            "kind": "compute",
+            "unit": "event"
+          },
+          {
+            "id": "commit",
+            "kind": "commit",
+            "unit": "event"
+          }
+        ],
+        "obligations": [
+          {
+            "kind": "protect",
+            "role_ids": [
+              "prepare"
+            ]
+          }
+        ],
+        "provenance": "Developer-authored partial transaction-role mechanism, not a discovered scientific principle",
+        "relations": [
+          [
+            "allocate",
+            "precedes",
+            "prepare"
+          ],
+          [
+            "prepare",
+            "precedes",
+            "apply"
+          ],
+          [
+            "apply",
+            "precedes",
+            "commit"
+          ]
+        ]
+      },
+      "target_graph": {
+        "conditions": {
+          "effects": "exclusive_local_output",
+          "failure": "catchable_exception"
+        },
+        "id": "P1-repaired-independent",
+        "nodes": [
+          {
+            "event": "P1-repaired-independent-allocate",
+            "id": "P1-repaired-independent-allocate",
+            "kind": "reserve",
+            "unit": "event"
+          },
+          {
+            "event": "P1-repaired-independent-capture",
+            "id": "P1-repaired-independent-capture",
+            "kind": "capture",
+            "unit": "event"
+          },
+          {
+            "event": "P1-repaired-independent-derive",
+            "id": "P1-repaired-independent-derive",
+            "kind": "compute",
+            "unit": "event"
+          },
+          {
+            "event": "P1-repaired-independent-publish",
+            "id": "P1-repaired-independent-publish",
+            "kind": "commit",
+            "unit": "event"
+          }
+        ],
+        "relations": [
+          [
+            "P1-repaired-independent-allocate",
+            "precedes",
+            "P1-repaired-independent-capture"
+          ],
+          [
+            "P1-repaired-independent-capture",
+            "precedes",
+            "P1-repaired-independent-derive"
+          ],
+          [
+            "P1-repaired-independent-derive",
+            "precedes",
+            "P1-repaired-independent-publish"
+          ]
+        ]
+      },
+      "correspondences": [
+        {
+          "allocate": "P1-repaired-independent-allocate",
+          "apply": "P1-repaired-independent-derive",
+          "commit": "P1-repaired-independent-publish",
+          "prepare": "P1-repaired-independent-capture"
+        }
+      ],
+      "status": "unique",
+      "applicable": true,
+      "search_complete": true,
+      "search_nodes": 5,
+      "candidate_limit": 32,
+      "search_limit": 10000,
+      "unresolved_mismatches": [],
+      "typed_domain_failures": [],
+      "preserved_relations": [
+        [
+          "allocate",
+          "precedes",
+          "prepare"
+        ],
+        [
+          "prepare",
+          "precedes",
+          "apply"
+        ],
+        [
+          "apply",
+          "precedes",
+          "commit"
+        ]
+      ],
+      "changed_assumptions": {},
+      "origin": "Developer supplied typed representations and role recipes; bounded search discovers correspondences, ignoring labels."
+    }
+  ],
+  "compiled_mapping": {
+    "source": "transaction-role-fragment",
+    "target": "P1-repaired-independent",
+    "source_graph": {
+      "conditions": {
+        "effects": "exclusive_local_output",
+        "failure": "catchable_exception"
+      },
+      "id": "transaction-role-fragment",
+      "nodes": [
+        {
+          "id": "allocate",
+          "kind": "reserve",
+          "unit": "event"
+        },
+        {
+          "id": "prepare",
+          "kind": "capture",
+          "unit": "event"
+        },
+        {
+          "id": "apply",
+          "kind": "compute",
+          "unit": "event"
+        },
+        {
+          "id": "commit",
+          "kind": "commit",
+          "unit": "event"
+        }
+      ],
+      "obligations": [
+        {
+          "kind": "protect",
+          "role_ids": [
+            "prepare"
+          ]
+        }
+      ],
+      "provenance": "Developer-authored partial transaction-role mechanism, not a discovered scientific principle",
+      "relations": [
+        [
+          "allocate",
+          "precedes",
+          "prepare"
+        ],
+        [
+          "prepare",
+          "precedes",
+          "apply"
+        ],
+        [
+          "apply",
+          "precedes",
+          "commit"
+        ]
+      ]
+    },
+    "donor_graph": {
+      "conditions": {
+        "effects": "exclusive_local_output",
+        "failure": "catchable_exception"
+      },
+      "id": "transaction-role-fragment",
+      "nodes": [
+        {
+          "id": "allocate",
+          "kind": "reserve",
+          "unit": "event"
+        },
+        {
+          "id": "prepare",
+          "kind": "capture",
+          "unit": "event"
+        },
+        {
+          "id": "apply",
+          "kind": "compute",
+          "unit": "event"
+        },
+        {
+          "id": "commit",
+          "kind": "commit",
+          "unit": "event"
+        }
+      ],
+      "obligations": [
+        {
+          "kind": "protect",
+          "role_ids": [
+            "prepare"
+          ]
+        }
+      ],
+      "provenance": "Developer-authored partial transaction-role mechanism, not a discovered scientific principle",
+      "relations": [
+        [
+          "allocate",
+          "precedes",
+          "prepare"
+        ],
+        [
+          "prepare",
+          "precedes",
+          "apply"
+        ],
+        [
+          "apply",
+          "precedes",
+          "commit"
+        ]
+      ]
+    },
+    "target_graph": {
+      "conditions": {
+        "effects": "exclusive_local_output",
+        "failure": "catchable_exception"
+      },
+      "id": "P1-repaired-independent",
+      "nodes": [
+        {
+          "event": "P1-repaired-independent-allocate",
+          "id": "P1-repaired-independent-allocate",
+          "kind": "reserve",
+          "unit": "event"
+        },
+        {
+          "event": "P1-repaired-independent-capture",
+          "id": "P1-repaired-independent-capture",
+          "kind": "capture",
+          "unit": "event"
+        },
+        {
+          "event": "P1-repaired-independent-derive",
+          "id": "P1-repaired-independent-derive",
+          "kind": "compute",
+          "unit": "event"
+        },
+        {
+          "event": "P1-repaired-independent-publish",
+          "id": "P1-repaired-independent-publish",
+          "kind": "commit",
+          "unit": "event"
+        }
+      ],
+      "relations": [
+        [
+          "P1-repaired-independent-allocate",
+          "precedes",
+          "P1-repaired-independent-capture"
+        ],
+        [
+          "P1-repaired-independent-capture",
+          "precedes",
+          "P1-repaired-independent-derive"
+        ],
+        [
+          "P1-repaired-independent-derive",
+          "precedes",
+          "P1-repaired-independent-publish"
+        ]
+      ]
+    },
+    "role_map": {
+      "allocate": "P1-repaired-independent-allocate",
+      "apply": "P1-repaired-independent-derive",
+      "commit": "P1-repaired-independent-publish",
+      "prepare": "P1-repaired-independent-capture"
+    },
+    "mapped_roles": {
+      "allocate": "P1-repaired-independent-allocate",
+      "apply": "P1-repaired-independent-derive",
+      "commit": "P1-repaired-independent-publish",
+      "prepare": "P1-repaired-independent-capture"
+    },
+    "target_events": {
+      "allocate": "P1-repaired-independent-allocate",
+      "apply": "P1-repaired-independent-derive",
+      "commit": "P1-repaired-independent-publish",
+      "prepare": "P1-repaired-independent-capture"
+    },
+    "obligations": [
+      {
+        "kind": "protect",
+        "phase_ids": [
+          "P1-repaired-independent-capture"
+        ],
+        "provenance": {
+          "origin": "structural-transfer-hypothesis",
+          "donor_id": "transaction-role-fragment",
+          "target_id": "P1-repaired-independent",
+          "donor_sha256": "62d9be0e4d177e4a57a75d8b2b0e360602c726e8b3e8606114fa238c2160eb1b",
+          "target_sha256": "ab8a6148c0c7607f571a2461e0daec52e126ec8804a9baa17f661031f8c05b8b",
+          "role_map_sha256": "d89ddd0338240548666345c3190b7394ffb44a8496f6a63e648dda89917e578e"
+        }
+      }
+    ],
+    "strategy_recipe": [],
+    "preserved_relations": [
+      [
+        "P1-repaired-independent-allocate",
+        "precedes",
+        "P1-repaired-independent-capture"
+      ],
+      [
+        "P1-repaired-independent-capture",
+        "precedes",
+        "P1-repaired-independent-derive"
+      ],
+      [
+        "P1-repaired-independent-derive",
+        "precedes",
+        "P1-repaired-independent-publish"
+      ]
+    ],
+    "applicability": {
+      "conditions": {
+        "effects": "exclusive_local_output",
+        "failure": "catchable_exception"
+      },
+      "checked": true,
+      "status": "hypothesis-awaiting-execution"
+    },
+    "prediction": {
+      "obligation_event_sets": [
+        [
+          "P1-repaired-independent-capture"
+        ]
+      ],
+      "claim": "The constructed target strategy must independently satisfy these transferred obligations."
+    },
+    "provenance": {
+      "origin": "structural-transfer-hypothesis",
+      "donor_id": "transaction-role-fragment",
+      "target_id": "P1-repaired-independent",
+      "donor_sha256": "62d9be0e4d177e4a57a75d8b2b0e360602c726e8b3e8606114fa238c2160eb1b",
+      "target_sha256": "ab8a6148c0c7607f571a2461e0daec52e126ec8804a9baa17f661031f8c05b8b",
+      "role_map_sha256": "d89ddd0338240548666345c3190b7394ffb44a8496f6a63e648dda89917e578e"
+    }
+  },
+  "input_sha256": "4863ed5453501c11469b7d2a438abccc59e3cf156ece25c5c43b8b94d0c36f51"
+}

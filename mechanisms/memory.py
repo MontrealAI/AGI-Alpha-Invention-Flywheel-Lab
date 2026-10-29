@@ -14,6 +14,21 @@ def digest(value):
     return hashlib.sha256(canonical(value)).hexdigest()
 
 
+def _file_identity(source_root, relative):
+    root = Path(source_root).resolve(strict=True)
+    name = Path(relative)
+    if name.is_absolute() or ".." in name.parts or not name.parts:
+        raise ValueError("INVALID_DEPENDENCY_PATH")
+    path = root
+    for part in name.parts:
+        path = path / part
+        if path.is_symlink():
+            raise ValueError("SYMLINK_DEPENDENCY " + str(name))
+    if not path.is_file():
+        raise ValueError("DEPENDENCY_SOURCE_UNAVAILABLE " + str(name))
+    return {"path": str(name), "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+
+
 def _source(source_root):
     root = Path(source_root).resolve(strict=True)
     path = root / "mechanisms/construct.py"
@@ -25,11 +40,8 @@ def _source(source_root):
 def _dependency_hashes(source_root):
     root = Path(source_root)
     result = {}
-    for name in ("mechanisms/memory.py", "mechanisms/mapping.py", "flywheel/retention.py"):
-        path = root / name
-        if path.is_symlink() or not path.is_file():
-            raise ValueError("DEPENDENCY_SOURCE_UNAVAILABLE " + name)
-        result[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+    for name in ("mechanisms/memory.py", "mechanisms/mapping.py", "mechanisms/pipeline.py", "flywheel/retention.py"):
+        result[name] = _file_identity(root, name)["sha256"]
     return result
 
 
@@ -55,6 +67,14 @@ def acquire(task, mapping, before, after, obligations, verification_receipt, sou
         raise ValueError("VERIFICATION_IDENTITY_MISMATCH")
     if receipt.get("before_passed") is not False or receipt.get("after_passed") is not True:
         raise ValueError("VERIFIED_REPAIR_TRANSITION_REQUIRED")
+    verifier_source = {**_file_identity(source_root, "mechanisms/pipeline.py"), "interface": "mechanisms.pipeline.verify"}
+    receipt_verifier = receipt.get("verifier_source")
+    if receipt_verifier is not None:
+        if type(receipt_verifier) is not dict or not {"path", "sha256"} <= set(receipt_verifier):
+            raise ValueError("INVALID_RECEIPT_VERIFIER_SOURCE")
+        actual_verifier = _file_identity(source_root, receipt_verifier["path"])
+        if receipt_verifier["sha256"] != actual_verifier["sha256"]:
+            raise ValueError("RECEIPT_VERIFIER_SOURCE_MISMATCH")
     phases = {phase["id"]: phase for phase in task["phases"]}
     target_events = mapping.get("target_events")
     source_graph = mapping.get("source_graph", mapping.get("donor_graph"))
@@ -93,6 +113,7 @@ def acquire(task, mapping, before, after, obligations, verification_receipt, sou
         "generative_operator": {"language": "event-plan-rewrite-v1", "program": {"source_graph": graph, "base_role_obligations": base_role_obligations, "role_deltas": role_deltas, "max_matches": 32}},
         "provenance": {"origin": "derived-from-verified-before-after-delta", "task_id": task["id"], "task_sha256": digest(task), "mapping_sha256": digest(mapping),
             "before_sha256": digest(before), "after_sha256": digest(after), "obligations_sha256": digest(obligations), "dependency_sha256": _dependency_hashes(source_root),
+            "verifier_source": verifier_source, "receipt_verifier_source": copy.deepcopy(receipt_verifier),
             "verification_scope": copy.deepcopy(receipt.get("objective_scope", {"scope": "receipt-bound development repair; no separately named subcontract"})),
             "acquisition": "Before behavior and actual added protected/atomic events separately inverted through discovered structural role mapping; target event identifiers not retained in recipe"},
         "verification": {"status": "verified-in-scope", "receipt_sha256": digest(receipt)},
@@ -122,9 +143,11 @@ def failed_transfer(root, task, mapping, reason, source_root, costs=None):
 def _source_check(record, source_root):
     root = Path(source_root).resolve(strict=True)
     for name, expected in {record["instrument"]["path"]: record["instrument"]["sha256"], **record["provenance"].get("dependency_sha256", {})}.items():
-        path = root / name
-        if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+        if _file_identity(root, name)["sha256"] != expected:
             raise ValueError("MEMORY_DEPENDENCY_MISMATCH " + name)
+    receipt_verifier = record["provenance"].get("receipt_verifier_source")
+    if receipt_verifier is not None and _file_identity(root, receipt_verifier["path"])["sha256"] != receipt_verifier["sha256"]:
+        raise ValueError("MEMORY_RECEIPT_VERIFIER_MISMATCH")
 
 
 def _bound(budget):

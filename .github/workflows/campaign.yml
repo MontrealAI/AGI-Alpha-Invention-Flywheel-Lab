@@ -61,6 +61,7 @@ jobs:
           (cd "$RUNNER_TEMP/frozen-cycle-004" && python -m flywheel.metabolic_probe --output "$RUNNER_TEMP/cycle004-metabolic-replay")
           python run_completion.py --output "$RUNNER_TEMP/mechanism-completion-005"
           python verification/cycle005_wholepath.py --root . --output "$RUNNER_TEMP/cycle005-wholepath"
+          python verification/cycle005_p1_regression.py --root . --output "$RUNNER_TEMP/cycle005-p1-regression"
   phase-code-qualification:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -153,6 +154,7 @@ jobs:
           python "$RUNNER_TEMP/clean-frozen-cycle-004/run_cycle.py" --output "$RUNNER_TEMP/clean-cycle-004-replay"
           python run_completion.py --output "$RUNNER_TEMP/clean-mechanism-completion-005"
           python verification/cycle005_wholepath.py --root . --output "$RUNNER_TEMP/clean-cycle005-wholepath"
+          python verification/cycle005_p1_regression.py --root . --output "$RUNNER_TEMP/clean-cycle005-p1-regression"
           OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python inventions/phase_codes/reproduce.py --output "$RUNNER_TEMP/clean-phase-code-replay"
           python verification/cycle005_archive_check.py --archive "$RUNNER_TEMP/mechanism-assets/AGI_ALPHA_Mechanism_Completion_005_source_evidence.zip" --output "$RUNNER_TEMP/clean-archive-independent-verification"
           cp "$RUNNER_TEMP/clean-archive-independent-verification/REPORT.json" "$RUNNER_TEMP/mechanism-assets/ARCHIVE_QUALIFICATION.json"

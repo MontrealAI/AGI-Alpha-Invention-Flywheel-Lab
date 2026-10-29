@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 from mechanisms import pipeline
 from mechanisms.executor import admit
+from mechanisms import construct
 
 
 class PipelineTests(unittest.TestCase):
@@ -34,3 +35,28 @@ class PipelineTests(unittest.TestCase):
         task['phases'].append({'id': 'second-reservation', 'kind': 'reserve', 'deps': [], 'unit': 'event'})
         with self.assertRaisesRegex(ValueError, 'UNSUPPORTED_BROKER_EFFECT_CLASS'):
             admit(task)
+
+    def test_unassessed_invariants_never_receive_passing_receipt(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            task, _, _ = pipeline.example()
+            program = construct.conventional(task)
+            program['compensations'] = {}
+            for number, kind in enumerate(('release_after_failure', 'required_effect_available', 'unknown-rule')):
+                result = pipeline.verify(task, program, root/str(number), {'invariants': [{'id': kind, 'kind': kind}]})
+                self.assertFalse(result['passed'])
+                self.assertEqual(result['state'], 'refused')
+
+    def test_scopes_and_unknown_fields_are_not_silently_ignored(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            task, _, _ = pipeline.example()
+            program = construct.construct(task, [{'kind': 'protect', 'phase_ids': ['acquisition-capture']}])['program']
+            scoped = {'invariants': [{'id': 'capture-only', 'kind': 'mark_after_reservation', 'phase_ids': ['acquisition-capture']}]}
+            self.assertTrue(pipeline.verify(task, program, root/'scoped', scoped)['passed'])
+            self.assertFalse(pipeline.verify(task, program, root/'global', {'invariants': [{'id': 'global', 'kind': 'mark_after_reservation'}]})['passed'])
+            for index, invariant in enumerate([
+                {'id': 'bad-phase', 'kind': 'mark_after_reservation', 'phase_ids': ['missing']},
+                {'id': 'bad-field', 'kind': 'no_commit_on_failure', 'required_state': 'SUCCESS'},
+                {'id': 'bad-artifact', 'kind': 'no_commit_on_failure', 'artifact': 'other.json'}]):
+                self.assertFalse(pipeline.verify(task, program, root/('refuse-'+str(index)), {'invariants': [invariant]})['passed'])

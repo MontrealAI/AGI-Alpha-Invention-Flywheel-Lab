@@ -1,0 +1,620 @@
+{
+  "original_false_acceptance_reproduced": true,
+  "verification": {
+    "passed": true,
+    "normal": {
+      "state": "COMPLETE",
+      "completed": true,
+      "directory_created": true,
+      "reserved": [
+        "P1-rerun-original-allocate"
+      ],
+      "trace": [
+        "P1-rerun-original-allocate",
+        "P1-rerun-original-capture",
+        "P1-rerun-original-derive",
+        "P1-rerun-original-publish"
+      ],
+      "interrupted_marker": false,
+      "partial_publication": false,
+      "complete_exists": true,
+      "files_sha256": {
+        "COMPLETE.json": "3cb12740916d52b86e6559a21670d95f06226ce48f159c713bf6adb2a6078d75",
+        "PENDING_COMPLETE.json": "3cb12740916d52b86e6559a21670d95f06226ce48f159c713bf6adb2a6078d75",
+        "phase-002.json": "b763f89d89ee7128fa5568e57f0f1b5f53e424c8f4ed9dd17685ac0674afaa6f",
+        "phase-001.json": "86ebad02aa3f10ad57d2d0a354651abfd322ea0d9fdb39966762bd1ea803b047"
+      },
+      "compensated": []
+    },
+    "checks": [
+      {
+        "phase": "P1-rerun-original-allocate",
+        "passed": true,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.09152175200142665,
+          "stdout_bytes": 457,
+          "stderr_bytes": 0,
+          "stdout_sha256": "2d3b0148038258760ccaff7347afd10e234f43eacc86c25e08ab85e5273c3c5a",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [],
+              "state": "UNMARKED",
+              "completed": false,
+              "complete_exists": false,
+              "failure_at": "P1-rerun-original-allocate",
+              "interrupted_marker": false,
+              "partial_publication": false,
+              "atomic_publication": true,
+              "reserved": [],
+              "compensated": [],
+              "directory_created": false
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 9.849300113273785e-05,
+            "worker_cpu_seconds": 0.081667025,
+            "peak_rss_kib": 15104
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "19807f0fdda723dbed76071acc95f3847d8db68494c140febfc493f249b310a6"
+        },
+        "actual": {
+          "state": "UNMARKED",
+          "completed": false,
+          "directory_created": false,
+          "reserved": [],
+          "failure_at": "P1-rerun-original-allocate",
+          "trace": [],
+          "interrupted_marker": false,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {}
+        }
+      },
+      {
+        "phase": "P1-rerun-original-capture",
+        "passed": true,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.0982999909974751,
+          "stdout_bytes": 510,
+          "stderr_bytes": 0,
+          "stdout_sha256": "95bafc434e1f3e7289693803d4ebf7607e0e4c737ed07041e3d95d281268e340",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "P1-rerun-original-allocate"
+              ],
+              "state": "INCOMPLETE",
+              "completed": false,
+              "complete_exists": false,
+              "failure_at": "P1-rerun-original-capture",
+              "interrupted_marker": true,
+              "partial_publication": false,
+              "atomic_publication": true,
+              "reserved": [
+                "P1-rerun-original-allocate"
+              ],
+              "compensated": [],
+              "directory_created": true
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 9.6850999398157e-05,
+            "worker_cpu_seconds": 0.088839356,
+            "peak_rss_kib": 15104
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "73e02e4d05983c3ed40e4a5d0f4c1d36971fe3df633dbabe4b59c25033f96991"
+        },
+        "actual": {
+          "state": "INCOMPLETE",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "P1-rerun-original-allocate"
+          ],
+          "failure_at": "P1-rerun-original-capture",
+          "trace": [
+            "P1-rerun-original-allocate"
+          ],
+          "interrupted_marker": true,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "INTERRUPTED.json": "ef22662185acecd448aba4d205072b76158e07aa2abeb8c642ace39e6fa2f054",
+            "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+        }
+      },
+      {
+        "phase": "P1-rerun-original-derive",
+        "passed": true,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.11585355999704916,
+          "stdout_bytes": 541,
+          "stderr_bytes": 0,
+          "stdout_sha256": "13af789e27e3660be5f3dd98b793c137ee0a2096a0c729e4df03a1cb0b3f13d0",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "P1-rerun-original-allocate",
+                "P1-rerun-original-capture"
+              ],
+              "state": "INCOMPLETE",
+              "completed": false,
+              "complete_exists": false,
+              "failure_at": "P1-rerun-original-derive",
+              "interrupted_marker": true,
+              "partial_publication": false,
+              "atomic_publication": true,
+              "reserved": [
+                "P1-rerun-original-allocate"
+              ],
+              "compensated": [],
+              "directory_created": true
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 0.00032451400329591706,
+            "worker_cpu_seconds": 0.103346341,
+            "peak_rss_kib": 15104
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "a879ef8dc1f2dda8a1fb335c61d9754fd50058738438cacdc9a46d252c11f7a6"
+        },
+        "actual": {
+          "state": "INCOMPLETE",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "P1-rerun-original-allocate"
+          ],
+          "failure_at": "P1-rerun-original-derive",
+          "trace": [
+            "P1-rerun-original-allocate",
+            "P1-rerun-original-capture"
+          ],
+          "interrupted_marker": true,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "INTERRUPTED.json": "d47161d912dcddc6dcb743329620fadff7afccfd00c6d2fd9409563f66b62e91",
+            "phase-002.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-001.json": "86ebad02aa3f10ad57d2d0a354651abfd322ea0d9fdb39966762bd1ea803b047"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+        }
+      },
+      {
+        "phase": "P1-rerun-original-publish",
+        "passed": true,
+        "confined": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.10765908000030322,
+          "stdout_bytes": 569,
+          "stderr_bytes": 0,
+          "stdout_sha256": "a05eadc16cb3e4a1a9ae564929c979c47026f5b66a9be876074a5b67d54c9912",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "P1-rerun-original-allocate",
+                "P1-rerun-original-capture",
+                "P1-rerun-original-derive"
+              ],
+              "state": "INCOMPLETE",
+              "completed": false,
+              "complete_exists": false,
+              "failure_at": "P1-rerun-original-publish",
+              "interrupted_marker": true,
+              "partial_publication": false,
+              "atomic_publication": true,
+              "reserved": [
+                "P1-rerun-original-allocate"
+              ],
+              "compensated": [],
+              "directory_created": true
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 9.621000208426267e-05,
+            "worker_cpu_seconds": 0.084325614,
+            "peak_rss_kib": 15104
+          },
+          "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+          "input_sha256": "d47d4352fd57d9b46b36e3e55775ecb95b8bdfe9aaac84dd6c56063eedcfc4a9"
+        },
+        "actual": {
+          "state": "INCOMPLETE",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "P1-rerun-original-allocate"
+          ],
+          "failure_at": "P1-rerun-original-publish",
+          "trace": [
+            "P1-rerun-original-allocate",
+            "P1-rerun-original-capture",
+            "P1-rerun-original-derive"
+          ],
+          "interrupted_marker": true,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "INTERRUPTED.json": "2144892305629cef01319f146faf9da6ed28be4bfb5ae802c633f7fa04275386",
+            "PENDING_COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "phase-002.json": "b763f89d89ee7128fa5568e57f0f1b5f53e424c8f4ed9dd17685ac0674afaa6f",
+            "phase-001.json": "86ebad02aa3f10ad57d2d0a354651abfd322ea0d9fdb39966762bd1ea803b047"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+        }
+      }
+    ],
+    "specification_sha256": "ae5e95762263c2800236536355a8b5aa79bc72f696dab5c9e006f7fed02bb579",
+    "candidate_sha256": "b6c08b623955df668e5fefbf90d8ada98839dbb49653d198b08e829c5fc8c58c",
+    "scope": "Catchable phase interruptions and normal dependency-ordered local-file effects"
+  },
+  "witness": {
+    "state": "INCOMPLETE",
+    "completed": false,
+    "directory_created": true,
+    "reserved": [
+      "P1-rerun-original-allocate"
+    ],
+    "failure_at": "P1-rerun-original-capture",
+    "trace": [
+      "P1-rerun-original-allocate"
+    ],
+    "interrupted_marker": true,
+    "partial_publication": false,
+    "complete_exists": false,
+    "files_sha256": {
+      "INTERRUPTED.json": "ef22662185acecd448aba4d205072b76158e07aa2abeb8c642ace39e6fa2f054",
+      "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compensated": [],
+    "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+    "interrupt_stage": "during"
+  },
+  "objection": {
+    "schema": "agi-alpha-evidence-criticism/v1",
+    "status": "proposed",
+    "claim_challenged": "release-custody",
+    "issue": {
+      "invariant_id": "release-custody",
+      "kind": "release_after_failure",
+      "phase_ids": [
+        "P1-rerun-original-capture"
+      ],
+      "resource_phase_ids": [
+        "P1-rerun-original-allocate"
+      ],
+      "repairable": true,
+      "finding": "The interrupted execution leaves declared reservations uncompensated."
+    },
+    "evidence": {
+      "task": {
+        "id": "P1-rerun-original",
+        "phases": [
+          {
+            "id": "P1-rerun-original-allocate",
+            "kind": "reserve",
+            "deps": [],
+            "unit": "event"
+          },
+          {
+            "id": "P1-rerun-original-capture",
+            "kind": "capture",
+            "deps": [
+              "P1-rerun-original-allocate"
+            ],
+            "unit": "event"
+          },
+          {
+            "id": "P1-rerun-original-derive",
+            "kind": "compute",
+            "deps": [
+              "P1-rerun-original-capture"
+            ],
+            "unit": "event"
+          },
+          {
+            "id": "P1-rerun-original-publish",
+            "kind": "commit",
+            "deps": [
+              "P1-rerun-original-derive"
+            ],
+            "unit": "event"
+          }
+        ],
+        "conditions": {
+          "failure": "catchable_exception",
+          "effects": "exclusive_local_output"
+        }
+      },
+      "candidate": {
+        "language": "event-plan/v1",
+        "order": [
+          "P1-rerun-original-allocate",
+          "P1-rerun-original-capture",
+          "P1-rerun-original-derive",
+          "P1-rerun-original-publish"
+        ],
+        "protected": [
+          "P1-rerun-original-allocate",
+          "P1-rerun-original-capture",
+          "P1-rerun-original-derive",
+          "P1-rerun-original-publish"
+        ],
+        "atomic": [
+          "P1-rerun-original-publish"
+        ],
+        "compensations": {}
+      },
+      "execution": {
+        "state": "INCOMPLETE",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "P1-rerun-original-allocate"
+        ],
+        "failure_at": "P1-rerun-original-capture",
+        "trace": [
+          "P1-rerun-original-allocate"
+        ],
+        "interrupted_marker": true,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {
+          "INTERRUPTED.json": "ef22662185acecd448aba4d205072b76158e07aa2abeb8c642ace39e6fa2f054",
+          "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+        "interrupt_stage": "during"
+      },
+      "specification": {
+        "invariants": [
+          {
+            "id": "release-custody",
+            "kind": "release_after_failure"
+          }
+        ],
+        "effect_scope": "exclusive_local_output"
+      },
+      "source_identity": {
+        "pipeline": "154f7458c88c63c150c09cfb31696013b76fa7b1e02613b531ee4f955104319e",
+        "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+      }
+    },
+    "bindings": {
+      "task_sha256": "854ec31a3f428931505bb2ef3ccd6bbe81e1afaad2a530b8ef0da4e8f628c220",
+      "candidate_sha256": "b6c08b623955df668e5fefbf90d8ada98839dbb49653d198b08e829c5fc8c58c",
+      "execution_sha256": "85e4282a4b244d1aba83c1d778c0d8492cce1a98e3032e057e40a8c82f874d35",
+      "specification_sha256": "ae5e95762263c2800236536355a8b5aa79bc72f696dab5c9e006f7fed02bb579",
+      "source_identity_sha256": "6fb7823f04ce8fb38fc9e516bfe065c1344c9a98f74f6266a8a6cec00d5ae205"
+    },
+    "reproduction": {
+      "interrupt_at": "P1-rerun-original-capture",
+      "interrupt_stage": "during"
+    },
+    "expected_failure": "The interrupted execution leaves declared reservations uncompensated.",
+    "severity": "consequential",
+    "uncertainty": "Single observed execution; a separate reproduction is required.",
+    "objection_sha256": "d017c1e6dd681e3b2500042f304f2bcab237d9f41e37f4a14c0868391373f2bb"
+  },
+  "adjudication": {
+    "schema": "agi-alpha-criticism-adjudication/v1",
+    "objection": {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "proposed",
+      "claim_challenged": "release-custody",
+      "issue": {
+        "invariant_id": "release-custody",
+        "kind": "release_after_failure",
+        "phase_ids": [
+          "P1-rerun-original-capture"
+        ],
+        "resource_phase_ids": [
+          "P1-rerun-original-allocate"
+        ],
+        "repairable": true,
+        "finding": "The interrupted execution leaves declared reservations uncompensated."
+      },
+      "evidence": {
+        "task": {
+          "id": "P1-rerun-original",
+          "phases": [
+            {
+              "id": "P1-rerun-original-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "P1-rerun-original-capture",
+              "kind": "capture",
+              "deps": [
+                "P1-rerun-original-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-rerun-original-derive",
+              "kind": "compute",
+              "deps": [
+                "P1-rerun-original-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-rerun-original-publish",
+              "kind": "commit",
+              "deps": [
+                "P1-rerun-original-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "P1-rerun-original-allocate",
+            "P1-rerun-original-capture",
+            "P1-rerun-original-derive",
+            "P1-rerun-original-publish"
+          ],
+          "protected": [
+            "P1-rerun-original-allocate",
+            "P1-rerun-original-capture",
+            "P1-rerun-original-derive",
+            "P1-rerun-original-publish"
+          ],
+          "atomic": [
+            "P1-rerun-original-publish"
+          ],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "INCOMPLETE",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "P1-rerun-original-allocate"
+          ],
+          "failure_at": "P1-rerun-original-capture",
+          "trace": [
+            "P1-rerun-original-allocate"
+          ],
+          "interrupted_marker": true,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "INTERRUPTED.json": "ef22662185acecd448aba4d205072b76158e07aa2abeb8c642ace39e6fa2f054",
+            "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "release-custody",
+              "kind": "release_after_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "pipeline": "154f7458c88c63c150c09cfb31696013b76fa7b1e02613b531ee4f955104319e",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "854ec31a3f428931505bb2ef3ccd6bbe81e1afaad2a530b8ef0da4e8f628c220",
+        "candidate_sha256": "b6c08b623955df668e5fefbf90d8ada98839dbb49653d198b08e829c5fc8c58c",
+        "execution_sha256": "85e4282a4b244d1aba83c1d778c0d8492cce1a98e3032e057e40a8c82f874d35",
+        "specification_sha256": "ae5e95762263c2800236536355a8b5aa79bc72f696dab5c9e006f7fed02bb579",
+        "source_identity_sha256": "6fb7823f04ce8fb38fc9e516bfe065c1344c9a98f74f6266a8a6cec00d5ae205"
+      },
+      "reproduction": {
+        "interrupt_at": "P1-rerun-original-capture",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": "The interrupted execution leaves declared reservations uncompensated.",
+      "severity": "consequential",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "d017c1e6dd681e3b2500042f304f2bcab237d9f41e37f4a14c0868391373f2bb"
+    },
+    "status": "established",
+    "reason": "CONSEQUENTIAL_DEFECT_REPRODUCED",
+    "independence": "Separate reproducer; shared host/libraries, not external certification.",
+    "reproduced_execution": {
+      "state": "INCOMPLETE",
+      "completed": false,
+      "directory_created": true,
+      "reserved": [
+        "P1-rerun-original-allocate"
+      ],
+      "failure_at": "P1-rerun-original-capture",
+      "trace": [
+        "P1-rerun-original-allocate"
+      ],
+      "interrupted_marker": true,
+      "partial_publication": false,
+      "complete_exists": false,
+      "files_sha256": {
+        "INTERRUPTED.json": "ef22662185acecd448aba4d205072b76158e07aa2abeb8c642ace39e6fa2f054",
+        "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compensated": [],
+      "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+      "interrupt_stage": "during"
+    },
+    "reproduced_execution_sha256": "85e4282a4b244d1aba83c1d778c0d8492cce1a98e3032e057e40a8c82f874d35",
+    "established_issue": {
+      "invariant_id": "release-custody",
+      "kind": "release_after_failure",
+      "phase_ids": [
+        "P1-rerun-original-capture"
+      ],
+      "resource_phase_ids": [
+        "P1-rerun-original-allocate"
+      ],
+      "repairable": true,
+      "finding": "The interrupted execution leaves declared reservations uncompensated."
+    },
+    "next_action": "derive_repair",
+    "adjudication_sha256": "8a575830ec6c4bd8ec8006533a4c8cceda987b7a2e7bcdf2557d982301798ba7"
+  },
+  "original_pipeline_sha256": "154f7458c88c63c150c09cfb31696013b76fa7b1e02613b531ee4f955104319e",
+  "original_memory_sha256": "980dd5aa4ec1cde79a63eb33d32683f797df23b936f11729a7b860323d90c148"
+}

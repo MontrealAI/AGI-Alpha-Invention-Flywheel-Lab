@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/tmp/alpha-actual-public-archive-sffpdg6p/old/flywheel/legacy.py", line 89, in <module>
+    main()
+  File "/tmp/alpha-actual-public-archive-sffpdg6p/old/flywheel/legacy.py", line 84, in main
+    result = materialize(args.root, args.output)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/alpha-actual-public-archive-sffpdg6p/old/flywheel/legacy.py", line 59, in materialize
+    raw, origin = _read(root, name, expected_hash)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/alpha-actual-public-archive-sffpdg6p/old/flywheel/legacy.py", line 39, in _read
+    raise ValueError("LEGACY_IDENTITY_MISMATCH " + name)
+ValueError: LEGACY_IDENTITY_MISMATCH .github/workflows/campaign.yml

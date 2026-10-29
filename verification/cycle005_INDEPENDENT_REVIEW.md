@@ -2,7 +2,13 @@
 
 **Connected engineering mechanisms: VERIFIED IN SCOPE. Scientific advantage, learned discovery-policy improvement, commercial success and complete mission: NOT ESTABLISHED.** Qualification covers the declared finite typed local-evidence protocol and the executed archive repair. It does not establish a consequential new scientific or production frontier.
 
-The verifier checked the final 50-file builder freeze, SHA256 `b14c94567111814a5dc10e7ce97bcfcff1041bcc7cb1f8118622c2d508b060ea`, before importing candidate code or selecting fresh tasks. The original prospective protocol is `2435ffbfa46cbba96f5184d0eb0606bb20b4a97c883475d4b6758e0a6c7bfe64`; the prospective steering addendum is `5baef3b9f8fd827dac1f9d6459615d6ec9af028fafc4361945e7bae0bb3b0f24`. No candidate source was edited by the verifier. The subsequent owner PR6 merge did not change these frozen builder files. Shared model family, libraries, host and filesystem mean procedural separation, not external certification or OS-protected secrecy.
+The verifier checked the repaired source B 50-file builder freeze, SHA256 `6606628dcd020dc735219186ba678ec0f4bb3d906ff689f5b896966406af4b40`, before importing candidate code or selecting fresh tasks. The original prospective protocol is `2435ffbfa46cbba96f5184d0eb0606bb20b4a97c883475d4b6758e0a6c7bfe64`; the prospective steering addendum is `5baef3b9f8fd827dac1f9d6459615d6ec9af028fafc4361945e7bae0bb3b0f24`. No candidate source was edited by the verifier. The owner PR6 merge preserves the independent ownership boundary. Source A and its eight original exposed cases remain preserved separately; no source-A result is relabeled source B. Shared model family, libraries, host and filesystem mean procedural separation, not external certification or OS-protected secrecy.
+
+## Established review defect and repaired refusal
+
+Public review found a consequential source-A verification defect: a caller-supplied `release_after_failure` invariant was silently ignored. The verifier reran the exact preserved source-A pipeline and memory, observed `passed:true` while an actual failure retained an uncompensated reservation, then separately reproduced and adjudicated that witness as established. Source-A artifacts, original checker/review bytes, the original false-pass receipt and raw interrupted files remain unchanged under `verifier-review-P1` and `review-P1`. The initial preservation harness stopped on a concurrent memory-identity assertion before executing a case; the corrected replay loads exact preserved memory bytes and records its source scope.
+
+Source B explicitly refuses unsupported actual-broker invariants, invalid scopes and unimplemented state/artifact fields before issuing any effects. It does not claim to implement real reservation release. Twelve independent unsupported/malformed specifications refuse with only a refusal receipt. Acquisition now pins the executing pipeline verifier source; forged verifier-identity acquisition and changed-verifier reuse refuse. `verification/cycle005_p1_regression.py` deterministically reruns both the old false acceptance and the repaired refusal from preserved source, with its actual receipts at `verifier-review-P1-rerun`. These checks repair certification scope; they do not establish the missing resource-release capability.
 
 ## Actual connected path
 
@@ -14,7 +20,7 @@ The verifier independently reads normal and interrupted output files, validates 
 
 ## Fresh results and controls
 
-Eight cases were selected after the final source freeze. They introduce new event identifiers, phase listing permutations and additional dependency edges while preserving the admitted structural family. All cases and raw results are now exposed regression evidence; none may retain freshness after a later repair.
+Eight new cases were selected from the source-B freeze hash after that repair freeze. The source-A eight cases were already exposed and did not count as fresh source-B cases. They introduce new event identifiers, phase listing permutations and additional dependency edges while preserving the admitted structural family. All cases and raw results are now exposed regression evidence; none may retain freshness after a later repair.
 
 | Arm | Independent useful-objective passes |
 | --- | --- |
@@ -45,7 +51,7 @@ The fresh crossed comparison keeps task information, candidate bound and indepen
 
 | Policy | Old capabilities | New capabilities |
 | --- | --- | --- |
-| Actual pinned old search through the disclosed adapter | 0/8 | 4/8 |
+| Actual pinned old search through the disclosed adapter | 0/8 | 6/8 |
 | New obligation-guided construction | 0/8 | 8/8 |
 
 The additional atomic-publication capability explains why neither policy meets the full objective with the old toolbox. The new search also improves completion under the same new toolbox and candidate allowance. The replacement policy is developer authored; this is not acquired discovery-policy learning, unrestricted invention, or after-cost progressive usefulness. The competent conventional control still passes 8/8. Old-source identity and adapter limitations remain in every cell's raw construction record.
@@ -62,8 +68,10 @@ This check changes no PR6 source and grants no merge approval, physical fault-to
 
 ## Evidence and decision
 
-Primary receipts are `evidence/cycle-005/verifier-wholepath-final/REPORT.json`, its actual development/reuse/bundle/policy files, `archive-enabling/ENABLING.json`, `verifier-archive-provisional/REPORT.json`, and `verifier-pr6-runtime-v2-corrected-harness/REPORT.json`. The whole-path test used 78.864 seconds wall time, 5.605 seconds verifier CPU and 70.408 seconds child CPU, within its declared 180-second wall/90-second CPU allocation. Complete acquisition, agent inference, integration, maintenance and monetary costs remain unknown. Zero statistical confirmation alpha was spent.
+Primary source-B receipts are `evidence/cycle-005/verifier-wholepath-repair/REPORT.json`, its actual development/reuse/bundle/policy files, `archive-enabling/ENABLING.json`, `verifier-archive-provisional/REPORT.json`, and `verifier-pr6-runtime-v2-corrected-harness/REPORT.json`. The source-B whole-path test used 73.970 seconds wall time, 7.004 seconds verifier CPU and 64.874 seconds child CPU. The exact source-A run and all original receipts remain at `verifier-wholepath-final`; the repaired panel is separate. Complete acquisition, agent inference, integration, maintenance and monetary costs remain unknown. Zero statistical confirmation alpha was spent.
 
 Publish the scoped connected implementation and all original failures. Retain strong ordinary and conventional methods. Engineering linkage is demonstrated; scientific advantage and complete-cost progressive usefulness are not. There is no independently priced accepted delivery, collected earnings, unrestricted earned funding or funded successor, and therefore no established commercial flywheel.
 
 Reproduction: `python verification/cycle005_wholepath.py --root . --output NEW_PATH`. The path must be new. A published replay is an exposed engineering regression, not fresh confirmation.
+
+P1 reproduction and repaired integrity gate: `python verification/cycle005_p1_regression.py --root . --output NEW_PATH`. Source-B fresh crossed scores are 0/6/0/8; the source-A 0/4/0/8 panel is preserved. Neither developer-authored policy comparison is learned discovery-policy improvement.

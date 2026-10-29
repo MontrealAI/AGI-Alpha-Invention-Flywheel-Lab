@@ -30,6 +30,31 @@ def file_sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def supported_specification(task, specification):
+    """Refuse any obligation the fixed file verifier cannot actually assess."""
+    if type(specification) is not dict or set(specification) - {'invariants', 'effect_scope'}:
+        raise ValueError('UNSUPPORTED_SPECIFICATION_FIELDS')
+    if specification.get('effect_scope', 'exclusive_local_output') != 'exclusive_local_output':
+        raise ValueError('UNSUPPORTED_EFFECT_SCOPE')
+    invariants = specification.get('invariants')
+    if type(invariants) is not list or not invariants or len(invariants) > 48:
+        raise ValueError('INVALID_INVARIANT_LIST')
+    phases = {phase['id'] for phase in task['phases']}
+    identities = set()
+    for invariant in invariants:
+        if type(invariant) is not dict or set(invariant) - {'id', 'kind', 'phase_ids'}:
+            raise ValueError('UNSUPPORTED_INVARIANT_FIELDS')
+        if type(invariant.get('id')) is not str or not invariant['id'] or invariant['id'] in identities:
+            raise ValueError('INVALID_OR_DUPLICATE_INVARIANT_ID')
+        identities.add(invariant['id'])
+        if type(invariant.get('kind')) is not str or invariant['kind'] not in {'mark_after_reservation', 'no_commit_on_failure'}:
+            raise ValueError('UNSUPPORTED_ACTUAL_EFFECT_INVARIANT')
+        selection = invariant.get('phase_ids', list(phases))
+        if type(selection) is not list or not selection or any(type(phase) is not str or phase not in phases for phase in selection) or len(set(selection)) != len(selection):
+            raise ValueError('INVALID_INVARIANT_SCOPE')
+    return invariants
+
+
 def example(prefix='acquisition', reverse=False):
     names = [prefix + '-' + x for x in ('allocate', 'capture', 'derive', 'publish')]
     phases = [{'id': name, 'kind': kind, 'deps': [] if i == 0 else [names[i-1]], 'unit': 'event'}
@@ -48,8 +73,15 @@ def verify(task, program, output, specification=None):
     """Final unchanged objective is outside candidate and acquisition control."""
     output = Path(output)
     specification = SPECIFICATION if specification is None else specification
-    invariant_kinds = {i['kind'] for i in specification['invariants']}
     output.mkdir(parents=True, exist_ok=False)
+    try:
+        invariants = supported_specification(task, specification)
+    except ValueError as error:
+        refused = {'passed': False, 'state': 'refused', 'checks': [], 'reason': str(error),
+                   'specification_sha256': memory.digest(specification), 'candidate_sha256': memory.digest(program),
+                   'scope': 'No verification receipt is issued for unsupported or malformed obligations'}
+        write(output / 'VERIFICATION.json', refused)
+        return refused
     if program is None:
         result = {'passed': False, 'checks': [], 'reason': 'NO_EXECUTABLE_PROGRAM'}
         write(output / 'VERIFICATION.json', result)
@@ -68,10 +100,13 @@ def verify(task, program, output, specification=None):
         else:
             observed = confined.get('worker', {}).get('result', {})
             passed = confined['state'] == 'COMPLETE'
-            if 'mark_after_reservation' in invariant_kinds:
-                passed = passed and observed.get('interrupted_marker') is True and actual['interrupted_marker'] is True
-            if 'no_commit_on_failure' in invariant_kinds:
-                passed = passed and observed.get('complete_exists') is False and actual['complete_exists'] is False
+            for invariant in invariants:
+                if phase not in invariant.get('phase_ids', program['order']):
+                    continue
+                if invariant['kind'] == 'mark_after_reservation':
+                    passed = passed and observed.get('interrupted_marker') is True and actual['interrupted_marker'] is True
+                if invariant['kind'] == 'no_commit_on_failure':
+                    passed = passed and observed.get('complete_exists') is False and actual['complete_exists'] is False
         checks.append({'phase': phase, 'passed': passed, 'confined': confined, 'actual': actual})
     result = {'passed': normal['completed'] and normal['complete_exists'] and all(x['passed'] for x in checks),
               'normal': normal, 'checks': checks, 'specification_sha256': memory.digest(specification),
@@ -126,6 +161,7 @@ def develop(task, donors, target_graph, output, memory_root, use_mapping=True, u
                'before_passed': before_verification['passed'], 'after_passed': after_verification['passed'],
                'before_verification_sha256': memory.digest(before_verification), 'after_verification_sha256': memory.digest(after_verification),
                'objective_scope': copy.deepcopy(specification),
+               'verifier_source': {'path': 'mechanisms/pipeline.py', 'sha256': file_sha(ROOT / 'mechanisms/pipeline.py')},
                'costs': {'wall_seconds': time.monotonic()-started, 'cpu_seconds': time.process_time()-cpu, 'full_cost': None}}
     try:
         retained = memory.retain(memory_root, task, mapped, before['program'], after['program'], obligations, receipt, ROOT)

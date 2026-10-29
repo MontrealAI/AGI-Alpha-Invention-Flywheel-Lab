@@ -36,13 +36,15 @@ The command also executes two complementary acquisitions and all bounded bundles
 | Archive depended on invisible Git state | `flywheel.legacy`, `archive_v2.build`, `extract`, `materialize_cycle004` | Exact historical workflow and all 22 old frozen sources are bundled with unchanged expected hashes. Original candidate replay occurs from its reconstructed source snapshot. Missing/corrupted dependencies and duplicate extraction/output refuse. |
 | Live model / foundations | `FOUNDATIONS.md`; unchanged pinned Alpha record/exchange adapters | Actual Omega and Lite source was recovered and inspected; task-specific deterministic construction is the executing replacement. No live provider inference, Omega integration or learned-policy result is implied. |
 
+Review P1 found that source A could accept an obligation its fixed effect checker did not evaluate. Source B explicitly refuses unsupported invariant kinds, fields, effect scopes and malformed scopes, and evaluates the declared phase selections. The retained dependency closure now includes the verifier itself; changing that source refuses old capability reuse. Original source A, its freeze, successful bounded checks and the consequential false-pass witness remain separate evidence under `evidence/cycle-005/review-P1/` and `verifier-review-P1/`. Source B has a distinct freeze and independent post-freeze evaluation; it does not retroactively repair source A.
+
 All `mechanisms.*` paths are under the new namespace. The source freeze is `FREEZE.json`; original exact payloads are inert files under `historical/`. The current legacy materializer is a new identified version, while the old materializer and old 22-source candidate remain reproducible unchanged. Historical expected hashes were not relaxed.
 
 ## Reframing and enabling evidence
 
 The untouched public release ZIP is included at `evidence/cycle-005/archive-original/release.zip`, SHA-256 `551932fadd6d65903c7bb4e5feef071cd9c72588787252548e4cc9bf5faf0634`. Its original failure log remains alongside it. The old method assumed a Git object could supply the frozen workflow; a ZIP has no such history. The required outcome is exact-source reproduction, not possession of Git history.
 
-The new instrument bundles the exact missing workflow with provenance, verifies its original hash, and reconstructs the old source closure from exact retained payloads. The recorded complete development command passed 91 unit tests, 11 verifier tests, the 127-file original edition check, all 22 original source identities and unchanged connected replay from a clean extraction. Subsequent published-artifact checks qualify only their exact downloaded ZIP identities; a developer checkout is not an archive acceptance result.
+The new instrument bundles the exact missing workflow with provenance, verifies its original hash, and reconstructs the old source closure from exact retained payloads. The original recorded development command passed 91 unit tests, 11 verifier tests, the 127-file original edition check, all 22 original source identities and unchanged connected replay from a clean extraction. After review P1, the expanded unit suite passed 94 tests. Subsequent published-artifact checks qualify only their exact downloaded ZIP identities; a developer checkout is not an archive acceptance result.
 
 ## Scope, costs and strongest controls
 

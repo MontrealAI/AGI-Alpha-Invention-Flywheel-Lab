@@ -1,0 +1,296 @@
+{
+  "passed": true,
+  "normal": {
+    "state": "COMPLETE",
+    "completed": true,
+    "directory_created": true,
+    "reserved": [
+      "P1-real-reservation-obligation-allocate"
+    ],
+    "trace": [
+      "P1-real-reservation-obligation-allocate",
+      "P1-real-reservation-obligation-capture",
+      "P1-real-reservation-obligation-derive",
+      "P1-real-reservation-obligation-publish"
+    ],
+    "interrupted_marker": false,
+    "partial_publication": false,
+    "complete_exists": true,
+    "files_sha256": {
+      "COMPLETE.json": "048a3b723c5d28512cbb7f8cb34fbfdd42a7dee1b1da22d2b8ea171e0a574b0b",
+      "PENDING_COMPLETE.json": "048a3b723c5d28512cbb7f8cb34fbfdd42a7dee1b1da22d2b8ea171e0a574b0b",
+      "phase-002.json": "371b6f4ee4a71a30510e5aa1d24b7a79b28ef326d55c7c951246d564b3bcf9af",
+      "phase-001.json": "0f78cf6b9a54946b02cfd8267672d0efe7d9e29c8d67d23e62b2fa1da93eeb1f"
+    },
+    "compensated": []
+  },
+  "checks": [
+    {
+      "phase": "P1-real-reservation-obligation-allocate",
+      "passed": true,
+      "confined": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 5,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.1388727480007219,
+        "stdout_bytes": 471,
+        "stderr_bytes": 0,
+        "stdout_sha256": "c00df360f970ba80bb480202168ae54ae5e28c025ee5f76a4165bed6db0b4d60",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "trace": [],
+            "state": "UNMARKED",
+            "completed": false,
+            "complete_exists": false,
+            "failure_at": "P1-real-reservation-obligation-allocate",
+            "interrupted_marker": false,
+            "partial_publication": false,
+            "atomic_publication": true,
+            "reserved": [],
+            "compensated": [],
+            "directory_created": false
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 0.00010580399975879118,
+          "worker_cpu_seconds": 0.123360195,
+          "peak_rss_kib": 15104
+        },
+        "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+        "input_sha256": "2a180865db452e878ca1ab53efbb714d9b8ab6ea9e7257f835c77feb9f46bdd0"
+      },
+      "actual": {
+        "state": "UNMARKED",
+        "completed": false,
+        "directory_created": false,
+        "reserved": [],
+        "failure_at": "P1-real-reservation-obligation-allocate",
+        "trace": [],
+        "interrupted_marker": false,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {}
+      }
+    },
+    {
+      "phase": "P1-real-reservation-obligation-capture",
+      "passed": true,
+      "confined": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 5,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.16601489599997876,
+        "stdout_bytes": 550,
+        "stderr_bytes": 0,
+        "stdout_sha256": "973e7d4b602541b10478375d68622a5cbd1991197785ae11bfd74939c823dee6",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "trace": [
+              "P1-real-reservation-obligation-allocate"
+            ],
+            "state": "INCOMPLETE",
+            "completed": false,
+            "complete_exists": false,
+            "failure_at": "P1-real-reservation-obligation-capture",
+            "interrupted_marker": true,
+            "partial_publication": false,
+            "atomic_publication": true,
+            "reserved": [
+              "P1-real-reservation-obligation-allocate"
+            ],
+            "compensated": [],
+            "directory_created": true
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 0.0001897229958558455,
+          "worker_cpu_seconds": 0.15148853,
+          "peak_rss_kib": 15104
+        },
+        "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+        "input_sha256": "4162b486f42ec13585b28e9e7bdfc463b97ac4b580f895d21bb261d88bbc65f3"
+      },
+      "actual": {
+        "state": "INCOMPLETE",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "P1-real-reservation-obligation-allocate"
+        ],
+        "failure_at": "P1-real-reservation-obligation-capture",
+        "trace": [
+          "P1-real-reservation-obligation-allocate"
+        ],
+        "interrupted_marker": true,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {
+          "INTERRUPTED.json": "6397c2a9465372137893da224ecbe827948d99614bf4be6c0eaed04acb27e485",
+          "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+      }
+    },
+    {
+      "phase": "P1-real-reservation-obligation-derive",
+      "passed": true,
+      "confined": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 5,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.1324472850028542,
+        "stdout_bytes": 592,
+        "stderr_bytes": 0,
+        "stdout_sha256": "137a5cba0d64d9128f068a60be02198548b423474149bf717af2ecca77c18187",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "trace": [
+              "P1-real-reservation-obligation-allocate",
+              "P1-real-reservation-obligation-capture"
+            ],
+            "state": "INCOMPLETE",
+            "completed": false,
+            "complete_exists": false,
+            "failure_at": "P1-real-reservation-obligation-derive",
+            "interrupted_marker": true,
+            "partial_publication": false,
+            "atomic_publication": true,
+            "reserved": [
+              "P1-real-reservation-obligation-allocate"
+            ],
+            "compensated": [],
+            "directory_created": true
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 0.0001162169937742874,
+          "worker_cpu_seconds": 0.120830509,
+          "peak_rss_kib": 15104
+        },
+        "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+        "input_sha256": "18bbb1cd268f0055438c3b297fd9c0377b3af985077d2253f8b76303b8c83973"
+      },
+      "actual": {
+        "state": "INCOMPLETE",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "P1-real-reservation-obligation-allocate"
+        ],
+        "failure_at": "P1-real-reservation-obligation-derive",
+        "trace": [
+          "P1-real-reservation-obligation-allocate",
+          "P1-real-reservation-obligation-capture"
+        ],
+        "interrupted_marker": true,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {
+          "INTERRUPTED.json": "a47676a837b53e6df69b5f749e16eb1c45aa24a8868cb9155ef9a2cb94b332e2",
+          "phase-002.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "phase-001.json": "0f78cf6b9a54946b02cfd8267672d0efe7d9e29c8d67d23e62b2fa1da93eeb1f"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+      }
+    },
+    {
+      "phase": "P1-real-reservation-obligation-publish",
+      "passed": true,
+      "confined": {
+        "state": "COMPLETE",
+        "returncode": 0,
+        "limits": {
+          "wall_seconds": 5,
+          "cpu_seconds": 2,
+          "memory_bytes": 268435456,
+          "output_bytes": 1048576,
+          "input_bytes": 4194304
+        },
+        "wall_seconds": 0.5413564499976928,
+        "stdout_bytes": 634,
+        "stderr_bytes": 0,
+        "stdout_sha256": "e388e59ed52341721e1585538cd1f5dda677dabb4fd440717bbfb9e6a37821ca",
+        "stderr": "",
+        "worker": {
+          "state": "COMPLETE",
+          "result": {
+            "trace": [
+              "P1-real-reservation-obligation-allocate",
+              "P1-real-reservation-obligation-capture",
+              "P1-real-reservation-obligation-derive"
+            ],
+            "state": "INCOMPLETE",
+            "completed": false,
+            "complete_exists": false,
+            "failure_at": "P1-real-reservation-obligation-publish",
+            "interrupted_marker": true,
+            "partial_publication": false,
+            "atomic_publication": true,
+            "reserved": [
+              "P1-real-reservation-obligation-allocate"
+            ],
+            "compensated": [],
+            "directory_created": true
+          },
+          "confinement": "linux-seccomp-default-deny",
+          "worker_wall_seconds": 0.00013691500498680398,
+          "worker_cpu_seconds": 0.51708377,
+          "peak_rss_kib": 15104
+        },
+        "interpreter_sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+        "input_sha256": "473a2b087d76798854f8dfcdda172c80f9edb6a2fc2ab4443f267cadffecd6d7"
+      },
+      "actual": {
+        "state": "INCOMPLETE",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "P1-real-reservation-obligation-allocate"
+        ],
+        "failure_at": "P1-real-reservation-obligation-publish",
+        "trace": [
+          "P1-real-reservation-obligation-allocate",
+          "P1-real-reservation-obligation-capture",
+          "P1-real-reservation-obligation-derive"
+        ],
+        "interrupted_marker": true,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {
+          "INTERRUPTED.json": "7b6f04c854c8e42d79b558a6e19213a723c89139cbd83760c7f22c691523f9d0",
+          "PENDING_COMPLETE.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "phase-002.json": "371b6f4ee4a71a30510e5aa1d24b7a79b28ef326d55c7c951246d564b3bcf9af",
+          "phase-001.json": "0f78cf6b9a54946b02cfd8267672d0efe7d9e29c8d67d23e62b2fa1da93eeb1f"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability"
+      }
+    }
+  ],
+  "specification_sha256": "a16bdcf48a9ae0455764bf1068d09e8d09fbef59652efcda24b1cb45e2efb083",
+  "candidate_sha256": "7688fb2a0d5370d5f88ed0a4e54433f848ed7a70c35c2730a87211b6a3c44495",
+  "scope": "Catchable phase interruptions and normal dependency-ordered local-file effects"
+}

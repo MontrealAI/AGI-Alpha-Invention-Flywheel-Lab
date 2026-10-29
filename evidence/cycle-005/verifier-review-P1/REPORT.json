@@ -1,0 +1,400 @@
+{
+  "schema": "agi-alpha-cycle005-verifier-P1-unsupported-invariant/v1",
+  "candidate": "A",
+  "freeze_sha256": "b14c94567111814a5dc10e7ce97bcfcff1041bcc7cb1f8118622c2d508b060ea",
+  "executing_original_pipeline_sha256": "154f7458c88c63c150c09cfb31696013b76fa7b1e02613b531ee4f955104319e",
+  "executing_original_memory_sha256": "980dd5aa4ec1cde79a63eb33d32683f797df23b936f11729a7b860323d90c148",
+  "loading_scope": "Exact preserved sourceA pipeline/memory; unchanged sourceA construct/critic/executor/mapping/sandbox/retention identities checked before imports. Concurrent sourceB edits are not executed.",
+  "task": {
+    "id": "P1-real-reservation-obligation",
+    "phases": [
+      {
+        "id": "P1-real-reservation-obligation-allocate",
+        "kind": "reserve",
+        "deps": [],
+        "unit": "event"
+      },
+      {
+        "id": "P1-real-reservation-obligation-capture",
+        "kind": "capture",
+        "deps": [
+          "P1-real-reservation-obligation-allocate"
+        ],
+        "unit": "event"
+      },
+      {
+        "id": "P1-real-reservation-obligation-derive",
+        "kind": "compute",
+        "deps": [
+          "P1-real-reservation-obligation-capture"
+        ],
+        "unit": "event"
+      },
+      {
+        "id": "P1-real-reservation-obligation-publish",
+        "kind": "commit",
+        "deps": [
+          "P1-real-reservation-obligation-derive"
+        ],
+        "unit": "event"
+      }
+    ],
+    "conditions": {
+      "failure": "catchable_exception",
+      "effects": "exclusive_local_output"
+    }
+  },
+  "program": {
+    "language": "event-plan/v1",
+    "order": [
+      "P1-real-reservation-obligation-allocate",
+      "P1-real-reservation-obligation-capture",
+      "P1-real-reservation-obligation-derive",
+      "P1-real-reservation-obligation-publish"
+    ],
+    "protected": [
+      "P1-real-reservation-obligation-allocate",
+      "P1-real-reservation-obligation-capture",
+      "P1-real-reservation-obligation-derive",
+      "P1-real-reservation-obligation-publish"
+    ],
+    "atomic": [
+      "P1-real-reservation-obligation-publish"
+    ],
+    "compensations": {}
+  },
+  "specification": {
+    "invariants": [
+      {
+        "id": "release-custody-after-failure",
+        "kind": "release_after_failure"
+      }
+    ],
+    "effect_scope": "exclusive_local_output"
+  },
+  "old_verifier_reported_passed": true,
+  "old_verification_receipt_sha256": "3183ed92d7f3dae38fefa5de50a6534882df30cf47b106430488e8b5208a8292",
+  "actual_failing_witness": {
+    "state": "INCOMPLETE",
+    "completed": false,
+    "directory_created": true,
+    "reserved": [
+      "P1-real-reservation-obligation-allocate"
+    ],
+    "failure_at": "P1-real-reservation-obligation-capture",
+    "trace": [
+      "P1-real-reservation-obligation-allocate"
+    ],
+    "interrupted_marker": true,
+    "partial_publication": false,
+    "complete_exists": false,
+    "files_sha256": {
+      "INTERRUPTED.json": "6397c2a9465372137893da224ecbe827948d99614bf4be6c0eaed04acb27e485",
+      "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compensated": [],
+    "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+    "interrupt_stage": "during"
+  },
+  "criticism": {
+    "schema": "agi-alpha-evidence-criticism/v1",
+    "status": "proposed",
+    "claim_challenged": "release-custody-after-failure",
+    "issue": {
+      "invariant_id": "release-custody-after-failure",
+      "kind": "release_after_failure",
+      "phase_ids": [
+        "P1-real-reservation-obligation-capture"
+      ],
+      "resource_phase_ids": [
+        "P1-real-reservation-obligation-allocate"
+      ],
+      "repairable": true,
+      "finding": "The interrupted execution leaves declared reservations uncompensated."
+    },
+    "evidence": {
+      "task": {
+        "id": "P1-real-reservation-obligation",
+        "phases": [
+          {
+            "id": "P1-real-reservation-obligation-allocate",
+            "kind": "reserve",
+            "deps": [],
+            "unit": "event"
+          },
+          {
+            "id": "P1-real-reservation-obligation-capture",
+            "kind": "capture",
+            "deps": [
+              "P1-real-reservation-obligation-allocate"
+            ],
+            "unit": "event"
+          },
+          {
+            "id": "P1-real-reservation-obligation-derive",
+            "kind": "compute",
+            "deps": [
+              "P1-real-reservation-obligation-capture"
+            ],
+            "unit": "event"
+          },
+          {
+            "id": "P1-real-reservation-obligation-publish",
+            "kind": "commit",
+            "deps": [
+              "P1-real-reservation-obligation-derive"
+            ],
+            "unit": "event"
+          }
+        ],
+        "conditions": {
+          "failure": "catchable_exception",
+          "effects": "exclusive_local_output"
+        }
+      },
+      "candidate": {
+        "language": "event-plan/v1",
+        "order": [
+          "P1-real-reservation-obligation-allocate",
+          "P1-real-reservation-obligation-capture",
+          "P1-real-reservation-obligation-derive",
+          "P1-real-reservation-obligation-publish"
+        ],
+        "protected": [
+          "P1-real-reservation-obligation-allocate",
+          "P1-real-reservation-obligation-capture",
+          "P1-real-reservation-obligation-derive",
+          "P1-real-reservation-obligation-publish"
+        ],
+        "atomic": [
+          "P1-real-reservation-obligation-publish"
+        ],
+        "compensations": {}
+      },
+      "execution": {
+        "state": "INCOMPLETE",
+        "completed": false,
+        "directory_created": true,
+        "reserved": [
+          "P1-real-reservation-obligation-allocate"
+        ],
+        "failure_at": "P1-real-reservation-obligation-capture",
+        "trace": [
+          "P1-real-reservation-obligation-allocate"
+        ],
+        "interrupted_marker": true,
+        "partial_publication": false,
+        "complete_exists": false,
+        "files_sha256": {
+          "INTERRUPTED.json": "6397c2a9465372137893da224ecbe827948d99614bf4be6c0eaed04acb27e485",
+          "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "compensated": [],
+        "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+        "interrupt_stage": "during"
+      },
+      "specification": {
+        "invariants": [
+          {
+            "id": "release-custody-after-failure",
+            "kind": "release_after_failure"
+          }
+        ],
+        "effect_scope": "exclusive_local_output"
+      },
+      "source_identity": {
+        "pipeline": "154f7458c88c63c150c09cfb31696013b76fa7b1e02613b531ee4f955104319e",
+        "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+      }
+    },
+    "bindings": {
+      "task_sha256": "2fa30a6f37888e055a3326342414a1f70ea4067e65886c7a8935e4b2a422476d",
+      "candidate_sha256": "7688fb2a0d5370d5f88ed0a4e54433f848ed7a70c35c2730a87211b6a3c44495",
+      "execution_sha256": "e57e454d0e7c6eb05e3af8756b74d4038d6fde9d96cdcaf8da4446ec7e8a31a1",
+      "specification_sha256": "a16bdcf48a9ae0455764bf1068d09e8d09fbef59652efcda24b1cb45e2efb083",
+      "source_identity_sha256": "6fb7823f04ce8fb38fc9e516bfe065c1344c9a98f74f6266a8a6cec00d5ae205"
+    },
+    "reproduction": {
+      "interrupt_at": "P1-real-reservation-obligation-capture",
+      "interrupt_stage": "during"
+    },
+    "expected_failure": "The interrupted execution leaves declared reservations uncompensated.",
+    "severity": "consequential",
+    "uncertainty": "Single observed execution; a separate reproduction is required.",
+    "objection_sha256": "f0282d6133db1af3af85f2e4bd42481c8fabf5b0b497c9bcd33838f05bdac72c"
+  },
+  "separate_adjudication": {
+    "schema": "agi-alpha-criticism-adjudication/v1",
+    "objection": {
+      "schema": "agi-alpha-evidence-criticism/v1",
+      "status": "proposed",
+      "claim_challenged": "release-custody-after-failure",
+      "issue": {
+        "invariant_id": "release-custody-after-failure",
+        "kind": "release_after_failure",
+        "phase_ids": [
+          "P1-real-reservation-obligation-capture"
+        ],
+        "resource_phase_ids": [
+          "P1-real-reservation-obligation-allocate"
+        ],
+        "repairable": true,
+        "finding": "The interrupted execution leaves declared reservations uncompensated."
+      },
+      "evidence": {
+        "task": {
+          "id": "P1-real-reservation-obligation",
+          "phases": [
+            {
+              "id": "P1-real-reservation-obligation-allocate",
+              "kind": "reserve",
+              "deps": [],
+              "unit": "event"
+            },
+            {
+              "id": "P1-real-reservation-obligation-capture",
+              "kind": "capture",
+              "deps": [
+                "P1-real-reservation-obligation-allocate"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-real-reservation-obligation-derive",
+              "kind": "compute",
+              "deps": [
+                "P1-real-reservation-obligation-capture"
+              ],
+              "unit": "event"
+            },
+            {
+              "id": "P1-real-reservation-obligation-publish",
+              "kind": "commit",
+              "deps": [
+                "P1-real-reservation-obligation-derive"
+              ],
+              "unit": "event"
+            }
+          ],
+          "conditions": {
+            "failure": "catchable_exception",
+            "effects": "exclusive_local_output"
+          }
+        },
+        "candidate": {
+          "language": "event-plan/v1",
+          "order": [
+            "P1-real-reservation-obligation-allocate",
+            "P1-real-reservation-obligation-capture",
+            "P1-real-reservation-obligation-derive",
+            "P1-real-reservation-obligation-publish"
+          ],
+          "protected": [
+            "P1-real-reservation-obligation-allocate",
+            "P1-real-reservation-obligation-capture",
+            "P1-real-reservation-obligation-derive",
+            "P1-real-reservation-obligation-publish"
+          ],
+          "atomic": [
+            "P1-real-reservation-obligation-publish"
+          ],
+          "compensations": {}
+        },
+        "execution": {
+          "state": "INCOMPLETE",
+          "completed": false,
+          "directory_created": true,
+          "reserved": [
+            "P1-real-reservation-obligation-allocate"
+          ],
+          "failure_at": "P1-real-reservation-obligation-capture",
+          "trace": [
+            "P1-real-reservation-obligation-allocate"
+          ],
+          "interrupted_marker": true,
+          "partial_publication": false,
+          "complete_exists": false,
+          "files_sha256": {
+            "INTERRUPTED.json": "6397c2a9465372137893da224ecbe827948d99614bf4be6c0eaed04acb27e485",
+            "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "compensated": [],
+          "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+          "interrupt_stage": "during"
+        },
+        "specification": {
+          "invariants": [
+            {
+              "id": "release-custody-after-failure",
+              "kind": "release_after_failure"
+            }
+          ],
+          "effect_scope": "exclusive_local_output"
+        },
+        "source_identity": {
+          "pipeline": "154f7458c88c63c150c09cfb31696013b76fa7b1e02613b531ee4f955104319e",
+          "executor": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05"
+        }
+      },
+      "bindings": {
+        "task_sha256": "2fa30a6f37888e055a3326342414a1f70ea4067e65886c7a8935e4b2a422476d",
+        "candidate_sha256": "7688fb2a0d5370d5f88ed0a4e54433f848ed7a70c35c2730a87211b6a3c44495",
+        "execution_sha256": "e57e454d0e7c6eb05e3af8756b74d4038d6fde9d96cdcaf8da4446ec7e8a31a1",
+        "specification_sha256": "a16bdcf48a9ae0455764bf1068d09e8d09fbef59652efcda24b1cb45e2efb083",
+        "source_identity_sha256": "6fb7823f04ce8fb38fc9e516bfe065c1344c9a98f74f6266a8a6cec00d5ae205"
+      },
+      "reproduction": {
+        "interrupt_at": "P1-real-reservation-obligation-capture",
+        "interrupt_stage": "during"
+      },
+      "expected_failure": "The interrupted execution leaves declared reservations uncompensated.",
+      "severity": "consequential",
+      "uncertainty": "Single observed execution; a separate reproduction is required.",
+      "objection_sha256": "f0282d6133db1af3af85f2e4bd42481c8fabf5b0b497c9bcd33838f05bdac72c"
+    },
+    "status": "established",
+    "reason": "CONSEQUENTIAL_DEFECT_REPRODUCED",
+    "independence": "Separate reproducer; shared host/libraries, not external certification.",
+    "reproduced_execution": {
+      "state": "INCOMPLETE",
+      "completed": false,
+      "directory_created": true,
+      "reserved": [
+        "P1-real-reservation-obligation-allocate"
+      ],
+      "failure_at": "P1-real-reservation-obligation-capture",
+      "trace": [
+        "P1-real-reservation-obligation-allocate"
+      ],
+      "interrupted_marker": true,
+      "partial_publication": false,
+      "complete_exists": false,
+      "files_sha256": {
+        "INTERRUPTED.json": "6397c2a9465372137893da224ecbe827948d99614bf4be6c0eaed04acb27e485",
+        "phase-001.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "compensated": [],
+      "boundary": "Trusted fixed local effects, no proposed paths/code/network; not host-crash durability",
+      "interrupt_stage": "during"
+    },
+    "reproduced_execution_sha256": "e57e454d0e7c6eb05e3af8756b74d4038d6fde9d96cdcaf8da4446ec7e8a31a1",
+    "established_issue": {
+      "invariant_id": "release-custody-after-failure",
+      "kind": "release_after_failure",
+      "phase_ids": [
+        "P1-real-reservation-obligation-capture"
+      ],
+      "resource_phase_ids": [
+        "P1-real-reservation-obligation-allocate"
+      ],
+      "repairable": true,
+      "finding": "The interrupted execution leaves declared reservations uncompensated."
+    },
+    "next_action": "derive_repair",
+    "adjudication_sha256": "1d1ceced5d84c495bbb95b1f9588ccecdbcf84f47d0f0fd346d4b49f6cfa374a"
+  },
+  "P1_false_acceptance_reproduced": true,
+  "cause": "verify silently skips the supplied release_after_failure invariant. Presence of a specification does not mean every clause was evaluated.",
+  "scope": "New exposed review regression; earlier sourceA cases exercised only the two implemented actual-broker invariants.",
+  "confirmation_alpha_spent": 0
+}
