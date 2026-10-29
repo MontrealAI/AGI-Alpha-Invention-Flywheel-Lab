@@ -1,0 +1,41 @@
+{
+  "schema": "cycle2-terminal-boundary-audit/v1",
+  "frozen_utc": "2026-10-29T19:13:23.892516+00:00",
+  "source_pdf_sha256": "2684fdf9b28d8c96572169ec5e651cfa8259062ff018dafb7a94afed428bd3e6",
+  "source_pdf": "https://crossboundary.com/wp-content/uploads/2025/07/CrossBoundary_Innovation_Insight_Second-life_batteries_Sep-2025.pdf",
+  "observed_source_boundary": "Printed11/PDF14 plot ORIGINAL(10years) jumpsatyear20, while labeledminigridlifetime20years; captionomitsresidualvalue. Exact workbook/discount rate unavailable.",
+  "question": "Can including a replacement exactly at the service horizon reverse the reported economic preference?",
+  "input_scope": "Actualreportedupfrontprices, simple declared replacement schedules, no reconstructedclaimofexactsourceworkbook",
+  "inputs": {
+    "second_reported_USD_per_kWh": 214,
+    "second_chart_mean_USD_per_kWh": "643/3",
+    "new_chart_mean_USD_per_kWh": 271,
+    "horizon_years": 20,
+    "new_interval_years": 10,
+    "second_interval_years": [
+      6,
+      7,
+      8
+    ],
+    "discount_rate_scenarios": [
+      0,
+      0.05
+    ],
+    "discount_rate_status": "Analyst sensitivity only; not source-reported or fitted calibration",
+    "capacity_scaling": 1
+  },
+  "comparisons": [
+    "serviceperiod[0,T): purchasesonlyatt<T",
+    "closedcapexconventionpurchasesatt<=T with noassetcredit"
+  ],
+  "acceptance": "Timestamp exactlyT doesnot supplyanypre-Tservice. Its chargeis excluded or appropriate post-Tresidualcreditmustbeexplicit; preservebothoutputsandshowanysignflip. No generalcommercialwinner withoutfullservicecosts,RUL,funding,uncertaintyanddemand.",
+  "protected_confirmation": false,
+  "alpha_spent": 0,
+  "missing": [
+    "sourceworkbook",
+    "declareddiscount/escalationpath",
+    "completeOPEXandshipping,tax,insurance",
+    "fieldRULvalidation",
+    "samechemistry/qualityandcapacityobligations"
+  ]
+}

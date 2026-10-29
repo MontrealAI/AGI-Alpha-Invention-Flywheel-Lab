@@ -1,0 +1,93 @@
+{
+  "schema": "battery-pilot-cost-subset/v1",
+  "source": "https://changing-transport.org/wp-content/uploads/2025_Second-Life-Applications.pdf",
+  "publication_page": "https://changing-transport.org/publications/exploring-second-life-application-of-ev-batteries-in-kenya/",
+  "publication_date": "2025-11-03",
+  "source_pdf_sha256": "c995f47a66224663f92dbf00aedb2cb8092e783525a4cbd0f39b7d6187a8e428",
+  "source_table": 9,
+  "source_pdf_page_one_based": 47,
+  "source_printed_page": 38,
+  "kind": "REPORTED_PILOT_COST_SUBSET_NOT_INVOICE",
+  "functional_unit": "Prototype2.4kWh residentialbattery; chemistry/sourceidentityconflict unresolved",
+  "currency": "KES",
+  "rows": {
+    "cells": 14000,
+    "BMS": 10500,
+    "casing": 16500,
+    "labelling": 400,
+    "cell_and_battery_testing": 14000,
+    "labour": 10500
+  },
+  "reported_total": 65900,
+  "reported_cost_per_kWh": 27460,
+  "explicit_exclusions": [
+    "transportation",
+    "installation"
+  ],
+  "other_unknowns": [
+    "all48modulesand96parallelpairsallocation",
+    "rejectedmodulesanddisposal",
+    "reworkidlecapacitystorage",
+    "firstlifeownershipandacquisitionopportunitycost",
+    "calibrationandequipmentallocationinside testing",
+    "safetycompliancecertificationpermitting",
+    "remaininglifewarrantyreplacement",
+    "supportmaintenanceinsurance",
+    "terminalresponsibilities",
+    "sellingpriceandbuyeracceptance",
+    "AGIinferencediscoveryconstructverificationintegration"
+  ],
+  "marginal_test_cost_elimination_upper_bound": 14000,
+  "no_testing_cost_floor": 51900,
+  "not_a_candidate_effect": "Zero testing cost is an impossible-to-exceed algebraic saving bound, not a proposed safe method or validated effect",
+  "source_conflicts": [
+    {
+      "location": "Table9 heading versus narrative2.4/5.2",
+      "issue": "HeadingcallsLFP; narrativeGreenCellfromNissanLeafLMO. Do nottransferchemistry-trainedmodel."
+    },
+    {
+      "location": "Table9 vsTable10",
+      "issue": "65,900 total versus69,500 price forGreenCell; maycostversuspricebutnotexplainedandper-kWhdoesnotmatchlatter. Keepdistinct."
+    },
+    {
+      "location": "ExecutiveSummary/5.5/Table9",
+      "issue": "USD570/USD535/USD211per-kWh not a stableexchange basis. WorkonlyinKES."
+    }
+  ],
+  "raw_population": {
+    "admitted_modules": 48,
+    "parallel_cell_pairs": 96,
+    "selected_modules": 14,
+    "public_selected_pair_rows": 28,
+    "all_population_outcomes_available": false,
+    "source_pdf_pages_one_based": [
+      21,
+      22
+    ]
+  },
+  "incumbent_choices": [
+    "wholepackreusewherequalified",
+    "ordinaryphysicalcapacity+IR+self-dischargecharacterization",
+    "qualifiedrapidEIS/MMERtriagewithconventionalfollowup",
+    "newbatterycompletedservice",
+    "declineandrecyclewithpricedterminalobligations"
+  ],
+  "economic_boundary_verdict": "UNKNOWN_NO_COMPLETE_MATCHED_SERVICE_COST_OR_RECEIPTS",
+  "lifetime_scenario": {
+    "used_cycles_report_range": [
+      1400,
+      2000
+    ],
+    "new_cycles_report_range": [
+      3500,
+      7000
+    ],
+    "new_table10_battery": "FELICITY 5kWh",
+    "new_table10_price_KES": 187000,
+    "new_table10_kWh": 5,
+    "priced_used_kWh": 2.4,
+    "other_source_nominal_voltage_V": 51.2,
+    "other_source_nominal_Ah": 52,
+    "scope": "Quotedrangesnotmatchedfieldlifetimes;derivednominalcapacitynotverifiedusablecapacity;noLCOSorprofitinference"
+  }
+}

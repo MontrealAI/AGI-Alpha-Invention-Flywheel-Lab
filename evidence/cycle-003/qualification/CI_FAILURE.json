@@ -1,0 +1,15 @@
+{
+  "run_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/40942501072",
+  "job_id": 123689241999,
+  "commit": "c2de0a1ed51a83a27e9d5498314544680331b08d",
+  "conclusion": "failure",
+  "finding": "Existing interruption probe again omitted INTERRUPTED marker. Memory/file/FD limits, partial preservation and restart refusal passed. Not repaired or hidden by any passing repeat.",
+  "selected_log_lines": [
+    "2026-10-29T19:42:43.1498897Z Ran 13 tests in 0.005s",
+    "2026-10-29T19:42:43.3205241Z Ran 11 tests in 0.009s",
+    "2026-10-29T19:42:43.8882534Z {\"runner_sha256\": \"1e812332d6b8ed91d38970ae07fffde0cca0047730a1a8e3d5c9665f7de254e3\", \"returncode\": 1, \"identity_mismatch_reported\": true, \"import_side_effect_before_refusal\": false, \"scope\": \"Temporary trusted verifier copy; harmless marker; original source untouched\", \"passed\": true}",
+    "2026-10-29T19:42:44.1862807Z {\"passed\": true, \"checks\": 2}",
+    "2026-10-29T19:42:44.3783811Z {\"resource_returncode\": 0, \"memory_limit_enforced\": true, \"file_limit_enforced\": true, \"fd_limit_enforced\": true, \"interrupt_record\": false, \"partial_preserved\": true, \"restart_refused\": true}",
+    "2026-10-29T19:42:44.3862913Z ##[error]Process completed with exit code 1."
+  ]
+}
