@@ -57,6 +57,55 @@ class ArchiveTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "HISTORICAL_SOURCE_IDENTITY_MISMATCH"):
                 materialize_cycle004(root, root / "out")
 
+    def test_ordinary_unzip_retains_verified_metadata_and_can_repackage(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "source"
+            source.mkdir()
+            (source / "one.txt").write_bytes(b"unchanged source")
+            first = build(source, root / "first.zip")
+            with zipfile.ZipFile(root / "first.zip") as archive:
+                archive.extractall(root / "ordinary")
+            unpacked = root / "ordinary" / PREFIX.rstrip("/")
+            metadata = (unpacked / "ARCHIVE_MANIFEST.json").read_bytes()
+            repacked = build(unpacked, root / "repacked.zip")
+            self.assertEqual(repacked["manifest"], first["manifest"])
+            self.assertNotIn("ARCHIVE_MANIFEST.json", repacked["manifest"]["files"])
+            self.assertEqual((unpacked / "ARCHIVE_MANIFEST.json").read_bytes(), metadata)
+            extract(root / "repacked.zip", root / "validated")
+            self.assertEqual((root / "validated/one.txt").read_bytes(), b"unchanged source")
+            self.assertFalse((root / "validated/ARCHIVE_MANIFEST.json").exists())
+
+    def test_ordinary_metadata_does_not_authorize_changed_payloads(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "source"
+            source.mkdir()
+            leaf = source / "one.txt"
+            leaf.write_bytes(b"unchanged")
+            built = build(source, root / "first.zip")
+            metadata = source / "ARCHIVE_MANIFEST.json"
+            metadata.write_text(json.dumps(built["manifest"]))
+            cases = [
+                ("content", lambda: leaf.write_bytes(b"changed"), "ARCHIVE_CONTENT_IDENTITY_MISMATCH"),
+                ("missing", lambda: leaf.unlink(), "ARCHIVE_MANIFEST_SET_MISMATCH"),
+                ("extra", lambda: (source / "extra.txt").write_text("extra"), "ARCHIVE_MANIFEST_SET_MISMATCH"),
+                ("json", lambda: metadata.write_text("{invalid"), "ARCHIVE_MANIFEST_INVALID_JSON"),
+                ("duplicate", lambda: metadata.write_text('{"schema":"x","schema":"y","files":{}}'), "ARCHIVE_MANIFEST_DUPLICATE_KEY"),
+                ("schema", lambda: metadata.write_text('{"schema":"unsupported","files":{}}'), "ARCHIVE_MANIFEST_SET_MISMATCH")]
+            for name, mutate, expected in cases:
+                with self.subTest(name=name):
+                    leaf.write_bytes(b"unchanged")
+                    metadata.write_text(json.dumps(built["manifest"]))
+                    extra = source / "extra.txt"
+                    if extra.exists():
+                        extra.unlink()
+                    mutate()
+                    destination = root / (name + ".zip")
+                    with self.assertRaisesRegex(ValueError, expected):
+                        build(source, destination)
+                    self.assertFalse(destination.exists())
+
     def test_corruption_and_path_escape_refuse_before_extract(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
