@@ -55,17 +55,23 @@ def run(output):
         call('resource-audit',[HERE/'resource_audit.py','--candidate',original,'--numeric',HERE/'artifacts/controlled_s15_numeric.json','--output',out/'RESOURCE_AUDIT.json'])
         call('ideal-runtime',[HERE/'runtime.py','--candidate',original,'--sha256',sha(original),'--output',out/'runtime'])
         call('independent-process',[HERE/'verification/finish_confirmation.py','--lab-root',ROOT,'--output',out/'independent-process'])
+        v2freeze=json.loads((ROOT/'campaign/cycle-004/RUNTIME_V2_FREEZE.json').read_text())
+        call('runtime-v2-regression',[HERE/'verification/runtime_v2/verify_runtime_v2.py','--lab-root',ROOT,'--output',out/'runtime-v2','--runtime-sha256',v2freeze['source_sha256']])
         call('fresh-reuse',[HERE/'transfer.py','--output',out/'fresh-reuse'])
         call('commercial-boundary',[HERE/'commercial.py','--candidate',original,'--certificate',out/'CERTIFICATE.json','--output',out/'commercial'])
         process=json.loads((out/'independent-process/SUMMARY.json').read_text())
         reuse=json.loads((out/'fresh-reuse/TRANSFER_REPORT.json').read_text())
         commercial=json.loads((out/'commercial/COMMERCIAL.json').read_text())
+        v2=json.loads((out/'runtime-v2/SUMMARY.json').read_text())
+        if v2['status']!='PASS' or v2['process_cases']!=438: raise ValueError('RUNTIME_V2_REGRESSION_FAILED')
         if not json.loads((out/'encoder/ENCODER_REPORT.json').read_text())['passed'] or not json.loads((out/'runtime/REPORT.json').read_text())['all_development_checks_passed']: raise ValueError('BUILDER_IMPLEMENTATION_CHECK_FAILED')
         if process['status']!='PASS' or not reuse['all_certified'] or not reuse['ordinary_reuse_parity']: raise ValueError('REPRODUCED_OUTCOME_FAILED')
-        for row in json.loads((ROOT/'evidence/cycle-004/confirmation/LOSSLESS_ARCHIVES.json').read_text()):
-            raw=gzip.decompress((ROOT/'evidence/cycle-004/confirmation'/row['gzip_path']).read_bytes())
-            if hashlib.sha256(raw).hexdigest()!=row['raw_sha256']: raise ValueError('PRESERVED_EVIDENCE_ARCHIVE_CORRUPT')
-        report={'status':'PASS_SCOPED_IDEAL_COMPONENT_REPRODUCTION','candidate_sha256':sha(original),'mathematical_reconstruction_equal':True,'process_cases':process['process_cases'],'ordinary_reuse_parity':True,'commercial_success':False,'real_revenue_USD':0,'simulated_receipts_microUSD':commercial['simulated_receipts_microUSD'],'earned_funded_successor':False,'wall_seconds':time.monotonic()-start,'steps':steps,'scope':'Exact mathematics and ideal process only. No physical fault-tolerant system, discovery-policy advantage, new statistical confirmation, paid delivery or profit.'}
+        for folder in ('confirmation','runtime-v2'):
+            base=ROOT/'evidence/cycle-004'/folder
+            for row in json.loads((base/'LOSSLESS_ARCHIVES.json').read_text()):
+                raw=gzip.decompress((base/row['gzip_path']).read_bytes())
+                if hashlib.sha256(raw).hexdigest()!=row['raw_sha256']: raise ValueError('PRESERVED_EVIDENCE_ARCHIVE_CORRUPT')
+        report={'status':'PASS_SCOPED_IDEAL_COMPONENT_REPRODUCTION','candidate_sha256':sha(original),'mathematical_reconstruction_equal':True,'process_cases':process['process_cases'],'runtime_delivery':'runtime_v2.Instrument','runtime_v2_regression_cases':v2['process_cases'],'historical_v1_contract_defect_preserved':True,'ordinary_reuse_parity':True,'commercial_success':False,'real_revenue_USD':0,'simulated_receipts_microUSD':commercial['simulated_receipts_microUSD'],'earned_funded_successor':False,'wall_seconds':time.monotonic()-start,'steps':steps,'scope':'Exact mathematics and restricted orthogonal-sector ideal recovery only. No physical fault-tolerant system, discovery-policy advantage, new statistical confirmation, paid delivery or profit.'}
         write(out/'REPORT.json',report);write(out/'COMPLETE.json',{'report_sha256':sha(out/'REPORT.json')})
         print(json.dumps({k:report[k] for k in ['status','mathematical_reconstruction_equal','process_cases','commercial_success','wall_seconds']}))
         return report
