@@ -1,0 +1,148 @@
+[
+  {
+    "args": [
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "returncode": 0,
+    "wall_seconds": 6.8100603640050394
+  },
+  {
+    "args": [
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "verification",
+      "-v"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.3936506370009738
+  },
+  {
+    "args": [
+      "-m",
+      "flywheel.legacy",
+      "--root",
+      ".",
+      "--output",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/legacy"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.2837765840013162
+  },
+  {
+    "args": [
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/legacy/reproduce.py",
+      "--output",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/grid"
+    ],
+    "returncode": 0,
+    "wall_seconds": 1.0634172589998343
+  },
+  {
+    "args": [
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/legacy/verification/probe_runner_identity.py",
+      "--root",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/legacy",
+      "--output",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/identity"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.22239255299791694
+  },
+  {
+    "args": [
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/legacy/verification/probe_added_source.py",
+      "--root",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/legacy",
+      "--output",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/added"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.7171219640003983
+  },
+  {
+    "args": [
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/legacy/verification/probe_worker_bounds.py",
+      "--root",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/legacy",
+      "--output",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/bounds"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.6888494279992301
+  },
+  {
+    "args": [
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/legacy/verification/check_edition.py"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.11089279999578139
+  },
+  {
+    "args": [
+      "run_cycle.py",
+      "--output",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/connected"
+    ],
+    "returncode": 0,
+    "wall_seconds": 9.282126733000041
+  },
+  {
+    "args": [
+      "verification/cycle004_probe_runner.py",
+      "--runner",
+      "run_cycle.py",
+      "--output",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/initialization"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.1566236740036402
+  },
+  {
+    "args": [
+      "verification/cycle004_completion.py",
+      "--root",
+      ".",
+      "--output",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/completion"
+    ],
+    "returncode": 0,
+    "wall_seconds": 0.33426051199785434
+  },
+  {
+    "args": [
+      "verification/cycle004_active_interrupt.py",
+      "--root",
+      ".",
+      "--output",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/active"
+    ],
+    "returncode": 0,
+    "wall_seconds": 3.706838948004588
+  },
+  {
+    "args": [
+      "verification/cycle004_fresh.py",
+      "--output",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/exposed-regression"
+    ],
+    "returncode": 0,
+    "wall_seconds": 24.005722566995246
+  },
+  {
+    "args": [
+      "-m",
+      "flywheel.metabolic_probe",
+      "--output",
+      "/workspace/scratch/396195bee4b8/cycle4-integrated-mechanism-replay/metabolic"
+    ],
+    "returncode": 0,
+    "wall_seconds": 1.4129456169976038
+  }
+]

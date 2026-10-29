@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "candidate_sha256": "df75e8119f67a54fa8cc6ffe0f2a51a7b80caf0ca71bb8480d875a1c69351556",
+  "process_cases": 242,
+  "normalized_probes_per_process_case": 19,
+  "before_and_after_gate": true,
+  "process_failures": [],
+  "worst_process_matrix_error": 2.7755575615628914e-16,
+  "worst_entanglement_infidelity": 4.440892098500626e-16,
+  "native_encoder_probes": 4,
+  "worst_encoder_L2_error": 2.378898249595772e-14,
+  "minimum_outside_contract_two_X_fidelity": 0.0,
+  "negative_controls_all_rejected": true,
+  "cpu_seconds": 57.343394447,
+  "wall_seconds": 57.393801639998856,
+  "peak_rss_kib": 39728,
+  "scope": "Procedurally independent probes on shared host. Exact algebra and finite ideal implementation checks only. Not physical noisy encoding/recovery, circuit threshold, global novelty, overall cost or commercial validation.",
+  "helper_initialization": "Two helper wires initially carry arbitrary coherent logical input; they are zero after erase. They are not initially clean ancillas.",
+  "frozen_builder_source_sha256": {
+    "inventions/phase_codes/construct.py": "875aed9af99824358a55b9e1c4fb492deae888ed5f254bd42b8577c9d769d431",
+    "inventions/phase_codes/encoder.py": "2ca362f1ff9193f9b481cbd98683ad1deb58b7f58f127108b13dc8dcb8648101",
+    "inventions/phase_codes/exactify.py": "a4174b4abdb9e8dbbb9603a130f8db6ae2164d367c5b246c5f02e9be6cf00f83",
+    "inventions/phase_codes/runtime.py": "740de7bb097f3ca3e23c6ee2142ae2559bd8622a0aa3e76c20e5fa28f7bc523e",
+    "inventions/phase_codes/artifacts/controlled_s15.json": "df75e8119f67a54fa8cc6ffe0f2a51a7b80caf0ca71bb8480d875a1c69351556",
+    "inventions/phase_codes/artifacts/controlled_s15_numeric.json": "114929d1da4e2ffe4d1b9a2c2a2accd29867d45d971c1629af4ca131c9d967ad"
+  },
+  "frozen_verifier_source_sha256": {
+    "SPEC.json": "775db9965c111fd5a0cb67764df6422586249f3e13c93608041a6fe064269948",
+    "certify.py": "83391efeb99982c276e8662ead9d706be0c7ce02f8f0281c4e072d012ffe5b4d",
+    "test_certify.py": "0616a2ee32028c68c1bb727d3cde4c719443aeee4f3dd29c66391320107add7b",
+    "PROCESS_SPEC.json": "3eed6eb26a19528956dc41e98fc8a02f6e005180846e10bfc6f74d435233c03b",
+    "process_core.py": "321918e8bf095c84a90be83601295926b4d11754831b4731b5d3fdc032060f46",
+    "test_process_core.py": "90d9318c402a56bd368e8ac8c44264d31e95251de8d667b98c677b390c295d33",
+    "baseline_audit.py": "92b769df9b8b9c51343ca3f4cba3e3dd6d1efa8844d6a7dc61a332ab88c3c134",
+    "KNOWN_BASELINE_AUDIT.json": "65c53030b6a3dfded2b0a8daf78c16503ae5e70a4293da23221cf0690c660c66",
+    "BASELINE_AND_SCOPE.md": "b6c506a04c5573d40054f9cec4db633f558f0578843da10a47834c7f510a0153",
+    "SOURCES.md": "a8b96a344015153685943ea1cd2bb88fef06fd54ee518f61fde4be664189a50a",
+    "PREEXPOSURE_TEST_RECEIPT.json": "201868d21934de7ac9ddab5ee8697aed10fdb3f91d911184f62bfffa7f3f482d"
+  },
+  "confirmation_driver_sha256": "3d84f240a3b5ce230810262b0318418d9404a287ca05b8f26d789280c10be76b",
+  "outputs": {
+    "ENCODER_CASES.json": "67777662834853e429a36c33166379034db135ff1789df3fa284954d884c50b5",
+    "NEGATIVE_CONTROLS.json": "4795fac586133c32c8ee7198ab145d11903490723b14d456d5176f8f2f2364b3",
+    "PROCESS_CASES.json": "c2c53ca8dc6cd671b4429c46033f778fdf7d48f7f9efb7a4d4bf5766007349f3"
+  }
+}

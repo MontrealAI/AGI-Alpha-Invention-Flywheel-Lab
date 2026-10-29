@@ -1,0 +1,214 @@
+{
+  "status": "CONFIRMED_WITH_SCOPE_LIMIT",
+  "recorded_utc": "2026-10-29T21:06:20.105176+00:00",
+  "script_sha256": "b3518ab45e4a5a666844eec80c6a0ccdc58f3b83f46d33f49bd47feddb6ab8b1",
+  "mathematical_definition": "H columns1..n; integer-word bit(j-1) corresponds to columnj; no builder applicability imports",
+  "adjudication": "n16 has a weight1 dual row and n17 a weight2 dual row, each identically+1 on every scaffold word. Any normalized probability measure on any subset therefore has this Z/ZZ moment+1, contradicting the selected zero goal. n15 has no weight1/2 dual vector, so removes this obstruction while retaining the same zero goal. Its actual exact candidate independently passed all goal checks.",
+  "scope_limit": "This obstruction applies to this scaffold plus the stronger zero-moment objective. General Knill-Laflamme only requires common moments, which may equal+1; n16/n17 codes and other scaffolds are not proved impossible. Removing an obstruction is not by itself construction success or a generic discovery-policy/business claim.",
+  "exposure": "Post-construction engineering adjudication; candidate and outcomes already exposed. No fresh statistical confirmation claim and no candidate/source/spec/threshold edits.",
+  "scaffold_results": [
+    {
+      "n": 16,
+      "all_binary_words_tested": 65536,
+      "scaffold_words": 2048,
+      "parity_rank": 5,
+      "dual_vectors_exhaustively_checked": 31,
+      "dual_weight_histogram": {
+        "1": 1,
+        "8": 15,
+        "9": 15
+      },
+      "one_or_two_coordinate_masks_checked": 136,
+      "zero_moment_obstruction": true,
+      "low_weight_dual_witnesses": [
+        {
+          "row_combination": 16,
+          "mask_integer": 32768,
+          "mask_bitstring": "1000000000000000",
+          "weight": 1,
+          "column_positions_LSB_numbered": [
+            16
+          ],
+          "plus_eigenstates": 2048,
+          "minus_eigenstates": 0
+        }
+      ],
+      "all_nonconstant_weight1_or2_masks_balanced": true
+    },
+    {
+      "n": 17,
+      "all_binary_words_tested": 131072,
+      "scaffold_words": 4096,
+      "parity_rank": 5,
+      "dual_vectors_exhaustively_checked": 31,
+      "dual_weight_histogram": {
+        "2": 1,
+        "8": 7,
+        "9": 16,
+        "10": 7
+      },
+      "one_or_two_coordinate_masks_checked": 153,
+      "zero_moment_obstruction": true,
+      "low_weight_dual_witnesses": [
+        {
+          "row_combination": 16,
+          "mask_integer": 98304,
+          "mask_bitstring": "11000000000000000",
+          "weight": 2,
+          "column_positions_LSB_numbered": [
+            16,
+            17
+          ],
+          "plus_eigenstates": 4096,
+          "minus_eigenstates": 0
+        }
+      ],
+      "all_nonconstant_weight1_or2_masks_balanced": true
+    },
+    {
+      "n": 15,
+      "all_binary_words_tested": 32768,
+      "scaffold_words": 2048,
+      "parity_rank": 4,
+      "dual_vectors_exhaustively_checked": 15,
+      "dual_weight_histogram": {
+        "8": 15
+      },
+      "one_or_two_coordinate_masks_checked": 120,
+      "zero_moment_obstruction": false,
+      "low_weight_dual_witnesses": [],
+      "all_nonconstant_weight1_or2_masks_balanced": true
+    }
+  ],
+  "development_records": {
+    "16": {
+      "path": "evidence/cycle-004/development/run-002/NUMERIC.json",
+      "sha256": "b5ae76de2d1a37a390d43c4ad92a3362532389b410003810e0d73598c9e43d02",
+      "all_numeric_feasible": false,
+      "registered_zero_goal_contains_witness_masks": [
+        32768
+      ]
+    },
+    "17": {
+      "path": "evidence/cycle-004/development/run-003/NUMERIC.json",
+      "sha256": "ae52aec1072812cbb3d28b33cfc9ce30736ba95d8991987d2330eefd08878228",
+      "all_numeric_feasible": false,
+      "registered_zero_goal_contains_witness_masks": [
+        98304
+      ]
+    },
+    "15": {
+      "path": "evidence/cycle-004/development/run-004/NUMERIC.json",
+      "sha256": "114929d1da4e2ffe4d1b9a2c2a2accd29867d45d971c1629af4ca131c9d967ad",
+      "all_numeric_feasible": true,
+      "registered_zero_goal_contains_witness_masks": []
+    }
+  },
+  "native_encoder_recount": {
+    "data_qubits": 15,
+    "logical_input_helpers": 2,
+    "helpers_initially_clean": false,
+    "helpers_initial_role": "arbitrary coherent two-qubit logical input",
+    "final_helpers": "zero by independently tested color-mask erasure",
+    "peak_wires": 17,
+    "parity_rank": 4,
+    "free_coordinates": 11,
+    "native_Ry_count": 8188,
+    "native_CNOT_preparation_count": 8188,
+    "native_CNOT_parity_count": 28,
+    "native_CNOT_helper_erase_count": 13,
+    "native_gate_total": 16417,
+    "per_depth_Ry_and_preparation_CNOT_counts": [
+      4,
+      8,
+      16,
+      32,
+      64,
+      128,
+      256,
+      512,
+      1024,
+      2048,
+      4096
+    ],
+    "parity_computation": [
+      {
+        "pivot_bit_LSB": 0,
+        "free_controls_LSB": [
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ]
+      },
+      {
+        "pivot_bit_LSB": 1,
+        "free_controls_LSB": [
+          2,
+          5,
+          6,
+          9,
+          10,
+          13,
+          14
+        ]
+      },
+      {
+        "pivot_bit_LSB": 3,
+        "free_controls_LSB": [
+          4,
+          5,
+          6,
+          11,
+          12,
+          13,
+          14
+        ]
+      },
+      {
+        "pivot_bit_LSB": 7,
+        "free_controls_LSB": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14
+        ]
+      }
+    ],
+    "scope": "Recounts the frozen encoder algorithm; neither a lower bound nor an optimal encoder, noisy fault-tolerant resource or full monetary cost."
+  },
+  "candidate_source_identities": {
+    "inventions/phase_codes/construct.py": {
+      "expected": "875aed9af99824358a55b9e1c4fb492deae888ed5f254bd42b8577c9d769d431",
+      "actual": "875aed9af99824358a55b9e1c4fb492deae888ed5f254bd42b8577c9d769d431"
+    },
+    "inventions/phase_codes/encoder.py": {
+      "expected": "2ca362f1ff9193f9b481cbd98683ad1deb58b7f58f127108b13dc8dcb8648101",
+      "actual": "2ca362f1ff9193f9b481cbd98683ad1deb58b7f58f127108b13dc8dcb8648101"
+    },
+    "inventions/phase_codes/exactify.py": {
+      "expected": "a4174b4abdb9e8dbbb9603a130f8db6ae2164d367c5b246c5f02e9be6cf00f83",
+      "actual": "a4174b4abdb9e8dbbb9603a130f8db6ae2164d367c5b246c5f02e9be6cf00f83"
+    },
+    "inventions/phase_codes/runtime.py": {
+      "expected": "740de7bb097f3ca3e23c6ee2142ae2559bd8622a0aa3e76c20e5fa28f7bc523e",
+      "actual": "740de7bb097f3ca3e23c6ee2142ae2559bd8622a0aa3e76c20e5fa28f7bc523e"
+    },
+    "inventions/phase_codes/artifacts/controlled_s15.json": {
+      "expected": "df75e8119f67a54fa8cc6ffe0f2a51a7b80caf0ca71bb8480d875a1c69351556",
+      "actual": "df75e8119f67a54fa8cc6ffe0f2a51a7b80caf0ca71bb8480d875a1c69351556"
+    },
+    "inventions/phase_codes/artifacts/controlled_s15_numeric.json": {
+      "expected": "114929d1da4e2ffe4d1b9a2c2a2accd29867d45d971c1629af4ca131c9d967ad",
+      "actual": "114929d1da4e2ffe4d1b9a2c2a2accd29867d45d971c1629af4ca131c9d967ad"
+    }
+  },
+  "cpu_seconds": 0.913287889,
+  "wall_seconds": 0.9137556820060126
+}

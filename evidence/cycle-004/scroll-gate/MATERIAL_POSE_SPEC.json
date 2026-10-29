@@ -1,0 +1,11 @@
+{
+ "purpose":"Independent CT-only repeat of released pose, not independent certification of original infrared-to-fine-CT placement",
+ "fine_CT_layer":"source_front_ct_00.png",
+ "coarse_CT":"reserved CT-only development and confirmation halo arrays",
+ "pose":"Pinned ir_pose.json; no fit to ink, labels, models or IR photo",
+ "resampling":"Independent scipy bilinear sampling with 4x4 subpixel area averaging through inverse released scale/rotation/translation; no OpenCV dependency",
+ "metrics":["raw material normalized cross-correlation","high-pass material normalized cross-correlation after Gaussian sigma3 coarse pixels"],
+ "search":"all 31 source CT planes; XY translations -32..32 coarse pixels inclusive, on the two fixed 256px cores with 64px halo",
+ "reported":"expected plane26/zero-shift, best shift of plane26, and best plane/shift across all31; every search result retained",
+ "claim_limit":"No binary gold-registration PASS from sourceflag or NCC alone; registration-dependent outcomes remain conditional until all transforms and uncertainty are resolved"
+}
