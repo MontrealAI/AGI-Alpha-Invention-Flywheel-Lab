@@ -1,0 +1,9 @@
+{
+  "origin": "developer deliberately seeded legacy singular-denominator suppression, not recovered autonomous failure",
+  "legacy_errors": [
+    "outage 13 status CONNECTED != ISLANDING_UNKNOWN"
+  ],
+  "repair_errors": [],
+  "constraint": "Disconnected outage cannot be labeled CONNECTED or count as accepted service",
+  "repair": "Explicit graph-connectivity guard, otherwise full DC LODF; unchanged independent flow specification"
+}

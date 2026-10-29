@@ -1,0 +1,9 @@
+{
+  "runner_sha256": "83c40e579524f677a8b4d3f2eba898e3b55809b8f2c8359c4d29202e5dbdb45b",
+  "returncode": 1,
+  "identity_mismatch_reported": true,
+  "import_side_effect_before_refusal": true,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/workspace/scratch/396195bee4b8/verifier-work/runner-order-probe/reproduce.py\", line 138, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/scratch/396195bee4b8/verifier-work/runner-order-probe/reproduce.py\", line 115, in main\n    worker(output)\n  File \"/workspace/scratch/396195bee4b8/verifier-work/runner-order-probe/reproduce.py\", line 40, in worker\n    raise ValueError(\"SOURCE_IDENTITY_MISMATCH \" + path.name)\nValueError: SOURCE_IDENTITY_MISMATCH __init__.py\n",
+  "purpose": "Harmless marker in temporary trusted verifier probe; original builder source not modified."
+}

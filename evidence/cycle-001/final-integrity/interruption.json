@@ -1,0 +1,11 @@
+{
+  "interrupt_returncode": -2,
+  "interruption_record_exists": true,
+  "complete_record_exists": false,
+  "restart_returncode": 1,
+  "partial_evidence_preserved": true,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/workspace/scratch/396195bee4b8/lab/reproduce.py\", line 151, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/scratch/396195bee4b8/lab/reproduce.py\", line 137, in main\n    result = subprocess.run([sys.executable, \"-I\", str(Path(__file__).resolve()), \"--worker\", \"--output\", str(output)],\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 1885, in _execute_child\n    self.pid = _fork_exec(\n               ^^^^^^^^^^^\nKeyboardInterrupt\n",
+  "restart_stderr": "Traceback (most recent call last):\n  File \"/workspace/scratch/396195bee4b8/lab/reproduce.py\", line 151, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/scratch/396195bee4b8/lab/reproduce.py\", line 130, in main\n    output.mkdir(parents=True, exist_ok=False)\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 1311, in mkdir\n    os.mkdir(self, mode)\nFileExistsError: [Errno 17] File exists: '/workspace/scratch/396195bee4b8/bounds-final-02/interrupted-run'\n",
+  "scope": "Actual SIGINT of reproduction parent after STARTED marker; same-directory restart must refuse without mutation. This does not test host power loss."
+}

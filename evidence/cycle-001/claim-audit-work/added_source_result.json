@@ -1,0 +1,12 @@
+{
+  "schema": "lab/claim-audit-added-source-probe/v1",
+  "runner_sha256": "ea94cacf133294e4d97c1d23ebf64a5b6f6f08b75b87b72a816bc0503a927b1e",
+  "returncode": 1,
+  "added_source": "campaign/__init__.py",
+  "existing_frozen_leaves_modified": false,
+  "marker_executed": true,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/workspace/scratch/396195bee4b8/research-work/claim-audit-work/added-initializer/reproduce.py\", line 145, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/scratch/396195bee4b8/research-work/claim-audit-work/added-initializer/reproduce.py\", line 134, in main\n    raise RuntimeError(\"Worker failed; preserve WORKER.log and partial evidence\")\nRuntimeError: Worker failed; preserve WORKER.log and partial evidence\n",
+  "worker_log": "Traceback (most recent call last):\n  File \"/workspace/scratch/396195bee4b8/research-work/claim-audit-work/added-initializer/reproduce.py\", line 145, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/scratch/396195bee4b8/research-work/claim-audit-work/added-initializer/reproduce.py\", line 122, in main\n    worker(output)\n  File \"/workspace/scratch/396195bee4b8/research-work/claim-audit-work/added-initializer/reproduce.py\", line 45, in worker\n    from campaign.successor import construct\n  File \"/workspace/scratch/396195bee4b8/research-work/claim-audit-work/added-initializer/campaign/__init__.py\", line 3, in <module>\n    raise RuntimeError('CLAIM_AUDIT_ADDED_INITIALIZER')\nRuntimeError: CLAIM_AUDIT_ADDED_INITIALIZER\n",
+  "scope": "Harmless marker in temporary copy; candidate and builder source unchanged"
+}

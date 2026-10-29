@@ -1,0 +1,10 @@
+{
+  "runner_sha256": "1e812332d6b8ed91d38970ae07fffde0cca0047730a1a8e3d5c9665f7de254e3",
+  "returncode": 1,
+  "identity_mismatch_reported": true,
+  "import_side_effect_before_refusal": false,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/workspace/scratch/396195bee4b8/identity-final-02/reproduce.py\", line 151, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/scratch/396195bee4b8/identity-final-02/reproduce.py\", line 128, in main\n    worker(output)\n  File \"/workspace/scratch/396195bee4b8/identity-final-02/reproduce.py\", line 44, in worker\n    raise ValueError(\"SOURCE_IDENTITY_MISMATCH \" + path)\nValueError: SOURCE_IDENTITY_MISMATCH grid_screen/__init__.py\n",
+  "scope": "Temporary trusted verifier copy; harmless marker; original source untouched",
+  "passed": true
+}
