@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/scratch/36115aecd71a/connected014-clean-committed002/extracted-source/connected_enterprise/__main__.py", line 2, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/workspace/scratch/36115aecd71a/connected014-clean-committed002/extracted-source/connected_enterprise/runner.py", line 208, in main
+    if args.command=='package':print(json.dumps(package(output,args.archive),sort_keys=True));return 0
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/36115aecd71a/connected014-clean-committed002/extracted-source/connected_enterprise/runner.py", line 181, in package
+    checked=audit_output(output)
+            ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/36115aecd71a/connected014-clean-committed002/extracted-source/connected_enterprise/runner.py", line 167, in audit_output
+    if any(result[k]!=task[k] for k in ['seed','case','arm']) or result['config']!=task_config(f,task) or result['source']!=f['source'] or not result['complete']:raise ValueError('WORLD_CONFIGURATION_OR_TASK_CHANGED')
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/36115aecd71a/connected014-clean-committed002/extracted-source/connected_enterprise/runner.py", line 167, in <genexpr>
+    if any(result[k]!=task[k] for k in ['seed','case','arm']) or result['config']!=task_config(f,task) or result['source']!=f['source'] or not result['complete']:raise ValueError('WORLD_CONFIGURATION_OR_TASK_CHANGED')
+           ~~~~~~^^^
+KeyError: 'case'

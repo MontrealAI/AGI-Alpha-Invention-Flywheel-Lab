@@ -1,0 +1,16 @@
+{
+  "schema": "agi-alpha/completion015-campaign-cleanup-timeout/v1",
+  "observed_utc": "2026-10-30T21:40:57.879711+00:00",
+  "source_commit": "3d53f63283723c1a28a224277493aadffd5af5b9",
+  "workflow_run_id": 41129899168,
+  "job_id": 124317849268,
+  "conclusion": "cancelled",
+  "source_matched_tests_and_actual_replay": "success",
+  "evidence_upload": "success",
+  "artifact_id": 13012714098,
+  "artifact_bytes": 30873739,
+  "artifact_sha256": "b4fbca97cbbface61a5aaffaba0bbb24e48a942070937cd5e8d1c165b42129c3",
+  "primary_log_sha256": "26d9b533a69072d962a5a065f878dde35f3ded927d4e26eb006321d0acef8632",
+  "failure": "20minute job limit reached during setup-python post-job cleanup, after all test/replay commands and full evidence upload succeeded; cancellation remains a nonpassing workflow.",
+  "repair": "Raise only this complete job wall bound20to30minutes within current prospective45minute hosted-job maximum. No test/replay/audit/dependency/publisher gate removed or relaxed. Fresh exact composed-head terminalsuccess remains required."
+}

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/36115aecd71a/connected014-confirmation-002/source/scripts/qualify_connected014.py", line 133, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/scratch/36115aecd71a/connected014-confirmation-002/source/scripts/qualify_connected014.py", line 131, in main
+    qualify(args.output,args.smoke,args.timeout_seconds)
+  File "/workspace/scratch/36115aecd71a/connected014-confirmation-002/source/scripts/qualify_connected014.py", line 110, in qualify
+    run_command(base+['package','--output',str(operating),'--archive',str(public)],source,output/'04-package',deadline,commands)
+  File "/workspace/scratch/36115aecd71a/connected014-confirmation-002/source/scripts/qualify_connected014.py", line 66, in run_command
+    if returncode:raise RuntimeError('CLEAN_COMMAND_FAILED:'+str(command)+':see '+str(log.with_suffix('.stderr')))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: CLEAN_COMMAND_FAILED:['/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python', '-m', 'connected_enterprise', 'package', '--output', '/workspace/scratch/36115aecd71a/connected014-clean-committed002/operation', '--archive', '/workspace/scratch/36115aecd71a/connected014-clean-committed002/connected014-keyfree.zip']:see /workspace/scratch/36115aecd71a/connected014-clean-committed002/04-package.stderr

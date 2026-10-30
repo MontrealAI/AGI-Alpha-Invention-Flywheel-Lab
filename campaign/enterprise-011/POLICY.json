@@ -1,0 +1,247 @@
+{
+  "schema": "agi-alpha/enterprise011-policy/v1",
+  "scope": "SIMULATED",
+  "currency": "simulated-microUSD",
+  "nominal_price_vintage": "2026-10-30",
+  "exchange_rate": {
+    "currency": "USD",
+    "rate": 1,
+    "basis": "single-currency experiment; no FX transaction"
+  },
+  "rounding": "nearest microUSD for authored USD envelopes; integer ledger",
+  "cycles": 24,
+  "capacity_per_cycle": 4,
+  "service_capacity_per_cycle": 2,
+  "customer_pool": 8,
+  "opening": 5000000000,
+  "working": 100000000,
+  "setup_cost": 350000000,
+  "cost_multiplier": 1.0,
+  "payment_bps": 290,
+  "payment_fixed": 300000,
+  "profit_tax_bps": 2000,
+  "sales_tax_bps": 0,
+  "costs_usd": {
+    "research_development_prequalification": 350,
+    "inference_tools_production": 1,
+    "independent_verification_corrections": 0.5,
+    "compute_storage_infrastructure": 0.25,
+    "delivery_support_obligation": 0.5,
+    "maintenance_failure_retry": 0.75,
+    "quote_acquisition": 0.5,
+    "autonomous_onboarding_once": 0.5,
+    "external_onboarding_fee": 0,
+    "bundle_coordination_once": 3
+  },
+  "cost_ranges_usd": {
+    "setup": [
+      200,
+      1500
+    ],
+    "per_attempt": [
+      2,
+      8
+    ],
+    "autonomous_onboarding_once": [
+      0.01,
+      5
+    ],
+    "quote_acquisition": [
+      0.5,
+      8
+    ]
+  },
+  "cost_evidence": "CONSERVATIVE_AUTHORED_ENVELOPES_NOT_MODEL_BILLS. Actual fixed deterministic service production and independent checking execute. No paid frontier-model inference is called. Setup includes all discovery, authored construction, rejected fixtures, initial prequalification and integration; per-attempt includes production/replay, verification, corrections, failed/unpaid work, storage, delivery, support, maintenance; acquisition charged on every exposed bid including losses. CPU runtime is not human task time. No human-review hour is inserted. Resource billing unavailable.",
+  "human_services": {
+    "reconciliation": {
+      "loaded_hourly_usd": 34.75,
+      "stages_hours": {
+        "research": 0.05,
+        "preparation_onboarding": 0.1,
+        "production": 0.2,
+        "verification": 0.1,
+        "correction": 0.05,
+        "ordering_support": 0.15
+      },
+      "tool_external_usd": 2
+    },
+    "kpi_variance": {
+      "loaded_hourly_usd": 60,
+      "stages_hours": {
+        "research": 0.05,
+        "preparation_onboarding": 0.1,
+        "production": 0.2,
+        "verification": 0.1,
+        "correction": 0.05,
+        "ordering_support": 0.15
+      },
+      "tool_external_usd": 2
+    },
+    "evidence_matrix": {
+      "loaded_hourly_usd": 55,
+      "stages_hours": {
+        "research": 0.05,
+        "preparation_onboarding": 0.1,
+        "production": 0.35,
+        "verification": 0.1,
+        "correction": 0.05,
+        "ordering_support": 0.15
+      },
+      "tool_external_usd": 2
+    }
+  },
+  "human_evidence": "Authored corresponding complete-service workload scenarios, not measured human times or observed selling prices. Loaded hourly values are bounded scenario proxies; ranges 0.5x\u20132x remain sensitivity inputs. No program runtime is converted into human effort. First-order complete work is0.65h for12-invoice reconciliation and10-metric variance,0.80h for8-requirement source matrix; preparation charged once/customer; repeats deduct0.10h onboarding. These small-fixture time hypotheses avoid applying multi-hour workloads to tiny delivered artifacts. Competent complete human delivery includes verification, correction, support and tools.",
+  "thresholds": {
+    "minimum_customers": 3,
+    "minimum_paid_jobs": 12,
+    "minimum_repeat_customers": 2,
+    "minimum_earned_funded_cycles": 2,
+    "minimum_region_success_fraction": 0.75
+  },
+  "qualification_regimes": [
+    "ordinary",
+    "differentiation"
+  ],
+  "regime_weights": {
+    "ordinary": 0.35,
+    "price_war": 0.3,
+    "differentiation": 0.2,
+    "correlated_shock": 0.15
+  },
+  "choice_models": [
+    "logit",
+    "utility"
+  ],
+  "competitor_models": [
+    "responsive",
+    "lagged"
+  ],
+  "arms": [
+    {
+      "id": "fixed_original",
+      "strategic_pricing": false,
+      "autonomous_onboarding": false
+    },
+    {
+      "id": "fixed_autonomous",
+      "strategic_pricing": false,
+      "autonomous_onboarding": true
+    },
+    {
+      "id": "strategic_original",
+      "strategic_pricing": true,
+      "autonomous_onboarding": false
+    },
+    {
+      "id": "strategic_autonomous",
+      "strategic_pricing": true,
+      "autonomous_onboarding": true
+    }
+  ],
+  "bundle_enabled": true,
+  "dynamic_allocation": true,
+  "bundle_discount": 0.05,
+  "regimes": {
+    "ordinary": {
+      "arrival_probability": 0.94,
+      "qualification_probability": 0.95,
+      "retention_probability": 0.94,
+      "reacquisition_probability": 0.25,
+      "collection_probability": 0.98,
+      "refund_probability": 0.02,
+      "supplier_multiplier": 1.0,
+      "supplier_outage_probability": 0.01,
+      "trust": 0.95,
+      "rival_trust": 0.95,
+      "urgency_value_hour": 0.5,
+      "our_hours": 2,
+      "rival_hours": 24,
+      "settlement_delay_days": 2,
+      "rival_cost_multiplier": 1.2,
+      "self_complete_cost_ratio": 0.85,
+      "temperature_ratio": 0.12,
+      "quote_cost_usd": 0.5,
+      "customer_friction_autonomous_usd": 0.5,
+      "customer_friction_original_usd": 2,
+      "demand_value_multiplier": 1.0
+    },
+    "price_war": {
+      "arrival_probability": 0.92,
+      "qualification_probability": 0.95,
+      "retention_probability": 0.85,
+      "reacquisition_probability": 0.25,
+      "collection_probability": 0.97,
+      "refund_probability": 0.03,
+      "supplier_multiplier": 1.3,
+      "supplier_outage_probability": 0.03,
+      "trust": 0.95,
+      "rival_trust": 0.97,
+      "urgency_value_hour": 0.05,
+      "our_hours": 2,
+      "rival_hours": 3,
+      "settlement_delay_days": 3,
+      "rival_cost_multiplier": 0.65,
+      "self_complete_cost_ratio": 0.45,
+      "temperature_ratio": 0.08,
+      "quote_cost_usd": 0.5,
+      "customer_friction_autonomous_usd": 0.5,
+      "customer_friction_original_usd": 2,
+      "demand_value_multiplier": 1.0
+    },
+    "differentiation": {
+      "arrival_probability": 0.96,
+      "qualification_probability": 0.97,
+      "retention_probability": 0.96,
+      "reacquisition_probability": 0.25,
+      "collection_probability": 0.99,
+      "refund_probability": 0.01,
+      "supplier_multiplier": 1.1,
+      "supplier_outage_probability": 0.01,
+      "trust": 0.97,
+      "rival_trust": 0.95,
+      "urgency_value_hour": 1.0,
+      "our_hours": 2,
+      "rival_hours": 24,
+      "settlement_delay_days": 2,
+      "rival_cost_multiplier": 1.4,
+      "self_complete_cost_ratio": 0.95,
+      "temperature_ratio": 0.1,
+      "quote_cost_usd": 0.5,
+      "customer_friction_autonomous_usd": 0.5,
+      "customer_friction_original_usd": 2,
+      "demand_value_multiplier": 1.0
+    },
+    "correlated_shock": {
+      "arrival_probability": 0.45,
+      "qualification_probability": 0.8,
+      "retention_probability": 0.5,
+      "reacquisition_probability": 0.15,
+      "collection_probability": 0.8,
+      "refund_probability": 0.18,
+      "supplier_multiplier": 2.5,
+      "supplier_outage_probability": 0.25,
+      "trust": 0.82,
+      "rival_trust": 0.9,
+      "urgency_value_hour": 0.05,
+      "our_hours": 8,
+      "rival_hours": 8,
+      "settlement_delay_days": 20,
+      "rival_cost_multiplier": 0.8,
+      "self_complete_cost_ratio": 0.5,
+      "temperature_ratio": 0.1,
+      "quote_cost_usd": 0.5,
+      "customer_friction_autonomous_usd": 12,
+      "customer_friction_original_usd": 25,
+      "demand_value_multiplier": 0.6
+    }
+  },
+  "assumptions": [
+    "All demand, budgets, arrival, switching, urgency, retention, competitor quality, rate limits, taxes and provider protection are disclosed conditional scenarios, not observed market estimates.",
+    "Churn persists with active=False; bounded independent channel reacquisition may restore a churned customer after an actual settled simulated order, with no repeated provider onboarding.",
+    "Buyer private value/budget and deterministic draws are not passed to seller pricing; seller uses public segment priors and its own transactional history only.",
+    "Turnaround2h/24h/48h are explicitly authored SLA waiting times, never labor hours. Ordinary segment values 2h complete delivery versus competent 24h rival and 48h human; same scoped outcome and obligations. Price war removes most latency differentiation. Trust ranges overlap; actual checker evidence is required for our deliveries.",
+    "Native principal-plus-fee tail reserves remain restricted throughout horizon; seed capital may back reserves. Earned delivery funding and seed-independent reserve replacement are separate metrics.",
+    "Tax is a conditional 20% positive-profit provision paid in the simulation; sales-tax collection/remittance assumed zero for nonjurisdictional synthetic workload. No tax compliance or actual transaction is asserted.",
+    "Bundles are optional grouped three-service orders with total willingness-to-pay and component identities; a bundle replaces its component sale opportunities, never adds duplicate revenue. Context reuse reduces one-time provider onboarding across services but does not grant data access."
+  ]
+}

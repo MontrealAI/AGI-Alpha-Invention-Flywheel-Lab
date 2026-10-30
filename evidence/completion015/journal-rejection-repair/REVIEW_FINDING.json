@@ -1,0 +1,35 @@
+{
+  "repository": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+  "pull_request": 28,
+  "exact_reviewed_source": "e85637baf9f9d7c4dc0095eda5ffa67aba7b5fc0",
+  "thread": {
+    "id": "PRRT_kwDOVcHIss6yJtnO",
+    "is_resolved": false,
+    "is_outdated": false,
+    "path": "connected_enterprise/finance.py",
+    "line": 181,
+    "diff_side": "RIGHT",
+    "start_line": 181,
+    "start_diff_side": null,
+    "original_line": 181,
+    "original_start_line": null,
+    "resolved_by": null,
+    "comments": [
+      {
+        "id": "PRRC_kwDOVcHIss8AAAABB_i7GA",
+        "database_id": 4428708632,
+        "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Retire definitively rejected native journal entries**\n\nWhen a native request passes `_validate_native_request()` but is rejected without committing, its saved journal entry remains `PENDING` indefinitely. Using the connected-finance fixture, I reproduced submitting an event for an unknown trade: it raises `unknown trade`, a subsequent legitimate cost fails with `PENDING_CONNECTED_ACTION_REQUIRES_RECOVERY`, and reopening the account fails by retrying the rejected event. Thus one rejected request permanently prevents otherwise valid account operations. Record definitive rejections separately after verifying that no native action committed, preserving the failure evidence and retaining pending recovery for ambiguous interruptions.\n\nAGENTS.md reference: [AGENTS.md:L5-L5](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/e85637baf9f9d7c4dc0095eda5ffa67aba7b5fc0/AGENTS.md#L5-L5)\n\nUseful? React with 👍 / 👎.\n\n<!-- codex-code-review-finding:v1 -->",
+        "created_at": "2026-10-30T21:38:28Z",
+        "updated_at": "2026-10-30T21:38:28Z",
+        "author": {
+          "login": "chatgpt-codex-connector",
+          "name": "chatgpt-codex-connector",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/in/1144995?v=4",
+          "id": null
+        },
+        "viewer_did_author": false
+      }
+    ]
+  }
+}

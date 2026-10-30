@@ -1,0 +1,11 @@
+{
+  "schema": "agi-alpha/completion015-hosted-ci-interruption/v1",
+  "source_commit": "287a306666d8419de8d2d3d49ff1eb50f6bf3895",
+  "workflow_run_id": 41120435625,
+  "job_id": 124285491268,
+  "conclusion": "cancelled",
+  "qualification": "INCOMPLETE_NOT_PASS",
+  "cause": "15-minute job timeout after optional setup-python pip cache failed with Egress is over the account limit and stalled ten minutes. Actual pip install succeeded in eight seconds. Tests were still running with no reported assertion failure; remaining suite and historical replays were not executed.",
+  "preservation": "Original hosted job logs remain authoritative; quoted lines below are a source-bound extract, not a recreated run.",
+  "repair": "Remove optional pip caches from campaign workflow; pinned installs and all tests/replays retained. Qualification job bound20minutes, within prospective45minute hosted cap, allows complete current tests plus preserved historical replays. Adaptive unchanged160-world run/complete audits bounded45minutes; publisher waits2400seconds for terminal same-main success."
+}

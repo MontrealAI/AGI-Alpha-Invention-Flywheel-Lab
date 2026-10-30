@@ -1,0 +1,206 @@
+test_missing_pilot_rejects_before_output_or_account (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_missing_pilot_rejects_before_output_or_account) ... FAIL
+test_positive_leads_and_defaults_remain_unchanged (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_positive_leads_and_defaults_remain_unchanged) ... ok
+test_standalone_channel_book_retains_zero_lead_contract_support (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_standalone_channel_book_retains_zero_lead_contract_support) ... ok
+test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) ... 
+  test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead=True) ... FAIL
+  test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead=False) ... FAIL
+  test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead='0') ... FAIL
+  test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead='2') ... FAIL
+  test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead=0.5) ... FAIL
+  test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead=-1) ... FAIL
+test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) ... FAIL
+test_zero_lead_connected_contract_rejects_before_output_or_account (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_zero_lead_connected_contract_rejects_before_output_or_account) ... FAIL
+
+======================================================================
+FAIL: test_missing_pilot_rejects_before_output_or_account (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_missing_pilot_rejects_before_output_or_account)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 31, in test_missing_pilot_rejects_before_output_or_account
+    self.assert_precommit_rejected(cfg, 'CONNECTED_PILOT_CHANNEL_REQUIRED')
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 21, in assert_precommit_rejected
+    run_world(root, {}, cfg, 13, 'growth', output, source={'files': files, 'sha256': digest(files)})
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/connected_enterprise/engine.py", line 185, in run_world
+    account=JournalAccount(root,manifest,output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract='connected014/'+binding)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: ACCOUNT_MUST_NOT_OPEN
+
+======================================================================
+FAIL: test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 37, in test_typed_and_malformed_contracts_are_validated_precommit
+    self.assert_precommit_rejected(cfg, 'BOUNDED_INTEGER_CHANNEL_TERMS_REQUIRED')
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 21, in assert_precommit_rejected
+    run_world(root, {}, cfg, 13, 'growth', output, source={'files': files, 'sha256': digest(files)})
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/connected_enterprise/engine.py", line 185, in run_world
+    account=JournalAccount(root,manifest,output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract='connected014/'+binding)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: ACCOUNT_MUST_NOT_OPEN
+
+======================================================================
+FAIL: test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 37, in test_typed_and_malformed_contracts_are_validated_precommit
+    self.assert_precommit_rejected(cfg, 'BOUNDED_INTEGER_CHANNEL_TERMS_REQUIRED')
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 21, in assert_precommit_rejected
+    run_world(root, {}, cfg, 13, 'growth', output, source={'files': files, 'sha256': digest(files)})
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/connected_enterprise/engine.py", line 185, in run_world
+    account=JournalAccount(root,manifest,output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract='connected014/'+binding)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: ACCOUNT_MUST_NOT_OPEN
+
+======================================================================
+FAIL: test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead='0')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 37, in test_typed_and_malformed_contracts_are_validated_precommit
+    self.assert_precommit_rejected(cfg, 'BOUNDED_INTEGER_CHANNEL_TERMS_REQUIRED')
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 21, in assert_precommit_rejected
+    run_world(root, {}, cfg, 13, 'growth', output, source={'files': files, 'sha256': digest(files)})
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/connected_enterprise/engine.py", line 185, in run_world
+    account=JournalAccount(root,manifest,output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract='connected014/'+binding)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: ACCOUNT_MUST_NOT_OPEN
+
+======================================================================
+FAIL: test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead='2')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 37, in test_typed_and_malformed_contracts_are_validated_precommit
+    self.assert_precommit_rejected(cfg, 'BOUNDED_INTEGER_CHANNEL_TERMS_REQUIRED')
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 21, in assert_precommit_rejected
+    run_world(root, {}, cfg, 13, 'growth', output, source={'files': files, 'sha256': digest(files)})
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/connected_enterprise/engine.py", line 185, in run_world
+    account=JournalAccount(root,manifest,output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract='connected014/'+binding)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: ACCOUNT_MUST_NOT_OPEN
+
+======================================================================
+FAIL: test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead=0.5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 37, in test_typed_and_malformed_contracts_are_validated_precommit
+    self.assert_precommit_rejected(cfg, 'BOUNDED_INTEGER_CHANNEL_TERMS_REQUIRED')
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 21, in assert_precommit_rejected
+    run_world(root, {}, cfg, 13, 'growth', output, source={'files': files, 'sha256': digest(files)})
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/connected_enterprise/engine.py", line 185, in run_world
+    account=JournalAccount(root,manifest,output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract='connected014/'+binding)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: ACCOUNT_MUST_NOT_OPEN
+
+======================================================================
+FAIL: test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit) (lead=-1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 37, in test_typed_and_malformed_contracts_are_validated_precommit
+    self.assert_precommit_rejected(cfg, 'BOUNDED_INTEGER_CHANNEL_TERMS_REQUIRED')
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 21, in assert_precommit_rejected
+    run_world(root, {}, cfg, 13, 'growth', output, source={'files': files, 'sha256': digest(files)})
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/connected_enterprise/engine.py", line 185, in run_world
+    account=JournalAccount(root,manifest,output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract='connected014/'+binding)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: ACCOUNT_MUST_NOT_OPEN
+
+======================================================================
+FAIL: test_typed_and_malformed_contracts_are_validated_precommit (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_typed_and_malformed_contracts_are_validated_precommit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 39, in test_typed_and_malformed_contracts_are_validated_precommit
+    self.assert_precommit_rejected(cfg, 'EXACT_CHANNEL_TERMS_REQUIRED')
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 21, in assert_precommit_rejected
+    run_world(root, {}, cfg, 13, 'growth', output, source={'files': files, 'sha256': digest(files)})
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/connected_enterprise/engine.py", line 185, in run_world
+    account=JournalAccount(root,manifest,output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract='connected014/'+binding)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: ACCOUNT_MUST_NOT_OPEN
+
+======================================================================
+FAIL: test_zero_lead_connected_contract_rejects_before_output_or_account (tests.test_connected_channel_lead.ConnectedChannelLeadPreflight.test_zero_lead_connected_contract_rejects_before_output_or_account)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 27, in test_zero_lead_connected_contract_rejects_before_output_or_account
+    self.assert_precommit_rejected(cfg, 'CONNECTED_CHANNEL_ADVANCE_LEAD_REQUIRED')
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/tests/test_connected_channel_lead.py", line 21, in assert_precommit_rejected
+    run_world(root, {}, cfg, 13, 'growth', output, source={'files': files, 'sha256': digest(files)})
+  File "/workspace/scratch/b156b0353186/channel-lead-repair/connected_enterprise/engine.py", line 185, in run_world
+    account=JournalAccount(root,manifest,output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract='connected014/'+binding)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/mock.py", line 1198, in _execute_mock_call
+    raise effect
+AssertionError: ACCOUNT_MUST_NOT_OPEN
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.021s
+
+FAILED (failures=9)

@@ -1,0 +1,54 @@
+{
+  "schema": "agi-alpha/connected014-public002-replay/v1",
+  "stage": "COMPLETE",
+  "accepted": true,
+  "started_utc": "2026-10-30T19:17:25.151427+00:00",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "connected_enterprise",
+    "audit",
+    "--output",
+    "/workspace/scratch/36115aecd71a/connected014-public002"
+  ],
+  "cwd": "/workspace/scratch/36115aecd71a/connected014-public002/source",
+  "wall_cap_seconds": 120,
+  "cpu_cap_seconds": 600,
+  "archive": {
+    "archive_bytes": 5175149,
+    "archive_sha256": "f316f599b9bdc0c8fb7ed522b3960e55e07b19f15a41a72760cde5d552655f72",
+    "archive_crc_verified": true,
+    "private_keys_absent": true,
+    "sqlite_accounts_absent": true,
+    "unique_safe_paths_verified": true,
+    "files": 515,
+    "uncompressed_bytes": 47530642,
+    "output": "/workspace/scratch/36115aecd71a/connected014-public002"
+  },
+  "finished_utc": "2026-10-30T19:18:00.141052+00:00",
+  "wall_seconds": 34.989650743998936,
+  "children_cpu_seconds": 34.710356000000004,
+  "returncode": 0,
+  "timeout": false,
+  "preexisting_changes_except_package_audit": [],
+  "logs": {
+    "audit.stdout": "1987e86faf59cc4c2dc9ab0725f51db462dc32fb8bde6b1eafa724d8054554cc",
+    "audit.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "audit": {
+    "accepted": true,
+    "resource_cpu_metadata": "Command resource observations retained, not independently reproduced timing measurements",
+    "schema": "agi-alpha/connected014-package-audit/v1",
+    "scope": "NATIVE_FINANCE_AND_OPERATING_SEMANTICS_WITH_ARTIFACT_REEXECUTION_AND_REPORT_REDERIVATION",
+    "service_cohort": {
+      "registered_jobs_rederived": 104
+    },
+    "simulation_keys_required": false,
+    "source_sha256": "3d985299bf6cfaf546b712ebd9e878e875aaf730ffdb32023637aafc5504a38d",
+    "worlds": 20
+  },
+  "all_archive_members_after_replay_match_original": true,
+  "archive_member_changes_after_replay": [],
+  "committed_source_files_verified": 116,
+  "source_commit": "ffc1f2e14e88e11f75d5087ab0f7c4e60512431e"
+}

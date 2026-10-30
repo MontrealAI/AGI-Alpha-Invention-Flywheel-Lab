@@ -1,0 +1,108 @@
+{
+  "schema": "agi-alpha/connected014-hosted-qualification-watch/v1",
+  "source_commit": "42238e4b39962d3d3cebce11bdf467a66c5e3436",
+  "source_sha256": "3734ea91e36e302bd82272a3e452f5b0a14df06ff6759cde8064f0bb60090ba2",
+  "observed_utc": "2026-10-30T18:44:09.273Z",
+  "workflows": [
+    {
+      "id": 41108607462,
+      "name": "Bounded campaign qualification",
+      "status": "in_progress",
+      "conclusion": null,
+      "run_number": 93,
+      "jobs_url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41108607462/jobs",
+      "logs_url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41108607462/logs",
+      "workflow_id": 400980526
+    },
+    {
+      "id": 41108607362,
+      "name": "Adaptive 012 operating and account qualification",
+      "status": "in_progress",
+      "conclusion": null,
+      "run_number": 5,
+      "jobs_url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41108607362/jobs",
+      "logs_url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41108607362/logs",
+      "workflow_id": 402050718
+    },
+    {
+      "id": 41108607190,
+      "name": "Consequential campaign 009 construction and downloaded package",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 37,
+      "jobs_url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41108607190/jobs",
+      "logs_url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41108607190/logs",
+      "workflow_id": 401624130
+    },
+    {
+      "id": 41108607318,
+      "name": "Consequential campaign 007 reproduction",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 63,
+      "jobs_url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41108607318/jobs",
+      "logs_url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41108607318/logs",
+      "workflow_id": 401417562
+    },
+    {
+      "id": 41108607261,
+      "name": "Connected 014 live enterprise qualification",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 1,
+      "jobs_url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41108607261/jobs",
+      "logs_url": "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41108607261/logs",
+      "workflow_id": 402117276
+    }
+  ],
+  "reruns_requested": 0,
+  "connected": {
+    "run_id": 41108607261,
+    "job_id": 124244763363,
+    "status": "completed",
+    "conclusion": "success",
+    "exact_checkout_verified_in_job_log": true,
+    "hosted_python": "3.12.15",
+    "fresh_dependency_install": {
+      "passed": true,
+      "packages": {
+        "cryptography": "50.0.2",
+        "cffi": "2.1.1",
+        "pycparser": "3.11"
+      },
+      "evidence": "Separate successful pip-install step in job log; qualification script then checked installed pins."
+    },
+    "connected_tests": {
+      "count": 63,
+      "passed": true,
+      "reported_elapsed_seconds": 143.8,
+      "cpu_seconds": null
+    },
+    "clean_qualification": {
+      "accepted": true,
+      "mode": "ENGINEERING_SMOKE",
+      "worlds": 2,
+      "service_cohort_jobs_rederived": 104,
+      "fresh_no_git_source_archive": true,
+      "completed_resume_native_records_unchanged": true,
+      "keyfree_public_copy_audit": true,
+      "report_rederivation": true,
+      "wall_seconds": 21.145480670000012,
+      "children_cpu_seconds": 32.123646,
+      "receipt": "CI_HOSTED_QUALIFICATION_42238e4.json"
+    },
+    "artifact": {
+      "id": 13002506693,
+      "bytes": 1146477,
+      "sha256": "5523f27bfcc9d0cc64dd3ffca0bb6e2f1cc29a565d7797138a2e619c722f2df2",
+      "downloaded_hash_and_crc_verified": true,
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41108607261/artifacts/13002506693"
+    },
+    "job_log": "CI_CONNECTED_42238e4.log"
+  },
+  "limits": [
+    "Engineering CI and smoke reproduction are separate from the new22-world commercial confirmation.",
+    "Hosted full-job CPU and provider billing are unavailable; the32.123646CPU receipt covers only the clean qualifier child processes.",
+    "The two workflows still in_progress are not treated as passing."
+  ]
+}

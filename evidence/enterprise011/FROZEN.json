@@ -1,0 +1,398 @@
+{
+  "freeze_sha256": "8dbdb2091bf82893933699393b8c42f99acb36c352e1a998255bf212ac5462bf",
+  "git_commit": "d171be216f3422ff0ba13103ba548044f838c0a4",
+  "model_usage": "Code-authored deterministic service tools; no paid model calls. Host assistant billing unavailable; conditional conservative costs, never CPU-as-human-time.",
+  "policy": {
+    "arms": [
+      {
+        "autonomous_onboarding": false,
+        "id": "fixed_original",
+        "strategic_pricing": false
+      },
+      {
+        "autonomous_onboarding": true,
+        "id": "fixed_autonomous",
+        "strategic_pricing": false
+      },
+      {
+        "autonomous_onboarding": false,
+        "id": "strategic_original",
+        "strategic_pricing": true
+      },
+      {
+        "autonomous_onboarding": true,
+        "id": "strategic_autonomous",
+        "strategic_pricing": true
+      }
+    ],
+    "assumptions": [
+      "All demand, budgets, arrival, switching, urgency, retention, competitor quality, rate limits, taxes and provider protection are disclosed conditional scenarios, not observed market estimates.",
+      "Churn persists with active=False; bounded independent channel reacquisition may restore a churned customer after an actual settled simulated order, with no repeated provider onboarding.",
+      "Buyer private value/budget and deterministic draws are not passed to seller pricing; seller uses public segment priors and its own transactional history only.",
+      "Turnaround2h/24h/48h are explicitly authored SLA waiting times, never labor hours. Ordinary segment values 2h complete delivery versus competent 24h rival and 48h human; same scoped outcome and obligations. Price war removes most latency differentiation. Trust ranges overlap; actual checker evidence is required for our deliveries.",
+      "Native principal-plus-fee tail reserves remain restricted throughout horizon; seed capital may back reserves. Earned delivery funding and seed-independent reserve replacement are separate metrics.",
+      "Tax is a conditional 20% positive-profit provision paid in the simulation; sales-tax collection/remittance assumed zero for nonjurisdictional synthetic workload. No tax compliance or actual transaction is asserted.",
+      "Bundles are optional grouped three-service orders with total willingness-to-pay and component identities; a bundle replaces its component sale opportunities, never adds duplicate revenue. Context reuse reduces one-time provider onboarding across services but does not grant data access."
+    ],
+    "bundle_discount": 0.05,
+    "bundle_enabled": true,
+    "capacity_per_cycle": 4,
+    "choice_models": [
+      "logit",
+      "utility"
+    ],
+    "competitor_models": [
+      "responsive",
+      "lagged"
+    ],
+    "cost_evidence": "CONSERVATIVE_AUTHORED_ENVELOPES_NOT_MODEL_BILLS. Actual fixed deterministic service production and independent checking execute. No paid frontier-model inference is called. Setup includes all discovery, authored construction, rejected fixtures, initial prequalification and integration; per-attempt includes production/replay, verification, corrections, failed/unpaid work, storage, delivery, support, maintenance; acquisition charged on every exposed bid including losses. CPU runtime is not human task time. No human-review hour is inserted. Resource billing unavailable.",
+    "cost_multiplier": 1.0,
+    "cost_ranges_usd": {
+      "autonomous_onboarding_once": [
+        0.01,
+        5
+      ],
+      "per_attempt": [
+        2,
+        8
+      ],
+      "quote_acquisition": [
+        0.5,
+        8
+      ],
+      "setup": [
+        200,
+        1500
+      ]
+    },
+    "costs_usd": {
+      "autonomous_onboarding_once": 0.5,
+      "bundle_coordination_once": 3,
+      "compute_storage_infrastructure": 0.25,
+      "delivery_support_obligation": 0.5,
+      "external_onboarding_fee": 0,
+      "independent_verification_corrections": 0.5,
+      "inference_tools_production": 1,
+      "maintenance_failure_retry": 0.75,
+      "quote_acquisition": 0.5,
+      "research_development_prequalification": 350
+    },
+    "currency": "simulated-microUSD",
+    "customer_pool": 8,
+    "cycles": 24,
+    "dynamic_allocation": true,
+    "exchange_rate": {
+      "basis": "single-currency experiment; no FX transaction",
+      "currency": "USD",
+      "rate": 1
+    },
+    "human_evidence": "Authored corresponding complete-service workload scenarios, not measured human times or observed selling prices. Loaded hourly values are bounded scenario proxies; ranges 0.5x\u20132x remain sensitivity inputs. No program runtime is converted into human effort. First-order complete work is0.65h for12-invoice reconciliation and10-metric variance,0.80h for8-requirement source matrix; preparation charged once/customer; repeats deduct0.10h onboarding. These small-fixture time hypotheses avoid applying multi-hour workloads to tiny delivered artifacts. Competent complete human delivery includes verification, correction, support and tools.",
+    "human_services": {
+      "evidence_matrix": {
+        "loaded_hourly_usd": 55,
+        "stages_hours": {
+          "correction": 0.05,
+          "ordering_support": 0.15,
+          "preparation_onboarding": 0.1,
+          "production": 0.35,
+          "research": 0.05,
+          "verification": 0.1
+        },
+        "tool_external_usd": 2
+      },
+      "kpi_variance": {
+        "loaded_hourly_usd": 60,
+        "stages_hours": {
+          "correction": 0.05,
+          "ordering_support": 0.15,
+          "preparation_onboarding": 0.1,
+          "production": 0.2,
+          "research": 0.05,
+          "verification": 0.1
+        },
+        "tool_external_usd": 2
+      },
+      "reconciliation": {
+        "loaded_hourly_usd": 34.75,
+        "stages_hours": {
+          "correction": 0.05,
+          "ordering_support": 0.15,
+          "preparation_onboarding": 0.1,
+          "production": 0.2,
+          "research": 0.05,
+          "verification": 0.1
+        },
+        "tool_external_usd": 2
+      }
+    },
+    "nominal_price_vintage": "2026-10-30",
+    "opening": 5000000000,
+    "payment_bps": 290,
+    "payment_fixed": 300000,
+    "profit_tax_bps": 2000,
+    "qualification_regimes": [
+      "ordinary",
+      "differentiation"
+    ],
+    "regime_weights": {
+      "correlated_shock": 0.15,
+      "differentiation": 0.2,
+      "ordinary": 0.35,
+      "price_war": 0.3
+    },
+    "regimes": {
+      "correlated_shock": {
+        "arrival_probability": 0.45,
+        "collection_probability": 0.8,
+        "customer_friction_autonomous_usd": 12,
+        "customer_friction_original_usd": 25,
+        "demand_value_multiplier": 0.6,
+        "our_hours": 8,
+        "qualification_probability": 0.8,
+        "quote_cost_usd": 0.5,
+        "reacquisition_probability": 0.15,
+        "refund_probability": 0.18,
+        "retention_probability": 0.5,
+        "rival_cost_multiplier": 0.8,
+        "rival_hours": 8,
+        "rival_trust": 0.9,
+        "self_complete_cost_ratio": 0.5,
+        "settlement_delay_days": 20,
+        "supplier_multiplier": 2.5,
+        "supplier_outage_probability": 0.25,
+        "temperature_ratio": 0.1,
+        "trust": 0.82,
+        "urgency_value_hour": 0.05
+      },
+      "differentiation": {
+        "arrival_probability": 0.96,
+        "collection_probability": 0.99,
+        "customer_friction_autonomous_usd": 0.5,
+        "customer_friction_original_usd": 2,
+        "demand_value_multiplier": 1.0,
+        "our_hours": 2,
+        "qualification_probability": 0.97,
+        "quote_cost_usd": 0.5,
+        "reacquisition_probability": 0.25,
+        "refund_probability": 0.01,
+        "retention_probability": 0.96,
+        "rival_cost_multiplier": 1.4,
+        "rival_hours": 24,
+        "rival_trust": 0.95,
+        "self_complete_cost_ratio": 0.95,
+        "settlement_delay_days": 2,
+        "supplier_multiplier": 1.1,
+        "supplier_outage_probability": 0.01,
+        "temperature_ratio": 0.1,
+        "trust": 0.97,
+        "urgency_value_hour": 1.0
+      },
+      "ordinary": {
+        "arrival_probability": 0.94,
+        "collection_probability": 0.98,
+        "customer_friction_autonomous_usd": 0.5,
+        "customer_friction_original_usd": 2,
+        "demand_value_multiplier": 1.0,
+        "our_hours": 2,
+        "qualification_probability": 0.95,
+        "quote_cost_usd": 0.5,
+        "reacquisition_probability": 0.25,
+        "refund_probability": 0.02,
+        "retention_probability": 0.94,
+        "rival_cost_multiplier": 1.2,
+        "rival_hours": 24,
+        "rival_trust": 0.95,
+        "self_complete_cost_ratio": 0.85,
+        "settlement_delay_days": 2,
+        "supplier_multiplier": 1.0,
+        "supplier_outage_probability": 0.01,
+        "temperature_ratio": 0.12,
+        "trust": 0.95,
+        "urgency_value_hour": 0.5
+      },
+      "price_war": {
+        "arrival_probability": 0.92,
+        "collection_probability": 0.97,
+        "customer_friction_autonomous_usd": 0.5,
+        "customer_friction_original_usd": 2,
+        "demand_value_multiplier": 1.0,
+        "our_hours": 2,
+        "qualification_probability": 0.95,
+        "quote_cost_usd": 0.5,
+        "reacquisition_probability": 0.25,
+        "refund_probability": 0.03,
+        "retention_probability": 0.85,
+        "rival_cost_multiplier": 0.65,
+        "rival_hours": 3,
+        "rival_trust": 0.97,
+        "self_complete_cost_ratio": 0.45,
+        "settlement_delay_days": 3,
+        "supplier_multiplier": 1.3,
+        "supplier_outage_probability": 0.03,
+        "temperature_ratio": 0.08,
+        "trust": 0.95,
+        "urgency_value_hour": 0.05
+      }
+    },
+    "rounding": "nearest microUSD for authored USD envelopes; integer ledger",
+    "sales_tax_bps": 0,
+    "schema": "agi-alpha/enterprise011-policy/v1",
+    "scope": "SIMULATED",
+    "service_capacity_per_cycle": 2,
+    "setup_cost": 350000000,
+    "thresholds": {
+      "minimum_customers": 3,
+      "minimum_earned_funded_cycles": 2,
+      "minimum_paid_jobs": 12,
+      "minimum_region_success_fraction": 0.75,
+      "minimum_repeat_customers": 2
+    },
+    "working": 100000000
+  },
+  "protocol": {
+    "central_region": [
+      "ordinary",
+      "differentiation"
+    ],
+    "choice_models": [
+      "utility",
+      "logit"
+    ],
+    "development_seeds": [
+      11011,
+      11012
+    ],
+    "edition": "fresh-confirmation-001",
+    "minimum_region_success_fraction": 0.75,
+    "paired_control_seed_count": 2,
+    "recovery_granularity": "Completed worlds are atomic checkpoints; interrupted worlds recompute from their unchanged seed/source. No completed-world job or payment is appended twice.",
+    "regimes": [
+      "ordinary",
+      "price_war",
+      "differentiation",
+      "correlated_shock"
+    ],
+    "rival_models": [
+      "responsive",
+      "lagged"
+    ],
+    "scale_seeds": [
+      2610302101,
+      2610302102,
+      2610302103,
+      2610302104,
+      2610302105,
+      2610302106,
+      2610302107,
+      2610302108,
+      2610302109,
+      2610302110,
+      2610302111,
+      2610302112,
+      2610302113,
+      2610302114,
+      2610302115,
+      2610302116
+    ],
+    "schema": "agi-alpha/enterprise011-confirmation/v1",
+    "scope": "CONDITIONAL_SIMULATION",
+    "seeds": [
+      2610301101,
+      2610301102,
+      2610301103,
+      2610301104,
+      2610301105,
+      2610301106,
+      2610301107,
+      2610301108
+    ],
+    "selection": "Policy and price-search procedure frozen before confirmation. No outcome-driven threshold or regime reclassification.",
+    "sensitivity_cases": [
+      "setup_upper",
+      "attempt_lower",
+      "attempt_upper",
+      "human_half",
+      "human_double",
+      "half_arrivals",
+      "latency_parity"
+    ],
+    "thresholds": {
+      "acquired_customers": 3,
+      "cash_survival": true,
+      "cycles": 24,
+      "earned_funded_cycles": 2,
+      "paid_jobs": 12,
+      "positive_complete_cost_profit": true,
+      "repeat_customers": 2
+    },
+    "uncertainty": "Wilson interval describes finite seeded simulation proportions; scenario worlds and paired arms are dependent, not an inferential sample of real buyers.",
+    "weights": "Equal finite-design weights, not estimated real-world probabilities"
+  },
+  "registered_utc": "2026-10-30T15:44:00Z",
+  "schema": "agi-alpha/enterprise011-run/v1",
+  "source": {
+    "files": {
+      "campaign/enterprise-011/ALLOCATION.json": "40ed2cb112398df471045f4d979570b83ff78ff80b22e2643db471e543e86710",
+      "campaign/enterprise-011/CALIBRATION.json": "b72011f13e03d814f3e008b54f6cd4e361b3bbe021ba15a44c007904b44162a2",
+      "campaign/enterprise-011/IMPORTS.json": "327d5dd0a29ade5e538f6c56be24246b5caade3f43e0fa85b349341e38a27fae",
+      "campaign/enterprise-011/MANDATE.txt": "a15bf528b00bae4ea26a74bc867e3397e2df656ddc03f2146e6507e51452baab",
+      "campaign/enterprise-011/OWNERSHIP.md": "42d4abc1ecd2d56e398aa39a279bdce2e13c25e6102db54c6d9327a4ed26ccf6",
+      "campaign/enterprise-011/POLICY.json": "61e7c49f5e5b8463336a666fc8d0420e856fc58ec2cb655204bb715840f51c27",
+      "campaign/enterprise-011/PRECONFIRMATION_AMENDMENT.json": "14eb74c5e910c23909cda857756c613dc3568ca99b3d12ffdb3a4a06ed859493",
+      "campaign/enterprise-011/PROTOCOL.json": "febf0a3fb3296d00a7a8f2903cd364d31904f45758c47e33e1ad872f409b93b4",
+      "campaign/enterprise-011/REQUIREMENTS.md": "5f25948cc2c40084af14dbac4fa111145db2c236c5784d2a2386895e757f1269",
+      "campaign/enterprise-011/SUPERSESSION.md": "132add168cf3c11eee8b2290e548ec2f9a6390666057bcc01cf52364448ce668",
+      "campaign/enterprise-011/development-001-terminal-summary.json": "f79be0d3e252c099a61b439eb13f8a2a4466318a8ceb13062e80dbcee33770f2",
+      "commercial/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "commercial/ledger.py": "231e6149a7abbf3118fdbb19111582b4845a3b4356e5ae5ecefe9db7659d5a44",
+      "commercial/market.py": "7fd46dee48344da54ccc01d909ef85e6d713746d9f2555be723e1ac1f30791ae",
+      "commercial/onboarding.py": "68e9fbc6eaaceed9b2678ef604646025c02f6cb77183da9208b729486c5302cf",
+      "commercial/persistence.py": "78c1eb1d82471843e32dd290ac3ea1b5b253d4edc1448cc954b5fafa5d6e0e15",
+      "commercial/service.py": "1604d20f5d9f54997eeceb971bc19af9a0c76cdcaf79ba74b9bbd80112c9c9a3",
+      "commercial/service_verifier.py": "ac79f1aa80fb5c2928827f08417a720cd041977df70e808860bc3dd4f5d61368",
+      "commercial/verdicts.py": "d0ae18586420c0d59342e11f36c8070c957ceaa1dee798f02bfb474f106753f9",
+      "enterprise/__init__.py": "94244631159981d13090d2816575856d71e3f35e91d380124ba43b22e60c9fdb",
+      "enterprise/__main__.py": "15f8037485edacee7e1e88c43fc30c8d9362cd6ccbf97d6c6ccabbbd7a00e382",
+      "enterprise/checkers.py": "8685c3c9876815db2f2f5de6ba5954529f88cd7d4f95d7c1fa9aedc438cc0981",
+      "enterprise/frontier.py": "037d51b8e56d5399446b8416e983823af4692fcb84ea129f930cd2d2a686bcb4",
+      "enterprise/model.py": "ab9faf9dc0451f79787a39904acf57b857d3c5ad69d6ebac847517a2a61de6dd",
+      "enterprise/portfolio.py": "59005bb0f570e422b31df22297c5d724c77c88b0be110a47a0370e5423368194",
+      "enterprise/pricing.py": "81098bbc9eb3c9d760855d427dcf526ba4a973f6ac2c6865c9a75db622660c3b",
+      "enterprise/runner.py": "65b394a3db512272fc0de53727c5b198de88ec50722e8f37ed64a5ed25de08f2",
+      "enterprise/scale.py": "a2d445caa23aa1005184915f2b699baf4eb7051bd574afd7199ee7b74354700a",
+      "enterprise/services.py": "f3ff23509899180235436bffb8b7396092ff9ae881f622a386ba932ebaa045bc",
+      "experiments/commerce006.py": "2fc529131885c75752dab8dbd77d85b5a36d4c0b43cb5e7e53286c997cc0a52f",
+      "flywheel/__init__.py": "b2bdd53c43426e128f56facd881b6aceaf70a8f8f6e14382c9a5e96de6d92e37",
+      "flywheel/evidence_executor.py": "aba80e202e9e8f769989d88dc85a63b1389065ed3ae80b414f01579928202e46",
+      "flywheel/retention.py": "7d7587fd11bffebc7b4ab6a1118eda0a899094099949434722d1254e630973c7",
+      "flywheel/strategy.py": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+      "portfolio25/HARDENING.json": "20f2ca0b5abaf2426e8123d71048a44b5cd82824d18ac830c4c59a9012a8462d",
+      "portfolio25/PORTFOLIO.md": "a410b14829999c9dd256f3dfe9640643fe85d360b92f16b09916e3ec184a86a8",
+      "portfolio25/SOURCE_IMPORT.json": "80b0741f93c911e4460e36d014259d30d11b91f6d2e98f57b69425cea5dff82a",
+      "portfolio25/jobs.json": "4faa7e6389409051f6b6377ca50b7bf93d945c27ce02293be247d9cfbe1847df",
+      "portfolio25/pricing.py": "b0a359619a02b6dcadd2af20b5683e4d84cb585841359b653579610ff1da568c",
+      "portfolio25/reference_strategy_results.json": "c7daf5887f18332946c8accbb20ced6079cce5c39fa90f24bda187c258083dc9",
+      "portfolio25/test_hardening.py": "09945d4f652b39f2a79489c4a705d687cf1f02784ccbe5a9593ffa7a2a747683",
+      "portfolio25/test_pricing.py": "4a6741d7334c6cc9181323d5761447d65dbc28dfa7bbb487317d5dc6220dbf05",
+      "portfolio_scale/README.md": "1c90b1def95927e3b690c5a9c039f3462394a4147bc4232256f06342a18e7939",
+      "portfolio_scale/__init__.py": "f1f0641ca31471a6c90d92ce0296814e7ceed0922ec656f9fa4ff60c086b17ea",
+      "portfolio_scale/bundles.py": "3d191e1dc247252cf0f36fd6dca970de7639b49b54624c01b274975677b8a227",
+      "portfolio_scale/engine.py": "429835f822138880985f2cf896409415d4c896388263d581da6cd7b7a9bb5104",
+      "portfolio_scale/reference_bundles.json": "7b22cf38a505cfd3005081182d1c6841a9ae7e42954dd8822f3b3d9c10e6df0e",
+      "portfolio_scale/reference_summary.json": "4bed1b9cbd1052d19333846da37d6409c16ab62936efe4dbc3d2228e4ae0d31e",
+      "portfolio_scale/test_scale.py": "ab05f822e20d8674da3d09cde50316c86be25b635555f79baf309a9ced257779",
+      "portfolio_scale/universe.json": "4ac0f017ba2637dcd15cbf80dbe265094c67f814e0ccf399076a0c190f851c4e",
+      "requirements-commercial010.txt": "d66a7237051eab778196473c326b9418033501ee60b647b6f6194dd6c97f1772",
+      "tests/test_enterprise_frontier.py": "c6f3d77195fd01ed76b4b06143f50b1c63079cd32aab2f6fd7aa3903caa0fafc",
+      "tests/test_enterprise_market.py": "0b5a0452bebd3df4fd25d818f1e47e6544d08ff81bec71a7527c0d1739c0b315",
+      "tests/test_enterprise_runner.py": "fc89b0683425ccfc81a9559d7e776bc19c7b0c6debffd79ecdf195ca0cc68c4f",
+      "tests/test_enterprise_scale.py": "754540d72944053428103289a2c181e904823f0c11f0d894e9ca4881a45e92d6",
+      "tests/test_enterprise_services.py": "446d5591bff14832bfb35aa2a2966cb82b1b074d310f41dd77efe02d58750ab4",
+      "vendor/__init__.py": "be8bdfe2c1e80537aa8346db6e39112224381b56a853f94d460c00d29692db54",
+      "vendor/alpha_claim/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vendor/alpha_claim/contracts.py": "3536b96c4b7ee46f9af7d807e02685aa55e42daae7f7c56b7e9029ca2cde0964",
+      "vendor/alpha_claim/protected_exchange.py": "7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272"
+    },
+    "sha256": "4dafe8403bf8271fbed6b7d75f31ebcf7bdb821c5925097289330a023b34e7e0"
+  }
+}

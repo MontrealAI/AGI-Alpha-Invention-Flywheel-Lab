@@ -1,3 +1,15 @@
+# Current connected-enterprise integration
+
+The owner's complete execution mandate of 30 October 2026 controls current work. The [completion-015 allocation](campaign/completion-015/ALLOCATION.json) is a distinct bounded increment; it does not extend connected-014 or reopen retired accounts. Preserve active PR #26 ownership and all original experiment identities. Follow the [fresh comparison registration](campaign/completion-015/PREREGISTRATION.json). Older readiness-only merge/release stops are superseded by the owner's explicit direction to complete normal qualified integration and release; required repository reviews, protections and genuine action-time approvals remain binding.
+
+The single current operating path is `python3 -m connected_enterprise run --output /absolute/new/enterprise`, with the start/resume/audit procedures in [the operator guide](docs/connected014/OPERATOR.md). Reuse the canonical mandatory adaptive `Account` through `JournalAccount`; do not create a parallel financial ledger or default runtime. Bind every reservation to current audited state, source and ownership. Source-bound incurred-cost and later-obligation reconciliation is required before releasing commitments. Unsafe `cancel_investment` histories fail closed at execution, audit and recovery. Preserve sealed operating state, write-ahead intents, original failures and source-bound evidence.
+
+Current work permits simulated commerce using existing resources and public, non-personal inputs. It grants no new real spending, paid calls, outreach, private-data access, financial transactions, persistent credentials or deployment. Unknown host/model billing remains an explicit cost envelope. Fixed-capability profitable commerce, growth, invention and observed revenue require separate claims. A projection cannot fund a native account. Preserve the trusted README and main historical resources; do not rewrite original evidence to fit new policies.
+
+The preserved adaptive/connected policy documents at integration input `fee293f6` are byte-bound in [historical/composition-015/MANIFEST.json](historical/composition-015/MANIFEST.json). Historical allocations and reported outcomes below retain their original scope and do not authorize new work.
+
+## Preserved laboratory instructions
+
 # Instructions for the invention laboratory
 
 ## Mission priority

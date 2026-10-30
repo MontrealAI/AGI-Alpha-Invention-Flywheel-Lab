@@ -1,0 +1,116 @@
+test_forged_retry_or_credit_cannot_serve_as_activation_authority (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_retry_or_credit_cannot_serve_as_activation_authority) ... 
+  test_forged_retry_or_credit_cannot_serve_as_activation_authority (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_retry_or_credit_cannot_serve_as_activation_authority) (field='activation_attempts') ... FAIL
+  test_forged_retry_or_credit_cannot_serve_as_activation_authority (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_retry_or_credit_cannot_serve_as_activation_authority) (field='failure_credit_due_microUSD') ... FAIL
+  test_forged_retry_or_credit_cannot_serve_as_activation_authority (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_retry_or_credit_cannot_serve_as_activation_authority) (field='state') ... FAIL
+test_forged_retry_or_credit_cannot_serve_as_activation_authority (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_retry_or_credit_cannot_serve_as_activation_authority) ... FAIL
+test_forged_zero_realization_cannot_grant_reach (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_zero_realization_cannot_grant_reach) ... FAIL
+test_forged_zero_reliability_activation_cannot_grant_reach (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_zero_reliability_activation_cannot_grant_reach) ... FAIL
+test_seeded_audience_order_and_shared_contact_limits_are_authoritative (tests.test_connected_channel_authority.SeededChannelAuthority.test_seeded_audience_order_and_shared_contact_limits_are_authoritative) ... FAIL
+test_unbound_seed_or_contracts_cannot_claim_full_channel_audit (tests.test_connected_channel_authority.SeededChannelAuthority.test_unbound_seed_or_contracts_cannot_claim_full_channel_audit) ... 
+  test_unbound_seed_or_contracts_cannot_claim_full_channel_audit (tests.test_connected_channel_authority.SeededChannelAuthority.test_unbound_seed_or_contracts_cannot_claim_full_channel_audit) (kwargs=[]) ... FAIL
+  test_unbound_seed_or_contracts_cannot_claim_full_channel_audit (tests.test_connected_channel_authority.SeededChannelAuthority.test_unbound_seed_or_contracts_cannot_claim_full_channel_audit) (kwargs=['contracts']) ... FAIL
+  test_unbound_seed_or_contracts_cannot_claim_full_channel_audit (tests.test_connected_channel_authority.SeededChannelAuthority.test_unbound_seed_or_contracts_cannot_claim_full_channel_audit) (kwargs=['seed']) ... FAIL
+test_valid_seeded_activation_retry_failure_and_expiry_replays (tests.test_connected_channel_authority.SeededChannelAuthority.test_valid_seeded_activation_retry_failure_and_expiry_replays) ... ok
+
+======================================================================
+FAIL: test_forged_retry_or_credit_cannot_serve_as_activation_authority (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_retry_or_credit_cannot_serve_as_activation_authority) (field='activation_attempts')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-activation-repair/tests/test_connected_channel_authority.py", line 56, in test_forged_retry_or_credit_cannot_serve_as_activation_authority
+    with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'SEEDED_CHANNEL_HISTORY_MISMATCH'):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_forged_retry_or_credit_cannot_serve_as_activation_authority (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_retry_or_credit_cannot_serve_as_activation_authority) (field='failure_credit_due_microUSD')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-activation-repair/tests/test_connected_channel_authority.py", line 56, in test_forged_retry_or_credit_cannot_serve_as_activation_authority
+    with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'SEEDED_CHANNEL_HISTORY_MISMATCH'):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_forged_retry_or_credit_cannot_serve_as_activation_authority (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_retry_or_credit_cannot_serve_as_activation_authority) (field='state')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-activation-repair/tests/test_connected_channel_authority.py", line 56, in test_forged_retry_or_credit_cannot_serve_as_activation_authority
+    with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'SEEDED_CHANNEL_HISTORY_MISMATCH'):
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_forged_retry_or_credit_cannot_serve_as_activation_authority (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_retry_or_credit_cannot_serve_as_activation_authority)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-activation-repair/tests/test_connected_channel_authority.py", line 61, in test_forged_retry_or_credit_cannot_serve_as_activation_authority
+    with self.assertRaisesRegex(ValueError, 'SEEDED_CHANNEL_HISTORY_MISMATCH'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_forged_zero_realization_cannot_grant_reach (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_zero_realization_cannot_grant_reach)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-activation-repair/tests/test_connected_channel_authority.py", line 38, in test_forged_zero_realization_cannot_grant_reach
+    with self.assertRaisesRegex(ValueError, 'SEEDED_CHANNEL_HISTORY_MISMATCH'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_forged_zero_reliability_activation_cannot_grant_reach (tests.test_connected_channel_authority.SeededChannelAuthority.test_forged_zero_reliability_activation_cannot_grant_reach)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-activation-repair/tests/test_connected_channel_authority.py", line 33, in test_forged_zero_reliability_activation_cannot_grant_reach
+    with self.assertRaisesRegex(ValueError, 'SEEDED_CHANNEL_HISTORY_MISMATCH'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_seeded_audience_order_and_shared_contact_limits_are_authoritative (tests.test_connected_channel_authority.SeededChannelAuthority.test_seeded_audience_order_and_shared_contact_limits_are_authoritative)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-activation-repair/tests/test_connected_channel_authority.py", line 69, in test_seeded_audience_order_and_shared_contact_limits_are_authoritative
+    with self.assertRaisesRegex(ValueError, 'SEEDED_CHANNEL_HISTORY_MISMATCH'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_unbound_seed_or_contracts_cannot_claim_full_channel_audit (tests.test_connected_channel_authority.SeededChannelAuthority.test_unbound_seed_or_contracts_cannot_claim_full_channel_audit) (kwargs=[])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-activation-repair/tests/test_connected_channel_authority.py", line 77, in test_unbound_seed_or_contracts_cannot_claim_full_channel_audit
+    with self.subTest(kwargs=sorted(kwargs)), self.assertRaisesRegex(ValueError, 'FROZEN_CHANNEL_CONTRACTS_AND_SEED_REQUIRED'):
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_unbound_seed_or_contracts_cannot_claim_full_channel_audit (tests.test_connected_channel_authority.SeededChannelAuthority.test_unbound_seed_or_contracts_cannot_claim_full_channel_audit) (kwargs=['contracts'])
+----------------------------------------------------------------------
+ValueError: CHANNEL_FROZEN_CONTRACT_OR_SEED_BINDING_CHANGED
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-activation-repair/tests/test_connected_channel_authority.py", line 77, in test_unbound_seed_or_contracts_cannot_claim_full_channel_audit
+    with self.subTest(kwargs=sorted(kwargs)), self.assertRaisesRegex(ValueError, 'FROZEN_CHANNEL_CONTRACTS_AND_SEED_REQUIRED'):
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "FROZEN_CHANNEL_CONTRACTS_AND_SEED_REQUIRED" does not match "CHANNEL_FROZEN_CONTRACT_OR_SEED_BINDING_CHANGED"
+
+======================================================================
+FAIL: test_unbound_seed_or_contracts_cannot_claim_full_channel_audit (tests.test_connected_channel_authority.SeededChannelAuthority.test_unbound_seed_or_contracts_cannot_claim_full_channel_audit) (kwargs=['seed'])
+----------------------------------------------------------------------
+ValueError: NONEMPTY_CHANNEL_CONTRACTS_REQUIRED
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/channel-activation-repair/tests/test_connected_channel_authority.py", line 77, in test_unbound_seed_or_contracts_cannot_claim_full_channel_audit
+    with self.subTest(kwargs=sorted(kwargs)), self.assertRaisesRegex(ValueError, 'FROZEN_CHANNEL_CONTRACTS_AND_SEED_REQUIRED'):
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "FROZEN_CHANNEL_CONTRACTS_AND_SEED_REQUIRED" does not match "NONEMPTY_CHANNEL_CONTRACTS_REQUIRED"
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.010s
+
+FAILED (failures=10)

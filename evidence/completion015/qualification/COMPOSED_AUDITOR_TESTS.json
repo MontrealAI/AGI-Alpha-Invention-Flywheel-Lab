@@ -1,0 +1,22 @@
+{
+  "schema": "agi-alpha/completion015-composed-auditor-qualification/v1",
+  "returncode": 0,
+  "tests": 48,
+  "modules": [
+    "tests.test_connected_capacity_contract",
+    "tests.test_connected_channel_authority",
+    "tests.test_connected_channels",
+    "tests.test_connected_verify",
+    "tests.test_connected_channel_lead",
+    "tests.test_connected_temporal_boundaries"
+  ],
+  "children_cpu_seconds": 18.040865,
+  "wall_seconds": 18.34380301499914,
+  "source_files": {
+    "connected_enterprise/channels.py": "5deec4bbfb4bcb4fc33198887bd8568d755d9406698cc7476ca6f7541b9d0545",
+    "connected_enterprise/verify.py": "64248e254a5cc07dfad9c35a4eba93fff6da76af80e6b6239d7ae4da0eb27843"
+  },
+  "scope": "Exact composed capacity and seeded-channel independent auditors plus affected channel/config/time tests. Selecting the whole test_connected_verify module also ran its six existing end-to-end regression methods over one exposed 12-day baseline fixture, seed14003, with actual Account/production/independent audits. This is engineering replay, not a new economic experiment or confirmation. Producer/financial authorities unchanged; full exact-head hosted qualification remains required.",
+  "initial_expected_tests": 42,
+  "scope_correction": "Initial 42-case/no-Account expectation was incorrect; the preserved raw log proves48cases and18.040865childCPU. No test rerun or favorable-result selection."
+}

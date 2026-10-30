@@ -1,0 +1,22 @@
+{
+  "schema": "agi-alpha/completion015-historical-publisher-scope/v1",
+  "reviewed_source_commit": "ebea89dd8f808d85f3917089847597026728a93a",
+  "workflow": ".github/workflows/consequential009.yml",
+  "existing_release": {
+    "tag": "symmetry-reference-20261030-r1",
+    "release_id": 428953679,
+    "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/symmetry-reference-20261030-r1",
+    "draft": false,
+    "tag_object_type": "commit",
+    "tag_commit": "69a4725d9c12589860670a551911bedbd65cba9e",
+    "release_target_commit": "69a4725d9c12589860670a551911bedbd65cba9e",
+    "observed_via": [
+      "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases",
+      "https://api.github.com/repos/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/git/ref/tags/symmetry-reference-20261030-r1"
+    ]
+  },
+  "prospective_failure_path": "At reviewed source lines 65-83, historical publication waits for each exact-main campaign/consequential007 workflow for 60 attempts at five-second intervals, before checking existing release at lines 94-102. A campaign taking more than the first five-minute allowance causes this main-only publisher and its containing workflow to fail despite the historical release already existing. This is a source-derived blocking path, not a fabricated failed main run.",
+  "repair": "Restrict only the historical publish job to its exact already-released source commit. The qualify job, current-source qualification, workflow triggers and new connected release's requirement for this workflow success remain unchanged.",
+  "preservation": "No existing tag, release, source freeze, assets, financial record, economic rule or acceptance criterion is modified. No main merge or release publication is performed by this repair.",
+  "validation": "Static YAML checks require qualify to have no job condition, retain publish dependency on qualify, retain main push restriction, and bind the historical publisher to the verified immutable release SHA. No additional commercial experiment was executed."
+}

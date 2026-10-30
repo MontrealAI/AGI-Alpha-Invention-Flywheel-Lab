@@ -1,0 +1,27 @@
+{
+  "schema": "agi-alpha/enterprise011-calibration/v1",
+  "checked_utc": "2026-10-30T15:31:17.158856+00:00",
+  "scope": "Reference wages/benefits only; no measured human task time, live demand or observed service selling prices",
+  "sources": [
+    {
+      "id": "BLS_BOOKKEEPER_2025",
+      "url": "https://www.bls.gov/ooh/office-and-administrative-support/bookkeeping-accounting-and-auditing-clerks.htm",
+      "population": "US occupation, May2025",
+      "verified_hourly_usd": 24.36,
+      "source_last_modified": "2026-08-27",
+      "applicability": "Occupation wage proxy only, not outsourcing quote; Montreal workload fit unestablished"
+    },
+    {
+      "id": "BLS_ECEC_JUNE2026",
+      "url": "https://www.bls.gov/ecec/",
+      "publication": "2026-09-09",
+      "population": "US private industry",
+      "verified_total_compensation_usd_hour": 46.89,
+      "verified_wages_usd_hour": 32.82,
+      "applicability": "Aggregate benefits factor46.89/32.82, not role-specific price or hours"
+    }
+  ],
+  "current_model_rates": "Loaded hourly scenarios34.75/60/55 USD; hours, all customer/channel/latency parameters, AI full-cost envelopes and scale dynamics remain explicit author hypotheses. Rate34.75 retains inherited rounded conservative bookkeeping comparator; not a refreshed wage estimate.",
+  "optional_external_claims": "World GDP/labor-income proxy, occupation-count totals, agent-adoption surveys, per-outcome advertised prices and bundle annual examples NOT used to calibrate demand or current verdict. Prior portfolio source URLs remain unverified historical candidate inputs unless independently sourced here.",
+  "billing": "Host assistant model/token invoice unavailable; setup and operating costs bracketed, never zero or CPU-as-human-labor."
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "agi-alpha/connected014-confirmation001-diagnosis/v1",
+  "registered_utc": "2026-10-30T18:45:08.325932+00:00",
+  "freeze_sha256": "ceeefcd58eebd9caf7f8e0e389b3b42af5444daf567edc943cf2588d279b2bf0",
+  "source_sha256": "3734ea91e36e302bd82272a3e452f5b0a14df06ff6759cde8064f0bb60090ba2",
+  "git_commit": "42238e4b39962d3d3cebce11bdf467a66c5e3436",
+  "world": "2610301402-central-growth",
+  "world_bytes_sha256": "0c536a9aa50fb3c3a54d78fad4cf1ff387ec6790a0a70d51c32da9efedae755e",
+  "error": "REACTIVATION_WITHOUT_PAID_EXPOSURE_OF_CHURNED_BUYER",
+  "failing_event_index": 248,
+  "premature_response": {
+    "customer_id": "SIM-customer-010",
+    "id": "channel-exposure-5d0e7bf8bcdaad6ae5960873-reactivation",
+    "kind": "REACTIVATION_RESPONSE",
+    "responded": false,
+    "response_probability_bps": 3500,
+    "source_plan_id": "connected014-resource-25373637bc791e16251ff5bd0d52fd57",
+    "time": 1512
+  },
+  "following_exposure": {
+    "customer_id": "SIM-customer-010",
+    "id": "channel-exposure-5d0e7bf8bcdaad6ae5960873",
+    "kind": "EXPOSURE",
+    "source_plan_id": "connected014-resource-25373637bc791e16251ff5bd0d52fd57",
+    "time": 1512
+  },
+  "finding": "Engine public trace emitted response before its causal paid exposure. Prepared simulated response and monetary effects were not changed by the repair; independently audited causal trace ordering was wrong.",
+  "repair": "Root engine records paid EXPOSURE first, then its REACTIVATION_RESPONSE. Frozen confirmation001 source, events and evidence remain untouched. New source edition and fresh seeds required; no completed001 protocol or aggregate verdict claimed.",
+  "targeted_regression": "test_public_reactivation_trace_follows_its_paid_exposure"
+}

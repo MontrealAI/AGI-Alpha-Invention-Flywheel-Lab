@@ -1,0 +1,58 @@
+{
+  "schema": "agi-alpha/connected014-addendum-recovery-checkpoint/v1",
+  "observed_utc": "2026-10-30T19:06:44.688851+00:00",
+  "business_source_sha256": "3d985299bf6cfaf546b712ebd9e878e875aaf730ffdb32023637aafc5504a38d",
+  "harness": {
+    "business_source_commit": "ffc1f2e14e88e11f75d5087ab0f7c4e60512431e",
+    "evaluation_source_separate_from_business_source": true,
+    "publication_commit": "692c09ae631b0fd4f1331327505e2942ad8767a6",
+    "registration_sha256": "afc7e700a7f889d6fd99e500b5f3622e51cbe1b2be1444d807fb96ec261ba3cf",
+    "script_sha256": "70dea9c9c6f695dd890ea5345ca89f5d14fabf0cd5630057a7f70dd304374257"
+  },
+  "reason": "Exec session became unavailable; no matching process remained, no exit receipt or traceback was exposed. Cause unknown. Six completed worlds and two partial live states retained.",
+  "registered_worlds": 8,
+  "complete_result_files": 6,
+  "full_confirmation_complete": false,
+  "completed_results": [
+    {
+      "path": "worlds/2610301801-central-baseline/RESULT.json",
+      "sha256": "26064756b1a52ee46ce970b3b8c97ed28671c17698aa2f20c32889f9a620b34f",
+      "native_actions_sha256": "69ca0b0dc1301bed6219dfbc9d03a3a2f9f54b6847bce1a79fe101e6974147af",
+      "engine_cpu_seconds": 21.353084397
+    },
+    {
+      "path": "worlds/2610301801-central-growth/RESULT.json",
+      "sha256": "4771a0a9708c7c6ce501d6f3724a976b418d941d5b2cb5d73ad1bd77905caeef",
+      "native_actions_sha256": "4163d24c7b94d69f86e7e607636f0f3b5132f3170c454bdc71d6b7859db99559",
+      "engine_cpu_seconds": 64.03363931
+    },
+    {
+      "path": "worlds/2610301802-central-baseline/RESULT.json",
+      "sha256": "05d204e803f42939f4b447e72bb73d6fb0ce8fe90ae06d83e1136b749ff0b261",
+      "native_actions_sha256": "8c9a46077cbbdb4d4f9a1801933a320484a4fe2bd39312d18a97f23005370bad",
+      "engine_cpu_seconds": 21.460839943
+    },
+    {
+      "path": "worlds/2610301802-central-growth/RESULT.json",
+      "sha256": "c64c3294ec37cee40367435f43d7ca514229c2f0d27507fb1e84a35da86b8e1a",
+      "native_actions_sha256": "fb06e87550c5f619e9fcedde167b8e3bbf78bf91d59ea962a454a185a923f6ad",
+      "engine_cpu_seconds": 56.991114655
+    },
+    {
+      "path": "worlds/2610301803-central-baseline/RESULT.json",
+      "sha256": "44bee002501d1219b6beae23dc53f380774092a828c0830a620a585f749952e7",
+      "native_actions_sha256": "4eca66be2676fc9396d104343d23dc187ceda6555191fa9fd6d3f89d618d69bc",
+      "engine_cpu_seconds": 15.382177969
+    },
+    {
+      "path": "worlds/2610301804-central-baseline/RESULT.json",
+      "sha256": "f093033ebb677554b41b6764d212eb0553fe6e68988fb055532254b266d51d49",
+      "native_actions_sha256": "1b8dbdce8e189eaed0179eb582f1610ee59430af5b7933b6b0864dd3447444e2",
+      "engine_cpu_seconds": 15.353976678000002
+    }
+  ],
+  "cpu_evidence": "Measured completed-engine CPU lower bound only; unobserved auditing/partial-process tail remains unknown, not zero. Overall allocation unchanged.",
+  "engine_cpu_lower_bound_seconds": 194.574832952,
+  "elapsed_wall_seconds": 380.688851,
+  "recovery": "Same committed harness, sealed queue, native source/action WAL, existing local keys and accounts; no reseeding or balance copying."
+}

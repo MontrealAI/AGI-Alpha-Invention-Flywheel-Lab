@@ -1,0 +1,412 @@
+{
+  "case": "channel_cost2",
+  "config": {
+    "acquisition_budget_fraction": 0.16,
+    "activation_probability": 0.9,
+    "annual_price_compression": 0.015,
+    "assumptions": "Authored conditional operating hypotheses, not calibrated market forecasts. Nominal USD cents, integer rounding at each charge, no currency conversion or inflation forecast. Zero sales tax is a disclosed scenario assumption, not a tax eligibility determination; a configured tax is collected and remitted immediately outside revenue. Only permitted synthetic digital outcomes; no geographic expansion or regulatory permission assumed. Aggregate binomial draws use exact trials up to 200 and bounded normal approximation above 200. Bundle components are counted as delivered work products once; no extra bundle revenue is added. Initial cash is an explicit hypothetical scale allocation, separate from any small-cohort earned funds. Adaptive012 compares controllers under matched initial cash, reachable opportunities and keyed monthly demand/supplier/payment shocks. All action effects, prices, churn and channel conversion are authored hypotheses. Costed channel entry and infrastructure provisioning have explicit delays. Lifetime value uses churn plus a positive monthly discount rate, not a short fixed acquisition horizon. No projected cash funds current spending. Instruments and new services here are projected cost/offer effects, not proof that a new real service or invention executed.",
+    "attempt_cost_cents": 4000,
+    "base_monthly_contacts": 120,
+    "base_products_per_customer": 2,
+    "capacity_block_cost_cents": 500000,
+    "capacity_block_jobs": 100,
+    "capacity_budget_fraction": 0.25,
+    "capacity_delay_months": 1,
+    "channel_contacts_per_month": 120,
+    "channel_entry_cost_cents": 1000000,
+    "channel_entry_delay_months": 1,
+    "choice_probability": 0.25,
+    "collection_probability": 0.98,
+    "contact_growth_monthly": 0.01,
+    "cross_sell_monthly_probability": 0.025,
+    "currency": "USD",
+    "discount_rate_monthly": 0.01,
+    "exposure_cost_cents": 300,
+    "extra_products_per_customer": 2,
+    "fixed_monthly_cost_cents": 300000,
+    "forecast_downside_penalty": 0.2,
+    "initial_capacity_jobs": 200,
+    "initial_customers": 20,
+    "instrument_attempt_cost_reduction": 0.15,
+    "instrument_entry_cost_cents": 1000000,
+    "instrument_monthly_cost_cents": 25000,
+    "liquidity_floor_cents": 1000000,
+    "maximum_monthly_contacts": 100000,
+    "money_unit": "cents",
+    "monthly_churn_probability": 0.025,
+    "months": 120,
+    "new_service_adoption_probability": 0.25,
+    "new_service_entry_cost_cents": 750000,
+    "onboarding_per_customer_cents": 2000,
+    "opening_cash_cents": 25000000,
+    "payment_fee_bps": 290,
+    "payment_fixed_cents": 30,
+    "planner_round_cost_cents": 25,
+    "planning_rounds_per_month": 8,
+    "price_per_work_product_cents": 40000,
+    "prudential_buffer_months": 2.0,
+    "qualification_cost_cents": 200,
+    "qualification_probability": 0.7,
+    "reachable_market_customers": 2000000,
+    "referral_contacts_per_customer": 0.15,
+    "refund_probability": 0.02,
+    "reserve_bps": 1000,
+    "reserve_months": 3,
+    "retention_churn_reduction": 0.25,
+    "retention_entry_cost_cents": 500000,
+    "retention_monthly_cost_cents": 20000,
+    "sales_cycle_months": 1,
+    "sales_tax_bps": 0,
+    "schema": "agi-alpha/adaptive012-scale/v1",
+    "scope": "CONDITIONAL_ADAPTIVE_SCALE_PROJECTION",
+    "settlement_months": 1,
+    "setup_cost_cents": 1000000,
+    "shock_month": 36,
+    "small_cohort_anchor": null,
+    "supplier_capacity_jobs": 2000000,
+    "supplier_cost_multiplier": 1.0,
+    "supplier_diversity_entry_cost_cents": 1500000,
+    "supplier_diversity_monthly_cost_cents": 50000,
+    "supplier_outage_probability": 0.03,
+    "support_per_customer_cents": 300,
+    "targets_annual_collected_cents": [
+      100000000000,
+      1000000000000,
+      10000000000000,
+      100000000000000
+    ],
+    "technical_acceptance_probability": 0.98,
+    "utilization_probability": 0.75
+  },
+  "result": {
+    "capital_needs_basis": "Largest encountered unfunded desired delivery or operating cash gap; no outside cash injected and not a solved minimum-capital theorem.",
+    "conclusion": "Policy comparisons under disclosed hypotheses. Nonreach by a controller is not impossibility for all controllers. Positive projected revenue is not audited actual service receipts.",
+    "config": {
+      "acquisition_budget_fraction": 0.16,
+      "activation_probability": 0.9,
+      "annual_price_compression": 0.015,
+      "assumptions": "Authored conditional operating hypotheses, not calibrated market forecasts. Nominal USD cents, integer rounding at each charge, no currency conversion or inflation forecast. Zero sales tax is a disclosed scenario assumption, not a tax eligibility determination; a configured tax is collected and remitted immediately outside revenue. Only permitted synthetic digital outcomes; no geographic expansion or regulatory permission assumed. Aggregate binomial draws use exact trials up to 200 and bounded normal approximation above 200. Bundle components are counted as delivered work products once; no extra bundle revenue is added. Initial cash is an explicit hypothetical scale allocation, separate from any small-cohort earned funds. Adaptive012 compares controllers under matched initial cash, reachable opportunities and keyed monthly demand/supplier/payment shocks. All action effects, prices, churn and channel conversion are authored hypotheses. Costed channel entry and infrastructure provisioning have explicit delays. Lifetime value uses churn plus a positive monthly discount rate, not a short fixed acquisition horizon. No projected cash funds current spending. Instruments and new services here are projected cost/offer effects, not proof that a new real service or invention executed.",
+      "attempt_cost_cents": 4000,
+      "base_monthly_contacts": 120,
+      "base_products_per_customer": 2,
+      "capacity_block_cost_cents": 500000,
+      "capacity_block_jobs": 100,
+      "capacity_budget_fraction": 0.25,
+      "capacity_delay_months": 1,
+      "channel_contacts_per_month": 120,
+      "channel_entry_cost_cents": 1000000,
+      "channel_entry_delay_months": 1,
+      "choice_probability": 0.25,
+      "collection_probability": 0.98,
+      "contact_growth_monthly": 0.01,
+      "cross_sell_monthly_probability": 0.025,
+      "currency": "USD",
+      "discount_rate_monthly": 0.01,
+      "exposure_cost_cents": 300,
+      "extra_products_per_customer": 2,
+      "fixed_monthly_cost_cents": 300000,
+      "forecast_downside_penalty": 0.2,
+      "initial_capacity_jobs": 200,
+      "initial_customers": 20,
+      "instrument_attempt_cost_reduction": 0.15,
+      "instrument_entry_cost_cents": 1000000,
+      "instrument_monthly_cost_cents": 25000,
+      "liquidity_floor_cents": 1000000,
+      "maximum_monthly_contacts": 100000,
+      "money_unit": "cents",
+      "monthly_churn_probability": 0.025,
+      "months": 120,
+      "new_service_adoption_probability": 0.25,
+      "new_service_entry_cost_cents": 750000,
+      "onboarding_per_customer_cents": 2000,
+      "opening_cash_cents": 25000000,
+      "payment_fee_bps": 290,
+      "payment_fixed_cents": 30,
+      "planner_round_cost_cents": 25,
+      "planning_rounds_per_month": 8,
+      "price_per_work_product_cents": 40000,
+      "prudential_buffer_months": 2.0,
+      "qualification_cost_cents": 200,
+      "qualification_probability": 0.7,
+      "reachable_market_customers": 2000000,
+      "referral_contacts_per_customer": 0.15,
+      "refund_probability": 0.02,
+      "reserve_bps": 1000,
+      "reserve_months": 3,
+      "retention_churn_reduction": 0.25,
+      "retention_entry_cost_cents": 500000,
+      "retention_monthly_cost_cents": 20000,
+      "sales_cycle_months": 1,
+      "sales_tax_bps": 0,
+      "schema": "agi-alpha/adaptive012-scale/v1",
+      "scope": "CONDITIONAL_ADAPTIVE_SCALE_PROJECTION",
+      "settlement_months": 1,
+      "setup_cost_cents": 1000000,
+      "shock_month": 36,
+      "small_cohort_anchor": null,
+      "supplier_capacity_jobs": 2000000,
+      "supplier_cost_multiplier": 1.0,
+      "supplier_diversity_entry_cost_cents": 1500000,
+      "supplier_diversity_monthly_cost_cents": 50000,
+      "supplier_outage_probability": 0.03,
+      "support_per_customer_cents": 300,
+      "targets_annual_collected_cents": [
+        100000000000,
+        1000000000000,
+        10000000000000,
+        100000000000000
+      ],
+      "technical_acceptance_probability": 0.98,
+      "utilization_probability": 0.75
+    },
+    "controllers": {
+      "adaptive": {
+        "binding_constraints": [
+          "capacity_or_delivery_cash"
+        ],
+        "cash_survival_fraction": 1.0,
+        "milestones": {
+          "100000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 0,
+            "probability_within_horizon": 1.0,
+            "reached": 2,
+            "times_months_with_censoring": [
+              25,
+              25
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": 25,
+              "p50": 25,
+              "p90": 25
+            }
+          },
+          "1000000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 2,
+            "probability_within_horizon": 0.0,
+            "reached": 0,
+            "times_months_with_censoring": [
+              null,
+              null
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": null,
+              "p50": null,
+              "p90": null
+            }
+          },
+          "10000000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 2,
+            "probability_within_horizon": 0.0,
+            "reached": 0,
+            "times_months_with_censoring": [
+              null,
+              null
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": null,
+              "p50": null,
+              "p90": null
+            }
+          },
+          "100000000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 2,
+            "probability_within_horizon": 0.0,
+            "reached": 0,
+            "times_months_with_censoring": [
+              null,
+              null
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": null,
+              "p50": null,
+              "p90": null
+            }
+          }
+        },
+        "peak_additional_capital_needed_cents": 465800,
+        "profit_cents": [
+          1648329115807,
+          1651260785066
+        ]
+      },
+      "fixed_shares": {
+        "binding_constraints": [
+          "capacity_or_delivery_cash",
+          "supplier_capacity_or_outage"
+        ],
+        "cash_survival_fraction": 1.0,
+        "milestones": {
+          "100000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 2,
+            "probability_within_horizon": 0.0,
+            "reached": 0,
+            "times_months_with_censoring": [
+              null,
+              null
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": null,
+              "p50": null,
+              "p90": null
+            }
+          },
+          "1000000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 2,
+            "probability_within_horizon": 0.0,
+            "reached": 0,
+            "times_months_with_censoring": [
+              null,
+              null
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": null,
+              "p50": null,
+              "p90": null
+            }
+          },
+          "10000000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 2,
+            "probability_within_horizon": 0.0,
+            "reached": 0,
+            "times_months_with_censoring": [
+              null,
+              null
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": null,
+              "p50": null,
+              "p90": null
+            }
+          },
+          "100000000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 2,
+            "probability_within_horizon": 0.0,
+            "reached": 0,
+            "times_months_with_censoring": [
+              null,
+              null
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": null,
+              "p50": null,
+              "p90": null
+            }
+          }
+        },
+        "peak_additional_capital_needed_cents": 28008000,
+        "profit_cents": [
+          15676808879,
+          15988414849
+        ]
+      },
+      "ordinary_adaptive": {
+        "binding_constraints": [
+          "capacity_or_delivery_cash"
+        ],
+        "cash_survival_fraction": 1.0,
+        "milestones": {
+          "100000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 0,
+            "probability_within_horizon": 1.0,
+            "reached": 2,
+            "times_months_with_censoring": [
+              31,
+              36
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": 31,
+              "p50": 31,
+              "p90": 36
+            }
+          },
+          "1000000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 2,
+            "probability_within_horizon": 0.0,
+            "reached": 0,
+            "times_months_with_censoring": [
+              null,
+              null
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": null,
+              "p50": null,
+              "p90": null
+            }
+          },
+          "10000000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 2,
+            "probability_within_horizon": 0.0,
+            "reached": 0,
+            "times_months_with_censoring": [
+              null,
+              null
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": null,
+              "p50": null,
+              "p90": null
+            }
+          },
+          "100000000000000": {
+            "basis": "Trailing 12 collected revenue, never annualized run rate. None includes nonreach and early cash failure.",
+            "not_reached": 2,
+            "probability_within_horizon": 0.0,
+            "reached": 0,
+            "times_months_with_censoring": [
+              null,
+              null
+            ],
+            "unconditional_censored_quantiles_months": {
+              "p10": null,
+              "p50": null,
+              "p90": null
+            }
+          }
+        },
+        "peak_additional_capital_needed_cents": 506600,
+        "profit_cents": [
+          1593674564438,
+          1668584812645
+        ]
+      }
+    },
+    "currency": "USD",
+    "horizon_months": 120,
+    "money_unit": "cents",
+    "paired_comparisons": [
+      {
+        "adaptive_cash_survival": true,
+        "adaptive_minus_fixed_collected_cents": 1914948748939,
+        "adaptive_minus_fixed_profit_cents": 1632652306928,
+        "adaptive_minus_ordinary_profit_cents": 54654551369,
+        "fixed_cash_survival": true,
+        "seed": 2610302301
+      },
+      {
+        "adaptive_cash_survival": true,
+        "adaptive_minus_fixed_collected_cents": 1917482603776,
+        "adaptive_minus_fixed_profit_cents": 1635272370217,
+        "adaptive_minus_ordinary_profit_cents": -17324027579,
+        "fixed_cash_survival": true,
+        "seed": 2610302302
+      }
+    ],
+    "schema": "agi-alpha/adaptive012-scale-comparison/v1",
+    "scope": "CONDITIONAL_ADAPTIVE_SCALE_PROJECTION",
+    "seeds": [
+      2610302301,
+      2610302302
+    ]
+  }
+}

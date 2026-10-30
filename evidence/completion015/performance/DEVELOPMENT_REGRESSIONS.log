@@ -1,0 +1,165 @@
+test_duplicate_indexed_native_identity_is_still_rejected (test_connected_audit_prefixes.ExactCanonicalAuditPrefixes.test_duplicate_indexed_native_identity_is_still_rejected) ... ok
+test_every_prefix_equals_independent_complete_canonical_serialization (test_connected_audit_prefixes.ExactCanonicalAuditPrefixes.test_every_prefix_equals_independent_complete_canonical_serialization) ... ok
+test_abrupt_process_exit_after_finish_recovers_one_expense (test_connected_finance.ConnectedFinanceTests.test_abrupt_process_exit_after_finish_recovers_one_expense) ... ok
+test_abrupt_process_exit_after_reserve_recovers_one_expense (test_connected_finance.ConnectedFinanceTests.test_abrupt_process_exit_after_reserve_recovers_one_expense) ... ok
+test_changed_duplicate_payload_refused_without_further_spending (test_connected_finance.ConnectedFinanceTests.test_changed_duplicate_payload_refused_without_further_spending) ... ok
+test_checkpoint_from_another_account_key_or_contract_is_rejected (test_connected_finance.ConnectedFinanceTests.test_checkpoint_from_another_account_key_or_contract_is_rejected) ... ok
+test_competing_owner_cannot_open_live_account (test_connected_finance.ConnectedFinanceTests.test_competing_owner_cannot_open_live_account) ... ok
+test_earned_contract_is_state_bound_obligation_resolved_and_exactly_once (test_connected_finance.ConnectedFinanceTests.test_earned_contract_is_state_bound_obligation_resolved_and_exactly_once) ... ok
+test_export_is_detached_from_live_native_authority (test_connected_finance.ConnectedFinanceTests.test_export_is_detached_from_live_native_authority) ... ok
+test_finish_committed_then_interrupted_replay_survives_advanced_state (test_connected_finance.ConnectedFinanceTests.test_finish_committed_then_interrupted_replay_survives_advanced_state) ... ok
+test_future_income_does_not_fund_and_seed_requires_explicit_flag (test_connected_finance.ConnectedFinanceTests.test_future_income_does_not_fund_and_seed_requires_explicit_flag) ... ok
+test_native_operation_commit_before_ack_returns_original_prefix_snapshot (test_connected_finance.ConnectedFinanceTests.test_native_operation_commit_before_ack_returns_original_prefix_snapshot) ... ok
+test_new_journal_write_requires_current_complete_native_audit (test_connected_finance.ConnectedFinanceTests.test_new_journal_write_requires_current_complete_native_audit) ... ok
+test_operating_checkpoint_preserves_state_and_accepts_native_advancement (test_connected_finance.ConnectedFinanceTests.test_operating_checkpoint_preserves_state_and_accepts_native_advancement) ... ok
+test_operating_queue_buyer_current_and_time_tampering_rejected (test_connected_finance.ConnectedFinanceTests.test_operating_queue_buyer_current_and_time_tampering_rejected) ... ok
+test_private_wal_tamper_is_rejected_on_reopen (test_connected_finance.ConnectedFinanceTests.test_private_wal_tamper_is_rejected_on_reopen) ... ok
+test_public_audit_prohibits_commitment_operations_in_execute_entries (test_connected_finance.ConnectedFinanceTests.test_public_audit_prohibits_commitment_operations_in_execute_entries) ... ok
+test_public_audit_rejects_direct_native_writer_bypass (test_connected_finance.ConnectedFinanceTests.test_public_audit_rejects_direct_native_writer_bypass) ... ok
+test_public_audit_rejects_duplicate_native_claim (test_connected_finance.ConnectedFinanceTests.test_public_audit_rejects_duplicate_native_claim) ... ok
+test_public_audit_requires_every_native_action_to_be_journaled (test_connected_finance.ConnectedFinanceTests.test_public_audit_requires_every_native_action_to_be_journaled) ... ok
+test_public_audit_requires_journal_native_causal_order (test_connected_finance.ConnectedFinanceTests.test_public_audit_requires_journal_native_causal_order) ... ok
+test_recovery_refuses_signed_unsupported_native_request_before_mutation (test_connected_finance.ConnectedFinanceTests.test_recovery_refuses_signed_unsupported_native_request_before_mutation) ... ok
+test_reserve_committed_then_interrupted_recovers_same_plan (test_connected_finance.ConnectedFinanceTests.test_reserve_committed_then_interrupted_recovers_same_plan) ... ok
+test_seed_cost_commit_before_ack_is_recovered_without_double_charge (test_connected_finance.ConnectedFinanceTests.test_seed_cost_commit_before_ack_is_recovered_without_double_charge) ... ok
+test_source_drift_and_public_receipt_tampering_fail_closed (test_connected_finance.ConnectedFinanceTests.test_source_drift_and_public_receipt_tampering_fail_closed) ... ok
+test_valid_checkpoint_refuses_native_tape_rollback (test_connected_finance.ConnectedFinanceTests.test_valid_checkpoint_refuses_native_tape_rollback) ... ok
+test_extra_native_cost_at_each_pending_boundary_rejects_before_mutation (test_connected_recovery_preflight.ConnectedRecoveryPreflightTests.test_extra_native_cost_at_each_pending_boundary_rejects_before_mutation) ... ok
+test_valid_zero_reserve_and_finish_tails_recover_once (test_connected_recovery_preflight.ConnectedRecoveryPreflightTests.test_valid_zero_reserve_and_finish_tails_recover_once) ... ok
+test_accepted_fee_invoice_requires_native_prepare_and_keeps_pending_principal_protected (test_adaptive_account.AdaptiveAccountTests.test_accepted_fee_invoice_requires_native_prepare_and_keeps_pending_principal_protected) ... ok
+test_adaptive_services_settle_through_owned_native_audit (test_adaptive_account.AdaptiveAccountTests.test_adaptive_services_settle_through_owned_native_audit) ... ok
+test_competing_processes_cannot_double_reserve_same_earnings (test_adaptive_account.AdaptiveAccountTests.test_competing_processes_cannot_double_reserve_same_earnings) ... Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 131, in _main
+    prepare(preparation_data)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 246, in prepare
+    _fixup_main_from_path(data['init_main_from_path'])
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 297, in _fixup_main_from_path
+    main_content = runpy.run_path(main_path,
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 286, in run_path
+  File "<frozen runpy>", line 254, in _get_code_from_file
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b156b0353186/agi-alpha/<stdin>'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 131, in _main
+    prepare(preparation_data)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 246, in prepare
+    _fixup_main_from_path(data['init_main_from_path'])
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 297, in _fixup_main_from_path
+    main_content = runpy.run_path(main_path,
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 286, in run_path
+  File "<frozen runpy>", line 254, in _get_code_from_file
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b156b0353186/agi-alpha/<stdin>'
+ERROR
+test_explicit_distributed_storage_and_aliases_refused (test_adaptive_account.AdaptiveAccountTests.test_explicit_distributed_storage_and_aliases_refused) ... ok
+test_hardlinked_tape_alias_refused (test_adaptive_account.AdaptiveAccountTests.test_hardlinked_tape_alias_refused) ... ok
+test_idempotent_cost_reserve_finish_and_resume (test_adaptive_account.AdaptiveAccountTests.test_idempotent_cost_reserve_finish_and_resume) ... ok
+test_interrupted_owner_takeover_replays_acknowledged_action_once (test_adaptive_account.AdaptiveAccountTests.test_interrupted_owner_takeover_replays_acknowledged_action_once) ... Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 131, in _main
+    prepare(preparation_data)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 246, in prepare
+    _fixup_main_from_path(data['init_main_from_path'])
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 297, in _fixup_main_from_path
+    main_content = runpy.run_path(main_path,
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 286, in run_path
+  File "<frozen runpy>", line 254, in _get_code_from_file
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b156b0353186/agi-alpha/<stdin>'
+ERROR
+test_interrupted_reservation_commit_retries_without_duplicate_funding (test_adaptive_account.AdaptiveAccountTests.test_interrupted_reservation_commit_retries_without_duplicate_funding) ... Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 131, in _main
+    prepare(preparation_data)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 246, in prepare
+    _fixup_main_from_path(data['init_main_from_path'])
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/spawn.py", line 297, in _fixup_main_from_path
+    main_content = runpy.run_path(main_path,
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 286, in run_path
+  File "<frozen runpy>", line 254, in _get_code_from_file
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b156b0353186/agi-alpha/<stdin>'
+ERROR
+test_later_obligation_early_finish_and_tampered_invoice_refused (test_adaptive_account.AdaptiveAccountTests.test_later_obligation_early_finish_and_tampered_invoice_refused) ... ok
+test_local_mac_entropy_does_not_change_native_financial_replay (test_adaptive_account.AdaptiveAccountTests.test_local_mac_entropy_does_not_change_native_financial_replay) ... ok
+test_mandatory_namespace_rejects_legacy_unguarded_callers (test_adaptive_account.AdaptiveAccountTests.test_mandatory_namespace_rejects_legacy_unguarded_callers) ... ok
+test_native_earned_reserve_finish_and_public_audit (test_adaptive_account.AdaptiveAccountTests.test_native_earned_reserve_finish_and_public_audit) ... ok
+test_plan_amount_and_later_obligations_cannot_be_underreserved (test_adaptive_account.AdaptiveAccountTests.test_plan_amount_and_later_obligations_cannot_be_underreserved) ... ok
+test_precommit_proof_survives_interruption_without_spending (test_adaptive_account.AdaptiveAccountTests.test_precommit_proof_survives_interruption_without_spending) ... ok
+test_seed_and_future_receipts_do_not_finance_reservation (test_adaptive_account.AdaptiveAccountTests.test_seed_and_future_receipts_do_not_finance_reservation) ... ok
+test_signed_proof_and_public_state_binding_tampering_rejected (test_adaptive_account.AdaptiveAccountTests.test_signed_proof_and_public_state_binding_tampering_rejected) ... ok
+test_stale_state_or_modified_authorization_rejected (test_adaptive_account.AdaptiveAccountTests.test_stale_state_or_modified_authorization_rejected) ... ok
+test_unqualified_direct_reservation_entrypoint_refused (test_adaptive_account.AdaptiveAccountTests.test_unqualified_direct_reservation_entrypoint_refused) ... ok
+test_abrupt_exit_after_prepare_keeps_reserved_costs_on_recovery (test_adaptive_cancellation.AdaptiveCancellationRetirementTests.test_abrupt_exit_after_prepare_keeps_reserved_costs_on_recovery) ... ok
+test_cancellation_before_work_is_retired_without_releasing_reserve (test_adaptive_cancellation.AdaptiveCancellationRetirementTests.test_cancellation_before_work_is_retired_without_releasing_reserve) ... ok
+test_duplicate_unknown_and_stale_cancellation_always_fail_closed (test_adaptive_cancellation.AdaptiveCancellationRetirementTests.test_duplicate_unknown_and_stale_cancellation_always_fail_closed) ... ok
+test_finished_plan_cannot_be_cancelled_again (test_adaptive_cancellation.AdaptiveCancellationRetirementTests.test_finished_plan_cannot_be_cancelled_again) ... ok
+test_interrupted_prepared_work_reopens_with_obligations_intact (test_adaptive_cancellation.AdaptiveCancellationRetirementTests.test_interrupted_prepared_work_reopens_with_obligations_intact) ... ok
+test_legacy_cancelled_account_cannot_be_exported_or_reopened (test_adaptive_cancellation.AdaptiveCancellationRetirementTests.test_legacy_cancelled_account_cannot_be_exported_or_reopened) ... ok
+test_partial_and_accepted_work_cannot_release_unreconciled_costs (test_adaptive_cancellation.AdaptiveCancellationRetirementTests.test_partial_and_accepted_work_cannot_release_unreconciled_costs) ... ok
+test_valid_native_legacy_cancellation_history_cannot_pass_adaptive_auditor (test_adaptive_cancellation.AdaptiveCancellationRetirementTests.test_valid_native_legacy_cancellation_history_cannot_pass_adaptive_auditor) ... ok
+
+======================================================================
+ERROR: test_competing_processes_cannot_double_reserve_same_earnings (test_adaptive_account.AdaptiveAccountTests.test_competing_processes_cannot_double_reserve_same_earnings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/agi-alpha/tests/test_adaptive_account.py", line 275, in test_competing_processes_cannot_double_reserve_same_earnings
+    outcomes = [queue.get(timeout=30) for _ in processes]
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/queues.py", line 114, in get
+    raise Empty
+_queue.Empty
+
+======================================================================
+ERROR: test_interrupted_owner_takeover_replays_acknowledged_action_once (test_adaptive_account.AdaptiveAccountTests.test_interrupted_owner_takeover_replays_acknowledged_action_once)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/agi-alpha/tests/test_adaptive_account.py", line 294, in test_interrupted_owner_takeover_replays_acknowledged_action_once
+    expected = parent.recv()
+               ^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/connection.py", line 399, in _recv
+    raise EOFError
+EOFError
+
+======================================================================
+ERROR: test_interrupted_reservation_commit_retries_without_duplicate_funding (test_adaptive_account.AdaptiveAccountTests.test_interrupted_reservation_commit_retries_without_duplicate_funding)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/agi-alpha/tests/test_adaptive_account.py", line 313, in test_interrupted_reservation_commit_retries_without_duplicate_funding
+    expected = parent.recv(); process.join(30)
+               ^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+          ^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/connection.py", line 430, in _recv_bytes
+    buf = self._recv(4)
+          ^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/connection.py", line 399, in _recv
+    raise EOFError
+EOFError
+
+----------------------------------------------------------------------
+Ran 54 tests in 83.378s
+
+FAILED (errors=3)
+{'successful': False, 'tests': 54, 'CPU_seconds': 52.430527000000005, 'wall_seconds': 83.4294808199993}

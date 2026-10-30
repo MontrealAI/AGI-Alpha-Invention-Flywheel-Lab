@@ -1,4 +1,11 @@
-"""Self-contained, content-verified archives and unchanged historical replay."""
+"""Content-verified source archives and unchanged historical replay.
+
+New builds omit only the exact root enterprise011/adaptive012 multipart transport
+directories and their generated combined ZIPs, avoiding recursive embedding of a
+newer package inside this older bounded source archive. Current code, historical
+evidence and other artifacts remain included. The extractor still verifies every
+declared payload of older archives, including transport files already present.
+"""
 from __future__ import annotations
 import argparse
 import hashlib
@@ -105,6 +112,8 @@ def build(root, archive_path):
     for path in sorted(root.rglob("*")):
         relative = path.relative_to(root)
         if _excluded(relative) or path == archive_path:
+            continue
+        if relative.parts[:2] in {("artifacts", "enterprise011-parts"), ("artifacts", "adaptive012-parts")} or relative.as_posix() in {"artifacts/AGI_ALPHA_Enterprise_011_source_evidence.zip", "artifacts/AGI_ALPHA_Adaptive_012_source_evidence.zip"}:
             continue
         if path.is_symlink():
             raise ValueError("ARCHIVE_SYMLINK_REFUSED " + str(relative))

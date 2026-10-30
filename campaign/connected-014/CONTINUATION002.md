@@ -1,0 +1,7 @@
+# Replacement confirmation 002 within the original allocation
+
+Source001 remains immutable at42238e4. Its fresh run stopped on an independent lifecycle disagreement: a paid reactivation response was logged before its source exposure.15 result files and14 accepted operating audits were preserved; no full22-world verdict is claimed. The trace-order repair changes event reporting order, not underlying money or buyer choices. All001 seeds are retired.
+
+Partial exposed outcomes identified price rigidity as the next binding commercial constraint. The new option uses only public rival quotations and Boolean own-offer outcomes, preserving a complete direct-resource/fee floor plus1USD contribution. It costs5USD once and0.05USD per actual quoted decision, including losses. It grants no sale or new funds. Retained growth and competitive growth receive equal starting capital, service specifications, channels, supplier and buyer assumptions. Equal utility ties use stable neutral customer/event draws for both arms. New cohort14023026 and fresh seeds are frozen in PREREGISTRATION before confirmation.
+
+The original90-minute allocation and19:41:16UTC cutoff remain; no extension, merge, release, deployment, real commerce, paid call or outreach is authorized. Separate businesses do not copy earned balances. Acquisition and capacity within each trajectory remain earned-funded. The pricing extension's initial construction uses that trajectory's declared seed allocation and is fully charged, not relabeled as the original representative enterprise's earnings.

@@ -1,0 +1,42 @@
+{
+  "schema": "agi-alpha/connected014-clean-qualification-failure/v1",
+  "accepted": false,
+  "source_commit": "ffc1f2e14e88e11f75d5087ab0f7c4e60512431e",
+  "source_sha256": "3d985299bf6cfaf546b712ebd9e878e875aaf730ffdb32023637aafc5504a38d",
+  "committed_source_files_verified": 116,
+  "scope": "ENGINEERING_SMOKE_DISTRIBUTION_FAILURE_NOT_COMMERCIAL_CONFIRMATION",
+  "completed": [
+    "clean_source_archive",
+    "two_smoke_worlds",
+    "same_account_resume_financial_consistency",
+    "native_and_operating_package_audit"
+  ],
+  "failure": "Subsequent package command rejected baseline RESULT.json missing case, KeyError:case. Public ZIP not produced.",
+  "diagnostic": {
+    "current_baseline_result_sha256": "86a2f0935f934be333fd2e55bea2577f2eb56120117b67f6ece33d853b0fd951",
+    "expected_report_index_sha256": "fcde576cebb84554ceec0eca42cee800a52ce9ea8df8ed1857f914716681dfe6",
+    "adding_case_central_in_memory_only_sha256": "fcde576cebb84554ceec0eca42cee800a52ce9ea8df8ed1857f914716681dfe6",
+    "only_case_field_differs_from_index": true,
+    "origin": "UNRESOLVED; no frozen source mutation or actual record repair performed by qualification agent."
+  },
+  "resources": {
+    "wall_seconds": 14.074044762994163,
+    "children_cpu_seconds": 21.920827,
+    "started_utc": "2026-10-30T18:51:31Z",
+    "finished_utc": "2026-10-30T18:51:45Z"
+  },
+  "files": {
+    "01-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "01-run.stdout": "203bceb154d6623ec889fa6414965d35fc4967dd8bc09067944d6fb4b1d908b4",
+    "02-resume.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "02-resume.stdout": "ac9e538b6bdb7889ee0a9169b6755345177f197c25f1acdfb378bb873bbba5f8",
+    "03-audit.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "03-audit.stdout": "c18cb6b8e3dd477ecf0ef9569d23074b23d8fc538437f9dd3444cca828312fe7",
+    "04-package.stderr": "20f4371593ef9ec16d0ff00bf1511eb0c757cb256283b96edf86b6bed4f4b546",
+    "04-package.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "QUALIFICATION.failed.json": "7b12b1dfff313dffdf4a08ea788b564d294073ad28199eda04891e1023af45e0",
+    "command.stderr": "6c677a2605bf9cd6d37b971959c87a6fc6dabc26e645f5d4a5e6ea20aec95f69",
+    "command.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "private_state_published": false
+}
