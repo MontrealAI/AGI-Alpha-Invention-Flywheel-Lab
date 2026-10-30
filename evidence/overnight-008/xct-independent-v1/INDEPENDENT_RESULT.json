@@ -1,0 +1,128 @@
+{
+  "scope": "INDEPENDENT_DEVELOPMENT_REVIEW_NO_PROTECTED_CASES",
+  "candidate_sha256": "c78f0a9e3229f779de91701ba5289719be9c3e40d1acf75d33be22ca1ce42f73",
+  "protocol_sha256": "e475f6f1b8ec9457fe2cc6cd14300da2b2097b441aecaf5e1a2c6915b81ad2ac",
+  "review_source_sha256": "3f0827cf422c5d8820b7198fa13ce3bcbbaab5c16ba9e16896bf29d7733c54ef",
+  "data_sha256": "03a35c57ae52026f980ffcf540a4243a02f198b3fcdd8dff72cb251f70b067cc",
+  "matrix_shape": [
+    9840,
+    6724
+  ],
+  "matrix_nnz": 970344,
+  "ray_order_check": "m(:) and x column-major indexing follow primary dataset documentation; no transpose error established",
+  "reference_roi": 0.02155260596023119,
+  "endpoints": {
+    "initial": {
+      "lo": {
+        "roi_mean": 0.0,
+        "min_x": 0.0,
+        "constraint_excess": 7.097794574306704e-14,
+        "feasible": true,
+        "all120_check": {
+          "roi_mean": 0.0,
+          "min_x": 0.0,
+          "constraint_excess": 1.384311835671759,
+          "feasible": false
+        }
+      },
+      "hi": {
+        "roi_mean": 0.17440665865455968,
+        "min_x": 0.0,
+        "constraint_excess": 2.5451862839531714e-14,
+        "feasible": true,
+        "all120_check": {
+          "roi_mean": 0.17440665865455968,
+          "min_x": 0.0,
+          "constraint_excess": 2.293837629467854,
+          "feasible": false
+        }
+      },
+      "interval_width": 0.17440665865455968
+    },
+    "selected": {
+      "lo": {
+        "roi_mean": 0.0,
+        "min_x": 0.0,
+        "constraint_excess": 6.45039577307216e-14,
+        "feasible": true,
+        "all120_check": {
+          "roi_mean": 0.0,
+          "min_x": 0.0,
+          "constraint_excess": 1.5986440159862012,
+          "feasible": false
+        }
+      },
+      "hi": {
+        "roi_mean": 0.17440665865455973,
+        "min_x": 0.0,
+        "constraint_excess": 5.0230652970384426e-14,
+        "feasible": true,
+        "all120_check": {
+          "roi_mean": 0.17440665865455973,
+          "min_x": 0.0,
+          "constraint_excess": 1.7762651593929597,
+          "feasible": false
+        }
+      },
+      "interval_width": 0.17440665865455973
+    },
+    "uniform": {
+      "lo": {
+        "roi_mean": 0.0,
+        "min_x": 0.0,
+        "constraint_excess": 4.231615058358784e-13,
+        "feasible": true,
+        "all120_check": {
+          "roi_mean": 0.0,
+          "min_x": 0.0,
+          "constraint_excess": 1.239117998746501,
+          "feasible": false
+        }
+      },
+      "hi": {
+        "roi_mean": 0.17440665865455968,
+        "min_x": 0.0,
+        "constraint_excess": 6.328965129753783e-14,
+        "feasible": true,
+        "all120_check": {
+          "roi_mean": 0.17440665865455968,
+          "min_x": 0.0,
+          "constraint_excess": 1.9015963666163709,
+          "feasible": false
+        }
+      },
+      "interval_width": 0.17440665865455968
+    }
+  },
+  "full120": {
+    "lo": {
+      "status": 1,
+      "message": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+      "solver_wall_seconds": 60.530613017006544,
+      "iterations": 2918
+    },
+    "hi": {
+      "status": 1,
+      "message": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+      "solver_wall_seconds": 54.761905501,
+      "iterations": 4259
+    }
+  },
+  "limitations": [
+    "All120 views and full-view FBP reference exposed to original calibration; not a heldout selection test.",
+    "Reference feasibility is guaranteed by fitted empirical residual envelope, not independent physical noise calibration.",
+    "ROI mean attenuation is not a pore-size/material-quality outcome.",
+    "Shared model libraries and host; no external certification."
+  ],
+  "actual_feature_range_reduction": {
+    "selected": -5.551115123125783e-17,
+    "uniform": 0.0,
+    "all_three_equal_within_1e_10": true,
+    "conclusion": "Pair separation does not establish ROI uncertainty reduction; the fixed feature range did not shrink."
+  },
+  "resources": {
+    "wall_seconds": 115.70361097800196,
+    "cpu_seconds": 116.258044,
+    "peak_rss_kib": 667452
+  }
+}
