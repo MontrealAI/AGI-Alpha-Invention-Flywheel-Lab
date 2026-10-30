@@ -1,0 +1,3 @@
+# Connected enterprise 014
+
+Execute the owner mandate dated 30 October 2026 18:05 UTC. Integrate the existing canonical adaptive enterprise into an event-clock operating path with financed expiring acquisition, buyer consent before production, independent acceptance, native protected settlement, prior-earned investment, repeat work and durable live recovery. Preserve historical results and distinct aggregate models. Measure complete modeled cost, cash and obligations; disclose unavailable billing. Test conditional profitable growth and failures within the fresh allocation. No real commerce, paid calls, private access or deployment. Public source/PR/evidence publication is authorized; formal approval, merge and release retain their existing boundary.
