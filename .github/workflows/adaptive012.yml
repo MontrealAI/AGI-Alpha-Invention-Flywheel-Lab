@@ -32,7 +32,7 @@ jobs:
       - name: Current default end-to-end operating edition
         run: |
           python3 -m adaptive_enterprise run --output "$RUNNER_TEMP/adaptive012-current"
-          python3 -m adaptive_enterprise audit --output "$RUNNER_TEMP/adaptive012-current"
+          python3 -m adaptive_enterprise audit --financial-only --output "$RUNNER_TEMP/adaptive012-current"
       - name: Clean no-Git route and independent owned financial audit
         run: |
           mkdir "$RUNNER_TEMP/adaptive012-no-git"

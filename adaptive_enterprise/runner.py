@@ -4,24 +4,28 @@ import copy
 import gzip
 import hashlib
 import json
+import multiprocessing
 from pathlib import Path
+import resource
 import shutil
 import subprocess
 import sys
 import tempfile
 import time
 import zipfile
+from concurrent.futures import ProcessPoolExecutor
 from enterprise.runner import RunLock, canonical, digest, write_json
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = 'agi-alpha/adaptive012-run/v1'
+MAX_WORKERS = 4
 
 
 def protocol(smoke=False):
     return {'schema':'agi-alpha/adaptive012-protocol/v1','scope':'CONDITIONAL_SIMULATION',
-        'edition':'engineering-smoke' if smoke else 'adaptive012-confirmation-001',
-        'seeds':[12001] if smoke else list(range(2610301201,2610301205)),
-        'exposed_development_seeds':[12001,12002], 'service_cohort_seed':12012026 if not smoke else 0,
+        'edition':'engineering-smoke' if smoke else 'adaptive012-confirmation-002',
+        'seeds':[12001] if smoke else list(range(2610301301,2610301305)),
+        'exposed_development_seeds':[12001,12002]+list(range(2610301201,2610301205)), 'service_cohort_seed':12013026 if not smoke else 0,
         'worlds':['recurring_complete_service'] if smoke else ['recurring_complete_service','unseen_responsive_rival','demand_shift','competent_imitation','supplier_interruption','delayed_payments','premium_need_mix','joint_adverse'],
         'central_region':['recurring_complete_service','unseen_responsive_rival','demand_shift','competent_imitation','supplier_interruption','delayed_payments','premium_need_mix'],
         'primary_arms':['full_adaptive'] if smoke else ['full_adaptive','strategic_011_public_priors','strong_fixed','ordinary_adaptive'],
@@ -32,8 +36,10 @@ def protocol(smoke=False):
         'economic_criteria':{'minimum_customers':3,'minimum_settled_jobs':12,'minimum_repeat_customers':2,'minimum_profitable_earned_continuations':2,'positive_complete_cost_profit':True,'positive_available_earned':True,'known_obligations_accounted':True,'all_cycles_required':False,'inventory_completion_required':False},
         'risk_choice':{'minimum_central_flywheel_fraction':.75,'minimum_central_cash_survival_fraction':.90,'central_cvar20_lower_bound_microUSD':-750_000_000},
         'hard_requirements':['Native money conservation','Owned state-bound authorized reservations','No protected-fund spending','Actual independent artifact acceptance','No hidden buyer/rival/seed/world information to policy','No future receipts financing current commitments'],
-        'scale_seeds':[12001] if smoke else list(range(2610302201,2610302209)),
+        'scale_seeds':[12001] if smoke else list(range(2610302301,2610302309)),
         'scale_sensitivities':[] if smoke else ['channel_cost2','channel_delay3','conversion_half','demand_half','buffer0','buffer4'],
+        'execution_workers':MAX_WORKERS,
+        'scheduling':'At most four spawned independent account workers; atomic per-world checkpoints; deterministic registered task/index/report order. Full audit uses the same bound. Financial-only audit omits operating replay and reports that narrower scope explicitly.',
         'weights':'Equal finite-design weights, not calibrated real-market probabilities. Risk tolerances are explicit policies, not laws.',
         'comparison':'Matched source/tools, information interface, initial capital, budgets and keyed private shocks. Online learning permitted under frozen code. Old011publishedverdicts preserved; strategic011public-prior adapter is separately identified.',
         'claims':'Commercial success, competitive adaptation, invention and productive expansion are independent verdicts. Scale is a conditional projection, never native earned cash.',
@@ -160,6 +166,57 @@ def _validate_world(result,frozen,task,manifest,root,reexecute=False):
     return checked
 
 
+def _children_cpu():
+    usage=resource.getrusage(resource.RUSAGE_CHILDREN)
+    return usage.ru_utime+usage.ru_stime
+
+
+def _report_input(result):
+    return {**brief(result),'instrument_receipts':result['instrument_receipts']}
+
+
+def _run_task(payload):
+    root,manifest,frozen,task,path=payload
+    root,path=Path(root),Path(path);result=None;cpu=time.process_time()
+    if path.exists():
+        try:result=json.loads(gzip.decompress(path.read_bytes()))
+        except (OSError,ValueError,EOFError):shutil.move(str(path),str(path)+'.interrupted-'+str(time.time_ns()))
+        if result is not None:_validate_world(result,frozen,task,manifest,root,reexecute=True)
+    if result is None:
+        from .model import run_world
+        from commercial.persistence import atomic_bytes
+        world=next(w for w in frozen['world_specs'] if w['id']==task['world'])
+        result=run_world(root,manifest,task_policy(frozen,task),task['seed'],world,task['arm'])
+        _validate_world(result,frozen,task,manifest,root)
+        atomic_bytes(path,gzip.compress(canonical(result),mtime=0))
+    return {'result':_report_input(result),'record':_file(path,path.parent.parent),'cpu_seconds':time.process_time()-cpu}
+
+
+def _audit_task(payload):
+    root,output,manifest,frozen,item,task,reexecute=payload
+    root,output=Path(root),Path(output);path=output/item['path']
+    if item['path']!='worlds/'+task['id']+'.json.gz':raise ValueError('EXACT_WORLD_PATH_REQUIRED')
+    if _file(path,output)!={k:item[k] for k in ['path','sha256','bytes']}:raise ValueError('WORLD_BYTES_CHANGED')
+    result=json.loads(gzip.decompress(path.read_bytes()))
+    _validate_world(result,frozen,task,manifest,root,reexecute=reexecute)
+    return _report_input(result)
+
+
+def _parallel(function,payloads):
+    if not payloads:return
+    executor=ProcessPoolExecutor(max_workers=min(MAX_WORKERS,len(payloads)),mp_context=multiprocessing.get_context('spawn'))
+    futures=[executor.submit(function,payload) for payload in payloads]
+    try:
+        for future in futures:yield future.result()
+    except BaseException:
+        for future in futures:future.cancel()
+        for process in list((executor._processes or {}).values()):
+            if process.is_alive():process.terminate()
+        for process in list((executor._processes or {}).values()):process.join(timeout=5)
+        raise
+    finally:executor.shutdown(wait=True,cancel_futures=True)
+
+
 def brief(result):
     return {k:result[k] for k in ['arm','evaluator_world_id','seed','conditional_simulated_go','accepted_jobs','paid_jobs','customers','repeat_buyers','profitable_earned_continuations','earned_funded_cycles','summary','cash_survival','stop','operated_cycles','economic_completion_requires_all_cycles','inventory_completion_required','available_earned_surplus','seed_backing_reserves','actual_customers','actual_collections','actual_profit','verdicts']}
 
@@ -194,28 +251,19 @@ def worker(output):
     if ROOT!=output/'source':raise ValueError('EXECUTE_FROZEN_SNAPSHOT_REQUIRED')
     from .instruments import prepare_services
     from .model import run_world
-    start=time.monotonic();cpu=time.process_time();manifest_path=ROOT/'service-inputs/MANIFEST.json'
+    start=time.monotonic();cpu=time.process_time();children_cpu=_children_cpu();completed_cpu=0;manifest_path=ROOT/'service-inputs/MANIFEST.json'
     if manifest_path.exists():manifest=json.loads(manifest_path.read_text())
     else:
         if (ROOT/'service-inputs').exists():shutil.move(str(ROOT/'service-inputs'),str(ROOT/('interrupted-inputs-'+str(time.time_ns()))))
         manifest=prepare_services(ROOT,'service-inputs',cohort_seed=frozen['protocol']['service_cohort_seed'])
     _validate_manifest_origin(frozen,manifest,ROOT)
     write_json(output/'SERVICES.json',manifest);directory=output/'worlds';directory.mkdir(exist_ok=True);index=[];results=[]
-    for i,task in enumerate(tasks(frozen)):
-        path=directory/(task['id']+'.json.gz');result=None
-        if path.exists():
-            try:result=json.loads(gzip.decompress(path.read_bytes()))
-            except (OSError,ValueError,EOFError):shutil.move(str(path),str(path)+'.interrupted-'+str(time.time_ns()))
-            if result is not None:_validate_world(result,frozen,task,manifest,ROOT,reexecute=True)
-        if result is None:
-            world=next(w for w in frozen['world_specs'] if w['id']==task['world'])
-            result=run_world(ROOT,manifest,task_policy(frozen,task),task['seed'],world,task['arm'])
-            _validate_world(result,frozen,task,manifest,ROOT)
-            from commercial.persistence import atomic_bytes
-            atomic_bytes(path,gzip.compress(canonical(result),mtime=0))
-        index.append({'task':task,**_file(path,output)});results.append((task,result))
-        write_json(output/'PROGRESS.json',{'completed':i+1,'planned':len(tasks(frozen)),'last':task['id'],'freeze_sha256':frozen['freeze_sha256']})
-        if time.monotonic()-start>1800 or time.process_time()-cpu>7000:raise TimeoutError('EVALUATION_BOUNDARY_CHECKPOINT_PRESERVED')
+    planned=tasks(frozen)
+    payloads=[(str(ROOT),manifest,frozen,task,str(directory/(task['id']+'.json.gz'))) for task in planned]
+    for i,(task,completed) in enumerate(zip(planned,_parallel(_run_task,payloads))):
+        index.append({'task':task,**completed['record']});results.append((task,completed['result']));completed_cpu+=completed['cpu_seconds']
+        write_json(output/'PROGRESS.json',{'completed':i+1,'planned':len(planned),'last':task['id'],'freeze_sha256':frozen['freeze_sha256'],'parallel_workers':min(MAX_WORKERS,len(planned)),'completed_task_cpu_seconds':completed_cpu})
+        if time.monotonic()-start>1800 or time.process_time()-cpu+completed_cpu>7000:raise TimeoutError('EVALUATION_BOUNDARY_CHECKPOINT_PRESERVED')
     from .scale import evaluate_scale
     scale=evaluate_scale(frozen['scale_config'],frozen['protocol']['scale_seeds']);write_json(output/'SCALE.json',scale)
     scale_sens=[]
@@ -223,24 +271,23 @@ def worker(output):
         cfg=scale_sensitivity_config(frozen,case)
         scale_sens.append({'case':case,'config':cfg,'result':evaluate_scale(cfg,frozen['protocol']['scale_seeds'][:2])})
     write_json(output/'SCALE_SENSITIVITIES.json',scale_sens)
-    report=assemble_report(frozen,results,manifest);report['resource_receipt']={'process_cpu_seconds':time.process_time()-cpu,'wall_seconds':time.monotonic()-start,'model_billing':'UNAVAILABLE; modeled envelopes disclosed','paid_model_calls':0};write_json(output/'INDEX.json',{'freeze_sha256':frozen['freeze_sha256'],'worlds':index});write_json(output/'REPORT.json',report)
+    parent_cpu=time.process_time()-cpu;child_cpu=_children_cpu()-children_cpu
+    report=assemble_report(frozen,results,manifest);report['resource_receipt']={'process_cpu_seconds':parent_cpu+child_cpu,'parent_cpu_seconds':parent_cpu,'children_cpu_seconds':child_cpu,'wall_seconds':time.monotonic()-start,'maximum_parallel_workers':MAX_WORKERS,'model_billing':'UNAVAILABLE; modeled envelopes disclosed','paid_model_calls':0};write_json(output/'INDEX.json',{'freeze_sha256':frozen['freeze_sha256'],'worlds':index});write_json(output/'REPORT.json',report)
     write_json(output/'COMPLETE.json',{'source_sha256':frozen['source']['sha256'],'report_sha256':hashlib.sha256((output/'REPORT.json').read_bytes()).hexdigest(),'completed_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())});print(json.dumps({'conclusion':report['conclusion'],'worlds':len(results),'report':str(output/'REPORT.json')}),flush=True)
 
 
 def audit(output,reexecute=True):
     output=Path(output).absolute()
     if ROOT!=output/'source':
-        done=subprocess.run([sys.executable,'-m','adaptive_enterprise','_audit','--output',str(output)],cwd=output/'source',capture_output=True,text=True)
+        command=[sys.executable,'-m','adaptive_enterprise','_audit','--output',str(output)]+([] if reexecute else ['--financial-only'])
+        done=subprocess.run(command,cwd=output/'source',capture_output=True,text=True)
         if done.returncode:raise ValueError('SNAPSHOT_AUDIT_FAILED:'+done.stderr.strip().splitlines()[-1])
         return json.loads(done.stdout)
     frozen=_read_freeze(output);manifest=json.loads((output/'SERVICES.json').read_text());_validate_manifest_origin(frozen,manifest,ROOT);index=json.loads((output/'INDEX.json').read_text());expected=tasks(frozen)
     if index['freeze_sha256']!=frozen['freeze_sha256'] or [x['task'] for x in index['worlds']]!=expected:raise ValueError('EXACT_COMPLETE_COVERAGE_REQUIRED')
-    results=[]
-    for item,task in zip(index['worlds'],expected):
-        if item['path']!='worlds/'+task['id']+'.json.gz':raise ValueError('EXACT_WORLD_PATH_REQUIRED')
-        path=output/item['path']
-        if _file(path,output)!={k:item[k] for k in ['path','sha256','bytes']}:raise ValueError('WORLD_BYTES_CHANGED')
-        result=json.loads(gzip.decompress(path.read_bytes()));_validate_world(result,frozen,task,manifest,ROOT,reexecute=reexecute);results.append((task,result))
+    start_cpu=time.process_time();child_start=_children_cpu()
+    payloads=[(str(ROOT),str(output),manifest,frozen,item,task,reexecute) for item,task in zip(index['worlds'],expected)]
+    results=list(zip(expected,_parallel(_audit_task,payloads)))
     actual=json.loads((output/'REPORT.json').read_text());expected_report=assemble_report(frozen,results,manifest)
     if {k:v for k,v in actual.items() if k!='resource_receipt'}!=expected_report:raise ValueError('DERIVED_REPORT_CHANGED')
     complete=json.loads((output/'COMPLETE.json').read_text())
@@ -250,7 +297,8 @@ def audit(output,reexecute=True):
     if json.loads((output/'SCALE.json').read_text())!=evaluate_scale(frozen['scale_config'],frozen['protocol']['scale_seeds']):raise ValueError('SCALE_OUTPUT_CHANGED')
     expected_scale_sens=[{'case':case,'config':scale_sensitivity_config(frozen,case),'result':evaluate_scale(scale_sensitivity_config(frozen,case),frozen['protocol']['scale_seeds'][:2])} for case in frozen['protocol']['scale_sensitivities']]
     if json.loads((output/'SCALE_SENSITIVITIES.json').read_text())!=expected_scale_sens:raise ValueError('SCALE_SENSITIVITY_OUTPUT_CHANGED')
-    return {'accepted':True,'source_sha256':frozen['source']['sha256'],'native_and_operating_worlds_replayed':len(results),'private_signing_keys_required':False}
+    operating=len(results) if reexecute else 0
+    return {'accepted':True,'source_sha256':frozen['source']['sha256'],'native_and_operating_worlds_replayed':operating,'native_worlds_replayed':len(results),'operating_replayed':operating,'qualification_scope':'FULL_NATIVE_AND_OPERATING' if reexecute else 'NATIVE_FINANCIAL_ONLY','maximum_parallel_workers':MAX_WORKERS,'audit_cpu_seconds':time.process_time()-start_cpu+_children_cpu()-child_start,'private_signing_keys_required':False}
 
 
 def package(output,archive):
@@ -269,7 +317,9 @@ def package(output,archive):
 def main():
     parser=argparse.ArgumentParser(description=__doc__);subs=parser.add_subparsers(dest='command',required=True)
     run=subs.add_parser('run');run.add_argument('--output',required=True);run.add_argument('--smoke',action='store_true')
-    for name in ['resume','audit','_worker','_audit']:subs.add_parser(name).add_argument('--output',required=True)
+    for name in ['resume','audit','_worker','_audit']:
+        command=subs.add_parser(name);command.add_argument('--output',required=True)
+        if name in {'audit','_audit'}:command.add_argument('--financial-only',action='store_true')
     p=subs.add_parser('package');p.add_argument('--output',required=True);p.add_argument('--archive',required=True)
     args=parser.parse_args();output=Path(args.output).absolute()
     if args.command=='run':
@@ -278,5 +328,5 @@ def main():
         if ROOT!=output/'source':subprocess.run([sys.executable,'-m','adaptive_enterprise','_worker','--output',str(output)],cwd=output/'source',check=True)
         else:
             with RunLock(output):worker(output)
-    elif args.command in {'audit','_audit'}:print(json.dumps(audit(output)))
+    elif args.command in {'audit','_audit'}:print(json.dumps(audit(output,reexecute=not args.financial_only)))
     else:print(json.dumps(package(output,args.archive)))

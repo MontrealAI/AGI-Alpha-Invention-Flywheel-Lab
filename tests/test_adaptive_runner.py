@@ -2,17 +2,25 @@ import copy
 import gzip
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 import zipfile
 
 from adaptive_enterprise.model import stable_projection
-from adaptive_enterprise.runner import assemble_report,audit,canonical,freeze,package,protocol,tasks,write_json
+from adaptive_enterprise.runner import MAX_WORKERS,_parallel,assemble_report,audit,canonical,freeze,package,protocol,tasks,write_json
 
 ROOT=Path(__file__).resolve().parents[1]
+
+
+def _observe_parallel(payload):
+    identity,delay=payload
+    time.sleep(delay)
+    return {'identity':identity,'pid':os.getpid()}
 
 
 class AdaptiveRunnerTests(unittest.TestCase):
@@ -31,6 +39,21 @@ class AdaptiveRunnerTests(unittest.TestCase):
         self.assertTrue(checked['accepted'])
         self.assertEqual(checked['native_and_operating_worlds_replayed'],1)
         self.assertFalse(checked['private_signing_keys_required'])
+
+    def test_financial_only_snapshot_dispatch_reports_no_operating_replay(self):
+        checked=audit(self.output,reexecute=False)
+        self.assertTrue(checked['accepted'])
+        self.assertEqual(checked['qualification_scope'],'NATIVE_FINANCIAL_ONLY')
+        self.assertEqual(checked['native_worlds_replayed'],1)
+        self.assertEqual(checked['operating_replayed'],0)
+        self.assertEqual(checked['native_and_operating_worlds_replayed'],0)
+
+    def test_parallel_workers_preserve_task_order_and_worker_bound(self):
+        self.assertEqual(MAX_WORKERS,4)
+        rows=list(_parallel(_observe_parallel,[(0,.4),(1,.05),(2,.05),(3,.05),(4,.05)]))
+        self.assertEqual([row['identity'] for row in rows],list(range(5)))
+        self.assertGreater(len({row['pid'] for row in rows}),1)
+        self.assertLessEqual(len({row['pid'] for row in rows}),MAX_WORKERS)
 
     def test_protocol_is_fresh_complete_and_preserves_hard_requirements(self):
         p=protocol();planned=tasks({'protocol':p})
