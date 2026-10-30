@@ -1,0 +1,43 @@
+{
+  "schema": "agi-alpha/resource-wrapper-supersession006/v1",
+  "historical_source": {
+    "path": "experiments/resource006.py",
+    "sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+    "status": "UNSUPPORTED_FOR_ACTIVE_SUPERVISION_PRESERVED_EXACTLY",
+    "scientific_freeze_unchanged": true
+  },
+  "established_defects": [
+    {
+      "id": "P1-supervisor-SIGTERM",
+      "receipt": "evidence/cycle-006/verifier-resource-v2-defects-final-run/artifacts/SIGTERM_ADJUDICATION.json"
+    },
+    {
+      "id": "P2-fast-exit-aggregate-output",
+      "receipt": "evidence/cycle-006/verifier-resource-v2-defects-run/artifacts/FAST_EXIT_STORAGE_ADJUDICATION.json"
+    }
+  ],
+  "replacement": {
+    "path": "experiments/resource006_v3.py",
+    "sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+    "executing_interface": "run(command,output,ledger,run_id,limits,cwd=None)",
+    "ledger_schema": "agi-alpha/prospective-resources006/v1",
+    "new_ledger_created": false,
+    "same_conservative_no_CPU_refund_policy": true
+  },
+  "entry_point": {
+    "path": "run_cycle006.py",
+    "sha256": "b89af6a85c9b2e7025cf1b2bcf48ff3d9d363c20c76913b70cdd41a4bddcb18b",
+    "historical_version": "historical/cycle-006/run_cycle006-before-resource-v3.py.txt",
+    "historical_sha256": "62304355427e908b6fed23334184e2843a9c4f80a1aba2f340e7fc178caf173e",
+    "explicit_resource_import": "experiments.resource006_v3",
+    "cpu_reservation_seconds": 240
+  },
+  "unchanged_scientific_results": true,
+  "old_failures_or_outputs_rewritten": false,
+  "scope": "Operational repair only; no additional scientific confirmation or commercial success follows.",
+  "qualification_receipts": [
+    "evidence/cycle-006/resource-v3-qualification-001-run/RECEIPT.json",
+    "evidence/cycle-006/resource-v3-qualification-002-run/RECEIPT.json"
+  ],
+  "deterministic_terminal_poll_miss_regression": "First wait4 observation deliberately waits for actual worker exit; unchanged real filesystem scan must still produce overrun, blocked ledger and nonzero CLI outcome."
+}

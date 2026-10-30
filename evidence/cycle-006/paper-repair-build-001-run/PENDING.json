@@ -1,0 +1,39 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "paper-repair-build-001",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "scripts/build_cycle006_paper.py",
+    "--markdown",
+    "docs/research/cycle-006.md",
+    "--manifest",
+    "docs/research/cycle-006.inputs.json"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "scripts/build_cycle006_paper.py",
+    "--markdown",
+    "docs/research/cycle-006.md",
+    "--manifest",
+    "docs/research/cycle-006.inputs.json"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "scripts/build_cycle006_paper.py",
+    "--markdown",
+    "docs/research/cycle-006.md",
+    "--manifest",
+    "docs/research/cycle-006.inputs.json"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 60,
+    "cpu_seconds": 10,
+    "memory_bytes": 1073741824,
+    "output_bytes": 10485760,
+    "storage_bytes": 20971520
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "pending"
+}

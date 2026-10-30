@@ -1,0 +1,42 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "paper-repair-build-render-002",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "evidence/cycle-006/paper-repair-build-render-002-driver.py"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "evidence/cycle-006/paper-repair-build-render-002-driver.py"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "evidence/cycle-006/paper-repair-build-render-002-driver.py"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 80,
+    "cpu_seconds": 10,
+    "memory_bytes": 1073741824,
+    "output_bytes": 10485760,
+    "storage_bytes": 33554432
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 7.688794257002883,
+  "supervisor_cpu_seconds": 0.15955134,
+  "waited_cpu_seconds": 7.4676279999999995,
+  "descendant_survivors": false,
+  "output_bytes": 3458236,
+  "logs": {
+    "stdout.log": "87767dd795b37bde08ba49aa8c82e5345d8435f15f23ebdb1c6d6f1f6ead8396",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

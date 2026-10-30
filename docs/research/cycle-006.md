@@ -1,7 +1,7 @@
 ---
 title: "AGI ALPHA: Verified Repair and Acquired Transfer Under Strong Predictive Controls"
 author: "Vincent Boucher, President of MONTREAL.AI"
-date: "29 October 2026"
+date: "30 October 2026, engineering repair edition"
 ---
 
 ## Abstract
@@ -66,7 +66,7 @@ The domain constructor begins with observed single-intervention effects relative
 
 The historical Norman proposal trace used a hash-qualified host copy of Omega's original `Program.create` and `mutate`. Its recovered archive has no established module license, so that module is not vendored or represented as installed by the public reproduction. The public historical run instead replays the exact recorded native proposals. A separately authored bounded fallback generator executes as a separately labeled development experiment; it is not native-regeneration parity or live-model performance. Source/archive identities and this licensing boundary remain part of provenance.
 
-Generated arithmetic representations execute as JSON data in the qualified seccomp interpreter. They cannot import arbitrary generated Python or choose host files, credentials or network endpoints. Trusted array fitting and data acquisition occur outside that interpreter and are identified as trusted application effects. The experiment supervisor meters and bounds trusted processes; it is not itself the generated-program sandbox and does not establish exact escaped-descendant CPU accounting.
+Generated arithmetic representations execute as JSON data in the qualified seccomp interpreter. They cannot import arbitrary generated Python or choose host files, credentials or network endpoints. Trusted array fitting and data acquisition occur outside that interpreter and are identified as trusted application effects. The trusted supervisor records resource receipts and applies per-process limits. Subsequent review found standalone termination and fast-exit storage-enforcement defects, documented in Section 5. This supervisor is separate from the generated-program seccomp boundary and does not establish exact escaped-descendant CPU accounting.
 
 ### 3.2 An observed criticism becomes a general construction
 
@@ -140,6 +140,8 @@ The evidence-directed decision is to retain the qualified conventional method fo
 
 ## 5. Reproducibility defects are evidence
 
+This engineering repair edition preserves the [earlier public paper](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/fbb0a1729cdaf6a2c7e410f3f15746d3b95c2471/docs/research/cycle-006.pdf), whose PDF SHA-256 is `c27384332c59b02ef3f27f450cbe81696de91d07a443c366827240dd2642f0bd`, and its original rendered pages. The protected experiments, candidate freeze and all nine decisions remain unchanged. The revisions below concern operational enforcement rather than a new scientific attempt.
+
 Ordinary unzipping of the preceding release retains `ARCHIVE_MANIFEST.json`. The self-packaging test then refused `ARCHIVE_RESERVED_MANIFEST`, producing 93/94 rather than the 94/94 obtained from the validated extractor, which consumes packaging metadata. The original archive and failure are preserved. The supporting repair validates the retained manifest, exact payload set and payload hashes before excluding only verified packaging metadata from repackaging. Added, missing or corrupted payloads continue to refuse. This does not relax the historical source identities.
 
 The PR #9 CI run failed its interruption harness even though the displayed result reported no surviving children. A separate deterministic regression reproduces a valid interruption with zero adopted descendants. Other harness attempts could observe a worker too late to establish a live-worker precondition. Invalid harness attempts are preserved rather than called candidate failures. The revised check establishes a live-worker barrier and stable process identity before interruption, then requires that exact worker to exit, no remaining children after reaping any adopted descendants, an interruption marker, no false completion and unchanged replay refusal. Python can legitimately reap its own interrupted subprocess before the outer verifier adopts it; a positive adoption count is therefore not itself an invariant. The new deterministic regression establishes a possible false-negative schedule, not the unrecovered exact scheduling cause of the original CI run. Both the old failure and invalid harness attempts remain available. A benign namespace probe showed why host `/proc` identifiers and namespace-local syscall identifiers must be mapped explicitly when task-children files are unavailable. This is Linux qualification, not host-crash durability.
@@ -149,6 +151,12 @@ Review of the new connected entry point also found an initialization race after 
 The first full offline replay rebuilt the historical baseline, generated construction, mapping, repair, acquired memory, fresh-family search and all controls, then correctly refused when the independent judge found an edited frozen documentation file. Source identity was restored from the original registered bytes; the changed documentation became a separate edition. This failure is retained and is not a new scientific attempt or a reason to relax identity checks.
 
 The second bounded replay completes the connected executing core: exact predecessor, generated construction, mapped criticism-to-repair, source-bound acquisition and retrieval, all nine fresh Wessels construction arms, every frozen prediction/control, exposed evaluation and both same-report settlement qualifications. It reproduces the scientific failures rather than turning replay into another confirmation. Its enclosing receipt records 128.457 wall seconds, 127.526 waited-child CPU-seconds and 64.059 supervisor CPU-seconds, with no surviving descendants. During that run an unused archive checker/test changed after the startup source check; the drift is separately recorded while the 761-file candidate freeze remains unchanged. This is an executing-core replay, not a claim that the final publication archive has already passed clean extraction and release qualification. The final archive requires its own source-matched checks.
+
+Public review subsequently challenged two additional supervisor behaviors. Sending SIGTERM to the original standalone resource-wrapper process could leave its child running without a final receipt. A child that rapidly exceeded the output-storage allowance and exited between polling steps could receive a complete result. These are consequential operational defects; ordinary successful runs did not disprove them. The original wrapper remains byte-identical because it is part of the protected scientific source closure. The active CLI instead names a separately versioned replacement, preserving both the old source and the original CLI. The unchanged historical runs are not relabeled as having used the repair.
+
+An independent namespace-aware replay establishes a live sleeping worker after the old supervisor exits with -15 and leaves no receipt; a separate rapid-exit run records complete with 15,676 output bytes against a 10,000-byte allowance. The initial inconclusive PID observation and another run that correctly caught an overrun are retained alongside these decisive counterexamples. A blocked accounting ledger does not make a falsely complete run acceptable.
+
+The version-3 supervisor installs explicit termination handling, protects initialization and settlement critical sections, terminates and reaps the owned worker group, and checks final aggregate output including the receipt before classifying completion. Five wrapper regressions and five CLI regressions pass, including actual pending SIGTERM, interruption of a live worker, rapid-exit storage overflow and an exited-before-first-poll schedule. Independent source review confirms that the repaired version preserves the original frozen wrapper rather than rewriting its evidence. Its source hash and the active CLI are separately bound in this edition. The active CLI uses a 240-CPU-second outer reservation within the original finite campaign budget. These targeted tests qualify the repaired cases; they do not claim a new complete connected replay or final archive qualification before that later execution occurs.
 
 ## 6. Commerce and the remaining economic boundary
 
@@ -180,7 +188,7 @@ Engineering qualification, a consequential enabling capability, combination adva
 | Earned-funded successor benefit | Not established; no commercially admitted earned funds |
 | Live commercial success | Not established; no actual orders or transfers |
 
-Functional symmetry repair and qualified data access support specific executable constructions. Neither supplies the missing scientific or economic links.
+Functional symmetry repair and qualified data access support specific executable constructions. Neither supplies the missing scientific or economic links. The scoped engineering verdict does not retroactively certify every historical supervisor behavior or waive final source-matched release gates.
 
 The current experimental restriction is a finite supplied language with developer-authored primitives and current-role outcome protection. Shared host, model family, solvers and libraries remain dependencies. Separate builder and verifier responsibilities constitute procedural separation, not independent external certification. The paper records executed evidence and unresolved boundaries; it does not treat the mission's ambition as a demonstrated property.
 

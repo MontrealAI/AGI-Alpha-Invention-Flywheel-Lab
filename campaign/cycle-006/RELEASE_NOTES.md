@@ -127,3 +127,5 @@ participation and price bounds, then a same-cohort complete-cost comparator.
 No outreach, spending, terms acceptance or real transfer is authorized by this
 edition. Engineering execution does not establish consequential enabling
 invention, commercial profitability or the complete flywheel.
+
+Resource supervision repair: the active connected command uses qualified V3; the frozen V2 is retained as unsupported evidence. See the [verified defects and V3 addendum](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/perturbation-construction-20261029-r1/campaign/cycle-006/RELEASE_RESOURCE_V3_ADDENDUM.md). The earlier paper and failures remain preserved.

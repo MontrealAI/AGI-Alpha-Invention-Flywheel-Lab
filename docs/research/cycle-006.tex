@@ -110,7 +110,7 @@
 \title{AGI ALPHA: Verified Repair and Acquired Transfer Under Strong
 Predictive Controls}
 \author{Vincent Boucher, President of MONTREAL.AI}
-\date{29 October 2026}
+\date{30 October 2026, engineering repair edition}
 
 \begin{document}
 \maketitle
@@ -429,9 +429,11 @@ Generated arithmetic representations execute as JSON data in the
 qualified seccomp interpreter. They cannot import arbitrary generated
 Python or choose host files, credentials or network endpoints. Trusted
 array fitting and data acquisition occur outside that interpreter and
-are identified as trusted application effects. The experiment supervisor
-meters and bounds trusted processes; it is not itself the
-generated-program sandbox and does not establish exact
+are identified as trusted application effects. The trusted supervisor
+records resource receipts and applies per-process limits. Subsequent
+review found standalone termination and fast-exit storage-enforcement
+defects, documented in Section 5. This supervisor is separate from the
+generated-program seccomp boundary and does not establish exact
 escaped-descendant CPU accounting.
 
 \hypertarget{an-observed-criticism-becomes-a-general-construction}{%
@@ -681,6 +683,14 @@ independently justified test.
 \subsection{5. Reproducibility defects are
 evidence}\label{reproducibility-defects-are-evidence}}
 
+This engineering repair edition preserves the
+\href{https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/fbb0a1729cdaf6a2c7e410f3f15746d3b95c2471/docs/research/cycle-006.pdf}{earlier
+public paper}, whose PDF SHA-256 is
+\nolinkurl{c27384332c59b02ef3f27f450cbe81696de91d07a443c366827240dd2642f0bd},
+and its original rendered pages. The protected experiments, candidate
+freeze and all nine decisions remain unchanged. The revisions below
+concern operational enforcement rather than a new scientific attempt.
+
 Ordinary unzipping of the preceding release retains
 \texttt{ARCHIVE\_MANIFEST.json}. The self-packaging test then refused
 \texttt{ARCHIVE\_RESERVED\_MANIFEST}, producing 93/94 rather than the
@@ -742,6 +752,41 @@ while the 761-file candidate freeze remains unchanged. This is an
 executing-core replay, not a claim that the final publication archive
 has already passed clean extraction and release qualification. The final
 archive requires its own source-matched checks.
+
+Public review subsequently challenged two additional supervisor
+behaviors. Sending SIGTERM to the original standalone resource-wrapper
+process could leave its child running without a final receipt. A child
+that rapidly exceeded the output-storage allowance and exited between
+polling steps could receive a complete result. These are consequential
+operational defects; ordinary successful runs did not disprove them. The
+original wrapper remains byte-identical because it is part of the
+protected scientific source closure. The active CLI instead names a
+separately versioned replacement, preserving both the old source and the
+original CLI. The unchanged historical runs are not relabeled as having
+used the repair.
+
+An independent namespace-aware replay establishes a live sleeping worker
+after the old supervisor exits with -15 and leaves no receipt; a
+separate rapid-exit run records complete with 15,676 output bytes
+against a 10,000-byte allowance. The initial inconclusive PID
+observation and another run that correctly caught an overrun are
+retained alongside these decisive counterexamples. A blocked accounting
+ledger does not make a falsely complete run acceptable.
+
+The version-3 supervisor installs explicit termination handling,
+protects initialization and settlement critical sections, terminates and
+reaps the owned worker group, and checks final aggregate output
+including the receipt before classifying completion. Five wrapper
+regressions and five CLI regressions pass, including actual pending
+SIGTERM, interruption of a live worker, rapid-exit storage overflow and
+an exited-before-first-poll schedule. Independent source review confirms
+that the repaired version preserves the original frozen wrapper rather
+than rewriting its evidence. Its source hash and the active CLI are
+separately bound in this edition. The active CLI uses a 240-CPU-second
+outer reservation within the original finite campaign budget. These
+targeted tests qualify the repaired cases; they do not claim a new
+complete connected replay or final archive qualification before that
+later execution occurs.
 
 \hypertarget{commerce-and-the-remaining-economic-boundary}{%
 \subsection{6. Commerce and the remaining economic
@@ -842,7 +887,9 @@ transfers \\
 
 Functional symmetry repair and qualified data access support specific
 executable constructions. Neither supplies the missing scientific or
-economic links.
+economic links. The scoped engineering verdict does not retroactively
+certify every historical supervisor behavior or waive final
+source-matched release gates.
 
 The current experimental restriction is a finite supplied language with
 developer-authored primitives and current-role outcome protection.

@@ -1,0 +1,30 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "signal-test",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "import os,time;from pathlib import Path;Path('/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/verifier-resource-v2-defects-continuation-run/artifacts/worker-pid.txt').write_text(str(os.getpid()));time.sleep(60)"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "import os,time;from pathlib import Path;Path('/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/verifier-resource-v2-defects-continuation-run/artifacts/worker-pid.txt').write_text(str(os.getpid()));time.sleep(60)"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "import os,time;from pathlib import Path;Path('/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/verifier-resource-v2-defects-continuation-run/artifacts/worker-pid.txt').write_text(str(os.getpid()));time.sleep(60)"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 90,
+    "cpu_seconds": 2,
+    "memory_bytes": 1073741824,
+    "output_bytes": 20000,
+    "storage_bytes": 50000
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "pending"
+}

@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Vincent Boucher, President of MONTREAL.AI" />
+  <title>AGI ALPHA: Verified Repair and Acquired Transfer Under Strong Predictive Controls</title>
+  <style>
+    html {
+      font-size: 10pt;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: Maroon;
+    }
+    a:visited {
+      color: Maroon;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <style>body{max-width:78ch;margin:3rem auto;padding:0 1.2rem;font:17px/1.65 system-ui,sans-serif;color:#172033}h1,h2,h3{line-height:1.2;color:#162b4a}table{border-collapse:collapse;width:100%;font-size:.9em}td,th{padding:.5rem;border-bottom:1px solid #ccd3dc;text-align:left;vertical-align:top}code{overflow-wrap:anywhere}pre{overflow:auto;background:#f2f4f7;padding:1rem}a{color:#174b88}img{max-width:100%}@media print{body{max-width:none;margin:0}}</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">AGI ALPHA: Verified Repair and Acquired Transfer Under
+Strong Predictive Controls</h1>
+<p class="author">Vincent Boucher, President of MONTREAL.AI</p>
+<p class="date">30 October 2026, engineering repair edition</p>
+</header>
+<h2 id="abstract">Abstract</h2>
+<p>AGI ALPHA aims to construct verified instruments that improve
+subsequent invention and support useful, economically viable delivery.
+This edition investigates that aim using two real perturbation-data
+families and a bounded executable representation language. It continues
+a verified release whose inherited memory matched ordinary reuse and
+conventional construction, rather than improving on them. The new work
+qualifies actual data interfaces, preserves an ordinary-extraction
+failure, generates arithmetic representations from observed
+single-intervention effects, and repairs a consequential
+exchange-symmetry defect through an independently reproduced constraint.
+These are distinct engineering and experimental contributions. On 44
+protected Norman pairs and 58 protected Wessels pairs, the repaired
+constructor fails the declared advantage criterion against strong
+conventional controls. The fresh inherited construction beats additivity
+but loses to matching mean and full-information ridge; equivalent
+ordinary reuse gives identical predictions and generated policy
+selection retains the incumbent. The resulting engineering qualification
+does not establish a previously inaccessible biological capability,
+improved invention policy or a commercial flywheel.</p>
+<h2 id="objective-inherited-evidence-and-authority">1. Objective,
+inherited evidence and authority</h2>
+<p>The intended progression is an enabling construction, accepted useful
+delivery, complete-cost surplus, unrestricted earned resources, further
+capability construction and a fresh useful successor. The central
+empirical question is whether the connected mechanisms improve
+construction against complete competent alternatives after acquisition
+and verification costs. Publishing software or an article does not
+complete that progression.</p>
+<p>The continuation baseline is Lab PR #8, merged at
+<code>bef0b697206699330a158f1430fe3b3ca58c6d97</code>. Its published
+source-and-evidence ZIP is 5,858,230 bytes with SHA-256
+<code>9e80e3708f430b0a5ac18c8580eb2320febb213cbda63cc7eaa00be81b78e95d</code>.
+The baseline’s published owner download receipt records a validated
+extraction matching 5,289 payload identities and 50 frozen sources, 94
+unit tests, 11 verifier tests and the original/repaired verifier-defect
+regression. This is the owner’s 16-gate execution, not the same
+independent execution identified in the continuation brief. In this
+cycle, the separate verifier again checked all original payload
+identities, ran the full unit suite on ordinary extraction, and
+rechecked three archive tests on validated extraction. That narrower
+latter branch is not a new independent full-94 qualification. The
+platform reported <code>immutable: false</code>; this is a
+hash-identified prerelease, not platform-enforced immutability.
+Historical releases and adverse results are retained.<a href="#fn1"
+class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>The inherited eight-case comparison accepted 8/8 with structured
+inheritance, 8/8 with equivalent-content ordinary reuse and 8/8 with
+conventional construction; reset and operator removal accepted 0/8.
+Those cases belong to one bounded local-file protocol family. The
+contrast establishes the contribution of acquired content relative to
+its removal, while the ordinary-reuse tie prevents a structured-memory
+superiority claim. The original policy improvement was
+developer-written. None of these results established general invention,
+complete-cost advantage or earned funding.</p>
+<p>Cycle 006 declared 120 wall minutes, including a 25-minute
+verification/publication reserve; 5,400 experiment CPU-seconds; 6 GiB of
+new artifacts; a 32 GiB received-network ceiling; 4 GiB per heavy
+worker; at most two concurrent heavy workers; and four substantive
+repair rounds. Paid model calls, spending, customer outreach, actual
+transfers and account/security changes were not authorized. All
+commercial transactions in this edition are simulated. Unavailable
+agent-inference billing remains unknown.</p>
+<h2 id="selection-and-actual-data-qualification">2. Selection and actual
+data qualification</h2>
+<p>The screen compared three materially different possibilities before
+selecting a bounded test. It did not admit a commercial flagship merely
+because data were convenient.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Possibility</th>
+<th style="text-align: left;">Missing-means hypothesis</th>
+<th style="text-align: left;">Complete alternative and decision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Combinatorial cellular response</td>
+<td style="text-align: left;">Construct representations that predict
+useful non-additive responses from limited prior interventions.</td>
+<td style="text-align: left;">Existing additive, linear, GEARS, Systema
+and calibrated perturbation workflows require strong controls. Execute a
+separately registered real-data pilot; novelty remains
+unestablished.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Cross-model metabolic repair</td>
+<td style="text-align: left;">Transfer a local direction repair to
+remove whole-model energy-generating behavior.</td>
+<td style="text-align: left;">Existing GlobalFit-style whole-model
+methods already address the proposed restriction; retained
+counterexamples prevent a local success being promoted to a global
+cure.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Constitutive identification</td>
+<td style="text-align: left;">Recover absolute mechanical properties
+without an apparently required force measurement.</td>
+<td style="text-align: left;">Missing physical information can make
+inversion nonunique, while established load-plus-displacement methods
+supply an alternative. No qualified physical measurement is supplied
+here.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="psgrn-was-checked-not-assumed-installed">2.1 PSGRN was checked,
+not assumed installed</h3>
+<p>At PSGRN revision
+<code>74aa640f7c472b23a69811f6795bb17678efd344</code>, the documented
+custom-model file is <code>src/main.py</code>; the previously copied
+<code>src/main_fast.py</code> does not exist. An actual
+application-entrypoint probe reached
+<code>causalscbench/apps/main_app.py</code> and refused at missing
+<code>slingpy</code>. The isolated inspection environment is not the
+original complete PSGRN environment. The full model and benchmark were
+not executed.<a href="#fn2" class="footnote-ref" id="fnref2"
+role="doc-noteref"><sup>2</sup></a></p>
+<p>Read-only HDF5 range access qualified the mirror’s metadata while
+preserving TLS verification and rejecting wrong or unbounded responses.
+The 8,700,873,216-byte mirror exposes a contiguous float32 matrix of
+247,914 cells by 8,749 genes. Eight ranges retrieved 8,178,176 bytes.
+Metadata contains 11,485 controls and 651 genes eligible under the
+pinned greater-than-100-intervention-cell condition before the
+unexecuted strong-effect filter. This implies 423,150 directed pairs,
+rather than counting all raw columns as eligible perturbation genes.</p>
+<p>The full mirror SHA-256 and equivalence to the original Figshare
+input remain unknown. More importantly, the upstream normalization
+depends on full-matrix row totals and their global median. Arbitrary
+cell/gene truncation or a stored UMI count is not a certified
+replacement. Removing local whole-file storage for metadata inspection
+is useful ordinary library composition; it is not a new biological means
+of inference. These findings motivated a distinct experiment rather than
+a retrospective success claim on PSGRN.</p>
+<h3 id="source-bound-norman-panel">2.2 Source-bound Norman panel</h3>
+<p>The selected pilot uses the authors’ published
+<code>source_data/suppl-qqplot.xlsx</code> at revision
+<code>bfa6eeea2bd145a1af2ec0127a2e808cc38456a9</code>. Its 10,905,627
+bytes match SHA-256
+<code>1b652c352d4dabdd20324d7fd74d331898fa22c51cf6fa28ff65aa1322a6c78f</code>.
+The export contains 124 double-intervention conditions and 1,000 readout
+genes, with observed A, B, AB and control means. Its readouts were
+selected by control-expression rank, not by the magnitude of the
+observed combination effect. The source code and notices establish how
+this narrower panel was constructed.<a href="#fn3" class="footnote-ref"
+id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>The file supplies condition means rather than raw cells, biological
+replicates or variance estimates. The 124,000 rows are not independent
+experimental tasks. Shared single-intervention and control measurements,
+correlated genes and published preprocessing remain dependencies. This
+pilot does not reconstruct the original paper’s training assignments or
+establish exact equivalence to a differently processed Norman input.</p>
+<p>The verifier selected 80 development pairs and 44 protected pairs.
+The development lane contains 60 fit and 20 calibration pairs. Protected
+double-intervention outcomes are withheld from current construction. As
+the source is public, prior model exposure cannot be excluded; this is
+role-blind current development, not a claim that no model has previously
+encountered the observations.</p>
+<h3 id="current-alternatives-constrain-the-claim">2.3 Current
+alternatives constrain the claim</h3>
+<p>Simple baselines are substantive competitors, not ceremonial
+controls. The 2025 linear-baseline comparison, Systema’s
+perturbation-specific evaluation, GEARS’ multigene predictions, and a
+later 27-method/29-dataset benchmark all predate this cycle.<a
+href="#fn4" class="footnote-ref" id="fnref4"
+role="doc-noteref"><sup>4</sup></a><a href="#fn5" class="footnote-ref"
+id="fnref5" role="doc-noteref"><sup>5</sup></a><a href="#fn6"
+class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a><a
+href="#fn7" class="footnote-ref" id="fnref7"
+role="doc-noteref"><sup>7</sup></a> A current calibration study further
+cautions against using the near-additive Norman benchmark alone and
+provides positive-control methodology.<a href="#fn8"
+class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>
+This literature does not establish the result of our candidate, but it
+prevents presenting residual prediction, metric calibration or multigene
+inference as an undiscovered class of work. Methods not actually run
+remain unqualified controls rather than silently weak substitutes.</p>
+<h3 id="a-distinct-successor-data-family">2.4 A distinct successor-data
+family</h3>
+<p>The complete 219,393,529-byte <code>WesselsSatija2023.h5ad</code>
+from the versioned scPerturb record matched its published MD5 and
+independently computed SHA-256. The data owner inspected metadata
+without consuming combination outcomes. The raw file contains 30,707
+cells, 21,052 genes, 28 single interventions, 158 canonical distinct
+intervention pairs and 424 control cells. Its metadata identifies THP-1
+monocytes and CRISPR-cas13. The inspected benchmark YAML’s HEK293T
+description and the paper’s processed 157-pair cohort are not silently
+inherited.<a href="#fn9" class="footnote-ref" id="fnref9"
+role="doc-noteref"><sup>9</sup></a></p>
+<p>This creates a separately identified raw-data pilot opportunity, not
+reproduction of the publication’s processed benchmark. The verifier
+selected 100 development pairs (75 fit, 25 calibration) and 58 protected
+pairs before reading combination counts. It normalized each cell over
+all 21,052 genes to 10,000 counts, applied log1p, and selected the 1,000
+highest-mean readouts using only the 424 control cells. The exported
+axis is canonical rather than rank-ordered; zero-library cells would
+remain zero and none occurred. Only development outcomes and protected
+single-input features reached construction. Prior art reports useful
+nonlinear predictions on a processed Wessels cohort, while PRESAGE
+code/weights were not executed here; its noncommercial model license is
+separate from the public data license.</p>
+<p>A remote processed-file HDF5 callback probe exited 139 without a
+result; its cause remains unresolved and the failed transfer is
+retained. The ordinary verified bulk download and native HDF5 driver
+provide the available alternative. That result argues for dependency
+removal, not a universal prohibition on range access. The raw-data
+download took 87.597 seconds wall time and 2.971 waited-child
+CPU-seconds. Input identity and metadata access alone establish no
+prediction, inheritance or economic advantage.</p>
+<h2 id="executing-construction-and-verification">3. Executing
+construction and verification</h2>
+<h3 id="generated-representations-and-bounded-execution">3.1 Generated
+representations and bounded execution</h3>
+<p>The domain constructor begins with observed single-intervention
+effects relative to the same control. It fits centering, scale and three
+principal coordinates using development inputs only, with deterministic
+component-sign conventions. Arithmetic trees combine the resulting six
+A/B coordinates. The finite grammar supplies addition, subtraction,
+multiplication, bounded division, minimum and maximum; trees have
+bounded depth and node counts. At most eight generated basis functions
+augment a residual ridge model over the additive prediction. PCA, ridge,
+normalization and arithmetic primitives are developer-authored.
+Runtime-generated compositions are not unrestricted invention.</p>
+<p><code>mechanisms/policy006.py</code> generates versioned arithmetic
+policies through bounded synthesis/mutation. Its generic action-selector
+interface proposes measurement, representation, construction or repair
+action identities under explicit budgets; a trusted broker owns actual
+effects. The Norman constructor uses generated trees as representations
+through an explicit developer-supplied terminal correspondence. That use
+is distinct from proving that a learned general discovery policy has
+improved.</p>
+<p>The historical Norman proposal trace used a hash-qualified host copy
+of Omega’s original <code>Program.create</code> and <code>mutate</code>.
+Its recovered archive has no established module license, so that module
+is not vendored or represented as installed by the public reproduction.
+The public historical run instead replays the exact recorded native
+proposals. A separately authored bounded fallback generator executes as
+a separately labeled development experiment; it is not
+native-regeneration parity or live-model performance. Source/archive
+identities and this licensing boundary remain part of provenance.</p>
+<p>Generated arithmetic representations execute as JSON data in the
+qualified seccomp interpreter. They cannot import arbitrary generated
+Python or choose host files, credentials or network endpoints. Trusted
+array fitting and data acquisition occur outside that interpreter and
+are identified as trusted application effects. The trusted supervisor
+records resource receipts and applies per-process limits. Subsequent
+review found standalone termination and fast-exit storage-enforcement
+defects, documented in Section 5. This supervisor is separate from the
+generated-program seccomp boundary and does not establish exact
+escaped-descendant CPU accounting.</p>
+<h3 id="an-observed-criticism-becomes-a-general-construction">3.2 An
+observed criticism becomes a general construction</h3>
+<p>The first nominated representation depended on the arbitrary order of
+the two simultaneous intervention labels. Swapping A and B changed a
+prediction by as much as 0.430802 on exposed development cases. The
+initial grammar permitted ordered representations and did not impose the
+unordered-input contract. A separate verifier reproduced the actual
+prediction defect and emitted an established exchange-symmetry
+constraint bound to source, artifact and data identities.</p>
+<p>The structural donor is the established finite-group averaging
+construction. The supplied source graph represents two exchangeable
+inputs contributing to a joint output. The matcher returns both
+permitted input correspondences, rather than manually selecting a
+desired A/B labeling. Simultaneous unordered inputs and matching units
+are applicability conditions. Ordered interventions do not admit this
+action.</p>
+<p>The constructor consumes the adjudicated constraint by replacing each
+generated basis with</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϕ</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">y</mi><mi mathvariant="normal">m</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>A</mi><mo>,</mo><mi>B</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><mo stretchy="false" form="prefix">{</mo><mi>ϕ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>A</mi><mo>,</mo><mi>B</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>ϕ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>B</mi><mo>,</mo><mi>A</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">}</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\phi_{\mathrm{sym}}(A,B)=\tfrac12\{\phi(A,B)+\phi(B,A)\}.
+</annotation></semantics></math></p>
+<p>It then refits using the same development data and unchanged
+prediction objective. This is a generic transformation of every
+generated basis, not a patch for one named pair. Group averaging is
+known mathematics and its implementation was a supplied primitive; the
+executed contribution is the constraint-triggered application to the
+selected generated artifact, not autonomous invention of the
+primitive.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Development observation</th>
+<th style="text-align: right;">Original</th>
+<th style="text-align: right;">Constructed repair</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Maximum absolute swap difference</td>
+<td style="text-align: right;">0.430802</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Median calibration-pair RMSE</td>
+<td style="text-align: right;">0.078464</td>
+<td style="text-align: right;">0.079215</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Pooled calibration RMSE</td>
+<td style="text-align: right;">0.090095</td>
+<td style="text-align: right;">0.089612</td>
+</tr>
+</tbody>
+</table>
+<p>Restoring the invariant did not uniformly improve accuracy: the
+median worsened while pooled error decreased. This adverse contrast is
+retained. The mapping-consuming repair run took 1.885 seconds wall time
+and 1.875 waited-child CPU-seconds; these figures are not complete
+acquisition or monetary costs.</p>
+<h3 id="retention-acquires-a-generative-operator">3.3 Retention acquires
+a generative operator</h3>
+<p>The new capability record binds an executable instrument, an
+applicability model and a generative procedure. Acquisition checks the
+actual selected pre-repair and post-repair configurations and the
+adjudication/verification identities. It retains generated basis
+structure plus the established symmetry constraint, rather than copying
+a success flag or retaining fitted output coefficients. The successor
+procedure generates related configurations and refits on target
+development data. The executed acquisition independently recomputed the
+original and repaired swap predictions, then stored and retrieved the
+record through the existing immutable memory implementation. Source
+corruption, stale applicability, poisoned arithmetic content and
+ordered/incompatible targets refuse. The acquired record contains no
+fitted PCA or output weights; its content hash is
+<code>7ea0e3fbd36db5480545b717fb1d94dace92a315a4f3998dbd6f0689f6f4dc35</code>.</p>
+<p>Equivalent-content ordinary reuse receives the same capability
+content and checks. Removing the operator leaves stopping/additive
+construction eligible. A new starting tool, a better policy and an
+advantage of structured retrieval are separate hypotheses.</p>
+<h3 id="actual-fresh-construction-and-policytoolbox-cross">3.4 Actual
+fresh construction and policy/toolbox cross</h3>
+<p>The Wessels successor executes the memory retrieval and
+related-generation path, fits a new latent representation and
+coefficients to the new gene axis, and produces predictions for 58
+feature-only protected pairs. Eight generated priority programs compete
+through replay of exposed Norman development history. The selected
+priority is exactly the existing gain/cost rule. This is a null result
+for improved discovery policy, not a new policy win.</p>
+<p>The four old/new policy by old/new toolbox cells, equivalent-content
+ordinary reuse, operator removal, frozen initial state, reset-and-refit
+state and history-best conventional action ordering receive up to four
+construction fits each, followed by one charged all-development refit.
+Every fit and rejected representation is retained. Old-tool recipes
+sampled by the policies violate exchange symmetry and fall back to
+explicit conventional additive stopping. Frozen/reset arms restore the
+initial construction catalog while retaining the same exposed history;
+they are toolbox ablations rather than complete independent lifecycle
+rebuilds.</p>
+<p>On exposed Wessels calibration, the two policy arms with acquired
+tools, equivalent ordinary reuse and history-best ordering tie at median
+pair RMSE 0.119045; operator removal/additive stopping yields 0.133949.
+The selected recipe is the inherited repaired basis, refitted to fresh
+data, rather than a winning new basis mutation. The full cross took
+44.308 seconds wall time and 44.270 waited-child CPU-seconds. This
+development contrast alone cannot distinguish a useful learned
+representation from its ordinary per-gene residual intercept. The
+independent conventional residual-mean and residual-ridge controls are
+consequently decisive.</p>
+<h2 id="prospective-protected-specification">4. Prospective protected
+specification</h2>
+<p>The registered primary endpoint is RMSE across the unchanged
+1,000-gene panel for each protected pair. Acceptance requires at least
+5% median pair-relative RMSE improvement against every qualified named
+control, improved pooled RMSE against every such control, at most 10%
+ninetieth-percentile pair-relative loss increase, and finite outputs
+with exact pair/gene identities. The complete controls are exact
+A+B-control, Systema MatchingMean, exactly (A+B)/2 when both singles are
+observed; full multioutput linear-kernel ridge on all 1,000 symmetric
+single-effect features; and additivity plus the per-gene
+development-mean residual. The fourth control was added before protected
+execution because the constructed model’s unpenalized intercept could
+otherwise explain apparent benefit. The full ridge control standardizes
+the complete symmetric vector A+B-2control using fit data only. Both
+direct and additive-residual targets search nine ridge strengths from
+1e-4 through 1e4 on the declared fit/calibration split, with
+deterministic tie rules, before all-development refitting. Direct ridge,
+residual ridge and training-mean controls are also reported separately.
+Hyperparameters are selected before protected outcomes, using 60/20
+Norman and 75/25 Wessels fit/calibration pairs. A coordinatewise ridge
+does not qualify this control.</p>
+<p>The secondary endpoint ranks observed absolute deviations from
+additivity, using a fixed top-100 relevance set, NDCG@50 and
+source/pair/gene hash tie-breaking. These are observed condition-mean
+deviations. They are not biological interaction significance, a cellular
+false-positive rate or a clinical endpoint.</p>
+<p>Candidate, comparators, verifier, protocol, task identities and
+budgets are frozen before the fixed protected panels are evaluated. No
+scientific confirmation alpha is newly spent. The practical thresholds
+describe this finite cohort; correlated means and shared measurements do
+not support gene-independent standard errors or biological-population
+confirmation. Outcomes used for repair become exposed and cannot retain
+confirmation status.</p>
+<h3 id="frozen-outcomes-conventional-controls-remain-stronger">4.1
+Frozen outcomes: conventional controls remain stronger</h3>
+<p>Before either protected outcome panel was opened, the
+candidate/control freeze was published at revision
+<code>2802fd573bd8ae8cc5585f7e98108660927fb0da</code>, with SHA-256
+<code>0f646f3481dd32e5a297115ea49d58615de48a47626390293bd167fd50ff7847</code>.
+The independent checker re-executed the direct controls and complete
+development ridge selection, reproduced model predictions and verified
+exchange invariance before reading truth. The fixed runs completed once.
+All 102 pair outcomes, adverse cases and source-bound predictions are
+retained and now exposed for reproduction; they are unavailable as fresh
+confirmation for later repairs.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Frozen arm</th>
+<th style="text-align: right;">Norman median / pooled RMSE</th>
+<th style="text-align: right;">Wessels median / pooled RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Constructed candidate</td>
+<td style="text-align: right;">0.071083 / 0.105698</td>
+<td style="text-align: right;">0.121445 / 0.132249</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Exact additive</td>
+<td style="text-align: right;">0.072337 / 0.098468</td>
+<td style="text-align: right;">0.136662 / 0.149529</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MatchingMean</td>
+<td style="text-align: right;">0.083743 / 0.101691</td>
+<td style="text-align: right;">0.105947 / 0.117994</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Development-selected full ridge</td>
+<td style="text-align: right;">0.073758 / 0.079619</td>
+<td style="text-align: right;">0.065302 / 0.081320</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Additive + mean residual</td>
+<td style="text-align: right;">0.072179 / 0.095742</td>
+<td style="text-align: right;">0.124619 / 0.136341</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Separate direct ridge</td>
+<td style="text-align: right;">0.080007 / 0.092130</td>
+<td style="text-align: right;">0.069333 / 0.077874</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Training mean</td>
+<td style="text-align: right;">0.124287 / 0.137876</td>
+<td style="text-align: right;">0.140423 / 0.143218</td>
+</tr>
+</tbody>
+</table>
+<p>Lower RMSE is better. These are two differently normalized panels, so
+absolute errors are not comparable across columns. The primary
+full-ridge recipe was chosen on development, not selected
+retrospectively from protected results. Direct ridge has lower protected
+pooled error on Wessels and is reported as a predeclared additional
+control; it does not replace the primary comparator after observing
+outcomes. The original unrepaired Norman candidate has pooled RMSE
+0.149550 and fails functional exchange invariance with maximum swap
+difference 5.794007 on protected inputs. The constructed repair has zero
+swap difference, but remains predictively inferior to the complete
+conventional alternative.</p>
+<p>The prespecified criterion fails in both families. In Norman, the
+candidate’s median paired relative gain against additive is 5.496%, but
+pooled error is worse and its ninetieth-percentile relative harm is
+20.528%, exceeding 10%. Against full ridge its median paired gain is
+-8.003% and ninetieth-percentile harm is 49.754%. These paired ratios
+are not the ratio of the tabulated marginal medians. Against the
+ordinary mean-residual control, median gain is only 0.140% and pooled
+error worsens.</p>
+<p>In Wessels, the inherited construction passes the isolated additive
+contrast with median paired gain 11.716% and ninetieth-percentile harm
+1.265%. It fails against MatchingMean, with median gain -10.574%, and
+against the primary full ridge, with median gain -77.941% and
+ninetieth-percentile harm 116.280%. Against the residual-mean control
+its median gain is 1.865%, below the required 5%. Thus a comparison
+restricted to additive would yield a misleading positive conclusion.</p>
+<p>The Wessels old/new policy arms with the new toolbox, ordinary
+equivalent reuse and history-best action ordering have identical
+prediction hashes and outcomes. Operator removal, frozen/reset toolboxes
+and both old-tool policy arms produce the same additive fallback. The
+acquired operator is exercised on fresh work, yet its extra acquisition
+and verification costs do not purchase superiority over equivalent
+ordinary reuse or full ridge. This experiment does not establish either
+combination advantage or progressive lifecycle advantage.</p>
+<p>The secondary observed-deviation ranking agrees with the boundary:
+candidate mean NDCG@50 is 0.3624 in Norman and 0.4042 in Wessels, versus
+MatchingMean 0.4783 and 0.5394, and full ridge 0.4229 and 0.7741. All
+pairs have defined rankings. These are finite-panel ranking
+measurements, not biological interaction-significance tests.
+Leave-one-pair and leave-one-constituent sensitivity summaries remain in
+the raw reports; they do not eliminate shared-data dependence or create
+a population-level confidence claim.</p>
+<p>The evidence-directed decision is to retain the qualified
+conventional method for this delivery and the acquired repair for its
+functional scope. The current representation does not justify further
+favorable-result search on these exposed panels. A subsequent scientific
+experiment must state a new unresolved capability and a new
+independently justified test.</p>
+<h2 id="reproducibility-defects-are-evidence">5. Reproducibility defects
+are evidence</h2>
+<p>This engineering repair edition preserves the <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/fbb0a1729cdaf6a2c7e410f3f15746d3b95c2471/docs/research/cycle-006.pdf">earlier
+public paper</a>, whose PDF SHA-256 is
+<code>c27384332c59b02ef3f27f450cbe81696de91d07a443c366827240dd2642f0bd</code>,
+and its original rendered pages. The protected experiments, candidate
+freeze and all nine decisions remain unchanged. The revisions below
+concern operational enforcement rather than a new scientific
+attempt.</p>
+<p>Ordinary unzipping of the preceding release retains
+<code>ARCHIVE_MANIFEST.json</code>. The self-packaging test then refused
+<code>ARCHIVE_RESERVED_MANIFEST</code>, producing 93/94 rather than the
+94/94 obtained from the validated extractor, which consumes packaging
+metadata. The original archive and failure are preserved. The supporting
+repair validates the retained manifest, exact payload set and payload
+hashes before excluding only verified packaging metadata from
+repackaging. Added, missing or corrupted payloads continue to refuse.
+This does not relax the historical source identities.</p>
+<p>The PR #9 CI run failed its interruption harness even though the
+displayed result reported no surviving children. A separate
+deterministic regression reproduces a valid interruption with zero
+adopted descendants. Other harness attempts could observe a worker too
+late to establish a live-worker precondition. Invalid harness attempts
+are preserved rather than called candidate failures. The revised check
+establishes a live-worker barrier and stable process identity before
+interruption, then requires that exact worker to exit, no remaining
+children after reaping any adopted descendants, an interruption marker,
+no false completion and unchanged replay refusal. Python can
+legitimately reap its own interrupted subprocess before the outer
+verifier adopts it; a positive adoption count is therefore not itself an
+invariant. The new deterministic regression establishes a possible
+false-negative schedule, not the unrecovered exact scheduling cause of
+the original CI run. Both the old failure and invalid harness attempts
+remain available. A benign namespace probe showed why host
+<code>/proc</code> identifiers and namespace-local syscall identifiers
+must be mapped explicitly when task-children files are unavailable. This
+is Linux qualification, not host-crash durability.</p>
+<p>Review of the new connected entry point also found an initialization
+race after exclusive directory creation but before the process recorded
+ownership. A real interrupt could leave an owned directory without its
+interruption marker. The repair blocks SIGINT/SIGTERM only across that
+ownership-critical section, restores the prior mask and records the
+resulting pending signal as incomplete. Five regression tests include
+actual pending-SIGINT delivery. The old executing source, deterministic
+defect and repair record are preserved.</p>
+<p>The first full offline replay rebuilt the historical baseline,
+generated construction, mapping, repair, acquired memory, fresh-family
+search and all controls, then correctly refused when the independent
+judge found an edited frozen documentation file. Source identity was
+restored from the original registered bytes; the changed documentation
+became a separate edition. This failure is retained and is not a new
+scientific attempt or a reason to relax identity checks.</p>
+<p>The second bounded replay completes the connected executing core:
+exact predecessor, generated construction, mapped criticism-to-repair,
+source-bound acquisition and retrieval, all nine fresh Wessels
+construction arms, every frozen prediction/control, exposed evaluation
+and both same-report settlement qualifications. It reproduces the
+scientific failures rather than turning replay into another
+confirmation. Its enclosing receipt records 128.457 wall seconds,
+127.526 waited-child CPU-seconds and 64.059 supervisor CPU-seconds, with
+no surviving descendants. During that run an unused archive checker/test
+changed after the startup source check; the drift is separately recorded
+while the 761-file candidate freeze remains unchanged. This is an
+executing-core replay, not a claim that the final publication archive
+has already passed clean extraction and release qualification. The final
+archive requires its own source-matched checks.</p>
+<p>Public review subsequently challenged two additional supervisor
+behaviors. Sending SIGTERM to the original standalone resource-wrapper
+process could leave its child running without a final receipt. A child
+that rapidly exceeded the output-storage allowance and exited between
+polling steps could receive a complete result. These are consequential
+operational defects; ordinary successful runs did not disprove them. The
+original wrapper remains byte-identical because it is part of the
+protected scientific source closure. The active CLI instead names a
+separately versioned replacement, preserving both the old source and the
+original CLI. The unchanged historical runs are not relabeled as having
+used the repair.</p>
+<p>An independent namespace-aware replay establishes a live sleeping
+worker after the old supervisor exits with -15 and leaves no receipt; a
+separate rapid-exit run records complete with 15,676 output bytes
+against a 10,000-byte allowance. The initial inconclusive PID
+observation and another run that correctly caught an overrun are
+retained alongside these decisive counterexamples. A blocked accounting
+ledger does not make a falsely complete run acceptable.</p>
+<p>The version-3 supervisor installs explicit termination handling,
+protects initialization and settlement critical sections, terminates and
+reaps the owned worker group, and checks final aggregate output
+including the receipt before classifying completion. Four wrapper
+regressions and five CLI regressions pass, including actual pending
+SIGTERM, interruption of a live worker and rapid-exit storage overflow.
+Independent source review confirms that the repaired version preserves
+the original frozen wrapper rather than rewriting its evidence. Its
+source hash and the active CLI are separately bound in this edition. The
+active CLI uses a 240-CPU-second outer reservation within the original
+finite campaign budget. These targeted tests qualify the repaired cases;
+they do not claim a new complete connected replay or final archive
+qualification before that later execution occurs.</p>
+<h2 id="commerce-and-the-remaining-economic-boundary">6. Commerce and
+the remaining economic boundary</h2>
+<p>Public service schedules can constrain a conditional price model, but
+an unrelated analysis package is not a buyer contract for this
+instrument. No independently admitted customer cohort or willingness to
+pay is inferred from predicted laboratory savings. Existing protected
+exchange code is reused; a new ledger is not substituted for it.</p>
+<p>The executed commerce adapter accepts the actual Wessels audit report
+only after matching a prefrozen functional contract, independent
+verifier source, obligations and artifact receipt. Acceptance concerns
+truthful source-bound reporting of every control, failure and null; it
+does not require a scientific win and is not buyer acceptance. The same
+bytes traverse the existing protected-exchange interface and
+payment-gated encrypted release. All 15 checks pass, including positive
+clearance, exact artifact download, duplicate settlement with no
+additional change, forged-binding refusal, nonpayment, acceptance
+disputes, interruption rollback/resume, correlated reversals and a
+separate liquidity falsifier.</p>
+<p>The scenario price is an arbitrary 2,000,000 simulated microUSD, with
+eight arbitrary 10,000-unit cost categories per admitted case. They are
+functional stress inputs, not inferred market prices or complete
+measured costs. The favorable seven-case scenario has five releases,
+collections 10,000,000, scenario expenses 560,000 and scenario profit
+9,440,000. Its opening capital is 20,000,000; cash is 29,440,000; tail
+obligations and working capital are separately represented. The ledger’s
+unrestricted-earned measure is 9,440,000, while its stricter
+earned-control allocation remains zero. These different controls are not
+silently reconciled by treating capital as earnings.</p>
+<p>After the correlated reversals, that same fixture has zero
+collections/earnings and loss 560,000; investment stops. The separate
+liquidity cohort has positive accounting profit 1,900,000 but zero
+available earned cash and refuses investment. Cohorts and favorable
+checkpoints are never pooled into a commercial result. The commerce
+integration took 3.830 wall seconds and 3.029 waited-child CPU-seconds;
+full monetary cost remains unknown.</p>
+<p>No independent buyer cohort is admitted. Artificial fixture balances
+therefore establish zero commercially qualified earned funds and no
+funded successor. The Wessels technical successor was constructed before
+this money simulation and cannot be relabeled as earned-funded
+construction. Demand, the offering’s price, conventional
+complete-service profit and the unknown historical cost term remain
+unqualified.</p>
+<p>Measured execution resources do not provide full monetary cost. Agent
+inference, acquisition, integration, maintenance, support and remaining
+obligations are not zero merely because their bills are unavailable.
+Conditional break-even frontiers can expose an unknown-cost term, but
+cannot certify positive complete-cost profit. Refundable deposits,
+reserve releases and borrowing do not finance a claimed earned-funded
+successor.</p>
+<h2 id="evidence-interpretation">7. Evidence interpretation</h2>
+<p>Engineering qualification, a consequential enabling capability,
+combination advantage, experience advantage and economic progression
+remain separate decisions.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Decision</th>
+<th style="text-align: left;">Evidence-based verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Engineering qualification</td>
+<td style="text-align: left;">Demonstrated in the declared finite
+construction, repair, retention and fresh-evaluation scope</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Consequential enabling capability</td>
+<td style="text-align: left;">Not established; strong conventional
+prediction remains available and superior</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Combination advantage</td>
+<td style="text-align: left;">Not established against the complete
+qualified controls</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Experience advantage</td>
+<td style="text-align: left;">Not established over equivalent ordinary
+reuse after acquisition costs</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Conditional modeled commercial
+viability</td>
+<td style="text-align: left;">Unknown without an admitted cohort, price
+and bounded full costs</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Investment attractiveness</td>
+<td style="text-align: left;">Unknown; earned-funded investment
+deferred</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AGI ALPHA value capture</td>
+<td style="text-align: left;">Unknown; beneficiary value is not an
+established receipt</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Earned-funded successor benefit</td>
+<td style="text-align: left;">Not established; no commercially admitted
+earned funds</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Live commercial success</td>
+<td style="text-align: left;">Not established; no actual orders or
+transfers</td>
+</tr>
+</tbody>
+</table>
+<p>Functional symmetry repair and qualified data access support specific
+executable constructions. Neither supplies the missing scientific or
+economic links. The scoped engineering verdict does not retroactively
+certify every historical supervisor behavior or waive final
+source-matched release gates.</p>
+<p>The current experimental restriction is a finite supplied language
+with developer-authored primitives and current-role outcome protection.
+Shared host, model family, solvers and libraries remain dependencies.
+Separate builder and verifier responsibilities constitute procedural
+separation, not independent external certification. The paper records
+executed evidence and unresolved boundaries; it does not treat the
+mission’s ambition as a demonstrated property.</p>
+<p>The next decisive commercial step is an independently admitted cohort
+with a qualified useful advantage and bounded full costs. A settlement
+fixture cannot supply that evidence. New physical or biological
+instrumentation would also require operational validation beyond this
+condition-mean pilot.</p>
+<h2 id="executing-interfaces-and-evidence-scope">8. Executing interfaces
+and evidence scope</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Requirement</th>
+<th style="text-align: left;">Executing interface</th>
+<th style="text-align: left;">Test or receipt</th>
+<th style="text-align: left;">Limit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Structural transfer drives a
+transformation</td>
+<td style="text-align: left;"><code>exchange_mapping</code>;
+<code>repair</code></td>
+<td style="text-align: left;">Mapping and constraint records;
+independent symmetry adjudications</td>
+<td style="text-align: left;">Supplied group-averaging primitive and
+role schema</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bounded generated strategies</td>
+<td style="text-align: left;">Policy interpreter and broker</td>
+<td style="text-align: left;">Generated policy trace and actual
+four-cell search</td>
+<td style="text-align: left;">Finite arithmetic grammar; selected policy
+ties incumbent</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Acquired generative inheritance</td>
+<td style="text-align: left;"><code>acquire</code>; retrieval</td>
+<td style="text-align: left;">Recomputed pre/post defect; immutable
+capability; Wessels refits</td>
+<td style="text-align: left;">Ordinary reuse receives equivalent
+content</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Protected scientific judgment</td>
+<td style="text-align: left;">Frozen checker</td>
+<td style="text-align: left;">Frozen predictions; independently
+reproduced controls; pair-level outcomes</td>
+<td style="text-align: left;">Fixed-cohort descriptive pilot;
+unavailable complete models remain limits</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Exact historical reproduction</td>
+<td style="text-align: left;"><code>materialize</code>; archive</td>
+<td style="text-align: left;">Actual bundled-release hash, 50 old
+sources, ordinary-extraction regression</td>
+<td style="text-align: left;">Old freezes remain unchanged</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Conditional delivery and finance</td>
+<td style="text-align: left;">Commerce adapter</td>
+<td style="text-align: left;">Independent artifact-acceptance binding
+and protected-exchange scenarios</td>
+<td style="text-align: left;">No admitted commercial cohort or
+established complete-cost surplus</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>inheritance.py</code> module supplies the constraint and
+retrieval interfaces. The exact source paths, source hashes and function
+identities are retained in the mapped repair, acquired-capability,
+policy-cross and final-verifier receipts. The bounded entry point checks
+this source closure before execution.</p>
+<p>On a qualified Linux host with the pinned Python dependencies and
+seccomp support, the bounded offline entry point is:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> pip install <span class="at">-r</span> requirements-cycle004.txt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> run_cycle006.py <span class="at">--output</span> /tmp/agi-alpha-cycle006-new</span></code></pre></div>
+<p>The output path must be new. The command checks the source closure
+before application imports, materializes the exact bundled predecessor,
+reconstructs mapping-driven repair, acquires and retrieves the operator,
+refits the actual fresh-family search arms, reproduces complete controls
+and evaluates the now-exposed frozen panels. It then executes
+same-report acceptance and conditional settlement. Historical native
+Omega proposals are explicitly replayed; new local generation is a
+separately labeled interface exercise. Reproduction is neither another
+protected confirmation nor evidence of live frontier-model
+discovery.</p>
+<p>The implementation sources are readable at the <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/5f299ac4e0e937ee88f5e0bcddeef42dbc2e344c">public
+scientific revision</a>. The edition’s machine-readable input manifest
+binds the frozen experiment, raw receipts and reported results by exact
+hashes. The scientific revision contains the original protected results;
+the later connected replay and settlement receipts accompany this
+edition rather than being retroactively assigned to the earlier source
+checkpoint. Identity proves which bytes were used; it does not certify
+their truth. The new <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/perturbation-construction-20261029-r1">source
+and evidence release</a> must be evaluated separately from its
+predecessor.</p>
+<aside id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>MONTREAL.AI, <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/mechanism-completion-20261029-r1">mechanism-completion
+release</a>, <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/8">merged
+implementation</a>, and <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/9">separate
+download audit</a>, 29 October 2026.<a href="#fnref1"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>GuanLab, <a
+href="https://github.com/GuanLab/PSGRN/blob/74aa640f7c472b23a69811f6795bb17678efd344/README.md">PSGRN
+README at the qualified revision</a>.<a href="#fnref2"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>C. Ahlmann-Eltze, W. Huber and S. Anders,
+<em>Deep-learning-based gene perturbation effect prediction does not yet
+outperform simple linear baselines</em>, Nature Methods 22, 1657-1661
+(2025), <a
+href="https://doi.org/10.1038/s41592-025-02772-6">doi:10.1038/s41592-025-02772-6</a>.
+<a href="https://doi.org/10.5281/zenodo.16092690">Archived source and
+outputs</a>; <a
+href="https://github.com/const-ae/linear_perturbation_prediction-Paper/tree/bfa6eeea2bd145a1af2ec0127a2e808cc38456a9">exact
+inspected repository revision</a>.<a href="#fnref3"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>C. Ahlmann-Eltze, W. Huber and S. Anders,
+<em>Deep-learning-based gene perturbation effect prediction does not yet
+outperform simple linear baselines</em>, Nature Methods 22, 1657-1661
+(2025), <a
+href="https://doi.org/10.1038/s41592-025-02772-6">doi:10.1038/s41592-025-02772-6</a>.
+<a href="https://doi.org/10.5281/zenodo.16092690">Archived source and
+outputs</a>; <a
+href="https://github.com/const-ae/linear_perturbation_prediction-Paper/tree/bfa6eeea2bd145a1af2ec0127a2e808cc38456a9">exact
+inspected repository revision</a>.<a href="#fnref4"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>R. Vinas Torne et al., <em>Systema: a framework for
+evaluating genetic perturbation response prediction beyond systematic
+variation</em>, Nature Biotechnology, <a
+href="https://doi.org/10.1038/s41587-025-02777-8">doi:10.1038/s41587-025-02777-8</a>,
+published online 25 August 2025.<a href="#fnref5" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Y. Roohani, K. Huang and J. Leskovec, <em>Predicting
+transcriptional outcomes of novel multigene perturbations with
+GEARS</em>, Nature Biotechnology 42, 927-935 (2024), <a
+href="https://doi.org/10.1038/s41587-023-01905-6">doi:10.1038/s41587-023-01905-6</a>,
+published online 17 August 2023.<a href="#fnref6" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p><em>Benchmarking algorithms for generalizable
+single-cell perturbation response prediction</em>, Nature Methods, <a
+href="https://doi.org/10.1038/s41592-025-02980-0">doi:10.1038/s41592-025-02980-0</a>,
+published 11 December 2025.<a href="#fnref7" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>H. E. Miller et al., <em>Deep learning perturbation
+models can outperform baselines on calibrated metrics</em>, Nature
+Biotechnology, <a
+href="https://doi.org/10.1038/s41587-026-03307-w">doi:10.1038/s41587-026-03307-w</a>,
+published 1 October 2026. Its complete-method and dataset-specific
+results are prior art, not experimental results of this laboratory.<a
+href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>scPerturb, <a
+href="https://zenodo.org/records/13350497">versioned source record
+13350497</a>, <code>WesselsSatija2023.h5ad</code>, CC-BY 4.0; S. Peidli
+et al., <em>scPerturb: harmonized single-cell perturbation data</em>,
+Nature Methods, <a
+href="https://doi.org/10.1038/s41592-023-02144-y">doi:10.1038/s41592-023-02144-y</a>.
+The source contribution and all preprocessing changes must be attributed
+with derived numeric artifacts.<a href="#fnref9" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>
+</body>
+</html>

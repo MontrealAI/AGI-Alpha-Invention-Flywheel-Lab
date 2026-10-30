@@ -26,7 +26,7 @@ ORIGINAL_JUDGMENT = 'evidence/cycle-006/verifier-symmetry-original/ADJUDICATION.
 REPAIR_JUDGMENT = 'evidence/cycle-006/verifier-symmetry-mapped-003-run/artifacts/ADJUDICATION.json'
 CONTRACT = 'verification/cycle006_functional_contract.json'
 TRUTHS = 'evidence/cycle-006/exposed-confirmation'
-REQUIRED = {'run_cycle006.py', 'experiments/resource006.py', 'flywheel/baseline005.py',
+REQUIRED = {'run_cycle006.py', 'experiments/resource006.py', 'experiments/resource006_v3.py', 'flywheel/baseline005.py',
             'flywheel/archive_v2.py', 'flywheel/sandbox.py', 'flywheel/retention.py',
             'mechanisms/policy006.py', 'mechanisms/mapping.py',
             'experiments/norman006/model.py', 'experiments/norman006/inheritance.py',
@@ -282,11 +282,11 @@ def main(argv=None):
         frozen, freeze_sha = source_identity(ROOT, args.freeze.absolute(), args.freeze_sha256)
         write(output / 'SOURCE_IDENTITY.json', {'freeze_sha256': freeze_sha, 'sources_checked': len(frozen['sources'])})
         sys.path.insert(0, str(ROOT))
-        from experiments import resource006
+        from experiments import resource006_v3 as resource006
         command_line = [sys.executable, '-I', str(ROOT / 'run_cycle006.py'), '--worker', '--output', str(output / 'bounded/artifacts'),
                         '--freeze', str(args.freeze.absolute()), '--freeze-sha256', freeze_sha]
         result = resource006.run(command_line, output / 'bounded', args.ledger or output / 'RESOURCE_LEDGER.json', args.run_id,
-            {'wall_seconds': 360, 'cpu_seconds': 300, 'memory_bytes': 4*1024**3,
+            {'wall_seconds': 360, 'cpu_seconds': 240, 'memory_bytes': 4*1024**3,
              'output_bytes': 64*1024**2, 'storage_bytes': 512*1024**2}, cwd=ROOT)
         if result['receipt']['state'] != 'complete':
             raise RuntimeError('CONNECTED_WORKER_INCOMPLETE; retain bounded/RECEIPT.json and logs')

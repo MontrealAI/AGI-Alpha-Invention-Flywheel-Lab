@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/681b6e3921b1/lab-cycle006/verification/cycle006_resource_adjudication.py", line 105, in <module>
+    main()
+  File "/workspace/scratch/681b6e3921b1/lab-cycle006/verification/cycle006_resource_adjudication.py", line 67, in main
+    'worker_state_after_supervisor_exit': state(worker_pid),
+                                          ^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/681b6e3921b1/lab-cycle006/verification/cycle006_resource_adjudication.py", line 28, in state
+    if (path / 'ns/pid').stat().st_ino != Path('/proc/self/ns/pid').stat().st_ino:
+       ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 840, in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '/proc/1/ns/pid'
