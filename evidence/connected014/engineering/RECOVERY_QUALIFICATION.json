@@ -1,0 +1,86 @@
+{
+  "accepted": true,
+  "finished_utc": "2026-10-30T18:41:45Z",
+  "frozen_git_commit": "42238e4b39962d3d3cebce11bdf467a66c5e3436",
+  "frozen_source_files_verified": 113,
+  "frozen_source_sha256": "3734ea91e36e302bd82272a3e452f5b0a14df06ff6759cde8064f0bb60090ba2",
+  "full_frozen_source_bytes_unchanged_after_tests": true,
+  "limitations": [
+    "Engineering recovery qualification, not commercial confirmation or empirical demand.",
+    "Only the17finance and10engine tests are claimed here; other hosted/local suites have separate receipts.",
+    "Actual host/model billing unavailable; measured CPU is not human labor or provider billing."
+  ],
+  "prior_engineering_runs": [
+    {
+      "cpu_seconds": null,
+      "engine_tests": 10,
+      "finance_tests": 17,
+      "reported_unittest_elapsed_seconds": 15.283,
+      "reported_unittest_elapsed_seconds_engine": 75.225,
+      "source_binding": "Prior engineering execution; exact executing engine source identity not captured then. Not counted as qualification of this commit."
+    }
+  ],
+  "schema": "agi-alpha/connected014-recovery-qualification/v1",
+  "scope": "EXACT_COMMITTED_SOURCE_FINANCE_AND_LIVE_QUEUE_RECOVERY_TESTS",
+  "source_commit": "42238e4b39962d3d3cebce11bdf467a66c5e3436",
+  "source_files_sha256": {
+    "connected_enterprise/engine.py": "3151eb478666136aa34112e210395f5e6d6ea2a6e5e0bee96792ebae006f97fe",
+    "connected_enterprise/finance.py": "8e1663e8c90a1e74d156db0e087950070bc34b82f9c5c3f7f30622874a15da16",
+    "tests/test_connected_engine.py": "ff50f495c7883e40a4a50117a17e6683708d0a068d7f5a947eda0b4b8576be6e",
+    "tests/test_connected_finance.py": "849e6313c85a71bbf21c55b138a56d5a0ea417027e15bbf26e3e9a3e5114cce1"
+  },
+  "source_unchanged_after_tests": true,
+  "started_utc": "2026-10-30T18:40:32Z",
+  "suites": [
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_connected_finance.py",
+        "-v"
+      ],
+      "completed_count_verified": true,
+      "expected_test_count": 17,
+      "log": "test_connected_finance-42238e4.log",
+      "log_sha256": "ee884b023f53b74e426458cf8be92849e373a99d9d0ea1de8d027a6e5641da3e",
+      "passed": true,
+      "returncode": 0,
+      "test_file": "test_connected_finance.py",
+      "test_source_sha256": "849e6313c85a71bbf21c55b138a56d5a0ea417027e15bbf26e3e9a3e5114cce1",
+      "waited_children_system_cpu_seconds": 1.9639110000000002,
+      "waited_children_user_cpu_seconds": 10.78539,
+      "wall_seconds": 13.06496938100463
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_connected_engine.py",
+        "-v"
+      ],
+      "completed_count_verified": true,
+      "expected_test_count": 10,
+      "log": "test_connected_engine-42238e4.log",
+      "log_sha256": "76ffb947c75e8840b6474c71e35cafca4cd2b2a98620acc9a03cca0cea570e78",
+      "passed": true,
+      "returncode": 0,
+      "test_file": "test_connected_engine.py",
+      "test_source_sha256": "ff50f495c7883e40a4a50117a17e6683708d0a068d7f5a947eda0b4b8576be6e",
+      "waited_children_system_cpu_seconds": 6.152419999999999,
+      "waited_children_user_cpu_seconds": 49.622464,
+      "wall_seconds": 60.72456127699843
+    }
+  ],
+  "total_waited_children_cpu_seconds": 68.524185,
+  "wall_seconds": 73.79006910199678
+}
