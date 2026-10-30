@@ -50,6 +50,11 @@ Choose a protected final confirmation or a valid sequential procedure. Its stopp
 
 ## 4. Test the commercial consequence
 
+**Primary benchmark:** compare the *fully configured autonomous operation using the strongest appropriate current frontier-AI models* with a competent human-delivered completed service at actual/credible human work speed and fully loaded wages. Match the same output, quality threshold, source rights, errors, revisions, deadlines, confidentiality, review, support, liability and acceptance. Record explicit model identity, inference/tool cost, failed attempts, human escalation, acquisition, allocation and delivery overhead. [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) is the operative benchmark method and includes sourced rate examples; its hypothetical values do not prove actual profit.
+
+**Secondary market/defensibility comparators:** human providers using AI, other equally capable autonomous AI operators, free/internal alternatives and no purchase. Preserve these as tests of real price, competitive adoption and unique technical advantage; do **not** make beating all AI competitors the prerequisite for proving that AI-native services are much cheaper than competent human labor. Do not confuse human labor-cost savings with AGI ALPHA's own revenue, or a profitable service with a profitable reinvestment/successor-invention flywheel.
+
+
 Carry a supported construction into useful delivery and a realistic commercial exercise using that same instrument, not an unrelated easy sale. All simulated participation, money and settlement must remain labeled simulated. This document grants no new spending, paid calls, real transactions, outreach or runtime access.
 
 Freeze the cohort, ownership, acquisition timing, functional obligations, horizon, existing-tool access and sunk-cost treatment. Account for every admitted input, including rejects, failures, rework, unsold output, idle capacity and terminal obligations. Complementary additions require prespecified admission rules.

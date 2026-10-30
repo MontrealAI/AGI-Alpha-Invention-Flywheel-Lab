@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "as_of": "2026-10-30",
+    "currency": "USD",
+    "evidence_status": "ILLUSTRATIVE_UNVALIDATED",
+    "same_outcome_independently_verified": false,
+    "actual_sales": 0,
+    "wage_source": "https://www.bls.gov/ooh/",
+    "compensation_source": "https://www.bls.gov/news.release/ecec.htm",
+    "model_price_source": "https://developers.openai.com/api/docs/pricing",
+    "note": "Only wages, aggregate burden and model rate schedules are sourced. Per-task hours, tokens, review, other costs, price and acceptance are unvalidated assumptions. No API runs were performed."
+  },
+  "wage_burden": {"wage_salary_per_hour": "32.82", "employer_cost_per_hour": "46.89", "basis": "June 2026 BLS ECEC, private industry aggregate, illustrative ratio not occupation-specific"},
+  "roles": {
+    "writer": {"wage_usd_per_hour": "36.98", "source": "https://www.bls.gov/ooh/media-and-communication/writers-and-authors.htm"},
+    "management_analyst": {"wage_usd_per_hour": "48.97", "source": "https://www.bls.gov/ooh/business-and-financial/management-analysts.htm"},
+    "software_developer": {"wage_usd_per_hour": "65.38", "source": "https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm", "note": "US$135980/year divided by 2080 hours"},
+    "accountant": {"wage_usd_per_hour": "40.23", "source": "https://www.bls.gov/ooh/business-and-financial/accountants-and-auditors.htm", "note": "US$83680/year divided by 2080 hours"}
+  },
+  "models": {
+    "gpt-6.1-terra": {"input_usd_per_million": "1", "output_usd_per_million": "5"},
+    "gpt-6.1-sol": {"input_usd_per_million": "2", "output_usd_per_million": "10"},
+    "gpt-6-astra": {"input_usd_per_million": "10", "output_usd_per_million": "50"}
+  },
+  "cases": [
+    {"id":"researched_article", "outcome":"Client-ready factual 1000-word article with sources, edits and publication-ready metadata", "role":"writer", "human_hours":"4", "model":"gpt-6.1-terra", "input_tokens":20000,"output_tokens":4000,"ai_review_hours":"0.30","tools_usd":"3","rework_usd":"4","acquisition_usd":"10","development_allocation_usd":"5","support_risk_usd":"3","assumed_price_usd":"95"},
+    {"id":"business_analysis", "outcome":"Reconciled business KPI and sensitivity brief with checkable calculations and interpretation", "role":"management_analyst", "human_hours":"6", "model":"gpt-6.1-sol", "input_tokens":100000,"output_tokens":25000,"ai_review_hours":"0.75","tools_usd":"12","rework_usd":"15","acquisition_usd":"20","development_allocation_usd":"10","support_risk_usd":"8","assumed_price_usd":"250"},
+    {"id":"software_patch", "outcome":"Reproducible scoped bug fix with tests, review and artifact handoff", "role":"software_developer", "human_hours":"8", "model":"gpt-6-astra", "input_tokens":250000,"output_tokens":40000,"ai_review_hours":"1.0","tools_usd":"12","rework_usd":"30","acquisition_usd":"25","development_allocation_usd":"25","support_risk_usd":"15","assumed_price_usd":"450"},
+    {"id":"reconciliation", "outcome":"Checked accounting reconciliation report with exceptions and correction trace", "role":"accountant", "human_hours":"5", "model":"gpt-6.1-sol", "input_tokens":80000,"output_tokens":12000,"ai_review_hours":"0.80","tools_usd":"7","rework_usd":"12","acquisition_usd":"20","development_allocation_usd":"10","support_risk_usd":"10","assumed_price_usd":"180"}
+  ]
+}

@@ -61,6 +61,12 @@ Require a concrete explanation of how its result would change a build, stop, piv
 
 A rejected analogy is useful if it becomes a scoped constraint. A verified criticism is useful if it changes a construction or decision. More agents, more papers, more test cases and more code are not substitutes for either.
 
+## Commercial comparison: human first, market competition second
+
+The primary commercial productivity and feasibility comparison is **a super-competent autonomous frontier-AI operation (E) versus a competent human-delivered service (H) at realistic human speed and fully loaded wages** for the same accepted outcome and obligations. Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) for wage and model-rate sources, four illustrative jobs and the required complete-cost method.
+
+This opens potentially profitable AI-native services even where other AI implementations tie technically. A separate comparison with human-AI hybrids, competing autonomous AI providers, free tools and no entry tests achievable selling prices and advantage. Low token cost alone is not verified delivery, paying demand, realized profit or recursive invention.
+
 ## Three achievements to establish separately
 
 - **Useful invention:** an executed construction improves the authorized outcome, or makes it possible, against strong complete alternatives within declared resources.

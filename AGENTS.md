@@ -38,6 +38,12 @@ Evaluators can be improved through separately validated, authorized changes. Nev
 
 Measure actual quantities where possible. Identify assumptions, ranges and missing measurements. Include discovery, rejected attempts, construction, adaptation, verification, integration, maintenance, buyer participation, acquisition, support and obligations where applicable. Do not count theoretical customer savings as revenue. An idealized market or custodian remains a model assumption.
 
+## Primary commercial benchmark — competent human service versus frontier AI
+
+For commercial feasibility, **first compare** our competently configured, currently capable frontier-AI operation with a competent human-delivered service at realistic human speed and fully loaded wages. Hold the required outcome, acceptance, legal rights, deadlines, corrections and support obligations fixed. Treat AI model-token pricing as one cost component, not total service cost. Measure the full accepted-job cost and buyer value. Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) before designing economic benchmarks.
+
+**Separately** compare human providers using AI, rival autonomous frontier-AI services, freely available alternatives and no purchase. These determine market competitiveness and defensibility; they must not erase the primary human-versus-frontier-AI productivity question. Causal successor-invention and economic compounding remain separate higher-level claims.
+
 ## Inheritance and economics
 
 A tool passing its original test does not establish successor benefit. Test fresh successor construction against matched no-inheritance and ordinary-reuse controls. Give ordinary reuse the same artifact content when isolating the value of a structured memory or router. Include the cost of acquiring the inheritance.
