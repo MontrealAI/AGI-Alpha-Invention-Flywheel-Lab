@@ -1,0 +1,11 @@
+# Circuit measurement construction and conditional protected exchange
+
+This experimental edition constructs and independently checks a passive-network measurement compiler, an actual scoped-memory successor experiment, and a switched-reference response to a reproduced sensor-gain ambiguity. All physical laws and conventional comparison methods remain credited. The source-bound finite model gains useful information; strong complete ordinary methods tie.
+
+The connected replay executes construction, separate exact checking, real store/retrieve/adaptation calls, the existing protected simulated exchange, and the paired-reference extension. It includes meaningful forgery tests, complete denominators, abstention, original failed repairs and interrupted-run evidence. The first missing cryptography dependency and outside-output path-label failure are retained. The package declares its inherited cryptographic dependencies and requires no hidden Git history or scientific data download.
+
+Commercial execution consists of eight alternative assumption worlds for the same accepted report. Nominal modeled profit is12.25 simulated USD, conditional on authored complete-cost and buyer assumptions; joint adverse modeled loss is87.75. The10 simulated USD investment reservation is unspent. Actual costs, matched human task time and AGI ALPHA demand remain unknown. Qualified unrestricted simulated earnings are zero; no earned-funded successor or live commerce is established.
+
+The LaTeX/PDF and formatted browser-reading HTML describe their immutable scientific source edition. Release qualification separately checks current source and actual downloaded standalone contents. Passing publication gates does not convert model assumptions into physical or commercial validation. The complete mission remains incomplete.
+
+Historical overnight008, lifecycle007 and four-repository work are preserved and are not qualified by this edition. A later green check does not prove the historical nondeterministic startup interruption defect repaired.

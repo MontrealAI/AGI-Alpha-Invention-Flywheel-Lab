@@ -1,10 +1,11 @@
 # Consequential009: executed construction and conditional exchange
 
-Python3.11+ standard library only. No paid provider, account, API key, hidden Git history or external data download is needed for the scoped replay. The original ngspice designs and licensing record are included. This is an ideal circuit-model experiment, not physical measurement or a live business.
+Python3.11+ with the pinned cryptography, cffi and pycparser packages used by the inherited protected exchange. Circuit construction and independent arithmetic use the standard library. No paid provider, account, API key, hidden Git history or scientific data download is needed. The original ngspice designs and licensing record are included. This is an ideal circuit-model experiment, not physical measurement or a live business.
 
 Run from the extracted project root:
 
 ```sh
+python -m pip install --only-binary=:all: -r requirements-consequential009.txt
 python -m unittest discover -s tests -p 'test_consequential009*.py' -v
 python -m unittest discover -s verification/consequential009 -p 'test_*.py' -v
 python run_consequential009.py --output /tmp/alpha009-new-output

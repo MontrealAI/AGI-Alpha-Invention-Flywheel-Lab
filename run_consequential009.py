@@ -72,7 +72,7 @@ def run(output):
             'reference_independent_acceptance': read(output / 'reference-verifier/ACCEPTANCE.json')['accepted'],
             'commerce': commercial['evidence_grounded_decision'], 'resources': receipts,
             'wall_seconds': time.monotonic() - started,
-            'scope': 'Downloaded-source reproducibility of finite engineering and conditional financial execution. Same cases, not new confirmation, observed orders or physical validation.',
+            'scope': 'Source-matched reproducibility of finite engineering and conditional financial execution. Downloaded-package origin requires a separate archive receipt. Same cases, not new confirmation, observed orders or physical validation.',
             'mission_success': False,
             'missing': ['Scientific/technical advantage over competent full-VI methods', 'Measured physical calibration and real service utility',
                 'Exact executed frontier model/token cost receipt', 'Matched competent-human task time and complete service costs',

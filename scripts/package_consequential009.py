@@ -1,5 +1,5 @@
 """Create and verify a standalone source/evidence archive without Git history."""
-import argparse, hashlib, io, json, tarfile, zipfile
+import argparse, hashlib, io, json, re, subprocess, tarfile, zipfile
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,7 +24,16 @@ def pack(output, source_commit):
             if '/reference-r1/artifacts/raw/' in name: continue
             files.add(name)
     data = {name: (ROOT / name).read_bytes() for name in sorted(files)}
-    manifest = {'schema': 'agi-alpha/consequential009-download-manifest/v1', 'source_commit': source_commit,
+    if source_commit != 'WORKTREE':
+        if not re.fullmatch('[0-9a-f]{40}', source_commit): raise ValueError('EXACT_COMMIT_OR_EXPLICIT_WORKTREE_REQUIRED')
+        entries = subprocess.check_output(['git', '-C', str(ROOT), 'ls-tree', '-r', '-z', source_commit]).split(b'\0')
+        public = {entry.split(b'\t', 1)[1].decode(): entry.split(b'\t', 1)[0].split()[2].decode() for entry in entries if entry}
+        for name, raw in data.items():
+            blob = hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
+            if public.get(name) != blob: raise ValueError('CLAIMED_COMMIT_DOES_NOT_CONTAIN_EXACT_PACKAGED_BYTES ' + name)
+    manifest = {'schema': 'agi-alpha/consequential009-download-manifest/v1',
+        'source_commit': None if source_commit == 'WORKTREE' else source_commit,
+        'source_identity_scope': 'UNPUBLISHED_WORKTREE; exact file hashes only' if source_commit == 'WORKTREE' else 'Every packaged source/evidence blob matched the exact claimed Git commit before packing.',
         'source_freeze_sha256': sha((ROOT / 'campaign/consequential-009/SOURCE_FREEZE.json').read_bytes()),
         'files': {name: {'sha256': sha(raw), 'bytes': len(raw)} for name, raw in data.items()},
         'original_reference_raw': 'Lossless verified reference-raw-r1.tar.gz plus per-original SHA256 manifest; restore separately. New replay generates new raw bytes independently.'}
@@ -35,7 +44,7 @@ def pack(output, source_commit):
             info = zipfile.ZipInfo(name, date_time=(2026, 10, 30, 0, 0, 0)); info.external_attr = 0o100644 << 16
             info.compress_type = zipfile.ZIP_DEFLATED
             archive.writestr(info, raw)
-    return {'files': len(data), 'bytes': output.stat().st_size, 'sha256': sha(output.read_bytes()), 'source_commit': source_commit}
+    return {'files': len(data), 'bytes': output.stat().st_size, 'sha256': sha(output.read_bytes()), 'source_commit': manifest['source_commit']}
 
 def extract(archive_path, destination):
     destination = Path(destination); destination.mkdir(parents=True, exist_ok=False)

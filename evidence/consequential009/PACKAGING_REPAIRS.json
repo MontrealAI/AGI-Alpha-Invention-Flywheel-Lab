@@ -1,0 +1,16 @@
+{
+  "schema": "agi-alpha/consequential009-packaging-repairs/v1",
+  "failed_ci_commit": "d06ab79268ffcb9cd3320b0494c3a782d51f0591",
+  "failed_ci_run": 41040636256,
+  "failed_job": 124012262019,
+  "cause": "InheritedProtectedExchange imports cryptography; original newworkflow falsely declared standardlibrary-only and didnot install it. This was a real packaging defect, not a conventionalmethod scientific failure.",
+  "repair": "Pinned cryptography50.0.2,cffi2.1.1,pycparser3.11 installed in emptyvenv; no implementation/securitygate removed.",
+  "local_package_provenance_error": {
+    "archive_sha256": "12e32ae08c1ada0696d5635c0e13b0f0f56b863b7f1ca43db18132db4173f0e1",
+    "status": "UNQUALIFIED_PROTOTYPE; source_commit argumentd06didnotdescribe thenmodifiedworktree. Filehashes factual, Gitcommitlabelinvalid. Preserved, not published as a release asset.",
+    "repair": "Packer nowverifieseveryblobagainstclaimedimmutablecommit, or requires explicitWORKTREE withnullsourcecommit. CIusesactualchecked-outPRhead ratherthan syntheticGITHUB_SHA."
+  },
+  "scope_label_repair": "Replay nowstatesSource-matched; archiveprovenancerequiresseparatereceipt.",
+  "costs": "All failedattempts/reservations preserved; no budget/error reset.",
+  "qualification": "Emptyenvironment/source-matched/currenthead/downloadqualification follow separately; this repairrecord isnot a pass."
+}
