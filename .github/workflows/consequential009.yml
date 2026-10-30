@@ -18,7 +18,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install pinned inherited exchange dependencies
-        run: python -m pip install --only-binary=:all: -r requirements-consequential009.txt
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-consequential009.txt
       - name: Meaningful exchange, independent arithmetic and forgery regressions
         run: |
           python -m unittest discover -s tests -p 'test_consequential009*.py' -v
@@ -70,8 +71,8 @@ jobs:
           repo, sha = os.environ['GH_REPO'], os.environ['GITHUB_SHA']
           for workflow in ['campaign.yml', 'consequential007.yml']:
               for attempt in range(60):
-                  data = json.loads(subprocess.check_output(['gh', 'api', f'repos/{repo}/actions/workflows/{workflow}/runs?head_sha={sha}&event=push'], text=True))
-                  runs = [r for r in data['workflow_runs'] if r['head_sha'] == sha and r['event'] == 'push']
+                  data = json.loads(subprocess.check_output(['gh', 'api', f'repos/{repo}/actions/workflows/{workflow}/runs?head_sha={sha}&event=push&branch=main'], text=True))
+                  runs = [r for r in data['workflow_runs'] if r['head_sha'] == sha and r['event'] == 'push' and r['head_branch'] == 'main']
                   if runs:
                       current = max(runs, key=lambda r:r['id'])
                       if current['status'] == 'completed':
@@ -99,16 +100,22 @@ jobs:
             echo 'Existing immutable experimental edition retained.'
             exit 0
           fi
-          if git show-ref --verify --quiet "refs/tags/$tag"; then
-            echo 'Tag exists without release; refuse reuse.' >&2
-            exit 1
+          if gh api "repos/$GH_REPO/git/ref/tags/$tag" > "$RUNNER_TEMP/009-existing-tag.json" 2>/dev/null; then
+            python - <<'PY'
+          import json, os, pathlib
+          tag = json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'009-existing-tag.json').read_text())
+          if tag['object']['type'] != 'commit' or tag['object']['sha'] != os.environ['GITHUB_SHA']:
+              raise SystemExit('Existing tag does not identify this qualified source; publication refused.')
+          PY
+          else
+            gh api "repos/$GH_REPO/git/refs" --method POST -f "ref=refs/tags/$tag" -f "sha=$GITHUB_SHA"
           fi
           mkdir -p "$RUNNER_TEMP/009-release-assets"
           cp "$RUNNER_TEMP/009-qualified-artifact/AGI_ALPHA_Consequential009.zip" "$RUNNER_TEMP/009-release-assets/"
           cp docs/consequential009/paper.pdf docs/consequential009/paper.tex docs/consequential009/index.html docs/consequential009/SOURCE_MANIFEST.json "$RUNNER_TEMP/009-release-assets/"
           cp "$RUNNER_TEMP/009-release-replay/RESULT.json" "$RUNNER_TEMP/009-release-assets/DOWNLOADED_PACKAGE_QUALIFICATION.json"
           (cd "$RUNNER_TEMP/009-release-assets" && sha256sum * > SHA256SUMS.txt)
-          gh release create "$tag" "$RUNNER_TEMP/009-release-assets/"* --target "$GITHUB_SHA" --prerelease --title 'AGI ALPHA: circuit measurement construction and conditional exchange' --notes-file campaign/consequential-009/RELEASE_NOTES.md
+          gh release create "$tag" "$RUNNER_TEMP/009-release-assets/"* --verify-tag --target "$GITHUB_SHA" --prerelease --title 'AGI ALPHA: circuit measurement construction and conditional exchange' --notes-file campaign/consequential-009/RELEASE_NOTES.md
       - name: Preserve publication and downloaded-package evidence including failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

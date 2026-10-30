@@ -1,0 +1,67 @@
+{
+  "schema": "agi-alpha/consequential009-operational-review/v1",
+  "recorded_utc": "2026-10-30T10:35:45.075711+00:00",
+  "workflow_source_sha256": "88fe7035cbbe60e2e78dd6b5175c7cb8f7f9e196c13f040ddd815be6173b5855",
+  "package_source_sha256": "06c897f900f1842e3d59f692a1b4a2558aff09ba7f3f61084d8d5135b4722806",
+  "findings": [
+    {
+      "id": "ZIP_CANONICAL_ALIAS",
+      "status": "REPRODUCED",
+      "receipt": "evidence/consequential009/verifier/operational-r1/ALIAS_COUNTEREXAMPLE.json",
+      "consequence": "Two declaredverifiedrawmembersbecomeoneoverwrittenfilesystemfile. Currentownpackcanonicalnamesnotshowncorrupt."
+    },
+    {
+      "id": "INHERITED_RUN_BRANCH_SUBSTITUTION",
+      "status": "REPRODUCED_SELECTION_LOGIC_WITH_AUTHORIZED_TRIGGER_SHAPES_NOT_OBSERVED_GITHUB_RUN",
+      "counterfactual_workflow_runs": [
+        {
+          "id": 101,
+          "head_sha": "1111111111111111111111111111111111111111",
+          "event": "push",
+          "head_branch": "main",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "id": 102,
+          "head_sha": "1111111111111111111111111111111111111111",
+          "event": "push",
+          "head_branch": "campaign/grid-screen-cycle-1",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "selected": {
+        "id": 102,
+        "head_sha": "1111111111111111111111111111111111111111",
+        "event": "push",
+        "head_branch": "campaign/grid-screen-cycle-1",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      "main_failed_yet_old_predicate_passes": true,
+      "reviewed_workflow_contains_old_filter": true,
+      "remedy": "Filter head_branch==main aswellasSHA/event; campaign.ymlallowspushesonthegridbranchandonlyexecutespublicationjobsonmain."
+    },
+    {
+      "id": "REMOTE_TAG_RACE",
+      "status": "DOCUMENTED_CONCURRENCY_ANALYSIS_NOT_SERVER_REPRODUCTION",
+      "source": "https://cli.github.com/manual/gh_release_create",
+      "consequence": "--targetcontrolsautomaticnewtagcreation; a concurrentlyexistingremotetagcanbeusedwithoutmovingit. Locallong-livedshow-refcannotproveabsenceatpublication.",
+      "remedy": "AtomicnewGitrefcreationatqualifiedSHAwithalreadyexistsrefusal, thenremoteidentitycheckandrelease--verify-tag. Preservehistoricalrefs."
+    }
+  ],
+  "non_findings": [
+    "Exact40hexcommitcheckplusperpackagedGitblobcomparisonpreventstheearlierwrong-sourcecommitlabel;WORKTREEnullisexplicitlyunqualified.",
+    "SameworkflowqualifyneedsandmainpushconditionpreventPRpublishes.",
+    "Upload-artifactleastcommonancestorisRUNNER_TEMPforspecifiedpaths;ZIPdownloadpathmatchesdocumentation.",
+    "Inheritedworkflowfailures/timeoutsrefusepublication, notrelabelaspass.",
+    "Nooutsidecertificationorapproverreviewisprovidedbythispeerrole."
+  ],
+  "resources": {
+    "received_external_source_bytes": "Twoofficialdocumentationpages;toolsnotmetered",
+    "new_paid_calls": 0,
+    "new_public_mutations": 0,
+    "complete_monetary_cost": null
+  }
+}

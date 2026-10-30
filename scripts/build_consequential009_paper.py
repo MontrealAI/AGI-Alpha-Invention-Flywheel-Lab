@@ -1,13 +1,31 @@
 from __future__ import annotations
-import argparse, hashlib, html, json, re, subprocess, sys, time
+import argparse, hashlib, html, json, re, subprocess, sys, tarfile, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
 def digest(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def load(path): return json.loads(Path(path).read_text())
+def source_bytes(relative):
+    metadata=ROOT/'evidence/consequential009/reference-raw-r1-MANIFEST.json'
+    if metadata.exists():
+        archived=load(metadata);prefix=archived['original_base']+'/'
+        if relative.startswith(prefix) and relative[len(prefix):] in archived['files']:
+            member=relative[len(prefix):];info=archived['files'][member];archive=ROOT/archived['archive']
+            if digest(archive)!=archived['archive_sha256']:raise ValueError('RAW_ARCHIVE_IDENTITY_MISMATCH')
+            with tarfile.open(archive) as stream:
+                entry=stream.getmember(member)
+                if not entry.isfile() or entry.size!=info['bytes']:raise ValueError('RAW_MEMBER_SIZE_OR_TYPE')
+                raw=stream.extractfile(entry).read()
+            if hashlib.sha256(raw).hexdigest()!=info['sha256']:raise ValueError('RAW_MEMBER_IDENTITY_MISMATCH')
+            local=ROOT/relative
+            if local.exists() and (local.is_symlink() or local.read_bytes()!=raw):raise ValueError('LOCAL_RAW_DIFFERS_FROM_PUBLIC_ARCHIVE')
+            return raw,{'archive':archived['archive'],'archive_sha256':archived['archive_sha256'],'member':member}
+    path=ROOT/relative
+    if path.is_symlink() or not path.is_file():raise ValueError('MISSING_OR_UNSAFE_SOURCE '+relative)
+    return path.read_bytes(),None
 def tex(s):
-    mapping={'\\':r'\textbackslash{}','&':r'\&','%':r'\%','$':r'\$','#':r'\#','_':r'\_','{':r'\{','}':r'\}','~':r'\textasciitilde{}','^':r'\textasciicircum{}'}
+    mapping={'\\':r'\textbackslash{}','&':r'\&','%':r'\%','$':r'\$','#':r'\#','_':r'\_\allowbreak{}','{':r'\{','}':r'\}','~':r'\textasciitilde{}','^':r'\textasciicircum{}'}
     out=[]
     for part in re.split(r'(https?://[^\s]+|[0-9a-f]{40,64})',str(s)):
         if part.startswith(('https://','http://')):
@@ -25,7 +43,9 @@ def equation(blocks,latex,plain): blocks.append(('eq',(latex,plain)))
 def code(blocks,text): blocks.append(('code',text))
 def bullets(blocks,items): blocks.append(('list',items))
 def readable(text):
-    text=re.sub(r'\b(commit|blob|or|and|for|from|of|by|to|at|above|below|only|then|produces|before|after|capital|price|cost|world|received|recorded|all|leave|is|near|with)(?=[0-9])',r'\1 ',str(text))
+    text=re.sub(r'\b(commit|blob|or|and|for|from|of|by|to|at|above|below|only|then|produces|before|after|capital|price|cost|world|received|recorded|all|leave|is|near|with|the|profit|cash|predeclared|records|in|least|most|same|executes|retains|either|producing|are|receives|Using|ratio|interval|passes|varies|These|accessed|cryptography|cffi|pycparser)(?=[0-9])',r'\1 ',str(text))
+    text=re.sub(r'\bis(?=[A-Z])','is ',text)
+    text=text.replace('production/setup/research-recovery','production, setup and research recovery')
     text=re.sub(r'(?<=[A-Za-z])(?=US\$|SIM USD)',' ',text)
     text=re.sub(r'(?<=[A-Za-z]),(?=[0-9])',', ',text)
     for a,b in [('US$','US$ '),('USD50','USD 50'),('USD10','USD 10'),('USD36','USD 36'),('SIM USD50','SIM USD 50'),('times3','times 3'),('=48','= 48'),('=24','= 24'),('in{','in {'),('or1/a','or 1/a'),('by1/a','by 1/a'),('October 2026','October 2026'),('May2025','May 2025'),('June2026','June 2026'),('August2026','August 2026'),('across119','across 119'),('received119','received 119'),('derivesR','derives R')]:text=text.replace(a,b)
@@ -50,7 +70,7 @@ def build_text(data):
     para(blocks,'A separate provider-identified current-frontier construction arm and a timed competent-human engineering study were not executed. Program reset and equal-content reuse are matched software controls; they are not new frontier API calls or measured expert labor. The study therefore does not establish superiority over independently operating frontier-AI construction, human scientific discovery or their best complete workflows.')
     table(blocks,['Claim','Decision at this edition'],[
       ['Finite-model measurement enablement','Demonstrated within the frozen response and uncertainty model'],
-      ['Advantage over complete ordinary experiment design','Not demonstrated; coverage ties and ordinary design is smaller'],
+      ['Advantage over complete ordinary experiment design','Not demonstrated; complete coverage and action count tie'],
       ['Scientific novelty or new circuit physics','Not established'],
       ['Physical calibration and real diagnostic service assurance','Not validated'],
       ['Actual commerce or autonomous frontier API execution','Not observed or authorized'],
@@ -99,6 +119,7 @@ def build_text(data):
     para(blocks,'The most consequential reproduced defect is sensor-gain confounding. If measured current is g times physical current, replacing the circuit by its scale-a equivalent and replacing g by ag leaves every measured current and voltage response unchanged. A current channel without a justified calibration bound therefore does not establish global scale. The stressed gain interval[1/2,2] leaves unresolved pairs in both complete cohorts. The construction preserves those failures instead of shrinking the denominator or treating simulation settings as calibration evidence.')
     equation(blocks,r'I_a=I_1/a,\qquad g_a=ag_1\quad\Longrightarrow\quad g_aI_a=g_1I_1.', 'Unknown gain can exactly compensate the change in physical input current.')
     para(blocks,'The independent checker has its own parser, rational complex operations and nodal solver, and does not import candidate arithmetic. Closed-form RC and RL cases, source-amplitude normalization, SPICE M versus MEG units, touching uncertainty rectangles, large-error abstention, unsupported devices and singular networks provide adversarial checks. Its exact symmetry receipt covers the official RC design across three scales and five positive angular frequencies. The final full-cohort receipt and its immutable source hash are included in this edition source manifest. A passing unit suite alone is not substituted for complete-cohort artifact acceptance.')
+    para(blocks,'An additional review dispatch requested the gpt-6-astra alias at high reasoning effort and returned actual executable probes, while exact served revision and token billing remained unexposed. Its scalar-gain geometry check confirms that response rectangles can be conservative for individual actions; on the full declared action families it retains the same56 and24 unresolved pairs. The same review executes34944 additional raw-reference corner cases, including negative-real and quadrature gains, with no analytic-enclosure escape. These are adversarial development probes, not a separate full frontier-model construction arm, outside certification, statistical confirmation or a provider-billed execution receipt.')
     para(blocks,'Strong ordinary impedance spectroscopy already uses voltage and current. The experiment does not demonstrate an outcome beyond that practice. Its useful scope is an executable explanation of why a restricted observation family fails, an explicit repair to the measurement specification, and a checkable model-domain plan. It does not prove identifiability of arbitrary continuous component values, unknown circuit topology, nonlinear faults, phase-calibration errors or physical specimens.')
 
     section(blocks,'5. Autonomous offering and complete-cost economics')
@@ -113,7 +134,7 @@ def build_text(data):
     for world in worlds:
         e=world['economics'];snap=world['snapshots']['terminal_180day_with_unresolved_exposure_retained']
         rows.append([world['id'].replace('_',' '),'yes' if world['participates_under_assumptions'] else 'no',f"{e['AI_conditional_profit_microUSD']/1e6:.2f}",f"{snap['cash']/1e6:.2f}"])
-    table(blocks,['Counterfactual world','Participates','Profit (SIM USD)','Terminal cash (SIM USD)'],rows,'One admitted report opportunity in each alternative world. These are not additive sales, measured buyer frequencies or independent scientific samples. All admitted preparation cost remains when output is unsold.')
+    table(blocks,['Counterfactual world','Participates','Profit (SIM USD)','Terminal cash (SIM USD)'],rows,'One admitted report opportunity in each alternative world. Participation means modeled utility preference; funding or delivery can still fail. These are not additive sales, measured buyer frequencies or independent scientific samples. All admitted preparation cost remains when output is unsold.')
     nominal=next(w for w in worlds if w['id']=='conditional_participation');econ=nominal['economics'];nominal_snap=nominal['snapshots']['terminal_180day_with_unresolved_exposure_retained']
     para(blocks,f"In the nominal authored world, selling price is SIM USD50, the declared all-category production/setup/research-recovery cost is36 before the1.75 payment fee, and complete assumed cost is{econ['AI_conditional_complete_cost_microUSD']/1e6:.2f}. This yields modeled profit{econ['AI_conditional_profit_microUSD']/1e6:.2f} and terminal cash{nominal_snap['cash']/1e6:.2f} from declared opening capital1000. Full modeled principal and dispute-fee exposure remains backed separately; a predeclared10 investment reservation is not a spend or successor construction. These amounts are scenario inputs and ledger consequences, not measurements of the campaign bill.")
     para(blocks,f"The nominal missing-cost frontier is K<{econ['AI_positive_profit_requires_K_less_than_microUSD']/1e6:.2f} SIM USD above the assumed complete totals. At the sourced loaded-compensation sensitivity, human profit is positive before unmeasured tools, setup and service overhead only below{60*econ['human_positive_profit_before_unmeasured_costs_requires_hours_less_than']:.6f} minutes per report; the authored AI cost is below human compensation only above{60*econ['AI_lower_cost_than_human_before_unknown_costs_requires_human_hours_greater_than']:.6f} minutes. Exact human effort is unknown, so neither a measured human loss nor a measured AI cost advantage follows. Actual complete profit remains unbounded by the available bill and obligation evidence.")
@@ -166,14 +187,17 @@ def build_text(data):
 
     section(blocks,'8. Reproduction and source identity')
     para(blocks,'This edition is reconstructed from an immutable public checkpoint and the exact input identities in SOURCE_MANIFEST.json. Each consumed file is hashed before authoring; no absent historical array, unobserved bill or prior paper is reconstructed under an old identity. The report source anchor and input manifest distinguish the engineering source freeze from the paper derivative. The browser edition contains the actual narrative, equations, results and source links rather than an HTML listing of LaTeX code.')
+    para(blocks,'The 26 original raw-readout JSON files are preserved losslessly as named members of reference-raw-r1.tar.gz, rather than claimed to exist as separate public Git blobs. The manifest records their archive identity, exact member names, sizes and original SHA256 values. The paper builder checks those archived bytes directly, and checks any present local raw files for equality; no regenerated raw array inherits an old identity.')
     para(blocks,'Public engineering anchor: '+data['anchor']+'. Repository: MontrealAI/AGI-Alpha-Invention-Flywheel-Lab. Source URL: https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/'+data['anchor']+'. The stable PR is https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/13. The input-manifest SHA256 is '+data['manifest_hash']+'.')
-    code(blocks,data.get('reproduce','python -m inventions.consequential009.experiment --protocol research/consequential009/analog/PROTOCOL.json --output /tmp/consequential009-replay\npython -m unittest discover -s verification/consequential009 -v'))
+    code(blocks,data.get('reproduce','python -m pip install -r requirements-consequential009.txt\npython run_consequential009.py --output /tmp/consequential009-replay\npython -m unittest discover -s verification/consequential009 -v'))
+    para(blocks,'Use a fresh output directory. The initial complete-path attempt with an external output directory failed during verifier source-relative identity construction; its original failure and resource reservation are preserved. A narrow source/artifact namespace-label repair changes no numerical criterion, and a second actual outside-repository local replay completes in7.373538 seconds with both independent acceptances. This is local source-matched replay; the historical result field naming a downloaded-source scope is not evidence that a download occurred. Actual downloaded-package and release-asset qualification require their own receipts. Do not overwrite or delete previous evidence to reuse an output name.')
+    para(blocks,'A fresh hosted qualification at the earlier d06ab792 checkpoint exposed an inherited runtime dependency on cryptography in the protected exchange. The circuit and checker arithmetic use the Python standard library; the complete exchange does not. The original failed check is retained. The current declared packaging edition pins cryptography50.0.2, cffi2.1.1 and pycparser3.11 in requirements-consequential009.txt; fresh-environment and downloaded-package qualification are separate from the executed scientific results above. This typesetting/evidence annotation edition includes that explicit installation instruction without transferring an earlier pass to the changed head.')
     para(blocks,'Re-execution can change timings while preserving exact mathematical claims. Downloaded-package qualification and source-matched CI are separate evidence scopes; consult the publication and verification receipts for their actual status at this edition. A test pass on a previous commit is not transferred automatically to a later head or release archive. Artifacts from reproduced runs are not counted as additional independent observations.')
     section(blocks,'9. Primary sources and retained provenance')
     refs=[('Circuit sources and known AC analysis','https://github.com/ngspice/ngspice/tree/032b1c32c4dbad45ff132bcfac1dbecadbd8abb0/examples'),('ngspice AC-analysis tutorial','https://ngspice.sourceforge.io/ngspice-tutorial.html'),('OpenAI GPT-6 Astra model and tariff, accessed30 October 2026','https://developers.openai.com/api/docs/models/gpt-6-astra'),('BLS electrical and electronics engineers, May2025 wage','https://www.bls.gov/ooh/architecture-and-engineering/electrical-and-electronics-engineers.htm'),('BLS employer compensation, June2026 release','https://www.bls.gov/news.release/ecec.nr0.htm'),('Stripe US domestic-card and dispute tariff','https://stripe.com/pricing'),('Fiverr broad electronics-services price summary, August2026','https://www.fiverr.com/resources/guides/costs/electronics-design-engineer'),('MB Designs Canadian consultation offer','https://mbdesignswork.com/'),('Grimm and Baake, Homometric Point Sets and Inverse Problems,2008','https://arxiv.org/abs/0808.0094'),('Candes, Li and Soltanolkotabi, Phase Retrieval from Coded Diffraction Patterns','https://statistics.stanford.edu/technical-reports/phase-retrieval-coded-diffraction-patterns'),('Isoform-deconvolution structural identifiability,2022','https://academic.oup.com/bioinformatics/article/38/6/1491/6493231'),('Long-read transcriptome quantification with lr-kallisto,2025','https://pmc.ncbi.nlm.nih.gov/articles/PMC12680354/')]
     for i,(label,url) in enumerate(refs,1):para(blocks,f'[{i}] {label}. {url}')
     para(blocks,'Sources describe their own methods, offers and measurements. The paper source manifest preserves the campaign intake records and exact executed artifacts; public fee schedules and provider examples are not automatically task-matched demand or price evidence. Copyrighted text is paraphrased; original source licenses and access limitations remain with the retained records.')
-    return [(kind,readable(value) if kind in ('p','h') else value) for kind,value in blocks]
+    return [(kind,readable(value) if kind in ('p','h') else (value[0],value[1],readable(value[2])) if kind=='table' else value) for kind,value in blocks]
 
 def dynamic_summary(value):
     if isinstance(value,dict):
@@ -182,7 +206,8 @@ def dynamic_summary(value):
     return value
 
 def render_tex(blocks,title,subtitle):
-    out=[r'\documentclass[11pt,letterpaper]{article}',r'\usepackage[margin=0.82in,headheight=14pt]{geometry}',r'\usepackage[T1]{fontenc}',r'\usepackage{lmodern,microtype,amsmath,amssymb,booktabs,longtable,array,xcolor,fancyhdr,enumitem}',r'\usepackage[hyphens]{url}',r'\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}',r'\definecolor{ink}{HTML}{122A3A}',r'\definecolor{accent}{HTML}{146B72}',r'\setlength{\parindent}{0pt}\setlength{\parskip}{6pt}',r'\setlength{\emergencystretch}{3em}',r'\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small\color{accent}AGI ALPHA / Consequential009}\fancyhead[R]{\small30 October 2026}\fancyfoot[C]{\small\thepage}',r'\setlist[itemize]{leftmargin=1.3em,topsep=2pt,itemsep=2pt}',r'\begin{document}',r'{\sffamily\LARGE\bfseries\color{ink}'+tex(title)+r'\par}',r'\vspace{6pt}{\large\color{accent}'+tex(subtitle)+r'\par}',r'\vspace{5pt}{\small Source-bound engineering study and conditional commercial execution\par}',r'\vspace{9pt}\hrule\vspace{9pt}',r'{\small\textbf{Evidence status.} Exact finite-model measurement enablement; conventional comparison retained; physical assurance and the complete commercial flywheel remain unestablished.}\vspace{4pt}']
+    out=[r'\documentclass[10pt,letterpaper]{article}',r'\usepackage[margin=0.75in,headheight=14pt]{geometry}',r'\usepackage[T1]{fontenc}',r'\usepackage{lmodern,microtype,amsmath,amssymb,booktabs,longtable,array,xcolor,fancyhdr,enumitem}',r'\usepackage[hyphens]{url}',r'\usepackage{xurl}',r'\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}',r'\definecolor{ink}{HTML}{122A3A}',r'\definecolor{accent}{HTML}{146B72}',r'\setlength{\parindent}{0pt}\setlength{\parskip}{4.5pt}',r'\setlength{\emergencystretch}{3em}',r'\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small\color{accent}AGI ALPHA / Consequential009}\fancyhead[R]{\small30 October 2026}\fancyfoot[C]{\small\thepage}',r'\setlist[itemize]{leftmargin=1.3em,topsep=2pt,itemsep=2pt}',r'\begin{document}',r'{\sffamily\LARGE\bfseries\color{ink}'+tex(title)+r'\par}',r'\vspace{6pt}{\large\color{accent}'+tex(subtitle)+r'\par}',r'\vspace{5pt}{\small Source-bound engineering study and conditional commercial execution\par}',r'\vspace{9pt}\hrule\vspace{9pt}',r'{\small\textbf{Evidence status.} Exact finite-model measurement enablement; conventional comparison retained; physical assurance and the complete commercial flywheel remain unestablished.}\vspace{4pt}']
+    out.insert(8,r'\hypersetup{pdftitle={'+tex(title)+r'},pdfauthor={AGI ALPHA experimental engineering program},pdfsubject={Source-bound finite-model construction and conditional service economics}}')
     for kind,value in blocks:
         if kind=='h': out += [r'\section*{\color{accent}'+tex(value)+'}']
         elif kind=='p': out += [tex(value)+r'\par']
@@ -228,17 +253,19 @@ def main():
     if accepted.get('accepted') is not True or accepted.get('artifact_sha256')!=digest(ROOT/args.experiment):raise ValueError('ACCEPTED_ARTIFACT_IDENTITY_MISMATCH')
     for path,expected in report['source_hashes'].items():
         if digest(ROOT/path)!=expected:raise ValueError('CURRENT_CANDIDATE_DIFFERS_FROM_EXECUTED_REPORT '+path)
-    inputs=[args.experiment,args.acceptance,args.retention,args.commerce,'research/consequential009/analog/PROTOCOL.json','research/consequential009/analog/SOURCES.json','research/consequential009/analog/rc-meas-ac.sp','research/consequential009/analog/MonteCarlo.sp','research/consequential009/alternatives/SOURCE_RECORDS.json','research/consequential009/alternatives/diffraction/RESULT.json','research/consequential009/alternatives/rna/RESULT.json','research/consequential009/transfer/RESULT.json','evidence/consequential009/resources/analog-r1/RECEIPT.json','evidence/consequential009/verifier/EXACT_SCALE_CHECK_v1.json','evidence/consequential009/verifier/COMPLETE_COHORT_r1.json','evidence/consequential009/verifier/COMPLETE_COHORT_r2.json','inventions/consequential009/circuit.py','inventions/consequential009/experiment.py','verification/consequential009/analog_check.py','verification/consequential009/cohort_check.py','flywheel/retention.py','vendor/alpha_claim/protected_exchange.py','campaign/consequential-009/ALLOCATION.json','campaign/consequential-009/COMMERCIAL_SOURCES.json','campaign/consequential-009/COMMERCIAL_POLICY.json','campaign/consequential-009/COMMERCIAL_FREEZE.json',*args.extra_input,*accepted.get('consumed_hashes',{})]
+    inputs=[args.experiment,args.acceptance,args.retention,args.commerce,'research/consequential009/analog/PROTOCOL.json','research/consequential009/analog/SOURCES.json','research/consequential009/analog/rc-meas-ac.sp','research/consequential009/analog/MonteCarlo.sp','research/consequential009/alternatives/SOURCE_RECORDS.json','research/consequential009/alternatives/diffraction/RESULT.json','research/consequential009/alternatives/rna/RESULT.json','research/consequential009/transfer/RESULT.json','evidence/consequential009/resources/analog-r1/RECEIPT.json','evidence/consequential009/verifier/EXACT_SCALE_CHECK_v1.json','evidence/consequential009/verifier/COMPLETE_COHORT_r1.json','evidence/consequential009/verifier/COMPLETE_COHORT_r2.json','evidence/consequential009/verifier/EXTERNAL_ARTIFACT_r1.json','evidence/consequential009/wholepath-failure-r1/INCOMPLETE.json','evidence/consequential009/wholepath-r2/RESULT.json','evidence/consequential009/frontier-review/AUDIT.json','inventions/consequential009/circuit.py','inventions/consequential009/experiment.py','verification/consequential009/analog_check.py','verification/consequential009/cohort_check.py','flywheel/retention.py','vendor/alpha_claim/protected_exchange.py','campaign/consequential-009/ALLOCATION.json','campaign/consequential-009/COMMERCIAL_SOURCES.json','campaign/consequential-009/COMMERCIAL_POLICY.json','campaign/consequential-009/COMMERCIAL_FREEZE.json','campaign/consequential-009/MODEL_EXECUTION.json','run_consequential009.py',*args.extra_input,*accepted.get('consumed_hashes',{})]
     if bool(args.reference)!=bool(args.reference_acceptance):raise ValueError('REFERENCE_AND_SEPARATE_ACCEPTANCE_REQUIRED_TOGETHER')
     if args.reference:
         refaccept=load(ROOT/args.reference_acceptance)
         if refaccept.get('accepted') is not True or refaccept.get('artifact_sha256')!=digest(ROOT/args.reference):raise ValueError('REFERENCE_ACCEPTED_ARTIFACT_IDENTITY_MISMATCH')
         inputs += [args.reference,args.reference_acceptance,'inventions/consequential009/reference_extension.py',*refaccept.get('consumed_hashes',{})]
+    inputs += ['evidence/consequential009/reference-raw-r1-MANIFEST.json','evidence/consequential009/reference-raw-r1.tar.gz']
     files=[]
     for relative in sorted(set(inputs)):
-        path=ROOT/relative
-        if path.is_symlink() or not path.is_file(): raise ValueError('MISSING_OR_UNSAFE_SOURCE '+relative)
-        files.append({'path':relative,'sha256':digest(path),'bytes':path.stat().st_size})
+        raw,storage=source_bytes(relative);item={'path':relative,'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}
+        if relative=='evidence/consequential009/paper/source-anchor/SOURCE_FREEZE.json':storage={'public_git_path':'campaign/consequential-009/SOURCE_FREEZE.json','commit':args.source_anchor}
+        if storage:item['storage']=storage
+        files.append(item)
     output=ROOT/args.output;output.mkdir(parents=True,exist_ok=True)
     manifest={'schema':'consequential009-paper-inputs-v1','public_source_anchor':args.source_anchor,'builder_sha256':digest(__file__),'inputs':files,'scope':'Consumed source-and-evidence identities. Build timing is not new scientific evidence.'}
     raw=json.dumps(manifest,indent=2,sort_keys=True)+'\n';(output/'SOURCE_MANIFEST.json').write_text(raw)
@@ -247,7 +274,7 @@ def main():
     blocks=build_text(data); title='When More Measurements Cannot Help';subtitle='A source-bound compiler for information-changing circuit experiments and conditional autonomous-service economics'
     (output/'paper.tex').write_text(render_tex(blocks,title,subtitle));(output/'index.html').write_text(render_html(blocks,title,subtitle));(output/'NARRATIVE.json').write_text(json.dumps({'title':title,'subtitle':subtitle,'blocks':blocks},indent=2)+'\n')
     for record in files:
-        if digest(ROOT/record['path'])!=record['sha256']:raise ValueError('SOURCE_CHANGED_DURING_AUTHORING '+record['path'])
+        if hashlib.sha256(source_bytes(record['path'])[0]).hexdigest()!=record['sha256']:raise ValueError('SOURCE_CHANGED_DURING_AUTHORING '+record['path'])
     if not args.no_compile:
         qa=ROOT/'evidence/consequential009/paper';qa.mkdir(parents=True,exist_ok=True)
         run=1

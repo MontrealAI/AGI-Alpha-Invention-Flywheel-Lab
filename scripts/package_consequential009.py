@@ -9,7 +9,7 @@ PREFIXES = ['campaign/consequential-009', 'inventions/consequential009', 'resear
 def sha(raw): return hashlib.sha256(raw).hexdigest()
 def safe(name):
     p = PurePosixPath(name)
-    return bool(name) and not p.is_absolute() and '..' not in p.parts and '\\' not in name
+    return bool(name) and bool(p.parts) and name == p.as_posix() and not p.is_absolute() and '..' not in p.parts and '\\' not in name
 
 def pack(output, source_commit):
     freeze = json.loads((ROOT / 'campaign/consequential-009/SOURCE_FREEZE.json').read_text())
@@ -47,19 +47,25 @@ def pack(output, source_commit):
     return {'files': len(data), 'bytes': output.stat().st_size, 'sha256': sha(output.read_bytes()), 'source_commit': manifest['source_commit']}
 
 def extract(archive_path, destination):
-    destination = Path(destination); destination.mkdir(parents=True, exist_ok=False)
+    destination = Path(destination)
     with zipfile.ZipFile(archive_path) as archive:
         names = archive.namelist()
         if len(names) > 5000 or len(names) != len(set(names)) or any(not safe(n) for n in names): raise ValueError('UNSAFE_ARCHIVE_NAMES')
+        name_set = set(names)
+        if any('/'.join(PurePosixPath(name).parts[:i]) in name_set for name in names for i in range(1, len(PurePosixPath(name).parts))): raise ValueError('ARCHIVE_FILE_PREFIX_CONFLICT')
         if sum(x.file_size for x in archive.infolist()) > 256 * 1024**2: raise ValueError('ARCHIVE_SIZE_CAP')
         if any((x.external_attr >> 16) & 0o170000 not in {0, 0o100000} for x in archive.infolist()): raise ValueError('NONREGULAR_ARCHIVE_MEMBER')
         manifest = json.loads(archive.read('DOWNLOAD_MANIFEST.json'))
         if set(names) != set(manifest['files']) | {'DOWNLOAD_MANIFEST.json'}: raise ValueError('ARCHIVE_MANIFEST_MEMBERSHIP')
+        verified = {}
         for name in names:
             raw = archive.read(name)
             if name != 'DOWNLOAD_MANIFEST.json':
                 expected = manifest['files'][name]
                 if sha(raw) != expected['sha256'] or len(raw) != expected['bytes']: raise ValueError('ARCHIVE_BYTE_MISMATCH ' + name)
+            verified[name] = raw
+        destination.mkdir(parents=True, exist_ok=False)
+        for name, raw in verified.items():
             path = destination / name; path.parent.mkdir(parents=True, exist_ok=True); path.write_bytes(raw)
     return {'files_verified': len(manifest['files']), 'source_commit': manifest['source_commit'], 'destination': str(destination)}
 
