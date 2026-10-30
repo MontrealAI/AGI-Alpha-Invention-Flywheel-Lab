@@ -1,0 +1,488 @@
+{
+  "schema": "agi-alpha/prospective-resources006/v1",
+  "capacity_cpu_seconds": 5400,
+  "capacity_storage_bytes": 6442450944,
+  "state": "active",
+  "runs": {
+    "verification-early-signal": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 30,
+        "cpu_seconds": 30,
+        "memory_bytes": 536870912,
+        "output_bytes": 1048576,
+        "storage_bytes": 8388608
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 29130,
+      "receipt_sha256": "7fa041e92f2a0f1c0a01085a2a1a23a3c100a17378ce85345d9a2088ee2dde3a",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.223059,
+      "observed_output_bytes": 29130,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-native-resource-preflight": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 30,
+        "cpu_seconds": 30,
+        "memory_bytes": 536870912,
+        "output_bytes": 1048576,
+        "storage_bytes": 8388608
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 4832,
+      "receipt_sha256": "5d528879bfa684b3e76e9951e25576509c6e7cb06d1303b8dd75e9cd529298fe",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.363249,
+      "observed_output_bytes": 4832,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "measurement009-net1-v1": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 180,
+        "cpu_seconds": 120,
+        "memory_bytes": 1073741824,
+        "output_bytes": 16777216,
+        "storage_bytes": 67108864
+      },
+      "budget_cpu_seconds": 120,
+      "budget_storage_bytes": 109928,
+      "receipt_sha256": "1a1dcf6b25277e7fc129ed94ee4bea948cb6727abe3f71e463eb4f8066d52e31",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.850073,
+      "observed_output_bytes": 109928,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-exact-checker-tests": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 30,
+        "cpu_seconds": 30,
+        "memory_bytes": 536870912,
+        "output_bytes": 1048576,
+        "storage_bytes": 8388608
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 3393,
+      "receipt_sha256": "78b0d3b7933a63f5ce898a846b0cd42617e1ad68b89f6b7fd516f030430d2803",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.061177999999999996,
+      "observed_output_bytes": 3393,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "measurement009-net3-v1": {
+      "state": "pending-interruption",
+      "limits": {
+        "wall_seconds": 360,
+        "cpu_seconds": 300,
+        "memory_bytes": 2147483648,
+        "output_bytes": 67108864,
+        "storage_bytes": 268435456
+      },
+      "budget_cpu_seconds": 300,
+      "budget_storage_bytes": 268435456,
+      "receipt_sha256": "95b74e38de77aa1620b3ded6c2311280a700d089881593b2180065e1bfd5fc2b",
+      "outcome": "interrupted",
+      "observed_waited_cpu_seconds": 145.979977,
+      "observed_output_bytes": 6133928,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-net1-development": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 30,
+        "cpu_seconds": 30,
+        "memory_bytes": 536870912,
+        "output_bytes": 8388608,
+        "storage_bytes": 16777216
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 16606,
+      "receipt_sha256": "012be775ceb6a0b4e8e8fe353bb4c4dc43ecb07ac9ce0b018741d9867f11c2eb",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.075889,
+      "observed_output_bytes": 16606,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-diagnostic-adversary": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 30,
+        "cpu_seconds": 30,
+        "memory_bytes": 1073741824,
+        "output_bytes": 16777216,
+        "storage_bytes": 33554432
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 188169,
+      "receipt_sha256": "20daf23c3307205fa73e92ebc0e21ea76498ba0fce5cf4c76118207fe3a8a84c",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 1.008083,
+      "observed_output_bytes": 188169,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "commerce009-tests-v1": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 45,
+        "cpu_seconds": 30,
+        "memory_bytes": 536870912,
+        "output_bytes": 4194304,
+        "storage_bytes": 16777216
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 4330,
+      "receipt_sha256": "aa28a52117d720bb7ffa2bc9c81aaa9b596fd9a987924f62fadc9430f6d1e6a3",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.648304,
+      "observed_output_bytes": 4330,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "measurement009-networks-v2": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 420,
+        "cpu_seconds": 360,
+        "memory_bytes": 2147483648,
+        "output_bytes": 67108864,
+        "storage_bytes": 268435456
+      },
+      "budget_cpu_seconds": 360,
+      "budget_storage_bytes": 6875919,
+      "receipt_sha256": "c23b166cf02647723140377ce762698765b5b38341c87cd32c843d4fbf9353d5",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 67.410248,
+      "observed_output_bytes": 6875919,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-net1-canonical-development": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 45,
+        "cpu_seconds": 30,
+        "memory_bytes": 1073741824,
+        "output_bytes": 16777216,
+        "storage_bytes": 33554432
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 376172,
+      "receipt_sha256": "44e1c4e22ea9dc590633902ef3af540a67966abd8de16359a3dc546bc0b1a34e",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.9978689999999999,
+      "observed_output_bytes": 376172,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-net1-canonical-final-development": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 45,
+        "cpu_seconds": 30,
+        "memory_bytes": 1073741824,
+        "output_bytes": 16777216,
+        "storage_bytes": 33554432
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 376258,
+      "receipt_sha256": "e122bb5869c79f64486450f9b6816006ce79b7de728afa3e96cf790d37feb14c",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 1.272883,
+      "observed_output_bytes": 376258,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "commerce009-net1-development-v1": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 180,
+        "cpu_seconds": 180,
+        "memory_bytes": 536870912,
+        "output_bytes": 16777216,
+        "storage_bytes": 67108864
+      },
+      "budget_cpu_seconds": 180,
+      "budget_storage_bytes": 691184,
+      "receipt_sha256": "6ac381cd92ef1d5d52a88bbbc6c57f94af40860ef18494efc01c089f757acee0",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.33200399999999997,
+      "observed_output_bytes": 691184,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "commerce009-event-export-v1": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 30,
+        "cpu_seconds": 15,
+        "memory_bytes": 268435456,
+        "output_bytes": 8388608,
+        "storage_bytes": 16777216
+      },
+      "budget_cpu_seconds": 15,
+      "budget_storage_bytes": 162412,
+      "receipt_sha256": "f225c975bee6df37c4112a394c7c4427576e73d92b117266152d8102d79f1781",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.058778,
+      "observed_output_bytes": 162412,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-numeric-disagreement-recheck": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 30,
+        "cpu_seconds": 30,
+        "memory_bytes": 536870912,
+        "output_bytes": 8388608,
+        "storage_bytes": 16777216
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 3129,
+      "receipt_sha256": "ad30a1367f24813aee0d341f7aac7a99b6614861a3f4a147bd4d2ac9696f16e4",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.10007899999999999,
+      "observed_output_bytes": 3129,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-parent-source-binding": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 30,
+        "cpu_seconds": 30,
+        "memory_bytes": 1073741824,
+        "output_bytes": 8388608,
+        "storage_bytes": 16777216
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 5109,
+      "receipt_sha256": "9455b2ab215beba09a904f9fac2fc325c06b0b59b5aa6fdf7a4268603b0ed802",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.55254,
+      "observed_output_bytes": 5109,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-primary-confirmation": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 60,
+        "cpu_seconds": 60,
+        "memory_bytes": 1073741824,
+        "output_bytes": 16777216,
+        "storage_bytes": 33554432
+      },
+      "budget_cpu_seconds": 60,
+      "budget_storage_bytes": 375947,
+      "receipt_sha256": "8ba0a3124f48dff07b1a6002ac3e61fe14be2fff142b24ed1cc916666a1268df",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 1.152429,
+      "observed_output_bytes": 375947,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-parent-source-binding-repaired": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 30,
+        "cpu_seconds": 30,
+        "memory_bytes": 1073741824,
+        "output_bytes": 8388608,
+        "storage_bytes": 16777216
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 5698,
+      "receipt_sha256": "2c4c864d255e6777763b004e0181633232fd28d52c6b9222c34bc52aa7efbcd9",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.467514,
+      "observed_output_bytes": 5698,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "commerce009-final-primary-v1": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 90,
+        "cpu_seconds": 60,
+        "memory_bytes": 536870912,
+        "output_bytes": 4194304,
+        "storage_bytes": 4194304
+      },
+      "budget_cpu_seconds": 60,
+      "budget_storage_bytes": 851713,
+      "receipt_sha256": "6135e47758d5fffd824bcdd06b08b8dec663dbc94b77a3b8f2eb4aa0ca302c64",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.5568759999999999,
+      "observed_output_bytes": 851713,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-successor-checker-tests": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 45,
+        "cpu_seconds": 30,
+        "memory_bytes": 1073741824,
+        "output_bytes": 8388608,
+        "storage_bytes": 16777216
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 3371,
+      "receipt_sha256": "ba0e6f0c6c17c4461a2dec828c327f4389ae5452089f561c284171bcd829d508",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.570579,
+      "observed_output_bytes": 3371,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "measurement009-net3-checker-v1": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 300,
+        "cpu_seconds": 300,
+        "memory_bytes": 2147483648,
+        "output_bytes": 16777216,
+        "storage_bytes": 67108864
+      },
+      "budget_cpu_seconds": 300,
+      "budget_storage_bytes": 8004,
+      "receipt_sha256": "37e1126d56f815031d997d96e5f047cf410b1512b7d40ae308c430b73f14a79e",
+      "outcome": "failed",
+      "observed_waited_cpu_seconds": 0.18743200000000002,
+      "observed_output_bytes": 8004,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-commercial-arithmetic": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 30,
+        "cpu_seconds": 30,
+        "memory_bytes": 536870912,
+        "output_bytes": 8388608,
+        "storage_bytes": 16777216
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 20885,
+      "receipt_sha256": "c4797bde74182dbbc8182840d44a6bc96d57bf77b680cfb5fa607caaa728a970",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.036934,
+      "observed_output_bytes": 20885,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "measurement009-numeric-edition-construct-v1": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 120,
+        "cpu_seconds": 60,
+        "memory_bytes": 2147483648,
+        "output_bytes": 67108864,
+        "storage_bytes": 268435456
+      },
+      "budget_cpu_seconds": 60,
+      "budget_storage_bytes": 7030865,
+      "receipt_sha256": "d5a6e990c42b315ba1ce8bad303cab7c135e69d6c0033ad0c00ffae6d656148e",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 5.850169,
+      "observed_output_bytes": 7030865,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-numeric-edition-every-coordinate": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 90,
+        "cpu_seconds": 60,
+        "memory_bytes": 1073741824,
+        "output_bytes": 8388608,
+        "storage_bytes": 16777216
+      },
+      "budget_cpu_seconds": 60,
+      "budget_storage_bytes": 7441,
+      "receipt_sha256": "5c7ac6dbea2bcd6e887ae40b3e36a9872d42a9b68f63fe120237af74d44182ee",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 3.826523,
+      "observed_output_bytes": 7441,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "measurement009-numeric-net3-verification-v1": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 300,
+        "cpu_seconds": 240,
+        "memory_bytes": 2147483648,
+        "output_bytes": 16777216,
+        "storage_bytes": 67108864
+      },
+      "budget_cpu_seconds": 240,
+      "budget_storage_bytes": 4497647,
+      "receipt_sha256": "a4e518c339a87818b74f4beda312fb6313fe05ba47455b120b0d4f893e956546",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 84.109604,
+      "observed_output_bytes": 4497647,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-successor-v2-checker-tests": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 45,
+        "cpu_seconds": 30,
+        "memory_bytes": 1073741824,
+        "output_bytes": 8388608,
+        "storage_bytes": 16777216
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 2637,
+      "receipt_sha256": "d24f18f25da84313a87618467c1977c54ac0de373434ffe87c14fa92576fba58",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.562771,
+      "observed_output_bytes": 2637,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "verification-successor-v2-replay-gate-tests": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 45,
+        "cpu_seconds": 30,
+        "memory_bytes": 1073741824,
+        "output_bytes": 8388608,
+        "storage_bytes": 16777216
+      },
+      "budget_cpu_seconds": 30,
+      "budget_storage_bytes": 2637,
+      "receipt_sha256": "011c1dc1a287c649bc290fa672b208ed50124eaf1088815ed9e2bd1a7e15261b",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.547709,
+      "observed_output_bytes": 2637,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "successor009-construction-v1": {
+      "state": "pending",
+      "limits": {
+        "wall_seconds": 600,
+        "cpu_seconds": 600,
+        "memory_bytes": 2147483648,
+        "output_bytes": 33554432,
+        "storage_bytes": 134217728
+      },
+      "budget_cpu_seconds": 600,
+      "budget_storage_bytes": 134217728
+    }
+  }
+}
