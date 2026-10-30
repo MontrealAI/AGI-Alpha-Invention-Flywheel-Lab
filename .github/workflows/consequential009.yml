@@ -47,7 +47,9 @@ jobs:
           if-no-files-found: warn
   publish:
     needs: [qualify]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # This historical edition already exists at its immutable released source.
+    # Current main sources retain qualification and use their own publisher.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.sha == '69a4725d9c12589860670a551911bedbd65cba9e'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     permissions:

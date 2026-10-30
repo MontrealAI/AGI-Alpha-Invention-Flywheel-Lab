@@ -48,6 +48,30 @@ def _declared_later(plan):
     return max(explicit, later)
 
 
+def _declared_upfront(plan):
+    upfront = plan.get('upfront_cost', 0)
+    amount(upfront)
+    selected = plan.get('selected_options', [])
+    if not isinstance(selected, list):
+        raise ValueError('SELECTED_OBLIGATION_CONTRACTS_REQUIRED')
+    if selected:
+        total = 0
+        for option in selected:
+            if not isinstance(option, dict) or 'upfront_cost' not in option:
+                raise ValueError('EXPLICIT_UPFRONT_RESOURCE_CONTRACT_REQUIRED')
+            amount(option['upfront_cost'])
+            total += option['upfront_cost']
+        if 'upfront_cost' in plan and upfront != total:
+            raise ValueError('DECLARED_UPFRONT_RESOURCE_CONTRACT_MISMATCH')
+        return total
+    return upfront
+
+
+def _requires_resolution(plan):
+    upfront, later = _declared_upfront(plan), _declared_later(plan)
+    return bool(plan.get('selected_options')) or upfront > 0 or later > 0
+
+
 def assert_local_storage(path, storage='local_posix'):
     if storage != 'local_posix' or os.name != 'posix' or not Path('/proc/self/mountinfo').is_file():
         raise ValueError('ONLY_VERIFIABLE_LOCAL_POSIX_STORAGE_SUPPORTED')
@@ -82,14 +106,16 @@ def action_digest(plan, expected_state_digest, amount_microUSD, expected_net_mic
         if key in plan and (type(plan[key]) is not int or plan[key] != expected_net_microUSD):
             raise ValueError('PLAN_EXPECTED_NET_MISMATCH')
     if 'upfront_cost' in plan or 'worst_later_reserve' in plan:
-        upfront, later = plan.get('upfront_cost', 0), _declared_later(plan)
+        upfront, later = _declared_upfront(plan), _declared_later(plan)
         amount(upfront); amount(later)
         if amount_microUSD < upfront + later:
             raise ValueError('LATER_OBLIGATIONS_NOT_FULLY_RESERVED')
     if plan.get('selected_options'):
-        upfront = sum(o['upfront_cost'] for o in plan['selected_options'])
+        upfront = _declared_upfront(plan)
         if amount_microUSD < upfront + _declared_later(plan):
             raise ValueError('SELECTED_LATER_OBLIGATIONS_NOT_FULLY_RESERVED')
+    if _requires_resolution(plan) and not plan.get('selected_options'):
+        raise ValueError('EXPLICIT_SELECTED_OBLIGATION_CONTRACTS_REQUIRED')
     clean = {k: v for k, v in plan.items() if k not in {'authorized_digest', 'expected_state_digest'}}
     if len(canonical(clean)) > 2_000_000:
         raise ValueError('BOUNDED_PLAN_REQUIRED')
@@ -136,7 +162,7 @@ def _validate_resolution(tape, proof, receipt, actual, work_sha256, day, jobs, *
     selected = plan.get('selected_options')
     if not isinstance(selected, list) or not selected or any(not isinstance(o, dict) for o in selected):
         raise ValueError('EXPLICIT_SELECTED_OBLIGATION_CONTRACTS_REQUIRED')
-    if receipt['upfront_incurred_microUSD'] != sum(o['upfront_cost'] for o in selected):
+    if receipt['upfront_incurred_microUSD'] != _declared_upfront(plan):
         raise ValueError('UPFRONT_RESOURCE_INVOICE_MISMATCH')
     deliveries = {o['id']: o for o in selected if o['kind'] == 'delivery'}
     growth = {o['id']: o for o in selected if o['kind'] != 'delivery'}
@@ -206,7 +232,7 @@ def audit_account(record, *, root, manifest):
     for index, event in enumerate(tape['actions']):
         if event['op'] == 'finish':
             proof = proofs.get(event['args']['id'])
-            if proof and _declared_later(proof['body']['plan']) > 0:
+            if proof and _requires_resolution(proof['body']['plan']):
                 receipt = resolutions.get(event['args']['id'])
                 if not isinstance(receipt, dict):
                     raise ValueError('FINISHED_LATER_OBLIGATION_RECEIPT_MISSING')
@@ -249,7 +275,7 @@ class Account:
             self._proofs = self._load_proofs()
             self._resolutions = self._load_resolutions()
             self._verify_reservations()
-            if any(e['op'] == 'finish' and _declared_later(self._proofs.get(e['args']['id'], {}).get('body', {}).get('plan', {})) > 0 for e in self._owner.export()['actions']):
+            if any(e['op'] == 'finish' and _requires_resolution(self._proofs.get(e['args']['id'], {}).get('body', {}).get('plan', {})) for e in self._owner.export()['actions']):
                 audit_account(self.export(), root=self.root, manifest=self.manifest)
         except BaseException:
             self.close()
@@ -313,6 +339,10 @@ class Account:
         for event in self._owner.export()['actions']:
             if event['op'] == 'cancel_investment':
                 raise ValueError('UNRECONCILED_INVESTMENT_CANCELLATION_RETIRED')
+            if event['op'] == 'finish':
+                proof = self._proofs.get(event['args']['id'])
+                if proof and _requires_resolution(proof['body']['plan']) and event['args']['id'] not in self._resolutions:
+                    raise ValueError('FINISHED_RESOURCE_OBLIGATION_RECEIPT_MISSING')
             if event['op'] != 'reserve':
                 continue
             proof = self._proofs.get(event['args']['id'])
@@ -347,7 +377,7 @@ class Account:
             raise ValueError('UNRECONCILED_INVESTMENT_CANCELLATION_RETIRED')
         if op == 'reserve':
             raise ValueError('STATE_BOUND_RESERVE_ENTRYPOINT_REQUIRED')
-        if op == 'finish' and _declared_later(self._proofs.get(args.get('id'), {}).get('body', {}).get('plan', {})) > 0:
+        if op == 'finish' and _requires_resolution(self._proofs.get(args.get('id'), {}).get('body', {}).get('plan', {})):
             raise ValueError('OBLIGATION_AWARE_FINISH_ENTRYPOINT_REQUIRED')
         args = copy.deepcopy(args)
         if self._prior(op, args, day) is None:
@@ -379,15 +409,36 @@ class Account:
             raise ValueError('STALE_NATIVE_ACCOUNT_STATE')
         if ident in self._proofs and self._proofs[ident] != proof:
             raise ValueError('PLAN_IDENTIFIER_PROOF_COLLISION')
+        new_proof = ident not in self._proofs
+        native_before = copy.deepcopy(self._owner.export())
+        exchange = self._owner._exchange
+        last_day_before = exchange.last_day
+        persistence = exchange.persistence
+        durable_before = persistence.tape.read_bytes() if persistence is not None else None
         self._proofs[ident] = proof
         atomic_bytes(self._proofs_path, canonical(self._proofs) + b'\n')
-        self._owner.execute('reserve', args, day)
+        try:
+            self._owner.execute('reserve', args, day)
+        except ValueError:
+            self._assert_owner()
+            if (new_proof and persistence is not None and not persistence.failed
+                    and ident not in self._resolutions
+                    and exchange.last_day == last_day_before
+                    and self._owner.export() == native_before
+                    and persistence.tape.read_bytes() == durable_before):
+                del self._proofs[ident]
+                try:
+                    atomic_bytes(self._proofs_path, canonical(self._proofs) + b'\n')
+                except BaseException:
+                    self._proofs[ident] = proof
+                    raise
+            raise
         return self.snapshot()
 
     def finish(self, ident, amount, artifact_sha256, day, *, obligation_receipt=None):
         self._assert_owner()
         proof = self._proofs.get(ident)
-        if proof and _declared_later(proof['body']['plan']) > 0:
+        if proof and _requires_resolution(proof['body']['plan']):
             if obligation_receipt is None:
                 raise ValueError('SOURCE_BOUND_OBLIGATION_RESOLUTION_REQUIRED_BEFORE_FINISH')
             bound = digest({'work_artifact_sha256': artifact_sha256, 'obligation_receipt_sha256': digest(obligation_receipt)})

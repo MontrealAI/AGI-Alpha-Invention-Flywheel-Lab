@@ -149,6 +149,8 @@ class AdaptiveAccountTests(unittest.TestCase):
             plan = dict(_plan(), upfront_cost=40_000_000, worst_later_reserve=30_000_000)
             with self.assertRaisesRegex(ValueError, 'LATER_OBLIGATIONS'):
                 action_digest(plan, state, 60_000_000, 10_000_000)
+            plan['selected_options'] = [{'id': 'capacity', 'kind': 'capacity', 'upfront_cost': 40_000_000,
+                'later_liabilities': {'ordinary': 30_000_000}, 'execution': {'kind': 'capacity', 'source_sha256': 'a' * 64}}]
             proof = action_digest(plan, state, 70_000_000, 10_000_000)
             account.reserve(plan, expected_state_digest=state, authorized_digest=proof,
                             amount=70_000_000, expected_net=10_000_000, day=1)

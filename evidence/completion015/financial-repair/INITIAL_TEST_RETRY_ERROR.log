@@ -1,0 +1,32 @@
+test_ambiguous_durable_tail_never_erases_authorization (tests.test_adaptive_resource_resolution.ExplicitResourceResolutionTests.test_ambiguous_durable_tail_never_erases_authorization) ... ok
+test_definitive_unfunded_rejection_allows_same_plan_and_action_reauthorization (tests.test_adaptive_resource_resolution.ExplicitResourceResolutionTests.test_definitive_unfunded_rejection_allows_same_plan_and_action_reauthorization) ... ok
+test_exact_upfront_invoice_and_unused_reserve_resume_idempotently (tests.test_adaptive_resource_resolution.ExplicitResourceResolutionTests.test_exact_upfront_invoice_and_unused_reserve_resume_idempotently) ... ok
+test_failed_persistence_never_erases_authorization (tests.test_adaptive_resource_resolution.ExplicitResourceResolutionTests.test_failed_persistence_never_erases_authorization) ... ok
+test_interruption_before_native_commit_preserves_pending_proof (tests.test_adaptive_resource_resolution.ExplicitResourceResolutionTests.test_interruption_before_native_commit_preserves_pending_proof) ... ok
+test_native_commit_then_valueerror_retains_proof_and_exact_retry (tests.test_adaptive_resource_resolution.ExplicitResourceResolutionTests.test_native_commit_then_valueerror_retains_proof_and_exact_retry) ... ERROR
+test_prepared_upfront_only_delivery_retains_cost_obligation_after_restart (tests.test_adaptive_resource_resolution.ExplicitResourceResolutionTests.test_prepared_upfront_only_delivery_retains_cost_obligation_after_restart) ... ok
+test_top_level_upfront_must_equal_explicit_selected_contracts (tests.test_adaptive_resource_resolution.ExplicitResourceResolutionTests.test_top_level_upfront_must_equal_explicit_selected_contracts) ... ok
+test_unsafe_legacy_zero_finish_rejected_by_audit_export_and_reopen (tests.test_adaptive_resource_resolution.ExplicitResourceResolutionTests.test_unsafe_legacy_zero_finish_rejected_by_audit_export_and_reopen) ... ok
+test_upfront_only_finish_and_raw_execute_require_resolution (tests.test_adaptive_resource_resolution.ExplicitResourceResolutionTests.test_upfront_only_finish_and_raw_execute_require_resolution) ... ok
+
+======================================================================
+ERROR: test_native_commit_then_valueerror_retains_proof_and_exact_retry (tests.test_adaptive_resource_resolution.ExplicitResourceResolutionTests.test_native_commit_then_valueerror_retains_proof_and_exact_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/b156b0353186/financial-repair-v2/tests/test_adaptive_resource_resolution.py", line 141, in test_native_commit_then_valueerror_retains_proof_and_exact_retry
+    expected = account.export(); self.reserve(account, plan)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/b156b0353186/financial-repair-v2/tests/test_adaptive_resource_resolution.py", line 35, in reserve
+    return account.reserve(plan, expected_state_digest=state,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/b156b0353186/financial-repair-v2/adaptive_enterprise/account.py", line 402, in reserve
+    if self._prior('reserve', args, day) is not None:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/b156b0353186/financial-repair-v2/adaptive_enterprise/account.py", line 368, in _prior
+    raise ValueError('IDEMPOTENT_ACTION_PAYLOAD_CHANGED')
+ValueError: IDEMPOTENT_ACTION_PAYLOAD_CHANGED
+
+----------------------------------------------------------------------
+Ran 10 tests in 2.653s
+
+FAILED (errors=1)
