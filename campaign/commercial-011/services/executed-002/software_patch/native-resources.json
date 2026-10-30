@@ -1,0 +1,44 @@
+{
+  "schema": "agi-alpha/prospective-resources006/v1",
+  "capacity_cpu_seconds": 5400,
+  "capacity_storage_bytes": 6442450944,
+  "state": "active",
+  "runs": {
+    "portfolio011-success": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 5,
+        "cpu_seconds": 1,
+        "memory_bytes": 134217728,
+        "output_bytes": 20000,
+        "storage_bytes": 100000
+      },
+      "budget_cpu_seconds": 1,
+      "budget_storage_bytes": 2643,
+      "receipt_sha256": "6ed0c3d76ebf6fee0c202487b7a52ce83a7464a1f9fe2c4c16736bd787ea722a",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.013951,
+      "observed_output_bytes": 2643,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "portfolio011-failure": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 5,
+        "cpu_seconds": 1,
+        "memory_bytes": 134217728,
+        "output_bytes": 20000,
+        "storage_bytes": 100000
+      },
+      "budget_cpu_seconds": 1,
+      "budget_storage_bytes": 2525,
+      "receipt_sha256": "1ae0512d81c4be6ace6b5549f54c87853f7df856d4b4eb443c173d3afc188f7d",
+      "outcome": "failed",
+      "observed_waited_cpu_seconds": 0.012565999999999999,
+      "observed_output_bytes": 2525,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    }
+  }
+}

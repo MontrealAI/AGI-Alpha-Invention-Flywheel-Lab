@@ -1,5 +1,38 @@
 # Connected enterprise 014 operator guide
 
+## Current default: completion015
+
+The current default is the separately registered completion015 comparison in
+`campaign/completion-015/PREREGISTRATION.json`: eight separate simulated businesses
+over 70 days, comparing retained earned-financed expansion with the owned fixed
+baseline. Two central pairs and one pair in each of two adverse regions are fixed
+before execution. The 70-day horizon covers acquisition and capacity activation,
+21-day expiry, renewal, repeat purchase and collection cycles. No future revenue
+or copied balance finances a commitment. The historical confirmation002 and
+expansion001 registrations below retain their original source and identities.
+
+The same `run`, `resume`, `audit` and `package` commands operate this edition.
+`--smoke` remains an engineering check with separate exposed seeds. Public release
+reproduction repeats the default and is labeled reproduction. Source publication
+alone does not assert a completed commercial result.
+
+Unsafe native investment cancellation is retired. Interrupted reservations resume
+and resolve incurred work and obligations through source-bound completion.
+Legacy cancelled accounts fail closed at independent audit and reopen. Connected
+journals must cover native history completely in causal order. Direct native
+mutations are not an additional supported operating interface.
+
+Central setup/development/search/qualification is a once-per-enterprise USD75
+envelope, plus USD0.10 daily maintenance and itemized variable costs. The adverse
+complete-cost case raises setup to USD500, production to three times central and
+channel prices to ten times central, alongside delayed collection and failures.
+These are conditional envelopes; actual host/model billing is unknown.
+
+The current owner mandate authorizes normal qualified merges and release
+publication using existing resources. Repository protections, valid findings and
+genuinely required action-time approvals remain binding. Historical readiness
+restrictions do not replace current authority.
+
 This path operates a **simulated** enterprise using deterministic service production, independent artifact checks, the existing owned native account, paid channel and capacity contracts, and an event clock. It makes no paid model calls, contacts no customers and moves no real money. Buyer demand, provider terms, resource costs and human-service comparisons are authored assumptions. A successful engineering run does not establish empirical demand or a billion-dollar business.
 
 The current allocation and ownership are in [`campaign/connected-014/ALLOCATION.json`](../../campaign/connected-014/ALLOCATION.json). Historical allocations are separate. Read the current source-bound experiment protocol and result receipts before interpreting a commercial verdict. This guide describes interfaces; it does not certify an unexecuted test, confirmation run, hosted workflow, merge or release.

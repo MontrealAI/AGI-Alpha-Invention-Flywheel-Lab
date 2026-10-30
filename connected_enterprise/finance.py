@@ -145,6 +145,11 @@ class JournalAccount:
 
     def _recover(self):
         self._assert_current()
+        pending = [entry for entry in self._journal['entries'] if entry['status'] == 'PENDING']
+        if pending:
+            if len(pending) != 1 or pending[0] is not self._journal['entries'][-1]:
+                raise ValueError('ONE_FINAL_PENDING_CONNECTED_ACTION_REQUIRED')
+            _audit_journal(self.export(), root=self.root, manifest=self.manifest, pending_key=pending[0]['key'])
         for entry in self._journal['entries']:
             if entry['status'] == 'PENDING':
                 self._perform(entry)
@@ -344,8 +349,66 @@ class JournalAccount:
         self.close()
 
 
+def _pending_native_coverage(entry, tape, record, start):
+    request = entry['request']
+    if entry['receipt'] is not None:
+        raise ValueError('PENDING_CONNECTED_RECEIPT_MUST_BE_UNACKNOWLEDGED')
+    commands = []
+    if request['operation'] == 'execute':
+        _validate_native_request(request['op'], request['args'], request['day'])
+        commands.append({'op': request['op'], 'args': request['args'], 'day': request['day']})
+        if entry['key'] != 'native:' + _native_id(request['op'], request['args']) or entry['plan'] is not None or entry['funding'] is not None or entry['obligation_receipt'] is not None:
+            raise ValueError('PENDING_CONNECTED_NATIVE_AUTHORITY_MISMATCH')
+    elif request['operation'] == 'spend':
+        if entry['key'] != 'spend:' + request['id']:
+            raise ValueError('PENDING_CONNECTED_SPEND_IDENTITY_MISMATCH')
+        if entry['funding'] == 'EARNED':
+            plan = entry['plan']
+            before = tape['actions'][start]['before'] if start < len(tape['actions']) else tape['summary']
+            expected_state = digest({'config': tape['config'], 'actions_sha256': digest(tape['actions'][:start]), 'summary': before})
+            if plan['expected_state_digest'] != expected_state or action_digest(plan, expected_state, request['amount'], request['expected_net']) != plan['authorized_digest']:
+                raise ValueError('PENDING_CONNECTED_SPEND_AUTHORIZATION_MISMATCH')
+            options = plan['selected_options']
+            if len(options) != 1 or options[0]['kind'] != 'prepaid_resource':
+                raise ValueError('PENDING_CONNECTED_RESOURCE_CONTRACT_REQUIRED')
+            execution = options[0]['execution']
+            source = record['connected_journal']['source']
+            if plan['source_hashes'] != source['files'] or execution['source_sha256'] != source['sha256'] or execution['kind'] != request['kind'] or execution['work_sha256'] != digest(request['work']):
+                raise ValueError('PENDING_CONNECTED_RESOURCE_SOURCE_MISMATCH')
+            if start == len(tape['actions']) and entry['obligation_receipt'] is not None:
+                raise ValueError('PENDING_CONNECTED_RESOLUTION_REQUIRES_NATIVE_RESERVATION')
+            body = {'schema': 'agi-alpha/adaptive012-action-proof/v1', 'scope': 'SIMULATED_LOCAL_INTEGRITY_ONLY',
+                    'plan': {k: v for k, v in plan.items() if k not in {'authorized_digest', 'expected_state_digest'}},
+                    'expected_state_digest': plan['expected_state_digest'], 'authorized_digest': plan['authorized_digest'],
+                    'amount_microUSD': request['amount'], 'expected_net_microUSD': request['expected_net'], 'day': request['day']}
+            proof = record['action_proofs'].get(plan['plan_id'])
+            if proof is not None and proof['body'] != body:
+                raise ValueError('PENDING_CONNECTED_SPEND_NATIVE_PROOF_MISMATCH')
+            commands.append({'op': 'reserve', 'args': {'id': plan['plan_id'], 'amount': request['amount'],
+                'expected_net_value': request['expected_net'], 'intent_sha256': digest(body)}, 'day': request['day']})
+            if entry['obligation_receipt'] is not None:
+                commands.append({'op': 'finish', 'args': {'id': plan['plan_id'], 'amount': request['amount'],
+                    'artifact_sha256': digest({'work_artifact_sha256': digest(request['work']),
+                        'obligation_receipt_sha256': digest(entry['obligation_receipt'])})}, 'day': request['day']})
+        elif entry['funding'] == 'SEED' and request['allow_seed'] and entry['plan'] is None and entry['obligation_receipt'] is None:
+            commands.append({'op': 'cost', 'args': {'id': _seed_id(request, record['connected_journal']['source']['sha256']),
+                'amount': request['amount']}, 'day': request['day']})
+        else:
+            raise ValueError('AUTHORIZED_CONNECTED_FUNDING_REQUIRED')
+    else:
+        raise ValueError('SUPPORTED_CONNECTED_JOURNAL_OPERATION_REQUIRED')
+    tail = [{'op': row['op'], 'args': row['args'], 'day': row['day']} for row in tape['actions'][start:]]
+    if len(tail) > len(commands) or tail != commands[:len(tail)]:
+        raise ValueError('PENDING_CONNECTED_NATIVE_TAIL_MISMATCH')
+    return list(range(start, len(tape['actions'])))
+
+
 def audit_journal(record, *, root, manifest):
     """Public independent finance replay and journal/native source reconciliation."""
+    return _audit_journal(record, root=root, manifest=manifest)
+
+
+def _audit_journal(record, *, root, manifest, pending_key=None):
     checked = audit_account(record, root=root, manifest=manifest)
     journal = record.get('connected_journal')
     if not isinstance(journal, dict) or digest(journal) != record.get('connected_journal_sha256'):
@@ -356,7 +419,12 @@ def audit_journal(record, *, root, manifest):
     if journal.get('schema') != SCHEMA or any(journal.get(k) != tape['config'].get(k) for k in ['opening', 'working', 'contract']):
         raise ValueError('CONNECTED_JOURNAL_NATIVE_AUTHORITY_MISMATCH')
     keys, spent, covered = set(), 0, []
-    for entry in journal['entries']:
+    for index, entry in enumerate(journal['entries']):
+        if pending_key is not None and entry['key'] == pending_key:
+            if index != len(journal['entries']) - 1 or entry['status'] != 'PENDING' or covered != list(range(len(covered))):
+                raise ValueError('ONE_FINAL_PENDING_CONNECTED_ACTION_REQUIRED')
+            covered.extend(_pending_native_coverage(entry, tape, record, len(covered)))
+            continue
         if entry['key'] in keys or entry['status'] != 'COMPLETE':
             raise ValueError('COMPLETE_UNIQUE_CONNECTED_JOURNAL_REQUIRED')
         keys.add(entry['key'])
@@ -409,7 +477,8 @@ def audit_journal(record, *, root, manifest):
             raise ValueError('SUPPORTED_CONNECTED_JOURNAL_OPERATION_REQUIRED')
     if covered != list(range(len(tape['actions']))):
         raise ValueError('CONNECTED_JOURNAL_NATIVE_ACTION_COVERAGE_REQUIRED')
-    return {**checked, 'connected_journal_entries': len(keys),
+    return {**checked, **({'recovery_preflight_only': True} if pending_key is not None else {}),
+            'connected_journal_entries': len(keys),
             'connected_native_actions_covered': len(covered),
             'source_bound_resource_spend_microUSD': spent,
             'journal_authenticity_scope': 'Public source/native commitments verified; private local WAL HMAC checked only on owner reopen.'}

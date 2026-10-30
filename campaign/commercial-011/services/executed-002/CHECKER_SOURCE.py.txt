@@ -1,0 +1,130 @@
+"""Independent source-fact and complete-body audit for the twelve-answer packet."""
+import ast
+import hashlib
+import json
+from pathlib import Path
+
+MANIFEST = 'campaign/commercial-010/service/executed-002/manifest.json'
+ONBOARDING = 'campaign/commercial-010/onboarding/executed-001/RESULT.json'
+POLICY = 'campaign/commercial-010/POLICY.json'
+ALLOCATION = 'campaign/commercial-010/ALLOCATION.json'
+FREEZE = 'campaign/commercial-010/SOURCE_FREEZE.json'
+SOURCES = [MANIFEST, ONBOARDING, POLICY, 'commercial/service.py', 'commercial/service_verifier.py', 'commercial/onboarding.py', 'vendor/alpha_claim/protected_exchange.py', ALLOCATION]
+LIMITS = 'A bounded 12-question technical evidence response, not a complete enterprise RFP, legal commitment, security attestation or observed sale.'
+
+
+def _read(root, name):
+    path = Path(name)
+    if not isinstance(name, str) or path.is_absolute() or '..' in path.parts:
+        raise ValueError('RELATIVE_SOURCE_REQUIRED')
+    target = Path(root) / path
+    if target.is_symlink() or any(p.is_symlink() for p in target.parents):
+        raise ValueError('REGULAR_SOURCE_REQUIRED')
+    return target.read_bytes()
+
+
+def _hash(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def _json(raw):
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError('DUPLICATE_SOURCE_FIELD')
+            result[key] = value
+        return result
+    return json.loads(raw, object_pairs_hook=pairs, parse_constant=lambda _: (_ for _ in ()).throw(ValueError('NONFINITE_SOURCE')))
+
+
+def _require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def _facts(root):
+    raw = {p: _read(root, p) for p in SOURCES}
+    m, o, p, allocation = (_json(raw[n]) for n in (MANIFEST, ONBOARDING, POLICY, ALLOCATION))
+    freeze = _json(_read(root, FREEZE))
+    for name in SOURCES:
+        if name in freeze['sources']:
+            _require(_hash(raw[name]) == freeze['sources'][name], 'FROZEN_SOURCE_CHANGED: ' + name)
+    protocol = _json(_read(root, m['source_freeze']))
+    _require(_hash(_read(root, m['source_freeze'])) == m['source_freeze_sha256'], 'PROTOCOL_IDENTITY')
+    for name, expected in protocol['source_hashes'].items():
+        _require(_hash(_read(root, name)) == expected, 'QUALIFIED_SERVICE_SOURCE_CHANGED')
+    _require(m['scope'] == 'SYNTHETIC_PUBLIC_WORKLOAD' and p['scope'] == 'SIMULATED', 'INVALID_EVIDENCE_SCOPE')
+    rows, accepted = 0, 0
+    for job in m['jobs']:
+        values = {}
+        for field in ('input', 'artifact', 'receipt'):
+            content = _read(root, job[field])
+            _require(_hash(content) == job[field + '_sha256'], 'COHORT_SOURCE_CHANGED')
+            values[field] = _json(content)
+        order, receipt = values['input'], values['receipt']
+        _require(order['scope'] == 'SYNTHETIC_PUBLIC_WORKLOAD', 'REAL_CUSTOMER_SCOPE_UNSUPPORTED')
+        _require(type(receipt['accepted']) is bool and receipt['accepted'] == job['accepted'], 'COHORT_ACCEPTANCE_CHANGED')
+        _require(job['human_intervention_seconds'] == 0, 'HUMAN_INTERVENTION_RECORDED')
+        rows += len(order['invoices']) + len(order['payments'])
+        accepted += receipt['accepted']
+    rejected = len(m['jobs']) - accepted
+    _require(accepted == m['accepted_count'] and rejected == m['rejected_count'], 'COHORT_SUMMARY_CHANGED')
+    _require(m['actual_customers'] == 0 and m['actual_collections_usd'] == 0, 'UNSUPPORTED_OBSERVED_COMMERCE')
+    _require(m['host_token_billing'] == 'UNKNOWN' and protocol['model_usage']['tokens'] is None, 'UNSUPPORTED_EXACT_BILLING')
+    _require(protocol['human_intervention_seconds'] == 0 and not allocation['model_provenance']['human_interventions'], 'AUTONOMY_MISMATCH')
+    _require(o['scope'] == 'SYNTHETIC_PUBLIC_EXPORTS_ACTUALLY_PARSED' and o['source_manifest_sha256'] == _hash(raw[MANIFEST]), 'ONBOARDING_IDENTITY')
+    identities = sum(j.get('exact_source_identity') is True for j in o['jobs'])
+    import_rejections = sum(j.get('onboarding_accepted') is not True for j in o['jobs'])
+    independent = sum(j.get('independent_service_accepted') is True for j in o['jobs'])
+    _require((identities, import_rejections, independent) == (o['canonical_identity_matches'], o['input_rejected'], o['independent_service_accepted']), 'ONBOARDING_SUMMARY_CHANGED')
+    _require(o['buyer_attention_observed'] is False and o['agent_host_bill_usd'] is None, 'ONBOARDING_COSTS_UNMEASURED')
+    required = {'commercial/service.py': {'validate', 'reconcile', 'deliver', 'exception_csv'}, 'commercial/service_verifier.py': {'audit_delivery', '_read_order', '_safe_matches'}, 'commercial/onboarding.py': {'prepare_order', 'read_csv'}, 'vendor/alpha_claim/protected_exchange.py': {'ProtectedExchange', 'snapshot', 'reserve_investment'}}
+    for name, functions in required.items():
+        names = {n.name for n in ast.walk(ast.parse(raw[name])) if isinstance(n, (ast.FunctionDef, ast.ClassDef))}
+        _require(functions <= names, 'SOURCE_CAPABILITY_MISSING')
+    native = raw['vendor/alpha_claim/protected_exchange.py'].decode()
+    _require(all(word in native for word in ('unrestrictedEarned', 'tailReserve', 'workingCapital')), 'CASH_PROTECTION_SOURCE_MISSING')
+    _require(all(allocation['caps'][k] == 0 for k in ('new_spending_usd', 'paid_api_calls', 'real_outreach', 'real_payments')), 'PERMISSION_SCOPE_CHANGED')
+    _require('expected complete-cost profit' in p['selection_rule'] and 'NoBid' in p['selection_rule'], 'PRICING_OBJECTIVE_CHANGED')
+    return raw, rows, accepted, rejected, identities, import_rejections, independent, len(o['jobs'])
+
+
+def _expected_claims(root):
+    raw, rows, accepted, rejected, identities, imports_rejected, independent, exports = _facts(root)
+    data = [
+        ('source_scope', 'What input data are qualified?', 'Authored public synthetic USD receivables and payment records only; this qualification does not represent live customer records.', [MANIFEST, 'commercial/service.py']),
+        ('cohort_outcome', 'What was actually produced and checked?', f'The executed engineering cohort supplied {rows} source records across {accepted + rejected} orders: {accepted} accepted packages and {rejected} rejected jobs. This is not a population accuracy estimate.', [MANIFEST]),
+        ('matching_contract', 'What is the delivered outcome?', 'Delivery contains row-level reconciliation JSON and a CSV exception schedule. It does not edit bank records, file taxes, attest accounts or move funds.', ['commercial/service.py']),
+        ('ambiguity_policy', 'How is ambiguous evidence handled?', 'Ambiguous matches remain in an exception schedule; a strict-completeness order is rejected when required rows remain unresolved rather than inventing an allocation.', ['commercial/service.py', 'commercial/service_verifier.py']),
+        ('onboarding', 'Can input preparation run autonomously?', f'The CSV pipeline executed {exports} synthetic exports: {identities} canonical prepared-order identities, {imports_rejected} input rejections and {independent} independent service acceptances. Customer attention and the complete host bill were not measured.', [ONBOARDING, 'commercial/onboarding.py']),
+        ('independent_acceptance', 'Who checks acceptance?', 'A separately implemented checker recomputes row partitions, exact cents, references and customer isolation. Builder and checker share the host and agent family; this is not external certification.', ['commercial/service_verifier.py']),
+        ('commerce_scope', 'Are the demonstrated commercial payments real?', 'Customers, orders, payment protection, settlement and earned funds in the commercial model are SIMULATED. The service cohort reports zero actual customers and zero actual collections.', [MANIFEST, POLICY, 'vendor/alpha_claim/protected_exchange.py']),
+        ('host_costs', 'Are exact model bills available?', 'Host token billing and the exact routed model version are unavailable. Monetary conclusions require disclosed complete-resource cost envelopes; process CPU is not a complete monetary bill.', [MANIFEST, ALLOCATION]),
+        ('intervention', 'Was a human reviewer inserted into this workflow?', 'No human intervention is recorded for the source service orders. The autonomous comparison does not impose hypothetical human staffing; this statement is limited to the declared workflow.', [MANIFEST]),
+        ('pricing', 'What does strategic pricing establish?', 'The pricing policy seeks expected collected complete-cost profit and sustainable cash under declared buyer and competitor assumptions. Its tested prices are not observed market optima or a universal equilibrium certificate.', [POLICY]),
+        ('cash_protection', 'How are earnings distinguished from capital?', 'The pinned native exchange separates seed liquidity, restricted custody, principal reserves and unrestricted earned funds, and admits continuation investment through its earned-funding gate. Seed capital may still back reserves.', ['vendor/alpha_claim/protected_exchange.py']),
+        ('permissions', 'What operating permissions are in scope?', 'The declared operation authorizes public or synthetic inputs and simulated commerce. It grants no new spending, paid provider calls, real outreach, real payment execution or credential access.', [ALLOCATION]),
+    ]
+    claims = [{'id': i, 'question': q, 'answer': a, 'evidence': [{'path': n, 'sha256': _hash(raw[n])} for n in paths]} for i, q, a, paths in data]
+    return claims, {n: _hash(raw[n]) for n in SOURCES}
+
+
+def _render(claims, limits):
+    pieces = ['# Technical response and evidence packet', '', 'Scope: public source-backed engineering evidence; customer behavior and commercial payments remain simulated.', '']
+    for item in claims:
+        pieces.extend(['## ' + item['question'], '', item['answer'], '', 'Evidence: ' + ', '.join('`' + row['path'] + '` (SHA256 `' + row['sha256'] + '`)' for row in item['evidence']), ''])
+    pieces.extend([limits, ''])
+    return '\n'.join(pieces).encode()
+
+
+def verify_packet(root, packet, rendered_bytes):
+    """Reject unsupported claims and prose; independently derive source facts."""
+    if isinstance(packet, (str, bytes)):
+        packet = _json(packet)
+    _require(isinstance(packet, dict) and set(packet) == {'schema', 'scope', 'claims', 'source_hashes', 'limits'}, 'EXPLICIT_PACKET_FIELDS_REQUIRED')
+    _require(packet['schema'] == 'agi-alpha/portfolio011-evidence-packet/v1' and packet['scope'] == 'PUBLIC_REPO_EVIDENCE', 'PACKET_SCOPE_MISMATCH')
+    claims, hashes = _expected_claims(root)
+    _require(packet['claims'] == claims and packet['source_hashes'] == hashes and packet['limits'] == LIMITS, 'UNSUPPORTED_OR_UNBOUND_TECHNICAL_CLAIM')
+    _require(type(rendered_bytes) is bytes and rendered_bytes == _render(claims, LIMITS), 'UNVERIFIED_RENDERED_CLAIM')
+    return {'accepted': True, 'claims_checked': len(claims), 'scope': 'SOURCE_BOUND_TECHNICAL_PACKET', 'method': 'Independent manifest/receipt fact derivation, frozen source identities, source capability inspection and complete rendered-body equality; no producer imports.', 'actual_customer_acceptance': False, 'independence': 'Separate checker implementation; shared host/model family, not external certification.'}

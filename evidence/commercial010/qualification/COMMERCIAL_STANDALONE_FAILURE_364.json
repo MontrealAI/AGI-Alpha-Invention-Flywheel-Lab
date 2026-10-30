@@ -1,0 +1,49 @@
+{
+  "schema": "alpha-commercial010/standalone-package-failure/v1",
+  "scope": "Post-experiment engineering/publication qualification only; frozen financial model, seeds, costs and conclusions unchanged.",
+  "failed_source": "364f5ee41d1ac21f368cc3d19109cd4067de8c9f",
+  "run_id": 41085999183,
+  "job_id": 124167190924,
+  "event": "pull_request",
+  "branch": "campaign/autonomous-commercial-010",
+  "run_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41085999183",
+  "completed_before_failure": [
+    "Pinned dependencies",
+    "Checkout scoped tests",
+    "Frozen input identity",
+    "Full-checkout paper bindings",
+    "Actual compact ZIP creation/member verification",
+    "Clean extracted scoped tests"
+  ],
+  "failure": "Clean extracted paper check: FileNotFoundError scripts/derive_commercial010_conversion.py. This helper became paper-bound after the earlier207-input preflight; it was absent from explicit package FILES.",
+  "smokes_executed": false,
+  "failed_artifact_id": 12992191248,
+  "failed_artifact_status": "INCOMPLETE_NOT_QUALIFIED_FOR_RELEASE",
+  "repair": [
+    "Add the actual paper-bound conversion helper to distributed FILES",
+    "Require every declared paper source in package entries before archive creation",
+    "Add a regression proving an omitted newly bound script is refused before ZIP creation"
+  ],
+  "regression": {
+    "command": "python -m unittest tests.test_package010 -v",
+    "tests": 1,
+    "passed": true,
+    "seconds": 0.003
+  },
+  "source_sha256": {
+    "scripts/package_commercial010.py": "a15735ae7f37b60176f3b99c9e30633597edb6ec3c904039acd54f56fc646a42",
+    "tests/test_package010.py": "964fd402aa0280663a123862867c854cad586f766d24a66d889fce7b3740a8b5",
+    "evidence/commercial010/qualification/commercial-standalone-364-failure.log": "eb1c6c5cbd1a78be8fd1e2790013d09fa3d1a0013e2e36af65a76596a2020437"
+  },
+  "remaining": "Fresh exact-source PR/main hosted qualification and actual downloaded/released package verification.",
+  "local_followup": {
+    "status": "PASS_CORRECTED_CLOSURE_AND_BOTH_ENGINEERING_SMOKES",
+    "receipt": "evidence/commercial010/qualification/LOCAL_COMPACT_CLOSURE_PREFLIGHT.json",
+    "members_verified": 1168,
+    "paper_bindings_checked": 217,
+    "positive_seed1_paid_jobs": 15,
+    "zero_seed1_paid_jobs": 0,
+    "seconds": 37.609,
+    "scope": "Working-tree mechanical engineering replay only; placeholder364source argument is not a qualified final-source claim."
+  }
+}

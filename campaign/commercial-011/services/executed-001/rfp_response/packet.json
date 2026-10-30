@@ -1,0 +1,173 @@
+{
+  "claims": [
+    {
+      "answer": "Authored public synthetic USD receivables and payment records only; this qualification does not represent live customer records.",
+      "evidence": [
+        {
+          "path": "campaign/commercial-010/service/executed-002/manifest.json",
+          "sha256": "b91c511a8ea416ebf70a5a90bebdd7275643152852472e53df9d103bb514a002"
+        },
+        {
+          "path": "commercial/service.py",
+          "sha256": "1604d20f5d9f54997eeceb971bc19af9a0c76cdcaf79ba74b9bbd80112c9c9a3"
+        }
+      ],
+      "id": "source_scope",
+      "question": "What input data are qualified?"
+    },
+    {
+      "answer": "The executed engineering cohort supplied 19000 source records across 19 orders: 16 accepted packages and 3 rejected jobs. This is not a population accuracy estimate.",
+      "evidence": [
+        {
+          "path": "campaign/commercial-010/service/executed-002/manifest.json",
+          "sha256": "b91c511a8ea416ebf70a5a90bebdd7275643152852472e53df9d103bb514a002"
+        }
+      ],
+      "id": "cohort_outcome",
+      "question": "What was actually produced and checked?"
+    },
+    {
+      "answer": "Delivery contains row-level reconciliation JSON and a CSV exception schedule. It does not edit bank records, file taxes, attest accounts or move funds.",
+      "evidence": [
+        {
+          "path": "commercial/service.py",
+          "sha256": "1604d20f5d9f54997eeceb971bc19af9a0c76cdcaf79ba74b9bbd80112c9c9a3"
+        }
+      ],
+      "id": "matching_contract",
+      "question": "What is the delivered outcome?"
+    },
+    {
+      "answer": "Ambiguous matches remain in an exception schedule; a strict-completeness order is rejected when required rows remain unresolved rather than inventing an allocation.",
+      "evidence": [
+        {
+          "path": "commercial/service.py",
+          "sha256": "1604d20f5d9f54997eeceb971bc19af9a0c76cdcaf79ba74b9bbd80112c9c9a3"
+        },
+        {
+          "path": "commercial/service_verifier.py",
+          "sha256": "ac79f1aa80fb5c2928827f08417a720cd041977df70e808860bc3dd4f5d61368"
+        }
+      ],
+      "id": "ambiguity_policy",
+      "question": "How is ambiguous evidence handled?"
+    },
+    {
+      "answer": "The CSV pipeline executed 19 synthetic exports: 17 canonical prepared-order identities, 2 input rejections and 16 independent service acceptances. Customer attention and the complete host bill were not measured.",
+      "evidence": [
+        {
+          "path": "campaign/commercial-010/onboarding/executed-001/RESULT.json",
+          "sha256": "4c22216a1a1c26b326e2f4a14faf07a0f37480cdec3da1ef39a6bb76eb71d1bb"
+        },
+        {
+          "path": "commercial/onboarding.py",
+          "sha256": "68e9fbc6eaaceed9b2678ef604646025c02f6cb77183da9208b729486c5302cf"
+        }
+      ],
+      "id": "onboarding",
+      "question": "Can input preparation run autonomously?"
+    },
+    {
+      "answer": "A separately implemented checker recomputes row partitions, exact cents, references and customer isolation. Builder and checker share the host and agent family; this is not external certification.",
+      "evidence": [
+        {
+          "path": "commercial/service_verifier.py",
+          "sha256": "ac79f1aa80fb5c2928827f08417a720cd041977df70e808860bc3dd4f5d61368"
+        }
+      ],
+      "id": "independent_acceptance",
+      "question": "Who checks acceptance?"
+    },
+    {
+      "answer": "Customers, orders, payment protection, settlement and earned funds in the commercial model are SIMULATED. The service cohort reports zero actual customers and zero actual collections.",
+      "evidence": [
+        {
+          "path": "campaign/commercial-010/service/executed-002/manifest.json",
+          "sha256": "b91c511a8ea416ebf70a5a90bebdd7275643152852472e53df9d103bb514a002"
+        },
+        {
+          "path": "campaign/commercial-010/POLICY.json",
+          "sha256": "dba429196ea3f7ccfda74f1d7a639a549e803f7b72e19b6c444b5c4e554bccee"
+        },
+        {
+          "path": "vendor/alpha_claim/protected_exchange.py",
+          "sha256": "7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272"
+        }
+      ],
+      "id": "commerce_scope",
+      "question": "Are the demonstrated commercial payments real?"
+    },
+    {
+      "answer": "Host token billing and the exact routed model version are unavailable. Monetary conclusions require disclosed complete-resource cost envelopes; process CPU is not a complete monetary bill.",
+      "evidence": [
+        {
+          "path": "campaign/commercial-010/service/executed-002/manifest.json",
+          "sha256": "b91c511a8ea416ebf70a5a90bebdd7275643152852472e53df9d103bb514a002"
+        },
+        {
+          "path": "campaign/commercial-010/ALLOCATION.json",
+          "sha256": "4a27bd50bb51432c2ad969f4680377417e113b4e7665a456ada1d62ca8f42032"
+        }
+      ],
+      "id": "host_costs",
+      "question": "Are exact model bills available?"
+    },
+    {
+      "answer": "No human intervention is recorded for the source service orders. The autonomous comparison does not impose hypothetical human staffing; this statement is limited to the declared workflow.",
+      "evidence": [
+        {
+          "path": "campaign/commercial-010/service/executed-002/manifest.json",
+          "sha256": "b91c511a8ea416ebf70a5a90bebdd7275643152852472e53df9d103bb514a002"
+        }
+      ],
+      "id": "intervention",
+      "question": "Was a human reviewer inserted into this workflow?"
+    },
+    {
+      "answer": "The pricing policy seeks expected collected complete-cost profit and sustainable cash under declared buyer and competitor assumptions. Its tested prices are not observed market optima or a universal equilibrium certificate.",
+      "evidence": [
+        {
+          "path": "campaign/commercial-010/POLICY.json",
+          "sha256": "dba429196ea3f7ccfda74f1d7a639a549e803f7b72e19b6c444b5c4e554bccee"
+        }
+      ],
+      "id": "pricing",
+      "question": "What does strategic pricing establish?"
+    },
+    {
+      "answer": "The pinned native exchange separates seed liquidity, restricted custody, principal reserves and unrestricted earned funds, and admits continuation investment through its earned-funding gate. Seed capital may still back reserves.",
+      "evidence": [
+        {
+          "path": "vendor/alpha_claim/protected_exchange.py",
+          "sha256": "7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272"
+        }
+      ],
+      "id": "cash_protection",
+      "question": "How are earnings distinguished from capital?"
+    },
+    {
+      "answer": "The declared operation authorizes public or synthetic inputs and simulated commerce. It grants no new spending, paid provider calls, real outreach, real payment execution or credential access.",
+      "evidence": [
+        {
+          "path": "campaign/commercial-010/ALLOCATION.json",
+          "sha256": "4a27bd50bb51432c2ad969f4680377417e113b4e7665a456ada1d62ca8f42032"
+        }
+      ],
+      "id": "permissions",
+      "question": "What operating permissions are in scope?"
+    }
+  ],
+  "limits": "A bounded 12-question technical evidence response, not a complete enterprise RFP, legal commitment, security attestation or observed sale.",
+  "schema": "agi-alpha/portfolio011-evidence-packet/v1",
+  "scope": "PUBLIC_REPO_EVIDENCE",
+  "source_hashes": {
+    "campaign/commercial-010/ALLOCATION.json": "4a27bd50bb51432c2ad969f4680377417e113b4e7665a456ada1d62ca8f42032",
+    "campaign/commercial-010/POLICY.json": "dba429196ea3f7ccfda74f1d7a639a549e803f7b72e19b6c444b5c4e554bccee",
+    "campaign/commercial-010/onboarding/executed-001/RESULT.json": "4c22216a1a1c26b326e2f4a14faf07a0f37480cdec3da1ef39a6bb76eb71d1bb",
+    "campaign/commercial-010/service/executed-002/manifest.json": "b91c511a8ea416ebf70a5a90bebdd7275643152852472e53df9d103bb514a002",
+    "commercial/onboarding.py": "68e9fbc6eaaceed9b2678ef604646025c02f6cb77183da9208b729486c5302cf",
+    "commercial/service.py": "1604d20f5d9f54997eeceb971bc19af9a0c76cdcaf79ba74b9bbd80112c9c9a3",
+    "commercial/service_verifier.py": "ac79f1aa80fb5c2928827f08417a720cd041977df70e808860bc3dd4f5d61368",
+    "vendor/alpha_claim/protected_exchange.py": "7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272"
+  }
+}

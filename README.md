@@ -1,32 +1,31 @@
-# AGI ALPHA: transform the competitive game
+# AGI-Alpha-Invention-Flywheel-Lab
+Blue Sky and Beyond-Human Foresight: structural discovery, executable strategy invention, adversarial verification, and fresh successors. Experimental research.
 
-## Connected enterprise 014 continuation
+## Current executed outcome - 30 October 2026
 
-The additive operating path is `python -m connected_enterprise run --output /absolute/new/connected014`. It keeps the canonical native Account and actual service/checker contracts while adding expiring earned-funded acquisition, qualified orders before production, hour-clock acceptance/clearing and authenticated live-state recovery. See [operator procedures](docs/connected014/OPERATOR.md), [fresh allocation and authority](campaign/connected-014/ALLOCATION.json), [registered protocol/configuration](campaign/connected-014/PREREGISTRATION.json), and [capability map](campaign/connected-014/CAPABILITY_MAP.md). Fresh commercial confirmation and source-matched hosted qualification are pending publication; development output is not confirmation.
+**Commercial 010: CONDITIONAL_SIMULATED_GO.** Actual autonomous production supplied 19,000 synthetic source rows across 19 orders: 16 deliveries passed the separate checker and three orders were rejected. The completed four-arm experiment supports fixed-capability repeated delivery financed by prior unrestricted simulated earnings; invention improvement is not a prerequisite. See the [machine-readable result](campaign/commercial-010/RESULT.json), [browser-readable paper](docs/commercial010/REPORT.md) and [compiled PDF](docs/commercial010/paper.pdf).
 
-The original adaptive012 public archive now passed all160 financial and160 operating replays from the byte-verified public copy; see [authentic replay receipt](evidence/connected014/public-replay/RECEIPT.json). This reproduces earlier conditional evidence, not a new market result. [Historical scale assumptions are reconciled separately](campaign/connected-014/SCALE_RECONCILIATION.md); no native billion-dollar result is claimed.
+Across the 18 qualification-region cases, mean complete modeled profit is **$375.80**, versus **-$123.14** for fixed-discount/original-onboarding control. Cash survives in 18/18 cases; 13/18 individually qualify, while five lose or fail the repeat-funding conditions. Mean earned-funded continuation is 3.06 cycles. Selected first/repeat prices are $139/$121.625. Settled collections per scheduled slot are 73.61%, versus 76.39% for fixed pricing with autonomous onboarding. Conditional participation wins among arrivals are 81.78% versus 84.76%, and collections per win are 96.36% versus 96.49%; see [metric definitions](campaign/commercial-010/METRIC_DEFINITIONS.md). The objective is expected collected complete-cost profit and sustainable cash, not maximum win rate or the highest advertised price.
 
+This result is conditional on the declared $500 setup/$15 cost-unit scenario, the assumed human comparator of four hours first order and 3.5 hours repeat, and unmeasured assurance/trust and customer-friction differences. Host billing and actual buyer demand remain unobserved. Original no-sale results, both interrupted executions, corrupt storage evidence, immutable source versions and the disclosed I/O-only recovery remain preserved; no favorable seed substitution or global five-verdict AND is introduced.
 
-Adaptive-012 demonstrated a conditional simulated commercial flywheel: the representative enterprise settled 34 deliveries for 11 customers, collected USD 1,340.63, paid USD 544.19 in modeled complete costs and retained USD 796.44. Thirty profitable continuations used prior earned funds. All 28 registered central cases met the declared commercial criteria. These are simulated receipts with executed deterministic artifacts and independent acceptance; actual commerce was not executed.
+The separate [guarded portfolio 011 report](campaign/commercial-011/REPORT.md) screens 25 services and technically qualifies four within their declared scopes. Its guarded central projection has median $414,092.53 complete-cost profit, 107 earned-funded cycles and 11,302 settled jobs, with 10/10 cash survival over 120 months from $5,000 seed. Scaled jobs are conditional aggregate projections, not individually executed customer deliveries; finite provider-tail terms are stronger successor assumptions. **The $1 billion trailing-year target is reached in 0/90 fresh projection cases by 120 months.** Actual commerce/live revenue, capability-compounding benefit and Blue Sky enablement remain NOT_ESTABLISHED. Publication, merge and release status must follow actual source-matched gates; these results do not assert a future release is already published.
 
-The new adaptive policy was not the general profit winner: the retained strategic-pricing comparator earned USD 175.44 more on average across 32 matched cases. Full adaptation added value in some tested competitive regions; generated instruments executed without establishing superior invention. The stronger baseline remains preserved. See [results and limits](evidence/adaptive012/RESULTS.md).
+The later [autonomous onboarding and strategic pricing adjustment](campaign/commercial-010/ONBOARDING_PRICING_ADJUSTMENT.md) controls price selection: maximize expected complete-cost contribution and sustainable cash growth under strategic buyer/rival responses. Choose the discount and implied win probability jointly, within the human-anchored premium offer range. A fixed five-percent policy is a controlled baseline, not a universal optimum. Separate actual agent-operated onboarding resources, uncertain customer attention/integration friction, and external obligations; one-time costs persist across repeat orders. Any optimality statement is limited to the modeled information and feasible price set.
 
-The controlling [mandate](campaign/adaptive-012/MANDATE.md) and [steering](campaign/adaptive-012/STEERING.md) require strict evidence and money, with flexible business design.
+### Bounded archive qualification
 
-```sh
-python3 -m pip install -r requirements-commercial010.txt
-python3 -m adaptive_enterprise run --output /tmp/adaptive012-NEW
-python3 -m unittest discover -s tests -p 'test_adaptive*.py' -v
-```
+The current published source/evidence profile is approximately 399.5 MB across
+9,320 files, including the complete 282-part raw evidence transport. The current
+archive reader/writer therefore has an explicit **512 MiB uncompressed-byte cap**
+and the unchanged **10,000-file cap**. The earlier 250 MiB cap cannot contain this
+measured profile; exceeding the new cap still fails before archive publication.
+Producer-owned transaction staging is outside the published input closure; its
+reserved prefixes match the compact packager and publication scan. Durable raw
+parts, original failures and their manifests remain included.
 
-Use Linux on a verified local POSIX filesystem. No real customers, payments, paid model calls or deployment are authorized. Scenario costs, human times and market behavior remain assumptions unless independently measured. The runner freezes source, observation/action rules and criteria before confirmation, retains every result and supports audit/recovery.
-
-Current publication is a new edition: economic completion replaces mandatory cycle/inventory completion; risk tolerance is explicit; protected money and actual obligations remain hard. Service-coverage tests are separate from production selection. Learning may use only legitimately observed histories; no hidden values, private rival costs or simulator labels.
-
-## Preserved baseline
-
-[Enterprise-011](docs/research/enterprise-011/enterprise-011.md) remains a successful conditional simulation under its original rules: 61/64 central trajectories passed; the representative trajectory settled 67 jobs for eight repeat customers, earned USD 204.97 before an optional USD 25 research allocation, and completed ten profitable earned-funded cycles. Its original source/outputs and [downloadable package](artifacts/README.md) are preserved, not relabeled under adaptive criteria. Historical replay uses that bound package; the current shared ledger adds the new account-ownership boundary.
-
-The 160-service catalogue remains a planning input. Qualified primitive contracts and actual joint offers are an initial scope, not a business ceiling. Scale comparisons preserve the successful enterprise-011 baseline and expose costed alternatives, finite demand/capacity and binding controller choices. A projection never creates spendable native cash or observed revenue.
-
-See [requirements](campaign/adaptive-012/REQUIREMENTS.md), [allocation](campaign/adaptive-012/ALLOCATION.json), and [prior-policy provenance](historical/adaptive012-prior-policy/MANIFEST.json). Merge and release await applicable action-time approval.
+The exact former 250 MiB `archive_v2.py` is preserved under
+`historical/cycle-006/archive_v2.py.txt`. Frozen cycle-006 materialization restores
+those original bytes against its unchanged hash; current cap qualification does
+not relabel altered current source as a historical reproduction. This transport
+repair changes no commercial policy, seed, cost, financial method or verdict.

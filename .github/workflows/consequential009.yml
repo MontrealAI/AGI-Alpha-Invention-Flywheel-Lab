@@ -35,7 +35,7 @@ jobs:
         env:
           PYTHONNOUSERSITE: '1'
           PYTHONPATH: ''
-        run: python run_consequential009.py --output "$RUNNER_TEMP/consequential009-replay"
+        run: python campaign/consequential-009/qualification_v2/run.py --output "$RUNNER_TEMP/consequential009-replay"
       - name: Preserve exact package and all receipts including failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -90,7 +90,7 @@ jobs:
           gh run download "$GITHUB_RUN_ID" -n consequential009-source-and-replay -D "$RUNNER_TEMP/009-qualified-artifact"
           python -m pip install --only-binary=:all: -r requirements-consequential009.txt
           python scripts/package_consequential009.py extract --archive "$RUNNER_TEMP/009-qualified-artifact/AGI_ALPHA_Consequential009.zip" --destination "$RUNNER_TEMP/009-release-clean"
-          python "$RUNNER_TEMP/009-release-clean/run_consequential009.py" --output "$RUNNER_TEMP/009-release-replay"
+          python "$RUNNER_TEMP/009-release-clean/campaign/consequential-009/qualification_v2/run.py" --output "$RUNNER_TEMP/009-release-replay"
       - name: Publish distinct experimental edition without replacing historical releases
         env:
           GH_TOKEN: ${{ github.token }}

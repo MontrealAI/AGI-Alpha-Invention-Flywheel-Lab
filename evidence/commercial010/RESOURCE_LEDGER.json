@@ -1,0 +1,38 @@
+{
+  "schema": "agi-alpha/prospective-resources006/v1",
+  "capacity_cpu_seconds": 5400,
+  "capacity_storage_bytes": 6442450944,
+  "state": "active",
+  "runs": {
+    "commercial010-full-1793369199270160077": {
+      "state": "pending",
+      "limits": {
+        "wall_seconds": 3600,
+        "cpu_seconds": 3600,
+        "memory_bytes": 2147483648,
+        "output_bytes": 64000000,
+        "storage_bytes": 800000000
+      },
+      "budget_cpu_seconds": 3600,
+      "budget_storage_bytes": 800000000
+    },
+    "commercial010-resume-1793370161358779825": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 1800,
+        "cpu_seconds": 1800,
+        "memory_bytes": 2147483648,
+        "output_bytes": 64000000,
+        "storage_bytes": 250000000
+      },
+      "budget_cpu_seconds": 1800,
+      "budget_storage_bytes": 43589619,
+      "receipt_sha256": "ce11dd61cd47dae6eb4c2d0ebf25ce45ed2980583ab899f77cf87682d5cddd8d",
+      "outcome": "failed",
+      "observed_waited_cpu_seconds": 121.613782,
+      "observed_output_bytes": 43589619,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    }
+  }
+}

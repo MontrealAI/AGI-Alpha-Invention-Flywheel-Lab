@@ -25,3 +25,8 @@ the original source copied to that separate directory. A successful old replay
 does not certify current code as historical code, establish fresh scientific
 confirmation, or qualify commercial success. No frozen manifest or reference
 identity was rewritten.
+
+The larger published commercial evidence profile requires a separately bounded
+512 MiB current archive cap. `archive_v2.py.txt` retains the exact former source
+with its original 250 MiB bound. The narrow materializer mapping restores that
+original archive module for frozen replay; the historical freeze remains unchanged.

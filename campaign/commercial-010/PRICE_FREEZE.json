@@ -1,0 +1,3832 @@
+{
+  "schema": "agi-alpha/commercial010-factorial-price-freeze/v2",
+  "scope": "SIMULATED",
+  "selections": {
+    "strategic_original": {
+      "selected_multiplier_bps": 9000,
+      "selected_payoff": {
+        "price_multiplier_bps": 9000,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 624546704.0,
+            "expected_available_cash": 3793502954.0,
+            "expected_unrestricted_earned": 624546704.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 4.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 189500000.0,
+            "profit_min": 582151469,
+            "profit_median": 666941939,
+            "profit_max": 666941939,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              4,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 425375991.0,
+            "expected_available_cash": 3813657241.0,
+            "expected_unrestricted_earned": 425375991.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 3.5,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 179593753.5,
+            "profit_min": 293800521,
+            "profit_median": 556951461,
+            "profit_max": 556951461,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              3,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 1,
+            "go_fraction": 0.5,
+            "expected_complete_profit": 28350575.0,
+            "expected_available_cash": 3863100575.0,
+            "expected_unrestricted_earned": 134300264.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.59375,
+            "mean_paid_jobs": 9.5,
+            "mean_earned_funded_cycles": 1.5,
+            "mean_repeat_buyers": 1.5,
+            "mean_reinvested_earned": 82875000.0,
+            "profit_min": -211899378,
+            "profit_median": 268600528,
+            "profit_max": 268600528,
+            "paid_jobs_range": [
+              7,
+              12
+            ],
+            "earned_cycles_range": [
+              0,
+              3
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 5,
+        "go_fraction": 0.8333333333333334,
+        "expected_complete_profit": 359424423.3333333,
+        "expected_available_cash": 3823420256.6666665,
+        "expected_unrestricted_earned": 394740986.3333333,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.8020833333333334,
+        "mean_paid_jobs": 12.833333333333334,
+        "mean_earned_funded_cycles": 3.0,
+        "mean_repeat_buyers": 1.8333333333333333,
+        "mean_reinvested_earned": 150656251.16666666,
+        "profit_min": -211899378,
+        "profit_median": 556951461,
+        "profit_max": 666941939,
+        "paid_jobs_range": [
+          7,
+          16
+        ],
+        "earned_cycles_range": [
+          0,
+          4
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      "candidate_curve": [
+        {
+          "price_multiplier_bps": 9000,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 624546704.0,
+              "expected_available_cash": 3793502954.0,
+              "expected_unrestricted_earned": 624546704.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 4.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 189500000.0,
+              "profit_min": 582151469,
+              "profit_median": 666941939,
+              "profit_max": 666941939,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                4,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 425375991.0,
+              "expected_available_cash": 3813657241.0,
+              "expected_unrestricted_earned": 425375991.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.84375,
+              "mean_paid_jobs": 13.5,
+              "mean_earned_funded_cycles": 3.5,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 179593753.5,
+              "profit_min": 293800521,
+              "profit_median": 556951461,
+              "profit_max": 556951461,
+              "paid_jobs_range": [
+                12,
+                15
+              ],
+              "earned_cycles_range": [
+                3,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 1,
+              "go_fraction": 0.5,
+              "expected_complete_profit": 28350575.0,
+              "expected_available_cash": 3863100575.0,
+              "expected_unrestricted_earned": 134300264.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.59375,
+              "mean_paid_jobs": 9.5,
+              "mean_earned_funded_cycles": 1.5,
+              "mean_repeat_buyers": 1.5,
+              "mean_reinvested_earned": 82875000.0,
+              "profit_min": -211899378,
+              "profit_median": 268600528,
+              "profit_max": 268600528,
+              "paid_jobs_range": [
+                7,
+                12
+              ],
+              "earned_cycles_range": [
+                0,
+                3
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 5,
+          "go_fraction": 0.8333333333333334,
+          "expected_complete_profit": 359424423.3333333,
+          "expected_available_cash": 3823420256.6666665,
+          "expected_unrestricted_earned": 394740986.3333333,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.8020833333333334,
+          "mean_paid_jobs": 12.833333333333334,
+          "mean_earned_funded_cycles": 3.0,
+          "mean_repeat_buyers": 1.8333333333333333,
+          "mean_reinvested_earned": 150656251.16666666,
+          "profit_min": -211899378,
+          "profit_median": 556951461,
+          "profit_max": 666941939,
+          "paid_jobs_range": [
+            7,
+            16
+          ],
+          "earned_cycles_range": [
+            0,
+            4
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 9500,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 699117077.5,
+              "expected_available_cash": 3772076452.5,
+              "expected_unrestricted_earned": 699117077.5,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 4.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 189500000.0,
+              "profit_min": 654359885,
+              "profit_median": 743874270,
+              "profit_max": 743874270,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                4,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 1,
+              "go_fraction": 0.5,
+              "expected_complete_profit": 106737267.5,
+              "expected_available_cash": 3882412267.5,
+              "expected_unrestricted_earned": 175848053.5,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.59375,
+              "mean_paid_jobs": 9.5,
+              "mean_earned_funded_cycles": 2.0,
+              "mean_repeat_buyers": 1.5,
+              "mean_reinvested_earned": 102625002.0,
+              "profit_min": -138221572,
+              "profit_median": 351696107,
+              "profit_max": 351696107,
+              "paid_jobs_range": [
+                7,
+                12
+              ],
+              "earned_cycles_range": [
+                0,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -990000000.0,
+              "expected_available_cash": 3910000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -990000000,
+              "profit_median": -990000000,
+              "profit_max": -990000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 3,
+          "go_fraction": 0.5,
+          "expected_complete_profit": -61381885.0,
+          "expected_available_cash": 3854829573.3333335,
+          "expected_unrestricted_earned": 291655043.6666667,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.5208333333333334,
+          "mean_paid_jobs": 8.333333333333334,
+          "mean_earned_funded_cycles": 2.0,
+          "mean_repeat_buyers": 1.1666666666666667,
+          "mean_reinvested_earned": 97375000.66666667,
+          "profit_min": -990000000,
+          "profit_median": 351696107,
+          "profit_max": 743874270,
+          "paid_jobs_range": [
+            0,
+            16
+          ],
+          "earned_cycles_range": [
+            0,
+            4
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 9800,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 743859300.0,
+              "expected_available_cash": 3759220550.0,
+              "expected_unrestricted_earned": 743859300.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 5.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 236875000.0,
+              "profit_min": 697684933,
+              "profit_median": 790033667,
+              "profit_max": 790033667,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                5,
+                5
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -958500008.0,
+              "expected_available_cash": 3941499992.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -958500008,
+              "profit_median": -958500008,
+              "profit_max": -958500008,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -990000000.0,
+              "expected_available_cash": 3910000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -990000000,
+              "profit_median": -990000000,
+              "profit_max": -990000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 2,
+          "go_fraction": 0.3333333333333333,
+          "expected_complete_profit": -401546902.6666667,
+          "expected_available_cash": 3870240180.6666665,
+          "expected_unrestricted_earned": 247953100.0,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.3229166666666667,
+          "mean_paid_jobs": 5.166666666666667,
+          "mean_earned_funded_cycles": 1.6666666666666667,
+          "mean_repeat_buyers": 0.6666666666666666,
+          "mean_reinvested_earned": 78958333.33333333,
+          "profit_min": -990000000,
+          "profit_median": -958500008,
+          "profit_max": 790033667,
+          "paid_jobs_range": [
+            0,
+            16
+          ],
+          "earned_cycles_range": [
+            0,
+            5
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 10000,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 773687450.0,
+              "expected_available_cash": 3750649950.0,
+              "expected_unrestricted_earned": 773687450.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 5.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 236875000.0,
+              "profit_min": 726568300,
+              "profit_median": 820806600,
+              "profit_max": 820806600,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                5,
+                5
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -958500008.0,
+              "expected_available_cash": 3941499992.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -958500008,
+              "profit_median": -958500008,
+              "profit_max": -958500008,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -990000000.0,
+              "expected_available_cash": 3910000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -990000000,
+              "profit_median": -990000000,
+              "profit_max": -990000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 2,
+          "go_fraction": 0.3333333333333333,
+          "expected_complete_profit": -391604186.0,
+          "expected_available_cash": 3867383314.0,
+          "expected_unrestricted_earned": 257895816.66666666,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.3229166666666667,
+          "mean_paid_jobs": 5.166666666666667,
+          "mean_earned_funded_cycles": 1.6666666666666667,
+          "mean_repeat_buyers": 0.6666666666666666,
+          "mean_reinvested_earned": 78958333.33333333,
+          "profit_min": -990000000,
+          "profit_median": -958500008,
+          "profit_max": 820806600,
+          "paid_jobs_range": [
+            0,
+            16
+          ],
+          "earned_cycles_range": [
+            0,
+            5
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 10500,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 848257816.0,
+              "expected_available_cash": 3729223441.0,
+              "expected_unrestricted_earned": 848257816.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 5.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 236875000.0,
+              "profit_min": 798776709,
+              "profit_median": 897738923,
+              "profit_max": 897738923,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                5,
+                5
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -958500008.0,
+              "expected_available_cash": 3941499992.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -958500008,
+              "profit_median": -958500008,
+              "profit_max": -958500008,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -990000000.0,
+              "expected_available_cash": 3910000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -990000000,
+              "profit_median": -990000000,
+              "profit_max": -990000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 2,
+          "go_fraction": 0.3333333333333333,
+          "expected_complete_profit": -366747397.3333333,
+          "expected_available_cash": 3860241144.3333335,
+          "expected_unrestricted_earned": 282752605.3333333,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.3229166666666667,
+          "mean_paid_jobs": 5.166666666666667,
+          "mean_earned_funded_cycles": 1.6666666666666667,
+          "mean_repeat_buyers": 0.6666666666666666,
+          "mean_reinvested_earned": 78958333.33333333,
+          "profit_min": -990000000,
+          "profit_median": -958500008,
+          "profit_max": 897738923,
+          "paid_jobs_range": [
+            0,
+            16
+          ],
+          "earned_cycles_range": [
+            0,
+            5
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 12000,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -927000000.0,
+              "expected_available_cash": 3973000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -927000000,
+              "profit_median": -927000000,
+              "profit_max": -927000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -958500008.0,
+              "expected_available_cash": 3941499992.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -958500008,
+              "profit_median": -958500008,
+              "profit_max": -958500008,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -990000000.0,
+              "expected_available_cash": 3910000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -990000000,
+              "profit_median": -990000000,
+              "profit_max": -990000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 0,
+          "go_fraction": 0.0,
+          "expected_complete_profit": -958500002.6666666,
+          "expected_available_cash": 3941499997.3333335,
+          "expected_unrestricted_earned": 0.0,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.0,
+          "mean_paid_jobs": 0.0,
+          "mean_earned_funded_cycles": 0.0,
+          "mean_repeat_buyers": 0.0,
+          "mean_reinvested_earned": 0.0,
+          "profit_min": -990000000,
+          "profit_median": -958500008,
+          "profit_max": -927000000,
+          "paid_jobs_range": [
+            0,
+            0
+          ],
+          "earned_cycles_range": [
+            0,
+            0
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 15000,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -927000000.0,
+              "expected_available_cash": 3973000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -927000000,
+              "profit_median": -927000000,
+              "profit_max": -927000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -958500008.0,
+              "expected_available_cash": 3941499992.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -958500008,
+              "profit_median": -958500008,
+              "profit_max": -958500008,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -990000000.0,
+              "expected_available_cash": 3910000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -990000000,
+              "profit_median": -990000000,
+              "profit_max": -990000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 0,
+          "go_fraction": 0.0,
+          "expected_complete_profit": -958500002.6666666,
+          "expected_available_cash": 3941499997.3333335,
+          "expected_unrestricted_earned": 0.0,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.0,
+          "mean_paid_jobs": 0.0,
+          "mean_earned_funded_cycles": 0.0,
+          "mean_repeat_buyers": 0.0,
+          "mean_reinvested_earned": 0.0,
+          "profit_min": -990000000,
+          "profit_median": -958500008,
+          "profit_max": -927000000,
+          "paid_jobs_range": [
+            0,
+            0
+          ],
+          "earned_cycles_range": [
+            0,
+            0
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": "first10500-repeat12000",
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 1039576380.0,
+              "expected_available_cash": 3674251380.0,
+              "expected_unrestricted_earned": 1039576380.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 5.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 236875000.0,
+              "profit_min": 983009400,
+              "profit_median": 1096143360,
+              "profit_max": 1096143360,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                5,
+                5
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -958500008.0,
+              "expected_available_cash": 3941499992.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -958500008,
+              "profit_median": -958500008,
+              "profit_max": -958500008,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -990000000.0,
+              "expected_available_cash": 3910000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -990000000,
+              "profit_median": -990000000,
+              "profit_max": -990000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 2,
+          "go_fraction": 0.3333333333333333,
+          "expected_complete_profit": -302974542.6666667,
+          "expected_available_cash": 3841917124.0,
+          "expected_unrestricted_earned": 346525460.0,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.3229166666666667,
+          "mean_paid_jobs": 5.166666666666667,
+          "mean_earned_funded_cycles": 1.6666666666666667,
+          "mean_repeat_buyers": 0.6666666666666666,
+          "mean_reinvested_earned": 78958333.33333333,
+          "profit_min": -990000000,
+          "profit_median": -958500008,
+          "profit_max": 1096143360,
+          "paid_jobs_range": [
+            0,
+            16
+          ],
+          "earned_cycles_range": [
+            0,
+            5
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": null,
+          "expected_complete_profit": -500000000,
+          "expected_available_cash": 4400000000,
+          "cash_survival_fraction": 1.0,
+          "win_probability": 0.0,
+          "payable_breach_runs": 0,
+          "scope": "NoBid preserves cash; already incurred full campaign qualification/setup remains charged."
+        }
+      ],
+      "seller_grid_profitable_deviation_residual": 0.0,
+      "information": "Only frozen exploration distributions; no confirmation outcome or individual private reservation value.",
+      "solution_scope": "Conditional finite-grid expected-contribution optimum with cash constraints; not Nash equilibrium or a global continuous-price optimum."
+    },
+    "strategic_autonomous_onboarding": {
+      "selected_multiplier_bps": 10000,
+      "selected_payoff": {
+        "price_multiplier_bps": 10000,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 772087450.0,
+            "expected_available_cash": 3749049950.0,
+            "expected_unrestricted_earned": 772087450.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 5.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 236875000.0,
+            "profit_min": 724968300,
+            "profit_median": 819206600,
+            "profit_max": 819206600,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              5,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 553879997.5,
+            "expected_available_cash": 3774492497.5,
+            "expected_unrestricted_earned": 553879997.5,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 4.5,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 230906254.5,
+            "profit_min": 407991697,
+            "profit_median": 699768298,
+            "profit_max": 699768298,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              4,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 528680000.0,
+            "expected_available_cash": 3749292500.0,
+            "expected_unrestricted_earned": 528680000.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 4.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 221000000.0,
+            "profit_min": 382791700,
+            "profit_median": 674568300,
+            "profit_max": 674568300,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              4,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 6,
+        "go_fraction": 1.0,
+        "expected_complete_profit": 618215815.8333334,
+        "expected_available_cash": 3757611649.1666665,
+        "expected_unrestricted_earned": 618215815.8333334,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.8854166666666666,
+        "mean_paid_jobs": 14.166666666666666,
+        "mean_earned_funded_cycles": 4.5,
+        "mean_repeat_buyers": 2.0,
+        "mean_reinvested_earned": 229593751.5,
+        "profit_min": 382791700,
+        "profit_median": 699768298,
+        "profit_max": 819206600,
+        "paid_jobs_range": [
+          12,
+          16
+        ],
+        "earned_cycles_range": [
+          4,
+          5
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      "candidate_curve": [
+        {
+          "price_multiplier_bps": 9000,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 622946704.0,
+              "expected_available_cash": 3791902954.0,
+              "expected_unrestricted_earned": 622946704.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 4.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 189500000.0,
+              "profit_min": 580551469,
+              "profit_median": 665341939,
+              "profit_max": 665341939,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                4,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 423775991.0,
+              "expected_available_cash": 3812057241.0,
+              "expected_unrestricted_earned": 423775991.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.84375,
+              "mean_paid_jobs": 13.5,
+              "mean_earned_funded_cycles": 3.5,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 179593753.5,
+              "profit_min": 292200521,
+              "profit_median": 555351461,
+              "profit_max": 555351461,
+              "paid_jobs_range": [
+                12,
+                15
+              ],
+              "earned_cycles_range": [
+                3,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 398575998.0,
+              "expected_available_cash": 3786857248.0,
+              "expected_unrestricted_earned": 398575998.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.84375,
+              "mean_paid_jobs": 13.5,
+              "mean_earned_funded_cycles": 3.5,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 193375000.0,
+              "profit_min": 267000528,
+              "profit_median": 530151468,
+              "profit_max": 530151468,
+              "paid_jobs_range": [
+                12,
+                15
+              ],
+              "earned_cycles_range": [
+                3,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 6,
+          "go_fraction": 1.0,
+          "expected_complete_profit": 481766231.0,
+          "expected_available_cash": 3796939147.6666665,
+          "expected_unrestricted_earned": 481766231.0,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.8854166666666666,
+          "mean_paid_jobs": 14.166666666666666,
+          "mean_earned_funded_cycles": 3.6666666666666665,
+          "mean_repeat_buyers": 2.0,
+          "mean_reinvested_earned": 187489584.5,
+          "profit_min": 267000528,
+          "profit_median": 555351461,
+          "profit_max": 665341939,
+          "paid_jobs_range": [
+            12,
+            16
+          ],
+          "earned_cycles_range": [
+            3,
+            4
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 9500,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 697517077.5,
+              "expected_available_cash": 3770476452.5,
+              "expected_unrestricted_earned": 697517077.5,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 4.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 189500000.0,
+              "profit_min": 652759885,
+              "profit_median": 742274270,
+              "profit_max": 742274270,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                4,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 488827992.0,
+              "expected_available_cash": 3793274867.0,
+              "expected_unrestricted_earned": 488827992.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.84375,
+              "mean_paid_jobs": 13.5,
+              "mean_earned_funded_cycles": 4.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 205250004.0,
+              "profit_min": 350096107,
+              "profit_median": 627559877,
+              "profit_max": 627559877,
+              "paid_jobs_range": [
+                12,
+                15
+              ],
+              "earned_cycles_range": [
+                4,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 463627999.5,
+              "expected_available_cash": 3768074874.5,
+              "expected_unrestricted_earned": 463627999.5,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.84375,
+              "mean_paid_jobs": 13.5,
+              "mean_earned_funded_cycles": 4.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 221000000.0,
+              "profit_min": 324896114,
+              "profit_median": 602359885,
+              "profit_max": 602359885,
+              "paid_jobs_range": [
+                12,
+                15
+              ],
+              "earned_cycles_range": [
+                4,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 6,
+          "go_fraction": 1.0,
+          "expected_complete_profit": 549991023.0,
+          "expected_available_cash": 3777275398.0,
+          "expected_unrestricted_earned": 549991023.0,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.8854166666666666,
+          "mean_paid_jobs": 14.166666666666666,
+          "mean_earned_funded_cycles": 4.0,
+          "mean_repeat_buyers": 2.0,
+          "mean_reinvested_earned": 205250001.33333334,
+          "profit_min": 324896114,
+          "profit_median": 627559877,
+          "profit_max": 742274270,
+          "paid_jobs_range": [
+            12,
+            16
+          ],
+          "earned_cycles_range": [
+            4,
+            4
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 9800,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 742259300.0,
+              "expected_available_cash": 3757620550.0,
+              "expected_unrestricted_earned": 742259300.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 5.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 236875000.0,
+              "profit_min": 696084933,
+              "profit_median": 788433667,
+              "profit_max": 788433667,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                5,
+                5
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 527859191.0,
+              "expected_available_cash": 3782005441.0,
+              "expected_unrestricted_earned": 527859191.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.84375,
+              "mean_paid_jobs": 13.5,
+              "mean_earned_funded_cycles": 4.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 205250004.0,
+              "profit_min": 384833457,
+              "profit_median": 670884925,
+              "profit_max": 670884925,
+              "paid_jobs_range": [
+                12,
+                15
+              ],
+              "earned_cycles_range": [
+                4,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 502659198.5,
+              "expected_available_cash": 3756805448.5,
+              "expected_unrestricted_earned": 502659198.5,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.84375,
+              "mean_paid_jobs": 13.5,
+              "mean_earned_funded_cycles": 4.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 221000000.0,
+              "profit_min": 359633464,
+              "profit_median": 645684933,
+              "profit_max": 645684933,
+              "paid_jobs_range": [
+                12,
+                15
+              ],
+              "earned_cycles_range": [
+                4,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 6,
+          "go_fraction": 1.0,
+          "expected_complete_profit": 590925896.5,
+          "expected_available_cash": 3765477146.5,
+          "expected_unrestricted_earned": 590925896.5,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.8854166666666666,
+          "mean_paid_jobs": 14.166666666666666,
+          "mean_earned_funded_cycles": 4.333333333333333,
+          "mean_repeat_buyers": 2.0,
+          "mean_reinvested_earned": 221041668.0,
+          "profit_min": 359633464,
+          "profit_median": 670884925,
+          "profit_max": 788433667,
+          "paid_jobs_range": [
+            12,
+            16
+          ],
+          "earned_cycles_range": [
+            4,
+            5
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 10000,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 772087450.0,
+              "expected_available_cash": 3749049950.0,
+              "expected_unrestricted_earned": 772087450.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 5.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 236875000.0,
+              "profit_min": 724968300,
+              "profit_median": 819206600,
+              "profit_max": 819206600,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                5,
+                5
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 553879997.5,
+              "expected_available_cash": 3774492497.5,
+              "expected_unrestricted_earned": 553879997.5,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.84375,
+              "mean_paid_jobs": 13.5,
+              "mean_earned_funded_cycles": 4.5,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 230906254.5,
+              "profit_min": 407991697,
+              "profit_median": 699768298,
+              "profit_max": 699768298,
+              "paid_jobs_range": [
+                12,
+                15
+              ],
+              "earned_cycles_range": [
+                4,
+                5
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 528680000.0,
+              "expected_available_cash": 3749292500.0,
+              "expected_unrestricted_earned": 528680000.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.84375,
+              "mean_paid_jobs": 13.5,
+              "mean_earned_funded_cycles": 4.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 221000000.0,
+              "profit_min": 382791700,
+              "profit_median": 674568300,
+              "profit_max": 674568300,
+              "paid_jobs_range": [
+                12,
+                15
+              ],
+              "earned_cycles_range": [
+                4,
+                4
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 6,
+          "go_fraction": 1.0,
+          "expected_complete_profit": 618215815.8333334,
+          "expected_available_cash": 3757611649.1666665,
+          "expected_unrestricted_earned": 618215815.8333334,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.8854166666666666,
+          "mean_paid_jobs": 14.166666666666666,
+          "mean_earned_funded_cycles": 4.5,
+          "mean_repeat_buyers": 2.0,
+          "mean_reinvested_earned": 229593751.5,
+          "profit_min": 382791700,
+          "profit_median": 699768298,
+          "profit_max": 819206600,
+          "paid_jobs_range": [
+            12,
+            16
+          ],
+          "earned_cycles_range": [
+            4,
+            5
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 10500,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 846657816.0,
+              "expected_available_cash": 3727623441.0,
+              "expected_unrestricted_earned": 846657816.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 5.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 236875000.0,
+              "profit_min": 797176709,
+              "profit_median": 896138923,
+              "profit_max": 896138923,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                5,
+                5
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -958500008.0,
+              "expected_available_cash": 3941499992.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -958500008,
+              "profit_median": -958500008,
+              "profit_max": -958500008,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 593731994.5,
+              "expected_available_cash": 3730510119.5,
+              "expected_unrestricted_earned": 593731994.5,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.84375,
+              "mean_paid_jobs": 13.5,
+              "mean_earned_funded_cycles": 4.5,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 248625000.0,
+              "profit_min": 440687280,
+              "profit_median": 746776709,
+              "profit_max": 746776709,
+              "paid_jobs_range": [
+                12,
+                15
+              ],
+              "earned_cycles_range": [
+                4,
+                5
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 4,
+          "go_fraction": 0.6666666666666666,
+          "expected_complete_profit": 160629934.16666666,
+          "expected_available_cash": 3799877850.8333335,
+          "expected_unrestricted_earned": 480129936.8333333,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.6041666666666666,
+          "mean_paid_jobs": 9.666666666666666,
+          "mean_earned_funded_cycles": 3.1666666666666665,
+          "mean_repeat_buyers": 1.3333333333333333,
+          "mean_reinvested_earned": 161833333.33333334,
+          "profit_min": -958500008,
+          "profit_median": 746776709,
+          "profit_max": 896138923,
+          "paid_jobs_range": [
+            0,
+            16
+          ],
+          "earned_cycles_range": [
+            0,
+            5
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 12000,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 1070368940.0,
+              "expected_available_cash": 3663343940.0,
+              "expected_unrestricted_earned": 1070368940.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 5.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 236875000.0,
+              "profit_min": 1013801960,
+              "profit_median": 1126935920,
+              "profit_max": 1126935920,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                5,
+                5
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -958500008.0,
+              "expected_available_cash": 3941499992.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -958500008,
+              "profit_median": -958500008,
+              "profit_max": -958500008,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -990000000.0,
+              "expected_available_cash": 3910000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -990000000,
+              "profit_median": -990000000,
+              "profit_max": -990000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 2,
+          "go_fraction": 0.3333333333333333,
+          "expected_complete_profit": -292710356.0,
+          "expected_available_cash": 3838281310.6666665,
+          "expected_unrestricted_earned": 356789646.6666667,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.3229166666666667,
+          "mean_paid_jobs": 5.166666666666667,
+          "mean_earned_funded_cycles": 1.6666666666666667,
+          "mean_repeat_buyers": 0.6666666666666666,
+          "mean_reinvested_earned": 78958333.33333333,
+          "profit_min": -990000000,
+          "profit_median": -958500008,
+          "profit_max": 1126935920,
+          "paid_jobs_range": [
+            0,
+            16
+          ],
+          "earned_cycles_range": [
+            0,
+            5
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": 15000,
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -927000000.0,
+              "expected_available_cash": 3973000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -927000000,
+              "profit_median": -927000000,
+              "profit_max": -927000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -958500008.0,
+              "expected_available_cash": 3941499992.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -958500008,
+              "profit_median": -958500008,
+              "profit_max": -958500008,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -990000000.0,
+              "expected_available_cash": 3910000000.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -990000000,
+              "profit_median": -990000000,
+              "profit_max": -990000000,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 0,
+          "go_fraction": 0.0,
+          "expected_complete_profit": -958500002.6666666,
+          "expected_available_cash": 3941499997.3333335,
+          "expected_unrestricted_earned": 0.0,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.0,
+          "mean_paid_jobs": 0.0,
+          "mean_earned_funded_cycles": 0.0,
+          "mean_repeat_buyers": 0.0,
+          "mean_reinvested_earned": 0.0,
+          "profit_min": -990000000,
+          "profit_median": -958500008,
+          "profit_max": -927000000,
+          "paid_jobs_range": [
+            0,
+            0
+          ],
+          "earned_cycles_range": [
+            0,
+            0
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": "first10500-repeat12000",
+          "worlds": {
+            "qualified_differentiation": {
+              "runs": 2,
+              "go_runs": 2,
+              "go_fraction": 1.0,
+              "expected_complete_profit": 1037976380.0,
+              "expected_available_cash": 3672651380.0,
+              "expected_unrestricted_earned": 1037976380.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.96875,
+              "mean_paid_jobs": 15.5,
+              "mean_earned_funded_cycles": 5.0,
+              "mean_repeat_buyers": 2.0,
+              "mean_reinvested_earned": 236875000.0,
+              "profit_min": 981409400,
+              "profit_median": 1094543360,
+              "profit_max": 1094543360,
+              "paid_jobs_range": [
+                15,
+                16
+              ],
+              "earned_cycles_range": [
+                5,
+                5
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "moderate_differentiation": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -958500008.0,
+              "expected_available_cash": 3941499992.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.0,
+              "mean_paid_jobs": 0.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -958500008,
+              "profit_median": -958500008,
+              "profit_max": -958500008,
+              "paid_jobs_range": [
+                0,
+                0
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            },
+            "delayed_high_assurance": {
+              "runs": 2,
+              "go_runs": 0,
+              "go_fraction": 0.0,
+              "expected_complete_profit": -667165100.0,
+              "expected_available_cash": 3940534900.0,
+              "expected_unrestricted_earned": 0.0,
+              "cash_survival_fraction": 1.0,
+              "payable_breach_runs": 0,
+              "win_probability": 0.125,
+              "mean_paid_jobs": 2.0,
+              "mean_earned_funded_cycles": 0.0,
+              "mean_repeat_buyers": 0.0,
+              "mean_reinvested_earned": 0.0,
+              "profit_min": -667165100,
+              "profit_median": -667165100,
+              "profit_max": -667165100,
+              "paid_jobs_range": [
+                2,
+                2
+              ],
+              "earned_cycles_range": [
+                0,
+                0
+              ],
+              "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+            }
+          },
+          "runs": 6,
+          "go_runs": 2,
+          "go_fraction": 0.3333333333333333,
+          "expected_complete_profit": -195896242.66666666,
+          "expected_available_cash": 3851562090.6666665,
+          "expected_unrestricted_earned": 345992126.6666667,
+          "cash_survival_fraction": 1.0,
+          "payable_breach_runs": 0,
+          "win_probability": 0.3645833333333333,
+          "mean_paid_jobs": 5.833333333333333,
+          "mean_earned_funded_cycles": 1.6666666666666667,
+          "mean_repeat_buyers": 0.6666666666666666,
+          "mean_reinvested_earned": 78958333.33333333,
+          "profit_min": -958500008,
+          "profit_median": -667165100,
+          "profit_max": 1094543360,
+          "paid_jobs_range": [
+            0,
+            16
+          ],
+          "earned_cycles_range": [
+            0,
+            5
+          ],
+          "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+        },
+        {
+          "price_multiplier_bps": null,
+          "expected_complete_profit": -500000000,
+          "expected_available_cash": 4400000000,
+          "cash_survival_fraction": 1.0,
+          "win_probability": 0.0,
+          "payable_breach_runs": 0,
+          "scope": "NoBid preserves cash; already incurred full campaign qualification/setup remains charged."
+        }
+      ],
+      "seller_grid_profitable_deviation_residual": 0.0,
+      "information": "Only frozen exploration distributions; no confirmation outcome or individual private reservation value.",
+      "solution_scope": "Conditional finite-grid expected-contribution optimum with cash constraints; not Nash equilibrium or a global continuous-price optimum."
+    }
+  },
+  "exploration": {
+    "False": [
+      {
+        "price_multiplier_bps": 9000,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 624546704.0,
+            "expected_available_cash": 3793502954.0,
+            "expected_unrestricted_earned": 624546704.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 4.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 189500000.0,
+            "profit_min": 582151469,
+            "profit_median": 666941939,
+            "profit_max": 666941939,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              4,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 425375991.0,
+            "expected_available_cash": 3813657241.0,
+            "expected_unrestricted_earned": 425375991.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 3.5,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 179593753.5,
+            "profit_min": 293800521,
+            "profit_median": 556951461,
+            "profit_max": 556951461,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              3,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 1,
+            "go_fraction": 0.5,
+            "expected_complete_profit": 28350575.0,
+            "expected_available_cash": 3863100575.0,
+            "expected_unrestricted_earned": 134300264.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.59375,
+            "mean_paid_jobs": 9.5,
+            "mean_earned_funded_cycles": 1.5,
+            "mean_repeat_buyers": 1.5,
+            "mean_reinvested_earned": 82875000.0,
+            "profit_min": -211899378,
+            "profit_median": 268600528,
+            "profit_max": 268600528,
+            "paid_jobs_range": [
+              7,
+              12
+            ],
+            "earned_cycles_range": [
+              0,
+              3
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 5,
+        "go_fraction": 0.8333333333333334,
+        "expected_complete_profit": 359424423.3333333,
+        "expected_available_cash": 3823420256.6666665,
+        "expected_unrestricted_earned": 394740986.3333333,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.8020833333333334,
+        "mean_paid_jobs": 12.833333333333334,
+        "mean_earned_funded_cycles": 3.0,
+        "mean_repeat_buyers": 1.8333333333333333,
+        "mean_reinvested_earned": 150656251.16666666,
+        "profit_min": -211899378,
+        "profit_median": 556951461,
+        "profit_max": 666941939,
+        "paid_jobs_range": [
+          7,
+          16
+        ],
+        "earned_cycles_range": [
+          0,
+          4
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 9500,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 699117077.5,
+            "expected_available_cash": 3772076452.5,
+            "expected_unrestricted_earned": 699117077.5,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 4.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 189500000.0,
+            "profit_min": 654359885,
+            "profit_median": 743874270,
+            "profit_max": 743874270,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              4,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 1,
+            "go_fraction": 0.5,
+            "expected_complete_profit": 106737267.5,
+            "expected_available_cash": 3882412267.5,
+            "expected_unrestricted_earned": 175848053.5,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.59375,
+            "mean_paid_jobs": 9.5,
+            "mean_earned_funded_cycles": 2.0,
+            "mean_repeat_buyers": 1.5,
+            "mean_reinvested_earned": 102625002.0,
+            "profit_min": -138221572,
+            "profit_median": 351696107,
+            "profit_max": 351696107,
+            "paid_jobs_range": [
+              7,
+              12
+            ],
+            "earned_cycles_range": [
+              0,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -990000000.0,
+            "expected_available_cash": 3910000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -990000000,
+            "profit_median": -990000000,
+            "profit_max": -990000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 3,
+        "go_fraction": 0.5,
+        "expected_complete_profit": -61381885.0,
+        "expected_available_cash": 3854829573.3333335,
+        "expected_unrestricted_earned": 291655043.6666667,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.5208333333333334,
+        "mean_paid_jobs": 8.333333333333334,
+        "mean_earned_funded_cycles": 2.0,
+        "mean_repeat_buyers": 1.1666666666666667,
+        "mean_reinvested_earned": 97375000.66666667,
+        "profit_min": -990000000,
+        "profit_median": 351696107,
+        "profit_max": 743874270,
+        "paid_jobs_range": [
+          0,
+          16
+        ],
+        "earned_cycles_range": [
+          0,
+          4
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 9800,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 743859300.0,
+            "expected_available_cash": 3759220550.0,
+            "expected_unrestricted_earned": 743859300.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 5.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 236875000.0,
+            "profit_min": 697684933,
+            "profit_median": 790033667,
+            "profit_max": 790033667,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              5,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -958500008.0,
+            "expected_available_cash": 3941499992.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -958500008,
+            "profit_median": -958500008,
+            "profit_max": -958500008,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -990000000.0,
+            "expected_available_cash": 3910000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -990000000,
+            "profit_median": -990000000,
+            "profit_max": -990000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 2,
+        "go_fraction": 0.3333333333333333,
+        "expected_complete_profit": -401546902.6666667,
+        "expected_available_cash": 3870240180.6666665,
+        "expected_unrestricted_earned": 247953100.0,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.3229166666666667,
+        "mean_paid_jobs": 5.166666666666667,
+        "mean_earned_funded_cycles": 1.6666666666666667,
+        "mean_repeat_buyers": 0.6666666666666666,
+        "mean_reinvested_earned": 78958333.33333333,
+        "profit_min": -990000000,
+        "profit_median": -958500008,
+        "profit_max": 790033667,
+        "paid_jobs_range": [
+          0,
+          16
+        ],
+        "earned_cycles_range": [
+          0,
+          5
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 10000,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 773687450.0,
+            "expected_available_cash": 3750649950.0,
+            "expected_unrestricted_earned": 773687450.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 5.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 236875000.0,
+            "profit_min": 726568300,
+            "profit_median": 820806600,
+            "profit_max": 820806600,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              5,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -958500008.0,
+            "expected_available_cash": 3941499992.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -958500008,
+            "profit_median": -958500008,
+            "profit_max": -958500008,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -990000000.0,
+            "expected_available_cash": 3910000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -990000000,
+            "profit_median": -990000000,
+            "profit_max": -990000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 2,
+        "go_fraction": 0.3333333333333333,
+        "expected_complete_profit": -391604186.0,
+        "expected_available_cash": 3867383314.0,
+        "expected_unrestricted_earned": 257895816.66666666,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.3229166666666667,
+        "mean_paid_jobs": 5.166666666666667,
+        "mean_earned_funded_cycles": 1.6666666666666667,
+        "mean_repeat_buyers": 0.6666666666666666,
+        "mean_reinvested_earned": 78958333.33333333,
+        "profit_min": -990000000,
+        "profit_median": -958500008,
+        "profit_max": 820806600,
+        "paid_jobs_range": [
+          0,
+          16
+        ],
+        "earned_cycles_range": [
+          0,
+          5
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 10500,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 848257816.0,
+            "expected_available_cash": 3729223441.0,
+            "expected_unrestricted_earned": 848257816.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 5.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 236875000.0,
+            "profit_min": 798776709,
+            "profit_median": 897738923,
+            "profit_max": 897738923,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              5,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -958500008.0,
+            "expected_available_cash": 3941499992.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -958500008,
+            "profit_median": -958500008,
+            "profit_max": -958500008,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -990000000.0,
+            "expected_available_cash": 3910000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -990000000,
+            "profit_median": -990000000,
+            "profit_max": -990000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 2,
+        "go_fraction": 0.3333333333333333,
+        "expected_complete_profit": -366747397.3333333,
+        "expected_available_cash": 3860241144.3333335,
+        "expected_unrestricted_earned": 282752605.3333333,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.3229166666666667,
+        "mean_paid_jobs": 5.166666666666667,
+        "mean_earned_funded_cycles": 1.6666666666666667,
+        "mean_repeat_buyers": 0.6666666666666666,
+        "mean_reinvested_earned": 78958333.33333333,
+        "profit_min": -990000000,
+        "profit_median": -958500008,
+        "profit_max": 897738923,
+        "paid_jobs_range": [
+          0,
+          16
+        ],
+        "earned_cycles_range": [
+          0,
+          5
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 12000,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -927000000.0,
+            "expected_available_cash": 3973000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -927000000,
+            "profit_median": -927000000,
+            "profit_max": -927000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -958500008.0,
+            "expected_available_cash": 3941499992.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -958500008,
+            "profit_median": -958500008,
+            "profit_max": -958500008,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -990000000.0,
+            "expected_available_cash": 3910000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -990000000,
+            "profit_median": -990000000,
+            "profit_max": -990000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 0,
+        "go_fraction": 0.0,
+        "expected_complete_profit": -958500002.6666666,
+        "expected_available_cash": 3941499997.3333335,
+        "expected_unrestricted_earned": 0.0,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.0,
+        "mean_paid_jobs": 0.0,
+        "mean_earned_funded_cycles": 0.0,
+        "mean_repeat_buyers": 0.0,
+        "mean_reinvested_earned": 0.0,
+        "profit_min": -990000000,
+        "profit_median": -958500008,
+        "profit_max": -927000000,
+        "paid_jobs_range": [
+          0,
+          0
+        ],
+        "earned_cycles_range": [
+          0,
+          0
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 15000,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -927000000.0,
+            "expected_available_cash": 3973000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -927000000,
+            "profit_median": -927000000,
+            "profit_max": -927000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -958500008.0,
+            "expected_available_cash": 3941499992.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -958500008,
+            "profit_median": -958500008,
+            "profit_max": -958500008,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -990000000.0,
+            "expected_available_cash": 3910000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -990000000,
+            "profit_median": -990000000,
+            "profit_max": -990000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 0,
+        "go_fraction": 0.0,
+        "expected_complete_profit": -958500002.6666666,
+        "expected_available_cash": 3941499997.3333335,
+        "expected_unrestricted_earned": 0.0,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.0,
+        "mean_paid_jobs": 0.0,
+        "mean_earned_funded_cycles": 0.0,
+        "mean_repeat_buyers": 0.0,
+        "mean_reinvested_earned": 0.0,
+        "profit_min": -990000000,
+        "profit_median": -958500008,
+        "profit_max": -927000000,
+        "paid_jobs_range": [
+          0,
+          0
+        ],
+        "earned_cycles_range": [
+          0,
+          0
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": "first10500-repeat12000",
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 1039576380.0,
+            "expected_available_cash": 3674251380.0,
+            "expected_unrestricted_earned": 1039576380.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 5.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 236875000.0,
+            "profit_min": 983009400,
+            "profit_median": 1096143360,
+            "profit_max": 1096143360,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              5,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -958500008.0,
+            "expected_available_cash": 3941499992.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -958500008,
+            "profit_median": -958500008,
+            "profit_max": -958500008,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -990000000.0,
+            "expected_available_cash": 3910000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -990000000,
+            "profit_median": -990000000,
+            "profit_max": -990000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 2,
+        "go_fraction": 0.3333333333333333,
+        "expected_complete_profit": -302974542.6666667,
+        "expected_available_cash": 3841917124.0,
+        "expected_unrestricted_earned": 346525460.0,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.3229166666666667,
+        "mean_paid_jobs": 5.166666666666667,
+        "mean_earned_funded_cycles": 1.6666666666666667,
+        "mean_repeat_buyers": 0.6666666666666666,
+        "mean_reinvested_earned": 78958333.33333333,
+        "profit_min": -990000000,
+        "profit_median": -958500008,
+        "profit_max": 1096143360,
+        "paid_jobs_range": [
+          0,
+          16
+        ],
+        "earned_cycles_range": [
+          0,
+          5
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      }
+    ],
+    "True": [
+      {
+        "price_multiplier_bps": 9000,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 622946704.0,
+            "expected_available_cash": 3791902954.0,
+            "expected_unrestricted_earned": 622946704.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 4.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 189500000.0,
+            "profit_min": 580551469,
+            "profit_median": 665341939,
+            "profit_max": 665341939,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              4,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 423775991.0,
+            "expected_available_cash": 3812057241.0,
+            "expected_unrestricted_earned": 423775991.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 3.5,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 179593753.5,
+            "profit_min": 292200521,
+            "profit_median": 555351461,
+            "profit_max": 555351461,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              3,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 398575998.0,
+            "expected_available_cash": 3786857248.0,
+            "expected_unrestricted_earned": 398575998.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 3.5,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 193375000.0,
+            "profit_min": 267000528,
+            "profit_median": 530151468,
+            "profit_max": 530151468,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              3,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 6,
+        "go_fraction": 1.0,
+        "expected_complete_profit": 481766231.0,
+        "expected_available_cash": 3796939147.6666665,
+        "expected_unrestricted_earned": 481766231.0,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.8854166666666666,
+        "mean_paid_jobs": 14.166666666666666,
+        "mean_earned_funded_cycles": 3.6666666666666665,
+        "mean_repeat_buyers": 2.0,
+        "mean_reinvested_earned": 187489584.5,
+        "profit_min": 267000528,
+        "profit_median": 555351461,
+        "profit_max": 665341939,
+        "paid_jobs_range": [
+          12,
+          16
+        ],
+        "earned_cycles_range": [
+          3,
+          4
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 9500,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 697517077.5,
+            "expected_available_cash": 3770476452.5,
+            "expected_unrestricted_earned": 697517077.5,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 4.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 189500000.0,
+            "profit_min": 652759885,
+            "profit_median": 742274270,
+            "profit_max": 742274270,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              4,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 488827992.0,
+            "expected_available_cash": 3793274867.0,
+            "expected_unrestricted_earned": 488827992.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 4.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 205250004.0,
+            "profit_min": 350096107,
+            "profit_median": 627559877,
+            "profit_max": 627559877,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              4,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 463627999.5,
+            "expected_available_cash": 3768074874.5,
+            "expected_unrestricted_earned": 463627999.5,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 4.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 221000000.0,
+            "profit_min": 324896114,
+            "profit_median": 602359885,
+            "profit_max": 602359885,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              4,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 6,
+        "go_fraction": 1.0,
+        "expected_complete_profit": 549991023.0,
+        "expected_available_cash": 3777275398.0,
+        "expected_unrestricted_earned": 549991023.0,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.8854166666666666,
+        "mean_paid_jobs": 14.166666666666666,
+        "mean_earned_funded_cycles": 4.0,
+        "mean_repeat_buyers": 2.0,
+        "mean_reinvested_earned": 205250001.33333334,
+        "profit_min": 324896114,
+        "profit_median": 627559877,
+        "profit_max": 742274270,
+        "paid_jobs_range": [
+          12,
+          16
+        ],
+        "earned_cycles_range": [
+          4,
+          4
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 9800,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 742259300.0,
+            "expected_available_cash": 3757620550.0,
+            "expected_unrestricted_earned": 742259300.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 5.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 236875000.0,
+            "profit_min": 696084933,
+            "profit_median": 788433667,
+            "profit_max": 788433667,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              5,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 527859191.0,
+            "expected_available_cash": 3782005441.0,
+            "expected_unrestricted_earned": 527859191.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 4.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 205250004.0,
+            "profit_min": 384833457,
+            "profit_median": 670884925,
+            "profit_max": 670884925,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              4,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 502659198.5,
+            "expected_available_cash": 3756805448.5,
+            "expected_unrestricted_earned": 502659198.5,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 4.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 221000000.0,
+            "profit_min": 359633464,
+            "profit_median": 645684933,
+            "profit_max": 645684933,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              4,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 6,
+        "go_fraction": 1.0,
+        "expected_complete_profit": 590925896.5,
+        "expected_available_cash": 3765477146.5,
+        "expected_unrestricted_earned": 590925896.5,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.8854166666666666,
+        "mean_paid_jobs": 14.166666666666666,
+        "mean_earned_funded_cycles": 4.333333333333333,
+        "mean_repeat_buyers": 2.0,
+        "mean_reinvested_earned": 221041668.0,
+        "profit_min": 359633464,
+        "profit_median": 670884925,
+        "profit_max": 788433667,
+        "paid_jobs_range": [
+          12,
+          16
+        ],
+        "earned_cycles_range": [
+          4,
+          5
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 10000,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 772087450.0,
+            "expected_available_cash": 3749049950.0,
+            "expected_unrestricted_earned": 772087450.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 5.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 236875000.0,
+            "profit_min": 724968300,
+            "profit_median": 819206600,
+            "profit_max": 819206600,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              5,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 553879997.5,
+            "expected_available_cash": 3774492497.5,
+            "expected_unrestricted_earned": 553879997.5,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 4.5,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 230906254.5,
+            "profit_min": 407991697,
+            "profit_median": 699768298,
+            "profit_max": 699768298,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              4,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 528680000.0,
+            "expected_available_cash": 3749292500.0,
+            "expected_unrestricted_earned": 528680000.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 4.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 221000000.0,
+            "profit_min": 382791700,
+            "profit_median": 674568300,
+            "profit_max": 674568300,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              4,
+              4
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 6,
+        "go_fraction": 1.0,
+        "expected_complete_profit": 618215815.8333334,
+        "expected_available_cash": 3757611649.1666665,
+        "expected_unrestricted_earned": 618215815.8333334,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.8854166666666666,
+        "mean_paid_jobs": 14.166666666666666,
+        "mean_earned_funded_cycles": 4.5,
+        "mean_repeat_buyers": 2.0,
+        "mean_reinvested_earned": 229593751.5,
+        "profit_min": 382791700,
+        "profit_median": 699768298,
+        "profit_max": 819206600,
+        "paid_jobs_range": [
+          12,
+          16
+        ],
+        "earned_cycles_range": [
+          4,
+          5
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 10500,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 846657816.0,
+            "expected_available_cash": 3727623441.0,
+            "expected_unrestricted_earned": 846657816.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 5.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 236875000.0,
+            "profit_min": 797176709,
+            "profit_median": 896138923,
+            "profit_max": 896138923,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              5,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -958500008.0,
+            "expected_available_cash": 3941499992.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -958500008,
+            "profit_median": -958500008,
+            "profit_max": -958500008,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 593731994.5,
+            "expected_available_cash": 3730510119.5,
+            "expected_unrestricted_earned": 593731994.5,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.84375,
+            "mean_paid_jobs": 13.5,
+            "mean_earned_funded_cycles": 4.5,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 248625000.0,
+            "profit_min": 440687280,
+            "profit_median": 746776709,
+            "profit_max": 746776709,
+            "paid_jobs_range": [
+              12,
+              15
+            ],
+            "earned_cycles_range": [
+              4,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 4,
+        "go_fraction": 0.6666666666666666,
+        "expected_complete_profit": 160629934.16666666,
+        "expected_available_cash": 3799877850.8333335,
+        "expected_unrestricted_earned": 480129936.8333333,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.6041666666666666,
+        "mean_paid_jobs": 9.666666666666666,
+        "mean_earned_funded_cycles": 3.1666666666666665,
+        "mean_repeat_buyers": 1.3333333333333333,
+        "mean_reinvested_earned": 161833333.33333334,
+        "profit_min": -958500008,
+        "profit_median": 746776709,
+        "profit_max": 896138923,
+        "paid_jobs_range": [
+          0,
+          16
+        ],
+        "earned_cycles_range": [
+          0,
+          5
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 12000,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 1070368940.0,
+            "expected_available_cash": 3663343940.0,
+            "expected_unrestricted_earned": 1070368940.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 5.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 236875000.0,
+            "profit_min": 1013801960,
+            "profit_median": 1126935920,
+            "profit_max": 1126935920,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              5,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -958500008.0,
+            "expected_available_cash": 3941499992.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -958500008,
+            "profit_median": -958500008,
+            "profit_max": -958500008,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -990000000.0,
+            "expected_available_cash": 3910000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -990000000,
+            "profit_median": -990000000,
+            "profit_max": -990000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 2,
+        "go_fraction": 0.3333333333333333,
+        "expected_complete_profit": -292710356.0,
+        "expected_available_cash": 3838281310.6666665,
+        "expected_unrestricted_earned": 356789646.6666667,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.3229166666666667,
+        "mean_paid_jobs": 5.166666666666667,
+        "mean_earned_funded_cycles": 1.6666666666666667,
+        "mean_repeat_buyers": 0.6666666666666666,
+        "mean_reinvested_earned": 78958333.33333333,
+        "profit_min": -990000000,
+        "profit_median": -958500008,
+        "profit_max": 1126935920,
+        "paid_jobs_range": [
+          0,
+          16
+        ],
+        "earned_cycles_range": [
+          0,
+          5
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": 15000,
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -927000000.0,
+            "expected_available_cash": 3973000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -927000000,
+            "profit_median": -927000000,
+            "profit_max": -927000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -958500008.0,
+            "expected_available_cash": 3941499992.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -958500008,
+            "profit_median": -958500008,
+            "profit_max": -958500008,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -990000000.0,
+            "expected_available_cash": 3910000000.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -990000000,
+            "profit_median": -990000000,
+            "profit_max": -990000000,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 0,
+        "go_fraction": 0.0,
+        "expected_complete_profit": -958500002.6666666,
+        "expected_available_cash": 3941499997.3333335,
+        "expected_unrestricted_earned": 0.0,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.0,
+        "mean_paid_jobs": 0.0,
+        "mean_earned_funded_cycles": 0.0,
+        "mean_repeat_buyers": 0.0,
+        "mean_reinvested_earned": 0.0,
+        "profit_min": -990000000,
+        "profit_median": -958500008,
+        "profit_max": -927000000,
+        "paid_jobs_range": [
+          0,
+          0
+        ],
+        "earned_cycles_range": [
+          0,
+          0
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      },
+      {
+        "price_multiplier_bps": "first10500-repeat12000",
+        "worlds": {
+          "qualified_differentiation": {
+            "runs": 2,
+            "go_runs": 2,
+            "go_fraction": 1.0,
+            "expected_complete_profit": 1037976380.0,
+            "expected_available_cash": 3672651380.0,
+            "expected_unrestricted_earned": 1037976380.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.96875,
+            "mean_paid_jobs": 15.5,
+            "mean_earned_funded_cycles": 5.0,
+            "mean_repeat_buyers": 2.0,
+            "mean_reinvested_earned": 236875000.0,
+            "profit_min": 981409400,
+            "profit_median": 1094543360,
+            "profit_max": 1094543360,
+            "paid_jobs_range": [
+              15,
+              16
+            ],
+            "earned_cycles_range": [
+              5,
+              5
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "moderate_differentiation": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -958500008.0,
+            "expected_available_cash": 3941499992.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.0,
+            "mean_paid_jobs": 0.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -958500008,
+            "profit_median": -958500008,
+            "profit_max": -958500008,
+            "paid_jobs_range": [
+              0,
+              0
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          },
+          "delayed_high_assurance": {
+            "runs": 2,
+            "go_runs": 0,
+            "go_fraction": 0.0,
+            "expected_complete_profit": -667165100.0,
+            "expected_available_cash": 3940534900.0,
+            "expected_unrestricted_earned": 0.0,
+            "cash_survival_fraction": 1.0,
+            "payable_breach_runs": 0,
+            "win_probability": 0.125,
+            "mean_paid_jobs": 2.0,
+            "mean_earned_funded_cycles": 0.0,
+            "mean_repeat_buyers": 0.0,
+            "mean_reinvested_earned": 0.0,
+            "profit_min": -667165100,
+            "profit_median": -667165100,
+            "profit_max": -667165100,
+            "paid_jobs_range": [
+              2,
+              2
+            ],
+            "earned_cycles_range": [
+              0,
+              0
+            ],
+            "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+          }
+        },
+        "runs": 6,
+        "go_runs": 2,
+        "go_fraction": 0.3333333333333333,
+        "expected_complete_profit": -195896242.66666666,
+        "expected_available_cash": 3851562090.6666665,
+        "expected_unrestricted_earned": 345992126.6666667,
+        "cash_survival_fraction": 1.0,
+        "payable_breach_runs": 0,
+        "win_probability": 0.3645833333333333,
+        "mean_paid_jobs": 5.833333333333333,
+        "mean_earned_funded_cycles": 1.6666666666666667,
+        "mean_repeat_buyers": 0.6666666666666666,
+        "mean_reinvested_earned": 78958333.33333333,
+        "profit_min": -958500008,
+        "profit_median": -667165100,
+        "profit_max": 1094543360,
+        "paid_jobs_range": [
+          0,
+          16
+        ],
+        "earned_cycles_range": [
+          0,
+          5
+        ],
+        "scope": "Equally weighted finite conditional seeded model outcomes, not estimated real customer demand or observed commercial probability"
+      }
+    ]
+  },
+  "policy_sha256": "dba429196ea3f7ccfda74f1d7a639a549e803f7b72e19b6c444b5c4e554bccee",
+  "cohort_sha256": "b91c511a8ea416ebf70a5a90bebdd7275643152852472e53df9d103bb514a002",
+  "confirmation_seeds": [
+    23001001,
+    23001002,
+    23001003,
+    23001004,
+    23001005,
+    23001006
+  ],
+  "adaptation_after_confirmation": false,
+  "objective": "Maximize exploration expected complete-cost profit across equally weighted qualification worlds and fixed common seeds, subject to cash survival and zero payable breaches. Compare NoBid preserving setup-only cash. No win-rate/GO/all-world-perfect-success condition and no private buyer values are given to the selector. Finite-grid conditional optimum, not Nash or observed optimal pricing."
+}
