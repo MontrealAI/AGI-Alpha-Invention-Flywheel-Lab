@@ -32,12 +32,37 @@ def _identifier(value):
     return value
 
 
-def _declared_later(plan):
-    explicit = plan.get('worst_later_reserve', 0)
-    amount(explicit)
+def _selected_contracts(plan, jobs=None):
     selected = plan.get('selected_options', [])
     if not isinstance(selected, list):
         raise ValueError('SELECTED_OBLIGATION_CONTRACTS_REQUIRED')
+    seen = set()
+    for option in selected:
+        if (not isinstance(option, dict) or not {'id', 'kind', 'execution'} <= set(option)
+                or not isinstance(option['execution'], dict)):
+            raise ValueError('TYPED_SELECTED_RESOURCE_CONTRACT_REQUIRED')
+        ident = _identifier(option['id']); _identifier(option['kind'])
+        if ident in seen:
+            raise ValueError('UNIQUE_SELECTED_RESOURCE_IDENTIFIERS_REQUIRED')
+        seen.add(ident)
+        if option['kind'] == 'delivery':
+            execution = option['execution']
+            required = {'job_id', 'customer_id', 'payment_bps', 'payment_fixed_microUSD', 'onboarding_microUSD'}
+            if not required <= set(execution):
+                raise ValueError('EXPLICIT_DELIVERY_EXECUTION_TERMS_REQUIRED')
+            _identifier(execution['job_id']); _identifier(execution['customer_id'])
+            if type(execution['payment_bps']) is not int or not 0 <= execution['payment_bps'] <= 10_000:
+                raise ValueError('DECLARED_PAYMENT_TERMS_REQUIRED')
+            amount(execution['payment_fixed_microUSD']); amount(execution['onboarding_microUSD'])
+            if jobs is not None and execution['job_id'] not in jobs:
+                raise ValueError('ADMITTED_DELIVERY_JOB_REQUIRED')
+    return selected
+
+
+def _declared_later(plan):
+    explicit = plan.get('worst_later_reserve', 0)
+    amount(explicit)
+    selected = _selected_contracts(plan)
     later = 0
     for option in selected:
         if not isinstance(option, dict) or not isinstance(option.get('later_liabilities'), dict) or not option['later_liabilities']:
@@ -51,9 +76,7 @@ def _declared_later(plan):
 def _declared_upfront(plan):
     upfront = plan.get('upfront_cost', 0)
     amount(upfront)
-    selected = plan.get('selected_options', [])
-    if not isinstance(selected, list):
-        raise ValueError('SELECTED_OBLIGATION_CONTRACTS_REQUIRED')
+    selected = _selected_contracts(plan)
     if selected:
         total = 0
         for option in selected:
@@ -159,7 +182,7 @@ def _validate_resolution(tape, proof, receipt, actual, work_sha256, day, jobs, *
         amount(receipt[key])
     if actual != receipt['upfront_incurred_microUSD'] + receipt['later_incurred_microUSD'] or actual + receipt['unused_reserve_microUSD'] != proof['body']['amount_microUSD']:
         raise ValueError('OBLIGATION_RESOLUTION_COST_CONSERVATION')
-    selected = plan.get('selected_options')
+    selected = _selected_contracts(plan, jobs)
     if not isinstance(selected, list) or not selected or any(not isinstance(o, dict) for o in selected):
         raise ValueError('EXPLICIT_SELECTED_OBLIGATION_CONTRACTS_REQUIRED')
     if receipt['upfront_incurred_microUSD'] != _declared_upfront(plan):
@@ -246,6 +269,7 @@ def audit_account(record, *, root, manifest):
         if not isinstance(proof, dict) or digest(proof.get('body')) != event['args']['intent_sha256']:
             raise ValueError('PUBLIC_RESERVATION_INTENT_MISMATCH')
         body = proof['body']
+        _selected_contracts(body['plan'], jobs)
         prior_digest = digest({'config': tape['config'], 'actions_sha256': prefixes[index], 'summary': event['before']})
         if body['expected_state_digest'] != prior_digest or body['day'] != event['day']:
             raise ValueError('PUBLIC_RESERVATION_STALE_STATE_OR_TIME')
@@ -349,6 +373,7 @@ class Account:
             if proof is None or digest(proof.get('body')) != event['args']['intent_sha256']:
                 raise ValueError('NATIVE_RESERVATION_PROOF_MISSING_OR_CHANGED')
             body = proof['body']
+            _selected_contracts(body['plan'], self._owner._exchange.jobs)
             if body['amount_microUSD'] != event['args']['amount'] or body['expected_net_microUSD'] != event['args']['expected_net_value']:
                 raise ValueError('NATIVE_RESERVATION_AMOUNT_PROOF_MISMATCH')
 
@@ -391,6 +416,7 @@ class Account:
             raise ValueError('AUTHORIZED_ACTION_DIGEST_MISMATCH')
         if plan.get('expected_state_digest', expected_state_digest) != expected_state_digest or plan.get('authorized_digest', authorized_digest) != authorized_digest:
             raise ValueError('PLAN_STATE_OR_AUTHORIZATION_MISMATCH')
+        _selected_contracts(plan, self._owner._exchange.jobs)
         body = {'schema': PROOF_SCHEMA, 'scope': 'SIMULATED_LOCAL_INTEGRITY_ONLY',
                 'plan': {k: copy.deepcopy(v) for k, v in plan.items() if k not in {'authorized_digest', 'expected_state_digest'}},
                 'expected_state_digest': expected_state_digest, 'authorized_digest': authorized_digest,

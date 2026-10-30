@@ -3,7 +3,7 @@ Blue Sky and Beyond-Human Foresight: structural discovery, executable strategy i
 
 ## Current default: connected enterprise completion015
 
-The default path operates eight **simulated** 70-day businesses: voluntary buyer choice, qualified orders, executed reconciliation/KPI/evidence work, separate artifact checking, collection, full modeled costs, native earnings reservations, acquisition/capacity and subsequent delivery. Use the [operator guide](docs/connected014/OPERATOR.md), [achieved-results report](docs/completion015/REPORT.md), [inspected PDF](docs/completion015/PAPER.pdf) and [full-record reconstruction commands](docs/completion015/ARTIFACTS.md).
+The default path operates eight **simulated** 70-day businesses: voluntary buyer choice, qualified orders, executed reconciliation/KPI/evidence work, separate artifact checking, collection, full modeled costs, native earnings reservations, acquisition/capacity and subsequent delivery. Use the [operator guide](docs/connected014/OPERATOR.md), [achieved-results report](docs/completion015/REPORT.md), [inspected PDF](docs/completion015/PAPER.pdf) and [full-record reconstruction commands](docs/completion015/ARTIFACTS.md) and [scale-model reconciliation](docs/completion015/SCALE_RECONCILIATION.md).
 
 ```sh
 python3 -m pip install -r requirements-commercial010.txt

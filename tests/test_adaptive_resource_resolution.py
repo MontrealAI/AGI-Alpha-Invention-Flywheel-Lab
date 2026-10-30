@@ -1,10 +1,12 @@
 import copy
+import hashlib
+import hmac
 import json
 import unittest
 from unittest.mock import patch
 
 from adaptive_enterprise.account import action_digest, audit_account
-from commercial.ledger import digest
+from commercial.ledger import canonical, digest
 from tests import test_adaptive_account as fixture
 
 
@@ -207,6 +209,54 @@ class ExplicitResourceResolutionTests(unittest.TestCase):
             self.assertEqual(account.export()['action_proofs'][plan['plan_id']], proof)
             self.reserve(account, plan)
             self.assertEqual(account.snapshot()['summary']['reservedInvestment'], 50_000_000)
+
+    def test_unfinishable_selected_shapes_reject_before_proof_or_funds(self):
+        with self.fixture.open() as account:
+            self.fixture.earn(account); before = account.export(); variants = []
+            for missing in ['id', 'kind', 'execution']:
+                plan = self.plan(); del plan['selected_options'][0][missing]; variants.append(plan)
+            for field, value in [('id', ''), ('kind', None), ('execution', [])]:
+                plan = self.plan(); plan['selected_options'][0][field] = value; variants.append(plan)
+            plan = self.plan(); plan['selected_options'].append(copy.deepcopy(plan['selected_options'][0]))
+            for option in plan['selected_options']: option['upfront_cost'] = 20_000_000
+            variants.append(plan)
+            for execution in [{}, {'job_id': 'unknown', 'customer_id': 'customer', 'payment_bps': True,
+                'payment_fixed_microUSD': 0, 'onboarding_microUSD': 0}]:
+                plan = self.plan(); plan['selected_options'][0].update(kind='delivery', execution=execution); variants.append(plan)
+            for plan in variants:
+                with self.subTest(plan=plan), self.assertRaises(ValueError): self.reserve(account, plan)
+                self.assertEqual(account.export(), before)
+
+    def test_unknown_delivery_job_rejects_admission_audit_export_and_reopen(self):
+        with self.fixture.open() as account:
+            self.fixture.earn(account); plan = self.plan(); plan['selected_options'][0].update(kind='delivery',
+                execution={'job_id': 'not-admitted', 'customer_id': 'customer', 'payment_bps': 0,
+                    'payment_fixed_microUSD': 0, 'onboarding_microUSD': 0})
+            before = account.export()
+            with self.assertRaisesRegex(ValueError, 'ADMITTED_DELIVERY_JOB_REQUIRED'): self.reserve(account, plan)
+            self.assertEqual(account.export(), before)
+            state = account.snapshot()['state_digest']; authorized = action_digest(plan, state, 50_000_000, 10_000_000)
+            body = {'schema': 'agi-alpha/adaptive012-action-proof/v1', 'scope': 'SIMULATED_LOCAL_INTEGRITY_ONLY',
+                'plan': plan, 'expected_state_digest': state, 'authorized_digest': authorized,
+                'amount_microUSD': 50_000_000, 'expected_net_microUSD': 10_000_000, 'day': 1}
+            proof = {'body': body, 'signature': hmac.new(account._key, canonical(body), hashlib.sha256).hexdigest()}
+            account._proofs[plan['plan_id']] = proof
+            account._proofs_path.write_bytes(canonical(account._proofs) + b'\n')
+            account._owner.execute('reserve', {'id': plan['plan_id'], 'amount': 50_000_000,
+                'expected_net_value': 10_000_000, 'intent_sha256': digest(body)}, 1)
+            record = copy.deepcopy(before); record['action_proofs'][plan['plan_id']] = proof
+            record['ledger'] = account._owner.export(); record['snapshot'] = account.snapshot()
+            with self.assertRaisesRegex(ValueError, 'ADMITTED_DELIVERY_JOB_REQUIRED'):
+                audit_account(record, root=self.fixture.root, manifest=self.fixture.manifest)
+            with self.assertRaisesRegex(ValueError, 'ADMITTED_DELIVERY_JOB_REQUIRED'): account.export()
+        with self.assertRaisesRegex(ValueError, 'ADMITTED_DELIVERY_JOB_REQUIRED'): self.fixture.open()
+
+    def test_extensible_growth_kind_with_declared_execution_remains_finishable(self):
+        with self.fixture.open() as account:
+            self.fixture.earn(account); plan = self.plan(); plan['selected_options'][0].update(kind='custom-resource', execution={})
+            self.reserve(account, plan); receipt = self.receipt(account, plan)
+            account.finish(plan['plan_id'], 40_000_000, 'b' * 64, 1, obligation_receipt=receipt)
+            self.assertTrue(account.audit()['accepted'])
 
 
 if __name__ == '__main__':
