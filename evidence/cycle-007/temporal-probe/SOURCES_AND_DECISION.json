@@ -1,0 +1,25 @@
+{
+  "retrieved": "2026-10-30",
+  "authorship": "Agent-authored SQLite/ASGI reproduction derived from the documented dependency semantics and public discussion. It is not an upstream application, buyer delivery or a production incident.",
+  "fastapi_version": "0.162.0",
+  "fastapi_tag_commit": "7a0a3f0b286c6c865cf4398ea0e957a87b8bffa4",
+  "docs": [
+    {
+      "url": "https://fastapi.tiangolo.com/advanced/advanced-dependencies/",
+      "scope": "Official description of function/request cleanup and streaming session lifetime",
+      "source_url": "https://github.com/fastapi/fastapi/blob/7a0a3f0b286c6c865cf4398ea0e957a87b8bffa4/docs/en/docs/advanced/advanced-dependencies.md"
+    },
+    {
+      "url": "https://github.com/fastapi/fastapi/discussions/14151",
+      "scope": "Dated2025 user reports and maintainer response about commit-before-response; do not present as unresolved current FastAPI defect"
+    }
+  ],
+  "first_decision": "RETAIN_INCUMBENT: explicit endpoint commit plus request-scoped resource cleanup satisfies both measured obligations. Single-scope failures justify an effect-factorization measurement exercise, not a novel enabling-capability claim.",
+  "limitations": [
+    "Local ASGI send boundary is measured, not real network receipt or distributed durability.",
+    "SQLite deferred foreign-key failure is an authored adversarial case. No SQLAlchemy/PostgreSQL or observed customer workflow evaluated.",
+    "One valid and one commit-failure case per arm are development probes, not protected statistical confirmation.",
+    "Current FastAPI version resolved through free PyPI installation; paid models, subscriptions and customer contact were not used.",
+    "Installation/download wall time and monetary research overhead are not measured by the subsecond execution receipt."
+  ]
+}

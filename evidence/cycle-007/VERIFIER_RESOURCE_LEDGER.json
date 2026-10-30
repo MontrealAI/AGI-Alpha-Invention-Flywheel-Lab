@@ -1,0 +1,62 @@
+{
+  "schema": "agi-alpha/prospective-resources006/v1",
+  "capacity_cpu_seconds": 5400,
+  "capacity_storage_bytes": 6442450944,
+  "state": "active",
+  "runs": {
+    "compatibility-setup": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 180,
+        "cpu_seconds": 120,
+        "memory_bytes": 1073741824,
+        "output_bytes": 10485760,
+        "storage_bytes": 31457280
+      },
+      "budget_cpu_seconds": 120,
+      "budget_storage_bytes": 4118,
+      "receipt_sha256": "462fa5ae1b5050c0749bee4056dda5e5f8db96ba61aa238aaa0548f98627c579",
+      "outcome": "failed",
+      "observed_waited_cpu_seconds": 0.055120999999999996,
+      "observed_output_bytes": 4118,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "compatibility-setup-v2": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 180,
+        "cpu_seconds": 120,
+        "memory_bytes": 1073741824,
+        "output_bytes": 10485760,
+        "storage_bytes": 31457280
+      },
+      "budget_cpu_seconds": 120,
+      "budget_storage_bytes": 4180,
+      "receipt_sha256": "d7ecc36352147049582f05159a4f35abb0111602d285a8707ace83344322af23",
+      "outcome": "failed",
+      "observed_waited_cpu_seconds": 0.24696099999999999,
+      "observed_output_bytes": 4180,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    },
+    "compatibility-final": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 120,
+        "cpu_seconds": 60,
+        "memory_bytes": 1073741824,
+        "output_bytes": 10485760,
+        "storage_bytes": 31457280
+      },
+      "budget_cpu_seconds": 60,
+      "budget_storage_bytes": 7815,
+      "receipt_sha256": "5d002b94e6ffa8599651665ba7d5e1ce8b6d17a7040a3fb9c7d59b895abc9617",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 4.099159,
+      "observed_output_bytes": 7815,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    }
+  }
+}
