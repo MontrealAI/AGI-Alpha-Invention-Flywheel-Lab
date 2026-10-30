@@ -1,0 +1,204 @@
+"""Freeze, operate, resume, independently audit and package one enterprise path."""
+from __future__ import annotations
+import argparse
+import copy
+import gzip
+import hashlib
+import json
+import multiprocessing
+import os
+from pathlib import Path
+import resource
+import shutil
+import subprocess
+import sys
+import time
+import zipfile
+from concurrent.futures import ProcessPoolExecutor
+from adaptive_enterprise.runner import source_paths as inherited_paths
+from commercial.ledger import canonical, digest
+from commercial.persistence import atomic_bytes
+from enterprise.runner import RunLock
+from .engine import default_config
+
+ROOT=Path(__file__).resolve().parents[1]
+
+def source_paths(root):
+    names=set(inherited_paths(root))
+    for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*')]:
+        names.update(p.relative_to(root).as_posix() for p in (root/folder).glob(pattern) if p.is_file())
+    names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','docs/connected014/OPERATOR.md','AGENTS.md','.github/workflows/connected014.yml'] if (root/p).is_file())
+    return sorted(name for name in names if (root/name).is_file())
+
+def identity(root):
+    root=Path(root).resolve();files={}
+    for name in source_paths(root):
+        p=root/name
+        if p.is_symlink() or any(q.is_symlink() for q in p.parents):raise ValueError('SOURCE_SYMLINK_REFUSED')
+        files[name]=hashlib.sha256(p.read_bytes()).hexdigest()
+    return {'files':files,'sha256':digest(files)}
+
+def protocol(smoke=False):
+    return {'schema':'agi-alpha/connected014-protocol/v1','edition':'development-smoke' if smoke else 'connected014-confirmation-001','scope':'CONDITIONAL_SIMULATION',
+        'central_seeds':[14001] if smoke else [2610301401,2610301402,2610301403,2610301404],
+        'adverse_seeds':[] if smoke else [2610301501,2610301502],'channel_control_seeds':[] if smoke else [2610301401,2610301402],
+        'development_excluded':[14001,14002,14003,14004,14005],'cases':['central'] if smoke else ['central','weak_channel','price_pressure','delayed_and_expensive'],
+        'arms':['baseline','growth'],'case_design':'Central4pairedseeds; three separatelydeclared adversecases2pairedseeds; channel-onlyoptioncontrol2centralseeds. Common exogenous customer/day/service payment and need identities; endogenous activity and artifact assignment may differ.',
+        'risk':{'central_minimum_commercial_fraction':.75,'central_minimum_cash_survival_fraction':1.,'growth_minimum_positive_paired_fraction':.75,'central_maximum_loss_microUSD':750_000_000,'hard_native_and_semantic_integrity':True},
+        'completion':{'minimum_collected_deliveries':12,'minimum_paying_customers':3,'minimum_profitable_earned_continuations':2,'positive_complete_cost_profit':True,'positive_available_earnings':True,'minimum_repeat_customers':2,'obligations_covered':True},
+        'comparison':'Equalstartingcapital,services,completequality,privatebuyer/marketassumptionsandcontractswithinpair. Baseline lacks added paidchannel/capacityoption; this estimates commercial optionvalue, NOT selectionalgorithm superiority. Channelarm isolates capacityoption.',
+        'selection':'Ordinary observed-contribution heuristic, frozen before confirmation; no hidden buyer values, future shocks or evaluator case labels in seller policy. Decline/retaincash allowed. No developmentcontroller tournament.',
+        'clock':'Integerhours/native dayfield; production2hours, acceptance1hour, clearing48hours baseline. Expiry/reinvestment eventcausal; tailobligations retained. Calendar epoch2026-11-01T00Z.',
+        'resource_billing':'Actual deterministic executors/checkers, no paidmodelcalls. Modeled completecost envelopes; host/modelbilling unavailable. Sensitivities do not turn assumptions into calibration.',
+        'recovery':'Live-state event intent persisted before mutations; signed command WAL/native CAS recovers exact commitments. Reopen requires retained local simulation key. Public copies support audit/reproduction, not takeover.',
+        'inference':'Finite authored worlds, not calibrated real success probabilities. Historical economic results never relabeled. Native record aggregation is exact accounting, not validated forward-demand aggregation.',
+        'service_cohort_seed':14013026,'workers':4}
+
+def config_for(case,smoke=False):
+    cfg=default_config()
+    if smoke:cfg['horizon_days']=21;cfg['customer_pool']=12
+    if case=='weak_channel':
+        for c in cfg['channels'].values():c['realization_bps']=1000;c['overlap_bps']=8500;c['activation_reliability_bps']=7000
+        cfg['retention_bps']=7500
+    elif case=='price_pressure':cfg['price_pressure_bps']=5500;cfg['value_bps']=7000;cfg['arrival_bps']=4500
+    elif case=='delayed_and_expensive':
+        cfg['clearing_hours']=168;cfg['nonpayment_bps']=1200;cfg['production_cost']*=3;cfg['supplier_outage_start_day']=18;cfg['supplier_outage_days']=10
+        for c in cfg['channels'].values():c['price_microUSD']*=10;c['lead_days']*=3
+    elif case!='central':raise ValueError('REGISTERED_CASE_REQUIRED')
+    return cfg
+
+def tasks(p):
+    result=[]
+    for seed in p['central_seeds']:
+        for arm in p['arms']:result.append({'seed':seed,'case':'central','arm':arm})
+    for seed in p['adverse_seeds']:
+        for case in p['cases'][1:]:
+            for arm in p['arms']:result.append({'seed':seed,'case':case,'arm':arm})
+    for seed in p['channel_control_seeds']:result.append({'seed':seed,'case':'central','arm':'channel'})
+    for row in result:row['id']=f"{row['seed']}-{row['case']}-{row['arm']}"
+    return result
+
+def write(path,value):atomic_bytes(Path(path),canonical(value)+b'\n')
+
+def freeze(output,smoke=False):
+    output=Path(output).resolve()
+    if output.exists() or any(p.is_symlink() for p in [output,*output.parents]):raise FileExistsError('NEW_NORMALIZED_OUTPUT_REQUIRED')
+    output.mkdir(parents=True);source=identity(ROOT)
+    for name in source['files']:
+        target=output/'source'/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,target)
+    if identity(output/'source')!=source:raise ValueError('FROZEN_COPY_CHANGED')
+    p=protocol(smoke)
+    if not smoke:
+        registration=json.loads((ROOT/'campaign/connected-014/PREREGISTRATION.json').read_text())
+        if registration!={'protocol':p,'configs':{case:config_for(case) for case in p['cases']}}:raise ValueError('PUBLIC_PREREGISTRATION_DOES_NOT_MATCH')
+    f={'schema':'agi-alpha/connected014-freeze/v1','source':source,'protocol':p,'configs':{case:config_for(case,smoke) for case in p['cases']},'registered_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'git_commit':None}
+    try:f['git_commit']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True,stderr=subprocess.DEVNULL).strip()
+    except (OSError,subprocess.CalledProcessError):pass
+    f['sha256']=digest(f);write(output/'FROZEN.json',f);return output
+
+def read_freeze(output):
+    f=json.loads((output/'FROZEN.json').read_text());expected=f.pop('sha256')
+    if digest(f)!=expected or identity(output/'source')!=f['source']:raise ValueError('FROZEN_SOURCE_OR_CONFIGURATION_CHANGED')
+    smoke=f['protocol'].get('edition')=='development-smoke';expected_protocol=protocol(smoke)
+    if f['protocol']!=expected_protocol or f['configs']!={case:config_for(case,smoke) for case in expected_protocol['cases']}:raise ValueError('FROZEN_REGISTRATION_NOT_REDERIVED_FROM_SOURCE')
+    f['sha256']=expected;return f
+
+def _task(payload):
+    root,manifest,output,f,task=payload
+    from .engine import run_world
+    from .verify import audit
+    from .scale import analyze
+    cfg=f['configs'][task['case']];directory=Path(output)/'worlds'/task['id'];start=time.process_time()
+    result=run_world(root,manifest,cfg,task['seed'],task['arm'],directory,source=f['source']);result['case']=task['case']
+    receipt=audit(root,manifest,result);growth=analyze(result)
+    write(directory/'RESULT.json',result);write(directory/'AUDIT.json',receipt);write(directory/'GROWTH.json',growth)
+    return {'task':task,'result':brief(result),'result_sha256':digest(result),'audit':receipt,'growth':growth,'cpu_seconds':time.process_time()-start}
+
+def brief(r):
+    return {k:r[k] for k in ['seed','case','arm','summary','complete','accepted_jobs','paid_jobs','customers','repeat_customers','profitable_earned_continuations','conditional_simulated_commercial_success','productive_expansion','processed_events']}
+
+def _summary(f,items,results):
+    from .scale import compare,frontier
+    central=[r for r in results if r['case']=='central' and r['arm']=='growth'];risk=f['protocol']['risk'];success=sum(r['conditional_simulated_commercial_success'] for r in central)
+    covered=lambda r:r['summary']['payables']==0 and not r['summary']['investmentStopped'] and r['summary']['cash']>=sum(r['summary'][x] for x in ['tailReserve','custodyReserve','workingCapital'])
+    fraction=success/len(central);survival=sum(covered(r) for r in central)/len(central)
+    growth_evidence=any(x['later_settled_order_ids'] for r in central for x in r['productive_expansion'])
+    paired=compare(results);central_pairs=[p for p in paired['pairs'] if p['identity'][1]=='central'];positive_growth=sum(p['collected_delivery_delta']>0 and p['profit_delta_microUSD']>0 for p in central_pairs);growth_fraction=positive_growth/len(central_pairs) if central_pairs else 0
+    growth_success=growth_evidence and growth_fraction>=risk['growth_minimum_positive_paired_fraction'] and sum(p['profit_delta_microUSD'] for p in central_pairs)>0
+    return {'schema':'agi-alpha/connected014-report/v1','scope':'CONDITIONAL_SIMULATION','source_sha256':f['source']['sha256'],'frozen_sha256':f['sha256'],'worlds':len(results),'all_independent_audits_passed':all(i['audit'].get('accepted',False) for i in items),
+        'outcomes':{'operating_implementation':'EXECUTED_WITH_INDEPENDENT_FINANCIAL_AND_OPERATING_SEMANTIC_AUDIT' if all(i['audit'].get('accepted',False) for i in items) else 'NOT_QUALIFIED','commercial_result':'CONDITIONAL_SUCCESS' if fraction>=risk['central_minimum_commercial_fraction'] and survival>=risk['central_minimum_cash_survival_fraction'] and min(r['summary']['profit'] for r in central)>=-risk['central_maximum_loss_microUSD'] else 'NOT_ESTABLISHED_IN_REGISTERED_REGION','growth_result':'CONDITIONAL_INCREASE_IN_PROFITABLE_DELIVERY' if growth_success else 'CAPABILITY_USE_WITHOUT_QUALIFIED_MATCHED_GROWTH' if growth_evidence else 'NOT_ESTABLISHED','billion_native_scale':'NOT_ESTABLISHED'},
+        'central':{'runs':len(central),'commercial_successes':success,'fraction':fraction,'cash_survival_fraction':survival,'minimum_profit':min(r['summary']['profit'] for r in central),'maximum_profit':max(r['summary']['profit'] for r in central),'minimum_paid_jobs':min(r['paid_jobs'] for r in central),'maximum_paid_jobs':max(r['paid_jobs'] for r in central)},
+        'growth_criterion':{'positive_delivery_and_profit_pairs':positive_growth,'central_pairs':len(central_pairs),'fraction':growth_fraction,'minimum_registered_fraction':risk['growth_minimum_positive_paired_fraction']},'representative':brief(central[0]),'comparisons':paired,'frontier':frontier(results),'protocol':f['protocol'],'worlds_index':[{k:i[k] for k in ['task','result_sha256','cpu_seconds']} for i in items],
+        'next_action':'Use matched realized incremental contribution to retain/renew channels and capacity; close finite artifact/audience/working-capital constraints with a new costed qualified capability before claiming a native scale bridge. Historical aggregate billion projections remain separate hypotheses.',
+        'actual_commerce':{'customers':0,'collections':0,'profit':None},'limits':default_config()['limits']}
+
+def worker(output):
+    output=Path(output).resolve();f=read_freeze(output);root=output/'source'
+    from adaptive_enterprise.instruments import prepare_services
+    with RunLock(output):
+        manifest_path=output/'SERVICES.json'
+        if manifest_path.exists():manifest=json.loads(manifest_path.read_text())
+        else:manifest=prepare_services(root,'service-inputs',cohort_seed=f['protocol']['service_cohort_seed']);write(manifest_path,manifest)
+        payloads=[(str(root),manifest,str(output),f,t) for t in tasks(f['protocol'])];items=[]
+        with ProcessPoolExecutor(max_workers=min(f['protocol']['workers'],len(payloads)),mp_context=multiprocessing.get_context('spawn')) as pool:
+            for item in pool.map(_task,payloads):
+                items.append(item);write(output/'PROGRESS.json',{'completed':len(items),'total':len(payloads),'last_task':item['task']['id']})
+        results=[json.loads((output/'worlds'/i['task']['id']/'RESULT.json').read_text()) for i in items]
+        report=_summary(f,items,results);write(output/'REPORT.json',report);write(output/'COMPLETE.json',{'source_sha256':f['source']['sha256'],'report_sha256':digest(report),'worlds':len(items)});return report
+
+def audit_output(output):
+    output=Path(output).resolve();f=read_freeze(output);manifest=json.loads((output/'SERVICES.json').read_text());receipts=[];items=[];results=[]
+    from .verify import audit
+    from .scale import analyze
+    from adaptive_enterprise.runner import _validate_manifest_origin
+    cohort=_validate_manifest_origin({'protocol':{'service_cohort_seed':f['protocol']['service_cohort_seed']}},manifest,output/'source')
+    stored=json.loads((output/'REPORT.json').read_text());indices=stored.get('worlds_index',[])
+    expected_tasks=tasks(f['protocol'])
+    if len(indices)!=len(expected_tasks):raise ValueError('REGISTERED_WORLD_INDEX_REQUIRED')
+    for task,index in zip(expected_tasks,indices):
+        directory=output/'worlds'/task['id'];result=json.loads((directory/'RESULT.json').read_text())
+        if any(result[k]!=task[k] for k in ['seed','case','arm']) or result['config']!=f['configs'][task['case']] or result['source']!=f['source'] or not result['complete']:raise ValueError('WORLD_CONFIGURATION_OR_TASK_CHANGED')
+        if index['task']!=task or index['result_sha256']!=digest(result) or type(index['cpu_seconds']) not in {int,float} or index['cpu_seconds']<0:raise ValueError('WORLD_RESULT_INDEX_BINDING_CHANGED')
+        checked=audit(output/'source',manifest,result);growth=analyze(result)
+        if json.loads((directory/'GROWTH.json').read_text())!=growth:raise ValueError('GROWTH_REPORT_NOT_REDERIVED_FROM_NATIVE_RECORDS')
+        if json.loads((directory/'AUDIT.json').read_text())!=checked:raise ValueError('WORLD_AUDIT_RECEIPT_CHANGED')
+        receipts.append(checked);results.append(result);items.append({'task':task,'result':brief(result),'result_sha256':digest(result),'audit':checked,'growth':growth,'cpu_seconds':index['cpu_seconds']})
+    expected_report=_summary(f,items,results)
+    if stored!=expected_report:raise ValueError('TOP_LEVEL_COMMERCIAL_REPORT_CHANGED')
+    complete={'source_sha256':f['source']['sha256'],'report_sha256':digest(expected_report),'worlds':len(items)}
+    if json.loads((output/'COMPLETE.json').read_text())!=complete:raise ValueError('COMPLETION_RECEIPT_CHANGED')
+    receipt={'schema':'agi-alpha/connected014-package-audit/v1','source_sha256':f['source']['sha256'],'worlds':len(receipts),'accepted':all(r['accepted'] for r in receipts),'scope':'NATIVE_FINANCE_AND_OPERATING_SEMANTICS_WITH_ARTIFACT_REEXECUTION_AND_REPORT_REDERIVATION','service_cohort':cohort,'simulation_keys_required':False,'resource_cpu_metadata':'Command resource observations retained, not independently reproduced timing measurements'};write(output/'PACKAGE_AUDIT.json',receipt);return receipt
+
+def package(output,archive):
+    output=Path(output).resolve();archive=Path(archive).resolve();read_freeze(output)
+    checked=audit_output(output)
+    if not checked['accepted']:raise ValueError('ACCEPTED_COMPLETE_PACKAGE_AUDIT_REQUIRED')
+    if archive.exists() or output in archive.parents:raise ValueError('NEW_ARCHIVE_OUTSIDE_OUTPUT_REQUIRED')
+    with zipfile.ZipFile(archive,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as z:
+        for p in sorted(output.rglob('*')):
+            if not p.is_file() or p.is_symlink() or p.name.endswith('.adaptive-simulation-key') or p.suffix in {'.sqlite','-wal','-shm'} or '__pycache__' in p.parts or p.name in {'WORKER.lock','RUN.lock'}:continue
+            if '.sqlite' in p.name:continue
+            z.write(p,p.relative_to(output).as_posix())
+    return {'bytes':archive.stat().st_size,'sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),'scope':'KEY_FREE_AUDIT_AND_FRESH_REPRODUCTION_NOT_ACCOUNT_TAKEOVER'}
+
+def main():
+    p=argparse.ArgumentParser();sub=p.add_subparsers(dest='command',required=True)
+    for name in ['run','resume','audit','_worker']:
+        s=sub.add_parser(name);s.add_argument('--output',required=True)
+        if name=='run':s.add_argument('--smoke',action='store_true')
+    s=sub.add_parser('package');s.add_argument('--output',required=True);s.add_argument('--archive',required=True)
+    args=p.parse_args();raw_output=Path(args.output).expanduser()
+    if any(q.is_symlink() for q in [raw_output,*raw_output.parents]):raise ValueError('OUTPUT_SYMLINK_REFUSED')
+    output=raw_output.resolve()
+    if args.command=='run':freeze(output,args.smoke)
+    if args.command in {'run','resume','audit'}:
+        frozen=read_freeze(output);command='_worker' if args.command!='audit' else '_audit'
+        if command=='_audit':
+            code='from connected_enterprise.runner import audit_output; import sys,json; print(json.dumps(audit_output(sys.argv[1]),sort_keys=True))'
+            return subprocess.call([sys.executable,'-c',code,str(output)],cwd=output/'source')
+        return subprocess.call([sys.executable,'-m','connected_enterprise','_worker','--output',str(output)],cwd=output/'source')
+    if args.command=='_worker':print(json.dumps(worker(output),sort_keys=True));return 0
+    if args.command=='package':print(json.dumps(package(output,args.archive),sort_keys=True));return 0
+    return 1
+
+if __name__=='__main__':raise SystemExit(main())

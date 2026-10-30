@@ -1,0 +1,124 @@
+{
+  "schema": "agi-alpha/connected014-public-package-replay/v1",
+  "accepted": true,
+  "scope": "DETERMINISTIC_REPRODUCTION_OF_EXISTING_FROZEN_EVIDENCE; NOT_FRESH_COMMERCIAL_CONFIRMATION",
+  "source_publication_commit": "12d5e5177c61a2d46cc502cc1b161c03c8016f16",
+  "frozen_source_commit": "cff284ffdbd930f63c2dd182870aa9f952672624",
+  "frozen_source_sha256": "805a6e047ec655b161ca1d0e76e4c479af7134b3f3d0a060c9de31f21dc19dcc",
+  "freeze_sha256": "28e752b69a17ed2a4763f3bf794c4d0507ff6a027b11d84fc1cddfafeb16a66a",
+  "transport": {
+    "parts_manifest": "artifacts/adaptive012-parts/INDEX.json",
+    "parts_verified": 20,
+    "archive_bytes": 59775697,
+    "archive_sha256": "29aaa1e6ec81b145753550b3394c1684f503f804e8bc565af404d13e8d92be34",
+    "crc_verified": true
+  },
+  "commands": {
+    "reassembly": {
+      "invocation": "python - (stdin script)",
+      "executed_api": "scripts.reassemble_enterprise011.reassemble",
+      "arguments": [
+        "artifacts/adaptive012-parts/INDEX.json",
+        "/workspace/scratch/36115aecd71a/public-replay-connected014/adaptive012-public.zip"
+      ],
+      "result_file": "REASSEMBLY.json",
+      "api_checks": "Exact part ordering,size,SHA256,archive SHA256,CRC and private-key omission checks."
+    },
+    "extraction": {
+      "invocation": "python - (stdin script)",
+      "executed_api": "zipfile.ZipFile.extractall",
+      "archive": "/workspace/scratch/36115aecd71a/public-replay-connected014/adaptive012-public.zip",
+      "destination": "/workspace/scratch/36115aecd71a/public-replay-connected014/extracted",
+      "path_check": "Reject absolute member names or parent path segments before extraction.",
+      "preparation_issue": "Extraction succeeded. Subsequent metadata print attempted missing FREEZE.json and exited1; corrected read used actual FROZEN012.json. No audit criterion/source change."
+    },
+    "audit": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "-m",
+      "adaptive_enterprise",
+      "audit",
+      "--output",
+      "/workspace/scratch/36115aecd71a/public-replay-connected014/extracted"
+    ],
+    "audit_cwd": "/workspace/scratch/36115aecd71a/public-replay-connected014/extracted/source",
+    "normalization": "resolved absolute extraction root; frozen relative parent-path defect avoided"
+  },
+  "dependencies": {
+    "cryptography": "50.0.2",
+    "cffi": "2.1.1",
+    "pycparser": "3.11",
+    "installation": "Preinstalled exact pinned versions; no provider call or dependency installation required."
+  },
+  "result": {
+    "accepted": true,
+    "source_sha256": "805a6e047ec655b161ca1d0e76e4c479af7134b3f3d0a060c9de31f21dc19dcc",
+    "native_and_operating_worlds_replayed": 160,
+    "native_worlds_replayed": 160,
+    "operating_replayed": 160,
+    "qualification_scope": "FULL_NATIVE_AND_OPERATING",
+    "maximum_parallel_workers": 4,
+    "audit_cpu_seconds": 1913.453597391,
+    "private_signing_keys_required": false
+  },
+  "execution": {
+    "started_utc": "2026-10-30T18:11:23.674703+00:00",
+    "finished_utc": "2026-10-30T18:19:45.611014+00:00",
+    "wall_seconds": 501.93633886300086,
+    "returncode": 0,
+    "stderr_bytes": 0,
+    "allocation_sha256": "baa9d898b0bc0aca558cfa7af3de099eb546ad711283de4c9e43af91fb32483c",
+    "audit_cpu_seconds": 1913.453597391,
+    "sampled_tree_cpu_seconds": 1912.1,
+    "sampled_tree_peak_rss_bytes": 397619200,
+    "peak_scratch_bytes": 210564765,
+    "resource_measurement_limit": "Initial watchdog sampled namespace-local PID against host /proc, so its raw CPU/RSS fields are invalid. PROCESS_MONITOR.json independently resolves host PID by exact audit command. Audit self-measured CPU and supplemental sampled RSS replace those raw fields; wall/scratch fields remain accurate. Peak RSS sampled every2seconds, not continuous."
+  },
+  "post_replay_source_identity_rechecked": true,
+  "boundaries": {
+    "wall_seconds": 900,
+    "cpu_seconds": 2400,
+    "rss_bytes": 500000000,
+    "scratch_bytes": 500000000,
+    "real_spending_usd": 0,
+    "paid_provider_calls": 0,
+    "outreach": 0,
+    "private_keys_required": false
+  },
+  "qualification": "The original public-copy ZIP passed all160native financial audits and all160operating semantic replays using extracted frozen source. This closes the previous full-public-copy operating replay gap without changing historical criteria or business results.",
+  "files": {
+    "AUDIT.json": "d08e040d2cacfac9373a016c51c0413bd9bdcaa0748cb268c5c5c55f91a51c0c",
+    "EXECUTION.raw.json": "1211cd2147e74c9f57381ef5f3e44628f700b31d463b4ffa5fdfab294c22938f",
+    "PROCESS_MONITOR.json": "a6c945468e09392c4fa45cad80f57404e4d3ed9d683707717864b9fe458e946d",
+    "REASSEMBLY.json": "fc9d7dd5b624095fc0344a367910cd953cd2dbbe6d0201a627a9b4d89d0adaf9",
+    "audit.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "audit.stdout": "faaa95509190e0f61a50e54d1a3b2f64a5f8749a43e159ebfb3b0413d931be97",
+    "proc_monitor.py": "c4a8d60047b9b49dad814c9cd22dc3bccf9cb31d5ec1974c7b1f6db8a99b8d90",
+    "watch.py": "f4796903b442111a84e2211448cb7f1315b25472fb955b91a642892e9f9aa6d9"
+  },
+  "equivalent_reproduction_commands": [
+    [
+      "python",
+      "scripts/reassemble_enterprise011.py",
+      "--manifest",
+      "artifacts/adaptive012-parts/INDEX.json",
+      "--output",
+      "/tmp/adaptive012-public.zip"
+    ],
+    [
+      "python",
+      "-m",
+      "zipfile",
+      "-e",
+      "/tmp/adaptive012-public.zip",
+      "/tmp/adaptive012-public-extracted"
+    ],
+    [
+      "python",
+      "-m",
+      "adaptive_enterprise",
+      "audit",
+      "--output",
+      "/tmp/adaptive012-public-extracted"
+    ]
+  ]
+}

@@ -1,6 +1,8 @@
-# Adaptive enterprise operating instructions
+# Connected enterprise operating instructions
 
-The current owner mandate is [campaign/adaptive-012/MANDATE.md](campaign/adaptive-012/MANDATE.md), with the later [steering](campaign/adaptive-012/STEERING.md) and bounded [allocation](campaign/adaptive-012/ALLOCATION.json). These supersede conflicting current business-policy requirements, while preserving every historical verdict.
+The current continuation is [connected-014](campaign/connected-014/MANDATE.md), with its fresh [allocation](campaign/connected-014/ALLOCATION.json). Root owns the additive `connected_enterprise` operating path; use `JournalAccount` over the canonical mandatory Account, retain sealed live state and source-bound write-ahead intents, and independently rederive services, finances and public reports. Historical adaptive, growth and commerce allocations do not authorize new work. Formal approval, merge and release still require their existing action-time approval.
+
+The preserved adaptive owner mandate is [campaign/adaptive-012/MANDATE.md](campaign/adaptive-012/MANDATE.md), with the later [steering](campaign/adaptive-012/STEERING.md) and bounded [allocation](campaign/adaptive-012/ALLOCATION.json). These supersede conflicting current business-policy requirements, while preserving every historical verdict.
 
 Be strict about evidence, authorization, money conservation, accounted obligations and truthful claims. Treat pricing, payment terms, packaging, acquisition, capacity and capital allocation as revisable policies. Conservative assumptions are scenarios to test, not universal prerequisites. Diagnose controller-created bottlenecks before a growth conclusion.
 

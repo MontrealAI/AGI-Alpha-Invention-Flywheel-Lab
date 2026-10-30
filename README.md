@@ -1,5 +1,12 @@
 # AGI ALPHA: transform the competitive game
 
+## Connected enterprise 014 continuation
+
+The additive operating path is `python -m connected_enterprise run --output /absolute/new/connected014`. It keeps the canonical native Account and actual service/checker contracts while adding expiring earned-funded acquisition, qualified orders before production, hour-clock acceptance/clearing and authenticated live-state recovery. See [operator procedures](docs/connected014/OPERATOR.md), [fresh allocation and authority](campaign/connected-014/ALLOCATION.json), [registered protocol/configuration](campaign/connected-014/PREREGISTRATION.json), and [capability map](campaign/connected-014/CAPABILITY_MAP.md). Fresh commercial confirmation and source-matched hosted qualification are pending publication; development output is not confirmation.
+
+The original adaptive012 public archive now passed all160 financial and160 operating replays from the byte-verified public copy; see [authentic replay receipt](evidence/connected014/public-replay/RECEIPT.json). This reproduces earlier conditional evidence, not a new market result. [Historical scale assumptions are reconciled separately](campaign/connected-014/SCALE_RECONCILIATION.md); no native billion-dollar result is claimed.
+
+
 Adaptive-012 demonstrated a conditional simulated commercial flywheel: the representative enterprise settled 34 deliveries for 11 customers, collected USD 1,340.63, paid USD 544.19 in modeled complete costs and retained USD 796.44. Thirty profitable continuations used prior earned funds. All 28 registered central cases met the declared commercial criteria. These are simulated receipts with executed deterministic artifacts and independent acceptance; actual commerce was not executed.
 
 The new adaptive policy was not the general profit winner: the retained strategic-pricing comparator earned USD 175.44 more on average across 32 matched cases. Full adaptation added value in some tested competitive regions; generated instruments executed without establishing superior invention. The stronger baseline remains preserved. See [results and limits](evidence/adaptive012/RESULTS.md).

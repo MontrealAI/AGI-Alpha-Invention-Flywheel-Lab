@@ -1,0 +1,39 @@
+{
+  "schema": "agi-alpha/connected014-local-runner-tests/v1",
+  "accepted": true,
+  "scope": "TARGETED_ENGINEERING_SMOKE_AND_AUTHENTICITY_REGRESSIONS; NOT_COMMERCIAL_CONFIRMATION",
+  "command": [
+    "python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_connected_runner.py",
+    "-v"
+  ],
+  "tests_passed": 4,
+  "unittest_wall_seconds": 22.577,
+  "fixture": "One fresh current-source snapshot, two development-smoke worlds, no.git. Valid baseline audit and key-free public archive audit precede tamper tests; mutations restored.",
+  "checks": [
+    "Normalized relative output and no.git source execution",
+    "Key-free package extracted-copy independent audit",
+    "Top-level commercial verdict, world result index, growth report, audit outreach value and completion hash tampering rejected",
+    "Tampered package refused before archive publication",
+    "Self-rehashed changed cohort registration and wrong manifest cohort origin rejected",
+    "Executing source mutation, output symlink and symlink parent rejected"
+  ],
+  "post_run_file_sha256": {
+    "tests/test_connected_runner.py": "8e005fe559386cc5a7889cc862e36a64714ecccba15107e18ca52aaad27f3e30",
+    "connected_enterprise/runner.py": "9cfe2e67251bcb98ed7d8809b88a45d4a8a8752953ef9cb7f4d301880854fe4b",
+    "connected_enterprise/verify.py": "9cae07b93255eb372fbdbb9a3f0cee3fd909bdd0334cd3fd5d9b44ca079e31c0"
+  },
+  "logs": {
+    "qualification.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "qualification.stderr": "fb9c1a5114fb219e7328ee74bc362c19aed8d1b3aa0a7883490420c79b8a72ef"
+  },
+  "source_claim": "Harness creates and checks frozen source identities internally. This local test receipt identifies post-run files; exact committed-source clean qualification and hosted checks are separately reported.",
+  "preserved_failure": "FAILURE001.json",
+  "repair": "Final audit receipt canonical JSON normalization preserves all values and internal numeric-hour cost checks."
+}

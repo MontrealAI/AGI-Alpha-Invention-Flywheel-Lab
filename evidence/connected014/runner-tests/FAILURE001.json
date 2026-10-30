@@ -1,0 +1,20 @@
+{
+  "schema": "agi-alpha/connected014-runner-failure/v1",
+  "status": "PRESERVED_ENGINEERING_FAILURE_FIXTURE_RETIRED",
+  "source_sha256": "76a8713eb2064c24371b810511973501fe3da7795cd73a5ca905c23c8a3fb2cf",
+  "verifier_source_sha256": "dac78a4cadcc2b1ba7304acb43a34b01f05c9b73dbfd9f1d632704b072af746b",
+  "registered_utc": "2026-10-30T18:34:56Z",
+  "protocol_edition": "development-smoke",
+  "seeds": [
+    14001
+  ],
+  "observed": "Untouched two-world smoke run completed; subsequent baseline package audit rejected WORLD_AUDIT_RECEIPT_CHANGED.",
+  "root_cause": "Checker daily_outreach_units_recomputed uses integer hour keys internally; JSON serialization stores string keys. Strict full receipt equality rejected only that representation mismatch in both worlds.",
+  "repair_requirement": "Canonicalize final public audit receipt to JSON-compatible keys while preserving all values and checks. Re-run current-source engineering tests.",
+  "fresh_commercial_confirmation": false,
+  "private_fixture": "Preserved outside repository; includes local recovery keys and must not be published. Public record includes only source identities, error log and exact differing field values.",
+  "files": {
+    "failure001.stderr": "b015424f403cacc45ac89a0e60c0fc3e3a3ee850f3102c302b0aa313eae24ff7",
+    "failure001-field-diff.txt": "66d6a8acfabbe8325a07f2c2328fd17bdaa91d7db5814623ce0279341f4bb567"
+  }
+}
