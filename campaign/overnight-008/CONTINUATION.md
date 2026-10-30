@@ -1,7 +1,7 @@
 # Active overnight recovery and construction
 
 Integration owner: `root`; separate verifier: `verification` (cannot modify candidate).
-Heartbeat: 2026-10-30T09:30:52.277199+00:00. Takeover from public3360acaf after last05:33 heartbeat exceeded75minutes and no other active owner was evidenced. Public review comments are not integration lease renewals.
+Heartbeat: 2026-10-30T09:39:01.386704+00:00. Takeover from public3360acaf after last05:33 heartbeat exceeded75minutes and no other active owner was evidenced. Public review comments are not integration lease renewals.
 
 Original allocation unchanged: started05:07:44Z, expensive development ends09:37:44Z, final verification/publication/recovery ends11:07:44Z (07:07Toronto). No budget or error-history reset. ALLOCATION.json remains unchanged. See append-only `evidence/overnight-008/recovery-0719/INTERRUPTION.json` for lost unpublished artifacts and conservative new suballocations.
 
@@ -30,3 +30,9 @@ No active candidate currently crosses an enabling/economic threshold. Next conse
 Source2205bf8 plus data5d5fb96 downloaded112524837/79649652bytes. Every8588source and25dataGit blob was checked before execution; exact externally supplied raw TIFF/ZIP were size/hash-checked. All47original artifacts restored, unchanged repair48cd04ae executed, separate checkerdd2dc passed, both repairedNPZ outputs match their frozen originals byte-for-byte. Candidate source bytes remained unchanged. Receipt: evidence/overnight-008/nasa-public-2205/REPORT.json and enclosingRECEIPT.json. Child49.192056CPU and supervisor42.725669613CPU are observed resources, not monetary cost. All charges retained.
 
 Current reservations12120experiment/7390verification-publication; qualified earned funds0; source claim review completed under separate150 reservation. At the recorded09:37:44 construction cutoff, continue only verification/publication/recovery. Late supplement source is prepared and awaits compile from its public anchor. ACCOUNTABILITY.md records all8links and RESTART.md the exact recovery command and missing physical input gate. These files do not claim that the11:07:44 window has already ended or that inference continues unattended.
+
+## Final verification/publication reserve
+
+The09:37:44UTC expensive-development cutoff is reached; do not start new expensive builds. Actual scientific/numerical cycles are closed. Publish the frozen three-page late supplement (53 source inputs at54f229), preserve exact-head CI, reconcile receipts and recover within the unchanged11:07:44UTC end. Current latest known source54f229 has008 and general qualification green,007red: resource006_v3 caught FileNotFoundError for a disappearing SQLitejournal during constructed-asgi. Preserve evidence/overnight-008/inherited007-ci-failure-54f/FAILURE.json; this is the excluded lifecycle scope, not an invitation to patch it here or reset campaign budgets.
+
+Both100-input progress and53-input late supplement cover actual outcomes at their explicit freezes; their source-matched LaTeX/PDF/HTML include recorded typesetting-only derivatives and failed compilation artifacts. No new numerical outcome, calibrated physical error, buyer or funds was created by publication. Current mission status remains incomplete.
