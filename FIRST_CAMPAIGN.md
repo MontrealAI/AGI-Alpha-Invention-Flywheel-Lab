@@ -66,6 +66,13 @@ Charge measured autonomous resources at justified rates, including discovery, fa
 
 Reconcile profit, investment recovery, liabilities, reserves and unrestricted cash. Deposits, borrowing and reserve releases are not operating earnings. Positive profit with insufficient cash must defer investment. Exercise protected exchange with acceptance, payment-gated release or escrow as appropriate, including participation costs, interruption, nonpayment, duplicate settlement and refunds. An idealized custodian is not deployed settlement.
 
+### Commercial flywheel qualification is independent of invention improvement
+
+**The autonomous commercial flywheel is achieved when a fixed-capability, end-to-end autonomous frontier-AI enterprise repeatedly completes and delivers accepted paid work, recognizes collected revenue, covers all costs/obligations and finances additional profitable service with unrestricted earned funds.** Human-equivalent delivery may previously have been profitable; its positive cost gap versus the autonomous service is a market opportunity, not a requirement to prove an initially negative business.
+
+Show real collections separately from simulated funds, trace earnings into additional delivery, and disclose price competition, demand, payment failure and support risk. A retained invention, stronger algorithm, causal successor gain or $40 trillion TAM estimate is *not* a prerequisite for the commercial GO. Evaluate the invention-to-invention flywheel separately in section 5. See [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md).
+
+
 ## 5. Test whether inheritance enables the next construction
 
 Retain exact artifacts, sources, applicability, checks, costs and failure boundaries. On a fresh successor problem, compare construction with inheritance, without it, with ordinary reuse of equivalent content and with an appropriate ablation. Keep strong conventional alternatives available and match complete budgets.

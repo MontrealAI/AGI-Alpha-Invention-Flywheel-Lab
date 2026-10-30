@@ -44,6 +44,13 @@ For commercial feasibility, **first compare our competently configured, end-to-e
 
 Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) for the revised v2 fully autonomous costing method and explicit hypothetical examples. Model token price is one cost, not proof of accepted delivery; running autonomously is a capability that must be tested. Compare human+AI, other autonomous frontier-AI providers, free/self-service and no launch **secondarily** for price pressure and competitiveness. The inherited-invention versus no-inheritance comparison is a distinct causal claim, not a prerequisite for a viable AI-native service.
 
+## Two distinct flywheels and success criteria
+
+The autonomous **commercial flywheel is independently successful** when the existing competent autonomous agent operation repeatedly fulfills accepted paid work, collected earnings cover *all* costs and obligations, and unrestricted earned cash finances additional profitable service delivery. **Do not require improvements in capability, new inventions, superior AI algorithms, or a negative human-business baseline.** Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md), section "Two distinct flywheels".
+
+A separate **capability-improvement invention flywheel** requires verified improvements and fresh causal successor benefit. Track it independently; it can amplify commercial profit but cannot serve as a prerequisite for qualifying a profitable, self-financing autonomous operation. Do not turn a human-vs-AI productivity advantage, simulated receipt, or $40T addressable-market conjecture into claimed cash receipts or actual demand.
+
+
 ## Inheritance and economics
 
 A tool passing its original test does not establish successor benefit. Test fresh successor construction against matched no-inheritance and ordinary-reuse controls. Give ordinary reuse the same artifact content when isolating the value of a structured memory or router. Include the cost of acquiring the inheritance.

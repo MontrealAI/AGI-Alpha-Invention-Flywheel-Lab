@@ -67,6 +67,13 @@ The primary economic benchmark is a **competently configured, fully autonomous f
 
 Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) and its v2 seven-stage agent cost scenarios. The 20k-input/4k-output Terra production example costs approximately $0.04 in standard model inference, but the whole accepted article has additional autonomous processes and external charges. Keep sourced tariffs separate from assumed model usage, outcome quality, customer acquisition and adoption. Human+AI providers, competing AI services and free tools are **secondary market comparisons** rather than the prerequisite to demonstrate human-labor replacement. Economic viability and profitable invention-to-successor compounding still require accepted work, credible price/collections, complete costs and fresh causally beneficial invention.
 
+## Independent commercial and invention flywheels
+
+**A commercially successful autonomous service does not have to invent better capabilities.** The first flywheel is accepted autonomous delivery -> collected revenue -> full-cost profit and unrestricted cash -> financing further accepted profitable autonomous delivery, using **unchanged** frontier models and tools if they suffice. The second, distinct, flywheel is verified invention -> retained productive or inventive capability -> causally improved fresh successor construction. The latter can strengthen the former but is not a condition of the former's success.
+
+The primary economic comparison remains the fully autonomous enterprise versus competent human-delivered work at realistic labor costs for the same outcome and obligations. Competitive AI services test sustainable pricing and buyer demand, not whether autonomous work can be profitable. A prior human service need not have been loss-making. Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) for separate qualification gates and the explicitly unvalidated global TAM hypothesis.
+
+
 ## Three achievements to establish separately
 
 - **Useful invention:** an executed construction improves the authorized outcome, or makes it possible, against strong complete alternatives within declared resources.
