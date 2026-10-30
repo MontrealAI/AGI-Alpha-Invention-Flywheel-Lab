@@ -24,6 +24,7 @@ jobs:
       - name: Source-matched tests and actual connected replay
         run: |
           python -m unittest discover -s benchmarks -p 'test_*.py' -v
+          python -m unittest discover -s portfolio25 -p 'test_*.py' -v
           python -m unittest discover -s tests -v
           python -m unittest discover -s verification -v
           python -m flywheel.legacy --root . --output "$RUNNER_TEMP/frozen-cycle-001"
