@@ -1,7 +1,7 @@
 # Active overnight recovery and construction
 
 Integration owner: `root`; separate verifier: `verification` (cannot modify candidate).
-Heartbeat: 2026-10-30T09:39:01.386704+00:00. Takeover from public3360acaf after last05:33 heartbeat exceeded75minutes and no other active owner was evidenced. Public review comments are not integration lease renewals.
+Heartbeat: 2026-10-30T09:52:00Z. Takeover from public3360acaf after last05:33 heartbeat exceeded75minutes and no other active owner was evidenced. Public review comments are not integration lease renewals.
 
 Original allocation unchanged: started05:07:44Z, expensive development ends09:37:44Z, final verification/publication/recovery ends11:07:44Z (07:07Toronto). No budget or error-history reset. ALLOCATION.json remains unchanged. See append-only `evidence/overnight-008/recovery-0719/INTERRUPTION.json` for lost unpublished artifacts and conservative new suballocations.
 
@@ -36,3 +36,13 @@ Current reservations12120experiment/7390verification-publication; qualified earn
 The09:37:44UTC expensive-development cutoff is reached; do not start new expensive builds. Actual scientific/numerical cycles are closed. Publish the frozen three-page late supplement (53 source inputs at54f229), preserve exact-head CI, reconcile receipts and recover within the unchanged11:07:44UTC end. Current latest known source54f229 has008 and general qualification green,007red: resource006_v3 caught FileNotFoundError for a disappearing SQLitejournal during constructed-asgi. Preserve evidence/overnight-008/inherited007-ci-failure-54f/FAILURE.json; this is the excluded lifecycle scope, not an invitation to patch it here or reset campaign budgets.
 
 Both100-input progress and53-input late supplement cover actual outcomes at their explicit freezes; their source-matched LaTeX/PDF/HTML include recorded typesetting-only derivatives and failed compilation artifacts. No new numerical outcome, calibrated physical error, buyer or funds was created by publication. Current mission status remains incomplete.
+
+## Current publication checkpoint — supersedes earlier next-action paragraphs
+
+At exact source12c75cff, all three hosted workflows completed successfully. See evidence/overnight-008/final-publication-12c/CI.json. This does not repair or erase the separate preserved56dc startup interruption and54f disappearing-journal failures. No manual favorable rerun was requested. The source-matched late supplement is now public; all three published PDFs were downloaded and matched their expectedSHA256/page counts. See PUBLISHED_PDF_DOWNLOADS.json and the deliberately limited SCOPE.json beside it.
+
+All actual numerical work and separate reviews are complete; no numerical experiment is running. The current final reserve is for publication/recovery only, not another expensive build. The next consequential construction remains gated by missing physical reference, clock/site/frequency alignment, same-system repeatability and a frozen useful obligation. These cannot be supplied by synthetic drift, a different cell, another pass of an exposed fixture or invented customers.
+
+The original11:07:44UTC end remains; this checkpoint does not claim the window has elapsed or that work continues unattended. Source data, failures and costs remain public and append-only. Current machine status is STATUS.json; the eight-link verdict and exact restart command are ACCOUNTABILITY.md and RESTART.md. No eligible profitable cohort or unrestricted earned funds exists, so earned-only successor investment remains deferred.
+
+Final publication accounting: event29adds60CPU only for root metadata/PR work. Current totals12120experiment/7450verification-publication; all28prior journal events preserved, no refund. The original600paper reserve covers the earlier PDF checks. See economics/recovery/FINAL_COST_SNAPSHOT_EVENT29.json.
