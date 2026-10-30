@@ -1,0 +1,52 @@
+{
+  "accepted": false,
+  "active_command": null,
+  "actual_release_download": true,
+  "commands": [
+    {
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+        "-m",
+        "connected_enterprise",
+        "run",
+        "--output",
+        "/home/runner/work/_temp/downloaded-release-operation/operation"
+      ],
+      "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+      "returncode": 0,
+      "stderr": "01-run.stderr",
+      "stdout": "01-run.stdout",
+      "wall_seconds": 799.665101931
+    }
+  ],
+  "failure": {
+    "message": "DOWNLOADED_OPERATION_CPU_ENVELOPE_EXCEEDED",
+    "type": "TimeoutError"
+  },
+  "resource_policy": {
+    "cpu_envelope_seconds": 2400,
+    "enforcement": "Measured after each completed subprocess and at final receipt; commands retain their live wall bound. This is not live aggregate process-tree CPU preemption.",
+    "measurement": "POSIX kernel RUSAGE_SELF plus RUSAGE_CHILDREN deltas; includes waited descendants.",
+    "scope": "Run, resume, native/operating audits, key-free packaging, public-copy audit and wrapper work after verified-asset/output-root admission. Initial asset verification and unavailable host/model billing are excluded.",
+    "wall_limit_seconds": 900
+  },
+  "resources": {
+    "children_cpu_seconds": 2504.977991,
+    "coverage": "COMPLETED_WAITED_PROCESS_TREE",
+    "cpu_envelope_exceeded": true,
+    "kernel_cpu_deltas_seconds": {
+      "children_system": 134.548518,
+      "children_user": 2370.429473,
+      "self_system": 0.23392,
+      "self_user": 0.7884319999999999
+    },
+    "self_cpu_seconds": 1.022352,
+    "total_measured_cpu_seconds": 2506.000343,
+    "wall_seconds": 799.9312113550001
+  },
+  "schema": "agi-alpha/connected014-downloaded-release-operation/v1",
+  "scope": "SIMULATED_RELEASED_DEFAULT_EXPERIMENT_REPRODUCTION_NOT_UNTOUCHED_CONFIRMATION",
+  "source_commit": "10bdb2c5787f95158642b068756ba30b58140562",
+  "source_sha256": "e4ae45a21614af62d336a96f4bba71db4339f73a72d5c4c0d9bc1aa324555d61",
+  "tag": "connected014-10bdb2c5787f95158642b068756ba30b58140562"
+}

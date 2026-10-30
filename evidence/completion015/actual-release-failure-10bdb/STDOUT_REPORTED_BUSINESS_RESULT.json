@@ -1,0 +1,589 @@
+{
+  "actual_commerce": {
+    "collections": 0,
+    "customers": 0,
+    "profit": null
+  },
+  "all_independent_audits_passed": true,
+  "central": {
+    "cash_survival_fraction": 1.0,
+    "commercial_successes": 2,
+    "fraction": 1.0,
+    "maximum_paid_jobs": 39,
+    "maximum_profit": 804394816,
+    "minimum_paid_jobs": 36,
+    "minimum_profit": 699912828,
+    "runs": 2
+  },
+  "comparisons": {
+    "pairs": [
+      {
+        "baseline_arm": "baseline",
+        "baseline_obligation_covered": true,
+        "candidate_arm": "growth",
+        "candidate_obligation_covered": true,
+        "collected_delivery_delta": 24,
+        "collections_delta_microUSD": 755819375,
+        "identity": [
+          2610301901,
+          "central",
+          36
+        ],
+        "opening_microUSD": 5000000000,
+        "profit_delta_microUSD": 486138512,
+        "unrestricted_earned_delta_microUSD": 486138512
+      },
+      {
+        "baseline_arm": "baseline",
+        "baseline_obligation_covered": true,
+        "candidate_arm": "growth",
+        "candidate_obligation_covered": true,
+        "collected_delivery_delta": 29,
+        "collections_delta_microUSD": 976300500,
+        "identity": [
+          2610301902,
+          "central",
+          36
+        ],
+        "opening_microUSD": 5000000000,
+        "profit_delta_microUSD": 648490228,
+        "unrestricted_earned_delta_microUSD": 648490228
+      },
+      {
+        "baseline_arm": "baseline",
+        "baseline_obligation_covered": true,
+        "candidate_arm": "growth",
+        "candidate_obligation_covered": true,
+        "collected_delivery_delta": 0,
+        "collections_delta_microUSD": 0,
+        "identity": [
+          2610301903,
+          "delayed_and_expensive",
+          36
+        ],
+        "opening_microUSD": 5000000000,
+        "profit_delta_microUSD": 0,
+        "unrestricted_earned_delta_microUSD": 0
+      },
+      {
+        "baseline_arm": "baseline",
+        "baseline_obligation_covered": true,
+        "candidate_arm": "growth",
+        "candidate_obligation_covered": true,
+        "collected_delivery_delta": 0,
+        "collections_delta_microUSD": 0,
+        "identity": [
+          2610301903,
+          "weak_channel",
+          36
+        ],
+        "opening_microUSD": 5000000000,
+        "profit_delta_microUSD": 0,
+        "unrestricted_earned_delta_microUSD": 0
+      }
+    ],
+    "schema": "agi-alpha/connected014-matched-growth/v1",
+    "scope": "Exact separate-business paired outcomes; no accounts pooled and no universal market probability inferred."
+  },
+  "frontier": {
+    "commercial_completion_limit": "Positive profit/available earnings and covered obligations are necessary financial conditions. Useful acceptance, customer breadth, repeat delivery and earned-funded investment require the independent operating completion verdict.",
+    "regions": [
+      {
+        "arm": "baseline",
+        "businesses": 2,
+        "case": "central",
+        "collected_delivery_range": [
+          10,
+          12
+        ],
+        "collections_range_microUSD": [
+          316586750,
+          397546750
+        ],
+        "covered_businesses": 2,
+        "customer_pool": 36,
+        "loss_businesses": 0,
+        "opening_microUSD": 5000000000,
+        "positive_profit_available_earnings_and_covered": 2,
+        "profit_range_microUSD": [
+          155904588,
+          213774316
+        ],
+        "seeds": [
+          2610301901,
+          2610301902
+        ],
+        "terminal_stops": [
+          null,
+          null
+        ]
+      },
+      {
+        "arm": "growth",
+        "businesses": 2,
+        "case": "central",
+        "collected_delivery_range": [
+          36,
+          39
+        ],
+        "collections_range_microUSD": [
+          1153366125,
+          1292887250
+        ],
+        "covered_businesses": 2,
+        "customer_pool": 36,
+        "loss_businesses": 0,
+        "opening_microUSD": 5000000000,
+        "positive_profit_available_earnings_and_covered": 2,
+        "profit_range_microUSD": [
+          699912828,
+          804394816
+        ],
+        "seeds": [
+          2610301901,
+          2610301902
+        ],
+        "terminal_stops": [
+          null,
+          null
+        ]
+      },
+      {
+        "arm": "baseline",
+        "businesses": 1,
+        "case": "delayed_and_expensive",
+        "collected_delivery_range": [
+          7,
+          7
+        ],
+        "collections_range_microUSD": [
+          234524000,
+          234524000
+        ],
+        "covered_businesses": 1,
+        "customer_pool": 36,
+        "loss_businesses": 1,
+        "opening_microUSD": 5000000000,
+        "positive_profit_available_earnings_and_covered": 0,
+        "profit_range_microUSD": [
+          -331051116,
+          -331051116
+        ],
+        "seeds": [
+          2610301903
+        ],
+        "terminal_stops": [
+          null
+        ]
+      },
+      {
+        "arm": "growth",
+        "businesses": 1,
+        "case": "delayed_and_expensive",
+        "collected_delivery_range": [
+          7,
+          7
+        ],
+        "collections_range_microUSD": [
+          234524000,
+          234524000
+        ],
+        "covered_businesses": 1,
+        "customer_pool": 36,
+        "loss_businesses": 1,
+        "opening_microUSD": 5000000000,
+        "positive_profit_available_earnings_and_covered": 0,
+        "profit_range_microUSD": [
+          -331051116,
+          -331051116
+        ],
+        "seeds": [
+          2610301903
+        ],
+        "terminal_stops": [
+          null
+        ]
+      },
+      {
+        "arm": "baseline",
+        "businesses": 1,
+        "case": "weak_channel",
+        "collected_delivery_range": [
+          5,
+          5
+        ],
+        "collections_range_microUSD": [
+          155914000,
+          155914000
+        ],
+        "covered_businesses": 1,
+        "customer_pool": 36,
+        "loss_businesses": 0,
+        "opening_microUSD": 5000000000,
+        "positive_profit_available_earnings_and_covered": 1,
+        "profit_range_microUSD": [
+          38774860,
+          38774860
+        ],
+        "seeds": [
+          2610301903
+        ],
+        "terminal_stops": [
+          null
+        ]
+      },
+      {
+        "arm": "growth",
+        "businesses": 1,
+        "case": "weak_channel",
+        "collected_delivery_range": [
+          5,
+          5
+        ],
+        "collections_range_microUSD": [
+          155914000,
+          155914000
+        ],
+        "covered_businesses": 1,
+        "customer_pool": 36,
+        "loss_businesses": 0,
+        "opening_microUSD": 5000000000,
+        "positive_profit_available_earnings_and_covered": 1,
+        "profit_range_microUSD": [
+          38774860,
+          38774860
+        ],
+        "seeds": [
+          2610301903
+        ],
+        "terminal_stops": [
+          null
+        ]
+      }
+    ],
+    "schema": "agi-alpha/connected014-executed-frontier/v1",
+    "scope": "Finite executed design regions, not calibrated market probabilities or a universal viability boundary."
+  },
+  "frozen_sha256": "e09a0e02a9c9a8706d95a2d964f0a0134d173ba49169ed5256d03bd940d25d3e",
+  "growth_criterion": {
+    "central_pairs": 2,
+    "fraction": 1.0,
+    "minimum_registered_fraction": 0.75,
+    "positive_delivery_and_profit_pairs": 2
+  },
+  "limits": [
+    "Synthetic non-personal work only; no actual customers or payments.",
+    "Finite authored buyer/channel/supplier contracts, no empirical conversion calibration.",
+    "Permanent native principal/fee protection tails remain; seed may back reserves.",
+    "No paid inference: capable-frontier AI economics represented by disclosed envelopes; actual executors are deterministic.",
+    "Finite frozen service inventory is an edition resource, not a universal market ceiling."
+  ],
+  "next_action": "Use matched realized incremental contribution to retain/renew channels and capacity; close finite artifact/audience/working-capital constraints with a new costed qualified capability before claiming a native scale bridge. Historical aggregate billion projections remain separate hypotheses.",
+  "outcomes": {
+    "billion_native_scale": "NOT_ESTABLISHED",
+    "commercial_result": "CONDITIONAL_SUCCESS",
+    "growth_result": "CONDITIONAL_INCREASE_IN_PROFITABLE_DELIVERY",
+    "operating_implementation": "EXECUTED_WITH_INDEPENDENT_FINANCIAL_AND_OPERATING_SEMANTIC_AUDIT"
+  },
+  "protocol": {
+    "adverse_seeds": [
+      2610301903
+    ],
+    "arms": [
+      "baseline",
+      "growth"
+    ],
+    "candidate_arm": "growth",
+    "case_design": "Two fresh central matched pairs; one fresh matched pair in each of weak-channel and delayed/high-complete-cost conditions. Eight separately funded businesses. Fixed sample; no optional stopping. Same public information, starting capital, services and buyer incentives in each pair; investment options differ by retained policy.",
+    "cases": [
+      "central",
+      "weak_channel",
+      "delayed_and_expensive"
+    ],
+    "central_seeds": [
+      2610301901,
+      2610301902
+    ],
+    "channel_control_seeds": [],
+    "clock": "Integerhours/native dayfield; production2hours, acceptance1hour, clearing48hours baseline. Expiry/reinvestment eventcausal; tailobligations retained. Calendar epoch2026-11-01T00Z. Seventy days cover three21daychannel/capacityterms plus clearing/renewal and repeatedpurchasecycles; a reportingbin nevergrantsactionauthority.",
+    "comparison": "Retained earned-financed growth versus owned fixed-capacity baseline. No algorithm superiority required. Native financing and later asset use plus matched collected-delivery and full-cost-profit differences establish only conditional finite-world incremental growth.",
+    "completion": {
+      "minimum_collected_deliveries": 12,
+      "minimum_paying_customers": 3,
+      "minimum_profitable_earned_continuations": 2,
+      "minimum_repeat_customers": 2,
+      "obligations_covered": true,
+      "positive_available_earnings": true,
+      "positive_complete_cost_profit": true
+    },
+    "control_arm": "baseline",
+    "development_excluded": [
+      14001,
+      14002,
+      14003,
+      14004,
+      14005,
+      14006,
+      2610301401,
+      2610301402,
+      2610301403,
+      2610301404,
+      2610301501,
+      2610301502,
+      2610301601,
+      2610301602,
+      2610301603,
+      2610301604,
+      2610301701,
+      2610301702,
+      2610301801,
+      2610301802,
+      2610301803,
+      2610301804,
+      9915014,
+      9915017
+    ],
+    "edition": "completion015-confirmation-001",
+    "inference": "Finite authored worlds, not calibrated real success probabilities. Historical economic results never relabeled. Native record aggregation is exact accounting, not validated forward-demand aggregation.",
+    "pricing_extension_per_quote_microUSD": 50000,
+    "pricing_extension_setup_microUSD": 5000000,
+    "recovery": "Live-state event intent persisted before mutations; signed command WAL/native CAS recovers exact commitments. Reopen requires retained local simulation key. Public copies support audit/reproduction, not takeover.",
+    "resource_billing": "Actual deterministic executors/checkers, no paidmodelcalls. Modeled completecost envelopes; host/modelbilling unavailable. Sensitivities do not turn assumptions into calibration.",
+    "risk": {
+      "central_maximum_loss_microUSD": 750000000,
+      "central_minimum_cash_survival_fraction": 1.0,
+      "central_minimum_commercial_fraction": 0.75,
+      "growth_minimum_positive_paired_fraction": 0.75,
+      "hard_native_and_semantic_integrity": true
+    },
+    "schema": "agi-alpha/connected014-protocol/v1",
+    "scope": "CONDITIONAL_SIMULATION",
+    "selection": "Ordinary observed-contribution heuristic, frozen before confirmation; no hidden buyer values, future shocks or evaluator case labels in seller policy. Decline/retaincash allowed. No developmentcontroller tournament.",
+    "service_cohort_seed": 14043026,
+    "workers": 4
+  },
+  "representative": {
+    "accepted_jobs": 37,
+    "arm": "growth",
+    "case": "central",
+    "complete": true,
+    "conditional_simulated_commercial_success": true,
+    "customers": 13,
+    "paid_jobs": 36,
+    "processed_events": 182,
+    "productive_expansion": [
+      {
+        "cost": 6250000,
+        "funding": "EARNED",
+        "kind": "acquisition",
+        "later_settled_order_ids": [
+          "order-0003",
+          "order-0004",
+          "order-0005",
+          "order-0007",
+          "order-0010",
+          "order-0012",
+          "order-0014",
+          "order-0015",
+          "order-0016",
+          "order-0019",
+          "order-0020",
+          "order-0021",
+          "order-0022",
+          "order-0026",
+          "order-0027",
+          "order-0029",
+          "order-0030",
+          "order-0031",
+          "order-0032"
+        ],
+        "plan_id": "connected014-resource-491add036795fb9064dd393a271f7aea",
+        "scoped_collections": 632320750
+      },
+      {
+        "cost": 8000000,
+        "funding": "EARNED",
+        "kind": "capacity",
+        "later_settled_order_ids": [
+          "order-0010",
+          "order-0013",
+          "order-0019"
+        ],
+        "plan_id": "connected014-resource-a00ab4b0678133c5d60acca58d390375",
+        "scoped_collections": 104897000
+      },
+      {
+        "cost": 8000000,
+        "funding": "EARNED",
+        "kind": "capacity",
+        "later_settled_order_ids": [
+          "order-0011"
+        ],
+        "plan_id": "connected014-resource-0ffb4e9a77ddaad303693c16807831c7",
+        "scoped_collections": 40480000
+      },
+      {
+        "cost": 6250000,
+        "funding": "EARNED",
+        "kind": "acquisition",
+        "later_settled_order_ids": [
+          "order-0017",
+          "order-0023",
+          "order-0024",
+          "order-0028"
+        ],
+        "plan_id": "connected014-resource-c1d34ca97424ffc02e96f83659f61430",
+        "scoped_collections": 119834000
+      },
+      {
+        "cost": 8000000,
+        "funding": "EARNED",
+        "kind": "capacity",
+        "later_settled_order_ids": [
+          "order-0022",
+          "order-0025",
+          "order-0029",
+          "order-0033"
+        ],
+        "plan_id": "connected014-resource-3f4ba97d387b149cad77c25cd32cf6cd",
+        "scoped_collections": 134277000
+      },
+      {
+        "cost": 8000000,
+        "funding": "EARNED",
+        "kind": "capacity",
+        "later_settled_order_ids": [
+          "order-0026",
+          "order-0030"
+        ],
+        "plan_id": "connected014-resource-d5c3039825bb5fe44635fcb45a8aef62",
+        "scoped_collections": 62117000
+      },
+      {
+        "cost": 6250000,
+        "funding": "EARNED",
+        "kind": "acquisition",
+        "later_settled_order_ids": [
+          "order-0034",
+          "order-0036"
+        ],
+        "plan_id": "connected014-resource-25373637bc791e16251ff5bd0d52fd57",
+        "scoped_collections": 62117000
+      }
+    ],
+    "profitable_earned_continuations": 32,
+    "repeat_customers": 10,
+    "seed": 2610301901,
+    "summary": {
+      "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+      "available": 4439346703,
+      "cash": 5699912828,
+      "collections": 1153366125,
+      "conditionalEarned": 599912828,
+      "custodyReserve": 0,
+      "custodyRestricted": 0,
+      "earnedProtectionBacking": 0,
+      "equityProtectionBacking": 1260566125,
+      "expensePaid": 453453297,
+      "expenses": 453453297,
+      "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+      "investmentStopped": false,
+      "netEarnedAfterIncurredObligations": 699912828,
+      "payables": 0,
+      "profit": 699912828,
+      "recoveryIncome": 0,
+      "reservedInvestment": 0,
+      "revenue": 1153366125,
+      "strictEarnedControl": 0,
+      "tailReserve": 1160566125,
+      "unrestrictedEarned": 699912828,
+      "workingCapital": 100000000
+    }
+  },
+  "schema": "agi-alpha/connected014-report/v1",
+  "scope": "CONDITIONAL_SIMULATION",
+  "source_sha256": "e4ae45a21614af62d336a96f4bba71db4339f73a72d5c4c0d9bc1aa324555d61",
+  "worlds": 8,
+  "worlds_index": [
+    {
+      "cpu_seconds": 237.390757512,
+      "result_sha256": "7fe5e33500feb4546450d296c69f7af162f08acaa1459c20c21946619ade40a1",
+      "task": {
+        "arm": "baseline",
+        "case": "central",
+        "id": "2610301901-central-baseline",
+        "seed": 2610301901
+      }
+    },
+    {
+      "cpu_seconds": 756.12110651,
+      "result_sha256": "e1abaa15bab2b3470cfc17b85e5a69a64f6a961ccb350d2d56058bd526741a2e",
+      "task": {
+        "arm": "growth",
+        "case": "central",
+        "id": "2610301901-central-growth",
+        "seed": 2610301901
+      }
+    },
+    {
+      "cpu_seconds": 182.54082138400003,
+      "result_sha256": "154a0d0b238d1db5060255ff910f77d523c544ebd01ec2bbd0924656dc52f90e",
+      "task": {
+        "arm": "baseline",
+        "case": "central",
+        "id": "2610301902-central-baseline",
+        "seed": 2610301902
+      }
+    },
+    {
+      "cpu_seconds": 793.736952676,
+      "result_sha256": "cdc79461847758ab03afa5394b7e10f71ee2d54fb6578f27f8711f385d5bb392",
+      "task": {
+        "arm": "growth",
+        "case": "central",
+        "id": "2610301902-central-growth",
+        "seed": 2610301902
+      }
+    },
+    {
+      "cpu_seconds": 116.20520002199999,
+      "result_sha256": "fae02cd3dee1720687085f6bf5870c89c54f7559d3c9e7e4b977dd1797b87639",
+      "task": {
+        "arm": "baseline",
+        "case": "weak_channel",
+        "id": "2610301903-weak_channel-baseline",
+        "seed": 2610301903
+      }
+    },
+    {
+      "cpu_seconds": 116.02511804900001,
+      "result_sha256": "79ac84c716b7ec89ced4b2d0312cddd2b1cbacb1301e54e615afab5e10e4fdca",
+      "task": {
+        "arm": "growth",
+        "case": "weak_channel",
+        "id": "2610301903-weak_channel-growth",
+        "seed": 2610301903
+      }
+    },
+    {
+      "cpu_seconds": 159.288637369,
+      "result_sha256": "d51f5552cf20891781c1a1a66e822bdb4963a56ea0596e83b315451e420d15be",
+      "task": {
+        "arm": "baseline",
+        "case": "delayed_and_expensive",
+        "id": "2610301903-delayed_and_expensive-baseline",
+        "seed": 2610301903
+      }
+    },
+    {
+      "cpu_seconds": 141.43268365400002,
+      "result_sha256": "3082f1d3aff6fee1e7ba40e13ba50f5eecd7eeac23295167f3bbd826cdc377c2",
+      "task": {
+        "arm": "growth",
+        "case": "delayed_and_expensive",
+        "id": "2610301903-delayed_and_expensive-growth",
+        "seed": 2610301903
+      }
+    }
+  ]
+}
