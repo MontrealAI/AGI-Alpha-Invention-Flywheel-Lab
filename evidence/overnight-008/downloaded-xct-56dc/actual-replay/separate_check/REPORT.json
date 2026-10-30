@@ -1,0 +1,205 @@
+{
+  "schema": "agi-alpha-independent-xct-recovery-fraction008/v1",
+  "current_utc": "2026-10-30T07:53:21.707026+00:00",
+  "edition": "XCT008_RECOVERY_FULL120_R1",
+  "scope": "Exact original full120 inequalities of newly reconstructed binary64 mathematical model only",
+  "checks": {
+    "independently_pinned_protocol": true,
+    "constructor_finished": true,
+    "same_new_edition": true,
+    "frozen_construct.py": true,
+    "frozen_exact_feasibility.py": true,
+    "frozen_calibrate.py": true,
+    "frozen_data/Data82.mat": true,
+    "frozen_data/GroundTruthReconstruction.mat": true,
+    "frozen_model/CALIBRATION.json": true,
+    "frozen_model/reference.npy": true,
+    "frozen_model/eps.npy": true,
+    "frozen_model/objective.npy": true,
+    "constructor_freeze_matches_protocol": true,
+    "all_required_records_present": true,
+    "full_nonnegative_canonical_matrix": true,
+    "model_array_shapes": true,
+    "raw_reference_contract": true,
+    "reference_reconstructs_from_frozen_affine_parameters": true,
+    "detector_envelope_rule_reconstructs": true,
+    "fixed_roi_objective_exact": true,
+    "positive_finite_detector_envelope": true,
+    "run_copied_model_arrays_match": true,
+    "final_status_matches_independent_result": true
+  },
+  "records": {
+    "reference": {
+      "array_sha256": "849380ff3930a96c8241578c85e20be49c96aa14c206cd08f70089a46372e3ed",
+      "verified_feasible": true,
+      "nonnegative": true,
+      "exact_minimum_margin": {
+        "numerator": "3368468412844934422201978772453",
+        "denominator": "2596148429267413814265248164610048"
+      },
+      "exact_roi": {
+        "numerator": "13988441030621277689382850127163",
+        "denominator": "649037107316853453566312041152512"
+      },
+      "checks": {
+        "feasibility_matches": true,
+        "nonnegative_matches": true,
+        "exact_margin_matches": true,
+        "exact_roi_matches": true,
+        "all_original_inequalities_reported": true,
+        "margin_outward_lower": true,
+        "roi_outward_lower": true
+      },
+      "record_integrity": true
+    },
+    "direct_lo": {
+      "array_sha256": "00a8a3b634f576dcad6b69489d287a42e61dc44f85ebd738ade291920836073f",
+      "verified_feasible": true,
+      "nonnegative": true,
+      "exact_minimum_margin": {
+        "numerator": "55452290621957715848152127",
+        "denominator": "20769187434139310514121985316880384"
+      },
+      "exact_roi": {
+        "numerator": "1718503663946395466602186752142269",
+        "denominator": "83076749736557242056487941267521536"
+      },
+      "checks": {
+        "feasibility_matches": true,
+        "nonnegative_matches": true,
+        "exact_margin_matches": true,
+        "exact_roi_matches": true,
+        "all_original_inequalities_reported": true,
+        "margin_outward_lower": true,
+        "roi_outward_lower": true
+      },
+      "record_integrity": true
+    },
+    "direct_hi": {
+      "array_sha256": "0d821036dd150203d9faf0b2c5a724cdeee4e15237ea8c44ed5e92a1ed381dc4",
+      "verified_feasible": true,
+      "nonnegative": true,
+      "exact_minimum_margin": {
+        "numerator": "825935660002126951844773695",
+        "denominator": "332306998946228968225951765070086144"
+      },
+      "exact_roi": {
+        "numerator": "1851705825757343988862032412141815",
+        "denominator": "83076749736557242056487941267521536"
+      },
+      "checks": {
+        "feasibility_matches": true,
+        "nonnegative_matches": true,
+        "exact_margin_matches": true,
+        "exact_roi_matches": true,
+        "all_original_inequalities_reported": true,
+        "margin_outward_lower": true,
+        "roi_outward_lower": true
+      },
+      "record_integrity": true
+    },
+    "pdhg_lo": {
+      "array_sha256": "f7dacde0f305830474a7fc144cfadaa4438f73d4304683f54472d80ad6631275",
+      "verified_feasible": true,
+      "nonnegative": true,
+      "exact_minimum_margin": {
+        "numerator": "6247913363966153994537634430527",
+        "denominator": "10633823966279326983230456482242756608"
+      },
+      "exact_roi": {
+        "numerator": "12330319635595214675174422592530587",
+        "denominator": "664613997892457936451903530140172288"
+      },
+      "checks": {
+        "feasibility_matches": true,
+        "nonnegative_matches": true,
+        "exact_margin_matches": true,
+        "exact_roi_matches": true,
+        "all_original_inequalities_reported": true,
+        "margin_outward_lower": true,
+        "roi_outward_lower": true,
+        "endpoint_record_matches_result": true
+      },
+      "record_integrity": true
+    },
+    "pdhg_hi": {
+      "array_sha256": "0f23ad3760cee792542e75180e69d6ff1127b106d8cffbf85044dcb0b53c2bd8",
+      "verified_feasible": true,
+      "nonnegative": true,
+      "exact_minimum_margin": {
+        "numerator": "191104967304631523951677739375",
+        "denominator": "2658455991569831745807614120560689152"
+      },
+      "exact_roi": {
+        "numerator": "2039750700589458352013589540104391",
+        "denominator": "83076749736557242056487941267521536"
+      },
+      "checks": {
+        "feasibility_matches": true,
+        "nonnegative_matches": true,
+        "exact_margin_matches": true,
+        "exact_roi_matches": true,
+        "all_original_inequalities_reported": true,
+        "margin_outward_lower": true,
+        "roi_outward_lower": true,
+        "endpoint_record_matches_result": true
+      },
+      "record_integrity": true
+    }
+  },
+  "routes": {
+    "ordinary_direct": {
+      "both_witnesses_exactly_feasible": true,
+      "exact_gap": {
+        "numerator": "66601080905474261129922829999773",
+        "denominator": "41538374868278621028243970633760768"
+      },
+      "gap_float": 0.001603362700555123,
+      "gap_exceeds_1_over_200": false,
+      "obstruction_verified": false,
+      "checks": {
+        "reported_gap_lower": true
+      }
+    },
+    "ordinary_pdhg": {
+      "both_witnesses_exactly_feasible": true,
+      "exact_gap": {
+        "numerator": "3987685969120452140934293728304541",
+        "denominator": "664613997892457936451903530140172288"
+      },
+      "gap_float": 0.006000002981829619,
+      "gap_exceeds_1_over_200": true,
+      "obstruction_verified": true,
+      "checks": {
+        "reported_gap_lower": true,
+        "reported_threshold_exact": true
+      }
+    }
+  },
+  "artifact_integrity_verified": true,
+  "verdict": "FULL120_MODEL_OBSTRUCTION_VERIFIED",
+  "input_freeze_sha256": "8621f1c9ecc95168c50118f40861c69ccfabb685b71927b7173805904f5121a2",
+  "constructor_results_sha256": "e28c0c3cbcdccdee0df1a8e9b3df3ef7e2791040050f8d835832cd7bc3bf698d",
+  "protocol_sha256": "7eb2d4efb7ba71bdda25695f95db2b73fcbed4943dd71cfcaa98a4d55954e58e",
+  "verifier_source_sha256": "fa2cd11e61a70ec9ab03f70817d51d01fd02377a82b8ac9be03b41ea87ba172e",
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "timeline": "Criteria fixed by root/protocol before construction; verifier source completed after builder summary exposure. Deterministic exposed engineering review, not protected confirmation.",
+  "limits": [
+    "No candidate helper imported. Every original ray is recomputed independently with Fraction.",
+    "Calibration reconstruction uses frozen fitted parameters; optimizer/global calibration quality or physical coverage is not independently validated.",
+    "All120 measurement views and1200-view reference are exposed; no acquisition saving.",
+    "New calibration bytes, not recovery of lost historical arrays or their exact proof.",
+    "Ordinary PDHG and equal-content reuse remain existing alternatives; no method novelty or inheritance advantage established.",
+    "No physical material validity, industrial tolerance, buyer demand, profit or earned-funded successor acceptance.",
+    "Shared model family/host and numerical libraries; procedural separation, not external certification.",
+    "Alpha0; no protected or population-inference claim."
+  ],
+  "resources": {
+    "cpu_seconds": 16.405505027,
+    "wall_seconds": 16.40418063300058,
+    "peak_rss_kib": 120844
+  }
+}

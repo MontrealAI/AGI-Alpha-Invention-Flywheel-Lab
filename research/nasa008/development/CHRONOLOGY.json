@@ -1,0 +1,93 @@
+{
+  "scope": "EXPOSED_DEVELOPMENT_CHRONOLOGY_NO_PROTECTED_DATA",
+  "recorded_utc": "2026-10-30T07:39:57.107856+00:00",
+  "source_protocol_sha256": "3aedc0a4c661c6ee3c03b2d58e398032d1149d3b985580e869dbd8212498e25e",
+  "sampling": {
+    "native_ct_spacing_mm": 0.0258478,
+    "native_ct_shape": [
+      931,
+      234,
+      902
+    ],
+    "original_source_ct_spacing_approx_mm": 0.0129,
+    "provided_ct_is_bicubically_downsampled": true,
+    "native_profile_spacing_mm": 0.0074,
+    "native_profile_shape": [
+      3259,
+      3195
+    ],
+    "profile_at_ct_spacing_shape": [
+      933,
+      915
+    ],
+    "resampling": "scipy.ndimage.zoom order1 on values and finite mask separately; accept resampled support only if interpolated finite-mask>.999",
+    "reference_valid_pixels": 547749
+  },
+  "cohorts": {
+    "primary": "All finite resampled reference points geometrically overlapping the 3-pixel-eroded largest projected CT component; coverage denominator all547749 finite resampled reference pixels",
+    "true_foreground_pore_mask": "UNAVAILABLE; no hand-traced source masks or classifier training labels in accessed data",
+    "depth_strata_mm": [
+      [
+        "-inf",
+        "-0.1"
+      ],
+      [
+        "-0.1",
+        "-0.03"
+      ],
+      [
+        "-0.03",
+        "-0.01"
+      ],
+      [
+        "-0.01",
+        "inf"
+      ]
+    ],
+    "strata_status": "Diagnostic strata, not admitted customer outcomes or confirmed pore identities",
+    "missing_pixels": "No inpainting; missing source neighborhoods removed from resampled validity, coverage retained in denominator"
+  },
+  "chronology": [
+    {
+      "order": 1,
+      "action": "Read public PR12 failure/intake reviews and NASA2024/25 ordinary methods; all their outcomes exposed."
+    },
+    {
+      "order": 2,
+      "action": "Write PROTOCOL before baseline; download exact public data; execute intake/header/data statistics and view projected intensity/texture."
+    },
+    {
+      "order": 3,
+      "action": "Write and execute ordinary_baseline.py: global full-volume Otsu92, both min/max CT faces, robust plane detrending, initial rigid/reflected registration optimized using exposed profilometry."
+    },
+    {
+      "order": 4,
+      "action": "Consume all v1 outcomes including images, whole/deep errors, stripe artifact and flat-dominated registration. Write ordinary_refined.py using conventional subvoxel interpolation and normalized depression correlation; same primary endpoint. Both faces retained and compared."
+    },
+    {
+      "order": 5,
+      "action": "Consume all refined outcomes; run planned ordinary threshold and registration sensitivity on exposed data. Thresholds84/88/92/96/100, fixed refined max-face transform, no threshold-specific re-registration. No threshold accepted as physical truth."
+    },
+    {
+      "order": 6,
+      "action": "Run independent saved-array math.fsum self-check, complete reports/costs; correct prose denominator typo547334 to actual547749, preserving draft-error record."
+    },
+    {
+      "order": 7,
+      "action": "After recognizing flat-majority weakness, execute simplest zero-plane ordinary comparator on all reference and identical overlaps; it beats the frozen all-field primary endpoint. Preserve this falsifier and stratified coverage. No new cohort/threshold, no new candidate tuning or protected test."
+    }
+  ],
+  "registration_fitting": {
+    "heldout": "NONE; every input and result is DEVELOPMENT exposed, not confirmation",
+    "v1": "4pixel-spaced finite reference samples; clipped negative-height residual plus support penalty, coarse rotations10deg and reflected conventions, six Powell refinements",
+    "v2": "3pixel-spaced eroded-interior finite reference; normalized correlation of smoothed clipped depression fields, threshold15um and100um scaling for registration only; coarse rotations4deg both reflections, eight Powell refinements; final all-valid overlap scoring",
+    "face_selection": "Both faces evaluated and disclosed; max-face selected after exposed comparison, no a priori designation or hidden test",
+    "plane": "Robust iterative least-squares fit from subsampled projected surface; no source-provided calibration plane"
+  },
+  "remaining_limits": [
+    "No independently measured registration uncertainty",
+    "CT-axis rays approximate fitted-plane-normal perspective",
+    "No complete published supervised-label baseline",
+    "No unseen specimens, internal-pore truth, physical qualification, novelty, demand or superiority claim"
+  ]
+}

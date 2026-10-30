@@ -1,0 +1,37 @@
+[
+  {
+    "id": "dataset",
+    "url": "https://ntrs.nasa.gov/citations/20240002767",
+    "source": "NASA Langley dataset, issued2024-03-18",
+    "license": "Work of the US Government, Public Use Permitted per NASA NTRS",
+    "supports": "Physical paired XCT and independent optical profilometry; source data bytes and metadata preserved in ACQUIRE.json"
+  },
+  {
+    "id": "paper2024",
+    "url": "https://ntrs.nasa.gov/api/citations/20240002879/downloads/spie_smart_structures_2024_final.pdf",
+    "source": "NASA20240002879, SPIE2024",
+    "supports": "Existing Otsu and supervised classifier route, plane/surface co-registration; Otsu and MLP each average0.063mm on their18manually traced pores",
+    "limits": "Original full resolution and manual labels differ from this new lowres all-valid-field computation. Numeric endpoints must not be equated."
+  },
+  {
+    "id": "presentation2025",
+    "url": "https://ntrs.nasa.gov/api/citations/20250002676/downloads/SPIE2025_Frankforter_XCT_Profilometry_Integration.pdf?attachment=true",
+    "source": "NASA20250002676, presentation2025-03-18",
+    "supports": "Opaque ray intersection, user-guided SegmentAnything ImageJ masks, surface-based hyperparameter calibration already described",
+    "limits": "Published graphical/pore results are not a raw error envelope for this dataset. This baseline does not claim full reproduction."
+  },
+  {
+    "id": "vendor_spec",
+    "url": "https://www.keyence.com/products/3d-measure/roughness-measure/vr-6000/models/vr-6200/",
+    "source": "KEYENCE primary current spec, accessed2026-10-30",
+    "supports": "Nominal accuracy +/-2.5um without Z stitching, +/-4um with; sigma repeatability0.4/1um, under specified gauge/mode and23+/-1C conditions",
+    "limits": "Dataset-specific configuration, stitching, environmental conditions and calibration certificate absent. Do not apply these catalogue terms as actual bound or substitute for observed10um export quantization."
+  },
+  {
+    "id": "PR12_reviews",
+    "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/12",
+    "source": "Public review comments recovered2026-10-30",
+    "supports": "Existing full-ray mathematical obstruction and earlier NASA intake, no physical/business success; scratch interruption disclosed",
+    "local": "PR12_REVIEW_RECOVERY.json"
+  }
+]

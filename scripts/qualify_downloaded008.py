@@ -118,7 +118,7 @@ def qualify(source_ref, output, downloaded_archive=None, scope="scientific", dat
     for name, command, cpu in commands:
         receipt = run(command, output / (name + '-bounded'), output / 'RESOURCE_LEDGER.json', name,
                       {'wall_seconds': cpu * 2, 'cpu_seconds': cpu, 'memory_bytes': 2 * 1024**3,
-                       'output_bytes': 32 * 1024**2, 'storage_bytes': 64 * 1024**2}, cwd=root)
+                       'output_bytes': (64 if scope == 'xct' else 32) * 1024**2, 'storage_bytes': 64 * 1024**2}, cwd=root)
         checks[name] = receipt
         if receipt['receipt']['state'] != 'complete':
             break

@@ -1,0 +1,11 @@
+{
+  "interrupt_returncode": -2,
+  "interruption_record_exists": false,
+  "complete_record_exists": false,
+  "restart_returncode": 1,
+  "partial_evidence_preserved": true,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/_temp/frozen-cycle-001/reproduce.py\", line 151, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/home/runner/work/_temp/frozen-cycle-001/reproduce.py\", line 131, in main\n    write(output / \"STARTED.json\", {\"state\": \"STARTED\", \"prior_evidence_overwrite\": False,\n  File \"/home/runner/work/_temp/frozen-cycle-001/reproduce.py\", line 22, in write\n    with path.open(\"x\") as stream:\n         ^^^^^^^^^^^^^^\nKeyboardInterrupt\n",
+  "restart_stderr": "Traceback (most recent call last):\n  File \"/home/runner/work/_temp/frozen-cycle-001/reproduce.py\", line 151, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/home/runner/work/_temp/frozen-cycle-001/reproduce.py\", line 130, in main\n    output.mkdir(parents=True, exist_ok=False)\n  File \"/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/pathlib.py\", line 1311, in mkdir\n    os.mkdir(self, mode)\nFileExistsError: [Errno 17] File exists: '/home/runner/work/_temp/bounds-probe/interrupted-run'\n",
+  "scope": "Actual SIGINT of reproduction parent after STARTED marker; same-directory restart must refuse without mutation. This does not test host power loss."
+}
