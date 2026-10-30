@@ -1,0 +1,62 @@
+{
+  "completed": [
+    {
+      "phase": "01-fresh-run",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "connected_enterprise",
+        "run",
+        "--output",
+        "/workspace/scratch/b156b0353186/completion015-confirmation"
+      ],
+      "returncode": 0,
+      "reason": null,
+      "wall_seconds": 484.15810091599997,
+      "children_cpu_seconds": 1416.9740669999999,
+      "observed_cpu_lower_bound": 38.94,
+      "cpu_cap": 600,
+      "scope": "Original registered accounts; no reseed, direct record edit or copied balances."
+    },
+    {
+      "phase": "02-independent-audit",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "connected_enterprise",
+        "audit",
+        "--output",
+        "/workspace/scratch/b156b0353186/completion015-confirmation"
+      ],
+      "returncode": 0,
+      "reason": null,
+      "wall_seconds": 7.518406633003906,
+      "children_cpu_seconds": 7.163361999999715,
+      "observed_cpu_lower_bound": 0.0,
+      "cpu_cap": 70,
+      "scope": "Original registered accounts; no reseed, direct record edit or copied balances."
+    },
+    {
+      "phase": "03-public-package",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "connected_enterprise",
+        "package",
+        "--output",
+        "/workspace/scratch/b156b0353186/completion015-confirmation",
+        "--archive",
+        "/workspace/scratch/b156b0353186/completion015-public.zip"
+      ],
+      "returncode": 0,
+      "reason": null,
+      "wall_seconds": 7.5180269480042625,
+      "children_cpu_seconds": 7.018787000000103,
+      "observed_cpu_lower_bound": 0.0,
+      "cpu_cap": 70,
+      "scope": "Original registered accounts; no reseed, direct record edit or copied balances."
+    }
+  ],
+  "accepted": true,
+  "actual_billing": "UNKNOWN_NOT_ZERO"
+}

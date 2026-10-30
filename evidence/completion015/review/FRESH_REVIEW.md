@@ -1,0 +1,7 @@
+# Completion015 independent arithmetic review
+
+Source SHA256 `abc262bf80741f36db2872330c2d4f5166c48d313143c239d440e3cd2143b9a4`. All eight original full-record result bindings, native expense and released-order collection sums, profit/cash identities, protected balances, prior-earned reservations and later investment-use links reconcile without discrepancy. The source snapshot was independently rehashed. No simulator/auditor was imported and no business was rerun.
+
+Central growth adds 24 and 29 collected deliveries and USD486.138512 and USD648.490228 complete modeled profit. Weak-channel arms each collect five jobs and earn USD38.774860, with no incremental growth and no declared commercial completion. Delayed/expensive arms each collect seven jobs and lose USD331.051116. Permanent tails remain seed-backed; added central profit reduces available liquidity relative to the matched baseline. Attributed acquisition/capacity collections overlap and must not be added.
+
+**This is operating/economic evidence, not resource-qualified confirmation.** Final reaped child CPU1416.974067 exceeded the registered600-second limit; the monitor undercount and breach remain preserved. Package audit acceptance does not waive that limit. All commerce and costs remain simulated/enveloped; no empirical market probability, actual revenue or native million/billion scale is established. See FRESH_ARITHMETIC.json for raw file hashes, all per-world checks, funding/use links, paired deltas and the resource receipt.
