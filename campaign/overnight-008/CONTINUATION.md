@@ -1,11 +1,11 @@
 # Active overnight execution
 
 Integration owner: `root`; verifier: `verification` (cannot edit candidate).
-Heartbeat: 2026-10-30 05:15 UTC. Six-hour envelope ends 11:07:44 UTC / 07:07 Toronto.
+Heartbeat: 2026-10-30T05:33:52.485227+00:00. Six-hour envelope ends 11:07:44 UTC / 07:07 Toronto.
 
 This is a distinct campaign from PR #11. Main is pinned at `cd90c81ab757a7042bf4d0384e8e1a7e6c2a9557`. A coordination comment has been posted to #11. Its GitHub author is MontrealAI; the current published description covers migration/lifecycle, and the latest handoff reports a molecular-identity/mass-spectrometry measurement-selection pivot. No acknowledgment or named current human integration owner has been observed. That scope is excluded from this campaign.
 
-Current next executable action: complete three materially different primary-source screens, challenge each with a strongest cheap complete baseline, then select the strongest supported discriminating construction. No flagship, customer cohort, or commercial success is admitted yet. The three research owners are screening energy/infrastructure, manufacturing/materials and mechanistic scientific experiment design. Early evidence already challenges broad versions of all three; these are falsifiers to sharpen construction, not commercial results.
+Current next executable action: complete the feature-bound-driven sparse XCT acquisition repair, against ordinary complete LP/TV/Tikhonov controls and independent checking. The real acquired-view pair-separation construction failed to reduce fixed ROI uncertainty. Its exact witnesses are preserved; do not repeat that objective or add favorable constraints. A new repair cycle has a prospective1200CPU-second/30-minute wall ceiling within the overall allocation. Science has executed the real Elowitz ambiguity instrument, stronger conventional ties, separate scoped acceptance, and actual retained different-model use (Crauste correctly needs0 new measurements). A new source-supported time-forcing parser extension for Boehm is under development; original unsupported/scientific-notation failures are preserved, and old acceptance does not qualify the extension. No flagship, commercial loss-making cohort or complete flywheel is admitted. Read OPPORTUNITY_SCREEN.md and the exact receipts; continue substantive construction, not report polishing.
 
 The inherited seccomp interpreter passed actual verifier preflight on this container (10 probes and 9 tests); bwrap cannot start. Candidate programs must execute through the qualified bounded interpreter. Trusted numerical/data preparation outside it needs separate resource bounds and cannot be described as confined arbitrary-code execution.
 

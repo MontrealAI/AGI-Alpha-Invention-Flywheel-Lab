@@ -1,0 +1,9 @@
+# Native-runtime isolation boundary
+
+The requested Landlock alternative is unavailable. On this x86_64 environment, both `landlock_create_ruleset(NULL, 0, LANDLOCK_CREATE_RULESET_VERSION)` and creation of a read-file-handling ruleset return `ENOSYS` (38, Function not implemented). The installed architecture header confirms syscall numbers 444/445/446. The inherited process has NoNewPrivs=1 and Seccomp mode 2. The probe cannot distinguish an unavailable kernel implementation from syscall masking by the enclosing runtime; neither permits using Landlock here.
+
+The trusted availability probe made no restriction, privilege, credential or external-access changes and executed no downloaded code. Filesystem/network/exec/fork/resource attack qualification for the proposed Landlock launcher is **BLOCKED**, not passed. No launcher was built and no unrestricted fallback is permitted. Reproduce with `python3 verification_overnight/landlock_availability.py`; compare its complete JSON result, not just this summary.
+
+The earlier inherited pure JSON seccomp interpreter remains qualified for its narrow reviewed-source scope. It denies file access entirely and therefore does not directly qualify importing a downloaded native simulator or Python stack that requires filesystem and library loading. A source-reviewed bounded pure-data interpreter or separately authorized already-qualified offline execution environment is the next available route. Moving the native baseline to an unrestricted host process would weaken the boundary and is not an acceptable substitute.
+
+Exact evidence: `LANDLOCK_AVAILABILITY.json`, `landlock_availability.py`, `BWRAP_AVAILABILITY.json`, `SANDBOX_QUALIFICATION.json`. This is a measured missing runtime capability, not an experimental result about assembly planning or commercial feasibility.
