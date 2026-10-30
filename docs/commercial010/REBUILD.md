@@ -1,6 +1,6 @@
 # Rebuild the commercial010 paper
 
-Run from the repository root with Python3 and pdflatex (TeXLive with lmodern, microtype, booktabs, longtable, fvextra, xurl and hyperref). The builder requires actual source-bound campaign/v2 results, policy and cohort inputs; it does not generate placeholder results.
+Run from the repository root with Python3 and pdflatex (TeXLive with lmodern, microtype, booktabs, longtable, fvextra, xurl, needspace and hyperref). The builder requires actual source-bound campaign/v2 results, policy and cohort inputs; it does not generate placeholder results.
 
 ```sh
 python scripts/build_commercial010_paper.py --results campaign/commercial-010/RESULT.json --policy campaign/commercial-010/POLICY.json --manifest campaign/commercial-010/service/executed-002/manifest.json --output docs/commercial010

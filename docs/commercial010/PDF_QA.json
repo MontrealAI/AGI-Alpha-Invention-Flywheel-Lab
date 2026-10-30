@@ -1,16 +1,12 @@
 {
-  "schema": "agi-alpha/commercial010/pdf-visual-qa/v1",
-  "pdf_sha256": "2a646cb990530485f8bbf428837948d1eeec3d4d19a54f7ae9b6b9fa8fd248b6",
+  "schema": "agi-alpha/commercial010/pdf-visual-qa/v2",
+  "pdf_sha256": "cc0eaaeb1425785cff21af99318edafda3dc0c64f2dd6ed162d33ca129ead0a4",
   "pages_inspected": 11,
   "layout_defects": [],
-  "rendering": "pdftoppm -scale-to1400 -png; all11pages inspected in current contact sheets, with full-resolution inspection of every page and dense result tables.",
-  "checks": [
-    "No clipped or overlapping text",
-    "Legible tables, headings, code and page numbers",
-    "All page text bounds inside physical page",
-    "Final LaTeX compilation emitted zero overfull/underfull warnings",
-    "Five verdicts and commercial scope match actual campaign/v2 results",
-    "Markdown and HTML derive from same narrative/data nodes"
-  ],
-  "scope": "Document layout and evidence integrity; no new customer, scientific or commercial confirmation."
+  "rendering": "Latest report-final PNGs from pdftoppm, all pages visually inspected; dense conversion table inspected full resolution.",
+  "reporting_correction": "Separate arrival, conditional participation wins, technical acceptance, collections and settled-per-slot. Original reporting-v1 retained unchanged.",
+  "raw_financial_results_unchanged": true,
+  "latex_warnings": [],
+  "out_of_page_words": [],
+  "scope": "Reporting and document QA only; no model rerun or new commercial evidence."
 }

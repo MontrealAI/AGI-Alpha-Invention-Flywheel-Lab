@@ -1,0 +1,127 @@
+{
+  "scope": "SIMULATED_AGGREGATE_PROJECTION",
+  "scenarios": {
+    "favorable": {
+      "earned_reinvestment": {
+        "runs": 34,
+        "conditional_loop_fraction": 0.0,
+        "target_reached_fraction": 0.0,
+        "time_to_target_months_if_reached": null,
+        "right_censored_without_target": 34,
+        "horizon_months": 120,
+        "profit_microUSD": {
+          "minimum": 5731831012,
+          "median": 6759488059.0,
+          "maximum": 8149725274
+        },
+        "cash_survival_fraction": 0.0,
+        "median_earned_funded_cycles": 1.0,
+        "median_repeat_jobs": 89.5,
+        "median_trailing_year_revenue": 7448368346.0,
+        "median_annualized_run_rate": 60707057712.0,
+        "median_cumulative_revenue": 13279389828.5
+      },
+      "hold_capacity": {
+        "runs": 34,
+        "conditional_loop_fraction": 1.0,
+        "target_reached_fraction": 0.0,
+        "time_to_target_months_if_reached": null,
+        "right_censored_without_target": 34,
+        "horizon_months": 120,
+        "profit_microUSD": {
+          "minimum": 107890477642,
+          "median": 167982001283.5,
+          "maximum": 218245727036
+        },
+        "cash_survival_fraction": 1.0,
+        "median_earned_funded_cycles": 116.5,
+        "median_repeat_jobs": 4333.0,
+        "median_trailing_year_revenue": 12118774732.5,
+        "median_annualized_run_rate": 11798139786.0,
+        "median_cumulative_revenue": 250420670864.5
+      }
+    },
+    "central": {
+      "earned_reinvestment": {
+        "runs": 33,
+        "conditional_loop_fraction": 0.0,
+        "target_reached_fraction": 0.0,
+        "time_to_target_months_if_reached": null,
+        "right_censored_without_target": 33,
+        "horizon_months": 120,
+        "profit_microUSD": {
+          "minimum": 5656257312,
+          "median": 7042020712,
+          "maximum": 8080749245
+        },
+        "cash_survival_fraction": 0.0,
+        "median_earned_funded_cycles": 1,
+        "median_repeat_jobs": 152,
+        "median_trailing_year_revenue": 9325259756,
+        "median_annualized_run_rate": 28080656208,
+        "median_cumulative_revenue": 13820490960
+      },
+      "hold_capacity": {
+        "runs": 33,
+        "conditional_loop_fraction": 0.9090909090909091,
+        "target_reached_fraction": 0.0,
+        "time_to_target_months_if_reached": null,
+        "right_censored_without_target": 33,
+        "horizon_months": 120,
+        "profit_microUSD": {
+          "minimum": -1622989930,
+          "median": 2150019422,
+          "maximum": 8231562244
+        },
+        "cash_survival_fraction": 1.0,
+        "median_earned_funded_cycles": 49,
+        "median_repeat_jobs": 157,
+        "median_trailing_year_revenue": 0,
+        "median_annualized_run_rate": 0,
+        "median_cumulative_revenue": 8997387473
+      }
+    },
+    "adverse": {
+      "earned_reinvestment": {
+        "runs": 33,
+        "conditional_loop_fraction": 0.0,
+        "target_reached_fraction": 0.0,
+        "time_to_target_months_if_reached": null,
+        "right_censored_without_target": 33,
+        "horizon_months": 120,
+        "profit_microUSD": {
+          "minimum": -3500000000,
+          "median": -3500000000,
+          "maximum": -3500000000
+        },
+        "cash_survival_fraction": 1.0,
+        "median_earned_funded_cycles": 0,
+        "median_repeat_jobs": 0,
+        "median_trailing_year_revenue": 0,
+        "median_annualized_run_rate": 0,
+        "median_cumulative_revenue": 0
+      },
+      "hold_capacity": {
+        "runs": 33,
+        "conditional_loop_fraction": 0.0,
+        "target_reached_fraction": 0.0,
+        "time_to_target_months_if_reached": null,
+        "right_censored_without_target": 33,
+        "horizon_months": 120,
+        "profit_microUSD": {
+          "minimum": -3500000000,
+          "median": -3500000000,
+          "maximum": -3500000000
+        },
+        "cash_survival_fraction": 1.0,
+        "median_earned_funded_cycles": 0,
+        "median_repeat_jobs": 0,
+        "median_trailing_year_revenue": 0,
+        "median_annualized_run_rate": 0,
+        "median_cumulative_revenue": 0
+      }
+    }
+  },
+  "cpu_seconds": 45.574063824,
+  "wall_seconds": 45.5876988500022
+}

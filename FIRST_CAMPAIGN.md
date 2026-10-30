@@ -2,7 +2,7 @@
 
 **IMPORTANT: BLUE SKY. BEYOND-HUMAN FORESIGHT. COMMERCIAL FLYWHEEL SUCCESS.**
 
-**Status: campaign assignment, not an executed opportunity screen or a success claim. Execution requires a recorded allocation within existing authority.**
+**Founding assignment status (historical): campaign assignment, not an executed opportunity screen or a success claim. Execution requires a recorded allocation within existing authority.**
 
 ## The ambition and the first achievement
 
@@ -96,3 +96,13 @@ Continue the [autonomous commercial mandate](campaign/commercial-010/MANDATE.txt
 The campaign at commercial-010 preserves the initial small cohort and no-sales development markets, then tests scaled synthetic reconciliation work under frozen finite scenario sets. Use [REPRODUCE.md](campaign/commercial-010/REPRODUCE.md) for the integrated bounded runtime. Prior exposed cases remain engineering replay, with no fresh statistical or observed-revenue claim. The original four reference prices remain hypothetical examples; the later premium-pricing policy controls new offers.
 
 The later [autonomous onboarding and strategic pricing adjustment](campaign/commercial-010/ONBOARDING_PRICING_ADJUSTMENT.md) controls price selection: maximize expected complete-cost contribution and sustainable cash growth under strategic buyer/rival responses. Choose the discount and implied win probability jointly, within the human-anchored premium offer range. A fixed five-percent policy is a controlled baseline, not a universal optimum. Separate actual agent-operated onboarding resources, uncertain customer attention/integration friction, and external obligations; one-time costs persist across repeat orders. Any optimality statement is limited to the modeled information and feasible price set.
+
+## Current executed outcome - 30 October 2026
+
+**Commercial 010: CONDITIONAL_SIMULATED_GO.** Actual autonomous production supplied 19,000 synthetic source rows across 19 orders: 16 deliveries passed the separate checker and three orders were rejected. The completed four-arm experiment supports fixed-capability repeated delivery financed by prior unrestricted simulated earnings; invention improvement is not a prerequisite. See the [machine-readable result](campaign/commercial-010/RESULT.json), [browser-readable paper](docs/commercial010/REPORT.md) and [compiled PDF](docs/commercial010/paper.pdf).
+
+Across the 18 qualification-region cases, mean complete modeled profit is **$375.80**, versus **-$123.14** for fixed-discount/original-onboarding control. Cash survives in 18/18 cases; 13/18 individually qualify, while five lose or fail the repeat-funding conditions. Mean earned-funded continuation is 3.06 cycles. Selected first/repeat prices are $139/$121.625. Settled collections per scheduled slot are 73.61%, versus 76.39% for fixed pricing with autonomous onboarding. Conditional participation wins among arrivals are 81.78% versus 84.76%, and collections per win are 96.36% versus 96.49%; see [metric definitions](campaign/commercial-010/METRIC_DEFINITIONS.md). The objective is expected collected complete-cost profit and sustainable cash, not maximum win rate or the highest advertised price.
+
+This result is conditional on the declared $500 setup/$15 cost-unit scenario, the assumed human comparator of four hours first order and 3.5 hours repeat, and unmeasured assurance/trust and customer-friction differences. Host billing and actual buyer demand remain unobserved. Original no-sale results, both interrupted executions, corrupt storage evidence, immutable source versions and the disclosed I/O-only recovery remain preserved; no favorable seed substitution or global five-verdict AND is introduced.
+
+The separate [guarded portfolio 011 report](campaign/commercial-011/REPORT.md) screens 25 services and technically qualifies four within their declared scopes. Its guarded central projection has median $414,092.53 complete-cost profit, 107 earned-funded cycles and 11,302 settled jobs, with 10/10 cash survival over 120 months from $5,000 seed. Scaled jobs are conditional aggregate projections, not individually executed customer deliveries; finite provider-tail terms are stronger successor assumptions. **The $1 billion trailing-year target is reached in 0/90 fresh projection cases by 120 months.** Actual commerce/live revenue, capability-compounding benefit and Blue Sky enablement remain NOT_ESTABLISHED. Publication, merge and release status must follow actual source-matched gates; these results do not assert a future release is already published.

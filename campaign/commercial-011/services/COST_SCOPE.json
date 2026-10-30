@@ -1,0 +1,98 @@
+{
+  "schema": "agi-alpha/portfolio011-service-cost-scope/v1",
+  "recorded_utc": "2026-10-30T14:55:07.909297+00:00",
+  "source": {
+    "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/be886e674f8b9bbce76410e5810b908c06a4300d/portfolio25/jobs.json",
+    "sha256": "4faa7e6389409051f6b6377ca50b7bf93d945c27ce02293be247d9cfbe1847df",
+    "use": "Source-bound PR17 wage proxies; not newly independently verified BLS rates."
+  },
+  "aggregate_loading_proxy": 1.4287020109689215,
+  "jobs": {
+    "software_bugfix": {
+      "human_role_proxy": "software_developer",
+      "wage_proxy_usd_per_hour": 65.38,
+      "loaded_hourly_proxy_usd": 93.40853747714807,
+      "first_complete_job_cost_usd_interval": [
+        8,
+        30
+      ],
+      "repeat_complete_job_cost_usd_interval": [
+        7,
+        25
+      ],
+      "first_assumed_hours_interval": [
+        0.0856452762891953,
+        0.3211697860844824
+      ],
+      "repeat_assumed_hours_interval": [
+        0.07493961675304589,
+        0.2676414884037353
+      ],
+      "human_cost_rule": "All comparable onboarding, preparation, production, verification, correction, delivery and support are HUMAN work. First-order total contains one-time context setup; repeat ranges omit that same setup. No additional setup charge is added to these complete-job intervals.",
+      "evidence_scope": "Narrow authored-workload budget sensitivity, not timed human delivery, retail quote or willingness-to-pay evidence."
+    },
+    "technical_docs": {
+      "human_role_proxy": "technical_writer",
+      "wage_proxy_usd_per_hour": 43.46,
+      "loaded_hourly_proxy_usd": 62.09138939670933,
+      "first_complete_job_cost_usd_interval": [
+        15,
+        90
+      ],
+      "repeat_complete_job_cost_usd_interval": [
+        12,
+        80
+      ],
+      "first_assumed_hours_interval": [
+        0.24157939040731077,
+        1.4494763424438646
+      ],
+      "repeat_assumed_hours_interval": [
+        0.19326351232584862,
+        1.2884234155056575
+      ],
+      "human_cost_rule": "All comparable onboarding, preparation, production, verification, correction, delivery and support are HUMAN work. First-order total contains one-time context setup; repeat ranges omit that same setup. No additional setup charge is added to these complete-job intervals.",
+      "evidence_scope": "Narrow authored-workload budget sensitivity, not timed human delivery, retail quote or willingness-to-pay evidence."
+    },
+    "rfp_response": {
+      "human_role_proxy": "technical_writer",
+      "wage_proxy_usd_per_hour": 43.46,
+      "loaded_hourly_proxy_usd": 62.09138939670933,
+      "first_complete_job_cost_usd_interval": [
+        20,
+        120
+      ],
+      "repeat_complete_job_cost_usd_interval": [
+        16,
+        110
+      ],
+      "first_assumed_hours_interval": [
+        0.3221058538764144,
+        1.9326351232584862
+      ],
+      "repeat_assumed_hours_interval": [
+        0.25768468310113146,
+        1.771582196320279
+      ],
+      "human_cost_rule": "All comparable onboarding, preparation, production, verification, correction, delivery and support are HUMAN work. First-order total contains one-time context setup; repeat ranges omit that same setup. No additional setup charge is added to these complete-job intervals.",
+      "evidence_scope": "Narrow authored-workload budget sensitivity, not timed human delivery, retail quote or willingness-to-pay evidence."
+    }
+  },
+  "ai_allocation": {
+    "operating_envelope_includes": [
+      "per-job data preparation",
+      "production",
+      "verification and correction",
+      "delivery and support workload"
+    ],
+    "outside_operating_envelope": [
+      "one-time customer onboarding",
+      "shared code construction/qualification and maintenance",
+      "opportunity acquisition and unsuccessful bids",
+      "payment fees/taxes/refunds/reserves modeled by the market"
+    ],
+    "human_labor_usd": 0,
+    "host_bills": "UNKNOWN; low resource envelopes are conditional, not exact token receipts."
+  },
+  "excluded_inference": "The 33-hour complete-RFP survey and PR17 full-project dollar examples are not assigned to this one-line patch, small guide or12-question evidence response."
+}

@@ -6,10 +6,12 @@ from pathlib import Path
 import re
 import zipfile
 
-PREFIXES = ['commercial', 'benchmarks', 'campaign/commercial-010', 'docs/commercial010', 'evidence/commercial010', 'vendor']
-FILES = ['README.md', 'AGENTS.md', 'CHARTER.md', 'FIRST_CAMPAIGN.md', 'COMMERCIAL_COMPARISON.md',
-         'run_commercial010.py', 'requirements-commercial010.txt', 'scripts/run_service010.py', 'scripts/run_onboarding010.py', 'scripts/package_commercial010.py', 'scripts/check_commercial010_paper.py',
-         'experiments/__init__.py', 'experiments/commerce006.py', 'experiments/resource006_v3.py',
+PREFIXES = ['commercial', 'benchmarks', 'campaign/commercial-010', 'docs/commercial010', 'evidence/commercial010', 'vendor', 'portfolio25', 'campaign/commercial-011', 'historical/commercial-010']
+FILES = ['.github/workflows/campaign.yml', '.github/workflows/commercial010.yml',
+         'README.md', 'AGENTS.md', 'CHARTER.md', 'FIRST_CAMPAIGN.md', 'COMMERCIAL_COMPARISON.md', 'THIRD_PARTY.md',
+         'run_commercial010.py', 'requirements-commercial010.txt', 'scripts/run_service010.py', 'scripts/run_onboarding010.py', 'scripts/package_commercial010.py', 'scripts/check_commercial010_paper.py', 'scripts/build_commercial010_paper.py',
+         'scripts/archive_commercial010_evidence.py', 'scripts/resume_commercial010.py',
+         'experiments/commerce006.py', 'experiments/resource006_v3.py',
          'verification/__init__.py', 'verification/commercial010_audit.py']
 
 
@@ -23,8 +25,12 @@ def build(root, output, source):
     for prefix in PREFIXES:
         candidates.update((root / prefix).rglob('*'))
     candidates.update((root / 'tests').glob('*010*.py'))
+    candidates.update((root / 'tests').glob('*011*.py'))
     entries = {}
     for path in sorted(candidates):
+        # Producer-owned transaction staging is not a published evidence root.
+        if any(part.startswith(('.commercial010-package-', '.publication-')) for part in path.relative_to(root).parts):
+            continue
         if path.is_symlink():
             raise ValueError('PACKAGE_SYMLINK_REFUSED')
         if not path.is_file() or '__pycache__' in path.parts or path.suffix in {'.pyc', '.lock'}:

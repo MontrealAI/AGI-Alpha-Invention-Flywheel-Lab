@@ -115,7 +115,7 @@ Exploration seeds are [1, 2]; confirmation seeds are [23001001, 23001002, 230010
 
 Common random inputs are keyed by seed, cycle, buyer and channel for values, arrivals, noisy rival information, revisions and disputes. This prevents conditional purchases from shifting later random draws between arms. Endogenous purchases, onboarding, trust, prices, balances and investment may diverge. The resulting paired contrasts identify model-intervention effects under the stated policies and assumptions; they are not empirical causal effects of onboarding on actual customers. The revised development history is disclosed, and this finite model comparison makes no population-confidence or statistical-alpha claim.
 
-| Arm | First / repeat price | Expected complete profit | Paid win / cash survival | Mean repeat / earned cycles |
+| Arm | First / repeat price | Expected complete profit | Settled / slot; cash survival | Mean repeat / earned cycles |
 | --- | --- | --- | --- | --- |
 | fixed_original | $132.05 / $115.54 | -$123.14 | 48.3% / 100.0% | 1.06 / 1.83 |
 | fixed_autonomous_onboarding | $132.05 / $115.54 | $367.99 | 76.4% / 100.0% | 1.67 / 2.72 |
@@ -129,13 +129,24 @@ Common random inputs are keyed by seed, cycle, buyer and channel for values, arr
 | strategic_original | -$851.30 / $331.00 / $672.94 | $312.46 | $111.84 | 11/18 |
 | strategic_autonomous_onboarding | -$807.66 / $662.57 / $825.21 | $440.44 | $155.04 | 13/18 |
 
-Paid win frequency is collected jobs divided by production opportunities, not a guaranteed acceptance probability. All four arms share the same source-bound service quality and rejection rules: 16 qualified artifact contracts from 19 supplied orders. First and repeat price policies are the observed price-distribution support in this game; buyer state determines their mixture. Regional commercial qualification requires positive expected complete profit, all modeled runs surviving with no payable breach, and mean earned-funded cycles and repeat buyers meeting the declared thresholds. Individual run GO counts remain separately reported descriptive outcomes.
+The immutable legacy raw field win_probability is settled collections per scheduled opportunity slot, not conditional participation wins among arriving buyers. The reporting correction below separates arrival, selection, technical acceptance and collection without changing any financial result or verdict. All four arms share the same source-bound service quality and rejection rules: 16 qualified artifact contracts from 19 supplied orders. First and repeat price policies are the observed price-distribution support in this game; buyer state determines their mixture. Regional commercial qualification requires positive expected complete profit, all modeled runs surviving with no payable breach, and mean earned-funded cycles and repeat buyers meeting the declared thresholds. Individual run GO counts remain separately reported descriptive outcomes.
+
+| Arm | Arrival A/N | Conditional win W/A | Technical Q/W | Collection C/W | Settled C/N |
+| --- | --- | --- | --- | --- | --- |
+| fixed_original | 94.10% | 53.14% | 100.00% | 96.53% | 48.26% |
+| fixed_autonomous_onboarding | 93.40% | 84.76% | 100.00% | 96.49% | 76.39% |
+| strategic_original | 93.40% | 78.81% | 100.00% | 96.23% | 70.83% |
+| strategic_autonomous_onboarding | 93.40% | 81.78% | 100.00% | 96.36% | 73.61% |
+
+The combined arm has 288 scheduled slots, 269 arrivals, 220 participation wins, 220 native technical acceptances and 212 collections. Denominator-zero rates are undefined, not inferred zero. Native prepare/release counts and archived decision outcomes are reconciled for all 168 confirmation runs. These are simulated buyer conversions; functional acceptance is an actual scoped synthetic-artifact replay, not a real-customer quality estimate. Shared underlying random draws remain matched even when endogenous purchase history changes repeat-arrival thresholds.
+
+Reporting-v1 is preserved with its exact PDF and builder under history/reporting-v1. Its earlier win-rate display labels are corrected here to settled-per-slot conversion; prices, profits, verdicts and raw financial evidence are unchanged.
 
 Integer price-policy labels are basis points of the applicable human anchor: 9500 means 95%. Adaptive labels encode first/repeat multipliers; None denotes NoBid rather than a free service. The displayed first/repeat prices describe each policy support, not an empirically observed willingness-to-pay distribution. All USD tables round to cents for display; replay uses exact integer simulated microUSD.
 
 Exploration price response for strategic_original; selected policy 9000, finite-grid profitable-deviation residual $0.00. Zero residual is limited to this candidate grid, information model and sampled conditional prior, not Nash or globally optimal continuous pricing.
 
-| Price policy | Expected complete profit | Paid win probability | Available cash / survival |
+| Price policy | Expected complete profit | Settled / slot | Available cash / survival |
 | --- | --- | --- | --- |
 | 9000 | $359.42 | 80.2% | $3,823.42 / 100.0% |
 | 9500 | -$61.38 | 52.1% | $3,854.83 / 100.0% |
@@ -149,7 +160,7 @@ Exploration price response for strategic_original; selected policy 9000, finite-
 
 Exploration price response for strategic_autonomous_onboarding; selected policy 10000, finite-grid profitable-deviation residual $0.00. Zero residual is limited to this candidate grid, information model and sampled conditional prior, not Nash or globally optimal continuous pricing.
 
-| Price policy | Expected complete profit | Paid win probability | Available cash / survival |
+| Price policy | Expected complete profit | Settled / slot | Available cash / survival |
 | --- | --- | --- | --- |
 | 9000 | $481.77 | 88.5% | $3,796.94 / 100.0% |
 | 9500 | $549.99 | 88.5% | $3,777.28 / 100.0% |
@@ -274,5 +285,3 @@ The mandate reports world GDP of approximately $118.35 trillion and a 52.6% labo
 Reference-v6 DOCX SHA256: 8916ec49efa7ed5c74d4a45e83731c88df108da6ea83977dfef654709457bdd2
 Extracted-text SHA256: 03dbfd4a509407bbcc40c8485e4a98f12b0d919cce737fd0d7d4126027ced062
 ```
-
-The full reference is intentionally not redistributed. No actual provider invoice, live customer commitment, real revenue or fresh invention benefit is asserted.

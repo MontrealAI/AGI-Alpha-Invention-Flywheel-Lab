@@ -1,0 +1,47 @@
+{
+  "schema": "alpha/portfolio25-hosted-qualification/v1",
+  "source_commit": "a255ec5794bfdd5926a678b51ed349a636fbcc28",
+  "scope": "Source-matched PR engineering qualification; no commercial acceptance or observed revenue inferred.",
+  "general_workflow": {
+    "id": 41077858898,
+    "path": ".github/workflows/campaign.yml",
+    "event": "pull_request",
+    "head_branch": "campaign/autonomous-commercial-010",
+    "conclusion": "success",
+    "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41077858898",
+    "job_id": 124138752642
+  },
+  "other_workflows": [
+    {
+      "id": 41077858833,
+      "path": ".github/workflows/consequential007.yml",
+      "head_sha": "a255ec5794bfdd5926a678b51ed349a636fbcc28",
+      "event": "pull_request",
+      "head_branch": "campaign/autonomous-commercial-010",
+      "conclusion": "success",
+      "html_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41077858833"
+    },
+    {
+      "id": 41077858881,
+      "path": ".github/workflows/consequential009.yml",
+      "head_sha": "a255ec5794bfdd5926a678b51ed349a636fbcc28",
+      "event": "pull_request",
+      "head_branch": "campaign/autonomous-commercial-010",
+      "conclusion": "success",
+      "html_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41077858881"
+    }
+  ],
+  "actual_console_proof": [
+    "2026-10-30T15:08:29.3286746Z \u001b[36;1mpython -m unittest discover -s portfolio25 -p 'test_*.py' -v\u001b[0m",
+    "2026-10-30T15:08:29.6259262Z Ran 27 tests in 0.145s",
+    "2026-10-30T15:08:32.6478129Z Ran 30 tests in 2.957s",
+    "2026-10-30T15:09:12.4638161Z Ran 253 tests in 38.746s",
+    "2026-10-30T15:09:12.7260224Z Ran 17 tests in 0.044s"
+  ],
+  "portfolio_tests": {
+    "original": 21,
+    "adversarial": 9,
+    "hosted_passed": 30
+  },
+  "remaining": "Final integrated commercial workflow, final PR head and merged-main push require their own exact-source qualification."
+}

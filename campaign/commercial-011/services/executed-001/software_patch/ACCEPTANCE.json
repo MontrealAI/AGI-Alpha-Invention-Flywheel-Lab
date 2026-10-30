@@ -1,0 +1,44 @@
+{
+  "accepted": true,
+  "checks": [
+    {
+      "after": {
+        "accepted": true,
+        "receipt_file": "campaign/commercial-011/services/executed-001/software_patch/native-success/RECEIPT.json",
+        "receipt_sha256": "1f1dc813a6642976a73bb58d257d38621ea0470a513520b648b1d06ced6f912f"
+      },
+      "before": {
+        "detail": "'receipt_path'",
+        "exception": "KeyError",
+        "rejected": true
+      },
+      "case": "success",
+      "native_result_keys": [
+        "receipt",
+        "receipt_sha256",
+        "settlement"
+      ],
+      "native_state": "complete"
+    },
+    {
+      "after": {
+        "accepted": true,
+        "receipt_file": "campaign/commercial-011/services/executed-001/software_patch/native-failure/RECEIPT.json",
+        "receipt_sha256": "f6ff64703aa8af9b991d0e9fafa35de316ed5ab5ec4774abeb97d5e4adbfe68b"
+      },
+      "before": {
+        "detail": "'receipt_path'",
+        "exception": "KeyError",
+        "rejected": true
+      },
+      "case": "failure",
+      "native_result_keys": [
+        "receipt",
+        "receipt_sha256",
+        "settlement"
+      ],
+      "native_state": "failed"
+    }
+  ],
+  "scope": "Actual native success and failure subprocesses, not mocked provider receipts."
+}

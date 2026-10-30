@@ -1,0 +1,60 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "portfolio011-confirmation-001",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "commercial.portfolio_growth",
+    "--services",
+    "campaign/commercial-011/services/EXECUTED_SERVICES.json",
+    "--policy",
+    "campaign/commercial-011/POLICY.json",
+    "--expected-policy-sha256",
+    "2205f428d1e6548ef1c4fb719e882703f1d52817f5006ea5417042139db7706b",
+    "--expected-services-sha256",
+    "47e3ef0f6ef0983a208460bf68706b3f0f593f35f999d4a65b6eb69812efe9d4",
+    "--output",
+    "campaign/commercial-011/bounded-execution-001/artifacts"
+  ],
+  "requested_command": [
+    "python",
+    "-m",
+    "commercial.portfolio_growth",
+    "--services",
+    "campaign/commercial-011/services/EXECUTED_SERVICES.json",
+    "--policy",
+    "campaign/commercial-011/POLICY.json",
+    "--expected-policy-sha256",
+    "2205f428d1e6548ef1c4fb719e882703f1d52817f5006ea5417042139db7706b",
+    "--expected-services-sha256",
+    "47e3ef0f6ef0983a208460bf68706b3f0f593f35f999d4a65b6eb69812efe9d4",
+    "--output",
+    "campaign/commercial-011/bounded-execution-001/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "commercial.portfolio_growth",
+    "--services",
+    "campaign/commercial-011/services/EXECUTED_SERVICES.json",
+    "--policy",
+    "campaign/commercial-011/POLICY.json",
+    "--expected-policy-sha256",
+    "2205f428d1e6548ef1c4fb719e882703f1d52817f5006ea5417042139db7706b",
+    "--expected-services-sha256",
+    "47e3ef0f6ef0983a208460bf68706b3f0f593f35f999d4a65b6eb69812efe9d4",
+    "--output",
+    "campaign/commercial-011/bounded-execution-001/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/3098f63ba128/workrepo",
+  "limits": {
+    "wall_seconds": 300,
+    "cpu_seconds": 200,
+    "memory_bytes": 1073741824,
+    "output_bytes": 16000000,
+    "storage_bytes": 80000000
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "pending"
+}
