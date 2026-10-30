@@ -60,7 +60,7 @@ def main():
         limits = {'wall_seconds': 3600 if not a.smoke else 600, 'cpu_seconds': 3600 if not a.smoke else 600,
                   'memory_bytes': 2147483648, 'output_bytes': 64000000, 'storage_bytes': 800000000}
         result = run(command, output, ledger, 'commercial010-' + ('smoke-' if a.smoke else 'full-') + str(time.time_ns()), limits, cwd=ROOT)
-        print(json.dumps({'state': result['receipt']['state'], 'receipt_path': result['receipt_path'], 'scope': 'SIMULATED'}))
+        print(json.dumps({'state': result['receipt']['state'], 'receipt_path': str(output / 'RECEIPT.json'), 'scope': 'SIMULATED'}))
         if result['receipt']['state'] != 'complete':
             raise SystemExit(1)
         return

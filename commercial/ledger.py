@@ -94,7 +94,7 @@ def load_jobs(root, manifest):
 
 
 class TapeExchange:
-    def __init__(self, path, *, root, manifest, opening, working, contract):
+    def __init__(self, path, *, root, manifest, opening, working, contract, durable=True):
         self.root = Path(root)
         self.manifest = copy.deepcopy(manifest)
         self.jobs = load_jobs(root, manifest)
@@ -107,9 +107,26 @@ class TapeExchange:
                        'contract': contract, 'manifest_sha256': digest(manifest)}
         self.actions = []
         self.last_day = -1
-        self.ex = engine()(Path(path), key=b'C' * 32, contract=contract,
-                           validate=self.validate, check=self.check,
-                           opening=opening, working=working)
+        from commercial.persistence import DurableTape, memory_engine
+        self.persistence = DurableTape(path, self.config, canonical, strict_json) if durable else None
+        self._restoring = True
+        self.ex = memory_engine(engine(), key=b'C' * 32, contract=contract,
+                                validate=self.validate, check=self.check,
+                                opening=opening, working=working)
+        try:
+            for expected in self.persistence.recovery_actions if self.persistence else []:
+                if expected.get('seq') != len(self.actions) or expected.get('before') != self.ex.snapshot():
+                    raise ValueError('DURABLE_RECOVERY_SEQUENCE_OR_STATE_MISMATCH')
+                after = self.execute(expected['op'], expected['args'], expected['day'])
+                if self.actions[-1] != expected or after != expected['after']:
+                    raise ValueError('DURABLE_RECOVERY_ACTION_MISMATCH')
+        except BaseException:
+            self.ex.close()
+            if self.persistence:
+                self.persistence.close()
+            raise
+        finally:
+            self._restoring = False
 
     def validate(self, task):
         if not isinstance(task, dict) or set(task) != {'scope', 'job_id', 'artifact_sha256', 'receipt_sha256'}:
@@ -139,6 +156,8 @@ class TapeExchange:
         return {'accepted': accepted, 'decisive': True, 'scope': SCOPE, 'authority': job['receipt_sha256']}
 
     def execute(self, op, args, day, *, record=True):
+        if self.persistence and (self.persistence.failed or not record):
+            raise ValueError('DURABLE_ACTION_RECORD_REQUIRED')
         if type(day) is not int or day < self.last_day or day < 0:
             raise ValueError('EVENT_TIME_REGRESSION')
         schemas = {'cost': {'id', 'amount'}, 'wallet': {'buyer', 'amount'},
@@ -195,10 +214,12 @@ class TapeExchange:
             raise ValueError('UNKNOWN_NATIVE_OPERATION')
         after = self.ex.snapshot()
         self.last_day = day
-        if record:
-            self.actions.append({'seq': len(self.actions), 'day': day, 'op': op, 'args': a,
-                                 'before': before, 'after': after})
         self.assert_conservation()
+        if record:
+            event = {'seq': len(self.actions), 'day': day, 'op': op, 'args': a, 'before': before, 'after': after}
+            if self.persistence and not self._restoring:
+                self.persistence.append(event)
+            self.actions.append(event)
         return after
 
     def assert_conservation(self):
@@ -231,7 +252,13 @@ class TapeExchange:
                 'invoices': invoices, 'receivables': receivables, 'summary': self.ex.snapshot()}
 
     def close(self):
-        self.ex.close()
+        try:
+            if self.persistence and not self.persistence.failed:
+                self.persistence.checkpoint(self.ex.db, self.actions)
+        finally:
+            self.ex.close()
+            if self.persistence:
+                self.persistence.close()
 
 
 def audit(tape, *, root, manifest, expected_actions_sha256=None):
@@ -248,7 +275,7 @@ def audit(tape, *, root, manifest, expected_actions_sha256=None):
         raise ValueError('EXACT_TAPE_CONFIG_REQUIRED')
     with tempfile.TemporaryDirectory(prefix='commercial010-audit-') as tmp:
         replay = TapeExchange(Path(tmp) / 'replay.sqlite', root=root, manifest=manifest,
-                              opening=c['opening'], working=c['working'], contract=c['contract'])
+                              opening=c['opening'], working=c['working'], contract=c['contract'], durable=False)
         try:
             for seq, event in enumerate(tape['actions']):
                 if event.get('seq') != seq or event.get('before') != replay.ex.snapshot():

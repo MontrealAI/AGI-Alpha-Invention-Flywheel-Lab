@@ -1,0 +1,152 @@
+{
+  "schema": "agi-alpha/commercial010/calibration-v1",
+  "checked_utc": "2026-10-30",
+  "currency": "USD",
+  "sources": [
+    {
+      "id": "bls_bookkeepers_2025",
+      "url": "https://www.bls.gov/news.release/ocwage.t01.htm",
+      "quantity": "May2025 median bookkeeper/accounting/auditing clerk wage",
+      "value": 24.36,
+      "unit": "USD_per_hour",
+      "applicability": "US occupation, not matched service quote; market/firms may differ"
+    },
+    {
+      "id": "bls_ecec_dec2025",
+      "url": "https://www.bls.gov/news.release/archives/ecec_03202026.htm",
+      "quantity": "Privateindustry compensation and wages",
+      "compensation": 46.15,
+      "wages": 32.36,
+      "unit": "USD_per_hour",
+      "applicability": "Aggregate burden ratio proxy, not occupation-specific; no second benefits burden added"
+    },
+    {
+      "id": "xero_reconciliation",
+      "url": "https://www.xero.com/us/guides/how-to-do-bank-reconciliation/",
+      "observation": "Vendor describes manual work from roughly half an hour to several hours, and much quicker automated workflows.",
+      "applicability": "General vendor guidance, not timing measurement for the generated1000row cohort; strong conventional/AI outside options remain"
+    },
+    {
+      "id": "worldbank_gdp",
+      "url": "https://data.worldbank.org/?locations=1W-US",
+      "value": 118.35,
+      "unit": "trillion_current_USD_2025"
+    },
+    {
+      "id": "ilo_labor_share",
+      "url": "https://ilostat.ilo.org/blog/the-world-of-work-and-the-2030-agenda-a-ten-year-review/",
+      "value": 52.6,
+      "unit": "percent_2025"
+    },
+    {
+      "id": "ilo_definition",
+      "url": "https://unstats.un.org/sdgs/metadata/files/Metadata-10-04-01.pdf",
+      "observation": "Labor share includes employee compensation and imputed labor income of self-employed."
+    },
+    {
+      "id": "ilo_methods",
+      "url": "https://webapps.ilo.org/ilostat-files/Documents/TEM.pdf",
+      "observation": "Reported and imputed country estimates support aggregates with consistent coverage; vintages may differ from WorldBank."
+    }
+  ],
+  "human_comparator": {
+    "derived_loaded_hourly": 34.74085290482076,
+    "base_hours_assumed": 4,
+    "base_complete_cost_scenario_rounded": 139,
+    "time_sensitivity_hours": [
+      0.25,
+      0.5,
+      1,
+      2,
+      4,
+      8
+    ],
+    "nonlabor_overhead": 0,
+    "interpretation": "Loaded labor is a sourced floor; no invented agency overhead. Complete benchmark assumes declared work including QA,capture,delivery,support fits4hours and no incremental nonlabor expense. This is a conditional scenario, not an observed completed human enterprise cost or retail price. Lower hours explicitly challenge benchmark and buyer price. Buyer obligations: reconciled rows plus accurate exception schedule, not guaranteed resolution where source ambiguity remains.",
+    "rounded_loaded_hourly_used": 34.75,
+    "first_order_hours_assumed": 4,
+    "one_time_onboarding_hours_per_customer": 0.5,
+    "repeat_order_hours_assumed": 3.5,
+    "first_order_human_cost_scenario": 139,
+    "repeat_order_human_cost_scenario": 121.625,
+    "stage_hours_assumed": {
+      "one_time_customer_onboarding_setup": 0.5,
+      "per_job_data_preparation": 0.5,
+      "per_job_reconciliation_production": 2,
+      "per_job_verification_correction": 0.5,
+      "per_job_acquisition_delivery_support_allocation": 0.5
+    },
+    "labor_performer": "HUMAN for all human-comparator stages, including onboarding, setup, preparation, verification, corrections, acquisition and support; no AI staff substituted into H",
+    "timing": "Human onboarding charged once when customer relationship starts; repeat human jobs omit that same0.5h. No extra onboarding cost added on top of139first-order total. Unproven repeat orders are not pre-amortized."
+  },
+  "ai_cost_scope": {
+    "mandatory_human_hours": 0,
+    "human_intervention_observed": false,
+    "exact_host_model_identifier": "NOT_EXPOSED",
+    "exact_usage_billing": "UNKNOWN",
+    "finite_scenario_intervals": "Declared sensitivity budgets, not measured billing bounds; qualification holds only if all unmetered resource costs fit that tested envelope. No exact token receipts manufactured.",
+    "setup_includes": [
+      "all agents development and research",
+      "failed exploration and repair",
+      "source retrieval",
+      "verification",
+      "publication",
+      "maintenance design"
+    ],
+    "operating_includes": [
+      "production",
+      "verification",
+      "correction and rejectedjobs",
+      "compute/inference/tools/storage",
+      "acquisition including no-sales",
+      "distribution",
+      "support",
+      "refunds",
+      "paymentfees",
+      "terminal reserves"
+    ]
+  },
+  "broad_scale_proxy": {
+    "formula": "118.35*0.526",
+    "value_trillion_USD": 62.2521,
+    "interpretation": "Illustrative cross-source worldwide labor-income proxy; not official combined total or measured screen-work/AI-addressable demand. Owner40trillionhypothesis remains unvalidated; no additionalbenefitloading applied."
+  },
+  "unmeasured_market_parameters": [
+    "buyer values",
+    "trust differentiation",
+    "onboarding cost",
+    "willingness to pay",
+    "repeat demand",
+    "supplier terms",
+    "tax provision",
+    "setup and perjob host costs"
+  ],
+  "onboarding": {
+    "agent_operation": {
+      "performer": "Autonomous agent-operated CSV preparation,validation,reconciliation and source checking",
+      "cost_range_assumed_USD_per_first_customer": [
+        0.01,
+        2
+      ],
+      "observed_resource_receipt": "campaign/commercial-010/onboarding/executed-001/RESULT.json",
+      "host_inference_bill": "UNKNOWN",
+      "recurrence": "one-time per customer, separate recurring resources each job"
+    },
+    "customer_side": {
+      "payer": "Customer",
+      "attention_switching_range_USD_equivalent": [
+        0,
+        50
+      ],
+      "evidence": "UNMEASURED; conditional ready-export segment hypothesis; pipeline measures machine resources, not human approval time",
+      "timing": "one-time completed setup, not charged again on repeats after refunds"
+    },
+    "external": {
+      "payer": "Specified provider/customer in policy",
+      "default_fee_USD": 0,
+      "basis": "No paid external onboarding provider assumed; stress nonzero fees separately; not asserted universally zero",
+      "payment_fees": "Separately charged on transactions"
+    },
+    "historical_zero_sales_cause": "An uncertain customer-side friction assumption consumed the small initial discount. It was not a measured AI onboarding invoice or human staffing requirement; do not relabel the original25USD utility friction as agent expense."
+  }
+}

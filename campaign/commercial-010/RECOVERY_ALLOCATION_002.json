@@ -1,0 +1,24 @@
+{
+  "schema": "agi-alpha/commercial010/recovery-allocation-002",
+  "authority": "Continuation and final bounded recovery within the owner-authorized original120minute execution window; no spending or authority extension. Explicit additive operational reservation, never a refund or a reset of earlier charges.",
+  "registered_utc": "2026-10-30T14:52:19.159750+00:00",
+  "original_closeout_deadline_utc": "2026-10-30T15:33:24.623909+00:00",
+  "reason": "Host transport loss and physical SQLite corruption consumed earlier conservative reservations before any confirmation case ran. Prior bound and charges remain visible; this final recovery uses available host resources inside the unchanged wall window.",
+  "prior_charged_cpu_seconds": 5400,
+  "total_charged_cpu_seconds": 7800,
+  "caps": {
+    "additional_cpu_seconds": 2400,
+    "total_charged_cpu_seconds": 7800,
+    "additional_wall_seconds": 2400,
+    "memory_bytes": 2147483648,
+    "output_storage_bytes": 500000000,
+    "new_spending_usd": 0,
+    "paid_api_calls": 0,
+    "outreach": 0,
+    "real_transactions": 0
+  },
+  "conservative_charges_vs_metering": "7800 is the cumulative conservative reservation ceiling, not measured CPU or a monetary bill. Interrupted originalusageUNKNOWN; failedrecovery waitedCPU121.613782. No exact model billing is manufactured.",
+  "scope": "Only unchanged frozen financial policies, seeds,costs and cohorts through the disclosedI/Orepair. No seed substitutions. Fast successor engineering remains separatelyversioned.",
+  "ledger": "evidence/commercial010/RESOURCE_LEDGER_RECOVERY_002.json",
+  "followup": "No further campaign allocation is silently created if this final recovery fails or reaches its cap."
+}
