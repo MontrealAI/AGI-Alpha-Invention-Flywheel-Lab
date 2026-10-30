@@ -11,11 +11,14 @@ import copy
 import hashlib
 import hmac
 from pathlib import Path
+import tempfile
 import threading
 
 from adaptive_enterprise.account import Account, action_digest, action_prefix_digests, audit_account
 from commercial.ledger import amount as validate_amount, canonical, digest, strict_json
 from commercial.persistence import atomic_bytes
+from commercial.ledger import _ADAPTIVE_ACCOUNT_CAPABILITY
+from commercial.single_writer import SingleWriterExchange
 
 SCHEMA = 'agi-alpha/connected014-resource-journal/v1'
 SOURCE_PATHS = ('connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
@@ -86,7 +89,7 @@ class JournalAccount:
     def __init__(self, root, manifest, path, *, opening, working, contract):
         self.root, self.path = Path(root).absolute(), Path(path).absolute()
         self.manifest = copy.deepcopy(manifest)
-        self._mutex, self._closed = threading.RLock(), False
+        self._mutex, self._closed, self._journal_failed = threading.RLock(), False, False
         self._account = None
         self.journal_path = self.path.with_name(self.path.name + '.connected-journal.json')
         self.source = source_identity(self.root)
@@ -105,6 +108,8 @@ class JournalAccount:
     def _assert_current(self):
         if self._closed or self._account is None:
             raise ValueError('CONNECTED_ACCOUNT_CLOSED')
+        if self._journal_failed:
+            raise ValueError('CONNECTED_JOURNAL_DURABILITY_REQUIRES_REOPEN')
         self._account._assert_owner()
         if source_identity(self.root) != self.source:
             raise ValueError('CONNECTED_FINANCE_SOURCE_CHANGED')
@@ -152,8 +157,18 @@ class JournalAccount:
             _audit_journal(self.export(), root=self.root, manifest=self.manifest, pending_key=pending[0]['key'])
         for entry in self._journal['entries']:
             if entry['status'] == 'PENDING':
-                self._perform(entry)
-            elif entry['status'] != 'COMPLETE':
+                # Only fresh-format intents carry a preattempt certificate.
+                # An advanced/partial native tail retains the ordinary recovery path.
+                certified = isinstance(entry.get('attempt'), dict) and entry['attempt'] == self._attempt_identity(entry['request'])
+                if certified:
+                    try:
+                        self._attempt(entry, new_entry=True)
+                    except ValueError:
+                        if entry['status'] != 'REJECTED':
+                            raise
+                else:
+                    self._perform(entry)
+            elif entry['status'] not in {'COMPLETE', 'REJECTED'}:
                 raise ValueError('UNSUPPORTED_CONNECTED_JOURNAL_STATUS')
         self.audit()
 
@@ -163,18 +178,35 @@ class JournalAccount:
             if prior['request'] != request:
                 raise ValueError('IDEMPOTENT_CONNECTED_ACTION_PAYLOAD_CHANGED')
             return prior
-        if any(row['status'] != 'COMPLETE' for row in self._journal['entries']):
+        if any(row['status'] not in {'COMPLETE', 'REJECTED'} for row in self._journal['entries']):
             raise ValueError('PENDING_CONNECTED_ACTION_REQUIRES_RECOVERY')
         self.audit()
         row = {'key': key, 'request': copy.deepcopy(request), 'plan': copy.deepcopy(plan),
-               'funding': funding, 'status': 'PENDING', 'receipt': None, 'obligation_receipt': None}
+               'funding': funding, 'status': 'PENDING', 'receipt': None, 'obligation_receipt': None,
+               'attempt': self._attempt_identity(request)}
         self._journal['entries'].append(row)
         self._save()
         return row
 
+    def _attempt_identity(self, request):
+        before = self._account.export()
+        exchange = self._account._owner._exchange
+        persistence = exchange.persistence
+        if persistence is None or persistence.failed:
+            return None
+        return {'source_sha256': self.source['sha256'], 'request_sha256': digest(request),
+                'account_record_sha256': digest(before), 'native_record_sha256': digest(before['ledger']),
+                'native_sequence': before['snapshot']['sequence'],
+                'native_state_digest': before['snapshot']['state_digest'],
+                'native_actions_sha256': before['snapshot']['actions_sha256'],
+                'last_day': exchange.last_day,
+                'durable_tape_sha256': hashlib.sha256(persistence.tape.read_bytes()).hexdigest()}
+
     def _perform(self, entry):
         if entry['status'] == 'COMPLETE':
             return copy.deepcopy(entry['receipt'])
+        if entry['status'] == 'REJECTED':
+            raise ValueError(entry['receipt']['error'])
         request = entry['request']
         if request['operation'] == 'execute':
             _validate_native_request(request['op'], request['args'], request['day'])
@@ -228,6 +260,46 @@ class JournalAccount:
         self._save()
         return copy.deepcopy(receipt)
 
+    def _attempt(self, entry, *, new_entry):
+        """Retire only a new, reproducibly rejected, zero-effect native attempt."""
+        if not new_entry:
+            return self._perform(entry)
+        before = self._account.export()
+        exchange = self._account._owner._exchange
+        persistence, last_day = exchange.persistence, exchange.last_day
+        durable = persistence.tape.read_bytes() if persistence is not None else None
+        try:
+            return self._perform(entry)
+        except ValueError as error:
+            self._assert_current()
+            if (persistence is None or persistence.failed or exchange.last_day != last_day
+                    or entry['status'] != 'PENDING' or entry['obligation_receipt'] is not None
+                    or self._account.export() != before or persistence.tape.read_bytes() != durable
+                    or not str(error) or len(str(error)) > 4096):
+                raise
+            snapshot = before['snapshot']
+            rejection = {'schema': 'agi-alpha/connected014-native-rejection/v1',
+                         'error_type': 'ValueError', 'error': str(error),
+                         'request_sha256': digest(entry['request']),
+                         'native_sequence': snapshot['sequence'],
+                         'native_actions_sha256': snapshot['actions_sha256'],
+                         'native_state_digest': snapshot['state_digest'],
+                         'native_record_sha256': digest(before['ledger'])}
+            proposed = {**copy.deepcopy(entry), 'status': 'REJECTED', 'receipt': rejection}
+            try:
+                _audit_rejection(proposed, before, self.source, len(before['ledger']['actions']),
+                                 root=self.root, manifest=self.manifest)
+            except (ValueError, OSError):
+                raise error
+            entry['status'], entry['receipt'] = 'REJECTED', rejection
+            try:
+                self._save()
+            except BaseException:
+                entry['status'], entry['receipt'] = 'PENDING', None
+                self._journal_failed = True
+                raise
+            raise
+
     def snapshot(self):
         with self._mutex:
             self._assert_current()
@@ -238,8 +310,10 @@ class JournalAccount:
             self._assert_current()
             _validate_native_request(op, args, day)
             request = {'operation': 'execute', 'op': op, 'args': copy.deepcopy(args), 'day': day}
-            entry = self._entry('native:' + _native_id(op, args), request)
-            return self._perform(entry)
+            key = 'native:' + _native_id(op, args)
+            new_entry = not any(row['key'] == key for row in self._journal['entries'])
+            entry = self._entry(key, request)
+            return self._attempt(entry, new_entry=new_entry)
 
     def cost(self, ident, amount, day):
         validate_amount(amount)
@@ -280,8 +354,8 @@ class JournalAccount:
                         'worst_later_reserve': support, 'reserve_amount': amount, 'expected_net': expected_net,
                         'selected_options': [option], 'expected_state_digest': snapshot['state_digest']}
                 plan['authorized_digest'] = action_digest(plan, snapshot['state_digest'], amount, expected_net)
-            return self._perform(self._entry('spend:' + ident, request, plan=plan,
-                                             funding='EARNED' if earned else 'SEED'))
+            return self._attempt(self._entry('spend:' + ident, request, plan=plan,
+                                            funding='EARNED' if earned else 'SEED'), new_entry=True)
 
     def export(self):
         with self._mutex:
@@ -408,6 +482,70 @@ def audit_journal(record, *, root, manifest):
     return _audit_journal(record, root=root, manifest=manifest)
 
 
+def _audit_rejection(entry, record, source, start, *, root, manifest):
+    """Reproduce the rejection at its exact native prefix without live writes."""
+    receipt, tape = entry['receipt'], record['ledger']
+    fields = {'schema', 'error_type', 'error', 'request_sha256', 'native_sequence',
+              'native_actions_sha256', 'native_state_digest', 'native_record_sha256'}
+    if (not isinstance(receipt, dict) or set(receipt) != fields
+            or receipt['schema'] != 'agi-alpha/connected014-native-rejection/v1'
+            or receipt['error_type'] != 'ValueError' or not isinstance(receipt['error'], str)
+            or not 1 <= len(receipt['error']) <= 4096 or type(receipt['native_sequence']) is not int
+            or receipt['native_sequence'] != start or receipt['request_sha256'] != digest(entry['request'])):
+        raise ValueError('SOURCE_BOUND_CONNECTED_REJECTION_REQUIRED')
+    actions = tape['actions'][:start]
+    summary = tape['actions'][start]['before'] if start < len(tape['actions']) else tape['summary']
+    prefix_sha256 = digest(actions)
+    if (receipt['native_actions_sha256'] != prefix_sha256
+            or receipt['native_state_digest'] != digest({'config': tape['config'], 'actions_sha256': prefix_sha256, 'summary': summary})):
+        raise ValueError('CONNECTED_REJECTION_NATIVE_PREFIX_MISMATCH')
+    attempt = entry.get('attempt')
+    durable = canonical({'schema': 'agi-alpha/commercial010-durable-actions/v1', 'config': tape['config']}) + b'\n'
+    durable += b''.join(canonical(row) + b'\n' for row in actions)
+    if (not isinstance(attempt, dict) or set(attempt) != {'source_sha256', 'request_sha256', 'account_record_sha256',
+            'native_record_sha256', 'native_sequence', 'native_state_digest', 'native_actions_sha256', 'last_day', 'durable_tape_sha256'}
+            or attempt['source_sha256'] != source['sha256'] or attempt['request_sha256'] != receipt['request_sha256']
+            or any(attempt[key] != receipt[key] for key in ['native_sequence', 'native_record_sha256', 'native_state_digest', 'native_actions_sha256'])
+            or attempt['last_day'] != (actions[-1]['day'] if actions else -1)
+            or attempt['durable_tape_sha256'] != hashlib.sha256(durable).hexdigest()
+            or not isinstance(attempt['account_record_sha256'], str) or len(attempt['account_record_sha256']) != 64):
+        raise ValueError('CONNECTED_REJECTION_ATTEMPT_CERTIFICATE_MISMATCH')
+    prefix = {**tape, 'actions': actions, 'summary': summary}
+    pending = {**entry, 'status': 'PENDING', 'receipt': None}
+    authority = {**record, 'connected_journal': {'source': source}}
+    _pending_native_coverage(pending, prefix, authority, start, action_prefix_digests(actions))
+    request = entry['request']
+    if request['operation'] == 'execute':
+        op, args = request['op'], request['args']
+    elif entry['funding'] == 'EARNED':
+        plan = entry['plan']
+        body = {'schema': 'agi-alpha/adaptive012-action-proof/v1', 'scope': 'SIMULATED_LOCAL_INTEGRITY_ONLY',
+                'plan': {k: v for k, v in plan.items() if k not in {'authorized_digest', 'expected_state_digest'}},
+                'expected_state_digest': plan['expected_state_digest'], 'authorized_digest': plan['authorized_digest'],
+                'amount_microUSD': request['amount'], 'expected_net_microUSD': request['expected_net'], 'day': request['day']}
+        op, args = 'reserve', {'id': plan['plan_id'], 'amount': request['amount'],
+                              'expected_net_value': request['expected_net'], 'intent_sha256': digest(body)}
+    else:
+        op, args = 'cost', {'id': _seed_id(request, source['sha256']), 'amount': request['amount']}
+    cfg = tape['config']
+    with tempfile.TemporaryDirectory(prefix='connected014-rejection-audit-') as temporary:
+        with SingleWriterExchange(Path(temporary) / 'replay.sqlite', root=root, manifest=manifest,
+                                  opening=cfg['opening'], working=cfg['working'], contract=cfg['contract'],
+                                  durable=False, _account_capability=_ADAPTIVE_ACCOUNT_CAPABILITY) as owner:
+            replay = owner._exchange
+            for event in actions:
+                replay.execute(event['op'], event['args'], event['day'])
+            before, day = replay.export(), replay.last_day
+            if digest(before) != receipt['native_record_sha256']:
+                raise ValueError('CONNECTED_REJECTION_NATIVE_RECORD_MISMATCH')
+            try:
+                replay.execute(op, args, request['day'])
+            except ValueError as error:
+                if str(error) == receipt['error'] and replay.export() == before and replay.last_day == day:
+                    return
+            raise ValueError('CONNECTED_REJECTION_NOT_REPRODUCIBLE_WITHOUT_MUTATION')
+
+
 def _audit_journal(record, *, root, manifest, pending_key=None):
     checked = audit_account(record, root=root, manifest=manifest)
     journal = record.get('connected_journal')
@@ -422,12 +560,18 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
     action_index = {}
     for native in tape['actions']:
         action_index.setdefault(_native_id(native['op'], native['args']), []).append(native)
-    keys, spent, covered = set(), 0, []
+    keys, spent, covered, rejected = set(), 0, [], 0
     for index, entry in enumerate(journal['entries']):
         if pending_key is not None and entry['key'] == pending_key:
             if index != len(journal['entries']) - 1 or entry['status'] != 'PENDING' or covered != list(range(len(covered))):
                 raise ValueError('ONE_FINAL_PENDING_CONNECTED_ACTION_REQUIRED')
             covered.extend(_pending_native_coverage(entry, tape, record, len(covered), prefixes))
+            continue
+        if entry['key'] not in keys and entry['status'] == 'REJECTED':
+            if covered != list(range(len(covered))):
+                raise ValueError('CONNECTED_REJECTION_NATIVE_PREFIX_MISMATCH')
+            _audit_rejection(entry, record, journal['source'], len(covered), root=root, manifest=manifest)
+            keys.add(entry['key']); rejected += 1
             continue
         if entry['key'] in keys or entry['status'] != 'COMPLETE':
             raise ValueError('COMPLETE_UNIQUE_CONNECTED_JOURNAL_REQUIRED')
@@ -483,6 +627,7 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
         raise ValueError('CONNECTED_JOURNAL_NATIVE_ACTION_COVERAGE_REQUIRED')
     return {**checked, **({'recovery_preflight_only': True} if pending_key is not None else {}),
             'connected_journal_entries': len(keys),
+            'connected_rejected_entries': rejected,
             'connected_native_actions_covered': len(covered),
             'source_bound_resource_spend_microUSD': spent,
             'journal_authenticity_scope': 'Public source/native commitments verified; private local WAL HMAC checked only on owner reopen.'}

@@ -40,7 +40,7 @@
   },
   "release_source_delta": {
     "additional_nonidentity_changes": [
-      "Campaign optional caches removed; full qualify bound20minutes.",
+      "Campaign optional caches removed; complete qualify job bound30minutes after preserved20minute cancellation during postjob cleanup despite passed full tests/replays/evidence upload. Every check retained.",
       "Adaptive full160-world run and all audits bound45minutes.",
       "Historical009/010 publisher and frozen-qualification provenance routed to genuine immutable release sources; current qualification remains required.",
       "README exposes one canonical run/audit/resume path; reports/qualification/impact evidence are explicit about scope."
@@ -58,6 +58,10 @@
         "after_sha256": "59598ab196ad538d8811b804e5a370b32c334e6b945f78a62252687752ed9af7",
         "before_sha256": "45a44cd2511debc34394644f92d928eb65996aa331f92d34574b9d7718cc2c7c"
       },
+      "connected_enterprise/finance.py": {
+        "after_sha256": "e2f20f9d5e52d3664be14a04f23a34311acbb431d36a1958176afb2c4ca923af",
+        "before_sha256": "5916188420a9a7b265919e3905e146ba3ed6aaf5a369634029ea51aa8382587c"
+      },
       "scripts/release_connected014.py": {
         "after_sha256": "8f321c162b36882b5954c7d6975932cabd9e2bc31eeb07332b27d677680d026b",
         "before_sha256": "9f0c4d0e77014c1082c05f1606df2e90db5f931043ae3329101cf4f0514cfa47"
@@ -72,6 +76,10 @@
       },
       "tests/test_adaptive_resource_resolution.py": {
         "after_sha256": "0b7e57636a56e6b4e2653ab0e2114acf3396da59a397fda66ac72cc3afdb25be",
+        "before_sha256": null
+      },
+      "tests/test_connected_rejections.py": {
+        "after_sha256": "05622bf05ef0226ec9ee3b50d57569526b8eca2e51780445490dc1455b0e8a2f",
         "before_sha256": null
       },
       "tests/test_connected_release.py": {
@@ -95,11 +103,19 @@
       "result": "Seven original archive/part hashes verified plus original local fresh records inspected. Six affected published archives and original fresh records contain no P1/P2 path, zero newly required zero-later/zero-cost or unsupported positive top-only shapes, missing receipts, aggregate mismatches, orphan proofs or malformed/unknown-canonical-job contracts. Ten bound original SERVICES maps prove the exact existing native job map. Generic enterprise011 predates affected Account and is marked not applicable. Duplicate fresh archive/local views are not additional businesses. This is preserved-record inspection, not new commercial execution.",
       "sha256": "8886741f3c8e73ae3af391261dbb249e53613ae5d79da067740e7bf9ec32ddc6"
     },
-    "registered_utc": "2026-10-30T21:30:43.783651+00:00",
-    "release_identity_files": 137,
-    "release_qualification_source_sha256": "eef26065020ebf73afe804f1aa5d0ec5f0fb95707cb8282b2e013a3c8a2defad",
+    "journal_rejection_historical_impact": {
+      "path": "evidence/completion015/journal-rejection-repair/HISTORICAL_IMPACT.json",
+      "sha256": "6ed2da5d30b96de2f89d63ce361be3b95bcb9b3cb3892f6601b5f5d25bcae6cf"
+    },
+    "journal_rejection_qualification": {
+      "path": "evidence/completion015/journal-rejection-repair/QUALIFICATION.json",
+      "sha256": "842d7732faaa457d91e3b832d4139130ea4f43e806d1e3c7db24124b7131fa02"
+    },
+    "registered_utc": "2026-10-30T21:46:41.770761+00:00",
+    "release_identity_files": 138,
+    "release_qualification_source_sha256": "6bb08e37c8e3b58052902039b2451a8565ce6a411634e6f0010caa299a68bdae",
     "reproduction_scope": "Current release requires fresh exact-head engineering qualification, all exact-main terminal-success checks and actual downloaded default reproduction. Known evaluation seeds make it reproduction, not untouched confirmation of repaired source. Original report, paper, QA, financial records and CPU-overrun evidence retain their historical source.",
-    "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.305020239 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment. TEMPORAL_REPAIR_ALLOCATION.json prospectively registers a separate additional80localCPU increment ending22:55UTC. Temporal qualification0.499749kernelchildCPU; construction/probes unmetered, notzero; conservative10CPUshare reserved. No new local commercial confirmation. Original resource failures remain unchanged.",
+    "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.305020239 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment. TEMPORAL_REPAIR_ALLOCATION.json prospectively registers a separate additional80localCPU increment ending22:55UTC. Temporal qualification0.499749kernelchildCPU; construction/probes unmetered, notzero; conservative10CPUshare reserved. No new local commercial confirmation. Original resource failures remain unchanged. Journal rejection repair measured lowerbound37.460127374CPU including beforeprobe, initial11/final14tests and original8read-only scan;20targetexceeded for restart-certificate completion; editing/wrapper CPU unknown, notzero. Conservative55financial+10temporal+5root+10other planning shares total80; no exact wholephase measurement/compliance claim. Hostedcampaign30minutes remains within45minute bound.",
     "schema": "agi-alpha/completion015-composed-release-delta/v2",
     "source_changes": [
       "Release wrapper: bounded exact-main gating, kernel self+waited-child CPU measurement, independently audited actual-run key-free archive retention and regressions.",
@@ -107,7 +123,8 @@
       "Failed reservation authorization: only a newly created proof from a provably noncommitted business rejection may be removed; qualified lease, unchanged full native export/last-day/tape and healthy persistence required; prior/interrupted/ambiguous authority retained.",
       "Typed finishability admission: bounded unique resource IDs/kinds and execution fields, valid delivery fee terms and the existing canonical native job map are checked before proof/funds; audit, export, reopen and resolution share that boundary. Growth kinds remain extensible.",
       "Pure allocation test fixtures migrate to explicit symbolic delivery fields with zero fee/context terms. Existing costs, payoff/objectives, caps and assertions remain unchanged; no financial guard is relaxed. Exact f214 hosted failure and before/after focused results are retained.",
-      "Temporal precommit admission: production plus acceptance plus clearing must fit the inclusive payment deadline; capacity must already be active at qualification and remain valid strictly through scheduled production, with one list for slot counting and asset assignment. No default economics retuned."
+      "Temporal precommit admission: production plus acceptance plus clearing must fit the inclusive payment deadline; capacity must already be active at qualification and remain valid strictly through scheduled production, with one list for slot counting and asset assignment. No default economics retuned.",
+      "Connected journal: audited terminal REJECTED records for independently reproduced zero-effect native failures; current-state/durable/full-account equality required, exact preattempt certificates support interrupted-before-native and rejection-marker recovery. Partial, advanced, ambiguous and legacy uncertified pending authority stays protected."
     ],
     "temporal_historical_impact": {
       "path": "evidence/completion015/temporal-repair/HISTORICAL_IMPACT.json",
@@ -118,7 +135,7 @@
       "sha256": "b3f9ecdd52517db67c1cd26cceb7cd95c559a7bd00c74a22b3abc27bff96a4d0"
     },
     "unchanged_economic_mechanism": "Service executors/checkers, buyer incentives/budgets/choices, offers/prices, channel/capacity contract terms, cost envelopes, learning rules, event timing values, protocol, cases and seeds are byte-identical. Financial guards and temporal admission enforcement are strengthened, not claimed unchanged. Original eight-world scans found no changed trajectory from the repairs.",
-    "unchanged_original_identity_files": 128
+    "unchanged_original_identity_files": 127
   },
   "rendering": "VISUALLY_INSPECTED_ALL_FIVE_FINAL_PAGES",
   "report_sha256": "c445bf8bebef8c1b5a63baf55ae8fa442e632691b3d47f5a8d164fae6d82db46",
@@ -141,7 +158,7 @@
   "resource_qualification_note": "RESOURCE QUALIFICATION FAILED. This is conditional native operating/growth evidence with an execution resource-envelope failure, not an overall registered confirmation pass. All eight businesses passed native financial, operating-semantic and top-report audits. Final kernel-reaped child usage was 1,416.974 CPU seconds, exceeding the preregistered 600 CPU-second phase cap; the process-group watcher undercounted usage. Full execution wall time was 484.16 seconds. Economic outcomes remain preserved at their actual evidence level. No additional local business experiments were performed.",
   "resource_qualification_sha256": "ca6b7dc17364601cb6707b342c16a2d48bfa2e39bde959d3364d0b22c114ca00",
   "schema": "agi-alpha/connected014-research-edition/v1",
-  "source_binding_scope": "Current repaired release qualification closure. Historical report, paper, resource qualification and PDF QA describe original economic_evidence_source_sha256. COMPOSED_RELEASE_DELTA.json binds explicit financial and temporal admission guard repairs, release wrapper and verified historical impact. Service/economic assumptions are unchanged; current actual downloaded default run is exposed-seed reproduction, not new untouched confirmation. Final merged Git commit is bound by RELEASE_MANIFEST.json to avoid circular self-reference.",
+  "source_binding_scope": "Current repaired release qualification closure. Historical report, paper, resource qualification and PDF QA describe original economic_evidence_source_sha256. COMPOSED_RELEASE_DELTA.json binds explicit financial, temporal admission and certified journal recovery repairs, release wrapper and verified historical impact. Service/economic assumptions are unchanged; current actual downloaded default run is exposed-seed reproduction, not new untouched confirmation. Final merged Git commit is bound by RELEASE_MANIFEST.json to avoid circular self-reference.",
   "source_commit": null,
-  "source_sha256": "eef26065020ebf73afe804f1aa5d0ec5f0fb95707cb8282b2e013a3c8a2defad"
+  "source_sha256": "6bb08e37c8e3b58052902039b2451a8565ce6a411634e6f0010caa299a68bdae"
 }
