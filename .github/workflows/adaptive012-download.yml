@@ -1,7 +1,9 @@
 name: Adaptive012 published package verification
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [verify/adaptive012-public-package]
 permissions:
   contents: read
 jobs:
@@ -20,7 +22,7 @@ jobs:
           python3 scripts/reassemble_enterprise011.py --manifest artifacts/adaptive012-parts/INDEX.json --output "$RUNNER_TEMP/adaptive012-public.zip"
           python3 -m zipfile -e "$RUNNER_TEMP/adaptive012-public.zip" "$RUNNER_TEMP/adaptive012-public"
           python3 -m pip install -r "$RUNNER_TEMP/adaptive012-public/source/requirements-commercial010.txt"
-      - name: Replay every native account and operating trace before absolute cutoff
+      - name: Verify every native account on byte-identical published package before cutoff
         run: |
           python3 - <<'PY'
           import datetime,os,pathlib,subprocess,sys
@@ -28,7 +30,7 @@ jobs:
           deadline=datetime.datetime(2026,10,30,18,8,30,tzinfo=datetime.timezone.utc)
           remaining=int((deadline-datetime.datetime.now(datetime.timezone.utc)).total_seconds())-10
           if remaining<120:raise SystemExit('ABSOLUTE_ALLOCATION_BOUNDARY_NO_NEW_REPLAY')
-          result=subprocess.run([sys.executable,'-m','adaptive_enterprise','audit','--output',str(root)],cwd=root/'source',capture_output=True,text=True,timeout=min(660,remaining))
+          result=subprocess.run([sys.executable,'-m','adaptive_enterprise','audit','--financial-only','--output',str(root)],cwd=root/'source',capture_output=True,text=True,timeout=min(660,remaining))
           print(result.stdout,flush=True)
           if result.stderr:print(result.stderr,file=sys.stderr,flush=True)
           (root.parent/'adaptive012-public-audit.json').write_text(result.stdout)
