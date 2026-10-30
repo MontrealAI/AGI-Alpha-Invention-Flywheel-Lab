@@ -66,6 +66,22 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /campaign/next-009/
+            /inventions/measurement009/
+            /research/next009/
+            /verification/next009/
+            /docs/next009/
+            /flywheel/
+            /experiments/
+            /vendor/
+            /tests/test_next009.py
+            /verification/__init__.py
+            /.github/workflows/measurement009.yml
+            /evidence/next009/archives/
+            /evidence/next009/*.json
+            /evidence/next009/*/*.json
       - name: Bind source and admit this attempt under the separate hosted allowance
         id: identity
         env:
@@ -86,6 +102,21 @@ jobs:
                       'per_invocation_download_cap_bytes':268435456,'per_invocation_runner_disk_cap_bytes':1073741824}
           if any(allocation.get(k) != v or type(allocation.get(k)) is not type(v) for k,v in required.items()):
               raise SystemExit('Explicit hosted allocation is missing or changed; refuse implicit reset.')
+          extension_path = pathlib.Path('campaign/next-009/HOSTED_RECOVERY_ALLOCATION_001.json')
+          extension = json.loads(extension_path.read_bytes())
+          extension_required = {'schema':'agi-alpha/next009-hosted-recovery-allocation/v1',
+              'additional_cpu_seconds':600,'additional_invocations':1,'combined_cpu_seconds':2400,
+              'combined_maximum_invocations':4,'per_invocation_cpu_seconds':600,
+              'per_invocation_wall_seconds':900,'memory_bytes':2147483648,'storage_bytes':268435456,
+              'per_invocation_download_cap_bytes':268435456,'per_invocation_runner_disk_cap_bytes':1073741824,
+              'original_allocation_replaced':False,'refund_seconds':0,'new_spending':0}
+          if any(extension.get(k)!=v or type(extension.get(k)) is not type(v) for k,v in extension_required.items()) or extension['parent_allocation_sha256']!=hashlib.sha256(allocation_path.read_bytes()).hexdigest() or extension.get('failed_run_ids_preserved')!=[41045280239,41046035229]:
+              raise SystemExit('Explicit additive recovery allocation is missing, incompatible or changed.')
+          if datetime.datetime.now(datetime.timezone.utc)>datetime.datetime.fromisoformat(extension['deadline_utc'].replace('Z','+00:00')):
+              raise SystemExit('Recovery allocation deadline passed.')
+          maximum = allocation['maximum_invocations'] + extension['additional_invocations']
+          allowance = allocation['total_cpu_seconds'] + extension['additional_cpu_seconds']
+          if maximum!=4 or allowance!=2400:raise SystemExit('Recovery arithmetic failed.')
           start = datetime.datetime.fromisoformat(allocation['registered_utc'].replace('Z','+00:00'))
           repo, current = os.environ['GH_REPO'], int(os.environ['GITHUB_RUN_ID'])
           current_run = json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/actions/runs/{current}'],text=True))
@@ -112,14 +143,17 @@ jobs:
           report = {'schema':'agi-alpha/next009-hosted-budget-admission/v1',
                     'allocation_id':allocation['allocation_id'],'allocation_sha256':hashlib.sha256(allocation_path.read_bytes()).hexdigest(),
                     'source_sha':sha,'repository':repo,'run_id':current,'run_attempt':int(os.environ['GITHUB_RUN_ATTEMPT']),
-                    'attempts_charged':count,'reserved_cpu_seconds':count*600,'allowance_cpu_seconds':1800,
-                    'admitted':count <= 3,'all_attempts_since_registration':list(selected.values()),
+                    'attempts_charged':count,'reserved_cpu_seconds':count*600,'allowance_cpu_seconds':allowance,
+                    'original_allowance_cpu_seconds':1800,'additive_allowance_cpu_seconds':600,
+                    'recovery_allocation_sha256':hashlib.sha256(extension_path.read_bytes()).hexdigest(),
+                    'admitted':count <= maximum,'all_attempts_since_registration':list(selected.values()),
                     'refund_seconds':0,'original_local_ledger_reset':False,
                     'scope':'Conservative hosted reservation accounting, including failed/cancelled attempts. Separate from original local construction resources; historical/native CI costs and monetary metering remain unknown.'}
           (root/'HOSTED_BUDGET_ADMISSION.json').write_text(json.dumps(report,indent=2)+'\n')
           shutil.copyfile(allocation_path,root/'HOSTED_QUALIFICATION_ALLOCATION.json')
+          shutil.copyfile(extension_path,root/'HOSTED_RECOVERY_ALLOCATION_001.json')
           shutil.copyfile('evidence/next009/RESOURCE_LEDGER.json',root/'ORIGINAL_LOCAL_RESOURCE_LEDGER.json')
-          if not report['admitted']: raise SystemExit('Hosted 1800-CPU allowance exhausted; no new replay admitted.')
+          if not report['admitted']: raise SystemExit('Cumulative hosted 2400-CPU allowance exhausted; no new replay admitted.')
           artifact = f'measurement009-qualified-{sha}-{current}-{os.environ["GITHUB_RUN_ATTEMPT"]}'
           with open(os.environ['GITHUB_OUTPUT'],'a') as out:
               out.write('source_sha='+sha+'\nartifact_name='+artifact+'\n')
@@ -231,7 +265,7 @@ jobs:
           shutil.copyfile(source/'campaign/next-009/RELEASE_NOTES.md',assets/'RELEASE_NOTES.md')
           shutil.copyfile(root/'replay/artifacts/REPRODUCTION.json',assets/'REPLAY_REPORT.json')
           shutil.copyfile(root/'replay/RECEIPT.json',assets/'REPLAY_RESOURCE_RECEIPT.json')
-          for name in ['HOSTED_BUDGET_ADMISSION.json','HOSTED_QUALIFICATION_ALLOCATION.json','HOSTED_RUNNER_LEDGER.json','ORIGINAL_LOCAL_RESOURCE_LEDGER.json','CHECKOUT_DEPENDENCY_RESOURCES.json']:
+          for name in ['HOSTED_BUDGET_ADMISSION.json','HOSTED_QUALIFICATION_ALLOCATION.json','HOSTED_RECOVERY_ALLOCATION_001.json','HOSTED_RUNNER_LEDGER.json','ORIGINAL_LOCAL_RESOURCE_LEDGER.json','CHECKOUT_DEPENDENCY_RESOURCES.json']:
               shutil.copyfile(root/name,assets/name)
           before=json.loads((root/'RESOURCE_BASELINE.json').read_bytes());allocation=json.loads((root/'HOSTED_QUALIFICATION_ALLOCATION.json').read_bytes())
           received=sum(int(p.read_text()) for p in pathlib.Path('/sys/class/net').glob('*/statistics/rx_bytes') if p.parts[-3]!='lo')
