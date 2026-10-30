@@ -1,0 +1,46 @@
+name: Adaptive012 published package verification
+on:
+  push:
+    branches: [verify/adaptive012-public-package]
+permissions:
+  contents: read
+jobs:
+  public-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Verify public part hashes and ZIP CRC
+        run: |
+          python3 scripts/reassemble_enterprise011.py --manifest artifacts/adaptive012-parts/INDEX.json --output "$RUNNER_TEMP/adaptive012-public.zip"
+          python3 -m zipfile -e "$RUNNER_TEMP/adaptive012-public.zip" "$RUNNER_TEMP/adaptive012-public"
+          python3 -m pip install -r "$RUNNER_TEMP/adaptive012-public/source/requirements-commercial010.txt"
+      - name: Replay every native account and operating trace before absolute cutoff
+        run: |
+          python3 - <<'PY'
+          import datetime,os,pathlib,subprocess,sys
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'adaptive012-public'
+          deadline=datetime.datetime(2026,10,30,18,8,30,tzinfo=datetime.timezone.utc)
+          remaining=int((deadline-datetime.datetime.now(datetime.timezone.utc)).total_seconds())-10
+          if remaining<120:raise SystemExit('ABSOLUTE_ALLOCATION_BOUNDARY_NO_NEW_REPLAY')
+          result=subprocess.run([sys.executable,'-m','adaptive_enterprise','audit','--output',str(root)],cwd=root/'source',capture_output=True,text=True,timeout=min(660,remaining))
+          print(result.stdout,flush=True)
+          if result.stderr:print(result.stderr,file=sys.stderr,flush=True)
+          (root.parent/'adaptive012-public-audit.json').write_text(result.stdout)
+          (root.parent/'adaptive012-public-audit.err').write_text(result.stderr)
+          result.check_returncode()
+          PY
+      - name: Preserve qualification receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: adaptive012-public-package
+          path: |
+            ${{ runner.temp }}/adaptive012-public-audit.json
+            ${{ runner.temp }}/adaptive012-public-audit.err
+          if-no-files-found: warn
