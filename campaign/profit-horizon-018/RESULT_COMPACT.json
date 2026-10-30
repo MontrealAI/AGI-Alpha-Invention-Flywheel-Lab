@@ -1,0 +1,311 @@
+{
+  "adoption": "Historical accounting correction only; no operating policy or reserve terms authorized by these projections",
+  "cost_sources": "Unchanged authored PR23 configs; no measured model bills, human trial, market demand or native liabilities",
+  "evidence_kind": "HISTORICAL_EXPOSED_PROJECTION_REPLAY_NOT_FRESH_CONFIRMATION",
+  "first_crossing_count": 0,
+  "full_result_sha256": "511e4f2e4d40ae298cafdb8d63667bb324013438c09387693be2a3def49676c6",
+  "limits": [
+    "Income taxes and complete frontier-model billing are not measured. Model expense totals are not certified complete economic costs.",
+    "Capacity and setup are immediately expensed; no residual value, amortization or profit tax is implemented.",
+    "Finite three-month percentage reserves differ from permanent native obligations; do not use projections to release native cash.",
+    "Projected net paid jobs are recognized at invoice time; settled-job count uses modeled delay and excludes terminal receivables.",
+    "Failure-month unrecorded financial mutations are disclosed; no missing months are filled or annualized.",
+    "Sensitivity changes accounting only; changed growth paths, funding feasibility and tax applicability remain unevaluated.",
+    "No fresh frontier-agent/human benchmark, recycling treatment, joint C/K treatment, insurer or legal finality was established."
+  ],
+  "matched_published_policy_aggregates": 60,
+  "matched_published_strata": 10,
+  "matrix_files": {
+    "campaign/profit-horizon-018/matrix/2500000-base.csv": "ece3906f6cfa1fc19f7b53fe5677976c9a35bc5e820f4ea1272ab3553a2f5fd9",
+    "campaign/profit-horizon-018/matrix/2500000-channel_failure.csv": "0ee981c518dc122c84c2691193ab8c0d903cfcc2047e9fbe21e18bdcf06efa10",
+    "campaign/profit-horizon-018/matrix/2500000-price_and_cost_shock.csv": "41ddd6038a247fc7ac8744ba46f39739d5c2830046a47d223b1111b56b5d07fb",
+    "campaign/profit-horizon-018/matrix/2500000-supply_constraint.csv": "6870acc36155695319847c62dd5349dccbdd9613d1170935748021ba6f33d6e2",
+    "campaign/profit-horizon-018/matrix/2500000-weak_demand.csv": "79dcb3ea99c778aea3ec1ebaf20fa4c6f5468dc583491ed8b56cb8e946730249",
+    "campaign/profit-horizon-018/matrix/25000000-base.csv": "fdeda65ef6fd64d94ee7d7ca47ac2d1fd79c18b0a7c8adcea1b6356016bc137e",
+    "campaign/profit-horizon-018/matrix/25000000-channel_failure.csv": "ea0b5ec6d7817ad84c8f8f6985024fb85ab8946983775dea45f578a51980cd98",
+    "campaign/profit-horizon-018/matrix/25000000-price_and_cost_shock.csv": "d1426ed26e84f21ce02c825f37610d03db3e414186c70714e5f53abe79e16a78",
+    "campaign/profit-horizon-018/matrix/25000000-supply_constraint.csv": "df1564778794b3893c55a193745ac8f2f8ab86a06b448063d6b37ce7a370593c",
+    "campaign/profit-horizon-018/matrix/25000000-weak_demand.csv": "5969136951f2941b220f646830323f9dd06544652364a678620a3ebf4096cda0"
+  },
+  "native_aggregation_validation": "NOT_PERFORMED; this model is not the native financial ledger",
+  "peak_rss_kib": 146288,
+  "policy_selection": "UNCHANGED_HISTORICAL_DEVELOPMENT_SELECTION",
+  "profit_target_cents": 300000000000,
+  "real_collections": 0,
+  "real_customers": 0,
+  "replay_cpu_seconds": 23.537375031,
+  "schema": "agi-alpha/profit-horizon018-replay/v1",
+  "selected_policy": "paid_distribution",
+  "source_sha": "2503b8823028200565e31933c521bac2cd82e080",
+  "source_sha256": {
+    "campaign/growth-frontier-012/RESULT.json": "b2ab5abe02db084368b7f60fa961feb7c28ba3c9c2fd7a84b8df7988a392a94e",
+    "enterprise/growth_frontier.py": "d7579693f3b4e766ab50f9497abad54ca305cfc9973f0b553ee4961e37ba9777",
+    "enterprise/scale.py": "0d0b22b5e47e6f220040176df0818ff5ffc91c8ce125134fc1dcf515f97b66ba"
+  },
+  "summary": [
+    {
+      "capital_cents": 2500000,
+      "completed_month60": 8,
+      "failures": [],
+      "family": "base",
+      "first_3b_annual_profit_crossings": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "max_month60_annual_profit_cents": 113680895591,
+      "mean_month60_annual_profit_cents": 101911076067.625,
+      "min_month60_annual_profit_cents": 79768401350,
+      "policy": "paid_distribution",
+      "survivors": 8,
+      "worlds": 8
+    },
+    {
+      "capital_cents": 2500000,
+      "completed_month60": 8,
+      "failures": [],
+      "family": "weak_demand",
+      "first_3b_annual_profit_crossings": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "max_month60_annual_profit_cents": 3772746274,
+      "mean_month60_annual_profit_cents": 2806245523.875,
+      "min_month60_annual_profit_cents": 2154194201,
+      "policy": "paid_distribution",
+      "survivors": 8,
+      "worlds": 8
+    },
+    {
+      "capital_cents": 2500000,
+      "completed_month60": 7,
+      "failures": [
+        {
+          "last_month": 6,
+          "partial_month": {
+            "collected_cents": 0,
+            "cost_cents": 0,
+            "profit_cents": 0
+          },
+          "reason": "OPERATING_CASH_FAILURE",
+          "seed": 10006
+        }
+      ],
+      "family": "price_and_cost_shock",
+      "first_3b_annual_profit_crossings": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "max_month60_annual_profit_cents": 9017546810,
+      "mean_month60_annual_profit_cents": 7961933645.428572,
+      "min_month60_annual_profit_cents": 6175782998,
+      "policy": "paid_distribution",
+      "survivors": 7,
+      "worlds": 8
+    },
+    {
+      "capital_cents": 2500000,
+      "completed_month60": 5,
+      "failures": [
+        {
+          "last_month": 8,
+          "partial_month": {
+            "collected_cents": 0,
+            "cost_cents": 0,
+            "profit_cents": 0
+          },
+          "reason": "OPERATING_CASH_FAILURE",
+          "seed": 10004
+        },
+        {
+          "last_month": 6,
+          "partial_month": {
+            "collected_cents": 0,
+            "cost_cents": 0,
+            "profit_cents": 0
+          },
+          "reason": "OPERATING_CASH_FAILURE",
+          "seed": 10006
+        },
+        {
+          "last_month": 6,
+          "partial_month": {
+            "collected_cents": 0,
+            "cost_cents": 0,
+            "profit_cents": 0
+          },
+          "reason": "OPERATING_CASH_FAILURE",
+          "seed": 10007
+        }
+      ],
+      "family": "supply_constraint",
+      "first_3b_annual_profit_crossings": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "max_month60_annual_profit_cents": 1909941316,
+      "mean_month60_annual_profit_cents": 1780371215.8,
+      "min_month60_annual_profit_cents": 1491075125,
+      "policy": "paid_distribution",
+      "survivors": 5,
+      "worlds": 8
+    },
+    {
+      "capital_cents": 2500000,
+      "completed_month60": 8,
+      "failures": [],
+      "family": "channel_failure",
+      "first_3b_annual_profit_crossings": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "max_month60_annual_profit_cents": 89924327,
+      "mean_month60_annual_profit_cents": 75567144.25,
+      "min_month60_annual_profit_cents": 62959230,
+      "policy": "paid_distribution",
+      "survivors": 8,
+      "worlds": 8
+    },
+    {
+      "capital_cents": 25000000,
+      "completed_month60": 8,
+      "failures": [],
+      "family": "base",
+      "first_3b_annual_profit_crossings": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "max_month60_annual_profit_cents": 111216805515,
+      "mean_month60_annual_profit_cents": 99707744288.25,
+      "min_month60_annual_profit_cents": 78323283990,
+      "policy": "paid_distribution",
+      "survivors": 8,
+      "worlds": 8
+    },
+    {
+      "capital_cents": 25000000,
+      "completed_month60": 8,
+      "failures": [],
+      "family": "weak_demand",
+      "first_3b_annual_profit_crossings": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "max_month60_annual_profit_cents": 2272240418,
+      "mean_month60_annual_profit_cents": 1655160049.625,
+      "min_month60_annual_profit_cents": 1249136278,
+      "policy": "paid_distribution",
+      "survivors": 8,
+      "worlds": 8
+    },
+    {
+      "capital_cents": 25000000,
+      "completed_month60": 8,
+      "failures": [],
+      "family": "price_and_cost_shock",
+      "first_3b_annual_profit_crossings": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "max_month60_annual_profit_cents": 6939733038,
+      "mean_month60_annual_profit_cents": 6130836701.375,
+      "min_month60_annual_profit_cents": 4776456073,
+      "policy": "paid_distribution",
+      "survivors": 8,
+      "worlds": 8
+    },
+    {
+      "capital_cents": 25000000,
+      "completed_month60": 8,
+      "failures": [],
+      "family": "supply_constraint",
+      "first_3b_annual_profit_crossings": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "max_month60_annual_profit_cents": 2325176248,
+      "mean_month60_annual_profit_cents": 1917694591.125,
+      "min_month60_annual_profit_cents": 1511882825,
+      "policy": "paid_distribution",
+      "survivors": 8,
+      "worlds": 8
+    },
+    {
+      "capital_cents": 25000000,
+      "completed_month60": 8,
+      "failures": [],
+      "family": "channel_failure",
+      "first_3b_annual_profit_crossings": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "max_month60_annual_profit_cents": 90329616,
+      "mean_month60_annual_profit_cents": 74934214.5,
+      "min_month60_annual_profit_cents": 63689668,
+      "policy": "paid_distribution",
+      "survivors": 8,
+      "worlds": 8
+    }
+  ],
+  "trajectories_sha256": "16740ff59ed637bfe780681f56e762c6148cf24b26f2a9b9dfffeaeddfbeb12f",
+  "worlds": 480
+}

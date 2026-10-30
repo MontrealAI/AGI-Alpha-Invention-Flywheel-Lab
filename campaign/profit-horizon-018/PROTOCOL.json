@@ -1,0 +1,48 @@
+{
+  "kind": "HISTORICAL_REPLAY",
+  "source": "2503b8823028200565e31933c521bac2cd82e080",
+  "seeds": [
+    10001,
+    10002,
+    10003,
+    10004,
+    10005,
+    10006,
+    10007,
+    10008
+  ],
+  "arms": [
+    "keyed_legacy",
+    "cash_contract",
+    "paid_distribution",
+    "adaptive_allocation",
+    "distribution_and_allocation",
+    "joint"
+  ],
+  "families": [
+    "base",
+    "weak_demand",
+    "price_and_cost_shock",
+    "supply_constraint",
+    "channel_failure"
+  ],
+  "capital_cents": [
+    2500000,
+    25000000
+  ],
+  "months": 60,
+  "profit_target_cents": 300000000000,
+  "selection": "prior paid_distribution only; no retuning",
+  "tolerance_cents": 0,
+  "requirements": [
+    "all historical aggregate records equal",
+    "monthly conservation exact",
+    "first crossing per world",
+    "unrecorded failure-month cost residual preserved"
+  ],
+  "source_sha256": {
+    "enterprise/profit_horizon.py": "a1ca9172d1793607d6fb24ae3e3807aa61aba6368300eee4ac65c1712d0c9094",
+    "tests/test_enterprise_profit_horizon.py": "894ae1b6de69a78a65cec6092c59bf55335e7923866b9f74bf2bbe52427130e8",
+    "campaign/profit-horizon-018/replay.py": "49866dd7e934a1e7338b823bef68376d0157c7f5b6fd498601bd479273cd12cd"
+  }
+}

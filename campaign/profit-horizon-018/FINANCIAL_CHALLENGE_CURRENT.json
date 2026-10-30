@@ -1,0 +1,107 @@
+{
+  "checkpoint": "3d53f63283723c1a28a224277493aadffd5af5b9",
+  "account_git_blob": "ca0b5358ed5f0c0290c538b063b3476ea7dd7491",
+  "records": [
+    {
+      "case": "P1_original",
+      "verdict": "UNSAFE_PATH_REPRODUCED",
+      "summary": {
+        "reservedInvestment": 0,
+        "revenue": 100000000,
+        "expenses": 10000000,
+        "recoveryIncome": 0,
+        "profit": 90000000,
+        "cash": 1090000000,
+        "collections": 100000000,
+        "expensePaid": 10000000,
+        "payables": 0,
+        "custodyRestricted": 0,
+        "custodyReserve": 0,
+        "tailReserve": 100200000,
+        "workingCapital": 0,
+        "available": 989800000,
+        "unrestrictedEarned": 90000000,
+        "strictEarnedControl": 0,
+        "equityProtectionBacking": 100200000,
+        "earnedProtectionBacking": 0,
+        "netEarnedAfterIncurredObligations": 90000000,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "conditionalEarned": 90000000,
+        "investmentStopped": false,
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+      }
+    },
+    {
+      "case": "P1_repaired",
+      "later_microUSD": 0,
+      "verdict": "RECONCILED_CRASH_RETRY_REPLAY",
+      "summary": {
+        "reservedInvestment": 0,
+        "revenue": 100000000,
+        "expenses": 50000000,
+        "recoveryIncome": 0,
+        "profit": 50000000,
+        "cash": 1050000000,
+        "collections": 100000000,
+        "expensePaid": 50000000,
+        "payables": 0,
+        "custodyRestricted": 0,
+        "custodyReserve": 0,
+        "tailReserve": 100200000,
+        "workingCapital": 0,
+        "available": 949800000,
+        "unrestrictedEarned": 50000000,
+        "strictEarnedControl": 0,
+        "equityProtectionBacking": 100200000,
+        "earnedProtectionBacking": 0,
+        "netEarnedAfterIncurredObligations": 50000000,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "conditionalEarned": 50000000,
+        "investmentStopped": false,
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+      }
+    },
+    {
+      "case": "P1_repaired",
+      "later_microUSD": 30000000,
+      "verdict": "RECONCILED_CRASH_RETRY_REPLAY",
+      "summary": {
+        "reservedInvestment": 0,
+        "revenue": 100000000,
+        "expenses": 80000000,
+        "recoveryIncome": 0,
+        "profit": 20000000,
+        "cash": 1020000000,
+        "collections": 100000000,
+        "expensePaid": 80000000,
+        "payables": 0,
+        "custodyRestricted": 0,
+        "custodyReserve": 0,
+        "tailReserve": 100200000,
+        "workingCapital": 0,
+        "available": 919800000,
+        "unrestrictedEarned": 20000000,
+        "strictEarnedControl": 0,
+        "equityProtectionBacking": 100200000,
+        "earnedProtectionBacking": 0,
+        "netEarnedAfterIncurredObligations": 20000000,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "conditionalEarned": 20000000,
+        "investmentStopped": false,
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+      }
+    },
+    {
+      "case": "P2_reauthorization",
+      "verdict": "REJECTED_STATE_CLEARED_HISTORY_UNCHANGED_FRESH_RESERVE_ACCEPTED"
+    },
+    {
+      "case": "P2_deadline",
+      "verdict": "UNRESOLVED_FINDING_REPRODUCED_AT_CHECKPOINT",
+      "admitted_completion_hour": 243,
+      "deadline_hour": 240
+    }
+  ],
+  "release_qualified": false,
+  "limits": "Same-session independent code-path challenge; not external certification. Original18 account regressions separately include concurrent writers and interrupted reservations."
+}

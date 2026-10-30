@@ -1,0 +1,60 @@
+{
+  "base_head": "3d53f63283723c1a28a224277493aadffd5af5b9",
+  "base_engine_git_blob": "2194e2d005a715f9e5957c51bb69b920fbd500e7",
+  "candidate_engine_sha256": "c0ab4ee6cdd1d3a8b505fb1caf31d3e784559701dbf26b9b96c5c9ae7d2a4e8d",
+  "deadline_boundaries": [
+    {
+      "production_hours": 2,
+      "acceptance_hours": 1,
+      "clearing_hours": 236,
+      "deadline_hours": 240,
+      "admitted": true
+    },
+    {
+      "production_hours": 2,
+      "acceptance_hours": 1,
+      "clearing_hours": 237,
+      "deadline_hours": 240,
+      "admitted": true
+    },
+    {
+      "production_hours": 2,
+      "acceptance_hours": 1,
+      "clearing_hours": 238,
+      "deadline_hours": 240,
+      "admitted": false
+    },
+    {
+      "production_hours": 2,
+      "acceptance_hours": 1,
+      "clearing_hours": 240,
+      "deadline_hours": 240,
+      "admitted": false
+    }
+  ],
+  "capacity_boundaries": [
+    {
+      "activation": 24,
+      "production": 26,
+      "expiry": 25,
+      "orders": 1
+    },
+    {
+      "activation": 24,
+      "production": 26,
+      "expiry": 26,
+      "orders": 1
+    },
+    {
+      "activation": 24,
+      "production": 26,
+      "expiry": 27,
+      "orders": 2
+    }
+  ],
+  "invalid_config_rejected_before_output_or_financial_commitment": true,
+  "prior_capacity_expiry_failure_reproduced": true,
+  "scope": "ISOLATED_FUNCTIONAL_ENGINEERING_REPAIR; not integrated or full composed/native/release qualification",
+  "release_qualified": false,
+  "canonical_source_modified": false
+}
