@@ -1,0 +1,54 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "final-publication-review",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "/workspace/scratch/557a27c9cfaf/verification_final_publication/review.py",
+    "--base",
+    "/workspace/scratch/557a27c9cfaf",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/verification_final_publication/bound/artifacts"
+  ],
+  "requested_command": [
+    "python",
+    "/workspace/scratch/557a27c9cfaf/verification_final_publication/review.py",
+    "--base",
+    "/workspace/scratch/557a27c9cfaf",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/verification_final_publication/bound/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "/workspace/scratch/557a27c9cfaf/verification_final_publication/review.py",
+    "--base",
+    "/workspace/scratch/557a27c9cfaf",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/verification_final_publication/bound/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/557a27c9cfaf",
+  "limits": {
+    "wall_seconds": 60,
+    "cpu_seconds": 10,
+    "memory_bytes": 536870912,
+    "output_bytes": 2097152,
+    "storage_bytes": 16777216
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 0.08522430099947087,
+  "supervisor_cpu_seconds": 0.0027338659999999945,
+  "waited_cpu_seconds": 0.074217,
+  "descendant_survivors": false,
+  "output_bytes": 13340,
+  "logs": {
+    "stdout.log": "56cbb9c1430b44866bb4ad4805af8cbc113b101e3d11fd534111f764acfb75f1",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

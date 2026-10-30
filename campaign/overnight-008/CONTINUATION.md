@@ -1,7 +1,7 @@
 # Active overnight recovery and construction
 
 Integration owner: `root`; separate verifier: `verification` (cannot modify candidate).
-Heartbeat: 2026-10-30T09:01:39.410714+00:00. Takeover from public3360acaf after last05:33 heartbeat exceeded75minutes and no other active owner was evidenced. Public review comments are not integration lease renewals.
+Heartbeat: 2026-10-30T09:30:52.277199+00:00. Takeover from public3360acaf after last05:33 heartbeat exceeded75minutes and no other active owner was evidenced. Public review comments are not integration lease renewals.
 
 Original allocation unchanged: started05:07:44Z, expensive development ends09:37:44Z, final verification/publication/recovery ends11:07:44Z (07:07Toronto). No budget or error-history reset. ALLOCATION.json remains unchanged. See append-only `evidence/overnight-008/recovery-0719/INTERRUPTION.json` for lost unpublished artifacts and conservative new suballocations.
 
@@ -24,3 +24,9 @@ The separate data-only archive commit5d5fb96d1421d5c1f5fd6cf8ea6c96fcfbd5b045 pr
 Current aggregate reservations:12120experiment /7240verification-publication CPU seconds; monetary costs and old unmetered quantities remain unknown. Alpha0, qualified earnings0. The source100-input ongoing progress paper is anchored at2b7a58e and is published as a checkpoint; later results are separate append-only source/evidence. Its LaTeX typesetting repair preserves scientific words/numbers and old overflow artifacts. At2b7a all3workflows pass;56dc's unrepaired frozen-legacy startup interruption failure stays material historical evidence. Do not change the separately owned lifecycle/mass-spectrometry scope.
 
 No active candidate currently crosses an enabling/economic threshold. Next consequential construction needs an independently grounded physical reference/control or a stronger evidenced opportunity before admission; do not invent fast-drift truth, noise bounds, customers or funds. Original cutoff09:37:44Z and end11:07:44Z unchanged.
+
+### Downloaded public numerical replay complete
+
+Source2205bf8 plus data5d5fb96 downloaded112524837/79649652bytes. Every8588source and25dataGit blob was checked before execution; exact externally supplied raw TIFF/ZIP were size/hash-checked. All47original artifacts restored, unchanged repair48cd04ae executed, separate checkerdd2dc passed, both repairedNPZ outputs match their frozen originals byte-for-byte. Candidate source bytes remained unchanged. Receipt: evidence/overnight-008/nasa-public-2205/REPORT.json and enclosingRECEIPT.json. Child49.192056CPU and supervisor42.725669613CPU are observed resources, not monetary cost. All charges retained.
+
+Current reservations12120experiment/7390verification-publication; qualified earned funds0; source claim review completed under separate150 reservation. At the recorded09:37:44 construction cutoff, continue only verification/publication/recovery. Late supplement source is prepared and awaits compile from its public anchor. ACCOUNTABILITY.md records all8links and RESTART.md the exact recovery command and missing physical input gate. These files do not claim that the11:07:44 window has already ended or that inference continues unattended.
