@@ -1,0 +1,122 @@
+{
+  "schema": "agi-alpha/capital-frontier-evidence/v1",
+  "scope": "EXPOSED_NATIVE_ARITHMETIC_REPLAY_NOT_NEW_COMMERCE",
+  "original_business_source_sha256": "4663287a94ea2a9da851c78e612817bfcff1fce667c66fe4a85c7060c887cda4",
+  "original_freeze_sha256": "fc3179f38b69fa7f6fe9ac57b86f9c5d9ff1c47ea7b1e18cf6c4fa85d7dca78f",
+  "independent_native_and_operating_replay_passed": 8,
+  "native_snapshot_checks": 1770,
+  "new_tests_passed": 23,
+  "random_native_fixture_checks": 120,
+  "new_worlds_executed": 0,
+  "actual_revenue": 0,
+  "financial_actions_executed": false,
+  "claims_not_established": [
+    "forward_growth_model",
+    "real_demand",
+    "improved_capabilities",
+    "provider_finality",
+    "contract_release_authority"
+  ],
+  "source_blobs": {
+    "connected_enterprise/capital_frontier.py": "89b6d1cf406876b4908dc83bd6d067679f672f72",
+    "tests/test_capital_frontier.py": "053cd029784906bfb12003aadf56f08f99e2ebc0"
+  },
+  "historical_package_sha256": "ce0e1025bf54c5a032641003dea825c882f6531d1363a8a026e71db790e60838",
+  "row_columns": [
+    "case",
+    "paid_jobs",
+    "profit_microUSD",
+    "available_microUSD",
+    "liquidity_decline_from_initial_microUSD",
+    "native_actions_sha256"
+  ],
+  "rows": [
+    [
+      "central-99014101-competitive_growth",
+      13,
+      210548348,
+      4692566848,
+      207433152,
+      "e0149509e6f193118691c91631f1d940d4661539884bc1768f3923be060abc6c"
+    ],
+    [
+      "central-99014101-market_matching_growth",
+      29,
+      568907398,
+      4537891898,
+      362108102,
+      "1305c27fe0e993afcd53956ec0793d9bfa63c19ba8fae4b81857d43b6956e9b0"
+    ],
+    [
+      "central-99014102-competitive_growth",
+      9,
+      133845249,
+      4737754249,
+      162245751,
+      "c150e42f3c6b1859590c126cdaefd05d5992c88d82cf8c2441444443cdc0a254"
+    ],
+    [
+      "central-99014102-market_matching_growth",
+      32,
+      643963158,
+      4498221158,
+      401778842,
+      "48698bdade5e6b2af2cd6deb13e2687c27dbc0cdf02dd10d5120122bc1a86e78"
+    ],
+    [
+      "failed_channel-99014104-competitive_growth",
+      6,
+      70124660,
+      4772780660,
+      127219340,
+      "f577462d6d70118a29e502e7b37947114c1fadab5dea0b91ce76e7325965256d"
+    ],
+    [
+      "failed_channel-99014104-market_matching_growth",
+      12,
+      189707244,
+      4720077494,
+      179922506,
+      "5be3db075f0098de5c79d5e30f3e129b61ea9ad7d2e1f1c09094e36106769287"
+    ],
+    [
+      "price_pressure-99014103-competitive_growth",
+      5,
+      -4857682,
+      4795386068,
+      104613932,
+      "c9e03e94db818d858b7abb0b77489c21a4c780c12e0cc38c7bf952a6719a0a37"
+    ],
+    [
+      "price_pressure-99014103-market_matching_growth",
+      22,
+      192449253,
+      4681961128,
+      218038872,
+      "1133b97bd7a21ea08abe8ebe9970dc9062f2b1b09191af149b6b9e345f3215b0"
+    ]
+  ],
+  "negative_probes": [
+    {
+      "mutation": "profit",
+      "rejected": true,
+      "reason": "OPERATING_SUMMARY_DIFFERS_FROM_NATIVE_ACCOUNT"
+    },
+    {
+      "mutation": "quote",
+      "rejected": true,
+      "reason": "PRICE_POLICY_USES_UNREGISTERED_INFORMATION_OR_HUMAN_ANCHOR"
+    },
+    {
+      "mutation": "funding",
+      "rejected": true,
+      "reason": "PRODUCTIVE_EXPANSION_ATTRIBUTION_DOES_NOT_RECOMPUTE"
+    }
+  ],
+  "limits": [
+    "Historical exposed trajectories only; not a fresh commercial experiment",
+    "Local exact scoped source, not full repository/hosted qualification",
+    "Arithmetic is not authentication or authority",
+    "No reserves changed; no obtainable provider contract established"
+  ]
+}
