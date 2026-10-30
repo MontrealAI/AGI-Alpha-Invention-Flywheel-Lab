@@ -2,6 +2,8 @@
 
 Transformational intelligence: profitable useful work can finance new instruments, retained capabilities and larger productive frontiers. The current enterprise-011 edition implements a bounded conditional commercial experiment using authorized synthetic inputs. Its service capability, simulated commerce, actual commerce, invention compounding and Blue Sky enablement have separate verdicts.
 
+The executed confirmation passed **61 of 64 central trajectories**. The first successful registered trajectory settled **67 simulated jobs**, served **eight repeat customers**, earned **USD 204.97** after complete modeled costs, and financed **10 profitable follow-on cycles**. A separate USD 25 frontier allocation leaves USD 179.97. Initial capital still supports reserves. Price-war and correlated-shock criteria failed; actual commerce and capability compounding remain unestablished. See the [paper](docs/research/enterprise-011/enterprise-011.md), [complete package](artifacts/README.md) and [source-bound summary](evidence/enterprise011/REPORT.summary.json).
+
 ## Run the current edition
 
 Python 3.11 or later; install the pinned cryptography dependency used by the inherited protected exchange. Choose a new output directory: retained evidence must not be overwritten.

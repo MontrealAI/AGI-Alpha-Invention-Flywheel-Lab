@@ -15,7 +15,7 @@ class CurrentPolicyBoundaryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             target = Path(folder)/'legacy'
             receipt = materialize(ROOT, target)
-            for name in ('AGENTS.md','CHARTER.md','FIRST_CAMPAIGN.md','README.md'):
+            for name in ('AGENTS.md','CAMPAIGN.md','CHARTER.md','FIRST_CAMPAIGN.md','README.md'):
                 with self.subTest(name=name):
                     original = (ROOT/'historical/cycle-001'/f'{name}.txt').read_bytes()
                     self.assertEqual(hashlib.sha256(original).hexdigest(), edition[name])

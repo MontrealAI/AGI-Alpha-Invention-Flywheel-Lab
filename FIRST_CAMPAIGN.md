@@ -5,6 +5,7 @@ Execute the owner’s 30 October 2026 complete mandate within the [recorded allo
 ## Execute and check
 
 ```sh
+python3 -m pip install -r requirements-commercial010.txt
 python3 -m enterprise run --output /tmp/enterprise011-NEW
 python3 -m unittest discover -s tests -p 'test_enterprise*.py' -v
 python3 -m unittest discover -s portfolio_scale -p 'test_*.py' -v

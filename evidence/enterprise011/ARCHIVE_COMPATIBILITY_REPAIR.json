@@ -1,0 +1,12 @@
+{
+  "schema": "agi-alpha/enterprise011-hosted-repair/v1",
+  "original_run": 41083396950,
+  "original_job": 124158126681,
+  "source_commit": "d171be216f3422ff0ba13103ba548044f838c0a4",
+  "failure": "Four inherited archive/materialization tests required old CAMPAIGN.md; current policy routing replaced it, preserved source existed but historical readers lacked its fallback mapping.",
+  "repair": "Copy exact822c2ce0 original into historical/cycle-001/CAMPAIGN.md.txt; extend only historical readers legacy.py and reproduction006.py snapshot maps. Frozen006 reference/source pins remain unchanged.",
+  "commercial_runtime_changed": false,
+  "fresh_confirmation_reused_as_new": false,
+  "exact_scope": "Archive adapters are outside frozen enterprise011 executable dependency closure; all listed frozen source bytes and financial source identity remain unchanged.",
+  "regressions_log": "archive-boundary-repair.log"
+}

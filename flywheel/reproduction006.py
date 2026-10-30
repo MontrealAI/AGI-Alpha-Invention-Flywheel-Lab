@@ -10,7 +10,7 @@ SNAPSHOTS = {
     '.github/workflows/campaign.yml': 'historical/cycle-006/campaign-workflow.yml.txt',
     'flywheel/legacy.py': 'historical/cycle-006/legacy.py.txt',
     **{name: 'historical/cycle-001/' + name + '.txt'
-       for name in ('AGENTS.md', 'CHARTER.md', 'FIRST_CAMPAIGN.md', 'README.md')},
+       for name in ('AGENTS.md', 'CAMPAIGN.md', 'CHARTER.md', 'FIRST_CAMPAIGN.md', 'README.md')},
 }
 
 

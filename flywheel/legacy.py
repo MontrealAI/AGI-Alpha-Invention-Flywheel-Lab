@@ -32,7 +32,7 @@ def _read(root, name, expected):
         return raw, "current-tree"
     snapshots = {".github/workflows/campaign.yml": "historical/cycle-001/campaign-workflow.yml.txt",
                  **{policy: "historical/cycle-001/" + policy + ".txt"
-                    for policy in ("AGENTS.md", "CHARTER.md", "FIRST_CAMPAIGN.md", "README.md")}}
+                    for policy in ("AGENTS.md", "CAMPAIGN.md", "CHARTER.md", "FIRST_CAMPAIGN.md", "README.md")}}
     if name in snapshots:
         historical = _safe(root, snapshots[name])
         if not historical.is_file():

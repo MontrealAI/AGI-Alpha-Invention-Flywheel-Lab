@@ -1,0 +1,20 @@
+{
+  "path": "artifacts/AGI_ALPHA_Enterprise_011_source_evidence.zip",
+  "sha256": "7e21fe606108d6625c0aa851f040638d09decf7a8f77ec9efe6fa82b6987cdb7",
+  "bytes": 49513883,
+  "schema": "agi-alpha/enterprise011-package/v1",
+  "source_commit": "d171be216f3422ff0ba13103ba548044f838c0a4",
+  "source_sha256": "4dafe8403bf8271fbed6b7d75f31ebcf7bdb821c5925097289330a023b34e7e0",
+  "freeze_sha256": "8dbdb2091bf82893933699393b8c42f99acb36c352e1a998255bf212ac5462bf",
+  "report_sha256": "efdf25e39abe13ec70ced04302ee9ad23d38c38b71a71fef5a1201a35f06be0a",
+  "scope": "Actual deterministic synthetic service production; conditional simulated customers/payments; no actual commerce or compounding claim.",
+  "extract_command": "python3 -m zipfile -e artifacts/AGI_ALPHA_Enterprise_011_source_evidence.zip NEW_DIRECTORY",
+  "audit_command": "cd NEW_DIRECTORY/source && python3 -m enterprise audit --output ..",
+  "local_package_audit": "PASS: all188 native financial and deterministic operational world replays before archive creation; ZIP CRC pass.",
+  "transport": {
+    "parts_index": "artifacts/enterprise011-parts/INDEX.json",
+    "parts": 17,
+    "reason": "Connector single-request payload limit; lossless original ZIP with identical SHA256",
+    "reassemble_command": "python3 scripts/reassemble_enterprise011.py --manifest artifacts/enterprise011-parts/INDEX.json --output /tmp/AGI_ALPHA_Enterprise_011_source_evidence.zip"
+  }
+}
