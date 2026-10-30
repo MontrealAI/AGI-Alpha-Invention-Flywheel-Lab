@@ -1,0 +1,11 @@
+{
+  "schema": "agi-alpha/cycle006-archive-input-snapshot-repair/v1",
+  "original_checker_sha256": "29a5da2dd03a3389e9fce4137fe494b483798ea80d8270e8e1127ed5a1e09ac0",
+  "repaired_checker_sha256": "646dfd9df78a44ca12e1fcc75b751cfb4892583cdaa278db20f8941a7bfdbb3e",
+  "established_issue": "Original new checker read bytes for external digest then reopened the mutable external path for ZIP parsing and actual extraction. A concurrent replacement could select different bytes after the check.",
+  "repair": "Parse the already verified byte snapshot; write that exact snapshot exclusively inside a new temporary directory for the qualified extractor. All receipts bind snapshot length/digest.",
+  "regression": "tests/test_archive_check006.py::test_digest_checked_bytes_survive_external_path_replacement",
+  "regression_run": "evidence/cycle-006/archive-check-snapshot-run/RECEIPT.json",
+  "tests_passed": 3,
+  "scope": "Release-input identity integrity. Does not change frozen candidate, scientific judge or protected outcomes."
+}

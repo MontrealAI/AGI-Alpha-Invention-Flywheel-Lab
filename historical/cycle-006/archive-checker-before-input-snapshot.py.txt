@@ -1,0 +1,151 @@
+"""Qualify an externally digest-identified new edition after ordinary and checked extraction."""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path, PurePosixPath
+import resource
+import signal
+import stat
+import subprocess
+import sys
+import tempfile
+import time
+import zipfile
+
+PREFIX = 'AGI_ALPHA_Mechanism_Completion/'
+HELPER_SHA256 = 'e80512aa0e06503c8e49c78c43f09e786df1ba51ee26c3bb36b52ab703328007'
+MAX_BYTES, MAX_FILES = 250 * 1024**2, 10000
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def unique(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError('ARCHIVE_DUPLICATE_JSON_KEY')
+        result[key] = value
+    return result
+
+
+def payloads(archive_path, expected_sha256):
+    if len(expected_sha256) != 64 or any(c not in '0123456789abcdef' for c in expected_sha256):
+        raise ValueError('EXTERNAL_ARCHIVE_DIGEST_REQUIRED')
+    if archive_path.is_symlink() or any(parent.is_symlink() for parent in archive_path.parents) or not archive_path.is_file() or archive_path.stat().st_size > MAX_BYTES:
+        raise ValueError('ARCHIVE_INPUT_SCOPE')
+    raw = archive_path.read_bytes()
+    if sha(raw) != expected_sha256:
+        raise ValueError('EXTERNAL_ARCHIVE_IDENTITY_MISMATCH')
+    data = {}
+    with zipfile.ZipFile(archive_path) as archive:
+        entries = archive.infolist()
+        if len(entries) > MAX_FILES + 1 or sum(item.file_size for item in entries) > MAX_BYTES:
+            raise ValueError('ARCHIVE_RESOURCE_BOUND')
+        for item in entries:
+            if not item.filename.startswith(PREFIX) or item.is_dir() or stat.S_ISLNK(item.external_attr >> 16):
+                raise ValueError('ARCHIVE_ENTRY_SCOPE')
+            name = item.filename[len(PREFIX):]
+            path = PurePosixPath(name)
+            if not name or path.is_absolute() or '..' in path.parts or '.git' in path.parts or '\\' in name or path.as_posix() != name or name in data:
+                raise ValueError('ARCHIVE_PATH_OR_DUPLICATE')
+            data[name] = archive.read(item)
+    manifest_raw = data.pop('ARCHIVE_MANIFEST.json')
+    manifest = json.loads(manifest_raw, object_pairs_hook=unique)
+    if type(manifest) is not dict or manifest.get('schema') != 'lab/self-contained-source-archive/v2' or type(manifest.get('files')) is not dict or set(data) != set(manifest['files']):
+        raise ValueError('ARCHIVE_MANIFEST_SET')
+    if any(type(expected) is not str or len(expected) != 64 or any(c not in '0123456789abcdef' for c in expected) or sha(data[name]) != expected for name, expected in manifest['files'].items()):
+        raise ValueError('ARCHIVE_PAYLOAD_IDENTITY')
+    return data, manifest_raw
+
+
+def bounded(command, cwd, log):
+    def restrict():
+        resource.setrlimit(resource.RLIMIT_CPU, (300, 300))
+        resource.setrlimit(resource.RLIMIT_AS, (4 * 1024**3, 4 * 1024**3))
+        resource.setrlimit(resource.RLIMIT_FSIZE, (MAX_BYTES, MAX_BYTES))
+    started = time.monotonic()
+    prior = resource.getrusage(resource.RUSAGE_CHILDREN)
+    env = {'PATH': os.defpath, 'LANG': 'C.UTF-8', 'OPENBLAS_NUM_THREADS': '1', 'OMP_NUM_THREADS': '1', 'MKL_NUM_THREADS': '1', 'PYTHONNOUSERSITE': '1'}
+    with log.open('xb') as stream:
+        process = subprocess.Popen(command, cwd=cwd, stdout=stream, stderr=subprocess.STDOUT, env=env, start_new_session=True, preexec_fn=restrict)
+        reason = None
+        try:
+            while process.poll() is None:
+                if time.monotonic() - started > 420 or log.stat().st_size > 25 * 1024**2:
+                    reason = 'wall-bound' if time.monotonic() - started > 420 else 'log-output-bound'
+                    os.killpg(process.pid, signal.SIGKILL)
+                    break
+                time.sleep(.05)
+            code = process.wait()
+        except BaseException:
+            if process.poll() is None:
+                os.killpg(process.pid, signal.SIGKILL)
+            process.wait()
+            raise
+    usage = resource.getrusage(resource.RUSAGE_CHILDREN)
+    return {'command': command, 'returncode': code, 'termination_reason': reason, 'log_sha256': sha(log.read_bytes()), 'wall_seconds': time.monotonic() - started,
+        'waited_child_cpu_seconds': usage.ru_utime + usage.ru_stime - prior.ru_utime - prior.ru_stime,
+        'scope': 'Trusted source commands with per-process CPU/address-space/file and process-group wall bounds; not a generated-program sandbox or exact full descendant accounting.'}
+
+
+def check(archive_path, expected_sha256, output, identity_only=False):
+    archive_path, output = Path(archive_path).absolute(), Path(output).absolute()
+    data, manifest_raw = payloads(archive_path, expected_sha256)  # No extracted imports before all identity checks.
+    if output.exists() or output.is_symlink() or any(parent.is_symlink() for parent in output.parents):
+        raise ValueError('ARCHIVE_REPORT_DESTINATION_SCOPE')
+    output.mkdir(parents=True, exist_ok=False)
+    started = time.monotonic()
+    checks = {}
+    if not identity_only:
+        helper = Path(__file__).resolve().parents[1] / 'flywheel/archive_v2.py'
+        if helper.is_symlink() or sha(helper.read_bytes()) != HELPER_SHA256:
+            raise ValueError('QUALIFIED_EXTRACTOR_IDENTITY_MISMATCH')
+        with tempfile.TemporaryDirectory(prefix='alpha006-downloaded-archive-', dir='/tmp') as temporary:
+            staging = Path(temporary)
+            if any((parent / '.git').exists() for parent in (staging, *staging.parents)):
+                raise ValueError('ARCHIVE_GIT_ANCESTRY')
+            validated = staging / 'validated'
+            checks['qualified_extractor'] = bounded([sys.executable, '-I', str(helper), 'extract', str(archive_path), str(validated)], staging, output / 'extract.log')
+            if checks['qualified_extractor']['returncode']:
+                raise ValueError('QUALIFIED_EXTRACTOR_FAILED')
+            ordinary = staging / 'ordinary'
+            ordinary.mkdir()
+            for name, raw in {**data, 'ARCHIVE_MANIFEST.json': manifest_raw}.items():
+                target = ordinary / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(raw)
+            for mode, root in [('ordinary', ordinary), ('validated', validated)]:
+                if any(sha((root / name).read_bytes()) != sha(raw) for name, raw in data.items()):
+                    raise ValueError('EXTRACTED_PAYLOAD_IDENTITY')
+                for label, command in [('unit', [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-v']),
+                    ('verifier_unit', [sys.executable, '-m', 'unittest', 'discover', '-s', 'verification', '-v']),
+                    ('runtime', [sys.executable, 'run_cycle006.py', '--output', str(output / (mode + '-runtime'))]),
+                    ('paper', [sys.executable, 'scripts/check_cycle006_paper.py', '--output', str(output / (mode + '-paper.json'))])]:
+                    checks[mode + '_' + label] = bounded(command, root, output / (mode + '-' + label + '.log'))
+                checks[mode + '_source_payloads_unchanged'] = all(sha((root / name).read_bytes()) == sha(raw) for name, raw in data.items())
+            checks['ordinary_packaging_metadata_unchanged'] = (ordinary / 'ARCHIVE_MANIFEST.json').read_bytes() == manifest_raw
+            checks['validated_packaging_metadata_consumed'] = not (validated / 'ARCHIVE_MANIFEST.json').exists()
+    passed = not identity_only and all(row['returncode'] == 0 if isinstance(row, dict) else row is True for row in checks.values())
+    report = {'schema': 'agi-alpha/cycle006-downloaded-archive-qualification/v1', 'archive_sha256': expected_sha256,
+        'archive_bytes': archive_path.stat().st_size, 'payload_files': len(data), 'manifest_sha256': sha(manifest_raw), 'checks': checks,
+        'identity_verified': True, 'runtime_qualified': passed, 'identity_only': identity_only,
+        'verifier_sha256': sha(Path(__file__).read_bytes()), 'wall_seconds': time.monotonic() - started,
+        'scope': 'Exact externally digest-identified archive on this Linux/Python/dependency installation. Identity-only mode does not qualify runtime. Runtime reproduction uses now-exposed fixed outcomes, not fresh scientific confirmation or commercial success.'}
+    with (output / 'REPORT.json').open('x') as stream:
+        json.dump(report, stream, indent=2, allow_nan=False); stream.write('\n')
+    return report
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--archive', type=Path, required=True)
+    parser.add_argument('--expected-sha256', required=True)
+    parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--identity-only', action='store_true')
+    args = parser.parse_args()
+    result = check(args.archive, args.expected_sha256, args.output, args.identity_only)
+    print(json.dumps({'identity_verified': result['identity_verified'], 'runtime_qualified': result['runtime_qualified'], 'output': str(args.output)}))
+    raise SystemExit(0 if result['runtime_qualified'] or args.identity_only else 1)

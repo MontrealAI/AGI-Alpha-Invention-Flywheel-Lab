@@ -1,0 +1,45 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "paper-final-layout-001",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "scripts/build_cycle006_paper.py",
+    "--markdown",
+    "docs/research/cycle-006.md",
+    "--manifest",
+    "docs/research/cycle-006.inputs.json",
+    "--output",
+    "/tmp/alpha006-paper-final-layout/cycle-006"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "scripts/build_cycle006_paper.py",
+    "--markdown",
+    "docs/research/cycle-006.md",
+    "--manifest",
+    "docs/research/cycle-006.inputs.json",
+    "--output",
+    "/tmp/alpha006-paper-final-layout/cycle-006"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "scripts/build_cycle006_paper.py",
+    "--markdown",
+    "docs/research/cycle-006.md",
+    "--manifest",
+    "docs/research/cycle-006.inputs.json",
+    "--output",
+    "/tmp/alpha006-paper-final-layout/cycle-006"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 60,
+    "cpu_seconds": 10,
+    "memory_bytes": 1073741824,
+    "output_bytes": 10485760,
+    "storage_bytes": 20971520
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "pending"
+}

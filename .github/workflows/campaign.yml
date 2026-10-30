@@ -8,7 +8,7 @@ permissions:
 jobs:
   qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -160,7 +160,7 @@ jobs:
     needs: [qualify, phase-code-qualification]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions:
       contents: write
     steps:
@@ -210,30 +210,17 @@ jobs:
           mkdir -p "$RUNNER_TEMP/cycle006-assets"
           archive="$RUNNER_TEMP/cycle006-assets/AGI_ALPHA_Perturbation_Construction_006_source_evidence.zip"
           python -m flywheel.archive_v2 build . "$archive"
-          python -m flywheel.archive_v2 extract "$archive" "$RUNNER_TEMP/cycle006-validated"
-          python -m zipfile -e "$archive" "$RUNNER_TEMP/cycle006-ordinary"
-          test ! -e "$RUNNER_TEMP/cycle006-validated/.git"
-          test ! -e "$RUNNER_TEMP/.git"
-          (cd "$RUNNER_TEMP/cycle006-validated" && python -m unittest discover -s tests -v && python -m unittest discover -s verification -v && python run_cycle006.py --output "$RUNNER_TEMP/cycle006-validated-runtime" && python scripts/check_cycle006_paper.py --output "$RUNNER_TEMP/cycle006-validated-paper.json")
-          (cd "$RUNNER_TEMP/cycle006-ordinary/AGI_ALPHA_Mechanism_Completion" && test -f ARCHIVE_MANIFEST.json && python -m unittest discover -s tests -v && python -m unittest discover -s verification -v && python run_cycle006.py --output "$RUNNER_TEMP/cycle006-ordinary-runtime" && python scripts/check_cycle006_paper.py --output "$RUNNER_TEMP/cycle006-ordinary-paper.json")
-          python -m flywheel.baseline005 --root "$RUNNER_TEMP/cycle006-validated" --output "$RUNNER_TEMP/cycle006-old005-source"
+          archive_sha256=$(sha256sum "$archive" | cut -d ' ' -f 1)
+          python verification/cycle006_archive_check.py --archive "$archive" --expected-sha256 "$archive_sha256" --output "$RUNNER_TEMP/cycle006-archive-qualification"
+          python -m flywheel.baseline005 --root . --output "$RUNNER_TEMP/cycle006-old005-source"
           python "$RUNNER_TEMP/cycle006-old005-source/run_completion.py" --output "$RUNNER_TEMP/cycle006-old005-replay"
           python "$RUNNER_TEMP/cycle006-old005-source/verification/cycle005_wholepath.py" --root "$RUNNER_TEMP/cycle006-old005-source" --output "$RUNNER_TEMP/cycle006-old005-wholepath"
           python "$RUNNER_TEMP/cycle006-old005-source/verification/cycle005_p1_regression.py" --root "$RUNNER_TEMP/cycle006-old005-source" --output "$RUNNER_TEMP/cycle006-old005-p1"
           cp docs/research/cycle-006.tex docs/research/cycle-006.pdf docs/research/cycle-006.html docs/research/cycle-006.md docs/research/cycle-006.inputs.json docs/research/cycle-006.build.json docs/research/PDF_QA_006.json "$RUNNER_TEMP/cycle006-assets/"
-          python - "$archive" "$RUNNER_TEMP/cycle006-validated-runtime/REPORT.json" "$RUNNER_TEMP/cycle006-ordinary-runtime/REPORT.json" "$RUNNER_TEMP/cycle006-assets/ARCHIVE_QUALIFICATION.json" <<'PY'
-          import hashlib, json, pathlib, sys
-          archive, validated, ordinary, output = map(pathlib.Path, sys.argv[1:])
-          sha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
-          report = {'schema': 'agi-alpha/cycle006-clean-archive-qualification/v1',
-              'archive_sha256': sha(archive), 'archive_bytes': archive.stat().st_size,
-              'validated_runtime_report_sha256': sha(validated), 'ordinary_runtime_report_sha256': sha(ordinary),
-              'qualification': 'All preceding source-matched unit/verifier/runtime/paper and unchanged005 replay commands completed successfully under fail-fast CI.',
-              'scope': 'Engineering reproduction and hash identity. Scientific and commercial verdicts remain scoped in the actual runtime reports; no blanket success follows.',
-              'platform_enforced_release_immutability': 'Not enabled or changed by this workflow; publish a uniquely versioned hash-identified prerelease.'}
-          with output.open('x') as stream:
-              json.dump(report, stream, indent=2); stream.write('\n')
-          PY
+          cp "$RUNNER_TEMP/cycle006-archive-qualification/REPORT.json" "$RUNNER_TEMP/cycle006-assets/ARCHIVE_QUALIFICATION.json"
+          python -m zipfile -c "$RUNNER_TEMP/cycle006-assets/CLEAN_ARCHIVE_RUNTIME_EVIDENCE.zip" "$RUNNER_TEMP/cycle006-archive-qualification"
+          python scripts/reassemble_evidence006.py --index evidence/cycle-006/reproduction-raw-packages-001/artifacts/connected-reproduction-001-parts/INDEX.json --output "$RUNNER_TEMP/cycle006-assets/connected-reproduction-001-complete-raw.zip" --expected-sha256 cb9e8608a89318f29bc309e3f0dea024793e56dcefdedeb16e87a4fb69bd4054
+          python scripts/reassemble_evidence006.py --index evidence/cycle-006/reproduction-raw-packages-001/artifacts/connected-reproduction-002-parts/INDEX.json --output "$RUNNER_TEMP/cycle006-assets/connected-reproduction-002-complete-raw.zip" --expected-sha256 2d4d4f6fb08a930a380828bd8dce6edb5175f103babc6f42b640fef7ba5bfe7d
           (cd "$RUNNER_TEMP/cycle006-assets" && sha256sum * > SHA256SUMS.txt)
       - name: Publish a new hash-identified experimental edition without rewriting old assets
         if: steps.existing.outputs.published == 'false'
@@ -249,8 +236,7 @@ jobs:
           name: perturbation-construction-release-evidence
           path: |
             ${{ runner.temp }}/cycle006-assets
-            ${{ runner.temp }}/cycle006-validated-runtime
-            ${{ runner.temp }}/cycle006-ordinary-runtime
+            ${{ runner.temp }}/cycle006-archive-qualification
             ${{ runner.temp }}/cycle006-old005-replay
             ${{ runner.temp }}/cycle006-old005-wholepath
             ${{ runner.temp }}/cycle006-old005-p1
