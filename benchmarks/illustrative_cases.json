@@ -8,24 +8,296 @@
     "wage_source": "https://www.bls.gov/ooh/",
     "compensation_source": "https://www.bls.gov/news.release/ecec.htm",
     "model_price_source": "https://developers.openai.com/api/docs/pricing",
-    "note": "Only wages, aggregate burden and model rate schedules are sourced. Per-task hours, tokens, review, other costs, price and acceptance are unvalidated assumptions. No API runs were performed."
+    "note": "No human validation, sales, development or support labor is imposed on AI. Model/tool/compute costs for ALL phases are explicitly assumed. No actual model calls, acceptance, buyer demand or end-to-end autonomous evidence.",
+    "execution_type": "HYPOTHETICAL_FULLY_AUTONOMOUS"
   },
-  "wage_burden": {"wage_salary_per_hour": "32.82", "employer_cost_per_hour": "46.89", "basis": "June 2026 BLS ECEC, private industry aggregate, illustrative ratio not occupation-specific"},
+  "wage_burden": {
+    "wage_salary_per_hour": "32.82",
+    "employer_cost_per_hour": "46.89",
+    "basis": "June 2026 BLS ECEC, private industry aggregate, illustrative ratio not occupation-specific"
+  },
   "roles": {
-    "writer": {"wage_usd_per_hour": "36.98", "source": "https://www.bls.gov/ooh/media-and-communication/writers-and-authors.htm"},
-    "management_analyst": {"wage_usd_per_hour": "48.97", "source": "https://www.bls.gov/ooh/business-and-financial/management-analysts.htm"},
-    "software_developer": {"wage_usd_per_hour": "65.38", "source": "https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm", "note": "US$135980/year divided by 2080 hours"},
-    "accountant": {"wage_usd_per_hour": "40.23", "source": "https://www.bls.gov/ooh/business-and-financial/accountants-and-auditors.htm", "note": "US$83680/year divided by 2080 hours"}
+    "writer": {
+      "wage_usd_per_hour": "36.98",
+      "source": "https://www.bls.gov/ooh/media-and-communication/writers-and-authors.htm"
+    },
+    "management_analyst": {
+      "wage_usd_per_hour": "48.97",
+      "source": "https://www.bls.gov/ooh/business-and-financial/management-analysts.htm"
+    },
+    "software_developer": {
+      "wage_usd_per_hour": "65.38",
+      "source": "https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm",
+      "note": "US$135980/year divided by 2080 hours"
+    },
+    "accountant": {
+      "wage_usd_per_hour": "40.23",
+      "source": "https://www.bls.gov/ooh/business-and-financial/accountants-and-auditors.htm",
+      "note": "US$83680/year divided by 2080 hours"
+    }
   },
   "models": {
-    "gpt-6.1-terra": {"input_usd_per_million": "1", "output_usd_per_million": "5"},
-    "gpt-6.1-sol": {"input_usd_per_million": "2", "output_usd_per_million": "10"},
-    "gpt-6-astra": {"input_usd_per_million": "10", "output_usd_per_million": "50"}
+    "gpt-6.1-terra": {
+      "input_usd_per_million": "1",
+      "output_usd_per_million": "5"
+    },
+    "gpt-6.1-sol": {
+      "input_usd_per_million": "2",
+      "output_usd_per_million": "10"
+    },
+    "gpt-6-astra": {
+      "input_usd_per_million": "10",
+      "output_usd_per_million": "50"
+    }
   },
   "cases": [
-    {"id":"researched_article", "outcome":"Client-ready factual 1000-word article with sources, edits and publication-ready metadata", "role":"writer", "human_hours":"4", "model":"gpt-6.1-terra", "input_tokens":20000,"output_tokens":4000,"ai_review_hours":"0.30","tools_usd":"3","rework_usd":"4","acquisition_usd":"10","development_allocation_usd":"5","support_risk_usd":"3","assumed_price_usd":"95"},
-    {"id":"business_analysis", "outcome":"Reconciled business KPI and sensitivity brief with checkable calculations and interpretation", "role":"management_analyst", "human_hours":"6", "model":"gpt-6.1-sol", "input_tokens":100000,"output_tokens":25000,"ai_review_hours":"0.75","tools_usd":"12","rework_usd":"15","acquisition_usd":"20","development_allocation_usd":"10","support_risk_usd":"8","assumed_price_usd":"250"},
-    {"id":"software_patch", "outcome":"Reproducible scoped bug fix with tests, review and artifact handoff", "role":"software_developer", "human_hours":"8", "model":"gpt-6-astra", "input_tokens":250000,"output_tokens":40000,"ai_review_hours":"1.0","tools_usd":"12","rework_usd":"30","acquisition_usd":"25","development_allocation_usd":"25","support_risk_usd":"15","assumed_price_usd":"450"},
-    {"id":"reconciliation", "outcome":"Checked accounting reconciliation report with exceptions and correction trace", "role":"accountant", "human_hours":"5", "model":"gpt-6.1-sol", "input_tokens":80000,"output_tokens":12000,"ai_review_hours":"0.80","tools_usd":"7","rework_usd":"12","acquisition_usd":"20","development_allocation_usd":"10","support_risk_usd":"10","assumed_price_usd":"180"}
+    {
+      "id": "researched_article",
+      "outcome": "Client-ready factual 1000-word article with sources, edits and publication-ready metadata",
+      "role": "writer",
+      "human_hours": "4",
+      "ai_operation": "FULLY_AUTONOMOUS_END_TO_END",
+      "agent_human_hours": "0",
+      "autonomous_phases": [
+        {
+          "name": "production",
+          "model": "gpt-6.1-terra",
+          "input_tokens": 20000,
+          "output_tokens": 4000
+        },
+        {
+          "name": "research_and_source_check",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 16000,
+          "output_tokens": 3000
+        },
+        {
+          "name": "adversarial_qa",
+          "model": "gpt-6-astra",
+          "input_tokens": 5000,
+          "output_tokens": 1000
+        },
+        {
+          "name": "correction_and_testing",
+          "model": "gpt-6.1-terra",
+          "input_tokens": 10000,
+          "output_tokens": 1500
+        },
+        {
+          "name": "customer_acquisition",
+          "model": "gpt-6.1-terra",
+          "input_tokens": 6000,
+          "output_tokens": 1000
+        },
+        {
+          "name": "customer_support_and_delivery",
+          "model": "gpt-6.1-terra",
+          "input_tokens": 2500,
+          "output_tokens": 300
+        },
+        {
+          "name": "development_and_maintenance",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 4000,
+          "output_tokens": 800
+        }
+      ],
+      "ai_non_model_costs": {
+        "external_tools_and_data_usd": "0.15",
+        "compute_and_storage_usd": "0.08",
+        "failed_attempts_and_retries_usd": "0.20",
+        "paid_distribution_usd": "0.50",
+        "payment_and_delivery_fees_usd": "3.15",
+        "warranty_and_liability_reserve_usd": "0.50",
+        "non_model_development_amortization_usd": "0.20"
+      },
+      "assumed_price_usd": "95"
+    },
+    {
+      "id": "business_analysis",
+      "outcome": "Reconciled business KPI and sensitivity brief with checkable calculations and interpretation",
+      "role": "management_analyst",
+      "human_hours": "6",
+      "ai_operation": "FULLY_AUTONOMOUS_END_TO_END",
+      "agent_human_hours": "0",
+      "autonomous_phases": [
+        {
+          "name": "production",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 100000,
+          "output_tokens": 25000
+        },
+        {
+          "name": "research_and_source_check",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 100000,
+          "output_tokens": 10000
+        },
+        {
+          "name": "adversarial_qa",
+          "model": "gpt-6-astra",
+          "input_tokens": 40000,
+          "output_tokens": 6000
+        },
+        {
+          "name": "correction_and_testing",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 35000,
+          "output_tokens": 7000
+        },
+        {
+          "name": "customer_acquisition",
+          "model": "gpt-6.1-terra",
+          "input_tokens": 10000,
+          "output_tokens": 3000
+        },
+        {
+          "name": "customer_support_and_delivery",
+          "model": "gpt-6.1-terra",
+          "input_tokens": 6000,
+          "output_tokens": 1000
+        },
+        {
+          "name": "development_and_maintenance",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 20000,
+          "output_tokens": 4000
+        }
+      ],
+      "ai_non_model_costs": {
+        "external_tools_and_data_usd": "1.80",
+        "compute_and_storage_usd": "0.30",
+        "failed_attempts_and_retries_usd": "3.00",
+        "paid_distribution_usd": "2.00",
+        "payment_and_delivery_fees_usd": "8.00",
+        "warranty_and_liability_reserve_usd": "6.00",
+        "non_model_development_amortization_usd": "0.80"
+      },
+      "assumed_price_usd": "250"
+    },
+    {
+      "id": "software_patch",
+      "outcome": "Reproducible scoped bug fix with tests, review and artifact handoff",
+      "role": "software_developer",
+      "human_hours": "8",
+      "ai_operation": "FULLY_AUTONOMOUS_END_TO_END",
+      "agent_human_hours": "0",
+      "autonomous_phases": [
+        {
+          "name": "production",
+          "model": "gpt-6-astra",
+          "input_tokens": 250000,
+          "output_tokens": 40000
+        },
+        {
+          "name": "research_and_source_check",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 160000,
+          "output_tokens": 10000
+        },
+        {
+          "name": "adversarial_qa",
+          "model": "gpt-6-astra",
+          "input_tokens": 150000,
+          "output_tokens": 20000
+        },
+        {
+          "name": "correction_and_testing",
+          "model": "gpt-6-astra",
+          "input_tokens": 160000,
+          "output_tokens": 30000
+        },
+        {
+          "name": "customer_acquisition",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 15000,
+          "output_tokens": 3000
+        },
+        {
+          "name": "customer_support_and_delivery",
+          "model": "gpt-6.1-terra",
+          "input_tokens": 12000,
+          "output_tokens": 2500
+        },
+        {
+          "name": "development_and_maintenance",
+          "model": "gpt-6-astra",
+          "input_tokens": 70000,
+          "output_tokens": 12000
+        }
+      ],
+      "ai_non_model_costs": {
+        "external_tools_and_data_usd": "3.00",
+        "compute_and_storage_usd": "3.00",
+        "failed_attempts_and_retries_usd": "10.00",
+        "paid_distribution_usd": "4.00",
+        "payment_and_delivery_fees_usd": "14.00",
+        "warranty_and_liability_reserve_usd": "10.00",
+        "non_model_development_amortization_usd": "4.00"
+      },
+      "assumed_price_usd": "450"
+    },
+    {
+      "id": "reconciliation",
+      "outcome": "Checked accounting reconciliation report with exceptions and correction trace",
+      "role": "accountant",
+      "human_hours": "5",
+      "ai_operation": "FULLY_AUTONOMOUS_END_TO_END",
+      "agent_human_hours": "0",
+      "autonomous_phases": [
+        {
+          "name": "production",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 80000,
+          "output_tokens": 12000
+        },
+        {
+          "name": "research_and_source_check",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 30000,
+          "output_tokens": 5000
+        },
+        {
+          "name": "adversarial_qa",
+          "model": "gpt-6-astra",
+          "input_tokens": 75000,
+          "output_tokens": 10000
+        },
+        {
+          "name": "correction_and_testing",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 30000,
+          "output_tokens": 4000
+        },
+        {
+          "name": "customer_acquisition",
+          "model": "gpt-6.1-terra",
+          "input_tokens": 7000,
+          "output_tokens": 1500
+        },
+        {
+          "name": "customer_support_and_delivery",
+          "model": "gpt-6.1-terra",
+          "input_tokens": 7000,
+          "output_tokens": 1200
+        },
+        {
+          "name": "development_and_maintenance",
+          "model": "gpt-6.1-sol",
+          "input_tokens": 20000,
+          "output_tokens": 3000
+        }
+      ],
+      "ai_non_model_costs": {
+        "external_tools_and_data_usd": "2.00",
+        "compute_and_storage_usd": "0.50",
+        "failed_attempts_and_retries_usd": "4.00",
+        "paid_distribution_usd": "1.00",
+        "payment_and_delivery_fees_usd": "6.00",
+        "warranty_and_liability_reserve_usd": "8.00",
+        "non_model_development_amortization_usd": "1.50"
+      },
+      "assumed_price_usd": "180"
+    }
   ]
 }

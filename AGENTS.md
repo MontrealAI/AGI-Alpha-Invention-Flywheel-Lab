@@ -38,11 +38,11 @@ Evaluators can be improved through separately validated, authorized changes. Nev
 
 Measure actual quantities where possible. Identify assumptions, ranges and missing measurements. Include discovery, rejected attempts, construction, adaptation, verification, integration, maintenance, buyer participation, acquisition, support and obligations where applicable. Do not count theoretical customer savings as revenue. An idealized market or custodian remains a model assumption.
 
-## Primary commercial benchmark — competent human service versus frontier AI
+## Primary commercial benchmark — fully autonomous frontier-AI enterprise versus human service
 
-For commercial feasibility, **first compare** our competently configured, currently capable frontier-AI operation with a competent human-delivered service at realistic human speed and fully loaded wages. Hold the required outcome, acceptance, legal rights, deadlines, corrections and support obligations fixed. Treat AI model-token pricing as one cost component, not total service cost. Measure the full accepted-job cost and buyer value. Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) before designing economic benchmarks.
+For commercial feasibility, **first compare our competently configured, end-to-end autonomous frontier-AI operation with a competent human-delivered complete service** at realistic human speed and fully loaded wages for the same acceptance, data rights, quality, delivery, revisions, support and liability. Frontier AI agents perform research, production, QA/verification, testing, corrections, acquisition, service/support and development/maintenance. Charge their measured inference, tool, compute, delivery, acquisition-channel, failure, payment and risk costs. **Do not impose an assumed human reviewer, developer, salesperson or support employee on the autonomous agent operation.** A genuinely necessary human escalation makes that case a hybrid separately reported arm—or an unaccepted autonomous job—not invisible free labor.
 
-**Separately** compare human providers using AI, rival autonomous frontier-AI services, freely available alternatives and no purchase. These determine market competitiveness and defensibility; they must not erase the primary human-versus-frontier-AI productivity question. Causal successor-invention and economic compounding remain separate higher-level claims.
+Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) for the revised v2 fully autonomous costing method and explicit hypothetical examples. Model token price is one cost, not proof of accepted delivery; running autonomously is a capability that must be tested. Compare human+AI, other autonomous frontier-AI providers, free/self-service and no launch **secondarily** for price pressure and competitiveness. The inherited-invention versus no-inheritance comparison is a distinct causal claim, not a prerequisite for a viable AI-native service.
 
 ## Inheritance and economics
 

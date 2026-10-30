@@ -61,11 +61,11 @@ Require a concrete explanation of how its result would change a build, stop, piv
 
 A rejected analogy is useful if it becomes a scoped constraint. A verified criticism is useful if it changes a construction or decision. More agents, more papers, more test cases and more code are not substitutes for either.
 
-## Commercial comparison: human first, market competition second
+## Commercial comparison: fully autonomous AI first, human-delivered service comparator
 
-The primary commercial productivity and feasibility comparison is **a super-competent autonomous frontier-AI operation (E) versus a competent human-delivered service (H) at realistic human speed and fully loaded wages** for the same accepted outcome and obligations. Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) for wage and model-rate sources, four illustrative jobs and the required complete-cost method.
+The primary economic benchmark is a **competently configured, fully autonomous frontier-AI enterprise E versus a competent human-delivered enterprise H**, providing the *same accepted outcome and obligations*. E's agents themselves carry out sourcing/research, production, independent-style verification, corrections, sales/acquisition, delivery, support and development. Bill E's actual model/tool, compute, infrastructure, failed-attempt, acquisition-channel, payment and liability costs. **Do not assign mandatory hypothetical human review, sales, development or support hours to E.** Human participation, if genuinely necessary, belongs to a distinct hybrid arm or marks a failure of strict E autonomy.
 
-This opens potentially profitable AI-native services even where other AI implementations tie technically. A separate comparison with human-AI hybrids, competing autonomous AI providers, free tools and no entry tests achievable selling prices and advantage. Low token cost alone is not verified delivery, paying demand, realized profit or recursive invention.
+Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) and its v2 seven-stage agent cost scenarios. The 20k-input/4k-output Terra production example costs approximately $0.04 in standard model inference, but the whole accepted article has additional autonomous processes and external charges. Keep sourced tariffs separate from assumed model usage, outcome quality, customer acquisition and adoption. Human+AI providers, competing AI services and free tools are **secondary market comparisons** rather than the prerequisite to demonstrate human-labor replacement. Economic viability and profitable invention-to-successor compounding still require accepted work, credible price/collections, complete costs and fresh causally beneficial invention.
 
 ## Three achievements to establish separately
 

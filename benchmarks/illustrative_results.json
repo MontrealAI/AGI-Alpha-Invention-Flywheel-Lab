@@ -1,15 +1,26 @@
 {
-  "schema": "alpha-human-frontier-benchmark/v1",
-  "inputs_sha256": "7f7ed0a36697a633c22d24c271a81f46702a6913c3983d32d2b5f1743bd82411",
-  "wage_loading_factor": "1.428702010968921389396709324",
-  "comparison_priority": "PRIMARY_HUMAN_FULLY_LOADED_LABOR_VS_FRONTIER_AI_OPERATION",
+  "schema": "alpha-human-frontier-autonomous-benchmark/v2",
+  "inputs_sha256": "a2a51f0cf0211bdcbb11487dd8c453e7a14bb2bc028519bd164ff34af7b66bb7",
+  "human_wage_loading_factor": "1.428702010968921389396709324",
+  "comparison_priority": "PRIMARY_HUMAN_FULLY_LOADED_SERVICE_VS_FULLY_AUTONOMOUS_FRONTIER_AI",
+  "autonomous_operation_includes": [
+    "production",
+    "research_and_source_check",
+    "adversarial_qa",
+    "correction_and_testing",
+    "customer_acquisition",
+    "customer_support_and_delivery",
+    "development_and_maintenance"
+  ],
+  "mandatory_human_verification": "NONE",
   "secondary_comparators": [
     "human_delivered_ai_assisted_service",
     "competent_alternative_autonomous_ai",
+    "free_self_service",
     "no_launch"
   ],
-  "caveat": "Human task hours, AI tokens, review, rates and offered price are scenario assumptions. Wage benchmarks and published model tariffs are sourced. Human wage excludes business overhead; AI other categories are illustrative allowances, not complete observed costs.",
-  "cost_status": "NOT_MEASURED",
+  "caveat": "All job hours, model tokens, acceptance, recurring tools, customer demand, acquisition, development amortization, risk and sale prices are assumptions; only model tariffs and wage schedules are sourced. A model output is not buyer-accepted work.",
+  "cost_status": "SCENARIO_ONLY_NOT_METERED",
   "actual_customer_receipts_usd": "0",
   "all_outcomes_confirmed": false,
   "commercial_success": "UNESTABLISHED",
@@ -20,18 +31,68 @@
       "outcome": "Client-ready factual 1000-word article with sources, edits and publication-ready metadata",
       "human_role": "writer",
       "human_hours_assumed": "4",
-      "frontier_model": "gpt-6.1-terra",
-      "human_loaded_hourly_usd": "52.83",
       "human_loaded_labor_usd": "211.33",
-      "ai_model_token_usd": "0.04",
-      "ai_review_labor_usd": "15.85",
-      "ai_other_costs_usd": "25.00",
-      "ai_total_modeled_usd": "40.89",
+      "agent_human_hours": "0",
+      "autonomous_operation_human_labor_usd": "0.00",
+      "ai_workflow_model_cost_usd": "0.25",
+      "autonomous_phase_costs": [
+        {
+          "phase": "production",
+          "model": "gpt-6.1-terra",
+          "model_cost_usd": "0.04",
+          "input_tokens": 20000,
+          "output_tokens": 4000
+        },
+        {
+          "phase": "research_and_source_check",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.06",
+          "input_tokens": 16000,
+          "output_tokens": 3000
+        },
+        {
+          "phase": "adversarial_qa",
+          "model": "gpt-6-astra",
+          "model_cost_usd": "0.10",
+          "input_tokens": 5000,
+          "output_tokens": 1000
+        },
+        {
+          "phase": "correction_and_testing",
+          "model": "gpt-6.1-terra",
+          "model_cost_usd": "0.02",
+          "input_tokens": 10000,
+          "output_tokens": 1500
+        },
+        {
+          "phase": "customer_acquisition",
+          "model": "gpt-6.1-terra",
+          "model_cost_usd": "0.01",
+          "input_tokens": 6000,
+          "output_tokens": 1000
+        },
+        {
+          "phase": "customer_support_and_delivery",
+          "model": "gpt-6.1-terra",
+          "model_cost_usd": "0.00",
+          "input_tokens": 2500,
+          "output_tokens": 300
+        },
+        {
+          "phase": "development_and_maintenance",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.02",
+          "input_tokens": 4000,
+          "output_tokens": 800
+        }
+      ],
+      "ai_non_model_assumption_costs_usd": "4.78",
+      "ai_total_scenario_cost_usd": "5.03",
       "assumed_sale_price_usd": "95.00",
-      "human_labor_only_contribution_at_price_usd": "-116.33",
-      "ai_modeled_contribution_at_price_usd": "54.11",
-      "human_minus_ai_modeled_cost_usd": "170.44",
+      "conditional_ai_contribution_usd": "89.97",
+      "human_loaded_labor_minus_ai_scenario_usd": "206.30",
       "quality_and_same_outcome_verified": false,
+      "real_customer_demand_verified": false,
       "commercial_conclusion": "ILLUSTRATIVE_ONLY"
     },
     {
@@ -39,18 +100,68 @@
       "outcome": "Reconciled business KPI and sensitivity brief with checkable calculations and interpretation",
       "human_role": "management_analyst",
       "human_hours_assumed": "6",
-      "frontier_model": "gpt-6.1-sol",
-      "human_loaded_hourly_usd": "69.96",
       "human_loaded_labor_usd": "419.78",
-      "ai_model_token_usd": "0.45",
-      "ai_review_labor_usd": "52.47",
-      "ai_other_costs_usd": "65.00",
-      "ai_total_modeled_usd": "117.92",
+      "agent_human_hours": "0",
+      "autonomous_operation_human_labor_usd": "0.00",
+      "ai_workflow_model_cost_usd": "1.71",
+      "autonomous_phase_costs": [
+        {
+          "phase": "production",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.45",
+          "input_tokens": 100000,
+          "output_tokens": 25000
+        },
+        {
+          "phase": "research_and_source_check",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.30",
+          "input_tokens": 100000,
+          "output_tokens": 10000
+        },
+        {
+          "phase": "adversarial_qa",
+          "model": "gpt-6-astra",
+          "model_cost_usd": "0.70",
+          "input_tokens": 40000,
+          "output_tokens": 6000
+        },
+        {
+          "phase": "correction_and_testing",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.14",
+          "input_tokens": 35000,
+          "output_tokens": 7000
+        },
+        {
+          "phase": "customer_acquisition",
+          "model": "gpt-6.1-terra",
+          "model_cost_usd": "0.03",
+          "input_tokens": 10000,
+          "output_tokens": 3000
+        },
+        {
+          "phase": "customer_support_and_delivery",
+          "model": "gpt-6.1-terra",
+          "model_cost_usd": "0.01",
+          "input_tokens": 6000,
+          "output_tokens": 1000
+        },
+        {
+          "phase": "development_and_maintenance",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.08",
+          "input_tokens": 20000,
+          "output_tokens": 4000
+        }
+      ],
+      "ai_non_model_assumption_costs_usd": "21.90",
+      "ai_total_scenario_cost_usd": "23.61",
       "assumed_sale_price_usd": "250.00",
-      "human_labor_only_contribution_at_price_usd": "-169.78",
-      "ai_modeled_contribution_at_price_usd": "132.08",
-      "human_minus_ai_modeled_cost_usd": "301.86",
+      "conditional_ai_contribution_usd": "226.39",
+      "human_loaded_labor_minus_ai_scenario_usd": "396.18",
       "quality_and_same_outcome_verified": false,
+      "real_customer_demand_verified": false,
       "commercial_conclusion": "ILLUSTRATIVE_ONLY"
     },
     {
@@ -58,18 +169,68 @@
       "outcome": "Reproducible scoped bug fix with tests, review and artifact handoff",
       "human_role": "software_developer",
       "human_hours_assumed": "8",
-      "frontier_model": "gpt-6-astra",
-      "human_loaded_hourly_usd": "93.41",
       "human_loaded_labor_usd": "747.27",
-      "ai_model_token_usd": "4.50",
-      "ai_review_labor_usd": "93.41",
-      "ai_other_costs_usd": "107.00",
-      "ai_total_modeled_usd": "204.91",
+      "agent_human_hours": "0",
+      "autonomous_operation_human_labor_usd": "0.00",
+      "ai_workflow_model_cost_usd": "11.90",
+      "autonomous_phase_costs": [
+        {
+          "phase": "production",
+          "model": "gpt-6-astra",
+          "model_cost_usd": "4.50",
+          "input_tokens": 250000,
+          "output_tokens": 40000
+        },
+        {
+          "phase": "research_and_source_check",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.42",
+          "input_tokens": 160000,
+          "output_tokens": 10000
+        },
+        {
+          "phase": "adversarial_qa",
+          "model": "gpt-6-astra",
+          "model_cost_usd": "2.50",
+          "input_tokens": 150000,
+          "output_tokens": 20000
+        },
+        {
+          "phase": "correction_and_testing",
+          "model": "gpt-6-astra",
+          "model_cost_usd": "3.10",
+          "input_tokens": 160000,
+          "output_tokens": 30000
+        },
+        {
+          "phase": "customer_acquisition",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.06",
+          "input_tokens": 15000,
+          "output_tokens": 3000
+        },
+        {
+          "phase": "customer_support_and_delivery",
+          "model": "gpt-6.1-terra",
+          "model_cost_usd": "0.02",
+          "input_tokens": 12000,
+          "output_tokens": 2500
+        },
+        {
+          "phase": "development_and_maintenance",
+          "model": "gpt-6-astra",
+          "model_cost_usd": "1.30",
+          "input_tokens": 70000,
+          "output_tokens": 12000
+        }
+      ],
+      "ai_non_model_assumption_costs_usd": "48.00",
+      "ai_total_scenario_cost_usd": "59.90",
       "assumed_sale_price_usd": "450.00",
-      "human_labor_only_contribution_at_price_usd": "-297.27",
-      "ai_modeled_contribution_at_price_usd": "245.09",
-      "human_minus_ai_modeled_cost_usd": "542.36",
+      "conditional_ai_contribution_usd": "390.10",
+      "human_loaded_labor_minus_ai_scenario_usd": "687.36",
       "quality_and_same_outcome_verified": false,
+      "real_customer_demand_verified": false,
       "commercial_conclusion": "ILLUSTRATIVE_ONLY"
     },
     {
@@ -77,18 +238,68 @@
       "outcome": "Checked accounting reconciliation report with exceptions and correction trace",
       "human_role": "accountant",
       "human_hours_assumed": "5",
-      "frontier_model": "gpt-6.1-sol",
-      "human_loaded_hourly_usd": "57.48",
       "human_loaded_labor_usd": "287.38",
-      "ai_model_token_usd": "0.28",
-      "ai_review_labor_usd": "45.98",
-      "ai_other_costs_usd": "59.00",
-      "ai_total_modeled_usd": "105.26",
+      "agent_human_hours": "0",
+      "autonomous_operation_human_labor_usd": "0.00",
+      "ai_workflow_model_cost_usd": "1.84",
+      "autonomous_phase_costs": [
+        {
+          "phase": "production",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.28",
+          "input_tokens": 80000,
+          "output_tokens": 12000
+        },
+        {
+          "phase": "research_and_source_check",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.11",
+          "input_tokens": 30000,
+          "output_tokens": 5000
+        },
+        {
+          "phase": "adversarial_qa",
+          "model": "gpt-6-astra",
+          "model_cost_usd": "1.25",
+          "input_tokens": 75000,
+          "output_tokens": 10000
+        },
+        {
+          "phase": "correction_and_testing",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.10",
+          "input_tokens": 30000,
+          "output_tokens": 4000
+        },
+        {
+          "phase": "customer_acquisition",
+          "model": "gpt-6.1-terra",
+          "model_cost_usd": "0.01",
+          "input_tokens": 7000,
+          "output_tokens": 1500
+        },
+        {
+          "phase": "customer_support_and_delivery",
+          "model": "gpt-6.1-terra",
+          "model_cost_usd": "0.01",
+          "input_tokens": 7000,
+          "output_tokens": 1200
+        },
+        {
+          "phase": "development_and_maintenance",
+          "model": "gpt-6.1-sol",
+          "model_cost_usd": "0.07",
+          "input_tokens": 20000,
+          "output_tokens": 3000
+        }
+      ],
+      "ai_non_model_assumption_costs_usd": "23.00",
+      "ai_total_scenario_cost_usd": "24.84",
       "assumed_sale_price_usd": "180.00",
-      "human_labor_only_contribution_at_price_usd": "-107.38",
-      "ai_modeled_contribution_at_price_usd": "74.74",
-      "human_minus_ai_modeled_cost_usd": "182.12",
+      "conditional_ai_contribution_usd": "155.16",
+      "human_loaded_labor_minus_ai_scenario_usd": "262.55",
       "quality_and_same_outcome_verified": false,
+      "real_customer_demand_verified": false,
       "commercial_conclusion": "ILLUSTRATIVE_ONLY"
     }
   ]

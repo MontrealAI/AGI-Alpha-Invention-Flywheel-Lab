@@ -1,85 +1,88 @@
-# Primary commercial comparison: frontier-AI operation versus human-delivered work
+# AGI ALPHA commercial baseline: autonomous frontier-AI enterprise versus human-delivered service
 
-**SUPER IMPORTANT: BLUE SKY. IMPORTANT: Beyond-Human Foresight.**
+**BLUE SKY · Beyond-Human Foresight · Fully autonomous operations**  
+**Benchmark revision: v2 — 30 October 2026**
 
-## Decision and scope
+## Primary comparison and correction
 
-**The primary commercial benchmark is AGI ALPHA's competently configured autonomous frontier-AI operation (E) versus a competent human-delivered service (H), at realistic human task duration and fully loaded wages, delivering the same outcome under the same acceptance, liability, revision, confidentiality, deadline and support obligations.**
+**Primary benchmark:** A super-competently configured autonomous frontier-AI operation **E** versus a competent human-delivered enterprise **H** at realistic human speed and fully loaded wages, with the **same required outcome and service obligations**.
 
-This is the enterprise's *first commercial feasibility benchmark*. It does **not** assert that E beats every other AI-enabled seller, that humans are unable to use AI, that the cheapest model meets the quality requirement, or that inference cost is complete delivery cost.
+**E is end-to-end autonomous.** AI agents perform planning, research, production, source checking, adversarial QA, tests, revisions, customer acquisition and proposals, delivery, support, software development and maintenance. Select the strongest *appropriate* currently available models, potentially escalating to premium frontier reasoning models and using validated deterministic tools. Optimize the combination of acceptance rate, speed, reliability and total cost, not the unit price of one prompt. **Do not impose hypothetical human validation hours or human development/sales/support staffing on E.**
 
-Keep these separate comparison families:
+Automating an activity does not eliminate the resources required to perform it. Charge actual model/tool calls, infrastructure, paid data, computer use, rework/failed attempts, paid customer distribution, transaction fees, warranty/refund risk, and amortized agent/tool development. AI-operated acquisition does not itself create buyers or make paid channels free. If a human is *actually* required by law, client contract, credential, or operational necessity, measure that cost in a separately labeled hybrid mode; **never pass off a partly human operation as fully autonomous**. If fully autonomous E cannot meet the fixed acceptance requirement, the task is unaccepted rather than silently escalated to unpaid human labor.
 
-1. **Primary, H versus E:** Human work at competent human speed and loaded labor rates versus a well-configured autonomous frontier-AI operation. Match the actual required outcome, input rights, review, corrections, time limits, risk and obligations. Test cost, turnaround, acceptance, customer value and credible price.
-2. **Secondary commercial competitiveness:** A human provider using contemporary AI tools, a competent rival autonomous frontier-AI business, lower-cost freelance/offshore providers and the customer's own AI or no-purchase option. Their availability may determine achievable price, adoption and defensibility. **Do not substitute these as the sole primary productivity comparator.**
-3. **Inventive/compounding advantage:** E with a retained invention versus equally resourced E without it, ordinary reuse with equivalent tool/content, and relevant ablations. This is required for claims about self-improving invention capability, *not* for demonstrating that an ordinary AI-powered service can be commercially viable.
+**H** includes research, execution, proofreading/review, delivery, support and corrections performed at human speed, with wages, benefits and necessary overhead. The examples below show **only loaded human labor**, making them an incomplete lower-bound *scenario* for full H operating cost, rather than a full human-business P&L. H and E must meet the *same* scope, quality, data rights, legal constraints, delivery standards, deadlines and refund/liability obligations.
 
-**Frontier-AI competence means:** select the strongest appropriate current model(s), with permissioned planning/tool execution, source acquisition, self-checking, external deterministic validation, fault handling, rework, and escalation to a more capable model when justified. Compare *accepted outputs and full lifecycle cost*, not one-shot prompts or raw tokens. The optimal operation may use a cost-effective frontier model for routine steps and a premium one for difficult cases; 'best' is an outcome/quality criterion, not always the most expensive model.
+The benchmark separates three claims:
 
-## Four illustrative service examples (USD, not observed delivery)
+1. **Human-to-autonomous-AI productivity:** cost, throughput, accepted quality and speed on the same job; the primary comparator is competent H, *not* the strongest current AI rival.
+2. **A commercially viable AI-native enterprise:** actual or labeled simulated customer adoption, earned/collected prices, complete full-service costs and risk, versus human+AI hybrids, equally capable rival AI providers, free/internal alternatives, and no launch. AI competition tests attainable price and defensibility, **not** whether the technology can replace expensive human labor.
+3. **The invention flywheel:** a verified innovation creates additional productive capability, accepted delivery yields net available earned resources, and inherited capabilities improve **fresh successor invention** versus matched no-inheritance and ordinary-reuse controls. This is a distinct, higher bar; do not block an initially viable AI-native service because its algorithm is not exclusive.
 
-US occupational median wage data, June 2026 aggregate employer-benefit burden and October 30, 2026 published OpenAI model tariffs underpin these *illustrations*. **Human hours, AI token usage, review hours, secondary costs, price, customer willingness to pay and same-outcome acceptance are unmeasured assumptions.** The scenario assumes one accepted outcome and allocates expected rework, acquisition and development. The model is not evidence of actual full cost, actual sales or profitability.
+## Illustrative scenarios — zero human labor in E
 
-| Equal required outcome (proposed) | Human hours assumed | Human loaded labor | AI model-token cost | Modeled AI total cost including review and allowances | Hypothetical sale price | Hypothetical AI contribution |
+The following examples use U.S. occupational wages and published model tariffs; the task hours, token volumes, non-model expenses, sale prices and client acceptance are **hypothetical**, not measured. They posit a genuinely fully autonomous seven-stage workflow; no model agent execution was conducted in this costing test.
+
+| Same required outcome | H human loaded labor | E all-agent inference (7 stages) | E non-model resource/obligation assumptions | E scenario total | Assumed sale price | E conditional contribution |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Sourced 1,000-word article, edited and ready for publication | 4 | $211.33 | $0.04 (Terra) | $40.89 | $95 | +$54.11 |
-| Independently reconciled business-analysis/KPI brief | 6 | $419.78 | $0.45 (Sol) | $117.92 | $250 | +$132.08 |
-| Scoped software bug fix, tests, review and delivery | 8 | $747.27 | $4.50 (Astra) | $204.91 | $450 | +$245.09 |
-| Checked accounting reconciliation and exceptions report | 5 | $287.38 | $0.28 (Sol) | $105.26 | $180 | +$74.74 |
+| Researched 1,000-word client-ready blog article | $211.33 | $0.25 | $4.78 | **$5.03** | $95 | +$89.97 |
+| Reconciled business KPI/sensitivity analysis | $419.78 | $1.71 | $21.90 | **$23.61** | $250 | +$226.39 |
+| Scoped software patch, tests and review | $747.27 | $11.90 | $48.00 | **$59.90** | $450 | +$390.10 |
+| Non-regulated accounting-data reconciliation and exception report | $287.38 | $1.84 | $23.00 | **$24.84** | $180 | +$155.16 |
 
-A four-hour article at approximately $53/hour loaded labor is roughly $211 for human work. A 20,000-input/4,000-output-token Terra run is $0.04 at posted rates. This confirms that a **$0.05 model inference** example is plausible; it does not establish that a complete client-approved article costs five cents. The hypothetical AI operation includes 0.30 hours of review, $3 tools, $4 rework, $10 customer acquisition, $5 development allocation and $3 support/risk, producing $40.89 modeled total cost. These values are scenarios to replace with measured data.
+All dollar values are USD. **E's assumed human labor is $0.00 and zero hours in every case.** The hypothetical selling prices and contribution figures are not real receipts, P&L or actual complete service costs. Wage hours and task difficulty are unmeasured; different customers, rights, or service levels may require different workflows. A legal/accounting attestation requiring a licensed human professional is *outside* this autonomous reconciliation example unless validly satisfied through a separately measured and labeled arrangement.
 
-For software, the premium Astra model at the illustrative 250,000 input and 40,000 output tokens still has a relatively small *token* cost of $4.50. The much larger assumed AI operation cost accounts for human validation, testing, corrections, acquisition, development and risk. Quality, rights, actual token usage and acceptance have not been verified.
+### Article calculation
 
-*Wage method:* U.S. BLS occupation median wage divided by 2,080 hours where only an annual figure is reported; multiplied by the approximate June 2026 private-industry aggregate employer-compensation/wage ratio **$46.89/$32.82 = 1.4287×**. This is a *cross-occupation scenario factor*, not an occupation-specific benefit estimate. Human cost shown is loaded labor alone and is therefore not an independently established full human agency cost; agency overhead may be additional. Human completion time has not been timed. If benchmarking Canada/Quebec, use local occupational wage and burden evidence instead of applying U.S. wages.
+The first production stage uses **20,000 Terra input tokens and 4,000 Terra output tokens**, yielding **$0.04** in published standard model rates. An entire autonomous pipeline is more involved than a single text pass. Illustrative agents also conduct sourcing, adversarial review, corrections/testing, sales proposals, customer support/delivery, and development/maintenance. Those seven phases cost about **$0.25 in assumed model tokens**. Explicit non-model costs add **$4.78**, including hypothetical tool/API use, compute, failure reserves, paid distribution, payment fees, risk and development amortization. The resulting **$5.03** is an *illustrative all-agent service cost*, **not a claim that all of this has been validated or paid**.
 
-*AI cost method:* 
+### Software calculation
 
-`API token cost = input_tokens × input_rate_per_million / 1,000,000 + output_tokens × output_rate_per_million / 1,000,000`.
+The initial Astra patch-generation stage uses 250,000 input and 40,000 output tokens at the published $10/$50 per million standard tariffs, producing **$4.50** of model inference. Other assumed agents perform investigation, independent-style critique, corrections/testing, acquisition, delivery/support and maintenance. All seven phases total **$11.90** in assumed model API charges. Non-model compute, test infrastructure, failed attempts, acquisition/distribution, payment processing, warranty and amortized engineering add a hypothetical **$48.00**. The resulting **$59.90** includes **no mandatory human-review hour**. It does not demonstrate that the agent can deliver an accepted patch at that price.
 
-`AI modeled cost = API tokens + QA/review labor + tools + rework + acquisition + allocated development/maintenance + support/risk`.
+### What gets measured rather than padded
 
-`Human loaded labor = human hours × occupation wage × sourced benefit/burden factor`.
+Each case includes a named agent phase for:
 
-`Conditional contribution = assumed collected sale price − modeled AI cost`. It is **not actual profit**. In a real campaign, use *actual accepted and collected orders* and charge unsuccessful attempts, all fixed costs, payment fees, tax liabilities where applicable, maintenance, customer participation costs, defaults and terminal obligations. Separate earned revenue, actual collections, accrued cost, reserves, unrestricted cash and reinvestment.
+- production;
+- research and source checks;
+- adversarial QA;
+- correction and testing;
+- customer acquisition;
+- customer support and delivery;
+- development and maintenance.
 
-## Why this changes the opportunity screen
+The calculation prices each agent phase at an explicit model tariff and token budget. It separately records seven non-model categories: external tools/data, compute/storage, retries/failed attempts, paid distribution, payment/delivery fees, warranty/liability reserves, and non-model development amortization.
 
-For suitable digital work, the binding constraint may be **the cost of competent human attention** rather than an unsolved mathematical problem. Frontier AI can already generate plausible solutions at extremely low marginal inference cost. An enabling invention might be a reliable source-checking and acceptance instrument, an autonomous research workflow, a customer-specific document compiler, a quality assurance procedure or a protected delivery arrangement. These could lower the *complete* AI service cost enough for large savings versus H.
+**A $0 assumption is permitted only for a genuinely absent cost in the defined scenario.** Unknown actual costs must remain unknown in measured reporting. Expense categories should be tightened or expanded from real instrumented runs, not inflated with fictitious employees or omitted to make the numbers attractive. Higher model capability may be worth its additional inference cost if it improves acceptance, time-to-result, or reduces retries.
 
-This admits conventional software parity: an AI-powered service can create value without a novel algorithm. But **the firm's ability to capture that value** remains a separate question. Another AI operator, a human using AI, or a customer's own model may offer the same result more cheaply. Use the secondary comparisons to test market price, sustainable profit and whether an exclusive advantage exists; never assume a $200 historical human wage expense guarantees a $200 selling price.
+## Evidence and commercial experiment
 
-## Required prospective validation
+First run a representative, rights-cleared job cohort **end-to-end** using the strongest suitable frontier models and qualified tools. Instrument every operation: model/version/token usage, tool calls and fees, CPU/storage, retries, QA tests, source checks, delivery, agent-run acquisition and support, refunds, failure rates, and any actual human escalation. If independent QA or customers cannot accept the autonomous result, mark the job unaccepted rather than assuming equivalent human quality. Test accepted tasks on held-out specifications and give H the same input rights and obligations.
 
-For a representative, rights-cleared task cohort:
+The most useful primary outcome is **cost per independently accepted and supported job** plus completion time, not cost per generated answer. Model selection should be a measured policy: routine work may use efficient models and difficult tasks premium frontier models. A strong all-premium agent is a useful comparator if budget permits. Add a competent human counterpart, including its total human prep/review/corrections and wage burden, and record the assumptions behind expert speed.
 
-- Freeze each client's actual deliverable specifications, evidence requirements, number of revisions, license/confidentiality conditions, acceptance process, SLA and warranty obligations. Ensure H and E satisfy exactly those conditions.
-- Measure competent human preparation, execution, review, corrections and delivery time on the same task distribution, with real wages, benefit loading and necessary overhead. Separately record H using ordinary AI support where relevant.
-- Execute genuinely available *current* frontier-model variants with tracked provider/model/version, token/tool usage, wall time, failed attempts, human escalations and acceptance. Do not select only successful examples or assume a maximum-capability agent is costless.
-- Measure the buyer's willingness to pay, acquisition and retention costs independently of builder estimates. Price E against real available alternatives, including other AI services and internal automation.
-- Apply the existing evidence and accounting gates: separate development and confirmation, registered strong comparators, no holdout leakage, no fabricated demand, actual or clearly labeled simulated collections, unknown costs not silently zero.
-- Treat positive H-vs-E task economics as **commercial productivity potential**. Promote a human-to-AI economic crossing only after same-outcome acceptance and a prospectively established cohort/price/cost comparison. Promote the full invention flywheel only after unrestricted *earned* resources fund another constructed capability whose *fresh successor benefit* is independently demonstrated.
+Then run the separate **commercial pricing/adoption** experiment. Compare actual willingness to pay and customer access to alternatives. A large labor-cost saving can coexist with little producer profit if buyers can self-serve using the same AI. Do not use a historical $200 human service cost as proof of a $200 selling price; the illustrative sale prices have no demand evidence. Under existing permissions, external acquisition/sales and paid providers remain **not authorized**; the calculation does not perform them.
 
-The first commercial opportunity need not be Blue Sky novelty. It may establish an economic base that finances a transformational invention. **But operating profit alone is not recursive invention**, and low token cost alone is not operating profit.
+Finally distinguish an AI-native service that earns revenue from AGI ALPHA's deeper invention-machine hypothesis. Retain causal mechanism records with tests and failure boundaries; compare successors with inheritance versus no inheritance and equivalent ordinary reuse. Pay for the entire adaptation, checking and learning lifecycle. Reinvest **only unrestricted actually earned or explicitly labeled simulated** surplus in genuinely new construction and verify fresh benefit; customer deposits/loans are not earned resources.
 
-## Executable illustrative arithmetic
-
-From the repository root:
+## Reproduce the assumptions
 
 ```sh
 python3 -m unittest discover -s benchmarks -p 'test_human_frontier.py' -v
-python3 benchmarks/human_frontier.py --output /tmp/human-frontier-comparison-NEW.json
+python3 benchmarks/human_frontier.py --output /tmp/human-frontier-autonomous-v2-NEW.json
 ```
 
-`benchmarks/illustrative_cases.json` contains the explicit assumptions and official source URLs. `benchmarks/illustrative_results.json` is the deterministic scenario output. This is a cost calculator and research record, not a provider invocation or a commercial confirmation run.
+The deterministic development scenarios are in `benchmarks/illustrative_cases.json`, and the checked result is `benchmarks/illustrative_results.json`. **No live frontier calls, human job trials, sales or accepted commercial deliveries were executed** by this calculation. The original v1 example with assumed human reviewer hours remains available in prior Git history but is **superseded as the primary autonomous-enterprise scenario**; its old numbers must not be repeated as if they describe E.
 
-## Sources: published parameters, accessed 2026-10-30
+## Sources — public rates, checked 2026-10-30
 
-- OpenAI official API model selection and pricing: https://developers.openai.com/api/docs/models and https://developers.openai.com/api/docs/pricing (Terra $1/$5, Sol $2/$10, Astra $10/$50 per million input/output tokens, standard short-context tariffs).
-- U.S. Bureau of Labor Statistics, *Employer Costs for Employee Compensation — June 2026*: https://www.bls.gov/news.release/ecec.htm (private industry $32.82 wages + $14.07 benefits = $46.89 total employer compensation per hour).
-- U.S. BLS, *Writers and Authors*: https://www.bls.gov/ooh/media-and-communication/writers-and-authors.htm (May 2025 median wage $76,910/year, reported $36.98/hour).
-- U.S. BLS, *Management Analysts*: https://www.bls.gov/ooh/business-and-financial/management-analysts.htm (May 2025 $101,860/year, reported $48.97/hour).
-- U.S. BLS, *Software Developers*: https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm (May 2025 $135,980/year, translated at 2,080 h).
-- U.S. BLS, *Accountants and Auditors*: https://www.bls.gov/ooh/business-and-financial/accountants-and-auditors.htm (May 2025 $83,680/year, translated at 2,080 h).
+- OpenAI, current model API tariffs: https://developers.openai.com/api/docs/pricing (GPT-6.1 Terra **$1/$5**, Sol **$2/$10**, Astra **$10/$50** per million standard short-context input/output tokens; other tool, caching, long-context and regional fees may apply).
+- OpenAI, GPT-6 Astra model capabilities and rates: https://developers.openai.com/api/docs/models/gpt-6-astra
+- U.S. Bureau of Labor Statistics, *Employer Costs for Employee Compensation, June 2026*: https://www.bls.gov/news.release/ecec.htm (private industry **$32.82** wages plus **$14.07** benefits = **$46.89** total, ratio approximately **1.4287×**).
+- BLS, *Writers and Authors*: https://www.bls.gov/ooh/media-and-communication/writers-and-authors.htm
+- BLS, *Management Analysts*: https://www.bls.gov/ooh/business-and-financial/management-analysts.htm
+- BLS, *Software Developers*: https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm
+- BLS, *Accountants and Auditors*: https://www.bls.gov/ooh/business-and-financial/accountants-and-auditors.htm
 
-These public rate schedules do not establish actual task hours, professional productivity, accepted model quality, service operating cost, selling prices or customer demand.
+Only published tariff/wage parameters are source-verified here. The illustrative model counts, service completion, labor hours, marketing costs, legal applicability, quality and actual market demand are not.
