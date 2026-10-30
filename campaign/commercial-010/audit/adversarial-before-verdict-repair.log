@@ -1,0 +1,49 @@
+test_cancellation_restores_reserved_earnings_without_topup (test_commercial010_adversarial.Commercial010AdversarialTests.test_cancellation_restores_reserved_earnings_without_topup) ... ok
+test_commercial_go_requires_actual_accepted_service_and_positive_economics (test_commercial010_adversarial.Commercial010AdversarialTests.test_commercial_go_requires_actual_accepted_service_and_positive_economics) ... 
+  test_commercial_go_requires_actual_accepted_service_and_positive_economics (test_commercial010_adversarial.Commercial010AdversarialTests.test_commercial_go_requires_actual_accepted_service_and_positive_economics) (accepted=0, positive=False) ... FAIL
+  test_commercial_go_requires_actual_accepted_service_and_positive_economics (test_commercial010_adversarial.Commercial010AdversarialTests.test_commercial_go_requires_actual_accepted_service_and_positive_economics) (accepted=0, positive=True) ... FAIL
+  test_commercial_go_requires_actual_accepted_service_and_positive_economics (test_commercial010_adversarial.Commercial010AdversarialTests.test_commercial_go_requires_actual_accepted_service_and_positive_economics) (accepted=16, positive=False) ... FAIL
+test_cost_identifier_reuse_rejected (test_commercial010_adversarial.Commercial010AdversarialTests.test_cost_identifier_reuse_rejected) ... ok
+test_duplicate_payment_cannot_increase_collections (test_commercial010_adversarial.Commercial010AdversarialTests.test_duplicate_payment_cannot_increase_collections) ... ok
+test_earned_spend_is_expensed_once_and_tail_stays_restricted (test_commercial010_adversarial.Commercial010AdversarialTests.test_earned_spend_is_expensed_once_and_tail_stays_restricted) ... ok
+test_event_reordering_and_scope_upgrade_rejected (test_commercial010_adversarial.Commercial010AdversarialTests.test_event_reordering_and_scope_upgrade_rejected) ... ok
+test_fixed_capability_service_can_qualify_without_invention_or_live_claim (test_commercial010_adversarial.Commercial010AdversarialTests.test_fixed_capability_service_can_qualify_without_invention_or_live_claim) ... ok
+test_forged_acceptance_cannot_admit_nonservice_artifact (test_commercial010_adversarial.Commercial010AdversarialTests.test_forged_acceptance_cannot_admit_nonservice_artifact) ... ok
+test_nonfinite_negative_boolean_and_overflow_costs_rejected (test_commercial010_adversarial.Commercial010AdversarialTests.test_nonfinite_negative_boolean_and_overflow_costs_rejected) ... ok
+test_replay_rejects_derived_summary_mutations (test_commercial010_adversarial.Commercial010AdversarialTests.test_replay_rejects_derived_summary_mutations) ... ok
+test_replay_rejects_repriced_cost_event_and_external_rehash (test_commercial010_adversarial.Commercial010AdversarialTests.test_replay_rejects_repriced_cost_event_and_external_rehash) ... ok
+test_seed_is_never_earned (test_commercial010_adversarial.Commercial010AdversarialTests.test_seed_is_never_earned) ... ok
+test_source_and_cohort_mutation_rejected (test_commercial010_adversarial.Commercial010AdversarialTests.test_source_and_cohort_mutation_rejected) ... ok
+test_whole_tape_clean_replay (test_commercial010_adversarial.Commercial010AdversarialTests.test_whole_tape_clean_replay) ... ok
+
+======================================================================
+FAIL: test_commercial_go_requires_actual_accepted_service_and_positive_economics (test_commercial010_adversarial.Commercial010AdversarialTests.test_commercial_go_requires_actual_accepted_service_and_positive_economics) (accepted=0, positive=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/3098f63ba128/workrepo/tests/test_commercial010_adversarial.py", line 167, in test_commercial_go_requires_actual_accepted_service_and_positive_economics
+    with self.subTest(accepted=accepted, positive=positive), self.assertRaises(ValueError):
+                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_commercial_go_requires_actual_accepted_service_and_positive_economics (test_commercial010_adversarial.Commercial010AdversarialTests.test_commercial_go_requires_actual_accepted_service_and_positive_economics) (accepted=0, positive=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/3098f63ba128/workrepo/tests/test_commercial010_adversarial.py", line 167, in test_commercial_go_requires_actual_accepted_service_and_positive_economics
+    with self.subTest(accepted=accepted, positive=positive), self.assertRaises(ValueError):
+                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_commercial_go_requires_actual_accepted_service_and_positive_economics (test_commercial010_adversarial.Commercial010AdversarialTests.test_commercial_go_requires_actual_accepted_service_and_positive_economics) (accepted=16, positive=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/3098f63ba128/workrepo/tests/test_commercial010_adversarial.py", line 167, in test_commercial_go_requires_actual_accepted_service_and_positive_economics
+    with self.subTest(accepted=accepted, positive=positive), self.assertRaises(ValueError):
+                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 14 tests in 86.760s
+
+FAILED (failures=3)

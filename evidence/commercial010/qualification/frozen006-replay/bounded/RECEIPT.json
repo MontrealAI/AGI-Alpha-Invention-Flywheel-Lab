@@ -1,0 +1,66 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "cycle006-connected-reproduction",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-I",
+    "/tmp/alpha-commercial010-frozen006-r1/run_cycle006.py",
+    "--worker",
+    "--output",
+    "/tmp/alpha-commercial010-replay006-r1/bounded/artifacts",
+    "--freeze",
+    "/tmp/alpha-commercial010-frozen006-r1/campaign/cycle-006/REPRODUCTION_FREEZE.json",
+    "--freeze-sha256",
+    "d64396e8d8e058aaddf1ecacf3e89f618d77b1e9ea88c87682ac3e8917534fdc"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-I",
+    "/tmp/alpha-commercial010-frozen006-r1/run_cycle006.py",
+    "--worker",
+    "--output",
+    "/tmp/alpha-commercial010-replay006-r1/bounded/artifacts",
+    "--freeze",
+    "/tmp/alpha-commercial010-frozen006-r1/campaign/cycle-006/REPRODUCTION_FREEZE.json",
+    "--freeze-sha256",
+    "d64396e8d8e058aaddf1ecacf3e89f618d77b1e9ea88c87682ac3e8917534fdc"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-I",
+    "/tmp/alpha-commercial010-frozen006-r1/run_cycle006.py",
+    "--worker",
+    "--output",
+    "/tmp/alpha-commercial010-replay006-r1/bounded/artifacts",
+    "--freeze",
+    "/tmp/alpha-commercial010-frozen006-r1/campaign/cycle-006/REPRODUCTION_FREEZE.json",
+    "--freeze-sha256",
+    "d64396e8d8e058aaddf1ecacf3e89f618d77b1e9ea88c87682ac3e8917534fdc"
+  ],
+  "reservation_created": true,
+  "cwd": "/tmp/alpha-commercial010-frozen006-r1",
+  "limits": {
+    "wall_seconds": 360,
+    "cpu_seconds": 240,
+    "memory_bytes": 4294967296,
+    "output_bytes": 67108864,
+    "storage_bytes": 536870912
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 75.06498420999924,
+  "supervisor_cpu_seconds": 27.672076236,
+  "waited_cpu_seconds": 73.77265299999999,
+  "descendant_survivors": false,
+  "output_bytes": 62422285,
+  "logs": {
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

@@ -1,0 +1,373 @@
+"""Bounded strategic simulated repeat market for actually executed service artifacts."""
+from __future__ import annotations
+import copy
+import hashlib
+import json
+import math
+from pathlib import Path
+import random
+import tempfile
+import time
+from .ledger import TapeExchange, amount, audit, canonical, digest, load_jobs
+
+ROOT = Path(__file__).resolve().parents[1]
+MICRO = 1_000_000
+
+
+def usd(value):
+    return int(round(value * MICRO))
+
+
+def default_policy():
+    return {
+        'schema': 'agi-alpha/commercial010-policy/v1', 'scope': 'SIMULATED',
+        'currency': 'simulated-microUSD', 'cycles': 8, 'jobs_per_cycle': 2,
+        'opening': usd(5000), 'working': usd(100),
+        'human_benchmark': usd(139), 'human_benchmark_interval': [usd(17.375), usd(278)],
+        'human_benchmark_basis': 'BLS May2025 bookkeeping wage24.36/hour times Dec2025 private total-compensation46.15/wage32.36; rounded loaded34.75/hour. Four-hour source-matched manual-work scenario=139USD; sensitivity0.5–8hours; exact task time unobserved, no invented overhead or double loading. Human tools/acquisition/support above this conservative floor remain an explicit comparability limit',
+        'initial_discount_bps': 500, 'price_multipliers_bps': [9500, 10000, 10500],
+        'setup_cost_interval': [usd(200), usd(2500)], 'setup_cost': usd(500),
+        'per_job_cost_interval': [usd(5), usd(30)], 'per_job_cost': usd(15),
+        'cost_basis': 'CONDITIONAL_RESOURCE_ENVELOPES_NOT_ACTUAL_TOKEN_RECEIPTS; setup includes all campaign development, failed search, integration, acquisition-design and maintenance; per cohort job includes agent inference, tools, compute, storage, production, verification, repairs, failures, delivery and post-delivery obligations; host usage and bills are unavailable',
+        'acquisition_new': usd(4), 'acquisition_repeat': usd(1), 'support_per_sale': usd(3),
+        'payment_bps': 290, 'payment_fixed': usd(.30), 'tax_bps': 2000,
+        'exploration_seeds': [1, 2, 3, 4], 'confirmation_seeds': list(range(101, 121)),
+        'minimum_earned_cycles': 2, 'minimum_paid_jobs': 6,
+        'minimum_repeat_buyers': 1, 'minimum_region_success_fraction': .75,
+        'selection_rule': 'highest multiplier >=9500 with >=75% GO across all exploration seeds in qualified differentiation worlds; otherwise preserve initial premium price and report failure',
+        'terminal_obligations': 'Native exchange retains full settled principal plus $0.20 per released order throughout the horizon; working capital is restricted; no tail expiry or extra liquidity is invented',
+        'strategic_scope': 'Finite heterogeneous repeated buyers; rival grid profit-maximization on noisy values, trust and capacity; supplier bounded scarcity response. Bounded heuristics, not Nash equilibrium. No actual demand data.',
+        'worlds': [
+            {'id': 'qualified_differentiation', 'qualification_region': True, 'value_low': 900, 'value_high': 1800, 'trust': .99, 'rival_trust': .79, 'arrival': .98, 'rival_cost': 35, 'supplier_multiplier': 1., 'settlement_delay': 1, 'revision_probability': .05, 'dispute_probability': .01, 'switching': 25},
+            {'id': 'moderate_differentiation', 'qualification_region': True, 'value_low': 750, 'value_high': 1650, 'trust': .98, 'rival_trust': .80, 'arrival': .95, 'rival_cost': 45, 'supplier_multiplier': 1.1, 'settlement_delay': 2, 'revision_probability': .10, 'dispute_probability': .02, 'switching': 20},
+            {'id': 'delayed_high_assurance', 'qualification_region': True, 'value_low': 1000, 'value_high': 1850, 'trust': .985, 'rival_trust': .82, 'arrival': .95, 'rival_cost': 40, 'supplier_multiplier': 1.2, 'settlement_delay': 5, 'revision_probability': .12, 'dispute_probability': .02, 'switching': 30},
+            {'id': 'commodity_ai_parity', 'qualification_region': False, 'value_low': 400, 'value_high': 900, 'trust': .97, 'rival_trust': .99, 'arrival': .95, 'rival_cost': 20, 'supplier_multiplier': 1., 'settlement_delay': 1, 'revision_probability': .05, 'dispute_probability': .02, 'switching': 0},
+            {'id': 'zero_demand', 'qualification_region': False, 'value_low': 0, 'value_high': 50, 'trust': .99, 'rival_trust': .90, 'arrival': .10, 'rival_cost': 35, 'supplier_multiplier': 1., 'settlement_delay': 1, 'revision_probability': .05, 'dispute_probability': .01, 'switching': 0},
+            {'id': 'correlated_adverse', 'qualification_region': False, 'value_low': 400, 'value_high': 900, 'trust': .72, 'rival_trust': .96, 'arrival': .55, 'rival_cost': 20, 'supplier_multiplier': 2.5, 'settlement_delay': 18, 'revision_probability': .45, 'dispute_probability': .25, 'switching': 0},
+        ]}
+
+
+def validate_policy(policy):
+    template = default_policy()
+    if not isinstance(policy, dict) or set(policy) != set(template):
+        raise ValueError('FROZEN_POLICY_SCHEMA')
+    if policy['schema'] != template['schema'] or policy['scope'] != 'SIMULATED' or policy['currency'] != template['currency']:
+        raise ValueError('UNSUPPORTED_SCOPE_OR_CURRENCY')
+    monetary = ['opening', 'working', 'human_benchmark', 'setup_cost', 'per_job_cost', 'acquisition_new', 'acquisition_repeat', 'support_per_sale', 'payment_fixed']
+    for key in monetary:
+        amount(policy[key])
+    amount(policy['human_benchmark'], positive=True)
+    for key in ['cycles', 'jobs_per_cycle', 'minimum_earned_cycles', 'minimum_paid_jobs', 'minimum_repeat_buyers']:
+        if type(policy[key]) is not int or not 1 <= policy[key] <= 1000:
+            raise ValueError('POSITIVE_BOUNDED_POLICY_INTEGER')
+    for key in ['initial_discount_bps', 'payment_bps', 'tax_bps']:
+        if type(policy[key]) is not int or not 0 <= policy[key] <= 10000:
+            raise ValueError('BASIS_POINT_POLICY_REQUIRED')
+    if 10000 - policy['initial_discount_bps'] not in policy['price_multipliers_bps']:
+        raise ValueError('INITIAL_DISCOUNT_MUST_BE_TESTED')
+    if policy['initial_discount_bps'] > 1000:
+        raise ValueError('PREMIUM_SMALL_DISCOUNT_REQUIRED')
+    multipliers = policy['price_multipliers_bps']
+    if not isinstance(multipliers, list) or not multipliers or any(type(x) is not int or not 9500 <= x <= 15000 for x in multipliers):
+        raise ValueError('PREMIUM_PRICE_GRID_REQUIRED')
+    for key in ['setup_cost_interval', 'per_job_cost_interval', 'human_benchmark_interval']:
+        values = policy[key]
+        if not isinstance(values, list) or len(values) != 2:
+            raise ValueError('COST_INTERVAL_REQUIRED')
+        for value in values:
+            amount(value)
+        if values[0] > values[1]:
+            raise ValueError('ORDERED_INTERVAL_REQUIRED')
+    if not policy['setup_cost_interval'][0] <= policy['setup_cost'] <= policy['setup_cost_interval'][1] or not policy['per_job_cost_interval'][0] <= policy['per_job_cost'] <= policy['per_job_cost_interval'][1]:
+        raise ValueError('COST_OUTSIDE_DECLARED_INTERVAL')
+    for key in ['exploration_seeds', 'confirmation_seeds']:
+        values = policy[key]
+        if not isinstance(values, list) or not values or len(set(values)) != len(values) or any(type(v) is not int or v < 0 for v in values):
+            raise ValueError('FIXED_UNIQUE_SEEDS_REQUIRED')
+    if set(policy['exploration_seeds']) & set(policy['confirmation_seeds']):
+        raise ValueError('EXPLORATION_CONFIRMATION_OVERLAP')
+    for key in ['minimum_region_success_fraction']:
+        if type(policy[key]) not in {int, float} or not math.isfinite(policy[key]) or not 0 < policy[key] <= 1:
+            raise ValueError('BOUNDED_SUCCESS_THRESHOLD_REQUIRED')
+    worlds = policy['worlds']
+    if not isinstance(worlds, list) or len({w.get('id') for w in worlds}) != len(worlds):
+        raise ValueError('UNIQUE_WORLD_SCHEMA')
+    fields = set(template['worlds'][0])
+    for world in worlds:
+        if not isinstance(world, dict) or set(world) != fields or type(world['qualification_region']) is not bool:
+            raise ValueError('EXPLICIT_WORLD_SCHEMA')
+        for key in fields - {'id', 'qualification_region'}:
+            value = world[key]
+            if type(value) not in {int, float} or not math.isfinite(value) or value < 0:
+                raise ValueError('FINITE_NONNEGATIVE_WORLD_VALUE')
+        for key in ['trust', 'rival_trust', 'arrival', 'revision_probability', 'dispute_probability']:
+            if not 0 <= world[key] <= 1:
+                raise ValueError('PROBABILITY_RANGE')
+        if world['value_low'] > world['value_high'] or type(world['settlement_delay']) is not int:
+            raise ValueError('WORLD_RANGE_OR_TIMING')
+    return policy
+
+
+def execute_work_batch(root, jobs, selected, commitment_sequence, funding):
+    from commercial.service import deliver, digest as file_digest
+    from commercial.service_verifier import audit_delivery
+    receipts = []
+    with tempfile.TemporaryDirectory(prefix='commercial010-executed-delivery-') as tmp:
+        for ident in selected:
+            job = jobs[ident]['job']
+            from .ledger import read_bound
+            order = read_bound(root, job['input'], job['input_sha256'])
+            target = Path(tmp) / ident
+            wall, cpu = time.monotonic(), time.process_time()
+            actual = deliver(order, target)
+            receipt = audit_delivery(order, actual)
+            if receipt['accepted'] is not True or file_digest(target / 'reconciliation.json') != job['artifact_sha256']:
+                raise ValueError('POST_COMMITMENT_ACTUAL_PRODUCTION_FAILED')
+            receipts.append({'job_id': ident, 'input_sha256': job['input_sha256'],
+                             'produced_artifact_sha256': file_digest(target / 'reconciliation.json'),
+                             'exceptions_csv_sha256': file_digest(target / 'exceptions.csv'),
+                             'fresh_checker_receipt': receipt, 'funding_scope': funding,
+                             'native_commitment_sequence': commitment_sequence,
+                             'production_cpu_seconds': time.process_time() - cpu,
+                             'production_wall_seconds': time.monotonic() - wall,
+                             'execution': 'Actual deterministic service deliver() executed after funding decision; same qualified input, not fresh independent scientific confirmation. Temporary production copies removed; identical source-bound deliverable is retained in cohort.'})
+    return receipts
+
+
+def _outside(value, human_price):
+    return max(0., .97 * value - human_price)
+
+
+def competitor_response(values, own_price, own_trust, rival_trust, rival_cost, human_price):
+    options = []
+    for quality in [.90, .95, .99]:
+        for fraction in [.65, .80, .95, 1.05, 1.20]:
+            price = human_price * fraction
+            unit_cost = rival_cost * (1 + (quality - .90) * 5)
+            choices = sum(quality * rival_trust * v - price > max(own_trust * .99 * v - own_price, _outside(v, human_price)) for v in values)
+            payoff = (price - unit_cost) * choices
+            options.append((payoff, price, quality, choices, unit_cost))
+    best = max(options, key=lambda x: (x[0], x[1]))
+    return {'price': best[1], 'quality': best[2], 'expected_payoff': best[0], 'estimated_customers': best[3],
+            'cost_per_job': best[4], 'grid_best_response_residual': max(x[0] for x in options) - best[0],
+            'scope': 'Noisy-value finite-grid response; zero grid residual is not a Nash equilibrium certificate'}
+
+
+def run_world(*, root, manifest, policy, world, seed, multiplier, directory, persist=True):
+    validate_policy(policy)
+    jobs = load_jobs(root, manifest)
+    eligible = sorted(jobs)
+    needed = policy['cycles'] * policy['jobs_per_cycle']
+    if len(eligible) < needed:
+        raise ValueError('INSUFFICIENT_UNIQUE_EXECUTED_COHORT')
+    eligible = eligible[:needed]
+    rng = random.Random(seed)
+    directory = Path(directory)
+    directory.mkdir(parents=True, exist_ok=False)
+    contract = 'commercial010/' + digest({'policy': policy, 'world': world, 'seed': seed, 'multiplier': multiplier, 'manifest': digest(manifest)})
+    tape = TapeExchange(directory / 'exchange.sqlite', root=root, manifest=manifest,
+                        opening=policy['opening'], working=policy['working'], contract=contract)
+    price = policy['human_benchmark'] * multiplier // 10000
+    human = policy['human_benchmark'] / MICRO
+    own_price = price / MICRO
+    buyers = [{'id': 'SIM-buyer-' + str(i), 'trust': world['trust'], 'purchases': 0,
+               'value': rng.uniform(world['value_low'], world['value_high']), 'last': None,
+               'budget': policy['cycles'] * human * 1.5}
+              for i in range(policy['jobs_per_cycle'])]
+    events, cycles, stop = [], [], None
+    failed_jobs = len(manifest['jobs']) - len(jobs)
+    attempts = manifest.get('attempts', [])
+    revised_attempts = max(0, len(attempts) - len(manifest['jobs']))
+    # Rejected jobs are charged just like accepted ones. Extra failed/revised
+    # attempts receive one full per-job envelope, deliberately conservative.
+    cost_units = len(manifest['jobs']) + revised_attempts
+    all_job_cost = policy['per_job_cost'] * cost_units
+    tranche = (all_job_cost + policy['cycles'] - 1) // policy['cycles']
+    previous_taxable = 0
+    cumulative_tax = 0
+    try:
+        tape.execute('cost', {'id': 'complete-campaign-setup', 'amount': policy['setup_cost']}, 0)
+        for cycle in range(policy['cycles']):
+            day = cycle * 30 + 1
+            selected = eligible[cycle * policy['jobs_per_cycle']:(cycle + 1) * policy['jobs_per_cycle']]
+            active_buyers = buyers[:len(selected)]
+            acquisition = sum(policy['acquisition_repeat'] if b['purchases'] else policy['acquisition_new'] for b in active_buyers)
+            # Supplier chooses scarcity markup in response to its utilization;
+            # base factor is a conditional exogenous cost state. This is a
+            # bounded pricing heuristic, not an optimized supplier equilibrium.
+            utilization = len(selected) / policy['jobs_per_cycle']
+            supplier_factor = world['supplier_multiplier'] * (1 + .05 * utilization)
+            production_cost = int(math.ceil(tranche * supplier_factor))
+            cycle_budget = production_cost + acquisition + len(selected) * policy['support_per_sale']
+            before = tape.ex.snapshot()
+            funding = 'BOOTSTRAP_SEED_OR_REMAINING_LIQUIDITY'
+            if before['unrestrictedEarned'] >= cycle_budget and before['profit'] > 0:
+                intent = digest({'cycle': cycle, 'jobs': selected, 'policy': digest(policy)})
+                tape.execute('reserve', {'id': 'delivery-capacity-' + str(cycle), 'amount': cycle_budget,
+                                        'expected_net_value': max(1, len(selected) * price - cycle_budget), 'intent_sha256': intent}, day)
+                funding = 'PRIOR_UNRESTRICTED_SIMULATED_EARNINGS'
+            else:
+                if before['available'] < cycle_budget:
+                    stop = 'LIQUIDITY_BOUNDARY_BEFORE_COMMITMENT'
+                    break
+                tape.execute('cost', {'id': 'cohort-production-acquisition-support-' + str(cycle), 'amount': cycle_budget}, day)
+            work_receipts = execute_work_batch(root, jobs, selected, len(tape.actions) - 1, funding)
+            if funding == 'PRIOR_UNRESTRICTED_SIMULATED_EARNINGS':
+                tape.execute('finish', {'id': 'delivery-capacity-' + str(cycle), 'amount': cycle_budget,
+                                       'artifact_sha256': digest([jobs[x]['job'] for x in selected])}, day)
+            information = [b['value'] * rng.uniform(.9, 1.1) for b in active_buyers]
+            rival = competitor_response(information, own_price, sum(b['trust'] for b in active_buyers) / len(active_buyers), world['rival_trust'], world['rival_cost'], human)
+            accepted_count, collected_count, returns = 0, 0, 0
+            decisions = []
+            for j, buyer in zip(selected, active_buyers):
+                ident = 'SIM-order-' + str(cycle) + '-' + j
+                arrival = rng.random() < world['arrival'] * (.97 if buyer['purchases'] else 1.)
+                switching = 0. if buyer['purchases'] else world['switching']
+                own_utility = buyer['trust'] * .99 * buyer['value'] - own_price - switching
+                rival_utility = world['rival_trust'] * rival['quality'] * buyer['value'] - rival['price'] - (world['switching'] if buyer['purchases'] else 0.)
+                human_utility = _outside(buyer['value'], human)
+                outside_utility = max(0., rival_utility, human_utility)
+                chooses = arrival and buyer['budget'] >= own_price and own_utility >= outside_utility and own_utility >= 0
+                decision = {'job_id': j, 'buyer': buyer['id'], 'arrival': arrival, 'own_utility': own_utility,
+                            'rival_utility': rival_utility, 'human_or_no_purchase_utility': human_utility,
+                            'outside_utility': outside_utility, 'participates': chooses, 'repeat_customer': buyer['purchases'] > 0,
+                            'price': price, 'buyer_budget_before_usd': buyer['budget'], 'information': 'Realized value is latent; buyer uses its own expected utility; rival sees noisy proxy'}
+                if chooses:
+                    tape.execute('wallet', {'buyer': ident + '-wallet', 'amount': price}, day)
+                    tape.execute('offer', {'id': ident, 'buyer': ident + '-wallet', 'price': price, 'job_id': j, 'deadline': day + 14}, day)
+                    for action in ['consent', 'fund', 'prepare']:
+                        tape.execute('event', {'id': ident, 'event_id': ident + '-' + action, 'action': action}, day)
+                    accepted_count += 1
+                    payment_fee = (price * policy['payment_bps'] + 9999) // 10000 + policy['payment_fixed']
+                    tape.execute('cost', {'id': ident + '-payment-fee', 'amount': payment_fee}, day)
+                    revised = rng.random() < world['revision_probability']
+                    if revised:
+                        tape.execute('cost', {'id': ident + '-extra-revision', 'amount': policy['per_job_cost'] // 2}, day)
+                    dispute = rng.random() < world['dispute_probability']
+                    settlement_day = day + world['settlement_delay']
+                    # All same-day order decisions occur before processing their
+                    # settlement queue; this preserves global event time.
+                    events.append({'id': ident, 'buyer': buyer, 'settlement_day': settlement_day,
+                                   'dispute': dispute or settlement_day > day + 14,
+                                   'revised': revised, 'decision': decision})
+                decisions.append(decision)
+            pending = [e for e in events if e['decision'].get('processed') is not True]
+            for e in sorted(pending, key=lambda x: x['settlement_day']):
+                now = e['settlement_day']
+                if e['dispute']:
+                    tape.execute('event', {'id': e['id'], 'event_id': e['id'] + '-refund', 'action': 'refund'}, now)
+                    e['buyer']['trust'] = max(0., e['buyer']['trust'] - .1)
+                    e['decision']['outcome'] = 'REFUNDED_DISPUTE_OR_DEADLINE'
+                else:
+                    tape.execute('event', {'id': e['id'], 'event_id': e['id'] + '-release', 'action': 'release'}, now)
+                    returns += int(e['buyer']['purchases'] > 0)
+                    e['buyer']['purchases'] += 1
+                    e['buyer']['budget'] -= own_price
+                    e['buyer']['trust'] = min(.995, e['buyer']['trust'] + .003)
+                    e['decision']['outcome'] = 'SIMULATED_COLLECTED'
+                    collected_count += 1
+                e['decision']['processed'] = True
+            taxable = max(0, tape.ex.snapshot()['profit'] + cumulative_tax)
+            tax = max(0, taxable - previous_taxable) * policy['tax_bps'] // 10000
+            if tax:
+                tape.execute('cost', {'id': 'conditional-tax-provision-' + str(cycle), 'amount': tax}, day + 25)
+            cumulative_tax += tax
+            previous_taxable = max(previous_taxable, taxable)
+            after = tape.ex.snapshot()
+            cycles.append({'cycle': cycle, 'day': day, 'jobs': selected, 'funding': funding,
+                           'budget': cycle_budget, 'actual_post_commitment_work': work_receipts, 'production_rejected_rework_allocation': production_cost,
+                           'acquisition': acquisition, 'supplier_factor': supplier_factor,
+                           'supplier_rule': '5% scarcity markup at full batch utilization, on exogenous world term',
+                           'rival': rival, 'decisions': decisions, 'accepted': accepted_count,
+                           'collected': collected_count, 'repeat_deliveries': returns, 'before': before, 'after': after})
+        exported = tape.export()
+    finally:
+        tape.close()
+    checked = audit(exported, root=root, manifest=manifest, expected_actions_sha256=exported['actions_sha256'])
+    summary = checked['summary']
+    paid = sum(c['collected'] for c in cycles)
+    earned = sum(c['funding'] == 'PRIOR_UNRESTRICTED_SIMULATED_EARNINGS' and c['collected'] > 0 for c in cycles)
+    repeats = sum(b['purchases'] > 1 for b in buyers)
+    go = (len(cycles) == policy['cycles'] and paid >= policy['minimum_paid_jobs'] and
+          earned >= policy['minimum_earned_cycles'] and repeats >= policy['minimum_repeat_buyers'] and
+          summary['profit'] > 0 and summary['unrestrictedEarned'] > 0 and summary['payables'] == 0 and
+          summary['custodyRestricted'] == 0 and not summary['investmentStopped'])
+    result = {'schema': 'agi-alpha/commercial010-world/v1', 'scope': 'SIMULATED', 'world': world['id'],
+              'seed': seed, 'price_multiplier_bps': multiplier, 'price': price,
+              'policy_sha256': digest(policy), 'cohort_sha256': digest(manifest), 'ledger': exported,
+              'cycles': cycles, 'paid_jobs': paid, 'earned_funded_cycles': earned, 'repeat_buyers': repeats,
+              'cohort_jobs': len(manifest['jobs']), 'failed_jobs': failed_jobs, 'extra_failed_attempts': revised_attempts,
+              'charged_cost_units': cost_units, 'complete_cost_model': policy['cost_basis'],
+              'conditional_simulated_go': go, 'stop': stop,
+              'actual_collections': 0, 'actual_profit': None,
+              'terminal_obligations': policy['terminal_obligations'],
+              'captured_productivity_savings': max(0, paid * policy['human_benchmark'] - summary['expenses']),
+              'available_earned_surplus': summary['unrestrictedEarned'],
+              'reinvested_earned': sum(int(x['actual']) for x in checked['investments'] if x['state'] == 'complete')}
+    if persist:
+        (directory / 'RESULT.json').write_text(json.dumps(result, indent=2, allow_nan=False) + '\n')
+    return result
+
+
+def aggregate(results):
+    profits = sorted(x['ledger']['summary']['profit'] for x in results)
+    return {'runs': len(results), 'go_runs': sum(x['conditional_simulated_go'] for x in results),
+            'go_fraction': sum(x['conditional_simulated_go'] for x in results) / len(results),
+            'profit_min': profits[0], 'profit_median': profits[len(profits) // 2], 'profit_max': profits[-1],
+            'paid_jobs_range': [min(x['paid_jobs'] for x in results), max(x['paid_jobs'] for x in results)],
+            'earned_cycles_range': [min(x['earned_funded_cycles'] for x in results), max(x['earned_funded_cycles'] for x in results)],
+            'scope': 'Finite conditional seeded model distribution; not estimated real customer demand probability'}
+
+
+def run_campaign(*, root, manifest_path, policy_path, output, expected_manifest_sha256, expected_policy_sha256):
+    root, output = Path(root), Path(output)
+    if output.exists() or output.is_symlink() or any(x.is_symlink() for x in output.absolute().parents):
+        raise FileExistsError(output)
+    raw_manifest, raw_policy = Path(manifest_path).read_bytes(), Path(policy_path).read_bytes()
+    if hashlib.sha256(raw_manifest).hexdigest() != expected_manifest_sha256 or hashlib.sha256(raw_policy).hexdigest() != expected_policy_sha256:
+        raise ValueError('EXTERNAL_FROZEN_INPUT_IDENTITY_REQUIRED')
+    manifest, policy = json.loads(raw_manifest), validate_policy(json.loads(raw_policy))
+    output.mkdir(parents=True)
+    explored = []
+    region = [w for w in policy['worlds'] if w['qualification_region']]
+    for multiplier in policy['price_multipliers_bps']:
+        runs = []
+        for world in region:
+            for seed in policy['exploration_seeds']:
+                runs.append(run_world(root=root, manifest=manifest, policy=policy, world=world, seed=seed,
+                                      multiplier=multiplier, directory=output / 'exploration' / str(multiplier) / world['id'] / str(seed)))
+        explored.append({'price_multiplier_bps': multiplier, **aggregate(runs)})
+    eligible = [x['price_multiplier_bps'] for x in explored if x['go_fraction'] >= policy['minimum_region_success_fraction']]
+    selected = max(eligible) if eligible else 10000 - policy['initial_discount_bps']
+    selection = {'schema': 'agi-alpha/commercial010-price-freeze/v1', 'scope': 'SIMULATED',
+                 'selected_multiplier_bps': selected, 'exploration': explored,
+                 'policy_sha256': expected_policy_sha256, 'cohort_sha256': expected_manifest_sha256,
+                 'confirmation_seeds': policy['confirmation_seeds'], 'adaptation_after_confirmation': False}
+    (output / 'PRICE_FREEZE.json').write_text(json.dumps(selection, indent=2) + '\n')
+    confirmation, summaries = [], {}
+    for world in policy['worlds']:
+        runs = []
+        for seed in policy['confirmation_seeds']:
+            result = run_world(root=root, manifest=manifest, policy=policy, world=world, seed=seed,
+                               multiplier=selected, directory=output / 'confirmation' / world['id'] / str(seed))
+            runs.append(result)
+            confirmation.append(result)
+        summaries[world['id']] = aggregate(runs)
+    region_runs = [r for r in confirmation if any(w['id'] == r['world'] and w['qualification_region'] for w in policy['worlds'])]
+    conclusion = aggregate(region_runs)
+    region_go = conclusion['go_fraction'] >= policy['minimum_region_success_fraction'] and all(summaries[w['id']]['go_fraction'] >= policy['minimum_region_success_fraction'] for w in region)
+    from .verdicts import verdicts
+    result = {'schema': 'agi-alpha/commercial010-campaign/v1', 'scope': 'SIMULATED',
+              'policy_file_sha256': expected_policy_sha256, 'cohort_file_sha256': expected_manifest_sha256,
+              'selected_price_multiplier_bps': selected, 'selected_price': policy['human_benchmark'] * selected // 10000,
+              'exploration': explored, 'worlds': summaries, 'qualification_region': conclusion,
+              'conditional_simulated_go': region_go,
+              'verdicts': verdicts(simulated_go=region_go, accepted_jobs=len(load_jobs(root, manifest)),
+                                   positive_service=any(r['ledger']['summary']['profit'] > 0 and r['paid_jobs'] > 0 for r in region_runs)),
+              'limits': ['Actual customer demand, willingness to pay, trust differentiation, supplier terms and token bills remain unobserved.',
+                         'Qualification is conditional on the stated cost and strategic-model region; cost envelopes are assumptions, not measured bills.',
+                         'Outputs were actually executed on authored synthetic work; customer orders, timing and payments are simulated.',
+                         'Seeded variation describes the specified heuristic game, not independent real commercial confirmation.',
+                         'No Nash equilibrium, invention improvement or Blue Sky enablement is claimed.']}
+    (output / 'RESULT.json').write_text(json.dumps(result, indent=2, allow_nan=False) + '\n')
+    return result

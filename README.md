@@ -1,2 +1,4 @@
 # AGI-Alpha-Invention-Flywheel-Lab
 Blue Sky and Beyond-Human Foresight: structural discovery, executable strategy invention, adversarial verification, and fresh successors. Experimental research.
+
+The later [autonomous onboarding and strategic pricing adjustment](campaign/commercial-010/ONBOARDING_PRICING_ADJUSTMENT.md) controls price selection: maximize expected complete-cost contribution and sustainable cash growth under strategic buyer/rival responses. Choose the discount and implied win probability jointly, within the human-anchored premium offer range. A fixed five-percent policy is a controlled baseline, not a universal optimum. Separate actual agent-operated onboarding resources, uncertain customer attention/integration friction, and external obligations; one-time costs persist across repeat orders. Any optimality statement is limited to the modeled information and feasible price set.

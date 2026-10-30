@@ -1,0 +1,94 @@
+{
+  "currency": "USD",
+  "invoices": [
+    {
+      "amount_cents": 46645,
+      "customer": "customer-3",
+      "id": "i3"
+    },
+    {
+      "amount_cents": 30904,
+      "customer": "customer-1",
+      "id": "i1"
+    },
+    {
+      "amount_cents": 48111,
+      "customer": "customer-2",
+      "id": "i2"
+    },
+    {
+      "amount_cents": 27042,
+      "customer": "focus",
+      "id": "focus2"
+    },
+    {
+      "amount_cents": 49162,
+      "customer": "customer-4",
+      "id": "i4"
+    },
+    {
+      "amount_cents": 47813,
+      "customer": "customer-0",
+      "id": "i0"
+    },
+    {
+      "amount_cents": 18406,
+      "customer": "focus",
+      "id": "focus1"
+    }
+  ],
+  "order_id": "development-03",
+  "payments": [
+    {
+      "amount_cents": 49162,
+      "customer": "customer-4",
+      "id": "p4",
+      "invoice_refs": [
+        "i4"
+      ]
+    },
+    {
+      "amount_cents": 45448,
+      "customer": "focus",
+      "id": "focusp1",
+      "invoice_refs": [
+        "focus1",
+        "focus2"
+      ]
+    },
+    {
+      "amount_cents": 30904,
+      "customer": "customer-1",
+      "id": "p1",
+      "invoice_refs": [
+        "i1"
+      ]
+    },
+    {
+      "amount_cents": 47813,
+      "customer": "customer-0",
+      "id": "p0",
+      "invoice_refs": [
+        "i0"
+      ]
+    },
+    {
+      "amount_cents": 48111,
+      "customer": "customer-2",
+      "id": "p2",
+      "invoice_refs": [
+        "i2"
+      ]
+    },
+    {
+      "amount_cents": 46645,
+      "customer": "customer-3",
+      "id": "p3",
+      "invoice_refs": [
+        "i3"
+      ]
+    }
+  ],
+  "require_complete": true,
+  "scope": "SYNTHETIC_PUBLIC_WORKLOAD"
+}
