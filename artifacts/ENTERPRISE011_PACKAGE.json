@@ -14,7 +14,7 @@
   "transport": {
     "parts_index": "artifacts/enterprise011-parts/INDEX.json",
     "parts": 17,
-    "reason": "Connector single-request payload limit; lossless original ZIP with identical SHA256",
+    "reason": "Single-request transfer failed; checksum-bound smaller requests succeeded.",
     "reassemble_command": "python3 scripts/reassemble_enterprise011.py --manifest artifacts/enterprise011-parts/INDEX.json --output /tmp/AGI_ALPHA_Enterprise_011_source_evidence.zip"
   }
 }

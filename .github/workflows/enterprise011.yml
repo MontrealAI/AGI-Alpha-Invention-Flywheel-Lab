@@ -4,9 +4,12 @@ on:
   pull_request:
   push:
     branches:
-      - campaign/autonomous-enterprise-011
       - main
   workflow_dispatch:
+
+concurrency:
+  group: enterprise011-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read

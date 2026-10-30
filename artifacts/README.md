@@ -1,6 +1,6 @@
 # Enterprise-011 source and evidence package
 
-The original byte-exact ZIP is 49,513,883 bytes, SHA-256 `7e21fe606108d6625c0aa851f040638d09decf7a8f77ec9efe6fa82b6987cdb7`. It is stored as 17 bounded transport parts because the connected publisher rejects a single request of that size. The prepared GitHub release publishes the reconstructed original ZIP.
+The original byte-exact ZIP is 49,513,883 bytes, SHA-256 `7e21fe606108d6625c0aa851f040638d09decf7a8f77ec9efe6fa82b6987cdb7`. It is stored as 17 bounded transport parts after the single-request transfer failed in this environment. The prepared GitHub release publishes the reconstructed original ZIP.
 
 From a checkout, reconstruct and verify every part, the full hash and ZIP CRC:
 

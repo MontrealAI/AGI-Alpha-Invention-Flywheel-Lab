@@ -8,5 +8,14 @@
   "commercial_runtime_changed": false,
   "fresh_confirmation_reused_as_new": false,
   "exact_scope": "Archive adapters are outside frozen enterprise011 executable dependency closure; all listed frozen source bytes and financial source identity remain unchanged.",
-  "regressions_log": "archive-boundary-repair.log"
+  "regressions_log": "archive-boundary-repair.log",
+  "second_boundary": {
+    "workflow": 41086953735,
+    "job": 124170486489,
+    "retained_failure_log": "hosted-general-109fd-failure.log.gz",
+    "cause": "Recursive embedding of completed standalone enterprise011 packageparts exceeded historical250MiB archive bound.",
+    "repair": "Omit only separate opaque artifacts/enterprise011-parts and the generated combinedZIP from new legacyarchivebuilds. Retainallcurrentcode and historicalevidence, unchangedbyte/filecaps and strictoldextraction. Preserveoriginalarchiver and restoreit for frozen006reproduction.",
+    "new_regressions": 4,
+    "all_historical_source_hashes_verified": 6363
+  }
 }

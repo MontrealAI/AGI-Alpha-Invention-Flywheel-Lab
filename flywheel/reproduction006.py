@@ -8,6 +8,7 @@ FREEZE = 'campaign/cycle-006/REPRODUCTION_FREEZE.json'
 FREEZE_SHA256 = 'd64396e8d8e058aaddf1ecacf3e89f618d77b1e9ea88c87682ac3e8917534fdc'
 SNAPSHOTS = {
     '.github/workflows/campaign.yml': 'historical/cycle-006/campaign-workflow.yml.txt',
+    'flywheel/archive_v2.py': 'historical/cycle-006/archive_v2.py.txt',
     'flywheel/legacy.py': 'historical/cycle-006/legacy.py.txt',
     **{name: 'historical/cycle-001/' + name + '.txt'
        for name in ('AGENTS.md', 'CAMPAIGN.md', 'CHARTER.md', 'FIRST_CAMPAIGN.md', 'README.md')},
