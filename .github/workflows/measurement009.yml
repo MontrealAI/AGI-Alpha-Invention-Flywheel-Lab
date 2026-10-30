@@ -38,7 +38,6 @@ jobs:
       actions: read
     env:
       SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-      RUN_ROOT: ${{ runner.temp }}/measurement009-${{ github.run_id }}-${{ github.run_attempt }}
       OPENBLAS_NUM_THREADS: '1'
       OMP_NUM_THREADS: '1'
       MKL_NUM_THREADS: '1'
@@ -50,6 +49,8 @@ jobs:
     steps:
       - name: Record checkout/dependency resource baseline
         run: |
+          export RUN_ROOT="$RUNNER_TEMP/measurement009-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          printf 'RUN_ROOT=%s\n' "$RUN_ROOT" >> "$GITHUB_ENV"
           python3 - <<'PY'
           import json, os, pathlib
           root = pathlib.Path(os.environ['RUN_ROOT']); root.mkdir(parents=True, exist_ok=False)
@@ -296,11 +297,12 @@ jobs:
       QUALIFIED_ARTIFACT: ${{ needs.qualify.outputs.artifact_name }}
       QUALIFIED_ARTIFACT_ID: ${{ needs.qualify.outputs.artifact_id }}
       RELEASE_TAG: measurement-construction-20261030-r1
-      RELEASE_ROOT: ${{ runner.temp }}/measurement009-publication
     steps:
       - name: Preserve existing releases and require both exact-main historical gates
         id: gates
         run: |
+          export RELEASE_ROOT="$RUNNER_TEMP/measurement009-publication"
+          printf 'RELEASE_ROOT=%s\n' "$RELEASE_ROOT" >> "$GITHUB_ENV"
           python3 - <<'PY'
           import json,os,pathlib,re,subprocess,time
           root=pathlib.Path(os.environ['RELEASE_ROOT']);root.mkdir(parents=True,exist_ok=False)
