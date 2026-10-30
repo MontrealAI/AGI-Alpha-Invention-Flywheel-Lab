@@ -191,6 +191,8 @@ def _check_market_decisions(result, tape):
 
 def _check_customer_lifecycle(result):
     cfg, seed = result['config'], result['seed']
+    if set(result['channels']['exposures_by_day']) != {str(day) for day in range(cfg['horizon_days'])}:
+        raise ValueError('CHANNEL_EXPOSURE_DAYS_DIFFER_FROM_FROZEN_HORIZON')
     buyers = {row['id']: row for row in result['buyers']}
     owned = set(sorted(buyers)[:4])
     state = {ident: {'known': ident in owned, 'active': True, 'onboarded': False,
@@ -375,6 +377,8 @@ def check_channels(channels, investments, buyers, *, contracts=None, seed=None):
     daily = channels.get('exposures_by_day')
     if not isinstance(instances, dict) or not isinstance(receipts, dict) or not isinstance(daily, dict) or set(instances) != set(receipts):
         raise ValueError('CHANNEL_INSTANCE_PURCHASE_BINDING_REQUIRED')
+    if contracts is None or type(seed) is not int or seed < 0:
+        raise ValueError('FROZEN_CHANNEL_CONTRACTS_AND_SEED_REQUIRED')
     investor = {row['plan_id']: row for row in investments}
     if contracts is not None or seed is not None:
         from connected_enterprise.channels import validate_contracts
@@ -447,6 +451,10 @@ def check_channels(channels, investments, buyers, *, contracts=None, seed=None):
     for ident, instance in instances.items():
         if instance['realized_exposures'] != sum(row['source_plan_id'] == ident for row in all_exposures):
             raise ValueError('CHANNEL_REALIZED_REACH_DOES_NOT_RECONCILE')
+    from connected_enterprise.channels import audit_channel_history
+    replay = audit_channel_history(channels, contracts, seed, buyers)
+    if activation != replay['activation_by_plan']:
+        raise ValueError('SEEDED_CHANNEL_HISTORY_MISMATCH')
     return {'paid_channel_contracts_checked': len(instances), 'paid_exposures_checked': len(all_exposures)}
 
 
@@ -653,6 +661,26 @@ def _check_investments(result, tape, orders):
             raise ValueError('PRODUCTIVE_INVESTMENT_FORECAST_NOT_SOURCE_BOUND')
         if row['kind'] == 'acquisition' and request['work'].get('terms') != row.get('contract_receipt', {}).get('terms'):
             raise ValueError('ACQUISITION_CONTRACT_TERMS_DIFFER_FROM_FINANCED_WORK')
+        if row['kind'] == 'capacity':
+            work, cfg = request.get('work'), result['config']
+            if not isinstance(work, dict):
+                raise ValueError('CAPACITY_FINANCED_TIMING_TERMS_REQUIRED')
+            lead = _integer(work.get('lead_hours'), 'CAPACITY_FINANCED_LEAD', positive=True)
+            duration = _integer(work.get('duration_hours'), 'CAPACITY_FINANCED_DURATION', positive=True)
+            units = _integer(work.get('units_per_day'), 'CAPACITY_FINANCED_UNITS', positive=True)
+            if (lead != _integer(cfg.get('capacity_lead_hours'), 'FROZEN_CAPACITY_LEAD', positive=True)
+                    or duration != _integer(cfg.get('capacity_duration_hours'), 'FROZEN_CAPACITY_DURATION', positive=True)
+                    or units != 1):
+                raise ValueError('CAPACITY_TERMS_DIFFER_FROM_FROZEN_SUPPLIER_CONTRACT')
+            if (request.get('id') != row.get('id') or request.get('kind') != 'capacity_contract'
+                    or _integer(request.get('amount'), 'CAPACITY_FINANCED_COST', positive=True) != cost
+                    or _integer(request.get('day'), 'CAPACITY_FINANCED_PURCHASE_TIME') != moment
+                    or _integer(row['funding_receipt'].get('day'), 'CAPACITY_RECEIPT_PURCHASE_TIME') != moment
+                    or _integer(reserve['day'], 'CAPACITY_NATIVE_RESERVE_TIME') != moment
+                    or _integer(finish['day'], 'CAPACITY_NATIVE_INVOICE_TIME') != moment):
+                raise ValueError('CAPACITY_PURCHASE_NOT_BOUND_TO_NATIVE_INVOICE')
+            if activation != moment + lead or _integer(expiry, 'CAPACITY_EXPIRY', positive=True) != activation + duration:
+                raise ValueError('CAPACITY_LIFETIME_DIFFERS_FROM_FINANCED_CONTRACT')
     for order in orders.values():
         day = order['qualified_time'] // 24
         qualified_daily[day] = qualified_daily.get(day, 0) + 1

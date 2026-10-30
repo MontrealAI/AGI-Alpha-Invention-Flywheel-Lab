@@ -162,3 +162,121 @@ class ChannelBook:
 
     def export(self):
         return copy.deepcopy(self.state)
+
+
+def audit_channel_history(channels, contracts, seed, buyers):
+    """Independently reconstruct seeded rights; producer state is only a claim."""
+    if type(seed) is not int or seed < 0 or contracts is None:
+        raise ValueError('FROZEN_CHANNEL_CONTRACTS_AND_SEED_REQUIRED')
+    terms_by_id = validate_contracts(contracts)
+    def encode(value):
+        return json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()
+    def commitment(value):
+        return hashlib.sha256(encode(value)).hexdigest()
+    def uniform(day, identity, stage):
+        raw = json.dumps(['connected014-channel', seed, day, identity, stage], separators=(',', ':')).encode()
+        return int.from_bytes(hashlib.sha256(raw).digest()[:8], 'big') % 10000
+    def reject():
+        raise ValueError('SEEDED_CHANNEL_HISTORY_MISMATCH')
+    population = sorted(row['id'] for row in buyers)
+    if len(population) != len(set(population)) or channels.get('binding_sha256') != commitment({'seed': seed, 'contracts': terms_by_id}):
+        reject()
+    purchases = channels['purchase_receipts']; instances = {}; expected_events = {}; event_days = {}
+    if set(purchases) != set(channels['instances']):reject()
+    for plan, purchase in purchases.items():
+        ident = purchase['contract_id']; terms = terms_by_id.get(ident); day = purchase['purchased_day']
+        if terms is None or type(day) is not int or day < 0 or purchase['source_plan_id'] != plan or purchase['terms'] != terms:
+            reject()
+        activation = day + terms['lead_days']; expiry = activation + terms['duration_days']
+        if any(purchase.get(key) != value for key, value in {'activation_day': activation, 'expiry_day': expiry,
+                'invoice_microUSD': terms['price_microUSD'] + terms['support_microUSD'],
+                'potential_slots': terms['slots_per_day'] * terms['duration_days']}.items()):reject()
+        instance = {**copy.deepcopy(purchase), 'state': 'SCHEDULED', 'potential_slots_used': 0,
+                    'realized_exposures': 0, 'unused_slots': 0, 'failure_credit_due_microUSD': 0,
+                    'activation_attempts': 0, 'next_activation_day': activation}
+        instances[plan] = instance
+        event_days[plan] = [day]
+        expected_events[plan] = [{'day': day, 'kind': 'PAID_CHANNEL_PURCHASED', 'contract_id': ident,
+                                 'source_plan_id': plan, 'invoice_microUSD': purchase['invoice_microUSD']}]
+    days = []
+    for text in channels['exposures_by_day']:
+        try:day = int(text)
+        except (TypeError, ValueError):reject()
+        if not isinstance(text, str) or str(day) != text or day < 0:reject()
+        days.append(day)
+    if type(channels.get('last_day')) is not int or channels['last_day'] != max(days, default=-1):reject()
+    contacts = {}; activations = {}; attempts = 0
+    for day in sorted(days):
+        exposures = []; exposed = set(); attempted = 0; unused = 0
+        for plan, instance in sorted(instances.items()):
+            terms = instance['terms']; events = expected_events[plan]
+            while day >= instance['next_activation_day'] and instance['state'] in {'SCHEDULED', 'RETRY_SCHEDULED'}:
+                when = instance['next_activation_day']
+                if when >= instance['expiry_day']:
+                    instance['state'] = 'FAILED'; break
+                attempt = instance['activation_attempts']
+                active = uniform(when, plan, 'activation' if attempt == 0 else 'prepaid-activation-retry-' + str(attempt)) < terms['activation_reliability_bps']
+                instance['activation_attempts'] += 1; attempts += 1
+                retry_day = when + terms['retry_delay_days']
+                retry = not active and attempt < terms['prepaid_retry_attempts'] and retry_day < instance['expiry_day']
+                instance['state'] = 'ACTIVE' if active else 'RETRY_SCHEDULED' if retry else 'FAILED'
+                if retry:instance['next_activation_day'] = retry_day
+                if not active and not retry:instance['failure_credit_due_microUSD'] = terms['price_microUSD'] * terms['failure_credit_bps'] // 10000
+                if active:activations[plan] = when
+                events.append({'day': when, 'kind': 'CHANNEL_ACTIVATED' if active else 'CHANNEL_ACTIVATION_FAILED_RETRY_SCHEDULED' if retry else 'CHANNEL_ACTIVATION_FAILED',
+                    'source_plan_id': plan, 'contract_id': instance['contract_id'], 'activation_attempt': attempt + 1,
+                    'next_retry_day': retry_day if retry else None, 'failure_credit_due_microUSD': instance['failure_credit_due_microUSD'],
+                    'credit_status': 'RECEIVABLE_NOT_CASH' if not active and not retry else 'NOT_APPLICABLE'})
+                event_days[plan].append(day)
+            if day >= instance['expiry_day'] and instance['state'] == 'ACTIVE':
+                instance['state'] = 'EXPIRED'
+                events.append({'day': instance['expiry_day'], 'kind': 'CHANNEL_EXPIRED', 'source_plan_id': plan,
+                    'contract_id': instance['contract_id'], 'realized_exposures': instance['realized_exposures'],
+                    'potential_slots_used': instance['potential_slots_used'], 'potential_slots': instance['potential_slots']})
+                event_days[plan].append(day)
+            if instance['state'] != 'ACTIVE' or day < instance['activation_day'] or day >= instance['expiry_day']:continue
+            pool = population[terms['owned_audience_count']:]
+            for slot in range(terms['slots_per_day']):
+                attempted += 1; instance['potential_slots_used'] += 1; identity = str(plan) + '/' + str(slot)
+                candidate = None
+                if pool and uniform(day, identity, 'reach-realization') < terms['realization_bps']:
+                    shared = uniform(day, identity, 'overlapping-audience') < terms['overlap_bps']
+                    stage = 'shared-audience' if shared else instance['contract_id'] + '-audience'
+                    ranking = sorted(pool, key=lambda customer: (uniform(day, customer, stage), customer))
+                    candidate = ranking[slot % len(ranking)]
+                    history = contacts.get(candidate, [])
+                    if candidate in exposed or len(history) >= terms['max_contacts_per_customer'] or (history and day - history[-1]['day'] < terms['contact_cooldown_days']):candidate = None
+                if candidate is None:
+                    unused += 1; instance['unused_slots'] += 1; continue
+                ident = 'channel-exposure-' + commitment([plan, day, slot, candidate])[:24]
+                row = {'customer_id': candidate, 'source_plan_id': plan, 'contract_id': instance['contract_id'], 'exposure_id': ident}
+                exposures.append(row); exposed.add(candidate); instance['realized_exposures'] += 1
+                contacts.setdefault(candidate, []).append({'day': day, 'exposure_id': ident, 'source_plan_id': plan})
+                events.append({'day': day, 'kind': 'POTENTIAL_CUSTOMER_EXPOSED', **row,
+                    'scope': 'Exposure only; qualification, voluntary decision and budget remain separate.'})
+                event_days[plan].append(day)
+        expected = {'population_sha256': commitment(population), 'exposures': exposures, 'attempted_slots': attempted,
+                    'realized_exposures': len(exposures), 'unused_slots': unused}
+        if channels['exposures_by_day'][str(day)] != expected:reject()
+    if channels['instances'] != instances or channels.get('contacts') != contacts:reject()
+    actual_events = {plan: [] for plan in instances}
+    for event in channels.get('events', []):
+        if event.get('source_plan_id') not in actual_events:reject()
+        actual_events[event['source_plan_id']].append(event)
+    if actual_events != expected_events:reject()
+    offsets = {plan: 0 for plan in instances}; live_states = {}; prior_day = -1
+    for event in channels.get('events', []):
+        plan = event['source_plan_id']; phase_day = event_days[plan][offsets[plan]]; offsets[plan] += 1
+        if phase_day < prior_day:reject()
+        prior_day = phase_day; kind = event['kind']
+        if kind == 'PAID_CHANNEL_PURCHASED':
+            current = instances[plan]
+            live = sum(instances[other]['contract_id'] == current['contract_id'] and instances[other]['expiry_day'] > phase_day
+                       and state not in {'FAILED', 'EXPIRED'} for other, state in live_states.items())
+            if live >= current['terms']['max_active_tranches']:reject()
+            live_states[plan] = 'SCHEDULED'
+        elif kind == 'CHANNEL_ACTIVATED':live_states[plan] = 'ACTIVE'
+        elif kind == 'CHANNEL_ACTIVATION_FAILED_RETRY_SCHEDULED':live_states[plan] = 'RETRY_SCHEDULED'
+        elif kind == 'CHANNEL_ACTIVATION_FAILED':live_states[plan] = 'FAILED'
+        elif kind == 'CHANNEL_EXPIRED':live_states[plan] = 'EXPIRED'
+    return {'activation_by_plan': activations, 'activation_attempts_checked': attempts, 'exposure_days_checked': len(days)}
