@@ -1,0 +1,595 @@
+{
+  "schema": "agi-alpha/next009-independent-commercial-arithmetic-audit/v1",
+  "passed": true,
+  "policy_sha256": "9fcaf341da5d6fe7c5412c004a045f69e4317e1f312d6a0cc05c2bdb6f9f565d",
+  "commercial_report_sha256": "6be4449aa8e73dca93d26c5fbea1f3d2d75604b133c51b19b94a3ea3bf0b7a70",
+  "auditor_sha256": "f8804d678604e32a72a29e549c09046aec090117648473b467f56f27b2735ae9",
+  "identity_checks": {
+    "artifact": true,
+    "receipt": true,
+    "verifier": true,
+    "protocol": true
+  },
+  "source_check": true,
+  "policy_check": true,
+  "qualification_labels_correct": true,
+  "scenario_count": 6,
+  "scenarios": [
+    {
+      "scenario": "conditional_base",
+      "checks": [
+        {
+          "field": "earned_revenue",
+          "expected_exact": "3500.00",
+          "expected_cents": "3500.00",
+          "reported": "3500.00",
+          "passed": true
+        },
+        {
+          "field": "production_all_attempts",
+          "expected_exact": "406.389800",
+          "expected_cents": "406.39",
+          "reported": "406.39",
+          "passed": true
+        },
+        {
+          "field": "fixed_research_setup_overhead",
+          "expected_exact": "900.00",
+          "expected_cents": "900.00",
+          "reported": "900.00",
+          "passed": true
+        },
+        {
+          "field": "processing_fees_retained_on_refunds",
+          "expected_exact": "120.80000",
+          "expected_cents": "120.80",
+          "reported": "120.80",
+          "passed": true
+        },
+        {
+          "field": "dispute_fees",
+          "expected_exact": "15.00",
+          "expected_cents": "15.00",
+          "reported": "15.00",
+          "passed": true
+        },
+        {
+          "field": "accounting_profit_within_authored_scenario",
+          "expected_exact": "2057.810200",
+          "expected_cents": "2057.81",
+          "reported": "2057.81",
+          "passed": true
+        },
+        {
+          "field": "delayed_processor_receivable",
+          "expected_exact": "500.00",
+          "expected_cents": "500.00",
+          "reported": "500.00",
+          "passed": true
+        },
+        {
+          "field": "available_bank_cash",
+          "expected_exact": "11557.810200",
+          "expected_cents": "11557.81",
+          "reported": "11557.81",
+          "passed": true
+        },
+        {
+          "field": "retained_principal_plus_dispute_reserve",
+          "expected_exact": "3710.00",
+          "expected_cents": "3710.00",
+          "reported": "3710.00",
+          "passed": true
+        },
+        {
+          "field": "available_after_reserves",
+          "expected_exact": "7347.810200",
+          "expected_cents": "7347.81",
+          "reported": "7347.81",
+          "passed": true
+        },
+        {
+          "field": "conditional_earned_cash_after_equity_backing",
+          "expected_exact": "1557.810200",
+          "expected_cents": "1557.81",
+          "reported": "1557.81",
+          "passed": true
+        },
+        {
+          "field": "cash_profit_bridge",
+          "passed": true
+        },
+        {
+          "field": "zero_qualified_reinvestment",
+          "passed": true
+        },
+        {
+          "field": "human_claims_remain_unknown",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "scenario": "zero_demand",
+      "checks": [
+        {
+          "field": "earned_revenue",
+          "expected_exact": "0.00",
+          "expected_cents": "0.00",
+          "reported": "0.00",
+          "passed": true
+        },
+        {
+          "field": "production_all_attempts",
+          "expected_exact": "406.389800",
+          "expected_cents": "406.39",
+          "reported": "406.39",
+          "passed": true
+        },
+        {
+          "field": "fixed_research_setup_overhead",
+          "expected_exact": "900.00",
+          "expected_cents": "900.00",
+          "reported": "900.00",
+          "passed": true
+        },
+        {
+          "field": "processing_fees_retained_on_refunds",
+          "expected_exact": "0.00000",
+          "expected_cents": "0.00",
+          "reported": "0.00",
+          "passed": true
+        },
+        {
+          "field": "dispute_fees",
+          "expected_exact": "0.00",
+          "expected_cents": "0.00",
+          "reported": "0.00",
+          "passed": true
+        },
+        {
+          "field": "accounting_profit_within_authored_scenario",
+          "expected_exact": "-1306.389800",
+          "expected_cents": "-1306.39",
+          "reported": "-1306.39",
+          "passed": true
+        },
+        {
+          "field": "delayed_processor_receivable",
+          "expected_exact": "0.00",
+          "expected_cents": "0.00",
+          "reported": "0.00",
+          "passed": true
+        },
+        {
+          "field": "available_bank_cash",
+          "expected_exact": "8693.610200",
+          "expected_cents": "8693.61",
+          "reported": "8693.61",
+          "passed": true
+        },
+        {
+          "field": "retained_principal_plus_dispute_reserve",
+          "expected_exact": "0.00",
+          "expected_cents": "0.00",
+          "reported": "0.00",
+          "passed": true
+        },
+        {
+          "field": "available_after_reserves",
+          "expected_exact": "8193.610200",
+          "expected_cents": "8193.61",
+          "reported": "8193.61",
+          "passed": true
+        },
+        {
+          "field": "conditional_earned_cash_after_equity_backing",
+          "expected_exact": "0",
+          "expected_cents": "0.00",
+          "reported": "0.00",
+          "passed": true
+        },
+        {
+          "field": "cash_profit_bridge",
+          "passed": true
+        },
+        {
+          "field": "zero_qualified_reinvestment",
+          "passed": true
+        },
+        {
+          "field": "human_claims_remain_unknown",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "scenario": "correlated_low_demand_overstatement_warranty",
+      "checks": [
+        {
+          "field": "earned_revenue",
+          "expected_exact": "500.00",
+          "expected_cents": "500.00",
+          "reported": "500.00",
+          "passed": true
+        },
+        {
+          "field": "production_all_attempts",
+          "expected_exact": "1413.309800",
+          "expected_cents": "1413.31",
+          "reported": "1413.31",
+          "passed": true
+        },
+        {
+          "field": "fixed_research_setup_overhead",
+          "expected_exact": "900.00",
+          "expected_cents": "900.00",
+          "reported": "900.00",
+          "passed": true
+        },
+        {
+          "field": "processing_fees_retained_on_refunds",
+          "expected_exact": "45.30000",
+          "expected_cents": "45.30",
+          "reported": "45.30",
+          "passed": true
+        },
+        {
+          "field": "dispute_fees",
+          "expected_exact": "30.00",
+          "expected_cents": "30.00",
+          "reported": "30.00",
+          "passed": true
+        },
+        {
+          "field": "accounting_profit_within_authored_scenario",
+          "expected_exact": "-2388.609800",
+          "expected_cents": "-2388.61",
+          "reported": "-2388.61",
+          "passed": true
+        },
+        {
+          "field": "delayed_processor_receivable",
+          "expected_exact": "500.00",
+          "expected_cents": "500.00",
+          "reported": "500.00",
+          "passed": true
+        },
+        {
+          "field": "available_bank_cash",
+          "expected_exact": "7111.390200",
+          "expected_cents": "7111.39",
+          "reported": "7111.39",
+          "passed": true
+        },
+        {
+          "field": "retained_principal_plus_dispute_reserve",
+          "expected_exact": "530.00",
+          "expected_cents": "530.00",
+          "reported": "530.00",
+          "passed": true
+        },
+        {
+          "field": "available_after_reserves",
+          "expected_exact": "6081.390200",
+          "expected_cents": "6081.39",
+          "reported": "6081.39",
+          "passed": true
+        },
+        {
+          "field": "conditional_earned_cash_after_equity_backing",
+          "expected_exact": "0",
+          "expected_cents": "0.00",
+          "reported": "0.00",
+          "passed": true
+        },
+        {
+          "field": "cash_profit_bridge",
+          "passed": true
+        },
+        {
+          "field": "zero_qualified_reinvestment",
+          "passed": true
+        },
+        {
+          "field": "human_claims_remain_unknown",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "scenario": "tenfold_inference",
+      "checks": [
+        {
+          "field": "earned_revenue",
+          "expected_exact": "3500.00",
+          "expected_cents": "3500.00",
+          "reported": "3500.00",
+          "passed": true
+        },
+        {
+          "field": "production_all_attempts",
+          "expected_exact": "1413.309800",
+          "expected_cents": "1413.31",
+          "reported": "1413.31",
+          "passed": true
+        },
+        {
+          "field": "fixed_research_setup_overhead",
+          "expected_exact": "900.00",
+          "expected_cents": "900.00",
+          "reported": "900.00",
+          "passed": true
+        },
+        {
+          "field": "processing_fees_retained_on_refunds",
+          "expected_exact": "120.80000",
+          "expected_cents": "120.80",
+          "reported": "120.80",
+          "passed": true
+        },
+        {
+          "field": "dispute_fees",
+          "expected_exact": "15.00",
+          "expected_cents": "15.00",
+          "reported": "15.00",
+          "passed": true
+        },
+        {
+          "field": "accounting_profit_within_authored_scenario",
+          "expected_exact": "1050.890200",
+          "expected_cents": "1050.89",
+          "reported": "1050.89",
+          "passed": true
+        },
+        {
+          "field": "delayed_processor_receivable",
+          "expected_exact": "500.00",
+          "expected_cents": "500.00",
+          "reported": "500.00",
+          "passed": true
+        },
+        {
+          "field": "available_bank_cash",
+          "expected_exact": "10550.890200",
+          "expected_cents": "10550.89",
+          "reported": "10550.89",
+          "passed": true
+        },
+        {
+          "field": "retained_principal_plus_dispute_reserve",
+          "expected_exact": "3710.00",
+          "expected_cents": "3710.00",
+          "reported": "3710.00",
+          "passed": true
+        },
+        {
+          "field": "available_after_reserves",
+          "expected_exact": "6340.890200",
+          "expected_cents": "6340.89",
+          "reported": "6340.89",
+          "passed": true
+        },
+        {
+          "field": "conditional_earned_cash_after_equity_backing",
+          "expected_exact": "550.890200",
+          "expected_cents": "550.89",
+          "reported": "550.89",
+          "passed": true
+        },
+        {
+          "field": "cash_profit_bridge",
+          "passed": true
+        },
+        {
+          "field": "zero_qualified_reinvestment",
+          "passed": true
+        },
+        {
+          "field": "human_claims_remain_unknown",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "scenario": "all_remaining_payouts_delayed",
+      "checks": [
+        {
+          "field": "earned_revenue",
+          "expected_exact": "3500.00",
+          "expected_cents": "3500.00",
+          "reported": "3500.00",
+          "passed": true
+        },
+        {
+          "field": "production_all_attempts",
+          "expected_exact": "406.389800",
+          "expected_cents": "406.39",
+          "reported": "406.39",
+          "passed": true
+        },
+        {
+          "field": "fixed_research_setup_overhead",
+          "expected_exact": "900.00",
+          "expected_cents": "900.00",
+          "reported": "900.00",
+          "passed": true
+        },
+        {
+          "field": "processing_fees_retained_on_refunds",
+          "expected_exact": "120.80000",
+          "expected_cents": "120.80",
+          "reported": "120.80",
+          "passed": true
+        },
+        {
+          "field": "dispute_fees",
+          "expected_exact": "15.00",
+          "expected_cents": "15.00",
+          "reported": "15.00",
+          "passed": true
+        },
+        {
+          "field": "accounting_profit_within_authored_scenario",
+          "expected_exact": "2057.810200",
+          "expected_cents": "2057.81",
+          "reported": "2057.81",
+          "passed": true
+        },
+        {
+          "field": "delayed_processor_receivable",
+          "expected_exact": "3500.00",
+          "expected_cents": "3500.00",
+          "reported": "3500.00",
+          "passed": true
+        },
+        {
+          "field": "available_bank_cash",
+          "expected_exact": "8557.810200",
+          "expected_cents": "8557.81",
+          "reported": "8557.81",
+          "passed": true
+        },
+        {
+          "field": "retained_principal_plus_dispute_reserve",
+          "expected_exact": "3710.00",
+          "expected_cents": "3710.00",
+          "reported": "3710.00",
+          "passed": true
+        },
+        {
+          "field": "available_after_reserves",
+          "expected_exact": "4347.810200",
+          "expected_cents": "4347.81",
+          "reported": "4347.81",
+          "passed": true
+        },
+        {
+          "field": "conditional_earned_cash_after_equity_backing",
+          "expected_exact": "0",
+          "expected_cents": "0.00",
+          "reported": "0.00",
+          "passed": true
+        },
+        {
+          "field": "cash_profit_bridge",
+          "passed": true
+        },
+        {
+          "field": "zero_qualified_reinvestment",
+          "passed": true
+        },
+        {
+          "field": "human_claims_remain_unknown",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "scenario": "positive_profit_liquidity_deferral",
+      "checks": [
+        {
+          "field": "earned_revenue",
+          "expected_exact": "3500.00",
+          "expected_cents": "3500.00",
+          "reported": "3500.00",
+          "passed": true
+        },
+        {
+          "field": "production_all_attempts",
+          "expected_exact": "406.389800",
+          "expected_cents": "406.39",
+          "reported": "406.39",
+          "passed": true
+        },
+        {
+          "field": "fixed_research_setup_overhead",
+          "expected_exact": "900.00",
+          "expected_cents": "900.00",
+          "reported": "900.00",
+          "passed": true
+        },
+        {
+          "field": "processing_fees_retained_on_refunds",
+          "expected_exact": "120.80000",
+          "expected_cents": "120.80",
+          "reported": "120.80",
+          "passed": true
+        },
+        {
+          "field": "dispute_fees",
+          "expected_exact": "15.00",
+          "expected_cents": "15.00",
+          "reported": "15.00",
+          "passed": true
+        },
+        {
+          "field": "accounting_profit_within_authored_scenario",
+          "expected_exact": "2057.810200",
+          "expected_cents": "2057.81",
+          "reported": "2057.81",
+          "passed": true
+        },
+        {
+          "field": "delayed_processor_receivable",
+          "expected_exact": "500.00",
+          "expected_cents": "500.00",
+          "reported": "500.00",
+          "passed": true
+        },
+        {
+          "field": "available_bank_cash",
+          "expected_exact": "3364.200000",
+          "expected_cents": "3364.20",
+          "reported": "3364.20",
+          "passed": true
+        },
+        {
+          "field": "retained_principal_plus_dispute_reserve",
+          "expected_exact": "3710.00",
+          "expected_cents": "3710.00",
+          "reported": "3710.00",
+          "passed": true
+        },
+        {
+          "field": "available_after_reserves",
+          "expected_exact": "0",
+          "expected_cents": "0.00",
+          "reported": "0.00",
+          "passed": true
+        },
+        {
+          "field": "conditional_earned_cash_after_equity_backing",
+          "expected_exact": "0",
+          "expected_cents": "0.00",
+          "reported": "0.00",
+          "passed": true
+        },
+        {
+          "field": "cash_profit_bridge",
+          "passed": true
+        },
+        {
+          "field": "zero_qualified_reinvestment",
+          "passed": true
+        },
+        {
+          "field": "human_claims_remain_unknown",
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "scope": "Independent Decimal arithmetic and source/claim audit. Does not import candidate commercial arithmetic or establish empirical model usage, cost completeness, demand, human duration, investment attractiveness or real revenue.",
+  "interpretation_notes": [
+    "CAD2057.8102 base profit and CAD1557.8102 conditional earned cash are authored-scenario results; qualified earned funds remain zero.",
+    "The 23.4456-minute human wage threshold compares wage-only labor with variable autonomous production cost, excluding fixed research/setup and processing expenses; it must not be described as a complete-cost advantage.",
+    "The 194.0885-minute wage-only threshold is a sufficient modeled human-loss condition under the declared revenue and fee basis, not an observed matched-task duration or demonstrated crossing."
+  ]
+}
