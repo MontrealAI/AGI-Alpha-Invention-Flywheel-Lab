@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+import contextlib
+import io
 from unittest.mock import patch
 import zipfile
 
@@ -240,6 +242,24 @@ class WorkflowGateTests(unittest.TestCase):
             result = release.push_applicability('owner/repo', COMMIT)
         self.assertEqual(result['changed_paths'], ['.github/workflows/measurement009.yml'])
         self.assertIn('measurement009.yml', release.applicable_workflows(result['changed_paths']))
+
+    def test_publication_wait_can_exceed_operating_timeout_without_raising_its_cap(self):
+        publish = ['release', 'publish', '--assets', '/unused', '--source-commit', COMMIT,
+                   '--repository', 'owner/repo', '--run-id', '7', '--timeout-seconds', '2400']
+        operate = ['release', 'operate-download', '--assets', '/unused', '--source-commit', COMMIT,
+                   '--output', '/unused-operation', '--timeout-seconds', '1201']
+        with patch.object(release.sys, 'argv', publish), patch.object(release, 'publish', return_value={}) as action, contextlib.redirect_stdout(io.StringIO()):
+            release.main()
+            self.assertEqual(action.call_args.args[-1], 2400)
+        with patch.object(release.sys, 'argv', operate), patch.object(release, 'operate_download') as action, contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit) as error:
+                release.main()
+            self.assertEqual(error.exception.code, 2)
+            action.assert_not_called()
+        with patch.object(release.sys, 'argv', [*publish[:-1], '2401']), patch.object(release, 'publish') as action, contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit):
+                release.main()
+            action.assert_not_called()
 
 if __name__ == '__main__':
     unittest.main()

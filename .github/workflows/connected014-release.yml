@@ -51,7 +51,7 @@ jobs:
     needs: [release-qualification]
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     permissions:
       contents: write
       actions: read
@@ -71,7 +71,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-        run: python scripts/release_connected014.py publish --assets "$RUNNER_TEMP/received-qualification" --source-commit "$GITHUB_SHA" --repository "$GITHUB_REPOSITORY" --run-id "$GITHUB_RUN_ID" --timeout-seconds 900
+        run: python scripts/release_connected014.py publish --assets "$RUNNER_TEMP/received-qualification" --source-commit "$GITHUB_SHA" --repository "$GITHUB_REPOSITORY" --run-id "$GITHUB_RUN_ID" --timeout-seconds 2400
       - name: Preserve source-bound publication gate and assets
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

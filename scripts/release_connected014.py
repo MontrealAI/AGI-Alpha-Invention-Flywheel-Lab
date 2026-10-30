@@ -388,8 +388,10 @@ def main():
             sub.add_argument('--repository', required=True)
             sub.add_argument('--receipt', required=True)
     args = parser.parse_args()
-    if args.command in {'publish', 'operate-download'} and not 1 <= args.timeout_seconds <= 1200:
-        parser.error('timeout-seconds must be 1..1200')
+    if args.command == 'publish' and not 1 <= args.timeout_seconds <= 2400:
+        parser.error('publish timeout-seconds must be 1..2400')
+    if args.command == 'operate-download' and not 1 <= args.timeout_seconds <= 1200:
+        parser.error('operate-download timeout-seconds must be 1..1200')
     if args.command == 'prepare':
         result = prepare(args.qualification, args.assets, args.source_commit, args.papers)
     elif args.command == 'publish':
