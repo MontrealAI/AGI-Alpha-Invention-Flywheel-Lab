@@ -15,7 +15,9 @@ def option(ident='delivery', upfront=100, central=300, adverse=200, later=20, be
             'future_net_cash': {'central': central, 'adverse': adverse},
             'benefit_ids': [benefit or ident + '-customer-outcome'], 'requires': [],
             'exclusive_group': None, 'authorized': True, 'evidence': 'declared outcome/cost scenario',
-            'execution': {'job': ident}}
+            'execution': {'job': ident, 'job_id': 'fixture-job-' + ident,
+                          'customer_id': 'fixture-customer-' + ident, 'payment_bps': 0,
+                          'payment_fixed_microUSD': 0, 'onboarding_microUSD': 0}}
 
 
 class AdaptiveAllocationTests(unittest.TestCase):

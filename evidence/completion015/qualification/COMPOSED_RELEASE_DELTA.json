@@ -1,9 +1,9 @@
 {
   "schema": "agi-alpha/completion015-composed-release-delta/v2",
-  "registered_utc": "2026-10-30T21:07:51.075536+00:00",
+  "registered_utc": "2026-10-30T21:16:32.687668+00:00",
   "economic_evidence_source_commit": "9354d76a7033e8958968cde4469cdd71ea870a21",
   "economic_evidence_source_sha256": "abc262bf80741f36db2872330c2d4f5166c48d313143c239d440e3cd2143b9a4",
-  "release_qualification_source_sha256": "068cad28d070e7458a834c1048e81f65538786a6fdaf15bf05f05cda1a3fe7ef",
+  "release_qualification_source_sha256": "12ecd3c5d48b63267075d49683bd2ed6498472397be5467deeb2a0faea452276",
   "changed_or_added_identity_files": {
     ".github/workflows/connected014-release.yml": {
       "before_sha256": "abec569a68521167883e2fcc18f92871c3da60a0f0cab9ad2e1b4d71bdf57c5b",
@@ -21,6 +21,10 @@
       "before_sha256": "89232200c542f715a40090f8c2f025aceb3f0b3d47b449664217cba267b512e2",
       "after_sha256": "401673cd95cc5564a8b5bbbac93da4de8c5db635407e536f7be06ad31b108842"
     },
+    "tests/test_adaptive_allocation.py": {
+      "before_sha256": "413108dd92913fec3b06f4fd72fdc9891e8b4ec372bfd56ce7c6acc874fa7f6e",
+      "after_sha256": "741a935a308b1815a1ae63303d4b7f1a0a7e7e2a43e807ad40df9ce6b9fcdc36"
+    },
     "tests/test_adaptive_resource_resolution.py": {
       "before_sha256": null,
       "after_sha256": "0b7e57636a56e6b4e2653ab0e2114acf3396da59a397fda66ac72cc3afdb25be"
@@ -30,13 +34,14 @@
       "after_sha256": "e6c1b17a7417521d09941e5e67712e86d9cd998418a7565770c50401e4d92e37"
     }
   },
-  "unchanged_original_identity_files": 130,
+  "unchanged_original_identity_files": 129,
   "release_identity_files": 136,
   "source_changes": [
     "Release wrapper: bounded exact-main gating, kernel self+waited-child CPU measurement, independently audited actual-run key-free archive retention and regressions.",
     "Account financial safety: explicit upfront/selected resource obligations reconciled at every finish/audit/export/reopen; exact aggregate costs; unsupported top-only commitments reject before funds/proof.",
     "Failed reservation authorization: only a newly created proof from a provably noncommitted business rejection may be removed; qualified lease, unchanged full native export/last-day/tape and healthy persistence required; prior/interrupted/ambiguous authority retained.",
-    "Typed finishability admission: bounded unique resource IDs/kinds and execution fields, valid delivery fee terms and the existing canonical native job map are checked before proof/funds; audit, export, reopen and resolution share that boundary. Growth kinds remain extensible."
+    "Typed finishability admission: bounded unique resource IDs/kinds and execution fields, valid delivery fee terms and the existing canonical native job map are checked before proof/funds; audit, export, reopen and resolution share that boundary. Growth kinds remain extensible.",
+    "Pure allocation test fixtures migrate to explicit symbolic delivery fields with zero fee/context terms. Existing costs, payoff/objectives, caps and assertions remain unchanged; no financial guard is relaxed. Exact f214 hosted failure and before/after focused results are retained."
   ],
   "unchanged_economic_mechanism": "All service executors/checkers, buyer incentives/budgets/choices, offers/prices, channel/capacity terms, cost envelopes, learning rules, event clock, protocol, cases and seeds are byte-identical. Financial guards are strengthened, not claimed unchanged.",
   "historical_impact": {
@@ -51,10 +56,10 @@
     "Historical009/010 publisher and frozen-qualification provenance routed to genuine immutable release sources; current qualification remains required.",
     "README exposes one canonical run/audit/resume path; reports/qualification/impact evidence are explicit about scope."
   ],
-  "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.266379048 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment.",
+  "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.305020239 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment.",
   "financial_qualification": {
     "path": "evidence/completion015/financial-repair/CONTRACT_SHAPE_QUALIFICATION.json",
-    "sha256": "5903d2b08e245ca2bb6a459354684f60c5374859586efd97e438d44cbe7a04a8",
-    "status": "17 current-source narrow regressions and independent static review pass; prior36+28guard/recovery checks preserved; all exact composed-head workflows remain required."
+    "sha256": "e66514c0f747449f5b6ea86b9738bc75ba0b80585cd09785af342ca74bac758c",
+    "status": "17 final financial-source narrow regressions and29 release-wrapper regressions passed;8 allocation tests reproduce5 schemaerrors before fixture migration, then8pass with guardbyte-identical. Independent fixture review confirms only required execution fields changed. All exact composed-head workflows remain required."
   }
 }
