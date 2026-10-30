@@ -1,0 +1,26 @@
+{
+  "accepted_arithmetic_claim": false,
+  "all_selector_counts_satisfy": false,
+  "candidate_count": 89,
+  "checker_sha256": "b895a0bf541d2f336d231bb24816c598273214c464bbf98f5cadd62c34754016",
+  "combined_maximum_allowed": 8,
+  "contract_sha256": "2a52ebe66b553a6951d50c9daa963ffab65e9a176d02e3c4271efaad7cd44a7c",
+  "decision": "REFUSED_INCOMPATIBLE_COUNT_CONSTRAINTS",
+  "evidence_state": "ORIGINAL_FROZEN_PROTOCOL",
+  "maximum_count_from_reduction": 8,
+  "maximum_retained_explicit": 10,
+  "minimum_reduction_exact_fraction": "9/10",
+  "requested_claim": "possible",
+  "schema": "agi-alpha/protocol-preflight007/v1",
+  "scope": "Checks exact count-constraint arithmetic only. It does not certify actual tie counts, truth retention, statistical coverage, beneficiary utility, source validity, chemical identification, economic feasibility or an invention-policy improvement.",
+  "selector": {
+    "k": 10,
+    "kind": "tie_inclusive_top_k"
+  },
+  "selector_basis": "A tie-inclusive first-k shortlist includes at least min(k,N) and may include all N when scores tie.",
+  "selector_possible_count_interval": [
+    10,
+    89
+  ],
+  "some_selector_count_can_satisfy": false
+}

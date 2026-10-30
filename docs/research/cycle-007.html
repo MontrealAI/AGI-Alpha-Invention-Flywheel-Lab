@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Vincent Boucher, President of MONTREAL.AI" />
+  <meta name="dcterms.date" content="2026-10-30" />
+  <title>A Library-Free Chemical Elucidation Probe and Its Unclosed Enabling Gap</title>
+  <style>
+    html {
+      font-size: 10pt;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: Maroon;
+    }
+    a:visited {
+      color: Maroon;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <style>body{max-width:78ch;margin:3rem auto;padding:0 1.2rem;font:17px/1.65 system-ui,sans-serif;color:#172033}h1,h2,h3{line-height:1.2;color:#162b4a}table{border-collapse:collapse;width:100%;font-size:.9em}td,th{padding:.5rem;border-bottom:1px solid #ccd3dc;text-align:left;vertical-align:top}code{overflow-wrap:anywhere}pre{overflow:auto;background:#f2f4f7;padding:1rem}a{color:#174b88}img{max-width:100%}@media print{body{max-width:none;margin:0}}</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">A Library-Free Chemical Elucidation Probe and Its
+Unclosed Enabling Gap</h1>
+<p class="author">Vincent Boucher, President of MONTREAL.AI</p>
+<p class="date">30 October 2026</p>
+</header>
+<h2 id="abstract">Abstract</h2>
+<p>The requested result is a new means of discovery or production that
+opens consequential work beyond competent existing methods, followed by
+accepted delivery, complete-cost surplus and earned-funded successor
+construction. This campaign has not achieved it. After early
+conventional routes removed two software gaps, the investigation moved
+to chemical identification outside a reference library. Real
+source-bound mass spectra were acquired and a runnable conventional
+baseline was executed before claiming invention. An initial 27-record,
+three-identity collision-energy study was already resolved by ordinary
+entropy matching at one recorded energy. The library-free probe then
+combined MAYGEN constitutional-graph enumeration with local MetFrag
+fragmentation scoring on two source-verified anonymous queries of
+formula C7H17N. All 89 generated graphs were independently verified and
+scored, but the truths remained in top-score tie sets of eight and
+twelve at every tested depth. The registered primary criterion was
+internally impossible and is adjudicated UNKNOWN_INVALID_CRITERION. No
+new enabling construction or independently useful chemical delivery is
+qualified at this checkpoint.</p>
+<p>The work preserves a distinct reusable effect-factorization compiler,
+its 90-check finite verification, a real streaming adapter and technical
+transfer, strictly as supporting engineering. The accepted compatibility
+report entered a 15-check simulated exchange; its canonical JSON content
+matched the accepted report, but raw byte identity did not, and the
+exact-byte claim remains unqualified. No buyer cohort, supported price,
+complete-cost crossing or qualified simulated earnings was established.
+The prior release’s small identity gap was separately closed without
+rewriting the original overrun. This paper records the executed
+scientific probe, supporting constructions, unresolved obligations and
+bounded continuation; publication is not completion of the invention
+mission.</p>
+<h2 id="outcome-authority-and-inherited-failures">1. Outcome, authority
+and inherited failures</h2>
+<p>An invention flywheel requires an evidenced beneficiary outcome, an
+enabling instrument, independent acceptance, rational buyer and operator
+participation, complete-cost surplus, unrestricted earned funds and
+additional construction that benefits fresh work. These links must
+concern the same useful capability. Results from unrelated
+demonstrations cannot be joined into a fictitious commercial
+achievement.</p>
+<p>The starting revision was
+<code>cd90c81ab757a7042bf4d0384e8e1a7e6c2a9557</code>, the merge of Lab
+PR #10. Strong ridge controls defeated that campaign’s primary predictor
+criterion, ordinary reuse tied inheritance, and neither a commercial
+cohort nor earned-funded compounding was established. Its
+developer-supplied group averaging was a conventional symmetry repair.
+All original sources, failures and releases remain intact. No new
+predictor development or confirmation was conducted; any required
+historical CI replay retains its exposed reproduction status.</p>
+<p>The 30 October instruction authorized public implementation, bounded
+experiments, ordinary reviewed publication and simulated commerce. It
+excluded new spending, paid provider calls, customer outreach, real
+transfers, credential grants, broader access, deletion of unique
+evidence and weakened safeguards. The fresh allocation began at 04:40
+UTC: 90 wall minutes, a 12,000 CPU-second capacity, 4 GiB additional
+storage and an 8 GiB network-receive limit. Development stops at 05:40
+UTC, reserving 30 minutes for reproduction and publication before 06:10
+UTC. These are limits, not measured costs. Earlier read-only inspection
+and a separately authorized prior identity audit are reported
+separately.</p>
+<p>One lead connected opportunity research, construction, verification,
+economics and release work. The roles shared a model family, libraries,
+host and filesystem. Verification is procedurally separate, not external
+certification or an operating-system-enforced information barrier.
+Exposed cases remain exposed across subsequent runs.</p>
+<h2 id="screen-falsification-and-the-consequential-redirection">2.
+Screen, falsification and the consequential redirection</h2>
+<p>Three materially different possibilities were screened before
+executable commitment: physical lead service-line verification,
+accessible PDF delivery, and behavior-preserving dependency migration.
+EPA and Philadelphia sources establish physical-observation obligations
+for hidden pipes; W3C and Canadian guidance establish semantic and
+assistive-technology obligations for PDF delivery. Neither complete
+field access nor complete assistive-technology acceptance was available.
+Those possibilities remained unadmitted rather than receiving simulated
+substitutes counted as real delivery.</p>
+<p>The cheapest executable dependency probe reproduced a break after an
+httpx-only bump. The original pinned environment passed nine upstream
+documentation tests; the direct bump failed during test collection
+before test assertions executed. An ordinary coordinated
+FastAPI/Starlette upgrade passed all nine without changing them. A
+separate frozen verifier then passed 18 upstream tests and 34 additional
+behavior checks across original and upgraded environments, with zero
+skips. Thus the complete conventional route removed the proposed gap.
+Compatibility does not qualify vulnerability remediation or production
+support.</p>
+<p>A streaming-lifetime probe likewise found that ordinary explicit
+commit plus request-scoped cleanup satisfied both
+durability-before-response and resource-live-through-stream obligations.
+These results are preserved as supporting machinery, not relabeled a
+consequential flagship.</p>
+<p>The investigation was redirected to analytical teams facing unknown
+reaction products, impurities or natural products outside spectral
+libraries. The beneficiary outcome is a defensible structural assignment
+from admissible measurements, with unresolved alternatives and
+downstream responsibilities stated. Candidate enumeration, fragment
+ranking and a source-authenticated peak list are useful components; none
+alone is that complete delivery.</p>
+<h2 id="real-data-access-and-the-library-matching-falsifier">3.
+Real-data access and the library-matching falsifier</h2>
+<h3 id="source-and-cohort-admission">Source and cohort admission</h3>
+<p>The initial scientific probe used MassBank data pinned at
+<code>d4cccb5b6756bb14d52568c82720dde1dd3d42e1</code>. Metadata
+selection preceded intensity matching. It fixed full InChIKey identity,
+formula, ion mode, adduct, precursor, exact instrument string and
+fragmentation field. The selected C19H29NO2 group contains three full
+identities at nine common exact nominal-percent collision-energy
+settings, all measured on the reported Exploris 240 Orbitrap under
+positive [M+H]+ HCD conditions. All 27 records were retained.</p>
+<p>The separate verifier checked their exact Git objects, all peak
+values, metadata, coverage, authorship and licenses. The observations
+JSON is bound to SHA-256
+<code>dc2b68d35fec47c16c4a5b2805cd6f1d8c415a91f1095d893d6abed1e771a7a1</code>.
+Reported standard-compound confidence is source attribution, not new
+chemical authentication.</p>
+<p>Every identity-energy cell has one record. Distinct accessions, dates
+or peak hashes do not establish independent injections. There is no
+independent query replicate, and all 27 records are explicitly
+development data. Nominal percentages were not globally converted into
+eV; scaled, ramped and other energy protocols were not silently
+equated.</p>
+<h3 id="strong-ordinary-baseline">Strong ordinary baseline</h3>
+<p>The baseline executed maintained ms-entropy 1.5.3 with 0.02 Da
+matching tolerance and default cleaning. The verifier independently
+parsed raw records and reproduced all nine similarity matrices to within
+1e-10 using the same disclosed library. An ordinary single higher-energy
+record already separates the three exact reference profiles. This
+falsifies the noiseless closed-library enabling-gap hypothesis.</p>
+<p>Self-matching is not unknown-sample accuracy. Threshold sensitivities
+from 0.90 to 0.99 are numerical probes, not calibrated noise or
+identification guarantees. Replaying a recorded energy is simulated
+acquisition, not a new physical experiment; an energy-setting count is
+not an established injection count, scan count or cost. The published
+longitudinal-fragment-profile method was inspected as prior art, but its
+unavailable complete plasma pipeline was not claimed as an executed
+comparator.</p>
+<h2
+id="library-free-constitutional-elucidation-the-executed-baseline">4.
+Library-free constitutional elucidation: the executed baseline</h2>
+<h3 id="outcome-and-available-information">Outcome and available
+information</h3>
+<p>The distinct question was whether candidate structures could be
+constructed without retrieving the desired answer from a reference
+library, then distinguished using the measured fragments. Two anonymous
+C7H17N queries each contain nine source-derived energy observations. The
+separate verifier matched all 18 records to the pinned source while
+initially holding back their full constitutional structures. Formula and
+measured peaks were admissible builder inputs; concealed labels were
+reserved for the subsequent truth audit.</p>
+<p>This is a bounded constitutional-graph population. It does not
+establish stereochemical elucidation, mixture deconvolution, structure
+authentication or general unknown-impurity identification. The two
+source-reported standards are not fresh physical acquisitions or a
+statistically representative industrial cohort.</p>
+<h3 id="executed-conventional-construction-path">Executed conventional
+construction path</h3>
+<p>The ordinary baseline uses MAYGEN 1.8 to enumerate formula-compatible
+constitutional graphs into SDF, then MetFrag 2.6.11 against that local
+generated file. Candidate generation uses no queried structure database.
+This is a competent formula-to-fragment route, not a qualification of
+the strongest complete physical elucidation service. Unexecuted current
+commercial or AI-native routes are not presumed to fail. The tool
+binaries, source URLs, versions and licenses are pinned; MAYGEN is
+MIT-licensed and the MetFrag release is LGPL-2.1-or-later.</p>
+<p>For each query, positive intensities are normalized within energy
+observations, pooled and clustered within 0.001 Da by the registered
+implementation. MetFrag receives the neutral formula and monoisotopic
+mass, local SDF, 0.001 Da absolute and 5 ppm relative fragment
+tolerances, positive ion mode and FragmenterScore. Depths 2, 3 and 7 are
+separately identified development settings; no successful depth is
+silently substituted for failed runs.</p>
+<p>Each process is bounded to two active processors, 1 GiB Java heap, 90
+CPU seconds and 90 wall seconds. Local fragmentation is configured
+without a usable network proxy. The process records stdout, stderr,
+settings, peaks, SDF, source identities, exit state and measured
+resources. Tool setup and complete monetary cost remain separate.</p>
+<h3 id="executed-result-and-interpretation">Executed result and
+interpretation</h3>
+<p>MAYGEN generated 89 constitutional graphs. An independent Python
+Prufer/tree enumeration, separate from MAYGEN/CDK, produced the same
+complete graph universe. All 89 graphs were scored for each query and
+both held-back constitutional truths were included. The three declared
+MetFrag depths produced the same observed ambiguity:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>MetFrag depth</th>
+<th>q01 true rank interval / top-score tie</th>
+<th>q02 true rank interval / top-score tie</th>
+<th>Complete enumeration and scoring</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2, 3 and 7</td>
+<td>1-8 / 8 graphs</td>
+<td>1-12 / 12 graphs</td>
+<td>89/89 for each query</td>
+</tr>
+</tbody>
+</table>
+<p>Both truths receive score 1.0, but neither is uniquely identified.
+The top-score tie sets are descriptive results, not calibrated coverage
+or posterior probabilities. This establishes residual ambiguity for the
+tested local fragmentation score, not failure of all conventional
+chemistry or proof that a new measurement instrument works.</p>
+<p>The original registered primary endpoint was internally incompatible.
+It required a tie-inclusive first-ten-rank shortlist and at least 90%
+reduction from 89 candidates; the first condition retains at least ten
+candidates, while the second requires at most eight. Literal false
+fields in the original reports remain preserved but cannot serve as a
+scientific falsification. The adjudicated primary decision is
+UNKNOWN_INVALID_CRITERION. The valid descriptive counts above are kept
+separate; no favorable replacement endpoint or new confirmation budget
+is introduced after exposure. The verifier then constructed an exact
+rational-arithmetic preflight guard, with six passing tests. Running it
+on the unchanged original contract refuses the incompatible 10-versus-8
+counts. A prospective first-rank proposal is only arithmetically
+possible, not guaranteed under ties, and remains unrun on fresh
+evidence. This repairs a research-process guard; it is
+developer/verifier-authored and establishes no autonomous policy
+advantage or chemical enabling capability.</p>
+<p>The initial rank parser also refused explicit hydrogen atoms in the
+MetFrag SMILES before interpreting Score fields or computing truth
+ranks. Its replacement validates hydrogen degree and heavy-atom valence,
+removes explicit hydrogens for constitutional canonicalization, and
+verifies all 89 graphs against the independently checked SDF universe
+before rank interpretation. Original refusals and repaired parser
+identities remain preserved. Source labels and all truth outcomes are
+now exposed; any subsequent adaptation uses development evidence.</p>
+<p>The current answer to whether a new consequential enabling
+construction is qualified is <strong>no</strong>. A conventional failure
+can specify a missing instrument, but does not demonstrate that a
+proposed repair works. A conventional success removes the claimed gap.
+Neither outcome licenses a profitable business or beyond-human-foresight
+claim.</p>
+<h2 id="construction-retained-as-supporting-engineering">5. Construction
+retained as supporting engineering</h2>
+<p>The separate lifetime instrument takes typed acquire, prepare,
+durable, consume and release effects, coupled blocks and explicit
+factorization permissions. It computes role mappings, searches block
+arrangements, separates authorized compound effects, and generates
+executable plans and a reusable operator. A real SQLite/ASGI adapter
+executes the generated before-consume plan, streams from a live resource
+and cleans up at request exit. Four development cases pass: success,
+actual deferred commit failure, midstream failure and injected midstream
+interruption. Partial output is never accepted as full delivery.</p>
+<p>Operation semantics, donor roles, constraints, grammar and search
+code were developer supplied. Misleading names do not drive
+correspondence. This is bounded executable adaptation, not an autonomous
+discovery of a new mathematical principle. Plans execute through at most
+five fixed capabilities and 64 bounded string values; no generated
+Python, shell, network access, dynamic imports or caller-selected paths
+are allowed.</p>
+<p>Criticism reproduced a qualification defect: initial consumption
+faults occurred before any emitted record, so they did not test
+partial-delivery cleanup. The typed repair obligation required faults
+after a visible chunk, preservation of early-failure tests, exactly-once
+release and truthful partial-output status. Original source, reproduced
+traces, repaired source and results are retained. Injected exceptions
+are not actual process cancellation.</p>
+<p>The frozen separate temporal verifier passed 90 finite checks,
+including 13 real executions, handle instrumentation, retained
+SQLite/file bytes, malformed specifications, stale or forged plans,
+corruption and applicability failures. Its panel remapped an in-memory
+generated operator; that alone is not persistent memory retrieval. The
+separate transfer runner performs actual retained-file acquisition,
+retrieval, remapping, construction and execution on a file-domain
+successor.</p>
+<p>The actual retained-file path acquired one source-bound record,
+retrieved it with no retrieval failures, remapped it to a fresh
+framed-file export and executed that construction. The frozen old
+toolbox could not construct a valid unsplit plan; inherited retrieval,
+equal-content ordinary reuse, reset with equal tools and explicit
+conventional split all accepted the same output. The complete transfer
+runner used 0.043 wall seconds and 0.019 process CPU seconds. This tiny
+authored file task is a technical transfer check, not a consequential
+chemistry successor or earned-funded construction.</p>
+<p>The explicit conventional split meets the same contract, and
+equivalent-content ordinary reuse ties the remapped content. A
+successful transfer is reusable content; it does not establish
+competitive or after-cost experience benefit. No learned
+discovery-policy improvement is credited to developer-authored search
+code. Technical successor work uses the research allocation, not
+qualified commercial earnings.</p>
+<h2 id="independent-demand-complete-obligations-and-economics">6.
+Independent demand, complete obligations and economics</h2>
+<p>Analytical elucidation is consequential and commercially offered.
+Northwestern IMSERC describes small-molecule identification using MS and
+NMR. Oregon State offers full elucidation with instrument and staff
+charges; its concentrated example acquires six standard spectra in under
+one hour. NorrChemica lists a conditional EUR 599 HRMS/proton/carbon-NMR
+assignment package and EUR 150 rest-of-world order fee; full elucidation
+requiring additional two-dimensional experiments remains quote-only.
+These are distinct obligations, not a universal EUR 749
+unknown-structure guarantee. Vendor testing ranges with unspecified
+currency are not converted into precise prices.</p>
+<p>A complete strong route may require isolation, physical measurements,
+suitable standards, interpretation, competing-structure checks,
+uncertainty and a report. An ordinary LC-MS/MS sample tariff cannot
+price that entire service. ICH/FDA impurity guidance establishes
+product-specific identification and qualification responsibilities; it
+grants no regulatory or manufacturing-release qualification to this
+software.</p>
+<p>No frozen loss-making customer cohort, committed buyer, realized
+purchase or supported AGI ALPHA price exists. Value created for a
+chemist, benefit to a buyer and revenue captured by this enterprise
+remain separate. Free tools, competent physical/software combinations
+and non-entry remain admissible alternatives.</p>
+<p>For price P, paying count q, refund fraction r, recorded cost lower
+bound L and remaining complete cost K, a necessary profit condition
+is:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>P</mi><mo>−</mo><mi>L</mi><mo>−</mo><mi>K</mi><mo>&gt;</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+q(1-r)P - L - K &gt; 0.
+</annotation></semantics></math></p>
+<p>The evidence provides no finite upper bound for K. It includes
+inference, failed search, acquisition, construction, verification,
+integration, deployment, storage and bandwidth, maintenance, support,
+disputes, fees, financing and terminal obligations. A missing bill is
+not zero. Participation must also beat alternatives after trust
+discounts, switching, procurement and risk. Negative-to-positive
+complete-cost crossing, investment attractiveness and value capture
+therefore remain UNKNOWN.</p>
+<p>The supporting compatibility offering was separately bound to its
+limited technical receipt and passed 15 simulated exchange checks. All
+six fixture inputs remain in the record. Four arbitrary one-dollar
+simulated releases collected four dollars before correlated reversals;
+final collections and unrestricted earnings were zero. No unknown
+lifecycle expenses were posted, so intermediate ledger profit was
+partial fixture accounting. Strict post-reserve earned control was zero
+even before reversal.</p>
+<p>A separate criticism establishes a delivery-identity defect: the
+accepted report had 11,303 raw bytes, while the released canonical JSON
+had 6,008 bytes. Parsed content matched but raw hashes did not. The 15
+checks qualify declared canonical-content and settlement behavior; the
+exact-byte claim is false and remains unqualified. Original source and
+receipts are preserved. The scientific query received no buyer
+acceptance or earnings from this unrelated compatibility exercise.</p>
+<p>Qualified simulated earnings are zero. Opening capital, custody,
+borrowing and reserve releases cannot fund a claimed commercial
+successor. Earned-funded capability construction is UNRUN. No real
+outreach, order, payment or live commercial success occurred.</p>
+<h2 id="verification-resources-and-publication-identity">7.
+Verification, resources and publication identity</h2>
+<p>Scientific source checks use separate parsers and original Git
+objects. The ordinary entropy replay shares the underlying
+algorithm/library, and all roles share infrastructure. Procedural
+separation is disclosed. Source-derived labels are not independent
+chemical authentication, and replaying exposed measurements is not
+protected physical confirmation. Statistical alpha spent is zero; no
+population-superiority claim or reset of historical error is
+asserted.</p>
+<p>The prior four-CPU-second audit remains historically unqualified. A
+separate new 120-CPU/150-wall identity audit verified thirteen published
+assets (216,893,436 bytes), all 6,364 archive payloads and 6,363 frozen
+sources against external digests. It used 5.605 measured CPU seconds
+including download and supervision. Original failures and the old
+release are unchanged; no predictor ran. The source-bound receipt and
+full accounting remain in the evidence manifest.</p>
+<p>Receipts record prospective bounds, conservative reservations,
+wall/CPU usage and output bytes, including failed setups and incomplete
+commands. Per-process limits do not establish full-host or descendant
+accounting. Initial setup, actor inference, infrastructure and CI remain
+incompletely priced; missing costs are not zero.</p>
+<p>The final local connected reproduction passed against the externally
+pinned 92-file freeze: 17 unit tests, 90 exposed lifetime checks, six
+ordinary and four generated ASGI cases, actual and independently
+replayed spectra, fresh original/upgraded compatibility environments
+with 18 upstream tests and 34 behavior checks, conditional exchange, and
+all six Java query/depth outputs. The driver recorded 39.801 wall
+seconds; its separately timed chemistry subprocess consumed 56.317
+waited-child CPU seconds across bounded parallel work, and parent self
+CPU was 0.358 seconds. These quantities must not be added to enclosing
+totals again. The pre-publication workspace snapshot was 1,437,518,064
+bytes including inherited source and reproducible tools; full monetary
+and host-wide costs remain unknown.</p>
+<p>Publication review reproduced an early wrapper import and an archive
+reread race. New versions verify source before importing the wrapper and
+digest/extract one captured archive snapshot with exact payload
+coverage. Original defects remain preserved. A repaired identity-layer
+probe passes but stubs runtime; it does not replace the full
+reproduction. Hosted CI and actual release-artifact qualification remain
+separately pending at manuscript freeze.</p>
+<p>The LaTeX, PDF, browser HTML and native GitHub Markdown editions are
+bound to the same evidence manifest. Mechanical binding and visual QA do
+not certify the truth of scientific or economic claims. Exact-head
+tests, ordinary review, normal merge and published-package
+extraction/reproduction remain separate qualification steps; historical
+assets are not rewritten.</p>
+<h2 id="decisions-and-bounded-continuation">8. Decisions and bounded
+continuation</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Required decision</th>
+<th>Status at this checkpoint</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Engineering qualification</td>
+<td>Scoped checks pass; package separate.</td>
+</tr>
+<tr class="even">
+<td>Consequential enabling capability</td>
+<td>Not established; no qualified new means.</td>
+</tr>
+<tr class="odd">
+<td>Combination benefit</td>
+<td>Conventional combination ties.</td>
+</tr>
+<tr class="even">
+<td>Experience benefit</td>
+<td>Ordinary reuse and reset tie.</td>
+</tr>
+<tr class="odd">
+<td>Conditional commercial viability</td>
+<td>Unknown; no admitted cohort or complete costs.</td>
+</tr>
+<tr class="even">
+<td>Investment attractiveness and AGI ALPHA capture</td>
+<td>Unknown; alternatives remain admissible.</td>
+</tr>
+<tr class="odd">
+<td>Qualified simulated unrestricted earnings</td>
+<td>Zero.</td>
+</tr>
+<tr class="even">
+<td>Earned-funded successor benefit</td>
+<td>Unrun; no qualified earnings.</td>
+</tr>
+<tr class="odd">
+<td>Live commercial success</td>
+<td>Unrun; no real orders or transfers.</td>
+</tr>
+</tbody>
+</table>
+<p>Install the pinned free dependencies and execute into new paths:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> pip install <span class="at">-r</span> requirements-cycle007.txt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> run_cycle007.py <span class="at">--output</span> /tmp/alpha007-reproduction-NEW <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--expected-freeze-sha256</span> <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  0001664b875aec9854e6cd033a97b28d80bc47bfa9a515b63c037db7e0598834 <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--with-compatibility</span> <span class="at">--chemistry-tools-dir</span> /tmp/alpha007-tools-NEW <span class="dt">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--download-tools</span></span></code></pre></div>
+<p>Obtain the expected digest through the trusted versioned GitHub paper
+or release channel separately from the archive being checked. Copying a
+hash from an untrusted archive does not establish external authority.
+The command verifies that supplied identity before candidate imports and
+rechecks source identities at completion. It reproduces exposed cases;
+it does not create new scientific confirmation or replenish the error
+budget.</p>
+<p>The next action must follow the measured de novo baseline, not
+another architecture. If ambiguity survives its strongest complete
+route, freeze the exact missing observation or constructive defect,
+build the smallest instrument that could remove it, and test its effect
+on independent acquisitions under the same obligations. If the
+conventional route meets the objective, retain it and do not force
+flagship status. New resource or access needs must be stated precisely;
+this checkpoint does not imply a background continuation.</p>
+<h2 id="references-and-evidence-map">References and evidence map</h2>
+<p>All public-source observations are dated 30 October 2026 unless
+explicitly historical. Original authors, record licenses and exact tool
+identities remain with the source data. The final input manifest
+provides file-level hashes and a stable source anchor.</p>
+<ul>
+<li>MassBank, <a href="https://github.com/MassBank/MassBank-data">source
+data</a>; pinned source revision and original records are reproduced
+with attribution.</li>
+<li>MAYGEN, <a
+href="https://github.com/MehmetAzizYirik/MAYGEN">constitutional
+structure generator</a>; MetFrag, <a
+href="https://github.com/ipb-halle/MetFragRelaunched">local
+fragmentation and ranking</a>.</li>
+<li><a
+href="https://github.com/academicCQMD/LongitudinalProf-MSMS-Method">Longitudinal
+MS/MS prior art</a>; unavailable full-pipeline execution is
+disclosed.</li>
+<li>Northwestern <a
+href="https://imserc.northwestern.edu/services-nmr-se.html">structure
+elucidation</a>; Oregon State <a
+href="https://nmr.science.oregonstate.edu/small-molecule-characterization">small-molecule
+characterization</a>; NorrChemica <a
+href="https://www.norrchemica.com/pages/nmr-service">current service
+scope</a>.</li>
+<li>FDA, <a
+href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/q3ar-impurities-new-drug-substances">Q3A
+impurities guidance</a>.</li>
+<li>FastAPI, <a
+href="https://fastapi.tiangolo.com/advanced/advanced-dependencies/">dependency
+lifetime semantics</a>; its documentation and tests are supporting
+comparator evidence.</li>
+<li>Source-bound records: opportunity screen, MassBank
+admission/source/baseline reports, de novo input/tool/enumeration/truth
+receipts, temporal and compatibility reviews, economic identity
+adjudication, all original failures, resource ledger and reproduction
+receipt.</li>
+</ul>
+<p>Stable experimental source anchor: <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/15ee8b0fed9e50db4c3e4a3680bfc00c78287307">15ee8b0fed9e50db4c3e4a3680bfc00c78287307</a>.</p>
+<p><a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/15ee8b0fed9e50db4c3e4a3680bfc00c78287307/campaign/cycle-007/ALLOCATION.json">Recorded
+allocation and authority</a>; <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/15ee8b0fed9e50db4c3e4a3680bfc00c78287307/campaign/cycle-007/OPPORTUNITY_SCREEN.json">Opportunity
+screen</a>; <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/15ee8b0fed9e50db4c3e4a3680bfc00c78287307/evidence/cycle-007/massbank-source-verification/REPORT.json">MassBank
+source qualification</a>; <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/15ee8b0fed9e50db4c3e4a3680bfc00c78287307/evidence/cycle-007/massbank-baseline-verification/REPORT.json">Independent
+ordinary spectral baseline</a>; <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/15ee8b0fed9e50db4c3e4a3680bfc00c78287307/evidence/cycle-007/denovo-verification-strong_depth7-v2/REPORT.json">Library-free
+depth-seven truth audit</a>.</p>
+<p><a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/15ee8b0fed9e50db4c3e4a3680bfc00c78287307/verification/cycle007_denovo_CRITERION_ADJUDICATION.json">Invalid-primary-criterion
+adjudication</a>; <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/15ee8b0fed9e50db4c3e4a3680bfc00c78287307/campaign/cycle-007/ECONOMICS_IDENTITY_ADJUDICATION.md">Preserved
+canonical-byte identity defect</a>; <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/15ee8b0fed9e50db4c3e4a3680bfc00c78287307/evidence/cycle-007/reproduction-005/REPORT.json">Complete
+local connected reproduction</a>; <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/15ee8b0fed9e50db4c3e4a3680bfc00c78287307/campaign/cycle-007/DECISION.json">Explicit
+campaign decisions</a>; <a
+href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/15ee8b0fed9e50db4c3e4a3680bfc00c78287307/research/cycle-007/de-novo-demand.md">Prospective
+costs and demand limitations</a>.</p>
+</body>
+</html>

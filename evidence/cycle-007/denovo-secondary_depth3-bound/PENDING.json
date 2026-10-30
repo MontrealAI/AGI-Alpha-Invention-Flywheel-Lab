@@ -1,0 +1,57 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "denovo-secondary_depth3",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/cycle007_denovo.py",
+    "--protocol",
+    "verification/cycle007_denovo_protocol.json",
+    "--freeze",
+    "verification/cycle007_denovo_freeze_secondary_depth3.json",
+    "--groundtruth",
+    "/workspace/scratch/92d546ab6009/verifier-private007/denovo-groundtruth.json",
+    "--sdf",
+    "/workspace/scratch/92d546ab6009/denovo_probe/enumeration/C7H17N.sdf",
+    "--output",
+    "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/denovo-verification-secondary_depth3"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/cycle007_denovo.py",
+    "--protocol",
+    "verification/cycle007_denovo_protocol.json",
+    "--freeze",
+    "verification/cycle007_denovo_freeze_secondary_depth3.json",
+    "--groundtruth",
+    "/workspace/scratch/92d546ab6009/verifier-private007/denovo-groundtruth.json",
+    "--sdf",
+    "/workspace/scratch/92d546ab6009/denovo_probe/enumeration/C7H17N.sdf",
+    "--output",
+    "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/denovo-verification-secondary_depth3"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/cycle007_denovo.py",
+    "--protocol",
+    "verification/cycle007_denovo_protocol.json",
+    "--freeze",
+    "verification/cycle007_denovo_freeze_secondary_depth3.json",
+    "--groundtruth",
+    "/workspace/scratch/92d546ab6009/verifier-private007/denovo-groundtruth.json",
+    "--sdf",
+    "/workspace/scratch/92d546ab6009/denovo_probe/enumeration/C7H17N.sdf",
+    "--output",
+    "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/denovo-verification-secondary_depth3"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/92d546ab6009/lab",
+  "limits": {
+    "wall_seconds": 90,
+    "cpu_seconds": 60,
+    "memory_bytes": 1073741824,
+    "output_bytes": 10485760,
+    "storage_bytes": 31457280
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "pending"
+}

@@ -1,0 +1,96 @@
+{
+  "schema": "agi-alpha-paper007-visual-qa/v1",
+  "pdf_sha256": "816f02210ffae281aac747af57aa59f02a79db2d4e36c639808527269b6ad662",
+  "pages": 7,
+  "inspected_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "passed": true,
+  "reviewer": "Separate release/publication agent on shared model/host; visual review, not external scientific certification.",
+  "reviewed_at_utc": "2026-10-30T05:48:28.292169+00:00",
+  "render_command": [
+    "pdftoppm",
+    "-r",
+    "105",
+    "-png",
+    "docs/research/cycle-007.pdf",
+    "page"
+  ],
+  "rendered_page_sha256": {
+    "1": "6af973fbd389b238e179c738b162e22520631bfdd6b7ba274be67562580668ee",
+    "2": "29bb52044ac194c9d45f7c8b53e6551e592ea1e3b7b9abe77344c293f9e4e1ca",
+    "3": "465b480feeda845bcd9b440f7b06ffc51093c6931499408f4bc43bd94580d0b9",
+    "4": "2d6beac3c5d4e7d6d7830e41e30665d9cc753406bc3b69b56ef270a11b4bd99f",
+    "5": "dee7c8b464fe2cb516d8288488c0b35af4a82a7e272f162d673d70cbf810d0dc",
+    "6": "d44f72f56997860ed433e3e2ec0e2ffe1e412794e8a762fd9bb7d72adc35a314",
+    "7": "abec28a46db36ade1b93b766da6e387a7464fed446f7b866604bc4f4200baf2d"
+  },
+  "checks": [
+    "All seven rendered pages visually inspected; final pages1-5 match inspected pixel hashes exactly, pages6-7 reinspected after final layout edits.",
+    "Consistent readable typography, margins, section hierarchy and page numbering.",
+    "Entire de-novo comparison table and entire decision table fit within their pages.",
+    "Reproduction command is intact on one page; trusted external-digest instruction explicit.",
+    "Displayed profit equation renders as mathematics; no clipping, overlap, missing glyph boxes, dangling table headers or unresolved editorial placeholders.",
+    "No overfull-box or undefined-reference compiler warnings; complete source-bound manuscript and browser edition produced."
+  ],
+  "known_authoring_builds": [
+    {
+      "wall_seconds": 5.991415575990686,
+      "process_cpu_seconds": 0.07611770500000004,
+      "child_cpu_seconds": 5.7352799999999995,
+      "scope": "First clean preliminary build, before source-epoch/layout finalization."
+    },
+    {
+      "wall_seconds": 6.567377647006651,
+      "process_cpu_seconds": 0.06695296900000001,
+      "child_cpu_seconds": 6.367703,
+      "external_model_calls": 0,
+      "complete_monetary_cost": null
+    },
+    {
+      "wall_seconds": 2.28696675899846,
+      "process_cpu_seconds": 0.025646045000000006,
+      "child_cpu_seconds": 2.139064,
+      "external_model_calls": 0,
+      "complete_monetary_cost": null
+    },
+    {
+      "wall_seconds": 3.6281164579995675,
+      "process_cpu_seconds": 0.239940373,
+      "child_cpu_seconds": 3.5019389999999997,
+      "external_model_calls": 0,
+      "complete_monetary_cost": null
+    },
+    {
+      "wall_seconds": 3.166482904998702,
+      "process_cpu_seconds": 0.043834157000000006,
+      "child_cpu_seconds": 3.004923,
+      "external_model_calls": 0,
+      "complete_monetary_cost": null
+    },
+    {
+      "wall_seconds": 2.457705786000588,
+      "process_cpu_seconds": 0.069016314,
+      "child_cpu_seconds": 2.307796,
+      "external_model_calls": 0,
+      "complete_monetary_cost": null
+    },
+    {
+      "wall_seconds": 2.39119381600176,
+      "process_cpu_seconds": 0.022560281,
+      "child_cpu_seconds": 2.2206979999999996,
+      "external_model_calls": 0,
+      "complete_monetary_cost": null
+    }
+  ],
+  "known_build_child_cpu_seconds": 25.277403,
+  "known_build_process_cpu_seconds": 0.5440678440000001,
+  "complete_monetary_cost": null,
+  "scope": "Layout inspection of the final supplied PDF plus declared build resources. Does not certify scientific utility, commercial viability, source authenticity beyond listed hash bindings, or final hosted publication."
+}

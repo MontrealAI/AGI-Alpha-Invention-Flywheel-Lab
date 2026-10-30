@@ -1,0 +1,17 @@
+{
+  "decision": "RETAIN_INCUMBENT_AND_PIVOT",
+  "scope": "Development probe only; nine unchanged upstream FastAPI documentation tests. No protected confirmation, vulnerability qualification, production deployability, or consequential gap claim.",
+  "source_commit": "dd4e78ca7b09abdf0d4646fe4697316c021a8b2e",
+  "source_tag": "0.99.1",
+  "baseline": "FastAPI0.99.1/Starlette0.27.0/httpx0.27.2: nine tests pass",
+  "naive_upgrade": "httpx0.28.1 alone: collection fails TypeError Client.__init__ unexpected app",
+  "strong_route": "Ordinary FastAPI0.110.1 upgrade selects Starlette0.37.2 with httpx0.28.1: same nine tests pass",
+  "causal_conclusion": "Direct isolated upgrade fails; existing documented coordinated dependency upgrade solves the tested contract. This removes this proposed enabling gap.",
+  "residual_gap": "Nine tests do not establish all service behavior, absence of vulnerabilities, current production security or compatibility for unknown third-party applications. No consequential residual defect is established by this probe. A comprehensive behavior/coverage contract on a real blocked service is missing, not assumed.",
+  "measurement_limits": "Step wall includes pip freeze; child CPU excludes pip freeze; initial venv/package setup and source retrieval not timed. No zero total research or model-cost claim.",
+  "step_wall_seconds": 11.735243694012752,
+  "step_child_cpu_seconds": 3.957998,
+  "initial_setup_cost": "UNKNOWN",
+  "money_spent": 0,
+  "paid_api_calls": 0
+}
