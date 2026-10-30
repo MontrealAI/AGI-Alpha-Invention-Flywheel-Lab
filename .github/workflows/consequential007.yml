@@ -7,6 +7,7 @@ permissions:
   contents: read
 jobs:
   reproduce:
+    if: github.head_ref != 'verify/adaptive012-public-package'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

@@ -1,7 +1,7 @@
 name: Adaptive012 published package verification
 on:
-  push:
-    branches: [verify/adaptive012-public-package]
+  pull_request:
+    types: [opened, synchronize]
 permissions:
   contents: read
 jobs:
