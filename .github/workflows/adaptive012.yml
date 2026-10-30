@@ -33,6 +33,12 @@ jobs:
         run: |
           python3 -m adaptive_enterprise run --output "$RUNNER_TEMP/adaptive012-current"
           python3 -m adaptive_enterprise audit --financial-only --output "$RUNNER_TEMP/adaptive012-current"
+      - name: Published package integrity and all native accounts
+        run: |
+          python3 scripts/reassemble_enterprise011.py --manifest artifacts/adaptive012-parts/INDEX.json --output "$RUNNER_TEMP/adaptive012-published.zip"
+          python3 -m zipfile -e "$RUNNER_TEMP/adaptive012-published.zip" "$RUNNER_TEMP/adaptive012-published"
+          cd "$RUNNER_TEMP/adaptive012-published/source"
+          python3 -m adaptive_enterprise audit --financial-only --output "$RUNNER_TEMP/adaptive012-published"
       - name: Clean no-Git route and independent owned financial audit
         run: |
           mkdir "$RUNNER_TEMP/adaptive012-no-git"

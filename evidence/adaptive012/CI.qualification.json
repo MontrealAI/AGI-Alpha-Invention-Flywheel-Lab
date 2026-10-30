@@ -45,11 +45,22 @@
     "audit_cpu_seconds": 1957.342408262
   },
   "public_package_check": {
-    "status": "BOUNDED_HOSTED_RECOVERY_PENDING",
-    "pull_request": 25,
+    "status": "PASSED",
+    "accepted": true,
+    "source_sha256": "805a6e047ec655b161ca1d0e76e4c479af7134b3f3d0a060c9de31f21dc19dcc",
+    "native_worlds_replayed": 160,
+    "operating_replayed": 0,
+    "qualification_scope": "NATIVE_FINANCIAL_ONLY",
+    "maximum_parallel_workers": 4,
+    "audit_cpu_seconds": 534.227341278,
+    "private_signing_keys_required": false,
     "run_id": 41103434448,
     "job_id": 124226082675,
-    "scope": "Full hash/CRC plus160native financial accounts; prior local full160operating replay remains separate."
+    "completed_utc": "2026-10-30T18:05:25.7770434Z",
+    "parts_verified": 20,
+    "archive_bytes": 59775697,
+    "archive_sha256": "29aaa1e6ec81b145753550b3394c1684f503f804e8bc565af404d13e8d92be34",
+    "interpretation": "Public GitHub checkout reconstructed byte-identical original ZIP and verified CRC, then audited all160native accounts from its extracted frozen source. Full160operating replay previously passed locally; do not relabel this hosted financial-only receipt as operating replay."
   },
   "metadata_only_commits": "Skip repeated CI only after frozen source qualification; all business modules and original criteria remain unchanged.",
   "utc": "2026-10-30T18:05:01.824Z"
