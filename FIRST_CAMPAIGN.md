@@ -2,7 +2,7 @@
 
 **IMPORTANT: BLUE SKY. BEYOND-HUMAN FORESIGHT. COMMERCIAL FLYWHEEL SUCCESS.**
 
-**Status: campaign assignment, not an executed opportunity screen or a success claim. Execution requires a recorded allocation within existing authority.**
+**Founding assignment status (historical): campaign assignment, not an executed opportunity screen or a success claim. Execution requires a recorded allocation within existing authority.**
 
 ## The ambition and the first achievement
 
@@ -50,6 +50,10 @@ Choose a protected final confirmation or a valid sequential procedure. Its stopp
 
 ## 4. Test the commercial consequence
 
+**Primary benchmark:** a competently configured **fully autonomous frontier-AI enterprise** using the best appropriate currently available models, tools and agents, versus competent **human-delivered end-to-end work** at realistic human speed and fully loaded wages. Match output, acceptance, research, verification, quality, source rights, confidentiality, deadlines, corrections, support and liability. E's agents autonomously perform research, QA, testing, revisions, customer acquisition, delivery, support, and development/maintenance; model and meter their **actual inference/tool/compute/infrastructure/external-channel/failed-job/payment/risk** costs. **No default human QA hour or fictional human agency staffing is charged to E.** If mandatory licensed human signoff is truly part of the task, either report a separately costed hybrid or mark strict autonomous E unaccepted. Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) and its v2 calculator before making economic claims.
+
+**Secondary comparators:** competent human providers using AI, other autonomous frontier AI providers, free tools/internal self-service and no entry. These test attainable price and competitive robustness, but technical parity with another AI operator does **not** erase the productivity gain against full human labor. Causal retained-invention successor gains remain a third, separate claim. The example selling prices and small modeled costs are hypotheses only; require measured acceptance, acquisition/collection, full lifecycle and authorized resource accounting before calling a service profitable.
+
 Carry a supported construction into useful delivery and a realistic commercial exercise using that same instrument, not an unrelated easy sale. All simulated participation, money and settlement must remain labeled simulated. This document grants no new spending, paid calls, real transactions, outreach or runtime access.
 
 Freeze the cohort, ownership, acquisition timing, functional obligations, horizon, existing-tool access and sunk-cost treatment. Account for every admitted input, including rejects, failures, rework, unsold output, idle capacity and terminal obligations. Complementary additions require prespecified admission rules.
@@ -61,6 +65,13 @@ Demand and price need evidence independent of the builder's benefit forecast. Ot
 Charge measured autonomous resources at justified rates, including discovery, failures, construction, inference, verification, integration, delivery, maintenance and risk. Do not invent human agency overhead or equate runtime with full intelligence cost. Unknown costs remain unknown.
 
 Reconcile profit, investment recovery, liabilities, reserves and unrestricted cash. Deposits, borrowing and reserve releases are not operating earnings. Positive profit with insufficient cash must defer investment. Exercise protected exchange with acceptance, payment-gated release or escrow as appropriate, including participation costs, interruption, nonpayment, duplicate settlement and refunds. An idealized custodian is not deployed settlement.
+
+### Commercial flywheel qualification is independent of invention improvement
+
+**The autonomous commercial flywheel is achieved when a fixed-capability, end-to-end autonomous frontier-AI enterprise repeatedly completes and delivers accepted paid work, recognizes collected revenue, covers all costs/obligations and finances additional profitable service with unrestricted earned funds.** Human-equivalent delivery may previously have been profitable; its positive cost gap versus the autonomous service is a market opportunity, not a requirement to prove an initially negative business.
+
+Show real collections separately from simulated funds, trace earnings into additional delivery, and disclose price competition, demand, payment failure and support risk. A retained invention, stronger algorithm, causal successor gain or $40 trillion TAM estimate is *not* a prerequisite for the commercial GO. Evaluate the invention-to-invention flywheel separately in section 5. See [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md).
+
 
 ## 5. Test whether inheritance enables the next construction
 
@@ -77,3 +88,21 @@ Publish a concise decision record, actual source identities, evidence, executed 
 Report separately: enabling technical change; commercial viability; investment attractiveness; AGI ALPHA value capture; unrestricted earned funding; fresh-successor benefit; and complete flywheel. Attach evidence scope to each verdict.
 
 The investigative decision may be CONSTRUCT, CONTINUE_BOUNDED_PROBE, RETAIN_INCUMBENT, PIVOT, STOP or UNKNOWN. Record remaining allocation and continuation. The laboratory advances when evidence changes a consequential possibility and what survives becomes demonstrably useful in creating the next one.
+
+## Current independent commercial lane
+
+Continue the [autonomous commercial mandate](campaign/commercial-010/MANDATE.txt) from exact refreshed source and ownership. Execute ordinary useful work, independently check deliverables, test premium human-anchored prices against strategic buyer alternatives, reconstruct complete cohort cash flows and prove prior unrestricted simulated earnings precede continuation commitments. Invention and Blue Sky are separate optional achievements, never additional commercial gates.
+
+The campaign at commercial-010 preserves the initial small cohort and no-sales development markets, then tests scaled synthetic reconciliation work under frozen finite scenario sets. Use [REPRODUCE.md](campaign/commercial-010/REPRODUCE.md) for the integrated bounded runtime. Prior exposed cases remain engineering replay, with no fresh statistical or observed-revenue claim. The original four reference prices remain hypothetical examples; the later premium-pricing policy controls new offers.
+
+The later [autonomous onboarding and strategic pricing adjustment](campaign/commercial-010/ONBOARDING_PRICING_ADJUSTMENT.md) controls price selection: maximize expected complete-cost contribution and sustainable cash growth under strategic buyer/rival responses. Choose the discount and implied win probability jointly, within the human-anchored premium offer range. A fixed five-percent policy is a controlled baseline, not a universal optimum. Separate actual agent-operated onboarding resources, uncertain customer attention/integration friction, and external obligations; one-time costs persist across repeat orders. Any optimality statement is limited to the modeled information and feasible price set.
+
+## Current executed outcome - 30 October 2026
+
+**Commercial 010: CONDITIONAL_SIMULATED_GO.** Actual autonomous production supplied 19,000 synthetic source rows across 19 orders: 16 deliveries passed the separate checker and three orders were rejected. The completed four-arm experiment supports fixed-capability repeated delivery financed by prior unrestricted simulated earnings; invention improvement is not a prerequisite. See the [machine-readable result](campaign/commercial-010/RESULT.json), [browser-readable paper](docs/commercial010/REPORT.md) and [compiled PDF](docs/commercial010/paper.pdf).
+
+Across the 18 qualification-region cases, mean complete modeled profit is **$375.80**, versus **-$123.14** for fixed-discount/original-onboarding control. Cash survives in 18/18 cases; 13/18 individually qualify, while five lose or fail the repeat-funding conditions. Mean earned-funded continuation is 3.06 cycles. Selected first/repeat prices are $139/$121.625. Settled collections per scheduled slot are 73.61%, versus 76.39% for fixed pricing with autonomous onboarding. Conditional participation wins among arrivals are 81.78% versus 84.76%, and collections per win are 96.36% versus 96.49%; see [metric definitions](campaign/commercial-010/METRIC_DEFINITIONS.md). The objective is expected collected complete-cost profit and sustainable cash, not maximum win rate or the highest advertised price.
+
+This result is conditional on the declared $500 setup/$15 cost-unit scenario, the assumed human comparator of four hours first order and 3.5 hours repeat, and unmeasured assurance/trust and customer-friction differences. Host billing and actual buyer demand remain unobserved. Original no-sale results, both interrupted executions, corrupt storage evidence, immutable source versions and the disclosed I/O-only recovery remain preserved; no favorable seed substitution or global five-verdict AND is introduced.
+
+The separate [guarded portfolio 011 report](campaign/commercial-011/REPORT.md) screens 25 services and technically qualifies four within their declared scopes. Its guarded central projection has median $414,092.53 complete-cost profit, 107 earned-funded cycles and 11,302 settled jobs, with 10/10 cash survival over 120 months from $5,000 seed. Scaled jobs are conditional aggregate projections, not individually executed customer deliveries; finite provider-tail terms are stronger successor assumptions. **The $1 billion trailing-year target is reached in 0/90 fresh projection cases by 120 months.** Actual commerce/live revenue, capability-compounding benefit and Blue Sky enablement remain NOT_ESTABLISHED. Publication, merge and release status must follow actual source-matched gates; these results do not assert a future release is already published.

@@ -1,0 +1,33 @@
+{
+  "accepted": true,
+  "scope": "Actual patchutility forwardapplication andexactrollback againstcapturedsourcebytes; noGitrequired.",
+  "checks": [
+    {
+      "command": [
+        "patch",
+        "--batch",
+        "-p1",
+        "-i",
+        "SOURCE_BOUND_delivery.patch"
+      ],
+      "returncode": 0,
+      "stdout": "patching file run_commercial010.py\n",
+      "expected_sha256": "12e784ff14c5fe02e375ec8b4b3aa2d40eb3438f2c63e9dc20ac237ed4115fd2",
+      "actual_sha256": "12e784ff14c5fe02e375ec8b4b3aa2d40eb3438f2c63e9dc20ac237ed4115fd2"
+    },
+    {
+      "command": [
+        "patch",
+        "--batch",
+        "-R",
+        "-p1",
+        "-i",
+        "SOURCE_BOUND_delivery.patch"
+      ],
+      "returncode": 0,
+      "stdout": "patching file run_commercial010.py\n",
+      "expected_sha256": "f9e13a4fd97219ded15c52c4366316ad8144406afb28c6e987d0d7ea638260fb",
+      "actual_sha256": "f9e13a4fd97219ded15c52c4366316ad8144406afb28c6e987d0d7ea638260fb"
+    }
+  ]
+}

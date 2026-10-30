@@ -1,0 +1,102 @@
+{
+  "schema": "agi-alpha/commercial010-source-freeze/v3",
+  "scope": "SIMULATED",
+  "claim_mode": "FINITE_ENGINEERING_COMPARISON",
+  "frozen_utc": "2026-10-30T14:52:19.158655+00:00",
+  "manifest": "campaign/commercial-010/service/executed-002/manifest.json",
+  "policy": "campaign/commercial-010/POLICY.json",
+  "sources": {
+    "campaign/commercial-010/CALIBRATION.json": "193177bcb0304ea456118c45546985efa712b8e4e1941bfe93bf1958ac2ddd6d",
+    "campaign/commercial-010/ONBOARDING_PRICING_ADJUSTMENT.md": "87324b9e5881aae0bd17aa2d66f5b675722439bc31840e4e66d5e3bb23fa7f3b",
+    "campaign/commercial-010/POLICY.json": "dba429196ea3f7ccfda74f1d7a639a549e803f7b72e19b6c444b5c4e554bccee",
+    "campaign/commercial-010/service/executed-002/manifest.json": "b91c511a8ea416ebf70a5a90bebdd7275643152852472e53df9d103bb514a002",
+    "commercial/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "commercial/ledger.py": "841c0eb69b734acc96a737f2ade9d522b5bbad156b4693d73eabfc19fdca901b",
+    "commercial/market.py": "7fd46dee48344da54ccc01d909ef85e6d713746d9f2555be723e1ac1f30791ae",
+    "commercial/onboarding.py": "68e9fbc6eaaceed9b2678ef604646025c02f6cb77183da9208b729486c5302cf",
+    "commercial/service.py": "1604d20f5d9f54997eeceb971bc19af9a0c76cdcaf79ba74b9bbd80112c9c9a3",
+    "commercial/service_verifier.py": "ac79f1aa80fb5c2928827f08417a720cd041977df70e808860bc3dd4f5d61368",
+    "commercial/verdicts.py": "d0ae18586420c0d59342e11f36c8070c957ceaa1dee798f02bfb474f106753f9",
+    "experiments/commerce006.py": "2fc529131885c75752dab8dbd77d85b5a36d4c0b43cb5e7e53286c997cc0a52f",
+    "experiments/resource006_v3.py": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+    "requirements-commercial010.txt": "d66a7237051eab778196473c326b9418033501ee60b647b6f6194dd6c97f1772",
+    "run_commercial010.py": "12e784ff14c5fe02e375ec8b4b3aa2d40eb3438f2c63e9dc20ac237ed4115fd2",
+    "scripts/run_onboarding010.py": "a2452a779991fae1093756e2a7ec1e305625758fe8c30363c2b56ae8d93a8eb3",
+    "scripts/run_service010.py": "d5c568dfd7c606a6cebf0e426de7fc37964fa4c8efe31926a423871d73086c5a",
+    "vendor/__init__.py": "be8bdfe2c1e80537aa8346db6e39112224381b56a853f94d460c00d29692db54",
+    "vendor/alpha_claim/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vendor/alpha_claim/contracts.py": "3536b96c4b7ee46f9af7d807e02685aa55e42daae7f7c56b7e9029ca2cde0964",
+    "vendor/alpha_claim/protected_exchange.py": "7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272",
+    "verification/__init__.py": "ff393258b02ce68afa0e520f737fc4e1e90045d0344488cbccba6960e7128c97",
+    "verification/commercial010_audit.py": "c54ac35ddd04407a7e4cb19a610206eed0397f7141eefb884d96e7c445cfc80f",
+    "commercial/persistence.py": "78c1eb1d82471843e32dd290ac3ea1b5b253d4edc1448cc954b5fafa5d6e0e15"
+  },
+  "runtime": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "sqlite": "3.53.1",
+    "cryptography": "50.0.2"
+  },
+  "selection": "Maximize exploration expected complete-cost profit across equally weighted qualification worlds and fixed common seeds, subject to cash survival and zero payable breaches. Compare NoBid preserving setup-only cash. No win-rate/GO/all-world-perfect-success condition and no private buyer values are given to the selector. Finite-grid conditional optimum, not Nash or observed optimal pricing.",
+  "fixed_arms": [
+    {
+      "id": "fixed_original",
+      "strategic_pricing": false,
+      "corrected_onboarding": false
+    },
+    {
+      "id": "fixed_autonomous_onboarding",
+      "strategic_pricing": false,
+      "corrected_onboarding": true
+    },
+    {
+      "id": "strategic_original",
+      "strategic_pricing": true,
+      "corrected_onboarding": false
+    },
+    {
+      "id": "strategic_autonomous_onboarding",
+      "strategic_pricing": true,
+      "corrected_onboarding": true
+    }
+  ],
+  "confirmation_seeds": [
+    23001001,
+    23001002,
+    23001003,
+    23001004,
+    23001005,
+    23001006
+  ],
+  "exposure": {
+    "development_seeds": [
+      1,
+      2
+    ],
+    "earlier_analytically_exposed_block": [
+      101,
+      120
+    ],
+    "fresh_block_rule": "Consecutive block23001001..23001006 selected once before any run, shared acrossfourarms. Prior20seedplan unexecuted, reduced to6 beforeevaluation to fit matchedcomparisonresources afterowneradjustment. No inspected seed substitutedforanadverseresult.",
+    "all_reconciliation_case_families": "EXPOSED ENGINEERING REPLICATION, not independent statistical populations",
+    "price_selection": "Uses only common development worlds/seeds and publicly specified priors. Hidden finalbuyer reservation information never supplied to pricing policy.",
+    "alpha_spent": 0
+  },
+  "success": {
+    "scope": "Conditional fixed-capability simulated service and repeat finance; observed commerce, capabilitycompounding and BlueSky independent.",
+    "region": "Three declared qualification worlds with equal conditional modelweights; otherworlds explicit stress alternatives. Positive expected completeprofit, cash survival, zero payable breaches and meaningful mean earnedfunded/repeatoperation. Individual worlds may lose; no alljobwin or chosen winprobability gate.",
+    "pricing_optimality": "Finite-grid estimated leader payoff under explicit bounded rival response and declared empiricalprior; zero candidate residual is not continuousglobaloptimality or Nash proof."
+  },
+  "resources": {
+    "direct_campaign_cpu_reservation_seconds": 3600,
+    "direct_campaign_wall_seconds": 3600,
+    "additional_local_verification_cap_seconds": 1800,
+    "new_spending": 0
+  },
+  "prior_evidence": "market-development-000,POLICY/source/nativeledger originalnoSales retained; allpreviouscampaignsource/evidence unchanged.",
+  "previous_source_freeze_sha256": "68e4edb58962eac4110e4d9ff5e1845cd37ea5eb5450817c1431d3651715f2c1",
+  "repair_scope": "SQLITE_IO_AND_RECEIPT_REPORTING_ONLY",
+  "io_repair": "Pinned ProtectedExchange financial methods unchanged. Active SQLite in memory, fsynced canonical action tapes and checked/atomic serialized checkpoints. Original malformed database and rollback journal retained. Cause of prior corruption unresolved; this is a disclosed persistence mitigation, not evidence that the root cause was proven.",
+  "financial_changes": false,
+  "policy_seed_cost_changes": false
+}

@@ -1,0 +1,88 @@
+{
+  "currency": "CAD",
+  "invoices": [
+    {
+      "amount_cents": 12355,
+      "customer": "focus",
+      "id": "focus1"
+    },
+    {
+      "amount_cents": 25095,
+      "customer": "customer-2",
+      "id": "i2"
+    },
+    {
+      "amount_cents": 13072,
+      "customer": "customer-1",
+      "id": "i1"
+    },
+    {
+      "amount_cents": 26447,
+      "customer": "customer-4",
+      "id": "i4"
+    },
+    {
+      "amount_cents": 13703,
+      "customer": "customer-0",
+      "id": "i0"
+    },
+    {
+      "amount_cents": 9762,
+      "customer": "customer-3",
+      "id": "i3"
+    }
+  ],
+  "order_id": "rejected-currency",
+  "payments": [
+    {
+      "amount_cents": 12355,
+      "customer": "focus",
+      "id": "focusp1",
+      "invoice_refs": [
+        "focus1"
+      ]
+    },
+    {
+      "amount_cents": 13703,
+      "customer": "customer-0",
+      "id": "p0",
+      "invoice_refs": [
+        "i0"
+      ]
+    },
+    {
+      "amount_cents": 9762,
+      "customer": "customer-3",
+      "id": "p3",
+      "invoice_refs": [
+        "i3"
+      ]
+    },
+    {
+      "amount_cents": 26447,
+      "customer": "customer-4",
+      "id": "p4",
+      "invoice_refs": [
+        "i4"
+      ]
+    },
+    {
+      "amount_cents": 25095,
+      "customer": "customer-2",
+      "id": "p2",
+      "invoice_refs": [
+        "i2"
+      ]
+    },
+    {
+      "amount_cents": 13072,
+      "customer": "customer-1",
+      "id": "p1",
+      "invoice_refs": [
+        "i1"
+      ]
+    }
+  ],
+  "require_complete": true,
+  "scope": "SYNTHETIC_PUBLIC_WORKLOAD"
+}

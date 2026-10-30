@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/tmp/commercial010-no-git-lciqcj7u/run_commercial010.py", line 83, in <module>
+    main()
+  File "/tmp/commercial010-no-git-lciqcj7u/run_commercial010.py", line 45, in main
+    freeze, manifest_path, policy_path = checked_inputs(a.freeze_sha256)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/commercial010-no-git-lciqcj7u/run_commercial010.py", line 25, in checked_inputs
+    raise ValueError('FROZEN_SOURCE_CHANGED ' + name)
+ValueError: FROZEN_SOURCE_CHANGED campaign/commercial-010/POLICY.json

@@ -1,0 +1,47 @@
+{
+  "schema": "alpha-commercial010/archive-cap-repair/v1",
+  "scope": "Transport engineering qualification only; no financial, market, seed, cost or scientific-candidate change.",
+  "failure_counterexample": {
+    "previous_cap_bytes": 262144000,
+    "measured_published_profile_before_repair_bytes": 399506792,
+    "measured_files_before_repair": 9320,
+    "actual_old_module_counterexample_bytes": 262144001,
+    "observed_error": "ARCHIVE_RESOURCE_BOUND",
+    "archive_created": false,
+    "counterexample_kind": "Sparse transport-boundary fixture; not commercial evidence."
+  },
+  "current_bounds": {
+    "uncompressed_bytes": 536870912,
+    "files": 10000,
+    "actual_current_profile_bytes": 399520317,
+    "actual_current_files": 9323
+  },
+  "test_run": {
+    "command": "python -m unittest tests.test_archive_cap_current tests.test_archive_v2 tests.test_frozen006_boundary tests.test_baseline005 -v",
+    "tests": 14,
+    "passed": true,
+    "seconds": 17.797,
+    "actual_oversized_source_bytes": 536870913,
+    "oversized_archive_created": false,
+    "current_whole_root_archive_and_no_git_extraction": "PASS",
+    "frozen006_original_closure": "PASS_6363_UNCHANGED_IDENTITIES",
+    "released_cycle005_source": "PASS_UNCHANGED_RELEASE_ARCHIVE"
+  },
+  "historical_boundary": {
+    "original_archive_source_sha256": "e80512aa0e06503c8e49c78c43f09e786df1ba51ee26c3bb36b52ab703328007",
+    "original_snapshot": "historical/cycle-006/archive_v2.py.txt",
+    "cycle006_candidate_and_reproduction_freezes": "UNCHANGED",
+    "cycle005": "Original archive_v2 version remains inside the immutable released ZIP materialized by baseline005; no new fallback required.",
+    "cycle004": "Its frozen source closure does not bind archive_v2."
+  },
+  "input_profile": "Known producer transaction staging is outside published inputs; reserved prefixes match compact packager/publication scan. Durable raw parts and failure evidence remain included. No arbitrary I/O errors are caught or suppressed.",
+  "source_sha256": {
+    "flywheel/archive_v2.py": "d033fbf478efeef0183fc72197b8792bda0f609a4fe4477346a0fe53e549bf55",
+    "flywheel/reproduction006.py": "fdfdc68b4bc801c68275c60cb40eb767dc91e5cd88caea5e7469f2b22d45e48e",
+    "historical/cycle-006/archive_v2.py.txt": "e80512aa0e06503c8e49c78c43f09e786df1ba51ee26c3bb36b52ab703328007",
+    "historical/cycle-006/POLICY_BOUNDARY.md": "f50102ac295cd7161cc9d58cadfb213b2a2ecf3669296ecdf1081127d03e0edb",
+    "tests/test_archive_cap_current.py": "2502f14a7abf2911c5e9f5ef87e2e3298c4ab9aece69e7c388ce746d291e218d",
+    "README.md": "a00b79310b0f7064941c1810f2132c44a6461f3ef3bf40c00d1b7c4a39754fe0",
+    "evidence/commercial010/qualification/archive-cap-tests.log": "8c2737cfa15f14ceb9db6a677fc517f7b4c32b003c9237abf85bcb54d469ba32"
+  }
+}

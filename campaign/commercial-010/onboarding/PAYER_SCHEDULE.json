@@ -1,0 +1,66 @@
+{
+  "schema": "agi-alpha/commercial010/onboarding-payers-v1",
+  "scope": "OBSERVED_MACHINE_WORK_WITH_CONDITIONAL_COST_AND_BUYER_UTILITY_ASSUMPTIONS",
+  "rows": [
+    {
+      "id": "agent_first_customer_setup",
+      "payer": "AUTONOMOUS_PROVIDER",
+      "recurrence": "once per genuinely new customer",
+      "evidence": "Known-schema CSV preparation/validation actually executed; no actual customers observed",
+      "usd_scenario_interval": [
+        0.01,
+        2.0
+      ],
+      "actual_usd": null,
+      "billing": "UNKNOWN",
+      "human_staff_hours": 0,
+      "amortization": "No guaranteed future orders; charge once at first setup. Recurring imports remain separate."
+    },
+    {
+      "id": "agent_recurring_import_and_requalification",
+      "payer": "AUTONOMOUS_PROVIDER",
+      "recurrence": "per supplied export",
+      "actual_cohort_cpu_seconds": 2.578753189,
+      "actual_cohort_wall_seconds": 2.583986086,
+      "measured_scope": "Parsing, preparation, deterministic reconciliation and independent requalification for19orders; excludes agent inference/code development/orchestration",
+      "actual_usd": null,
+      "modeled_cost_treatment": "Recurring resource envelope, not a repeated first-customer setup charge",
+      "human_staff_hours": 0
+    },
+    {
+      "id": "customer_initial_attention",
+      "payer": "BUYER",
+      "recurrence": "initial switching/approval/integration attention; any recurring attention explicit separately",
+      "usd_utility_scenario_interval": [
+        0,
+        50
+      ],
+      "actual_observation": null,
+      "historical_original_value": 25,
+      "interpretation": "Unmeasured customer friction, not agent labor or seller staff. Actual preparation does not prove itzero."
+    },
+    {
+      "id": "external_onboarding_fees",
+      "payer": "EXPLICITLY_NAMED_IN_MARKET_POLICY",
+      "recurrence": "only when incurred under a specified service/channel contract",
+      "conditional_default_usd": 0,
+      "new_paid_external_transactions": 0,
+      "actual_total_host_tools_storage_bill_usd": null,
+      "stress": "Nonzero fee cases remain explicit; zero is no-paid-provider scenario only."
+    }
+  ],
+  "human_comparator": {
+    "scope": "ILLUSTRATIVE_ASSUMED_STAGE_ALLOCATION_NOT_MATCHED_OBSERVATION",
+    "loaded_hourly_usd_rounded": 34.75,
+    "first_customer_onboarding_hours": 0.5,
+    "recurring_service_hours": 3.5,
+    "first_total_hours": 4,
+    "first_loaded_labor_usd": 139,
+    "repeat_loaded_labor_usd": 121.625,
+    "work": "Humans do human onboarding/preparation/reconciliation/verification/correction/delivery/support at human compensation",
+    "no_double_count": "First total includes onboarding; never139plusanotheronboardingcharge. Repeat excludes completedinitialsetup."
+  },
+  "source_result": "campaign/commercial-010/onboarding/executed-001/RESULT.json",
+  "source_result_sha256": "4c22216a1a1c26b326e2f4a14faf07a0f37480cdec3da1ef39a6bb76eb71d1bb",
+  "sales_or_customer_attention_claim": false
+}

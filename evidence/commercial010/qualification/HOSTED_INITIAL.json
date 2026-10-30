@@ -1,0 +1,50 @@
+{
+  "schema": "alpha-commercial010/hosted-checkpoint/v1",
+  "source_sha": "caa79827c4ab683818c7dfbfcf3c789b10afb2bd",
+  "branch": "campaign/autonomous-commercial-010",
+  "event": "pull_request",
+  "scope": "Initial durable checkpoint before qualification repairs, retained as actual failed history. Not current-head CI.",
+  "runs": [
+    {
+      "id": 41064278794,
+      "name": "Bounded campaign qualification",
+      "head_sha": "caa79827c4ab683818c7dfbfcf3c789b10afb2bd",
+      "event": "pull_request",
+      "head_branch": "campaign/autonomous-commercial-010",
+      "status": "in_progress",
+      "conclusion": null,
+      "html_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41064278794"
+    },
+    {
+      "id": 41064278753,
+      "name": "Consequential campaign 007 reproduction",
+      "head_sha": "caa79827c4ab683818c7dfbfcf3c789b10afb2bd",
+      "event": "pull_request",
+      "head_branch": "campaign/autonomous-commercial-010",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41064278753"
+    },
+    {
+      "id": 41064278782,
+      "name": "Consequential campaign 009 construction and downloaded package",
+      "head_sha": "caa79827c4ab683818c7dfbfcf3c789b10afb2bd",
+      "event": "pull_request",
+      "head_branch": "campaign/autonomous-commercial-010",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41064278782"
+    }
+  ],
+  "failure": {
+    "job_id": 124091507501,
+    "name": "qualify",
+    "conclusion": "failure",
+    "tests": 189,
+    "errors": 2,
+    "error": "LEGACY_IDENTITY_MISMATCH AGENTS.md",
+    "raw_log": "hosted-initial-caa798.log",
+    "benchmark_assertions_executed": false
+  },
+  "next": "Run all applicable workflows on repaired PR head; verify new benchmark assertions in actual hosted job logs; qualify merged main by push/main event."
+}

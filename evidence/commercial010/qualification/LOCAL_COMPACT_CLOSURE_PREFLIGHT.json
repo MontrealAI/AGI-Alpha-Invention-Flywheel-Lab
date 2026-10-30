@@ -1,0 +1,59 @@
+{
+  "scope": "WORKING_TREE_ENGINEERING_PREFLIGHT_ONLY",
+  "placeholder_source_argument": "364f5ee41d1ac21f368cc3d19109cd4067de8c9f",
+  "freeze": "117ea809b09cb7bc8597bdcfb472e0df63a15d987dfedbc6844ef482d6c01ed5",
+  "new_campaign_or_confirmation": false,
+  "checks": [
+    {
+      "check": "package",
+      "returncode": 0,
+      "output_tail": "{\"archive\": \"source.zip\", \"bytes\": 183075236, \"sha256\": \"724610873a278936f4a169ed7db1685a5424df5d64a2f9b3dca16a643259d4b3\", \"files\": 1168, \"source_commit\": \"364f5ee41d1ac21f368cc3d19109cd4067de8c9f\"}\n"
+    },
+    {
+      "check": "clean-paper",
+      "returncode": 0,
+      "output_tail": ""
+    },
+    {
+      "check": "clean-inputs",
+      "returncode": 0,
+      "output_tail": ""
+    },
+    {
+      "check": "positive",
+      "returncode": 0,
+      "output_tail": "{\"state\": \"complete\", \"receipt_path\": \"/tmp/commercial010-closure-repair-preflight/positive/RECEIPT.json\", \"scope\": \"SIMULATED\"}\n"
+    },
+    {
+      "check": "zero",
+      "returncode": 0,
+      "output_tail": "{\"state\": \"complete\", \"receipt_path\": \"/tmp/commercial010-closure-repair-preflight/zero/RECEIPT.json\", \"scope\": \"SIMULATED\"}\n"
+    }
+  ],
+  "archive_bytes": 183075236,
+  "archive_sha256": "724610873a278936f4a169ed7db1685a5424df5d64a2f9b3dca16a643259d4b3",
+  "members_verified": 1168,
+  "git_ancestry_absent": true,
+  "paper": {
+    "source_bindings_checked": 217,
+    "pdf_sha256": "cc0eaaeb1425785cff21af99318edafda3dc0c64f2dd6ed162d33ca129ead0a4",
+    "pages_inspected": 11,
+    "scope": "Document integrity and visual-QA record, not new commercial confirmation."
+  },
+  "positive": {
+    "paid_jobs": 15,
+    "scope": "SIMULATED",
+    "supervisor": "complete",
+    "conditional_simulated_go": true,
+    "seed": 1
+  },
+  "zero": {
+    "paid_jobs": 0,
+    "scope": "SIMULATED",
+    "supervisor": "complete",
+    "conditional_simulated_go": false,
+    "seed": 1
+  },
+  "status": "PASS_CORRECTED_CLOSURE_AND_BOTH_ENGINEERING_SMOKES",
+  "seconds": 37.609
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "agi-alpha/commercial010-sqlite-diagnosis/v1",
+  "scope": "READ_ONLY_ORIGINALS_COPY_ONLY_RECOVERY_PROBE",
+  "path": "/workspace/scratch/3098f63ba128/full-campaign010-resumed/artifacts/exploration/strategic_autonomous_onboarding/9500/delayed_high_assurance/1/exchange.sqlite",
+  "sha256": "75e43123149545cf1475988cd70b263d61fe96f78112f73581d91bc9d1fa5103",
+  "bytes": 438272,
+  "header_magic": "SQLite format 3\u0000",
+  "page_size": 4096,
+  "header_pages": 107,
+  "physical_pages": 107,
+  "out_of_file_btree_references": [
+    {
+      "page": 2,
+      "kind": 5,
+      "cell_count": 4,
+      "out_of_file_right_child": 181
+    },
+    {
+      "page": 6,
+      "kind": 5,
+      "cell_count": 1,
+      "out_of_file_right_child": 183
+    },
+    {
+      "page": 10,
+      "kind": 5,
+      "cell_count": 2,
+      "out_of_file_right_child": 198
+    },
+    {
+      "page": 16,
+      "kind": 5,
+      "cell_count": 1,
+      "out_of_file_right_child": 215
+    }
+  ],
+  "rollback_journal": {
+    "path": "/workspace/scratch/3098f63ba128/full-campaign010-resumed/artifacts/exploration/strategic_autonomous_onboarding/9500/delayed_high_assurance/1/exchange.sqlite-journal",
+    "bytes": 16928,
+    "sha256": "48571166f41a7ee9a816b887596fe80fa6d446e4a9acb0e1459a364d2be835c1",
+    "magic": "d9d505f920a163d7",
+    "records": 4,
+    "original_database_pages": 107
+  },
+  "copy_only_normal_hot_journal_recovery": {
+    "PRAGMA integrity_check(10)": [
+      [
+        "*** in database main ***\nTree 16 page 16 cell 0: invalid page number 215\nTree 16 page 16 cell 0: invalid page number 214\nTree 10 page 10 cell 0: invalid page number 198\nTree 2 page 2 cell 0: invalid page number 181\nTree 2 page 2 cell 3: invalid page number 165\nTree 2 page 62 cell 6: invalid page number 138\nTree 2 page 62 cell 5: invalid page number 123\nTree 2 page 62 cell 4: invalid page number 109\nTree 6 page 6 cell 0: invalid page number 183\nTree 6 page 6 cell 0: invalid page number 182"
+      ]
+    ],
+    "SELECT count(*) FROM journal": {
+      "error": "DatabaseError",
+      "message": "database disk image is malformed"
+    }
+  },
+  "capacity": {
+    "free_bytes": 60675235840,
+    "free_inodes": 4144298,
+    "workspace_and_tmp": "Both overlayfs on same filesystem per stat/df; /tmp is not proven independent hardware/storage."
+  },
+  "originals_unchanged": true,
+  "source_freeze_sha256": "68e4edb58962eac4110e4d9ff5e1845cd37ea5eb5450817c1431d3651715f2c1",
+  "all_23_frozen_sources_unchanged": true,
+  "source_checks": {
+    "campaign/commercial-010/CALIBRATION.json": true,
+    "campaign/commercial-010/ONBOARDING_PRICING_ADJUSTMENT.md": true,
+    "campaign/commercial-010/POLICY.json": true,
+    "campaign/commercial-010/service/executed-002/manifest.json": true,
+    "commercial/__init__.py": true,
+    "commercial/ledger.py": true,
+    "commercial/market.py": true,
+    "commercial/onboarding.py": true,
+    "commercial/service.py": true,
+    "commercial/service_verifier.py": true,
+    "commercial/verdicts.py": true,
+    "experiments/commerce006.py": true,
+    "experiments/resource006_v3.py": true,
+    "requirements-commercial010.txt": true,
+    "run_commercial010.py": true,
+    "scripts/run_onboarding010.py": true,
+    "scripts/run_service010.py": true,
+    "vendor/__init__.py": true,
+    "vendor/alpha_claim/__init__.py": true,
+    "vendor/alpha_claim/contracts.py": true,
+    "vendor/alpha_claim/protected_exchange.py": true,
+    "verification/__init__.py": true,
+    "verification/commercial010_audit.py": true
+  },
+  "cause_status": "UNRESOLVED; valid SQLite pages with out-of-file child pointers and old-size header are consistent with mixed/truncated generations. Capacity exhaustion and obvious non-SQLite overwrite are not supported. SQLite/VFS/filesystem/runtime cause not established.",
+  "code_review": "Inspected native ProtectedExchange, commercial ledger/market, resource supervisor and recovery copier. No production write of arbitrary content into exchange.sqlite found; completed-world copying uses distinct new destination paths."
+}

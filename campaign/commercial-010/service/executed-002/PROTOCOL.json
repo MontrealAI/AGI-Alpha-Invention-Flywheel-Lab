@@ -1,0 +1,57 @@
+{
+  "acceptance": "Independent exact partition, arithmetic, reference/customer safety and required safe matches. Exception findings accepted only if original order require_complete=false. Strict unmatched orders rejected.",
+  "confirmation_scope": "Previously exposed case families and seed sets expanded to1000rows perjob. Engineering replication only; no fresh holdout or population inference. Blocks independent by unique customer/id namespaces.",
+  "families": [
+    "referenced",
+    "split",
+    "bundled",
+    "unique_implicit",
+    "partial",
+    "ambiguous_amount",
+    "overlapping_refs",
+    "customer_isolation"
+  ],
+  "frozen_before_execution": true,
+  "human_intervention_seconds": 0,
+  "model_usage": {
+    "billing": "UNKNOWN; use separately declared conservative cost intervals, never zero",
+    "runtime": "system-provided agent execution; exact routed model/version and host token metering unavailable",
+    "tokens": null
+  },
+  "post_delivery_obligations": {
+    "market_cost_owner": "market complete-cost interval includes support, acquisition, setup, failures and maintenance",
+    "modeled_support_days": 7,
+    "scope": "No record modification, tax filing, attestation, financial advice or funds movement; correction of arithmetic/classification defects only."
+  },
+  "scope": "SYNTHETIC_PUBLIC_WORKLOAD",
+  "seeds": {
+    "development_synthesis": [
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108
+    ],
+    "engineering_replication": [
+      901,
+      902,
+      903,
+      904,
+      905,
+      906,
+      907,
+      908
+    ]
+  },
+  "source_hashes": {
+    "commercial/service.py": "1604d20f5d9f54997eeceb971bc19af9a0c76cdcaf79ba74b9bbd80112c9c9a3",
+    "commercial/service_verifier.py": "ac79f1aa80fb5c2928827f08417a720cd041977df70e808860bc3dd4f5d61368",
+    "scripts/run_service010.py": "d5c568dfd7c606a6cebf0e426de7fc37964fa4c8efe31926a423871d73086c5a"
+  },
+  "source_provenance": "All order records authored synthetic public workload; no client records, outreach or payment execution.",
+  "source_rows_per_order": 1000,
+  "version": "reconciliation010-v2-1000rows"
+}

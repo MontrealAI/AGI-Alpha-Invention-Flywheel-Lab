@@ -12,7 +12,12 @@ OLD_COMMIT = "90791dbf8cc8d9d53e5d58b997887882fa2e5f00"
 PREFIX = "AGI_ALPHA_Mechanism_Completion/"
 MANIFEST = "ARCHIVE_MANIFEST.json"
 SKIP = {".git", ".venv", "__pycache__", ".pytest_cache"}
-MAX_BYTES, MAX_FILES = 250 * 1024**2, 10000
+MAX_BYTES, MAX_FILES = 512 * 1024**2, 10000
+TRANSACTION_PREFIXES = (".commercial010-package-", ".publication-")
+
+
+def _excluded(path):
+    return bool(set(path.parts) & SKIP) or any(part.startswith(TRANSACTION_PREFIXES) for part in path.parts)
 
 
 def _sha(raw):
@@ -83,7 +88,7 @@ def _manifest(raw, payloads):
         raise ValueError("ARCHIVE_MANIFEST_SET_MISMATCH")
     for name, expected in manifest["files"].items():
         path = _name(name)
-        if name == MANIFEST or set(path.parts) & SKIP or type(expected) is not str or len(expected) != 64 or any(c not in "0123456789abcdef" for c in expected):
+        if name == MANIFEST or _excluded(path) or type(expected) is not str or len(expected) != 64 or any(c not in "0123456789abcdef" for c in expected):
             raise ValueError("ARCHIVE_MANIFEST_ENTRY_SCOPE")
     if set(payloads) != set(manifest["files"]):
         raise ValueError("ARCHIVE_MANIFEST_SET_MISMATCH")
@@ -99,7 +104,7 @@ def build(root, archive_path):
     payloads, packaging_manifest = {}, None
     for path in sorted(root.rglob("*")):
         relative = path.relative_to(root)
-        if set(relative.parts) & SKIP or path == archive_path:
+        if _excluded(relative) or path == archive_path:
             continue
         if path.is_symlink():
             raise ValueError("ARCHIVE_SYMLINK_REFUSED " + str(relative))

@@ -1,0 +1,30 @@
+{
+  "schema": "alpha/portfolio25-hardening/v1",
+  "original_source_commit": "be886e674f8b9bbce76410e5810b908c06a4300d",
+  "command": "python -m unittest discover -s portfolio25 -p test_*.py -v",
+  "returncode": 0,
+  "cpu_seconds": 4.254563,
+  "wall_seconds": 4.256260919999477,
+  "one_bounded_full_scoped_run": true,
+  "original_test_count": 21,
+  "new_adversarial_test_count": 9,
+  "source_sha256": {
+    "HARDENING_TESTS.log": "df9510803aa269da3f212dc18360c162fc8f56689f30580dba7f71dc8bf96577",
+    "PORTFOLIO.md": "a410b14829999c9dd256f3dfe9640643fe85d360b92f16b09916e3ec184a86a8",
+    "SOURCE_IMPORT.json": "80b0741f93c911e4460e36d014259d30d11b91f6d2e98f57b69425cea5dff82a",
+    "jobs.json": "4faa7e6389409051f6b6377ca50b7bf93d945c27ce02293be247d9cfbe1847df",
+    "pricing.py": "b0a359619a02b6dcadd2af20b5683e4d84cb585841359b653579610ff1da568c",
+    "reference_strategy_results.json": "c7daf5887f18332946c8accbb20ced6079cce5c39fa90f24bda187c258083dc9",
+    "test_hardening.py": "09945d4f652b39f2a79489c4a705d687cf1f02784ccbe5a9593ffa7a2a747683",
+    "test_pricing.py": "4a6741d7334c6cc9181323d5761447d65dbc28dfa7bbb487317d5dc6220dbf05"
+  },
+  "original_valid_fixture_outputs_preserved": true,
+  "research_scope": "Scenario-only NOT_AUTHORIZED_QUOTE; no actual customers/revenue or frozen010policy changes.",
+  "units": "Original v1 numeric keys explicitly useUSD; absent currency preserves that documented schema. Any explicit nonUSD currency or incompatible unit is refused. Models are unsupported calibration records and are rejected rather than ignored.",
+  "changes": [
+    "Typed schema validation before arithmetic for metadata,wage roles,jobs,scenarios and public helpers",
+    "Zero acceptance/collection gives finite rivalNO_BID and no profitable seller offer",
+    "Nonfinite,negative,oversized and malformed numeric values rejected asValueError",
+    "DuplicateJSON and dangling output paths refused; CLI validation errors return2 withouttraceback"
+  ]
+}

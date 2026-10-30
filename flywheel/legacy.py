@@ -30,8 +30,11 @@ def _read(root, name, expected):
     raw = path.read_bytes()
     if hashlib.sha256(raw).hexdigest() == expected:
         return raw, "current-tree"
-    if name == ".github/workflows/campaign.yml":
-        historical = _safe(root, "historical/cycle-001/campaign-workflow.yml.txt")
+    snapshots = {".github/workflows/campaign.yml": "historical/cycle-001/campaign-workflow.yml.txt",
+                 **{policy: "historical/cycle-001/" + policy + ".txt"
+                    for policy in ("AGENTS.md", "CHARTER.md", "FIRST_CAMPAIGN.md", "README.md")}}
+    if name in snapshots:
+        historical = _safe(root, snapshots[name])
         if not historical.is_file():
             raise ValueError("LEGACY_HISTORICAL_INPUT_MISSING " + name)
         retained = historical.read_bytes()

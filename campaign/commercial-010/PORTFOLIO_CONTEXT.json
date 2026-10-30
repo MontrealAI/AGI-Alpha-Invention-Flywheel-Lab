@@ -1,0 +1,132 @@
+{
+  "schema": "alpha-commercial010/portfolio-context/v1",
+  "checked_date": "2026-10-30",
+  "timezone": "America/Toronto",
+  "scope": "Current-source context for the owner's reported concurrent 25-job portfolio planning. No 25-job execution, buyer demand, revenue, market share or billion-dollar outcome is established by this research. The present bounded experiment continues unchanged.",
+  "permission_boundary": "Read-only public research; no outreach, subscription, spending, account action or additional service production.",
+  "primary_sources": [
+    {
+      "id": "loopio-2026-statistics",
+      "url": "https://loopio.com/blog/rfp-statistics-win-rates/",
+      "publisher": "Loopio",
+      "published_date": "2026-03-26",
+      "retrieved_date": "2026-10-30",
+      "evidence_type": "Vendor-published summary of its response-management survey",
+      "facts": [
+        {
+          "metric": "reported_average_response_time",
+          "value": 33,
+          "unit": "hours per RFP response",
+          "population": "Response teams represented in Loopio's 2026 report",
+          "qualifier": "The public summary does not establish whether this is aggregate person-hours or elapsed working duration; do not multiply it by contributor count or treat it as a verified complete-cost invoice."
+        },
+        {
+          "metric": "reported_generative_ai_adoption",
+          "value": 79,
+          "unit": "percent of represented response teams that have used generative AI in the RFP process",
+          "qualifier": "Not 79% of all workers, all companies, or fully autonomous enterprises. Adoption is not proof of autonomous accepted delivery."
+        }
+      ],
+      "applicability": "A category-level workload/adoption lead for enterprise proposals. It does not price a matched managed service or calibrate unrelated software, analysis, document or customer-operations jobs.",
+      "limitations": "Vendor survey summary; sampling frame, weighting and detailed time definition were not independently verified. Some unrelated headings retain inconsistent year/value wording; no additional numerical claims are imported."
+    },
+    {
+      "id": "loopio-2026-report-landing",
+      "url": "https://loopio.com/trends-report/",
+      "publisher": "Loopio",
+      "published_date": null,
+      "retrieved_date": "2026-10-30",
+      "evidence_type": "Official 2026 report landing page",
+      "facts": {
+        "sample_description": "More than 1,500 global participants/companies; developed with APMP"
+      },
+      "limitations": "Public landing-page descriptions vary between participants and companies. Full report and underlying response-level data were not obtained; no form or contact information was submitted."
+    },
+    {
+      "id": "autorfp-official-pricing",
+      "url": "https://autorfp.ai/pricing",
+      "publisher": "AutoRFP.ai",
+      "published_date": null,
+      "retrieved_date": "2026-10-30",
+      "evidence_type": "Current advertised software subscription terms",
+      "displayed_currency_symbol": "$",
+      "iso_currency_verified": null,
+      "plans": [
+        {
+          "name": "Scale",
+          "monthly_displayed_amount": 899,
+          "billing": "paid yearly",
+          "included_projects_per_year": 24
+        },
+        {
+          "name": "Accelerate",
+          "monthly_displayed_amount": 1299,
+          "billing": "paid yearly",
+          "included_projects_per_year": 50
+        }
+      ],
+      "project_unit": "An RFP, DDQ, tender or security questionnaire; generally one CRM opportunity, regardless of requirement count or accompanying documents.",
+      "other_terms": "Unlimited users and features; implementation/support included. Page states a minimum 12-month term after the initial 30-day period.",
+      "applicability": "Credible customer software outside option. Subscription access is not a matched autonomous managed-service price, acceptance guarantee or measured customer acquisition result.",
+      "currency_caution": "Fetched official pricing text does not explicitly identify USD. Keep amounts in displayed dollars until currency is verified; no implicit conversion."
+    },
+    {
+      "id": "1up-official-pricing",
+      "url": "https://1up.ai/pricing",
+      "publisher": "1up",
+      "published_date": null,
+      "retrieved_date": "2026-10-30",
+      "evidence_type": "Current advertised software pricing",
+      "displayed_currency_symbol": "$",
+      "iso_currency_verified": null,
+      "offers": [
+        {
+          "name": "MCP",
+          "monthly_base_displayed_amount": 50,
+          "usage_displayed_amount_per_question_answered": 0.05
+        },
+        {
+          "name": "Starter",
+          "monthly_displayed_amount": 300,
+          "displayed_questionnaires_per_month": 1
+        },
+        {
+          "name": "Plus",
+          "monthly_displayed_amount": 900,
+          "displayed_questionnaires_per_month": 6
+        }
+      ],
+      "billing_caution": "Page exposes monthly and annual billing options with a 15% annual saving; amounts recorded here are the displayed monthly prices, not an independently executed checkout.",
+      "applicability": "Questionnaire automation with approved company sources is an existing competitive alternative. Software access, answer generation and a complete accepted managed delivery have different obligations.",
+      "currency_caution": "Fetched official pricing text does not explicitly identify USD. No paid checkout or account creation was performed."
+    }
+  ],
+  "arithmetic_only": [
+    {
+      "source_id": "autorfp-official-pricing",
+      "formula": "899 * 12 / 24",
+      "result": 449.5,
+      "unit": "displayed dollars of annual subscription allocation per included project at full utilization"
+    },
+    {
+      "source_id": "autorfp-official-pricing",
+      "formula": "1299 * 12 / 50",
+      "result": 311.76,
+      "unit": "displayed dollars of annual subscription allocation per included project at full utilization"
+    }
+  ],
+  "arithmetic_limits": "These divisions are software-budget allocations, not per-job managed-service prices, full customer cost, observed usage, realized savings or demand forecasts. They exclude customer production/review obligations and assume every included project is used.",
+  "execution_implications": [
+    "Preserve premium initial offers near a matched complete human-service cost with an explicit small discount; AI cost savings remain available margin.",
+    "Include software-assisted self-service and managed competitors in buyer outside options; customer setup, knowledge access, review, switching costs and confidential-data obligations must remain explicit.",
+    "Before extending into proposals, freeze a factual source/answer matrix, unsupported-claim rejection, compliance requirements, acceptance and revision obligations. Do not equate a sourced draft with an accepted bid or winning a contract.",
+    "Retain priority categories as hypotheses for a separate authorized portfolio; one qualified service does not validate all five categories.",
+    "Treat US$1 billion as an owner ambition requiring separately declared horizon, price, customer count, capacity, collection, complete costs and cash timing. No market-share or sales assumption is established here."
+  ],
+  "verdict": {
+    "context_research": "COMPLETE_BOUNDED_PRIMARY_SOURCE_CHECK",
+    "portfolio_25_job_execution": "NOT_AUDITED",
+    "observed_new_sales": 0,
+    "billion_dollar_commercial_result": "NOT_ESTABLISHED"
+  }
+}

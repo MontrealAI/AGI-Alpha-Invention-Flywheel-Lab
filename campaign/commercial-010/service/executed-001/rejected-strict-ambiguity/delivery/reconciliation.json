@@ -1,0 +1,92 @@
+{
+  "accepted": false,
+  "currency": "USD",
+  "exceptions": [
+    {
+      "id": "focus1",
+      "kind": "UNMATCHED_INVOICE"
+    },
+    {
+      "id": "focus2",
+      "kind": "UNMATCHED_INVOICE"
+    },
+    {
+      "id": "focusp1",
+      "kind": "UNMATCHED_PAYMENT"
+    }
+  ],
+  "matches": [
+    {
+      "invoice_cents": 14386,
+      "invoice_ids": [
+        "i0"
+      ],
+      "payment_cents": 14386,
+      "payment_ids": [
+        "p0"
+      ],
+      "status": "MATCHED"
+    },
+    {
+      "invoice_cents": 24692,
+      "invoice_ids": [
+        "i1"
+      ],
+      "payment_cents": 24692,
+      "payment_ids": [
+        "p1"
+      ],
+      "status": "MATCHED"
+    },
+    {
+      "invoice_cents": 13257,
+      "invoice_ids": [
+        "i2"
+      ],
+      "payment_cents": 13257,
+      "payment_ids": [
+        "p2"
+      ],
+      "status": "MATCHED"
+    },
+    {
+      "invoice_cents": 46328,
+      "invoice_ids": [
+        "i3"
+      ],
+      "payment_cents": 46328,
+      "payment_ids": [
+        "p3"
+      ],
+      "status": "MATCHED"
+    },
+    {
+      "invoice_cents": 17901,
+      "invoice_ids": [
+        "i4"
+      ],
+      "payment_cents": 17901,
+      "payment_ids": [
+        "p4"
+      ],
+      "status": "MATCHED"
+    }
+  ],
+  "order_id": "rejected-strict-ambiguity",
+  "scope": "SYNTHETIC_PUBLIC_WORKLOAD",
+  "totals": {
+    "invoice_cents": 137890,
+    "matched_invoice_cents": 116564,
+    "matched_payment_cents": 116564,
+    "open_invoice_cents": 21326,
+    "payment_cents": 127227,
+    "unallocated_payment_cents": 10663
+  },
+  "unmatched_invoices": [
+    "focus1",
+    "focus2"
+  ],
+  "unmatched_payments": [
+    "focusp1"
+  ]
+}

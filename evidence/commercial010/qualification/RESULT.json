@@ -1,0 +1,79 @@
+{
+  "schema": "alpha-commercial010/qualification/v1",
+  "scope": "Working-tree engineering qualification before publication; final PR and main source-matched hosted CI remain required. No fresh commercial or scientific confirmation inferred.",
+  "source_pr15_head": "9e80181be5819bac7d4b472482db3e3604c75d46",
+  "source_main": "69a4725d9c12589860670a551911bedbd65cba9e",
+  "checks": [
+    {
+      "command": "python -m unittest discover -s benchmarks -v",
+      "tests": 27,
+      "returncode": 0,
+      "seconds": 0.298
+    },
+    {
+      "command": "python -m unittest discover -s verification -v",
+      "tests": 17,
+      "returncode": 0,
+      "seconds": 0.047
+    },
+    {
+      "command": "python -m unittest discover -s tests -v",
+      "tests": 208,
+      "returncode": 0,
+      "seconds": 23.301
+    },
+    {
+      "command": "python -m unittest tests.test_legacy tests.test_archive_v2 tests.test_current_policy_boundary -v",
+      "tests": 9,
+      "returncode": 0,
+      "seconds": 9.173
+    },
+    {
+      "command": "python -m flywheel.legacy --root . --output /tmp/alpha-commercial010-legacy-qualification",
+      "files": 128,
+      "returncode": 0
+    },
+    {
+      "command": "python /tmp/alpha-commercial010-legacy-qualification/reproduce.py --output /tmp/alpha-commercial010-legacy-replay",
+      "returncode": 0,
+      "report_sha256": "5edd3aaa3a72d2eb983f9719967864bcb570f56ea574b7313576c3426f0b9828"
+    }
+  ],
+  "preserved_failures": [
+    {
+      "stage": "AGENTS-only intermediate repair",
+      "command": "python -m unittest tests.test_legacy tests.test_archive_v2 tests.test_current_policy_boundary -v",
+      "tests": 9,
+      "errors": 3,
+      "error": "LEGACY_IDENTITY_MISMATCH CHARTER.md",
+      "implication": "Current CHARTER, FIRST_CAMPAIGN and README are mutable operating policy too; preserve their original edition inputs separately rather than rehash."
+    },
+    {
+      "stage": "test invocation from parent directory",
+      "command": "python -m unittest tests.test_legacy tests.test_archive_v2 tests.test_current_policy_boundary -v",
+      "errors": 3,
+      "error": "ModuleNotFoundError: No module named 'tests'",
+      "repair": "Reran from repository root; no test/source change for this invocation error."
+    }
+  ],
+  "owned_source_sha256": {
+    "benchmarks/human_frontier.py": "eb15e8a8e85679d35f18ff149264b76bf982b36bc5663b81f30da321086a10d5",
+    "benchmarks/test_hardening.py": "69b45d6fdef64da8e95661e14365e3fdda1697c14dc8e3b5b3bef50939d77d70",
+    "benchmarks/test_human_frontier.py": "7aaeb9c47f0091b593e148ea224cfd14b924b1010f3da2c3b8346ecfeee092f8",
+    ".github/workflows/campaign.yml": "cb2c711ed43fed7defbddaf96af81bf7e9689ce101dd9211bf9deac7ab9f62ef",
+    "flywheel/legacy.py": "1be05c90a8d20bff6412664324e0395f28985bb61212f70a05a9ec471527161d",
+    "tests/test_current_policy_boundary.py": "e7f6e902bb9e35a84c9bb335581de84bef0f6c7ec72c99d5c44a7a3b09455b4e",
+    "historical/cycle-001/AGENTS.md.txt": "8edb2ab092ee6ee61e37bb20130cef880e1e3857dfea44f7014394f48034a826",
+    "historical/cycle-001/CHARTER.md.txt": "8bd617c12b6ab9bd12f68e7b9897656929a96fe917a4fbc43757e60b4b2f795c",
+    "historical/cycle-001/FIRST_CAMPAIGN.md.txt": "e96d4bab80f6f557d848b0b21b4495809355283a16b1680c3c23d5da05abfdf2",
+    "historical/cycle-001/README.md.txt": "86fd45f53f3171fa30ee28d0c7bd9a7be6dcb2f3b7d2f5eadb24c3cc1796e4d1",
+    "campaign/cycle-001/EDITION_SHA256.json": "e968d63bd2c4b22d635216f8d2df5b80a92db253cdfe3982c5cbbaf5b639f920",
+    "campaign/cycle-001/CLOSURE.json": "a06a4f7630184b54205173e1f271e6af7ae5396687fd64deb575ae4de13b3252"
+  },
+  "test_log_sha256": {
+    "tests.log": "157d7532c6f4006d71803ac6e4d3362ede351d8c15abec326d3e081d51af778d",
+    "verification.log": "958140abe048d0d70f32d7001076798805c5c7ca83f05cb720ac71c731302326",
+    "benchmarks.log": "88dec3081616b53ae3f3aff6f855d2a125d1c8b43df34e1664a7ff491990832a"
+  },
+  "cost_metering": "CPU/wall timing is engineering runtime, not human labor. Host inference-token billing unavailable; no exact inference receipt claimed."
+}

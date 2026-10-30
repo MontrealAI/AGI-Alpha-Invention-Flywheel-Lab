@@ -1,0 +1,252 @@
+{
+  "schema": "agi-alpha/commercial010-policy/v1",
+  "scope": "SIMULATED",
+  "currency": "simulated-microUSD",
+  "cycles": 8,
+  "jobs_per_cycle": 2,
+  "opening": 5000000000,
+  "working": 100000000,
+  "human_benchmark": 139000000,
+  "human_benchmark_interval": [
+    17375000,
+    278000000
+  ],
+  "human_benchmark_basis": "BLS May2025 bookkeeping wage24.36/hour times Dec2025 private total-compensation46.15/wage32.36; rounded loaded34.75/hour. Four-hour source-matched manual-work scenario=139USD; sensitivity0.5\u20138hours; exact task time unobserved, no invented overhead or double loading. Human tools/acquisition/support above this conservative floor remain an explicit comparability limit",
+  "initial_discount_bps": 500,
+  "price_multipliers_bps": [
+    9500,
+    10000,
+    10500,
+    12000,
+    15000
+  ],
+  "setup_cost_interval": [
+    200000000,
+    2500000000
+  ],
+  "setup_cost": 500000000,
+  "per_job_cost_interval": [
+    5000000,
+    30000000
+  ],
+  "per_job_cost": 15000000,
+  "cost_basis": "CONDITIONAL_RESOURCE_ENVELOPES_NOT_ACTUAL_TOKEN_RECEIPTS; setup includes all campaign development, failed search, integration, acquisition-design and maintenance; per cohort job includes agent inference, tools, compute, storage, production, verification, repairs, failures, delivery and post-delivery obligations; host usage and bills are unavailable",
+  "acquisition_new": 4000000,
+  "acquisition_repeat": 1000000,
+  "support_per_sale": 3000000,
+  "payment_bps": 290,
+  "payment_fixed": 300000,
+  "tax_bps": 2000,
+  "exploration_seeds": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "confirmation_seeds": [
+    23001001,
+    23001002,
+    23001003,
+    23001004,
+    23001005,
+    23001006,
+    23001007,
+    23001008,
+    23001009,
+    23001010,
+    23001011,
+    23001012,
+    23001013,
+    23001014,
+    23001015,
+    23001016,
+    23001017,
+    23001018,
+    23001019,
+    23001020
+  ],
+  "sensitivity_seeds": [
+    201,
+    202,
+    203
+  ],
+  "sensitivity_cases": [
+    {
+      "id": "cost_low",
+      "setup": 200000000,
+      "per_job": 5000000,
+      "human": 139000000
+    },
+    {
+      "id": "cost_region_edge",
+      "setup": 700000000,
+      "per_job": 20000000,
+      "human": 139000000
+    },
+    {
+      "id": "cost_high",
+      "setup": 1000000000,
+      "per_job": 30000000,
+      "human": 139000000
+    },
+    {
+      "id": "full_upper_cost",
+      "setup": 2500000000,
+      "per_job": 30000000,
+      "human": 139000000
+    },
+    {
+      "id": "human_half_hour",
+      "setup": 500000000,
+      "per_job": 15000000,
+      "human": 17375000
+    },
+    {
+      "id": "human_two_hours",
+      "setup": 500000000,
+      "per_job": 15000000,
+      "human": 69500000
+    },
+    {
+      "id": "human_eight_hours",
+      "setup": 500000000,
+      "per_job": 15000000,
+      "human": 278000000
+    }
+  ],
+  "minimum_earned_cycles": 2,
+  "minimum_paid_jobs": 6,
+  "minimum_repeat_buyers": 1,
+  "minimum_region_success_fraction": 0.75,
+  "selection_rule": "highest multiplier >=9500 with >=75% GO across all exploration seeds in qualified differentiation worlds; otherwise preserve initial premium price and report failure",
+  "terminal_obligations": "Native exchange retains full settled principal plus $0.20 per released order throughout the horizon; working capital is restricted; no tail expiry or extra liquidity is invented",
+  "strategic_scope": "Finite heterogeneous repeated buyers; rival grid profit-maximization on noisy values, trust and capacity; supplier bounded scarcity response. Bounded heuristics, not Nash equilibrium. No actual demand data.",
+  "worlds": [
+    {
+      "id": "qualified_differentiation",
+      "qualification_region": true,
+      "value_low": 900,
+      "value_high": 1800,
+      "trust": 0.99,
+      "rival_trust": 0.79,
+      "arrival": 0.98,
+      "rival_cost": 35,
+      "supplier_multiplier": 1.0,
+      "settlement_delay": 1,
+      "revision_probability": 0.05,
+      "dispute_probability": 0.01,
+      "switching": 5,
+      "delivery_premium": 25,
+      "self_service_cost": 30,
+      "self_service_trust": 0.85
+    },
+    {
+      "id": "moderate_differentiation",
+      "qualification_region": true,
+      "value_low": 750,
+      "value_high": 1650,
+      "trust": 0.98,
+      "rival_trust": 0.8,
+      "arrival": 0.95,
+      "rival_cost": 45,
+      "supplier_multiplier": 1.1,
+      "settlement_delay": 2,
+      "revision_probability": 0.1,
+      "dispute_probability": 0.02,
+      "switching": 10,
+      "delivery_premium": 15,
+      "self_service_cost": 30,
+      "self_service_trust": 0.85
+    },
+    {
+      "id": "delayed_high_assurance",
+      "qualification_region": true,
+      "value_low": 1000,
+      "value_high": 1850,
+      "trust": 0.985,
+      "rival_trust": 0.82,
+      "arrival": 0.95,
+      "rival_cost": 40,
+      "supplier_multiplier": 1.2,
+      "settlement_delay": 5,
+      "revision_probability": 0.12,
+      "dispute_probability": 0.02,
+      "switching": 5,
+      "delivery_premium": 10,
+      "self_service_cost": 30,
+      "self_service_trust": 0.85
+    },
+    {
+      "id": "original_onboarding_barrier",
+      "qualification_region": false,
+      "value_low": 900,
+      "value_high": 1800,
+      "trust": 0.99,
+      "rival_trust": 0.79,
+      "arrival": 0.98,
+      "rival_cost": 35,
+      "supplier_multiplier": 1.0,
+      "settlement_delay": 1,
+      "revision_probability": 0.05,
+      "dispute_probability": 0.01,
+      "switching": 25,
+      "delivery_premium": 0,
+      "self_service_cost": 30,
+      "self_service_trust": 0.85
+    },
+    {
+      "id": "commodity_ai_parity",
+      "qualification_region": false,
+      "value_low": 400,
+      "value_high": 900,
+      "trust": 0.97,
+      "rival_trust": 0.99,
+      "arrival": 0.95,
+      "rival_cost": 20,
+      "supplier_multiplier": 1.0,
+      "settlement_delay": 1,
+      "revision_probability": 0.05,
+      "dispute_probability": 0.02,
+      "switching": 0,
+      "delivery_premium": 25,
+      "self_service_cost": 5,
+      "self_service_trust": 0.99
+    },
+    {
+      "id": "zero_demand",
+      "qualification_region": false,
+      "value_low": 0,
+      "value_high": 50,
+      "trust": 0.99,
+      "rival_trust": 0.9,
+      "arrival": 0.1,
+      "rival_cost": 35,
+      "supplier_multiplier": 1.0,
+      "settlement_delay": 1,
+      "revision_probability": 0.05,
+      "dispute_probability": 0.01,
+      "switching": 0,
+      "delivery_premium": 0,
+      "self_service_cost": 5,
+      "self_service_trust": 0.99
+    },
+    {
+      "id": "correlated_adverse",
+      "qualification_region": false,
+      "value_low": 400,
+      "value_high": 900,
+      "trust": 0.72,
+      "rival_trust": 0.96,
+      "arrival": 0.55,
+      "rival_cost": 20,
+      "supplier_multiplier": 2.5,
+      "settlement_delay": 18,
+      "revision_probability": 0.45,
+      "dispute_probability": 0.25,
+      "switching": 0,
+      "delivery_premium": 0,
+      "self_service_cost": 5,
+      "self_service_trust": 0.99
+    }
+  ]
+}

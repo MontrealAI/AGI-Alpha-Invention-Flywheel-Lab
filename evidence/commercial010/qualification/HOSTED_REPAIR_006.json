@@ -1,0 +1,33 @@
+{
+  "schema": "alpha-commercial010/hosted-repair-006/v1",
+  "failed_head": "308b2d6393d04689f79970725cf3679d599b9526",
+  "failed_run_id": 41064657993,
+  "failed_job_id": 124092796227,
+  "event": "pull_request",
+  "branch": "campaign/autonomous-commercial-010",
+  "actual_hosted_results": {
+    "benchmarks": {
+      "tests": 27,
+      "passed": true
+    },
+    "tests": {
+      "tests": 191,
+      "passed": true
+    },
+    "verification": {
+      "tests": 17,
+      "passed": true
+    },
+    "historical_replays_001_004_005": "PASS",
+    "cycle006_direct_current_checkout": "REFUSED_REPRODUCTION_SOURCE_IDENTITY_MISMATCH .github/workflows/campaign.yml"
+  },
+  "repair": "Materialize and verify exact unchanged6363-file frozen006 closure at a distinct path, then execute original runtime there. Current tests continue to execute repaired current code.",
+  "freeze_sha256": "d64396e8d8e058aaddf1ecacf3e89f618d77b1e9ea88c87682ac3e8917534fdc",
+  "current_working_tree_validation": {
+    "boundary_tests": 3,
+    "passed": true,
+    "frozen006_actual_replay": "COMPLETE",
+    "report_sha256": "442ac3f87f15a1923c878a3712db460ca3f6720f102a9658b8419f4aa8aad3e0"
+  },
+  "scope": "Preserved source-matched hosted failure plus local repaired materialization/replay. New source-matched PR/main hosted qualification still required."
+}
