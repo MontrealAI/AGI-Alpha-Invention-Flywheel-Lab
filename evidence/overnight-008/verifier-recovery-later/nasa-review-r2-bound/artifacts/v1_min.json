@@ -1,0 +1,75 @@
+{
+  "version": "v1",
+  "side": "min",
+  "record_sha256": "28f56fda49520b422a26473632ca5dee3ce04dd00f0399948b6595d736ac10e5",
+  "overlap": 528369,
+  "coverage": 0.9646188308878701,
+  "MAE_mm": 0.019159971695580376,
+  "zero_plane_MAE_same_overlap_mm": 0.001877843874392108,
+  "zero_plane_wins_primary": true,
+  "strata": [
+    {
+      "reference_interval_mm": [
+        "-inf",
+        "-0.1"
+      ],
+      "all_reference_pixels": 2446,
+      "overlap_pixels": 1114,
+      "coverage": 0.455437448896157,
+      "MAE_mm": 0.13537442901087424,
+      "zero_plane_MAE_mm": 0.18441577890943783
+    },
+    {
+      "reference_interval_mm": [
+        "-0.1",
+        "-0.03"
+      ],
+      "all_reference_pixels": 5402,
+      "overlap_pixels": 4099,
+      "coverage": 0.7587930396149575,
+      "MAE_mm": 0.09917492455156432,
+      "zero_plane_MAE_mm": 0.05652748667194626
+    },
+    {
+      "reference_interval_mm": [
+        "-0.03",
+        "-0.01"
+      ],
+      "all_reference_pixels": 11103,
+      "overlap_pixels": 9825,
+      "coverage": 0.8848959740610646,
+      "MAE_mm": 0.08090990210768317,
+      "zero_plane_MAE_mm": 0.015936978375503945
+    },
+    {
+      "reference_interval_mm": [
+        "-0.01",
+        "inf"
+      ],
+      "all_reference_pixels": 528798,
+      "overlap_pixels": 513331,
+      "coverage": 0.970750645804258,
+      "MAE_mm": 0.01708696760366926,
+      "zero_plane_MAE_mm": 0.0007762405386698561
+    }
+  ],
+  "checks": {
+    "mask_subset_of_reference": true,
+    "finite_predictions_on_overlap": true,
+    "overlap_count_matches": true,
+    "coverage_matches": true,
+    "MAE_matches": true,
+    "bias_matches": true,
+    "RMS_matches": true,
+    "reported_rigid_transform_rebuilds_predictions": true,
+    "overlap_rebuilds_from_source_support_only": true,
+    "stratum0_counts_and_MAE": true,
+    "stratum0_coverage": true,
+    "stratum1_counts_and_MAE": true,
+    "stratum1_coverage": true,
+    "stratum2_counts_and_MAE": true,
+    "stratum2_coverage": true,
+    "stratum3_counts_and_MAE": true,
+    "stratum3_coverage": true
+  }
+}

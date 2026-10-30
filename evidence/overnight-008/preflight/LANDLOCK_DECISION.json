@@ -1,0 +1,16 @@
+{
+  "question": "Can Landlock supply the unavailable filesystem confinement for a downloaded offline native baseline?",
+  "decision": "BLOCKED_UNSUPPORTED_LANDLOCK",
+  "qualified": false,
+  "source_sha256": {
+    "landlock_availability.py": "bb5ea10a7029ec23f5e9823d416d25b1a7caa87a8e39bb302c10c0a179ff33cb",
+    "LANDLOCK_AVAILABILITY.json": "81b473c917ebf3385aafd0eb9e6f8db1620b40829fc09820c3d05ff0579a24fb",
+    "LANDLOCK_BOUNDARY.md": "bc738bd40d2ef5bfe96f2f0389427370e6b7dc5dc6cb6784aeff2d20fd9599a2"
+  },
+  "ceiling": {
+    "cpu_seconds": 120,
+    "wall_minutes": 20
+  },
+  "actual_execution": "Two ABI/availability probes; <0.001 s reported inner wall time. No untrusted execution, effect attacks, inference billing or complete monetary cost measurement.",
+  "resource_decision": "Stop this unsupported isolation approach immediately; preserve unused allocation."
+}

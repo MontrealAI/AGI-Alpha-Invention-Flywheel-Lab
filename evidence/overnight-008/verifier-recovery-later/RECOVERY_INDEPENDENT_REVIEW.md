@@ -1,0 +1,19 @@
+# Independent verification after execution-environment loss
+
+The earlier unpublished XCT arrays and exact checker were absent from public revision `3360acaf`. Their hashes and transcript summaries did not constitute a current executable proof. This recovery therefore uses a declared **new calibration/model edition**, freshly acquired source bytes, new actual construction and a separately authored Fraction checker. No old result was silently relabelled as reproduced.
+
+The current host's exact inherited sandbox source passes ten actual effect/resource probes and all nine existing sandbox tests under `resource006_v3`. The copied source hashes remain unchanged; no candidate file was edited by the verifier. This qualifies only the narrow pure JSON interpreter on the current host. Landlock still returns ENOSYS and the trusted bubblewrap availability probe timed out, so general downloaded-native execution remains unqualified.
+
+For `XCT008_RECOVERY_FULL120_R1`, the independent checker verifies frozen source/protocol/data/model identities, reconstructs the reference from the frozen affine parameters, reconstructs the detector envelope, checks the fixed binary64 ROI objective and verifies every original ray inequality for five arrays: the reference, both ordinary direct-direction outputs and both ordinary PDHG outputs. It imports no candidate helper. All exact integer margin and ROI records agree with separate Fraction arithmetic.
+
+Both ordinary PDHG witnesses are nonnegative and satisfy all 19,680 original full120-view inequalities. Their exact ROI gap is approximately **0.006000002981829619**, greater than the authored developmental `1/200` threshold. The same pair remains feasible for every subset, so subset selection alone cannot meet that target under this new declared model. The restricted ordinary direct-direction pair is also feasible but spans only approximately **0.001603362700555123**; its smaller span does not establish identification of the complete class.
+
+This is a current exact finite-model obstruction, not a physical-material counterexample or an industrial acceptance result. The affine fit and empirical envelope use all120 measurements and the1200-view reference. There is no independently established physical error coverage, customer tolerance, prospective acquisition saving or novel-method advantage. Both construction routes are ordinary methods available equally to controls. Commercial admission, complete-cost profitability, unrestricted simulated earnings and earned-funded compounding remain unestablished.
+
+The acceptance criteria were fixed in the root-agreed protocol before construction. The verifier source was completed after the builder summary had been exposed; this is explicitly a deterministic development review, not protected confirmation, and consumes no statistical alpha.
+
+The first bounded verifier startup failed because it attempted CPU hard185 under the wrapper's hard180. Its original source, exception and 0.323CPU receipt are preserved. The verifier was repaired to honor inherited limits, without changing data, cohort, arithmetic or thresholds. The successful replay used 14.995199 waited CPU seconds and approximately15.03 seconds wall, with no surviving descendants. The full1000CPU verifier allocation remains cumulative; failed reservations are not refunded.
+
+Current proof: `xct-fraction-r2-bound/artifacts/REPORT.json` with `xct-fraction-r2-bound/RECEIPT.json`. Verifier source SHA256 `fa2cd11e61a70ec9ab03f70817d51d01fd02377a82b8ac9be03b41ea87ba172e`. Protocol SHA256 `7eb2d4efb7ba71bdda25695f95db2b73fcbed4943dd71cfcaa98a4d55954e58e`. Calibration SHA256 `448b4eb9ad98f8f846ee25060e0186b323395f56ce9b5e5a5a2d3ba8bb4af4d3`.
+
+The roles share a model family, host, Python and numerical libraries. This is procedural separation, not external certification. **MISSION NOT COMPLETE.**

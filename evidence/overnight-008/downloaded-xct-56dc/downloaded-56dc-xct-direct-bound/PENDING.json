@@ -1,0 +1,54 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "downloaded-56dc-xct-direct",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "research/xct008/recovery/replay.py",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-56dc-xct-direct",
+    "--offline",
+    "--data",
+    "/workspace/scratch/557a27c9cfaf/manufacturing_recovery/data/Data82.mat",
+    "--reference",
+    "/workspace/scratch/557a27c9cfaf/manufacturing_recovery/data/GroundTruthReconstruction.mat",
+    "--verifier",
+    "verification/xct008_recovery/check_recovery.py"
+  ],
+  "requested_command": [
+    "python3",
+    "research/xct008/recovery/replay.py",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-56dc-xct-direct",
+    "--offline",
+    "--data",
+    "/workspace/scratch/557a27c9cfaf/manufacturing_recovery/data/Data82.mat",
+    "--reference",
+    "/workspace/scratch/557a27c9cfaf/manufacturing_recovery/data/GroundTruthReconstruction.mat",
+    "--verifier",
+    "verification/xct008_recovery/check_recovery.py"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "research/xct008/recovery/replay.py",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-56dc-xct-direct",
+    "--offline",
+    "--data",
+    "/workspace/scratch/557a27c9cfaf/manufacturing_recovery/data/Data82.mat",
+    "--reference",
+    "/workspace/scratch/557a27c9cfaf/manufacturing_recovery/data/GroundTruthReconstruction.mat",
+    "--verifier",
+    "verification/xct008_recovery/check_recovery.py"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/557a27c9cfaf/downloaded-56dc-xct/source",
+  "limits": {
+    "wall_seconds": 1200,
+    "cpu_seconds": 900,
+    "memory_bytes": 2147483648,
+    "output_bytes": 67108864,
+    "storage_bytes": 134217728
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "pending"
+}

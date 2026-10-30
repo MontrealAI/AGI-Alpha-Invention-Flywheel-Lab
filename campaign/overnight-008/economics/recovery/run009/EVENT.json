@@ -1,0 +1,38 @@
+{
+  "id": "recovery-reservation/durable-NASA-array-publication-r1",
+  "pool": "verification_publication",
+  "conservative_budget_charge_CPU_seconds": 200,
+  "charge_is_measured_cost": false,
+  "origin": {
+    "authority": "Integration owner direct prospective task2026-10-30, within original10000CPU verifier/publication envelope and existing public repository authority"
+  },
+  "purpose": "Durably publish the frozen original and repaired NASA registration NPZ arrays to address the earlier genuine private-artifact-loss interruption",
+  "artifact_scope": {
+    "original_registered_fields": "4 arrays approximately8.3MB each",
+    "repaired_registered_fields": "2 arrays approximately16.6MB each",
+    "estimated_unique_output": "approximately66MB; exact published byte lengths and hashes await publication receipt",
+    "actual_unique_published_bytes": null
+  },
+  "operations": {
+    "provider": "Existing GitHub Git blob API authority only",
+    "read_chunks_bytes_approx": 15360,
+    "readonly_chunk_reads_may_parallelize": true,
+    "mutation_uploads_sequential": true,
+    "new_data_downloads": 0,
+    "new_experiments": 0
+  },
+  "integrity_obligations": [
+    "Preserve source-frozen data bytes and criterion",
+    "Keep prior event24 journal prefix",
+    "Do not modify frozen source-builder artifact",
+    "Metadata/document links may record actual durable publication without altering underlying data",
+    "Record actual blob/file identities and byte lengths in a versioned publication receipt"
+  ],
+  "observed_CPU_seconds": null,
+  "refund_CPU_seconds": 0,
+  "new_spending_USD": 0,
+  "new_external_access_or_security_authority": false,
+  "qualified_simulated_commercial_earnings_microUSD": 0,
+  "original_final90minute_reserve_starts_utc": "2026-10-30T09:37:44Z",
+  "original_end_utc": "2026-10-30T11:07:44Z"
+}

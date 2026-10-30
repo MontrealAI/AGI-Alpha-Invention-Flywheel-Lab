@@ -1,0 +1,39 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "nasa-coordinate-repair-r2",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "energy_recovery_coordinate_r2/repair.py",
+    "--old",
+    "energy_recovery",
+    "--output",
+    "energy_recovery_coordinate_r2/bound/artifacts"
+  ],
+  "requested_command": [
+    "python",
+    "energy_recovery_coordinate_r2/repair.py",
+    "--old",
+    "energy_recovery",
+    "--output",
+    "energy_recovery_coordinate_r2/bound/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "energy_recovery_coordinate_r2/repair.py",
+    "--old",
+    "energy_recovery",
+    "--output",
+    "energy_recovery_coordinate_r2/bound/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/557a27c9cfaf",
+  "limits": {
+    "wall_seconds": 180,
+    "cpu_seconds": 160,
+    "memory_bytes": 2147483648,
+    "output_bytes": 67108864,
+    "storage_bytes": 134217728
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "pending"
+}

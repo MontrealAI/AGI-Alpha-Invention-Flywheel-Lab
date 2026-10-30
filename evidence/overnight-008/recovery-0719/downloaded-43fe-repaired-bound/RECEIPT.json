@@ -1,0 +1,60 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "downloaded-43fe-repaired",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "scripts/qualify_downloaded008.py",
+    "--source-ref",
+    "43fe01217117f658b275b47ed3c0925a27c43035",
+    "--archive",
+    "/workspace/scratch/557a27c9cfaf/source-43fe.tar.gz",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired"
+  ],
+  "requested_command": [
+    "python3",
+    "scripts/qualify_downloaded008.py",
+    "--source-ref",
+    "43fe01217117f658b275b47ed3c0925a27c43035",
+    "--archive",
+    "/workspace/scratch/557a27c9cfaf/source-43fe.tar.gz",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "scripts/qualify_downloaded008.py",
+    "--source-ref",
+    "43fe01217117f658b275b47ed3c0925a27c43035",
+    "--archive",
+    "/workspace/scratch/557a27c9cfaf/source-43fe.tar.gz",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/557a27c9cfaf/lab",
+  "limits": {
+    "wall_seconds": 600,
+    "cpu_seconds": 300,
+    "memory_bytes": 2147483648,
+    "output_bytes": 134217728,
+    "storage_bytes": 536870912
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 7.785753571999976,
+  "supervisor_cpu_seconds": 0.09061445800000001,
+  "waited_cpu_seconds": 7.735231000000001,
+  "descendant_survivors": false,
+  "output_bytes": 3854,
+  "logs": {
+    "stdout.log": "67430ac3fe8417f3a36353885638bfb8b6a76f549a5f354bd8cecb9b52de305d",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

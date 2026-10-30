@@ -1,0 +1,39 @@
+{
+  "schema": "agi-alpha-landlock-availability/v1",
+  "time_utc": "2026-10-30T05:17:15.039106+00:00",
+  "kernel": "6.18.55",
+  "machine": "x86_64",
+  "python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+  "syscall_numbers": {
+    "landlock_create_ruleset": 444,
+    "landlock_add_rule": 445,
+    "landlock_restrict_self": 446
+  },
+  "header_sha256": {
+    "/usr/include/x86_64-linux-gnu/asm/unistd_64.h": "e34e39ab6237ba98b63d03e677f80c780c7416b9374b747f46c474d1920809fe",
+    "/usr/include/linux/landlock.h": "283947cfcbdda47350af2dea694adcf49a2e9eff1654bf165b358f2705b6f476"
+  },
+  "probes": {
+    "query_abi": {
+      "return": -1,
+      "errno": 38,
+      "error_name": "ENOSYS",
+      "error_text": "Function not implemented"
+    },
+    "create_read_ruleset": {
+      "return": -1,
+      "errno": 38,
+      "error_name": "ENOSYS",
+      "error_text": "Function not implemented"
+    }
+  },
+  "inherited_status": {
+    "NoNewPrivs": "1",
+    "Seccomp": "2",
+    "Seccomp_filters": "1"
+  },
+  "available": false,
+  "qualified_for_untrusted_code": false,
+  "wall_seconds": 0.0005849250010214746,
+  "execution_scope": "Trusted ABI-availability queries only. No untrusted code, baseline, privilege/credential change, new namespace or external access. Filesystem restriction was not installed. All effect/resource attack qualification is BLOCKED if ABI unavailable; no unrestricted fallback."
+}

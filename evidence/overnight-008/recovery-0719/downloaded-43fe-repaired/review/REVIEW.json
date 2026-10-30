@@ -1,0 +1,87 @@
+{
+  "schema": "agi-alpha/independent-linear-plan-review008/v1",
+  "scope": "supplied-linear-ambiguity-plan-only",
+  "lane": "Independent fixed-artifact engineering review; DEVELOPMENT exposed, no statistical superiority claim or protected scientific confirmation",
+  "source_task_sha256": "9e284ca459afc0b26fd2a5d3498f24ece7be17f51df13b7043ae04ea54440fce",
+  "artifact_sha256": "2b34fc4b98f982acedde8345b07aec87bb63cfaaa7a1e26524ecd5bf51a54d65",
+  "interpreter_sha256": "b5ff72fb964ab5c86914b2c23156e7ca4ec9c4d1f7999971906f3fd87d83bb22",
+  "verifier_source_sha256": "962e767a0a64bc6e4100c5c19eda80cc6edc0fc408209fba1d511ac66ded2b9c",
+  "checks": {
+    "qualified_sandbox_unchanged": true,
+    "artifact_schema": true,
+    "task_identity": true,
+    "interpreter_identity": true,
+    "linear_language": true,
+    "dimension": true,
+    "typed_calibration": true,
+    "unique_measurement_ids": true,
+    "typed_measurements": true,
+    "plan_identity": true,
+    "calibration_obligation": true,
+    "complete_supplied_linear_rank": true,
+    "reported_cost": true,
+    "minimum_basis_cost": true,
+    "no_physical_or_commercial_upgrade": true,
+    "actual_confined_execution": true
+  },
+  "errors": [],
+  "reference": {
+    "rank": 29,
+    "cost_units": 3,
+    "plan": [
+      "GFP",
+      "GFP_mRNA",
+      "X_protein"
+    ],
+    "checks": 4
+  },
+  "execution": {
+    "state": "COMPLETE",
+    "returncode": 0,
+    "limits": {
+      "wall_seconds": 30,
+      "cpu_seconds": 20,
+      "memory_bytes": 268435456,
+      "output_bytes": 1048576,
+      "input_bytes": 4194304
+    },
+    "wall_seconds": 0.07622540200009098,
+    "stdout_bytes": 719,
+    "stderr_bytes": 0,
+    "stdout_sha256": "1e4590d67ebd8d6e67ae859f498b1c3670cd548ad06699f8b7afa61be99205cd",
+    "stderr": "",
+    "worker": {
+      "state": "COMPLETE",
+      "result": {
+        "status": "DETECTED_LINEAR_AMBIGUITIES_REMOVED",
+        "initial_ambiguity": 3,
+        "remaining_ambiguity": 0,
+        "plan": [
+          "GFP",
+          "GFP_mRNA",
+          "X_protein"
+        ],
+        "cost_units": 3,
+        "checked": 1,
+        "trace": [],
+        "refused": [],
+        "scope": "Supplied exact linear ambiguity constraints only; no global/practical identifiability, physical feasibility or commercial validation",
+        "calibration_obligation_enforced": true,
+        "physical_calibration_acquired": false,
+        "calibration_uncertainty_qualification": "UNMEASURED_NOT_ENFORCED; exact-rank conditional specification only"
+      },
+      "confinement": "linux-seccomp-default-deny",
+      "worker_wall_seconds": 0.013931980000052135,
+      "worker_cpu_seconds": 0.066498433,
+      "peak_rss_kib": 14080
+    },
+    "interpreter_sha256": "b5ff72fb964ab5c86914b2c23156e7ca4ec9c4d1f7999971906f3fd87d83bb22",
+    "input_sha256": "5fab6613ba365a85a072755e5b65dc30c73eed2caf41cea8c54c5057e50b0451"
+  },
+  "limits": [
+    "Source-derived constraints are supplied inputs; this review does not establish their scientific completeness.",
+    "calibrated:true means a conditional exact measurement specification; physical calibration and finite uncertainty are UNMEASURED_NOT_ENFORCED.",
+    "No global/practical identifiability, technical superiority, economic admission, funds or earned-funded successor claim.",
+    "Shared model/host/filesystem and libraries; separate role control is procedural, not external certification."
+  ]
+}

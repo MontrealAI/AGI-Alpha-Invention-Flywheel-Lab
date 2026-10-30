@@ -1,0 +1,51 @@
+# Recovery screen: evolving electrochemical processes during operation
+
+**Decision: REJECT THE BROAD LEVER AS FLAGSHIP.** Existing complete operando/dynamic impedance methods already measure nonstationary battery/electrochemical processes. The executed real-data probe reproduces an ordinary competent drift-separation baseline; it does not establish a new enabling capability or commercial success. This is a bounded continuation of overnight008 after the biological-identifiability/geothermal/XCT limitations, with all evidence kept in the development lane and no confirmation alpha allocated.
+
+The consequential activity is non-destructive characterization of evolving battery and fuel-cell processes while energy devices operate. Potential beneficiaries are cell/material developers, process engineers and diagnostic-instrument users. The apparent restriction is waiting for equilibrium or confusing a slow change in operating voltage with a frequency-response measurement. A proposed lever would separate that drift from phase-coded excitation so useful operating response becomes measurable. This would matter for energy-device development if an independently important outcome remained unavailable through the strongest current complete route.
+
+That broad gap does not survive the source challenge. Published 2022 operando EIS already supplies reproducible time-varying commercial-cell measurements and methods separating response contributions. The 2022 trend-removal paper applies differencing to improve low-frequency information and reduce required periods in three electrochemical processes. The 2025 three-electrode/overvoltage paper demonstrates operating-condition measurements and complements them with equilibrium and morphological analysis. Current AI-native alternatives must also be included: ISDiffM (2026) publicly releases models and more than5700 paired measured fuel-cell samples for short-profile spectrum prediction. A new predictor would not be the requested missing means. These alternatives were researched, not all executed here, and unavailable comparisons are not counted as wins. Primary sources and access limits are in `SOURCES.json`.
+
+## Prospective protocol and real execution
+
+`PROTOCOL.json` was frozen at `2026-10-30T07:43:06Z`, before downloading or numerically processing the selected measurements. Its SHA256 is `5dd041b584a94c228653e745a8c9b6785d7e7ce06500c0d100cfccb7a2bcb901`. One smaller5°C operando dataset was selected prospectively under the32MiB aggregate download ceiling. It is a public Samsung48X battery charging record from `noelhallemans/EIS-beyond-linearity-and-stationarity`, revision `ab4538a44f37c90006a904ff2f06202daacbe7ca`. The14,330,409 bytes match upstream Git blob `a2500c3927dcf97c11e5b758e28e276d9c79793c` and SHA256 `8d1fd39e1971b39d2d6e24aa78eaaec44ba57fa5a36f82df7f6d39fd0947995a`.
+
+The source README contains an important physical limitation: potentiostat current sampling affects phase at frequencies above10Hz, and the authors instruct users to interpret only frequencies below10Hz. The probe consequently excludes22 affected excited bins and evaluates54 frequencies from0.00556 to9.772Hz. It does not numerically repair uncalibrated high-frequency data or claim that smooth fits restore lost instrumentation information.
+
+The record has1,044,000 measured voltage/current samples at200Hz,29 periods of180s and87minutes total. All source periods remain accounted for. The prespecified interior10%-90% time interval supplies23 period-center comparisons. The supplied published time-varying estimate is an existing algorithmic output, **not independent physical truth**. Its median relative magnitude range across the allowed frequencies is50.7%, showing that the source's existing route already represents substantial temporal evolution.
+
+`probe_eis.py` executes an ordinary per-period Fourier ratio ablation and an ordinary joint sinusoid/quadratic-drift least-squares baseline. The latter uses the Fourier/Schur complement of the same least-squares equations; it is a standard numerical procedure, not an autonomous invention. All76 excited tones are accounted for as nuisance components while only the54 allowed frequencies are interpreted. The provided complete dynamic route remains the strong existing alternative; a stationary-only FFT is not promoted as the strongest comparator.
+
+| Executed diagnostic | Median relative complex disagreement with provided dynamic estimate | 95th percentile |
+| --- | ---: | ---: |
+| Stationary per-period FFT |1.497% |12.935% |
+| Ordinary joint Fourier/quadratic drift least squares |0.165% |0.670% |
+
+These comparisons establish algorithmic reproduction only. They cannot establish physical accuracy, device-fault detection, kinetics identification, useful cell-life extension or a novel measurement class. The joint baseline's improvement over the stationary ablation is precisely why a deliberately weak stationary comparator would give a misleading invention claim.
+
+The closed-form baseline was qualified against a natural dense pivoted-QR least-squares implementation on the same first real period:36,000rows,155columns, full rank, relative coefficient discrepancy `4.884e-13` against the coded `1e-8` implementation-check tolerance. The first readiness attempt rejected unsigned integer metadata by mistake; its code, stderr and failure record remain in `original-r1` and `run-r1`. The repair accepts numeric unsigned integers while retaining every finite-value, shape, time and frequency condition. No cohort, frequency cutoff or scientific threshold changed.
+
+## Rejected causal levers and better next means
+
+1. **Remove the equilibrium requirement with multisine measurement:** rejected as a new flagship because established complete operando methods already do so.
+2. **Separate charging drift through ordinary polynomial/orthogonal demodulation:** rejected as a new means because competent least-squares and published LTV/differencing methods already provide it. The executed ordinary baseline is adequate to challenge the proposed lever; a naive FFT loss would not establish a gap.
+3. **Use software fits to restore the source's high-frequency phase:** not established. The source explicitly identifies missing current oversampling; this is an instrument-information problem, not evidence that a smoother or learned curve is correct.
+4. **Predict a full impedance spectrum from short operating traces:** not selected. Current released AI-native methods are strong alternatives, and another predictor experiment would repeat the campaign's rejected direction without establishing a new productive means.
+
+The 2026 dynamic-impedance review identifies a more specific unresolved boundary: current approaches require drift slower than the lowest excitation and standardized validation remains incomplete. That observation is a lead, not an admitted customer obligation. The better first experiment would target a fixed useful response under a prospectively specified fast operating transition, and test whether a representation of the finite-time causal response plus synchronized orthogonal measurements or designed perturbations changes what can be measured. Existing BLTVA trend-removal/differencing, dynamic multifrequency analysis, and relevant learned alternatives must receive the same inputs and calibration.
+
+Before that construction can support a physical claim, it needs paired reference measurements with an independently characterized time-varying electrical/physical standard, adequate current oversampling and a real permissible perturbation/control inventory. A prospective sign/phase-paired experiment at matched operating state could help distinguish nuisance drift from a causal incremental response, but ordinary system-identification and operando techniques already use related principles. The first gate is whether those complete methods fail the fixed useful outcome on such **independent measured inputs**. This public slow-charging record does not supply that reference. Shortening records, inventing a fast-drift simulator or treating a supplied estimate as truth would not close the gap. Specific available next data anchors include the ISDiffM paired signal/EIS archives, but access to them alone does not establish the needed fast-transition calibration and no additional candidate was run here.
+
+## Commercial and resource consequence
+
+No loss-making cohort, willingness-to-pay lower bound, enforceable capture arrangement, complete-cost profit or investment attractiveness is established. Existing free/MIT code and published methods are substitutes; their existence is not a claim that instrument acquisition, commissioning or complete operation costs zero. All such costs and buyer participation remain unknown. No real or simulated customer transaction was manufactured from this probe; earned funding remains unestablished.
+
+The experiment used only existing NumPy/SciPy and our own authored Python. Downloaded MATLAB programs were read for provenance and never executed. Numerical work ran with a2GiB address-space cap, CPU/wall limits and restricted file descriptors; no native untrusted program, paid service, outreach or new account access occurred. The main probe used approximately0.385CPU seconds and82MiB peak RSS. Dense-QR qualification used approximately0.786CPU seconds and219MiB peak RSS. These quantities are resource measurements, **not complete monetary cost**; search, inference, researcher construction, prior failures, integration, verification, instrument operation and obligations remain chargeable or unknown.
+
+Replay from the exact source data:
+
+```sh
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 prlimit --as=2147483648 --cpu=400 --nofile=64 -- timeout 240 python3 probe_eis.py --data operandoEIS_5degrees.mat --output /tmp/eis-probe-NEW
+```
+
+The output directory must not exist. `DATA_IDENTITY.json` pins the original bytes; `run-r2/RAW_DIAGNOSTICS.json` preserves calculated diagnostic values, and `JOINT_BASELINE_QUALIFICATION.json` records the ordinary alternative implementation check. The MIT source license and authors' data-use/citation note are retained under `upstream/`. This experiment supports the decision to pursue a better means; it does not complete the mission.

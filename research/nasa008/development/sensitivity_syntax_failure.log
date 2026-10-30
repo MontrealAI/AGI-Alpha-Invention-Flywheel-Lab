@@ -1,0 +1,4 @@
+  File "/workspace/scratch/557a27c9cfaf/energy_recovery/sensitivity.py", line 43
+    v=block[np.isfinite(block)];q=v/.01;d=abs(q-np.rint(q));finite_n+=len(v);noninteger_n+=int((d>1e-10).sum());max_deviation=max(max_deviation,float(d.max())if len(d)else0);zero_n+=int((v==0).sum())
+                                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: expected 'else' after 'if' expression

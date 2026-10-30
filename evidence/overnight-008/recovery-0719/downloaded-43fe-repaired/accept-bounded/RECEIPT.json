@@ -1,0 +1,66 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "accept",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "verification/accept_linear_plan008.py",
+    "--root",
+    ".",
+    "--task",
+    "research/observability008/elowitz/model_constraints.json",
+    "--delivery",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/construction/DELIVERY.json",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/review"
+  ],
+  "requested_command": [
+    "python3",
+    "verification/accept_linear_plan008.py",
+    "--root",
+    ".",
+    "--task",
+    "research/observability008/elowitz/model_constraints.json",
+    "--delivery",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/construction/DELIVERY.json",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/review"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "verification/accept_linear_plan008.py",
+    "--root",
+    ".",
+    "--task",
+    "research/observability008/elowitz/model_constraints.json",
+    "--delivery",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/construction/DELIVERY.json",
+    "--output",
+    "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/review"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/source",
+  "limits": {
+    "wall_seconds": 60,
+    "cpu_seconds": 30,
+    "memory_bytes": 2147483648,
+    "output_bytes": 33554432,
+    "storage_bytes": 67108864
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 0.7576577019999604,
+  "supervisor_cpu_seconds": 0.011442233999999996,
+  "waited_cpu_seconds": 0.735849,
+  "descendant_survivors": false,
+  "output_bytes": 4568,
+  "logs": {
+    "stdout.log": "821205e389e16e081e7f628d384dec1ded9a0cbb6fef274407587db79c9fe896",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}
