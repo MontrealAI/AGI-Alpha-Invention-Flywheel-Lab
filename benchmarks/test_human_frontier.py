@@ -3,6 +3,8 @@ from __future__ import annotations
 import copy
 import importlib.util
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -42,9 +44,17 @@ class BenchmarkTests(unittest.TestCase):
     def test_unknown_cost_category_refused(self):
         x=copy.deepcopy(self.source);x['cases'][0]['new_unknown_cost']='0'
         with self.assertRaises(ValueError): hf.analyze(x)
-    def test_output_file_does_not_overwrite(self):
+    def test_cli_writes_and_refuses_overwrite(self):
         with tempfile.TemporaryDirectory() as tmp:
-            path=Path(tmp)/'existing.json';path.write_text('previous')
-            self.assertTrue(path.exists())
-            self.assertNotEqual(path.read_text(),'{ }')
+            path=Path(tmp)/'out.json'
+            command=[sys.executable,str(ROOT/'human_frontier.py'),
+                     '--input',str(ROOT/'illustrative_cases.json'),'--output',str(path)]
+            first=subprocess.run(command,capture_output=True,text=True,timeout=10)
+            self.assertEqual(first.returncode,0,first.stderr)
+            original=path.read_bytes()
+            self.assertEqual(json.loads(original)['commercial_success'],'UNESTABLISHED')
+            second=subprocess.run(command,capture_output=True,text=True,timeout=10)
+            self.assertEqual(second.returncode,2)
+            self.assertIn('Preserve prior output',second.stderr)
+            self.assertEqual(path.read_bytes(),original)
 if __name__=='__main__': unittest.main()
