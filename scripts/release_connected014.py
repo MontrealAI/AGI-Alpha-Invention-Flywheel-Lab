@@ -230,7 +230,7 @@ def push_applicability(repository, source_commit):
         trees = [gh(f'repos/{repository}/git/trees/{value}?recursive=1') for value in (before, source_commit)]
         if any(tree.get('truncated', True) for tree in trees):
             raise ValueError('UNTRUNCATED_PUSH_SOURCE_TREES_REQUIRED')
-        old, new = [{row['path']:(row['type'], row['sha']) for row in tree['tree'] if row['type'] != 'tree'} for tree in trees]
+        old, new = [{row['path']:(row['type'], row.get('mode'), row['sha']) for row in tree['tree'] if row['type'] != 'tree'} for tree in trees]
         changed = {name for name in set(old)|set(new) if old.get(name) != new.get(name)}
         method = 'EXACT_RECURSIVE_GIT_TREE_DIFF_AFTER_COMPARE_FILE_CAP'
     return {'base_commit':before, 'changed_paths':sorted(changed), 'comparison_method':method,

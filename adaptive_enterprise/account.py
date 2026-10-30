@@ -97,6 +97,19 @@ def action_digest(plan, expected_state_digest, amount_microUSD, expected_net_mic
                    'amount_microUSD': amount_microUSD, 'expected_net_microUSD': expected_net_microUSD})
 
 
+def action_prefix_digests(actions):
+    running = hashlib.sha256(b'[')
+    empty = running.copy(); empty.update(b']')
+    prefixes = [empty.hexdigest()]
+    for index, event in enumerate(actions):
+        if index:
+            running.update(b',')
+        running.update(canonical(event))
+        prefix = running.copy(); prefix.update(b']')
+        prefixes.append(prefix.hexdigest())
+    return prefixes
+
+
 def _operation_id(op, args):
     if op == 'event':
         return 'event:' + _identifier(args.get('id')) + ':' + _identifier(args.get('event_id'))
@@ -105,7 +118,7 @@ def _operation_id(op, args):
     return op + ':' + _identifier(args.get('id'))
 
 
-def _validate_resolution(tape, proof, receipt, actual, work_sha256, day, jobs):
+def _validate_resolution(tape, proof, receipt, actual, work_sha256, day, jobs, *, native_actions_sha256=None):
     fields = {'schema', 'plan_id', 'resolved_at_day', 'native_actions_sha256', 'work_artifact_sha256',
               'upfront_incurred_microUSD', 'later_incurred_microUSD', 'unused_reserve_microUSD', 'deliveries', 'growth'}
     if not isinstance(receipt, dict) or set(receipt) != fields or receipt['schema'] != 'agi-alpha/adaptive012-obligation-resolution/v1':
@@ -113,7 +126,8 @@ def _validate_resolution(tape, proof, receipt, actual, work_sha256, day, jobs):
     if not _hex(work_sha256) or type(receipt['resolved_at_day']) is not int:
         raise ValueError('ACTUAL_WORK_HASH_AND_RESOLUTION_DAY_REQUIRED')
     plan = proof['body']['plan']
-    if receipt['plan_id'] != plan['plan_id'] or receipt['resolved_at_day'] != day or receipt['native_actions_sha256'] != digest(tape['actions']) or receipt['work_artifact_sha256'] != work_sha256:
+    native_actions_sha256 = digest(tape['actions']) if native_actions_sha256 is None else native_actions_sha256
+    if receipt['plan_id'] != plan['plan_id'] or receipt['resolved_at_day'] != day or receipt['native_actions_sha256'] != native_actions_sha256 or receipt['work_artifact_sha256'] != work_sha256:
         raise ValueError('OBLIGATION_RESOLUTION_SOURCE_OR_TIME_MISMATCH')
     for key in ['upfront_incurred_microUSD', 'later_incurred_microUSD', 'unused_reserve_microUSD']:
         amount(receipt[key])
@@ -188,6 +202,7 @@ def audit_account(record, *, root, manifest):
     checked = audit(tape, root=root, manifest=manifest)
     from commercial.ledger import load_jobs
     jobs = load_jobs(root, manifest)
+    prefixes = action_prefix_digests(tape['actions'])
     for index, event in enumerate(tape['actions']):
         if event['op'] == 'finish':
             proof = proofs.get(event['args']['id'])
@@ -196,7 +211,7 @@ def audit_account(record, *, root, manifest):
                 if not isinstance(receipt, dict):
                     raise ValueError('FINISHED_LATER_OBLIGATION_RECEIPT_MISSING')
                 prefix = {**tape, 'actions': tape['actions'][:index], 'summary': event['before']}
-                bound = _validate_resolution(prefix, proof, receipt, event['args']['amount'], receipt['work_artifact_sha256'], event['day'], jobs)
+                bound = _validate_resolution(prefix, proof, receipt, event['args']['amount'], receipt['work_artifact_sha256'], event['day'], jobs, native_actions_sha256=prefixes[index])
                 if event['args']['artifact_sha256'] != bound:
                     raise ValueError('NATIVE_FINISH_RESOLUTION_COMMITMENT_MISMATCH')
         if event['op'] != 'reserve':
@@ -205,7 +220,7 @@ def audit_account(record, *, root, manifest):
         if not isinstance(proof, dict) or digest(proof.get('body')) != event['args']['intent_sha256']:
             raise ValueError('PUBLIC_RESERVATION_INTENT_MISMATCH')
         body = proof['body']
-        prior_digest = digest({'config': tape['config'], 'actions_sha256': digest(tape['actions'][:index]), 'summary': event['before']})
+        prior_digest = digest({'config': tape['config'], 'actions_sha256': prefixes[index], 'summary': event['before']})
         if body['expected_state_digest'] != prior_digest or body['day'] != event['day']:
             raise ValueError('PUBLIC_RESERVATION_STALE_STATE_OR_TIME')
         expected = action_digest(body['plan'], prior_digest, body['amount_microUSD'], body['expected_net_microUSD'])

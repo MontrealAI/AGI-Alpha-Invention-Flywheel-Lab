@@ -339,8 +339,14 @@ def prepare_services(root, relative, cohort_seed=0):
 
 
 def check_job(root, manifest, job, artifact=None):
+    _validate_manifest(root, manifest)
+    checked = _check_job(root, manifest, job, artifact)
+    _validate_manifest(root, manifest)
+    return checked
+
+
+def _check_job(root, manifest, job, artifact=None):
     from adaptive_enterprise.checkers import audit_delivery
-    _validate_manifest(root,manifest)
     raw = _read(root,job['input'],job['input_sha256'])
     current = _read(root,job['artifact'],job['artifact_sha256'])
     receipt = _read(root,job['receipt'],job['receipt_sha256'])
@@ -381,11 +387,12 @@ def load_jobs(root,manifest):
         if not isinstance(job,dict) or set(job)!=fields or not isinstance(job.get('id'),str) or not job['id'] or job['id'] in seen or type(job['accepted']) is not bool:
             raise ValueError('UNIQUE_ADAPTIVE_JOB_REQUIRED')
         seen.add(job['id'])
-        checked=check_job(root,manifest,job)
+        checked=_check_job(root,manifest,job)
         if job['accepted']:
             jobs[job['id']]=checked
     if not jobs:
         raise ValueError('NO_ACCEPTED_ADAPTIVE_ARTIFACTS')
+    _validate_manifest(root, manifest)
     return jobs
 
 

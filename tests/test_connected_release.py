@@ -231,5 +231,15 @@ class WorkflowGateTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'UNTRUNCATED_PUSH'):
                 release.push_applicability('owner/repo', COMMIT)
 
+    def test_exact_path_diff_includes_mode_only_changes(self):
+        old = {'path':'.github/workflows/measurement009.yml', 'type':'blob', 'mode':'100644', 'sha':'d'*40}
+        new = {**old, 'mode':'100755'}
+        responses = [{'parents':[{'sha':'c'*40}]}, {'files':[{'filename':str(i)} for i in range(300)]},
+                     {'truncated':False, 'tree':[old]}, {'truncated':False, 'tree':[new]}]
+        with patch.dict(release.os.environ, {}, clear=True), patch.object(release, 'gh', side_effect=responses):
+            result = release.push_applicability('owner/repo', COMMIT)
+        self.assertEqual(result['changed_paths'], ['.github/workflows/measurement009.yml'])
+        self.assertIn('measurement009.yml', release.applicable_workflows(result['changed_paths']))
+
 if __name__ == '__main__':
     unittest.main()

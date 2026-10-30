@@ -43,8 +43,8 @@ class ArchiveTransport011Tests(unittest.TestCase):
             self.assertFalse((extracted / PART).exists())
             self.assertFalse((extracted / COMBINED).exists())
 
-    def test_caps_remain_unchanged_and_apply_to_retained_payloads(self):
-        self.assertEqual(archive_v2.MAX_BYTES, 250 * 1024**2)
+    def test_current_caps_apply_to_retained_payloads(self):
+        self.assertEqual(archive_v2.MAX_BYTES, 512 * 1024**2)
         self.assertEqual(archive_v2.MAX_FILES, 10000)
         with tempfile.TemporaryDirectory() as tmp:
             root, source = Path(tmp), Path(tmp) / 'source'
@@ -84,6 +84,10 @@ class ArchiveTransport011Tests(unittest.TestCase):
         expected = frozen['sources']['flywheel/archive_v2.py']
         historical = ROOT / SNAPSHOTS['flywheel/archive_v2.py']
         self.assertEqual(hashlib.sha256(historical.read_bytes()).hexdigest(), expected)
+        namespace = {'__name__':'frozen_archive_transport011_policy'}
+        exec(compile(historical.read_bytes(), str(historical), 'exec'), namespace)
+        self.assertEqual(namespace['MAX_BYTES'], 250 * 1024**2)
+        self.assertEqual(namespace['MAX_FILES'], 10000)
         self.assertNotEqual(hashlib.sha256((ROOT / 'flywheel/archive_v2.py').read_bytes()).hexdigest(), expected)
         with tempfile.TemporaryDirectory(prefix='transport011-frozen6363-', dir='/tmp') as tmp:
             destination = Path(tmp) / 'original'

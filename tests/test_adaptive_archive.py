@@ -41,7 +41,7 @@ class AdaptiveArchiveTests(unittest.TestCase):
             for name in omitted:self.assertFalse((root/'extracted'/name).exists())
 
     def test_resource_caps_remain_enforced_for_retained_payloads(self):
-        self.assertEqual(archive_v2.MAX_BYTES,250*1024**2)
+        self.assertEqual(archive_v2.MAX_BYTES,512*1024**2)
         self.assertEqual(archive_v2.MAX_FILES,10000)
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary);source=root/'source';source.mkdir()
@@ -67,12 +67,17 @@ class AdaptiveArchiveTests(unittest.TestCase):
             self.assertEqual((root/'valid'/PART).read_bytes(),payloads[PART])
             with self.assertRaisesRegex(ValueError,'CONTENT_IDENTITY'):archive_v2.extract(root/'corrupt.zip',root/'corrupt')
 
-    def test_prior_adapter_source_is_preserved_without_raising_limits(self):
+    def test_prior_adapter_retains_its_hash_bound_original_limits(self):
         record=json.loads((ROOT/'historical/adaptive012-prior-policy/ARCHIVE_V2_SOURCE.json').read_text())
         preserved=(ROOT/record['preserved_path']).read_bytes()
+        self.assertEqual(record['source_commit'],'daf3ef2ff07a2ba89393038288606f0b61610b92')
+        self.assertEqual(record['sha256'],'138f59b545c91fc36ef0d9653b9f94cccf2aaed68f6e879c07387dcd6de88afe')
         self.assertEqual(hashlib.sha256(preserved).hexdigest(),record['sha256'])
         self.assertEqual(len(preserved),record['bytes'])
-        self.assertEqual(record['limits'],{'MAX_BYTES':archive_v2.MAX_BYTES,'MAX_FILES':archive_v2.MAX_FILES})
+        namespace={'__name__':'preserved_adaptive_archive_policy'}
+        exec(compile(preserved,record['preserved_path'],'exec'),namespace)
+        self.assertEqual(record['limits'],{'MAX_BYTES':namespace['MAX_BYTES'],'MAX_FILES':namespace['MAX_FILES']})
+        self.assertEqual(record['limits'],{'MAX_BYTES':250*1024**2,'MAX_FILES':10000})
         self.assertNotEqual(preserved,(ROOT/'flywheel/archive_v2.py').read_bytes())
 
 

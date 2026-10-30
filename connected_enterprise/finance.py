@@ -13,7 +13,7 @@ import hmac
 from pathlib import Path
 import threading
 
-from adaptive_enterprise.account import Account, action_digest, audit_account
+from adaptive_enterprise.account import Account, action_digest, action_prefix_digests, audit_account
 from commercial.ledger import amount as validate_amount, canonical, digest, strict_json
 from commercial.persistence import atomic_bytes
 
@@ -55,9 +55,9 @@ def _validate_native_request(op, args, day):
         raise ValueError('DECLARED_CONNECTED_NATIVE_ACTION_REQUIRED')
 
 
-def _find_action(tape, op, args, day):
+def _find_action(tape, op, args, day, *, action_index=None):
     ident = _native_id(op, args)
-    matches = [row for row in tape['actions'] if _native_id(row['op'], row['args']) == ident]
+    matches = action_index.get(ident, []) if action_index is not None else [row for row in tape['actions'] if _native_id(row['op'], row['args']) == ident]
     if not matches:
         raise ValueError('JOURNALED_NATIVE_ACTION_NOT_COMMITTED')
     if len(matches) != 1:
@@ -68,12 +68,12 @@ def _find_action(tape, op, args, day):
     return row
 
 
-def _native_snapshot(tape, native, filesystem):
-    prefix = tape['actions'][:native['seq'] + 1]
-    actions_sha256 = digest(prefix)
+def _native_snapshot(tape, native, filesystem, *, prefixes=None):
+    sequence = native['seq'] + 1
+    actions_sha256 = prefixes[sequence] if prefixes is not None else digest(tape['actions'][:sequence])
     return {'summary': copy.deepcopy(native['after']),
             'state_digest': digest({'config': tape['config'], 'actions_sha256': actions_sha256, 'summary': native['after']}),
-            'actions_sha256': actions_sha256, 'sequence': len(prefix),
+            'actions_sha256': actions_sha256, 'sequence': sequence,
             'scope': 'SIMULATED', 'ownership': 'MANDATORY_SINGLE_LOCAL_POSIX_WRITER',
             'filesystem': filesystem}
 
@@ -349,7 +349,7 @@ class JournalAccount:
         self.close()
 
 
-def _pending_native_coverage(entry, tape, record, start):
+def _pending_native_coverage(entry, tape, record, start, prefixes):
     request = entry['request']
     if entry['receipt'] is not None:
         raise ValueError('PENDING_CONNECTED_RECEIPT_MUST_BE_UNACKNOWLEDGED')
@@ -365,7 +365,7 @@ def _pending_native_coverage(entry, tape, record, start):
         if entry['funding'] == 'EARNED':
             plan = entry['plan']
             before = tape['actions'][start]['before'] if start < len(tape['actions']) else tape['summary']
-            expected_state = digest({'config': tape['config'], 'actions_sha256': digest(tape['actions'][:start]), 'summary': before})
+            expected_state = digest({'config': tape['config'], 'actions_sha256': prefixes[start], 'summary': before})
             if plan['expected_state_digest'] != expected_state or action_digest(plan, expected_state, request['amount'], request['expected_net']) != plan['authorized_digest']:
                 raise ValueError('PENDING_CONNECTED_SPEND_AUTHORIZATION_MISMATCH')
             options = plan['selected_options']
@@ -418,12 +418,16 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
         raise ValueError('CONNECTED_JOURNAL_PUBLIC_SOURCE_MISMATCH')
     if journal.get('schema') != SCHEMA or any(journal.get(k) != tape['config'].get(k) for k in ['opening', 'working', 'contract']):
         raise ValueError('CONNECTED_JOURNAL_NATIVE_AUTHORITY_MISMATCH')
+    prefixes = action_prefix_digests(tape['actions'])
+    action_index = {}
+    for native in tape['actions']:
+        action_index.setdefault(_native_id(native['op'], native['args']), []).append(native)
     keys, spent, covered = set(), 0, []
     for index, entry in enumerate(journal['entries']):
         if pending_key is not None and entry['key'] == pending_key:
             if index != len(journal['entries']) - 1 or entry['status'] != 'PENDING' or covered != list(range(len(covered))):
                 raise ValueError('ONE_FINAL_PENDING_CONNECTED_ACTION_REQUIRED')
-            covered.extend(_pending_native_coverage(entry, tape, record, len(covered)))
+            covered.extend(_pending_native_coverage(entry, tape, record, len(covered), prefixes))
             continue
         if entry['key'] in keys or entry['status'] != 'COMPLETE':
             raise ValueError('COMPLETE_UNIQUE_CONNECTED_JOURNAL_REQUIRED')
@@ -431,8 +435,8 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
         request, receipt = entry['request'], entry['receipt']
         if request['operation'] == 'execute':
             _validate_native_request(request['op'], request['args'], request['day'])
-            native = _find_action(tape, request['op'], request['args'], request['day'])
-            if entry['key'] != 'native:' + _native_id(request['op'], request['args']) or receipt != _native_snapshot(tape, native, receipt.get('filesystem')):
+            native = _find_action(tape, request['op'], request['args'], request['day'], action_index=action_index)
+            if entry['key'] != 'native:' + _native_id(request['op'], request['args']) or receipt != _native_snapshot(tape, native, receipt.get('filesystem'), prefixes=prefixes):
                 raise ValueError('CONNECTED_NATIVE_RECEIPT_CHANGED')
             covered.append(native['seq'])
         elif request['operation'] == 'spend':
@@ -445,18 +449,18 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
                 if not public_proof or public_proof['body']['plan'] != clean or public_proof['body']['amount_microUSD'] != request['amount'] or public_proof['body']['expected_net_microUSD'] != request['expected_net'] or record['obligation_resolutions'].get(plan['plan_id']) != entry['obligation_receipt']:
                     raise ValueError('CONNECTED_SPEND_NATIVE_PROOF_MISMATCH')
                 reservation = _find_action(tape, 'reserve', {'id': plan['plan_id'], 'amount': request['amount'],
-                    'expected_net_value': request['expected_net'], 'intent_sha256': digest(public_proof['body'])}, request['day'])
+                    'expected_net_value': request['expected_net'], 'intent_sha256': digest(public_proof['body'])}, request['day'], action_index=action_index)
                 covered.append(reservation['seq'])
                 execution = plan['selected_options'][0]['execution']
                 if execution['kind'] != request['kind'] or execution['work_sha256'] != digest(request['work']) or execution['source_sha256'] != journal['source']['sha256'] or plan['source_hashes'] != journal['source']['files']:
                     raise ValueError('CONNECTED_RESOURCE_CONTRACT_SOURCE_MISMATCH')
                 artifact = digest({'work_artifact_sha256': digest(request['work']),
                                    'obligation_receipt_sha256': digest(entry['obligation_receipt'])})
-                native = _find_action(tape, 'finish', {'id': plan['plan_id'], 'amount': request['amount'], 'artifact_sha256': artifact}, request['day'])
+                native = _find_action(tape, 'finish', {'id': plan['plan_id'], 'amount': request['amount'], 'artifact_sha256': artifact}, request['day'], action_index=action_index)
                 if receipt['plan_id'] != plan['plan_id'] or receipt['obligation_receipt_sha256'] != digest(entry['obligation_receipt']):
                     raise ValueError('CONNECTED_SPEND_RESOLUTION_CHANGED')
             elif entry['funding'] == 'SEED' and request['allow_seed']:
-                native = _find_action(tape, 'cost', {'id': _seed_id(request, journal['source']['sha256']), 'amount': request['amount']}, request['day'])
+                native = _find_action(tape, 'cost', {'id': _seed_id(request, journal['source']['sha256']), 'amount': request['amount']}, request['day'], action_index=action_index)
                 if receipt['plan_id'] is not None:
                     raise ValueError('SEED_CANNOT_CLAIM_EARNED_RESERVATION')
             else:
@@ -466,7 +470,7 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
                                'plan_id': entry['plan']['plan_id'] if entry['plan'] else None,
                                'work_sha256': digest(request['work']), 'source_sha256': journal['source']['sha256'],
                                'native_event_sequence': native['seq'],
-                               'native_actions_sha256': digest(tape['actions'][:native['seq'] + 1]),
+                               'native_actions_sha256': prefixes[native['seq'] + 1],
                                'obligation_receipt_sha256': digest(entry['obligation_receipt']) if entry['obligation_receipt'] else None,
                                'prepaid_support_microUSD': max(entry['plan']['selected_options'][0]['later_liabilities'].values()) if entry['plan'] else 0}
             if entry['key'] != 'spend:' + request['id'] or receipt != expected_receipt:

@@ -1,0 +1,98 @@
+{
+  "accepted": false,
+  "children_cpu_seconds": 21.920827,
+  "commands": [
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "connected_enterprise",
+        "run",
+        "--output",
+        "/workspace/scratch/36115aecd71a/connected014-clean-committed002/operation",
+        "--smoke"
+      ],
+      "cwd": "/workspace/scratch/36115aecd71a/connected014-clean-committed002/extracted-source",
+      "returncode": 0,
+      "stderr": "01-run.stderr",
+      "stdout": "01-run.stdout",
+      "wall_seconds": 7.202169313997729
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "connected_enterprise",
+        "resume",
+        "--output",
+        "/workspace/scratch/36115aecd71a/connected014-clean-committed002/operation"
+      ],
+      "cwd": "/workspace/scratch/36115aecd71a/connected014-clean-committed002/extracted-source",
+      "returncode": 0,
+      "stderr": "02-resume.stderr",
+      "stdout": "02-resume.stdout",
+      "wall_seconds": 3.5793189059986616
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "connected_enterprise",
+        "audit",
+        "--output",
+        "/workspace/scratch/36115aecd71a/connected014-clean-committed002/operation"
+      ],
+      "cwd": "/workspace/scratch/36115aecd71a/connected014-clean-committed002/extracted-source",
+      "returncode": 0,
+      "stderr": "03-audit.stderr",
+      "stdout": "03-audit.stdout",
+      "wall_seconds": 2.3772114619932836
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "connected_enterprise",
+        "package",
+        "--output",
+        "/workspace/scratch/36115aecd71a/connected014-clean-committed002/operation",
+        "--archive",
+        "/workspace/scratch/36115aecd71a/connected014-clean-committed002/connected014-keyfree.zip"
+      ],
+      "cwd": "/workspace/scratch/36115aecd71a/connected014-clean-committed002/extracted-source",
+      "returncode": 1,
+      "stderr": "04-package.stderr",
+      "stdout": "04-package.stdout",
+      "wall_seconds": 0.7667666709967307
+    }
+  ],
+  "failure": {
+    "message": "CLEAN_COMMAND_FAILED:['/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python', '-m', 'connected_enterprise', 'package', '--output', '/workspace/scratch/36115aecd71a/connected014-clean-committed002/operation', '--archive', '/workspace/scratch/36115aecd71a/connected014-clean-committed002/connected014-keyfree.zip']:see /workspace/scratch/36115aecd71a/connected014-clean-committed002/04-package.stderr",
+    "type": "RuntimeError"
+  },
+  "finished_utc": "2026-10-30T18:51:45Z",
+  "logs": {
+    "01-run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "01-run.stdout": "203bceb154d6623ec889fa6414965d35fc4967dd8bc09067944d6fb4b1d908b4",
+    "02-resume.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "02-resume.stdout": "ac9e538b6bdb7889ee0a9169b6755345177f197c25f1acdfb378bb873bbba5f8",
+    "03-audit.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "03-audit.stdout": "c18cb6b8e3dd477ecf0ef9569d23074b23d8fc538437f9dd3444cca828312fe7",
+    "04-package.stderr": "20f4371593ef9ec16d0ff00bf1511eb0c757cb256283b96edf86b6bed4f4b546",
+    "04-package.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "mode": "ENGINEERING_SMOKE",
+  "runtime": {
+    "dependencies": {
+      "cffi": "2.1.1",
+      "cryptography": "50.0.2",
+      "pycparser": "3.11"
+    },
+    "dependency_installation": "NOT_PERFORMED; exact preinstalled pinned runtime checked. Fresh dependency installation must be qualified separately.",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]"
+  },
+  "schema": "agi-alpha/connected014-clean-qualification/v1",
+  "started_utc": "2026-10-30T18:51:31Z",
+  "timeout_seconds": 900,
+  "wall_seconds": 14.074044762994163
+}

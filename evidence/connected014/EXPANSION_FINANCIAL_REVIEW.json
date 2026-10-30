@@ -1,0 +1,434 @@
+{
+  "accepted": true,
+  "actual_recovery_readonly_check": {
+    "expected_sealed397_sha256": "3450c2b9b17c99f7dc81128c50a64462503bad32ac7f879182d35b913a3253b8",
+    "final_native_actions": 540,
+    "final_signed_commands": 499,
+    "journal_HMAC_valid": true,
+    "receipt_prefix_errors": [],
+    "reservation_proof_HMACs_valid": true,
+    "scope": "Read-only separate HMAC and serialized receipt-prefix check; no account opened or mutated; local simulation key never published.",
+    "sealed397_exact_sha256": "3450c2b9b17c99f7dc81128c50a64462503bad32ac7f879182d35b913a3253b8",
+    "signed_original367_receipt_prefixes": 367,
+    "state_HMAC_valid": true
+  },
+  "addendum_file_sha256": "afc7e700a7f889d6fd99e500b5f3622e51cbe1b2be1444d807fb96ec261ba3cf",
+  "all_native_milestones": "NOT_REACHED_WITHIN_EXECUTED_HORIZON",
+  "errors": [],
+  "evidence_file_bindings": {
+    "evidence/connected014/recovery/CONTINUATION_EXECUTION.json": "5e4e96ba5955130c820fa813a78d124afca2a7fc22237a0f32e7fa65a78dd6b9",
+    "evidence/connected014/recovery/DRY_RUN.json": "278928b10bdd12b94acd44d44352de5683f41e6c13880a72a656b024c31103f2"
+  },
+  "expected_worlds": 8,
+  "failed_regions_retained": [
+    {
+      "arm": "baseline",
+      "available": 4745349687,
+      "available_earned": 125197687,
+      "buyer_choices": {
+        "decline": 11,
+        "rival": 21,
+        "us": 9
+      },
+      "case": "central",
+      "cash": 5125197687,
+      "collections": 278048000,
+      "complete_commercial": false,
+      "costs": 152850313,
+      "decisions": {
+        "capacity_decline": 2,
+        "offer": 41,
+        "outside_choice": 2
+      },
+      "id": "2610301803-central-baseline",
+      "initial_budget": 13279969363,
+      "investments": 0,
+      "known_buyers": 4,
+      "paid_jobs": 9,
+      "payables": 0,
+      "profit": 125197687,
+      "remaining_budget": 12226733113,
+      "result_sha256": "6ac73e034070914a3c007394c1024e547765da2d92e3531856c3db80115ff97f",
+      "seed": 2610301803,
+      "source_inventory_used": 9,
+      "tailReserve": 279848000,
+      "unused_capacity_purchases": 0,
+      "unused_channel_purchases": 0,
+      "workingCapital": 100000000
+    },
+    {
+      "arm": "baseline",
+      "available": 4741132893,
+      "available_earned": 138753268,
+      "buyer_choices": {
+        "decline": 11,
+        "rival": 23,
+        "us": 9
+      },
+      "case": "central",
+      "cash": 5138753268,
+      "collections": 295820375,
+      "complete_commercial": false,
+      "costs": 157067107,
+      "decisions": {
+        "capacity_decline": 1,
+        "offer": 43,
+        "outside_choice": 1
+      },
+      "id": "2610301804-central-baseline",
+      "initial_budget": 13596005937,
+      "investments": 0,
+      "known_buyers": 4,
+      "paid_jobs": 9,
+      "payables": 0,
+      "profit": 138753268,
+      "remaining_budget": 12535283062,
+      "result_sha256": "9b7a374cac3eabca11e11261574c6ba960e0f769191d8eb1f9a0752f1b69f0ee",
+      "seed": 2610301804,
+      "source_inventory_used": 9,
+      "tailReserve": 297620375,
+      "unused_capacity_purchases": 0,
+      "unused_channel_purchases": 0,
+      "workingCapital": 100000000
+    }
+  ],
+  "failure_retention_scope": "This addendum evaluates four paired central seeds only. Earlier incomplete001 and adverse/pricing outcomes remain distinct; this result does not erase or rerun their failures.",
+  "freeze_file_sha256": "a5b1185d926149ee55d9d4b095a7203ec58da8ac03f4163ea5f88235f9673b33",
+  "freeze_sha256": "6e94439fad2dbdbf529fbfbad238decbc8477e50c8ee8035b631ee4ec8a4406c",
+  "historical_billion_bridge": "UNBRIDGED_NATIVE_SCALE",
+  "max_overlap_deviation_microUSD": 0,
+  "milestones_usd": [
+    1000000,
+    10000000,
+    100000000,
+    1000000000,
+    10000000000
+  ],
+  "native_tail_obligations": "PRESERVED: permanent native tailReserve and working/custody protections remain exactly as exported; no expiring-aggregate reserve substituted.",
+  "next_step_authority": "Root decides any new bounded intervention under remaining owner allocation; this review changes no code, financial record or policy.",
+  "overlap_8_16_32_counts": {
+    "16": 4,
+    "32": 1,
+    "8": 8
+  },
+  "pair_summary": {
+    "baseline_paid_range": [
+      9,
+      13
+    ],
+    "complete_cost_profit_deltas_microUSD": [
+      297813404,
+      311388247,
+      692558932,
+      481898440
+    ],
+    "growth_paid_range": [
+      27,
+      39
+    ],
+    "mean_complete_cost_profit_delta_microUSD": 445914755.75,
+    "paid_delivery_deltas": [
+      15,
+      14,
+      30,
+      22
+    ],
+    "pairs": 4,
+    "positive_delivery_and_profit_pairs": 4,
+    "scope": "Four separate matched businesses, each with own equal seed allocation; no pooled capital or universal success probability. Tests commercial acquisition/capacity option value, not superior invention or selection algorithm."
+  },
+  "recovery_intervention_scope": {
+    "billing": "Actual recovery CPU/wall observations are separate resource metadata. Host/model billing unavailable; enterprise economics remain authored complete-cost envelopes and actual operator intervention is disclosed, not a hypothetical human staffing charge.",
+    "new_receipts_or_seed_grant": "No seed injection, balance copy, cash recoveryIncome or replacement receipts were needed to explain the final financial result; the verified signed prefixes and normal continuation remain in the same account.",
+    "observed": "Original sealed native397-action prefix survives byte-for-byte in final540-action tape. All367 original signed command receipt prefixes match final history. Current command WAL, STATE seal and reservation proofs have valid HMAC under retained local simulation key. No account was opened or written by this review.",
+    "operator_intervention": "Actual agent-assisted authenticated tail restoration occurred before normal engine continuation. The review does not claim that this recovery was fully unattended."
+  },
+  "registered_review_utc": "2026-10-30T19:23:54.068320+00:00",
+  "report_file_sha256": "e8914432384e365407e343a39a2dc68f18c4ac9e3ff889ae65a81406cf443982",
+  "report_sha256": "7709ba5fb3102db8681377bd29cc24f4c71377ba412efaccfdb4c24d406f160d",
+  "review_scope": "Independent serialized financial/event arithmetic, matched deltas, all-cost allocation and realized payback. No producer simulator imported; original accepted outputs independently checked by each world AUDIT.json. Same agent session/host, not external certification.",
+  "schema": "agi-alpha/connected014-expansion-financial-review/v1",
+  "source_commit": "ffc1f2e14e88e11f75d5087ab0f7c4e60512431e",
+  "source_files_rehashed": 116,
+  "source_hash_errors": [],
+  "source_sha256": "3d985299bf6cfaf546b712ebd9e878e875aaf730ffdb32023637aafc5504a38d",
+  "world_summaries": [
+    {
+      "arm": "baseline",
+      "available": 4705403303,
+      "available_earned": 239171303,
+      "buyer_choices": {
+        "rival": 22,
+        "us": 13
+      },
+      "case": "central",
+      "cash": 5239171303,
+      "collections": 431168000,
+      "complete_commercial": true,
+      "costs": 191996697,
+      "decisions": {
+        "capacity_decline": 1,
+        "offer": 35,
+        "outside_choice": 1
+      },
+      "id": "2610301801-central-baseline",
+      "initial_budget": 14182912830,
+      "investments": 0,
+      "known_buyers": 4,
+      "paid_jobs": 13,
+      "payables": 0,
+      "profit": 239171303,
+      "remaining_budget": 12978614080,
+      "result_sha256": "4e36c470851bae95d5a51ed9aa9381c672d320322de416c3aa7231105a4536a8",
+      "seed": 2610301801,
+      "source_inventory_used": 13,
+      "tailReserve": 433768000,
+      "unused_capacity_purchases": 0,
+      "unused_channel_purchases": 0,
+      "workingCapital": 100000000
+    },
+    {
+      "arm": "growth",
+      "available": 4533158957,
+      "available_earned": 536984707,
+      "buyer_choices": {
+        "rival": 55,
+        "us": 29
+      },
+      "case": "central",
+      "cash": 5536984707,
+      "collections": 898225750,
+      "complete_commercial": true,
+      "costs": 361241043,
+      "decisions": {
+        "capacity_decline": 6,
+        "offer": 84,
+        "outside_choice": 6
+      },
+      "id": "2610301801-central-growth",
+      "initial_budget": 14182912830,
+      "investments": 4,
+      "known_buyers": 33,
+      "paid_jobs": 28,
+      "payables": 0,
+      "profit": 536984707,
+      "remaining_budget": 11330342580,
+      "result_sha256": "4e550d12f9c92f2e8b0b2c65a46128048b82d04e82f06b1ae4a3e9f42be839f8",
+      "seed": 2610301801,
+      "source_inventory_used": 29,
+      "tailReserve": 903825750,
+      "unused_capacity_purchases": 0,
+      "unused_channel_purchases": 0,
+      "workingCapital": 100000000
+    },
+    {
+      "arm": "baseline",
+      "available": 4709140340,
+      "available_earned": 226165340,
+      "buyer_choices": {
+        "rival": 20,
+        "us": 13
+      },
+      "case": "central",
+      "cash": 5226165340,
+      "collections": 414425000,
+      "complete_commercial": true,
+      "costs": 188259660,
+      "decisions": {
+        "capacity_decline": 1,
+        "offer": 33,
+        "outside_choice": 1
+      },
+      "id": "2610301802-central-baseline",
+      "initial_budget": 13818242836,
+      "investments": 0,
+      "known_buyers": 4,
+      "paid_jobs": 13,
+      "payables": 0,
+      "profit": 226165340,
+      "remaining_budget": 12730098336,
+      "result_sha256": "3716ba914f60664d3b56e19f851a3574a8cf9484b4075e0a216e42952b4f65fc",
+      "seed": 2610301802,
+      "source_inventory_used": 13,
+      "tailReserve": 417025000,
+      "unused_capacity_purchases": 0,
+      "unused_channel_purchases": 0,
+      "workingCapital": 100000000
+    },
+    {
+      "arm": "growth",
+      "available": 4550480587,
+      "available_earned": 537553587,
+      "buyer_choices": {
+        "rival": 44,
+        "us": 27
+      },
+      "case": "central",
+      "cash": 5537553587,
+      "collections": 881673000,
+      "complete_commercial": true,
+      "costs": 344119413,
+      "decisions": {
+        "capacity_decline": 5,
+        "offer": 71,
+        "outside_choice": 5
+      },
+      "id": "2610301802-central-growth",
+      "initial_budget": 13818242836,
+      "investments": 3,
+      "known_buyers": 33,
+      "paid_jobs": 27,
+      "payables": 0,
+      "profit": 537553587,
+      "remaining_budget": 11350745086,
+      "result_sha256": "1612f933aadf7bd7186926f7ae183f618f6bd5102fc20e091137617b0f63883f",
+      "seed": 2610301802,
+      "source_inventory_used": 27,
+      "tailReserve": 887073000,
+      "unused_capacity_purchases": 0,
+      "unused_channel_purchases": 0,
+      "workingCapital": 100000000
+    },
+    {
+      "arm": "baseline",
+      "available": 4745349687,
+      "available_earned": 125197687,
+      "buyer_choices": {
+        "decline": 11,
+        "rival": 21,
+        "us": 9
+      },
+      "case": "central",
+      "cash": 5125197687,
+      "collections": 278048000,
+      "complete_commercial": false,
+      "costs": 152850313,
+      "decisions": {
+        "capacity_decline": 2,
+        "offer": 41,
+        "outside_choice": 2
+      },
+      "id": "2610301803-central-baseline",
+      "initial_budget": 13279969363,
+      "investments": 0,
+      "known_buyers": 4,
+      "paid_jobs": 9,
+      "payables": 0,
+      "profit": 125197687,
+      "remaining_budget": 12226733113,
+      "result_sha256": "6ac73e034070914a3c007394c1024e547765da2d92e3531856c3db80115ff97f",
+      "seed": 2610301803,
+      "source_inventory_used": 9,
+      "tailReserve": 279848000,
+      "unused_capacity_purchases": 0,
+      "unused_channel_purchases": 0,
+      "workingCapital": 100000000
+    },
+    {
+      "arm": "growth",
+      "available": 4408828119,
+      "available_earned": 817756619,
+      "buyer_choices": {
+        "decline": 9,
+        "rival": 40,
+        "us": 39
+      },
+      "case": "central",
+      "cash": 5817756619,
+      "collections": 1301128500,
+      "complete_commercial": true,
+      "costs": 483371881,
+      "decisions": {
+        "capacity_decline": 5,
+        "offer": 88,
+        "outside_choice": 5
+      },
+      "id": "2610301803-central-growth",
+      "initial_budget": 13279969363,
+      "investments": 6,
+      "known_buyers": 30,
+      "paid_jobs": 39,
+      "payables": 0,
+      "profit": 817756619,
+      "remaining_budget": 10411586113,
+      "result_sha256": "a9e280dc2effb77f82f3e4564d3b7e355da33a180f1b11978401900c283ea0eb",
+      "seed": 2610301803,
+      "source_inventory_used": 39,
+      "tailReserve": 1308928500,
+      "unused_capacity_purchases": 1,
+      "unused_channel_purchases": 0,
+      "workingCapital": 100000000
+    },
+    {
+      "arm": "baseline",
+      "available": 4741132893,
+      "available_earned": 138753268,
+      "buyer_choices": {
+        "decline": 11,
+        "rival": 23,
+        "us": 9
+      },
+      "case": "central",
+      "cash": 5138753268,
+      "collections": 295820375,
+      "complete_commercial": false,
+      "costs": 157067107,
+      "decisions": {
+        "capacity_decline": 1,
+        "offer": 43,
+        "outside_choice": 1
+      },
+      "id": "2610301804-central-baseline",
+      "initial_budget": 13596005937,
+      "investments": 0,
+      "known_buyers": 4,
+      "paid_jobs": 9,
+      "payables": 0,
+      "profit": 138753268,
+      "remaining_budget": 12535283062,
+      "result_sha256": "9b7a374cac3eabca11e11261574c6ba960e0f769191d8eb1f9a0752f1b69f0ee",
+      "seed": 2610301804,
+      "source_inventory_used": 9,
+      "tailReserve": 297620375,
+      "unused_capacity_purchases": 0,
+      "unused_channel_purchases": 0,
+      "workingCapital": 100000000
+    },
+    {
+      "arm": "growth",
+      "available": 4496568458,
+      "available_earned": 620651708,
+      "buyer_choices": {
+        "decline": 2,
+        "rival": 49,
+        "us": 31
+      },
+      "case": "central",
+      "cash": 5620651708,
+      "collections": 1017883250,
+      "complete_commercial": true,
+      "costs": 397231542,
+      "decisions": {
+        "capacity_decline": 5,
+        "offer": 82,
+        "outside_choice": 5
+      },
+      "id": "2610301804-central-growth",
+      "initial_budget": 13596005937,
+      "investments": 5,
+      "known_buyers": 32,
+      "paid_jobs": 31,
+      "payables": 0,
+      "profit": 620651708,
+      "remaining_budget": 10749526187,
+      "result_sha256": "861025a7931461d31fdf25fc53f51810c92c219ef53838b1cda99b4e1ff92d7b",
+      "seed": 2610301804,
+      "source_inventory_used": 31,
+      "tailReserve": 1024083250,
+      "unused_capacity_purchases": 1,
+      "unused_channel_purchases": 0,
+      "workingCapital": 100000000
+    }
+  ],
+  "worlds": 8
+}

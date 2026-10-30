@@ -1,0 +1,67 @@
+{
+  "schema": "agi-alpha/connected014-public-expansion-replay/v1",
+  "stage": "COMPLETE",
+  "accepted": true,
+  "started_utc": "2026-10-30T19:28:23.979245+00:00",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "/workspace/scratch/36115aecd71a/connected014-public-expansion/harness/run_connected014_expansion.py",
+    "_audit",
+    "--output",
+    "/workspace/scratch/36115aecd71a/connected014-public-expansion"
+  ],
+  "cwd": "/workspace/scratch/36115aecd71a/connected014-public-expansion/source",
+  "wall_cap_seconds": 120,
+  "transport": {
+    "archive_bytes": 2789307,
+    "archive_sha256": "2d4d0e467e7a83788707b51b84711b736e6744e3862125b9f2fea76e8a920496",
+    "crc_verified": true,
+    "private_key_files_absent": true,
+    "sqlite_accounts_absent": true,
+    "unique_safe_regular_paths": true,
+    "files": 478,
+    "uncompressed_bytes": 22954614,
+    "recovery_files": [
+      "RECOVERY/ALLOCATION.json",
+      "RECOVERY/CONTINUATION_EXECUTION.json",
+      "RECOVERY/DRY_RUN.json",
+      "RECOVERY/LIVE_RECOVERY.json",
+      "RECOVERY/NATIVE_PREFIX_BEFORE.jsonl",
+      "RECOVERY/PROCESS_INTERRUPTION.json"
+    ]
+  },
+  "audit_interface": "EXTRACTED_CUSTOM_ADDENDUM_HARNESS__audit; default business runner audit not used",
+  "finished_utc": "2026-10-30T19:28:39.791592+00:00",
+  "wall_seconds": 15.812380627998209,
+  "children_cpu_seconds": 15.634936999999999,
+  "returncode": 0,
+  "timeout": false,
+  "archive_member_changes_after_audit": [],
+  "all_original_files_unchanged": true,
+  "logs": {
+    "audit.stdout": "5ce81b1e6910b8b325a6ff848a960ff63ad1dc94e9f10425f482b909255a0d7f",
+    "audit.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "audit": {
+    "accepted": true,
+    "evaluation_harness": {
+      "business_source_commit": "ffc1f2e14e88e11f75d5087ab0f7c4e60512431e",
+      "evaluation_source_separate_from_business_source": true,
+      "publication_commit": "692c09ae631b0fd4f1331327505e2942ad8767a6",
+      "registration_sha256": "afc7e700a7f889d6fd99e500b5f3622e51cbe1b2be1444d807fb96ec261ba3cf",
+      "script_sha256": "70dea9c9c6f695dd890ea5345ca89f5d14fabf0cd5630057a7f70dd304374257"
+    },
+    "schema": "agi-alpha/connected014-expansion-package-audit/v1",
+    "scope": "NATIVE_FINANCE_AND_OPERATING_SEMANTICS_WITH_ARTIFACT_REEXECUTION_AND_REPORT_REDERIVATION",
+    "service_cohort": {
+      "registered_jobs_rederived": 104
+    },
+    "simulation_keys_required": false,
+    "source_sha256": "3d985299bf6cfaf546b712ebd9e878e875aaf730ffdb32023637aafc5504a38d",
+    "worlds": 8
+  },
+  "source_commit": "ffc1f2e14e88e11f75d5087ab0f7c4e60512431e",
+  "committed_source_files_verified": 116,
+  "source_sha256": "3d985299bf6cfaf546b712ebd9e878e875aaf730ffdb32023637aafc5504a38d",
+  "recovery_scope": "Published assisted native-tail recovery records included unchanged; audit is key-free reproduction, not private account takeover or independently observed counterparty commerce."
+}
