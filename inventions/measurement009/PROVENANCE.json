@@ -1,0 +1,44 @@
+{
+  "schema": "agi-alpha/measurement009/provenance-v1",
+  "upstream_repository": "https://github.com/USEPA/WNTR",
+  "upstream_commit": "11eec7d5bf0a9367ffe04d75707918f0c0a890a1",
+  "input_files": {
+    "Net1.inp": {
+      "bytes": 6247,
+      "sha256": "607510a01287d60d27b280a39df31a001363175a438a5de1b39e749cec6ddbc8",
+      "git_blob_sha1": "fb114141f6fda79f7a827835c06af1a5eadf686d"
+    },
+    "Net3.inp": {
+      "bytes": 31249,
+      "sha256": "ea3e825c4fef0b5cba47fb06301bc85253f18b6364dc96c44d9fb492c40faa52",
+      "git_blob_sha1": "1bfc21bc17d22c265727833885e1232e06012752"
+    },
+    "WNTR_LICENSE.md": {
+      "bytes": 4788,
+      "sha256": "9bd305ef62ff1c2bbbafb799e495151c66a4c3ffbc642b98df5c12ace156429e",
+      "git_blob_sha1": "858d730438452c9330c0c0d97e50ffe36b237e5b"
+    },
+    "libepanet22.so": {
+      "bytes": 385808,
+      "sha256": "3a49fa2eb1aecdf4d7a83c9a26667bacc418d285ed1d3a45becec52e7556d73f",
+      "git_blob_sha1": "d0da2ba2e3ec07e98b502644cc00cfe3ada056be"
+    }
+  },
+  "license": "WNTR revised BSD and EPANET MIT; upstream notices included",
+  "discovery_attribution": {
+    "physical_model": "EPA EPANET/WNTR source-pinned transport simulation",
+    "nuisance_model": "Builder-authored explicit bounded development assumptions",
+    "contrast_primitive_proposal": "Builder response to reproduced all-sensor ambiguity; known calibration prior art",
+    "generated_expression": "Runtime enumeration of typed signed coefficients over proposed operands",
+    "generated_sensor_plan": "Conventional exact/MILP or greedy selection applied to actual source-derived distinguishability relations",
+    "algorithm_novelty": "Not established"
+  },
+  "prior_art": [
+    "https://github.com/sandialabs/chama/blob/main/examples/water_network_example.py",
+    "https://arxiv.org/abs/1507.07134",
+    "https://par.nsf.gov/servlets/purl/10350109"
+  ],
+  "protected_data": "Net2 not downloaded or inspected by construction worker",
+  "new_paid_calls": 0,
+  "actual_session_model_usage": "Model identity/token usage unavailable to program; no inference receipt fabricated"
+}
