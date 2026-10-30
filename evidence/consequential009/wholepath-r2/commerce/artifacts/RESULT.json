@@ -1,0 +1,3556 @@
+{
+  "schema": "agi-alpha/consequential009-commercial-execution/v1",
+  "scope": "Exact-model finite-cohort passive-circuit diagnostic report: certify the stated voltage scale ambiguity, provide a distinguishing calibrated measurement plan when supported, and abstain for unsupported or unknown-gain obligations. No physical inspection, empirical calibration, safety certification or production qualification.",
+  "commerce_adapter_sha256": "dd4335f5527f2718945ca65f0dc99b813269e187799c8071aee26108c09f3ebc",
+  "authority": {
+    "artifact": "0fe74f9ba7465a9e75f9829f6a8c6afb609692bce6ccdb91bf84a972ebecd553",
+    "receipt": "69502fbe587625b35bbcd73c704e4f2605f3879db4f8a663968f20ae8e563e17",
+    "protocol": "9a28e4202fecbe46769f82a20a8aeedb92020cdd2701a6d941b6694d5363d7ad",
+    "candidate": "88474d7e6ab1f90cf1d38fc166814b658b876004a4029bb281fd3634daf3d0fc",
+    "verifier": "ffae794ea4ea91c36e1a84823882c6989cebd70f7d5931cdf1bb799ed166581b"
+  },
+  "policy_sha256": "2424d01efa170aae95d52495b0b3138e77240a5ac5a01cf18975fb46301174a0",
+  "source_manifest": {
+    "schema": "agi-alpha/consequential009-commercial-primary-sources/v1",
+    "observed_utc": "2026-10-30T10:02:17.462939+00:00",
+    "scope": "Source-derived tariffs, occupation wages and broad electronics service offers; not AGI ALPHA orders, exact job quotes, calibrated physical data or provider execution receipts.",
+    "sources": [
+      {
+        "id": "BLS_electrical_wage_2025",
+        "url": "https://www.bls.gov/ooh/architecture-and-engineering/electrical-and-electronics-engineers.htm",
+        "reference_period": "May2025",
+        "facts": {
+          "median_electrical_engineer_USD_annual": 120630
+        },
+        "limits": "Occupation wage is not total delivery cost or task time."
+      },
+      {
+        "id": "BLS_ECEC_fulltime_2026",
+        "url": "https://www.bls.gov/news.release/ecec.nr0.htm",
+        "reference_period": "June2026",
+        "released": "2026-09-09",
+        "facts": {
+          "fulltime_private_USD_total_compensation_per_hour": 54,
+          "fulltime_private_USD_wages_per_hour": 36.97
+        },
+        "limits": "Broad fulltime aggregate loading ratio is a sensitivity, not electrical-engineer-specific benefits/overhead."
+      },
+      {
+        "id": "Fiverr_electronics_market",
+        "url": "https://www.fiverr.com/resources/guides/costs/electronics-design-engineer",
+        "published": "2026-08-03",
+        "facts": {
+          "electronics_engineering_fixed_project_USD": 87.9,
+          "electronics_engineering_hourly_USD_range": [
+            40,
+            100
+          ]
+        },
+        "limits": "Platform-authored pricing based on marketplace data for broader design/review work; not an exact RC diagnosis quote, completed order, our buyerWTP or volume. Free ngspice, impedance analysis and otherAI-native methods remain alternatives."
+      },
+      {
+        "id": "MB_Designs_Canadian_service_offer",
+        "url": "https://mbdesignswork.com/",
+        "facts": {
+          "consultation_CAD": 150,
+          "call_up_to_minutes": 60,
+          "includes": [
+            "file or circuit review",
+            "written findings and next steps"
+          ],
+          "hourly_CAD_start": 70,
+          "prepaid_minimum_hours": 2
+        },
+        "limits": "Offered service; up-to60minute call is not total exact RC job time. CAD never silently mixed with USD. No contact or purchase."
+      },
+      {
+        "id": "Stripe_US_domestic_card",
+        "url": "https://stripe.com/pricing",
+        "facts": {
+          "currency": "USD",
+          "domestic_card_basis_points": 290,
+          "fixed_USD": 0.3,
+          "international_extra_basis_points": 150,
+          "FX_extra_basis_points": 100,
+          "received_dispute_USD": 15,
+          "manual_countered_dispute_USD": 15,
+          "refund_processing_fees_returned": false
+        },
+        "limits": "USdomesticUSD tariff proxy only; no live merchant integration or eligibility, production escrow or actual guarantee. Canadian route/crossborder and assurancecost remainunknownK; receipts are reversible."
+      },
+      {
+        "id": "JobBank_Quebec_electrical_wage",
+        "url": "https://www.jobbank.gc.ca/marketreport/wages-occupation/17815/22446",
+        "updated": "2025-11-19",
+        "reference_period": "2023-2024",
+        "facts": {
+          "Montreal_CAD_hourly_low": 35,
+          "Montreal_CAD_hourly_median": 50.77,
+          "Montreal_CAD_hourly_high": 78,
+          "Quebec_CAD_hourly_median": 53.85
+        },
+        "limits": "Wages omit nonwage benefits. This contextual source is not used in USD arithmetic."
+      },
+      {
+        "id": "OpenAI_Astra_capability_tariff",
+        "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+        "facts": {
+          "model_id": "gpt-6-astra",
+          "provider_description": "most capable for most demandingwork",
+          "input_USD_per_million_tokens": 10,
+          "output_USD_per_million_tokens": 50,
+          "cached_input_USD_per_million_tokens": 1,
+          "above_272K_input_multiplier": 2,
+          "above_272K_output_multiplier": 1.5
+        },
+        "limits": "Primary provider description/tariff; availability is not proof of execution. No paid API call made; inherited session exact revision, tokens and bill unexposed."
+      }
+    ],
+    "human_comparator": {
+      "matched_job": "Independently accepted exact-model circuit information-sufficiency and measurement-design report, with unsupported/unknown-gain abstentions. No benchwork, empirical calibration, safety signoff or PCBdesign assumed.",
+      "wage_USD_per_hour": 57.99519230769231,
+      "annual_hours": 2080,
+      "annual_hours_status": "declared conversion assumption",
+      "loaded_USD_per_hour_sensitivity": 84.71031605667798,
+      "task_hours_observed": null,
+      "task_hours_status": "Unknown; never equated to CPUtime or a call maximum",
+      "tools_review_rework_overhead": "Unknown; retained as additionalcostK_human"
+    },
+    "independent_demand_evidence": "Broader engineeringservice offers and a platform-authored pricing summary; insufficient to identify AGIALPHA participation, exactprice or volume. Conditional buyer utility remains authored.",
+    "actual_qualified_funds_microUSD": 0,
+    "actual_commerce": "UNRUN"
+  },
+  "actual_report_acceptance_receipt": {
+    "schema": "agi-alpha/consequential009-complete-independent-acceptance/v1",
+    "accepted": true,
+    "artifact_sha256": "0fe74f9ba7465a9e75f9829f6a8c6afb609692bce6ccdb91bf84a972ebecd553",
+    "verifier_sha256": "ffae794ea4ea91c36e1a84823882c6989cebd70f7d5931cdf1bb799ed166581b",
+    "protocol_sha256": "9a28e4202fecbe46769f82a20a8aeedb92020cdd2701a6d941b6694d5363d7ad",
+    "candidate_sha256": "88474d7e6ab1f90cf1d38fc166814b658b876004a4029bb281fd3634daf3d0fc",
+    "independent_arithmetic_sha256": "119314be8a1d19960a1a7b902a2a14bd771d9eff41e2a15e4a20a98d1cf9c2ec",
+    "candidate_source_hashes": {
+      "inventions/consequential009/circuit.py": "88474d7e6ab1f90cf1d38fc166814b658b876004a4029bb281fd3634daf3d0fc",
+      "inventions/consequential009/experiment.py": "b51db5dab9b8e14e18d00698b2b1db074e6b5137cce58ecf1b7b87f5ba3bc4f8"
+    },
+    "consumed_hashes": {
+      "artifact/fresh_successor-constructed.json": "ce785b1c4dc372655e385ae8b0bde91ee3faab10917576e9d909fb3c505d9f44",
+      "artifact/fresh_successor-ordinary-exhaustive.json": "a6fae066ad34616a4824c10b791e75596b6b71088a7d4488f12ce8ca1d4b12df",
+      "artifact/fresh_successor-constructed-greedy.json": "a4e0b89f015f8372f843efa43ea2e07918bc0064a622809c4b1b0c49302603e9",
+      "artifact/primary-COHORT.json": "8d245796a9209a2e4257d52248a3ded91213eac3a7be93a3d9adec26d6f6493a",
+      "artifact/fresh_successor-COHORT.json": "40a531a2f979ecfae2f7460406b6cef8d41e5bff73d8b04bb852fc51ed6fcbf4",
+      "artifact/primary-GENERATED.json": "e4a2de60ab97fcec31b08cd4cc4e76e754f5e9ee37d2f5fe8acb3f278d47b666",
+      "artifact/primary-unknown-gain-stress.json": "6c145142c982fdd085c2bf8a8fef326246a6a115df1e3520408f662ad53d9044",
+      "artifact/primary-constructed-greedy.json": "8d2c1785f973aaf9c0f330290e4e5703ab6834750a7552d0a1a5c2ed8f071777",
+      "artifact/fresh_successor-voltage-only.json": "51850f1df4692aadedd866fff4dde2d52267ccb9b671dd15f1764a47a2360a7a",
+      "artifact/fresh_successor-GENERATED.json": "e1dc25b52f0dbce1cfe44691dc17ef6d0feb6d7dcdb110f3488596bfffed610a",
+      "artifact/primary-voltage-only.json": "113604cbcec2f531c442bf445a03ab1d29caa582ebfec317eea3b0453021cced",
+      "artifact/primary-constructed.json": "a9d28582e04a50c1ee151fdbf74cdd09ae750d3b08829e3dfc84ea9d0529af0f",
+      "artifact/REPORT.json": "0fe74f9ba7465a9e75f9829f6a8c6afb609692bce6ccdb91bf84a972ebecd553",
+      "artifact/PROTOCOL.json": "9a28e4202fecbe46769f82a20a8aeedb92020cdd2701a6d941b6694d5363d7ad",
+      "artifact/primary-ordinary-exhaustive.json": "98211fbf460ae2ab9aeaad423e530d39b553255268627104d7f8aa7b758ec562",
+      "artifact/fresh_successor-unknown-gain-stress.json": "a10795460fc3d53a734f7037b77d27064c3f443aa333a6211fc7f35e75f2a26b",
+      "source/research/consequential009/analog/PROTOCOL.json": "9a28e4202fecbe46769f82a20a8aeedb92020cdd2701a6d941b6694d5363d7ad",
+      "source/research/consequential009/analog/rc-meas-ac.sp": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+      "source/research/consequential009/analog/MonteCarlo.sp": "9d6e0b268bcfbf47d5b442166b9c36c3283c2ac65137f51cec19a5c6fa616d72",
+      "source/inventions/consequential009/circuit.py": "88474d7e6ab1f90cf1d38fc166814b658b876004a4029bb281fd3634daf3d0fc",
+      "source/inventions/consequential009/experiment.py": "b51db5dab9b8e14e18d00698b2b1db074e6b5137cce58ecf1b7b87f5ba3bc4f8"
+    },
+    "checks": [
+      {
+        "name": "candidate source matches executed report: inventions/consequential009/circuit.py",
+        "passed": true
+      },
+      {
+        "name": "candidate source matches executed report: inventions/consequential009/experiment.py",
+        "passed": true
+      },
+      {
+        "name": "artifact bound to same frozen protocol",
+        "passed": true
+      },
+      {
+        "name": "primary: pinned upstream raw bytes",
+        "passed": true
+      },
+      {
+        "name": "primary: complete frozen cohort values and order",
+        "passed": true
+      },
+      {
+        "name": "primary: cohort source identity",
+        "passed": true
+      },
+      {
+        "name": "primary: complete typed action universe",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: exact frozen uncertainty",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: every exact response independently recomputed",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: original denominator",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: exact selected-plan coverage and abstentions",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: endpoint label",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: strongest complete experiment",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: initial admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: full ancestry retained",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: ancestry selection and coverage 1",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: causally accurate ancestry 1",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: ancestry selection and coverage 2",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: causally accurate ancestry 2",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: full pruning trace retained",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: exact reverse-delete consequence y:input:100000",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: exact reverse-delete consequence v:mid1:100000",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: replacement starts from actual prior plan",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: every replacement coverage and missing witness",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: deterministic lower-cost replacement selection",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: final plan follows retained ancestry, pruning and replacement",
+        "passed": true
+      },
+      {
+        "name": "primary:constructed: acquisition units reconciled",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: exact frozen uncertainty",
+        "passed": true
+      },
+      {
+        "name": "primary: voltage-only grammar",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: every exact response independently recomputed",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: original denominator",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: exact selected-plan coverage and abstentions",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: endpoint label",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: strongest complete experiment",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: initial admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: full ancestry retained",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: ancestry selection and coverage 1",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: causally accurate ancestry 1",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: final plan follows retained ancestry, pruning and replacement",
+        "passed": true
+      },
+      {
+        "name": "primary:voltage-only: acquisition units reconciled",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: exact frozen uncertainty",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: every exact response independently recomputed",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: original denominator",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: exact selected-plan coverage and abstentions",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: endpoint label",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: strongest complete experiment",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: initial admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: full ancestry retained",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: ancestry selection and coverage 1",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: causally accurate ancestry 1",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: ancestry selection and coverage 2",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: causally accurate ancestry 2",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: full pruning trace retained",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: exact reverse-delete consequence y:input:100000",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: exact reverse-delete consequence v:mid1:100000",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: replacement starts from actual prior plan",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: every replacement coverage and missing witness",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: deterministic lower-cost replacement selection",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: final plan follows retained ancestry, pruning and replacement",
+        "passed": true
+      },
+      {
+        "name": "primary:unknown-gain-stress: acquisition units reconciled",
+        "passed": true
+      },
+      {
+        "name": "primary: ordinary admitted actions",
+        "passed": true
+      },
+      {
+        "name": "primary: independently exhaustive ordinary optimum",
+        "passed": true
+      },
+      {
+        "name": "primary: ordinary full endpoint",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor: pinned upstream raw bytes",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor: complete frozen cohort values and order",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor: cohort source identity",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor: complete typed action universe",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: exact frozen uncertainty",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: every exact response independently recomputed",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: original denominator",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: exact selected-plan coverage and abstentions",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: endpoint label",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: strongest complete experiment",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: initial admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: full ancestry retained",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: ancestry selection and coverage 1",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: causally accurate ancestry 1",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: ancestry selection and coverage 2",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: causally accurate ancestry 2",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: full pruning trace retained",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: exact reverse-delete consequence y:input:300000",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: exact reverse-delete consequence v:n002:10000000",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: replacement starts from actual prior plan",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: every replacement coverage and missing witness",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: deterministic lower-cost replacement selection",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: final plan follows retained ancestry, pruning and replacement",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:constructed: acquisition units reconciled",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: exact frozen uncertainty",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor: voltage-only grammar",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: every exact response independently recomputed",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: original denominator",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: exact selected-plan coverage and abstentions",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: endpoint label",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: strongest complete experiment",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: initial admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: full ancestry retained",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: ancestry selection and coverage 1",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: causally accurate ancestry 1",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: final plan follows retained ancestry, pruning and replacement",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:voltage-only: acquisition units reconciled",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: exact frozen uncertainty",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: every exact response independently recomputed",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: original denominator",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: exact selected-plan coverage and abstentions",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: endpoint label",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: strongest complete experiment",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: initial admitted unique actions",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: full ancestry retained",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: ancestry selection and coverage 1",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: causally accurate ancestry 1",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: full pruning trace retained",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: exact reverse-delete consequence v:n002:10000000",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: replacement starts from actual prior plan",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: every replacement coverage and missing witness",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: deterministic lower-cost replacement selection",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: final plan follows retained ancestry, pruning and replacement",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor:unknown-gain-stress: acquisition units reconciled",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor: ordinary admitted actions",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor: independently exhaustive ordinary optimum",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor: ordinary full endpoint",
+        "passed": true
+      },
+      {
+        "name": "primary: report complete numerical summary",
+        "passed": true
+      },
+      {
+        "name": "primary: ordinary control advantage preserved",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor: report complete numerical summary",
+        "passed": true
+      },
+      {
+        "name": "fresh_successor: ordinary control advantage preserved",
+        "passed": true
+      },
+      {
+        "name": "all consumed candidate artifact and source bytes unchanged",
+        "passed": true
+      }
+    ],
+    "complete_cohort_results": {
+      "primary": {
+        "constructed": {
+          "admitted_pairs": 1128,
+          "separated_pairs": 1128,
+          "unresolved_pairs": 0,
+          "complete": true,
+          "selected_actions": [
+            "y:input:300000"
+          ]
+        },
+        "voltage-only": {
+          "admitted_pairs": 1128,
+          "separated_pairs": 1071,
+          "unresolved_pairs": 57,
+          "complete": false,
+          "selected_actions": [
+            "v:mid1:100000"
+          ]
+        },
+        "unknown-gain-stress": {
+          "admitted_pairs": 1128,
+          "separated_pairs": 1072,
+          "unresolved_pairs": 56,
+          "complete": false,
+          "selected_actions": [
+            "v:mid1:100000",
+            "y:input:100000"
+          ]
+        },
+        "ordinary": {
+          "admitted_pairs": 1128,
+          "separated_pairs": 1128,
+          "minimum_actions": 1,
+          "one_optimal_plan": [
+            "y:input:300000"
+          ]
+        },
+        "cohort": 48,
+        "source_blob": "2d464ba58ee46f4f88cb319debe5e90d396e06ad"
+      },
+      "fresh_successor": {
+        "constructed": {
+          "admitted_pairs": 276,
+          "separated_pairs": 276,
+          "unresolved_pairs": 0,
+          "complete": true,
+          "selected_actions": [
+            "y:input:10000000"
+          ]
+        },
+        "voltage-only": {
+          "admitted_pairs": 276,
+          "separated_pairs": 252,
+          "unresolved_pairs": 24,
+          "complete": false,
+          "selected_actions": [
+            "v:n002:10000000"
+          ]
+        },
+        "unknown-gain-stress": {
+          "admitted_pairs": 276,
+          "separated_pairs": 252,
+          "unresolved_pairs": 24,
+          "complete": false,
+          "selected_actions": [
+            "v:n002:10000000"
+          ]
+        },
+        "ordinary": {
+          "admitted_pairs": 276,
+          "separated_pairs": 276,
+          "minimum_actions": 1,
+          "one_optimal_plan": [
+            "y:input:10000000"
+          ]
+        },
+        "cohort": 24,
+        "source_blob": "608dc4cfdda5d168952a6319d87a9d63f4f6cb84"
+      }
+    },
+    "scope": "Complete source-bound finite ideal-network development report and conservative rectangular uncertainty experiment; no physical specimen or calibrated sensor has been measured, no customer has accepted a service. Same model family/host, independently implemented arithmetic; procedural verification only.",
+    "confirmation": false,
+    "alpha_spent": 0,
+    "technical_novelty": "NOT_ESTABLISHED_KNOWN_IMPEDANCE_MEASUREMENT_CONTROL_STRONGER",
+    "commercial_admission": false,
+    "resources": {
+      "cpu_seconds": 0.38394799999999996,
+      "wall_seconds": 0.38446440799998527,
+      "max_rss_kib": 14464,
+      "complete_monetary_cost": null
+    }
+  },
+  "worlds": [
+    {
+      "id": "conditional_participation",
+      "mode": "CONDITIONALLY_ASSUMED_WORLD_NOT_OBSERVED_MARKET",
+      "one_admitted_report": [
+        "source-bound-report-001"
+      ],
+      "fixed_obligation": "Exact-model finite-cohort passive-circuit diagnostic report: certify the stated voltage scale ambiguity, provide a distinguishing calibrated measurement plan when supported, and abstain for unsupported or unknown-gain obligations. No physical inspection, empirical calibration, safety certification or production qualification.",
+      "buyer_inputs": {
+        "id": "conditional_participation",
+        "value_microUSD": 100000000,
+        "trust_basis_points": 9500,
+        "switching_microUSD": 5000000,
+        "outside_cost_microUSD": 87900000,
+        "funded": true,
+        "reversal": false,
+        "warranty_extra_microUSD": 0,
+        "delivery": "accept",
+        "buyer_parameter_basis": "AUTHORED_CONDITIONAL_WORLD_NOT_AGI_ALPHA_DEMAND_DATA",
+        "realized_value_microUSD": 100000000
+      },
+      "own_utility_microUSD": 40000000,
+      "best_outside_utility_microUSD": 12100000,
+      "participates_under_assumptions": true,
+      "realized_utility_microUSD": 40000000,
+      "source_bound_report_accepted": true,
+      "net_collections_microUSD": 50000000,
+      "snapshots": {
+        "all_admitted_costs_including_unsold": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "terminal_180day_with_unresolved_exposure_retained": {
+          "reservedInvestment": 0,
+          "revenue": 50000000,
+          "expenses": 37750000,
+          "recoveryIncome": 0,
+          "profit": 12250000,
+          "cash": 1012250000,
+          "collections": 50000000,
+          "expensePaid": 37750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 50200000,
+          "workingCapital": 30800000,
+          "available": 931250000,
+          "unrestrictedEarned": 12250000,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 81000000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": 12250000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "after_prespecified_conditional_reservation": {
+          "reservedInvestment": 10000000,
+          "revenue": 50000000,
+          "expenses": 37750000,
+          "recoveryIncome": 0,
+          "profit": 12250000,
+          "cash": 1012250000,
+          "collections": 50000000,
+          "expensePaid": 37750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 50200000,
+          "workingCapital": 30800000,
+          "available": 921250000,
+          "unrestrictedEarned": 2250000,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 81000000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": 12250000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        }
+      },
+      "economics": {
+        "AI_conditional_complete_cost_microUSD": 37750000,
+        "AI_conditional_profit_microUSD": 12250000,
+        "AI_actual_profit_interval_microUSD": [
+          null,
+          null
+        ],
+        "unknown_K_definition": "Additional current and inherited enterprise discovery/construction, inference, data, execution, verification, acquisition, support, financing, tax, assurance and liability costs above the authored scenario totals. Actual totals are unbounded and are not established to equal or exceed those authored amounts; the K frontier is conditional, not an actual profit interval.",
+        "AI_positive_profit_requires_K_less_than_microUSD": 12250000,
+        "human_loaded_compensation_USD_per_hour_sensitivity": 84.71031605667798,
+        "human_positive_profit_before_unmeasured_costs_requires_hours_less_than": 0.48695367837372305,
+        "AI_lower_cost_than_human_before_unknown_costs_requires_human_hours_greater_than": 0.34234319206879926,
+        "human_conditional_grid": [
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": 32778968
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.25,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": 20072420
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.5,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -1105158
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -43460316
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 2,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -128170632
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 4,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -297591264
+          }
+        ],
+        "human_complete_cost_profit": "UNKNOWN_EXACT_TASK_TIME_TOOLS_REVIEW_REWORK_AND_SERVICE_OVERHEAD",
+        "human_to_AI_crossing": "UNESTABLISHED; a negative grid value is not a measured human loss",
+        "technical_parity_policy": "A tie with ordinary impedance analysis or an AI-native control does not veto a human-service economic advantage; it does forbid claiming novel scientific superiority from the tie.",
+        "investment_attractiveness": "UNKNOWN versus non-entry and equally capable AI-native competitors; positive gross margin is insufficient."
+      },
+      "conditional_investment_reservation": {
+        "decision": "CONSTRUCT",
+        "funding": "earned after incurred costs; equity separately backs protection",
+        "cap": 10000000,
+        "before": {
+          "reservedInvestment": 0,
+          "revenue": 50000000,
+          "expenses": 37750000,
+          "recoveryIncome": 0,
+          "profit": 12250000,
+          "cash": 1012250000,
+          "collections": 50000000,
+          "expensePaid": 37750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 50200000,
+          "workingCapital": 30800000,
+          "available": 931250000,
+          "unrestrictedEarned": 12250000,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 81000000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": 12250000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "witness": {
+          "before": {
+            "reservedInvestment": 0,
+            "revenue": 50000000,
+            "expenses": 37750000,
+            "recoveryIncome": 0,
+            "profit": 12250000,
+            "cash": 1012250000,
+            "collections": 50000000,
+            "expensePaid": 37750000,
+            "payables": 0,
+            "custodyRestricted": 0,
+            "custodyReserve": 0,
+            "tailReserve": 50200000,
+            "workingCapital": 30800000,
+            "available": 931250000,
+            "unrestrictedEarned": 12250000,
+            "strictEarnedControl": 0,
+            "equityProtectionBacking": 81000000,
+            "earnedProtectionBacking": 0,
+            "netEarnedAfterIncurredObligations": 12250000,
+            "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+            "conditionalEarned": 0,
+            "investmentStopped": false,
+            "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+          },
+          "cap": 10000000,
+          "expectedNetValue": 20000000,
+          "valuationScope": "caller assumption, not realized demand",
+          "intentHash": "37c36ef20aa2c367b2f7e7358d0012a3fec5a44d341f21e2cbd9a3d8c25edbe8",
+          "journalThrough": 27,
+          "eventRowidThrough": 16
+        }
+      },
+      "construction_spend": 0,
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 4,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 5,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "3000000"
+        },
+        {
+          "seq": 6,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "3000000"
+        },
+        {
+          "seq": 7,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 8,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 9,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 10,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 11,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 12,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 13,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 14,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 15,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 16,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 17,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 18,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 19,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 20,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 21,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 22,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 23,
+          "order_id": "conditional-scenario-buyer",
+          "kind": "buyer_provision",
+          "amount": "50000000"
+        },
+        {
+          "seq": 24,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1750000"
+        },
+        {
+          "seq": 25,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1750000"
+        },
+        {
+          "seq": 26,
+          "order_id": "source-bound-report-001",
+          "kind": "revenue",
+          "amount": "50000000"
+        },
+        {
+          "seq": 27,
+          "order_id": "source-bound-report-001",
+          "kind": "collections",
+          "amount": "50000000"
+        }
+      ],
+      "orders": [
+        {
+          "id": "source-bound-report-001",
+          "buyer": "conditional-scenario-buyer",
+          "price": "50000000",
+          "state": "released",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0"
+        }
+      ],
+      "terminal_reserve_rule": "Full engine principal-plus0.20 tail plus additional29.80 fixed working reserve covers modeled30USD dispute fees. No reserve release is revenue; no empirical reversal-tail expiry is asserted."
+    },
+    {
+      "id": "zero_demand",
+      "mode": "CONDITIONALLY_ASSUMED_WORLD_NOT_OBSERVED_MARKET",
+      "one_admitted_report": [
+        "source-bound-report-001"
+      ],
+      "fixed_obligation": "Exact-model finite-cohort passive-circuit diagnostic report: certify the stated voltage scale ambiguity, provide a distinguishing calibrated measurement plan when supported, and abstain for unsupported or unknown-gain obligations. No physical inspection, empirical calibration, safety certification or production qualification.",
+      "buyer_inputs": {
+        "id": "zero_demand",
+        "value_microUSD": 100000000,
+        "trust_basis_points": 0,
+        "switching_microUSD": 5000000,
+        "outside_cost_microUSD": 87900000,
+        "funded": true,
+        "reversal": false,
+        "warranty_extra_microUSD": 0,
+        "delivery": "accept",
+        "buyer_parameter_basis": "AUTHORED_CONDITIONAL_WORLD_NOT_AGI_ALPHA_DEMAND_DATA",
+        "realized_value_microUSD": 100000000
+      },
+      "own_utility_microUSD": -55000000,
+      "best_outside_utility_microUSD": 12100000,
+      "participates_under_assumptions": false,
+      "realized_utility_microUSD": -55000000,
+      "source_bound_report_accepted": false,
+      "net_collections_microUSD": 0,
+      "snapshots": {
+        "all_admitted_costs_including_unsold": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "terminal_180day_with_unresolved_exposure_retained": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "after_prespecified_conditional_reservation": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        }
+      },
+      "economics": {
+        "AI_conditional_complete_cost_microUSD": 36000000,
+        "AI_conditional_profit_microUSD": -36000000,
+        "AI_actual_profit_interval_microUSD": [
+          null,
+          null
+        ],
+        "unknown_K_definition": "Additional current and inherited enterprise discovery/construction, inference, data, execution, verification, acquisition, support, financing, tax, assurance and liability costs above the authored scenario totals. Actual totals are unbounded and are not established to equal or exceed those authored amounts; the K frontier is conditional, not an actual profit interval.",
+        "AI_positive_profit_requires_K_less_than_microUSD": -36000000,
+        "human_loaded_compensation_USD_per_hour_sensitivity": 84.71031605667798,
+        "human_positive_profit_before_unmeasured_costs_requires_hours_less_than": -0.08263456360281361,
+        "AI_lower_cost_than_human_before_unknown_costs_requires_human_hours_greater_than": 0.34234319206879926,
+        "human_conditional_grid": [
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -15471031
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.25,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -28177579
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.5,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -49355158
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -91710316
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 2,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -176420632
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 4,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -345841264
+          }
+        ],
+        "human_complete_cost_profit": "UNKNOWN_EXACT_TASK_TIME_TOOLS_REVIEW_REWORK_AND_SERVICE_OVERHEAD",
+        "human_to_AI_crossing": "UNESTABLISHED; a negative grid value is not a measured human loss",
+        "technical_parity_policy": "A tie with ordinary impedance analysis or an AI-native control does not veto a human-service economic advantage; it does forbid claiming novel scientific superiority from the tie.",
+        "investment_attractiveness": "UNKNOWN versus non-entry and equally capable AI-native competitors; positive gross margin is insufficient."
+      },
+      "conditional_investment_reservation": null,
+      "construction_spend": 0,
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 4,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 5,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "3000000"
+        },
+        {
+          "seq": 6,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "3000000"
+        },
+        {
+          "seq": 7,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 8,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 9,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 10,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 11,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 12,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 13,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 14,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 15,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 16,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 17,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 18,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 19,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 20,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 21,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 22,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 23,
+          "order_id": "conditional-scenario-buyer",
+          "kind": "buyer_provision",
+          "amount": "50000000"
+        }
+      ],
+      "orders": [],
+      "terminal_reserve_rule": "Full engine principal-plus0.20 tail plus additional29.80 fixed working reserve covers modeled30USD dispute fees. No reserve release is revenue; no empirical reversal-tail expiry is asserted."
+    },
+    {
+      "id": "equal_ai_native_outside_option",
+      "mode": "CONDITIONALLY_ASSUMED_WORLD_NOT_OBSERVED_MARKET",
+      "one_admitted_report": [
+        "source-bound-report-001"
+      ],
+      "fixed_obligation": "Exact-model finite-cohort passive-circuit diagnostic report: certify the stated voltage scale ambiguity, provide a distinguishing calibrated measurement plan when supported, and abstain for unsupported or unknown-gain obligations. No physical inspection, empirical calibration, safety certification or production qualification.",
+      "buyer_inputs": {
+        "id": "equal_ai_native_outside_option",
+        "value_microUSD": 100000000,
+        "trust_basis_points": 9500,
+        "switching_microUSD": 5000000,
+        "outside_cost_microUSD": 5000000,
+        "funded": true,
+        "reversal": false,
+        "warranty_extra_microUSD": 0,
+        "delivery": "accept",
+        "buyer_parameter_basis": "AUTHORED_CONDITIONAL_WORLD_NOT_AGI_ALPHA_DEMAND_DATA",
+        "realized_value_microUSD": 100000000
+      },
+      "own_utility_microUSD": 40000000,
+      "best_outside_utility_microUSD": 95000000,
+      "participates_under_assumptions": false,
+      "realized_utility_microUSD": 40000000,
+      "source_bound_report_accepted": false,
+      "net_collections_microUSD": 0,
+      "snapshots": {
+        "all_admitted_costs_including_unsold": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "terminal_180day_with_unresolved_exposure_retained": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "after_prespecified_conditional_reservation": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        }
+      },
+      "economics": {
+        "AI_conditional_complete_cost_microUSD": 36000000,
+        "AI_conditional_profit_microUSD": -36000000,
+        "AI_actual_profit_interval_microUSD": [
+          null,
+          null
+        ],
+        "unknown_K_definition": "Additional current and inherited enterprise discovery/construction, inference, data, execution, verification, acquisition, support, financing, tax, assurance and liability costs above the authored scenario totals. Actual totals are unbounded and are not established to equal or exceed those authored amounts; the K frontier is conditional, not an actual profit interval.",
+        "AI_positive_profit_requires_K_less_than_microUSD": -36000000,
+        "human_loaded_compensation_USD_per_hour_sensitivity": 84.71031605667798,
+        "human_positive_profit_before_unmeasured_costs_requires_hours_less_than": -0.08263456360281361,
+        "AI_lower_cost_than_human_before_unknown_costs_requires_human_hours_greater_than": 0.34234319206879926,
+        "human_conditional_grid": [
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -15471031
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.25,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -28177579
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.5,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -49355158
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -91710316
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 2,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -176420632
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 4,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -345841264
+          }
+        ],
+        "human_complete_cost_profit": "UNKNOWN_EXACT_TASK_TIME_TOOLS_REVIEW_REWORK_AND_SERVICE_OVERHEAD",
+        "human_to_AI_crossing": "UNESTABLISHED; a negative grid value is not a measured human loss",
+        "technical_parity_policy": "A tie with ordinary impedance analysis or an AI-native control does not veto a human-service economic advantage; it does forbid claiming novel scientific superiority from the tie.",
+        "investment_attractiveness": "UNKNOWN versus non-entry and equally capable AI-native competitors; positive gross margin is insufficient."
+      },
+      "conditional_investment_reservation": null,
+      "construction_spend": 0,
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 4,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 5,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "3000000"
+        },
+        {
+          "seq": 6,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "3000000"
+        },
+        {
+          "seq": 7,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 8,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 9,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 10,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 11,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 12,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 13,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 14,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 15,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 16,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 17,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 18,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 19,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 20,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 21,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 22,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 23,
+          "order_id": "conditional-scenario-buyer",
+          "kind": "buyer_provision",
+          "amount": "50000000"
+        }
+      ],
+      "orders": [],
+      "terminal_reserve_rule": "Full engine principal-plus0.20 tail plus additional29.80 fixed working reserve covers modeled30USD dispute fees. No reserve release is revenue; no empirical reversal-tail expiry is asserted."
+    },
+    {
+      "id": "strategic_nonpayment",
+      "mode": "CONDITIONALLY_ASSUMED_WORLD_NOT_OBSERVED_MARKET",
+      "one_admitted_report": [
+        "source-bound-report-001"
+      ],
+      "fixed_obligation": "Exact-model finite-cohort passive-circuit diagnostic report: certify the stated voltage scale ambiguity, provide a distinguishing calibrated measurement plan when supported, and abstain for unsupported or unknown-gain obligations. No physical inspection, empirical calibration, safety certification or production qualification.",
+      "buyer_inputs": {
+        "id": "strategic_nonpayment",
+        "value_microUSD": 100000000,
+        "trust_basis_points": 9500,
+        "switching_microUSD": 5000000,
+        "outside_cost_microUSD": 87900000,
+        "funded": false,
+        "reversal": false,
+        "warranty_extra_microUSD": 0,
+        "delivery": "accept",
+        "buyer_parameter_basis": "AUTHORED_CONDITIONAL_WORLD_NOT_AGI_ALPHA_DEMAND_DATA",
+        "realized_value_microUSD": 100000000
+      },
+      "own_utility_microUSD": 40000000,
+      "best_outside_utility_microUSD": 12100000,
+      "participates_under_assumptions": true,
+      "realized_utility_microUSD": 40000000,
+      "source_bound_report_accepted": false,
+      "net_collections_microUSD": 0,
+      "snapshots": {
+        "all_admitted_costs_including_unsold": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "terminal_180day_with_unresolved_exposure_retained": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "after_prespecified_conditional_reservation": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        }
+      },
+      "economics": {
+        "AI_conditional_complete_cost_microUSD": 36000000,
+        "AI_conditional_profit_microUSD": -36000000,
+        "AI_actual_profit_interval_microUSD": [
+          null,
+          null
+        ],
+        "unknown_K_definition": "Additional current and inherited enterprise discovery/construction, inference, data, execution, verification, acquisition, support, financing, tax, assurance and liability costs above the authored scenario totals. Actual totals are unbounded and are not established to equal or exceed those authored amounts; the K frontier is conditional, not an actual profit interval.",
+        "AI_positive_profit_requires_K_less_than_microUSD": -36000000,
+        "human_loaded_compensation_USD_per_hour_sensitivity": 84.71031605667798,
+        "human_positive_profit_before_unmeasured_costs_requires_hours_less_than": -0.08263456360281361,
+        "AI_lower_cost_than_human_before_unknown_costs_requires_human_hours_greater_than": 0.34234319206879926,
+        "human_conditional_grid": [
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -15471031
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.25,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -28177579
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.5,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -49355158
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -91710316
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 2,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -176420632
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 4,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -345841264
+          }
+        ],
+        "human_complete_cost_profit": "UNKNOWN_EXACT_TASK_TIME_TOOLS_REVIEW_REWORK_AND_SERVICE_OVERHEAD",
+        "human_to_AI_crossing": "UNESTABLISHED; a negative grid value is not a measured human loss",
+        "technical_parity_policy": "A tie with ordinary impedance analysis or an AI-native control does not veto a human-service economic advantage; it does forbid claiming novel scientific superiority from the tie.",
+        "investment_attractiveness": "UNKNOWN versus non-entry and equally capable AI-native competitors; positive gross margin is insufficient."
+      },
+      "conditional_investment_reservation": null,
+      "construction_spend": 0,
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 4,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 5,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "3000000"
+        },
+        {
+          "seq": 6,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "3000000"
+        },
+        {
+          "seq": 7,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 8,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 9,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 10,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 11,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 12,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 13,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 14,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 15,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 16,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 17,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 18,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 19,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 20,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 21,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 22,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 23,
+          "order_id": "conditional-scenario-buyer",
+          "kind": "buyer_provision",
+          "amount": "0"
+        }
+      ],
+      "orders": [
+        {
+          "id": "source-bound-report-001",
+          "buyer": "conditional-scenario-buyer",
+          "price": "50000000",
+          "state": "cancelled",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0"
+        }
+      ],
+      "terminal_reserve_rule": "Full engine principal-plus0.20 tail plus additional29.80 fixed working reserve covers modeled30USD dispute fees. No reserve release is revenue; no empirical reversal-tail expiry is asserted."
+    },
+    {
+      "id": "rejected_delivery",
+      "mode": "CONDITIONALLY_ASSUMED_WORLD_NOT_OBSERVED_MARKET",
+      "one_admitted_report": [
+        "source-bound-report-001"
+      ],
+      "fixed_obligation": "Exact-model finite-cohort passive-circuit diagnostic report: certify the stated voltage scale ambiguity, provide a distinguishing calibrated measurement plan when supported, and abstain for unsupported or unknown-gain obligations. No physical inspection, empirical calibration, safety certification or production qualification.",
+      "buyer_inputs": {
+        "id": "rejected_delivery",
+        "value_microUSD": 100000000,
+        "trust_basis_points": 9500,
+        "switching_microUSD": 5000000,
+        "outside_cost_microUSD": 87900000,
+        "funded": true,
+        "reversal": false,
+        "warranty_extra_microUSD": 0,
+        "delivery": "reject",
+        "buyer_parameter_basis": "AUTHORED_CONDITIONAL_WORLD_NOT_AGI_ALPHA_DEMAND_DATA",
+        "realized_value_microUSD": 100000000
+      },
+      "own_utility_microUSD": 40000000,
+      "best_outside_utility_microUSD": 12100000,
+      "participates_under_assumptions": true,
+      "realized_utility_microUSD": 40000000,
+      "source_bound_report_accepted": false,
+      "net_collections_microUSD": 0,
+      "snapshots": {
+        "all_admitted_costs_including_unsold": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "terminal_180day_with_unresolved_exposure_retained": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 37750000,
+          "recoveryIncome": 0,
+          "profit": -37750000,
+          "cash": 962250000,
+          "collections": 0,
+          "expensePaid": 37750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 931450000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -37750000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "after_prespecified_conditional_reservation": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 37750000,
+          "recoveryIncome": 0,
+          "profit": -37750000,
+          "cash": 962250000,
+          "collections": 0,
+          "expensePaid": 37750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 931450000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -37750000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        }
+      },
+      "economics": {
+        "AI_conditional_complete_cost_microUSD": 37750000,
+        "AI_conditional_profit_microUSD": -37750000,
+        "AI_actual_profit_interval_microUSD": [
+          null,
+          null
+        ],
+        "unknown_K_definition": "Additional current and inherited enterprise discovery/construction, inference, data, execution, verification, acquisition, support, financing, tax, assurance and liability costs above the authored scenario totals. Actual totals are unbounded and are not established to equal or exceed those authored amounts; the K frontier is conditional, not an actual profit interval.",
+        "AI_positive_profit_requires_K_less_than_microUSD": -37750000,
+        "human_loaded_compensation_USD_per_hour_sensitivity": 84.71031605667798,
+        "human_positive_profit_before_unmeasured_costs_requires_hours_less_than": -0.10329320450351702,
+        "AI_lower_cost_than_human_before_unknown_costs_requires_human_hours_greater_than": 0.34234319206879926,
+        "human_conditional_grid": [
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -17221031
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.25,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -29927579
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.5,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -51105158
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -93460316
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 2,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -178170632
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 4,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -347591264
+          }
+        ],
+        "human_complete_cost_profit": "UNKNOWN_EXACT_TASK_TIME_TOOLS_REVIEW_REWORK_AND_SERVICE_OVERHEAD",
+        "human_to_AI_crossing": "UNESTABLISHED; a negative grid value is not a measured human loss",
+        "technical_parity_policy": "A tie with ordinary impedance analysis or an AI-native control does not veto a human-service economic advantage; it does forbid claiming novel scientific superiority from the tie.",
+        "investment_attractiveness": "UNKNOWN versus non-entry and equally capable AI-native competitors; positive gross margin is insufficient."
+      },
+      "conditional_investment_reservation": null,
+      "construction_spend": 0,
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 4,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 5,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "3000000"
+        },
+        {
+          "seq": 6,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "3000000"
+        },
+        {
+          "seq": 7,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 8,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 9,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 10,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 11,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 12,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 13,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 14,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 15,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 16,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 17,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 18,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 19,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 20,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 21,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 22,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 23,
+          "order_id": "conditional-scenario-buyer",
+          "kind": "buyer_provision",
+          "amount": "50000000"
+        },
+        {
+          "seq": 24,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1750000"
+        },
+        {
+          "seq": 25,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1750000"
+        }
+      ],
+      "orders": [
+        {
+          "id": "source-bound-report-001",
+          "buyer": "conditional-scenario-buyer",
+          "price": "50000000",
+          "state": "refunded",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0"
+        }
+      ],
+      "terminal_reserve_rule": "Full engine principal-plus0.20 tail plus additional29.80 fixed working reserve covers modeled30USD dispute fees. No reserve release is revenue; no empirical reversal-tail expiry is asserted."
+    },
+    {
+      "id": "outage_delay",
+      "mode": "CONDITIONALLY_ASSUMED_WORLD_NOT_OBSERVED_MARKET",
+      "one_admitted_report": [
+        "source-bound-report-001"
+      ],
+      "fixed_obligation": "Exact-model finite-cohort passive-circuit diagnostic report: certify the stated voltage scale ambiguity, provide a distinguishing calibrated measurement plan when supported, and abstain for unsupported or unknown-gain obligations. No physical inspection, empirical calibration, safety certification or production qualification.",
+      "buyer_inputs": {
+        "id": "outage_delay",
+        "value_microUSD": 100000000,
+        "trust_basis_points": 9500,
+        "switching_microUSD": 5000000,
+        "outside_cost_microUSD": 87900000,
+        "funded": true,
+        "reversal": false,
+        "warranty_extra_microUSD": 0,
+        "delivery": "delay",
+        "buyer_parameter_basis": "AUTHORED_CONDITIONAL_WORLD_NOT_AGI_ALPHA_DEMAND_DATA",
+        "realized_value_microUSD": 100000000
+      },
+      "own_utility_microUSD": 40000000,
+      "best_outside_utility_microUSD": 12100000,
+      "participates_under_assumptions": true,
+      "realized_utility_microUSD": 40000000,
+      "source_bound_report_accepted": true,
+      "net_collections_microUSD": 0,
+      "snapshots": {
+        "all_admitted_costs_including_unsold": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "terminal_180day_with_unresolved_exposure_retained": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 37750000,
+          "recoveryIncome": 0,
+          "profit": -37750000,
+          "cash": 962250000,
+          "collections": 0,
+          "expensePaid": 37750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 931450000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -37750000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "after_prespecified_conditional_reservation": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 37750000,
+          "recoveryIncome": 0,
+          "profit": -37750000,
+          "cash": 962250000,
+          "collections": 0,
+          "expensePaid": 37750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 931450000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -37750000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        }
+      },
+      "economics": {
+        "AI_conditional_complete_cost_microUSD": 37750000,
+        "AI_conditional_profit_microUSD": -37750000,
+        "AI_actual_profit_interval_microUSD": [
+          null,
+          null
+        ],
+        "unknown_K_definition": "Additional current and inherited enterprise discovery/construction, inference, data, execution, verification, acquisition, support, financing, tax, assurance and liability costs above the authored scenario totals. Actual totals are unbounded and are not established to equal or exceed those authored amounts; the K frontier is conditional, not an actual profit interval.",
+        "AI_positive_profit_requires_K_less_than_microUSD": -37750000,
+        "human_loaded_compensation_USD_per_hour_sensitivity": 84.71031605667798,
+        "human_positive_profit_before_unmeasured_costs_requires_hours_less_than": -0.10329320450351702,
+        "AI_lower_cost_than_human_before_unknown_costs_requires_human_hours_greater_than": 0.34234319206879926,
+        "human_conditional_grid": [
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -17221031
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.25,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -29927579
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.5,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -51105158
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -93460316
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 2,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -178170632
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 4,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -347591264
+          }
+        ],
+        "human_complete_cost_profit": "UNKNOWN_EXACT_TASK_TIME_TOOLS_REVIEW_REWORK_AND_SERVICE_OVERHEAD",
+        "human_to_AI_crossing": "UNESTABLISHED; a negative grid value is not a measured human loss",
+        "technical_parity_policy": "A tie with ordinary impedance analysis or an AI-native control does not veto a human-service economic advantage; it does forbid claiming novel scientific superiority from the tie.",
+        "investment_attractiveness": "UNKNOWN versus non-entry and equally capable AI-native competitors; positive gross margin is insufficient."
+      },
+      "conditional_investment_reservation": null,
+      "construction_spend": 0,
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 4,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 5,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "3000000"
+        },
+        {
+          "seq": 6,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "3000000"
+        },
+        {
+          "seq": 7,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 8,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 9,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 10,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 11,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 12,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 13,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 14,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 15,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 16,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 17,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 18,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 19,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 20,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 21,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 22,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 23,
+          "order_id": "conditional-scenario-buyer",
+          "kind": "buyer_provision",
+          "amount": "50000000"
+        },
+        {
+          "seq": 24,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1750000"
+        },
+        {
+          "seq": 25,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1750000"
+        }
+      ],
+      "orders": [
+        {
+          "id": "source-bound-report-001",
+          "buyer": "conditional-scenario-buyer",
+          "price": "50000000",
+          "state": "refunded",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0"
+        }
+      ],
+      "terminal_reserve_rule": "Full engine principal-plus0.20 tail plus additional29.80 fixed working reserve covers modeled30USD dispute fees. No reserve release is revenue; no empirical reversal-tail expiry is asserted."
+    },
+    {
+      "id": "interruption_recovery",
+      "mode": "CONDITIONALLY_ASSUMED_WORLD_NOT_OBSERVED_MARKET",
+      "one_admitted_report": [
+        "source-bound-report-001"
+      ],
+      "fixed_obligation": "Exact-model finite-cohort passive-circuit diagnostic report: certify the stated voltage scale ambiguity, provide a distinguishing calibrated measurement plan when supported, and abstain for unsupported or unknown-gain obligations. No physical inspection, empirical calibration, safety certification or production qualification.",
+      "buyer_inputs": {
+        "id": "interruption_recovery",
+        "value_microUSD": 100000000,
+        "trust_basis_points": 9500,
+        "switching_microUSD": 5000000,
+        "outside_cost_microUSD": 87900000,
+        "funded": true,
+        "reversal": false,
+        "warranty_extra_microUSD": 0,
+        "delivery": "interrupt",
+        "buyer_parameter_basis": "AUTHORED_CONDITIONAL_WORLD_NOT_AGI_ALPHA_DEMAND_DATA",
+        "realized_value_microUSD": 100000000
+      },
+      "own_utility_microUSD": 40000000,
+      "best_outside_utility_microUSD": 12100000,
+      "participates_under_assumptions": true,
+      "realized_utility_microUSD": 40000000,
+      "source_bound_report_accepted": true,
+      "net_collections_microUSD": 50000000,
+      "snapshots": {
+        "all_admitted_costs_including_unsold": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 36000000,
+          "recoveryIncome": 0,
+          "profit": -36000000,
+          "cash": 964000000,
+          "collections": 0,
+          "expensePaid": 36000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 933200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -36000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "terminal_180day_with_unresolved_exposure_retained": {
+          "reservedInvestment": 0,
+          "revenue": 50000000,
+          "expenses": 37750000,
+          "recoveryIncome": 0,
+          "profit": 12250000,
+          "cash": 1012250000,
+          "collections": 50000000,
+          "expensePaid": 37750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 50200000,
+          "workingCapital": 30800000,
+          "available": 931250000,
+          "unrestrictedEarned": 12250000,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 81000000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": 12250000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "after_prespecified_conditional_reservation": {
+          "reservedInvestment": 10000000,
+          "revenue": 50000000,
+          "expenses": 37750000,
+          "recoveryIncome": 0,
+          "profit": 12250000,
+          "cash": 1012250000,
+          "collections": 50000000,
+          "expensePaid": 37750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 50200000,
+          "workingCapital": 30800000,
+          "available": 921250000,
+          "unrestrictedEarned": 2250000,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 81000000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": 12250000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        }
+      },
+      "economics": {
+        "AI_conditional_complete_cost_microUSD": 37750000,
+        "AI_conditional_profit_microUSD": 12250000,
+        "AI_actual_profit_interval_microUSD": [
+          null,
+          null
+        ],
+        "unknown_K_definition": "Additional current and inherited enterprise discovery/construction, inference, data, execution, verification, acquisition, support, financing, tax, assurance and liability costs above the authored scenario totals. Actual totals are unbounded and are not established to equal or exceed those authored amounts; the K frontier is conditional, not an actual profit interval.",
+        "AI_positive_profit_requires_K_less_than_microUSD": 12250000,
+        "human_loaded_compensation_USD_per_hour_sensitivity": 84.71031605667798,
+        "human_positive_profit_before_unmeasured_costs_requires_hours_less_than": 0.48695367837372305,
+        "AI_lower_cost_than_human_before_unknown_costs_requires_human_hours_greater_than": 0.34234319206879926,
+        "human_conditional_grid": [
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": 32778968
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.25,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": 20072420
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.5,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -1105158
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -43460316
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 2,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -128170632
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 4,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -297591264
+          }
+        ],
+        "human_complete_cost_profit": "UNKNOWN_EXACT_TASK_TIME_TOOLS_REVIEW_REWORK_AND_SERVICE_OVERHEAD",
+        "human_to_AI_crossing": "UNESTABLISHED; a negative grid value is not a measured human loss",
+        "technical_parity_policy": "A tie with ordinary impedance analysis or an AI-native control does not veto a human-service economic advantage; it does forbid claiming novel scientific superiority from the tie.",
+        "investment_attractiveness": "UNKNOWN versus non-entry and equally capable AI-native competitors; positive gross margin is insufficient."
+      },
+      "conditional_investment_reservation": {
+        "decision": "CONSTRUCT",
+        "funding": "earned after incurred costs; equity separately backs protection",
+        "cap": 10000000,
+        "before": {
+          "reservedInvestment": 0,
+          "revenue": 50000000,
+          "expenses": 37750000,
+          "recoveryIncome": 0,
+          "profit": 12250000,
+          "cash": 1012250000,
+          "collections": 50000000,
+          "expensePaid": 37750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 50200000,
+          "workingCapital": 30800000,
+          "available": 931250000,
+          "unrestrictedEarned": 12250000,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 81000000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": 12250000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "witness": {
+          "before": {
+            "reservedInvestment": 0,
+            "revenue": 50000000,
+            "expenses": 37750000,
+            "recoveryIncome": 0,
+            "profit": 12250000,
+            "cash": 1012250000,
+            "collections": 50000000,
+            "expensePaid": 37750000,
+            "payables": 0,
+            "custodyRestricted": 0,
+            "custodyReserve": 0,
+            "tailReserve": 50200000,
+            "workingCapital": 30800000,
+            "available": 931250000,
+            "unrestrictedEarned": 12250000,
+            "strictEarnedControl": 0,
+            "equityProtectionBacking": 81000000,
+            "earnedProtectionBacking": 0,
+            "netEarnedAfterIncurredObligations": 12250000,
+            "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+            "conditionalEarned": 0,
+            "investmentStopped": false,
+            "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+          },
+          "cap": 10000000,
+          "expectedNetValue": 20000000,
+          "valuationScope": "caller assumption, not realized demand",
+          "intentHash": "37c36ef20aa2c367b2f7e7358d0012a3fec5a44d341f21e2cbd9a3d8c25edbe8",
+          "journalThrough": 27,
+          "eventRowidThrough": 16
+        }
+      },
+      "construction_spend": 0,
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 4,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 5,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "3000000"
+        },
+        {
+          "seq": 6,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "3000000"
+        },
+        {
+          "seq": 7,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 8,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 9,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 10,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 11,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 12,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 13,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 14,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 15,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 16,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 17,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 18,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 19,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 20,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 21,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 22,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 23,
+          "order_id": "conditional-scenario-buyer",
+          "kind": "buyer_provision",
+          "amount": "50000000"
+        },
+        {
+          "seq": 24,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1750000"
+        },
+        {
+          "seq": 25,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1750000"
+        },
+        {
+          "seq": 26,
+          "order_id": "source-bound-report-001",
+          "kind": "revenue",
+          "amount": "50000000"
+        },
+        {
+          "seq": 27,
+          "order_id": "source-bound-report-001",
+          "kind": "collections",
+          "amount": "50000000"
+        }
+      ],
+      "orders": [
+        {
+          "id": "source-bound-report-001",
+          "buyer": "conditional-scenario-buyer",
+          "price": "50000000",
+          "state": "released",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0"
+        }
+      ],
+      "terminal_reserve_rule": "Full engine principal-plus0.20 tail plus additional29.80 fixed working reserve covers modeled30USD dispute fees. No reserve release is revenue; no empirical reversal-tail expiry is asserted."
+    },
+    {
+      "id": "correlated_benefit_warranty_reversals",
+      "mode": "CONDITIONALLY_ASSUMED_WORLD_NOT_OBSERVED_MARKET",
+      "one_admitted_report": [
+        "source-bound-report-001"
+      ],
+      "fixed_obligation": "Exact-model finite-cohort passive-circuit diagnostic report: certify the stated voltage scale ambiguity, provide a distinguishing calibrated measurement plan when supported, and abstain for unsupported or unknown-gain obligations. No physical inspection, empirical calibration, safety certification or production qualification.",
+      "buyer_inputs": {
+        "id": "correlated_benefit_warranty_reversals",
+        "value_microUSD": 100000000,
+        "trust_basis_points": 9500,
+        "switching_microUSD": 5000000,
+        "outside_cost_microUSD": 87900000,
+        "funded": true,
+        "reversal": true,
+        "warranty_extra_microUSD": 20000000,
+        "delivery": "accept",
+        "buyer_parameter_basis": "AUTHORED_CONDITIONAL_WORLD_NOT_AGI_ALPHA_DEMAND_DATA",
+        "realized_value_microUSD": 20000000
+      },
+      "own_utility_microUSD": 40000000,
+      "best_outside_utility_microUSD": 12100000,
+      "participates_under_assumptions": true,
+      "realized_utility_microUSD": -36000000,
+      "source_bound_report_accepted": true,
+      "net_collections_microUSD": 0,
+      "snapshots": {
+        "all_admitted_costs_including_unsold": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 56000000,
+          "recoveryIncome": 0,
+          "profit": -56000000,
+          "cash": 944000000,
+          "collections": 0,
+          "expensePaid": 56000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 913200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -56000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "terminal_180day_with_unresolved_exposure_retained": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 87750000,
+          "recoveryIncome": 0,
+          "profit": -87750000,
+          "cash": 912250000,
+          "collections": 0,
+          "expensePaid": 87750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 881450000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -87750000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": true,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "after_prespecified_conditional_reservation": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 87750000,
+          "recoveryIncome": 0,
+          "profit": -87750000,
+          "cash": 912250000,
+          "collections": 0,
+          "expensePaid": 87750000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 30800000,
+          "available": 881450000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 30800000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -87750000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": true,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        }
+      },
+      "economics": {
+        "AI_conditional_complete_cost_microUSD": 87750000,
+        "AI_conditional_profit_microUSD": -87750000,
+        "AI_actual_profit_interval_microUSD": [
+          null,
+          null
+        ],
+        "unknown_K_definition": "Additional current and inherited enterprise discovery/construction, inference, data, execution, verification, acquisition, support, financing, tax, assurance and liability costs above the authored scenario totals. Actual totals are unbounded and are not established to equal or exceed those authored amounts; the K frontier is conditional, not an actual profit interval.",
+        "AI_positive_profit_requires_K_less_than_microUSD": -87750000,
+        "human_loaded_compensation_USD_per_hour_sensitivity": 84.71031605667798,
+        "human_positive_profit_before_unmeasured_costs_requires_hours_less_than": -0.6935400873807571,
+        "AI_lower_cost_than_human_before_unknown_costs_requires_human_hours_greater_than": 0.34234319206879926,
+        "human_conditional_grid": [
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -67221031
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.25,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -79927579
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 0.5,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -101105158
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 1,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -143460316
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 2,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -228170632
+          },
+          {
+            "hours_AUTHORED_NOT_OBSERVED": 4,
+            "profit_upper_microUSD_before_unknown_setup_tools_service_overhead": -397591264
+          }
+        ],
+        "human_complete_cost_profit": "UNKNOWN_EXACT_TASK_TIME_TOOLS_REVIEW_REWORK_AND_SERVICE_OVERHEAD",
+        "human_to_AI_crossing": "UNESTABLISHED; a negative grid value is not a measured human loss",
+        "technical_parity_policy": "A tie with ordinary impedance analysis or an AI-native control does not veto a human-service economic advantage; it does forbid claiming novel scientific superiority from the tie.",
+        "investment_attractiveness": "UNKNOWN versus non-entry and equally capable AI-native competitors; positive gross margin is insufficient."
+      },
+      "conditional_investment_reservation": null,
+      "construction_spend": 0,
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000000"
+        },
+        {
+          "seq": 4,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000000"
+        },
+        {
+          "seq": 5,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "3000000"
+        },
+        {
+          "seq": 6,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "3000000"
+        },
+        {
+          "seq": 7,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 8,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 9,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 10,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 11,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 12,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 13,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 14,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 15,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 16,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 17,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 18,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 19,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1000000"
+        },
+        {
+          "seq": 20,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1000000"
+        },
+        {
+          "seq": 21,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "2000000"
+        },
+        {
+          "seq": 22,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 23,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "20000000"
+        },
+        {
+          "seq": 24,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "20000000"
+        },
+        {
+          "seq": 25,
+          "order_id": "conditional-scenario-buyer",
+          "kind": "buyer_provision",
+          "amount": "50000000"
+        },
+        {
+          "seq": 26,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "1750000"
+        },
+        {
+          "seq": 27,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "1750000"
+        },
+        {
+          "seq": 28,
+          "order_id": "source-bound-report-001",
+          "kind": "revenue",
+          "amount": "50000000"
+        },
+        {
+          "seq": 29,
+          "order_id": "source-bound-report-001",
+          "kind": "collections",
+          "amount": "50000000"
+        },
+        {
+          "seq": 30,
+          "order_id": "source-bound-report-001",
+          "kind": "contra_revenue",
+          "amount": "50000000"
+        },
+        {
+          "seq": 31,
+          "order_id": "source-bound-report-001",
+          "kind": "reversal_paid",
+          "amount": "50000000"
+        },
+        {
+          "seq": 32,
+          "order_id": "source-bound-report-001",
+          "kind": "breach",
+          "amount": "1"
+        },
+        {
+          "seq": 33,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "30000000"
+        },
+        {
+          "seq": 34,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "30000000"
+        }
+      ],
+      "orders": [
+        {
+          "id": "source-bound-report-001",
+          "buyer": "conditional-scenario-buyer",
+          "price": "50000000",
+          "state": "breached",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0"
+        }
+      ],
+      "terminal_reserve_rule": "Full engine principal-plus0.20 tail plus additional29.80 fixed working reserve covers modeled30USD dispute fees. No reserve release is revenue; no empirical reversal-tail expiry is asserted."
+    }
+  ],
+  "checks": [
+    {
+      "check": "conditional_participation/payment-gated-download",
+      "passed": true,
+      "detail": "assured simulated release required"
+    },
+    {
+      "check": "conditional_participation/forged-clearing",
+      "passed": true,
+      "detail": "unbound or forged provider observation"
+    },
+    {
+      "check": "conditional_participation/exact-delivery-and-duplicate-idempotence",
+      "passed": true
+    },
+    {
+      "check": "zero_demand/no-capital-or-negative-profit-funding",
+      "passed": true,
+      "detail": "earned funds or exposure qualification unavailable"
+    },
+    {
+      "check": "equal_ai_native_outside_option/no-capital-or-negative-profit-funding",
+      "passed": true,
+      "detail": "earned funds or exposure qualification unavailable"
+    },
+    {
+      "check": "strategic_nonpayment/nonpayment",
+      "passed": true,
+      "detail": "buyer funds or collateral unavailable"
+    },
+    {
+      "check": "strategic_nonpayment/no-capital-or-negative-profit-funding",
+      "passed": true,
+      "detail": "earned funds or exposure qualification unavailable"
+    },
+    {
+      "check": "rejected_delivery/rejected-report-cannot-settle",
+      "passed": true,
+      "detail": "independent acceptance failed"
+    },
+    {
+      "check": "rejected_delivery/no-capital-or-negative-profit-funding",
+      "passed": true,
+      "detail": "earned funds or exposure qualification unavailable"
+    },
+    {
+      "check": "outage_delay/payment-gated-download",
+      "passed": true,
+      "detail": "assured simulated release required"
+    },
+    {
+      "check": "outage_delay/expired-release",
+      "passed": true,
+      "detail": "unassured or expired settlement"
+    },
+    {
+      "check": "outage_delay/no-capital-or-negative-profit-funding",
+      "passed": true,
+      "detail": "earned funds or exposure qualification unavailable"
+    },
+    {
+      "check": "interruption_recovery/interrupted-funding-atomicity",
+      "passed": true,
+      "detail": "before transaction commit"
+    },
+    {
+      "check": "interruption_recovery/payment-gated-download",
+      "passed": true,
+      "detail": "assured simulated release required"
+    },
+    {
+      "check": "interruption_recovery/forged-clearing",
+      "passed": true,
+      "detail": "unbound or forged provider observation"
+    },
+    {
+      "check": "interruption_recovery/exact-delivery-and-duplicate-idempotence",
+      "passed": true
+    },
+    {
+      "check": "correlated_benefit_warranty_reversals/payment-gated-download",
+      "passed": true,
+      "detail": "assured simulated release required"
+    },
+    {
+      "check": "correlated_benefit_warranty_reversals/forged-clearing",
+      "passed": true,
+      "detail": "unbound or forged provider observation"
+    },
+    {
+      "check": "correlated_benefit_warranty_reversals/exact-delivery-and-duplicate-idempotence",
+      "passed": true
+    },
+    {
+      "check": "correlated_benefit_warranty_reversals/no-capital-or-negative-profit-funding",
+      "passed": true,
+      "detail": "earned funds or exposure qualification unavailable"
+    }
+  ],
+  "cohort_accounting": "One source-bound report per counterfactual world. Worlds are alternative assumptions, not additive sales, independent customers, new scientific samples or measured delivery volume. All admitted preparation costs remain charged when unsold or rejected.",
+  "evidence_grounded_decision": {
+    "real_orders": 0,
+    "actual_commerce_receipts_microUSD": 0,
+    "AGI_ALPHA_demand": "UNKNOWN",
+    "complete_actual_cost": "UNKNOWN",
+    "commercial_human_to_AI_crossing": "UNESTABLISHED",
+    "qualified_unrestricted_simulated_earned_funds_microUSD": 0,
+    "qualified_earned_funded_successor": "DEFERRED_NO_QUALIFIED_EARNINGS",
+    "conditional_model_reservation": "See each world; no successor construction or its benefit is invented by this adapter.",
+    "conditional_simulated_viability": "Positive only under the explicit buyer, complete-cost and provider assumptions in profitable worlds; zero-demand, competitive and joint adverse worlds are retained.",
+    "live_commercial_success": "UNRUN"
+  },
+  "route_limitations": [
+    "No production escrow, Stripe merchant integration, paid provider call or real settlement.",
+    "The inherited engine calls its local release rail nonrecourse-simulated; a real captured card is reversible and is not thereby nonrecourse. Actual late reversals are executed in the adverse world.",
+    "The Stripe US tariff is an illustrative domesticUSD card proxy. Montreal merchant eligibility/Canada cross-border tariffs and any assurance provider cost are unmeasured; no silent currency conversion.",
+    "All complete costs above authored totals remain unbounded K, including inherited enterprise research. Positive assumed-world balances are not promoted to qualified funds.",
+    "The actual report is an exact-model engineering delivery; no physical metrology or safety qualification follows."
+  ],
+  "resources": {
+    "wall_seconds": 0.43571539699951245,
+    "cpu_seconds": 0.11329200599999999,
+    "peak_rss_kib": 17792,
+    "external_paid_calls": 0,
+    "actual_inference_bill": null,
+    "complete_actual_monetary_cost": null
+  }
+}

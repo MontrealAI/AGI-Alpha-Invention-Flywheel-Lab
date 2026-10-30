@@ -1,0 +1,26 @@
+{
+  "schema": "agi-alpha/prospective-resources006/v1",
+  "capacity_cpu_seconds": 5400,
+  "capacity_storage_bytes": 6442450944,
+  "state": "active",
+  "runs": {
+    "teardown": {
+      "state": "settled",
+      "limits": {
+        "wall_seconds": 10,
+        "cpu_seconds": 5,
+        "memory_bytes": 134217728,
+        "output_bytes": 1048576,
+        "storage_bytes": 4194304
+      },
+      "budget_cpu_seconds": 5,
+      "budget_storage_bytes": 3090,
+      "receipt_sha256": "5339ff568e72736cd0fe9c8182f87789e71a5159b6aa5a4f1ca8d93c23a8b1a2",
+      "outcome": "complete",
+      "observed_waited_cpu_seconds": 0.017596,
+      "observed_output_bytes": 3090,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schema": "agi-alpha/consequential009-operational-repair-review/v1",
+  "source_hashes_before": {
+    "package": "f10f5368a06804f7b1977021f8471d13ed9a0f4664defb2338834dd498990483",
+    "workflow": "b74c209b77bde3349b96a3088277ae1eb131c919c8efef70e64cb19d37587459",
+    "tests": "595a7e83f11dc6fd6bf061344983faa136fa35d3c47c19abe2c3ee16935fe630"
+  },
+  "source_hashes_after": {
+    "package": "f10f5368a06804f7b1977021f8471d13ed9a0f4664defb2338834dd498990483",
+    "workflow": "b74c209b77bde3349b96a3088277ae1eb131c919c8efef70e64cb19d37587459",
+    "tests": "595a7e83f11dc6fd6bf061344983faa136fa35d3c47c19abe2c3ee16935fe630"
+  },
+  "source_unchanged_during_tests": true,
+  "exact_original_alias_archive_replay": {
+    "rejected": true,
+    "reason": "UNSAFE_ARCHIVE_NAMES",
+    "no_destination_created": true
+  },
+  "focused_tests_returncode": 0,
+  "focused_tests": 6,
+  "focused_tests_wall_seconds": 0.0873470480000833,
+  "yaml_parse": "PASS via installed PyYAML; GitHub platform interpretation remains source-matched CI scope",
+  "bash_syntax_checks": [
+    {
+      "job": "qualify",
+      "step": "Install pinned inherited exchange dependencies",
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "job": "qualify",
+      "step": "Meaningful exchange, independent arithmetic and forgery regressions",
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "job": "qualify",
+      "step": "Create exact standalone package and verify every extracted member",
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "job": "qualify",
+      "step": "Actually construct, independently check, retrieve, exchange and extend from clean contents",
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "job": "publish",
+      "step": "Require both unchanged exact-main qualification workflows",
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "job": "publish",
+      "step": "Download actual qualified package and test clean contents again",
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "job": "publish",
+      "step": "Publish distinct experimental edition without replacing historical releases",
+      "returncode": 0,
+      "stderr": ""
+    }
+  ],
+  "publisher_gate": "Current actual workflow predicate tested against failed main + later green grid branch and grid-only run records; refuses both. Query and predicate require main.",
+  "tag_review": "Live remote ref is either verified as exact lightweight qualified commit or atomically created with no force. Existing different source is refused. --verify-tag prevents silent automatic tag creation. No historical ref mutation observed or authorized.",
+  "residual_limit": "Another authorized actor could retarget a non-immutable tag after readback and before release creation; this adversarial external-write race was not exercised. This review makes no blanket immutability guarantee or outside certification.",
+  "open_reproduced_defects": [],
+  "complete_monetary_cost": null
+}

@@ -1,0 +1,45 @@
+{
+  "schema": "consequential009-paper-primary-source-check/v1",
+  "observer": "paper",
+  "observed_utc": "2026-10-30T10:13:34.904543+00:00",
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+      "checked_facts": {
+        "model_id": "gpt-6-astra",
+        "standard_input_USD_per_1M": 10,
+        "standard_output_USD_per_1M": 50,
+        "long_context_input_threshold_tokens": 272000
+      },
+      "limit": "Tariff and provider description, no actual execution receipt or bill."
+    },
+    {
+      "url": "https://www.bls.gov/ooh/architecture-and-engineering/electrical-and-electronics-engineers.htm",
+      "checked_facts": {
+        "electrical_engineer_median_annual_USD_May2025": 120630
+      },
+      "limit": "Occupation wage is not task time, service price or willingness to pay."
+    },
+    {
+      "url": "https://www.bls.gov/news.release/ecec.nr0.htm",
+      "checked_facts": {
+        "June2026_fulltime_private_compensation_USD_per_hour": 54,
+        "June2026_fulltime_private_wage_USD_per_hour": 36.97
+      },
+      "limit": "Broad compensation ratio is a sensitivity, not electrical-engineer-specific overhead."
+    },
+    {
+      "url": "https://stripe.com/pricing",
+      "checked_facts": {
+        "domestic_card_percent": 2.9,
+        "domestic_card_fixed_USD": 0.3,
+        "received_dispute_USD": 15,
+        "manually_countered_dispute_USD": 15
+      },
+      "limit": "US domestic route proxy; not a Montreal merchant quote, escrow or irreversible collection."
+    }
+  ],
+  "method": "Public primary pages opened and relevant values located in their returned text; paraphrased numeric intake, not a full page archive.",
+  "paid_calls": 0,
+  "actual_marginal_inference_bill": null
+}

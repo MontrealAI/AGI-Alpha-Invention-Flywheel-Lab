@@ -1,0 +1,218 @@
+{
+  "actions": [
+    {
+      "id": "v:mid1:100000",
+      "kind": "voltage_ratio",
+      "node": "mid1",
+      "omega_rad_s": "100000",
+      "relative_acquisition_units": 1,
+      "units": "1"
+    },
+    {
+      "id": "v:out:100000",
+      "kind": "voltage_ratio",
+      "node": "out",
+      "omega_rad_s": "100000",
+      "relative_acquisition_units": 1,
+      "units": "1"
+    },
+    {
+      "id": "v:mid1:300000",
+      "kind": "voltage_ratio",
+      "node": "mid1",
+      "omega_rad_s": "300000",
+      "relative_acquisition_units": 1,
+      "units": "1"
+    },
+    {
+      "id": "v:out:300000",
+      "kind": "voltage_ratio",
+      "node": "out",
+      "omega_rad_s": "300000",
+      "relative_acquisition_units": 1,
+      "units": "1"
+    },
+    {
+      "id": "v:mid1:1000000",
+      "kind": "voltage_ratio",
+      "node": "mid1",
+      "omega_rad_s": "1000000",
+      "relative_acquisition_units": 1,
+      "units": "1"
+    },
+    {
+      "id": "v:out:1000000",
+      "kind": "voltage_ratio",
+      "node": "out",
+      "omega_rad_s": "1000000",
+      "relative_acquisition_units": 1,
+      "units": "1"
+    },
+    {
+      "id": "v:mid1:3000000",
+      "kind": "voltage_ratio",
+      "node": "mid1",
+      "omega_rad_s": "3000000",
+      "relative_acquisition_units": 1,
+      "units": "1"
+    },
+    {
+      "id": "v:out:3000000",
+      "kind": "voltage_ratio",
+      "node": "out",
+      "omega_rad_s": "3000000",
+      "relative_acquisition_units": 1,
+      "units": "1"
+    },
+    {
+      "id": "y:input:100000",
+      "kind": "input_admittance",
+      "node": "in",
+      "omega_rad_s": "100000",
+      "relative_acquisition_units": 2,
+      "units": "siemens"
+    },
+    {
+      "id": "y:input:300000",
+      "kind": "input_admittance",
+      "node": "in",
+      "omega_rad_s": "300000",
+      "relative_acquisition_units": 2,
+      "units": "siemens"
+    },
+    {
+      "id": "y:input:1000000",
+      "kind": "input_admittance",
+      "node": "in",
+      "omega_rad_s": "1000000",
+      "relative_acquisition_units": 2,
+      "units": "siemens"
+    },
+    {
+      "id": "y:input:3000000",
+      "kind": "input_admittance",
+      "node": "in",
+      "omega_rad_s": "3000000",
+      "relative_acquisition_units": 2,
+      "units": "siemens"
+    }
+  ],
+  "generated_extension": {
+    "generated_from": "executed all-node voltage-equivalence witness plus typed current scaling",
+    "inherited": false,
+    "op": "derive_flux_observable",
+    "required_model": [
+      "linear time-invariant passive lumped RCL",
+      "positive finite components",
+      "single grounded independent input voltage",
+      "all circuit branches included",
+      "no fixed known load omitted",
+      "normalized coherent voltage measurement"
+    ],
+    "rule_authorship": "developer supplied conjugate-observable rule; runtime derives network expression, units and admissibility",
+    "sensor_obligation": "independently calibrated input-current and input-voltage transfer; otherwise abstain",
+    "source_sha256": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+    "units": "siemens",
+    "version": 1
+  },
+  "witness": {
+    "a": "2",
+    "all_frequency_proof": {
+      "applicability": [
+        "linear time-invariant passive lumped RCL",
+        "positive finite components",
+        "single grounded independent input voltage",
+        "all circuit branches included",
+        "no fixed known load omitted",
+        "normalized coherent voltage measurement"
+      ],
+      "authors": "developer supplied passive constitutive laws; algebraic exponent matching and graph coverage executed by program",
+      "non_applicability": [
+        "active/nonlinear components",
+        "unknown omitted source impedance/load",
+        "unbounded current calibration",
+        "unmodeled distributed effects",
+        "physical assurance without measured calibration"
+      ],
+      "program": {
+        "c1": -1,
+        "c2": -1,
+        "r1": 1,
+        "r2": 1
+      },
+      "proof": "Every branch admittance is multiplied by1/a. Entire KCL matrix and source RHS scale1/a, leaving all node voltage ratios unchanged wherever matrix invertible. Input current scales1/a.",
+      "relations": [
+        {
+          "branch_law": {
+            "omega_exponent": 0,
+            "parameter_exponent": -1,
+            "unit": "ohm"
+          },
+          "derived_admittance_scale_exponent": -1,
+          "element": "r1",
+          "kind": "R",
+          "parameter_scale_exponent": 1
+        },
+        {
+          "branch_law": {
+            "omega_exponent": 1,
+            "parameter_exponent": 1,
+            "unit": "farad"
+          },
+          "derived_admittance_scale_exponent": -1,
+          "element": "c1",
+          "kind": "C",
+          "parameter_scale_exponent": -1
+        },
+        {
+          "branch_law": {
+            "omega_exponent": 1,
+            "parameter_exponent": 1,
+            "unit": "farad"
+          },
+          "derived_admittance_scale_exponent": -1,
+          "element": "c2",
+          "kind": "C",
+          "parameter_scale_exponent": -1
+        },
+        {
+          "branch_law": {
+            "omega_exponent": 0,
+            "parameter_exponent": -1,
+            "unit": "ohm"
+          },
+          "derived_admittance_scale_exponent": -1,
+          "element": "r2",
+          "kind": "R",
+          "parameter_scale_exponent": 1
+        }
+      ],
+      "schema": "typed-network-symmetry-v1",
+      "source_sha256": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c"
+    },
+    "current_different": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "original_values": {
+      "c1": "1/1000000000",
+      "c2": "1/2000000000",
+      "r1": "1000",
+      "r2": "1000"
+    },
+    "transformed_values": {
+      "c1": "1/2000000000",
+      "c2": "1/4000000000",
+      "r1": "2000",
+      "r2": "2000"
+    },
+    "voltage_equal": [
+      true,
+      true,
+      true,
+      true
+    ]
+  }
+}

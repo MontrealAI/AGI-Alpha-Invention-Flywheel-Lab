@@ -1,0 +1,54 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "retention-r1",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "experiments.consequential009_retention",
+    "--primary-directory",
+    "evidence/consequential009/resources/analog-r3/artifacts",
+    "--receipt",
+    "evidence/consequential009/verifier/COMPLETE_COHORT_r3.json",
+    "--expected-receipt-sha256",
+    "19984d8186cada6690d576f3317f5d6b33f0cb4250a5fce26dcb4d9628553c3f",
+    "--output",
+    "evidence/consequential009/resources/retention-r1/artifacts"
+  ],
+  "requested_command": [
+    "python",
+    "-m",
+    "experiments.consequential009_retention",
+    "--primary-directory",
+    "evidence/consequential009/resources/analog-r3/artifacts",
+    "--receipt",
+    "evidence/consequential009/verifier/COMPLETE_COHORT_r3.json",
+    "--expected-receipt-sha256",
+    "19984d8186cada6690d576f3317f5d6b33f0cb4250a5fce26dcb4d9628553c3f",
+    "--output",
+    "evidence/consequential009/resources/retention-r1/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "experiments.consequential009_retention",
+    "--primary-directory",
+    "evidence/consequential009/resources/analog-r3/artifacts",
+    "--receipt",
+    "evidence/consequential009/verifier/COMPLETE_COHORT_r3.json",
+    "--expected-receipt-sha256",
+    "19984d8186cada6690d576f3317f5d6b33f0cb4250a5fce26dcb4d9628553c3f",
+    "--output",
+    "evidence/consequential009/resources/retention-r1/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/1f8586d459dc/lab",
+  "limits": {
+    "wall_seconds": 120,
+    "cpu_seconds": 180,
+    "memory_bytes": 1073741824,
+    "output_bytes": 16777216,
+    "storage_bytes": 67108864
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "pending"
+}

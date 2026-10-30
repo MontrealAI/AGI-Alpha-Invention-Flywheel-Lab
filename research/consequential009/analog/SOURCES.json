@@ -1,0 +1,51 @@
+{
+  "commit_date": "2015-03-08T16:54:49Z",
+  "files": [
+    {
+      "local_path": "research/consequential009/analog/rc-meas-ac.sp",
+      "sha256": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+      "size_bytes": 1308,
+      "upstream_git_blob": "2d464ba58ee46f4f88cb319debe5e90d396e06ad",
+      "upstream_path": "examples/measure/rc-meas-ac.sp",
+      "url": "https://github.com/ngspice/ngspice/blob/032b1c32c4dbad45ff132bcfac1dbecadbd8abb0/examples/measure/rc-meas-ac.sp"
+    },
+    {
+      "local_path": "research/consequential009/analog/MonteCarlo.sp",
+      "sha256": "9d6e0b268bcfbf47d5b442166b9c36c3283c2ac65137f51cec19a5c6fa616d72",
+      "size_bytes": 2298,
+      "upstream_git_blob": "608dc4cfdda5d168952a6319d87a9d63f4f6cb84",
+      "upstream_path": "examples/Monte_Carlo/MonteCarlo.sp",
+      "url": "https://github.com/ngspice/ngspice/blob/032b1c32c4dbad45ff132bcfac1dbecadbd8abb0/examples/Monte_Carlo/MonteCarlo.sp"
+    },
+    {
+      "local_path": "research/consequential009/analog/COPYING-ngspice",
+      "sha256": "07b8adb715ea31e6729732d6001f1abdadf944682f7d19cd91701ca72a8b0219",
+      "size_bytes": 32432,
+      "upstream_git_blob": "e266da0141a06637b8119d8ce7e53318ab1eee12",
+      "upstream_path": "COPYING",
+      "url": "https://github.com/ngspice/ngspice/blob/032b1c32c4dbad45ff132bcfac1dbecadbd8abb0/COPYING"
+    }
+  ],
+  "licensing": "Original upstream COPYING retained in full without edits. Upstream describes heterogeneous component licensing; these example files contain no separate per-file license notice. No ngspice implementation or binary imported, and no blanket licensing qualification is asserted. Known circuit laws implemented independently.",
+  "other_primary_sources": [
+    {
+      "role": "Known nodal circuit-simulation and AC analysis capability; strong conventional baseline exists.",
+      "url": "https://ngspice.sourceforge.io/ngspice-tutorial.html"
+    },
+    {
+      "date": "2012-03-28",
+      "role": "Mature diagnostic test generation transforms indistinguishable faults into differentiating experiments; no invention priority claimed for this principle.",
+      "url": "https://holocron.lib.auburn.edu/handle/10415/2987"
+    },
+    {
+      "role": "Open ordinary complete DFT/ATPG and scan/JTAG alternative; Boolean-only proposal rejected as novelty candidate.",
+      "url": "https://fault.readthedocs.io/en/latest/"
+    }
+  ],
+  "retrieved_utc": "2026-10-30T10:02:01.113658+00:00",
+  "source_commit": "032b1c32c4dbad45ff132bcfac1dbecadbd8abb0",
+  "source_observation": "Pinned upstream UTF-8 contents fetched through connected GitHub reads and each exact Git blob checked locally; no reconstructed historical specimen artifacts.",
+  "source_repository": "https://github.com/ngspice/ngspice",
+  "source_scope": "Real published circuit designs, not measured physical specimens. The MonteCarlo example is parsed only before.control; its random/control programs are retained but neither executed nor used as experimental truth.",
+  "total_included_source_bytes": 36038
+}

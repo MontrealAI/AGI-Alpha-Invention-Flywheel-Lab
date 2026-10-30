@@ -1,0 +1,28 @@
+{
+  "schema": "agi-alpha/consequential009-operational-alias-probe/v1",
+  "source_sha256": "06c897f900f1842e3d59f692a1b4a2558aff09ba7f3f61084d8d5135b4722806",
+  "archive_sha256": "5694e7d8edccc0f73410008af3afbd84e1d88d671400c03f17ec543610b55085",
+  "names": [
+    "proof.txt",
+    "./proof.txt"
+  ],
+  "extract_returned": {
+    "files_verified": 2,
+    "source_commit": null,
+    "destination": "/workspace/scratch/1f8586d459dc/lab/evidence/consequential009/verifier/operational-r1/extracted"
+  },
+  "normalized_destination_files": {
+    "proof.txt": {
+      "sha256": "5f4cce66006b8143720c0e01c46bc3c5ad17633674611e9f23c0fbb633d1c5dc",
+      "content": "second aliased member\n"
+    }
+  },
+  "first_claimed_member_survives": false,
+  "second_member_overwrites_same_destination": true,
+  "canonical_alias_rejected": false,
+  "finding": "Two distinct allowed ZIP names normalize to one destination. Extract reports2verified members but first filesystem artifact is overwritten bysecond. Current ownpack produces canonicalnames; no claim currentarchivewasmalicious.",
+  "resources": {
+    "cpu_seconds": 0.0010527359999999986,
+    "wall_seconds": 0.0010527520007599378
+  }
+}

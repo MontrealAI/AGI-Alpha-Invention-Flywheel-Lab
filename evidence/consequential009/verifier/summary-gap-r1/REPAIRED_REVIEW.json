@@ -1,0 +1,27 @@
+{
+  "schema": "agi-alpha/consequential009-summary-repair-review/v1",
+  "recorded_utc": "2026-10-30T10:56:08.118279+00:00",
+  "original_counterexamples": "COUNTEREXAMPLES.json",
+  "native_acceptance": {
+    "cohort": {
+      "path": "evidence/consequential009/verifier/summary-gap-r1/cohort/native-REPAIRED_ACCEPTANCE.json",
+      "sha256": "058ede18976164f0f0a3cd0ed354ea21172afb7dd4f346023eca86059c7f4a65",
+      "accepted": true,
+      "checks": 153,
+      "verifier_sha256": "d95b0f809b8858a3dd896021f8217b42fb64159b434da80aac774b4ec5df9469",
+      "artifact_sha256": "e6540e581f90430d175d2da6e7f928e72dca0e81e0d8aa96a064cd04b3a14649"
+    },
+    "reference": {
+      "path": "evidence/consequential009/verifier/summary-gap-r1/reference/native-REPAIRED_ACCEPTANCE.json",
+      "sha256": "2d830d5e5cab666cd647b17ae9f44da27604a3c2058b11f71b535190245740d4",
+      "accepted": true,
+      "checks": 170,
+      "verifier_sha256": "3567a33c13af2f7dabf9ba86d97ad392d56a35e0fee2f634100a0bc71a952128",
+      "artifact_sha256": "9b6d4b23119e96b1a63f03dbdc1a6f3ef5c5818c94f6135fc621489e17d7b8b0"
+    }
+  },
+  "scope": "Independent validator repair only; candidate, frozen cohort, endpoint and thresholds unchanged. No incorrect number was found in original native reports. Historical old checkers accepted forged summary claims; old receipts remain limited to their original validation coverage.",
+  "source_edits_frozen": true,
+  "regression_log": "REGRESSIONS.log",
+  "original_forged_reports_now_rejected": true
+}

@@ -1,0 +1,474 @@
+{
+  "netlist_sha256": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+  "parts": 4,
+  "scales": [
+    "1/2",
+    "1",
+    "2"
+  ],
+  "omega_rad_per_second": [
+    "1000",
+    "10000",
+    "100000",
+    "1000000",
+    "10000000"
+  ],
+  "absolute_per_component_admittance_error_S": "1/1000000000",
+  "source_amplitude_V": "1",
+  "symmetry_checks": [
+    {
+      "scale": "1/2",
+      "all_branch_admittances_inverse_scale": true,
+      "exact_all_node_voltage_ratios_equal": true,
+      "exact_input_admittance_inverse_scale": true
+    },
+    {
+      "scale": "1",
+      "all_branch_admittances_inverse_scale": true,
+      "exact_all_node_voltage_ratios_equal": true,
+      "exact_input_admittance_inverse_scale": true
+    },
+    {
+      "scale": "2",
+      "all_branch_admittances_inverse_scale": true,
+      "exact_all_node_voltage_ratios_equal": true,
+      "exact_input_admittance_inverse_scale": true
+    }
+  ],
+  "unknown_gain_counterexamples": [
+    {
+      "scale": "1/2",
+      "sensor_gain": "1/2",
+      "exact_gain_times_changed_current_equal": true
+    },
+    {
+      "scale": "1",
+      "sensor_gain": "1",
+      "exact_gain_times_changed_current_equal": true
+    },
+    {
+      "scale": "2",
+      "sensor_gain": "2",
+      "exact_gain_times_changed_current_equal": true
+    }
+  ],
+  "pairs": [
+    {
+      "a": "1/2",
+      "b": "1",
+      "current_measurement_actions": [
+        {
+          "omega_rad_per_second": "1000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "10000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "100000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "1000000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "10000000",
+          "disjoint_calibrated_rectangles": true
+        }
+      ],
+      "ordinary_full_VI_discriminates": true
+    },
+    {
+      "a": "1/2",
+      "b": "2",
+      "current_measurement_actions": [
+        {
+          "omega_rad_per_second": "1000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "10000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "100000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "1000000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "10000000",
+          "disjoint_calibrated_rectangles": true
+        }
+      ],
+      "ordinary_full_VI_discriminates": true
+    },
+    {
+      "a": "1",
+      "b": "2",
+      "current_measurement_actions": [
+        {
+          "omega_rad_per_second": "1000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "10000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "100000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "1000000",
+          "disjoint_calibrated_rectangles": true
+        },
+        {
+          "omega_rad_per_second": "10000000",
+          "disjoint_calibrated_rectangles": true
+        }
+      ],
+      "ordinary_full_VI_discriminates": true
+    }
+  ],
+  "responses": {
+    "1/2": [
+      {
+        "omega_rad_per_second": "1000",
+        "input_admittance_S": [
+          "10000001/2000006000000500",
+          "12000002/4000012000001"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "4000002000000/4000012000001",
+            "-6000001000/4000012000001"
+          ],
+          "out": [
+            "4000000/4000012000001",
+            "1999999000/4000012000001"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "10000",
+        "input_admittance_S": [
+          "100001/200060000500",
+          "60001/2000600005"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "400020000/400120001",
+            "-6000100/400120001"
+          ],
+          "out": [
+            "40000/400120001",
+            "1999900/400120001"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "100000",
+        "input_admittance_S": [
+          "1001/20600500",
+          "601/2060050"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "40200/41201",
+            "-6010/41201"
+          ],
+          "out": [
+            "400/41201",
+            "1990/41201"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "1000000",
+        "input_admittance_S": [
+          "11/8500",
+          "7/8500"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "6/17",
+            "-7/17"
+          ],
+          "out": [
+            "4/17",
+            "1/17"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "10000000",
+        "input_admittance_S": [
+          "11/5602",
+          "53/280100"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "51/2801",
+            "-265/2801"
+          ],
+          "out": [
+            "100/2801",
+            "-245/2801"
+          ]
+        }
+      }
+    ],
+    "1": [
+      {
+        "omega_rad_per_second": "1000",
+        "input_admittance_S": [
+          "10000001/4000012000001000",
+          "6000001/4000012000001"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "4000002000000/4000012000001",
+            "-6000001000/4000012000001"
+          ],
+          "out": [
+            "4000000/4000012000001",
+            "1999999000/4000012000001"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "10000",
+        "input_admittance_S": [
+          "100001/400120001000",
+          "60001/4001200010"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "400020000/400120001",
+            "-6000100/400120001"
+          ],
+          "out": [
+            "40000/400120001",
+            "1999900/400120001"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "100000",
+        "input_admittance_S": [
+          "1001/41201000",
+          "601/4120100"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "40200/41201",
+            "-6010/41201"
+          ],
+          "out": [
+            "400/41201",
+            "1990/41201"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "1000000",
+        "input_admittance_S": [
+          "11/17000",
+          "7/17000"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "6/17",
+            "-7/17"
+          ],
+          "out": [
+            "4/17",
+            "1/17"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "10000000",
+        "input_admittance_S": [
+          "11/11204",
+          "53/560200"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "51/2801",
+            "-265/2801"
+          ],
+          "out": [
+            "100/2801",
+            "-245/2801"
+          ]
+        }
+      }
+    ],
+    "2": [
+      {
+        "omega_rad_per_second": "1000",
+        "input_admittance_S": [
+          "10000001/8000024000002000",
+          "6000001/8000024000002"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "4000002000000/4000012000001",
+            "-6000001000/4000012000001"
+          ],
+          "out": [
+            "4000000/4000012000001",
+            "1999999000/4000012000001"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "10000",
+        "input_admittance_S": [
+          "100001/800240002000",
+          "60001/8002400020"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "400020000/400120001",
+            "-6000100/400120001"
+          ],
+          "out": [
+            "40000/400120001",
+            "1999900/400120001"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "100000",
+        "input_admittance_S": [
+          "1001/82402000",
+          "601/8240200"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "40200/41201",
+            "-6010/41201"
+          ],
+          "out": [
+            "400/41201",
+            "1990/41201"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "1000000",
+        "input_admittance_S": [
+          "11/34000",
+          "7/34000"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "6/17",
+            "-7/17"
+          ],
+          "out": [
+            "4/17",
+            "1/17"
+          ]
+        }
+      },
+      {
+        "omega_rad_per_second": "10000000",
+        "input_admittance_S": [
+          "11/22408",
+          "53/1120400"
+        ],
+        "voltage_ratios": {
+          "in": [
+            "1",
+            "0"
+          ],
+          "mid1": [
+            "51/2801",
+            "-265/2801"
+          ],
+          "out": [
+            "100/2801",
+            "-245/2801"
+          ]
+        }
+      }
+    ]
+  },
+  "all_calibrated_pairwise_satisfiable": true,
+  "proof_scope": "Exact finite arithmetic and branch-law scaling for positive passive RCL model; topology, ideal source, finite scale hypotheses, and authored calibrated error bounds assumed. No physical measurement, empirical sensor calibration, all-parameter identifiability, or novel physical law.",
+  "technical_control": "Ordinary complete voltage/current experiment with equal information can discriminate exactly the same finite pairs. A compiler tie is retained, not scientific superiority.",
+  "sensor_gain_scope": "Free unknown positive scalar gain restores exact scale ambiguity: gain a times admittance divided by a. This counterexample does not falsify a qualified calibrated-gain obligation.",
+  "schema": "agi-alpha/consequential009-independent-analog-check/v1",
+  "verifier_sha256": "69f2766d5640d816587cd619526801b5a8ef624ee929fdd1d6570981ee755e75",
+  "resources": {
+    "cpu_seconds": 0.005109999999999998,
+    "wall_seconds": 0.005144397999174544,
+    "max_rss_kib": 11392,
+    "complete_monetary_cost": null
+  },
+  "confirmation": false
+}

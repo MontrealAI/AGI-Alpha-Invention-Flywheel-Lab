@@ -1,0 +1,27 @@
+{
+  "role": "independent procedural verifier; shared model/host, not external certification",
+  "recorded_utc": "2026-10-30T09:53:26.757115+00:00",
+  "base_main": "53ea8859bc0eb83a1fbe4c9b134149193537dd23",
+  "candidate_edit_authority": false,
+  "confirmation_consumed": false,
+  "alpha_spent_this_role": 0,
+  "source_inspection": {
+    "AGENTS.md": "8edb2ab092ee6ee61e37bb20130cef880e1e3857dfea44f7014394f48034a826",
+    "CHARTER.md": "8bd617c12b6ab9bd12f68e7b9897656929a96fe917a4fbc43757e60b4b2f795c",
+    "run_cycle.py": "8cd5a0acfb20f98f9c95ec9126b3a9083ca3d61c924521c5a64a0deb4acdcfbf",
+    "experiments/resource006_v3.py": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+    "verification/cycle006_active_interrupt.py": "5674ec4f7b32668d3ac834edf13f6695ec4b3cc96757790ee8793c4cb7e7f00b"
+  },
+  "startup_obligation": "An interruption before owned state exists may exit without marker; after any resource reservation or unique output ownership exists it must preserve a terminal/refusal receipt, never orphan worker groups, and refuse overwrite on restart. Terminal cleanup needs protection from a second signal.",
+  "inherited_failure": "PR12 owner/reviewer report SIGINT during STARTED.json creation in frozen run_cycle.py; source inspection sees single unmasked except BaseException marker write, but no reproduction performed by this role. Retain historical report; later PASS not repair.",
+  "needed_target_freeze": [
+    "original complete acceptance endpoint and fixed cohort denominator",
+    "units, schema, tolerances, feasible satisfying witness",
+    "candidate bytes, baseline bytes, verifier bytes and consumed public data identities",
+    "ordinary strongest complete control, simple control, reset, retained and equal-content reuse",
+    "all exposed development cases and prior claim/error history",
+    "resource allocation and all-attempt costs",
+    "commercial evidence scope separate from authored simulation"
+  ],
+  "claim_adjudication": "UNKNOWN where missing costs, calibration, independent demand or model execution prevents qualification; reject unsupported objections unless testable/reproduced."
+}

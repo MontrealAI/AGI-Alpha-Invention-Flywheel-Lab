@@ -1,0 +1,778 @@
+{
+  "schema": "agi-alpha/consequential009-complete-independent-acceptance/v1",
+  "accepted": false,
+  "artifact_sha256": "c964ef710ae91f5bbc35b1a1392d487d4958e31ccfcaa8f84e43d799c682bbe0",
+  "verifier_sha256": "d95b0f809b8858a3dd896021f8217b42fb64159b434da80aac774b4ec5df9469",
+  "protocol_sha256": "9a28e4202fecbe46769f82a20a8aeedb92020cdd2701a6d941b6694d5363d7ad",
+  "candidate_sha256": "88474d7e6ab1f90cf1d38fc166814b658b876004a4029bb281fd3634daf3d0fc",
+  "independent_arithmetic_sha256": "119314be8a1d19960a1a7b902a2a14bd771d9eff41e2a15e4a20a98d1cf9c2ec",
+  "candidate_source_hashes": {
+    "inventions/consequential009/circuit.py": "88474d7e6ab1f90cf1d38fc166814b658b876004a4029bb281fd3634daf3d0fc",
+    "inventions/consequential009/experiment.py": "b51db5dab9b8e14e18d00698b2b1db074e6b5137cce58ecf1b7b87f5ba3bc4f8"
+  },
+  "consumed_hashes": {
+    "artifact/fresh_successor-constructed.json": "8fdb9e238225ccb481ddb6bc6b2d26492524a81b40b0d4bc9022183d42a2cbaf",
+    "artifact/fresh_successor-ordinary-exhaustive.json": "a6fae066ad34616a4824c10b791e75596b6b71088a7d4488f12ce8ca1d4b12df",
+    "artifact/fresh_successor-constructed-greedy.json": "b5275071cb618895285c1a303ae6cc8d5eef125e0e9292f43a4a43204ce65ac8",
+    "artifact/primary-COHORT.json": "8d245796a9209a2e4257d52248a3ded91213eac3a7be93a3d9adec26d6f6493a",
+    "artifact/fresh_successor-COHORT.json": "40a531a2f979ecfae2f7460406b6cef8d41e5bff73d8b04bb852fc51ed6fcbf4",
+    "artifact/primary-GENERATED.json": "e4a2de60ab97fcec31b08cd4cc4e76e754f5e9ee37d2f5fe8acb3f278d47b666",
+    "artifact/primary-unknown-gain-stress.json": "baa8510d64636aafe2ca99b6e27878feb665af0425cd415c0094c9f1f0f79619",
+    "artifact/primary-constructed-greedy.json": "8b103296a6356a0967bf0884b6105b467db2fd406a89ca36645f0a4414bfc57e",
+    "artifact/fresh_successor-voltage-only.json": "4ae096957f5c11473ab1f3d97bfff3a6be7b32f00e1863e27dcbd32057baec3e",
+    "artifact/fresh_successor-GENERATED.json": "e1dc25b52f0dbce1cfe44691dc17ef6d0feb6d7dcdb110f3488596bfffed610a",
+    "artifact/primary-voltage-only.json": "279abfb0d44f14b8839eee581e24419f4199b8998c655e50952b0dbdfe08d037",
+    "artifact/primary-constructed.json": "8dd9b2a2d4042b57fc069cbe19323df24040ba9486b0626e8e010bd156010f29",
+    "artifact/REPORT.json": "c964ef710ae91f5bbc35b1a1392d487d4958e31ccfcaa8f84e43d799c682bbe0",
+    "artifact/PROTOCOL.json": "9a28e4202fecbe46769f82a20a8aeedb92020cdd2701a6d941b6694d5363d7ad",
+    "artifact/primary-ordinary-exhaustive.json": "98211fbf460ae2ab9aeaad423e530d39b553255268627104d7f8aa7b758ec562",
+    "artifact/fresh_successor-unknown-gain-stress.json": "850e8cdbfbeb99856a2546cef81f5c2d0bc51f8e9f03def1cc1f3b07446db13e",
+    "source/research/consequential009/analog/PROTOCOL.json": "9a28e4202fecbe46769f82a20a8aeedb92020cdd2701a6d941b6694d5363d7ad",
+    "source/research/consequential009/analog/rc-meas-ac.sp": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+    "source/research/consequential009/analog/MonteCarlo.sp": "9d6e0b268bcfbf47d5b442166b9c36c3283c2ac65137f51cec19a5c6fa616d72",
+    "source/inventions/consequential009/circuit.py": "88474d7e6ab1f90cf1d38fc166814b658b876004a4029bb281fd3634daf3d0fc",
+    "source/inventions/consequential009/experiment.py": "b51db5dab9b8e14e18d00698b2b1db074e6b5137cce58ecf1b7b87f5ba3bc4f8"
+  },
+  "checks": [
+    {
+      "name": "candidate source matches executed report: inventions/consequential009/circuit.py",
+      "passed": true
+    },
+    {
+      "name": "candidate source matches executed report: inventions/consequential009/experiment.py",
+      "passed": true
+    },
+    {
+      "name": "artifact bound to same frozen protocol",
+      "passed": true
+    },
+    {
+      "name": "primary: pinned upstream raw bytes",
+      "passed": true
+    },
+    {
+      "name": "primary: complete frozen cohort values and order",
+      "passed": true
+    },
+    {
+      "name": "primary: cohort source identity",
+      "passed": true
+    },
+    {
+      "name": "primary: complete typed action universe",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: exact frozen uncertainty",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: every exact response independently recomputed",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: original denominator",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: exact selected-plan coverage and abstentions",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: endpoint label",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: strongest complete experiment",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: initial admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: full ancestry retained",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: ancestry selection and coverage 1",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: causally accurate ancestry 1",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: ancestry selection and coverage 2",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: causally accurate ancestry 2",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: full pruning trace retained",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: exact reverse-delete consequence y:input:100000",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: exact reverse-delete consequence v:mid1:100000",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: replacement starts from actual prior plan",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: every replacement coverage and missing witness",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: deterministic lower-cost replacement selection",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: final plan follows retained ancestry, pruning and replacement",
+      "passed": true
+    },
+    {
+      "name": "primary:constructed: acquisition units reconciled",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: exact frozen uncertainty",
+      "passed": true
+    },
+    {
+      "name": "primary: voltage-only grammar",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: every exact response independently recomputed",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: original denominator",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: exact selected-plan coverage and abstentions",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: endpoint label",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: strongest complete experiment",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: initial admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: full ancestry retained",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: ancestry selection and coverage 1",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: causally accurate ancestry 1",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: final plan follows retained ancestry, pruning and replacement",
+      "passed": true
+    },
+    {
+      "name": "primary:voltage-only: acquisition units reconciled",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: exact frozen uncertainty",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: every exact response independently recomputed",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: original denominator",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: exact selected-plan coverage and abstentions",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: endpoint label",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: strongest complete experiment",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: initial admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: full ancestry retained",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: ancestry selection and coverage 1",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: causally accurate ancestry 1",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: ancestry selection and coverage 2",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: causally accurate ancestry 2",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: full pruning trace retained",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: exact reverse-delete consequence y:input:100000",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: exact reverse-delete consequence v:mid1:100000",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: replacement starts from actual prior plan",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: every replacement coverage and missing witness",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: deterministic lower-cost replacement selection",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: final plan follows retained ancestry, pruning and replacement",
+      "passed": true
+    },
+    {
+      "name": "primary:unknown-gain-stress: acquisition units reconciled",
+      "passed": true
+    },
+    {
+      "name": "primary: ordinary admitted actions",
+      "passed": true
+    },
+    {
+      "name": "primary: independently exhaustive ordinary optimum",
+      "passed": true
+    },
+    {
+      "name": "primary: ordinary full endpoint",
+      "passed": true
+    },
+    {
+      "name": "primary: original greedy plan independently reconstructed",
+      "passed": true
+    },
+    {
+      "name": "primary: original greedy complete endpoint",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: pinned upstream raw bytes",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: complete frozen cohort values and order",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: cohort source identity",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: complete typed action universe",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: exact frozen uncertainty",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: every exact response independently recomputed",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: original denominator",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: exact selected-plan coverage and abstentions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: endpoint label",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: strongest complete experiment",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: initial admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: full ancestry retained",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: ancestry selection and coverage 1",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: causally accurate ancestry 1",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: ancestry selection and coverage 2",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: causally accurate ancestry 2",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: full pruning trace retained",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: exact reverse-delete consequence y:input:300000",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: exact reverse-delete consequence v:n002:10000000",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: replacement starts from actual prior plan",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: every replacement coverage and missing witness",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: deterministic lower-cost replacement selection",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: final plan follows retained ancestry, pruning and replacement",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:constructed: acquisition units reconciled",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: exact frozen uncertainty",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: voltage-only grammar",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: every exact response independently recomputed",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: original denominator",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: exact selected-plan coverage and abstentions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: endpoint label",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: strongest complete experiment",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: initial admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: full ancestry retained",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: ancestry selection and coverage 1",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: causally accurate ancestry 1",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: final plan follows retained ancestry, pruning and replacement",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:voltage-only: acquisition units reconciled",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: exact frozen uncertainty",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: every exact response independently recomputed",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: original denominator",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: exact selected-plan coverage and abstentions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: endpoint label",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: strongest complete experiment",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: initial admitted unique actions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: full ancestry retained",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: ancestry selection and coverage 1",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: causally accurate ancestry 1",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: full pruning trace retained",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: exact reverse-delete consequence v:n002:10000000",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: replacement starts from actual prior plan",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: every replacement coverage and missing witness",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: deterministic lower-cost replacement selection",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: final plan follows retained ancestry, pruning and replacement",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor:unknown-gain-stress: acquisition units reconciled",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: ordinary admitted actions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: independently exhaustive ordinary optimum",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: ordinary full endpoint",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: original greedy plan independently reconstructed",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: original greedy complete endpoint",
+      "passed": true
+    },
+    {
+      "name": "primary: report complete numerical summary",
+      "passed": true
+    },
+    {
+      "name": "primary: ordinary control advantage preserved",
+      "passed": true
+    },
+    {
+      "name": "primary: report summary constructed_actions",
+      "passed": false
+    },
+    {
+      "name": "primary: report summary constructed_relative_acquisition_units",
+      "passed": false
+    },
+    {
+      "name": "primary: report summary ordinary_actions",
+      "passed": false
+    },
+    {
+      "name": "primary: report summary constructed_complete_acceptance",
+      "passed": false
+    },
+    {
+      "name": "primary: report summary old_greedy_actions",
+      "passed": false
+    },
+    {
+      "name": "primary: report summary old_greedy_relative_acquisition_units",
+      "passed": false
+    },
+    {
+      "name": "primary: model-only truth scope preserved",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: report complete numerical summary",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: ordinary control advantage preserved",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: report summary constructed_actions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: report summary constructed_relative_acquisition_units",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: report summary ordinary_actions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: report summary constructed_complete_acceptance",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: report summary old_greedy_actions",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: report summary old_greedy_relative_acquisition_units",
+      "passed": true
+    },
+    {
+      "name": "fresh_successor: model-only truth scope preserved",
+      "passed": true
+    },
+    {
+      "name": "report preserves evidence scope physical_capability",
+      "passed": true
+    },
+    {
+      "name": "report preserves evidence scope scientific_novelty",
+      "passed": true
+    },
+    {
+      "name": "report preserves evidence scope commerce",
+      "passed": true
+    },
+    {
+      "name": "report preserves evidence scope monetary_cost",
+      "passed": true
+    },
+    {
+      "name": "all consumed candidate artifact and source bytes unchanged",
+      "passed": true
+    }
+  ],
+  "complete_cohort_results": {
+    "primary": {
+      "constructed": {
+        "admitted_pairs": 1128,
+        "separated_pairs": 1128,
+        "unresolved_pairs": 0,
+        "complete": true,
+        "selected_actions": [
+          "y:input:300000"
+        ],
+        "actions_count": 1,
+        "relative_acquisition_units": 2
+      },
+      "voltage-only": {
+        "admitted_pairs": 1128,
+        "separated_pairs": 1071,
+        "unresolved_pairs": 57,
+        "complete": false,
+        "selected_actions": [
+          "v:mid1:100000"
+        ],
+        "actions_count": 1,
+        "relative_acquisition_units": 1
+      },
+      "unknown-gain-stress": {
+        "admitted_pairs": 1128,
+        "separated_pairs": 1072,
+        "unresolved_pairs": 56,
+        "complete": false,
+        "selected_actions": [
+          "v:mid1:100000",
+          "y:input:100000"
+        ],
+        "actions_count": 2,
+        "relative_acquisition_units": 3
+      },
+      "ordinary": {
+        "admitted_pairs": 1128,
+        "separated_pairs": 1128,
+        "minimum_actions": 1,
+        "one_optimal_plan": [
+          "y:input:300000"
+        ],
+        "relative_acquisition_units": 2,
+        "complete": true
+      },
+      "old_greedy": {
+        "actions_count": 2,
+        "relative_acquisition_units": 3,
+        "selected_actions": [
+          "v:mid1:100000",
+          "y:input:100000"
+        ],
+        "complete": true,
+        "separated_pairs": 1128
+      },
+      "cohort": 48,
+      "source_blob": "2d464ba58ee46f4f88cb319debe5e90d396e06ad"
+    },
+    "fresh_successor": {
+      "constructed": {
+        "admitted_pairs": 276,
+        "separated_pairs": 276,
+        "unresolved_pairs": 0,
+        "complete": true,
+        "selected_actions": [
+          "y:input:10000000"
+        ],
+        "actions_count": 1,
+        "relative_acquisition_units": 2
+      },
+      "voltage-only": {
+        "admitted_pairs": 276,
+        "separated_pairs": 252,
+        "unresolved_pairs": 24,
+        "complete": false,
+        "selected_actions": [
+          "v:n002:10000000"
+        ],
+        "actions_count": 1,
+        "relative_acquisition_units": 1
+      },
+      "unknown-gain-stress": {
+        "admitted_pairs": 276,
+        "separated_pairs": 252,
+        "unresolved_pairs": 24,
+        "complete": false,
+        "selected_actions": [
+          "v:n002:10000000"
+        ],
+        "actions_count": 1,
+        "relative_acquisition_units": 1
+      },
+      "ordinary": {
+        "admitted_pairs": 276,
+        "separated_pairs": 276,
+        "minimum_actions": 1,
+        "one_optimal_plan": [
+          "y:input:10000000"
+        ],
+        "relative_acquisition_units": 2,
+        "complete": true
+      },
+      "old_greedy": {
+        "actions_count": 2,
+        "relative_acquisition_units": 3,
+        "selected_actions": [
+          "v:n002:10000000",
+          "y:input:300000"
+        ],
+        "complete": true,
+        "separated_pairs": 276
+      },
+      "cohort": 24,
+      "source_blob": "608dc4cfdda5d168952a6319d87a9d63f4f6cb84"
+    }
+  },
+  "scope": "Complete source-bound finite ideal-network development report and conservative rectangular uncertainty experiment; no physical specimen or calibrated sensor has been measured, no customer has accepted a service. Same model family/host, independently implemented arithmetic; procedural verification only.",
+  "confirmation": false,
+  "alpha_spent": 0,
+  "technical_novelty": "NOT_ESTABLISHED_KNOWN_IMPEDANCE_MEASUREMENT_CONTROL_STRONGER",
+  "commercial_admission": false,
+  "resources": {
+    "cpu_seconds": 0.324764,
+    "wall_seconds": 0.32486721399982343,
+    "max_rss_kib": 13312,
+    "complete_monetary_cost": null
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "schema": "agi-alpha/consequential009-supervisor-signal-verification/v1",
+  "passed": true,
+  "source_sha256_before": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "source_sha256_after": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "verifier_sha256": "10fa6f699abff2ae098c88730bf143d16e79b4b01f06804ed44d8e4b9f0401b0",
+  "driver_sha256": "e0a080023d9c4ef4c73a15a222b56002ecd816849da5310c9f3e954621dfad36",
+  "trials": [
+    {
+      "mode": "before-import",
+      "passed": true,
+      "first_signal": "SIGINT",
+      "second_signal": "SIGTERM",
+      "second_signal_phase": "before-import",
+      "returncode": -15,
+      "no_live_descendant_with_original_identity": true,
+      "all_children_reaped": true,
+      "barrier": {
+        "stage": "before-import",
+        "namespace_pid": 5,
+        "host_pid": 49713
+      },
+      "observed_descendants": {
+        "49713": {
+          "state": "T",
+          "parent": 49710,
+          "start_ticks": 1228410,
+          "namespace_pid": 5
+        }
+      },
+      "final_states": {
+        "49713": null
+      },
+      "reaped_adopted_descendants": [],
+      "receipt_state": null,
+      "conservative_cpu_reservation_seconds": 0,
+      "receipt_sha256": null,
+      "stdout": "",
+      "stderr": "",
+      "interpretation": "Before reservation/worker launch there is no owned evidence or child and no terminal receipt is required."
+    },
+    {
+      "mode": "before-reservation",
+      "passed": true,
+      "first_signal": "SIGINT",
+      "second_signal": "SIGTERM",
+      "second_signal_phase": "before-reservation",
+      "returncode": -2,
+      "no_live_descendant_with_original_identity": true,
+      "all_children_reaped": true,
+      "barrier": {
+        "stage": "before-reservation",
+        "namespace_pid": 6,
+        "host_pid": 49714
+      },
+      "observed_descendants": {
+        "49714": {
+          "state": "T",
+          "parent": 49710,
+          "start_ticks": 1228413,
+          "namespace_pid": 6
+        }
+      },
+      "final_states": {
+        "49714": null
+      },
+      "reaped_adopted_descendants": [],
+      "receipt_state": null,
+      "conservative_cpu_reservation_seconds": 0,
+      "receipt_sha256": null,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/workspace/scratch/1f8586d459dc/lab/experiments/resource006_v3.py\", line 207, in run\n    command = normalize_command(requested_command)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/1f8586d459dc/lab/verification/consequential009/interruption_driver.py\", line 29, in normalize\n    pause('before-reservation')\n  File \"/workspace/scratch/1f8586d459dc/lab/verification/consequential009/interruption_driver.py\", line 16, in pause\n    os.kill(os.getpid(), signal.SIGSTOP)\nKeyboardInterrupt\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/workspace/scratch/1f8586d459dc/lab/verification/consequential009/interruption_driver.py\", line 62, in <module>\n    result = runner.run(command, output / 'actual-run', output / 'resource-ledger.json', mode, limits, root)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/1f8586d459dc/lab/experiments/resource006_v3.py\", line 292, in run\n    signal.signal(signal.SIGTERM, previous_handler)\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/signal.py\", line 56, in signal\n    @_wraps(_signal.signal)\n    \n  File \"/workspace/scratch/1f8586d459dc/lab/experiments/resource006_v3.py\", line 162, in _terminated\n    raise KeyboardInterrupt('RESOURCE_SIGNAL_' + str(signum))\nKeyboardInterrupt: RESOURCE_SIGNAL_15\n",
+      "interpretation": "Before reservation/worker launch there is no owned evidence or child and no terminal receipt is required."
+    },
+    {
+      "mode": "initialization",
+      "passed": true,
+      "first_signal": "SIGINT",
+      "second_signal": "SIGTERM",
+      "second_signal_phase": "signal-blocked terminal cleanup",
+      "returncode": -15,
+      "no_live_descendant_with_original_identity": true,
+      "all_children_reaped": true,
+      "barrier": {
+        "stage": "initialization",
+        "namespace_pid": 7,
+        "host_pid": 49715
+      },
+      "observed_descendants": {
+        "49715": {
+          "state": "T",
+          "parent": 49710,
+          "start_ticks": 1228417,
+          "namespace_pid": 7
+        }
+      },
+      "final_states": {
+        "49715": null
+      },
+      "reaped_adopted_descendants": [],
+      "receipt_state": "interrupted",
+      "conservative_cpu_reservation_seconds": 5,
+      "receipt_sha256": "50d417d633f7303a6b7bfd5b105b4f9f087b6d235a741579d15df2d69585eb02",
+      "stdout": "",
+      "stderr": "",
+      "interpretation": "Second signal arrives at an established barrier inside masked cleanup; terminal receipt preserved and process tree dead."
+    },
+    {
+      "mode": "active",
+      "passed": true,
+      "first_signal": "SIGINT",
+      "second_signal": "SIGTERM",
+      "second_signal_phase": "signal-blocked terminal cleanup",
+      "returncode": -15,
+      "no_live_descendant_with_original_identity": true,
+      "all_children_reaped": true,
+      "barrier": {
+        "namespace_pid": 9,
+        "host_pid": 49717,
+        "child_namespace_pid": 10
+      },
+      "observed_descendants": {
+        "49716": {
+          "state": "T",
+          "parent": 49710,
+          "start_ticks": 1228422,
+          "namespace_pid": 8
+        },
+        "49717": {
+          "state": "S",
+          "parent": 49716,
+          "start_ticks": 1228425,
+          "namespace_pid": 9
+        },
+        "49718": {
+          "state": "Z",
+          "parent": 49710,
+          "start_ticks": 1228428,
+          "namespace_pid": 10
+        }
+      },
+      "final_states": {
+        "49716": null,
+        "49717": null,
+        "49718": null
+      },
+      "reaped_adopted_descendants": [
+        {
+          "namespace_pid": 10,
+          "wait_status": 9
+        }
+      ],
+      "receipt_state": "interrupted",
+      "conservative_cpu_reservation_seconds": 5,
+      "receipt_sha256": "07f56c4680e0aa56a5070144e93cdbf23a298c3f29bd3eceb6fd7fb4d42c8f0f",
+      "stdout": "",
+      "stderr": "",
+      "interpretation": "Second signal arrives at an established barrier inside masked cleanup; terminal receipt preserved and process tree dead."
+    },
+    {
+      "mode": "teardown",
+      "passed": true,
+      "first_signal": "SIGINT",
+      "second_signal": "SIGTERM",
+      "second_signal_phase": "teardown",
+      "returncode": -2,
+      "no_live_descendant_with_original_identity": true,
+      "all_children_reaped": true,
+      "barrier": {
+        "stage": "teardown",
+        "namespace_pid": 11,
+        "host_pid": 49719
+      },
+      "observed_descendants": {
+        "49719": {
+          "state": "T",
+          "parent": 49710,
+          "start_ticks": 1228429,
+          "namespace_pid": 11
+        }
+      },
+      "final_states": {
+        "49719": null
+      },
+      "reaped_adopted_descendants": [],
+      "receipt_state": "complete",
+      "conservative_cpu_reservation_seconds": 5,
+      "receipt_sha256": "83e8d8dc17a200821fc165166fbd537b6195629625ad2161ee62596c54823b3a",
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/workspace/scratch/1f8586d459dc/lab/experiments/resource006_v3.py\", line 277, in run\n    with _blocked():\n         ^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/contextlib.py\", line 144, in __exit__\n    next(self.gen)\n  File \"/workspace/scratch/1f8586d459dc/lab/experiments/resource006_v3.py\", line 158, in _blocked\n    signal.pthread_sigmask(signal.SIG_SETMASK, prior)\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/signal.py\", line 71, in pthread_sigmask\n    sigs_set = _signal.pthread_sigmask(how, mask)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nKeyboardInterrupt\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/workspace/scratch/1f8586d459dc/lab/verification/consequential009/interruption_driver.py\", line 62, in <module>\n    result = runner.run(command, output / 'actual-run', output / 'resource-ledger.json', mode, limits, root)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/1f8586d459dc/lab/experiments/resource006_v3.py\", line 292, in run\n    signal.signal(signal.SIGTERM, previous_handler)\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/signal.py\", line 56, in signal\n    @_wraps(_signal.signal)\n    \n  File \"/workspace/scratch/1f8586d459dc/lab/experiments/resource006_v3.py\", line 162, in _terminated\n    raise KeyboardInterrupt('RESOURCE_SIGNAL_' + str(signum))\nKeyboardInterrupt: RESOURCE_SIGNAL_15\n",
+      "interpretation": "Teardown signals arrive after trusted child already exited; completed receipt remains valid and no work survives."
+    }
+  ],
+  "resources": {
+    "verifier_cpu_seconds": 0.019658428000000006,
+    "wall_seconds": 0.27410466899891617,
+    "waited_child_cpu_seconds": 0.244252,
+    "conservative_cpu_reservations_seconds": 15,
+    "complete_monetary_cost": null
+  },
+  "scope": "Actual catchable signals at established barriers in a verifier driver importing unchanged trusted-command resource006_v3.run; hooks pause before import/reservation, PENDING creation, running child+grandchild, and terminal receipt. This is not testing every application-internal phase, arbitrary adversarial process escape, SIGKILL/powerloss durability, or repairing frozen run_cycle legacy startup.",
+  "historical_legacy_failure_preserved": true
+}

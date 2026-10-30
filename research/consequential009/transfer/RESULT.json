@@ -1,0 +1,993 @@
+{
+  "scope": "exposed two-state authored DEVELOPMENT diagnostic on source-bound real example topology; no physical specimens or protected confirmation",
+  "ontology_origin": "research role supplied source choices, abstraction ontology and extraction; existing bounded search inferred the unique relation-preserving role map",
+  "source_sha256": {
+    "research/consequential009/alternatives/diffraction/RESULT.json": "c7fbefa5e495e7ccfac7a7a1357aae32cf27f8a639dcd176a2741239d7210ed6",
+    "research/consequential009/alternatives/diffraction/probe.py": "67d598087d729f432499d6ed6c94787521231fb9d6a0a8b00512605ce845a9aa",
+    "research/consequential009/analog/rc-meas-ac.sp": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+    "inventions/consequential009/circuit.py": "f9450af1d2cbfb0011b0981bb02a04992c9b0ca6e2b816e57dd92cc678ffba00",
+    "mechanisms/mapping.py": "66d66208ac731249217766785a7d22a5d255f3ab6729b71edd7139ef1ce1cc18",
+    "research/consequential009/transfer/run_transfer.py": "76084a477784eea9342ee4a3996fbefd639b917aa0970a6cd06f102b1b605e5b"
+  },
+  "source_unchanged": true,
+  "diffraction_integer_signatures": {
+    "uncoded_a": [
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      6,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1
+    ],
+    "uncoded_b": [
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      6,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1
+    ],
+    "masked_a": [
+      18,
+      36,
+      0,
+      0,
+      90,
+      13,
+      26,
+      11,
+      22,
+      65,
+      198,
+      55,
+      234,
+      5,
+      10,
+      143,
+      2,
+      644,
+      2,
+      143,
+      10,
+      5,
+      234,
+      55,
+      198,
+      65,
+      22,
+      11,
+      26,
+      13,
+      90,
+      0,
+      0,
+      36,
+      18
+    ],
+    "masked_b": [
+      18,
+      36,
+      0,
+      0,
+      14,
+      28,
+      12,
+      24,
+      162,
+      9,
+      18,
+      216,
+      126,
+      252,
+      108,
+      168,
+      2,
+      750,
+      2,
+      168,
+      108,
+      252,
+      126,
+      216,
+      18,
+      9,
+      162,
+      24,
+      12,
+      28,
+      14,
+      0,
+      0,
+      36,
+      18
+    ]
+  },
+  "analog_symmetry": {
+    "schema": "typed-network-symmetry-v1",
+    "source_sha256": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+    "authors": "developer supplied passive constitutive laws; algebraic exponent matching and graph coverage executed by program",
+    "relations": [
+      {
+        "element": "r1",
+        "kind": "R",
+        "branch_law": {
+          "parameter_exponent": -1,
+          "omega_exponent": 0,
+          "unit": "ohm"
+        },
+        "parameter_scale_exponent": 1,
+        "derived_admittance_scale_exponent": -1
+      },
+      {
+        "element": "c1",
+        "kind": "C",
+        "branch_law": {
+          "parameter_exponent": 1,
+          "omega_exponent": 1,
+          "unit": "farad"
+        },
+        "parameter_scale_exponent": -1,
+        "derived_admittance_scale_exponent": -1
+      },
+      {
+        "element": "c2",
+        "kind": "C",
+        "branch_law": {
+          "parameter_exponent": 1,
+          "omega_exponent": 1,
+          "unit": "farad"
+        },
+        "parameter_scale_exponent": -1,
+        "derived_admittance_scale_exponent": -1
+      },
+      {
+        "element": "r2",
+        "kind": "R",
+        "branch_law": {
+          "parameter_exponent": -1,
+          "omega_exponent": 0,
+          "unit": "ohm"
+        },
+        "parameter_scale_exponent": 1,
+        "derived_admittance_scale_exponent": -1
+      }
+    ],
+    "program": {
+      "r1": 1,
+      "c1": -1,
+      "c2": -1,
+      "r2": 1
+    },
+    "proof": "Every branch admittance is multiplied by1/a. Entire KCL matrix and source RHS scale1/a, leaving all node voltage ratios unchanged wherever matrix invertible. Input current scales1/a.",
+    "applicability": [
+      "linear time-invariant passive lumped RCL",
+      "positive finite components",
+      "single grounded independent input voltage",
+      "all circuit branches included",
+      "no fixed known load omitted",
+      "normalized coherent voltage measurement"
+    ],
+    "non_applicability": [
+      "active/nonlinear components",
+      "unknown omitted source impedance/load",
+      "unbounded current calibration",
+      "unmodeled distributed effects",
+      "physical assurance without measured calibration"
+    ]
+  },
+  "analog_responses": [
+    {
+      "omega_rad_s": "1000",
+      "nominal_voltages": {
+        "0": [
+          "0",
+          "0"
+        ],
+        "in": [
+          "1",
+          "0"
+        ],
+        "mid1": [
+          "4000002000000/4000012000001",
+          "-6000001000/4000012000001"
+        ],
+        "out": [
+          "4000000/4000012000001",
+          "1999999000/4000012000001"
+        ]
+      },
+      "scaled_voltages": {
+        "0": [
+          "0",
+          "0"
+        ],
+        "in": [
+          "1",
+          "0"
+        ],
+        "mid1": [
+          "4000002000000/4000012000001",
+          "-6000001000/4000012000001"
+        ],
+        "out": [
+          "4000000/4000012000001",
+          "1999999000/4000012000001"
+        ]
+      },
+      "nominal_input_admittance_S": [
+        "10000001/4000012000001000",
+        "6000001/4000012000001"
+      ],
+      "scaled_input_admittance_S": [
+        "10000001/8000024000002000",
+        "6000001/8000024000002"
+      ]
+    },
+    {
+      "omega_rad_s": "10000",
+      "nominal_voltages": {
+        "0": [
+          "0",
+          "0"
+        ],
+        "in": [
+          "1",
+          "0"
+        ],
+        "mid1": [
+          "400020000/400120001",
+          "-6000100/400120001"
+        ],
+        "out": [
+          "40000/400120001",
+          "1999900/400120001"
+        ]
+      },
+      "scaled_voltages": {
+        "0": [
+          "0",
+          "0"
+        ],
+        "in": [
+          "1",
+          "0"
+        ],
+        "mid1": [
+          "400020000/400120001",
+          "-6000100/400120001"
+        ],
+        "out": [
+          "40000/400120001",
+          "1999900/400120001"
+        ]
+      },
+      "nominal_input_admittance_S": [
+        "100001/400120001000",
+        "60001/4001200010"
+      ],
+      "scaled_input_admittance_S": [
+        "100001/800240002000",
+        "60001/8002400020"
+      ]
+    },
+    {
+      "omega_rad_s": "100000",
+      "nominal_voltages": {
+        "0": [
+          "0",
+          "0"
+        ],
+        "in": [
+          "1",
+          "0"
+        ],
+        "mid1": [
+          "40200/41201",
+          "-6010/41201"
+        ],
+        "out": [
+          "400/41201",
+          "1990/41201"
+        ]
+      },
+      "scaled_voltages": {
+        "0": [
+          "0",
+          "0"
+        ],
+        "in": [
+          "1",
+          "0"
+        ],
+        "mid1": [
+          "40200/41201",
+          "-6010/41201"
+        ],
+        "out": [
+          "400/41201",
+          "1990/41201"
+        ]
+      },
+      "nominal_input_admittance_S": [
+        "1001/41201000",
+        "601/4120100"
+      ],
+      "scaled_input_admittance_S": [
+        "1001/82402000",
+        "601/8240200"
+      ]
+    },
+    {
+      "omega_rad_s": "1000000",
+      "nominal_voltages": {
+        "0": [
+          "0",
+          "0"
+        ],
+        "in": [
+          "1",
+          "0"
+        ],
+        "mid1": [
+          "6/17",
+          "-7/17"
+        ],
+        "out": [
+          "4/17",
+          "1/17"
+        ]
+      },
+      "scaled_voltages": {
+        "0": [
+          "0",
+          "0"
+        ],
+        "in": [
+          "1",
+          "0"
+        ],
+        "mid1": [
+          "6/17",
+          "-7/17"
+        ],
+        "out": [
+          "4/17",
+          "1/17"
+        ]
+      },
+      "nominal_input_admittance_S": [
+        "11/17000",
+        "7/17000"
+      ],
+      "scaled_input_admittance_S": [
+        "11/34000",
+        "7/34000"
+      ]
+    },
+    {
+      "omega_rad_s": "10000000",
+      "nominal_voltages": {
+        "0": [
+          "0",
+          "0"
+        ],
+        "in": [
+          "1",
+          "0"
+        ],
+        "mid1": [
+          "51/2801",
+          "-265/2801"
+        ],
+        "out": [
+          "100/2801",
+          "-245/2801"
+        ]
+      },
+      "scaled_voltages": {
+        "0": [
+          "0",
+          "0"
+        ],
+        "in": [
+          "1",
+          "0"
+        ],
+        "mid1": [
+          "51/2801",
+          "-265/2801"
+        ],
+        "out": [
+          "100/2801",
+          "-245/2801"
+        ]
+      },
+      "nominal_input_admittance_S": [
+        "11/11204",
+        "53/560200"
+      ],
+      "scaled_input_admittance_S": [
+        "11/22408",
+        "53/1120400"
+      ]
+    }
+  ],
+  "physical_units": {
+    "raw_voltage": "V",
+    "raw_current": "A",
+    "candidate_voltage_ratio": "V/V",
+    "candidate_input_admittance": "A/V = S",
+    "transfer_relations": "dimensionless equality/separation; no conversion of different physical quantities"
+  },
+  "mapping_discovery": [
+    {
+      "source": "diffraction_integer_witness",
+      "target": "passive_network_scale_witness",
+      "source_graph": {
+        "conditions": {
+          "added_information_checked": true,
+          "finite_pair_witness": true,
+          "physical_calibration_claim": false
+        },
+        "id": "diffraction_integer_witness",
+        "nodes": [
+          {
+            "id": "config_pair",
+            "kind": "latent_pair",
+            "unit": "pair"
+          },
+          {
+            "id": "uncoded_intensity",
+            "kind": "observation_partition",
+            "unit": "dimensionless"
+          },
+          {
+            "id": "amplitude_mask",
+            "kind": "measurement_refinement",
+            "unit": "dimensionless"
+          },
+          {
+            "id": "coded_intensity",
+            "kind": "observation_partition",
+            "unit": "dimensionless"
+          },
+          {
+            "id": "distinguished_pair",
+            "kind": "pair_identification",
+            "unit": "boolean"
+          }
+        ],
+        "relations": [
+          [
+            "config_pair",
+            "indistinguishable_under",
+            "uncoded_intensity"
+          ],
+          [
+            "uncoded_intensity",
+            "refined_by",
+            "amplitude_mask"
+          ],
+          [
+            "amplitude_mask",
+            "produces",
+            "coded_intensity"
+          ],
+          [
+            "config_pair",
+            "distinguishable_under",
+            "coded_intensity"
+          ],
+          [
+            "coded_intensity",
+            "permits",
+            "distinguished_pair"
+          ]
+        ],
+        "strategy_recipe": [
+          {
+            "kind": "refine_observation_partition",
+            "role_ids": [
+              "uncoded_intensity",
+              "amplitude_mask",
+              "coded_intensity"
+            ]
+          }
+        ]
+      },
+      "donor_graph": {
+        "conditions": {
+          "added_information_checked": true,
+          "finite_pair_witness": true,
+          "physical_calibration_claim": false
+        },
+        "id": "diffraction_integer_witness",
+        "nodes": [
+          {
+            "id": "config_pair",
+            "kind": "latent_pair",
+            "unit": "pair"
+          },
+          {
+            "id": "uncoded_intensity",
+            "kind": "observation_partition",
+            "unit": "dimensionless"
+          },
+          {
+            "id": "amplitude_mask",
+            "kind": "measurement_refinement",
+            "unit": "dimensionless"
+          },
+          {
+            "id": "coded_intensity",
+            "kind": "observation_partition",
+            "unit": "dimensionless"
+          },
+          {
+            "id": "distinguished_pair",
+            "kind": "pair_identification",
+            "unit": "boolean"
+          }
+        ],
+        "relations": [
+          [
+            "config_pair",
+            "indistinguishable_under",
+            "uncoded_intensity"
+          ],
+          [
+            "uncoded_intensity",
+            "refined_by",
+            "amplitude_mask"
+          ],
+          [
+            "amplitude_mask",
+            "produces",
+            "coded_intensity"
+          ],
+          [
+            "config_pair",
+            "distinguishable_under",
+            "coded_intensity"
+          ],
+          [
+            "coded_intensity",
+            "permits",
+            "distinguished_pair"
+          ]
+        ],
+        "strategy_recipe": [
+          {
+            "kind": "refine_observation_partition",
+            "role_ids": [
+              "uncoded_intensity",
+              "amplitude_mask",
+              "coded_intensity"
+            ]
+          }
+        ]
+      },
+      "target_graph": {
+        "conditions": {
+          "added_information_checked": true,
+          "finite_pair_witness": true,
+          "physical_calibration_claim": false
+        },
+        "id": "passive_network_scale_witness",
+        "nodes": [
+          {
+            "id": "parameter_pair",
+            "kind": "latent_pair",
+            "unit": "pair"
+          },
+          {
+            "id": "voltage_ratios",
+            "kind": "observation_partition",
+            "unit": "dimensionless"
+          },
+          {
+            "id": "current_sense",
+            "kind": "measurement_refinement",
+            "unit": "dimensionless"
+          },
+          {
+            "id": "input_admittance",
+            "kind": "observation_partition",
+            "unit": "dimensionless"
+          },
+          {
+            "id": "identified_pair",
+            "kind": "pair_identification",
+            "unit": "boolean"
+          }
+        ],
+        "relations": [
+          [
+            "parameter_pair",
+            "indistinguishable_under",
+            "voltage_ratios"
+          ],
+          [
+            "voltage_ratios",
+            "refined_by",
+            "current_sense"
+          ],
+          [
+            "current_sense",
+            "produces",
+            "input_admittance"
+          ],
+          [
+            "parameter_pair",
+            "distinguishable_under",
+            "input_admittance"
+          ],
+          [
+            "input_admittance",
+            "permits",
+            "identified_pair"
+          ]
+        ],
+        "strategy_recipe": [
+          {
+            "kind": "refine_observation_partition",
+            "role_ids": [
+              "voltage_ratios",
+              "current_sense",
+              "input_admittance"
+            ]
+          }
+        ]
+      },
+      "correspondences": [
+        {
+          "amplitude_mask": "current_sense",
+          "coded_intensity": "input_admittance",
+          "config_pair": "parameter_pair",
+          "distinguished_pair": "identified_pair",
+          "uncoded_intensity": "voltage_ratios"
+        }
+      ],
+      "status": "unique",
+      "applicable": true,
+      "search_complete": true,
+      "search_nodes": 6,
+      "candidate_limit": 32,
+      "search_limit": 10000,
+      "unresolved_mismatches": [],
+      "typed_domain_failures": [],
+      "preserved_relations": [
+        [
+          "config_pair",
+          "indistinguishable_under",
+          "uncoded_intensity"
+        ],
+        [
+          "uncoded_intensity",
+          "refined_by",
+          "amplitude_mask"
+        ],
+        [
+          "amplitude_mask",
+          "produces",
+          "coded_intensity"
+        ],
+        [
+          "config_pair",
+          "distinguishable_under",
+          "coded_intensity"
+        ],
+        [
+          "coded_intensity",
+          "permits",
+          "distinguished_pair"
+        ]
+      ],
+      "changed_assumptions": {},
+      "origin": "Developer supplied typed representations and role recipes; bounded search discovers correspondences, ignoring labels."
+    }
+  ],
+  "inherited_compile_refusal": "UNSUPPORTED_ROLE_TRANSFORM",
+  "raw_unit_mapping_refusal": "ROLE_KIND_OR_UNIT_MISMATCH",
+  "transferred_hint": {
+    "operator": "refine_observation_partition",
+    "source_graph": "diffraction_integer_witness",
+    "target_graph": "passive_network_scale_witness",
+    "mapped_intervention": "current_sense",
+    "normalization": "Only equivalence/separation transferred; no intensity-to-voltage/current numeric conversion",
+    "proof_obligation": "new observable robustly separates the witnessed pair under the same declared uncertainty policy"
+  },
+  "restricted_voltage_only": {
+    "schema": "circuit-measurement-strategy-v1",
+    "source_sha256": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+    "selected_actions": [],
+    "generated_ancestry": [],
+    "admitted_pairs": 1,
+    "separated_pairs": 0,
+    "unresolved_pairs": [
+      [
+        "nominal",
+        "scale2"
+      ]
+    ],
+    "complete_finite_model_acceptance": false,
+    "strong_full_experiment_unresolved_pairs": 1,
+    "exact_responses": {
+      "V_mid1": [
+        [
+          "6/17",
+          "-7/17"
+        ],
+        [
+          "6/17",
+          "-7/17"
+        ]
+      ],
+      "V_out": [
+        [
+          "4/17",
+          "1/17"
+        ],
+        [
+          "4/17",
+          "1/17"
+        ]
+      ]
+    },
+    "cpu_seconds": 0.0011013980000000034,
+    "policies": {
+      "voltage_ratio": {
+        "gain": [
+          "99/100",
+          "101/100"
+        ],
+        "absolute_coordinate_error": "1/100000000"
+      },
+      "input_admittance": {
+        "gain": [
+          "99/100",
+          "101/100"
+        ],
+        "absolute_coordinate_error": "1/100000000"
+      }
+    },
+    "proof_scope": "Sufficient exact pairwise separation of axis-aligned complex uncertainty rectangles on a finite authored model cohort. Not continuous-tolerance or physical specimen validation."
+  },
+  "transferred_extension_enabled": {
+    "schema": "circuit-measurement-strategy-v1",
+    "source_sha256": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+    "selected_actions": [
+      {
+        "id": "Y_input",
+        "kind": "input_admittance",
+        "omega_rad_s": "1000000",
+        "relative_acquisition_units": 2
+      }
+    ],
+    "generated_ancestry": [
+      {
+        "revision": 1,
+        "parent": "voltage-only-v1",
+        "consequential_unresolved_pair": [
+          "nominal",
+          "scale2"
+        ],
+        "generated_action": {
+          "id": "Y_input",
+          "kind": "input_admittance",
+          "omega_rad_s": "1000000",
+          "relative_acquisition_units": 2
+        },
+        "newly_separated_pairs": 1,
+        "extension": "flux conjugate input-current observable"
+      }
+    ],
+    "admitted_pairs": 1,
+    "separated_pairs": 1,
+    "unresolved_pairs": [],
+    "complete_finite_model_acceptance": true,
+    "strong_full_experiment_unresolved_pairs": 0,
+    "exact_responses": {
+      "V_mid1": [
+        [
+          "6/17",
+          "-7/17"
+        ],
+        [
+          "6/17",
+          "-7/17"
+        ]
+      ],
+      "V_out": [
+        [
+          "4/17",
+          "1/17"
+        ],
+        [
+          "4/17",
+          "1/17"
+        ]
+      ],
+      "Y_input": [
+        [
+          "11/17000",
+          "7/17000"
+        ],
+        [
+          "11/34000",
+          "7/34000"
+        ]
+      ]
+    },
+    "cpu_seconds": 0.0015688030000000006,
+    "policies": {
+      "voltage_ratio": {
+        "gain": [
+          "99/100",
+          "101/100"
+        ],
+        "absolute_coordinate_error": "1/100000000"
+      },
+      "input_admittance": {
+        "gain": [
+          "99/100",
+          "101/100"
+        ],
+        "absolute_coordinate_error": "1/100000000"
+      }
+    },
+    "proof_scope": "Sufficient exact pairwise separation of axis-aligned complex uncertainty rectangles on a finite authored model cohort. Not continuous-tolerance or physical specimen validation."
+  },
+  "equal_action_ordinary_no_transfer_hint": {
+    "schema": "circuit-measurement-strategy-v1",
+    "source_sha256": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+    "selected_actions": [
+      {
+        "id": "Y_input",
+        "kind": "input_admittance",
+        "omega_rad_s": "1000000",
+        "relative_acquisition_units": 2
+      }
+    ],
+    "generated_ancestry": [
+      {
+        "revision": 1,
+        "parent": "voltage-only-v1",
+        "consequential_unresolved_pair": [
+          "nominal",
+          "scale2"
+        ],
+        "generated_action": {
+          "id": "Y_input",
+          "kind": "input_admittance",
+          "omega_rad_s": "1000000",
+          "relative_acquisition_units": 2
+        },
+        "newly_separated_pairs": 1,
+        "extension": "flux conjugate input-current observable"
+      }
+    ],
+    "admitted_pairs": 1,
+    "separated_pairs": 1,
+    "unresolved_pairs": [],
+    "complete_finite_model_acceptance": true,
+    "strong_full_experiment_unresolved_pairs": 0,
+    "exact_responses": {
+      "V_mid1": [
+        [
+          "6/17",
+          "-7/17"
+        ],
+        [
+          "6/17",
+          "-7/17"
+        ]
+      ],
+      "V_out": [
+        [
+          "4/17",
+          "1/17"
+        ],
+        [
+          "4/17",
+          "1/17"
+        ]
+      ],
+      "Y_input": [
+        [
+          "11/17000",
+          "7/17000"
+        ],
+        [
+          "11/34000",
+          "7/34000"
+        ]
+      ]
+    },
+    "cpu_seconds": 0.0014231359999999915,
+    "policies": {
+      "voltage_ratio": {
+        "gain": [
+          "99/100",
+          "101/100"
+        ],
+        "absolute_coordinate_error": "1/100000000"
+      },
+      "input_admittance": {
+        "gain": [
+          "99/100",
+          "101/100"
+        ],
+        "absolute_coordinate_error": "1/100000000"
+      }
+    },
+    "proof_scope": "Sufficient exact pairwise separation of axis-aligned complex uncertainty rectangles on a finite authored model cohort. Not continuous-tolerance or physical specimen validation."
+  },
+  "decision": {
+    "extension_changes_executed_finite_model_acceptance": true,
+    "transferred_hint_beats_equal_action_ordinary": false,
+    "causal_scope": "Availability of input-admittance observation changes two-state acceptance; ordinary equal-action control ties. No discovery superiority or novel physical law established."
+  },
+  "cpu_seconds": 0.010072747,
+  "wall_seconds": 0.01008575999912864,
+  "maximum_rss_kib": 12672,
+  "protected_confirmation_alpha_spent": 0
+}
