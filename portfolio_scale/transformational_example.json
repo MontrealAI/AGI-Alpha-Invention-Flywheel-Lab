@@ -1,0 +1,140 @@
+{
+  "schema": "alpha-transformational-allocation/v1",
+  "scope": "SIMULATED",
+  "currency": "simulated-microUSD",
+  "funding": {
+    "source": "SYNTHETIC_ENGINEERING_FIXTURE_NOT_AUDITED_EARNINGS",
+    "available": 1500000000,
+    "unrestrictedEarned": 1000000000,
+    "authorized_allocation": 800000000
+  },
+  "scenarios": {
+    "ordinary": 5000,
+    "competition": 3000,
+    "stress": 2000
+  },
+  "actions": [
+    {
+      "id": "fixed_capability_delivery",
+      "lane": "delivery",
+      "catalog_id": "software_engineering__reproducible_bug_fix",
+      "cost": 100000000,
+      "requires": [],
+      "exclusive_group": "cohort-A",
+      "cash_returns": {
+        "ordinary": 140000000,
+        "competition": 115000000,
+        "stress": 100000000
+      },
+      "evidence": "ILLUSTRATIVE_FIXTURE_NOT_MARKET_OR_PHYSICAL_EVIDENCE",
+      "authorized": true
+    },
+    {
+      "id": "discounted_same_delivery",
+      "lane": "delivery",
+      "catalog_id": "software_engineering__reproducible_bug_fix",
+      "cost": 100000000,
+      "requires": [],
+      "exclusive_group": "cohort-A",
+      "cash_returns": {
+        "ordinary": 125000000,
+        "competition": 105000000,
+        "stress": 95000000
+      },
+      "evidence": "ILLUSTRATIVE_FIXTURE_NOT_MARKET_OR_PHYSICAL_EVIDENCE",
+      "authorized": true
+    },
+    {
+      "id": "measurement_instrument",
+      "lane": "instrument",
+      "catalog_id": null,
+      "cost": 150000000,
+      "requires": [],
+      "exclusive_group": null,
+      "cash_returns": {
+        "ordinary": 0,
+        "competition": 0,
+        "stress": 0
+      },
+      "evidence": "ILLUSTRATIVE_FIXTURE_NOT_MARKET_OR_PHYSICAL_EVIDENCE",
+      "authorized": true
+    },
+    {
+      "id": "independent_checker",
+      "lane": "instrument",
+      "catalog_id": null,
+      "cost": 100000000,
+      "requires": [],
+      "exclusive_group": null,
+      "cash_returns": {
+        "ordinary": 0,
+        "competition": 0,
+        "stress": 0
+      },
+      "evidence": "ILLUSTRATIVE_FIXTURE_NOT_MARKET_OR_PHYSICAL_EVIDENCE",
+      "authorized": true
+    },
+    {
+      "id": "enabled_delivery",
+      "lane": "delivery",
+      "catalog_id": "software_engineering__reproducible_bug_fix",
+      "cost": 350000000,
+      "requires": [
+        "measurement_instrument",
+        "independent_checker"
+      ],
+      "exclusive_group": null,
+      "cash_returns": {
+        "ordinary": 500000000,
+        "competition": 430000000,
+        "stress": 400000000
+      },
+      "evidence": "ILLUSTRATIVE_FIXTURE_NOT_MARKET_OR_PHYSICAL_EVIDENCE",
+      "authorized": true
+    },
+    {
+      "id": "unresolved_energy_research",
+      "lane": "research",
+      "catalog_id": null,
+      "cost": 200000000,
+      "requires": [],
+      "exclusive_group": null,
+      "cash_returns": null,
+      "evidence": "ILLUSTRATIVE_FIXTURE_NOT_MARKET_OR_PHYSICAL_EVIDENCE",
+      "authorized": true
+    },
+    {
+      "id": "unapproved_physical_action",
+      "lane": "research",
+      "catalog_id": null,
+      "cost": 10000000,
+      "requires": [],
+      "exclusive_group": null,
+      "cash_returns": {
+        "ordinary": 1000000000,
+        "competition": 1000000000,
+        "stress": 1000000000
+      },
+      "evidence": "ILLUSTRATIVE_FIXTURE_NOT_MARKET_OR_PHYSICAL_EVIDENCE",
+      "authorized": false
+    }
+  ],
+  "synergies": [
+    {
+      "id": "paired_instrument_value",
+      "members": [
+        "measurement_instrument",
+        "independent_checker"
+      ],
+      "incremental_cash": {
+        "ordinary": 600000000,
+        "competition": 500000000,
+        "stress": 300000000
+      },
+      "evidence": "HYPOTHETICAL_NONADDITIVE_BENEFIT_FOR_ENGINEERING_TEST_ONLY"
+    }
+  ],
+  "max_states": 1024,
+  "worst_loss_limit": 200000000,
+  "downside_penalty_bps": 5000
+}
