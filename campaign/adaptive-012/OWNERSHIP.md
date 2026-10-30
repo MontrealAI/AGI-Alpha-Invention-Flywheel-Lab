@@ -1,0 +1,9 @@
+# Adaptive-012 ownership and historical handoff
+
+The same root owner who completed enterprise-011 owns this adaptive increment. PR #19 and its published head daf3ef2ff07a2ba89393038288606f0b61610b92 remain the historical enterprise-011 publication. Their original source, criteria, evidence, successful baseline and failure records are preserved. The separate older commercial-011 namespace remains untouched.
+
+The new campaign/adaptive-enterprise-012 branch adopts inspected PR #20 planning and PR #21 ownership modules with explicit provenance in IMPORTS.json. The current native financial ledger remains authoritative; Account adds mandatory ownership and reservation gates for adopted adaptive accounts. The aggregate scale model has no financial authority.
+
+Scoped implementation owners reviewed account custody and obligations; typed offers, source-bound instruments and independent checkers; public learning and persistent markets; and capital allocation and scale controls. The root owns the frozen protocol, runner, integration, independent replay, downloadable evidence and publication. All are AI agents in the same session, sharing host and model infrastructure; these are independent code paths and checks, not independent institutions or observed commercial counterparties.
+
+Source is registered before fresh confirmation. Completed-world checkpoints preserve task identity and native action histories. Resume cannot reseed a world or reset its account. A source repair after exposed confirmation requires a new registered edition and fresh seeds, preserving the exposed result. The absolute allocation cutoff is 2026-10-30T18:09:36Z. Unavailable aggregate host/model billing remains disclosed; no paid provider call, real commerce, merge, release or deployment is implied by branch publication.

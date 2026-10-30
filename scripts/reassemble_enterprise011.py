@@ -1,4 +1,8 @@
-"""Reassemble the byte-exact enterprise evidence ZIP from bounded public parts."""
+"""Reassemble byte-exact enterprise011 or adaptive012 ZIPs from bounded parts.
+
+Both namespaces retain the same size, ordering, path, hash and CRC checks.
+Adaptive012 transport additionally refuses its private simulation-key files.
+"""
 import argparse
 import hashlib
 import json
@@ -13,7 +17,7 @@ def reassemble(manifest, output):
     if manifest.is_symlink() or any(p.is_symlink() for p in manifest.parents):
         raise ValueError('REGULAR_PART_MANIFEST_REQUIRED')
     data = json.loads(manifest.read_text())
-    if set(data) != {'schema','archive_filename','archive_bytes','archive_sha256','parts'} or data['schema'] != 'agi-alpha/enterprise011-package-parts/v1':
+    if set(data) != {'schema','archive_filename','archive_bytes','archive_sha256','parts'} or type(data['schema']) is not str or data['schema'] not in {'agi-alpha/enterprise011-package-parts/v1','agi-alpha/adaptive012-package-parts/v1'}:
         raise ValueError('EXACT_PART_MANIFEST_SCHEMA_REQUIRED')
     if type(data['archive_bytes']) is not int or not 1 <= data['archive_bytes'] <= 256_000_000 or not isinstance(data['parts'],list) or not 1 <= len(data['parts']) <= 256:
         raise ValueError('BOUNDED_PACKAGE_REQUIRED')
@@ -39,6 +43,8 @@ def reassemble(manifest, output):
         if total != data['archive_bytes'] or h.hexdigest() != data['archive_sha256']:
             raise ValueError('COMPLETE_ARCHIVE_HASH_MISMATCH')
         with zipfile.ZipFile(pending) as z:
+            if data['schema']=='agi-alpha/adaptive012-package-parts/v1' and any(name.endswith('.adaptive-simulation-key') for name in z.namelist()):
+                raise ValueError('PRIVATE_SIMULATION_KEY_PUBLICATION_REFUSED')
             if z.testzip() is not None:
                 raise ValueError('ARCHIVE_CRC_FAILURE')
         os.link(pending, output)

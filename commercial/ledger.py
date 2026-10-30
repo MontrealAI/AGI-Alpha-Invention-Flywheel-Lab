@@ -8,6 +8,7 @@ import copy
 import hashlib
 import json
 from pathlib import Path
+import stat
 import tempfile
 from experiments.commerce006 import engine
 
@@ -15,6 +16,7 @@ SCOPE = 'SIMULATED'
 UNIT = 'simulated-microUSD'
 MAX_AMOUNT = 10**12
 _AUDITED_CONTENT = set()
+_ADAPTIVE_ACCOUNT_CAPABILITY = object()
 
 
 def canonical(value):
@@ -58,6 +60,9 @@ def read_bound(root, path, expected):
 
 
 def load_jobs(root, manifest):
+    if isinstance(manifest, dict) and manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
+        from adaptive_enterprise.instruments import load_jobs as adaptive_jobs
+        return adaptive_jobs(root, manifest)
     if isinstance(manifest, dict) and manifest.get('schema') == 'agi-alpha/enterprise011-services/v1':
         from enterprise.services import load_jobs as enterprise_jobs
         return enterprise_jobs(root, manifest)
@@ -96,8 +101,39 @@ def load_jobs(root, manifest):
     return jobs
 
 
+def _adaptive_ownership(path, manifest, namespace, lease, capability):
+    path = Path(path).absolute()
+    marker = path.with_name(path.name + '.adaptive-account.json')
+    adaptive = namespace == 'adaptive012' or isinstance(manifest, dict) and (manifest.get('schema') == 'agi-alpha/adaptive012-services/v1' or manifest.get('account_namespace') == 'adaptive012') or marker.exists() or marker.is_symlink()
+    for candidate in [path, path.with_name(path.name + '.actions.jsonl')]:
+        if candidate.exists() or candidate.is_symlink():
+            info = candidate.lstat()
+            if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+                raise ValueError('SINGLE_REGULAR_ACCOUNT_FILE_REQUIRED')
+    if not adaptive:
+        return None
+    if capability is not _ADAPTIVE_ACCOUNT_CAPABILITY:
+        raise ValueError('ADAPTIVE_ACCOUNT_REQUIRES_MANDATORY_WRITER_ACCOUNT_FACADE')
+    from commercial.tape_lease import WriterLease
+    if not isinstance(lease, WriterLease) or lease.path != path.with_name(path.name + '.writer.lock'):
+        raise ValueError('ADAPTIVE_ACCOUNT_REQUIRES_MANDATORY_WRITER_OWNERSHIP')
+    lease.assert_owner()
+    from adaptive_enterprise.account import assert_local_storage
+    assert_local_storage(path)
+    expected = {'schema': 'agi-alpha/adaptive012-account-namespace/v1', 'namespace': 'adaptive012', 'account_path': str(path)}
+    if marker.exists() or marker.is_symlink():
+        info = marker.lstat()
+        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or strict_json(marker.read_bytes()) != expected:
+            raise ValueError('ADAPTIVE_ACCOUNT_NAMESPACE_CHANGED')
+    else:
+        from commercial.persistence import atomic_bytes
+        atomic_bytes(marker, canonical(expected) + b'\n')
+    return lease
+
+
 class TapeExchange:
-    def __init__(self, path, *, root, manifest, opening, working, contract, durable=True):
+    def __init__(self, path, *, root, manifest, opening, working, contract, durable=True, _writer_lease=None, _account_namespace=None, _account_capability=None):
+        self._adaptive_writer = _adaptive_ownership(path, manifest, _account_namespace, _writer_lease, _account_capability)
         self.root = Path(root)
         self.manifest = copy.deepcopy(manifest)
         self.jobs = load_jobs(root, manifest)
@@ -147,6 +183,11 @@ class TapeExchange:
 
     def check(self, task, artifact):
         self.validate(task)
+        if self.manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
+            from adaptive_enterprise.instruments import check_job
+            checked = check_job(self.root, self.manifest, self.jobs[task['job_id']]['job'], artifact)
+            return {'accepted': checked['receipt']['accepted'], 'decisive': True, 'scope': SCOPE,
+                    'authority': checked['job']['receipt_sha256']}
         if self.manifest.get('schema') == 'agi-alpha/enterprise011-services/v1':
             from enterprise.services import check_job
             checked = check_job(self.root, self.manifest, self.jobs[task['job_id']]['job'], artifact)
@@ -164,6 +205,8 @@ class TapeExchange:
         return {'accepted': accepted, 'decisive': True, 'scope': SCOPE, 'authority': job['receipt_sha256']}
 
     def execute(self, op, args, day, *, record=True):
+        if self._adaptive_writer is not None:
+            self._adaptive_writer.assert_owner()
         if self.persistence and (self.persistence.failed or not record):
             raise ValueError('DURABLE_ACTION_RECORD_REQUIRED')
         if type(day) is not int or day < self.last_day or day < 0:
@@ -242,6 +285,8 @@ class TapeExchange:
             raise ValueError('NEGATIVE_BALANCE_FAILURE')
 
     def export(self):
+        if self._adaptive_writer is not None:
+            self._adaptive_writer.assert_owner()
         journal = [dict(x) for x in self.ex.db.execute('SELECT seq,order_id,kind,amount FROM journal ORDER BY seq')]
         states = [{k: dict(x)[k] for k in ('id', 'buyer', 'price', 'state', 'refund_due', 'compensation_due', 'custody')}
                   for x in self.ex.db.execute('SELECT * FROM trades ORDER BY id')]
@@ -282,8 +327,16 @@ def audit(tape, *, root, manifest, expected_actions_sha256=None):
     if set(c) != {'schema', 'scope', 'currency', 'opening', 'working', 'contract', 'manifest_sha256'} or c['schema'] != 'agi-alpha/commercial010-tape/v1':
         raise ValueError('EXACT_TAPE_CONFIG_REQUIRED')
     with tempfile.TemporaryDirectory(prefix='commercial010-audit-') as tmp:
-        replay = TapeExchange(Path(tmp) / 'replay.sqlite', root=root, manifest=manifest,
-                              opening=c['opening'], working=c['working'], contract=c['contract'], durable=False)
+        owned = None
+        if manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
+            from commercial.single_writer import SingleWriterExchange
+            owned = SingleWriterExchange(Path(tmp) / 'replay.sqlite', root=root, manifest=manifest,
+                                         opening=c['opening'], working=c['working'], contract=c['contract'], durable=False,
+                                         _account_capability=_ADAPTIVE_ACCOUNT_CAPABILITY)
+            replay = owned._exchange
+        else:
+            replay = TapeExchange(Path(tmp) / 'replay.sqlite', root=root, manifest=manifest,
+                                  opening=c['opening'], working=c['working'], contract=c['contract'], durable=False)
         try:
             for seq, event in enumerate(tape['actions']):
                 if event.get('seq') != seq or event.get('before') != replay.ex.snapshot():
@@ -296,6 +349,6 @@ def audit(tape, *, root, manifest, expected_actions_sha256=None):
                 if rebuilt[key] != tape.get(key):
                     raise ValueError('DERIVED_' + key.upper() + '_MISMATCH')
         finally:
-            replay.close()
+            owned.close() if owned is not None else replay.close()
     return {'accepted': True, 'scope': SCOPE, 'actions_sha256': tape['actions_sha256'],
             'summary': rebuilt['summary'], 'orders': rebuilt['orders'], 'investments': rebuilt['investments']}

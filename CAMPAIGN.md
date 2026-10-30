@@ -1,5 +1,3 @@
 # Current campaign routing
 
-The active edition is [enterprise-011](campaign/enterprise-011/MANDATE.txt). Run `python3 -m enterprise run --output /tmp/enterprise011-NEW`.
-
-The prior cycle-001 campaign text is preserved unchanged at [historical/enterprise011-prior-policy/CAMPAIGN.md](historical/enterprise011-prior-policy/CAMPAIGN.md) and is SUPERSEDED FOR CURRENT ACCEPTANCE. See [FIRST_CAMPAIGN.md](FIRST_CAMPAIGN.md).
+Run `python3 -m adaptive_enterprise run --output /tmp/adaptive012-NEW` under [the controlling mandate](campaign/adaptive-012/MANDATE.md) and [registered allocation](campaign/adaptive-012/ALLOCATION.json). Enterprise-011 is a preserved historical baseline; audit its exact bound package as documented in [artifacts/README.md](artifacts/README.md).
