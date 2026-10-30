@@ -182,6 +182,8 @@ def audit_account(record, *, root, manifest):
     if not isinstance(record, dict) or record.get('schema') != 'agi-alpha/adaptive012-owned-account/v1' or record.get('scope') != 'SIMULATED':
         raise ValueError('ADAPTIVE_ACCOUNT_EXPORT_REQUIRED')
     tape, proofs = record['ledger'], record['action_proofs']
+    if any(event.get('op') == 'cancel_investment' for event in tape['actions']):
+        raise ValueError('UNRECONCILED_INVESTMENT_CANCELLATION_RETIRED')
     resolutions = record.get('obligation_resolutions', {})
     checked = audit(tape, root=root, manifest=manifest)
     from commercial.ledger import load_jobs
@@ -294,6 +296,8 @@ class Account:
 
     def _verify_reservations(self):
         for event in self._owner.export()['actions']:
+            if event['op'] == 'cancel_investment':
+                raise ValueError('UNRECONCILED_INVESTMENT_CANCELLATION_RETIRED')
             if event['op'] != 'reserve':
                 continue
             proof = self._proofs.get(event['args']['id'])
@@ -324,6 +328,8 @@ class Account:
 
     def execute(self, op, args, day):
         self._assert_owner()
+        if op == 'cancel_investment':
+            raise ValueError('UNRECONCILED_INVESTMENT_CANCELLATION_RETIRED')
         if op == 'reserve':
             raise ValueError('STATE_BOUND_RESERVE_ENTRYPOINT_REQUIRED')
         if op == 'finish' and _declared_later(self._proofs.get(args.get('id'), {}).get('body', {}).get('plan', {})) > 0:

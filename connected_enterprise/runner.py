@@ -25,9 +25,9 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def source_paths(root):
     names=set(inherited_paths(root))
-    for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*')]:
+    for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*'),('campaign/completion-015','*')]:
         names.update(p.relative_to(root).as_posix() for p in (root/folder).glob(pattern) if p.is_file())
-    names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','docs/connected014/OPERATOR.md','AGENTS.md','.github/workflows/connected014.yml'] if (root/p).is_file())
+    names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','tests/test_release_connected014.py','docs/connected014/OPERATOR.md','AGENTS.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
@@ -38,7 +38,7 @@ def identity(root):
         files[name]=hashlib.sha256(p.read_bytes()).hexdigest()
     return {'files':files,'sha256':digest(files)}
 
-def protocol(smoke=False):
+def source002_protocol(smoke=False):
     return {'schema':'agi-alpha/connected014-protocol/v1','edition':'development-smoke' if smoke else 'connected014-confirmation-002','scope':'CONDITIONAL_SIMULATION',
         'central_seeds':[14001] if smoke else [2610301601,2610301602,2610301603,2610301604],
         'adverse_seeds':[] if smoke else [2610301701,2610301702],'channel_control_seeds':[],
@@ -54,6 +54,12 @@ def protocol(smoke=False):
         'inference':'Finite authored worlds, not calibrated real success probabilities. Historical economic results never relabeled. Native record aggregation is exact accounting, not validated forward-demand aggregation.',
         'service_cohort_seed':14013026 if smoke else 14023026,'workers':4}
 
+def protocol(smoke=False):
+    if smoke:
+        return source002_protocol(True)
+    registration=json.loads((ROOT/'campaign/completion-015/PREREGISTRATION.json').read_text())
+    return registration['protocol']
+
 def config_for(case,smoke=False):
     cfg=default_config()
     if smoke:cfg['horizon_days']=21;cfg['customer_pool']=12
@@ -64,6 +70,7 @@ def config_for(case,smoke=False):
     elif case=='delayed_and_expensive':
         cfg['clearing_hours']=168;cfg['nonpayment_bps']=1200;cfg['production_cost']*=3;cfg['supplier_outage_start_day']=18;cfg['supplier_outage_days']=10
         for c in cfg['channels'].values():c['price_microUSD']*=10;c['lead_days']*=3
+        cfg['setup_cost']=500_000_000
     elif case!='central':raise ValueError('REGISTERED_CASE_REQUIRED')
     return cfg
 
@@ -96,8 +103,8 @@ def freeze(output,smoke=False):
     if identity(output/'source')!=source:raise ValueError('FROZEN_COPY_CHANGED')
     p=protocol(smoke)
     if not smoke:
-        registration=json.loads((ROOT/'campaign/connected-014/PREREGISTRATION.json').read_text())
-        if registration!={'protocol':p,'configs':{case:config_for(case) for case in p['cases']}}:raise ValueError('PUBLIC_PREREGISTRATION_DOES_NOT_MATCH')
+        registration=json.loads((ROOT/'campaign/completion-015/PREREGISTRATION.json').read_text())
+        if registration['protocol']!=p or registration['configs']!={case:config_for(case) for case in p['cases']}:raise ValueError('PUBLIC_PREREGISTRATION_DOES_NOT_MATCH')
     f={'schema':'agi-alpha/connected014-freeze/v1','source':source,'protocol':p,'configs':{case:config_for(case,smoke) for case in p['cases']},'registered_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'git_commit':None}
     try:f['git_commit']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True,stderr=subprocess.DEVNULL).strip()
     except (OSError,subprocess.CalledProcessError):pass

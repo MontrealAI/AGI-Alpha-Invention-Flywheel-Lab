@@ -124,8 +124,8 @@ class ConnectedFinanceTests(unittest.TestCase):
             raise InterruptedError('after native finish commit')
         with patch.object(self.account._account, 'finish', crash), self.assertRaises(InterruptedError):
             self.spend()
-        self.account._account.cost('later-independent-resource', 123, 2)
         self.reopen()
+        self.account.cost('later-independent-resource', 123, 2)
         receipt = self.spend()
         self.assertEqual(self.account.snapshot()['summary']['expenses'], 70_000_123)
         self.assertEqual(sum(row['op'] == 'finish' for row in self.account.export()['ledger']['actions']), 1)
@@ -180,8 +180,8 @@ account.spend('resource-1','production_contract',60000000,1,{'source':'contract-
             raise InterruptedError('after native action commit')
         with patch.object(self.account._account, 'execute', crash), self.assertRaises(InterruptedError):
             self.account.cost('exact-resource', 7, 0)
-        self.account._account.cost('later-resource', 11, 1)
         self.reopen()
+        self.account.cost('later-resource', 11, 1)
         original = self.account.cost('exact-resource', 7, 0)
         self.assertEqual(original['summary']['expenses'], 7)
         self.assertEqual(self.account.snapshot()['summary']['expenses'], 18)
@@ -261,6 +261,77 @@ account.spend('resource-1','production_contract',60000000,1,{'source':'contract-
         with patch.object(self.account._account, 'export', lambda: before):
             with self.assertRaisesRegex(ValueError, 'CHECKPOINT_NATIVE_PREFIX'):
                 self.account.verify_checkpoint(checkpoint)
+
+    def test_public_audit_requires_every_native_action_to_be_journaled(self):
+        self.earn(); self.spend()
+        for dropped in [0, -1]:
+            forged = copy.deepcopy(self.account.export())
+            forged['connected_journal']['entries'].pop(dropped)
+            from commercial.ledger import digest
+            forged['connected_journal_sha256'] = digest(forged['connected_journal'])
+            with self.subTest(dropped=dropped), self.assertRaisesRegex(ValueError, 'NATIVE_ACTION_COVERAGE'):
+                audit_journal(forged, root=self.root, manifest=self.manifest)
+
+    def test_public_audit_requires_journal_native_causal_order(self):
+        self.earn(); self.spend()
+        forged = copy.deepcopy(self.account.export())
+        forged['connected_journal']['entries'][:2] = reversed(forged['connected_journal']['entries'][:2])
+        from commercial.ledger import digest
+        forged['connected_journal_sha256'] = digest(forged['connected_journal'])
+        with self.assertRaisesRegex(ValueError, 'NATIVE_ACTION_COVERAGE'):
+            audit_journal(forged, root=self.root, manifest=self.manifest)
+
+    def test_public_audit_rejects_direct_native_writer_bypass(self):
+        self.account.cost('journaled-cost', 7, 0)
+        self.account._account.cost('unclaimed-native-cost', 11, 1)
+        record = self.account.export()
+        self.assertEqual(record['ledger']['summary']['expenses'], 18)
+        with self.assertRaisesRegex(ValueError, 'NATIVE_ACTION_COVERAGE'):
+            audit_journal(record, root=self.root, manifest=self.manifest)
+        self.account.close()
+        with self.assertRaisesRegex(ValueError, 'NATIVE_ACTION_COVERAGE'):
+            self.open()
+
+    def test_new_journal_write_requires_current_complete_native_audit(self):
+        self.account._account.cost('bypassed-journal', 11, 0)
+        before = self.account.export()
+        with self.assertRaisesRegex(ValueError, 'NATIVE_ACTION_COVERAGE'):
+            self.account.cost('cannot-continue-from-invalid-state', 7, 1)
+        self.assertEqual(self.account.export(), before)
+        with self.assertRaisesRegex(ValueError, 'NATIVE_ACTION_COVERAGE'):
+            self.spend(allow_seed=True)
+        self.assertEqual(self.account.export(), before)
+
+    def test_recovery_refuses_signed_unsupported_native_request_before_mutation(self):
+        self.account._entry('native:cancel_investment:stale',
+                            {'operation': 'execute', 'op': 'cancel_investment', 'args': {'id': 'stale'}, 'day': 0})
+        before = self.account._account.export()
+        self.account.close()
+        with self.assertRaisesRegex(ValueError, 'CONNECTED_RESOURCE_COMMITMENT_ENTRYPOINT_REQUIRED'):
+            self.open()
+        from adaptive_enterprise.account import Account
+        with Account(self.root, self.manifest, self.path, opening=1_000_000_000,
+                     working=0, contract='connected014-finance-test') as native:
+            self.assertEqual(native.export(), before)
+
+    def test_public_audit_rejects_duplicate_native_claim(self):
+        self.account.cost('actual-cost', 7, 0)
+        forged = copy.deepcopy(self.account.export())
+        forged['connected_journal']['entries'].append(copy.deepcopy(forged['connected_journal']['entries'][0]))
+        from commercial.ledger import digest
+        forged['connected_journal_sha256'] = digest(forged['connected_journal'])
+        with self.assertRaisesRegex(ValueError, 'COMPLETE_UNIQUE_CONNECTED_JOURNAL_REQUIRED'):
+            audit_journal(forged, root=self.root, manifest=self.manifest)
+
+    def test_public_audit_prohibits_commitment_operations_in_execute_entries(self):
+        self.account.cost('actual-cost', 7, 0)
+        from commercial.ledger import digest
+        for operation in ['reserve', 'finish', 'cancel_investment']:
+            forged = copy.deepcopy(self.account.export())
+            forged['connected_journal']['entries'][0]['request']['op'] = operation
+            forged['connected_journal_sha256'] = digest(forged['connected_journal'])
+            with self.subTest(operation=operation), self.assertRaisesRegex(ValueError, 'CONNECTED_RESOURCE_COMMITMENT_ENTRYPOINT_REQUIRED'):
+                audit_journal(forged, root=self.root, manifest=self.manifest)
 
     def test_export_is_detached_from_live_native_authority(self):
         self.account.cost('actual-resource', 7, 0)

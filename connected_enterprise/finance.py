@@ -48,12 +48,21 @@ def _native_id(op, args):
     return op + ':' + _identifier(args.get('buyer') if op == 'wallet' else args.get('id'))
 
 
+def _validate_native_request(op, args, day):
+    if op in {'reserve', 'finish', 'cancel_investment'}:
+        raise ValueError('CONNECTED_RESOURCE_COMMITMENT_ENTRYPOINT_REQUIRED')
+    if op not in {'cost', 'wallet', 'offer', 'event'} or not isinstance(args, dict) or type(day) is not int or day < 0:
+        raise ValueError('DECLARED_CONNECTED_NATIVE_ACTION_REQUIRED')
+
+
 def _find_action(tape, op, args, day):
     ident = _native_id(op, args)
     matches = [row for row in tape['actions'] if _native_id(row['op'], row['args']) == ident]
     if not matches:
         raise ValueError('JOURNALED_NATIVE_ACTION_NOT_COMMITTED')
-    row = matches[-1]
+    if len(matches) != 1:
+        raise ValueError('JOURNALED_NATIVE_ACTION_NOT_UNIQUE')
+    row = matches[0]
     if row['op'] != op or row['args'] != args or row['day'] != day:
         raise ValueError('JOURNALED_NATIVE_ACTION_PAYLOAD_CHANGED')
     return row
@@ -151,6 +160,7 @@ class JournalAccount:
             return prior
         if any(row['status'] != 'COMPLETE' for row in self._journal['entries']):
             raise ValueError('PENDING_CONNECTED_ACTION_REQUIRES_RECOVERY')
+        self.audit()
         row = {'key': key, 'request': copy.deepcopy(request), 'plan': copy.deepcopy(plan),
                'funding': funding, 'status': 'PENDING', 'receipt': None, 'obligation_receipt': None}
         self._journal['entries'].append(row)
@@ -162,6 +172,7 @@ class JournalAccount:
             return copy.deepcopy(entry['receipt'])
         request = entry['request']
         if request['operation'] == 'execute':
+            _validate_native_request(request['op'], request['args'], request['day'])
             self._account.execute(request['op'], request['args'], request['day'])
             tape = self._account.export()['ledger']
             native = _find_action(tape, request['op'], request['args'], request['day'])
@@ -220,10 +231,7 @@ class JournalAccount:
     def execute(self, op, args, day):
         with self._mutex:
             self._assert_current()
-            if op in {'reserve', 'finish', 'cancel_investment'}:
-                raise ValueError('CONNECTED_RESOURCE_COMMITMENT_ENTRYPOINT_REQUIRED')
-            if op not in {'cost', 'wallet', 'offer', 'event'} or not isinstance(args, dict) or type(day) is not int or day < 0:
-                raise ValueError('DECLARED_CONNECTED_NATIVE_ACTION_REQUIRED')
+            _validate_native_request(op, args, day)
             request = {'operation': 'execute', 'op': op, 'args': copy.deepcopy(args), 'day': day}
             entry = self._entry('native:' + _native_id(op, args), request)
             return self._perform(entry)
@@ -247,7 +255,6 @@ class JournalAccount:
                 return self._perform(self._entry('spend:' + ident, request))
             if amount == 0:
                 return None
-            self._account.audit()
             snapshot = self._account.snapshot()
             summary = snapshot['summary']
             earned = expected_net > 0 and min(summary['available'], summary['unrestrictedEarned']) >= amount
@@ -348,16 +355,18 @@ def audit_journal(record, *, root, manifest):
         raise ValueError('CONNECTED_JOURNAL_PUBLIC_SOURCE_MISMATCH')
     if journal.get('schema') != SCHEMA or any(journal.get(k) != tape['config'].get(k) for k in ['opening', 'working', 'contract']):
         raise ValueError('CONNECTED_JOURNAL_NATIVE_AUTHORITY_MISMATCH')
-    keys, spent = set(), 0
+    keys, spent, covered = set(), 0, []
     for entry in journal['entries']:
         if entry['key'] in keys or entry['status'] != 'COMPLETE':
             raise ValueError('COMPLETE_UNIQUE_CONNECTED_JOURNAL_REQUIRED')
         keys.add(entry['key'])
         request, receipt = entry['request'], entry['receipt']
         if request['operation'] == 'execute':
+            _validate_native_request(request['op'], request['args'], request['day'])
             native = _find_action(tape, request['op'], request['args'], request['day'])
             if entry['key'] != 'native:' + _native_id(request['op'], request['args']) or receipt != _native_snapshot(tape, native, receipt.get('filesystem')):
                 raise ValueError('CONNECTED_NATIVE_RECEIPT_CHANGED')
+            covered.append(native['seq'])
         elif request['operation'] == 'spend':
             if receipt['id'] != request['id'] or receipt['kind'] != request['kind'] or receipt['amount'] != request['amount'] or receipt['day'] != request['day'] or receipt['work_sha256'] != digest(request['work']) or receipt['source_sha256'] != journal['source']['sha256'] or receipt['funding'] != entry['funding']:
                 raise ValueError('CONNECTED_SPEND_RECEIPT_CHANGED')
@@ -367,6 +376,9 @@ def audit_journal(record, *, root, manifest):
                 clean = {k: v for k, v in plan.items() if k not in {'authorized_digest', 'expected_state_digest'}}
                 if not public_proof or public_proof['body']['plan'] != clean or public_proof['body']['amount_microUSD'] != request['amount'] or public_proof['body']['expected_net_microUSD'] != request['expected_net'] or record['obligation_resolutions'].get(plan['plan_id']) != entry['obligation_receipt']:
                     raise ValueError('CONNECTED_SPEND_NATIVE_PROOF_MISMATCH')
+                reservation = _find_action(tape, 'reserve', {'id': plan['plan_id'], 'amount': request['amount'],
+                    'expected_net_value': request['expected_net'], 'intent_sha256': digest(public_proof['body'])}, request['day'])
+                covered.append(reservation['seq'])
                 execution = plan['selected_options'][0]['execution']
                 if execution['kind'] != request['kind'] or execution['work_sha256'] != digest(request['work']) or execution['source_sha256'] != journal['source']['sha256'] or plan['source_hashes'] != journal['source']['files']:
                     raise ValueError('CONNECTED_RESOURCE_CONTRACT_SOURCE_MISMATCH')
@@ -391,9 +403,13 @@ def audit_journal(record, *, root, manifest):
                                'prepaid_support_microUSD': max(entry['plan']['selected_options'][0]['later_liabilities'].values()) if entry['plan'] else 0}
             if entry['key'] != 'spend:' + request['id'] or receipt != expected_receipt:
                 raise ValueError('CONNECTED_SPEND_NATIVE_COMMITMENT_CHANGED')
+            covered.append(native['seq'])
             spent += request['amount']
         else:
             raise ValueError('SUPPORTED_CONNECTED_JOURNAL_OPERATION_REQUIRED')
+    if covered != list(range(len(tape['actions']))):
+        raise ValueError('CONNECTED_JOURNAL_NATIVE_ACTION_COVERAGE_REQUIRED')
     return {**checked, 'connected_journal_entries': len(keys),
+            'connected_native_actions_covered': len(covered),
             'source_bound_resource_spend_microUSD': spent,
             'journal_authenticity_scope': 'Public source/native commitments verified; private local WAL HMAC checked only on owner reopen.'}
