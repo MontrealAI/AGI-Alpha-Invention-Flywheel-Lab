@@ -75,7 +75,7 @@
         "before_sha256": "5916188420a9a7b265919e3905e146ba3ed6aaf5a369634029ea51aa8382587c"
       },
       "connected_enterprise/verify.py": {
-        "after_sha256": "64248e254a5cc07dfad9c35a4eba93fff6da76af80e6b6239d7ae4da0eb27843",
+        "after_sha256": "a02b127900a605627ef406a544643a64226805ff72339baa98f38a0343f12ec2",
         "before_sha256": "c775c11e4eb40c5d24a5d85a3d47f96bdba0f557f092be804f673a53f0036446"
       },
       "scripts/release_connected014.py": {
@@ -109,6 +109,10 @@
       "tests/test_connected_engine.py": {
         "after_sha256": "0f0d04979d9d7aaa5d380a2349b17d42102e03a9648a76616f15f13d9c7c3533",
         "before_sha256": "ff50f495c7883e40a4a50117a17e6683708d0a068d7f5a947eda0b4b8576be6e"
+      },
+      "tests/test_connected_refund_clock.py": {
+        "after_sha256": "67313bd493610019d96fb196f75da00866e2bdce9cd981e83799aa28152b7d2b",
+        "before_sha256": null
       },
       "tests/test_connected_rejections.py": {
         "after_sha256": "05622bf05ef0226ec9ee3b50d57569526b8eca2e51780445490dc1455b0e8a2f",
@@ -160,7 +164,7 @@
     },
     "frozen_delivery_allocation": {
       "path": "evidence/completion015/DELIVERY_ALLOCATION.json",
-      "sha256": "8072462ae25e29ac19bea42bbdf64e16a85e6209df0fcf3b8756a8046d4bb4a0"
+      "sha256": "659f4e3431e6ba9ec7880444e93e64550e4b07cba9dfbb74297399956d48cc29"
     },
     "historical_impact": {
       "path": "evidence/completion015/financial-repair/HISTORICAL_IMPACT.json",
@@ -175,11 +179,19 @@
       "path": "evidence/completion015/journal-rejection-repair/QUALIFICATION.json",
       "sha256": "842d7732faaa457d91e3b832d4139130ea4f43e806d1e3c7db24124b7131fa02"
     },
-    "registered_utc": "2026-10-30T22:28:15.650761+00:00",
-    "release_identity_files": 141,
-    "release_qualification_source_sha256": "b1f627fa62bc2dd690c74123a20807b5c8a8880caed38b060ced244d9da3d1a6",
+    "refund_clock_historical_impact": {
+      "path": "evidence/completion015/refund-clock-repair/HISTORICAL_IMPACT.json",
+      "sha256": "13844941724c25d47f36e074e729ec69d5624373c5bcde2c6b79d847db535672"
+    },
+    "refund_clock_qualification": {
+      "path": "evidence/completion015/refund-clock-repair/QUALIFICATION.json",
+      "sha256": "b562580f5ac6aa2b32bab1c2ff61e2eadac2d9522b7a6826dc06aaa66189347d"
+    },
+    "registered_utc": "2026-10-30T22:38:47.219188+00:00",
+    "release_identity_files": 142,
+    "release_qualification_source_sha256": "e4ae45a21614af62d336a96f4bba71db4339f73a72d5c4c0d9bc1aa324555d61",
     "reproduction_scope": "Current release requires fresh exact-head engineering qualification, all exact-main terminal-success checks and actual downloaded default reproduction. Known evaluation seeds make it reproduction, not untouched confirmation of repaired source. Original report, paper, QA, financial records and CPU-overrun evidence retain their historical source.",
-    "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.305020239 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment. TEMPORAL_REPAIR_ALLOCATION.json prospectively registers a separate additional80localCPU increment ending22:55UTC. Temporal qualification0.499749kernelchildCPU; construction/probes unmetered, notzero; conservative10CPUshare reserved. No new local commercial confirmation. Original resource failures remain unchanged. Journal rejection repair measured lowerbound37.460127374CPU including beforeprobe, initial11/final14tests and original8read-only scan;20targetexceeded for restart-certificate completion; editing/wrapper CPU unknown, notzero. Conservative55financial+10temporal+5root+10other planning shares total80; no exact wholephase measurement/compliance claim. Hostedcampaign30minutes remains within45minute bound. Channel preflight31focusedtests use0.186818kernelchildCPU; construction/probes unmetered, no commercialrun, within existing temporal planning share. Absolute22:55UTC stop unchanged. Normalized-channel34tests0.179401CPU; semantic-comparison actualtwoownerprobe plus3focusedtests7.422202446CPU. Financial aggregateknownlowerbound44.882329820CPU;55planning share unchanged, edits/wrapperunknown. No full14daylocalengine rerun/newcommerce; full exactheadCI remainsrequired. Capacityrepair known0.509626579CPU; channel37targeted0.195900CPU andunmeteredhistoricalscan. Rootcomposedwholemodule48tests18.040865CPU included sixexistingend-to-end methods overexposed12daybaseline14003; initial42/noAccount prediction corrected inrawreceipt. Known wholecurrentphase lowerbound64.679093545CPU; unknownconstruction/wrapper/historyscan gapsnotzero, noexact80CPUcomplianceclaim. Separate delivery-only allocation22:55\u201323:40UTC/additional20localCPU, SAMEsingle2400CPU/900wallactualreleasedreproduction, no newfinancial/economicconstruction orcommercialsearch.",
+    "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.305020239 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment. TEMPORAL_REPAIR_ALLOCATION.json prospectively registers a separate additional80localCPU increment ending22:55UTC. Temporal qualification0.499749kernelchildCPU; construction/probes unmetered, notzero; conservative10CPUshare reserved. No new local commercial confirmation. Original resource failures remain unchanged. Journal rejection repair measured lowerbound37.460127374CPU including beforeprobe, initial11/final14tests and original8read-only scan;20targetexceeded for restart-certificate completion; editing/wrapper CPU unknown, notzero. Conservative55financial+10temporal+5root+10other planning shares total80; no exact wholephase measurement/compliance claim. Hostedcampaign30minutes remains within45minute bound. Channel preflight31focusedtests use0.186818kernelchildCPU; construction/probes unmetered, no commercialrun, within existing temporal planning share. Absolute22:55UTC stop unchanged. Normalized-channel34tests0.179401CPU; semantic-comparison actualtwoownerprobe plus3focusedtests7.422202446CPU. Financial aggregateknownlowerbound44.882329820CPU;55planning share unchanged, edits/wrapperunknown. No full14daylocalengine rerun/newcommerce; full exactheadCI remainsrequired. Capacityrepair known0.509626579CPU; channel37targeted0.195900CPU andunmeteredhistoricalscan. Rootcomposedwholemodule48tests18.040865CPU included sixexistingend-to-end methods overexposed12daybaseline14003; initial42/noAccount prediction corrected inrawreceipt. Known wholecurrentphase lowerbound64.679093545CPU; unknownconstruction/wrapper/historyscan gapsnotzero, noexact80CPUcomplianceclaim. Separate delivery-only allocation22:55\u201323:40UTC/additional20localCPU, SAMEsingle2400CPU/900wallactualreleasedreproduction, no newfinancial/economicconstruction orcommercialsearch. Refundclock5tinytests andoriginal8clockinspection0.245222798CPU, nofullnative/businessrerun; currentknownlowerbound64.924316343CPU. Unmeteredgapsnotzero, existing80phase/end22:55 andseparate20CPUdelivery/end23:40 unchanged.",
     "restart_comparison_leaf_proof": {
       "path": "evidence/completion015/restart-comparison-repair/LEAF_DIFF.before.json",
       "sha256": "964c48401a731edf00ff1122731483ae5b4a5ad1d782a3f95b7b2c3419707380"
@@ -201,7 +213,8 @@
       "Connected config normalization returns a detached copy carrying the shared validator canonical channel terms; valid optional omissions finance the exact purchased terms. Caller/default values and checker unchanged.",
       "Restart comparison tests normalize only the exact host/key-bound attempt.account_record_sha256 witness and recompute the projected journal checksum. Actual two-account leaf proof shows identical native ledgers and only those two derived witness leaves differ. Every other certificate/journal/proof/obligation/work/financial field remains compared; nine anti-masking mutations stay visible. Product full-state certificates, native/public auditors and shared adaptive projection are unchanged.",
       "Independent capacity verification binds native/request/receipt purchase time, units and frozen financed lead/duration to exact activation and expiry; existing strict production validity retained.",
-      "Independent seeded channel-history reconstruction derives activation/retries/remedies/expiry, slots/realization/audience/ranking/overlap, shared contact cooldown/fatigue/dedup, supplier tranche limits and exact events/counters. Producer expose/random function is not an oracle. Explicit frozen contracts/seed required; full business has exact horizon-day coverage. Only three known unbound audit fixtures migrate to explicit original seed/contracts. Producer economics unchanged."
+      "Independent seeded channel-history reconstruction derives activation/retries/remedies/expiry, slots/realization/audience/ranking/overlap, shared contact cooldown/fatigue/dedup, supplier tranche limits and exact events/counters. Producer expose/random function is not an oracle. Explicit frozen contracts/seed required; full business has exact horizon-day coverage. Only three known unbound audit fixtures migrate to explicit original seed/contracts. Producer economics unchanged.",
+      "Independent native/operating clock binding: every offer deadline equals qualified+frozen payment deadline; default refunds occur exactly at recomputed due, and quality-rejected refunds occur exactly after production+acceptance delay. Both native and operating REFUND clocks checked before any quality early return. Existing settlement/default/useful-output rules preserved; producer/financial authority unchanged."
     ],
     "temporal_historical_impact": {
       "path": "evidence/completion015/temporal-repair/HISTORICAL_IMPACT.json",
@@ -237,5 +250,5 @@
   "schema": "agi-alpha/connected014-research-edition/v1",
   "source_binding_scope": "Current repaired release qualification closure. Historical report, paper, resource qualification and PDF QA describe original economic_evidence_source_sha256. COMPOSED_RELEASE_DELTA.json binds explicit financial, temporal admission and certified journal recovery and independently reconstructed capacity/channel authority repairs, release wrapper and verified historical impact. Service/economic assumptions are unchanged; current actual downloaded default run is exposed-seed reproduction, not new untouched confirmation. Final merged Git commit is bound by RELEASE_MANIFEST.json to avoid circular self-reference.",
   "source_commit": null,
-  "source_sha256": "b1f627fa62bc2dd690c74123a20807b5c8a8880caed38b060ced244d9da3d1a6"
+  "source_sha256": "e4ae45a21614af62d336a96f4bba71db4339f73a72d5c4c0d9bc1aa324555d61"
 }

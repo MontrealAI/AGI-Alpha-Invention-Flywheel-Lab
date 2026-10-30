@@ -458,6 +458,17 @@ def check_channels(channels, investments, buyers, *, contracts=None, seed=None):
     return {'paid_channel_contracts_checked': len(instances), 'paid_exposures_checked': len(all_exposures)}
 
 
+def _check_contract_clock(ident, offered, actions, operating, qualified, config, *, refund_due=None):
+    deadline = qualified + _integer(config.get('payment_deadline_hours'), 'PAYMENT_DEADLINE_HOURS', positive=True)
+    if _integer(offered['args'].get('deadline'), 'NATIVE_OFFER_DEADLINE') != deadline:
+        raise ValueError('NATIVE_OFFER_DEADLINE_DIFFERS_FROM_FROZEN_CONTRACT')
+    if refund_due is not None:
+        native_time = _integer(actions.get('refund', {}).get('day'), 'NATIVE_REFUND_TIME')
+        event_time = _integer(operating.get((ident, 'REFUND'), {}).get('time'), 'OPERATING_REFUND_TIME')
+        if native_time != refund_due or event_time != refund_due:
+            raise ValueError('REFUND_TIME_DIFFERS_FROM_FROZEN_CONTRACT')
+
+
 def audit(root, manifest, result):
     if not isinstance(result, dict) or result.get('schema') != 'agi-alpha/connected014-result/v1' or result.get('scope') != 'CONDITIONAL_SIMULATION':
         raise ValueError('CONNECTED_SIMULATED_WORLD_REQUIRED')
@@ -534,6 +545,7 @@ def audit(root, manifest, result):
             raise ValueError('ORDER_NATIVE_PRICE_OR_JOB_MISMATCH')
         qualified = _integer(row.get('qualified_time'), 'QUALIFIED_TIME')
         produced = _integer(row.get('production_time'), 'PRODUCTION_TIME')
+        _check_contract_clock(ident, offered, actions, operating, qualified, cfg)
         acceptance = row.get('acceptance_time')
         if produced < qualified or (acceptance is not None and _integer(acceptance, 'ACCEPTANCE_TIME') < produced):
             raise ValueError('QUALIFICATION_PRODUCTION_ACCEPTANCE_ORDER')
@@ -561,6 +573,8 @@ def audit(root, manifest, result):
                 raise ValueError('QUALITY_REJECTION_MUST_PRESERVE_FAILED_ACCEPTANCE')
             if native['state'] != 'refunded' or 'refund' not in actions or row.get('collection_time') is not None:
                 raise ValueError('REJECTED_DELIVERY_MUST_REFUND_FUNDED_CUSTOMER')
+            _check_contract_clock(ident, offered, actions, operating, qualified, cfg,
+                                  refund_due=produced + _integer(cfg.get('acceptance_hours'), 'ACCEPTANCE_HOURS', positive=True))
             continue
         if fresh.get('accepted') is not True or acceptance is None or 'prepare' not in actions:
             raise ValueError('INDEPENDENT_USEFUL_OUTPUT_NOT_ACCEPTED')
@@ -573,6 +587,8 @@ def audit(root, manifest, result):
                 raise ValueError('DELIVERY_RECEIPT_RECOMPUTATION_MISMATCH:' + field)
         if row['offer'].get('scope') != 'complete_outcome' or fresh.get('outcome_scope') != 'complete_outcome':
             raise ValueError('INCOMPLETE_OUTCOME_CANNOT_QUALIFY_COMPLETE_COMMERCE')
+        default = _private_draw(result['seed'], [row['customer_id'], qualified, row['offer']['service_id']], 'nonpayment') < cfg['nonpayment_bps'] / 10000
+        due = qualified + cfg['payment_deadline_hours'] if default else acceptance + cfg['clearing_hours']
         if row['outcome'] == 'SETTLED':
             collection = _integer(row.get('collection_time'), 'COLLECTION_TIME')
             if native['state'] != 'released' or 'release' not in actions or actions['release']['day'] != collection or collection < acceptance:
@@ -583,8 +599,7 @@ def audit(root, manifest, result):
         elif row['outcome'] == 'REFUNDED':
             if native['state'] != 'refunded' or 'refund' not in actions or row.get('collection_time') is not None:
                 raise ValueError('REFUND_MUST_PRESERVE_NATIVE_OBLIGATION')
-            if operating.get((ident, 'REFUND'), {}).get('time') != actions['refund']['day']:
-                raise ValueError('REFUND_EVENT_MISSING_OR_CHANGED')
+            _check_contract_clock(ident, offered, actions, operating, qualified, cfg, refund_due=due)
         elif row['outcome'] == 'PENDING':
             if native['state'] != 'verified' or row.get('collection_time') is not None:
                 raise ValueError('PENDING_ORDER_CANNOT_BE_COLLECTION')
@@ -592,8 +607,6 @@ def audit(root, manifest, result):
             raise ValueError('SUPPORTED_NATIVE_ORDER_OUTCOME_REQUIRED')
         if result.get('complete') and row['outcome'] == 'PENDING':
             raise ValueError('COMPLETED_RUN_HAS_UNRESOLVED_ORDER')
-        default = _private_draw(result['seed'], [row['customer_id'], qualified, row['offer']['service_id']], 'nonpayment') < cfg['nonpayment_bps'] / 10000
-        due = qualified + cfg['payment_deadline_hours'] if default else acceptance + cfg['clearing_hours']
         if row.get('clearing_due_time') != due or (result.get('complete') and row['outcome'] != ('REFUNDED' if default else 'SETTLED')):
             raise ValueError('FROZEN_PAYMENT_SHOCK_OR_CASH_TIMING_CHANGED')
         accepted += 1
