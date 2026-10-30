@@ -71,7 +71,7 @@ The domestic-card analytical route uses a Canadian standard-priced account, CAD 
 
 ## Accounting equations and complete-cohort results
 
-Let \(n\) be admitted attempts; \(s,r,d,k\) the disjoint paid, refunded, lost-dispute and still-pending remaining-payout counts; \(p\) the price; \(a\) and \(b\) the percentage and fixed capture fees; \(\delta\) the received-dispute fee; \(c_0\) the non-inference unit cost; \(\lambda I\) the inference cost; \(F\) fixed costs; and \(L\) additional lifecycle cost. Here, \(r+d+k\le s\), and every attempt is costed.
+Let \(n\) be admitted attempts; \(s\) total paid captures; \(r,d,k\) mutually disjoint refunded, lost-dispute and still-pending payout subsets of those captures; \(p\) the price; \(a\) and \(b\) the percentage and fixed capture fees; \(\delta\) the received-dispute fee; \(c_0\) the non-inference unit cost; \(\lambda I\) the inference cost; \(F\) fixed costs; and \(L\) additional lifecycle cost. Here, \(r+d+k\le s\), and every attempt is costed.
 
 \[
 R=(s-r-d)p,\qquad

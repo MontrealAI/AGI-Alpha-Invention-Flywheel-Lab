@@ -10,7 +10,7 @@ import zipfile
 PREFIXES = ('campaign/next-009/', 'inventions/measurement009/',
             'research/next009/', 'verification/next009/', 'docs/next009/',
             'flywheel/', 'experiments/', 'vendor/')
-FILES = {'tests/test_next009.py', 'verification/__init__.py'}
+FILES = {'tests/test_next009.py', 'verification/__init__.py', '.github/workflows/measurement009.yml'}
 PREFIX = 'AGI_ALPHA_Measurement_009/'
 
 def package(root, commit, output):
