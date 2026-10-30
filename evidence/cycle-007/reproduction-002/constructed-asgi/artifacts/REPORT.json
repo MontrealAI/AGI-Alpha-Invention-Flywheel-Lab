@@ -1,0 +1,2597 @@
+{
+  "all_passed": true,
+  "candidate_sources": {
+    "/workspace/scratch/92d546ab6009/lab/experiments/temporal_construct007.py": "766b95f7ec40253e8f6c47c02422d27854e4d196718112acac44721e30846172",
+    "inventions/lifetime007/compiler.py": "2920afd8c90cac7918ea9c3424cb0446583b7277fded704af4c5542cb7170c9b"
+  },
+  "comparison": "The ordinary explicit commit/request-close route already meets the same obligations. This generated plan establishes scoped construction, not a consequential enabling advantage.",
+  "packages": {
+    "fastapi": "0.162.0",
+    "pydantic": "2.14.2",
+    "starlette": "1.10.0"
+  },
+  "peak_rss_kib": 36844,
+  "plan": {
+    "failed_attempts": [
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "transaction",
+          "finish",
+          "publish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "transaction",
+          "publish",
+          "finish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "finish",
+          "transaction",
+          "publish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "finish",
+          "publish",
+          "transaction"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "publish",
+          "transaction",
+          "finish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "publish",
+          "finish",
+          "transaction"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "cleanup",
+          "send",
+          "finish",
+          "publish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "cleanup",
+          "send",
+          "publish",
+          "finish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "finish",
+          "cleanup",
+          "send",
+          "publish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "finish",
+          "publish",
+          "cleanup",
+          "send"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "publish",
+          "cleanup",
+          "send",
+          "finish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "publish",
+          "finish",
+          "cleanup",
+          "send"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "cleanup",
+          "send",
+          "transaction",
+          "publish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "cleanup",
+          "send",
+          "publish",
+          "transaction"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "transaction",
+          "cleanup",
+          "send",
+          "publish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "transaction",
+          "publish",
+          "cleanup",
+          "send"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "publish",
+          "cleanup",
+          "send",
+          "transaction"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "publish",
+          "transaction",
+          "cleanup",
+          "send"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "cleanup",
+          "send",
+          "transaction",
+          "finish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "cleanup",
+          "send",
+          "finish",
+          "transaction"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "transaction",
+          "cleanup",
+          "send",
+          "finish"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "transaction",
+          "finish",
+          "cleanup",
+          "send"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "finish",
+          "cleanup",
+          "send",
+          "transaction"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "finish",
+          "transaction",
+          "cleanup",
+          "send"
+        ],
+        "split_blocks": [],
+        "violations": [
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "transaction",
+          "finish",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "transaction",
+          "publish",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "finish",
+          "transaction",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "finish",
+          "publish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "publish",
+          "transaction",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "send",
+          "publish",
+          "finish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "transaction",
+          "send",
+          "finish",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "transaction",
+          "send",
+          "publish",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "transaction",
+          "finish",
+          "send",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "transaction",
+          "finish",
+          "publish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "transaction",
+          "publish",
+          "send",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "transaction",
+          "publish",
+          "finish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "finish",
+          "send",
+          "transaction",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "finish",
+          "send",
+          "publish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "finish",
+          "transaction",
+          "send",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "finish",
+          "transaction",
+          "publish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "finish",
+          "publish",
+          "send",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "finish",
+          "publish",
+          "transaction",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "publish",
+          "send",
+          "transaction",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "publish",
+          "send",
+          "finish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "publish",
+          "transaction",
+          "send",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "publish",
+          "transaction",
+          "finish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "publish",
+          "finish",
+          "send",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "cleanup",
+          "publish",
+          "finish",
+          "transaction",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "cleanup",
+          "transaction",
+          "finish",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "cleanup",
+          "transaction",
+          "publish",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "cleanup",
+          "finish",
+          "transaction",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "cleanup",
+          "finish",
+          "publish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "cleanup",
+          "publish",
+          "transaction",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "cleanup",
+          "publish",
+          "finish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "transaction",
+          "cleanup",
+          "finish",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "transaction",
+          "cleanup",
+          "publish",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "transaction",
+          "finish",
+          "cleanup",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "transaction",
+          "finish",
+          "publish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "transaction",
+          "publish",
+          "cleanup",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "transaction",
+          "publish",
+          "finish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "finish",
+          "cleanup",
+          "transaction",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "finish",
+          "cleanup",
+          "publish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "finish",
+          "transaction",
+          "cleanup",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "finish",
+          "transaction",
+          "publish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "finish",
+          "publish",
+          "cleanup",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "finish",
+          "publish",
+          "transaction",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "publish",
+          "cleanup",
+          "transaction",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "publish",
+          "cleanup",
+          "finish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "publish",
+          "transaction",
+          "cleanup",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "publish",
+          "transaction",
+          "finish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "publish",
+          "finish",
+          "cleanup",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "send",
+          "publish",
+          "finish",
+          "transaction",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "cleanup",
+          "send",
+          "finish",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "cleanup",
+          "send",
+          "publish",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "cleanup",
+          "finish",
+          "send",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "cleanup",
+          "finish",
+          "publish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "cleanup",
+          "publish",
+          "send",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "cleanup",
+          "publish",
+          "finish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "send",
+          "cleanup",
+          "finish",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "send",
+          "cleanup",
+          "publish",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "send",
+          "finish",
+          "cleanup",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "send",
+          "finish",
+          "publish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "send",
+          "publish",
+          "cleanup",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "send",
+          "publish",
+          "finish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "finish",
+          "cleanup",
+          "send",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "finish",
+          "cleanup",
+          "publish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "finish",
+          "send",
+          "cleanup",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "finish",
+          "send",
+          "publish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "finish",
+          "publish",
+          "cleanup",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "finish",
+          "publish",
+          "send",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "publish",
+          "cleanup",
+          "send",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "publish",
+          "cleanup",
+          "finish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "publish",
+          "send",
+          "cleanup",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "publish",
+          "send",
+          "finish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "publish",
+          "finish",
+          "cleanup",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "transaction",
+          "publish",
+          "finish",
+          "send",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "cleanup",
+          "send",
+          "transaction",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "cleanup",
+          "send",
+          "publish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "cleanup",
+          "transaction",
+          "send",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "cleanup",
+          "transaction",
+          "publish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "cleanup",
+          "publish",
+          "send",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "cleanup",
+          "publish",
+          "transaction",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "send",
+          "cleanup",
+          "transaction",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "send",
+          "cleanup",
+          "publish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "send",
+          "transaction",
+          "cleanup",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "send",
+          "transaction",
+          "publish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "send",
+          "publish",
+          "cleanup",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "send",
+          "publish",
+          "transaction",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "transaction",
+          "cleanup",
+          "send",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "transaction",
+          "cleanup",
+          "publish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "transaction",
+          "send",
+          "cleanup",
+          "publish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "transaction",
+          "send",
+          "publish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "transaction",
+          "publish",
+          "cleanup",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "transaction",
+          "publish",
+          "send",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "acquire_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "publish",
+          "cleanup",
+          "send",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "publish",
+          "cleanup",
+          "transaction",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "publish",
+          "send",
+          "cleanup",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "publish",
+          "send",
+          "transaction",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "publish",
+          "transaction",
+          "cleanup",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "finish",
+          "publish",
+          "transaction",
+          "send",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "acquire_BEFORE_prepare",
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "cleanup",
+          "send",
+          "transaction",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "cleanup",
+          "send",
+          "finish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "cleanup",
+          "transaction",
+          "send",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "cleanup",
+          "transaction",
+          "finish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "cleanup",
+          "finish",
+          "send",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "cleanup",
+          "finish",
+          "transaction",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "send",
+          "cleanup",
+          "transaction",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "send",
+          "cleanup",
+          "finish",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "send",
+          "transaction",
+          "cleanup",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "send",
+          "transaction",
+          "finish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "send",
+          "finish",
+          "cleanup",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "send",
+          "finish",
+          "transaction",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume",
+          "consume_BEFORE_release"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "transaction",
+          "cleanup",
+          "send",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "transaction",
+          "cleanup",
+          "finish",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "transaction",
+          "send",
+          "cleanup",
+          "finish"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "prepare_BEFORE_durable",
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "transaction",
+          "send",
+          "finish",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "transaction",
+          "finish",
+          "cleanup",
+          "send"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "transaction",
+          "finish",
+          "send",
+          "cleanup"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "durable_BEFORE_consume"
+        ]
+      },
+      {
+        "order": [
+          "publish",
+          "finish",
+          "cleanup",
+          "send",
+          "transaction"
+        ],
+        "split_blocks": [
+          0
+        ],
+        "violations": [
+          "consume_BEFORE_release"
+        ]
+      }
+    ],
+    "generated_operator": {
+      "blocks": [
+        [
+          "cleanup",
+          "send"
+        ]
+      ],
+      "kind": "separate-compound-effects",
+      "precedence": [
+        [
+          "publish",
+          "finish"
+        ],
+        [
+          "finish",
+          "cleanup"
+        ],
+        [
+          "cleanup",
+          "transaction"
+        ],
+        [
+          "transaction",
+          "send"
+        ]
+      ],
+      "schema": "agi-alpha/factor-operator007/v1"
+    },
+    "mapping": {
+      "donor": "durable-publication-with-live-reader",
+      "origin": "Developer supplied operation semantics and donor requirements; role correspondence computed from typed effects, not lexical similarity.",
+      "roles": {
+        "acquire": "publish",
+        "consume": "transaction",
+        "durable": "cleanup",
+        "prepare": "finish",
+        "release": "send"
+      }
+    },
+    "order": [
+      "publish",
+      "finish",
+      "cleanup",
+      "transaction",
+      "send"
+    ],
+    "origin": "Bounded effect factoring and permutation search written by the development model; no mathematical novelty or autonomous discovery-policy advantage claimed.",
+    "schema": "agi-alpha/lifetime-plan007/v1",
+    "search_attempts": 140,
+    "spec_sha256": "32afde859a551ba1e7025c6222bd30284b3357a36ea92ef43d657162751e100c",
+    "split_blocks": [
+      0
+    ],
+    "status": "CONSTRUCTED",
+    "task_id": "sqlite-stream-construction"
+  },
+  "results": [
+    {
+      "actual_network_disconnect_tested": false,
+      "closed": true,
+      "commit_before_success": true,
+      "contract_pass": true,
+      "error": null,
+      "events": [
+        {
+          "effect": "publish",
+          "event": "acquire"
+        },
+        {
+          "effect": "finish",
+          "event": "prepare"
+        },
+        {
+          "effect": "cleanup",
+          "event": "durable"
+        },
+        {
+          "event": "response_start",
+          "status": 200,
+          "visible_rows": [
+            [
+              7
+            ],
+            [
+              8
+            ]
+          ]
+        },
+        {
+          "event": "consume",
+          "live": true,
+          "value": 7
+        },
+        {
+          "body": "7\n",
+          "event": "response_body",
+          "more_body": true
+        },
+        {
+          "event": "consume",
+          "live": true,
+          "value": 8
+        },
+        {
+          "body": "8\n",
+          "event": "response_body",
+          "more_body": true
+        },
+        {
+          "event": "stream_complete"
+        },
+        {
+          "body": "",
+          "event": "response_body",
+          "more_body": false
+        },
+        {
+          "effect": "send",
+          "event": "release"
+        }
+      ],
+      "fault": null,
+      "full_delivery_accepted": true,
+      "partial_delivery_is_full_delivery": false
+    },
+    {
+      "actual_network_disconnect_tested": false,
+      "closed": true,
+      "commit_before_success": true,
+      "contract_pass": true,
+      "error": "IntegrityError:FOREIGN KEY constraint failed",
+      "events": [
+        {
+          "effect": "publish",
+          "event": "acquire"
+        },
+        {
+          "effect": "finish",
+          "event": "prepare"
+        },
+        {
+          "effect": "send",
+          "event": "release"
+        },
+        {
+          "event": "response_start",
+          "status": 500,
+          "visible_rows": []
+        },
+        {
+          "body": "Internal Server Error",
+          "event": "response_body",
+          "more_body": false
+        }
+      ],
+      "fault": "commit",
+      "full_delivery_accepted": false,
+      "partial_delivery_is_full_delivery": false
+    },
+    {
+      "actual_network_disconnect_tested": false,
+      "closed": true,
+      "commit_before_success": true,
+      "contract_pass": true,
+      "error": "RuntimeError:INJECTED_MIDSTREAM_FAILURE",
+      "events": [
+        {
+          "effect": "publish",
+          "event": "acquire"
+        },
+        {
+          "effect": "finish",
+          "event": "prepare"
+        },
+        {
+          "effect": "cleanup",
+          "event": "durable"
+        },
+        {
+          "event": "response_start",
+          "status": 200,
+          "visible_rows": [
+            [
+              7
+            ],
+            [
+              8
+            ]
+          ]
+        },
+        {
+          "event": "consume",
+          "live": true,
+          "value": 7
+        },
+        {
+          "body": "7\n",
+          "event": "response_body",
+          "more_body": true
+        },
+        {
+          "effect": "send",
+          "event": "release"
+        }
+      ],
+      "fault": "mid_consume",
+      "full_delivery_accepted": false,
+      "partial_delivery_is_full_delivery": false
+    },
+    {
+      "actual_network_disconnect_tested": false,
+      "closed": true,
+      "commit_before_success": true,
+      "contract_pass": true,
+      "error": "ClientDisconnect:",
+      "events": [
+        {
+          "effect": "publish",
+          "event": "acquire"
+        },
+        {
+          "effect": "finish",
+          "event": "prepare"
+        },
+        {
+          "effect": "cleanup",
+          "event": "durable"
+        },
+        {
+          "event": "response_start",
+          "status": 200,
+          "visible_rows": [
+            [
+              7
+            ],
+            [
+              8
+            ]
+          ]
+        },
+        {
+          "event": "consume",
+          "live": true,
+          "value": 7
+        },
+        {
+          "body": "7\n",
+          "event": "response_body",
+          "more_body": true
+        },
+        {
+          "effect": "send",
+          "event": "release"
+        }
+      ],
+      "fault": "mid_interrupt",
+      "full_delivery_accepted": false,
+      "partial_delivery_is_full_delivery": false
+    }
+  ],
+  "schema": "agi-alpha/generated-asgi007/v1",
+  "self_cpu_seconds": 0.269033948,
+  "spec": {
+    "blocks": [
+      {
+        "effects": [
+          "cleanup",
+          "send"
+        ],
+        "separable": true
+      },
+      {
+        "effects": [
+          "transaction"
+        ],
+        "separable": false
+      },
+      {
+        "effects": [
+          "finish"
+        ],
+        "separable": false
+      },
+      {
+        "effects": [
+          "publish"
+        ],
+        "separable": false
+      }
+    ],
+    "domain": "sqlite",
+    "effects": [
+      {
+        "id": "send",
+        "operation": "sqlite_close",
+        "resource": "session"
+      },
+      {
+        "id": "cleanup",
+        "operation": "sqlite_commit",
+        "resource": "session"
+      },
+      {
+        "id": "publish",
+        "operation": "sqlite_connect",
+        "resource": "session"
+      },
+      {
+        "id": "transaction",
+        "operation": "sqlite_stream",
+        "resource": "session"
+      },
+      {
+        "id": "finish",
+        "operation": "sqlite_insert",
+        "resource": "session"
+      }
+    ],
+    "obligations": {
+      "close_on_exit": true,
+      "durable_before_visible": true,
+      "live_during_consumption": true
+    },
+    "schema": "agi-alpha/lifetime-spec007/v1",
+    "task_id": "sqlite-stream-construction"
+  },
+  "wall_seconds": 0.2841808020020835
+}

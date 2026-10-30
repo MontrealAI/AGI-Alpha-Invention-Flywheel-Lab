@@ -1,0 +1,10 @@
+{
+  "schema": "agi-alpha/asgi-development-adjudication007/v1",
+  "original_report_sha256": "fe7979d1554275afbcd77fbcf7dc79e215606ee70f5b477ef393f5c1c9e176e4",
+  "original_result": "3/4 because development checker rejected the standard HTTP500 error body",
+  "established_fact": "The actual failed foreign-key commit produced HTTP500, no success status, no consumed data and no externally visible rows.",
+  "contract": "Failed commit must prevent a successful data response; an error response body is allowed.",
+  "adjudication": "Development-checker error; corrected before any protected ASGI evaluation. Original receipt retained.",
+  "new_command": "python -m experiments.temporal_construct007 --output NEW",
+  "does_not_reclassify_original_pass": false
+}

@@ -1,0 +1,75 @@
+[
+  {
+    "child_cpu_seconds": 2.683843999999998,
+    "command": [
+      "/workspace/scratch/92d546ab6009/denovo_probe/tools/jdk-21.0.13+9-jre/bin/java",
+      "-XX:ActiveProcessorCount=2",
+      "-Xmx1024m",
+      "-jar",
+      "/workspace/scratch/92d546ab6009/denovo_probe/tools/MAYGEN-1.8.jar",
+      "-f",
+      "C7H17N",
+      "-o",
+      "/workspace/scratch/92d546ab6009/denovo_probe/full-cli-reproduction/depth-7/enumeration/",
+      "-sdf",
+      "-v",
+      "-t"
+    ],
+    "java_CPU_budget_after": 258.601663,
+    "java_CPU_budget_before": 261.285507,
+    "process_CPU_soft_limit": 90,
+    "returncode": 0,
+    "status": "COMPLETED",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_sha256": "e334b64d283f8396c824debb3bff41c741a0cde4a57b9e3fa9e54440229c186f",
+    "wall_seconds": 1.6214453720021993
+  },
+  {
+    "child_cpu_seconds": 7.399653999999996,
+    "command": [
+      "/workspace/scratch/92d546ab6009/denovo_probe/tools/jdk-21.0.13+9-jre/bin/java",
+      "-XX:ActiveProcessorCount=2",
+      "-Xmx1024m",
+      "-Djava.net.useSystemProxies=false",
+      "-Dhttp.proxyHost=127.0.0.1",
+      "-Dhttp.proxyPort=9",
+      "-Dhttps.proxyHost=127.0.0.1",
+      "-Dhttps.proxyPort=9",
+      "-jar",
+      "/workspace/scratch/92d546ab6009/denovo_probe/tools/MetFragCommandLine-2.6.11.jar",
+      "/workspace/scratch/92d546ab6009/denovo_probe/full-cli-reproduction/depth-7/q01/params.txt"
+    ],
+    "java_CPU_budget_after": 251.20200899999998,
+    "java_CPU_budget_before": 258.601663,
+    "process_CPU_soft_limit": 90,
+    "returncode": 0,
+    "status": "COMPLETED",
+    "stderr_sha256": "d2ab8ab4a27ff662da1c0444892db250f61d0602d0012485839521b2dc8258f3",
+    "stdout_sha256": "ccb1174edb307d1b186a9916304a83a5acdea208a8d675631360c64149c13f30",
+    "wall_seconds": 3.0109919929964235
+  },
+  {
+    "child_cpu_seconds": 6.728870000000001,
+    "command": [
+      "/workspace/scratch/92d546ab6009/denovo_probe/tools/jdk-21.0.13+9-jre/bin/java",
+      "-XX:ActiveProcessorCount=2",
+      "-Xmx1024m",
+      "-Djava.net.useSystemProxies=false",
+      "-Dhttp.proxyHost=127.0.0.1",
+      "-Dhttp.proxyPort=9",
+      "-Dhttps.proxyHost=127.0.0.1",
+      "-Dhttps.proxyPort=9",
+      "-jar",
+      "/workspace/scratch/92d546ab6009/denovo_probe/tools/MetFragCommandLine-2.6.11.jar",
+      "/workspace/scratch/92d546ab6009/denovo_probe/full-cli-reproduction/depth-7/q02/params.txt"
+    ],
+    "java_CPU_budget_after": 244.47313899999997,
+    "java_CPU_budget_before": 251.20200899999998,
+    "process_CPU_soft_limit": 90,
+    "returncode": 0,
+    "status": "COMPLETED",
+    "stderr_sha256": "7951840c3bcc5a3566dd6d79e21e28f11929e1afda4129e267bb6a0bc94dc580",
+    "stdout_sha256": "59516701399e2c82fe5339e688209c23d7d4ddf0338ab03cdd46cf01893ee83f",
+    "wall_seconds": 3.4433513520052657
+  }
+]
