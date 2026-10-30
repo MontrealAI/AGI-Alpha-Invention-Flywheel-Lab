@@ -20,4 +20,16 @@ The protected-exchange exercise uses the unchanged pinned `ProtectedExchange` en
 
 No commercially admitted earnings exist. A fixture's opening capital, refundable custody, released reserve or positive partial accounting balance cannot fund the claimed successor. Qualified simulated earned funds are zero and earned-funded construction is deferred. Any separately authorized technical successor probe uses the research allocation and must be reported as such.
 
+The final source-bound compatibility delivery is accepted after 18/18 unchanged upstream tests and 34/34 protected behavior checks across the original and upgraded environments, with no skips. The actual commerce execution passes 15/15 checks. All six fixture inputs and outcomes are retained. Four simulated releases collect 4,000,000 microUSD at the arbitrary 1,000,000-unit fixture price, before every released trade undergoes correlated reversal. The final collections and unrestricted-earned balance are zero. Even before stress, the engine's strict post-reserve earned control is zero. No expenses were posted for unknown lifecycle costs; consequently the intermediate 4,000,000-unit ledger profit is partial fixture accounting, not evidence of complete-cost profitability. At full reversal the complete economic result is `-L-K`, not an assumed zero loss.
+
+The 15 price/participation/refund sensitivity cells retain zero price, zero participation and full-refund conditions. Every complete-profit lower bound is unknown because the complete-cost upper bound is unavailable. The bounded wrapper records 0.258 wall seconds, 0.145 waited-child CPU seconds and 125,963 output bytes, with no surviving descendants; its prospective 20-CPU-second reservation remains charged. Unit tests pass 6/6. `ECONOMICS_RESULT.json` binds the actual report and receipt, while `ECONOMICS_FREEZE.json` preserves the pre-exchange contract and source identities.
+
+To reproduce the now-exposed functional exchange under the same fixed contract, use a new output directory:
+
+```sh
+python experiments/commerce007.py --artifact evidence/cycle-007/verification/ACCEPTED_DELIVERY.json --acceptance evidence/cycle-007/verification/REPORT.json --contract campaign/cycle-007/ECONOMICS_CONTRACT.json --expected-contract-sha256 7f2ca3aacf98e140f03bc0b5000d61163f7a2fdfe1d84a9c2b5fa9f7f274e395 --expected-acceptance-sha256 1fe2f8de69d028ce1891dc4cce68a0f937974ae75081a83f6c992c5eb6e4a8ed --output /tmp/agi-alpha-commerce007-new
+```
+
+This reproduces engineering controls and the preserved conditional frontier. It is not a new protected scientific test, a market confirmation or a buyer purchase.
+
 The remaining economic evidence is specific: a consequential blocked service with frozen obligations; a competent complete baseline that remains insufficient; an independently useful accepted construction; comparable price and participation bounds including free tools; and bounded complete costs over that same prospectively admitted population. Current permissions allow public research and simulated exchange only. No customer contact, quote request, paid call, purchase or real transfer has occurred.

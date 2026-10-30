@@ -1,0 +1,16 @@
+.........                                                                [100%]
+=============================== warnings summary ===============================
+../../../workspace/scratch/92d546ab6009/reproduction007-003/compatibility-envs/baseline/lib/python3.12/site-packages/starlette/testclient.py:29
+  /workspace/scratch/92d546ab6009/reproduction007-003/compatibility-envs/baseline/lib/python3.12/site-packages/starlette/testclient.py:29: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    [], typing.ContextManager[anyio.abc.BlockingPortal]
+
+../../../workspace/scratch/92d546ab6009/reproduction007-003/compatibility-envs/baseline/lib/python3.12/site-packages/httpx/_client.py:690
+tutorial002.py::test_read_main
+tutorial002.py::test_websocket
+tutorial003.py::test_read_items
+  /workspace/scratch/92d546ab6009/reproduction007-003/compatibility-envs/baseline/lib/python3.12/site-packages/httpx/_client.py:690: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=WSGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: /workspace/scratch/92d546ab6009/reproduction007-003/exposed-compatibility-verifier/artifacts/baseline/upstream.xml -
+9 passed, 5 warnings in 0.64s

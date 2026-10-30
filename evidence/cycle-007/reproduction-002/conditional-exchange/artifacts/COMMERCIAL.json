@@ -1,0 +1,728 @@
+{
+  "schema": "agi-alpha/conditional-commerce007/v1",
+  "mode": "SIMULATED_FUNCTIONAL_ENGINEERING_QUALIFICATION_ONLY",
+  "binding": {
+    "artifact_sha256": "2fe6d6ea18864fc203997554a2a0d9b41a58ab3b13b8aa24cde74aa709ad8e1d",
+    "candidate_sha256": "f3409703ff50f3a8f2d18ad60c7090caa32f23e3d1b24ca0aa8cb8bac01103f6",
+    "technical_contract_sha256": "df8860a6185c2747e7d8fa64a8ca773f65b3783e534c30d7ae6c5dac5843bab7",
+    "verifier_sha256": "1ee24835d5879162d143fbede1d701d4796b6379a0742e541075c4e4362b44e1",
+    "verifier_path": "verification/cycle007_compatibility.py",
+    "source_manifest_sha256": "ad45d157445427e97d0ce9e6b69df92472113b256993f09e1a2a1036406c21f6"
+  },
+  "technical_acceptance": {
+    "accepted": true,
+    "artifact": "ACCEPTED_DELIVERY.json",
+    "artifact_sha256": "2fe6d6ea18864fc203997554a2a0d9b41a58ab3b13b8aa24cde74aa709ad8e1d",
+    "candidate_sha256": "f3409703ff50f3a8f2d18ad60c7090caa32f23e3d1b24ca0aa8cb8bac01103f6",
+    "contract_sha256": "df8860a6185c2747e7d8fa64a8ca773f65b3783e534c30d7ae6c5dac5843bab7",
+    "independence": "Separate verifier agent did not modify candidate or upstream source/tests; shared model family, libraries, host and filesystem. Procedural separation, no OS-enforced builder exclusion or external certification.",
+    "protected_cases_first_exposure": "After candidate/verifier/protocol/source freeze in this run; subsequent replay is exposed reproduction.",
+    "schema": "agi-alpha/compatibility-acceptance007/v1",
+    "scope": "pinned FastAPI documentation create/read, WebSocket, startup compatibility only; no production or security qualification",
+    "source_manifest_sha256": "ad45d157445427e97d0ce9e6b69df92472113b256993f09e1a2a1036406c21f6",
+    "statistical_alpha_spent": 0,
+    "statistical_superiority_claim": false,
+    "tests": {
+      "protected_checks_passed": 34,
+      "protected_checks_total": 34,
+      "upstream_passed": 18,
+      "upstream_skipped": 0,
+      "upstream_source_unchanged": true,
+      "upstream_total": 18
+    },
+    "verifier_sha256": "1ee24835d5879162d143fbede1d701d4796b6379a0742e541075c4e4362b44e1"
+  },
+  "technical_accepted": true,
+  "scope": "pinned FastAPI documentation create/read, WebSocket, startup compatibility only; no production or security qualification",
+  "offering": {
+    "description": "Independent source-bound report of ordinary coordinated FastAPI/Starlette upgrade compatible with the pinned create/read, WebSocket and startup contract.",
+    "obligations": [
+      "Exact source/version identities",
+      "All9 upstream tests unchanged per arm; no skips",
+      "All17 protected documented-behavior checks per arm",
+      "Truthful direct-bump failure and incumbent success",
+      "Deliver report bytes only after scoped verification and simulated cleared payment"
+    ],
+    "excluded": [
+      "Production deployment",
+      "Unknown third-party application behavior",
+      "Security/vulnerability qualification",
+      "Complete managed migration or support",
+      "An invention advantage or guaranteed economic benefit"
+    ],
+    "actual_buyer": null,
+    "independently_committed_price_microUSD": null,
+    "competent_route": "Ordinary coordinated FastAPI0.110.1/Starlette0.37.2/httpx0.28.1; Pydantic1.10.27 unchanged"
+  },
+  "economic_frontier": {
+    "schema": "agi-alpha/remediation-economic-frontier007/v1",
+    "units": "simulated microUSD; illustrative grid is not a market price or a participation forecast",
+    "cohort": [
+      "UNADMITTED-TECHNICAL-PROBE:fastapi-dd4e78ca-httpx0272-to0281"
+    ],
+    "horizon": "One pinned documentation-compatibility report; illustrative one-unit service sensitivity only, no commercially admitted buyer cohort.",
+    "known_cost_lower_bound_microUSD": 0,
+    "complete_cost_upper_bound_microUSD": null,
+    "unknown_categories": [
+      "discovery_failed_search",
+      "construction_integration",
+      "agent_inference",
+      "data_network_storage",
+      "execution",
+      "verification_repair",
+      "deployment",
+      "maintenance_support",
+      "payment_fees",
+      "refund_dispute_terminal_obligations",
+      "financing_capital_recovery"
+    ],
+    "K_definition": "All complete lifecycle cost above the recorded lower bound, including unknown inference and acquisition; no finite bound inferred from missing bills.",
+    "profit_formula": "paid_count * (1 - refund_fraction) * price - known_cost_lower_bound - K",
+    "participation_condition": "trust * expected_useful_value - (1-refund_probability) * price - switching - procurement - expected_dispute_cost >= best_alternative_utility",
+    "competitive_price_ceiling": "(trust * expected_useful_value - switching - procurement - expected_dispute_cost - best_alternative_utility) / (1-refund_probability), if refund_probability < 1; at full refund test non-price obligations directly",
+    "rational_operator_condition": "expected complete profit >= best incremental outside option; available earned cash sufficient after all obligations and reserves",
+    "buyer_parameters": {
+      "trust_probability": null,
+      "expected_useful_value_microUSD": null,
+      "switching_and_integration_microUSD": null,
+      "procurement_friction_microUSD": null,
+      "expected_dispute_cost_microUSD": null,
+      "refund_probability": null,
+      "participation_probability": null,
+      "bound": "Unmeasured; zero participation admissible. No prior artifact savings or subscription list price substituted for willingness to pay."
+    },
+    "joint_stress": "Lower trust and useful value jointly with higher switching, procurement, support and dispute costs; zero participation and full refund are retained.",
+    "outside_options": [
+      {
+        "route": "Free conventional coordinated upgrade plus unchanged tests",
+        "license_price_microUSD": 0,
+        "complete_cost_microUSD": null,
+        "tested_contract_passes": true
+      },
+      {
+        "route": "Ordinary AI-native repair and validation",
+        "price_microUSD": null,
+        "competent_class_unrun": true
+      },
+      {
+        "route": "Managed migration with wider support obligations",
+        "price_microUSD": null,
+        "source": "Infield/Moderne current primary vendor descriptions; no quote requested"
+      },
+      {
+        "route": "Non-entry",
+        "incremental_new_commitment_microUSD": 0,
+        "separate_investment_comparison": true
+      }
+    ],
+    "scenarios": [
+      {
+        "price_microUSD": 0,
+        "paying_count": 0,
+        "refunded_count": 0,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 0,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 0,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 0
+      },
+      {
+        "price_microUSD": 0,
+        "paying_count": 1,
+        "refunded_count": 0,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 0,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 0,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 0
+      },
+      {
+        "price_microUSD": 0,
+        "paying_count": 1,
+        "refunded_count": 1,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 0,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 0,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 0
+      },
+      {
+        "price_microUSD": 200000,
+        "paying_count": 0,
+        "refunded_count": 0,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 0,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 0,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 0
+      },
+      {
+        "price_microUSD": 200000,
+        "paying_count": 1,
+        "refunded_count": 0,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 200000,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 200000,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 200000
+      },
+      {
+        "price_microUSD": 200000,
+        "paying_count": 1,
+        "refunded_count": 1,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 0,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 0,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 0
+      },
+      {
+        "price_microUSD": 1000000,
+        "paying_count": 0,
+        "refunded_count": 0,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 0,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 0,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 0
+      },
+      {
+        "price_microUSD": 1000000,
+        "paying_count": 1,
+        "refunded_count": 0,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 1000000,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 1000000,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 1000000
+      },
+      {
+        "price_microUSD": 1000000,
+        "paying_count": 1,
+        "refunded_count": 1,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 0,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 0,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 0
+      },
+      {
+        "price_microUSD": 10000000,
+        "paying_count": 0,
+        "refunded_count": 0,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 0,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 0,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 0
+      },
+      {
+        "price_microUSD": 10000000,
+        "paying_count": 1,
+        "refunded_count": 0,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 10000000,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 10000000,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 10000000
+      },
+      {
+        "price_microUSD": 10000000,
+        "paying_count": 1,
+        "refunded_count": 1,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 0,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 0,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 0
+      },
+      {
+        "price_microUSD": 100000000,
+        "paying_count": 0,
+        "refunded_count": 0,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 0,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 0,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 0
+      },
+      {
+        "price_microUSD": 100000000,
+        "paying_count": 1,
+        "refunded_count": 0,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 100000000,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 100000000,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 100000000
+      },
+      {
+        "price_microUSD": 100000000,
+        "paying_count": 1,
+        "refunded_count": 1,
+        "admitted_count_including_unsold": 1,
+        "net_collections_microUSD": 0,
+        "complete_profit_lower_microUSD": null,
+        "complete_profit_upper_microUSD": 0,
+        "unknown_cost_K_positive_profit_threshold_microUSD": 0
+      }
+    ],
+    "baseline_same_cohort_complete_profit": null,
+    "negative_to_positive_crossing": "UNKNOWN_NO_ESTABLISHED_LOSS_MAKING_BASELINE",
+    "conditional_commercial_viability": "UNKNOWN_WITH_UNBOUNDED_K_OR_UNMEASURED_PARTICIPATION",
+    "AGI_ALPHA_value_capture": "UNKNOWN_NO_COMMITTED_PRICE_OR_PARTICIPATION",
+    "investment_attractiveness": "UNKNOWN; non-entry has zero incremental new commitment by definition, separate from service-threshold eligibility",
+    "source_manifest": {
+      "path": "campaign/cycle-007/ECONOMICS_SOURCES.json",
+      "sha256": "9bb9410fa5b6fb0d5b185342796cb5f900ad8eb2709657315a249bc5f219050c"
+    }
+  },
+  "all_fixture_inputs": [
+    {
+      "id": "nonpayment",
+      "buyer": "fixture-unfunded",
+      "model_accepts": true,
+      "price_microUSD": 1000000,
+      "real_buyer": false,
+      "commercially_admitted": false
+    },
+    {
+      "id": "rejected",
+      "buyer": "fixture-funded",
+      "model_accepts": false,
+      "price_microUSD": 1000000,
+      "real_buyer": false,
+      "commercially_admitted": false
+    },
+    {
+      "id": "interrupted",
+      "buyer": "fixture-funded",
+      "model_accepts": true,
+      "price_microUSD": 1000000,
+      "real_buyer": false,
+      "commercially_admitted": false
+    },
+    {
+      "id": "correlated-0",
+      "buyer": "fixture-funded",
+      "model_accepts": true,
+      "price_microUSD": 1000000,
+      "real_buyer": false,
+      "commercially_admitted": false
+    },
+    {
+      "id": "correlated-1",
+      "buyer": "fixture-funded",
+      "model_accepts": true,
+      "price_microUSD": 1000000,
+      "real_buyer": false,
+      "commercially_admitted": false
+    },
+    {
+      "id": "correlated-2",
+      "buyer": "fixture-funded",
+      "model_accepts": true,
+      "price_microUSD": 1000000,
+      "real_buyer": false,
+      "commercially_admitted": false
+    }
+  ],
+  "all_fixture_outcomes": [
+    {
+      "id": "correlated-0",
+      "buyer": "fixture-funded",
+      "price": "1000000",
+      "state": "breached",
+      "custody": 0,
+      "refund_due": "0",
+      "compensation_due": "0"
+    },
+    {
+      "id": "correlated-1",
+      "buyer": "fixture-funded",
+      "price": "1000000",
+      "state": "breached",
+      "custody": 0,
+      "refund_due": "0",
+      "compensation_due": "0"
+    },
+    {
+      "id": "correlated-2",
+      "buyer": "fixture-funded",
+      "price": "1000000",
+      "state": "breached",
+      "custody": 0,
+      "refund_due": "0",
+      "compensation_due": "0"
+    },
+    {
+      "id": "interrupted",
+      "buyer": "fixture-funded",
+      "price": "1000000",
+      "state": "breached",
+      "custody": 0,
+      "refund_due": "0",
+      "compensation_due": "0"
+    },
+    {
+      "id": "nonpayment",
+      "buyer": "fixture-unfunded",
+      "price": "1000000",
+      "state": "cancelled",
+      "custody": 0,
+      "refund_due": "0",
+      "compensation_due": "0"
+    },
+    {
+      "id": "rejected",
+      "buyer": "fixture-funded",
+      "price": "1000000",
+      "state": "refunded",
+      "custody": 0,
+      "refund_due": "0",
+      "compensation_due": "0"
+    }
+  ],
+  "journal": [
+    {
+      "seq": 1,
+      "order_id": "fixture-funded",
+      "kind": "buyer_provision",
+      "amount": "100000000"
+    },
+    {
+      "seq": 2,
+      "order_id": "fixture-unfunded",
+      "kind": "buyer_provision",
+      "amount": "0"
+    },
+    {
+      "seq": 3,
+      "order_id": "interrupted",
+      "kind": "revenue",
+      "amount": "1000000"
+    },
+    {
+      "seq": 4,
+      "order_id": "interrupted",
+      "kind": "collections",
+      "amount": "1000000"
+    },
+    {
+      "seq": 5,
+      "order_id": "correlated-0",
+      "kind": "revenue",
+      "amount": "1000000"
+    },
+    {
+      "seq": 6,
+      "order_id": "correlated-0",
+      "kind": "collections",
+      "amount": "1000000"
+    },
+    {
+      "seq": 7,
+      "order_id": "correlated-1",
+      "kind": "revenue",
+      "amount": "1000000"
+    },
+    {
+      "seq": 8,
+      "order_id": "correlated-1",
+      "kind": "collections",
+      "amount": "1000000"
+    },
+    {
+      "seq": 9,
+      "order_id": "correlated-2",
+      "kind": "revenue",
+      "amount": "1000000"
+    },
+    {
+      "seq": 10,
+      "order_id": "correlated-2",
+      "kind": "collections",
+      "amount": "1000000"
+    },
+    {
+      "seq": 11,
+      "order_id": "interrupted",
+      "kind": "contra_revenue",
+      "amount": "1000000"
+    },
+    {
+      "seq": 12,
+      "order_id": "interrupted",
+      "kind": "reversal_paid",
+      "amount": "1000000"
+    },
+    {
+      "seq": 13,
+      "order_id": "interrupted",
+      "kind": "breach",
+      "amount": "1"
+    },
+    {
+      "seq": 14,
+      "order_id": "correlated-0",
+      "kind": "contra_revenue",
+      "amount": "1000000"
+    },
+    {
+      "seq": 15,
+      "order_id": "correlated-0",
+      "kind": "reversal_paid",
+      "amount": "1000000"
+    },
+    {
+      "seq": 16,
+      "order_id": "correlated-0",
+      "kind": "breach",
+      "amount": "1"
+    },
+    {
+      "seq": 17,
+      "order_id": "correlated-1",
+      "kind": "contra_revenue",
+      "amount": "1000000"
+    },
+    {
+      "seq": 18,
+      "order_id": "correlated-1",
+      "kind": "reversal_paid",
+      "amount": "1000000"
+    },
+    {
+      "seq": 19,
+      "order_id": "correlated-1",
+      "kind": "breach",
+      "amount": "1"
+    },
+    {
+      "seq": 20,
+      "order_id": "correlated-2",
+      "kind": "contra_revenue",
+      "amount": "1000000"
+    },
+    {
+      "seq": 21,
+      "order_id": "correlated-2",
+      "kind": "reversal_paid",
+      "amount": "1000000"
+    },
+    {
+      "seq": 22,
+      "order_id": "correlated-2",
+      "kind": "breach",
+      "amount": "1"
+    }
+  ],
+  "checks": [
+    {
+      "name": "nonpayment",
+      "passed": true,
+      "detail": "buyer funds or collateral unavailable"
+    },
+    {
+      "name": "rejected-delivery",
+      "passed": true,
+      "detail": "independent acceptance failed"
+    },
+    {
+      "name": "rejected-download",
+      "passed": true,
+      "detail": "assured simulated release required"
+    },
+    {
+      "name": "duplicate-refund-idempotent",
+      "passed": true
+    },
+    {
+      "name": "funding-interruption-rollback",
+      "passed": true,
+      "detail": "before transaction commit"
+    },
+    {
+      "name": "download-before-clearing-interrupted",
+      "passed": true,
+      "detail": "assured simulated release required"
+    },
+    {
+      "name": "forged-receipt-interrupted",
+      "passed": true,
+      "detail": "unbound or forged provider observation"
+    },
+    {
+      "name": "download-before-clearing-correlated-0",
+      "passed": true,
+      "detail": "assured simulated release required"
+    },
+    {
+      "name": "forged-receipt-correlated-0",
+      "passed": true,
+      "detail": "unbound or forged provider observation"
+    },
+    {
+      "name": "download-before-clearing-correlated-1",
+      "passed": true,
+      "detail": "assured simulated release required"
+    },
+    {
+      "name": "forged-receipt-correlated-1",
+      "passed": true,
+      "detail": "unbound or forged provider observation"
+    },
+    {
+      "name": "download-before-clearing-correlated-2",
+      "passed": true,
+      "detail": "assured simulated release required"
+    },
+    {
+      "name": "forged-receipt-correlated-2",
+      "passed": true,
+      "detail": "unbound or forged provider observation"
+    },
+    {
+      "name": "accepted-exact-artifact-duplicate-settlement",
+      "passed": true
+    },
+    {
+      "name": "capital-and-refunds-cannot-fund-successor",
+      "passed": true,
+      "detail": "earned funds or exposure qualification unavailable"
+    }
+  ],
+  "semantic_checks": [
+    {
+      "accepted": false,
+      "decisive": true,
+      "commercial_acceptance": false,
+      "scope": "SOURCE_BOUND_COMPATIBILITY_ARTIFACT_FIXTURE_ONLY"
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "commercial_acceptance": false,
+      "scope": "SOURCE_BOUND_COMPATIBILITY_ARTIFACT_FIXTURE_ONLY"
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "commercial_acceptance": false,
+      "scope": "SOURCE_BOUND_COMPATIBILITY_ARTIFACT_FIXTURE_ONLY"
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "commercial_acceptance": false,
+      "scope": "SOURCE_BOUND_COMPATIBILITY_ARTIFACT_FIXTURE_ONLY"
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "commercial_acceptance": false,
+      "scope": "SOURCE_BOUND_COMPATIBILITY_ARTIFACT_FIXTURE_ONLY"
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "commercial_acceptance": false,
+      "scope": "SOURCE_BOUND_COMPATIBILITY_ARTIFACT_FIXTURE_ONLY"
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "commercial_acceptance": false,
+      "scope": "SOURCE_BOUND_COMPATIBILITY_ARTIFACT_FIXTURE_ONLY"
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "commercial_acceptance": false,
+      "scope": "SOURCE_BOUND_COMPATIBILITY_ARTIFACT_FIXTURE_ONLY"
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "commercial_acceptance": false,
+      "scope": "SOURCE_BOUND_COMPATIBILITY_ARTIFACT_FIXTURE_ONLY"
+    }
+  ],
+  "snapshots": {
+    "positive_functional_fixture_before_stress": {
+      "reservedInvestment": 0,
+      "revenue": 4000000,
+      "expenses": 0,
+      "recoveryIncome": 0,
+      "profit": 4000000,
+      "cash": 24000000,
+      "collections": 4000000,
+      "expensePaid": 0,
+      "payables": 0,
+      "custodyRestricted": 0,
+      "custodyReserve": 0,
+      "tailReserve": 4800000,
+      "workingCapital": 1000000,
+      "available": 18200000,
+      "unrestrictedEarned": 4000000,
+      "strictEarnedControl": 0,
+      "equityProtectionBacking": 5800000,
+      "earnedProtectionBacking": 0,
+      "netEarnedAfterIncurredObligations": 4000000,
+      "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+      "conditionalEarned": 3000000,
+      "investmentStopped": false,
+      "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+    },
+    "final_full_reversal_or_rejection": {
+      "reservedInvestment": 0,
+      "revenue": 0,
+      "expenses": 0,
+      "recoveryIncome": 0,
+      "profit": 0,
+      "cash": 20000000,
+      "collections": 0,
+      "expensePaid": 0,
+      "payables": 0,
+      "custodyRestricted": 0,
+      "custodyReserve": 0,
+      "tailReserve": 0,
+      "workingCapital": 1000000,
+      "available": 19000000,
+      "unrestrictedEarned": 0,
+      "strictEarnedControl": 0,
+      "equityProtectionBacking": 1000000,
+      "earnedProtectionBacking": 0,
+      "netEarnedAfterIncurredObligations": 0,
+      "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+      "conditionalEarned": 0,
+      "investmentStopped": true,
+      "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+    }
+  },
+  "fixture_pricing": "USD 1 simulated engineering input per fixture; never claimed as market-supported demand or price",
+  "fixture_accounting_scope": "The reused engine has no unpriced cost posting; any displayed fixture profit excludes unknown complete costs. The parametric frontier retains them as K.",
+  "commercial_decision": {
+    "commercial_cohort_admitted": false,
+    "observed_orders": 0,
+    "real_receipts_microUSD": 0,
+    "qualified_simulated_earned_funds_microUSD": 0,
+    "complete_cost_surplus": "UNKNOWN",
+    "earned_funded_successor": "DEFERRED_NO_QUALIFIED_EARNINGS",
+    "live_commercial_success": "UNRUN"
+  },
+  "resources": {
+    "wall_seconds": 0.20283867100079078,
+    "cpu_seconds": 0.10650901899999998,
+    "peak_rss_kib": 23708,
+    "external_paid_calls": 0,
+    "complete_monetary_cost_microUSD": null
+  },
+  "limits": [
+    "Procedural verifier separation on a shared host/model is not external certification.",
+    "Trusted external contract and receipt hashes establish identity, not actual buyer authority.",
+    "Free self-service and ordinary AI-native alternatives remain admissible; unexecuted routes are not assumed to fail.",
+    "This artifact is scoped compatibility evidence, not production support, complete security remediation or commercial acceptance.",
+    "No fixture balance, deposit, refund, reserve release or opening capital becomes commercially qualified earned funds."
+  ]
+}

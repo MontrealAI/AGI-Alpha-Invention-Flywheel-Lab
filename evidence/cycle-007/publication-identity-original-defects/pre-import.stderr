@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/publication-identity-original-defects/pre-import-root/run_cycle007.py", line 144, in <module>
+    main(args.output, args.expected_freeze_sha256, args.with_compatibility, args.chemistry_tools_dir, args.download_tools)
+  File "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/publication-identity-original-defects/pre-import-root/run_cycle007.py", line 46, in main
+    freeze = sources(expected_freeze_sha256)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/publication-identity-original-defects/pre-import-root/run_cycle007.py", line 29, in sources
+    raise ValueError('EXTERNAL_FREEZE_IDENTITY_MISMATCH')
+ValueError: EXTERNAL_FREEZE_IDENTITY_MISMATCH

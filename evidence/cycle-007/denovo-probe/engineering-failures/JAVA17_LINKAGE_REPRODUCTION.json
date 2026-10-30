@@ -1,0 +1,16 @@
+{
+  "scope": "Reproduced initial Java17 incompatibility; later Java21 success does not erase original failure. Original first check timing was not captured.",
+  "command": [
+    "java",
+    "-XX:ActiveProcessorCount=2",
+    "-Xmx1024m",
+    "-jar",
+    "/workspace/scratch/92d546ab6009/denovo_probe/tools/MetFragCommandLine-2.6.11.jar",
+    "--help"
+  ],
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "Error: LinkageError occurred while loading main class de.ipbhalle.metfrag.commandline.CommandLineTool\n\tjava.lang.UnsupportedClassVersionError: de/ipbhalle/metfrag/commandline/CommandLineTool has been compiled by a more recent version of the Java Runtime (class file version 65.0), this version of the Java Runtime only recognizes class file versions up to 61.0\n",
+  "wall_seconds": 1.971107908000704,
+  "child_cpu_seconds": 2.26246
+}

@@ -1,0 +1,53 @@
+{
+  "archive_bytes": 1384,
+  "archive_sha256": "d64b1542e74d13d8c66915710fea84a159a5943748a61b6da64bca6982d5066b",
+  "ordinary_and_validated_extractions_reproduced": true,
+  "payload_files": 3,
+  "results": [
+    {
+      "accepted_reproduction": true,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/publication-identity-original-defects/archive-check/validated-source/run_cycle007.py",
+        "--expected-freeze-sha256",
+        "a6c8a0c43ee3c47c6fd55f6612abfb4c4fb40fb8362fb679b04c6409c39ba183",
+        "--output",
+        "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/publication-identity-original-defects/archive-check/validated-replay",
+        "--with-compatibility",
+        "--chemistry-tools-dir",
+        "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/publication-identity-original-defects/tools-unused"
+      ],
+      "complete_sha256": "81ad937994f630fac6093ba2b52f0643b5fb0601063b250c0ebe1dbfbc4d2698",
+      "extraction": "validated",
+      "files_verified": 3,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "returncode": 0,
+      "waited_child_cpu_seconds": -3.469446951953614e-18,
+      "wall_seconds": 0.013879222999094054
+    },
+    {
+      "accepted_reproduction": true,
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/publication-identity-original-defects/archive-check/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/run_cycle007.py",
+        "--expected-freeze-sha256",
+        "a6c8a0c43ee3c47c6fd55f6612abfb4c4fb40fb8362fb679b04c6409c39ba183",
+        "--output",
+        "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/publication-identity-original-defects/archive-check/ordinary-replay",
+        "--with-compatibility",
+        "--chemistry-tools-dir",
+        "/workspace/scratch/92d546ab6009/lab/evidence/cycle-007/publication-identity-original-defects/tools-unused"
+      ],
+      "complete_sha256": "81ad937994f630fac6093ba2b52f0643b5fb0601063b250c0ebe1dbfbc4d2698",
+      "extraction": "ordinary",
+      "files_verified": 3,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "returncode": 0,
+      "waited_child_cpu_seconds": -3.469446951953614e-18,
+      "wall_seconds": 0.00044409399561118335
+    }
+  ],
+  "schema": "agi-alpha/archive-qualification007/v1",
+  "scope": "Actual exact archive extraction and exposed source-bound engineering/chemical baseline replay; no new protected confirmation, invention success, commercial success or retroactive qualification of historical failed receipts.",
+  "wall_seconds": 0.016245653008809313
+}

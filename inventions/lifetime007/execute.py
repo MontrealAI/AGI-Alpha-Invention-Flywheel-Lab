@@ -11,7 +11,7 @@ def execute(spec, plan, values, fault=None):
     roles = validate_plan(spec, plan)
     if type(values) is not list or not 1 <= len(values) <= 64 or any(type(x) is not str or len(x.encode()) > 256 for x in values):
         raise ValueError('BOUNDED_STRING_INPUT_REQUIRED')
-    if fault not in (None, 'commit', 'consume', 'interrupt'):
+    if fault not in (None, 'commit', 'consume', 'interrupt', 'mid_consume', 'mid_interrupt'):
         raise ValueError('UNSUPPORTED_FAULT')
     reverse = {v: k for k, v in roles.items()}
     trace, output = [], []
@@ -77,6 +77,10 @@ def execute(spec, plan, values, fault=None):
                             raise RuntimeError('INJECTED_CONSUMPTION_FAILURE')
                         if i == 0 and fault == 'interrupt':
                             raise InterruptedError('INJECTED_INTERRUPT')
+                        if i == 1 and fault == 'mid_consume':
+                            raise RuntimeError('INJECTED_MIDSTREAM_CONSUMPTION_FAILURE')
+                        if i == 1 and fault == 'mid_interrupt':
+                            raise InterruptedError('INJECTED_MIDSTREAM_INTERRUPT')
                         trace.append({'event': 'consume', 'effect': ident, 'durable': committed, 'live': not closed})
                         output.append(value)
                         trace.append({'event': 'visible', 'sha256': hashlib.sha256(value.encode()).hexdigest()})
