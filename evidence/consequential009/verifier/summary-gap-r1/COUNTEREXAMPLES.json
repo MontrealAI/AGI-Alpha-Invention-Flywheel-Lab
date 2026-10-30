@@ -1,0 +1,41 @@
+{
+  "schema": "agi-alpha/consequential009-summary-gap/v1",
+  "results": {
+    "cohort": {
+      "accepted_forged_summary": true,
+      "changes": {
+        "primary": {
+          "constructed_actions": 0,
+          "constructed_relative_acquisition_units": 0,
+          "ordinary_actions": 0,
+          "constructed_complete_acceptance": false,
+          "old_greedy_actions": 0,
+          "old_greedy_relative_acquisition_units": 0
+        }
+      },
+      "original_verifier_sha256": "ffae794ea4ea91c36e1a84823882c6989cebd70f7d5931cdf1bb799ed166581b",
+      "receipt_sha256": "ad6a4bd21ab1663cad312cc7d2e513ab5c41fd1005170aaf20666aa68e128f77"
+    },
+    "reference": {
+      "accepted_forged_summary": true,
+      "changes": {
+        "primary": {
+          "selected_frequency_count": 0,
+          "ordinary_frequency_count": 0,
+          "conditional_complete_acceptance": false,
+          "gain_drift_decision": "ACCEPT_WITHOUT_STABILITY",
+          "gain_drift_witnesses_identical": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "high_noise_decision": "ACCEPT"
+        }
+      },
+      "original_verifier_sha256": "cccfff809c85a609f0ea779dc6de4ceb86619c91a560c1d76e8e72b1e824978d",
+      "receipt_sha256": "834661f047c71fa24eed0fcd4108c48d45d5cd4a3674ba3bad3da1346d490778"
+    }
+  },
+  "scope": "Actual old checker invocations on complete unchanged source/data/plan artifacts with only REPORT summaries altered. Supplied report hash matches altered bytes; semantic-summary validation is the missing gate."
+}

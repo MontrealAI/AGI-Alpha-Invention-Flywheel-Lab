@@ -1,0 +1,792 @@
+{
+  "schema": "agi-alpha/consequential009-reference-independent-acceptance/v1",
+  "accepted": false,
+  "artifact_sha256": "fd05d46d19f3480f4c958af3d2ccecd9ad96fe7cdf917eede571f88adc9601f0",
+  "protocol_sha256": "a8f33a6234e57bc2b7452fd760fb1bbdb3bb2447415bc245cb4f99d94c0f4a55",
+  "verifier_sha256": "3567a33c13af2f7dabf9ba86d97ad392d56a35e0fee2f634100a0bc71a952128",
+  "independent_arithmetic_sha256": "119314be8a1d19960a1a7b902a2a14bd771d9eff41e2a15e4a20a98d1cf9c2ec",
+  "candidate_source_hashes": {
+    "inventions/consequential009/circuit.py": "88474d7e6ab1f90cf1d38fc166814b658b876004a4029bb281fd3634daf3d0fc",
+    "inventions/consequential009/reference_extension.py": "2752716af6b40a1f37ab920ee1fa50e7bd4b1103abc4fe28499f144370f6482a"
+  },
+  "consumed_hashes": {
+    "artifact/primary-COHORT.json": "b3ca4e65ca1921aee7e7056f97d12451023677e2e666189b12a64ab6a500f670",
+    "artifact/primary-DRIFT.json": "df6fc9e8ae8b41b7413da0f9cd6fde42f96dba98298e609833fb8196615d5920",
+    "artifact/primary-STRATEGY.json": "2de31646e9bd1231f91395fcb374034a6a52d5750981f65bb5289a84bd1f1f6e",
+    "artifact/new_rlc_family-DRIFT.json": "c1840e71a1ca83904050a793df975cc4dcbc5b908ef299c34663d4449c1a40fb",
+    "artifact/new_rlc_family-COHORT.json": "3ece5adc21ce06b32cc6ba099befa4cc66399969d77a5e08cd66fb7241c80e94",
+    "artifact/REPORT.json": "fd05d46d19f3480f4c958af3d2ccecd9ad96fe7cdf917eede571f88adc9601f0",
+    "artifact/PROTOCOL.json": "a8f33a6234e57bc2b7452fd760fb1bbdb3bb2447415bc245cb4f99d94c0f4a55",
+    "artifact/new_rlc_family-HIGH_NOISE.json": "91f61f38a6a3e5de4879050ef11a5ffa61bed9fbd5f2de6ddeb77baa6d42afdc",
+    "artifact/new_rlc_family-STRATEGY.json": "4bfa341c9da66d08f351966da283b14fc0480f11c9bd8884f87596cc147990d2",
+    "artifact/primary-HIGH_NOISE.json": "91f61f38a6a3e5de4879050ef11a5ffa61bed9fbd5f2de6ddeb77baa6d42afdc",
+    "artifact/raw/primary/000.json": "4f3084879910242361d681902f6b713e8fdbd20356f2dae5e9569271c27ed2e0",
+    "artifact/raw/primary/001.json": "11400d8eafae0b700d545d9dce77c00194d3b5eb56bcdc1b64223b7b453faa90",
+    "artifact/raw/new_rlc_family/002.json": "55bb13ad5bab6562510c3080fffad9d16eacecad913b1ab29d4d19b9a04c8e65",
+    "artifact/raw/new_rlc_family/022.json": "0083a575218cbf63c14ecf2007555499293c2d3b2b9ec82977caec9b61e3f33c",
+    "artifact/raw/new_rlc_family/016.json": "000d9d0f202a8ecc54eb425b87d53c3c6131f6dcadc8ce5c6868a08b66f2c3fe",
+    "artifact/raw/new_rlc_family/019.json": "787dfed0943a723154da6162b2b0e9fcf37d3cf703336c19183920727f90d8e5",
+    "artifact/raw/new_rlc_family/003.json": "c89ddec35ca20ab4452060da838b9f9643a2246bcc6bc5fd69c5b607b9db93a7",
+    "artifact/raw/new_rlc_family/009.json": "9ff0854fceef90988803094d7f15416dabafa4e369b396b06a3ddbf1fa488e76",
+    "artifact/raw/new_rlc_family/011.json": "acacc49bc7b8deff182aee8a2915c8d9b7c4f32552662681dd95d4b01a54d357",
+    "artifact/raw/new_rlc_family/018.json": "8eec23f7ac9473c450da5c4c1a26b0255bf49ae3c1a99f2eed70112109adda5b",
+    "artifact/raw/new_rlc_family/004.json": "8ba5039ad58c55753aee619fbc0ab6ddbe8b3dfa223d988ee27af2c309784baa",
+    "artifact/raw/new_rlc_family/005.json": "084d3a6f0449adb5ee72be2da55ebb62d80469de9b39543f8a65a27585ce9268",
+    "artifact/raw/new_rlc_family/010.json": "6130b7a7d6efcb986f6de6881fde6255c3d5002ab7ade9610a6fa2f50b6e1a91",
+    "artifact/raw/new_rlc_family/012.json": "faad1450fd3856d68f2a8efc166085ab8f5217ea2709d49944650547b7e4cd36",
+    "artifact/raw/new_rlc_family/000.json": "394bd470650987b21b3fdd0ee7fc496bde07e618ce71030b14e23fc45eebe257",
+    "artifact/raw/new_rlc_family/006.json": "3115532d549375fbb4062001760155dc61eaf13500c3c4975e408a204098d4c8",
+    "artifact/raw/new_rlc_family/013.json": "9976e0fdd75fca3f822bab7edf59fefd30a3834faecc308fbe49c81a9eaa62e7",
+    "artifact/raw/new_rlc_family/014.json": "3d20752159b395cb2eb4d57767dcdc79f49e51ec2568f89a0ddda096a50b1649",
+    "artifact/raw/new_rlc_family/021.json": "522f75b24614b01ebd0d6df3eef8e37844f81927d11e4ef0e28e94cd5e0f86ab",
+    "artifact/raw/new_rlc_family/017.json": "3bccdc8d1da6703f953f4b550bd65af43e2137fc1e635579bcb5e84d12cf663d",
+    "artifact/raw/new_rlc_family/001.json": "23fe68657f0f38838dbe179cc6a974408756b16a07c9851434bdd99151b193ba",
+    "artifact/raw/new_rlc_family/007.json": "49a7aa13ede297e791ac636a9a2d5981f756d84b8782aef18b579cc6b0bc36d8",
+    "artifact/raw/new_rlc_family/008.json": "796fa20b63effcf43a9f05b5527b27779690d8024f7b3dcbe561b3f0c0683572",
+    "artifact/raw/new_rlc_family/020.json": "cd6d59dfc9fc9470a92ef90bcb537f53c1ac811480604ad5bb99651e4b1ad9f3",
+    "artifact/raw/new_rlc_family/015.json": "a47a5c868fc59adff49506284718a29c33b01c87c9bc5cd7f3e5e1ab5fdc52dd",
+    "artifact/raw/new_rlc_family/023.json": "26c8040d9f12e86a30edf6e3d84aca3e97bc2f60aa63fed082928211128b8a1b",
+    "source/research/consequential009/analog/REFERENCE_PROTOCOL.json": "a8f33a6234e57bc2b7452fd760fb1bbdb3bb2447415bc245cb4f99d94c0f4a55",
+    "source/inventions/consequential009/circuit.py": "88474d7e6ab1f90cf1d38fc166814b658b876004a4029bb281fd3634daf3d0fc",
+    "source/inventions/consequential009/reference_extension.py": "2752716af6b40a1f37ab920ee1fa50e7bd4b1103abc4fe28499f144370f6482a",
+    "source/research/consequential009/analog/rc-meas-ac.sp": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+    "source/research/consequential009/analog/MonteCarlo.sp": "9d6e0b268bcfbf47d5b442166b9c36c3283c2ac65137f51cec19a5c6fa616d72"
+  },
+  "checks": [
+    {
+      "name": "same frozen protocol authority",
+      "passed": true
+    },
+    {
+      "name": "candidate source matches executed artifact inventions/consequential009/circuit.py",
+      "passed": true
+    },
+    {
+      "name": "candidate source matches executed artifact inventions/consequential009/reference_extension.py",
+      "passed": true
+    },
+    {
+      "name": "primary: exact upstream raw source",
+      "passed": true
+    },
+    {
+      "name": "primary: unchanged complete finite cohort",
+      "passed": true
+    },
+    {
+      "name": "primary: every true response independently solved",
+      "passed": true
+    },
+    {
+      "name": "primary: every bound present at 100000",
+      "passed": true
+    },
+    {
+      "name": "primary: exact analytic bound 100000/0",
+      "passed": true
+    },
+    {
+      "name": "primary: exact analytic bound 100000/1",
+      "passed": true
+    },
+    {
+      "name": "primary: every bound present at 300000",
+      "passed": true
+    },
+    {
+      "name": "primary: exact analytic bound 300000/0",
+      "passed": true
+    },
+    {
+      "name": "primary: exact analytic bound 300000/1",
+      "passed": true
+    },
+    {
+      "name": "primary: every bound present at 1000000",
+      "passed": true
+    },
+    {
+      "name": "primary: exact analytic bound 1000000/0",
+      "passed": true
+    },
+    {
+      "name": "primary: exact analytic bound 1000000/1",
+      "passed": true
+    },
+    {
+      "name": "primary: every bound present at 3000000",
+      "passed": true
+    },
+    {
+      "name": "primary: exact analytic bound 3000000/0",
+      "passed": true
+    },
+    {
+      "name": "primary: exact analytic bound 3000000/1",
+      "passed": true
+    },
+    {
+      "name": "primary: admitted unique paired-reference actions",
+      "passed": true
+    },
+    {
+      "name": "primary: full denominator, acceptance and abstentions",
+      "passed": true
+    },
+    {
+      "name": "primary: independent exhaustive known-ratiometric control",
+      "passed": true
+    },
+    {
+      "name": "primary: complete action ancestry",
+      "passed": true
+    },
+    {
+      "name": "primary: ancestry action resolves its witnessed pair 100000",
+      "passed": true
+    },
+    {
+      "name": "primary: admitted complex gains satisfy magnitude floor",
+      "passed": true
+    },
+    {
+      "name": "primary: every raw observation and normalized estimate exact and inside analytic box",
+      "passed": true
+    },
+    {
+      "name": "primary: no raw cohort units omitted or added",
+      "passed": true
+    },
+    {
+      "name": "primary: complete gain-drift witness cohort",
+      "passed": true
+    },
+    {
+      "name": "primary: exact observationally indistinguishable drift witness 100000",
+      "passed": true
+    },
+    {
+      "name": "primary: exact observationally indistinguishable drift witness 300000",
+      "passed": true
+    },
+    {
+      "name": "primary: exact observationally indistinguishable drift witness 1000000",
+      "passed": true
+    },
+    {
+      "name": "primary: exact observationally indistinguishable drift witness 3000000",
+      "passed": true
+    },
+    {
+      "name": "primary: high-noise denominator gate abstains",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact upstream raw source",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: unchanged complete finite cohort",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: every true response independently solved",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: every bound present at 300000",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/0",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/1",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/2",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/3",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/4",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/5",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/6",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/7",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/8",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/9",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/10",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/11",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/12",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/13",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/14",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/15",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/16",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/17",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/18",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/19",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/20",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/21",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/22",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 300000/23",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: every bound present at 1000000",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/0",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/1",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/2",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/3",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/4",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/5",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/6",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/7",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/8",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/9",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/10",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/11",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/12",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/13",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/14",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/15",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/16",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/17",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/18",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/19",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/20",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/21",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/22",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 1000000/23",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: every bound present at 3000000",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/0",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/1",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/2",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/3",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/4",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/5",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/6",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/7",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/8",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/9",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/10",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/11",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/12",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/13",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/14",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/15",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/16",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/17",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/18",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/19",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/20",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/21",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/22",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 3000000/23",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: every bound present at 10000000",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/0",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/1",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/2",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/3",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/4",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/5",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/6",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/7",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/8",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/9",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/10",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/11",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/12",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/13",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/14",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/15",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/16",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/17",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/18",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/19",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/20",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/21",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/22",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact analytic bound 10000000/23",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: admitted unique paired-reference actions",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: full denominator, acceptance and abstentions",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: independent exhaustive known-ratiometric control",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: complete action ancestry",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: ancestry action resolves its witnessed pair 10000000",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: admitted complex gains satisfy magnitude floor",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: every raw observation and normalized estimate exact and inside analytic box",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: no raw cohort units omitted or added",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: complete gain-drift witness cohort",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact observationally indistinguishable drift witness 300000",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact observationally indistinguishable drift witness 1000000",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact observationally indistinguishable drift witness 3000000",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: exact observationally indistinguishable drift witness 10000000",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: high-noise denominator gate abstains",
+      "passed": true
+    },
+    {
+      "name": "primary: report complete numerical summary",
+      "passed": true
+    },
+    {
+      "name": "primary: report summary selected_frequency_count",
+      "passed": false
+    },
+    {
+      "name": "primary: report summary ordinary_frequency_count",
+      "passed": false
+    },
+    {
+      "name": "primary: report summary conditional_complete_acceptance",
+      "passed": false
+    },
+    {
+      "name": "primary: report summary gain_drift_witnesses_identical",
+      "passed": false
+    },
+    {
+      "name": "primary: report summary gain_drift_decision",
+      "passed": false
+    },
+    {
+      "name": "primary: report summary high_noise_decision",
+      "passed": false
+    },
+    {
+      "name": "new_rlc_family: report complete numerical summary",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: report summary selected_frequency_count",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: report summary ordinary_frequency_count",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: report summary conditional_complete_acceptance",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: report summary gain_drift_witnesses_identical",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: report summary gain_drift_decision",
+      "passed": true
+    },
+    {
+      "name": "new_rlc_family: report summary high_noise_decision",
+      "passed": true
+    },
+    {
+      "name": "report preserves evidence scope novelty",
+      "passed": true
+    },
+    {
+      "name": "report preserves evidence scope physical_calibration",
+      "passed": true
+    },
+    {
+      "name": "report preserves evidence scope buyer_participation",
+      "passed": true
+    },
+    {
+      "name": "report preserves evidence scope complete_monetary_cost",
+      "passed": true
+    },
+    {
+      "name": "report preserves evidence scope funding",
+      "passed": true
+    },
+    {
+      "name": "all raw observation denominator retained",
+      "passed": true
+    },
+    {
+      "name": "all candidate artifacts and source bytes unchanged",
+      "passed": true
+    }
+  ],
+  "results": {
+    "primary": {
+      "cases": 2,
+      "pairs": 1,
+      "separated_pairs": 1,
+      "ordinary_pairs": 1,
+      "selected_frequency_count": 1,
+      "ordinary_frequency_count": 1,
+      "raw_rows_independently_checked": 600,
+      "all_raw_rows_inside_analytic_envelope": true,
+      "gain_drift_witnesses": 4,
+      "gain_drift_witnesses_identical": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "gain_drift_decision": "ABSTAIN_REQUIRED_WITHOUT_STABILITY_EVIDENCE",
+      "high_noise": "ABSTAIN",
+      "conditional_complete_acceptance": true
+    },
+    "new_rlc_family": {
+      "cases": 24,
+      "pairs": 276,
+      "separated_pairs": 276,
+      "ordinary_pairs": 276,
+      "selected_frequency_count": 1,
+      "ordinary_frequency_count": 1,
+      "raw_rows_independently_checked": 7200,
+      "all_raw_rows_inside_analytic_envelope": true,
+      "gain_drift_witnesses": 4,
+      "gain_drift_witnesses_identical": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "gain_drift_decision": "ABSTAIN_REQUIRED_WITHOUT_STABILITY_EVIDENCE",
+      "high_noise": "ABSTAIN",
+      "conditional_complete_acceptance": true
+    }
+  },
+  "scope": "Independent rational KCL, algebraic nuisance-bound reconstruction and every released raw observation; conditional ideal networks with authored reference/noise/stable-sensor assumptions. Known ratiometry is a full ordinary control. Same host/model-family procedural verification, not hardware or outside certification.",
+  "bound_derivation": "estimate-(Gnom/G)Y=(Gnom/G)(G e0-Y(e1-e0))/(gG+e1-e0). Coordinate errors <=eps give |e0|<=2eps and |e1-e0|<=4eps; denominator >=gmin*Glo-4eps. Triangle inequality and |Y|<=|ReY|+|ImY| imply declared radius. Reference scale remains [Gnom/Ghi,Gnom/Glo].",
+  "consequential_counterexample": "When gain may drift between reference-off and reference-on observations, distinct networks have exactly identical raw readings. Stability requires external evidence; these observations cannot certify it.",
+  "confirmation": false,
+  "alpha_spent": 0,
+  "physical_calibration": "UNMEASURED",
+  "funding": "Original campaign allocation only. Qualified unrestricted simulated earnings0; not earned-funded.",
+  "resources": {
+    "cpu_seconds": 0.47274056900000005,
+    "wall_seconds": 0.4727544650013442,
+    "max_rss_kib": 14308,
+    "complete_monetary_cost": null
+  }
+}

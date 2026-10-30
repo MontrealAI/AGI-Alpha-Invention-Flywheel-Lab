@@ -6,6 +6,7 @@ Run from the extracted project root:
 
 ```sh
 python -m pip install --only-binary=:all: -r requirements-consequential009.txt
+python scripts/package_consequential009.py restore-reference --root .
 python -m unittest discover -s tests -p 'test_consequential009*.py' -v
 python -m unittest discover -s verification/consequential009 -p 'test_*.py' -v
 python run_consequential009.py --output /tmp/alpha009-new-output

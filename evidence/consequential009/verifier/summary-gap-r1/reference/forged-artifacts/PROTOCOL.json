@@ -1,0 +1,106 @@
+{
+  "absolute_coordinate_error_siemens": "1/10000000000",
+  "assumptions": [
+    "Author-specified reference conductance range, not measured calibration.",
+    "Same complex sensor transfer g during the two paired observations at each frequency, |g|>=1/2.",
+    "Input-current signals normalized by actual coherent input voltage; remaining coordinate error bounded as stated.",
+    "Lumped linear passive network and known source/load model.",
+    "Reference loading, source current limit, thermal effects and switching transients must be qualified on hardware; no hardware is qualified here."
+  ],
+  "endpoint": "Every pair of admitted finite network hypotheses must have disjoint conditional normalized-admittance rectangles at one chosen frequency; unresolved pairs cause abstention.",
+  "funding": "Original campaign allocation only. Qualified unrestricted simulated earnings0; not earned-funded.",
+  "gain_magnitude_lower_bound": "1/2",
+  "high_noise_stress_siemens": "1/1000",
+  "noise_patterns": [
+    "zero",
+    "equal-opposite-diagonal",
+    "opposite-equal-diagonal",
+    "equal-opposite-antidiagonal",
+    "opposite-equal-antidiagonal"
+  ],
+  "not_measured": [
+    "physical specimens",
+    "reference precision or drift",
+    "sensor noise or gain stability",
+    "buyer participation",
+    "prices or complete monetary costs"
+  ],
+  "ordinary_control": "Known ratiometric/switched-reference normalization plus exhaustive frequency selection, same information and envelopes; no novelty or superiority from parity.",
+  "primary_omega_rad_s": [
+    "100000",
+    "300000",
+    "1000000",
+    "3000000"
+  ],
+  "primary_scale": [
+    "1",
+    "2"
+  ],
+  "primary_source": "rc-meas-ac.sp",
+  "raw_gain_grid": [
+    [
+      "1/2",
+      "0"
+    ],
+    [
+      "1",
+      "0"
+    ],
+    [
+      "2",
+      "0"
+    ],
+    [
+      "1/2",
+      "1/2"
+    ],
+    [
+      "1",
+      "1/4"
+    ]
+  ],
+  "raw_reference_multiplier_grid": [
+    "99/100",
+    "1",
+    "101/100"
+  ],
+  "reference_multiplier_bounds": [
+    "99/100",
+    "101/100"
+  ],
+  "reference_nominal_siemens": "1/1000",
+  "retained_constraint": {
+    "adaptation": "Add switched known parallel reference conductance and normalize paired readings from the same stable sensor transfer.",
+    "kind": "unbounded_sensor_gain_confounding",
+    "witness": "impedance-scale2 halves Y; doubling unknown channel gain preserves every old current reading"
+  },
+  "schema": "consequential009-switched-reference-development-v1",
+  "source_commit": "032b1c32c4dbad45ff132bcfac1dbecadbd8abb0",
+  "source_git_blobs": {
+    "MonteCarlo.sp": "608dc4cfdda5d168952a6319d87a9d63f4f6cb84",
+    "rc-meas-ac.sp": "2d464ba58ee46f4f88cb319debe5e90d396e06ad"
+  },
+  "statistical_scope": "Exact finite-model engineering comparison and analytic conditional nuisance bound. New names/cases do not reset any campaign error budget.",
+  "status": "DEVELOPMENT; new model-derived cases exposed; no protected confirmation",
+  "successor_omega_rad_s": [
+    "300000",
+    "1000000",
+    "3000000",
+    "10000000"
+  ],
+  "successor_scales": [
+    "1/2",
+    "1",
+    "2"
+  ],
+  "successor_source": "MonteCarlo.sp",
+  "successor_tolerance_elements": [
+    "r1",
+    "c3",
+    "l2"
+  ],
+  "successor_tolerance_multipliers": [
+    "7/8",
+    "9/8"
+  ]
+}

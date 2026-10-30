@@ -20,6 +20,7 @@ jobs:
       - name: Install pinned inherited exchange dependencies
         run: |
           python -m pip install --only-binary=:all: -r requirements-consequential009.txt
+          python scripts/package_consequential009.py restore-reference --root .
       - name: Meaningful exchange, independent arithmetic and forgery regressions
         run: |
           python -m unittest discover -s tests -p 'test_consequential009*.py' -v

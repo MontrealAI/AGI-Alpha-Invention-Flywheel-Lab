@@ -22,6 +22,14 @@ def read(path):
     return json.loads(Path(path).read_text())
 
 
+def typed_equal(actual, expected):
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(expected, list):
+        return len(actual) == len(expected) and all(typed_equal(a, b) for a, b in zip(actual, expected))
+    return actual == expected
+
+
 def consumed_label(path, root, directory):
     if path.is_relative_to(directory):
         return 'artifact/' + str(path.relative_to(directory))
@@ -186,14 +194,37 @@ def inspect_stage(root, directory, protocol, name, check):
         check(retained == used, name + ':' + suffix + ': final plan follows retained ancestry, pruning and replacement')
         if 'selected_relative_acquisition_units' in artifact:
             check(artifact['selected_relative_acquisition_units'] == sum(a['relative_acquisition_units'] for a in artifact['selected_actions']) and artifact['initial_relative_acquisition_units'] == sum(a['relative_acquisition_units'] for a in initial), name + ':' + suffix + ': acquisition units reconciled')
-        results[suffix] = {'admitted_pairs': len(pairs), 'separated_pairs': len(chosen_coverage), 'unresolved_pairs': len(unresolved), 'complete': not unresolved, 'selected_actions': used}
+        results[suffix] = {'admitted_pairs': len(pairs), 'separated_pairs': len(chosen_coverage), 'unresolved_pairs': len(unresolved), 'complete': not unresolved, 'selected_actions': used,
+                           'actions_count': len(used), 'relative_acquisition_units': sum(a['relative_acquisition_units'] for a in artifact['selected_actions'])}
     ordinary = read(directory / (name + '-ordinary-exhaustive.json'))
     ordinary_choice = ordinary['selected_actions']
     check(all(a in actions for a in ordinary_choice), name + ': ordinary admitted actions')
     ordinary_coverage = set().union(*(covered[a['id']] for a in ordinary_choice))
     check(ordinary_coverage == full and ordinary['minimum_cardinality_to_equal_full_experiment'] == len(exhaustive) and len(ordinary_choice) == len(exhaustive), name + ': independently exhaustive ordinary optimum')
     check(ordinary['separated_pairs'] == len(full) and ordinary['admitted_pairs'] == len(pairs) and ordinary['unresolved_pairs'] == len(pairs - full) and ordinary['complete_finite_model_acceptance'] is (pairs == full), name + ': ordinary full endpoint')
-    results['ordinary'] = {'admitted_pairs': len(pairs), 'separated_pairs': len(full), 'minimum_actions': len(exhaustive), 'one_optimal_plan': [a['id'] for a in exhaustive]}
+    results['ordinary'] = {'admitted_pairs': len(pairs), 'separated_pairs': len(full), 'minimum_actions': len(exhaustive), 'one_optimal_plan': [a['id'] for a in exhaustive],
+                           'relative_acquisition_units': sum(a['relative_acquisition_units'] for a in ordinary_choice), 'complete': pairs == full}
+    remaining, greedy_ids = pairs.copy(), []
+    while remaining:
+        eligible = [(a, index) for index, a in enumerate(actions) if a['id'] not in greedy_ids]
+        if not eligible:
+            break
+        action, _ = max(eligible, key=lambda item: (F(len(covered[item[0]['id']] & remaining), item[0]['relative_acquisition_units']), -item[1]))
+        newly_covered = covered[action['id']] & remaining
+        if not newly_covered:
+            break
+        greedy_ids.append(action['id'])
+        remaining -= newly_covered
+    greedy_units = sum(a['relative_acquisition_units'] for a in actions if a['id'] in greedy_ids)
+    results['old_greedy'] = {'actions_count': len(greedy_ids), 'relative_acquisition_units': greedy_units, 'selected_actions': greedy_ids,
+                             'complete': not remaining, 'separated_pairs': len(pairs - remaining)}
+    greedy_path = directory / (name + '-constructed-greedy.json')
+    if greedy_path.exists():
+        submitted = read(greedy_path)
+        check([a['id'] for a in submitted['selected_actions']] == greedy_ids and submitted['selected_relative_acquisition_units'] == greedy_units,
+              name + ': original greedy plan independently reconstructed')
+        check(submitted['admitted_pairs'] == len(pairs) and submitted['separated_pairs'] == len(pairs - remaining) and submitted['complete_finite_model_acceptance'] is (not remaining),
+              name + ': original greedy complete endpoint')
     results['cohort'] = len(cohort)
     results['source_blob'] = blob
     return results
@@ -220,6 +251,32 @@ def run(root, directory, expected_protocol, expected_artifact, output):
         summary = artifact[name]
         check(summary['cohort'] == result['cohort'] and summary['pairs'] == result['constructed']['admitted_pairs'] and summary['constructed_separated'] == result['constructed']['separated_pairs'] and summary['voltage_only_separated'] == result['voltage-only']['separated_pairs'] and summary['ordinary_separated'] == result['ordinary']['separated_pairs'] and summary['unknown_gain_stress_unresolved'] == result['unknown-gain-stress']['unresolved_pairs'], name + ': report complete numerical summary')
         check(summary['strong_technical_advantage'] is False, name + ': ordinary control advantage preserved')
+        expected = {'constructed_actions': result['constructed']['actions_count'],
+                    'constructed_relative_acquisition_units': result['constructed']['relative_acquisition_units'],
+                    'ordinary_actions': result['ordinary']['minimum_actions'],
+                    'constructed_complete_acceptance': result['constructed']['complete']}
+        for field, value in expected.items():
+            check(typed_equal(summary.get(field), value), name + ': report summary ' + field)
+        optional = {'old_greedy_actions': result['old_greedy']['actions_count'],
+                    'old_greedy_relative_acquisition_units': result['old_greedy']['relative_acquisition_units'],
+                    'old_greedy_complete_acceptance': result['old_greedy']['complete'],
+                    'old_greedy_separated': result['old_greedy']['separated_pairs'],
+                    'ordinary_relative_acquisition_units': result['ordinary']['relative_acquisition_units'],
+                    'ordinary_complete_acceptance': result['ordinary']['complete'],
+                    'voltage_only_actions': result['voltage-only']['actions_count'],
+                    'voltage_only_relative_acquisition_units': result['voltage-only']['relative_acquisition_units'],
+                    'voltage_only_complete_acceptance': result['voltage-only']['complete'],
+                    'unknown_gain_stress_actions': result['unknown-gain-stress']['actions_count'],
+                    'unknown_gain_stress_relative_acquisition_units': result['unknown-gain-stress']['relative_acquisition_units'],
+                    'unknown_gain_stress_complete_acceptance': result['unknown-gain-stress']['complete']}
+        for field, value in optional.items():
+            if field in summary:
+                check(typed_equal(summary[field], value), name + ': report summary ' + field)
+        check(summary.get('truth_scope') == 'model-derived exact linear RCL responses; no physical calibration', name + ': model-only truth scope preserved')
+    expected_scope = {'physical_capability': 'NOT_VALIDATED', 'scientific_novelty': 'NOT_ESTABLISHED',
+                      'commerce': 'No buyer, payment or earned funds created by this run', 'monetary_cost': 'UNKNOWN; measured CPU not complete money'}
+    for field, value in expected_scope.items():
+        check(artifact.get(field) == value, 'report preserves evidence scope ' + field)
     after_hashes = {consumed_label(p, root, directory): sha(p) for p in consumed}
     check(before_hashes == after_hashes, 'all consumed candidate artifact and source bytes unchanged')
     after = resource.getrusage(resource.RUSAGE_SELF)

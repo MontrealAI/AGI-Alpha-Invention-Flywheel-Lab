@@ -22,6 +22,14 @@ def read(path):
     return json.loads(Path(path).read_text())
 
 
+def typed_equal(actual, expected):
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(expected, list):
+        return len(actual) == len(expected) and all(typed_equal(a, b) for a, b in zip(actual, expected))
+    return actual == expected
+
+
 def consumed_label(path, root, directory):
     if path.is_relative_to(directory):
         return 'artifact/' + str(path.relative_to(directory))
@@ -139,12 +147,14 @@ def verify_stage(root, directory, protocol, primary, check):
     check(len(list((directory / 'raw' / name).glob('*.json'))) == len(cases), name + ': no raw cohort units omitted or added')
     drift_rows = read(directory / (name + '-DRIFT.json'))
     check(len(drift_rows) == len(frequencies), name + ': complete gain-drift witness cohort')
+    drift_equalities = []
     for row, w in zip(drift_rows, frequencies):
         y = q.solve(parts, source, F(w))[1]
         changed = q.solve(q.transformed(parts, F(2)), source, F(w))[1]
         gain_b = q.divide(q.plus(y, (nominal, F(0))), q.plus(changed, (nominal, F(0))))
         raw_a0, raw_a1 = y, q.plus(y, (nominal, F(0)))
         raw_b0, raw_b1 = q.times((F(2), F(0)), changed), q.times(gain_b, q.plus(changed, (nominal, F(0))))
+        drift_equalities.append(raw_a0 == raw_b0 and raw_a1 == raw_b1)
         expected = {'original_Y': y, 'scaled_Y': changed, 'world_a_g0': q.ONE, 'world_a_g1': q.ONE, 'world_b_g0': (F(2), F(0)), 'world_b_g1': gain_b,
                     'world_a_z0': raw_a0, 'world_a_z1': raw_a1, 'world_b_z0': raw_b0, 'world_b_z1': raw_b1}
         check(row['omega_rad_s'] == w and all(row[k] == q.encode(v) for k, v in expected.items()) and raw_a0 == raw_b0 and raw_a1 == raw_b1 and y != changed and gain_b != (F(2), F(0)) and row['same_raw_observations'] is True and row['distinct_networks'] is True and row['stable_transfer_condition_violated'] is True and row['decision'] == 'ABSTAIN_REQUIRED_WITHOUT_STABILITY_EVIDENCE', name + ': exact observationally indistinguishable drift witness ' + w)
@@ -153,7 +163,9 @@ def verify_stage(root, directory, protocol, primary, check):
     check(high['decision'] == 'ABSTAIN' and all(submitted_high.get(k) == v for k, v in high.items()), name + ': high-noise denominator gate abstains')
     return {'cases': len(cases), 'pairs': len(all_pairs), 'separated_pairs': len(actual), 'ordinary_pairs': len(full), 'selected_frequency_count': len(selected),
             'ordinary_frequency_count': len(minimum), 'raw_rows_independently_checked': rows_checked, 'all_raw_rows_inside_analytic_envelope': bool(inside_all),
-            'gain_drift_witnesses': len(drift_rows), 'high_noise': high['decision'], 'conditional_complete_acceptance': actual == all_pairs}
+            'gain_drift_witnesses': len(drift_rows), 'gain_drift_witnesses_identical': drift_equalities,
+            'gain_drift_decision': 'ABSTAIN_REQUIRED_WITHOUT_STABILITY_EVIDENCE',
+            'high_noise': high['decision'], 'conditional_complete_acceptance': actual == all_pairs}
 
 
 def run(root, directory, expected_protocol, expected_artifact, output):
@@ -177,6 +189,17 @@ def run(root, directory, expected_protocol, expected_artifact, output):
     for name, result in results.items():
         record = artifact[name]
         check(record['cases'] == result['cases'] and record['pairs'] == result['pairs'] and record['separated_pairs'] == result['separated_pairs'] and record['ordinary_separated_pairs'] == result['ordinary_pairs'] and record['raw_rows'] == result['raw_rows_independently_checked'] and record['raw_rows_within_conditional_bound'] == result['raw_rows_independently_checked'], name + ': report complete numerical summary')
+        expected = {'selected_frequency_count': result['selected_frequency_count'],
+                    'ordinary_frequency_count': result['ordinary_frequency_count'],
+                    'conditional_complete_acceptance': result['conditional_complete_acceptance'],
+                    'gain_drift_witnesses_identical': result['gain_drift_witnesses_identical'],
+                    'gain_drift_decision': result['gain_drift_decision'], 'high_noise_decision': result['high_noise']}
+        for field, value in expected.items():
+            check(typed_equal(record.get(field), value), name + ': report summary ' + field)
+    expected_scope = {'novelty': 'Not established', 'physical_calibration': 'Not performed', 'buyer_participation': 'Not established',
+                      'complete_monetary_cost': 'UNKNOWN', 'funding': protocol['funding']}
+    for field, value in expected_scope.items():
+        check(artifact.get(field) == value, 'report preserves evidence scope ' + field)
     check(artifact['raw_rows'] == sum(r['raw_rows_independently_checked'] for r in results.values()), 'all raw observation denominator retained')
     check(before == {consumed_label(p, root, directory): sha(p) for p in consumed}, 'all candidate artifacts and source bytes unchanged')
     result = {'schema': 'agi-alpha/consequential009-reference-independent-acceptance/v1', 'accepted': all(c['passed'] for c in checks),
