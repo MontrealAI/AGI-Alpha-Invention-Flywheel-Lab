@@ -1,0 +1,461 @@
+name: Measurement campaign 009 clean reproduction
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/measurement009.yml'
+      - 'campaign/next-009/**'
+      - 'inventions/measurement009/**'
+      - 'research/next009/**'
+      - 'verification/next009/**'
+      - 'docs/next009/**'
+      - 'evidence/next009/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/measurement009.yml'
+      - 'campaign/next-009/**'
+      - 'inventions/measurement009/**'
+      - 'research/next009/**'
+      - 'verification/next009/**'
+      - 'docs/next009/**'
+      - 'evidence/next009/**'
+
+permissions:
+  contents: read
+
+# One allocation namespace: a failed/cancelled attempt receives no CPU refund.
+concurrency:
+  group: measurement009-hosted-qualification-20261030-r1
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    env:
+      SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONNOUSERSITE: '1'
+    outputs:
+      source_sha: ${{ steps.identity.outputs.source_sha }}
+      artifact_name: ${{ steps.identity.outputs.artifact_name }}
+      artifact_id: ${{ steps.qualified-assets.outputs.artifact-id }}
+    steps:
+      - name: Record checkout/dependency resource baseline
+        run: |
+          export RUN_ROOT="$RUNNER_TEMP/measurement009-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          printf 'RUN_ROOT=%s\n' "$RUN_ROOT" >> "$GITHUB_ENV"
+          python3 - <<'PY'
+          import json, os, pathlib
+          root = pathlib.Path(os.environ['RUN_ROOT']); root.mkdir(parents=True, exist_ok=False)
+          def received():
+              return sum(int(p.read_text()) for p in pathlib.Path('/sys/class/net').glob('*/statistics/rx_bytes') if p.parts[-3] != 'lo')
+          stat = os.statvfs(root)
+          baseline = {'network_received_bytes': received(), 'filesystem_available_bytes': stat.f_bavail * stat.f_frsize,
+                      'scope': 'Host counters before checkout/dependency steps. Includes unrelated received traffic conservatively; action bootstrap and historical hosted costs remain separately unknown.'}
+          (root/'RESOURCE_BASELINE.json').write_text(json.dumps(baseline, indent=2)+'\n')
+          PY
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /campaign/next-009/
+            /inventions/measurement009/
+            /research/next009/
+            /verification/next009/
+            /docs/next009/
+            /flywheel/
+            /experiments/
+            /vendor/
+            /tests/test_next009.py
+            /verification/__init__.py
+            /.github/workflows/measurement009.yml
+            /evidence/next009/archives/
+            /evidence/next009/*.json
+            /evidence/next009/*/*.json
+      - name: Bind source and admit this attempt under the separate hosted allowance
+        id: identity
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import datetime, hashlib, json, os, pathlib, re, shutil, subprocess
+          root = pathlib.Path(os.environ['RUN_ROOT'])
+          sha = os.environ['SOURCE_SHA']
+          if not re.fullmatch('[0-9a-f]{40}', sha) or subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip() != sha:
+              raise SystemExit('Checkout is not the exact PR head or main source.')
+          allocation_path = pathlib.Path('campaign/next-009/HOSTED_QUALIFICATION_ALLOCATION.json')
+          allocation = json.loads(allocation_path.read_bytes())
+          required = {'schema':'agi-alpha/next009-hosted-qualification-allocation/v1',
+                      'total_cpu_seconds':1800,'per_invocation_cpu_seconds':600,'maximum_invocations':3,
+                      'per_invocation_wall_seconds':900,'memory_bytes':2147483648,'storage_bytes':268435456,
+                      'per_invocation_download_cap_bytes':268435456,'per_invocation_runner_disk_cap_bytes':1073741824}
+          if any(allocation.get(k) != v or type(allocation.get(k)) is not type(v) for k,v in required.items()):
+              raise SystemExit('Explicit hosted allocation is missing or changed; refuse implicit reset.')
+          extension_path = pathlib.Path('campaign/next-009/HOSTED_RECOVERY_ALLOCATION_001.json')
+          extension = json.loads(extension_path.read_bytes())
+          extension_required = {'schema':'agi-alpha/next009-hosted-recovery-allocation/v1',
+              'additional_cpu_seconds':600,'additional_invocations':1,'combined_cpu_seconds':2400,
+              'combined_maximum_invocations':4,'per_invocation_cpu_seconds':600,
+              'per_invocation_wall_seconds':900,'memory_bytes':2147483648,'storage_bytes':268435456,
+              'per_invocation_download_cap_bytes':268435456,'per_invocation_runner_disk_cap_bytes':1073741824,
+              'original_allocation_replaced':False,'refund_seconds':0,'new_spending':0}
+          if any(extension.get(k)!=v or type(extension.get(k)) is not type(v) for k,v in extension_required.items()) or extension['parent_allocation_sha256']!=hashlib.sha256(allocation_path.read_bytes()).hexdigest() or extension.get('failed_run_ids_preserved')!=[41045280239,41046035229]:
+              raise SystemExit('Explicit additive recovery allocation is missing, incompatible or changed.')
+          if datetime.datetime.now(datetime.timezone.utc)>datetime.datetime.fromisoformat(extension['deadline_utc'].replace('Z','+00:00')):
+              raise SystemExit('Recovery allocation deadline passed.')
+          maximum = allocation['maximum_invocations'] + extension['additional_invocations']
+          allowance = allocation['total_cpu_seconds'] + extension['additional_cpu_seconds']
+          if maximum!=4 or allowance!=2400:raise SystemExit('Recovery arithmetic failed.')
+          start = datetime.datetime.fromisoformat(allocation['registered_utc'].replace('Z','+00:00'))
+          repo, current = os.environ['GH_REPO'], int(os.environ['GITHUB_RUN_ID'])
+          current_run = json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/actions/runs/{current}'],text=True))
+          workflow_id = current_run['workflow_id']
+          if type(workflow_id) is not int or workflow_id <= 0: raise SystemExit('Cannot identify current workflow for complete attempt accounting.')
+          runs = []
+          for page in range(1,101):
+              data = json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/actions/workflows/{workflow_id}/runs?per_page=100&page={page}'],text=True))
+              batch = data['workflow_runs']; runs.extend(batch)
+              if len(batch) < 100: break
+          else:
+              raise SystemExit('Cannot establish complete hosted attempt history within query bound.')
+          selected = {}
+          for run in runs:
+              created = datetime.datetime.fromisoformat(run['created_at'].replace('Z','+00:00'))
+              if created < start: continue
+              attempt = run.get('run_attempt')
+              if type(attempt) is not int or attempt < 1: raise SystemExit('Unknown historical attempt count.')
+              selected[run['id']] = {'run_id':run['id'],'attempts_charged':attempt,'source_sha':run['head_sha'],
+                                   'event':run['event'],'status':run['status'],'conclusion':run.get('conclusion')}
+          if current not in selected or selected[current]['attempts_charged'] != int(os.environ['GITHUB_RUN_ATTEMPT']):
+              raise SystemExit('Current attempt is absent from authoritative workflow history.')
+          count = sum(x['attempts_charged'] for x in selected.values())
+          report = {'schema':'agi-alpha/next009-hosted-budget-admission/v1',
+                    'allocation_id':allocation['allocation_id'],'allocation_sha256':hashlib.sha256(allocation_path.read_bytes()).hexdigest(),
+                    'source_sha':sha,'repository':repo,'run_id':current,'run_attempt':int(os.environ['GITHUB_RUN_ATTEMPT']),
+                    'attempts_charged':count,'reserved_cpu_seconds':count*600,'allowance_cpu_seconds':allowance,
+                    'original_allowance_cpu_seconds':1800,'additive_allowance_cpu_seconds':600,
+                    'recovery_allocation_sha256':hashlib.sha256(extension_path.read_bytes()).hexdigest(),
+                    'admitted':count <= maximum,'all_attempts_since_registration':list(selected.values()),
+                    'refund_seconds':0,'original_local_ledger_reset':False,
+                    'scope':'Conservative hosted reservation accounting, including failed/cancelled attempts. Separate from original local construction resources; historical/native CI costs and monetary metering remain unknown.'}
+          (root/'HOSTED_BUDGET_ADMISSION.json').write_text(json.dumps(report,indent=2)+'\n')
+          shutil.copyfile(allocation_path,root/'HOSTED_QUALIFICATION_ALLOCATION.json')
+          shutil.copyfile(extension_path,root/'HOSTED_RECOVERY_ALLOCATION_001.json')
+          shutil.copyfile('evidence/next009/RESOURCE_LEDGER.json',root/'ORIGINAL_LOCAL_RESOURCE_LEDGER.json')
+          if not report['admitted']: raise SystemExit('Cumulative hosted 2400-CPU allowance exhausted; no new replay admitted.')
+          artifact = f'measurement009-qualified-{sha}-{current}-{os.environ["GITHUB_RUN_ATTEMPT"]}'
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:
+              out.write('source_sha='+sha+'\nartifact_name='+artifact+'\n')
+          PY
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install exact replay dependencies and PDF metadata reader
+        run: |
+          python -m pip install --no-cache-dir -r research/next009/requirements.txt
+          if ! command -v pdfinfo >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y --no-install-recommends poppler-utils
+          fi
+      - name: Enforce observed checkout/dependency download and disk allowance
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          root=pathlib.Path(os.environ['RUN_ROOT']); before=json.loads((root/'RESOURCE_BASELINE.json').read_bytes())
+          allocation=json.loads((root/'HOSTED_QUALIFICATION_ALLOCATION.json').read_bytes())
+          received=sum(int(p.read_text()) for p in pathlib.Path('/sys/class/net').glob('*/statistics/rx_bytes') if p.parts[-3]!='lo')
+          stat=os.statvfs(root); available=stat.f_bavail*stat.f_frsize
+          observed={'download_counter_delta_bytes':received-before['network_received_bytes'],
+                    'filesystem_used_delta_bytes':max(0,before['filesystem_available_bytes']-available),
+                    'download_cap_bytes':allocation['per_invocation_download_cap_bytes'],
+                    'runner_disk_cap_bytes':allocation['per_invocation_runner_disk_cap_bytes'],
+                    'scope':'Observed host counter deltas; post-transfer check, not an atomic transport throttle. Counter reset or excess refuses qualification.'}
+          observed['passed']=0<=observed['download_counter_delta_bytes']<=observed['download_cap_bytes'] and observed['filesystem_used_delta_bytes']<=observed['runner_disk_cap_bytes']
+          (root/'CHECKOUT_DEPENDENCY_RESOURCES.json').write_text(json.dumps(observed,indent=2)+'\n')
+          if not observed['passed']:raise SystemExit('Hosted checkout/dependency resource allowance exceeded or counter reset.')
+          PY
+      - name: Build the compact package from the exact immutable source
+        run: |
+          python research/next009/package.py --commit "$SOURCE_SHA" --output "$RUN_ROOT/assets/AGI_ALPHA_Measurement_009_source_evidence.zip"
+      - name: Safely extract and verify every compact package member
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, pathlib, stat, zipfile
+          base=pathlib.Path(os.environ['RUN_ROOT']); archive=base/'assets/AGI_ALPHA_Measurement_009_source_evidence.zip'
+          output=base/'extracted'; output.mkdir(exist_ok=False); prefix='AGI_ALPHA_Measurement_009/'
+          with zipfile.ZipFile(archive) as z:
+              names=z.namelist()
+              if len(names)!=len(set(names)) or len(names)>5000 or sum(i.file_size for i in z.infolist())>512*1024*1024:
+                  raise SystemExit('Package member/expansion cap failed.')
+              manifest=json.loads(z.read(prefix+'PACKAGE_MANIFEST.json'))
+              if manifest.get('schema')!='agi-alpha/next009-source-package/v1' or manifest.get('source_commit')!=os.environ['SOURCE_SHA']:
+                  raise SystemExit('Package source identity failed.')
+              entries=manifest['entries']
+              if set(names)!={prefix+p for p in entries}|{prefix+'PACKAGE_MANIFEST.json'}:
+                  raise SystemExit('Package member manifest mismatch.')
+              for info in z.infolist():
+                  path=pathlib.PurePosixPath(info.filename)
+                  if path.is_absolute() or '..' in path.parts or not info.filename.startswith(prefix) or not stat.S_ISREG(info.external_attr>>16):
+                      raise SystemExit('Unsafe/nonregular package member.')
+                  raw=z.read(info); relative=info.filename[len(prefix):]
+                  if relative!='PACKAGE_MANIFEST.json':
+                      expected=entries[relative]
+                      blob=hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()
+                      if len(raw)!=expected['bytes'] or hashlib.sha256(raw).hexdigest()!=expected['sha256'] or blob!=expected['git_blob_sha1']:
+                          raise SystemExit('Package member byte identity failed: '+relative)
+                  target=output.joinpath(*path.parts);target.parent.mkdir(parents=True,exist_ok=True)
+                  with target.open('xb') as stream:stream.write(raw)
+          source=output/'AGI_ALPHA_Measurement_009'
+          if (source/'.git').exists():raise SystemExit('Clean package unexpectedly contains Git metadata.')
+          result={'schema':'agi-alpha/next009-package-extraction-check/v1','accepted':True,
+                  'source_sha':os.environ['SOURCE_SHA'],'archive_sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),
+                  'archive_bytes':archive.stat().st_size,'files_verified':len(entries),'git_metadata_present':False,
+                  'scope':'Source/member identity and safe extraction only; actual replay follows.'}
+          (base/'assets/PACKAGE_EXTRACTION.json').write_text(json.dumps(result,indent=2)+'\n')
+          PY
+      - name: Require the current inspected paper and reviewed additive monitor
+        run: |
+          source="$RUN_ROOT/extracted/AGI_ALPHA_Measurement_009"
+          python "$source/research/next009/check_paper.py" --root "$source" --restore-archives --output "$RUN_ROOT/assets/PAPER_CHECK.json"
+          python - <<'PY'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path(os.environ['RUN_ROOT'])/'extracted/AGI_ALPHA_Measurement_009'
+          source=root/'research/next009/resource_monitor009.py'
+          receipt=root/'evidence/next009/verification/monitor-race-repair-v1/artifacts/REPORT.json'
+          expected='606947bf8ba6812bf5accb437391b630e3ef3faa5804c3189b65771361c52a14'
+          if hashlib.sha256(source.read_bytes()).hexdigest()!=expected or hashlib.sha256(receipt.read_bytes()).hexdigest()!='473ed66724c268ef421bb43d3d991f7c274d52a4aeb8a3a8d2d4f765ae8b4d4c':
+              raise SystemExit('Reviewed monitor source/receipt identity changed.')
+          review=json.loads(receipt.read_bytes())
+          if review.get('passed') is not True or review.get('repaired_source_sha256')!=expected or len(review['checks'])!=14 or not all(x['passed'] for x in review['checks']):
+              raise SystemExit('Additive monitor repair is not qualified at the recorded scope.')
+          PY
+      - name: Execute one complete clean replay under the admitted hosted reservation
+        run: |
+          cd "$RUN_ROOT/extracted/AGI_ALPHA_Measurement_009"
+          python -m research.next009.resource_monitor009 \
+            --ledger "$RUN_ROOT/HOSTED_RUNNER_LEDGER.json" \
+            --run-id "hosted-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${SOURCE_SHA}" \
+            --output "$RUN_ROOT/replay" --wall 900 --cpu 600 \
+            --memory-bytes 2147483648 --output-bytes 134217728 --storage-bytes 268435456 \
+            -- python -m research.next009.reproduce --require-clean --output "$RUN_ROOT/replay/artifacts"
+      - name: Assemble already-qualified assets and immutable checksums
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,pathlib,shutil,zipfile
+          root=pathlib.Path(os.environ['RUN_ROOT']);source=root/'extracted/AGI_ALPHA_Measurement_009';assets=root/'assets'
+          replay=json.loads((root/'replay/artifacts/REPRODUCTION.json').read_bytes())
+          resource=json.loads((root/'replay/RECEIPT.json').read_bytes())
+          if replay['decision']!='COMPLETE_EXPOSED_REPRODUCTION_PASSED' or replay['new_protected_cases']!=0 or replay['git_metadata_present'] is not False or replay['source_files_changed_during_replay']:
+              raise SystemExit('Complete exposed clean replay not established.')
+          if resource['state']!='complete' or resource['exit_code']!=0 or resource['descendant_survivors'] is not False or resource['wrapper_sha256']!='606947bf8ba6812bf5accb437391b630e3ef3faa5804c3189b65771361c52a14':
+              raise SystemExit('Source-matched bounded replay completion not established.')
+          for name in ['paper.pdf','paper.tex','paper.html','paper.md','paper.inputs.json','paper.build.json','PDF_QA.json']:
+              shutil.copyfile(source/'docs/next009'/name,assets/name)
+          shutil.copyfile(source/'campaign/next-009/RELEASE_NOTES.md',assets/'RELEASE_NOTES.md')
+          shutil.copyfile(root/'replay/artifacts/REPRODUCTION.json',assets/'REPLAY_REPORT.json')
+          shutil.copyfile(root/'replay/RECEIPT.json',assets/'REPLAY_RESOURCE_RECEIPT.json')
+          for name in ['HOSTED_BUDGET_ADMISSION.json','HOSTED_QUALIFICATION_ALLOCATION.json','HOSTED_RECOVERY_ALLOCATION_001.json','HOSTED_RUNNER_LEDGER.json','ORIGINAL_LOCAL_RESOURCE_LEDGER.json','CHECKOUT_DEPENDENCY_RESOURCES.json']:
+              shutil.copyfile(root/name,assets/name)
+          before=json.loads((root/'RESOURCE_BASELINE.json').read_bytes());allocation=json.loads((root/'HOSTED_QUALIFICATION_ALLOCATION.json').read_bytes())
+          received=sum(int(p.read_text()) for p in pathlib.Path('/sys/class/net').glob('*/statistics/rx_bytes') if p.parts[-3]!='lo')
+          stat=os.statvfs(root)
+          observed={'download_counter_delta_bytes':received-before['network_received_bytes'],
+                    'filesystem_used_delta_bytes':max(0,before['filesystem_available_bytes']-stat.f_bavail*stat.f_frsize),
+                    'download_cap_bytes':allocation['per_invocation_download_cap_bytes'],'runner_disk_cap_bytes':allocation['per_invocation_runner_disk_cap_bytes'],
+                    'scope':'Observed post-execution host deltas; no claim of exact attribution, atomic transfer throttling or monetary cost.'}
+          observed['passed']=0<=observed['download_counter_delta_bytes']<=observed['download_cap_bytes'] and observed['filesystem_used_delta_bytes']<=observed['runner_disk_cap_bytes']
+          (assets/'RESOURCE_OBSERVATION.json').write_text(json.dumps(observed,indent=2)+'\n')
+          if not observed['passed']:raise SystemExit('Hosted download/disk envelope exceeded; refuse qualification.')
+          with zipfile.ZipFile(assets/'CLEAN_REPLAY_EVIDENCE.zip','x',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as archive:
+              for path in sorted((root/'replay').rglob('*')):
+                  if path.is_symlink():raise SystemExit('Replay evidence symlink refused.')
+                  if path.is_file():archive.write(path,'replay/'+path.relative_to(root/'replay').as_posix())
+          digest=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+          qualification={'schema':'agi-alpha/next009-hosted-qualified-package/v1','qualified':True,
+              'source_sha':os.environ['SOURCE_SHA'],'repository':os.environ['GITHUB_REPOSITORY'],
+              'run_id':int(os.environ['GITHUB_RUN_ID']),'run_attempt':int(os.environ['GITHUB_RUN_ATTEMPT']),
+              'package_sha256':digest(assets/'AGI_ALPHA_Measurement_009_source_evidence.zip'),
+              'replay_report_sha256':digest(assets/'REPLAY_REPORT.json'),'paper_check_sha256':digest(assets/'PAPER_CHECK.json'),
+              'replay_execution_count':1,'new_protected_cases':0,'qualified_unrestricted_earned_funds':0,
+              'scope':'One exact-source compact-package clean replay and inspected-paper binding. Finite model instrument and conditional economics; no field, demand, novelty, live-commerce or earned-funded mission upgrade.'}
+          (assets/'QUALIFICATION.json').write_text(json.dumps(qualification,indent=2)+'\n')
+          with (assets/'SHA256SUMS.txt').open('x') as out:
+              for path in sorted(assets.iterdir()):
+                  if path.name!='SHA256SUMS.txt':
+                      if not path.is_file() or path.is_symlink():raise SystemExit('Only regular flat release assets are permitted.')
+                      out.write(digest(path)+'  '+path.name+'\n')
+          PY
+      - name: Retain qualified assets for publication without rerunning
+        id: qualified-assets
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ${{ steps.identity.outputs.artifact_name }}
+          path: ${{ env.RUN_ROOT }}/assets/*
+          if-no-files-found: error
+          retention-days: 1
+      - name: Preserve completed and failed qualification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: measurement009-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ env.RUN_ROOT }}/*.json
+            ${{ env.RUN_ROOT }}/assets
+            ${{ env.RUN_ROOT }}/replay
+          if-no-files-found: warn
+          retention-days: 1
+
+  publish:
+    needs: [qualify]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
+      QUALIFIED_ARTIFACT: ${{ needs.qualify.outputs.artifact_name }}
+      QUALIFIED_ARTIFACT_ID: ${{ needs.qualify.outputs.artifact_id }}
+      RELEASE_TAG: measurement-construction-20261030-r1
+    steps:
+      - name: Preserve existing releases and require both exact-main historical gates
+        id: gates
+        run: |
+          export RELEASE_ROOT="$RUNNER_TEMP/measurement009-publication"
+          printf 'RELEASE_ROOT=%s\n' "$RELEASE_ROOT" >> "$GITHUB_ENV"
+          python3 - <<'PY'
+          import json,os,pathlib,re,subprocess,time
+          root=pathlib.Path(os.environ['RELEASE_ROOT']);root.mkdir(parents=True,exist_ok=False)
+          repo,sha,tag=os.environ['GH_REPO'],os.environ['SOURCE_SHA'],os.environ['RELEASE_TAG']
+          if sha!=os.environ['GITHUB_SHA']:raise SystemExit('Publication source is not this main run.')
+          def get(route):return json.loads(subprocess.check_output(['gh','api',route],text=True))
+          present=[]
+          for label,route in [('release',f'repos/{repo}/releases/tags/{tag}'),('tag',f'repos/{repo}/git/ref/tags/{tag}')]:
+              result=subprocess.run(['gh','api','--include',route],text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+              status=re.findall(r'^HTTP/\S+\s+(\d+)',result.stdout,re.MULTILINE)
+              if not status or int(status[-1]) not in (200,404):raise SystemExit('Cannot establish immutable release/tag absence; refuse publication.')
+              if int(status[-1])==200:present.append(label)
+          if 'release' in present:
+              (root/'EXISTING_RELEASE_PRESERVED.json').write_text(json.dumps({'tag':tag,'decision':'Existing release/assets retained unchanged; no overwrite or new publication.'},indent=2)+'\n')
+              with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('existing=true\n')
+              raise SystemExit(0)
+          if 'tag' in present:raise SystemExit('Tag exists without a release; refuse reuse.')
+          for attempt in range(180):
+              gates={}
+              for workflow in ('campaign.yml','consequential007.yml'):
+                  data=get(f'repos/{repo}/actions/workflows/{workflow}/runs?head_sha={sha}&event=push&per_page=100')
+                  exact=[r for r in data['workflow_runs'] if r['head_sha']==sha and r['event']=='push' and r['head_branch']=='main']
+                  if not exact:continue
+                  latest=max(exact,key=lambda r:r['id'])
+                  if latest['status']=='completed':
+                      if latest['conclusion']!='success':raise SystemExit('Historical exact-main gate failed: '+workflow)
+                      gates[workflow]={'run_id':latest['id'],'run_attempt':latest['run_attempt'],'source_sha':sha,'conclusion':'success','url':latest['html_url']}
+              if len(gates)==2:break
+              time.sleep(5)
+          else:raise SystemExit('Both exact-main historical gates did not complete within publication allowance.')
+          observed_main=get(f'repos/{repo}/git/ref/heads/main')['object']['sha']
+          relationship=get(f'repos/{repo}/compare/{sha}...{observed_main}')
+          if relationship.get('status') not in ('ahead','identical') or relationship.get('merge_base_commit',{}).get('sha')!=sha:
+              raise SystemExit('Qualified source is no longer an ancestor of current main; publication refused.')
+          source_gates={'schema':'agi-alpha/next009-publication-source-gates/v1','source_sha':sha,
+                        'observed_main_sha':observed_main,'main_relationship':relationship['status'],
+                        'merge_base_sha':relationship['merge_base_commit']['sha'],'historical_workflows':gates,
+                        'scope':'Only the exact immutable source has these qualification receipts. Later main commits are recorded for ancestry and are not represented as qualified by this run.'}
+          (root/'HISTORICAL_GATE_RECEIPTS.json').write_text(json.dumps(source_gates,indent=2)+'\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('existing=false\n')
+          PY
+      - name: Download this run's already-qualified artifact and verify every asset
+        if: steps.gates.outputs.existing == 'false'
+        run: |
+          python3 - <<'PY'
+          import json,os,subprocess
+          repo,run=os.environ['GH_REPO'],os.environ['GITHUB_RUN_ID']
+          artifacts=json.loads(subprocess.check_output(['gh','api',f'repos/{repo}/actions/runs/{run}/artifacts?per_page=100'],text=True))['artifacts']
+          exact=[a for a in artifacts if a['name']==os.environ['QUALIFIED_ARTIFACT'] and str(a['id'])==os.environ['QUALIFIED_ARTIFACT_ID'] and a['expired'] is False]
+          if len(exact)!=1:raise SystemExit('Exact run/artifact identity not available; do not rerun qualification here.')
+          PY
+          gh run download "$GITHUB_RUN_ID" --name "$QUALIFIED_ARTIFACT" --dir "$RELEASE_ROOT/assets"
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,re,zipfile
+          root=pathlib.Path(os.environ['RELEASE_ROOT'])/'assets'
+          expected={}
+          for line in (root/'SHA256SUMS.txt').read_text().splitlines():
+              match=re.fullmatch(r'([0-9a-f]{64})  ([A-Za-z0-9_.-]+)',line)
+              if not match or match.group(2) in expected:raise SystemExit('Unsafe or duplicate checksum asset.')
+              expected[match.group(2)]=match.group(1)
+          if set(p.name for p in root.iterdir())!=set(expected)|{'SHA256SUMS.txt'}:raise SystemExit('Downloaded asset set differs from qualification.')
+          for name,digest in expected.items():
+              path=root/name
+              if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest()!=digest:raise SystemExit('Downloaded asset identity failed: '+name)
+          q=json.loads((root/'QUALIFICATION.json').read_bytes())
+          if q.get('qualified') is not True or q['source_sha']!=os.environ['SOURCE_SHA'] or q['repository']!=os.environ['GH_REPO'] or q['run_id']!=int(os.environ['GITHUB_RUN_ID']) or q['run_attempt']!=int(os.environ['GITHUB_RUN_ATTEMPT']) or q['replay_execution_count']!=1 or q['new_protected_cases']!=0:
+              raise SystemExit('Qualified artifact/run/source binding failed.')
+          package=root/'AGI_ALPHA_Measurement_009_source_evidence.zip'
+          if hashlib.sha256(package.read_bytes()).hexdigest()!=q['package_sha256']:raise SystemExit('Qualified package identity failed.')
+          with zipfile.ZipFile(package) as z:
+              manifest=json.loads(z.read('AGI_ALPHA_Measurement_009/PACKAGE_MANIFEST.json'))
+              if manifest['source_commit']!=os.environ['SOURCE_SHA']:raise SystemExit('Source package commit mismatch.')
+              note=z.read('AGI_ALPHA_Measurement_009/campaign/next-009/RELEASE_NOTES.md')
+              if note!=(root/'RELEASE_NOTES.md').read_bytes():raise SystemExit('Release notes are not the qualified source bytes.')
+          if json.loads((root/'REPLAY_REPORT.json').read_bytes())['decision']!='COMPLETE_EXPOSED_REPRODUCTION_PASSED' or json.loads((root/'PAPER_CHECK.json').read_bytes()).get('accepted') is not True:
+              raise SystemExit('Replay/paper acceptance missing from qualified artifact.')
+          PY
+      - name: Publish one new prerelease from the existing qualified assets
+        if: steps.gates.outputs.existing == 'false'
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess
+          repo,sha=os.environ['GH_REPO'],os.environ['SOURCE_SHA']
+          get=lambda route:json.loads(subprocess.check_output(['gh','api',route],text=True))
+          root=pathlib.Path(os.environ['RELEASE_ROOT']);assets=root/'assets'
+          gates=json.loads((root/'HISTORICAL_GATE_RECEIPTS.json').read_bytes())
+          for workflow,gate in gates['historical_workflows'].items():
+              current=get(f'repos/{repo}/actions/runs/{gate["run_id"]}')
+              if current['head_sha']!=sha or current['run_attempt']!=gate['run_attempt'] or current['status']!='completed' or current['conclusion']!='success':
+                  raise SystemExit('Historical exact-source gate changed before publication: '+workflow)
+          main=get(f'repos/{repo}/git/ref/heads/main')['object']['sha']
+          relation=get(f'repos/{repo}/compare/{sha}...{main}')
+          if relation.get('status') not in ('ahead','identical') or relation.get('merge_base_commit',{}).get('sha')!=sha:
+              raise SystemExit('Qualified source is not an ancestor/equal of observed main.')
+          record={'source_sha':sha,'observed_main_sha':main,'main_relationship':relation['status'],
+                  'merge_base_sha':relation['merge_base_commit']['sha'],
+                  'scope':'Final ancestry check; newer main commits receive no qualification claim.'}
+          (root/'FINAL_MAIN_ANCESTRY.json').write_text(json.dumps(record,indent=2)+'\n')
+          # Preserve the exact qualified checksum list before adding publication
+          # receipts. The source archive and all scientific assets stay unchanged.
+          with (assets/'QUALIFIED_SHA256SUMS.txt').open('xb') as out:
+              out.write((assets/'SHA256SUMS.txt').read_bytes())
+          for name in ('HISTORICAL_GATE_RECEIPTS.json','FINAL_MAIN_ANCESTRY.json'):
+              with (assets/name).open('xb') as out:out.write((root/name).read_bytes())
+          with (assets/'SHA256SUMS.txt').open('w') as out:
+              for path in sorted(assets.iterdir()):
+                  if path.name!='SHA256SUMS.txt':
+                      if not path.is_file() or path.is_symlink():raise SystemExit('Nonregular publication asset refused.')
+                      out.write(hashlib.sha256(path.read_bytes()).hexdigest()+'  '+path.name+'\n')
+          PY
+          gh release create "$RELEASE_TAG" "$RELEASE_ROOT/assets/"* \
+            --target "$SOURCE_SHA" --prerelease \
+            --title 'AGI ALPHA measurement construction: finite-model instrument and conditional economics' \
+            --notes-file "$RELEASE_ROOT/assets/RELEASE_NOTES.md"
+      - name: Preserve publication checks and any failure evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: measurement009-publication-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.RELEASE_ROOT }}
+          if-no-files-found: warn
+          retention-days: 1

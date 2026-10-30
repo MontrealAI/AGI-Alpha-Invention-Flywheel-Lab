@@ -1,0 +1,36 @@
+{
+  "schema": "agi-alpha/next009-observation-protocol/v1",
+  "scope": "model-based-water-observation-plan",
+  "population": "All source-node pairs in the declared pinned EPA EPANET corpus; the corpus is a numerical simulation, not field measurements.",
+  "cohort_rule": "Every source, timestamp and eligible sensor in the source-bound corpus remains included; no favorable source subset.",
+  "units": "source_contribution_percentage_points",
+  "noise_bound_pp": "1",
+  "max_sensor_erasures": 1,
+  "calibration": "One measured known-zero reference per selected sensor, with the identical unknown additive offset as all trace readings; reference and every trace reading each have arbitrary bounded plus/minus one percentage-point error.",
+  "offset": "Arbitrary real per-sensor constant; no prior bound; fixed across reference and all trace timestamps.",
+  "erasures": "At most one selected sensor is known unavailable. An undetected corrupt sensor is outside this guarantee.",
+  "primary_endpoint": "Zero compatible distinct-source pairs after each allowed erasure of selected sensors under the exact common-reference-error model.",
+  "causal_control": "At least one compatible distinct-source pair using every available uncalibrated sensor under the unchanged offset/noise model.",
+  "strong_control": "Exhaustive cardinality-minimal calibrated subset under exactly the same information, nuisance, noise and outage requirements.",
+  "candidate_requirement": "Primary endpoint satisfied; candidate cardinality equals independently exhaustive minimum. A tie does not establish invention or discovery superiority.",
+  "proper_subset_requirement": false,
+  "numeric_semantics": "canonical-json-finite-binary64-decimal-rational-v1",
+  "arithmetic": "Parse finite JSON numbers into Python binary64, use their canonical JSON/Python shortest decimal representation, and interpret that decimal as an exact rational. This is the declared source corpus representation, not arbitrary original JSON numeric lexemes or exact binary expansions, and does not bound simulator or physical-model error.",
+  "protected_cases": {
+    "cases_per_source": 8,
+    "seed_creation": "Only after checker, protocol, candidate, corpus and dependency identities are frozen; seed withheld from builder until evaluation ends.",
+    "observations": "Raw source traces plus independently generated exact rational constant offsets, bounded read/reference errors, and permitted erasures; includes boundary noise schedules.",
+    "acceptance": "Both the independent exact decoder and the frozen actual candidate diagnosis runtime return the correct source uniquely for every protected case. Candidate runtime receives raw observations and reference readings without the verifier's source-truth labels. All failures remain in the denominator."
+  },
+  "decision_rule": "Deterministic finite engineering verification; no statistical population claim or novelty confirmation; no claim-level alpha spent.",
+  "intervention_scope": "The reference reading is newly available information under an explicit measurement assumption. No real sensor, calibrated reference operation, customer deployment or field service has been performed.",
+  "independence": "Separate verifier source and process; checker does not import candidate arithmetic or modify the candidate. Shared host, models, Python and source simulator mean procedural separation, not independent external certification.",
+  "exclusions": [
+    "Unknown offset drift between reference and trace",
+    "Arbitrary unbounded measurement error",
+    "Unknown source dynamics beyond the declared EPANET TRACE corpus",
+    "Real-world contamination or health decisions",
+    "Actual procurement, sales, field deployment or revenue",
+    "After-cost scientific discovery superiority"
+  ]
+}

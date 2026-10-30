@@ -1,0 +1,29 @@
+{
+  "schema": "agi-alpha/next009-hosted-recovery-allocation/v1",
+  "allocation_id": "next009-hosted-recovery-20261030-r1",
+  "registered_utc": "2026-10-30T11:12:33.424508+00:00",
+  "parent_allocation_sha256": "627bc1d74aaead7bf94124d274de17530bdc640947d3c81edb60f7b4f05d2b1b",
+  "additional_cpu_seconds": 600,
+  "additional_invocations": 1,
+  "combined_cpu_seconds": 2400,
+  "combined_maximum_invocations": 4,
+  "per_invocation_cpu_seconds": 600,
+  "per_invocation_wall_seconds": 900,
+  "memory_bytes": 2147483648,
+  "storage_bytes": 268435456,
+  "per_invocation_download_cap_bytes": 268435456,
+  "per_invocation_runner_disk_cap_bytes": 1073741824,
+  "failed_run_ids_preserved": [
+    41045280239,
+    41046035229
+  ],
+  "failed_reservations_seconds": 1200,
+  "actual_prior_download_overrun_bytes": 82282632,
+  "reason": "One invalid workflow and one actual full-repository checkout/dependency download overrun exhausted two original reservations before replay. Preserve both failures; narrow checkout to required source paths and add exactly one standard public hosted attempt, making room for the corrected PR and main qualification. Original allocation, local ledger, statistical error budget and per-run limits remain unchanged.",
+  "authority": "The user brief authorizes explicit resource allocations and bounded recovery within available free public execution. No paid runners, purchased minutes, paid APIs, new credentials, extra access or monetary spending.",
+  "deadline_utc": "2026-10-30T12:00:00Z",
+  "original_allocation_replaced": false,
+  "refund_seconds": 0,
+  "new_spending": 0,
+  "monetary_complete_cost": "UNKNOWN; do not convert free hosted compute or absent inference metering into zero complete enterprise cost."
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "next009-public-clean-r1",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "research.next009.reproduce",
+    "--require-clean",
+    "--output",
+    "/workspace/scratch/85dffc7b798c/lab/evidence/next009/reproduction/public-clean-r1/artifacts"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "research.next009.reproduce",
+    "--require-clean",
+    "--output",
+    "/workspace/scratch/85dffc7b798c/lab/evidence/next009/reproduction/public-clean-r1/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "research.next009.reproduce",
+    "--require-clean",
+    "--output",
+    "/workspace/scratch/85dffc7b798c/lab/evidence/next009/reproduction/public-clean-r1/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/85dffc7b798c/next009-compact-clean-r1/AGI_ALPHA_Measurement_009",
+  "limits": {
+    "wall_seconds": 720,
+    "cpu_seconds": 600,
+    "memory_bytes": 2147483648,
+    "output_bytes": 67108864,
+    "storage_bytes": 268435456
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "failed",
+  "exit_code": -9,
+  "reason": "launch-or-monitor-error",
+  "error": {
+    "type": "FileNotFoundError",
+    "message": "[Errno 2] No such file or directory: '/workspace/scratch/85dffc7b798c/lab/evidence/next009/reproduction/public-clean-r1/artifacts/commerce/native-main.sqlite-journal'"
+  },
+  "wall_seconds": 170.28072253899882,
+  "supervisor_cpu_seconds": 8.759535592,
+  "waited_cpu_seconds": 169.572182,
+  "descendant_survivors": true,
+  "output_bytes": 19025199,
+  "logs": {
+    "stdout.log": "c4f97237e10bd1eea6aa93a1208b22c810ce14784378c657eb2edb35a09d0d07",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

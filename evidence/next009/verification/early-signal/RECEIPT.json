@@ -1,0 +1,54 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "verification-early-signal",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/next009/early_signal_probe.py",
+    "--root",
+    "/workspace/scratch/85dffc7b798c/lab",
+    "--output",
+    "/workspace/scratch/85dffc7b798c/lab/evidence/next009/verification/early-signal/artifacts"
+  ],
+  "requested_command": [
+    "python",
+    "verification/next009/early_signal_probe.py",
+    "--root",
+    "/workspace/scratch/85dffc7b798c/lab",
+    "--output",
+    "/workspace/scratch/85dffc7b798c/lab/evidence/next009/verification/early-signal/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/next009/early_signal_probe.py",
+    "--root",
+    "/workspace/scratch/85dffc7b798c/lab",
+    "--output",
+    "/workspace/scratch/85dffc7b798c/lab/evidence/next009/verification/early-signal/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/85dffc7b798c/lab",
+  "limits": {
+    "wall_seconds": 30,
+    "cpu_seconds": 30,
+    "memory_bytes": 536870912,
+    "output_bytes": 1048576,
+    "storage_bytes": 8388608
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 0.25069176299984974,
+  "supervisor_cpu_seconds": 0.007745551999999996,
+  "waited_cpu_seconds": 0.223059,
+  "descendant_survivors": false,
+  "output_bytes": 29130,
+  "logs": {
+    "stdout.log": "d498aa903ac18eedc41ba987c07c67eb439a939ac2fc7818e704d2675cfb22d3",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

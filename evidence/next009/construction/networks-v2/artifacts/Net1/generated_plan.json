@@ -1,0 +1,595 @@
+{
+  "schema": "agi-alpha/observation-plan009/v1",
+  "network": "Net1",
+  "numeric_semantics": "canonical-json-finite-binary64-decimal-rational-v1",
+  "network_sha256": "607510a01287d60d27b280a39df31a001363175a438a5de1b39e749cec6ddbc8",
+  "corpus_sha256": "41bf02db143ca3be3f8c99f05b2c70d667bc6b01ce8c84bfc4b50ca5558b7a0f",
+  "sensors": [
+    "13",
+    "23",
+    "31",
+    "32"
+  ],
+  "operator": "known-zero-reference",
+  "noise_bound_pp": "1",
+  "max_sensor_erasures": 1,
+  "nuisance": "arbitrary-per-sensor-offset-constant-across-reference-and-trace",
+  "status": "CONSTRUCTED_MODEL_PLAN",
+  "solver": {
+    "status": "OPTIMAL",
+    "objective": 4,
+    "solver_status": 0,
+    "mip_gap": 0.0,
+    "dual_bound": 4.0,
+    "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+  },
+  "algorithm": "milp",
+  "generated_expression": {
+    "schema": "agi-alpha/generated-observation-expression009/v1",
+    "status": "CONSTRUCTED",
+    "ast": {
+      "op": "subtract",
+      "left": {
+        "op": "read",
+        "sensor": "$sensor",
+        "time": "$time"
+      },
+      "right": {
+        "op": "zero_reference",
+        "sensor": "$sensor"
+      }
+    },
+    "ancestry": {
+      "generator": "bounded-coefficient-enumeration-v1",
+      "attempts": [
+        {
+          "left": "read",
+          "right": "zero_reference",
+          "coefficients": [
+            -1,
+            -1
+          ],
+          "same_units": true,
+          "same_nuisance_group": "sensor_offset",
+          "bias_coefficient": -2,
+          "preserves_current_signal": false,
+          "admissible": false
+        },
+        {
+          "left": "read",
+          "right": "zero_reference",
+          "coefficients": [
+            -1,
+            0
+          ],
+          "same_units": true,
+          "same_nuisance_group": "sensor_offset",
+          "bias_coefficient": -1,
+          "preserves_current_signal": false,
+          "admissible": false
+        },
+        {
+          "left": "read",
+          "right": "zero_reference",
+          "coefficients": [
+            -1,
+            1
+          ],
+          "same_units": true,
+          "same_nuisance_group": "sensor_offset",
+          "bias_coefficient": 0,
+          "preserves_current_signal": false,
+          "admissible": false
+        },
+        {
+          "left": "read",
+          "right": "zero_reference",
+          "coefficients": [
+            0,
+            -1
+          ],
+          "same_units": true,
+          "same_nuisance_group": "sensor_offset",
+          "bias_coefficient": -1,
+          "preserves_current_signal": false,
+          "admissible": false
+        },
+        {
+          "left": "read",
+          "right": "zero_reference",
+          "coefficients": [
+            0,
+            0
+          ],
+          "same_units": true,
+          "same_nuisance_group": "sensor_offset",
+          "bias_coefficient": 0,
+          "preserves_current_signal": false,
+          "admissible": false
+        },
+        {
+          "left": "read",
+          "right": "zero_reference",
+          "coefficients": [
+            0,
+            1
+          ],
+          "same_units": true,
+          "same_nuisance_group": "sensor_offset",
+          "bias_coefficient": 1,
+          "preserves_current_signal": false,
+          "admissible": false
+        },
+        {
+          "left": "read",
+          "right": "zero_reference",
+          "coefficients": [
+            1,
+            -1
+          ],
+          "same_units": true,
+          "same_nuisance_group": "sensor_offset",
+          "bias_coefficient": 0,
+          "preserves_current_signal": true,
+          "admissible": true
+        }
+      ],
+      "primitive_proposal_author": "builder, following reproduced missing-DC-information witness",
+      "generated_parts": [
+        "signed coefficients",
+        "typed expression",
+        "sensor assignment in downstream solver"
+      ],
+      "prior_art": "Calibration subtraction and test multicover are established methods; no novelty inferred."
+    },
+    "qualification": {
+      "unit_preserved": true,
+      "offset_coefficient": 0,
+      "sample_noise_coefficient": 1,
+      "reference_noise_coefficient": -1,
+      "required_assumptions": [
+        "Known-zero reference",
+        "same constant sensor offset at reference and all samples",
+        "each raw read, including reference, has bounded noise"
+      ]
+    }
+  },
+  "pair_certificates": [
+    {
+      "sources": [
+        "10",
+        "11"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "10",
+        "12"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "10",
+        "13"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "10",
+        "21"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "10",
+        "22"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "10",
+        "23"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "10",
+        "31"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "10",
+        "32"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "11",
+        "12"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "11",
+        "13"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "11",
+        "21"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "11",
+        "22"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "11",
+        "23"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "11",
+        "31"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "11",
+        "32"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "12",
+        "13"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "12",
+        "21"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "12",
+        "22"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "12",
+        "23"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "12",
+        "31"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "12",
+        "32"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "13",
+        "21"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "13",
+        "22"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "13",
+        "23"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23"
+      ]
+    },
+    {
+      "sources": [
+        "13",
+        "31"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "13",
+        "32"
+      ],
+      "separating_selected_sensors": [
+        "13",
+        "23",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "21",
+        "22"
+      ],
+      "separating_selected_sensors": [
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "21",
+        "23"
+      ],
+      "separating_selected_sensors": [
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "21",
+        "31"
+      ],
+      "separating_selected_sensors": [
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "21",
+        "32"
+      ],
+      "separating_selected_sensors": [
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "22",
+        "23"
+      ],
+      "separating_selected_sensors": [
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "22",
+        "31"
+      ],
+      "separating_selected_sensors": [
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "22",
+        "32"
+      ],
+      "separating_selected_sensors": [
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "23",
+        "31"
+      ],
+      "separating_selected_sensors": [
+        "23",
+        "31",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "23",
+        "32"
+      ],
+      "separating_selected_sensors": [
+        "23",
+        "32"
+      ]
+    },
+    {
+      "sources": [
+        "31",
+        "32"
+      ],
+      "separating_selected_sensors": [
+        "31",
+        "32"
+      ]
+    }
+  ],
+  "unresolved_pairs": [],
+  "acquisition_obligations": {
+    "known_zero_references": 4,
+    "trace_readings": 96,
+    "last_sample_seconds": 82800,
+    "scope": "Prospective modeled measurement requirements. No references/sensors are physically acquired. Simulator acquisition/setup costs remain counted."
+  },
+  "program": {
+    "op": "adaptive-diagnostic-readout",
+    "policy": "select next unused sensor that distinguishes most remaining source pairs; test current version space, then verify all remaining supplied traces before acceptance",
+    "stop": "one compatible source or no usable sensors; empty set is MODEL_INCONSISTENT, multiple sources ABSTAIN",
+    "not_claimed": "No avoided hardware, physical acquisition, or elapsed monitoring time from readout order."
+  },
+  "construction_cost": {
+    "wall_seconds": 0.0023926989997562487,
+    "process_cpu_seconds": 0.004009172000000005,
+    "complete_monetary_cost": null
+  },
+  "scope": "Finite source-pinned engineering model only. Independent verifier acceptance required. Conventional calibration/multicover are prior art."
+}

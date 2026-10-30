@@ -1,0 +1,27 @@
+{
+  "schema": "agi-alpha/next009-independent-successor-protocol/v1",
+  "cohort": "All junctions as source identities and eligible sensors in the pinned EPA Net2 corpus; all hourly samples from zero through 82800 seconds.",
+  "numeric_semantics": "canonical-json-finite-binary64-decimal-rational-v1",
+  "numeric_representation_edition": {
+    "edition": "uniform-half-even-12dp-v1",
+    "rule": "Round every raw signal coordinate to 12 decimal places with ties to even; independently recompute through exact integer arithmetic. Preserve raw bytes and all original source/time/sensor identities and other metadata.",
+    "maximum_absolute_representation_change_pp": "1/2000000000000",
+    "post_transform_range_pp": ["0", "100"],
+    "nonselective": "No clipping, omitted coordinates or threshold-based choice of which values to transform; fail if any exact change or post-transform range requirement is violated.",
+    "scope": "New finite numerical representation prospectively selected before Net2 acquisition; no physical or simulator-error guarantee and no qualification of original Net3 raw data."
+  },
+  "noise_bound_pp": "1",
+  "drift_grid_pp": ["0", "1", "5", "10", "25"],
+  "max_sensor_erasures": 1,
+  "arms": ["retained", "equal-content-ordinary-reuse", "reset-full-toolbox"],
+  "sample_drift": "Arbitrary time-varying sample offset relative to the reference; absolute value bounded by the declared D independently at each sample. Reference measurement noise and every sample noise remain bounded by plus/minus one percentage point.",
+  "endpoint": "Every source pair incompatible after every permitted selected-sensor erasure under exact interval arithmetic, or return the complete unresolved count and a reproducible ambiguity witness.",
+  "benefit_rule": "Old zero-drift plan has at least one exact ambiguity under a nonzero prespecified D; revised plan has none at that same D and passes fresh actual runtime cases. All five levels reported.",
+  "conventional_control": "Independently formulate binary multicover from exact pair relations, solve through SciPy/HiGHS with a 20-second limit and zero requested relative gap, and independently verify the returned subset. Solver-reported optimum is not an externally certified integer proof. Shared solver is disclosed.",
+  "protected_cases_per_source_per_drift": 4,
+  "protected_case_design": "Same generated latent offsets, reference errors, sample errors and drift values across arms for each D. Two boundary schedules and two rational random schedules per source; zero or one known selected-sensor erasure. No truth label is provided to candidate runtime.",
+  "case_exposure": "Generate only after public freeze of successor/checker/parent source and protocols; Net2 contents are uninspected at source freeze. Final cases are never used for a repair retaining their confirmation status.",
+  "reproduction": "The --replay-seed argument accepts an already exposed 64-character lowercase hexadecimal seed. All checks and cohorts remain identical, but output is labeled EXPOSED_REPRODUCTION_NO_NEW_CONFIRMATION and new_protected_latent_worlds is zero. Default execution generates a fresh seed after the public source freeze.",
+  "decision": "Finite engineering transfer check, not field validation, novelty confirmation, observed demand or after-cost discovery advantage. Research-funded until a separate economic gate qualifies actual unrestricted simulated earnings.",
+  "scope": "model-based-water-observation-plan-with-bounded-reference-drift"
+}

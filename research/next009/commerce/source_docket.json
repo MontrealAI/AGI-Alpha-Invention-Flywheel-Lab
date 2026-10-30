@@ -1,0 +1,265 @@
+{
+  "retrieved_at_utc": "2026-10-30T09:55:39Z",
+  "scope": "Primary-source intake; no paid API calls, customer outreach, orders, settlement or external account access performed.",
+  "sources": [
+    {
+      "id": "openai_models_20261030",
+      "url": "https://developers.openai.com/api/docs/models",
+      "web_ref": "turn0search1",
+      "kind": "provider official model catalogue",
+      "facts": {
+        "flagship": "gpt-6-astra",
+        "capabilities": [
+          "reasoning",
+          "coding",
+          "text/image input",
+          "tool use"
+        ],
+        "context_tokens": 1050000,
+        "max_output_tokens": 128000
+      },
+      "limits": "Provider description is not an independent benchmark. Actual available session identity is reported by runtime; no API execution or token/billing receipt inferred from catalogue availability."
+    },
+    {
+      "id": "openai_prices_20261030",
+      "url": "https://developers.openai.com/api/docs/pricing",
+      "web_ref": "turn3view0",
+      "kind": "provider official USD standard token pricing",
+      "facts": {
+        "unit": "USD per million tokens",
+        "gpt-6-astra": {
+          "input": 10,
+          "output": 50,
+          "cached_input": 1
+        },
+        "gpt-6.1-sol": {
+          "input": 2,
+          "output": 10,
+          "cached_input": 0.1
+        },
+        "gpt-6.1-terra": {
+          "input": 1,
+          "output": 5,
+          "cached_input": 0.05
+        },
+        "gpt-6-luna": {
+          "input": 0.1,
+          "output": 0.5,
+          "cached_input": 0.01
+        },
+        "hosted_container_4gb_20min_usd": 0.12,
+        "web_search_per_call_usd": 0.01,
+        "search_content_tokens_billed": true,
+        "file_search_storage_usd_gb_day": 0.1
+      },
+      "limits": "Rates support deployment sensitivities only until actual usage, context tier, service mode and tools are recorded. Paid calls are not authorized. Standard, batch/flex and fast-mode rates differ."
+    },
+    {
+      "id": "anthropic_models_20261030",
+      "url": "https://platform.claude.com/docs/en/models/overview",
+      "web_ref": "turn3view1",
+      "kind": "provider official model and pricing catalogue",
+      "facts": {
+        "unit": "USD per million tokens",
+        "claude-fable-5-1": {
+          "input": 10,
+          "output": 50
+        },
+        "claude-opus-5-5": {
+          "input": 4,
+          "output": 20
+        },
+        "claude-sonnet-5-5": {
+          "input": 2,
+          "output": 10
+        }
+      },
+      "limits": "No callable authorized Anthropic endpoint is evidenced in this execution; these models did not run. Older pricing snippets naming Opus 5 are superseded by the opened current catalogue."
+    },
+    {
+      "id": "gemini_prices_20261030",
+      "url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "web_ref": "turn3view2",
+      "kind": "provider official model and pricing catalogue",
+      "facts": {
+        "model": "gemini-4-argon",
+        "unit": "USD per million tokens",
+        "input_through_20261130": 2,
+        "output_through_20261130": 10,
+        "input_from_20261201": 4,
+        "output_from_20261201": 20,
+        "free_tier_available": false
+      },
+      "limits": "No authorized Google API endpoint evidenced and no invocation made. Counts thinking and internal tool instructions. Promotional rates cannot be assumed beyond their published expiry."
+    },
+    {
+      "id": "york_hydraulic_demand_2026",
+      "url": "https://york.bidsandtenders.ca/Module/Tenders/en/Tender/Detail/597d96c5-9a68-4907-a56d-afe5b1526bd4",
+      "web_ref": "turn7view1",
+      "kind": "public buyer procurement",
+      "facts": {
+        "bid": "RFP-3918-26",
+        "published": "2026-09-22",
+        "closes": "2026-11-02",
+        "scope": "Water hydraulic model update, calibration and validation",
+        "months": 10,
+        "prequalified_firms": [
+          "GEI Consultants Canada Ltd.",
+          "AECOM Canada Ltd.",
+          "Arcadis Professional Services (Canada) Inc.",
+          "FP&P HydraTek Inc.",
+          "WSP Canada Inc.",
+          "Carollo Engineers Canada, Ltd."
+        ]
+      },
+      "limits": "Category demand, not demand for this narrow model-based diagnostic, not evidence of AGI ALPHA bidding eligibility, uptake, willingness to pay or order volume. No account, paid documents or bid action taken."
+    },
+    {
+      "id": "seguin_contract_2026",
+      "url": "https://cityofseguintx.legistar.com/View.ashx?GUID=7ECD6DB4-BA96-4E91-80B2-A43F7471B839&ID=15349896&M=F",
+      "web_ref": "turn12view0",
+      "kind": "public professional-services agreement and effort estimate",
+      "facts": {
+        "agreement_date": "2026-03-16",
+        "consultant": "Freese and Nichols, Inc.",
+        "task": "Water Model Development and Calibration",
+        "estimated_hours": 372,
+        "labor_usd": 61560,
+        "expenses_usd": 11170,
+        "total_usd": 72730
+      },
+      "limits": "Full master-plan task includes much more than an automated benchmark package. Estimated contractual hours are not timed actual observations, cannot be transferred to per-Net3 job duration. Document requires licensed professionals and client approval of subcontracting. Supports category economics and scope obligations only. Initial primary PDF open succeeded; subsequent find/open returned HTTP410. Effort values are preserved from primary search result, not independently downloaded bytes."
+    },
+    {
+      "id": "montreal_civil_engineer_wage",
+      "url": "https://www.jobbank.gc.ca/marketreport/wages-occupation/22376/geo25154",
+      "web_ref": "turn12view2",
+      "kind": "government occupational wage statistics",
+      "facts": {
+        "currency": "CAD",
+        "hourly_low": 36.06,
+        "hourly_median": 52,
+        "hourly_high": 69.23,
+        "reference_period": "2023-2024",
+        "updated": "2025-11-19"
+      },
+      "limits": "Wages only. Benefits, paid time, overhead, tools and actual task duration remain to be measured. A source-backed wage does not establish a fully loaded cost or customer willingness to pay."
+    },
+    {
+      "id": "us_professional_compensation_202606",
+      "url": "https://www.bls.gov/news.release/ecec.t02.htm",
+      "web_ref": "turn3view3",
+      "kind": "government employer compensation statistics",
+      "facts": {
+        "currency": "USD",
+        "group": "Civilian professional and related occupations",
+        "period": "2026-06",
+        "total_per_hour": 74.42,
+        "wages_per_hour": 50.37,
+        "benefits_per_hour": 24.06
+      },
+      "limits": "U.S. broad occupation reference only. Total compensation is not full consulting overhead and does not establish Canadian loading or this task's duration."
+    },
+    {
+      "id": "ucanr_gis_full_cost_2026",
+      "url": "https://ucanr.edu/program/informatics-and-gis-program/service-center-rates",
+      "web_ref": "turn4view0",
+      "kind": "university service fee",
+      "facts": {
+        "currency": "USD",
+        "valid_from": "2026-07-01",
+        "valid_through": "2027-06-30",
+        "analysis_full_cost_hourly": 99.62,
+        "external_surcharge": 35.86,
+        "external_total": 135.48
+      },
+      "limits": "GIS-analysis price/full-cost reference, not water experiment-design price nor buyer demand."
+    },
+    {
+      "id": "osu_statistical_service",
+      "url": "https://stat.osu.edu/resources/consulting/external-entities",
+      "web_ref": "turn3view5",
+      "kind": "university external service fee",
+      "facts": {
+        "currency": "USD",
+        "faculty_nongovernment_hourly": 250,
+        "faculty_government_hourly": 225,
+        "junior_consultant_hourly": 125,
+        "business_manager_hourly": 75,
+        "includes": [
+          "experimental design",
+          "decision theory",
+          "network analysis",
+          "quality control"
+        ]
+      },
+      "limits": "Posted service prices, not loaded employee wages or proof that any buyer will substitute AGI ALPHA."
+    },
+    {
+      "id": "stripe_canada_domestic_card",
+      "url": "https://stripe.com/en-ca/pricing",
+      "web_ref": "turn7view2",
+      "kind": "payment provider pricing",
+      "facts": {
+        "currency": "CAD",
+        "domestic_card_percent": 2.9,
+        "domestic_card_fixed": 0.3,
+        "international_card_additional_percent": 0.8,
+        "currency_conversion_additional_percent": 2,
+        "dispute_received": 15,
+        "manual_dispute_countered": 15,
+        "original_fees_returned_on_refund": false
+      },
+      "limits": "Specific proposed route: Canadian account, domestic card, CAD presentment and standard payout. No account opened/integration performed. Network fees can apply; pricing does not guarantee availability or eligibility."
+    },
+    {
+      "id": "stripe_dispute_lifecycle",
+      "url": "https://docs.stripe.com/disputes/how-disputes-work",
+      "web_ref": "turn7view3",
+      "kind": "payment provider operational rules",
+      "facts": {
+        "dispute_debits_principal_and_fee": true,
+        "typical_initiation_window_days": 120,
+        "longer_windows_possible": true,
+        "provider_controls_bank_outcome": false
+      },
+      "limits": "Payment capture and payout are not nonrecourse or escrow. Do not automatically free all reserves at day120. Dispute duration and legal/service tail remain separate."
+    },
+    {
+      "id": "boc_usdcad_20261029",
+      "url": "https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates-lookup/?dF=2026-10-16&dT=2026-10-30&lP=lookup_daily_exchange_rates_2017.php&rangeType=dates&sR=2017-01-01&se=FXUSDCAD",
+      "web_ref": "turn11search0",
+      "kind": "central bank daily exchange-rate reference",
+      "facts": {
+        "date": "2026-10-29",
+        "cad_per_usd": 1.3985
+      },
+      "limits": "Search-returned primary indexed table; direct open failed in this tool. Not a transactable quote; conversion spread must be separately modeled."
+    },
+    {
+      "id": "epa_sensor_lifecycle",
+      "url": "https://www.epa.gov/water-research/water-sensors-toolbox",
+      "web_ref": "turn6search8",
+      "kind": "public agency technical operating guidance",
+      "facts": {
+        "required_costs": [
+          "sensor placement",
+          "data storage and transfer",
+          "calibration",
+          "maintenance",
+          "life cycle",
+          "site access and power"
+        ]
+      },
+      "limits": "No physical device-cost savings can be claimed from a software simulation without full measurement/acquisition and service lifecycle costs."
+    }
+  ],
+  "admission_conclusion": {
+    "human_time_same_job": "UNKNOWN",
+    "agi_alpha_willingness_to_pay": "UNKNOWN",
+    "demand_volume_same_job": "UNKNOWN",
+    "session_token_usage_and_complete_cost": "UNKNOWN",
+    "actual_revenue": 0,
+    "permitted_conclusion": "Conditional operating frontier and explicit hypothetical scenarios; no validated human-to-AI profitability crossing or qualified unrestricted earned funds."
+  }
+}

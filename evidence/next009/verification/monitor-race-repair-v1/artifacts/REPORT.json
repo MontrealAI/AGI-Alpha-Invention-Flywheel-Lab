@@ -1,0 +1,205 @@
+{
+  "schema": "agi-alpha/next009-independent-monitor-race-repair/v1",
+  "passed": true,
+  "original_source_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "repaired_source_sha256": "606947bf8ba6812bf5accb437391b630e3ef3faa5804c3189b65771361c52a14",
+  "verifier_source_sha256": "76ed706f22f07b56445cbc59f2727483d973a9df5d9b468b03322318ec49c5f3",
+  "checks": [
+    {
+      "case": "same_actual_unlink_before_lstat_usage",
+      "passed": true,
+      "original": {
+        "exception": "FileNotFoundError",
+        "message": "[Errno 2] No such file or directory: '/tmp/next009-independent-monitor-y_del8yg/old-usage/transaction.sqlite-journal'",
+        "operation": "usage",
+        "events": [
+          {
+            "entry_existed_immediately_before_unlink": true,
+            "point": "immediately before real lstat after directory enumeration"
+          }
+        ],
+        "entry_absent_after": true
+      },
+      "repaired": {
+        "returned": 0,
+        "exception": null,
+        "operation": "usage",
+        "events": [
+          {
+            "entry_existed_immediately_before_unlink": true,
+            "point": "immediately before real lstat after directory enumeration"
+          }
+        ],
+        "entry_absent_after": true
+      }
+    },
+    {
+      "case": "same_actual_unlink_before_lstat_final_receipt",
+      "passed": true,
+      "original": {
+        "exception": "FileNotFoundError",
+        "message": "[Errno 2] No such file or directory: '/tmp/next009-independent-monitor-y_del8yg/old-final_receipt/transaction.sqlite-journal'",
+        "operation": "final_receipt",
+        "events": [
+          {
+            "entry_existed_immediately_before_unlink": true,
+            "point": "immediately before real lstat after directory enumeration"
+          }
+        ],
+        "entry_absent_after": true
+      },
+      "repaired": {
+        "returned": {
+          "state": "complete",
+          "reason": null,
+          "wall_seconds": 0.01,
+          "waited_cpu_seconds": 0.01,
+          "output_bytes": 271,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 5,
+            "memory_bytes": 134217728,
+            "output_bytes": 65536,
+            "storage_bytes": 131072
+          }
+        },
+        "exception": null,
+        "operation": "final_receipt",
+        "events": [
+          {
+            "entry_existed_immediately_before_unlink": true,
+            "point": "immediately before real lstat after directory enumeration"
+          }
+        ],
+        "entry_absent_after": true
+      }
+    },
+    {
+      "case": "regular_nested_empty_and_symlink_entries",
+      "passed": true,
+      "observed_bytes": 83,
+      "expected_bytes": 83,
+      "external_target_bytes_not_followed": 100000
+    },
+    {
+      "case": "PermissionError_propagates_usage",
+      "passed": true,
+      "exception": "PermissionError",
+      "injection_fired": true,
+      "scope": "Injected exception at lstat tests propagation; not a claim of an observed OS permission denial."
+    },
+    {
+      "case": "PermissionError_propagates_final_receipt",
+      "passed": true,
+      "exception": "PermissionError",
+      "injection_fired": true,
+      "scope": "Injected exception at lstat tests propagation; not a claim of an observed OS permission denial."
+    },
+    {
+      "case": "OSError_propagates_usage",
+      "passed": true,
+      "exception": "OSError",
+      "injection_fired": true,
+      "scope": "Injected exception at lstat tests propagation; not a claim of an observed OS permission denial."
+    },
+    {
+      "case": "OSError_propagates_final_receipt",
+      "passed": true,
+      "exception": "OSError",
+      "injection_fired": true,
+      "scope": "Injected exception at lstat tests propagation; not a claim of an observed OS permission denial."
+    },
+    {
+      "case": "aggregate_limit_still_enforced",
+      "passed": true,
+      "result": {
+        "state": "overrun",
+        "reason": "final-aggregate-output-storage-limit",
+        "wall_seconds": 0.01,
+        "waited_cpu_seconds": 0.01,
+        "output_bytes": 13305,
+        "limits": {
+          "wall_seconds": 5,
+          "cpu_seconds": 5,
+          "memory_bytes": 134217728,
+          "output_bytes": 20000,
+          "storage_bytes": 10000
+        }
+      }
+    },
+    {
+      "case": "individual_limit_still_enforced",
+      "passed": true,
+      "result": {
+        "state": "overrun",
+        "reason": "final-output-file-limit",
+        "wall_seconds": 0.01,
+        "waited_cpu_seconds": 0.01,
+        "output_bytes": 13291,
+        "limits": {
+          "wall_seconds": 5,
+          "cpu_seconds": 5,
+          "memory_bytes": 134217728,
+          "output_bytes": 5000,
+          "storage_bytes": 50000
+        }
+      }
+    },
+    {
+      "case": "actual_sqlite_delete_journal_churn",
+      "passed": true,
+      "receipt_state": "complete",
+      "descendant_survivors": false,
+      "wrapper_sha256": "606947bf8ba6812bf5accb437391b630e3ef3faa5804c3189b65771361c52a14",
+      "observed_churn": {
+        "sqlite_version": "3.53.1",
+        "journal_mode": "delete",
+        "transactions": 300,
+        "journal_observed_before_commit": 300,
+        "journal_absent_after_commit": 300,
+        "database_bytes": 12288
+      }
+    },
+    {
+      "case": "early_SIGINT_mkdir",
+      "signal": "SIGINT",
+      "injection_point": "mkdir",
+      "passed": true,
+      "driver_exit_code": 0,
+      "worker_marker_absent": true,
+      "receipt_wrapper_sha256": "606947bf8ba6812bf5accb437391b630e3ef3faa5804c3189b65771361c52a14"
+    },
+    {
+      "case": "early_SIGINT_pending_write",
+      "signal": "SIGINT",
+      "injection_point": "pending_write",
+      "passed": true,
+      "driver_exit_code": 0,
+      "worker_marker_absent": true,
+      "receipt_wrapper_sha256": "606947bf8ba6812bf5accb437391b630e3ef3faa5804c3189b65771361c52a14"
+    },
+    {
+      "case": "early_SIGTERM_mkdir",
+      "signal": "SIGTERM",
+      "injection_point": "mkdir",
+      "passed": true,
+      "driver_exit_code": 0,
+      "worker_marker_absent": true,
+      "receipt_wrapper_sha256": "606947bf8ba6812bf5accb437391b630e3ef3faa5804c3189b65771361c52a14"
+    },
+    {
+      "case": "early_SIGTERM_pending_write",
+      "signal": "SIGTERM",
+      "injection_point": "pending_write",
+      "passed": true,
+      "driver_exit_code": 0,
+      "worker_marker_absent": true,
+      "receipt_wrapper_sha256": "606947bf8ba6812bf5accb437391b630e3ef3faa5804c3189b65771361c52a14"
+    }
+  ],
+  "source_unchanged_during_checks": true,
+  "wall_seconds": 0.8385311590009223,
+  "scope": "Deterministic real-file unlink at the reproduced stat boundary in both original and repaired live source; direct helper checks plus real SQLite transactions and actual early kernel signals. Shared infrastructure; no outside certification.",
+  "resource_scope": "All work charged by one outer common-ledger reservation. Inner ledgers are small test fixtures only. Transient fixtures outside the outer monitored output prevent the intentionally reproduced legacy race from aborting the test runner. SQLite worker itself uses unchanged limits (5 CPU/wall seconds,128MiB memory,256KiB total output); other fixture payloads total under1MiB. Fixture logs, receipts, sources and schedules are retained.",
+  "historical_failure_status": "Actual public-clean-r1 failure and immediate descendant_survivors=True remain unchanged. Later scoped process inspection is separate. These tests do not repair or overturn the older frozen cycle001 SIGINT failure."
+}

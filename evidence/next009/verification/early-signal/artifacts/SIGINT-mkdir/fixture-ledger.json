@@ -1,0 +1,26 @@
+{
+  "schema": "agi-alpha/prospective-resources006/v1",
+  "capacity_cpu_seconds": 5400,
+  "capacity_storage_bytes": 6442450944,
+  "state": "active",
+  "runs": {
+    "SIGINT-mkdir": {
+      "state": "pending-interruption",
+      "limits": {
+        "wall_seconds": 2,
+        "cpu_seconds": 2,
+        "memory_bytes": 134217728,
+        "output_bytes": 65536,
+        "storage_bytes": 131072
+      },
+      "budget_cpu_seconds": 2,
+      "budget_storage_bytes": 131072,
+      "receipt_sha256": "d2705f6efb7a5eeda8a75c3efc355024985e9e777ada6a269d57f0f96da93994",
+      "outcome": "interrupted",
+      "observed_waited_cpu_seconds": 0.0,
+      "observed_output_bytes": 3273,
+      "cpu_refund_seconds": 0,
+      "cpu_refund_reason": "No exact full process-group CPU attribution; preserve conservative reservation as budget charge, not measured cost."
+    }
+  }
+}
