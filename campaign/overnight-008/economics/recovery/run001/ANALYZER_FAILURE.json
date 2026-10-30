@@ -1,9 +1,0 @@
-{
-  "schema": "agi-alpha/recovery-analyzer-failure/v1",
-  "source_sha256": "7690405e3b915342316aeb609972012fe723b18250d5f9a8f5d3f58945c21c4a",
-  "error": "public receipt changed observability-development-r1",
-  "cause": "Analyzer incorrectly compared raw file bytes with RESOURCE_LEDGER canonical JSON semantic digest",
-  "reproduction": "recover_economics.py fails before ledger creation",
-  "impact": "No original files, expected hashes or ledger records changed; failed attempt remains charged within economics200CPU reservation",
-  "adjudication": "NOT_A_REPOSITORY_DEFECT; all6 canonical semantic digests match after reading experiments/resource006.py digest/settle implementation"
-}

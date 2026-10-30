@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/workspace/scratch/557a27c9cfaf/science_recovery/probe_eis.py", line 50, in <module>
-    if __name__=='__main__':main()
-                            ^^^^^^
-  File "/workspace/scratch/557a27c9cfaf/science_recovery/probe_eis.py", line 16, in main
-    if any(k not in d or d[k].dtype.kind not in 'fci' or not np.isfinite(d[k]).all() for k in required):raise ValueError('FINITE_NUMERIC_SOURCE_ARRAYS_REQUIRED')
-                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-ValueError: FINITE_NUMERIC_SOURCE_ARRAYS_REQUIRED

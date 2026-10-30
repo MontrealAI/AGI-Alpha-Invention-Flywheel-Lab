@@ -1,9 +1,0 @@
-Traceback (most recent call last):
-  File "/workspace/scratch/681b6e3921b1/lab-cycle006/scripts/build_cycle006_paper.py", line 101, in <module>
-    main()
-  File "/workspace/scratch/681b6e3921b1/lab-cycle006/scripts/build_cycle006_paper.py", line 97, in main
-    print(json.dumps(build(args.markdown, args.manifest, args.output), indent=2))
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/scratch/681b6e3921b1/lab-cycle006/scripts/build_cycle006_paper.py", line 72, in build
-    raise ValueError('PAPER_LAYOUT_OR_REFERENCE_FAILURE: ' + '\n'.join(bad))
-ValueError: PAPER_LAYOUT_OR_REFERENCE_FAILURE: Overfull \hbox (120.06436pt too wide) in paragraph at lines 873--881
