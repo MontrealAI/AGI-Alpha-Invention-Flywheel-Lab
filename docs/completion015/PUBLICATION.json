@@ -55,7 +55,7 @@
         "before_sha256": "45374590f265ec8f86b65f17ca21fe3f5dc9e212f2f557b5e51e0d1f93e7e9b4"
       },
       "connected_enterprise/engine.py": {
-        "after_sha256": "59598ab196ad538d8811b804e5a370b32c334e6b945f78a62252687752ed9af7",
+        "after_sha256": "2d6340c9c067866978dc22395f9c5857b02f836a4111ae78e34e4f6f0ef8b7f9",
         "before_sha256": "45a44cd2511debc34394644f92d928eb65996aa331f92d34574b9d7718cc2c7c"
       },
       "connected_enterprise/finance.py": {
@@ -78,6 +78,10 @@
         "after_sha256": "0b7e57636a56e6b4e2653ab0e2114acf3396da59a397fda66ac72cc3afdb25be",
         "before_sha256": null
       },
+      "tests/test_connected_channel_lead.py": {
+        "after_sha256": "08978bb0d11d1183837475efe171ef38b08ff11371b06d5b2555aa6bcace484b",
+        "before_sha256": null
+      },
       "tests/test_connected_rejections.py": {
         "after_sha256": "05622bf05ef0226ec9ee3b50d57569526b8eca2e51780445490dc1455b0e8a2f",
         "before_sha256": null
@@ -90,6 +94,14 @@
         "after_sha256": "93ee007ddf9ef1dada8c7e0b4569daf64b13f1aee061e56e73fa73390849b778",
         "before_sha256": null
       }
+    },
+    "channel_lead_historical_configs": {
+      "path": "evidence/completion015/channel-lead-repair/HISTORICAL_CONFIGS.json",
+      "sha256": "3f955a864aab684c1754b8f6871c39fc06bfc91c4bfd5e614d6d0769e615cf3c"
+    },
+    "channel_lead_qualification": {
+      "path": "evidence/completion015/channel-lead-repair/QUALIFICATION.json",
+      "sha256": "5d8abf8dfcb5bd6a448ddba56a5f2ba85f088b699e4e7414fa0605f504ba1028"
     },
     "economic_evidence_source_commit": "9354d76a7033e8958968cde4469cdd71ea870a21",
     "economic_evidence_source_sha256": "abc262bf80741f36db2872330c2d4f5166c48d313143c239d440e3cd2143b9a4",
@@ -111,11 +123,11 @@
       "path": "evidence/completion015/journal-rejection-repair/QUALIFICATION.json",
       "sha256": "842d7732faaa457d91e3b832d4139130ea4f43e806d1e3c7db24124b7131fa02"
     },
-    "registered_utc": "2026-10-30T21:46:41.770761+00:00",
-    "release_identity_files": 138,
-    "release_qualification_source_sha256": "6bb08e37c8e3b58052902039b2451a8565ce6a411634e6f0010caa299a68bdae",
+    "registered_utc": "2026-10-30T21:54:26.014080+00:00",
+    "release_identity_files": 139,
+    "release_qualification_source_sha256": "de720871db2aa397381cf318d083eddf4d44239db6db99d86120219584279f9c",
     "reproduction_scope": "Current release requires fresh exact-head engineering qualification, all exact-main terminal-success checks and actual downloaded default reproduction. Known evaluation seeds make it reproduction, not untouched confirmation of repaired source. Original report, paper, QA, financial records and CPU-overrun evidence retain their historical source.",
-    "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.305020239 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment. TEMPORAL_REPAIR_ALLOCATION.json prospectively registers a separate additional80localCPU increment ending22:55UTC. Temporal qualification0.499749kernelchildCPU; construction/probes unmetered, notzero; conservative10CPUshare reserved. No new local commercial confirmation. Original resource failures remain unchanged. Journal rejection repair measured lowerbound37.460127374CPU including beforeprobe, initial11/final14tests and original8read-only scan;20targetexceeded for restart-certificate completion; editing/wrapper CPU unknown, notzero. Conservative55financial+10temporal+5root+10other planning shares total80; no exact wholephase measurement/compliance claim. Hostedcampaign30minutes remains within45minute bound.",
+    "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.305020239 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment. TEMPORAL_REPAIR_ALLOCATION.json prospectively registers a separate additional80localCPU increment ending22:55UTC. Temporal qualification0.499749kernelchildCPU; construction/probes unmetered, notzero; conservative10CPUshare reserved. No new local commercial confirmation. Original resource failures remain unchanged. Journal rejection repair measured lowerbound37.460127374CPU including beforeprobe, initial11/final14tests and original8read-only scan;20targetexceeded for restart-certificate completion; editing/wrapper CPU unknown, notzero. Conservative55financial+10temporal+5root+10other planning shares total80; no exact wholephase measurement/compliance claim. Hostedcampaign30minutes remains within45minute bound. Channel preflight31focusedtests use0.186818kernelchildCPU; construction/probes unmetered, no commercialrun, within existing temporal planning share. Absolute22:55UTC stop unchanged.",
     "schema": "agi-alpha/completion015-composed-release-delta/v2",
     "source_changes": [
       "Release wrapper: bounded exact-main gating, kernel self+waited-child CPU measurement, independently audited actual-run key-free archive retention and regressions.",
@@ -124,7 +136,8 @@
       "Typed finishability admission: bounded unique resource IDs/kinds and execution fields, valid delivery fee terms and the existing canonical native job map are checked before proof/funds; audit, export, reopen and resolution share that boundary. Growth kinds remain extensible.",
       "Pure allocation test fixtures migrate to explicit symbolic delivery fields with zero fee/context terms. Existing costs, payoff/objectives, caps and assertions remain unchanged; no financial guard is relaxed. Exact f214 hosted failure and before/after focused results are retained.",
       "Temporal precommit admission: production plus acceptance plus clearing must fit the inclusive payment deadline; capacity must already be active at qualification and remain valid strictly through scheduled production, with one list for slot counting and asset assignment. No default economics retuned.",
-      "Connected journal: audited terminal REJECTED records for independently reproduced zero-effect native failures; current-state/durable/full-account equality required, exact preattempt certificates support interrupted-before-native and rejection-marker recovery. Partial, advanced, ambiguous and legacy uncertified pending authority stays protected."
+      "Connected journal: audited terminal REJECTED records for independently reproduced zero-effect native failures; current-state/durable/full-account equality required, exact preattempt certificates support interrupted-before-native and rejection-marker recovery. Partial, advanced, ambiguous and legacy uncertified pending authority stays protected.",
+      "Connected channel preflight validates all typed contracts, requires the used pilot contract and positive advance lead before financial initialization. This edition exposes once before same-day purchase; unsupported zerolead must not create backdated paid capacity. Standalone ChannelBook zerolead semantics, checker and default contracts unchanged."
     ],
     "temporal_historical_impact": {
       "path": "evidence/completion015/temporal-repair/HISTORICAL_IMPACT.json",
@@ -160,5 +173,5 @@
   "schema": "agi-alpha/connected014-research-edition/v1",
   "source_binding_scope": "Current repaired release qualification closure. Historical report, paper, resource qualification and PDF QA describe original economic_evidence_source_sha256. COMPOSED_RELEASE_DELTA.json binds explicit financial, temporal admission and certified journal recovery repairs, release wrapper and verified historical impact. Service/economic assumptions are unchanged; current actual downloaded default run is exposed-seed reproduction, not new untouched confirmation. Final merged Git commit is bound by RELEASE_MANIFEST.json to avoid circular self-reference.",
   "source_commit": null,
-  "source_sha256": "6bb08e37c8e3b58052902039b2451a8565ce6a411634e6f0010caa299a68bdae"
+  "source_sha256": "de720871db2aa397381cf318d083eddf4d44239db6db99d86120219584279f9c"
 }

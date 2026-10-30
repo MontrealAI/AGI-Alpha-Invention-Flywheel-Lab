@@ -9,7 +9,7 @@ from adaptive_enterprise.instruments import load_jobs, execute_offer
 from adaptive_enterprise.strategies import offer_catalog
 from commercial.ledger import canonical, digest
 from commercial.persistence import atomic_bytes
-from .channels import ChannelBook, default_contracts
+from .channels import ChannelBook, default_contracts, validate_contracts
 from .finance import JournalAccount
 
 MICRO=1_000_000
@@ -40,6 +40,9 @@ def validate_config(cfg):
     if cfg['production_hours']+cfg['acceptance_hours']+cfg['clearing_hours']>cfg['payment_deadline_hours']:raise ValueError('COMPLETE_LIFECYCLE_EXCEEDS_PAYMENT_DEADLINE')
     for key in ['opening','working','setup_cost','maintenance_daily','exposure_cost','qualification_cost','onboarding_cost','production_cost','support_cost','supplier_unit_cost','capacity_price','payment_fixed']:
         if type(cfg[key]) is not int or cfg[key]<0:raise ValueError('INTEGER_RESOURCE_COST_REQUIRED')
+    contracts=validate_contracts(cfg['channels'])
+    if 'pilot' not in contracts:raise ValueError('CONNECTED_PILOT_CHANNEL_REQUIRED')
+    if contracts['pilot']['lead_days']<1:raise ValueError('CONNECTED_CHANNEL_ADVANCE_LEAD_REQUIRED')
     return cfg
 
 def _write(path,value):atomic_bytes(Path(path),canonical(value)+b'\n')
