@@ -37,6 +37,7 @@ def validate_config(cfg):
     for key in ['nonpayment_bps','arrival_bps','retention_bps','payment_bps','profit_tax_bps']:
         if type(cfg[key]) is not int or not 0<=cfg[key]<=10000:raise ValueError('BASIS_POINTS_REQUIRED')
     if not 4<=cfg['customer_pool']<=200 or cfg['initial_slots']>cfg['maximum_slots'] or cfg['clearing_hours']>cfg['payment_deadline_hours']:raise ValueError('FINITE_VALID_CONTRACT_REQUIRED')
+    if cfg['production_hours']+cfg['acceptance_hours']+cfg['clearing_hours']>cfg['payment_deadline_hours']:raise ValueError('COMPLETE_LIFECYCLE_EXCEEDS_PAYMENT_DEADLINE')
     for key in ['opening','working','setup_cost','maintenance_daily','exposure_cost','qualification_cost','onboarding_cost','production_cost','support_cost','supplier_unit_cost','capacity_price','payment_fixed']:
         if type(cfg[key]) is not int or cfg[key]<0:raise ValueError('INTEGER_RESOURCE_COST_REQUIRED')
     return cfg
@@ -103,7 +104,9 @@ def _prepare_plan(state,account,jobs):
             prepared['reactivations'].append({'customer_id':b['id'],'responded':responded,'time':t,'source_plan_id':x['source_plan_id'],'response_probability_bps':3500})
             b['active']=responded
         b['known']=True
-    slots=cfg['initial_slots']+sum(i['kind']=='capacity' and i['activation_time']<=t<i['expiry_time'] for i in state['investments'])
+    production_time=t+cfg['production_hours']
+    usable_capacity=[i for i in state['investments'] if i['kind']=='capacity' and i['activation_time']<=t and production_time<i['expiry_time']]
+    slots=cfg['initial_slots']+len(usable_capacity)
     slots=min(cfg['maximum_slots'],slots)
     if cfg['supplier_outage_start_day']<=day<cfg['supplier_outage_start_day']+cfg['supplier_outage_days']:slots=0
     candidates=sorted((b for b in simulated['buyers'] if b['known'] and b['active'] and not b['pending_commitments'] and b['next_need_time']<=t and (b['id'] in owned_ids or b['onboarded'] or b['id'] in exposed_ids)),key=lambda b:(b['next_need_time'],b['id']))
@@ -161,10 +164,10 @@ def _prepare_plan(state,account,jobs):
         if decision['buyer_choice']!='us':continue
         ident=f"order-{len(state['orders'])+len(prepared['orders']):04d}"
         order={'id':ident,'customer_id':b['id'],'job_id':entry['job']['id'],'work_keys':entry['job']['work_keys'],'offer':offer,'price':price,
-            'qualified_time':t,'production_time':t+cfg['production_hours'],'acceptance_time':None,'collection_time':None,'clearing_due_time':None,'outcome':'PENDING',
+            'qualified_time':t,'production_time':production_time,'acceptance_time':None,'collection_time':None,'clearing_due_time':None,'outcome':'PENDING',
             'complete_cost':cost,'fee':fee,'onboarding':onboard,'production_cost':cfg['production_cost']+cfg['supplier_unit_cost'],'support_cost':cfg['support_cost'],'service_receipt':None,
             'funding_receipt':None,'acquisition_source_plan_id':b['acquisition_source_plan_id'],'exposure_time':b['exposure_time'],
-            'capacity_source_plan_id':[i['plan_id'] for i in state['investments'] if i['kind']=='capacity' and i['activation_time']<=t<i['expiry_time']][len(prepared['orders'])-cfg['initial_slots']] if len(prepared['orders'])>=cfg['initial_slots'] else None}
+            'capacity_source_plan_id':usable_capacity[len(prepared['orders'])-cfg['initial_slots']]['plan_id'] if len(prepared['orders'])>=cfg['initial_slots'] else None}
         prepared['orders'].append(order);simulated['used_jobs'].append(order['job_id']);liquidity-=cost+price
     return prepared
 
