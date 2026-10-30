@@ -1,0 +1,40 @@
+{
+  "schema": "agi-alpha/capital-recycling019-manifest/v1",
+  "parent": "ee6742725c68bf7bea5bb3cb2ed91c4fd5a1164e",
+  "pr24_input": "97c790ae681779deca53e8ddc8c6dc3b6841bfc6",
+  "observed_pr28_head": "d1a7b41779ae4ee2f00402bef11e5ae931200ba6",
+  "files": {
+    "enterprise/contract012.py": "2088de93e04042eba89616343e602da62ae0ad4715832ee933a48f13cb5dc1e3",
+    "enterprise/contract019.py": "a10a71ea43f460692389f074ab3b57e315aa15e52e016123e2bb9965f39132e0",
+    "continuation/capital-recycling-019/ALLOCATION.json": "f3a5552e38e98ac040e53ed81114b569b6a9cfe83d80c25c0b8092b7c086a080",
+    "continuation/capital-recycling-019/CURRENT_STATUS.json": "efd6599818600dedff5869785227535d7663c9eeaf841a65d49a7ca3bb7a536d",
+    "continuation/capital-recycling-019/FAILURES.md": "ca1d065a9cca8a758d094549b78e49090bd3635f10805978091d36e602ec241f",
+    "continuation/capital-recycling-019/README.md": "43791d8b8388405984cad25b2ff7eaae168ede660aa30c426a10743c98c80f93",
+    "continuation/capital-recycling-019/PREPARE_RESULT.json": "e9676ee57082951e17759f957a8ddf99e7372f8cbb457c3b6c49b33d65590a82",
+    "continuation/capital-recycling-019/RESOURCES.jsonl": "aee5b2da33142dd58b33665603f9a9b407c93afd97f1f33640ee6f98ebf845f7",
+    "continuation/capital-recycling-019/RESULT.json": "06e84f04dd6637844782946f2a8f99438bb325626c18a23a946a49b12cb1a6af",
+    "continuation/capital-recycling-019/VERIFY_RESULT.json": "1f920c7d5616e8e5f0c29c0c2e75a457b52861a988d155c0b5ec34344fa84556",
+    "continuation/capital-recycling-019/independent-verify-final.log": "bcc373f09375d5a80a8e660831d7e9048d30f828f37e860a78aa4ad6fdac5579",
+    "continuation/capital-recycling-019/independent-verify.log": "0afa3f8a6eab16b74f49bb93cd652c0ef478eb33d1e1da956677939b500d4045",
+    "continuation/capital-recycling-019/matched-experiment-final.log": "2bf8e7500715416d3e24f677e468aa85f3bc2edd67017d65c9696cca943ea9de",
+    "continuation/capital-recycling-019/matched-experiment-recovery.log": "2bf8e7500715416d3e24f677e468aa85f3bc2edd67017d65c9696cca943ea9de",
+    "continuation/capital-recycling-019/matched-experiment-retry.log": "679165adb4b170a61158674522294d836723edbb140bc0d6ae93305e32e7fc62",
+    "continuation/capital-recycling-019/matched-experiment-retry2.log": "4a5899814a2c20ebdfa84fd8c293a90dac637270fc12099acc4068ca39a50413",
+    "continuation/capital-recycling-019/matched-experiment-retry3.log": "0a65b75082fe4f9c4c08e0e6db55a3b9c03b9db7a48bf4cb0703c93f53a7d842",
+    "continuation/capital-recycling-019/matched-experiment.log": "e0638bd5303e5f30ec5777860811456c92e268fd765c4c3b2c4cd8331e2a5eec",
+    "continuation/capital-recycling-019/prepare-enterprise.log": "b7581ba4c30258b2dc6115bb7bad0619fdbcf7b722c75a031d562c20c86c131a",
+    "continuation/capital-recycling-019/prepare-final.log": "0b3f231e813d2ca150a488eb783acc2cf432a08ba2ed7a4e114ede16c6137d47",
+    "continuation/capital-recycling-019/prepare-retry.log": "987aac8942aeaa285b0ce56586fc7e4c94aa2d26fc1d7d239e430ebe13ad7d18",
+    "continuation/capital-recycling-019/prepare.log": "22109eda91afe93db56ab173dfb94246708b2b7cfbd8714e817f9395fb8025a1",
+    "continuation/capital-recycling-019/source-smoke.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "continuation/capital-recycling-019/prepare.py": "4484f2b3c5545407123fc8da751f4606458d36e00388ccdd831ecf86cee6bdf7",
+    "continuation/capital-recycling-019/run_bounded.py": "800e70aa8b89e0efcf0fdd6807bd80bad03da20b46940d807a66197f5a7d28ef",
+    "continuation/capital-recycling-019/run_experiment.py": "ae5f39e39d4f6ad55411adcc92086282e84696e7661ed00e4ccb5abe62174a35",
+    "continuation/capital-recycling-019/verify.py": "075097e1755dc100fd2d40627da15998fe1e7d421dee7f91a60203fdfe797f33"
+  },
+  "omitted_generated_inputs": [
+    "continuation/capital-recycling-019/services",
+    "continuation/capital-recycling-019/enterprise-services"
+  ],
+  "reproduction": "Run prepare.py before run_experiment.py; generated accepted synthetic cohorts are deterministic and source-bound."
+}

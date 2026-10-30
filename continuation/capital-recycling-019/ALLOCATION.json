@@ -1,0 +1,53 @@
+{
+  "schema": "agi-alpha-bounded-continuation/v1",
+  "registered_utc": "2026-10-30T22:50:39.769819503Z",
+  "absolute_stop_utc": "2026-10-30T23:20:39.769819503Z",
+  "purpose": "Prospective, costed, native finite-exposure capital-recycling qualification isolated from PR 28 release ownership",
+  "source_support_commit": "ee6742725c68bf7bea5bb3cb2ed91c4fd5a1164e",
+  "observed_pr28_head": "d1a7b41779ae4ee2f00402bef11e5ae931200ba6",
+  "pr24_input": "97c790ae681779deca53e8ddc8c6dc3b6841bfc6",
+  "limits": {
+    "total_cpu_seconds_including_waited_children": 180,
+    "total_wall_seconds": 1800,
+    "total_task_memory_bytes": 805306368,
+    "additional_disk_bytes": 67108864,
+    "decoded_source_retrieval_bytes": 12582912,
+    "active_jobs": 1,
+    "external_cost_usd": 0,
+    "per_job_cpu_seconds": 60,
+    "per_job_wall_seconds": 60,
+    "processors_per_job": 1,
+    "cpu_seconds_total": 180,
+    "wall_seconds_total": 1800,
+    "memory_bytes": 805306368,
+    "added_disk_bytes": 67108864,
+    "cpu_seconds_per_job": 60,
+    "wall_seconds_per_job": 60
+  },
+  "controls": {
+    "exclusive_prelaunch_lock": true,
+    "kernel_waited_child_accounting": true,
+    "preserve_aggregate_reservations_and_obligations": true,
+    "hosted_ci_launch": false,
+    "full_default_or_downloaded_release_run": false,
+    "real_spending_or_external_actions": false
+  },
+  "stop_conditions": [
+    "resource exhaustion",
+    "unsafe accounting",
+    "ownership conflict",
+    "missing action approval",
+    "lost audit integrity"
+  ],
+  "ownership": {
+    "canonical_release_owner": "task 01a18e41-da6b-764d-8a13-d6e9a0b5c0f5",
+    "canonical_accounts_or_keys_inherited": false,
+    "component_scope": "new prospective contract and fresh matched simulation accounts only",
+    "canonical_ledger": "existing Account/JournalAccount; no parallel ledger"
+  },
+  "prior_cycle_preserved": {
+    "measured_job_cpu_seconds": 72.449163,
+    "original_concurrency_failure_reset": false,
+    "support_packaging_boundary_cpu_seconds": 72.277115
+  }
+}

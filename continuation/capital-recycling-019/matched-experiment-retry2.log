@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/a22e8320e3d4/continuation/capital-recycling-019/run_experiment.py", line 290, in <module>
+    main()
+  File "/workspace/scratch/a22e8320e3d4/continuation/capital-recycling-019/run_experiment.py", line 230, in main
+    results[name] = run_arm(tmp / (name + ".sqlite"), prospective=True, terms=terms)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/a22e8320e3d4/continuation/capital-recycling-019/run_experiment.py", line 155, in run_arm
+    result = deliver(ex, opportunity["id"], tick, funding,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/a22e8320e3d4/continuation/capital-recycling-019/run_experiment.py", line 87, in deliver
+    ex.execute("event", {"id": oid, "action": "consent",
+  File "/workspace/scratch/a22e8320e3d4/commercial/single_writer.py", line 76, in execute
+    return self._exchange.execute(op, args, day)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/a22e8320e3d4/enterprise/contract019.py", line 218, in execute
+    return super().execute(op, args, day, record=record)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/a22e8320e3d4/enterprise/contract012.py", line 131, in execute
+    return super().execute(op, args, day, record=record)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/a22e8320e3d4/commercial/ledger.py", line 254, in execute
+    self.ex.event(ident, a['event_id'], action, payload, day, crash=a.get('crash', False))
+  File "/workspace/scratch/a22e8320e3d4/vendor/alpha_claim/protected_exchange.py", line 372, in event
+    json.loads(x[0])["now"] for x in self.db.execute("SELECT raw FROM events WHERE order_id=?", (ident,))
+    ~~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'now'

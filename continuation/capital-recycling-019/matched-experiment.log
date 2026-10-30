@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/a22e8320e3d4/continuation/capital-recycling-019/run_experiment.py", line 290, in <module>
+    main()
+  File "/workspace/scratch/a22e8320e3d4/continuation/capital-recycling-019/run_experiment.py", line 227, in main
+    permanent = run_arm(tmp / "permanent.sqlite", prospective=False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/a22e8320e3d4/continuation/capital-recycling-019/run_experiment.py", line 132, in run_arm
+    ex = SingleWriterExchange(destination, **common)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/a22e8320e3d4/commercial/single_writer.py", line 69, in __init__
+    self._exchange = TapeExchange(path, _writer_lease=self.lease, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/a22e8320e3d4/commercial/ledger.py", line 152, in __init__
+    self.ex = memory_engine(engine(), key=b'C' * 32, contract=contract,
+                            ^^^^^^^^
+  File "/workspace/scratch/a22e8320e3d4/experiments/commerce006.py", line 105, in engine
+    if sha(read_bytes(root/path))!=expected:raise ValueError('PINNED_EXCHANGE_SOURCE_MISMATCH '+path)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/a22e8320e3d4/experiments/commerce006.py", line 37, in read_bytes
+    raise ValueError('REGULAR_UNSYMLINKED_FILE_REQUIRED')
+ValueError: REGULAR_UNSYMLINKED_FILE_REQUIRED
