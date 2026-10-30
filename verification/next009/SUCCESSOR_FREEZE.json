@@ -1,0 +1,75 @@
+{
+  "schema": "agi-alpha/next009-successor-source-freeze/v2",
+  "scope": "Prospective source/protocol freeze before Net2 acquisition, using a new uniform numerical representation edition. Finite engineering transfer only; original raw Net3 failure and Net1 qualification unchanged.",
+  "files": {
+    "research/next009/successor.py": "c425b7de1532a4d205fd4cdb2ce0e82087143623ec5564178dcc39f5c4b69524",
+    "research/next009/successor_protocol.json": "8a33eca821afb951d05ddb75256856ab0da98b5be1207713bf100af9102ef50a",
+    "verification/next009/verify_successor.py": "7830f1cb610c815dfb83c1e2970d7e53275e33d774cdcb99c248997b28e9bc19",
+    "verification/next009/successor_runtime_driver.py": "1b13b26df6daeddb266924ac2595df9ae71ca3579faaba31809040a3a9c7180d",
+    "verification/next009/successor_protocol.json": "37df9d5599e76843f11e329bb048008fe3824a4a556dd7e52889375bd6401b30",
+    "inventions/measurement009/compiler.py": "98892085340baf1b58762e46bc83d46b5290c7b3198171782b407e9c0a783c0d",
+    "inventions/measurement009/model.py": "ac8977f0e90a5608147659f7265f533891091d94e7f2fec194416db8d5508df6",
+    "inventions/measurement009/__init__.py": "6bdc8ca0499b47aa0f9e4a2c07ed1375708eb0777be60c7f07608b5d4836c93e",
+    "inventions/measurement009/inputs/libepanet22.so": "3a49fa2eb1aecdf4d7a83c9a26667bacc418d285ed1d3a45becec52e7556d73f",
+    "flywheel/retention.py": "7d7587fd11bffebc7b4ab6a1118eda0a899094099949434722d1254e630973c7",
+    "experiments/resource006_v3.py": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+    "verification/next009/verify.py": "08bd61de297e491115c48d0a6eca482dc1c40f42966daf646e4cd2737cf68a76",
+    "verification/next009/protocol.json": "5e80370c23a9486489334a9b7e17cd2f612d5db5dab77bd2e546313aa7282351",
+    "verification/next009/runtime_driver.py": "ba187008a23ba81b3a9632970bd4a9e90c3ef19f102244235ba72c63c3aabab9",
+    "evidence/next009/verification/primary-confirmation/artifacts/ACCEPTANCE.json": "58da3c195b1d7b22e91601d33f1434a16cfc92339db7ac6074314e6c15e60824",
+    "evidence/next009/construction/networks-v2/artifacts/Net1/generated_plan.json": "9d3609491a1649a1e46a9e8e2b040c1a653fc38ee9fa75ea62adf47f67344d90",
+    "research/next009/PARENT_FREEZE.json": "4f68155fc87819c5a4bbfe5fecb8508304219c00643a8b688775b245a7a46ac7",
+    "inventions/measurement009/numeric_edition.py": "34a847e1944b3bed8bcc69221b94ac7d24f8b19f04a029c893afd8926775a13e",
+    "verification/next009/numeric_edition_checker.py": "2a8cec4a863e6102d3a3c1b610e193f2156c2000225cfd44a9f284c9ec74ac64"
+  },
+  "net2_acquired_or_inspected": false,
+  "fresh_case_seed": null,
+  "drift_grid_pp": [
+    "0",
+    "1",
+    "5",
+    "10",
+    "25"
+  ],
+  "all_source_pairs_required": true,
+  "cases_per_source_per_drift": 4,
+  "arms": [
+    "retained",
+    "equal-content-ordinary-reuse",
+    "reset-full-toolbox"
+  ],
+  "independent_control": "Exact rational relation construction; separate conventional SciPy/HiGHS multicover with returned-subset check; sharedsolver disclosed.",
+  "allocation": {
+    "cpu_seconds": 600,
+    "wall_seconds": 600,
+    "memory_bytes": 2147483648,
+    "output_bytes": 33554432,
+    "storage_bytes": 134217728
+  },
+  "funding": "Research allocation; zero qualified unrestricted earned funding.",
+  "prepared_utc": "2026-10-30T10:31:46.595603+00:00",
+  "previous_unexecuted_freeze": {
+    "path": "verification/next009/history/successor_v1/SUCCESSOR_FREEZE.json",
+    "sha256": "13cb0e247493dce2cc2d393d9f31ac4c6fe4f4d66802ab9f1524594e2b2a25a2",
+    "net2_executed": false
+  },
+  "numeric_edition": {
+    "edition": "uniform-half-even-12dp-v1",
+    "all_coordinates": true,
+    "decimal_places": 12,
+    "rounding": "ROUND_HALF_EVEN",
+    "maximum_absolute_change_pp": "1/2000000000000",
+    "post_transform_range_pp": [
+      "0",
+      "100"
+    ],
+    "raw_bytes_preserved": true,
+    "physical_or_simulator_error_bound": null
+  },
+  "reproduction": {
+    "argument": "--replay-seed",
+    "format": "64 lowercase hexadecimal characters from exposed original result",
+    "new_protected_cases": false,
+    "output_label": "EXPOSED_REPRODUCTION_NO_NEW_CONFIRMATION"
+  }
+}
