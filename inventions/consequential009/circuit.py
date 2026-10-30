@@ -199,7 +199,7 @@ def coordinate_box(z,gain,eps):
 def separated(a,b): return any(x[1]<y[0] or y[1]<x[0] for x,y in zip(a,b))
 
 
-def compile_plan(circuit,hypotheses,actions,policies,allow_extension=True):
+def compile_plan(circuit,hypotheses,actions,policies,allow_extension=True,prune=False):
     started=time.process_time(); pairs=set(combinations(range(len(hypotheses)),2)); covers={}; signatures={}
     for action in actions:
         if action['kind']=='input_admittance' and not allow_extension: continue
@@ -217,13 +217,51 @@ def compile_plan(circuit,hypotheses,actions,policies,allow_extension=True):
         if not new: break
         witness=min(uncovered)
         ancestry.append({'revision':len(selected)+1,'parent':selected[-1] if selected else 'voltage-only-v1',
-           'consequential_unresolved_pair':[hypotheses[i]['id'] for i in witness],
+           'blocking_witness':[hypotheses[i]['id'] for i in witness],
+           'action_demonstrated_pair':[hypotheses[i]['id'] for i in min(new)],
+           'resolves_blocking_witness':witness in new,
            'generated_action':best,'newly_separated_pairs':len(new),
            'extension':'flux conjugate input-current observable' if best['kind']=='input_admittance' else None})
         selected.append(best['id']);uncovered-=new
+    initial_selected=list(selected);pruning_trace=[];replacement_trace=None
+    if prune:
+        achieved=pairs-uncovered
+        for aid in reversed(initial_selected):
+            others=[x for x in selected if x!=aid]
+            other_coverage=set().union(*(covers[x] for x in others))
+            remove=achieved<=other_coverage
+            pruning_trace.append({'action':aid,'removed':remove,'preserved_covered_pairs':len(other_coverage&achieved),
+                'required_covered_pairs':len(achieved),'known_method':'reverse deletion of redundant tests'})
+            if remove:selected.remove(aid)
+        prior_cost=sum(a['relative_acquisition_units'] for a in actions if a['id'] in selected)
+        pre_replacement=list(selected);evaluations=[];qualifying=[]
+        for rank,a in enumerate(actions):
+            if a['id'] not in covers:continue
+            missing=achieved-covers[a['id']]
+            evaluations.append({'action_id':a['id'],'relative_acquisition_units':a['relative_acquisition_units'],
+                'covers_prior_coverage':not missing,'missing_pairs_count':len(missing),
+                'first_missing_pair':[hypotheses[i]['id'] for i in min(missing)] if missing else None,
+                'strictly_lower_cost':a['relative_acquisition_units']<prior_cost})
+            if not missing and a['relative_acquisition_units']<prior_cost:
+                qualifying.append((a['relative_acquisition_units'],rank,a['id']))
+        chosen=min(qualifying)[2] if qualifying else None
+        if chosen is not None:selected=[chosen]
+        replacement_trace={'known_method':'finite single-test replacement of a redundant greedy bundle',
+            'prior_action_ids':pre_replacement,'prior_relative_acquisition_units':prior_cost,
+            'required_covered_pairs':len(achieved),'evaluations':evaluations,
+            'selected_action_id':chosen,'selection_rule':'Strictly lower relative acquisition cost; lowest cost first, then admitted action order. Never hard-code a frequency.',
+            'discovery_provenance':'Developer provided known replacement search after preserved r2 efficiency counterexample; runtime evaluates exact coverage and instantiates the replacement.'}
+        uncovered=pairs-set().union(*(covers[x] for x in selected))
     all_uncovered=pairs-set().union(*covers.values()) if covers else pairs
     return {'schema':'circuit-measurement-strategy-v1','source_sha256':circuit.source_sha256,
        'selected_actions':[a for aid in selected for a in actions if a['id']==aid],
+       'initial_greedy_actions':[a for aid in initial_selected for a in actions if a['id']==aid],
+       'policy_recipe':['greedy_cover','reverse_delete','single_action_replacement'] if prune else ['greedy_cover'],
+       'policy_provenance':'Developer applied known reverse-delete and finite replacement adaptations after executed ordinary-control counterexamples; not a newly invented test-set algorithm.',
+       'pruning_trace':pruning_trace,
+       'replacement_trace':replacement_trace,
+       'selected_relative_acquisition_units':sum(a['relative_acquisition_units'] for a in actions if a['id'] in selected),
+       'initial_relative_acquisition_units':sum(a['relative_acquisition_units'] for a in actions if a['id'] in initial_selected),
        'generated_ancestry':ancestry,'admitted_pairs':len(pairs),'separated_pairs':len(pairs-uncovered),
        'unresolved_pairs':[[hypotheses[i]['id'],hypotheses[j]['id']] for i,j in sorted(uncovered)],
        'complete_finite_model_acceptance':not uncovered,'strong_full_experiment_unresolved_pairs':len(all_uncovered),

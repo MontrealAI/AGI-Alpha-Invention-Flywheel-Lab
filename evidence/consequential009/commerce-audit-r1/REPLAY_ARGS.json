@@ -1,0 +1,49 @@
+{
+  "schema": "agi-alpha/consequential009-commerce-r2-source-alias-replay/v1",
+  "status": "Content-identical historical source aliases, checked withoutrerunningworlds. Originalfreeze andreceipts remainunchanged. Outputmustnotexist. This reconstructs thehistoricalr2commercialedition, notcurrentr3qualification.",
+  "original_freeze_sha256": "a70305060c3803dc9a2d522f797e9b902e7ea0ca0358afe93470db9824f5d5e3",
+  "paths": {
+    "artifact": "evidence/consequential009/resources/analog-r2/artifacts/REPORT.json",
+    "receipt": "evidence/consequential009/verifier/COMPLETE_COHORT_r2.json",
+    "protocol": "research/consequential009/analog/PROTOCOL.json",
+    "candidate": "evidence/consequential009/source-r2/circuit.py",
+    "verifier": "verification/consequential009/cohort_check_r2_preserved.py"
+  },
+  "authority": {
+    "artifact": "30bca7ec8ad3a9d1db22019551ed72bae2da536d7364b9f7ddb62a2c3fcd5022",
+    "receipt": "84fb69b88aad4a1d47973be307cd078820cdd1b92b3a4c5961abcee6243b4081",
+    "protocol": "9a28e4202fecbe46769f82a20a8aeedb92020cdd2701a6d941b6694d5363d7ad",
+    "candidate": "201e445cc25525a42f0990aa0d71cfe624eadfd41899f528810e83a246cd43b4",
+    "verifier": "bcda22f037034babf9dae98daffc0b2afe51b911b9568d8a7f04a5bb91d315f1"
+  },
+  "args": [
+    "python",
+    "experiments/consequential009_commerce.py",
+    "--artifact",
+    "evidence/consequential009/resources/analog-r2/artifacts/REPORT.json",
+    "--expected-artifact-sha256",
+    "30bca7ec8ad3a9d1db22019551ed72bae2da536d7364b9f7ddb62a2c3fcd5022",
+    "--receipt",
+    "evidence/consequential009/verifier/COMPLETE_COHORT_r2.json",
+    "--expected-receipt-sha256",
+    "84fb69b88aad4a1d47973be307cd078820cdd1b92b3a4c5961abcee6243b4081",
+    "--protocol",
+    "research/consequential009/analog/PROTOCOL.json",
+    "--expected-protocol-sha256",
+    "9a28e4202fecbe46769f82a20a8aeedb92020cdd2701a6d941b6694d5363d7ad",
+    "--candidate",
+    "evidence/consequential009/source-r2/circuit.py",
+    "--expected-candidate-sha256",
+    "201e445cc25525a42f0990aa0d71cfe624eadfd41899f528810e83a246cd43b4",
+    "--verifier",
+    "verification/consequential009/cohort_check_r2_preserved.py",
+    "--expected-verifier-sha256",
+    "bcda22f037034babf9dae98daffc0b2afe51b911b9568d8a7f04a5bb91d315f1",
+    "--policy",
+    "campaign/consequential-009/COMMERCIAL_POLICY.json",
+    "--expected-policy-sha256",
+    "2424d01efa170aae95d52495b0b3138e77240a5ac5a01cf18975fb46301174a0",
+    "--output",
+    "/tmp/alpha009-commerce-replay-UNUSED"
+  ]
+}

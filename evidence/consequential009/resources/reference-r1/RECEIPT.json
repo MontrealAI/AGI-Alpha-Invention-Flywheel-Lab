@@ -1,0 +1,57 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "reference-r1",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "inventions.consequential009.reference_extension",
+    "--protocol",
+    "research/consequential009/analog/REFERENCE_PROTOCOL.json",
+    "--output",
+    "evidence/consequential009/resources/reference-r1/artifacts"
+  ],
+  "requested_command": [
+    "python",
+    "-m",
+    "inventions.consequential009.reference_extension",
+    "--protocol",
+    "research/consequential009/analog/REFERENCE_PROTOCOL.json",
+    "--output",
+    "evidence/consequential009/resources/reference-r1/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "inventions.consequential009.reference_extension",
+    "--protocol",
+    "research/consequential009/analog/REFERENCE_PROTOCOL.json",
+    "--output",
+    "evidence/consequential009/resources/reference-r1/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/1f8586d459dc/lab",
+  "limits": {
+    "wall_seconds": 120,
+    "cpu_seconds": 180,
+    "memory_bytes": 1073741824,
+    "output_bytes": 16777216,
+    "storage_bytes": 67108864
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 0.6388158339996153,
+  "supervisor_cpu_seconds": 0.014345353999999998,
+  "waited_cpu_seconds": 0.630416,
+  "descendant_survivors": false,
+  "output_bytes": 5252074,
+  "logs": {
+    "stdout.log": "9b6d4b23119e96b1a63f03dbdc1a6f3ef5c5818c94f6135fc621489e17d7b8b0",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

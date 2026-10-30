@@ -1,0 +1,41 @@
+{
+  "schema": "agi-alpha/consequential009-negative-memory-adaptation/v1",
+  "retrieved": {
+    "records": [],
+    "refused": [
+      {
+        "id": "c4fecc99048f3be8b93e70bd4b859b7bedcaf91ea62a7b282e959c2667faba9e",
+        "reason": "SCOPED_COUNTEREXAMPLE"
+      }
+    ],
+    "failures": [
+      {
+        "id": "c4fecc99048f3be8b93e70bd4b859b7bedcaf91ea62a7b282e959c2667faba9e",
+        "counterexamples": [
+          {
+            "conditions": {
+              "sensor_gain": "unbounded"
+            },
+            "reason": "Impedance-scale/current-gain symmetry; current measurement alone cannot identify scale."
+          }
+        ]
+      }
+    ]
+  },
+  "record_sha256": "c4fecc99048f3be8b93e70bd4b859b7bedcaf91ea62a7b282e959c2667faba9e",
+  "reference_protocol_sha256": "a8f33a6234e57bc2b7452fd760fb1bbdb3bb2447415bc245cb4f99d94c0f4a55",
+  "reference_artifact_sha256": "ec57db23ffc1fcde267a2259919684340dac5e2fa600ebb8fbd3001ba2260d7c",
+  "executed_path": [
+    "flywheel.retention.retrieve",
+    "typed gain-counterexample admission",
+    "fixed reference-normalization constructor",
+    "new RLC experiment"
+  ],
+  "source_of_rule": "Developer supplied known switched-reference normalization; retrieved defect gates the experiment. This does not invent or autonomously discover the physical law.",
+  "counterfactual": "Equal-content ordinary reuse can supply the same defect and known reference rule; no superiority is claimed.",
+  "funding": "Original campaign allocation; qualified earned funds zero; conditional commercial reservation remains unspent.",
+  "cpu_seconds": 0.5796209459999999,
+  "wall_seconds": 0.5818003130007128,
+  "complete_monetary_cost": null,
+  "report_scope": "Exact source-bound model results under authored calibration, stable-transfer and noise envelope; not physical or commercial assurance."
+}

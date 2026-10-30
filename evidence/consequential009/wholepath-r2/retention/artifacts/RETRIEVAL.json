@@ -1,0 +1,78 @@
+{
+  "failures": [],
+  "records": [
+    {
+      "id": "c4fecc99048f3be8b93e70bd4b859b7bedcaf91ea62a7b282e959c2667faba9e",
+      "record": {
+        "applicability": {
+          "assumptions": [
+            "linear time-invariant passive lumped RCL",
+            "positive finite components",
+            "single grounded independent input voltage",
+            "all circuit branches included",
+            "no fixed known load omitted",
+            "normalized coherent voltage measurement"
+          ],
+          "conditions": {
+            "model_family": "passive-RCL-one-port",
+            "observable": "coherent-normalized-admittance"
+          },
+          "failures": [
+            {
+              "conditions": {
+                "sensor_gain": "unbounded"
+              },
+              "reason": "Impedance-scale/current-gain symmetry; current measurement alone cannot identify scale."
+            }
+          ],
+          "schema_version": 1,
+          "uncertainty": "Authored finite model and sensor envelope only; calibration not measured."
+        },
+        "costs": {
+          "complete_acquisition_money": null,
+          "observed_predecessor_cpu_seconds": 1.8994394430000001,
+          "recovery_horizon": "No justified amortization volume; all predecessor and inherited costs remain in lifecycle unknown K."
+        },
+        "exposure": [
+          "primary and successor model definitions exposed DEVELOPMENT before this memory experiment; no untouched confirmation"
+        ],
+        "generative_operator": {
+          "language": "circuit_measurement_v1",
+          "program": {
+            "generated_from": "executed all-node voltage-equivalence witness plus typed current scaling",
+            "inherited": false,
+            "op": "derive_flux_observable",
+            "required_model": [
+              "linear time-invariant passive lumped RCL",
+              "positive finite components",
+              "single grounded independent input voltage",
+              "all circuit branches included",
+              "no fixed known load omitted",
+              "normalized coherent voltage measurement"
+            ],
+            "rule_authorship": "developer supplied conjugate-observable rule; runtime derives network expression, units and admissibility",
+            "sensor_obligation": "independently calibrated input-current and input-voltage transfer; otherwise abstain",
+            "source_sha256": "896eb7c9cf78f0a3b5635842ac9e4b42312f9928e0eb4d9a60a49f00e4b8068c",
+            "units": "siemens",
+            "version": 1
+          }
+        },
+        "instrument": {
+          "path": "inventions/consequential009/circuit.py",
+          "sha256": "88474d7e6ab1f90cf1d38fc166814b658b876004a4029bb281fd3634daf3d0fc"
+        },
+        "provenance": {
+          "accepted_artifact_sha256": "0fe74f9ba7465a9e75f9829f6a8c6afb609692bce6ccdb91bf84a972ebecd553",
+          "insight_origin": "Developer supplied physical constitutive laws and conjugate-observable rule. Runtime derives network expressions and verifies witness; no autonomous broad-discovery priority.",
+          "protocol_sha256": "9a28e4202fecbe46769f82a20a8aeedb92020cdd2701a6d941b6694d5363d7ad"
+        },
+        "supersedes": [],
+        "verification": {
+          "receipt_sha256": "69502fbe587625b35bbcd73c704e4f2605f3879db4f8a663968f20ae8e563e17",
+          "status": "verified-in-scope"
+        }
+      }
+    }
+  ],
+  "refused": []
+}

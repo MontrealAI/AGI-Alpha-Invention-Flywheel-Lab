@@ -1,0 +1,51 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "active",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "import json,os,subprocess,sys,time\nfrom pathlib import Path\np=subprocess.Popen([sys.executable,'-c','import time; time.sleep(30)'])\nwith Path(sys.argv[1]).open('x') as stream:\n json.dump({'namespace_pid':os.getpid(),'host_pid':int(Path('/proc/self/stat').read_text().split()[0]),'child_namespace_pid':p.pid},stream)\ntime.sleep(30)\n",
+    "/workspace/scratch/1f8586d459dc/lab/evidence/consequential009/verifier/interruption-r1/active/active.json"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "import json,os,subprocess,sys,time\nfrom pathlib import Path\np=subprocess.Popen([sys.executable,'-c','import time; time.sleep(30)'])\nwith Path(sys.argv[1]).open('x') as stream:\n json.dump({'namespace_pid':os.getpid(),'host_pid':int(Path('/proc/self/stat').read_text().split()[0]),'child_namespace_pid':p.pid},stream)\ntime.sleep(30)\n",
+    "/workspace/scratch/1f8586d459dc/lab/evidence/consequential009/verifier/interruption-r1/active/active.json"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "import json,os,subprocess,sys,time\nfrom pathlib import Path\np=subprocess.Popen([sys.executable,'-c','import time; time.sleep(30)'])\nwith Path(sys.argv[1]).open('x') as stream:\n json.dump({'namespace_pid':os.getpid(),'host_pid':int(Path('/proc/self/stat').read_text().split()[0]),'child_namespace_pid':p.pid},stream)\ntime.sleep(30)\n",
+    "/workspace/scratch/1f8586d459dc/lab/evidence/consequential009/verifier/interruption-r1/active/active.json"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/1f8586d459dc/lab",
+  "limits": {
+    "wall_seconds": 10,
+    "cpu_seconds": 5,
+    "memory_bytes": 134217728,
+    "output_bytes": 1048576,
+    "storage_bytes": 4194304
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "interrupted",
+  "exit_code": -9,
+  "reason": "interrupted",
+  "error": {
+    "type": "KeyboardInterrupt",
+    "message": ""
+  },
+  "wall_seconds": 0.03464578199964308,
+  "supervisor_cpu_seconds": 0.0025256760000000045,
+  "waited_cpu_seconds": 0.029599,
+  "descendant_survivors": true,
+  "output_bytes": 5136,
+  "logs": {
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

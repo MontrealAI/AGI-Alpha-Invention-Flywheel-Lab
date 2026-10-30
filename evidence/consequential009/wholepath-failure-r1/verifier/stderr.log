@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/1f8586d459dc/lab/verification/consequential009/cohort_check.py", line 244, in <module>
+    result = run(args.root.resolve(), args.directory.resolve(), args.expected_protocol, args.expected_artifact, args.output)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/1f8586d459dc/lab/verification/consequential009/cohort_check.py", line 208, in run
+    before_hashes = {str(p.relative_to(root)): sha(p) for p in consumed}
+                         ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 682, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: '/workspace/scratch/1f8586d459dc/wholepath-r1/producer/artifacts/fresh_successor-constructed.json' is not in the subpath of '/workspace/scratch/1f8586d459dc/lab'

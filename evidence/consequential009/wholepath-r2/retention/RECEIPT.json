@@ -1,0 +1,69 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "retention",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "experiments.consequential009_retention",
+    "--primary-directory",
+    "/workspace/scratch/1f8586d459dc/wholepath-r2/producer/artifacts",
+    "--receipt",
+    "/workspace/scratch/1f8586d459dc/wholepath-r2/verifier/ACCEPTANCE.json",
+    "--expected-receipt-sha256",
+    "69502fbe587625b35bbcd73c704e4f2605f3879db4f8a663968f20ae8e563e17",
+    "--output",
+    "/workspace/scratch/1f8586d459dc/wholepath-r2/retention/artifacts"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "experiments.consequential009_retention",
+    "--primary-directory",
+    "/workspace/scratch/1f8586d459dc/wholepath-r2/producer/artifacts",
+    "--receipt",
+    "/workspace/scratch/1f8586d459dc/wholepath-r2/verifier/ACCEPTANCE.json",
+    "--expected-receipt-sha256",
+    "69502fbe587625b35bbcd73c704e4f2605f3879db4f8a663968f20ae8e563e17",
+    "--output",
+    "/workspace/scratch/1f8586d459dc/wholepath-r2/retention/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "experiments.consequential009_retention",
+    "--primary-directory",
+    "/workspace/scratch/1f8586d459dc/wholepath-r2/producer/artifacts",
+    "--receipt",
+    "/workspace/scratch/1f8586d459dc/wholepath-r2/verifier/ACCEPTANCE.json",
+    "--expected-receipt-sha256",
+    "69502fbe587625b35bbcd73c704e4f2605f3879db4f8a663968f20ae8e563e17",
+    "--output",
+    "/workspace/scratch/1f8586d459dc/wholepath-r2/retention/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/1f8586d459dc/lab",
+  "limits": {
+    "wall_seconds": 120,
+    "cpu_seconds": 60,
+    "memory_bytes": 1073741824,
+    "output_bytes": 16777216,
+    "storage_bytes": 67108864
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 3.215607474998251,
+  "supervisor_cpu_seconds": 0.09375456799999998,
+  "waited_cpu_seconds": 3.1838509999999998,
+  "descendant_survivors": false,
+  "output_bytes": 667409,
+  "logs": {
+    "stdout.log": "cd8a2e49d0cffb52c4f14957354dde1c2ed665316ee5fcf6a39973e9acef9a01",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

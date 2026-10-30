@@ -1,0 +1,1128 @@
+{
+  "schema": "agi-alpha/consequential009-replacement-negative-controls/v1",
+  "source_report_sha256": "e6540e581f90430d175d2da6e7f928e72dca0e81e0d8aa96a064cd04b3a14649",
+  "checker_sha256": "4fb5f8abc4a6c16ac522f2ac06a3ae4c57e869822f9301ce18c4dcfb3588304b",
+  "test_source_sha256": "105b2b26f92ff21f96b6b5e870b4a85034678c7fe3bd2a3786fa0eefb116e8b1",
+  "cases": [
+    {
+      "label": "false voltage fullcoverage",
+      "accepted": false,
+      "failed_checks": [
+        "primary:constructed: every replacement coverage and missing witness"
+      ],
+      "original_replacement_trace": {
+        "discovery_provenance": "Developer provided known replacement search after preserved r2 efficiency counterexample; runtime evaluates exact coverage and instantiates the replacement.",
+        "evaluations": [
+          {
+            "action_id": "v:mid1:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a2",
+              "t0001-a2"
+            ],
+            "missing_pairs_count": 4,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:300000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:1000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:3000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          }
+        ],
+        "known_method": "finite single-test replacement of a redundant greedy bundle",
+        "prior_action_ids": [
+          "v:mid1:100000",
+          "y:input:100000"
+        ],
+        "prior_relative_acquisition_units": 3,
+        "required_covered_pairs": 1128,
+        "selected_action_id": "y:input:300000",
+        "selection_rule": "Strictly lower relative acquisition cost; lowest cost first, then admitted action order. Never hard-code a frequency."
+      },
+      "tested_replacement_trace": {
+        "discovery_provenance": "Developer provided known replacement search after preserved r2 efficiency counterexample; runtime evaluates exact coverage and instantiates the replacement.",
+        "evaluations": [
+          {
+            "action_id": "v:mid1:100000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a2",
+              "t0001-a2"
+            ],
+            "missing_pairs_count": 4,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:300000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:1000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:3000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          }
+        ],
+        "known_method": "finite single-test replacement of a redundant greedy bundle",
+        "prior_action_ids": [
+          "v:mid1:100000",
+          "y:input:100000"
+        ],
+        "prior_relative_acquisition_units": 3,
+        "required_covered_pairs": 1128,
+        "selected_action_id": "y:input:300000",
+        "selection_rule": "Strictly lower relative acquisition cost; lowest cost first, then admitted action order. Never hard-code a frequency."
+      }
+    },
+    {
+      "label": "suppressed unresolved pair",
+      "accepted": false,
+      "failed_checks": [
+        "primary:constructed: every replacement coverage and missing witness"
+      ],
+      "original_replacement_trace": {
+        "discovery_provenance": "Developer provided known replacement search after preserved r2 efficiency counterexample; runtime evaluates exact coverage and instantiates the replacement.",
+        "evaluations": [
+          {
+            "action_id": "v:mid1:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a2",
+              "t0001-a2"
+            ],
+            "missing_pairs_count": 4,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:300000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:1000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:3000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          }
+        ],
+        "known_method": "finite single-test replacement of a redundant greedy bundle",
+        "prior_action_ids": [
+          "v:mid1:100000",
+          "y:input:100000"
+        ],
+        "prior_relative_acquisition_units": 3,
+        "required_covered_pairs": 1128,
+        "selected_action_id": "y:input:300000",
+        "selection_rule": "Strictly lower relative acquisition cost; lowest cost first, then admitted action order. Never hard-code a frequency."
+      },
+      "tested_replacement_trace": {
+        "discovery_provenance": "Developer provided known replacement search after preserved r2 efficiency counterexample; runtime evaluates exact coverage and instantiates the replacement.",
+        "evaluations": [
+          {
+            "action_id": "v:mid1:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": null,
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a2",
+              "t0001-a2"
+            ],
+            "missing_pairs_count": 4,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:300000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:1000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:3000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          }
+        ],
+        "known_method": "finite single-test replacement of a redundant greedy bundle",
+        "prior_action_ids": [
+          "v:mid1:100000",
+          "y:input:100000"
+        ],
+        "prior_relative_acquisition_units": 3,
+        "required_covered_pairs": 1128,
+        "selected_action_id": "y:input:300000",
+        "selection_rule": "Strictly lower relative acquisition cost; lowest cost first, then admitted action order. Never hard-code a frequency."
+      }
+    },
+    {
+      "label": "selected unqualified voltageaction",
+      "accepted": false,
+      "failed_checks": [
+        "primary:constructed: deterministic lower-cost replacement selection"
+      ],
+      "original_replacement_trace": {
+        "discovery_provenance": "Developer provided known replacement search after preserved r2 efficiency counterexample; runtime evaluates exact coverage and instantiates the replacement.",
+        "evaluations": [
+          {
+            "action_id": "v:mid1:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a2",
+              "t0001-a2"
+            ],
+            "missing_pairs_count": 4,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:300000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:1000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:3000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          }
+        ],
+        "known_method": "finite single-test replacement of a redundant greedy bundle",
+        "prior_action_ids": [
+          "v:mid1:100000",
+          "y:input:100000"
+        ],
+        "prior_relative_acquisition_units": 3,
+        "required_covered_pairs": 1128,
+        "selected_action_id": "y:input:300000",
+        "selection_rule": "Strictly lower relative acquisition cost; lowest cost first, then admitted action order. Never hard-code a frequency."
+      },
+      "tested_replacement_trace": {
+        "discovery_provenance": "Developer provided known replacement search after preserved r2 efficiency counterexample; runtime evaluates exact coverage and instantiates the replacement.",
+        "evaluations": [
+          {
+            "action_id": "v:mid1:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a2",
+              "t0001-a2"
+            ],
+            "missing_pairs_count": 4,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:300000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:1000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:3000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          }
+        ],
+        "known_method": "finite single-test replacement of a redundant greedy bundle",
+        "prior_action_ids": [
+          "v:mid1:100000",
+          "y:input:100000"
+        ],
+        "prior_relative_acquisition_units": 3,
+        "required_covered_pairs": 1128,
+        "selected_action_id": "v:mid1:100000",
+        "selection_rule": "Strictly lower relative acquisition cost; lowest cost first, then admitted action order. Never hard-code a frequency."
+      }
+    },
+    {
+      "label": "unmodified r3",
+      "accepted": true,
+      "failed_checks": [],
+      "original_replacement_trace": {
+        "discovery_provenance": "Developer provided known replacement search after preserved r2 efficiency counterexample; runtime evaluates exact coverage and instantiates the replacement.",
+        "evaluations": [
+          {
+            "action_id": "v:mid1:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a2",
+              "t0001-a2"
+            ],
+            "missing_pairs_count": 4,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:300000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:1000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:3000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          }
+        ],
+        "known_method": "finite single-test replacement of a redundant greedy bundle",
+        "prior_action_ids": [
+          "v:mid1:100000",
+          "y:input:100000"
+        ],
+        "prior_relative_acquisition_units": 3,
+        "required_covered_pairs": 1128,
+        "selected_action_id": "y:input:300000",
+        "selection_rule": "Strictly lower relative acquisition cost; lowest cost first, then admitted action order. Never hard-code a frequency."
+      },
+      "tested_replacement_trace": {
+        "discovery_provenance": "Developer provided known replacement search after preserved r2 efficiency counterexample; runtime evaluates exact coverage and instantiates the replacement.",
+        "evaluations": [
+          {
+            "action_id": "v:mid1:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:300000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:1000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:mid1:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "v:out:3000000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a1_2",
+              "t0000-a1"
+            ],
+            "missing_pairs_count": 57,
+            "relative_acquisition_units": 1,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:100000",
+            "covers_prior_coverage": false,
+            "first_missing_pair": [
+              "t0000-a2",
+              "t0001-a2"
+            ],
+            "missing_pairs_count": 4,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:300000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:1000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          },
+          {
+            "action_id": "y:input:3000000",
+            "covers_prior_coverage": true,
+            "first_missing_pair": null,
+            "missing_pairs_count": 0,
+            "relative_acquisition_units": 2,
+            "strictly_lower_cost": true
+          }
+        ],
+        "known_method": "finite single-test replacement of a redundant greedy bundle",
+        "prior_action_ids": [
+          "v:mid1:100000",
+          "y:input:100000"
+        ],
+        "prior_relative_acquisition_units": 3,
+        "required_covered_pairs": 1128,
+        "selected_action_id": "y:input:300000",
+        "selection_rule": "Strictly lower relative acquisition cost; lowest cost first, then admitted action order. Never hard-code a frequency."
+      }
+    }
+  ],
+  "scope": "Unchanged frozen checker on exact r3 copies plus explicitly generated forgeries; not fresh scientific samples."
+}

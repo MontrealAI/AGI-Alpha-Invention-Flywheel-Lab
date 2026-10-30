@@ -1,0 +1,21 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/consequential009/commerce_review.py",
+    "--directory",
+    "evidence/consequential009/resources/commerce-r1/artifacts",
+    "--policy",
+    "campaign/consequential-009/COMMERCIAL_POLICY.json",
+    "--expected-result",
+    "cc26d5679e05400bf1c2dcc5a992a78c7f2e9450f6596a529f28965362906cc8",
+    "--expected-policy",
+    "2424d01efa170aae95d52495b0b3138e77240a5ac5a01cf18975fb46301174a0",
+    "--output",
+    "evidence/consequential009/verifier/commerce-readonly-failure-r1/never-written.json"
+  ],
+  "source_sha256": "c02dee4a4ceca19616fb10fcbb0637e68d7d7e43eac2c068d7ce3d37cbe093d8",
+  "returncode": 1,
+  "wall_seconds": 0.03846258599878638,
+  "child_cpu_seconds": 0.037670999999999996,
+  "scope": "Exact replay of verifier implementation error: summaries initialized aslist before string-keyassignment. ReadonlySQL only; no commercepolicy orartifacts changed."
+}

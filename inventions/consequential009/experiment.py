@@ -62,16 +62,20 @@ def run(output,protocol_path=None):
         gen=generate_actions(c,p);actions=gen['actions']
         write(out/(edition+'-GENERATED.json'),gen)
         old=compile_plan(c,hs,actions,protocol['policies'],allow_extension=False)
-        candidate=compile_plan(c,hs,actions,protocol['policies'])
+        greedy=compile_plan(c,hs,actions,protocol['policies'])
+        candidate=compile_plan(c,hs,actions,protocol['policies'],prune=True)
         ordinary=exhaustive_plan(c,hs,actions,protocol['policies'])
         stress_p=json.loads(json.dumps(protocol['policies']));stress_p['input_admittance']['gain']=protocol['unknown_current_gain_stress']
-        stress=compile_plan(c,hs,actions,stress_p)
-        for arm,data in [('voltage-only',old),('constructed',candidate),('ordinary-exhaustive',ordinary),('unknown-gain-stress',stress)]:
+        stress=compile_plan(c,hs,actions,stress_p,prune=True)
+        for arm,data in [('voltage-only',old),('constructed-greedy',greedy),('constructed',candidate),('ordinary-exhaustive',ordinary),('unknown-gain-stress',stress)]:
             write(out/(edition+'-'+arm+'.json'),data)
         results[edition]={'cohort':len(hs),'pairs':candidate['admitted_pairs'],
           'voltage_only_separated':old['separated_pairs'],'constructed_separated':candidate['separated_pairs'],
           'constructed_complete_acceptance':candidate['complete_finite_model_acceptance'],
           'constructed_actions':len(candidate['selected_actions']),
+          'old_greedy_actions':len(greedy['selected_actions']),
+          'constructed_relative_acquisition_units':candidate['selected_relative_acquisition_units'],
+          'old_greedy_relative_acquisition_units':greedy['selected_relative_acquisition_units'],
           'ordinary_separated':ordinary['separated_pairs'],'ordinary_actions':len(ordinary['selected_actions']),
           'strong_technical_advantage':candidate['separated_pairs']>ordinary['separated_pairs'],
           'unknown_gain_stress_unresolved':len(stress['unresolved_pairs']),
