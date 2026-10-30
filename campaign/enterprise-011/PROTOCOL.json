@@ -1,0 +1,79 @@
+{
+  "schema": "agi-alpha/enterprise011-confirmation/v1",
+  "scope": "CONDITIONAL_SIMULATION",
+  "edition": "fresh-confirmation-001",
+  "seeds": [
+    2610301101,
+    2610301102,
+    2610301103,
+    2610301104,
+    2610301105,
+    2610301106,
+    2610301107,
+    2610301108
+  ],
+  "development_seeds": [
+    11011,
+    11012
+  ],
+  "regimes": [
+    "ordinary",
+    "price_war",
+    "differentiation",
+    "correlated_shock"
+  ],
+  "choice_models": [
+    "utility",
+    "logit"
+  ],
+  "rival_models": [
+    "responsive",
+    "lagged"
+  ],
+  "central_region": [
+    "ordinary",
+    "differentiation"
+  ],
+  "minimum_region_success_fraction": 0.75,
+  "paired_control_seed_count": 2,
+  "thresholds": {
+    "cycles": 24,
+    "acquired_customers": 3,
+    "paid_jobs": 12,
+    "repeat_customers": 2,
+    "earned_funded_cycles": 2,
+    "positive_complete_cost_profit": true,
+    "cash_survival": true
+  },
+  "weights": "Equal finite-design weights, not estimated real-world probabilities",
+  "uncertainty": "Wilson interval describes finite seeded simulation proportions; scenario worlds and paired arms are dependent, not an inferential sample of real buyers.",
+  "selection": "Policy and price-search procedure frozen before confirmation. No outcome-driven threshold or regime reclassification.",
+  "sensitivity_cases": [
+    "setup_upper",
+    "attempt_lower",
+    "attempt_upper",
+    "human_half",
+    "human_double",
+    "half_arrivals",
+    "latency_parity"
+  ],
+  "recovery_granularity": "Completed worlds are atomic checkpoints; interrupted worlds recompute from their unchanged seed/source. No completed-world job or payment is appended twice.",
+  "scale_seeds": [
+    2610302101,
+    2610302102,
+    2610302103,
+    2610302104,
+    2610302105,
+    2610302106,
+    2610302107,
+    2610302108,
+    2610302109,
+    2610302110,
+    2610302111,
+    2610302112,
+    2610302113,
+    2610302114,
+    2610302115,
+    2610302116
+  ]
+}

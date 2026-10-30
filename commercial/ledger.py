@@ -58,6 +58,9 @@ def read_bound(root, path, expected):
 
 
 def load_jobs(root, manifest):
+    if isinstance(manifest, dict) and manifest.get('schema') == 'agi-alpha/enterprise011-services/v1':
+        from enterprise.services import load_jobs as enterprise_jobs
+        return enterprise_jobs(root, manifest)
     if not isinstance(manifest, dict) or not isinstance(manifest.get('jobs'), list):
         raise ValueError('SERVICE_COHORT_REQUIRED')
     from verification.commercial010_audit import audit_service, _bound
@@ -144,6 +147,11 @@ class TapeExchange:
 
     def check(self, task, artifact):
         self.validate(task)
+        if self.manifest.get('schema') == 'agi-alpha/enterprise011-services/v1':
+            from enterprise.services import check_job
+            checked = check_job(self.root, self.manifest, self.jobs[task['job_id']]['job'], artifact)
+            return {'accepted': checked['receipt']['accepted'], 'decisive': True, 'scope': SCOPE,
+                    'authority': checked['job']['receipt_sha256']}
         from commercial.service_verifier import audit_delivery
         job = self.jobs[task['job_id']]['job']
         order = read_bound(self.root, job['input'], job['input_sha256'])
