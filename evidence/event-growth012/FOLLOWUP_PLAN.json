@@ -1,0 +1,45 @@
+{
+  "schema": "agi-alpha/eventgrowth012-followup/v1",
+  "registered_utc": "2026-10-30T17:39:42.654255+00:00",
+  "protected_primary_results_seen": false,
+  "scope": "Conditional costed reachable-buyer expansion, separate from controller effect; no observed demand or real spending.",
+  "trigger": "After fixed128-world comparison completes with at least one ordinary positive-profit event policy and funded obligations; otherwise follow diagnosed failure rather than launch expansion.",
+  "policy_selection": "Use ordinary mean collected revenue among event simple/joint policies with positive mean complete-cost profit and all obligations funded. If both collected revenue and profit weakly favor simple, retain simple. If objectives conflict report both, select higher collected-revenue feasible policy for this bounded followup. No algorithm edits.",
+  "seeds": [
+    2610301207,
+    2610301208
+  ],
+  "family": "ordinary",
+  "horizon_hours": 1440,
+  "same_initial_capital": true,
+  "arms": [
+    {
+      "id": "current_reachable_market",
+      "customer_pool": 48,
+      "extra_setup_microUSD": 0,
+      "extra_daily_microUSD": 0
+    },
+    {
+      "id": "costed_reachable_market_60",
+      "customer_pool": 60,
+      "extra_setup_microUSD": 25000000,
+      "extra_daily_microUSD": 500000
+    },
+    {
+      "id": "costed_reachable_market_72",
+      "customer_pool": 72,
+      "extra_setup_microUSD": 35000000,
+      "extra_daily_microUSD": 750000
+    },
+    {
+      "id": "costed_reachable_market_96",
+      "customer_pool": 96,
+      "extra_setup_microUSD": 50000000,
+      "extra_daily_microUSD": 1000000
+    }
+  ],
+  "resource_boundary": "Same original75minute/7200CPU/512MiB allocation, no refresh. Skip if primary completion or publication budget endangered.",
+  "demand_assumption": "Additional distinct qualified hypothetical buyers reachable through a costed new segment/channel, with unchanged buyer-choice/retention distributions, rivals, service quality and payment obligations. This changes a market assumption and channel arrangement; never attribute it to controller intelligence. Exact new customer IDs and fulfilled work; no growth multiplier.",
+  "accounting": "Independent equal-capital counterfactuals. Do not add their receipts to primary worlds or to the preserved parent account. Same frozen controller/tools/native audit, actual service work per order.",
+  "decision": "Choose smallest tested reachable-buyer change improving collected revenue and complete-cost profit on both fresh seeds without unfunded obligations; report failures and stock/capacity constraints. No continuous/global minimum claim."
+}

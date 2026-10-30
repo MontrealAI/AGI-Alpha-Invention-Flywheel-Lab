@@ -1,0 +1,443 @@
+{
+  "actual_revenue_microUSD": 0,
+  "assumptions": "Authored conditional demand, autonomous resource costs and buyer behavior; exact synthetic service production and separate semantic checking. Host assistant bill unavailable; no human staffing is charged.",
+  "config": {
+    "allocation_cap": 100000000000,
+    "arrangement_cost": 5000000,
+    "assumptions": "Authored finite buyer demand, private budgets, delayed rivals and cash-contract hypotheses. Exact service tools/checkers are reused unchanged. No market calibration or real revenue. A distinct competent human-plus-AI complete service is assumed to cost60percent of equivalent human complete cost with12hour delivery; this includes customer effort rather than comparing a software subscription to a service. Native permanent principal-plus-fee tail remains in all first-comparison arms. Exact workload stock is an experimental qualification boundary, never an economic law. No external funds are added.",
+    "baseline_acquisition_fraction": 0.16,
+    "baseline_capacity_fraction": 0.25,
+    "capacity_block_cost": 12000000,
+    "choice_model": "logit",
+    "contacts_per_day": 24,
+    "currency": "simulated-microUSD",
+    "customer_pool": 48,
+    "daily_overhead": 250000,
+    "finite_contract_customer_friction_usd": 2.0,
+    "finite_contract_fee_bps": 50,
+    "finite_liability_hours": null,
+    "horizon_hours": 1440,
+    "human_ai_complete_cost_ratio": 0.6,
+    "human_ai_delivery_hours": 12,
+    "initial_capacity": 1,
+    "intervention_daily_cost": 0,
+    "intervention_setup_cost": 0,
+    "liquidity_floor": 100000000,
+    "market_regime": "ordinary",
+    "maximum_capacity": 8,
+    "opening": 5000000000,
+    "policy": {
+      "arms": [
+        {
+          "autonomous_onboarding": false,
+          "id": "fixed_original",
+          "strategic_pricing": false
+        },
+        {
+          "autonomous_onboarding": true,
+          "id": "fixed_autonomous",
+          "strategic_pricing": false
+        },
+        {
+          "autonomous_onboarding": false,
+          "id": "strategic_original",
+          "strategic_pricing": true
+        },
+        {
+          "autonomous_onboarding": true,
+          "id": "strategic_autonomous",
+          "strategic_pricing": true
+        }
+      ],
+      "assumptions": [
+        "All demand, budgets, arrival, switching, urgency, retention, competitor quality, rate limits, taxes and provider protection are disclosed conditional scenarios, not observed market estimates.",
+        "Churn persists with active=False; bounded independent channel reacquisition may restore a churned customer after an actual settled simulated order, with no repeated provider onboarding.",
+        "Buyer private value/budget and deterministic draws are not passed to seller pricing; seller uses public segment priors and its own transactional history only.",
+        "Turnaround2h/24h/48h are explicitly authored SLA waiting times, never labor hours. Ordinary segment values 2h complete delivery versus competent 24h rival and 48h human; same scoped outcome and obligations. Price war removes most latency differentiation. Trust ranges overlap; actual checker evidence is required for our deliveries.",
+        "Native principal-plus-fee tail reserves remain restricted throughout horizon; seed capital may back reserves. Earned delivery funding and seed-independent reserve replacement are separate metrics.",
+        "Tax is a conditional 20% positive-profit provision paid in the simulation; sales-tax collection/remittance assumed zero for nonjurisdictional synthetic workload. No tax compliance or actual transaction is asserted.",
+        "Bundles are optional grouped three-service orders with total willingness-to-pay and component identities; a bundle replaces its component sale opportunities, never adds duplicate revenue. Context reuse reduces one-time provider onboarding across services but does not grant data access."
+      ],
+      "bundle_discount": 0.05,
+      "bundle_enabled": true,
+      "capacity_per_cycle": 4,
+      "choice_models": [
+        "logit",
+        "utility"
+      ],
+      "competitor_models": [
+        "responsive",
+        "lagged"
+      ],
+      "cost_evidence": "CONSERVATIVE_AUTHORED_ENVELOPES_NOT_MODEL_BILLS. Actual fixed deterministic service production and independent checking execute. No paid frontier-model inference is called. Setup includes all discovery, authored construction, rejected fixtures, initial prequalification and integration; per-attempt includes production/replay, verification, corrections, failed/unpaid work, storage, delivery, support, maintenance; acquisition charged on every exposed bid including losses. CPU runtime is not human task time. No human-review hour is inserted. Resource billing unavailable.",
+      "cost_multiplier": 1.0,
+      "cost_ranges_usd": {
+        "autonomous_onboarding_once": [
+          0.01,
+          5
+        ],
+        "per_attempt": [
+          2,
+          8
+        ],
+        "quote_acquisition": [
+          0.5,
+          8
+        ],
+        "setup": [
+          200,
+          1500
+        ]
+      },
+      "costs_usd": {
+        "autonomous_onboarding_once": 0.5,
+        "bundle_coordination_once": 3,
+        "compute_storage_infrastructure": 0.25,
+        "delivery_support_obligation": 0.5,
+        "external_onboarding_fee": 0,
+        "independent_verification_corrections": 0.5,
+        "inference_tools_production": 1,
+        "maintenance_failure_retry": 0.75,
+        "quote_acquisition": 0.5,
+        "research_development_prequalification": 350
+      },
+      "currency": "simulated-microUSD",
+      "customer_pool": 8,
+      "cycles": 24,
+      "dynamic_allocation": true,
+      "exchange_rate": {
+        "basis": "single-currency experiment; no FX transaction",
+        "currency": "USD",
+        "rate": 1
+      },
+      "human_evidence": "Authored corresponding complete-service workload scenarios, not measured human times or observed selling prices. Loaded hourly values are bounded scenario proxies; ranges 0.5x\u20132x remain sensitivity inputs. No program runtime is converted into human effort. First-order complete work is0.65h for12-invoice reconciliation and10-metric variance,0.80h for8-requirement source matrix; preparation charged once/customer; repeats deduct0.10h onboarding. These small-fixture time hypotheses avoid applying multi-hour workloads to tiny delivered artifacts. Competent complete human delivery includes verification, correction, support and tools.",
+      "human_services": {
+        "evidence_matrix": {
+          "loaded_hourly_usd": 55,
+          "stages_hours": {
+            "correction": 0.05,
+            "ordering_support": 0.15,
+            "preparation_onboarding": 0.1,
+            "production": 0.35,
+            "research": 0.05,
+            "verification": 0.1
+          },
+          "tool_external_usd": 2
+        },
+        "kpi_variance": {
+          "loaded_hourly_usd": 60,
+          "stages_hours": {
+            "correction": 0.05,
+            "ordering_support": 0.15,
+            "preparation_onboarding": 0.1,
+            "production": 0.2,
+            "research": 0.05,
+            "verification": 0.1
+          },
+          "tool_external_usd": 2
+        },
+        "reconciliation": {
+          "loaded_hourly_usd": 34.75,
+          "stages_hours": {
+            "correction": 0.05,
+            "ordering_support": 0.15,
+            "preparation_onboarding": 0.1,
+            "production": 0.2,
+            "research": 0.05,
+            "verification": 0.1
+          },
+          "tool_external_usd": 2
+        }
+      },
+      "nominal_price_vintage": "2026-10-30",
+      "opening": 5000000000,
+      "payment_bps": 290,
+      "payment_fixed": 300000,
+      "profit_tax_bps": 2000,
+      "qualification_regimes": [
+        "ordinary",
+        "differentiation"
+      ],
+      "regime_weights": {
+        "correlated_shock": 0.15,
+        "differentiation": 0.2,
+        "ordinary": 0.35,
+        "price_war": 0.3
+      },
+      "regimes": {
+        "correlated_shock": {
+          "arrival_probability": 0.45,
+          "collection_probability": 0.8,
+          "customer_friction_autonomous_usd": 12,
+          "customer_friction_original_usd": 25,
+          "demand_value_multiplier": 0.6,
+          "our_hours": 8,
+          "qualification_probability": 0.8,
+          "quote_cost_usd": 0.5,
+          "reacquisition_probability": 0.15,
+          "refund_probability": 0.18,
+          "retention_probability": 0.5,
+          "rival_cost_multiplier": 0.8,
+          "rival_hours": 8,
+          "rival_trust": 0.9,
+          "self_complete_cost_ratio": 0.5,
+          "settlement_delay_days": 20,
+          "supplier_multiplier": 2.5,
+          "supplier_outage_probability": 0.25,
+          "temperature_ratio": 0.1,
+          "trust": 0.82,
+          "urgency_value_hour": 0.05
+        },
+        "differentiation": {
+          "arrival_probability": 0.96,
+          "collection_probability": 0.99,
+          "customer_friction_autonomous_usd": 0.5,
+          "customer_friction_original_usd": 2,
+          "demand_value_multiplier": 1.0,
+          "our_hours": 2,
+          "qualification_probability": 0.97,
+          "quote_cost_usd": 0.5,
+          "reacquisition_probability": 0.25,
+          "refund_probability": 0.01,
+          "retention_probability": 0.96,
+          "rival_cost_multiplier": 1.4,
+          "rival_hours": 24,
+          "rival_trust": 0.95,
+          "self_complete_cost_ratio": 0.95,
+          "settlement_delay_days": 2,
+          "supplier_multiplier": 1.1,
+          "supplier_outage_probability": 0.01,
+          "temperature_ratio": 0.1,
+          "trust": 0.97,
+          "urgency_value_hour": 1.0
+        },
+        "ordinary": {
+          "arrival_probability": 0.94,
+          "collection_probability": 0.98,
+          "customer_friction_autonomous_usd": 0.5,
+          "customer_friction_original_usd": 2,
+          "demand_value_multiplier": 1.0,
+          "our_hours": 2,
+          "qualification_probability": 0.95,
+          "quote_cost_usd": 0.5,
+          "reacquisition_probability": 0.25,
+          "refund_probability": 0.02,
+          "retention_probability": 0.94,
+          "rival_cost_multiplier": 1.2,
+          "rival_hours": 24,
+          "rival_trust": 0.95,
+          "self_complete_cost_ratio": 0.85,
+          "settlement_delay_days": 2,
+          "supplier_multiplier": 1.0,
+          "supplier_outage_probability": 0.01,
+          "temperature_ratio": 0.12,
+          "trust": 0.95,
+          "urgency_value_hour": 0.5
+        },
+        "price_war": {
+          "arrival_probability": 0.92,
+          "collection_probability": 0.97,
+          "customer_friction_autonomous_usd": 0.5,
+          "customer_friction_original_usd": 2,
+          "demand_value_multiplier": 1.0,
+          "our_hours": 2,
+          "qualification_probability": 0.95,
+          "quote_cost_usd": 0.5,
+          "reacquisition_probability": 0.25,
+          "refund_probability": 0.03,
+          "retention_probability": 0.85,
+          "rival_cost_multiplier": 0.65,
+          "rival_hours": 3,
+          "rival_trust": 0.97,
+          "self_complete_cost_ratio": 0.45,
+          "settlement_delay_days": 3,
+          "supplier_multiplier": 1.3,
+          "supplier_outage_probability": 0.03,
+          "temperature_ratio": 0.08,
+          "trust": 0.95,
+          "urgency_value_hour": 0.05
+        }
+      },
+      "rounding": "nearest microUSD for authored USD envelopes; integer ledger",
+      "sales_tax_bps": 0,
+      "schema": "agi-alpha/enterprise011-policy/v1",
+      "scope": "SIMULATED",
+      "service_capacity_per_cycle": 2,
+      "setup_cost": 350000000,
+      "thresholds": {
+        "minimum_customers": 3,
+        "minimum_earned_funded_cycles": 2,
+        "minimum_paid_jobs": 12,
+        "minimum_region_success_fraction": 0.75,
+        "minimum_repeat_customers": 2
+      },
+      "working": 100000000
+    },
+    "production_hours": 2,
+    "repeat_interval_hours": 336,
+    "retention_probability": 0.94,
+    "risk_accepted_workload_quantile_z": 1.645,
+    "rival_update_hours": 168,
+    "sales_cycle_hours": 6,
+    "schema": "agi-alpha/growth012-config/v1",
+    "scope": "SIMULATED",
+    "settlement_hours": 48,
+    "setup_cost": 350000000,
+    "targets_collected_microUSD": [
+      500000000,
+      1000000000,
+      10000000000,
+      100000000000,
+      1000000000000,
+      10000000000000,
+      100000000000000,
+      1000000000000000,
+      10000000000000000
+    ],
+    "time_unit": "hours",
+    "working": 100000000
+  },
+  "freeze_sha256": "c5a377bd8e8027f5614ef025dc87cfc0d2e3c42d655d71e4b64db6b1595576ce",
+  "git_parent": "cff284ffdbd930f63c2dd182870aa9f952672624",
+  "protocol": {
+    "aggregation": "Only exact executably qualified cohorts; large milestones remain unreached when no validated large-scale aggregation exists. Historical scale projections remain explicitly separate.",
+    "arms": [
+      "baseline",
+      "simple",
+      "joint",
+      "joint_fast_settlement",
+      "joint_finite_liability",
+      "joint_finite_fast",
+      "joint_channel",
+      "joint_retention",
+      "joint_combination",
+      "simple_combination"
+    ],
+    "development_seeds": [
+      12001,
+      12002
+    ],
+    "edition": "protected-growth012-001",
+    "equal_capital": true,
+    "families": [
+      "ordinary",
+      "low_demand",
+      "price_war",
+      "shock"
+    ],
+    "historical_scale_reference": {
+      "config": "exact default_config",
+      "seed": 2610301201,
+      "separate_from_matched_comparison": true,
+      "source": "enterprise/scale.py"
+    },
+    "intervention_families": [
+      "ordinary",
+      "low_demand"
+    ],
+    "intervention_seeds": [
+      2610301201,
+      2610301202,
+      2610301203,
+      2610301204
+    ],
+    "learning_rule": "Frozen controller update rules may use own legitimate observations inside each trajectory; no changes after protected results.",
+    "milestones_microUSD": [
+      500000000,
+      1000000000,
+      10000000000,
+      100000000000,
+      1000000000000,
+      10000000000000,
+      100000000000000,
+      1000000000000000,
+      10000000000000000
+    ],
+    "next_action_selection_condition": "ordinary",
+    "obligations_unchanged_first_comparison": true,
+    "recovery": "Completed worlds are source-bound checkpoints. An interrupted incomplete world is preserved then recomputed from identical source, config and seed in a new account; no completed world is appended twice.",
+    "risk_limit": "No unfunded commitments, borrowing or topups. Preserve native funded obligations and declared liquidity floor before every investment; report all unprofitable and nonreaching paths.",
+    "sample_rationale": "Development timing12.04seconds for4 integrated14-dayworlds motivated a fixed128-world60-daydesign:6pairedseeds\u00d74conditions\u00d73controllers plus4seeds\u00d72conditions\u00d77businessinterventions. Unused previously registered seeds stay unexposed. Two independent owned-account worker processes reduce wall time, with shared output-run ownership. Precision is limited to material finite-design differences, not rare risk or empirical demand calibration.",
+    "seeds": [
+      2610301201,
+      2610301202,
+      2610301203,
+      2610301204,
+      2610301205,
+      2610301206
+    ],
+    "workers": 2
+  },
+  "registered_utc": "2026-10-30T17:34:33Z",
+  "resource_boundary": "Existing local execution and public branch/PR grants only; no spending, outreach, real finance or deployment. Allocation file controls actual budget.",
+  "schema": "agi-alpha/growth012-tournament/v1",
+  "source": {
+    "files": {
+      ".github/workflows/event-growth012.yml": "30549be995240086796e6d64d2722baf774bc743ebdf772811de274892134313",
+      "campaign/growth-012/ALLOCATION.json": "03f6be0e7c8b8504b4db9b658821dc5da8c9c25d8b2f9512833dfa034eb14c6d",
+      "campaign/growth-012/OWNERSHIP.md": "e499a503a54d2fa7e4c90d1d920cc5e70abe7c50fe723f4185a1d5d3e455de1e",
+      "campaign/growth-012/PARENT_FUNDING_AUDIT.json": "e0078d60d04925e78e5880fb7e674e8d79fa318cf18cf8d613b943cc81306e30",
+      "campaign/growth-012/PROTOCOL.md": "a619d349d74a6b4dca163405cf1e791f8ea502f8f26a2e94b61e3504bf7832d6",
+      "commercial/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "commercial/ledger.py": "854e1e393cf302ad50996153b5eac9934cfcebb1a20c29a65b0cf706df3fedee",
+      "commercial/market.py": "7fd46dee48344da54ccc01d909ef85e6d713746d9f2555be723e1ac1f30791ae",
+      "commercial/onboarding.py": "68e9fbc6eaaceed9b2678ef604646025c02f6cb77183da9208b729486c5302cf",
+      "commercial/persistence.py": "78c1eb1d82471843e32dd290ac3ea1b5b253d4edc1448cc954b5fafa5d6e0e15",
+      "commercial/service.py": "1604d20f5d9f54997eeceb971bc19af9a0c76cdcaf79ba74b9bbd80112c9c9a3",
+      "commercial/service_verifier.py": "ac79f1aa80fb5c2928827f08417a720cd041977df70e808860bc3dd4f5d61368",
+      "commercial/single_writer.py": "0d34de2e32dd2ad47b43c32edd4ccac01196c2858db7a32c7b7d2217ec2cf984",
+      "commercial/tape_lease.py": "854ad7c0341a94fbfcc0ed3f450ab9116bbaf9666e4f6d5f118397a19f7f575c",
+      "commercial/verdicts.py": "d0ae18586420c0d59342e11f36c8070c957ceaa1dee798f02bfb474f106753f9",
+      "enterprise/__init__.py": "94244631159981d13090d2816575856d71e3f35e91d380124ba43b22e60c9fdb",
+      "enterprise/__main__.py": "15f8037485edacee7e1e88c43fc30c8d9362cd6ccbf97d6c6ccabbbd7a00e382",
+      "enterprise/checkers.py": "8685c3c9876815db2f2f5de6ba5954529f88cd7d4f95d7c1fa9aedc438cc0981",
+      "enterprise/contract012.py": "2088de93e04042eba89616343e602da62ae0ad4715832ee933a48f13cb5dc1e3",
+      "enterprise/finance012.py": "42e1afb5852e1c74d3405ba48074e435b506f7b53dbfe54013c32234b8fcbaa5",
+      "enterprise/frontier.py": "037d51b8e56d5399446b8416e983823af4692fcb84ea129f930cd2d2a686bcb4",
+      "enterprise/growth012.py": "0d4b2f627b3b0463d610bf168f1df68c597c82d75695915db5b6988b8d8adfb5",
+      "enterprise/model.py": "ab9faf9dc0451f79787a39904acf57b857d3c5ad69d6ebac847517a2a61de6dd",
+      "enterprise/parent012.py": "ba38b54ad06a7636a96341b782a71517ac426e466c5d44c226888847a39b840d",
+      "enterprise/portfolio.py": "59005bb0f570e422b31df22297c5d724c77c88b0be110a47a0370e5423368194",
+      "enterprise/pricing.py": "81098bbc9eb3c9d760855d427dcf526ba4a973f6ac2c6865c9a75db622660c3b",
+      "enterprise/runner.py": "65b394a3db512272fc0de53727c5b198de88ec50722e8f37ed64a5ed25de08f2",
+      "enterprise/scale.py": "a2d445caa23aa1005184915f2b699baf4eb7051bd574afd7199ee7b74354700a",
+      "enterprise/services.py": "f3ff23509899180235436bffb8b7396092ff9ae881f622a386ba932ebaa045bc",
+      "enterprise/tournament012.py": "b1bbba8902c006ece72f1b9f5e0d16b0fd7afb0a580ef0d32b249bec0d5d41cc",
+      "enterprise/workload012.py": "7cfdd0e9626480001ee9201471ee8e725e61f3e5f6219498253b6b15de9bacd9",
+      "experiments/commerce006.py": "2fc529131885c75752dab8dbd77d85b5a36d4c0b43cb5e7e53286c997cc0a52f",
+      "portfolio25/HARDENING.json": "20f2ca0b5abaf2426e8123d71048a44b5cd82824d18ac830c4c59a9012a8462d",
+      "portfolio25/PORTFOLIO.md": "a410b14829999c9dd256f3dfe9640643fe85d360b92f16b09916e3ec184a86a8",
+      "portfolio25/SOURCE_IMPORT.json": "80b0741f93c911e4460e36d014259d30d11b91f6d2e98f57b69425cea5dff82a",
+      "portfolio25/jobs.json": "4faa7e6389409051f6b6377ca50b7bf93d945c27ce02293be247d9cfbe1847df",
+      "portfolio25/pricing.py": "b0a359619a02b6dcadd2af20b5683e4d84cb585841359b653579610ff1da568c",
+      "portfolio25/reference_strategy_results.json": "c7daf5887f18332946c8accbb20ced6079cce5c39fa90f24bda187c258083dc9",
+      "portfolio25/test_hardening.py": "09945d4f652b39f2a79489c4a705d687cf1f02784ccbe5a9593ffa7a2a747683",
+      "portfolio25/test_pricing.py": "4a6741d7334c6cc9181323d5761447d65dbc28dfa7bbb487317d5dc6220dbf05",
+      "portfolio_scale/README.md": "1c90b1def95927e3b690c5a9c039f3462394a4147bc4232256f06342a18e7939",
+      "portfolio_scale/__init__.py": "f1f0641ca31471a6c90d92ce0296814e7ceed0922ec656f9fa4ff60c086b17ea",
+      "portfolio_scale/bundles.py": "3d191e1dc247252cf0f36fd6dca970de7639b49b54624c01b274975677b8a227",
+      "portfolio_scale/engine.py": "429835f822138880985f2cf896409415d4c896388263d581da6cd7b7a9bb5104",
+      "portfolio_scale/reference_bundles.json": "7b22cf38a505cfd3005081182d1c6841a9ae7e42954dd8822f3b3d9c10e6df0e",
+      "portfolio_scale/reference_summary.json": "4bed1b9cbd1052d19333846da37d6409c16ab62936efe4dbc3d2228e4ae0d31e",
+      "portfolio_scale/test_scale.py": "ab05f822e20d8674da3d09cde50316c86be25b635555f79baf309a9ced257779",
+      "portfolio_scale/test_transformational.py": "2a4625c06216f6a8fd2755d7ff8731b8443e403548ed2bfb425d37e7f39c897f",
+      "portfolio_scale/transformational.py": "6e14da5f36e9d72d82b27ecabf94859c40bd27dcfbf6f3f5ca7b4bb59d85d794",
+      "portfolio_scale/transformational_example.json": "b40d7f7a386e62322351efc2b53b09b6122bf4bb24a6d0900d49abae4b6ff111",
+      "portfolio_scale/transformational_qualification.json": "83688faca80fa12d25c42054faf4a88a38b01acd2c738b74ac17cd1fdc555530",
+      "portfolio_scale/universe.json": "4ac0f017ba2637dcd15cbf80dbe265094c67f814e0ccf399076a0c190f851c4e",
+      "requirements-commercial010.txt": "d66a7237051eab778196473c326b9418033501ee60b647b6f6194dd6c97f1772",
+      "run_growth012.py": "ad12e6d6b037f5ecd961e48dd94712759a5087eecdefd346021528276d24e55d",
+      "tests/test_growth012_audit.py": "987d1d9c93ffb73acd655051fe3d237ee394f7fc39f1acba177e4a80fa26cd48",
+      "tests/test_growth012_contract.py": "5e02cf898de80bf2ed51e9afe49fe6d62c88022d3cb27c60722181eb016422ab",
+      "tests/test_growth012_controller.py": "6298f4cadc316e9facc7e0ae631559bc132c83b18299c131303992b0ff8d391b",
+      "tests/test_growth012_finance.py": "5b524696151d4bad68c690962db91b2837dfa97318a34146ecf14dedd95617ca",
+      "tests/test_growth012_tournament.py": "a9c63dce02426c9001d539517bdece92c3006a241a7220ba9672230965b7c11d",
+      "vendor/__init__.py": "be8bdfe2c1e80537aa8346db6e39112224381b56a853f94d460c00d29692db54",
+      "vendor/alpha_claim/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vendor/alpha_claim/contracts.py": "3536b96c4b7ee46f9af7d807e02685aa55e42daae7f7c56b7e9029ca2cde0964",
+      "vendor/alpha_claim/protected_exchange.py": "7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272",
+      "verification/growth012.py": "532c93bd3a12b212c6f610190e21740fcecf88c6d64050aad9b98eed19a249c8"
+    },
+    "sha256": "0fa7610e781249afe3f3db53f2344ad13ce922cc12260284a99755c6c0156cf5"
+  }
+}
