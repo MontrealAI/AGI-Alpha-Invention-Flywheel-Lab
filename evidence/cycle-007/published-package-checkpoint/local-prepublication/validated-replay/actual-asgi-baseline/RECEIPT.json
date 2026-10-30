@@ -1,0 +1,51 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "actual-asgi-baseline",
+  "command": [
+    "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+    "-m",
+    "experiments.temporal_probe007",
+    "--output",
+    "/workspace/scratch/92d546ab6009/edition007-local-qualification/validated-replay/actual-asgi-baseline/artifacts"
+  ],
+  "requested_command": [
+    "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+    "-m",
+    "experiments.temporal_probe007",
+    "--output",
+    "/workspace/scratch/92d546ab6009/edition007-local-qualification/validated-replay/actual-asgi-baseline/artifacts"
+  ],
+  "normalized_command": [
+    "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+    "-m",
+    "experiments.temporal_probe007",
+    "--output",
+    "/workspace/scratch/92d546ab6009/edition007-local-qualification/validated-replay/actual-asgi-baseline/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/92d546ab6009/edition007-local-qualification/validated-source",
+  "limits": {
+    "wall_seconds": 90,
+    "cpu_seconds": 60,
+    "memory_bytes": 2147483648,
+    "output_bytes": 8388608,
+    "storage_bytes": 134217728
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 0.9133301339898026,
+  "supervisor_cpu_seconds": 0.018891189000000003,
+  "waited_cpu_seconds": 0.825318,
+  "descendant_survivors": false,
+  "output_bytes": 88886,
+  "logs": {
+    "stdout.log": "733bdc44a3a973ff7307c4ac98da2209182db47d6b725e179b1b090908208e6e",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

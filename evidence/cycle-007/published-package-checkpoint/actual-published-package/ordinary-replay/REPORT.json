@@ -1,0 +1,639 @@
+{
+  "chemical_baseline_receipt": {
+    "command": [
+      "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+      "experiments/denovo007.py",
+      "--tools-dir",
+      "/workspace/scratch/92d546ab6009/denovo_probe/tools",
+      "--output",
+      "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/chemical-baseline"
+    ],
+    "returncode": 0,
+    "scope": "Pinned free baseline tools; helper enforces offline Java process limits and aggregate CPU allowance. Reproduction of exposed chemistry inputs, not new confirmation.",
+    "waited_child_cpu_seconds": 54.83504800000001,
+    "wall_seconds": 29.11235877800209
+  },
+  "chemical_java_baseline_continuation": "Use the separately source-bound de-novo baseline command and pinned free tools; this driver never silently counts an unrun phase.",
+  "chemical_java_baseline_replayed": true,
+  "commercially_qualified_earned_funds": 0,
+  "compatibility_setup": {
+    "command": [
+      "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+      "verification/cycle007_setup_compatibility.py",
+      "--directory",
+      "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-envs",
+      "--output",
+      "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-setup"
+    ],
+    "returncode": 0,
+    "scope": "Free dependency installation with inherited approved network/proxy environment; separately timed trusted setup, not an effect sandbox.",
+    "waited_child_cpu_seconds": 0.907915,
+    "wall_seconds": 4.186320345994318
+  },
+  "completed_phases": [
+    {
+      "phase": "unit-tests",
+      "receipt": {
+        "aggregate_cpu_complete": false,
+        "command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "unittest",
+          "tests.test_lifetime007",
+          "tests.test_commerce007",
+          "verification.test_denovo007_protocol_preflight",
+          "-v"
+        ],
+        "complete_monetary_cost": null,
+        "cwd": "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+        "descendant_survivors": false,
+        "error": null,
+        "exit_code": 0,
+        "limits": {
+          "cpu_seconds": 60,
+          "memory_bytes": 2147483648,
+          "output_bytes": 8388608,
+          "storage_bytes": 134217728,
+          "wall_seconds": 90
+        },
+        "logs": {
+          "stderr.log": "30fc809315f6e91c7cb557f9064a289cf357be3f8483396d1ebaf08340450e03",
+          "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "normalized_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "unittest",
+          "tests.test_lifetime007",
+          "tests.test_commerce007",
+          "verification.test_denovo007_protocol_preflight",
+          "-v"
+        ],
+        "output_bytes": 6108,
+        "reason": null,
+        "requested_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "unittest",
+          "tests.test_lifetime007",
+          "tests.test_commerce007",
+          "verification.test_denovo007_protocol_preflight",
+          "-v"
+        ],
+        "reservation_created": true,
+        "run_id": "unit-tests",
+        "schema": "agi-alpha/trusted-experiment-run006/v3",
+        "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+        "state": "complete",
+        "supervisor_cpu_seconds": 0.018717420999999998,
+        "waited_cpu_seconds": 0.619293,
+        "wall_seconds": 1.371949783002492,
+        "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd"
+      }
+    },
+    {
+      "phase": "actual-retention-transfer",
+      "receipt": {
+        "aggregate_cpu_complete": false,
+        "command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.lifetime007",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-retention-transfer/artifacts"
+        ],
+        "complete_monetary_cost": null,
+        "cwd": "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+        "descendant_survivors": false,
+        "error": null,
+        "exit_code": 0,
+        "limits": {
+          "cpu_seconds": 60,
+          "memory_bytes": 2147483648,
+          "output_bytes": 8388608,
+          "storage_bytes": 134217728,
+          "wall_seconds": 90
+        },
+        "logs": {
+          "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "normalized_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.lifetime007",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-retention-transfer/artifacts"
+        ],
+        "output_bytes": 188147,
+        "reason": null,
+        "requested_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.lifetime007",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-retention-transfer/artifacts"
+        ],
+        "reservation_created": true,
+        "run_id": "actual-retention-transfer",
+        "schema": "agi-alpha/trusted-experiment-run006/v3",
+        "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+        "state": "complete",
+        "supervisor_cpu_seconds": 0.010264472999999996,
+        "waited_cpu_seconds": 0.170352,
+        "wall_seconds": 0.23807084700092673,
+        "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd"
+      }
+    },
+    {
+      "phase": "exposed-temporal-verifier",
+      "receipt": {
+        "aggregate_cpu_complete": false,
+        "command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "verification/cycle007_temporal.py",
+          "--root",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+          "--worker",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/temporal-verification/EXPOSED_PROTECTED_CASES.py",
+          "--protocol",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/verification/cycle007_temporal_protocol.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/exposed-temporal-verifier/artifacts"
+        ],
+        "complete_monetary_cost": null,
+        "cwd": "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+        "descendant_survivors": false,
+        "error": null,
+        "exit_code": 0,
+        "limits": {
+          "cpu_seconds": 60,
+          "memory_bytes": 2147483648,
+          "output_bytes": 8388608,
+          "storage_bytes": 134217728,
+          "wall_seconds": 90
+        },
+        "logs": {
+          "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout.log": "85dbcbfc087f82a7523f472a273d47f35225cc4bcaddecfb7a57528029420dbb"
+        },
+        "normalized_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "verification/cycle007_temporal.py",
+          "--root",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+          "--worker",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/temporal-verification/EXPOSED_PROTECTED_CASES.py",
+          "--protocol",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/verification/cycle007_temporal_protocol.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/exposed-temporal-verifier/artifacts"
+        ],
+        "output_bytes": 134618,
+        "reason": null,
+        "requested_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "verification/cycle007_temporal.py",
+          "--root",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+          "--worker",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/temporal-verification/EXPOSED_PROTECTED_CASES.py",
+          "--protocol",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/verification/cycle007_temporal_protocol.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/exposed-temporal-verifier/artifacts"
+        ],
+        "reservation_created": true,
+        "run_id": "exposed-temporal-verifier",
+        "schema": "agi-alpha/trusted-experiment-run006/v3",
+        "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+        "state": "complete",
+        "supervisor_cpu_seconds": 0.055140787000000024,
+        "waited_cpu_seconds": 0.322009,
+        "wall_seconds": 1.446463287997176,
+        "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd"
+      }
+    },
+    {
+      "phase": "actual-asgi-baseline",
+      "receipt": {
+        "aggregate_cpu_complete": false,
+        "command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.temporal_probe007",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-asgi-baseline/artifacts"
+        ],
+        "complete_monetary_cost": null,
+        "cwd": "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+        "descendant_survivors": false,
+        "error": null,
+        "exit_code": 0,
+        "limits": {
+          "cpu_seconds": 60,
+          "memory_bytes": 2147483648,
+          "output_bytes": 8388608,
+          "storage_bytes": 134217728,
+          "wall_seconds": 90
+        },
+        "logs": {
+          "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout.log": "733bdc44a3a973ff7307c4ac98da2209182db47d6b725e179b1b090908208e6e"
+        },
+        "normalized_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.temporal_probe007",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-asgi-baseline/artifacts"
+        ],
+        "output_bytes": 88923,
+        "reason": null,
+        "requested_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.temporal_probe007",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-asgi-baseline/artifacts"
+        ],
+        "reservation_created": true,
+        "run_id": "actual-asgi-baseline",
+        "schema": "agi-alpha/trusted-experiment-run006/v3",
+        "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+        "state": "complete",
+        "supervisor_cpu_seconds": 0.020512220999999997,
+        "waited_cpu_seconds": 0.782548,
+        "wall_seconds": 0.8899044249992585,
+        "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd"
+      }
+    },
+    {
+      "phase": "constructed-asgi",
+      "receipt": {
+        "aggregate_cpu_complete": false,
+        "command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.temporal_construct007",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/constructed-asgi/artifacts"
+        ],
+        "complete_monetary_cost": null,
+        "cwd": "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+        "descendant_survivors": false,
+        "error": null,
+        "exit_code": 0,
+        "limits": {
+          "cpu_seconds": 60,
+          "memory_bytes": 2147483648,
+          "output_bytes": 8388608,
+          "storage_bytes": 134217728,
+          "wall_seconds": 90
+        },
+        "logs": {
+          "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "normalized_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.temporal_construct007",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/constructed-asgi/artifacts"
+        ],
+        "output_bytes": 105214,
+        "reason": null,
+        "requested_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.temporal_construct007",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/constructed-asgi/artifacts"
+        ],
+        "reservation_created": true,
+        "run_id": "constructed-asgi",
+        "schema": "agi-alpha/trusted-experiment-run006/v3",
+        "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+        "state": "complete",
+        "supervisor_cpu_seconds": 0.024060010999999992,
+        "waited_cpu_seconds": 1.355446,
+        "wall_seconds": 1.4399737409985391,
+        "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd"
+      }
+    },
+    {
+      "phase": "actual-spectra-baseline",
+      "receipt": {
+        "aggregate_cpu_complete": false,
+        "command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.massbank_entropy007",
+          "--data",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/massbank-probe/development-dataset",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-spectra-baseline/artifacts.json"
+        ],
+        "complete_monetary_cost": null,
+        "cwd": "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+        "descendant_survivors": false,
+        "error": null,
+        "exit_code": 0,
+        "limits": {
+          "cpu_seconds": 60,
+          "memory_bytes": 2147483648,
+          "output_bytes": 8388608,
+          "storage_bytes": 134217728,
+          "wall_seconds": 90
+        },
+        "logs": {
+          "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout.log": "684c5d27e2a68d353f6a60d1f9ccf273e3f31255c29df69bf2fd318183d22711"
+        },
+        "normalized_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.massbank_entropy007",
+          "--data",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/massbank-probe/development-dataset",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-spectra-baseline/artifacts.json"
+        ],
+        "output_bytes": 12950,
+        "reason": null,
+        "requested_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.massbank_entropy007",
+          "--data",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/massbank-probe/development-dataset",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-spectra-baseline/artifacts.json"
+        ],
+        "reservation_created": true,
+        "run_id": "actual-spectra-baseline",
+        "schema": "agi-alpha/trusted-experiment-run006/v3",
+        "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+        "state": "complete",
+        "supervisor_cpu_seconds": 0.009159185000000014,
+        "waited_cpu_seconds": 0.41955,
+        "wall_seconds": 0.43738038500305265,
+        "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd"
+      }
+    },
+    {
+      "phase": "independent-spectra-replay",
+      "receipt": {
+        "aggregate_cpu_complete": false,
+        "command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "verification/cycle007_massbank_baseline.py",
+          "--data",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/massbank-probe/development-dataset",
+          "--baseline",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-spectra-baseline/artifacts.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/independent-spectra-replay/artifacts.json"
+        ],
+        "complete_monetary_cost": null,
+        "cwd": "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+        "descendant_survivors": false,
+        "error": null,
+        "exit_code": 0,
+        "limits": {
+          "cpu_seconds": 60,
+          "memory_bytes": 2147483648,
+          "output_bytes": 8388608,
+          "storage_bytes": 134217728,
+          "wall_seconds": 90
+        },
+        "logs": {
+          "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout.log": "86437ea86e666e92c55178175f3b96e99114b558146bd11099b1c83ecf686445"
+        },
+        "normalized_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "verification/cycle007_massbank_baseline.py",
+          "--data",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/massbank-probe/development-dataset",
+          "--baseline",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-spectra-baseline/artifacts.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/independent-spectra-replay/artifacts.json"
+        ],
+        "output_bytes": 10556,
+        "reason": null,
+        "requested_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "verification/cycle007_massbank_baseline.py",
+          "--data",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/massbank-probe/development-dataset",
+          "--baseline",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-spectra-baseline/artifacts.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/independent-spectra-replay/artifacts.json"
+        ],
+        "reservation_created": true,
+        "run_id": "independent-spectra-replay",
+        "schema": "agi-alpha/trusted-experiment-run006/v3",
+        "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+        "state": "complete",
+        "supervisor_cpu_seconds": 0.009597091000000002,
+        "waited_cpu_seconds": 0.339878,
+        "wall_seconds": 0.3560347660095431,
+        "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd"
+      }
+    },
+    {
+      "phase": "conditional-exchange",
+      "receipt": {
+        "aggregate_cpu_complete": false,
+        "command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.commerce007",
+          "--artifact",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/verification/ACCEPTED_DELIVERY.json",
+          "--acceptance",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/verification/REPORT.json",
+          "--contract",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/campaign/cycle-007/ECONOMICS_CONTRACT.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/conditional-exchange/artifacts",
+          "--expected-contract-sha256",
+          "7f2ca3aacf98e140f03bc0b5000d61163f7a2fdfe1d84a9c2b5fa9f7f274e395",
+          "--expected-acceptance-sha256",
+          "1fe2f8de69d028ce1891dc4cce68a0f937974ae75081a83f6c992c5eb6e4a8ed"
+        ],
+        "complete_monetary_cost": null,
+        "cwd": "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+        "descendant_survivors": false,
+        "error": null,
+        "exit_code": 0,
+        "limits": {
+          "cpu_seconds": 60,
+          "memory_bytes": 2147483648,
+          "output_bytes": 8388608,
+          "storage_bytes": 134217728,
+          "wall_seconds": 90
+        },
+        "logs": {
+          "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout.log": "7b7fbf83f26ec563feff39993281de82060544cd029a4aa5b6fbf0ab84e22ed9"
+        },
+        "normalized_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.commerce007",
+          "--artifact",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/verification/ACCEPTED_DELIVERY.json",
+          "--acceptance",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/verification/REPORT.json",
+          "--contract",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/campaign/cycle-007/ECONOMICS_CONTRACT.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/conditional-exchange/artifacts",
+          "--expected-contract-sha256",
+          "7f2ca3aacf98e140f03bc0b5000d61163f7a2fdfe1d84a9c2b5fa9f7f274e395",
+          "--expected-acceptance-sha256",
+          "1fe2f8de69d028ce1891dc4cce68a0f937974ae75081a83f6c992c5eb6e4a8ed"
+        ],
+        "output_bytes": 128530,
+        "reason": null,
+        "requested_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "-m",
+          "experiments.commerce007",
+          "--artifact",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/verification/ACCEPTED_DELIVERY.json",
+          "--acceptance",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/verification/REPORT.json",
+          "--contract",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/campaign/cycle-007/ECONOMICS_CONTRACT.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/conditional-exchange/artifacts",
+          "--expected-contract-sha256",
+          "7f2ca3aacf98e140f03bc0b5000d61163f7a2fdfe1d84a9c2b5fa9f7f274e395",
+          "--expected-acceptance-sha256",
+          "1fe2f8de69d028ce1891dc4cce68a0f937974ae75081a83f6c992c5eb6e4a8ed"
+        ],
+        "reservation_created": true,
+        "run_id": "conditional-exchange",
+        "schema": "agi-alpha/trusted-experiment-run006/v3",
+        "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+        "state": "complete",
+        "supervisor_cpu_seconds": 0.015274498999999997,
+        "waited_cpu_seconds": 0.221399,
+        "wall_seconds": 0.9053644459927455,
+        "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd"
+      }
+    },
+    {
+      "phase": "exposed-compatibility-verifier",
+      "receipt": {
+        "aggregate_cpu_complete": false,
+        "command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "verification/cycle007_compatibility.py",
+          "--source",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/dependency-probe/source",
+          "--manifest",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/dependency-probe/source_manifest.json",
+          "--candidate",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/campaign/cycle-007/COMPATIBILITY_TARGET.json",
+          "--baseline-python",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-envs/baseline/bin/python",
+          "--target-python",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-envs/target/bin/python",
+          "--worker",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/verification/EXPOSED_PROTECTED_CASES.py",
+          "--protocol",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/verification/cycle007_compatibility_protocol_v3.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/exposed-compatibility-verifier/artifacts"
+        ],
+        "complete_monetary_cost": null,
+        "cwd": "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+        "descendant_survivors": false,
+        "error": null,
+        "exit_code": 0,
+        "limits": {
+          "cpu_seconds": 120,
+          "memory_bytes": 2147483648,
+          "output_bytes": 8388608,
+          "storage_bytes": 134217728,
+          "wall_seconds": 150
+        },
+        "logs": {
+          "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout.log": "bbf7c71645568e0b21162a8a6c67a6b0b5dcc2b5a3a06415bad4033876725313"
+        },
+        "normalized_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "verification/cycle007_compatibility.py",
+          "--source",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/dependency-probe/source",
+          "--manifest",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/dependency-probe/source_manifest.json",
+          "--candidate",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/campaign/cycle-007/COMPATIBILITY_TARGET.json",
+          "--baseline-python",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-envs/baseline/bin/python",
+          "--target-python",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-envs/target/bin/python",
+          "--worker",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/verification/EXPOSED_PROTECTED_CASES.py",
+          "--protocol",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/verification/cycle007_compatibility_protocol_v3.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/exposed-compatibility-verifier/artifacts"
+        ],
+        "output_bytes": 38744,
+        "reason": null,
+        "requested_command": [
+          "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+          "verification/cycle007_compatibility.py",
+          "--source",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/dependency-probe/source",
+          "--manifest",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/dependency-probe/source_manifest.json",
+          "--candidate",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/campaign/cycle-007/COMPATIBILITY_TARGET.json",
+          "--baseline-python",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-envs/baseline/bin/python",
+          "--target-python",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-envs/target/bin/python",
+          "--worker",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/verification/EXPOSED_PROTECTED_CASES.py",
+          "--protocol",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/verification/cycle007_compatibility_protocol_v3.json",
+          "--output",
+          "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/exposed-compatibility-verifier/artifacts"
+        ],
+        "reservation_created": true,
+        "run_id": "exposed-compatibility-verifier",
+        "schema": "agi-alpha/trusted-experiment-run006/v3",
+        "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+        "state": "complete",
+        "supervisor_cpu_seconds": 0.09556575899999997,
+        "waited_cpu_seconds": 4.47263,
+        "wall_seconds": 4.620356017010636,
+        "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd"
+      }
+    }
+  ],
+  "enabling_invention_demonstrated": false,
+  "fresh_compatibility_replayed": true,
+  "full_campaign_complete": false,
+  "limitations": [
+    "Every previously protected case is now exposed.",
+    "Core and chemistry baselines are supporting evidence; no flagship is admitted by this replay.",
+    "Agent inference and complete lifecycle monetary costs remain unknown.",
+    "Original commerce qualifies canonical JSON content; the original raw-byte claim remains false."
+  ],
+  "reproduction_complete_in_stated_scope": true,
+  "schema": "agi-alpha/reproduction-report007/v1",
+  "self_cpu_seconds": 0.36961404099999995,
+  "wall_seconds": 45.399264677005704
+}

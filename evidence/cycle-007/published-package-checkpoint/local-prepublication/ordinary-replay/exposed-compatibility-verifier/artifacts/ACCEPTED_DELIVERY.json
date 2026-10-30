@@ -1,0 +1,426 @@
+{
+  "accepted": true,
+  "baseline_versions": {
+    "fastapi": "0.99.1",
+    "httpx": "0.27.2",
+    "pydantic": "1.10.27",
+    "starlette": "0.27.0"
+  },
+  "behavior_agreement": true,
+  "candidate_sha256": "f3409703ff50f3a8f2d18ad60c7090caa32f23e3d1b24ca0aa8cb8bac01103f6",
+  "limits": "Existing documented upgrade; no vulnerability advisory qualification, unknown production behavior, scientific superiority or buyer demand inferred.",
+  "protected_checks_per_arm": 17,
+  "results": {
+    "baseline": {
+      "observed": {
+        "checks": [
+          {
+            "id": "header_alias",
+            "observed": [
+              200,
+              {
+                "description": "The bartenders",
+                "id": "bar",
+                "title": "Bar"
+              }
+            ]
+          },
+          {
+            "id": "missing_header",
+            "observed": 422
+          },
+          {
+            "id": "auth_precedes_lookup",
+            "observed": [
+              400,
+              {
+                "detail": "Invalid X-Token header"
+              }
+            ]
+          },
+          {
+            "id": "create_optional",
+            "observed": [
+              200,
+              {
+                "description": null,
+                "id": "held-74129",
+                "title": "Δ neutral title"
+              }
+            ]
+          },
+          {
+            "id": "read_created",
+            "observed": [
+              200,
+              {
+                "description": null,
+                "id": "held-74129",
+                "title": "Δ neutral title"
+              }
+            ]
+          },
+          {
+            "id": "duplicate_refusal",
+            "observed": [
+              400,
+              {
+                "detail": "Item already exists"
+              }
+            ]
+          },
+          {
+            "id": "duplicate_preserves_value",
+            "observed": [
+              200,
+              {
+                "description": null,
+                "id": "held-74129",
+                "title": "Δ neutral title"
+              }
+            ]
+          },
+          {
+            "id": "bad_auth_write",
+            "observed": [
+              400,
+              {
+                "detail": "Invalid X-Token header"
+              }
+            ]
+          },
+          {
+            "id": "bad_auth_no_mutation",
+            "observed": [
+              404,
+              {
+                "detail": "Item not found"
+              }
+            ]
+          },
+          {
+            "id": "invalid_body",
+            "observed": 422
+          },
+          {
+            "id": "invalid_body_no_mutation",
+            "observed": [
+              404,
+              {
+                "detail": "Item not found"
+              }
+            ]
+          },
+          {
+            "id": "http_greeting",
+            "observed": [
+              200,
+              {
+                "msg": "Hello World"
+              }
+            ]
+          },
+          {
+            "id": "websocket_greeting",
+            "observed": {
+              "msg": "Hello WebSocket"
+            }
+          },
+          {
+            "id": "websocket_close",
+            "observed": {
+              "code": 1000,
+              "reason": "",
+              "type": "websocket.close"
+            }
+          },
+          {
+            "id": "startup_initial_state",
+            "observed": {
+              "bar": {
+                "name": "Tenders"
+              },
+              "foo": {
+                "name": "Fighters"
+              }
+            }
+          },
+          {
+            "id": "startup_foo",
+            "observed": [
+              200,
+              {
+                "name": "Fighters"
+              }
+            ]
+          },
+          {
+            "id": "startup_bar",
+            "observed": [
+              200,
+              {
+                "name": "Tenders"
+              }
+            ]
+          }
+        ],
+        "versions": {
+          "fastapi": "0.99.1",
+          "httpx": "0.27.2",
+          "pydantic": "1.10.27",
+          "pytest": "8.3.5",
+          "starlette": "0.27.0"
+        }
+      },
+      "protected": {
+        "command": [
+          "/workspace/scratch/92d546ab6009/edition007-local-qualification/ordinary-replay/compatibility-envs/baseline/bin/python",
+          "/workspace/scratch/92d546ab6009/edition007-local-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/verification/EXPOSED_PROTECTED_CASES.py",
+          "--source",
+          "/tmp/alpha007-verifier-baseline-lts_1vpr/source",
+          "--output",
+          "/workspace/scratch/92d546ab6009/edition007-local-qualification/ordinary-replay/exposed-compatibility-verifier/artifacts/baseline/protected.json"
+        ],
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "returncode": 0,
+        "waited_child_cpu_seconds": 0.8134370000000003,
+        "wall_seconds": 0.8187774820107734
+      },
+      "source_unchanged": true,
+      "upstream": {
+        "command": [
+          "/workspace/scratch/92d546ab6009/edition007-local-qualification/ordinary-replay/compatibility-envs/baseline/bin/python",
+          "-m",
+          "pytest",
+          "-q",
+          "app_b",
+          "tutorial002.py",
+          "tutorial003.py",
+          "--junitxml=/workspace/scratch/92d546ab6009/edition007-local-qualification/ordinary-replay/exposed-compatibility-verifier/artifacts/baseline/upstream.xml"
+        ],
+        "log_sha256": "012d0d7edbc7b253d033711f8282c474466715892cee31dce6e078068b736515",
+        "returncode": 0,
+        "waited_child_cpu_seconds": 1.294214,
+        "wall_seconds": 1.3231780089990934
+      },
+      "upstream_summary": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 9
+      },
+      "versions_match": true
+    },
+    "target": {
+      "observed": {
+        "checks": [
+          {
+            "id": "header_alias",
+            "observed": [
+              200,
+              {
+                "description": "The bartenders",
+                "id": "bar",
+                "title": "Bar"
+              }
+            ]
+          },
+          {
+            "id": "missing_header",
+            "observed": 422
+          },
+          {
+            "id": "auth_precedes_lookup",
+            "observed": [
+              400,
+              {
+                "detail": "Invalid X-Token header"
+              }
+            ]
+          },
+          {
+            "id": "create_optional",
+            "observed": [
+              200,
+              {
+                "description": null,
+                "id": "held-74129",
+                "title": "Δ neutral title"
+              }
+            ]
+          },
+          {
+            "id": "read_created",
+            "observed": [
+              200,
+              {
+                "description": null,
+                "id": "held-74129",
+                "title": "Δ neutral title"
+              }
+            ]
+          },
+          {
+            "id": "duplicate_refusal",
+            "observed": [
+              400,
+              {
+                "detail": "Item already exists"
+              }
+            ]
+          },
+          {
+            "id": "duplicate_preserves_value",
+            "observed": [
+              200,
+              {
+                "description": null,
+                "id": "held-74129",
+                "title": "Δ neutral title"
+              }
+            ]
+          },
+          {
+            "id": "bad_auth_write",
+            "observed": [
+              400,
+              {
+                "detail": "Invalid X-Token header"
+              }
+            ]
+          },
+          {
+            "id": "bad_auth_no_mutation",
+            "observed": [
+              404,
+              {
+                "detail": "Item not found"
+              }
+            ]
+          },
+          {
+            "id": "invalid_body",
+            "observed": 422
+          },
+          {
+            "id": "invalid_body_no_mutation",
+            "observed": [
+              404,
+              {
+                "detail": "Item not found"
+              }
+            ]
+          },
+          {
+            "id": "http_greeting",
+            "observed": [
+              200,
+              {
+                "msg": "Hello World"
+              }
+            ]
+          },
+          {
+            "id": "websocket_greeting",
+            "observed": {
+              "msg": "Hello WebSocket"
+            }
+          },
+          {
+            "id": "websocket_close",
+            "observed": {
+              "code": 1000,
+              "reason": "",
+              "type": "websocket.close"
+            }
+          },
+          {
+            "id": "startup_initial_state",
+            "observed": {
+              "bar": {
+                "name": "Tenders"
+              },
+              "foo": {
+                "name": "Fighters"
+              }
+            }
+          },
+          {
+            "id": "startup_foo",
+            "observed": [
+              200,
+              {
+                "name": "Fighters"
+              }
+            ]
+          },
+          {
+            "id": "startup_bar",
+            "observed": [
+              200,
+              {
+                "name": "Tenders"
+              }
+            ]
+          }
+        ],
+        "versions": {
+          "fastapi": "0.110.1",
+          "httpx": "0.28.1",
+          "pydantic": "1.10.27",
+          "pytest": "8.3.5",
+          "starlette": "0.37.2"
+        }
+      },
+      "protected": {
+        "command": [
+          "/workspace/scratch/92d546ab6009/edition007-local-qualification/ordinary-replay/compatibility-envs/target/bin/python",
+          "/workspace/scratch/92d546ab6009/edition007-local-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/verification/EXPOSED_PROTECTED_CASES.py",
+          "--source",
+          "/tmp/alpha007-verifier-target-62tjedi0/source",
+          "--output",
+          "/workspace/scratch/92d546ab6009/edition007-local-qualification/ordinary-replay/exposed-compatibility-verifier/artifacts/target/protected.json"
+        ],
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "returncode": 0,
+        "waited_child_cpu_seconds": 0.8135440000000003,
+        "wall_seconds": 0.8694066689931788
+      },
+      "source_unchanged": true,
+      "upstream": {
+        "command": [
+          "/workspace/scratch/92d546ab6009/edition007-local-qualification/ordinary-replay/compatibility-envs/target/bin/python",
+          "-m",
+          "pytest",
+          "-q",
+          "app_b",
+          "tutorial002.py",
+          "tutorial003.py",
+          "--junitxml=/workspace/scratch/92d546ab6009/edition007-local-qualification/ordinary-replay/exposed-compatibility-verifier/artifacts/target/upstream.xml"
+        ],
+        "log_sha256": "0e9fb0377dbcc06102ad26356294e514bd7c151971600d18212f8c2f8c8165c5",
+        "returncode": 0,
+        "waited_child_cpu_seconds": 1.262754,
+        "wall_seconds": 1.2719348020036705
+      },
+      "upstream_summary": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 9
+      },
+      "versions_match": true
+    }
+  },
+  "schema": "agi-alpha/scoped-compatibility-delivery007/v1",
+  "scope": "pinned FastAPI documentation create/read, WebSocket, startup compatibility only; no production or security qualification",
+  "source_commit": "dd4e78ca7b09abdf0d4646fe4697316c021a8b2e",
+  "source_manifest_sha256": "ad45d157445427e97d0ce9e6b69df92472113b256993f09e1a2a1036406c21f6",
+  "target_versions": {
+    "fastapi": "0.110.1",
+    "httpx": "0.28.1",
+    "pydantic": "1.10.27",
+    "starlette": "0.37.2"
+  },
+  "upstream_tests_per_arm": 9
+}

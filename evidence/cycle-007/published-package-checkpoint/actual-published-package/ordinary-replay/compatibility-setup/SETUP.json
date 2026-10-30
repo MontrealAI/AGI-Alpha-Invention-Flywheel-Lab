@@ -1,0 +1,127 @@
+{
+  "source_sha256": "6874efec3a61cbd31746d87dcce1eb5d0706167d4f024806262e93ef3d6704cb",
+  "receipts": [
+    {
+      "arm": "baseline",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/uv",
+        "venv",
+        "--python",
+        "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+        "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-envs/baseline"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.0322819389984943,
+      "log_sha256": "3eb9facb363e0a377ec14ea766cab0b9051d7ccfc59fb79dff5c3c1909e584c0"
+    },
+    {
+      "arm": "baseline",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/uv",
+        "pip",
+        "install",
+        "--python",
+        "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-envs/baseline/bin/python",
+        "anyio==4.15.1",
+        "certifi==2026.10.23",
+        "h11==0.16.0",
+        "httpcore==1.0.9",
+        "idna==3.20",
+        "iniconfig==2.3.1",
+        "packaging==26.3",
+        "pluggy==1.7.0",
+        "pydantic==1.10.27",
+        "pytest==8.3.5",
+        "sniffio==1.3.1",
+        "typing_extensions==4.16.0",
+        "fastapi==0.99.1",
+        "starlette==0.27.0",
+        "httpx==0.27.2"
+      ],
+      "returncode": 0,
+      "wall_seconds": 3.0278698330075713,
+      "log_sha256": "32d4b2afb756cec681594cfe91e2e42d0b0e64040fc5f58fc847cf37c2c738a3"
+    },
+    {
+      "arm": "target",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/uv",
+        "venv",
+        "--python",
+        "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+        "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-envs/target"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.06439103301090654,
+      "log_sha256": "586b9b7aa6a99a215cf98d72265720677bbcc97cfa243d24be1a792cd4456e58"
+    },
+    {
+      "arm": "target",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/uv",
+        "pip",
+        "install",
+        "--python",
+        "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/compatibility-envs/target/bin/python",
+        "anyio==4.15.1",
+        "certifi==2026.10.23",
+        "h11==0.16.0",
+        "httpcore==1.0.9",
+        "idna==3.20",
+        "iniconfig==2.3.1",
+        "packaging==26.3",
+        "pluggy==1.7.0",
+        "pydantic==1.10.27",
+        "pytest==8.3.5",
+        "sniffio==1.3.1",
+        "typing_extensions==4.16.0",
+        "fastapi==0.110.1",
+        "starlette==0.37.2",
+        "httpx==0.28.1"
+      ],
+      "returncode": 0,
+      "wall_seconds": 0.9680591099895537,
+      "log_sha256": "f071365fb3644e90ab0c5d4aada430ff44ef531a3295c7ce7653d307a9be8e1e"
+    }
+  ],
+  "packages": {
+    "baseline": [
+      "anyio==4.15.1",
+      "certifi==2026.10.23",
+      "h11==0.16.0",
+      "httpcore==1.0.9",
+      "idna==3.20",
+      "iniconfig==2.3.1",
+      "packaging==26.3",
+      "pluggy==1.7.0",
+      "pydantic==1.10.27",
+      "pytest==8.3.5",
+      "sniffio==1.3.1",
+      "typing_extensions==4.16.0",
+      "fastapi==0.99.1",
+      "starlette==0.27.0",
+      "httpx==0.27.2"
+    ],
+    "target": [
+      "anyio==4.15.1",
+      "certifi==2026.10.23",
+      "h11==0.16.0",
+      "httpcore==1.0.9",
+      "idna==3.20",
+      "iniconfig==2.3.1",
+      "packaging==26.3",
+      "pluggy==1.7.0",
+      "pydantic==1.10.27",
+      "pytest==8.3.5",
+      "sniffio==1.3.1",
+      "typing_extensions==4.16.0",
+      "fastapi==0.110.1",
+      "starlette==0.37.2",
+      "httpx==0.28.1"
+    ]
+  },
+  "wall_seconds": 4.0937544829939725,
+  "waited_child_cpu_seconds": 0.806129,
+  "own_cpu_seconds": 0.08126442,
+  "scope": "Free package installation, inherited approved proxy environment;120s timeout per command; no generated code, no paid provider call; monetary project/inference costs unknown."
+}

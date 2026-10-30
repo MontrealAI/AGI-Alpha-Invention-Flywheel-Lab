@@ -1,0 +1,60 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "independent-spectra-replay",
+  "command": [
+    "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+    "verification/cycle007_massbank_baseline.py",
+    "--data",
+    "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/massbank-probe/development-dataset",
+    "--baseline",
+    "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-spectra-baseline/artifacts.json",
+    "--output",
+    "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/independent-spectra-replay/artifacts.json"
+  ],
+  "requested_command": [
+    "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+    "verification/cycle007_massbank_baseline.py",
+    "--data",
+    "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/massbank-probe/development-dataset",
+    "--baseline",
+    "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-spectra-baseline/artifacts.json",
+    "--output",
+    "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/independent-spectra-replay/artifacts.json"
+  ],
+  "normalized_command": [
+    "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+    "verification/cycle007_massbank_baseline.py",
+    "--data",
+    "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/evidence/cycle-007/massbank-probe/development-dataset",
+    "--baseline",
+    "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/actual-spectra-baseline/artifacts.json",
+    "--output",
+    "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay/independent-spectra-replay/artifacts.json"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion",
+  "limits": {
+    "wall_seconds": 90,
+    "cpu_seconds": 60,
+    "memory_bytes": 2147483648,
+    "output_bytes": 8388608,
+    "storage_bytes": 134217728
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 0.3560347660095431,
+  "supervisor_cpu_seconds": 0.009597091000000002,
+  "waited_cpu_seconds": 0.339878,
+  "descendant_survivors": false,
+  "output_bytes": 10556,
+  "logs": {
+    "stdout.log": "86437ea86e666e92c55178175f3b96e99114b558146bd11099b1c83ecf686445",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

@@ -1,0 +1,384 @@
+[
+  {
+    "arm": "request",
+    "commit_before_success": false,
+    "commit_failure": false,
+    "delivery_contract_pass": false,
+    "events": [
+      {
+        "elapsed_seconds": 0.0010998689976986498,
+        "event": "open"
+      },
+      {
+        "elapsed_seconds": 0.001232177994097583,
+        "event": "insert"
+      },
+      {
+        "elapsed_seconds": 0.0034681799879763275,
+        "event": "response_start",
+        "externally_visible_rows": 0,
+        "status": 200
+      },
+      {
+        "elapsed_seconds": 0.003480036000837572,
+        "event": "stream_read_attempt"
+      },
+      {
+        "elapsed_seconds": 0.003492495001410134,
+        "event": "stream_read_success",
+        "rows": [
+          [
+            7
+          ]
+        ]
+      },
+      {
+        "body": "7\n",
+        "elapsed_seconds": 0.0035045789991272613,
+        "event": "response_body",
+        "more_body": true
+      },
+      {
+        "elapsed_seconds": 0.003506006993120536,
+        "event": "stream_complete"
+      },
+      {
+        "body": "",
+        "elapsed_seconds": 0.003512223993311636,
+        "event": "response_body",
+        "more_body": false
+      },
+      {
+        "elapsed_seconds": 0.0035231559886597097,
+        "event": "commit_attempt"
+      },
+      {
+        "elapsed_seconds": 0.007689577993005514,
+        "event": "commit_success"
+      },
+      {
+        "elapsed_seconds": 0.007751118988380767,
+        "event": "close"
+      }
+    ],
+    "exception": null,
+    "live_resource_through_stream": true,
+    "no_success_after_failed_commit": true,
+    "persisted_rows": [
+      [
+        7,
+        1
+      ]
+    ]
+  },
+  {
+    "arm": "request",
+    "commit_before_success": false,
+    "commit_failure": true,
+    "delivery_contract_pass": false,
+    "events": [
+      {
+        "elapsed_seconds": 0.00233287199807819,
+        "event": "open"
+      },
+      {
+        "elapsed_seconds": 0.0024972520041046664,
+        "event": "insert"
+      },
+      {
+        "elapsed_seconds": 0.0026339690084569156,
+        "event": "response_start",
+        "externally_visible_rows": 0,
+        "status": 200
+      },
+      {
+        "elapsed_seconds": 0.0026381119969300926,
+        "event": "stream_read_attempt"
+      },
+      {
+        "elapsed_seconds": 0.0026467520074220374,
+        "event": "stream_read_success",
+        "rows": [
+          [
+            7
+          ]
+        ]
+      },
+      {
+        "body": "7\n",
+        "elapsed_seconds": 0.00265334099822212,
+        "event": "response_body",
+        "more_body": true
+      },
+      {
+        "elapsed_seconds": 0.0026545200089458376,
+        "event": "stream_complete"
+      },
+      {
+        "body": "",
+        "elapsed_seconds": 0.0026576730015221983,
+        "event": "response_body",
+        "more_body": false
+      },
+      {
+        "elapsed_seconds": 0.00266286100668367,
+        "event": "commit_attempt"
+      },
+      {
+        "elapsed_seconds": 0.002804739007842727,
+        "event": "rollback"
+      },
+      {
+        "elapsed_seconds": 0.00283199900877662,
+        "event": "close"
+      },
+      {
+        "elapsed_seconds": 0.0029271230014273897,
+        "event": "exception",
+        "message": "FOREIGN KEY constraint failed",
+        "type": "IntegrityError"
+      }
+    ],
+    "exception": {
+      "message": "FOREIGN KEY constraint failed",
+      "type": "IntegrityError"
+    },
+    "live_resource_through_stream": true,
+    "no_success_after_failed_commit": false,
+    "persisted_rows": []
+  },
+  {
+    "arm": "function",
+    "commit_before_success": true,
+    "commit_failure": false,
+    "delivery_contract_pass": false,
+    "events": [
+      {
+        "elapsed_seconds": 0.0007724360038992018,
+        "event": "open"
+      },
+      {
+        "elapsed_seconds": 0.0009131260012509301,
+        "event": "insert"
+      },
+      {
+        "elapsed_seconds": 0.000930527996388264,
+        "event": "commit_attempt"
+      },
+      {
+        "elapsed_seconds": 0.004189365994534455,
+        "event": "commit_success"
+      },
+      {
+        "elapsed_seconds": 0.004217830995912664,
+        "event": "close"
+      },
+      {
+        "elapsed_seconds": 0.004401811005664058,
+        "event": "response_start",
+        "externally_visible_rows": 1,
+        "status": 200
+      },
+      {
+        "elapsed_seconds": 0.004406674997881055,
+        "event": "stream_read_attempt"
+      },
+      {
+        "elapsed_seconds": 0.004460185999050736,
+        "event": "exception",
+        "message": "Cannot operate on a closed database.",
+        "type": "ProgrammingError"
+      }
+    ],
+    "exception": {
+      "message": "Cannot operate on a closed database.",
+      "type": "ProgrammingError"
+    },
+    "live_resource_through_stream": false,
+    "no_success_after_failed_commit": true,
+    "persisted_rows": [
+      [
+        7,
+        1
+      ]
+    ]
+  },
+  {
+    "arm": "function",
+    "commit_before_success": true,
+    "commit_failure": true,
+    "delivery_contract_pass": true,
+    "events": [
+      {
+        "elapsed_seconds": 0.0005950350023340434,
+        "event": "open"
+      },
+      {
+        "elapsed_seconds": 0.0007171890028985217,
+        "event": "insert"
+      },
+      {
+        "elapsed_seconds": 0.0007327860075747594,
+        "event": "commit_attempt"
+      },
+      {
+        "elapsed_seconds": 0.0007706020114710554,
+        "event": "rollback"
+      },
+      {
+        "elapsed_seconds": 0.0007878309988882393,
+        "event": "close"
+      },
+      {
+        "elapsed_seconds": 0.002293958008522168,
+        "event": "response_start",
+        "externally_visible_rows": 0,
+        "status": 500
+      },
+      {
+        "body": "Internal Server Error",
+        "elapsed_seconds": 0.002299790008692071,
+        "event": "response_body",
+        "more_body": false
+      },
+      {
+        "elapsed_seconds": 0.0023170560016296804,
+        "event": "exception",
+        "message": "FOREIGN KEY constraint failed",
+        "type": "IntegrityError"
+      }
+    ],
+    "exception": {
+      "message": "FOREIGN KEY constraint failed",
+      "type": "IntegrityError"
+    },
+    "live_resource_through_stream": true,
+    "no_success_after_failed_commit": true,
+    "persisted_rows": []
+  },
+  {
+    "arm": "split",
+    "commit_before_success": true,
+    "commit_failure": false,
+    "delivery_contract_pass": true,
+    "events": [
+      {
+        "elapsed_seconds": 0.0010998869984177873,
+        "event": "open"
+      },
+      {
+        "elapsed_seconds": 0.0012376320082694292,
+        "event": "insert"
+      },
+      {
+        "elapsed_seconds": 0.0012386360031086951,
+        "event": "commit_attempt"
+      },
+      {
+        "elapsed_seconds": 0.005945720011368394,
+        "event": "commit_success"
+      },
+      {
+        "elapsed_seconds": 0.006130328998551704,
+        "event": "response_start",
+        "externally_visible_rows": 1,
+        "status": 200
+      },
+      {
+        "elapsed_seconds": 0.006135575007647276,
+        "event": "stream_read_attempt"
+      },
+      {
+        "elapsed_seconds": 0.006148216009023599,
+        "event": "stream_read_success",
+        "rows": [
+          [
+            7
+          ]
+        ]
+      },
+      {
+        "body": "7\n",
+        "elapsed_seconds": 0.006156607007142156,
+        "event": "response_body",
+        "more_body": true
+      },
+      {
+        "elapsed_seconds": 0.006157846000860445,
+        "event": "stream_complete"
+      },
+      {
+        "body": "",
+        "elapsed_seconds": 0.006161515004350804,
+        "event": "response_body",
+        "more_body": false
+      },
+      {
+        "elapsed_seconds": 0.006186131009599194,
+        "event": "close"
+      }
+    ],
+    "exception": null,
+    "live_resource_through_stream": true,
+    "no_success_after_failed_commit": true,
+    "persisted_rows": [
+      [
+        7,
+        1
+      ]
+    ]
+  },
+  {
+    "arm": "split",
+    "commit_before_success": true,
+    "commit_failure": true,
+    "delivery_contract_pass": true,
+    "events": [
+      {
+        "elapsed_seconds": 0.0006205669924383983,
+        "event": "open"
+      },
+      {
+        "elapsed_seconds": 0.000747234997106716,
+        "event": "insert"
+      },
+      {
+        "elapsed_seconds": 0.0007484429952455685,
+        "event": "commit_attempt"
+      },
+      {
+        "elapsed_seconds": 0.0008077489910647273,
+        "event": "rollback"
+      },
+      {
+        "elapsed_seconds": 0.0008262149931397289,
+        "event": "close"
+      },
+      {
+        "elapsed_seconds": 0.0010061449866043404,
+        "event": "response_start",
+        "externally_visible_rows": 0,
+        "status": 500
+      },
+      {
+        "body": "Internal Server Error",
+        "elapsed_seconds": 0.0010095769976032898,
+        "event": "response_body",
+        "more_body": false
+      },
+      {
+        "elapsed_seconds": 0.0010222969867754728,
+        "event": "exception",
+        "message": "FOREIGN KEY constraint failed",
+        "type": "IntegrityError"
+      }
+    ],
+    "exception": {
+      "message": "FOREIGN KEY constraint failed",
+      "type": "IntegrityError"
+    },
+    "live_resource_through_stream": true,
+    "no_success_after_failed_commit": true,
+    "persisted_rows": []
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "archive_bytes": 110761878,
+  "archive_sha256": "46af032e70f6c976f7535df104613539f5a833d7ec226fdeb4a88ea7a87c33b1",
+  "ordinary_and_validated_extractions_reproduced": true,
+  "payload_files": 7439,
+  "results": [
+    {
+      "accepted_reproduction": true,
+      "command": [
+        "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+        "/workspace/scratch/92d546ab6009/published007-qualification/validated-source/run_cycle007.py",
+        "--expected-freeze-sha256",
+        "0001664b875aec9854e6cd033a97b28d80bc47bfa9a515b63c037db7e0598834",
+        "--output",
+        "/workspace/scratch/92d546ab6009/published007-qualification/validated-replay",
+        "--with-compatibility",
+        "--chemistry-tools-dir",
+        "/workspace/scratch/92d546ab6009/denovo_probe/tools"
+      ],
+      "complete_sha256": "5b12fcf4d0094325d40aa4cfc548b0c4d2b4f95ea604e6f6b24ee8179c047627",
+      "extraction": "validated",
+      "files_verified": 7439,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "returncode": 0,
+      "waited_child_cpu_seconds": 91.26901299999999,
+      "wall_seconds": 53.97271496000758
+    },
+    {
+      "accepted_reproduction": true,
+      "command": [
+        "/workspace/scratch/92d546ab6009/ms007-venv/bin/python",
+        "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-extraction/AGI_ALPHA_Mechanism_Completion/run_cycle007.py",
+        "--expected-freeze-sha256",
+        "0001664b875aec9854e6cd033a97b28d80bc47bfa9a515b63c037db7e0598834",
+        "--output",
+        "/workspace/scratch/92d546ab6009/published007-qualification/ordinary-replay",
+        "--with-compatibility",
+        "--chemistry-tools-dir",
+        "/workspace/scratch/92d546ab6009/denovo_probe/tools"
+      ],
+      "complete_sha256": "173e7bc208e66c304e91ce0bcc4c20633a9808dfeb9079f3790ca77c68342560",
+      "extraction": "ordinary",
+      "files_verified": 7439,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "returncode": 0,
+      "waited_child_cpu_seconds": 64.93029599999998,
+      "wall_seconds": 45.53696967300493
+    }
+  ],
+  "schema": "agi-alpha/archive-qualification007/v1",
+  "scope": "Actual exact archive extraction and exposed source-bound engineering/chemical baseline replay; no new protected confirmation, invention success, commercial success or retroactive qualification of historical failed receipts.",
+  "wall_seconds": 107.46056032300112
+}
