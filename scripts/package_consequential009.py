@@ -16,6 +16,7 @@ def pack(output, source_commit):
     files = set(freeze['files']) | {'AGENTS.md', 'CHARTER.md', 'FIRST_CAMPAIGN.md', 'THIRD_PARTY.md',
         'scripts/package_consequential009.py', 'scripts/build_consequential009_paper.py', 'REPRODUCING_CONSEQUENTIAL009.md'}
     files.update(str(p.relative_to(ROOT)) for p in (ROOT / 'tests').glob('test_consequential009*.py'))
+    files.update(str(p.relative_to(ROOT)) for p in (ROOT / 'scripts').glob('build_consequential009_*.py'))
     for prefix in PREFIXES:
         for p in (ROOT / prefix).rglob('*'):
             if not p.is_file() or p.is_symlink(): continue

@@ -27,6 +27,8 @@ def typed_equal(actual, expected):
         return False
     if isinstance(expected, list):
         return len(actual) == len(expected) and all(typed_equal(a, b) for a, b in zip(actual, expected))
+    if isinstance(expected, dict):
+        return actual.keys() == expected.keys() and all(typed_equal(actual[key], value) for key, value in expected.items())
     return actual == expected
 
 
@@ -101,6 +103,48 @@ def minimum_full_plan(actions, covered):
     raise AssertionError('FULL_UNIVERSE_NOT_SELF_COVERING')
 
 
+ADMITTED_MODEL = ['linear time-invariant passive lumped RCL', 'positive finite components',
+                  'single grounded independent input voltage', 'all circuit branches included',
+                  'no fixed known load omitted', 'normalized coherent voltage measurement']
+NON_APPLICABILITY = ['active/nonlinear components', 'unknown omitted source impedance/load',
+                     'unbounded current calibration', 'unmodeled distributed effects',
+                     'physical assurance without measured calibration']
+SENSOR_OBLIGATION = 'independently calibrated input-current and input-voltage transfer; otherwise abstain'
+
+
+def generated_authority(parts, source, frequencies, source_hash, actions):
+    laws = {'r': {'parameter_exponent': -1, 'omega_exponent': 0, 'unit': 'ohm'},
+            'c': {'parameter_exponent': 1, 'omega_exponent': 1, 'unit': 'farad'},
+            'l': {'parameter_exponent': -1, 'omega_exponent': -1, 'unit': 'henry'}}
+    program, relations = {}, []
+    for kind, name, _, _, _ in parts:
+        exponent = -1 if kind == 'c' else 1
+        program[name] = exponent
+        relations.append({'element': name, 'kind': kind.upper(), 'branch_law': laws[kind],
+                          'parameter_scale_exponent': exponent, 'derived_admittance_scale_exponent': -1})
+    changed = kcl.transformed(parts, F(2))
+    voltage_equal, current_different = [], []
+    for omega in frequencies:
+        original_v, original_y = kcl.solve(parts, source, F(omega))
+        changed_v, changed_y = kcl.solve(changed, source, F(omega))
+        voltage_equal.append(original_v == changed_v)
+        current_different.append(original_y != changed_y)
+    proof = {'schema': 'typed-network-symmetry-v1', 'source_sha256': source_hash,
+             'authors': 'developer supplied passive constitutive laws; algebraic exponent matching and graph coverage executed by program',
+             'relations': relations, 'program': program,
+             'proof': 'Every branch admittance is multiplied by1/a. Entire KCL matrix and source RHS scale1/a, leaving all node voltage ratios unchanged wherever matrix invertible. Input current scales1/a.',
+             'applicability': ADMITTED_MODEL, 'non_applicability': NON_APPLICABILITY}
+    extension = {'op': 'derive_flux_observable', 'version': 1,
+                 'generated_from': 'executed all-node voltage-equivalence witness plus typed current scaling',
+                 'source_sha256': source_hash, 'required_model': ADMITTED_MODEL,
+                 'rule_authorship': 'developer supplied conjugate-observable rule; runtime derives network expression, units and admissibility',
+                 'units': 'siemens', 'sensor_obligation': SENSOR_OBLIGATION, 'inherited': False}
+    witness = {'a': '2', 'original_values': {name: str(value) for _, name, _, _, value in parts},
+               'transformed_values': {name: str(value) for _, name, _, _, value in changed},
+               'voltage_equal': voltage_equal, 'current_different': current_different, 'all_frequency_proof': proof}
+    return {'actions': actions, 'generated_extension': extension, 'witness': witness}
+
+
 def inspect_stage(root, directory, protocol, name, check):
     primary = name == 'primary'
     source_name = 'rc-meas-ac.sp' if primary else 'MonteCarlo.sp'
@@ -118,6 +162,10 @@ def inspect_stage(root, directory, protocol, name, check):
     actions = action_universe(parts, source, frequencies)
     generated = read(directory / (name + '-GENERATED.json'))
     check(generated['actions'] == actions, name + ': complete typed action universe')
+    expected_generated = generated_authority(parts, source, frequencies, sha(source_path), actions)
+    check(typed_equal(generated.get('generated_extension'), expected_generated['generated_extension']), name + ': closed generated operator and retained authority')
+    check(typed_equal(generated.get('witness'), expected_generated['witness']), name + ': independent derivation and complete generated witness')
+    check(typed_equal(generated, expected_generated), name + ': exact typed generated-authority schema')
     responses = all_responses(parts, source, cohort, actions)
     policies = protocol['policies']
     pairs, covered = coverings(cohort, actions, responses, policies)

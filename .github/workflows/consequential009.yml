@@ -114,6 +114,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/009-release-assets"
           cp "$RUNNER_TEMP/009-qualified-artifact/AGI_ALPHA_Consequential009.zip" "$RUNNER_TEMP/009-release-assets/"
           cp docs/consequential009/paper.pdf docs/consequential009/paper.tex docs/consequential009/index.html docs/consequential009/SOURCE_MANIFEST.json "$RUNNER_TEMP/009-release-assets/"
+          cp docs/consequential009/paper-with-corrigendum.pdf docs/consequential009/corrigendum.pdf docs/consequential009/corrigendum.tex docs/consequential009/corrigendum.html docs/consequential009/index-qualified.html docs/consequential009/CORRIGENDUM_SOURCE_MANIFEST.json "$RUNNER_TEMP/009-release-assets/"
           cp "$RUNNER_TEMP/009-release-replay/RESULT.json" "$RUNNER_TEMP/009-release-assets/DOWNLOADED_PACKAGE_QUALIFICATION.json"
           (cd "$RUNNER_TEMP/009-release-assets" && sha256sum * > SHA256SUMS.txt)
           gh release create "$tag" "$RUNNER_TEMP/009-release-assets/"* --verify-tag --target "$GITHUB_SHA" --prerelease --title 'AGI ALPHA: circuit measurement construction and conditional exchange' --notes-file campaign/consequential-009/RELEASE_NOTES.md

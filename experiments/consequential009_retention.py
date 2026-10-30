@@ -17,18 +17,27 @@ def write(path, value):
 def run(primary, receipt, expected_receipt, output):
     started, cpu = time.monotonic(), time.process_time()
     primary, receipt, output = Path(primary), Path(receipt), Path(output)
-    accepted = read(receipt)
-    if sha(receipt) != expected_receipt or accepted.get('accepted') is not True:
+    receipt_raw = receipt.read_bytes()
+    accepted = json.loads(receipt_raw)
+    if hashlib.sha256(receipt_raw).hexdigest() != expected_receipt or accepted.get('accepted') is not True:
         raise ValueError('SOURCE_BOUND_INDEPENDENT_ACCEPTANCE_REQUIRED')
     artifact_path = primary / 'REPORT.json'
-    if accepted['artifact_sha256'] != sha(artifact_path): raise ValueError('ACCEPTED_REPORT_IDENTITY')
+    artifact_raw = artifact_path.read_bytes()
+    artifact_identity = hashlib.sha256(artifact_raw).hexdigest()
+    artifact = json.loads(artifact_raw)
+    if accepted['artifact_sha256'] != artifact_identity: raise ValueError('ACCEPTED_REPORT_IDENTITY')
     if accepted['verifier_sha256'] != sha(ROOT / 'verification/consequential009/cohort_check.py'):
         raise ValueError('VERIFIER_SOURCE_IDENTITY')
     circuit_path = ROOT / 'inventions/consequential009/circuit.py'
     if accepted['candidate_sha256'] != sha(circuit_path): raise ValueError('INSTRUMENT_SOURCE_IDENTITY')
-    protocol = read(primary / 'PROTOCOL.json')
-    if accepted['protocol_sha256'] != sha(primary / 'PROTOCOL.json'): raise ValueError('PROTOCOL_IDENTITY')
-    program = read(primary / 'primary-GENERATED.json')['generated_extension']
+    protocol_raw = (primary / 'PROTOCOL.json').read_bytes()
+    protocol = json.loads(protocol_raw)
+    if accepted['protocol_sha256'] != hashlib.sha256(protocol_raw).hexdigest(): raise ValueError('PROTOCOL_IDENTITY')
+    generated_raw = (primary / 'primary-GENERATED.json').read_bytes()
+    expected_generated = accepted.get('consumed_hashes', {}).get('artifact/primary-GENERATED.json')
+    if hashlib.sha256(generated_raw).hexdigest() != expected_generated:
+        raise ValueError('ACCEPTED_GENERATIVE_SIDECAR_IDENTITY')
+    program = json.loads(generated_raw)['generated_extension']
     if program is None: raise ValueError('NO_VERIFIED_GENERATIVE_EXTENSION')
     output.mkdir(parents=True, exist_ok=False)
     record = {
@@ -39,10 +48,10 @@ def run(primary, receipt, expected_receipt, output):
             'uncertainty': 'Authored finite model and sensor envelope only; calibration not measured.',
             'failures': [{'conditions': {'sensor_gain': 'unbounded'}, 'reason': 'Impedance-scale/current-gain symmetry; current measurement alone cannot identify scale.'}]},
         'generative_operator': {'language': 'circuit_measurement_v1', 'program': program},
-        'provenance': {'accepted_artifact_sha256': sha(artifact_path), 'protocol_sha256': accepted['protocol_sha256'],
+        'provenance': {'accepted_artifact_sha256': artifact_identity, 'protocol_sha256': accepted['protocol_sha256'],
             'insight_origin': 'Developer supplied physical constitutive laws and conjugate-observable rule. Runtime derives network expressions and verifies witness; no autonomous broad-discovery priority.'},
         'verification': {'status': 'verified-in-scope', 'receipt_sha256': expected_receipt},
-        'costs': {'observed_predecessor_cpu_seconds': read(artifact_path)['cpu_seconds'], 'complete_acquisition_money': None,
+        'costs': {'observed_predecessor_cpu_seconds': artifact['cpu_seconds'], 'complete_acquisition_money': None,
             'recovery_horizon': 'No justified amortization volume; all predecessor and inherited costs remain in lifecycle unknown K.'},
         'exposure': ['primary and successor model definitions exposed DEVELOPMENT before this memory experiment; no untouched confirmation'],
         'supersedes': []}
@@ -92,7 +101,7 @@ def run(primary, receipt, expected_receipt, output):
         'cost_reduced': new['relative_acquisition_units'] < old['relative_acquisition_units'],
         'methods': 'known reverse deletion and finite single-action replacement; no novel search algorithm claim'}
     result = {'schema': 'agi-alpha/consequential009-retained-successor/v1',
-        'record_sha256': identity, 'accepted_predecessor_artifact_sha256': sha(artifact_path),
+        'record_sha256': identity, 'accepted_predecessor_artifact_sha256': artifact_identity,
         'independent_receipt_sha256': expected_receipt, 'instrument_sha256': sha(circuit_path),
         'memory_paths_executed': ['flywheel.retention.store', 'flywheel.retention.retrieve', 'generate_actions(inherited_program)', 'compile_plan'],
         'actual_negative_retrieval_refused': bool(negative['failures']),

@@ -27,6 +27,8 @@ def typed_equal(actual, expected):
         return False
     if isinstance(expected, list):
         return len(actual) == len(expected) and all(typed_equal(a, b) for a, b in zip(actual, expected))
+    if isinstance(expected, dict):
+        return actual.keys() == expected.keys() and all(typed_equal(actual[key], value) for key, value in expected.items())
     return actual == expected
 
 
@@ -98,6 +100,10 @@ def verify_stage(root, directory, protocol, primary, check):
         bounds[w] = [bound(y, protocol) for y in values[w]]
         covered[w] = {pair for pair in all_pairs if bounds[w][pair[0]]['decision'] != 'ABSTAIN' and bounds[w][pair[1]]['decision'] != 'ABSTAIN' and separate(bounds[w][pair[0]]['box'], bounds[w][pair[1]]['box'])}
     strategy = read(directory / (name + '-STRATEGY.json'))
+    check(strategy.get('schema') == 'switched-reference-strategy-v1' and strategy.get('source_sha256') == sha(source_path)
+          and typed_equal(strategy.get('generated_from'), protocol['retained_constraint']), name + ': source-bound reference derivation')
+    check(strategy.get('novelty') == 'Not established; switched-reference/ratiometric normalization is known.'
+          and strategy.get('physical_validation') == 'Absent; all obligations conditional and model-derived.', name + ': reference strategy evidence scope')
     check(strategy['true_network_admittance'] == {w: [q.encode(y) for y in ys] for w, ys in values.items()}, name + ': every true response independently solved')
     for w in frequencies:
         check(len(strategy['bounds'][w]) == len(cases), name + ': every bound present at ' + w)
@@ -107,6 +113,12 @@ def verify_stage(root, directory, protocol, primary, check):
     minimum = next(choice for count in range(len(frequencies) + 1) for choice in itertools.combinations(frequencies, count) if set().union(*(covered[w] for w in choice)) == full)
     selected = strategy['dsl']['frequency_rad_s']
     check(len(selected) == len(set(selected)) and all(w in frequencies for w in selected), name + ': admitted unique paired-reference actions')
+    expected_dsl = {'op': 'paired_reference_normalization',
+                    'actions': [{'op': 'measure_normalized_input_current', 'reference': 'off'},
+                                {'op': 'measure_normalized_input_current', 'reference': 'parallel_known_G'}],
+                    'expression': 'Gnom*z0/(z1-z0)', 'frequency_rad_s': selected,
+                    'requires': ['known_reference_range', 'stable_shared_sensor_transfer', 'bounded_noise', 'qualified_loading']}
+    check(typed_equal(strategy['dsl'], expected_dsl), name + ': closed paired-reference operator, actions, expression and obligations')
     actual = set().union(*(covered[w] for w in selected))
     unresolved = [[cases[i]['id'], cases[j]['id']] for i, j in sorted(all_pairs - actual)]
     check(strategy['admitted_cases'] == len(cases) and strategy['admitted_pairs'] == len(all_pairs) and strategy['separated_pairs'] == len(actual) and strategy['unresolved_pairs'] == unresolved and strategy['conditional_complete_acceptance'] is (actual == all_pairs), name + ': full denominator, acceptance and abstentions')
