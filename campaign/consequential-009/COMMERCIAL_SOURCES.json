@@ -1,0 +1,110 @@
+{
+  "schema": "agi-alpha/consequential009-commercial-primary-sources/v1",
+  "observed_utc": "2026-10-30T10:02:17.462939+00:00",
+  "scope": "Source-derived tariffs, occupation wages and broad electronics service offers; not AGI ALPHA orders, exact job quotes, calibrated physical data or provider execution receipts.",
+  "sources": [
+    {
+      "id": "BLS_electrical_wage_2025",
+      "url": "https://www.bls.gov/ooh/architecture-and-engineering/electrical-and-electronics-engineers.htm",
+      "reference_period": "May2025",
+      "facts": {
+        "median_electrical_engineer_USD_annual": 120630
+      },
+      "limits": "Occupation wage is not total delivery cost or task time."
+    },
+    {
+      "id": "BLS_ECEC_fulltime_2026",
+      "url": "https://www.bls.gov/news.release/ecec.nr0.htm",
+      "reference_period": "June2026",
+      "released": "2026-09-09",
+      "facts": {
+        "fulltime_private_USD_total_compensation_per_hour": 54,
+        "fulltime_private_USD_wages_per_hour": 36.97
+      },
+      "limits": "Broad fulltime aggregate loading ratio is a sensitivity, not electrical-engineer-specific benefits/overhead."
+    },
+    {
+      "id": "Fiverr_electronics_market",
+      "url": "https://www.fiverr.com/resources/guides/costs/electronics-design-engineer",
+      "published": "2026-08-03",
+      "facts": {
+        "electronics_engineering_fixed_project_USD": 87.9,
+        "electronics_engineering_hourly_USD_range": [
+          40,
+          100
+        ]
+      },
+      "limits": "Platform-authored pricing based on marketplace data for broader design/review work; not an exact RC diagnosis quote, completed order, our buyerWTP or volume. Free ngspice, impedance analysis and otherAI-native methods remain alternatives."
+    },
+    {
+      "id": "MB_Designs_Canadian_service_offer",
+      "url": "https://mbdesignswork.com/",
+      "facts": {
+        "consultation_CAD": 150,
+        "call_up_to_minutes": 60,
+        "includes": [
+          "file or circuit review",
+          "written findings and next steps"
+        ],
+        "hourly_CAD_start": 70,
+        "prepaid_minimum_hours": 2
+      },
+      "limits": "Offered service; up-to60minute call is not total exact RC job time. CAD never silently mixed with USD. No contact or purchase."
+    },
+    {
+      "id": "Stripe_US_domestic_card",
+      "url": "https://stripe.com/pricing",
+      "facts": {
+        "currency": "USD",
+        "domestic_card_basis_points": 290,
+        "fixed_USD": 0.3,
+        "international_extra_basis_points": 150,
+        "FX_extra_basis_points": 100,
+        "received_dispute_USD": 15,
+        "manual_countered_dispute_USD": 15,
+        "refund_processing_fees_returned": false
+      },
+      "limits": "USdomesticUSD tariff proxy only; no live merchant integration or eligibility, production escrow or actual guarantee. Canadian route/crossborder and assurancecost remainunknownK; receipts are reversible."
+    },
+    {
+      "id": "JobBank_Quebec_electrical_wage",
+      "url": "https://www.jobbank.gc.ca/marketreport/wages-occupation/17815/22446",
+      "updated": "2025-11-19",
+      "reference_period": "2023-2024",
+      "facts": {
+        "Montreal_CAD_hourly_low": 35,
+        "Montreal_CAD_hourly_median": 50.77,
+        "Montreal_CAD_hourly_high": 78,
+        "Quebec_CAD_hourly_median": 53.85
+      },
+      "limits": "Wages omit nonwage benefits. This contextual source is not used in USD arithmetic."
+    },
+    {
+      "id": "OpenAI_Astra_capability_tariff",
+      "url": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+      "facts": {
+        "model_id": "gpt-6-astra",
+        "provider_description": "most capable for most demandingwork",
+        "input_USD_per_million_tokens": 10,
+        "output_USD_per_million_tokens": 50,
+        "cached_input_USD_per_million_tokens": 1,
+        "above_272K_input_multiplier": 2,
+        "above_272K_output_multiplier": 1.5
+      },
+      "limits": "Primary provider description/tariff; availability is not proof of execution. No paid API call made; inherited session exact revision, tokens and bill unexposed."
+    }
+  ],
+  "human_comparator": {
+    "matched_job": "Independently accepted exact-model circuit information-sufficiency and measurement-design report, with unsupported/unknown-gain abstentions. No benchwork, empirical calibration, safety signoff or PCBdesign assumed.",
+    "wage_USD_per_hour": 57.99519230769231,
+    "annual_hours": 2080,
+    "annual_hours_status": "declared conversion assumption",
+    "loaded_USD_per_hour_sensitivity": 84.71031605667798,
+    "task_hours_observed": null,
+    "task_hours_status": "Unknown; never equated to CPUtime or a call maximum",
+    "tools_review_rework_overhead": "Unknown; retained as additionalcostK_human"
+  },
+  "independent_demand_evidence": "Broader engineeringservice offers and a platform-authored pricing summary; insufficient to identify AGIALPHA participation, exactprice or volume. Conditional buyer utility remains authored.",
+  "actual_qualified_funds_microUSD": 0,
+  "actual_commerce": "UNRUN"
+}

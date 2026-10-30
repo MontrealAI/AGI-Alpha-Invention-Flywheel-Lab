@@ -1,6 +1,8 @@
 # Consequential009 owner and executable scope
 
-Owner: root/consequential009. Heartbeat: 2026-10-30T10:05:00Z. Lease ends11:24UTC; new expensive development stops10:44UTC. This is a separate public campaign allocation explicitly requested by the current execution brief. PR12's overnight008 owner remains responsible for its own source, numerical probes and publication. No takeover, budget reset or claim inheritance occurs here.
+Owner: root/consequential009. Heartbeat: 2026-10-30T09:59:39Z. Lease ends11:24UTC; new expensive development stops10:44UTC. This is a separate public campaign allocation explicitly requested by the current execution brief. PR12's overnight008 owner remains responsible for its own source, numerical probes and publication. No takeover, budget reset or claim inheritance occurs here.
+
+Timestamp correction: the first public owner record accidentally contained the prospective10:05 value. It is corrected here; it was not evidence of execution at that future time. The initial allocation/publication and preserved commit remain independently inspectable.
 
 The first construction is a source-bound analog experiment compiler. Its proposed functional contribution is to distinguish a model class that is provably indistinguishable under voltage-only observations by generating an additional current measurement. The selected official ngspice circuit is a real public design; fault values and sensor envelopes are authored model-derived development cases, not measured physical specimens or customer orders. Known dimensional symmetry, nodal analysis and ordinary impedance experiments must be strong controls. Their scientific novelty is not claimed.
 

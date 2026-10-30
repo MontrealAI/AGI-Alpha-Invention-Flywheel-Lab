@@ -1,0 +1,112 @@
+{
+  "scope": "bounded alternatives, not admitted flagship; no actual commerce or calibrated physical claim",
+  "cutoff_utc": "2026-10-30T09:56:57Z",
+  "owner": "physical_opportunity",
+  "sources": [
+    {
+      "id": "diffraction_homometry",
+      "title": "Homometric Point Sets and Inverse Problems",
+      "authors": [
+        "Uwe Grimm",
+        "Michael Baake"
+      ],
+      "date": "2008-08-01",
+      "url": "https://arxiv.org/abs/0808.0094",
+      "type": "primary research",
+      "supports": "Diffraction can be nonunique via equal autocorrelation; no solver reconstructs uniquely without justified added information."
+    },
+    {
+      "id": "coded_diffraction",
+      "title": "Phase Retrieval from Coded Diffraction Patterns",
+      "authors": [
+        "Emmanuel J. Candes",
+        "Xiaodong Li",
+        "Mahdi Soltanolkotabi"
+      ],
+      "date": "2013-12",
+      "url": "https://statistics.stanford.edu/technical-reports/phase-retrieval-coded-diffraction-patterns",
+      "fulltext": "https://candes.su.domains/publications/downloads/PhaseLift_CDP.pdf",
+      "type": "primary research",
+      "supports": "Modulation plus convex reconstruction is an existing complete noiseless theoretical route under stated admissibility/sample conditions; a new mask alone is not novelty."
+    },
+    {
+      "id": "cdi2025",
+      "title": "Reduction of artifacts associated with missing data in coherent diffractive imaging",
+      "date": "2025-01",
+      "url": "https://journals.iucr.org/s/issues/2025/01/00/gui5001/",
+      "doi": "10.1107/S1600577524010956",
+      "type": "primary research",
+      "supports": "Existing TVRAAR/ERHIO physical-model baselines with simulations and 3D experimental data; regularized selection is distinct from recovering unknown truth without additional assumptions."
+    },
+    {
+      "id": "rna_identifiability",
+      "title": "On the identifiability of the isoform deconvolution problem: application to select the proper fragment length in an RNA-seq library",
+      "date": "2022",
+      "url": "https://academic.oup.com/bioinformatics/article/38/6/1491/6493231",
+      "type": "primary research",
+      "access": "search returned abstract/body excerpt; full open redirected to inaccessible CDN",
+      "supports": "Existing gene/fragment/read-length identifiability test and mixed short/long library proposal. Conditions assume specified transcriptome and enough junction coverage."
+    },
+    {
+      "id": "lr_kallisto",
+      "title": "Long-read sequencing transcriptome quantification with lr-kallisto",
+      "date": "2025",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12680354/",
+      "type": "primary research",
+      "repository": "https://github.com/pachterlab/LSRRSRLFKOTWMWMP_2024",
+      "commit": "97bd0aa5592304155dafc236de1c123603d33ed3",
+      "data_url": "https://zenodo.org/records/11201284",
+      "processed_data_url": "https://zenodo.org/records/13755772",
+      "supports": "Runnable strong conventional long-read pipeline; paper reports actual/simulated quantification. No claim that our role reproduced those outcomes."
+    },
+    {
+      "id": "sirv",
+      "title": "SIRV controls and official sequences",
+      "date_accessed": "2026-10-30",
+      "url": "https://www.lexogen.com/sirvs/download/",
+      "type": "manufacturer primary",
+      "sequence_zip": "https://www.lexogen.com/wp-content/uploads/2026/01/SIRV_Set1_2_Norm_Sequences_20250402.zip",
+      "access": "shell403; web cannot return ZIP",
+      "supports": "Independent assay-control product and sequencing record SRR3497201 exist; vendor page identifies current vs previous lot sequence versions."
+    },
+    {
+      "id": "sirv_price",
+      "title": "SIRV-Set2 product",
+      "url": "https://www.lexogen.com/store/sirv-set2/",
+      "type": "manufacturer primary",
+      "supports": "Price requires login/quote; no observed price, AGI-ALPHA buyer orders, willingness-to-pay or task time is established."
+    }
+  ],
+  "economics": {
+    "rna": {
+      "buyer_class": "transcriptomics laboratories/assay developers",
+      "observed_evidence": "Commercial RNA controls and published multi-tool benchmark demonstrate activity, not willingness to purchase our service.",
+      "price": "UNKNOWN",
+      "competent_human_time": "UNKNOWN",
+      "autonomous_complete_cost": "UNKNOWN",
+      "participation_frontier": "conditional only; must include free lr-kallisto and assay costs"
+    },
+    "diffraction": {
+      "buyer_class": "coherent imaging beamlines/materials researchers",
+      "observed_evidence": "Experimental reconstruction research demonstrates useful work; no independent buyer/price evidence for an AGI ALPHA offering.",
+      "price": "UNKNOWN",
+      "competent_human_time": "UNKNOWN",
+      "autonomous_complete_cost": "UNKNOWN",
+      "participation_frontier": "conditional only; hardware/calibration required and conventional coded acquisition competes"
+    }
+  },
+  "resources": {
+    "allocation_wall_minutes": 10,
+    "reserved_cpu_seconds": 300,
+    "measured_numerical_cpu_seconds": 0.142327,
+    "downloaded_data_bytes": 9851,
+    "failed_downloads": 2,
+    "billable_inference_usage": "not exposed by runtime",
+    "all_cases": "exposed development",
+    "statistical_confirmation_alpha_spent": 0
+  },
+  "decisions": {
+    "rna": "RETAIN_ORDINARY_ROUTE_OR_BOUNDED_PROBE; no residual gap established; promising autonomous analysis service requires complete-cost/demand evidence.",
+    "diffraction": "RETAIN_KNOWN_CODED_ACQUISITION; same-data uniqueness claim falsified in authored finite exact model; physical acquisition/calibration unavailable."
+  }
+}

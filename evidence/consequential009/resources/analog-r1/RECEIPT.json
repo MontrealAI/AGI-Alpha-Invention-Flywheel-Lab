@@ -1,0 +1,57 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "analog-r1",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "inventions.consequential009.experiment",
+    "--protocol",
+    "research/consequential009/analog/PROTOCOL.json",
+    "--output",
+    "evidence/consequential009/analog-development-r1"
+  ],
+  "requested_command": [
+    "python",
+    "-m",
+    "inventions.consequential009.experiment",
+    "--protocol",
+    "research/consequential009/analog/PROTOCOL.json",
+    "--output",
+    "evidence/consequential009/analog-development-r1"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "inventions.consequential009.experiment",
+    "--protocol",
+    "research/consequential009/analog/PROTOCOL.json",
+    "--output",
+    "evidence/consequential009/analog-development-r1"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/1f8586d459dc/lab",
+  "limits": {
+    "wall_seconds": 120,
+    "cpu_seconds": 180,
+    "memory_bytes": 1073741824,
+    "output_bytes": 16777216,
+    "storage_bytes": 67108864
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 1.2674885470005393,
+  "supervisor_cpu_seconds": 0.019686179999999998,
+  "waited_cpu_seconds": 1.245008,
+  "descendant_survivors": false,
+  "output_bytes": 4984,
+  "logs": {
+    "stdout.log": "0408d21ec4b4c2d6266085993852613078fe1c300fc652eb19f8162d4e0f289f",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}
