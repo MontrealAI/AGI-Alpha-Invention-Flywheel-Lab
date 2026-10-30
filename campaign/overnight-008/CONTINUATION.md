@@ -1,7 +1,7 @@
 # Active overnight recovery and construction
 
 Integration owner: `root`; separate verifier: `verification` (cannot modify candidate).
-Heartbeat: 2026-10-30T07:40:00Z. Takeover from public3360acaf after last05:33 heartbeat exceeded75minutes and no other active owner was evidenced. Public review comments are not integration lease renewals.
+Heartbeat: 2026-10-30T09:01:39.410714+00:00. Takeover from public3360acaf after last05:33 heartbeat exceeded75minutes and no other active owner was evidenced. Public review comments are not integration lease renewals.
 
 Original allocation unchanged: started05:07:44Z, expensive development ends09:37:44Z, final verification/publication/recovery ends11:07:44Z (07:07Toronto). No budget or error-history reset. ALLOCATION.json remains unchanged. See append-only `evidence/overnight-008/recovery-0719/INTERRUPTION.json` for lost unpublished artifacts and conservative new suballocations.
 
@@ -14,3 +14,13 @@ All previous scientific cases exposed; alpha spent0 of0.05; no protected scienti
 Current sandbox qualification must be executed on this replacement host before generated programs run; the old host receipt is historical. Trusted numerical construction is separately bounded and is not arbitrary-code confinement. Keep verifier separate and retain every failed run. No paid APIs, spending, real commerce, outreach, new access, credentials/security changes. Public reviewable source/evidence/PR authorized; normal checks apply.
 
 Check a live public integration heartbeat before edits. If younger than75minutes and an active owner exists, contribute independent research/review only. No claim of uninterrupted background inference. At the true boundary publish the8-link verdict, exact restart command and missing link/blocker; negative results, papers and green checks do not complete the mission.
+
+## Executed late cycles and current next action
+
+The coordinate repair is complete with separate frozen-checker acceptance: explicit-center sampling removes the geometric spacing defect; on common physical overlap refitMAE0.00670376mm still loses to zero-plane0.00146873mm. All original47 artifacts remain unchanged. See research/nasa008/coordinate-r2. The paired fuel-cell audit retains all828released records: zero exact aliases in both9x100 and10x180 views, no identifiability inference. Raw948 spectra cover79folders and12 distinct stack/cell sites; clocks/repeatability remain unresolved. See research/eis008/paired-audit. No flagship admitted.
+
+The separate data-only archive commit5d5fb96d1421d5c1f5fd6cf8ea6c96fcfbd5b045 preserves original/repaired numerical fields and original support files. Earlier9121 data archive downloaded,13Git blobs checked and all6complete fieldSHA256s restored; this is preservation, not instrument qualification. The remaining executable action is to restore all47original NASA dependencies from public source/archive plus pinned rawdata, execute the unchanged coordinate repair from newly downloaded public source, and run its separate checker. No weakened hash/criterion or missing-file waiver. This is verification of an already executed cycle, within event26's300CPU reserve.
+
+Current aggregate reservations:12120experiment /7240verification-publication CPU seconds; monetary costs and old unmetered quantities remain unknown. Alpha0, qualified earnings0. The source100-input ongoing progress paper is anchored at2b7a58e and is published as a checkpoint; later results are separate append-only source/evidence. Its LaTeX typesetting repair preserves scientific words/numbers and old overflow artifacts. At2b7a all3workflows pass;56dc's unrepaired frozen-legacy startup interruption failure stays material historical evidence. Do not change the separately owned lifecycle/mass-spectrometry scope.
+
+No active candidate currently crosses an enabling/economic threshold. Next consequential construction needs an independently grounded physical reference/control or a stronger evidenced opportunity before admission; do not invent fast-drift truth, noise bounds, customers or funds. Original cutoff09:37:44Z and end11:07:44Z unchanged.
