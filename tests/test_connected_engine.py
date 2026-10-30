@@ -21,7 +21,70 @@ ROOT = Path(__file__).resolve().parents[1]
 def stable(result):
     result = copy.deepcopy(result)
     result.pop('resource_receipt', None)
-    return stable_projection(result)
+    result = stable_projection(result)
+    journal = result.get('owned_account', {}).get('connected_journal')
+    if isinstance(journal, dict):
+        for entry in journal.get('entries', []):
+            attempt = entry.get('attempt')
+            if isinstance(attempt, dict) and 'account_record_sha256' in attempt:
+                # This full export digest commits private HMAC signatures and the
+                # local filesystem label. Live/restart/public guards retain it;
+                # separate owners compare every other semantic field here.
+                attempt['account_record_sha256'] = 'LOCAL_ACCOUNT_AUTHORITY_WITNESS'
+        result['owned_account']['connected_journal_sha256'] = digest(journal)
+    return result
+
+
+class ConnectedStableProjectionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from tests.test_connected_finance import ConnectedFinanceTests as Fixture
+        Fixture.setUpClass()
+        cls.results = []
+        cls.keys_differ = False
+        keys = []
+        try:
+            for _ in range(2):
+                fixture = Fixture(); fixture.setUp()
+                try:
+                    keys.append(fixture.account._account._key)
+                    fixture.earn(); fixture.spend()
+                    fixture.account.cost('after-earned-proof', 7, 2)
+                    cls.results.append({'owned_account': fixture.account.export()})
+                finally:
+                    fixture.tearDown()
+            cls.keys_differ = keys[0] != keys[1]
+        finally:
+            Fixture.tearDownClass()
+
+    def test_independent_owner_certificates_keep_same_financial_result(self):
+        first, second = self.results
+        self.assertTrue(self.keys_differ)
+        self.assertNotEqual(first['owned_account']['connected_journal_sha256'], second['owned_account']['connected_journal_sha256'])
+        self.assertEqual(first['owned_account']['ledger'], second['owned_account']['ledger'])
+        self.assertEqual(stable(first), stable(second))
+
+    def test_financial_and_native_certificate_or_obligation_changes_remain_visible(self):
+        original = self.results[0]
+        account = original['owned_account']
+        plan_id = next(iter(account['obligation_resolutions']))
+        index = len(account['connected_journal']['entries']) - 1
+        mutations = [lambda a: a['ledger']['summary'].__setitem__('cash', a['ledger']['summary']['cash'] + 1),
+                     lambda a: a['ledger']['actions'][-1]['args'].__setitem__('amount', 8),
+                     lambda a: a['obligation_resolutions'][plan_id].__setitem__('upfront_incurred_microUSD', 1),
+                     lambda a: a['connected_journal']['entries'][index]['request']['args'].__setitem__('amount', 8)]
+        for field in ['native_record_sha256', 'native_state_digest', 'native_actions_sha256', 'request_sha256', 'durable_tape_sha256']:
+            mutations.append(lambda a, field=field: a['connected_journal']['entries'][index]['attempt'].__setitem__(field, '0' * 64))
+        for mutation in mutations:
+            changed = copy.deepcopy(original); mutation(changed['owned_account'])
+            with self.subTest(mutation=mutation):
+                self.assertNotEqual(stable(changed), stable(original))
+
+    def test_filesystem_label_and_its_full_account_witness_are_owner_local(self):
+        changed = copy.deepcopy(self.results[0])
+        changed['owned_account']['snapshot']['filesystem'] = 'authored-other-local-filesystem'
+        changed['owned_account']['connected_journal']['entries'][-1]['attempt']['account_record_sha256'] = 'f' * 64
+        self.assertEqual(stable(changed), stable(self.results[0]))
 
 
 class ConnectedEngineRecoveryTests(unittest.TestCase):

@@ -1,9 +1,9 @@
 {
   "schema": "agi-alpha/completion015-composed-release-delta/v2",
-  "registered_utc": "2026-10-30T21:54:26.014080+00:00",
+  "registered_utc": "2026-10-30T22:03:37.739370+00:00",
   "economic_evidence_source_commit": "9354d76a7033e8958968cde4469cdd71ea870a21",
   "economic_evidence_source_sha256": "abc262bf80741f36db2872330c2d4f5166c48d313143c239d440e3cd2143b9a4",
-  "release_qualification_source_sha256": "de720871db2aa397381cf318d083eddf4d44239db6db99d86120219584279f9c",
+  "release_qualification_source_sha256": "08be5eb8e5f369884442476075710cfaaed66ab843e8f32f7e4f62bf26bb434c",
   "changed_or_added_identity_files": {
     ".github/workflows/connected014-release.yml": {
       "before_sha256": "abec569a68521167883e2fcc18f92871c3da60a0f0cab9ad2e1b4d71bdf57c5b",
@@ -15,7 +15,7 @@
     },
     "connected_enterprise/engine.py": {
       "before_sha256": "45a44cd2511debc34394644f92d928eb65996aa331f92d34574b9d7718cc2c7c",
-      "after_sha256": "2d6340c9c067866978dc22395f9c5857b02f836a4111ae78e34e4f6f0ef8b7f9"
+      "after_sha256": "b706c6c63ae63acc5ebccccc26d5d89360986ceef612a7459b1e457ec5d8c805"
     },
     "connected_enterprise/finance.py": {
       "before_sha256": "5916188420a9a7b265919e3905e146ba3ed6aaf5a369634029ea51aa8382587c",
@@ -39,7 +39,11 @@
     },
     "tests/test_connected_channel_lead.py": {
       "before_sha256": null,
-      "after_sha256": "08978bb0d11d1183837475efe171ef38b08ff11371b06d5b2555aa6bcace484b"
+      "after_sha256": "6bd74fdb24c27716b6855a286b9216c67cfbfae613c110c6cf06da04e5698447"
+    },
+    "tests/test_connected_engine.py": {
+      "before_sha256": "ff50f495c7883e40a4a50117a17e6683708d0a068d7f5a947eda0b4b8576be6e",
+      "after_sha256": "0f0d04979d9d7aaa5d380a2349b17d42102e03a9648a76616f15f13d9c7c3533"
     },
     "tests/test_connected_rejections.py": {
       "before_sha256": null,
@@ -54,7 +58,7 @@
       "after_sha256": "93ee007ddf9ef1dada8c7e0b4569daf64b13f1aee061e56e73fa73390849b778"
     }
   },
-  "unchanged_original_identity_files": 127,
+  "unchanged_original_identity_files": 126,
   "release_identity_files": 139,
   "source_changes": [
     "Release wrapper: bounded exact-main gating, kernel self+waited-child CPU measurement, independently audited actual-run key-free archive retention and regressions.",
@@ -64,7 +68,9 @@
     "Pure allocation test fixtures migrate to explicit symbolic delivery fields with zero fee/context terms. Existing costs, payoff/objectives, caps and assertions remain unchanged; no financial guard is relaxed. Exact f214 hosted failure and before/after focused results are retained.",
     "Temporal precommit admission: production plus acceptance plus clearing must fit the inclusive payment deadline; capacity must already be active at qualification and remain valid strictly through scheduled production, with one list for slot counting and asset assignment. No default economics retuned.",
     "Connected journal: audited terminal REJECTED records for independently reproduced zero-effect native failures; current-state/durable/full-account equality required, exact preattempt certificates support interrupted-before-native and rejection-marker recovery. Partial, advanced, ambiguous and legacy uncertified pending authority stays protected.",
-    "Connected channel preflight validates all typed contracts, requires the used pilot contract and positive advance lead before financial initialization. This edition exposes once before same-day purchase; unsupported zerolead must not create backdated paid capacity. Standalone ChannelBook zerolead semantics, checker and default contracts unchanged."
+    "Connected channel preflight validates all typed contracts, requires the used pilot contract and positive advance lead before financial initialization. This edition exposes once before same-day purchase; unsupported zerolead must not create backdated paid capacity. Standalone ChannelBook zerolead semantics, checker and default contracts unchanged.",
+    "Connected config normalization returns a detached copy carrying the shared validator canonical channel terms; valid optional omissions finance the exact purchased terms. Caller/default values and checker unchanged.",
+    "Restart comparison tests normalize only the exact host/key-bound attempt.account_record_sha256 witness and recompute the projected journal checksum. Actual two-account leaf proof shows identical native ledgers and only those two derived witness leaves differ. Every other certificate/journal/proof/obligation/work/financial field remains compared; nine anti-masking mutations stay visible. Product full-state certificates, native/public auditors and shared adaptive projection are unchanged."
   ],
   "unchanged_economic_mechanism": "Service executors/checkers, buyer incentives/budgets/choices, offers/prices, channel/capacity contract terms, cost envelopes, learning rules, event timing values, protocol, cases and seeds are byte-identical. Financial guards and temporal admission enforcement are strengthened, not claimed unchanged. Original eight-world scans found no changed trajectory from the repairs.",
   "historical_impact": {
@@ -79,7 +85,7 @@
     "Historical009/010 publisher and frozen-qualification provenance routed to genuine immutable release sources; current qualification remains required.",
     "README exposes one canonical run/audit/resume path; reports/qualification/impact evidence are explicit about scope."
   ],
-  "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.305020239 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment. TEMPORAL_REPAIR_ALLOCATION.json prospectively registers a separate additional80localCPU increment ending22:55UTC. Temporal qualification0.499749kernelchildCPU; construction/probes unmetered, notzero; conservative10CPUshare reserved. No new local commercial confirmation. Original resource failures remain unchanged. Journal rejection repair measured lowerbound37.460127374CPU including beforeprobe, initial11/final14tests and original8read-only scan;20targetexceeded for restart-certificate completion; editing/wrapper CPU unknown, notzero. Conservative55financial+10temporal+5root+10other planning shares total80; no exact wholephase measurement/compliance claim. Hostedcampaign30minutes remains within45minute bound. Channel preflight31focusedtests use0.186818kernelchildCPU; construction/probes unmetered, no commercialrun, within existing temporal planning share. Absolute22:55UTC stop unchanged.",
+  "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.305020239 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment. TEMPORAL_REPAIR_ALLOCATION.json prospectively registers a separate additional80localCPU increment ending22:55UTC. Temporal qualification0.499749kernelchildCPU; construction/probes unmetered, notzero; conservative10CPUshare reserved. No new local commercial confirmation. Original resource failures remain unchanged. Journal rejection repair measured lowerbound37.460127374CPU including beforeprobe, initial11/final14tests and original8read-only scan;20targetexceeded for restart-certificate completion; editing/wrapper CPU unknown, notzero. Conservative55financial+10temporal+5root+10other planning shares total80; no exact wholephase measurement/compliance claim. Hostedcampaign30minutes remains within45minute bound. Channel preflight31focusedtests use0.186818kernelchildCPU; construction/probes unmetered, no commercialrun, within existing temporal planning share. Absolute22:55UTC stop unchanged. Normalized-channel34tests0.179401CPU; semantic-comparison actualtwoownerprobe plus3focusedtests7.422202446CPU. Financial aggregateknownlowerbound44.882329820CPU;55planning share unchanged, edits/wrapperunknown. No full14daylocalengine rerun/newcommerce; full exactheadCI remainsrequired.",
   "financial_qualification": {
     "path": "evidence/completion015/financial-repair/CONTRACT_SHAPE_QUALIFICATION.json",
     "sha256": "e66514c0f747449f5b6ea86b9738bc75ba0b80585cd09785af342ca74bac758c",
@@ -108,5 +114,17 @@
   "channel_lead_historical_configs": {
     "path": "evidence/completion015/channel-lead-repair/HISTORICAL_CONFIGS.json",
     "sha256": "3f955a864aab684c1754b8f6871c39fc06bfc91c4bfd5e614d6d0769e615cf3c"
+  },
+  "channel_normalization_qualification": {
+    "path": "evidence/completion015/channel-normalization-repair/QUALIFICATION.json",
+    "sha256": "fd4d20c74bdba0620455cc9c8473b6c36fe1940e260adc21af79737e76fd1b16"
+  },
+  "restart_comparison_qualification": {
+    "path": "evidence/completion015/restart-comparison-repair/QUALIFICATION.json",
+    "sha256": "857d82cf40ea83e45470463106bc8d743f753b5a369ee5b2c43e8574435cab45"
+  },
+  "restart_comparison_leaf_proof": {
+    "path": "evidence/completion015/restart-comparison-repair/LEAF_DIFF.before.json",
+    "sha256": "964c48401a731edf00ff1122731483ae5b4a5ad1d782a3f95b7b2c3419707380"
   }
 }

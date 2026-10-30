@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 
 from commercial.ledger import digest
-from connected_enterprise.channels import ChannelBook, validate_contracts
+from connected_enterprise.channels import ChannelBook, OPTIONAL, validate_contracts
 from connected_enterprise.engine import default_config, run_world, validate_config
 
 
@@ -48,6 +48,37 @@ class ConnectedChannelLeadPreflight(unittest.TestCase):
                 expected = copy.deepcopy(cfg)
                 self.assertEqual(validate_config(cfg), expected)
                 self.assertEqual(cfg, expected)
+
+    def test_omitted_optional_defaults_match_financed_and_purchased_terms(self):
+        for omitted in [{'failure_credit_bps'}, OPTIONAL]:
+            with self.subTest(omitted=sorted(omitted)):
+                cfg = default_config()
+                for terms in cfg['channels'].values():
+                    for name in omitted:
+                        terms.pop(name, None)
+                admitted = validate_config(cfg)
+                book = ChannelBook(13, admitted['channels'])
+                self.assertEqual(admitted['channels'], book.contracts)
+                purchase = book.purchase('pilot', 0, 'engineering-financed-plan')
+                self.assertEqual(admitted['channels']['pilot'], purchase['terms'])
+                self.assertEqual(digest(admitted['channels']['pilot']), digest(purchase['terms']))
+
+    def test_normalization_leaves_caller_unchanged_and_returns_detached_config(self):
+        cfg = default_config(); cfg['channels']['pilot'].pop('failure_credit_bps')
+        original = copy.deepcopy(cfg); admitted = validate_config(cfg)
+        self.assertEqual(cfg, original)
+        self.assertIsNot(admitted, cfg)
+        admitted['channels']['pilot']['failure_credit_bps'] = 100
+        admitted['human_comparator']['reconciliation']['hours'] = 999
+        self.assertEqual(cfg, original)
+
+    def test_normalized_resume_config_binding_is_idempotent(self):
+        cfg = default_config(); cfg['channels']['pilot'].pop('failure_credit_bps')
+        first = validate_config(cfg); second = validate_config(first)
+        self.assertEqual(first, second)
+        self.assertEqual(digest({'config': first, 'seed': 13, 'arm': 'growth'}),
+                         digest({'config': second, 'seed': 13, 'arm': 'growth'}))
+        self.assertEqual(first['channels']['pilot']['failure_credit_bps'], 0)
 
     def test_standalone_channel_book_retains_zero_lead_contract_support(self):
         terms = default_config()['channels']; terms['pilot']['lead_days'] = 0

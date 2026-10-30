@@ -43,7 +43,8 @@ def validate_config(cfg):
     contracts=validate_contracts(cfg['channels'])
     if 'pilot' not in contracts:raise ValueError('CONNECTED_PILOT_CHANNEL_REQUIRED')
     if contracts['pilot']['lead_days']<1:raise ValueError('CONNECTED_CHANNEL_ADVANCE_LEAD_REQUIRED')
-    return cfg
+    normalized=copy.deepcopy(cfg);normalized['channels']=contracts
+    return normalized
 
 def _write(path,value):atomic_bytes(Path(path),canonical(value)+b'\n')
 
