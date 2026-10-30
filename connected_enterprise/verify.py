@@ -26,6 +26,22 @@ def _private_draw(seed, identity, stage):
     return int.from_bytes(hashlib.sha256(canonical(['connected014', seed, identity, stage])).digest()[:8], 'big') / 2**64
 
 
+def _expected_competitive_price(legacy, rival, config, previous):
+    denominator = 10000 - config['payment_bps']
+    if denominator == 0:
+        return legacy
+    resources = sum(config[key] for key in ['production_cost', 'supplier_unit_cost', 'support_cost',
+                                           'onboarding_cost', 'qualification_cost', 'exposure_cost'])
+    numerator = (resources + config['payment_fixed'] + 1_000_000) * 10000
+    floor = (numerator + denominator - 1) // denominator
+    count, wins = len(previous), sum(row['chosen'] for row in previous)
+    responsive = count > 0 and wins < count and wins * 5 < 2 * count
+    target = min(legacy, rival - 250_000) if responsive else legacy
+    if target < floor:
+        return legacy if floor > legacy else floor
+    return target
+
+
 def _unique(rows, key, label):
     if not isinstance(rows, list) or any(not isinstance(row, dict) or key not in row for row in rows):
         raise ValueError(label + '_RECORDS_REQUIRED')
@@ -119,8 +135,6 @@ def _check_market_decisions(result, tape):
         winrate = sum(row['chosen'] for row in previous) / len(previous) if previous else .5
         ratio = .88 if winrate < .4 else .98 if winrate > .8 else .93
         price = max(5_000_000, int(anchor * ratio))
-        if decision['human_price'] != anchor or (decision['kind'] == 'offer' and decision['price'] != price) or (decision['kind'] == 'outside_choice' and decision['price'] is not None):
-            raise ValueError('PRICE_POLICY_USES_UNREGISTERED_INFORMATION_OR_HUMAN_ANCHOR')
         rival_bps = cfg['price_pressure_bps']
         for update_day in range(7, moment // 24 + 1, 7):
             update = update_day * 24
@@ -132,6 +146,10 @@ def _check_market_decisions(result, tape):
                 rival_bps = max(5000, min(10500, rival_bps + (200 if won > .6 else -200)))
         if decision['public_rival_price'] != int(anchor * rival_bps / 10000):
             raise ValueError('RIVAL_RESPONSE_READS_UNAVAILABLE_FUTURE_HISTORY')
+        if result['arm'] == 'competitive_growth':
+            price = _expected_competitive_price(price, int(anchor * rival_bps / 10000), cfg, previous)
+        if decision['human_price'] != anchor or (decision['kind'] == 'offer' and decision['price'] != price) or (decision['kind'] == 'outside_choice' and decision['price'] is not None):
+            raise ValueError('PRICE_POLICY_USES_UNREGISTERED_INFORMATION_OR_HUMAN_ANCHOR')
         committed = sum(row['price'] for row in result['orders'] if row['customer_id'] == customer
                         and row['qualified_time'] < moment and (row['id'] not in refunds or refunds[row['id']] > moment))
         available = buyers[customer]['initial_budget'] - outside.get(customer, 0) - committed
@@ -144,7 +162,7 @@ def _check_market_decisions(result, tape):
             options.append(('us', value - price))
         if rival_capacity > 0 and rival_cash > 1_000_000 and available >= rival_price:
             options.append(('rival', value - rival_price))
-        choice = max(options, key=lambda item: (item[1], item[0]))[0]
+        choice = max(options, key=lambda item: (item[1], _private_draw(seed, [moment // 24, customer, item[0]], 'buyer-indifference')))[0]
         if decision['buyer_choice'] != choice or decision['chosen'] is not (choice == 'us'):
             raise ValueError('VOLUNTARY_BUYER_CHOICE_DOES_NOT_RECOMPUTE')
         if choice == 'us':
@@ -441,7 +459,7 @@ def audit(root, manifest, result):
     from connected_enterprise.finance import SOURCE_PATHS as FINANCE_SOURCES
     required = set(SERVICE_SOURCES) | set(FINANCE_SOURCES) | {
         'connected_enterprise/engine.py', 'connected_enterprise/channels.py',
-        'connected_enterprise/verify.py', 'connected_enterprise/scale.py'}
+        'connected_enterprise/verify.py', 'connected_enterprise/scale.py', 'connected_enterprise/pricing.py'}
     if not required <= set(result.get('source', {}).get('files', {})):
         raise ValueError('COMPLETE_EXECUTING_SOURCE_BINDING_REQUIRED')
     source_receipt = check_source(root, result['source'])

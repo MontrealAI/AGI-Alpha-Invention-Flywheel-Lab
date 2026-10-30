@@ -39,20 +39,20 @@ def identity(root):
     return {'files':files,'sha256':digest(files)}
 
 def protocol(smoke=False):
-    return {'schema':'agi-alpha/connected014-protocol/v1','edition':'development-smoke' if smoke else 'connected014-confirmation-001','scope':'CONDITIONAL_SIMULATION',
-        'central_seeds':[14001] if smoke else [2610301401,2610301402,2610301403,2610301404],
-        'adverse_seeds':[] if smoke else [2610301501,2610301502],'channel_control_seeds':[] if smoke else [2610301401,2610301402],
-        'development_excluded':[14001,14002,14003,14004,14005],'cases':['central'] if smoke else ['central','weak_channel','price_pressure','delayed_and_expensive'],
-        'arms':['baseline','growth'],'case_design':'Central4pairedseeds; three separatelydeclared adversecases2pairedseeds; channel-onlyoptioncontrol2centralseeds. Common exogenous customer/day/service payment and need identities; endogenous activity and artifact assignment may differ.',
+    return {'schema':'agi-alpha/connected014-protocol/v1','edition':'development-smoke' if smoke else 'connected014-confirmation-002','scope':'CONDITIONAL_SIMULATION',
+        'central_seeds':[14001] if smoke else [2610301601,2610301602,2610301603,2610301604],
+        'adverse_seeds':[] if smoke else [2610301701,2610301702],'channel_control_seeds':[],
+        'development_excluded':[14001,14002,14003,14004,14005,14006,2610301401,2610301402,2610301403,2610301404,2610301501,2610301502],'cases':['central'] if smoke else ['central','weak_channel','price_pressure','delayed_and_expensive'],
+        'arms':['baseline','growth'] if smoke else ['growth','competitive_growth'],'candidate_arm':'growth' if smoke else 'competitive_growth','control_arm':'baseline' if smoke else 'growth','pricing_extension_setup_microUSD':5000000,'pricing_extension_per_quote_microUSD':50000,'case_design':'Central4pairedseeds; three separatelydeclared adversecases2pairedseeds. Retainedgrowthcontrol andcostedpublicpricingoption haveequalcapital/actionsasidefromthepriceextension. Common exogenous customer/day/service payment and need identities; endogenous activity and artifact assignment may differ.',
         'risk':{'central_minimum_commercial_fraction':.75,'central_minimum_cash_survival_fraction':1.,'growth_minimum_positive_paired_fraction':.75,'central_maximum_loss_microUSD':750_000_000,'hard_native_and_semantic_integrity':True},
         'completion':{'minimum_collected_deliveries':12,'minimum_paying_customers':3,'minimum_profitable_earned_continuations':2,'positive_complete_cost_profit':True,'positive_available_earnings':True,'minimum_repeat_customers':2,'obligations_covered':True},
-        'comparison':'Equalstartingcapital,services,completequality,privatebuyer/marketassumptionsandcontractswithinpair. Baseline lacks added paidchannel/capacityoption; this estimates commercial optionvalue, NOT selectionalgorithm superiority. Channelarm isolates capacityoption.',
+        'comparison':'Equalstartingcapital,services,completequality,privatebuyer/marketassumptionsandcontractswithinpair. Non-smoke comparesretainedgrowthwiththecostedpublicpriceextension. Smokecomparesownedbaselinewithgrowth. Equalpriceutilitytiesusestablekeyedneutralindifference. Thisestimatescommercialoptionvalue,NOTgeneralalgorithmicoptimality.',
         'selection':'Ordinary observed-contribution heuristic, frozen before confirmation; no hidden buyer values, future shocks or evaluator case labels in seller policy. Decline/retaincash allowed. No developmentcontroller tournament.',
         'clock':'Integerhours/native dayfield; production2hours, acceptance1hour, clearing48hours baseline. Expiry/reinvestment eventcausal; tailobligations retained. Calendar epoch2026-11-01T00Z.',
         'resource_billing':'Actual deterministic executors/checkers, no paidmodelcalls. Modeled completecost envelopes; host/modelbilling unavailable. Sensitivities do not turn assumptions into calibration.',
         'recovery':'Live-state event intent persisted before mutations; signed command WAL/native CAS recovers exact commitments. Reopen requires retained local simulation key. Public copies support audit/reproduction, not takeover.',
         'inference':'Finite authored worlds, not calibrated real success probabilities. Historical economic results never relabeled. Native record aggregation is exact accounting, not validated forward-demand aggregation.',
-        'service_cohort_seed':14013026,'workers':4}
+        'service_cohort_seed':14013026 if smoke else 14023026,'workers':4}
 
 def config_for(case,smoke=False):
     cfg=default_config()
@@ -65,6 +65,13 @@ def config_for(case,smoke=False):
         cfg['clearing_hours']=168;cfg['nonpayment_bps']=1200;cfg['production_cost']*=3;cfg['supplier_outage_start_day']=18;cfg['supplier_outage_days']=10
         for c in cfg['channels'].values():c['price_microUSD']*=10;c['lead_days']*=3
     elif case!='central':raise ValueError('REGISTERED_CASE_REQUIRED')
+    return cfg
+
+def task_config(f,task):
+    cfg=copy.deepcopy(f['configs'][task['case']])
+    if task['arm']=='competitive_growth':
+        cfg['setup_cost']+=f['protocol']['pricing_extension_setup_microUSD']
+        cfg['qualification_cost']+=f['protocol']['pricing_extension_per_quote_microUSD']
     return cfg
 
 def tasks(p):
@@ -108,7 +115,7 @@ def _task(payload):
     from .engine import run_world
     from .verify import audit
     from .scale import analyze
-    cfg=f['configs'][task['case']];directory=Path(output)/'worlds'/task['id'];start=time.process_time()
+    cfg=task_config(f,task);directory=Path(output)/'worlds'/task['id'];start=time.process_time()
     result=run_world(root,manifest,cfg,task['seed'],task['arm'],directory,source=f['source']);result['case']=task['case']
     receipt=audit(root,manifest,result);growth=analyze(result)
     write(directory/'RESULT.json',result);write(directory/'AUDIT.json',receipt);write(directory/'GROWTH.json',growth)
@@ -119,11 +126,11 @@ def brief(r):
 
 def _summary(f,items,results):
     from .scale import compare,frontier
-    central=[r for r in results if r['case']=='central' and r['arm']=='growth'];risk=f['protocol']['risk'];success=sum(r['conditional_simulated_commercial_success'] for r in central)
+    central=[r for r in results if r['case']=='central' and r['arm']==f['protocol']['candidate_arm']];risk=f['protocol']['risk'];success=sum(r['conditional_simulated_commercial_success'] for r in central)
     covered=lambda r:r['summary']['payables']==0 and not r['summary']['investmentStopped'] and r['summary']['cash']>=sum(r['summary'][x] for x in ['tailReserve','custodyReserve','workingCapital'])
     fraction=success/len(central);survival=sum(covered(r) for r in central)/len(central)
     growth_evidence=any(x['later_settled_order_ids'] for r in central for x in r['productive_expansion'])
-    paired=compare(results);central_pairs=[p for p in paired['pairs'] if p['identity'][1]=='central'];positive_growth=sum(p['collected_delivery_delta']>0 and p['profit_delta_microUSD']>0 for p in central_pairs);growth_fraction=positive_growth/len(central_pairs) if central_pairs else 0
+    paired=compare(results,baseline=f['protocol']['control_arm'],candidate=f['protocol']['candidate_arm']);central_pairs=[p for p in paired['pairs'] if p['identity'][1]=='central'];positive_growth=sum(p['collected_delivery_delta']>0 and p['profit_delta_microUSD']>0 for p in central_pairs);growth_fraction=positive_growth/len(central_pairs) if central_pairs else 0
     growth_success=growth_evidence and growth_fraction>=risk['growth_minimum_positive_paired_fraction'] and sum(p['profit_delta_microUSD'] for p in central_pairs)>0
     return {'schema':'agi-alpha/connected014-report/v1','scope':'CONDITIONAL_SIMULATION','source_sha256':f['source']['sha256'],'frozen_sha256':f['sha256'],'worlds':len(results),'all_independent_audits_passed':all(i['audit'].get('accepted',False) for i in items),
         'outcomes':{'operating_implementation':'EXECUTED_WITH_INDEPENDENT_FINANCIAL_AND_OPERATING_SEMANTIC_AUDIT' if all(i['audit'].get('accepted',False) for i in items) else 'NOT_QUALIFIED','commercial_result':'CONDITIONAL_SUCCESS' if fraction>=risk['central_minimum_commercial_fraction'] and survival>=risk['central_minimum_cash_survival_fraction'] and min(r['summary']['profit'] for r in central)>=-risk['central_maximum_loss_microUSD'] else 'NOT_ESTABLISHED_IN_REGISTERED_REGION','growth_result':'CONDITIONAL_INCREASE_IN_PROFITABLE_DELIVERY' if growth_success else 'CAPABILITY_USE_WITHOUT_QUALIFIED_MATCHED_GROWTH' if growth_evidence else 'NOT_ESTABLISHED','billion_native_scale':'NOT_ESTABLISHED'},
@@ -157,7 +164,7 @@ def audit_output(output):
     if len(indices)!=len(expected_tasks):raise ValueError('REGISTERED_WORLD_INDEX_REQUIRED')
     for task,index in zip(expected_tasks,indices):
         directory=output/'worlds'/task['id'];result=json.loads((directory/'RESULT.json').read_text())
-        if any(result[k]!=task[k] for k in ['seed','case','arm']) or result['config']!=f['configs'][task['case']] or result['source']!=f['source'] or not result['complete']:raise ValueError('WORLD_CONFIGURATION_OR_TASK_CHANGED')
+        if any(result[k]!=task[k] for k in ['seed','case','arm']) or result['config']!=task_config(f,task) or result['source']!=f['source'] or not result['complete']:raise ValueError('WORLD_CONFIGURATION_OR_TASK_CHANGED')
         if index['task']!=task or index['result_sha256']!=digest(result) or type(index['cpu_seconds']) not in {int,float} or index['cpu_seconds']<0:raise ValueError('WORLD_RESULT_INDEX_BINDING_CHANGED')
         checked=audit(output/'source',manifest,result);growth=analyze(result)
         if json.loads((directory/'GROWTH.json').read_text())!=growth:raise ValueError('GROWTH_REPORT_NOT_REDERIVED_FROM_NATIVE_RECORDS')

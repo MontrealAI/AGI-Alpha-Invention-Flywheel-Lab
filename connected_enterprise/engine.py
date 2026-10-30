@@ -50,6 +50,10 @@ def _schedule(state,when,kind,ident,**fields):
 def _event(state,when,kind,ident,**fields):
     state['events'].append({'id':ident,'time':when,'kind':kind,**fields})
 
+def _record_exposure(state,when,exposure,response=None):
+    _event(state,when,'EXPOSURE',exposure['exposure_id'],customer_id=exposure['customer_id'],source_plan_id=exposure['source_plan_id'])
+    if response is not None:_event(state,when,'REACTIVATION_RESPONSE',exposure['exposure_id']+'-reactivation',**response)
+
 def _buyers(cfg,seed):
     result=[]
     for i in range(cfg['customer_pool']):
@@ -75,7 +79,14 @@ def _offer(jobs,state,buyer,cfg):
     history=[d for d in state['decisions'] if d.get('service_id')==service and d.get('kind')=='offer'][-12:]
     winrate=sum(d['chosen'] for d in history)/len(history) if history else .5
     ratio=.88 if winrate<.4 else .98 if winrate>.8 else .93
-    price=max(5*MICRO,int(anchor*ratio));offer['price_microUSD']=price
+    price=max(5*MICRO,int(anchor*ratio))
+    if state['arm']=='competitive_growth':
+        from .pricing import price as competitive_price
+        base=cfg['production_cost']+cfg['supplier_unit_cost']+cfg['support_cost']+cfg['onboarding_cost']+cfg['qualification_cost']+cfg['exposure_cost']
+        quote=competitive_price(anchor,price,int(anchor*state['market']['public_rival_bps']/10000),base,cfg['payment_bps'],cfg['payment_fixed'],[bool(d['chosen']) for d in history])
+        if quote is not None:price=quote['price']
+        offer['provenance']+=' Executed ordinary public competitive pricing with a complete direct-resource floor; no private buyer value or guaranteed sale.'
+    offer['price_microUSD']=price
     return entry,offer,anchor
 
 def _prepare_plan(state,account,jobs):
@@ -114,7 +125,7 @@ def _prepare_plan(state,account,jobs):
         prepared['channel_purchase']=forecast>channel_invoice;prepared['channel_predicted_net']=int(forecast-channel_invoice)
     lost_capacity=sum(d.get('kind')=='capacity_decline' and day-3<=d['time']//24<day for d in state['decisions'])
     live_capacity=sum(i['kind']=='capacity' and t<i['expiry_time'] for i in state['investments'])
-    if state['arm']=='growth' and profitable and lost_capacity>=2 and slots<cfg['maximum_slots'] and live_capacity<cfg['maximum_slots']-cfg['initial_slots'] and remaining>7 and earned>cfg['capacity_price']+channel_invoice+operating_envelope+2*MICRO:
+    if state['arm'] in {'growth','competitive_growth'} and profitable and lost_capacity>=2 and slots<cfg['maximum_slots'] and live_capacity<cfg['maximum_slots']-cfg['initial_slots'] and remaining>7 and earned>cfg['capacity_price']+channel_invoice+operating_envelope+2*MICRO:
         capacity_forecast=sum(margin_history)/len(margin_history)*min(remaining,5)*.5;prepared['capacity_purchase']=capacity_forecast>cfg['capacity_price'];prepared['capacity_predicted_net']=int(capacity_forecast-cfg['capacity_price'])
     liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-cfg['capacity_price']*bool(prepared['capacity_purchase'])
     rival_capacity=2;rival_bps=state['market']['public_rival_bps'];rival_cash=state['market']['rival_cash']
@@ -127,7 +138,7 @@ def _prepare_plan(state,account,jobs):
         if price is not None:prices['us']=price;options.append(('us',value-price))
         if rival_capacity>0 and rival_cash>MICRO:options.append(('rival',value-rival_price))
         options=[(name,u) for name,u in options if name=='decline' or b['remaining_budget']>=prices[name]]
-        chosen=max(options,key=lambda p:(p[1],p[0]))[0]
+        chosen=max(options,key=lambda p:(p[1],draw(seed,[day,b['id'],p[0]],'buyer-indifference')))[0]
         decision={'kind':'offer' if price is not None else 'outside_choice','time':t,'customer_id':b['id'],'service_id':service,'price':price,'human_price':anchor,'public_rival_price':rival_price,'chosen':chosen=='us','buyer_choice':chosen,'information':'Seller uses past public outcomes only; buyer utility is private environment, not policy observation. Unavailable enterprise offers do not remove outside alternatives.'}
         if chosen in {'human','rival'}:
             outside=prices[chosen];decision['outside_spend']=outside;b['remaining_budget']-=outside;b['next_need_time']=t+7*24
@@ -159,7 +170,7 @@ def _prepare_plan(state,account,jobs):
 
 def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events=None,failpoint=None):
     cfg=validate_config(copy.deepcopy(config));root=Path(root).resolve();output=Path(output).resolve();output.mkdir(parents=True,exist_ok=True)
-    if arm not in {'baseline','channel','growth'}:raise ValueError('REGISTERED_COMMERCIAL_OPTION_ARM_REQUIRED')
+    if arm not in {'baseline','channel','growth','competitive_growth'}:raise ValueError('REGISTERED_COMMERCIAL_OPTION_ARM_REQUIRED')
     if source is None:
         from .runner import identity
         source=identity(root)
@@ -199,8 +210,8 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                     if not b['onboarded']:b['acquisition_source_plan_id']=exposure['source_plan_id'];b['exposure_time']=t
                     b['known']=True
                     response=next((r for r in p['reactivations'] if r['customer_id']==b['id']),None)
-                    if response is not None:b['active']=response['responded'];_event(state,t,'REACTIVATION_RESPONSE',exposure['exposure_id']+'-reactivation',**response)
-                    _event(state,t,'EXPOSURE',exposure['exposure_id'],customer_id=b['id'],source_plan_id=exposure['source_plan_id'])
+                    if response is not None:b['active']=response['responded']
+                    _record_exposure(state,t,exposure,response)
                 cost('outreach-'+str(day),cfg['exposure_cost']*p['outreach_units'],t,'outreach_including_failed_and_unused_slots')
                 attempts=[d for d in p['declines'] if d['kind']=='offer'];cost('qualification-'+str(day),cfg['qualification_cost']*len(attempts),t,'qualification_including_lost_offers')
                 state['decisions'].extend(p['declines'])

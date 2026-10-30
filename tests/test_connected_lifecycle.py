@@ -2,7 +2,7 @@ import copy
 import unittest
 from unittest.mock import patch
 from connected_enterprise.channels import ChannelBook
-from connected_enterprise.engine import MICRO,_initial,_prepare_plan,default_config
+from connected_enterprise.engine import MICRO,_initial,_prepare_plan,_record_exposure,default_config
 
 
 class AccountView:
@@ -70,6 +70,17 @@ class ConnectedLifecycleTests(unittest.TestCase):
         self.assertEqual(sum(d['kind']=='liquidity_decline' for d in liquidity['declines']),4)
         self.assertEqual(sum(d['kind']=='outside_choice' for d in liquidity['declines']),4)
         self.assertGreater(liquidity['operating_cost_envelope'],state['config']['maintenance_daily'])
+
+    def test_public_reactivation_trace_follows_its_paid_exposure(self):
+        state={'events':[]}
+        exposure={'customer_id':'SIM-customer-010','exposure_id':'paid-exposure','source_plan_id':'earned-plan'}
+        response={'customer_id':'SIM-customer-010','time':1512,'source_plan_id':'earned-plan','responded':False,'response_probability_bps':3500}
+        _record_exposure(state,1512,exposure,response)
+        self.assertEqual([row['kind'] for row in state['events']],['EXPOSURE','REACTIVATION_RESPONSE'])
+        first,second=state['events']
+        self.assertEqual(second['id'],first['id']+'-reactivation')
+        self.assertEqual((first['time'],first['customer_id'],first['source_plan_id']),(second['time'],second['customer_id'],second['source_plan_id']))
+        self.assertFalse(second['responded'])
 
 
 if __name__=='__main__':unittest.main()

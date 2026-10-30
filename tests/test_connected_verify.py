@@ -7,11 +7,23 @@ import unittest
 from pathlib import Path
 
 from commercial.ledger import digest
-from connected_enterprise.verify import check_budgets, check_channels, check_events, check_source
+from connected_enterprise.verify import check_budgets, check_channels, check_events, check_source, _expected_competitive_price
 from connected_enterprise.channels import ChannelBook, default_contracts
 
 
 class ConnectedEvidenceChecks(unittest.TestCase):
+    def test_independent_public_competitive_price_includes_fee_and_margin_floor(self):
+        from connected_enterprise.engine import default_config
+        config = default_config()
+        config['qualification_cost'] += 50_000
+        history = [{'chosen': False}] * 3
+        self.assertEqual(_expected_competitive_price(22_000_000, 14_000_000, config, history), 13_750_000)
+        self.assertEqual(_expected_competitive_price(22_000_000, 14_000_000, config, []), 22_000_000)
+        bounded = _expected_competitive_price(22_000_000, 1_000_000, config, history)
+        resources = sum(config[key] for key in ['production_cost','supplier_unit_cost','support_cost','onboarding_cost','qualification_cost','exposure_cost'])
+        fee = (bounded * config['payment_bps'] + 9999) // 10000 + config['payment_fixed']
+        self.assertGreaterEqual(bounded - resources - fee, 1_000_000)
+
     def test_event_identity_time_and_causal_reordering(self):
         events = [{'id': 'consent', 'time': 1, 'kind': 'QUALIFIED'}, {'id': 'production', 'time': 2, 'kind': 'PRODUCTION'}]
         self.assertEqual(len(check_events(events)), 2)

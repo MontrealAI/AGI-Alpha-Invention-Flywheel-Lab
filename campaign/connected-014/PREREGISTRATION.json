@@ -387,14 +387,15 @@
   },
   "protocol": {
     "adverse_seeds": [
-      2610301501,
-      2610301502
+      2610301701,
+      2610301702
     ],
     "arms": [
-      "baseline",
-      "growth"
+      "growth",
+      "competitive_growth"
     ],
-    "case_design": "Central4pairedseeds; three separatelydeclared adversecases2pairedseeds; channel-onlyoptioncontrol2centralseeds. Common exogenous customer/day/service payment and need identities; endogenous activity and artifact assignment may differ.",
+    "candidate_arm": "competitive_growth",
+    "case_design": "Central4pairedseeds; three separatelydeclared adversecases2pairedseeds. Retainedgrowthcontrol andcostedpublicpricingoption haveequalcapital/actionsasidefromthepriceextension. Common exogenous customer/day/service payment and need identities; endogenous activity and artifact assignment may differ.",
     "cases": [
       "central",
       "weak_channel",
@@ -402,17 +403,14 @@
       "delayed_and_expensive"
     ],
     "central_seeds": [
-      2610301401,
-      2610301402,
-      2610301403,
-      2610301404
+      2610301601,
+      2610301602,
+      2610301603,
+      2610301604
     ],
-    "channel_control_seeds": [
-      2610301401,
-      2610301402
-    ],
+    "channel_control_seeds": [],
     "clock": "Integerhours/native dayfield; production2hours, acceptance1hour, clearing48hours baseline. Expiry/reinvestment eventcausal; tailobligations retained. Calendar epoch2026-11-01T00Z.",
-    "comparison": "Equalstartingcapital,services,completequality,privatebuyer/marketassumptionsandcontractswithinpair. Baseline lacks added paidchannel/capacityoption; this estimates commercial optionvalue, NOT selectionalgorithm superiority. Channelarm isolates capacityoption.",
+    "comparison": "Equalstartingcapital,services,completequality,privatebuyer/marketassumptionsandcontractswithinpair. Non-smoke comparesretainedgrowthwiththecostedpublicpriceextension. Smokecomparesownedbaselinewithgrowth. Equalpriceutilitytiesusestablekeyedneutralindifference. Thisestimatescommercialoptionvalue,NOTgeneralalgorithmicoptimality.",
     "completion": {
       "minimum_collected_deliveries": 12,
       "minimum_paying_customers": 3,
@@ -422,15 +420,25 @@
       "positive_available_earnings": true,
       "positive_complete_cost_profit": true
     },
+    "control_arm": "growth",
     "development_excluded": [
       14001,
       14002,
       14003,
       14004,
-      14005
+      14005,
+      14006,
+      2610301401,
+      2610301402,
+      2610301403,
+      2610301404,
+      2610301501,
+      2610301502
     ],
-    "edition": "connected014-confirmation-001",
+    "edition": "connected014-confirmation-002",
     "inference": "Finite authored worlds, not calibrated real success probabilities. Historical economic results never relabeled. Native record aggregation is exact accounting, not validated forward-demand aggregation.",
+    "pricing_extension_per_quote_microUSD": 50000,
+    "pricing_extension_setup_microUSD": 5000000,
     "recovery": "Live-state event intent persisted before mutations; signed command WAL/native CAS recovers exact commitments. Reopen requires retained local simulation key. Public copies support audit/reproduction, not takeover.",
     "resource_billing": "Actual deterministic executors/checkers, no paidmodelcalls. Modeled completecost envelopes; host/modelbilling unavailable. Sensitivities do not turn assumptions into calibration.",
     "risk": {
@@ -443,7 +451,7 @@
     "schema": "agi-alpha/connected014-protocol/v1",
     "scope": "CONDITIONAL_SIMULATION",
     "selection": "Ordinary observed-contribution heuristic, frozen before confirmation; no hidden buyer values, future shocks or evaluator case labels in seller policy. Decline/retaincash allowed. No developmentcontroller tournament.",
-    "service_cohort_seed": 14013026,
+    "service_cohort_seed": 14023026,
     "workers": 4
   }
 }
