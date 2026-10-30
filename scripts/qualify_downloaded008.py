@@ -26,7 +26,7 @@ def sha(raw):
     return hashlib.sha256(raw).hexdigest()
 
 
-def qualify(source_ref, output, downloaded_archive=None):
+def qualify(source_ref, output, downloaded_archive=None, scope="scientific", data=None, reference=None):
     if len(source_ref) != 40 or any(c not in '0123456789abcdef' for c in source_ref):
         raise ValueError('FULL_COMMIT_REQUIRED')
     output = Path(output).absolute()
@@ -104,6 +104,16 @@ def qualify(source_ref, output, downloaded_archive=None):
         ('forced-model', ['python3', 'research/observability008/compile_petab_forcing.py', '--source', 'research/observability008/boehm/source', '--output', str(output / 'boehm')], 60),
         ('literals', ['python3', 'scripts/replay_literal_check008.py', '--output', str(output / 'literal')], 20),
     ]
+    if scope == 'xct':
+        if data is None or reference is None:
+            raise ValueError('XCT_REQUIRES_EXTERNALLY_HASH_CHECKED_RAW_INPUT_PATHS')
+        commands = [('xct-construction-and-independent-check', ['python3', 'research/xct008/recovery/replay.py',
+                     '--output', str(output / 'xct-replay'), '--offline', '--data', str(Path(data).absolute()),
+                     '--reference', str(Path(reference).absolute()), '--verifier', 'verification/xct008_recovery/check_recovery.py'], 890)]
+        import pypdf
+        pdf = root / 'docs/overnight008/AGI_ALPHA_Overnight_008.pdf'
+        if len(pypdf.PdfReader(pdf).pages) != 12:
+            raise ValueError('PUBLISHED_CHECKPOINT_PDF_PAGE_COUNT')
     checks = {}
     for name, command, cpu in commands:
         receipt = run(command, output / (name + '-bounded'), output / 'RESOURCE_LEDGER.json', name,
@@ -119,7 +129,7 @@ def qualify(source_ref, output, downloaded_archive=None):
               'archive_sha256': manifest['archive_sha256'], 'all_git_blobs_verified_before_execution': True,
               'source_files': len(actual), 'commands': checks, 'source_bytes_unchanged': unchanged,
               'runtime_qualified': len(checks) == len(commands) and all(x['receipt']['state'] == 'complete' for x in checks.values()) and unchanged,
-              'scope': 'Downloaded exact GitHub contents, executed scoped 008 scientific construction/verification/real memory path. No XCT, paper, physical, superiority or commercial qualification is implied.'}
+              'scope': ('Downloaded exact GitHub contents; actual reconstructed XCT construction plus separate exact check and checkpoint PDF readability.' if scope == 'xct' else 'Downloaded exact GitHub contents; scoped scientific construction/verification/real memory path.'), 'limitations': 'Executed exposed engineering replay only; no physical, superiority, protected scientific or commercial qualification.'}
     (output / 'REPORT.json').write_text(json.dumps(report, indent=2) + '\n')
     return report
 
@@ -129,7 +139,10 @@ if __name__ == '__main__':
     p.add_argument('--source-ref', required=True)
     p.add_argument('--output', required=True)
     p.add_argument('--archive', help='Previously downloaded exact codeload package; still checks every Git blob before execution.')
+    p.add_argument('--scope', choices=['scientific', 'xct'], default='scientific')
+    p.add_argument('--data')
+    p.add_argument('--reference')
     a = p.parse_args()
-    result = qualify(a.source_ref, a.output, a.archive)
+    result = qualify(a.source_ref, a.output, a.archive, a.scope, a.data, a.reference)
     print(json.dumps({'runtime_qualified': result['runtime_qualified'], 'source_ref': result['source_ref'], 'output': a.output}))
     raise SystemExit(0 if result['runtime_qualified'] else 1)

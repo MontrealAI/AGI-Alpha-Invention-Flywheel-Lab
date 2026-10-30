@@ -41,6 +41,9 @@ jobs:
           python research/observability008/compile_petab.py --source research/observability008/crauste/source --output "$RUNNER_TEMP/overnight008-crauste"
           python research/observability008/compile_petab_forcing.py --source research/observability008/boehm/source --output "$RUNNER_TEMP/overnight008-boehm"
           python scripts/replay_literal_check008.py --output "$RUNNER_TEMP/overnight008-literal-check"
+      - name: Construct real-data full120 XCT witnesses and check every original ray independently
+        run: |
+          python research/xct008/recovery/replay.py --output "$RUNNER_TEMP/overnight008-xct-recovery" --verifier verification/xct008_recovery/check_recovery.py
       - name: Preserve actual source-matched receipts including failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -1,0 +1,63 @@
+{
+  "schema": "agi-alpha/covered-integration-observations008/v1",
+  "recorded_utc": "2026-10-30T07:38:31.366915+00:00",
+  "subledger_source": {
+    "path": "evidence/overnight-008/recovery-0719/INTEGRATION_SUBLEDGER.json",
+    "sha256": "9cce9090749a1b2301ad2181f13d34c1a236578e2f7fdc3dd6b0a84a78507e9f"
+  },
+  "source_subledger_capacity5400_is_not_a_new_allocation": true,
+  "root_integration_aggregate_reservation_CPU_seconds": 1300,
+  "settled_child_reservations_CPU_seconds": 1200,
+  "reported_waited_CPU_seconds": 14.468789000000001,
+  "still_reserved_unused_CPU_seconds": 100,
+  "unused_refund_CPU_seconds": 0,
+  "observations": [
+    {
+      "run_id": "downloaded-43fe",
+      "outcome": "failed",
+      "settled_reservation_CPU_seconds": 600,
+      "reported_waited_CPU_seconds": 0.09478699999999998,
+      "canonical_semantic_receipt_sha256": "b977defdc54c221d0203084dcc17af049547e9386e396cfa54e5d446d57dfa96",
+      "public_file_identity": {
+        "path": "evidence/overnight-008/recovery-0719/downloaded-43fe-bound/RECEIPT.json",
+        "sha256": "664fb84916f5257382bde1caedcfc4555312c69a87b3445fd1a46608aa8ff7ca"
+      },
+      "receipt_semantic_identity_verified": true,
+      "full_group_CPU_metering_complete": false,
+      "charged_again_in_aggregation": false
+    },
+    {
+      "run_id": "downloaded-43fe-offline",
+      "outcome": "failed",
+      "settled_reservation_CPU_seconds": 300,
+      "reported_waited_CPU_seconds": 6.638771,
+      "canonical_semantic_receipt_sha256": "9edf4ae6758d299981be80b129d26bc6be91539645b6c26342ca98713d6f3c70",
+      "public_file_identity": {
+        "path": "evidence/overnight-008/recovery-0719/downloaded-43fe-offline-bound/RECEIPT.json",
+        "sha256": "3409d1a7e4af891b7fb8efb8f247c0db42c6c5fcb7494165b6349898b6672db6"
+      },
+      "receipt_semantic_identity_verified": true,
+      "full_group_CPU_metering_complete": false,
+      "charged_again_in_aggregation": false
+    },
+    {
+      "run_id": "downloaded-43fe-repaired",
+      "outcome": "complete",
+      "settled_reservation_CPU_seconds": 300,
+      "reported_waited_CPU_seconds": 7.735231000000001,
+      "canonical_semantic_receipt_sha256": "2a4a0a8ff5df8b5865ae8032cbb6ce509f4ecd6963fbfd5fcb07333fe1f99831",
+      "public_file_identity": {
+        "path": "evidence/overnight-008/recovery-0719/downloaded-43fe-repaired-bound/RECEIPT.json",
+        "sha256": "efa98adaf91390603dce981bd2b41ca6f58cef6cc8cc58cea0ddc2a31bd2345d"
+      },
+      "receipt_semantic_identity_verified": true,
+      "full_group_CPU_metering_complete": false,
+      "charged_again_in_aggregation": false
+    }
+  ],
+  "nested_replay_worker_ledgers_and_receipts_are_covered_not_added_twice": true,
+  "no_new_charge_for_these_observations": true,
+  "complete_monetary_cost_USD": null,
+  "actual_paid_API_calls": 0,
+  "actual_commercial_receipts_USD": 0
+}
