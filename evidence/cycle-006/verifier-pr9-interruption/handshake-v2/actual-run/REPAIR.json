@@ -1,0 +1,200 @@
+{
+  "construction": {
+    "status": "constructed",
+    "program": {
+      "body": [
+        "reserve",
+        "start",
+        "work",
+        "complete"
+      ],
+      "protected_from": 0
+    },
+    "attempts": [
+      {
+        "program": {
+          "body": [
+            "reserve",
+            "start",
+            "work",
+            "complete"
+          ],
+          "protected_from": 2
+        },
+        "violations": [
+          "start"
+        ]
+      },
+      {
+        "program": {
+          "body": [
+            "reserve",
+            "start",
+            "work",
+            "complete"
+          ],
+          "protected_from": 0
+        },
+        "violations": []
+      }
+    ],
+    "novelty": "new bounded composition/guard scope, no new primitive or unrestricted invention",
+    "effects": "pure protocol interpreter; file effects require separate fixed trusted executor"
+  },
+  "checks": [
+    {
+      "state": "COMPLETE",
+      "returncode": 0,
+      "limits": {
+        "wall_seconds": 5,
+        "cpu_seconds": 2,
+        "memory_bytes": 268435456,
+        "output_bytes": 1048576,
+        "input_bytes": 4194304
+      },
+      "wall_seconds": 0.33350860700011253,
+      "stdout_bytes": 298,
+      "stderr_bytes": 0,
+      "stdout_sha256": "d401b9755958ffc10bb5538713ab58e7279dc238debdcc8bc14db646bbcb59f1",
+      "stderr": "",
+      "worker": {
+        "state": "COMPLETE",
+        "result": {
+          "trace": [
+            "reserve"
+          ],
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "failure_at": "start"
+        },
+        "confinement": "linux-seccomp-default-deny",
+        "worker_wall_seconds": 5.95720048295334e-05,
+        "worker_cpu_seconds": 0.268784874,
+        "peak_rss_kib": 15220
+      },
+      "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+      "input_sha256": "b0690055647095ac8cbdfc6987f3e0ba821073787c5cd0cbc024a554efdca74b"
+    },
+    {
+      "state": "COMPLETE",
+      "returncode": 0,
+      "limits": {
+        "wall_seconds": 5,
+        "cpu_seconds": 2,
+        "memory_bytes": 268435456,
+        "output_bytes": 1048576,
+        "input_bytes": 4194304
+      },
+      "wall_seconds": 0.107359005996841,
+      "stdout_bytes": 307,
+      "stderr_bytes": 0,
+      "stdout_sha256": "4e3ff97eec3ef33ccb2435341f3ccde594e8c93a7f8c8805d0c04ac4fcd54dd5",
+      "stderr": "",
+      "worker": {
+        "state": "COMPLETE",
+        "result": {
+          "trace": [
+            "reserve",
+            "start"
+          ],
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "failure_at": "work"
+        },
+        "confinement": "linux-seccomp-default-deny",
+        "worker_wall_seconds": 0.0006359369945130311,
+        "worker_cpu_seconds": 0.085866331,
+        "peak_rss_kib": 15220
+      },
+      "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+      "input_sha256": "ba2a92bc4492fcea487acb8af604ff9a46fcfe121bc148c92c3d909fdf7189e3"
+    },
+    {
+      "state": "COMPLETE",
+      "returncode": 0,
+      "limits": {
+        "wall_seconds": 5,
+        "cpu_seconds": 2,
+        "memory_bytes": 268435456,
+        "output_bytes": 1048576,
+        "input_bytes": 4194304
+      },
+      "wall_seconds": 0.1359996970059001,
+      "stdout_bytes": 319,
+      "stderr_bytes": 0,
+      "stdout_sha256": "b0420cb7ced0e18fc8fdb05a9e3a115ba319db166a52f70245f9a952676c8e72",
+      "stderr": "",
+      "worker": {
+        "state": "COMPLETE",
+        "result": {
+          "trace": [
+            "reserve",
+            "start",
+            "work"
+          ],
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "failure_at": "complete"
+        },
+        "confinement": "linux-seccomp-default-deny",
+        "worker_wall_seconds": 3.363600262673572e-05,
+        "worker_cpu_seconds": 0.102090884,
+        "peak_rss_kib": 15220
+      },
+      "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+      "input_sha256": "423b33bd7191d979d882c18410a0d936943210111344918d0fb34ff533a9e91c"
+    }
+  ],
+  "passed": true,
+  "actual_effect_execution": [
+    {
+      "state": "INCOMPLETE",
+      "interrupted_marker": true,
+      "completed": false,
+      "trace": [
+        "reserve"
+      ],
+      "files_sha256": {
+        "INTERRUPTED.json": "2b37339af170157f5e4fe1f9e5cd9d54321403efc40823015159cf55c5f9b149"
+      },
+      "failure_at": "start",
+      "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+    },
+    {
+      "state": "INCOMPLETE",
+      "interrupted_marker": true,
+      "completed": false,
+      "trace": [
+        "reserve",
+        "start"
+      ],
+      "files_sha256": {
+        "STARTED.json": "41a03964da35172bdfbd901c6f6a7b443eace04987e3fd931cc841348ec8b6bf",
+        "INTERRUPTED.json": "eb3675a30b632006d51668de34fe34b94e54912402ae67a886c838d5a530befb"
+      },
+      "failure_at": "work",
+      "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+    },
+    {
+      "state": "INCOMPLETE",
+      "interrupted_marker": true,
+      "completed": false,
+      "trace": [
+        "reserve",
+        "start",
+        "work"
+      ],
+      "files_sha256": {
+        "STARTED.json": "41a03964da35172bdfbd901c6f6a7b443eace04987e3fd931cc841348ec8b6bf",
+        "WORK.json": "a7526e7ffe1bcf4f64ccfac7a53f75c65aef2d03f0f8f1edf4f2d1057cc9eca7",
+        "INTERRUPTED.json": "5863ef92b10d9ed19a7cff6d9b6a272e24e1609ff25c1d287c63a471b21e5188"
+      },
+      "failure_at": "complete",
+      "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+    }
+  ],
+  "actual_instrument": "flywheel/evidence_executor.py consumes the selected generated guard scope; run_cycle.py supervisor is separately hand-written and verified"
+}

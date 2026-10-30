@@ -1,0 +1,39 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "resource-v3-qualification-001",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "tests.test_resource006_v3",
+    "tests.test_reproduction006",
+    "-v"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "tests.test_resource006_v3",
+    "tests.test_reproduction006",
+    "-v"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "tests.test_resource006_v3",
+    "tests.test_reproduction006",
+    "-v"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 40,
+    "cpu_seconds": 20,
+    "memory_bytes": 1073741824,
+    "output_bytes": 4194304,
+    "storage_bytes": 16777216
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "pending"
+}

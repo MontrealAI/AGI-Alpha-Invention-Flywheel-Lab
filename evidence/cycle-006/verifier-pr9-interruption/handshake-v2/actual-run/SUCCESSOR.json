@@ -1,0 +1,1315 @@
+{
+  "task": {
+    "id": "fresh-artifact-publication",
+    "phases": [
+      "reserve",
+      "manifest",
+      "build",
+      "publish",
+      "complete"
+    ],
+    "dependencies": [
+      [
+        "reserve",
+        "manifest"
+      ],
+      [
+        "manifest",
+        "build"
+      ],
+      [
+        "build",
+        "publish"
+      ],
+      [
+        "publish",
+        "complete"
+      ]
+    ]
+  },
+  "capability_id": "369ef8e9b8a035f463e4ca9ad5ddd7419e92a3c2a8134cd5445892280b8a3d96",
+  "retrieval": {
+    "records": [
+      {
+        "id": "369ef8e9b8a035f463e4ca9ad5ddd7419e92a3c2a8134cd5445892280b8a3d96",
+        "record": {
+          "applicability": {
+            "assumptions": [
+              "No SIGKILL or host crash durability claim"
+            ],
+            "conditions": {
+              "effects": "exclusive_local_output",
+              "failure": "catchable_exception"
+            },
+            "failures": [
+              {
+                "conditions": {
+                  "failure": "power_loss"
+                },
+                "reason": "Process exception handling cannot guarantee durable recovery"
+              }
+            ],
+            "schema_version": 1,
+            "uncertainty": "Engineering scope only"
+          },
+          "costs": {
+            "acquisition_monetary": null
+          },
+          "exposure": [
+            "public legacy bug",
+            "development initialization case"
+          ],
+          "generative_operator": {
+            "language": "bounded-evidence.v1",
+            "program": {
+              "language": "bounded-evidence/v1",
+              "operator": "protect_initialization"
+            }
+          },
+          "instrument": {
+            "path": "flywheel/strategy.py",
+            "sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17"
+          },
+          "provenance": {
+            "construction": "REPAIR.json",
+            "mapping": "DISCOVERY.json",
+            "source": "c487e4741aa9d6f1a0928bc73d399d8a247b62e4"
+          },
+          "supersedes": [],
+          "verification": {
+            "receipt_sha256": "47f79d4b4fca3e960ea2696743ce4493c59b4b5bd1519f409f64e114e7e1995f",
+            "status": "verified-in-scope"
+          }
+        }
+      }
+    ],
+    "refused": [],
+    "failures": []
+  },
+  "arms": {
+    "inheritance": {
+      "construction": {
+        "status": "constructed",
+        "program": {
+          "body": [
+            "reserve",
+            "manifest",
+            "build",
+            "publish",
+            "complete"
+          ],
+          "protected_from": 1
+        },
+        "attempts": [
+          {
+            "program": {
+              "body": [
+                "reserve",
+                "manifest",
+                "build",
+                "publish",
+                "complete"
+              ],
+              "protected_from": 1
+            },
+            "violations": []
+          }
+        ],
+        "novelty": "new bounded composition/guard scope, no new primitive or unrestricted invention",
+        "effects": "pure protocol interpreter; file effects require separate fixed trusted executor"
+      },
+      "checks": [
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.09687248500267742,
+          "stdout_bytes": 302,
+          "stderr_bytes": 0,
+          "stdout_sha256": "6cc85376ed5250038d82f2cac7b28fd2fc26dc090cffdf61043d8adae2fdffc8",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "manifest"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 3.889600338879973e-05,
+            "worker_cpu_seconds": 0.074555747,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "f892a1fca8d8c5f7f047d5be720d9b0cbbcac93d5391a5ab746480abb91d18c9"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.4181081760034431,
+          "stdout_bytes": 312,
+          "stderr_bytes": 0,
+          "stdout_sha256": "d3c649430cabc6b271225c512f48a85245759fc973b50974b9026a530d3c41b9",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "build"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 5.3775998821947724e-05,
+            "worker_cpu_seconds": 0.249098351,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "51adaba9e44939b10e11eef806ff7a075715788c08094e45c89d0036bdc32622"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.26348797399987234,
+          "stdout_bytes": 322,
+          "stderr_bytes": 0,
+          "stdout_sha256": "be4087d4fba0e1ea8ac212144bdf7822c686fb4c68690261949a20ac206eae64",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest",
+                "build"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "publish"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 4.109200381208211e-05,
+            "worker_cpu_seconds": 0.231171396,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "f4350e948ab55f50f8ce1f1627d712b63a5cb7e62b31127483047f23e5f0c849"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.3608024739951361,
+          "stdout_bytes": 334,
+          "stderr_bytes": 0,
+          "stdout_sha256": "48ef3d46ee2f1a60eb63d1f5262c8f0944d92f398fdb3faa24c9c3339f58e035",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest",
+                "build",
+                "publish"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "complete"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 4.449900006875396e-05,
+            "worker_cpu_seconds": 0.331726674,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "fd336765bb6631bdc5d685104cd1ad54b2fccec3167a8bf574057d24dcb1bbd8"
+        }
+      ],
+      "actual_effect_execution": [
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve"
+          ],
+          "files_sha256": {
+            "INTERRUPTED.json": "f6317443c2028c8545038320bcd4f6129d385a0a7c56db26e330fbdc1e62e117"
+          },
+          "failure_at": "manifest",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "INTERRUPTED.json": "5173901a5dd4a3041f925c5d90e05d4208c0d1f49121003bd7a090df6465d3a1"
+          },
+          "failure_at": "build",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest",
+            "build"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "BUILD.json": "f30b57f9ff75e532eb194ddea43761fab55d093432c2f7f0158c5f7576228136",
+            "INTERRUPTED.json": "5e82818fcc82c073b1d9c13deb5e412f53954888efd66ca9cbaf1fef4f77c740"
+          },
+          "failure_at": "publish",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest",
+            "build",
+            "publish"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "BUILD.json": "f30b57f9ff75e532eb194ddea43761fab55d093432c2f7f0158c5f7576228136",
+            "PUBLISH.json": "be6d9e2231f84634d2488ca82815a4f32ba6e09f9605595cbb156912bd41da9e",
+            "INTERRUPTED.json": "5863ef92b10d9ed19a7cff6d9b6a272e24e1609ff25c1d287c63a471b21e5188"
+          },
+          "failure_at": "complete",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        }
+      ],
+      "passed": true
+    },
+    "ordinary_reuse": {
+      "construction": {
+        "status": "constructed",
+        "program": {
+          "body": [
+            "reserve",
+            "manifest",
+            "build",
+            "publish",
+            "complete"
+          ],
+          "protected_from": 1
+        },
+        "attempts": [
+          {
+            "program": {
+              "body": [
+                "reserve",
+                "manifest",
+                "build",
+                "publish",
+                "complete"
+              ],
+              "protected_from": 1
+            },
+            "violations": []
+          }
+        ],
+        "novelty": "new bounded composition/guard scope, no new primitive or unrestricted invention",
+        "effects": "pure protocol interpreter; file effects require separate fixed trusted executor"
+      },
+      "checks": [
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.24878712600184372,
+          "stdout_bytes": 301,
+          "stderr_bytes": 0,
+          "stdout_sha256": "40548f62aabb6fadfe31594cd4d3a6b91a9be53a3f2b93b5f93db14791d1972b",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "manifest"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 4.138400254305452e-05,
+            "worker_cpu_seconds": 0.22568554,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "f892a1fca8d8c5f7f047d5be720d9b0cbbcac93d5391a5ab746480abb91d18c9"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.07716452900058357,
+          "stdout_bytes": 311,
+          "stderr_bytes": 0,
+          "stdout_sha256": "b7a5d62964ad79a920e12abf3447ee731b5e2f605277d62cfbfdc23f82657d09",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "build"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 3.209299757145345e-05,
+            "worker_cpu_seconds": 0.063866745,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "51adaba9e44939b10e11eef806ff7a075715788c08094e45c89d0036bdc32622"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.12502781800139928,
+          "stdout_bytes": 322,
+          "stderr_bytes": 0,
+          "stdout_sha256": "ecee12328213bf86f735f97313027d3d464e363554f1b7a35211bf6901be392a",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest",
+                "build"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "publish"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 4.050799907417968e-05,
+            "worker_cpu_seconds": 0.109490945,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "f4350e948ab55f50f8ce1f1627d712b63a5cb7e62b31127483047f23e5f0c849"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.11814387400227133,
+          "stdout_bytes": 334,
+          "stderr_bytes": 0,
+          "stdout_sha256": "0c156e8644b26532774c7212ff7fdd9540e935b9d3382e6f8563cb9943adefd8",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest",
+                "build",
+                "publish"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "complete"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 6.507500074803829e-05,
+            "worker_cpu_seconds": 0.102061918,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "fd336765bb6631bdc5d685104cd1ad54b2fccec3167a8bf574057d24dcb1bbd8"
+        }
+      ],
+      "actual_effect_execution": [
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve"
+          ],
+          "files_sha256": {
+            "INTERRUPTED.json": "f6317443c2028c8545038320bcd4f6129d385a0a7c56db26e330fbdc1e62e117"
+          },
+          "failure_at": "manifest",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "INTERRUPTED.json": "5173901a5dd4a3041f925c5d90e05d4208c0d1f49121003bd7a090df6465d3a1"
+          },
+          "failure_at": "build",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest",
+            "build"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "BUILD.json": "f30b57f9ff75e532eb194ddea43761fab55d093432c2f7f0158c5f7576228136",
+            "INTERRUPTED.json": "5e82818fcc82c073b1d9c13deb5e412f53954888efd66ca9cbaf1fef4f77c740"
+          },
+          "failure_at": "publish",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest",
+            "build",
+            "publish"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "BUILD.json": "f30b57f9ff75e532eb194ddea43761fab55d093432c2f7f0158c5f7576228136",
+            "PUBLISH.json": "be6d9e2231f84634d2488ca82815a4f32ba6e09f9605595cbb156912bd41da9e",
+            "INTERRUPTED.json": "5863ef92b10d9ed19a7cff6d9b6a272e24e1609ff25c1d287c63a471b21e5188"
+          },
+          "failure_at": "complete",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        }
+      ],
+      "passed": true
+    },
+    "reset": {
+      "construction": {
+        "status": "constructed",
+        "program": {
+          "body": [
+            "reserve",
+            "manifest",
+            "build",
+            "publish",
+            "complete"
+          ],
+          "protected_from": 4
+        },
+        "attempts": [
+          {
+            "program": {
+              "body": [
+                "reserve",
+                "manifest",
+                "build",
+                "publish",
+                "complete"
+              ],
+              "protected_from": 4
+            },
+            "violations": []
+          }
+        ],
+        "novelty": "new bounded composition/guard scope, no new primitive or unrestricted invention",
+        "effects": "pure protocol interpreter; file effects require separate fixed trusted executor"
+      },
+      "checks": [
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.11183268400054658,
+          "stdout_bytes": 302,
+          "stderr_bytes": 0,
+          "stdout_sha256": "769c617cbf4ed1bf4b723f2b685ed2dd880a80926f62ee5c5d72f73c5544f56b",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve"
+              ],
+              "state": "UNMARKED",
+              "interrupted_marker": false,
+              "completed": false,
+              "failure_at": "manifest"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 0.00012455999967642128,
+            "worker_cpu_seconds": 0.095919687,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "d65d6d154b1472aba5340965be00313573749f6d379eb7985293a4268582026b"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.08660813099413645,
+          "stdout_bytes": 309,
+          "stderr_bytes": 0,
+          "stdout_sha256": "9f1df8ec41cd0188deba7820146a6a0ec5673337695014cefbaae746f48b675c",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest"
+              ],
+              "state": "UNMARKED",
+              "interrupted_marker": false,
+              "completed": false,
+              "failure_at": "build"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 9.565499931341037e-05,
+            "worker_cpu_seconds": 0.07225519,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "737f367ea49c12a3b33dba85995651bcc9e9633db3abe168588ada1e7f6847f8"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.10488445699593285,
+          "stdout_bytes": 321,
+          "stderr_bytes": 0,
+          "stdout_sha256": "738e24de3ba9f492f3e7956a5b5f8ac97835311ee484b714cb5c4359573428c0",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest",
+                "build"
+              ],
+              "state": "UNMARKED",
+              "interrupted_marker": false,
+              "completed": false,
+              "failure_at": "publish"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 4.036999598611146e-05,
+            "worker_cpu_seconds": 0.092974536,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "f09437532ffc0d0764f3c832afb9ab81061a32197f9c97db3118299ac7717f24"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.0924794259990449,
+          "stdout_bytes": 334,
+          "stderr_bytes": 0,
+          "stdout_sha256": "dbd82e8e28c14f0398413f122c30cd435baffc5512729d01e3fdec27a8f61862",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest",
+                "build",
+                "publish"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "complete"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 5.015599890612066e-05,
+            "worker_cpu_seconds": 0.075805328,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "31abb692f1ceea844f7a73fe163598058412ad958779e2906b2eb3d5632e77e8"
+        }
+      ],
+      "actual_effect_execution": [
+        {
+          "state": "UNMARKED",
+          "interrupted_marker": false,
+          "completed": false,
+          "trace": [
+            "reserve"
+          ],
+          "files_sha256": {},
+          "failure_at": "manifest",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "UNMARKED",
+          "interrupted_marker": false,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664"
+          },
+          "failure_at": "build",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "UNMARKED",
+          "interrupted_marker": false,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest",
+            "build"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "BUILD.json": "f30b57f9ff75e532eb194ddea43761fab55d093432c2f7f0158c5f7576228136"
+          },
+          "failure_at": "publish",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest",
+            "build",
+            "publish"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "BUILD.json": "f30b57f9ff75e532eb194ddea43761fab55d093432c2f7f0158c5f7576228136",
+            "PUBLISH.json": "be6d9e2231f84634d2488ca82815a4f32ba6e09f9605595cbb156912bd41da9e",
+            "INTERRUPTED.json": "5863ef92b10d9ed19a7cff6d9b6a272e24e1609ff25c1d287c63a471b21e5188"
+          },
+          "failure_at": "complete",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        }
+      ],
+      "passed": false
+    },
+    "operator_removed": {
+      "construction": {
+        "status": "constructed",
+        "program": {
+          "body": [
+            "reserve",
+            "manifest",
+            "build",
+            "publish",
+            "complete"
+          ],
+          "protected_from": 4
+        },
+        "attempts": [
+          {
+            "program": {
+              "body": [
+                "reserve",
+                "manifest",
+                "build",
+                "publish",
+                "complete"
+              ],
+              "protected_from": 4
+            },
+            "violations": []
+          }
+        ],
+        "novelty": "new bounded composition/guard scope, no new primitive or unrestricted invention",
+        "effects": "pure protocol interpreter; file effects require separate fixed trusted executor"
+      },
+      "checks": [
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.10019938999903388,
+          "stdout_bytes": 301,
+          "stderr_bytes": 0,
+          "stdout_sha256": "d794614357a1e8b8ea51d86499ffd541d926fcb9a8c4aba4d83333b844ddf4a6",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve"
+              ],
+              "state": "UNMARKED",
+              "interrupted_marker": false,
+              "completed": false,
+              "failure_at": "manifest"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 3.524699422996491e-05,
+            "worker_cpu_seconds": 0.075937518,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "d65d6d154b1472aba5340965be00313573749f6d379eb7985293a4268582026b"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.10587166199547937,
+          "stdout_bytes": 309,
+          "stderr_bytes": 0,
+          "stdout_sha256": "4a40cca48878be6e0898aeecc265aee8fb2766f0dd464e6f807294154373fb55",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest"
+              ],
+              "state": "UNMARKED",
+              "interrupted_marker": false,
+              "completed": false,
+              "failure_at": "build"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 3.91630019294098e-05,
+            "worker_cpu_seconds": 0.089782716,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "737f367ea49c12a3b33dba85995651bcc9e9633db3abe168588ada1e7f6847f8"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.08436112500203308,
+          "stdout_bytes": 321,
+          "stderr_bytes": 0,
+          "stdout_sha256": "7f6561f42630a830e5635b4c71b6edebf2b876963237b410e428fb09427abd32",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest",
+                "build"
+              ],
+              "state": "UNMARKED",
+              "interrupted_marker": false,
+              "completed": false,
+              "failure_at": "publish"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 3.975899744546041e-05,
+            "worker_cpu_seconds": 0.069753186,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "f09437532ffc0d0764f3c832afb9ab81061a32197f9c97db3118299ac7717f24"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.08970025899907341,
+          "stdout_bytes": 335,
+          "stderr_bytes": 0,
+          "stdout_sha256": "5f6088205373145872433f148de8140adc30be9ac81f3535fdd280fc2a9020d2",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest",
+                "build",
+                "publish"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "complete"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 4.2196996218990535e-05,
+            "worker_cpu_seconds": 0.074874984,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "31abb692f1ceea844f7a73fe163598058412ad958779e2906b2eb3d5632e77e8"
+        }
+      ],
+      "actual_effect_execution": [
+        {
+          "state": "UNMARKED",
+          "interrupted_marker": false,
+          "completed": false,
+          "trace": [
+            "reserve"
+          ],
+          "files_sha256": {},
+          "failure_at": "manifest",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "UNMARKED",
+          "interrupted_marker": false,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664"
+          },
+          "failure_at": "build",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "UNMARKED",
+          "interrupted_marker": false,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest",
+            "build"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "BUILD.json": "f30b57f9ff75e532eb194ddea43761fab55d093432c2f7f0158c5f7576228136"
+          },
+          "failure_at": "publish",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest",
+            "build",
+            "publish"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "BUILD.json": "f30b57f9ff75e532eb194ddea43761fab55d093432c2f7f0158c5f7576228136",
+            "PUBLISH.json": "be6d9e2231f84634d2488ca82815a4f32ba6e09f9605595cbb156912bd41da9e",
+            "INTERRUPTED.json": "5863ef92b10d9ed19a7cff6d9b6a272e24e1609ff25c1d287c63a471b21e5188"
+          },
+          "failure_at": "complete",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        }
+      ],
+      "passed": false
+    },
+    "conventional_wrap_all": {
+      "construction": {
+        "status": "constructed",
+        "program": {
+          "body": [
+            "reserve",
+            "manifest",
+            "build",
+            "publish",
+            "complete"
+          ],
+          "protected_from": 0
+        },
+        "attempts": [
+          {
+            "program": {
+              "body": [
+                "reserve",
+                "manifest",
+                "build",
+                "publish",
+                "complete"
+              ],
+              "protected_from": 4
+            },
+            "violations": [
+              "manifest"
+            ]
+          },
+          {
+            "program": {
+              "body": [
+                "reserve",
+                "manifest",
+                "build",
+                "publish",
+                "complete"
+              ],
+              "protected_from": 0
+            },
+            "violations": []
+          }
+        ],
+        "novelty": "new bounded composition/guard scope, no new primitive or unrestricted invention",
+        "effects": "pure protocol interpreter; file effects require separate fixed trusted executor"
+      },
+      "checks": [
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.1446210739959497,
+          "stdout_bytes": 301,
+          "stderr_bytes": 0,
+          "stdout_sha256": "a5b644ed2515a3782ea5e063e7dc2d96a04857bc2667a896a0f42ffac7952361",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "manifest"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 0.0001671290010563098,
+            "worker_cpu_seconds": 0.12293503,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "1f1bd94efbb20034ec6930da5f06def7b73606e7bc98831d7bc4a2e0a39a2463"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.13960921900434187,
+          "stdout_bytes": 311,
+          "stderr_bytes": 0,
+          "stdout_sha256": "d6b066a313cc43702d91d31bedd163b09b598fcc3bfa226e985a2838779cc5e2",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "build"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 9.682300151325762e-05,
+            "worker_cpu_seconds": 0.125279405,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "5924c534abba1926f9acae3fba4e3338e6bc441750f1c2b90cac26ad846d2b9c"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.3037526599946432,
+          "stdout_bytes": 323,
+          "stderr_bytes": 0,
+          "stdout_sha256": "4ce23d0a5684d3c419d1be6fb911453130a97ec98c0efd14c63c9836e667695d",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest",
+                "build"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "publish"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 5.2817005780525506e-05,
+            "worker_cpu_seconds": 0.258055223,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "e2bf3d1e5dc45d016fc1e04ade0f1dbcf331d3a4613399b6b1614990776fbe8e"
+        },
+        {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.08976701899518957,
+          "stdout_bytes": 334,
+          "stderr_bytes": 0,
+          "stdout_sha256": "91c9656b86d7bac9b5eda6293f1358b03c9e15009c0c8a0a6918f5a62a1f3981",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "trace": [
+                "reserve",
+                "manifest",
+                "build",
+                "publish"
+              ],
+              "state": "INCOMPLETE",
+              "interrupted_marker": true,
+              "completed": false,
+              "failure_at": "complete"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 6.266299897106364e-05,
+            "worker_cpu_seconds": 0.081229811,
+            "peak_rss_kib": 15220
+          },
+          "interpreter_sha256": "93b00697efbbdb2e29c357ee83f30e46ac220068783731568c297f0017453b17",
+          "input_sha256": "6d83688edae8f4e81dbab9018ff7f6193477626d565860ee99b18fca0432790f"
+        }
+      ],
+      "actual_effect_execution": [
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve"
+          ],
+          "files_sha256": {
+            "INTERRUPTED.json": "f6317443c2028c8545038320bcd4f6129d385a0a7c56db26e330fbdc1e62e117"
+          },
+          "failure_at": "manifest",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "INTERRUPTED.json": "5173901a5dd4a3041f925c5d90e05d4208c0d1f49121003bd7a090df6465d3a1"
+          },
+          "failure_at": "build",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest",
+            "build"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "BUILD.json": "f30b57f9ff75e532eb194ddea43761fab55d093432c2f7f0158c5f7576228136",
+            "INTERRUPTED.json": "5e82818fcc82c073b1d9c13deb5e412f53954888efd66ca9cbaf1fef4f77c740"
+          },
+          "failure_at": "publish",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        },
+        {
+          "state": "INCOMPLETE",
+          "interrupted_marker": true,
+          "completed": false,
+          "trace": [
+            "reserve",
+            "manifest",
+            "build",
+            "publish"
+          ],
+          "files_sha256": {
+            "MANIFEST.json": "deb5978e116cdedda4f2738d7272a451244ae120869d22003da3b40c0cd4f664",
+            "BUILD.json": "f30b57f9ff75e532eb194ddea43761fab55d093432c2f7f0158c5f7576228136",
+            "PUBLISH.json": "be6d9e2231f84634d2488ca82815a4f32ba6e09f9605595cbb156912bd41da9e",
+            "INTERRUPTED.json": "5863ef92b10d9ed19a7cff6d9b6a272e24e1609ff25c1d287c63a471b21e5188"
+          },
+          "failure_at": "complete",
+          "effect_boundary": "Fixed trusted executor, exclusive output directory and filenames only"
+        }
+      ],
+      "passed": true
+    }
+  },
+  "freshness": "Different engineering task; parent selected, separately verifier-selected cases published separately",
+  "conclusion": "Ordinary equivalent-content reuse remains tied; structured memory/policy/lifecycle superiority not established"
+}

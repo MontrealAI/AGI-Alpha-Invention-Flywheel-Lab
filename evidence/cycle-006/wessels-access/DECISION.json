@@ -1,0 +1,60 @@
+{
+  "schema": "agi-alpha-fresh-family-access006/v1",
+  "primary_paper": {
+    "doi": "10.1038/s41587-026-03307-w",
+    "published": "2026-10-01",
+    "repository": "shiftbioscience/Perturbation-Models-Outperform-Baselines",
+    "inspected_revision": "15361aec8392fb45a75c8c9da88ca5e6510fca97",
+    "publication_vs_current_source_match": "NOT_INDEPENDENTLY_ESTABLISHED"
+  },
+  "raw_input": {
+    "source_record": "https://zenodo.org/records/13350497",
+    "file": "WesselsSatija2023.h5ad",
+    "size_bytes": 219393529,
+    "primary_advertised_md5": "6897bfdcda928a678208fecf4eeb282e",
+    "downloaded_md5": "6897bfdcda928a678208fecf4eeb282e",
+    "downloaded_sha256": "5da0485aed81b23bda57b4a7b4510a394682d54911416db89b4846ff6dd34732",
+    "rights": "CC-BY-4.0",
+    "local_reproducible_cache": "/tmp/alpha006-wessels-download-r2/WesselsSatija2023.h5ad",
+    "raw_file_committed": false
+  },
+  "actual_metadata": {
+    "cells": 30707,
+    "genes": 21052,
+    "sparse_nonzero_count": 90716135,
+    "condition_labels": 187,
+    "single_perturbations": 28,
+    "distinct_canonical_two_gene_combinations": 158,
+    "control_cells": 424,
+    "missing_pair_constituent_singles": [],
+    "cell_line": "THP-1",
+    "celltype": "monocytes",
+    "organism": "human",
+    "perturbation_type": "CRISPR-cas13"
+  },
+  "boundaries": {
+    "benchmark_yaml_description": "HEK293T conflicts with actual raw metadata; do not inherit this label",
+    "paper_pair_count": 157,
+    "raw_vs_publication_processed_cohort": "DIFFERENT_UNQUALIFIED; QC/downsampling/HVG/technical-halves not replicated",
+    "PRESAGE": "Non-commercial license and GPU model, code/weights not executed or integrated; public performance remains prior art",
+    "raw_outcomes_inspected_by_data_constructor": false,
+    "protected_confirmation": "Verifier owns newly preregistered condition partition before any builder sees held-out AB values",
+    "metrics": "No claim that MSE alone establishes biologically useful response; current primary paper reports calibration limitations"
+  },
+  "decision": "ACCESS_QUALIFIED_FOR_SEPARATELY_IDENTIFIED_RAW_WESSELS_PILOT; STRONG_COMPLETE_PRESAGE_BENCHMARK_UNRUN",
+  "resources": {
+    "download_run": "raw-download-verified/RECEIPT.json",
+    "download_waited_cpu_seconds": 2.970997,
+    "download_wall_seconds": 87.59677300300245,
+    "download_bytes": 219393529,
+    "successful_first_range_probes_bytes": 8192,
+    "earlier_failed_remote_metadata_bytes": null,
+    "setup_research_inference_and_complete_cost": null,
+    "paid_calls": 0
+  },
+  "failures_preserved": [
+    "processed-metadata.json empty output plus FAILED_TRANSFER.json exit139",
+    "raw-download-original-route-failure ProxyError,0bytes"
+  ],
+  "executing_fetch_source_sha256": "81098e996acd89b23d62bd62d9905dff55d780e39febd7d9b316042ab00d5df3"
+}

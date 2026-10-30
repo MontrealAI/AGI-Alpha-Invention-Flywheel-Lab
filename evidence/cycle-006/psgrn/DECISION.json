@@ -1,0 +1,49 @@
+{
+  "schema": "agi-alpha-source-data-qualification006/v1",
+  "decision": "PIVOT_TO_SEPARATELY_REGISTERED_NORMAN_CONDITION_MEANS_PILOT",
+  "psgrn": {
+    "commit": "74aa640f7c472b23a69811f6795bb17678efd344",
+    "correct_entrypoint": "src/main.py",
+    "absent_entrypoint": "src/main_fast.py",
+    "complete_pipeline_executed": false,
+    "main_app_import": "REFUSED_MISSING_SLINGPY",
+    "full_data_identity": "UNKNOWN",
+    "original_benchmark_equivalence": "UNKNOWN",
+    "pilot_expression_outcomes_read": false
+  },
+  "norman": {
+    "commit": "bfa6eeea2bd145a1af2ec0127a2e808cc38456a9",
+    "file": "source_data/suppl-qqplot.xlsx",
+    "git_blob": "f35c9efe3bf0f917068b2aaf2c2236b593c06e2c",
+    "sha256": "1b652c352d4dabdd20324d7fd74d331898fa22c51cf6fa28ff65aa1322a6c78f",
+    "size": 10905627,
+    "AB_values_seen_by_data_agent": false,
+    "verifier_controls_combination_partition": true
+  },
+  "sources": {
+    "experiments/perturbseq006/range_hdf5.py": "f7be0065e55459cf3d7899852444ecb75eb44b3bc6763ef55707db6c22bdd310",
+    "experiments/perturbseq006/qualify.py": "8a86bcc677bca7bd33faec5afaefede09d06dc2e152a614793a19b669f845c59",
+    "experiments/perturbseq006/test_range.py": "f7dd3f667898e6e5287dcbf5d162f9bbe937a7e43678d97807830402ef9a3a9f",
+    "requirements-perturb006.txt": "a8324ee041b73c97f934be24183d1305fb0ad300840828b4fe0f8595306c8b95"
+  },
+  "prospective_limits": {
+    "initial_wall_minutes": 20,
+    "initial_cpu_seconds": 600,
+    "new_storage_bytes": 2147483648,
+    "network_bytes_suballocation_expanded_by_lead": 17179869184
+  },
+  "consumption": {
+    "successful_qualified_interface_receipt": "qualified-interface-r2/REPORT.json",
+    "failed_qualification_preserved": "qualified-interface/REPORT.json",
+    "setup_and_clone_network_cpu_totals": null,
+    "complete_monetary_cost": null,
+    "inference_cost": null,
+    "external_paid_model_calls": 0
+  },
+  "limitations": [
+    "Ordinary selective input access is not scientific novelty",
+    "Full intact PSGRN benchmark remains unqualified",
+    "Published Norman panel has no cell-level/replicate variance and shared controls",
+    "No causal, commercial or learning advantage established by data qualification"
+  ]
+}

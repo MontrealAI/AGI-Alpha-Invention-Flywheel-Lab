@@ -1,0 +1,60 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "verifier-wessels-protected-prepare-001",
+  "command": [
+    "/tmp/alpha-psgrn006-env/bin/python",
+    "verification/cycle006_prepare_wessels.py",
+    "--source",
+    "/tmp/alpha006-wessels-download-r2/WesselsSatija2023.h5ad",
+    "--public",
+    "evidence/cycle-006/verifier-wessels-preparation-run/artifacts/public",
+    "--private",
+    "/tmp/alpha006-verifier-wessels-private-b8177c"
+  ],
+  "requested_command": [
+    "/tmp/alpha-psgrn006-env/bin/python",
+    "verification/cycle006_prepare_wessels.py",
+    "--source",
+    "/tmp/alpha006-wessels-download-r2/WesselsSatija2023.h5ad",
+    "--public",
+    "evidence/cycle-006/verifier-wessels-preparation-run/artifacts/public",
+    "--private",
+    "/tmp/alpha006-verifier-wessels-private-b8177c"
+  ],
+  "normalized_command": [
+    "/tmp/alpha-psgrn006-env/bin/python",
+    "verification/cycle006_prepare_wessels.py",
+    "--source",
+    "/tmp/alpha006-wessels-download-r2/WesselsSatija2023.h5ad",
+    "--public",
+    "evidence/cycle-006/verifier-wessels-preparation-run/artifacts/public",
+    "--private",
+    "/tmp/alpha006-verifier-wessels-private-b8177c"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 300,
+    "cpu_seconds": 100,
+    "memory_bytes": 4294967296,
+    "output_bytes": 10485760,
+    "storage_bytes": 104857600
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 70.5364928199997,
+  "supervisor_cpu_seconds": 25.156109236,
+  "waited_cpu_seconds": 48.459007,
+  "descendant_survivors": false,
+  "output_bytes": 2680122,
+  "logs": {
+    "stdout.log": "ef99550f0ddca4bde3ea25244afd69f7a10ac8c17e4dd5b06dc4afb887ea776b",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

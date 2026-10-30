@@ -1,0 +1,42 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v1",
+  "run_id": "constructor-norman-repair-002",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/experiments/norman006/repair_development.py",
+    "--data",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/experiments/interaction006_data/development.npz",
+    "--original",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/norman-development-constructor-001c-run/artifacts/ARTIFACT.json",
+    "--constraint",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/verifier-symmetry-original/CONSTRAINT.json",
+    "--adjudication",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/verifier-symmetry-original/ADJUDICATION.json",
+    "--output",
+    "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/norman-repair-constructor-002-run/artifacts"
+  ],
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 120,
+    "cpu_seconds": 100,
+    "memory_bytes": 4294967296,
+    "output_bytes": 20971520,
+    "storage_bytes": 52428800
+  },
+  "wrapper_sha256": "58171898be156b4f28abc7ff2fc586ba221a7ecb7800c22180176bca8433798c",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "wall_seconds": 1.5740858470016974,
+  "supervisor_cpu_seconds": 0.021971472,
+  "waited_cpu_seconds": 1.5568359999999999,
+  "descendant_survivors": false,
+  "output_bytes": 329358,
+  "logs": {
+    "stdout.log": "8d6a39ea846553b9c0947ff7252ac45d95ee09cebc66a2042b30d1490f48dfa2",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

@@ -1,0 +1,58 @@
+{
+  "configuration": {
+    "language": "norman-residual-construction/v1",
+    "expressions": [
+      "b1",
+      [
+        "div",
+        [
+          "add",
+          "a0",
+          [
+            "sub",
+            "b2",
+            "a0"
+          ]
+        ],
+        "b0"
+      ],
+      [
+        "div",
+        [
+          "mul",
+          "a0",
+          -2.496
+        ],
+        "b0"
+      ],
+      [
+        "div",
+        [
+          "div",
+          "a0",
+          [
+            "div",
+            "a0",
+            "a2"
+          ]
+        ],
+        "b0"
+      ]
+    ],
+    "ridge": 100,
+    "symmetric": true,
+    "constraints": [
+      {
+        "kind": "exchange_symmetry",
+        "status": "established",
+        "evidence_sha256": "a671d8db25ffe401b1ea18c0da30298815169a30fef2bc37dd24381d80de0898"
+      }
+    ]
+  },
+  "median_pair_rmse": 0.07921492721913945,
+  "functional_contract_passed": null,
+  "execution": "Read-only replay of actual exposed predecessor receipt; no new fit is claimed",
+  "id": "representation-753ac1b8436533bf72461657",
+  "configuration_sha256": "753ac1b8436533bf7246165743fe42f30edf5f4848854a259f4c26f5534b35a5",
+  "artifact_sha256": "1ed86723d79aaae02c969125e4fe6606927ed17b0466fcfda3c1dffa096b4831"
+}

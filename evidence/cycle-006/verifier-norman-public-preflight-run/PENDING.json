@@ -1,0 +1,48 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "verifier-norman-public-preflight-001",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/cycle006_confirm.py",
+    "--root",
+    ".",
+    "--manifest",
+    "evidence/cycle-006/prediction-nominations-001-run/artifacts/norman/ARM_MANIFEST.json",
+    "--output",
+    "evidence/cycle-006/verifier-norman-public-preflight-run/artifacts",
+    "--preflight-only"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/cycle006_confirm.py",
+    "--root",
+    ".",
+    "--manifest",
+    "evidence/cycle-006/prediction-nominations-001-run/artifacts/norman/ARM_MANIFEST.json",
+    "--output",
+    "evidence/cycle-006/verifier-norman-public-preflight-run/artifacts",
+    "--preflight-only"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/cycle006_confirm.py",
+    "--root",
+    ".",
+    "--manifest",
+    "evidence/cycle-006/prediction-nominations-001-run/artifacts/norman/ARM_MANIFEST.json",
+    "--output",
+    "evidence/cycle-006/verifier-norman-public-preflight-run/artifacts",
+    "--preflight-only"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 180,
+    "cpu_seconds": 100,
+    "memory_bytes": 4294967296,
+    "output_bytes": 20971520,
+    "storage_bytes": 104857600
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "pending"
+}

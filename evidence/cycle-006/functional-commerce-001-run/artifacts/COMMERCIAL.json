@@ -1,0 +1,2534 @@
+{
+  "schema": "agi-alpha/conditional-commerce006/v1",
+  "mode": "ENGINEERING_CONDITIONAL_QUALIFICATION_FIXTURE_ONLY",
+  "binding": {
+    "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+    "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+    "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+    "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+    "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+  },
+  "contract": {
+    "schema": "agi-alpha/conditional-functional-contract006/v1",
+    "scope": "source-bound-pilot-report-delivery",
+    "requirements": [
+      "artifact-identity",
+      "receipt-identity",
+      "verifier-source-identity",
+      "frozen-obligations-identity",
+      "independent-scoped-acceptance"
+    ],
+    "verifier_source": {
+      "path": "verification/cycle006_confirm.py",
+      "sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+    },
+    "functional_obligations": {
+      "path": "verification/cycle006_functional_obligations.json",
+      "sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048"
+    },
+    "scenario": {
+      "currency": "simulated-microUSD",
+      "unit_price": 2000000,
+      "opening_capital": 20000000,
+      "working_capital": 1000000,
+      "cost_per_admitted_case": {
+        "discovery_and_failed_search": 10000,
+        "inference": 10000,
+        "data_network_storage": 10000,
+        "construction_integration": 10000,
+        "verification_repair": 10000,
+        "delivery_fees": 10000,
+        "maintenance_support": 10000,
+        "refunds_and_terminal_obligations": 10000
+      }
+    },
+    "commercial_cohort_admitted": false
+  },
+  "source": {
+    "foundation": "MontrealAI/AGI-Alpha-Agent-v0",
+    "revision": "a6b2d869a7736e7c414d7d615d86c616c2f82615",
+    "pinned_sha256": {
+      "vendor/__init__.py": "be8bdfe2c1e80537aa8346db6e39112224381b56a853f94d460c00d29692db54",
+      "vendor/alpha_claim/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "vendor/alpha_claim/contracts.py": "3536b96c4b7ee46f9af7d807e02685aa55e42daae7f7c56b7e9029ca2cde0964",
+      "vendor/alpha_claim/protected_exchange.py": "7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272"
+    },
+    "adapter_sha256": "2fc529131885c75752dab8dbd77d85b5a36d4c0b43cb5e7e53286c997cc0a52f"
+  },
+  "functional_acceptance": {
+    "accepted": true,
+    "scope": "source-bound-pilot-report-delivery",
+    "receipt": {
+      "schema": "agi-alpha/functional-acceptance006/v1",
+      "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+      "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+      "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+      "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67",
+      "accepted": true,
+      "scope": "source-bound-pilot-report-delivery"
+    },
+    "not_scientific_advantage": true,
+    "not_buyer_demand": true
+  },
+  "all_scenario_cases_including_separate_liquidity_falsifier": [
+    {
+      "cohort": "same-artifact-cohort",
+      "scenario_category_costs_charged": true,
+      "id": "accepted",
+      "model_accepts": true,
+      "price": 2000000,
+      "buyer": "model-funded",
+      "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+      "real_buyer": false
+    },
+    {
+      "cohort": "same-artifact-cohort",
+      "scenario_category_costs_charged": true,
+      "id": "nonpayment",
+      "model_accepts": true,
+      "price": 2000000,
+      "buyer": "model-unfunded",
+      "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+      "real_buyer": false
+    },
+    {
+      "cohort": "same-artifact-cohort",
+      "scenario_category_costs_charged": true,
+      "id": "dispute",
+      "model_accepts": false,
+      "price": 2000000,
+      "buyer": "model-funded",
+      "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+      "real_buyer": false
+    },
+    {
+      "cohort": "same-artifact-cohort",
+      "scenario_category_costs_charged": true,
+      "id": "interrupted",
+      "model_accepts": true,
+      "price": 2000000,
+      "buyer": "model-funded",
+      "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+      "real_buyer": false
+    },
+    {
+      "cohort": "same-artifact-cohort",
+      "scenario_category_costs_charged": true,
+      "id": "correlated-0",
+      "model_accepts": true,
+      "price": 2000000,
+      "buyer": "model-funded",
+      "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+      "real_buyer": false
+    },
+    {
+      "cohort": "same-artifact-cohort",
+      "scenario_category_costs_charged": true,
+      "id": "correlated-1",
+      "model_accepts": true,
+      "price": 2000000,
+      "buyer": "model-funded",
+      "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+      "real_buyer": false
+    },
+    {
+      "cohort": "same-artifact-cohort",
+      "scenario_category_costs_charged": true,
+      "id": "correlated-2",
+      "model_accepts": true,
+      "price": 2000000,
+      "buyer": "model-funded",
+      "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+      "real_buyer": false
+    },
+    {
+      "cohort": "liquidity-deferral",
+      "scenario_category_costs_charged": false,
+      "id": "liquidity-positive",
+      "model_accepts": true,
+      "price": 2000000,
+      "buyer": "model-funded",
+      "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+      "real_buyer": false
+    },
+    {
+      "cohort": "liquidity-deferral",
+      "scenario_category_costs_charged": false,
+      "id": "liquidity-restricted",
+      "model_accepts": true,
+      "price": 1800000,
+      "buyer": "model-funded",
+      "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+      "real_buyer": false
+    }
+  ],
+  "checks": [
+    {
+      "name": "download-before-acceptance",
+      "passed": true,
+      "error": "PermissionError",
+      "detail": "assured simulated release required"
+    },
+    {
+      "name": "download-before-payment-clearance",
+      "passed": true,
+      "error": "PermissionError",
+      "detail": "assured simulated release required"
+    },
+    {
+      "name": "forged-clearing-receipt",
+      "passed": true,
+      "error": "ValueError",
+      "detail": "unbound or forged provider observation"
+    },
+    {
+      "name": "positive-cleared-settlement-idempotent",
+      "passed": true
+    },
+    {
+      "name": "wrong-buyer-download",
+      "passed": true,
+      "error": "PermissionError",
+      "detail": "assured simulated release required"
+    },
+    {
+      "name": "nonpayment",
+      "passed": true,
+      "error": "ValueError",
+      "detail": "buyer funds or collateral unavailable"
+    },
+    {
+      "name": "buyer-model-dispute",
+      "passed": true,
+      "error": "ValueError",
+      "detail": "independent acceptance failed"
+    },
+    {
+      "name": "duplicate-refund-idempotent",
+      "passed": true
+    },
+    {
+      "name": "funding-interrupted-before-commit",
+      "passed": true,
+      "error": "InterruptedError",
+      "detail": "before transaction commit"
+    },
+    {
+      "name": "settlement-interrupted-before-commit",
+      "passed": true,
+      "error": "InterruptedError",
+      "detail": "before transaction commit"
+    },
+    {
+      "name": "durable-funding-and-release-recovery",
+      "passed": true
+    },
+    {
+      "name": "correlated-accepted-delivery-refund-cluster",
+      "passed": true
+    },
+    {
+      "name": "breach-stops-investment",
+      "passed": true,
+      "error": "ValueError",
+      "detail": "earned funds or exposure qualification unavailable"
+    },
+    {
+      "name": "profit-without-liquidity-defers-investment",
+      "passed": true,
+      "error": "ValueError",
+      "detail": "earned funds or exposure qualification unavailable"
+    },
+    {
+      "name": "restricted-deposit-release-not-operating-revenue",
+      "passed": true
+    }
+  ],
+  "all_qualification_checks_passed": true,
+  "semantic_checks": [
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": false,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    },
+    {
+      "accepted": true,
+      "decisive": true,
+      "scope": "CONDITIONAL_FUNCTIONAL_DELIVERY_QUALIFICATION_ONLY",
+      "commercial_acceptance": false,
+      "authority": {
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "contract_sha256": "21e7e2285077629eb4abaa591fd392a84de661ce243fb8585282a16ea66e4a91",
+        "receipt_sha256": "77382926f0243933b1eddd832a30591bea620329e4b3bf4396e9208ffae88635",
+        "functional_obligations_sha256": "cea4c6d32bdf86ec0c2359c2d6afe4b2b92dd15876632b6d4e0cde6ff8b3e048",
+        "verifier_source_sha256": "1200a137264df0da160dabe4de144e6cb247840a8dd91eb43a2ceddfa553ef67"
+      }
+    }
+  ],
+  "snapshots": {
+    "primary_conditional_qualification": {
+      "snapshot": {
+        "reservedInvestment": 0,
+        "revenue": 10000000,
+        "expenses": 560000,
+        "recoveryIncome": 0,
+        "profit": 9440000,
+        "cash": 29440000,
+        "collections": 10000000,
+        "expensePaid": 560000,
+        "payables": 0,
+        "custodyRestricted": 0,
+        "custodyReserve": 0,
+        "tailReserve": 11000000,
+        "workingCapital": 1000000,
+        "available": 17440000,
+        "unrestrictedEarned": 9440000,
+        "strictEarnedControl": 0,
+        "equityProtectionBacking": 12000000,
+        "earnedProtectionBacking": 0,
+        "netEarnedAfterIncurredObligations": 9440000,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "conditionalEarned": 8440000,
+        "investmentStopped": false,
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+      },
+      "trades": [
+        {
+          "id": "accepted",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "released",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "correlated-0",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "released",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "correlated-1",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "released",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "correlated-2",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "released",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "dispute",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "refunded",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": null
+        },
+        {
+          "id": "interrupted",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "released",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "nonpayment",
+          "buyer": "model-unfunded",
+          "price": "2000000",
+          "state": "cancelled",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": null
+        }
+      ],
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "model-funded",
+          "kind": "buyer_provision",
+          "amount": "100000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "model-unfunded",
+          "kind": "buyer_provision",
+          "amount": "0"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 4,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 5,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 6,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 7,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 8,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 9,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 10,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 11,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 12,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 13,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 14,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 15,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 16,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 17,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 18,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 19,
+          "order_id": "accepted",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 20,
+          "order_id": "accepted",
+          "kind": "collections",
+          "amount": "2000000"
+        },
+        {
+          "seq": 21,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 22,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 23,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 24,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 25,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 26,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 27,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 28,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 29,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 30,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 31,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 32,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 33,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 34,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 35,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 36,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 37,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 38,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 39,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 40,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 41,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 42,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 43,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 44,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 45,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 46,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 47,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 48,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 49,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 50,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 51,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 52,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 53,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 54,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 55,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 56,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 57,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 58,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 59,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 60,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 61,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 62,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 63,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 64,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 65,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 66,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 67,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 68,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 69,
+          "order_id": "interrupted",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 70,
+          "order_id": "interrupted",
+          "kind": "collections",
+          "amount": "2000000"
+        },
+        {
+          "seq": 71,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 72,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 73,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 74,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 75,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 76,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 77,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 78,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 79,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 80,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 81,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 82,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 83,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 84,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 85,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 86,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 87,
+          "order_id": "correlated-0",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 88,
+          "order_id": "correlated-0",
+          "kind": "collections",
+          "amount": "2000000"
+        },
+        {
+          "seq": 89,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 90,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 91,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 92,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 93,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 94,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 95,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 96,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 97,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 98,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 99,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 100,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 101,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 102,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 103,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 104,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 105,
+          "order_id": "correlated-1",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 106,
+          "order_id": "correlated-1",
+          "kind": "collections",
+          "amount": "2000000"
+        },
+        {
+          "seq": 107,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 108,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 109,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 110,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 111,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 112,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 113,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 114,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 115,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 116,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 117,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 118,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 119,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 120,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 121,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 122,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 123,
+          "order_id": "correlated-2",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 124,
+          "order_id": "correlated-2",
+          "kind": "collections",
+          "amount": "2000000"
+        }
+      ],
+      "event_count": 81,
+      "source_receipt_count": 11
+    },
+    "correlated_reversal_stress": {
+      "snapshot": {
+        "reservedInvestment": 0,
+        "revenue": 0,
+        "expenses": 560000,
+        "recoveryIncome": 0,
+        "profit": -560000,
+        "cash": 19440000,
+        "collections": 0,
+        "expensePaid": 560000,
+        "payables": 0,
+        "custodyRestricted": 0,
+        "custodyReserve": 0,
+        "tailReserve": 0,
+        "workingCapital": 1000000,
+        "available": 18440000,
+        "unrestrictedEarned": 0,
+        "strictEarnedControl": 0,
+        "equityProtectionBacking": 1000000,
+        "earnedProtectionBacking": 0,
+        "netEarnedAfterIncurredObligations": -560000,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "conditionalEarned": 0,
+        "investmentStopped": true,
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+      },
+      "trades": [
+        {
+          "id": "accepted",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "breached",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "correlated-0",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "breached",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "correlated-1",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "breached",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "correlated-2",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "breached",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "dispute",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "refunded",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": null
+        },
+        {
+          "id": "interrupted",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "breached",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "nonpayment",
+          "buyer": "model-unfunded",
+          "price": "2000000",
+          "state": "cancelled",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": null
+        }
+      ],
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "model-funded",
+          "kind": "buyer_provision",
+          "amount": "100000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "model-unfunded",
+          "kind": "buyer_provision",
+          "amount": "0"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 4,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 5,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 6,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 7,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 8,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 9,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 10,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 11,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 12,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 13,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 14,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 15,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 16,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 17,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 18,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 19,
+          "order_id": "accepted",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 20,
+          "order_id": "accepted",
+          "kind": "collections",
+          "amount": "2000000"
+        },
+        {
+          "seq": 21,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 22,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 23,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 24,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 25,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 26,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 27,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 28,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 29,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 30,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 31,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 32,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 33,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 34,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 35,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 36,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 37,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 38,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 39,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 40,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 41,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 42,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 43,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 44,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 45,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 46,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 47,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 48,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 49,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 50,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 51,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 52,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 53,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 54,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 55,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 56,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 57,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 58,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 59,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 60,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 61,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 62,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 63,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 64,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 65,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 66,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 67,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 68,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 69,
+          "order_id": "interrupted",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 70,
+          "order_id": "interrupted",
+          "kind": "collections",
+          "amount": "2000000"
+        },
+        {
+          "seq": 71,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 72,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 73,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 74,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 75,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 76,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 77,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 78,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 79,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 80,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 81,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 82,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 83,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 84,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 85,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 86,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 87,
+          "order_id": "correlated-0",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 88,
+          "order_id": "correlated-0",
+          "kind": "collections",
+          "amount": "2000000"
+        },
+        {
+          "seq": 89,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 90,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 91,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 92,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 93,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 94,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 95,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 96,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 97,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 98,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 99,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 100,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 101,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 102,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 103,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 104,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 105,
+          "order_id": "correlated-1",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 106,
+          "order_id": "correlated-1",
+          "kind": "collections",
+          "amount": "2000000"
+        },
+        {
+          "seq": 107,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 108,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 109,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 110,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 111,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 112,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 113,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 114,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 115,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 116,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 117,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 118,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 119,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 120,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 121,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "10000"
+        },
+        {
+          "seq": 122,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "10000"
+        },
+        {
+          "seq": 123,
+          "order_id": "correlated-2",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 124,
+          "order_id": "correlated-2",
+          "kind": "collections",
+          "amount": "2000000"
+        },
+        {
+          "seq": 125,
+          "order_id": "accepted",
+          "kind": "contra_revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 126,
+          "order_id": "accepted",
+          "kind": "reversal_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 127,
+          "order_id": "accepted",
+          "kind": "breach",
+          "amount": "1"
+        },
+        {
+          "seq": 128,
+          "order_id": "interrupted",
+          "kind": "contra_revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 129,
+          "order_id": "interrupted",
+          "kind": "reversal_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 130,
+          "order_id": "interrupted",
+          "kind": "breach",
+          "amount": "1"
+        },
+        {
+          "seq": 131,
+          "order_id": "correlated-0",
+          "kind": "contra_revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 132,
+          "order_id": "correlated-0",
+          "kind": "reversal_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 133,
+          "order_id": "correlated-0",
+          "kind": "breach",
+          "amount": "1"
+        },
+        {
+          "seq": 134,
+          "order_id": "correlated-1",
+          "kind": "contra_revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 135,
+          "order_id": "correlated-1",
+          "kind": "reversal_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 136,
+          "order_id": "correlated-1",
+          "kind": "breach",
+          "amount": "1"
+        },
+        {
+          "seq": 137,
+          "order_id": "correlated-2",
+          "kind": "contra_revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 138,
+          "order_id": "correlated-2",
+          "kind": "reversal_paid",
+          "amount": "2000000"
+        },
+        {
+          "seq": 139,
+          "order_id": "correlated-2",
+          "kind": "breach",
+          "amount": "1"
+        }
+      ],
+      "event_count": 86,
+      "source_receipt_count": 11
+    },
+    "positive_profit_but_no_unrestricted_cash": {
+      "snapshot": {
+        "reservedInvestment": 0,
+        "revenue": 2000000,
+        "expenses": 100000,
+        "recoveryIncome": 0,
+        "profit": 1900000,
+        "cash": 4000000,
+        "collections": 2000000,
+        "expensePaid": 100000,
+        "payables": 0,
+        "custodyRestricted": 1800000,
+        "custodyReserve": 1800000,
+        "tailReserve": 2200000,
+        "workingCapital": 0,
+        "available": 0,
+        "unrestrictedEarned": 0,
+        "strictEarnedControl": 0,
+        "equityProtectionBacking": 2100000,
+        "earnedProtectionBacking": 1900000,
+        "netEarnedAfterIncurredObligations": 1900000,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "conditionalEarned": 100000,
+        "investmentStopped": false,
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+      },
+      "trades": [
+        {
+          "id": "liquidity-positive",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "released",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "liquidity-restricted",
+          "buyer": "model-funded",
+          "price": "1800000",
+          "state": "funded",
+          "custody": 1,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": null
+        }
+      ],
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "model-funded",
+          "kind": "buyer_provision",
+          "amount": "10000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "100000"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "100000"
+        },
+        {
+          "seq": 4,
+          "order_id": "liquidity-positive",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 5,
+          "order_id": "liquidity-positive",
+          "kind": "collections",
+          "amount": "2000000"
+        }
+      ],
+      "event_count": 7,
+      "source_receipt_count": 3
+    },
+    "refundable_custody_released_not_revenue": {
+      "snapshot": {
+        "reservedInvestment": 0,
+        "revenue": 2000000,
+        "expenses": 100000,
+        "recoveryIncome": 0,
+        "profit": 1900000,
+        "cash": 4000000,
+        "collections": 2000000,
+        "expensePaid": 100000,
+        "payables": 0,
+        "custodyRestricted": 0,
+        "custodyReserve": 0,
+        "tailReserve": 2200000,
+        "workingCapital": 0,
+        "available": 1800000,
+        "unrestrictedEarned": 1800000,
+        "strictEarnedControl": 0,
+        "equityProtectionBacking": 2100000,
+        "earnedProtectionBacking": 100000,
+        "netEarnedAfterIncurredObligations": 1900000,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "conditionalEarned": 1900000,
+        "investmentStopped": false,
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+      },
+      "trades": [
+        {
+          "id": "liquidity-positive",
+          "buyer": "model-funded",
+          "price": "2000000",
+          "state": "released",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": "e2ad19622fbe3483da401414f2f724ee86788409e367a925d3bc4b152903199a"
+        },
+        {
+          "id": "liquidity-restricted",
+          "buyer": "model-funded",
+          "price": "1800000",
+          "state": "refunded",
+          "custody": 0,
+          "refund_due": "0",
+          "compensation_due": "0",
+          "artifact_hash": null
+        }
+      ],
+      "journal": [
+        {
+          "seq": 1,
+          "order_id": "model-funded",
+          "kind": "buyer_provision",
+          "amount": "10000000"
+        },
+        {
+          "seq": 2,
+          "order_id": "",
+          "kind": "expense",
+          "amount": "100000"
+        },
+        {
+          "seq": 3,
+          "order_id": "",
+          "kind": "expense_paid",
+          "amount": "100000"
+        },
+        {
+          "seq": 4,
+          "order_id": "liquidity-positive",
+          "kind": "revenue",
+          "amount": "2000000"
+        },
+        {
+          "seq": 5,
+          "order_id": "liquidity-positive",
+          "kind": "collections",
+          "amount": "2000000"
+        }
+      ],
+      "event_count": 8,
+      "source_receipt_count": 3
+    }
+  },
+  "conditional_frontier": {
+    "units": "simulated-microUSD; scenario prices and cost entries are engineering inputs, not market estimates",
+    "illustrative_collections": 10000000,
+    "illustrative_costs_charged": 560000,
+    "unpriced_complete_lifecycle_cost_K": null,
+    "conditional_positive_profit_iff": "K < illustrative_collections - illustrative_costs_charged",
+    "illustrative_K_upper_threshold": 9440000,
+    "conditional_participation": "Unmeasured. Include zero participation and free qualified conventional self-service. Public core prices are functionally different and do not set this fixture price.",
+    "same_cohort_baseline_complete_cost_profit": null,
+    "intervention_complete_cost_profit": null,
+    "negative_to_positive_boundary_crossing": "NOT_ESTABLISHED",
+    "nonentry_incremental_no_new_commitment_profit": 0,
+    "nonentry_complete_profit": null,
+    "best_outside_option_value": null,
+    "AGI_ALPHA_value_capture": "UNKNOWN",
+    "commercial_admitted_inputs": 0,
+    "accounting_scope": "same-artifact-cohort only; liquidity-deferral is a separate falsifier and is never pooled into this cohort profit",
+    "all_fixture_admitted_cases": [
+      {
+        "cohort": "same-artifact-cohort",
+        "scenario_category_costs_charged": true,
+        "id": "accepted",
+        "model_accepts": true,
+        "price": 2000000,
+        "buyer": "model-funded",
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "real_buyer": false
+      },
+      {
+        "cohort": "same-artifact-cohort",
+        "scenario_category_costs_charged": true,
+        "id": "nonpayment",
+        "model_accepts": true,
+        "price": 2000000,
+        "buyer": "model-unfunded",
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "real_buyer": false
+      },
+      {
+        "cohort": "same-artifact-cohort",
+        "scenario_category_costs_charged": true,
+        "id": "dispute",
+        "model_accepts": false,
+        "price": 2000000,
+        "buyer": "model-funded",
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "real_buyer": false
+      },
+      {
+        "cohort": "same-artifact-cohort",
+        "scenario_category_costs_charged": true,
+        "id": "interrupted",
+        "model_accepts": true,
+        "price": 2000000,
+        "buyer": "model-funded",
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "real_buyer": false
+      },
+      {
+        "cohort": "same-artifact-cohort",
+        "scenario_category_costs_charged": true,
+        "id": "correlated-0",
+        "model_accepts": true,
+        "price": 2000000,
+        "buyer": "model-funded",
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "real_buyer": false
+      },
+      {
+        "cohort": "same-artifact-cohort",
+        "scenario_category_costs_charged": true,
+        "id": "correlated-1",
+        "model_accepts": true,
+        "price": 2000000,
+        "buyer": "model-funded",
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "real_buyer": false
+      },
+      {
+        "cohort": "same-artifact-cohort",
+        "scenario_category_costs_charged": true,
+        "id": "correlated-2",
+        "model_accepts": true,
+        "price": 2000000,
+        "buyer": "model-funded",
+        "artifact_sha256": "736977073b4bd54a677e08cba514136a35b571e2e3497532a31c3587417e9f56",
+        "real_buyer": false
+      }
+    ],
+    "cost_categories": {
+      "discovery_and_failed_search": {
+        "actual_measured_monetary_cost": null,
+        "scenario_only_per_case_charge": 10000
+      },
+      "inference": {
+        "actual_measured_monetary_cost": null,
+        "scenario_only_per_case_charge": 10000
+      },
+      "data_network_storage": {
+        "actual_measured_monetary_cost": null,
+        "scenario_only_per_case_charge": 10000
+      },
+      "construction_integration": {
+        "actual_measured_monetary_cost": null,
+        "scenario_only_per_case_charge": 10000
+      },
+      "verification_repair": {
+        "actual_measured_monetary_cost": null,
+        "scenario_only_per_case_charge": 10000
+      },
+      "delivery_fees": {
+        "actual_measured_monetary_cost": null,
+        "scenario_only_per_case_charge": 10000
+      },
+      "maintenance_support": {
+        "actual_measured_monetary_cost": null,
+        "scenario_only_per_case_charge": 10000
+      },
+      "refunds_and_terminal_obligations": {
+        "actual_measured_monetary_cost": null,
+        "scenario_only_per_case_charge": 10000
+      }
+    }
+  },
+  "commercial_decision": {
+    "admitted_cohort": null,
+    "actual_receipts": 0,
+    "commercially_qualified_simulated_receipts": 0,
+    "available_commercial_earned_funds": 0,
+    "complete_cost_surplus": "UNKNOWN",
+    "investment": "DEFER_NO_QUALIFIED_COMMERCIAL_EARNINGS",
+    "funded_successor": "NOT_ESTABLISHED",
+    "live_commercial_success": "NOT_ESTABLISHED"
+  },
+  "resources": {
+    "wall_seconds": 3.549884492000274,
+    "cpu_seconds": 2.7660179460000003,
+    "peak_rss_kib": 20816,
+    "database_bytes": 393216,
+    "external_model_calls": 0,
+    "complete_monetary_cost": null
+  },
+  "limits": [
+    "The external contract and receipt hashes are a trusted caller/independent-verifier boundary; hashes authenticate identity, not factual correctness or external buyer authority.",
+    "Source-hash checks do not turn a forged externally supplied authority hash into a real signature. No actual buyer-authentication or payment provider is integrated.",
+    "The same artifact is functionally accepted/released only inside an explicitly artificial local scenario. Its qualification revenue/profit/cash is NEVER commercial earnings.",
+    "No real provider, customer outreach, spending, security change or transfer. The existing source-pinned Alpha ledger is reused, not replaced.",
+    "All scenarios are fixed before outcome; the stress and liquidity cases are preserved beside the favorable clearing path.",
+    "Historical inference, support and full lifecycle costs remain unknown; no complete-cost commercial profitability or funded compounding follows."
+  ]
+}

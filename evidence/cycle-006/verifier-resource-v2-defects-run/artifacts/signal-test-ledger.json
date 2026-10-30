@@ -1,0 +1,20 @@
+{
+  "schema": "agi-alpha/prospective-resources006/v1",
+  "capacity_cpu_seconds": 5400,
+  "capacity_storage_bytes": 6442450944,
+  "state": "active",
+  "runs": {
+    "signal-test": {
+      "state": "pending",
+      "limits": {
+        "wall_seconds": 90,
+        "cpu_seconds": 2,
+        "memory_bytes": 1073741824,
+        "output_bytes": 20000,
+        "storage_bytes": 50000
+      },
+      "budget_cpu_seconds": 2,
+      "budget_storage_bytes": 50000
+    }
+  }
+}

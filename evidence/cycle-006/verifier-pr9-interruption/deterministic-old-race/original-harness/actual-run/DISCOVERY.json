@@ -1,0 +1,165 @@
+{
+  "target": {
+    "id": "legacy-evidence-initialization",
+    "nodes": [
+      {
+        "id": "exception_scope",
+        "kind": "guard",
+        "unit": "event"
+      },
+      {
+        "id": "started_write",
+        "kind": "effect",
+        "unit": "event"
+      },
+      {
+        "id": "worker",
+        "kind": "action",
+        "unit": "event"
+      }
+    ],
+    "relations": [
+      [
+        "exception_scope",
+        "protects",
+        "started_write"
+      ],
+      [
+        "started_write",
+        "precedes",
+        "worker"
+      ]
+    ],
+    "conditions": {
+      "failure": "catchable_exception",
+      "effects": "exclusive_local_output"
+    },
+    "changed_assumptions": [
+      "Database durability is not transferred; this target covers catchable process interruption only"
+    ]
+  },
+  "donors": [
+    {
+      "id": "transaction-before-mutation",
+      "domain": "database transaction discipline",
+      "provenance": "developer supplied abstract failure-atomicity mechanism, not autonomous new discovery",
+      "nodes": [
+        {
+          "id": "transaction",
+          "kind": "guard",
+          "unit": "event"
+        },
+        {
+          "id": "prepare",
+          "kind": "effect",
+          "unit": "event"
+        },
+        {
+          "id": "apply",
+          "kind": "action",
+          "unit": "event"
+        }
+      ],
+      "relations": [
+        [
+          "transaction",
+          "protects",
+          "prepare"
+        ],
+        [
+          "prepare",
+          "precedes",
+          "apply"
+        ]
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output"
+      }
+    },
+    {
+      "id": "similar-labels-incompatible-causality",
+      "domain": "misleading surface labels",
+      "nodes": [
+        {
+          "id": "transaction",
+          "kind": "guard",
+          "unit": "event"
+        },
+        {
+          "id": "prepare",
+          "kind": "effect",
+          "unit": "event"
+        },
+        {
+          "id": "apply",
+          "kind": "action",
+          "unit": "event"
+        }
+      ],
+      "relations": [
+        [
+          "prepare",
+          "protects",
+          "transaction"
+        ],
+        [
+          "apply",
+          "precedes",
+          "prepare"
+        ]
+      ],
+      "conditions": {
+        "failure": "catchable_exception",
+        "effects": "exclusive_local_output"
+      }
+    }
+  ],
+  "mappings": [
+    {
+      "source": "transaction-before-mutation",
+      "target": "legacy-evidence-initialization",
+      "correspondences": [
+        {
+          "transaction": "exception_scope",
+          "prepare": "started_write",
+          "apply": "worker"
+        }
+      ],
+      "preserved_relations": [
+        [
+          "transaction",
+          "protects",
+          "prepare"
+        ],
+        [
+          "prepare",
+          "precedes",
+          "apply"
+        ]
+      ],
+      "changed_assumptions": [
+        "Database durability is not transferred; this target covers catchable process interruption only"
+      ],
+      "unresolved_mismatches": [],
+      "applicable": true,
+      "origin": "developer supplied donor representation; exhaustive structural matcher selected mapping",
+      "prediction": "Moving the exception scope before initialization preserves an incomplete marker on initialization interruption",
+      "expected_benefit": "Evidence completeness under declared process interruption boundary; no economic claim"
+    },
+    {
+      "source": "similar-labels-incompatible-causality",
+      "target": "legacy-evidence-initialization",
+      "correspondences": [],
+      "preserved_relations": [],
+      "changed_assumptions": [
+        "Database durability is not transferred; this target covers catchable process interruption only"
+      ],
+      "unresolved_mismatches": [],
+      "applicable": false,
+      "origin": "developer supplied donor representation; exhaustive structural matcher selected mapping",
+      "prediction": "Moving the exception scope before initialization preserves an incomplete marker on initialization interruption",
+      "expected_benefit": "Evidence completeness under declared process interruption boundary; no economic claim"
+    }
+  ]
+}

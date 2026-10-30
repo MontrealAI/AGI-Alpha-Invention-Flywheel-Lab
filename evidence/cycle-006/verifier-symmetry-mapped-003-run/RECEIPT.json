@@ -1,0 +1,41 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v1",
+  "run_id": "verifier-symmetry-repair-mapped-003",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "verification/cycle006_symmetry_adjudication.py",
+    "--root",
+    ".",
+    "--artifact",
+    "evidence/cycle-006/norman-repair-constructor-002b-mapped-run/artifacts/ARTIFACT.json",
+    "--source-sha256",
+    "3a4e642905027fc4f7a67e6ef55ef27f34c6fbfe8b3da3c97f041d9344c98c80",
+    "--output",
+    "evidence/cycle-006/verifier-symmetry-mapped-003-run/artifacts",
+    "--repaired"
+  ],
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 60,
+    "cpu_seconds": 20,
+    "memory_bytes": 1073741824,
+    "output_bytes": 10485760,
+    "storage_bytes": 20971520
+  },
+  "wrapper_sha256": "58171898be156b4f28abc7ff2fc586ba221a7ecb7800c22180176bca8433798c",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "wall_seconds": 1.9283821759963757,
+  "supervisor_cpu_seconds": 0.295213293,
+  "waited_cpu_seconds": 1.747166,
+  "descendant_survivors": false,
+  "output_bytes": 43888,
+  "logs": {
+    "stdout.log": "d508b838dc1d6751c57062685e301a287d33bf403b87ddbb158fb5eb8bc5bc69",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

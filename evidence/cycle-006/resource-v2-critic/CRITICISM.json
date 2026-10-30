@@ -1,0 +1,38 @@
+{
+  "schema": "agi-alpha/criticism006/v1",
+  "claim_challenged": "Resource-v2 bounded supervisor completes conservatively after interruptions and output overrun.",
+  "source": {
+    "path": "experiments/resource006.py",
+    "sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5"
+  },
+  "defects": [
+    {
+      "id": "P1-supervisor-SIGTERM",
+      "evidence": {
+        "path": "evidence/cycle-006/verifier-resource-v2-defects-final-run/artifacts/SIGTERM_ADJUDICATION.json",
+        "sha256": "c445a248e85146c7aa119e1b7dd07d4f71e8adde0dd704a18757b46f1c551bbd"
+      },
+      "reproduction": "Run the standalone original wrapper around a real Python worker that records its PID then sleeps. After the worker marker and wrapper PENDING exist, send actual SIGTERM only to the wrapper supervisor. Observe supervisor returncode, exact worker namespace state, and receipt before separately killing/reaping the test worker.",
+      "expected_failure": "Supervisor exits -15, leaves real sleeping worker and no final receipt; pending reservation survives.",
+      "severity": "high: owned worker outlives supervisor and bounded evidence is incomplete",
+      "uncertainty": "Established on this Linux/Python installation; external host/crash behavior unqualified. Initial PID/proc mismatch observation was inconclusive, not evidence."
+    },
+    {
+      "id": "P2-fast-exit-storage",
+      "evidence": {
+        "path": "evidence/cycle-006/verifier-resource-v2-defects-run/artifacts/FAST_EXIT_STORAGE_ADJUDICATION.json",
+        "sha256": "edfa1b7770d0a9e61378d897363b197752741c8f75bb036fd4d2af9221e8fb04"
+      },
+      "reproduction": "Run unchanged wrapper with output_bytes5000, storage_bytes10000 around a real Python command writing three independent4000byte files then immediately exiting. Preserve every result: scheduler may observe overrun before exit, but an exit observed first skips the usage check.",
+      "expected_failure": "Returned receipt says complete despite final output_bytes above10000 and settlement blocks ledger.",
+      "severity": "high: a disqualified over-budget run is certified complete",
+      "uncertainty": "Race is not universal. Initial real run established complete15676B; later actual run correctly interrupted15731B. Both remain preserved."
+    }
+  ],
+  "cost": {
+    "common_cpu_reservation_seconds": 20,
+    "actual_waited_cpu_seconds_sum": 0.618335,
+    "complete_monetary_cost": null
+  },
+  "not_seeded_candidate_defects": true
+}

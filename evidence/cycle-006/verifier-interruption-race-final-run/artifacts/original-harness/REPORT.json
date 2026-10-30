@@ -1,0 +1,22 @@
+{
+  "schema": "agi-alpha-cycle004-active-worker-interruption/v1",
+  "runner_sha256": "8cd5a0acfb20f98f9c95ec9126b3a9083ca3d61c924521c5a64a0deb4acdcfbf",
+  "pid_namespace_note": "No proc PID assumption: verifier is a Linux child subreaper and reaps adopted worker descendants after parent exit.",
+  "triggered_after_worker_sandbox_receipt_before_report": false,
+  "parent_returncode": 1,
+  "adopted_descendants_reaped": [],
+  "no_children_after_reaping": true,
+  "interrupted_marker": true,
+  "complete_absent": true,
+  "restart_refused_unchanged": true,
+  "files_sha256": {
+    "INTERRUPTED.json": "14e7e40db6e3a4a5102cecb7571ac7005d95b0f2fb0e85ef2840b8f504e34107",
+    "WORKER.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "STARTED.json": "5be8dd8270a62a5858f07e19dbcc8bf6ff970458843ba03d408226faca5c7070"
+  },
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/tmp/cycle006-verifier-old004/run_cycle.py\", line 192, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/tmp/cycle006-verifier-old004/run_cycle.py\", line 177, in main\n    result = subprocess.run([sys.executable, '-I', str(ROOT / 'run_cycle.py'), '--worker', '--output', str(output)],\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 1958, in _execute_child\n    raise child_exception_type(err_msg)\nsubprocess.SubprocessError: Exception occurred in preexec_fn.\n",
+  "restart_stderr": "Traceback (most recent call last):\n  File \"/tmp/cycle006-verifier-old004/run_cycle.py\", line 192, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/tmp/cycle006-verifier-old004/run_cycle.py\", line 173, in main\n    output.mkdir(parents=True, exist_ok=False)\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py\", line 1311, in mkdir\n    os.mkdir(self, mode)\nFileExistsError: [Errno 17] File exists: '/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/verifier-interruption-race-final-run/artifacts/original-harness/actual-run'\n",
+  "passed": false,
+  "scope": "SIGINT sent to reproduction parent after real worker wrote sandbox receipt but before its report. Adopted descendants are reaped and ECHILD proves none remain; Linux procedural qualification, not host-crash durability."
+}

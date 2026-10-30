@@ -8,7 +8,7 @@ permissions:
 jobs:
   qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -20,11 +20,7 @@ jobs:
           python-version: '3.12'
           cache: pip
       - run: |
-          if test -f requirements-cycle004.txt; then
-            python -m pip install -r requirements-cycle004.txt
-          else
-            python -m pip install -r requirements.txt
-          fi
+          python -m pip install -r requirements-cycle004.txt -r requirements-perturb006.txt
       - name: Source-matched tests and actual connected replay
         run: |
           python -m unittest discover -s tests -v
@@ -56,12 +52,33 @@ jobs:
           python "$RUNNER_TEMP/frozen-cycle-004/run_cycle.py" --output "$RUNNER_TEMP/connected-cycle-004"
           python "$RUNNER_TEMP/frozen-cycle-004/verification/cycle004_probe_runner.py" --runner "$RUNNER_TEMP/frozen-cycle-004/run_cycle.py" --output "$RUNNER_TEMP/cycle004-initialization"
           python "$RUNNER_TEMP/frozen-cycle-004/verification/cycle004_completion.py" --root "$RUNNER_TEMP/frozen-cycle-004" --output "$RUNNER_TEMP/cycle004-completion"
-          python "$RUNNER_TEMP/frozen-cycle-004/verification/cycle004_active_interrupt.py" --root "$RUNNER_TEMP/frozen-cycle-004" --output "$RUNNER_TEMP/cycle004-active-interruption"
+          python verification/cycle006_active_interrupt.py --root "$RUNNER_TEMP/frozen-cycle-004" --output "$RUNNER_TEMP/cycle006-active-interruption-kernel-v3"
+          python verification/cycle006_interruption_race.py --root "$RUNNER_TEMP/frozen-cycle-004" --original-verifier "$RUNNER_TEMP/frozen-cycle-004/verification/cycle004_active_interrupt.py" --output "$RUNNER_TEMP/cycle006-original-verifier-scheduling-regression"
           python "$RUNNER_TEMP/frozen-cycle-004/verification/cycle004_fresh.py" --output "$RUNNER_TEMP/cycle004-exposed-regression"
           (cd "$RUNNER_TEMP/frozen-cycle-004" && python -m flywheel.metabolic_probe --output "$RUNNER_TEMP/cycle004-metabolic-replay")
-          python run_completion.py --output "$RUNNER_TEMP/mechanism-completion-005"
-          python verification/cycle005_wholepath.py --root . --output "$RUNNER_TEMP/cycle005-wholepath"
-          python verification/cycle005_p1_regression.py --root . --output "$RUNNER_TEMP/cycle005-p1-regression"
+          python -m flywheel.baseline005 --root . --output "$RUNNER_TEMP/frozen-cycle-005"
+          python "$RUNNER_TEMP/frozen-cycle-005/run_completion.py" --output "$RUNNER_TEMP/mechanism-completion-005"
+          python "$RUNNER_TEMP/frozen-cycle-005/verification/cycle005_wholepath.py" --root "$RUNNER_TEMP/frozen-cycle-005" --output "$RUNNER_TEMP/cycle005-wholepath"
+          python "$RUNNER_TEMP/frozen-cycle-005/verification/cycle005_p1_regression.py" --root "$RUNNER_TEMP/frozen-cycle-005" --output "$RUNNER_TEMP/cycle005-p1-regression"
+          python run_cycle006.py --output "$RUNNER_TEMP/consequential-cycle-006"
+          python scripts/check_cycle006_paper.py --output "$RUNNER_TEMP/cycle006-paper-identity.json"
+      - name: Retain executed qualification evidence including incomplete runs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: connected-qualification-evidence
+          path: |
+            ${{ runner.temp }}/campaign-replay
+            ${{ runner.temp }}/identity-probe
+            ${{ runner.temp }}/added-source-probe
+            ${{ runner.temp }}/bounds-probe
+            ${{ runner.temp }}/connected-cycle-004
+            ${{ runner.temp }}/cycle004-*
+            ${{ runner.temp }}/cycle006-*
+            ${{ runner.temp }}/mechanism-completion-005
+            ${{ runner.temp }}/cycle005-*
+            ${{ runner.temp }}/consequential-cycle-006
+          if-no-files-found: warn
   phase-code-qualification:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -123,7 +140,27 @@ jobs:
     needs: [qualify, phase-code-qualification]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Preserve the historical mechanism release before obsolete source checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          tag=mechanism-completion-20261029-r1
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo 'Existing mechanism-completion source and assets retained unchanged.'
+            exit 0
+          fi
+          echo 'Historical mechanism release is absent; refuse to recreate its tag from a different source.' >&2
+          exit 1
+  publish-perturbation-construction:
+    needs: [qualify, phase-code-qualification]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write
     steps:
@@ -132,48 +169,81 @@ jobs:
           ref: ${{ github.sha }}
           persist-credentials: false
           fetch-depth: 0
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: '3.12'
-          cache: pip
-      - run: python -m pip install -r requirements-cycle004.txt -r inventions/phase_codes/requirements.txt
-      - name: Build self-contained source and verify its clean extraction before upload
-        run: |
-          mkdir -p "$RUNNER_TEMP/mechanism-assets"
-          python -m flywheel.archive_v2 build . "$RUNNER_TEMP/mechanism-assets/AGI_ALPHA_Mechanism_Completion_005_source_evidence.zip"
-          python -m flywheel.archive_v2 extract "$RUNNER_TEMP/mechanism-assets/AGI_ALPHA_Mechanism_Completion_005_source_evidence.zip" "$RUNNER_TEMP/clean-mechanism-source"
-          cd "$RUNNER_TEMP/clean-mechanism-source"
-          test ! -e .git
-          test ! -e "$RUNNER_TEMP/.git"
-          python -m unittest discover -s tests -v
-          python -m unittest discover -s verification -v
-          python -m flywheel.legacy --root . --output "$RUNNER_TEMP/clean-frozen-cycle-001"
-          python "$RUNNER_TEMP/clean-frozen-cycle-001/reproduce.py" --output "$RUNNER_TEMP/clean-cycle-001-replay"
-          python "$RUNNER_TEMP/clean-frozen-cycle-001/verification/check_edition.py"
-          python -m flywheel.archive_v2 cycle004 . "$RUNNER_TEMP/clean-frozen-cycle-004"
-          python "$RUNNER_TEMP/clean-frozen-cycle-004/run_cycle.py" --output "$RUNNER_TEMP/clean-cycle-004-replay"
-          python run_completion.py --output "$RUNNER_TEMP/clean-mechanism-completion-005"
-          python verification/cycle005_wholepath.py --root . --output "$RUNNER_TEMP/clean-cycle005-wholepath"
-          python verification/cycle005_p1_regression.py --root . --output "$RUNNER_TEMP/clean-cycle005-p1-regression"
-          OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python inventions/phase_codes/reproduce.py --output "$RUNNER_TEMP/clean-phase-code-replay"
-          python verification/cycle005_archive_check.py --archive "$RUNNER_TEMP/mechanism-assets/AGI_ALPHA_Mechanism_Completion_005_source_evidence.zip" --output "$RUNNER_TEMP/clean-archive-independent-verification"
-          cp "$RUNNER_TEMP/clean-archive-independent-verification/REPORT.json" "$RUNNER_TEMP/mechanism-assets/ARCHIVE_QUALIFICATION.json"
-          (cd "$RUNNER_TEMP/mechanism-assets" && sha256sum AGI_ALPHA_Mechanism_Completion_005_source_evidence.zip ARCHIVE_QUALIFICATION.json > SHA256SUMS.txt)
-      - name: Publish a new experimental version without changing old tags or assets
+      - name: Check whether this uniquely versioned release already exists
+        id: existing
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          tag=mechanism-completion-20261029-r1
+          tag=perturbation-construction-20261029-r1
           if gh release view "$tag" >/dev/null 2>&1; then
-            echo 'Existing mechanism-completion version retained unchanged.'
-            exit 0
-          fi
-          if git show-ref --verify --quiet "refs/tags/$tag"; then
-            echo 'Tag exists without release; refuse reuse.' >&2
+            echo 'published=true' >> "$GITHUB_OUTPUT"
+            echo 'Existing cycle-006 release retained unchanged.'
+          elif git show-ref --verify --quiet "refs/tags/$tag"; then
+            echo 'Cycle-006 tag exists without release; refuse reuse.' >&2
             exit 1
+          else
+            echo 'published=false' >> "$GITHUB_OUTPUT"
           fi
-          gh release create "$tag" "$RUNNER_TEMP/mechanism-assets/"* --target "$GITHUB_SHA" --prerelease --title 'AGI ALPHA mechanism completion: executable transfer and acquired retention' --notes-file campaign/cycle-005/RELEASE_NOTES.md
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        if: steps.existing.outputs.published == 'false'
+        with:
+          python-version: '3.12'
+          cache: pip
+      - if: steps.existing.outputs.published == 'false'
+        run: python -m pip install -r requirements-cycle004.txt -r requirements-perturb006.txt
+      - name: Validate committed paper bindings and optionally compile its TeX separately
+        if: steps.existing.outputs.published == 'false'
+        run: |
+          python scripts/check_cycle006_paper.py --output "$RUNNER_TEMP/cycle006-paper-identity.json"
+          if command -v pdflatex >/dev/null 2>&1; then
+            mkdir -p "$RUNNER_TEMP/cycle006-tex-check"
+            cp docs/research/cycle-006.tex "$RUNNER_TEMP/cycle006-tex-check/"
+            (cd "$RUNNER_TEMP/cycle006-tex-check" && timeout 60 pdflatex -no-shell-escape -interaction=nonstopmode -halt-on-error cycle-006.tex && timeout 60 pdflatex -no-shell-escape -interaction=nonstopmode -halt-on-error cycle-006.tex)
+            echo 'CI compiled TeX separately; the hash-bound visually inspected supplied PDF is retained.'
+          else
+            echo 'No pdflatex in this runner: CI verifies the supplied compiled-PDF identity and visual-QA binding; it does not claim recompilation.'
+          fi
+      - name: Build source artifact and qualify validated and ordinary clean extractions
+        if: steps.existing.outputs.published == 'false'
+        run: |
+          mkdir -p "$RUNNER_TEMP/cycle006-assets"
+          archive="$RUNNER_TEMP/cycle006-assets/AGI_ALPHA_Perturbation_Construction_006_source_evidence.zip"
+          python -m flywheel.archive_v2 build . "$archive"
+          archive_sha256=$(sha256sum "$archive" | cut -d ' ' -f 1)
+          python verification/cycle006_archive_check.py --archive "$archive" --expected-sha256 "$archive_sha256" --output "$RUNNER_TEMP/cycle006-archive-qualification"
+          python -m flywheel.baseline005 --root . --output "$RUNNER_TEMP/cycle006-old005-source"
+          python "$RUNNER_TEMP/cycle006-old005-source/run_completion.py" --output "$RUNNER_TEMP/cycle006-old005-replay"
+          python "$RUNNER_TEMP/cycle006-old005-source/verification/cycle005_wholepath.py" --root "$RUNNER_TEMP/cycle006-old005-source" --output "$RUNNER_TEMP/cycle006-old005-wholepath"
+          python "$RUNNER_TEMP/cycle006-old005-source/verification/cycle005_p1_regression.py" --root "$RUNNER_TEMP/cycle006-old005-source" --output "$RUNNER_TEMP/cycle006-old005-p1"
+          cp docs/research/cycle-006.tex docs/research/cycle-006.pdf docs/research/cycle-006.html docs/research/cycle-006.md docs/research/cycle-006.inputs.json docs/research/cycle-006.build.json docs/research/PDF_QA_006.json "$RUNNER_TEMP/cycle006-assets/"
+          cp "$RUNNER_TEMP/cycle006-archive-qualification/REPORT.json" "$RUNNER_TEMP/cycle006-assets/ARCHIVE_QUALIFICATION.json"
+          python -m zipfile -c "$RUNNER_TEMP/cycle006-assets/CLEAN_ARCHIVE_RUNTIME_EVIDENCE.zip" "$RUNNER_TEMP/cycle006-archive-qualification"
+          python scripts/reassemble_evidence006.py --index evidence/cycle-006/reproduction-raw-packages-001/artifacts/connected-reproduction-001-parts/INDEX.json --output "$RUNNER_TEMP/cycle006-assets/connected-reproduction-001-complete-raw.zip" --expected-sha256 cb9e8608a89318f29bc309e3f0dea024793e56dcefdedeb16e87a4fb69bd4054
+          python scripts/reassemble_evidence006.py --index evidence/cycle-006/reproduction-raw-packages-001/artifacts/connected-reproduction-002-parts/INDEX.json --output "$RUNNER_TEMP/cycle006-assets/connected-reproduction-002-complete-raw.zip" --expected-sha256 2d4d4f6fb08a930a380828bd8dce6edb5175f103babc6f42b640fef7ba5bfe7d
+          (cd "$RUNNER_TEMP/cycle006-assets" && sha256sum * > SHA256SUMS.txt)
+      - name: Publish a new hash-identified experimental edition without rewriting old assets
+        if: steps.existing.outputs.published == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release create perturbation-construction-20261029-r1 "$RUNNER_TEMP/cycle006-assets/"* --target "$GITHUB_SHA" --prerelease --title 'AGI ALPHA: bounded perturbation construction and verified retained adaptations' --notes-file campaign/cycle-006/RELEASE_NOTES.md
+      - name: Retain new-edition qualification evidence including failures
+        if: always() && steps.existing.outputs.published == 'false'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: perturbation-construction-release-evidence
+          path: |
+            ${{ runner.temp }}/cycle006-assets
+            ${{ runner.temp }}/cycle006-archive-qualification
+            ${{ runner.temp }}/cycle006-old005-replay
+            ${{ runner.temp }}/cycle006-old005-wholepath
+            ${{ runner.temp }}/cycle006-old005-p1
+            ${{ runner.temp }}/cycle006-*-paper.json
+            ${{ runner.temp }}/cycle006-paper-identity.json
+            ${{ runner.temp }}/cycle006-tex-check
+          if-no-files-found: warn
   publish-research-edition:
     needs: [qualify, phase-code-qualification]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

@@ -1,0 +1,160 @@
+{
+  "schema": "agi-alpha/cycle006-downloaded-archive-qualification/v1",
+  "archive_sha256": "c2b4262fc9d463d841d250eb6d772e24b5f0bc58b2b5c284ce109bea0279163f",
+  "archive_bytes": 105057356,
+  "external_input_bytes_snapshotted_before_extraction": true,
+  "payload_files": 6202,
+  "manifest_sha256": "a1916401baea0422549b94e697d8724e92127c78978671b7181c960c999972d7",
+  "checks": {
+    "qualified_extractor": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-I",
+        "/tmp/alpha006-final-source-x1fxjka2/source/flywheel/archive_v2.py",
+        "extract",
+        "/tmp/alpha006-downloaded-archive-24ksldds/digest-verified-input.zip",
+        "/tmp/alpha006-downloaded-archive-24ksldds/validated"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_sha256": "e34a48fb6e9f5127928be3b36d7344877804d24d5073a97e594bfc572870be9a",
+      "wall_seconds": 4.636203112000658,
+      "waited_child_cpu_seconds": 4.512336,
+      "scope": "Trusted source commands with per-process CPU/address-space/file and process-group wall bounds; not a generated-program sandbox or exact full descendant accounting."
+    },
+    "ordinary_unit": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_sha256": "561a207ac69fb6bf9b35877440bf65fb98b96ceaaec915fc49bb240b91357311",
+      "wall_seconds": 31.0589092339942,
+      "waited_child_cpu_seconds": 28.855361,
+      "scope": "Trusted source commands with per-process CPU/address-space/file and process-group wall bounds; not a generated-program sandbox or exact full descendant accounting."
+    },
+    "ordinary_verifier_unit": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "verification",
+        "-v"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_sha256": "f5fe37ebc4574a231584d7c98eea7fb607c621e6f867e47360b054ca96afb283",
+      "wall_seconds": 0.2257636049980647,
+      "waited_child_cpu_seconds": 0.19462100000000326,
+      "scope": "Trusted source commands with per-process CPU/address-space/file and process-group wall bounds; not a generated-program sandbox or exact full descendant accounting."
+    },
+    "ordinary_runtime": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "run_cycle006.py",
+        "--output",
+        "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/final-clean-archive-qualification-run/artifacts/qualification/ordinary-runtime"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_sha256": "defb5ef7624a9291e3b7f90472bff66ce10a251b102a4f33f829e107dd8f5c8a",
+      "wall_seconds": 122.98510744899977,
+      "waited_child_cpu_seconds": 180.709718,
+      "scope": "Trusted source commands with per-process CPU/address-space/file and process-group wall bounds; not a generated-program sandbox or exact full descendant accounting."
+    },
+    "ordinary_paper": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "scripts/check_cycle006_paper.py",
+        "--output",
+        "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/final-clean-archive-qualification-run/artifacts/qualification/ordinary-paper.json"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_sha256": "c80fdabaca7868fefc9ed2114e9d716af7bc8a5572037d20e9361d974891ef00",
+      "wall_seconds": 0.21493025900417706,
+      "waited_child_cpu_seconds": 0.19057099999997718,
+      "scope": "Trusted source commands with per-process CPU/address-space/file and process-group wall bounds; not a generated-program sandbox or exact full descendant accounting."
+    },
+    "ordinary_source_payloads_unchanged": true,
+    "validated_unit": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_sha256": "f7a7c6fc2508287a4d85c5474d6afebda44295b850990dfa90e3144dccb10a58",
+      "wall_seconds": 30.72315240900207,
+      "waited_child_cpu_seconds": 28.779646,
+      "scope": "Trusted source commands with per-process CPU/address-space/file and process-group wall bounds; not a generated-program sandbox or exact full descendant accounting."
+    },
+    "validated_verifier_unit": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "verification",
+        "-v"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_sha256": "df3bc401d8c709245c65f3a469f68a24d2126b16e20c751cf5b65ede380aa72d",
+      "wall_seconds": 0.2690200430006371,
+      "waited_child_cpu_seconds": 0.21132000000000062,
+      "scope": "Trusted source commands with per-process CPU/address-space/file and process-group wall bounds; not a generated-program sandbox or exact full descendant accounting."
+    },
+    "validated_runtime": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "run_cycle006.py",
+        "--output",
+        "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/final-clean-archive-qualification-run/artifacts/qualification/validated-runtime"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_sha256": "2212bcec9250046c01084f6e10309235f3984fddf1dbf01dfda283a933bd547f",
+      "wall_seconds": 126.09476374500082,
+      "waited_child_cpu_seconds": 179.57079099999999,
+      "scope": "Trusted source commands with per-process CPU/address-space/file and process-group wall bounds; not a generated-program sandbox or exact full descendant accounting."
+    },
+    "validated_paper": {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "scripts/check_cycle006_paper.py",
+        "--output",
+        "/workspace/scratch/681b6e3921b1/lab-cycle006/evidence/cycle-006/final-clean-archive-qualification-run/artifacts/qualification/validated-paper.json"
+      ],
+      "returncode": 0,
+      "termination_reason": null,
+      "log_sha256": "c80fdabaca7868fefc9ed2114e9d716af7bc8a5572037d20e9361d974891ef00",
+      "wall_seconds": 0.2213426980015356,
+      "waited_child_cpu_seconds": 0.19598200000001498,
+      "scope": "Trusted source commands with per-process CPU/address-space/file and process-group wall bounds; not a generated-program sandbox or exact full descendant accounting."
+    },
+    "validated_source_payloads_unchanged": true,
+    "ordinary_packaging_metadata_unchanged": true,
+    "validated_packaging_metadata_consumed": true
+  },
+  "identity_verified": true,
+  "runtime_qualified": true,
+  "identity_only": false,
+  "verifier_sha256": "646dfd9df78a44ca12e1fcc75b751cfb4892583cdaa278db20f8941a7bfdbb3e",
+  "wall_seconds": 321.140643697996,
+  "scope": "Exact externally digest-identified archive on this Linux/Python/dependency installation. Identity-only mode does not qualify runtime. Runtime reproduction uses now-exposed fixed outcomes, not fresh scientific confirmation or commercial success."
+}

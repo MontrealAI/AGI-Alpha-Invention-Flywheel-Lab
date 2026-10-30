@@ -1,0 +1,407 @@
+{
+  "url": "https://huggingface.co/datasets/arcinstitute/Replogle-Nadig-Preprint/resolve/63a2f314b4043b002965d13cef84b4581b585601/rpe1_normalized_singlecell_01.h5ad",
+  "full_content_sha256_verified": false,
+  "benchmark_equivalence": "UNKNOWN",
+  "root": {
+    "X": {},
+    "obs": {
+      "_index": "cell_barcode",
+      "column-order": [
+        "gem_group",
+        "gene",
+        "gene_id",
+        "transcript",
+        "gene_transcript",
+        "sgID_AB",
+        "mitopercent",
+        "UMI_count",
+        "z_gemgroup_UMI",
+        "core_scale_factor",
+        "core_adjusted_UMI_count"
+      ],
+      "encoding-type": "dataframe",
+      "encoding-version": "0.1.0"
+    },
+    "var": {
+      "_index": "gene_id",
+      "column-order": [
+        "gene_name",
+        "chr",
+        "start",
+        "end",
+        "class",
+        "strand",
+        "length",
+        "in_matrix",
+        "mean",
+        "std",
+        "cv",
+        "fano"
+      ],
+      "encoding-type": "dataframe",
+      "encoding-version": "0.1.0"
+    }
+  },
+  "datasets": {
+    "X": {
+      "shape": [
+        247914,
+        8749
+      ],
+      "dtype": "float32",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/UMI_count": {
+      "shape": [
+        247914
+      ],
+      "dtype": "float32",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/__categories/gene": {
+      "shape": [
+        2394
+      ],
+      "dtype": "object",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/__categories/gene_id": {
+      "shape": [
+        2392
+      ],
+      "dtype": "object",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/__categories/gene_transcript": {
+      "shape": [
+        2662
+      ],
+      "dtype": "object",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/__categories/sgID_AB": {
+      "shape": [
+        2662
+      ],
+      "dtype": "object",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/__categories/transcript": {
+      "shape": [
+        62
+      ],
+      "dtype": "object",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/cell_barcode": {
+      "shape": [
+        247914
+      ],
+      "dtype": "object",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/core_adjusted_UMI_count": {
+      "shape": [
+        247914
+      ],
+      "dtype": "float32",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/core_scale_factor": {
+      "shape": [
+        247914
+      ],
+      "dtype": "float32",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/gem_group": {
+      "shape": [
+        247914
+      ],
+      "dtype": "int64",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/gene": {
+      "shape": [
+        247914
+      ],
+      "dtype": "int16",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/gene_id": {
+      "shape": [
+        247914
+      ],
+      "dtype": "int16",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/gene_transcript": {
+      "shape": [
+        247914
+      ],
+      "dtype": "int16",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/mitopercent": {
+      "shape": [
+        247914
+      ],
+      "dtype": "float32",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/sgID_AB": {
+      "shape": [
+        247914
+      ],
+      "dtype": "int16",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/transcript": {
+      "shape": [
+        247914
+      ],
+      "dtype": "int8",
+      "chunks": null,
+      "compression": null
+    },
+    "obs/z_gemgroup_UMI": {
+      "shape": [
+        247914
+      ],
+      "dtype": "float32",
+      "chunks": null,
+      "compression": null
+    },
+    "var/__categories/chr": {
+      "shape": [
+        24
+      ],
+      "dtype": "object",
+      "chunks": null,
+      "compression": null
+    },
+    "var/__categories/class": {
+      "shape": [
+        26
+      ],
+      "dtype": "object",
+      "chunks": null,
+      "compression": null
+    },
+    "var/__categories/gene_name": {
+      "shape": [
+        8748
+      ],
+      "dtype": "object",
+      "chunks": null,
+      "compression": null
+    },
+    "var/__categories/strand": {
+      "shape": [
+        2
+      ],
+      "dtype": "object",
+      "chunks": null,
+      "compression": null
+    },
+    "var/chr": {
+      "shape": [
+        8749
+      ],
+      "dtype": "int8",
+      "chunks": null,
+      "compression": null
+    },
+    "var/class": {
+      "shape": [
+        8749
+      ],
+      "dtype": "int8",
+      "chunks": null,
+      "compression": null
+    },
+    "var/cv": {
+      "shape": [
+        8749
+      ],
+      "dtype": "float32",
+      "chunks": null,
+      "compression": null
+    },
+    "var/end": {
+      "shape": [
+        8749
+      ],
+      "dtype": "int64",
+      "chunks": null,
+      "compression": null
+    },
+    "var/fano": {
+      "shape": [
+        8749
+      ],
+      "dtype": "float32",
+      "chunks": null,
+      "compression": null
+    },
+    "var/gene_id": {
+      "shape": [
+        8749
+      ],
+      "dtype": "object",
+      "chunks": null,
+      "compression": null
+    },
+    "var/gene_name": {
+      "shape": [
+        8749
+      ],
+      "dtype": "int16",
+      "chunks": null,
+      "compression": null
+    },
+    "var/in_matrix": {
+      "shape": [
+        8749
+      ],
+      "dtype": "bool",
+      "chunks": null,
+      "compression": null
+    },
+    "var/length": {
+      "shape": [
+        8749
+      ],
+      "dtype": "int64",
+      "chunks": null,
+      "compression": null
+    },
+    "var/mean": {
+      "shape": [
+        8749
+      ],
+      "dtype": "float32",
+      "chunks": null,
+      "compression": null
+    },
+    "var/start": {
+      "shape": [
+        8749
+      ],
+      "dtype": "int64",
+      "chunks": null,
+      "compression": null
+    },
+    "var/std": {
+      "shape": [
+        8749
+      ],
+      "dtype": "float32",
+      "chunks": null,
+      "compression": null
+    },
+    "var/strand": {
+      "shape": [
+        8749
+      ],
+      "dtype": "int8",
+      "chunks": null,
+      "compression": null
+    }
+  },
+  "obs": {},
+  "attrs": {},
+  "requests": [
+    {
+      "start": 0,
+      "end": 1048575,
+      "status": 206,
+      "content_range": "bytes 0-1048575/8700873216",
+      "length": 1048576,
+      "sha256": "585a8b888817954525225593cb945db473c3c1ef281bb1edfca08254e278e3d2",
+      "wall_seconds": 7.54564247700182
+    },
+    {
+      "start": 8675917824,
+      "end": 8676966399,
+      "status": 206,
+      "content_range": "bytes 8675917824-8676966399/8700873216",
+      "length": 1048576,
+      "sha256": "98d5cfc158f2de222f78fb84b87fcc34a44cf848b02fad94a16f752cb5710663",
+      "wall_seconds": 0.6748939179960871
+    },
+    {
+      "start": 8692695040,
+      "end": 8693743615,
+      "status": 206,
+      "content_range": "bytes 8692695040-8693743615/8700873216",
+      "length": 1048576,
+      "sha256": "f0b5cb690c36ee29a9f6eb29623302adf364fd3e95bca6529f6ecb95c092365c",
+      "wall_seconds": 0.4826768790007918
+    },
+    {
+      "start": 8698986496,
+      "end": 8700035071,
+      "status": 206,
+      "content_range": "bytes 8698986496-8700035071/8700873216",
+      "length": 1048576,
+      "sha256": "973c9ab9b3f50fa617f3aed0f1d2fa33350b896b20f6ae107fd6e7a4ebdb4385",
+      "wall_seconds": 0.46519037899997784
+    },
+    {
+      "start": 8693743616,
+      "end": 8694792191,
+      "status": 206,
+      "content_range": "bytes 8693743616-8694792191/8700873216",
+      "length": 1048576,
+      "sha256": "e5a38e117355bbc0c5bae42080a07f4c603bf8359bdb9b34ad15ea11efe55aae",
+      "wall_seconds": 0.5739122499944642
+    },
+    {
+      "start": 8694792192,
+      "end": 8695840767,
+      "status": 206,
+      "content_range": "bytes 8694792192-8695840767/8700873216",
+      "length": 1048576,
+      "sha256": "a7e2f337a7c4cb954ce38d09f7933a04dbe49e470117702554f1c0d9de343b15",
+      "wall_seconds": 0.46040953999909107
+    },
+    {
+      "start": 8691646464,
+      "end": 8692695039,
+      "status": 206,
+      "content_range": "bytes 8691646464-8692695039/8700873216",
+      "length": 1048576,
+      "sha256": "177029f5ebc1034ba1c3992c64a38a0a3fbaf6a5b2f7fbb1cde38a16333c1b5b",
+      "wall_seconds": 0.44740164700488094
+    },
+    {
+      "start": 8700035072,
+      "end": 8700873215,
+      "status": 206,
+      "content_range": "bytes 8700035072-8700873215/8700873216",
+      "length": 838144,
+      "sha256": "1db424138d10dea6f2cb16ea12d2fbf7bad40c4796ea8a037a4563ff991ed0be",
+      "wall_seconds": 0.44261526899936143
+    }
+  ],
+  "received_bytes": 8178176,
+  "wall_seconds": 11.137553555003251,
+  "cpu_seconds": 0.21227650799999997
+}

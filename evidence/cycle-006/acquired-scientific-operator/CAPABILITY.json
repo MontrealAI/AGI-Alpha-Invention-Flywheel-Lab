@@ -1,0 +1,135 @@
+{
+  "instrument": {
+    "path": "experiments/norman006/model.py",
+    "sha256": "3a4e642905027fc4f7a67e6ef55ef27f34c6fbfe8b3da3c97f041d9344c98c80"
+  },
+  "applicability": {
+    "schema_version": 1,
+    "conditions": {
+      "representation": "single-intervention-panel-means",
+      "unordered_simultaneous_inputs": true,
+      "gene_axis_available": true
+    },
+    "assumptions": [
+      "Observed single effects and controls share an axis and normalization.",
+      "New target training uses only its development outcomes.",
+      "Only unordered simultaneous labels justify the exchange action."
+    ],
+    "uncertainty": "Functional permutation invariance is verified; predictive superiority and cross-dataset transfer are not implied.",
+    "failures": [
+      {
+        "conditions": {
+          "unordered_simultaneous_inputs": false
+        },
+        "reason": "Order-dependent intervention effects do not admit this group action."
+      }
+    ]
+  },
+  "generative_operator": {
+    "language": "norman-residual-generator-v1",
+    "program": {
+      "configuration": {
+        "language": "norman-residual-construction/v1",
+        "expressions": [
+          "b1",
+          [
+            "div",
+            [
+              "add",
+              "a0",
+              [
+                "sub",
+                "b2",
+                "a0"
+              ]
+            ],
+            "b0"
+          ],
+          [
+            "div",
+            [
+              "mul",
+              "a0",
+              -2.496
+            ],
+            "b0"
+          ],
+          [
+            "div",
+            [
+              "div",
+              "a0",
+              [
+                "div",
+                "a0",
+                "a2"
+              ]
+            ],
+            "b0"
+          ]
+        ],
+        "ridge": 100,
+        "symmetric": true,
+        "constraints": [
+          {
+            "kind": "exchange_symmetry",
+            "status": "established",
+            "evidence_sha256": "a671d8db25ffe401b1ea18c0da30298815169a30fef2bc37dd24381d80de0898"
+          }
+        ]
+      },
+      "construction_rule": "generate_related_then_refit_target_development",
+      "learned_objects": [
+        "executed selected arithmetic basis",
+        "adjudicated exchange constraint"
+      ],
+      "no_retained_fitted_weights": true
+    }
+  },
+  "provenance": {
+    "source_pins": {
+      "experiments/norman006/model.py": "3a4e642905027fc4f7a67e6ef55ef27f34c6fbfe8b3da3c97f041d9344c98c80",
+      "experiments/norman006/inheritance.py": "2ede58a523c54e41ecc98045850233430e2db4b10dee95ae9d3601768f2e0918",
+      "mechanisms/policy006.py": "2bc25a8da04632354f9f409cd4700da8f17e6dac3ee6ebbb458945135c7d63bf",
+      "mechanisms/mapping.py": "66d66208ac731249217766785a7d22a5d255f3ab6729b71edd7139ef1ce1cc18",
+      "flywheel/retention.py": "7d7587fd11bffebc7b4ab6a1118eda0a899094099949434722d1254e630973c7",
+      "flywheel/sandbox.py": "103e2a8828a7aaf31faac475fb48ccbba1a685b4f64191dae4f6fbe8a9b6c7c8",
+      "verification/cycle006_symmetry_adjudication.py": "04a9ba74b198baa838f0c67df7997171dcaed5ded7561c84fc13f22ce226dd0a",
+      "historical/cycle-006/verifier-symmetry-original.py.txt": "cab8619de35301b358e727cee520872b1a1e4cfee5f7898920a70a3d7032cac0"
+    },
+    "before_artifact_sha256": "8e3c553d68a2a6bfe70695bc046e4ff1afe90933c87d82edf8cd16e0ac7b242e",
+    "after_artifact_sha256": "b3858528afeac8bb68e752e73c95dbe46d53dc4dcf777c6f43df4e25931c2ea0",
+    "search_sha256": "660d4bf6c3d633713c15775aea61fbd0ab73d64b6479c92729d90f57679edff3",
+    "adjudication_sha256": "a671d8db25ffe401b1ea18c0da30298815169a30fef2bc37dd24381d80de0898",
+    "verifier_versions": {
+      "original": "cab8619de35301b358e727cee520872b1a1e4cfee5f7898920a70a3d7032cac0",
+      "repair": "04a9ba74b198baa838f0c67df7997171dcaed5ded7561c84fc13f22ce226dd0a"
+    },
+    "acquisition_recomputed_maximum_swap_errors": [
+      0.43080204198310357,
+      0.0
+    ],
+    "authorship": "Developer-authored grammar, source group-averaging theorem, PCA/ridge primitives; runtime-generated selected basis and trace-acquired repair. No unrestricted invention claim."
+  },
+  "verification": {
+    "status": "verified-in-scope",
+    "receipt_sha256": "9dfc4e270bfbdf9869c9f9073e8a3b6d77b5c3cf1dba6f7c6624664fabd2bf49"
+  },
+  "costs": {
+    "acquisition_search": {
+      "wall_seconds": 12.0697079100064,
+      "host_cpu_seconds": 4.97596335,
+      "complete_monetary_cost": null
+    },
+    "repair_construction": {
+      "wall_seconds": 0.4010419810001622,
+      "host_cpu_seconds": 0.241891666,
+      "complete_monetary_cost": null
+    },
+    "complete_lifecycle_cost": null
+  },
+  "exposure": [
+    "Norman development pairs only; no protected AB outcomes used in acquisition"
+  ],
+  "supersedes": []
+}

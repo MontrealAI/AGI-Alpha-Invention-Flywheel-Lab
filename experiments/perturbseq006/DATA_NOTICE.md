@@ -1,0 +1,9 @@
+# Provenance and rights for the published Norman condition-mean panel
+
+The source is Constantin Ahlmann-Eltze, Wolfgang Huber and Simon Anders, *Deep-learning-based gene perturbation effect prediction does not yet outperform simple linear baselines*, Nature Methods22,1657-1661(2025), DOI https://doi.org/10.1038/s41592-025-02772-6 . The source analysis uses the Norman et al.(2019) combinatorial perturbation dataset; these files are derived published means, not a new collection of raw experimental cells.
+
+The exact repository source is `const-ae/linear_perturbation_prediction-Paper` at `bfa6eeea2bd145a1af2ec0127a2e808cc38456a9`, path `source_data/suppl-qqplot.xlsx`, SHA256 `1b652c352d4dabdd20324d7fd74d331898fa22c51cf6fa28ff65aa1322a6c78f`. The upstream MIT copyright and permission notice is preserved at `evidence/cycle-006/psgrn/LINEAR_PAPER_LICENSE.md`.
+
+The author's primary Zenodo archive, https://doi.org/10.5281/zenodo.16092690 , explicitly describes an archive of **code and data** accompanying that publication. Its public API metadata declares `license.id: mit-license` and `access_right: open`; the exact relevant response is retained at `evidence/cycle-006/psgrn/linear-primary-archive-license.json`. The archive links to the publication revision of this repository. The publisher's article also states CC BY4.0 and provides the Extended Data3 source spreadsheet; this is a separate article license, not a public-domain assertion.
+
+If the runtime publishes a numeric NPZ derived from this source panel, it must retain attribution, this source identity and the upstream MIT notice, and describe its transformations (for example condition ordering, column selection and protected-development partitioning). Do not relabel it as full-transcriptome raw data, a new biological replicate set or an independently acquired cohort. Do not attribute scientific conclusions or AGI ALPHA's adaptations to the source authors.

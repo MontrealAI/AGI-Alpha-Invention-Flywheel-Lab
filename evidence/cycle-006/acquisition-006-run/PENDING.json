@@ -1,0 +1,30 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "acquisition-006",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "import json,hashlib;from pathlib import Path\nfrom experiments.norman006 import inheritance\nfrom flywheel import retention\nroot=Path.cwd(); base=root/'evidence/cycle-006'; out=base/'acquired-scientific-operator';out.mkdir(exist_ok=False)\nbefore=json.loads((base/'norman-development-constructor-001c-run/artifacts/ARTIFACT.json').read_text());after=json.loads((base/'norman-repair-constructor-002b-mapped-run/artifacts/ARTIFACT.json').read_text());search=json.loads((base/'norman-development-constructor-001c-run/artifacts/SEARCH.json').read_text())\nr=inheritance.acquire(before,after,search,base/'verifier-symmetry-original/ADJUDICATION.json',base/'verifier-symmetry-mapped-003-run/artifacts/ADJUDICATION.json',root)\nident=retention.store(out/'memory',r); duplicate=retention.store(out/'memory',r);assert ident==duplicate\nconditions={'representation':'single-intervention-panel-means','unordered_simultaneous_inputs':True,'gene_axis_available':True,'cell_line':'THP-1','perturbation':'CRISPR-cas13'}\ngenerated=inheritance.retrieve_and_generate(out/'memory',conditions,root,count=8);ordinary=inheritance.ordinary_generate([r],root,count=8)\nassert generated['candidates'][0]['generated']==ordinary[0]['generated']\nfor name,value in [('CAPABILITY.json',r),('RETRIEVAL_AND_GENERATION.json',generated),('ORDINARY_EQUIVALENT.json',ordinary)]:\n (out/name).write_text(json.dumps(value,indent=2,allow_nan=False)+'\\n')\nprint(json.dumps({'record_id':ident,'duplicate_idempotent':True,'fresh_related_configurations':len(generated['candidates'][0]['generated']['configurations']),'ordinary_identical_content_and_generation':True,'scope':'Functional generative acquisition only; fresh target predictions and advantage unrun.'}))\n"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "import json,hashlib;from pathlib import Path\nfrom experiments.norman006 import inheritance\nfrom flywheel import retention\nroot=Path.cwd(); base=root/'evidence/cycle-006'; out=base/'acquired-scientific-operator';out.mkdir(exist_ok=False)\nbefore=json.loads((base/'norman-development-constructor-001c-run/artifacts/ARTIFACT.json').read_text());after=json.loads((base/'norman-repair-constructor-002b-mapped-run/artifacts/ARTIFACT.json').read_text());search=json.loads((base/'norman-development-constructor-001c-run/artifacts/SEARCH.json').read_text())\nr=inheritance.acquire(before,after,search,base/'verifier-symmetry-original/ADJUDICATION.json',base/'verifier-symmetry-mapped-003-run/artifacts/ADJUDICATION.json',root)\nident=retention.store(out/'memory',r); duplicate=retention.store(out/'memory',r);assert ident==duplicate\nconditions={'representation':'single-intervention-panel-means','unordered_simultaneous_inputs':True,'gene_axis_available':True,'cell_line':'THP-1','perturbation':'CRISPR-cas13'}\ngenerated=inheritance.retrieve_and_generate(out/'memory',conditions,root,count=8);ordinary=inheritance.ordinary_generate([r],root,count=8)\nassert generated['candidates'][0]['generated']==ordinary[0]['generated']\nfor name,value in [('CAPABILITY.json',r),('RETRIEVAL_AND_GENERATION.json',generated),('ORDINARY_EQUIVALENT.json',ordinary)]:\n (out/name).write_text(json.dumps(value,indent=2,allow_nan=False)+'\\n')\nprint(json.dumps({'record_id':ident,'duplicate_idempotent':True,'fresh_related_configurations':len(generated['candidates'][0]['generated']['configurations']),'ordinary_identical_content_and_generation':True,'scope':'Functional generative acquisition only; fresh target predictions and advantage unrun.'}))\n"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "import json,hashlib;from pathlib import Path\nfrom experiments.norman006 import inheritance\nfrom flywheel import retention\nroot=Path.cwd(); base=root/'evidence/cycle-006'; out=base/'acquired-scientific-operator';out.mkdir(exist_ok=False)\nbefore=json.loads((base/'norman-development-constructor-001c-run/artifacts/ARTIFACT.json').read_text());after=json.loads((base/'norman-repair-constructor-002b-mapped-run/artifacts/ARTIFACT.json').read_text());search=json.loads((base/'norman-development-constructor-001c-run/artifacts/SEARCH.json').read_text())\nr=inheritance.acquire(before,after,search,base/'verifier-symmetry-original/ADJUDICATION.json',base/'verifier-symmetry-mapped-003-run/artifacts/ADJUDICATION.json',root)\nident=retention.store(out/'memory',r); duplicate=retention.store(out/'memory',r);assert ident==duplicate\nconditions={'representation':'single-intervention-panel-means','unordered_simultaneous_inputs':True,'gene_axis_available':True,'cell_line':'THP-1','perturbation':'CRISPR-cas13'}\ngenerated=inheritance.retrieve_and_generate(out/'memory',conditions,root,count=8);ordinary=inheritance.ordinary_generate([r],root,count=8)\nassert generated['candidates'][0]['generated']==ordinary[0]['generated']\nfor name,value in [('CAPABILITY.json',r),('RETRIEVAL_AND_GENERATION.json',generated),('ORDINARY_EQUIVALENT.json',ordinary)]:\n (out/name).write_text(json.dumps(value,indent=2,allow_nan=False)+'\\n')\nprint(json.dumps({'record_id':ident,'duplicate_idempotent':True,'fresh_related_configurations':len(generated['candidates'][0]['generated']['configurations']),'ordinary_identical_content_and_generation':True,'scope':'Functional generative acquisition only; fresh target predictions and advantage unrun.'}))\n"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 60,
+    "cpu_seconds": 20,
+    "memory_bytes": 4294967296,
+    "output_bytes": 20971520,
+    "storage_bytes": 33554432
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "pending"
+}

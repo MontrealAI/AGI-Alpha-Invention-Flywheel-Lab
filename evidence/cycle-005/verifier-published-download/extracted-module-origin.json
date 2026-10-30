@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "import pathlib,flywheel,mechanisms;r=pathlib.Path.cwd().resolve();assert pathlib.Path(flywheel.__file__).resolve().is_relative_to(r);assert pathlib.Path(mechanisms.__file__).resolve().is_relative_to(r);print(flywheel.__file__);print(mechanisms.__file__)"
+  ],
+  "returncode": 0,
+  "wall_seconds": 0.06471372999658342,
+  "log": "extracted-module-origin.log",
+  "log_sha256": "0d302f9a1ad9924ffa75ec13ff54f22ee8a736329fab2acee603e913c79cfc27"
+}

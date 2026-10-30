@@ -1,0 +1,13 @@
+{
+  "schema": "agi-alpha/cycle006-workflow-integration-static-check/v1",
+  "workflow_sha256": "ad84d2a880060deadbace27dff9e6181d3e9526e384bfec4a7756bc6c1263fff",
+  "checks": {
+    "yaml_parsed": true,
+    "historical_phase_job_byte_identical": true,
+    "independent_archive_checker_replaces_duplicate_shell_replay": true,
+    "external_digest_required_before_extracted_imports": true,
+    "no_extra_repeated_runtime_added": true
+  },
+  "checker_sha256": "29a5da2dd03a3389e9fce4137fe494b483798ea80d8270e8e1127ed5a1e09ac0",
+  "scope": "Static workflow/checker integration and metered negative boundary tests only; source-matched public CI and the final actual downloaded release have not yet been qualified."
+}

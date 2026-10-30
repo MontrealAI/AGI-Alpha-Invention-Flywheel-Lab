@@ -1,0 +1,34 @@
+{
+  "schema": "agi-alpha/extraction006-repair/v1",
+  "source_artifact": "new owner-built bounded repair candidate; not a public release or cycle005 recertification",
+  "old_public_zip_sha256": "9e80e3708f430b0a5ac18c8580eb2320febb213cbda63cc7eaa00be81b78e95d",
+  "old_archive_v2_sha256": "bf0417edbdff7003601220fea4bcb2ce1aa47c81304968356249a3d92fd6517a",
+  "new_source_sha256": {
+    "flywheel/archive_v2.py": "e80512aa0e06503c8e49c78c43f09e786df1ba51ee26c3bb36b52ab703328007",
+    "tests/test_archive_v2.py": "b2211dc28e86845a8faae1b17f4942c01c61aafb130a3b8416c6ca8a09c73fb8"
+  },
+  "new_archive_sha256": "21c56c66ca4d4d9ff44515e8c1309a6db8d3413a3f0785e360682173131bf05a",
+  "archive_bytes": 5859144,
+  "payload_files": 5289,
+  "extraction": "ordinary zipfile.extractall retaining ARCHIVE_MANIFEST.json",
+  "git_ancestry_absent": true,
+  "manifest_retained": true,
+  "unit_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-v"
+  ],
+  "returncode": 0,
+  "wall_seconds": 16.343476674002886,
+  "child_cpu_seconds": 15.923676,
+  "log_sha256": "66473636748134c9ec30c2d6a6d3ff79616b2c80a090ffe8a907aaa408048674",
+  "limitations": [
+    "Owner construction test; independent checker must qualify final006source and actual newlydownloaded publicartifact.",
+    "Original005freeze is preserved and not rewritten; this changedsource candidate requires new006freeze before connected runtime admission.",
+    "Packaging repair does not establish consequential invention or commerce."
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "report": {
+    "source": "finite-group-averaging",
+    "target": "Norman-simultaneous-pair-means",
+    "source_graph": {
+      "conditions": {
+        "unordered_simultaneous_inputs": true
+      },
+      "id": "finite-group-averaging",
+      "nodes": [
+        {
+          "id": "left",
+          "kind": "exchangeable-input",
+          "unit": "normalized-expression-coordinate"
+        },
+        {
+          "id": "right",
+          "kind": "exchangeable-input",
+          "unit": "normalized-expression-coordinate"
+        },
+        {
+          "id": "result",
+          "kind": "joint-output",
+          "unit": "normalized-expression-coordinate"
+        }
+      ],
+      "provenance": "Developer-supplied Reynolds/group-averaging construction from invariant estimation. This is established mathematics, not a newly discovered biological mechanism.",
+      "relations": [
+        [
+          "left",
+          "contributes-to",
+          "result"
+        ],
+        [
+          "right",
+          "contributes-to",
+          "result"
+        ]
+      ]
+    },
+    "donor_graph": {
+      "conditions": {
+        "unordered_simultaneous_inputs": true
+      },
+      "id": "finite-group-averaging",
+      "nodes": [
+        {
+          "id": "left",
+          "kind": "exchangeable-input",
+          "unit": "normalized-expression-coordinate"
+        },
+        {
+          "id": "right",
+          "kind": "exchangeable-input",
+          "unit": "normalized-expression-coordinate"
+        },
+        {
+          "id": "result",
+          "kind": "joint-output",
+          "unit": "normalized-expression-coordinate"
+        }
+      ],
+      "provenance": "Developer-supplied Reynolds/group-averaging construction from invariant estimation. This is established mathematics, not a newly discovered biological mechanism.",
+      "relations": [
+        [
+          "left",
+          "contributes-to",
+          "result"
+        ],
+        [
+          "right",
+          "contributes-to",
+          "result"
+        ]
+      ]
+    },
+    "target_graph": {
+      "conditions": {
+        "unordered_simultaneous_inputs": true
+      },
+      "id": "Norman-simultaneous-pair-means",
+      "nodes": [
+        {
+          "id": "A",
+          "kind": "exchangeable-input",
+          "unit": "normalized-expression-coordinate"
+        },
+        {
+          "id": "B",
+          "kind": "exchangeable-input",
+          "unit": "normalized-expression-coordinate"
+        },
+        {
+          "id": "AB",
+          "kind": "joint-output",
+          "unit": "normalized-expression-coordinate"
+        }
+      ],
+      "relations": [
+        [
+          "A",
+          "contributes-to",
+          "AB"
+        ],
+        [
+          "B",
+          "contributes-to",
+          "AB"
+        ]
+      ]
+    },
+    "correspondences": [
+      {
+        "left": "A",
+        "result": "AB",
+        "right": "B"
+      },
+      {
+        "left": "B",
+        "result": "AB",
+        "right": "A"
+      }
+    ],
+    "status": "ambiguous",
+    "applicable": true,
+    "search_complete": true,
+    "search_nodes": 6,
+    "candidate_limit": 8,
+    "search_limit": 10000,
+    "unresolved_mismatches": [],
+    "typed_domain_failures": [],
+    "preserved_relations": [
+      [
+        "left",
+        "contributes-to",
+        "result"
+      ],
+      [
+        "right",
+        "contributes-to",
+        "result"
+      ]
+    ],
+    "changed_assumptions": {},
+    "origin": "Developer supplied typed representations and role recipes; bounded search discovers correspondences, ignoring labels."
+  },
+  "permutations": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "A"
+    ]
+  ],
+  "transformation": {
+    "symmetric": true,
+    "rule": "average generated basis over every mapped input permutation"
+  },
+  "prediction": "Swapping the simultaneous input roles preserves every predicted gene mean within numerical tolerance; this predicts no biological interaction or accuracy gain."
+}

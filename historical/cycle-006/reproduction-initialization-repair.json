@@ -1,0 +1,12 @@
+{
+  "schema": "agi-alpha/reproduction-initialization-repair006/v1",
+  "original_source": "historical/cycle-006/run_cycle006-before-initialization-repair.py.txt",
+  "original_sha256": "a2caeb05101a4ac56babf0dcb31db8266bf884ace4af550c5679fb33fac5dd27",
+  "source": "run_cycle006.py",
+  "repaired_sha256": "62304355427e908b6fed23334184e2843a9c4f80a1aba2f340e7fc178caf173e",
+  "original_defect_receipt": "historical/cycle-006/reproduction-initialization-original-defect.json",
+  "regression": "test_signal_pending_at_successful_mkdir_keeps_interruption_marker sends real pending SIGINT after successful mkdir while blocked; deferred delivery must produce INTERRUPTED.json",
+  "additional_regression": "CLI freeze symlink is refused before application imports; absolute paths preserve alias checks",
+  "candidate_sources_changed": false,
+  "old_execution_evidence": "evidence/cycle-006/connected-reproduction-001 preserved unchanged; its later frozen-document mismatch is a distinct incident"
+}

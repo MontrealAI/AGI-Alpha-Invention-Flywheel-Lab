@@ -1,0 +1,230 @@
+{
+  "policy": {
+    "language": "discovery-policy/v1",
+    "priority": [
+      "div",
+      "gain",
+      "cost"
+    ],
+    "stop_below": 0
+  },
+  "execution": {
+    "state": "STOP",
+    "policy_sha256": "58607f1d841ca9f07e07d7fb3e91c58a726c98724b80e8a56b7f309f18483708",
+    "source_sha256": "2bc25a8da04632354f9f409cd4700da8f17e6dac3ee6ebbb458945135c7d63bf",
+    "records": [
+      {
+        "selection": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.17824806899443502,
+          "stdout_bytes": 724,
+          "stderr_bytes": 0,
+          "stdout_sha256": "bef6030ce44ceffa63fa42bcf4a76297019c7e658fdd205f7c4c8d7033d8c38c",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "state": "SELECTED",
+              "selected": {
+                "action_id": "representation-5cf37cd020f0ba6bca57a733",
+                "kind": "represent",
+                "cost_units": 1,
+                "score": 0.0
+              },
+              "ranked": [
+                {
+                  "action_id": "representation-5cf37cd020f0ba6bca57a733",
+                  "kind": "represent",
+                  "cost_units": 1,
+                  "score": 0.0
+                }
+              ],
+              "budget_blocked": [],
+              "evidence_sha256": "4d865a708c339de8e7a539883c0ea43fa2dce094cc6b3e50571d0ccd053be51d",
+              "boundary": "Inert action identity only; feature provenance is declared, not authenticated truth; external broker owns actual effects, costs and unchanged acceptance"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 9.830500493990257e-05,
+            "worker_cpu_seconds": 0.15811135,
+            "peak_rss_kib": 61072
+          },
+          "interpreter_sha256": "2bc25a8da04632354f9f409cd4700da8f17e6dac3ee6ebbb458945135c7d63bf",
+          "input_sha256": "932b4ba74a1696a3adc7d9e5887b92a8d1dbd70b463c102116cdcb36acc22bf1"
+        },
+        "before_sha256": "de47d995b18a8b2bca917eb1600360821daf1a619232a80d12bffb5ad7bb7d98",
+        "state": "EXECUTED",
+        "outcome": {
+          "action_id": "representation-5cf37cd020f0ba6bca57a733",
+          "kind": "represent",
+          "cost_units": 1,
+          "artifact_sha256": "2f88c5c21b660d028437cc2e6c337e441b6afa8f6b1b02e2c64dc56ed44d24af",
+          "observation_sha256": "d5c0f2a622eeaa039d8a28d05e300783b6a330e7a52e9f41282a7a39abcbb728"
+        }
+      },
+      {
+        "selection": {
+          "state": "COMPLETE",
+          "returncode": 0,
+          "limits": {
+            "wall_seconds": 5,
+            "cpu_seconds": 2,
+            "memory_bytes": 268435456,
+            "output_bytes": 1048576,
+            "input_bytes": 4194304
+          },
+          "wall_seconds": 0.08802928400109522,
+          "stdout_bytes": 510,
+          "stderr_bytes": 0,
+          "stdout_sha256": "c6a601568ef74edf81c66fea885690451adffed1bf966827366710a02851bc27",
+          "stderr": "",
+          "worker": {
+            "state": "COMPLETE",
+            "result": {
+              "state": "STOP",
+              "selected": null,
+              "ranked": [],
+              "budget_blocked": [],
+              "evidence_sha256": "c0ab1f017738a2e9fa85e1b67c5b01f58d0caa71c834faba416d0515a6e927cf",
+              "boundary": "Inert action identity only; feature provenance is declared, not authenticated truth; external broker owns actual effects, costs and unchanged acceptance"
+            },
+            "confinement": "linux-seccomp-default-deny",
+            "worker_wall_seconds": 5.3443996876012534e-05,
+            "worker_cpu_seconds": 0.072799491,
+            "peak_rss_kib": 61072
+          },
+          "interpreter_sha256": "2bc25a8da04632354f9f409cd4700da8f17e6dac3ee6ebbb458945135c7d63bf",
+          "input_sha256": "fbe1720ba9149f798c215023667dbe7cd6590cd02989e222c5506c1a78231dcd"
+        },
+        "state": "STOP"
+      }
+    ],
+    "spent": {
+      "steps": 1,
+      "cost_units": 1,
+      "kinds": {
+        "measure": 0,
+        "represent": 1,
+        "construct": 0,
+        "repair": 0
+      }
+    },
+    "budget": {
+      "steps": 4,
+      "cost_units": 4,
+      "kinds": {
+        "measure": 0,
+        "represent": 4,
+        "construct": 0,
+        "repair": 0
+      }
+    },
+    "resources": {
+      "wall_seconds": 0.9355997589955223,
+      "host_cpu_seconds": 0.28407201599999965,
+      "selection_worker_cpu_seconds": 0.230910841,
+      "complete_monetary_cost": null,
+      "broker_resource_costs": "Must be included by the enclosing domain experiment"
+    },
+    "scope": "Generated JSON arithmetic action selectors execute inside seccomp; fixed trusted broker effects are external. No result here is final scientific/commercial acceptance."
+  },
+  "experiments": [
+    {
+      "configuration": {
+        "language": "norman-residual-construction/v1",
+        "expressions": [],
+        "ridge": 1,
+        "symmetric": false,
+        "constraints": []
+      },
+      "median_pair_rmse": 0.13394874975758403,
+      "pooled_rmse": 0.13983791628471748,
+      "pair_rmse": [
+        0.20844222681867652,
+        0.09624988905002978,
+        0.11492441304609828,
+        0.1630763441211786,
+        0.10174228333703024,
+        0.10213794259003721,
+        0.15436552651987315,
+        0.16155549024738677,
+        0.12191262795881448,
+        0.11720443209175953,
+        0.13394874975758403,
+        0.11734219956528699,
+        0.12459285442049463,
+        0.16050413714215833,
+        0.1939799084429731,
+        0.13537526340960218,
+        0.10793340017989425,
+        0.16196463093012506,
+        0.14474595221885406,
+        0.12020836584901648,
+        0.10957147591862795,
+        0.1425864623031066,
+        0.1560140160119715,
+        0.1231199685511578,
+        0.15155806814833234
+      ],
+      "max_swap_difference": 0.0,
+      "functional_contract_passed": true,
+      "execution": "Actual fresh-target development fit/predict; protected target outcomes never supplied",
+      "id": "representation-5cf37cd020f0ba6bca57a733",
+      "configuration_sha256": "5cf37cd020f0ba6bca57a7338ca103e047fb197b26327b694762af56c47c3a16",
+      "artifact_sha256": "2f88c5c21b660d028437cc2e6c337e441b6afa8f6b1b02e2c64dc56ed44d24af"
+    }
+  ],
+  "best_functionally_admitted": {
+    "configuration": {
+      "language": "norman-residual-construction/v1",
+      "expressions": [],
+      "ridge": 1,
+      "symmetric": false,
+      "constraints": []
+    },
+    "median_pair_rmse": 0.13394874975758403,
+    "pooled_rmse": 0.13983791628471748,
+    "pair_rmse": [
+      0.20844222681867652,
+      0.09624988905002978,
+      0.11492441304609828,
+      0.1630763441211786,
+      0.10174228333703024,
+      0.10213794259003721,
+      0.15436552651987315,
+      0.16155549024738677,
+      0.12191262795881448,
+      0.11720443209175953,
+      0.13394874975758403,
+      0.11734219956528699,
+      0.12459285442049463,
+      0.16050413714215833,
+      0.1939799084429731,
+      0.13537526340960218,
+      0.10793340017989425,
+      0.16196463093012506,
+      0.14474595221885406,
+      0.12020836584901648,
+      0.10957147591862795,
+      0.1425864623031066,
+      0.1560140160119715,
+      0.1231199685511578,
+      0.15155806814833234
+    ],
+    "max_swap_difference": 0.0,
+    "functional_contract_passed": true,
+    "execution": "Actual fresh-target development fit/predict; protected target outcomes never supplied",
+    "id": "representation-5cf37cd020f0ba6bca57a733",
+    "configuration_sha256": "5cf37cd020f0ba6bca57a7338ca103e047fb197b26327b694762af56c47c3a16",
+    "artifact_sha256": "2f88c5c21b660d028437cc2e6c337e441b6afa8f6b1b02e2c64dc56ed44d24af"
+  },
+  "fit_allowance": 4,
+  "ordinary_and_structured_content_equal": false
+}

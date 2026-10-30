@@ -67,11 +67,36 @@ def materialize_cycle004(root, destination):
     return receipt
 
 
+def _manifest(raw, payloads):
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("ARCHIVE_MANIFEST_DUPLICATE_KEY")
+            result[key] = value
+        return result
+    try:
+        manifest = json.loads(raw, object_pairs_hook=unique)
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ValueError("ARCHIVE_MANIFEST_INVALID_JSON") from error
+    if type(manifest) is not dict or manifest.get("schema") != "lab/self-contained-source-archive/v2" or type(manifest.get("files")) is not dict:
+        raise ValueError("ARCHIVE_MANIFEST_SET_MISMATCH")
+    for name, expected in manifest["files"].items():
+        path = _name(name)
+        if name == MANIFEST or set(path.parts) & SKIP or type(expected) is not str or len(expected) != 64 or any(c not in "0123456789abcdef" for c in expected):
+            raise ValueError("ARCHIVE_MANIFEST_ENTRY_SCOPE")
+    if set(payloads) != set(manifest["files"]):
+        raise ValueError("ARCHIVE_MANIFEST_SET_MISMATCH")
+    if any(_sha(raw) != manifest["files"][name] for name, raw in payloads.items()):
+        raise ValueError("ARCHIVE_CONTENT_IDENTITY_MISMATCH")
+    return manifest
+
+
 def build(root, archive_path):
     root, archive_path = Path(root).resolve(), Path(archive_path).absolute()
     if archive_path.exists() or archive_path.is_symlink():
         raise FileExistsError(archive_path)
-    payloads = {}
+    payloads, packaging_manifest = {}, None
     for path in sorted(root.rglob("*")):
         relative = path.relative_to(root)
         if set(relative.parts) & SKIP or path == archive_path:
@@ -81,10 +106,15 @@ def build(root, archive_path):
         if path.is_file():
             name = relative.as_posix()
             if name == MANIFEST:
-                raise ValueError("ARCHIVE_RESERVED_MANIFEST")
+                if path.stat().st_size > MAX_BYTES:
+                    raise ValueError("ARCHIVE_RESOURCE_BOUND")
+                packaging_manifest = path.read_bytes()
+                continue
             payloads[name] = path.read_bytes()
     if len(payloads) > MAX_FILES or sum(map(len, payloads.values())) > MAX_BYTES:
         raise ValueError("ARCHIVE_RESOURCE_BOUND")
+    if packaging_manifest is not None:
+        _manifest(packaging_manifest, payloads)
     manifest = {"schema": "lab/self-contained-source-archive/v2", "files": {name: _sha(raw) for name, raw in payloads.items()},
                 "source_history_required": False, "network_required_for_extraction": False,
                 "limits": {"files": MAX_FILES, "uncompressed_bytes": MAX_BYTES}}
@@ -116,11 +146,9 @@ def extract(archive_path, destination):
             if name in payloads:
                 raise ValueError("ARCHIVE_DUPLICATE_ENTRY")
             payloads[name] = archive.read(item)
-    manifest = json.loads(payloads.pop(MANIFEST))
-    if manifest.get("schema") != "lab/self-contained-source-archive/v2" or set(payloads) != set(manifest["files"]):
-        raise ValueError("ARCHIVE_MANIFEST_SET_MISMATCH")
-    if any(_sha(raw) != manifest["files"][name] for name, raw in payloads.items()):
-        raise ValueError("ARCHIVE_CONTENT_IDENTITY_MISMATCH")
+    if MANIFEST not in payloads:
+        raise ValueError("ARCHIVE_MANIFEST_MISSING")
+    manifest = _manifest(payloads.pop(MANIFEST), payloads)
     destination.mkdir(parents=True, exist_ok=False)
     for name, raw in payloads.items():
         target = destination / name

@@ -1,0 +1,21 @@
+{
+  "schema": "agi-alpha-failed-transfer006/v1",
+  "source_instrument": "experiments/perturbseq006/range_hdf5.py",
+  "source_sha256": "f7be0065e55459cf3d7899852444ecb75eb44b3bc6763ef55707db6c22bdd310",
+  "task": "Inspect processed Wessels author-S3 HDF5 metadata through file-like callback",
+  "script": "failed-metadata-probe.py.txt",
+  "script_sha256": "778e310b018dbf8baf02c02b7a78276585ae2920d8953ce11c2664b87575e9c9",
+  "source_url": "https://public-access-bucket-i9sdj34j.s3.amazonaws.com/cellsimbench-data/data/wessels23/wessels23_processed_complete.h5ad",
+  "source_etag": "71d52843b26cc090333cf658f2f50944-258",
+  "source_size": 2160011462,
+  "full_source_hash_verified": false,
+  "actual_exit_code": 139,
+  "outcome": "PROCESS_NATIVE_SEGMENTATION_FAULT; NO_METADATA_RESULT",
+  "original_empty_output": "processed-metadata.json",
+  "outcome_values_inspected": false,
+  "cause": "UNRESOLVED; h5py native file-like callback path, not independently reproduced or claimed library defect",
+  "scope": "This source/schema plus deep metadata enumeration failed; do not infer universal prohibition on remote HDF5",
+  "next_construction": "Use verified local 219MB raw input and native h5py driver in bounded child process",
+  "historical_success_preserved": "RPE1 exact-source metadata qualified separately; cannot promote to universal HDF5 applicability",
+  "elapsed_cpu_or_wall": null
+}

@@ -1,0 +1,179 @@
+{
+  "schema": "agi-alpha-opportunity006/v1",
+  "observed_utc": "2026-10-29T23:03:00Z",
+  "authority": "cycle-006/ALLOCATION.json",
+  "screen_duration_limit_minutes": 15,
+  "decision": "EXECUTE_NORMAN_RARE_INTERACTION_PILOT",
+  "admitted_flagship": null,
+  "commercial_cohort_admitted": false,
+  "selection_origin": "Implementation-team literature inspection and source recovery; neither owner-supplied complete answer nor autonomous scientific discovery.",
+  "sources": [
+    {
+      "id": "causalbench2025",
+      "url": "https://www.nature.com/articles/s42003-025-07764-y",
+      "kind": "primary benchmark paper",
+      "observed_utc": "2026-10-29T22:55:00Z",
+      "finding": "Interventional information is underused; methods and held-out cell evaluation are already supplied. Target selection is explicitly an existing research direction, not a novel class supplied by this lab."
+    },
+    {
+      "id": "active2022",
+      "url": "https://arxiv.org/abs/2203.02016v3",
+      "kind": "primary method paper",
+      "finding": "Existing Bayesian experimental design selects intervention targets and values in nonlinear SCMs. Its in-silico results are not real Norman evidence."
+    },
+    {
+      "id": "identiflow2020",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7355299/",
+      "doi": "10.1093/bioinformatics/btaa404",
+      "kind": "primary method paper",
+      "finding": "Existing max-flow and matroid framework constructs identifiable perturbation designs. Adaptive selection alone is not an admitted missing means."
+    },
+    {
+      "id": "linear2025",
+      "url": "https://doi.org/10.1038/s41592-025-02772-6",
+      "kind": "primary comparison paper",
+      "source_revision": "bfa6eeea2bd145a1af2ec0127a2e808cc38456a9",
+      "repository": "https://github.com/const-ae/linear_perturbation_prediction-Paper",
+      "finding": "Simple linear/additive comparators are essential; the published Norman analysis has 100 single and 124 double perturbations. Performance parity on aggregate expression does not establish rare-interaction discovery."
+    },
+    {
+      "id": "systema2025",
+      "url": "https://doi.org/10.1038/s41587-025-02777-8",
+      "kind": "primary comparison paper",
+      "finding": "Matching mean and perturbed mean explain substantial benchmark performance. Perturbation-specific ability requires an endpoint that does not reward generic expression variation."
+    },
+    {
+      "id": "gears2023",
+      "url": "https://www.nature.com/articles/s41587-023-01905-6",
+      "kind": "primary competing method paper",
+      "finding": "GEARS already predicts multigene effects and interaction subtypes. Its reported interaction results are a strong competing claim, not evidence that our residual is solved or unsolved."
+    },
+    {
+      "id": "metric_response2025",
+      "url": "https://www.biorxiv.org/content/10.1101/2025.10.20.683304v1.full",
+      "kind": "primary unreviewed response paper",
+      "finding": "Challenges conclusions under alternative metric calibration and notes predominance of additive gene-pair effects. This is contrary evidence, not a settled verdict."
+    },
+    {
+      "id": "egc2017",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005494",
+      "doi": "10.1371/journal.pcbi.1005494",
+      "kind": "primary complete alternative",
+      "finding": "Published GlobalFit variant jointly removes energy-generating cycles. Local direction repair is not a whole-model cure."
+    },
+    {
+      "id": "elastic2002",
+      "url": "https://doi.org/10.1088/0031-9155/47/12/310",
+      "kind": "primary inverse-mechanics paper",
+      "finding": "Displacement/strain-only inverse elasticity can be nonunique. A general optimizer cannot remove missing physical information."
+    },
+    {
+      "id": "elastic1997",
+      "url": "https://doi.org/10.1177/108128659700200304",
+      "kind": "primary competing construction",
+      "finding": "Traction plus displacement can recover moduli under declared nondegeneracy assumptions. Adding a load measurement is established methodology."
+    },
+    {
+      "id": "comprehensive2025",
+      "url": "https://doi.org/10.1038/s41592-025-02980-0",
+      "kind": "primary newer comparative benchmark, identified by paper006",
+      "finding": "Later broad comparison across27methods29datasets must be considered before any globally strongest or general-superiority claim. Those methods were not all executed in this bounded pilot."
+    },
+    {
+      "id": "calibrated2026",
+      "url": "https://www.nature.com/articles/s41587-026-03307-w",
+      "doi": "10.1038/s41587-026-03307-w",
+      "published": "2026-10-01",
+      "kind": "primary current competing method/calibration study",
+      "finding": "Introduces positive controls and metric calibration across14datasets18metrics. On Norman the additive predictor captures about88% of the ideal gap for well-calibrated metrics; authors discourage sole use of this sparse-combination benchmark. On Wessels23, PRESAGE exceeds additivity on15of18metrics. Calibration and rare-effect evaluation are active prior art, not new discoveries by this lab."
+    }
+  ],
+  "possibilities": [
+    {
+      "id": "rare-combinatorial-interventions",
+      "beneficiary": "Experimental biologists and biotechnology research groups prioritizing combinatorial perturbations.",
+      "unavailable_outcome": "Reliably identify non-additive expression responses in unmeasured gene pairs from limited prior measurements, with calibrated false positives.",
+      "strongest_qualified_alternatives": [
+        "Exact additive response from single-condition means",
+        "Matching-mean response",
+        "Regularized linear prediction with matched information and development tuning"
+      ],
+      "strong_unrun_controls": [
+        "GEARS",
+        "CPA",
+        "other latest calibrated interaction-specific methods",
+        "PRESAGE",
+        "scLambda",
+        "CellFlow",
+        "current positive-control metric-calibration workflows"
+      ],
+      "binding_residual": "A high overall-expression score can coexist with inability to distinguish rare interaction-specific responses. Whether the admitted simple complete controls leave a practically useful residual is to be tested.",
+      "missing_means_hypothesis": "A constructed residual representation and acquisition/repair policy can identify rare interactions more reliably at the same information and cost. This is a hypothesis, not prior admission.",
+      "transformation": {
+        "objective_preserved": "Predict unseen double-pair expression interactions and reject unsupported claims.",
+        "method_assumption_questioned": "Better global transcriptome correlation is a sufficient proxy for useful interaction discovery.",
+        "alternative": "Hold out complete double pairs; use control-ranked readouts and calibration-only interaction definition; compare explicit nonadditive residual prediction with complete simple competitors."
+      },
+      "cheapest_falsifier": "On real Norman condition means, compare generated residual operator with additive/matching/linear predictions on verifier-controlled unseen double pairs at the prespecified false-positive threshold. A tie, loss or uncalibrated output rejects advantage.",
+      "data_route": "Pinned published source_data/suppl-qqplot.xlsx; 10,905,627 bytes, Git blob f35c9efe3bf0f917068b2aaf2c2236b593c06e2c. Its panel is 1000 genes chosen by expression in control, not outcome-selected top differential genes.",
+      "limits": [
+        "Published means omit single-cell and biological replicate variance.",
+        "Not the complete Perturb-seq transcriptome or a whole-cell scientific validation.",
+        "Real-data pilot, not prospective wet-lab success.",
+        "Same gene can recur in many double pairs; uncertainty must respect pair/gene dependence.",
+        "Current2026primarystudy recommends Norman not be the sole combinatorial benchmark; richer Wessels23 is an independent successor candidate, not yet qualified."
+      ],
+      "offering_family": "Source-bound interaction prioritization and diagnostic evidence package; commercial acceptance requires independent buyer specifications, not modeled savings.",
+      "successor_family": "Independently selected combinatorial dataset such as Wessels23 with separate gene/context coverage and strong current models; its access and protocol must be independently qualified.",
+      "decision": "SELECT_BOUNDED_DISCRIMINATING_PILOT_NOT_FLAGSHIP_ADMISSION"
+    },
+    {
+      "id": "global-metabolic-model-repair",
+      "beneficiary": "Bioprocess modeling and metabolic engineering teams.",
+      "unavailable_outcome": "A model that excludes all internal energy-generating cycles while retaining specified growth/production obligations.",
+      "strongest_complete_alternative": "Published GlobalFit/FBA whole-model correction and domain curation, not the lab three-reaction direction patch.",
+      "residual": "The local inherited repair leaves full-model ATP diagnostic flux at 10000.0; no new whole-model residual beyond established methods has been established.",
+      "missing_means_hypothesis": "Compose local verified transfer constraints into a whole-model guarantee.",
+      "cheapest_falsifier": "Replay full archived SBML under the original nutrient-closed diagnostic after the local restriction.",
+      "executed_receipt": "evidence/cycle-006/opportunity-metabolic-recheck/RESULT.json",
+      "decision": "RETAIN_INCUMBENT_AND_PRESERVE_FAILED_TRANSFER",
+      "offering_family": "Model quality-control repair subject to growth/production acceptance; no cohort or price qualified.",
+      "successor_family": "Fresh model repairs under separately verified physiological obligations."
+    },
+    {
+      "id": "inverse-material-instruments",
+      "beneficiary": "Nondestructive material characterization and mechanical testing groups.",
+      "unavailable_outcome": "Quantify absolute constitutive parameters from passive displacement images without sufficient load/traction information.",
+      "strongest_complete_alternative": "Established inverse elasticity/virtual-field or force-displacement methods with identifiable boundary data.",
+      "residual": "The missing input is physical identifiability, not simply a search weakness. Published load measurements already address standard cases.",
+      "missing_means_hypothesis": "Construct an independently calibrated measurement that removes the force dependency without changing the required absolute-modulus output.",
+      "cheapest_falsifier": "Produce indistinguishable displacement observations with different admissible moduli, then ask whether the candidate instrument independently measures the distinguishing quantity.",
+      "execution": "No physical instrument or independently calibrated real-data experiment available in this allocation.",
+      "decision": "NOT_ADMITTED_NO_NEW_MISSING_MEANS_ESTABLISHED",
+      "offering_family": "Calibrated nondestructive material certificate only after physical validation and service obligations.",
+      "successor_family": "Fresh material/geometry calibration with inherited applicability boundaries."
+    }
+  ],
+  "protocol_constraints": [
+    "Freeze exact source, candidate, tasks, endpoints and practical threshold before protected outcomes.",
+    "Do not expose protected AB means to builder before candidate freeze.",
+    "Do not derive label thresholds from all evaluation outcomes.",
+    "Treat public published threshold-based results as exposed contextual evidence.",
+    "Use pair-level uncertainty; do not count every gene-pair row as independent.",
+    "Statistical alpha remains zero unless verifier prospectively registers a valid claim procedure."
+  ],
+  "failure_knowledge": [
+    "Known local metabolic repair cannot be reused as a whole-model guarantee.",
+    "Adaptive causal selection already has strong prior art.",
+    "A helper formula mismatch does not establish a paper-result defect when downstream labels use a different path.",
+    "A strong older simple baseline does not establish that it is the globally strongest current complete alternative.",
+    "Latest primary evidence already supplies positive-control calibration and warns that Norman has near-additive saturation."
+  ],
+  "resources": {
+    "paid_calls": 0,
+    "external_live_model_calls": 0,
+    "research_model_inference_cost": null,
+    "web_retrieval_cost": null,
+    "complete_lifecycle_cost": null
+  }
+}
