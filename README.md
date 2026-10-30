@@ -1,6 +1,10 @@
 # AGI ALPHA: transform the competitive game
 
-The current adaptive-012 increment connects observable customer problems, executable complete offers, generated intake plans, delayed competitive learning, native owned-account reservations and repeated profitable delivery. The controlling [mandate](campaign/adaptive-012/MANDATE.md) and [steering](campaign/adaptive-012/STEERING.md) require strict evidence and money, with flexible business design.
+Adaptive-012 demonstrated a conditional simulated commercial flywheel: the representative enterprise settled 34 deliveries for 11 customers, collected USD 1,340.63, paid USD 544.19 in modeled complete costs and retained USD 796.44. Thirty profitable continuations used prior earned funds. All 28 registered central cases met the declared commercial criteria. These are simulated receipts with executed deterministic artifacts and independent acceptance; actual commerce was not executed.
+
+The new adaptive policy was not the general profit winner: the retained strategic-pricing comparator earned USD 175.44 more on average across 32 matched cases. Full adaptation added value in some tested competitive regions; generated instruments executed without establishing superior invention. The stronger baseline remains preserved. See [results and limits](evidence/adaptive012/RESULTS.md).
+
+The controlling [mandate](campaign/adaptive-012/MANDATE.md) and [steering](campaign/adaptive-012/STEERING.md) require strict evidence and money, with flexible business design.
 
 ```sh
 python3 -m pip install -r requirements-commercial010.txt
