@@ -1,0 +1,14 @@
+{
+  "scope": "SYNTHETIC_PUBLIC_WORKLOAD",
+  "currency": "USD",
+  "order_id": "DEMONSTRATION-RECON-001",
+  "require_complete": true,
+  "invoices": [
+    {"id": "INV-001", "customer": "SYNTHETIC-ACME", "amount_cents": 12500},
+    {"id": "INV-002", "customer": "SYNTHETIC-ACME", "amount_cents": 7500}
+  ],
+  "payments": [
+    {"id": "PAY-001", "customer": "SYNTHETIC-ACME", "amount_cents": 12500, "invoice_refs": ["INV-001"]},
+    {"id": "PAY-002", "customer": "SYNTHETIC-ACME", "amount_cents": 7500, "invoice_refs": ["INV-002"]}
+  ]
+}
