@@ -1,0 +1,30 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "SIGTERM-pending_write",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "from pathlib import Path;Path('/workspace/scratch/85dffc7b798c/lab/evidence/next009/verification/early-signal/artifacts/SIGTERM-pending_write/worker_launched').write_text('ran')"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "from pathlib import Path;Path('/workspace/scratch/85dffc7b798c/lab/evidence/next009/verification/early-signal/artifacts/SIGTERM-pending_write/worker_launched').write_text('ran')"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-c",
+    "from pathlib import Path;Path('/workspace/scratch/85dffc7b798c/lab/evidence/next009/verification/early-signal/artifacts/SIGTERM-pending_write/worker_launched').write_text('ran')"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/85dffc7b798c/lab",
+  "limits": {
+    "wall_seconds": 2,
+    "cpu_seconds": 2,
+    "memory_bytes": 134217728,
+    "output_bytes": 65536,
+    "storage_bytes": 131072
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "pending"
+}

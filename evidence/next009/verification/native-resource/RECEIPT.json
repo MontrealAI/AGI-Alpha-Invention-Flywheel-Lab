@@ -1,0 +1,54 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "verification-native-resource-preflight",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "tests.test_resource006_v3",
+    "verification.test_denovo007_protocol_preflight",
+    "-v"
+  ],
+  "requested_command": [
+    "python",
+    "-m",
+    "unittest",
+    "tests.test_resource006_v3",
+    "verification.test_denovo007_protocol_preflight",
+    "-v"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "tests.test_resource006_v3",
+    "verification.test_denovo007_protocol_preflight",
+    "-v"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/85dffc7b798c/lab",
+  "limits": {
+    "wall_seconds": 30,
+    "cpu_seconds": 30,
+    "memory_bytes": 536870912,
+    "output_bytes": 1048576,
+    "storage_bytes": 8388608
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 0.3916358010010299,
+  "supervisor_cpu_seconds": 0.007261038999999997,
+  "waited_cpu_seconds": 0.363249,
+  "descendant_survivors": false,
+  "output_bytes": 4832,
+  "logs": {
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr.log": "2b56b024c1f7ed4584da974ff3593847ff37109c2dd1edfe5046635659ee6d10"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}
