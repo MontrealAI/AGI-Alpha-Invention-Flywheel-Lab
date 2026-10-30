@@ -73,3 +73,13 @@ This package authorizes no spending, paid provider calls, outreach, real commerc
 ## Initial executable tool
 
 `lab.py screen` validates three distinct authored possibilities, emits a hash-bound evidence-gap report, and refuses to claim an admitted cohort without external verification. The example hypotheses are fictional research directions, not a completed opportunity screen. Local unittest checks are engineering tests, not scientific confirmation. Keep the trusted owner README unchanged unless explicitly asked to update it.
+
+## Current commercial execution mandate 30 October 2026
+
+The owner-supplied [commercial mandate](campaign/commercial-010/MANDATE.txt) supersedes founding restrictions that conflict with this explicitly authorized public implementation, qualification, normal merge and release. See [allocation](campaign/commercial-010/ALLOCATION.json). No new spending, paid provider calls, real outreach, payment execution, credentials or modifications to the four foundation repositories are authorized. This commercial lane permits ordinary fixed-capability services; Blue Sky and capability-compounding remain independently evaluated lanes.
+
+Report five independent verdicts: profitable autonomous service; simulated commercial flywheel; observed commercial flywheel; capability-compounding flywheel; Blue Sky enablement. Never impose a global AND. Actual service artifacts on disclosed synthetic work can support conditional SIM success; generated buyers and payments never qualify observed commerce. Invention is optional for commercial success. Apply the reference-v6 clarification recorded by hash in [REFERENCE_V6.json](campaign/commercial-010/REFERENCE_V6.json).
+
+Premium pricing starts near the matched human complete-service cost with a small declared discount. Test higher sustainable prices without anchoring to AI marginal cost. Retain AI savings for profitable earned-funded continuation subject to obligations and liquidity. Source or bound the human comparator, avoid invented overhead, include every failed/rejected/unsold attempt, and disclose unknown host billing via conditional cost sensitivity. CPU seconds are not human hours. Actual necessary human intervention must be measured; do not add hypothetical staff.
+
+Preserve original policy/manifests in historical materializers. Use current operating policy for current work and immutable source snapshots for historical replay; do not regenerate old identities after edits. New evidence is in campaign/commercial-010 and evidence/commercial010. Existing invention engines, adversarial outcomes, scientific failures and published releases remain intact.

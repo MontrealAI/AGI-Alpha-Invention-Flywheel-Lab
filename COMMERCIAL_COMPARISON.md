@@ -103,3 +103,15 @@ The deterministic development scenarios are in `benchmarks/illustrative_cases.js
 - BLS, *Accountants and Auditors*: https://www.bls.gov/ooh/business-and-financial/accountants-and-auditors.htm
 
 Only published tariff/wage parameters are source-verified here. The illustrative model counts, service completion, labor hours, marketing costs, legal applicability, quality and actual market demand are not.
+
+## Executed commercial campaign 010
+
+The implemented service is row-level receivables reconciliation plus an exact exception schedule on authored synthetic records. It does not attest accounts or promise resolution when source information is ambiguous. Both comparator and buyer utility must match that contract. Four illustrative reference cases remain intact and are not measured outcomes or default selling prices.
+
+[CALIBRATION.json](campaign/commercial-010/CALIBRATION.json) records primary wage/benefit sources and task-time uncertainty. The selected human complete-service scenario uses four hours at approximately USD34.74 loaded compensation per hour, rounded to USD139 total. This treats loaded labor as a conservative floor with no invented additional overhead, assuming all comparable obligations fit the stated time. Actual task time and a matched retail quote are unmeasured; shorter human and software-assisted alternatives are sensitivity cases. Raising the input cohort to 1000 source rows per order does not itself establish four human hours.
+
+Offer exploration starts at a 5 percent discount to that human anchor and tests higher prices. Buyer values, trust, onboarding, urgency premiums and repeat demand are conditional model parameters. Competitors may undercut our offer under their own resource costs; commodity parity and correlated adverse conditions may defeat the premium service. No AI-cost-plus selling rule or forced purchase is used.
+
+Exact host model routing, token usage and billing remain UNKNOWN. Complete-cost setup and operating scenarios include agent development, failed search, source handling, testing, acquisition, rejected and unsold work, corrections, support, fees, tax provision and terminal obligations. These are disclosed sensitivity budgets rather than invented token receipts. A positive verdict is conditional on actual complete costs fitting the demonstrated region. No mandatory hypothetical human staff is charged to AI. Modeled taxes and provider terms are assumptions, not jurisdiction-specific financial claims.
+
+The native ProtectedExchange remains the authority for earnings and investment gates. Seed liquidity, revenue, receivables, collection, accrued expenses, reserves and earned cash remain separate. Actual production/checking is rerun only after the next simulated funding commitment. A qualified simulated earned balance can fund simulated continuation; it cannot become a real cash balance. See the five machine-readable verdicts in the campaign result and [browser paper](docs/commercial010/REPORT.md).

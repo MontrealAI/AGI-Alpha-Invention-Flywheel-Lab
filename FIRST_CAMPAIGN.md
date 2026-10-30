@@ -88,3 +88,9 @@ Publish a concise decision record, actual source identities, evidence, executed 
 Report separately: enabling technical change; commercial viability; investment attractiveness; AGI ALPHA value capture; unrestricted earned funding; fresh-successor benefit; and complete flywheel. Attach evidence scope to each verdict.
 
 The investigative decision may be CONSTRUCT, CONTINUE_BOUNDED_PROBE, RETAIN_INCUMBENT, PIVOT, STOP or UNKNOWN. Record remaining allocation and continuation. The laboratory advances when evidence changes a consequential possibility and what survives becomes demonstrably useful in creating the next one.
+
+## Current independent commercial lane
+
+Continue the [autonomous commercial mandate](campaign/commercial-010/MANDATE.txt) from exact refreshed source and ownership. Execute ordinary useful work, independently check deliverables, test premium human-anchored prices against strategic buyer alternatives, reconstruct complete cohort cash flows and prove prior unrestricted simulated earnings precede continuation commitments. Invention and Blue Sky are separate optional achievements, never additional commercial gates.
+
+The campaign at commercial-010 preserves the initial small cohort and no-sales development markets, then tests scaled synthetic reconciliation work under frozen finite scenario sets. Use [REPRODUCE.md](campaign/commercial-010/REPRODUCE.md) for the integrated bounded runtime. Prior exposed cases remain engineering replay, with no fresh statistical or observed-revenue claim. The original four reference prices remain hypothetical examples; the later premium-pricing policy controls new offers.

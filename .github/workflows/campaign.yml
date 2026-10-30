@@ -61,7 +61,8 @@ jobs:
           python "$RUNNER_TEMP/frozen-cycle-005/run_completion.py" --output "$RUNNER_TEMP/mechanism-completion-005"
           python "$RUNNER_TEMP/frozen-cycle-005/verification/cycle005_wholepath.py" --root "$RUNNER_TEMP/frozen-cycle-005" --output "$RUNNER_TEMP/cycle005-wholepath"
           python "$RUNNER_TEMP/frozen-cycle-005/verification/cycle005_p1_regression.py" --root "$RUNNER_TEMP/frozen-cycle-005" --output "$RUNNER_TEMP/cycle005-p1-regression"
-          python run_cycle006.py --output "$RUNNER_TEMP/consequential-cycle-006"
+          python -m flywheel.reproduction006 --root . --output "$RUNNER_TEMP/frozen-cycle-006"
+          python "$RUNNER_TEMP/frozen-cycle-006/run_cycle006.py" --output "$RUNNER_TEMP/consequential-cycle-006"
           python scripts/check_cycle006_paper.py --output "$RUNNER_TEMP/cycle006-paper-identity.json"
       - name: Retain executed qualification evidence including incomplete runs
         if: always()
