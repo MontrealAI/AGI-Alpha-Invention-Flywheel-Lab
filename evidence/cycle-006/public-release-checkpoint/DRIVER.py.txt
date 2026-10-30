@@ -1,0 +1,104 @@
+"""Read-only identity check of downloaded CI bytes against published release digests."""
+import argparse, hashlib, importlib.util, io, json, pathlib, time, urllib.request, zipfile
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--spec', required=True)
+    parser.add_argument('--output', required=True)
+    args = parser.parse_args()
+    spec = json.loads(pathlib.Path(args.spec).read_text())
+    output = pathlib.Path(args.output)
+    output.mkdir(parents=True, exist_ok=False)
+    started = time.monotonic()
+    destination = output / 'downloaded-workflow-artifact.zip'
+    count = 0
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({'https': spec['network_proxy']}))
+    with opener.open(spec['download_url'], timeout=60) as response, destination.open('xb') as target:
+        while chunk := response.read(1024 * 1024):
+            count += len(chunk)
+            if count > 1024**3:
+                raise ValueError('DOWNLOAD_BYTE_BOUND')
+            target.write(chunk)
+    assert sha(destination.read_bytes()) == spec['artifact_sha256']
+    release = spec['release']
+    assert release['tag_name'] == 'perturbation-construction-20261029-r1'
+    assert release['target_commitish'] == 'cd90c81ab757a7042bf4d0384e8e1a7e6c2a9557'
+    assets = {a['name']: a for a in release['assets']}
+    with zipfile.ZipFile(destination) as bundle:
+        def asset(name):
+            matches = [p for p in bundle.namelist() if p.rsplit('/', 1)[-1] == name]
+            if len(matches) != 1:
+                raise ValueError('ASSET_MEMBER_NOT_UNIQUE ' + name)
+            info = bundle.getinfo(matches[0])
+            if info.file_size > 300 * 1024**2:
+                raise ValueError('ASSET_BYTE_BOUND')
+            raw = bundle.read(info)
+            assert assets[name]['size'] == len(raw)
+            assert assets[name]['digest'] == 'sha256:' + sha(raw)
+            return raw
+        source_name = 'AGI_ALPHA_Perturbation_Construction_006_source_evidence.zip'
+        source = asset(source_name)
+        qualification = json.loads(asset('ARCHIVE_QUALIFICATION.json'))
+        assert qualification['archive_sha256'] == sha(source)
+        assert qualification['runtime_qualified'] is True and qualification['identity_only'] is False
+        assert qualification['verifier_sha256'] == '646dfd9df78a44ca12e1fcc75b751cfb4892583cdaa278db20f8941a7bfdbb3e'
+        for row in qualification['checks'].values():
+            assert (row['returncode'] == 0 if isinstance(row, dict) else row is True)
+        helper = pathlib.Path(spec['trusted_root']) / 'verification/cycle006_archive_check.py'
+        assert sha(helper.read_bytes()) == qualification['verifier_sha256']
+        module_spec = importlib.util.spec_from_file_location('digest_pinned_archive_checker', helper)
+        checker = importlib.util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(checker)
+        # Its parser authenticates paths, duplicates, manifest set and every payload.
+        pinned_source = output / source_name
+        with pinned_source.open('xb') as stream:
+            stream.write(source)
+        data, manifest, verified = checker.payloads(pinned_source, sha(source))
+        freeze_path = 'campaign/cycle-006/REPRODUCTION_FREEZE.json'
+        assert sha(data[freeze_path]) == 'd64396e8d8e058aaddf1ecacf3e89f618d77b1e9ea88c87682ac3e8917534fdc'
+        freeze = json.loads(data[freeze_path])
+        assert all(sha(data[p]) == identity for p, identity in freeze['sources'].items())
+        assert sha(data['campaign/cycle-006/CANDIDATE_FREEZE.json']) == '0f646f3481dd32e5a297115ea49d58615de48a47626390293bd167fd50ff7847'
+        expected_paper = {'pdf': 'f5d92d134354da82b282ed02fcbfb0a8505243ae0d28bebcfc61d66688240986',
+            'tex': '14a87c53c0671ba122c885143b9a772514052f0eba676b346e24f197a8aabfc5',
+            'html': 'ecf26ec26a0071e191337a229e8866bb7f724ba1b048cd6170b6c50e9e6e0ad5'}
+        for extension, identity in expected_paper.items():
+            name = 'cycle-006.' + extension
+            assert sha(asset(name)) == identity == sha(data['docs/research/' + name])
+        evidence = asset('CLEAN_ARCHIVE_RUNTIME_EVIDENCE.zip')
+        runtime_reports = {}
+        with zipfile.ZipFile(io.BytesIO(evidence)) as raw:
+            for mode in ('ordinary', 'validated'):
+                suffix = mode + '-runtime/REPORT.json'
+                names = [p for p in raw.namelist() if p.endswith(suffix)]
+                assert len(names) == 1
+                receipt = json.loads(raw.read(names[0]))
+                assert receipt['source_freeze_sha256'] == sha(data[freeze_path])
+                assert receipt['all_predictions_reconstructed'] is True
+                assert not any(receipt['scientific_pilot_threshold_met'].values())
+                assert all(receipt['conditional_settlement_checks_passed'].values())
+                assert receipt['actual_receipts'] == receipt['available_commercial_earned_funds'] == 0
+                assert receipt['funded_successor'] is False
+                runtime_reports[mode] = sha(raw.read(names[0]))
+        original_zips = {}
+        for number in ('001', '002'):
+            name = 'connected-reproduction-' + number + '-complete-raw.zip'
+            original_zips[number] = sha(asset(name))
+        result = {'schema': 'agi-alpha/public-release-identity006/v1', 'passed': True,
+            'release_url': release['html_url'], 'release_target': release['target_commitish'],
+            'downloaded_workflow_artifact_id': spec['artifact_id'], 'downloaded_bytes': count,
+            'source_archive_sha256': sha(source), 'source_archive_bytes': len(source),
+            'payload_files': len(data), 'reproduction_sources_checked': len(freeze['sources']),
+            'archive_qualification_asset_sha256': assets['ARCHIVE_QUALIFICATION.json']['digest'],
+            'runtime_reports': runtime_reports, 'original_raw_zip_identities': original_zips,
+            'paper_identities': expected_paper, 'wall_seconds': time.monotonic() - started,
+            'scope': 'Downloaded workflow artifact members match GitHub-published release asset digests byte for byte. The exact same source ZIP was qualified on CI through ordinary and validated extraction; this local step checks identity and retained raw reports, and performs no new full runtime or scientific confirmation. No direct release-download-endpoint claim. Complete actor/CI/monetary costs remain unknown.'}
+        with (output / 'IDENTITY.json').open('x') as stream:
+            json.dump(result, stream, indent=2); stream.write('\n')
+        print(json.dumps(result))
+
+if __name__ == '__main__':
+    main()

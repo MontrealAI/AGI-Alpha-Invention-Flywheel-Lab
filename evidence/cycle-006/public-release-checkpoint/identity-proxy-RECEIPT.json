@@ -1,0 +1,54 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v3",
+  "run_id": "public-identity-contained",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "/tmp/alpha006_public_identity_proxy.py",
+    "--spec",
+    "/tmp/alpha006-public-download-spec.json",
+    "--output",
+    "/tmp/alpha006-public-identity-contained-run/artifacts"
+  ],
+  "requested_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "/tmp/alpha006_public_identity_proxy.py",
+    "--spec",
+    "/tmp/alpha006-public-download-spec.json",
+    "--output",
+    "/tmp/alpha006-public-identity-contained-run/artifacts"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "/tmp/alpha006_public_identity_proxy.py",
+    "--spec",
+    "/tmp/alpha006-public-download-spec.json",
+    "--output",
+    "/tmp/alpha006-public-identity-contained-run/artifacts"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/681b6e3921b1/lab-cycle006",
+  "limits": {
+    "wall_seconds": 180,
+    "cpu_seconds": 8,
+    "memory_bytes": 4294967296,
+    "output_bytes": 1073741824,
+    "storage_bytes": 2147483648
+  },
+  "wrapper_sha256": "8a10193e2cc29ca277560c7b2153d616e8cb46e64fbc7f54c102518dc2b71cbd",
+  "state": "failed",
+  "exit_code": 1,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 0.21600083301018458,
+  "supervisor_cpu_seconds": 0.008049585000000012,
+  "waited_cpu_seconds": 0.19941499999999998,
+  "descendant_survivors": false,
+  "output_bytes": 6759,
+  "logs": {
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr.log": "ec73d0313a2cc327dbf09066ba9e5422d05d36747f30b32f9ccc3c43801e0752"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}
