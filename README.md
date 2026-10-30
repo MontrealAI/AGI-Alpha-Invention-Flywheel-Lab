@@ -1,6 +1,21 @@
 # AGI-Alpha-Invention-Flywheel-Lab
 Blue Sky and Beyond-Human Foresight: structural discovery, executable strategy invention, adversarial verification, and fresh successors. Experimental research.
 
+## Current default: connected enterprise completion015
+
+The default path operates eight **simulated** 70-day businesses: voluntary buyer choice, qualified orders, executed reconciliation/KPI/evidence work, separate artifact checking, collection, full modeled costs, native earnings reservations, acquisition/capacity and subsequent delivery. Use the [operator guide](docs/connected014/OPERATOR.md), [achieved-results report](docs/completion015/REPORT.md), [inspected PDF](docs/completion015/PAPER.pdf) and [full-record reconstruction commands](docs/completion015/ARTIFACTS.md).
+
+```sh
+python3 -m pip install -r requirements-commercial010.txt
+python3 -m connected_enterprise run --output /absolute/new/business
+python3 -m connected_enterprise audit --output /absolute/new/business
+python3 -m connected_enterprise resume --output /absolute/new/business
+```
+
+The completed economic run demonstrates conditional earned-financed expansion: the two central growth businesses collected 36/39 deliveries and earned modeled profit of $699.91/$804.39, exceeding matched baselines by 24/29 deliveries. Weak channels produced no expansion; delayed, expensive conditions lost money. These are authored simulation conditions, with unknown actual host/model billing and seed-backed protection reserves. **The original run exceeded its registered CPU envelope and is not resource-qualified confirmation.** No native million/billion milestone or seed-independent open-ended expansion is established. All real customers, payments and revenue remain zero.
+
+The final integration and release status is tracked in [PR #28](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/28). A source branch or successful smoke check alone does not establish publication or operation of a downloaded release. Earlier editions and their original claims, failures and URLs are preserved below.
+
 ## Current executed outcome - 30 October 2026
 
 **Commercial 010: CONDITIONAL_SIMULATED_GO.** Actual autonomous production supplied 19,000 synthetic source rows across 19 orders: 16 deliveries passed the separate checker and three orders were rejected. The completed four-arm experiment supports fixed-capability repeated delivery financed by prior unrestricted simulated earnings; invention improvement is not a prerequisite. See the [machine-readable result](campaign/commercial-010/RESULT.json), [browser-readable paper](docs/commercial010/REPORT.md) and [compiled PDF](docs/commercial010/paper.pdf).

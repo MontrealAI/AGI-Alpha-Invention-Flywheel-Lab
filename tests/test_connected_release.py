@@ -173,6 +173,77 @@ class ReleaseIntegrityTests(unittest.TestCase):
         self.assertFalse(receipt['accepted'])
         self.assertFalse(receipt['actual_release_download'])
 
+    def operation_command_fixture(self, private=False):
+        def execute(arguments, cwd, log, deadline, commands):
+            kind = arguments[3]
+            target = Path(arguments[arguments.index('--output')+1])
+            target.mkdir(parents=True, exist_ok=True)
+            if kind == 'run':
+                release.write(target/'FROZEN.json', {'source':{'sha256':self.manifest['source_sha256']}})
+                release.write(target/'REPORT.json', {'fixture':'artifact transport test only'})
+            elif kind == 'audit':
+                release.write(target/'PACKAGE_AUDIT.json', {'accepted':True, 'source_sha256':self.manifest['source_sha256']})
+            elif kind == 'package':
+                path = Path(arguments[arguments.index('--archive')+1])
+                with zipfile.ZipFile(path, 'w') as archive:
+                    archive.writestr('account.sqlite.adaptive-simulation-key' if private else 'source/service.py', b'fixture')
+            commands.append({'command':arguments, 'returncode':0})
+        return execute
+
+    def test_private_candidate_is_never_promoted_to_uploadable_operation_archive(self):
+        import scripts.qualify_connected014 as qualifier
+        output = self.root/'private-artifact-check'
+        with patch.object(qualifier, 'run_command', side_effect=self.operation_command_fixture(private=True)), patch.object(qualifier, 'native_state', return_value={'account':'unchanged'}):
+            with self.assertRaisesRegex(ValueError, 'UNSAFE_OR_PRIVATE'):
+                release.operate_download(self.assets, output, COMMIT, 10)
+        self.assertFalse((output/'downloaded-operation-keyfree.zip').exists())
+        self.assertFalse(release.read(output/'DOWNLOADED_RELEASE_RUN.json')['accepted'])
+
+    def test_actual_operation_archive_hash_and_public_audit_are_retained(self):
+        import scripts.qualify_connected014 as qualifier
+        with zipfile.ZipFile(self.assets/'connected014-keyfree.zip', 'w') as archive:
+            archive.writestr('source/service.py', b'released evidence fixture')
+        qualification = release.read(self.assets/'QUALIFICATION.json')
+        qualification['public_archive']['sha256'] = release.digest(self.assets/'connected014-keyfree.zip')
+        release.write(self.assets/'QUALIFICATION.json', qualification)
+        release.seal(self.assets, self.manifest)
+        output = self.root/'public-artifact-check'
+        with patch.object(qualifier, 'run_command', side_effect=self.operation_command_fixture()), patch.object(qualifier, 'native_state', return_value={'account':'unchanged'}):
+            receipt = release.operate_download(self.assets, output, COMMIT, 10)
+        archive = output/'downloaded-operation-keyfree.zip'
+        self.assertTrue(receipt['accepted'])
+        self.assertEqual(receipt['downloaded_operation_package']['sha256'], release.digest(archive))
+        self.assertEqual(receipt['downloaded_operation_package']['bytes'], archive.stat().st_size)
+        self.assertTrue(receipt['downloaded_operation_public_audit']['accepted'])
+        self.assertEqual(len(receipt['commands']), 6)
+        with zipfile.ZipFile(archive) as source:
+            release.checked_members(source)
+
+    def test_child_cpu_over_envelope_retains_failure_before_further_work(self):
+        import scripts.qualify_connected014 as qualifier
+        zero = {key:0. for key in ('self_user','self_system','children_user','children_system')}
+        over = {**zero, 'children_user':2400.5}
+        output = self.root/'cpu-envelope-check'
+        with patch.object(release, 'cpu_usage', side_effect=[zero, zero, over, over]), patch.object(qualifier, 'run_command') as command:
+            with self.assertRaisesRegex(TimeoutError, 'CPU_ENVELOPE_EXCEEDED'):
+                release.operate_download(self.assets, output, COMMIT, 10)
+        receipt = release.read(output/'DOWNLOADED_RELEASE_RUN.json')
+        self.assertFalse(receipt['accepted'])
+        self.assertTrue(receipt['resources']['cpu_envelope_exceeded'])
+        self.assertEqual(receipt['resources']['total_measured_cpu_seconds'], 2400.5)
+        self.assertEqual(command.call_count, 1)
+
+class KernelCpuTests(unittest.TestCase):
+    def test_deltas_count_self_and_waited_children_without_prior_usage(self):
+        before = {'self_user':10.,'self_system':3.,'children_user':100.,'children_system':7.}
+        after = {'self_user':12.,'self_system':4.,'children_user':150.,'children_system':11.}
+        measured = release.cpu_delta(before, after)
+        self.assertEqual(measured['self_cpu_seconds'], 3.)
+        self.assertEqual(measured['children_cpu_seconds'], 54.)
+        self.assertEqual(measured['total_measured_cpu_seconds'], 57.)
+        with self.assertRaisesRegex(ValueError, 'MONOTONIC_KERNEL'):
+            release.cpu_delta(after, before)
+
 class WorkflowGateTests(unittest.TestCase):
     def row(self, **changes):
         value = {'id':1, 'run_number':1, 'run_attempt':1, 'head_sha':COMMIT,

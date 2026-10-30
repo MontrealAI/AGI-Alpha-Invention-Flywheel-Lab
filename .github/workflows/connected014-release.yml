@@ -109,6 +109,7 @@ jobs:
           path: |
             ${{ runner.temp }}/RELEASE_DOWNLOAD.json
             ${{ runner.temp }}/downloaded-release-operation/DOWNLOADED_RELEASE_RUN.json
+            ${{ runner.temp }}/downloaded-release-operation/downloaded-operation-keyfree.zip
             ${{ runner.temp }}/downloaded-release-operation/*.stdout
             ${{ runner.temp }}/downloaded-release-operation/*.stderr
           if-no-files-found: warn
