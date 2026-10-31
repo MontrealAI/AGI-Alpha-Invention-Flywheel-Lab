@@ -1,0 +1,137 @@
+{
+  "schema": "alpha-staged-coupling/v1",
+  "scope": "SIMULATED_PLANNING_ONLY",
+  "currency": "simulated-microUSD",
+  "funding": {
+    "source": "SYNTHETIC_NOT_AUTHENTICATED",
+    "available": 100000000,
+    "unrestrictedEarned": 100000000,
+    "authorized_allocation": 100000000
+  },
+  "state_weights": {
+    "useful": 5000,
+    "not_useful": 5000
+  },
+  "portfolios": [
+    {
+      "id": "keep_liquidity",
+      "lane": "retain",
+      "cost": 0,
+      "authorized": true,
+      "evidence": "AUTHORED_ENGINEERING_FIXTURE_NOT_BUSINESS_EVIDENCE",
+      "responses": {
+        "retain_offer": {
+          "useful": {
+            "net_receipts": 0,
+            "rival_value": 20000000,
+            "future_cash_required": 0
+          },
+          "not_useful": {
+            "net_receipts": 0,
+            "rival_value": 20000000,
+            "future_cash_required": 0
+          }
+        },
+        "imitate": {
+          "useful": {
+            "net_receipts": 0,
+            "rival_value": 0,
+            "future_cash_required": 0
+          },
+          "not_useful": {
+            "net_receipts": 0,
+            "rival_value": 0,
+            "future_cash_required": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "repeat_delivery",
+      "lane": "commerce",
+      "cost": 20000000,
+      "authorized": true,
+      "evidence": "AUTHORED_ENGINEERING_FIXTURE_NOT_BUSINESS_EVIDENCE",
+      "responses": {
+        "retain_offer": {
+          "useful": {
+            "net_receipts": 50000000,
+            "rival_value": 20000000,
+            "future_cash_required": 0
+          },
+          "not_useful": {
+            "net_receipts": 50000000,
+            "rival_value": 20000000,
+            "future_cash_required": 0
+          }
+        },
+        "imitate": {
+          "useful": {
+            "net_receipts": 50000000,
+            "rival_value": 0,
+            "future_cash_required": 0
+          },
+          "not_useful": {
+            "net_receipts": 50000000,
+            "rival_value": 0,
+            "future_cash_required": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "build_instrument_and_expand",
+      "lane": "combined",
+      "cost": 60000000,
+      "authorized": true,
+      "evidence": "AUTHORED_ENGINEERING_FIXTURE_NOT_BUSINESS_EVIDENCE",
+      "responses": {
+        "retain_offer": {
+          "useful": {
+            "net_receipts": 220000000,
+            "rival_value": 20000000,
+            "future_cash_required": 0
+          },
+          "not_useful": {
+            "net_receipts": 0,
+            "rival_value": 20000000,
+            "future_cash_required": 0
+          }
+        },
+        "imitate": {
+          "useful": {
+            "net_receipts": 190000000,
+            "rival_value": 40000000,
+            "future_cash_required": 0
+          },
+          "not_useful": {
+            "net_receipts": 0,
+            "rival_value": -20000000,
+            "future_cash_required": 0
+          }
+        }
+      }
+    }
+  ],
+  "probes": [
+    {
+      "id": "discriminating_test",
+      "cost": 5000000,
+      "authorized": true,
+      "evidence": "HYPOTHETICAL_90_PERCENT_ACCURACY_NOT_MEASURED",
+      "discount_bps": 10000,
+      "likelihoods": {
+        "favorable": {
+          "useful": 9000,
+          "not_useful": 1000
+        },
+        "unfavorable": {
+          "useful": 1000,
+          "not_useful": 9000
+        }
+      }
+    }
+  ],
+  "max_loss": 70000000,
+  "max_evaluations": 100000
+}

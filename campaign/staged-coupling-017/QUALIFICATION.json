@@ -1,0 +1,78 @@
+{
+  "schema": "alpha-staged-coupling-qualification/v1",
+  "scope": "ENGINEERING_ONLY_NOT_NATIVE_ENTERPRISE_EXECUTION",
+  "base_commit": "c5eba47e8d1618847cb0235c5fac980d92a40816",
+  "tests_passed": 27,
+  "random_games_against_exhaustive_oracle": 80,
+  "scenarios": 7,
+  "source_blobs": {
+    "portfolio_scale/staged_coupling.py": "34f212d6a83f55682659312c5c2e01b797e7c695",
+    "portfolio_scale/transformational.py": "465e752db419b5077314b91136e2b4e8e8784226",
+    "portfolio_scale/__init__.py": "e5d53ac45e2e164ae2c12b75dab176ace489c9a4",
+    "tests/test_staged_coupling.py": "413573d8187f2f651ce8a8c372cb28958272bd1c",
+    "campaign/staged-coupling-017/EXAMPLE.json": "bf50f226194cdb3bf112dde2d084b1f4f30e4be4",
+    "campaign/staged-coupling-017/reproduce.py": "05b4cf1c44cb5bb35bfaaa1d1d88e4fa304a498a"
+  },
+  "result_sha256": "b62cac2822568d40059a779decddf20339af15b0ceaf85017c558cb4c43e15e4",
+  "tests_sha256": "7d3e78a77a17566db7afc43cdb8a07793bff174a8b536418d29859a0da709f6f",
+  "summary": {
+    "responsive_rival": {
+      "decision": "probe_then_choose",
+      "probe": "discriminating_test",
+      "expected_net_microUSD": "65500000",
+      "best_nonadaptive_net_microUSD": "50000000"
+    },
+    "passive_rival_control": {
+      "decision": "probe_then_choose",
+      "probe": "discriminating_test",
+      "expected_net_microUSD": "79000000",
+      "best_nonadaptive_net_microUSD": "50000000"
+    },
+    "expensive_probe": {
+      "decision": "commit_now",
+      "probe": null,
+      "expected_net_microUSD": "50000000",
+      "best_nonadaptive_net_microUSD": "50000000"
+    },
+    "delayed_probe": {
+      "decision": "commit_now",
+      "probe": null,
+      "expected_net_microUSD": "50000000",
+      "best_nonadaptive_net_microUSD": "50000000"
+    },
+    "easy_imitation": {
+      "decision": "commit_now",
+      "probe": null,
+      "expected_net_microUSD": "30000000",
+      "best_nonadaptive_net_microUSD": "30000000"
+    },
+    "no_earned_funding": {
+      "decision": "commit_now",
+      "probe": null,
+      "expected_net_microUSD": "0",
+      "best_nonadaptive_net_microUSD": "0"
+    },
+    "unaffordable_later_requirement": {
+      "decision": "commit_now",
+      "probe": null,
+      "expected_net_microUSD": "30000000",
+      "best_nonadaptive_net_microUSD": "30000000"
+    }
+  },
+  "no_execution_authority": true,
+  "native_operating_test": false,
+  "market_calibrated": false,
+  "new_commercial_worlds": 0,
+  "limits": [
+    "One optional public signal, one portfolio commitment, one rival best response; no real-market or multi-period global guarantee.",
+    "Caller payoff/likelihood/funding assumptions are not independently authenticated.",
+    "Same author/session/host for separately implemented enumerator.",
+    "Exact scoped dependency recovered from prior archive; full new checkout DNS failed.",
+    "No paid calls, actual payments, default runtime integration, merge or release."
+  ],
+  "validation_note": "Transport changed only the name of a local comprehension variable; final exact Git blobs rerun. Initial engineering output retained locally, not called final qualification.",
+  "clean_source_replay": {
+    "tests_passed": 27,
+    "complete_results_identical": true
+  }
+}
