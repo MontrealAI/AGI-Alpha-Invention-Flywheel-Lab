@@ -18,9 +18,9 @@ def validate_policy(p):
     if not isinstance(p['profiles'],list) or not 1<=len(p['profiles'])<=16:raise ValueError('BOUNDED_REQUEST_PROFILES_REQUIRED')
     if 'requested_jobs' in p:
         requests=p['requested_jobs']
-        if not isinstance(requests,dict) or not 1<=len(requests)<=10000:raise ValueError('BOUNDED_PUBLIC_JOB_REQUESTS_REQUIRED')
+        if not isinstance(requests,dict) or not requests:raise ValueError('BOUNDED_PUBLIC_JOB_REQUESTS_REQUIRED')
         for buyer,ids in requests.items():
-            if not isinstance(buyer,str) or not buyer or not isinstance(ids,list) or len(ids)>10000 or len(ids)!=len(set(ids)) or any(not isinstance(i,str) or not i for i in ids):raise ValueError('UNIQUE_REQUESTED_ADMITTED_IDS_REQUIRED')
+            if not isinstance(buyer,str) or not buyer or not isinstance(ids,list) or len(ids)!=len(set(ids)) or any(not isinstance(i,str) or not i for i in ids):raise ValueError('UNIQUE_REQUESTED_ADMITTED_IDS_REQUIRED')
     ids=[]
     for r in p['profiles']:
         if set(r)!={'id','services','price_grids','atoms','outside_options'}:raise ValueError('EXACT_REQUEST_PROFILE_REQUIRED')
