@@ -20,7 +20,9 @@ LIMIT = 256_000_000
 OPERATING_CPU_ENVELOPE_SECONDS = 2400
 PAPERS = ('PAPER.pdf', 'PAPER.tex', 'index.html', 'REPORT.md', 'PUBLICATION.json', 'PDF_QA.json')
 REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.yml', 'adaptive012.yml', 'commercial010.yml')
-CONDITIONAL_WORKFLOWS = {'measurement009.yml':('.github/workflows/measurement009.yml', 'campaign/next-009/', 'inventions/measurement009/', 'research/next009/', 'verification/next009/', 'docs/next009/', 'evidence/next009/')}
+# Terminal measurement009 is manual-only; path changes never renew its expired allocation.
+CONDITIONAL_WORKFLOWS = {}
+RETIRED_MANUAL_WORKFLOWS = ('measurement009.yml',)
 OWN_WORKFLOW = 'connected014-release.yml'
 
 def digest(path):
@@ -153,6 +155,13 @@ def verify_assets(directory, expected_commit):
                        or row.get('head_branch') != 'main' or row.get('conclusion') != 'success'
                        or row.get('path') != '.github/workflows/'+name for name, row in runs.items())):
             raise ValueError('SOURCE_BOUND_MAIN_RELEASE_GATE_REQUIRED')
+        manual = gate.get('observed_retired_manual_workflows', {})
+        if (not isinstance(manual, dict) or any(name not in RETIRED_MANUAL_WORKFLOWS
+                or not isinstance(row, dict) or row.get('head_sha') != expected_commit
+                or row.get('event') != 'workflow_dispatch' or row.get('head_branch') != 'main'
+                or row.get('conclusion') != 'success' or row.get('path') != '.github/workflows/'+name
+                for name, row in manual.items())):
+            raise ValueError('SOURCE_BOUND_OBSERVED_MANUAL_GATE_REQUIRED')
     return manifest
 
 
@@ -328,10 +337,10 @@ def gh(endpoint, optional=False):
         raise RuntimeError('GITHUB_API_FAILED:'+endpoint)
     return json.loads(result.stdout)
 
-def qualifying_runs(workflows, source_commit):
+def qualifying_runs(workflows, source_commit, *, event='push'):
     accepted = {}
     for name, runs in workflows.items():
-        matches = [row for row in runs if row.get('head_sha') == source_commit and row.get('event') == 'push'
+        matches = [row for row in runs if row.get('head_sha') == source_commit and row.get('event') == event
                    and row.get('head_branch') == 'main' and row.get('path') == '.github/workflows/'+name]
         if not matches:
             continue
@@ -341,6 +350,16 @@ def qualifying_runs(workflows, source_commit):
                 raise ValueError('EXACT_MAIN_QUALIFICATION_FAILED:'+name)
             accepted[name] = {key:latest[key] for key in ('id', 'head_sha', 'event', 'head_branch', 'path', 'conclusion', 'html_url')}
     return accepted
+
+def observed_retired_manual_runs(workflows, source_commit):
+    """No manual run is required; an actually observed same-head run must finish successfully."""
+    observed = {name: [row for row in rows if row.get('head_sha') == source_commit
+                      and row.get('event') == 'workflow_dispatch' and row.get('head_branch') == 'main'
+                      and row.get('path') == '.github/workflows/'+name]
+                for name, rows in workflows.items() if name in RETIRED_MANUAL_WORKFLOWS}
+    observed = {name:rows for name,rows in observed.items() if rows}
+    accepted = qualifying_runs(observed, source_commit, event='workflow_dispatch') if observed else {}
+    return observed, accepted
 
 def applicable_workflows(changed_paths, observed=(), conservative=False):
     required = set(REQUIRED_WORKFLOWS)
@@ -393,7 +412,9 @@ def publish(directory, source_commit, repository, run_id, timeout):
         required = applicable_workflows(applicability['changed_paths'], names, applicability['conservative_all_conditionals'])
         runs = {name:gh(f'repos/{repository}/actions/workflows/{name}/runs?head_sha={source_commit}&event=push&branch=main&per_page=100')['workflow_runs'] for name in required}
         accepted = qualifying_runs(runs, source_commit)
-        if set(accepted) == required:
+        manual_runs = {name:gh(f'repos/{repository}/actions/workflows/{name}/runs?head_sha={source_commit}&event=workflow_dispatch&branch=main&per_page=100')['workflow_runs'] for name in RETIRED_MANUAL_WORKFLOWS}
+        manual_observed, manual_accepted = observed_retired_manual_runs(manual_runs, source_commit)
+        if set(accepted) == required and set(manual_accepted) == set(manual_observed):
             break
         if time.monotonic() >= deadline:
             raise TimeoutError('EXACT_MAIN_WORKFLOW_GATE_TIMEOUT')
@@ -424,7 +445,7 @@ def publish(directory, source_commit, repository, run_id, timeout):
         return original
     gate = {'schema':'agi-alpha/connected014-release-gate/v1', 'source_commit':source_commit,
             'event':'push', 'branch':'main', 'own_run_id':run_id, 'required_workflows':accepted,
-            'applicability':applicability}
+            'applicability':applicability, 'observed_retired_manual_workflows':manual_accepted}
     write(directory/'RELEASE_GATE.json', gate)
     manifest['downloaded_release_operation'] = 'FOLLOWING_PUBLICATION_JOB_REQUIRED; SEE_WORKFLOW_ARTIFACT'
     seal(directory, manifest)
