@@ -35,10 +35,6 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
             'payment_bps':cfg['payment_bps'],'payment_fixed':cfg['payment_fixed'],'available':available,
             'reserve_buffer':1_000_000,'quote_cost':cfg['exposure_cost']+cfg['qualification_cost'],
             'native_state_digest':snapshot['state_digest'],'profit_tax_bps':cfg['profit_tax_bps']}
-        if 'repeat_choice' in cfg:
-            from .repeat_choice import public_state
-            admitted=[e['job'] for e in jobs.values() if e['artifact'].get('outcome_scope')=='complete_outcome']
-            public['repeat_state']=public_state(cfg,buyer,state['orders'],state['decisions'],state['investments'],admitted,set(tentative['used_jobs']),job['id'],prepared['event']['time'],state['market']['public_rival_bps'])
         selection=select(cfg['strategic_policy'],cfg.get('mechanism_policy'),job['id'],offer,state.get('mechanism_memory'),public)
         deliveries.append({'id':'quote-'+str(day)+'-'+buyer['id'],'customer_id':buyer['id'],'onboarding':onboard,
                            'exclusive_group':'customer-'+buyer['id'],'selection':selection,'requires':[]})

@@ -31,7 +31,7 @@ def default_config():
         'limits':['Synthetic non-personal work only; no actual customers or payments.','Finite authored buyer/channel/supplier contracts, no empirical conversion calibration.','Permanent native principal/fee protection tails remain; seed may back reserves.','No paid inference: capable-frontier AI economics represented by disclosed envelopes; actual executors are deterministic.','Finite frozen service inventory is an edition resource, not a universal market ceiling.']}
 
 def validate_config(cfg):
-    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','repeat_choice'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
     for key in ['horizon_days','customer_pool','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
     for key in ['nonpayment_bps','arrival_bps','retention_bps','payment_bps','profit_tax_bps']:
@@ -40,14 +40,6 @@ def validate_config(cfg):
     if cfg['production_hours']+cfg['acceptance_hours']+cfg['clearing_hours']>cfg['payment_deadline_hours']:raise ValueError('COMPLETE_LIFECYCLE_EXCEEDS_PAYMENT_DEADLINE')
     for key in ['opening','working','setup_cost','maintenance_daily','exposure_cost','qualification_cost','onboarding_cost','production_cost','support_cost','supplier_unit_cost','capacity_price','payment_fixed']:
         if type(cfg[key]) is not int or cfg[key]<0:raise ValueError('INTEGER_RESOURCE_COST_REQUIRED')
-    if 'repeat_choice' in cfg:
-        from .repeat_choice import validate_contract
-        validate_contract(cfg['repeat_choice'])
-        if cfg['value_bps']!=10000 or cfg['buyer_budget_multiplier_bps']!=10000:raise ValueError('REPEAT_ATOMS_REPLACE_NOT_MULTIPLY_LEGACY_BUYER_PRIORS')
-        if 'mechanism_policy' in cfg and 'cost_contract' not in cfg['mechanism_policy']:raise ValueError('REPEAT_SUCCESSOR_REQUIRES_COMMON_COMPLETE_COST_SCOPE')
-        if 'strategic_policy' in cfg and (cfg['strategic_policy'].get('demand_model')!='connected_repeat' or cfg['strategic_policy'].get('choice_contract')!=cfg['repeat_choice']):raise ValueError('BUYER_AND_POLICY_GAME_MUST_MATCH')
-        if 'strategic_policy' in cfg and any(x['accept_prob']!=1 or abs(x['collect_prob']-(1-cfg['nonpayment_bps']/10000))>1e-12 for x in cfg['strategic_policy']['scenarios']):raise ValueError('PUBLIC_COLLECTION_BELIEFS_MUST_MATCH_DECLARED_REPEAT_GAME')
-    elif cfg.get('strategic_policy',{}).get('demand_model')=='connected_repeat':raise ValueError('REPEAT_POLICY_REQUIRES_MATCHED_BUYER_GAME')
     if 'mechanism_policy' in cfg:
         from .mechanism_choice import validate_policy
         validate_policy(cfg['mechanism_policy'])
@@ -86,10 +78,7 @@ def _buyers(cfg,seed):
     result=[]
     for i in range(cfg['customer_pool']):
         ident=f'SIM-customer-{i:03d}';budget=int((180+400*draw(seed,ident,'budget'))*MICRO*cfg['buyer_budget_multiplier_bps']/10000)
-        if 'repeat_choice' in cfg:
-            atoms=cfg['repeat_choice']['budget_microUSD_atoms'];budget=atoms[min(len(atoms)-1,int(draw(seed,ident,'budget')*len(atoms)))]
         result.append({'id':ident,'initial_budget':budget,'remaining_budget':budget,'pending_commitments':{},'outside_spend':0,'our_settled_spend':0,'known':i<4,'active':True,'purchases':0,'onboarded':False,'next_need_time':0,'acquisition_source_plan_id':None,'exposure_time':0 if i<4 else None,'retention_decision_count':0,'service_index':i%3,'last_quote':None})
-        if 'repeat_choice' in cfg:result[-1]['last_provider']=None
     return result
 
 def _initial(cfg,seed,arm,source):
@@ -172,19 +161,9 @@ def _prepare_plan(state,account,jobs):
         if rival_capacity>0 and rival_cash>MICRO:options.append(('rival',value-rival_price))
         options=[(name,u) for name,u in options if name=='decline' or b['remaining_budget']>=prices[name]]
         chosen=max(options,key=lambda p:(p[1],draw(seed,[day,b['id'],p[0]],'buyer-indifference')))[0]
-        if 'repeat_choice' in cfg:
-            from .repeat_choice import actual_choice
-            c=cfg['repeat_choice'];vs=c['value_bps_atoms'];v=vs[min(len(vs)-1,int(draw(seed,b['id'],'repeat-value')*len(vs)))]
-            choice=actual_choice(c,anchor,price,rival_price if rival_capacity>0 and rival_cash>MICRO else None,v,b['remaining_budget'],b.get('last_provider'),lambda provider:draw(seed,[day,b['id'],provider],'buyer-indifference'))
-            chosen=choice['provider'];prices['self_service']=anchor*c['self_service_fee_bps']//10000
         decision={'kind':'offer' if price is not None else 'outside_choice','time':t,'customer_id':b['id'],'service_id':service,'price':price,'human_price':anchor,'public_rival_price':rival_price,'chosen':chosen=='us','buyer_choice':chosen,'information':'Seller uses past public outcomes only; buyer utility is private environment, not policy observation. Unavailable enterprise offers do not remove outside alternatives.'}
-        if chosen in ({'human','rival','self_service'} if 'repeat_choice' in cfg else {'human','rival'}):
+        if chosen in {'human','rival'}:
             outside=prices[chosen];decision['outside_spend']=outside;b['remaining_budget']-=outside;b['next_need_time']=t+7*24
-            if 'repeat_choice' in cfg:
-                decision['provider_before']=b.get('last_provider');b['last_provider']=chosen
-                decision['outside_delay_hours']=cfg['repeat_choice']['self_service_delay_hours'] if chosen=='self_service' else 0
-                b['next_need_time']+=decision['outside_delay_hours']
-                if chosen=='self_service':decision['self_service_status']='PENDING_OUTSIDE_ENVIRONMENT'
             if chosen=='rival':rival_capacity-=1;rival_cash+=outside-MICRO
         return decision
     joint=None; joint_by_customer={}; joint_selected={}
@@ -301,11 +280,8 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 attempts=[d for d in p['declines'] if d['kind']=='offer'];qualified_candidates=(len(p['joint_action']['allocation']['deliveries']) if p.get('joint_action') else len(attempts));cost('qualification-'+str(day),cfg['qualification_cost']*qualified_candidates,t,'qualification_including_lost_offers')
                 state['decisions'].extend(p['declines'])
                 for d in p['declines']:
-                    if d.get('outside_spend') or ('repeat_choice' in cfg and d.get('buyer_choice')=='self_service'):
+                    if d.get('outside_spend'):
                         b=byid[d['customer_id']];b['remaining_budget']-=d['outside_spend'];b['outside_spend']+=d['outside_spend'];b['next_need_time']=t+7*24
-                        if 'repeat_choice' in cfg:
-                            b['last_provider']=d['buyer_choice'];b['next_need_time']+=d['outside_delay_hours']
-                            if d['buyer_choice']=='self_service':_schedule(state,t+d['outside_delay_hours'],'self_service_complete','self-service-'+str(day)+'-'+b['id'],customer_id=b['id'],decision_time=t)
                         if d['buyer_choice']=='rival':
                             market=state['market'];market['rival_collections']+=d['outside_spend'];market['rival_cash']+=d['outside_spend']-MICRO;market['rival_expenses']+=MICRO
                 if 'channel_menu_policy' in cfg:
@@ -332,20 +308,12 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                     account.execute('offer',{'id':ident,'buyer':ident+'-wallet','price':o['price'],'job_id':o['job_id'],'deadline':t+cfg['payment_deadline_hours']},t)
                     for action in ['consent','fund']:account.execute('event',{'id':ident,'event_id':ident+'-'+action,'action':action},t)
                     b['pending_commitments'][ident]=o['price'];b['remaining_budget']-=o['price'];b['onboarded']=True;state['used_jobs'].append(o['job_id']);state['orders'].append(o)
-                    if 'repeat_choice' in cfg:b['last_provider']='us'
                     _event(state,t,'QUALIFIED_ORDER',ident+'-qualified',order_id=ident,customer_id=b['id']);_schedule(state,o['production_time'],'produce',ident+'-produce',order_id=ident)
                 if day and day%7==0:
                     observed=[d for d in state['decisions'] if d['kind']=='offer' and d['time']<=t-24][-20:]
                     if observed:
                         won=sum(d['buyer_choice']=='rival' for d in observed)/len(observed);old=state['market']['public_rival_bps'];state['market']['public_rival_bps']=max(5000,min(10500,old+(200 if won>.6 else -200)))
                 _event(state,t,'BUSINESS_DECISION',ev['id'],offered=len(attempts),qualified=len(p['orders']),channel_selected=bool(p['channel_purchase']),capacity_selected=bool(p['capacity_purchase']),public_account_before=p['before']['summary'])
-            elif kind=='self_service_complete':
-                b=byid[ev['customer_id']];d=next(x for x in state['decisions'] if x['customer_id']==b['id'] and x['time']==ev['decision_time'] and x.get('buyer_choice')=='self_service')
-                success=draw(seed,[b['id'],ev['decision_time']],'self-service-success')<cfg['repeat_choice']['self_service_success_bps']/10000
-                d['self_service_status']='SIMULATED_SUCCESS' if success else 'SIMULATED_FAILURE';d['self_service_completion_time']=t
-                if success:b['service_index']+=1
-                b['next_need_time']=t+(168 if success else 24)
-                _event(state,t,'SELF_SERVICE_COMPLETE',ev['id'],customer_id=b['id'],decision_time=ev['decision_time'],success=success,fee_paid=d['outside_spend'],scope='Authored outside-provider outcome, not enterprise delivery or independently verified outside artifact')
             elif kind=='produce':
                 o=next(o for o in state['orders'] if o['id']==ev['order_id'])
                 if 'method_plan' in o:

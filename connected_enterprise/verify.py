@@ -100,8 +100,6 @@ def _check_buyer_origins(config, seed, buyers):
         key = canonical(['connected014', seed, ident, 'budget'])
         uniform = int.from_bytes(hashlib.sha256(key).digest()[:8], 'big') / 2**64
         expected = int((180 + 400 * uniform) * 1_000_000 * config['buyer_budget_multiplier_bps'] / 10000)
-        if 'repeat_choice' in config:
-            atoms=config['repeat_choice']['budget_microUSD_atoms'];expected=atoms[min(len(atoms)-1,int(uniform*len(atoms)))]
         if buyer['initial_budget'] != expected:
             raise ValueError('FROZEN_INITIAL_BUYER_BUDGET_CHANGED')
 
@@ -119,7 +117,6 @@ def _check_market_decisions(result, tape):
     outside = {}
     checked = set()
     history = []
-    last_provider={ident:None for ident in buyers}
     current_time, rival_capacity = None, 0
     rival_cash = 500_000_000
     for decision in choices:
@@ -172,11 +169,6 @@ def _check_market_decisions(result, tape):
         if rival_capacity > 0 and rival_cash > 1_000_000 and available >= rival_price:
             options.append(('rival', value - rival_price))
         choice = max(options, key=lambda item: (item[1], _private_draw(seed, [moment // 24, customer, item[0]], 'buyer-indifference')))[0]
-        if 'repeat_choice' in cfg:
-            from .repeat_choice import actual_choice
-            contract=cfg['repeat_choice'];vs=contract['value_bps_atoms'];v=vs[min(len(vs)-1,int(_private_draw(seed,customer,'repeat-value')*len(vs)))]
-            chosen=actual_choice(contract,anchor,price if decision['kind']=='offer' else None,rival_price if rival_capacity>0 and rival_cash>1000000 else None,v,available,last_provider[customer],lambda provider:_private_draw(seed,[moment//24,customer,provider],'buyer-indifference'))
-            choice=chosen['provider']
         if decision['buyer_choice'] != choice or decision['chosen'] is not (choice == 'us'):
             raise ValueError('VOLUNTARY_BUYER_CHOICE_DOES_NOT_RECOMPUTE')
         if choice == 'us':
@@ -186,20 +178,15 @@ def _check_market_decisions(result, tape):
         else:
             if (customer, moment) in orders:
                 raise ValueError('DECLINED_OFFER_BECAME_NATIVE_ORDER')
-            amount = anchor if choice == 'human' else rival_price if choice == 'rival' else anchor*cfg['repeat_choice']['self_service_fee_bps']//10000 if choice=='self_service' and 'repeat_choice' in cfg else 0
-            if 'repeat_choice' in cfg and choice in {'human','rival','self_service'}:
-                delay=cfg['repeat_choice']['self_service_delay_hours'] if choice=='self_service' else 0
-                if decision.get('outside_delay_hours')!=delay or decision.get('provider_before')!=last_provider[customer]:raise ValueError('OUTSIDE_PROVIDER_STATE_OR_DELAY_CHANGED')
+            amount = anchor if choice == 'human' else rival_price if choice == 'rival' else 0
             if decision.get('outside_spend', 0) != amount:
                 raise ValueError('COMPETING_PROVIDER_BUDGET_SPEND_CHANGED')
             outside[customer] = outside.get(customer, 0) + amount
             if choice == 'rival':
                 rival_capacity -= 1
                 rival_cash += amount - 1_000_000
-        if 'repeat_choice' in cfg and choice!='decline':last_provider[customer]=choice
         if decision['kind'] == 'offer':
             history.append(decision)
-    if 'repeat_choice' in cfg and any(buyers[i].get('last_provider')!=v for i,v in last_provider.items()):raise ValueError('FINAL_PROVIDER_HISTORY_CHANGED')
     if set(orders) - checked:
         raise ValueError('NATIVE_ORDER_WITHOUT_VOLUNTARY_BUYER_DECISION')
     if any(buyer['outside_spend'] != outside.get(ident, 0) for ident, buyer in buyers.items()):
@@ -218,13 +205,11 @@ def _check_customer_lifecycle(result):
                      'purchases': 0, 'retention_decision_count': 0, 'pending': None,
                      'service_index': int(ident.rsplit('-', 1)[1]) % 3,
                      'last_exposure': None, 'next_need_time': 0} for ident in buyers}
-    if 'repeat_choice' in cfg:
-        for ident,b in state.items():b['last_provider']=None;b['id']=ident
     orders = {row['id']: row for row in result['orders']}
     pending_reactivations = {}
     outside = {}
     for decision in result['decisions']:
-        if decision.get('outside_spend') or ('repeat_choice' in cfg and decision.get('buyer_choice')=='self_service'):
+        if decision.get('outside_spend'):
             outside.setdefault(decision['time'], []).append(decision)
     responses = 0
     outreach_units = {};candidate_ids={};public_buyers={}
@@ -272,7 +257,6 @@ def _check_customer_lifecycle(result):
             if order['offer']['service_id'] != service:
                 raise ValueError('CUSTOMER_SERVICE_NEED_CHANGED_WITHOUT_DELIVERY')
             buyer['onboarded'], buyer['pending'] = True, order['id']
-            if 'repeat_choice' in cfg:buyer['last_provider']='us'
         elif kind in {'COLLECTION', 'REFUND'}:
             order = orders[event['order_id']]
             buyer = state[order['customer_id']]
@@ -286,30 +270,15 @@ def _check_customer_lifecycle(result):
                 buyer['retention_decision_count'] += 1
                 buyer['purchases'] += 1
                 buyer['service_index'] += 1
-        elif kind=='SELF_SERVICE_COMPLETE':
-            decision=next((d for d in result['decisions'] if d['customer_id']==event['customer_id'] and d['time']==event['decision_time'] and d.get('buyer_choice')=='self_service'),None)
-            if decision is None or moment!=decision['time']+cfg['repeat_choice']['self_service_delay_hours']:raise ValueError('SELF_SERVICE_OUTCOME_NOT_FROM_PRIOR_PAID_CHOICE')
-            success=_private_draw(seed,[event['customer_id'],decision['time']],'self-service-success')<cfg['repeat_choice']['self_service_success_bps']/10000
-            if event['success'] is not success or event['fee_paid']!=decision['outside_spend'] or decision.get('self_service_completion_time')!=moment or decision.get('self_service_status')!=('SIMULATED_SUCCESS' if success else 'SIMULATED_FAILURE'):raise ValueError('SELF_SERVICE_OUTCOME_CHANGED')
-            buyer=state[event['customer_id']]
-            if success:buyer['service_index']+=1
-            buyer['next_need_time']=moment+(168 if success else 24)
         elif kind == 'BUSINESS_DECISION':
             for decision in outside.get(moment, []):
                 state[decision['customer_id']]['next_need_time'] = moment + 7 * 24
-                if 'repeat_choice' in cfg:
-                    state[decision['customer_id']]['last_provider']=decision['buyer_choice']
-                    state[decision['customer_id']]['next_need_time']+=decision['outside_delay_hours']
-    if 'repeat_choice' in cfg:
-        choices={(d['customer_id'],d['time']) for d in result['decisions'] if d.get('buyer_choice')=='self_service'}
-        outcomes=[(e['customer_id'],e['decision_time']) for e in result['events'] if e['kind']=='SELF_SERVICE_COMPLETE']
-        if len(outcomes)!=len(set(outcomes)) or set(outcomes)!=choices:raise ValueError('COMPLETE_DISTINCT_SELF_SERVICE_OUTCOMES_REQUIRED')
     if pending_reactivations:
         raise ValueError('UNRESOLVED_PAID_REACTIVATION_RESPONSE')
     if set(outreach_units) != {day * 24 for day in range(cfg['horizon_days'])}:
         raise ValueError('COMPLETE_OPERATING_CALENDAR_NOT_EXECUTED')
     for customer, expected in state.items():
-        for key in ['known', 'active', 'onboarded', 'purchases', 'retention_decision_count', 'service_index', 'next_need_time']+(['last_provider'] if 'repeat_choice' in cfg else []):
+        for key in ['known', 'active', 'onboarded', 'purchases', 'retention_decision_count', 'service_index', 'next_need_time']:
             if buyers[customer].get(key) != expected[key]:
                 raise ValueError('DERIVED_CUSTOMER_LIFECYCLE_CHANGED:' + key)
     return {'customer_lifecycles_recomputed': len(state), 'paid_reactivation_responses_recomputed': responses,
@@ -521,15 +490,6 @@ def audit(root, manifest, result):
     required = set(SERVICE_SOURCES) | set(FINANCE_SOURCES) | {
         'connected_enterprise/engine.py', 'connected_enterprise/channels.py',
         'connected_enterprise/verify.py', 'connected_enterprise/scale.py', 'connected_enterprise/pricing.py'}
-    if 'repeat_choice' in result['config']:
-        from .repeat_choice import validate_contract
-        cfg=result['config'];validate_contract(cfg['repeat_choice'])
-        required|={'connected_enterprise/repeat_choice.py','connected_enterprise/strategic_commerce.py','connected_enterprise/joint_planning.py','connected_enterprise/strategic_audit.py','adaptive_enterprise/allocation.py'}
-        if cfg['value_bps']!=10000 or cfg['buyer_budget_multiplier_bps']!=10000:raise ValueError('REPEAT_GAME_LEGACY_PRIOR_DOUBLE_APPLICATION')
-        if 'strategic_policy' in cfg:
-            policy=cfg['strategic_policy']
-            if policy.get('demand_model')!='connected_repeat' or policy.get('choice_contract')!=cfg['repeat_choice'] or any(x['accept_prob']!=1 or abs(x['collect_prob']-(1-cfg['nonpayment_bps']/10000))>1e-12 for x in policy['scenarios']):raise ValueError('POLICY_AND_ACTUAL_BUYER_GAME_DIFFER')
-        if 'mechanism_policy' in cfg and 'cost_contract' not in cfg['mechanism_policy']:raise ValueError('SUCCESSOR_FULL_COST_SCOPE_REQUIRED')
     if not required <= set(result.get('source', {}).get('files', {})):
         raise ValueError('COMPLETE_EXECUTING_SOURCE_BINDING_REQUIRED')
     source_receipt = check_source(root, result['source'])

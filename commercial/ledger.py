@@ -17,6 +17,7 @@ UNIT = 'simulated-microUSD'
 MAX_AMOUNT = 10**12
 _AUDITED_CONTENT = set()
 _ADAPTIVE_ACCOUNT_CAPABILITY = object()
+_NO_EXPECTED_BEFORE = object()
 
 
 def canonical(value):
@@ -204,11 +205,19 @@ class TapeExchange:
         accepted = fresh['accepted'] is True and canonical(artifact) == canonical(current) and all(receipt.get(k) == v for k, v in fresh.items())
         return {'accepted': accepted, 'decisive': True, 'scope': SCOPE, 'authority': job['receipt_sha256']}
 
-    def execute(self, op, args, day, *, record=True):
+    def execute(self, op, args, day, *, record=True, _expected_before=_NO_EXPECTED_BEFORE):
         if self._adaptive_writer is not None:
             self._adaptive_writer.assert_owner()
         if self.persistence and (self.persistence.failed or not record):
             raise ValueError('DURABLE_ACTION_RECORD_REQUIRED')
+        # Audit opening-state validation still precedes action validation/effects.
+        # The exchange is a private in-memory SQLite connection; no callback or
+        # native write occurs between this read and the operation below.
+        before = None
+        if _expected_before is not _NO_EXPECTED_BEFORE:
+            before = self.ex.snapshot()
+            if before != _expected_before:
+                raise ValueError('EVENT_SEQUENCE_OR_OPENING_STATE_MISMATCH')
         if type(day) is not int or day < self.last_day or day < 0:
             raise ValueError('EVENT_TIME_REGRESSION')
         schemas = {'cost': {'id', 'amount'}, 'wallet': {'buyer', 'amount'},
@@ -223,7 +232,8 @@ class TapeExchange:
             raise ValueError('EXACT_ACTION_ARGUMENT_SCHEMA_REQUIRED')
         if 'crash' in args and type(args['crash']) is not bool:
             raise ValueError('EXPLICIT_CRASH_BOOLEAN_REQUIRED')
-        before = self.ex.snapshot()
+        if _expected_before is _NO_EXPECTED_BEFORE:
+            before = self.ex.snapshot()
         a = copy.deepcopy(args)
         if op == 'cost':
             amount(a['amount'])
@@ -265,7 +275,8 @@ class TapeExchange:
             raise ValueError('UNKNOWN_NATIVE_OPERATION')
         after = self.ex.snapshot()
         self.last_day = day
-        self.assert_conservation()
+        # Only last_day changed since this fresh post-operation snapshot.
+        self._assert_conservation_snapshot(after)
         if record:
             event = {'seq': len(self.actions), 'day': day, 'op': op, 'args': a, 'before': before, 'after': after}
             if self.persistence and not self._restoring:
@@ -274,7 +285,9 @@ class TapeExchange:
         return after
 
     def assert_conservation(self):
-        s = self.ex.snapshot()
+        self._assert_conservation_snapshot(self.ex.snapshot())
+
+    def _assert_conservation_snapshot(self, s):
         if s['cash'] != self.ex.opening + s['collections'] + s['recoveryIncome'] - s['expensePaid']:
             raise ValueError('CASH_CONSERVATION_FAILURE')
         if s['profit'] != s['revenue'] + s['recoveryIncome'] - s['expenses']:
@@ -346,9 +359,10 @@ def _audit_native_and_jobs(tape, *, root, manifest, expected_actions_sha256=None
                                   opening=c['opening'], working=c['working'], contract=c['contract'], durable=False)
         try:
             for seq, event in enumerate(tape['actions']):
-                if event.get('seq') != seq or event.get('before') != replay.ex.snapshot():
+                if event.get('seq') != seq:
                     raise ValueError('EVENT_SEQUENCE_OR_OPENING_STATE_MISMATCH')
-                after = replay.execute(event['op'], event['args'], event['day'])
+                after = replay.execute(event['op'], event['args'], event['day'],
+                                       _expected_before=event.get('before'))
                 if after != event.get('after'):
                     raise ValueError('EVENT_DERIVED_BALANCE_MISMATCH')
             rebuilt = replay.export()

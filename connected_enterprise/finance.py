@@ -21,7 +21,7 @@ from commercial.ledger import _ADAPTIVE_ACCOUNT_CAPABILITY
 from commercial.single_writer import SingleWriterExchange
 
 SCHEMA = 'agi-alpha/connected014-resource-journal/v1'
-SOURCE_PATHS = ('connected_enterprise/scale.py', 'connected_enterprise/repeat_choice.py', 'connected_enterprise/channel_menu.py', 'connected_enterprise/mechanism_choice.py', 'connected_enterprise/strategic_commerce.py', 'connected_enterprise/joint_planning.py', 'connected_enterprise/strategic_audit.py', 'connected_enterprise/engine.py', 'connected_enterprise/verify.py', 'adaptive_enterprise/allocation.py', 'adaptive_enterprise/instruments.py', 'adaptive_enterprise/strategies.py', 'adaptive_enterprise/checkers.py', 'portfolio25/pricing.py', 'connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
+SOURCE_PATHS = ('connected_enterprise/scale.py', 'connected_enterprise/channel_menu.py', 'connected_enterprise/mechanism_choice.py', 'connected_enterprise/strategic_commerce.py', 'connected_enterprise/joint_planning.py', 'connected_enterprise/strategic_audit.py', 'connected_enterprise/engine.py', 'connected_enterprise/verify.py', 'adaptive_enterprise/allocation.py', 'adaptive_enterprise/instruments.py', 'adaptive_enterprise/strategies.py', 'adaptive_enterprise/checkers.py', 'portfolio25/pricing.py', 'connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
                 'commercial/ledger.py', 'commercial/persistence.py',
                 'commercial/single_writer.py', 'commercial/tape_lease.py',
                 'experiments/commerce006.py', 'vendor/alpha_claim/contracts.py',

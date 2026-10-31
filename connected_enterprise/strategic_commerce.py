@@ -16,7 +16,7 @@ POLICY_FIELDS = {'schema','public_basis','price_bps','rival_price_bps','rival_co
 RANK = {'default':0,'conventional':1,'generated':2,'ordinary_reuse':3,'critic_retain':4}
 
 def validate_policy(policy):
-    if set(policy)-{'demand_model','connected_beliefs','choice_contract','lookahead_opportunities'}!=POLICY_FIELDS or policy['schema']!='connected-strategic-commerce/v1':
+    if set(policy)-{'demand_model','connected_beliefs'}!=POLICY_FIELDS or policy['schema']!='connected-strategic-commerce/v1':
         raise ValueError('EXPLICIT_FINITE_STRATEGIC_POLICY_REQUIRED')
     if not isinstance(policy['public_basis'],str) or not policy['public_basis'].strip():
         raise ValueError('PUBLIC_BELIEF_PROVENANCE_REQUIRED')
@@ -29,13 +29,7 @@ def validate_policy(policy):
     validate_scenarios(policy['scenarios'])
     if len({s['id'] for s in policy['scenarios']})!=len(policy['scenarios']):raise ValueError('UNIQUE_PUBLIC_SCENARIO_IDS_REQUIRED')
     model=policy.get('demand_model','portfolio_logit')
-    if model not in {'portfolio_logit','connected_range','connected_repeat'}:raise ValueError('DECLARED_BUYER_MODEL_REQUIRED')
-    if model=='connected_repeat':
-        from .repeat_choice import validate_contract
-        validate_contract(policy.get('choice_contract'))
-        if len(policy['price_bps'])>11 or len(policy['scenarios'])>4:raise ValueError('BOUNDED_TWO_OPPORTUNITY_ENUMERATION_REQUIRED')
-        if type(policy.get('lookahead_opportunities')) is not int or policy['lookahead_opportunities'] not in (1,2) or policy['rival_response']!='observed_quote' or 'connected_beliefs' in policy:raise ValueError('FINITE_MATCHED_REPEAT_GAME_REQUIRED')
-    elif 'choice_contract' in policy or 'lookahead_opportunities' in policy:raise ValueError('UNUSED_REPEAT_POLICY_REFUSED')
+    if model not in {'portfolio_logit','connected_range'}:raise ValueError('DECLARED_BUYER_MODEL_REQUIRED')
     if model=='connected_range':
         beliefs=policy.get('connected_beliefs',{})
         if set(beliefs)!={s['id'] for s in policy['scenarios']} or policy['rival_response']!='observed_quote':
@@ -50,14 +44,11 @@ def validate_policy(policy):
     return policy
 
 def _public(public):
-    if set(public)-{'repeat_state'}!=PUBLIC_FIELDS:raise ValueError('ONLY_EXPLICIT_PUBLIC_OBSERVATIONS_ALLOWED')
+    if set(public)!=PUBLIC_FIELDS:raise ValueError('ONLY_EXPLICIT_PUBLIC_OBSERVATIONS_ALLOWED')
     for field in PUBLIC_FIELDS-{'native_state_digest'}:
         if type(public[field]) is not int or not 0<=public[field]<=10**15:raise ValueError('BOUNDED_PUBLIC_INTEGER_REQUIRED')
     if public['anchor']<1 or public['payment_bps']>10000 or public['profit_tax_bps']>10000:
         raise ValueError('VALID_PUBLIC_PRICE_AND_TAX_REQUIRED')
-    if 'repeat_state' in public:
-        from .repeat_choice import validate_public_state
-        validate_public_state(public['repeat_state'])
     h=public['native_state_digest']
     if not isinstance(h,str) or len(h)!=64 or any(c not in '0123456789abcdef' for c in h):raise ValueError('NATIVE_STATE_BINDING_REQUIRED')
 
@@ -103,7 +94,6 @@ def select(policy, method_policy, job_id, offer, memory, public):
     Public prefix/deductions must be reconstructed by the calling operating audit.
     """
     validate_policy(policy);_public(public)
-    if (policy.get('demand_model')=='connected_repeat')!=('repeat_state' in public):raise ValueError('MATCHED_REPEAT_PUBLIC_STATE_REQUIRED')
     if method_policy is not None:validate_method_policy(method_policy)
     scoped=method_policy is not None and offer['service_id']=='reconciliation'
     if scoped and method_policy['mode']!='optimize':raise ValueError('DIAGNOSTIC_POLICY_NOT_STRATEGIC_OPTIMUM')
@@ -133,23 +123,15 @@ def select(policy, method_policy, job_id, offer, memory, public):
             forecasts=[]; expected=0.0
             for sc in policy['scenarios']:
                 rival=_response(price,public,policy,sc)
+                win,_=_belief_choice(price,rival,public,policy,sc)
                 paid=sc['accept_prob']*sc['collect_prob']
-                if policy.get('demand_model')=='connected_repeat':
-                    from .repeat_choice import evaluate
-                    projection=evaluate(policy['choice_contract'],policy,public,sc,price,cost,reserve)
-                    win=projection['win_probability'];contribution=projection['immediate_expected_net'];continuation=projection['continuation_delta']
-                    expected+=sc['weight']*(contribution+continuation)
-                    forecasts.append({'belief':sc['id'],'rival_price':rival,'win_probability':win,'accept_collect_probability':paid,
-                                      'net_after_modeled_tax':contribution,'ranking_only_continuation':continuation})
-                else:
-                    win,_=_belief_choice(price,rival,public,policy,sc)
-                    net=paid*price-cost
-                    tax=paid*max(0,price-cost)*public['profit_tax_bps']/10000
-                    contribution=win*(net-tax)-public['quote_cost']
-                    expected+=sc['weight']*contribution
-                    forecasts.append({'belief':sc['id'],'rival_price':rival,'win_probability':win,
-                                      'accept_collect_probability':paid,'net_after_modeled_tax':contribution})
-            if policy.get('demand_model')=='connected_repeat' and sum(sc['weight']*f['net_after_modeled_tax'] for sc,f in zip(policy['scenarios'],forecasts))<=0:continue
+                # All fulfillment costs are prepaid on a win, even on nonpayment.
+                net=paid*price-cost
+                tax=paid*max(0,price-cost)*public['profit_tax_bps']/10000
+                contribution=win*(net-tax)-public['quote_cost']
+                expected+=sc['weight']*contribution
+                forecasts.append({'belief':sc['id'],'rival_price':rival,'win_probability':win,
+                                  'accept_collect_probability':paid,'net_after_modeled_tax':contribution})
             row={'mode':mode,'price':price,'cost':cost,'fee':fee,'required_current_cash':reserve,
                  'expected_net':expected,'forecasts':forecasts}
             rows.append(row)
@@ -162,10 +144,6 @@ def select(policy, method_policy, job_id, offer, memory, public):
               'collection_belief_source':'strategic policy scenario accept_prob * collect_prob; legacy method_policy accept_collect_bps is not used',
               'buyer_belief_source':'connected public intervals and current quote ordering' if policy.get('demand_model')=='connected_range' else 'inherited portfolio public logit hypotheses',
               'limits':'One admitted service offer, one order, fixed public buyer beliefs. No global equilibrium, calibrated demand, future cash, or long-horizon mechanism advantage claimed.'}
-    if policy.get('demand_model')=='connected_repeat':
-        decision['scope']='FINITE_ONE_OR_TWO_OPPORTUNITY_PUBLIC_GAME_WITH_CURRENT_NATIVE_CASH_ONLY'
-        decision['buyer_belief_source']='Matched declared finite public buyer game; latent atoms remain private'
-        decision['limits']='One next eligible planning day only; observed spending/provider history, not private balances. Future value ranks only. Current evaluated-shortlist cost is sunk for bid and hold; future evaluation charged even on hold. Current-cash-only successor ceiling is an edition assumption, not a financial law; it excludes projected receipts and does not guarantee future cash/capacity. No loss leaders, new capability gains or global equilibrium.'
     if best is None:return {'offer':None,'method_plan':None,'decision':decision,'problem':problem,'candidates':rows}
     chosen=copy.deepcopy(offer);chosen['price_microUSD']=best['price']
     plan=None
@@ -212,24 +190,15 @@ def allocate_actions(observation, deliveries, investments, riskpolicy, *, allow_
                     'evidence':result['decision']['problem_sha256'],
                     'execution':{'job_id':p['job_id'],'customer_id':d['customer_id'],'payment_bps':pub['payment_bps'],'payment_fixed_microUSD':pub['payment_fixed'],'onboarding_microUSD':d['onboarding'],'funding':'SEED_OR_EARNED','cash_lock':row['price']+pub['reserve_buffer'],'delivery_id':d['id'],'row':row,
                                  'selection_sha256':digest(result)}}
-            if p['policy'].get('demand_model')=='connected_repeat':
-                option['execution']['ranking_only_scenario_value']={x['belief']:math.floor(x['ranking_only_continuation']) for x in row['forecasts']}
-                if p['policy']['lookahead_opportunities']==2:
-                    rs=pub['repeat_state'];option['benefit_ids'].append('repeat-customer-'+rs['customer_id'])
-                    option['benefit_ids'].extend('delivery-'+v['job_id'] for v in (rs['same_service'],rs['successor']) if v is not None)
-                    option['benefit_ids']=list(dict.fromkeys(option['benefit_ids']))
             options.append(option)
     if not isinstance(investments,list) or len(investments)>8:raise ValueError('FINITE_COSTED_INVESTMENTS_REQUIRED')
     for o in investments:
         if o['kind'] not in {'acquisition','capacity','instrument'} or o['execution'].get('funding')!='EARNED':
             raise ValueError('EARNED_COSTED_EXPANSION_ONLY')
         # Existing allocation validates full liabilities, benefit overlap, source evidence and dependencies.
-        investment=copy.deepcopy(o)
-        future_ids={x for opt in options if opt['kind']=='delivery' for x in opt['benefit_ids'] if x.startswith('repeat-customer-')}
-        investment['benefit_ids'].extend(sorted(future_ids))
-        options.append(investment)
-    decision=allocate(observation,options,riskpolicy,allow_seed=allow_seed,max_delivery_slots=max_delivery_slots,earned_deduction=earned_deduction,allow_ranking_only=any('ranking_only_scenario_value' in o['execution'] for o in options))
-    return {'schema':'connected-joint-actions/v1','risk_scope':('Scenario conditional expectations; continuation ranks only, never income, cash or reservation relief. Current-cash-only successor feasibility is a restricted planning assumption, not a prohibition on modeling future collected cash.' if any('ranking_only_scenario_value' in o['execution'] for o in options) else 'Scenario conditional expectations, not realized worst-case losses; conservative floor to microUSD. Native cash locks bound present commitments.'),'observation':copy.deepcopy(observation),
+        options.append(copy.deepcopy(o))
+    decision=allocate(observation,options,riskpolicy,allow_seed=allow_seed,max_delivery_slots=max_delivery_slots,earned_deduction=earned_deduction)
+    return {'schema':'connected-joint-actions/v1','risk_scope':'Scenario conditional expectations, not realized worst-case losses; conservative floor to microUSD. Native cash locks bound present commitments.','observation':copy.deepcopy(observation),
             'deliveries':copy.deepcopy(deliveries),'investments':copy.deepcopy(investments),
             'riskpolicy':copy.deepcopy(riskpolicy),'allow_seed':allow_seed,'max_delivery_slots':max_delivery_slots,'earned_deduction':earned_deduction,'decision':decision}
 
