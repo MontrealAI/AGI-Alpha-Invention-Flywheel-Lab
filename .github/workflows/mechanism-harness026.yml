@@ -1,0 +1,33 @@
+name: Mechanism Harness 026 finite research qualification
+on:
+  pull_request:
+    paths:
+      - 'mechanism_harness/**'
+      - 'tests/test_mechanism_harness_026.py'
+      - 'campaign/mechanism-harness-026/**'
+      - 'docs/mechanism-harness/**'
+      - '.github/workflows/mechanism-harness026.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bounded-offline-qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Source-bound mechanism composition regressions
+        run: python -m unittest discover -s tests -p 'test_mechanism_harness_026.py' -v
+      - name: Recreate deterministic study without model calls or network
+        run: |
+          python -m mechanism_harness experiment \
+            --spec campaign/mechanism-harness-026/EXAMPLE.json \
+            --successor campaign/mechanism-harness-026/FRESH_SUCCESSOR.json \
+            --reference campaign/mechanism-harness-026/REFLECTION.json \
+            --output "$RUNNER_TEMP/mechanism-026-result.json"
+          python -c 'import json,os,pathlib; ref=json.loads(pathlib.Path("campaign/mechanism-harness-026/RESULT.json").read_text()); out=json.loads(pathlib.Path(os.environ["RUNNER_TEMP"],"mechanism-026-result.json").read_text()); assert ref==out; assert ref["actual_collected_usd"]==0; assert ref["observed_successor_inheritance_benefit"] is None; print("Exact scoped reproduction accepted")'
