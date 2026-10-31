@@ -149,11 +149,19 @@ def audit_decisions(root,manifest,result,lifecycle):
         if events[moment][1]['channel_selected']!=(any(o['kind']=='acquisition' for o in record['decision']['selected_options']) if 'channel_menu_policy' in cfg else ('channel-'+str(day) in investments)) or events[moment][1]['capacity_selected']!=('capacity-'+str(day) in investments):raise ValueError('SELECTED_INVESTMENT_FLAGS_CHANGED')
         choices=[d for d in result['decisions'] if d.get('kind') in {'offer','outside_choice'} and d['time']==moment]
         if [d['customer_id'] for d in choices]!=needs:raise ValueError('EVERY_OBSERVED_NEED_REQUIRES_ONE_JOINT_DECISION')
+        capacity_only_customers=set()
+        if 'complete_offer_policy' in cfg:
+            from .capacity_signal import capacity_declined_customers
+            capacity_only_customers=capacity_declined_customers(record)
         for choice in choices:
             if choice.get('joint_allocation_sha256')!=key:raise ValueError('JOINT_DECISION_REFERENCE_MISSING')
             option=selected.get(choice['customer_id']);quotes+=1
             if option is None:
                 no_bids+=1
+                if 'complete_offer_policy' in cfg:
+                    reasons=[d['kind'] for d in result['decisions'] if d.get('customer_id')==choice['customer_id'] and d.get('time')==moment and d.get('kind') not in {'offer','outside_choice'}]
+                    expected_reason='capacity_decline' if choice['customer_id'] in capacity_only_customers else 'joint_no_bid'
+                    if reasons!=[expected_reason]:raise ValueError('CAPACITY_ONLY_OPPORTUNITY_NOT_REDERIVED')
                 if choice['kind']!='outside_choice' or choice.get('joint_option_id') is not None:raise ValueError('UNSELECTED_CUSTOMER_WAS_QUOTED')
                 continue
             contract=selected_delivery(record,option['id'])
