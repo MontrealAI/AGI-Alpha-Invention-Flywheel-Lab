@@ -218,12 +218,16 @@ def discover_applicable_designs(spec, baseline):
             continue
         arm = d["arm"]
         remedy = None
-        if arm in ("growth", "channel") and "customer_access" in diagnosed:
-            remedy = "costed_earned_funded_customer_access"
+        if arm in ("growth", "channel") and (
+            "customer_access" in diagnosed or "production_capacity" in diagnosed
+        ):
+            remedy = ("costed_earned_funded_customer_access" if "customer_access" in diagnosed
+                      else "costed_earned_funded_productive_capacity")
         elif arm == "competitive_growth" and (
             "competitive_buyer_choice" in diagnosed or "customer_access" in diagnosed
+            or "production_capacity" in diagnosed
         ):
-            remedy = "buyer_response_plus_optional_earned_distribution"
+            remedy = "buyer_response_plus_earned_constraint_removal"
         elif "strategic_policy" in d["policies"] and "competitive_buyer_choice" in diagnosed:
             remedy = "finite_public_price_and_execution_method"
         if remedy is not None:
