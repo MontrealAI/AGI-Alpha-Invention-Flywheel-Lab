@@ -6,6 +6,7 @@ on:
       - 'commercial/service.py'
       - 'commercial/service_verifier.py'
       - 'scripts/run_verified_delta044.py'
+      - 'scripts/demo_verified_delta044.py'
       - 'tests/test_verified_delta044.py'
       - 'connected_enterprise/runner.py'
       - 'campaign/verified-delta-044/**'
@@ -49,6 +50,8 @@ jobs:
           test -f commercial/verified_delta.py
           test -f scripts/run_verified_delta044.py
           python3 -m scripts.run_verified_delta044 --output "$RUNNER_TEMP/delta044-frozen-public.json"
+          python3 -m scripts.demo_verified_delta044 build --path "$RUNNER_TEMP/delta044-frozen-demo"
+          python3 -m scripts.demo_verified_delta044 verify --path "$RUNNER_TEMP/delta044-frozen-demo"
       - name: Upload compact synthetic source-bound receipts only
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -57,5 +60,6 @@ jobs:
           path: |
             ${{ runner.temp }}/delta044-checkout.json
             ${{ runner.temp }}/delta044-frozen-public.json
+            ${{ runner.temp }}/delta044-frozen-demo/*
           if-no-files-found: warn
           retention-days: 7
