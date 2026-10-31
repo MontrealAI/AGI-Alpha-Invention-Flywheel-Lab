@@ -1,0 +1,27 @@
+{
+  "schema": "agi-alpha/overnight022-final-remote-verification/v1",
+  "main": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+  "evidence_commit": "5a039b59f6bc9f6ca31b5f324715e68c51570681",
+  "remote_matrix_retrieved": true,
+  "earlier_ref_collection_note": "The last ls-remote returned a complete-looking head list including unchanged candidate3981 and main8ab, but the caller required a final exit_code while the process had yielded. The verification wrapper raised an orchestration error. Do not classify the yielded command as a completed failed Git command or infer a new ownership state. Main/evidence and candidate refs verified independently through the GitHub API.",
+  "morning": {
+    "id": "6ae56ba21cfc81918c6da91ea9821170",
+    "is_enabled": true,
+    "schedule": "BEGIN:VEVENT\nDTSTART;TZID=America/Toronto:20261031T080000\nEND:VEVENT",
+    "default_timezone": "America/Toronto",
+    "updated_at": "2026-10-31T04:16:55.124332+00:00"
+  },
+  "execution": {
+    "id": "6ae37e74ac008191a5d413a46f359c84",
+    "is_enabled": true,
+    "schedule": "BEGIN:VEVENT\nDTSTART:20261029T171220Z\nRRULE:FREQ=HOURLY\nEND:VEVENT",
+    "default_timezone": "America/Toronto",
+    "updated_at": "2026-10-31T04:56:01.161118+00:00"
+  },
+  "latest_public_candidate": "3981b182513abbba1c2ab1102f94732c453422fa",
+  "process_check": {
+    "utc": "2026-10-31T04:57:49.715309+00:00",
+    "matching_git_processes": "",
+    "pgrep_exit": 1
+  }
+}
