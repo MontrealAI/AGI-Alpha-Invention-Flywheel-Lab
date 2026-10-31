@@ -59,6 +59,8 @@ class NativeDesignSearch041Tests(unittest.TestCase):
         self.assertEqual(w["successor_paid_order"], "successor")
         self.assertEqual(w["binding_constraint_changed"], "customer_access")
         self.assertTrue(w["strictly_better_per_order_margin"])
+        self.assertEqual(w["net_after_native_investment_microUSD"], 26)
+        self.assertTrue(w["positive_incremental_collected_contribution"])
 
     def test_rejects_future_or_unfunded_or_unlinked_expansion(self):
         original = case()
@@ -79,6 +81,7 @@ class NativeDesignSearch041Tests(unittest.TestCase):
         w = find_native_successor(bad)
         self.assertIsNotNone(w)
         self.assertFalse(w["strictly_better_per_order_margin"])
+        self.assertFalse(w["positive_incremental_collected_contribution"])
 
     def test_profit_is_not_available_liquidity_or_safe_reserves(self):
         s = {"complete": True, "summary": {"payables": 0, "investmentStopped": False,
