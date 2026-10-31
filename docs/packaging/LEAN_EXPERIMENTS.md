@@ -3,6 +3,7 @@
 Keep useful mechanisms, compact results and complete accounting; discard redundant terminal logs and failed-run bundles. This cleanup changes storage, not outcomes.
 
 Lessons:
+- Expired measurement replay is manual-only; current regressions remain mandatory in `campaign.yml`, and actually observed same-head runs must pass.
 - Broad checkout exceeded the download cap before replay: fetch only pinned dependencies.
 - Recursive evidence packaging exceeded file limits: remove redundant output, not guards.
 - Compatibility and source-binding failures require matching fixtures and exact-source checks; a rerun alone is not a repair.

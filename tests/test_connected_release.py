@@ -201,6 +201,30 @@ class ReleaseIntegrityTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'MAIN_RELEASE_GATE'):
             release.verify_assets(self.assets, COMMIT)
 
+    def test_observed_manual_gate_receipt_is_source_bound_and_old_field_optional(self):
+        rows={name:{'head_sha':COMMIT,'event':'push','head_branch':'main','conclusion':'success',
+                    'path':'.github/workflows/'+name} for name in release.REQUIRED_WORKFLOWS}
+        gate={'source_commit':COMMIT,'event':'push','branch':'main','required_workflows':rows}
+        release.write(self.assets/'RELEASE_GATE.json',gate);release.seal(self.assets,self.manifest)
+        release.verify_assets(self.assets,COMMIT)  # historical absent field remains supported
+        row={'head_sha':COMMIT,'event':'workflow_dispatch','head_branch':'main','conclusion':'success',
+             'path':'.github/workflows/measurement009.yml'}
+        gate['observed_retired_manual_workflows']={'measurement009.yml':row}
+        release.write(self.assets/'RELEASE_GATE.json',gate);release.seal(self.assets,self.manifest)
+        release.verify_assets(self.assets,COMMIT)
+        for change in ({'head_sha':'b'*40},{'event':'push'},{'head_branch':'feature'},
+                       {'conclusion':'failure'},{'path':'.github/workflows/other.yml'}):
+            with self.subTest(change=change):
+                gate['observed_retired_manual_workflows']={'measurement009.yml':{**row,**change}}
+                release.write(self.assets/'RELEASE_GATE.json',gate);release.seal(self.assets,self.manifest)
+                with self.assertRaisesRegex(ValueError,'OBSERVED_MANUAL_GATE'):
+                    release.verify_assets(self.assets,COMMIT)
+        for manual in (None, {'unknown.yml':row}):
+            gate['observed_retired_manual_workflows']=manual
+            release.write(self.assets/'RELEASE_GATE.json',gate);release.seal(self.assets,self.manifest)
+            with self.assertRaisesRegex(ValueError,'OBSERVED_MANUAL_GATE'):
+                release.verify_assets(self.assets,COMMIT)
+
     def test_moved_main_and_wrong_existing_tag_never_create_release(self):
         gate = {name:{'head_sha':COMMIT} for name in release.REQUIRED_WORKFLOWS}
         applicability = {'changed_paths':['connected_enterprise/finance.py'], 'base_commit':'c'*40, 'conservative_all_conditionals':False}
@@ -455,12 +479,36 @@ class WorkflowGateTests(unittest.TestCase):
         self.assertNotIn('connected014.yml', required)
         self.assertNotIn('measurement009.yml', required)
 
-    def test_conditional_measurement_and_every_observed_extra_workflow_are_gated(self):
+    def test_retired_measurement_not_implied_but_observed_extras_remain_gated(self):
         required = release.applicable_workflows(['docs/next009/PAPER.pdf'], ['extra-security.yml', release.OWN_WORKFLOW])
-        self.assertIn('measurement009.yml', required)
+        self.assertNotIn('measurement009.yml', required)
         self.assertIn('extra-security.yml', required)
         self.assertNotIn(release.OWN_WORKFLOW, required)
-        self.assertIn('measurement009.yml', release.applicable_workflows([], conservative=True))
+        self.assertNotIn('measurement009.yml', release.applicable_workflows([], conservative=True))
+        self.assertIn('measurement009.yml', release.applicable_workflows([], ['measurement009.yml']))
+
+    def test_current_measurement_source_still_requires_campaign_regressions(self):
+        for path in ('research/next009/successor.py','inventions/measurement009/new.py',
+                     'verification/next009/check.py','.github/workflows/measurement009.yml',
+                     'evidence/next009/old.log'):
+            required=release.applicable_workflows([path])
+            self.assertIn('campaign.yml',required)
+            self.assertTrue(set(release.REQUIRED_WORKFLOWS)<=required)
+            self.assertNotIn('measurement009.yml',required)
+
+    def test_observed_retired_manual_failure_blocks_without_renewing_missing_run(self):
+        name='measurement009.yml'
+        self.assertEqual(release.observed_retired_manual_runs({name:[]}, COMMIT), ({},{}))
+        row=self.row(event='workflow_dispatch', path='.github/workflows/'+name)
+        observed, accepted=release.observed_retired_manual_runs({name:[row]}, COMMIT)
+        self.assertEqual(set(observed),{name});self.assertEqual(set(accepted),{name})
+        with self.assertRaisesRegex(ValueError,'QUALIFICATION_FAILED'):
+            release.observed_retired_manual_runs({name:[row,{**row,'run_attempt':2,'conclusion':'failure'}]},COMMIT)
+        observed, accepted=release.observed_retired_manual_runs({name:[{**row,'status':'in_progress','conclusion':None}]}, COMMIT)
+        self.assertEqual(set(observed),{name});self.assertEqual(accepted,{})
+        for changes in ({'head_sha':'b'*40},{'head_branch':'feature'},{'event':'pull_request'}):
+            self.assertEqual(release.observed_retired_manual_runs({name:[{**row,**changes}]}, COMMIT), ({},{}))
+        self.assertEqual(release.qualifying_runs({name:[row]},COMMIT),{})
 
     def test_push_comparison_uses_full_event_range_and_exact_trees_after_path_cap(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -491,7 +539,7 @@ class WorkflowGateTests(unittest.TestCase):
         with patch.dict(release.os.environ, {}, clear=True), patch.object(release, 'gh', side_effect=responses):
             result = release.push_applicability('owner/repo', COMMIT)
         self.assertEqual(result['changed_paths'], ['.github/workflows/measurement009.yml'])
-        self.assertIn('measurement009.yml', release.applicable_workflows(result['changed_paths']))
+        self.assertNotIn('measurement009.yml', release.applicable_workflows(result['changed_paths']))
 
     def test_publication_wait_can_exceed_operating_timeout_without_raising_its_cap(self):
         publish = ['release', 'publish', '--assets', '/unused', '--source-commit', COMMIT,
