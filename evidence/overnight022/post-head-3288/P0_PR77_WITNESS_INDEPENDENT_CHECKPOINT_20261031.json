@@ -1,0 +1,60 @@
+{
+  "schema": "agi-alpha/pr77-independent-witness-qualification/v1",
+  "observation_date": "2026-10-31",
+  "evidence_owner": "Independent nonfinancial review; PR77 implementation owner retains native financial writing authority",
+  "source": {
+    "current_main_at_review": "de639de28f52020dee818d3fcec2f36d441b160e",
+    "pr77_examined_head": "cd5281b0ae7b484572bfb35ccb7e51ef5b3be4b3",
+    "pr77_function_file_blob": "2fb07224fcd646ed8b85135ab3b886d75bff1a3d",
+    "pinned_function_sha256": "d947c7ee835f2deb9b180c09f08cc3f7db4a4180ccb98dd52a7d2931f2f3efa5",
+    "pinned_function_length": 3748,
+    "source_function_sha_match_method": "Source excerpt reproduced verbatim in local synthetic execution; independent remote length and FNV32 match. Full SHA256 calculated on locally executed exact excerpt; not a separate remote byte-by-byte audit."
+  },
+  "test": {
+    "kind": "pure function synthetic falsifier only; NOT canonical account/audit",
+    "cases": [
+      {
+        "id": "loss_making_settled_order_omitted",
+        "reported_net_microUSD": 24,
+        "conservative_joint_net_microUSD": -1,
+        "result": "false_positive_metric"
+      },
+      {
+        "id": "two_joint_enablers_one_invoice_subtracted",
+        "reported_net_microUSD": 7,
+        "conservative_joint_net_microUSD": -8,
+        "result": "false_positive_metric"
+      }
+    ],
+    "local_measured": {
+      "wall_seconds_rounded": 0.71,
+      "user_cpu_seconds_rounded": 0.99,
+      "system_cpu_seconds_rounded": 0.12,
+      "max_rss_kb": 96364
+    },
+    "local_probe_sha256": "835e5c3cefa98715fe4272909379d8f4d4d257e854fc29c86445f4c885b6a0b5",
+    "evidence_script_commit": "f2f93cb2741f2f9c4eda0142dc15463e3a983c26",
+    "evidence_script_blob": "e0757148f67901f57aadc30a5d707a0da2246a15",
+    "delivered_pr77_review": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/77#issuecomment-6550478819"
+  },
+  "acceptance": {
+    "previously_released_permanent_native_runtime": "achieved (historical immutable released proof; not rerun)",
+    "authoritative_original_signed_account_migration": "blocked (actual checkpoint and original signing authority unavailable)",
+    "pr77_source_witness_attribution": "failed synthetic conservative profitability criterion; not yet proven on canonical native case",
+    "pr77_frozen_development_confirmation": "partial/unqualified; hosted exact-head workflow queued at observed check",
+    "pr77_qualified_prospective_release": "blocked; no merged or downloaded source",
+    "P1_causal_net_complete_cost_growth": "not_qualified",
+    "P2_recursive_successor_benefit": "not_qualified",
+    "native_to_aggregate_bridge": "not_qualified",
+    "actual_buyer_sales": "none verified",
+    "trailing_365_complete_cost_3b_USD": "not_qualified"
+  },
+  "costs_and_obligations": {
+    "modeled_business_ledger": "unchanged; no private account opened",
+    "spent_external_funds_USD": 0,
+    "measured_host_or_model_billing_USD": null,
+    "old_liabilities_and_failures": "left intact; no source guard or financial state changes",
+    "resource_scope": "Only one local pure-function synthetic probe measured; all tool/platform usage and billed compute beyond probe unknown."
+  },
+  "next_decision": "PR77 owner: fix loss-making linked order omission and joint enabler invoice attribution, add negative regressions, confirm cost provenance for failed/refunded outcomes, preserve frozen 341014/341015, then run exact-head hosted unit/native/audit, retain failed outcomes. P0 original financial owner must independently qualify signed legacy migration; no new authorization requested."
+}
