@@ -36,7 +36,7 @@
     "whole_campaign_billing_usd": null
   },
   "retained_failure_checkpoint": {
-    "sha256": "b464bec6126344755cc9497ecce5027734f987e424703ca5398e2165d4b54c46239fd",
+    "sha256": "b464bec6126344755cc9497ecce5027734f987e424703ca539a5d9618d5f2aaf",
     "bytes": 20254988,
     "files": 505,
     "scope": "UNQUALIFIED_FAILURE_CHECKPOINT_NOT_RESUME_AUTHORITY",
@@ -55,5 +55,9 @@
   "decision": "P0_RELEASE_NO_GO_ON_6B; KEEP_PUBLISHED_RELEASE_HISTORICAL_BUT_LABEL_DOWNLOADED_OPERATION_FAILED; DO_NOT_MARK_REPAIRED_WITHOUT_EXACT_NEW_RELEASE_RESULT",
   "next_action": "Inspect per-world workload/cost regressions using source-bound actual receipt; engineer bounded CPU reduction and retain 2400-second guard or adopt separately documented genuinely authorized resource profile only after independent policy review; run exact-head full CI and actual downloaded-operation on the repaired candidate; keep failure immutable. No candidate iteration until favorable.",
   "safety": "No account, HMAC, key, liability, operating queue, release asset, other owner's branch or external commerce modified. Failed key-free checkpoint is not recovery authority.",
-  "resource_spend_usd": null
+  "resource_spend_usd": null,
+  "correction": {
+    "note": "Corrected manual transcription of nested failed-operation-keyfree.zip SHA256; the original 84f6325 evidence draft is preserved in Git history; exact value matches downloaded receipt.",
+    "original_draft_commit": "84f6325745ea944e92a7107d11b61268062a7b72"
+  }
 }
