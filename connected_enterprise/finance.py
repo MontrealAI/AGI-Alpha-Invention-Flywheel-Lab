@@ -10,11 +10,12 @@ from __future__ import annotations
 import copy
 import hashlib
 import hmac
+import os
 from pathlib import Path
 import tempfile
 import threading
 
-from adaptive_enterprise.account import Account, action_digest, action_prefix_digests, audit_account
+from adaptive_enterprise.account import Account, action_digest, action_prefix_digests, audit_account, _audit_account
 from commercial.ledger import amount as validate_amount, canonical, digest, strict_json
 from commercial.persistence import atomic_bytes
 from commercial.ledger import _ADAPTIVE_ACCOUNT_CAPABILITY
@@ -96,6 +97,8 @@ class JournalAccount:
         self.manifest = copy.deepcopy(manifest)
         self._mutex, self._closed, self._journal_failed = threading.RLock(), False, False
         self._account = None
+        self._native_prefix = None
+        self._prefix_owner_binding, self._prefix_generation = None, 0
         self.journal_path = self.path.with_name(self.path.name + '.connected-journal.json')
         self.source = source_identity(self.root)
         self._header = {'schema': SCHEMA, 'scope': 'SIMULATED_LOCAL_POSIX',
@@ -185,7 +188,7 @@ class JournalAccount:
             return prior
         if any(row['status'] not in {'COMPLETE', 'REJECTED'} for row in self._journal['entries']):
             raise ValueError('PENDING_CONNECTED_ACTION_REQUIRES_RECOVERY')
-        self.audit()
+        self._audit_incremental()
         row = {'key': key, 'request': copy.deepcopy(request), 'plan': copy.deepcopy(plan),
                'funding': funding, 'status': 'PENDING', 'receipt': None, 'obligation_receipt': None,
                'attempt': self._attempt_identity(request)}
@@ -394,8 +397,42 @@ class JournalAccount:
 
     def audit(self):
         with self._mutex:
-            self._assert_current()
-            return audit_journal(self.export(), root=self.root, manifest=self.manifest)
+            try:
+                self._assert_current()
+                return audit_journal(self.export(), root=self.root, manifest=self.manifest)
+            except BaseException:
+                if self._native_prefix is not None:
+                    self._native_prefix.close()
+                raise
+
+    def _prefix_identity(self):
+        self._assert_current()
+        owner = self._account._owner
+        previous = self._prefix_owner_binding
+        if previous is None or previous[0] is not owner or previous[1] is not owner.lease:
+            self._prefix_owner_binding = (owner, owner.lease)
+            self._prefix_generation += 1
+        return {'account': str(self.path), 'pid': os.getpid(), 'writer_epoch': self._prefix_generation,
+                'key_sha256': hashlib.sha256(self._account._key).hexdigest(),
+                'source': self.source, 'manifest_sha256': digest(self.manifest)}
+
+    def _audit_incremental(self):
+        # Legacy service schemas retain full replay; the measured optimization
+        # is deliberately limited to canonical adaptive service accounts.
+        if self.manifest.get('schema') != 'agi-alpha/adaptive012-services/v1':
+            return self.audit()
+        with self._mutex:
+            try:
+                self._assert_current()
+                if self._native_prefix is None:
+                    from commercial.ledger import _NativePrefixReplay
+                    self._native_prefix = _NativePrefixReplay(self._prefix_identity)
+                return _audit_journal(self.export(), root=self.root, manifest=self.manifest,
+                                      _native_session=self._native_prefix)
+            except BaseException:
+                if self._native_prefix is not None:
+                    self._native_prefix.close()
+                raise
 
     def seal_checkpoint(self, state):
         with self._mutex:
@@ -439,8 +476,12 @@ class JournalAccount:
         if self._closed:
             return
         self._closed = True
-        if self._account is not None:
-            self._account.close()
+        try:
+            if self._native_prefix is not None:
+                self._native_prefix.close()
+        finally:
+            if self._account is not None:
+                self._account.close()
 
     def __enter__(self):
         self._assert_current()
@@ -575,8 +616,8 @@ def _audit_rejection(entry, record, source, start, *, root, manifest):
             raise ValueError('CONNECTED_REJECTION_NOT_REPRODUCIBLE_WITHOUT_MUTATION')
 
 
-def _audit_journal(record, *, root, manifest, pending_key=None):
-    checked = audit_account(record, root=root, manifest=manifest)
+def _audit_journal(record, *, root, manifest, pending_key=None, _native_session=None):
+    checked = _audit_account(record, root=root, manifest=manifest, _native_session=_native_session)
     journal = record.get('connected_journal')
     if not isinstance(journal, dict) or digest(journal) != record.get('connected_journal_sha256'):
         raise ValueError('CONNECTED_JOURNAL_PUBLIC_IDENTITY_MISMATCH')

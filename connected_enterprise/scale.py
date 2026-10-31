@@ -3,7 +3,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
-from collections import defaultdict
+from collections import defaultdict, deque
 from datetime import datetime, timedelta, timezone
 
 MICRO = 1_000_000
@@ -57,6 +57,40 @@ def _point(summary, receivables):
             'profitable_and_obligation_covered': summary['profit'] > 0 and _covered(summary)}
 
 
+class _ObservedFlows:
+    """One-pass state for exact historical receivables and rolling collections."""
+    def __init__(self):
+        self.orders = {}
+        self.receivables = 0
+        self.window = deque()
+        self.trailing_collections = 0
+
+    def advance(self, action, collection_delta):
+        args = action['args']
+        if action['op'] == 'offer':
+            old = self.orders.get(args['id'])
+            if old is not None and old['state'] == 'prepare':
+                self.receivables -= old['price']
+            self.orders[args['id']] = {'price': args['price'], 'state': 'offered'}
+        elif action['op'] == 'event':
+            if args['id'] not in self.orders:
+                raise ValueError('EVENT_WITHOUT_QUALIFIED_NATIVE_OFFER')
+            order = self.orders[args['id']]
+            if order['state'] == 'prepare':
+                self.receivables -= order['price']
+            order['state'] = args['action']
+            if order['state'] == 'prepare':
+                self.receivables += order['price']
+        moment = action['day']
+        if collection_delta:
+            self.window.append((moment, collection_delta))
+            self.trailing_collections += collection_delta
+        # Existing collection window is (moment - 365 days, moment].
+        # Signed corrections and simultaneous events retain their original time.
+        while self.window and self.window[0][0] <= moment - YEAR_HOURS:
+            self.trailing_collections -= self.window.popleft()[1]
+
+
 def aggregate_native(tape, checkpoints=(8, 16, 32)):
     """Aggregate exact monetary events; this does not simulate future activity."""
     if not isinstance(tape, dict) or not tape.get('actions'):
@@ -73,6 +107,7 @@ def aggregate_native(tape, checkpoints=(8, 16, 32)):
     released = 0
     previous = initial
     last_time = -1
+    observed = _ObservedFlows()
     for index, action in enumerate(actions):
         moment = _integer(action['day'], 'native-hour')
         if moment < last_time or action['before'] != previous or action['seq'] != index:
@@ -89,6 +124,7 @@ def aggregate_native(tape, checkpoints=(8, 16, 32)):
             raise ValueError('NEGATIVE_NATIVE_FINANCIAL_STATE')
         if flow['collections']:
             collections.append({'hour': moment, 'amount': flow['collections'], 'action_index': index})
+        observed.advance(action, flow['collections'])
         day = moment // HOURS_PER_DAY
         if day not in daily:
             daily[day] = {'day': day, 'first_hour': moment, 'last_hour': moment,
@@ -97,8 +133,8 @@ def aggregate_native(tape, checkpoints=(8, 16, 32)):
         row['last_hour'] = moment
         for field in FLOW_FIELDS:
             row['flow_microUSD'][field] += flow[field]
-        row['end_state_microUSD'] = _point(after, _receivables(actions[:index + 1]))
-        row['trailing_365_day_collections_microUSD'] = sum(item['amount'] for item in collections if moment - YEAR_HOURS < item['hour'] <= moment)
+        row['end_state_microUSD'] = _point(after, observed.receivables)
+        row['trailing_365_day_collections_microUSD'] = observed.trailing_collections
         row['complete_365_day_history'] = moment >= YEAR_HOURS
         if action['op'] == 'event' and action['args']['action'] == 'release':
             released += 1
@@ -109,7 +145,7 @@ def aggregate_native(tape, checkpoints=(8, 16, 32)):
                 overlapping.append({'collected_deliveries': released, 'native_action_index': index,
                                     'hour': moment, 'aggregate_minus_exact_microUSD': differences,
                                     'max_absolute_deviation_microUSD': max(abs(v) for v in differences.values()),
-                                    'exact_state_microUSD': _point(after, _receivables(actions[:index + 1]))})
+                                    'exact_state_microUSD': _point(after, observed.receivables)})
         previous, last_time = after, moment
     if previous != tape['summary']:
         raise ValueError('NATIVE_FINAL_SUMMARY_MISMATCH')
