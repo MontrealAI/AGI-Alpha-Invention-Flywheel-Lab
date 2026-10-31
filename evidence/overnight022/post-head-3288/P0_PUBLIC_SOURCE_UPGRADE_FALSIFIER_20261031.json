@@ -1,0 +1,151 @@
+{
+  "schema": "agi-alpha/p0-public-source-upgrade-structural-falsifier/v1",
+  "scope": "READ_ONLY_PUBLIC_RECORD_STRUCTURE; NO_PRIVATE_HMAC; NOT_RUNTIME_MIGRATION_OR_AN_INDEPENDENT_FINANCIAL_AUDIT",
+  "source_manifest": {
+    "LEGACY_CHECKPOINT.json": {
+      "path": "evidence/overnight022/migration/production-awaiting-acceptance/LEGACY_CHECKPOINT.json",
+      "git_blob_sha": "91a4c08cac3a5d789d7dd9429815c1168c935bd5",
+      "immutable_ref": "328835b30b3fed52b491f33f86ad008c60c37704"
+    },
+    "LEGACY_PUBLIC_RECORD.json": {
+      "path": "evidence/overnight022/migration/production-awaiting-acceptance/LEGACY_PUBLIC_RECORD.json",
+      "git_blob_sha": "70d843141bb5d399eec15f9ea21805fcdc392023",
+      "immutable_ref": "328835b30b3fed52b491f33f86ad008c60c37704"
+    },
+    "UPGRADED_PUBLIC_RECORD.json": {
+      "path": "evidence/overnight022/migration/production-awaiting-acceptance/UPGRADED_PUBLIC_RECORD.json",
+      "git_blob_sha": "b77756b8ade1029b7ab28ce4e2e93beb3be09bc8",
+      "immutable_ref": "328835b30b3fed52b491f33f86ad008c60c37704"
+    },
+    "RESULT.json": {
+      "path": "evidence/overnight022/migration/production-awaiting-acceptance/RESULT.json",
+      "git_blob_sha": "d7a62fa780c0a676acc77653e3ae16620fd158cd",
+      "immutable_ref": "328835b30b3fed52b491f33f86ad008c60c37704"
+    },
+    "CASE_ACCEPTED_SETTLEMENT_PENDING": {
+      "path": "evidence/overnight022/migration/CASE_ACCEPTED_SETTLEMENT_PENDING.json",
+      "git_blob_sha": "a0a19b8dcd3350bf5c1951b8d8a036590ba1d7e9",
+      "immutable_ref": "328835b30b3fed52b491f33f86ad008c60c37704"
+    }
+  },
+  "source_lineage": {
+    "released_main": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+    "old_operating_checkpoint": "9facd934d9ae763691e8a51052a67793cac5b48e",
+    "source_upgrade_candidate": "d2e03f11d145eed908e8d473fc007f8daef6f1df"
+  },
+  "baseline": {
+    "checks": {
+      "original_checkpoint_financial_source_bound": true,
+      "checkpoint_native_sequence_bound": true,
+      "account_action_history_exact_prefix": true,
+      "exactly_one_nonmonetary_source_transition": true,
+      "cash_profit_reserves_payables_unchanged": true,
+      "orders_receivables_invoices_unchanged": true,
+      "existing_queue_nonempty_unique_monotone": true,
+      "due_acceptance_remains_pending": true,
+      "source_transition_references_original_snapshot": true,
+      "old_checkpoint_has_no_new_source_receipt": true,
+      "recorded_runtime_checkpoint_rejection": true,
+      "second_nonempty_settlement_queue_failed_closed": true
+    },
+    "passed": 12,
+    "total": 12,
+    "old_actions": 9,
+    "new_actions": 10,
+    "legacy_processed_queue_events": 3,
+    "legacy_emitted_semantic_events": 4,
+    "legacy_pending_queue": 12,
+    "queue_next": {
+      "id": "order-0000-accept",
+      "time": 3,
+      "kind": "accept"
+    },
+    "last_time": 2,
+    "old_unrestricted_earned_microUSD": 0,
+    "old_custody_reserve_microUSD": 42780000,
+    "old_profit_microUSD": -79640620
+  },
+  "negative_controls": {
+    "cash_mint_after_transition": {
+      "rejected": true,
+      "failed_checks": [
+        "cash_profit_reserves_payables_unchanged"
+      ]
+    },
+    "erased_protected_custody": {
+      "rejected": true,
+      "failed_checks": [
+        "cash_profit_reserves_payables_unchanged"
+      ]
+    },
+    "prior_native_action_rewritten": {
+      "rejected": true,
+      "failed_checks": [
+        "account_action_history_exact_prefix"
+      ]
+    },
+    "future_source_downgrade": {
+      "rejected": true,
+      "failed_checks": [
+        "source_transition_references_original_snapshot"
+      ]
+    },
+    "transition_counter_fork": {
+      "rejected": true,
+      "failed_checks": [
+        "source_transition_references_original_snapshot"
+      ]
+    },
+    "duplicate_pending_acceptance": {
+      "rejected": true,
+      "failed_checks": [
+        "existing_queue_nonempty_unique_monotone"
+      ]
+    },
+    "queue_event_time_rollback": {
+      "rejected": true,
+      "failed_checks": [
+        "existing_queue_nonempty_unique_monotone",
+        "due_acceptance_remains_pending"
+      ]
+    },
+    "queue_out_of_order": {
+      "rejected": true,
+      "failed_checks": [
+        "existing_queue_nonempty_unique_monotone",
+        "due_acceptance_remains_pending"
+      ]
+    },
+    "native_sequence_rollback": {
+      "rejected": true,
+      "failed_checks": [
+        "checkpoint_native_sequence_bound"
+      ]
+    },
+    "old_checkpoint_claims_new_source": {
+      "rejected": true,
+      "failed_checks": [
+        "original_checkpoint_financial_source_bound",
+        "old_checkpoint_has_no_new_source_receipt"
+      ]
+    }
+  },
+  "negative_rejections": 10,
+  "limitation": "The controls mutate copies of previously public JSON, not an active account. Public HMAC signatures cannot be reverified without private original authority; exact original checkpoint authenticity and post-upgrade due-event execution remain unproved. The old STATE still fails the real canonical guard. This is not a repaired migration or fresh commercial confirmation.",
+  "decision": "P0 remains blocked on actual native-capital owner source handoff and signed nonempty operating queue version transition. Preserve the native owner and original release; no competing writer or re-sign. A future composed implementation must run public canonical CLI, pin historical verifier, retain old HMAC and native/action prefixes, link an explicitly authorized forward-only transition, preserve current/pending provenance and liabilities, and independently test settlement/maturity/reinvestment and adverse crash/replay/fork cases.",
+  "resources": {
+    "hosted_tests": 0,
+    "financial_operations": 0,
+    "private_credentials_read": 0,
+    "external_spending_usd": 0,
+    "actual_model_billing_usd": null,
+    "validation_method": "Connector-read immutable public JSON; V8 deterministic assertions and mutation controls. Connector/assistant CPU and billing unmeasured."
+  },
+  "ownership": {
+    "one_native_account": true,
+    "other_owner_branches_modified": false,
+    "successor_automations_modified": false,
+    "target_branch": "evidence/operator022-prepared-3288",
+    "runtime_main_unchanged": true
+  }
+}
