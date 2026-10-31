@@ -41,7 +41,7 @@ SHA-256 b624891e11ecf423f5e5d2ff0916f9171635cb1b7864bd615fff8ac27bf1868d
 
 ## Earlier research editions
 
-Existing papers and their source/evidence files remain unchanged:
+Existing paper editions remain unchanged:
 
 - [Cycle 001](cycle-001.md) ([PDF](cycle-001.pdf))
 - [Cycle 006](cycle-006.md) ([PDF](cycle-006.pdf))
