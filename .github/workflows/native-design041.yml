@@ -1,0 +1,59 @@
+name: Native business design search 041
+on:
+  pull_request:
+    paths:
+      - "connected_enterprise/design_flywheel.py"
+      - "tests/test_connected_design_flywheel041.py"
+      - "docs/design-flywheel041/**"
+      - ".github/workflows/native-design041.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: native-design041-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  design-search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Install declared native dependencies
+        run: python -m pip install -r requirements-commercial010.txt
+      - name: Independent unit and tamper/constraint tests
+        run: python -m unittest -v tests.test_connected_design_flywheel041
+      - name: Run actual native discovery / selection / funded successor experiment
+        run: |
+          python -m connected_enterprise.design_flywheel demo --output "$RUNNER_TEMP/native-design041"
+          python -m connected_enterprise.design_flywheel verify --output "$RUNNER_TEMP/native-design041"
+      - name: Require an independently audited profitable funded successor
+        run: |
+          python - <<'PY'
+          import json,os,pathlib
+          r=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'native-design041/PUBLIC.json').read_text())
+          print('SELECTED:',r['selection']['selected'])
+          print('NATIVE WITNESS:',r['connected_earned_successor_witness'])
+          print('CONFIRMATION DELTA:',r['matched_confirmation_profit_delta_microUSD'])
+          assert r['confirmed_positive_funded_successor_opportunity'], 'NO_CONFIRMED_BETTER_FUNDED_SUCCESSOR_IN_THIS_FROZEN_WORLD'
+          assert r['comparative_advantage_on_one_fresh_seed'], 'NO_POSITIVE_MATCHED_PROFIT_DELTA_IN_THIS_FROZEN_WORLD'
+          PY
+      - name: Export only compact public outcome (no private accounts or keys)
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "$RUNNER_TEMP/native-design041/PUBLIC.json" ]; then
+            cp "$RUNNER_TEMP/native-design041/PUBLIC.json" "$RUNNER_TEMP/NATIVE_DESIGN041_PUBLIC.json"
+          fi
+      - name: Retain exact-head outcome or failed gate
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: native-design041-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/NATIVE_DESIGN041_PUBLIC.json
+          if-no-files-found: warn
