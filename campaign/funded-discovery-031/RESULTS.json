@@ -1,0 +1,449 @@
+{
+  "acquisition": {
+    "after_passed": true,
+    "before_passed": false,
+    "mechanism_path": [
+      "discovery",
+      "mapped obligations",
+      "strategy",
+      "actual counterexamples",
+      "adjudication",
+      "derived obligations",
+      "generated repair",
+      "verification",
+      "acquired role rewrite",
+      "immutable store"
+    ],
+    "native_cost_microUSD": 1000000,
+    "retained": {
+      "id": "2e43bd165ac8aa11ab78309bfd9f46a90bb754099dbbbf78a760a98bf24cc4e5",
+      "record": {
+        "applicability": {
+          "assumptions": [
+            "Typed relation-preserving unique mapping",
+            "Construction language and exact dependency hashes unchanged",
+            "New task requires its own verification"
+          ],
+          "conditions": {
+            "effects": "exclusive_local_output",
+            "failure": "catchable_exception"
+          },
+          "failures": [],
+          "schema_version": 1,
+          "uncertainty": "Learned from one adjudicated repair; transfer and lifecycle advantage remain unproved"
+        },
+        "costs": {
+          "acquisition_cpu_seconds": 0.001030577000000088,
+          "complete_cost_usd": null,
+          "development_trace_costs": {
+            "cpu_seconds": 0.02441245000000003,
+            "full_cost": null,
+            "wall_seconds": 0.7945390230161138
+          }
+        },
+        "exposure": [
+          "acquisition031"
+        ],
+        "generative_operator": {
+          "language": "event-plan-rewrite-v1",
+          "program": {
+            "base_role_obligations": [
+              {
+                "kind": "protect",
+                "role_ids": [
+                  "prepare"
+                ]
+              }
+            ],
+            "max_matches": 32,
+            "role_deltas": [
+              {
+                "kind": "protect",
+                "role_ids": [
+                  "apply"
+                ]
+              },
+              {
+                "kind": "protect",
+                "role_ids": [
+                  "commit"
+                ]
+              },
+              {
+                "kind": "atomic_publish",
+                "role_ids": [
+                  "commit"
+                ]
+              }
+            ],
+            "source_graph": {
+              "conditions": {
+                "effects": "exclusive_local_output",
+                "failure": "catchable_exception"
+              },
+              "id": "transaction-role-fragment",
+              "nodes": [
+                {
+                  "id": "allocate",
+                  "kind": "reserve",
+                  "unit": "event"
+                },
+                {
+                  "id": "prepare",
+                  "kind": "capture",
+                  "unit": "event"
+                },
+                {
+                  "id": "apply",
+                  "kind": "compute",
+                  "unit": "event"
+                },
+                {
+                  "id": "commit",
+                  "kind": "commit",
+                  "unit": "event"
+                }
+              ],
+              "obligations": [
+                {
+                  "kind": "protect",
+                  "role_ids": [
+                    "prepare"
+                  ]
+                },
+                {
+                  "kind": "protect",
+                  "role_ids": [
+                    "apply"
+                  ]
+                },
+                {
+                  "kind": "protect",
+                  "role_ids": [
+                    "commit"
+                  ]
+                },
+                {
+                  "kind": "atomic_publish",
+                  "role_ids": [
+                    "commit"
+                  ]
+                }
+              ],
+              "provenance": "Developer-authored partial transaction-role mechanism, not a discovered scientific principle",
+              "relations": [
+                [
+                  "allocate",
+                  "precedes",
+                  "prepare"
+                ],
+                [
+                  "prepare",
+                  "precedes",
+                  "apply"
+                ],
+                [
+                  "apply",
+                  "precedes",
+                  "commit"
+                ]
+              ]
+            }
+          }
+        },
+        "instrument": {
+          "path": "mechanisms/construct.py",
+          "sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7"
+        },
+        "provenance": {
+          "acquisition": "Before behavior and actual added protected/atomic events separately inverted through discovered structural role mapping; target event identifiers not retained in recipe",
+          "after_sha256": "6ffd1af11ad7fb7c32329ea3928a082e222cb663d268f46547744e26c00fc5f4",
+          "before_sha256": "e14f14d33d99a34d24f90c923e1d334465094537e77fadfc1d33c1de367c5567",
+          "dependency_sha256": {
+            "flywheel/retention.py": "7d7587fd11bffebc7b4ab6a1118eda0a899094099949434722d1254e630973c7",
+            "mechanisms/mapping.py": "66d66208ac731249217766785a7d22a5d255f3ab6729b71edd7139ef1ce1cc18",
+            "mechanisms/memory.py": "927fe08a6c85afba29577084cc37b19c21a6e7c6bccdd18ec68c51e43442e806",
+            "mechanisms/pipeline.py": "3cffc1f364bb053323da5f5c9e97e36158dfcdd56a38f59debbb35973dc43064"
+          },
+          "mapping_sha256": "7047adad36a026af277c0d6c51c641c888f458cbb23c588b4161c055dd27d543",
+          "obligations_sha256": "49cbf6199995d5635e7ab3d8f2ba40c691e25979f78dfbeb07296f1a0877c41d",
+          "origin": "derived-from-verified-before-after-delta",
+          "receipt_verifier_source": {
+            "path": "mechanisms/pipeline.py",
+            "sha256": "3cffc1f364bb053323da5f5c9e97e36158dfcdd56a38f59debbb35973dc43064"
+          },
+          "task_id": "acquisition031",
+          "task_sha256": "80d339dafbb349d6c09448188b8a96894240dacb2cd11da3143eadd2baaf0ca7",
+          "verification_scope": {
+            "effect_scope": "exclusive_local_output",
+            "invariants": [
+              {
+                "id": "interruption-record",
+                "kind": "mark_after_reservation"
+              },
+              {
+                "id": "no-false-completion",
+                "kind": "no_commit_on_failure"
+              }
+            ]
+          },
+          "verifier_source": {
+            "interface": "mechanisms.pipeline.verify",
+            "path": "mechanisms/pipeline.py",
+            "sha256": "3cffc1f364bb053323da5f5c9e97e36158dfcdd56a38f59debbb35973dc43064"
+          }
+        },
+        "supersedes": [],
+        "verification": {
+          "receipt_sha256": "ba01405127d07cdbac152264772fc8a3162ad3600bd0313d17c196fb58585cfc",
+          "status": "verified-in-scope"
+        }
+      }
+    },
+    "status": "verified-in-scope"
+  },
+  "actual_collections": 0,
+  "actual_customers": 0,
+  "actual_profit": null,
+  "authority": [],
+  "canonical_default_changed": false,
+  "claims_not_established": [
+    "autonomous frontier-model invention",
+    "retained method advantage",
+    "commercial profit",
+    "annual scale",
+    "global optimality"
+  ],
+  "cost_basis": "Authored simulated complete-operation envelopes, not API bills; engineering/model/host costs unknown.",
+  "counterfactual_acquisition_cost_each_reuse_arm_microUSD": 1000000,
+  "exposure": "Builder-visible engineering cases distinct from acquisition, NOT untouched confirmation.",
+  "native_audit": {
+    "accepted": true,
+    "actions_sha256": "257f89e6a8f80a1e24dcf1616d270337fb98107b300ca65d8b8ca347d478fa24",
+    "connected_journal_entries": 23,
+    "connected_native_actions_covered": 23,
+    "connected_rejected_entries": 0,
+    "investments": [],
+    "journal_authenticity_scope": "Public source/native commitments verified; private local WAL HMAC checked only on owner reopen.",
+    "orders": [],
+    "scope": "SIMULATED",
+    "signature_scope": "Public audit verifies native finance and state/action commitments. Private local HMAC authenticity is checked only by the account owner.",
+    "source_bound_resource_spend_microUSD": 2360000,
+    "state_bound_reservations": 0,
+    "summary": {
+      "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+      "available": 96640000,
+      "cash": 97640000,
+      "collections": 0,
+      "conditionalEarned": 0,
+      "custodyReserve": 0,
+      "custodyRestricted": 0,
+      "earnedProtectionBacking": 0,
+      "equityProtectionBacking": 1000000,
+      "expensePaid": 2360000,
+      "expenses": 2360000,
+      "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+      "investmentStopped": false,
+      "netEarnedAfterIncurredObligations": -2360000,
+      "payables": 0,
+      "profit": -2360000,
+      "recoveryIncome": 0,
+      "reservedInvestment": 0,
+      "revenue": 0,
+      "strictEarnedControl": 0,
+      "tailReserve": 0,
+      "unrestrictedEarned": 0,
+      "workingCapital": 1000000
+    }
+  },
+  "native_audit_accepted": true,
+  "native_cost_microUSD": 2360000,
+  "paid_operations": 23,
+  "process_cpu_seconds": 5.3263862,
+  "protocol": {
+    "acquisition_sha256": "eb82a080e426f5bb95f271b4b2930025742e6207488f6465ae632c051a249ea1",
+    "fees": {
+      "acquisition": 1000000,
+      "construction": 50000,
+      "retrieval": 10000,
+      "verification": 100000
+    },
+    "heldout_sha256": "b739325e40e60ecdd712e27e187fdbd45c9d3d895d9977d3a6b6ab54ac2632bf",
+    "limits": {
+      "max_bundle_size": 2,
+      "max_candidates": 64,
+      "max_combinations": 4
+    },
+    "schema": "funded-discovery031/v1",
+    "scope": "SEED_FUNDED_SYNTHETIC_RESEARCH_PROPOSALS_ONLY",
+    "source_sha256": "6bda8d23670686ff7c07f337be092372b702b3b4a704e7db6a3ecd1f14d9a92f",
+    "specification_sha256": "2f1a368eab4e37e35f1c14d3d0d581fd3a5bf94bc2a0558378979ad9c75953bf"
+  },
+  "rows": [
+    {
+      "accepted": true,
+      "arm": "no_memory",
+      "authority": [],
+      "candidates": [
+        {
+          "candidate_sha256": "08e84c7db955131a0c883f588b52197b71a3b5b7854b3146bfabaac682dc81a9",
+          "checks": 4,
+          "passed": true
+        }
+      ],
+      "content_sha256": [],
+      "generation_status": null,
+      "native_cost_microUSD": 160000,
+      "task": "heldout-reversed"
+    },
+    {
+      "accepted": true,
+      "arm": "ordinary_reuse",
+      "authority": [],
+      "candidates": [
+        {
+          "candidate_sha256": "f4bb0f4eba755c6b767070d68e1ffd642aeb2dbd2ed4d98e0c0604736489d0b2",
+          "checks": 4,
+          "passed": false
+        },
+        {
+          "candidate_sha256": "ca7b21c7d6ec9876ae06b100df523737416f2a09557539c69afb32f3e3b17789",
+          "checks": 4,
+          "passed": true
+        }
+      ],
+      "content_sha256": [
+        "2e43bd165ac8aa11ab78309bfd9f46a90bb754099dbbbf78a760a98bf24cc4e5"
+      ],
+      "generation_status": "generated",
+      "native_cost_microUSD": 260000,
+      "task": "heldout-reversed"
+    },
+    {
+      "accepted": true,
+      "arm": "acquired_reuse",
+      "authority": [],
+      "candidates": [
+        {
+          "candidate_sha256": "f4bb0f4eba755c6b767070d68e1ffd642aeb2dbd2ed4d98e0c0604736489d0b2",
+          "checks": 4,
+          "passed": false
+        },
+        {
+          "candidate_sha256": "ca7b21c7d6ec9876ae06b100df523737416f2a09557539c69afb32f3e3b17789",
+          "checks": 4,
+          "passed": true
+        }
+      ],
+      "content_sha256": [
+        "2e43bd165ac8aa11ab78309bfd9f46a90bb754099dbbbf78a760a98bf24cc4e5"
+      ],
+      "generation_status": "generated",
+      "native_cost_microUSD": 260000,
+      "task": "heldout-reversed"
+    },
+    {
+      "accepted": true,
+      "arm": "no_memory",
+      "authority": [],
+      "candidates": [
+        {
+          "candidate_sha256": "0ebaf93e89d43d5bcb35fd0889d400bf7441c239eaa2163d39aa0eb90e12da66",
+          "checks": 5,
+          "passed": true
+        }
+      ],
+      "content_sha256": [],
+      "generation_status": null,
+      "native_cost_microUSD": 160000,
+      "task": "heldout-branch"
+    },
+    {
+      "accepted": false,
+      "arm": "ordinary_reuse",
+      "authority": [],
+      "candidates": [
+        {
+          "candidate_sha256": "f5ba49b9dc8b2c1927256a78eeacee8726fb191ccaa05eee305d99172c8b0858",
+          "checks": 5,
+          "passed": false
+        },
+        {
+          "candidate_sha256": "32bd724c7ceb9ac3ddb69a4d3a09ee9c666855e17e4c429ac14d0d6c44e4f9fc",
+          "checks": 5,
+          "passed": false
+        }
+      ],
+      "content_sha256": [
+        "2e43bd165ac8aa11ab78309bfd9f46a90bb754099dbbbf78a760a98bf24cc4e5"
+      ],
+      "generation_status": "generated",
+      "native_cost_microUSD": 260000,
+      "task": "heldout-branch"
+    },
+    {
+      "accepted": false,
+      "arm": "acquired_reuse",
+      "authority": [],
+      "candidates": [
+        {
+          "candidate_sha256": "f5ba49b9dc8b2c1927256a78eeacee8726fb191ccaa05eee305d99172c8b0858",
+          "checks": 5,
+          "passed": false
+        },
+        {
+          "candidate_sha256": "32bd724c7ceb9ac3ddb69a4d3a09ee9c666855e17e4c429ac14d0d6c44e4f9fc",
+          "checks": 5,
+          "passed": false
+        }
+      ],
+      "content_sha256": [
+        "2e43bd165ac8aa11ab78309bfd9f46a90bb754099dbbbf78a760a98bf24cc4e5"
+      ],
+      "generation_status": "generated",
+      "native_cost_microUSD": 260000,
+      "task": "heldout-branch"
+    }
+  ],
+  "schema": "funded-discovery031/v1",
+  "scope": "PROCEDURALLY_SEPARATE_FIXED_VERIFIER_SYNTHETIC_ENGINEERING",
+  "source": {
+    "files": {
+      "adaptive_enterprise/account.py": "d8a64a593731ca956b96794cbfb790b02cfbc381c8cfabc900a6b11fd1695ab2",
+      "adaptive_enterprise/allocation.py": "359a380847c6053ac64a5c339277b9bd040b6913aecec2634af7f19af097035b",
+      "adaptive_enterprise/checkers.py": "f687655e7edd77eb5dd9bb11ad89c6a5a80fbd59f3b27250dc9c40be5e1732c3",
+      "adaptive_enterprise/instruments.py": "4bd313edcc6e9f81b695318e7147e638a7733d16b8fdd875cc207aecb15efbbd",
+      "adaptive_enterprise/strategies.py": "fe53983bb85d9057ece8f2f974e7326cfb57eeb729c7ce285ba65136757a8020",
+      "commercial/ledger.py": "d160cd2142b963e54c558305d26858bbbe00f408c72bcc3c736c6f50cb8c5b74",
+      "commercial/persistence.py": "78c1eb1d82471843e32dd290ac3ea1b5b253d4edc1448cc954b5fafa5d6e0e15",
+      "commercial/single_writer.py": "0d34de2e32dd2ad47b43c32edd4ccac01196c2858db7a32c7b7d2217ec2cf984",
+      "commercial/tape_lease.py": "854ad7c0341a94fbfcc0ed3f450ab9116bbaf9666e4f6d5f118397a19f7f575c",
+      "connected_enterprise/channel_menu.py": "8b0b4dad25ce851cfb23ae794d836728dd5a9738a8b3906be054f3c1fc7d9152",
+      "connected_enterprise/engine.py": "c103a011237b08ff702ad9639bd67167bb714f3536870735f99feb0fde404c3e",
+      "connected_enterprise/finance.py": "a1aa8fd8ebfece5852c7877e392f2dc68a61914ac0e9e1d22e368b0dfd9cb43e",
+      "connected_enterprise/funded_discovery031.py": "89ebd9026c05b8595b3b72c26ca34a0d71c5426698e6ba3fbd5abe7c5b147792",
+      "connected_enterprise/joint_planning.py": "fbb5718e94fb4189b166c4064449ef343c00a804e80866b4eb2d23868f21a037",
+      "connected_enterprise/mechanism_choice.py": "debd395980f06d72c1769ed2df1e2d1222e6ef083fa8b01399b50fa62e85d096",
+      "connected_enterprise/strategic_audit.py": "a0b4a36eff711d643b34da56797d5ff67b6e25962ebdaecad2767dcb265f8cc5",
+      "connected_enterprise/strategic_commerce.py": "640932e08825fd88969802b63350aa3bc933cca1696a3e50d40b0ce8fe6b709e",
+      "connected_enterprise/verify.py": "0d272d8e2f62b39181d5f2647c140d15e524b160befb755b42bb05dd717f1e95",
+      "experiments/commerce006.py": "2fc529131885c75752dab8dbd77d85b5a36d4c0b43cb5e7e53286c997cc0a52f",
+      "flywheel/__init__.py": "b2bdd53c43426e128f56facd881b6aceaf70a8f8f6e14382c9a5e96de6d92e37",
+      "flywheel/retention.py": "7d7587fd11bffebc7b4ab6a1118eda0a899094099949434722d1254e630973c7",
+      "flywheel/sandbox.py": "103e2a8828a7aaf31faac475fb48ccbba1a685b4f64191dae4f6fbe8a9b6c7c8",
+      "mechanisms/__init__.py": "1340cebd4b82f6958e29aa61b6c1ee36a3bb52699e5f32633935c39442be9293",
+      "mechanisms/construct.py": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7",
+      "mechanisms/criticism.py": "69158ba8bf5b7ad135758612194eef94643eae9ba19255c8c9eeec4a6fbd9875",
+      "mechanisms/executor.py": "86bc36b628dfd6bd52377b558a0f5e13e67b0d38e39d7e8b99c164f6fc8eeb05",
+      "mechanisms/mapping.py": "66d66208ac731249217766785a7d22a5d255f3ab6729b71edd7139ef1ce1cc18",
+      "mechanisms/memory.py": "927fe08a6c85afba29577084cc37b19c21a6e7c6bccdd18ec68c51e43442e806",
+      "mechanisms/pipeline.py": "3cffc1f364bb053323da5f5c9e97e36158dfcdd56a38f59debbb35973dc43064",
+      "portfolio25/pricing.py": "b0a359619a02b6dcadd2af20b5683e4d84cb585841359b653579610ff1da568c",
+      "scripts/run_funded_discovery031.py": "b2e440b96375c42aaf0a902ff511b8389ee405b3dae964ea38d8adcaa63e12fe",
+      "vendor/alpha_claim/contracts.py": "3536b96c4b7ee46f9af7d807e02685aa55e42daae7f7c56b7e9029ca2cde0964",
+      "vendor/alpha_claim/protected_exchange.py": "7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272"
+    },
+    "sha256": "6bda8d23670686ff7c07f337be092372b702b3b4a704e7db6a3ecd1f14d9a92f"
+  },
+  "wall_seconds": 9.79404147103196
+}
