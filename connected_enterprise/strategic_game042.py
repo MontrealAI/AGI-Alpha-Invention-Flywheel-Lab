@@ -127,6 +127,11 @@ def solve(game, basis):
         if worst < -game['max_downside_microUSD']:
             reasons[name]='DECLARED_MAX_DOWNSIDE_VIOLATION';continue
         expected_num=sum(s['weight_bps']*outcomes[s['id']]['seller_net_microUSD'] for s in game['scenarios'])
+        # Commercial investment requires a positive (declared, not realized)
+        # expected contribution. Funding loss-making exploration is a different,
+        # explicitly authorized research contract, not a hidden sales subsidy.
+        if name!='continue_direct' and expected_num<=0:
+            reasons[name]='NO_POSITIVE_DECLARED_EXPECTED_COMMERCIAL_SURPLUS';continue
         eligible[name]={'scenarios':outcomes,'worst_net_microUSD':worst,
                         'expected_net_numerator_bps_microUSD':expected_num}
     ensure('continue_direct' in eligible, 'RETAIN_CASH_MUST_BE_FEASIBLE')

@@ -210,6 +210,10 @@ def audit_history(result,manifest):
         if d['selected']=='continue_direct' and day_invest:raise ValueError('NO_OPPORTUNITY_INVESTMENT_ALLOWED_ON_HOLD')
         if any(i['kind']!=('acquisition' if d['selected']=='partner_access' else 'capacity') for i in day_invest):raise ValueError('WRONG_OPPORTUNITY_MEANS_EXECUTED')
         for i in day_invest:
+            if 'game' in cfg['opportunity_policy']:
+                expected_bps=d['game_certificate']['eligible'][d['selected']]['expected_net_numerator_bps_microUSD']
+                if expected_bps<=0 or i['predicted_net']!=max(1,expected_bps//10000):
+                    raise ValueError('NATIVE_INVESTMENT_FORECAST_CHANGED_FROM_CHOSEN_GAME')
             if i['funding_receipt'].get('funding')!='EARNED':raise ValueError('OPPORTUNITY_REQUIRES_ACTUAL_EARNED_FINANCING')
             if not past:raise ValueError('UNFUNDED_OPPORTUNITY_BEFORE_ACCEPTED_COLLECTION')
             later=[o for o in settlements if o['collection_time']>t and o.get('acquisition_source_plan_id' if i['kind']=='acquisition' else 'capacity_source_plan_id')==i['plan_id']]

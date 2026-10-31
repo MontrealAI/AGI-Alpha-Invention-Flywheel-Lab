@@ -44,3 +44,17 @@ Evaluate complete modeled profit, actual native settled output, protected obliga
 - **Next transformation:** construct an independently acceptable, high-value recurring enterprise offer plus a legitimately available customer channel, and introduce costed contingent partner incentives in the native ledger only after real terms and authority exist. That is where the greatest additional upside may lie; it is **not** implemented or empirically demonstrated by this game solver.
 
 References: [2007 mechanism-design technical review](https://www.nobelprize.org/uploads/2018/06/advanced-economicsciences2007-1.pdf), [2012 stable matching and market design](https://www.nobelprize.org/uploads/2018/06/popular-economicsciences2012.pdf), and the repository's current `AGENTS.md`, developer guide and operator rules. No source claims global optimality beyond a stated game.
+
+## Expected-value and native receipt consistency
+
+The finite game now rejects commercial-investment actions with nonpositive
+scenario-weighted expected contribution. Research whose short-term returns may
+be negative requires its separate, expressly funded research contract. For a
+game-selected earned-funded purchase, the canonical engine records the *chosen
+game* expected contribution rather than an unrelated optimistic pre-game
+heuristic. The independent auditor rejects an altered value. The forecast is
+still a model assumption, not verified additional revenue or authorization:
+actual native availability, collection and obligations remain authoritative.
+The registered four-world experiment is exposed development, not fresh
+confirmation. No broad optimality, observed market participation, or invention
+improvement follows from a positive finite-game result.

@@ -70,6 +70,14 @@ class GameTheory042Tests(unittest.TestCase):
         self.assertNotIn('partner_access',r['eligible'])
         self.assertEqual(r['excluded']['partner_access'],'CURRENT_NATIVE_AVAILABLE_EARNINGS_INSUFFICIENT')
 
+    def test_declared_negative_expectation_cannot_be_hidden_in_regret_selection(self):
+        g=game()
+        for s in g['scenarios']:
+            s['demand_bps']=0
+        r=solve(g,basis())
+        self.assertEqual(r['selected'],'continue_direct')
+        self.assertEqual(r['excluded']['partner_access'],'NO_POSITIVE_DECLARED_EXPECTED_COMMERCIAL_SURPLUS')
+
     def test_no_profitable_channel_under_adverse_market(self):
         g=game()
         for s in g['scenarios']:
@@ -101,6 +109,35 @@ class GameTheory042Tests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'WEIGHTS'):solve(g,basis())
         g=game();g['scenarios'][0]['rival_responses'][1]['id']='hold'
         with self.assertRaisesRegex(ValueError,'DUPLICATE_RIVAL'):solve(g,basis())
+
+    def test_independent_finite_regret_enumeration_matches_certificate(self):
+        # Separate reference equation, not a replay of the candidate score.
+        g=game(); b=basis(); got=solve(g,b)
+        feasible=got['eligible']
+        scenario_ids=[s['id'] for s in g['scenarios']]
+        candidate_scores={}
+        for name, row in feasible.items():
+            diffs=[]
+            for sid in scenario_ids:
+                outcome=row['scenarios'][sid]['seller_net_microUSD']
+                best=max(other['scenarios'][sid]['seller_net_microUSD'] for other in feasible.values())
+                diffs.append(best-outcome)
+            candidate_scores[name]=max(diffs)
+        winner=min(candidate_scores,key=lambda k:(candidate_scores[k],
+            -feasible[k]['expected_net_numerator_bps_microUSD'],
+            b[k]['native_invoice_microUSD'],
+            ('continue_direct','partner_access','add_capacity').index(k)))
+        self.assertEqual(got['selected'],winner)
+        self.assertEqual(got['selected_max_regret_microUSD'],candidate_scores[winner])
+
+    def test_known_finite_market_does_not_guarantee_accepted_sales(self):
+        # A chosen investment remains a speculative action: native buyers can
+        # still decline, choose the rival, or fail acceptance/collection.
+        g=game(); b=basis(); proof=solve(g,b)
+        self.assertEqual(proof['selected'],'partner_access')
+        self.assertTrue(proof['no_current_native_funding_authority'])
+        self.assertEqual(proof['eligible']['continue_direct']['expected_net_numerator_bps_microUSD'],0)
+        self.assertIn('not a complete market equilibrium',proof['limitations'][0])
 
     def test_explicit_hold_prevents_fictional_spend(self):
         b={'continue_direct':basis()['continue_direct']}
