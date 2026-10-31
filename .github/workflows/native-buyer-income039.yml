@@ -1,0 +1,23 @@
+name: Native recurring buyer income 039
+on:
+  pull_request:
+    paths:
+      - 'connected_enterprise/**'
+      - 'tests/test_connected_buyer_income039.py'
+      - '.github/workflows/native-buyer-income039.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-income:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen commercial requirements
+        run: python3 -m pip install -r requirements-commercial010.txt
+      - name: Validate external buyer-income contracts and native audited operation
+        run: python3 -m unittest -v tests.test_connected_buyer_income039
