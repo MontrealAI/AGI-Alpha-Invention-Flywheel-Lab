@@ -1,0 +1,89 @@
+{
+  "schema": "agi-alpha/overnight022/p0-published-python-selftest-and-immutable-fixture-readback/v1",
+  "recorded_at_utc": "2026-10-31T10:16:18Z",
+  "scope": "Independent read-only qualification of an existing queue-boundary regression and immutable public fixture; NO old HMAC verification, signed STATE continuation, financial action, account access, or prospective release.",
+  "source": {
+    "repository": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+    "branch": "evidence/operator022-prepared-3288",
+    "qualified_release": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+    "regression_path": "evidence/overnight022/post-head-3288/p0_queue_boundary_regression.py",
+    "regression_git_blob": "f3128e534b706c2dbd573d886457dae19fe10991",
+    "regression_sha256": "81d03b618229a7d463c34e6c00c538d7cb658e7ec9d4f30c24eb5d39cfe214cc",
+    "regression_bytes": 8877,
+    "immutable_fixture_commit": "328835b30b3fed52b491f33f86ad008c60c37704",
+    "fixture_paths_prefix": "evidence/overnight022/migration/production-awaiting-acceptance/",
+    "fixture_git_blobs": {
+      "LEGACY_CHECKPOINT": "91a4c08cac3a5d789d7dd9429815c1168c935bd5",
+      "LEGACY_PUBLIC_RECORD": "70d843141bb5d399eec15f9ea21805fcdc392023",
+      "UPGRADED_PUBLIC_RECORD": "b77756b8ade1029b7ab28ce4e2e93beb3be09bc8"
+    }
+  },
+  "python_selftest": {
+    "command": "python3 evidence/overnight022/post-head-3288/p0_queue_boundary_regression.py --self-test",
+    "source_identity": "Exact Git blob identity matched after manual transcription to local sandbox; test uses same file bytes as published source.",
+    "exit_code": 0,
+    "tests_passed": 6,
+    "tests_failed": 0,
+    "tests": [
+      "changed liability or action-prefix rejected",
+      "late clock overtaking pending acceptance rejected",
+      "noninteger queue time rejected",
+      "rollback, duplicate IDs and in-flight event rejected",
+      "valid structural time/prefix accepted",
+      "same-hour canonical queue-order check"
+    ],
+    "measured_wall_seconds": 1.122556,
+    "measured_child_user_cpu_seconds": 1.119148,
+    "measured_child_system_cpu_seconds": 0.344547,
+    "measured_child_total_cpu_seconds": 1.463695,
+    "full_repository_test_suite": "NOT_EXECUTED",
+    "signed_legacy_migration": "NOT_EXECUTED"
+  },
+  "independent_fixture_readback": {
+    "mode": "Connector fetched entire three immutable JSON documents and separately performed JavaScript structural translation of published Python predicates, not a second Python fixture CLI run.",
+    "source_blob_identities_match": true,
+    "errors": [],
+    "native_actions_before": 9,
+    "native_actions_after": 10,
+    "processed_operating_events": 3,
+    "emitted_semantic_events": 4,
+    "queued_events": 12,
+    "financial_summary_unchanged": true,
+    "old_last_financial_hour": 0,
+    "old_operating_hour": 2,
+    "first_queued_event": {
+      "id": "order-0000-accept",
+      "kind": "accept",
+      "hour": 3
+    },
+    "hypothetical_transition_hour_2": "STRUCTURALLY_ELIGIBLE_ONLY",
+    "hypothetical_transition_hour_4": "REJECT_OVERTAKES_PENDING_ACCEPTANCE"
+  },
+  "ownership": {
+    "integration_handoff": "READY_FOR_SUCCESSOR",
+    "native_capital_task": "01a18fa7-ffc6-7384-8bb4-ea6012cfb0f7",
+    "actual_native_task_checkpoint": "UNAVAILABLE: task API returned not found or inaccessible in this context; this does not show inactivity.",
+    "latest_visible_native_candidate": "3981b182513abbba1c2ab1102f94732c453422fa",
+    "competing_financial_writes": false
+  },
+  "historical_failures": [
+    "Preserve failed original 328835b ARCHIVE_RESOURCE_BOUND; 845 other root tests passing does not retroactively convert failure.",
+    "Preserve old signed STATE restore rejection OPERATING_CHECKPOINT_SOURCE_OR_AUTHORITY_CHANGED; structural preflight does not repair it."
+  ],
+  "limitations": [
+    "No new native Account or HMAC was opened, simulated or migrated.",
+    "All tester records are exposed; no fresh scientific/economic confirmation, demand, model billing, or profit claim.",
+    "The Python self-test uses synthetic data; three real fixture documents were examined by independent JS translation with exact Git blob IDs, not by the Python fixture CLI.",
+    "Prior report's local SHA256 differed from exact published script; the current independently checked exact SHA256 is 81d03b... and Git blob is f3128e...; preserve earlier receipt without retroactive rewriting.",
+    "GitHub connector transport, assistant compute and whole-campaign monetary costs are UNKNOWN, not zero."
+  ],
+  "acceptance_matrix": {
+    "released_baseline": "ACHIEVED unchanged",
+    "canonical_registered_operator": "ACHIEVED unchanged",
+    "nonempty_signed_state_queue_migration": "FAILED unchanged",
+    "composed_native_lifecycle": "PARTIAL",
+    "earned_causal_reinvestment": "PARTIAL",
+    "full_commercial_or_invention_claims": "NOT_QUALIFIED"
+  },
+  "next_decision": "Obtain actual native-capital active source checkpoint and safe writing boundary before touching any finance code. Compose authorized source with released8ab, then execute authenticated old HMAC and queue-preserving migration through the public CLI; prove due claim-before-maturity events, crash and racing-writer safety and genuinely earned atomic reservations. Preserve immutable failures and do not duplicate existing release reproduction."
+}
