@@ -5,7 +5,7 @@ from adaptive_enterprise.allocation import default_riskpolicy
 from .strategic_commerce import select,allocate_actions
 
 def validate_allocation_policy(policy):
-    if not isinstance(policy,dict) or set(policy)!={'risk','max_customers'} or type(policy['max_customers']) is not int or not 1<=policy['max_customers']<=8:
+    if not isinstance(policy,dict) or set(policy)-{'sequence'}!={'risk','max_customers'} or type(policy['max_customers']) is not int or not 1<=policy['max_customers']<=8:
         raise ValueError('EXPLICIT_BOUNDED_JOINT_ALLOCATION_POLICY_REQUIRED')
     if not isinstance(policy['risk'],dict) or set(policy['risk'])!=set(default_riskpolicy()):
         raise ValueError('EXACT_JOINT_RISK_POLICY_REQUIRED')
@@ -17,6 +17,12 @@ def investment_option(ident,kind,cost,predicted_net,scenarios,day,contract):
         'benefit_ids':['unvalidated-shared-expansion-window-'+str(day)],'requires':[],
         'exclusive_group':None,'authorized':True,'evidence':digest(contract),
         'execution':{'funding':'EARNED','contract':contract,'forecast_scope':'Historical margin and public contract hypothesis; not income. Shared benefit identity forbids unverified additive channel/capacity gains.'}}
+
+def observed_sequence_buyers(state, prepared):
+    buyers={b['id']:copy.deepcopy(b) for b in state['buyers']}
+    for response in prepared['reactivations']:
+        buyers[response['customer_id']]['active']=response['responded']
+    return buyers
 
 def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_fn,draw_fn):
     cfg=state['config'];day=prepared['event']['time']//24;policy=validate_allocation_policy(cfg['strategic_allocation_policy'])
@@ -54,6 +60,14 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
     if prepared['capacity_purchase']:
         contract={'price':cfg['capacity_price'],'lead_hours':cfg['capacity_lead_hours'],'duration_hours':cfg['capacity_duration_hours']}
         investments.append(investment_option('capacity-'+str(day),'capacity',cfg['capacity_price'],prepared['capacity_predicted_net'],risk['scenarios'],day,contract))
+    if 'sequence' in policy:
+        from .sequence_planning import sequence_options
+        failed={e['source_plan_id'] for e in prepared['channel_after']['events'] if e['day']<=day and e['kind']=='CHANNEL_ACTIVATION_FAILED'}
+        public_buyers=observed_sequence_buyers(state,prepared)
+        investments=sequence_options(cfg,prepared['event']['time'],snapshot,operating_envelope,jobs,
+            set(state['used_jobs'])|{d['selection']['problem']['job_id'] for d in deliveries},
+            state['investments'],public_buyers,prepared['channel_after']['contacts'],failed,risk['scenarios'],
+            sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in deliveries),channel_state=prepared['channel_after'])
     allocation=allocate_actions(snapshot,deliveries,investments,risk,allow_seed=True,max_delivery_slots=slots,earned_deduction=operating_envelope)
     if allocation['decision']['optimality_scope']=='NONE':raise ValueError('JOINT_PLANNING_SHORTLIST_EXCEEDS_DECLARED_FINITE_BOUND')
     return {'id':digest(allocation),'time':prepared['event']['time'],'allocation':allocation,
