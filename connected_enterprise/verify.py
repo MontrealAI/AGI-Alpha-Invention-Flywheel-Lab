@@ -150,10 +150,15 @@ def _check_market_decisions(result, tape):
         if result['arm'] == 'competitive_growth':
             price = _expected_competitive_price(price, int(anchor * rival_bps / 10000), cfg, previous)
         if 'strategic_policy' in cfg and decision['kind']=='offer':
-            from .strategic_commerce import selected_delivery
-            wrapper=result.get('joint_actions',{}).get(decision.get('joint_allocation_sha256'))
-            if wrapper is None:raise ValueError('STRATEGIC_PRICE_RECEIPT_REQUIRED')
-            price=selected_delivery(wrapper['allocation'],decision.get('joint_option_id'))['price']
+            if cfg.get('strategic_execution')=='sequential':
+                selection=decision.get('strategic_selection')
+                if not selection or not selection.get('offer'):raise ValueError('STRATEGIC_PRICE_RECEIPT_REQUIRED')
+                price=selection['offer']['price_microUSD']
+            else:
+                from .strategic_commerce import selected_delivery
+                wrapper=result.get('joint_actions',{}).get(decision.get('joint_allocation_sha256'))
+                if wrapper is None:raise ValueError('STRATEGIC_PRICE_RECEIPT_REQUIRED')
+                price=selected_delivery(wrapper['allocation'],decision.get('joint_option_id'))['price']
         if decision['human_price'] != anchor or (decision['kind'] == 'offer' and decision['price'] != price) or (decision['kind'] == 'outside_choice' and decision['price'] is not None):
             raise ValueError('PRICE_POLICY_USES_UNREGISTERED_INFORMATION_OR_HUMAN_ANCHOR')
         committed = sum(row['price'] for row in result['orders'] if row['customer_id'] == customer
@@ -298,9 +303,10 @@ def _check_cost_semantics(result, tape, lifecycle):
         units = lifecycle['daily_outreach_units_recomputed'][moment]
         add('outreach-' + str(day), cfg['exposure_cost'] * units, moment, 'outreach_including_failed_and_unused_slots')
         attempts = sum(row.get('kind') == 'offer' and row['time'] == moment for row in result['decisions'])
-        if 'strategic_policy' in cfg:
+        if 'strategic_policy' in cfg and cfg.get('strategic_execution')!='sequential':
             wrapper=next(w for w in result['joint_actions'].values() if w['time']==moment)
             attempts=len(wrapper['allocation']['deliveries'])
+        if cfg.get('strategic_execution')=='sequential':attempts=lifecycle['sequential_evaluation_counts'][moment]
         add('qualification-' + str(day), cfg['qualification_cost'] * attempts, moment, 'qualification_including_lost_offers')
     for row in result['orders']:
         add(row['id'] + '-resources', row['complete_cost'], row['qualified_time'], 'production_contract')
@@ -480,6 +486,7 @@ def _check_contract_clock(ident, offered, actions, operating, qualified, config,
 
 
 def audit(root, manifest, result):
+    cfg = result['config']
     if not isinstance(result, dict) or result.get('schema') != 'agi-alpha/connected014-result/v1' or result.get('scope') != 'CONDITIONAL_SIMULATION':
         raise ValueError('CONNECTED_SIMULATED_WORLD_REQUIRED')
     if result.get('complete') is not True:
@@ -639,7 +646,10 @@ def audit(root, manifest, result):
     budget_receipt = check_budgets(result['buyers'], list(orders.values()))
     _check_buyer_origins(result['config'], result['seed'], result['buyers'])
     lifecycle_receipt = _check_customer_lifecycle(result)
-    from .strategic_audit import audit_decisions
+    if cfg.get('strategic_execution')=='sequential':
+        from .sequential_audit import audit_decisions
+    else:
+        from .strategic_audit import audit_decisions
     strategic_receipt=audit_decisions(root,manifest,result,lifecycle_receipt)
     market_receipt = _check_market_decisions(result, tape)
     cost_semantics = _check_cost_semantics(result, tape, lifecycle_receipt)
