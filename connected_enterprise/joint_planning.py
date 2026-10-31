@@ -46,7 +46,15 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
                            'exclusive_group':'customer-'+buyer['id'],'selection':selection,'requires':[]})
         tentative['used_jobs'].append(job['id'])
     investments=[]
-    if prepared['channel_purchase']:
+    if 'channel_menu_policy' in cfg:
+        from .channel_menu import menu_options
+        book=prepared['channel_after'];live=[x for x in book['instances'].values() if x['state'] not in {'FAILED','EXPIRED'} and x['expiry_day']>day]
+        public_buyers={b['id']:copy.deepcopy(b) for b in state['buyers']}
+        for exposure in prepared['exposures']:public_buyers[exposure['customer_id']]['known']=True
+        for response in prepared['reactivations']:public_buyers[response['customer_id']]['active']=response['responded']
+        margins=[o['price']-o['complete_cost'] for o in state['orders'] if o['outcome']=='SETTLED']
+        investments.extend(menu_options(cfg,state['arm'],day,public_buyers,book['contacts'],live,margins,slots,risk['scenarios']))
+    elif prepared['channel_purchase']:
         terms=cfg['channels']['pilot'];invoice=terms['price_microUSD']+terms['support_microUSD']
         investments.append(investment_option('channel-'+str(day),'acquisition',invoice,prepared['channel_predicted_net'],risk['scenarios'],day,terms))
     if prepared['capacity_purchase']:
@@ -59,7 +67,7 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
         investments=sequence_options(cfg,prepared['event']['time'],snapshot,operating_envelope,jobs,
             set(state['used_jobs'])|{d['selection']['problem']['job_id'] for d in deliveries},
             state['investments'],public_buyers,prepared['channel_after']['contacts'],failed,risk['scenarios'],
-            sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in deliveries))
+            sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in deliveries),channel_state=prepared['channel_after'])
     allocation=allocate_actions(snapshot,deliveries,investments,risk,allow_seed=True,max_delivery_slots=slots,earned_deduction=operating_envelope)
     if allocation['decision']['optimality_scope']=='NONE':raise ValueError('JOINT_PLANNING_SHORTLIST_EXCEEDS_DECLARED_FINITE_BOUND')
     return {'id':digest(allocation),'time':prepared['event']['time'],'allocation':allocation,

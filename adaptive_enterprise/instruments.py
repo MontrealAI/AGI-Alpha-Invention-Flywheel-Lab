@@ -285,7 +285,9 @@ def _read(root, path, expected):
     return read_bound(root, path, expected)
 
 
-def prepare_services(root, relative, cohort_seed=0):
+def prepare_services(root, relative, cohort_seed=0, *, jobs_per_service=32):
+    if type(jobs_per_service) is not int or not 32<=jobs_per_service<=256:
+        raise ValueError("FINITE_ADMITTED_INVENTORY_REQUIRED")
     from adaptive_enterprise.checkers import audit_delivery
     from adaptive_enterprise.strategies import PRIMITIVE_SERVICES
     root, target = Path(root).absolute(), Path(relative)
@@ -295,7 +297,7 @@ def prepare_services(root, relative, cohort_seed=0):
     jobs = []
     start = time.process_time()
     for service_id in PRIMITIVE_SERVICES:
-        for index in range(32):
+        for index in range(jobs_per_service):
             raw = synthetic_raw(service_id, index,cohort_seed)
             plan = infer_plan(raw)
             method = 'staged_readiness' if plan['status'] != 'READY' else ('canonical' if service_id!='reconciliation' or index<8 else 'generated_schema')
@@ -333,6 +335,9 @@ def prepare_services(root, relative, cohort_seed=0):
                 'source_hashes':source_hashes,'jobs':jobs,'attempts':[],
                 'cohort_provenance':{'generator':'adaptive_enterprise.instruments.synthetic_raw','cohort_seed_sha256':digest(cohort_seed),'scope':'Deterministic synthetic sources; seed0 is exposed development. Fresh registered seeds change amounts, identities, evidence and aliased headers; no hidden seed is given to seller policy.'},
                 'resource_receipt':{'process_cpu_seconds':time.process_time()-start,'model_calls':0,'billing':'UNAVAILABLE; deterministic executors and authored setup envelope'}}
+    if jobs_per_service!=32:
+        manifest['cohort_provenance']['jobs_per_service']=jobs_per_service
+        manifest['cohort_provenance']['inventory_scope']='Equal predeclared finite synthetic workload inventory, not market size or free business capacity. Actual enterprise delivery costs remain native prepaid contracts.'
     _write(root,str(target/'MANIFEST.json'),manifest)
     load_jobs(root,manifest)
     return manifest

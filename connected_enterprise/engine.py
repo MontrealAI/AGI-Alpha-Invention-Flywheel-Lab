@@ -31,7 +31,7 @@ def default_config():
         'limits':['Synthetic non-personal work only; no actual customers or payments.','Finite authored buyer/channel/supplier contracts, no empirical conversion calibration.','Permanent native principal/fee protection tails remain; seed may back reserves.','No paid inference: capable-frontier AI economics represented by disclosed envelopes; actual executors are deterministic.','Finite frozen service inventory is an edition resource, not a universal market ceiling.']}
 
 def validate_config(cfg):
-    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
     for key in ['horizon_days','customer_pool','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
     for key in ['nonpayment_bps','arrival_bps','retention_bps','payment_bps','profit_tax_bps']:
@@ -43,6 +43,7 @@ def validate_config(cfg):
     if 'mechanism_policy' in cfg:
         from .mechanism_choice import validate_policy
         validate_policy(cfg['mechanism_policy'])
+        if 'cost_contract' in cfg['mechanism_policy'] and cfg['mechanism_policy']['cost_contract']['production_envelope_microUSD']!=cfg['production_cost']:raise ValueError('COMMON_ENVELOPE_MUST_MATCH_PRODUCTION_CONFIG')
     if 'strategic_policy' in cfg:
         from .strategic_commerce import validate_policy
         validate_policy(cfg['strategic_policy'])
@@ -51,6 +52,10 @@ def validate_config(cfg):
         if cfg['maintenance_daily']<=0:raise ValueError('POSITIVE_PREPAID_STRATEGIC_PLANNING_CONTRACT_REQUIRED')
     elif 'strategic_allocation_policy' in cfg:raise ValueError('JOINT_STRATEGIC_POLICY_REQUIRED')
     contracts=validate_contracts(cfg['channels'])
+    if 'channel_menu_policy' in cfg:
+        from .channel_menu import validate_policy
+        validate_policy(cfg['channel_menu_policy'],contracts)
+        if 'strategic_policy' not in cfg:raise ValueError('CHANNEL_MENU_REQUIRES_NATIVE_JOINT_STRATEGY')
     if 'pilot' not in contracts:raise ValueError('CONNECTED_PILOT_CHANNEL_REQUIRED')
     if contracts['pilot']['lead_days']<1:raise ValueError('CONNECTED_CHANNEL_ADVANCE_LEAD_REQUIRED')
     normalized=copy.deepcopy(cfg);normalized['channels']=contracts
@@ -171,7 +176,11 @@ def _prepare_plan(state,account,jobs):
         for option in joint['allocation']['decision']['selected_options']:
             if option['kind']=='delivery':joint_selected[option['execution']['customer_id']]=selected_delivery(joint['allocation'],option['id'])
         chosen=joint['allocation']['decision']['selected']
-        prepared['channel_purchase']='channel-'+str(day) in chosen
+        if 'channel_menu_policy' in cfg:
+            prepared['channel_purchases']=[o for o in joint['allocation']['decision']['selected_options'] if o['kind']=='acquisition']
+            prepared['channel_purchase']=bool(prepared['channel_purchases'])
+            channel_invoice=sum(o['upfront_cost'] for o in prepared['channel_purchases'])
+        else:prepared['channel_purchase']='channel-'+str(day) in chosen
         prepared['capacity_purchase']='capacity-'+str(day) in chosen
         if 'sequence' in cfg['strategic_allocation_policy']:
             picks=[o for o in joint['allocation']['decision']['selected_options'] if 'first_investment' in o['execution']]
@@ -287,7 +296,14 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                         b=byid[d['customer_id']];b['remaining_budget']-=d['outside_spend'];b['outside_spend']+=d['outside_spend'];b['next_need_time']=t+7*24
                         if d['buyer_choice']=='rival':
                             market=state['market'];market['rival_collections']+=d['outside_spend'];market['rival_cash']+=d['outside_spend']-MICRO;market['rival_expenses']+=MICRO
-                if p['channel_purchase']:
+                if 'channel_menu_policy' in cfg:
+                    for option in p.get('channel_purchases',[]):
+                        contract_id=option['execution']['contract_id'];terms=cfg['channels'][contract_id];invoice=terms['price_microUSD']+terms['support_microUSD'];ident=option['id']
+                        predicted=(sum(cfg['strategic_allocation_policy']['risk']['scenarios'][k]*(option['future_net_cash'][k]-invoice) for k in cfg['strategic_allocation_policy']['risk']['scenarios'])//10000 if 'first_investment' in option['execution'] else next(iter(option['future_net_cash'].values()))-invoice)
+                        receipt=cost(ident,invoice,t,'acquisition_contract',{'terms':terms,'contract_id':contract_id,'investment':'expiring_contact_access'},earned_only=True,expected_net=predicted)
+                        if receipt:
+                            purchase=book.purchase(contract_id,day,receipt['plan_id']);state['investments'].append({'id':ident,'plan_id':receipt['plan_id'],'kind':'acquisition','contract_id':contract_id,'purchased_time':t,'activation_time':purchase['activation_day']*24,'expiry_time':purchase['expiry_day']*24,'cost':invoice,'funding_receipt':receipt,'contract_receipt':purchase,'predicted_net':predicted});_event(state,t,'INVESTMENT',ident,source_plan_id=receipt['plan_id'],investment_kind='acquisition',contract_id=contract_id)
+                elif p['channel_purchase']:
                     terms=cfg['channels']['pilot'];invoice=terms['price_microUSD']+terms['support_microUSD'];ident='channel-'+str(day)
                     receipt=cost(ident,invoice,t,'acquisition_contract',{'terms':terms,'investment':'expiring_contact_access'},earned_only=True,expected_net=p['channel_predicted_net'])
                     if receipt:
@@ -298,7 +314,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 state['channel_state']=book.export()
                 for proposed in p['orders']:
                     o=copy.deepcopy(proposed);ident=o['id'];b=byid[o['customer_id']]
-                    o['funding_receipt']=cost(ident+'-resources',o['complete_cost'],t,'production_contract',{'job_id':o['job_id'],'offer':o['offer'],'fee':o['fee'],'onboarding':o['onboarding'],'support':o['support_cost'],'resource_supplier':'SIMULATED_PREPAID_COMPLETE_RESOURCE_CONTRACT',**({'method_plan':o['method_plan']} if 'method_plan' in o else {})},expected_net=o['price']-o['complete_cost'])
+                    o['funding_receipt']=cost(ident+'-resources',o['complete_cost'],t,'production_contract',{'job_id':o['job_id'],'offer':o['offer'],'fee':o['fee'],'onboarding':o['onboarding'],'support':o['support_cost'],'resource_supplier':'SIMULATED_PREPAID_COMPLETE_RESOURCE_CONTRACT',**({'method_plan':o['method_plan'],**({'production_envelope_microUSD':cfg['production_cost']} if 'cost_contract' in o['method_plan'] else {})} if 'method_plan' in o else {})},expected_net=o['price']-o['complete_cost'])
                     if o['funding_receipt'] is None:raise ValueError('QUALIFIED_PRODUCTION_RESOURCE_CONTRACT_NOT_FUNDED')
                     account.execute('wallet',{'buyer':ident+'-wallet','amount':o['price']},t)
                     account.execute('offer',{'id':ident,'buyer':ident+'-wallet','price':o['price'],'job_id':o['job_id'],'deadline':t+cfg['payment_deadline_hours']},t)
@@ -314,7 +330,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 o=next(o for o in state['orders'] if o['id']==ev['order_id'])
                 if 'method_plan' in o:
                     from .mechanism_choice import execute_funded
-                    plan=o['method_plan'];execution=execute_funded(root,manifest,account,o['offer'],o['job_id'],ident=o['id']+'-method',day=t,mode=plan['mode'],costs=plan['costs'],memory=plan['memory'],prepaid_order=o['id'])
+                    plan=o['method_plan'];execution=execute_funded(root,manifest,account,o['offer'],o['job_id'],ident=o['id']+'-method',day=t,mode=plan['mode'],costs=plan['costs'],memory=plan['memory'],prepaid_order=o['id'],cost_contract=plan.get('cost_contract'))
                     o['method_execution']=execution;o['service_receipt']=execution.get('service',{'accepted':False,'errors':[execution.get('error','METHOD_FAILED')]})
                     if execution.get('memory') is not None:state['mechanism_memory']=execution['memory']
                 else:o['service_receipt']=execute_offer(root,manifest,o['offer'],o['job_id'])

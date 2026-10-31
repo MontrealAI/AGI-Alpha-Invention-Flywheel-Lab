@@ -11,17 +11,21 @@ import time
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
-from run_strategic024 import config as prior_config, PROTOCOL as PRIOR_PROTOCOL
+from run_commoncost026 import config as prior_config
+from run_strategic024 import PROTOCOL as PRIOR_PROTOCOL
 from adaptive_enterprise.instruments import prepare_services
 from connected_enterprise.engine import run_world
 from connected_enterprise.runner import identity
 from connected_enterprise.verify import audit
 from commercial.ledger import digest
 
-PROTOCOL={'schema':'sequence026-public-development/v1',
- 'horizon_days':14,'seeds':[2610311726,2610311727],
- 'arms':['joint','sequence'],'cases':['central','low_invoice_wiring_fixture'],
+PROTOCOL={'schema':'sequence026-current-menu-composition-development/v1',
+ 'registration_change':'Before any new composition campaign outcomes, reduce 16 proposed worlds to8 for fast decisive integration: one exposed seed, old single-pilot control, real-menu central, overlap wiring and adverse worlds, each joint/sequence matched. Old evidence remains untouched.',
+ 'source_scope':'Rebased current runtime and common production contract; old PR44 results remain exposed historical evidence, not results for this source.',
+ 'horizon_days':14,'seeds':[2610311726],
+ 'arms':['joint','sequence'],'cases':['central','menu_central','menu_overlap_wiring_fixture','menu_adverse'],
  'hypotheses':{'schema':'public-sequence-window/v1','provenance':'Authored uncertain future-window availability/service/arrival and rival-price hypotheses. No private future draws, calibrated demand or future income authority.','window_delay_days':3,'owned_contact_count':4,'owned_available_bps':2500,'service_share_bps':3333,'arrival_bps':7000,'future_rival_price_bps':9000},
+ 'channel_forecast':'Menu arms reuse actual ChannelBook transitions under four fixed declared public surrogate seeds, never actual future draws. All intervening attempts are charged; only final-window delivery credited. This is an uncalibrated conservative scenario approximation, not an optimal full-horizon policy.',
  'limits':'Developer-authored two-stage composition, not autonomous mechanism invention, inherited discovery advantage, global optimum, annual scale or actual commerce. Future costs conservatively prefunded after max commitments of all current shortlisted customers. Low-invoice fixture only tests purchase wiring, never economic confirmation.',
  'evidence_scope':'Compact in-job financial/operating audits and hashes, not a portable independent replay archive. No private authority or customer inputs exported.',
  'stop':'All fixed cases/seeds/arms complete or publish explicit failure. Do not replace bad outcomes.'}
@@ -32,9 +36,16 @@ def config(case,arm):
     if case=='low_invoice_wiring_fixture':
         cfg['setup_cost']=0;cfg['capacity_price']=1_000_000
         cfg['channels']['pilot'].update(price_microUSD=1_000_000,support_microUSD=0)
+    if case in ('menu_central','menu_overlap_wiring_fixture','menu_adverse'):
+        cfg['channel_menu_policy']={'schema':'connected-channel-menu/v1','contract_ids':['extended','pilot'],'conversion_bps':4000}
+        if case=='menu_overlap_wiring_fixture':
+            cfg['setup_cost']=0;cfg['capacity_price']=1_000_000
+            cfg['channels']['pilot'].update(price_microUSD=1_000_000,support_microUSD=0,duration_days=5,contact_cooldown_days=2)
+            cfg['channels']['extended'].update(price_microUSD=1_250_000,support_microUSD=0,lead_days=1,duration_days=5,contact_cooldown_days=2)
+    if case=='menu_adverse':cfg.update(nonpayment_bps=1200,clearing_hours=96,retention_bps=8000,price_pressure_bps=7000)
     if arm=='sequence':
         cfg['strategic_allocation_policy']['sequence']=dict(PROTOCOL['hypotheses'])
-        if case=='low_invoice_wiring_fixture':
+        if case in ('low_invoice_wiring_fixture','menu_overlap_wiring_fixture'):
             cfg['strategic_allocation_policy']['sequence'].update(service_share_bps=10000,owned_available_bps=5000)
     return cfg
 
@@ -47,7 +58,7 @@ def main():
     r={'protocol':PROTOCOL,'protocol_sha256':digest(PROTOCOL),'case':args.case,'seed':args.seed,'arm':args.arm,
        'status':'RUNNING','checkout_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
        'workflow_run_id':os.environ.get('GITHUB_RUN_ID'),'runner_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-       'policy_factory_sha256':hashlib.sha256(Path(__file__).with_name('run_strategic024.py').read_bytes()).hexdigest()}
+       'policy_factory_sha256':hashlib.sha256(Path(__file__).with_name('run_commoncost026.py').read_bytes()).hexdigest()}
     def save():(public/'SUMMARY.json').write_text(json.dumps(r,sort_keys=True,indent=2)+'\n')
     start=time.process_time();wall=time.monotonic();save()
     try:

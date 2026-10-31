@@ -83,8 +83,11 @@ jobs:
     needs: [publish-and-gate]
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # GitHub-hosted job ceiling; finite commands, not an experimental budget.
+    timeout-minutes: 360
     steps:
+      - name: Record platform-aligned job start
+        run: echo "OPERATION_JOB_START=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
@@ -100,7 +103,13 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: python scripts/release_connected014.py download --source-commit "$GITHUB_SHA" --repository "$GITHUB_REPOSITORY" --assets "$RUNNER_TEMP/actual-release-download" --receipt "$RUNNER_TEMP/RELEASE_DOWNLOAD.json"
       - name: Run, resume and audit the actual downloaded implementation and evidence
-        run: python scripts/release_connected014.py operate-download --assets "$RUNNER_TEMP/actual-release-download" --source-commit "$GITHUB_SHA" --output "$RUNNER_TEMP/downloaded-release-operation" --timeout-seconds 900 --actual-release-download
+        run: |
+          remaining=$((21600 - 300 - ($(date +%s) - OPERATION_JOB_START)))
+          if [ "$remaining" -le 0 ]; then
+            echo "Platform-aligned job window exhausted before operation; no command started."
+            exit 1
+          fi
+          python scripts/release_connected014.py operate-download --assets "$RUNNER_TEMP/actual-release-download" --source-commit "$GITHUB_SHA" --output "$RUNNER_TEMP/downloaded-release-operation" --timeout-seconds "$remaining" --actual-release-download
       - name: Preserve publication gate and actual downloaded operating receipts
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

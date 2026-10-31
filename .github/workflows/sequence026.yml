@@ -6,7 +6,8 @@ on:
       - ".github/workflows/sequence026.yml"
       - "scripts/run_sequence026.py"
       - "connected_enterprise/sequence_window.py"
-      - "connected_enterprise/sequence_planning.py"
+      - "connected_enterprise/**"
+      - "tests/test_sequence*.py"
 permissions:
   contents: read
 concurrency:
@@ -21,8 +22,8 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        case: [central, low_invoice_wiring_fixture]
-        seed: [2610311726, 2610311727]
+        case: [central, menu_central, menu_overlap_wiring_fixture, menu_adverse]
+        seed: [2610311726]
         arm: [joint, sequence]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -33,6 +34,11 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements-commercial010.txt
+      - name: Sequence, common-cost and actual channel contract regressions
+        run: |
+          python -m unittest discover -s tests -p "test_sequence*.py" -v
+          python -m unittest discover -s tests -p test_common_cost026.py -v
+          python -m unittest discover -s tests -p "test_connected_channel*.py" -v
       - name: Fixed horizon, useful-output audit and completed resume
         run: python scripts/run_sequence026.py --case '${{ matrix.case }}' --seed '${{ matrix.seed }}' --arm '${{ matrix.arm }}' --output "$RUNNER_TEMP/sequence026"
       - name: Browser-readable compact outcome
