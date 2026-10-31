@@ -121,6 +121,10 @@ class NativeDesignSearch041Tests(unittest.TestCase):
         pressure = discover_applicable_designs(spec, incumbent(rival=3))
         self.assertEqual(pressure["selected_development_ids"],
                          ["incumbent", "competitive_distribution"])
+        capacity = discover_applicable_designs(spec, incumbent(capacity=3))
+        self.assertIn("production_capacity", capacity["diagnosed_constraints"])
+        self.assertEqual(capacity["selected_development_ids"],
+                         ["incumbent", "earned_distribution", "competitive_distribution"])
         exhausted = discover_applicable_designs(spec, incumbent())
         self.assertEqual(exhausted["selected_development_ids"], ["incumbent"])
         losing = discover_applicable_designs(spec, incumbent(unreached=4, profit=-5, earned=0))
