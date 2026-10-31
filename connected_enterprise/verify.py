@@ -5,6 +5,7 @@ does not accept a producer's commercial verdict as evidence of useful delivery.
 """
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 from pathlib import Path
@@ -148,6 +149,11 @@ def _check_market_decisions(result, tape):
             raise ValueError('RIVAL_RESPONSE_READS_UNAVAILABLE_FUTURE_HISTORY')
         if result['arm'] == 'competitive_growth':
             price = _expected_competitive_price(price, int(anchor * rival_bps / 10000), cfg, previous)
+        if 'strategic_policy' in cfg and decision['kind']=='offer':
+            from .strategic_commerce import selected_delivery
+            wrapper=result.get('joint_actions',{}).get(decision.get('joint_allocation_sha256'))
+            if wrapper is None:raise ValueError('STRATEGIC_PRICE_RECEIPT_REQUIRED')
+            price=selected_delivery(wrapper['allocation'],decision.get('joint_option_id'))['price']
         if decision['human_price'] != anchor or (decision['kind'] == 'offer' and decision['price'] != price) or (decision['kind'] == 'outside_choice' and decision['price'] is not None):
             raise ValueError('PRICE_POLICY_USES_UNREGISTERED_INFORMATION_OR_HUMAN_ANCHOR')
         committed = sum(row['price'] for row in result['orders'] if row['customer_id'] == customer
@@ -206,7 +212,7 @@ def _check_customer_lifecycle(result):
         if decision.get('outside_spend'):
             outside.setdefault(decision['time'], []).append(decision)
     responses = 0
-    outreach_units = {}
+    outreach_units = {};candidate_ids={};public_buyers={}
     def operating_snapshot(moment):
         if moment in outreach_units:
             return
@@ -218,6 +224,7 @@ def _check_customer_lifecycle(result):
         candidates = [ident for ident, buyer in state.items() if buyer['known'] and buyer['active']
                       and buyer['pending'] is None and buyer['next_need_time'] <= moment
                       and (ident in owned or buyer['onboarded'] or ident in exposed)]
+        candidate_ids[moment]=sorted(candidates,key=lambda ident:(state[ident]['next_need_time'],ident));public_buyers[moment]=copy.deepcopy(state)
         outreach_units[moment] = channel_day['attempted_slots'] + sum(ident not in exposed for ident in candidates)
     for event in result['events']:
         kind, moment = event['kind'], event['time']
@@ -275,7 +282,7 @@ def _check_customer_lifecycle(result):
             if buyers[customer].get(key) != expected[key]:
                 raise ValueError('DERIVED_CUSTOMER_LIFECYCLE_CHANGED:' + key)
     return {'customer_lifecycles_recomputed': len(state), 'paid_reactivation_responses_recomputed': responses,
-            'daily_outreach_units_recomputed': outreach_units}
+            'daily_outreach_units_recomputed': outreach_units,**({'daily_candidate_ids_recomputed':candidate_ids,'daily_public_buyers':public_buyers} if 'strategic_policy' in cfg else {})}
 
 
 def _check_cost_semantics(result, tape, lifecycle):
@@ -291,6 +298,9 @@ def _check_cost_semantics(result, tape, lifecycle):
         units = lifecycle['daily_outreach_units_recomputed'][moment]
         add('outreach-' + str(day), cfg['exposure_cost'] * units, moment, 'outreach_including_failed_and_unused_slots')
         attempts = sum(row.get('kind') == 'offer' and row['time'] == moment for row in result['decisions'])
+        if 'strategic_policy' in cfg:
+            wrapper=next(w for w in result['joint_actions'].values() if w['time']==moment)
+            attempts=len(wrapper['allocation']['deliveries'])
         add('qualification-' + str(day), cfg['qualification_cost'] * attempts, moment, 'qualification_including_lost_offers')
     for row in result['orders']:
         add(row['id'] + '-resources', row['complete_cost'], row['qualified_time'], 'production_contract')
@@ -536,6 +546,7 @@ def audit(root, manifest, result):
         onboarding_seen.add(row['customer_id'])
         production = cfg['production_cost'] + cfg['supplier_unit_cost']
         expected_cost = production + cfg['support_cost'] + fee + onboard
+        if row.get('method_plan'):expected_cost+=row['method_plan']['cost']
         if row.get('fee') != fee or row.get('onboarding') != onboard or row.get('production_cost') != production or row.get('support_cost') != cfg['support_cost'] or row['complete_cost'] != expected_cost or funding['amount'] != expected_cost:
             raise ValueError('COMPLETE_PRODUCTION_FEES_SUPPORT_ONBOARDING_COST_MISMATCH')
         native = native_orders[ident]
@@ -564,7 +575,16 @@ def audit(root, manifest, result):
         if job is None or row.get('work_keys') != job['work_keys'] or used.intersection(job['work_keys']):
             raise ValueError('DUPLICATED_OR_UNBOUND_DELIVERY_WORK')
         used.update(job['work_keys'])
-        fresh = execute_offer(root, manifest, row['offer'], row['job_id'])
+        if 'mechanism_policy' in cfg:
+            from .mechanism_choice import audit_order
+            memory=row.get('method_plan',{}).get('memory')
+            if memory is not None:
+                positions={(e.get('order_id'),e['kind']):i for i,e in enumerate(result['events']) if e.get('order_id') is not None}
+                prior=[o for o in orders.values() if o['production_time']<=row['qualified_time'] and positions.get((o['id'],'PRODUCTION'),len(result['events']))<positions.get((row['id'],'QUALIFIED_ORDER'),-1) and o.get('method_execution',{}).get('mode')=='critic_retain' and o.get('method_execution',{}).get('memory')==memory]
+                if not prior:raise ValueError('RETAINED_CONTEXT_HAS_NO_PRIOR_OPERATING_ACQUISITION')
+            audit_order(root,manifest,row,result['owned_account'],cfg['mechanism_policy'],result.get('joint_actions'))
+        elif 'method_plan' in row:raise ValueError('UNAUTHORIZED_METHOD_POLICY')
+        fresh = execute_offer(root, manifest, row['offer'], row['job_id'],context=row.get('method_execution',{}).get('context'))
         recorded = row.get('service_receipt')
         if not isinstance(recorded, dict):
             raise ValueError('EXECUTED_SERVICE_RECEIPT_REQUIRED')
@@ -618,8 +638,10 @@ def audit(root, manifest, result):
         raise ValueError('FULL_ENTERPRISE_COSTS_DO_NOT_RECONCILE')
     budget_receipt = check_budgets(result['buyers'], list(orders.values()))
     _check_buyer_origins(result['config'], result['seed'], result['buyers'])
-    market_receipt = _check_market_decisions(result, tape)
     lifecycle_receipt = _check_customer_lifecycle(result)
+    from .strategic_audit import audit_decisions
+    strategic_receipt=audit_decisions(root,manifest,result,lifecycle_receipt)
+    market_receipt = _check_market_decisions(result, tape)
     cost_semantics = _check_cost_semantics(result, tape, lifecycle_receipt)
     commercial_receipt = _check_commercial_result(result)
     investment_receipt = _check_investments(result, tape, orders)
@@ -633,7 +655,7 @@ def audit(root, manifest, result):
             'verifier_matches_world_source_snapshot': result['source']['files'].get('connected_enterprise/verify.py') == EXECUTING_VERIFIER_SHA256,
             'collections_microUSD': collections, 'complete_costs_microUSD': expense,
             **source_receipt, **budget_receipt, **investment_receipt, **channel_receipt, **market_receipt,
-            **lifecycle_receipt, **cost_semantics, **commercial_receipt}
+            **{k:v for k,v in lifecycle_receipt.items() if k!='daily_public_buyers'}, **cost_semantics, **commercial_receipt, **strategic_receipt}
     return json.loads(canonical(receipt))
 
 

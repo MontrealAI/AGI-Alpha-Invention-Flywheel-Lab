@@ -129,6 +129,18 @@ def verify_assets(directory, expected_commit):
             or qualification['source_archive']['sha256'] != digest(directory/'connected014-source.zip')
             or qualification['public_archive']['sha256'] != digest(directory/'connected014-keyfree.zip')):
         raise ValueError('QUALIFIED_ARCHIVE_BINDING_CHANGED')
+    publication = read(directory/'PUBLICATION.json')
+    if publication.get('source_sha256') != manifest['source_sha256'] and 'COMPOSED_PUBLICATION.json' not in names:
+        raise ValueError('COMPOSED_PUBLICATION_REQUIRED')
+    if 'COMPOSED_PUBLICATION.json' in names:
+        for name, expected in publication.get('files', {}).items():
+            if Path(name).name != name or not (directory/name).is_file() or digest(directory/name) != expected:
+                raise ValueError('COMPOSED_HISTORICAL_PAPER_ASSET_CHANGED')
+        if digest(directory/'PDF_QA.json') != publication.get('pdf_qa_sha256'):
+            raise ValueError('COMPOSED_HISTORICAL_PDF_QA_CHANGED')
+        verify_composed_binding(read(directory/'COMPOSED_PUBLICATION.json'), source['executing_source']['files'],
+                                read(directory/'PUBLICATION.json'), qualification,
+                                digest(directory/'QUALIFICATION.json'), directory/'connected014-source.zip')
     if 'RELEASE_GATE.json' in names:
         gate = read(directory/'RELEASE_GATE.json')
         runs = gate.get('required_workflows', {})
@@ -142,6 +154,95 @@ def verify_assets(directory, expected_commit):
                        or row.get('path') != '.github/workflows/'+name for name, row in runs.items())):
             raise ValueError('SOURCE_BOUND_MAIN_RELEASE_GATE_REQUIRED')
     return manifest
+
+
+HISTORICAL_SOURCE = 'b0eae06dabfdf09197a60b60d3680f7f67946936631fafe431dc6be1f9b56983'
+HISTORICAL_PUBLICATION = '1db280be4dbae777d12a23dcb1aded270fdcab0563de55319bef8493fa829e66'
+COMPOSED_SCOPE = 'CURRENT_ENGINEERING_QUALIFICATION_WITH_UNCHANGED_HISTORICAL_PAPER_NOT_FRESH_ECONOMIC_CONFIRMATION'
+
+def canonical_digest(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+
+HISTORICAL_SNAPSHOTS = 'historical/strategic024-prior-source/'
+
+def historical_source(source, expected_files):
+    # Reconstruct historical identity from actual source bytes. Only changed
+    # files need plain byte-exact snapshots; unchanged files are not duplicated.
+    if len(expected_files) != 149 or canonical_digest(expected_files) != HISTORICAL_SOURCE:
+        raise ValueError('HISTORICAL_SOURCE_CHANGED')
+    archive = None
+    if Path(source).is_dir():
+        root = Path(source)
+        def get(name):
+            p=root/name
+            if p.is_symlink() or any(q.is_symlink() for q in p.parents):
+                raise ValueError('HISTORICAL_SOURCE_UNSAFE_MEMBER')
+            return p.read_bytes() if p.is_file() else None
+    else:
+        archive=zipfile.ZipFile(source)
+        names=set(checked_members(archive))
+        def get(name):return archive.read(name) if name in names else None
+    try:
+        actual={}; total=0
+        for name, expected in expected_files.items():
+            p=PurePosixPath(name)
+            if p.is_absolute() or '..' in p.parts or p.as_posix()!=name:
+                raise ValueError('HISTORICAL_SOURCE_UNSAFE_MEMBER')
+            raw=get(name)
+            if raw is None or hashlib.sha256(raw).hexdigest()!=expected:
+                raw=get(HISTORICAL_SNAPSHOTS+name+'.txt')
+            if raw is None or hashlib.sha256(raw).hexdigest()!=expected:
+                raise ValueError('HISTORICAL_SOURCE_CHANGED '+name)
+            total+=len(raw)
+            if total>LIMIT:raise ValueError('HISTORICAL_SOURCE_MEMBERS_OR_BOUND')
+            actual[name]=hashlib.sha256(raw).hexdigest()
+        return actual
+    finally:
+        if archive is not None:archive.close()
+
+def verify_composed_binding(binding, current_files, publication, qualification, qualification_sha, history_archive):
+    if (binding.get('schema') != 'agi-alpha/composed-publication/v1'
+            or binding.get('scope') != COMPOSED_SCOPE
+            or binding.get('historical_source_sha256') != HISTORICAL_SOURCE
+            or publication.get('source_sha256') != HISTORICAL_SOURCE
+            or canonical_digest(publication) != HISTORICAL_PUBLICATION
+            or binding.get('historical_publication_sha256') != HISTORICAL_PUBLICATION):
+        raise ValueError('COMPOSED_HISTORICAL_PUBLICATION_CHANGED')
+    prior = historical_source(history_archive, binding['historical_files'])
+    changes = {p: {'before_sha256':prior.get(p), 'after_sha256':current_files.get(p)}
+               for p in sorted(set(prior) | set(current_files)) if prior.get(p) != current_files.get(p)}
+    if (binding.get('current_files') != current_files
+            or binding.get('current_source_sha256') != canonical_digest(current_files)
+            or binding.get('source_delta') != changes):
+        raise ValueError('COMPOSED_SOURCE_DELTA_CHANGED')
+    commands = qualification.get('commands', [])
+    logs = qualification.get('logs', {})
+    expected = ['run', 'resume', 'audit', 'package', 'audit']
+    if (qualification.get('schema') != 'agi-alpha/connected014-clean-qualification/v1'
+            or len(commands) != len(expected)):
+        raise ValueError('COMPOSED_EXECUTED_COMMAND_RECEIPTS_REQUIRED')
+    for row, action in zip(commands, expected):
+        command = row.get('command', [])
+        if (not isinstance(command, list) or len(command) < 4
+                or command[1:4] != ['-m', 'connected_enterprise', action]
+                or type(row.get('returncode')) is not int or row['returncode'] != 0
+                or any(not isinstance(logs.get(row.get(stream)), str)
+                       or not re.fullmatch('[0-9a-f]{64}', logs[row[stream]])
+                       for stream in ['stdout', 'stderr'])):
+            raise ValueError('COMPOSED_EXECUTED_COMMAND_RECEIPTS_REQUIRED')
+    for key in ['native_and_operating_audit', 'keyfree_public_audit']:
+        audit = qualification.get(key, {})
+        if audit.get('accepted') is not True or audit.get('source_sha256') != canonical_digest(current_files):
+            raise ValueError('COMPOSED_SOURCE_BOUND_AUDITS_REQUIRED')
+    if (qualification.get('accepted') is not True or qualification.get('no_git_execution') is not True
+            or qualification.get('completed_resume_financially_unchanged') is not True
+            or qualification.get('source_sha256') != canonical_digest(current_files)
+            or qualification.get('source_files') != current_files
+            or binding.get('qualification_sha256') != qualification_sha
+            or binding.get('source_archive_sha256') != qualification['source_archive']['sha256']
+            or binding.get('public_archive_sha256') != qualification['public_archive']['sha256']):
+        raise ValueError('COMPOSED_ACTUAL_QUALIFICATION_REQUIRED')
+    return binding
 
 def prepare(qualification, output, source_commit, papers):
     source_commit = commit(source_commit)
@@ -161,8 +262,26 @@ def prepare(qualification, output, source_commit, papers):
     if any(not (papers/name).is_file() or (papers/name).is_symlink() for name in PAPERS):
         raise ValueError('COMPLETE_INSPECTED_RESEARCH_EDITION_REQUIRED')
     publication, qa = read(papers/'PUBLICATION.json'), read(papers/'PDF_QA.json')
+    composed = None
     if publication.get('source_sha256') != receipt['source_sha256']:
-        raise ValueError('PAPER_EXECUTING_SOURCE_CHANGED')
+        registration = ROOT/'evidence/strategic024-publication/COMPOSED_SOURCE_BINDING.json'
+        history_archive = ROOT
+        if not registration.is_file() or registration.is_symlink():
+            raise ValueError('PAPER_EXECUTING_SOURCE_CHANGED')
+        composed = dict(read(registration))
+        # Only actual clean qualification supplies acceptance; registration alone grants nothing.
+        composed.update(qualification_sha256=digest(qualification/'QUALIFICATION.json'),
+                        source_archive_sha256=receipt['source_archive']['sha256'],
+                        public_archive_sha256=receipt['public_archive']['sha256'])
+        verify_composed_binding(composed, identity(ROOT)['files'], publication, receipt,
+                                digest(qualification/'QUALIFICATION.json'), history_archive)
+        for row in receipt['commands']:
+            for stream in ['stdout', 'stderr']:
+                name = row[stream]
+                if (Path(name).name != name or not (qualification/name).is_file()
+                        or (qualification/name).is_symlink()
+                        or digest(qualification/name) != receipt['logs'][name]):
+                    raise ValueError('COMPOSED_EXECUTION_LOG_BYTES_CHANGED')
     for name, expected in publication.get('files', {}).items():
         if Path(name).name != name or digest(papers/name) != expected:
             raise ValueError('PUBLICATION_FILE_HASH_CHANGED')
@@ -175,6 +294,8 @@ def prepare(qualification, output, source_commit, papers):
         shutil.copyfile(qualification/name, output/name)
     for name in PAPERS:
         shutil.copyfile(papers/name, output/name)
+    if composed is not None:
+        write(output/'COMPOSED_PUBLICATION.json', composed)
     notes = ('# Connected 014 released simulated enterprise\n\n'
              'Immutable source commit: `'+source_commit+'`.\n\n'
              'The source package passed clean operation, completed-account resume, independent native/operating audit '
@@ -185,6 +306,11 @@ def prepare(qualification, output, source_commit, papers):
              'Source/asset hashes are in RELEASE_MANIFEST.json and SHA256SUMS.txt. '
              'The publication workflow downloads and operates this actual release; its post-publication receipt is retained '
              'as a workflow artifact.\n')
+    if composed is not None:
+        notes += ('\nThe unchanged paper describes historical source '+HISTORICAL_SOURCE+
+                  ', NOT this composed financial implementation. COMPOSED_PUBLICATION.json separately binds '
+                  'actual current-source engineering qualification and the complete declared source delta. '
+                  'No fresh economic confirmation or recovered original-account continuity is claimed.\n')
     (output/'RELEASE_NOTES.md').write_text(notes)
     manifest = {'schema':'agi-alpha/connected014-release/v1', 'source_commit':source_commit,
                 'source_sha256':receipt['source_sha256'], 'tag':tag(source_commit),

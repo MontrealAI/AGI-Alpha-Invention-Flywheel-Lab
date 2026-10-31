@@ -31,6 +31,7 @@ class ReleaseIntegrityTests(unittest.TestCase):
         (self.assets/'connected014-keyfree.zip').write_bytes(b'public key-free artifact')
         for name in ('RELEASE_NOTES.md', *release.PAPERS):
             (self.assets/name).write_text('Test fixture only; not a publication.')
+        release.write(self.assets/'PUBLICATION.json', {'source_sha256':identity['sha256']})
         release.write(self.assets/'QUALIFICATION.json', {'accepted':True, 'source_sha256':identity['sha256'],
             'source_archive':{'sha256':release.digest(self.assets/'connected014-source.zip')},
             'public_archive':{'sha256':release.digest(self.assets/'connected014-keyfree.zip')}})
@@ -43,6 +44,74 @@ class ReleaseIntegrityTests(unittest.TestCase):
 
     def test_source_bound_assets_are_accepted(self):
         self.assertEqual(release.verify_assets(self.assets, COMMIT)['source_commit'], COMMIT)
+
+    def test_resealed_source_mismatch_requires_explicit_composed_wrapper(self):
+        release.write(self.assets/'PUBLICATION.json', {'source_sha256':'e'*64})
+        release.seal(self.assets, self.manifest)
+        with self.assertRaisesRegex(ValueError, 'COMPOSED_PUBLICATION_REQUIRED'):
+            release.verify_assets(self.assets, COMMIT)
+
+    def composed_asset_fixture(self):
+        # Synthetic checksummed assets, not actual clean operation or financial evidence.
+        root = PATH.parents[1]
+        binding = release.read(root/'evidence/strategic024-publication/COMPOSED_SOURCE_BINDING.json')
+        current = self.source_manifest['executing_source']['files']
+        prior = binding['historical_files']
+        binding.update(current_files=current, current_source_sha256=release.canonical_digest(current),
+            source_delta={p:{'before_sha256':prior.get(p),'after_sha256':current.get(p)}
+                          for p in sorted(set(prior)|set(current)) if prior.get(p)!=current.get(p)})
+        import shutil
+        for name in release.PAPERS:
+            shutil.copyfile(root/'docs/completion015'/name,self.assets/name)
+        payloads={'service.py':b'print("auditable simulated work")\n'}
+        for name, expected in prior.items():
+            raw=(root/name).read_bytes()
+            if hashlib.sha256(raw).hexdigest()!=expected:
+                raw=(root/release.HISTORICAL_SNAPSHOTS/(name+'.txt')).read_bytes()
+            payloads[release.HISTORICAL_SNAPSHOTS+name+'.txt']=raw
+        self.source_manifest['files']={n:hashlib.sha256(raw).hexdigest() for n,raw in payloads.items()}
+        with zipfile.ZipFile(self.assets/'connected014-source.zip','w') as z:
+            for name,raw in payloads.items():z.writestr(name,raw)
+            z.writestr('SOURCE_MANIFEST.json',json.dumps(self.source_manifest))
+        q=release.read(self.assets/'QUALIFICATION.json')
+        q['source_archive']['sha256']=release.digest(self.assets/'connected014-source.zip')
+        q.update(no_git_execution=True,completed_resume_financially_unchanged=True,source_files=current)
+        q.update(schema='agi-alpha/connected014-clean-qualification/v1',
+            commands=[{'command':['python','-m','connected_enterprise',a], 'returncode':0,
+                       'stdout':str(i)+'.stdout','stderr':str(i)+'.stderr'}
+                      for i,a in enumerate(['run','resume','audit','package','audit'])],
+            logs={str(i)+'.'+stream:'d'*64 for i in range(5) for stream in ['stdout','stderr']},
+            native_and_operating_audit={'accepted':True,'source_sha256':release.canonical_digest(current)},
+            keyfree_public_audit={'accepted':True,'source_sha256':release.canonical_digest(current)})
+        release.write(self.assets/'QUALIFICATION.json',q)
+        binding.update(qualification_sha256=release.digest(self.assets/'QUALIFICATION.json'),
+                       source_archive_sha256=q['source_archive']['sha256'],public_archive_sha256=q['public_archive']['sha256'])
+        release.write(self.assets/'COMPOSED_PUBLICATION.json',binding)
+        release.seal(self.assets,self.manifest)
+
+    def test_composed_actual_asset_verifier_accepts_bound_synthetic_fixture(self):
+        self.composed_asset_fixture()
+        release.verify_assets(self.assets,COMMIT)
+
+    def test_composed_historical_pdf_tamper_fails_even_after_outer_reseal(self):
+        self.composed_asset_fixture()
+        (self.assets/'PAPER.pdf').write_bytes(b'forged economics')
+        release.seal(self.assets,self.manifest)
+        with self.assertRaisesRegex(ValueError,'HISTORICAL_PAPER_ASSET_CHANGED'):
+            release.verify_assets(self.assets,COMMIT)
+
+    def test_composed_qualification_tamper_fails_even_after_outer_reseal(self):
+        self.composed_asset_fixture()
+        q=release.read(self.assets/'QUALIFICATION.json');q['completed_resume_financially_unchanged']=False
+        release.write(self.assets/'QUALIFICATION.json',q);release.seal(self.assets,self.manifest)
+        with self.assertRaisesRegex(ValueError,'ACTUAL_QUALIFICATION'):
+            release.verify_assets(self.assets,COMMIT)
+
+    def test_composed_wrapper_cannot_be_dropped_after_outer_reseal(self):
+        self.composed_asset_fixture()
+        (self.assets/'COMPOSED_PUBLICATION.json').unlink();release.seal(self.assets,self.manifest)
+        with self.assertRaisesRegex(ValueError,'COMPOSED_PUBLICATION_REQUIRED'):
+            release.verify_assets(self.assets,COMMIT)
 
     def test_wrong_commit_or_tag_is_rejected(self):
         with self.assertRaisesRegex(ValueError, 'SOURCE_OR_TAG'):

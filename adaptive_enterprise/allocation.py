@@ -51,7 +51,10 @@ def _cash(values, scenarios, *, signed):
     return values
 
 
-def allocate(observation, options, riskpolicy):
+def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery_slots=None, earned_deduction=0):
+    if type(earned_deduction) is not int or earned_deduction<0:raise ValueError("NONNEGATIVE_EARNED_OPERATING_DEDUCTION_REQUIRED")
+    if max_delivery_slots is not None and (type(max_delivery_slots) is not int or max_delivery_slots<0):raise ValueError("FINITE_DELIVERY_CAPACITY_REQUIRED")
+    if type(allow_seed) is not bool:raise ValueError("EXPLICIT_SEED_PERMISSION_REQUIRED")
     if not isinstance(observation, dict) or observation.get('scope') != 'SIMULATED' or not isinstance(observation.get('summary'), dict):
         raise ValueError('NATIVE_SIMULATED_ACCOUNT_OBSERVATION_REQUIRED')
     state_digest = observation.get('state_digest')
@@ -134,7 +137,11 @@ def allocate(observation, options, riskpolicy):
         if len(joint['members']) < 2 or not set(joint['members']) <= set(by_id):
             raise ValueError('EXISTING_DISTINCT_JOINT_MEMBERS_REQUIRED')
         _cash(joint['net_cash'], scenarios, signed=True)
-    budget = min(summary['available'], summary['unrestrictedEarned'], riskpolicy['authorized_allocation'])
+    if any(type(o['execution'].get('cash_lock',0)) is not int or o['execution'].get('cash_lock',0)<0 for o in options):raise ValueError('NONNEGATIVE_NEUTRAL_CASH_LOCK_REQUIRED')
+    if allow_seed and any(o['execution'].get('funding') not in {'SEED_OR_EARNED','EARNED'} for o in options):
+        raise ValueError('EXPLICIT_PER_ACTION_FUNDING_REQUIRED')
+    spendable_earned=max(0,summary['unrestrictedEarned']-earned_deduction)
+    budget = min(summary['available'], riskpolicy['authorized_allocation']) if allow_seed else min(summary['available'], spendable_earned, riskpolicy['authorized_allocation'])
     base = {'schema': SCHEMA, 'scope': 'SIMULATED_PLANNING_ONLY', 'currency': 'simulated-microUSD',
             'expected_state_digest': state_digest, 'observation_sha256': digest(observation),
             'options_sha256': digest(options), 'riskpolicy_sha256': digest(riskpolicy),
@@ -147,14 +154,35 @@ def allocate(observation, options, riskpolicy):
             'cash_semantics': 'future_net_cash is hypothetical future net cash AFTER explicit later liabilities and BEFORE upfront cost. Reservation covers upfront plus each action\'s worst later cost, at least any forecast negative future cash, plus worst negative interactions. Future receipts never fund present commitments.',
             'optimality_scope': 'EXACT_FINITE_SHORTLIST_WITH_DECLARED_SCENARIOS',
             'later_obligation_release_rule': 'Do not release a reservation before its later obligations are incurred/settled or protected by an additional native reservation. Forecast returns are not permission to release.'}
+    if allow_seed:base['funding_policy']='EXPLICIT_PER_ACTION_SEED_OR_EARNED'
+    if max_delivery_slots is not None:base['max_delivery_slots']=max_delivery_slots
+    if earned_deduction:base['earned_operating_deduction']=earned_deduction
     eligible = [o for o in options if o['authorized'] and o['future_net_cash'] is not None and o['kind'] != 'cash']
-    if len(eligible) >= max_states.bit_length() or (1 << len(eligible)) > max_states:
-        return {**base, 'decision': 'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET', 'optimality_scope': 'NONE'}
+    if max_delivery_slots is None:
+        if len(eligible) >= max_states.bit_length() or (1 << len(eligible)) > max_states:
+            return {**base, 'decision': 'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET', 'optimality_scope': 'NONE'}
+        baskets=([o for index,o in enumerate(eligible) if mask & (1 << index)] for mask in range(1 << len(eligible)))
+    else:
+        # Mutually exclusive quote/method variants are one categorical choice,
+        # not 2**N independent booleans. Capacity is enforced during generation.
+        grouped={}
+        for o in eligible:grouped.setdefault(('group',o['exclusive_group']) if o['exclusive_group'] is not None else ('single',o['id']),[]).append(o)
+        baskets=[[]]
+        for group in grouped.values():
+            expanded=[]
+            for basket in baskets:
+                expanded.append(basket)
+                for o in group:
+                    if sum(x['kind']=='delivery' for x in basket)+(o['kind']=='delivery')<=max_delivery_slots:
+                        expanded.append([*basket,o])
+                    if len(expanded)>max_states:
+                        return {**base,'decision':'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET','optimality_scope':'NONE'}
+            baskets=expanded
     best_key = (Fraction(0), Fraction(0), 0)
-    for mask in range(1 << len(eligible)):
+    for chosen in baskets:
         base['states_evaluated'] += 1
-        chosen = [o for index, o in enumerate(eligible) if mask & (1 << index)]
         selected = {o['id'] for o in chosen}
+        if max_delivery_slots is not None and sum(o['kind']=='delivery' for o in chosen)>max_delivery_slots:continue
         if any(not set(o['requires']) <= selected for o in chosen):
             continue
         groups = [o['exclusive_group'] for o in chosen if o['exclusive_group'] is not None]
@@ -167,9 +195,15 @@ def allocate(observation, options, riskpolicy):
         upfront = sum(o['upfront_cost'] for o in chosen)
         later = sum(max(max(o['later_liabilities'].values()), max(0, -min(o['future_net_cash'].values()))) for o in chosen)
         later += sum(max(0, -min(j['net_cash'].values())) for j in joints)
-        reservation = upfront + later
+        locks=sum(o['execution'].get('cash_lock',0) for o in chosen)
+        reservation = upfront + later + locks
         if reservation > budget:
             continue
+        if allow_seed:
+            earned_reserve=sum(o['upfront_cost']+o['execution'].get('cash_lock',0)+max(max(o['later_liabilities'].values()),max(0,-min(o['future_net_cash'].values()))) for o in chosen if o['execution']['funding']=='EARNED')
+            # Negative interaction reserves also require earned funding.
+            earned_reserve+=sum(max(0,-min(j['net_cash'].values())) for j in joints)
+            if earned_reserve>spendable_earned:continue
         net = {s: sum(o['future_net_cash'][s] for o in chosen) + sum(j['net_cash'][s] for j in joints) - upfront for s in scenarios}
         downside = max(0, -min(net.values()))
         if downside > riskpolicy['worst_loss_limit']:
@@ -189,6 +223,9 @@ def allocate(observation, options, riskpolicy):
     plan_content = {'selected': base['selected'], 'options_sha256': base['options_sha256'],
                     'riskpolicy_sha256': base['riskpolicy_sha256'], 'state_digest': state_digest,
                     'reserve_amount': base['reserve_amount'], 'predicted_scenario_cash': base['predicted_scenario_cash']}
+    if allow_seed:plan_content['funding_policy']=base['funding_policy']
+    if max_delivery_slots is not None:plan_content['max_delivery_slots']=max_delivery_slots
+    if earned_deduction:plan_content['earned_operating_deduction']=earned_deduction
     base['plan_id'] = 'adaptive012-allocation-' + digest(plan_content)[:24]
     base['action_id'] = 'allocation-' + digest(plan_content)[:24]
     if base['selected']:

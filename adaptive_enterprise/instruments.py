@@ -213,7 +213,7 @@ def apply_source_extension(raw, supplied_facts):
     return result,{'source_id':supplied_facts['source_id'],'origin':supplied_facts['origin'],'prior_source_sha256':digest(raw),'new_source_sha256':digest(result),'scope':'New facts supplied by the simulation environment; readiness sale alone did not manufacture them.'}
 
 
-def produce(raw, method='generated_schema', retained=None):
+def produce(raw, method='generated_schema', retained=None, mode=None):
     if isinstance(raw,dict) and raw.get('service_id')=='operations_bundle':
         if method!='operations_bundle':
             raise ValueError('QUALIFIED_BUNDLE_PRODUCTION_METHOD_REQUIRED')
@@ -221,7 +221,7 @@ def produce(raw, method='generated_schema', retained=None):
         return build_bundle(raw)
     from enterprise.services import produce as inherited_produce
     _raw(raw)
-    plan = infer_plan(raw, retained, mode='retained' if retained is not None else 'generated')
+    plan = infer_plan(raw, retained, mode=mode or ('retained' if retained is not None else 'generated'))
     if method == 'canonical' and raw['service_id'] == 'reconciliation':
         canonical_mapping = {'invoices': {'id': 'id', 'customer': 'customer', 'amount_cents': 'amount_cents'},
                              'payments': {'id': 'id', 'customer': 'customer', 'amount_cents': 'amount_cents', 'invoice_refs': 'invoice_refs'}}
@@ -437,7 +437,7 @@ def execute_offer(root,manifest,offer,job_id,context=None):
     try:
         if offer['method']!=saved['method'] or offer['scope']!=saved['outcome_scope']:
             raise ValueError('OFFER_DOES_NOT_MATCH_ADMITTED_PRODUCTION_CONTRACT')
-        artifact=produce(raw,offer['method'],(context or {}).get('retained'))
+        artifact=produce(raw,offer['method'],(context or {}).get('retained'),mode=(context or {}).get('mode'))
         checked=audit_delivery(offer['service_id'],raw,artifact)
         if artifact['outcome_scope']!=offer['scope']:
             raise ValueError('OFFER_SCOPE_CHANGED')

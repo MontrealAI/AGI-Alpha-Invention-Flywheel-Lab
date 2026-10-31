@@ -83,6 +83,8 @@ def qualify(output,smoke,timeout_seconds):
         receipt['runtime']={'python':sys.version,'dependencies':dependencies,'dependency_installation':'NOT_PERFORMED; exact preinstalled pinned runtime checked. Fresh dependency installation must be qualified separately.'}
         frozen_source=identity(REPOSITORY)
         names=set(source_paths(REPOSITORY))|{'AGENTS.md','requirements-commercial010.txt','scripts/qualify_connected014.py','docs/connected014/OPERATOR.md'}
+        # Explicit non-executing prior bytes for historical paper verification.
+        names.update(p.relative_to(REPOSITORY).as_posix() for p in (REPOSITORY/'historical/strategic024-prior-source').rglob('*.txt') if p.is_file())
         files={}
         for name in sorted(names):
             path=REPOSITORY/name

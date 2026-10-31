@@ -1,4 +1,4 @@
-"""Current supplementary binding and immutable historical publication proofs."""
+"""Immutable 8ab publication proofs; composed source is separately qualified."""
 import copy
 import hashlib
 import io
@@ -91,8 +91,13 @@ class PublicationBindingTests(unittest.TestCase):
         self.historical_proof = read(ROOT / self.binding['historical_pr33_closure_proof']['path'])
         self.current_proof = read(ROOT / self.binding['source_closure_proof']['path'])
 
-    def test_current_publication_matches_actual_source_identity(self):
-        current = identity(ROOT)
+    def historical_identity(self):
+        from scripts.release_connected014 import historical_source
+        files = historical_source(ROOT, self.current_proof['current_files'])
+        return {'files': files, 'sha256': canonical_sha(files)}
+
+    def test_historical_publication_matches_actual_frozen_source_bytes(self):
+        current = self.historical_identity()
         self.assertEqual(current['sha256'], self.publication['source_sha256'])
         self.assertEqual(current['sha256'], self.delta['release_qualification_source_sha256'])
         self.assertEqual(current['sha256'], self.binding['current_source_sha256'])
@@ -131,7 +136,7 @@ class PublicationBindingTests(unittest.TestCase):
     def test_current_delta_matches_only_declared_operator_source_changes(self):
         self.assertEqual(self.publication['release_source_delta'], self.delta)
         prior = self.historical_proof['current_files']
-        current = identity(ROOT)['files']
+        current = self.historical_identity()['files']
         changes = {path: {'before_sha256': prior.get(path), 'after_sha256': current.get(path)}
                    for path in sorted(set(prior) | set(current)) if prior.get(path) != current.get(path)}
         self.assertEqual(changes, self.binding['changed_or_added_identity_files'])
@@ -180,7 +185,7 @@ class PublicationBindingTests(unittest.TestCase):
         self.assertEqual(self.delta['source_changes'][:-1], self.pr33_delta['source_changes'])
         for path in ['adaptive_enterprise/account.py', 'commercial/ledger.py', 'connected_enterprise/engine.py',
                      'connected_enterprise/finance.py', 'experiments/commerce006.py', 'vendor/alpha_claim/protected_exchange.py']:
-            self.assertEqual(sha(ROOT / path), self.historical_proof['current_files'][path])
+            self.assertEqual(self.historical_identity()['files'][path], self.historical_proof['current_files'][path])
         self.assertIn('do not retrospectively qualify', self.publication['source_binding_scope'])
         self.assertIn('does not establish that the paper exercised', self.publication['source_binding_scope'])
         self.assertIn('actual downloaded-release operation', self.publication['source_binding_scope'])
@@ -192,14 +197,14 @@ class PublicationBindingTests(unittest.TestCase):
         self.assertTrue(qualification['no_git_execution'])
         self.assertTrue(qualification['completed_resume_financially_unchanged'])
         self.assertEqual(qualification['source_sha256'], self.binding['current_source_sha256'])
-        self.assertEqual(qualification['source_files'], identity(ROOT)['files'])
+        self.assertEqual(qualification['source_files'], self.historical_identity()['files'])
         self.assertIn('NOT_PERFORMED', qualification['runtime']['dependency_installation'])
         proof = read(ROOT / evidence['public_registered_operator_reproduction']['path'])
         failed = read(ROOT / evidence['preserved_failed_collector']['path'])
         registered = read(SUPPLEMENT / 'REGISTERED_FROZEN.json')
         source = dict(registered['source']['files'])
         source.pop(registered['registration_path'])
-        self.assertEqual(source, identity(ROOT)['files'])
+        self.assertEqual(source, self.historical_identity()['files'])
         self.assertEqual(canonical_sha(registered['source']['files']), proof['source_sha256'])
         self.assertTrue(proof['accepted'])
         self.assertTrue(proof['public_audit']['accepted'])
@@ -215,8 +220,8 @@ class PublicationBindingTests(unittest.TestCase):
         payloads = bundle_payloads(TRANSPORT.read_bytes(), (ROOT / manifest['bundle']['path']).read_bytes())
         self.assertEqual(len(payloads), 92)
         self.assertEqual(manifest['original_inventory_count'], 95)
-        self.assertEqual(manifest['executing_source']['sha256'], identity(ROOT)['sha256'])
-        self.assertEqual(manifest['executing_source']['files'], len(identity(ROOT)['files']))
+        self.assertEqual(manifest['executing_source']['sha256'], self.historical_identity()['sha256'])
+        self.assertEqual(manifest['executing_source']['files'], len(self.historical_identity()['files']))
         self.assertEqual(read(SUPPLEMENT / 'BINDING_DELTA.json'), self.binding)
 
     def test_corrupted_proof_transport_cannot_replace_original_records(self):
