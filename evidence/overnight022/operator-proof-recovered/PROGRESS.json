@@ -1,0 +1,103 @@
+{
+  "accepted": false,
+  "authority": "Owned private simulated accounts only; existing delivery accounts untouched",
+  "commands": [
+    {
+      "args": [
+        "resume",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/operator022-49day-private"
+      ],
+      "cpu_seconds": 96.547475,
+      "cwd": "/workspace/scratch/b8d559bc7031/operator022-clean/extracted-source",
+      "exit_code": 0,
+      "label": "03-resume",
+      "wall_seconds": 98.29074984899489
+    },
+    {
+      "args": [
+        "audit",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/operator022-49day-private"
+      ],
+      "cpu_seconds": 1.3698390000000025,
+      "cwd": "/workspace/scratch/b8d559bc7031/operator022-clean/extracted-source",
+      "exit_code": 0,
+      "label": "04-audit",
+      "wall_seconds": 1.374731096002506
+    },
+    {
+      "args": [
+        "comparison",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/operator022-49day-private",
+        "--control",
+        "baseline",
+        "--candidate",
+        "growth"
+      ],
+      "cpu_seconds": 1.4037850000000063,
+      "cwd": "/workspace/scratch/b8d559bc7031/operator022-clean/extracted-source",
+      "exit_code": 0,
+      "label": "05-comparison",
+      "wall_seconds": 1.4078468730003806
+    },
+    {
+      "args": [
+        "scoreboard",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/operator022-49day-private"
+      ],
+      "cpu_seconds": 0.316485000000001,
+      "cwd": "/workspace/scratch/b8d559bc7031/operator022-clean/extracted-source",
+      "exit_code": 0,
+      "label": "06-scoreboard",
+      "wall_seconds": 0.3170140189904487
+    },
+    {
+      "args": [
+        "resume",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/operator022-49day-private"
+      ],
+      "cpu_seconds": 4.436122999999995,
+      "cwd": "/workspace/scratch/b8d559bc7031/operator022-clean/extracted-source",
+      "exit_code": 0,
+      "label": "07-completed-resume",
+      "wall_seconds": 4.435299998993287
+    },
+    {
+      "args": [
+        "package",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/operator022-49day-private",
+        "--archive",
+        "/workspace/scratch/b8d559bc7031/agi-alpha/evidence/overnight022/operator-proof-recovered/operator022-keyfree.zip"
+      ],
+      "cpu_seconds": 1.5402660000000035,
+      "cwd": "/workspace/scratch/b8d559bc7031/operator022-clean/extracted-source",
+      "exit_code": 0,
+      "label": "08-package",
+      "wall_seconds": 1.5450721359957242
+    },
+    {
+      "args": [
+        "audit",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/agi-alpha/evidence/overnight022/operator-proof-recovered/public-copy"
+      ],
+      "cpu_seconds": 1.408874999999993,
+      "cwd": "/workspace/scratch/b8d559bc7031/agi-alpha/evidence/overnight022/operator-proof-recovered/public-copy/source",
+      "exit_code": 0,
+      "label": "09-public-audit",
+      "wall_seconds": 1.4131119590019807
+    }
+  ],
+  "external_billing": "UNKNOWN",
+  "prior_command_cpu_seconds": 5.471091,
+  "prior_failed_evidence": "/workspace/scratch/b8d559bc7031/agi-alpha/evidence/overnight022/operator-proof",
+  "prior_failed_result_sha256": "bcc35968bf8402178c185964c9008fb1be13f7177760086035df0d4147881589",
+  "schema": "agi-alpha/overnight022-public-operator-proof/v1",
+  "scope": "ENGINEERING_REPRODUCTION_FROM_CLEAN_SOURCE_ARCHIVE_NOT_PUBLISHED_RELEASE",
+  "script_sha256": "196f55169bfa89f34fbe76b65217df911b2caaa7a257927048c073011cfbe847"
+}

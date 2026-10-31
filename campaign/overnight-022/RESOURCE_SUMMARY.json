@@ -1,0 +1,55 @@
+{
+  "actual_host_or_model_billing_usd": null,
+  "external_spending_performed": false,
+  "failed_jobs_preserved": [
+    "evidence/overnight022/jobs/registered-public-proof-001.json"
+  ],
+  "measured_root_command_cpu_seconds": 680.3578050000001,
+  "measured_root_jobs": [
+    {
+      "cpu_seconds": 42.994447,
+      "exit_code": 0,
+      "path": "evidence/overnight022/jobs/clean-package-001.json",
+      "sha256": "d68b201cc0195efb908a15567e75b646141e007ec0ad7deac40fe936de7acbe3",
+      "wall_seconds": 25.19662689100369
+    },
+    {
+      "cpu_seconds": 255.33947000000003,
+      "exit_code": 0,
+      "path": "evidence/overnight022/jobs/connected-suite-001.json",
+      "sha256": "35f03d7b6fadbd7b0cbb1358a7278d6fda632214832fb3598ff4b313eb331b1c",
+      "wall_seconds": 244.52434102300322
+    },
+    {
+      "cpu_seconds": 257.790545,
+      "exit_code": 0,
+      "path": "evidence/overnight022/jobs/connected-suite-repaired-002.json",
+      "sha256": "a2a4202bbea0e443fb3d79b880b4a3fa3c5ec5e8ba318b37885a401faf3e2768",
+      "wall_seconds": 247.52408813599322
+    },
+    {
+      "cpu_seconds": 5.531597,
+      "exit_code": 1,
+      "path": "evidence/overnight022/jobs/registered-public-proof-001.json",
+      "sha256": "1615038771dc15af8e4c818efb3e1b5a06d91175bef11f06194ce1cd1fe53916",
+      "wall_seconds": 5.609748157003196
+    },
+    {
+      "cpu_seconds": 107.185012,
+      "exit_code": 0,
+      "path": "evidence/overnight022/jobs/registered-public-proof-recovery-002.json",
+      "sha256": "4b79f18fd818455cfe75e02a155e8d253f80b75fd0a4ab179f899bb7f7d9ab2c",
+      "wall_seconds": 108.94267090399808
+    },
+    {
+      "cpu_seconds": 11.516734000000001,
+      "exit_code": 0,
+      "path": "evidence/overnight022/jobs/registration-development-001.json",
+      "sha256": "bd96cf095b120d715b6f724c5ba6170265c51c1a691a21b96f281a826b71a958",
+      "wall_seconds": 11.669919045001734
+    }
+  ],
+  "schema": "agi-alpha/overnight022-resource-summary/v1",
+  "scope": "Distinct outer command receipts only; inner proof command measurements are not added again. Excludes assistant/model inference, clone/git/connector/CI resources, independent role work listed separately, and one migration reporting job with missing resource receipt. Entire campaign resource/cost total remains UNKNOWN. These are measurements, not new permission allocations.",
+  "sum_command_wall_seconds_nonadditive_due_to_concurrency": 643.4673941560031
+}

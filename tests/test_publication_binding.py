@@ -1,0 +1,173 @@
+"""Current supplementary binding and immutable historical publication proofs."""
+import copy
+import hashlib
+import json
+from pathlib import Path
+import unittest
+from connected_enterprise.runner import identity
+
+ROOT = Path(__file__).resolve().parents[1]
+PAPERS = ROOT / 'docs/completion015'
+DELTA = ROOT / 'evidence/completion015/qualification/COMPOSED_RELEASE_DELTA.json'
+SUPPLEMENT = ROOT / 'evidence/overnight022/publication-binding'
+PR33_SOURCE = 'f937cb4e553812ad532d987fdbbfb6ff2f7f21f049530b2a0fce677ca1a29fe9'
+PRIOR_SOURCE = '411eed021e5a80606cf8468d3bfc9f1920cc03439013c0991c37060e059ecf23'
+
+
+def read(path):
+    return json.loads(path.read_text())
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def canonical_sha(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+
+
+class PublicationBindingTests(unittest.TestCase):
+    def setUp(self):
+        self.publication = read(PAPERS / 'PUBLICATION.json')
+        self.delta = read(DELTA)
+        self.binding = self.delta['operator022_publication_binding']
+        self.pr33_binding = self.delta['pr30_publication_binding']
+        self.pr33_publication = read(ROOT / self.binding['prior_records']['publication']['path'])
+        self.pr33_delta = read(ROOT / self.binding['prior_records']['composed_release_delta']['path'])
+        self.prior = read(ROOT / self.pr33_binding['prior_records']['publication']['path'])
+        self.prior_delta = read(ROOT / self.pr33_binding['prior_records']['composed_release_delta']['path'])
+        self.historical_proof = read(ROOT / self.binding['historical_pr33_closure_proof']['path'])
+        self.current_proof = read(ROOT / self.binding['source_closure_proof']['path'])
+
+    def test_current_publication_matches_actual_source_identity(self):
+        current = identity(ROOT)
+        self.assertEqual(current['sha256'], self.publication['source_sha256'])
+        self.assertEqual(current['sha256'], self.delta['release_qualification_source_sha256'])
+        self.assertEqual(current['sha256'], self.binding['current_source_sha256'])
+        self.assertEqual(current['files'], self.current_proof['current_files'])
+        self.assertEqual(current['sha256'], canonical_sha(self.current_proof['current_files']))
+        self.assertEqual(len(current['files']), self.delta['release_identity_files'])
+        self.assertEqual(len(current['files']), self.binding['current_identity_files'])
+        self.assertEqual(self.binding, read(SUPPLEMENT / 'BINDING_DELTA.json'))
+
+    def test_exact_historical_prior_source_recovered_by_removing_only_added_planner(self):
+        files = dict(self.historical_proof['current_files'])
+        self.assertEqual(len(files), 143)
+        self.assertEqual(canonical_sha(files), PR33_SOURCE)
+        self.assertEqual(self.pr33_publication['source_sha256'], PR33_SOURCE)
+        self.assertEqual(self.pr33_binding['current_source_sha256'], PR33_SOURCE)
+        added = self.pr33_binding['added_identity_file']
+        self.assertEqual(files.pop(added['path']), added['sha256'])
+        self.assertEqual(canonical_sha(files), PRIOR_SOURCE)
+        self.assertEqual(canonical_sha(files), self.prior['source_sha256'])
+        self.assertEqual(len(files), self.prior_delta['release_identity_files'])
+        self.assertEqual(len(files), 142)
+        self.assertEqual(self.pr33_delta['release_identity_files'], self.prior_delta['release_identity_files'] + 1)
+        self.assertEqual(self.historical_proof['added'], {added['path']: added['sha256']})
+        self.assertEqual(self.historical_proof['existing_files_changed'], [])
+
+    def test_historical_embedded_delta_and_additive_planner_map_are_preserved(self):
+        self.assertEqual(self.pr33_publication['release_source_delta'], self.pr33_delta)
+        self.assertEqual(self.pr33_binding, self.pr33_delta['pr30_publication_binding'])
+        old = self.prior_delta['changed_or_added_identity_files']
+        new = self.pr33_delta['changed_or_added_identity_files']
+        self.assertEqual(set(new) - set(old), {'portfolio_scale/staged_coupling.py'})
+        for path, value in old.items():
+            self.assertEqual(new[path], value)
+        self.assertEqual(self.pr33_delta['performance016'], self.prior_delta['performance016'])
+
+    def test_current_delta_matches_only_declared_operator_source_changes(self):
+        self.assertEqual(self.publication['release_source_delta'], self.delta)
+        prior = self.historical_proof['current_files']
+        current = identity(ROOT)['files']
+        changes = {path: {'before_sha256': prior.get(path), 'after_sha256': current.get(path)}
+                   for path in sorted(set(prior) | set(current)) if prior.get(path) != current.get(path)}
+        self.assertEqual(changes, self.binding['changed_or_added_identity_files'])
+        self.assertEqual(changes, self.current_proof['changed_or_added_identity_files'])
+        self.assertEqual(self.binding['removed_identity_files'], {})
+        cumulative = copy.deepcopy(self.pr33_delta['changed_or_added_identity_files'])
+        for path, value in changes.items():
+            if path in cumulative:
+                cumulative[path]['after_sha256'] = value['after_sha256']
+            else:
+                cumulative[path] = value
+        self.assertEqual(cumulative, self.delta['changed_or_added_identity_files'])
+        for path, value in cumulative.items():
+            self.assertEqual(current[path], value['after_sha256'])
+        self.assertEqual(self.delta['unchanged_original_identity_files'], len(current) - len(cumulative))
+        self.assertEqual(self.binding['unchanged_prior_identity_files'], sum(prior.get(path) == value for path, value in current.items()))
+
+    def test_all_prior_and_supplementary_records_remain_byte_exact(self):
+        records = [*self.binding['prior_records'].values(), *self.pr33_binding['prior_records'].values(),
+                   self.binding['historical_pr33_closure_proof'], self.binding['source_closure_proof'],
+                   *self.binding['engineering_evidence'].values()]
+        for record in records:
+            path = ROOT / record['path']
+            self.assertFalse(path.is_symlink())
+            raw = path.read_bytes()
+            self.assertEqual(hashlib.sha256(raw).hexdigest(), record['sha256'])
+            git_blob = hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
+            self.assertEqual(git_blob, record['git_blob'])
+            if 'bytes' in record:
+                self.assertEqual(len(raw), record['bytes'])
+
+    def test_historical_paper_economics_resource_failures_and_financial_sources_unchanged(self):
+        allowed = {'source_sha256', 'source_binding_scope', 'release_source_delta'}
+        for former in [self.prior, self.pr33_publication]:
+            self.assertEqual({k: v for k, v in self.publication.items() if k not in allowed},
+                             {k: v for k, v in former.items() if k not in allowed})
+            for name, digest in former['files'].items():
+                self.assertEqual(Path(name).name, name)
+                self.assertEqual(sha(PAPERS / name), digest)
+            self.assertEqual(sha(PAPERS / 'PDF_QA.json'), former['pdf_qa_sha256'])
+        delta_changes = {'release_qualification_source_sha256', 'changed_or_added_identity_files',
+                         'unchanged_original_identity_files', 'release_identity_files', 'source_changes',
+                         'operator022_publication_binding'}
+        self.assertEqual({k: v for k, v in self.delta.items() if k not in delta_changes},
+                         {k: v for k, v in self.pr33_delta.items() if k not in delta_changes})
+        self.assertEqual(self.delta['source_changes'][:-1], self.pr33_delta['source_changes'])
+        for path in ['adaptive_enterprise/account.py', 'commercial/ledger.py', 'connected_enterprise/engine.py',
+                     'connected_enterprise/finance.py', 'experiments/commerce006.py', 'vendor/alpha_claim/protected_exchange.py']:
+            self.assertEqual(sha(ROOT / path), self.historical_proof['current_files'][path])
+        self.assertIn('do not retrospectively qualify', self.publication['source_binding_scope'])
+        self.assertIn('does not establish that the paper exercised', self.publication['source_binding_scope'])
+        self.assertIn('actual downloaded-release operation', self.publication['source_binding_scope'])
+
+    def test_engineering_evidence_is_bound_and_failed_collector_stays_failed(self):
+        evidence = self.binding['engineering_evidence']
+        qualification = read(ROOT / evidence['clean_archive_qualification']['path'])
+        self.assertTrue(qualification['accepted'])
+        self.assertTrue(qualification['no_git_execution'])
+        self.assertTrue(qualification['completed_resume_financially_unchanged'])
+        self.assertEqual(qualification['source_sha256'], self.binding['current_source_sha256'])
+        self.assertEqual(qualification['source_files'], identity(ROOT)['files'])
+        self.assertIn('NOT_PERFORMED', qualification['runtime']['dependency_installation'])
+        proof = read(ROOT / evidence['public_registered_operator_reproduction']['path'])
+        failed = read(ROOT / evidence['preserved_failed_collector']['path'])
+        registered = read(SUPPLEMENT / 'REGISTERED_FROZEN.json')
+        source = dict(registered['source']['files'])
+        source.pop(registered['registration_path'])
+        self.assertEqual(source, identity(ROOT)['files'])
+        self.assertEqual(canonical_sha(registered['source']['files']), proof['source_sha256'])
+        self.assertTrue(proof['accepted'])
+        self.assertTrue(proof['public_audit']['accepted'])
+        self.assertEqual(proof['scope'], 'ENGINEERING_REPRODUCTION_FROM_CLEAN_SOURCE_ARCHIVE_NOT_PUBLISHED_RELEASE')
+        self.assertFalse(failed['accepted'])
+        self.assertEqual(proof['prior_failed_result_sha256'], sha(ROOT / evidence['preserved_failed_collector']['path']))
+        failure = read(ROOT / evidence['preserved_binding_failure']['path'])
+        self.assertNotEqual(failure['exit_code'], 0)
+        self.assertIn('PAPER_EXECUTING_SOURCE_CHANGED', (ROOT / evidence['preserved_binding_failure_stderr']['path']).read_text())
+
+    def test_binding_regression_and_metadata_do_not_enter_operating_identity(self):
+        files = identity(ROOT)['files']
+        excluded = ['tests/test_publication_binding.py', 'docs/completion015/PUBLICATION.json',
+                    'evidence/completion015/qualification/COMPOSED_RELEASE_DELTA.json']
+        excluded += [r['path'] for r in self.binding['prior_records'].values()]
+        excluded += [r['path'] for r in self.pr33_binding['prior_records'].values()]
+        excluded += [path.relative_to(ROOT).as_posix() for path in SUPPLEMENT.rglob('*') if path.is_file()]
+        for path in excluded:
+            self.assertNotIn(path, files)
+
+
+if __name__ == '__main__':
+    unittest.main()

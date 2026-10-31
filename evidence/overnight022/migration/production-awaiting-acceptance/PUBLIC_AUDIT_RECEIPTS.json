@@ -1,0 +1,114 @@
+[
+  {
+    "version": "old",
+    "record": "LEGACY_PUBLIC_RECORD.json",
+    "returncode": 0,
+    "audit": {
+      "accepted": true,
+      "actions_sha256": "e5ac58c5c54237aa7875d7dd3a17866d9ae519d0f0faabb546bc012b37b2f958",
+      "connected_journal_entries": 9,
+      "connected_native_actions_covered": 9,
+      "connected_rejected_entries": 0,
+      "investments": [],
+      "journal_authenticity_scope": "Public source/native commitments verified; private local WAL HMAC checked only on owner reopen.",
+      "orders": [
+        {
+          "buyer": "order-0000-wallet",
+          "compensation_due": "0",
+          "custody": 1,
+          "id": "order-0000",
+          "price": "42780000",
+          "refund_due": "0",
+          "state": "funded"
+        }
+      ],
+      "scope": "SIMULATED",
+      "signature_scope": "Public audit verifies native finance and state/action commitments. Private local HMAC authenticity is checked only by the account owner.",
+      "source_bound_resource_spend_microUSD": 4040620,
+      "state_bound_reservations": 0,
+      "summary": {
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+        "available": 4777579380,
+        "cash": 4920359380,
+        "collections": 0,
+        "conditionalEarned": 0,
+        "custodyReserve": 42780000,
+        "custodyRestricted": 42780000,
+        "earnedProtectionBacking": 0,
+        "equityProtectionBacking": 142780000,
+        "expensePaid": 79640620,
+        "expenses": 79640620,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "investmentStopped": false,
+        "netEarnedAfterIncurredObligations": -79640620,
+        "payables": 0,
+        "profit": -79640620,
+        "recoveryIncome": 0,
+        "reservedInvestment": 0,
+        "revenue": 0,
+        "strictEarnedControl": 0,
+        "tailReserve": 0,
+        "unrestrictedEarned": 0,
+        "workingCapital": 100000000
+      }
+    },
+    "wall_seconds": 0.1829810369963525,
+    "cpu_seconds": 0.18101299999999998
+  },
+  {
+    "version": "new",
+    "record": "UPGRADED_PUBLIC_RECORD.json",
+    "returncode": 0,
+    "audit": {
+      "accepted": true,
+      "actions_sha256": "c6e93ab6637d6b362abc0c27b693b0d0c61a037fb9ee30a212c4d8c79e133148",
+      "connected_journal_entries": 10,
+      "connected_native_actions_covered": 10,
+      "connected_rejected_entries": 0,
+      "investments": [],
+      "journal_authenticity_scope": "Public source/native commitments verified; private local WAL HMAC checked only on owner reopen.",
+      "orders": [
+        {
+          "buyer": "order-0000-wallet",
+          "compensation_due": "0",
+          "custody": 1,
+          "id": "order-0000",
+          "price": "42780000",
+          "refund_due": "0",
+          "state": "funded"
+        }
+      ],
+      "scope": "SIMULATED",
+      "signature_scope": "Public audit verifies native finance and state/action commitments. Private local HMAC authenticity is checked only by the account owner.",
+      "source_bound_resource_spend_microUSD": 4040620,
+      "state_bound_reservations": 0,
+      "summary": {
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+        "available": 4777579380,
+        "cash": 4920359380,
+        "collections": 0,
+        "conditionalEarned": 0,
+        "custodyReserve": 42780000,
+        "custodyRestricted": 42780000,
+        "earnedProtectionBacking": 0,
+        "equityProtectionBacking": 142780000,
+        "expensePaid": 79640620,
+        "expenses": 79640620,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "investmentStopped": false,
+        "netEarnedAfterIncurredObligations": -79640620,
+        "payables": 0,
+        "profit": -79640620,
+        "recoveryIncome": 0,
+        "reservedInvestment": 0,
+        "revenue": 0,
+        "strictEarnedControl": 0,
+        "tailReserve": 0,
+        "unrestrictedEarned": 0,
+        "workingCapital": 100000000
+      }
+    },
+    "wall_seconds": 0.6972644380002748,
+    "cpu_seconds": 0.690522
+  }
+]
