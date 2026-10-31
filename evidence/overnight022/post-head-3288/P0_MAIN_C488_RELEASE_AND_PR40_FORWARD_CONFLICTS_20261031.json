@@ -1,0 +1,163 @@
+{
+  "schema": "agi-alpha/overnight022-independent-current-release-native-forward/v1",
+  "date_utc": "2026-10-31",
+  "authority": "Independent read-only public release audit and three-tree source/packaging reconciliation. No financial account access, new key, spend, deployment, production transaction, other owner source mutation or merge.",
+  "repo": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+  "observed_main_commit": "c488e1c401d4d7eb276171e29fa82c48f927b8e5",
+  "main_merge": "PR56 normal merge; historical resource CPU failure remains historically failed",
+  "current_release": {
+    "tag": "connected014-c488e1c401d4d7eb276171e29fa82c48f927b8e5",
+    "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/connected014-c488e1c401d4d7eb276171e29fa82c48f927b8e5",
+    "workflow_run_id": 41239269262,
+    "workflow_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41239269262",
+    "six_exact_main_workflows": "success (consequential009, adaptive012, campaign, consequential007, commercial010, connected014)",
+    "release_job_ids": {
+      "qualify": 124649522829,
+      "publish": 124650923456,
+      "downloaded_operation": 124654161260
+    },
+    "release_asset_source_zip_sha256": "a1cba97731de54dfa1597996226c3bf990cc857c50cca485258d2e17b0eaf5d4",
+    "released_executing_source_sha256": "33ab369796c9da59b6bed86887cb81d3a154161bf9e7fff4ea3ff91ad534bb62",
+    "downloaded_operation_artifact": {
+      "id": 13057272423,
+      "zip_sha256": "1494b400c7eda7fa02e4d71e5573819e502bebcbb4888fe7730fec346b1c3896",
+      "downloaded_receipt_sha256": "9ff42b21f2f044c55df669233efaa1868bf7582c92e4ce71f2e20ad5ca0adb49",
+      "downloaded_keyfree_package_sha256": "53db48c30276d0b36150e6efa4bba3588531040f10a9b26b05a86a9b437de7ff"
+    },
+    "downloaded_operation": {
+      "accepted": true,
+      "command_exit_codes": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "commands": [
+        "run",
+        "resume",
+        "audit",
+        "package",
+        "public-copy audit",
+        "released-public audit"
+      ],
+      "measured_process_tree_cpu_seconds": 1202.246312,
+      "measured_wall_seconds": 396.172408225,
+      "completed_resume_financially_unchanged": true,
+      "downloaded_public_audit_accepted": true,
+      "actual_customers": 0,
+      "actual_collections": 0,
+      "actual_profit": null
+    },
+    "independent_keyfree_reaudit": {
+      "artifact_zip_sha256": "1494b400c7eda7fa02e4d71e5573819e502bebcbb4888fe7730fec346b1c3896",
+      "package_sha256_verified": true,
+      "archive_entries": 507,
+      "entry_path_validation": "Reject absolute, traversal, duplicate and symlink entries before extraction",
+      "canonical_cli": "python -m connected_enterprise audit --output <ephemeral extracted key-free package>",
+      "returncode": 0,
+      "accepted": true,
+      "wall_seconds": 6.996601382999984,
+      "child_cpu_seconds": 7.802970999999999,
+      "python_version": "3.13, not hosted release's 3.12",
+      "note": "Re-audit ran once successfully; Python generated __pycache__ in ephemeral extracted copy, which was erased. Original ZIP bytes unchanged. Earlier local harness attempt failed due use-after-close of ZIP handle, fixed before this audit; no business process or account was started in that failed attempt."
+    },
+    "comparison_with_previous_qualified_release": {
+      "previous_main": "78b7268807a0f80d19a639ee1b2b02adca0dbbbb",
+      "previous_workflow_id": 41236866390,
+      "previous_release_download_artifact": 13057065469,
+      "previous_artifact_sha256": "7937ad60c99b54465a81d17b08b4a96db57d06b6b5433204fb3d068dec9f5a74",
+      "previous_downloaded_receipt_sha256": "fedbdf01d53d02b5cb037976d8e6cb8f31fe1fbd4165964413dd88a37258872d",
+      "previous_6_exit_codes": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "previous_cpu_seconds": 1374.3945279999998,
+      "previous_wall_seconds": 467.789712157,
+      "interpretation": "Observed process-tree CPU/wall difference across hosted runs, not causal attribution to snapshot optimization. Both are fixed exposed-fixture reproduction; no new profit."
+    }
+  },
+  "forward_native": {
+    "native_draft_pr": 40,
+    "native_commit": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+    "native_base_pr": 35,
+    "archive_policy": "flywheel/archive_v2.py unchanged MAX_FILES=10000, MAX_BYTES=536870912; active source-only omissions manifest absent at both heads",
+    "git_trees": {
+      "historical_8ab": "d1c1393359d31415906369ee503edb079f03fa7f",
+      "main_c488": "0e578600aa7d4a994a07bfc31cd3c023a2317c78",
+      "native_pr40": "548b5affc425a40759741828628659f2c36840e9"
+    },
+    "verified_git_tree_response": "All three recursive Git trees complete, truncated=false; excluded generated/transaction components and artifacts/enterprise011-parts/adaptive012-parts, and ARCHIVE_MANIFEST.json",
+    "eligible": {
+      "historical_files": 9998,
+      "historical_bytes": 464617279,
+      "main_files": 9951,
+      "main_bytes": 458634467,
+      "native_files": 10085,
+      "native_bytes": 467740915,
+      "naive_main_plus_native_filename_union": 10143,
+      "retired_historical_paths_on_native_only": 105,
+      "new_native_paths_not_on_8ab_or_main": 87,
+      "forward_union_preserving_retired_deletions": 10038,
+      "excess_before_compaction": 38,
+      "min_reviewed_loose_files_to_losslessly_replace_if_one_zip_and_one_index_added": 40
+    },
+    "conflicts": {
+      "baseline": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+      "both_branches_modified_exact_same_four_paths": [
+        "commercial/ledger.py",
+        "connected_enterprise/engine.py",
+        "connected_enterprise/finance.py",
+        "connected_enterprise/verify.py"
+      ],
+      "new_overlap": "PR56 modified commercial/ledger.py for native snapshot efficiency; PR40 independently modified the historical ledger for migration. Preserve both semantics under canonical audit and Account; do not take either file wholesale.",
+      "financial_source_path_counts": {
+        "main": 21,
+        "native": 23,
+        "required_pathname_union": 33
+      },
+      "note": "Membership union is necessary, not proof of transitive executable closure; pin historical source versions separately."
+    },
+    "status": "Candidate P0 NO-GO; no merged prospective native release or original inaccessible signed account continuity verified",
+    "next_decisions": [
+      "One integration owner: reconcile all FOUR overlapping files and 33-path financial source authority with current main, retain immutable old versions and liabilities",
+      "Keep 105 deliberately retired historical logs retired from new main packaging, while preserving their original Git history",
+      "Losslessly compact >=40 reviewed loose evidence files for one new ZIP+index, with headroom; retain unchanged 10000-file guard and provenance",
+      "Qualify nonempty signed legacy operating migration and original available owned account checkpoint, crash/replay/race/financial maturity boundaries; no account takeover",
+      "Run exact-head connected/adaptive/root, historical source binding, released public download, settlement/maturity earned-only atomic reinvestment/resume/audit before P0 declaration"
+    ]
+  },
+  "acceptance": {
+    "previous_qualified_permanent_term_release": "ACHIEVED",
+    "current_c488_permanent_term_release": "ACHIEVED",
+    "independent_c488_keyfree_audit": "ACHIEVED",
+    "historical_6b_download_cpu_gate": "FAILED_UNCHANGED",
+    "native_pr40_composition": "PARTIAL",
+    "latest_original_signed_account_continuation": "BLOCKED_UNAVAILABLE_CHECKPOINT",
+    "native_archive_packaging": "BLOCKED_FORWARD_10038_OVER_10000",
+    "native_historical_publication_binding": "FAILED_PREVIOUS_RUNS_NOT_WAIVED",
+    "P1_causal_complete_cost_expansion": "UNQUALIFIED",
+    "P2_joint_capability_benefit": "UNQUALIFIED",
+    "native_to_aggregate_bridge": "BLOCKED",
+    "TTM_profit_3billion": "NOT_ESTABLISHED"
+  },
+  "costs": {
+    "this_external_GitHub_download": "No new purchase or paid API requested; actual underlying account host/platform charges not measured.",
+    "local_independent_audit_cpu_seconds": 7.802970999999999,
+    "model_billing": "UNKNOWN",
+    "full_enterprise_campaign_cost": "UNKNOWN"
+  },
+  "obligations": "No owned financial account or signed state touched. Original liabilities and queued events unchanged; no new capital reservation or alternative ledger.",
+  "limits": [
+    "Published receipts and independent key-free audit verify engineering reproducibility on exposed fixed fixtures, not live market demand",
+    "Downloaded-run CPU measurements are runner kernel process-tree deltas; local re-audit was separate Python3.13",
+    "Three-tree pathname union does not resolve merge conflicts or verify content hashes after composition",
+    "No original owner-held completion023 signed account accessed or reconstructed",
+    "No retrospective success assigned to historical 6b CPU gate failure or prior archive/publication errors"
+  ]
+}
