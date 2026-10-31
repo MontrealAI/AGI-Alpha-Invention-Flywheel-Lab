@@ -64,7 +64,8 @@ def main():
         manifest=prepare_services(ROOT,relative,cohort_seed=PROTOCOL['service_cohort_seed'],jobs_per_service=PROTOCOL['jobs_per_service'])
         if a.liability=='prospective':manifest['native_engine']='prospective-v1'
         (ROOT/relative/'MANIFEST.json').write_bytes(canonical(manifest)+b'\n')
-        source=identity(ROOT);receipt.update(config=cfg,config_sha256=digest(cfg),source=source,manifest_sha256=digest(manifest),inventory_count=len(manifest['jobs']),inventory_generation=manifest['resource_receipt']);write()
+        inventory_fingerprint=digest({'cohort':manifest['cohort_provenance'],'jobs':[{k:v for k,v in job.items() if k not in {'input','artifact','receipt'}} for job in manifest['jobs']]})
+        source=identity(ROOT);receipt.update(inventory_fingerprint=inventory_fingerprint,config=cfg,config_sha256=digest(cfg),source=source,manifest_sha256=digest(manifest),inventory_count=len(manifest['jobs']),inventory_generation=manifest['resource_receipt']);write()
         result=run_world(ROOT,manifest,cfg,a.seed,'competitive_growth',out/'private',source=source)
         checked=audit(ROOT,manifest,result)
         if not result['complete'] or not checked['accepted']:raise ValueError('COMPLETE_NATIVE_OPERATING_AUDIT_REQUIRED')
