@@ -1,0 +1,76 @@
+{
+  "schema": "agi-alpha/p0-independent-archive-utility-checkpoint/v1",
+  "date": "2026-10-31",
+  "scope": "INDEPENDENT_NONCONFLICTING_RELEASE_PREPARATION_NOT_P0_QUALIFICATION",
+  "repository": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+  "source_main": "85fba7c94cac5f741d047807a0c83e8ce11f4216",
+  "source_draft_pr35": "7d75766401adede49afd2427be82eb0302934b80",
+  "integration_owner": "PR35 incumbent; did not edit integration branch or private accounts",
+  "branch": "evidence/operator022-prepared-3288",
+  "source": {
+    "path": "evidence/overnight022/post-head-3288/p0_lossless_compact.py",
+    "git_blob": "21acfd9860190f534536a112c94d200ec07c3619",
+    "sha256": "321b6cda88b75977780847c284af077cb89e02f4c8ada9c552df3276f9a37334",
+    "published_commit": "91724dc8dee8d95bfa966cf48cc452fc011395ca"
+  },
+  "tests": {
+    "path": "evidence/overnight022/post-head-3288/test_p0_lossless_compact.py",
+    "git_blob": "f9ff9b3e6bc288eead44196fac73015ea382f983",
+    "sha256": "f68a27515feabfd3e9783a8dd20b057df7f4e1bc17c9135a2db530bcdfef2cd0",
+    "published_commit": "0dbed99b528e989e74a20a469627fe8a5f9bf60f",
+    "tests_run": 6,
+    "failures": 0,
+    "errors": 0,
+    "measured_child_and_test_wall_seconds": 0.96,
+    "measured_cpu_user_seconds": 1.22,
+    "measured_cpu_system_seconds": 0.15,
+    "max_rss_kilobytes": 98824,
+    "python_unittest_reported_seconds": 0.188
+  },
+  "preserved_development_failure": {
+    "initial_test_attempt": "3 errors from synthetic fixture incorrectly setting MAX_FILES=4 while attempting to store 5 members; correctly failed LOSSLESS_BUNDLE_RESOURCE_BOUND",
+    "resolution": "Tests corrected to MAX_FILES=5, 4 bundled members, 7 eligible source files; subsequent 6 tests pass",
+    "original_failed_attempt_not_reclassified": true
+  },
+  "positive_guards": [
+    "Source commit and clean checkout required",
+    "Only explicitly selected tracked regular evidence/ files",
+    "Original raw bytes verify against immutable Git blob",
+    "ZIP members carry SHA256, Git blob SHA1, original size and mode",
+    "Full member set and ZIP digest verified after construction",
+    "Original immutable commit remains addressable after optional reviewer-controlled removal",
+    "Unchanged MAX_FILES=10000 and MAX_BYTES=536870912; new ZIP+index counted",
+    "No deletion, no HMAC keys, no operating account or ledger writes"
+  ],
+  "excluded_claims": [
+    "No actual PR35 compaction run",
+    "No actual PR35 archive success",
+    "No proof that any selected evidence files are unreferenced by consumers",
+    "No protected merge/release of PR35",
+    "No authenticated native migration, maturity or profit improvement",
+    "No real customer or billing evidence"
+  ],
+  "counts": {
+    "qualified_main_latest_eligible_files": 9999,
+    "draft_PR35_old_base_eligible_files": 10077,
+    "possible_current_main_plus_candidate_additions_before_compaction": 10078,
+    "assumed_new_bundle_index_files": 2,
+    "minimum_loose_eligible_files_to_remove_under_assumptions": 80,
+    "headroom_preferred": true
+  },
+  "next_decision": "Owner must choose ≥80 eligible loose evidence records not required as direct paths, perform consumer/reference audit, build and independently verify bundle, remove only reviewed loose copies on PR35, then run unchanged archive tests, publication binding and full protected P0 qualifications. This utility is unmerged and does not imply permission to merge the evidence branch wholesale.",
+  "financial_integrity": "No operating account, key, liabilities, history, or source guard changed.",
+  "cost_scope": "Measured local subprocess/test CPU and wall only; model and host billing unknown.",
+  "matrix": {
+    "historical_qualified_release": "ACHIEVED",
+    "published_85fba_original_operator": "ACHIEVED",
+    "composed_native_P0": "PARTIAL",
+    "legacy_latest_signed_checkpoint": "BLOCKED",
+    "draft_PR35_release": "FAILED_UNQUALIFIED",
+    "archive_compaction_utility": "ACHIEVED_ISOLATED_TESTED",
+    "P1_commercial_expansion": "UNQUALIFIED",
+    "P2_joint_policy": "UNQUALIFIED",
+    "scale_bridge": "BLOCKED",
+    "trailing_12_month_3b_profit": "UNQUALIFIED"
+  }
+}
