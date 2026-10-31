@@ -1,0 +1,113 @@
+{
+  "schema": "agi-alpha/independent-p0-bounded-transition-capsule-experiment/v1",
+  "as_of_utc": "2026-10-31T16:25:00Z",
+  "classification": "INDEPENDENT_SYNTHETIC_TRANSPORT_EXPERIMENT_NOT_CANONICAL_FINANCIAL_MIGRATION_OR_RELEASE",
+  "governance": {
+    "integration_owner": "Codex completion024 / draft PR #35",
+    "branch": "evidence/independent-p0-v2-capsule-20261031",
+    "independent_nonconflicting_scope": "New isolated source/test in distinct evidence branch only; no changes to PR35 integration branch, canonical Account, original accounts, ledger, guards, release, or other automation.",
+    "source_handoff": "Original successor022 archive recovered by owner and locally authenticated, original latest post-continuation completion023 signed checkpoint remains unavailable.",
+    "account_writes": 0,
+    "original_account_keys_read": 0,
+    "credential_published": false,
+    "external_transactions": 0,
+    "spending": false
+  },
+  "qualified_incumbent": {
+    "repository_main_observed": "85fba7c94cac5f741d047807a0c83e8ce11f4216",
+    "baseline_permanent_runtime": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+    "status": "Existing permanent-term release only; no composed prospective native release."
+  },
+  "candidate": {
+    "pr": 35,
+    "head": "7d75766401adede49afd2427be82eb0302934b80",
+    "draft": true,
+    "release_decision": "NO-GO",
+    "known_blockers": [
+      "Current v1 source transition requires embedded prior record/journal larger than 16,000,000 bytes",
+      "Latest completed original two-business signed checkpoint unavailable",
+      "Existing PR35 complete-source archive/publication qualification failed; original archive/resource failures remain failed"
+    ],
+    "signed_transition_public_lower_bounds_bytes": {
+      "prospective": 42937362,
+      "permanent": 52345223
+    },
+    "source_lower_bound": "campaign/completion-023/SOURCE_TRANSITION_PREFLIGHT.json at PR35 exact head"
+  },
+  "experiment": {
+    "hypothesis": "An immutable full-history content-addressed anchor, bound by a small account-key HMAC capsule, can transport history with an unchanged 16,000,000-byte signed-ticket cap without discarding historical records.",
+    "source_path": "evidence/overnight022/post-head-3288/p0_bounded_transition_capsule.py",
+    "source_git_blob": "e45a3f61125ba56ba4d9d03dd5e96be52a0123e1",
+    "source_sha256": "5161e6f8ea59a9b0cb9671ae2892076b5ec105a5490e0e5b591d91b1cd0c204a",
+    "test_path": "evidence/overnight022/post-head-3288/test_p0_bounded_transition_capsule.py",
+    "test_git_blob": "2a1343b3fe8c39c985ec70f4340b5f546b3d996a",
+    "test_sha256": "a51d517ec77fa26de7adffce39b37264544c107a5c262fb509327b87a7c0dc6b",
+    "independent_branch_head_before_receipt": "b56909e338319c1241b9c64a6d56912322df50a3",
+    "canonical_native_guard_changed": false,
+    "max_capsule_bytes": 16000000,
+    "prototype_anchor_guard_bytes": 80000000,
+    "historical_payload_preservation": "Full canonical bytes in separate, immutable SHA256-addressed local synthetic fixture; no old action or liability deletion or re-signing.",
+    "required_verifier": "Historical auditor function parameter must return independent accepted receipt and original sequence/digest; this experiment's callback is synthetic, NOT the canonical pinned HMAC Account/audit_account verification."
+  },
+  "executed_tests": {
+    "local_python_count": 9,
+    "passed": 9,
+    "failed": 0,
+    "errors": 0,
+    "exit_code": 0,
+    "test_coverage": [
+      "17.5MB synthetic history yields bounded ticket and content-addressed readback",
+      "synthetic immutable-anchor tamper and collision rejection",
+      "cross-account/stale checkpoint/counter/replay/fork rejection",
+      "ticket body or HMAC forgery rejection",
+      "required historical callback rejecting failed audit",
+      "symlink anchor rejection",
+      "wrong signed checkpoint native-prefix rejection before persistence",
+      "pending queue overtake/inflight rejection before persistence",
+      "native counter bound"
+    ],
+    "measured": {
+      "user_cpu_s": 1.4,
+      "system_cpu_s": 0.42,
+      "wall_s": 1.44,
+      "max_rss_kib": 181956
+    },
+    "stress": {
+      "description": "Synthetic payload approximating 52,345,223-byte published permanent-account v1 lower bound.",
+      "canonical_full_anchor_bytes": 52345911,
+      "ticket_bytes": 927,
+      "ticket_guard_bytes": 16000000,
+      "structurally_verified": true,
+      "native_account_migration": false,
+      "canonical_hmac_history_audit": false,
+      "measured": {
+        "user_cpu_s": 1.81,
+        "system_cpu_s": 1.05,
+        "wall_s": 2.47,
+        "max_rss_kib": 351876,
+        "exit_code": 0
+      }
+    },
+    "billing": "Actual host, model, CI and all external billing UNKNOWN; none inferred as zero."
+  },
+  "limitations": [
+    "Uses entirely synthetic sealed predecessor/ledger, synthetic callback, and private ephemeral local simulated HMAC key; no recovered account/key/signature or independent source verifier was accessed.",
+    "No canonical JournalAccount/Account source-transition, HMAC recovery, write-ahead crash/replay, racing writer, same-business full financial continuity or released-byte reproduction executed.",
+    "No release guard relaxed, no historical failure rewritten, no 16MB v1 account ticket installed or signed, no source checked out in integration owner's workspace.",
+    "Proof addresses only bounded transport and rejection predicates, not completeness of financial semantics; 80MB anchor guard is experimental and needs budget and large-account/streaming security review before consideration."
+  ],
+  "acceptance_matrix": {
+    "qualified_permanent_term_public_release": "ACHIEVED_EXISTING",
+    "independent_bounded_v2_transport_synthetic_tests": "ACHIEVED_ISOLATED_ENGINEERING_ONLY",
+    "authenticated_native_nonempty_queue_migration": "BLOCKED",
+    "canonical_v2_transition_review_and_owner_integration": "NOT_STARTED",
+    "composed_PR35_qualification": "FAILED_UNCHANGED",
+    "published_composed_native_release_and_download": "BLOCKED",
+    "continuing_P1_commercial_causal_profit": "NOT_QUALIFIED",
+    "P2_joint_challenger": "NOT_QUALIFIED",
+    "native_to_aggregate_scale_bridge": "NOT_QUALIFIED",
+    "target_3b_TTM_complete_cost_profit": "NOT_QUALIFIED",
+    "historical_failures": "PRESERVED"
+  },
+  "next_decision": "Integration owner must separately assess whether bounded content-addressed, HMAC-authenticated journal anchor can be safely integrated through mandatory canonical Account/JournalAccount and pinned historical audit with atomic write-ahead recovery, exact original identity and liabilities. Recover latest signed original completion023 history before adopting/advancing either account; do not switch the account to a synthetic copy. Preserve existing 16MB ticket guard and original failures. Compaction/publication failures in draft PR35 remain independent release blockers."
+}
