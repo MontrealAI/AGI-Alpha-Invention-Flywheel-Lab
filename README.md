@@ -1,6 +1,22 @@
 # AGI-Alpha-Invention-Flywheel-Lab
 Blue Sky and Beyond-Human Foresight: structural discovery, executable strategy invention, adversarial verification, and fresh successors. Experimental research.
 
+## Native capital integration candidate — completion023
+
+The recovered capital source is composed with the released operator interfaces on
+`integration/native-capital-completion-023`. This is an **unreleased candidate**;
+the qualified champion remains `connected014-8abfb96d4ef859e30ca344d7933ec2a2f49012c1`.
+The original accounts cannot fit another v1 source transition inside its existing
+16 MB guard. An early preflight now rejects that operation before changing the
+operator descriptor. See [commands and qualification limits](docs/completion023/OPERATOR.md)
+and the [source handoff](campaign/completion-023/RECOVERED_SOURCE.json).
+
+The released batch registration, operation, resume, audit, comparison and scoreboard
+commands remain available. The candidate also accepts the single-business and
+native capital configuration schemas; each uses the mandatory native Account.
+Historical verification and modeled economic results remain separate from a
+qualified composed release, annual profit and external commerce.
+
 ## Current default: connected enterprise completion015
 
 The default path operates eight **simulated** 70-day businesses: voluntary buyer choice, qualified orders, executed reconciliation/KPI/evidence work, separate artifact checking, collection, full modeled costs, native earnings reservations, acquisition/capacity and subsequent delivery. Use the [operator guide](docs/connected014/OPERATOR.md), [achieved-results report](docs/completion015/REPORT.md), [inspected PDF](docs/completion015/PAPER.pdf) and [full-record reconstruction commands](docs/completion015/ARTIFACTS.md) and [scale-model reconciliation](docs/completion015/SCALE_RECONCILIATION.md).

@@ -25,10 +25,16 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def source_paths(root):
     names=set(inherited_paths(root))
-    for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('campaign/connected-registrations','*.json')]:
+    for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('tests','test_native*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('examples/native_capital020','*.json'),('docs/native-capital020','*.md'),('historical/successor022','*'),('examples/connected022','*.json'),('docs/successor022','*.md')]:
         names.update(p.relative_to(root).as_posix() for p in (root/folder).glob(pattern) if p.is_file())
-    names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','verification/scan_adaptive_cancellation_history.py','evidence/cancellation-retirement/HISTORICAL_SCAN.json','evidence/cancellation-retirement/COUNTEREXAMPLE.before.json','docs/connected014/OPERATOR.md','AGENTS.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())
+    names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','verification/scan_adaptive_cancellation_history.py','evidence/cancellation-retirement/HISTORICAL_SCAN.json','evidence/cancellation-retirement/COUNTEREXAMPLE.before.json','docs/connected014/OPERATOR.md','AGENTS.md','README.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())
+    names.update(p for p in ['tests/__init__.py','tests/connected_legacy_fixture.py'] if (root/p).is_file())
+    names.update(p for p in ['campaign/successor-022/qualify.py','campaign/successor-022/QUALIFICATION_PROTOCOL.json','campaign/successor-022/CONTINUATION_PROTOCOL.json'] if (root/p).is_file())
+    names.update(p.relative_to(root).as_posix() for p in (root/'campaign/successor-022/proofs').glob('*.py'))
+    names.update(p for p in ['campaign/successor-022/proofs/maturity_successor_protocol.json','campaign/successor-022/proofs/ADAPTATION.json'] if (root/p).is_file())
+    names.update(p.relative_to(root).as_posix() for p in (root/'campaign/connected-registrations').glob('*.json') if p.is_file())
     names.update(p for p in ['campaign/overnight-022/OPERATOR_INPUT.json','scripts/measure_overnight022.py'] if (root/p).is_file())
+    names.update(p for p in ['docs/completion023/OPERATOR.md','scripts/export_recovered023.py','campaign/completion-023/PLAN.json'] if (root/p).is_file())
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
@@ -245,12 +251,70 @@ def main():
         s=sub.add_parser(name);s.add_argument('--output',required=True)
         if name=='run':s.add_argument('--smoke',action='store_true')
         if name in {'operate','_worker'}:s.add_argument('--max-events',type=int)
-        if name=='comparison':s.add_argument('--control');s.add_argument('--candidate')
+        if name=='comparison':s.add_argument('--control');s.add_argument('--candidate');s.add_argument('--config')
     s=sub.add_parser('register');s.add_argument('--config',required=True);s.add_argument('--output',required=True)
+    s.add_argument('--seed',type=int);s.add_argument('--arm',default='growth',choices=['baseline','channel','growth','competitive_growth']);s.add_argument('--cohort-seed',type=int)
     s=sub.add_parser('package');s.add_argument('--output',required=True);s.add_argument('--archive',required=True)
+    s=sub.add_parser('_capital');s.add_argument('--output',required=True);s.add_argument('--action',required=True,choices=['register','operate','audit','scoreboard','comparison']);s.add_argument('--max-events',type=int)
+    s=sub.add_parser('upgrade');s.add_argument('--output',required=True);s.add_argument('--historical-source',required=True);s.add_argument('--manifest',required=True);s.add_argument('--policy',required=True);s.add_argument('--expected-checkpoint',required=True);s.add_argument('--id',required=True)
+    s=sub.add_parser('recover-checkpoint');s.add_argument('--output',required=True);s.add_argument('--historical-source',required=True);s.add_argument('--manifest',required=True);s.add_argument('--expected-checkpoint',required=True);s.add_argument('--id',required=True)
+    s=sub.add_parser('_connected');s.add_argument('--output',required=True);s.add_argument('--action',required=True,choices=['operate','audit','scoreboard','upgrade']);s.add_argument('--max-events',type=int)
     args=p.parse_args();raw_output=Path(args.output).expanduser()
     if any(q.is_symlink() for q in [raw_output,*raw_output.parents]):raise ValueError('OUTPUT_SYMLINK_REFUSED')
     output=raw_output.resolve()
+    from . import capital,operations
+    if args.command=='recover-checkpoint':
+        from .recovery import recover_checkpoint
+        result=recover_checkpoint(args.historical_source,args.manifest,output,expected_checkpoint=args.expected_checkpoint,ident=args.id)
+        print(json.dumps(result,sort_keys=True));return 0
+    if args.command=='upgrade':
+        d=operations.prepare_upgrade(ROOT,args.historical_source,args.manifest,output,policy=strict_json(Path(args.policy).read_bytes()),expected_checkpoint_sha256=args.expected_checkpoint,ident=args.id)
+        return subprocess.call([sys.executable,'-m','connected_enterprise','_connected','--action','upgrade','--output',str(output)],cwd=output/d['source_dir'])
+    if args.command=='_connected':
+        if args.action=='operate':
+            r=operations.operate(output,max_events=args.max_events);result={'complete':r['complete'],'summary':r['summary'],'processed_events':r['processed_events']}
+        elif args.action=='upgrade':result=operations.upgrade(output)
+        elif args.action=='audit':result=operations.audit(output)
+        else:result=operations.scoreboard(output)
+        print(json.dumps(result,sort_keys=True));return 0
+    configuration=None
+    if args.command=='register' or args.command=='comparison' and args.config is not None:
+        config_path=Path(args.config).expanduser()
+        if any(q.is_symlink() for q in [config_path,*config_path.parents]):raise ValueError('REGISTRATION_SYMLINK_REFUSED')
+        configuration=strict_json(config_path.read_bytes())
+    if (args.command=='register' and configuration.get('schema')!='agi-alpha/connected014-registration/v1'
+            or args.command=='comparison' and args.config is not None):
+        if args.command=='register' and configuration.get('schema')=='agi-alpha/connected014-config/v1':
+            d=operations.register(ROOT,configuration,output,seed=args.seed,arm=args.arm,cohort_seed=args.cohort_seed)
+            print(json.dumps({'schema':d['schema'],'registration_sha256':d['sha256'],'source_sha256':d['source']['sha256']},sort_keys=True));return 0
+        capital.freeze(ROOT,configuration,output,comparison=args.command=='comparison')
+        action='comparison' if args.command=='comparison' else 'register'
+        return subprocess.call([sys.executable,'-m','connected_enterprise','_capital','--action',action,'--output',str(output)],cwd=output/'source')
+    if args.command=='_capital':
+        if args.action=='register':
+            registered=capital.register(output);result={'schema':registered['schema'],'registration_sha256':registered['sha256'],'opportunities':len(registered['opportunities'])}
+        elif args.action=='operate':
+            from .engine import run_native_capital
+            operated=run_native_capital(output,max_events=args.max_events)
+            result={'complete':operated['complete'],'summary':operated['summary'],'processed_events':operated['state']['processed_events'],'source_sha256':operated['source_sha256']}
+        elif args.action=='comparison':result=capital.comparison(output)
+        else:
+            checked=capital.audit_output(output)
+            write(output/'CAPITAL_AUDIT.json',checked)
+            result=({'accepted':checked['accepted'],'arms':{k:v['scoreboard'] for k,v in checked['arms'].items()}} if 'arms' in checked
+                    else checked['scoreboard'] if args.action=='scoreboard' else {'accepted':checked['accepted'],'scoreboard':checked['scoreboard']})
+        print(json.dumps(result,sort_keys=True));return 0
+    if args.command in {'operate','resume','audit','scoreboard'} and operations.is_connected(output):
+        d,_=operations.read_operator(output);action='operate' if args.command=='resume' else args.command
+        command=[sys.executable,'-m','connected_enterprise','_connected','--action',action,'--output',str(output)]
+        if args.command=='operate' and args.max_events is not None:command.extend(['--max-events',str(args.max_events)])
+        return subprocess.call(command,cwd=output/d['source_dir'])
+    if args.command in {'operate','scoreboard','resume','audit'} and capital.is_capital(output):
+        capital.read_freeze(output)
+        action='operate' if args.command=='resume' else args.command
+        command=[sys.executable,'-m','connected_enterprise','_capital','--action',action,'--output',str(output)]
+        if args.command=='operate' and args.max_events is not None:command.extend(['--max-events',str(args.max_events)])
+        return subprocess.call(command,cwd=output/'source')
     if args.command=='register':
         config_path=Path(args.config).expanduser()
         if any(p.is_symlink() for p in [config_path,*config_path.parents]):raise ValueError('REGISTRATION_SYMLINK_REFUSED')

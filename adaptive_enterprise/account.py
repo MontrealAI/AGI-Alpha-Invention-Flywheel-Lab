@@ -12,6 +12,8 @@ import json
 import os
 from pathlib import Path
 import stat
+import threading
+from functools import wraps
 
 from commercial.ledger import _ADAPTIVE_ACCOUNT_CAPABILITY, _audit_native_and_jobs, amount, canonical, digest, strict_json
 from commercial.persistence import atomic_bytes
@@ -160,6 +162,11 @@ def action_prefix_digests(actions):
 
 
 def _operation_id(op, args):
+    if op == 'mature':
+        return op + ':' + _identifier(args.get('id')) + ':' + _identifier(args.get('event_id'))
+    if op in {'claim', 'resolve_claim', 'recover_claim'}:
+        suffix = ':' + _identifier(args.get('settlement_id')) if op != 'claim' else ''
+        return op + ':' + _identifier(args.get('id')) + ':' + _identifier(args.get('claim_id')) + suffix
     if op == 'event':
         return 'event:' + _identifier(args.get('id')) + ':' + _identifier(args.get('event_id'))
     if op == 'wallet':
@@ -241,7 +248,7 @@ def _validate_resolution(tape, proof, receipt, actual, work_sha256, day, jobs, *
     return digest({'work_artifact_sha256': work_sha256, 'obligation_receipt_sha256': digest(receipt)})
 
 
-def audit_account(record, *, root, manifest):
+def audit_account(record, *, root, manifest, pending_source_transition=None):
     if not isinstance(record, dict) or record.get('schema') != 'agi-alpha/adaptive012-owned-account/v1' or record.get('scope') != 'SIMULATED':
         raise ValueError('ADAPTIVE_ACCOUNT_EXPORT_REQUIRED')
     tape, proofs = record['ledger'], record['action_proofs']
@@ -253,6 +260,40 @@ def audit_account(record, *, root, manifest):
         # Other service schemas retain their previous second qualification.
         from commercial.ledger import load_jobs
         jobs = load_jobs(root, manifest)
+    transitions = record.get('source_transitions', {})
+    used = []
+    for index, event in enumerate(tape['actions']):
+        if event['op'] != 'source_transition':
+            continue
+        from connected_enterprise.upgrades import validate_ticket, transition_args, verify_historical
+        ticket = transitions.get(event['args']['id'])
+        body = validate_ticket(ticket)
+        prior = body['prior_record']['ledger']
+        if (event['args'] != transition_args(ticket) or event['day'] != body['day']
+                or prior['config'] != tape['config'] or prior['actions'] != tape['actions'][:index]
+                or prior['summary'] != event['before'] or event['before'] != event['after']
+                or body['counter'] != len(used) + 1):
+            raise ValueError('SOURCE_TRANSITION_NATIVE_CONTINUITY_MISMATCH')
+        if used and body['from_source'] != transitions[used[-1]]['body']['to_source']:
+            raise ValueError('SOURCE_TRANSITION_VERSION_CHAIN_BROKEN')
+        prior_sources = [transitions[x]['body']['from_source']['sha256'] for x in used]
+        if body['to_source']['sha256'] in prior_sources:
+            raise ValueError('SOURCE_TRANSITION_DOWNGRADE_OR_FORK')
+        verify_historical(ticket, manifest, root=root)
+        used.append(event['args']['id'])
+    from connected_enterprise.finance import source_identity
+    pending_target = None
+    if pending_source_transition is not None:
+        from connected_enterprise.upgrades import validate_ticket, verify_historical
+        pending = validate_ticket(pending_source_transition, root=root)
+        if (pending['prior_record']['ledger'] != tape or pending['counter'] != len(used) + 1
+                or used and pending['from_source'] != transitions[used[-1]]['body']['to_source']):
+            raise ValueError('PENDING_SOURCE_TRANSITION_NOT_BOUND_TO_EXACT_CURRENT_HISTORY')
+        verify_historical(pending_source_transition, manifest, root=root)
+        pending_target = pending['to_source']
+    if used:
+        if transitions[used[-1]]['body']['to_source'] != source_identity(root) and pending_target != source_identity(root):
+            raise ValueError('CURRENT_SOURCE_NOT_AUTHORIZED_BY_TRANSITION')
     prefixes = action_prefix_digests(tape['actions'])
     for index, event in enumerate(tape['actions']):
         if event['op'] == 'finish':
@@ -282,16 +323,29 @@ def audit_account(record, *, root, manifest):
             'signature_scope': 'Public audit verifies native finance and state/action commitments. Private local HMAC authenticity is checked only by the account owner.'}
 
 
+def _account_locked(method):
+    @wraps(method)
+    def call(self, *args, **kwargs):
+        with self._mutex:
+            return method(self, *args, **kwargs)
+    return call
+
+
 class Account:
     """One owned account; every mutation is executed by native TapeExchange."""
-    def __init__(self, root, manifest, path, *, opening, working=0, contract='adaptive012', storage='local_posix'):
+    def __init__(self, root, manifest, path, *, opening, working=0, contract='adaptive012', storage='local_posix', source_upgrade=None):
         self.path = Path(path).absolute()
         self.root, self.manifest = Path(root).absolute(), copy.deepcopy(manifest)
+        self._initial_source_upgrade = copy.deepcopy(source_upgrade)
         self.filesystem = assert_local_storage(self.path, storage)
         self._closed, self._owner = False, None
+        self._mutex = threading.RLock()
         self._proofs_path = self.path.with_name(self.path.name + '.adaptive-proofs.json')
         self._resolutions_path = self.path.with_name(self.path.name + '.adaptive-resolutions.json')
         self._key_path = self.path.with_name(self.path.name + '.adaptive-simulation-key')
+        self._transitions_path = self.path.with_name(self.path.name + '.adaptive-source-transitions.json')
+        self._source_marker_path = self.path.with_name(self.path.name + '.adaptive-connected-source.json')
+        self._connected_source_bound = False
         try:
             self._owner = SingleWriterExchange(self.path, root=self.root, manifest=self.manifest,
                                                opening=opening, working=working, contract=contract,
@@ -300,9 +354,22 @@ class Account:
             self._key = self._load_key()
             self._proofs = self._load_proofs()
             self._resolutions = self._load_resolutions()
+            self._source_transitions = self._load_source_transitions()
+            if self._source_marker_path.exists():
+                info = self._source_marker_path.lstat()
+                if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or info.st_size > 1_000_000:
+                    raise ValueError('BOUNDED_REGULAR_CONNECTED_SOURCE_MARKER_REQUIRED')
+                marker = strict_json(self._source_marker_path.read_bytes())
+                if not isinstance(marker, dict) or set(marker) != {'body', 'signature'} or not isinstance(marker['body'], dict):
+                    raise ValueError('EXACT_CONNECTED_SOURCE_MARKER_REQUIRED')
+                expected = hmac.new(self._key, b'connected-source-required\n' + canonical(marker['body']), hashlib.sha256).hexdigest()
+                if marker['body'].get('account_path') != str(self.path) or not hmac.compare_digest(expected, str(marker.get('signature'))):
+                    raise ValueError('CONNECTED_SOURCE_MARKER_SIGNATURE_MISMATCH')
+                self._connected_source_bound = True
             self._verify_reservations()
             if any(e['op'] == 'finish' and _requires_resolution(self._proofs.get(e['args']['id'], {}).get('body', {}).get('plan', {})) for e in self._owner.export()['actions']):
-                audit_account(self.export(), root=self.root, manifest=self.manifest)
+                audit_account(self.export(), root=self.root, manifest=self.manifest,
+                              pending_source_transition=self._pending_source_transition())
         except BaseException:
             self.close()
             raise
@@ -311,6 +378,65 @@ class Account:
         if self._closed or self._owner is None:
             raise ValueError('ADAPTIVE_ACCOUNT_CLOSED')
         self._owner.lease.assert_owner()
+
+    def _pending_source_transition(self):
+        ticket = self._initial_source_upgrade
+        if ticket is None:
+            path = self.path.with_name(self.path.name + '.connected-journal.json')
+            if not path.exists():
+                return None
+            if path.is_symlink() or not path.is_file() or path.stat().st_size > 64_000_000:
+                raise ValueError('REGULAR_BOUNDED_SOURCE_PREFLIGHT_JOURNAL_REQUIRED')
+            envelope = strict_json(path.read_bytes()); body = envelope['body']
+            signature = hmac.new(self._key, b'connected014-journal\n' + canonical(body), hashlib.sha256).hexdigest()
+            if not hmac.compare_digest(str(envelope.get('signature')), signature):
+                raise ValueError('SOURCE_PREFLIGHT_JOURNAL_SIGNATURE_MISMATCH')
+            history = body.get('source_history', [])
+            if not history:
+                return None
+            ticket = history[-1]
+        from connected_enterprise.upgrades import validate_ticket
+        body = validate_ticket(ticket, key=self._key, root=self.root, path=self.path)
+        tape = self._owner.export()
+        if any(e['op'] == 'source_transition' and e['args']['id'] == body['id'] for e in tape['actions']):
+            return None
+        if body['prior_record']['ledger'] != tape:
+            raise ValueError('STALE_PENDING_SOURCE_TRANSITION_PREFLIGHT')
+        return ticket
+
+    def _assert_source_write(self):
+        journal_path = self.path.with_name(self.path.name + '.connected-journal.json')
+        if not journal_path.exists():
+            if self._connected_source_bound or self._source_transitions:
+                raise ValueError('EXISTING_CONNECTED_SOURCE_AUTHORITY_MISSING')
+            return
+        if journal_path.is_symlink() or not journal_path.is_file():
+            raise ValueError('REGULAR_CONNECTED_SOURCE_AUTHORITY_REQUIRED')
+        envelope = strict_json(journal_path.read_bytes())
+        body = envelope['body']
+        expected = hmac.new(self._key, b'connected014-journal\n' + canonical(body), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(str(envelope.get('signature')), expected):
+            raise ValueError('CONNECTED_SOURCE_AUTHORITY_SIGNATURE_MISMATCH')
+        from connected_enterprise.finance import source_identity
+        if body['source'] != source_identity(self.root):
+            raise ValueError('EXPLICIT_AUTHENTICATED_SOURCE_UPGRADE_REQUIRED')
+        history = body.get('source_history', [])
+        if history:
+            ident = history[-1]['body']['id']
+            if not any(e['op'] == 'source_transition' and e['args']['id'] == ident for e in self._owner.export()['actions']):
+                raise ValueError('PENDING_SOURCE_TRANSITION_MUST_RECOVER_FIRST')
+
+    def bind_connected_source(self, envelope):
+        self._assert_owner()
+        expected = hmac.new(self._key, b'connected014-journal\n' + canonical(envelope['body']), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(expected, str(envelope.get('signature'))):
+            raise ValueError('CONNECTED_SOURCE_AUTHORITY_SIGNATURE_MISMATCH')
+        if not self._connected_source_bound:
+            body = {'schema': 'agi-alpha/connected-source-required/v1', 'account_path': str(self.path),
+                    'initial_source': envelope['body']['source']}
+            signature = hmac.new(self._key, b'connected-source-required\n' + canonical(body), hashlib.sha256).hexdigest()
+            atomic_bytes(self._source_marker_path, canonical({'body': body, 'signature': signature}) + b'\n')
+            self._connected_source_bound = True
 
     def _load_key(self):
         if self._key_path.exists():
@@ -361,8 +487,28 @@ class Account:
             raise ValueError('OBLIGATION_RESOLUTION_MAP_REQUIRED')
         return records
 
+    def _load_source_transitions(self):
+        if not self._transitions_path.exists():
+            return {}
+        if self._transitions_path.is_symlink() or not self._transitions_path.is_file():
+            raise ValueError('REGULAR_SOURCE_AUTHORIZATION_RECORD_REQUIRED')
+        records = strict_json(self._transitions_path.read_bytes())
+        if not isinstance(records, dict) or len(canonical(records)) > 32_000_000:
+            raise ValueError('BOUNDED_SOURCE_AUTHORIZATION_MAP_REQUIRED')
+        from connected_enterprise.upgrades import validate_ticket
+        for ident, ticket in records.items():
+            body = validate_ticket(ticket, key=self._key, path=self.path)
+            if body['id'] != ident:
+                raise ValueError('SOURCE_AUTHORIZATION_ID_CHANGED')
+        return records
+
     def _verify_reservations(self):
         for event in self._owner.export()['actions']:
+            if event['op'] == 'source_transition':
+                from connected_enterprise.upgrades import transition_args
+                ticket = self._source_transitions.get(event['args']['id'])
+                if ticket is None or transition_args(ticket) != event['args'] or ticket['body']['day'] != event['day']:
+                    raise ValueError('NATIVE_SOURCE_TRANSITION_AUTHORIZATION_MISSING')
             if event['op'] == 'cancel_investment':
                 raise ValueError('UNRECONCILED_INVESTMENT_CANCELLATION_RETIRED')
             if event['op'] == 'finish':
@@ -379,6 +525,7 @@ class Account:
             if body['amount_microUSD'] != event['args']['amount'] or body['expected_net_microUSD'] != event['args']['expected_net_value']:
                 raise ValueError('NATIVE_RESERVATION_AMOUNT_PROOF_MISMATCH')
 
+    @_account_locked
     def snapshot(self):
         self._assert_owner()
         tape = self._owner.export()
@@ -398,8 +545,12 @@ class Account:
             return event
         return None
 
+    @_account_locked
     def execute(self, op, args, day):
         self._assert_owner()
+        self._assert_source_write()
+        if op == 'source_transition':
+            raise ValueError('AUTHENTICATED_SOURCE_TRANSITION_ENTRYPOINT_REQUIRED')
         if op == 'cancel_investment':
             raise ValueError('UNRECONCILED_INVESTMENT_CANCELLATION_RETIRED')
         if op == 'reserve':
@@ -411,8 +562,10 @@ class Account:
             self._owner.execute(op, args, day)
         return self.snapshot()
 
+    @_account_locked
     def reserve(self, plan, *, expected_state_digest, authorized_digest, amount, expected_net, day):
         self._assert_owner()
+        self._assert_source_write()
         expected = action_digest(plan, expected_state_digest, amount, expected_net)
         if not _hex(authorized_digest) or not hmac.compare_digest(expected, authorized_digest):
             raise ValueError('AUTHORIZED_ACTION_DIGEST_MISMATCH')
@@ -463,8 +616,10 @@ class Account:
             raise
         return self.snapshot()
 
+    @_account_locked
     def finish(self, ident, amount, artifact_sha256, day, *, obligation_receipt=None):
         self._assert_owner()
+        self._assert_source_write()
         proof = self._proofs.get(ident)
         if proof and _requires_resolution(proof['body']['plan']):
             if obligation_receipt is None:
@@ -485,6 +640,41 @@ class Account:
     def cost(self, ident, amount, day):
         return self.execute('cost', {'id': ident, 'amount': amount}, day)
 
+    @_account_locked
+    def source_transition(self, ticket):
+        self._assert_owner()
+        from connected_enterprise.upgrades import validate_ticket, transition_args, verify_historical
+        body = validate_ticket(ticket, key=self._key, root=self.root, path=self.path)
+        args = transition_args(ticket)
+        prior = self._prior('source_transition', args, body['day'])
+        if prior is not None:
+            if self._source_transitions.get(body['id']) != ticket:
+                raise ValueError('SOURCE_TRANSITION_RETRY_CHANGED')
+            return self.snapshot()
+        tape = self._owner.export()
+        committed = [e for e in tape['actions'] if e['op'] == 'source_transition']
+        if body['counter'] != len(committed) + 1 or tape != body['prior_record']['ledger']:
+            raise ValueError('STALE_SOURCE_TRANSITION_OR_FORK')
+        if self.snapshot()['state_digest'] != body['expected_state_digest']:
+            raise ValueError('STALE_SOURCE_TRANSITION_CHECKPOINT')
+        if committed:
+            latest = self._source_transitions[committed[-1]['args']['id']]['body']
+            previous = {t['body']['from_source']['sha256'] for t in self._source_transitions.values()}
+            if body['from_source'] != latest['to_source'] or body['to_source']['sha256'] in previous:
+                raise ValueError('SOURCE_TRANSITION_DOWNGRADE_OR_FORK')
+        original = body['prior_envelope']
+        signed = hmac.new(self._key, b'connected014-journal\n' + canonical(original['body']), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(signed, str(original['signature'])):
+            raise ValueError('ORIGINAL_SOURCE_ENVELOPE_SIGNATURE_MISMATCH')
+        verify_historical(ticket, self.manifest, root=self.root)
+        if body['id'] in self._source_transitions and self._source_transitions[body['id']] != ticket:
+            raise ValueError('SOURCE_TRANSITION_AUTHORIZATION_COLLISION')
+        self._source_transitions[body['id']] = copy.deepcopy(ticket)
+        atomic_bytes(self._transitions_path, canonical(self._source_transitions) + b'\n')
+        self._owner.execute('source_transition', args, body['day'])
+        return self.snapshot()
+
+    @_account_locked
     def export(self):
         self._assert_owner()
         self._verify_reservations()
@@ -492,6 +682,7 @@ class Account:
                 'ledger': self._owner.export(), 'snapshot': self.snapshot(),
                 'action_proofs': copy.deepcopy(self._proofs),
                 'obligation_resolutions': copy.deepcopy(self._resolutions),
+                **({'source_transitions': copy.deepcopy(self._source_transitions)} if self._source_transitions else {}),
                 'signature_verification': 'Verified with private local simulation key by owning process; exported proof is not externally certified.',
                 'storage_scope': 'Operator-owned local POSIX filesystem only; distributed, NFS, aliases and hostile-host guarantees unsupported.'}
 

@@ -50,7 +50,7 @@ def _write(path,value):atomic_bytes(Path(path),canonical(value)+b'\n')
 
 def _schedule(state,when,kind,ident,**fields):
     state['queue'].append({'id':ident,'time':when,'kind':kind,**fields})
-    state['queue'].sort(key=lambda e:(e['time'],e['id']))
+    state['queue'].sort(key=lambda e:(e['time'],{'claim':-3,'resolve_claim':-2,'recover_claim':-1,'mature':0}.get(e['kind'],1),e['id']))
 
 def _event(state,when,kind,ident,**fields):
     state['events'].append({'id':ident,'time':when,'kind':kind,**fields})
@@ -87,7 +87,8 @@ def _offer(jobs,state,buyer,cfg):
     price=max(5*MICRO,int(anchor*ratio))
     if state['arm']=='competitive_growth':
         from .pricing import price as competitive_price
-        base=cfg['production_cost']+cfg['supplier_unit_cost']+cfg['support_cost']+cfg['onboarding_cost']+cfg['qualification_cost']+cfg['exposure_cost']
+        premium=state.get('prospective_policy',{}).get('premium_microUSD',0)
+        base=cfg['production_cost']+cfg['supplier_unit_cost']+cfg['support_cost']+cfg['onboarding_cost']+cfg['qualification_cost']+cfg['exposure_cost']+premium
         quote=competitive_price(anchor,price,int(anchor*state['market']['public_rival_bps']/10000),base,cfg['payment_bps'],cfg['payment_fixed'],[bool(d['chosen']) for d in history])
         if quote is not None:price=quote['price']
         offer['provenance']+=' Executed ordinary public competitive pricing with a complete direct-resource floor; no private buyer value or guaranteed sale.'
@@ -159,6 +160,7 @@ def _prepare_plan(state,account,jobs):
         elif len(prepared['orders'])>=slots:blocked='capacity_decline'
         else:
             entry,offer,anchor=selected;price=offer['price_microUSD'];fee=(price*cfg['payment_bps']+9999)//10000+cfg['payment_fixed'];onboard=0 if b['onboarded'] else cfg['onboarding_cost'];cost=cfg['production_cost']+cfg['support_cost']+cfg['supplier_unit_cost']+fee+onboard
+            if state.get('prospective_policy',{}).get('mode')=='prospective':cost+=state['prospective_policy']['premium_microUSD']
             if price-cost<=0 or liquidity<cost+price+MICRO:blocked='liquidity_decline'
         if blocked:
             prepared['declines'].append({'kind':blocked,'customer_id':b['id'],'time':t})
@@ -172,10 +174,22 @@ def _prepare_plan(state,account,jobs):
             'complete_cost':cost,'fee':fee,'onboarding':onboard,'production_cost':cfg['production_cost']+cfg['supplier_unit_cost'],'support_cost':cfg['support_cost'],'service_receipt':None,
             'funding_receipt':None,'acquisition_source_plan_id':b['acquisition_source_plan_id'],'exposure_time':b['exposure_time'],
             'capacity_source_plan_id':usable_capacity[len(prepared['orders'])-cfg['initial_slots']]['plan_id'] if len(prepared['orders'])>=cfg['initial_slots'] else None}
+        if state.get('prospective_policy',{}).get('mode')=='prospective':
+            from .migration import terms_for
+            collection=production_time+cfg['acceptance_hours']+cfg['clearing_hours']
+            terms=terms_for(ident,price,collection,state['prospective_policy'],fee,deadline=t+cfg['payment_deadline_hours'])
+            order.update(terms=terms,terms_id='terms-'+ident,terms_sha256=digest(terms),premium=terms['premium_microUSD'],resource_cost=cost-fee-terms['premium_microUSD'])
         prepared['orders'].append(order);simulated['used_jobs'].append(order['job_id']);liquidity-=cost+price
     return prepared
 
 def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events=None,failpoint=None):
+    from enterprise.runner import RunLock
+    output=Path(output).resolve();output.mkdir(parents=True,exist_ok=True)
+    with RunLock(output):
+        return _run_world(root,manifest,config,seed,arm,output,source=source,stop_after_events=stop_after_events,failpoint=failpoint)
+
+
+def _run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events=None,failpoint=None):
     cfg=validate_config(copy.deepcopy(config));root=Path(root).resolve();output=Path(output).resolve();output.mkdir(parents=True,exist_ok=True)
     if arm not in {'baseline','channel','growth','competitive_growth'}:raise ValueError('REGISTERED_COMMERCIAL_OPTION_ARM_REQUIRED')
     if source is None:
@@ -183,13 +197,18 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
         source=identity(root)
     from .verify import check_source
     check_source(root,source)
-    binding=digest({'config':cfg,'seed':seed,'arm':arm,'source':source,'manifest':manifest})
     path=output/'STATE.json'
+    if (output/'MIGRATION_INTENT.json').exists():
+        from .migration import recover_upgrade
+        recover_upgrade(root,manifest,output)
     envelope=json.loads(path.read_text()) if path.exists() else None
+    origin=envelope['body']['state'].get('origin_source',source) if envelope else source
+    binding=digest({'config':cfg,'seed':seed,'arm':arm,'source':origin,'manifest':manifest})
     account=JournalAccount(root,manifest,output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract='connected014/'+binding)
     try:
+        envelope=json.loads(path.read_text()) if path.exists() else None
         state=account.verify_checkpoint(envelope) if envelope is not None else _initial(cfg,seed,arm,source)
-        if digest({'config':state['config'],'seed':state['seed'],'arm':state['arm'],'source':state['source'],'manifest':manifest})!=binding:raise ValueError('LIVE_STATE_BINDING_CHANGED')
+        if digest({'config':state['config'],'seed':state['seed'],'arm':state['arm'],'source':state.get('origin_source',state['source']),'manifest':manifest})!=binding or state['source']!=source:raise ValueError('LIVE_STATE_BINDING_CHANGED')
     except BaseException:
         account.close();raise
     jobs=load_jobs(root,manifest);cpu=time.process_time();wall=time.monotonic();performed=0
@@ -204,7 +223,8 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
         while state['queue']:
             if stop_after_events is not None and performed>=stop_after_events:break
             if state['current'] is None:
-                state['current']=_prepare_plan(state,account,jobs);_write(path,account.seal_checkpoint(state))
+                account.advance_financial(state['queue'][0]['time'])
+                state['current']=_prepare_plan(state,account,jobs);account.save_checkpoint(path,state)
             p=state['current'];ev=p['event'];t=ev['time'];day=t//24;kind=ev['kind'];byid={b['id']:b for b in state['buyers']}
             if kind=='startup':
                 cost('complete-development-setup',cfg['setup_cost'],t,'development_integration_qualification_and_failed_search')
@@ -238,10 +258,12 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 state['channel_state']=book.export()
                 for proposed in p['orders']:
                     o=copy.deepcopy(proposed);ident=o['id'];b=byid[o['customer_id']]
-                    o['funding_receipt']=cost(ident+'-resources',o['complete_cost'],t,'production_contract',{'job_id':o['job_id'],'offer':o['offer'],'fee':o['fee'],'onboarding':o['onboarding'],'support':o['support_cost'],'resource_supplier':'SIMULATED_PREPAID_COMPLETE_RESOURCE_CONTRACT'},expected_net=o['price']-o['complete_cost'])
+                    if 'terms' in o:account.execute('register_terms',{'id':o['terms_id'],'terms':o['terms']},t)
+                    o['funding_receipt']=cost(ident+'-resources',o.get('resource_cost',o['complete_cost']),t,'production_contract',{'job_id':o['job_id'],'offer':o['offer'],'fee':o['fee'],'onboarding':o['onboarding'],'support':o['support_cost'],'resource_supplier':'SIMULATED_PREPAID_COMPLETE_RESOURCE_CONTRACT'},expected_net=o['price']-o['complete_cost'])
                     if o['funding_receipt'] is None:raise ValueError('QUALIFIED_PRODUCTION_RESOURCE_CONTRACT_NOT_FUNDED')
                     account.execute('wallet',{'buyer':ident+'-wallet','amount':o['price']},t)
-                    account.execute('offer',{'id':ident,'buyer':ident+'-wallet','price':o['price'],'job_id':o['job_id'],'deadline':t+cfg['payment_deadline_hours']},t)
+                    offered=account.execute('offer',{'id':ident,'buyer':ident+'-wallet','price':o['price'],'job_id':o['job_id'],'deadline':t+cfg['payment_deadline_hours'],**({'terms_id':o['terms_id']} if 'terms' in o else {})},t)
+                    if 'terms' in o and o['fee']+o['premium'] and not any(c['id']==ident+'-prospective-charges' for c in state['costs']):state['costs'].append({'id':ident+'-prospective-charges','amount':o['fee']+o['premium'],'category':'prospective_contract_charges','time':t,'funding_receipt':offered})
                     for action in ['consent','fund']:account.execute('event',{'id':ident,'event_id':ident+'-'+action,'action':action},t)
                     b['pending_commitments'][ident]=o['price'];b['remaining_budget']-=o['price'];b['onboarded']=True;state['used_jobs'].append(o['job_id']);state['orders'].append(o)
                     _event(state,t,'QUALIFIED_ORDER',ident+'-qualified',order_id=ident,customer_id=b['id']);_schedule(state,o['production_time'],'produce',ident+'-produce',order_id=ident)
@@ -276,13 +298,22 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 _event(state,t,'COLLECTION' if not ev['refund'] else 'REFUND',ev['id'],order_id=o['id'])
                 summary=cleared['summary'];taxable=max(0,summary['profit']+state['tax_paid']);tax=max(0,taxable*cfg['profit_tax_bps']//10000-state['tax_paid'])
                 if tax:cost('tax-'+o['id'],tax,t,'tax_provision');state['tax_paid']+=tax
+                if not ev['refund'] and 'terms' in o:_schedule(state,o['terms']['maturity_day']+1,'mature',o['id']+'-mature',order_id=o['id'])
+            elif kind=='mature':
+                o=next(o for o in state['orders'] if o['id']==ev['order_id'])
+                before=account.snapshot()['summary'];after=account.advance_financial(t)['summary']
+                o['maturity_time']=t
+                _event(state,t,'PROTECTION_MATURITY',ev['id'],order_id=o['id'])
+                if before['profit']!=after['profit'] or before['cash']!=after['cash']:raise ValueError('MATURITY_CANNOT_CREATE_CASH_OR_PROFIT')
             else:raise ValueError('UNKNOWN_OPERATING_EVENT')
             if failpoint:failpoint('after_event_before_checkpoint',state,account)
-            state['queue'].pop(0);state['last_time']=t;state['processed_events']+=1;state['current']=None;_write(path,account.seal_checkpoint(state));performed+=1
+            state['queue'].pop(0);state['last_time']=t;state['processed_events']+=1;state['current']=None;account.save_checkpoint(path,state);performed+=1
         audit=account.audit();owned=account.export();summary=audit['summary'];settled=[o for o in state['orders'] if o['outcome']=='SETTLED'];customers={o['customer_id'] for o in settled};earned=[o for o in settled if o['funding_receipt']['funding']=='EARNED' and o['price']>o['complete_cost']]
         for b in state['buyers']:
             if b['initial_budget']!=b['remaining_budget']+b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values()) or b['remaining_budget']<0:raise ValueError('SHARED_BUYER_BUDGET_CONSERVATION')
         result={k:copy.deepcopy(state[k]) for k in ['config','seed','arm','source','orders','buyers','investments','costs','events','decisions','market','stop_reasons']}
+        result.update({k:copy.deepcopy(state[k]) for k in ['origin_source','operating_upgrades','prospective_policy'] if k in state})
+        result['operating_state']=copy.deepcopy(state)
         result.update(schema='agi-alpha/connected014-result/v1',scope='CONDITIONAL_SIMULATION',channels=state['channel_state'],owned_account=owned,summary=summary,complete=not state['queue'],processed_events=state['processed_events'],
             accepted_jobs=sum(o['acceptance_time'] is not None for o in state['orders']),paid_jobs=len(settled),customers=len(customers),repeat_customers=sum(sum(o['customer_id']==c for o in settled)>1 for c in customers),profitable_earned_continuations=len(earned),
             conditional_simulated_commercial_success=len(settled)>=12 and len(customers)>=3 and sum(sum(o['customer_id']==c for o in settled)>1 for c in customers)>=2 and len(earned)>=2 and summary['profit']>0 and summary['unrestrictedEarned']>0 and summary['payables']==0 and not summary['investmentStopped'] and summary['cash']>=summary['custodyReserve']+summary['tailReserve']+summary['workingCapital'],
@@ -291,3 +322,8 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
         _write(output/'RESULT.json',result)
         return result
     finally:account.close()
+
+
+def run_native_capital(output, *, max_events=None):
+    from .capital import operate
+    return operate(output, max_events=max_events)

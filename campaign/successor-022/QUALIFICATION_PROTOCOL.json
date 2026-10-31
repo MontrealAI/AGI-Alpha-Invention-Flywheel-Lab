@@ -1,0 +1,38 @@
+{
+  "schema": "agi-alpha/successor022-qualification-protocol/v1",
+  "scope": "LOCAL_ENGINEERING_AND_CONDITIONAL_SYNTHETIC_COMMERCE_NOT_MARKET_CONFIRMATION",
+  "legacy_commit": "9facd934d9ae763691e8a51052a67793cac5b48e",
+  "world_seed": 2610312231,
+  "service_cohort_seed": 2610312231,
+  "exposed_development": [
+    2610312201,
+    2610312202,
+    2610312203
+  ],
+  "arms": [
+    "prospective",
+    "permanent_control"
+  ],
+  "config": "examples/connected022/continuing-world.json",
+  "policies": {
+    "prospective": "examples/connected022/prospective-policy.json",
+    "permanent_control": "examples/connected022/permanent-control-policy.json"
+  },
+  "planning_horizon_hours": 504,
+  "maximum_registered_drain_hour": 649,
+  "quantum_event_limit": 18,
+  "legacy_coverage_stop": "First authenticated prepared checkpoint with nonempty produce, accept and clear queues and an extant permanent tail; at most250 old events within the finite21-day planning horizon. This is engineering coverage selection, not economic confirmation selection.",
+  "acceptance": [
+    "Same account/key and exact prior native prefix",
+    "Queued/current work and provenance retained",
+    "Prospective terms only for new quotes",
+    "Upgrade invoice, native premiums/fees, prepaid resources, setup, maintenance and taxes reconciled",
+    "Permanent tails retained and exact eligible releases are not income",
+    "Canonical independent operating and finance audit",
+    "Resume preserves complete ledger",
+    "At least two profitable earned-funded settled successors after earlier maturity in the stated prospective positive region"
+  ],
+  "comparison_scope": "Matched term-regime package comparison; same source, seed, inputs, buyer policy, starting capital and upgrade invoice. Prospective premium differs by explicit cost. Buyer response to legal terms is uncalibrated; no market-superiority or isolated financing claim. Separate inherited12-arrival recycling experiment isolates its receipt-financing ablation under fixed terms.",
+  "resource_authority": "Uses only parent approved local allocation. Script grants no allocation, CI, real spending, external commerce, credentials or automatic renewal.",
+  "stopping": "Finite registered horizon plus drain; stop on unsafe integrity or resource bound, preserve all outcomes. No favorable-seed substitution."
+}
