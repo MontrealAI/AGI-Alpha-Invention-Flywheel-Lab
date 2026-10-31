@@ -31,7 +31,7 @@ def default_config():
         'limits':['Synthetic non-personal work only; no actual customers or payments.','Finite authored buyer/channel/supplier contracts, no empirical conversion calibration.','Permanent native principal/fee protection tails remain; seed may back reserves.','No paid inference: capable-frontier AI economics represented by disclosed envelopes; actual executors are deterministic.','Finite frozen service inventory is an edition resource, not a universal market ceiling.']}
 
 def validate_config(cfg):
-    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','opportunity_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
     for key in ['horizon_days','customer_pool','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
     for key in ['nonpayment_bps','arrival_bps','retention_bps','payment_bps','profit_tax_bps']:
@@ -55,6 +55,10 @@ def validate_config(cfg):
         validate_allocation_policy(cfg.get('strategic_allocation_policy'))
         if cfg['maintenance_daily']<=0:raise ValueError('POSITIVE_PREPAID_STRATEGIC_PLANNING_CONTRACT_REQUIRED')
     elif 'strategic_allocation_policy' in cfg:raise ValueError('JOINT_STRATEGIC_POLICY_REQUIRED')
+    if 'opportunity_policy' in cfg:
+        from .opportunity_search040 import validate_policy
+        validate_policy(cfg['opportunity_policy'])
+        if 'strategic_policy' in cfg:raise ValueError('OPPORTUNITY040_AND_JOINT_POLICY_MUTUALLY_EXCLUSIVE')
     contracts=validate_contracts(cfg['channels'])
     if 'channel_menu_policy' in cfg:
         from .channel_menu import validate_policy
@@ -153,6 +157,16 @@ def _prepare_plan(state,account,jobs):
     live_capacity=sum(i['kind']=='capacity' and t<i['expiry_time'] for i in state['investments'])
     if state['arm'] in {'growth','competitive_growth'} and profitable and lost_capacity>=2 and slots<cfg['maximum_slots'] and live_capacity<cfg['maximum_slots']-cfg['initial_slots'] and remaining>7 and ('strategic_policy' in cfg or earned>cfg['capacity_price']+channel_invoice+operating_envelope+2*MICRO):
         capacity_forecast=sum(margin_history)/len(margin_history)*min(remaining,5)*.5;prepared['capacity_purchase']=capacity_forecast>cfg['capacity_price'];prepared['capacity_predicted_net']=int(capacity_forecast-cfg['capacity_price'])
+    if 'opportunity_policy' in cfg and state['arm']=='growth':
+        from .opportunity_search040 import search
+        selected=search(state,prepared,jobs,candidates,slots,operating_envelope,_offer)
+        prepared['opportunity_search']=selected
+        prepared['channel_purchase']=selected['selected']=='partner_access'
+        prepared['capacity_purchase']=selected['selected']=='add_capacity'
+        if prepared['channel_purchase']:prepared['channel_predicted_net']=next(a['net_microUSD'] for a in selected['alternatives'] if a['id']=='partner_access')
+        if prepared['capacity_purchase']:prepared['capacity_predicted_net']=next(a['net_microUSD'] for a in selected['alternatives'] if a['id']=='add_capacity')
+        ranking={x['customer_id']:i for i,x in enumerate(selected['direct_outcomes'])}
+        candidates.sort(key=lambda b:(ranking.get(b['id'],len(ranking)),b['id']))
     liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-cfg['capacity_price']*bool(prepared['capacity_purchase'])
     rival_capacity=2;rival_bps=state['market']['public_rival_bps'];rival_cash=state['market']['rival_cash']
     def buyer_choice(b,service,anchor,price=None):
@@ -302,6 +316,10 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 cost('outreach-'+str(day),cfg['exposure_cost']*p['outreach_units'],t,'outreach_including_failed_and_unused_slots')
                 attempts=[d for d in p['declines'] if d['kind']=='offer'];qualified_candidates=(len(p['joint_action']['allocation']['deliveries']) if p.get('joint_action') else len(attempts));cost('qualification-'+str(day),cfg['qualification_cost']*qualified_candidates,t,'qualification_including_lost_offers')
                 state['decisions'].extend(p['declines'])
+                if p.get('opportunity_search'):
+                    state['decisions'].append(copy.deepcopy(p['opportunity_search']))
+                    _event(state,t,'OPPORTUNITY_SELECTION','opportunity-'+str(day),decision_sha256=p['opportunity_search']['id'],
+                           selected=p['opportunity_search']['selected'],target_service_id=p['opportunity_search']['target_service_id'])
                 for d in p['declines']:
                     if d.get('outside_spend'):
                         b=byid[d['customer_id']];b['remaining_budget']-=d['outside_spend'];b['outside_spend']+=d['outside_spend'];b['next_need_time']=t+7*24

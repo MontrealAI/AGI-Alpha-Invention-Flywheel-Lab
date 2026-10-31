@@ -1,0 +1,66 @@
+name: "AGI ALPHA: native opportunity and execution-means braid 040"
+on:
+  pull_request:
+    paths:
+      - 'connected_enterprise/engine.py'
+      - 'connected_enterprise/verify.py'
+      - 'connected_enterprise/opportunity_search040.py'
+      - 'tests/test_opportunity_search040.py'
+      - 'scripts/run_opportunity040.py'
+      - 'campaign/opportunity-040/**'
+      - '.github/workflows/opportunity-native040.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: opportunity-native040-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  native-connected-opportunity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: "Install the pre-existing native operating dependencies"
+        run: "python -m pip install --only-binary=:all: -r requirements-commercial010.txt"
+      - name: "Mechanism admission and adversarial evidence tests"
+        run: python -m unittest discover -s tests -p 'test_opportunity_search040.py' -v
+      - name: "Native event, journal and independent audit regressions"
+        run: |
+          python -m unittest discover -s tests -p 'test_connected_engine.py' -q
+          python -m unittest discover -s tests -p 'test_connected_finance.py' -q
+      - name: "Execute fixed source-frozen opportunity discovery, earned investment, delivery and native audit"
+        run: python scripts/run_opportunity040.py --output "$RUNNER_TEMP/opportunity040"
+      - name: "Public summary contract (no copied private accounts)"
+        run: |
+          python - <<'PY'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'opportunity040'
+          files=list((root/'public').iterdir())
+          assert [x.name for x in files]==['SUMMARY.json']
+          p=files[0]
+          assert p.stat().st_size<120000
+          result=json.loads(p.read_bytes())
+          assert result['native_audit_accepted'] is True
+          assert result['starting_capital_per_independent_arm_microUSD']==100_000_000_000
+          assert result['actual_collections_microUSD']==0
+          assert result['actual_profit_microUSD'] is None
+          assert result['external_funding_microUSD']==0
+          for arm in ['baseline','growth']:
+              assert result['worlds'][arm]['expenses_microUSD']>=0
+              assert result['worlds'][arm]['payables_microUSD']==0
+          PY
+      - name: "Upload compact result only; never private account state, ZIPs or keys"
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: opportunity040-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/opportunity040/public/SUMMARY.json
+          retention-days: 7
+          if-no-files-found: error
