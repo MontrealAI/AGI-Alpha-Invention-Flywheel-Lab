@@ -14,19 +14,20 @@ Three cases remain distinct: no sale (activation costs are lost), delivery witho
 
 ## Run the complete proof-to-partner vertical slice
 
-From the repository root in Python 3.12:
+From the repository root in Python 3.12. On a Mac, use a new folder under your home directory (the system `/tmp` may be a symlink and is intentionally refused):
 
 ```bash
+BASE="$(mktemp -d "$HOME/agi-alpha-proof-XXXXXX")"
 python3 -m commercial.portable_offer build \
   --input examples/portable_offer/sample_order.json \
-  --output /tmp/alpha-proof-unique \
+  --output $BASE/proof \
   --price-cents 59900
 
-python3 -m commercial.portable_offer verify --path /tmp/alpha-proof-unique
+python3 -m commercial.portable_offer verify --path $BASE/proof
 
 python3 -m commercial.partner_offer build \
-  --proof-dir /tmp/alpha-proof-unique \
-  --output /tmp/alpha-partner-unique \
+  --proof-dir $BASE/proof \
+  --output $BASE/partner \
   --distributor-cost 12000 \
   --distributor-min-gain 5000 \
   --provider-complete-cost 10000 \
@@ -37,13 +38,14 @@ python3 -m commercial.partner_offer build \
   --opening-cash 100000
 ```
 
-The returned `proposal_sha256` is the shareable contract-content pin. Ask a second process to verify *that exact pin*:
+The returned `proposal_sha256` is the shareable contract-content pin. Capture that digest independently and have a second process verify *that exact pin*:
 
 ```bash
+PIN="$(python3 -c 'import hashlib, pathlib, sys; print(hashlib.sha256(pathlib.Path(sys.argv[1]).read_bytes()).hexdigest())' "$BASE/partner/PARTNER_OFFER.json")"
 python3 -m commercial.partner_offer verify \
-  --proof-dir /tmp/alpha-proof-unique \
-  --package /tmp/alpha-partner-unique \
-  --expected-sha256 <the-exact-sha256-from-build>
+  --proof-dir $BASE/proof \
+  --package $BASE/partner \
+  --expected-sha256 "$PIN"
 ```
 
 The illustrative $599 sale would leave a $170 minimum declared distributor share, a $50 net distributor surplus over its stated costs, and a $319 provider contribution after its declared $100 delivery cost and $10 activation expense. Both are **hypothetical**; $319 is not earned, collected or booked. No-bid remains the correct result if the partner or provider cannot participate.
