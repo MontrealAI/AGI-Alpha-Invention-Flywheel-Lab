@@ -6,6 +6,7 @@ does not accept a producer's commercial verdict as evidence of useful delivery.
 from __future__ import annotations
 
 import copy
+from bisect import bisect_right
 import hashlib
 import json
 from pathlib import Path
@@ -85,9 +86,12 @@ def check_budgets(buyers, orders):
             raise ValueError('BUYER_PENDING_COMMITMENTS_REQUIRED')
         if spent != settled.get(customer, 0) or commitments != pending.get(customer, {}):
             raise ValueError('BUYER_CROSS_SERVICE_COMMITMENT_OR_SPEND_MISMATCH')
-        if initial != remaining + spent + outside + sum(commitments.values()):
+        if initial + _integer(row.get('external_income_total', 0), 'EXTERNAL_BUYER_INCOME') != remaining + spent + outside + sum(commitments.values()):
             raise ValueError('BUYER_BUDGET_CONSERVATION_FAILURE')
-    return {'buyers_checked': len(indexed), 'buyer_initial_budget': sum(row['initial_budget'] for row in buyers)}
+    receipt = {'buyers_checked': len(indexed), 'buyer_initial_budget': sum(row['initial_budget'] for row in buyers)}
+    if any('external_income_total' in row for row in buyers):
+        receipt['external_buyer_income_microUSD'] = sum(row['external_income_total'] for row in buyers)
+    return receipt
 
 
 def _check_buyer_origins(config, seed, buyers):
@@ -104,12 +108,56 @@ def _check_buyer_origins(config, seed, buyers):
             raise ValueError('FROZEN_INITIAL_BUYER_BUDGET_CHANGED')
 
 
+def _check_external_buyer_income(result):
+    """Independently rederive every outside-income event; never credit the enterprise."""
+    cfg, seed = result['config'], result['seed']
+    buyers = result['buyers']
+    actual = [event for event in result['events'] if event['kind'] == 'EXTERNAL_BUYER_INCOME']
+    policy = cfg.get('buyer_income_policy')
+    if policy is None:
+        if actual or any('external_income_total' in b for b in buyers):
+            raise ValueError('UNREGISTERED_EXTERNAL_BUYER_INCOME')
+        return {}  # Legacy/default independent audit receipt remains unchanged.
+    from .buyer_income import validate_policy, EVIDENCE
+    validate_policy(policy, cfg['horizon_days'])
+    expected = []
+    totals = {b['id']: 0 for b in buyers}
+    for day in range(policy['first_day'], cfg['horizon_days'], policy['period_days']):
+        for buyer in buyers:
+            if _private_draw(seed, [day, buyer['id']], 'buyer-external-income') < policy['receipt_bps'] / 10000:
+                amount = policy['income_microUSD']
+                expected.append({'id': f"external-income-{day:06d}-{buyer['id']}",
+                                 'time': day * 24, 'kind': 'EXTERNAL_BUYER_INCOME',
+                                 'customer_id': buyer['id'], 'amount_microUSD': amount,
+                                 'evidence_role': EVIDENCE})
+                totals[buyer['id']] += amount
+    if actual != expected or any(b.get('external_income_total') != totals[b['id']] for b in buyers):
+        raise ValueError('EXOGENOUS_BUYER_INCOME_NOT_REDERIVED_FROM_FROZEN_POLICY')
+    # The native queue credits external purchasing power before the same-day
+    # offer process. A timestamp alone cannot prove that causal order.
+    first_business_by_time = {}
+    for position, event in enumerate(result['events']):
+        if event['kind'] in {'EXPOSURE', 'REACTIVATION_RESPONSE', 'INVESTMENT', 'QUALIFIED_ORDER', 'BUSINESS_DECISION'}:
+            first_business_by_time.setdefault(event['time'], position)
+        if event['kind'] == 'EXTERNAL_BUYER_INCOME' and first_business_by_time.get(event['time'], position + 1) < position:
+            raise ValueError('EXOGENOUS_BUYER_INCOME_AFTER_SAME_DAY_BUSINESS_DECISION')
+    return {'external_buyer_income_events_recomputed': len(expected),
+            'external_buyer_income_microUSD_recomputed': sum(totals.values()),
+            'income_is_enterprise_collection': False}
+
+
 def _check_market_decisions(result, tape):
     cfg, seed = result['config'], result['seed']
     buyers = {row['id']: row for row in result['buyers']}
     offers = [row for row in result['decisions'] if row.get('kind') == 'offer']
     choices = [row for row in result['decisions'] if row.get('kind') in {'offer', 'outside_choice'}]
     orders = {(row['customer_id'], row['qualified_time']): row for row in result['orders']}
+    income_by_customer = {}
+    for event in result['events']:
+        if event['kind'] == 'EXTERNAL_BUYER_INCOME':
+            times, cumulative = income_by_customer.setdefault(event['customer_id'], ([], []))
+            times.append(event['time'])
+            cumulative.append(event['amount_microUSD'] + (cumulative[-1] if cumulative else 0))
     if len(orders) != len(result['orders']):
         raise ValueError('MULTIPLE_ORDERS_FOR_ONE_CUSTOMER_NEED')
     refunds = {row['args']['id']: row['day'] for row in tape['actions']
@@ -158,7 +206,10 @@ def _check_market_decisions(result, tape):
             raise ValueError('PRICE_POLICY_USES_UNREGISTERED_INFORMATION_OR_HUMAN_ANCHOR')
         committed = sum(row['price'] for row in result['orders'] if row['customer_id'] == customer
                         and row['qualified_time'] < moment and (row['id'] not in refunds or refunds[row['id']] > moment))
-        available = buyers[customer]['initial_budget'] - outside.get(customer, 0) - committed
+        income_times, income_amounts = income_by_customer.get(customer, ([], []))
+        income_position = bisect_right(income_times, moment)
+        income_earned = income_amounts[income_position-1] if income_position else 0
+        available = buyers[customer]['initial_budget'] + income_earned - outside.get(customer, 0) - committed
         value = int(anchor * (1.1 + _private_draw(seed, customer, 'value')) * cfg['value_bps'] / 10000)
         rival_price = decision['public_rival_price']
         options = [('decline', 0)]
@@ -686,6 +737,7 @@ def audit(root, manifest, result):
         raise ValueError('FULL_ENTERPRISE_COSTS_DO_NOT_RECONCILE')
     budget_receipt = check_budgets(result['buyers'], list(orders.values()))
     _check_buyer_origins(result['config'], result['seed'], result['buyers'])
+    income_receipt = _check_external_buyer_income(result)
     lifecycle_receipt = _check_customer_lifecycle(result)
     from .strategic_audit import audit_decisions
     strategic_receipt=audit_decisions(root,manifest,result,lifecycle_receipt)
@@ -702,7 +754,7 @@ def audit(root, manifest, result):
             'verifier_source_sha256': EXECUTING_VERIFIER_SHA256,
             'verifier_matches_world_source_snapshot': result['source']['files'].get('connected_enterprise/verify.py') == EXECUTING_VERIFIER_SHA256,
             'collections_microUSD': collections, 'complete_costs_microUSD': expense,
-            **source_receipt, **budget_receipt, **investment_receipt, **channel_receipt, **market_receipt,
+            **source_receipt, **budget_receipt, **income_receipt, **investment_receipt, **channel_receipt, **market_receipt,
             **{k:v for k,v in lifecycle_receipt.items() if k!='daily_public_buyers'}, **cost_semantics, **commercial_receipt, **strategic_receipt}
     return json.loads(canonical(receipt))
 
