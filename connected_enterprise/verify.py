@@ -88,8 +88,10 @@ def check_budgets(buyers, orders):
             raise ValueError('BUYER_CROSS_SERVICE_COMMITMENT_OR_SPEND_MISMATCH')
         if initial + _integer(row.get('external_income_total', 0), 'EXTERNAL_BUYER_INCOME') != remaining + spent + outside + sum(commitments.values()):
             raise ValueError('BUYER_BUDGET_CONSERVATION_FAILURE')
-    return {'buyers_checked': len(indexed), 'buyer_initial_budget': sum(row['initial_budget'] for row in buyers),
-            'external_buyer_income_microUSD': sum(row.get('external_income_total', 0) for row in buyers)}
+    receipt = {'buyers_checked': len(indexed), 'buyer_initial_budget': sum(row['initial_budget'] for row in buyers)}
+    if any('external_income_total' in row for row in buyers):
+        receipt['external_buyer_income_microUSD'] = sum(row['external_income_total'] for row in buyers)
+    return receipt
 
 
 def _check_buyer_origins(config, seed, buyers):
@@ -115,7 +117,7 @@ def _check_external_buyer_income(result):
     if policy is None:
         if actual or any('external_income_total' in b for b in buyers):
             raise ValueError('UNREGISTERED_EXTERNAL_BUYER_INCOME')
-        return {'external_buyer_income_events_recomputed': 0}
+        return {}  # Legacy/default independent audit receipt remains unchanged.
     from .buyer_income import validate_policy, EVIDENCE
     validate_policy(policy, cfg['horizon_days'])
     expected = []
