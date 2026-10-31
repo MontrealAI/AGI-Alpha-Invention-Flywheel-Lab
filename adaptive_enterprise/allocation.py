@@ -51,7 +51,8 @@ def _cash(values, scenarios, *, signed):
     return values
 
 
-def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery_slots=None, earned_deduction=0):
+def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery_slots=None, earned_deduction=0, allow_ranking_only=False):
+    if type(allow_ranking_only) is not bool:raise ValueError('EXPLICIT_RANKING_ONLY_SCOPE_REQUIRED')
     if type(earned_deduction) is not int or earned_deduction<0:raise ValueError("NONNEGATIVE_EARNED_OPERATING_DEDUCTION_REQUIRED")
     if max_delivery_slots is not None and (type(max_delivery_slots) is not int or max_delivery_slots<0):raise ValueError("FINITE_DELIVERY_CAPACITY_REQUIRED")
     if type(allow_seed) is not bool:raise ValueError("EXPLICIT_SEED_PERMISSION_REQUIRED")
@@ -100,6 +101,9 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
         if not isinstance(option['execution'], dict):
             raise ValueError('EXECUTION_PAYLOAD_REQUIRED')
         digest(option['execution'])
+        if 'ranking_only_scenario_value' in option['execution']:
+            if not allow_ranking_only:raise ValueError('RANKING_VALUE_NOT_FINANCIAL_AUTHORITY')
+            _cash(option['execution']['ranking_only_scenario_value'],scenarios,signed=True)
         if option['future_net_cash'] is None:
             unknown.append(ident)
         else:
@@ -209,11 +213,13 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
         if downside > riskpolicy['worst_loss_limit']:
             continue
         expected = sum((Fraction(scenarios[s], 10000) * net[s] for s in scenarios), Fraction(0))
-        score = expected - Fraction(riskpolicy['downside_penalty_bps'], 10000) * downside
+        ranking_value=sum((Fraction(scenarios[s],10000)*sum(o['execution'].get('ranking_only_scenario_value',{}).get(s,0) for o in chosen) for s in scenarios),Fraction(0))
+        score = expected + ranking_value - Fraction(riskpolicy['downside_penalty_bps'], 10000) * downside
         key = (score, expected, -reservation)
         if reservation <= 0 or expected < 1 or key <= best_key:
             continue
         best_key = key
+        if allow_ranking_only:base['ranking_only_expected_value']=str(ranking_value)
         base.update(selected=sorted(selected), selected_options=copy.deepcopy(chosen),
                     predicted_scenario_cash=net, upfront_cost=upfront, worst_later_reserve=later,
                     reserve_amount=reservation, expected_net=expected.numerator // expected.denominator,
