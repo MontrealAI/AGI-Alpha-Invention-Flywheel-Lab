@@ -24,6 +24,7 @@ from connected_enterprise.verify import audit
 from connected_enterprise.mechanism_choice import MODES
 from commercial.ledger import digest
 from portfolio25.pricing import SCENARIOS
+from outcome_receipts import customer_outcomes
 
 PROTOCOL={'schema':'strategic024-public-development/v1',
  'smoke':{'horizon_days':14,'seeds':[2610311624],'cases':['central']},
@@ -92,6 +93,7 @@ def main():
         if not result['complete'] or not checked['accepted']:raise ValueError('FULL_HORIZON_AND_OPERATING_AUDIT_REQUIRED')
         receipt.update(status='COMPLETED',complete=True,audit=checked,summary=result['summary'],
           paid_jobs=result['paid_jobs'],customers=result['customers'],repeat_customers=result['repeat_customers'],
+          customer_outcomes=customer_outcomes(result,checked),
           profitable_earned_continuations=result['profitable_earned_continuations'],
           conditional_simulated_commercial_success=result['conditional_simulated_commercial_success'],
           actual_collections=0,actual_profit=None,result_sha256=digest(result),
