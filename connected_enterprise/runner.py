@@ -40,6 +40,12 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in DEPENDENCIES):
             raise ValueError('FUNDED_DISCOVERY_SOURCE_DEPENDENCY_MISSING')
         names.update(DEPENDENCIES)
+    if (root/'connected_enterprise/research_service.py').is_file():
+        from connected_enterprise.research_service import DEPENDENCIES
+        required=set(DEPENDENCIES)|{'battery_service/study.py','tests/test_battery_service040.py','tests/test_pending_battery_native.py','tests/test_connected_battery_dependencies.py','docs/battery040/README.md','docs/battery040/NATIVE_CONTRACT.md'}
+        if any(not (root/name).is_file() for name in required):
+            raise ValueError('PENDING_RESEARCH_SOURCE_DEPENDENCY_MISSING')
+        names.update(required)
     if (root/'flywheel_wheel').exists():
         # Optional read-only wheel utilities ship through this canonical inventory.
         required={
