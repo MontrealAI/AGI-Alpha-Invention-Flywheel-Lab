@@ -96,10 +96,11 @@ def _margin(order):
 
 
 def find_native_successor(result):
-    """Find earned-funded, source-linked successor delivery in ONE account.
+    """Find a profitable, earned-funded, source-linked successor in ONE account.
 
-    Does not assert causality or reconstruct a hypothetical cash balance.
-    Actual funding and acceptance are independently checked before calling.
+    Incremental value is actually collected *order contribution* less the native
+    acquisition/capacity invoice, not an assumed better first-order margin.
+    Enterprise-wide complete-cost profit and independent audit are separate gates.
     """
     settled = sorted((o for o in result["orders"]
                       if o["outcome"] == "SETTLED" and o["collection_time"] is not None
@@ -109,43 +110,51 @@ def find_native_successor(result):
     for investment in result["investments"]:
         if investment["kind"] not in ("acquisition", "capacity"):
             continue
-        receipt = investment["funding_receipt"]
-        if receipt.get("funding") != "EARNED":
+        if investment["funding_receipt"].get("funding") != "EARNED":
             continue
+        def linked(order):
+            if investment["kind"] == "acquisition":
+                return order.get("acquisition_source_plan_id") == investment["plan_id"]
+            return (order.get("capacity_source_plan_id") == investment["plan_id"]
+                    or investment["plan_id"] in order.get("capacity_source_plan_ids", []))
+        successors = [o for o in settled if linked(o)
+                      and o["qualified_time"] >= investment["activation_time"]
+                      and o["collection_time"] > investment["purchased_time"]]
+        if not successors:
+            continue
+        net = sum(_margin(o) for o in successors) - investment["cost"]
         for first in settled:
             if first["collection_time"] >= investment["purchased_time"]:
                 continue
-            for second in settled:
-                link = (second.get("acquisition_source_plan_id") == investment["plan_id"]
-                        if investment["kind"] == "acquisition"
-                        else second.get("capacity_source_plan_id") == investment["plan_id"]
-                        or investment["plan_id"] in second.get("capacity_source_plan_ids", []))
-                if (not link or second["qualified_time"] < investment["activation_time"]
-                        or second["collection_time"] <= investment["purchased_time"]):
-                    continue
-                new_outcome = (second["customer_id"] != first["customer_id"]
-                               or second["offer"]["service_id"] != first["offer"]["service_id"])
-                better = _margin(second) > _margin(first)
-                if not new_outcome:
-                    continue
-                witnesses.append({
-                    "first_paid_order": first["id"], "first_service": first["offer"]["service_id"],
-                    "first_collection_hour": first["collection_time"],
-                    "first_margin_microUSD": _margin(first),
-                    "binding_constraint_changed": "customer_access" if investment["kind"] == "acquisition" else "productive_capacity",
-                    "native_investment": investment["id"], "native_plan_id": investment["plan_id"],
-                    "investment_time": investment["purchased_time"], "investment_cost_microUSD": investment["cost"],
-                    "funding": "EARNED", "successor_paid_order": second["id"],
-                    "successor_service": second["offer"]["service_id"],
-                    "successor_customer": second["customer_id"],
-                    "successor_collection_hour": second["collection_time"],
-                    "successor_margin_microUSD": _margin(second),
-                    "distinct_opportunity": new_outcome,
-                    "strictly_better_per_order_margin": better,
-                    "source_link_type": investment["kind"]
-                })
+            new = [o for o in successors
+                   if o["customer_id"] != first["customer_id"]
+                   or o["offer"]["service_id"] != first["offer"]["service_id"]]
+            if not new:
+                continue
+            second = new[0]
+            witnesses.append({
+                "first_paid_order": first["id"], "first_service": first["offer"]["service_id"],
+                "first_collection_hour": first["collection_time"],
+                "first_margin_microUSD": _margin(first),
+                "binding_constraint_changed": "customer_access" if investment["kind"] == "acquisition" else "productive_capacity",
+                "native_investment": investment["id"], "native_plan_id": investment["plan_id"],
+                "investment_time": investment["purchased_time"], "investment_cost_microUSD": investment["cost"],
+                "funding": "EARNED", "successor_paid_order": second["id"],
+                "successor_service": second["offer"]["service_id"],
+                "successor_customer": second["customer_id"],
+                "successor_collection_hour": second["collection_time"],
+                "successor_margin_microUSD": _margin(second),
+                "source_linked_paid_order_ids": [o["id"] for o in successors],
+                "source_linked_total_order_contribution_microUSD": sum(_margin(o) for o in successors),
+                "net_after_native_investment_microUSD": net,
+                "distinct_opportunity": True,
+                "positive_incremental_collected_contribution": net > 0,
+                "strictly_better_per_order_margin": _margin(second) > _margin(first),
+                "source_link_type": investment["kind"]
+            })
     witnesses.sort(key=lambda w: (
-        not w["strictly_better_per_order_margin"], -w["successor_margin_microUSD"],
+        not w["positive_incremental_collected_contribution"],
+        -w["net_after_native_investment_microUSD"],
         w["investment_time"], w["first_paid_order"], w["successor_paid_order"]))
     return witnesses[0] if witnesses else None
 
@@ -200,8 +209,8 @@ def _public(spec, source, development, selection, confirmation):
         "confirmation": {k: v["observed"] for k, v in sorted(confirmation.items())},
         "matched_confirmation_profit_delta_microUSD": delta,
         "connected_earned_successor_witness": witness,
-        "confirmed_strictly_better_funded_opportunity":
-            bool(witness and witness["strictly_better_per_order_margin"] and
+        "confirmed_positive_funded_successor_opportunity":
+            bool(witness and witness["positive_incremental_collected_contribution"] and
                  challenger["observed"]["obligations_covered"] and
                  challenger["observed"]["profit_microUSD"] > 0),
         "comparative_advantage_on_one_fresh_seed":
@@ -348,7 +357,7 @@ def main(argv=None):
         "source_sha256": public["source_sha256"], "selected": public["selection"]["selected"],
         "heldout_profit_delta_microUSD": public["matched_confirmation_profit_delta_microUSD"],
         "funded_successor": public["connected_earned_successor_witness"],
-        "better_opportunity": public["confirmed_strictly_better_funded_opportunity"],
+        "better_opportunity": public["confirmed_positive_funded_successor_opportunity"],
         "actual_commerce": False, "scope": public["status"]
     }, sort_keys=True))
     return 0
