@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/workspace/scratch/b8d559bc7031/agi-alpha/scripts/prove_operator022.py", line 73, in <module>
-    if __name__=='__main__':main()
-                            ^^^^^^
-  File "/workspace/scratch/b8d559bc7031/agi-alpha/scripts/prove_operator022.py", line 42, in main
-    queues={path.parent.name:read(path)['state']['queue'] for path in (private/'worlds').glob('*/STATE.json')}
-                             ~~~~~~~~~~^^^^^^^^^
-KeyError: 'state'

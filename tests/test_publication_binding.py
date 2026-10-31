@@ -1,9 +1,13 @@
 """Current supplementary binding and immutable historical publication proofs."""
 import copy
 import hashlib
+import io
 import json
 from pathlib import Path
+import stat
 import unittest
+import zipfile
+from functools import lru_cache
 from connected_enterprise.runner import identity
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,14 +16,62 @@ DELTA = ROOT / 'evidence/completion015/qualification/COMPOSED_RELEASE_DELTA.json
 SUPPLEMENT = ROOT / 'evidence/overnight022/publication-binding'
 PR33_SOURCE = 'f937cb4e553812ad532d987fdbbfb6ff2f7f21f049530b2a0fce677ca1a29fe9'
 PRIOR_SOURCE = '411eed021e5a80606cf8468d3bfc9f1920cc03439013c0991c37060e059ecf23'
+TRANSPORT = ROOT / 'evidence/overnight022/PROOF_BUNDLE.json'
+
+
+@lru_cache(maxsize=1)
+def bundle_payloads(manifest_raw, archive_raw):
+    from commercial.ledger import strict_json
+    from flywheel.archive_v2 import MAX_BYTES, MAX_FILES
+    manifest = strict_json(manifest_raw)
+    if (manifest.get('schema') != 'agi-alpha/overnight022-proof-bundle/v1'
+            or manifest.get('source_commit') != '328835b30b3fed52b491f33f86ad008c60c37704'
+            or len(archive_raw) != manifest['bundle']['bytes'] or len(archive_raw) > MAX_BYTES
+            or hashlib.sha256(archive_raw).hexdigest() != manifest['bundle']['sha256']):
+        raise ValueError('PROOF_TRANSPORT_IDENTITY_MISMATCH')
+    files = manifest['files']
+    if len(files) != manifest['file_count'] or len(files) > MAX_FILES:
+        raise ValueError('PROOF_TRANSPORT_FILE_BOUND')
+    with zipfile.ZipFile(io.BytesIO(archive_raw)) as archive:
+        entries = archive.infolist()
+        if ([entry.filename for entry in entries] != sorted(files)
+                or sum(entry.file_size for entry in entries) != manifest['uncompressed_bytes']
+                or manifest['uncompressed_bytes'] > MAX_BYTES):
+            raise ValueError('PROOF_TRANSPORT_MEMBER_SET_OR_BOUND')
+        payloads = {}
+        for entry in entries:
+            name = entry.filename; path = Path(name); record = files[name]
+            if (path.is_absolute() or '..' in path.parts or path.as_posix() != name
+                    or not name.startswith(('campaign/overnight-022/', 'evidence/overnight022/'))
+                    or entry.is_dir() or stat.S_ISLNK(entry.external_attr >> 16)):
+                raise ValueError('PROOF_TRANSPORT_MEMBER_SCOPE')
+            raw = archive.read(entry)
+            if (len(raw) != record['bytes'] or hashlib.sha256(raw).hexdigest() != record['sha256']
+                    or hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest() != record['git_blob_sha1']
+                    or record['git_mode'] != '100644'):
+                raise ValueError('PROOF_TRANSPORT_MEMBER_CHANGED')
+            payloads[name] = raw
+    return payloads
+
+
+def record_bytes(path):
+    path = Path(path); name = path.relative_to(ROOT).as_posix()
+    if TRANSPORT.is_file():
+        raw = TRANSPORT.read_bytes(); manifest = json.loads(raw)
+        if name in manifest['files']:
+            archive = ROOT / manifest['bundle']['path']
+            if manifest['bundle']['path'] != 'evidence/overnight022/PROOF_BUNDLE.zip' or archive.is_symlink():
+                raise ValueError('PROOF_TRANSPORT_PATH_REFUSED')
+            return bundle_payloads(raw, archive.read_bytes())[name]
+    return path.read_bytes()
 
 
 def read(path):
-    return json.loads(path.read_text())
+    return json.loads(record_bytes(path))
 
 
 def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(record_bytes(path)).hexdigest()
 
 
 def canonical_sha(value):
@@ -104,7 +156,7 @@ class PublicationBindingTests(unittest.TestCase):
         for record in records:
             path = ROOT / record['path']
             self.assertFalse(path.is_symlink())
-            raw = path.read_bytes()
+            raw = record_bytes(path)
             self.assertEqual(hashlib.sha256(raw).hexdigest(), record['sha256'])
             git_blob = hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
             self.assertEqual(git_blob, record['git_blob'])
@@ -156,7 +208,22 @@ class PublicationBindingTests(unittest.TestCase):
         self.assertEqual(proof['prior_failed_result_sha256'], sha(ROOT / evidence['preserved_failed_collector']['path']))
         failure = read(ROOT / evidence['preserved_binding_failure']['path'])
         self.assertNotEqual(failure['exit_code'], 0)
-        self.assertIn('PAPER_EXECUTING_SOURCE_CHANGED', (ROOT / evidence['preserved_binding_failure_stderr']['path']).read_text())
+        self.assertIn('PAPER_EXECUTING_SOURCE_CHANGED', record_bytes(ROOT / evidence['preserved_binding_failure_stderr']['path']).decode())
+
+    def test_proof_transport_preserves_exact_records_and_existing_bounds(self):
+        manifest = json.loads(TRANSPORT.read_bytes())
+        payloads = bundle_payloads(TRANSPORT.read_bytes(), (ROOT / manifest['bundle']['path']).read_bytes())
+        self.assertEqual(len(payloads), 92)
+        self.assertEqual(manifest['original_inventory_count'], 95)
+        self.assertEqual(manifest['executing_source']['sha256'], identity(ROOT)['sha256'])
+        self.assertEqual(manifest['executing_source']['files'], len(identity(ROOT)['files']))
+        self.assertEqual(read(SUPPLEMENT / 'BINDING_DELTA.json'), self.binding)
+
+    def test_corrupted_proof_transport_cannot_replace_original_records(self):
+        raw = TRANSPORT.read_bytes(); manifest = json.loads(raw)
+        archive = (ROOT / manifest['bundle']['path']).read_bytes()
+        with self.assertRaisesRegex(ValueError, 'PROOF_TRANSPORT_IDENTITY_MISMATCH'):
+            bundle_payloads(raw, archive[:-1] + bytes([archive[-1] ^ 1]))
 
     def test_binding_regression_and_metadata_do_not_enter_operating_identity(self):
         files = identity(ROOT)['files']

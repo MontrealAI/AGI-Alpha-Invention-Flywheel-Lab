@@ -1,9 +1,0 @@
-Traceback (most recent call last):
-  File "/workspace/scratch/b8d559bc7031/agi-alpha/scripts/check_nonempty_migration022.py", line 121, in <module>
-    main()
-  File "/workspace/scratch/b8d559bc7031/agi-alpha/scripts/check_nonempty_migration022.py", line 103, in main
-    'legacy_financial_source': source_identity(old), 'candidate_financial_source': source_identity(new),
-                               ^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/scratch/b8d559bc7031/overnight022-private-migration-production/new/connected_enterprise/finance.py", line 39, in source_identity
-    raise ValueError('REGULAR_CONNECTED_FINANCE_SOURCE_REQUIRED:' + name)
-ValueError: REGULAR_CONNECTED_FINANCE_SOURCE_REQUIRED:vendor/alpha_claim/protected_exchange_legacy.py
