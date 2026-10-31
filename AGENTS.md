@@ -31,6 +31,18 @@ Use structural mapping, executable strategy construction/composition, evidence-g
 
 Report commercial success, invention, retained-method advantage and physical/scientific expansion separately. Transformational work must remove a consequential constraint and validate the enabling instrument; routine repair is not automatically transformation. Optimality claims apply only to the tested feasible set, information and assumptions, never to all strategies or markets.
 
+### Practical invention and operating loop
+
+1. Fix the useful outcome, permissions and acceptance contract; distinguish hard constraints from assumptions and prerequisites of the current method. Start from the strongest applicable known solution.
+2. Identify the binding constraint. Compare direct execution, reuse, causal transfer, complementary composition, a missing connector/instrument, and changing the process so the constraint no longer matters. Change the means, not the required outcome.
+3. Make the proposal executable: permitted inputs, current state, prerequisites, actions/branches, outputs, effects, complete costs and stopping conditions. Check interfaces and shared resources; a sequence of impressive names is not a working mechanism.
+4. Let evidence-grounded criticism propose a checkable counterexample or discriminating test. Adjudicate before repair. Resolve important uncertainty, act acceptably despite it, remove the dependency, or stop; consider that all initial explanations may be wrong.
+5. Prefer production that carries source/dependency evidence over repeatedly reconstructing it. Reuse compatible generic work, but establish current task acceptance and authority. Critic agreement and internally consistent references alone do not establish truth.
+6. Keep the useful executable instrument, concise applicability/avoidance lesson and, when supported, its constructor. Prune redundant terminal files. A working tool, successful transfer and a better discovery procedure are separate achievements.
+7. Choose the next action jointly across profitable delivery, acquisition, reuse, enabling research and retaining cash. Use actual available funds and obligations, not forecast profit. Do not force novelty, a fixed research share or a fixed mechanism sequence.
+
+Use the guide's [practical recipes](docs/harness/DEVELOPER_GUIDE.md#practical-recipes) for conditions, outputs, real call paths and remaining gaps. Established methods need applicability and implementation checks, not a fresh invention claim; new beyond-established-knowledge claims need evidence proportionate to that claim.
+
 ## Objective and completion
 
 The objective is **US$3 billion trailing-year profit after complete modeled costs**, not revenue, cash, valuation or cumulative multi-year profit. Separate native executed/audited simulation, conditional projections and actual commerce. State horizon, capital, cost scope, uncertainties and outstanding obligations; unknown model/host billing remains unknown. Simulation does not establish actual customers or revenue, and the objective is not guaranteed.
