@@ -40,6 +40,15 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in DEPENDENCIES):
             raise ValueError('FUNDED_DISCOVERY_SOURCE_DEPENDENCY_MISSING')
         names.update(DEPENDENCIES)
+    if (root/'commercial/verified_delta.py').is_file():
+        required={'commercial/service.py','commercial/service_verifier.py',
+                  'commercial/verified_delta.py','tests/test_verified_delta044.py',
+                  'scripts/run_verified_delta044.py',
+                  'campaign/verified-delta-044/REPORT.md',
+                  '.github/workflows/verified-delta044.yml'}
+        if any(not (root/name).is_file() for name in required):
+            raise ValueError('VERIFIED_DELTA_RELEASE_SOURCE_DEPENDENCY_MISSING')
+        names.update(required)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
