@@ -13,7 +13,6 @@ from typing import Any, Callable
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from .contracts import canonical, digest
-from commercial.terms import validate_terms
 
 
 class SimulatedProvider:
@@ -74,9 +73,6 @@ class ProtectedExchange:
          lost INTEGER NOT NULL DEFAULT 0,recovered INTEGER NOT NULL DEFAULT 0,blob_id TEXT);
         CREATE TABLE IF NOT EXISTS source_receipts(tx TEXT PRIMARY KEY,order_id TEXT,kind TEXT);
         CREATE TABLE IF NOT EXISTS events(id TEXT PRIMARY KEY,order_id TEXT,raw TEXT NOT NULL);
-        CREATE TABLE IF NOT EXISTS prospective_terms(id TEXT PRIMARY KEY,terms TEXT NOT NULL,sha256 TEXT NOT NULL,registered_at INTEGER NOT NULL);
-        CREATE TABLE IF NOT EXISTS prospective_orders(order_id TEXT PRIMARY KEY,terms_id TEXT NOT NULL,terms_sha256 TEXT NOT NULL,matured_at INTEGER);
-        CREATE TABLE IF NOT EXISTS prospective_claims(id TEXT PRIMARY KEY,order_id TEXT NOT NULL,kind TEXT NOT NULL,amount TEXT NOT NULL,paid TEXT NOT NULL DEFAULT '0',recovered TEXT NOT NULL DEFAULT '0',covered TEXT NOT NULL DEFAULT '0',created_at INTEGER NOT NULL,state TEXT NOT NULL);
         CREATE TABLE IF NOT EXISTS journal(seq INTEGER PRIMARY KEY,order_id TEXT,kind TEXT,amount TEXT);
         """)
         wanted = canonical(
@@ -133,24 +129,7 @@ class ProtectedExchange:
             raise ValueError("unknown buyer wallet")
         self.db.execute("UPDATE wallets SET balance=? WHERE buyer=?", (str(int(current[0]) + amount), buyer))
 
-    def register_terms(self, ident: str, terms: dict, now: int) -> None:
-        clean = validate_terms(terms, registered_at=now)
-        if not isinstance(ident, str) or not ident.strip() or len(ident) > 160:
-            raise ValueError('BOUNDED_PROSPECTIVE_TERMS_ID_REQUIRED')
-        if self.db.execute('SELECT 1 FROM trades WHERE id=?', (clean['order_id'],)).fetchone():
-            raise ValueError('PROSPECTIVE_TERMS_MUST_PRECEDE_ORDER_COMMITMENT')
-        self.db.execute('INSERT INTO prospective_terms VALUES(?,?,?,?)', (ident, canonical(clean).decode(), digest(clean), now))
-
-    def _prospective(self, ident):
-        row = self.db.execute('SELECT * FROM prospective_orders WHERE order_id=?', (ident,)).fetchone()
-        if row is None:
-            return None
-        registered = self.db.execute('SELECT * FROM prospective_terms WHERE id=?', (row['terms_id'],)).fetchone()
-        if registered is None or registered['sha256'] != row['terms_sha256'] or digest(json.loads(registered['terms'])) != row['terms_sha256']:
-            raise ValueError('PROSPECTIVE_ORDER_TERMS_BINDING_CHANGED')
-        return dict(row), validate_terms(json.loads(registered['terms']))
-
-    def offer(self, ident: str, buyer: str, price: int, rail: str, task: Any, deadline: int, *, terms_id=None, now=None) -> None:
+    def offer(self, ident: str, buyer: str, price: int, rail: str, task: Any, deadline: int) -> None:
         self.validate(task)
         if (
             type(price) is not int
@@ -160,22 +139,7 @@ class ProtectedExchange:
             raise ValueError("price or supported rail")
         if type(deadline) is not int or deadline < 0 or not ident or ident.startswith("investment:") or not buyer:
             raise ValueError("trade identity/deadline")
-        prospective = None
-        if terms_id is not None:
-            registered = self.db.execute('SELECT * FROM prospective_terms WHERE id=?', (terms_id,)).fetchone()
-            if registered is None:
-                raise ValueError('REGISTERED_PROSPECTIVE_TERMS_REQUIRED')
-            prospective = validate_terms(json.loads(registered['terms']))
-            if (prospective['order_id'] != ident or prospective['price_microUSD'] != price or type(now) is not int
-                    or now < registered['registered_at'] or now > prospective['expected_collection_day']
-                    or prospective['expected_collection_day'] > deadline or deadline >= prospective['maturity_day']):
-                raise ValueError('PROSPECTIVE_ORDER_PRICE_OR_CLOCK_MISMATCH')
-            charge = prospective['premium_microUSD'] + prospective['fee_microUSD']
-            if self.snapshot()['available'] < charge:
-                raise ValueError('PROSPECTIVE_PREMIUM_AND_FEE_CASH_REQUIRED')
-            self.db.execute('BEGIN IMMEDIATE')
-        try:
-            self.db.execute(
+        self.db.execute(
             "INSERT INTO trades(id,buyer,price,rail,task,task_hash,contract,deadline,state) VALUES(?,?,?,?,?,?,?,?,?)",
             (
                 ident,
@@ -184,31 +148,18 @@ class ProtectedExchange:
                 rail,
                 canonical(task).decode(),
                 digest(task),
-                self.contract if prospective is None else self.contract + ':' + registered['sha256'],
+                self.contract,
                 deadline,
                 "offered",
             ),
-            )
-            if prospective is not None:
-                self.db.execute('INSERT INTO prospective_orders VALUES(?,?,?,NULL)', (ident, terms_id, registered['sha256']))
-                if charge:
-                    self._entry(ident, 'expense', charge)
-                    self._entry(ident, 'expense_paid', charge)
-                self.db.execute('COMMIT')
-        except BaseException:
-            if prospective is not None:
-                self.db.execute('ROLLBACK')
-            raise
+        )
 
     def snapshot(self) -> dict[str, Any]:
         sums: dict[str, int] = {}
-        order_sums: dict[str, dict[str, int]] = {}
-        for row in self.db.execute("SELECT order_id,kind,amount FROM journal"):
+        for row in self.db.execute("SELECT kind,amount FROM journal"):
             sums[row["kind"]] = sums.get(row["kind"], 0) + int(row["amount"])
-            subtotal = order_sums.setdefault(row['order_id'], {})
-            subtotal[row['kind']] = subtotal.get(row['kind'], 0) + int(row['amount'])
         revenue = sums.get("revenue", 0) - sums.get("contra_revenue", 0)
-        costs, paid = sums.get("expense", 0) - sums.get('expense_reversal', 0), sums.get("expense_paid", 0)
+        costs, paid = sums.get("expense", 0), sums.get("expense_paid", 0)
         collections = sums.get("collections", 0) - sums.get("reversal_paid", 0)
         recovery = sums.get("recovery_income", 0)
         cash = self.opening + collections + recovery - paid - sums.get("investment_paid", 0)
@@ -216,27 +167,8 @@ class ProtectedExchange:
         refund_due = sum(int(x["refund_due"]) for x in orders)
         custody = sum(int(x["price"]) for x in orders if x["custody"])
         # A custody-loss compensation expense is already in expense payables.
-        custody_reserve = 0
-        for row in orders:
-            if row['custody'] and row['state'] in {'funded', 'verified'}:
-                prospective = self._prospective(row['id'])
-                custody_reserve += int(row['price']) if prospective is None else max(int(row['price']), prospective[1]['exposure_microUSD'] - int(row['price']))
-        tail = 0
-        for row in orders:
-            prospective = self._prospective(row['id'])
-            if prospective is None:
-                if row['state'] == 'released':
-                    tail += int(row['price']) + 200_000
-                continue
-            native = order_sums.get(row['id'], {})
-            if native.get('collections', 0) <= 0:
-                continue
-            protection, terms = prospective
-            claims = [dict(x) for x in self.db.execute("SELECT * FROM prospective_claims WHERE order_id=? AND state!='denied'", (row['id'],))]
-            if protection['matured_at'] is None:
-                tail += max(0, terms['exposure_microUSD'] - native.get('contra_revenue', 0) - sum(int(x['amount']) for x in claims))
-            else:
-                tail += max(0, terms['residual_microUSD'] - sum(int(x['amount']) for x in claims if x['created_at'] > terms['maturity_day']))
+        custody_reserve = sum(int(x["price"]) for x in orders if x["custody"] and x["state"] in {"funded", "verified"})
+        tail = sum(int(x["price"]) + 200_000 for x in orders if x["state"] == "released")
         payable = max(0, costs - paid) + refund_due
         free = max(0, cash - payable - custody_reserve - tail - self.working)
         conditional = max(
@@ -421,105 +353,6 @@ class ProtectedExchange:
             raise ValueError("unbound or forged provider observation")
         self.db.execute("INSERT INTO source_receipts VALUES(?,?,?)", (source_tx, row["id"], kind))
 
-    def prospective_event(self, op, args, now):
-        if type(now) is not int or now < 0:
-            raise ValueError('PROSPECTIVE_EVENT_TIME_REQUIRED')
-        ident = args['id']
-        binding = self._prospective(ident)
-        if binding is None:
-            raise ValueError('PROSPECTIVE_ORDER_REQUIRED_LEGACY_TERMS_IMMUTABLE')
-        protection, terms = binding
-        event = 'prospective:' + op + ':' + digest([ident, args.get('claim_id'), args.get('settlement_id'), args.get('event_id')])
-        raw = canonical({'action': op, 'payload': args, 'now': now}).decode()
-        self.db.execute('BEGIN IMMEDIATE')
-        try:
-            prior = self.db.execute('SELECT * FROM events WHERE id=?', (event,)).fetchone()
-            if prior:
-                if prior['raw'] != raw or prior['order_id'] != ident:
-                    raise ValueError('PROSPECTIVE_EVENT_REBOUND')
-                self.db.execute('COMMIT')
-                return
-            row = self.order(ident)
-            collected = sum(int(x[0]) for x in self.db.execute("SELECT amount FROM journal WHERE order_id=? AND kind='collections'", (ident,)))
-            if row['state'] not in {'released', 'breached'} or collected <= 0:
-                raise ValueError('COLLECTED_ACCEPTED_ORDER_REQUIRED')
-            times = [json.loads(x[0])['now'] for x in self.db.execute('SELECT raw FROM events WHERE order_id=?', (ident,))]
-            if times and now < max(times):
-                raise ValueError('PROSPECTIVE_EVENT_TIME_REGRESSION')
-            if op == 'mature':
-                if now <= terms['maturity_day'] or protection['matured_at'] is not None:
-                    raise ValueError('MATURITY_AFTER_INCLUSIVE_CLAIM_BOUNDARY_REQUIRED')
-                # Existing claims remain incurred payables; only the unknown future
-                # exposure changes to the prospectively registered residual.
-                self.db.execute('UPDATE prospective_orders SET matured_at=? WHERE order_id=?', (now, ident))
-            elif op == 'claim':
-                value, kind = args['amount'], args['kind']
-                if type(value) is not int or not 0 < value <= 10**15 or kind not in {'ordinary', 'disputed', 'covered', 'provider_default'}:
-                    raise ValueError('BOUNDED_DECLARED_NATIVE_CLAIM_REQUIRED')
-                if self.db.execute('SELECT 1 FROM prospective_claims WHERE id=?', (args['claim_id'],)).fetchone():
-                    raise ValueError('NATIVE_CLAIM_IDENTIFIER_ALREADY_BOUND')
-                claims = [dict(x) for x in self.db.execute("SELECT * FROM prospective_claims WHERE order_id=? AND state!='denied'", (ident,))]
-                covered = 0
-                if kind == 'covered' and kind not in terms['coverage_exclusions']:
-                    unused = max(0, terms['coverage_limit_microUSD'] - sum(int(x['covered']) for x in claims))
-                    covered = min(unused, max(0, value - terms['deductible_microUSD']))
-                self.db.execute('INSERT INTO prospective_claims(id,order_id,kind,amount,covered,created_at,state) VALUES(?,?,?,?,?,?,?)',
-                                (args['claim_id'], ident, kind, str(value), str(covered), now, 'disputed' if kind == 'disputed' else 'pending'))
-                self._entry(ident, 'expense', value)
-                total = value + sum(int(x['amount']) for x in claims)
-                late = (value if now > terms['maturity_day'] else 0) + sum(int(x['amount']) for x in claims if x['created_at'] > terms['maturity_day'])
-                if total > terms['exposure_microUSD'] or late > terms['residual_microUSD'] or kind == 'provider_default':
-                    self._entry(ident, 'breach', 1)
-            elif op in {'resolve_claim', 'recover_claim'}:
-                claim = self.db.execute('SELECT * FROM prospective_claims WHERE id=? AND order_id=?', (args['claim_id'], ident)).fetchone()
-                if claim is None:
-                    raise ValueError('REGISTERED_NATIVE_CLAIM_REQUIRED')
-                claim = dict(claim)
-                if op == 'resolve_claim':
-                    resolution = args['resolution']
-                    if claim['state'] not in {'pending', 'disputed', 'partially_paid'}:
-                        raise ValueError('UNRESOLVED_NATIVE_CLAIM_REQUIRED')
-                    if resolution == 'deny':
-                        if claim['kind'] != 'disputed' or int(claim['paid']):
-                            raise ValueError('ONLY_UNPAID_DISPUTED_CLAIM_CAN_BE_DENIED')
-                        self._entry(ident, 'expense_reversal', int(claim['amount']))
-                        self.db.execute("UPDATE prospective_claims SET state='denied' WHERE id=?", (claim['id'],))
-                    elif resolution == 'pay':
-                        remaining = int(claim['amount']) - int(claim['paid'])
-                        state = self.snapshot()
-                        protected_elsewhere = state['custodyReserve'] + state['tailReserve'] + state['workingCapital'] + state['reservedInvestment'] + max(0, state['payables'] - remaining)
-                        paid = min(remaining, max(0, state['cash'] - protected_elsewhere))
-                        self._entry(ident, 'expense_paid', paid)
-                        self._credit_wallet(row['buyer'], paid)
-                        self.db.execute('UPDATE prospective_claims SET paid=?,state=? WHERE id=?',
-                                        (str(int(claim['paid']) + paid), 'paid' if paid == remaining else 'partially_paid', claim['id']))
-                        if paid < remaining:
-                            self._entry(ident, 'breach', 1)
-                    else:
-                        raise ValueError('EXPLICIT_NATIVE_CLAIM_RESOLUTION_REQUIRED')
-                else:
-                    value, tx = args['amount'], args['source_tx']
-                    if (type(value) is not int or value <= 0 or not isinstance(tx, str) or not 1 <= len(tx) <= 200
-                            or now < claim['created_at'] + terms['payout_delay_hours']
-                            or value + int(claim['recovered']) > min(int(claim['paid']), int(claim['covered']))):
-                        raise ValueError('COLLECTED_COVERED_RECOVERY_BOUND_OR_DELAY_INVALID')
-                    if self.db.execute('SELECT 1 FROM source_receipts WHERE tx=?', (tx,)).fetchone():
-                        raise ValueError('RECOVERY_SOURCE_TRANSACTION_ALREADY_CONSUMED')
-                    # This is a bound, explicit synthetic cash observation. The
-                    # provider key is local scenario authority, not insurer backing.
-                    payload = {'order_id': ident, 'claim_id': claim['id'], 'amount': value, 'source_tx': tx, 'kind': 'collected_claim_recovery'}
-                    signature = hmac.new(self.provider.key, canonical(payload), hashlib.sha256).hexdigest()
-                    self.db.execute('INSERT INTO source_receipts VALUES(?,?,?)', (tx, ident, 'collected_claim_recovery:' + signature))
-                    self._entry(ident, 'recovery_income', value)
-                    self.db.execute('UPDATE prospective_claims SET recovered=? WHERE id=?', (str(int(claim['recovered']) + value), claim['id']))
-            else:
-                raise ValueError('NATIVE_PROSPECTIVE_OPERATION_REQUIRED')
-            self.db.execute('INSERT INTO events VALUES(?,?,?)', (event, ident, raw))
-            self.db.execute('COMMIT')
-        except BaseException:
-            self.db.execute('ROLLBACK')
-            raise
-
     def event(self, ident: str, event: str, action: str, payload: Any, now: int, *, crash: bool = False) -> str:
         """Apply one durable trade transition; authenticated receipts are scenario authority only."""
         if type(now) is not int or now < 0:
@@ -555,9 +388,7 @@ class ProtectedExchange:
                     raise ValueError("funding state/expiry")
                 self._receipt(row, payload, "funded")
                 wallet = self.db.execute("SELECT balance FROM wallets WHERE buyer=?", (row["buyer"],)).fetchone()
-                prospective = self._prospective(ident)
-                collateral = price if prospective is None else max(price, prospective[1]['exposure_microUSD'] - price)
-                if wallet is None or int(wallet[0]) < price or self.snapshot()["available"] < collateral:
+                if wallet is None or int(wallet[0]) < price or self.snapshot()["available"] < price:
                     raise ValueError("buyer funds or collateral unavailable")
                 self.db.execute(
                     "UPDATE wallets SET balance=? WHERE buyer=?", (str(int(wallet[0]) - price), row["buyer"])
@@ -599,9 +430,6 @@ class ProtectedExchange:
                     or not row["custody"]
                 ):
                     raise ValueError("unassured or expired settlement")
-                prospective = self._prospective(ident)
-                if prospective is not None and now >= prospective[1]['maturity_day']:
-                    raise ValueError('PROSPECTIVE_COLLECTION_MUST_PRECEDE_MATURITY')
                 self._receipt(row, payload, "cleared")
                 raw_check = self._decrypt(row)
                 captured_task, captured_artifact = json.loads(row["task"]), json.loads(raw_check)

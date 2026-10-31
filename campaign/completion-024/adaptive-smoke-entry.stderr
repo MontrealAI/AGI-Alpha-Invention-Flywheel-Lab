@@ -1,0 +1,53 @@
+concurrent.futures.process._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/process.py", line 264, in _process_worker
+    r = call_item.fn(*call_item.args, **call_item.kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/4c95433e444b/verification-024/adaptive-smoke-entry/source/adaptive_enterprise/runner.py", line 189, in _run_task
+    result=run_world(root,manifest,task_policy(frozen,task),task['seed'],world,task['arm'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/4c95433e444b/verification-024/adaptive-smoke-entry/source/adaptive_enterprise/model.py", line 454, in run_world
+    audited=account.audit();exported=account.export();summary=audited['summary']
+            ^^^^^^^^^^^^^^^
+  File "/workspace/scratch/4c95433e444b/verification-024/adaptive-smoke-entry/source/adaptive_enterprise/account.py", line 692, in audit
+    return audit_account(self.export(), root=self.root, manifest=self.manifest)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/4c95433e444b/verification-024/adaptive-smoke-entry/source/adaptive_enterprise/account.py", line 284, in audit_account
+    from connected_enterprise.finance import source_identity
+ModuleNotFoundError: No module named 'connected_enterprise'
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/scratch/4c95433e444b/verification-024/adaptive-smoke-entry/source/adaptive_enterprise/__main__.py", line 4, in <module>
+    main()
+  File "/workspace/scratch/4c95433e444b/verification-024/adaptive-smoke-entry/source/adaptive_enterprise/runner.py", line 330, in main
+    with RunLock(output):worker(output)
+                         ^^^^^^^^^^^^^^
+  File "/workspace/scratch/4c95433e444b/verification-024/adaptive-smoke-entry/source/adaptive_enterprise/runner.py", line 263, in worker
+    for i,(task,completed) in enumerate(zip(planned,_parallel(_run_task,payloads))):
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/4c95433e444b/verification-024/adaptive-smoke-entry/source/adaptive_enterprise/runner.py", line 210, in _parallel
+    for future in futures:yield future.result()
+                                ^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+ModuleNotFoundError: No module named 'connected_enterprise'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/scratch/4c95433e444b/repo/adaptive_enterprise/__main__.py", line 4, in <module>
+    main()
+  File "/workspace/scratch/4c95433e444b/repo/adaptive_enterprise/runner.py", line 326, in main
+    freeze(output,args.smoke);subprocess.run([sys.executable,'-m','adaptive_enterprise','_worker','--output',str(output)],cwd=output/'source',check=True)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3', '-m', 'adaptive_enterprise', '_worker', '--output', '/workspace/scratch/4c95433e444b/verification-024/adaptive-smoke-entry']' returned non-zero exit status 1.

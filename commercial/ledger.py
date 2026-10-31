@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 import stat
 import tempfile
-from experiments.commerce006 import engine
+from commercial.native_engine import engine
 
 SCOPE = 'SIMULATED'
 UNIT = 'simulated-microUSD'

@@ -28,6 +28,7 @@ SOURCE_PATHS = ('connected_enterprise/finance.py', 'adaptive_enterprise/account.
                 'experiments/commerce006.py', 'vendor/alpha_claim/contracts.py',
                 'vendor/alpha_claim/protected_exchange.py',
                 'vendor/alpha_claim/protected_exchange_legacy.py', 'commercial/terms.py',
+                'vendor/alpha_claim/protected_exchange_prospective_v1.py', 'commercial/native_engine.py',
                 'connected_enterprise/upgrades.py', 'connected_enterprise/migration.py',
                 'connected_enterprise/engine.py', 'connected_enterprise/operations.py',
                 'connected_enterprise/runner.py', 'connected_enterprise/verify.py',

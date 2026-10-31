@@ -281,7 +281,6 @@ def audit_account(record, *, root, manifest, pending_source_transition=None):
             raise ValueError('SOURCE_TRANSITION_DOWNGRADE_OR_FORK')
         verify_historical(ticket, manifest, root=root)
         used.append(event['args']['id'])
-    from connected_enterprise.finance import source_identity
     pending_target = None
     if pending_source_transition is not None:
         from connected_enterprise.upgrades import validate_ticket, verify_historical
@@ -292,6 +291,7 @@ def audit_account(record, *, root, manifest, pending_source_transition=None):
         verify_historical(pending_source_transition, manifest, root=root)
         pending_target = pending['to_source']
     if used:
+        from connected_enterprise.finance import source_identity
         if transitions[used[-1]]['body']['to_source'] != source_identity(root) and pending_target != source_identity(root):
             raise ValueError('CURRENT_SOURCE_NOT_AUTHORIZED_BY_TRANSITION')
     prefixes = action_prefix_digests(tape['actions'])

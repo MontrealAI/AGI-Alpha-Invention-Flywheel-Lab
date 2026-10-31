@@ -12,10 +12,7 @@ ROOT = Path(__file__).absolute().parents[1]
 PINS = {'vendor/__init__.py':'be8bdfe2c1e80537aa8346db6e39112224381b56a853f94d460c00d29692db54',
         'vendor/alpha_claim/__init__.py':'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
         'vendor/alpha_claim/contracts.py':'3536b96c4b7ee46f9af7d807e02685aa55e42daae7f7c56b7e9029ca2cde0964',
-        'vendor/alpha_claim/protected_exchange.py':'a3bd70ec100f813e64bfaaabef97a6e336c8fd2d86c048c8a3c5e0ec3b664e42'}
-LEGACY_ENGINE_SHA256 = '7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272'
-PINS['vendor/alpha_claim/protected_exchange_legacy.py'] = LEGACY_ENGINE_SHA256
-PINS['commercial/terms.py'] = '5ade1ed96b540663ee0826cf66686ce5bf2a571187e273bcf6106963f2a42eb9'
+        'vendor/alpha_claim/protected_exchange.py':'7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272'}
 REQUIREMENTS = ['artifact-identity','receipt-identity','verifier-source-identity','frozen-obligations-identity','independent-scoped-acceptance']
 COSTS = ['discovery_and_failed_search','inference','data_network_storage','construction_integration','verification_repair','delivery_fees','maintenance_support','refunds_and_terminal_obligations']
 SCENARIO = {'currency':'simulated-microUSD','unit_price':2000000,'opening_capital':20000000,'working_capital':1000000,
@@ -102,16 +99,11 @@ def validate_authority(artifact_path,receipt_path,contract_path,expected_contrac
         'verifier_source_sha256':expected['verifier_source_sha256']}
 
 
-def engine(root=None, *, version='legacy-permanent-v1'):
+def engine(root=None):
     root=ROOT if root is None else Path(root)
     for path,expected in PINS.items():
         if sha(read_bytes(root/path))!=expected:raise ValueError('PINNED_EXCHANGE_SOURCE_MISMATCH '+path)
-    if version == 'legacy-permanent-v1':
-        from vendor.alpha_claim.protected_exchange_legacy import ProtectedExchange
-    elif version == 'prospective-v1':
-        from vendor.alpha_claim.protected_exchange import ProtectedExchange
-    else:
-        raise ValueError('SUPPORTED_EXPLICIT_NATIVE_ENGINE_VERSION_REQUIRED')
+    from vendor.alpha_claim.protected_exchange import ProtectedExchange
     return ProtectedExchange
 
 

@@ -183,6 +183,8 @@ def _prepare_plan(state,account,jobs):
     return prepared
 
 def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events=None,failpoint=None):
+    # Reject invalid terms before creating an output directory or acquiring a lease.
+    config=validate_config(copy.deepcopy(config))
     from enterprise.runner import RunLock
     output=Path(output).resolve();output.mkdir(parents=True,exist_ok=True)
     with RunLock(output):
