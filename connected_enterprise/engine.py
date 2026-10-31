@@ -173,6 +173,18 @@ def _prepare_plan(state,account,jobs):
         chosen=joint['allocation']['decision']['selected']
         prepared['channel_purchase']='channel-'+str(day) in chosen
         prepared['capacity_purchase']='capacity-'+str(day) in chosen
+        if 'sequence' in cfg['strategic_allocation_policy']:
+            picks=[o for o in joint['allocation']['decision']['selected_options'] if 'first_investment' in o['execution']]
+            if len(picks)>1:raise ValueError('ONE_FIRST_SEQUENCE_INVESTMENT_REQUIRED')
+            prepared['channel_purchase']=bool(picks and picks[0]['execution']['first_investment']=='acquisition')
+            prepared['capacity_purchase']=bool(picks and picks[0]['execution']['first_investment']=='capacity')
+            if picks:
+                # Receipt value is only a disclosed planning hypothesis, not income.
+                weights=cfg['strategic_allocation_policy']['risk']['scenarios']
+                net=sum(weights[k]*(picks[0]['future_net_cash'][k]-picks[0]['upfront_cost']) for k in weights)//10000
+                if net<=0:raise ValueError('POSITIVE_SEQUENCE_EXPECTATION_REQUIRED')
+                prepared['channel_predicted_net']=prepared['capacity_predicted_net']=net
+
         liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-cfg['capacity_price']*bool(prepared['capacity_purchase'])
     for b in candidates:
         if draw(seed,[day,b['id']],'need')>=cfg['arrival_bps']/10000:continue

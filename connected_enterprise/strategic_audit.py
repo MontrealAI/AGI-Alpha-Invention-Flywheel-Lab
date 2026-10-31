@@ -65,6 +65,12 @@ def audit_decisions(root,manifest,result,lifecycle):
             if forecast>cfg['capacity_price']:
                 contract={'price':cfg['capacity_price'],'lead_hours':cfg['capacity_lead_hours'],'duration_hours':cfg['capacity_duration_hours']}
                 expected_investments.append(investment_option('capacity-'+str(day),'capacity',cfg['capacity_price'],int(forecast-cfg['capacity_price']),risk['scenarios'],day,contract))
+        if 'sequence' in cfg['strategic_allocation_policy']:
+            from .sequence_planning import sequence_options
+            expected_investments=sequence_options(cfg,moment,snapshot,operating,
+                {ident:{'job':job,'artifact':artifacts[ident]} for ident,job in jobs.items()},
+                used,previous_investments,buyers,contacts,failed,risk['scenarios'],
+                sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in record['deliveries']))
         if record['investments']!=expected_investments:raise ValueError('INVESTMENT_HYPOTHESIS_NOT_FROM_PUBLIC_HISTORY')
         for delivery,(ident,job) in zip(record['deliveries'],expected_deliveries):
             selection=delivery['selection'];problem=selection['problem'];offer=problem['offer'];service=job['service_id'];human=cfg['human_comparator'][service];anchor=int((human['hours']*human['loaded_usd_hour']+2)*1_000_000)
@@ -86,7 +92,18 @@ def audit_decisions(root,manifest,result,lifecycle):
                 if not prior:raise ValueError('MEMORY_NOT_ACQUIRED_BEFORE_PLANNING')
         rederive_actions(record);states+=record['decision']['states_evaluated']
         selected={o['execution']['customer_id']:o for o in record['decision']['selected_options'] if o['kind']=='delivery'}
-        investments={o['id'] for o in record['decision']['selected_options'] if o['kind']!='delivery'};selected_investments|=investments
+        investments={o['id'] for o in record['decision']['selected_options'] if o['kind']!='delivery'}
+        if 'sequence' in cfg['strategic_allocation_policy']:
+            picked=[o for o in record['decision']['selected_options'] if 'first_investment' in o['execution']]
+            if len(picked)>1:raise ValueError('ONE_NATIVE_SEQUENCE_FIRST_ACTION_REQUIRED')
+            investments=set()
+            for option in picked:
+                ident=('channel-' if option['execution']['first_investment']=='acquisition' else 'capacity-')+str(day)
+                native=next((i for i in result['investments'] if i['id']==ident),None)
+                expected_net=sum(risk['scenarios'][k]*(option['future_net_cash'][k]-option['upfront_cost']) for k in risk['scenarios'])//10000
+                if native is None or native['cost']!=option['upfront_cost'] or native['predicted_net']!=expected_net:raise ValueError('SEQUENCE_FIRST_NATIVE_INVOICE_CHANGED')
+                investments.add(ident)
+        selected_investments|=investments
         if events[moment][1]['channel_selected']!=('channel-'+str(day) in investments) or events[moment][1]['capacity_selected']!=('capacity-'+str(day) in investments):raise ValueError('SELECTED_INVESTMENT_FLAGS_CHANGED')
         choices=[d for d in result['decisions'] if d.get('kind') in {'offer','outside_choice'} and d['time']==moment]
         if [d['customer_id'] for d in choices]!=needs:raise ValueError('EVERY_OBSERVED_NEED_REQUIRES_ONE_JOINT_DECISION')

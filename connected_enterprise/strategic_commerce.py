@@ -189,7 +189,7 @@ def allocate_actions(observation, deliveries, investments, riskpolicy, *, allow_
                     'execution':{'job_id':p['job_id'],'customer_id':d['customer_id'],'payment_bps':pub['payment_bps'],'payment_fixed_microUSD':pub['payment_fixed'],'onboarding_microUSD':d['onboarding'],'funding':'SEED_OR_EARNED','cash_lock':row['price']+pub['reserve_buffer'],'delivery_id':d['id'],'row':row,
                                  'selection_sha256':digest(result)}}
             options.append(option)
-    if not isinstance(investments,list) or len(investments)>8:raise ValueError('FINITE_COSTED_INVESTMENTS_REQUIRED')
+    if not isinstance(investments,list) or len(investments)>9:raise ValueError('FINITE_COSTED_INVESTMENTS_REQUIRED')
     for o in investments:
         if o['kind'] not in {'acquisition','capacity','instrument'} or o['execution'].get('funding')!='EARNED':
             raise ValueError('EARNED_COSTED_EXPANSION_ONLY')
