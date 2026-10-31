@@ -21,6 +21,7 @@ from connected_enterprise.migration import default_policy, upgrade_world
 from connected_enterprise.operations import _copy_source, _copy_inputs
 from connected_enterprise.runner import identity
 from connected_enterprise.verify import audit
+from connected_enterprise.transition_evidence import (business_evidence, ticket_body, externalize, persist_evidence)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -80,9 +81,18 @@ except InterruptedError:
         return upgrade_world(self.new,self.old,self.manifest,self.world,policy=self.policy,
                              expected_checkpoint_sha256=digest(self.before),ident='operating-upgrade-1',**kwargs)
 
+    def public_audit(self, result):
+        # The test owns this directory; signed tickets cannot select their store.
+        with business_evidence(self.world):
+            return audit(self.new, self.manifest, result)
+
+    def public_journal_audit(self, record):
+        with business_evidence(self.world):
+            return audit_journal(record, root=self.new, manifest=self.manifest)
+
     def finish(self):
         result = run_world(self.new,self.manifest,self.cfg,2610312202,'growth',self.world,source=self.source)
-        self.assertTrue(result['complete']); self.assertTrue(audit(self.new,self.manifest,result)['accepted'])
+        self.assertTrue(result['complete']); self.assertTrue(self.public_audit(result)['accepted'])
         return result
 
     def test_nonempty_queue_transition_preserves_exact_identity_and_legacy_protection(self):
@@ -136,7 +146,14 @@ except InterruptedError:
             if where=='after_upgrade_intent':raise InterruptedError(where)
         with self.assertRaises(InterruptedError):self.migrate(failpoint=crash)
         path=self.world/'MIGRATION_INTENT.json'; original=path.read_bytes(); intent=json.loads(original)
-        intent['ticket']['body']['operating']['policy']['premium_microUSD']=1
+        with business_evidence(self.world):
+            altered = copy.deepcopy(ticket_body(intent['ticket']))
+        altered['operating']['policy']['premium_microUSD'] = 1
+        blobs = {}
+        intent['ticket']['body'] = externalize(altered, blobs)
+        persist_evidence(self.world/'transition-evidence', blobs)
+        # Valid content-addressed altered evidence still lacks owner authorization.
+        # Keep the original signature: a well-formed CAS payload must not bypass it.
         path.write_text(json.dumps(intent))
         with self.assertRaises(ValueError):self.finish()
         path.write_bytes(original); self.migrate(); result=self.finish(); count=len(result['owned_account']['ledger']['actions'])
@@ -161,22 +178,22 @@ except InterruptedError:
 
     def test_cached_historical_audit_rechecks_source_and_artifact_bytes(self):
         self.legacy(); self.migrate(); result=self.finish()
-        self.assertTrue(audit_journal(result['owned_account'],root=self.new,manifest=self.manifest)['accepted'])
+        self.assertTrue(self.public_journal_audit(result['owned_account'])['accepted'])
         paths=[self.old/'connected_enterprise/finance.py',self.old/self.manifest['jobs'][0]['artifact']]
         for path in paths:
             original=path.read_bytes()
             try:
                 path.write_bytes(original+b'\n')
-                with self.assertRaises(ValueError):audit_journal(result['owned_account'],root=self.new,manifest=self.manifest)
+                with self.assertRaises(ValueError):self.public_journal_audit(result['owned_account'])
             finally:path.write_bytes(original)
-        self.assertTrue(audit_journal(result['owned_account'],root=self.new,manifest=self.manifest)['accepted'])
+        self.assertTrue(self.public_journal_audit(result['owned_account'])['accepted'])
 
     def test_public_audit_rejects_retroactive_terms_and_lineage_omission(self):
         self.legacy(); self.migrate(); result=self.finish()
         forged=copy.deepcopy(result); forged['operating_upgrades']=[]
-        with self.assertRaises(ValueError):audit(self.new,self.manifest,forged)
+        with self.assertRaises(ValueError):self.public_audit(forged)
         forged=copy.deepcopy(result); forged['orders'][0]['terms']={}
-        with self.assertRaises(ValueError):audit(self.new,self.manifest,forged)
+        with self.assertRaises(ValueError):self.public_audit(forged)
 
     def test_old_signed_checkpoint_cannot_rewind_new_version_financial_history(self):
         self.legacy(); self.migrate(); migrated=(self.world/'STATE.json').read_bytes()
