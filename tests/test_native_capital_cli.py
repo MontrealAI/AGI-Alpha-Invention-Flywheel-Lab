@@ -9,6 +9,27 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class NativeCapitalCLITests(unittest.TestCase):
+    def test_existing_matched_comparison_resumes_frozen_accounts(self):
+        with tempfile.TemporaryDirectory(prefix='native-capital-compare-resume-') as tmp:
+            root = Path(tmp); output = root / 'comparison'
+            from connected_enterprise.capital import freeze, register, operate
+            frozen = freeze(ROOT, {'arrivals': 3}, output, comparison=True)
+            register(output)
+            prior = operate(output, max_events=3, business=output / 'arms/recycling_enabled', enabled=True)
+            self.assertFalse(prior['complete'])
+            keys = list((output / 'arms/recycling_enabled').glob('*simulation-key'))
+            inode = keys[0].stat().st_ino
+            result = self.command('comparison', '--output', output)
+            self.assertEqual(result['schema'], 'agi-alpha/native-capital-comparison/v1')
+            final = json.loads((output / 'arms/recycling_enabled/RESULT.json').read_text())
+            self.assertEqual(final['source_sha256'], frozen['source']['sha256'])
+            self.assertEqual(final['owned_account']['ledger']['actions'][:len(prior['owned_account']['ledger']['actions'])], prior['owned_account']['ledger']['actions'])
+            self.assertEqual(keys[0].stat().st_ino, inode)
+            self.assertTrue(final['complete'])
+            self.assertEqual(result, self.command('comparison', '--output', output))
+            self.assertEqual(final['owned_account']['ledger'], json.loads((output / 'arms/recycling_enabled/RESULT.json').read_text())['owned_account']['ledger'])
+            self.assertTrue(self.command('audit', '--output', output)['accepted'])
+
     def command(self, *args):
         result = subprocess.run([sys.executable, '-m', 'connected_enterprise', *map(str, args)],
                                 cwd=ROOT, capture_output=True, text=True, timeout=180)

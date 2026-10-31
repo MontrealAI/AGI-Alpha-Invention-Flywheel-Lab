@@ -309,6 +309,9 @@ def main():
         command=[sys.executable,'-m','connected_enterprise','_connected','--action',action,'--output',str(output)]
         if args.command=='operate' and args.max_events is not None:command.extend(['--max-events',str(args.max_events)])
         return subprocess.call(command,cwd=output/d['source_dir'])
+    if args.command=='comparison' and args.config is None and capital.is_capital(output):
+        capital.read_freeze(output)
+        return subprocess.call([sys.executable,'-m','connected_enterprise','_capital','--action','comparison','--output',str(output)],cwd=output/'source')
     if args.command in {'operate','scoreboard','resume','audit'} and capital.is_capital(output):
         capital.read_freeze(output)
         action='operate' if args.command=='resume' else args.command
