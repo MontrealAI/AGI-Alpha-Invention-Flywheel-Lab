@@ -12,7 +12,7 @@
     "adaptive_enterprise/instruments.py": "7aa7dc2f517d44a4c94198ee9ba4b33a282ff81445203adee431e0e980e176cb",
     "adaptive_enterprise/learning.py": "7b8655aac40b54861cd35cb36c0236331eca020cd3d6826a81031ff6bf8c2f1f",
     "adaptive_enterprise/model.py": "48eb5fbf65e8fe71bbbaede7204ac4e1863c420ffb52c3cc136f3125db80ab04",
-    "adaptive_enterprise/runner.py": "978f18dad37ffeef4df2371d3da6e4f6bed6538da9e28220ec9523bf82bd9fed",
+    "adaptive_enterprise/runner.py": "a0d29cb55d9654e1425712bce14973c03faaf4d8fa01d9122d347560659eebc8",
     "adaptive_enterprise/scale.py": "6c780203f8613a19025fcf095227a212a3975e9c19e611fcb0f0af3318e63dea",
     "adaptive_enterprise/strategies.py": "b4b4d09fb8cea0c1ea1d43149321910dd3bce09e57ab88b8fa590b96c144285d",
     "campaign/adaptive-012/ALLOCATION.json": "ee1007de3d388a9866ca1cad2f982f197812792542558c38855e5ff483f18fde",
@@ -160,6 +160,7 @@
     "tests/test_adaptive_resource_resolution.py": "0b7e57636a56e6b4e2653ab0e2114acf3396da59a397fda66ac72cc3afdb25be",
     "tests/test_adaptive_runner.py": "e486e82b7c8c682ef48505878d20b6e6151dd0a1968cc71bcf3bc6a3b5c1c441",
     "tests/test_adaptive_scale.py": "06f8711eddeefb4d93ffc4b1f371ca434729c3741920c1abaca5bb7f56c19da6",
+    "tests/test_adaptive_source_dependencies.py": "cb31401b261ff9186217595c148bf5927239ab8349737fdd375f2f57442848bd",
     "tests/test_adaptive_strategies.py": "7658650591d3f998b447ebad51fcf2cd986355cea2297ad7cbb6a789ca7083d2",
     "tests/test_adaptive_transport.py": "b3aebfc50bcb6483f1c2611827d45f6dfb312ecff6dc71fc0a6dd1ce0c19f765",
     "tests/test_connected_audit_prefixes.py": "9281d3a0c85c47321c1a99742b7f877287f880d570bff57897522ccaa5809cfb",
@@ -192,7 +193,7 @@
     "vendor/alpha_claim/protected_exchange_prospective_v1.py": "cc23e6f064302b38750caa3d755345cb6318b524d3bbdc0f9b86e6f6a4be7565",
     "verification/scan_adaptive_cancellation_history.py": "83ac6a8b36bcf461f79fe6dc7a37ad282f7b944631af54d42aa9e08295a499e8"
   },
-  "current_source_sha256": "a00c9a737df8dca02f16fd73987c112844e9ec58ba05b94d0d2c3f385e35bc42",
+  "current_source_sha256": "6c27f8c41e8c535ebc6a2128390812ed8eebcd8d7b6657a0e535d9f910db6092",
   "historical_commit": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
   "historical_files": {
     ".github/workflows/connected014-release.yml": "f6936c77641080283df60c7c3ab626ae459362ef9c6af3a5612953f34487c657",
@@ -378,6 +379,10 @@
     "adaptive_enterprise/instruments.py": {
       "after_sha256": "7aa7dc2f517d44a4c94198ee9ba4b33a282ff81445203adee431e0e980e176cb",
       "before_sha256": "b385486bd555f1eb1afa5b68ee973d824e2cf65fbd6303e49476350739536455"
+    },
+    "adaptive_enterprise/runner.py": {
+      "after_sha256": "a0d29cb55d9654e1425712bce14973c03faaf4d8fa01d9122d347560659eebc8",
+      "before_sha256": "978f18dad37ffeef4df2371d3da6e4f6bed6538da9e28220ec9523bf82bd9fed"
     },
     "adaptive_enterprise/strategies.py": {
       "after_sha256": "b4b4d09fb8cea0c1ea1d43149321910dd3bce09e57ab88b8fa590b96c144285d",
@@ -569,6 +574,10 @@
     },
     "scripts/run_funded_discovery031.py": {
       "after_sha256": "b2e440b96375c42aaf0a902ff511b8389ee405b3dae964ea38d8adcaa63e12fe",
+      "before_sha256": null
+    },
+    "tests/test_adaptive_source_dependencies.py": {
+      "after_sha256": "cb31401b261ff9186217595c148bf5927239ab8349737fdd375f2f57442848bd",
       "before_sha256": null
     },
     "tests/test_connected_channel_inventory027.py": {
