@@ -43,6 +43,7 @@ def validate_config(cfg):
     if 'mechanism_policy' in cfg:
         from .mechanism_choice import validate_policy
         validate_policy(cfg['mechanism_policy'])
+        if 'cost_contract' in cfg['mechanism_policy'] and cfg['mechanism_policy']['cost_contract']['production_envelope_microUSD']!=cfg['production_cost']:raise ValueError('COMMON_ENVELOPE_MUST_MATCH_PRODUCTION_CONFIG')
     if 'strategic_policy' in cfg:
         from .strategic_commerce import validate_policy
         validate_policy(cfg['strategic_policy'])
@@ -286,7 +287,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 state['channel_state']=book.export()
                 for proposed in p['orders']:
                     o=copy.deepcopy(proposed);ident=o['id'];b=byid[o['customer_id']]
-                    o['funding_receipt']=cost(ident+'-resources',o['complete_cost'],t,'production_contract',{'job_id':o['job_id'],'offer':o['offer'],'fee':o['fee'],'onboarding':o['onboarding'],'support':o['support_cost'],'resource_supplier':'SIMULATED_PREPAID_COMPLETE_RESOURCE_CONTRACT',**({'method_plan':o['method_plan']} if 'method_plan' in o else {})},expected_net=o['price']-o['complete_cost'])
+                    o['funding_receipt']=cost(ident+'-resources',o['complete_cost'],t,'production_contract',{'job_id':o['job_id'],'offer':o['offer'],'fee':o['fee'],'onboarding':o['onboarding'],'support':o['support_cost'],'resource_supplier':'SIMULATED_PREPAID_COMPLETE_RESOURCE_CONTRACT',**({'method_plan':o['method_plan'],**({'production_envelope_microUSD':cfg['production_cost']} if 'cost_contract' in o['method_plan'] else {})} if 'method_plan' in o else {})},expected_net=o['price']-o['complete_cost'])
                     if o['funding_receipt'] is None:raise ValueError('QUALIFIED_PRODUCTION_RESOURCE_CONTRACT_NOT_FUNDED')
                     account.execute('wallet',{'buyer':ident+'-wallet','amount':o['price']},t)
                     account.execute('offer',{'id':ident,'buyer':ident+'-wallet','price':o['price'],'job_id':o['job_id'],'deadline':t+cfg['payment_deadline_hours']},t)
@@ -302,7 +303,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 o=next(o for o in state['orders'] if o['id']==ev['order_id'])
                 if 'method_plan' in o:
                     from .mechanism_choice import execute_funded
-                    plan=o['method_plan'];execution=execute_funded(root,manifest,account,o['offer'],o['job_id'],ident=o['id']+'-method',day=t,mode=plan['mode'],costs=plan['costs'],memory=plan['memory'],prepaid_order=o['id'])
+                    plan=o['method_plan'];execution=execute_funded(root,manifest,account,o['offer'],o['job_id'],ident=o['id']+'-method',day=t,mode=plan['mode'],costs=plan['costs'],memory=plan['memory'],prepaid_order=o['id'],cost_contract=plan.get('cost_contract'))
                     o['method_execution']=execution;o['service_receipt']=execution.get('service',{'accepted':False,'errors':[execution.get('error','METHOD_FAILED')]})
                     if execution.get('memory') is not None:state['mechanism_memory']=execution['memory']
                 else:o['service_receipt']=execute_offer(root,manifest,o['offer'],o['job_id'])
