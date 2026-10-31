@@ -1,0 +1,10 @@
+{
+  "schema": "agi-alpha/mechanism-harness/v1",
+  "purpose": {"initial": ["raw_public_exports"], "goal": ["independently_checked_delivery"], "max_cost": 20, "max_steps": 4, "max_states": 30, "allowed_effects": ["pure"]},
+  "mechanisms": [
+    {"id": "prepare_csv_order", "requires": ["raw_public_exports"], "provides": ["canonical_order"], "cost": 3, "effect": "pure", "origin": "developer_supplied"},
+    {"id": "produce_reconciliation", "requires": ["canonical_order"], "provides": ["reconciliation_files"], "cost": 3, "effect": "pure", "origin": "developer_supplied"},
+    {"id": "check_reconciliation", "requires": ["canonical_order", "reconciliation_files"], "provides": ["independently_checked_delivery"], "cost": 2, "effect": "pure", "origin": "developer_supplied"}
+  ],
+  "candidate_bridges": []
+}
