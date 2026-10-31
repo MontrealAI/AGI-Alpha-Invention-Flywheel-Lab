@@ -29,6 +29,12 @@ def source_paths(root):
         names.update(p.relative_to(root).as_posix() for p in (root/folder).glob(pattern) if p.is_file())
     names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','verification/scan_adaptive_cancellation_history.py','evidence/cancellation-retirement/HISTORICAL_SCAN.json','evidence/cancellation-retirement/COUNTEREXAMPLE.before.json','docs/connected014/OPERATOR.md','AGENTS.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())
     names.update(p for p in ['campaign/overnight-022/OPERATOR_INPUT.json','scripts/measure_overnight022.py'] if (root/p).is_file())
+    if (root/'connected_enterprise/funded_csv_adapter028.py').is_file():
+        required={'mechanism_harness/'+name for name in ('__init__.py','__main__.py','core.py','evidence.py','experiment.py','operating027.py','study027.py')}
+        required.update({'campaign/mechanism-harness-027/EXISTING_OPERATIONS.json','campaign/mechanism-harness-027/PLAN.json'})
+        if any(not (root/name).is_file() for name in required):
+            raise ValueError('FUNDED_CSV_ADAPTER_SOURCE_DEPENDENCY_MISSING')
+        names.update(required)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):

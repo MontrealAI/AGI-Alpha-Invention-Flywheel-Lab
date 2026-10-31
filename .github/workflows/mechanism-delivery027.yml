@@ -1,0 +1,52 @@
+name: Mechanism Harness 027 - actual synthetic P0 service, independent confirmation
+on:
+  pull_request:
+    paths:
+      - 'mechanism_harness/**'
+      - 'campaign/mechanism-harness-027/**'
+      - 'tests/test_mechanism_harness_027.py'
+      - 'commercial/service.py'
+      - 'commercial/onboarding.py'
+      - 'commercial/service_verifier.py'
+      - '.github/workflows/mechanism-delivery027.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: mechanism-delivery027-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  actual-p0-synthetic-service:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Original reconciliation and onboarding regressions
+        run: |
+          python -m unittest discover -s tests -p 'test_service010.py' -v
+          python -m unittest discover -s tests -p 'test_onboarding010.py' -v
+      - name: Mechanism execution, source mutation, abstention and limited authority regressions
+        run: python -m unittest discover -s tests -p 'test_mechanism_harness_027.py' -v
+      - name: Actual P0 service executions under three matched variants
+        run: |
+          python -m mechanism_harness.study027 --output "$RUNNER_TEMP/mechanism027-study"
+          python -m mechanism_harness.operating027 audit \
+            --spec campaign/mechanism-harness-027/EXISTING_OPERATIONS.json \
+            --plan campaign/mechanism-harness-027/PLAN.json \
+            --contract campaign/mechanism-harness-027/cases/complete/contract.json \
+            --invoices campaign/mechanism-harness-027/cases/complete/invoices.csv \
+            --payments campaign/mechanism-harness-027/cases/complete/payments.csv \
+            --output "$RUNNER_TEMP/mechanism027-study/complete-inherited"
+      - name: Preserve compact synthetic result without account state
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: mechanism-delivery027-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/mechanism027-study/STUDY.json
+          if-no-files-found: warn
