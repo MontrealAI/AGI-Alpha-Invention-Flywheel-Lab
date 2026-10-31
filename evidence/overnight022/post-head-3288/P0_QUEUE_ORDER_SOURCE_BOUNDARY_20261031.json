@@ -1,0 +1,61 @@
+{
+  "schema": "agi-alpha/overnight022/p0-legacy-queue-source-order-checkpoint/v1",
+  "utc_recorded_at": "2026-10-31T09:13:45Z",
+  "purpose": "Additive independent safety check for a nonempty legacy operating queue; NOT an authenticated migration or operating integration.",
+  "ownership": {
+    "integration_handoff": "READY_FOR_SUCCESSOR",
+    "native_task": "01a18fa7-ffc6-7384-8bb4-ea6012cfb0f7",
+    "native_task_actual_state": "UNKNOWN: automation peek returned task not found/access denied in current context; not evidence of inactivity",
+    "overlapping_financial_writes": false
+  },
+  "refs": {
+    "released_main": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+    "native_candidate_public": "3981b182513abbba1c2ab1102f94732c453422fa",
+    "immutable_public_fixture_commit": "328835b30b3fed52b491f33f86ad008c60c37704",
+    "fixture_path": "evidence/overnight022/migration/production-awaiting-acceptance/LEGACY_CHECKPOINT.json",
+    "fixture_blob": "91a4c08cac3a5d789d7dd9429815c1168c935bd5",
+    "updated_readonly_preflight": "evidence/overnight022/post-head-3288/p0_queue_boundary_regression.py",
+    "prior_preflight_commit": "0ccf95bc705443610337939d22b27d571c554255",
+    "updated_preflight_commit": "13294ce9a24432d5e8f4ec3bf3942b06bce0a09c",
+    "updated_preflight_blob": "f3128e534b706c2dbd573d886457dae19fe10991"
+  },
+  "observed_fixture": {
+    "processed_operating_events": 3,
+    "semantic_events": 4,
+    "pending_queue_events": 12,
+    "last_operating_hour": 2,
+    "first_pending_hour": 3,
+    "queue_order": "(time, id) as in connected_enterprise/engine.py _schedule; signed legacy queue must not be re-sorted"
+  },
+  "new_counterexample": {
+    "input": "Synthetic pair of distinct legacy event IDs at the same hour in reverse lexical ID order",
+    "previous_preflight": "WOULD_ACCEPT because it compared only adjacent event times",
+    "corrected_preflight": "REJECTS LEGACY_QUEUE_PROVENANCE_INVALID",
+    "canonical_equal_time_pair": "ACCEPTS",
+    "fractional_hour": "REJECTS instead of accepting Python numeric comparison",
+    "assumption": "Synthetic negative cases; equal-time tie not present in the single exposed immutable nonempty checkpoint"
+  },
+  "tests": {
+    "local_isolated_python": "5/5 targeted self-contained structural predicate tests passed (not full GitHub script)",
+    "local_python_utc": "2026-10-31",
+    "local_file_sha256": "8d16dc06cb3782583b801aacd3b26c39e6542ac28559e877a5ce27e780147dfa",
+    "python_process_user_cpu_seconds": 1.04,
+    "python_process_system_cpu_seconds": 0.22,
+    "python_wall_seconds": 0.82,
+    "python_max_rss_kib": 96408,
+    "additional_git_host_model_billing": "UNKNOWN",
+    "remote_readback_predicate_checks": "6/6 cross-language structural cases passed against immutable fixture and synthetic same-time/float cases",
+    "remote_full_script_selftest": "NOT_EXECUTED; run python3 p0_queue_boundary_regression.py --self-test before claiming Python source qualification"
+  },
+  "interpretation": "This closes one defect in a public read-only structural preflight; it neither verifies HMAC nor proves queue provenance, operating STATE migration, native funding, maturity, earnings, or financial correctness.",
+  "historical_failures": "Preserve original ARCHIVE_RESOURCE_BOUND and nonempty signed STATE source rejection without reclassification.",
+  "acceptance_matrix_delta": {
+    "qualified_baseline_release": "unchanged achieved",
+    "canonical_operator_interface": "unchanged achieved",
+    "nonempty_queue_migration": "unchanged FAILED",
+    "native_prospective_lifecycle": "unchanged partial",
+    "causal_earned_cash_reinvestment": "unchanged partial",
+    "verified_commercial_invention_claims": "unchanged unqualified"
+  },
+  "next_decision": "Obtain native-capital task actual source checkpoint and explicit safe boundary. Then compose with released 8ab, authenticate old HMAC and full queue using pinned old source, enforce source-specific queue ordering and outstanding financial event priority without editing old schedule, test crash/replay/racing writers and due claim-before-maturity through public canonical CLI; no competing Account."
+}
