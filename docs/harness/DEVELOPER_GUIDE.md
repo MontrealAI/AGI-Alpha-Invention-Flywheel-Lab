@@ -77,4 +77,13 @@ For a new successor-method claim, compare acquired reuse with no inheritance and
 
 Use canonical `plan_actions → select/allocate_actions` and funded execution; do not add a second ledger. Consider recurring complete functions, authorized additional services and costed distribution channels without assuming infinite demand or counting bundle components twice. Sequence planning may select only the currently affordable first action, then reobserve and replan. Future enabling value can justify a finite experiment but is not income or spendable cash. No fixed R&D split: ordinary profitable expansion may be best.
 
-Track **financed by** separately from **causally enabled by**. Commercial surplus, inherited capability, improved discovery and physical productive capacity are different outcomes. Software/simulation results do not establish an installed industrial asset; physical work needs its own authorized environment, measurements and lifecycle costs. None of these recipes establishes the $3B trailing-year profit objective by itself.
+Track **financed by** separately from **causally enabled by**. Commercial surplus, inherited capability, improved discovery and physical productive capacity are different outcomes. Software/simulation results do not establish an installed industrial asset; physical work needs its own authorized environment, measurements and lifecycle costs. None of these recipes establishes a trailing-year profit milestone by itself.
+
+
+## Scale without arbitrary commercial ceilings
+
+There is no arbitrary maximum buyer count, business count, service catalogue, transaction volume or profit. The historical $3B trailing-year complete-cost profit notification milestone is not a cap. Treat $100B annual profit as a required engineering stress case, not an upper bound, forecast or achieved result; support larger cases when justified.
+
+Separate business-scale semantics from finite execution: resumable batches, scalable state/indexes and validated aggregation can support larger workloads while each experiment and job respects actual platform resources, native cash/obligations, permissions and security. Do not disable resource guards, assume infinite demand or replace an artificial ceiling with another magic number. Trace the full path through admission, planning, execution, persistence, restart, audit and reporting; accepting a large number at one interface is not scale support.
+
+Scale tests must exercise meaningful demand/fulfillment/settlement workloads, conservation and duplicate/recovery behavior, with complete cost and explicit horizon. Validate aggregate calculations against tractable native executions and preserve adverse regions. Report measured limits and unresolved bottlenecks honestly; do not change an in-flight cohort or fabricate profit to meet a stress target. Current scale-cap repairs are implementation work requiring their own qualification, not something this guidance itself implements.
