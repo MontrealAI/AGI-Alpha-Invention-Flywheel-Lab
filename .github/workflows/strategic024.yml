@@ -1,15 +1,11 @@
 name: Strategic 024 public commercial experiment
 on:
   pull_request:
+    # Deliberate experiment definitions, not every runtime/test/docs change.
+    # Current correctness, native audits and clean smoke remain mandatory elsewhere.
     paths:
-      - 'connected_enterprise/**'
-      - 'adaptive_enterprise/**'
       - 'scripts/run_strategic024.py'
       - 'scripts/summarize_strategic024.py'
-      - 'tests/test_strategic024*.py'
-      - 'tests/test_source_package_logs.py'
-      - 'flywheel/archive_v2.py'
-      - 'docs/packaging/SOURCE_ONLY_OMISSIONS.json'
       - 'campaign/strategic-024/**'
       - '.github/workflows/strategic024.yml'
   workflow_dispatch:

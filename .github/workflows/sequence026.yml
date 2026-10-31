@@ -2,12 +2,13 @@ name: Public mechanism sequence 026 development
 on:
   workflow_dispatch:
   pull_request:
+    # Explicit protocol/configuration changes or manual execution request a cohort.
     paths:
-      - ".github/workflows/sequence026.yml"
-      - "scripts/run_sequence026.py"
-      - "connected_enterprise/sequence_window.py"
-      - "connected_enterprise/**"
-      - "tests/test_sequence*.py"
+      - '.github/workflows/sequence026.yml'
+      - 'scripts/run_sequence026.py'
+      - 'scripts/run_commoncost026.py'
+      - 'scripts/run_strategic024.py'
+      - 'campaign/sequence-026/**'
 permissions:
   contents: read
 concurrency:
