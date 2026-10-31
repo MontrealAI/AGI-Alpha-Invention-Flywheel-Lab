@@ -40,6 +40,33 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in DEPENDENCIES):
             raise ValueError('FUNDED_DISCOVERY_SOURCE_DEPENDENCY_MISSING')
         names.update(DEPENDENCIES)
+    if (root/'flywheel_wheel').exists():
+        # Optional read-only wheel utilities ship through this canonical inventory.
+        required={
+            '.github/workflows/flywheel-wheel030.yml',
+            'docs/flywheel-wheel/ARCHITECTURE.md',
+            'docs/flywheel-wheel/ECONOMIC-ATLAS.md',
+            'docs/flywheel-wheel/HARNESS-032.md',
+            'docs/flywheel-wheel/LEAN-LEARNING-034.md',
+            'docs/flywheel-wheel/OPERATING.md',
+            'docs/flywheel-wheel/REVOLUTION-033.md',
+            'docs/flywheel-wheel/architecture.svg',
+            'flywheel_wheel/__init__.py',
+            'flywheel_wheel/__main__.py',
+            'flywheel_wheel/atlas.py',
+            'flywheel_wheel/coupling.py',
+            'flywheel_wheel/lessons.py',
+            'flywheel_wheel/precision.py',
+            'flywheel_wheel/preflight.py',
+            'flywheel_wheel/readout.py',
+            'flywheel_wheel/render.py',
+            'flywheel_wheel/revolution.py',
+            'scripts/qualify_economic_wheel031.py',
+            'scripts/qualify_released_wheel035.py',
+        }
+        if any(not (root/name).is_file() for name in required):
+            raise ValueError('FLYWHEEL_WHEEL_SOURCE_DEPENDENCY_MISSING')
+        names.update(required)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):

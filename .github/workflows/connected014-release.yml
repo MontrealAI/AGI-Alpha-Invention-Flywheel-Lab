@@ -111,8 +111,20 @@ jobs:
             exit 1
           fi
           python scripts/release_connected014.py operate-download --assets "$RUNNER_TEMP/actual-release-download" --source-commit "$GITHUB_SHA" --output "$RUNNER_TEMP/downloaded-release-operation" --timeout-seconds "$remaining" --actual-release-download
+      - name: Qualify wheel utility from the actual downloaded source
+        id: released_wheel
+        run: |
+          source_sha=$(python -c 'import json,os; print(json.load(open(os.environ["RUNNER_TEMP"]+"/downloaded-release-operation/DOWNLOADED_RELEASE_RUN.json"))["source_sha256"])')
+          python "$RUNNER_TEMP/downloaded-release-operation/source/scripts/qualify_released_wheel035.py" --expected-source "$source_sha" --output "$RUNNER_TEMP/RELEASED_WHEEL.json"
+      - name: Retain compact released wheel qualification
+        if: always() && steps.operation.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: connected014-wheel-utility-${{ github.sha }}
+          path: ${{ runner.temp }}/RELEASED_WHEEL.json
+          if-no-files-found: error
       - name: Retain successful downloaded operation
-        if: success()
+        if: always() && steps.operation.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: connected014-published-operation-${{ github.sha }}

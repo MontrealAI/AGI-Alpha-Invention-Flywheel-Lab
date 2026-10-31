@@ -52,12 +52,17 @@ class CompactFailureTests(unittest.TestCase):
   self.assertEqual(len(operation),1)
   steps=re.split(r'(?m)^      - ',operation[0])
   uploads=[step for step in steps if re.search(r'(?m)^        uses: actions/upload-artifact@',step)]
-  self.assertEqual(len(uploads),2)
+  self.assertEqual(len(uploads),3)
   failure=[step for step in uploads if re.search(r'(?m)^        if: failure\(\)',step)]
   self.assertEqual(len(failure),1)
   self.assertIn("        if: failure() && steps.operation.outcome != 'success' && steps.compact_failure.outcome == 'success'\n",failure[0])
   self.assertEqual(re.findall(r'(?m)^          path: (.+)$',failure[0]),['${{ runner.temp }}/downloaded-release-operation/FAILURE_LESSON.json'])
-  success=[step for step in uploads if re.search(r'(?m)^        if: success\(\)$',step)]
+  success=[step for step in uploads if 'name: connected014-published-operation-' in step]
+  wheel=[step for step in uploads if 'name: connected014-wheel-utility-' in step]
+  self.assertEqual(len(wheel),1)
+  for step in success+wheel:
+   self.assertIn("        if: always() && steps.operation.outcome == 'success'\n",step)
+  self.assertEqual(re.findall(r'(?m)^          path: (.+)$',wheel[0]),['${{ runner.temp }}/RELEASED_WHEEL.json'])
   self.assertEqual(len(success),1)
   self.assertEqual(re.findall(r'(?m)^            (.+)$',success[0]),[
    '${{ runner.temp }}/RELEASE_DOWNLOAD.json',
@@ -70,5 +75,7 @@ class CompactFailureTests(unittest.TestCase):
   self.assert_workflow_upload_contract(text)
   for changed in (text.replace(" && steps.compact_failure.outcome == 'success'",''),
                   text.replace('/FAILURE_LESSON.json','/*.stderr'),
+                  text.replace('/RELEASED_WHEEL.json','/*.stdout'),
+                  text.replace("always() && steps.operation.outcome == 'success'",'always()'),
                   text.replace('downloaded-operation-keyfree.zip','failed-operation-keyfree.zip')):
    with self.assertRaises(AssertionError): self.assert_workflow_upload_contract(changed)
