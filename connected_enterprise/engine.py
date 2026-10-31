@@ -304,10 +304,11 @@ def _run_world(root,manifest,config,seed,arm,output,source=None,stop_after_event
                 if not ev['refund'] and 'terms' in o:_schedule(state,o['terms']['maturity_day']+1,'mature',o['id']+'-mature',order_id=o['id'])
             elif kind=='mature':
                 o=next(o for o in state['orders'] if o['id']==ev['order_id'])
-                before=account.snapshot()['summary'];after=account.advance_financial(t)['summary']
+                # Financial advance checks neutrality around each actual native
+                # maturity, including the pre-event advance above.
+                account.advance_financial(t)
                 o['maturity_time']=t
                 _event(state,t,'PROTECTION_MATURITY',ev['id'],order_id=o['id'])
-                if before['profit']!=after['profit'] or before['cash']!=after['cash']:raise ValueError('MATURITY_CANNOT_CREATE_CASH_OR_PROFIT')
             else:raise ValueError('UNKNOWN_OPERATING_EVENT')
             if failpoint:failpoint('after_event_before_checkpoint',state,account)
             state['queue'].pop(0);state['last_time']=t;state['processed_events']+=1;state['current']=None;account.save_checkpoint(path,state);performed+=1

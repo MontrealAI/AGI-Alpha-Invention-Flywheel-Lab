@@ -110,14 +110,19 @@ def register(root, config, output, *, seed, arm, cohort_seed=None):
 
 
 def read_operator(output):
-    from .runner import identity
     from .engine import validate_config
+    from .verify import check_source
     output = Path(output).absolute(); d = _read(output / 'OPERATOR.json')
     fields = {'schema', 'source_dir', 'source', 'business_dir', 'config', 'seed', 'arm', 'manifest_sha256', 'upgrade_request', 'scope', 'sha256'}
     if (set(d) != fields or d['schema'] != SCHEMA or digest({k: v for k, v in d.items() if k != 'sha256'}) != d['sha256']
             or not (d['source_dir'] in {'source', 'source-022'} or isinstance(d['source_dir'], str) and d['source_dir'].startswith('source-') and len(d['source_dir']) == 71 and all(c in '0123456789abcdef' for c in d['source_dir'][7:])) or d['business_dir'] not in {'business', '.'}
-            or validate_config(d['config']) != d['config'] or identity(output / d['source_dir']) != d['source']):
+            or validate_config(d['config']) != d['config']):
         raise ValueError('REGISTERED_CONNECTED_OPERATOR_OR_SOURCE_CHANGED')
+    # The registered map belongs to the historical selector. Today's selector
+    # can add/remove distribution resources without changing those old bytes.
+    # Financial operations additionally authenticate this exact runtime map
+    # against the owned checkpoint and its pinned transition history.
+    check_source(output / d['source_dir'], d['source'])
     manifest = _read(output / 'SERVICES.json')
     if digest(manifest) != d['manifest_sha256']:
         raise ValueError('CONNECTED_OPERATOR_SERVICE_MANIFEST_CHANGED')

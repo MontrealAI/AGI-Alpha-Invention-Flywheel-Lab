@@ -56,7 +56,16 @@ def operate(output):
                 while True:
                     try:
                         pid,status=os.waitpid(-1,os.WNOHANG)
-                        if pid==0:break
+                        if pid==0:
+                            # An inner CLI timeout can exit its launcher while a
+                            # verifier remains alive. Stop the entire owned group
+                            # and reap it before reporting costs or any exit.
+                            try:os.killpg(child.pid,signal.SIGKILL)
+                            except ProcessLookupError:pass
+                            while True:
+                                try:os.waitpid(-1,0)
+                                except ChildProcessError:break
+                            raise RuntimeError('UNEXPECTED_LIVE_COMMAND_DESCENDANT')
                     except ChildProcessError:break
         receipt['commands'].append({'label':label,'arguments':list(map(str,arguments)),'returncode':returncode,
                                    'stdout_sha256':hashlib.sha256((output/(label+'.stdout')).read_bytes()).hexdigest(),

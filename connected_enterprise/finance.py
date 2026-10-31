@@ -442,7 +442,11 @@ class JournalAccount:
             states = {t['id']: t['state'] for t in tape['orders']}
             for row in tape.get('prospective_orders', []):
                 if row['matured_at'] is None and states[row['order_id']] in {'released', 'breached'} and day > terms[row['terms_id']]['maturity_day']:
+                    before = self._account.snapshot()['summary']
                     self.execute('mature', {'id': row['order_id'], 'event_id': 'maturity:' + row['order_id'] + ':' + row['terms_sha256'][:20]}, day)
+                    after = self._account.snapshot()['summary']
+                    if any(before[name] != after[name] for name in ('cash', 'profit')):
+                        raise ValueError('MATURITY_CANNOT_CREATE_CASH_OR_PROFIT')
             return self._account.snapshot()
 
     @classmethod

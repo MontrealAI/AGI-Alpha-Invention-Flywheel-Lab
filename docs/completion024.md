@@ -1,6 +1,6 @@
 # Composed native lifecycle qualification
 
-The qualified released champion remains connected014-8abfb96d4ef859e30ca344d7933ec2a2f49012c1 until the composed source completes all normal gates. Every collection below is simulated. The historical operator022 paper and economic evidence remain bound to their original source.
+The qualified released champion is connected014-85fba7c94cac5f741d047807a0c83e8ce11f4216 (the same historical operating closure) until the composed source completes all normal gates. Every collection below is simulated. The historical operator022 paper and economic evidence remain bound to their original source.
 
 Use Python 3.12 and `python -m pip install --only-binary=:all: -r requirements-commercial010.txt`. Existing run, registration, comparison and scoreboard commands are documented in [the operator manual](connected014/OPERATOR.md) and [the capital manual](completion023/OPERATOR.md).
 
@@ -28,6 +28,10 @@ This command retains orphan bytes, signs metadata with existing owner authority,
 Neither a public package nor the older successor022 private backup authorizes rewinding the original business. Its later completion023 account/tape, signed STATE/journal/recovery sidecars, unchanged private key, complete source maps and manifest remain unavailable to this receiving environment. New experimental accounts and engineering tests do not replace that missing continuation state.
 
 Qualification is a frozen-source engineering reproduction, not new buyer evidence, measured frontier billing, annual profit or external commerce. The current binding must be generated from the actual accepted clean qualification receipt, after source changes stop; it cannot promote the historical paper to new-source economic confirmation.
+
+Each registered historical runtime is checked against its own stored file map, including resources that a newer selector no longer includes. Its unchanged bytes remain part of the authenticated source-transition history; the new selector cannot retroactively redefine them. Native financial advance checks cash and profit immediately around each individual maturity operation. This assertion supplements canonical replay and does not prohibit legitimate claim costs or collected recoveries at the same clock.
+
+PR 38's separate strategic-commerce experiment is not included in this candidate. Its opt-in policy and packaging changes need their own composition and qualification after the safe native lifecycle release; its synthetic or public experiment receipts do not qualify this source.
 
 Run the finite installed-source native continuation proof with one command (a new private experimental output, no original-account replacement):
 

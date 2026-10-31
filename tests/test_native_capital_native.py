@@ -3,6 +3,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from commercial.terms import prospective_terms
 from connected_enterprise.finance import JournalAccount, SOURCE_PATHS, audit_journal
@@ -41,6 +42,37 @@ class NativeCapitalAdverseStateTests(unittest.TestCase):
                                  'job_id': self.job['id'], 'deadline': 10, 'terms_id': 't'}, 0)
         for action, moment in [('consent', 0), ('fund', 0), ('prepare', 1), ('release', 2)]:
             account.execute('event', {'id': 'o', 'event_id': action, 'action': action}, moment)
+
+    def test_first_native_maturity_detects_cash_or_profit_fault_and_keeps_committed_history(self):
+        for fields in [('cash',), ('profit',), ('cash', 'profit')]:
+            with self.subTest(fields=fields), tempfile.TemporaryDirectory(prefix='maturity-fault-') as tmp:
+                with self.open(Path(tmp) / 'account.sqlite') as account:
+                    self.settle(account)
+                    execute, snapshot = account.execute, account._account.snapshot
+                    committed = False
+                    def observed_execute(op, args, day):
+                        nonlocal committed
+                        result = execute(op, args, day)
+                        if op == 'mature':
+                            committed = True
+                        return result
+                    def faulty_snapshot():
+                        result = copy.deepcopy(snapshot())
+                        if committed:
+                            for field in fields:
+                                result['summary'][field] += 1
+                        return result
+                    with patch.object(account, 'execute', observed_execute), \
+                         patch.object(account._account, 'snapshot', faulty_snapshot), \
+                         self.assertRaisesRegex(ValueError, 'MATURITY_CANNOT_CREATE_CASH_OR_PROFIT'):
+                        account.advance_financial(21)
+                    # The negative assertion cannot erase or retry a committed
+                    # financial event. Original canonical audit remains mandatory.
+                    before = account.export()
+                    self.assertEqual(sum(row['op'] == 'mature' for row in before['ledger']['actions']), 1)
+                    account.advance_financial(21)
+                    self.assertEqual(account.export(), before)
+                    self.assertTrue(account.audit()['accepted'])
 
     def test_reversal_keeps_distinct_claim_service_and_registered_residual(self):
         with tempfile.TemporaryDirectory(prefix='native-capital-account-') as tmp:

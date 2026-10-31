@@ -34,7 +34,6 @@ def source_paths(root):
     names.update(p for p in ['campaign/successor-022/proofs/maturity_successor_protocol.json','campaign/successor-022/proofs/ADAPTATION.json'] if (root/p).is_file())
     names.update(p.relative_to(root).as_posix() for p in (root/'campaign/connected-registrations').glob('*.json') if p.is_file())
     names.update(p for p in ['campaign/overnight-022/OPERATOR_INPUT.json','scripts/measure_overnight022.py','scripts/run_regression_shard.py'] if (root/p).is_file())
-    names.update(p for p in ['docs/completion015/'+name for name in ['PAPER.pdf','PAPER.tex','index.html','REPORT.md','PUBLICATION.json','PDF_QA.json']] if (root/p).is_file())
     names.update(p for p in ['docs/completion024.md','scripts/operate_completion024.py'] if (root/p).is_file())
     names.update(p for p in ['docs/completion023/OPERATOR.md','scripts/export_recovered023.py','campaign/completion-023/PLAN.json'] if (root/p).is_file())
     return sorted(name for name in names if (root/name).is_file())

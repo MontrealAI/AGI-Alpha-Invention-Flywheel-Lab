@@ -49,6 +49,37 @@ class OwnerOperatingTests(unittest.TestCase):
   done=subprocess.run([sys.executable,'-m','connected_enterprise',*map(str,args)],cwd=root,
       env={**os.environ,'PYTHONPATH':str(root),'PYTHONDONTWRITEBYTECODE':'1'},text=True,capture_output=True,timeout=150)
   self.assertEqual(done.returncode,0,done.stderr[-5000:]);return done
+ def test_forward_upgrade_uses_registered_historical_selector_and_rejects_changed_resource(self):
+  self.legacy();key_inode=self.key.stat().st_ino
+  previous=self.case/'previous-selector';operations._copy_source(self.new,previous)
+  operations._copy_inputs(self.old,previous,self.manifest)
+  resource=previous/'historical-selector-resource.json';resource.write_text('{"historical":"bound"}\n')
+  runner=previous/'connected_enterprise/runner.py'
+  runner.write_text(runner.read_text().replace('    names=set(inherited_paths(root))',
+     "    names=set(inherited_paths(root)); names.add('historical-selector-resource.json')"))
+  manifest=self.case/'SERVICES.json';manifest.write_text(json.dumps(self.manifest))
+  policy=self.case/'policy.json';policy.write_text(json.dumps(self.policy))
+  def upgrade(root,old,ident):
+   checkpoint=json.loads((self.world/'STATE.json').read_text())
+   self.command(root,'upgrade','--output',self.world,'--historical-source',old,'--manifest',manifest,
+       '--policy',policy,'--expected-checkpoint',digest(checkpoint),'--id',ident,'--transition-format','v2-cas')
+  # Only the old CLI computes and signs the historical runtime map.
+  upgrade(previous,self.old,'historical-selector-first')
+  descriptor=operations.read_operator(self.world)[0];registered=self.world/descriptor['source_dir']
+  self.assertIn(resource.name,descriptor['source']['files'])
+  from connected_enterprise.runner import identity
+  self.assertNotEqual(identity(registered),descriptor['source'])
+  bound=registered/resource.name;raw=bound.read_bytes();bound.write_bytes(raw+b' ')
+  with self.assertRaisesRegex(ValueError,'CONNECTED_EXECUTING_SOURCE_CHANGED'):
+   operations.read_operator(self.world)
+  bound.write_bytes(raw)
+  prior=json.loads((self.world/'RESULT.json').read_text())['owned_account']['ledger']['actions']
+  upgrade(fixture.ROOT,registered,'historical-selector-second')
+  self.command(fixture.ROOT,'operate','--output',self.world)
+  result=json.loads((self.world/'RESULT.json').read_text())
+  self.assertTrue(result['complete']);self.assertEqual(result['owned_account']['ledger']['actions'][:len(prior)],prior)
+  self.assertEqual(self.key.stat().st_ino,key_inode)
+  self.command(fixture.ROOT,'audit','--output',self.world)
  def test_public_cli_two_successive_owner_transitions_and_unchanged_resume(self):
   self.legacy();before=self.before['body']['state'];self.assertTrue(before['queue'])
   manifest=self.case/'SERVICES.json';manifest.write_text(json.dumps(self.manifest))

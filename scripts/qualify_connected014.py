@@ -83,6 +83,9 @@ def qualify(output,smoke,timeout_seconds):
         receipt['runtime']={'python':sys.version,'dependencies':dependencies,'dependency_installation':'NOT_PERFORMED; exact preinstalled pinned runtime checked. Fresh dependency installation must be qualified separately.'}
         frozen_source=identity(REPOSITORY)
         names=set(source_paths(REPOSITORY))|{'AGENTS.md','requirements-commercial010.txt','scripts/qualify_connected014.py','docs/connected014/OPERATOR.md'}
+        # Immutable historical paper fixtures are distribution resources, not
+        # operating authority or a self-referential current publication hash.
+        names.update('docs/completion015/'+name for name in ['PAPER.pdf','PAPER.tex','index.html','REPORT.md','PUBLICATION.json','PDF_QA.json'])
         files={}
         for name in sorted(names):
             path=REPOSITORY/name
