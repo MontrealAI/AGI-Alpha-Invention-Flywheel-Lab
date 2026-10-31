@@ -4,6 +4,8 @@ from pathlib import Path
 import tempfile
 import unittest
 from adaptive_enterprise.instruments import prepare_services,load_jobs
+from connected_enterprise.engine import default_config,run_world
+from connected_enterprise.capital_lifecycle import default_policy
 ROOT=Path(__file__).resolve().parents[1]
 class ChannelInventory(unittest.TestCase):
     def test_generation_bounds_before_effects(self):
@@ -17,6 +19,16 @@ class ChannelInventory(unittest.TestCase):
             self.assertEqual(len(m['jobs']),296);self.assertEqual(len({j['id'] for j in m['jobs']}),296)
             self.assertEqual(m['cohort_provenance']['jobs_per_service'],96)
             self.assertEqual(len(load_jobs(ROOT,m)),296)
+            self.assertNotIn('native_engine',m)  # Inventory expansion never opts into finance.
             changed=copy.deepcopy(m);changed['native_engine']='prospective-v1'
-            with self.assertRaises(ValueError):load_jobs(ROOT,changed)
+            self.assertEqual(len(load_jobs(ROOT,changed)),296)
+            unknown=copy.deepcopy(m);unknown['native_engine']='unknown-engine'
+            with self.assertRaisesRegex(ValueError,'DECLARED_NATIVE_ENGINE_REQUIRED'):load_jobs(ROOT,unknown)
+            cfg=default_config()
+            for manifest,config in [(changed,cfg),(m,{**cfg,'prospective_policy':default_policy()})]:
+                output=Path(folder)/'rejected-account'
+                with self.assertRaisesRegex(ValueError,'FRESH_POLICY_NATIVE_ENGINE_REGISTRATION_MISMATCH'):
+                    run_world(ROOT,manifest,config,1,'competitive_growth',output)
+                self.assertFalse((output/'account.sqlite').exists())
+                self.assertFalse((output/'STATE.json').exists())
 if __name__=='__main__':unittest.main()

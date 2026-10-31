@@ -262,7 +262,7 @@ class ReleaseIntegrityTests(unittest.TestCase):
         with patch.object(qualifier, 'run_command', side_effect=TimeoutError('bounded test interruption')):
             with self.assertRaisesRegex(TimeoutError, 'interruption'):
                 release.operate_download(self.assets, self.root/'operation-check', COMMIT, 1)
-        receipt = release.read(self.root/'operation-check/DOWNLOADED_RELEASE_RUN.json')
+        receipt = release.read(self.root/'operation-check/FAILURE_LESSON.json')
         self.assertFalse(receipt['accepted'])
         self.assertFalse(receipt['actual_release_download'])
 
@@ -290,7 +290,7 @@ class ReleaseIntegrityTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'UNSAFE_OR_PRIVATE'):
                 release.operate_download(self.assets, output, COMMIT, 10)
         self.assertFalse((output/'downloaded-operation-keyfree.zip').exists())
-        self.assertFalse(release.read(output/'DOWNLOADED_RELEASE_RUN.json')['accepted'])
+        self.assertFalse(release.read(output/'FAILURE_LESSON.json')['accepted'])
 
     def test_actual_operation_archive_hash_and_public_audit_are_retained(self):
         import scripts.qualify_connected014 as qualifier
@@ -347,10 +347,10 @@ class ReleaseIntegrityTests(unittest.TestCase):
         with patch.object(release,'cpu_usage',side_effect=[zero]+[over]*10), patch.object(qualifier,'run_command',side_effect=rejected), patch.object(qualifier,'native_state',return_value={'account':'unchanged'}):
             with self.assertRaisesRegex(ValueError,'NATIVE_OPERATING_AUDIT_REJECTED'):
                 release.operate_download(self.assets,output,COMMIT,10)
-        receipt=release.read(output/'DOWNLOADED_RELEASE_RUN.json')
+        receipt=release.read(output/'FAILURE_LESSON.json')
         self.assertFalse(receipt['accepted'])
         self.assertEqual(receipt['resources']['total_measured_cpu_seconds'],3000.)
-        self.assertEqual(len(receipt['commands']),3)
+        self.assertEqual(len(receipt['completed_commands']),3)
 
     def checkpoint_fixture(self, parent):
         operation = parent/'operation'
@@ -444,24 +444,25 @@ class ReleaseIntegrityTests(unittest.TestCase):
         with patch('connected_enterprise.runner.read_freeze', side_effect=metadata), patch('adaptive_enterprise.instruments._validate_manifest'), patch.object(release, 'cpu_usage', side_effect=[zero, over, cleanup]), patch.object(qualifier, 'run_command', side_effect=execute) as command:
             with self.assertRaisesRegex(TimeoutError, 'actual command wall deadline'):
                 release.operate_download(self.assets, output, COMMIT, 10)
-        receipt = release.read(output/'DOWNLOADED_RELEASE_RUN.json')
+        receipt = release.read(output/'FAILURE_LESSON.json')
         self.assertFalse(receipt['accepted'])
         self.assertEqual(command.call_count, 1)
-        self.assertEqual(receipt['failure']['message'], 'actual command wall deadline')
+        self.assertEqual(receipt['category'], 'WALL_TIMEOUT')
         self.assertEqual(receipt['resources']['total_measured_cpu_seconds'], 2400.75)
-        self.assertTrue((output/receipt['failure_checkpoint']['path']).exists())
+        self.assertFalse((output/'failed-operation-keyfree.zip').exists())
+        self.assertTrue((output/'operation').is_dir())
         self.assertFalse((output/'downloaded-operation-keyfree.zip').exists())
 
-    def test_checkpoint_error_never_masks_original_failure(self):
+    def test_failure_never_invokes_bulk_checkpoint_export(self):
         import scripts.qualify_connected014 as qualifier
         output = self.root/'checkpoint-error'
-        with patch.object(qualifier, 'run_command', side_effect=TimeoutError('original boundary')), patch.object(release, 'failure_checkpoint', side_effect=ValueError('privacy refusal')):
+        with patch.object(qualifier, 'run_command', side_effect=TimeoutError('original boundary')), patch.object(release, 'failure_checkpoint') as checkpoint:
             with self.assertRaisesRegex(TimeoutError, 'original boundary'):
                 release.operate_download(self.assets, output, COMMIT, 10)
-        receipt = release.read(output/'DOWNLOADED_RELEASE_RUN.json')
+        receipt = release.read(output/'FAILURE_LESSON.json')
         self.assertFalse(receipt['accepted'])
-        self.assertEqual(receipt['failure']['message'], 'original boundary')
-        self.assertEqual(receipt['checkpoint_failure']['message'], 'privacy refusal')
+        self.assertEqual(receipt['category'], 'WALL_TIMEOUT')
+        checkpoint.assert_not_called()
 
 class KernelCpuTests(unittest.TestCase):
     def test_deltas_count_self_and_waited_children_without_prior_usage(self):

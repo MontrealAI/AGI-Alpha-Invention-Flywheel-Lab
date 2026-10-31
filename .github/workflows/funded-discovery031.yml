@@ -1,0 +1,72 @@
+name: Native funded discovery 031
+on:
+  pull_request:
+    paths:
+      - 'connected_enterprise/**'
+      - 'adaptive_enterprise/**'
+      - 'commercial/**'
+      - 'mechanisms/**'
+      - 'flywheel/**'
+      - 'vendor/alpha_claim/**'
+      - 'scripts/run_funded_discovery031.py'
+      - 'tests/test_funded_discovery031.py'
+      - 'tests/test_funded_csv028.py'
+      - 'campaign/funded-discovery-031/**'
+      - 'requirements-commercial010.txt'
+      - '.github/workflows/funded-discovery031.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fixed-engineering-reproduction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-commercial010.txt
+      - name: Native prepayment, existing-account and compatibility regressions
+        run: |
+          python -m unittest discover -s tests -p 'test_funded_discovery031.py' -v
+          python -m unittest discover -s tests -p 'test_funded_csv028.py' -v
+      - name: Actual fixed engineering reproduction, including adverse transfer
+        run: |
+          python scripts/run_funded_discovery031.py --output "$RUNNER_TEMP/discovery031-summary.json"
+          python - "$RUNNER_TEMP/discovery031-summary.json" <<'PY'
+          import json,pathlib,sys
+          p=pathlib.Path(sys.argv[1]); assert p.stat().st_size < 2000000
+          r=json.loads(p.read_text()); assert len(r['rows']) == 6
+          assert r['authority'] == [] and r['canonical_default_changed'] is False
+          assert r['actual_profit'] is None and r['actual_customers'] == r['actual_collections'] == 0
+          assert r['acquisition']['before_passed'] is False and r['acquisition']['after_passed'] is True
+          assert r['acquisition']['retained'] is not None
+          assert r['native_audit_accepted'] and r['native_audit']['accepted']
+          assert r['paid_operations'] == 23
+          assert r['native_cost_microUSD'] == 2360000
+          assert r['native_audit']['summary']['expenses'] == r['native_cost_microUSD']
+          assert r['native_audit']['summary']['collections'] == 0
+          assert r['native_audit']['summary']['profit'] == -r['native_cost_microUSD']
+          assert r['native_cost_microUSD'] == r['acquisition']['native_cost_microUSD'] + sum(x['native_cost_microUSD'] for x in r['rows'])
+          for task in ('heldout-reversed','heldout-branch'):
+              rows={x['arm']:x for x in r['rows'] if x['task']==task}
+              assert set(rows)=={'no_memory','ordinary_reuse','acquired_reuse'}
+              assert rows['no_memory']['accepted']
+              ordinary,inherited=rows['ordinary_reuse'],rows['acquired_reuse']
+              assert ordinary['content_sha256'] == inherited['content_sha256'] and ordinary['content_sha256']
+              assert ordinary['candidates'] == inherited['candidates']
+              assert ordinary['native_cost_microUSD'] == inherited['native_cost_microUSD']
+              assert ordinary['accepted'] is (task=='heldout-reversed')
+          print('Fixed exposed engineering reproduction passed, including expected adverse transfer; no invention advantage or commercial profit.')
+          PY
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: discovery031-compact-public-summary
+          path: ${{ runner.temp }}/discovery031-summary.json
+          if-no-files-found: error
+          retention-days: 7

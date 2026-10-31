@@ -103,6 +103,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: python scripts/release_connected014.py download --source-commit "$GITHUB_SHA" --repository "$GITHUB_REPOSITORY" --assets "$RUNNER_TEMP/actual-release-download" --receipt "$RUNNER_TEMP/RELEASE_DOWNLOAD.json"
       - name: Run, resume and audit the actual downloaded implementation and evidence
+        id: operation
         run: |
           remaining=$((21600 - 300 - ($(date +%s) - OPERATION_JOB_START)))
           if [ "$remaining" -le 0 ]; then
@@ -110,8 +111,8 @@ jobs:
             exit 1
           fi
           python scripts/release_connected014.py operate-download --assets "$RUNNER_TEMP/actual-release-download" --source-commit "$GITHUB_SHA" --output "$RUNNER_TEMP/downloaded-release-operation" --timeout-seconds "$remaining" --actual-release-download
-      - name: Preserve publication gate and actual downloaded operating receipts
-        if: always()
+      - name: Retain successful downloaded operation
+        if: success()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: connected014-published-operation-${{ github.sha }}
@@ -119,7 +120,15 @@ jobs:
             ${{ runner.temp }}/RELEASE_DOWNLOAD.json
             ${{ runner.temp }}/downloaded-release-operation/DOWNLOADED_RELEASE_RUN.json
             ${{ runner.temp }}/downloaded-release-operation/downloaded-operation-keyfree.zip
-            ${{ runner.temp }}/downloaded-release-operation/failed-operation-keyfree.zip
-            ${{ runner.temp }}/downloaded-release-operation/*.stdout
-            ${{ runner.temp }}/downloaded-release-operation/*.stderr
+          if-no-files-found: error
+      - name: Learn briefly and discard disposable failure output
+        id: compact_failure
+        if: failure() && steps.operation.outcome != 'success'
+        run: python scripts/release_connected014.py compact-failure --assets "$RUNNER_TEMP/actual-release-download" --source-commit "$GITHUB_SHA" --output "$RUNNER_TEMP/downloaded-release-operation"
+      - name: Retain only compact failure lesson
+        if: failure() && steps.operation.outcome != 'success' && steps.compact_failure.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: connected014-failure-lesson-${{ github.sha }}
+          path: ${{ runner.temp }}/downloaded-release-operation/FAILURE_LESSON.json
           if-no-files-found: warn
