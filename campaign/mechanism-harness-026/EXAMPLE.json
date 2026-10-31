@@ -1,0 +1,14 @@
+{
+  "schema":"agi-alpha/mechanism-harness/v1",
+  "purpose":{"initial":["raw_customer_files"],"goal":["independently_checkable_deliverable"],"max_cost":25,"max_steps":8,"max_states":512,"allowed_effects":["pure"]},
+  "mechanisms":[
+    {"id":"collect_sources","requires":["raw_customer_files"],"provides":["source_inventory"],"cost":2,"effect":"pure","origin":"developer_supplied"},
+    {"id":"compile_claims","requires":["canonical_evidence"],"provides":["structured_claims"],"cost":2,"effect":"pure","origin":"developer_supplied"},
+    {"id":"verify_claims","requires":["source_inventory","structured_claims"],"provides":["claim_proofs"],"cost":3,"effect":"pure","origin":"developer_supplied"},
+    {"id":"build_deliverable","requires":["claim_proofs"],"provides":["independently_checkable_deliverable"],"cost":1,"effect":"pure","origin":"developer_supplied"},
+    {"id":"direct_expert","requires":["raw_customer_files"],"provides":["independently_checkable_deliverable"],"cost":20,"effect":"pure","origin":"developer_supplied"}
+  ],
+  "candidate_bridges":[
+    {"id":"bridge_inventory_to_canonical","requires":["source_inventory"],"provides":["canonical_evidence"],"cost":1,"effect":"pure","origin":"developer_supplied"}
+  ]
+}
