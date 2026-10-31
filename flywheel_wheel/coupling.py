@@ -9,6 +9,7 @@ import hashlib
 from pathlib import Path
 import re
 import sys
+from .preflight import benefit_members, same_canonical
 from .readout import (EvidenceError, _invoke, _plain_directory, canonical, sha,
                       snapshot_from_rederived, strict_json)
 
@@ -143,6 +144,7 @@ def assess(request, context, universe):
     require(type(base['actions']) is list and len(base['actions']) <= 16, 'BOUNDED_ACTION_SHORTLIST')
     require(type(base['scenarios']) is dict and 1 <= len(base['scenarios']) <= 32, 'BOUNDED_SCENARIOS')
     actions = index(base['actions'], 'ACTION')
+    benefit_members(base['synergies'], set(actions))
     assets = index(request['assets'], 'ASSET')
     rewards = index(request['incentives'], 'INCENTIVE')
     shared = index(request['shared_costs'], 'SHARED_COST')
@@ -250,6 +252,6 @@ def assess(request, context, universe):
 
 
 def verify_proposal(proposal, request, context, universe):
-    require(type(proposal) is dict and proposal == assess(request, context, universe), 'PROPOSAL_OR_NATIVE_STATE_CHANGED')
+    require(type(proposal) is dict and same_canonical(proposal, assess(request, context, universe)), 'PROPOSAL_OR_NATIVE_STATE_CHANGED')
     return {'accepted': True, 'scope': 'RECOMPUTED_PLANNING_CONTRACT_ONLY',
             'context_sha256': sha(context), 'funding_authority': False}

@@ -8,6 +8,7 @@ import sys
 from .readout import EvidenceError, empty_snapshot, live_readout, canonical
 from .render import render_html, render_svg
 from .coupling import live_context, assess, verify_proposal
+from .preflight import fresh_output
 
 def write_once(target, name, raw):
     path = target / name
@@ -37,7 +38,7 @@ def publish(snapshot, target, *, detailed=False):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description='Read-only circular Flywheel Harness (no account or deployment authority)')
-    parser.add_argument('mode', choices=['architecture', 'audit-render', 'atlas', 'couple'])
+    parser.add_argument('mode', choices=['architecture', 'audit-render', 'atlas', 'precision', 'couple'])
     parser.add_argument('--output', required=True, help='fresh output directory; never an existing native enterprise')
     parser.add_argument('--enterprise', help='existing trusted completed native enterprise output for canonical re-audit')
     parser.add_argument('--trust-frozen-source', action='store_true', help='required for audit-render: acknowledge executing trusted frozen repository source')
@@ -47,15 +48,20 @@ def main(argv=None):
     parser.add_argument('--world', help='couple: exactly one existing simulated business')
     args = parser.parse_args(argv)
     try:
-        if args.mode in {'architecture', 'atlas'}:
+        if args.mode in {'architecture', 'atlas', 'precision'}:
             if args.enterprise or args.trust_frozen_source:
                 raise EvidenceError('ARCHITECTURE_REQUIRES_NO_ENTERPRISE')
+            if args.mode == 'precision':
+                from .precision import publish as publish_precision
+                print(json.dumps(publish_precision(args.output),sort_keys=True))
+                return 0
             snapshot = empty_snapshot()
         else:
             if not args.enterprise:
                 raise EvidenceError('TRUSTED_EXISTING_ENTERPRISE_REQUIRED')
             if not args.trust_frozen_source:
                 raise EvidenceError('EXPLICIT_TRUSTED_EXECUTABLE_SOURCE_ACKNOWLEDGEMENT_REQUIRED')
+            fresh_output(args.output, args.enterprise)
             if args.mode == 'couple':
                 if not args.request or not args.universe or not args.world:
                     raise EvidenceError('REQUEST_UNIVERSE_AND_SINGLE_WORLD_REQUIRED')
