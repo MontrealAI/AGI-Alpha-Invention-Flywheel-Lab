@@ -71,6 +71,7 @@ def audit_decisions(root,manifest,result,lifecycle):
                 contract={'price':cfg['capacity_price'],'lead_hours':cfg['capacity_lead_hours'],'duration_hours':cfg['capacity_duration_hours']}
                 expected_investments.append(investment_option('capacity-'+str(day),'capacity',cfg['capacity_price'],int(forecast-cfg['capacity_price']),risk['scenarios'],day,contract))
         if record['investments']!=expected_investments:raise ValueError('INVESTMENT_HYPOTHESIS_NOT_FROM_PUBLIC_HISTORY')
+        repeat_used={o['job_id'] for o in result['orders'] if o['qualified_time']<moment}
         for delivery,(ident,job) in zip(record['deliveries'],expected_deliveries):
             selection=delivery['selection'];problem=selection['problem'];offer=problem['offer'];service=job['service_id'];human=cfg['human_comparator'][service];anchor=int((human['hours']*human['loaded_usd_hour']+2)*1_000_000)
             if problem['policy']!=cfg['strategic_policy'] or problem['method_policy']!=cfg.get('mechanism_policy'):raise ValueError('STRATEGIC_POLICY_CHANGED')
@@ -83,6 +84,11 @@ def audit_decisions(root,manifest,result,lifecycle):
                 visible=[d for d in result['decisions'] if d.get('kind')=='offer' and d['time']<=update_day*24-24][-20:]
                 if visible:rival_bps=max(5000,min(10500,rival_bps+(200 if sum(d['buyer_choice']=='rival' for d in visible)/len(visible)>.6 else -200)))
             expected={'anchor':anchor,'public_rival_price':int(anchor*rival_bps/10000),'base_cost':cfg['production_cost']+cfg['supplier_unit_cost']+cfg['support_cost']+onboard,'payment_bps':cfg['payment_bps'],'payment_fixed':cfg['payment_fixed'],'available':max(0,summary['available']-operating),'reserve_buffer':1_000_000,'quote_cost':cfg['exposure_cost']+cfg['qualification_cost'],'native_state_digest':state_digest,'profit_tax_bps':cfg['profit_tax_bps']}
+            if 'repeat_choice' in cfg:
+                from .repeat_choice import public_state
+                admitted=[j for j in jobs.values() if artifacts[j['id']]['outcome_scope']=='complete_outcome']
+                expected['repeat_state']=public_state(cfg,{**buyers[ident],'id':ident},result['orders'],result['decisions'],result['investments'],admitted,repeat_used,job['id'],moment,rival_bps)
+                repeat_used.add(job['id'])
             if problem['public']!=expected or delivery['onboarding']!=onboard:raise ValueError('STRATEGIC_INPUT_NOT_PUBLIC_CURRENT_FACTS')
             memory=problem['memory']
             if memory is not None:
@@ -108,4 +114,4 @@ def audit_decisions(root,manifest,result,lifecycle):
                 order=next(o for o in result['orders'] if o['customer_id']==choice['customer_id'] and o['qualified_time']==moment)
                 if order['offer']!=contract['offer'] or order.get('method_plan')!=contract['method_plan'] or order['complete_cost']!=contract['complete_cost'] or order.get('joint_option_id')!=option['id']:raise ValueError('JOINT_SELECTED_METHOD_NOT_EXECUTED')
     if {i['id'] for i in result['investments']}!=selected_investments:raise ValueError('JOINT_SELECTED_INVESTMENTS_NOT_NATIVE_EXECUTED')
-    return {'joint_plans_rederived':len(actions),'joint_states_evaluated':states,'strategic_quotes_and_no_bids_rederived':quotes,'strategic_no_bids_rederived':no_bids,'joint_optimality_scope':'Exact declared finite shortlist under public conditional-mean forecasts; not a global or long-horizon optimum.'}
+    return {**({'repeat_choice_contract_rederived':True,'self_service_decisions_rederived':sum(d.get('buyer_choice')=='self_service' for d in result['decisions']),'self_service_successes_rederived':sum(e.get('success') is True for e in result['events'] if e['kind']=='SELF_SERVICE_COMPLETE'),'self_service_failures_rederived':sum(e.get('success') is False for e in result['events'] if e['kind']=='SELF_SERVICE_COMPLETE'),'repeat_value_scope':'One next eligible day under declared finite public atoms and frozen rival/current-cash ceiling; ranking only, not revenue or funding.'} if 'repeat_choice' in cfg else {}),'joint_plans_rederived':len(actions),'joint_states_evaluated':states,'strategic_quotes_and_no_bids_rederived':quotes,'strategic_no_bids_rederived':no_bids,'joint_optimality_scope':'Exact declared finite shortlist under public conditional-mean forecasts; not a global or long-horizon optimum.'}
