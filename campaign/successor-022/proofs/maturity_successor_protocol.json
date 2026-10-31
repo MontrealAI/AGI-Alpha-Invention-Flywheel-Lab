@@ -1,0 +1,85 @@
+{
+  "schema": "agi-alpha/native020-maturity-successor-preregistration/v1",
+  "execution_status": "UNEXECUTED_STOPPED_BEFORE_LAUNCH",
+  "stop_reason": "Owner stopped all further experiments after a separate composed qualification harness exceeded its300CPU per-job limit. No causal proof or portable rerun was launched.",
+  "source_scope": "Fixed authored native financial mechanism only; no legacy operating queue conversion, market, frontier-model, external-commerce or annual-profit claim.",
+  "financial_source_sha256": "1320ce103e5799bd6d991bab81776d1c66ef3878040c148e7721c56274a1fb52",
+  "script_sha256": "0dc924f0a7ca7a71937926996682cdd1f003544d03a5020d127bd2284381ca95",
+  "model": {
+    "currency": "SIMULATED_USD",
+    "opening": 500,
+    "working": 100,
+    "first_orders": 5,
+    "distinct_accepted_service_jobs": 6,
+    "first_price": 100,
+    "first_production_cost": 50,
+    "first_arrival_hours": [
+      0,
+      2,
+      4,
+      6,
+      8
+    ],
+    "first_settlement_hours": [
+      1,
+      3,
+      5,
+      7,
+      9
+    ],
+    "first_maturity_boundaries": [
+      20,
+      22,
+      24,
+      26,
+      28
+    ],
+    "premium": 0,
+    "payment_fee": 0,
+    "tax": 0,
+    "before_release": {
+      "profit": 250,
+      "cash": 750,
+      "tail": 501,
+      "available": 149
+    },
+    "counterfactual_hour": 11,
+    "counterfactual_production": 150,
+    "counterfactual_expected_profit": 50,
+    "counterfactual_required_outcome": "DEFER_UNCHANGED_NATIVE_HISTORY_PROFIT_AND_TAIL",
+    "release_hour": 29,
+    "released_tail": 501,
+    "release_income": 0,
+    "after_release": {
+      "profit": 250,
+      "cash": 750,
+      "tail": 0,
+      "available": 650
+    },
+    "successor_price": 200,
+    "successor_production": 150,
+    "successor_funding": "EARNED_ONLY",
+    "successor_arrival_hour": 29,
+    "successor_collection_hour": 30,
+    "successor_maturity_boundary": 35,
+    "successor_contribution": 50,
+    "final": {
+      "profit": 300,
+      "cash": 800,
+      "tail": 200.2
+    },
+    "service_cohort_seed": 2610312001
+  },
+  "limits": {
+    "total_cpu_seconds_including_children": 40,
+    "wall_seconds": 120,
+    "external_spending": 0,
+    "paid_calls": 0,
+    "outreach": 0,
+    "real_transactions": 0
+  },
+  "stopping": "Single fixed mechanism case; retain failure and stop, no retuning or favorable rerun.",
+  "future_execution_command_after_new_allocation": "python3 campaign/native-capital-020/independent/test_maturity_funds_successor.py --execute-authorized",
+  "independence": "Same model, host, tools and source helpers; separate reviewing agent, not external certification.",
+  "prepared_not_executed": true
+}

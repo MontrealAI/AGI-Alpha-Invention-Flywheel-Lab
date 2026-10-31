@@ -10,12 +10,13 @@ from __future__ import annotations
 import copy
 import hashlib
 import hmac
+import os
 from pathlib import Path
 import tempfile
 import threading
 
 from adaptive_enterprise.account import Account, action_digest, action_prefix_digests, audit_account
-from commercial.ledger import amount as validate_amount, canonical, digest, strict_json
+from commercial.ledger import amount as validate_amount, canonical, digest, strict_json, operating_state_digest
 from commercial.persistence import atomic_bytes
 from commercial.ledger import _ADAPTIVE_ACCOUNT_CAPABILITY
 from commercial.single_writer import SingleWriterExchange
@@ -25,7 +26,14 @@ SOURCE_PATHS = ('connected_enterprise/finance.py', 'adaptive_enterprise/account.
                 'commercial/ledger.py', 'commercial/persistence.py',
                 'commercial/single_writer.py', 'commercial/tape_lease.py',
                 'experiments/commerce006.py', 'vendor/alpha_claim/contracts.py',
-                'vendor/alpha_claim/protected_exchange.py')
+                'vendor/alpha_claim/protected_exchange.py',
+                'vendor/alpha_claim/protected_exchange_legacy.py', 'commercial/terms.py',
+                'vendor/alpha_claim/protected_exchange_prospective_v1.py', 'commercial/native_engine.py',
+                'connected_enterprise/upgrades.py', 'connected_enterprise/migration.py',
+                'connected_enterprise/engine.py', 'connected_enterprise/operations.py',
+                'connected_enterprise/runner.py', 'connected_enterprise/verify.py',
+                'connected_enterprise/channels.py', 'connected_enterprise/pricing.py',
+                'connected_enterprise/recovery.py')
 
 
 def source_identity(root):
@@ -46,6 +54,11 @@ def _identifier(value):
 
 
 def _native_id(op, args):
+    if op == 'mature':
+        return op + ':' + _identifier(args.get('id')) + ':' + _identifier(args.get('event_id'))
+    if op in {'claim', 'resolve_claim', 'recover_claim'}:
+        suffix = ':' + _identifier(args.get('settlement_id')) if op != 'claim' else ''
+        return op + ':' + _identifier(args.get('id')) + ':' + _identifier(args.get('claim_id')) + suffix
     if op == 'event':
         return 'event:' + _identifier(args.get('id')) + ':' + _identifier(args.get('event_id'))
     return op + ':' + _identifier(args.get('buyer') if op == 'wallet' else args.get('id'))
@@ -54,7 +67,7 @@ def _native_id(op, args):
 def _validate_native_request(op, args, day):
     if op in {'reserve', 'finish', 'cancel_investment'}:
         raise ValueError('CONNECTED_RESOURCE_COMMITMENT_ENTRYPOINT_REQUIRED')
-    if op not in {'cost', 'wallet', 'offer', 'event'} or not isinstance(args, dict) or type(day) is not int or day < 0:
+    if op not in {'cost', 'wallet', 'offer', 'event', 'register_terms', 'claim', 'resolve_claim', 'mature', 'recover_claim', 'source_transition', 'operating_checkpoint'} or not isinstance(args, dict) or type(day) is not int or day < 0:
         raise ValueError('DECLARED_CONNECTED_NATIVE_ACTION_REQUIRED')
 
 
@@ -85,12 +98,48 @@ def _seed_id(request, source_sha256):
     return 'connected014-seed-' + digest({'request': request, 'source_sha256': source_sha256})[:32]
 
 
+def _journal_source_at(journal, index):
+    for ticket in journal.get('source_history', []):
+        if index < len(ticket['body']['prior_envelope']['body']['entries']):
+            return ticket['body']['from_source']
+    return journal['source']
+
+
+def _validate_source_history(journal, record, manifest, root):
+    from .upgrades import validate_ticket, transition_args, verify_historical
+    previous, cut, seen = None, -1, set()
+    for counter, ticket in enumerate(journal.get('source_history', []), 1):
+        body = validate_ticket(ticket)
+        old = body['prior_envelope']['body']
+        size = len(old['entries'])
+        if (body['counter'] != counter or size <= cut or old['source'] != body['from_source']
+                or journal['entries'][:size] != old['entries']
+                or (previous is not None and body['from_source'] != previous)
+                or body['to_source']['sha256'] in seen):
+            raise ValueError('JOURNAL_SOURCE_HISTORY_CHAIN_CHANGED')
+        if size >= len(journal['entries']):
+            raise ValueError('SOURCE_TRANSITION_NATIVE_INTENT_MISSING')
+        entry = journal['entries'][size]
+        request = {'operation': 'execute', 'op': 'source_transition',
+                   'args': transition_args(ticket), 'day': body['day']}
+        if entry['request'] != request or entry['key'] != 'native:' + _native_id('source_transition', request['args']):
+            raise ValueError('SOURCE_TRANSITION_JOURNAL_INTENT_CHANGED')
+        prior = body['prior_record']['ledger']
+        if prior['actions'] != record['ledger']['actions'][:len(prior['actions'])]:
+            raise ValueError('SOURCE_TRANSITION_HISTORICAL_PREFIX_CHANGED')
+        verify_historical(ticket, manifest, root=root)
+        seen.add(body['from_source']['sha256']); previous, cut = body['to_source'], size
+    if previous is not None and previous != journal['source']:
+        raise ValueError('SOURCE_TRANSITION_CURRENT_JOURNAL_TARGET_CHANGED')
+
+
 class JournalAccount:
-    def __init__(self, root, manifest, path, *, opening, working, contract):
+    def __init__(self, root, manifest, path, *, opening, working, contract, source_upgrade=None):
         self.root, self.path = Path(root).absolute(), Path(path).absolute()
         self.manifest = copy.deepcopy(manifest)
         self._mutex, self._closed, self._journal_failed = threading.RLock(), False, False
         self._account = None
+        self._upgrade_ticket = copy.deepcopy(source_upgrade)
         self.journal_path = self.path.with_name(self.path.name + '.connected-journal.json')
         self.source = source_identity(self.root)
         self._header = {'schema': SCHEMA, 'scope': 'SIMULATED_LOCAL_POSIX',
@@ -98,9 +147,11 @@ class JournalAccount:
                         'opening': opening, 'working': working, 'contract': contract}
         try:
             self._account = Account(self.root, manifest, self.path, opening=opening,
-                                    working=working, contract=contract)
+                                    working=working, contract=contract, source_upgrade=self._upgrade_ticket)
             self._journal = self._load()
+            self._account.bind_connected_source(strict_json(self.journal_path.read_bytes()))
             self._recover()
+            self._recover_operating_checkpoint()
         except BaseException:
             self.close()
             raise
@@ -135,8 +186,41 @@ class JournalAccount:
         body = envelope['body']
         if not hmac.compare_digest(str(envelope['signature']), self._signature(body)):
             raise ValueError('CONNECTED_JOURNAL_SIGNATURE_MISMATCH')
-        if not isinstance(body, dict) or {k: v for k, v in body.items() if k != 'entries'} != self._header:
+        if not isinstance(body, dict):
             raise ValueError('CONNECTED_JOURNAL_SOURCE_OR_AUTHORITY_CHANGED')
+        header = {k: v for k, v in body.items() if k not in {'entries', 'source_history'}}
+        if header != self._header:
+            from .upgrades import validate_ticket, verify_historical, transition_args
+            if self._upgrade_ticket is None:
+                raise ValueError('CONNECTED_JOURNAL_SOURCE_OR_AUTHORITY_CHANGED')
+            ticket = self._upgrade_ticket
+            authority = validate_ticket(ticket, key=self._account._key, root=self.root, path=self.path)
+            if (authority['prior_envelope'] != envelope or authority['from_source'] != body['source']
+                    or authority['prior_record']['ledger'] != self._account.export()['ledger']
+                    or {k: v for k, v in header.items() if k != 'source'} != {k: v for k, v in self._header.items() if k != 'source'}):
+                raise ValueError('SOURCE_UPGRADE_PRIOR_AUTHORITY_CHANGED')
+            verify_historical(ticket, self.manifest, root=self.root)
+            args = transition_args(ticket)
+            history = body.get('source_history', [])
+            seen_sources = {t['body']['from_source']['sha256'] for t in history}
+            if (authority['counter'] != len(history) + 1
+                    or authority['to_source']['sha256'] in seen_sources
+                    or any(t['body']['id'] == authority['id'] for t in history)
+                    or any(e['key'] == 'native:' + _native_id('source_transition', args) for e in body['entries'])
+                    or (history and history[-1]['body']['to_source'] != authority['from_source'])):
+                raise ValueError('SOURCE_UPGRADE_FORWARD_CHAIN_OR_IDENTITY_INVALID')
+            request = {'operation': 'execute', 'op': 'source_transition', 'args': args, 'day': authority['day']}
+            entry = {'key': 'native:' + _native_id('source_transition', args), 'request': request,
+                     'plan': None, 'funding': None, 'status': 'PENDING', 'receipt': None,
+                     'obligation_receipt': None, 'attempt': None}
+            body = {**copy.deepcopy(self._header), 'entries': copy.deepcopy(body['entries']) + [entry],
+                    'source_history': copy.deepcopy(body.get('source_history', [])) + [ticket]}
+            self._save(body)
+        elif self._upgrade_ticket is not None and (not body.get('source_history') or body['source_history'][-1] != self._upgrade_ticket):
+            raise ValueError('SOURCE_UPGRADE_RETRY_AUTHORIZATION_CHANGED')
+        for ticket in body.get('source_history', []):
+            from .upgrades import validate_ticket
+            validate_ticket(ticket, key=self._account._key, path=self.path)
         if not isinstance(body.get('entries'), list):
             raise ValueError('CONNECTED_JOURNAL_ENTRIES_REQUIRED')
         keys = [row.get('key') for row in body['entries']]
@@ -210,11 +294,19 @@ class JournalAccount:
         request = entry['request']
         if request['operation'] == 'execute':
             _validate_native_request(request['op'], request['args'], request['day'])
-            self._account.execute(request['op'], request['args'], request['day'])
+            if request['op'] == 'source_transition':
+                ticket = next((t for t in self._journal.get('source_history', []) if t['body']['id'] == request['args']['id']), None)
+                if ticket is None:
+                    raise ValueError('JOURNALED_SOURCE_AUTHORIZATION_REQUIRED')
+                self._account.source_transition(ticket)
+            else:
+                self._account.execute(request['op'], request['args'], request['day'])
             tape = self._account.export()['ledger']
             native = _find_action(tape, request['op'], request['args'], request['day'])
             receipt = _native_snapshot(tape, native, self._account.filesystem)
         elif request['operation'] == 'spend':
+            if type(request.get('seed_only', False)) is not bool or (request.get('seed_only') and entry['funding'] != 'SEED'):
+                raise ValueError('DECLARED_SEED_ONLY_FINANCING_REQUIRED')
             plan = entry['plan']
             work_sha256 = digest(request['work'])
             if entry['funding'] == 'EARNED':
@@ -308,6 +400,8 @@ class JournalAccount:
     def execute(self, op, args, day):
         with self._mutex:
             self._assert_current()
+            if op == 'source_transition':
+                raise ValueError('EXPLICIT_SOURCE_UPGRADE_ENTRYPOINT_REQUIRED')
             _validate_native_request(op, args, day)
             request = {'operation': 'execute', 'op': op, 'args': copy.deepcopy(args), 'day': day}
             key = 'native:' + _native_id(op, args)
@@ -319,24 +413,60 @@ class JournalAccount:
         validate_amount(amount)
         return self.execute('cost', {'id': _identifier(ident), 'amount': amount}, day)
 
-    def spend(self, ident, kind, amount, day, work, expected_net, allow_seed=False):
+    def advance_financial(self, day):
+        """Process eligible expiries before any new funding snapshot.
+
+        Claims at the inclusive boundary must be admitted before calling this
+        operation at the next clock tick. Pending claims remain protected.
+        """
+        with self._mutex:
+            self._assert_current()
+            if type(day) is not int or day < 0:
+                raise ValueError('EXPLICIT_FINANCIAL_EVENT_DAY_REQUIRED')
+            tape = self._account.export()['ledger']
+            if tape['actions'] and day < tape['actions'][-1]['day']:
+                raise ValueError('EVENT_TIME_REGRESSION')
+            terms = {t['id']: strict_json(t['terms']) for t in tape.get('prospective_terms', [])}
+            states = {t['id']: t['state'] for t in tape['orders']}
+            for row in tape.get('prospective_orders', []):
+                if row['matured_at'] is None and states[row['order_id']] in {'released', 'breached'} and day > terms[row['terms_id']]['maturity_day']:
+                    self.execute('mature', {'id': row['order_id'], 'event_id': 'maturity:' + row['order_id'] + ':' + row['terms_sha256'][:20]}, day)
+            return self._account.snapshot()
+
+    @classmethod
+    def upgrade_source(cls, root, manifest, path, *, opening, working, contract, authorization):
+        return cls(root, manifest, path, opening=opening, working=working,
+                   contract=contract, source_upgrade=authorization)
+
+    def spend(self, ident, kind, amount, day, work, expected_net, allow_seed=False, seed_only=False):
         with self._mutex:
             self._assert_current()
             _identifier(ident); _identifier(kind); validate_amount(amount)
-            if type(day) is not int or day < 0 or type(expected_net) is not int or type(allow_seed) is not bool:
+            if type(day) is not int or day < 0 or type(expected_net) is not int or type(allow_seed) is not bool or type(seed_only) is not bool or (seed_only and not allow_seed):
                 raise ValueError('DECLARED_CONNECTED_RESOURCE_CONTRACT_REQUIRED')
             if len(canonical(work)) > 1_000_000:
                 raise ValueError('BOUNDED_CONNECTED_RESOURCE_WORK_REQUIRED')
             request = {'operation': 'spend', 'id': ident, 'kind': kind, 'amount': amount,
                        'day': day, 'work': copy.deepcopy(work), 'expected_net': expected_net, 'allow_seed': allow_seed}
+            if seed_only:
+                request['seed_only'] = True
             existing = next((row for row in self._journal['entries'] if row['key'] == 'spend:' + ident), None)
             if existing:
                 return self._perform(self._entry('spend:' + ident, request))
             if amount == 0:
                 return None
+            # A rollback attempt must retain the canonical zero-effect rejection
+            # receipt. Do not process due events for a stale requested clock;
+            # the native writer below rejects and journals that exact attempt.
+            if day >= self._account._owner._exchange.last_day:
+                self.advance_financial(day)
             snapshot = self._account.snapshot()
             summary = snapshot['summary']
-            earned = expected_net > 0 and min(summary['available'], summary['unrestrictedEarned']) >= amount
+            if seed_only:
+                seed_remaining = max(0, self._header['opening'] - self._header['working'] - summary['expensePaid'] - summary['payables'] - summary['reservedInvestment'])
+                if amount > seed_remaining:
+                    return None
+            earned = not seed_only and expected_net > 0 and min(summary['available'], summary['unrestrictedEarned']) >= amount
             if not earned and (not allow_seed or summary['available'] < amount):
                 return None
             plan = None
@@ -370,12 +500,28 @@ class JournalAccount:
             self._assert_current()
             return audit_journal(self.export(), root=self.root, manifest=self.manifest)
 
-    def seal_checkpoint(self, state):
+    def seal_checkpoint(self, state, *, anchored=False):
         with self._mutex:
             self._assert_current()
             if not isinstance(state, dict) or len(canonical(state)) > 32_000_000:
                 raise ValueError('BOUNDED_OPERATING_CHECKPOINT_STATE_REQUIRED')
             tape = self._account.export()['ledger']
+            markers = [e for e in tape['actions'] if e['op'] == 'operating_checkpoint']
+            if anchored or markers:
+                state_sha256 = operating_state_digest(state)
+                prior = next((e for e in markers if e['args']['state_sha256'] == state_sha256), None)
+                if prior is not None and prior is not markers[-1]:
+                    raise ValueError('STALE_SIGNED_OPERATING_STATE_REWIND_FORBIDDEN')
+                if prior is None:
+                    current = state.get('current')
+                    event = current.get('event', current) if isinstance(current, dict) else {}
+                    clocks = [state.get('last_time', 0), state.get('last_hour', 0), event.get('time', event.get('hour', 0))]
+                    if any(type(value) is not int or value < 0 for value in clocks):
+                        raise ValueError('OPERATING_CHECKPOINT_INTEGER_CLOCK_REQUIRED')
+                    day = max([e['day'] for e in tape['actions']] + clocks)
+                    self.execute('operating_checkpoint', {'id': 'operating-state-' + state_sha256,
+                                 'state_sha256': state_sha256, 'counter': len(markers) + 1}, day)
+                    tape = self._account.export()['ledger']
             body = {'schema': 'agi-alpha/connected014-operating-checkpoint/v1',
                     'scope': 'SIMULATED_LOCAL_POSIX', 'contract': self._header['contract'],
                     'source_sha256': self.source['sha256'],
@@ -384,6 +530,127 @@ class JournalAccount:
                     'native_actions_sha256': tape['actions_sha256'], 'state': copy.deepcopy(state)}
             signature = hmac.new(self._account._key, b'connected014-operating-state\n' + canonical(body), hashlib.sha256).hexdigest()
             return {'body': body, 'signature': signature}
+
+    def _checkpoint_intent_signature(self, body):
+        return hmac.new(self._account._key, b'connected-operating-checkpoint-intent\n' + canonical(body), hashlib.sha256).hexdigest()
+
+    def _clear_operating_intent(self, path):
+        path.unlink()
+        descriptor=os.open(path.parent,os.O_RDONLY|os.O_DIRECTORY)
+        try:os.fsync(descriptor)
+        finally:os.close(descriptor)
+
+    def _reject_obsolete_operating_intent(self, intent_path, body):
+        target = self.path.parent / 'STATE.json'
+        if not target.is_file() or target.is_symlink():
+            return False
+        envelope = strict_json(target.read_bytes())
+        tape = self._account.export()['ledger']
+        try:
+            self.verify_checkpoint(envelope)
+        except ValueError as error:
+            # During a committed source transition STATE can still be the exact
+            # signed predecessor authorized by that transition. No other old
+            # checkpoint or native tail is a compatible recovery authority.
+            if str(error) != 'OPERATING_CHECKPOINT_SOURCE_OR_AUTHORITY_CHANGED' or self._upgrade_ticket is None:
+                raise
+            from .upgrades import validate_ticket
+            ticket=validate_ticket(self._upgrade_ticket,key=self._account._key,root=self.root,path=self.path)
+            prior=ticket.get('operating',{}).get('prior_checkpoint')
+            if envelope != prior or envelope['body']['source_sha256'] != ticket['from_source']['sha256']:
+                raise ValueError('OPERATING_INTENT_PENDING_TRANSITION_CHECKPOINT_CHANGED')
+            signed=hmac.new(self._account._key,b'connected014-operating-state\n'+canonical(envelope['body']),hashlib.sha256).hexdigest()
+            n=envelope['body']['native_sequence'];tail=tape['actions'][n:]
+            if (not hmac.compare_digest(str(envelope['signature']),signed)
+                    or digest(tape['actions'][:n])!=envelope['body']['native_actions_sha256']
+                    or len(tail) not in {1,2} or tail[0]['op']!='source_transition'
+                    or tail[0]['args']['id']!=ticket['id']
+                    or len(tail)==2 and (tail[1]['op']!='cost' or tail[1]['args']!={'id':'source-upgrade-'+ticket['id'],'amount':ticket['operating']['policy']['upgrade_cost_microUSD']})):
+                raise ValueError('OPERATING_INTENT_PENDING_TRANSITION_NATIVE_TAIL_CHANGED')
+        markers = [e for e in tape['actions'] if e['op'] == 'operating_checkpoint']
+        if (not markers or envelope['body']['native_sequence'] <= body['prior_sequence']
+                or operating_state_digest(envelope['body']['state']) != markers[-1]['args']['state_sha256']):
+            return False
+        raw = intent_path.read_bytes(); sha = hashlib.sha256(raw).hexdigest()
+        archive = self.path.with_name(self.path.name + '.rejected-operating-intents')
+        if archive.is_symlink():
+            raise ValueError('OPERATING_INTENT_ARCHIVE_SYMLINK_REFUSED')
+        archive.mkdir(exist_ok=True)
+        rejected = archive / (sha + '.json')
+        if rejected.exists() and rejected.read_bytes() != raw:
+            raise ValueError('REJECTED_OPERATING_INTENT_HISTORY_CHANGED')
+        os.replace(intent_path, rejected)
+        for directory in [archive, intent_path.parent]:
+            descriptor=os.open(directory,os.O_RDONLY|os.O_DIRECTORY)
+            try:os.fsync(descriptor)
+            finally:os.close(descriptor)
+        return True
+
+    def _recover_operating_checkpoint(self):
+        intent_path = self.path.with_name(self.path.name + '.operating-checkpoint-intent.json')
+        if not intent_path.exists():
+            return
+        if intent_path.is_symlink() or not intent_path.is_file() or intent_path.stat().st_size > 34_000_000:
+            raise ValueError('BOUNDED_REGULAR_OPERATING_CHECKPOINT_INTENT_REQUIRED')
+        envelope = strict_json(intent_path.read_bytes())
+        if not isinstance(envelope, dict) or set(envelope) != {'body', 'signature'}:
+            raise ValueError('SIGNED_OPERATING_CHECKPOINT_INTENT_REQUIRED')
+        body = envelope['body']
+        fields = {'schema', 'path', 'source_sha256', 'manifest_sha256', 'prior_sequence', 'prior_actions_sha256', 'state'}
+        if (not isinstance(body, dict) or set(body) != fields
+                or body['schema'] != 'agi-alpha/connected-operating-checkpoint-intent/v1'
+                or not hmac.compare_digest(str(envelope['signature']), self._checkpoint_intent_signature(body))
+                or body['manifest_sha256'] != self._header['manifest_sha256']
+                or body['path'] != str(self.path.parent / 'STATE.json')):
+            raise ValueError('OPERATING_CHECKPOINT_INTENT_AUTHORITY_CHANGED')
+        tape = self._account.export()['ledger']; n = body['prior_sequence']
+        if type(n) is not int or not 0 <= n <= len(tape['actions']) or digest(tape['actions'][:n]) != body['prior_actions_sha256']:
+            raise ValueError('OPERATING_CHECKPOINT_INTENT_NATIVE_PREFIX_CHANGED')
+        if body['source_sha256'] != self.source['sha256']:
+            history = self._account.export().get('source_transitions', {}).values()
+            known = {t['body'][field]['sha256'] for t in history for field in ['from_source', 'to_source']}
+            if body['source_sha256'] in known and self._reject_obsolete_operating_intent(intent_path, body):
+                return
+            raise ValueError('OPERATING_CHECKPOINT_INTENT_SOURCE_AUTHORITY_CHANGED')
+        tail = tape['actions'][n:]
+        if tail and (len(tail) != 1 or tail[0]['op'] != 'operating_checkpoint' or tail[0]['args']['state_sha256'] != operating_state_digest(body['state'])):
+            if self._reject_obsolete_operating_intent(intent_path, body):
+                return
+            raise ValueError('OPERATING_CHECKPOINT_INTENT_HISTORY_REWIND_FORBIDDEN')
+        checkpoint = self.seal_checkpoint(body['state'], anchored=True)
+        target = Path(body['path'])
+        if target.is_symlink() or any(p.is_symlink() for p in target.parents):
+            raise ValueError('OPERATING_CHECKPOINT_PATH_SYMLINK_REFUSED')
+        atomic_bytes(target, canonical(checkpoint) + b'\n')
+        self._clear_operating_intent(intent_path)
+
+    def save_checkpoint(self, path, state):
+        with self._mutex:
+            self._assert_current(); path = Path(path).absolute()
+            if path != self.path.parent / 'STATE.json' or path.is_symlink() or any(p.is_symlink() for p in path.parents):
+                raise ValueError('OWNED_CANONICAL_OPERATING_CHECKPOINT_PATH_REQUIRED')
+            if not isinstance(state, dict) or len(canonical(state)) > 32_000_000:
+                raise ValueError('BOUNDED_OPERATING_CHECKPOINT_STATE_REQUIRED')
+            tape = self._account.export()['ledger']; state_sha256 = operating_state_digest(state)
+            markers = [e for e in tape['actions'] if e['op'] == 'operating_checkpoint']
+            prior = next((e for e in markers if e['args']['state_sha256'] == state_sha256), None)
+            if prior is not None and prior is not markers[-1]:
+                raise ValueError('STALE_SIGNED_OPERATING_STATE_REWIND_FORBIDDEN')
+            body = {'schema': 'agi-alpha/connected-operating-checkpoint-intent/v1', 'path': str(path),
+                    'source_sha256': self.source['sha256'], 'manifest_sha256': self._header['manifest_sha256'],
+                    'prior_sequence': len(tape['actions']), 'prior_actions_sha256': tape['actions_sha256'],
+                    'state': copy.deepcopy(state)}
+            intent = {'body': body, 'signature': self._checkpoint_intent_signature(body)}
+            intent_path = self.path.with_name(self.path.name + '.operating-checkpoint-intent.json')
+            try:
+                atomic_bytes(intent_path, canonical(intent) + b'\n')
+                checkpoint = self.seal_checkpoint(state, anchored=True)
+                atomic_bytes(path, canonical(checkpoint) + b'\n')
+                self._clear_operating_intent(intent_path)
+            except BaseException:
+                self._journal_failed = True
+                raise
+            return checkpoint
 
     def verify_checkpoint(self, envelope):
         with self._mutex:
@@ -402,6 +669,10 @@ class JournalAccount:
                 raise ValueError('OPERATING_CHECKPOINT_SOURCE_OR_AUTHORITY_CHANGED')
             sequence = body['native_sequence']
             tape = self._account.export()['ledger']
+            markers = [e for e in tape['actions'] if e['op'] == 'operating_checkpoint']
+            if markers and (operating_state_digest(body['state']) != markers[-1]['args']['state_sha256']
+                            or type(sequence) is not int or sequence <= markers[-1]['seq']):
+                raise ValueError('STALE_SIGNED_OPERATING_STATE_REWIND_FORBIDDEN')
             if type(sequence) is not int or sequence < 0 or sequence > len(tape['actions']) or digest(tape['actions'][:sequence]) != body['native_actions_sha256']:
                 raise ValueError('OPERATING_CHECKPOINT_NATIVE_PREFIX_MISMATCH')
             if not isinstance(body['state'], dict):
@@ -547,7 +818,6 @@ def _audit_rejection(entry, record, source, start, *, root, manifest):
 
 
 def _audit_journal(record, *, root, manifest, pending_key=None):
-    checked = audit_account(record, root=root, manifest=manifest)
     journal = record.get('connected_journal')
     if not isinstance(journal, dict) or digest(journal) != record.get('connected_journal_sha256'):
         raise ValueError('CONNECTED_JOURNAL_PUBLIC_IDENTITY_MISMATCH')
@@ -556,12 +826,28 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
         raise ValueError('CONNECTED_JOURNAL_PUBLIC_SOURCE_MISMATCH')
     if journal.get('schema') != SCHEMA or any(journal.get(k) != tape['config'].get(k) for k in ['opening', 'working', 'contract']):
         raise ValueError('CONNECTED_JOURNAL_NATIVE_AUTHORITY_MISMATCH')
+    pending_transition = None
+    if pending_key is not None and journal.get('entries'):
+        entry = journal['entries'][-1]; request = entry.get('request', {})
+        if entry.get('key') == pending_key and entry.get('status') == 'PENDING' and request.get('op') == 'source_transition':
+            history = journal.get('source_history', [])
+            if not history:
+                raise ValueError('SIGNED_PENDING_SOURCE_HISTORY_REQUIRED')
+            from .upgrades import transition_args
+            pending_transition = history[-1]
+            if request != {'operation': 'execute', 'op': 'source_transition', 'args': transition_args(pending_transition), 'day': pending_transition['body']['day']}:
+                raise ValueError('PENDING_SOURCE_INTENT_ARGUMENTS_CHANGED')
+            if any(e['op'] == 'source_transition' and e['args']['id'] == pending_transition['body']['id'] for e in tape['actions']):
+                pending_transition = None
+    checked = audit_account(record, root=root, manifest=manifest, pending_source_transition=pending_transition)
+    _validate_source_history(journal, record, manifest, root)
     prefixes = action_prefix_digests(tape['actions'])
     action_index = {}
     for native in tape['actions']:
         action_index.setdefault(_native_id(native['op'], native['args']), []).append(native)
     keys, spent, covered, rejected = set(), 0, [], 0
     for index, entry in enumerate(journal['entries']):
+        entry_source = _journal_source_at(journal, index)
         if pending_key is not None and entry['key'] == pending_key:
             if index != len(journal['entries']) - 1 or entry['status'] != 'PENDING' or covered != list(range(len(covered))):
                 raise ValueError('ONE_FINAL_PENDING_CONNECTED_ACTION_REQUIRED')
@@ -570,7 +856,8 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
         if entry['key'] not in keys and entry['status'] == 'REJECTED':
             if covered != list(range(len(covered))):
                 raise ValueError('CONNECTED_REJECTION_NATIVE_PREFIX_MISMATCH')
-            _audit_rejection(entry, record, journal['source'], len(covered), root=root, manifest=manifest)
+            if entry_source == journal['source']:
+                _audit_rejection(entry, record, entry_source, len(covered), root=root, manifest=manifest)
             keys.add(entry['key']); rejected += 1
             continue
         if entry['key'] in keys or entry['status'] != 'COMPLETE':
@@ -584,7 +871,7 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
                 raise ValueError('CONNECTED_NATIVE_RECEIPT_CHANGED')
             covered.append(native['seq'])
         elif request['operation'] == 'spend':
-            if receipt['id'] != request['id'] or receipt['kind'] != request['kind'] or receipt['amount'] != request['amount'] or receipt['day'] != request['day'] or receipt['work_sha256'] != digest(request['work']) or receipt['source_sha256'] != journal['source']['sha256'] or receipt['funding'] != entry['funding']:
+            if receipt['id'] != request['id'] or receipt['kind'] != request['kind'] or receipt['amount'] != request['amount'] or receipt['day'] != request['day'] or receipt['work_sha256'] != digest(request['work']) or receipt['source_sha256'] != entry_source['sha256'] or receipt['funding'] != entry['funding']:
                 raise ValueError('CONNECTED_SPEND_RECEIPT_CHANGED')
             if entry['funding'] == 'EARNED':
                 plan = entry['plan']
@@ -596,7 +883,7 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
                     'expected_net_value': request['expected_net'], 'intent_sha256': digest(public_proof['body'])}, request['day'], action_index=action_index)
                 covered.append(reservation['seq'])
                 execution = plan['selected_options'][0]['execution']
-                if execution['kind'] != request['kind'] or execution['work_sha256'] != digest(request['work']) or execution['source_sha256'] != journal['source']['sha256'] or plan['source_hashes'] != journal['source']['files']:
+                if execution['kind'] != request['kind'] or execution['work_sha256'] != digest(request['work']) or execution['source_sha256'] != entry_source['sha256'] or plan['source_hashes'] != entry_source['files']:
                     raise ValueError('CONNECTED_RESOURCE_CONTRACT_SOURCE_MISMATCH')
                 artifact = digest({'work_artifact_sha256': digest(request['work']),
                                    'obligation_receipt_sha256': digest(entry['obligation_receipt'])})
@@ -604,7 +891,12 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
                 if receipt['plan_id'] != plan['plan_id'] or receipt['obligation_receipt_sha256'] != digest(entry['obligation_receipt']):
                     raise ValueError('CONNECTED_SPEND_RESOLUTION_CHANGED')
             elif entry['funding'] == 'SEED' and request['allow_seed']:
-                native = _find_action(tape, 'cost', {'id': _seed_id(request, journal['source']['sha256']), 'amount': request['amount']}, request['day'], action_index=action_index)
+                native = _find_action(tape, 'cost', {'id': _seed_id(request, entry_source['sha256']), 'amount': request['amount']}, request['day'], action_index=action_index)
+                if request.get('seed_only'):
+                    before = native['before']
+                    seed_remaining = max(0, tape['config']['opening'] - tape['config']['working'] - before['expensePaid'] - before['payables'] - before['reservedInvestment'])
+                    if request['amount'] > seed_remaining:
+                        raise ValueError('SEED_ONLY_CAPITAL_ENVELOPE_EXCEEDED')
                 if receipt['plan_id'] is not None:
                     raise ValueError('SEED_CANNOT_CLAIM_EARNED_RESERVATION')
             else:
@@ -612,7 +904,7 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
             expected_receipt = {'id': request['id'], 'kind': request['kind'], 'amount': request['amount'],
                                'day': request['day'], 'funding': entry['funding'],
                                'plan_id': entry['plan']['plan_id'] if entry['plan'] else None,
-                               'work_sha256': digest(request['work']), 'source_sha256': journal['source']['sha256'],
+                               'work_sha256': digest(request['work']), 'source_sha256': entry_source['sha256'],
                                'native_event_sequence': native['seq'],
                                'native_actions_sha256': prefixes[native['seq'] + 1],
                                'obligation_receipt_sha256': digest(entry['obligation_receipt']) if entry['obligation_receipt'] else None,

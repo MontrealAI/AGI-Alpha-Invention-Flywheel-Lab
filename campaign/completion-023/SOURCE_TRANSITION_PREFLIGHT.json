@@ -1,0 +1,28 @@
+{
+  "schema": "agi-alpha/completion023-source-transition-preflight/v1",
+  "accounts": [
+    {
+      "arm": "qualified-prospective",
+      "source_transition_counter": 3,
+      "v1_ticket_maximum_bytes": 16000000,
+      "required_prior_record_and_signed_journal_bytes": 42937362,
+      "exceeds_bound_before_any_other_fields": true,
+      "prior_record_sha256": "2420ce33ff3a9a8e8b4912e87df0823f367d25a520959ae22bfe255c6643dae6",
+      "journal_sha256": "d83c4de80082a14a5cd6a0557d9cbe648ae81f7a44dc9cbdbb06f43b80c37080",
+      "account_modified_by_preflight": false,
+      "decision": "Do not attempt a source transition that cannot fit its authenticated guard. Continue existing source and isolate composed-source qualification."
+    },
+    {
+      "arm": "qualified-permanent",
+      "source_transition_counter": 3,
+      "v1_ticket_maximum_bytes": 16000000,
+      "required_prior_record_and_signed_journal_bytes": 52345223,
+      "exceeds_bound_before_any_other_fields": true,
+      "prior_record_sha256": "ce7b7bf248ce2343fc5ffc7ea53a8f66901793eee99c2e1b93b738675124ff5b",
+      "journal_sha256": "9fa839e9faf8e186fd4985fdb4d13e08b0d138427c7adfd350f5ae055c7e29f8",
+      "account_modified_by_preflight": false,
+      "decision": "Do not attempt a source transition that cannot fit its authenticated guard. Continue existing source and isolate composed-source qualification."
+    }
+  ],
+  "scope": "Structural lower bound on existing v1 authenticated transition payload; no signature generated, no guard changed."
+}

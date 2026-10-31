@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 
 from adaptive_enterprise.instruments import execute_offer
-from commercial.ledger import canonical, digest
+from commercial.ledger import canonical, digest, operating_state_digest
 
 EXECUTING_VERIFIER_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
@@ -26,13 +26,13 @@ def _private_draw(seed, identity, stage):
     return int.from_bytes(hashlib.sha256(canonical(['connected014', seed, identity, stage])).digest()[:8], 'big') / 2**64
 
 
-def _expected_competitive_price(legacy, rival, config, previous):
+def _expected_competitive_price(legacy, rival, config, previous, premium=0):
     denominator = 10000 - config['payment_bps']
     if denominator == 0:
         return legacy
     resources = sum(config[key] for key in ['production_cost', 'supplier_unit_cost', 'support_cost',
                                            'onboarding_cost', 'qualification_cost', 'exposure_cost'])
-    numerator = (resources + config['payment_fixed'] + 1_000_000) * 10000
+    numerator = (resources + config['payment_fixed'] + premium + 1_000_000) * 10000
     floor = (numerator + denominator - 1) // denominator
     count, wins = len(previous), sum(row['chosen'] for row in previous)
     responsive = count > 0 and wins < count and wins * 5 < 2 * count
@@ -147,7 +147,16 @@ def _check_market_decisions(result, tape):
         if decision['public_rival_price'] != int(anchor * rival_bps / 10000):
             raise ValueError('RIVAL_RESPONSE_READS_UNAVAILABLE_FUTURE_HISTORY')
         if result['arm'] == 'competitive_growth':
-            price = _expected_competitive_price(price, int(anchor * rival_bps / 10000), cfg, previous)
+            premium = 0
+            for transition in tape['actions']:
+                if transition['op'] == 'source_transition' and transition['day'] <= moment:
+                    ticket = result['owned_account'].get('source_transitions', {}).get(transition['args']['id'], {})
+                    op = ticket.get('body', {}).get('operating')
+                    if op and op['policy']['mode'] == 'prospective':
+                        prepared = op['prior_checkpoint']['body']['state']['current']
+                        if not prepared or prepared['event']['time'] != moment:
+                            premium = op['policy']['premium_microUSD']
+            price = _expected_competitive_price(price, int(anchor * rival_bps / 10000), cfg, previous, premium)
         if decision['human_price'] != anchor or (decision['kind'] == 'offer' and decision['price'] != price) or (decision['kind'] == 'outside_choice' and decision['price'] is not None):
             raise ValueError('PRICE_POLICY_USES_UNREGISTERED_INFORMATION_OR_HUMAN_ANCHOR')
         committed = sum(row['price'] for row in result['orders'] if row['customer_id'] == customer
@@ -293,12 +302,17 @@ def _check_cost_semantics(result, tape, lifecycle):
         attempts = sum(row.get('kind') == 'offer' and row['time'] == moment for row in result['decisions'])
         add('qualification-' + str(day), cfg['qualification_cost'] * attempts, moment, 'qualification_including_lost_offers')
     for row in result['orders']:
-        add(row['id'] + '-resources', row['complete_cost'], row['qualified_time'], 'production_contract')
+        add(row['id'] + '-resources', row.get('resource_cost', row['complete_cost']), row['qualified_time'], 'production_contract')
+        if 'terms' in row:
+            add(row['id'] + '-prospective-charges', row['fee'] + row['premium'], row['qualified_time'], 'prospective_contract_charges')
     for row in result['investments']:
         category = 'acquisition_contract' if row['kind'] == 'acquisition' else 'capacity_contract'
         if row['kind'] == 'capacity' and row['cost'] != cfg['capacity_price']:
             raise ValueError('CAPACITY_COST_DIFFERS_FROM_DECLARED_SUPPLIER_CONTRACT')
         add(row['id'], row['cost'], row['purchased_time'], category)
+    for row in result.get('operating_upgrades', []):
+        ticket = result['owned_account']['source_transitions'][row['id']]['body']
+        add('source-upgrade-' + row['id'], ticket['operating']['policy'].get('upgrade_cost_microUSD', 0), ticket['day'], 'source_upgrade_integration')
     tax_paid = 0
     for native in tape['actions']:
         if native['op'] == 'event' and native['args']['action'] in {'release', 'refund'}:
@@ -317,6 +331,11 @@ def _check_cost_semantics(result, tape, lifecycle):
             committed[request['id']] = (request['amount'], request['day'])
         elif request['operation'] == 'execute' and request['op'] == 'cost':
             committed[request['args']['id']] = (request['args']['amount'], request['day'])
+        elif request['operation'] == 'execute' and request['op'] == 'offer' and 'terms_id' in request['args']:
+            order = next(o for o in result['orders'] if o['id'] == request['args']['id'])
+            charge = order['fee'] + order['premium']
+            if charge:
+                committed[order['id'] + '-prospective-charges'] = (charge, request['day'])
     if committed != {ident: (row['amount'], row['time']) for ident, row in expected.items()}:
         raise ValueError('ALL_NATIVE_COSTS_MUST_HAVE_OPERATING_RESOURCE_CONTRACT')
     return {'complete_operating_cost_contracts_recomputed': len(expected), 'tax_provision_recomputed_microUSD': tax_paid}
@@ -469,6 +488,53 @@ def _check_contract_clock(ident, offered, actions, operating, qualified, config,
             raise ValueError('REFUND_TIME_DIFFERS_FROM_FROZEN_CONTRACT')
 
 
+def _check_order_terms(result, row, offered, tape, operating):
+    expected, policy, inherited = None, None, False
+    for transition in tape['actions']:
+        if transition['op'] != 'source_transition' or transition['seq'] > offered['seq']:
+            continue
+        ticket = result['owned_account'].get('source_transitions', {}).get(transition['args']['id'], {})
+        op = ticket.get('body', {}).get('operating')
+        if op is None:
+            continue
+        old = op['prior_checkpoint']['body']['state']; prepared = old.get('current')
+        legacy = old['orders'] + (prepared.get('orders', []) if prepared else [])
+        existing = next((o for o in legacy if o['id'] == row['id']), None)
+        if existing is not None:
+            expected = existing.get('terms'); inherited = True
+        else:
+            policy = op['policy']; inherited = False
+    if not inherited and policy and policy['mode'] == 'prospective':
+        from commercial.terms import prospective_terms
+        cfg = result['config']; qualified = row['qualified_time']
+        collection = qualified + cfg['production_hours'] + cfg['acceptance_hours'] + cfg['clearing_hours']
+        boundary = max(collection, qualified + cfg['payment_deadline_hours']) + policy['protection_hours']
+        expected = prospective_terms(row['id'], row['price'], boundary, collection,
+                                     residual=policy['residual_microUSD'], premium=policy['premium_microUSD'], fee=row['fee'],
+                                     coverage_limit=policy['coverage_limit_microUSD'], deductible=policy['deductible_microUSD'],
+                                     exclusions=policy['exclusions'], payout_delay_hours=policy['payout_delay_hours'],
+                                     jurisdiction=policy['jurisdiction'], counterparty_obligations=policy['counterparty_obligations'])
+    if expected is None:
+        if any(k in row for k in ['terms', 'terms_id', 'terms_sha256', 'resource_cost', 'premium', 'maturity_time']) or 'terms_id' in offered['args']:
+            raise ValueError('LEGACY_OR_PREPARED_ORDER_TERMS_CANNOT_CHANGE_RETROACTIVELY')
+        return 0
+    registered = [e for e in tape['actions'] if e['op'] == 'register_terms' and e['args']['id'] == row.get('terms_id')]
+    if (row.get('terms') != expected or row.get('terms_sha256') != digest(expected)
+            or row.get('terms_id') != 'terms-' + row['id'] or offered['args'].get('terms_id') != row['terms_id']
+            or len(registered) != 1 or registered[0]['args']['terms'] != expected
+            or registered[0]['seq'] >= offered['seq'] or registered[0]['day'] != row['qualified_time']
+            or row.get('premium') != expected['premium_microUSD']):
+        raise ValueError('OPERATING_PROSPECTIVE_TERMS_NOT_AUTHORIZED_BEFORE_COMMITMENT')
+    if row['outcome'] == 'SETTLED':
+        maturity = [e for e in tape['actions'] if e['op'] == 'mature' and e['args']['id'] == row['id']]
+        due = expected['maturity_day'] + 1
+        if len(maturity) != 1 or maturity[0]['day'] != due or row.get('maturity_time') != due or operating.get((row['id'], 'PROTECTION_MATURITY'), {}).get('time') != due:
+            raise ValueError('PROSPECTIVE_MATURITY_MISSING_DUPLICATED_OR_WRONG_CLOCK')
+        if maturity[0]['before']['profit'] != maturity[0]['after']['profit'] or maturity[0]['before']['cash'] != maturity[0]['after']['cash']:
+            raise ValueError('MATURITY_MUST_NOT_CREATE_INCOME_OR_CASH')
+    return expected['premium_microUSD']
+
+
 def audit(root, manifest, result):
     if not isinstance(result, dict) or result.get('schema') != 'agi-alpha/connected014-result/v1' or result.get('scope') != 'CONDITIONAL_SIMULATION':
         raise ValueError('CONNECTED_SIMULATED_WORLD_REQUIRED')
@@ -486,10 +552,10 @@ def audit(root, manifest, result):
     from connected_enterprise.finance import audit_journal
     account = audit_journal(result['owned_account'], root=root, manifest=manifest)
     tape = result['owned_account']['ledger']
-    if result['config'].get('native_time_unit') != 'hour' or tape['config']['contract'] != 'connected014/' + digest({
-            'config': result['config'], 'seed': result['seed'], 'arm': result['arm'],
-            'source': result['source'], 'manifest': manifest}):
+    if result['config'].get('native_time_unit') != 'hour':
         raise ValueError('FROZEN_SOURCE_CONFIG_SEED_ARM_ACCOUNT_BINDING_CHANGED')
+    from .migration import check_lineage
+    lineage_receipt = check_lineage(result, manifest)
     if result['summary'] != account['summary']:
         raise ValueError('OPERATING_SUMMARY_DIFFERS_FROM_NATIVE_ACCOUNT')
     native_orders = {row['id']: row for row in account['orders']}
@@ -535,8 +601,10 @@ def audit(root, manifest, result):
         onboard = 0 if row['customer_id'] in onboarding_seen else cfg['onboarding_cost']
         onboarding_seen.add(row['customer_id'])
         production = cfg['production_cost'] + cfg['supplier_unit_cost']
-        expected_cost = production + cfg['support_cost'] + fee + onboard
-        if row.get('fee') != fee or row.get('onboarding') != onboard or row.get('production_cost') != production or row.get('support_cost') != cfg['support_cost'] or row['complete_cost'] != expected_cost or funding['amount'] != expected_cost:
+        premium = _check_order_terms(result, row, offers[ident], tape, operating)
+        expected_cost = production + cfg['support_cost'] + fee + onboard + premium
+        resource_cost = expected_cost - fee - premium if 'terms' in row else expected_cost
+        if row.get('fee') != fee or row.get('onboarding') != onboard or row.get('production_cost') != production or row.get('support_cost') != cfg['support_cost'] or row['complete_cost'] != expected_cost or funding['amount'] != resource_cost or row.get('resource_cost',resource_cost) != resource_cost:
             raise ValueError('COMPLETE_PRODUCTION_FEES_SUPPORT_ONBOARDING_COST_MISMATCH')
         native = native_orders[ident]
         offered = offers[ident]
@@ -625,6 +693,15 @@ def audit(root, manifest, result):
     investment_receipt = _check_investments(result, tape, orders)
     channel_receipt = check_channels(result['channels'], result['investments'], result['buyers'],
                                      contracts=result['config']['channels'], seed=result['seed'])
+    markers = [e for e in tape['actions'] if e['op'] == 'operating_checkpoint']
+    if markers:
+        state = result.get('operating_state')
+        if (not isinstance(state, dict) or operating_state_digest(state) != markers[-1]['args']['state_sha256']
+                or state.get('queue') != [] or state.get('current') is not None
+                or state.get('processed_events') != result['processed_events']
+                or any(state.get(k) != result[k] for k in ['config', 'seed', 'arm', 'source', 'orders', 'buyers', 'investments', 'costs', 'events', 'decisions', 'market', 'stop_reasons'])
+                or state.get('channel_state') != result['channels']):
+            raise ValueError('OPERATING_STATE_NOT_BOUND_TO_LATEST_NATIVE_CHECKPOINT')
     receipt = {'schema': 'agi-alpha/connected014-independent-audit/v1', 'accepted': True,
             'scope': 'NATIVE_FINANCIAL_AND_OPERATING_SEMANTICS',
             'independence': 'Separate checking code in the same agent session and host; not independent institutions or live counterparties.',
@@ -632,7 +709,7 @@ def audit(root, manifest, result):
             'verifier_source_sha256': EXECUTING_VERIFIER_SHA256,
             'verifier_matches_world_source_snapshot': result['source']['files'].get('connected_enterprise/verify.py') == EXECUTING_VERIFIER_SHA256,
             'collections_microUSD': collections, 'complete_costs_microUSD': expense,
-            **source_receipt, **budget_receipt, **investment_receipt, **channel_receipt, **market_receipt,
+            **source_receipt, **budget_receipt, **investment_receipt, **channel_receipt, **market_receipt, **lineage_receipt,
             **lifecycle_receipt, **cost_semantics, **commercial_receipt}
     return json.loads(canonical(receipt))
 
