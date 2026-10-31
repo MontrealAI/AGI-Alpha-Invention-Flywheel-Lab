@@ -201,6 +201,30 @@ class ReleaseIntegrityTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'MAIN_RELEASE_GATE'):
             release.verify_assets(self.assets, COMMIT)
 
+    def test_observed_manual_gate_receipt_is_source_bound_and_old_field_optional(self):
+        rows={name:{'head_sha':COMMIT,'event':'push','head_branch':'main','conclusion':'success',
+                    'path':'.github/workflows/'+name} for name in release.REQUIRED_WORKFLOWS}
+        gate={'source_commit':COMMIT,'event':'push','branch':'main','required_workflows':rows}
+        release.write(self.assets/'RELEASE_GATE.json',gate);release.seal(self.assets,self.manifest)
+        release.verify_assets(self.assets,COMMIT)  # historical absent field remains supported
+        row={'head_sha':COMMIT,'event':'workflow_dispatch','head_branch':'main','conclusion':'success',
+             'path':'.github/workflows/measurement009.yml'}
+        gate['observed_retired_manual_workflows']={'measurement009.yml':row}
+        release.write(self.assets/'RELEASE_GATE.json',gate);release.seal(self.assets,self.manifest)
+        release.verify_assets(self.assets,COMMIT)
+        for change in ({'head_sha':'b'*40},{'event':'push'},{'head_branch':'feature'},
+                       {'conclusion':'failure'},{'path':'.github/workflows/other.yml'}):
+            with self.subTest(change=change):
+                gate['observed_retired_manual_workflows']={'measurement009.yml':{**row,**change}}
+                release.write(self.assets/'RELEASE_GATE.json',gate);release.seal(self.assets,self.manifest)
+                with self.assertRaisesRegex(ValueError,'OBSERVED_MANUAL_GATE'):
+                    release.verify_assets(self.assets,COMMIT)
+        for manual in (None, {'unknown.yml':row}):
+            gate['observed_retired_manual_workflows']=manual
+            release.write(self.assets/'RELEASE_GATE.json',gate);release.seal(self.assets,self.manifest)
+            with self.assertRaisesRegex(ValueError,'OBSERVED_MANUAL_GATE'):
+                release.verify_assets(self.assets,COMMIT)
+
     def test_moved_main_and_wrong_existing_tag_never_create_release(self):
         gate = {name:{'head_sha':COMMIT} for name in release.REQUIRED_WORKFLOWS}
         applicability = {'changed_paths':['connected_enterprise/finance.py'], 'base_commit':'c'*40, 'conservative_all_conditionals':False}
@@ -288,19 +312,45 @@ class ReleaseIntegrityTests(unittest.TestCase):
         with zipfile.ZipFile(archive) as source:
             release.checked_members(source)
 
-    def test_child_cpu_over_envelope_retains_failure_before_further_work(self):
+    def test_cpu_above_historical_reference_is_telemetry_not_acceptance(self):
         import scripts.qualify_connected014 as qualifier
         zero = {key:0. for key in ('self_user','self_system','children_user','children_system')}
         over = {**zero, 'children_user':2400.5}
-        output = self.root/'cpu-envelope-check'
-        with patch.object(release, 'cpu_usage', side_effect=[zero, zero, over, over]), patch.object(qualifier, 'run_command') as command:
-            with self.assertRaisesRegex(TimeoutError, 'CPU_ENVELOPE_EXCEEDED'):
-                release.operate_download(self.assets, output, COMMIT, 10)
-        receipt = release.read(output/'DOWNLOADED_RELEASE_RUN.json')
-        self.assertFalse(receipt['accepted'])
-        self.assertTrue(receipt['resources']['cpu_envelope_exceeded'])
+        with zipfile.ZipFile(self.assets/'connected014-keyfree.zip', 'w') as archive:
+            archive.writestr('source/service.py', b'released evidence fixture')
+        qualification = release.read(self.assets/'QUALIFICATION.json')
+        qualification['public_archive']['sha256'] = release.digest(self.assets/'connected014-keyfree.zip')
+        release.write(self.assets/'QUALIFICATION.json', qualification)
+        release.seal(self.assets, self.manifest)
+        output = self.root/'cpu-telemetry-check'
+        with patch.object(release, 'cpu_usage', side_effect=[zero]+[over]*14), patch.object(qualifier, 'run_command', side_effect=self.operation_command_fixture()) as command, patch.object(qualifier, 'native_state', return_value={'account':'unchanged'}):
+            receipt = release.operate_download(self.assets, output, COMMIT, 10)
+        self.assertTrue(receipt['accepted'])
+        self.assertFalse(receipt['resource_policy']['cpu_acceptance_gate'])
+        self.assertIsNone(receipt['resource_policy']['cpu_limit_seconds'])
+        self.assertTrue(receipt['resources']['historical_cpu_reference_exceeded'])
         self.assertEqual(receipt['resources']['total_measured_cpu_seconds'], 2400.5)
-        self.assertEqual(command.call_count, 1)
+        self.assertEqual(command.call_count, 6)
+        self.assertNotIn('failure', receipt)
+
+    def test_audit_rejection_still_fails_above_historical_cpu_reference(self):
+        import scripts.qualify_connected014 as qualifier
+        zero = {key:0. for key in ('self_user','self_system','children_user','children_system')}
+        over = {**zero, 'children_user':3000.}
+        execute = self.operation_command_fixture()
+        def rejected(arguments, cwd, log, deadline, commands):
+            execute(arguments,cwd,log,deadline,commands)
+            if arguments[3]=='audit':
+                target=Path(arguments[arguments.index('--output')+1])
+                release.write(target/'PACKAGE_AUDIT.json',{'accepted':False})
+        output=self.root/'audit-rejection-high-cpu'
+        with patch.object(release,'cpu_usage',side_effect=[zero]+[over]*10), patch.object(qualifier,'run_command',side_effect=rejected), patch.object(qualifier,'native_state',return_value={'account':'unchanged'}):
+            with self.assertRaisesRegex(ValueError,'NATIVE_OPERATING_AUDIT_REJECTED'):
+                release.operate_download(self.assets,output,COMMIT,10)
+        receipt=release.read(output/'DOWNLOADED_RELEASE_RUN.json')
+        self.assertFalse(receipt['accepted'])
+        self.assertEqual(receipt['resources']['total_measured_cpu_seconds'],3000.)
+        self.assertEqual(len(receipt['commands']),3)
 
     def checkpoint_fixture(self, parent):
         operation = parent/'operation'
@@ -381,7 +431,7 @@ class ReleaseIntegrityTests(unittest.TestCase):
                     release.failure_checkpoint(operation, output, COMMIT, self.manifest['source_sha256'])
                 self.assertFalse((output/'failed-operation-keyfree.zip').exists())
 
-    def test_cpu_failure_preserves_checkpoint_and_accounts_cleanup_without_more_commands(self):
+    def test_real_failure_above_reference_remains_failure_and_accounts_cleanup(self):
         import scripts.qualify_connected014 as qualifier
         output = self.root/'actual-failure-fixture'
         zero = {key:0. for key in ('self_user','self_system','children_user','children_system')}
@@ -389,14 +439,15 @@ class ReleaseIntegrityTests(unittest.TestCase):
         frozen = {'value':None}
         def execute(*args):
             _, frozen['value'] = self.checkpoint_fixture(output)
+            raise TimeoutError('actual command wall deadline')
         def metadata(_):return frozen['value']
-        with patch('connected_enterprise.runner.read_freeze', side_effect=metadata), patch('adaptive_enterprise.instruments._validate_manifest'), patch.object(release, 'cpu_usage', side_effect=[zero, zero, over, cleanup]), patch.object(qualifier, 'run_command', side_effect=execute) as command:
-            with self.assertRaisesRegex(TimeoutError, 'CPU_ENVELOPE_EXCEEDED'):
+        with patch('connected_enterprise.runner.read_freeze', side_effect=metadata), patch('adaptive_enterprise.instruments._validate_manifest'), patch.object(release, 'cpu_usage', side_effect=[zero, over, cleanup]), patch.object(qualifier, 'run_command', side_effect=execute) as command:
+            with self.assertRaisesRegex(TimeoutError, 'actual command wall deadline'):
                 release.operate_download(self.assets, output, COMMIT, 10)
         receipt = release.read(output/'DOWNLOADED_RELEASE_RUN.json')
         self.assertFalse(receipt['accepted'])
         self.assertEqual(command.call_count, 1)
-        self.assertEqual(receipt['failure']['message'], 'DOWNLOADED_OPERATION_CPU_ENVELOPE_EXCEEDED')
+        self.assertEqual(receipt['failure']['message'], 'actual command wall deadline')
         self.assertEqual(receipt['resources']['total_measured_cpu_seconds'], 2400.75)
         self.assertTrue((output/receipt['failure_checkpoint']['path']).exists())
         self.assertFalse((output/'downloaded-operation-keyfree.zip').exists())
@@ -455,12 +506,36 @@ class WorkflowGateTests(unittest.TestCase):
         self.assertNotIn('connected014.yml', required)
         self.assertNotIn('measurement009.yml', required)
 
-    def test_conditional_measurement_and_every_observed_extra_workflow_are_gated(self):
+    def test_retired_measurement_not_implied_but_observed_extras_remain_gated(self):
         required = release.applicable_workflows(['docs/next009/PAPER.pdf'], ['extra-security.yml', release.OWN_WORKFLOW])
-        self.assertIn('measurement009.yml', required)
+        self.assertNotIn('measurement009.yml', required)
         self.assertIn('extra-security.yml', required)
         self.assertNotIn(release.OWN_WORKFLOW, required)
-        self.assertIn('measurement009.yml', release.applicable_workflows([], conservative=True))
+        self.assertNotIn('measurement009.yml', release.applicable_workflows([], conservative=True))
+        self.assertIn('measurement009.yml', release.applicable_workflows([], ['measurement009.yml']))
+
+    def test_current_measurement_source_still_requires_campaign_regressions(self):
+        for path in ('research/next009/successor.py','inventions/measurement009/new.py',
+                     'verification/next009/check.py','.github/workflows/measurement009.yml',
+                     'evidence/next009/old.log'):
+            required=release.applicable_workflows([path])
+            self.assertIn('campaign.yml',required)
+            self.assertTrue(set(release.REQUIRED_WORKFLOWS)<=required)
+            self.assertNotIn('measurement009.yml',required)
+
+    def test_observed_retired_manual_failure_blocks_without_renewing_missing_run(self):
+        name='measurement009.yml'
+        self.assertEqual(release.observed_retired_manual_runs({name:[]}, COMMIT), ({},{}))
+        row=self.row(event='workflow_dispatch', path='.github/workflows/'+name)
+        observed, accepted=release.observed_retired_manual_runs({name:[row]}, COMMIT)
+        self.assertEqual(set(observed),{name});self.assertEqual(set(accepted),{name})
+        with self.assertRaisesRegex(ValueError,'QUALIFICATION_FAILED'):
+            release.observed_retired_manual_runs({name:[row,{**row,'run_attempt':2,'conclusion':'failure'}]},COMMIT)
+        observed, accepted=release.observed_retired_manual_runs({name:[{**row,'status':'in_progress','conclusion':None}]}, COMMIT)
+        self.assertEqual(set(observed),{name});self.assertEqual(accepted,{})
+        for changes in ({'head_sha':'b'*40},{'head_branch':'feature'},{'event':'pull_request'}):
+            self.assertEqual(release.observed_retired_manual_runs({name:[{**row,**changes}]}, COMMIT), ({},{}))
+        self.assertEqual(release.qualifying_runs({name:[row]},COMMIT),{})
 
     def test_push_comparison_uses_full_event_range_and_exact_trees_after_path_cap(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -491,13 +566,13 @@ class WorkflowGateTests(unittest.TestCase):
         with patch.dict(release.os.environ, {}, clear=True), patch.object(release, 'gh', side_effect=responses):
             result = release.push_applicability('owner/repo', COMMIT)
         self.assertEqual(result['changed_paths'], ['.github/workflows/measurement009.yml'])
-        self.assertIn('measurement009.yml', release.applicable_workflows(result['changed_paths']))
+        self.assertNotIn('measurement009.yml', release.applicable_workflows(result['changed_paths']))
 
-    def test_publication_wait_can_exceed_operating_timeout_without_raising_its_cap(self):
+    def test_platform_aligned_operating_timeout_has_finite_receipt_reserve(self):
         publish = ['release', 'publish', '--assets', '/unused', '--source-commit', COMMIT,
                    '--repository', 'owner/repo', '--run-id', '7', '--timeout-seconds', '2400']
         operate = ['release', 'operate-download', '--assets', '/unused', '--source-commit', COMMIT,
-                   '--output', '/unused-operation', '--timeout-seconds', '1201']
+                   '--output', '/unused-operation', '--timeout-seconds', '21301']
         with patch.object(release.sys, 'argv', publish), patch.object(release, 'publish', return_value={}) as action, contextlib.redirect_stdout(io.StringIO()):
             release.main()
             self.assertEqual(action.call_args.args[-1], 2400)
@@ -510,6 +585,15 @@ class WorkflowGateTests(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 release.main()
             action.assert_not_called()
+
+class ProspectivePlatformPolicyTests(unittest.TestCase):
+    def test_default_operation_deadline_is_platform_ceiling_less_reserve(self):
+        args=['release','operate-download','--assets','/unused','--source-commit',COMMIT,'--output','/unused-operation']
+        with patch.object(release.sys,'argv',args), patch.object(release,'operate_download',return_value={}) as operation, contextlib.redirect_stdout(io.StringIO()):
+            release.main()
+        self.assertEqual(operation.call_args.args[3],21300)
+        self.assertEqual(release.HOSTED_JOB_LIMIT_SECONDS,21600)
+        self.assertEqual(release.RECEIPT_SHUTDOWN_RESERVE_SECONDS,300)
 
 if __name__ == '__main__':
     unittest.main()

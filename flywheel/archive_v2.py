@@ -107,19 +107,6 @@ def _manifest(raw, payloads):
     return manifest
 
 
-def _engineering_log_scope(relative):
-    # Only completed engineering transcript areas; never financial/output records.
-    if relative.parts[:2] == ("evidence", "completion015"):
-        return relative.suffix in {".log", ".stdout", ".stderr"}
-    if relative.suffix != ".log":
-        return False
-    if relative.parent.as_posix() in {"evidence/connected014/engineering", "evidence/enterprise011", "evidence/commercial010/qualification"}:
-        return True
-    return relative.parent.as_posix() == "evidence/adaptive012" and relative.name in {
-        "imported-allocation-ownership-tests.log", "initial-137-tests.log",
-        "CI-adaptive-current.log", "CI-public-package.log", "CI-historical-general.log"}
-
-
 def _source_log_omissions(root):
     path = Path(root) / OMISSIONS
     if not path.exists():
@@ -131,7 +118,7 @@ def _source_log_omissions(root):
         raise ValueError("BOUNDED_SOURCE_LOG_OMISSIONS_REQUIRED")
     for name, entry in files.items():
         relative = _name(name)
-        if (not _engineering_log_scope(relative)
+        if (relative.parts[:2] != ("evidence", "completion015") or relative.suffix not in {".log", ".stdout", ".stderr"}
                 or not isinstance(entry, dict) or set(entry) != {"sha256", "bytes"}
                 or type(entry["bytes"]) is not int or entry["bytes"] < 0
                 or not isinstance(entry["sha256"], str) or len(entry["sha256"]) != 64

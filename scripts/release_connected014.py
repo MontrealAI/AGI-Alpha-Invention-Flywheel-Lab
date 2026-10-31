@@ -17,10 +17,15 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 LIMIT = 256_000_000
-OPERATING_CPU_ENVELOPE_SECONDS = 2400
+HISTORICAL_CPU_REFERENCE_SECONDS = 2400
+HOSTED_JOB_LIMIT_SECONDS = 6 * 60 * 60
+RECEIPT_SHUTDOWN_RESERVE_SECONDS = 5 * 60
+OPERATING_HANG_TIMEOUT_SECONDS = HOSTED_JOB_LIMIT_SECONDS - RECEIPT_SHUTDOWN_RESERVE_SECONDS
 PAPERS = ('PAPER.pdf', 'PAPER.tex', 'index.html', 'REPORT.md', 'PUBLICATION.json', 'PDF_QA.json')
 REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.yml', 'adaptive012.yml', 'commercial010.yml')
-CONDITIONAL_WORKFLOWS = {'measurement009.yml':('.github/workflows/measurement009.yml', 'campaign/next-009/', 'inventions/measurement009/', 'research/next009/', 'verification/next009/', 'docs/next009/', 'evidence/next009/')}
+# Terminal measurement009 is manual-only; path changes never renew its expired allocation.
+CONDITIONAL_WORKFLOWS = {}
+RETIRED_MANUAL_WORKFLOWS = ('measurement009.yml',)
 OWN_WORKFLOW = 'connected014-release.yml'
 
 def digest(path):
@@ -153,6 +158,13 @@ def verify_assets(directory, expected_commit):
                        or row.get('head_branch') != 'main' or row.get('conclusion') != 'success'
                        or row.get('path') != '.github/workflows/'+name for name, row in runs.items())):
             raise ValueError('SOURCE_BOUND_MAIN_RELEASE_GATE_REQUIRED')
+        manual = gate.get('observed_retired_manual_workflows', {})
+        if (not isinstance(manual, dict) or any(name not in RETIRED_MANUAL_WORKFLOWS
+                or not isinstance(row, dict) or row.get('head_sha') != expected_commit
+                or row.get('event') != 'workflow_dispatch' or row.get('head_branch') != 'main'
+                or row.get('conclusion') != 'success' or row.get('path') != '.github/workflows/'+name
+                for name, row in manual.items())):
+            raise ValueError('SOURCE_BOUND_OBSERVED_MANUAL_GATE_REQUIRED')
     return manifest
 
 
@@ -328,10 +340,10 @@ def gh(endpoint, optional=False):
         raise RuntimeError('GITHUB_API_FAILED:'+endpoint)
     return json.loads(result.stdout)
 
-def qualifying_runs(workflows, source_commit):
+def qualifying_runs(workflows, source_commit, *, event='push'):
     accepted = {}
     for name, runs in workflows.items():
-        matches = [row for row in runs if row.get('head_sha') == source_commit and row.get('event') == 'push'
+        matches = [row for row in runs if row.get('head_sha') == source_commit and row.get('event') == event
                    and row.get('head_branch') == 'main' and row.get('path') == '.github/workflows/'+name]
         if not matches:
             continue
@@ -341,6 +353,16 @@ def qualifying_runs(workflows, source_commit):
                 raise ValueError('EXACT_MAIN_QUALIFICATION_FAILED:'+name)
             accepted[name] = {key:latest[key] for key in ('id', 'head_sha', 'event', 'head_branch', 'path', 'conclusion', 'html_url')}
     return accepted
+
+def observed_retired_manual_runs(workflows, source_commit):
+    """No manual run is required; an actually observed same-head run must finish successfully."""
+    observed = {name: [row for row in rows if row.get('head_sha') == source_commit
+                      and row.get('event') == 'workflow_dispatch' and row.get('head_branch') == 'main'
+                      and row.get('path') == '.github/workflows/'+name]
+                for name, rows in workflows.items() if name in RETIRED_MANUAL_WORKFLOWS}
+    observed = {name:rows for name,rows in observed.items() if rows}
+    accepted = qualifying_runs(observed, source_commit, event='workflow_dispatch') if observed else {}
+    return observed, accepted
 
 def applicable_workflows(changed_paths, observed=(), conservative=False):
     required = set(REQUIRED_WORKFLOWS)
@@ -393,7 +415,9 @@ def publish(directory, source_commit, repository, run_id, timeout):
         required = applicable_workflows(applicability['changed_paths'], names, applicability['conservative_all_conditionals'])
         runs = {name:gh(f'repos/{repository}/actions/workflows/{name}/runs?head_sha={source_commit}&event=push&branch=main&per_page=100')['workflow_runs'] for name in required}
         accepted = qualifying_runs(runs, source_commit)
-        if set(accepted) == required:
+        manual_runs = {name:gh(f'repos/{repository}/actions/workflows/{name}/runs?head_sha={source_commit}&event=workflow_dispatch&branch=main&per_page=100')['workflow_runs'] for name in RETIRED_MANUAL_WORKFLOWS}
+        manual_observed, manual_accepted = observed_retired_manual_runs(manual_runs, source_commit)
+        if set(accepted) == required and set(manual_accepted) == set(manual_observed):
             break
         if time.monotonic() >= deadline:
             raise TimeoutError('EXACT_MAIN_WORKFLOW_GATE_TIMEOUT')
@@ -424,7 +448,7 @@ def publish(directory, source_commit, repository, run_id, timeout):
         return original
     gate = {'schema':'agi-alpha/connected014-release-gate/v1', 'source_commit':source_commit,
             'event':'push', 'branch':'main', 'own_run_id':run_id, 'required_workflows':accepted,
-            'applicability':applicability}
+            'applicability':applicability, 'observed_retired_manual_workflows':manual_accepted}
     write(directory/'RELEASE_GATE.json', gate)
     manifest['downloaded_release_operation'] = 'FOLLOWING_PUBLICATION_JOB_REQUIRED; SEE_WORKFLOW_ARTIFACT'
     seal(directory, manifest)
@@ -578,21 +602,21 @@ def operate_download(directory, output, source_commit, timeout, actual_release_d
                'source_commit':source_commit, 'source_sha256':manifest['source_sha256'],
                'tag':manifest['tag'], 'actual_release_download':actual_release_download, 'commands':commands,
                'scope':'SIMULATED_RELEASED_DEFAULT_EXPERIMENT_REPRODUCTION_NOT_UNTOUCHED_CONFIRMATION',
-               'resource_policy':{'cpu_envelope_seconds':OPERATING_CPU_ENVELOPE_SECONDS,
+               'resource_policy':{'policy_version':'platform-aligned-telemetry-v2',
+                   'cpu_limit_seconds':None, 'cpu_acceptance_gate':False,
+                   'historical_cpu_reference_seconds':HISTORICAL_CPU_REFERENCE_SECONDS,
+                   'hosted_job_limit_seconds':HOSTED_JOB_LIMIT_SECONDS,
+                   'receipt_shutdown_reserve_seconds':RECEIPT_SHUTDOWN_RESERVE_SECONDS,
                    'wall_limit_seconds':timeout, 'measurement':'POSIX kernel RUSAGE_SELF plus RUSAGE_CHILDREN deltas; includes waited descendants.',
-                   'enforcement':'Measured after each completed subprocess and at final receipt; commands retain their live wall bound. This is not live aggregate process-tree CPU preemption.',
+                   'enforcement':'CPU is measured after each completed subprocess and at final receipt, never an acceptance or spending gate. A finite platform-aligned wall deadline terminates hangs and leaves receipt/shutdown time; no retry or extra experiment is authorized.',
                    'scope':'Run, resume, native/operating audits, key-free packaging, public-copy audit and wrapper work after verified-asset/output-root admission. Initial asset verification and unavailable host/model billing are excluded.'}}
-    def measure(enforce=True):
+    def measure():
         measured = cpu_delta(cpu_start, cpu_usage())
         measured['wall_seconds'] = time.monotonic()-wall_start
-        measured['cpu_envelope_exceeded'] = measured['total_measured_cpu_seconds'] > OPERATING_CPU_ENVELOPE_SECONDS
+        measured['historical_cpu_reference_exceeded'] = measured['total_measured_cpu_seconds'] > HISTORICAL_CPU_REFERENCE_SECONDS
         measured['coverage'] = 'COMPLETED_WAITED_COMMANDS; ACTIVE_COMMAND_CPU_NOT_YET_REAPED' if receipt.get('active_command') else 'COMPLETED_WAITED_PROCESS_TREE'
         receipt['resources'] = measured
-        if measured['cpu_envelope_exceeded']:
-            receipt['accepted'] = False
         write(output/'DOWNLOADED_RELEASE_RUN.json', receipt)
-        if enforce and measured['cpu_envelope_exceeded']:
-            raise TimeoutError('DOWNLOADED_OPERATION_CPU_ENVELOPE_EXCEEDED')
         return measured
     def command(arguments, cwd, label):
         receipt['active_command'] = label
@@ -648,14 +672,8 @@ def operate_download(directory, output, source_commit, timeout, actual_release_d
             receipt['checkpoint_failure'] = {'type':type(checkpoint_error).__name__, 'message':str(checkpoint_error)}
         raise
     finally:
-        measured = measure(enforce=False)
-        new_cpu_failure = measured['cpu_envelope_exceeded'] and 'failure' not in receipt
-        if measured['cpu_envelope_exceeded']:
-            receipt['accepted'] = False
-            receipt.setdefault('failure', {'type':'TimeoutError', 'message':'DOWNLOADED_OPERATION_CPU_ENVELOPE_EXCEEDED'})
+        measure()
         write(output/'DOWNLOADED_RELEASE_RUN.json', receipt)
-        if new_cpu_failure:
-            raise TimeoutError('DOWNLOADED_OPERATION_CPU_ENVELOPE_EXCEEDED')
     return receipt
 
 def main():
@@ -674,7 +692,7 @@ def main():
             sub.add_argument('--timeout-seconds', type=int, default=900)
         elif name == 'operate-download':
             sub.add_argument('--output', required=True)
-            sub.add_argument('--timeout-seconds', type=int, default=900)
+            sub.add_argument('--timeout-seconds', type=int, default=OPERATING_HANG_TIMEOUT_SECONDS)
             sub.add_argument('--actual-release-download', action='store_true')
         elif name == 'download':
             sub.add_argument('--repository', required=True)
@@ -682,8 +700,8 @@ def main():
     args = parser.parse_args()
     if args.command == 'publish' and not 1 <= args.timeout_seconds <= 2400:
         parser.error('publish timeout-seconds must be 1..2400')
-    if args.command == 'operate-download' and not 1 <= args.timeout_seconds <= 1200:
-        parser.error('operate-download timeout-seconds must be 1..1200')
+    if args.command == 'operate-download' and not 1 <= args.timeout_seconds <= OPERATING_HANG_TIMEOUT_SECONDS:
+        parser.error(f'operate-download timeout-seconds must be 1..{OPERATING_HANG_TIMEOUT_SECONDS} (hosted job ceiling minus receipt reserve)')
     if args.command == 'prepare':
         result = prepare(args.qualification, args.assets, args.source_commit, args.papers)
     elif args.command == 'publish':
