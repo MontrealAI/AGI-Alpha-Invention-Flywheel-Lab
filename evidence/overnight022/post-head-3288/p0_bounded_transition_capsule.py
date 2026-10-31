@@ -79,6 +79,7 @@ def _store_anchor(storage, raw):
     return digest
 
 
+
 def _clock(checkpoint, prior_record, day):
     state = checkpoint['body'].get('state', {})
     last_time = state.get('last_time', 0)
