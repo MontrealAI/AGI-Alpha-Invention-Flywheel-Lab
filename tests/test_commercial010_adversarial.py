@@ -42,10 +42,30 @@ class Commercial010AdversarialTests(unittest.TestCase):
             self.ex.execute('reserve', {'id': 'seed-claim', 'amount': 1, 'expected_net_value': 1,
                                        'intent_sha256': '0' * 64}, 0)
 
-    def test_nonfinite_negative_boolean_and_overflow_costs_rejected(self):
-        for value in [-1, True, float('nan'), float('inf'), 10**12 + 1, '0', None]:
+    def test_nonfinite_negative_boolean_and_noninteger_costs_rejected(self):
+        for value in [-1, True, 1.5, float('nan'), float('inf'), '0', None]:
             with self.subTest(value=value), self.assertRaises(ValueError):
                 amount(value)
+
+    def test_exact_large_cost_is_recognized_without_erasing_obligations(self):
+        value = 10**12 + 1
+        self.assertEqual(amount(value), value)
+        self.assertEqual(amount(2**80 + 19), 2**80 + 19)
+        self.ex.execute('cost', {'id': 'large-incurred-cost', 'amount': value}, 0)
+        summary = self.ex.ex.snapshot()
+        self.assertEqual(summary['expenses'], value)
+        self.assertEqual(summary['profit'], -value)
+        self.assertEqual(summary['payables'], value - 1_000_000_000)
+        self.assertEqual(summary['available'], 0)
+        self.assertEqual(summary['unrestrictedEarned'], 0)
+        self.assertTrue(audit(self.ex.export(), root=ROOT, manifest=self.manifest)['accepted'])
+
+    def test_pinned_legacy_offer_limit_is_not_silently_upgraded(self):
+        before = self.ex.ex.snapshot()
+        with self.assertRaisesRegex(ValueError, 'price or supported rail'):
+            self.ex.execute('offer', {'id': 'legacy-too-large', 'buyer': 'buyer',
+                                     'price': 10**12 + 1, 'job_id': self.job, 'deadline': 100}, 0)
+        self.assertEqual(self.ex.ex.snapshot(), before)
 
     def test_duplicate_payment_cannot_increase_collections(self):
         self.settle()
