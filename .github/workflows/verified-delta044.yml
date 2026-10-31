@@ -1,0 +1,61 @@
+name: Verified Delta Production 044
+on:
+  pull_request:
+    paths:
+      - 'commercial/verified_delta.py'
+      - 'commercial/service.py'
+      - 'commercial/service_verifier.py'
+      - 'scripts/run_verified_delta044.py'
+      - 'tests/test_verified_delta044.py'
+      - 'connected_enterprise/runner.py'
+      - 'campaign/verified-delta-044/**'
+      - '.github/workflows/verified-delta044.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fixed-engineering-development:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install fixed commerce dependency set
+        run: python3 -m pip install -r requirements-commercial010.txt
+      - name: Execute direct-specialist equivalence and adversarial regressions
+        run: python3 -m unittest discover -s tests -p test_verified_delta044.py -v
+      - name: Run fixed exposed development comparison
+        run: |
+          python3 -m scripts.run_verified_delta044 --output "$RUNNER_TEMP/delta044-checkout.json"
+          python3 - "$RUNNER_TEMP/delta044-checkout.json" <<'PY'
+          import json,sys
+          r=json.load(open(sys.argv[1]))
+          assert r['actual_customers']==r['actual_collections']==0 and r['actual_profit'] is None
+          assert r['human_expert_forecast_comparator']=='NOT_RUN'
+          assert len(r['cases'])==3
+          assert all(x['result']=='ALL_BOUND_SYNTHETIC_OUTCOMES_EQUAL_AND_ACCEPTED' for x in r['cases'])
+          assert [x['delta_semantic_rows'] for x in r['cases']]==[246,1090,1490]
+          print('Scoped verified-data production matched canonical specialist in exposed cases.')
+          PY
+      - name: Freeze canonical source and reproduce benchmark from extracted source
+        run: |
+          python3 -m connected_enterprise register --config campaign/overnight-022/OPERATOR_INPUT.json --output "$RUNNER_TEMP/delta044-frozen"
+          cd "$RUNNER_TEMP/delta044-frozen/source"
+          test -f commercial/verified_delta.py
+          test -f scripts/run_verified_delta044.py
+          python3 -m scripts.run_verified_delta044 --output "$RUNNER_TEMP/delta044-frozen-public.json"
+      - name: Upload compact synthetic source-bound receipts only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: verified-delta044-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/delta044-checkout.json
+            ${{ runner.temp }}/delta044-frozen-public.json
+          if-no-files-found: warn
+          retention-days: 7
