@@ -56,4 +56,31 @@ class MultiChannelSequence(unittest.TestCase):
    obs['summary']['unrestrictedEarned']=0
    self.assertEqual(sequence_options(cfg,0,obs,0,jobs,set(),[],self.buyers,{},set(),cfg['strategic_allocation_policy']['risk']['scenarios'],channel_state=self.book.export()),[])
   finally:sys.path.remove(str(scripts))
+ def test_full_actual_menu_catalogue_above_nine_is_exact_categorical_search(self):
+  from connected_enterprise.strategic_commerce import allocate_actions,rederive_actions
+  from adaptive_enterprise.allocation import allocate
+  scripts=Path(__file__).resolve().parents[1]/'scripts';sys.path.insert(0,str(scripts))
+  try:
+   from run_sequence026 import config
+   cfg=config('menu_overlap_wiring_fixture','sequence')
+   book=ChannelBook(999,cfg['channels']);book.expose(0,list(self.buyers.values()))
+   jobs={service:{'job':{'id':service,'accepted':True,'service_id':service},'artifact':{'method':'canonical','outcome_scope':'complete_outcome'}} for service in ('reconciliation','kpi_variance','evidence_matrix')}
+   obs={'scope':'SIMULATED','state_digest':'a'*64,'summary':{'available':100000000,'unrestrictedEarned':100000000}}
+   risk=cfg['strategic_allocation_policy']['risk']
+   rows=sequence_options(cfg,0,obs,0,jobs,set(),[],self.buyers,{},set(),risk['scenarios'],channel_state=book.export())
+   self.assertGreater(len(rows),9);self.assertEqual(len({r['exclusive_group'] for r in rows}),1)
+   actual=allocate_actions(obs,[],rows,risk,allow_seed=True,max_delivery_slots=1)
+   expected=allocate(obs,rows,risk,allow_seed=True,max_delivery_slots=1)
+   self.assertEqual(actual['decision'],expected);self.assertEqual(expected['states_evaluated'],len(rows)+1)
+   self.assertEqual(rederive_actions(actual),actual)
+   for row in rows:
+    single=allocate(obs,[row],risk,allow_seed=True,max_delivery_slots=1)
+    from fractions import Fraction
+    key=lambda x:(Fraction(x['risk_adjusted_value']),Fraction(x['expected_net_fraction']),-x['reserve_amount'])
+    self.assertGreaterEqual(key(expected),key(single))
+   bounded=copy.deepcopy(risk);bounded['max_states']=2
+   self.assertEqual(allocate_actions(obs,[],rows,bounded,allow_seed=True,max_delivery_slots=1)['decision']['optimality_scope'],'NONE')
+   with self.assertRaisesRegex(ValueError,'FINITE_COSTED_INVESTMENTS_REQUIRED'):
+    allocate_actions(obs,[],rows*9,risk,allow_seed=True,max_delivery_slots=1)
+  finally:sys.path.remove(str(scripts))
 if __name__=='__main__':unittest.main()

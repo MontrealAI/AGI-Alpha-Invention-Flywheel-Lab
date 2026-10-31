@@ -19,7 +19,8 @@ from connected_enterprise.runner import identity
 from connected_enterprise.verify import audit
 from commercial.ledger import digest
 
-PROTOCOL={'schema':'sequence026-current-menu-composition-development/v1',
+PROTOCOL={'schema':'sequence026-current-menu-composition-development/v2',
+ 'repair_edition':{'prior_head':'80531c99b1f4f3712c67de8b9452262260df8ff7','prior_run':41240919851,'failure':'menu_overlap_wiring_fixture/sequence FINITE_COSTED_INVESTMENTS_REQUIRED','change':'Remove obsolete raw-nine investment wrapper ceiling; unchanged total128 option and explicit max_states bounds. Same fixed eight cases/arms/seed, now exposed reproduction after repair, not fresh confirmation.'},
  'registration_change':'Before any new composition campaign outcomes, reduce 16 proposed worlds to8 for fast decisive integration: one exposed seed, old single-pilot control, real-menu central, overlap wiring and adverse worlds, each joint/sequence matched. Old evidence remains untouched.',
  'source_scope':'Rebased current runtime and common production contract; old PR44 results remain exposed historical evidence, not results for this source.',
  'horizon_days':14,'seeds':[2610311726],
