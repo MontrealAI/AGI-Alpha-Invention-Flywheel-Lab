@@ -239,6 +239,10 @@ def _prepare_plan(state,account,jobs):
                 prepared['channel_predicted_net']=prepared['capacity_predicted_net']=net
 
         liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-cfg['capacity_price']*bool(prepared['capacity_purchase'])
+    capacity_only_customers=set()
+    if joint is not None and 'complete_offer_policy' in cfg:
+        from .capacity_signal import capacity_declined_customers
+        capacity_only_customers=capacity_declined_customers(joint['allocation'])
     for b in candidates:
         if draw(seed,[day,b['id']],'need')>=cfg['arrival_bps']/10000:continue
         service=SERVICES[b['service_index']%3];human=cfg['human_comparator'][service];anchor=int((human['hours']*human['loaded_usd_hour']+2)*MICRO)
@@ -253,7 +257,7 @@ def _prepare_plan(state,account,jobs):
                 selected=(entry,joint_choice['offer'],anchor)
             else:
                 considered=joint_by_customer.get(b['id'])
-                blocked='capacity_decline' if considered and considered['selection']['decision']['selected'] is not None and len(joint_selected)>=slots else 'joint_no_bid'
+                blocked=('capacity_decline' if b['id'] in capacity_only_customers else 'joint_no_bid') if 'complete_offer_policy' in cfg else ('capacity_decline' if considered and considered['selection']['decision']['selected'] is not None and len(joint_selected)>=slots else 'joint_no_bid')
         if blocked:pass
         elif selected is None:blocked='inventory_decline'
         elif sum(o.get('capacity_units',1) for o in prepared['orders'])+_resource_units(selected[1],cfg)>slots:blocked='capacity_decline'
