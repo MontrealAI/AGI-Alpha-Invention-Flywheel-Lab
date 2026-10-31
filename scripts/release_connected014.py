@@ -582,6 +582,116 @@ def failure_checkpoint(operation, output, source_commit, source_sha256):
     return {'path':archive.name, 'sha256':digest(archive), 'bytes':archive.stat().st_size,
             'files':len(files), 'scope':checkpoint['scope'], 'consistent_cut':checkpoint['consistent_cut']}
 
+def discard_disposable_failure_outputs(output):
+    for path in Path(output).iterdir():
+        disposable = path.name in ('DOWNLOADED_RELEASE_RUN.json','failed-operation-keyfree.zip',
+            '.failed-operation-keyfree.zip','.failed-operation-candidate.zip','downloaded-operation-keyfree.zip','.downloaded-operation-candidate.zip') or path.suffix in ('.stdout','.stderr')
+        if disposable and path.is_file() and not path.is_symlink(): path.unlink()
+        if path.name in ('downloaded-operation-public','published-keyfree') and path.is_dir() and not path.is_symlink():
+            shutil.rmtree(path)
+
+
+def validate_compact_failure(value, source_commit):
+    keys={'schema','accepted','source_commit','source_sha256','actual_release_download','category','lesson',
+          'error_code','failure_message_sha256','active_stage','completed_commands','resources','input_hashes',
+          'observed_representative_finances','financial_unit','financial_scope','measured_host_billing','billing_scope','working_state'}
+    number=lambda v: isinstance(v,(int,float)) and not isinstance(v,bool) and math.isfinite(v)
+    sha=lambda v: isinstance(v,str) and re.fullmatch('[0-9a-f]{64}',v)
+    stages={'01-run','02-resume','03-audit','04-package-actual-operation','05-actual-operation-public-audit','06-released-public-audit','setup-or-unclassified'}
+    lessons={'WALL_TIMEOUT':'Inspect the stopped stage before changing finite execution protection.',
+             'AUDIT_OR_SOURCE_REJECTED':'Repair the exact source, audit or publication mismatch before retrying.',
+             'COMMAND_OR_SETUP_FAILURE':'Inspect the command or setup failure; do not rerun unchanged blindly.'}
+    errors={'DOWNLOADED_EXECUTION_SOURCE_CHANGED','DOWNLOADED_RESUME_CHANGED_MONEY_OR_WORK','DOWNLOADED_NATIVE_OPERATING_AUDIT_REJECTED','DOWNLOADED_OPERATION_PUBLIC_AUDIT_REJECTED','RELEASED_PUBLIC_EVIDENCE_SOURCE_CHANGED','UNSAFE_OR_PRIVATE_ARCHIVE_MEMBER'}
+    if (not isinstance(value,dict) or set(value)!=keys or value.get('schema')!='agi-alpha/compact-failure/v1'
+            or value.get('source_commit')!=commit(source_commit) or value.get('accepted') is not False
+            or type(value.get('actual_release_download')) is not bool
+            or value.get('category') not in lessons or value.get('lesson')!=lessons[value['category']]
+            or value.get('error_code') not in errors|{None} or not sha(value.get('failure_message_sha256'))
+            or value.get('source_sha256') is not None and not sha(value['source_sha256'])
+            or value.get('active_stage') not in stages or value.get('financial_unit')!='microUSD'
+            or value.get('financial_scope')!='Unqualified partial diagnostic; no aggregate profit or recovery claim.'
+            or value.get('measured_host_billing') is not None
+            or value.get('billing_scope')!='Unknown; CPU telemetry is not a monetary bill.'
+            or value.get('working_state')!='Authoritative operation and recovery state untouched; not exported.'):
+        raise ValueError('COMPACT_FAILURE_SCHEMA_OR_SOURCE_CHANGED')
+    for field,allowed in [('resources',{'self_cpu_seconds','children_cpu_seconds','total_measured_cpu_seconds','wall_seconds'}),
+                          ('observed_representative_finances',{'revenue','expenses','profit','collections','expensePaid','payables','cash','tailReserve','custodyReserve'})]:
+        rows=value[field]
+        if not isinstance(rows,dict) or not set(rows)<=allowed or not all(number(v) for v in rows.values()):
+            raise ValueError('COMPACT_FAILURE_NUMERIC_FIELDS_REQUIRED')
+    hashes=value['input_hashes']
+    if not isinstance(hashes,dict) or not set(hashes)<={'operation/FROZEN.json','operation/REPORT.json'} or not all(sha(v) for v in hashes.values()):
+        raise ValueError('COMPACT_FAILURE_HASH_FIELDS_REQUIRED')
+    rows=value['completed_commands']
+    if not isinstance(rows,list) or len(rows)>6 or any(not isinstance(row,dict) or set(row)!={'stage','returncode','wall_seconds'} or row['stage'] not in stages or row['returncode'] is not None and type(row['returncode']) is not int or row['wall_seconds'] is not None and not number(row['wall_seconds']) for row in rows):
+        raise ValueError('COMPACT_FAILURE_COMMAND_FIELDS_REQUIRED')
+    return value
+
+
+def compact_failure(output, source_commit):
+    """Project diagnostics, then discard only disposable top-level failure outputs."""
+    output = Path(output)
+    if any(path.is_symlink() for path in (output,*output.parents)):
+        raise ValueError('UNSYMLINKED_FAILURE_OUTPUT_REQUIRED')
+    output.mkdir(parents=True, exist_ok=True)
+    target = output/'FAILURE_LESSON.json'
+    if target.is_symlink():
+        raise ValueError('UNSYMLINKED_FAILURE_RECEIPT_REQUIRED')
+    if target.exists():
+        old = validate_compact_failure(read(target), source_commit)
+        discard_disposable_failure_outputs(output)
+        return old
+    raw = output/'DOWNLOADED_RELEASE_RUN.json'
+    receipt = read(raw) if raw.is_file() and not raw.is_symlink() else {}
+    if receipt.get('source_commit') not in (None,commit(source_commit)):
+        raise ValueError('FAILURE_RECEIPT_SOURCE_CHANGED')
+    if receipt.get('accepted') is True:
+        raise ValueError('SUCCESS_IS_NOT_A_FAILURE')
+    failure = receipt.get('failure', {})
+    message = str(failure.get('message', ''))
+    category = ('WALL_TIMEOUT' if failure.get('type') == 'TimeoutError' else
+                'AUDIT_OR_SOURCE_REJECTED' if failure.get('type') == 'ValueError' else
+                'COMMAND_OR_SETUP_FAILURE')
+    lessons = {'WALL_TIMEOUT':'Inspect the stopped stage before changing finite execution protection.',
+               'AUDIT_OR_SOURCE_REJECTED':'Repair the exact source, audit or publication mismatch before retrying.',
+               'COMMAND_OR_SETUP_FAILURE':'Inspect the command or setup failure; do not rerun unchanged blindly.'}
+    numeric = lambda value: isinstance(value, (int,float)) and not isinstance(value,bool) and math.isfinite(value)
+    resources = {k:receipt['resources'][k] for k in ('self_cpu_seconds','children_cpu_seconds','total_measured_cpu_seconds','wall_seconds') if numeric(receipt.get('resources',{}).get(k))}
+    stages = {'01-run','02-resume','03-audit','04-package-actual-operation','05-actual-operation-public-audit','06-released-public-audit'}
+    stage = lambda value: value if value in stages else 'setup-or-unclassified'
+    commands = [{'stage':stage(Path(str(row.get('stdout',''))).stem),
+                 'returncode':row.get('returncode') if isinstance(row.get('returncode'),int) else None,
+                 'wall_seconds':row.get('wall_seconds') if numeric(row.get('wall_seconds')) else None}
+                for row in receipt.get('commands', [])]
+    hashes = {}
+    for name in ('operation/FROZEN.json','operation/REPORT.json'):
+        path=output/name
+        if path.is_file() and not path.is_symlink() and not path.parent.is_symlink(): hashes[name]=digest(path)
+    report_path=output/'operation/REPORT.json'
+    summary={}
+    if report_path.is_file() and not report_path.is_symlink() and not report_path.parent.is_symlink():
+        try:
+            candidate=read(report_path).get('representative',{}).get('summary',{})
+            if not isinstance(candidate,dict): candidate={}
+        except (ValueError, AttributeError):
+            candidate={}
+        summary={k:candidate[k] for k in ('revenue','expenses','profit','collections','expensePaid','payables','cash','tailReserve','custodyReserve') if numeric(candidate.get(k))}
+    result={'schema':'agi-alpha/compact-failure/v1','accepted':False,'source_commit':commit(source_commit),
+            'actual_release_download':receipt.get('actual_release_download') is True,
+            'source_sha256':receipt.get('source_sha256') if re.fullmatch('[0-9a-f]{64}', str(receipt.get('source_sha256',''))) else None, 'category':category,'lesson':lessons[category],
+            'error_code':message if message in {'DOWNLOADED_EXECUTION_SOURCE_CHANGED','DOWNLOADED_RESUME_CHANGED_MONEY_OR_WORK','DOWNLOADED_NATIVE_OPERATING_AUDIT_REJECTED','DOWNLOADED_OPERATION_PUBLIC_AUDIT_REJECTED','RELEASED_PUBLIC_EVIDENCE_SOURCE_CHANGED','UNSAFE_OR_PRIVATE_ARCHIVE_MEMBER'} else None,
+            'failure_message_sha256':hashlib.sha256(message.encode()).hexdigest(),
+            'active_stage':stage(receipt.get('active_command')), 'completed_commands':commands,'resources':resources,
+            'input_hashes':hashes,'observed_representative_finances':summary,
+            'financial_unit':'microUSD',
+            'financial_scope':'Unqualified partial diagnostic; no aggregate profit or recovery claim.',
+            'measured_host_billing':None,'billing_scope':'Unknown; CPU telemetry is not a monetary bill.',
+            'working_state':'Authoritative operation and recovery state untouched; not exported.'}
+    validate_compact_failure(result, source_commit)
+    write(target,result)
+    discard_disposable_failure_outputs(output)
+    return result
+
 def operate_download(directory, output, source_commit, timeout, actual_release_download=False):
     directory, output = Path(directory).resolve(), Path(output).resolve()
     manifest = verify_assets(directory, source_commit)
@@ -666,24 +776,24 @@ def operate_download(directory, output, source_commit, timeout, actual_release_d
                        operating_report=read(operation/'REPORT.json'))
     except BaseException as error:
         receipt['failure'] = {'type':type(error).__name__, 'message':str(error)}
-        try:
-            receipt['failure_checkpoint'] = failure_checkpoint(output/'operation', output, source_commit, manifest['source_sha256'])
-        except BaseException as checkpoint_error:
-            receipt['checkpoint_failure'] = {'type':type(checkpoint_error).__name__, 'message':str(checkpoint_error)}
         raise
     finally:
         measure()
         write(output/'DOWNLOADED_RELEASE_RUN.json', receipt)
+        if not receipt['accepted']:
+            compact_failure(output, source_commit)
     return receipt
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     subs = parser.add_subparsers(dest='command', required=True)
-    for name in ('prepare', 'publish', 'download', 'operate-download', 'verify'):
+    for name in ('prepare', 'publish', 'download', 'operate-download', 'verify', 'compact-failure'):
         sub = subs.add_parser(name)
         sub.add_argument('--source-commit', required=True)
         sub.add_argument('--assets', required=True)
-        if name == 'prepare':
+        if name == 'compact-failure':
+            sub.add_argument('--output', required=True)
+        elif name == 'prepare':
             sub.add_argument('--qualification', required=True)
             sub.add_argument('--papers', required=True)
         elif name == 'publish':
@@ -702,7 +812,9 @@ def main():
         parser.error('publish timeout-seconds must be 1..2400')
     if args.command == 'operate-download' and not 1 <= args.timeout_seconds <= OPERATING_HANG_TIMEOUT_SECONDS:
         parser.error(f'operate-download timeout-seconds must be 1..{OPERATING_HANG_TIMEOUT_SECONDS} (hosted job ceiling minus receipt reserve)')
-    if args.command == 'prepare':
+    if args.command == 'compact-failure':
+        result = compact_failure(args.output, args.source_commit)
+    elif args.command == 'prepare':
         result = prepare(args.qualification, args.assets, args.source_commit, args.papers)
     elif args.command == 'publish':
         result = publish(args.assets, args.source_commit, args.repository, args.run_id, args.timeout_seconds)
