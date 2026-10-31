@@ -1,25 +1,9 @@
 name: Measurement campaign 009 clean reproduction
 
+# Terminal historical campaign: ordinary cleanup must not restart its expired allocation.
+# Manual inspection/replay retains the original admission and deadline refusal below.
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/measurement009.yml'
-      - 'campaign/next-009/**'
-      - 'inventions/measurement009/**'
-      - 'research/next009/**'
-      - 'verification/next009/**'
-      - 'docs/next009/**'
-      - 'evidence/next009/**'
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/measurement009.yml'
-      - 'campaign/next-009/**'
-      - 'inventions/measurement009/**'
-      - 'research/next009/**'
-      - 'verification/next009/**'
-      - 'docs/next009/**'
-      - 'evidence/next009/**'
+  workflow_dispatch:
 
 permissions:
   contents: read

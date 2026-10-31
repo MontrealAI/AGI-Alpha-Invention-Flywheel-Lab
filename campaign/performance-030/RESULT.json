@@ -1,0 +1,91 @@
+{
+  "scope": "Engineering efficiency only; no new business cohort or attributable cross-host performance cause.",
+  "failed_release": "connected014-6b03619bcedfe3aef8b674281dc3317f37e5d16c",
+  "original_failure": {
+    "operation_cpu_seconds": 2472.893466,
+    "historical_cpu_envelope_seconds": 2400,
+    "wall_seconds": 787.905691526,
+    "run_returncode": 0,
+    "later_commands_run": false
+  },
+  "source_baseline_ledger_sha256": "59a974314705012674d7e196a210a9c9379508c72787503f5261514a9b6e97ed",
+  "source_candidate_ledger_sha256": "d160cd2142b963e54c558305d26858bbbe00f408c72bcc3c736c6f50cb8c5b74",
+  "paired_replay": {
+    "scope": "ABBAABBA same-process/same-input read-only replay, no business execution; timings include warmup and retain every trial.",
+    "rows": [
+      {
+        "arm": "baseline",
+        "cpu_seconds": 1.579663962,
+        "result_sha256": "9f0f924bcf0139a40a07144c726cf1fd13b9970b72ab0dbcb9325d2af85b3f26"
+      },
+      {
+        "arm": "candidate",
+        "cpu_seconds": 1.3773122930000001,
+        "result_sha256": "9f0f924bcf0139a40a07144c726cf1fd13b9970b72ab0dbcb9325d2af85b3f26"
+      },
+      {
+        "arm": "candidate",
+        "cpu_seconds": 1.0630201280000002,
+        "result_sha256": "9f0f924bcf0139a40a07144c726cf1fd13b9970b72ab0dbcb9325d2af85b3f26"
+      },
+      {
+        "arm": "baseline",
+        "cpu_seconds": 1.5897320869999998,
+        "result_sha256": "9f0f924bcf0139a40a07144c726cf1fd13b9970b72ab0dbcb9325d2af85b3f26"
+      },
+      {
+        "arm": "baseline",
+        "cpu_seconds": 1.4582719339999999,
+        "result_sha256": "9f0f924bcf0139a40a07144c726cf1fd13b9970b72ab0dbcb9325d2af85b3f26"
+      },
+      {
+        "arm": "candidate",
+        "cpu_seconds": 1.0773975699999996,
+        "result_sha256": "9f0f924bcf0139a40a07144c726cf1fd13b9970b72ab0dbcb9325d2af85b3f26"
+      },
+      {
+        "arm": "candidate",
+        "cpu_seconds": 1.095218117,
+        "result_sha256": "9f0f924bcf0139a40a07144c726cf1fd13b9970b72ab0dbcb9325d2af85b3f26"
+      },
+      {
+        "arm": "baseline",
+        "cpu_seconds": 1.5522508659999996,
+        "result_sha256": "9f0f924bcf0139a40a07144c726cf1fd13b9970b72ab0dbcb9325d2af85b3f26"
+      }
+    ],
+    "means": {
+      "baseline": 1.5449797122499997,
+      "candidate": 1.1532370269999999
+    },
+    "candidate_sha256": "d160cd2142b963e54c558305d26858bbbe00f408c72bcc3c736c6f50cb8c5b74"
+  },
+  "snapshot_calls": {
+    "baseline": 2536,
+    "candidate": 1480
+  },
+  "tamper_rejections_equal": {
+    "before": "ValueError:EVENT_SEQUENCE_OR_OPENING_STATE_MISMATCH",
+    "after": "ValueError:EVENT_DERIVED_BALANCE_MISMATCH",
+    "sequence": "ValueError:EVENT_SEQUENCE_OR_OPENING_STATE_MISMATCH",
+    "summary": "ValueError:DERIVED_SUMMARY_MISMATCH",
+    "source_manifest": "ValueError:SOURCE_COHORT_MISMATCH",
+    "missing_before": "ValueError:EVENT_SEQUENCE_OR_OPENING_STATE_MISMATCH",
+    "missing_after": "ValueError:EVENT_DERIVED_BALANCE_MISMATCH"
+  },
+  "regressions": {
+    "focused": 8,
+    "adaptive_account": 18,
+    "cancellation": 8,
+    "canonical_prefixes": 2,
+    "total": 36,
+    "passed": true
+  },
+  "limits": [
+    "No wall timing recorded for paired microbenchmark.",
+    "Full released operation not repeated or qualified by this local result.",
+    "Source/global-host CPU slowdown remains unattributed; all default configs/events/financial summaries matched.",
+    "A preliminary test mock needed an explicit assert_owner spec; corrected before final passing tests.",
+    "Historical CPU failure is unchanged; current user separately rejects imposing that artificial gate prospectively."
+  ]
+}
