@@ -113,7 +113,10 @@ def verify(proof_dir, package, *, expected_sha256=None):
     target = safe(package)
     if not target.is_dir() or {p.relative_to(target).as_posix() for p in target.rglob('*')} != {'PARTNER_OFFER.json'}:
         raise ValueError('EXACT_PARTNER_PACKAGE_REQUIRED')
-    raw = (target/'PARTNER_OFFER.json').read_bytes()
+    source = safe(target/'PARTNER_OFFER.json')
+    if not source.is_file():
+        raise ValueError('REGULAR_PARTNER_PROPOSAL_REQUIRED')
+    raw = source.read_bytes()
     actual_sha256 = hashlib.sha256(raw).hexdigest()
     if expected_sha256 is not None:
         if (not isinstance(expected_sha256,str) or len(expected_sha256)!=64
@@ -125,7 +128,10 @@ def verify(proof_dir, package, *, expected_sha256=None):
     record = strict_json(raw)
     if not isinstance(record, dict) or record.get('schema') != SCHEMA:
         raise ValueError('EXACT_PARTNER_SCHEMA_REQUIRED')
-    costs = record.get('proposal', {}).get('scenario')
+    proposal = record.get('proposal')
+    if not isinstance(proposal, dict):
+        raise ValueError('COST_AND_PARTICIPATION_CONTRACT_REQUIRED')
+    costs = proposal.get('scenario')
     if not isinstance(costs, dict):
         raise ValueError('COST_AND_PARTICIPATION_CONTRACT_REQUIRED')
     recomputed = expected(proof_dir, {k:v for k,v in costs.items() if k!='price'})
