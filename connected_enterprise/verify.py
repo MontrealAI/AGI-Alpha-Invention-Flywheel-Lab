@@ -319,7 +319,7 @@ def _check_cost_semantics(result, tape, lifecycle):
         if 'terms' in row:add(row['id']+'-prospective-charges',row['fee']+row['premium'],row['qualified_time'],'prospective_contract_charges')
     for row in result['investments']:
         category = 'acquisition_contract' if row['kind'] == 'acquisition' else 'capacity_contract'
-        if row['kind'] == 'capacity' and row['cost'] != cfg['capacity_price']:
+        if row['kind'] == 'capacity' and row['cost'] != cfg['capacity_price']*row.get('capacity_units',1):
             raise ValueError('CAPACITY_COST_DIFFERS_FROM_DECLARED_SUPPLIER_CONTRACT')
         add(row['id'], row['cost'], row['purchased_time'], category)
     tax_paid = 0
@@ -771,7 +771,9 @@ def _check_investments(result, tape, orders):
             units = _integer(work.get('units_per_day'), 'CAPACITY_FINANCED_UNITS', positive=True)
             if (lead != _integer(cfg.get('capacity_lead_hours'), 'FROZEN_CAPACITY_LEAD', positive=True)
                     or duration != _integer(cfg.get('capacity_duration_hours'), 'FROZEN_CAPACITY_DURATION', positive=True)
-                    or units != 1):
+                    or units != row.get('capacity_units',1)
+                    or ('capacity_menu' not in cfg.get('strategic_allocation_policy',{}) and units!=1)
+                    or ('capacity_menu' in cfg.get('strategic_allocation_policy',{}) and units>cfg['strategic_allocation_policy']['capacity_menu']['max_quantity'])):
                 raise ValueError('CAPACITY_TERMS_DIFFER_FROM_FROZEN_SUPPLIER_CONTRACT')
             if (request.get('id') != row.get('id') or request.get('kind') != 'capacity_contract'
                     or _integer(request.get('amount'), 'CAPACITY_FINANCED_COST', positive=True) != cost
@@ -788,6 +790,7 @@ def _check_investments(result, tape, orders):
         if 'complete_offer_policy' in result['config']:
             cfg=result['config'];previous=qualified_daily.get(day,0)
             available=[i for i in result['investments'] if i['kind']=='capacity' and i['activation_time']<=order['qualified_time'] and order['production_time']<i['expiry_time']]
+            available=[i for i in available for _ in range(i.get('capacity_units',1))]
             expected=[available[index-cfg['initial_slots']]['plan_id'] for index in range(previous,previous+units) if index>=cfg['initial_slots'] and index-cfg['initial_slots']<len(available)]
             if len(expected)!=max(0,previous+units-cfg['initial_slots'])-max(0,previous-cfg['initial_slots']) or order.get('capacity_source_plan_ids')!=expected or order.get('capacity_source_plan_id')!=(expected[0] if expected else None):raise ValueError('ALL_PACKET_CAPACITY_UNITS_REQUIRE_CURRENT_AUTHORITY')
         qualified_daily[day] = qualified_daily.get(day, 0) + units
@@ -812,14 +815,14 @@ def _check_investments(result, tape, orders):
             if field.startswith('capacity'):
                 key = (ident, day)
                 capacity_use[key] = capacity_use.get(key, 0) + 1
-                if capacity_use[key] > 1:
+                if capacity_use[key] > investment.get('capacity_units',1):
                     raise ValueError('PAID_CAPACITY_UNIT_REUSED_WITHIN_DAY')
             if order['outcome'] == 'SETTLED':
                 linked += 1
     cfg = result['config']
     for day, count in qualified_daily.items():
         moment = day * 24
-        active = sum(row['kind'] == 'capacity' and row['activation_time'] <= moment < row['expiry_time'] for row in investments.values())
+        active = sum(row.get('capacity_units',1) for row in investments.values() if row['kind'] == 'capacity' and row['activation_time'] <= moment < row['expiry_time'])
         capacity = min(cfg['maximum_slots'], cfg['initial_slots'] + active)
         if cfg['supplier_outage_start_day'] <= day < cfg['supplier_outage_start_day'] + cfg['supplier_outage_days']:
             capacity = 0
