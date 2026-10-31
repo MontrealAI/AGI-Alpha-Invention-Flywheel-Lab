@@ -176,11 +176,11 @@ def choose_from_development(spec, development):
     candidates = [(profit, name) for profit, name in rows if profit is not None]
     if not candidates:
         return {"selected": None, "reason": "NO_FUNDED_POSITIVE_PROFIT_DESIGN",
-                "observed_ranking": sorted(rows, key=lambda r: r[1])}
+                "observed_ranking": [list(row) for row in sorted(rows, key=lambda r: r[1])]}
     candidates.sort(key=lambda r: (-r[0], 0 if r[1] == incumbent else 1, r[1]))
     return {"selected": candidates[0][1],
             "reason": "MAXIMUM_OBSERVED_PROTECTED_COMPLETE_COST_PROFIT_IN_DECLARED_DEVELOPMENT_WORLD",
-            "observed_ranking": sorted(rows, key=lambda r: (r[0] is None, -(r[0] or 0), r[1]))}
+            "observed_ranking": [list(row) for row in sorted(rows, key=lambda r: (r[0] is None, -(r[0] or 0), r[1]))]}
 
 
 def _public(spec, source, development, selection, confirmation):
