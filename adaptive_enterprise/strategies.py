@@ -36,7 +36,7 @@ def validate_offer(offer):
     if (offer['method'] == 'staged_readiness') != (offer['scope'] == 'intake_readiness'):
         raise ValueError('STAGED_SCOPE_MUST_BE_EXPLICIT')
     for key in ['price_microUSD', 'capacity_units', 'upfront_cost_microUSD', 'deadline_hours']:
-        if type(offer[key]) is not int or not 1 <= offer[key] <= 10**12:
+        if type(offer[key]) is not int or (offer[key] < 1 or (not key.endswith('_microUSD') and offer[key] > 10**12)):
             raise ValueError('POSITIVE_INTEGER_OFFER_RESOURCE_REQUIRED:' + key)
     for key in ['qualification', 'production_pipeline', 'later_liabilities', 'applicability', 'falsifiers', 'evidence']:
         if not isinstance(offer[key], list) or not offer[key] or any(not isinstance(x, str) or not x for x in offer[key]):

@@ -4,6 +4,7 @@ import copy
 import hashlib
 import json
 from collections import defaultdict, deque
+from fractions import Fraction
 from datetime import datetime, timedelta, timezone
 
 MICRO = 1_000_000
@@ -362,12 +363,15 @@ def _cohorts(result):
     for row in allocation.values():
         row['allocated_complete_cost_microUSD'] = row['direct_resources_microUSD'] + row['shared_enterprise_cost_microUSD']
         row['allocated_collected_contribution_microUSD'] = row['collections_microUSD'] - row['allocated_complete_cost_microUSD']
+    acquisition_ratio=None if not channel_buyers else Fraction(paid_channel_cost+exposure_cost,len(channel_buyers))
     return {'paying_customers': len(customers), 'repeat_paying_customers': sum(len(rows) > 1 for rows in customers.values()),
             'first_sale_direct_contribution_microUSD': contribution(first),
             'repeat_direct_contribution_microUSD': contribution(repeat),
             'all_paid_channel_and_exposure_cost_microUSD': paid_channel_cost + exposure_cost,
             'source_linked_paying_channel_customers': len(channel_buyers),
-            'acquisition_cost_per_source_linked_paying_customer_microUSD': None if not channel_buyers else (paid_channel_cost + exposure_cost) / len(channel_buyers),
+            'acquisition_cost_per_source_linked_paying_customer_microUSD': acquisition_ratio.numerator if acquisition_ratio is not None and acquisition_ratio.denominator==1 else None,
+            'acquisition_cost_per_source_linked_paying_customer_microUSD_fraction': None if acquisition_ratio is None else str(acquisition_ratio),
+            'acquisition_ratio_representation': 'Exact rational microUSD; integer field is null for non-integral ratios, never rounded through binary float.',
             'acquisition_denominator_scope': 'Distinct collected customers linked to a paid channel. Includes all registered channel and exposure costs; this is a whole-run ratio, not a causal counterfactual.',
             'whole_enterprise_cost_allocation': {
                 'cohorts': allocation,
@@ -402,7 +406,7 @@ def analyze(result):
             'trailing_profit': trailing_profit(tape, operating_end_hour=(config['horizon_days'] * HOURS_PER_DAY if 'horizon_days' in config else None), operating_complete=result.get('complete', False), aggregation=aggregation),
             'trailing_365_day_collections_microUSD': trailing,
             'complete_365_day_history': last >= YEAR_HOURS,
-            'annualized_collections_run_rate_microUSD': None if last == 0 else round(totals['collections'] * YEAR_HOURS / last),
+            'annualized_collections_run_rate_microUSD': None if last == 0 else round(Fraction(totals['collections'] * YEAR_HOURS, last)),
             'annualization_scope': 'Whole-executed-horizon average annualized only; not a trailing-year milestone or prediction.',
             'milestones': _milestones(tape, aggregation, epoch),
             'aggregation': aggregation,

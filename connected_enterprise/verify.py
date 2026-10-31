@@ -487,7 +487,10 @@ def _check_contract_clock(ident, offered, actions, operating, qualified, config,
 def _check_order_terms(result, row, offered, tape, operating):
     expected=None;policy=result['config'].get('prospective_policy')
     if policy:
-        from commercial.terms import prospective_terms
+        if 'monetary_policy' in result['config']:
+            from commercial.terms_exact_v2 import prospective_terms
+        else:
+            from commercial.terms import prospective_terms
         cfg = result['config']; qualified = row['qualified_time']
         collection = qualified + cfg['production_hours'] + cfg['acceptance_hours'] + cfg['clearing_hours']
         boundary = max(collection, qualified + cfg['payment_deadline_hours']) + policy['protection_hours']
@@ -533,7 +536,7 @@ def audit(root, manifest, result):
     check_events(result['events'])
     from connected_enterprise.finance import audit_journal
     account = audit_journal(result['owned_account'], root=root, manifest=manifest)
-    if manifest.get('native_engine','legacy-permanent-v1')!=('prospective-v1' if 'prospective_policy' in result['config'] else 'legacy-permanent-v1'):raise ValueError('FRESH_POLICY_NATIVE_ENGINE_REGISTRATION_MISMATCH')
+    if manifest.get('native_engine','legacy-permanent-v1')!=(('exact-prospective-v2' if 'prospective_policy' in result['config'] else 'exact-permanent-v2') if 'monetary_policy' in result['config'] else ('prospective-v1' if 'prospective_policy' in result['config'] else 'legacy-permanent-v1')):raise ValueError('FRESH_POLICY_NATIVE_ENGINE_REGISTRATION_MISMATCH')
     from .capital_lifecycle import capital_metrics
     if result.get('capital_metrics')!=capital_metrics(result):raise ValueError('NATIVE_CAPITAL_OBSERVATIONS_CHANGED')
     tape = result['owned_account']['ledger']

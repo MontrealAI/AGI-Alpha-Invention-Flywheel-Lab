@@ -22,7 +22,7 @@ from commercial.ledger import _ADAPTIVE_ACCOUNT_CAPABILITY
 from commercial.single_writer import SingleWriterExchange
 
 SCHEMA = 'agi-alpha/connected014-resource-journal/v1'
-SOURCE_PATHS = ('connected_enterprise/sequence_channels.py', 'connected_enterprise/sequence_planning.py', 'connected_enterprise/sequence_window.py', 'commercial/terms.py', 'commercial/native_engine.py', 'vendor/alpha_claim/protected_exchange_prospective_v1.py', 'connected_enterprise/capital_lifecycle.py', 'connected_enterprise/scale.py', 'connected_enterprise/channel_menu.py', 'connected_enterprise/mechanism_choice.py', 'connected_enterprise/strategic_commerce.py', 'connected_enterprise/joint_planning.py', 'connected_enterprise/strategic_audit.py', 'connected_enterprise/engine.py', 'connected_enterprise/verify.py', 'adaptive_enterprise/allocation.py', 'adaptive_enterprise/instruments.py', 'adaptive_enterprise/strategies.py', 'adaptive_enterprise/checkers.py', 'portfolio25/pricing.py', 'connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
+SOURCE_PATHS = ('commercial/terms_exact_v2.py','vendor/alpha_claim/protected_exchange_exact_v2.py','vendor/alpha_claim/protected_exchange_prospective_exact_v2.py','connected_enterprise/sequence_channels.py', 'connected_enterprise/sequence_planning.py', 'connected_enterprise/sequence_window.py', 'commercial/terms.py', 'commercial/native_engine.py', 'vendor/alpha_claim/protected_exchange_prospective_v1.py', 'connected_enterprise/capital_lifecycle.py', 'connected_enterprise/scale.py', 'connected_enterprise/channel_menu.py', 'connected_enterprise/mechanism_choice.py', 'connected_enterprise/strategic_commerce.py', 'connected_enterprise/joint_planning.py', 'connected_enterprise/strategic_audit.py', 'connected_enterprise/engine.py', 'connected_enterprise/verify.py', 'adaptive_enterprise/allocation.py', 'adaptive_enterprise/instruments.py', 'adaptive_enterprise/strategies.py', 'adaptive_enterprise/checkers.py', 'portfolio25/pricing.py', 'connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
                 'commercial/ledger.py', 'commercial/persistence.py',
                 'commercial/single_writer.py', 'commercial/tape_lease.py',
                 'experiments/commerce006.py', 'vendor/alpha_claim/contracts.py',
@@ -223,7 +223,7 @@ class JournalAccount:
             native = _find_action(tape, request['op'], request['args'], request['day'])
             receipt = _native_snapshot(tape, native, self._account.filesystem)
         elif request['operation'] == 'spend':
-            if self.manifest.get('native_engine')=='prospective-v1' and self._account.snapshot()['summary']['investmentStopped']:raise ValueError('PROSPECTIVE_STOP_CANNOT_BE_BYPASSED_BY_SEED')
+            if self.manifest.get('native_engine') in {'prospective-v1','exact-prospective-v2'} and self._account.snapshot()['summary']['investmentStopped']:raise ValueError('PROSPECTIVE_STOP_CANNOT_BE_BYPASSED_BY_SEED')
             plan = entry['plan']
             work_sha256 = digest(request['work'])
             if entry['funding'] == 'EARNED':
@@ -365,7 +365,7 @@ class JournalAccount:
                 return None
             snapshot = self._account.snapshot()
             summary = snapshot['summary']
-            if self.manifest.get('native_engine')=='prospective-v1' and summary['investmentStopped']:return None
+            if self.manifest.get('native_engine') in {'prospective-v1','exact-prospective-v2'} and summary['investmentStopped']:return None
             earned = expected_net > 0 and min(summary['available'], summary['unrestrictedEarned']) >= amount
             if not earned and (not allow_seed or summary['available'] < amount):
                 return None
@@ -503,7 +503,7 @@ def _pending_native_coverage(entry, tape, record, start, prefixes, manifest):
             raise ValueError('PENDING_CONNECTED_NATIVE_AUTHORITY_MISMATCH')
     elif request['operation'] == 'spend':
         before=tape['actions'][start]['before'] if start<len(tape['actions']) else tape['summary']
-        if manifest.get('native_engine')=='prospective-v1' and before['investmentStopped']:raise ValueError('PROSPECTIVE_STOP_CANNOT_BE_BYPASSED_BY_SEED')
+        if manifest.get('native_engine') in {'prospective-v1','exact-prospective-v2'} and before['investmentStopped']:raise ValueError('PROSPECTIVE_STOP_CANNOT_BE_BYPASSED_BY_SEED')
         if entry['key'] != 'spend:' + request['id']:
             raise ValueError('PENDING_CONNECTED_SPEND_IDENTITY_MISMATCH')
         if entry['funding'] == 'EARNED':
@@ -675,7 +675,7 @@ def _audit_journal(record, *, root, manifest, pending_key=None, _native_session=
                     raise ValueError('CONNECTED_SPEND_RESOLUTION_CHANGED')
             elif entry['funding'] == 'SEED' and request['allow_seed']:
                 native = _find_action(tape, 'cost', {'id': _seed_id(request, journal['source']['sha256']), 'amount': request['amount']}, request['day'], action_index=action_index)
-                if manifest.get('native_engine')=='prospective-v1' and native['before']['investmentStopped']:raise ValueError('PROSPECTIVE_STOP_CANNOT_BE_BYPASSED_BY_SEED')
+                if manifest.get('native_engine') in {'prospective-v1','exact-prospective-v2'} and native['before']['investmentStopped']:raise ValueError('PROSPECTIVE_STOP_CANNOT_BE_BYPASSED_BY_SEED')
                 if receipt['plan_id'] is not None:
                     raise ValueError('SEED_CANNOT_CLAIM_EARNED_RESERVATION')
             else:
