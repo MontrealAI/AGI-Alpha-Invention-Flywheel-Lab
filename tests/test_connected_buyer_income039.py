@@ -112,8 +112,8 @@ class NativeExternalIncomeIntegration(unittest.TestCase):
 
     def test_same_day_income_cannot_be_reordered_after_a_business_decision(self):
         changed = copy.deepcopy(self.result)
-        income_index = next(i for i,e in enumerate(changed['events'])
-                            if e['kind']=='EXTERNAL_BUYER_INCOME' and e['time']==24)
+        income_index = max(i for i,e in enumerate(changed['events'])
+                           if e['kind']=='EXTERNAL_BUYER_INCOME' and e['time']==24)
         decision_index = next(i for i,e in enumerate(changed['events'])
                               if e['kind']=='BUSINESS_DECISION' and e['time']==24)
         moved = changed['events'].pop(income_index)
