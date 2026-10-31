@@ -1,0 +1,133 @@
+{
+  "accepted": false,
+  "actual_public_release_download_verified": true,
+  "authority": "Owned private simulated accounts only; existing delivery accounts untouched",
+  "commands": [
+    {
+      "args": [
+        "register",
+        "--config",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-source/campaign/overnight-022/OPERATOR_INPUT.json",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 0.187248,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "01-register",
+      "wall_seconds": 0.19069155599572696
+    },
+    {
+      "args": [
+        "operate",
+        "--max-events",
+        "4",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 4.960305,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "02-operate-step",
+      "wall_seconds": 5.082076106991735
+    },
+    {
+      "args": [
+        "resume",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 93.324228,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "03-resume",
+      "wall_seconds": 94.71103765000589
+    },
+    {
+      "args": [
+        "audit",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 1.299341,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "04-audit",
+      "wall_seconds": 1.303858183993725
+    },
+    {
+      "args": [
+        "comparison",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private",
+        "--control",
+        "baseline",
+        "--candidate",
+        "growth"
+      ],
+      "cpu_seconds": 1.4349699999999972,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "05-comparison",
+      "wall_seconds": 1.4458777120016748
+    },
+    {
+      "args": [
+        "scoreboard",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 0.3400620000000023,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "06-scoreboard",
+      "wall_seconds": 0.3410107999952743
+    },
+    {
+      "args": [
+        "resume",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 3.999748999999997,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "07-completed-resume",
+      "wall_seconds": 3.9981582239997806
+    },
+    {
+      "args": [
+        "package",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private",
+        "--archive",
+        "/workspace/scratch/b8d559bc7031/agi-alpha/evidence/overnight022/post-head-3288/actual-release-feature-proof/operator022-keyfree.zip"
+      ],
+      "cpu_seconds": 1.3868559999999919,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "08-package",
+      "wall_seconds": 1.3936917920073029
+    },
+    {
+      "args": [
+        "audit",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/agi-alpha/evidence/overnight022/post-head-3288/actual-release-feature-proof/public-copy"
+      ],
+      "cpu_seconds": 1.4353830000000123,
+      "cwd": "/workspace/scratch/b8d559bc7031/agi-alpha/evidence/overnight022/post-head-3288/actual-release-feature-proof/public-copy/source",
+      "exit_code": 0,
+      "label": "09-public-audit",
+      "wall_seconds": 1.4418055909918621
+    }
+  ],
+  "download_receipt_sha256": "1d0531db69370710f99870ff259f71bde71c69e3b54be90fbebd105f31176200",
+  "external_billing": "UNKNOWN",
+  "release_manifest_sha256": "eab16eb78c512a2219158deb7011fa07a3e9d7461587239540029a65546f07e5",
+  "released_source_commit": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+  "schema": "agi-alpha/overnight022-public-operator-proof/v1",
+  "scope": "ENGINEERING_REPRODUCTION_FROM_ACTUALLY_DOWNLOADED_PUBLISHED_RELEASE",
+  "script_sha256": "5fb0e80b74560d0b817ce2b3ce0b305bf01084e187df3ce4b4d089b9359d26b6",
+  "source_archive_sha256": "2feec3c644c5165ce32829192b93935733ce9d0b582c853c74cdb884240ebcd8"
+}

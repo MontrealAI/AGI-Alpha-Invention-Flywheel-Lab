@@ -1,0 +1,87 @@
+"""Exercise public registered operation and preserve key-free engineering proof."""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import resource
+import subprocess
+import sys
+import time
+import zipfile
+
+
+def read(path):return json.loads(Path(path).read_text())
+def write(path,value):Path(path).write_text(json.dumps(value,indent=2,sort_keys=True)+'\n')
+def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def main():
+    p=argparse.ArgumentParser();p.add_argument('--source',required=True);p.add_argument('--private-output',required=True);p.add_argument('--evidence-output',required=True);p.add_argument('--continue-paused',action='store_true');p.add_argument('--prior-evidence');p.add_argument('--release-assets',required=True);p.add_argument('--download-receipt',required=True)
+    a=p.parse_args();source=Path(a.source).resolve();private=Path(a.private_output).resolve();evidence=Path(a.evidence_output).resolve()
+    if evidence.exists() or private.exists()!=a.continue_paused:raise FileExistsError('NEW_EVIDENCE_AND_NEW_OR_EXPLICIT_PAUSED_ACCOUNT_REQUIRED')
+    if a.continue_paused and not a.prior_evidence:raise ValueError('PRIOR_FAILED_PROOF_EVIDENCE_REQUIRED')
+    if source in private.parents or source in evidence.parents:raise ValueError('PROOF_OUTPUTS_OUTSIDE_EXECUTING_SOURCE_REQUIRED')
+    assets=Path(a.release_assets).resolve();download=read(a.download_receipt);release=read(assets/'RELEASE_MANIFEST.json');distributed=read(source/'SOURCE_MANIFEST.json')
+    if not download['actual_public_release_download'] or download['source_commit']!='8abfb96d4ef859e30ca344d7933ec2a2f49012c1' or release['source_commit']!=download['source_commit'] or release['source_sha256']!=distributed['executing_source']['sha256']:raise AssertionError('ACTUAL_RELEASE_BINDING_REQUIRED')
+    for row in download['assets']:
+        if sha(assets/row['name'])!=row['sha256']:raise AssertionError('DOWNLOADED_ASSET_CHANGED')
+    for name,expected in distributed['files'].items():
+        if sha(source/name)!=expected:raise AssertionError('EXTRACTED_RELEASE_SOURCE_CHANGED')
+    evidence.mkdir(parents=True);commands=[]
+    summary={'schema':'agi-alpha/overnight022-public-operator-proof/v1','accepted':False,'scope':'ENGINEERING_REPRODUCTION_FROM_CLEAN_SOURCE_ARCHIVE_NOT_PUBLISHED_RELEASE','commands':commands,'external_billing':'UNKNOWN','authority':'Owned private simulated accounts only; existing delivery accounts untouched','script_sha256':sha(__file__)}
+    summary.update(scope='ENGINEERING_REPRODUCTION_FROM_ACTUALLY_DOWNLOADED_PUBLISHED_RELEASE',released_source_commit=release['source_commit'],release_manifest_sha256=sha(assets/'RELEASE_MANIFEST.json'),source_archive_sha256=sha(assets/'connected014-source.zip'),download_receipt_sha256=sha(a.download_receipt),actual_public_release_download_verified=True)
+    def command(label,args,cwd=source):
+        start=time.monotonic();before=resource.getrusage(resource.RUSAGE_CHILDREN)
+        with (evidence/(label+'.stdout')).open('w') as out,(evidence/(label+'.stderr')).open('w') as err:
+            done=subprocess.run([sys.executable,'-m','connected_enterprise',*args],cwd=cwd,env={**os.environ,'PYTHONPATH':str(cwd),'PYTHONDONTWRITEBYTECODE':'1'},stdout=out,stderr=err)
+        after=resource.getrusage(resource.RUSAGE_CHILDREN)
+        receipt={'label':label,'args':args,'cwd':str(cwd),'exit_code':done.returncode,'wall_seconds':time.monotonic()-start,'cpu_seconds':after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime}
+        commands.append(receipt);write(evidence/'PROGRESS.json',summary)
+        if done.returncode:raise RuntimeError('PUBLIC_COMMAND_FAILED:'+label)
+    def worlds(root):return {path.parent.name:read(path) for path in (root/'worlds').glob('*/RESULT.json')}
+    def native(rows):return {name:{'actions_sha256':r['owned_account']['ledger']['actions_sha256'],'summary':r['summary']} for name,r in rows.items()}
+    try:
+        if not a.continue_paused:
+            command('01-register',['register','--config',str(source/'campaign/overnight-022/OPERATOR_INPUT.json'),'--output',str(private)])
+            if list(private.rglob('*.sqlite*')):raise AssertionError('REGISTRATION_CREATED_ACCOUNT')
+            command('02-operate-step',['operate','--max-events','4','--output',str(private)])
+        else:
+            prior=read(Path(a.prior_evidence)/'RESULT.json')
+            if prior.get('accepted') or prior.get('failure')!={'type':'KeyError','message':"'state'"} or [c['label'] for c in prior['commands']]!=['01-register','02-operate-step'] or any(c['exit_code'] for c in prior['commands']):raise AssertionError('EXPECTED_PRESERVED_COLLECTOR_FAILURE_REQUIRED')
+            summary['prior_failed_evidence']=str(Path(a.prior_evidence).resolve());summary['prior_failed_result_sha256']=sha(Path(a.prior_evidence)/'RESULT.json');summary['prior_command_cpu_seconds']=sum(c['cpu_seconds'] for c in prior['commands'])
+        paused=worlds(private);keys={path.relative_to(private):path.read_bytes() for path in private.rglob('*.adaptive-simulation-key')}
+        if not paused or not keys or (private/'COMPLETE.json').exists() or any(row['complete'] for row in paused.values()):raise AssertionError('INVALID_PAUSED_STATE')
+        queues={path.parent.name:read(path)['body']['state']['queue'] for path in (private/'worlds').glob('*/STATE.json')}
+        write(evidence/'PAUSED_QUEUES.json',queues)
+        command('03-resume',['resume','--output',str(private)])
+        completed=worlds(private)
+        if set(paused)!=set(completed):raise AssertionError('BUSINESS_SET_CHANGED')
+        for name,old in paused.items():
+            before=old['owned_account']['ledger'];after=completed[name]['owned_account']['ledger']
+            if not completed[name]['complete'] or before['config']!=after['config'] or before['actions']!=after['actions'][:len(before['actions'])]:raise AssertionError('ACCOUNT_HISTORY_CHANGED')
+        if any((private/path).read_bytes()!=key for path,key in keys.items()):raise AssertionError('SIMULATION_AUTHORITY_CHANGED')
+        command('04-audit',['audit','--output',str(private)])
+        command('05-comparison',['comparison','--output',str(private),'--control','baseline','--candidate','growth'])
+        command('06-scoreboard',['scoreboard','--output',str(private)])
+        command('07-completed-resume',['resume','--output',str(private)])
+        if native(completed)!=native(worlds(private)):raise AssertionError('COMPLETED_RESUME_CHANGED_NATIVE_RECORDS')
+        command('08-package',['package','--output',str(private),'--archive',str(evidence/'operator022-keyfree.zip')])
+        public=evidence/'public-copy'
+        with zipfile.ZipFile(evidence/'operator022-keyfree.zip') as archive:
+            if archive.testzip() is not None or any('.sqlite' in name or name.endswith('.adaptive-simulation-key') for name in archive.namelist()):raise AssertionError('PRIVATE_OR_CORRUPT_PUBLIC_PACKAGE')
+            archive.extractall(public)
+        command('09-public-audit',['audit','--output',str(public)],cwd=public/'source')
+        frozen=read(private/'FROZEN.json');final=worlds(private)
+        summary.update(accepted=True,source_sha256=frozen['source']['sha256'],frozen_sha256=frozen['sha256'],registration_path=frozen['registration_path'],git_commit=frozen['git_commit'],account_keys_unchanged=True,native_prefix_preserved=True,completed_resume_native_unchanged=True,nonempty_queues={name:len(q) for name,q in queues.items()},package_sha256=sha(evidence/'operator022-keyfree.zip'),public_audit=read(public/'PACKAGE_AUDIT.json'),businesses={name:{'summary':r['summary'],'accepted_jobs':r['accepted_jobs'],'paid_jobs':r['paid_jobs'],'processed_events':r['processed_events'],'native_actions_sha256':r['owned_account']['ledger']['actions_sha256']} for name,r in final.items()},limits=['Existing permanent protection tails unchanged; prospective maturity and legacy source migration not qualified.','Exposed reproduction seeds; no new economic confirmation, annualization or real commerce.','Command CPU includes children but excludes assistant inference, connector and actual host/model billing.'])
+    except BaseException as exc:
+        summary['failure']={'type':type(exc).__name__,'message':str(exc)};raise
+    finally:
+        summary['measured_command_cpu_seconds']=sum(row['cpu_seconds'] for row in commands)
+        summary['including_preserved_prior_command_cpu_seconds']=summary['measured_command_cpu_seconds']+summary.get('prior_command_cpu_seconds',0)
+        summary['command_wall_seconds']=sum(row['wall_seconds'] for row in commands)
+        write(evidence/'RESULT.json',summary)
+    print(json.dumps({'accepted':summary['accepted'],'source_sha256':summary['source_sha256'],'worlds':len(summary['businesses']),'measured_command_cpu_seconds':summary['measured_command_cpu_seconds']},sort_keys=True))
+
+
+if __name__=='__main__':main()

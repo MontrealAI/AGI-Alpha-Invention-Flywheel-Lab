@@ -1,0 +1,229 @@
+{
+  "accepted": true,
+  "account_keys_unchanged": true,
+  "actual_public_release_download_verified": true,
+  "authority": "Owned private simulated accounts only; existing delivery accounts untouched",
+  "businesses": {
+    "14001-central-baseline": {
+      "accepted_jobs": 5,
+      "native_actions_sha256": "7813baa5fdf7d8fbcf174a06adcd3bf1df160be1d0accee2f73a9e24fa13c891",
+      "paid_jobs": 5,
+      "processed_events": 65,
+      "summary": {
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+        "available": 4783956636,
+        "cash": 5043170636,
+        "collections": 158214000,
+        "conditionalEarned": 0,
+        "custodyReserve": 0,
+        "custodyRestricted": 0,
+        "earnedProtectionBacking": 0,
+        "equityProtectionBacking": 259214000,
+        "expensePaid": 115043364,
+        "expenses": 115043364,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "investmentStopped": false,
+        "netEarnedAfterIncurredObligations": 43170636,
+        "payables": 0,
+        "profit": 43170636,
+        "recoveryIncome": 0,
+        "reservedInvestment": 0,
+        "revenue": 158214000,
+        "strictEarnedControl": 0,
+        "tailReserve": 159214000,
+        "unrestrictedEarned": 43170636,
+        "workingCapital": 100000000
+      }
+    },
+    "14001-central-growth": {
+      "accepted_jobs": 11,
+      "native_actions_sha256": "fb7e1ff082018f202aa1cdebe8cee1e444ccbd1b774d077b96333e9c52ee0443",
+      "paid_jobs": 11,
+      "processed_events": 83,
+      "summary": {
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+        "available": 4714281495,
+        "cash": 5171089495,
+        "collections": 354608000,
+        "conditionalEarned": 71089495,
+        "custodyReserve": 0,
+        "custodyRestricted": 0,
+        "earnedProtectionBacking": 0,
+        "equityProtectionBacking": 456808000,
+        "expensePaid": 183518505,
+        "expenses": 183518505,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "investmentStopped": false,
+        "netEarnedAfterIncurredObligations": 171089495,
+        "payables": 0,
+        "profit": 171089495,
+        "recoveryIncome": 0,
+        "reservedInvestment": 0,
+        "revenue": 354608000,
+        "strictEarnedControl": 0,
+        "tailReserve": 356808000,
+        "unrestrictedEarned": 171089495,
+        "workingCapital": 100000000
+      }
+    }
+  },
+  "command_wall_seconds": 109.90820761598297,
+  "commands": [
+    {
+      "args": [
+        "register",
+        "--config",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-source/campaign/overnight-022/OPERATOR_INPUT.json",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 0.187248,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "01-register",
+      "wall_seconds": 0.19069155599572696
+    },
+    {
+      "args": [
+        "operate",
+        "--max-events",
+        "4",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 4.960305,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "02-operate-step",
+      "wall_seconds": 5.082076106991735
+    },
+    {
+      "args": [
+        "resume",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 93.324228,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "03-resume",
+      "wall_seconds": 94.71103765000589
+    },
+    {
+      "args": [
+        "audit",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 1.299341,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "04-audit",
+      "wall_seconds": 1.303858183993725
+    },
+    {
+      "args": [
+        "comparison",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private",
+        "--control",
+        "baseline",
+        "--candidate",
+        "growth"
+      ],
+      "cpu_seconds": 1.4349699999999972,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "05-comparison",
+      "wall_seconds": 1.4458777120016748
+    },
+    {
+      "args": [
+        "scoreboard",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 0.3400620000000023,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "06-scoreboard",
+      "wall_seconds": 0.3410107999952743
+    },
+    {
+      "args": [
+        "resume",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private"
+      ],
+      "cpu_seconds": 3.999748999999997,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "07-completed-resume",
+      "wall_seconds": 3.9981582239997806
+    },
+    {
+      "args": [
+        "package",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/actual-release-8ab-private",
+        "--archive",
+        "/workspace/scratch/b8d559bc7031/agi-alpha/evidence/overnight022/post-head-3288/actual-release-feature-proof/operator022-keyfree.zip"
+      ],
+      "cpu_seconds": 1.3868559999999919,
+      "cwd": "/workspace/scratch/b8d559bc7031/actual-release-8ab-source",
+      "exit_code": 0,
+      "label": "08-package",
+      "wall_seconds": 1.3936917920073029
+    },
+    {
+      "args": [
+        "audit",
+        "--output",
+        "/workspace/scratch/b8d559bc7031/agi-alpha/evidence/overnight022/post-head-3288/actual-release-feature-proof/public-copy"
+      ],
+      "cpu_seconds": 1.4353830000000123,
+      "cwd": "/workspace/scratch/b8d559bc7031/agi-alpha/evidence/overnight022/post-head-3288/actual-release-feature-proof/public-copy/source",
+      "exit_code": 0,
+      "label": "09-public-audit",
+      "wall_seconds": 1.4418055909918621
+    }
+  ],
+  "completed_resume_native_unchanged": true,
+  "download_receipt_sha256": "1d0531db69370710f99870ff259f71bde71c69e3b54be90fbebd105f31176200",
+  "external_billing": "UNKNOWN",
+  "frozen_sha256": "c8d7f3880f1421658012929a716bc60b0e273e655ebb5411d37c677efa92da1c",
+  "git_commit": null,
+  "including_preserved_prior_command_cpu_seconds": 108.368142,
+  "limits": [
+    "Existing permanent protection tails unchanged; prospective maturity and legacy source migration not qualified.",
+    "Exposed reproduction seeds; no new economic confirmation, annualization or real commerce.",
+    "Command CPU includes children but excludes assistant inference, connector and actual host/model billing."
+  ],
+  "measured_command_cpu_seconds": 108.368142,
+  "native_prefix_preserved": true,
+  "nonempty_queues": {
+    "14001-central-baseline": 49,
+    "14001-central-growth": 49
+  },
+  "package_sha256": "cf17753218747d285c5653133d7230a96c0c539c5a4b84847ada67b8e60714b5",
+  "public_audit": {
+    "accepted": true,
+    "resource_cpu_metadata": "Command resource observations retained, not independently reproduced timing measurements",
+    "schema": "agi-alpha/connected014-package-audit/v1",
+    "scope": "NATIVE_FINANCE_AND_OPERATING_SEMANTICS_WITH_ARTIFACT_REEXECUTION_AND_REPORT_REDERIVATION",
+    "service_cohort": {
+      "registered_jobs_rederived": 104
+    },
+    "simulation_keys_required": false,
+    "source_sha256": "198d9184b781090bba2478fc268c317d78f415d78b019c1b97c15adf0aed4af5",
+    "worlds": 2
+  },
+  "registration_path": "campaign/connected-registrations/58215eed0bac4a5c7302f9f5ad588defda89d70bb701196430b63c8b3a4509cc.json",
+  "release_manifest_sha256": "eab16eb78c512a2219158deb7011fa07a3e9d7461587239540029a65546f07e5",
+  "released_source_commit": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+  "schema": "agi-alpha/overnight022-public-operator-proof/v1",
+  "scope": "ENGINEERING_REPRODUCTION_FROM_ACTUALLY_DOWNLOADED_PUBLISHED_RELEASE",
+  "script_sha256": "5fb0e80b74560d0b817ce2b3ce0b305bf01084e187df3ce4b4d089b9359d26b6",
+  "source_archive_sha256": "2feec3c644c5165ce32829192b93935733ce9d0b582c853c74cdb884240ebcd8",
+  "source_sha256": "198d9184b781090bba2478fc268c317d78f415d78b019c1b97c15adf0aed4af5"
+}
