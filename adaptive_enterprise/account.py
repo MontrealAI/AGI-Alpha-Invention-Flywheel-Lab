@@ -247,13 +247,17 @@ def _validate_resolution(tape, proof, receipt, actual, work_sha256, day, jobs, *
 
 
 def audit_account(record, *, root, manifest):
+    return _audit_account(record, root=root, manifest=manifest)
+
+
+def _audit_account(record, *, root, manifest, _native_session=None):
     if not isinstance(record, dict) or record.get('schema') != 'agi-alpha/adaptive012-owned-account/v1' or record.get('scope') != 'SIMULATED':
         raise ValueError('ADAPTIVE_ACCOUNT_EXPORT_REQUIRED')
     tape, proofs = record['ledger'], record['action_proofs']
     if any(event.get('op') == 'cancel_investment' for event in tape['actions']):
         raise ValueError('UNRECONCILED_INVESTMENT_CANCELLATION_RETIRED')
     resolutions = record.get('obligation_resolutions', {})
-    checked, jobs = _audit_native_and_jobs(tape, root=root, manifest=manifest)
+    checked, jobs = _audit_native_and_jobs(tape, root=root, manifest=manifest, _session=_native_session)
     if manifest.get('schema') != 'agi-alpha/adaptive012-services/v1':
         # Other service schemas retain their previous second qualification.
         from commercial.ledger import load_jobs
