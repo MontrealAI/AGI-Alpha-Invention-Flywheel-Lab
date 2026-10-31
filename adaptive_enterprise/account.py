@@ -160,6 +160,11 @@ def action_prefix_digests(actions):
 
 
 def _operation_id(op, args):
+    if op == 'mature':
+        return op + ':' + _identifier(args.get('id')) + ':' + _identifier(args.get('event_id'))
+    if op in {'claim', 'resolve_claim', 'recover_claim'}:
+        suffix = ':' + _identifier(args.get('settlement_id')) if op != 'claim' else ''
+        return op + ':' + _identifier(args.get('id')) + ':' + _identifier(args.get('claim_id')) + suffix
     if op == 'event':
         return 'event:' + _identifier(args.get('id')) + ':' + _identifier(args.get('event_id'))
     if op == 'wallet':
