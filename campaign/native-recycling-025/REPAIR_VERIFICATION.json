@@ -1,0 +1,34 @@
+{
+  "base_commit": "7d75766401adede49afd2427be82eb0302934b80",
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_native_capital_cli.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "logs": {
+    "native-capital-cli025.stderr": {
+      "bytes": 975,
+      "sha256": "2a851c0419be1efb01d12cc595614d2c28c6a646ef9fd0921fca6260112a81bd"
+    },
+    "native-capital-cli025.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "published_candidate": "35de8d5bbca0d3184828e275431f79ceabddc6eb",
+  "qualification_scope": "Isolated dispatch and current native CLI regression suite only. No complete composed-head CI, merge or release adopted.",
+  "schema": "agi-alpha/native-comparison-dispatch-repair025-verification/v1",
+  "source_files": {
+    "connected_enterprise/runner.py": "f6bff0f8e1e1049acb6124e4db3f5093ff0747478d8f675ddf2662fcaf546c3c",
+    "tests/test_native_capital_cli.py": "fab99404f06d7d271a036dde6023903e140f525a7a866343789bd5c5ae1aa0fa"
+  },
+  "tests_passed": 5,
+  "wall_seconds_from_unittest": 122.678
+}

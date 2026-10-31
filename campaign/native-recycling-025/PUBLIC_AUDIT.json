@@ -1,0 +1,67 @@
+{
+  "accepted": true,
+  "archive_bytes": 5456168,
+  "archive_limits": {
+    "files": 10000,
+    "uncompressed_bytes": 536870912
+  },
+  "archive_sha256": "26147af2ac5391935f2b3a9a2afbb69810dd9bc1288d6996215d0ba95bc66383",
+  "audit": {
+    "accepted": true,
+    "cases": [
+      {
+        "accepted": true,
+        "arms": {
+          "recycling_disabled": {
+            "profit_microUSD": 453280000,
+            "settled_orders": 4
+          },
+          "recycling_enabled": {
+            "profit_microUSD": 2739680000,
+            "settled_orders": 24
+          }
+        },
+        "case": "normal_turnover"
+      },
+      {
+        "accepted": true,
+        "arms": {
+          "recycling_disabled": {
+            "profit_microUSD": 453280000,
+            "settled_orders": 4
+          },
+          "recycling_enabled": {
+            "profit_microUSD": 1253520000,
+            "settled_orders": 11
+          }
+        },
+        "case": "delayed_protection"
+      },
+      {
+        "accepted": true,
+        "arms": {
+          "recycling_disabled": {
+            "profit_microUSD": 2739680000,
+            "settled_orders": 24
+          },
+          "recycling_enabled": {
+            "profit_microUSD": 2739680000,
+            "settled_orders": 24
+          }
+        },
+        "case": "ample_seed"
+      }
+    ],
+    "scope": "Key-free native/service audits on extracted bytes; no private signing/recovery authority, annual scale or live revenue."
+  },
+  "files": 1223,
+  "key_scope": "No simulation signing key, private database, or key-bearing checkpoint is exported. Public audit supplies no signing/recovery authority.",
+  "original_private_and_registered_source_paths_unavailable": true,
+  "private_key_byte_scan_passed": true,
+  "private_original_paths_restored": true,
+  "resource_limit": "Original timed-out attempt lacks complete descendant resource accounting; its live CPU lower bound and failed receipts remain preserved. Engineering continuation, not untouched or original-resource-qualified confirmation.",
+  "schema": "agi-alpha/native-recycling025-portable-audit/v1",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "47d0d0e2a94a0bf7a6db03bb10a8a6c95f5ec5f9fabf994239ba21f57d8c85d0",
+  "uncompressed_bytes": 18155087
+}
