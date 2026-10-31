@@ -40,6 +40,15 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in DEPENDENCIES):
             raise ValueError('FUNDED_DISCOVERY_SOURCE_DEPENDENCY_MISSING')
         names.update(DEPENDENCIES)
+    # The buyer-side proof instrument is part of the frozen released source.
+    # It creates no native sale/payment and must not import private account keys.
+    names.update(name for name in (
+        'commercial/portable_offer.py', 'commercial/partner_offer.py',
+        'examples/portable_offer/sample_order.json',
+        'docs/portable_offer/README.md', 'docs/portable_offer/PARTNER_PILOT.md',
+        'tests/test_portable_offer.py', 'tests/test_partner_offer043.py',
+        '.github/workflows/proof-led-partner043.yml',
+    ) if (root/name).is_file())
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
