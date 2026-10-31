@@ -1,0 +1,59 @@
+{
+  "schema": "agi-alpha/overnight022-independent-release-cpu-failure/v1",
+  "date_utc": "2026-10-31",
+  "scope": "READ_ONLY_FORENSIC_OF_ACTUAL_DOWNLOADED_PUBLIC_RELEASE; NO_RELEASE_OR_FINANCIAL_AUTHORITY",
+  "source_commit": "6b03619bcedfe3aef8b674281dc3317f37e5d16c",
+  "workflow_run": 41233380707,
+  "downloaded_operation_job": 124637649547,
+  "workflow_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41233380707",
+  "job_conclusion": "failure",
+  "release_qualification_conclusion": "success",
+  "publication_gate_conclusion": "success",
+  "actual_public_release_download_verified": true,
+  "downloaded_operation_conclusion": "failure",
+  "failure": "DOWNLOADED_OPERATION_CPU_ENVELOPE_EXCEEDED",
+  "failed_operation_artifact": {
+    "id": 13056330346,
+    "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41233380707/artifacts/13056330346",
+    "sha256": "da99e72ded583071b0e7195a27f3940cc4195cadd165eee69e2ce96f8c590754",
+    "receipt_path": "downloaded-release-operation/DOWNLOADED_RELEASE_RUN.json",
+    "receipt_sha256": "84220a5d6dc49ebbdb6f8cc0c3e9487eb93b95b38e272d8547b052be848842b4"
+  },
+  "execution": {
+    "only_completed_command": "python -m connected_enterprise run --output <private-new-operation>",
+    "command_returncode": 0,
+    "command_wall_seconds": 787.415414667,
+    "wrapper_wall_seconds": 787.905691526,
+    "measured_process_tree_cpu_seconds": 2472.893466,
+    "measured_children_cpu_seconds": 2471.747843,
+    "existing_guard_cpu_seconds": 2400,
+    "exceedance_cpu_seconds": 72.893466,
+    "existing_guard_wall_seconds": 900,
+    "post_run_command_count": 0,
+    "all_independent_audits_passed_stdout_claim": true,
+    "independent_downloaded_operation_final_audit": false,
+    "actual_downloaded_operation_accepted": false,
+    "whole_campaign_billing_usd": null
+  },
+  "retained_failure_checkpoint": {
+    "sha256": "b464bec6126344755cc9497ecce5027734f987e424703ca5398e2165d4b54c46239fd",
+    "bytes": 20254988,
+    "files": 505,
+    "scope": "UNQUALIFIED_FAILURE_CHECKPOINT_NOT_RESUME_AUTHORITY",
+    "consistent_cut": "NOT_ATTESTED"
+  },
+  "succeeding_main_observation": {
+    "commit": "78b7268807a0f80d19a639ee1b2b02adca0dbbbb",
+    "workflow_run": 41236866390,
+    "release_qualification_conclusion": "success",
+    "downstream_release_conclusion_at_observation": null,
+    "downloaded_operation_outcome_at_observation": null,
+    "operating_resource_guard_cpu_seconds": 2400,
+    "source_code_changes_to_release_wrapper_and_log_packaging_present": true,
+    "conclusion": "NEW_MAIN_MUST_PASS_ITS_OWN_ACTUAL_DOWNLOADED_OPERATION; NO_INFERENCE_FROM_6B_OR_78B_QUALIFICATION"
+  },
+  "decision": "P0_RELEASE_NO_GO_ON_6B; KEEP_PUBLISHED_RELEASE_HISTORICAL_BUT_LABEL_DOWNLOADED_OPERATION_FAILED; DO_NOT_MARK_REPAIRED_WITHOUT_EXACT_NEW_RELEASE_RESULT",
+  "next_action": "Inspect per-world workload/cost regressions using source-bound actual receipt; engineer bounded CPU reduction and retain 2400-second guard or adopt separately documented genuinely authorized resource profile only after independent policy review; run exact-head full CI and actual downloaded-operation on the repaired candidate; keep failure immutable. No candidate iteration until favorable.",
+  "safety": "No account, HMAC, key, liability, operating queue, release asset, other owner's branch or external commerce modified. Failed key-free checkpoint is not recovery authority.",
+  "resource_spend_usd": null
+}
