@@ -1,101 +1,416 @@
 {
-  "schema": "agi-alpha/completion015-composed-release-delta/v2",
-  "registered_utc": "2026-10-31T00:06:52.451818+00:00",
-  "economic_evidence_source_commit": "9354d76a7033e8958968cde4469cdd71ea870a21",
-  "economic_evidence_source_sha256": "abc262bf80741f36db2872330c2d4f5166c48d313143c239d440e3cd2143b9a4",
-  "release_qualification_source_sha256": "f937cb4e553812ad532d987fdbbfb6ff2f7f21f049530b2a0fce677ca1a29fe9",
+  "additional_nonidentity_changes": [
+    "Campaign optional caches removed; complete qualify job bound30minutes after preserved20minute cancellation during postjob cleanup despite passed full tests/replays/evidence upload. Every check retained.",
+    "Adaptive full160-world run and all audits bound45minutes.",
+    "Historical009/010 publisher and frozen-qualification provenance routed to genuine immutable release sources; current qualification remains required.",
+    "README exposes one canonical run/audit/resume path; reports/qualification/impact evidence are explicit about scope."
+  ],
+  "capacity_contract_historical_impact": {
+    "path": "evidence/completion015/capacity-contract-repair/HISTORICAL_IMPACT.json",
+    "sha256": "1c0afb29fd81a98a6b6efae81903f4a252bceaf12c4ada9d7ebf1d71677c1780"
+  },
+  "capacity_contract_qualification": {
+    "path": "evidence/completion015/capacity-contract-repair/QUALIFICATION.json",
+    "sha256": "5106dc3a027fdcbaf4f24f860fd48ee18e490fd45e099275e3473bf18a12c32c"
+  },
   "changed_or_added_identity_files": {
     ".github/workflows/connected014-release.yml": {
-      "before_sha256": "abec569a68521167883e2fcc18f92871c3da60a0f0cab9ad2e1b4d71bdf57c5b",
-      "after_sha256": "f6936c77641080283df60c7c3ab626ae459362ef9c6af3a5612953f34487c657"
+      "after_sha256": "f6936c77641080283df60c7c3ab626ae459362ef9c6af3a5612953f34487c657",
+      "before_sha256": "abec569a68521167883e2fcc18f92871c3da60a0f0cab9ad2e1b4d71bdf57c5b"
     },
     "adaptive_enterprise/account.py": {
-      "before_sha256": "45374590f265ec8f86b65f17ca21fe3f5dc9e212f2f557b5e51e0d1f93e7e9b4",
-      "after_sha256": "d8a64a593731ca956b96794cbfb790b02cfbc381c8cfabc900a6b11fd1695ab2"
+      "after_sha256": "d8a64a593731ca956b96794cbfb790b02cfbc381c8cfabc900a6b11fd1695ab2",
+      "before_sha256": "45374590f265ec8f86b65f17ca21fe3f5dc9e212f2f557b5e51e0d1f93e7e9b4"
+    },
+    "campaign/overnight-022/OPERATOR_INPUT.json": {
+      "after_sha256": "4755424fddadda2216313fa5519dec15d473eca859acde21b058cf1beafeb52b",
+      "before_sha256": null
     },
     "commercial/ledger.py": {
-      "before_sha256": "854e1e393cf302ad50996153b5eac9934cfcebb1a20c29a65b0cf706df3fedee",
-      "after_sha256": "59a974314705012674d7e196a210a9c9379508c72787503f5261514a9b6e97ed"
+      "after_sha256": "59a974314705012674d7e196a210a9c9379508c72787503f5261514a9b6e97ed",
+      "before_sha256": "854e1e393cf302ad50996153b5eac9934cfcebb1a20c29a65b0cf706df3fedee"
     },
     "connected_enterprise/channels.py": {
-      "before_sha256": "67ec30ae665966e59d8835a181f941e2dc9a2e25002844689a9e1b899cd6b32f",
-      "after_sha256": "5deec4bbfb4bcb4fc33198887bd8568d755d9406698cc7476ca6f7541b9d0545"
+      "after_sha256": "5deec4bbfb4bcb4fc33198887bd8568d755d9406698cc7476ca6f7541b9d0545",
+      "before_sha256": "67ec30ae665966e59d8835a181f941e2dc9a2e25002844689a9e1b899cd6b32f"
     },
     "connected_enterprise/engine.py": {
-      "before_sha256": "45a44cd2511debc34394644f92d928eb65996aa331f92d34574b9d7718cc2c7c",
-      "after_sha256": "b706c6c63ae63acc5ebccccc26d5d89360986ceef612a7459b1e457ec5d8c805"
+      "after_sha256": "b706c6c63ae63acc5ebccccc26d5d89360986ceef612a7459b1e457ec5d8c805",
+      "before_sha256": "45a44cd2511debc34394644f92d928eb65996aa331f92d34574b9d7718cc2c7c"
     },
     "connected_enterprise/finance.py": {
-      "before_sha256": "5916188420a9a7b265919e3905e146ba3ed6aaf5a369634029ea51aa8382587c",
-      "after_sha256": "e2f20f9d5e52d3664be14a04f23a34311acbb431d36a1958176afb2c4ca923af"
+      "after_sha256": "e2f20f9d5e52d3664be14a04f23a34311acbb431d36a1958176afb2c4ca923af",
+      "before_sha256": "5916188420a9a7b265919e3905e146ba3ed6aaf5a369634029ea51aa8382587c"
+    },
+    "connected_enterprise/registration.py": {
+      "after_sha256": "3bfbda99ed25d138d8e833bb1b61767faf936df52cdf329f09c47f3639526a5f",
+      "before_sha256": null
+    },
+    "connected_enterprise/runner.py": {
+      "after_sha256": "f628c293fde03b94987ba065e7200ceab83604e50a7b4c54c2d1db33dbe29489",
+      "before_sha256": "6849a3092c90a4c5be286393b185dbe2e61a4b7be8ee103ea9b21b853d9333b2"
+    },
+    "connected_enterprise/scoreboard.py": {
+      "after_sha256": "bcf995aae21c3dd1bbed3a36158fca79ba06360ce8404a60eefae81b46876ba1",
+      "before_sha256": null
     },
     "connected_enterprise/verify.py": {
-      "before_sha256": "c775c11e4eb40c5d24a5d85a3d47f96bdba0f557f092be804f673a53f0036446",
-      "after_sha256": "a02b127900a605627ef406a544643a64226805ff72339baa98f38a0343f12ec2"
+      "after_sha256": "a02b127900a605627ef406a544643a64226805ff72339baa98f38a0343f12ec2",
+      "before_sha256": "c775c11e4eb40c5d24a5d85a3d47f96bdba0f557f092be804f673a53f0036446"
     },
-    "scripts/release_connected014.py": {
-      "before_sha256": "9f0c4d0e77014c1082c05f1606df2e90db5f931043ae3329101cf4f0514cfa47",
-      "after_sha256": "184d6fbd9e4767dd8efbb69621ccfc3920a609fef5e45e07f4e41652d2fb82bf"
-    },
-    "tests/test_adaptive_account.py": {
-      "before_sha256": "89232200c542f715a40090f8c2f025aceb3f0b3d47b449664217cba267b512e2",
-      "after_sha256": "401673cd95cc5564a8b5bbbac93da4de8c5db635407e536f7be06ad31b108842"
-    },
-    "tests/test_adaptive_allocation.py": {
-      "before_sha256": "413108dd92913fec3b06f4fd72fdc9891e8b4ec372bfd56ce7c6acc874fa7f6e",
-      "after_sha256": "741a935a308b1815a1ae63303d4b7f1a0a7e7e2a43e807ad40df9ce6b9fcdc36"
-    },
-    "tests/test_adaptive_resource_resolution.py": {
-      "before_sha256": null,
-      "after_sha256": "0b7e57636a56e6b4e2653ab0e2114acf3396da59a397fda66ac72cc3afdb25be"
-    },
-    "tests/test_connected_capacity_contract.py": {
-      "before_sha256": null,
-      "after_sha256": "8b248e5d72154d22a20fd61ed395bbb676b1cf0e709107894e9a5b44a269ab67"
-    },
-    "tests/test_connected_channel_authority.py": {
-      "before_sha256": null,
-      "after_sha256": "8ff2f55a88393b1be281e500337abda5a72e91e6b9eeba7b1803e55ade4439d4"
-    },
-    "tests/test_connected_channel_lead.py": {
-      "before_sha256": null,
-      "after_sha256": "6bd74fdb24c27716b6855a286b9216c67cfbfae613c110c6cf06da04e5698447"
-    },
-    "tests/test_connected_engine.py": {
-      "before_sha256": "ff50f495c7883e40a4a50117a17e6683708d0a068d7f5a947eda0b4b8576be6e",
-      "after_sha256": "0f0d04979d9d7aaa5d380a2349b17d42102e03a9648a76616f15f13d9c7c3533"
-    },
-    "tests/test_connected_manifest_validation.py": {
-      "before_sha256": "dd37a9659e7a615af231e7fc0730f090b0b1818e2902ce3d4fdc4462c76b65a7",
-      "after_sha256": "9ef1c04092b59ad90bf9bc9781d629a7b1fca27232fd51115117be85abcb08ef"
-    },
-    "tests/test_connected_refund_clock.py": {
-      "before_sha256": null,
-      "after_sha256": "67313bd493610019d96fb196f75da00866e2bdce9cd981e83799aa28152b7d2b"
-    },
-    "tests/test_connected_rejections.py": {
-      "before_sha256": null,
-      "after_sha256": "05622bf05ef0226ec9ee3b50d57569526b8eca2e51780445490dc1455b0e8a2f"
-    },
-    "tests/test_connected_release.py": {
-      "before_sha256": "c9e354df94a9c5473cd1441651c72d36f1ea3892942d0984aded93f6a448ecc2",
-      "after_sha256": "60bc28a5e4e8e714c7dedb1fc97deb31c51bb22e26b8aa0764eeb8ea1b0d79f4"
-    },
-    "tests/test_connected_temporal_boundaries.py": {
-      "before_sha256": null,
-      "after_sha256": "93ee007ddf9ef1dada8c7e0b4569daf64b13f1aee061e56e73fa73390849b778"
-    },
-    "tests/test_connected_verify.py": {
-      "before_sha256": "503cdb3be57548b63348a3c8e1d383b9721a321891b73a88c5ce5c6cf0f8ef86",
-      "after_sha256": "91d8f7e7f333577a600cdf89a712f9b461e132b6239bc871f725ba13f3f7e83b"
+    "docs/connected014/OPERATOR.md": {
+      "after_sha256": "c76f5aea84eb680ca542f419b689f19271aa5c2759bd3277c579ecd04e965ed4",
+      "before_sha256": "400f7a308f44627e1cc682a73c6c2677bff6d90c68a568378365c271ec3f905b"
     },
     "portfolio_scale/staged_coupling.py": {
-      "before_sha256": null,
-      "after_sha256": "751d736c8bab6683e0b1963eee0713a494847c00cb38fb643e37fb0027e0ec4b"
+      "after_sha256": "751d736c8bab6683e0b1963eee0713a494847c00cb38fb643e37fb0027e0ec4b",
+      "before_sha256": null
+    },
+    "scripts/measure_overnight022.py": {
+      "after_sha256": "4585ad10458f5d478f1a995f0b42f2d9a8708b0942d6eb17bd58d7f3bba0070a",
+      "before_sha256": null
+    },
+    "scripts/release_connected014.py": {
+      "after_sha256": "184d6fbd9e4767dd8efbb69621ccfc3920a609fef5e45e07f4e41652d2fb82bf",
+      "before_sha256": "9f0c4d0e77014c1082c05f1606df2e90db5f931043ae3329101cf4f0514cfa47"
+    },
+    "tests/test_adaptive_account.py": {
+      "after_sha256": "401673cd95cc5564a8b5bbbac93da4de8c5db635407e536f7be06ad31b108842",
+      "before_sha256": "89232200c542f715a40090f8c2f025aceb3f0b3d47b449664217cba267b512e2"
+    },
+    "tests/test_adaptive_allocation.py": {
+      "after_sha256": "741a935a308b1815a1ae63303d4b7f1a0a7e7e2a43e807ad40df9ce6b9fcdc36",
+      "before_sha256": "413108dd92913fec3b06f4fd72fdc9891e8b4ec372bfd56ce7c6acc874fa7f6e"
+    },
+    "tests/test_adaptive_resource_resolution.py": {
+      "after_sha256": "0b7e57636a56e6b4e2653ab0e2114acf3396da59a397fda66ac72cc3afdb25be",
+      "before_sha256": null
+    },
+    "tests/test_connected_capacity_contract.py": {
+      "after_sha256": "8b248e5d72154d22a20fd61ed395bbb676b1cf0e709107894e9a5b44a269ab67",
+      "before_sha256": null
+    },
+    "tests/test_connected_channel_authority.py": {
+      "after_sha256": "8ff2f55a88393b1be281e500337abda5a72e91e6b9eeba7b1803e55ade4439d4",
+      "before_sha256": null
+    },
+    "tests/test_connected_channel_lead.py": {
+      "after_sha256": "6bd74fdb24c27716b6855a286b9216c67cfbfae613c110c6cf06da04e5698447",
+      "before_sha256": null
+    },
+    "tests/test_connected_engine.py": {
+      "after_sha256": "0f0d04979d9d7aaa5d380a2349b17d42102e03a9648a76616f15f13d9c7c3533",
+      "before_sha256": "ff50f495c7883e40a4a50117a17e6683708d0a068d7f5a947eda0b4b8576be6e"
+    },
+    "tests/test_connected_manifest_validation.py": {
+      "after_sha256": "9ef1c04092b59ad90bf9bc9781d629a7b1fca27232fd51115117be85abcb08ef",
+      "before_sha256": "dd37a9659e7a615af231e7fc0730f090b0b1818e2902ce3d4fdc4462c76b65a7"
+    },
+    "tests/test_connected_refund_clock.py": {
+      "after_sha256": "67313bd493610019d96fb196f75da00866e2bdce9cd981e83799aa28152b7d2b",
+      "before_sha256": null
+    },
+    "tests/test_connected_registration.py": {
+      "after_sha256": "d65c4dd7e657a179f5777b7af03845753241d2ec3b7e153dd0869bef397afe11",
+      "before_sha256": null
+    },
+    "tests/test_connected_rejections.py": {
+      "after_sha256": "05622bf05ef0226ec9ee3b50d57569526b8eca2e51780445490dc1455b0e8a2f",
+      "before_sha256": null
+    },
+    "tests/test_connected_release.py": {
+      "after_sha256": "60bc28a5e4e8e714c7dedb1fc97deb31c51bb22e26b8aa0764eeb8ea1b0d79f4",
+      "before_sha256": "c9e354df94a9c5473cd1441651c72d36f1ea3892942d0984aded93f6a448ecc2"
+    },
+    "tests/test_connected_scoreboard.py": {
+      "after_sha256": "23043d3aebf5a4db9a783768b787079c6bbaddd5a6face3a0937491e8931a435",
+      "before_sha256": null
+    },
+    "tests/test_connected_temporal_boundaries.py": {
+      "after_sha256": "93ee007ddf9ef1dada8c7e0b4569daf64b13f1aee061e56e73fa73390849b778",
+      "before_sha256": null
+    },
+    "tests/test_connected_verify.py": {
+      "after_sha256": "91d8f7e7f333577a600cdf89a712f9b461e132b6239bc871f725ba13f3f7e83b",
+      "before_sha256": "503cdb3be57548b63348a3c8e1d383b9721a321891b73a88c5ce5c6cf0f8ef86"
     }
   },
-  "unchanged_original_identity_files": 121,
-  "release_identity_files": 143,
+  "channel_authority_historical_impact": {
+    "path": "evidence/completion015/channel-authority-repair/HISTORICAL_IMPACT.json",
+    "sha256": "93fde2641a851afeae76f947f8770799f1d9daf74130f78d7ab2e5bae02be55c"
+  },
+  "channel_authority_qualification": {
+    "path": "evidence/completion015/channel-authority-repair/QUALIFICATION.json",
+    "sha256": "809859cad7204af7ed8816bc5508e8d211e50fa754f05f03a459002dce255941"
+  },
+  "channel_lead_historical_configs": {
+    "path": "evidence/completion015/channel-lead-repair/HISTORICAL_CONFIGS.json",
+    "sha256": "3f955a864aab684c1754b8f6871c39fc06bfc91c4bfd5e614d6d0769e615cf3c"
+  },
+  "channel_lead_qualification": {
+    "path": "evidence/completion015/channel-lead-repair/QUALIFICATION.json",
+    "sha256": "5d8abf8dfcb5bd6a448ddba56a5f2ba85f088b699e4e7414fa0605f504ba1028"
+  },
+  "channel_normalization_qualification": {
+    "path": "evidence/completion015/channel-normalization-repair/QUALIFICATION.json",
+    "sha256": "fd4d20c74bdba0620455cc9c8473b6c36fe1940e260adc21af79737e76fd1b16"
+  },
+  "composed_auditor_qualification": {
+    "path": "evidence/completion015/qualification/COMPOSED_AUDITOR_TESTS.json",
+    "sha256": "d5575f9ff72cb79c95b5269af11d619f2115769e742fc875847ce95e9ca48de5"
+  },
+  "economic_evidence_source_commit": "9354d76a7033e8958968cde4469cdd71ea870a21",
+  "economic_evidence_source_sha256": "abc262bf80741f36db2872330c2d4f5166c48d313143c239d440e3cd2143b9a4",
+  "financial_qualification": {
+    "path": "evidence/completion015/financial-repair/CONTRACT_SHAPE_QUALIFICATION.json",
+    "sha256": "e66514c0f747449f5b6ea86b9738bc75ba0b80585cd09785af342ca74bac758c",
+    "status": "17 final financial-source narrow regressions and29 release-wrapper regressions passed;8 allocation tests reproduce5 schemaerrors before fixture migration, then8pass with guardbyte-identical. Independent fixture review confirms only required execution fields changed. All exact composed-head workflows remain required."
+  },
+  "frozen_delivery_allocation": {
+    "path": "evidence/completion015/DELIVERY_ALLOCATION.json",
+    "sha256": "659f4e3431e6ba9ec7880444e93e64550e4b07cba9dfbb74297399956d48cc29"
+  },
+  "historical_impact": {
+    "path": "evidence/completion015/financial-repair/HISTORICAL_IMPACT.json",
+    "result": "Seven original archive/part hashes verified plus original local fresh records inspected. Six affected published archives and original fresh records contain no P1/P2 path, zero newly required zero-later/zero-cost or unsupported positive top-only shapes, missing receipts, aggregate mismatches, orphan proofs or malformed/unknown-canonical-job contracts. Ten bound original SERVICES maps prove the exact existing native job map. Generic enterprise011 predates affected Account and is marked not applicable. Duplicate fresh archive/local views are not additional businesses. This is preserved-record inspection, not new commercial execution.",
+    "sha256": "8886741f3c8e73ae3af391261dbb249e53613ae5d79da067740e7bf9ec32ddc6"
+  },
+  "journal_rejection_historical_impact": {
+    "path": "evidence/completion015/journal-rejection-repair/HISTORICAL_IMPACT.json",
+    "sha256": "6ed2da5d30b96de2f89d63ce361be3b95bcb9b3cb3892f6601b5f5d25bcae6cf"
+  },
+  "journal_rejection_qualification": {
+    "path": "evidence/completion015/journal-rejection-repair/QUALIFICATION.json",
+    "sha256": "842d7732faaa457d91e3b832d4139130ea4f43e806d1e3c7db24124b7131fa02"
+  },
+  "operator022_publication_binding": {
+    "achieved_scope": {
+      "clean_archive": "Accepted smoke run/resume/native and operating audit, key-free package and public audit on closure b0eae06dabfdf09197a60b60d3680f7f67946936631fafe431dc6be1f9b56983. Uses exact checked preinstalled dependencies; clean dependency installation NOT_PERFORMED. This is a clean archive, not a downloaded published release.",
+      "connected_suite": "195 connected tests passed on the same executing closure; test log and command receipt retained by root. Reproduction/engineering tests, not fresh commercial confirmation.",
+      "financial_authority": "No financial writer, native verifier, journal, engine, terms, maturity policy or legacy migration implementation changed. Existing permanent liabilities remain. No P0 prospective-lifecycle qualification or financing-effect causal claim.",
+      "registered_operator": "49-day input, exposed smoke service/seed, public register/operate-step/resume/audit/comparison/scoreboard/package and extracted key-free audit; nonempty queues, same private test keys and native prefixes preserved. Two separate same-seed arm businesses, each independently capitalized and never pooled. The first collector failed KeyError state after successful step; failure and its resources remain failed, then successor collector continued the same accounts.",
+      "release_status": "Supplementary binding proposed for current operator changes. Exact committed-head/main gates, clean dependency installation where required, publication and actual released-download operation remain separate unclaimed gates.",
+      "research": "No new held-out economic, capability, annual-profit, buyer-response or scale result. Historical paper and economic/source/failure records unchanged."
+    },
+    "changed_or_added_identity_files": {
+      "campaign/overnight-022/OPERATOR_INPUT.json": {
+        "after_sha256": "4755424fddadda2216313fa5519dec15d473eca859acde21b058cf1beafeb52b",
+        "before_sha256": null
+      },
+      "connected_enterprise/registration.py": {
+        "after_sha256": "3bfbda99ed25d138d8e833bb1b61767faf936df52cdf329f09c47f3639526a5f",
+        "before_sha256": null
+      },
+      "connected_enterprise/runner.py": {
+        "after_sha256": "f628c293fde03b94987ba065e7200ceab83604e50a7b4c54c2d1db33dbe29489",
+        "before_sha256": "6849a3092c90a4c5be286393b185dbe2e61a4b7be8ee103ea9b21b853d9333b2"
+      },
+      "connected_enterprise/scoreboard.py": {
+        "after_sha256": "bcf995aae21c3dd1bbed3a36158fca79ba06360ce8404a60eefae81b46876ba1",
+        "before_sha256": null
+      },
+      "docs/connected014/OPERATOR.md": {
+        "after_sha256": "c76f5aea84eb680ca542f419b689f19271aa5c2759bd3277c579ecd04e965ed4",
+        "before_sha256": "400f7a308f44627e1cc682a73c6c2677bff6d90c68a568378365c271ec3f905b"
+      },
+      "scripts/measure_overnight022.py": {
+        "after_sha256": "4585ad10458f5d478f1a995f0b42f2d9a8708b0942d6eb17bd58d7f3bba0070a",
+        "before_sha256": null
+      },
+      "tests/test_connected_registration.py": {
+        "after_sha256": "d65c4dd7e657a179f5777b7af03845753241d2ec3b7e153dd0869bef397afe11",
+        "before_sha256": null
+      },
+      "tests/test_connected_scoreboard.py": {
+        "after_sha256": "23043d3aebf5a4db9a783768b787079c6bbaddd5a6face3a0937491e8931a435",
+        "before_sha256": null
+      }
+    },
+    "cost_scope": "Receipts preserve measured command and reaped-child CPU/wall including first failed collector; assistant inference, transport and actual model/host billing remain unknown, not zero.",
+    "current_identity_files": 149,
+    "current_source_sha256": "b0eae06dabfdf09197a60b60d3680f7f67946936631fafe431dc6be1f9b56983",
+    "engineering_evidence": {
+      "clean_archive_qualification": {
+        "bytes": 22267,
+        "git_blob": "cd124ccfc34bc7b3fc84a2ea26082b291f046f02",
+        "path": "evidence/overnight022/publication-binding/CLEAN_QUALIFICATION.json",
+        "sha256": "9e67087d0f31261034f18396e5dbc9fae92392bd255b5009fd34946e3d03bef7"
+      },
+      "connected_suite": {
+        "bytes": 830,
+        "git_blob": "175873117befe93078ae070cf9a9e8586b48abb9",
+        "path": "evidence/overnight022/publication-binding/CONNECTED_SUITE.json",
+        "sha256": "a2a4202bbea0e443fb3d79b880b4a3fa3c5ec5e8ba318b37885a401faf3e2768"
+      },
+      "preserved_binding_failure": {
+        "bytes": 1055,
+        "git_blob": "922d38ba0e16cf4995ff9e5ffaa4d7c214bed86e",
+        "path": "evidence/overnight022/publication-binding/prepare-before.json",
+        "sha256": "db6f80d6359b4abc3bb130d6569b41be0c84e4c07d72582c2009a608dbafa823"
+      },
+      "preserved_binding_failure_stderr": {
+        "bytes": 667,
+        "git_blob": "7858154c56c3f63439148cf1fd703956c7061c71",
+        "path": "evidence/overnight022/publication-binding/prepare-before.stderr",
+        "sha256": "2d6c4b058b642e417394db1c4c717425873bb6e1c0427863984696bf08888c7d"
+      },
+      "preserved_failed_collector": {
+        "bytes": 1375,
+        "git_blob": "970e856daa5e954fce05536c595413fc318b790c",
+        "path": "evidence/overnight022/publication-binding/OPERATOR_PROOF_FAILED.json",
+        "sha256": "bcc35968bf8402178c185964c9008fb1be13f7177760086035df0d4147881589"
+      },
+      "public_registered_operator_reproduction": {
+        "bytes": 7591,
+        "git_blob": "96dbc2d8b49126ef45ad1ec2f0660a0d8d09f9d9",
+        "path": "evidence/overnight022/publication-binding/OPERATOR_PROOF.json",
+        "sha256": "5dda4e13e64fdb1011ea86df14668aff5c1fc7a45497a812cad19d86cf965ecf"
+      }
+    },
+    "historical_pr33_closure_proof": {
+      "bytes": 16334,
+      "git_blob": "032bba0bb5bffdeb8fde58cb556a82d6fb363b9b",
+      "path": "evidence/completion015/qualification/pr30-publication-binding/SOURCE_CLOSURE_PROOF.json",
+      "sha256": "cbfe76bddbbeb7e4b6491bb7aca93041a0316df7c47a47476b3b0d75348de5fd"
+    },
+    "historical_scope": "Original PUBLICATION and COMPOSED_RELEASE_DELTA bytes from merged PR33 main are retained exactly. Original PR33 additive-planner records and their 143-to-142 reconstruction are immutable history. Historical economic/failure metadata and paper assets are not recertified by this supplement.",
+    "independence": "Same author/model family, host, tools and synthetic/exposed data; separate checks are not independent external certification.",
+    "input_commit_before_binding": "cdee5d9dcd0b86ce2eec0d09542ad6f28240f408",
+    "prior_identity_files": 143,
+    "prior_main_commit": "84c8b5322d0ef6c7ac9acacbe3f82762518f8ab0",
+    "prior_records": {
+      "composed_release_delta": {
+        "bytes": 25225,
+        "git_blob": "22289b7f01ffc8f4885d3f30acf46a4d96fbb625",
+        "path": "evidence/overnight022/publication-binding/prior-84c8b532/COMPOSED_RELEASE_DELTA.json",
+        "sha256": "d5fdfb05226e5d4671d6d0a0eaca3db40bb1fbf7d2bfceb84b62cabc3070ac9c"
+      },
+      "publication": {
+        "bytes": 32816,
+        "git_blob": "bf8c274fe822e7e076ea50ef66a0f778579c4923",
+        "path": "evidence/overnight022/publication-binding/prior-84c8b532/PUBLICATION.json",
+        "sha256": "51d4f868c00447bc9a8cbc46eb0a8d4b632c828dde89417ba0730012ef217f26"
+      }
+    },
+    "prior_source_sha256": "f937cb4e553812ad532d987fdbbfb6ff2f7f21f049530b2a0fce677ca1a29fe9",
+    "registered_utc": "2026-10-31T03:24:46Z",
+    "removed_identity_files": {},
+    "schema": "agi-alpha/operator022-supplementary-publication-binding/v1",
+    "source_closure_proof": {
+      "bytes": 19517,
+      "git_blob": "37fe250d9c5bfff94a858a0074517c9c041ac9e7",
+      "path": "evidence/overnight022/publication-binding/SOURCE_CLOSURE_PROOF.json",
+      "sha256": "0f55c6c0e672d310c1988e630ceb6fd72e48beb40d3bf246184fd62b182961ba"
+    },
+    "unchanged_prior_identity_files": 141
+  },
+  "performance016": {
+    "allocation": {
+      "path": "evidence/performance016/ALLOCATION.json",
+      "sha256": "cbcb1e7a41aceae382c647fb6ef77387e096ed81de52d7ae5a87521ac0804085"
+    },
+    "component_commits": {
+      "failure_checkpoint": "f5af7def0eb49d200d6f327aca59b2a004722818",
+      "financial": "3a13a66efeba7c09f9d3711205fc42d35282a8c1"
+    },
+    "current_source_sha256": "411eed021e5a80606cf8468d3bfc9f1920cc03439013c0991c37060e059ecf23",
+    "failure_checkpoint_commit": "573efff00798332653337e42d3149a0d35f46ea3",
+    "final_engineering_benchmark": {
+      "after_process_cpu_seconds": 10.89009207,
+      "before_process_cpu_seconds": 13.978736472,
+      "fixture": "Fixed exposed14003/12daybaseline:4accepted/4paid/54nativeactions/1earnedreservation; all3candidate semanticprojections match, no capacity-expansion inference.",
+      "percent_reduction": 22.095304594851505,
+      "pre_guard_candidate2": "26.582percent prior-source observation preserved; finalsource is22.0953percent, no best-of timing selection.",
+      "prior_candidate1": "19.507percent targetmiss preserved",
+      "tests": "14focusedfinancial/authority/guard checks;34wrapper checks pass; independent same-session review no blocking findings. Fullcurrenthead CI/main/actualrelease still pending."
+    },
+    "performance_scope": "Fixed exposed12day14003fixture, no economic retuning or fresh commercial confirmation. Original baseline and all intermediate misses preserved; exact final source and measured candidate distinctions are explicit in qualification evidence.",
+    "prior_actual_operation": "FAILED_CPU_ENVELOPE_2506.000343_GT_2400; full raw native state absent; only four authentic receipts/logs preserved",
+    "prior_main": "10bdb2c5787f95158642b068756ba30b58140562",
+    "prior_source_sha256": "e4ae45a21614af62d336a96f4bba71db4339f73a72d5c4c0d9bc1aa324555d61",
+    "qualification": {
+      "FINANCIAL_QUALIFICATION.json": {
+        "path": "evidence/performance016/FINANCIAL_QUALIFICATION.json",
+        "sha256": "5afd71c0d3380a6520d1bd1748ae9cfa14b8fb9c22f90b0e90dc8d88187870bc"
+      },
+      "INDEPENDENT_REVIEW.json": {
+        "path": "evidence/performance016/INDEPENDENT_REVIEW.json",
+        "sha256": "ff0a87fb30ad89f1fcf7ae3284d664d1b073a0c3fa5c1db14f84a9df4e00585c"
+      },
+      "MANIFEST.json": {
+        "path": "evidence/performance016/MANIFEST.json",
+        "sha256": "6cdf11da1b1704424a3cfc6e151e1fe6fa1485ebec13baadf88fd43325286cf0"
+      },
+      "SEMANTIC_EQUIVALENCE.json": {
+        "path": "evidence/performance016/SEMANTIC_EQUIVALENCE.json",
+        "sha256": "ba052ffd2d3ec303e344cda7c8611704530989cd8f3a1f57b77fd7de2fb38515"
+      }
+    },
+    "resource_policy": "UNCHANGED2400CPU/900livewall; one separately identified improved-source actual release attempt after normal exact-head/main qualification. No unchanged favorable rerun.",
+    "resources": "Financialknown meteredlowerbound91.0700228CPU +wrappertests0.311505CPU. Financial75targetexceeded. Root/edit/wrapper/review/earlier import/teardown notfullymetered, notzero; no exactwholephase100CPU complianceclaim. No furtherlocal tests/benchmarks. Unchanged100phaseallocation/01:45stop/one repairedactual2400CPU900wall attempt.",
+    "root_review": {
+      "path": "evidence/performance016/ROOT_REVIEW.json",
+      "sha256": "930ad3a0334965d3e362725a156b1844c354a8a928104e080f11789c63997d84"
+    },
+    "status": "ENGINEERING_REVIEWED; EXACT_HEAD_MAIN_AND_ACTUAL_DOWNLOADED_RELEASE_GATES_PENDING"
+  },
+  "pr30_publication_binding": {
+    "added_identity_file": {
+      "git_blob": "34f212d6a83f55682659312c5c2e01b797e7c695",
+      "path": "portfolio_scale/staged_coupling.py",
+      "sha256": "751d736c8bab6683e0b1963eee0713a494847c00cb38fb643e37fb0027e0ec4b"
+    },
+    "closure_reason": "Connected identity inherits adaptive source_paths, which includes portfolio_scale/*.py. Of six additive PR30 files, only the optional planning module enters this closure. No existing identity file changed.",
+    "composed_pr_head": "fbdd08f8f71cad861ad8fabdc37864acc16713c7",
+    "current_qualification_status": "Metadata proposal only. Exact repaired-head/main checks, source-bound preparation, publication and actual downloaded operation remain pending. Prior performance016 status fields remain historical, not current qualification.",
+    "current_source_sha256": "f937cb4e553812ad532d987fdbbfb6ff2f7f21f049530b2a0fce677ca1a29fe9",
+    "engineering_evidence": {
+      "failure_artifact": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41160852720/artifacts/13026799534",
+      "main_job": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41160852720/job/124417842210",
+      "main_result": "176 connected tests passed and clean smoke QUALIFICATION accepted true at current source hash. Subsequent release prepare failed PAPER_EXECUTING_SOURCE_CHANGED; this failure is preserved, not relabeled full release success.",
+      "pr_job": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41158982106/job/124412040405",
+      "pr_tests": "27 staged-coupling tests passed within 819 root tests on exact fbdd08f8; all nine substantive PR jobs passed."
+    },
+    "previous_main": "9facd934d9ae763691e8a51052a67793cac5b48e",
+    "prior_records": {
+      "composed_release_delta": {
+        "git_blob": "bacff8ebfaf46083ba41eb0ec2ccb48f9e86e251",
+        "path": "evidence/completion015/qualification/pr30-publication-binding/prior-a3600070/COMPOSED_RELEASE_DELTA.json",
+        "sha256": "93dae655fee5f02091f84eb3062ef29a2b89f8b36796671d3c419d8d849386ce"
+      },
+      "publication": {
+        "git_blob": "b54be437f8ecbd6adcb0d6978ce5aafbd2568ecb",
+        "path": "evidence/completion015/qualification/pr30-publication-binding/prior-a3600070/PUBLICATION.json",
+        "sha256": "8ee345cd76a94c53483efa722c61976bcbdba4aa1b47a9739d646aa4830461eb"
+      }
+    },
+    "prior_source_sha256": "411eed021e5a80606cf8468d3bfc9f1920cc03439013c0991c37060e059ecf23",
+    "schema": "agi-alpha/additive-planner-publication-binding/v1",
+    "scope": "No financial authority, default enterprise behavior, paper, economic history, PDF QA, resource envelope or workflow gate changed. No new finance activity or commercial confirmation; unauthenticated solver recommendations never authorize execution.",
+    "source_commit": "a3600070f3964d907d9bc663bdad6b77a84cbdbd"
+  },
+  "refund_clock_historical_impact": {
+    "path": "evidence/completion015/refund-clock-repair/HISTORICAL_IMPACT.json",
+    "sha256": "13844941724c25d47f36e074e729ec69d5624373c5bcde2c6b79d847db535672"
+  },
+  "refund_clock_qualification": {
+    "path": "evidence/completion015/refund-clock-repair/QUALIFICATION.json",
+    "sha256": "b562580f5ac6aa2b32bab1c2ff61e2eadac2d9522b7a6826dc06aaa66189347d"
+  },
+  "registered_utc": "2026-10-31T00:06:52.451818+00:00",
+  "release_identity_files": 149,
+  "release_qualification_source_sha256": "b0eae06dabfdf09197a60b60d3680f7f67946936631fafe431dc6be1f9b56983",
+  "reproduction_scope": "Current release requires fresh exact-head qualification, all exact-main terminal-success checks and one actual downloaded full-default reproduction under unchanged2400CPU/900wall. Known evaluation seeds make it reproduction, not untouched confirmation. Both original600CPU and prior actual2400CPU failures remain preserved; missing prior actual raw state is not re-created.",
+  "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.305020239 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment. TEMPORAL_REPAIR_ALLOCATION.json prospectively registers a separate additional80localCPU increment ending22:55UTC. Temporal qualification0.499749kernelchildCPU; construction/probes unmetered, notzero; conservative10CPUshare reserved. No new local commercial confirmation. Original resource failures remain unchanged. Journal rejection repair measured lowerbound37.460127374CPU including beforeprobe, initial11/final14tests and original8read-only scan;20targetexceeded for restart-certificate completion; editing/wrapper CPU unknown, notzero. Conservative55financial+10temporal+5root+10other planning shares total80; no exact wholephase measurement/compliance claim. Hostedcampaign30minutes remains within45minute bound. Channel preflight31focusedtests use0.186818kernelchildCPU; construction/probes unmetered, no commercialrun, within existing temporal planning share. Absolute22:55UTC stop unchanged. Normalized-channel34tests0.179401CPU; semantic-comparison actualtwoownerprobe plus3focusedtests7.422202446CPU. Financial aggregateknownlowerbound44.882329820CPU;55planning share unchanged, edits/wrapperunknown. No full14daylocalengine rerun/newcommerce; full exactheadCI remainsrequired. Capacityrepair known0.509626579CPU; channel37targeted0.195900CPU andunmeteredhistoricalscan. Rootcomposedwholemodule48tests18.040865CPU included sixexistingend-to-end methods overexposed12daybaseline14003; initial42/noAccount prediction corrected inrawreceipt. Known wholecurrentphase lowerbound64.679093545CPU; unknownconstruction/wrapper/historyscan gapsnotzero, noexact80CPUcomplianceclaim. Separate delivery-only allocation22:55\u201323:40UTC/additional20localCPU, SAMEsingle2400CPU/900wallactualreleasedreproduction, no newfinancial/economicconstruction orcommercialsearch. Refundclock5tinytests andoriginal8clockinspection0.245222798CPU, nofullnative/businessrerun; currentknownlowerbound64.924316343CPU. Unmeteredgapsnotzero, existing80phase/end22:55 andseparate20CPUdelivery/end23:40 unchanged.",
+  "restart_comparison_leaf_proof": {
+    "path": "evidence/completion015/restart-comparison-repair/LEAF_DIFF.before.json",
+    "sha256": "964c48401a731edf00ff1122731483ae5b4a5ad1d782a3f95b7b2c3419707380"
+  },
+  "restart_comparison_qualification": {
+    "path": "evidence/completion015/restart-comparison-repair/QUALIFICATION.json",
+    "sha256": "857d82cf40ea83e45470463106bc8d743f753b5a369ee5b2c43e8574435cab45"
+  },
+  "schema": "agi-alpha/completion015-composed-release-delta/v2",
   "source_changes": [
     "Release wrapper: bounded exact-main gating, kernel self+waited-child CPU measurement, independently audited actual-run key-free archive retention and regressions.",
     "Account financial safety: explicit upfront/selected resource obligations reconciled at every finish/audit/export/reopen; exact aggregate costs; unsupported top-only commitments reject before funds/proof.",
@@ -112,178 +427,17 @@
     "Independent native/operating clock binding: every offer deadline equals qualified+frozen payment deadline; default refunds occur exactly at recomputed due, and quality-rejected refunds occur exactly after production+acceptance delay. Both native and operating REFUND clocks checked before any quality early return. Existing settlement/default/useful-output rules preserved; producer/financial authority unchanged.",
     "Performance016: one complete native replay yields call-local freshly bound job authority for the same obligation-aware audit; no cross-action cache. All source/manifest/input/artifact/receipt bindings, exact accepted set, cached/fresh equality and detached returned data remain enforced; caller native config is pinned. No JournalAccount/WAL change; public audit interface and other-schema fallback retained.",
     "Failure-only public checkpoint: fixed registered-world/canonical-service/frozen-source allowlist, stable contained regular-file reads and hashes, privacy/CRC before promotion. No audit/reopen/retry, no qualified or coherent-cut claim, original exception retained and all diagnostic CPU charged. Private simulation key and SQLite omitted; not resume authority.",
-    "PR30 adds an optional staged public-signal planning utility to inherited source closure; no existing operating or financial code changed or execution authority granted."
+    "PR30 adds an optional staged public-signal planning utility to inherited source closure; no existing operating or financial code changed or execution authority granted.",
+    "Operator022 supplementary extension: source-bound public registration, existing run_world stepped operation/resume, audited configurable descriptive comparisons, frozen-source read-only scoreboard, complete native record display and durable command resource helper. Financial authority and default economic configuration unchanged. Clean-archive/exposed operator reproduction only; no prospective maturity/migration, financing-causal, annual-profit or new business confirmation claim."
   ],
-  "unchanged_economic_mechanism": "Service executors/checkers, buyer incentives/budgets/choices, offers/prices, channel/capacity contract terms, cost envelopes, learning rules, event timing values, protocol, cases and seeds are byte-identical. Financial guards and temporal admission enforcement are strengthened, not claimed unchanged. Original eight-world scans found no changed trajectory from the repairs.",
-  "historical_impact": {
-    "path": "evidence/completion015/financial-repair/HISTORICAL_IMPACT.json",
-    "sha256": "8886741f3c8e73ae3af391261dbb249e53613ae5d79da067740e7bf9ec32ddc6",
-    "result": "Seven original archive/part hashes verified plus original local fresh records inspected. Six affected published archives and original fresh records contain no P1/P2 path, zero newly required zero-later/zero-cost or unsupported positive top-only shapes, missing receipts, aggregate mismatches, orphan proofs or malformed/unknown-canonical-job contracts. Ten bound original SERVICES maps prove the exact existing native job map. Generic enterprise011 predates affected Account and is marked not applicable. Duplicate fresh archive/local views are not additional businesses. This is preserved-record inspection, not new commercial execution."
-  },
-  "reproduction_scope": "Current release requires fresh exact-head qualification, all exact-main terminal-success checks and one actual downloaded full-default reproduction under unchanged2400CPU/900wall. Known evaluation seeds make it reproduction, not untouched confirmation. Both original600CPU and prior actual2400CPU failures remain preserved; missing prior actual raw state is not re-created.",
-  "additional_nonidentity_changes": [
-    "Campaign optional caches removed; complete qualify job bound30minutes after preserved20minute cancellation during postjob cleanup despite passed full tests/replays/evidence upload. Every check retained.",
-    "Adaptive full160-world run and all audits bound45minutes.",
-    "Historical009/010 publisher and frozen-qualification provenance routed to genuine immutable release sources; current qualification remains required.",
-    "README exposes one canonical run/audit/resume path; reports/qualification/impact evidence are explicit about scope."
-  ],
-  "resources": "FINANCIAL_REPAIR_ALLOCATION.json is a separate prospective existing-resource repair increment ending22:25UTC, localCPU180; financial measured lowerbound84.305020239 plus disclosed unmetered probes, conservative100share. Released reproduction2400CPU/900wall; no newlocalcommercialexperiment, realspending, paidcalls, outreach or deployment. TEMPORAL_REPAIR_ALLOCATION.json prospectively registers a separate additional80localCPU increment ending22:55UTC. Temporal qualification0.499749kernelchildCPU; construction/probes unmetered, notzero; conservative10CPUshare reserved. No new local commercial confirmation. Original resource failures remain unchanged. Journal rejection repair measured lowerbound37.460127374CPU including beforeprobe, initial11/final14tests and original8read-only scan;20targetexceeded for restart-certificate completion; editing/wrapper CPU unknown, notzero. Conservative55financial+10temporal+5root+10other planning shares total80; no exact wholephase measurement/compliance claim. Hostedcampaign30minutes remains within45minute bound. Channel preflight31focusedtests use0.186818kernelchildCPU; construction/probes unmetered, no commercialrun, within existing temporal planning share. Absolute22:55UTC stop unchanged. Normalized-channel34tests0.179401CPU; semantic-comparison actualtwoownerprobe plus3focusedtests7.422202446CPU. Financial aggregateknownlowerbound44.882329820CPU;55planning share unchanged, edits/wrapperunknown. No full14daylocalengine rerun/newcommerce; full exactheadCI remainsrequired. Capacityrepair known0.509626579CPU; channel37targeted0.195900CPU andunmeteredhistoricalscan. Rootcomposedwholemodule48tests18.040865CPU included sixexistingend-to-end methods overexposed12daybaseline14003; initial42/noAccount prediction corrected inrawreceipt. Known wholecurrentphase lowerbound64.679093545CPU; unknownconstruction/wrapper/historyscan gapsnotzero, noexact80CPUcomplianceclaim. Separate delivery-only allocation22:55–23:40UTC/additional20localCPU, SAMEsingle2400CPU/900wallactualreleasedreproduction, no newfinancial/economicconstruction orcommercialsearch. Refundclock5tinytests andoriginal8clockinspection0.245222798CPU, nofullnative/businessrerun; currentknownlowerbound64.924316343CPU. Unmeteredgapsnotzero, existing80phase/end22:55 andseparate20CPUdelivery/end23:40 unchanged.",
-  "financial_qualification": {
-    "path": "evidence/completion015/financial-repair/CONTRACT_SHAPE_QUALIFICATION.json",
-    "sha256": "e66514c0f747449f5b6ea86b9738bc75ba0b80585cd09785af342ca74bac758c",
-    "status": "17 final financial-source narrow regressions and29 release-wrapper regressions passed;8 allocation tests reproduce5 schemaerrors before fixture migration, then8pass with guardbyte-identical. Independent fixture review confirms only required execution fields changed. All exact composed-head workflows remain required."
+  "temporal_historical_impact": {
+    "path": "evidence/completion015/temporal-repair/HISTORICAL_IMPACT.json",
+    "sha256": "19179d53e37d010489018912e2b97c67f119aa1c8031adaa7573c194d4a6e6af"
   },
   "temporal_qualification": {
     "path": "evidence/completion015/temporal-repair/QUALIFICATION.json",
     "sha256": "b3f9ecdd52517db67c1cd26cceb7cd95c559a7bd00c74a22b3abc27bff96a4d0"
   },
-  "temporal_historical_impact": {
-    "path": "evidence/completion015/temporal-repair/HISTORICAL_IMPACT.json",
-    "sha256": "19179d53e37d010489018912e2b97c67f119aa1c8031adaa7573c194d4a6e6af"
-  },
-  "journal_rejection_qualification": {
-    "path": "evidence/completion015/journal-rejection-repair/QUALIFICATION.json",
-    "sha256": "842d7732faaa457d91e3b832d4139130ea4f43e806d1e3c7db24124b7131fa02"
-  },
-  "journal_rejection_historical_impact": {
-    "path": "evidence/completion015/journal-rejection-repair/HISTORICAL_IMPACT.json",
-    "sha256": "6ed2da5d30b96de2f89d63ce361be3b95bcb9b3cb3892f6601b5f5d25bcae6cf"
-  },
-  "channel_lead_qualification": {
-    "path": "evidence/completion015/channel-lead-repair/QUALIFICATION.json",
-    "sha256": "5d8abf8dfcb5bd6a448ddba56a5f2ba85f088b699e4e7414fa0605f504ba1028"
-  },
-  "channel_lead_historical_configs": {
-    "path": "evidence/completion015/channel-lead-repair/HISTORICAL_CONFIGS.json",
-    "sha256": "3f955a864aab684c1754b8f6871c39fc06bfc91c4bfd5e614d6d0769e615cf3c"
-  },
-  "channel_normalization_qualification": {
-    "path": "evidence/completion015/channel-normalization-repair/QUALIFICATION.json",
-    "sha256": "fd4d20c74bdba0620455cc9c8473b6c36fe1940e260adc21af79737e76fd1b16"
-  },
-  "restart_comparison_qualification": {
-    "path": "evidence/completion015/restart-comparison-repair/QUALIFICATION.json",
-    "sha256": "857d82cf40ea83e45470463106bc8d743f753b5a369ee5b2c43e8574435cab45"
-  },
-  "restart_comparison_leaf_proof": {
-    "path": "evidence/completion015/restart-comparison-repair/LEAF_DIFF.before.json",
-    "sha256": "964c48401a731edf00ff1122731483ae5b4a5ad1d782a3f95b7b2c3419707380"
-  },
-  "capacity_contract_qualification": {
-    "path": "evidence/completion015/capacity-contract-repair/QUALIFICATION.json",
-    "sha256": "5106dc3a027fdcbaf4f24f860fd48ee18e490fd45e099275e3473bf18a12c32c"
-  },
-  "capacity_contract_historical_impact": {
-    "path": "evidence/completion015/capacity-contract-repair/HISTORICAL_IMPACT.json",
-    "sha256": "1c0afb29fd81a98a6b6efae81903f4a252bceaf12c4ada9d7ebf1d71677c1780"
-  },
-  "channel_authority_qualification": {
-    "path": "evidence/completion015/channel-authority-repair/QUALIFICATION.json",
-    "sha256": "809859cad7204af7ed8816bc5508e8d211e50fa754f05f03a459002dce255941"
-  },
-  "channel_authority_historical_impact": {
-    "path": "evidence/completion015/channel-authority-repair/HISTORICAL_IMPACT.json",
-    "sha256": "93fde2641a851afeae76f947f8770799f1d9daf74130f78d7ab2e5bae02be55c"
-  },
-  "composed_auditor_qualification": {
-    "path": "evidence/completion015/qualification/COMPOSED_AUDITOR_TESTS.json",
-    "sha256": "d5575f9ff72cb79c95b5269af11d619f2115769e742fc875847ce95e9ca48de5"
-  },
-  "frozen_delivery_allocation": {
-    "path": "evidence/completion015/DELIVERY_ALLOCATION.json",
-    "sha256": "659f4e3431e6ba9ec7880444e93e64550e4b07cba9dfbb74297399956d48cc29"
-  },
-  "refund_clock_qualification": {
-    "path": "evidence/completion015/refund-clock-repair/QUALIFICATION.json",
-    "sha256": "b562580f5ac6aa2b32bab1c2ff61e2eadac2d9522b7a6826dc06aaa66189347d"
-  },
-  "refund_clock_historical_impact": {
-    "path": "evidence/completion015/refund-clock-repair/HISTORICAL_IMPACT.json",
-    "sha256": "13844941724c25d47f36e074e729ec69d5624373c5bcde2c6b79d847db535672"
-  },
-  "performance016": {
-    "prior_main": "10bdb2c5787f95158642b068756ba30b58140562",
-    "prior_source_sha256": "e4ae45a21614af62d336a96f4bba71db4339f73a72d5c4c0d9bc1aa324555d61",
-    "current_source_sha256": "411eed021e5a80606cf8468d3bfc9f1920cc03439013c0991c37060e059ecf23",
-    "allocation": {
-      "path": "evidence/performance016/ALLOCATION.json",
-      "sha256": "cbcb1e7a41aceae382c647fb6ef77387e096ed81de52d7ae5a87521ac0804085"
-    },
-    "root_review": {
-      "path": "evidence/performance016/ROOT_REVIEW.json",
-      "sha256": "930ad3a0334965d3e362725a156b1844c354a8a928104e080f11789c63997d84"
-    },
-    "failure_checkpoint_commit": "573efff00798332653337e42d3149a0d35f46ea3",
-    "prior_actual_operation": "FAILED_CPU_ENVELOPE_2506.000343_GT_2400; full raw native state absent; only four authentic receipts/logs preserved",
-    "resource_policy": "UNCHANGED2400CPU/900livewall; one separately identified improved-source actual release attempt after normal exact-head/main qualification. No unchanged favorable rerun.",
-    "performance_scope": "Fixed exposed12day14003fixture, no economic retuning or fresh commercial confirmation. Original baseline and all intermediate misses preserved; exact final source and measured candidate distinctions are explicit in qualification evidence.",
-    "status": "ENGINEERING_REVIEWED; EXACT_HEAD_MAIN_AND_ACTUAL_DOWNLOADED_RELEASE_GATES_PENDING",
-    "component_commits": {
-      "financial": "3a13a66efeba7c09f9d3711205fc42d35282a8c1",
-      "failure_checkpoint": "f5af7def0eb49d200d6f327aca59b2a004722818"
-    },
-    "qualification": {
-      "FINANCIAL_QUALIFICATION.json": {
-        "path": "evidence/performance016/FINANCIAL_QUALIFICATION.json",
-        "sha256": "5afd71c0d3380a6520d1bd1748ae9cfa14b8fb9c22f90b0e90dc8d88187870bc"
-      },
-      "SEMANTIC_EQUIVALENCE.json": {
-        "path": "evidence/performance016/SEMANTIC_EQUIVALENCE.json",
-        "sha256": "ba052ffd2d3ec303e344cda7c8611704530989cd8f3a1f57b77fd7de2fb38515"
-      },
-      "INDEPENDENT_REVIEW.json": {
-        "path": "evidence/performance016/INDEPENDENT_REVIEW.json",
-        "sha256": "ff0a87fb30ad89f1fcf7ae3284d664d1b073a0c3fa5c1db14f84a9df4e00585c"
-      },
-      "MANIFEST.json": {
-        "path": "evidence/performance016/MANIFEST.json",
-        "sha256": "6cdf11da1b1704424a3cfc6e151e1fe6fa1485ebec13baadf88fd43325286cf0"
-      }
-    },
-    "final_engineering_benchmark": {
-      "before_process_cpu_seconds": 13.978736472,
-      "after_process_cpu_seconds": 10.89009207,
-      "percent_reduction": 22.095304594851505,
-      "fixture": "Fixed exposed14003/12daybaseline:4accepted/4paid/54nativeactions/1earnedreservation; all3candidate semanticprojections match, no capacity-expansion inference.",
-      "prior_candidate1": "19.507percent targetmiss preserved",
-      "pre_guard_candidate2": "26.582percent prior-source observation preserved; finalsource is22.0953percent, no best-of timing selection.",
-      "tests": "14focusedfinancial/authority/guard checks;34wrapper checks pass; independent same-session review no blocking findings. Fullcurrenthead CI/main/actualrelease still pending."
-    },
-    "resources": "Financialknown meteredlowerbound91.0700228CPU +wrappertests0.311505CPU. Financial75targetexceeded. Root/edit/wrapper/review/earlier import/teardown notfullymetered, notzero; no exactwholephase100CPU complianceclaim. No furtherlocal tests/benchmarks. Unchanged100phaseallocation/01:45stop/one repairedactual2400CPU900wall attempt."
-  },
-  "pr30_publication_binding": {
-    "schema": "agi-alpha/additive-planner-publication-binding/v1",
-    "source_commit": "a3600070f3964d907d9bc663bdad6b77a84cbdbd",
-    "previous_main": "9facd934d9ae763691e8a51052a67793cac5b48e",
-    "composed_pr_head": "fbdd08f8f71cad861ad8fabdc37864acc16713c7",
-    "prior_source_sha256": "411eed021e5a80606cf8468d3bfc9f1920cc03439013c0991c37060e059ecf23",
-    "current_source_sha256": "f937cb4e553812ad532d987fdbbfb6ff2f7f21f049530b2a0fce677ca1a29fe9",
-    "added_identity_file": {
-      "path": "portfolio_scale/staged_coupling.py",
-      "git_blob": "34f212d6a83f55682659312c5c2e01b797e7c695",
-      "sha256": "751d736c8bab6683e0b1963eee0713a494847c00cb38fb643e37fb0027e0ec4b"
-    },
-    "closure_reason": "Connected identity inherits adaptive source_paths, which includes portfolio_scale/*.py. Of six additive PR30 files, only the optional planning module enters this closure. No existing identity file changed.",
-    "prior_records": {
-      "publication": {
-        "path": "evidence/completion015/qualification/pr30-publication-binding/prior-a3600070/PUBLICATION.json",
-        "git_blob": "b54be437f8ecbd6adcb0d6978ce5aafbd2568ecb",
-        "sha256": "8ee345cd76a94c53483efa722c61976bcbdba4aa1b47a9739d646aa4830461eb"
-      },
-      "composed_release_delta": {
-        "path": "evidence/completion015/qualification/pr30-publication-binding/prior-a3600070/COMPOSED_RELEASE_DELTA.json",
-        "git_blob": "bacff8ebfaf46083ba41eb0ec2ccb48f9e86e251",
-        "sha256": "93dae655fee5f02091f84eb3062ef29a2b89f8b36796671d3c419d8d849386ce"
-      }
-    },
-    "engineering_evidence": {
-      "pr_tests": "27 staged-coupling tests passed within 819 root tests on exact fbdd08f8; all nine substantive PR jobs passed.",
-      "pr_job": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41158982106/job/124412040405",
-      "main_job": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41160852720/job/124417842210",
-      "main_result": "176 connected tests passed and clean smoke QUALIFICATION accepted true at current source hash. Subsequent release prepare failed PAPER_EXECUTING_SOURCE_CHANGED; this failure is preserved, not relabeled full release success.",
-      "failure_artifact": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41160852720/artifacts/13026799534"
-    },
-    "current_qualification_status": "Metadata proposal only. Exact repaired-head/main checks, source-bound preparation, publication and actual downloaded operation remain pending. Prior performance016 status fields remain historical, not current qualification.",
-    "scope": "No financial authority, default enterprise behavior, paper, economic history, PDF QA, resource envelope or workflow gate changed. No new finance activity or commercial confirmation; unauthenticated solver recommendations never authorize execution."
-  }
+  "unchanged_economic_mechanism": "Service executors/checkers, buyer incentives/budgets/choices, offers/prices, channel/capacity contract terms, cost envelopes, learning rules, event timing values, protocol, cases and seeds are byte-identical. Financial guards and temporal admission enforcement are strengthened, not claimed unchanged. Original eight-world scans found no changed trajectory from the repairs.",
+  "unchanged_original_identity_files": 119
 }

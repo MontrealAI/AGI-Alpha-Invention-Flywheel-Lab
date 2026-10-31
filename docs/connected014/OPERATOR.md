@@ -1,5 +1,71 @@
 # Connected enterprise 014 operator guide
 
+## Configurable operator increment (overnight022)
+
+The additive interface below uses the same `run_world`, mandatory adaptive
+`Account`, `JournalAccount`, signed checkpoint and native ledger. It does not
+adopt the separate capital candidate, migrate a legacy account, shorten permanent
+tails, or qualify prospective maturity. The active financial integration owner
+retains that work. Existing `run --smoke`, default `run`, `resume`, `audit`, and
+`package` behavior remains available.
+
+Register a complete finite input before creating accounts:
+
+```sh
+python3 -m connected_enterprise register --config campaign/overnight-022/OPERATOR_INPUT.json --output /absolute/new/enterprise022
+python3 -m connected_enterprise operate --output /absolute/new/enterprise022 --max-events 4
+python3 -m connected_enterprise resume --output /absolute/new/enterprise022
+python3 -m connected_enterprise audit --output /absolute/new/enterprise022
+python3 -m connected_enterprise comparison --output /absolute/new/enterprise022 --control baseline --candidate growth
+python3 -m connected_enterprise scoreboard --output /absolute/new/enterprise022
+```
+
+`register` creates a source/configuration freeze, not funded accounts. The input
+is copied into the frozen source under its SHA256 content address; its exact
+protocol, cases, seeds, service cohort and complete cost configurations are bound
+to that source. Inputs require an explicit evidence role (`development`,
+`reproduction`, or `finite_authored_comparison`). This label does not certify fresh
+holdouts or empirical demand. Existing completion thresholds and financial guards
+cannot be weakened through this input.
+
+`operate` executes from that frozen source. `--max-events N` stops after at most
+N additional operating events **per business**, retaining the original nonempty
+queues, native action tapes and private simulation keys. It is an optional
+checkpoint step, not a CPU allocation or a changed scientific horizon. Omitting
+the option drains the registered finite run. A paused operation reports
+`complete: false`, writes per-world `STATE.json`/`RESULT.json` and `PROGRESS.json`,
+and does not emit `COMPLETE.json`. `resume` continues those same accounts. Retain
+the whole private output; never copy a balance or regenerate a key.
+
+`comparison` audits the completed operation with its frozen source before
+comparing registered control/candidate arms. It uses existing matched native
+records; it does not start new worlds. No accounts are pooled. This baseline vs
+growth comparison estimates the specified expansion-policy difference under
+unchanged permanent terms; it does **not** isolate prospective maturity or the
+recycling toggle in the separate capital experiment. Invalid or unregistered
+arms, tampered source/configuration, duplicate JSON fields and incomplete output
+fail with a nonzero exit and an explicit error. Missing private account authority
+blocks operation/resume; a key-free public copy still supports audit.
+
+`scoreboard` is read-only and opens no account. It verifies the recorded package,
+source and result bindings and reconciles native event arithmetic before
+displaying separate businesses, daily/cohort growth records, costs, cash,
+recognized profit, reserves and obligations. Stored audit receipts are labeled
+recorded receipts; this display cannot replace `audit` or authorize spending.
+Unmeasured host/frontier billing, retention fractions, causal investment returns
+and short-horizon trailing-year profit remain `null`. Attributed asset use is
+nonadditive. The example is a declared 49-day engineering reproduction with
+permanent liabilities, not a fresh commercial or annual-profit confirmation.
+
+For local command resource receipts, including reaped child CPU:
+
+```sh
+python3 scripts/measure_overnight022.py --receipt /absolute/new/operate022.json -- python3 -m connected_enterprise operate --output /absolute/new/enterprise022
+```
+
+Receipts measure command resources, not model billing or the entire chat session.
+Use a new receipt path for each command, retaining failed jobs and their logs.
+
 ## Current default: completion015
 
 The current default is the separately registered completion015 comparison in
