@@ -151,6 +151,14 @@ class WheelTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             (Path(d)/'source').mkdir()
             with self.assertRaisesRegex(EvidenceError,'COMPLETE_ENTERPRISE_INPUT'):live_readout(d)
+    def test_trusted_source_flag_required_before_auditor_executes(self):
+        with tempfile.TemporaryDirectory() as d:
+            with mock.patch('flywheel_wheel.__main__.live_readout') as trusted:
+                self.assertEqual(main(['audit-render','--enterprise',d,'--output',str(Path(d)/'new')]),2)
+                trusted.assert_not_called()
+    def test_architecture_rejects_trust_flag(self):
+        with tempfile.TemporaryDirectory() as d:
+            self.assertEqual(main(['architecture','--output',str(Path(d)/'new'),'--trust-frozen-source']),2)
     def test_enforced_timeout_limit(self):
         with tempfile.TemporaryDirectory() as d:
             path=Path(d);(path/'source'/'connected_enterprise').mkdir(parents=True)

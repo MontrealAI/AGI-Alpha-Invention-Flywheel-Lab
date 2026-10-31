@@ -42,7 +42,8 @@ Only operators with an explicitly trusted frozen source, original output and exi
 python3 -m flywheel_wheel audit-render \
   --enterprise /absolute/existing/native-enterprise \
   --output /absolute/new/wheel-audit-view \
-  --audit-timeout 600
+  --audit-timeout 600 \
+  --trust-frozen-source
 ```
 
 - The enterprise input must have `source/`, `FROZEN.json`, `REPORT.json` and `COMPLETE.json`. The frozen source is executable Python; **do not invoke untrusted extracted source**, even in an otherwise read-only display workflow.

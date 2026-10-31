@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import subprocess
 from pathlib import Path
 import sys
 from .readout import EvidenceError, empty_snapshot, live_readout, canonical
@@ -33,20 +34,23 @@ def main(argv=None):
     parser.add_argument('mode', choices=['architecture', 'audit-render'])
     parser.add_argument('--output', required=True, help='fresh output directory; never an existing native enterprise')
     parser.add_argument('--enterprise', help='existing trusted completed native enterprise output for canonical re-audit')
+    parser.add_argument('--trust-frozen-source', action='store_true', help='required for audit-render: acknowledge executing trusted frozen repository source')
     parser.add_argument('--audit-timeout', type=int, default=600)
     args = parser.parse_args(argv)
     try:
         if args.mode == 'architecture':
-            if args.enterprise:
+            if args.enterprise or args.trust_frozen_source:
                 raise EvidenceError('ARCHITECTURE_REQUIRES_NO_ENTERPRISE')
             snapshot = empty_snapshot()
         else:
             if not args.enterprise:
                 raise EvidenceError('TRUSTED_EXISTING_ENTERPRISE_REQUIRED')
+            if not args.trust_frozen_source:
+                raise EvidenceError('EXPLICIT_TRUSTED_EXECUTABLE_SOURCE_ACKNOWLEDGEMENT_REQUIRED')
             snapshot = live_readout(args.enterprise, timeout=args.audit_timeout)
         print(json.dumps(publish(snapshot,args.output),sort_keys=True))
         return 0
-    except (EvidenceError, FileExistsError, ValueError, OSError, TimeoutError, json.JSONDecodeError) as e:
+    except (EvidenceError, FileExistsError, ValueError, OSError, TimeoutError, subprocess.TimeoutExpired, json.JSONDecodeError) as e:
         print(type(e).__name__ + ': ' + str(e),file=sys.stderr)
         return 2
 if __name__ == '__main__':
