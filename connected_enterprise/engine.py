@@ -32,11 +32,13 @@ def default_config():
 
 def validate_config(cfg):
     if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
-    for key in ['horizon_days','customer_pool','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
+    for key in ['horizon_days','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
+    # Explicit finite scenario population; no universal market ceiling.
+    if type(cfg['customer_pool']) is not int or cfg['customer_pool']<1:raise ValueError('FINITE_POSITIVE_BUYER_POPULATION_REQUIRED')
     for key in ['nonpayment_bps','arrival_bps','retention_bps','payment_bps','profit_tax_bps']:
         if type(cfg[key]) is not int or not 0<=cfg[key]<=10000:raise ValueError('BASIS_POINTS_REQUIRED')
-    if not 4<=cfg['customer_pool']<=200 or cfg['initial_slots']>cfg['maximum_slots'] or cfg['clearing_hours']>cfg['payment_deadline_hours']:raise ValueError('FINITE_VALID_CONTRACT_REQUIRED')
+    if cfg['initial_slots']>cfg['maximum_slots'] or cfg['clearing_hours']>cfg['payment_deadline_hours']:raise ValueError('FINITE_VALID_CONTRACT_REQUIRED')
     if cfg['production_hours']+cfg['acceptance_hours']+cfg['clearing_hours']>cfg['payment_deadline_hours']:raise ValueError('COMPLETE_LIFECYCLE_EXCEEDS_PAYMENT_DEADLINE')
     for key in ['opening','working','setup_cost','maintenance_daily','exposure_cost','qualification_cost','onboarding_cost','production_cost','support_cost','supplier_unit_cost','capacity_price','payment_fixed']:
         if type(cfg[key]) is not int or cfg[key]<0:raise ValueError('INTEGER_RESOURCE_COST_REQUIRED')

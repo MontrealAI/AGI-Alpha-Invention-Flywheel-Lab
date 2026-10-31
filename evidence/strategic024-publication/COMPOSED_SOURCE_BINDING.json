@@ -2,7 +2,7 @@
   "current_files": {
     ".github/workflows/connected014-release.yml": "5846b88fa9799dcd68a009d20e30789db5b597fd6824ff0da73d96e18635fb90",
     ".github/workflows/connected014.yml": "0d980a72380ffb55763267940ad4064f1bbc2a742449342820d142b0466674ae",
-    "AGENTS.md": "6523c01b74f12dc21ffec77337fec1c24fb99688500b0cc02a7fe96e6ae8ab47",
+    "AGENTS.md": "1130f6564fc88f2f7068fb0e1fa5af58ea505b2b011faac0542e4995772b7894",
     "adaptive_enterprise/__init__.py": "0198938b03df067057b90c7cd643d6052025b9544a10a4e30b8f600237e55592",
     "adaptive_enterprise/__main__.py": "15f8037485edacee7e1e88c43fc30c8d9362cd6ccbf97d6c6ccabbbd7a00e382",
     "adaptive_enterprise/account.py": "8d4eea94b067cdc0c9279f7b6fe5d2b51257edb7f296e51025f1c2a52df38f90",
@@ -59,7 +59,7 @@
     "connected_enterprise/channel_menu.py": "8b0b4dad25ce851cfb23ae794d836728dd5a9738a8b3906be054f3c1fc7d9152",
     "connected_enterprise/channels.py": "5deec4bbfb4bcb4fc33198887bd8568d755d9406698cc7476ca6f7541b9d0545",
     "connected_enterprise/csv_backend029.py": "ed9c371749e40637a89e8c9c5be6723cdba3e926f954acaf8dc34f5be12c3a17",
-    "connected_enterprise/engine.py": "223299e29c5eb9aa2c1d9c924b6612f93ab9e1392b22fe6cc316031b125502a8",
+    "connected_enterprise/engine.py": "9a4d31364a62a0b969164f591581f8d71755b28670bbcca0693f36c584a05eb9",
     "connected_enterprise/finance.py": "e86882b44168c042691e171ed48b5aef618869b22bf7b9f2c1ea13addef4e9ff",
     "connected_enterprise/funded_csv_adapter028.py": "045f4233295434c698e6365fbd3b58131ba307b569c4f0b757b6b8dbde08e9ed",
     "connected_enterprise/funded_discovery031.py": "89ebd9026c05b8595b3b72c26ca34a0d71c5426698e6ba3fbd5abe7c5b147792",
@@ -158,6 +158,7 @@
     "tests/test_adaptive_strategies.py": "7658650591d3f998b447ebad51fcf2cd986355cea2297ad7cbb6a789ca7083d2",
     "tests/test_adaptive_transport.py": "b3aebfc50bcb6483f1c2611827d45f6dfb312ecff6dc71fc0a6dd1ce0c19f765",
     "tests/test_connected_audit_prefixes.py": "9281d3a0c85c47321c1a99742b7f877287f880d570bff57897522ccaa5809cfb",
+    "tests/test_connected_buyer_population.py": "848f4d666522fd81c7c16bd51da5efe3d5804b13f726c36d0eb44d4f03b3116b",
     "tests/test_connected_capacity_contract.py": "8b248e5d72154d22a20fd61ed395bbb676b1cf0e709107894e9a5b44a269ab67",
     "tests/test_connected_channel_authority.py": "8ff2f55a88393b1be281e500337abda5a72e91e6b9eeba7b1803e55ade4439d4",
     "tests/test_connected_channel_inventory027.py": "880adf32c9eb242aeebc9dfdfc1056a5cc5cf1418dbcaba0f499b7adac7cb136",
@@ -186,7 +187,7 @@
     "vendor/alpha_claim/protected_exchange_prospective_v1.py": "cc23e6f064302b38750caa3d755345cb6318b524d3bbdc0f9b86e6f6a4be7565",
     "verification/scan_adaptive_cancellation_history.py": "83ac6a8b36bcf461f79fe6dc7a37ad282f7b944631af54d42aa9e08295a499e8"
   },
-  "current_source_sha256": "c673a7ee845bfd7ea8c79a5c8a95e09b0084bf5242a8a1396b351dfd32492c76",
+  "current_source_sha256": "deaa2f0c78afb93f8e2b41cb15322bb69d6d6198e2bd25360ef00d3884a4a9a8",
   "historical_commit": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
   "historical_files": {
     ".github/workflows/connected014-release.yml": "f6936c77641080283df60c7c3ab626ae459362ef9c6af3a5612953f34487c657",
@@ -354,7 +355,7 @@
       "before_sha256": "f6936c77641080283df60c7c3ab626ae459362ef9c6af3a5612953f34487c657"
     },
     "AGENTS.md": {
-      "after_sha256": "6523c01b74f12dc21ffec77337fec1c24fb99688500b0cc02a7fe96e6ae8ab47",
+      "after_sha256": "1130f6564fc88f2f7068fb0e1fa5af58ea505b2b011faac0542e4995772b7894",
       "before_sha256": "9268b373c1777d291ad75213386578280916a0e73b9e3f5e2036073131ab64a4"
     },
     "adaptive_enterprise/account.py": {
@@ -402,7 +403,7 @@
       "before_sha256": null
     },
     "connected_enterprise/engine.py": {
-      "after_sha256": "223299e29c5eb9aa2c1d9c924b6612f93ab9e1392b22fe6cc316031b125502a8",
+      "after_sha256": "9a4d31364a62a0b969164f591581f8d71755b28670bbcca0693f36c584a05eb9",
       "before_sha256": "b706c6c63ae63acc5ebccccc26d5d89360986ceef612a7459b1e457ec5d8c805"
     },
     "connected_enterprise/finance.py": {
@@ -535,6 +536,10 @@
     },
     "scripts/run_funded_discovery031.py": {
       "after_sha256": "b2e440b96375c42aaf0a902ff511b8389ee405b3dae964ea38d8adcaa63e12fe",
+      "before_sha256": null
+    },
+    "tests/test_connected_buyer_population.py": {
+      "after_sha256": "848f4d666522fd81c7c16bd51da5efe3d5804b13f726c36d0eb44d4f03b3116b",
       "before_sha256": null
     },
     "tests/test_connected_channel_inventory027.py": {
