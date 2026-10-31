@@ -231,7 +231,9 @@ class JournalAccount:
 
     def _save(self, body=None):
         body = self._journal if body is None else body
-        atomic_bytes(self.journal_path, canonical({'body': body, 'signature': self._signature(body)}) + b'\n')
+        raw = canonical({'body': body, 'signature': self._signature(body)}) + b'\n'
+        if len(raw) > 64_000_000:raise ValueError('BOUNDED_RESOURCE_JOURNAL_REQUIRED')
+        atomic_bytes(self.journal_path, raw)
 
     def _recover(self):
         self._assert_current()

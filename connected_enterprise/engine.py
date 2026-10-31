@@ -187,7 +187,8 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
     config=validate_config(copy.deepcopy(config))
     from enterprise.runner import RunLock
     output=Path(output).resolve();output.mkdir(parents=True,exist_ok=True)
-    with RunLock(output):
+    from .transition_evidence import output_scope
+    with output_scope(output), RunLock(output):
         return _run_world(root,manifest,config,seed,arm,output,source=source,stop_after_events=stop_after_events,failpoint=failpoint)
 
 

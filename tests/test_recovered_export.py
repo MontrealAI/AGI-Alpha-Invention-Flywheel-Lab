@@ -30,8 +30,8 @@ class RecoveredExportTests(unittest.TestCase):
     def test_historical_verifier_files_outside_runtime_inventory_are_preserved(self):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);source=root/'old';source.mkdir();(source/'runtime.py').write_bytes(b'runtime');(source/'extra_verifier.py').write_bytes(b'verifier')
-            body={'historical_root':str(source),'from_source':{'sha256':'a'*64},'operating':{'from_runtime':{'files':{'runtime.py':sha(b'runtime')}}},'verifier_files':{'runtime.py':sha(b'runtime'),'extra_verifier.py':sha(b'verifier')},'prior_record':{}}
-            target=root/'public';export023.copy_history(target,{'source_transitions':{'old':{'body':body}}},{'jobs':[]})
+            body={'schema':'agi-alpha/native-source-transition/v1','historical_root':str(source),'from_source':{'sha256':'a'*64},'operating':{'from_runtime':{'files':{'runtime.py':sha(b'runtime')}}},'verifier_files':{'runtime.py':sha(b'runtime'),'extra_verifier.py':sha(b'verifier')},'prior_record':{}}
+            target=root/'public';export023.copy_history(target,{'source_transitions':{'old':{'body':body,'signature':'0'*64}}},{'jobs':[]})
             self.assertEqual((target/'historical-source-versions'/('a'*64)/'extra_verifier.py').read_bytes(),b'verifier')
 
 

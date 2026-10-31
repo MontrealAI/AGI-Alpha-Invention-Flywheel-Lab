@@ -19,6 +19,11 @@ from connected_enterprise.finance import audit_journal,source_identity
 from connected_enterprise.verify import check_source
 from connected_enterprise.upgrades import validate_ticket
 p=json.load(sys.stdin);out=Path(p['output']);account_path=out/'account.sqlite'
+from contextlib import ExitStack
+stack=ExitStack()
+if (out/'TRANSITION_EVIDENCE').exists():
+ from connected_enterprise.transition_evidence import evidence_directory
+ stack.enter_context(evidence_directory(out/'TRANSITION_EVIDENCE'))
 required=[account_path,out/'STATE.json',out/'account.sqlite.actions.jsonl',out/'account.sqlite.adaptive-simulation-key',out/'account.sqlite.connected-journal.json']
 if any(not f.is_file() or f.is_symlink() for f in required):raise ValueError('EXISTING_OWNED_RECOVERY_FILES_REQUIRED')
 journal_path=out/'account.sqlite.connected-journal.json';journal_raw=journal_path.read_bytes();journal=strict_json(journal_raw);header=journal['body']

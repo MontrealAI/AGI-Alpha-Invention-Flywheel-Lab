@@ -669,8 +669,11 @@ class Account:
         verify_historical(ticket, self.manifest, root=self.root)
         if body['id'] in self._source_transitions and self._source_transitions[body['id']] != ticket:
             raise ValueError('SOURCE_TRANSITION_AUTHORIZATION_COLLISION')
-        self._source_transitions[body['id']] = copy.deepcopy(ticket)
-        atomic_bytes(self._transitions_path, canonical(self._source_transitions) + b'\n')
+        updated = {**self._source_transitions, body['id']: copy.deepcopy(ticket)}
+        raw = canonical(updated) + b'\n'
+        if len(raw) > 32_000_000:raise ValueError('BOUNDED_SOURCE_AUTHORIZATION_MAP_REQUIRED')
+        atomic_bytes(self._transitions_path, raw)
+        self._source_transitions = updated
         self._owner.execute('source_transition', args, body['day'])
         return self.snapshot()
 

@@ -1,0 +1,165 @@
+"""Engineering exits for owner-held CAS authorization and operating continuation."""
+import copy,hashlib,json,os,subprocess,sys,unittest
+from pathlib import Path
+from unittest.mock import patch
+import tests.test_transition_cas_candidate as fixture
+from connected_enterprise import operations
+from connected_enterprise.transition_evidence import evidence_directory,ticket_body,persist_evidence
+from connected_enterprise.upgrades import authorize_upgrade
+from connected_enterprise.migration import default_policy
+from commercial.ledger import digest
+
+class OwnerSigningTests(unittest.TestCase):
+ setUpClass=classmethod(fixture.CASMigrationTests.setUpClass.__func__)
+ tearDownClass=classmethod(fixture.CASMigrationTests.tearDownClass.__func__)
+ setUp=fixture.CASMigrationTests.setUp
+ tearDown=fixture.CASMigrationTests.tearDown
+ def test_owner_signs_without_parent_reading_key_and_rejects_changed_preparation(self):
+  store=Path(self.case.name)/'objects';store.mkdir();original=Path.read_bytes
+  def guarded(path):
+   if path==self.keypath:raise AssertionError('parent attempted to read owner key')
+   return original(path)
+  kwargs=dict(historical_root=self.old,target_root=self.new,manifest=self.manifest,path=self.path,
+              opening=500000000,working=100000000,contract='connected014-ordinary-legacy-owned',
+              expected_state_digest=self.prior['snapshot']['state_digest'],ident='owner-cas',day=1,
+              transition_format='v2-cas',evidence_root=store)
+  with patch.object(Path,'read_bytes',guarded):ticket=authorize_upgrade(**kwargs)
+  self.assertEqual(ticket['body']['schema'],'agi-alpha/native-source-transition/v2-cas')
+  with evidence_directory(store):self.assertEqual(ticket_body(ticket)['prior_record'],self.prior)
+  self.assertEqual(authorize_upgrade(**kwargs,prepared_ticket=ticket),ticket)
+  changed=copy.deepcopy(ticket);changed['signature']='0'*64
+  with self.assertRaisesRegex(ValueError,'PREPARED_SOURCE_AUTHORIZATION_CHANGED'):
+   authorize_upgrade(**kwargs,prepared_ticket=changed)
+
+class OwnerOperatingTests(unittest.TestCase):
+ setUpClass=classmethod(fixture.CASOperatingTests.setUpClass.__func__)
+ tearDownClass=classmethod(fixture.CASOperatingTests.tearDownClass.__func__)
+ setUp=fixture.CASOperatingTests.setUp
+ tearDown=fixture.CASOperatingTests.tearDown
+ legacy=fixture.CASOperatingTests.legacy
+ def command(self,root,*args):
+  done=subprocess.run([sys.executable,'-m','connected_enterprise',*map(str,args)],cwd=root,
+      env={**os.environ,'PYTHONPATH':str(root),'PYTHONDONTWRITEBYTECODE':'1'},text=True,capture_output=True,timeout=150)
+  self.assertEqual(done.returncode,0,done.stderr[-5000:]);return done
+ def test_public_cli_two_successive_owner_transitions_and_unchanged_resume(self):
+  self.legacy();before=self.before['body']['state'];self.assertTrue(before['queue'])
+  manifest=self.case/'SERVICES.json';manifest.write_text(json.dumps(self.manifest))
+  policy=self.case/'policy.json';policy.write_text(json.dumps(self.policy))
+  keyhash=hashlib.sha256(self.key.read_bytes()).hexdigest()
+  def upgrade(root,old,ident):
+   checkpoint=json.loads((self.world/'STATE.json').read_text())
+   self.command(root,'upgrade','--output',self.world,'--historical-source',old,'--manifest',manifest,
+      '--policy',policy,'--expected-checkpoint',digest(checkpoint),'--id',ident,'--transition-format','v2-cas')
+  # Legitimate interruption leaves only a private stage, never a partial canonical object.
+  store=self.world/'TRANSITION_EVIDENCE';store.mkdir()
+  raw=b'{"synthetic":"interrupted"}';name=hashlib.sha256(raw).hexdigest()
+  def crash(where,stage):
+   if where=='stage_created':raise InterruptedError('owned stage interruption')
+  with self.assertRaises(InterruptedError):persist_evidence(store,{name:raw},failpoint=crash)
+  native_before=(self.world/'account.sqlite.actions.jsonl').read_bytes()
+  recovery=self.command(self.new,'recover-transition-evidence','--output',self.world,'--historical-source',self.old,
+        '--manifest',manifest,'--expected-checkpoint',digest(self.before),'--id','stage-recovery')
+  self.assertTrue(json.loads(recovery.stdout)['accepted'])
+  self.assertEqual((self.world/'account.sqlite.actions.jsonl').read_bytes(),native_before)
+  self.assertEqual(len(list(store.glob('.orphan-*'))),1)
+  self.assertFalse((store/name).exists())
+  # Retrying publication creates a complete, independently hashed object.
+  persist_evidence(store,{name:raw})
+  upgrade(self.new,self.old,'first-owner-cas')
+  first=operations.read_operator(self.world)[0];old=self.world/first['source_dir']
+  state=json.loads((self.world/'STATE.json').read_text())['body']['state']
+  for name in ['queue','current','orders','buyers','events','investments','used_jobs','processed_events','last_time']:
+   self.assertEqual(before[name],state[name],name)
+  self.command(self.new,'operate','--output',self.world,'--max-events','1')
+  nextroot=self.case/'next-source';operations._copy_source(self.new,nextroot);operations._copy_inputs(self.old,nextroot,self.manifest)
+  with (nextroot/'connected_enterprise/pricing.py').open('a') as stream:stream.write('\n# Distinct experimental forward source version.\n')
+  upgrade(nextroot,old,'second-owner-cas')
+  self.command(nextroot,'operate','--output',self.world)
+  result=json.loads((self.world/'RESULT.json').read_text());self.assertTrue(result['complete'])
+  transitions=[e for e in result['owned_account']['ledger']['actions'] if e['op']=='source_transition']
+  self.assertEqual([e['args']['counter'] for e in transitions],[1,2])
+  self.assertEqual(result['owned_account']['ledger']['actions'][:len(self.prior['ledger']['actions'])],self.prior['ledger']['actions'])
+  self.command(nextroot,'resume','--output',self.world)
+  self.assertEqual(json.loads((self.world/'RESULT.json').read_text())['summary'],result['summary'])
+  self.command(nextroot,'audit','--output',self.world)
+  self.assertEqual(self.key.stat().st_ino,self.key_inode)
+  self.assertEqual(hashlib.sha256(self.key.read_bytes()).hexdigest(),keyhash)
+  public=self.case/'public-portable'
+  done=subprocess.run([sys.executable,str(nextroot/'scripts/export_recovered023.py'),'--business',str(self.world),
+                       '--output',str(public),'--offline-historical-sources'],cwd=nextroot,
+        env={**os.environ,'PYTHONPATH':str(nextroot),'PYTHONDONTWRITEBYTECODE':'1'},text=True,capture_output=True,timeout=180)
+  self.assertEqual(done.returncode,0,done.stderr[-5000:]);self.assertTrue(json.loads(done.stdout)['accepted'])
+  self.assertTrue((public/'TRANSITION_EVIDENCE_INDEX.json').is_file())
+  self.assertFalse(any('.sqlite' in str(p.relative_to(public)) or p.name.endswith('.adaptive-simulation-key') for p in public.rglob('*')))
+  self.assertEqual(self.key.stat().st_ino,self.key_inode)
+
+
+class OwnerCrashTests(unittest.TestCase):
+ setUpClass=classmethod(fixture.CASOperatingTests.setUpClass.__func__)
+ tearDownClass=classmethod(fixture.CASOperatingTests.tearDownClass.__func__)
+ setUp=fixture.CASOperatingTests.setUp
+ tearDown=fixture.CASOperatingTests.tearDown
+ legacy=fixture.CASOperatingTests.legacy
+ def prepare(self):
+  manifest=self.case/'manifest.json';manifest.write_text(json.dumps(self.manifest))
+  return operations.prepare_upgrade(self.new,self.old,manifest,self.world,policy=self.policy,
+     expected_checkpoint_sha256=digest(self.before),ident='owner-crash',transition_format='v2-cas')
+ def finish(self):
+  result=operations.operate(self.world)
+  self.assertTrue(result['complete']);self.assertTrue(operations.audit(self.world)['accepted'])
+  actions=result['owned_account']['ledger']['actions']
+  self.assertEqual(sum(e['op']=='source_transition' for e in actions),1)
+  self.assertEqual(sum(e['op']=='cost' and e['args']['id']=='source-upgrade-owner-crash' for e in actions),1)
+  self.assertEqual(actions[:len(self.prior['ledger']['actions'])],self.prior['ledger']['actions'])
+  self.assertEqual(self.key.stat().st_ino,self.key_inode)
+  return result
+ def test_preparation_survives_descriptor_interruption_and_reuses_exact_signed_wire(self):
+  self.legacy();native=(self.world/'account.sqlite.actions.jsonl').read_bytes();original=operations._write
+  def crash(path,value):
+   if Path(path).name=='OPERATOR.json':raise InterruptedError('before descriptor publication')
+   return original(path,value)
+  with patch.object(operations,'_write',crash),self.assertRaises(InterruptedError):self.prepare()
+  self.assertFalse((self.world/'OPERATOR.json').exists());self.assertEqual((self.world/'account.sqlite.actions.jsonl').read_bytes(),native)
+  preparations=list((self.world/'TRANSITION_PREPARATIONS').glob('*.json'));self.assertEqual(len(preparations),1)
+  original=preparations[0].read_bytes();self.prepare();self.assertEqual(preparations[0].read_bytes(),original)
+  operations.upgrade(self.world);self.finish()
+ def test_migration_intent_boundary(self):self.boundary('after_upgrade_intent')
+ def test_financial_commit_boundary(self):self.boundary('after_financial_transition')
+ def test_checkpoint_publication_boundary(self):self.boundary('after_operating_checkpoint')
+ def boundary(self,where):
+  self.legacy();self.prepare()
+  def crash(observed,account):
+   if observed==where:raise InterruptedError(where)
+  with self.assertRaises(InterruptedError):operations.upgrade(self.world,failpoint=crash)
+  operations.upgrade(self.world);self.finish()
+ def test_checkpoint_intent_and_financial_anchor_interruptions(self):
+  from connected_enterprise import finance
+  for after in [False,True]:
+   with self.subTest(after_checkpoint=after):
+    if after:
+     self.tearDown();self.setUp()
+    self.legacy();self.prepare();original=finance.atomic_bytes
+    def crash(path,raw):
+     if Path(path).name=='STATE.json':
+      if after:original(path,raw)
+      raise InterruptedError('state publication')
+     return original(path,raw)
+    with patch.object(finance,'atomic_bytes',crash),self.assertRaises(InterruptedError):operations.upgrade(self.world)
+    operations.upgrade(self.world);self.finish()
+ def test_missing_or_changed_preparation_cannot_create_new_authority(self):
+  self.legacy();self.prepare();path=next((self.world/'TRANSITION_PREPARATIONS').glob('*.json'));raw=path.read_bytes()
+  ticket=json.loads(raw);ticket['signature']='0'*64;path.write_text(json.dumps(ticket))
+  native=(self.world/'account.sqlite.actions.jsonl').read_bytes()
+  with self.assertRaisesRegex(ValueError,'PREPARED_SOURCE_AUTHORIZATION_CHANGED'):operations.upgrade(self.world)
+  self.assertEqual((self.world/'account.sqlite.actions.jsonl').read_bytes(),native)
+  self.assertFalse((self.world/'MIGRATION_INTENT.json').exists())
+  path.write_bytes(raw);operations.upgrade(self.world);result=self.finish()
+  with evidence_directory(self.world/'TRANSITION_EVIDENCE'):
+   from connected_enterprise.finance import audit_journal
+   descriptor=operations.read_operator(self.world)[0];root=self.world/descriptor['source_dir']
+   self.assertTrue(audit_journal(result['owned_account'],root=root,manifest=self.manifest)['accepted'])
+   ref=ticket['body']['evidence']['prior_record'];obj=self.world/'TRANSITION_EVIDENCE'/ref['sha256'];saved=obj.read_bytes()
+   try:
+    obj.write_bytes(saved+b' ')
+    with self.assertRaises(ValueError):audit_journal(result['owned_account'],root=root,manifest=self.manifest)
+   finally:obj.write_bytes(saved)

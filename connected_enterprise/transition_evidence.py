@@ -4,7 +4,12 @@ Not a production storage/publication implementation. No paths from signed or
 unsigned tickets are ever opened. Wire descriptors are owner-authenticated;
 immutable canonical blobs are checked at every resolution, never cached mutable.
 """
+from collections import OrderedDict
+import threading
 import contextvars
+import uuid
+import re
+from contextlib import nullcontext
 import copy
 import hashlib
 import hmac
@@ -20,6 +25,7 @@ MAX_BLOB_BYTES = 64_000_000
 MAX_BUNDLE_BYTES = 512 * 1024 * 1024
 MAX_BUNDLE_FILES = 10_000
 _store = contextvars.ContextVar('explicit_transition_evidence', default=None)
+_directory = contextvars.ContextVar('explicit_transition_directory', default=None)
 FIELDS = {'schema','id','account_path','from_source','to_source','counter',
           'expected_state_digest','day','historical_root','verifier_files'}
 
@@ -105,6 +111,29 @@ def _parse_budget(raw):
     if quoted or depth!=0:raise ValueError('INVALID_TRANSITION_JSON')
 
 
+_decoded_cache=OrderedDict()
+_decoded_bytes=0
+_decoded_lock=threading.RLock()
+
+
+def _decoded(raw):
+    # Cache only validated immutable byte strings. Every resolver still reads and
+    # hashes the referenced content, and returns a detached copy to its caller.
+    global _decoded_bytes
+    with _decoded_lock:
+        if raw in _decoded_cache:
+            _decoded_cache.move_to_end(raw)
+            return _decoded_cache[raw]
+        _parse_budget(raw)
+        value=json.loads(raw)
+        if not isinstance(value,dict) or canonical(value)!=raw:
+            raise ValueError('CANONICAL_TRANSITION_EVIDENCE_REQUIRED')
+        while _decoded_cache and (len(_decoded_cache)>=12 or _decoded_bytes+len(raw)>64_000_000):
+            previous,_=_decoded_cache.popitem(last=False);_decoded_bytes-=len(previous)
+        _decoded_cache[raw]=value;_decoded_bytes+=len(raw)
+        return value
+
+
 def ticket_body(ticket, *, key=None):
     if not isinstance(ticket,dict) or set(ticket)!={'body','signature'}:
         raise ValueError('EXACT_SOURCE_TRANSITION_AUTHORIZATION_REQUIRED')
@@ -134,13 +163,7 @@ def ticket_body(ticket, *, key=None):
         raw=store.get(ref['sha256'])
         if raw is None or len(raw)!=ref['bytes'] or _sha(raw)!=ref['sha256']:
             raise ValueError('TRANSITION_EVIDENCE_MISSING_OR_CHANGED')
-        # Resource qualification of stdlib parsing remains explicitly outstanding.
-        # No compression and no recursive reference following are performed.
-        _parse_budget(raw)
-        value=json.loads(raw)
-        if not isinstance(value,dict) or canonical(value)!=raw:
-            raise ValueError('CANONICAL_TRANSITION_EVIDENCE_REQUIRED')
-        resolved[field]=value
+        resolved[field]=copy.deepcopy(_decoded(raw))
     return resolved
 
 # Explicit caller-selected store I/O. This is not automatic account path discovery.
@@ -168,20 +191,37 @@ def _name(name):
     return isinstance(name,str) and len(name)==64 and all(c in '0123456789abcdef' for c in name)
 
 
+def _artifact(name):
+    return re.fullmatch(r'\.(?:stage|orphan)-[0-9a-f]{32}-[0-9a-f]{64}', name) is not None
+
+
 class _DirectoryStore:
     def __init__(self, fd):
         self.fd=fd
+        self.inventory()
+
+    def inventory(self):
+        fd=self.fd
         names=os.listdir(fd)
         if len(names)>MAX_BUNDLE_FILES:raise ValueError('BOUNDED_TRANSITION_BUNDLE_REQUIRED')
         total=0
         for name in names:
-            if not _name(name):raise ValueError('EXACT_TRANSITION_CONTENT_ADDRESS_REQUIRED')
+            if not (_name(name) or _artifact(name)):raise ValueError('EXACT_TRANSITION_CONTENT_ADDRESS_REQUIRED')
             info=os.stat(name,dir_fd=fd,follow_symlinks=False)
             if not stat.S_ISREG(info.st_mode) or info.st_size>MAX_BLOB_BYTES:
                 raise ValueError('BOUNDED_REGULAR_TRANSITION_BLOB_REQUIRED')
             total+=info.st_size
         if total>MAX_BUNDLE_BYTES:raise ValueError('BOUNDED_TRANSITION_BUNDLE_REQUIRED')
+        return names,total
+
     def get(self, name):
+        fcntl.flock(self.fd,fcntl.LOCK_SH)
+        try:
+            self.inventory()
+            return self._get(name)
+        finally:fcntl.flock(self.fd,fcntl.LOCK_UN)
+
+    def _get(self, name):
         if not _name(name):raise ValueError('EXACT_TRANSITION_CONTENT_ADDRESS_REQUIRED')
         try: fd=os.open(name,os.O_RDONLY|os.O_NOFOLLOW,dir_fd=self.fd)
         except FileNotFoundError:return None
@@ -203,39 +243,97 @@ class _DirectoryStore:
 
 @contextmanager
 def evidence_directory(path):
-    """Trusted caller path only; never obtain this argument from a ticket field."""
+    """Pin a caller-selected directory; locks cover reads, never child processes."""
     fd=_open_directory(path)
     try:
         fcntl.flock(fd,fcntl.LOCK_SH)
-        store=_DirectoryStore(fd);token=_store.set(store)
+        try:store=_DirectoryStore(fd)
+        finally:fcntl.flock(fd,fcntl.LOCK_UN)
+        token=_store.set(store);directory=_directory.set(str(Path(path).absolute()))
         try:yield
-        finally:_store.reset(token)
+        finally:_directory.reset(directory);_store.reset(token)
     finally:os.close(fd)
 
 
-def persist_evidence(path,blobs):
-    """Create-only verified content. Caller supplies an existing private directory.
+def active_directory():
+    return _directory.get()
 
-    Partial writes fail closed by hash and are not referenced by any new ticket.
-    No account/intent descriptor writes occur here. Caller must finish this step
-    before signing or committing a ticket; crash consistency is not yet qualified.
-    """
+
+def output_scope(output):
+    # The public output argument is the trusted locator, never a ticket field.
+    path=Path(output).absolute()/'TRANSITION_EVIDENCE'
+    return evidence_directory(path) if path.exists() or path.is_symlink() else nullcontext()
+
+
+def persist_evidence(path,blobs,*,failpoint=None):
+    """Create-only immutable objects. Interrupted stages remain bounded evidence."""
     with evidence_scope(blobs):pass
     fd=_open_directory(path)
     try:
         fcntl.flock(fd,fcntl.LOCK_EX)
         store=_DirectoryStore(fd)
-        existing=set(os.listdir(fd)); total=sum(os.stat(n,dir_fd=fd,follow_symlinks=False).st_size for n in existing)
-        new={n:r for n,r in blobs.items() if n not in existing}
-        if len(existing|set(new))>MAX_BUNDLE_FILES or total+sum(map(len,new.values()))>MAX_BUNDLE_BYTES:
-            raise ValueError('BOUNDED_TRANSITION_BUNDLE_REQUIRED')
         for name,raw in blobs.items():
-            if name in existing:
-                if store.get(name)!=raw:raise ValueError('TRANSITION_EVIDENCE_MISSING_OR_CHANGED')
+            names,total=store.inventory()
+            if name in names:
+                if store._get(name)!=raw:raise ValueError('TRANSITION_EVIDENCE_MISSING_OR_CHANGED')
                 continue
-            out=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600,dir_fd=fd)
+            # Includes temporary publication's transient hard link and bytes.
+            if len(names)+2>MAX_BUNDLE_FILES or total+2*len(raw)>MAX_BUNDLE_BYTES:
+                raise ValueError('BOUNDED_TRANSITION_BUNDLE_REQUIRED')
+            stage='.stage-'+uuid.uuid4().hex+'-'+name
+            out=os.open(stage,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600,dir_fd=fd)
             try:
-                with os.fdopen(out,'wb',closefd=False) as stream:stream.write(raw);stream.flush();os.fsync(out)
+                if failpoint:failpoint('stage_created',stage)
+                with os.fdopen(out,'wb',closefd=False) as stream:
+                    stream.write(raw);stream.flush();os.fsync(out)
+                if failpoint:failpoint('stage_synced',stage)
             finally:os.close(out)
-        os.fsync(fd)
+            os.link(stage,name,src_dir_fd=fd,dst_dir_fd=fd,follow_symlinks=False)
+            os.fsync(fd)
+            if failpoint:failpoint('object_published',stage)
+            os.unlink(stage,dir_fd=fd);os.fsync(fd)
     finally:os.close(fd)
+
+
+def recover_stages(path):
+    """Owner calls under account authority. Preserve failed raw bytes, no deletion."""
+    fd=_open_directory(path)
+    try:
+        fcntl.flock(fd,fcntl.LOCK_EX);store=_DirectoryStore(fd)
+        rows=[]
+        for name in sorted(store.inventory()[0]):
+            if _name(name):
+                store._get(name)  # Corrupt published objects cannot be repaired here.
+                continue
+            dest=name.replace('.stage-','.orphan-',1)
+            if dest!=name:os.rename(name,dest,src_dir_fd=fd,dst_dir_fd=fd)
+            obj=os.open(dest,os.O_RDONLY|os.O_NOFOLLOW,dir_fd=fd)
+            try:
+                raw=os.read(obj,MAX_BLOB_BYTES+1)
+                if len(raw)!=os.fstat(obj).st_size:raise ValueError('TRANSITION_RECOVERY_READ_CHANGED')
+            finally:os.close(obj)
+            rows.append({'path':dest,'bytes':len(raw),'sha256':_sha(raw)})
+        os.fsync(fd);return rows
+    finally:os.close(fd)
+
+
+def record_blobs(record):
+    """Resolve only known transition ancestry, bounded to four unique tickets."""
+    found={};seen={}
+    def visit(current):
+        for ticket in current.get('source_transitions',{}).values():
+            ident=_sha(canonical(ticket))
+            if ident in seen:continue
+            seen[ident]=True
+            if len(seen)>4:raise ValueError('BOUNDED_SOURCE_TRANSITION_ANCESTRY_REQUIRED')
+            body=ticket_body(ticket)
+            if ticket['body']['schema']==V2:
+                for ref in ticket['body']['evidence'].values():
+                    raw=_store.get().get(ref['sha256'])
+                    if raw is None or len(raw)!=ref['bytes'] or _sha(raw)!=ref['sha256']:
+                        raise ValueError('TRANSITION_EVIDENCE_MISSING_OR_CHANGED')
+                    found[ref['sha256']]=raw
+            visit(body['prior_record'])
+    visit(record)
+    with evidence_scope(found):pass
+    return found

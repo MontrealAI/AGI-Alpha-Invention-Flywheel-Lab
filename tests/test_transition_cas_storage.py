@@ -39,3 +39,30 @@ class StorageTests(unittest.TestCase):
   (self.root/self.name).write_bytes(self.raw[:2])
   with self.assertRaises(ValueError):persist_evidence(self.root,self.blobs)
   self.assertEqual((self.root/self.name).read_bytes(),self.raw[:2])
+
+ def test_every_atomic_publication_boundary_retries_without_partial_canonical_object(self):
+  for boundary in ['stage_created','stage_synced','object_published']:
+   with self.subTest(boundary=boundary),tempfile.TemporaryDirectory() as directory:
+    root=Path(directory)
+    def crash(where,stage):
+     if where==boundary:raise InterruptedError(boundary)
+    with self.assertRaises(InterruptedError):persist_evidence(root,self.blobs,failpoint=crash)
+    if (root/self.name).exists():self.assertEqual((root/self.name).read_bytes(),self.raw)
+    persist_evidence(root,self.blobs)
+    rows=recover_stages(root)
+    self.assertEqual(len(rows),1);self.assertFalse(list(root.glob('.stage-*')))
+    self.assertEqual((root/rows[0]['path']).stat().st_size,rows[0]['bytes'])
+    with evidence_directory(root):self.assertEqual(te._store.get().get(self.name),self.raw)
+ def test_nested_directory_scope_does_not_lock_out_writer_subprocess(self):
+  import subprocess,sys,os
+  with evidence_directory(self.root):
+   code='import sys;from connected_enterprise.transition_evidence import persist_evidence;persist_evidence(sys.argv[1],{sys.argv[2]:bytes.fromhex(sys.argv[3])})'
+   done=subprocess.run([sys.executable,'-c',code,str(self.root),self.name,self.raw.hex()],text=True,capture_output=True,timeout=10)
+   self.assertEqual(done.returncode,0,done.stderr)
+   self.assertEqual(te._store.get().get(self.name),self.raw)
+ def test_two_writers_deduplicate_without_overwrite(self):
+  from concurrent.futures import ThreadPoolExecutor
+  with ThreadPoolExecutor(max_workers=2) as pool:
+   jobs=[pool.submit(persist_evidence,self.root,self.blobs) for i in range(2)]
+   for job in jobs:job.result(timeout=10)
+  self.assertEqual([p.name for p in self.root.iterdir()],[self.name])

@@ -221,7 +221,30 @@ def recover_upgrade(root, manifest, output, *, failpoint=None):
         return receipt
 
 
-def upgrade_world(root, historical_root, manifest, output, *, policy, expected_checkpoint_sha256, ident, failpoint=None):
+def authorize_world(root, historical_root, manifest, output, *, policy, expected_checkpoint_sha256,
+                    ident, transition_format='v1', evidence_root=None, prepared_ticket=None):
+    from .runner import identity
+    from .upgrades import authorize_upgrade
+    from .verify import check_source
+    output=Path(output).absolute();checkpoint=_read(output/'STATE.json')
+    if digest(checkpoint)!=expected_checkpoint_sha256:raise ValueError('STALE_OPERATING_UPGRADE_CHECKPOINT')
+    state=checkpoint['body']['state'];cfg=state['config']
+    check_source(historical_root,state['source'])
+    origin=state.get('origin_source',state['source'])
+    contract='connected014/'+digest({'config':cfg,'seed':state['seed'],'arm':state['arm'],'source':origin,'manifest':manifest})
+    day=max(state['last_time'],state['current']['event']['time'] if state['current'] else state['last_time'])
+    operating={'schema':'agi-alpha/connected-operating-transition/v1','prior_checkpoint':checkpoint,
+               'from_runtime':state['source'],'to_runtime':identity(root),'policy':policy}
+    ticket=authorize_upgrade(historical_root=historical_root,target_root=root,manifest=manifest,
+        path=output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract=contract,
+        expected_state_digest=None,ident=ident,day=day,operating=operating,
+        **({'transition_format':transition_format,'evidence_root':evidence_root,'prepared_ticket':prepared_ticket}
+           if transition_format!='v1' else {}))
+    if _read(output/'STATE.json')!=checkpoint:raise ValueError('OPERATING_CHECKPOINT_ADVANCED_DURING_AUTHORIZATION')
+    return ticket
+
+
+def upgrade_world(root, historical_root, manifest, output, *, policy, expected_checkpoint_sha256, ident, failpoint=None, prepared_ticket=None):
     from enterprise.runner import RunLock
     from .runner import identity
     from .upgrades import authorize_upgrade
@@ -252,9 +275,21 @@ def upgrade_world(root, historical_root, manifest, output, *, policy, expected_c
         day = max(state['last_time'], state['current']['event']['time'] if state['current'] else state['last_time'])
         operating = {'schema': 'agi-alpha/connected-operating-transition/v1', 'prior_checkpoint': checkpoint,
                      'from_runtime': state['source'], 'to_runtime': identity(root), 'policy': policy}
-        ticket = authorize_upgrade(historical_root=historical_root, target_root=root, manifest=manifest,
-                                   path=output / 'account.sqlite', opening=cfg['opening'], working=cfg['working'],
-                                   contract=contract, expected_state_digest=None, ident=ident, day=day, operating=operating)
+        if prepared_ticket is None:
+            ticket = authorize_upgrade(historical_root=historical_root, target_root=root, manifest=manifest,
+                                       path=output / 'account.sqlite', opening=cfg['opening'], working=cfg['working'],
+                                       contract=contract, expected_state_digest=None, ident=ident, day=day, operating=operating)
+        else:
+            from .upgrades import validate_ticket
+            from .transition_evidence import active_directory
+            # Authenticate the persisted wire under the original owner's key before publishing any intent.
+            ticket=authorize_world(root,historical_root,manifest,output,policy=policy,
+                expected_checkpoint_sha256=expected_checkpoint_sha256,ident=ident,transition_format='v2-cas',
+                evidence_root=active_directory(),prepared_ticket=prepared_ticket)
+            prepared=validate_ticket(ticket,root=root,path=output/'account.sqlite')
+            if (prepared.get('operating')!=operating or prepared['id']!=ident
+                    or prepared['historical_root']!=str(Path(historical_root).absolute())):
+                raise ValueError('PREPARED_SOURCE_AUTHORIZATION_CHANGED')
         if _read(output / 'STATE.json') != checkpoint:
             raise ValueError('OPERATING_CHECKPOINT_ADVANCED_DURING_AUTHORIZATION')
         validate_operating_authority(ticket, root=root)

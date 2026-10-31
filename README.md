@@ -60,3 +60,7 @@ The exact former 250 MiB `archive_v2.py` is preserved under
 those original bytes against its unchanged hash; current cap qualification does
 not relabel altered current source as a historical reproduction. This transport
 repair changes no commercial policy, seed, cost, financial method or verdict.
+
+### Native lifecycle completion candidate
+
+[Composed-source operating and recovery commands](docs/completion024.md) extend the existing connected CLI with an explicit owner-held CAS source-transition format. Preserve existing accounts, signed history and obligations. The historical release remains champion until exact-source clean qualification, normal CI, merge, release and downloaded operation pass; synthetic transition tests alone do not establish adoption.

@@ -137,4 +137,9 @@ jobs:
             ${{ runner.temp }}/downloaded-release-operation/failed-operation-keyfree.zip
             ${{ runner.temp }}/downloaded-release-operation/*.stdout
             ${{ runner.temp }}/downloaded-release-operation/*.stderr
+            ${{ runner.temp }}/downloaded-release-operation/native-completion/PROFILE.json
+            ${{ runner.temp }}/downloaded-release-operation/native-completion/*.stdout
+            ${{ runner.temp }}/downloaded-release-operation/native-completion/*.stderr
+            ${{ runner.temp }}/downloaded-release-operation/native-completion/public.zip
+            ${{ runner.temp }}/downloaded-release-operation/native-completion/failed-keyfree.zip
           if-no-files-found: warn

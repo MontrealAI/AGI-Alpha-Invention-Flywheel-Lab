@@ -2,6 +2,10 @@
 from __future__ import annotations
 
 import copy
+from functools import wraps
+import inspect
+import os
+import uuid
 import hashlib
 from pathlib import Path
 import shutil
@@ -35,13 +39,24 @@ def _copy_source(root, target):
         if identity(target) != source:
             raise ValueError('EXISTING_CONNECTED_OPERATOR_SOURCE_CHANGED')
         return source
-    target.mkdir(parents=True)
+    stage=target.with_name(target.name+'-preparing-'+uuid.uuid4().hex)
+    stage.mkdir(parents=True)
     for name in source['files']:
-        destination = target / name
+        destination = stage / name
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(root / name, destination)
-    if identity(target) != source:
+        with destination.open('rb') as stream:os.fsync(stream.fileno())
+    if identity(stage) != source:
         raise ValueError('FROZEN_CONNECTED_OPERATOR_SOURCE_CHANGED')
+    if target.exists():raise ValueError('CONNECTED_SOURCE_PUBLICATION_RACE')
+    for directory in sorted((p for p in stage.rglob('*') if p.is_dir()),key=lambda p:-len(p.parts))+[stage]:
+        fd=os.open(directory,os.O_RDONLY|os.O_DIRECTORY)
+        try:os.fsync(fd)
+        finally:os.close(fd)
+    os.rename(stage,target)
+    fd=os.open(target.parent,os.O_RDONLY|os.O_DIRECTORY)
+    try:os.fsync(fd)
+    finally:os.close(fd)
     return source
 
 
@@ -109,13 +124,32 @@ def read_operator(output):
     return d, manifest
 
 
-def prepare_upgrade(root, historical_root, manifest_path, output, *, policy, expected_checkpoint_sha256, ident):
+def _scoped_operation(function):
+    @wraps(function)
+    def call(*args,**kwargs):
+        from .transition_evidence import output_scope
+        output=inspect.signature(function).bind(*args,**kwargs).arguments['output']
+        with output_scope(output):return function(*args,**kwargs)
+    return call
+
+
+@_scoped_operation
+def prepare_upgrade(root, historical_root, manifest_path, output, *, policy, expected_checkpoint_sha256, ident, transition_format='v1'):
+    from enterprise.runner import RunLock
+    with RunLock(output):
+        return _prepare_upgrade(root,historical_root,manifest_path,output,policy=policy,
+            expected_checkpoint_sha256=expected_checkpoint_sha256,ident=ident,transition_format=transition_format)
+
+
+def _prepare_upgrade(root, historical_root, manifest_path, output, *, policy, expected_checkpoint_sha256, ident, transition_format):
     from .migration import validate_policy
     output = Path(output).absolute(); historical_root = Path(historical_root).absolute()
     manifest = _read(manifest_path); checkpoint = _read(output / 'STATE.json')
     policy = validate_policy(policy)
     request = {'historical_root': str(historical_root), 'policy': policy,
                'expected_checkpoint_sha256': expected_checkpoint_sha256, 'id': ident}
+    if transition_format not in {'v1','v2-cas'}:raise ValueError('EXPLICIT_SUPPORTED_TRANSITION_FORMAT_REQUIRED')
+    if transition_format!='v1':request['transition_format']=transition_format
     previous = None
     if (output / 'OPERATOR.json').exists():
         d, existing = read_operator(output)
@@ -130,7 +164,22 @@ def prepare_upgrade(root, historical_root, manifest_path, output, *, policy, exp
     if digest(checkpoint) != expected_checkpoint_sha256:
         raise ValueError('STALE_OPERATING_UPGRADE_CHECKPOINT')
     from .upgrades import preflight_ticket_size
-    preflight_ticket_size(output)
+    if transition_format=='v1':
+        preflight_ticket_size(output)
+    else:
+        from .migration import authorize_world,_preserve
+        from .transition_evidence import evidence_directory
+        store=output/'TRANSITION_EVIDENCE'
+        if store.is_symlink():raise ValueError('EVIDENCE_STORE_SYMLINK_REFUSED')
+        store.mkdir(mode=0o700,exist_ok=True)
+        preparation=output/'TRANSITION_PREPARATIONS'/(digest(request)+'.json')
+        ticket=authorize_world(root,historical_root,manifest,output,policy=policy,
+            expected_checkpoint_sha256=expected_checkpoint_sha256,ident=ident,transition_format=transition_format,
+            evidence_root=store,prepared_ticket=_read(preparation) if preparation.exists() else None)
+        with evidence_directory(store):
+            from .upgrades import validate_ticket
+            validate_ticket(ticket,root=root,path=output/'account.sqlite')
+        _preserve(preparation,ticket)
     state = checkpoint['body']['state']
     from .runner import identity
     source_dir = 'source-022' if previous is None else 'source-' + identity(root)['sha256']
@@ -149,6 +198,7 @@ def prepare_upgrade(root, historical_root, manifest_path, output, *, policy, exp
     return descriptor
 
 
+@_scoped_operation
 def upgrade(output, *, failpoint=None):
     from .migration import upgrade_world
     d, manifest = read_operator(output); output = Path(output).absolute(); request = d['upgrade_request']
@@ -156,9 +206,12 @@ def upgrade(output, *, failpoint=None):
         raise ValueError('EXPLICIT_CONNECTED_OPERATING_UPGRADE_REQUIRED')
     return upgrade_world(output / d['source_dir'], request['historical_root'], manifest, output / d['business_dir'],
                          policy=request['policy'], expected_checkpoint_sha256=request['expected_checkpoint_sha256'],
-                         ident=request['id'], failpoint=failpoint)
+                         ident=request['id'], failpoint=failpoint,
+                         prepared_ticket=_read(output/'TRANSITION_PREPARATIONS'/(digest(request)+'.json'))
+                         if request.get('transition_format')=='v2-cas' else None)
 
 
+@_scoped_operation
 def operate(output, *, max_events=None):
     from .engine import run_world
     d, manifest = read_operator(output); output = Path(output).absolute()
@@ -169,6 +222,7 @@ def operate(output, *, max_events=None):
                      source=d['source'], stop_after_events=max_events)
 
 
+@_scoped_operation
 def audit(output):
     from .verify import audit as independent_audit
     d, manifest = read_operator(output); output = Path(output).absolute()
@@ -180,6 +234,7 @@ def audit(output):
     return checked
 
 
+@_scoped_operation
 def scoreboard(output):
     checked = audit(output); d, manifest = read_operator(output)
     result = _read(Path(output) / d['business_dir'] / 'RESULT.json')

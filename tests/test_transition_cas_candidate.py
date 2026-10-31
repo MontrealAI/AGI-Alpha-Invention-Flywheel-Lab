@@ -98,6 +98,11 @@ with JournalAccount(p['root'],p['manifest'],p['path'],opening=500000000,working=
   with evidence_scope(self.blobs):
    resolved=ticket_body(ticket,key=self.key)
    self.assertEqual(resolved['prior_record']['source_transitions']['old'],self.ticket)
+ def test_resolved_mutation_cannot_change_subsequent_authenticated_view(self):
+  with evidence_scope(self.blobs):
+   first=ticket_body(self.ticket,key=self.key);first['prior_record']['snapshot']['state_digest']='f'*64
+   second=ticket_body(self.ticket,key=self.key)
+   self.assertEqual(second,self.legacy['body'])
  def test_stale_signed_state_and_double_apply(self):
   bad=copy.deepcopy(self.ticket);bad['body']['expected_state_digest']='f'*64
   bad['signature']=hmac.new(self.key,DOMAIN+canonical(bad['body']),hashlib.sha256).hexdigest()
