@@ -2,8 +2,10 @@
 
 New builds omit only the exact root enterprise011/adaptive012 multipart transport
 directories and their generated combined ZIPs, avoiding recursive embedding of a
-newer package inside this older bounded source archive. Current code, historical
-evidence and other artifacts remain included. The extractor still verifies every
+newer package inside this older bounded source archive. Current code, financial records and other artifacts remain included. A narrow
+hash-pinned list of completed historical engineering logs is omitted from new
+source packages only; exact originals remain in Git and linked by the omission
+manifest. Old archives retain their original complete manifest verification. The extractor still verifies every
 declared payload of older archives, including transport files already present.
 """
 from __future__ import annotations
@@ -20,6 +22,7 @@ PREFIX = "AGI_ALPHA_Mechanism_Completion/"
 MANIFEST = "ARCHIVE_MANIFEST.json"
 SKIP = {".git", ".venv", "__pycache__", ".pytest_cache"}
 MAX_BYTES, MAX_FILES = 512 * 1024**2, 10000
+OMISSIONS = "docs/packaging/SOURCE_ONLY_OMISSIONS.json"
 TRANSACTION_PREFIXES = (".commercial010-package-", ".publication-")
 
 
@@ -104,11 +107,32 @@ def _manifest(raw, payloads):
     return manifest
 
 
+def _source_log_omissions(root):
+    path = Path(root) / OMISSIONS
+    if not path.exists():
+        return {}
+    raw = _regular(root, OMISSIONS)
+    record = json.loads(raw)
+    files = record.get("files")
+    if record.get("schema") != "lab/source-package-omissions/v1" or not isinstance(files, dict) or len(files) > 128:
+        raise ValueError("BOUNDED_SOURCE_LOG_OMISSIONS_REQUIRED")
+    for name, entry in files.items():
+        relative = _name(name)
+        if (relative.parts[:2] != ("evidence", "completion015") or relative.suffix not in {".log", ".stdout", ".stderr"}
+                or not isinstance(entry, dict) or set(entry) != {"sha256", "bytes"}
+                or type(entry["bytes"]) is not int or entry["bytes"] < 0
+                or not isinstance(entry["sha256"], str) or len(entry["sha256"]) != 64
+                or any(c not in "0123456789abcdef" for c in entry["sha256"])):
+            raise ValueError("SOURCE_LOG_OMISSION_SCOPE")
+    return files
+
+
 def build(root, archive_path):
     root, archive_path = Path(root).resolve(), Path(archive_path).absolute()
     if archive_path.exists() or archive_path.is_symlink():
         raise FileExistsError(archive_path)
     payloads, packaging_manifest = {}, None
+    omitted_logs = _source_log_omissions(root)
     for path in sorted(root.rglob("*")):
         relative = path.relative_to(root)
         if _excluded(relative) or path == archive_path:
@@ -124,13 +148,22 @@ def build(root, archive_path):
                     raise ValueError("ARCHIVE_RESOURCE_BOUND")
                 packaging_manifest = path.read_bytes()
                 continue
-            payloads[name] = path.read_bytes()
+            raw = path.read_bytes()
+            if name in omitted_logs:
+                expected = omitted_logs[name]
+                if len(raw) != expected["bytes"] or _sha(raw) != expected["sha256"]:
+                    raise ValueError("SOURCE_LOG_OMISSION_IDENTITY_CHANGED " + name)
+                continue
+            payloads[name] = raw
     if len(payloads) > MAX_FILES or sum(map(len, payloads.values())) > MAX_BYTES:
         raise ValueError("ARCHIVE_RESOURCE_BOUND")
     if packaging_manifest is not None:
         _manifest(packaging_manifest, payloads)
     manifest = {"schema": "lab/self-contained-source-archive/v2", "files": {name: _sha(raw) for name, raw in payloads.items()},
                 "source_history_required": False, "network_required_for_extraction": False,
+                "omitted_historical_engineering_logs": omitted_logs,
+                "omission_provenance": OMISSIONS if omitted_logs else None,
+                "scope": "Executable source and retained evidence; omitted engineering logs remain at pinned Git URLs, not in this package.",
                 "limits": {"files": MAX_FILES, "uncompressed_bytes": MAX_BYTES}}
     archive_path.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(archive_path, "x", compression=zipfile.ZIP_DEFLATED) as archive:

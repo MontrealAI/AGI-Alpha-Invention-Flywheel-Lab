@@ -31,7 +31,7 @@ def default_config():
         'limits':['Synthetic non-personal work only; no actual customers or payments.','Finite authored buyer/channel/supplier contracts, no empirical conversion calibration.','Permanent native principal/fee protection tails remain; seed may back reserves.','No paid inference: capable-frontier AI economics represented by disclosed envelopes; actual executors are deterministic.','Finite frozen service inventory is an edition resource, not a universal market ceiling.']}
 
 def validate_config(cfg):
-    if set(cfg)!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
     for key in ['horizon_days','customer_pool','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
     for key in ['nonpayment_bps','arrival_bps','retention_bps','payment_bps','profit_tax_bps']:
@@ -40,6 +40,16 @@ def validate_config(cfg):
     if cfg['production_hours']+cfg['acceptance_hours']+cfg['clearing_hours']>cfg['payment_deadline_hours']:raise ValueError('COMPLETE_LIFECYCLE_EXCEEDS_PAYMENT_DEADLINE')
     for key in ['opening','working','setup_cost','maintenance_daily','exposure_cost','qualification_cost','onboarding_cost','production_cost','support_cost','supplier_unit_cost','capacity_price','payment_fixed']:
         if type(cfg[key]) is not int or cfg[key]<0:raise ValueError('INTEGER_RESOURCE_COST_REQUIRED')
+    if 'mechanism_policy' in cfg:
+        from .mechanism_choice import validate_policy
+        validate_policy(cfg['mechanism_policy'])
+    if 'strategic_policy' in cfg:
+        from .strategic_commerce import validate_policy
+        validate_policy(cfg['strategic_policy'])
+        from .joint_planning import validate_allocation_policy
+        validate_allocation_policy(cfg.get('strategic_allocation_policy'))
+        if cfg['maintenance_daily']<=0:raise ValueError('POSITIVE_PREPAID_STRATEGIC_PLANNING_CONTRACT_REQUIRED')
+    elif 'strategic_allocation_policy' in cfg:raise ValueError('JOINT_STRATEGIC_POLICY_REQUIRED')
     contracts=validate_contracts(cfg['channels'])
     if 'pilot' not in contracts:raise ValueError('CONNECTED_PILOT_CHANNEL_REQUIRED')
     if contracts['pilot']['lead_days']<1:raise ValueError('CONNECTED_CHANNEL_ADVANCE_LEAD_REQUIRED')
@@ -117,7 +127,7 @@ def _prepare_plan(state,account,jobs):
     stats=prepared['channel_after']['exposures_by_day'][str(day)]
     prepared['outreach_units']=stats['attempted_slots']+sum(b['id'] not in exposed_ids for b in candidates)
     # Reserve the maximum qualification bill before commitments, including lost offers.
-    operating_envelope=cfg['maintenance_daily']+cfg['exposure_cost']*prepared['outreach_units']+cfg['qualification_cost']*len(candidates)
+    operating_envelope=(0 if 'strategic_policy' in cfg else cfg['maintenance_daily'])+cfg['exposure_cost']*prepared['outreach_units']+cfg['qualification_cost']*len(candidates)
     prepared['operating_cost_envelope']=operating_envelope
     earned=prepared['before']['summary']['unrestrictedEarned'];margin_history=[o['price']-o['complete_cost'] for o in state['orders'] if o['outcome']=='SETTLED']
     live_channels=[i for i in prepared['channel_after']['instances'].values() if i['state'] not in {'FAILED','EXPIRED'} and i['expiry_day']>day]
@@ -126,13 +136,13 @@ def _prepare_plan(state,account,jobs):
     contacts=prepared['channel_after']['contacts']
     reachable=sum(b['id'] not in owned_ids and (not b['onboarded'] or not b['active']) and len(contacts.get(b['id'],[]))<pilot.get('max_contacts_per_customer',3) for b in state['buyers'])
     remaining=cfg['horizon_days']-day
-    if state['arm']!='baseline' and profitable and reachable>0 and remaining>pilot['lead_days']+7 and not live_channels and earned>channel_invoice+operating_envelope+2*MICRO:
+    if state['arm']!='baseline' and profitable and reachable>0 and remaining>pilot['lead_days']+7 and not live_channels and ('strategic_policy' in cfg or earned>channel_invoice+operating_envelope+2*MICRO):
         known_access=pilot['activation_reliability_bps']*pilot['realization_bps']/10000**2
         forecast=sum(margin_history)/len(margin_history)*min(reachable,4)*.4*known_access
         prepared['channel_purchase']=forecast>channel_invoice;prepared['channel_predicted_net']=int(forecast-channel_invoice)
     lost_capacity=sum(d.get('kind')=='capacity_decline' and day-3<=d['time']//24<day for d in state['decisions'])
     live_capacity=sum(i['kind']=='capacity' and t<i['expiry_time'] for i in state['investments'])
-    if state['arm'] in {'growth','competitive_growth'} and profitable and lost_capacity>=2 and slots<cfg['maximum_slots'] and live_capacity<cfg['maximum_slots']-cfg['initial_slots'] and remaining>7 and earned>cfg['capacity_price']+channel_invoice+operating_envelope+2*MICRO:
+    if state['arm'] in {'growth','competitive_growth'} and profitable and lost_capacity>=2 and slots<cfg['maximum_slots'] and live_capacity<cfg['maximum_slots']-cfg['initial_slots'] and remaining>7 and ('strategic_policy' in cfg or earned>cfg['capacity_price']+channel_invoice+operating_envelope+2*MICRO):
         capacity_forecast=sum(margin_history)/len(margin_history)*min(remaining,5)*.5;prepared['capacity_purchase']=capacity_forecast>cfg['capacity_price'];prepared['capacity_predicted_net']=int(capacity_forecast-cfg['capacity_price'])
     liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-cfg['capacity_price']*bool(prepared['capacity_purchase'])
     rival_capacity=2;rival_bps=state['market']['public_rival_bps'];rival_cash=state['market']['rival_cash']
@@ -151,20 +161,53 @@ def _prepare_plan(state,account,jobs):
             outside=prices[chosen];decision['outside_spend']=outside;b['remaining_budget']-=outside;b['next_need_time']=t+7*24
             if chosen=='rival':rival_capacity-=1;rival_cash+=outside-MICRO
         return decision
+    joint=None; joint_by_customer={}; joint_selected={}
+    if 'strategic_policy' in cfg:
+        from .joint_planning import plan_actions
+        joint=plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,_offer,draw)
+        prepared['joint_action']=joint
+        joint_by_customer={d['customer_id']:d for d in joint['allocation']['deliveries']}
+        from .strategic_commerce import selected_delivery
+        for option in joint['allocation']['decision']['selected_options']:
+            if option['kind']=='delivery':joint_selected[option['execution']['customer_id']]=selected_delivery(joint['allocation'],option['id'])
+        chosen=joint['allocation']['decision']['selected']
+        prepared['channel_purchase']='channel-'+str(day) in chosen
+        prepared['capacity_purchase']='capacity-'+str(day) in chosen
+        liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-cfg['capacity_price']*bool(prepared['capacity_purchase'])
     for b in candidates:
         if draw(seed,[day,b['id']],'need')>=cfg['arrival_bps']/10000:continue
         service=SERVICES[b['service_index']%3];human=cfg['human_comparator'][service];anchor=int((human['hours']*human['loaded_usd_hour']+2)*MICRO)
-        selected=_offer(jobs,simulated,b,cfg);blocked=None
-        if selected is None:blocked='inventory_decline'
+        selected=_offer(jobs,simulated,b,cfg);blocked=None;method_plan=None;joint_choice=None
+        if joint is not None:
+            joint_choice=joint_selected.get(b['id'])
+            if joint_choice:
+                delivery=joint_by_customer[b['id']];entry=jobs[delivery['selection']['problem']['job_id']]
+                selected=(entry,joint_choice['offer'],anchor)
+            else:
+                considered=joint_by_customer.get(b['id'])
+                blocked='capacity_decline' if considered and considered['selection']['decision']['selected'] is not None and len(joint_selected)>=slots else 'joint_no_bid'
+        if blocked:pass
+        elif selected is None:blocked='inventory_decline'
         elif len(prepared['orders'])>=slots:blocked='capacity_decline'
         else:
             entry,offer,anchor=selected;price=offer['price_microUSD'];fee=(price*cfg['payment_bps']+9999)//10000+cfg['payment_fixed'];onboard=0 if b['onboarded'] else cfg['onboarding_cost'];cost=cfg['production_cost']+cfg['support_cost']+cfg['supplier_unit_cost']+fee+onboard
+            if joint_choice:method_plan=joint_choice['method_plan']
+            elif 'mechanism_policy' in cfg and joint is None:
+                from .mechanism_choice import order_plan
+                method_plan=order_plan(cfg['mechanism_policy'],entry['job']['id'],offer,state.get('mechanism_memory'),cost)
+            if method_plan:
+                cost+=method_plan['cost']
+                if method_plan['mode']=='hold':blocked='method_hold'
             if price-cost<=0 or liquidity<cost+price+MICRO:blocked='liquidity_decline'
         if blocked:
             prepared['declines'].append({'kind':blocked,'customer_id':b['id'],'time':t})
-            prepared['declines'].append(buyer_choice(b,service,anchor))
+            choice=buyer_choice(b,service,anchor)
+            if joint is not None:choice.update(joint_allocation_sha256=joint['id'],joint_option_id=None)
+            prepared['declines'].append(choice)
             continue
-        decision=buyer_choice(b,service,anchor,price);prepared['declines'].append(decision)
+        decision=buyer_choice(b,service,anchor,price)
+        if joint_choice:decision.update(joint_allocation_sha256=joint['id'],joint_option_id=joint_choice['joint_option_id'])
+        prepared['declines'].append(decision)
         if decision['buyer_choice']!='us':continue
         ident=f"order-{len(state['orders'])+len(prepared['orders']):04d}"
         order={'id':ident,'customer_id':b['id'],'job_id':entry['job']['id'],'work_keys':entry['job']['work_keys'],'offer':offer,'price':price,
@@ -172,6 +215,8 @@ def _prepare_plan(state,account,jobs):
             'complete_cost':cost,'fee':fee,'onboarding':onboard,'production_cost':cfg['production_cost']+cfg['supplier_unit_cost'],'support_cost':cfg['support_cost'],'service_receipt':None,
             'funding_receipt':None,'acquisition_source_plan_id':b['acquisition_source_plan_id'],'exposure_time':b['exposure_time'],
             'capacity_source_plan_id':usable_capacity[len(prepared['orders'])-cfg['initial_slots']]['plan_id'] if len(prepared['orders'])>=cfg['initial_slots'] else None}
+        if method_plan:order['method_plan']=method_plan
+        if joint_choice:order.update(joint_allocation_sha256=joint['id'],joint_option_id=joint_choice['joint_option_id'])
         prepared['orders'].append(order);simulated['used_jobs'].append(order['job_id']);liquidity-=cost+price
     return prepared
 
@@ -204,12 +249,15 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
         while state['queue']:
             if stop_after_events is not None and performed>=stop_after_events:break
             if state['current'] is None:
+                if 'strategic_policy' in cfg and state['queue'][0]['kind']=='plan':
+                    now=state['queue'][0]['time'];cost('maintenance-'+str(now//24),cfg['maintenance_daily'],now,'maintenance')
                 state['current']=_prepare_plan(state,account,jobs);_write(path,account.seal_checkpoint(state))
             p=state['current'];ev=p['event'];t=ev['time'];day=t//24;kind=ev['kind'];byid={b['id']:b for b in state['buyers']}
             if kind=='startup':
                 cost('complete-development-setup',cfg['setup_cost'],t,'development_integration_qualification_and_failed_search')
                 _event(state,t,'STARTUP_FUNDED',ev['id'])
             elif kind=='plan':
+                if p.get('joint_action'):state.setdefault('joint_actions',{})[p['joint_action']['id']]=p['joint_action']
                 cost('maintenance-'+str(day),cfg['maintenance_daily'],t,'maintenance')
                 state['channel_state']=p['channel_after'];book=ChannelBook(seed,cfg['channels'],state['channel_state'])
                 for exposure in p['exposures']:
@@ -220,7 +268,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                     if response is not None:b['active']=response['responded']
                     _record_exposure(state,t,exposure,response)
                 cost('outreach-'+str(day),cfg['exposure_cost']*p['outreach_units'],t,'outreach_including_failed_and_unused_slots')
-                attempts=[d for d in p['declines'] if d['kind']=='offer'];cost('qualification-'+str(day),cfg['qualification_cost']*len(attempts),t,'qualification_including_lost_offers')
+                attempts=[d for d in p['declines'] if d['kind']=='offer'];qualified_candidates=(len(p['joint_action']['allocation']['deliveries']) if p.get('joint_action') else len(attempts));cost('qualification-'+str(day),cfg['qualification_cost']*qualified_candidates,t,'qualification_including_lost_offers')
                 state['decisions'].extend(p['declines'])
                 for d in p['declines']:
                     if d.get('outside_spend'):
@@ -238,7 +286,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 state['channel_state']=book.export()
                 for proposed in p['orders']:
                     o=copy.deepcopy(proposed);ident=o['id'];b=byid[o['customer_id']]
-                    o['funding_receipt']=cost(ident+'-resources',o['complete_cost'],t,'production_contract',{'job_id':o['job_id'],'offer':o['offer'],'fee':o['fee'],'onboarding':o['onboarding'],'support':o['support_cost'],'resource_supplier':'SIMULATED_PREPAID_COMPLETE_RESOURCE_CONTRACT'},expected_net=o['price']-o['complete_cost'])
+                    o['funding_receipt']=cost(ident+'-resources',o['complete_cost'],t,'production_contract',{'job_id':o['job_id'],'offer':o['offer'],'fee':o['fee'],'onboarding':o['onboarding'],'support':o['support_cost'],'resource_supplier':'SIMULATED_PREPAID_COMPLETE_RESOURCE_CONTRACT',**({'method_plan':o['method_plan']} if 'method_plan' in o else {})},expected_net=o['price']-o['complete_cost'])
                     if o['funding_receipt'] is None:raise ValueError('QUALIFIED_PRODUCTION_RESOURCE_CONTRACT_NOT_FUNDED')
                     account.execute('wallet',{'buyer':ident+'-wallet','amount':o['price']},t)
                     account.execute('offer',{'id':ident,'buyer':ident+'-wallet','price':o['price'],'job_id':o['job_id'],'deadline':t+cfg['payment_deadline_hours']},t)
@@ -251,7 +299,13 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                         won=sum(d['buyer_choice']=='rival' for d in observed)/len(observed);old=state['market']['public_rival_bps'];state['market']['public_rival_bps']=max(5000,min(10500,old+(200 if won>.6 else -200)))
                 _event(state,t,'BUSINESS_DECISION',ev['id'],offered=len(attempts),qualified=len(p['orders']),channel_selected=bool(p['channel_purchase']),capacity_selected=bool(p['capacity_purchase']),public_account_before=p['before']['summary'])
             elif kind=='produce':
-                o=next(o for o in state['orders'] if o['id']==ev['order_id']);o['service_receipt']=execute_offer(root,manifest,o['offer'],o['job_id'])
+                o=next(o for o in state['orders'] if o['id']==ev['order_id'])
+                if 'method_plan' in o:
+                    from .mechanism_choice import execute_funded
+                    plan=o['method_plan'];execution=execute_funded(root,manifest,account,o['offer'],o['job_id'],ident=o['id']+'-method',day=t,mode=plan['mode'],costs=plan['costs'],memory=plan['memory'],prepaid_order=o['id'])
+                    o['method_execution']=execution;o['service_receipt']=execution.get('service',{'accepted':False,'errors':[execution.get('error','METHOD_FAILED')]})
+                    if execution.get('memory') is not None:state['mechanism_memory']=execution['memory']
+                else:o['service_receipt']=execute_offer(root,manifest,o['offer'],o['job_id'])
                 if not o['service_receipt'].get('accepted'):o['outcome']='QUALITY_REJECTED'
                 _event(state,t,'PRODUCTION',ev['id'],order_id=o['id'],accepted_by_executor=o['service_receipt'].get('accepted'));_schedule(state,t+cfg['acceptance_hours'],'accept',o['id']+'-accept',order_id=o['id'])
                 market=state['market'];supplier_receipt=cfg['supplier_unit_cost'];market['supplier_collections']+=supplier_receipt;market['supplier_expenses']+=supplier_receipt//2;market['supplier_cash']+=supplier_receipt-supplier_receipt//2
@@ -283,6 +337,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
         for b in state['buyers']:
             if b['initial_budget']!=b['remaining_budget']+b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values()) or b['remaining_budget']<0:raise ValueError('SHARED_BUYER_BUDGET_CONSERVATION')
         result={k:copy.deepcopy(state[k]) for k in ['config','seed','arm','source','orders','buyers','investments','costs','events','decisions','market','stop_reasons']}
+        if 'joint_actions' in state:result['joint_actions']=copy.deepcopy(state['joint_actions'])
         result.update(schema='agi-alpha/connected014-result/v1',scope='CONDITIONAL_SIMULATION',channels=state['channel_state'],owned_account=owned,summary=summary,complete=not state['queue'],processed_events=state['processed_events'],
             accepted_jobs=sum(o['acceptance_time'] is not None for o in state['orders']),paid_jobs=len(settled),customers=len(customers),repeat_customers=sum(sum(o['customer_id']==c for o in settled)>1 for c in customers),profitable_earned_continuations=len(earned),
             conditional_simulated_commercial_success=len(settled)>=12 and len(customers)>=3 and sum(sum(o['customer_id']==c for o in settled)>1 for c in customers)>=2 and len(earned)>=2 and summary['profit']>0 and summary['unrestrictedEarned']>0 and summary['payables']==0 and not summary['investmentStopped'] and summary['cash']>=summary['custodyReserve']+summary['tailReserve']+summary['workingCapital'],
