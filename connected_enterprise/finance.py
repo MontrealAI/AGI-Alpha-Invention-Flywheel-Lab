@@ -21,7 +21,7 @@ from commercial.ledger import _ADAPTIVE_ACCOUNT_CAPABILITY
 from commercial.single_writer import SingleWriterExchange
 
 SCHEMA = 'agi-alpha/connected014-resource-journal/v1'
-SOURCE_PATHS = ('connected_enterprise/scale.py', 'connected_enterprise/channel_menu.py', 'connected_enterprise/mechanism_choice.py', 'connected_enterprise/strategic_commerce.py', 'connected_enterprise/joint_planning.py', 'connected_enterprise/strategic_audit.py', 'connected_enterprise/engine.py', 'connected_enterprise/verify.py', 'adaptive_enterprise/allocation.py', 'adaptive_enterprise/instruments.py', 'adaptive_enterprise/strategies.py', 'adaptive_enterprise/checkers.py', 'portfolio25/pricing.py', 'connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
+SOURCE_PATHS = ('commercial/terms.py', 'commercial/native_engine.py', 'vendor/alpha_claim/protected_exchange_prospective_v1.py', 'connected_enterprise/capital_lifecycle.py', 'connected_enterprise/scale.py', 'connected_enterprise/channel_menu.py', 'connected_enterprise/mechanism_choice.py', 'connected_enterprise/strategic_commerce.py', 'connected_enterprise/joint_planning.py', 'connected_enterprise/strategic_audit.py', 'connected_enterprise/engine.py', 'connected_enterprise/verify.py', 'adaptive_enterprise/allocation.py', 'adaptive_enterprise/instruments.py', 'adaptive_enterprise/strategies.py', 'adaptive_enterprise/checkers.py', 'portfolio25/pricing.py', 'connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
                 'commercial/ledger.py', 'commercial/persistence.py',
                 'commercial/single_writer.py', 'commercial/tape_lease.py',
                 'experiments/commerce006.py', 'vendor/alpha_claim/contracts.py',
@@ -46,6 +46,11 @@ def _identifier(value):
 
 
 def _native_id(op, args):
+    if op == 'mature':
+        return op + ':' + _identifier(args.get('id')) + ':' + _identifier(args.get('event_id'))
+    if op in {'claim', 'resolve_claim', 'recover_claim'}:
+        suffix = ':' + _identifier(args.get('settlement_id')) if op != 'claim' else ''
+        return op + ':' + _identifier(args.get('id')) + ':' + _identifier(args.get('claim_id')) + suffix
     if op == 'event':
         return 'event:' + _identifier(args.get('id')) + ':' + _identifier(args.get('event_id'))
     return op + ':' + _identifier(args.get('buyer') if op == 'wallet' else args.get('id'))
@@ -54,7 +59,7 @@ def _native_id(op, args):
 def _validate_native_request(op, args, day):
     if op in {'reserve', 'finish', 'cancel_investment'}:
         raise ValueError('CONNECTED_RESOURCE_COMMITMENT_ENTRYPOINT_REQUIRED')
-    if op not in {'cost', 'wallet', 'offer', 'event'} or not isinstance(args, dict) or type(day) is not int or day < 0:
+    if op not in {'cost', 'wallet', 'offer', 'event', 'register_terms', 'claim', 'resolve_claim', 'mature', 'recover_claim'} or not isinstance(args, dict) or type(day) is not int or day < 0:
         raise ValueError('DECLARED_CONNECTED_NATIVE_ACTION_REQUIRED')
 
 
@@ -215,6 +220,7 @@ class JournalAccount:
             native = _find_action(tape, request['op'], request['args'], request['day'])
             receipt = _native_snapshot(tape, native, self._account.filesystem)
         elif request['operation'] == 'spend':
+            if self.manifest.get('native_engine')=='prospective-v1' and self._account.snapshot()['summary']['investmentStopped']:raise ValueError('PROSPECTIVE_STOP_CANNOT_BE_BYPASSED_BY_SEED')
             plan = entry['plan']
             work_sha256 = digest(request['work'])
             if entry['funding'] == 'EARNED':
@@ -319,6 +325,26 @@ class JournalAccount:
         validate_amount(amount)
         return self.execute('cost', {'id': _identifier(ident), 'amount': amount}, day)
 
+    def advance_financial(self, day):
+        """Process eligible expiries before any new funding snapshot.
+
+        Claims at the inclusive boundary must be admitted before calling this
+        operation at the next clock tick. Pending claims remain protected.
+        """
+        with self._mutex:
+            self._assert_current()
+            if type(day) is not int or day < 0:
+                raise ValueError('EXPLICIT_FINANCIAL_EVENT_DAY_REQUIRED')
+            tape = self._account.export()['ledger']
+            if tape['actions'] and day < tape['actions'][-1]['day']:
+                raise ValueError('EVENT_TIME_REGRESSION')
+            terms = {t['id']: strict_json(t['terms']) for t in tape.get('prospective_terms', [])}
+            states = {t['id']: t['state'] for t in tape['orders']}
+            for row in tape.get('prospective_orders', []):
+                if row['matured_at'] is None and states[row['order_id']] in {'released', 'breached'} and day > terms[row['terms_id']]['maturity_day']:
+                    self.execute('mature', {'id': row['order_id'], 'event_id': 'maturity:' + row['order_id'] + ':' + row['terms_sha256'][:20]}, day)
+            return self._account.snapshot()
+
     def spend(self, ident, kind, amount, day, work, expected_net, allow_seed=False):
         with self._mutex:
             self._assert_current()
@@ -336,6 +362,7 @@ class JournalAccount:
                 return None
             snapshot = self._account.snapshot()
             summary = snapshot['summary']
+            if self.manifest.get('native_engine')=='prospective-v1' and summary['investmentStopped']:return None
             earned = expected_net > 0 and min(summary['available'], summary['unrestrictedEarned']) >= amount
             if not earned and (not allow_seed or summary['available'] < amount):
                 return None
@@ -423,7 +450,7 @@ class JournalAccount:
         self.close()
 
 
-def _pending_native_coverage(entry, tape, record, start, prefixes):
+def _pending_native_coverage(entry, tape, record, start, prefixes, manifest):
     request = entry['request']
     if entry['receipt'] is not None:
         raise ValueError('PENDING_CONNECTED_RECEIPT_MUST_BE_UNACKNOWLEDGED')
@@ -434,6 +461,8 @@ def _pending_native_coverage(entry, tape, record, start, prefixes):
         if entry['key'] != 'native:' + _native_id(request['op'], request['args']) or entry['plan'] is not None or entry['funding'] is not None or entry['obligation_receipt'] is not None:
             raise ValueError('PENDING_CONNECTED_NATIVE_AUTHORITY_MISMATCH')
     elif request['operation'] == 'spend':
+        before=tape['actions'][start]['before'] if start<len(tape['actions']) else tape['summary']
+        if manifest.get('native_engine')=='prospective-v1' and before['investmentStopped']:raise ValueError('PROSPECTIVE_STOP_CANNOT_BE_BYPASSED_BY_SEED')
         if entry['key'] != 'spend:' + request['id']:
             raise ValueError('PENDING_CONNECTED_SPEND_IDENTITY_MISMATCH')
         if entry['funding'] == 'EARNED':
@@ -513,7 +542,7 @@ def _audit_rejection(entry, record, source, start, *, root, manifest):
     prefix = {**tape, 'actions': actions, 'summary': summary}
     pending = {**entry, 'status': 'PENDING', 'receipt': None}
     authority = {**record, 'connected_journal': {'source': source}}
-    _pending_native_coverage(pending, prefix, authority, start, action_prefix_digests(actions))
+    _pending_native_coverage(pending, prefix, authority, start, action_prefix_digests(actions), manifest)
     request = entry['request']
     if request['operation'] == 'execute':
         op, args = request['op'], request['args']
@@ -565,7 +594,7 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
         if pending_key is not None and entry['key'] == pending_key:
             if index != len(journal['entries']) - 1 or entry['status'] != 'PENDING' or covered != list(range(len(covered))):
                 raise ValueError('ONE_FINAL_PENDING_CONNECTED_ACTION_REQUIRED')
-            covered.extend(_pending_native_coverage(entry, tape, record, len(covered), prefixes))
+            covered.extend(_pending_native_coverage(entry, tape, record, len(covered), prefixes, manifest))
             continue
         if entry['key'] not in keys and entry['status'] == 'REJECTED':
             if covered != list(range(len(covered))):
@@ -605,6 +634,7 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
                     raise ValueError('CONNECTED_SPEND_RESOLUTION_CHANGED')
             elif entry['funding'] == 'SEED' and request['allow_seed']:
                 native = _find_action(tape, 'cost', {'id': _seed_id(request, journal['source']['sha256']), 'amount': request['amount']}, request['day'], action_index=action_index)
+                if manifest.get('native_engine')=='prospective-v1' and native['before']['investmentStopped']:raise ValueError('PROSPECTIVE_STOP_CANNOT_BE_BYPASSED_BY_SEED')
                 if receipt['plan_id'] is not None:
                     raise ValueError('SEED_CANNOT_CLAIM_EARNED_RESERVATION')
             else:

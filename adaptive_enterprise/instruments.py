@@ -374,8 +374,10 @@ def _check_job(root, manifest, job, artifact=None):
 def _validate_manifest(root,manifest):
     if not isinstance(manifest,dict) or manifest.get('schema')!=SCHEMA or manifest.get('scope')!=SCOPE or manifest.get('currency')!='USD' or manifest.get('account_namespace')!='adaptive012':
         raise ValueError('ADAPTIVE_SERVICE_SCOPE_REQUIRED')
-    if set(manifest)!={'schema','scope','currency','account_namespace','source_hashes','jobs','attempts','cohort_provenance','resource_receipt'} or manifest['attempts']!=[]:
+    if set(manifest)-{'native_engine'}!={'schema','scope','currency','account_namespace','source_hashes','jobs','attempts','cohort_provenance','resource_receipt'} or manifest['attempts']!=[]:
         raise ValueError('EXACT_ADAPTIVE_MANIFEST_REQUIRED')
+    if 'native_engine' in manifest and manifest['native_engine'] not in {'legacy-permanent-v1','prospective-v1'}:
+        raise ValueError('DECLARED_NATIVE_ENGINE_REQUIRED')
     if set(manifest.get('source_hashes',{}))!=set(SOURCE_PATHS) or not isinstance(manifest.get('jobs'),list) or not 1<=len(manifest['jobs'])<=1000:
         raise ValueError('ADAPTIVE_BOUNDED_SOURCE_AND_COHORT_REQUIRED')
     for name,expected in manifest['source_hashes'].items():
