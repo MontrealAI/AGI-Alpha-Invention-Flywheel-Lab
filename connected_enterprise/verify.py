@@ -587,7 +587,10 @@ def audit(root, manifest, result):
                 if not prior:raise ValueError('RETAINED_CONTEXT_HAS_NO_PRIOR_OPERATING_ACQUISITION')
             audit_order(root,manifest,row,result['owned_account'],cfg['mechanism_policy'],result.get('joint_actions'))
         elif 'method_plan' in row:raise ValueError('UNAUTHORIZED_METHOD_POLICY')
-        fresh = execute_offer(root, manifest, row['offer'], row['job_id'],context=row.get('method_execution',{}).get('context'))
+        if row.get('method_plan',{}).get('mode')=='csv_backend':
+            from .csv_backend029 import execute_service
+            fresh=execute_service(root,manifest,row['offer'],row['job_id'],'conventional',row['method_plan']['backend'])
+        else:fresh = execute_offer(root, manifest, row['offer'], row['job_id'],context=row.get('method_execution',{}).get('context'))
         recorded = row.get('service_receipt')
         if not isinstance(recorded, dict):
             raise ValueError('EXECUTED_SERVICE_RECEIPT_REQUIRED')

@@ -64,7 +64,7 @@ def validate_problem(problem):
         raise ValueError('PUBLIC_BELIEFS_REQUIRED')
     if type(problem['initial_memory']) is not bool or not 1 <= len(problem['jobs']) <= 8:
         raise ValueError('BOUNDED_HORIZON_REQUIRED')
-    if set(problem['costs']) != set(MODES)-{'hold'}:
+    if set(problem['costs']) not in (set(MODES)-{'hold'}, (set(MODES)-{'hold'})|{'csv_backend'}):
         raise ValueError('ALL_DIRECT_REUSE_CRITIC_ALTERNATIVES_REQUIRED')
     for mode, row in problem['costs'].items():
         if set(row) != set(COST_FIELDS) or any(type(v) is not int or v < 0 for v in row.values()):
@@ -95,7 +95,7 @@ def choose(problem):
         key = (index, memory)
         if key in memo: return memo[key]
         job = problem['jobs'][index]; rows=[]
-        for mode in MODES:
+        for mode in (*problem['costs'], 'hold'):
             if mode == 'ordinary_reuse' and not memory: continue
             if mode == 'critic_retain' and not job['critic_applicable']: continue
             cost=0 if mode=='hold' else sum(problem['costs'][mode].values())+job['base_cost']
@@ -103,7 +103,7 @@ def choose(problem):
             future, tail=solve(index+1, memory or mode=='critic_retain')
             rows.append((revenue-cost+future, mode, tail))
         # Fixed, declared tie rule: prefer the simpler direct mode, then hold over speculative construction.
-        rank={'conventional':0,'generated':1,'ordinary_reuse':2,'hold':3,'critic_retain':4}
+        rank={'conventional':0,'generated':1,'ordinary_reuse':2,'hold':3,'critic_retain':4,'csv_backend':5}
         value,mode,tail=max(rows,key=lambda r:(r[0],-rank[r[1]]))
         memo[key]=(value,[mode,*tail]);return memo[key]
     value,policy=solve(0,problem['initial_memory'])
@@ -111,13 +111,13 @@ def choose(problem):
             'scope':'EXACT_OPTIMUM_OF_DECLARED_FINITE_METHOD_SET_AND_BELIEFS_NOT_GLOBAL_GAME_EQUILIBRIUM'}
 
 def execute_funded(root, manifest, account, offer, job_id, *, ident, day, mode, costs,
-                   memory=None, allow_seed=False, expected_net=1, prepaid_order=None, cost_contract=None):
+                   memory=None, allow_seed=False, expected_net=1, prepaid_order=None, cost_contract=None, backend=None):
     """Native prepayment before any diagnostic/search/production work.
 
     Caller must record returned receipt in its authenticated operating checkpoint.
     Diagnostic mode must be explicitly identified by caller; selection isn't implied.
     """
-    if mode not in MODES: raise ValueError('DECLARED_METHOD_REQUIRED')
+    if mode not in (*MODES,'csv_backend'): raise ValueError('DECLARED_METHOD_REQUIRED')
     if mode=='hold': return {'mode':'hold','accepted':False,'cost':0,'memory':memory}
     if set(costs)!=set(COST_FIELDS) or any(type(v) is not int or v<0 for v in costs.values()) or (sum(costs.values())<=0 and cost_contract is None):
         raise ValueError('COMPLETE_METHOD_COSTS_REQUIRED')
@@ -128,8 +128,15 @@ def execute_funded(root, manifest, account, offer, job_id, *, ident, day, mode, 
     job=next(j for j in manifest['jobs'] if j['id']==job_id)
     if job['service_id']!='reconciliation' or offer['service_id']!='reconciliation':
         raise ValueError('SCOPED_RECONCILIATION_BRIDGE_ONLY')
+    if mode=='csv_backend':
+        from .csv_backend029 import validate_contract
+        validate_contract(root,backend)
+        if cost_contract is None or prepaid_order is None:raise ValueError('CSV_NATIVE_COMMON_PREPAYMENT_REQUIRED')
+        if costs!=csv_costs(backend):raise ValueError('CSV_COMPLETE_INCREMENTAL_ENVELOPE_REQUIRED')
+    elif backend is not None:raise ValueError('BACKEND_FOR_UNRELATED_METHOD')
     request={'mode':mode,'job_id':job_id,'offer_sha256':digest(offer),'costs':costs,'memory_sha256':digest(memory)}
     if cost_contract is not None:request['cost_contract']=copy.deepcopy(cost_contract)
+    if backend is not None:request['backend']=copy.deepcopy(backend)
     if prepaid_order is None:
         funding=account.spend(ident,'mechanism_resource_contract',sum(costs.values()),day,request,expected_net,allow_seed=allow_seed)
     else:
@@ -141,6 +148,7 @@ def execute_funded(root, manifest, account, offer, job_id, *, ident, day, mode, 
             raise ValueError('NATIVE_METHOD_PREPAYMENT_MISMATCH')
         if cost_contract is not None and (plan.get('cost_contract')!=cost_contract or native['work'].get('production_envelope_microUSD')!=cost_contract['production_envelope_microUSD'] or native['amount']<cost_contract['production_envelope_microUSD']+sum(costs.values())):
             raise ValueError('COMMON_PRODUCTION_PREPAYMENT_CHANGED')
+        if plan.get('backend')!=backend:raise ValueError('BACKEND_PREPAYMENT_CHANGED')
         funding=rows[0]['receipt']
     if funding is None:return {'mode':mode,'accepted':False,'reason':'CURRENT_NATIVE_FUNDS_INSUFFICIENT','cost':0,'memory':memory}
     paid_id=prepaid_order+'-resources' if prepaid_order else ident
@@ -161,13 +169,17 @@ def execute_funded(root, manifest, account, offer, job_id, *, ident, day, mode, 
             comparison=compare_methods(raw,retained)
         context={'mode':'retained' if mode=='critic_retain' else mode}
         if mode in {'ordinary_reuse','critic_retain'}:context['retained']=retained
-        service=execute_offer(root,manifest,offer,job_id,context=context)
+        if mode=='csv_backend':
+            from .csv_backend029 import execute_service
+            service=execute_service(root,manifest,offer,job_id,'conventional',backend)
+        else:service=execute_offer(root,manifest,offer,job_id,context=context)
         result={'mode':mode,'accepted':service['accepted'],'service':service,'context':context,
                 'memory':memory,'comparison':comparison,'cost':sum(costs.values()),'costs':copy.deepcopy(costs),
                 'funding':funding,'resource_request':request,'job_id':job_id,'offer':copy.deepcopy(offer),'ident':ident,'day':day,'prepaid_order':prepaid_order}
     except (ValueError,KeyError,TypeError) as error:
         result={'mode':mode,'accepted':False,'error':str(error),'cost':sum(costs.values()),'costs':copy.deepcopy(costs),
                 'funding':funding,'resource_request':request,'memory':memory,'job_id':job_id,'offer':copy.deepcopy(offer),'ident':ident,'day':day,'prepaid_order':prepaid_order}
+    if backend is not None:result['backend']=copy.deepcopy(backend)
     if cost_contract is not None:result['cost_contract']=copy.deepcopy(cost_contract)
     return result
 
@@ -191,6 +203,10 @@ def audit_execution(root, manifest, account, record):
             raise ValueError('METHOD_NATIVE_COST_BINDING_CHANGED')
     elif req['amount']!=record['cost'] or req['work']!=record['resource_request'] or req['day']!=record['day']:
         raise ValueError('METHOD_NATIVE_COST_BINDING_CHANGED')
+    if record['mode']=='csv_backend':
+        from .csv_backend029 import validate_contract
+        validate_contract(root,record['backend'])
+        if record['backend']!=req['work']['method_plan'].get('backend') or record['resource_request'].get('backend')!=record['backend'] or record['costs']!=csv_costs(record['backend']):raise ValueError('CSV_BACKEND_SOURCE_OR_COST_CHANGED')
     if record['mode']=='critic_retain' and not record.get('error'):
         job=next(j for j in manifest['jobs'] if j['id']==record['job_id'])
         raw=read_bound(root,job['input'],job['input_sha256']);saved=read_bound(root,job['artifact'],job['artifact_sha256'])
@@ -208,24 +224,43 @@ def audit_execution(root, manifest, account, record):
             raise ValueError('METHOD_COMPARISON_NOT_REPRODUCED')
     elif record['mode']!='critic_retain' and digest(record.get('memory'))!=record['resource_request']['memory_sha256']:
         raise ValueError('REUSE_MEMORY_DIFFERS_FROM_PREFUNDED_CONTEXT')
-    if record.get('error'):return {'accepted':False,'paid_failure':True,'native_audit':account.audit()['accepted']}
+    if record.get('error'):
+        if record['mode']=='csv_backend':
+            from .csv_backend029 import execute_service
+            try:execute_service(root,manifest,record['offer'],record['job_id'],'conventional',record['backend'])
+            except (ValueError,KeyError,TypeError) as error:
+                if str(error)!=record['error']:raise ValueError('CSV_PAID_FAILURE_NOT_REPRODUCED')
+            else:raise ValueError('CSV_PAID_FAILURE_NOT_REPRODUCED')
+        return {'accepted':False,'paid_failure':True,'native_audit':account.audit()['accepted']}
     context=record['context'];expected={'mode':'retained' if record['mode']=='critic_retain' else record['mode']}
     if record['mode'] in {'ordinary_reuse','critic_retain'}:expected['retained']=record['memory']['retained']
     if context!=expected:raise ValueError('EXECUTED_CONTEXT_CHANGED')
-    fresh=execute_offer(root,manifest,record['offer'],record['job_id'],context=context)
+    if record['mode']=='csv_backend':
+        from .csv_backend029 import execute_service
+        fresh=execute_service(root,manifest,record['offer'],record['job_id'],'conventional',record['backend'])
+    else:fresh=execute_offer(root,manifest,record['offer'],record['job_id'],context=context)
     if fresh.get('accepted')!=record['accepted'] or fresh.get('useful_outcome_sha256')!=record['service'].get('useful_outcome_sha256'):
         raise ValueError('FRESH_METHOD_EXECUTION_CHANGED')
     return {'accepted':fresh['accepted'],'native_audit':account.audit()['accepted'],
-            'fresh_operation_count':fresh['operation_count'],'useful_outcome_sha256':fresh['useful_outcome_sha256']}
+            'fresh_operation_count':fresh['operation_count'],'useful_outcome_sha256':fresh.get('useful_outcome_sha256')}
 
 def validate_policy(policy):
-    if set(policy)-{'cost_contract'}!={'mode','costs','accept_collect_bps','future_equivalent_jobs','public_basis'} or policy['mode'] not in {'optimize','diagnostic_critic_then_reuse'}:
+    if set(policy)-{'cost_contract','csv_backend'}!={'mode','costs','accept_collect_bps','future_equivalent_jobs','public_basis'} or policy['mode'] not in {'optimize','diagnostic_critic_then_reuse','diagnostic_csv_backend'}:
         raise ValueError('EXPLICIT_OPT_IN_METHOD_POLICY_REQUIRED')
     if type(policy['future_equivalent_jobs']) is not int or not 0<=policy['future_equivalent_jobs']<=7:
         raise ValueError('BOUNDED_PUBLIC_FUTURE_JOB_HYPOTHESIS_REQUIRED')
     validate_problem({'schema':'connected-method-choice/v1','public_basis':policy['public_basis'],'initial_memory':False,
         'jobs':[{'job_id':'validation','price':1,'base_cost':0,'critic_applicable':True,'win_bps':10000,'accept_collect_bps':policy['accept_collect_bps']}], 'costs':policy['costs'],**({'cost_contract':policy['cost_contract']} if 'cost_contract' in policy else {})})
+    if 'csv_backend' in policy:
+        if 'cost_contract' not in policy or policy['costs'].get('csv_backend')!=csv_costs(policy['csv_backend']):raise ValueError('CSV_SOURCE_AND_COMPLETE_COST_POLICY_REQUIRED')
+    elif 'csv_backend' in policy['costs'] or policy['mode']=='diagnostic_csv_backend':raise ValueError('CSV_BACKEND_POLICY_REQUIRED')
     return policy
+
+def csv_costs(backend):
+    from .funded_csv_adapter028 import FEES,VERIFICATION
+    if not isinstance(backend,dict) or backend.get('arm') not in FEES:raise ValueError('QUALIFIED_CSV_ARM_REQUIRED')
+    row=dict.fromkeys(COST_FIELDS,0);row['integration']=FEES[backend['arm']];row['verification']=VERIFICATION
+    return row
 
 def order_plan(policy, job_id, offer, memory, base_cost):
     validate_policy(policy)
@@ -235,13 +270,17 @@ def order_plan(policy, job_id, offer, memory, base_cost):
                  'win_bps':10000,'accept_collect_bps':policy['accept_collect_bps'],'critic_applicable':offer['method']=='generated_schema'}
                 for i in range(policy['future_equivalent_jobs']+1)], 'costs':policy['costs']}
     if 'cost_contract' in policy:problem['cost_contract']=copy.deepcopy(policy['cost_contract'])
+    csv_eligible=offer.get('scope')=='complete_outcome' and offer.get('method') in ('canonical','generated_schema')
+    if not csv_eligible:problem['costs']={k:v for k,v in problem['costs'].items() if k!='csv_backend'}
     decision=choose(problem);mode=decision['policy'][0]
     if policy['mode']=='diagnostic_critic_then_reuse':
         mode=('ordinary_reuse' if memory else 'critic_retain') if offer['method']=='generated_schema' else 'conventional'
+    if policy['mode']=='diagnostic_csv_backend' and csv_eligible:mode='csv_backend'
     return {'problem':problem,'decision':decision,'mode':mode,'diagnostic':policy['mode']!='optimize',
             'costs':{} if mode=='hold' else copy.deepcopy(policy['costs'][mode]),'memory':copy.deepcopy(memory),
             'cost':0 if mode=='hold' else sum(policy['costs'][mode].values()),
-            **({'cost_contract':copy.deepcopy(policy['cost_contract'])} if 'cost_contract' in policy else {})}
+            **({'cost_contract':copy.deepcopy(policy['cost_contract'])} if 'cost_contract' in policy else {}),
+            **({'backend':copy.deepcopy(policy['csv_backend'])} if mode=='csv_backend' else {})}
 
 def audit_order(root,manifest,record,owned_account,policy,joint_actions=None):
     """Recompute strategic choice, method context, native prepayment and output."""
@@ -265,6 +304,7 @@ def audit_order(root,manifest,record,owned_account,policy,joint_actions=None):
     checked_memory(plan['memory'])
     result=record['method_execution']
     if plan.get('cost_contract')!=result.get('cost_contract'):raise ValueError('EXECUTED_COST_CONTRACT_CHANGED')
+    if result.get('backend')!=plan.get('backend'):raise ValueError('EXECUTED_BACKEND_DIFFERS_FROM_SELECTION')
     if result['mode']!=plan['mode'] or result['costs']!=plan['costs'] or result['cost']!=plan['cost']:
         raise ValueError('EXECUTED_METHOD_DIFFERS_FROM_FUNDED_SELECTION')
     # An account facade exposes only inspected exported native evidence; it grants no mutation.
