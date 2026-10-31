@@ -8,11 +8,22 @@
 
 **Independent acceptance:** A full qualification reruns the original strong specialist on the entire current input and calls the independent original checker; it compares the complete resulting report byte semantics, not just a developer-declared success flag. A faster conditional verification mode checks newly changed components, revalidates the source/input/hash chain and reuses explicitly pinned earlier evidence. The latter assumes the original pinned certificate was itself trustworthy; a hash is not a digital signature or an independent source of truth.
 
+## One-command independently recheckable demonstration
+
+The packaged synthetic example begins with 100 customer groups and 1,000 current invoice/payment records. Only one customer's invoice and payment change. The new source-bound proof **inherits 99 previously verified groups** and independently rechecks the 10 records belonging to the changed customer, while the global input is still checked for partition validity. The original full specialist independently checks the current composite and gets the **same accepted output**.
+
+```sh
+python3 -m scripts.demo_verified_delta044 build --path /absolute/new/blue-sky-demo
+python3 -m scripts.demo_verified_delta044 verify --path /absolute/new/blue-sky-demo
+```
+
+The create-only directory contains five public-synthetic files: `BEFORE_INPUT.json`, `BEFORE_CERT.json`, `AFTER_INPUT.json`, `AFTER_CERT.json`, and `DEMO.json`. Verification rederives current-source identity, external pin relation, previous and successor proof, exact changed and retained counts, and complete acceptance; a changed stored income/customer-collection claim fails. This is a **testable causal artifact** rather than a screenshot or a narration. It does not touch a real account or imply revenue.
+
 ## Actual local results — exposed engineering development, not blinded new science
 
 The exact repository producer Git blob was `c25683b5ce90a3a28b9e3e22848c2cd137eb424b`, and checker Git blob was `8f3a12cacf2ad5e4321d5ec921a40b58641b38c1`. Locally reconstructed files matched both Git blob SHAs exactly before tests.
 
-Eleven source-matched differential tests passed, including 30 randomized deterministic snapshots, source change, proof tampering, false completion, cross-customer mismatch, missing previous external pin, new customer, no-change and unsupported-partition fallback.
+Twelve source-matched differential tests passed, including 30 randomized deterministic snapshots, source change, proof tampering, false completion, cross-customer mismatch, missing previous external pin, new customer, no-change and unsupported-partition fallback.
 
 The following measured local development CPU results came from `python -m scripts.run_verified_delta044`; CPU numbers are **host- and ordering-sensitive**, not calibrated paid-compute bills:
 
