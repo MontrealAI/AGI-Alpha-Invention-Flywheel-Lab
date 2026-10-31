@@ -35,6 +35,11 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in required):
             raise ValueError('FUNDED_CSV_ADAPTER_SOURCE_DEPENDENCY_MISSING')
         names.update(required)
+    if (root/'connected_enterprise/funded_discovery031.py').is_file():
+        from connected_enterprise.funded_discovery031 import DEPENDENCIES
+        if any(not (root/name).is_file() for name in DEPENDENCIES):
+            raise ValueError('FUNDED_DISCOVERY_SOURCE_DEPENDENCY_MISSING')
+        names.update(DEPENDENCIES)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
