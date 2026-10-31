@@ -1,0 +1,66 @@
+{
+  "schema": "agi-alpha/native-capital020-closeout/v1",
+  "closed_checkpoint_utc": "2026-10-31T01:09:05.088081+00:00",
+  "status": "PARTIAL_CANDIDATE_NOT_RESOURCE_QUALIFIED",
+  "owner_task": "01a18f24-55c1-75cd-a0d2-e9ce05aa30ed",
+  "source_commit": "d2e03f11d145eed908e8d473fc007f8daef6f1df",
+  "source_tree": "c4b0c1b48af3b48a6f2c1e36da86e02480a2696f",
+  "byte_identical_local_commit": "010e236f3ba34a8f948866f53600a02987c512e1",
+  "branch": "candidate/native-capital-p0-20261030",
+  "runtime_source_sha256": "0a41cbe703772ddd831497fc094b0379f0eae99d4d24f9c62a40098e3aa3db4e",
+  "financial_source_sha256": "bdd2676ceb1bd5fe4dd1b27c46f8b8014b42dc3e0bc57b8c95d35e30120e863a",
+  "remote_verification": {
+    "exact_source_tree_matched": true,
+    "source_commit_actions_runs": 0,
+    "parent": "10bdb2c5787f95158642b068756ba30b58140562",
+    "main_advanced_independently_to": "9facd934d9ae763691e8a51052a67793cac5b48e",
+    "composition": "NOT_PERFORMED"
+  },
+  "qualification": {
+    "native_composed_tests": 22,
+    "native_composed_accepted": true,
+    "legacy_composed": "FAILED_HARNESS_AND_RESOURCE_ENVELOPE",
+    "failed_job_child_cpu_seconds": 396.134608,
+    "failed_job_wrapper_cpu_seconds": 39.122064077,
+    "job_cpu_limit": 300,
+    "launcher": "Main guard repaired and syntax-validated; no favorable rerun.",
+    "causal_maturity_probe": "UNEXECUTED",
+    "raw_12_arrival_run": "NOT_EXECUTED",
+    "legacy_operating_queue_source_migration": "NOT_IMPLEMENTED"
+  },
+  "resources": {
+    "accounted_local_cpu_seconds_at_closeout": 1262.963703065001,
+    "recorded_jobs": 196,
+    "full_phase_resource_compliance": "NOT_QUALIFIED",
+    "other_active_jobs": [],
+    "resource_snapshot_sha256": "b617e8eac326a621f34188f5f9272a1576761e589b3652fbd0f1b26f7231095b",
+    "limits": "Original1800CPU and90minutes not extended; actual per-job breach remains failed. Earlier sampled concurrency/RSS and descendant enforcement unqualified. Publication bookkeeping and model/host billing not fully metered."
+  },
+  "actions": {
+    "candidate_branch_published": true,
+    "pr_created": false,
+    "hosted_ci_dispatched": 0,
+    "merged": false,
+    "released": false,
+    "production_deployed": false,
+    "real_transactions": 0,
+    "new_paid_calls": 0,
+    "new_external_spending": 0,
+    "other_owner_accounts_or_keys_changed": false
+  },
+  "continuation": {
+    "status": "PROPOSED_NOT_GRANTED",
+    "scope": "Verification only on unchanged runtime: validate descendant CPU control; corrected compatibility suite; retained operating/comparison/adverse traces; prepared maturity probe. No CI/merge/release.",
+    "wall_minutes": 30,
+    "total_cpu_seconds_including_children_and_meter": 600,
+    "per_job_cpu_seconds": 150,
+    "per_job_wall_seconds": 300,
+    "aggregate_memory_bytes": 2147483648,
+    "new_disk_bytes": 268435456,
+    "maximum_active_jobs": 2,
+    "decoded_source_retrieval_bytes": 16777216,
+    "external_spending_usd": 0,
+    "hosted_ci": 0,
+    "automatic_renewal": false
+  }
+}
