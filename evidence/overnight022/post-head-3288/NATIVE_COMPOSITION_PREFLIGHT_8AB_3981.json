@@ -1,0 +1,123 @@
+{
+  "schema": "agi-alpha/overnight022-successor-composition-preflight/v1",
+  "evidence_role": "INDEPENDENT_STATIC_SOURCE_COMPARISON_NOT_RUNTIME_QUALIFICATION",
+  "execution_date_utc": "2026-10-31",
+  "source": {
+    "repository": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+    "merge_base": "10bdb2c5787f95158642b068756ba30b58140562",
+    "qualified_released_main": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+    "public_native_candidate_checkpoint": "3981b182513abbba1c2ab1102f94732c453422fa",
+    "public_native_candidate_runtime": "d2e03f11d145eed908e8d473fc007f8daef6f1df",
+    "candidate_is_released_composition": false,
+    "active_financial_task": "01a18fa7-ffc6-7384-8bb4-ea6012cfb0f7",
+    "actual_active_task_status": "UNKNOWN_NOT_ACCESSIBLE_VIA_CURRENT_TASK_INTERFACE",
+    "newer_owner_source_checkpoint": "UNKNOWN_NOT_PROVEN",
+    "owner_inactivity_inferred": false
+  },
+  "method": {
+    "interface": "GitHub fetch_file of nine real Git blobs; GitHub compare_commits and ref reads",
+    "three_way_analysis": "Line-sequence LCS from common 10bdb2 ancestor to released8ab and candidate d2e03, intersecting original-line edit ranges. Static collision detection, not git-merge simulation or semantic qualification.",
+    "executable_tests_new": 0,
+    "financial_operations_new": 0,
+    "paid_provider_calls_new": 0,
+    "source_files_changed": 0
+  },
+  "original_source_overlaps": [
+    {
+      "path": "adaptive_enterprise/account.py",
+      "base_blob": "ca0b5358ed5f0c0290c538b063b3476ea7dd7491",
+      "released_blob": "11348e7611d0b5cfcbc3aa0e10c1c3e2f2a1583e",
+      "candidate_blob": "c118c91532e0df8b1a12ec462d02063dee7ff139",
+      "released_edit_hunks": 2,
+      "candidate_edit_hunks": 19,
+      "intersecting_hunk_pairs": 1,
+      "intersection_base_lines": "251-253",
+      "risk": "Retain released `_audit_native_and_jobs`/nonadaptive service checker plus independently qualified source-transition checks. Candidate replaces native-plus-job audit call; copying over release is not an acceptable qualification."
+    },
+    {
+      "path": "commercial/ledger.py",
+      "base_blob": "5836f64048f0165916173f75a01a74d4a7b1901b",
+      "released_blob": "d938d86b4befdad5b85d42ff4ba153afd0983e6e",
+      "candidate_blob": "56a5764927be453e00f274974225190e24c9a94e",
+      "released_edit_hunks": 4,
+      "candidate_edit_hunks": 11,
+      "intersecting_hunk_pairs": 0,
+      "risk": "Nonintersecting textual hunks do not prove compatible pricing, native audit, source-version and prospective term semantics."
+    },
+    {
+      "path": "connected_enterprise/runner.py",
+      "base_blob": "c472df05baf3a638ff365b0dae41b2da7bbe01c5",
+      "released_blob": "7a4fe575d87870a928238e3a25fa8230ccdfe175",
+      "candidate_blob": "a2edcc2190506c83963ae3f051f63e4778d0d238",
+      "released_edit_hunks": 20,
+      "candidate_edit_hunks": 4,
+      "intersecting_hunk_pairs": 3,
+      "intersection_base_lines": [
+        "28",
+        "30",
+        "206-207"
+      ],
+      "risk": "Source closure and canonical CLI are changed by both branches. Candidate dispatch cannot replace released8ab operator dispatch without regressions."
+    }
+  ],
+  "hard_interface_collisions": [
+    {
+      "command": "register",
+      "released": "register --config <operator-input> --output <path>; freeze finite native connected014 comparison; accounts_created=false",
+      "candidate": "register --config <capital-config> --output <path>; dispatch capital.freeze/capital.register with different format",
+      "required": "Preserve released register syntax and native cohort/authority semantics. Version any prospective terms/operator registration explicitly, do not silently reuse alias."
+    },
+    {
+      "command": "comparison",
+      "released": "comparison --output <completed-operation> --control <arm> --candidate <arm>; read-only registered same-business comparison",
+      "candidate": "comparison --config <capital-config> --output <path>; creates/computes candidate capital arm via capital.freeze",
+      "required": "Do not replace read-only historical comparator with a command that freezes or starts new accounts under the same public name."
+    },
+    {
+      "command": "operate",
+      "released": "operate --output <registered-operation> --max-events N; preserve signed STATE, nonempty queue and existing account",
+      "candidate": "operate unconditionally dispatches to _capital on candidate CLI, regardless of original registered operator path",
+      "required": "Route by authenticated registration/schema and source identity; old operator queues must remain resumable, not reinterpreted as fresh capital accounts."
+    },
+    {
+      "command": "scoreboard",
+      "released": "read-only audit-bound scoreboard on frozen registered operation",
+      "candidate": "scoreboard unconditionally dispatches to _capital",
+      "required": "Retain old scoreboard's source/financial rederivation and read-only semantics."
+    }
+  ],
+  "executing_source_closure": {
+    "released_sha256": "b0eae06dabfdf09197a60b60d3680f7f67946936631fafe431dc6be1f9b56983",
+    "released_closure_files": 149,
+    "runner_source_paths_conflict": "Released source_paths includes campaign/connected-registrations/*.json, overnight022 OPERATOR_INPUT.json and measurement script. Candidate adds native tests/examples/docs but omits released registration entries. Merge must include both with exact source hashes.",
+    "source_archive_guard_files": 10000,
+    "last_published_archive_files": 9998,
+    "unmodified_guard_required": true,
+    "size_warning": "Additional files can threaten unchanged archive guard. This is a preflight risk, NOT a measured new ARCHIVE_RESOURCE_BOUND failure; preserve failed historical 328835b separately.",
+    "bundle_index": "evidence/overnight022/PROOF_BUNDLE.json",
+    "historical_raw_ref": "328835b30b3fed52b491f33f86ad008c60c37704"
+  },
+  "operating_migration": {
+    "current_gate": "OPERATING_CHECKPOINT_SOURCE_OR_AUTHORITY_CHANGED",
+    "actual_reproduction_ref": "328835b30b3fed52b491f33f86ad008c60c37704:evidence/overnight022/migration/",
+    "legacy_queues_tested": [
+      "clear+plan",
+      "accept+plan"
+    ],
+    "monetary_source_transition": "accepted in historical finite tests",
+    "authenticated_nonempty_queue_transition": "FAILED_CLOSED_NOT_IMPLEMENTED",
+    "do_not": "Do not weaken signed guard, re-sign old history, reset identity, empty queues, redirect a writer to alternate Account/ledger, or claim old tails matured.",
+    "next_required": "Obtain owner's actual new source checkpoint, reconcile four command collisions and three overlapping source files, then qualify pinned-old-source checkpoint validation, version-chain transition, nonempty queue and event provenance, claim-before-maturity ordering and write-ahead crash recovery under a single account/public CLI."
+  },
+  "verdicts": {
+    "release8ab": "ACHIEVED_AS_PREVIOUSLY_QUALIFIED",
+    "candidate_merge_readiness": "NOT_QUALIFIED_AND_REQUIRES_OWNER_HANDOFF",
+    "simple_cherry_pick": "REJECT_FOR_RELEASED_CLI_REGRESSION_RISK",
+    "full_P0": "BLOCKED_ON_REAL_SOURCE_HANDOFF_AND_MIGRATION_IMPLEMENTATION",
+    "simulation_reproduction": "NO_NEW_RUN",
+    "observed_revenue_usd": 0,
+    "frontier_model_cost_actual_usd": null,
+    "P1_P2_P3": "NOT_NEWLY_QUALIFIED"
+  },
+  "custody": "Additive evidence-only successor preflight. No PR34 branch edits, no migration/financial implementation edits, no account/key access, no merge/release, no SUCCESSOR work."
+}
