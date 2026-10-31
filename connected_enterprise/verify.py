@@ -133,6 +133,14 @@ def _check_external_buyer_income(result):
                 totals[buyer['id']] += amount
     if actual != expected or any(b.get('external_income_total') != totals[b['id']] for b in buyers):
         raise ValueError('EXOGENOUS_BUYER_INCOME_NOT_REDERIVED_FROM_FROZEN_POLICY')
+    # The native queue credits external purchasing power before the same-day
+    # offer process. A timestamp alone cannot prove that causal order.
+    first_business_by_time = {}
+    for position, event in enumerate(result['events']):
+        if event['kind'] in {'EXPOSURE', 'REACTIVATION_RESPONSE', 'INVESTMENT', 'QUALIFIED_ORDER', 'BUSINESS_DECISION'}:
+            first_business_by_time.setdefault(event['time'], position)
+        if event['kind'] == 'EXTERNAL_BUYER_INCOME' and first_business_by_time.get(event['time'], position + 1) < position:
+            raise ValueError('EXOGENOUS_BUYER_INCOME_AFTER_SAME_DAY_BUSINESS_DECISION')
     return {'external_buyer_income_events_recomputed': len(expected),
             'external_buyer_income_microUSD_recomputed': sum(totals.values()),
             'income_is_enterprise_collection': False}
