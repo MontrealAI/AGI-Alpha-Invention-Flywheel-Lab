@@ -4,7 +4,7 @@ import unittest
 
 from connected_enterprise.design_flywheel import (
     example_spec, validate, find_native_successor,
-    choose_from_development, _covered,
+    choose_from_development, discover_applicable_designs, _covered,
 )
 
 
@@ -102,6 +102,43 @@ class NativeDesignSearch041Tests(unittest.TestCase):
         for key in dev:
             dev[key] = observed(-1, True)
         self.assertIsNone(choose_from_development(spec, dev)["selected"])
+
+
+    def test_machine_constructs_only_constraint_relevant_native_designs(self):
+        spec = example_spec()
+        def incumbent(*, unreached=0, rival=0, capacity=0, profit=100, earned=50):
+            return {"audit_accepted": True, "observed": {
+                "obligations_covered": True, "settled_orders": 2,
+                "profit_microUSD": profit, "unrestricted_earned_microUSD": earned,
+                "constraints": {
+                    "unreached_buyers": unreached, "unserved_buyers": unreached,
+                    "capacity_declines": capacity, "inventory_declines": 0,
+                    "rival_choices": rival, "nonpayment_or_rejected": 0}}}
+        access = discover_applicable_designs(spec, incumbent(unreached=4))
+        self.assertIn("customer_access", access["diagnosed_constraints"])
+        self.assertEqual(access["selected_development_ids"],
+                         ["incumbent", "earned_distribution", "competitive_distribution"])
+        pressure = discover_applicable_designs(spec, incumbent(rival=3))
+        self.assertEqual(pressure["selected_development_ids"],
+                         ["incumbent", "competitive_distribution"])
+        exhausted = discover_applicable_designs(spec, incumbent())
+        self.assertEqual(exhausted["selected_development_ids"], ["incumbent"])
+        losing = discover_applicable_designs(spec, incumbent(unreached=4, profit=-5, earned=0))
+        self.assertEqual(losing["selected_development_ids"], ["incumbent"])
+        with self.assertRaisesRegex(ValueError, "AUDITED_INCUMBENT"):
+            discover_applicable_designs(spec, {"audit_accepted": False, "observed": {}})
+        corrupted = incumbent(unreached=4)
+        corrupted["observed"]["constraints"]["unreached_buyers"] = -10
+        with self.assertRaisesRegex(ValueError, "COMPLETE_NONNEGATIVE"):
+            discover_applicable_designs(spec, corrupted)
+
+    def test_unrun_interventions_are_not_eligible_for_adoption(self):
+        spec = example_spec()
+        dev = {"incumbent": {"audit_accepted": True, "observed": {
+            "obligations_covered": True, "profit_microUSD": 14}}}
+        result = choose_from_development(spec, dev)
+        self.assertEqual(result["selected"], "incumbent")
+        self.assertEqual(result["observed_ranking"], [[14, "incumbent"]])
 
     def test_unapproved_audit_prevents_adaptive_selection(self):
         spec = example_spec()
