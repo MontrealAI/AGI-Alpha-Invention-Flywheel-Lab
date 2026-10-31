@@ -161,7 +161,15 @@ def find_native_successor(result):
 
 def _observed(result):
     s = result["summary"]
-    return {"audit_required": True, "complete": result["complete"], "obligations_covered": _covered(result),
+    constraints = {
+        "unreached_buyers": sum(not b["known"] for b in result["buyers"]),
+        "unserved_buyers": sum(b["purchases"] == 0 for b in result["buyers"]),
+        "capacity_declines": sum(d.get("kind") == "capacity_decline" for d in result["decisions"]),
+        "inventory_declines": sum(d.get("kind") == "inventory_decline" for d in result["decisions"]),
+        "rival_choices": sum(d.get("buyer_choice") == "rival" for d in result["decisions"]),
+        "nonpayment_or_rejected": sum(o["outcome"] in ("REFUNDED", "QUALITY_REJECTED") for o in result["orders"]),
+    }
+    return {"audit_required": True, "constraints": constraints, "complete": result["complete"], "obligations_covered": _covered(result),
             "profit_microUSD": s["profit"], "available_microUSD": s["available"],
             "unrestricted_earned_microUSD": s["unrestrictedEarned"],
             "settled_orders": result["paid_jobs"], "accepted_orders": result["accepted_jobs"],
@@ -169,13 +177,79 @@ def _observed(result):
             "source_linked_successor": find_native_successor(result)}
 
 
+
+def discover_applicable_designs(spec, baseline):
+    """Discover a binding constraint from independently audited, actual native results.
+
+    This constructs an executable *subset* of the registered design grammar.
+    A marketing hypothesis, solver forecast, or hidden buyer draw cannot nominate
+    an intervention. Existing policy capabilities are not claimed novel inventions.
+    """
+    if baseline.get("audit_accepted") is not True:
+        raise ValueError("AUDITED_INCUMBENT_REQUIRED_FOR_DISCOVERY")
+    observed = baseline["observed"]
+    conditions = observed["constraints"]
+    required = {"unreached_buyers", "unserved_buyers", "capacity_declines",
+                "inventory_declines", "rival_choices", "nonpayment_or_rejected"}
+    if set(conditions) != required or any(type(v) is not int or v < 0 for v in conditions.values()):
+        raise ValueError("COMPLETE_NONNEGATIVE_AUDITED_CONSTRAINTS_REQUIRED")
+    profitable = (observed["obligations_covered"] and observed["settled_orders"] > 0
+                  and observed["profit_microUSD"] > 0
+                  and observed["unrestricted_earned_microUSD"] > 0)
+    diagnosed = []
+    if conditions["unreached_buyers"] and profitable:
+        diagnosed.append("customer_access")
+    if conditions["capacity_declines"] and profitable:
+        diagnosed.append("production_capacity")
+    if conditions["rival_choices"]:
+        diagnosed.append("competitive_buyer_choice")
+    if conditions["inventory_declines"]:
+        diagnosed.append("finite_qualified_work_inventory")
+    if conditions["nonpayment_or_rejected"]:
+        diagnosed.append("acceptance_or_collection_risk")
+    if not profitable:
+        diagnosed.append("unproven_funded_surplus")
+    if not diagnosed:
+        diagnosed.append("no_demonstrated_binding_constraint")
+    admitted = [spec["incumbent"]]
+    evidence = []
+    for d in spec["designs"]:
+        if d["id"] == spec["incumbent"]:
+            continue
+        arm = d["arm"]
+        remedy = None
+        if arm in ("growth", "channel") and "customer_access" in diagnosed:
+            remedy = "costed_earned_funded_customer_access"
+        elif arm == "competitive_growth" and (
+            "competitive_buyer_choice" in diagnosed or "customer_access" in diagnosed
+        ):
+            remedy = "buyer_response_plus_optional_earned_distribution"
+        elif "strategic_policy" in d["policies"] and "competitive_buyer_choice" in diagnosed:
+            remedy = "finite_public_price_and_execution_method"
+        if remedy is not None:
+            admitted.append(d["id"])
+            evidence.append({"design": d["id"], "native_arm": arm, "proposed_remedy": remedy})
+    return {
+        "schema": "agi-alpha/native-constraint-discovery041/v1",
+        "incumbent_observed_sha256": digest(observed),
+        "diagnosed_constraints": diagnosed,
+        "declared_candidate_remedies": evidence,
+        "selected_development_ids": admitted,
+        "bounded_method": "Causal opportunity diagnosis over actually audited public native state; only pre-authorized executable native interventions.",
+        "limits": "No new market demand, unknown customer valuation, solver invention, claim of universally binding cause, or current action authority created."
+    }
+
 def choose_from_development(spec, development):
     """Use ONLY recorded native development results to choose an incumbent or challenger.
 
     No optimistic forecast, invented demand or promotion from unqualified accounts.
     """
+    if spec["incumbent"] not in development or set(development) - {d["id"] for d in spec["designs"]}:
+        raise ValueError("REGISTERED_AUDITED_DEVELOPMENT_REQUIRED")
     rows = []
     for d in spec["designs"]:
+        if d["id"] not in development:
+            continue
         r = development[d["id"]]["observed"]
         if not development[d["id"]]["audit_accepted"]:
             raise ValueError("INDEPENDENT_NATIVE_AUDIT_REQUIRED_FOR_SELECTION")
@@ -192,7 +266,7 @@ def choose_from_development(spec, development):
             "observed_ranking": [list(row) for row in sorted(rows, key=lambda r: (r[0] is None, -(r[0] or 0), r[1]))]}
 
 
-def _public(spec, source, development, selection, confirmation):
+def _public(spec, source, development, selection, confirmation, discovery):
     selected = selection["selected"]
     challenger = confirmation.get(selected) if selected else None
     incumbent = confirmation.get(spec["incumbent"])
@@ -204,7 +278,8 @@ def _public(spec, source, development, selection, confirmation):
     return {
         "schema": SCHEMA, "status": "CONDITIONAL_SIMULATED_EXECUTION",
         "source_sha256": source["sha256"], "spec_sha256": digest(spec),
-        "development": {d["id"]: development[d["id"]]["observed"] for d in spec["designs"]},
+        "discovered_binding_constraints": discovery,
+        "development": {d["id"]: development[d["id"]]["observed"] for d in spec["designs"] if d["id"] in development},
         "selection": selection,
         "confirmation": {k: v["observed"] for k, v in sorted(confirmation.items())},
         "matched_confirmation_profit_delta_microUSD": delta,
@@ -220,7 +295,9 @@ def _public(spec, source, development, selection, confirmation):
             "id": "observed-funded-channel-or-capacity",
             "applicability": "Positive collected native margin, available earned funds, eligible unserved buyer or unmet capacity, checked current obligations",
             "avoid": "No profitable proven demand, inadequate available cash, exhausted contacts, negative net expansion or unresolved obligations",
-            "native_evidence": witness, "execution_authority": [], "current_proof": None,
+            "native_evidence": witness, "diagnostic_provenance_sha256": digest(discovery),
+            "selected_executable_policy": selected,
+            "execution_authority": [], "current_proof": None,
             "scope": "Candidate lesson, not qualified autonomous invention or general causal strategy advantage"
         } if witness else None),
         "limits": [
@@ -270,11 +347,14 @@ def execute(spec, root, output):
     _store(output / "SOURCE.json", source)
     manifest = prepare_services(root, "service-inputs", cohort_seed=spec["service_cohort_seed"])
     _store(output / "SERVICES.json", manifest)
-    development = {}
-    for d in spec["designs"]:
-        name = d["id"]
+    incumbent = next(d for d in spec["designs"] if d["id"] == spec["incumbent"])
+    development = {spec["incumbent"]: _run_one(root, manifest, source, _config(spec, incumbent),
+        spec["development_seed"], incumbent["arm"], output / ("dev-" + incumbent["id"]))}
+    discovery = discover_applicable_designs(spec, development[spec["incumbent"]])
+    for name in discovery["selected_development_ids"][1:]:
+        d = next(x for x in spec["designs"] if x["id"] == name)
         development[name] = _run_one(root, manifest, source, _config(spec, d),
-                                     spec["development_seed"], d["arm"], output / ("dev-" + name))
+            spec["development_seed"], d["arm"], output / ("dev-" + name))
     selection = choose_from_development(spec, development)
     confirmation = {}
     if selection["selected"] is not None:
@@ -283,10 +363,11 @@ def execute(spec, root, output):
             d = next(x for x in spec["designs"] if x["id"] == name)
             confirmation[name] = _run_one(root, manifest, source, _config(spec, d),
                 spec["confirmation_seed"], d["arm"], output / ("confirm-" + name))
-    public = _public(spec, source, development, selection, confirmation)
+    public = _public(spec, source, development, selection, confirmation, discovery)
     _store(output / "PUBLIC.json", public)
     _store(output / "INDEX.json", {"schema": SCHEMA,
         "source_sha256": source["sha256"], "spec_sha256": digest(spec),
+        "discovery_sha256": digest(discovery),
         "development": development, "confirmation": confirmation,
         "public_sha256": digest(public)})
     return public
@@ -317,20 +398,27 @@ def verify(root, output):
             raise ValueError("OBSERVED_DESIGN_RESULT_CHANGED")
         return expected
 
-    development = {}
-    for d in spec["designs"]:
-        key = d["id"]
-        development[key] = one("dev-" + key, index["development"][key], d, spec["development_seed"])
+    incumbent = next(d for d in spec["designs"] if d["id"] == spec["incumbent"])
+    development = {spec["incumbent"]: one("dev-" + incumbent["id"],
+        index["development"][incumbent["id"]], incumbent, spec["development_seed"])}
+    discovery = discover_applicable_designs(spec, development[spec["incumbent"]])
+    if (index.get("discovery_sha256") != digest(discovery) or
+            set(index["development"]) != set(discovery["selected_development_ids"])):
+        raise ValueError("DISCOVERED_INTERVENTION_SET_CHANGED")
+    for name in discovery["selected_development_ids"][1:]:
+        d = next(x for x in spec["designs"] if x["id"] == name)
+        development[name] = one("dev-" + name, index["development"][name], d,
+                                spec["development_seed"])
     selection = choose_from_development(spec, development)
     names = sorted(set((spec["incumbent"], selection["selected"]))) if selection["selected"] else []
-    if set(index["confirmation"]) != set(names) or set(index["development"]) != {d["id"] for d in spec["designs"]}:
+    if set(index["confirmation"]) != set(names):
         raise ValueError("REQUIRED_MATCHED_NATIVE_WORLDS_CHANGED")
     confirmation = {}
     for name in names:
         d = next(x for x in spec["designs"] if x["id"] == name)
         confirmation[name] = one("confirm-" + name, index["confirmation"][name], d,
                                  spec["confirmation_seed"])
-    public = _public(spec, source, development, selection, confirmation)
+    public = _public(spec, source, development, selection, confirmation, discovery)
     if public != _load(output / "PUBLIC.json") or index["public_sha256"] != digest(public):
         raise ValueError("STRATEGIC_SELECTION_OR_SUCCESSOR_WITNESS_CHANGED")
     return public
