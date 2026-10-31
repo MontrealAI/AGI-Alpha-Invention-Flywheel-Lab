@@ -1,0 +1,107 @@
+{
+  "scope": "Two affected phases only on repaired wrapper; not full GitHub reproduction or new scientific/commercial confirmation. Existing local dependencies, not a clean installed CI environment.",
+  "receipts": {
+    "actual-asgi-baseline": {
+      "schema": "agi-alpha/trusted-experiment-run006/v4",
+      "run_id": "actual-asgi-baseline",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "experiments.temporal_probe007",
+        "--output",
+        "/workspace/scratch/1f6e2f637e9a/resource-scan-repair/phase-results/actual-asgi-baseline/artifacts"
+      ],
+      "requested_command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "experiments.temporal_probe007",
+        "--output",
+        "/workspace/scratch/1f6e2f637e9a/resource-scan-repair/phase-results/actual-asgi-baseline/artifacts"
+      ],
+      "normalized_command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "experiments.temporal_probe007",
+        "--output",
+        "/workspace/scratch/1f6e2f637e9a/resource-scan-repair/phase-results/actual-asgi-baseline/artifacts"
+      ],
+      "reservation_created": true,
+      "cwd": "/workspace/scratch/1f6e2f637e9a/resource-scan-repair/core",
+      "limits": {
+        "wall_seconds": 90,
+        "cpu_seconds": 60,
+        "memory_bytes": 2147483648,
+        "output_bytes": 8388608,
+        "storage_bytes": 134217728
+      },
+      "wrapper_sha256": "1889b2d2c4bf075cc0d7edb89f6e0aaa32f96793b531064024fcadb33ab4ae1a",
+      "state": "complete",
+      "exit_code": 0,
+      "reason": null,
+      "error": null,
+      "wall_seconds": 0.6147086840355769,
+      "supervisor_cpu_seconds": 0.008479694000000003,
+      "waited_cpu_seconds": 0.5661269999999999,
+      "descendant_survivors": false,
+      "output_bytes": 88984,
+      "logs": {
+        "stdout.log": "733bdc44a3a973ff7307c4ac98da2209182db47d6b725e179b1b090908208e6e",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+      "aggregate_cpu_complete": false,
+      "complete_monetary_cost": null
+    },
+    "constructed-asgi": {
+      "schema": "agi-alpha/trusted-experiment-run006/v4",
+      "run_id": "constructed-asgi",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "experiments.temporal_construct007",
+        "--output",
+        "/workspace/scratch/1f6e2f637e9a/resource-scan-repair/phase-results/constructed-asgi/artifacts"
+      ],
+      "requested_command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "experiments.temporal_construct007",
+        "--output",
+        "/workspace/scratch/1f6e2f637e9a/resource-scan-repair/phase-results/constructed-asgi/artifacts"
+      ],
+      "normalized_command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "experiments.temporal_construct007",
+        "--output",
+        "/workspace/scratch/1f6e2f637e9a/resource-scan-repair/phase-results/constructed-asgi/artifacts"
+      ],
+      "reservation_created": true,
+      "cwd": "/workspace/scratch/1f6e2f637e9a/resource-scan-repair/core",
+      "limits": {
+        "wall_seconds": 90,
+        "cpu_seconds": 60,
+        "memory_bytes": 2147483648,
+        "output_bytes": 8388608,
+        "storage_bytes": 134217728
+      },
+      "wrapper_sha256": "1889b2d2c4bf075cc0d7edb89f6e0aaa32f96793b531064024fcadb33ab4ae1a",
+      "state": "complete",
+      "exit_code": 0,
+      "reason": null,
+      "error": null,
+      "wall_seconds": 0.41074127895990387,
+      "supervisor_cpu_seconds": 0.006706730000000001,
+      "waited_cpu_seconds": 0.366354,
+      "descendant_survivors": false,
+      "output_bytes": 105124,
+      "logs": {
+        "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination, main-thread SIGTERM cleanup, and terminal aggregate-output/receipt checks. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+      "aggregate_cpu_complete": false,
+      "complete_monetary_cost": null
+    }
+  }
+}

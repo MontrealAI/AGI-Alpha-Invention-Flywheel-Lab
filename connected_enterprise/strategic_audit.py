@@ -55,7 +55,12 @@ def audit_decisions(root,manifest,result,lifecycle):
         owned=set(sorted(buyers)[:4]);contacts=result['channels']['contacts']
         reachable=sum(ident not in owned and (not b['onboarded'] or not b['active']) and sum(c['day']<=day for c in contacts.get(ident,[]))<pilot.get('max_contacts_per_customer',3) for ident,b in buyers.items())
         expected_investments=[]
-        if result['arm']!='baseline' and profitable and reachable>0 and remaining>pilot['lead_days']+7 and not live_channels:
+        if 'channel_menu_policy' in cfg:
+            from .channel_menu import menu_options
+            dated_contacts={ident:[c for c in rows if c['day']<=day] for ident,rows in contacts.items()}
+            live=[{'contract_id':i['contract_receipt']['contract_id'],'activation_day':i['activation_time']//24,'expiry_day':i['expiry_time']//24} for i in live_channels]
+            expected_investments.extend(menu_options(cfg,result['arm'],day,buyers,dated_contacts,live,margins,slots,risk['scenarios']))
+        elif result['arm']!='baseline' and profitable and reachable>0 and remaining>pilot['lead_days']+7 and not live_channels:
             forecast=sum(margins)/len(margins)*min(reachable,4)*.4*(pilot['activation_reliability_bps']*pilot['realization_bps']/10000**2)
             if forecast>invoice:expected_investments.append(investment_option('channel-'+str(day),'acquisition',invoice,int(forecast-invoice),risk['scenarios'],day,pilot))
         lost=sum(d.get('kind')=='capacity_decline' and day-3<=d['time']//24<day for d in result['decisions'])
@@ -87,7 +92,7 @@ def audit_decisions(root,manifest,result,lifecycle):
         rederive_actions(record);states+=record['decision']['states_evaluated']
         selected={o['execution']['customer_id']:o for o in record['decision']['selected_options'] if o['kind']=='delivery'}
         investments={o['id'] for o in record['decision']['selected_options'] if o['kind']!='delivery'};selected_investments|=investments
-        if events[moment][1]['channel_selected']!=('channel-'+str(day) in investments) or events[moment][1]['capacity_selected']!=('capacity-'+str(day) in investments):raise ValueError('SELECTED_INVESTMENT_FLAGS_CHANGED')
+        if events[moment][1]['channel_selected']!=(any(o['kind']=='acquisition' for o in record['decision']['selected_options']) if 'channel_menu_policy' in cfg else ('channel-'+str(day) in investments)) or events[moment][1]['capacity_selected']!=('capacity-'+str(day) in investments):raise ValueError('SELECTED_INVESTMENT_FLAGS_CHANGED')
         choices=[d for d in result['decisions'] if d.get('kind') in {'offer','outside_choice'} and d['time']==moment]
         if [d['customer_id'] for d in choices]!=needs:raise ValueError('EVERY_OBSERVED_NEED_REQUIRES_ONE_JOINT_DECISION')
         for choice in choices:
