@@ -693,6 +693,10 @@ def audit(root, manifest, result):
     cost_semantics = _check_cost_semantics(result, tape, lifecycle_receipt)
     commercial_receipt = _check_commercial_result(result)
     investment_receipt = _check_investments(result, tape, orders)
+    opportunity_receipt={}
+    if 'opportunity_policy' in result['config']:
+        from .opportunity_search040 import audit_history
+        opportunity_receipt=audit_history(result,manifest)
     channel_receipt = check_channels(result['channels'], result['investments'], result['buyers'],
                                      contracts=result['config']['channels'], seed=result['seed'])
     receipt = {'schema': 'agi-alpha/connected014-independent-audit/v1', 'accepted': True,
@@ -703,7 +707,7 @@ def audit(root, manifest, result):
             'verifier_matches_world_source_snapshot': result['source']['files'].get('connected_enterprise/verify.py') == EXECUTING_VERIFIER_SHA256,
             'collections_microUSD': collections, 'complete_costs_microUSD': expense,
             **source_receipt, **budget_receipt, **investment_receipt, **channel_receipt, **market_receipt,
-            **{k:v for k,v in lifecycle_receipt.items() if k!='daily_public_buyers'}, **cost_semantics, **commercial_receipt, **strategic_receipt}
+            **{k:v for k,v in lifecycle_receipt.items() if k!='daily_public_buyers'}, **cost_semantics, **commercial_receipt, **strategic_receipt, **opportunity_receipt}
     return json.loads(canonical(receipt))
 
 
