@@ -86,7 +86,7 @@ def _response(price, public, policy, scenario):
         if value>best[0]+1e-9:best=(value,p)
     return best[1] # Rational rival withdrawal remains available.
 
-def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_available=None):
+def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_available=None, market_context=None):
     """Choose one admitted offer's execution method and price, or no bid.
 
     Cash feasibility is conservative: today's full cost plus native principal
@@ -94,6 +94,10 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
     Public prefix/deductions must be reconstructed by the calling operating audit.
     """
     validate_policy(policy);_public(public)
+    if market_context is not None:
+        from .complete_offer_market import validate_context
+        validate_context(market_context)
+        if offer['service_id'] not in market_context['profile']['services']:raise ValueError('REQUEST_SCOPE_NOT_APPLICABLE')
     if _diagnostic_available is not None and (type(_diagnostic_available) is not int or _diagnostic_available < public['available']):
         raise ValueError('DIAGNOSTIC_MUST_ONLY_RELAX_DEPLOYABLE_CASH')
     cash_limit=public['available'] if _diagnostic_available is None else _diagnostic_available
@@ -110,6 +114,7 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
     if scoped and 'cost_contract' in method_policy:modes.sort(key=lambda mode:RANK[mode])
     problem={'policy':copy.deepcopy(policy),'method_policy':copy.deepcopy(method_policy),
              'job_id':job_id,'offer':copy.deepcopy(offer),'memory':copy.deepcopy(memory),'public':copy.deepcopy(public)}
+    if market_context is not None:problem['market_context']=copy.deepcopy(market_context)
     rows=[]; best=None
     for mode in modes:
         if mode=='csv_backend' and (offer.get('scope')!='complete_outcome' or offer.get('method') not in ('canonical','generated_schema')):continue
@@ -117,8 +122,8 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
         if mode=='critic_retain' and offer['method']!='generated_schema':continue
         costs={} if mode=='default' else method_policy['costs'][mode]
         method_cost=sum(costs.values())
-        for bps in policy['price_bps']:
-            price=public['anchor']*bps//10000
+        prices=market_context['profile']['price_grids'][offer['service_id']] if market_context is not None else [public['anchor']*bps//10000 for bps in policy['price_bps']]
+        for price in prices:
             fee=(price*public['payment_bps']+9999)//10000+public['payment_fixed']
             cost=public['base_cost']+method_cost+fee
             reserve=cost+price+public['reserve_buffer']
@@ -127,7 +132,10 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
             forecasts=[]; expected=0.0
             for sc in policy['scenarios']:
                 rival=_response(price,public,policy,sc)
-                win,_=_belief_choice(price,rival,public,policy,sc)
+                if market_context is not None:
+                    from .complete_offer_market import win_probability
+                    win=win_probability(market_context,offer['service_id'],price)
+                else:win,_=_belief_choice(price,rival,public,policy,sc)
                 paid=sc['accept_prob']*sc['collect_prob']
                 # All fulfillment costs are prepaid on a win, even on nonpayment.
                 net=paid*price-cost
@@ -148,6 +156,9 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
               'collection_belief_source':'strategic policy scenario accept_prob * collect_prob; legacy method_policy accept_collect_bps is not used',
               'buyer_belief_source':'connected public intervals and current quote ordering' if policy.get('demand_model')=='connected_range' else 'inherited portfolio public logit hypotheses',
               'limits':'One admitted service offer, one order, fixed public buyer beliefs. No global equilibrium, calibrated demand, future cash, or long-horizon mechanism advantage claimed.'}
+    if market_context is not None:
+        decision['buyer_belief_source']='Independent public complete-outcome value/budget atoms and declared outside contracts; same geometry as actual choice'
+        decision['limits']='Finite applicable offers and price/method shortlist; observed-spend-truncated prior, not full choice-history inference. Outside contracts independently available; no shared rival capacity game.'
     if _diagnostic_available is not None:
         decision['diagnostic_available']=_diagnostic_available
         decision['scope']='COUNTERFACTUAL_CASH_CANDIDATES_NOT_EXECUTABLE'
@@ -166,7 +177,7 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
 def rederive(result):
     """Structural replay; caller must separately bind public facts to native prefix."""
     p=result['problem']
-    expected=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],p['public'])
+    expected=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],p['public'],market_context=p.get('market_context'))
     if result!=expected:raise ValueError('STRATEGIC_COMMERCE_DECISION_CHANGED')
     return expected
 
@@ -211,20 +222,21 @@ def selected_delivery(record, option_id):
               'joint_decision':True,'joint_allocation_sha256':digest(record),'joint_option_id':option_id,
               **({'cost_contract':copy.deepcopy(p['method_policy']['cost_contract'])} if 'cost_contract' in p['method_policy'] else {}),
               **({'backend':copy.deepcopy(p['method_policy']['csv_backend'])} if row['mode']=='csv_backend' else {})}
-    return {'offer':offer,'method_plan':plan,'price':row['price'],'complete_cost':row['cost'],
+    extra={'job_id':p['job_id'],'service_id':offer['service_id'],'capacity_units':execution['capacity_units'],'work_keys':execution['work_keys'],'public':copy.deepcopy(p['public']),'market_context':copy.deepcopy(p.get('market_context'))} if 'capacity_units' in execution else {}
+    return {**extra,'offer':offer,'method_plan':plan,'price':row['price'],'complete_cost':row['cost'],
             'fee':row['fee'],'joint_allocation_sha256':digest(record),'joint_option_id':option_id}
 
 
 def _action_options(observation,deliveries,investments,riskpolicy,diagnostic_available=None):
-    if not isinstance(deliveries,list) or len(deliveries)>8:raise ValueError('FINITE_DELIVERY_SHORTLIST_REQUIRED')
+    if not isinstance(deliveries,list) or len(deliveries)>32:raise ValueError('FINITE_DELIVERY_SHORTLIST_REQUIRED')
     options=[]
     for d in deliveries:
-        if set(d)!={'id','customer_id','onboarding','exclusive_group','selection','requires'}:raise ValueError('EXACT_DELIVERY_ACTION_REQUIRED')
+        if set(d) not in ({'id','customer_id','onboarding','exclusive_group','selection','requires'}, {'id','customer_id','onboarding','exclusive_group','selection','requires','capacity_units','work_keys'}):raise ValueError('EXACT_DELIVERY_ACTION_REQUIRED')
         result=d['selection']
         if diagnostic_available is None:rederive(result)
         else:
             p=result['problem']
-            if result!=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],p['public'],_diagnostic_available=diagnostic_available):raise ValueError('DIAGNOSTIC_CANDIDATES_CHANGED')
+            if result!=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],p['public'],_diagnostic_available=diagnostic_available,market_context=p.get('market_context')):raise ValueError('DIAGNOSTIC_CANDIDATES_CHANGED')
         p=result['problem'];pub=p['public']
         if pub['native_state_digest']!=observation['state_digest']:raise ValueError('JOINT_NATIVE_PREFIX_CHANGED')
         if any(abs(s['weight']-riskpolicy['scenarios'].get(s['id'],-1)/10000)>1e-12 for s in p['policy']['scenarios']):
@@ -240,6 +252,8 @@ def _action_options(observation,deliveries,investments,riskpolicy,diagnostic_ava
                     'evidence':result['decision']['problem_sha256'],
                     'execution':{'job_id':p['job_id'],'customer_id':d['customer_id'],'payment_bps':pub['payment_bps'],'payment_fixed_microUSD':pub['payment_fixed'],'onboarding_microUSD':d['onboarding'],'funding':'SEED_OR_EARNED','cash_lock':row['price']+pub['reserve_buffer'],'delivery_id':d['id'],'row':row,
                                  'selection_sha256':digest(result)}}
+            if 'capacity_units' in d:
+                option['execution']['capacity_units']=d['capacity_units'];option['execution']['work_keys']=copy.deepcopy(d['work_keys'])
             options.append(option)
     if not isinstance(investments,list) or len(options)+len(investments)>128:raise ValueError('FINITE_COSTED_INVESTMENTS_REQUIRED')
     for o in investments:
@@ -273,7 +287,7 @@ def cash_opportunity_diagnostic(record, *, relaxed_available, declared_allocatio
     deliveries=copy.deepcopy(record['deliveries'])
     for d in deliveries:
         p=d['selection']['problem']
-        d['selection']=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],p['public'],_diagnostic_available=deployable)
+        d['selection']=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],p['public'],_diagnostic_available=deployable,market_context=p.get('market_context'))
     options=_action_options(observation,deliveries,record['investments'],risk,deployable)
     counter=allocate(observation,options,risk,allow_seed=record['allow_seed'],max_delivery_slots=record['max_delivery_slots'],earned_deduction=record['earned_deduction'],_diagnostic_cash_limit=relaxed_available)
     actual=_diagnostic_result(record['decision'])
