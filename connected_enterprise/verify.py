@@ -4,6 +4,7 @@ This checker consumes exported records, source bytes and admitted artifacts. It
 does not accept a producer's commercial verdict as evidence of useful delivery.
 """
 from __future__ import annotations
+from connected_enterprise.transition_evidence import ticket_body
 
 import hashlib
 import json
@@ -151,7 +152,7 @@ def _check_market_decisions(result, tape):
             for transition in tape['actions']:
                 if transition['op'] == 'source_transition' and transition['day'] <= moment:
                     ticket = result['owned_account'].get('source_transitions', {}).get(transition['args']['id'], {})
-                    op = ticket.get('body', {}).get('operating')
+                    op = ticket_body(ticket).get('operating') if ticket else None
                     if op and op['policy']['mode'] == 'prospective':
                         prepared = op['prior_checkpoint']['body']['state']['current']
                         if not prepared or prepared['event']['time'] != moment:
@@ -198,9 +199,59 @@ def _check_market_decisions(result, tape):
             'unavailable_offer_outside_choices_recomputed': len(choices) - len(offers)}
 
 
-def _check_customer_lifecycle(result):
+def _audited_calendar_horizon(result):
+    """Independently reconstruct the calendar from audited signed transition records.
+
+    Never infer authority from the producer's horizon or extension metadata. Native
+    ticket authentication/source lineage is checked by audit_journal/check_lineage;
+    this separate derivation binds calendar changes to exact prior checkpoints.
+    """
+    horizon=_integer(result['config']['horizon_days'],'ORIGINAL_CALENDAR_HORIZON',positive=True)
+    expected=[]
+    owned=result.get('owned_account',{})
+    transitions=owned.get('source_transitions',{})
+    for action in owned.get('ledger',{}).get('actions',[]):
+        if action.get('op')!='source_transition':continue
+        ident=action['args']['id']
+        if ident not in transitions:raise ValueError('CALENDAR_TRANSITION_TICKET_REQUIRED')
+        ticket=transitions[ident];body=ticket_body(ticket);op=body.get('operating',{})
+        policy=op.get('policy',{});prior=op.get('prior_checkpoint',{}).get('body',{}).get('state',{})
+        if prior.get('calendar_extensions',[])!=expected:
+            raise ValueError('CALENDAR_PRIOR_EXTENSION_PREFIX_CHANGED')
+        if policy.get('schema')!='agi-alpha/connected-prospective-policy/v3-calendar':continue
+        if prior.get('config')!=result['config'] or prior.get('queue')!=[] or prior.get('current') is not None:
+            raise ValueError('CALENDAR_EXTENSION_REQUIRES_COMPLETED_ORIGINAL_STATE')
+        until=policy.get('calendar_until_day')
+        if type(until) is not int or not horizon<until<=365:
+            raise ValueError('STRICT_PROSPECTIVE_CALENDAR_EXTENSION_REQUIRED')
+        clock=_integer(prior.get('last_time'),'PRIOR_CALENDAR_CLOCK')
+        if not (horizon-1)*24<=clock<horizon*24 or body.get('day')!=clock:
+            raise ValueError('CALENDAR_EXTENSION_CANNOT_BACKDATE_OR_SKIP_DAYS')
+        prior_days=[e['time']//24 for e in prior.get('events',[]) if e.get('kind')=='BUSINESS_DECISION' and type(e.get('time')) is int and e['time']%24==0]
+        decisions=[e for e in prior.get('events',[]) if e.get('kind')=='BUSINESS_DECISION']
+        if prior_days!=list(range(horizon)) or len(decisions)!=horizon:
+            raise ValueError('CALENDAR_EXTENSION_REQUIRES_COMPLETE_OLD_CALENDAR')
+        def terms(p):
+            p=dict(p);p.pop('calendar_until_day',None);p['schema']='agi-alpha/connected-prospective-policy/v2';return p
+        if not isinstance(prior.get('prospective_policy'),dict) or terms(policy)!=terms(prior['prospective_policy']):
+            raise ValueError('CALENDAR_EXTENSION_CANNOT_CHANGE_EXISTING_TERMS')
+        old_orders=prior.get('orders',[])
+        if result.get('orders',[])[:len(old_orders)]!=old_orders:
+            raise ValueError('COMPLETED_PRE_EXTENSION_ORDERS_CHANGED')
+        expected.append({'from_day':horizon,'until_day':until,'ticket_sha256':digest(ticket),'prior_checkpoint_sha256':digest(op['prior_checkpoint'])})
+        horizon=until
+    if result.get('calendar_extensions',[])!=expected:
+        raise ValueError('CALENDAR_EXTENSIONS_NOT_SIGNED_OR_CONTIGUOUS')
+    state=result.get('operating_state')
+    if state is not None and state.get('calendar_extensions',[])!=expected:
+        raise ValueError('CALENDAR_OPERATING_STATE_EXTENSION_MISMATCH')
+    return horizon
+
+
+def _check_customer_lifecycle(result, calendar_horizon=None):
+    horizon=_audited_calendar_horizon(result) if calendar_horizon is None else calendar_horizon
     cfg, seed = result['config'], result['seed']
-    if set(result['channels']['exposures_by_day']) != {str(day) for day in range(cfg['horizon_days'])}:
+    if set(result['channels']['exposures_by_day']) != {str(day) for day in range(horizon)}:
         raise ValueError('CHANNEL_EXPOSURE_DAYS_DIFFER_FROM_FROZEN_HORIZON')
     buyers = {row['id']: row for row in result['buyers']}
     owned = set(sorted(buyers)[:4])
@@ -220,7 +271,7 @@ def _check_customer_lifecycle(result):
         if moment in outreach_units:
             return
         day = moment // 24
-        if moment % 24 or not 0 <= day < cfg['horizon_days']:
+        if moment % 24 or not 0 <= day < horizon:
             raise ValueError('OPERATING_DECISION_OUTSIDE_REGISTERED_CALENDAR')
         channel_day = result['channels']['exposures_by_day'][str(day)]
         exposed = {row['customer_id'] for row in channel_day['exposures']}
@@ -277,7 +328,7 @@ def _check_customer_lifecycle(result):
                 state[decision['customer_id']]['next_need_time'] = moment + 7 * 24
     if pending_reactivations:
         raise ValueError('UNRESOLVED_PAID_REACTIVATION_RESPONSE')
-    if set(outreach_units) != {day * 24 for day in range(cfg['horizon_days'])}:
+    if set(outreach_units) != {day * 24 for day in range(horizon)}:
         raise ValueError('COMPLETE_OPERATING_CALENDAR_NOT_EXECUTED')
     for customer, expected in state.items():
         for key in ['known', 'active', 'onboarded', 'purchases', 'retention_decision_count', 'service_index', 'next_need_time']:
@@ -287,14 +338,15 @@ def _check_customer_lifecycle(result):
             'daily_outreach_units_recomputed': outreach_units}
 
 
-def _check_cost_semantics(result, tape, lifecycle):
+def _check_cost_semantics(result, tape, lifecycle, calendar_horizon=None):
+    horizon=_audited_calendar_horizon(result) if calendar_horizon is None else calendar_horizon
     cfg = result['config']
     expected = {}
     def add(ident, amount, moment, category):
         if amount:
             expected[ident] = {'amount': amount, 'time': moment, 'category': category}
     add('complete-development-setup', cfg['setup_cost'], 0, 'development_integration_qualification_and_failed_search')
-    for day in range(cfg['horizon_days']):
+    for day in range(horizon):
         moment = day * 24
         add('maintenance-' + str(day), cfg['maintenance_daily'], moment, 'maintenance')
         units = lifecycle['daily_outreach_units_recomputed'][moment]
@@ -311,7 +363,7 @@ def _check_cost_semantics(result, tape, lifecycle):
             raise ValueError('CAPACITY_COST_DIFFERS_FROM_DECLARED_SUPPLIER_CONTRACT')
         add(row['id'], row['cost'], row['purchased_time'], category)
     for row in result.get('operating_upgrades', []):
-        ticket = result['owned_account']['source_transitions'][row['id']]['body']
+        ticket = ticket_body(result['owned_account']['source_transitions'][row['id']])
         add('source-upgrade-' + row['id'], ticket['operating']['policy'].get('upgrade_cost_microUSD', 0), ticket['day'], 'source_upgrade_integration')
     tax_paid = 0
     for native in tape['actions']:
@@ -494,7 +546,7 @@ def _check_order_terms(result, row, offered, tape, operating):
         if transition['op'] != 'source_transition' or transition['seq'] > offered['seq']:
             continue
         ticket = result['owned_account'].get('source_transitions', {}).get(transition['args']['id'], {})
-        op = ticket.get('body', {}).get('operating')
+        op = ticket_body(ticket).get('operating') if ticket else None
         if op is None:
             continue
         old = op['prior_checkpoint']['body']['state']; prepared = old.get('current')
@@ -556,6 +608,7 @@ def audit(root, manifest, result):
         raise ValueError('FROZEN_SOURCE_CONFIG_SEED_ARM_ACCOUNT_BINDING_CHANGED')
     from .migration import check_lineage
     lineage_receipt = check_lineage(result, manifest)
+    calendar_horizon = _audited_calendar_horizon(result)
     if result['summary'] != account['summary']:
         raise ValueError('OPERATING_SUMMARY_DIFFERS_FROM_NATIVE_ACCOUNT')
     native_orders = {row['id']: row for row in account['orders']}
@@ -687,8 +740,8 @@ def audit(root, manifest, result):
     budget_receipt = check_budgets(result['buyers'], list(orders.values()))
     _check_buyer_origins(result['config'], result['seed'], result['buyers'])
     market_receipt = _check_market_decisions(result, tape)
-    lifecycle_receipt = _check_customer_lifecycle(result)
-    cost_semantics = _check_cost_semantics(result, tape, lifecycle_receipt)
+    lifecycle_receipt = _check_customer_lifecycle(result, calendar_horizon)
+    cost_semantics = _check_cost_semantics(result, tape, lifecycle_receipt, calendar_horizon)
     commercial_receipt = _check_commercial_result(result)
     investment_receipt = _check_investments(result, tape, orders)
     channel_receipt = check_channels(result['channels'], result['investments'], result['buyers'],

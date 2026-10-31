@@ -6,6 +6,7 @@ Resource contracts prepay their declared reconciliation/support slice. Delivery
 acceptance remains a separate native service operation.
 """
 from __future__ import annotations
+from connected_enterprise.transition_evidence import ticket_body
 
 import copy
 import hashlib
@@ -14,6 +15,7 @@ import os
 from pathlib import Path
 import tempfile
 import threading
+from types import MappingProxyType
 
 from adaptive_enterprise.account import Account, action_digest, action_prefix_digests, audit_account
 from commercial.ledger import amount as validate_amount, canonical, digest, strict_json, operating_state_digest
@@ -22,7 +24,7 @@ from commercial.ledger import _ADAPTIVE_ACCOUNT_CAPABILITY
 from commercial.single_writer import SingleWriterExchange
 
 SCHEMA = 'agi-alpha/connected014-resource-journal/v1'
-SOURCE_PATHS = ('connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
+SOURCE_PATHS = ('connected_enterprise/transition_evidence.py', 'connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
                 'commercial/ledger.py', 'commercial/persistence.py',
                 'commercial/single_writer.py', 'commercial/tape_lease.py',
                 'experiments/commerce006.py', 'vendor/alpha_claim/contracts.py',
@@ -98,16 +100,21 @@ def _seed_id(request, source_sha256):
     return 'connected014-seed-' + digest({'request': request, 'source_sha256': source_sha256})[:32]
 
 
-def _journal_source_at(journal, index):
+def _journal_source_at(journal, index, validated_history=None):
+    if validated_history is not None:
+        for cut, source in validated_history:
+            if index < cut:return source
+        return journal['source']
     for ticket in journal.get('source_history', []):
-        if index < len(ticket['body']['prior_envelope']['body']['entries']):
-            return ticket['body']['from_source']
+        if index < len(ticket_body(ticket)['prior_envelope']['body']['entries']):
+            return ticket_body(ticket)['from_source']
     return journal['source']
 
 
 def _validate_source_history(journal, record, manifest, root):
     from .upgrades import validate_ticket, transition_args, verify_historical
     previous, cut, seen = None, -1, set()
+    validated = []
     for counter, ticket in enumerate(journal.get('source_history', []), 1):
         body = validate_ticket(ticket)
         old = body['prior_envelope']['body']
@@ -128,9 +135,13 @@ def _validate_source_history(journal, record, manifest, root):
         if prior['actions'] != record['ledger']['actions'][:len(prior['actions'])]:
             raise ValueError('SOURCE_TRANSITION_HISTORICAL_PREFIX_CHANGED')
         verify_historical(ticket, manifest, root=root)
+        source = body['from_source']
+        validated.append((size, MappingProxyType({'sha256':source['sha256'],
+                                                 'files':MappingProxyType(dict(source['files']))})))
         seen.add(body['from_source']['sha256']); previous, cut = body['to_source'], size
     if previous is not None and previous != journal['source']:
         raise ValueError('SOURCE_TRANSITION_CURRENT_JOURNAL_TARGET_CHANGED')
+    return tuple(validated)
 
 
 class JournalAccount:
@@ -230,7 +241,9 @@ class JournalAccount:
 
     def _save(self, body=None):
         body = self._journal if body is None else body
-        atomic_bytes(self.journal_path, canonical({'body': body, 'signature': self._signature(body)}) + b'\n')
+        raw=canonical({'body':body,'signature':self._signature(body)})+b'\n'
+        if len(raw)>64_000_000:raise ValueError('BOUNDED_CONNECTED_JOURNAL_REQUIRED')
+        atomic_bytes(self.journal_path,raw)
 
     def _recover(self):
         self._assert_current()
@@ -430,7 +443,11 @@ class JournalAccount:
             states = {t['id']: t['state'] for t in tape['orders']}
             for row in tape.get('prospective_orders', []):
                 if row['matured_at'] is None and states[row['order_id']] in {'released', 'breached'} and day > terms[row['terms_id']]['maturity_day']:
+                    before = self._account.snapshot()['summary']
                     self.execute('mature', {'id': row['order_id'], 'event_id': 'maturity:' + row['order_id'] + ':' + row['terms_sha256'][:20]}, day)
+                    after = self._account.snapshot()['summary']
+                    if any(before[name] != after[name] for name in ('cash', 'profit')):
+                        raise ValueError('MATURITY_CANNOT_CREATE_CASH_OR_PROFIT')
             return self._account.snapshot()
 
     @classmethod
@@ -840,14 +857,14 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
             if any(e['op'] == 'source_transition' and e['args']['id'] == pending_transition['body']['id'] for e in tape['actions']):
                 pending_transition = None
     checked = audit_account(record, root=root, manifest=manifest, pending_source_transition=pending_transition)
-    _validate_source_history(journal, record, manifest, root)
+    validated_history = _validate_source_history(journal, record, manifest, root)
     prefixes = action_prefix_digests(tape['actions'])
     action_index = {}
     for native in tape['actions']:
         action_index.setdefault(_native_id(native['op'], native['args']), []).append(native)
     keys, spent, covered, rejected = set(), 0, [], 0
     for index, entry in enumerate(journal['entries']):
-        entry_source = _journal_source_at(journal, index)
+        entry_source = _journal_source_at(journal, index, validated_history)
         if pending_key is not None and entry['key'] == pending_key:
             if index != len(journal['entries']) - 1 or entry['status'] != 'PENDING' or covered != list(range(len(covered))):
                 raise ValueError('ONE_FINAL_PENDING_CONNECTED_ACTION_REQUIRED')
@@ -917,6 +934,10 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
             raise ValueError('SUPPORTED_CONNECTED_JOURNAL_OPERATION_REQUIRED')
     if covered != list(range(len(tape['actions']))):
         raise ValueError('CONNECTED_JOURNAL_NATIVE_ACTION_COVERAGE_REQUIRED')
+    # Per-call snapshot only. Recheck authenticated history and current blob bytes
+    # before accepting, so store changes during the audit cannot hide behind it.
+    if _validate_source_history(journal, record, manifest, root) != validated_history:
+        raise ValueError('SOURCE_HISTORY_CHANGED_DURING_JOURNAL_AUDIT')
     return {**checked, **({'recovery_preflight_only': True} if pending_key is not None else {}),
             'connected_journal_entries': len(keys),
             'connected_rejected_entries': rejected,
