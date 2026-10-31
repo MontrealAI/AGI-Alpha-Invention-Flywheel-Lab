@@ -27,6 +27,14 @@ class OwnerSigningTests(unittest.TestCase):
   self.assertEqual(ticket['body']['schema'],'agi-alpha/native-source-transition/v2-cas')
   with evidence_directory(store):self.assertEqual(ticket_body(ticket)['prior_record'],self.prior)
   self.assertEqual(authorize_upgrade(**kwargs,prepared_ticket=ticket),ticket)
+  admission=Path(self.case.name)/'TRANSITION_PREFLIGHT'/(digest(ticket)+'.json')
+  value=json.loads(admission.read_text());self.assertEqual(value['body']['ticket_sha256'],digest(ticket))
+  import hmac
+  from commercial.ledger import canonical
+  expected=hmac.new(self.key,b'native-publication-preflight\n'+canonical(value['body']),hashlib.sha256).hexdigest()
+  self.assertEqual(value['signature'],expected)
+  self.assertLessEqual(value['body']['preflight']['planned_public_files'],10000)
+  self.assertLessEqual(value['body']['preflight']['planned_public_bytes'],512*1024*1024)
   changed=copy.deepcopy(ticket);changed['signature']='0'*64
   with self.assertRaisesRegex(ValueError,'PREPARED_SOURCE_AUTHORIZATION_CHANGED'):
    authorize_upgrade(**kwargs,prepared_ticket=changed)
@@ -163,3 +171,79 @@ class OwnerCrashTests(unittest.TestCase):
     obj.write_bytes(saved+b' ')
     with self.assertRaises(ValueError):audit_journal(result['owned_account'],root=root,manifest=self.manifest)
    finally:obj.write_bytes(saved)
+
+
+class OwnerFourTransitionTests(unittest.TestCase):
+ @classmethod
+ def setUpClass(cls):
+  fixture.CASOperatingTests.setUpClass.__func__(cls)
+  # A large, disclosed synthetic verifier inventory makes recursive copying
+  # exceed the unchanged archive file guard. These are not research evidence.
+  notes=cls.old/'synthetic-verifier-inventory';notes.mkdir()
+  for number in range(3000):(notes/(str(number)+'.py')).write_bytes(b'')
+ tearDownClass=classmethod(fixture.CASOperatingTests.tearDownClass.__func__)
+ setUp=fixture.CASOperatingTests.setUp
+ tearDown=fixture.CASOperatingTests.tearDown
+ legacy=fixture.CASOperatingTests.legacy
+ command=OwnerOperatingTests.command
+ def test_four_owner_transitions_flat_portable_history_and_fifth_rejection(self):
+  self.legacy();manifest=self.case/'manifest.json';manifest.write_text(json.dumps(self.manifest))
+  policy=self.case/'policy.json';policy.write_text(json.dumps(self.policy))
+  old=self.old;target=self.new
+  for counter in range(1,5):
+   checkpoint=json.loads((self.world/'STATE.json').read_text())
+   self.command(target,'upgrade','--output',self.world,'--historical-source',old,'--manifest',manifest,
+       '--policy',policy,'--expected-checkpoint',digest(checkpoint),'--id','four-owner-'+str(counter),'--transition-format','v2-cas')
+   descriptor=operations.read_operator(self.world)[0];old=self.world/descriptor['source_dir']
+   self.command(target,'operate','--output',self.world,'--max-events','1')
+   target=self.case/('source-'+str(counter+1));operations._copy_source(old,target);operations._copy_inputs(self.old,target,self.manifest)
+   with (target/'connected_enterprise/pricing.py').open('a') as stream:stream.write('\n# Finite synthetic forward source '+str(counter+1)+'.\n')
+  checkpoint=json.loads((self.world/'STATE.json').read_text());operator=(self.world/'OPERATOR.json').read_bytes();native=(self.world/'account.sqlite.actions.jsonl').read_bytes()
+  with self.assertRaisesRegex(ValueError,'FORWARD_CHAIN_OR_IDENTITY_INVALID'):
+   operations.prepare_upgrade(target,old,manifest,self.world,policy=self.policy,expected_checkpoint_sha256=digest(checkpoint),ident='fifth-forbidden',transition_format='v2-cas')
+  self.assertEqual((self.world/'OPERATOR.json').read_bytes(),operator);self.assertEqual((self.world/'account.sqlite.actions.jsonl').read_bytes(),native)
+  self.command(old,'resume','--output',self.world);self.command(old,'audit','--output',self.world)
+  result=json.loads((self.world/'RESULT.json').read_text());self.assertTrue(result['complete'])
+  self.assertEqual([e['args']['counter'] for e in result['owned_account']['ledger']['actions'] if e['op']=='source_transition'],[1,2,3,4])
+  public=self.case/'public-four'
+  done=subprocess.run([sys.executable,str(old/'scripts/export_recovered023.py'),'--business',str(self.world),'--output',str(public),'--offline-historical-sources'],cwd=old,
+      env={**os.environ,'PYTHONPATH':str(old),'PYTHONDONTWRITEBYTECODE':'1'},capture_output=True,text=True,timeout=300)
+  self.assertEqual(done.returncode,0,done.stderr[-6000:]);self.assertTrue(json.loads(done.stdout)['accepted'])
+  versions=public/'source/historical-source-versions'
+  self.assertEqual(len(list(versions.iterdir())),4)
+  self.assertFalse(any(p.name=='historical-source-versions' for p in versions.rglob('*')))
+  self.assertEqual(len(list(versions.rglob('synthetic-verifier-inventory/*.py'))),3000)
+  self.assertEqual(self.key.stat().st_ino,self.key_inode)
+
+class OwnerPublicationBudgetTests(unittest.TestCase):
+ setUpClass=classmethod(fixture.CASOperatingTests.setUpClass.__func__)
+ tearDownClass=classmethod(fixture.CASOperatingTests.tearDownClass.__func__)
+ setUp=fixture.CASOperatingTests.setUp
+ tearDown=fixture.CASOperatingTests.tearDown
+ legacy=fixture.CASOperatingTests.legacy
+ def test_combined_source_and_objects_reject_before_descriptor_or_financial_change(self):
+  self.legacy();target=self.case/'bounded-target';operations._copy_source(self.new,target);operations._copy_inputs(self.old,target,self.manifest)
+  module=target/'connected_enterprise/transition_evidence.py';text=module.read_text();self.assertIn('MAX_BUNDLE_FILES = 10_000',text)
+  module.write_text(text.replace('MAX_BUNDLE_FILES = 10_000','MAX_BUNDLE_FILES = 300'))
+  manifest=self.case/'manifest.json';manifest.write_text(json.dumps(self.manifest))
+  journal=(self.world/'account.sqlite.connected-journal.json').read_bytes();native=(self.world/'account.sqlite.actions.jsonl').read_bytes()
+  with self.assertRaisesRegex(ValueError,'SHARED_PUBLICATION_BUDGET_EXCEEDED'):
+   operations.prepare_upgrade(target,self.old,manifest,self.world,policy=self.policy,expected_checkpoint_sha256=digest(self.before),ident='unpublishable',transition_format='v2-cas')
+  self.assertFalse((self.world/'OPERATOR.json').exists());self.assertFalse((self.world/'MIGRATION_INTENT.json').exists())
+  self.assertEqual((self.world/'account.sqlite.connected-journal.json').read_bytes(),journal)
+  self.assertEqual((self.world/'account.sqlite.actions.jsonl').read_bytes(),native)
+  self.assertEqual(list((self.world/'TRANSITION_EVIDENCE').iterdir()),[])
+  self.assertEqual(self.key.stat().st_ino,self.key_inode)
+
+ def test_bare_target_preflights_bound_inputs_before_the_normal_copy(self):
+  self.legacy();target=self.case/'bare-target'
+  operations._copy_source(fixture.ROOT,target)
+  # The source-only installation intentionally lacks generated cohort inputs.
+  self.assertFalse((target/self.manifest['jobs'][0]['input']).exists())
+  manifest=self.case/'manifest.json';manifest.write_text(json.dumps(self.manifest))
+  descriptor=operations.prepare_upgrade(target,self.old,manifest,self.world,policy=self.policy,
+      expected_checkpoint_sha256=digest(self.before),ident='bare-installed-target',transition_format='v2-cas')
+  self.assertTrue((self.world/descriptor['source_dir']/self.manifest['jobs'][0]['input']).is_file())
+  self.assertTrue(operations.upgrade(self.world)['accepted'])
+  self.assertTrue(operations.operate(self.world)['complete']);self.assertTrue(operations.audit(self.world)['accepted'])
+  self.assertEqual(self.key.stat().st_ino,self.key_inode)

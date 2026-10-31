@@ -99,10 +99,19 @@ def _seed_id(request, source_sha256):
     return 'connected014-seed-' + digest({'request': request, 'source_sha256': source_sha256})[:32]
 
 
-def _journal_source_at(journal, index):
+def _journal_source_cuts(journal):
+    # One detached resolution per version, after complete history validation.
+    # Each entry still uses its original authenticated source boundary.
+    cuts=[]
     for ticket in journal.get('source_history', []):
-        if index < len(ticket_body(ticket)['prior_envelope']['body']['entries']):
-            return ticket_body(ticket)['from_source']
+        body=ticket_body(ticket)
+        cuts.append((len(body['prior_envelope']['body']['entries']),body['from_source']))
+    return tuple(cuts)
+
+
+def _journal_source_at(journal, index, *, cuts=None):
+    for boundary, source in _journal_source_cuts(journal) if cuts is None else cuts:
+        if index < boundary:return source
     return journal['source']
 
 
@@ -844,13 +853,14 @@ def _audit_journal(record, *, root, manifest, pending_key=None):
                 pending_transition = None
     checked = audit_account(record, root=root, manifest=manifest, pending_source_transition=pending_transition)
     _validate_source_history(journal, record, manifest, root)
+    source_cuts = _journal_source_cuts(journal)
     prefixes = action_prefix_digests(tape['actions'])
     action_index = {}
     for native in tape['actions']:
         action_index.setdefault(_native_id(native['op'], native['args']), []).append(native)
     keys, spent, covered, rejected = set(), 0, [], 0
     for index, entry in enumerate(journal['entries']):
-        entry_source = _journal_source_at(journal, index)
+        entry_source = _journal_source_at(journal, index, cuts=source_cuts)
         if pending_key is not None and entry['key'] == pending_key:
             if index != len(journal['entries']) - 1 or entry['status'] != 'PENDING' or covered != list(range(len(covered))):
                 raise ValueError('ONE_FINAL_PENDING_CONNECTED_ACTION_REQUIRED')

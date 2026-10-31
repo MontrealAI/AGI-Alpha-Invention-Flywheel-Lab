@@ -337,3 +337,75 @@ def record_blobs(record):
     visit(record)
     with evidence_scope(found):pass
     return found
+
+
+def publication_preflight(body, blobs, target_root, manifest):
+    """Owner-side shared source/object/checkpoint budget before signing a new wire.
+
+    The exact eventual export still enforces its guard. This preflight reserves a
+    declared record margin for this checkpoint; it never promises unbounded future
+    records or counts each historical version more than once.
+    """
+    objects={**record_blobs(body['prior_record']),**blobs}
+    with evidence_scope(objects):pass
+    files={};versions={};seen=set()
+    def add_source(root,expected,prefix,inputs_root=None):
+        expected=dict(expected);source_names=set(expected);input_names=set()
+        for job in manifest['jobs']:
+            for field in ['input','artifact','receipt']:
+                name=job[field];bound=job[field+'_sha256']
+                if name in expected and expected[name]!=bound:raise ValueError('HISTORICAL_SOURCE_INPUT_HASH_CONFLICT')
+                expected[name]=bound
+                if name not in source_names:input_names.add(name)
+        for name,bound in sorted(expected.items()):
+            relative=Path(name);path=Path(root)/relative
+            # Normal preparation copies these exact bound job inputs only after
+            # authorization. A bare target need not already contain them.
+            if name in input_names and not path.exists() and not path.is_symlink() and inputs_root is not None:path=Path(inputs_root)/relative
+            if (relative.is_absolute() or '..' in relative.parts or '\\' in name
+                    or any('.sqlite' in part or part=='.git' or part.endswith(('.key','-key')) for part in relative.parts)):
+                raise ValueError('RELATIVE_KEY_FREE_PUBLIC_SOURCE_REQUIRED')
+            if not path.is_file() or any(p.is_symlink() for p in [path,*path.parents]):raise ValueError('REGULAR_PUBLIC_SOURCE_REQUIRED')
+            size=path.stat().st_size
+            if size>MAX_BUNDLE_BYTES:raise ValueError('SHARED_PUBLICATION_BUDGET_EXCEEDED')
+            with path.open('rb') as stream:actual=hashlib.file_digest(stream,'sha256').hexdigest()
+            if actual!=bound:raise ValueError('PUBLIC_SOURCE_CHANGED_DURING_PREFLIGHT')
+            public=prefix+name
+            if public in files and files[public]!={'bytes':size,'sha256':bound}:raise ValueError('PUBLIC_SOURCE_PATH_CONFLICT')
+            files[public]={'bytes':size,'sha256':bound}
+            if len(files)>MAX_BUNDLE_FILES or sum(row['bytes'] for row in files.values())>MAX_BUNDLE_BYTES:
+                raise ValueError('SHARED_PUBLICATION_BUDGET_EXCEEDED')
+    def visit(resolved,ancestors=frozenset()):
+        ident=resolved['from_source']['sha256']
+        if ident in ancestors:raise ValueError('HISTORICAL_SOURCE_CYCLE_REFUSED')
+        expected=dict(resolved.get('operating',{}).get('from_runtime',resolved['from_source'])['files'])
+        for name,bound in resolved['verifier_files'].items():
+            if name in expected and expected[name]!=bound:raise ValueError('HISTORICAL_VERIFIER_HASH_CONFLICT')
+            expected[name]=bound
+        if ident in versions and versions[ident]!=expected:raise ValueError('HISTORICAL_VERSION_INVENTORY_CHANGED')
+        if ident not in versions:
+            if len(versions)>=4:raise ValueError('BOUNDED_SOURCE_TRANSITION_ANCESTRY_REQUIRED')
+            add_source(resolved['historical_root'],expected,'source/historical-source-versions/'+ident+'/')
+            versions[ident]=expected
+        for ticket in resolved['prior_record'].get('source_transitions',{}).values():
+            key=_sha(canonical(ticket))
+            if key in seen:continue
+            seen.add(key)
+            visit(ticket_body(ticket),ancestors|{ident})
+    add_source(target_root,body.get('operating',{}).get('to_runtime',body['to_source'])['files'],'source/',inputs_root=body['historical_root'])
+    visit(body)
+    record_bytes=(len(canonical(body['prior_record']))
+                  +2*len(canonical(body.get('operating',{}).get('prior_checkpoint',{})))
+                  +2*len(canonical(manifest))+1_000_000)
+    source_bytes=sum(row['bytes'] for row in files.values());object_bytes=sum(map(len,objects.values()))
+    # Up to four owner admission receipts plus records, indexes and audit receipts.
+    public_files=len(files)+len(objects)+12
+    if public_files>MAX_BUNDLE_FILES or source_bytes+object_bytes+record_bytes>MAX_BUNDLE_BYTES:
+        raise ValueError('SHARED_PUBLICATION_BUDGET_EXCEEDED')
+    return {'schema':'agi-alpha/native-publication-preflight/v1','source_files':len(files),
+            'source_bytes':source_bytes,'historical_versions':len(versions),'objects':len(objects),
+            'object_bytes':object_bytes,'checkpoint_record_allowance_bytes':record_bytes,
+            'planned_public_files':public_files,'planned_public_bytes':source_bytes+object_bytes+record_bytes,
+            'source_inventory_sha256':_sha(canonical(files)),
+            'limits':{'files':MAX_BUNDLE_FILES,'bytes':MAX_BUNDLE_BYTES},
+            'scope':'Shared checkpoint publication preflight; final actual export retains exact guard; later growth may require another bounded transport'}

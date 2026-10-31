@@ -52,22 +52,28 @@ def copy_source(original,target,expected,manifest,budget=None):
         dest=target/relative;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,dest)
 
 
-def copy_history(target,record,manifest,seen=None,budget=None):
+def copy_history(target,record,manifest,seen=None,budget=None,processed=None):
+    """One exact closure per source version; ancestry remains in original tickets."""
     seen=set() if seen is None else seen
+    processed={} if processed is None else processed
     for ticket in record.get('source_transitions',{}).values():
         body=ticket_body(ticket);identity=body['from_source']['sha256']
         if identity in seen:raise ValueError('HISTORICAL_SOURCE_CYCLE_REFUSED')
-        source=Path(body['historical_root'])
-        destination=target/'historical-source-versions'/identity
-        if not destination.exists():
-            runtime=body.get('operating',{}).get('from_runtime')
-            if runtime is None:raise ValueError('PINNED_HISTORICAL_RUNTIME_INVENTORY_REQUIRED')
-            expected=dict(runtime['files'])
-            for name,bound in body['verifier_files'].items():
-                if name in expected and expected[name]!=bound:raise ValueError('HISTORICAL_VERIFIER_HASH_CONFLICT')
-                expected[name]=bound
+        runtime=body.get('operating',{}).get('from_runtime')
+        if runtime is None:raise ValueError('PINNED_HISTORICAL_RUNTIME_INVENTORY_REQUIRED')
+        expected=dict(runtime['files'])
+        for name,bound in body['verifier_files'].items():
+            if name in expected and expected[name]!=bound:raise ValueError('HISTORICAL_VERIFIER_HASH_CONFLICT')
+            expected[name]=bound
+        if identity in processed and processed[identity]!=expected:
+            raise ValueError('HISTORICAL_VERSION_INVENTORY_CHANGED')
+        if identity not in processed:
+            if len(processed)>=4:raise ValueError('BOUNDED_SOURCE_TRANSITION_ANCESTRY_REQUIRED')
+            source=Path(body['historical_root'])
+            destination=target/'historical-source-versions'/identity
             copy_source(source,destination,expected,manifest,budget)
-            copy_history(destination,body['prior_record'],manifest,seen|{identity},budget)
+            processed[identity]=expected
+        copy_history(target,body['prior_record'],manifest,seen|{identity},budget,processed)
 
 
 def historical_roots(record):
@@ -143,6 +149,18 @@ def _export(business,output,offline):
         initial,total=inventory(output);budget={'files':len(initial),'bytes':total}
     copy_source(source,output/'source',result['source']['files'],manifest,budget)
     copy_history(output/'source',result['owned_account'],manifest,budget=budget)
+    admissions={}
+    from commercial.ledger import digest
+    for ident,ticket in result['owned_account'].get('source_transitions',{}).items():
+        name=digest(ticket)+'.json';path=business/'TRANSITION_PREFLIGHT'/name
+        if path.exists():
+            if path.is_symlink():raise ValueError('PREFLIGHT_RECEIPT_SYMLINK_REFUSED')
+            value=read(path)
+            if value.get('body',{}).get('ticket_sha256')!=digest(ticket):raise ValueError('PUBLICATION_PREFLIGHT_TICKET_CHANGED')
+            target=output/'TRANSITION_PREFLIGHT'/name;target.parent.mkdir(exist_ok=True);shutil.copyfile(path,target)
+            admissions[ident]={'path':'TRANSITION_PREFLIGHT/'+name,'sha256':sha(target)}
+        else:admissions[ident]={'status':'NOT_PRESENT_IN_THIS_HISTORICAL_VERSION'}
+    if admissions:write(output/'PUBLICATION_ADMISSIONS.json',admissions)
     for name in ['RESULT.json','STATE.json','SERVICES.json','SCOREBOARD.json']:
         if (business/name).is_file():shutil.copyfile(business/name,output/name)
     inventory(output)

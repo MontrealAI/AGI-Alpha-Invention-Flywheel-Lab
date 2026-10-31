@@ -11,6 +11,9 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
+import shutil
+from contextlib import contextmanager
 
 from commercial.ledger import canonical, digest
 
@@ -52,6 +55,82 @@ def source_inventory(root):
     return files
 
 
+@contextmanager
+def historical_view(selected, record, manifest, *, flat_root=None, selected_files=None):
+    """Exact old verifiers receive their original nested lookup layout.
+
+    Public transport stores each version once. Derived compatibility paths link
+    only private temporary COPIES, never original source/evidence files. Four
+    unique authenticated tickets bound the ancestry expansion to fifteen nodes.
+    The unchanged public 10k/512MiB budget applies to the unique source closure.
+    """
+    selected=Path(selected)
+    if flat_root is None or not record.get('source_transitions'):
+        yield selected;return
+    flat_root=Path(flat_root)
+    # Only use a caller-derived complete flat inventory. Original owned paths
+    # need no temporary reconstruction when that inventory is absent.
+    if not flat_root.is_dir():
+        yield selected;return
+    from .transition_evidence import ticket_body
+    inventories={};records={};nodes=0
+    def collect(current,ancestors=frozenset()):
+        for ticket in current.get('source_transitions',{}).values():
+            body=ticket_body(ticket);ident=body['from_source']['sha256']
+            if ident in ancestors:raise ValueError('HISTORICAL_SOURCE_CYCLE_REFUSED')
+            expected=dict(body.get('operating',{}).get('from_runtime',{}).get('files',body['from_source']['files']))
+            for name,bound in body['verifier_files'].items():
+                if name in expected and expected[name]!=bound:raise ValueError('HISTORICAL_VERIFIER_HASH_CONFLICT')
+                expected[name]=bound
+            if ident in inventories and inventories[ident]!=expected:raise ValueError('HISTORICAL_VERSION_INVENTORY_CHANGED')
+            inventories[ident]=expected;records[ident]=body['prior_record']
+            if len(inventories)>4:raise ValueError('BOUNDED_SOURCE_TRANSITION_ANCESTRY_REQUIRED')
+            collect(body['prior_record'],ancestors|{ident})
+    collect(record)
+    with tempfile.TemporaryDirectory(prefix='pinned-verifier-view-') as temporary:
+        temporary=Path(temporary);base=temporary/'bases';budget={'files':0,'bytes':0}
+        def copy_bound(original,target,expected):
+            expected=dict(expected)
+            for job in manifest['jobs']:
+                for field in ['input','artifact','receipt']:
+                    name=job[field];bound=job[field+'_sha256']
+                    if name in expected and expected[name]!=bound:raise ValueError('HISTORICAL_SOURCE_INPUT_HASH_CONFLICT')
+                    expected[name]=bound
+            for name,bound in sorted(expected.items()):
+                relative=Path(name);path=original/relative
+                if (relative.is_absolute() or '..' in relative.parts or '\\' in name
+                        or any('.sqlite' in part or part=='.git' or part.endswith(('.key','-key')) for part in relative.parts)):
+                    raise ValueError('RELATIVE_KEY_FREE_HISTORICAL_SOURCE_REQUIRED')
+                if not path.is_file() or any(p.is_symlink() for p in [path,*path.parents]):raise ValueError('REGULAR_HISTORICAL_SOURCE_REQUIRED')
+                budget['files']+=1;budget['bytes']+=path.stat().st_size
+                if budget['files']>10_000 or budget['bytes']>512*1024*1024:raise ValueError('HISTORICAL_SOURCE_BUNDLE_BOUND')
+                destination=target/relative;destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,destination)
+                with destination.open('rb') as stream:actual=hashlib.file_digest(stream,'sha256').hexdigest()
+                if actual!=bound:raise ValueError('HISTORICAL_SOURCE_CONTENT_CHANGED')
+        copy_bound(selected,base/'selected',selected_files)
+        for ident,expected in inventories.items():copy_bound(flat_root/ident,base/ident,expected)
+        def link_tree(original,target):
+            target.mkdir(parents=True)
+            for path in original.rglob('*'):
+                if path.is_file():
+                    destination=target/path.relative_to(original);destination.parent.mkdir(parents=True,exist_ok=True)
+                    os.link(path,destination)
+        def render(original,target,current,ancestors=frozenset()):
+            nonlocal nodes
+            nodes+=1
+            if nodes>16:raise ValueError('BOUNDED_HISTORICAL_VIEW_REQUIRED')
+            link_tree(original,target)
+            rendered=set()
+            for ticket in current.get('source_transitions',{}).values():
+                body=ticket_body(ticket);ident=body['from_source']['sha256']
+                if ident in ancestors:raise ValueError('HISTORICAL_SOURCE_CYCLE_REFUSED')
+                if ident in rendered:continue
+                rendered.add(ident)
+                render(base/ident,target/'historical-source-versions'/ident,body['prior_record'],ancestors|{ident})
+        rendered=temporary/'verifier';render(base/'selected',rendered,record)
+        yield rendered
+
+
 def verify_historical(ticket, manifest, *, root=None):
     body = ticket_body(ticket)
     candidates = [Path(body['historical_root']).absolute()]
@@ -74,6 +153,21 @@ def verify_historical(ticket, manifest, *, root=None):
                         'verifier_files': body['verifier_files']})
     # Recheck all referenced objects even when a pinned verifier receipt is cached.
     record_blobs(body['prior_record'])
+    flat=Path(root).parent if Path(root).parent.name=='historical-source-versions' else None
+    if flat is not None:
+        from .verify import check_source
+        seen=set()
+        def recheck(current):
+            for ancestor in current.get('source_transitions',{}).values():
+                wire=digest(ancestor)
+                if wire in seen:continue
+                seen.add(wire)
+                if len(seen)>4:raise ValueError('BOUNDED_SOURCE_TRANSITION_ANCESTRY_REQUIRED')
+                prior=ticket_body(ancestor);directory=flat/prior['from_source']['sha256']
+                if source_inventory(directory)!=prior['verifier_files']:raise ValueError('PINNED_HISTORICAL_VERIFIER_CHANGED')
+                if 'operating' in prior:check_source(directory,prior['operating']['from_runtime'])
+                load_jobs(directory,manifest);recheck(prior['prior_record'])
+        recheck(body['prior_record'])
     if cache_key in _HISTORICAL_AUDITS:
         return copy.deepcopy(_HISTORICAL_AUDITS[cache_key])
     payload = {'record': body['prior_record'], 'manifest': manifest, 'root': str(root), 'evidence_root': active_directory()}
@@ -82,9 +176,18 @@ def verify_historical(ticket, manifest, *, root=None):
             'scope=__import__("connected_enterprise.transition_evidence",fromlist=["evidence_directory"]).evidence_directory(p["evidence_root"]) if p["evidence_root"] and (Path(p["root"])/"connected_enterprise/transition_evidence.py").is_file() else ExitStack(); '
             'stack.enter_context(scope); r=audit_journal(p["record"],root=p["root"],manifest=p["manifest"]); '
             'assert r["accepted"]; print(json.dumps(r,sort_keys=True))')
-    env = {**os.environ, 'PYTHONPATH': str(root), 'PYTHONDONTWRITEBYTECODE': '1'}
-    done = subprocess.run([sys.executable, '-c', code], input=json.dumps(payload),
-                          text=True, capture_output=True, cwd=root, env=env, timeout=60)
+    flat_root=Path(root).parent if Path(root).parent.name=='historical-source-versions' else None
+    selected_files=dict(body.get('operating',{}).get('from_runtime',body['from_source'])['files'])
+    for name,bound in body['verifier_files'].items():
+        if name in selected_files and selected_files[name]!=bound:raise ValueError('HISTORICAL_VERIFIER_HASH_CONFLICT')
+        selected_files[name]=bound
+    with historical_view(root,body['prior_record'],manifest,flat_root=flat_root,selected_files=selected_files) as executing:
+        payload['root']=str(executing)
+        env = {**os.environ, 'PYTHONPATH': str(executing), 'PYTHONDONTWRITEBYTECODE': '1'}
+        done = subprocess.run([sys.executable, '-c', code], input=json.dumps(payload),
+                              text=True, capture_output=True, cwd=executing, env=env, timeout=60)
+        if source_inventory(executing)!=body['verifier_files']:raise ValueError('HISTORICAL_VERIFIER_CHANGED_DURING_AUDIT')
+        load_jobs(executing,manifest)
     if done.returncode:
         raise ValueError('PINNED_HISTORICAL_AUDIT_FAILED:' + done.stderr[-1200:])
     receipt = json.loads(done.stdout)
@@ -153,7 +256,9 @@ with JournalAccount(p['root'],p['manifest'],p['path'],opening=p['opening'],worki
   serializer=Path(p['serializer'])
   if serializer.is_symlink() or hashlib.sha256(serializer.read_bytes()).hexdigest()!=p['serializer_sha256']:raise ValueError('TARGET_TRANSITION_SERIALIZER_CHANGED')
   spec=importlib.util.spec_from_file_location('owner_selected_transition_serializer',serializer);codec=importlib.util.module_from_spec(spec);spec.loader.exec_module(codec)
-  blobs={};body=codec.externalize(body,blobs)
+  resolved=body;blobs={};body=codec.externalize(body,blobs)
+  with codec.evidence_directory(p['evidence_root']):
+   preflight=codec.publication_preflight(resolved,blobs,serializer.parents[1],p['manifest'])
   codec.persist_evidence(p['evidence_root'],blobs)
  ticket={'body':body,'signature':hmac.new(a._account._key,b'native-source-transition\\n'+canonical(body),hashlib.sha256).hexdigest()}
  if len(canonical(ticket))>16_000_000:raise ValueError('SOURCE_UPGRADE_EXCEEDS_EXISTING_TICKET_BOUND')
@@ -163,6 +268,15 @@ with JournalAccount(p['root'],p['manifest'],p['path'],opening=p['opening'],worki
  if p['prepared_ticket'] is not None:
   if p['prepared_ticket']!=ticket:raise ValueError('PREPARED_SOURCE_AUTHORIZATION_CHANGED')
   ticket=p['prepared_ticket']
+ if p['transition_format']=='v2-cas':
+  from commercial.persistence import atomic_bytes
+  directory=Path(p['path']).parent/'TRANSITION_PREFLIGHT';directory.mkdir(exist_ok=True)
+  if directory.is_symlink():raise ValueError('PUBLICATION_PREFLIGHT_SYMLINK_REFUSED')
+  report={'ticket_sha256':digest(ticket),'preflight':preflight}
+  admission={'body':report,'signature':hmac.new(a._account._key,b'native-publication-preflight\\n'+canonical(report),hashlib.sha256).hexdigest()}
+  report_path=directory/(digest(ticket)+'.json');raw=canonical(admission)+b'\\n'
+  if report_path.exists() and report_path.read_bytes()!=raw:raise ValueError('PUBLICATION_PREFLIGHT_RECEIPT_CHANGED')
+  if not report_path.exists():atomic_bytes(report_path,raw)
  print(json.dumps(ticket,sort_keys=True))
 '''
     env = {**os.environ, 'PYTHONPATH': str(historical_root), 'PYTHONDONTWRITEBYTECODE': '1'}
