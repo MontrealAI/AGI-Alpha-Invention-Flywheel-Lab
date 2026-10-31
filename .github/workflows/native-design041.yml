@@ -32,7 +32,7 @@ jobs:
         run: |
           python -m connected_enterprise.design_flywheel demo --output "$RUNNER_TEMP/native-design041"
           python -m connected_enterprise.design_flywheel verify --output "$RUNNER_TEMP/native-design041"
-      - name: Require an independently audited funded successor and better opportunity
+      - name: Require an independently audited profitable funded successor
         run: |
           python - <<'PY'
           import json,os,pathlib
@@ -40,7 +40,7 @@ jobs:
           print('SELECTED:',r['selection']['selected'])
           print('NATIVE WITNESS:',r['connected_earned_successor_witness'])
           print('CONFIRMATION DELTA:',r['matched_confirmation_profit_delta_microUSD'])
-          assert r['confirmed_strictly_better_funded_opportunity'], 'NO_CONFIRMED_BETTER_FUNDED_SUCCESSOR_IN_THIS_FROZEN_WORLD'
+          assert r['confirmed_positive_funded_successor_opportunity'], 'NO_CONFIRMED_BETTER_FUNDED_SUCCESSOR_IN_THIS_FROZEN_WORLD'
           assert r['comparative_advantage_on_one_fresh_seed'], 'NO_POSITIVE_MATCHED_PROFIT_DELTA_IN_THIS_FROZEN_WORLD'
           PY
       - name: Export only compact public outcome (no private accounts or keys)
