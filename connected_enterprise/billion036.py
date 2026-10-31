@@ -41,7 +41,7 @@ def registered_design():
     return validate_registration({
         'schema': REGISTRATION_SCHEMA, 'label': 'billion036-100k-60months',
         'evidence_role': 'finite_authored_comparison', 'seeds': [261031036],
-        'configs': {'central': base, 'low-demand-high-cost': adverse},
+        'configs': {'central': base, 'low_demand_high_cost': adverse},
         'arms': ['baseline', 'growth'], 'control_arm': 'baseline', 'candidate_arm': 'growth',
         'service_cohort_seed': 14013026, 'workers': 1,
     })
