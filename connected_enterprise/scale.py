@@ -132,6 +132,100 @@ def aggregate_native(tape, checkpoints=(8, 16, 32)):
             'qualification_limit': 'Native event arithmetic is checked at each action. Overlap checks validate record aggregation only; they do not qualify future buyer behavior, unexecuted artifacts, larger-scale unit costs or a forecast model.'}
 
 
+def trailing_profit(tape, *, operating_end_hour, operating_complete, aggregation=None):
+    """Exact one-account observed profit, never a projection or funding authority.
+
+    A completed operating horizon closes at its exclusive configured endpoint.
+    Settlement-drain actions at/after that endpoint remain on the native account
+    but do not silently lengthen the operating horizon or enter this window.
+    Native validity/financial audit is a caller prerequisite; arithmetic/hash
+    checks here are an additional reconciliation, not a substitute audit.
+    """
+    if operating_end_hour is None:
+        # Older analysis fixtures/results have no declared operating clock.
+        # Preserve their financial analysis, but never infer a year from drain.
+        if tape.get('actions_sha256') != _digest(tape.get('actions')):
+            raise ValueError('NATIVE_ACTION_HASH_MISMATCH')
+        return {
+            'schema': 'agi-alpha/native-trailing-profit/v1',
+            'scope': 'ONE_ACCOUNT_EXACT_MODELED_ACCRUAL_PROFIT_NOT_FORWARD_PROJECTION',
+            'native_actions_sha256': tape['actions_sha256'],
+            'interval': None,
+            'operating_complete': operating_complete,
+            'complete_365_day_operating_history': False,
+            'qualification': 'OPERATING_HORIZON_UNAVAILABLE',
+            'trailing_365_day_profit_microUSD': None,
+            'observed_window_profit_microUSD': None,
+            'reason': 'No declared operating horizon; event/drain timestamps do not establish operating coverage.',
+            'limits': ['No annualization or full-year certification. Existing native/operating audit prerequisites and cost limitations remain.']}
+    end = _integer(operating_end_hour, 'operating_end_hour')
+    if end <= 0 or type(operating_complete) is not bool:
+        raise ValueError('POSITIVE_OPERATING_HORIZON_AND_COMPLETION_REQUIRED')
+    if tape.get('actions_sha256') != _digest(tape.get('actions')):
+        raise ValueError('NATIVE_ACTION_HASH_MISMATCH')
+    aggregation = aggregate_native(tape) if aggregation is None else aggregation
+    if aggregation['native_actions_sha256'] != tape['actions_sha256']:
+        raise ValueError('AGGREGATION_ACCOUNT_BINDING_MISMATCH')
+    if not operating_complete:
+        end = min(end, aggregation['last_hour'] + 1)
+    start = max(0, end - YEAR_HOURS)
+    fields = ('revenue', 'recoveryIncome', 'expenses')
+    flows = {k: 0 for k in fields}
+    initial = tape['actions'][0]['before']
+    before_start = {k: initial[k] for k in fields}
+    before_end = dict(before_start)
+    endpoint_summary = dict(initial)
+    if any(initial[k] != 0 for k in fields) or any(a['day'] < 0 for a in tape['actions']):
+        raise ValueError('OPENING_ORIGIN_HISTORY_REQUIRED')
+    included = 0
+    for action in tape['actions']:
+        moment = action['day']
+        if moment < start:
+            before_start = {k: action['after'][k] for k in fields}
+        if moment < end:
+            before_end = {k: action['after'][k] for k in fields}
+            endpoint_summary = dict(action['after'])
+        if start <= moment < end:
+            included += 1
+            for k in fields:
+                flows[k] += action['after'][k] - action['before'][k]
+    prefix = {k: before_end[k] - before_start[k] for k in fields}
+    if flows != prefix:
+        raise ValueError('ROLLING_PROFIT_EVENT_PREFIX_MISMATCH')
+    profit = flows['revenue'] + flows['recoveryIncome'] - flows['expenses']
+    prefix_profit = ((before_end['revenue'] + before_end['recoveryIncome'] - before_end['expenses'])
+                    - (before_start['revenue'] + before_start['recoveryIncome'] - before_start['expenses']))
+    if profit != prefix_profit:
+        raise ValueError('ROLLING_PROFIT_PREFIX_IDENTITY_MISMATCH')
+    qualified = operating_complete and end >= YEAR_HOURS
+    return {
+        'schema': 'agi-alpha/native-trailing-profit/v1',
+        'scope': 'ONE_ACCOUNT_EXACT_MODELED_ACCRUAL_PROFIT_NOT_FORWARD_PROJECTION',
+        'native_actions_sha256': tape['actions_sha256'],
+        'interval': {'start_hour_inclusive': start, 'end_hour_exclusive': end,
+                     'clock': 'native integer hours from opening',
+                     'boundary': '[start,end); all same-hour actions included or excluded together'},
+        'operating_complete': operating_complete,
+        'complete_365_day_operating_history': qualified,
+        'qualification': 'FULL_OPERATING_YEAR' if qualified else 'INSUFFICIENT_OPERATING_HORIZON',
+        'trailing_365_day_profit_microUSD': profit if qualified else None,
+        'observed_window_profit_microUSD': profit,
+        'observed_window_flows_microUSD': flows,
+        'prefix_difference_microUSD': prefix,
+        'prefix_before_start_microUSD': before_start,
+        'prefix_before_end_microUSD': before_end,
+        'native_endpoint_summary': endpoint_summary,
+        'obligation_scope': 'Endpoint native summary preserved, not a new reserve-coverage or complete-cost qualification.',
+        'event_prefix_max_deviation_microUSD': max(abs(flows[k] - prefix[k]) for k in fields),
+        'included_native_actions': included,
+        'settlement_drain_actions_excluded': sum(a['day'] >= end for a in tape['actions']),
+        'accounting_basis': 'Recognized revenue plus recovery income minus incurred expenses; signed revisions retained. Seed and principal reserve releases are not profit. Payables remain incurred expenses even when unpaid. Taxes enter only when recorded as native expense; no added hypothetical tax/depreciation.',
+        'limits': ['Requires independent native and operating audits of the source result.',
+                   'Existing modeled cost coverage and unknown host/model billing are unchanged.',
+                   'No annualization, pooled enterprises, forward inference, or spending authority.',
+                   'Post-operating settlement drain remains on the account but is excluded from this operating-window measure.']}
+
+
 def _milestones(tape, aggregation, epoch):
     records = []
     for dollars in TARGETS_USD:
@@ -269,6 +363,7 @@ def analyze(result):
             'config_sha256': _digest(config), 'native_actions_sha256': tape['actions_sha256'],
             'calendar_epoch_utc': epoch, 'terminal_calendar_utc': _calendar(epoch, last),
             'executed_hours': last,
+            'trailing_profit': trailing_profit(tape, operating_end_hour=(config['horizon_days'] * HOURS_PER_DAY if 'horizon_days' in config else None), operating_complete=result.get('complete', False), aggregation=aggregation),
             'trailing_365_day_collections_microUSD': trailing,
             'complete_365_day_history': last >= YEAR_HOURS,
             'annualized_collections_run_rate_microUSD': None if last == 0 else round(totals['collections'] * YEAR_HOURS / last),

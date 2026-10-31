@@ -318,7 +318,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 o=next(o for o in state['orders'] if o['id']==ev['order_id'])
                 if 'method_plan' in o:
                     from .mechanism_choice import execute_funded
-                    plan=o['method_plan'];execution=execute_funded(root,manifest,account,o['offer'],o['job_id'],ident=o['id']+'-method',day=t,mode=plan['mode'],costs=plan['costs'],memory=plan['memory'],prepaid_order=o['id'],cost_contract=plan.get('cost_contract'))
+                    plan=o['method_plan'];execution=execute_funded(root,manifest,account,o['offer'],o['job_id'],ident=o['id']+'-method',day=t,mode=plan['mode'],costs=plan['costs'],memory=plan['memory'],prepaid_order=o['id'],cost_contract=plan.get('cost_contract'),backend=plan.get('backend'))
                     o['method_execution']=execution;o['service_receipt']=execution.get('service',{'accepted':False,'errors':[execution.get('error','METHOD_FAILED')]})
                     if execution.get('memory') is not None:state['mechanism_memory']=execution['memory']
                 else:o['service_receipt']=execute_offer(root,manifest,o['offer'],o['job_id'])

@@ -13,7 +13,7 @@ PUBLIC_FIELDS = {'anchor','public_rival_price','base_cost','payment_bps','paymen
                  'available','reserve_buffer','quote_cost','native_state_digest','profit_tax_bps'}
 POLICY_FIELDS = {'schema','public_basis','price_bps','rival_price_bps','rival_cost_bps',
                  'rival_response','scenarios'}
-RANK = {'default':0,'conventional':1,'generated':2,'ordinary_reuse':3,'critic_retain':4}
+RANK = {'default':0,'conventional':1,'generated':2,'ordinary_reuse':3,'critic_retain':4,'csv_backend':5}
 
 def validate_policy(policy):
     if set(policy)-{'demand_model','connected_beliefs'}!=POLICY_FIELDS or policy['schema']!='connected-strategic-commerce/v1':
@@ -103,12 +103,13 @@ def select(policy, method_policy, job_id, offer, memory, public):
     # to the paid execution and independent audit, not unfunded quote preparation.
     if memory is not None and (not isinstance(memory,dict) or set(memory)!={'chain','retained'}):
         raise ValueError('SOURCE_BOUND_MEMORY_REFERENCE_REQUIRED')
-    modes=[m for m in MODES if m!='hold'] if scoped else ['default']
+    modes=list(method_policy['costs']) if scoped else ['default']
     if scoped and 'cost_contract' in method_policy:modes.sort(key=lambda mode:RANK[mode])
     problem={'policy':copy.deepcopy(policy),'method_policy':copy.deepcopy(method_policy),
              'job_id':job_id,'offer':copy.deepcopy(offer),'memory':copy.deepcopy(memory),'public':copy.deepcopy(public)}
     rows=[]; best=None
     for mode in modes:
+        if mode=='csv_backend' and (offer.get('scope')!='complete_outcome' or offer.get('method') not in ('canonical','generated_schema')):continue
         if mode=='ordinary_reuse' and memory is None:continue
         if mode=='critic_retain' and offer['method']!='generated_schema':continue
         costs={} if mode=='default' else method_policy['costs'][mode]
@@ -151,7 +152,8 @@ def select(policy, method_policy, job_id, offer, memory, public):
         mode=best['mode'];costs=copy.deepcopy(method_policy['costs'][mode])
         plan={'problem':problem,'decision':decision,'mode':mode,'diagnostic':False,'costs':costs,
               'memory':copy.deepcopy(memory),'cost':sum(costs.values()),'joint_decision':True,
-              **({'cost_contract':copy.deepcopy(method_policy['cost_contract'])} if 'cost_contract' in method_policy else {})}
+              **({'cost_contract':copy.deepcopy(method_policy['cost_contract'])} if 'cost_contract' in method_policy else {}),
+              **({'backend':copy.deepcopy(method_policy['csv_backend'])} if mode=='csv_backend' else {})}
     return {'offer':chosen,'method_plan':plan,'decision':decision,'problem':problem,'candidates':rows}
 
 def rederive(result):
@@ -226,6 +228,7 @@ def selected_delivery(record, option_id):
         plan={'problem':p,'decision':result['decision'],'mode':row['mode'],'diagnostic':False,
               'costs':costs,'memory':copy.deepcopy(p['memory']),'cost':sum(costs.values()),
               'joint_decision':True,'joint_allocation_sha256':digest(record),'joint_option_id':option_id,
-              **({'cost_contract':copy.deepcopy(p['method_policy']['cost_contract'])} if 'cost_contract' in p['method_policy'] else {})}
+              **({'cost_contract':copy.deepcopy(p['method_policy']['cost_contract'])} if 'cost_contract' in p['method_policy'] else {}),
+              **({'backend':copy.deepcopy(p['method_policy']['csv_backend'])} if row['mode']=='csv_backend' else {})}
     return {'offer':offer,'method_plan':plan,'price':row['price'],'complete_cost':row['cost'],
             'fee':row['fee'],'joint_allocation_sha256':digest(record),'joint_option_id':option_id}
