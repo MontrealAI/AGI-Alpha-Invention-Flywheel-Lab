@@ -104,6 +104,7 @@ def select(policy, method_policy, job_id, offer, memory, public):
     if memory is not None and (not isinstance(memory,dict) or set(memory)!={'chain','retained'}):
         raise ValueError('SOURCE_BOUND_MEMORY_REFERENCE_REQUIRED')
     modes=[m for m in MODES if m!='hold'] if scoped else ['default']
+    if scoped and 'cost_contract' in method_policy:modes.sort(key=lambda mode:RANK[mode])
     problem={'policy':copy.deepcopy(policy),'method_policy':copy.deepcopy(method_policy),
              'job_id':job_id,'offer':copy.deepcopy(offer),'memory':copy.deepcopy(memory),'public':copy.deepcopy(public)}
     rows=[]; best=None
@@ -149,7 +150,8 @@ def select(policy, method_policy, job_id, offer, memory, public):
     if scoped:
         mode=best['mode'];costs=copy.deepcopy(method_policy['costs'][mode])
         plan={'problem':problem,'decision':decision,'mode':mode,'diagnostic':False,'costs':costs,
-              'memory':copy.deepcopy(memory),'cost':sum(costs.values()),'joint_decision':True}
+              'memory':copy.deepcopy(memory),'cost':sum(costs.values()),'joint_decision':True,
+              **({'cost_contract':copy.deepcopy(method_policy['cost_contract'])} if 'cost_contract' in method_policy else {})}
     return {'offer':chosen,'method_plan':plan,'decision':decision,'problem':problem,'candidates':rows}
 
 def rederive(result):
@@ -223,6 +225,7 @@ def selected_delivery(record, option_id):
         costs=copy.deepcopy(p['method_policy']['costs'][row['mode']])
         plan={'problem':p,'decision':result['decision'],'mode':row['mode'],'diagnostic':False,
               'costs':costs,'memory':copy.deepcopy(p['memory']),'cost':sum(costs.values()),
-              'joint_decision':True,'joint_allocation_sha256':digest(record),'joint_option_id':option_id}
+              'joint_decision':True,'joint_allocation_sha256':digest(record),'joint_option_id':option_id,
+              **({'cost_contract':copy.deepcopy(p['method_policy']['cost_contract'])} if 'cost_contract' in p['method_policy'] else {})}
     return {'offer':offer,'method_plan':plan,'price':row['price'],'complete_cost':row['cost'],
             'fee':row['fee'],'joint_allocation_sha256':digest(record),'joint_option_id':option_id}

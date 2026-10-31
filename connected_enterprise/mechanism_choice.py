@@ -13,6 +13,38 @@ from adaptive_enterprise.strategies import offer_catalog, adjudicate_and_adapt
 MODES = ('generated', 'conventional', 'ordinary_reuse', 'critic_retain', 'hold')
 COST_FIELDS = ('execution', 'discovery', 'integration', 'verification', 'maintenance', 'retrieval', 'failed_attempts')
 
+
+def validate_cost_contract(contract):
+    if not isinstance(contract,dict) or set(contract)!={'schema','basis','production_envelope_microUSD','covered_operations'} or contract['schema']!='connected-method-cost-contract/v1' or contract['basis']!='COMMON_COMPLETE_PRODUCTION_REPLACEMENT' or contract['covered_operations']!=['produce','acceptance_check']:
+        raise ValueError('EXPLICIT_COMMON_PRODUCTION_REPLACEMENT_CONTRACT_REQUIRED')
+    if type(contract['production_envelope_microUSD']) is not int or contract['production_envelope_microUSD']<=0:
+        raise ValueError('POSITIVE_COMMON_PRODUCTION_ENVELOPE_REQUIRED')
+    return contract
+
+
+
+def validate_common_row(mode,row):
+    if set(row)!=set(COST_FIELDS) or any(type(v) is not int or v<0 for v in row.values()):raise ValueError('COMPLETE_INCREMENTAL_COMMON_COSTS_REQUIRED')
+    if row['execution']!=0:raise ValueError('EXECUTION_ALREADY_COVERED_BY_PRODUCTION')
+    if mode in ('generated','conventional') and any(row.values()):raise ValueError('DIRECT_SUBSTITUTION_ALREADY_COVERED_BY_PRODUCTION')
+    if mode=='ordinary_reuse' and (row['retrieval']<=0 or row['verification']<=0):raise ValueError('PAID_MEMORY_RETRIEVAL_AND_REVALIDATION_REQUIRED')
+    if mode=='critic_retain' and (row['discovery']+row['integration']<=0 or row['verification']<=0 or row['maintenance']<=0):raise ValueError('PAID_CRITIC_CONSTRUCTION_COMPARISON_RETENTION_REQUIRED')
+    return row
+
+def validate_common_costs(costs,contract):
+    validate_cost_contract(contract)
+    for mode,row in costs.items():validate_common_row(mode,row)
+    # These ordinary substitutions execute the same complete admitted service.
+    # They receive no claimed speed/cost savings and no duplicate execution fee.
+    for mode in ('generated','conventional'):
+        if any(costs[mode].values()):raise ValueError('DIRECT_SUBSTITUTION_ALREADY_COVERED_BY_PRODUCTION')
+    if any(row['execution'] for row in costs.values()):raise ValueError('EXECUTION_ALREADY_COVERED_BY_PRODUCTION')
+    if costs['ordinary_reuse']['retrieval']<=0 or costs['ordinary_reuse']['verification']<=0:
+        raise ValueError('PAID_MEMORY_RETRIEVAL_AND_REVALIDATION_REQUIRED')
+    if costs['critic_retain']['verification']<=0 or costs['critic_retain']['maintenance']<=0:
+        raise ValueError('PAID_CRITIC_COMPARISON_AND_RETENTION_REQUIRED')
+    return costs
+
 def checked_memory(memory):
     if memory is None:
         return None
@@ -26,7 +58,7 @@ def checked_memory(memory):
     return copy.deepcopy(memory['retained'])
 
 def validate_problem(problem):
-    if set(problem) != {'schema', 'public_basis', 'jobs', 'costs', 'initial_memory'} or problem['schema'] != 'connected-method-choice/v1':
+    if set(problem)-{'cost_contract'} != {'schema', 'public_basis', 'jobs', 'costs', 'initial_memory'} or problem['schema'] != 'connected-method-choice/v1':
         raise ValueError('FINITE_METHOD_PROBLEM_REQUIRED')
     if not isinstance(problem['public_basis'], str) or not problem['public_basis']:
         raise ValueError('PUBLIC_BELIEFS_REQUIRED')
@@ -37,8 +69,9 @@ def validate_problem(problem):
     for mode, row in problem['costs'].items():
         if set(row) != set(COST_FIELDS) or any(type(v) is not int or v < 0 for v in row.values()):
             raise ValueError('COMPLETE_NONNEGATIVE_COST_ENVELOPE_REQUIRED')
-        if sum(row.values()) <= 0:
+        if sum(row.values()) <= 0 and 'cost_contract' not in problem:
             raise ValueError('POSITIVE_PREPAID_METHOD_COST_REQUIRED')
+    if 'cost_contract' in problem:validate_common_costs(problem['costs'],problem['cost_contract'])
     if problem['costs']['critic_retain']['discovery']+problem['costs']['critic_retain']['integration']<=0:
         raise ValueError('EXPLICIT_PAID_CRITIC_CONSTRUCTION_REQUIRED')
     for job in problem['jobs']:
@@ -78,7 +111,7 @@ def choose(problem):
             'scope':'EXACT_OPTIMUM_OF_DECLARED_FINITE_METHOD_SET_AND_BELIEFS_NOT_GLOBAL_GAME_EQUILIBRIUM'}
 
 def execute_funded(root, manifest, account, offer, job_id, *, ident, day, mode, costs,
-                   memory=None, allow_seed=False, expected_net=1, prepaid_order=None):
+                   memory=None, allow_seed=False, expected_net=1, prepaid_order=None, cost_contract=None):
     """Native prepayment before any diagnostic/search/production work.
 
     Caller must record returned receipt in its authenticated operating checkpoint.
@@ -86,13 +119,17 @@ def execute_funded(root, manifest, account, offer, job_id, *, ident, day, mode, 
     """
     if mode not in MODES: raise ValueError('DECLARED_METHOD_REQUIRED')
     if mode=='hold': return {'mode':'hold','accepted':False,'cost':0,'memory':memory}
-    if set(costs)!=set(COST_FIELDS) or any(type(v) is not int or v<0 for v in costs.values()) or sum(costs.values())<=0:
+    if set(costs)!=set(COST_FIELDS) or any(type(v) is not int or v<0 for v in costs.values()) or (sum(costs.values())<=0 and cost_contract is None):
         raise ValueError('COMPLETE_METHOD_COSTS_REQUIRED')
+    if cost_contract is not None:
+        validate_cost_contract(cost_contract);validate_common_row(mode,costs)
+        if prepaid_order is None:raise ValueError('COMMON_ENVELOPE_REQUIRES_NATIVE_PRODUCTION_PREPAYMENT')
     # Bind raw job identity without executing the service or doing search.
     job=next(j for j in manifest['jobs'] if j['id']==job_id)
     if job['service_id']!='reconciliation' or offer['service_id']!='reconciliation':
         raise ValueError('SCOPED_RECONCILIATION_BRIDGE_ONLY')
     request={'mode':mode,'job_id':job_id,'offer_sha256':digest(offer),'costs':costs,'memory_sha256':digest(memory)}
+    if cost_contract is not None:request['cost_contract']=copy.deepcopy(cost_contract)
     if prepaid_order is None:
         funding=account.spend(ident,'mechanism_resource_contract',sum(costs.values()),day,request,expected_net,allow_seed=allow_seed)
     else:
@@ -102,6 +139,8 @@ def execute_funded(root, manifest, account, offer, job_id, *, ident, day, mode, 
         native=rows[0]['request'];plan=native['work'].get('method_plan')
         if native['kind']!='production_contract' or native['day']>day or native['amount']<sum(costs.values()) or not plan or plan['mode']!=mode or plan['costs']!=costs or digest(plan['memory'])!=digest(memory) or native['work']['job_id']!=job_id or digest(native['work']['offer'])!=digest(offer):
             raise ValueError('NATIVE_METHOD_PREPAYMENT_MISMATCH')
+        if cost_contract is not None and (plan.get('cost_contract')!=cost_contract or native['work'].get('production_envelope_microUSD')!=cost_contract['production_envelope_microUSD'] or native['amount']<cost_contract['production_envelope_microUSD']+sum(costs.values())):
+            raise ValueError('COMMON_PRODUCTION_PREPAYMENT_CHANGED')
         funding=rows[0]['receipt']
     if funding is None:return {'mode':mode,'accepted':False,'reason':'CURRENT_NATIVE_FUNDS_INSUFFICIENT','cost':0,'memory':memory}
     paid_id=prepaid_order+'-resources' if prepaid_order else ident
@@ -110,7 +149,7 @@ def execute_funded(root, manifest, account, offer, job_id, *, ident, day, mode, 
         raise ValueError('COMPLETED_NATIVE_PAYMENT_RECEIPT_REQUIRED')
     # Failures remain paid. Never invent missing source facts or silently retry.
     try:
-        retained=checked_memory(memory) if memory is not None else None
+        retained=checked_memory(memory) if memory is not None and (cost_contract is None or mode in {'ordinary_reuse','critic_retain'}) else None
         comparison=None
         if mode=='ordinary_reuse' and retained is None:raise ValueError('VERIFIED_MEMORY_REQUIRED')
         if mode=='critic_retain':
@@ -129,6 +168,7 @@ def execute_funded(root, manifest, account, offer, job_id, *, ident, day, mode, 
     except (ValueError,KeyError,TypeError) as error:
         result={'mode':mode,'accepted':False,'error':str(error),'cost':sum(costs.values()),'costs':copy.deepcopy(costs),
                 'funding':funding,'resource_request':request,'memory':memory,'job_id':job_id,'offer':copy.deepcopy(offer),'ident':ident,'day':day,'prepaid_order':prepaid_order}
+    if cost_contract is not None:result['cost_contract']=copy.deepcopy(cost_contract)
     return result
 
 def audit_execution(root, manifest, account, record):
@@ -140,6 +180,11 @@ def audit_execution(root, manifest, account, record):
     matching=[e for e in journal if e['request'].get('id')==native_id and e['request'].get('operation')=='spend']
     if len(matching)!=1 or matching[0]['status']!='COMPLETE' or matching[0]['receipt']!=record['funding'] or record['funding'].get('amount')!=matching[0]['request']['amount'] or record['funding'].get('funding') not in {'SEED','EARNED'}:raise ValueError('COMPLETED_NATIVE_PAYMENT_RECEIPT_REQUIRED')
     req=matching[0]['request']
+    if 'cost_contract' in record:
+        contract=validate_cost_contract(record['cost_contract']);validate_common_row(record['mode'],record['costs'])
+        if record['cost']!=sum(record['costs'].values()):raise ValueError('INCREMENTAL_COST_TOTAL_CHANGED')
+        if not record.get('prepaid_order') or req['work'].get('production_envelope_microUSD')!=contract['production_envelope_microUSD'] or req['amount']<contract['production_envelope_microUSD']+record['cost'] or req['work'].get('method_plan',{}).get('cost_contract')!=contract or record['resource_request'].get('cost_contract')!=contract:
+            raise ValueError('COMMON_PRODUCTION_AUDIT_BINDING_CHANGED')
     if record.get('prepaid_order'):
         plan=req['work'].get('method_plan')
         if not plan or req['amount']<record['cost'] or plan['mode']!=record['mode'] or plan['costs']!=record['costs'] or req['work']['job_id']!=record['job_id'] or req['day']>record['day'] or digest(plan['memory'])!=record['resource_request']['memory_sha256']:
@@ -174,12 +219,12 @@ def audit_execution(root, manifest, account, record):
             'fresh_operation_count':fresh['operation_count'],'useful_outcome_sha256':fresh['useful_outcome_sha256']}
 
 def validate_policy(policy):
-    if set(policy)!={'mode','costs','accept_collect_bps','future_equivalent_jobs','public_basis'} or policy['mode'] not in {'optimize','diagnostic_critic_then_reuse'}:
+    if set(policy)-{'cost_contract'}!={'mode','costs','accept_collect_bps','future_equivalent_jobs','public_basis'} or policy['mode'] not in {'optimize','diagnostic_critic_then_reuse'}:
         raise ValueError('EXPLICIT_OPT_IN_METHOD_POLICY_REQUIRED')
     if type(policy['future_equivalent_jobs']) is not int or not 0<=policy['future_equivalent_jobs']<=7:
         raise ValueError('BOUNDED_PUBLIC_FUTURE_JOB_HYPOTHESIS_REQUIRED')
     validate_problem({'schema':'connected-method-choice/v1','public_basis':policy['public_basis'],'initial_memory':False,
-        'jobs':[{'job_id':'validation','price':1,'base_cost':0,'critic_applicable':True,'win_bps':10000,'accept_collect_bps':policy['accept_collect_bps']}], 'costs':policy['costs']})
+        'jobs':[{'job_id':'validation','price':1,'base_cost':0,'critic_applicable':True,'win_bps':10000,'accept_collect_bps':policy['accept_collect_bps']}], 'costs':policy['costs'],**({'cost_contract':policy['cost_contract']} if 'cost_contract' in policy else {})})
     return policy
 
 def order_plan(policy, job_id, offer, memory, base_cost):
@@ -189,12 +234,14 @@ def order_plan(policy, job_id, offer, memory, base_cost):
         'jobs':[{'job_id':job_id if i==0 else 'PUBLIC_EQUIVALENT_JOB_HYPOTHESIS-'+str(i),'price':offer['price_microUSD'],'base_cost':base_cost,
                  'win_bps':10000,'accept_collect_bps':policy['accept_collect_bps'],'critic_applicable':offer['method']=='generated_schema'}
                 for i in range(policy['future_equivalent_jobs']+1)], 'costs':policy['costs']}
+    if 'cost_contract' in policy:problem['cost_contract']=copy.deepcopy(policy['cost_contract'])
     decision=choose(problem);mode=decision['policy'][0]
     if policy['mode']=='diagnostic_critic_then_reuse':
         mode=('ordinary_reuse' if memory else 'critic_retain') if offer['method']=='generated_schema' else 'conventional'
     return {'problem':problem,'decision':decision,'mode':mode,'diagnostic':policy['mode']!='optimize',
             'costs':{} if mode=='hold' else copy.deepcopy(policy['costs'][mode]),'memory':copy.deepcopy(memory),
-            'cost':0 if mode=='hold' else sum(policy['costs'][mode].values())}
+            'cost':0 if mode=='hold' else sum(policy['costs'][mode].values()),
+            **({'cost_contract':copy.deepcopy(policy['cost_contract'])} if 'cost_contract' in policy else {})}
 
 def audit_order(root,manifest,record,owned_account,policy,joint_actions=None):
     """Recompute strategic choice, method context, native prepayment and output."""
@@ -217,6 +264,7 @@ def audit_order(root,manifest,record,owned_account,policy,joint_actions=None):
     if plan!=expected:raise ValueError('STRATEGIC_METHOD_SELECTION_CHANGED')
     checked_memory(plan['memory'])
     result=record['method_execution']
+    if plan.get('cost_contract')!=result.get('cost_contract'):raise ValueError('EXECUTED_COST_CONTRACT_CHANGED')
     if result['mode']!=plan['mode'] or result['costs']!=plan['costs'] or result['cost']!=plan['cost']:
         raise ValueError('EXECUTED_METHOD_DIFFERS_FROM_FUNDED_SELECTION')
     # An account facade exposes only inspected exported native evidence; it grants no mutation.

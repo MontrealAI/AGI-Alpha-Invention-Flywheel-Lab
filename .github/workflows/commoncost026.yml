@@ -1,0 +1,147 @@
+name: "🌌♾️ AGI ALPHA Flywheel Harness — Common production cost"
+on:
+  pull_request:
+    paths:
+      - 'scripts/run_commoncost026.py'
+      - 'scripts/summarize_commoncost026.py'
+      - 'campaign/commoncost-026/**'
+      - '.github/workflows/commoncost026.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: commoncost026-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  smoke:
+    name: Native smoke / ${{ matrix.arm }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        arm: [incumbent, joint]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-commercial010.txt
+      - name: Focused decision and package checks
+        run: |
+          python -m unittest discover -s tests -p 'test_common_cost*.py' -v
+          python -m unittest discover -s tests -p 'test_strategic024.py' -v
+      - name: Run fixed native business and separate financial/operating audit
+        run: python scripts/run_commoncost026.py --stage smoke --case central --seed 2610311740 --arm '${{ matrix.arm }}' --output "$RUNNER_TEMP/commoncost026"
+      - name: Write browser-readable outcome
+        if: always()
+        run: |
+          python - <<'PYCODE'
+          import json, os
+          from pathlib import Path
+          p = Path(os.environ['RUNNER_TEMP']) / 'commoncost026/public/SUMMARY.json'
+          if not p.exists():
+              text = 'No completed receipt was produced. See execution logs; this is not a successful business result.'
+          else:
+              r = json.loads(p.read_text())
+              text = '\n'.join(['## Conditional simulated business',
+                  'Status: ' + str(r.get('status')),
+                  'Case / seed / arm: ' + str(r.get('case')) + ' / ' + str(r.get('seed')) + ' / ' + str(r.get('arm')),
+                  'Paid deliveries: ' + str(r.get('paid_jobs')),
+                  'Native financial summary (micro-USD): ' + json.dumps(r.get('summary'), sort_keys=True),
+                  'Conditional commercial gate: ' + str(r.get('conditional_simulated_commercial_success')),
+                  'Actual commerce: none. Host/model/integration billing is not measured. No annualized or billion-dollar claim.',
+                  'Finite development comparison, not global game-theoretic optimality.'])
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write(text + '\n')
+          PYCODE
+      - name: Publish compact public result only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: commoncost026-smoke-${{ matrix.arm }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/commoncost026/public/SUMMARY.json
+          if-no-files-found: error
+          retention-days: 30
+  scale:
+    name: Matched 28-day / ${{ matrix.case }} / ${{ matrix.seed }} / ${{ matrix.arm }}
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        case: [central, parity, adverse]
+        seed: [2610311737, 2610311738]
+        arm: [incumbent, joint]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-commercial010.txt
+      - name: Execute full fixed horizon and settlement drain
+        run: python scripts/run_commoncost026.py --stage scale --case '${{ matrix.case }}' --seed '${{ matrix.seed }}' --arm '${{ matrix.arm }}' --output "$RUNNER_TEMP/commoncost026"
+      - name: Write browser-readable outcome
+        if: always()
+        run: |
+          python - <<'PYCODE'
+          import json, os
+          from pathlib import Path
+          p = Path(os.environ['RUNNER_TEMP']) / 'commoncost026/public/SUMMARY.json'
+          if not p.exists():
+              text = 'No completed receipt was produced. See execution logs; this is not a successful business result.'
+          else:
+              r = json.loads(p.read_text())
+              text = '\n'.join(['## Conditional simulated business',
+                  'Status: ' + str(r.get('status')),
+                  'Case / seed / arm: ' + str(r.get('case')) + ' / ' + str(r.get('seed')) + ' / ' + str(r.get('arm')),
+                  'Paid deliveries: ' + str(r.get('paid_jobs')),
+                  'Native financial summary (micro-USD): ' + json.dumps(r.get('summary'), sort_keys=True),
+                  'Conditional commercial gate: ' + str(r.get('conditional_simulated_commercial_success')),
+                  'Actual commerce: none. Host/model/integration billing is not measured. No annualized or billion-dollar claim.',
+                  'Finite development comparison, not global game-theoretic optimality.'])
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write(text + '\n')
+          PYCODE
+      - name: Publish compact public result only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: commoncost026-scale-${{ matrix.case }}-${{ matrix.seed }}-${{ matrix.arm }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/commoncost026/public/SUMMARY.json
+          if-no-files-found: error
+          retention-days: 30
+  compare:
+    name: Reconcile every fixed pair
+    if: always()
+    needs: [smoke, scale]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: commoncost026-*
+          path: ${{ runner.temp }}/commoncost026-receipts
+      - name: Compare all registered pairs, including adverse outcomes
+        run: python scripts/summarize_commoncost026.py --input "$RUNNER_TEMP/commoncost026-receipts" --output "$RUNNER_TEMP/commoncost026-comparison"
+      - name: Publish compact paired comparison
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: commoncost026-comparison-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/commoncost026-comparison/COMPARISON.json
+          if-no-files-found: warn
+          retention-days: 30

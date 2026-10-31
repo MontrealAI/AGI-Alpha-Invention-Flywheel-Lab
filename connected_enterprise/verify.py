@@ -547,6 +547,9 @@ def audit(root, manifest, result):
         production = cfg['production_cost'] + cfg['supplier_unit_cost']
         expected_cost = production + cfg['support_cost'] + fee + onboard
         if row.get('method_plan'):expected_cost+=row['method_plan']['cost']
+        contract=cfg.get('mechanism_policy',{}).get('cost_contract')
+        if contract is not None and row.get('method_plan'):
+            if contract['production_envelope_microUSD']!=cfg['production_cost'] or resource['work'].get('production_envelope_microUSD')!=cfg['production_cost'] or row['method_plan'].get('cost_contract')!=contract:raise ValueError('COMMON_PRODUCTION_COST_NOT_SOURCE_BOUND')
         if row.get('fee') != fee or row.get('onboarding') != onboard or row.get('production_cost') != production or row.get('support_cost') != cfg['support_cost'] or row['complete_cost'] != expected_cost or funding['amount'] != expected_cost:
             raise ValueError('COMPLETE_PRODUCTION_FEES_SUPPORT_ONBOARDING_COST_MISMATCH')
         native = native_orders[ident]
