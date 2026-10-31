@@ -48,7 +48,7 @@ class ExternalIncomeContracts(unittest.TestCase):
 
     def test_inflated_external_income_cannot_satisfy_buyer_conservation(self):
         buyer = {'id': 'SIM-customer-000', 'initial_budget': 100,
-                 'remaining_budget': 149, 'our_settled_spend': 1, 'outside_spend': 0,
+                 'remaining_budget': 150, 'our_settled_spend': 0, 'outside_spend': 0,
                  'pending_commitments': {}, 'external_income_total': 50}
         self.assertEqual(check_budgets([buyer], [])['external_buyer_income_microUSD'], 50)
         changed = copy.deepcopy(buyer)
