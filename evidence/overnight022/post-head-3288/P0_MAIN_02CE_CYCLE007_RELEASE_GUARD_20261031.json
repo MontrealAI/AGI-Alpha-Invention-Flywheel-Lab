@@ -1,0 +1,143 @@
+{
+  "schema": "agi-alpha/p0-independent-current-main-release-qualification/v1",
+  "date_utc": "2026-10-31",
+  "owner_lane": "independent-readonly-source-and-public-CI-verification",
+  "source_main": {
+    "commit": "02ce45f19a85765f202ec99c9b4923c7c82b7647",
+    "tree": "8ae51950be251faaecb9d41acf8d1e1a99948886",
+    "merged_change": "PR48 costed channel menu",
+    "qualified_new_release": false
+  },
+  "prior_qualified_incumbent": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+  "observed_failure": {
+    "workflow": "consequential007.yml",
+    "run": 41231994477,
+    "job": 124627963647,
+    "conclusion": "failure",
+    "failed_phase": "conditional-exchange",
+    "artifact_id": 13053549459,
+    "artifact_zip_sha256": "96dd95dab9dc6f34305a795231e8537ddd670982b56ebfd87d337163886525f7",
+    "receipt_member": "cycle007-reproduction/conditional-exchange/RECEIPT.json",
+    "receipt_sha256": "b8e4bd2a72192ff85df4591f54aa80d5d973f836b797abf18b7b05432dc75da1",
+    "ledger_member": "cycle007-reproduction/RESOURCE_LEDGER.json",
+    "ledger_sha256": "f8c86d5da576784cb08541fa6cbba64869a27d3b3b09e37e785777de47d0100a",
+    "receipt_state": "failed",
+    "exit_code": -9,
+    "reason": "launch-or-monitor-error",
+    "error_type": "FileNotFoundError",
+    "error_path_suffix": "/conditional-exchange/artifacts/exchange.sqlite-journal",
+    "observed_wall_seconds": 0.08621675799999906,
+    "waited_child_cpu_seconds": 0.067893,
+    "aggregate_cpu_complete": false,
+    "classified": "transient-SQLite-journal-file-enumeration/stat race in historical resource006_v3 monitor; not a demonstrated financial/account audit error, not a CPU/memory exhaustion"
+  },
+  "release_gate": {
+    "run": 41231994423,
+    "qualify_job": 124627963709,
+    "qualify_result": "success",
+    "publication_job": 124628872126,
+    "publication_result": "failure",
+    "failure": "EXACT_MAIN_QUALIFICATION_FAILED:consequential007.yml",
+    "downloaded_operation": "skipped",
+    "new_release_qualified": false
+  },
+  "versioned_repair": {
+    "pr": 53,
+    "head": "52b31b7112d0fdb3a0ef92dcd114a1829e31690e",
+    "base": "02a48632326521600c9621771937cfd862fb6374",
+    "draft": true,
+    "mechanism": "new resource006_v4 only tolerates FileNotFoundError on vanished scan entries; retains other I/O exceptions, live+terminal accounting and historical resource006_v3 unchanged",
+    "exact_head_public_workflows": {
+      "total": 7,
+      "success": 7,
+      "runs": [
+        41231566267,
+        41231566272,
+        41231566224,
+        41231566350,
+        41231566297,
+        41231566401,
+        41231566225
+      ]
+    },
+    "scope": "PR53 passed exact-HEAD CI on its earlier 02a base; not yet merged or qualified against current main 02ce. No historical failure reclassified."
+  },
+  "archive_exact_git_tree_preflight": {
+    "all_git_trees_truncated": false,
+    "rule": "archive_v2 10,000 eligible files and 512 MiB, current-main 51 hash-pinned source-package-only omissions",
+    "main": {
+      "raw_candidates": 10039,
+      "after_omissions": 9988,
+      "after_bytes": 459545993
+    },
+    "pr53": {
+      "raw_candidates": 10041,
+      "after_omissions_with_main_policy": 9990
+    },
+    "hypothetical_main_plus_pr53": {
+      "raw_candidates": 10047,
+      "after_omissions": 9996,
+      "after_bytes_from_filename_union_last_seen": 459600196,
+      "headroom_files": 4
+    },
+    "hypothetical_main_plus_pr40": {
+      "raw_candidates": 10129,
+      "after_omissions": 10078,
+      "min_to_remove_with_one_zip_and_one_index": 80
+    },
+    "hypothetical_main_plus_pr40_plus_pr53": {
+      "raw_candidates": 10137,
+      "after_omissions": 10086,
+      "min_to_remove_with_one_zip_and_one_index": 88
+    },
+    "limitation": "Source-tree filename unions only, not an executable Git merge, not exact conflict-resolved bytes, not a completed archive build. Omission hashes and original Git records must remain verified and preserved."
+  },
+  "financial_source_authority": {
+    "current_main_source_paths": 21,
+    "dependent_native_pr40_source_paths": 23,
+    "union_paths": 33,
+    "claim": "path-membership preflight only; code/values/transitive dependencies/legacy-HMAC binding remain unqualified"
+  },
+  "source_owner_boundary": {
+    "native_pr": 40,
+    "native_head": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+    "private_completion023": "not independently available",
+    "original_signed_continuation": "blocked",
+    "finance_writes": "none",
+    "key_access": "none"
+  },
+  "acceptance": {
+    "achieved": [
+      "earlier qualified and downloaded permanent-term incumbent",
+      "independently obtained and inspected fresh failed public CI artifact",
+      "PR53 exact-head seven hosted workflows passed against earlier base"
+    ],
+    "partial": [
+      "versioned scan-race repair awaits latest-main composition/normal integration",
+      "native source and release composition"
+    ],
+    "failed": [
+      "main02ce consequential007 and exact-main publication gate",
+      "PR40 earlier archive/publication qualification"
+    ],
+    "blocked": [
+      "original authenticated signed-account continuation and held liabilities",
+      "P0 protected composed release and public downloaded settlement/maturity/earned-funded reinvestment"
+    ],
+    "unqualified": [
+      "P1 paired same-business causal complete-cost expansion",
+      "P2 held-out joint challenger capability benefit",
+      "native-to-aggregate scale bridge",
+      "3B USD TTM complete-cost profit"
+    ]
+  },
+  "resource_scope": "No new spending, paid API, external transaction, native financial account change or key exposure. This review accessed existing public CI/Git history; its overall CPU/model/host billing unknown.",
+  "next_decision": "Existing PR53 owner should integrate narrowly with latest main02ce and qualify exact composed source; do not rerun old failed head unchanged or waive gate. Existing native integration owner should then reconcile all financially executing source paths, historical bindings and archive guard before attempting P0 release. Never overwrite private histories or re-sign old events.",
+  "links": {
+    "failed_ci": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41231994477",
+    "failed_asset": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41231994477/artifacts/13053549459",
+    "blocked_release": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41231994423",
+    "repair_pr": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/53",
+    "native_pr": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/40"
+  }
+}
