@@ -1,0 +1,84 @@
+{
+  "all_test_returncodes": [
+    0,
+    0,
+    0
+  ],
+  "baseline_commit": "10bdb2c5787f95158642b068756ba30b58140562",
+  "benchmarks": [
+    {
+      "name": "before",
+      "process_cpu_seconds": 29.801725933,
+      "result_file_sha256": "2666d2a8d9bba8b1c2b7e43dc0f3ce9bc60bb439052f2f6e299dca445f9c64ba",
+      "source_files": {
+        "adaptive_enterprise/account.py": "31604e0cef1b6f0a1125d97f67b1978e53d14a7de7a1fac5cb7b6b9d4fbc8ce1",
+        "commercial/ledger.py": "854e1e393cf302ad50996153b5eac9934cfcebb1a20c29a65b0cf706df3fedee",
+        "connected_enterprise/finance.py": "e2f20f9d5e52d3664be14a04f23a34311acbb431d36a1958176afb2c4ca923af"
+      },
+      "world_source_sha256": "0af71f7e896a93febf938a07f85bbdba6957287314413a77810b25b2b8d0e3ca"
+    },
+    {
+      "name": "before-unprofiled",
+      "process_cpu_seconds": 13.978736472,
+      "result_file_sha256": "370286deb81489fbb223203a7a44133f77b3c9db180f791b15335a0ab32dcb93",
+      "source_files": {
+        "adaptive_enterprise/account.py": "31604e0cef1b6f0a1125d97f67b1978e53d14a7de7a1fac5cb7b6b9d4fbc8ce1",
+        "commercial/ledger.py": "854e1e393cf302ad50996153b5eac9934cfcebb1a20c29a65b0cf706df3fedee",
+        "connected_enterprise/finance.py": "e2f20f9d5e52d3664be14a04f23a34311acbb431d36a1958176afb2c4ca923af"
+      },
+      "world_source_sha256": "0af71f7e896a93febf938a07f85bbdba6957287314413a77810b25b2b8d0e3ca"
+    },
+    {
+      "name": "after-unprofiled",
+      "process_cpu_seconds": 11.25189089,
+      "result_file_sha256": "135ed5a10b6fe7c298a6649f814a0bab2db41d5addd3a187a3f6214d8cabcde5",
+      "source_files": {
+        "adaptive_enterprise/account.py": "d8a64a593731ca956b96794cbfb790b02cfbc381c8cfabc900a6b11fd1695ab2",
+        "commercial/ledger.py": "74326562e249e9418a3cf5bf1a75245081dd795c7af085118b04e84ffb7fde80",
+        "connected_enterprise/finance.py": "e2f20f9d5e52d3664be14a04f23a34311acbb431d36a1958176afb2c4ca923af"
+      },
+      "world_source_sha256": "ad73704de6f84b25d3d8d82fa66b7a7c8638e2ab2f474863f58c511206388ec8"
+    },
+    {
+      "name": "after-fresh-objects",
+      "process_cpu_seconds": 10.262905117,
+      "result_file_sha256": "7400697ecb9fcb5f85a43591289408a27a6490ea110a889cc5809ff4655d3bec",
+      "source_files": {
+        "adaptive_enterprise/account.py": "d8a64a593731ca956b96794cbfb790b02cfbc381c8cfabc900a6b11fd1695ab2",
+        "commercial/ledger.py": "b75c6faa05617f3779fced53d870d01620e6e50dc40aada899ad6a546e88b0c5",
+        "connected_enterprise/finance.py": "e2f20f9d5e52d3664be14a04f23a34311acbb431d36a1958176afb2c4ca923af"
+      },
+      "world_source_sha256": "7bc591812f78feb7492838afeaedcc4ad05b6003f882e25e2166a40b5a12d975"
+    },
+    {
+      "name": "after-final-guard",
+      "process_cpu_seconds": 10.89009207,
+      "result_file_sha256": "cf43b69ec58d85f8889f7aa175ed174fa873e71f9913ca68b1b587feca241ed7",
+      "source_files": {
+        "adaptive_enterprise/account.py": "d8a64a593731ca956b96794cbfb790b02cfbc381c8cfabc900a6b11fd1695ab2",
+        "commercial/ledger.py": "59a974314705012674d7e196a210a9c9379508c72787503f5261514a9b6e97ed",
+        "connected_enterprise/finance.py": "e2f20f9d5e52d3664be14a04f23a34311acbb431d36a1958176afb2c4ca923af"
+      },
+      "world_source_sha256": "6857d23db070867448565e0ba6bbc36afece251087bc79762c4e232755abe06f"
+    }
+  ],
+  "candidate1_below20percent_preserved": true,
+  "candidate2_pre_guard_percent_cpu_reduction": 26.582025939490073,
+  "existing_financial_recovery_tests": 5,
+  "final_guard_tests": 2,
+  "final_percent_cpu_reduction": 22.095304594851505,
+  "final_source_files": {
+    "adaptive_enterprise/account.py": "d8a64a593731ca956b96794cbfb790b02cfbc381c8cfabc900a6b11fd1695ab2",
+    "commercial/ledger.py": "59a974314705012674d7e196a210a9c9379508c72787503f5261514a9b6e97ed",
+    "connected_enterprise/finance.py": "e2f20f9d5e52d3664be14a04f23a34311acbb431d36a1958176afb2c4ca923af",
+    "tests/test_connected_manifest_validation.py": "9ef1c04092b59ad90bf9bc9781d629a7b1fca27232fd51115117be85abcb08ef"
+  },
+  "known_process_and_waited_child_cpu_lower_bound": 91.07002279999999,
+  "limits": "Fixed exposed12day/4paid54action/1earnedreservation baseline fixture only. Final22percent engineering speedup is not resource-qualified full-default released commerce. Old CPU failures/600 and2506.000343 attempts remain failed. Full exact-head CI/main/release and actual2400CPU/900wall downloaded default remain mandatory.",
+  "new_authority_tests": 7,
+  "profile_excluded_from_speedup_comparison": true,
+  "resource_scope": "75CPU target exceeded; measuredknown lowerbound below92financial planning ceiling, phase100CPU unchanged. Imports/teardown for earlier process-timed runs, edit/git/review/wrapper CPU not fully measured, not zero; root owns total reserve. No further financial runs authorized/planned.",
+  "schema": "agi-alpha/performance016-financial-qualification/v1",
+  "semantic_equivalence_sha256": "d3033c3668e0286b63c3ab18ab4c2ddf3768426af9756fb9951e005c098be173",
+  "source_authenticity": "Each benchmark RESULT authentically records source.files map/digest. Candidate2 preguard sourcebytes captured and hashmatched; final sourcebytes captured and hashmatched. No reconstructed outputs are original evidence."
+}

@@ -333,6 +333,105 @@ def download(directory, receipt_path, source_commit, repository):
     write(receipt_path, receipt)
     return receipt
 
+def failure_checkpoint(operation, output, source_commit, source_sha256):
+    """Preserve bounded public diagnostics without auditing or reopening accounts."""
+    from connected_enterprise.runner import read_freeze, tasks
+    operation, output = Path(operation).absolute(), Path(output).absolute()
+    if any(path.is_symlink() for path in [operation, *operation.parents, output, *output.parents]):
+        raise ValueError('UNSYMLINKED_FAILURE_CHECKPOINT_REQUIRED')
+    captured = {}
+    def read_member(name, optional=False):
+        relative = PurePosixPath(name)
+        if (not name or relative.is_absolute() or '..' in relative.parts or '\\' in name
+                or '.git' in relative.parts or '.sqlite' in name or name.endswith('.adaptive-simulation-key')):
+            raise ValueError('UNSAFE_OR_PRIVATE_FAILURE_MEMBER')
+        if name in captured:
+            return captured[name]
+        path = operation.joinpath(*relative.parts)
+        if any(part.is_symlink() for part in [path, *path.parents]):
+            raise ValueError('UNSYMLINKED_FAILURE_MEMBER_REQUIRED')
+        if not path.exists() and optional:
+            return None
+        with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), 'rb') as stream:
+            before = os.fstat(stream.fileno())
+            if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size > 32_000_000:
+                raise ValueError('BOUNDED_REGULAR_FAILURE_MEMBER_REQUIRED')
+            raw = stream.read(32_000_001)
+            after = os.fstat(stream.fileno())
+        if ((before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns, before.st_nlink, before.st_mode)
+                != (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns, after.st_nlink, after.st_mode)
+                or len(raw) != before.st_size):
+            raise ValueError('FAILURE_MEMBER_CHANGED_DURING_CAPTURE')
+        captured[name] = raw
+        return raw
+    frozen_raw = read_member('FROZEN.json')
+    frozen = read_freeze(operation)
+    if json.loads(frozen_raw) != frozen or frozen['source']['sha256'] != source_sha256:
+        raise ValueError('FAILURE_CHECKPOINT_RELEASE_SOURCE_MISMATCH')
+    registered = [row['id'] for row in tasks(frozen['protocol'])]
+    if (not 1 <= len(registered) <= 1000 or len(registered) != len(set(registered))
+            or any(not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,159}', name) for name in registered)):
+        raise ValueError('BOUNDED_REGISTERED_FAILURE_WORLDS_REQUIRED')
+    archive, candidate = output/'failed-operation-keyfree.zip', output/'.failed-operation-candidate.zip'
+    if archive.exists() or candidate.exists():
+        raise FileExistsError('NEW_FAILURE_CHECKPOINT_REQUIRED')
+    files, missing, total = {}, [], 0
+    with zipfile.ZipFile(candidate, 'x', compression=zipfile.ZIP_STORED) as zipped:
+        def include(name, expected=None, optional=False):
+            nonlocal total
+            if name in files:
+                if expected is not None and files[name]['sha256'] != expected:
+                    raise ValueError('FAILURE_MEMBER_BINDING_COLLISION')
+                return
+            raw = read_member(name, optional)
+            if raw is None:
+                missing.append(name)
+                return
+            if len(files) >= 10000 or total + len(raw) > LIMIT:
+                raise ValueError('BOUNDED_REGULAR_FAILURE_MEMBER_REQUIRED')
+            actual = hashlib.sha256(raw).hexdigest()
+            if expected is not None and actual != expected:
+                raise ValueError('FAILURE_MEMBER_HASH_MISMATCH')
+            zipped.writestr(name, raw)
+            files[name] = {'sha256':actual, 'bytes':len(raw)}
+            total += len(raw)
+        for name in ('FROZEN.json', 'SERVICES.json', 'PROGRESS.json', 'REPORT.json', 'COMPLETE.json', 'PACKAGE_AUDIT.json'):
+            include(name, optional=name not in {'FROZEN.json', 'SERVICES.json'})
+        services = json.loads(captured['SERVICES.json'])
+        from adaptive_enterprise.instruments import _validate_manifest
+        _validate_manifest(operation/'source', services)
+        if any(frozen['source']['files'].get(name) != expected for name, expected in services['source_hashes'].items()):
+            raise ValueError('FAILURE_SERVICE_SOURCE_BINDING_MISMATCH')
+        for name, expected in frozen['source']['files'].items():
+            include('source/'+name, expected)
+        job_fields = {'id','service_id','accepted','work_keys','input','input_sha256','artifact','artifact_sha256','receipt','receipt_sha256'}
+        seen = set()
+        for job in services['jobs']:
+            if (not isinstance(job, dict) or set(job) != job_fields or not isinstance(job.get('id'), str)
+                    or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,159}', job['id']) or job['id'] in seen
+                    or type(job.get('accepted')) is not bool):
+                raise ValueError('BOUND_FAILURE_SERVICE_JOB_REQUIRED')
+            seen.add(job['id'])
+            for field, filename in (('input','input.json'), ('artifact','artifact.json'), ('receipt','acceptance.json')):
+                if (job[field] != 'service-inputs/'+job['id']+'/'+filename
+                        or not isinstance(job[field+'_sha256'], str) or not re.fullmatch('[0-9a-f]{64}', job[field+'_sha256'])):
+                    raise ValueError('CANONICAL_FAILURE_SERVICE_PATH_REQUIRED')
+                include('source/'+job[field], job[field+'_sha256'])
+        for ident in registered:
+            for name in ('RESULT.json', 'STATE.json', 'AUDIT.json', 'GROWTH.json'):
+                include('worlds/'+ident+'/'+name, optional=True)
+        checkpoint = {'schema':'agi-alpha/connected014-failure-checkpoint/v1',
+            'scope':'UNQUALIFIED_FAILURE_CHECKPOINT_NOT_RESUME_AUTHORITY', 'source_commit':source_commit,
+            'source_sha256':source_sha256, 'frozen_sha256':frozen['sha256'], 'registered_world_ids':registered,
+            'consistent_cut':'NOT_ATTESTED; individual file bytes are hash-bound; no financial or operating audit performed.',
+            'files':files, 'missing_optional_files':missing}
+        zipped.writestr('FAILURE_CHECKPOINT.json', json.dumps(checkpoint, sort_keys=True, separators=(',', ':'), allow_nan=False))
+    with zipfile.ZipFile(candidate) as zipped:
+        checked_members(zipped)
+    candidate.replace(archive)
+    return {'path':archive.name, 'sha256':digest(archive), 'bytes':archive.stat().st_size,
+            'files':len(files), 'scope':checkpoint['scope'], 'consistent_cut':checkpoint['consistent_cut']}
+
 def operate_download(directory, output, source_commit, timeout, actual_release_download=False):
     directory, output = Path(directory).resolve(), Path(output).resolve()
     manifest = verify_assets(directory, source_commit)
@@ -417,6 +516,10 @@ def operate_download(directory, output, source_commit, timeout, actual_release_d
                        operating_report=read(operation/'REPORT.json'))
     except BaseException as error:
         receipt['failure'] = {'type':type(error).__name__, 'message':str(error)}
+        try:
+            receipt['failure_checkpoint'] = failure_checkpoint(output/'operation', output, source_commit, manifest['source_sha256'])
+        except BaseException as checkpoint_error:
+            receipt['checkpoint_failure'] = {'type':type(checkpoint_error).__name__, 'message':str(checkpoint_error)}
         raise
     finally:
         measured = measure(enforce=False)
