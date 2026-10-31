@@ -1,0 +1,15 @@
+{
+  "schema": "agi-alpha/native020-independent-upgrade/v1",
+  "accepted": false,
+  "source_sha256": "bdd2676ceb1bd5fe4dd1b27c46f8b8014b42dc3e0bc57b8c95d35e30120e863a",
+  "test_sha256": "80ec4a815d606a96cd02e9c1ce61a3295e36334b56ad8c6c3f94c44eb9c62b1b",
+  "historical_commit": "10bdb2c5787f95158642b068756ba30b58140562",
+  "scope": "Financial Account/Journal source transition only; no legacy engine queue or STATE migration.",
+  "independence": "Different same-session reviewing agent and independently composed sequence; shared model, host, tools and source fixture.",
+  "cpu_limit_seconds": 30,
+  "early_stop_seconds": 28,
+  "error": "Traceback (most recent call last):\n  File \"/workspace/scratch/8ae627a67fcf/p0-native/campaign/verification-021-work/source/campaign/native-capital-020/independent/test_ordinary_portable_upgrade.py\", line 46, in main\n    T.setUpClass()\n  File \"/workspace/scratch/8ae627a67fcf/p0-native/campaign/verification-021-work/source/tests/test_native_source_upgrade.py\", line 35, in setUpClass\n    raw = subprocess.check_output(['git', 'archive', BASE, '--', *folders], cwd=ROOT)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 466, in check_output\n    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py\", line 571, in run\n    raise CalledProcessError(retcode, process.args,\nsubprocess.CalledProcessError: Command '['git', 'archive', '10bdb2c5787f95158642b068756ba30b58140562', '--', 'adaptive_enterprise', 'connected_enterprise', 'commercial', 'enterprise', 'experiments', 'vendor', 'flywheel', 'portfolio25', 'portfolio_scale', 'verification']' returned non-zero exit status 128.\n",
+  "cpu_seconds_including_waited_children": 0.028397,
+  "wall_seconds": 0.028310292997048236,
+  "finished_utc": "2026-10-31T01:29:37.269983+00:00"
+}

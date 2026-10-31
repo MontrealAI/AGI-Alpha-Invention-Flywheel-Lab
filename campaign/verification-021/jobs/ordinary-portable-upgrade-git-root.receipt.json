@@ -1,0 +1,36 @@
+{
+  "schema": "native021-local-job/v1",
+  "name": "ordinary-portable-upgrade-git-root",
+  "job_id": "ca78dada5c5046809158bb9bf83445ea",
+  "command": [
+    "env",
+    "GIT_DIR=/workspace/scratch/8ae627a67fcf/p0-native/.git",
+    "GIT_WORK_TREE=/workspace/scratch/8ae627a67fcf/p0-native/campaign/verification-021-work/source",
+    "python3",
+    "campaign/native-capital-020/independent/test_ordinary_portable_upgrade.py"
+  ],
+  "cwd": "/workspace/scratch/8ae627a67fcf/p0-native/campaign/verification-021-work/source",
+  "host_process_group": {
+    "pid": 225689,
+    "pgid": 225689
+  },
+  "exit_code": 0,
+  "stop_reason": null,
+  "expected_control_stop": false,
+  "accepted": true,
+  "child_and_waited_descendant_cpu_seconds": 17.293013,
+  "controller_cpu_seconds": 1.8779519,
+  "shell_cpu_allowance_seconds": 0.2,
+  "charged_cpu_seconds": 19.370964899999997,
+  "peak_live_cpu_seconds": 19.189594753,
+  "wall_seconds": 17.966582378998282,
+  "peak_rss_including_controller_bytes": 97681408,
+  "peak_observed_processes": 2,
+  "new_disk_bytes_at_finish": 10825925,
+  "per_job_limit_cpu_seconds": 150,
+  "per_job_limit_wall_seconds": 300,
+  "monitor_cpu_stop_seconds": 38.0,
+  "monitor_wall_stop_seconds": 120.0,
+  "within_hard_limits": true,
+  "finished_utc": "2026-10-31T01:30:35.969870+00:00"
+}

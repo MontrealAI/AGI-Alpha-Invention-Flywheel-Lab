@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/8ae627a67fcf/verify021_operations.py", line 53, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/scratch/8ae627a67fcf/verify021_operations.py", line 37, in main
+    assert json.loads((output/'arms'/name/'RESULT.json').read_text())['complete'],'INCOMPLETE_COMPARISON_ARM'
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: INCOMPLETE_COMPARISON_ARM

@@ -1,0 +1,55 @@
+{
+  "checked_utc": "2026-10-31T01:33:42.141465+00:00",
+  "candidate_ref_expected": "fff440f64087ae1daa088e329f980c4827729b05",
+  "base_tree": "6cf0e642ea25e776bf543367477b79eeb467db34",
+  "candidate_actions_runs_before": 0,
+  "repository_rulesets": [],
+  "write_plan": "Fast-forward only the existing candidate branch; no PR, workflow dispatch, merge, release or workflow change.",
+  "workflows": [
+    {
+      "path": ".github/workflows/adaptive012.yml",
+      "sha256": "6441da62bcd0aead8e5fc54257107996eb5d9804cfed15cd0122c0028257164b",
+      "triggers": "on:\n  pull_request:\n  push:\n    branches: [main]\n  workflow_dispatch:"
+    },
+    {
+      "path": ".github/workflows/campaign.yml",
+      "sha256": "7757d6a2b4f7f98dcd528d79f8e8de1fe638c52a7e75239db9a829928f01d594",
+      "triggers": "on:\n  pull_request:\n  push:\n    branches: [main, campaign/grid-screen-cycle-1]"
+    },
+    {
+      "path": ".github/workflows/commercial010.yml",
+      "sha256": "6c367634b8431895141a4d137cdbc02db5a77ccbf9d0375766c9640f0f3458d7",
+      "triggers": "on:\n  pull_request:\n  push:\n    branches: [main]"
+    },
+    {
+      "path": ".github/workflows/connected014-release.yml",
+      "sha256": "e7f3517a428d56fdcb95ab4709b0a877949209e97f602223b19208e855881fb3",
+      "triggers": "on:\n  pull_request:\n  push:\n    branches: [main]\n  workflow_dispatch:"
+    },
+    {
+      "path": ".github/workflows/connected014.yml",
+      "sha256": "0d980a72380ffb55763267940ad4064f1bbc2a742449342820d142b0466674ae",
+      "triggers": "on:\n  pull_request:\n  workflow_dispatch:"
+    },
+    {
+      "path": ".github/workflows/consequential007.yml",
+      "sha256": "d77de83e6069eafdb0c0c5e6cff69557484a35a91afe605af699fafb829138db",
+      "triggers": "on:\n  pull_request:\n  push:\n    branches: [main]"
+    },
+    {
+      "path": ".github/workflows/consequential009.yml",
+      "sha256": "dd6eb96aef4501d0a5729328c6a8afe7eeba60bf2fb153881ea1bed3873dea5d",
+      "triggers": "on:\n  pull_request:\n  push:\n    branches: [main]"
+    },
+    {
+      "path": ".github/workflows/enterprise011.yml",
+      "sha256": "f5338af74f24552738276cf88a1ca558d78e2a64a1540eabaa1f59c3c0c36c49",
+      "triggers": "on:\n  workflow_dispatch:"
+    },
+    {
+      "path": ".github/workflows/measurement009.yml",
+      "sha256": "adade5890dc6202bf3ab9b454dc95008826495bb6f670f2d1c7fbd4744a93d31",
+      "triggers": "on:\n  pull_request:\n    paths:\n      - '.github/workflows/measurement009.yml'\n      - 'campaign/next-009/**'\n      - 'inventions/measurement009/**'\n      - 'research/next009/**'\n      - 'verification/next009/**'\n      - 'docs/next009/**'\n      - 'evidence/next009/**'\n  push:\n    branches: [main]\n    paths:\n      - '.github/workflows/measurement009.yml'\n      - 'campaign/next-009/**'\n      - 'inventions/measurement009/**'\n      - 'research/next009/**'\n      - 'verification/next009/**'\n      - 'docs/next009/**'\n      - 'evidence/next009/**'\n"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "native021-local-job/v1",
+  "name": "corrected-launcher-legacy",
+  "job_id": "e6e6cf5e5b454b19be5fb636ae17a5ac",
+  "command": [
+    "python3",
+    "campaign/native-capital-020/run_qualification.py",
+    "--name",
+    "verification021-legacy",
+    "test_adaptive_account",
+    "test_connected_finance",
+    "test_connected_recovery_preflight",
+    "test_connected_rejections",
+    "test_connected_audit_prefixes",
+    "test_commerce006"
+  ],
+  "cwd": "/workspace/scratch/8ae627a67fcf/p0-native/campaign/verification-021-work/source",
+  "host_process_group": {
+    "pid": 225465,
+    "pgid": 225465
+  },
+  "exit_code": 0,
+  "stop_reason": null,
+  "expected_control_stop": false,
+  "accepted": true,
+  "child_and_waited_descendant_cpu_seconds": 86.34172,
+  "controller_cpu_seconds": 47.840956556,
+  "shell_cpu_allowance_seconds": 0.2,
+  "charged_cpu_seconds": 134.38267655599998,
+  "peak_live_cpu_seconds": 133.34081709699998,
+  "wall_seconds": 90.47328341800312,
+  "peak_rss_including_controller_bytes": 113844224,
+  "peak_observed_processes": 4,
+  "new_disk_bytes_at_finish": 15298111,
+  "per_job_limit_cpu_seconds": 150,
+  "per_job_limit_wall_seconds": 300,
+  "monitor_cpu_stop_seconds": 145.0,
+  "monitor_wall_stop_seconds": 295.0,
+  "within_hard_limits": true,
+  "finished_utc": "2026-10-31T01:30:26.041890+00:00"
+}

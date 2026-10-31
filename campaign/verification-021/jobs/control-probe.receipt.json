@@ -1,0 +1,34 @@
+{
+  "schema": "native021-local-job/v1",
+  "name": "control-probe",
+  "job_id": "8f1711895cab49a3bd8dc1121fc39494",
+  "command": [
+    "python3",
+    "verify021_control_probe.py"
+  ],
+  "cwd": "/workspace/scratch/8ae627a67fcf",
+  "host_process_group": {
+    "pid": 225426,
+    "pgid": 225426
+  },
+  "exit_code": -9,
+  "stop_reason": "CPU_GUARD",
+  "expected_control_stop": true,
+  "accepted": true,
+  "child_and_waited_descendant_cpu_seconds": 2.1714759999999997,
+  "controller_cpu_seconds": 1.908085736,
+  "shell_cpu_allowance_seconds": 0.2,
+  "charged_cpu_seconds": 4.279561736,
+  "peak_live_cpu_seconds": 3.380552968,
+  "wall_seconds": 1.9674816939950688,
+  "peak_rss_including_controller_bytes": 41844736,
+  "peak_observed_processes": 3,
+  "new_disk_bytes_at_finish": 4169689,
+  "per_job_limit_cpu_seconds": 150,
+  "per_job_limit_wall_seconds": 300,
+  "monitor_cpu_stop_seconds": 2.0,
+  "monitor_wall_stop_seconds": 15.0,
+  "within_hard_limits": true,
+  "finished_utc": "2026-10-31T01:28:30.715973+00:00",
+  "accounting_correction": "Include final disk-enumeration controller CPU; corrected before any candidate checks."
+}

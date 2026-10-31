@@ -1,0 +1,33 @@
+{
+  "schema": "native021-local-job/v1",
+  "name": "final-controller-probe",
+  "job_id": "4549f5fe791c4e4f9d5e04211b5d7c29",
+  "command": [
+    "python3",
+    "verify021_control_probe.py"
+  ],
+  "cwd": "/workspace/scratch/8ae627a67fcf",
+  "host_process_group": {
+    "pid": 225980,
+    "pgid": 225980
+  },
+  "exit_code": -9,
+  "stop_reason": "CPU_GUARD",
+  "expected_control_stop": true,
+  "accepted": true,
+  "child_and_waited_descendant_cpu_seconds": 1.6079620000000001,
+  "controller_cpu_seconds": 0.421435717,
+  "shell_cpu_allowance_seconds": 0.2,
+  "charged_cpu_seconds": 2.2293977170000003,
+  "peak_live_cpu_seconds": 2.013484349,
+  "wall_seconds": 1.007779343999573,
+  "peak_rss_including_controller_bytes": 42311680,
+  "peak_observed_processes": 3,
+  "new_disk_bytes_at_finish": 26364388,
+  "per_job_limit_cpu_seconds": 150,
+  "per_job_limit_wall_seconds": 300,
+  "monitor_cpu_stop_seconds": 2.0,
+  "monitor_wall_stop_seconds": 15.0,
+  "within_hard_limits": true,
+  "finished_utc": "2026-10-31T01:33:29.558050+00:00"
+}

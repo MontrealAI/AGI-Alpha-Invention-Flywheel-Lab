@@ -1,0 +1,27 @@
+{
+  "schema": "native021-owner-allocation/v1",
+  "accepted_utc": "2026-10-31T01:21:04Z",
+  "deadline_utc": "2026-10-31T01:51:04Z",
+  "authorization": "I authorize the checkpoint’s verification-only continuation: 30 minutes, 600 total CPU seconds; 150 CPU/300 wall seconds per job; 2 GiB memory; 256 MiB new disk; two concurrent jobs; 16 MiB retrieval. Zero hosted CI, external spending, new runtime changes, merge, release or automatic renewal. Verify the corrected launcher and prepared tests on the unchanged candidate, preserve the failed run, and publish the results and resource receipts.",
+  "limits": {
+    "total_cpu_seconds_including_children_and_meter": 600,
+    "per_job_cpu_seconds": 150,
+    "per_job_wall_seconds": 300,
+    "aggregate_memory_bytes": 2147483648,
+    "new_disk_bytes": 268435456,
+    "maximum_active_jobs": 2,
+    "retrieval_bytes": 16777216
+  },
+  "forbidden": {
+    "hosted_ci": true,
+    "external_spending": true,
+    "new_runtime_changes": true,
+    "merge": true,
+    "release": true,
+    "automatic_renewal": true
+  },
+  "candidate_commit": "fff440f64087ae1daa088e329f980c4827729b05",
+  "scope": "Validate host-PGID aggregate CPU control; corrected 70-test launcher; unchanged prepared maturity-successor and portable source-upgrade tests; retained operating/comparison/adverse traces. Evidence only.",
+  "prior_failed_allocation": "Preserved independently; this allocation does not cure or reset its breach.",
+  "dispatch": "Comparison uses existing frozen API operate(max_events=12) on the same accounts to bound individual jobs. Final existing canonical comparison CLI and audit/scoreboard operate on those retained accounts."
+}
