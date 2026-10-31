@@ -21,6 +21,16 @@ def costs():
             'activation_cost':1000,'provider_loss_cost':6500,
             'protected_cash':30000,'opening_cash':100000}
 
+class NativePackagingCompatibility(unittest.TestCase):
+    def test_proof_and_contract_are_inside_canonical_source_closure(self):
+        from connected_enterprise.runner import source_paths
+        root=Path(__file__).resolve().parents[1]
+        paths=set(source_paths(root))
+        self.assertTrue({'commercial/portable_offer.py','commercial/partner_offer.py',
+                         'examples/portable_offer/sample_order.json',
+                         'docs/portable_offer/PARTNER_PILOT.md'} <= paths)
+
+
 class TwoSidedTerms(unittest.TestCase):
     def test_smallest_declared_incentive_compatible_share(self):
         q=quote_terms(59900,**costs())
