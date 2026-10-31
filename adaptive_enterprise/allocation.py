@@ -51,7 +51,7 @@ def _cash(values, scenarios, *, signed):
     return values
 
 
-def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery_slots=None, earned_deduction=0):
+def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery_slots=None, earned_deduction=0, _diagnostic_cash_limit=None):
     if type(earned_deduction) is not int or earned_deduction<0:raise ValueError("NONNEGATIVE_EARNED_OPERATING_DEDUCTION_REQUIRED")
     if max_delivery_slots is not None and (type(max_delivery_slots) is not int or max_delivery_slots<0):raise ValueError("FINITE_DELIVERY_CAPACITY_REQUIRED")
     if type(allow_seed) is not bool:raise ValueError("EXPLICIT_SEED_PERMISSION_REQUIRED")
@@ -140,8 +140,12 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
     if any(type(o['execution'].get('cash_lock',0)) is not int or o['execution'].get('cash_lock',0)<0 for o in options):raise ValueError('NONNEGATIVE_NEUTRAL_CASH_LOCK_REQUIRED')
     if allow_seed and any(o['execution'].get('funding') not in {'SEED_OR_EARNED','EARNED'} for o in options):
         raise ValueError('EXPLICIT_PER_ACTION_FUNDING_REQUIRED')
+    if _diagnostic_cash_limit is not None:
+        _integer(_diagnostic_cash_limit)
+        if _diagnostic_cash_limit < summary['available']:raise ValueError('DIAGNOSTIC_MUST_ONLY_RELAX_CASH')
     spendable_earned=max(0,summary['unrestrictedEarned']-earned_deduction)
-    budget = min(summary['available'], riskpolicy['authorized_allocation']) if allow_seed else min(summary['available'], spendable_earned, riskpolicy['authorized_allocation'])
+    cash_limit=summary['available'] if _diagnostic_cash_limit is None else _diagnostic_cash_limit
+    budget = min(cash_limit, riskpolicy['authorized_allocation']) if allow_seed else min(cash_limit, spendable_earned, riskpolicy['authorized_allocation'])
     base = {'schema': SCHEMA, 'scope': 'SIMULATED_PLANNING_ONLY', 'currency': 'simulated-microUSD',
             'expected_state_digest': state_digest, 'observation_sha256': digest(observation),
             'options_sha256': digest(options), 'riskpolicy_sha256': digest(riskpolicy),
@@ -160,7 +164,7 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
     eligible = [o for o in options if o['authorized'] and o['future_net_cash'] is not None and o['kind'] != 'cash']
     if max_delivery_slots is None:
         if len(eligible) >= max_states.bit_length() or (1 << len(eligible)) > max_states:
-            return {**base, 'decision': 'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET', 'optimality_scope': 'NONE'}
+            return _diagnostic_result({**base, 'decision': 'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET', 'optimality_scope': 'NONE'}) if _diagnostic_cash_limit is not None else {**base, 'decision': 'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET', 'optimality_scope': 'NONE'}
         baskets=([o for index,o in enumerate(eligible) if mask & (1 << index)] for mask in range(1 << len(eligible)))
     else:
         # Mutually exclusive quote/method variants are one categorical choice,
@@ -176,7 +180,7 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
                     if sum(x['kind']=='delivery' for x in basket)+(o['kind']=='delivery')<=max_delivery_slots:
                         expanded.append([*basket,o])
                     if len(expanded)>max_states:
-                        return {**base,'decision':'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET','optimality_scope':'NONE'}
+                        return _diagnostic_result({**base,'decision':'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET','optimality_scope':'NONE'}) if _diagnostic_cash_limit is not None else {**base,'decision':'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET','optimality_scope':'NONE'}
             baskets=expanded
     best_key = (Fraction(0), Fraction(0), 0)
     for chosen in baskets:
@@ -219,6 +223,7 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
                     reserve_amount=reservation, expected_net=expected.numerator // expected.denominator,
                     expected_net_fraction=str(expected), risk_adjusted_value=str(score),
                     interactions=copy.deepcopy(joints), decision='CANDIDATE_ALLOCATION')
+    if _diagnostic_cash_limit is not None:return _diagnostic_result(base)
     base['unallocated_budget'] = budget - base['reserve_amount']
     plan_content = {'selected': base['selected'], 'options_sha256': base['options_sha256'],
                     'riskpolicy_sha256': base['riskpolicy_sha256'], 'state_digest': state_digest,
@@ -233,3 +238,25 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
     else:
         base['authorized_digest'] = None
     return base
+
+
+def _diagnostic_result(result):
+    """Deliberately omit action IDs, execution payloads, reservation and authority."""
+    work=[]
+    for option in result['selected_options']:
+        execution=option['execution']
+        if option['kind']=='delivery':
+            row=execution.get('row',{})
+            work.append({'kind':'delivery','job_id':execution.get('job_id'),
+                         'customer_id':execution.get('customer_id'),
+                         'mode':row.get('mode'),'price':row.get('price')})
+        else:
+            work.append({'kind':option['kind'],'evidence_sha256':digest(option['evidence'])})
+    return {'scope':'COUNTERFACTUAL_CASH_OPPORTUNITY_NOT_EXECUTABLE_OR_REALIZED_PROFIT',
+            'selected_work':work, 'id_scope':'Positional labels local to each enumeration; compare selected_work semantics, not ID equality.',
+            'selected_ids':result['selected'], 'selected_count':len(result['selected']),
+            'delivery_count':sum(o['kind']=='delivery' for o in result['selected_options']),
+            'risk_adjusted_value':result['risk_adjusted_value'],
+            'expected_net_fraction':result['expected_net_fraction'],
+            'states_evaluated':result['states_evaluated'], 'optimality_scope':result['optimality_scope'],
+            'authorized_digest':None}

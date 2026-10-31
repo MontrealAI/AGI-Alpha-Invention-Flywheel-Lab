@@ -31,7 +31,7 @@ def default_config():
         'limits':['Synthetic non-personal work only; no actual customers or payments.','Finite authored buyer/channel/supplier contracts, no empirical conversion calibration.','Permanent native principal/fee protection tails remain; seed may back reserves.','No paid inference: capable-frontier AI economics represented by disclosed envelopes; actual executors are deterministic.','Finite frozen service inventory is an edition resource, not a universal market ceiling.']}
 
 def validate_config(cfg):
-    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','prospective_policy','cash_diagnostic_available'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
     for key in ['horizon_days','customer_pool','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
     for key in ['nonpayment_bps','arrival_bps','retention_bps','payment_bps','profit_tax_bps']:
@@ -40,6 +40,10 @@ def validate_config(cfg):
     if cfg['production_hours']+cfg['acceptance_hours']+cfg['clearing_hours']>cfg['payment_deadline_hours']:raise ValueError('COMPLETE_LIFECYCLE_EXCEEDS_PAYMENT_DEADLINE')
     for key in ['opening','working','setup_cost','maintenance_daily','exposure_cost','qualification_cost','onboarding_cost','production_cost','support_cost','supplier_unit_cost','capacity_price','payment_fixed']:
         if type(cfg[key]) is not int or cfg[key]<0:raise ValueError('INTEGER_RESOURCE_COST_REQUIRED')
+    if 'cash_diagnostic_available' in cfg and (type(cfg['cash_diagnostic_available']) is not int or not 0<=cfg['cash_diagnostic_available']<=10**15):raise ValueError('FINITE_DIAGNOSTIC_CASH_REQUIRED')
+    if 'prospective_policy' in cfg:
+        from .capital_lifecycle import validate_policy
+        validate_policy(cfg['prospective_policy'])
     if 'mechanism_policy' in cfg:
         from .mechanism_choice import validate_policy
         validate_policy(cfg['mechanism_policy'])
@@ -190,7 +194,7 @@ def _prepare_plan(state,account,jobs):
         elif selected is None:blocked='inventory_decline'
         elif len(prepared['orders'])>=slots:blocked='capacity_decline'
         else:
-            entry,offer,anchor=selected;price=offer['price_microUSD'];fee=(price*cfg['payment_bps']+9999)//10000+cfg['payment_fixed'];onboard=0 if b['onboarded'] else cfg['onboarding_cost'];cost=cfg['production_cost']+cfg['support_cost']+cfg['supplier_unit_cost']+fee+onboard
+            entry,offer,anchor=selected;price=offer['price_microUSD'];fee=(price*cfg['payment_bps']+9999)//10000+cfg['payment_fixed'];onboard=0 if b['onboarded'] else cfg['onboarding_cost'];cost=cfg['production_cost']+cfg['support_cost']+cfg['supplier_unit_cost']+fee+onboard+cfg.get('prospective_policy',{}).get('premium_microUSD',0)
             if joint_choice:method_plan=joint_choice['method_plan']
             elif 'mechanism_policy' in cfg and joint is None:
                 from .mechanism_choice import order_plan
@@ -215,6 +219,11 @@ def _prepare_plan(state,account,jobs):
             'complete_cost':cost,'fee':fee,'onboarding':onboard,'production_cost':cfg['production_cost']+cfg['supplier_unit_cost'],'support_cost':cfg['support_cost'],'service_receipt':None,
             'funding_receipt':None,'acquisition_source_plan_id':b['acquisition_source_plan_id'],'exposure_time':b['exposure_time'],
             'capacity_source_plan_id':usable_capacity[len(prepared['orders'])-cfg['initial_slots']]['plan_id'] if len(prepared['orders'])>=cfg['initial_slots'] else None}
+        if 'prospective_policy' in cfg:
+            from .capital_lifecycle import terms_for
+            collection=production_time+cfg['acceptance_hours']+cfg['clearing_hours']
+            terms=terms_for(ident,price,collection,cfg['prospective_policy'],fee,deadline=t+cfg['payment_deadline_hours'])
+            order.update(terms=terms,terms_id='terms-'+ident,terms_sha256=digest(terms),premium=terms['premium_microUSD'],resource_cost=cost-fee-terms['premium_microUSD'])
         if method_plan:order['method_plan']=method_plan
         if joint_choice:order.update(joint_allocation_sha256=joint['id'],joint_option_id=joint_choice['joint_option_id'])
         prepared['orders'].append(order);simulated['used_jobs'].append(order['job_id']);liquidity-=cost+price
@@ -222,6 +231,8 @@ def _prepare_plan(state,account,jobs):
 
 def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events=None,failpoint=None):
     cfg=validate_config(copy.deepcopy(config));root=Path(root).resolve();output=Path(output).resolve();output.mkdir(parents=True,exist_ok=True)
+    expected_engine='prospective-v1' if 'prospective_policy' in cfg else 'legacy-permanent-v1'
+    if manifest.get('native_engine','legacy-permanent-v1')!=expected_engine:raise ValueError('FRESH_POLICY_NATIVE_ENGINE_REGISTRATION_MISMATCH')
     if arm not in {'baseline','channel','growth','competitive_growth'}:raise ValueError('REGISTERED_COMMERCIAL_OPTION_ARM_REQUIRED')
     if source is None:
         from .runner import identity
@@ -286,10 +297,12 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 state['channel_state']=book.export()
                 for proposed in p['orders']:
                     o=copy.deepcopy(proposed);ident=o['id'];b=byid[o['customer_id']]
-                    o['funding_receipt']=cost(ident+'-resources',o['complete_cost'],t,'production_contract',{'job_id':o['job_id'],'offer':o['offer'],'fee':o['fee'],'onboarding':o['onboarding'],'support':o['support_cost'],'resource_supplier':'SIMULATED_PREPAID_COMPLETE_RESOURCE_CONTRACT',**({'method_plan':o['method_plan']} if 'method_plan' in o else {})},expected_net=o['price']-o['complete_cost'])
+                    if 'terms' in o:account.execute('register_terms',{'id':o['terms_id'],'terms':o['terms']},t)
+                    o['funding_receipt']=cost(ident+'-resources',o.get('resource_cost',o['complete_cost']),t,'production_contract',{'job_id':o['job_id'],'offer':o['offer'],'fee':o['fee'],'onboarding':o['onboarding'],'support':o['support_cost'],'resource_supplier':'SIMULATED_PREPAID_COMPLETE_RESOURCE_CONTRACT',**({'method_plan':o['method_plan']} if 'method_plan' in o else {})},expected_net=o['price']-o['complete_cost'])
                     if o['funding_receipt'] is None:raise ValueError('QUALIFIED_PRODUCTION_RESOURCE_CONTRACT_NOT_FUNDED')
                     account.execute('wallet',{'buyer':ident+'-wallet','amount':o['price']},t)
-                    account.execute('offer',{'id':ident,'buyer':ident+'-wallet','price':o['price'],'job_id':o['job_id'],'deadline':t+cfg['payment_deadline_hours']},t)
+                    offered=account.execute('offer',{'id':ident,'buyer':ident+'-wallet','price':o['price'],'job_id':o['job_id'],'deadline':t+cfg['payment_deadline_hours'],**({'terms_id':o['terms_id']} if 'terms' in o else {})},t)
+                    if 'terms' in o and o['fee']+o['premium'] and not any(c['id']==ident+'-prospective-charges' for c in state['costs']):state['costs'].append({'id':ident+'-prospective-charges','amount':o['fee']+o['premium'],'category':'prospective_contract_charges','time':t,'funding_receipt':offered})
                     for action in ['consent','fund']:account.execute('event',{'id':ident,'event_id':ident+'-'+action,'action':action},t)
                     b['pending_commitments'][ident]=o['price'];b['remaining_budget']-=o['price'];b['onboarded']=True;state['used_jobs'].append(o['job_id']);state['orders'].append(o)
                     _event(state,t,'QUALIFIED_ORDER',ident+'-qualified',order_id=ident,customer_id=b['id']);_schedule(state,o['production_time'],'produce',ident+'-produce',order_id=ident)
@@ -330,6 +343,13 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 _event(state,t,'COLLECTION' if not ev['refund'] else 'REFUND',ev['id'],order_id=o['id'])
                 summary=cleared['summary'];taxable=max(0,summary['profit']+state['tax_paid']);tax=max(0,taxable*cfg['profit_tax_bps']//10000-state['tax_paid'])
                 if tax:cost('tax-'+o['id'],tax,t,'tax_provision');state['tax_paid']+=tax
+                if not ev['refund'] and 'terms' in o:_schedule(state,o['terms']['maturity_day']+1,'mature',o['id']+'-mature',order_id=o['id'])
+            elif kind=='mature':
+                o=next(o for o in state['orders'] if o['id']==ev['order_id'])
+                before=account.snapshot()['summary'];after=account.advance_financial(t)['summary']
+                o['maturity_time']=t
+                _event(state,t,'PROTECTION_MATURITY',ev['id'],order_id=o['id'])
+                if before['profit']!=after['profit'] or before['cash']!=after['cash']:raise ValueError('MATURITY_CANNOT_CREATE_CASH_OR_PROFIT')
             else:raise ValueError('UNKNOWN_OPERATING_EVENT')
             if failpoint:failpoint('after_event_before_checkpoint',state,account)
             state['queue'].pop(0);state['last_time']=t;state['processed_events']+=1;state['current']=None;_write(path,account.seal_checkpoint(state));performed+=1
@@ -338,11 +358,14 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
             if b['initial_budget']!=b['remaining_budget']+b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values()) or b['remaining_budget']<0:raise ValueError('SHARED_BUYER_BUDGET_CONSERVATION')
         result={k:copy.deepcopy(state[k]) for k in ['config','seed','arm','source','orders','buyers','investments','costs','events','decisions','market','stop_reasons']}
         if 'joint_actions' in state:result['joint_actions']=copy.deepcopy(state['joint_actions'])
+        from .capital_lifecycle import capital_metrics
         result.update(schema='agi-alpha/connected014-result/v1',scope='CONDITIONAL_SIMULATION',channels=state['channel_state'],owned_account=owned,summary=summary,complete=not state['queue'],processed_events=state['processed_events'],
             accepted_jobs=sum(o['acceptance_time'] is not None for o in state['orders']),paid_jobs=len(settled),customers=len(customers),repeat_customers=sum(sum(o['customer_id']==c for o in settled)>1 for c in customers),profitable_earned_continuations=len(earned),
             conditional_simulated_commercial_success=len(settled)>=12 and len(customers)>=3 and sum(sum(o['customer_id']==c for o in settled)>1 for c in customers)>=2 and len(earned)>=2 and summary['profit']>0 and summary['unrestrictedEarned']>0 and summary['payables']==0 and not summary['investmentStopped'] and summary['cash']>=summary['custodyReserve']+summary['tailReserve']+summary['workingCapital'],
             actual_collections=0,actual_customers=0,actual_profit=None,resource_receipt={'process_cpu_seconds':time.process_time()-cpu,'wall_seconds':time.monotonic()-wall,'billing':'UNAVAILABLE_ENVELOPED_NOT_ZERO'})
         result['productive_expansion']=[{'plan_id':i['plan_id'],'kind':i['kind'],'cost':i['cost'],'funding':i['funding_receipt']['funding'],'later_settled_order_ids':[o['id'] for o in settled if o.get('acquisition_source_plan_id' if i['kind']=='acquisition' else 'capacity_source_plan_id')==i['plan_id']],'scoped_collections':sum(o['price'] for o in settled if o.get('acquisition_source_plan_id' if i['kind']=='acquisition' else 'capacity_source_plan_id')==i['plan_id'])} for i in state['investments']]
+        result['capital_metrics']=capital_metrics(result)
+        result['resource_receipt'].update(process_cpu_seconds=time.process_time()-cpu,wall_seconds=time.monotonic()-wall)
         _write(output/'RESULT.json',result)
         return result
     finally:account.close()
