@@ -109,11 +109,18 @@ def build(proof_dir, output, **costs):
     return verify(proof_dir, target)
 
 
-def verify(proof_dir, package):
+def verify(proof_dir, package, *, expected_sha256=None):
     target = safe(package)
     if not target.is_dir() or {p.relative_to(target).as_posix() for p in target.rglob('*')} != {'PARTNER_OFFER.json'}:
         raise ValueError('EXACT_PARTNER_PACKAGE_REQUIRED')
     raw = (target/'PARTNER_OFFER.json').read_bytes()
+    actual_sha256 = hashlib.sha256(raw).hexdigest()
+    if expected_sha256 is not None:
+        if (not isinstance(expected_sha256,str) or len(expected_sha256)!=64
+                or any(c not in '0123456789abcdef' for c in expected_sha256)):
+            raise ValueError('EXACT_EXTERNAL_PROPOSAL_PIN_REQUIRED')
+        if actual_sha256 != expected_sha256:
+            raise ValueError('EXTERNALLY_PINNED_PARTNER_TERMS_CHANGED')
     if len(raw) > 50000:raise ValueError('PARTNER_PROPOSAL_TOO_LARGE')
     record = strict_json(raw)
     if not isinstance(record, dict) or record.get('schema') != SCHEMA:
@@ -128,8 +135,9 @@ def verify(proof_dir, package):
             'proposal_status': record['proposal']['status'],
             'provider_gain_if_collected_cents': record['proposal']['provider_gain_if_collected_cents'],
             'partner_share_if_collected_cents': record['proposal']['partner_share_if_collected_cents'],
-            'rechecked': True, 'actual_collections_cents': 0,
-            'native_financial_authority': False}
+            'rechecked': True, 'proposal_sha256': actual_sha256,
+            'partner_terms_externally_pinned': expected_sha256 is not None,
+            'actual_collections_cents': 0, 'native_financial_authority': False}
 
 
 def main():
@@ -145,13 +153,14 @@ def main():
     v=sub.add_parser('verify')
     v.add_argument('--proof-dir',required=True)
     v.add_argument('--package',required=True)
+    v.add_argument('--expected-sha256')
     args=p.parse_args()
     try:
         if args.command=='build':
             costs={key:getattr(args,key) for key in ('distributor_cost','distributor_min_gain','provider_complete_cost',
                 'provider_min_gain','activation_cost','provider_loss_cost','protected_cash','opening_cash')}
             result=build(args.proof_dir,args.output,**costs)
-        else:result=verify(args.proof_dir,args.package)
+        else:result=verify(args.proof_dir,args.package,expected_sha256=args.expected_sha256)
     except (ValueError,OSError,TypeError,KeyError,json.JSONDecodeError) as exc:
         p.exit(2,'REFUSED: '+str(exc)+'\n')
     print(json.dumps(result,sort_keys=True))
