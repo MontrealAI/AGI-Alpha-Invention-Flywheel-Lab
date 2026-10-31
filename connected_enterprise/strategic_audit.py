@@ -34,20 +34,36 @@ def audit_decisions(root,manifest,result,lifecycle):
         charge=charges[0];seq=charge['seq']+1;summary=charge['after'];state_digest=digest({'config':tape['config'],'actions_sha256':prefixes[seq],'summary':summary})
         if snapshot['sequence']!=seq or snapshot['summary']!=summary or snapshot['actions_sha256']!=prefixes[seq] or snapshot['state_digest']!=state_digest:raise ValueError('JOINT_CASH_NOT_CURRENT_NATIVE_PREFIX')
         candidates=lifecycle['daily_candidate_ids_recomputed'][moment];buyers=lifecycle['daily_public_buyers'][moment]
-        operating=cfg['exposure_cost']*lifecycle['daily_outreach_units_recomputed'][moment]+cfg['qualification_cost']*len(candidates)
+        operating=cfg['exposure_cost']*lifecycle['daily_outreach_units_recomputed'][moment]+cfg['qualification_cost']*len(candidates)*(4 if 'complete_offer_policy' in cfg else 1)
         if wrapper['operating_envelope']!=operating or wrapper['candidate_ids']!=candidates:raise ValueError('JOINT_OPERATING_RESERVE_CHANGED')
         from .verify import _private_draw
         needs=[ident for ident in candidates if _private_draw(result['seed'],[day,ident],'need')<cfg['arrival_bps']/10000]
         if wrapper['observed_need_ids']!=needs:raise ValueError('CURRENT_NEED_OBSERVATION_CHANGED')
         # Only evaluator uses the source seed here; the selector receives observed current needs, not future draws.
         used={o['job_id'] for o in result['orders'] if o['qualified_time']<moment};expected_deliveries=[]
+        considered=0
         for ident in needs:
-            if len(expected_deliveries)>=cfg['strategic_allocation_policy']['max_customers']:break
-            service=('reconciliation','kpi_variance','evidence_matrix')[buyers[ident]['service_index']%3]
-            available=[j for j in jobs.values() if j['id'] not in used and j['accepted'] and j['service_id']==service and artifacts[j['id']]['outcome_scope']=='complete_outcome']
-            if not available:continue
-            job=min(available,key=lambda j:j['id']);used.add(job['id']);expected_deliveries.append((ident,job))
+            if considered>=cfg['strategic_allocation_policy']['max_customers']:break
+            services=[('reconciliation','kpi_variance','evidence_matrix')[buyers[ident]['service_index']%3]]
+            if 'complete_offer_policy' in cfg:
+                from .complete_offer_market import request_profile
+                profile=request_profile(cfg['complete_offer_policy'],ident)
+                services=profile['services'] if cfg['complete_offer_policy']['selection']=='menu' else [service for service in services if service in profile['services']]
+            menu=[]
+            consumed={key for jobid in used for key in jobs[jobid]['work_keys']}
+            for service in services:
+                available=[j for j in jobs.values() if j['id'] not in used and j['accepted'] and j['service_id']==service and artifacts[j['id']]['outcome_scope']=='complete_outcome' and ('complete_offer_policy' not in cfg or (j['id'] in cfg['complete_offer_policy']['requested_jobs'][ident] and not consumed.intersection(j['work_keys'])))]
+                if available:menu.append(min(available,key=lambda j:j['id']))
+            if menu:considered+=1
+            for job in menu:used.add(job['id']);expected_deliveries.append((ident,job))
         if [(d['customer_id'],d['selection']['problem']['job_id']) for d in record['deliveries']]!=[(ident,j['id']) for ident,j in expected_deliveries]:raise ValueError('DECLARED_FINITE_SHORTLIST_CHANGED')
+        if 'complete_offer_policy' in cfg:
+            fixed=cfg['exposure_cost']*lifecycle['daily_outreach_units_recomputed'][moment]+cfg['qualification_cost']*len(expected_deliveries)
+            expected_evaluation={'fixed_evaluation_cost':fixed,'hold_net_after_evaluation':-fixed,
+                'selected_expected_net_after_evaluation':record['decision']['expected_net']-fixed,
+                'scope':'Conditional marginal allocation after fixed offer evaluation. Entire evaluation bill is incurred for selected and no-bid alternatives and separately charged natively; risk score is incremental, not whole-business risk or profit.'}
+            if wrapper.get('evaluation_cost')!=expected_evaluation:raise ValueError('COMMON_OFFER_EVALUATION_COST_CHANGED')
+        elif 'evaluation_cost' in wrapper:raise ValueError('UNREGISTERED_COMMON_EVALUATION_RECEIPT')
         risk=copy.deepcopy(cfg['strategic_allocation_policy']['risk']);risk['authorized_allocation']=min(risk['authorized_allocation'],max(0,summary['available']-operating))
         if record['riskpolicy']!=risk or record['earned_deduction']!=operating or record['allow_seed'] is not True:raise ValueError('JOINT_TOTAL_OR_EARNED_RESERVE_CHANGED')
         previous_investments=[i for i in result['investments'] if i['purchased_time']<moment]
@@ -87,18 +103,30 @@ def audit_decisions(root,manifest,result,lifecycle):
                 channel_state=sequence_book.export() if 'channel_menu_policy' in cfg else None)
         if record['investments']!=expected_investments:raise ValueError('INVESTMENT_HYPOTHESIS_NOT_FROM_PUBLIC_HISTORY')
         for delivery,(ident,job) in zip(record['deliveries'],expected_deliveries):
-            selection=delivery['selection'];problem=selection['problem'];offer=problem['offer'];service=job['service_id'];human=cfg['human_comparator'][service];anchor=int((human['hours']*human['loaded_usd_hour']+2)*1_000_000)
+            selection=delivery['selection'];problem=selection['problem'];offer=problem['offer'];service=job['service_id']
+            if 'complete_offer_policy' in cfg:
+                from .complete_offer_market import request_profile,market_context
+                anchor=max(request_profile(cfg['complete_offer_policy'],ident)['price_grids'][service])
+            else:
+                human=cfg['human_comparator'][service];anchor=int((human['hours']*human['loaded_usd_hour']+2)*1_000_000)
             if problem['policy']!=cfg['strategic_policy'] or problem['method_policy']!=cfg.get('mechanism_policy'):raise ValueError('STRATEGIC_POLICY_CHANGED')
             onboard=0 if buyers[ident]['onboarded'] else cfg['onboarding_cost']
-            template=next(o for o in offer_catalog() if o['service_id']==service and o['method']==artifacts[job['id']]['method'])
+            template=next(o for o in offer_catalog(include_packet='complete_offer_policy' in cfg) if o['service_id']==service and o['method']==artifacts[job['id']]['method'])
             if any(offer.get(k)!=v for k,v in template.items() if k not in {'price_microUSD','provenance'}):raise ValueError('ADMITTED_OFFER_CONTRACT_CHANGED')
             rival_bps=cfg['price_pressure_bps']
             for update_day in range(7,day+1,7):
                 if update_day*24>=moment:break
                 visible=[d for d in result['decisions'] if d.get('kind')=='offer' and d['time']<=update_day*24-24][-20:]
                 if visible:rival_bps=max(5000,min(10500,rival_bps+(200 if sum(d['buyer_choice']=='rival' for d in visible)/len(visible)>.6 else -200)))
-            expected={'anchor':anchor,'public_rival_price':int(anchor*rival_bps/10000),'base_cost':cfg['production_cost']+cfg['supplier_unit_cost']+cfg['support_cost']+onboard+cfg.get('prospective_policy',{}).get('premium_microUSD',0),'payment_bps':cfg['payment_bps'],'payment_fixed':cfg['payment_fixed'],'available':max(0,summary['available']-operating),'reserve_buffer':1_000_000,'quote_cost':cfg['exposure_cost']+cfg['qualification_cost'],'native_state_digest':state_digest,'profit_tax_bps':cfg['profit_tax_bps']}
+            expected={'anchor':anchor,'public_rival_price':int(anchor*rival_bps/10000),'base_cost':(offer['capacity_units'] if 'complete_offer_policy' in cfg else 1)*(cfg['production_cost']+cfg['supplier_unit_cost']+cfg['support_cost'])+onboard+cfg.get('prospective_policy',{}).get('premium_microUSD',0),'payment_bps':cfg['payment_bps'],'payment_fixed':cfg['payment_fixed'],'available':max(0,summary['available']-operating),'reserve_buffer':1_000_000,'quote_cost':0 if 'complete_offer_policy' in cfg else cfg['exposure_cost']+cfg['qualification_cost'],'native_state_digest':state_digest,'profit_tax_bps':cfg['profit_tax_bps']}
             if problem['public']!=expected or delivery['onboarding']!=onboard:raise ValueError('STRATEGIC_INPUT_NOT_PUBLIC_CURRENT_FACTS')
+            if 'complete_offer_policy' in cfg:
+                outside=sum(d.get('outside_spend',0) for d in result['decisions'] if d.get('customer_id')==ident and d['time']<moment)
+                refunds={a['args']['id']:a['day'] for a in tape['actions'] if a['op']=='event' and a['args']['action']=='refund'}
+                committed=sum(o['price'] for o in result['orders'] if o['customer_id']==ident and o['qualified_time']<moment and (o['id'] not in refunds or refunds[o['id']]>moment))
+                if problem.get('market_context')!=market_context(cfg['complete_offer_policy'],ident,outside+committed):raise ValueError('COMPLETE_MARKET_FORECAST_READS_PRIVATE_STATE')
+                if delivery.get('capacity_units')!=offer['capacity_units'] or delivery.get('work_keys')!=job['work_keys']:raise ValueError('COMPLETE_PRODUCTION_WORK_OR_UNITS_CHANGED')
+            elif 'market_context' in problem:raise ValueError('UNAUTHORIZED_COMPLETE_MARKET')
             memory=problem['memory']
             if memory is not None:
                 positions={(e.get('order_id'),e['kind']):i for i,e in enumerate(result['events']) if e.get('order_id')}

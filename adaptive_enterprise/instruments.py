@@ -14,7 +14,7 @@ import time
 
 SCHEMA = 'agi-alpha/adaptive012-services/v1'
 SCOPE = 'SYNTHETIC_PUBLIC_WORKLOAD'
-SOURCE_PATHS = ('adaptive_enterprise/instruments.py', 'adaptive_enterprise/checkers.py',
+SOURCE_PATHS = ('connected_enterprise/packet_contract.py','connected_enterprise/receivables_packet.py','connected_enterprise/receivables_packet_verify.py', 'adaptive_enterprise/instruments.py', 'adaptive_enterprise/checkers.py',
                 'adaptive_enterprise/strategies.py','adaptive_enterprise/bundles.py', 'enterprise/services.py', 'enterprise/checkers.py',
                 'commercial/service.py', 'commercial/service_verifier.py')
 CONSTRAINTS = ['preserve_source_rows', 'explicit_money_units', 'unique_record_identity', 'referential_customer_consistency']
@@ -214,6 +214,10 @@ def apply_source_extension(raw, supplied_facts):
 
 
 def produce(raw, method='generated_schema', retained=None, mode=None):
+    if isinstance(raw,dict) and raw.get('service_id')=='receivables_packet':
+        if method!='receivables_packet':raise ValueError('QUALIFIED_PACKET_METHOD_REQUIRED')
+        from connected_enterprise.receivables_packet import produce as packet_produce
+        return packet_produce(raw)
     if isinstance(raw,dict) and raw.get('service_id')=='operations_bundle':
         if method!='operations_bundle':
             raise ValueError('QUALIFIED_BUNDLE_PRODUCTION_METHOD_REQUIRED')
@@ -356,7 +360,10 @@ def _check_job(root, manifest, job, artifact=None):
     current = _read(root,job['artifact'],job['artifact_sha256'])
     receipt = _read(root,job['receipt'],job['receipt_sha256'])
     checked = audit_delivery(job['service_id'],raw,current if artifact is None else artifact)
-    expected_work=current['work_keys'] if job['service_id']=='operations_bundle' else [job['id']]
+    expected_work=current['work_keys'] if job['service_id'] in {'operations_bundle','receivables_packet'} else [job['id']]
+    if job['service_id']=='receivables_packet':
+        from connected_enterprise.packet_contract import work_contract
+        if expected_work!=work_contract(raw)['work_keys']:raise ValueError('PACKET_WORK_NOT_BOUND_TO_SOURCE')
     if job.get('work_keys')!=expected_work or len(expected_work)!=len(set(expected_work)):
         raise ValueError('EXACT_SHARED_WORK_IDENTITIES_REQUIRED')
     if job['service_id']=='operations_bundle':
@@ -420,12 +427,14 @@ def execute_job(root,job):
 
 
 def operation_count(artifact):
+    if artifact.get('service_id')=='receivables_packet':return artifact['work_observation']['instrumented_source_row_visits']
     if artifact.get('service_id')=='operations_bundle':
         return sum(operation_count(c['artifact']) for c in artifact['components'])
     return artifact['plan']['search']['operation_count']
 
 
 def _semantics(artifact):
+    if artifact.get('service_id')=='receivables_packet':return artifact
     if artifact.get('service_id')=='operations_bundle':
         return {'work_keys':artifact['work_keys'],'components':[{'job_id':c['job_id'],'semantics':_semantics(c['artifact'])} for c in artifact['components']],'promise':artifact['promise']}
     return {'normalized_input':artifact['normalized_input'],'useful_outcome':artifact['useful_outcome']}
@@ -453,7 +462,33 @@ def execute_offer(root,manifest,offer,job_id,context=None):
         return {**checked,'artifact_sha256':job['artifact_sha256'],'actual_execution_artifact_sha256':digest(artifact),'artifact':artifact,'outcome_scope':artifact['outcome_scope'],
                 'native_delivered_artifact_sha256':job['artifact_sha256'],'useful_outcome_sha256':digest(_semantics(artifact)),
                 'execution_binding':'Native delivers the saved accepted artifact; current production rechecks identical normalized input and useful outcome. Search trace and measured work may differ under retained constraints; byte identity is not claimed.',
-                'operation_count':operation_count(artifact),'work_keys':job['work_keys'],'process_cpu_seconds':time.process_time()-start,'model_calls':0}
+                'operation_count':operation_count(artifact),**({'work_count_scope':artifact['work_observation']['scope']} if artifact.get('service_id')=='receivables_packet' else {}),'work_keys':job['work_keys'],'process_cpu_seconds':time.process_time()-start,'model_calls':0}
     except (ValueError,KeyError,TypeError) as exc:
         return {'accepted':False,'service_id':offer['service_id'],'order_id':raw['order_id'],'errors':[str(exc)],
                 'outcome_scope':offer['scope'],'operation_count':0,'process_cpu_seconds':time.process_time()-start,'model_calls':0}
+
+
+def prepare_complete_offer_services(root, relative, *, cohort_seed=0, jobs_per_service=32, packet_jobs=8, packet_rows=40):
+    """Explicit opt-in finite primitive plus coherent-packet admission; not demand."""
+    if type(packet_jobs) is not int or not 1<=packet_jobs<=128 or type(packet_rows) is not int or not 1<=packet_rows<=1000:
+        raise ValueError('BOUNDED_PACKET_INVENTORY_REQUIRED')
+    from connected_enterprise.packet_contract import synthetic_input,work_contract
+    from adaptive_enterprise.checkers import audit_delivery
+    root=Path(root);start=time.process_time()
+    manifest=prepare_services(root,relative,cohort_seed=cohort_seed,jobs_per_service=jobs_per_service)
+    for index in range(packet_jobs):
+        raw=synthetic_input(index=index,cohort_seed=cohort_seed,rows=packet_rows)
+        artifact=produce(raw,'receivables_packet');checked=audit_delivery('receivables_packet',raw,artifact)
+        if not checked['accepted']:raise ValueError('PACKET_ADMISSION_REJECTED')
+        base=Path(relative)/raw['order_id']
+        job={'id':raw['order_id'],'service_id':'receivables_packet','accepted':True,'work_keys':work_contract(raw)['work_keys']}
+        for field,name,value in [('input','input.json',raw),('artifact','artifact.json',artifact)]:
+            job[field]=str(base/name);job[field+'_sha256']=_write(root,job[field],value)
+        receipt={**checked,'input_sha256':job['input_sha256'],'artifact_sha256':job['artifact_sha256'],'checker_source_sha256':manifest['source_hashes']['adaptive_enterprise/checkers.py']}
+        job['receipt']=str(base/'acceptance.json');job['receipt_sha256']=_write(root,job['receipt'],receipt)
+        manifest['jobs'].append(job)
+    manifest['cohort_provenance']['packet_inventory']={'jobs':packet_jobs,'rows_per_kind':packet_rows,'scope':'Explicit finite coherent entity/period inventory, not sales or market size.'}
+    manifest['resource_receipt']['process_cpu_seconds']=time.process_time()-start
+    from commercial.persistence import atomic_bytes
+    atomic_bytes(root/relative/'MANIFEST.json',canonical(manifest)+b'\n');load_jobs(root,manifest)
+    return manifest

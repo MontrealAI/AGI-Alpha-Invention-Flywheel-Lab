@@ -173,6 +173,9 @@ def _readiness(raw, plan):
 
 
 def audit_delivery(service_id, raw_order, artifact):
+    if service_id=='receivables_packet':
+        from connected_enterprise.receivables_packet_verify import audit_packet
+        return audit_packet(raw_order,artifact)
     if service_id=='operations_bundle':
         from adaptive_enterprise.bundles import audit_bundle
         return audit_bundle(raw_order,artifact)

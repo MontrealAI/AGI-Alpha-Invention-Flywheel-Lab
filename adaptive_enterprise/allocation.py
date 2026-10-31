@@ -100,6 +100,14 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
         if not isinstance(option['execution'], dict):
             raise ValueError('EXECUTION_PAYLOAD_REQUIRED')
         digest(option['execution'])
+        if 'capacity_units' in option['execution']:
+            _integer(option['execution']['capacity_units'], 1 if option['kind']=='delivery' else 0)
+            if option['kind']!='delivery' and option['execution']['capacity_units']:
+                raise ValueError('ONLY_DELIVERY_CONSUMES_CURRENT_CAPACITY')
+        if 'work_keys' in option['execution']:
+            _list_ids(option['execution']['work_keys'])
+            if option['kind']=='delivery' and not option['execution']['work_keys']:
+                raise ValueError('DECLARED_DELIVERY_WORK_KEYS_NONEMPTY')
         if option['future_net_cash'] is None:
             unknown.append(ident)
         else:
@@ -177,7 +185,7 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
             for basket in baskets:
                 expanded.append(basket)
                 for o in group:
-                    if sum(x['kind']=='delivery' for x in basket)+(o['kind']=='delivery')<=max_delivery_slots:
+                    if sum(x['execution'].get('capacity_units',1) for x in basket if x['kind']=='delivery')+(o['execution'].get('capacity_units',1) if o['kind']=='delivery' else 0)<=max_delivery_slots:
                         expanded.append([*basket,o])
                     if len(expanded)>max_states:
                         return _diagnostic_result({**base,'decision':'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET','optimality_scope':'NONE'}) if _diagnostic_cash_limit is not None else {**base,'decision':'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET','optimality_scope':'NONE'}
@@ -186,12 +194,14 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
     for chosen in baskets:
         base['states_evaluated'] += 1
         selected = {o['id'] for o in chosen}
-        if max_delivery_slots is not None and sum(o['kind']=='delivery' for o in chosen)>max_delivery_slots:continue
+        if max_delivery_slots is not None and sum(o['execution'].get('capacity_units',1) for o in chosen if o['kind']=='delivery')>max_delivery_slots:continue
         if any(not set(o['requires']) <= selected for o in chosen):
             continue
         groups = [o['exclusive_group'] for o in chosen if o['exclusive_group'] is not None]
         if len(groups) != len(set(groups)):
             continue
+        work_keys=[k for o in chosen if o['kind']=='delivery' for k in o['execution'].get('work_keys',[])]
+        if len(work_keys)!=len(set(work_keys)):continue
         joints = [j for j in interactions if set(j['members']) <= selected]
         identities = [identity for o in chosen for identity in o['benefit_ids']] + [identity for j in joints for identity in j['benefit_ids']]
         if len(identities) != len(set(identities)):
