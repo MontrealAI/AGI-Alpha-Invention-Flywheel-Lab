@@ -44,8 +44,31 @@ class CompactFailureTests(unittest.TestCase):
    root=pathlib.Path(d);private=root/'private.json';private.write_text('private account');out=root/'output';out.mkdir();(out/'FAILURE_LESSON.json').symlink_to(private)
    with self.assertRaisesRegex(ValueError,'UNSYMLINKED_FAILURE_RECEIPT'):release.compact_failure(out,'a'*40)
    self.assertEqual(private.read_text(),'private account')
+ def assert_workflow_upload_contract(self, text):
+  # Check this workflow's explicit indented steps without optional YAML packages.
+  import re
+  jobs=re.split(r'(?m)^  (?=[A-Za-z0-9_-]+:)',text)
+  operation=[job for job in jobs if job.startswith('operate-published-release:')]
+  self.assertEqual(len(operation),1)
+  steps=re.split(r'(?m)^      - ',operation[0])
+  uploads=[step for step in steps if re.search(r'(?m)^        uses: actions/upload-artifact@',step)]
+  self.assertEqual(len(uploads),2)
+  failure=[step for step in uploads if re.search(r'(?m)^        if: failure\(\)',step)]
+  self.assertEqual(len(failure),1)
+  self.assertIn("        if: failure() && steps.operation.outcome != 'success' && steps.compact_failure.outcome == 'success'\n",failure[0])
+  self.assertEqual(re.findall(r'(?m)^          path: (.+)$',failure[0]),['${{ runner.temp }}/downloaded-release-operation/FAILURE_LESSON.json'])
+  success=[step for step in uploads if re.search(r'(?m)^        if: success\(\)$',step)]
+  self.assertEqual(len(success),1)
+  self.assertEqual(re.findall(r'(?m)^            (.+)$',success[0]),[
+   '${{ runner.temp }}/RELEASE_DOWNLOAD.json',
+   '${{ runner.temp }}/downloaded-release-operation/DOWNLOADED_RELEASE_RUN.json',
+   '${{ runner.temp }}/downloaded-release-operation/downloaded-operation-keyfree.zip'])
+  self.assertIn('          path: |\n',success[0])
+  self.assertFalse(any('*.stdout' in step or '*.stderr' in step or 'failed-operation-keyfree' in step for step in uploads))
  def test_workflow_exports_only_compact_failure(self):
-  import yaml
-  d=yaml.safe_load((P.parents[1]/'.github/workflows/connected014-release.yml').read_text());steps=d['jobs']['operate-published-release']['steps']
-  failure=[s for s in steps if s.get('if', '').startswith('failure()') and 'uses' in s];self.assertEqual(len(failure),1);self.assertIn("steps.compact_failure.outcome == 'success'",failure[0]['if']);self.assertTrue(failure[0]['with']['path'].endswith('/FAILURE_LESSON.json'))
-  uploads=[s['with']['path'] for s in steps if 'upload-artifact' in s.get('uses','')];self.assertFalse(any('*.stdout' in s or '*.stderr' in s or 'failed-operation-keyfree' in s for s in uploads))
+  text=(P.parents[1]/'.github/workflows/connected014-release.yml').read_text()
+  self.assert_workflow_upload_contract(text)
+  for changed in (text.replace(" && steps.compact_failure.outcome == 'success'",''),
+                  text.replace('/FAILURE_LESSON.json','/*.stderr'),
+                  text.replace('downloaded-operation-keyfree.zip','failed-operation-keyfree.zip')):
+   with self.assertRaises(AssertionError): self.assert_workflow_upload_contract(changed)
