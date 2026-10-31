@@ -1,0 +1,73 @@
+name: Transformational Intelligence — six-ring wheel and economic coupling qualification
+on:
+  pull_request:
+    paths:
+      - 'flywheel_wheel/**'
+      - 'docs/flywheel-wheel/**'
+      - 'tests/test_flywheel*.py'
+      - 'scripts/qualify_economic_wheel031.py'
+      - '.github/workflows/flywheel-wheel030.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: flywheel-wheel030-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Native-evidence claim gates and accessible wheel checks
+        run: python -m unittest discover -s tests -p 'test_flywheel*.py' -v
+      - name: Generate actual circular wheel without accounts or permissions
+        run: |
+          python -m flywheel_wheel architecture --output "$RUNNER_TEMP/agi-alpha-wheel030"
+          python -c 'import json,os,pathlib,xml.etree.ElementTree as ET; p=pathlib.Path(os.environ["RUNNER_TEMP"])/"agi-alpha-wheel030"; v=json.loads((p/"snapshot.json").read_text()); assert v["funding_authority"] is False and v["scope"]=="ARCHITECTURE_ONLY_NO_ENTERPRISE_INPUT"; ET.parse(p/"wheel.svg"); assert (p/"index.html").is_file()'
+      - name: Create intricate six-ring atlas and contract tests
+        run: python -m flywheel_wheel atlas --output "$RUNNER_TEMP/agi-alpha-atlas031"
+      - name: Create complete precision wheel and validate SVG
+        run: |
+          python -m flywheel_wheel precision --output "$RUNNER_TEMP/agi-alpha-precision032"
+          python -c 'import os,pathlib,xml.etree.ElementTree as E; p=pathlib.Path(os.environ["RUNNER_TEMP"])/"agi-alpha-precision032"/"wheel.svg"; t=E.parse(p); assert len(t.findall(".//{http://www.w3.org/2000/svg}textPath"))==48'
+      - name: Install existing native simulation dependencies
+        run: python -m pip install -r requirements-commercial010.txt
+      - name: Qualify native audit to incentive/asset planning without financial writes
+        run: python scripts/qualify_economic_wheel031.py --output "$RUNNER_TEMP/agi-alpha-coupling031"
+      - name: Witness one audited native commercial revolution without spending
+        run: |
+          python -m flywheel_wheel.revolution \
+            --enterprise "$RUNNER_TEMP/agi-alpha-coupling031/private-enterprise" \
+            --world "2610311931-central-baseline" \
+            --output "$RUNNER_TEMP/agi-alpha-revolution033" \
+            --trust-frozen-source
+          python -c 'import json,os,pathlib; r=json.loads((pathlib.Path(os.environ["RUNNER_TEMP"])/"agi-alpha-revolution033"/"REVOLUTION.json").read_text()); assert r["scope"]=="SOURCE_LINKED_NATIVE_SIMULATION_ONLY" and r["funding_authority"] is False and r["actual_customers"]==0 and r["verification"]=="CANONICAL_NATIVE_AUDIT_AND_STORED_GROWTH_REDERIVED"; assert r["causal_extra_profit"]=="NOT_ESTABLISHED_WITHOUT_MATCHED_COUNTERFACTUAL"'
+      - name: Publish only static, no-account artifacts
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: wheel030-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/agi-alpha-wheel030/index.html
+            ${{ runner.temp }}/agi-alpha-wheel030/wheel.svg
+            ${{ runner.temp }}/agi-alpha-wheel030/snapshot.json
+            ${{ runner.temp }}/agi-alpha-atlas031/index.html
+            ${{ runner.temp }}/agi-alpha-atlas031/wheel.svg
+            ${{ runner.temp }}/agi-alpha-atlas031/snapshot.json
+            ${{ runner.temp }}/agi-alpha-precision032/index.html
+            ${{ runner.temp }}/agi-alpha-precision032/wheel.svg
+            ${{ runner.temp }}/agi-alpha-precision032/snapshot.json
+            ${{ runner.temp }}/agi-alpha-coupling031/public/index.html
+            ${{ runner.temp }}/agi-alpha-coupling031/public/wheel.svg
+            ${{ runner.temp }}/agi-alpha-coupling031/public/snapshot.json
+            ${{ runner.temp }}/agi-alpha-coupling031/public/proposal.json
+            ${{ runner.temp }}/agi-alpha-coupling031/public/INTEGRATION.json
+            ${{ runner.temp }}/agi-alpha-revolution033/REVOLUTION.json
+          if-no-files-found: error
