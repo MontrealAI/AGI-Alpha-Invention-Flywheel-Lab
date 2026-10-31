@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import sys
 import zipfile
+from contextlib import nullcontext
 
 MAX_FILES=10_000
 MAX_BYTES=512*1024*1024
@@ -43,10 +44,53 @@ def copy_source(original,target,expected,manifest):
         dest=target/relative;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,dest)
 
 
+def resolved_body(ticket):
+    from connected_enterprise.transition_evidence import ticket_body, V2
+    return ticket_body(ticket) if ticket.get('body',{}).get('schema')==V2 else ticket['body']
+
+
+def reachable_evidence(record):
+    """Resolve only hash-addressed bytes from the caller-selected active store."""
+    from connected_enterprise.transition_evidence import V2, read_evidence_blob, ticket_body
+    blobs={};seen=set();nodes=0
+    def visit(value,depth=0):
+        nonlocal nodes
+        nodes+=1
+        if depth>128 or nodes>2_000_000:raise ValueError('PORTABLE_TRANSITION_TRAVERSAL_BOUND')
+        if isinstance(value,dict):
+            if value.get('body',{}).__class__ is dict and value.get('body',{}).get('schema')==V2:
+                # Full resolver validates wire shape, references and canonical content.
+                body=ticket_body(value)
+                for ref in value['body']['evidence'].values():
+                    name=ref['sha256']
+                    if name not in blobs:blobs[name]=read_evidence_blob(name)
+                ident=hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+                if ident in seen:return
+                seen.add(ident);visit(body,depth+1)
+            else:
+                for item in value.values():visit(item,depth+1)
+        elif isinstance(value,list):
+            for item in value:visit(item,depth+1)
+    visit(record)
+    return blobs
+
+
+def copy_transition_evidence(output,record):
+    from connected_enterprise.transition_evidence import persist_evidence
+    blobs=reachable_evidence(record)
+    if not blobs:return
+    files,total=inventory(output)
+    if len(files)+len(blobs)>MAX_FILES or total+sum(map(len,blobs.values()))>MAX_BYTES:
+        raise ValueError('PUBLIC_ARCHIVE_GUARD_EXCEEDED')
+    target=output/'transition-evidence';target.mkdir()
+    persist_evidence(target,blobs)
+    inventory(output)
+
+
 def copy_history(target,record,manifest,seen=None):
     seen=set() if seen is None else seen
     for ticket in record.get('source_transitions',{}).values():
-        body=ticket['body'];identity=body['from_source']['sha256']
+        body=resolved_body(ticket);identity=body['from_source']['sha256']
         if identity in seen:raise ValueError('HISTORICAL_SOURCE_CYCLE_REFUSED')
         source=Path(body['historical_root'])
         destination=target/'historical-source-versions'/identity
@@ -64,8 +108,9 @@ def copy_history(target,record,manifest,seen=None):
 def historical_roots(record):
     result=set()
     for ticket in record.get('source_transitions',{}).values():
-        result.add(Path(ticket['body']['historical_root']))
-        result.update(historical_roots(ticket['body']['prior_record']))
+        body=resolved_body(ticket)
+        result.add(Path(body['historical_root']))
+        result.update(historical_roots(body['prior_record']))
     return result
 
 
@@ -80,7 +125,7 @@ def inventory(output):
     return files,total
 
 
-def export(business,output,offline):
+def _export(business,output,offline):
     descriptor=read(business/'OPERATOR.json');result=read(business/'RESULT.json')
     if not result['complete']:raise ValueError('COMPLETE_REGISTERED_HORIZON_REQUIRED')
     if output.exists() or any(p.is_symlink() for p in [output,*output.parents]):raise FileExistsError('NEW_PUBLIC_OUTPUT_REQUIRED')
@@ -88,6 +133,7 @@ def export(business,output,offline):
     manifest=read(business/'SERVICES.json')
     copy_source(source,output/'source',result['source']['files'],manifest)
     copy_history(output/'source',result['owned_account'],manifest)
+    copy_transition_evidence(output,result['owned_account'])
     for name in ['RESULT.json','STATE.json','SERVICES.json','SCOREBOARD.json']:
         if (business/name).is_file():shutil.copyfile(business/name,output/name)
     inventory(output)
@@ -100,7 +146,7 @@ def export(business,output,offline):
                 temporary=original.with_name(original.name+'-completion023-offline')
                 if temporary.exists():raise FileExistsError('OFFLINE_SOURCE_TARGET_EXISTS')
                 original.rename(temporary);renamed.append((original,temporary))
-        code='import json,sys;from pathlib import Path;from connected_enterprise.verify import audit;p=Path(sys.argv[1]);print(json.dumps(audit(p/"source",json.load(open(p/"SERVICES.json")),json.load(open(p/"RESULT.json"))),sort_keys=True))'
+        code='\n'.join(['import json,sys','from pathlib import Path','from contextlib import nullcontext','from connected_enterprise.verify import audit','p=Path(sys.argv[1])','store=p/"transition-evidence"','if store.exists():',' from connected_enterprise.transition_evidence import evidence_directory',' context=evidence_directory(store)','else: context=nullcontext()','with context:',' print(json.dumps(audit(p/"source",json.load(open(p/"SERVICES.json")),json.load(open(p/"RESULT.json"))),sort_keys=True))'])
         env={**os.environ,'PYTHONPATH':str(output/'source'),'PYTHONDONTWRITEBYTECODE':'1'}
         done=subprocess.run([sys.executable,'-c',code,str(output)],cwd=output/'source',env=env,capture_output=True,text=True,timeout=300)
         (output.parent/(output.name+'-audit.stdout')).write_text(done.stdout)
@@ -119,6 +165,14 @@ def export(business,output,offline):
         for path in sorted(output.rglob('*')):
             if path.is_file() and '__pycache__' not in path.parts:z.write(path,path.relative_to(output))
     return {'accepted':True,'archive':str(archive),'archive_bytes':archive.stat().st_size,'archive_sha256':sha(archive),'public_files':len(files)+1,'source_sha256':result['source']['sha256']}
+
+
+def export(business,output,offline):
+    from connected_enterprise.transition_evidence import evidence_directory
+    business=Path(business).absolute();output=Path(output).absolute()
+    store=business/'transition-evidence'
+    with evidence_directory(store) if store.exists() else nullcontext():
+        return _export(business,output,offline)
 
 
 def main():

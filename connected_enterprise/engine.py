@@ -1,5 +1,6 @@
 """Event-clock simulated enterprise over the canonical owned native account."""
 from __future__ import annotations
+from connected_enterprise.transition_evidence import scoped_business
 import copy
 import hashlib
 import json
@@ -126,7 +127,8 @@ def _prepare_plan(state,account,jobs):
     pilot=cfg['channels']['pilot'];channel_invoice=pilot['price_microUSD']+pilot['support_microUSD']
     contacts=prepared['channel_after']['contacts']
     reachable=sum(b['id'] not in owned_ids and (not b['onboarded'] or not b['active']) and len(contacts.get(b['id'],[]))<pilot.get('max_contacts_per_customer',3) for b in state['buyers'])
-    remaining=cfg['horizon_days']-day
+    from .migration import effective_horizon
+    remaining=effective_horizon(state)-day
     if state['arm']!='baseline' and profitable and reachable>0 and remaining>pilot['lead_days']+7 and not live_channels and earned>channel_invoice+operating_envelope+2*MICRO:
         known_access=pilot['activation_reliability_bps']*pilot['realization_bps']/10000**2
         forecast=sum(margin_history)/len(margin_history)*min(reachable,4)*.4*known_access
@@ -182,6 +184,7 @@ def _prepare_plan(state,account,jobs):
         prepared['orders'].append(order);simulated['used_jobs'].append(order['job_id']);liquidity-=cost+price
     return prepared
 
+@scoped_business
 def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events=None,failpoint=None):
     # Reject invalid terms before creating an output directory or acquiring a lease.
     config=validate_config(copy.deepcopy(config))
@@ -314,7 +317,7 @@ def _run_world(root,manifest,config,seed,arm,output,source=None,stop_after_event
         for b in state['buyers']:
             if b['initial_budget']!=b['remaining_budget']+b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values()) or b['remaining_budget']<0:raise ValueError('SHARED_BUYER_BUDGET_CONSERVATION')
         result={k:copy.deepcopy(state[k]) for k in ['config','seed','arm','source','orders','buyers','investments','costs','events','decisions','market','stop_reasons']}
-        result.update({k:copy.deepcopy(state[k]) for k in ['origin_source','operating_upgrades','prospective_policy'] if k in state})
+        result.update({k:copy.deepcopy(state[k]) for k in ['origin_source','operating_upgrades','prospective_policy','calendar_extensions'] if k in state})
         result['operating_state']=copy.deepcopy(state)
         result.update(schema='agi-alpha/connected014-result/v1',scope='CONDITIONAL_SIMULATION',channels=state['channel_state'],owned_account=owned,summary=summary,complete=not state['queue'],processed_events=state['processed_events'],
             accepted_jobs=sum(o['acceptance_time'] is not None for o in state['orders']),paid_jobs=len(settled),customers=len(customers),repeat_customers=sum(sum(o['customer_id']==c for o in settled)>1 for c in customers),profitable_earned_continuations=len(earned),

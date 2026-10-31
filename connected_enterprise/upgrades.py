@@ -14,6 +14,8 @@ import sys
 
 from commercial.ledger import canonical, digest
 
+from connected_enterprise.transition_evidence import ticket_body, current_store_directory
+
 DOMAIN = b'native-source-transition\n'
 _HISTORICAL_AUDITS = {}
 MAX_TICKET_BYTES = 16_000_000
@@ -51,7 +53,7 @@ def source_inventory(root):
 
 
 def verify_historical(ticket, manifest, *, root=None):
-    body = ticket['body']
+    body = ticket_body(ticket)
     candidates = [Path(body['historical_root']).absolute()]
     if root is not None:
         candidates.append(Path(root).absolute() / 'historical-source-versions' / body['from_source']['sha256'])
@@ -72,10 +74,17 @@ def verify_historical(ticket, manifest, *, root=None):
                         'verifier_files': body['verifier_files']})
     if cache_key in _HISTORICAL_AUDITS:
         return copy.deepcopy(_HISTORICAL_AUDITS[cache_key])
-    payload = {'record': body['prior_record'], 'manifest': manifest, 'root': str(root)}
-    code = ('import json,sys; from connected_enterprise.finance import audit_journal; '
-            'p=json.load(sys.stdin); r=audit_journal(p["record"],root=p["root"],manifest=p["manifest"]); '
-            'assert r["accepted"]; print(json.dumps(r,sort_keys=True))')
+    payload = {'record': body['prior_record'], 'manifest': manifest, 'root': str(root), 'evidence_dir': current_store_directory()}
+    code = """import json,sys,contextlib,importlib.util
+from connected_enterprise.finance import audit_journal
+p=json.load(sys.stdin);scope=contextlib.nullcontext()
+if p.get('evidence_dir') and importlib.util.find_spec('connected_enterprise.transition_evidence'):
+ from connected_enterprise.transition_evidence import evidence_directory
+ scope=evidence_directory(p['evidence_dir'])
+with scope:
+ r=audit_journal(p['record'],root=p['root'],manifest=p['manifest'])
+ assert r['accepted'];print(json.dumps(r,sort_keys=True))
+"""
     env = {**os.environ, 'PYTHONPATH': str(root), 'PYTHONDONTWRITEBYTECODE': '1'}
     done = subprocess.run([sys.executable, '-c', code], input=json.dumps(payload),
                           text=True, capture_output=True, cwd=root, env=env, timeout=60)
@@ -93,8 +102,10 @@ def verify_historical(ticket, manifest, *, root=None):
     return receipt
 
 
+AUTHORIZATION_REUSE_HELPER = "import stat\n\ndef clean_authorization_snapshot(root, path, operating):\n # Eligibility only, not authentication. The original historical constructor and\n # verify_checkpoint still authenticate/audit the final owned record.\n root=Path(root);path=Path(path)\n if operating is None:return None\n known='05b102ee40510b59c7693002251996ade2a03a3c383a885c08cedda54abf619a'\n finance=root/'connected_enterprise/finance.py'\n try:\n  if hashlib.sha256(finance.read_bytes()).hexdigest()!=known:return None\n  intent=path.with_name(path.name+'.operating-checkpoint-intent.json')\n  if intent.exists() or intent.is_symlink():return None\n  names=[path,path.with_name(path.name+'.actions.jsonl'),path.with_name(path.name+'.connected-journal.json'),path.parent/'STATE.json']\n  names += [path.with_name(path.name+suffix) for suffix in ['.adaptive-proofs.json','.adaptive-resolutions.json','.adaptive-source-transitions.json','.adaptive-connected-source.json','.adaptive-account.json','.persistence.json']]\n  fingerprint={};raws={}\n  for index,name in enumerate(names):\n   if any(p.is_symlink() for p in [name,*name.parents]):return None\n   if not name.exists():\n    if index<4:return None\n    fingerprint[str(name)]=None;continue\n   info=name.stat()\n   if not stat.S_ISREG(info.st_mode) or info.st_nlink!=1 or info.st_size>64_000_000:return None\n   raw=name.read_bytes();fingerprint[str(name)]=hashlib.sha256(raw).hexdigest();raws[str(name)]=raw\n  from commercial.ledger import strict_json\n  journal=strict_json(raws[str(names[2])])\n  if not isinstance(journal,dict) or set(journal)!={'body','signature'}:return None\n  entries=journal['body']['entries']\n  if not isinstance(entries,list) or any(e.get('status') not in {'COMPLETE','REJECTED'} for e in entries):return None\n  if strict_json(raws[str(names[3])])!=operating['prior_checkpoint']:return None\n  return fingerprint\n except (OSError,ValueError,KeyError,TypeError,AttributeError):return None\n\n"
+
 def authorize_upgrade(*, historical_root, target_root, manifest, path, opening,
-                      working, contract, expected_state_digest, ident, day, operating=None):
+                      working, contract, expected_state_digest, ident, day, operating=None, evidence_dir=None):
     """Invoke only after the owner has explicitly selected the target source."""
     from connected_enterprise.finance import source_identity
     historical_root, target_root = Path(historical_root).absolute(), Path(target_root).absolute()
@@ -102,18 +113,31 @@ def authorize_upgrade(*, historical_root, target_root, manifest, path, opening,
     if expected_state_digest is None and operating is None:
         raise ValueError('EXPLICIT_SOURCE_UPGRADE_CHECKPOINT_REQUIRED')
     files = source_inventory(historical_root)
+    if evidence_dir is not None:
+        evidence_dir=Path(evidence_dir).absolute()
+        if any(p.is_symlink() for p in [evidence_dir,*evidence_dir.parents]):raise ValueError('EVIDENCE_DIRECTORY_SYMLINK_REFUSED')
+        evidence_dir.mkdir(mode=0o700,exist_ok=True)
     payload = {'root': str(historical_root), 'path': str(Path(path).absolute()),
                'manifest': manifest, 'opening': opening, 'working': working,
                'contract': contract, 'expected': expected_state_digest,
                'target': target, 'ident': ident, 'day': day, 'verifier_files': files,
-               'operating': operating}
-    code = '''import json,sys,hashlib,hmac
+               'operating': operating, 'evidence_dir': str(Path(evidence_dir).absolute()) if evidence_dir else None,
+               'codec_source': (target_root/'connected_enterprise/transition_evidence.py').read_text() if evidence_dir else None}
+    code = AUTHORIZATION_REUSE_HELPER + '''import json,sys,hashlib,hmac,contextlib,importlib.util
 from pathlib import Path
 from connected_enterprise.finance import JournalAccount
 from commercial.ledger import canonical,digest
 p=json.load(sys.stdin)
-with JournalAccount(p['root'],p['manifest'],p['path'],opening=p['opening'],working=p['working'],contract=p['contract']) as a:
- a.audit(); r=a.export()
+scope=contextlib.nullcontext()
+if p['evidence_dir'] and importlib.util.find_spec('connected_enterprise.transition_evidence'):
+ from connected_enterprise.transition_evidence import evidence_directory
+ scope=evidence_directory(p['evidence_dir'])
+before=clean_authorization_snapshot(p['root'],p['path'],p['operating'])
+with scope, JournalAccount(p['root'],p['manifest'],p['path'],opening=p['opening'],working=p['working'],contract=p['contract']) as a:
+ after=clean_authorization_snapshot(p['root'],p['path'],p['operating'])
+ reuse=before is not None and before==after
+ if not reuse:a.audit()
+ r=a.export()
  if p['expected'] is not None and a.snapshot()['state_digest']!=p['expected']: raise ValueError('STALE_SOURCE_UPGRADE_CHECKPOINT')
  if p['operating'] is not None:
   from connected_enterprise.verify import check_source
@@ -127,6 +151,13 @@ with JournalAccount(p['root'],p['manifest'],p['path'],opening=p['opening'],worki
  counter=len(r.get('source_transitions',{}))+1
  body={'schema':'agi-alpha/native-source-transition/v1','id':p['ident'],'account_path':p['path'],'from_source':a.source,'to_source':p['target'],'counter':counter,'expected_state_digest':p['expected'],'day':p['day'],'prior_record':r,'prior_envelope':old,'historical_root':p['root'],'verifier_files':p['verifier_files']}
  if p['operating'] is not None:body['operating']=p['operating']
+ if p['evidence_dir']:
+  codec={};exec(p['codec_source'],codec);blobs={}
+  body=codec['externalize'](body,blobs)
+  unsigned={'body':body,'signature':'0'*64}
+  codec['preflight_storage'](unsigned,r,old)
+  codec['persist_evidence'](p['evidence_dir'],blobs)
+ if reuse and clean_authorization_snapshot(p['root'],p['path'],p['operating'])!=after:raise ValueError('OWNER_AUTHORITY_CHANGED_DURING_AUTHORIZATION')
  print(json.dumps({'body':body,'signature':hmac.new(a._account._key,b'native-source-transition\\n'+canonical(body),hashlib.sha256).hexdigest()},sort_keys=True))
 '''
     env = {**os.environ, 'PYTHONPATH': str(historical_root), 'PYTHONDONTWRITEBYTECODE': '1'}
@@ -135,13 +166,14 @@ with JournalAccount(p['root'],p['manifest'],p['path'],opening=p['opening'],worki
     if done.returncode:
         raise ValueError('SOURCE_UPGRADE_AUTHORIZATION_FAILED:' + done.stderr[-1200:])
     ticket = json.loads(done.stdout)
+    if source_identity(target_root)!=target:raise ValueError('TARGET_CHANGED_DURING_AUTHORIZATION')
     if source_inventory(historical_root) != files:
         raise ValueError('HISTORICAL_SOURCE_CHANGED_DURING_AUTHORIZATION')
     return ticket
 
 
 def transition_args(ticket):
-    body = ticket['body']
+    body = ticket_body(ticket)
     return {'id': body['id'], 'from_source': body['from_source']['sha256'],
             'to_source': body['to_source']['sha256'], 'counter': body['counter'],
             'checkpoint_sha256': digest(body['prior_record'])}
@@ -153,7 +185,7 @@ def validate_ticket(ticket, *, key=None, root=None, path=None):
               'historical_root', 'verifier_files'}
     if not isinstance(ticket, dict) or set(ticket) != {'body', 'signature'}:
         raise ValueError('EXACT_SOURCE_TRANSITION_AUTHORIZATION_REQUIRED')
-    body = ticket['body']
+    body = ticket_body(ticket, key=key)
     if not isinstance(body, dict) or set(body) not in [fields, fields | {'operating'}] or body['schema'] != 'agi-alpha/native-source-transition/v1':
         raise ValueError('EXACT_SOURCE_TRANSITION_BODY_REQUIRED')
     if type(body['counter']) is not int or not 1 <= body['counter'] <= 4 or type(body['day']) is not int or body['day'] < 0:
@@ -172,7 +204,7 @@ def validate_ticket(ticket, *, key=None, root=None, path=None):
         if body['to_source'] != source_identity(root):
             raise ValueError('SOURCE_TRANSITION_TARGET_CHANGED')
     if key is not None:
-        expected = hmac.new(key, DOMAIN + canonical(body), hashlib.sha256).hexdigest()
+        expected = hmac.new(key, DOMAIN + canonical(ticket['body']), hashlib.sha256).hexdigest()
         if not hmac.compare_digest(expected, str(ticket['signature'])):
             raise ValueError('SOURCE_TRANSITION_SIGNATURE_MISMATCH')
     record = body['prior_record']

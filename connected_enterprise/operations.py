@@ -8,6 +8,7 @@ import shutil
 
 from commercial.ledger import canonical, digest, strict_json
 from commercial.persistence import atomic_bytes
+from .transition_evidence import business_evidence
 
 SCHEMA = 'agi-alpha/connected-single-business-operator/v1'
 
@@ -129,8 +130,20 @@ def prepare_upgrade(root, historical_root, manifest_path, output, *, policy, exp
         previous = d
     if digest(checkpoint) != expected_checkpoint_sha256:
         raise ValueError('STALE_OPERATING_UPGRADE_CHECKPOINT')
-    from .upgrades import preflight_ticket_size
-    preflight_ticket_size(output)
+    # Authenticate and measure the new representation before descriptor/source
+    # mutation. The owner subprocess keeps the existing key private.
+    from .upgrades import authorize_upgrade, validate_ticket
+    from .runner import identity
+    state=checkpoint['body']['state'];cfg=state['config']
+    origin=state.get('origin_source',state['source'])
+    contract='connected014/'+digest({'config':cfg,'seed':state['seed'],'arm':state['arm'],'source':origin,'manifest':manifest})
+    day=max(state['last_time'],state['current']['event']['time'] if state['current'] else state['last_time'])
+    operating={'schema':'agi-alpha/connected-operating-transition/v1','prior_checkpoint':checkpoint,
+               'from_runtime':state['source'],'to_runtime':identity(root),'policy':policy}
+    prepared=authorize_upgrade(historical_root=historical_root,target_root=root,manifest=manifest,
+        path=output/'account.sqlite',opening=cfg['opening'],working=cfg['working'],contract=contract,
+        expected_state_digest=None,ident=ident,day=day,operating=operating,evidence_dir=output/'transition-evidence')
+    with business_evidence(output):validate_ticket(prepared,root=root,path=output/'account.sqlite')
     state = checkpoint['body']['state']
     from .runner import identity
     source_dir = 'source-022' if previous is None else 'source-' + identity(root)['sha256']
@@ -175,7 +188,8 @@ def audit(output):
     result = _read(output / d['business_dir'] / 'RESULT.json')
     if any(result[k] != d[k] for k in ['config', 'seed', 'arm', 'source']):
         raise ValueError('CONNECTED_OPERATOR_RESULT_AUTHORITY_CHANGED')
-    checked = independent_audit(output / d['source_dir'], manifest, result)
+    with business_evidence(output/d['business_dir']):
+        checked = independent_audit(output / d['source_dir'], manifest, result)
     _write(output / 'OPERATOR_AUDIT.json', checked)
     return checked
 
