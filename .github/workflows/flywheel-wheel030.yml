@@ -41,6 +41,14 @@ jobs:
         run: python -m pip install -r requirements-commercial010.txt
       - name: Qualify native audit to incentive/asset planning without financial writes
         run: python scripts/qualify_economic_wheel031.py --output "$RUNNER_TEMP/agi-alpha-coupling031"
+      - name: Witness one audited native commercial revolution without spending
+        run: |
+          python -m flywheel_wheel.revolution \
+            --enterprise "$RUNNER_TEMP/agi-alpha-coupling031/private-enterprise" \
+            --world "2610311931-central-baseline" \
+            --output "$RUNNER_TEMP/agi-alpha-revolution033" \
+            --trust-frozen-source
+          python -c 'import json,os,pathlib; r=json.loads((pathlib.Path(os.environ["RUNNER_TEMP"])/"agi-alpha-revolution033"/"REVOLUTION.json").read_text()); assert r["scope"]=="SOURCE_LINKED_NATIVE_SIMULATION_ONLY" and r["funding_authority"] is False and r["actual_customers"]==0 and r["verification"]=="CANONICAL_NATIVE_AUDIT_AND_STORED_GROWTH_REDERIVED"; assert r["causal_extra_profit"]=="NOT_ESTABLISHED_WITHOUT_MATCHED_COUNTERFACTUAL"'
       - name: Publish only static, no-account artifacts
         if: success()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -61,4 +69,5 @@ jobs:
             ${{ runner.temp }}/agi-alpha-coupling031/public/snapshot.json
             ${{ runner.temp }}/agi-alpha-coupling031/public/proposal.json
             ${{ runner.temp }}/agi-alpha-coupling031/public/INTEGRATION.json
+            ${{ runner.temp }}/agi-alpha-revolution033/REVOLUTION.json
           if-no-files-found: error
