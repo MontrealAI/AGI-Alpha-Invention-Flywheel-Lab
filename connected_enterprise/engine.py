@@ -31,7 +31,7 @@ def default_config():
         'limits':['Synthetic non-personal work only; no actual customers or payments.','Finite authored buyer/channel/supplier contracts, no empirical conversion calibration.','Permanent native principal/fee protection tails remain; seed may back reserves.','No paid inference: capable-frontier AI economics represented by disclosed envelopes; actual executors are deterministic.','Finite frozen service inventory is an edition resource, not a universal market ceiling.']}
 
 def validate_config(cfg):
-    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','buyer_income_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
     for key in ['horizon_days','customer_pool','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
     for key in ['nonpayment_bps','arrival_bps','retention_bps','payment_bps','profit_tax_bps']:
@@ -55,6 +55,9 @@ def validate_config(cfg):
         validate_allocation_policy(cfg.get('strategic_allocation_policy'))
         if cfg['maintenance_daily']<=0:raise ValueError('POSITIVE_PREPAID_STRATEGIC_PLANNING_CONTRACT_REQUIRED')
     elif 'strategic_allocation_policy' in cfg:raise ValueError('JOINT_STRATEGIC_POLICY_REQUIRED')
+    if 'buyer_income_policy' in cfg:
+        from .buyer_income import validate_policy as validate_income
+        validate_income(cfg['buyer_income_policy'], cfg['horizon_days'])
     contracts=validate_contracts(cfg['channels'])
     if 'channel_menu_policy' in cfg:
         from .channel_menu import validate_policy
@@ -91,6 +94,11 @@ def _initial(cfg,seed,arm,source):
         'market':{'rival_cash':500*MICRO,'rival_collections':0,'rival_expenses':0,'rival_initial_cash':500*MICRO,'rival_observations':[],'public_rival_bps':cfg['price_pressure_bps'],'supplier_cash':100*MICRO,'supplier_initial_cash':100*MICRO,'supplier_collections':0,'supplier_expenses':0},'stop_reasons':[]}
     _schedule(s,0,'startup','000-startup')
     for day in range(cfg['horizon_days']):_schedule(s,day*24,'plan',f'plan-{day:04d}')
+    if 'buyer_income_policy' in cfg:
+        from .buyer_income import due_days
+        for buyer in s['buyers']:buyer['external_income_total']=0
+        for day in due_days(cfg['buyer_income_policy'],cfg['horizon_days']):
+            _schedule(s,day*24,'buyer_income',f'000-income-{day:06d}')
     return s
 
 def _offer(jobs,state,buyer,cfg):
@@ -288,6 +296,16 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
             if kind=='startup':
                 cost('complete-development-setup',cfg['setup_cost'],t,'development_integration_qualification_and_failed_search')
                 _event(state,t,'STARTUP_FUNDED',ev['id'])
+            elif kind=='buyer_income':
+                from .buyer_income import EVIDENCE
+                policy=cfg['buyer_income_policy']
+                for buyer in state['buyers']:
+                    if draw(seed,[day,buyer['id']],'buyer-external-income')<policy['receipt_bps']/10000:
+                        amount=policy['income_microUSD']
+                        buyer['remaining_budget']+=amount
+                        buyer['external_income_total']+=amount
+                        _event(state,t,'EXTERNAL_BUYER_INCOME',f"external-income-{day:06d}-{buyer['id']}",
+                               customer_id=buyer['id'],amount_microUSD=amount,evidence_role=EVIDENCE)
             elif kind=='plan':
                 if p.get('joint_action'):state.setdefault('joint_actions',{})[p['joint_action']['id']]=p['joint_action']
                 cost('maintenance-'+str(day),cfg['maintenance_daily'],t,'maintenance')
@@ -383,7 +401,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
             state['queue'].pop(0);state['last_time']=t;state['processed_events']+=1;state['current']=None;_write(path,account.seal_checkpoint(state));performed+=1
         audit=account.audit();owned=account.export();summary=audit['summary'];settled=[o for o in state['orders'] if o['outcome']=='SETTLED'];customers={o['customer_id'] for o in settled};earned=[o for o in settled if o['funding_receipt']['funding']=='EARNED' and o['price']>o['complete_cost']]
         for b in state['buyers']:
-            if b['initial_budget']!=b['remaining_budget']+b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values()) or b['remaining_budget']<0:raise ValueError('SHARED_BUYER_BUDGET_CONSERVATION')
+            if b['initial_budget']+b.get('external_income_total',0)!=b['remaining_budget']+b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values()) or b['remaining_budget']<0:raise ValueError('SHARED_BUYER_BUDGET_CONSERVATION')
         result={k:copy.deepcopy(state[k]) for k in ['config','seed','arm','source','orders','buyers','investments','costs','events','decisions','market','stop_reasons']}
         if 'joint_actions' in state:result['joint_actions']=copy.deepcopy(state['joint_actions'])
         from .capital_lifecycle import capital_metrics
