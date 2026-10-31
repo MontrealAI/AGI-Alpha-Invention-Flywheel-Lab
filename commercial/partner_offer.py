@@ -62,11 +62,11 @@ def quote_terms(price, distributor_cost, distributor_min_gain,
                    protected_cash=protected_cash, opening_cash=opening_cash)
     for key, value in amounts.items():integer(value, key)
     minimum_share = distributor_cost + distributor_min_gain
-    maximum_share = price - provider_complete_cost - provider_min_gain
+    maximum_share = price - provider_complete_cost - activation_cost - provider_min_gain
     funded = opening_cash >= activation_cost + protected_cash + provider_loss_cost
     feasible = minimum_share <= maximum_share and funded
     share = minimum_share if feasible else None
-    provider_gain = (price - share - provider_complete_cost) if feasible else None
+    provider_gain = (price - share - provider_complete_cost - activation_cost) if feasible else None
     return {'scenario': amounts,
             'status': 'CONDITIONALLY_FEASIBLE_QUOTE' if feasible else 'NO_BID',
             'partner_share_if_collected_cents': share,
