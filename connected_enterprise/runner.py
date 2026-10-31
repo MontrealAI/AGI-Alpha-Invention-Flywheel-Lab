@@ -25,7 +25,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def source_paths(root):
     names=set(inherited_paths(root))
-    for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('tests','test_native*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('examples/native_capital020','*.json'),('docs/native-capital020','*.md'),('historical/successor022','*'),('examples/connected022','*.json'),('docs/successor022','*.md')]:
+    for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('tests','test_native*.py'),('tests','test_transition*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('examples/native_capital020','*.json'),('docs/native-capital020','*.md'),('historical/successor022','*'),('historical/cas-parent7d','*'),('examples/connected022','*.json'),('docs/successor022','*.md')]:
         names.update(p.relative_to(root).as_posix() for p in (root/folder).glob(pattern) if p.is_file())
     names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','verification/scan_adaptive_cancellation_history.py','evidence/cancellation-retirement/HISTORICAL_SCAN.json','evidence/cancellation-retirement/COUNTEREXAMPLE.before.json','docs/connected014/OPERATOR.md','AGENTS.md','README.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())
     names.update(p for p in ['tests/__init__.py','tests/connected_legacy_fixture.py'] if (root/p).is_file())
@@ -33,7 +33,7 @@ def source_paths(root):
     names.update(p.relative_to(root).as_posix() for p in (root/'campaign/successor-022/proofs').glob('*.py'))
     names.update(p for p in ['campaign/successor-022/proofs/maturity_successor_protocol.json','campaign/successor-022/proofs/ADAPTATION.json'] if (root/p).is_file())
     names.update(p.relative_to(root).as_posix() for p in (root/'campaign/connected-registrations').glob('*.json') if p.is_file())
-    names.update(p for p in ['campaign/overnight-022/OPERATOR_INPUT.json','scripts/measure_overnight022.py'] if (root/p).is_file())
+    names.update(p for p in ['campaign/overnight-022/OPERATOR_INPUT.json','scripts/measure_overnight022.py','scripts/run_regression_shard.py'] if (root/p).is_file())
     names.update(p for p in ['docs/completion023/OPERATOR.md','scripts/export_recovered023.py','campaign/completion-023/PLAN.json'] if (root/p).is_file())
     return sorted(name for name in names if (root/name).is_file())
 
@@ -238,11 +238,21 @@ def package(output,archive):
     checked=audit_output(output)
     if not checked['accepted']:raise ValueError('ACCEPTED_COMPLETE_PACKAGE_AUDIT_REQUIRED')
     if archive.exists() or output in archive.parents:raise ValueError('NEW_ARCHIVE_OUTSIDE_OUTPUT_REQUIRED')
+    recovery={}
     with zipfile.ZipFile(archive,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as z:
         for p in sorted(output.rglob('*')):
             if not p.is_file() or p.is_symlink() or p.name.endswith('.adaptive-simulation-key') or p.suffix in {'.sqlite','-wal','-shm'} or '__pycache__' in p.parts or p.name in {'WORKER.lock','RUN.lock'}:continue
             if '.sqlite' in p.name:continue
-            z.write(p,p.relative_to(output).as_posix())
+            relative=p.relative_to(output)
+            if 'account.sqlite.rejected-operating-intents' in relative.parts:
+                if p.suffix!='.json':raise ValueError('DECLARED_PUBLIC_RECOVERY_EVIDENCE_REQUIRED')
+                name='/'.join('public-rejected-operating-intents' if part=='account.sqlite.rejected-operating-intents' else part for part in relative.parts)
+                raw=p.read_bytes();recovery[name]={'original_path':relative.as_posix(),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+                z.writestr(name,raw)
+            elif any('.sqlite' in part for part in relative.parts):
+                continue
+            else:z.write(p,relative.as_posix())
+        if recovery:z.writestr('PUBLIC_RECOVERY_INDEX.json',json.dumps({'schema':'agi-alpha/keyfree-rejected-intent-transport/v1','scope':'Original key-free rejected-intent evidence preserved byte-for-byte; no account database or signing key.','files':recovery},sort_keys=True,indent=2)+'\n')
     return {'bytes':archive.stat().st_size,'sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),'scope':'KEY_FREE_AUDIT_AND_FRESH_REPRODUCTION_NOT_ACCOUNT_TAKEOVER'}
 
 def main():

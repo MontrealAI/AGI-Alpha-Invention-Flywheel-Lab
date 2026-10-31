@@ -5,6 +5,7 @@ import io
 import json
 from pathlib import Path
 import stat
+import tempfile
 import unittest
 import zipfile
 from functools import lru_cache
@@ -79,6 +80,34 @@ def canonical_sha(value):
 
 
 class PublicationBindingTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.preserved=tempfile.TemporaryDirectory(prefix='operator022-publication-source-')
+        cls.baseline=Path(cls.preserved.name)
+        manifest=json.loads((ROOT/'historical/operator022/MANIFEST.json').read_text())
+        archive=ROOT/'historical/operator022/source.zip'
+        if (manifest['git_commit']!='8abfb96d4ef859e30ca344d7933ec2a2f49012c1'
+                or hashlib.sha256(archive.read_bytes()).hexdigest()!=manifest['archive_sha256']
+                or archive.stat().st_size!=manifest['archive_bytes']):
+            raise ValueError('IMMUTABLE_OPERATOR022_SOURCE_REQUIRED')
+        with zipfile.ZipFile(archive) as z:
+            entries=z.infolist()
+            if (len(entries)>10000 or sum(e.file_size for e in entries)>512*1024*1024
+                    or len(entries)!=len(set(e.filename for e in entries))
+                    or set(z.namelist())!=set(manifest['files'])):
+                raise ValueError('BOUNDED_EXACT_OPERATOR022_SOURCE_REQUIRED')
+            for e in entries:
+                p=Path(e.filename);raw=z.read(e)
+                if p.is_absolute() or '..' in p.parts or stat.S_ISLNK(e.external_attr>>16) or hashlib.sha256(raw).hexdigest()!=manifest['files'][e.filename]:
+                    raise ValueError('OPERATOR022_SOURCE_CHANGED')
+                target=cls.baseline/p;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+        if identity(cls.baseline)['sha256']!=manifest['source_sha256']:
+            raise ValueError('OPERATOR022_SOURCE_CLOSURE_CHANGED')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.preserved.cleanup()
+
     def setUp(self):
         self.publication = read(PAPERS / 'PUBLICATION.json')
         self.delta = read(DELTA)
@@ -92,7 +121,7 @@ class PublicationBindingTests(unittest.TestCase):
         self.current_proof = read(ROOT / self.binding['source_closure_proof']['path'])
 
     def test_current_publication_matches_actual_source_identity(self):
-        current = identity(ROOT)
+        current = identity(self.baseline)
         self.assertEqual(current['sha256'], self.publication['source_sha256'])
         self.assertEqual(current['sha256'], self.delta['release_qualification_source_sha256'])
         self.assertEqual(current['sha256'], self.binding['current_source_sha256'])
@@ -131,7 +160,7 @@ class PublicationBindingTests(unittest.TestCase):
     def test_current_delta_matches_only_declared_operator_source_changes(self):
         self.assertEqual(self.publication['release_source_delta'], self.delta)
         prior = self.historical_proof['current_files']
-        current = identity(ROOT)['files']
+        current = identity(self.baseline)['files']
         changes = {path: {'before_sha256': prior.get(path), 'after_sha256': current.get(path)}
                    for path in sorted(set(prior) | set(current)) if prior.get(path) != current.get(path)}
         self.assertEqual(changes, self.binding['changed_or_added_identity_files'])
@@ -180,7 +209,7 @@ class PublicationBindingTests(unittest.TestCase):
         self.assertEqual(self.delta['source_changes'][:-1], self.pr33_delta['source_changes'])
         for path in ['adaptive_enterprise/account.py', 'commercial/ledger.py', 'connected_enterprise/engine.py',
                      'connected_enterprise/finance.py', 'experiments/commerce006.py', 'vendor/alpha_claim/protected_exchange.py']:
-            self.assertEqual(sha(ROOT / path), self.historical_proof['current_files'][path])
+            self.assertEqual(hashlib.sha256((self.baseline/path).read_bytes()).hexdigest(), self.historical_proof['current_files'][path])
         self.assertIn('do not retrospectively qualify', self.publication['source_binding_scope'])
         self.assertIn('does not establish that the paper exercised', self.publication['source_binding_scope'])
         self.assertIn('actual downloaded-release operation', self.publication['source_binding_scope'])
@@ -192,14 +221,14 @@ class PublicationBindingTests(unittest.TestCase):
         self.assertTrue(qualification['no_git_execution'])
         self.assertTrue(qualification['completed_resume_financially_unchanged'])
         self.assertEqual(qualification['source_sha256'], self.binding['current_source_sha256'])
-        self.assertEqual(qualification['source_files'], identity(ROOT)['files'])
+        self.assertEqual(qualification['source_files'], identity(self.baseline)['files'])
         self.assertIn('NOT_PERFORMED', qualification['runtime']['dependency_installation'])
         proof = read(ROOT / evidence['public_registered_operator_reproduction']['path'])
         failed = read(ROOT / evidence['preserved_failed_collector']['path'])
         registered = read(SUPPLEMENT / 'REGISTERED_FROZEN.json')
         source = dict(registered['source']['files'])
         source.pop(registered['registration_path'])
-        self.assertEqual(source, identity(ROOT)['files'])
+        self.assertEqual(source, identity(self.baseline)['files'])
         self.assertEqual(canonical_sha(registered['source']['files']), proof['source_sha256'])
         self.assertTrue(proof['accepted'])
         self.assertTrue(proof['public_audit']['accepted'])
@@ -215,8 +244,8 @@ class PublicationBindingTests(unittest.TestCase):
         payloads = bundle_payloads(TRANSPORT.read_bytes(), (ROOT / manifest['bundle']['path']).read_bytes())
         self.assertEqual(len(payloads), 92)
         self.assertEqual(manifest['original_inventory_count'], 95)
-        self.assertEqual(manifest['executing_source']['sha256'], identity(ROOT)['sha256'])
-        self.assertEqual(manifest['executing_source']['files'], len(identity(ROOT)['files']))
+        self.assertEqual(manifest['executing_source']['sha256'], identity(self.baseline)['sha256'])
+        self.assertEqual(manifest['executing_source']['files'], len(identity(self.baseline)['files']))
         self.assertEqual(read(SUPPLEMENT / 'BINDING_DELTA.json'), self.binding)
 
     def test_corrupted_proof_transport_cannot_replace_original_records(self):
@@ -234,6 +263,23 @@ class PublicationBindingTests(unittest.TestCase):
         excluded += [path.relative_to(ROOT).as_posix() for path in SUPPLEMENT.rglob('*') if path.is_file()]
         for path in excluded:
             self.assertNotIn(path, files)
+
+    def test_new_native_source_has_its_own_delta_and_executed_qualification(self):
+        binding=read(ROOT/'campaign/completion-024/CURRENT_SOURCE_BINDING.json')
+        current=identity(ROOT);prior=identity(self.baseline)
+        self.assertEqual(binding['schema'],'agi-alpha/completion024-current-source-binding/v1')
+        self.assertEqual(binding['source'],current)
+        self.assertEqual(binding['historical_source_sha256'],prior['sha256'])
+        changes={p:{'before_sha256':prior['files'].get(p),'after_sha256':current['files'].get(p)} for p in sorted(set(prior['files'])|set(current['files'])) if prior['files'].get(p)!=current['files'].get(p)}
+        self.assertEqual(binding['changes'],changes)
+        self.assertNotEqual(current['sha256'],prior['sha256'])
+        qualification=read(ROOT/binding['qualification']['path'])
+        self.assertEqual(sha(ROOT/binding['qualification']['path']),binding['qualification']['sha256'])
+        self.assertTrue(qualification['accepted'])
+        self.assertTrue(qualification['completed_resume_financially_unchanged'])
+        self.assertEqual(qualification['source_sha256'],current['sha256'])
+        self.assertEqual(qualification['source_files'],current['files'])
+        self.assertEqual(binding['historical_claim'],'Original operator022 publication remains immutable; it does not qualify this new source or its financial changes.')
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 """Authenticated continuation of a connected business across source versions."""
 from __future__ import annotations
+from connected_enterprise.transition_evidence import ticket_body
 
 import copy
 import hashlib
@@ -74,7 +75,7 @@ def _write(path, value):
 
 
 def validate_operating_authority(ticket, *, key=None, root=None):
-    body = ticket['body']
+    body = ticket_body(ticket)
     op = body.get('operating')
     if not isinstance(op, dict) or set(op) != {'schema', 'prior_checkpoint', 'from_runtime', 'to_runtime', 'policy'} or op['schema'] != 'agi-alpha/connected-operating-transition/v1':
         raise ValueError('EXACT_OPERATING_TRANSITION_AUTHORITY_REQUIRED')
@@ -124,27 +125,27 @@ def migrated_state(ticket):
     op = validate_operating_authority(ticket)
     state = copy.deepcopy(op['prior_checkpoint']['body']['state'])
     history = state.get('operating_upgrades', [])
-    if any(row['id'] == ticket['body']['id'] for row in history):
+    if any(row['id'] == ticket_body(ticket)['id'] for row in history):
         raise ValueError('OPERATING_TRANSITION_REPLAY_OR_FORK')
     state.setdefault('origin_source', copy.deepcopy(state['source']))
     state['source'] = copy.deepcopy(op['to_runtime'])
     state['prospective_policy'] = copy.deepcopy(op['policy'])
     state['operating_upgrades'] = copy.deepcopy(history) + [{
-        'id': ticket['body']['id'], 'ticket_sha256': digest(ticket),
+        'id': ticket_body(ticket)['id'], 'ticket_sha256': digest(ticket),
         'prior_checkpoint_sha256': digest(op['prior_checkpoint']),
         'from_runtime_sha256': op['from_runtime']['sha256'],
         'to_runtime_sha256': op['to_runtime']['sha256'], 'policy': copy.deepcopy(op['policy'])}]
     invoice = op['policy'].get('upgrade_cost_microUSD', 0)
     if invoice:
-        state['costs'].append({'id': 'source-upgrade-' + ticket['body']['id'], 'amount': invoice,
-                               'category': 'source_upgrade_integration', 'time': ticket['body']['day'],
+        state['costs'].append({'id': 'source-upgrade-' + ticket_body(ticket)['id'], 'amount': invoice,
+                               'category': 'source_upgrade_integration', 'time': ticket_body(ticket)['day'],
                                'funding_receipt': {'funding': 'OPERATING_CASH', 'authorization_sha256': digest(ticket),
                                                    'scope': 'Declared modeled upgrade invoice; actual engineering/host/model billing unknown'}})
     return state
 
 
 def _receipt(ticket, record, account_path):
-    body = ticket['body']; original = body['operating']['prior_checkpoint']; expected = migrated_state(ticket)
+    body = ticket_body(ticket); original = body['operating']['prior_checkpoint']; expected = migrated_state(ticket)
     transitions = [e for e in record['ledger']['actions'] if e['op'] == 'source_transition' and e['args']['id'] == body['id']]
     if len(transitions) != 1 or transitions[0]['before'] != transitions[0]['after']:
         raise ValueError('EXACT_MONETARY_CONTINUITY_TRANSITION_REQUIRED')
@@ -175,7 +176,7 @@ def recover_upgrade(root, manifest, output, *, failpoint=None):
     intent = _read(output / 'MIGRATION_INTENT.json')
     if set(intent) != {'schema', 'ticket', 'manifest_sha256'} or intent['schema'] != INTENT_SCHEMA or intent['manifest_sha256'] != digest(manifest):
         raise ValueError('OPERATING_UPGRADE_INTENT_AUTHORITY_CHANGED')
-    ticket = intent['ticket']; body = ticket['body']; cfg = body['prior_record']['ledger']['config']
+    ticket = intent['ticket']; body = ticket_body(ticket); cfg = body['prior_record']['ledger']['config']
     from .upgrades import validate_ticket
     validate_ticket(ticket, root=root, path=output / 'account.sqlite')
     expected = migrated_state(ticket)
@@ -212,7 +213,7 @@ def recover_upgrade(root, manifest, output, *, failpoint=None):
         if path.exists() and _read(path) != receipt:
             prior = _read(path); previous = record.get('source_transitions', {}).get(prior.get('id'))
             archived = output / 'MIGRATION_HISTORY' / (str(prior.get('ticket_sha256')) + '.receipt.json')
-            if (previous is None or previous['body']['counter'] >= body['counter']
+            if (previous is None or ticket_body(previous)['counter'] >= body['counter']
                     or prior != _receipt(previous, record, account.path)
                     or not archived.exists() or _read(archived) != prior):
                 raise ValueError('OPERATING_MIGRATION_RECEIPT_CHANGED')
@@ -233,7 +234,7 @@ def upgrade_world(root, historical_root, manifest, output, *, policy, expected_c
             raise ValueError('NEW_OPERATING_UPGRADE_REQUIRES_CURRENT_COSTED_POLICY')
         predecessor = None
         if intent_path.exists():
-            predecessor = _read(intent_path); prior = predecessor['ticket']['body']
+            predecessor = _read(intent_path); prior = ticket_body(predecessor['ticket'])
             if prior['id'] == ident:
                 if (prior['operating']['policy'] != policy
                         or digest(prior['operating']['prior_checkpoint']) != expected_checkpoint_sha256):
@@ -258,10 +259,10 @@ def upgrade_world(root, historical_root, manifest, output, *, policy, expected_c
             raise ValueError('OPERATING_CHECKPOINT_ADVANCED_DURING_AUTHORIZATION')
         validate_operating_authority(ticket, root=root)
         if predecessor is not None:
-            previous = predecessor['ticket']; previous_body = previous['body']; record = ticket['body']['prior_record']
+            previous = predecessor['ticket']; previous_body = ticket_body(previous); record = ticket_body(ticket)['prior_record']
             if (record.get('source_transitions', {}).get(previous_body['id']) != previous
-                    or ticket['body']['counter'] != previous_body['counter'] + 1
-                    or ticket['body']['from_source'] != previous_body['to_source']):
+                    or ticket_body(ticket)['counter'] != previous_body['counter'] + 1
+                    or ticket_body(ticket)['from_source'] != previous_body['to_source']):
                 raise ValueError('OPERATING_PREDECESSOR_INTENT_NOT_AUTHENTICATED')
             previous_receipt = _receipt(previous, record, output / 'account.sqlite')
             receipt_path = output / 'MIGRATION_RECEIPT.json'
@@ -287,7 +288,7 @@ def check_lineage(result, manifest):
         if native['op'] != 'source_transition':
             continue
         ticket = transitions[native['args']['id']]
-        if 'operating' not in ticket['body']:
+        if 'operating' not in ticket_body(ticket):
             raise ValueError('OPERATING_HISTORY_REQUIRES_QUEUE_TRANSITION_AUTHORITY')
         op = validate_operating_authority(ticket)
         state = migrated_state(ticket)
@@ -308,7 +309,7 @@ def check_lineage(result, manifest):
         raise ValueError('OPERATING_SOURCE_HISTORY_NOT_AUTHORIZED')
     origin = result.get('origin_source', result['source'])
     if history:
-        first = transitions[history[0]['id']]['body']['operating']['prior_checkpoint']['body']['state']
+        first = ticket_body(transitions[history[0]['id']])['operating']['prior_checkpoint']['body']['state']
         if origin != first.get('origin_source', first['source']):
             raise ValueError('OPERATING_ORIGINAL_SOURCE_OR_IDENTITY_CHANGED')
     contract = 'connected014/' + digest({'config': result['config'], 'seed': result['seed'], 'arm': result['arm'], 'source': origin, 'manifest': manifest})

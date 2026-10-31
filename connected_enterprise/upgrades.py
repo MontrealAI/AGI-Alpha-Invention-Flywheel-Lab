@@ -14,6 +14,8 @@ import sys
 
 from commercial.ledger import canonical, digest
 
+from connected_enterprise.transition_evidence import ticket_body
+
 DOMAIN = b'native-source-transition\n'
 _HISTORICAL_AUDITS = {}
 MAX_TICKET_BYTES = 16_000_000
@@ -51,7 +53,7 @@ def source_inventory(root):
 
 
 def verify_historical(ticket, manifest, *, root=None):
-    body = ticket['body']
+    body = ticket_body(ticket)
     candidates = [Path(body['historical_root']).absolute()]
     if root is not None:
         candidates.append(Path(root).absolute() / 'historical-source-versions' / body['from_source']['sha256'])
@@ -141,7 +143,7 @@ with JournalAccount(p['root'],p['manifest'],p['path'],opening=p['opening'],worki
 
 
 def transition_args(ticket):
-    body = ticket['body']
+    body = ticket_body(ticket)
     return {'id': body['id'], 'from_source': body['from_source']['sha256'],
             'to_source': body['to_source']['sha256'], 'counter': body['counter'],
             'checkpoint_sha256': digest(body['prior_record'])}
@@ -153,7 +155,7 @@ def validate_ticket(ticket, *, key=None, root=None, path=None):
               'historical_root', 'verifier_files'}
     if not isinstance(ticket, dict) or set(ticket) != {'body', 'signature'}:
         raise ValueError('EXACT_SOURCE_TRANSITION_AUTHORIZATION_REQUIRED')
-    body = ticket['body']
+    body = ticket_body(ticket, key=key)
     if not isinstance(body, dict) or set(body) not in [fields, fields | {'operating'}] or body['schema'] != 'agi-alpha/native-source-transition/v1':
         raise ValueError('EXACT_SOURCE_TRANSITION_BODY_REQUIRED')
     if type(body['counter']) is not int or not 1 <= body['counter'] <= 4 or type(body['day']) is not int or body['day'] < 0:
@@ -172,7 +174,7 @@ def validate_ticket(ticket, *, key=None, root=None, path=None):
         if body['to_source'] != source_identity(root):
             raise ValueError('SOURCE_TRANSITION_TARGET_CHANGED')
     if key is not None:
-        expected = hmac.new(key, DOMAIN + canonical(body), hashlib.sha256).hexdigest()
+        expected = hmac.new(key, DOMAIN + canonical(ticket['body']), hashlib.sha256).hexdigest()
         if not hmac.compare_digest(expected, str(ticket['signature'])):
             raise ValueError('SOURCE_TRANSITION_SIGNATURE_MISMATCH')
     record = body['prior_record']

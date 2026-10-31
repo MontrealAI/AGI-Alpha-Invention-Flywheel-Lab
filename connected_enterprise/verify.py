@@ -4,6 +4,7 @@ This checker consumes exported records, source bytes and admitted artifacts. It
 does not accept a producer's commercial verdict as evidence of useful delivery.
 """
 from __future__ import annotations
+from connected_enterprise.transition_evidence import ticket_body
 
 import hashlib
 import json
@@ -151,7 +152,7 @@ def _check_market_decisions(result, tape):
             for transition in tape['actions']:
                 if transition['op'] == 'source_transition' and transition['day'] <= moment:
                     ticket = result['owned_account'].get('source_transitions', {}).get(transition['args']['id'], {})
-                    op = ticket.get('body', {}).get('operating')
+                    op = ticket_body(ticket).get('operating') if ticket else None
                     if op and op['policy']['mode'] == 'prospective':
                         prepared = op['prior_checkpoint']['body']['state']['current']
                         if not prepared or prepared['event']['time'] != moment:
@@ -311,7 +312,7 @@ def _check_cost_semantics(result, tape, lifecycle):
             raise ValueError('CAPACITY_COST_DIFFERS_FROM_DECLARED_SUPPLIER_CONTRACT')
         add(row['id'], row['cost'], row['purchased_time'], category)
     for row in result.get('operating_upgrades', []):
-        ticket = result['owned_account']['source_transitions'][row['id']]['body']
+        ticket = ticket_body(result['owned_account']['source_transitions'][row['id']])
         add('source-upgrade-' + row['id'], ticket['operating']['policy'].get('upgrade_cost_microUSD', 0), ticket['day'], 'source_upgrade_integration')
     tax_paid = 0
     for native in tape['actions']:
@@ -494,7 +495,7 @@ def _check_order_terms(result, row, offered, tape, operating):
         if transition['op'] != 'source_transition' or transition['seq'] > offered['seq']:
             continue
         ticket = result['owned_account'].get('source_transitions', {}).get(transition['args']['id'], {})
-        op = ticket.get('body', {}).get('operating')
+        op = ticket_body(ticket).get('operating') if ticket else None
         if op is None:
             continue
         old = op['prior_checkpoint']['body']['state']; prepared = old.get('current')

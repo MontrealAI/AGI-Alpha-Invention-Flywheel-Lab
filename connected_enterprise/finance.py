@@ -6,6 +6,7 @@ Resource contracts prepay their declared reconciliation/support slice. Delivery
 acceptance remains a separate native service operation.
 """
 from __future__ import annotations
+from connected_enterprise.transition_evidence import ticket_body
 
 import copy
 import hashlib
@@ -22,7 +23,7 @@ from commercial.ledger import _ADAPTIVE_ACCOUNT_CAPABILITY
 from commercial.single_writer import SingleWriterExchange
 
 SCHEMA = 'agi-alpha/connected014-resource-journal/v1'
-SOURCE_PATHS = ('connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
+SOURCE_PATHS = ('connected_enterprise/transition_evidence.py', 'connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
                 'commercial/ledger.py', 'commercial/persistence.py',
                 'commercial/single_writer.py', 'commercial/tape_lease.py',
                 'experiments/commerce006.py', 'vendor/alpha_claim/contracts.py',
@@ -100,8 +101,8 @@ def _seed_id(request, source_sha256):
 
 def _journal_source_at(journal, index):
     for ticket in journal.get('source_history', []):
-        if index < len(ticket['body']['prior_envelope']['body']['entries']):
-            return ticket['body']['from_source']
+        if index < len(ticket_body(ticket)['prior_envelope']['body']['entries']):
+            return ticket_body(ticket)['from_source']
     return journal['source']
 
 
