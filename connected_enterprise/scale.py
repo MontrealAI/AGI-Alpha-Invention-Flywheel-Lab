@@ -141,6 +141,23 @@ def trailing_profit(tape, *, operating_end_hour, operating_complete, aggregation
     Native validity/financial audit is a caller prerequisite; arithmetic/hash
     checks here are an additional reconciliation, not a substitute audit.
     """
+    if operating_end_hour is None:
+        # Older analysis fixtures/results have no declared operating clock.
+        # Preserve their financial analysis, but never infer a year from drain.
+        if tape.get('actions_sha256') != _digest(tape.get('actions')):
+            raise ValueError('NATIVE_ACTION_HASH_MISMATCH')
+        return {
+            'schema': 'agi-alpha/native-trailing-profit/v1',
+            'scope': 'ONE_ACCOUNT_EXACT_MODELED_ACCRUAL_PROFIT_NOT_FORWARD_PROJECTION',
+            'native_actions_sha256': tape['actions_sha256'],
+            'interval': None,
+            'operating_complete': operating_complete,
+            'complete_365_day_operating_history': False,
+            'qualification': 'OPERATING_HORIZON_UNAVAILABLE',
+            'trailing_365_day_profit_microUSD': None,
+            'observed_window_profit_microUSD': None,
+            'reason': 'No declared operating horizon; event/drain timestamps do not establish operating coverage.',
+            'limits': ['No annualization or full-year certification. Existing native/operating audit prerequisites and cost limitations remain.']}
     end = _integer(operating_end_hour, 'operating_end_hour')
     if end <= 0 or type(operating_complete) is not bool:
         raise ValueError('POSITIVE_OPERATING_HORIZON_AND_COMPLETION_REQUIRED')
@@ -346,7 +363,7 @@ def analyze(result):
             'config_sha256': _digest(config), 'native_actions_sha256': tape['actions_sha256'],
             'calendar_epoch_utc': epoch, 'terminal_calendar_utc': _calendar(epoch, last),
             'executed_hours': last,
-            'trailing_profit': trailing_profit(tape, operating_end_hour=config['horizon_days'] * HOURS_PER_DAY, operating_complete=result.get('complete', False), aggregation=aggregation),
+            'trailing_profit': trailing_profit(tape, operating_end_hour=(config['horizon_days'] * HOURS_PER_DAY if 'horizon_days' in config else None), operating_complete=result.get('complete', False), aggregation=aggregation),
             'trailing_365_day_collections_microUSD': trailing,
             'complete_365_day_history': last >= YEAR_HOURS,
             'annualized_collections_run_rate_microUSD': None if last == 0 else round(totals['collections'] * YEAR_HOURS / last),

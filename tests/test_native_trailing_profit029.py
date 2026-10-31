@@ -66,6 +66,19 @@ class TrailingProfit(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'NATIVE_ACTION_HASH_MISMATCH'):
             trailing_profit(t, operating_end_hour=8760, operating_complete=True, aggregation=a)
 
+    def test_legacy_partial_config_horizon_unknown(self):
+        from tests.test_connected_scale import fixture
+        from connected_enterprise.scale import analyze
+        for cfg in ({}, {'opening': 1000}):
+            result = {'owned_account': {'ledger': fixture()}, 'config': cfg,
+                      'complete': True, 'orders': [], 'investments': [], 'costs': []}
+            r = analyze(result)
+            self.assertEqual(r['terminal_state_microUSD']['profit'], 160)
+            self.assertEqual(r['trailing_profit']['qualification'], 'OPERATING_HORIZON_UNAVAILABLE')
+            self.assertIsNone(r['trailing_profit']['trailing_365_day_profit_microUSD'])
+            self.assertIsNone(r['trailing_profit']['interval'])
+            self.assertFalse(r['trailing_profit']['complete_365_day_operating_history'])
+
     def test_source_inclusion(self):
         from connected_enterprise.finance import SOURCE_PATHS
         self.assertIn('connected_enterprise/scale.py', SOURCE_PATHS)
