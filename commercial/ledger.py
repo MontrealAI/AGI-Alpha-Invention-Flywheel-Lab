@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 import stat
 import tempfile
-from experiments.commerce006 import engine
+from commercial.native_engine import engine
 
 SCOPE = 'SIMULATED'
 UNIT = 'simulated-microUSD'
@@ -136,6 +136,9 @@ class TapeExchange:
         self._adaptive_writer = _adaptive_ownership(path, manifest, _account_namespace, _writer_lease, _account_capability)
         self.root = Path(root)
         self.manifest = copy.deepcopy(manifest)
+        self.native_engine = self.manifest.get('native_engine', 'legacy-permanent-v1')
+        if self.native_engine not in {'legacy-permanent-v1', 'prospective-v1'}:
+            raise ValueError('EXPLICIT_SUPPORTED_NATIVE_ENGINE_REQUIRED')
         self.jobs = load_jobs(root, manifest)
         amount(opening)
         amount(working)
@@ -149,7 +152,7 @@ class TapeExchange:
         from commercial.persistence import DurableTape, memory_engine
         self.persistence = DurableTape(path, self.config, canonical, strict_json) if durable else None
         self._restoring = True
-        self.ex = memory_engine(engine(), key=b'C' * 32, contract=contract,
+        self.ex = memory_engine(engine(version=self.native_engine), key=b'C' * 32, contract=contract,
                                 validate=self.validate, check=self.check,
                                 opening=opening, working=working)
         try:
@@ -216,13 +219,18 @@ class TapeExchange:
                    'event': {'id', 'action', 'event_id'},
                    'reserve': {'id', 'amount', 'expected_net_value', 'intent_sha256'},
                    'finish': {'id', 'amount', 'artifact_sha256'}, 'cancel_investment': {'id'}}
+        schemas.update(register_terms={'id', 'terms'}, claim={'id', 'claim_id', 'amount', 'kind'},
+                       resolve_claim={'id', 'claim_id', 'settlement_id', 'resolution'}, mature={'id', 'event_id'},
+                       recover_claim={'id', 'claim_id', 'settlement_id', 'amount', 'source_tx'})
         if op not in schemas or not isinstance(args, dict):
             raise ValueError('ACTION_ARGUMENTS_REQUIRED')
-        optional = {'source_tx', 'crash'} if op == 'event' else set()
+        optional = {'source_tx', 'crash'} if op == 'event' else {'terms_id'} if op == 'offer' else set()
         if not schemas[op] <= set(args) or set(args) - schemas[op] - optional:
             raise ValueError('EXACT_ACTION_ARGUMENT_SCHEMA_REQUIRED')
         if 'crash' in args and type(args['crash']) is not bool:
             raise ValueError('EXPLICIT_CRASH_BOOLEAN_REQUIRED')
+        if op in {'register_terms', 'claim', 'resolve_claim', 'mature', 'recover_claim'} and self.native_engine != 'prospective-v1':
+            raise ValueError('PROSPECTIVE_NATIVE_ENGINE_OPT_IN_REQUIRED')
         before = self.ex.snapshot()
         a = copy.deepcopy(args)
         if op == 'cost':
@@ -233,8 +241,9 @@ class TapeExchange:
             self.ex.wallet(a['buyer'], a['amount'])
         elif op == 'offer':
             amount(a['price'], positive=True)
+            extra = {'terms_id': a['terms_id'], 'now': day} if 'terms_id' in a else {}
             self.ex.offer(a['id'], a['buyer'], a['price'], 'nonrecourse-simulated',
-                          self.task(a['job_id']), a['deadline'])
+                          self.task(a['job_id']), a['deadline'], **extra)
         elif op == 'event':
             ident, action = a['id'], a['action']
             row = self.ex.order(ident)
@@ -261,6 +270,13 @@ class TapeExchange:
             self.ex.finish_investment(a['id'], a['amount'], a['artifact_sha256'])
         elif op == 'cancel_investment':
             self.ex.cancel_investment(a['id'])
+        elif op == 'register_terms':
+            self.ex.register_terms(a['id'], a['terms'], day)
+        elif op in {'claim', 'resolve_claim', 'mature', 'recover_claim'}:
+            for key in ['id', 'claim_id', 'settlement_id', 'event_id']:
+                if key in a and (not isinstance(a[key], str) or not a[key].strip() or len(a[key]) > 160):
+                    raise ValueError('BOUNDED_NATIVE_PROSPECTIVE_IDENTIFIER_REQUIRED')
+            self.ex.prospective_event(op, a, day)
         else:
             raise ValueError('UNKNOWN_NATIVE_OPERATION')
         after = self.ex.snapshot()
@@ -300,9 +316,17 @@ class TapeExchange:
                                  'state': 'PAID' if row['state'] == 'released' else 'VOID_OR_DISPUTED' if row['state'] in {'refunded', 'breached', 'custody-lost'} else 'ISSUED',
                                  'receivable': int(row['price']) if row['state'] == 'verified' else 0})
         receivables = sum(x['receivable'] for x in invoices)
-        return {'config': self.config, 'actions': self.actions, 'actions_sha256': digest(self.actions),
+        exported = {'config': self.config, 'actions': self.actions, 'actions_sha256': digest(self.actions),
                 'journal': journal, 'orders': states, 'investments': investments, 'investment_witnesses': witnesses,
                 'invoices': invoices, 'receivables': receivables, 'summary': self.ex.snapshot()}
+        if self.native_engine == 'prospective-v1':
+            prospective = {
+                'prospective_terms': [dict(x) for x in self.ex.db.execute('SELECT * FROM prospective_terms ORDER BY id')],
+                'prospective_orders': [dict(x) for x in self.ex.db.execute('SELECT * FROM prospective_orders ORDER BY order_id')],
+                'prospective_claims': [dict(x) for x in self.ex.db.execute('SELECT * FROM prospective_claims ORDER BY id')]}
+            if any(prospective.values()):
+                exported.update(prospective)
+        return exported
 
     def close(self):
         try:
@@ -352,7 +376,16 @@ def _audit_native_and_jobs(tape, *, root, manifest, expected_actions_sha256=None
                 if after != event.get('after'):
                     raise ValueError('EVENT_DERIVED_BALANCE_MISMATCH')
             rebuilt = replay.export()
-            for key in ['config', 'summary', 'journal', 'orders', 'investments', 'investment_witnesses', 'invoices', 'receivables']:
+            derived_keys = ['config', 'summary', 'journal', 'orders', 'investments', 'investment_witnesses', 'invoices', 'receivables']
+            if replay.native_engine == 'prospective-v1':
+                prospective_keys = {'prospective_terms', 'prospective_orders', 'prospective_claims'}
+                actual_keys = prospective_keys.intersection(rebuilt)
+                if actual_keys != prospective_keys.intersection(tape):
+                    raise ValueError('PROSPECTIVE_TAPE_EXPORTED_STATE_PRESENCE_MISMATCH')
+                derived_keys += sorted(actual_keys)
+            elif any(key in tape for key in ['prospective_terms', 'prospective_orders', 'prospective_claims']):
+                raise ValueError('LEGACY_TAPE_CANNOT_ASSERT_PROSPECTIVE_STATE')
+            for key in derived_keys:
                 if rebuilt[key] != tape.get(key):
                     raise ValueError('DERIVED_' + key.upper() + '_MISMATCH')
             jobs = replay.jobs

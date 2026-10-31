@@ -86,7 +86,7 @@ def _response(price, public, policy, scenario):
         if value>best[0]+1e-9:best=(value,p)
     return best[1] # Rational rival withdrawal remains available.
 
-def select(policy, method_policy, job_id, offer, memory, public):
+def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_available=None):
     """Choose one admitted offer's execution method and price, or no bid.
 
     Cash feasibility is conservative: today's full cost plus native principal
@@ -94,6 +94,9 @@ def select(policy, method_policy, job_id, offer, memory, public):
     Public prefix/deductions must be reconstructed by the calling operating audit.
     """
     validate_policy(policy);_public(public)
+    if _diagnostic_available is not None and (type(_diagnostic_available) is not int or _diagnostic_available < public['available']):
+        raise ValueError('DIAGNOSTIC_MUST_ONLY_RELAX_DEPLOYABLE_CASH')
+    cash_limit=public['available'] if _diagnostic_available is None else _diagnostic_available
     if method_policy is not None:validate_method_policy(method_policy)
     scoped=method_policy is not None and offer['service_id']=='reconciliation'
     if scoped and method_policy['mode']!='optimize':raise ValueError('DIAGNOSTIC_POLICY_NOT_STRATEGIC_OPTIMUM')
@@ -117,7 +120,7 @@ def select(policy, method_policy, job_id, offer, memory, public):
             fee=(price*public['payment_bps']+9999)//10000+public['payment_fixed']
             cost=public['base_cost']+method_cost+fee
             reserve=cost+price+public['reserve_buffer']
-            feasible=reserve<=public['available'] and price>cost
+            feasible=reserve<=cash_limit and price>cost
             if not feasible:continue
             forecasts=[]; expected=0.0
             for sc in policy['scenarios']:
@@ -143,6 +146,10 @@ def select(policy, method_policy, job_id, offer, memory, public):
               'collection_belief_source':'strategic policy scenario accept_prob * collect_prob; legacy method_policy accept_collect_bps is not used',
               'buyer_belief_source':'connected public intervals and current quote ordering' if policy.get('demand_model')=='connected_range' else 'inherited portfolio public logit hypotheses',
               'limits':'One admitted service offer, one order, fixed public buyer beliefs. No global equilibrium, calibrated demand, future cash, or long-horizon mechanism advantage claimed.'}
+    if _diagnostic_available is not None:
+        decision['diagnostic_available']=_diagnostic_available
+        decision['scope']='COUNTERFACTUAL_CASH_CANDIDATES_NOT_EXECUTABLE'
+        return {'offer':None,'method_plan':None,'decision':decision,'problem':problem,'candidates':rows}
     if best is None:return {'offer':None,'method_plan':None,'decision':decision,'problem':problem,'candidates':rows}
     chosen=copy.deepcopy(offer);chosen['price_microUSD']=best['price']
     plan=None
@@ -168,33 +175,7 @@ def allocate_actions(observation, deliveries, investments, riskpolicy, *, allow_
     expansion funding and risk, and returns NONE optimality if bound is exceeded.
     """
     from adaptive_enterprise.allocation import allocate
-    if not isinstance(deliveries,list) or len(deliveries)>8:raise ValueError('FINITE_DELIVERY_SHORTLIST_REQUIRED')
-    options=[]
-    for d in deliveries:
-        if set(d)!={'id','customer_id','onboarding','exclusive_group','selection','requires'}:raise ValueError('EXACT_DELIVERY_ACTION_REQUIRED')
-        result=d['selection']; rederive(result)
-        p=result['problem'];pub=p['public']
-        if pub['native_state_digest']!=observation['state_digest']:raise ValueError('JOINT_NATIVE_PREFIX_CHANGED')
-        if any(abs(s['weight']-riskpolicy['scenarios'].get(s['id'],-1)/10000)>1e-12 for s in p['policy']['scenarios']):
-            raise ValueError('JOINT_SCENARIO_WEIGHTS_MUST_MATCH_PUBLIC_BELIEFS')
-        for n,row in enumerate(result['candidates']):
-            sc_net={x['belief']:math.floor(x['net_after_modeled_tax']) for x in row['forecasts']}
-            if set(sc_net)!=set(riskpolicy['scenarios']):raise ValueError('MATCHED_JOINT_BELIEFS_REQUIRED')
-            option={'id':d['id']+'-'+str(n),'kind':'delivery','upfront_cost':row['cost'],
-                    'later_liabilities':dict.fromkeys(sc_net,0),
-                    'future_net_cash':{k:v+row['cost'] for k,v in sc_net.items()},
-                    'benefit_ids':['delivery-'+p['job_id']], 'requires':d['requires'],
-                    'exclusive_group':d['exclusive_group'],'authorized':True,
-                    'evidence':result['decision']['problem_sha256'],
-                    'execution':{'job_id':p['job_id'],'customer_id':d['customer_id'],'payment_bps':pub['payment_bps'],'payment_fixed_microUSD':pub['payment_fixed'],'onboarding_microUSD':d['onboarding'],'funding':'SEED_OR_EARNED','cash_lock':row['price']+pub['reserve_buffer'],'delivery_id':d['id'],'row':row,
-                                 'selection_sha256':digest(result)}}
-            options.append(option)
-    if not isinstance(investments,list) or len(investments)>8:raise ValueError('FINITE_COSTED_INVESTMENTS_REQUIRED')
-    for o in investments:
-        if o['kind'] not in {'acquisition','capacity','instrument'} or o['execution'].get('funding')!='EARNED':
-            raise ValueError('EARNED_COSTED_EXPANSION_ONLY')
-        # Existing allocation validates full liabilities, benefit overlap, source evidence and dependencies.
-        options.append(copy.deepcopy(o))
+    options=_action_options(observation,deliveries,investments,riskpolicy)
     decision=allocate(observation,options,riskpolicy,allow_seed=allow_seed,max_delivery_slots=max_delivery_slots,earned_deduction=earned_deduction)
     return {'schema':'connected-joint-actions/v1','risk_scope':'Scenario conditional expectations, not realized worst-case losses; conservative floor to microUSD. Native cash locks bound present commitments.','observation':copy.deepcopy(observation),
             'deliveries':copy.deepcopy(deliveries),'investments':copy.deepcopy(investments),
@@ -226,3 +207,75 @@ def selected_delivery(record, option_id):
               'joint_decision':True,'joint_allocation_sha256':digest(record),'joint_option_id':option_id}
     return {'offer':offer,'method_plan':plan,'price':row['price'],'complete_cost':row['cost'],
             'fee':row['fee'],'joint_allocation_sha256':digest(record),'joint_option_id':option_id}
+
+
+def _action_options(observation,deliveries,investments,riskpolicy,diagnostic_available=None):
+    if not isinstance(deliveries,list) or len(deliveries)>8:raise ValueError('FINITE_DELIVERY_SHORTLIST_REQUIRED')
+    options=[]
+    for d in deliveries:
+        if set(d)!={'id','customer_id','onboarding','exclusive_group','selection','requires'}:raise ValueError('EXACT_DELIVERY_ACTION_REQUIRED')
+        result=d['selection']
+        if diagnostic_available is None:rederive(result)
+        else:
+            p=result['problem']
+            if result!=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],p['public'],_diagnostic_available=diagnostic_available):raise ValueError('DIAGNOSTIC_CANDIDATES_CHANGED')
+        p=result['problem'];pub=p['public']
+        if pub['native_state_digest']!=observation['state_digest']:raise ValueError('JOINT_NATIVE_PREFIX_CHANGED')
+        if any(abs(s['weight']-riskpolicy['scenarios'].get(s['id'],-1)/10000)>1e-12 for s in p['policy']['scenarios']):
+            raise ValueError('JOINT_SCENARIO_WEIGHTS_MUST_MATCH_PUBLIC_BELIEFS')
+        for n,row in enumerate(result['candidates']):
+            sc_net={x['belief']:math.floor(x['net_after_modeled_tax']) for x in row['forecasts']}
+            if set(sc_net)!=set(riskpolicy['scenarios']):raise ValueError('MATCHED_JOINT_BELIEFS_REQUIRED')
+            option={'id':d['id']+'-'+str(n),'kind':'delivery','upfront_cost':row['cost'],
+                    'later_liabilities':dict.fromkeys(sc_net,0),
+                    'future_net_cash':{k:v+row['cost'] for k,v in sc_net.items()},
+                    'benefit_ids':['delivery-'+p['job_id']], 'requires':d['requires'],
+                    'exclusive_group':d['exclusive_group'],'authorized':True,
+                    'evidence':result['decision']['problem_sha256'],
+                    'execution':{'job_id':p['job_id'],'customer_id':d['customer_id'],'payment_bps':pub['payment_bps'],'payment_fixed_microUSD':pub['payment_fixed'],'onboarding_microUSD':d['onboarding'],'funding':'SEED_OR_EARNED','cash_lock':row['price']+pub['reserve_buffer'],'delivery_id':d['id'],'row':row,
+                                 'selection_sha256':digest(result)}}
+            options.append(option)
+    if not isinstance(investments,list) or len(investments)>8:raise ValueError('FINITE_COSTED_INVESTMENTS_REQUIRED')
+    for o in investments:
+        if o['kind'] not in {'acquisition','capacity','instrument'} or o['execution'].get('funding')!='EARNED':
+            raise ValueError('EARNED_COSTED_EXPANSION_ONLY')
+        # Existing allocation validates full liabilities, benefit overlap, source evidence and dependencies.
+        options.append(copy.deepcopy(o))
+    return options
+
+
+def cash_opportunity_diagnostic(record, *, relaxed_available, declared_allocation_ceiling, operating_envelope=0):
+    """Replay identical finite game with only deployable cash relaxed.
+
+    record must use the actual unmodified native snapshot. The caller supplies
+    the source-bound economic ceiling; only its derived cash clipping is relaxed.
+    Earned-only requirements, slots, beliefs,
+    costs, liabilities and max_states stay fixed. Returned IDs are diagnostic
+    labels, never instructions to execute. No native snapshot is fabricated.
+    """
+    from adaptive_enterprise.allocation import allocate, _diagnostic_result
+    from fractions import Fraction
+    rederive_actions(record)
+    if type(operating_envelope) is not int or operating_envelope<0:raise ValueError('NONNEGATIVE_OPERATING_ENVELOPE_REQUIRED')
+    observation=record['observation']
+    if type(relaxed_available) is not int or relaxed_available<observation['summary']['available']:raise ValueError('DIAGNOSTIC_MUST_ONLY_RELAX_CASH')
+    if type(declared_allocation_ceiling) is not int or declared_allocation_ceiling<0:raise ValueError('DECLARED_ECONOMIC_CEILING_REQUIRED')
+    actual_deployable=max(0,observation['summary']['available']-operating_envelope)
+    if record['riskpolicy']['authorized_allocation']!=min(declared_allocation_ceiling,actual_deployable):raise ValueError('ORIGINAL_CASH_CLIPPED_CEILING_MISMATCH')
+    deployable=max(0,relaxed_available-operating_envelope)
+    risk=copy.deepcopy(record['riskpolicy']);risk['authorized_allocation']=min(declared_allocation_ceiling,deployable)
+    deliveries=copy.deepcopy(record['deliveries'])
+    for d in deliveries:
+        p=d['selection']['problem']
+        d['selection']=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],p['public'],_diagnostic_available=deployable)
+    options=_action_options(observation,deliveries,record['investments'],risk,deployable)
+    counter=allocate(observation,options,risk,allow_seed=record['allow_seed'],max_delivery_slots=record['max_delivery_slots'],earned_deduction=record['earned_deduction'],_diagnostic_cash_limit=relaxed_available)
+    actual=_diagnostic_result(record['decision'])
+    resolved=actual['optimality_scope']!='NONE' and counter['optimality_scope']!='NONE'
+    return {'schema':'connected-cash-opportunity-diagnostic/v1','scope':counter['scope'],
+            'source_record_sha256':digest(record),'native_observation_sha256':digest(observation),
+            'relaxed_available':relaxed_available,'declared_allocation_ceiling':declared_allocation_ceiling,'operating_envelope':operating_envelope,
+            'actual':actual,'counterfactual':counter,'resolved':resolved,
+            'predicted_objective_gain':str(Fraction(counter['risk_adjusted_value'])-Fraction(actual['risk_adjusted_value'])) if resolved else None,
+            'authorized_digest':None,
+            'limits':'Decision-local conditional expected opportunity only; not causal realized profit. Earned funding, risk ceiling, slots and enumerated game unchanged.'}

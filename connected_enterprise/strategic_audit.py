@@ -77,7 +77,7 @@ def audit_decisions(root,manifest,result,lifecycle):
                 if update_day*24>=moment:break
                 visible=[d for d in result['decisions'] if d.get('kind')=='offer' and d['time']<=update_day*24-24][-20:]
                 if visible:rival_bps=max(5000,min(10500,rival_bps+(200 if sum(d['buyer_choice']=='rival' for d in visible)/len(visible)>.6 else -200)))
-            expected={'anchor':anchor,'public_rival_price':int(anchor*rival_bps/10000),'base_cost':cfg['production_cost']+cfg['supplier_unit_cost']+cfg['support_cost']+onboard,'payment_bps':cfg['payment_bps'],'payment_fixed':cfg['payment_fixed'],'available':max(0,summary['available']-operating),'reserve_buffer':1_000_000,'quote_cost':cfg['exposure_cost']+cfg['qualification_cost'],'native_state_digest':state_digest,'profit_tax_bps':cfg['profit_tax_bps']}
+            expected={'anchor':anchor,'public_rival_price':int(anchor*rival_bps/10000),'base_cost':cfg['production_cost']+cfg['supplier_unit_cost']+cfg['support_cost']+onboard+cfg.get('prospective_policy',{}).get('premium_microUSD',0),'payment_bps':cfg['payment_bps'],'payment_fixed':cfg['payment_fixed'],'available':max(0,summary['available']-operating),'reserve_buffer':1_000_000,'quote_cost':cfg['exposure_cost']+cfg['qualification_cost'],'native_state_digest':state_digest,'profit_tax_bps':cfg['profit_tax_bps']}
             if problem['public']!=expected or delivery['onboarding']!=onboard:raise ValueError('STRATEGIC_INPUT_NOT_PUBLIC_CURRENT_FACTS')
             memory=problem['memory']
             if memory is not None:

@@ -31,7 +31,7 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
         if selected is None:continue
         entry,offer,anchor=selected;job=entry['job'];onboard=0 if buyer['onboarded'] else cfg['onboarding_cost']
         public={'anchor':anchor,'public_rival_price':int(anchor*state['market']['public_rival_bps']/10000),
-            'base_cost':cfg['production_cost']+cfg['supplier_unit_cost']+cfg['support_cost']+onboard,
+            'base_cost':cfg['production_cost']+cfg['supplier_unit_cost']+cfg['support_cost']+onboard+cfg.get('prospective_policy',{}).get('premium_microUSD',0),
             'payment_bps':cfg['payment_bps'],'payment_fixed':cfg['payment_fixed'],'available':available,
             'reserve_buffer':1_000_000,'quote_cost':cfg['exposure_cost']+cfg['qualification_cost'],
             'native_state_digest':snapshot['state_digest'],'profit_tax_bps':cfg['profit_tax_bps']}
