@@ -233,6 +233,116 @@ class ReleaseIntegrityTests(unittest.TestCase):
         self.assertEqual(receipt['resources']['total_measured_cpu_seconds'], 2400.5)
         self.assertEqual(command.call_count, 1)
 
+    def checkpoint_fixture(self, parent):
+        operation = parent/'operation'
+        operation.mkdir(parents=True)
+        source = operation/'source'
+        source.mkdir()
+        (source/'service.py').write_bytes(b'print("auditable simulated work")\n')
+        identity = self.source_manifest['executing_source']
+        frozen = {'source':identity, 'sha256':'f'*64, 'protocol':{'central_seeds':[17],
+            'adverse_seeds':[], 'channel_control_seeds':[], 'cases':['central'], 'arms':['growth']}}
+        release.write(operation/'FROZEN.json', frozen)
+        job = {'id':'job-1', 'service_id':'reconciliation', 'accepted':True, 'work_keys':['job-1']}
+        for field, filename in [('input','input.json'), ('artifact','artifact.json'), ('receipt','acceptance.json')]:
+            relative = 'service-inputs/job-1/'+filename
+            path = source/relative; path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps({'fixture':field}))
+            job[field], job[field+'_sha256'] = relative, release.digest(path)
+        release.write(operation/'SERVICES.json', {'source_hashes':{}, 'jobs':[job]})
+        world = operation/'worlds/17-central-growth'; world.mkdir(parents=True)
+        release.write(world/'RESULT.json', {'fixture':'unqualified result bytes only'})
+        release.write(world/'STATE.json', {'fixture':'synthetic queued intent', 'signature':'public HMAC witness'})
+        (world/'account.sqlite.adaptive-simulation-key').write_text('DO NOT PUBLISH')
+        (world/'account.sqlite').write_text('DO NOT PUBLISH')
+        (source/'extra.env').write_text('DO NOT PUBLISH')
+        return operation, frozen
+
+    def checkpoint_guards(self, frozen):
+        # Transport fixtures mock metadata rederivation only; no business/audit runs.
+        from contextlib import ExitStack
+        stack = ExitStack()
+        stack.enter_context(patch('connected_enterprise.runner.read_freeze', return_value=frozen))
+        stack.enter_context(patch('adaptive_enterprise.instruments._validate_manifest'))
+        return stack
+
+    def test_failure_checkpoint_preserves_only_bound_public_records(self):
+        output = self.root/'failure-preservation'; operation, frozen = self.checkpoint_fixture(output)
+        unknown = operation/'worlds/unregistered'; unknown.mkdir()
+        (unknown/'RESULT.json').write_text('DO NOT PUBLISH')
+        with self.checkpoint_guards(frozen):
+            receipt = release.failure_checkpoint(operation, output, COMMIT, self.manifest['source_sha256'])
+        archive = output/receipt['path']
+        self.assertEqual(receipt['sha256'], release.digest(archive))
+        self.assertEqual(receipt['scope'], 'UNQUALIFIED_FAILURE_CHECKPOINT_NOT_RESUME_AUTHORITY')
+        with zipfile.ZipFile(archive) as zipped:
+            names = release.checked_members(zipped)
+            self.assertIn('worlds/17-central-growth/RESULT.json', names)
+            self.assertIn('worlds/17-central-growth/STATE.json', names)
+            self.assertIn('source/service-inputs/job-1/input.json', names)
+            self.assertFalse(any('.sqlite' in name or name.endswith('.env') or 'unregistered' in name for name in names))
+            metadata = json.loads(zipped.read('FAILURE_CHECKPOINT.json'))
+            self.assertIn('REPORT.json', metadata['missing_optional_files'])
+            for name, binding in metadata['files'].items():
+                raw = zipped.read(name)
+                self.assertEqual(len(raw), binding['bytes'])
+                self.assertEqual(hashlib.sha256(raw).hexdigest(), binding['sha256'])
+
+    def test_failure_manifest_cannot_promote_arbitrary_private_path(self):
+        output = self.root/'private-path'; operation, frozen = self.checkpoint_fixture(output)
+        services = release.read(operation/'SERVICES.json')
+        services['jobs'][0].update(input='extra.env', input_sha256=release.digest(operation/'source/extra.env'))
+        release.write(operation/'SERVICES.json', services)
+        with self.checkpoint_guards(frozen), self.assertRaisesRegex(ValueError, 'CANONICAL_FAILURE_SERVICE_PATH'):
+            release.failure_checkpoint(operation, output, COMMIT, self.manifest['source_sha256'])
+        self.assertFalse((output/'failed-operation-keyfree.zip').exists())
+
+    def test_failure_capture_rejects_symlink_hardlink_and_changed_bound_bytes(self):
+        import os
+        for kind in ['symlink', 'hardlink', 'changed']:
+            with self.subTest(kind=kind):
+                output = self.root/kind; operation, frozen = self.checkpoint_fixture(output)
+                target = operation/'source/service-inputs/job-1/input.json'
+                if kind == 'changed':
+                    target.write_text('changed bytes')
+                else:
+                    original = operation/'original.json'; original.write_bytes(target.read_bytes()); target.unlink()
+                    target.symlink_to(original) if kind == 'symlink' else os.link(original, target)
+                with self.checkpoint_guards(frozen), self.assertRaises(ValueError):
+                    release.failure_checkpoint(operation, output, COMMIT, self.manifest['source_sha256'])
+                self.assertFalse((output/'failed-operation-keyfree.zip').exists())
+
+    def test_cpu_failure_preserves_checkpoint_and_accounts_cleanup_without_more_commands(self):
+        import scripts.qualify_connected014 as qualifier
+        output = self.root/'actual-failure-fixture'
+        zero = {key:0. for key in ('self_user','self_system','children_user','children_system')}
+        over = {**zero, 'children_user':2400.5}; cleanup = {**over, 'self_user':0.25}
+        frozen = {'value':None}
+        def execute(*args):
+            _, frozen['value'] = self.checkpoint_fixture(output)
+        def metadata(_):return frozen['value']
+        with patch('connected_enterprise.runner.read_freeze', side_effect=metadata), patch('adaptive_enterprise.instruments._validate_manifest'), patch.object(release, 'cpu_usage', side_effect=[zero, zero, over, cleanup]), patch.object(qualifier, 'run_command', side_effect=execute) as command:
+            with self.assertRaisesRegex(TimeoutError, 'CPU_ENVELOPE_EXCEEDED'):
+                release.operate_download(self.assets, output, COMMIT, 10)
+        receipt = release.read(output/'DOWNLOADED_RELEASE_RUN.json')
+        self.assertFalse(receipt['accepted'])
+        self.assertEqual(command.call_count, 1)
+        self.assertEqual(receipt['failure']['message'], 'DOWNLOADED_OPERATION_CPU_ENVELOPE_EXCEEDED')
+        self.assertEqual(receipt['resources']['total_measured_cpu_seconds'], 2400.75)
+        self.assertTrue((output/receipt['failure_checkpoint']['path']).exists())
+        self.assertFalse((output/'downloaded-operation-keyfree.zip').exists())
+
+    def test_checkpoint_error_never_masks_original_failure(self):
+        import scripts.qualify_connected014 as qualifier
+        output = self.root/'checkpoint-error'
+        with patch.object(qualifier, 'run_command', side_effect=TimeoutError('original boundary')), patch.object(release, 'failure_checkpoint', side_effect=ValueError('privacy refusal')):
+            with self.assertRaisesRegex(TimeoutError, 'original boundary'):
+                release.operate_download(self.assets, output, COMMIT, 10)
+        receipt = release.read(output/'DOWNLOADED_RELEASE_RUN.json')
+        self.assertFalse(receipt['accepted'])
+        self.assertEqual(receipt['failure']['message'], 'original boundary')
+        self.assertEqual(receipt['checkpoint_failure']['message'], 'privacy refusal')
+
 class KernelCpuTests(unittest.TestCase):
     def test_deltas_count_self_and_waited_children_without_prior_usage(self):
         before = {'self_user':10.,'self_system':3.,'children_user':100.,'children_system':7.}

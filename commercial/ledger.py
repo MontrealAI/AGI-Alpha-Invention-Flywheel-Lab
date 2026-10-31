@@ -315,6 +315,13 @@ class TapeExchange:
 
 
 def audit(tape, *, root, manifest, expected_actions_sha256=None):
+    checked, _ = _audit_native_and_jobs(tape, root=root, manifest=manifest,
+                                       expected_actions_sha256=expected_actions_sha256)
+    return checked
+
+
+def _audit_native_and_jobs(tape, *, root, manifest, expected_actions_sha256=None):
+    """One complete native replay and call-local, freshly rebound job authority."""
     if not isinstance(tape, dict) or tape.get('config', {}).get('scope') != SCOPE or tape['config'].get('currency') != UNIT:
         raise ValueError('SIMULATED_SCOPE_AND_UNIT_REQUIRED')
     if tape['config'].get('manifest_sha256') != digest(manifest):
@@ -323,7 +330,7 @@ def audit(tape, *, root, manifest, expected_actions_sha256=None):
         raise ValueError('ACTION_TAPE_IDENTITY_MISMATCH')
     if expected_actions_sha256 is not None and tape['actions_sha256'] != expected_actions_sha256:
         raise ValueError('EXTERNAL_ACTION_IDENTITY_MISMATCH')
-    c = tape['config']
+    c = copy.deepcopy(tape['config'])
     if set(c) != {'schema', 'scope', 'currency', 'opening', 'working', 'contract', 'manifest_sha256'} or c['schema'] != 'agi-alpha/commercial010-tape/v1':
         raise ValueError('EXACT_TAPE_CONFIG_REQUIRED')
     with tempfile.TemporaryDirectory(prefix='commercial010-audit-') as tmp:
@@ -348,7 +355,27 @@ def audit(tape, *, root, manifest, expected_actions_sha256=None):
             for key in ['config', 'summary', 'journal', 'orders', 'investments', 'investment_witnesses', 'invoices', 'receivables']:
                 if rebuilt[key] != tape.get(key):
                     raise ValueError('DERIVED_' + key.upper() + '_MISMATCH')
+            jobs = replay.jobs
         finally:
             owned.close() if owned is not None else replay.close()
-    return {'accepted': True, 'scope': SCOPE, 'actions_sha256': tape['actions_sha256'],
-            'summary': rebuilt['summary'], 'orders': rebuilt['orders'], 'investments': rebuilt['investments']}
+    if manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
+        from adaptive_enterprise.instruments import _validate_manifest
+        _validate_manifest(root, manifest)
+        if set(jobs) != {job['id'] for job in manifest['jobs'] if job['accepted']}:
+            raise ValueError('AUDITED_JOB_AUTHORITY_SET_CHANGED')
+        fresh_jobs = {}
+        for job in manifest['jobs']:
+            current = {field: read_bound(root, job[field], job[field + '_sha256'])
+                       for field in ['input', 'artifact', 'receipt']}
+            if job['accepted'] and jobs[job['id']] != {'job': job, 'artifact': current['artifact'], 'receipt': current['receipt']}:
+                raise ValueError('AUDITED_JOB_AUTHORITY_CHANGED')
+            if job['accepted']:
+                # The bound reads already produced detached JSON objects. Copy
+                # only caller-owned metadata, not another complete artifact map.
+                fresh_jobs[job['id']] = {'job': copy.deepcopy(job), 'artifact': current['artifact'], 'receipt': current['receipt']}
+        _validate_manifest(root, manifest)
+        if digest(manifest) != c['manifest_sha256'] or tape['config'] != c:
+            raise ValueError('SOURCE_COHORT_MISMATCH')
+        jobs = fresh_jobs
+    return ({'accepted': True, 'scope': SCOPE, 'actions_sha256': tape['actions_sha256'],
+             'summary': rebuilt['summary'], 'orders': rebuilt['orders'], 'investments': rebuilt['investments']}, jobs)

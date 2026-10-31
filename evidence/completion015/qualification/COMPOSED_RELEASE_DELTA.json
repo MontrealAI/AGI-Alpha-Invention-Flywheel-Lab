@@ -1,17 +1,21 @@
 {
   "schema": "agi-alpha/completion015-composed-release-delta/v2",
-  "registered_utc": "2026-10-30T22:38:47.219188+00:00",
+  "registered_utc": "2026-10-31T00:06:52.451818+00:00",
   "economic_evidence_source_commit": "9354d76a7033e8958968cde4469cdd71ea870a21",
   "economic_evidence_source_sha256": "abc262bf80741f36db2872330c2d4f5166c48d313143c239d440e3cd2143b9a4",
-  "release_qualification_source_sha256": "e4ae45a21614af62d336a96f4bba71db4339f73a72d5c4c0d9bc1aa324555d61",
+  "release_qualification_source_sha256": "411eed021e5a80606cf8468d3bfc9f1920cc03439013c0991c37060e059ecf23",
   "changed_or_added_identity_files": {
     ".github/workflows/connected014-release.yml": {
       "before_sha256": "abec569a68521167883e2fcc18f92871c3da60a0f0cab9ad2e1b4d71bdf57c5b",
-      "after_sha256": "e7f3517a428d56fdcb95ab4709b0a877949209e97f602223b19208e855881fb3"
+      "after_sha256": "f6936c77641080283df60c7c3ab626ae459362ef9c6af3a5612953f34487c657"
     },
     "adaptive_enterprise/account.py": {
       "before_sha256": "45374590f265ec8f86b65f17ca21fe3f5dc9e212f2f557b5e51e0d1f93e7e9b4",
-      "after_sha256": "31604e0cef1b6f0a1125d97f67b1978e53d14a7de7a1fac5cb7b6b9d4fbc8ce1"
+      "after_sha256": "d8a64a593731ca956b96794cbfb790b02cfbc381c8cfabc900a6b11fd1695ab2"
+    },
+    "commercial/ledger.py": {
+      "before_sha256": "854e1e393cf302ad50996153b5eac9934cfcebb1a20c29a65b0cf706df3fedee",
+      "after_sha256": "59a974314705012674d7e196a210a9c9379508c72787503f5261514a9b6e97ed"
     },
     "connected_enterprise/channels.py": {
       "before_sha256": "67ec30ae665966e59d8835a181f941e2dc9a2e25002844689a9e1b899cd6b32f",
@@ -31,7 +35,7 @@
     },
     "scripts/release_connected014.py": {
       "before_sha256": "9f0c4d0e77014c1082c05f1606df2e90db5f931043ae3329101cf4f0514cfa47",
-      "after_sha256": "8f321c162b36882b5954c7d6975932cabd9e2bc31eeb07332b27d677680d026b"
+      "after_sha256": "184d6fbd9e4767dd8efbb69621ccfc3920a609fef5e45e07f4e41652d2fb82bf"
     },
     "tests/test_adaptive_account.py": {
       "before_sha256": "89232200c542f715a40090f8c2f025aceb3f0b3d47b449664217cba267b512e2",
@@ -61,6 +65,10 @@
       "before_sha256": "ff50f495c7883e40a4a50117a17e6683708d0a068d7f5a947eda0b4b8576be6e",
       "after_sha256": "0f0d04979d9d7aaa5d380a2349b17d42102e03a9648a76616f15f13d9c7c3533"
     },
+    "tests/test_connected_manifest_validation.py": {
+      "before_sha256": "dd37a9659e7a615af231e7fc0730f090b0b1818e2902ce3d4fdc4462c76b65a7",
+      "after_sha256": "9ef1c04092b59ad90bf9bc9781d629a7b1fca27232fd51115117be85abcb08ef"
+    },
     "tests/test_connected_refund_clock.py": {
       "before_sha256": null,
       "after_sha256": "67313bd493610019d96fb196f75da00866e2bdce9cd981e83799aa28152b7d2b"
@@ -71,7 +79,7 @@
     },
     "tests/test_connected_release.py": {
       "before_sha256": "c9e354df94a9c5473cd1441651c72d36f1ea3892942d0984aded93f6a448ecc2",
-      "after_sha256": "e6c1b17a7417521d09941e5e67712e86d9cd998418a7565770c50401e4d92e37"
+      "after_sha256": "60bc28a5e4e8e714c7dedb1fc97deb31c51bb22e26b8aa0764eeb8ea1b0d79f4"
     },
     "tests/test_connected_temporal_boundaries.py": {
       "before_sha256": null,
@@ -82,7 +90,7 @@
       "after_sha256": "91d8f7e7f333577a600cdf89a712f9b461e132b6239bc871f725ba13f3f7e83b"
     }
   },
-  "unchanged_original_identity_files": 123,
+  "unchanged_original_identity_files": 121,
   "release_identity_files": 142,
   "source_changes": [
     "Release wrapper: bounded exact-main gating, kernel self+waited-child CPU measurement, independently audited actual-run key-free archive retention and regressions.",
@@ -97,7 +105,9 @@
     "Restart comparison tests normalize only the exact host/key-bound attempt.account_record_sha256 witness and recompute the projected journal checksum. Actual two-account leaf proof shows identical native ledgers and only those two derived witness leaves differ. Every other certificate/journal/proof/obligation/work/financial field remains compared; nine anti-masking mutations stay visible. Product full-state certificates, native/public auditors and shared adaptive projection are unchanged.",
     "Independent capacity verification binds native/request/receipt purchase time, units and frozen financed lead/duration to exact activation and expiry; existing strict production validity retained.",
     "Independent seeded channel-history reconstruction derives activation/retries/remedies/expiry, slots/realization/audience/ranking/overlap, shared contact cooldown/fatigue/dedup, supplier tranche limits and exact events/counters. Producer expose/random function is not an oracle. Explicit frozen contracts/seed required; full business has exact horizon-day coverage. Only three known unbound audit fixtures migrate to explicit original seed/contracts. Producer economics unchanged.",
-    "Independent native/operating clock binding: every offer deadline equals qualified+frozen payment deadline; default refunds occur exactly at recomputed due, and quality-rejected refunds occur exactly after production+acceptance delay. Both native and operating REFUND clocks checked before any quality early return. Existing settlement/default/useful-output rules preserved; producer/financial authority unchanged."
+    "Independent native/operating clock binding: every offer deadline equals qualified+frozen payment deadline; default refunds occur exactly at recomputed due, and quality-rejected refunds occur exactly after production+acceptance delay. Both native and operating REFUND clocks checked before any quality early return. Existing settlement/default/useful-output rules preserved; producer/financial authority unchanged.",
+    "Performance016: one complete native replay yields call-local freshly bound job authority for the same obligation-aware audit; no cross-action cache. All source/manifest/input/artifact/receipt bindings, exact accepted set, cached/fresh equality and detached returned data remain enforced; caller native config is pinned. No JournalAccount/WAL change; public audit interface and other-schema fallback retained.",
+    "Failure-only public checkpoint: fixed registered-world/canonical-service/frozen-source allowlist, stable contained regular-file reads and hashes, privacy/CRC before promotion. No audit/reopen/retry, no qualified or coherent-cut claim, original exception retained and all diagnostic CPU charged. Private simulation key and SQLite omitted; not resume authority."
   ],
   "unchanged_economic_mechanism": "Service executors/checkers, buyer incentives/budgets/choices, offers/prices, channel/capacity contract terms, cost envelopes, learning rules, event timing values, protocol, cases and seeds are byte-identical. Financial guards and temporal admission enforcement are strengthened, not claimed unchanged. Original eight-world scans found no changed trajectory from the repairs.",
   "historical_impact": {
@@ -105,7 +115,7 @@
     "sha256": "8886741f3c8e73ae3af391261dbb249e53613ae5d79da067740e7bf9ec32ddc6",
     "result": "Seven original archive/part hashes verified plus original local fresh records inspected. Six affected published archives and original fresh records contain no P1/P2 path, zero newly required zero-later/zero-cost or unsupported positive top-only shapes, missing receipts, aggregate mismatches, orphan proofs or malformed/unknown-canonical-job contracts. Ten bound original SERVICES maps prove the exact existing native job map. Generic enterprise011 predates affected Account and is marked not applicable. Duplicate fresh archive/local views are not additional businesses. This is preserved-record inspection, not new commercial execution."
   },
-  "reproduction_scope": "Current release requires fresh exact-head engineering qualification, all exact-main terminal-success checks and actual downloaded default reproduction. Known evaluation seeds make it reproduction, not untouched confirmation of repaired source. Original report, paper, QA, financial records and CPU-overrun evidence retain their historical source.",
+  "reproduction_scope": "Current release requires fresh exact-head qualification, all exact-main terminal-success checks and one actual downloaded full-default reproduction under unchanged2400CPU/900wall. Known evaluation seeds make it reproduction, not untouched confirmation. Both original600CPU and prior actual2400CPU failures remain preserved; missing prior actual raw state is not re-created.",
   "additional_nonidentity_changes": [
     "Campaign optional caches removed; complete qualify job bound30minutes after preserved20minute cancellation during postjob cleanup despite passed full tests/replays/evidence upload. Every check retained.",
     "Adaptive full160-world run and all audits bound45minutes.",
@@ -185,5 +195,55 @@
   "refund_clock_historical_impact": {
     "path": "evidence/completion015/refund-clock-repair/HISTORICAL_IMPACT.json",
     "sha256": "13844941724c25d47f36e074e729ec69d5624373c5bcde2c6b79d847db535672"
+  },
+  "performance016": {
+    "prior_main": "10bdb2c5787f95158642b068756ba30b58140562",
+    "prior_source_sha256": "e4ae45a21614af62d336a96f4bba71db4339f73a72d5c4c0d9bc1aa324555d61",
+    "current_source_sha256": "411eed021e5a80606cf8468d3bfc9f1920cc03439013c0991c37060e059ecf23",
+    "allocation": {
+      "path": "evidence/performance016/ALLOCATION.json",
+      "sha256": "cbcb1e7a41aceae382c647fb6ef77387e096ed81de52d7ae5a87521ac0804085"
+    },
+    "root_review": {
+      "path": "evidence/performance016/ROOT_REVIEW.json",
+      "sha256": "930ad3a0334965d3e362725a156b1844c354a8a928104e080f11789c63997d84"
+    },
+    "failure_checkpoint_commit": "573efff00798332653337e42d3149a0d35f46ea3",
+    "prior_actual_operation": "FAILED_CPU_ENVELOPE_2506.000343_GT_2400; full raw native state absent; only four authentic receipts/logs preserved",
+    "resource_policy": "UNCHANGED2400CPU/900livewall; one separately identified improved-source actual release attempt after normal exact-head/main qualification. No unchanged favorable rerun.",
+    "performance_scope": "Fixed exposed12day14003fixture, no economic retuning or fresh commercial confirmation. Original baseline and all intermediate misses preserved; exact final source and measured candidate distinctions are explicit in qualification evidence.",
+    "status": "ENGINEERING_REVIEWED; EXACT_HEAD_MAIN_AND_ACTUAL_DOWNLOADED_RELEASE_GATES_PENDING",
+    "component_commits": {
+      "financial": "3a13a66efeba7c09f9d3711205fc42d35282a8c1",
+      "failure_checkpoint": "f5af7def0eb49d200d6f327aca59b2a004722818"
+    },
+    "qualification": {
+      "FINANCIAL_QUALIFICATION.json": {
+        "path": "evidence/performance016/FINANCIAL_QUALIFICATION.json",
+        "sha256": "5afd71c0d3380a6520d1bd1748ae9cfa14b8fb9c22f90b0e90dc8d88187870bc"
+      },
+      "SEMANTIC_EQUIVALENCE.json": {
+        "path": "evidence/performance016/SEMANTIC_EQUIVALENCE.json",
+        "sha256": "ba052ffd2d3ec303e344cda7c8611704530989cd8f3a1f57b77fd7de2fb38515"
+      },
+      "INDEPENDENT_REVIEW.json": {
+        "path": "evidence/performance016/INDEPENDENT_REVIEW.json",
+        "sha256": "ff0a87fb30ad89f1fcf7ae3284d664d1b073a0c3fa5c1db14f84a9df4e00585c"
+      },
+      "MANIFEST.json": {
+        "path": "evidence/performance016/MANIFEST.json",
+        "sha256": "6cdf11da1b1704424a3cfc6e151e1fe6fa1485ebec13baadf88fd43325286cf0"
+      }
+    },
+    "final_engineering_benchmark": {
+      "before_process_cpu_seconds": 13.978736472,
+      "after_process_cpu_seconds": 10.89009207,
+      "percent_reduction": 22.095304594851505,
+      "fixture": "Fixed exposed14003/12daybaseline:4accepted/4paid/54nativeactions/1earnedreservation; all3candidate semanticprojections match, no capacity-expansion inference.",
+      "prior_candidate1": "19.507percent targetmiss preserved",
+      "pre_guard_candidate2": "26.582percent prior-source observation preserved; finalsource is22.0953percent, no best-of timing selection.",
+      "tests": "14focusedfinancial/authority/guard checks;34wrapper checks pass; independent same-session review no blocking findings. Fullcurrenthead CI/main/actualrelease still pending."
+    },
+    "resources": "Financialknown meteredlowerbound91.0700228CPU +wrappertests0.311505CPU. Financial75targetexceeded. Root/edit/wrapper/review/earlier import/teardown notfullymetered, notzero; no exactwholephase100CPU complianceclaim. No furtherlocal tests/benchmarks. Unchanged100phaseallocation/01:45stop/one repairedactual2400CPU900wall attempt."
   }
 }

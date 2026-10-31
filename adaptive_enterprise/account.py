@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 import stat
 
-from commercial.ledger import _ADAPTIVE_ACCOUNT_CAPABILITY, amount, audit, canonical, digest, strict_json
+from commercial.ledger import _ADAPTIVE_ACCOUNT_CAPABILITY, _audit_native_and_jobs, amount, canonical, digest, strict_json
 from commercial.persistence import atomic_bytes
 from commercial.single_writer import SingleWriterExchange
 
@@ -248,9 +248,11 @@ def audit_account(record, *, root, manifest):
     if any(event.get('op') == 'cancel_investment' for event in tape['actions']):
         raise ValueError('UNRECONCILED_INVESTMENT_CANCELLATION_RETIRED')
     resolutions = record.get('obligation_resolutions', {})
-    checked = audit(tape, root=root, manifest=manifest)
-    from commercial.ledger import load_jobs
-    jobs = load_jobs(root, manifest)
+    checked, jobs = _audit_native_and_jobs(tape, root=root, manifest=manifest)
+    if manifest.get('schema') != 'agi-alpha/adaptive012-services/v1':
+        # Other service schemas retain their previous second qualification.
+        from commercial.ledger import load_jobs
+        jobs = load_jobs(root, manifest)
     prefixes = action_prefix_digests(tape['actions'])
     for index, event in enumerate(tape['actions']):
         if event['op'] == 'finish':
