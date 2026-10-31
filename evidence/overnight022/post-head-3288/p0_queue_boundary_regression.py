@@ -48,7 +48,8 @@ def clock_probe(checkpoint, original, proposed_hour):
     if not queue:
         errors.append('NONEMPTY_QUEUE_FIXTURE_REQUIRED')
     elif (len({entry['id'] for entry in queue}) != len(queue)
-          or any(queue[i]['time'] > queue[i + 1]['time'] for i in range(len(queue) - 1))
+          or any(type(entry.get('time')) is not int or not isinstance(entry.get('id'), str) for entry in queue)
+          or any((queue[i]['time'], queue[i]['id']) > (queue[i + 1]['time'], queue[i + 1]['id']) for i in range(len(queue) - 1))
           or any(entry['time'] < state['last_time'] for entry in queue)):
         errors.append('LEGACY_QUEUE_PROVENANCE_INVALID')
     if proposed_hour < max(native_last, state['last_time']):
@@ -113,6 +114,17 @@ class Regression(unittest.TestCase):
         self.assertIn('LEGACY_QUEUE_PROVENANCE_INVALID', clock_probe(self.checkpoint, self.original, 2)['errors'])
         self.checkpoint['body']['state']['current'] = {'id': 'accept'}
         self.assertIn('INFLIGHT_EVENT_REQUIRES_AUTHENTICATED_INTENT_RECOVERY', clock_probe(self.checkpoint, self.original, 2)['errors'])
+
+    def test_same_hour_legacy_queue_tie_order_is_preserved(self):
+        queue = self.checkpoint['body']['state']['queue']
+        queue[:] = [{'id': 'plan-b', 'time': 3}, {'id': 'accept-a', 'time': 3}]
+        self.assertIn('LEGACY_QUEUE_PROVENANCE_INVALID', clock_probe(self.checkpoint, self.original, 2)['errors'])
+        queue.reverse()
+        self.assertTrue(clock_probe(self.checkpoint, self.original, 2)['eligible'])
+
+    def test_noninteger_queue_clock_is_rejected(self):
+        self.checkpoint['body']['state']['queue'][0]['time'] = 3.0
+        self.assertIn('LEGACY_QUEUE_PROVENANCE_INVALID', clock_probe(self.checkpoint, self.original, 2)['errors'])
 
     def test_changed_liability_or_prefix_is_rejected(self):
         self.upgraded['ledger']['summary']['reserve'] = 0
