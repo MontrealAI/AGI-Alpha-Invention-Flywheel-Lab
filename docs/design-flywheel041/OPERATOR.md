@@ -4,7 +4,9 @@
 
 This opt-in controller **runs the repository's authoritative \`connected_enterprise.engine.run_world\`**, using the actual mandatory adaptive \`Account\`, \`JournalAccount\`, source manifest, native customer choice, producer/checker, acceptance, payment, earned-only investment, checkpoint and independently reconstructed native audit. It does not create a second ledger, use future forecast cash, rewrite the default operating policy or claim real commerce.
 
-It searches a **joint finite policy space**: currently supported baseline, channel, earned-funded growth and competitive-growth arms, optionally combined with independently validated existing strategic price/method/allocation/channel policies. These combinations are *business designs and means of delivering them*, not a generative proof that the machine can invent arbitrary new services. Current native outcomes remain reconciliation, KPI reporting and evidence matrices.
+It discovers the applicable intervention type from audited native evidence and then searches a **joint finite policy space**: currently supported baseline, channel, earned-funded growth and competitive-growth arms, optionally combined with independently validated existing strategic price/method/allocation/channel policies. These combinations are *business designs and means of delivering them*, not a generative proof that the machine can invent arbitrary new services. Current native outcomes remain reconciliation, KPI reporting and evidence matrices.
+
+Before spending development resources on alternatives, the controller executes and audits the incumbent, diagnoses actual customer-access, capacity, competitive-choice, inventory and collection limitations, and **constructs the applicable development policy shortlist** from the source-registered native strategy grammar. An exhausted inventory or a losing business cannot be mislabeled a profitable customer-acquisition opportunity. This diagnosis is itself recomputed during independent verification. It is an evidence-guided strategy choice, not invention of a new general-purpose business operator.
 
 The controller selects a candidate using **observed development-world profit, obligation protection and actual collection** (including native production/setup and failed bid costs) rather than a developer-supplied winner, simulated forecast revenue or a manufactured win rate. A losing or unprofitable challenger may lose to the incumbent; if every candidate loses or lacks protected profit the result is **no qualified investment**, not a forced promotion.
 
@@ -28,7 +30,7 @@ python3 -m connected_enterprise.design_flywheel demo --output /absolute/new/desi
 python3 -m connected_enterprise.design_flywheel verify --output /absolute/new/design041
 \`\`\`
 
-The fixed \`demo\` spec uses openly exposed synthetic customer assumptions and **three real native policies**, with development seed 341014, fresh seed 341015, 14 operating days, eight finite customers and no actual sales. It is for engineering reproduction, not a hidden confirmation or a billion-dollar projection.
+The fixed \`demo\` spec uses openly exposed synthetic customer assumptions and **three real native policies**, with development seed 341014, fresh seed 341015, 14 operating days, eight finite customers and no actual sales. It is for engineering reproduction, not a hidden confirmation or a billion-dollar projection. Its constraints and candidate shortlist are computed by the actual controller using the development incumbent's independently audited results; a changed or tampered diagnosis fails verification.
 
 For an independently registered finite experiment, write the exact JSON contract returned by \`example_spec()\` (including complete native market configuration, designs and predeclared seeds), then run:
 
