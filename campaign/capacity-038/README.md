@@ -1,0 +1,11 @@
+# Capacity038 — frozen native capacity comparison
+
+Eight fixed worlds, not the superseded22-world design. Both arms use the same complete-offer menu and520 admitted jobs (128 each of three primitives,128 receivables packets with40 rows,8 legacy bundles),48 prospects,42 operating days and settlement drain. Opening$5,000, working$25, initial3/maximum12 capacity units. These finite experiment choices are not enterprise ceilings.
+
+Pairs: positive2311/2312, costly-capacity2311, combined competitive-self-service/no-retention2312, all seeds prefixed261031. Cohort2610312309. No separate fresh economic smoke. Existing exposed16-day engine adoption proof and capacity complement/expiry/funding/native finance checks are prerequisites.
+
+Incumbent: existing one-unit capacity heuristic. Quantity: finite0..6 complement recourse over actually observed unserved offers,24-hour next opportunity and actual configured production duration. Same current funds, complete costs, market/prices/channel contracts and packet development costs. Quantity pays additional$5 implementation envelope; actual engineering/model/host billing is unknown. Positive forecast retention9000bps is an authored uncertain hypothesis, not measured demand. Costly unit$40 vs default$8. Hard control actual and forecast retention0 plus stronger self-service; effects cannot be isolated. Existing nonpayment032 evidence remains relevant; it is not newly rerun here.
+
+Native total cash/obligations and EARNED capacity invoices remain authoritative. Forecast benefit does not become revenue or cash. Capture quantity invoices, activation/expiry, linked later production/settlements, all financial costs/refunds/payables and residual reserves. Links indicate use, not isolated causal profit. Annual profit stays null. Keep every negative/failed result; reducer rejects missing, duplicate, mismatched source/config/inventory or invalid identities.
+
+Protocol JSON and runner constant match and are FROZEN after independent runtime/protocol review and the root’s explicit 23:22 UTC publication/execution instruction. No economic parameter changed during freeze. Pinned read-only Actions, max4parallel, platform360-minute timeout, SUMMARY/COMPARISON only. No private authority or bulk archives uploaded. No automatic expansion after this first stage.

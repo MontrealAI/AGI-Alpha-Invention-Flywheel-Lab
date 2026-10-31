@@ -6,6 +6,17 @@ from adaptive_enterprise.strategies import offer_catalog
 from .strategic_commerce import rederive_actions,selected_delivery
 from .joint_planning import investment_option
 
+def check_capacity_effect(option, row, cfg, moment, risk):
+    execution=option['execution'];units=execution['purchased_units']
+    expected={'id':option['id'],'kind':'capacity','capacity_units':units,
+        'cost':option['upfront_cost'],'purchased_time':moment,
+        'activation_time':moment+cfg['capacity_lead_hours'],
+        'expiry_time':moment+cfg['capacity_lead_hours']+cfg['capacity_duration_hours'],
+        'predicted_net':sum(risk['scenarios'][k]*option['future_net_cash'][k] for k in risk['scenarios'])//10000-option['upfront_cost']}
+    if row is None or any(row.get(k)!=v for k,v in expected.items()) or option['upfront_cost']!=units*cfg['capacity_price']:
+        raise ValueError('SELECTED_CAPACITY_QUANTITY_NOT_NATIVE_EXECUTED')
+
+
 def audit_decisions(root,manifest,result,lifecycle):
     cfg=result['config']
     if 'strategic_policy' not in cfg:
@@ -68,7 +79,7 @@ def audit_decisions(root,manifest,result,lifecycle):
         if record['riskpolicy']!=risk or record['earned_deduction']!=operating or record['allow_seed'] is not True:raise ValueError('JOINT_TOTAL_OR_EARNED_RESERVE_CHANGED')
         previous_investments=[i for i in result['investments'] if i['purchased_time']<moment]
         usable=[i for i in previous_investments if i['kind']=='capacity' and i['activation_time']<=moment and moment+cfg['production_hours']<i['expiry_time']]
-        slots=min(cfg['maximum_slots'],cfg['initial_slots']+len(usable))
+        slots=min(cfg['maximum_slots'],cfg['initial_slots']+sum(i.get('capacity_units',1) for i in usable))
         if cfg['supplier_outage_start_day']<=day<cfg['supplier_outage_start_day']+cfg['supplier_outage_days']:slots=0
         if record['max_delivery_slots']!=slots:raise ValueError('CURRENT_DELIVERY_CAPACITY_CHANGED')
         # Reconstruct disclosed investment hypotheses, not their unrealized future returns.
@@ -89,7 +100,7 @@ def audit_decisions(root,manifest,result,lifecycle):
             if forecast>invoice:expected_investments.append(investment_option('channel-'+str(day),'acquisition',invoice,int(forecast-invoice),risk['scenarios'],day,pilot))
         lost=sum(d.get('kind')=='capacity_decline' and day-3<=d['time']//24<day for d in result['decisions'])
         live_capacity=sum(i['kind']=='capacity' and moment<i['expiry_time'] for i in previous_investments)
-        if result['arm'] in {'growth','competitive_growth'} and profitable and lost>=2 and slots<cfg['maximum_slots'] and live_capacity<cfg['maximum_slots']-cfg['initial_slots'] and remaining>7:
+        if 'capacity_menu' not in cfg['strategic_allocation_policy'] and result['arm'] in {'growth','competitive_growth'} and profitable and lost>=2 and slots<cfg['maximum_slots'] and live_capacity<cfg['maximum_slots']-cfg['initial_slots'] and remaining>7:
             forecast=sum(margins)/len(margins)*min(remaining,5)*.5
             if forecast>cfg['capacity_price']:
                 contract={'price':cfg['capacity_price'],'lead_hours':cfg['capacity_lead_hours'],'duration_hours':cfg['capacity_duration_hours']}
@@ -101,6 +112,12 @@ def audit_decisions(root,manifest,result,lifecycle):
                 used,previous_investments,buyers,contacts,failed,risk['scenarios'],
                 sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in record['deliveries']),
                 channel_state=sequence_book.export() if 'channel_menu_policy' in cfg else None)
+        if 'capacity_menu' in cfg['strategic_allocation_policy']:
+            from .joint_planning import capacity_recourse
+            expected_capacity=capacity_recourse(cfg,moment,snapshot,operating,record['deliveries'],previous_investments,slots,risk)
+            if wrapper.get('capacity_recourse')!=expected_capacity:raise ValueError('CAPACITY_RECOURSE_INPUTS_OR_RESULTS_CHANGED')
+            expected_investments.extend(expected_capacity['options'])
+        elif 'capacity_recourse' in wrapper:raise ValueError('UNREGISTERED_CAPACITY_RECOURSE')
         if record['investments']!=expected_investments:raise ValueError('INVESTMENT_HYPOTHESIS_NOT_FROM_PUBLIC_HISTORY')
         for delivery,(ident,job) in zip(record['deliveries'],expected_deliveries):
             selection=delivery['selection'];problem=selection['problem'];offer=problem['offer'];service=job['service_id']
@@ -145,8 +162,13 @@ def audit_decisions(root,manifest,result,lifecycle):
                 expected_net=sum(risk['scenarios'][k]*(option['future_net_cash'][k]-option['upfront_cost']) for k in risk['scenarios'])//10000
                 if native is None or native['cost']!=option['upfront_cost'] or native['predicted_net']!=expected_net:raise ValueError('SEQUENCE_FIRST_NATIVE_INVOICE_CHANGED')
                 investments.add(ident)
+        if 'capacity_menu' in cfg['strategic_allocation_policy']:
+            for option in record['decision']['selected_options']:
+                if option['kind']=='capacity':
+                    row=next((i for i in result['investments'] if i['id']==option['id']),None)
+                    check_capacity_effect(option,row,cfg,moment,risk)
         selected_investments|=investments
-        if events[moment][1]['channel_selected']!=(any(o['kind']=='acquisition' for o in record['decision']['selected_options']) if 'channel_menu_policy' in cfg else ('channel-'+str(day) in investments)) or events[moment][1]['capacity_selected']!=('capacity-'+str(day) in investments):raise ValueError('SELECTED_INVESTMENT_FLAGS_CHANGED')
+        if events[moment][1]['channel_selected']!=(any(o['kind']=='acquisition' for o in record['decision']['selected_options']) if 'channel_menu_policy' in cfg else ('channel-'+str(day) in investments)) or events[moment][1]['capacity_selected']!=(any(o['kind']=='capacity' for o in record['decision']['selected_options']) if 'capacity_menu' in cfg['strategic_allocation_policy'] else ('capacity-'+str(day) in investments)):raise ValueError('SELECTED_INVESTMENT_FLAGS_CHANGED')
         choices=[d for d in result['decisions'] if d.get('kind') in {'offer','outside_choice'} and d['time']==moment]
         if [d['customer_id'] for d in choices]!=needs:raise ValueError('EVERY_OBSERVED_NEED_REQUIRES_ONE_JOINT_DECISION')
         capacity_only_customers=set()

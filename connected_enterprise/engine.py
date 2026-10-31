@@ -61,6 +61,9 @@ def validate_config(cfg):
         validate_allocation_policy(cfg.get('strategic_allocation_policy'))
         if cfg['maintenance_daily']<=0:raise ValueError('POSITIVE_PREPAID_STRATEGIC_PLANNING_CONTRACT_REQUIRED')
     elif 'strategic_allocation_policy' in cfg:raise ValueError('JOINT_STRATEGIC_POLICY_REQUIRED')
+    if 'capacity_menu' in cfg.get('strategic_allocation_policy',{}):
+        if 'complete_offer_policy' not in cfg or cfg['capacity_price']<=0:raise ValueError('COSTED_COMPLETE_CAPACITY_MENU_REQUIRED')
+        if cfg['strategic_allocation_policy']['capacity_menu']['opportunity_delay_hours']<max(cfg['production_hours'],cfg['capacity_lead_hours']):raise ValueError('FUTURE_CAPACITY_AFTER_CURRENT_PRODUCTION_AND_ACTIVATION_REQUIRED')
     contracts=validate_contracts(cfg['channels'])
     if 'channel_menu_policy' in cfg:
         from .channel_menu import validate_policy
@@ -162,6 +165,7 @@ def _prepare_plan(state,account,jobs):
         b['known']=True
     production_time=t+cfg['production_hours']
     usable_capacity=[i for i in state['investments'] if i['kind']=='capacity' and i['activation_time']<=t and production_time<i['expiry_time']]
+    usable_capacity=[i for i in usable_capacity for _ in range(i.get('capacity_units',1))]
     slots=cfg['initial_slots']+len(usable_capacity)
     slots=min(cfg['maximum_slots'],slots)
     if cfg['supplier_outage_start_day']<=day<cfg['supplier_outage_start_day']+cfg['supplier_outage_days']:slots=0
@@ -228,6 +232,9 @@ def _prepare_plan(state,account,jobs):
             channel_invoice=sum(o['upfront_cost'] for o in prepared['channel_purchases'])
         else:prepared['channel_purchase']='channel-'+str(day) in chosen
         prepared['capacity_purchase']='capacity-'+str(day) in chosen
+        if 'capacity_menu' in cfg['strategic_allocation_policy']:
+            prepared['capacity_options']=[o for o in joint['allocation']['decision']['selected_options'] if o['kind']=='capacity']
+            prepared['capacity_purchase']=bool(prepared['capacity_options'])
         if 'sequence' in cfg['strategic_allocation_policy']:
             picks=[o for o in joint['allocation']['decision']['selected_options'] if 'first_investment' in o['execution']]
             if len(picks)>1:raise ValueError('ONE_FIRST_SEQUENCE_INVESTMENT_REQUIRED')
@@ -240,7 +247,8 @@ def _prepare_plan(state,account,jobs):
                 if net<=0:raise ValueError('POSITIVE_SEQUENCE_EXPECTATION_REQUIRED')
                 prepared['channel_predicted_net']=prepared['capacity_predicted_net']=net
 
-        liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-cfg['capacity_price']*bool(prepared['capacity_purchase'])
+        capacity_invoice=sum(o['upfront_cost'] for o in prepared['capacity_options']) if 'capacity_options' in prepared else cfg['capacity_price']*bool(prepared['capacity_purchase'])
+        liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-capacity_invoice
     capacity_only_customers=set()
     if joint is not None and 'complete_offer_policy' in cfg:
         from .capacity_signal import capacity_declined_customers
@@ -377,7 +385,15 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                     receipt=cost(ident,invoice,t,'acquisition_contract',{'terms':terms,'investment':'expiring_contact_access'},earned_only=True,expected_net=p['channel_predicted_net'])
                     if receipt:
                         purchase=book.purchase('pilot',day,receipt['plan_id']);state['investments'].append({'id':ident,'plan_id':receipt['plan_id'],'kind':'acquisition','purchased_time':t,'activation_time':purchase['activation_day']*24,'expiry_time':purchase['expiry_day']*24,'cost':invoice,'funding_receipt':receipt,'contract_receipt':purchase,'predicted_net':p['channel_predicted_net']});_event(state,t,'INVESTMENT',ident,source_plan_id=receipt['plan_id'],investment_kind='acquisition')
-                if p['capacity_purchase']:
+                if 'capacity_options' in p:
+                    for option in p['capacity_options']:
+                        units=option['execution']['purchased_units'];ident=option['id'];invoice=units*cfg['capacity_price']
+                        weights=cfg['strategic_allocation_policy']['risk']['scenarios'];predicted=sum(weights[k]*option['future_net_cash'][k] for k in weights)//10000-invoice
+                        receipt=cost(ident,invoice,t,'capacity_contract',{'units_per_day':units,'lead_hours':cfg['capacity_lead_hours'],'duration_hours':cfg['capacity_duration_hours']},earned_only=True,expected_net=predicted)
+                        if receipt:
+                            state['investments'].append({'id':ident,'plan_id':receipt['plan_id'],'kind':'capacity','capacity_units':units,'purchased_time':t,'activation_time':t+cfg['capacity_lead_hours'],'expiry_time':t+cfg['capacity_lead_hours']+cfg['capacity_duration_hours'],'cost':invoice,'funding_receipt':receipt,'predicted_net':predicted})
+                            _event(state,t,'INVESTMENT',ident,source_plan_id=receipt['plan_id'],investment_kind='capacity')
+                elif p['capacity_purchase']:
                     ident='capacity-'+str(day);receipt=cost(ident,cfg['capacity_price'],t,'capacity_contract',{'units_per_day':1,'lead_hours':cfg['capacity_lead_hours'],'duration_hours':cfg['capacity_duration_hours']},earned_only=True,expected_net=p['capacity_predicted_net'])
                     if receipt:state['investments'].append({'id':ident,'plan_id':receipt['plan_id'],'kind':'capacity','purchased_time':t,'activation_time':t+cfg['capacity_lead_hours'],'expiry_time':t+cfg['capacity_lead_hours']+cfg['capacity_duration_hours'],'cost':cfg['capacity_price'],'funding_receipt':receipt,'predicted_net':p['capacity_predicted_net']});_event(state,t,'INVESTMENT',ident,source_plan_id=receipt['plan_id'],investment_kind='capacity')
                 state['channel_state']=book.export()

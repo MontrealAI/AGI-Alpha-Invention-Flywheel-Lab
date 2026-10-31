@@ -104,6 +104,9 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
             _integer(option['execution']['capacity_units'], 1 if option['kind']=='delivery' else 0)
             if option['kind']!='delivery' and option['execution']['capacity_units']:
                 raise ValueError('ONLY_DELIVERY_CONSUMES_CURRENT_CAPACITY')
+        if 'recourse_work_keys' in option['execution']:
+            _list_ids(option['execution']['recourse_work_keys'])
+            if option['kind']!='capacity':raise ValueError('CAPACITY_RECOURSE_WORK_ONLY')
         if 'work_keys' in option['execution']:
             _list_ids(option['execution']['work_keys'])
             if option['kind']=='delivery' and not option['execution']['work_keys']:
@@ -146,6 +149,10 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
             raise ValueError('EXISTING_DISTINCT_JOINT_MEMBERS_REQUIRED')
         _cash(joint['net_cash'], scenarios, signed=True)
     if any(type(o['execution'].get('cash_lock',0)) is not int or o['execution'].get('cash_lock',0)<0 for o in options):raise ValueError('NONNEGATIVE_NEUTRAL_CASH_LOCK_REQUIRED')
+    for option in options:
+        execution=option['execution']
+        if 'earned_cash_lock' in execution:
+            if option['kind']!='capacity' or execution.get('capacity_recourse_schema')!='connected-capacity-recourse/v1' or type(execution['earned_cash_lock']) is not int or not 0<=execution['earned_cash_lock']<=execution.get('cash_lock',0):raise ValueError('TYPED_CAPACITY_RECOURSE_EARNED_LOCK_REQUIRED')
     if allow_seed and any(o['execution'].get('funding') not in {'SEED_OR_EARNED','EARNED'} for o in options):
         raise ValueError('EXPLICIT_PER_ACTION_FUNDING_REQUIRED')
     if _diagnostic_cash_limit is not None:
@@ -201,6 +208,7 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
         if len(groups) != len(set(groups)):
             continue
         work_keys=[k for o in chosen if o['kind']=='delivery' for k in o['execution'].get('work_keys',[])]
+        work_keys += [k for o in chosen for k in o['execution'].get('recourse_work_keys',[])]
         if len(work_keys)!=len(set(work_keys)):continue
         joints = [j for j in interactions if set(j['members']) <= selected]
         identities = [identity for o in chosen for identity in o['benefit_ids']] + [identity for j in joints for identity in j['benefit_ids']]
@@ -214,7 +222,7 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
         if reservation > budget:
             continue
         if allow_seed:
-            earned_reserve=sum(o['upfront_cost']+o['execution'].get('cash_lock',0)+max(max(o['later_liabilities'].values()),max(0,-min(o['future_net_cash'].values()))) for o in chosen if o['execution']['funding']=='EARNED')
+            earned_reserve=sum(o['upfront_cost']+o['execution'].get('earned_cash_lock',o['execution'].get('cash_lock',0))+max(max(o['later_liabilities'].values()),max(0,-min(o['future_net_cash'].values()))) for o in chosen if o['execution']['funding']=='EARNED')
             # Negative interaction reserves also require earned funding.
             earned_reserve+=sum(max(0,-min(j['net_cash'].values())) for j in joints)
             if earned_reserve>spendable_earned:continue
