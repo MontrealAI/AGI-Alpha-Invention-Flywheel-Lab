@@ -1,0 +1,85 @@
+{
+  "schema": "agi-alpha/p0-executable-queue-boundary-preflight/v1",
+  "scope": "READ_ONLY_PUBLIC_SOURCE_STRUCTURAL_PREFLIGHT_NOT_AUTHENTICATED_STATE_MIGRATION_OR_ACCOUNT_AUDIT",
+  "source": {
+    "released_main": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+    "candidate_verification": "3981b182513abbba1c2ab1102f94732c453422fa",
+    "candidate_authorizer": "connected_enterprise/upgrades.py@26d2c441c52db9b51f5efde529452e3e5f917504",
+    "immutable_legacy": "328835b30b3fed52b491f33f86ad008c60c37704",
+    "legacy_checkpoint_git_blob": "91a4c08cac3a5d789d7dd9429815c1168c935bd5",
+    "legacy_public_record_git_blob": "70d843141bb5d399eec15f9ea21805fcdc392023",
+    "upgraded_public_record_git_blob": "b77756b8ade1029b7ab28ce4e2e93beb3be09bc8",
+    "script": "evidence/overnight022/post-head-3288/p0_queue_boundary_regression.py",
+    "script_commit": "c4f9aa97d4f8a2e40145208a7204709d5ad65ae0",
+    "script_git_blob": "afc333b0578ca32b5418e0d591733ca6fd48e808",
+    "script_sha256": "e026961bfac45d57bd0cb2faebc89742dd4f9df87d7cac03d1df15dd83a10cd6"
+  },
+  "execution": {
+    "python_version": "3.13.5",
+    "script_syntax": "python -m py_compile: PASS",
+    "python_synthetic_unittests": {
+      "passed": 4,
+      "failed": 0,
+      "elapsed_seconds_reported": 0.001
+    },
+    "full_immutable_fixture_checks": {
+      "execution": "read-only connector fetch and equivalent V8 predicates, not executing Python against full fixture",
+      "passed": true,
+      "baseline": {
+        "original_actions": 9,
+        "upgraded_actions": 10,
+        "processed_events": 3,
+        "emitted_semantic_events": 4,
+        "pending_queue": 12,
+        "operating_last_hour": 2,
+        "first_pending_hour": 3,
+        "native_last_hour": 0
+      },
+      "same_clock_at_2": "structurally eligible",
+      "pending_boundary_at_3": "structurally eligible",
+      "late_clock_at_4": "REJECT SOURCE_UPGRADE_OVERTAKES_PENDING_EVENT",
+      "backward_clock_at_1": "REJECT SOURCE_UPGRADE_CLOCK_ROLLBACK",
+      "native_financial_prefix": "unchanged 9 actions; one nonmonetary source transition",
+      "summary_and_reserves": "unchanged",
+      "negative_public_mutations": {
+        "duplicate_pending_id": "REJECT",
+        "erased_custody_reserve": "REJECT",
+        "rewritten_native_action": "REJECT",
+        "inflight_current_event": "REJECT"
+      }
+    },
+    "historical_migration_guard": "OPERATING_CHECKPOINT_SOURCE_OR_AUTHORITY_CHANGED remains a valid enforced rejection; no successful native queue migration",
+    "historical_failed_archive": "328835b ARCHIVE_RESOURCE_BOUND retained, not reclassified",
+    "original_release": "connected014-8abfb96d4ef859e30ca344d7933ec2a2f49012c1 unchanged"
+  },
+  "acceptance": {
+    "public_structural_preflight": "ACHIEVED",
+    "authenticated_old_state_hmac": "NOT_EXECUTED",
+    "operating_queue_version_transition": "BLOCKED",
+    "due_acceptance_settlement_maturity": "NOT_EXECUTED",
+    "crash_retry_and_racing_writers": "NOT_EXECUTED",
+    "protected_native_account_audit": "NOT_EXECUTED",
+    "composed_release_download": "NOT_EXECUTED",
+    "commercial_profit_new_evidence": "NONE"
+  },
+  "coordination": {
+    "integration_owner": "current overnight root team",
+    "native_owner_task": "01a18fa7-ffc6-7384-8bb4-ea6012cfb0f7",
+    "actual_native_task_state": "NOT_ACCESSIBLE_IN_CURRENT_TASK_INTERFACE",
+    "visible_native_branch": "candidate/native-capital-p0-20261030@3981b182513abbba1c2ab1102f94732c453422fa",
+    "other_owner_branch_modified": false,
+    "main_modified": false,
+    "successor_tasks_modified": false
+  },
+  "resource_and_permissions": {
+    "public_source_read_and_isolated_synthetic_tests": true,
+    "new_paid_calls": 0,
+    "external_outreach": 0,
+    "real_transactions": 0,
+    "new_financial_mutations": 0,
+    "new_releases": 0,
+    "whole_agent_host_billing": "UNKNOWN",
+    "private_hmac_verified": false
+  },
+  "next_decision": "KEEP_RELEASED_INCUMBENT. Obtain actual active native owner source checkpoint and safe integration boundary. Use this executable structural oracle as a regression input, not approval, in subsequent canonical authenticated forward-only migration through the single Account/JournalAccount. Bind signed old STATE, queue and original source with financial prefix; prohibit overtaking due work; preserve liabilities; test nonempty acceptance and settlement queues plus crash/retry/replay/fork and claim-before-maturity through CLI. Normal CI/reviews/public-release proof only after safe composition."
+}
