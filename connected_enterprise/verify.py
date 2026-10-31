@@ -191,6 +191,8 @@ def _check_market_decisions(result, tape):
 
 def _check_customer_lifecycle(result):
     cfg, seed = result['config'], result['seed']
+    if set(result['channels']['exposures_by_day']) != {str(day) for day in range(cfg['horizon_days'])}:
+        raise ValueError('CHANNEL_EXPOSURE_DAYS_DIFFER_FROM_FROZEN_HORIZON')
     buyers = {row['id']: row for row in result['buyers']}
     owned = set(sorted(buyers)[:4])
     state = {ident: {'known': ident in owned, 'active': True, 'onboarded': False,
@@ -375,6 +377,8 @@ def check_channels(channels, investments, buyers, *, contracts=None, seed=None):
     daily = channels.get('exposures_by_day')
     if not isinstance(instances, dict) or not isinstance(receipts, dict) or not isinstance(daily, dict) or set(instances) != set(receipts):
         raise ValueError('CHANNEL_INSTANCE_PURCHASE_BINDING_REQUIRED')
+    if contracts is None or type(seed) is not int or seed < 0:
+        raise ValueError('FROZEN_CHANNEL_CONTRACTS_AND_SEED_REQUIRED')
     investor = {row['plan_id']: row for row in investments}
     if contracts is not None or seed is not None:
         from connected_enterprise.channels import validate_contracts
@@ -447,7 +451,22 @@ def check_channels(channels, investments, buyers, *, contracts=None, seed=None):
     for ident, instance in instances.items():
         if instance['realized_exposures'] != sum(row['source_plan_id'] == ident for row in all_exposures):
             raise ValueError('CHANNEL_REALIZED_REACH_DOES_NOT_RECONCILE')
+    from connected_enterprise.channels import audit_channel_history
+    replay = audit_channel_history(channels, contracts, seed, buyers)
+    if activation != replay['activation_by_plan']:
+        raise ValueError('SEEDED_CHANNEL_HISTORY_MISMATCH')
     return {'paid_channel_contracts_checked': len(instances), 'paid_exposures_checked': len(all_exposures)}
+
+
+def _check_contract_clock(ident, offered, actions, operating, qualified, config, *, refund_due=None):
+    deadline = qualified + _integer(config.get('payment_deadline_hours'), 'PAYMENT_DEADLINE_HOURS', positive=True)
+    if _integer(offered['args'].get('deadline'), 'NATIVE_OFFER_DEADLINE') != deadline:
+        raise ValueError('NATIVE_OFFER_DEADLINE_DIFFERS_FROM_FROZEN_CONTRACT')
+    if refund_due is not None:
+        native_time = _integer(actions.get('refund', {}).get('day'), 'NATIVE_REFUND_TIME')
+        event_time = _integer(operating.get((ident, 'REFUND'), {}).get('time'), 'OPERATING_REFUND_TIME')
+        if native_time != refund_due or event_time != refund_due:
+            raise ValueError('REFUND_TIME_DIFFERS_FROM_FROZEN_CONTRACT')
 
 
 def audit(root, manifest, result):
@@ -526,6 +545,7 @@ def audit(root, manifest, result):
             raise ValueError('ORDER_NATIVE_PRICE_OR_JOB_MISMATCH')
         qualified = _integer(row.get('qualified_time'), 'QUALIFIED_TIME')
         produced = _integer(row.get('production_time'), 'PRODUCTION_TIME')
+        _check_contract_clock(ident, offered, actions, operating, qualified, cfg)
         acceptance = row.get('acceptance_time')
         if produced < qualified or (acceptance is not None and _integer(acceptance, 'ACCEPTANCE_TIME') < produced):
             raise ValueError('QUALIFICATION_PRODUCTION_ACCEPTANCE_ORDER')
@@ -553,6 +573,8 @@ def audit(root, manifest, result):
                 raise ValueError('QUALITY_REJECTION_MUST_PRESERVE_FAILED_ACCEPTANCE')
             if native['state'] != 'refunded' or 'refund' not in actions or row.get('collection_time') is not None:
                 raise ValueError('REJECTED_DELIVERY_MUST_REFUND_FUNDED_CUSTOMER')
+            _check_contract_clock(ident, offered, actions, operating, qualified, cfg,
+                                  refund_due=produced + _integer(cfg.get('acceptance_hours'), 'ACCEPTANCE_HOURS', positive=True))
             continue
         if fresh.get('accepted') is not True or acceptance is None or 'prepare' not in actions:
             raise ValueError('INDEPENDENT_USEFUL_OUTPUT_NOT_ACCEPTED')
@@ -565,6 +587,8 @@ def audit(root, manifest, result):
                 raise ValueError('DELIVERY_RECEIPT_RECOMPUTATION_MISMATCH:' + field)
         if row['offer'].get('scope') != 'complete_outcome' or fresh.get('outcome_scope') != 'complete_outcome':
             raise ValueError('INCOMPLETE_OUTCOME_CANNOT_QUALIFY_COMPLETE_COMMERCE')
+        default = _private_draw(result['seed'], [row['customer_id'], qualified, row['offer']['service_id']], 'nonpayment') < cfg['nonpayment_bps'] / 10000
+        due = qualified + cfg['payment_deadline_hours'] if default else acceptance + cfg['clearing_hours']
         if row['outcome'] == 'SETTLED':
             collection = _integer(row.get('collection_time'), 'COLLECTION_TIME')
             if native['state'] != 'released' or 'release' not in actions or actions['release']['day'] != collection or collection < acceptance:
@@ -575,8 +599,7 @@ def audit(root, manifest, result):
         elif row['outcome'] == 'REFUNDED':
             if native['state'] != 'refunded' or 'refund' not in actions or row.get('collection_time') is not None:
                 raise ValueError('REFUND_MUST_PRESERVE_NATIVE_OBLIGATION')
-            if operating.get((ident, 'REFUND'), {}).get('time') != actions['refund']['day']:
-                raise ValueError('REFUND_EVENT_MISSING_OR_CHANGED')
+            _check_contract_clock(ident, offered, actions, operating, qualified, cfg, refund_due=due)
         elif row['outcome'] == 'PENDING':
             if native['state'] != 'verified' or row.get('collection_time') is not None:
                 raise ValueError('PENDING_ORDER_CANNOT_BE_COLLECTION')
@@ -584,8 +607,6 @@ def audit(root, manifest, result):
             raise ValueError('SUPPORTED_NATIVE_ORDER_OUTCOME_REQUIRED')
         if result.get('complete') and row['outcome'] == 'PENDING':
             raise ValueError('COMPLETED_RUN_HAS_UNRESOLVED_ORDER')
-        default = _private_draw(result['seed'], [row['customer_id'], qualified, row['offer']['service_id']], 'nonpayment') < cfg['nonpayment_bps'] / 10000
-        due = qualified + cfg['payment_deadline_hours'] if default else acceptance + cfg['clearing_hours']
         if row.get('clearing_due_time') != due or (result.get('complete') and row['outcome'] != ('REFUNDED' if default else 'SETTLED')):
             raise ValueError('FROZEN_PAYMENT_SHOCK_OR_CASH_TIMING_CHANGED')
         accepted += 1
@@ -653,6 +674,26 @@ def _check_investments(result, tape, orders):
             raise ValueError('PRODUCTIVE_INVESTMENT_FORECAST_NOT_SOURCE_BOUND')
         if row['kind'] == 'acquisition' and request['work'].get('terms') != row.get('contract_receipt', {}).get('terms'):
             raise ValueError('ACQUISITION_CONTRACT_TERMS_DIFFER_FROM_FINANCED_WORK')
+        if row['kind'] == 'capacity':
+            work, cfg = request.get('work'), result['config']
+            if not isinstance(work, dict):
+                raise ValueError('CAPACITY_FINANCED_TIMING_TERMS_REQUIRED')
+            lead = _integer(work.get('lead_hours'), 'CAPACITY_FINANCED_LEAD', positive=True)
+            duration = _integer(work.get('duration_hours'), 'CAPACITY_FINANCED_DURATION', positive=True)
+            units = _integer(work.get('units_per_day'), 'CAPACITY_FINANCED_UNITS', positive=True)
+            if (lead != _integer(cfg.get('capacity_lead_hours'), 'FROZEN_CAPACITY_LEAD', positive=True)
+                    or duration != _integer(cfg.get('capacity_duration_hours'), 'FROZEN_CAPACITY_DURATION', positive=True)
+                    or units != 1):
+                raise ValueError('CAPACITY_TERMS_DIFFER_FROM_FROZEN_SUPPLIER_CONTRACT')
+            if (request.get('id') != row.get('id') or request.get('kind') != 'capacity_contract'
+                    or _integer(request.get('amount'), 'CAPACITY_FINANCED_COST', positive=True) != cost
+                    or _integer(request.get('day'), 'CAPACITY_FINANCED_PURCHASE_TIME') != moment
+                    or _integer(row['funding_receipt'].get('day'), 'CAPACITY_RECEIPT_PURCHASE_TIME') != moment
+                    or _integer(reserve['day'], 'CAPACITY_NATIVE_RESERVE_TIME') != moment
+                    or _integer(finish['day'], 'CAPACITY_NATIVE_INVOICE_TIME') != moment):
+                raise ValueError('CAPACITY_PURCHASE_NOT_BOUND_TO_NATIVE_INVOICE')
+            if activation != moment + lead or _integer(expiry, 'CAPACITY_EXPIRY', positive=True) != activation + duration:
+                raise ValueError('CAPACITY_LIFETIME_DIFFERS_FROM_FINANCED_CONTRACT')
     for order in orders.values():
         day = order['qualified_time'] // 24
         qualified_daily[day] = qualified_daily.get(day, 0) + 1

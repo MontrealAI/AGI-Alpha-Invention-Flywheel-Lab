@@ -1,0 +1,25 @@
+{
+  "schema": "agi-alpha/performance016-root-source-review/v1",
+  "reviewed_utc": "2026-10-31T00:06:11.397412+00:00",
+  "reviewer": "root, integration owner; same-session/model review, not external certification or formal GitHub approval",
+  "source_files": {
+    "commercial/ledger.py": "59a974314705012674d7e196a210a9c9379508c72787503f5261514a9b6e97ed",
+    "adaptive_enterprise/account.py": "d8a64a593731ca956b96794cbfb790b02cfbc381c8cfabc900a6b11fd1695ab2",
+    "tests/test_connected_manifest_validation.py": "9ef1c04092b59ad90bf9bc9781d629a7b1fca27232fd51115117be85abcb08ef",
+    "scripts/release_connected014.py": "184d6fbd9e4767dd8efbb69621ccfc3920a609fef5e45e07f4e41652d2fb82bf",
+    ".github/workflows/connected014-release.yml": "f6936c77641080283df60c7c3ab626ae459362ef9c6af3a5612953f34487c657",
+    "tests/test_connected_release.py": "60bc28a5e4e8e714c7dedb1fc97deb31c51bb22e26b8aa0764eeb8ea1b0d79f4"
+  },
+  "result": "NO_BLOCKING_FINDING_IN_REVIEWED_DIFF",
+  "financial_checks": [
+    "Complete native replay and public audit result interface retained; fallback service schemas retain old second qualification.",
+    "Adaptive authority reused only within one complete audit, with accepted-ID equality, all bound input/artifact/receipt reads and cached/fresh triple equality. Returned parsed data detached; small metadata copied.",
+    "Caller config copied before replay; final manifest digest and native config pinned, current source checked before/after. No finance.py/journal/WAL/rejection/recovery modification."
+  ],
+  "failure_preservation_checks": [
+    "Outer released source identity and rederived freeze/tasks govern fixed allowlist; only canonical service-input JSON paths and frozen source/registered-world records.",
+    "Regular nonsymlink/nlink1/stable file reads, hashes, caps, unsafe/private member rejection and CRC precede final promotion; quarantine is not uploaded.",
+    "UNQUALIFIED_NOT_RESUME, no coherent-cut attestation; no Account reopen/audit/rerun; original failure survives diagnostic errors, cleanup CPU remains charged."
+  ],
+  "validation_scope": "Read-only source review; no duplicate local test or business run by root. Source-bound writer test receipts, independent journal_safety review and all fresh exact-head/main/released-operation gates remain required. Timing/source candidate distinctions must remain explicit."
+}

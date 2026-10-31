@@ -68,16 +68,16 @@ class ConnectedEvidenceChecks(unittest.TestCase):
         investments = [{'plan_id': 'earned-plan', 'kind': 'acquisition', 'cost': purchase['invoice_microUSD'],
                         'purchased_time': 0, 'activation_time': 48, 'expiry_time': 552}]
         state = book.export()
-        self.assertGreater(check_channels(state, investments, buyers)['paid_exposures_checked'], 0)
+        self.assertGreater(check_channels(state, investments, buyers, contracts=terms, seed=314)['paid_exposures_checked'], 0)
         changed = copy.deepcopy(state)
         day = next(k for k, v in changed['exposures_by_day'].items() if v['exposures'])
         changed['exposures_by_day'][day]['exposures'].append(changed['exposures_by_day'][day]['exposures'][0])
         with self.assertRaisesRegex(ValueError, 'DOUBLE_COUNT'):
-            check_channels(changed, investments, buyers)
+            check_channels(changed, investments, buyers, contracts=terms, seed=314)
         changed = copy.deepcopy(state)
         changed['instances']['earned-plan']['expiry_day'] = 2
         with self.assertRaisesRegex(ValueError, 'LEAD_OR_DURATION'):
-            check_channels(changed, investments, buyers)
+            check_channels(changed, investments, buyers, contracts=terms, seed=314)
 
 
 class ConnectedEndToEndVerification(unittest.TestCase):

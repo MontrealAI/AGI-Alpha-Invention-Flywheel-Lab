@@ -3,9 +3,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path, PurePosixPath
 import re
+import resource
 import shutil
 import stat
 import subprocess
@@ -15,6 +17,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 LIMIT = 256_000_000
+OPERATING_CPU_ENVELOPE_SECONDS = 2400
 PAPERS = ('PAPER.pdf', 'PAPER.tex', 'index.html', 'REPORT.md', 'PUBLICATION.json', 'PDF_QA.json')
 REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.yml', 'adaptive012.yml', 'commercial010.yml')
 CONDITIONAL_WORKFLOWS = {'measurement009.yml':('.github/workflows/measurement009.yml', 'campaign/next-009/', 'inventions/measurement009/', 'research/next009/', 'verification/next009/', 'docs/next009/', 'evidence/next009/')}
@@ -28,6 +31,21 @@ def read(path):
 
 def write(path, value):
     Path(path).write_text(json.dumps(value, indent=2, sort_keys=True)+'\n')
+
+def cpu_usage():
+    own, children = resource.getrusage(resource.RUSAGE_SELF), resource.getrusage(resource.RUSAGE_CHILDREN)
+    return {'self_user':own.ru_utime, 'self_system':own.ru_stime,
+            'children_user':children.ru_utime, 'children_system':children.ru_stime}
+
+def cpu_delta(before, after):
+    keys = ('self_user', 'self_system', 'children_user', 'children_system')
+    values = {key:after[key]-before[key] for key in keys}
+    if any(not math.isfinite(value) or value < 0 for value in values.values()):
+        raise ValueError('MONOTONIC_KERNEL_CPU_COUNTERS_REQUIRED')
+    own = values['self_user']+values['self_system']
+    children = values['children_user']+values['children_system']
+    return {'self_cpu_seconds':own, 'children_cpu_seconds':children,
+            'total_measured_cpu_seconds':own+children, 'kernel_cpu_deltas_seconds':values}
 
 def commit(value):
     if not re.fullmatch('[0-9a-f]{40}', value):
@@ -315,12 +333,112 @@ def download(directory, receipt_path, source_commit, repository):
     write(receipt_path, receipt)
     return receipt
 
+def failure_checkpoint(operation, output, source_commit, source_sha256):
+    """Preserve bounded public diagnostics without auditing or reopening accounts."""
+    from connected_enterprise.runner import read_freeze, tasks
+    operation, output = Path(operation).absolute(), Path(output).absolute()
+    if any(path.is_symlink() for path in [operation, *operation.parents, output, *output.parents]):
+        raise ValueError('UNSYMLINKED_FAILURE_CHECKPOINT_REQUIRED')
+    captured = {}
+    def read_member(name, optional=False):
+        relative = PurePosixPath(name)
+        if (not name or relative.is_absolute() or '..' in relative.parts or '\\' in name
+                or '.git' in relative.parts or '.sqlite' in name or name.endswith('.adaptive-simulation-key')):
+            raise ValueError('UNSAFE_OR_PRIVATE_FAILURE_MEMBER')
+        if name in captured:
+            return captured[name]
+        path = operation.joinpath(*relative.parts)
+        if any(part.is_symlink() for part in [path, *path.parents]):
+            raise ValueError('UNSYMLINKED_FAILURE_MEMBER_REQUIRED')
+        if not path.exists() and optional:
+            return None
+        with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), 'rb') as stream:
+            before = os.fstat(stream.fileno())
+            if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size > 32_000_000:
+                raise ValueError('BOUNDED_REGULAR_FAILURE_MEMBER_REQUIRED')
+            raw = stream.read(32_000_001)
+            after = os.fstat(stream.fileno())
+        if ((before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns, before.st_nlink, before.st_mode)
+                != (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns, after.st_nlink, after.st_mode)
+                or len(raw) != before.st_size):
+            raise ValueError('FAILURE_MEMBER_CHANGED_DURING_CAPTURE')
+        captured[name] = raw
+        return raw
+    frozen_raw = read_member('FROZEN.json')
+    frozen = read_freeze(operation)
+    if json.loads(frozen_raw) != frozen or frozen['source']['sha256'] != source_sha256:
+        raise ValueError('FAILURE_CHECKPOINT_RELEASE_SOURCE_MISMATCH')
+    registered = [row['id'] for row in tasks(frozen['protocol'])]
+    if (not 1 <= len(registered) <= 1000 or len(registered) != len(set(registered))
+            or any(not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,159}', name) for name in registered)):
+        raise ValueError('BOUNDED_REGISTERED_FAILURE_WORLDS_REQUIRED')
+    archive, candidate = output/'failed-operation-keyfree.zip', output/'.failed-operation-candidate.zip'
+    if archive.exists() or candidate.exists():
+        raise FileExistsError('NEW_FAILURE_CHECKPOINT_REQUIRED')
+    files, missing, total = {}, [], 0
+    with zipfile.ZipFile(candidate, 'x', compression=zipfile.ZIP_STORED) as zipped:
+        def include(name, expected=None, optional=False):
+            nonlocal total
+            if name in files:
+                if expected is not None and files[name]['sha256'] != expected:
+                    raise ValueError('FAILURE_MEMBER_BINDING_COLLISION')
+                return
+            raw = read_member(name, optional)
+            if raw is None:
+                missing.append(name)
+                return
+            if len(files) >= 10000 or total + len(raw) > LIMIT:
+                raise ValueError('BOUNDED_REGULAR_FAILURE_MEMBER_REQUIRED')
+            actual = hashlib.sha256(raw).hexdigest()
+            if expected is not None and actual != expected:
+                raise ValueError('FAILURE_MEMBER_HASH_MISMATCH')
+            zipped.writestr(name, raw)
+            files[name] = {'sha256':actual, 'bytes':len(raw)}
+            total += len(raw)
+        for name in ('FROZEN.json', 'SERVICES.json', 'PROGRESS.json', 'REPORT.json', 'COMPLETE.json', 'PACKAGE_AUDIT.json'):
+            include(name, optional=name not in {'FROZEN.json', 'SERVICES.json'})
+        services = json.loads(captured['SERVICES.json'])
+        from adaptive_enterprise.instruments import _validate_manifest
+        _validate_manifest(operation/'source', services)
+        if any(frozen['source']['files'].get(name) != expected for name, expected in services['source_hashes'].items()):
+            raise ValueError('FAILURE_SERVICE_SOURCE_BINDING_MISMATCH')
+        for name, expected in frozen['source']['files'].items():
+            include('source/'+name, expected)
+        job_fields = {'id','service_id','accepted','work_keys','input','input_sha256','artifact','artifact_sha256','receipt','receipt_sha256'}
+        seen = set()
+        for job in services['jobs']:
+            if (not isinstance(job, dict) or set(job) != job_fields or not isinstance(job.get('id'), str)
+                    or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,159}', job['id']) or job['id'] in seen
+                    or type(job.get('accepted')) is not bool):
+                raise ValueError('BOUND_FAILURE_SERVICE_JOB_REQUIRED')
+            seen.add(job['id'])
+            for field, filename in (('input','input.json'), ('artifact','artifact.json'), ('receipt','acceptance.json')):
+                if (job[field] != 'service-inputs/'+job['id']+'/'+filename
+                        or not isinstance(job[field+'_sha256'], str) or not re.fullmatch('[0-9a-f]{64}', job[field+'_sha256'])):
+                    raise ValueError('CANONICAL_FAILURE_SERVICE_PATH_REQUIRED')
+                include('source/'+job[field], job[field+'_sha256'])
+        for ident in registered:
+            for name in ('RESULT.json', 'STATE.json', 'AUDIT.json', 'GROWTH.json'):
+                include('worlds/'+ident+'/'+name, optional=True)
+        checkpoint = {'schema':'agi-alpha/connected014-failure-checkpoint/v1',
+            'scope':'UNQUALIFIED_FAILURE_CHECKPOINT_NOT_RESUME_AUTHORITY', 'source_commit':source_commit,
+            'source_sha256':source_sha256, 'frozen_sha256':frozen['sha256'], 'registered_world_ids':registered,
+            'consistent_cut':'NOT_ATTESTED; individual file bytes are hash-bound; no financial or operating audit performed.',
+            'files':files, 'missing_optional_files':missing}
+        zipped.writestr('FAILURE_CHECKPOINT.json', json.dumps(checkpoint, sort_keys=True, separators=(',', ':'), allow_nan=False))
+    with zipfile.ZipFile(candidate) as zipped:
+        checked_members(zipped)
+    candidate.replace(archive)
+    return {'path':archive.name, 'sha256':digest(archive), 'bytes':archive.stat().st_size,
+            'files':len(files), 'scope':checkpoint['scope'], 'consistent_cut':checkpoint['consistent_cut']}
+
 def operate_download(directory, output, source_commit, timeout, actual_release_download=False):
     directory, output = Path(directory).resolve(), Path(output).resolve()
     manifest = verify_assets(directory, source_commit)
     if output.exists() or any(path.is_symlink() for path in [output, *output.parents]):
         raise ValueError('NEW_UNSYMLINKED_DOWNLOADED_OPERATION_REQUIRED')
     output.mkdir(parents=True)
+    cpu_start, wall_start = cpu_usage(), time.monotonic()
     source = output/'source'
     with zipfile.ZipFile(directory/'connected014-source.zip') as archive:
         archive.extractall(source)
@@ -333,37 +451,85 @@ def operate_download(directory, output, source_commit, timeout, actual_release_d
     receipt = {'schema':'agi-alpha/connected014-downloaded-release-operation/v1', 'accepted':False,
                'source_commit':source_commit, 'source_sha256':manifest['source_sha256'],
                'tag':manifest['tag'], 'actual_release_download':actual_release_download, 'commands':commands,
-               'scope':'SIMULATED_RELEASED_DEFAULT_EXPERIMENT_REPRODUCTION_NOT_UNTOUCHED_CONFIRMATION'}
+               'scope':'SIMULATED_RELEASED_DEFAULT_EXPERIMENT_REPRODUCTION_NOT_UNTOUCHED_CONFIRMATION',
+               'resource_policy':{'cpu_envelope_seconds':OPERATING_CPU_ENVELOPE_SECONDS,
+                   'wall_limit_seconds':timeout, 'measurement':'POSIX kernel RUSAGE_SELF plus RUSAGE_CHILDREN deltas; includes waited descendants.',
+                   'enforcement':'Measured after each completed subprocess and at final receipt; commands retain their live wall bound. This is not live aggregate process-tree CPU preemption.',
+                   'scope':'Run, resume, native/operating audits, key-free packaging, public-copy audit and wrapper work after verified-asset/output-root admission. Initial asset verification and unavailable host/model billing are excluded.'}}
+    def measure(enforce=True):
+        measured = cpu_delta(cpu_start, cpu_usage())
+        measured['wall_seconds'] = time.monotonic()-wall_start
+        measured['cpu_envelope_exceeded'] = measured['total_measured_cpu_seconds'] > OPERATING_CPU_ENVELOPE_SECONDS
+        measured['coverage'] = 'COMPLETED_WAITED_COMMANDS; ACTIVE_COMMAND_CPU_NOT_YET_REAPED' if receipt.get('active_command') else 'COMPLETED_WAITED_PROCESS_TREE'
+        receipt['resources'] = measured
+        if measured['cpu_envelope_exceeded']:
+            receipt['accepted'] = False
+        write(output/'DOWNLOADED_RELEASE_RUN.json', receipt)
+        if enforce and measured['cpu_envelope_exceeded']:
+            raise TimeoutError('DOWNLOADED_OPERATION_CPU_ENVELOPE_EXCEEDED')
+        return measured
+    def command(arguments, cwd, label):
+        receipt['active_command'] = label
+        measure()
+        run_command(arguments, cwd, output/label, deadline, commands)
+        receipt['active_command'] = None
+        measure()
     try:
         operation = output/'operation'
         base = [sys.executable, '-m', 'connected_enterprise']
-        run_command(base+['run', '--output', str(operation)], source, output/'01-run', deadline, commands)
+        command(base+['run', '--output', str(operation)], source, '01-run')
         if read(operation/'FROZEN.json')['source']['sha256'] != manifest['source_sha256']:
             raise ValueError('DOWNLOADED_EXECUTION_SOURCE_CHANGED')
         before = native_state(operation)
-        run_command(base+['resume', '--output', str(operation)], source, output/'02-resume', deadline, commands)
+        command(base+['resume', '--output', str(operation)], source, '02-resume')
         if native_state(operation) != before:
             raise ValueError('DOWNLOADED_RESUME_CHANGED_MONEY_OR_WORK')
-        run_command(base+['audit', '--output', str(operation)], source, output/'03-audit', deadline, commands)
+        command(base+['audit', '--output', str(operation)], source, '03-audit')
         if not read(operation/'PACKAGE_AUDIT.json').get('accepted'):
             raise ValueError('DOWNLOADED_NATIVE_OPERATING_AUDIT_REJECTED')
+        operating_archive = output/'downloaded-operation-keyfree.zip'
+        candidate_archive = output/'.downloaded-operation-candidate.zip'
+        command(base+['package', '--output', str(operation), '--archive', str(candidate_archive)], source, '04-package-actual-operation')
+        operating_public = output/'downloaded-operation-public'
+        with zipfile.ZipFile(candidate_archive) as archive:
+            checked_members(archive)
+            archive.extractall(operating_public)
+        command(base+['audit', '--output', str(operating_public)], operating_public/'source', '05-actual-operation-public-audit')
+        operating_public_audit = read(operating_public/'PACKAGE_AUDIT.json')
+        if not operating_public_audit.get('accepted') or operating_public_audit.get('source_sha256') != manifest['source_sha256']:
+            raise ValueError('DOWNLOADED_OPERATION_PUBLIC_AUDIT_REJECTED')
+        candidate_archive.replace(operating_archive)
+        receipt['downloaded_operation_package'] = {'path':operating_archive.name, 'bytes':operating_archive.stat().st_size,
+            'sha256':digest(operating_archive), 'scope':'ACTUAL_DOWNLOADED_IMPLEMENTATION_RUN_KEY_FREE_AUDIT_AND_REPRODUCTION_NOT_ACCOUNT_TAKEOVER'}
         public = output/'published-keyfree'
         with zipfile.ZipFile(directory/'connected014-keyfree.zip') as archive:
             checked_members(archive)
             archive.extractall(public)
-        run_command(base+['audit', '--output', str(public)], public/'source', output/'04-released-public-audit', deadline, commands)
+        command(base+['audit', '--output', str(public)], public/'source', '06-released-public-audit')
         if (not read(public/'PACKAGE_AUDIT.json').get('accepted')
                 or read(public/'PACKAGE_AUDIT.json').get('source_sha256') != manifest['source_sha256']):
             raise ValueError('RELEASED_PUBLIC_EVIDENCE_SOURCE_CHANGED')
         receipt.update(accepted=True, completed_resume_financially_unchanged=True,
                        native_and_operating_audit=read(operation/'PACKAGE_AUDIT.json'),
+                       downloaded_operation_public_audit=operating_public_audit,
                        released_public_audit=read(public/'PACKAGE_AUDIT.json'),
                        operating_report=read(operation/'REPORT.json'))
     except BaseException as error:
         receipt['failure'] = {'type':type(error).__name__, 'message':str(error)}
+        try:
+            receipt['failure_checkpoint'] = failure_checkpoint(output/'operation', output, source_commit, manifest['source_sha256'])
+        except BaseException as checkpoint_error:
+            receipt['checkpoint_failure'] = {'type':type(checkpoint_error).__name__, 'message':str(checkpoint_error)}
         raise
     finally:
+        measured = measure(enforce=False)
+        new_cpu_failure = measured['cpu_envelope_exceeded'] and 'failure' not in receipt
+        if measured['cpu_envelope_exceeded']:
+            receipt['accepted'] = False
+            receipt.setdefault('failure', {'type':'TimeoutError', 'message':'DOWNLOADED_OPERATION_CPU_ENVELOPE_EXCEEDED'})
         write(output/'DOWNLOADED_RELEASE_RUN.json', receipt)
+        if new_cpu_failure:
+            raise TimeoutError('DOWNLOADED_OPERATION_CPU_ENVELOPE_EXCEEDED')
     return receipt
 
 def main():
