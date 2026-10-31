@@ -16,9 +16,17 @@ def audit_decisions(root,manifest,result,lifecycle):
     jobs={j['id']:j for j in manifest['jobs']};artifacts={j['id']:read_bound(root,j['artifact'],j['artifact_sha256']) for j in manifest['jobs']}
     events={e['time']:(i,e) for i,e in enumerate(result['events']) if e['kind']=='BUSINESS_DECISION'}
     states=0;quotes=0;no_bids=0;selected_investments=set()
+    if 'sequence' in cfg['strategic_allocation_policy'] and 'channel_menu_policy' in cfg:
+        from .channels import ChannelBook
+        sequence_book=ChannelBook(result['seed'],cfg['channels'])
     for moment in range(0,cfg['horizon_days']*24,24):
         wrappers=[w for w in actions.values() if w['time']==moment]
         if len(wrappers)!=1:raise ValueError('UNIQUE_JOINT_PLANNING_DAY_REQUIRED')
+        if 'sequence' in cfg['strategic_allocation_policy'] and 'channel_menu_policy' in cfg:
+            for investment in result['investments']:
+                if investment['kind']=='acquisition' and investment['purchased_time']==moment-24:
+                    sequence_book.purchase(investment['contract_receipt']['contract_id'],(moment-24)//24,investment['plan_id'])
+            sequence_book.expose(moment//24,result['buyers'])
         wrapper=wrappers[0];record=wrapper['allocation'];key=digest(record);day=moment//24
         if wrapper['id']!=key or actions.get(key)!=wrapper:raise ValueError('JOINT_ALLOCATION_ID_CHANGED')
         snapshot=record['observation'];charges=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')=='maintenance-'+str(day)]
@@ -70,6 +78,13 @@ def audit_decisions(root,manifest,result,lifecycle):
             if forecast>cfg['capacity_price']:
                 contract={'price':cfg['capacity_price'],'lead_hours':cfg['capacity_lead_hours'],'duration_hours':cfg['capacity_duration_hours']}
                 expected_investments.append(investment_option('capacity-'+str(day),'capacity',cfg['capacity_price'],int(forecast-cfg['capacity_price']),risk['scenarios'],day,contract))
+        if 'sequence' in cfg['strategic_allocation_policy']:
+            from .sequence_planning import sequence_options
+            expected_investments=sequence_options(cfg,moment,snapshot,operating,
+                {ident:{'job':job,'artifact':artifacts[ident]} for ident,job in jobs.items()},
+                used,previous_investments,buyers,contacts,failed,risk['scenarios'],
+                sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in record['deliveries']),
+                channel_state=sequence_book.export() if 'channel_menu_policy' in cfg else None)
         if record['investments']!=expected_investments:raise ValueError('INVESTMENT_HYPOTHESIS_NOT_FROM_PUBLIC_HISTORY')
         for delivery,(ident,job) in zip(record['deliveries'],expected_deliveries):
             selection=delivery['selection'];problem=selection['problem'];offer=problem['offer'];service=job['service_id'];human=cfg['human_comparator'][service];anchor=int((human['hours']*human['loaded_usd_hour']+2)*1_000_000)
@@ -91,7 +106,18 @@ def audit_decisions(root,manifest,result,lifecycle):
                 if not prior:raise ValueError('MEMORY_NOT_ACQUIRED_BEFORE_PLANNING')
         rederive_actions(record);states+=record['decision']['states_evaluated']
         selected={o['execution']['customer_id']:o for o in record['decision']['selected_options'] if o['kind']=='delivery'}
-        investments={o['id'] for o in record['decision']['selected_options'] if o['kind']!='delivery'};selected_investments|=investments
+        investments={o['id'] for o in record['decision']['selected_options'] if o['kind']!='delivery'}
+        if 'sequence' in cfg['strategic_allocation_policy']:
+            picked=[o for o in record['decision']['selected_options'] if 'first_investment' in o['execution']]
+            if len(picked)>1:raise ValueError('ONE_NATIVE_SEQUENCE_FIRST_ACTION_REQUIRED')
+            investments=set()
+            for option in picked:
+                ident=option['id'] if 'channel_menu_policy' in cfg and option['execution']['first_investment']=='acquisition' else ('channel-' if option['execution']['first_investment']=='acquisition' else 'capacity-')+str(day)
+                native=next((i for i in result['investments'] if i['id']==ident),None)
+                expected_net=sum(risk['scenarios'][k]*(option['future_net_cash'][k]-option['upfront_cost']) for k in risk['scenarios'])//10000
+                if native is None or native['cost']!=option['upfront_cost'] or native['predicted_net']!=expected_net:raise ValueError('SEQUENCE_FIRST_NATIVE_INVOICE_CHANGED')
+                investments.add(ident)
+        selected_investments|=investments
         if events[moment][1]['channel_selected']!=(any(o['kind']=='acquisition' for o in record['decision']['selected_options']) if 'channel_menu_policy' in cfg else ('channel-'+str(day) in investments)) or events[moment][1]['capacity_selected']!=('capacity-'+str(day) in investments):raise ValueError('SELECTED_INVESTMENT_FLAGS_CHANGED')
         choices=[d for d in result['decisions'] if d.get('kind') in {'offer','outside_choice'} and d['time']==moment]
         if [d['customer_id'] for d in choices]!=needs:raise ValueError('EVERY_OBSERVED_NEED_REQUIRES_ONE_JOINT_DECISION')

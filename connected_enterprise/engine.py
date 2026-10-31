@@ -186,6 +186,18 @@ def _prepare_plan(state,account,jobs):
             channel_invoice=sum(o['upfront_cost'] for o in prepared['channel_purchases'])
         else:prepared['channel_purchase']='channel-'+str(day) in chosen
         prepared['capacity_purchase']='capacity-'+str(day) in chosen
+        if 'sequence' in cfg['strategic_allocation_policy']:
+            picks=[o for o in joint['allocation']['decision']['selected_options'] if 'first_investment' in o['execution']]
+            if len(picks)>1:raise ValueError('ONE_FIRST_SEQUENCE_INVESTMENT_REQUIRED')
+            prepared['channel_purchase']=bool(picks and picks[0]['execution']['first_investment']=='acquisition')
+            prepared['capacity_purchase']=bool(picks and picks[0]['execution']['first_investment']=='capacity')
+            if picks:
+                # Receipt value is only a disclosed planning hypothesis, not income.
+                weights=cfg['strategic_allocation_policy']['risk']['scenarios']
+                net=sum(weights[k]*(picks[0]['future_net_cash'][k]-picks[0]['upfront_cost']) for k in weights)//10000
+                if net<=0:raise ValueError('POSITIVE_SEQUENCE_EXPECTATION_REQUIRED')
+                prepared['channel_predicted_net']=prepared['capacity_predicted_net']=net
+
         liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-cfg['capacity_price']*bool(prepared['capacity_purchase'])
     for b in candidates:
         if draw(seed,[day,b['id']],'need')>=cfg['arrival_bps']/10000:continue
@@ -298,7 +310,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 if 'channel_menu_policy' in cfg:
                     for option in p.get('channel_purchases',[]):
                         contract_id=option['execution']['contract_id'];terms=cfg['channels'][contract_id];invoice=terms['price_microUSD']+terms['support_microUSD'];ident=option['id']
-                        predicted=next(iter(option['future_net_cash'].values()))-invoice
+                        predicted=(sum(cfg['strategic_allocation_policy']['risk']['scenarios'][k]*(option['future_net_cash'][k]-invoice) for k in cfg['strategic_allocation_policy']['risk']['scenarios'])//10000 if 'first_investment' in option['execution'] else next(iter(option['future_net_cash'].values()))-invoice)
                         receipt=cost(ident,invoice,t,'acquisition_contract',{'terms':terms,'contract_id':contract_id,'investment':'expiring_contact_access'},earned_only=True,expected_net=predicted)
                         if receipt:
                             purchase=book.purchase(contract_id,day,receipt['plan_id']);state['investments'].append({'id':ident,'plan_id':receipt['plan_id'],'kind':'acquisition','contract_id':contract_id,'purchased_time':t,'activation_time':purchase['activation_day']*24,'expiry_time':purchase['expiry_day']*24,'cost':invoice,'funding_receipt':receipt,'contract_receipt':purchase,'predicted_net':predicted});_event(state,t,'INVESTMENT',ident,source_plan_id=receipt['plan_id'],investment_kind='acquisition',contract_id=contract_id)

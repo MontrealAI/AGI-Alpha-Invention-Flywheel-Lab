@@ -1,109 +1,38 @@
-# Current connected-enterprise integration
+# AGI ALPHA Flywheel: developer instructions
 
-The owner's complete execution mandate of 30 October 2026 controls current work. The [completion-015 allocation](campaign/completion-015/ALLOCATION.json) is a distinct bounded increment; it does not extend connected-014 or reopen retired accounts. Preserve active PR #26 ownership and all original experiment identities. Follow the [fresh comparison registration](campaign/completion-015/PREREGISTRATION.json). Older readiness-only merge/release stops are superseded by the owner's explicit direction to complete normal qualified integration and release; required repository reviews, protections and genuine action-time approvals remain binding.
+## Current mandate
 
-The single current operating path is `python3 -m connected_enterprise run --output /absolute/new/enterprise`, with the start/resume/audit procedures in [the operator guide](docs/connected014/OPERATOR.md). Reuse the canonical mandatory adaptive `Account` through `JournalAccount`; do not create a parallel financial ledger or default runtime. Bind every reservation to current audited state, source and ownership. Source-bound incurred-cost and later-obligation reconciliation is required before releasing commitments. Unsafe `cancel_investment` histories fail closed at execution, audit and recovery. Preserve sealed operating state, write-ahead intents, original failures and source-bound evidence.
+Build publicly in this repository: visible branches/PRs, GitHub Actions, qualified integration and releases, then an actual released-system run. Check current main, exact candidate source, current owners and existing work before changing anything; old completed assignments are not active ownership. Use the canonical `AGENTS.md`, not a competing `Agent.md`.
 
-Current work permits simulated commerce using existing resources and public, non-personal inputs. It grants no new real spending, paid calls, outreach, private-data access, financial transactions, persistent credentials or deployment. Unknown host/model billing remains an explicit cost envelope. Fixed-capability profitable commerce, growth, invention and observed revenue require separate claims. A projection cannot fund a native account. Preserve the trusted README and main historical resources; do not rewrite original evidence to fit new policies.
+Read [the developer/mechanism guide](docs/harness/DEVELOPER_GUIDE.md), [operator guide](docs/connected014/OPERATOR.md) and [resource policy](docs/harness/RESOURCE_POLICY.md). These current instructions supersede older blanket failure-file retention, stale campaign renewal gates and obsolete owner labels. Historical source snapshots, outcomes and permissions still describe their original scope.
 
-The preserved adaptive/connected policy documents at integration input `fee293f6` are byte-bound in [historical/composition-015/MANIFEST.json](historical/composition-015/MANIFEST.json). Historical allocations and reported outcomes below retain their original scope and do not authorize new work.
+## Learn, consolidate, delete
 
-## Preserved laboratory instructions
+- After an attempt, keep a short **tried → outcome → why (or unknown) → next/avoid** lesson. Consolidate repeated lessons by failure class; improve the fix, regression or applicability rule rather than accumulating transcripts.
+- Delete redundant terminal failure logs, ZIPs, dumps and intermediate output from the current Git tree after extracting the useful lesson. Keep useful code even when one experiment loses. Do not replace deleted bulk with another archive or an ever-growing failure catalogue.
+- Keep working mechanisms, compact successful results, reproducible inputs/procedures, acceptance checks and essential source provenance. Preserve complete accounting: incurred costs including failed attempts, refunds, liabilities, reservations and uncertainty. Do not erase losses, cherry-pick seeds or relabel failure as success.
+- Before deletion, check actual readers, manifests, source maps, recovery needs and tests. A historical hash mention alone is not a permanent storage requirement: point descriptive historical references to a pinned commit. Migrate genuine executable dependencies safely; never claim removed inputs remain self-contained.
+- Preserve live/needed recovery state, keys and account authority. Use normal recoverable commits; do not rewrite Git history, purge remote artifacts/releases irreversibly or change access without the required authorization. Never publish secrets.
+- Keep [lean lessons](docs/packaging/LEAN_EXPERIMENTS.md) concise. Review retained material by usefulness, applicability and replacement value, pruning obsolete duplicates. Finite memory cannot retain infinite information: the goal is continued learning through compression and selective retention, not unlimited lossless memory. This policy is not a claim that automatic memory compaction is implemented.
 
-# Instructions for the invention laboratory
+## Execute safely and quickly
 
-## Mission priority
+Use existing authorized resources and actual platform limits; do not invent CPU/memory/disk grants or repeated renewal approvals for ordinary authorized engineering. Keep experiments finite and preregister their comparisons, stopping conditions and costs. Preserve security, resource-safety and qualification guards; do not retroactively turn an old limit failure into a pass. No extra purchases, paid external services, real transactions, outreach, private-data access or credential changes without appropriate authority.
 
-SUPER IMPORTANT: BLUE SKY. IMPORTANT: Beyond-Human Foresight.
+The operating entry point is `python3 -m connected_enterprise run --output /absolute/new/enterprise`. Reuse `JournalAccount` and the mandatory adaptive `Account`, not another ledger. Audit current cash and obligations and reserve atomically before every paid action. Future profits are not spendable cash. Resume/upgrade authenticated accounts without reseeding, copying balances or discarding liabilities. Audit and recovery must reject unsafe histories independently of the producer.
 
-Read README.md and CHARTER.md. Build towards an invention-automation machine whose verified inventions help discover, construct and economically enable successors. Do not replace that objective with infrastructure completion, publication output or a familiar service merely because it is easy to implement.
+## Use strong mechanisms; earn claims
 
-## Before a campaign
+Start at the frontier of relevant knowledge: consult current primary sources and the strongest proven methods, reuse established results and work on the actual gap rather than rediscovering basics. Keep research bounded and decision-relevant, not an endless literature-screening gate. Use competent strong comparators and disclose assumptions and unknowns.
 
-Identify the authorized purpose, permissions, resource allocation, existing commitments, exposed evidence and inherited claim history. A new repository does not replenish a previously exhausted allocation. If a new campaign allocation is absent, prepare a bounded proposal and do only independently permitted work; do not silently invent a budget.
+Adopt strong mechanisms from established theory, economics, engineering and successful historical practice without demanding a new research proof for each adoption. Cite the basis, check assumptions/applicability and test correct implementation. Game-theoretic optimality is conditional on its model, information and incentives; historical success supports use, not universality. Ordinary profitable activity does not require a novel invention advantage. Reserve new research proofs for genuinely new claims beyond established knowledge and expected human foresight. Routine correctness, security, cash-conservation and truthful outcome checks still apply; they are not a new research project at every step.
 
-Read relevant existing implementations and failed experiments. Reuse only what the selected experiment needs. Preserve exact source provenance, applicable licenses, regressions and original outcomes. Do not import an entire platform or build a competing financial ledger.
+Use structural mapping, executable strategy construction/composition, evidence-grounded criticism, independent verification, adjudicated repair and applicability-aware retained procedures when they improve a real decision or outcome. See the guide for actual call paths, optional policies and limitations. A named module, template, mock or developer-written repair is not demonstrated autonomous discovery. When claiming a new retained-method advantage, compare on fresh work against equal-content ordinary reuse and strong conventional controls; include acquisition and verification costs. Do not impose that research claim as a prerequisite for using an established mechanism. Keep the incumbent when a relevant comparison shows it wins. Do not force invention or fixed R&D spending into profitable commerce.
 
-Compare at least three materially different consequential possibilities before flagship selection. Do not force selection when the evidence instead justifies a discriminating probe. Treat unavailable models, data and human review as unavailable, not as simulated substitutes secretly counted as real.
+Report commercial success, invention, retained-method advantage and physical/scientific expansion separately. Transformational work must remove a consequential constraint and validate the enabling instrument; routine repair is not automatically transformation. Optimality claims apply only to the tested feasible set, information and assumptions, never to all strategies or markets.
 
-## Discovery and construction
+## Objective and completion
 
-Start from an outcome and a potentially removable restriction, not a list of agent roles. Separate ends, hard constraints, uncertain environmental hypotheses and inherited design choices. Question the classification itself when warranted.
+The objective is **US$3 billion trailing-year profit after complete modeled costs**, not revenue, cash, valuation or cumulative multi-year profit. Separate native executed/audited simulation, conditional projections and actual commerce. State horizon, capital, cost scope, uncertainties and outstanding obligations; unknown model/host billing remains unknown. Simulation does not establish actual customers or revenue, and the objective is not guaranteed.
 
-Investigate future capability changes, complementary technologies, changing bottlenecks, competing responses and newly feasible production arrangements. Work backward from possible futures to an instrument that can be tested now. Sources need dates and provenance; forecasts need resolution conditions. A forecast is not evidence that the predicted event has happened.
-
-A structural transfer must specify the mapping, its assumptions, what fails to transfer, and the adaptation. Label who supplied the insight: user, developer, model, search or inherited mechanism. Hand-supplied novelty must not be reported as autonomous discovery.
-
-Construct an executable means and a decisive experiment together. A criticism must carry evidence or a reproducible test. Do not reward unsupported objections. Turn verified defects into repairs, missing-capability targets, changed formulations or stopping decisions.
-
-Allow bounded complementary changes and temporary development regressions. Do not deploy an incomplete combination. Retain a stronger conventional method when it wins. Reinvest effort based on an observed bottleneck, a decisive unknown or an enabling opportunity—not the existence of unused code.
-
-## Evaluation
-
-Maintain a development lane for rapid iteration and a separate confirmation lane for claims. Freeze candidate, task population, comparators, outcome requirements, protocol, resource rules and thresholds before confirmation. The verifier may not modify the candidate. Confirmation results consumed by development cease to be fresh. Shared authors/models/libraries/host are disclosed; separate roles are not independent external certification.
-
-Strong controls receive the same authorized information and tools. Separate within-frame optimization from formulation change; changing a permission or the goal is not an improvement under the original comparison. Keep final correctness checks in every arm even when extra adversarial search is disabled.
-
-Keep campaign-wide claim/error accounting and exposure history. Do not stop a fixed-sample test opportunistically, omit failures, recycle holdouts or reset the error budget by changing names. Do not assert statistical confirmation when the design only supports an engineering comparison.
-
-Evaluators can be improved through separately validated, authorized changes. Never let a candidate activate a more favourable evaluator to approve itself. UNKNOWN stays UNKNOWN.
-
-Measure actual quantities where possible. Identify assumptions, ranges and missing measurements. Include discovery, rejected attempts, construction, adaptation, verification, integration, maintenance, buyer participation, acquisition, support and obligations where applicable. Do not count theoretical customer savings as revenue. An idealized market or custodian remains a model assumption.
-
-## Primary commercial benchmark — fully autonomous frontier-AI enterprise versus human service
-
-For commercial feasibility, **first compare our competently configured, end-to-end autonomous frontier-AI operation with a competent human-delivered complete service** at realistic human speed and fully loaded wages for the same acceptance, data rights, quality, delivery, revisions, support and liability. Frontier AI agents perform research, production, QA/verification, testing, corrections, acquisition, service/support and development/maintenance. Charge their measured inference, tool, compute, delivery, acquisition-channel, failure, payment and risk costs. **Do not impose an assumed human reviewer, developer, salesperson or support employee on the autonomous agent operation.** A genuinely necessary human escalation makes that case a hybrid separately reported arm—or an unaccepted autonomous job—not invisible free labor.
-
-Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md) for the revised v2 fully autonomous costing method and explicit hypothetical examples. Model token price is one cost, not proof of accepted delivery; running autonomously is a capability that must be tested. Compare human+AI, other autonomous frontier-AI providers, free/self-service and no launch **secondarily** for price pressure and competitiveness. The inherited-invention versus no-inheritance comparison is a distinct causal claim, not a prerequisite for a viable AI-native service.
-
-## Two distinct flywheels and success criteria
-
-The autonomous **commercial flywheel is independently successful** when the existing competent autonomous agent operation repeatedly fulfills accepted paid work, collected earnings cover *all* costs and obligations, and unrestricted earned cash finances additional profitable service delivery. **Do not require improvements in capability, new inventions, superior AI algorithms, or a negative human-business baseline.** Read [COMMERCIAL_COMPARISON.md](COMMERCIAL_COMPARISON.md), section "Two distinct flywheels".
-
-A separate **capability-improvement invention flywheel** requires verified improvements and fresh causal successor benefit. Track it independently; it can amplify commercial profit but cannot serve as a prerequisite for qualifying a profitable, self-financing autonomous operation. Do not turn a human-vs-AI productivity advantage, simulated receipt, or $40T addressable-market conjecture into claimed cash receipts or actual demand.
-
-
-## Inheritance and economics
-
-A tool passing its original test does not establish successor benefit. Test fresh successor construction against matched no-inheritance and ordinary-reuse controls. Give ordinary reuse the same artifact content when isolating the value of a structured memory or router. Include the cost of acquiring the inheritance.
-
-Do not force every invention to be a profitable standalone product. A shared enabling instrument can be justified by demonstrated downstream contributions. Conversely, speculative future leverage is not earned income or unlimited permission to invest.
-
-Keep technical usefulness, discovery advantage, commercial viability, economic-boundary crossing, financing, investment attractiveness and autonomous operation as separate claims. The complete flywheel needs an evidence-connected chain; historical passes from unrelated projects cannot be assembled into a fictitious single success.
-
-## Lightweight operating discipline
-
-Prefer one runnable experiment and one concise decision record over a new framework. No deployment, CI expansion, dashboard, paper, blockchain, marketplace or agent proliferation unless it removes a measured constraint. Retain necessary integrity and execution controls; speed is not permission to bypass them.
-
-Before adding a component, state the evidence gap it closes. After an experiment, record: outcome, comparison, cost, uncertainty, decision and next discriminating action. Preserve negative evidence. Do not claim to continue in the background unless an actual authorized scheduling mechanism exists.
-
-Keep at most one flagship and two explicitly bounded exploratory alternatives initially. Stop or redirect when a falsifier, resource limit or permission boundary requires it. The mission remains ambitious; evidence, rather than rhetorical intensity, determines the next action.
-
-## Initial permissions
-
-This package authorizes no spending, paid provider calls, outreach, real commerce, credentials/wallet access, financial provisioning, production deployment, release, or modification of another repository. Existing separately granted permissions must be checked at use. No campaign has been launched and no candidate is admitted by these documents.
-## Initial executable tool
-
-`lab.py screen` validates three distinct authored possibilities, emits a hash-bound evidence-gap report, and refuses to claim an admitted cohort without external verification. The example hypotheses are fictional research directions, not a completed opportunity screen. Local unittest checks are engineering tests, not scientific confirmation. Keep the trusted owner README unchanged unless explicitly asked to update it.
-
-## Current commercial execution mandate 30 October 2026
-
-The owner-supplied [commercial mandate](campaign/commercial-010/MANDATE.txt) supersedes founding restrictions that conflict with this explicitly authorized public implementation, qualification, normal merge and release. See [allocation](campaign/commercial-010/ALLOCATION.json). No new spending, paid provider calls, real outreach, payment execution, credentials or modifications to the four foundation repositories are authorized. This commercial lane permits ordinary fixed-capability services; Blue Sky and capability-compounding remain independently evaluated lanes.
-
-Report five independent verdicts: profitable autonomous service; simulated commercial flywheel; observed commercial flywheel; capability-compounding flywheel; Blue Sky enablement. Never impose a global AND. Actual service artifacts on disclosed synthetic work can support conditional SIM success; generated buyers and payments never qualify observed commerce. Invention is optional for commercial success. Apply the reference-v6 clarification recorded by hash in [REFERENCE_V6.json](campaign/commercial-010/REFERENCE_V6.json).
-
-Premium pricing starts near the matched human complete-service cost with a small declared discount. Test higher sustainable prices without anchoring to AI marginal cost. Retain AI savings for profitable earned-funded continuation subject to obligations and liquidity. Source or bound the human comparator, avoid invented overhead, include every failed/rejected/unsold attempt, and disclose unknown host billing via conditional cost sensitivity. CPU seconds are not human hours. Actual necessary human intervention must be measured; do not add hypothetical staff.
-
-Preserve original policy/manifests in historical materializers. Use current operating policy for current work and immutable source snapshots for historical replay; do not regenerate old identities after edits. New evidence is in campaign/commercial-010 and evidence/commercial010. Existing invention engines, adversarial outcomes, scientific failures and published releases remain intact.
-
-The later [autonomous onboarding and strategic pricing adjustment](campaign/commercial-010/ONBOARDING_PRICING_ADJUSTMENT.md) controls price selection: maximize expected complete-cost contribution and sustainable cash growth under strategic buyer/rival responses. Choose the discount and implied win probability jointly, within the human-anchored premium offer range. A fixed five-percent policy is a controlled baseline, not a universal optimum. Separate actual agent-operated onboarding resources, uncertain customer attention/integration friction, and external obligations; one-time costs persist across repeat orders. Any optimality statement is limited to the modeled information and feasible price set.
-
-## Current executed outcome - 30 October 2026
-
-**Commercial 010: CONDITIONAL_SIMULATED_GO.** Actual autonomous production supplied 19,000 synthetic source rows across 19 orders: 16 deliveries passed the separate checker and three orders were rejected. The completed four-arm experiment supports fixed-capability repeated delivery financed by prior unrestricted simulated earnings; invention improvement is not a prerequisite. See the [machine-readable result](campaign/commercial-010/RESULT.json), [browser-readable paper](docs/commercial010/REPORT.md) and [compiled PDF](docs/commercial010/paper.pdf).
-
-Across the 18 qualification-region cases, mean complete modeled profit is **$375.80**, versus **-$123.14** for fixed-discount/original-onboarding control. Cash survives in 18/18 cases; 13/18 individually qualify, while five lose or fail the repeat-funding conditions. Mean earned-funded continuation is 3.06 cycles. Selected first/repeat prices are $139/$121.625. Settled collections per scheduled slot are 73.61%, versus 76.39% for fixed pricing with autonomous onboarding. Conditional participation wins among arrivals are 81.78% versus 84.76%, and collections per win are 96.36% versus 96.49%; see [metric definitions](campaign/commercial-010/METRIC_DEFINITIONS.md). The objective is expected collected complete-cost profit and sustainable cash, not maximum win rate or the highest advertised price.
-
-This result is conditional on the declared $500 setup/$15 cost-unit scenario, the assumed human comparator of four hours first order and 3.5 hours repeat, and unmeasured assurance/trust and customer-friction differences. Host billing and actual buyer demand remain unobserved. Original no-sale results, both interrupted executions, corrupt storage evidence, immutable source versions and the disclosed I/O-only recovery remain preserved; no favorable seed substitution or global five-verdict AND is introduced.
-
-The separate [guarded portfolio 011 report](campaign/commercial-011/REPORT.md) screens 25 services and technically qualifies four within their declared scopes. Its guarded central projection has median $414,092.53 complete-cost profit, 107 earned-funded cycles and 11,302 settled jobs, with 10/10 cash survival over 120 months from $5,000 seed. Scaled jobs are conditional aggregate projections, not individually executed customer deliveries; finite provider-tail terms are stronger successor assumptions. **The $1 billion trailing-year target is reached in 0/90 fresh projection cases by 120 months.** Actual commerce/live revenue, capability-compounding benefit and Blue Sky enablement remain NOT_ESTABLISHED. Publication, merge and release status must follow actual source-matched gates; these results do not assert a future release is already published.
+Completion requires source-matched tests, independent review, normal qualified merge, public release and verified operation from that release—not just a plan, local pass or successful workflow badge. Report blockers exactly and continue independent useful work. Never claim a message was delivered, a task is active, a merge happened or a result is qualified without a receipt. Update concise developer guidance when an implementation or its qualification changes; preserve historical facts without preserving unnecessary bulk.
