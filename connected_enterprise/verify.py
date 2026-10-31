@@ -413,6 +413,7 @@ def check_channels(channels, investments, buyers, *, contracts=None, seed=None):
             raise ValueError('CHANNEL_COMPLETE_CONTRACT_INVOICE_MISMATCH')
         if row['activation_day'] != row['purchased_day'] + terms['lead_days'] or row['expiry_day'] != row['activation_day'] + terms['duration_days']:
             raise ValueError('CHANNEL_CONTRACT_LEAD_OR_DURATION_CHANGED')
+        if 'contract_id' in investor[ident] and investor[ident]['contract_id']!=row['contract_id']:raise ValueError('NATIVE_CHANNEL_CONTRACT_ID_CHANGED')
         if investor[ident]['purchased_time'] != row['purchased_day'] * 24 or investor[ident]['activation_time'] != row['activation_day'] * 24 or investor[ident]['expiry_time'] != row['expiry_day'] * 24:
             raise ValueError('CHANNEL_AND_OPERATING_CLOCK_MISMATCH')
         if row.get('failure_credit_due_microUSD', 0) and purchase.get('failure_credit_collected_microUSD', 0):
@@ -699,6 +700,10 @@ def _check_investments(result, tape, orders):
             raise ValueError('PRODUCTIVE_INVESTMENT_FORECAST_NOT_SOURCE_BOUND')
         if row['kind'] == 'acquisition' and request['work'].get('terms') != row.get('contract_receipt', {}).get('terms'):
             raise ValueError('ACQUISITION_CONTRACT_TERMS_DIFFER_FROM_FINANCED_WORK')
+        if row['kind']=='acquisition' and 'channel_menu_policy' in result['config']:
+            contract_id=row.get('contract_id');terms=result['config']['channels'].get(contract_id)
+            if contract_id not in result['config']['channel_menu_policy']['contract_ids'] or request['work'].get('contract_id')!=contract_id or row.get('contract_receipt',{}).get('contract_id')!=contract_id or terms!=request['work'].get('terms') or request.get('kind')!='acquisition_contract' or request.get('id')!=row['id'] or request.get('amount')!=cost or request.get('day')!=moment or cost!=terms['price_microUSD']+terms['support_microUSD']:
+                raise ValueError('MENU_CHANNEL_NOT_BOUND_TO_NATIVE_INVOICE')
         if row['kind'] == 'capacity':
             work, cfg = request.get('work'), result['config']
             if not isinstance(work, dict):
