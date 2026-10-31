@@ -43,7 +43,7 @@ def source_paths(root):
     if (root/'commercial/verified_delta.py').is_file():
         required={'commercial/service.py','commercial/service_verifier.py',
                   'commercial/verified_delta.py','tests/test_verified_delta044.py',
-                  'scripts/run_verified_delta044.py',
+                  'scripts/run_verified_delta044.py','scripts/demo_verified_delta044.py',
                   'campaign/verified-delta-044/REPORT.md',
                   '.github/workflows/verified-delta044.yml'}
         if any(not (root/name).is_file() for name in required):
