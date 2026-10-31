@@ -20,6 +20,26 @@ jobs:
           python-version: '3.12'
       - run: |
           python -m pip install -r requirements-cycle004.txt -r requirements-perturb006.txt
+      - name: Mandatory isolated battery physics and native qualification
+        env:
+          BATTERY_QUALIFICATION_REQUIRED: '1'
+          PYBAMM_DISABLE_TELEMETRY: 'true'
+        run: |
+          python -m venv "$RUNNER_TEMP/battery040-venv"
+          "$RUNNER_TEMP/battery040-venv/bin/python" -m pip install -r requirements-battery040.txt -r requirements-commercial010.txt
+          "$RUNNER_TEMP/battery040-venv/bin/python" - <<'PYBATTERY'
+          import importlib.metadata, pathlib, unittest
+          for line in pathlib.Path('requirements-battery040.txt').read_text().splitlines():
+              if line and not line.startswith('#'):
+                  name, version = line.split('==')
+                  assert importlib.metadata.version(name) == version, name
+          suite = unittest.TestSuite()
+          for pattern in ('test_battery_service040.py', 'test_pending_battery_native.py'):
+              suite.addTests(unittest.defaultTestLoader.discover('tests', pattern=pattern))
+          assert suite.countTestCases() == 14, 'BATTERY_TEST_INVENTORY_CHANGED'
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.wasSuccessful() and not result.skipped, 'BATTERY_QUALIFICATION_REQUIRED'
+          PYBATTERY
       - name: Source-matched tests and actual connected replay
         run: |
           python -m unittest discover -s benchmarks -p 'test_*.py' -v

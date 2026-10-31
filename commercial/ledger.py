@@ -63,6 +63,9 @@ def read_bound(root, path, expected):
 
 
 def load_jobs(root, manifest):
+    if isinstance(manifest,dict) and manifest.get('schema')=='agi-alpha/pending-battery-research/v1':
+        from connected_enterprise.research_service import load_jobs as research_jobs
+        return research_jobs(root,manifest)
     if isinstance(manifest, dict) and manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
         from adaptive_enterprise.instruments import load_jobs as adaptive_jobs
         return adaptive_jobs(root, manifest)
@@ -174,6 +177,10 @@ class TapeExchange:
             self._restoring = False
 
     def validate(self, task):
+        if self.manifest.get('schema')=='agi-alpha/pending-battery-research/v1':
+            from connected_enterprise.research_service import task as research_task
+            if not isinstance(task,dict) or task.get('job_id') not in self.jobs or task!=research_task(self.jobs[task['job_id']]['job']):raise ValueError('RESEARCH_TASK_CONTRACT_CHANGED')
+            return
         if not isinstance(task, dict) or set(task) != {'scope', 'job_id', 'artifact_sha256', 'receipt_sha256'}:
             raise ValueError('TASK_SCHEMA')
         if task['scope'] != SCOPE or task['job_id'] not in self.jobs:
@@ -184,11 +191,17 @@ class TapeExchange:
 
     def task(self, job_id):
         job = self.jobs[job_id]['job']
+        if self.manifest.get('schema')=='agi-alpha/pending-battery-research/v1':
+            from connected_enterprise.research_service import task as research_task
+            return research_task(job)
         return {'scope': SCOPE, 'job_id': job_id, 'artifact_sha256': job['artifact_sha256'],
                 'receipt_sha256': job['receipt_sha256']}
 
     def check(self, task, artifact):
         self.validate(task)
+        if self.manifest.get('schema')=='agi-alpha/pending-battery-research/v1':
+            from connected_enterprise.research_service import check as research_check
+            return research_check(self.root,self.manifest,self.jobs[task['job_id']]['job'],artifact,self.actions)
         if self.manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
             from adaptive_enterprise.instruments import check_job
             checked = check_job(self.root, self.manifest, self.jobs[task['job_id']]['job'], artifact)
@@ -236,6 +249,7 @@ class TapeExchange:
         if op not in schemas or not isinstance(args, dict):
             raise ValueError('ACTION_ARGUMENTS_REQUIRED')
         optional = {'source_tx', 'crash'} if op == 'event' else {'terms_id'} if op == 'offer' else set()
+        if op=='event' and args.get('action')=='prepare' and self.manifest.get('schema')=='agi-alpha/pending-battery-research/v1':optional=optional|{'research_payload'}
         if not schemas[op] <= set(args) or set(args) - schemas[op] - optional:
             raise ValueError('EXACT_ACTION_ARGUMENT_SCHEMA_REQUIRED')
         if 'crash' in args and type(args['crash']) is not bool:
@@ -267,7 +281,13 @@ class TapeExchange:
                 payload = self.ex.provider.issue(row, 'funded' if action == 'fund' else 'cleared', a.get('source_tx'))
             elif action == 'prepare':
                 task = json.loads(row['task'])
-                payload = self.jobs[task['job_id']]['artifact']
+                if self.manifest.get('schema')=='agi-alpha/pending-battery-research/v1':
+                    if 'research_payload' not in a:raise ValueError('ACTUAL_PENDING_RESEARCH_RESULT_REQUIRED')
+                    payload=copy.deepcopy(a['research_payload'])
+                    from connected_enterprise.research_service import assert_unused
+                    assert_unused(self.jobs[task['job_id']]['job'],payload,self.actions)
+                else:
+                    payload = self.jobs[task['job_id']]['artifact']
             elif action in {'refund', 'cancel', 'late_reversal'}:
                 payload = {}
             else:
@@ -440,7 +460,7 @@ def _native_replay_context(tape, *, root, manifest, session):
     c = tape['config']
     with tempfile.TemporaryDirectory(prefix='commercial010-audit-') as tmp:
         owned = None
-        if manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
+        if manifest.get('schema') in {'agi-alpha/adaptive012-services/v1','agi-alpha/pending-battery-research/v1'}:
             from commercial.single_writer import SingleWriterExchange
             owned = SingleWriterExchange(Path(tmp)/'replay.sqlite', root=root, manifest=manifest,
                 opening=c['opening'], working=c['working'], contract=c['contract'], durable=False,
