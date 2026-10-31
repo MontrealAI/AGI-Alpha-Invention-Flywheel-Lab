@@ -1,0 +1,14 @@
+{
+  "schema":"agi-alpha/mechanism-harness/v1",
+  "purpose":{"initial":["legacy_api_inventory"],"goal":["verified_migration_guidance"],"max_cost":20,"max_steps":8,"max_states":512,"allowed_effects":["pure"]},
+  "mechanisms":[
+    {"id":"derive_dependencies","requires":["legacy_api_inventory"],"provides":["api_graph"],"cost":2,"effect":"pure","origin":"developer_supplied"},
+    {"id":"evaluate_impact","requires":["canonical_api_graph"],"provides":["affected_endpoints"],"cost":3,"effect":"pure","origin":"developer_supplied"},
+    {"id":"compile_migration","requires":["affected_endpoints"],"provides":["migration_draft"],"cost":3,"effect":"pure","origin":"developer_supplied"},
+    {"id":"check_migration","requires":["api_graph","migration_draft"],"provides":["verified_migration_guidance"],"cost":2,"effect":"pure","origin":"developer_supplied"},
+    {"id":"direct_specialist","requires":["legacy_api_inventory"],"provides":["verified_migration_guidance"],"cost":19,"effect":"pure","origin":"developer_supplied"}
+  ],
+  "candidate_bridges":[
+    {"id":"bridge_api_to_canonical","requires":["api_graph"],"provides":["canonical_api_graph"],"cost":1,"effect":"pure","origin":"developer_supplied"}
+  ]
+}
