@@ -1,0 +1,49 @@
+{
+  "schema": "agi-alpha/p0-pr40-archive-guard-prequalification/v1",
+  "date": "2026-10-31",
+  "repository": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+  "refs": {
+    "current_main": "02a48632326521600c9621771937cfd862fb6374",
+    "dependent_native_PR40": "ced6c1cb004887dcdafaea59a2976020be649f8e"
+  },
+  "scope": "STATIC_COMPLETE_GIT_TREE_ARCHIVE_ELIGIBILITY_COUNT_NOT_CLEAN_BUILD_OR_MERGE_TEST",
+  "complete_recursive_git_trees": true,
+  "git_trees_truncated": false,
+  "eligible_symlinks": 0,
+  "guard": {
+    "max_files": 10000,
+    "max_uncompressed_bytes": 536870912,
+    "unchanged": true
+  },
+  "current_main": {
+    "raw_archive_eligible_files": 10033,
+    "eligible_log_omissions": 51,
+    "packaged_files": 9982,
+    "packaged_bytes": 459524334,
+    "archive_rule": "flywheel/archive_v2.py Git blob b11b568440bfe0f8270ebd4dda0c1074b5f598e9",
+    "omission_manifest": "docs/packaging/SOURCE_ONLY_OMISSIONS.json"
+  },
+  "pr40_exact_head": {
+    "archive_eligible_files": 10085,
+    "archive_eligible_bytes": 467740915,
+    "over_file_guard_by": 85,
+    "archive_rule": "flywheel/archive_v2.py Git blob 66eddadc3dce2967e3e0396b08098ebdcc7819ac",
+    "omission_manifest_present": false,
+    "static_build_verdict": "ARCHIVE_RESOURCE_BOUND_DETERMINISTIC_WITH_UNCHANGED_CURRENT_PR40_TREE"
+  },
+  "hypothetical_union": {
+    "raw_eligible_unique_names": 10123,
+    "main_only_names": 38,
+    "pr40_only_names": 90,
+    "conflicting_existing_blobs": 14,
+    "main_hash_pinned_omissions_retained": 51,
+    "eligible_unique_names_after_exact_main_omissions": 10072,
+    "over_file_guard_by": 72,
+    "min_additional_loose_files_to_replace_if_adding_one_zip_and_one_index": 74,
+    "arithmetic": "10072 - 74 + 2 = 10000",
+    "scope": "STATIC_UNION_ONLY; NOT A MERGED TREE, BYTE_TOTAL, SEMANTIC_CONFLICT_RESOLUTION, OR AUTHORIZED DELETION"
+  },
+  "historical_integrity": "All records and failed runs remain available at original Git identities. No archive limits, omissions, key material or native liabilities modified.",
+  "recommendation": "Owner: reconcile P0 source path and code conflicts, apply only lossless hash-indexed evidence compaction with sufficient headroom on composed exact head, check source-bound historical publication and frozen replay, and require clean full archive build/extract and public release download; do not change guards or rewrite failures.",
+  "notice": "Current main has advanced beyond PR40's old-base release rule; historical PR35 counts and previous 54/80/81 minimums do not apply to this exact pair."
+}
