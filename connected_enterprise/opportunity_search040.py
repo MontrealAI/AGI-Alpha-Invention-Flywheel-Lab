@@ -12,13 +12,16 @@ POLICY = frozenset({'schema','conversion_bps','max_new_deliveries','buffer_micro
 SERVICE_IDS = ('reconciliation','kpi_variance','evidence_matrix')
 
 def validate_policy(p):
-    if type(p) is not dict or set(p)!=POLICY or p['schema']!=SCHEMA:
+    if type(p) is not dict or set(p) not in (POLICY, POLICY|{'game'}) or p['schema']!=SCHEMA:
         raise ValueError('EXACT_OPPORTUNITY_POLICY_REQUIRED')
     for name in ('conversion_bps','max_new_deliveries','buffer_microUSD','minimum_settlements','min_expected_surplus_microUSD'):
         if type(p[name]) is not int or p[name]<0:
             raise ValueError('BOUNDED_OPPORTUNITY_INTEGER_REQUIRED:'+name)
     if not 1<=p['conversion_bps']<=10000 or not 1<=p['max_new_deliveries']<=48 or p['buffer_microUSD']>10**12 or not 1<=p['minimum_settlements']<=32 or p['min_expected_surplus_microUSD']>10**12:
         raise ValueError('FINITE_OPPORTUNITY_POLICY_REQUIRED')
+    if 'game' in p:
+        from .strategic_game042 import validate
+        validate(p['game'])
     return p
 
 
@@ -71,6 +74,8 @@ def search(state,prepared,jobs,candidates,slots,operating_envelope,offer_fn):
             n=len(by_service[svc]);actual=sum(by_service[svc])
             return (2*prior+actual)//(2+n)
         target=max(source_services,key=lambda svc:(estimated_target(svc),-SERVICE_IDS.index(svc)))
+    game_basis={'continue_direct':{'count':0,'margin_microUSD':0,
+                  'complete_incremental_cost_microUSD':0,'native_invoice_microUSD':0,'eligible':True}}
     feasible=[{'id':'continue_direct','kind':'delivery','cost_microUSD':0,'net_microUSD':0,'target_service_id':direct[0]['service_id'] if direct else target,
                'premise':'No new investment; native buyer-choice and delivery remain independently gated.'}]
     prior=sum(observed_margins)
@@ -88,17 +93,32 @@ def search(state,prepared,jobs,candidates,slots,operating_envelope,offer_fn):
             expected_net=expected_deliveries*margin*(10000-cfg['profit_tax_bps'])//10000-invoice
             expected_net-=pilot['slots_per_day']*min(pilot['duration_days'],remaining)*cfg['exposure_cost']
             expected_net-=possible*cfg['qualification_cost']
+            game_basis['partner_access']={'count':possible,
+                'margin_microUSD':max(0,margin)*(10000-cfg['profit_tax_bps'])//10000,
+                'complete_incremental_cost_microUSD':invoice+pilot['slots_per_day']*min(pilot['duration_days'],remaining)*cfg['exposure_cost']+possible*cfg['qualification_cost'],
+                'native_invoice_microUSD':invoice,
+                'eligible':earned>=invoice+p['buffer_microUSD']+operating_envelope and available>=invoice+p['buffer_microUSD']+operating_envelope}
             feasible.append({'id':'partner_access','kind':'acquisition','cost_microUSD':invoice,'net_microUSD':expected_net,
                  'target_service_id':target,'premise':'Declared conversion, observed settled margins, paid channel costs and eligible native earned cash; no future buyer is presumed.',
                  'eligible_current_cash':earned>=invoice+p['buffer_microUSD']+operating_envelope and available>=invoice+p['buffer_microUSD']+operating_envelope})
         recent_declines=sum(d.get('kind')=='capacity_decline' and now-3*24<=d['time']<now for d in state['decisions'])
         if recent_declines>0 and slots<cfg['maximum_slots'] and remaining>2:
             net=min(recent_declines,p['max_new_deliveries'])*margin*(10000-cfg['profit_tax_bps'])//10000-cfg['capacity_price']
+            game_basis['add_capacity']={'count':min(recent_declines,p['max_new_deliveries']),
+                'margin_microUSD':max(0,margin)*(10000-cfg['profit_tax_bps'])//10000,
+                'complete_incremental_cost_microUSD':cfg['capacity_price'],
+                'native_invoice_microUSD':cfg['capacity_price'],
+                'eligible':earned>=cfg['capacity_price']+p['buffer_microUSD']+operating_envelope and available>=cfg['capacity_price']+p['buffer_microUSD']+operating_envelope}
             feasible.append({'id':'add_capacity','kind':'capacity','cost_microUSD':cfg['capacity_price'],'net_microUSD':net,
                  'target_service_id':target,'premise':'Observed capacity declines and completed margins; hypothetical extra acceptance is not already earned.',
                  'eligible_current_cash':earned>=cfg['capacity_price']+p['buffer_microUSD']+operating_envelope and available>=cfg['capacity_price']+p['buffer_microUSD']+operating_envelope})
-    selected=max((x for x in feasible if x['kind']=='delivery' or x.get('eligible_current_cash') and x['net_microUSD']>p['min_expected_surplus_microUSD']),
-                 key=lambda x:(x['net_microUSD'],-x['cost_microUSD'],x['id']))
+    if 'game' in p:
+        from .strategic_game042 import solve
+        game_certificate=solve(p['game'],game_basis)
+        selected=next(x for x in feasible if x['id']==game_certificate['selected'])
+    else:
+        selected=max((x for x in feasible if x['kind']=='delivery' or x.get('eligible_current_cash') and x['net_microUSD']>p['min_expected_surplus_microUSD']),
+                     key=lambda x:(x['net_microUSD'],-x['cost_microUSD'],x['id']))
     decision={'kind':'opportunity_search','time':now,'schema':SCHEMA,'source':'OBSERVED_NATIVE_STATE_AND_DECLARED_CONTRACTS',
               'observed':observed,'direct_outcomes':direct[:24],'source_services':source_services,
               'unseen_buyer_outcomes':'UNKNOWN','binding_constraint':'NEEDS_DISTRIBUTION' if not direct and len(settled)>=p['minimum_settlements'] else 'CURRENT_DEMAND_AND_FINANCING',
@@ -106,6 +126,10 @@ def search(state,prepared,jobs,candidates,slots,operating_envelope,offer_fn):
               'native_state_sha256':prepared['before']['state_digest'],
               'available_microUSD':available,'unrestricted_earned_microUSD':earned,
               'policy_sha256':digest(p),'decision_scope':'FINITE_ESTIMATES_NOT_OBSERVED_CAUSAL_BENEFIT_OR_SPENDING_PERMISSION'}
+    if 'game' in p:
+        decision['game_basis']=game_basis
+        decision['game_certificate']=game_certificate
+        decision['decision_scope']='SCOPED_FINITE_FOLLOWER_BEST_RESPONSE_NOT_GLOBAL_MARKET_OPTIMUM_OR_SPENDING_PERMISSION'
     decision['id']=digest(decision)
     return decision
 
@@ -144,13 +168,52 @@ def audit_history(result,manifest):
         if d['observed']!=service or not set(d['source_services'])<=service_ids or d['selected'] not in {'continue_direct','partner_access','add_capacity'}:raise ValueError('OPPORTUNITY_CLAIM_NOT_SUPPORTED_BY_PRIOR_SETTLEMENTS')
         alternatives=d['alternatives']
         if type(alternatives) is not list or not alternatives or len(alternatives)>3 or len({x['id'] for x in alternatives})!=len(alternatives):raise ValueError('FINITE_OPPORTUNITY_SEARCH_NOT_RECORDABLE')
-        valid=[x for x in alternatives if x['kind']=='delivery' or x.get('eligible_current_cash') and x['net_microUSD']>cfg['opportunity_policy']['min_expected_surplus_microUSD']]
-        best=max(valid,key=lambda x:(x['net_microUSD'],-x['cost_microUSD'],x['id']))
+        if 'game' in cfg['opportunity_policy']:
+            from .strategic_game042 import solve
+            basis=d.get('game_basis')
+            if d.get('game_certificate')!=solve(cfg['opportunity_policy']['game'],basis):
+                raise ValueError('GAME_CERTIFICATE_NOT_REDERIVABLE_FROM_DECLARED_STRATEGIC_GAME')
+            if set(basis)!=set(x['id'] for x in alternatives):
+                raise ValueError('GAME_ACTIONS_NOT_SOURCE_LINKED_TO_NATIVE_ALTERNATIVES')
+            margins=[o['price']-o['complete_cost'] for o in past]
+            expected_margin=(max(0,sum(margins)//len(margins))*(10000-cfg['profit_tax_bps'])//10000) if margins else 0
+            for alternative in alternatives:
+                name=alternative['id']
+                if name=='continue_direct':continue
+                b=basis[name]
+                if (b['native_invoice_microUSD']!=alternative['cost_microUSD']
+                    or b['eligible'] is not alternative['eligible_current_cash']
+                    or b['margin_microUSD']!=expected_margin):
+                    raise ValueError('GAME_BASIS_NOT_MATCHED_NATIVE_CURRENT_COST_AND_SETTLEMENT')
+                if name=='partner_access':
+                    terms=cfg['channels']['pilot']
+                    invoice=terms['price_microUSD']+terms['support_microUSD']
+                    remaining=cfg['horizon_days']-day-terms['lead_days']
+                    if b['count']>cfg['opportunity_policy']['max_new_deliveries'] or b['count']>max(0,remaining*cfg['maximum_slots']):
+                        raise ValueError('GAME_REACH_EXCEEDS_DECLARED_SOURCE_CAPACITY')
+                    cost=invoice+terms['slots_per_day']*min(terms['duration_days'],remaining)*cfg['exposure_cost']+b['count']*cfg['qualification_cost']
+                    if b['native_invoice_microUSD']!=invoice or b['complete_incremental_cost_microUSD']!=cost:
+                        raise ValueError('GAME_PARTNER_COST_NOT_REDERIVED')
+                elif name=='add_capacity':
+                    declines=sum(d0.get('kind')=='capacity_decline' and t-3*24<=d0['time']<t for d0 in result['decisions'])
+                    if (b['count']!=min(declines,cfg['opportunity_policy']['max_new_deliveries'])
+                            or b['complete_incremental_cost_microUSD']!=cfg['capacity_price']):
+                        raise ValueError('GAME_CAPACITY_COST_OR_PRIOR_DECLINES_CHANGED')
+            best=next(x for x in alternatives if x['id']==d['game_certificate']['selected'])
+        else:
+            if 'game_certificate' in d or 'game_basis' in d:
+                raise ValueError('UNREGISTERED_STRATEGIC_GAME_EVIDENCE')
+            valid=[x for x in alternatives if x['kind']=='delivery' or x.get('eligible_current_cash') and x['net_microUSD']>cfg['opportunity_policy']['min_expected_surplus_microUSD']]
+            best=max(valid,key=lambda x:(x['net_microUSD'],-x['cost_microUSD'],x['id']))
         if best['id']!=d['selected'] or best['target_service_id']!=d['target_service_id']:raise ValueError('OPPORTUNITY_SELECTION_NOT_FINITE_OPTIMUM')
         day_invest=[i for i in result['investments'] if i['purchased_time']==t]
         if d['selected']=='continue_direct' and day_invest:raise ValueError('NO_OPPORTUNITY_INVESTMENT_ALLOWED_ON_HOLD')
         if any(i['kind']!=('acquisition' if d['selected']=='partner_access' else 'capacity') for i in day_invest):raise ValueError('WRONG_OPPORTUNITY_MEANS_EXECUTED')
         for i in day_invest:
+            if 'game' in cfg['opportunity_policy']:
+                expected_bps=d['game_certificate']['eligible'][d['selected']]['expected_net_numerator_bps_microUSD']
+                if expected_bps<=0 or i['predicted_net']!=max(1,expected_bps//10000):
+                    raise ValueError('NATIVE_INVESTMENT_FORECAST_CHANGED_FROM_CHOSEN_GAME')
             if i['funding_receipt'].get('funding')!='EARNED':raise ValueError('OPPORTUNITY_REQUIRES_ACTUAL_EARNED_FINANCING')
             if not past:raise ValueError('UNFUNDED_OPPORTUNITY_BEFORE_ACCEPTED_COLLECTION')
             later=[o for o in settlements if o['collection_time']>t and o.get('acquisition_source_plan_id' if i['kind']=='acquisition' else 'capacity_source_plan_id')==i['plan_id']]
