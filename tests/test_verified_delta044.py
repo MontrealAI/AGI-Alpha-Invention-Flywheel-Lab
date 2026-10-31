@@ -132,5 +132,22 @@ class VerifiedDifferentialProductionTests(unittest.TestCase):
         self.assertLess(total_delta_rows,total_direct_rows/4)
         self.assertEqual(total_scan_rows,total_direct_rows)
 
+    def test_public_demo_is_reverifiable_and_forged_success_is_rejected(self):
+        import tempfile
+        from pathlib import Path
+        from scripts import demo_verified_delta044 as demo
+        with tempfile.TemporaryDirectory() as directory:
+            bundle=Path(directory)/'proof'
+            created=demo.build(bundle)
+            self.assertTrue(created['verified'])
+            self.assertEqual(created['demo']['reused_groups'],99)
+            self.assertEqual(created['demo']['rows_semantically_rechecked'],10)
+            self.assertTrue(demo.verify(bundle)['verified'])
+            p=bundle/'DEMO.json';record=json.loads(p.read_text())
+            record['actual_collections']=1000000000
+            p.write_bytes(delta.canonical(record))
+            with self.assertRaisesRegex(ValueError,'CURRENT_DEMO_RECEIPT_DOES_NOT_REDERIVE'):
+                demo.verify(bundle)
+
 
 if __name__=='__main__':unittest.main()
