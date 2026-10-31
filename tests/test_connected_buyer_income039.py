@@ -110,6 +110,17 @@ class NativeExternalIncomeIntegration(unittest.TestCase):
             with self.subTest(mutation=mutation), self.assertRaisesRegex(ValueError, 'EXOGENOUS_BUYER_INCOME'):
                 _check_external_buyer_income(changed)
 
+    def test_same_day_income_cannot_be_reordered_after_a_business_decision(self):
+        changed = copy.deepcopy(self.result)
+        income_index = next(i for i,e in enumerate(changed['events'])
+                            if e['kind']=='EXTERNAL_BUYER_INCOME' and e['time']==24)
+        decision_index = next(i for i,e in enumerate(changed['events'])
+                              if e['kind']=='BUSINESS_DECISION' and e['time']==24)
+        moved = changed['events'].pop(income_index)
+        changed['events'].insert(decision_index + 1, moved)
+        with self.assertRaisesRegex(ValueError, 'AFTER_SAME_DAY_BUSINESS_DECISION'):
+            _check_external_buyer_income(changed)
+
     def test_no_sales_means_no_enterprise_revenue_despite_new_buyer_income(self):
         cfg = copy.deepcopy(self.cfg)
         cfg.update(horizon_days=3, arrival_bps=0)
