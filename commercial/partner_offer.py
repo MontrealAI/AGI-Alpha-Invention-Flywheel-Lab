@@ -61,6 +61,8 @@ def quote_terms(price, distributor_cost, distributor_min_gain,
                    provider_loss_cost=provider_loss_cost,
                    protected_cash=protected_cash, opening_cash=opening_cash)
     for key, value in amounts.items():integer(value, key)
+    if price == 0 or provider_complete_cost == 0:
+        raise ValueError('POSITIVE_PRICE_AND_COMPLETE_DELIVERY_COST_REQUIRED')
     minimum_share = distributor_cost + distributor_min_gain
     maximum_share = price - provider_complete_cost - activation_cost - provider_min_gain
     funded = opening_cash >= activation_cost + protected_cash + provider_loss_cost
