@@ -1,0 +1,88 @@
+{
+  "schema": "agi-alpha/p0-source-transition-operating-clock-counterexample/v1",
+  "scope": "EXECUTED_READ_ONLY_SOURCE_AND_IMMUTABLE_PUBLIC_FIXTURE_PREDICATE; NO_PRIVATE_HMAC_OR_ACCOUNT_MUTATION; NOT_A_RUNTIME_BYPASS",
+  "basis": {
+    "released_source": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+    "candidate_verification_commit": "3981b182513abbba1c2ab1102f94732c453422fa",
+    "candidate_upgrade_source": {
+      "path": "connected_enterprise/upgrades.py",
+      "blob_sha": "26d2c441c52db9b51f5efde529452e3e5f917504"
+    },
+    "legacy_ref": "328835b30b3fed52b491f33f86ad008c60c37704",
+    "checkpoint": {
+      "path": "evidence/overnight022/migration/production-awaiting-acceptance/LEGACY_CHECKPOINT.json",
+      "blob_sha": "91a4c08cac3a5d789d7dd9429815c1168c935bd5"
+    },
+    "native_record": {
+      "path": "evidence/overnight022/migration/production-awaiting-acceptance/LEGACY_PUBLIC_RECORD.json",
+      "blob_sha": "70d843141bb5d399eec15f9ea21805fcdc392023"
+    }
+  },
+  "observed_fixture": {
+    "processed_operating_events": 3,
+    "emitted_semantic_events": 4,
+    "pending_queue_events": 12,
+    "last_processed_operating_time_hours": 2,
+    "earliest_pending_event": {
+      "id": "order-0000-accept",
+      "kind": "accept",
+      "time_hours": 3
+    },
+    "original_native_actions": 9,
+    "last_native_action_day_hours": 0
+  },
+  "source_observations": {
+    "authorizer_clock_check": "p['day'] >= max(prior ledger action.day), default 0",
+    "authorizer_checks_old_signed_operating_checkpoint": false,
+    "ticket_contains_old_signed_operating_checkpoint": false,
+    "candidate_engine_first_reopen": "JournalAccount(...).verify_checkpoint(old_envelope)",
+    "old_state_reopen_error": "OPERATING_CHECKPOINT_SOURCE_OR_AUTHORITY_CHANGED",
+    "source_guard_intact": true
+  },
+  "negative_case": {
+    "proposed_source_transition_day_hours": 4,
+    "passes_native_only_clock_guard": true,
+    "crosses_pending_acceptance_at_hour_3": true,
+    "hypothetical_native_acceptance_clock_regression_after_committed_transition": true,
+    "transition_ticket_issued": false,
+    "native_upgrade_attempt_executed": false,
+    "runtime_migration_attempt_executed": false,
+    "tested_scope": "Read-only boolean source predicate and real published queue/action fields; not an HMAC acceptance assertion."
+  },
+  "finding": "Financial-only source authorization is not sufficient for a forward migration of a live operating queue: a financially clock-valid ticket can be requested later than the first pending event. Any future queue migrator must cryptographically bind the old signed STATE, its original queue/cursor/clock and native prefix, and prohibit authorization that advances the native clock beyond due old work. This is an additional acceptance guard, not an observed exploit; the existing source guard still correctly refuses the old STATE.",
+  "required_implementation_regression": {
+    "test_case": "Restore genuine same-owned-account legacy engine at 3 processed events, next pending acceptance t=3, and 9 native actions. Demand an explicit migration request at t=4 with identical financial state and historical verifier. Reject before any source transition or financial mutation; preserve original keys and pending event. Separately allow only explicitly approved same-clock transition at t=2 with old signed envelope pinned, then process acceptance/clearing once on that same account with crash-and-retry, audit all obligations and deny replay/downgrade/fork.",
+    "verify_invariants": [
+      "transition time does not pass earliest pending native event",
+      "old STATE HMAC validated under retained authority",
+      "no old event skipped, synthesized or reordered",
+      "immutable native prefix including source transition",
+      "only one final state transition under exclusive writer lock",
+      "restored continuation retains exact old account and liabilities",
+      "funding uses only audited available earned funds",
+      "claim before maturity at shared boundary"
+    ],
+    "do_not": "Do not insert an unauthenticated clock clamp, edit STATE.json, reinterpret native days, re-sign old state without a traceable source transition or weaken source guards."
+  },
+  "historical_outcomes": {
+    "original_archive_resource_failure_retained": true,
+    "previous_full_release_verified": true,
+    "previous_public_guard_failure_retained": true
+  },
+  "decision": "KEEP_RELEASED_INCUMBENT; DO_NOT_MERGE_UNOWNED_FINANCIAL_SOURCE; P0_BLOCKED_ON_ACTUAL_NATIVE_CAPITAL_TASK_CHECKPOINT_AND_CANONICAL_AUTHENTICATED_NONEMPTY_QUEUE_MIGRATION",
+  "resources": {
+    "new_hosted_tests": 0,
+    "new_financial_events": 0,
+    "new_spending_usd": 0,
+    "connector_transport_and_assistant_compute": "UNMETERED",
+    "host_model_billing_usd": null
+  },
+  "coordination": {
+    "integration_owner": "current overnight root team",
+    "native_capital_task": "01a18fa7-ffc6-7384-8bb4-ea6012cfb0f7",
+    "native_task_current_checkpoint": "INACCESSIBLE_TASK_INTERFACE",
+    "other_owner_runtime_modified": false,
+    "main_modified": false,
+    "successor_automations_modified": false
+  }
+}
