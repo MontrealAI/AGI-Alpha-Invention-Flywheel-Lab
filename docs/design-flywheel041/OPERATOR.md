@@ -13,7 +13,7 @@ It then freezes that selected design and runs it with a new predeclared seed alo
 1. A first independently accepted and collected profitable order.
 2. A **later** native earned-funded acquisition or capacity commitment, with preserved protected reserves.
 3. A subsequent independently accepted/collected order tied to that actual native investment plan.
-4. A different customer or complete service outcome and a **strictly greater modeled per-order margin**, with positive overall complete-cost native profit.
+4. A different customer or complete service outcome and **positive collected order contribution net of the actual source-linked investment invoice**, with positive overall native enterprise complete-cost profit. A higher per-order margin is reported only as a separate diagnostic.
 5. A matched baseline comparison with positive incremental complete-cost profit to claim superiority on this particular fresh seed.
 
 No single development run is statistically sufficient to prove out-of-sample generality; this is a small execution demonstration. Better per-order margin does not, by itself, prove positive lifetime contribution of the investment. No separate native account's funds are pooled into another account. The comparison is an explicitly conditional, simulated synthetic business.
@@ -39,7 +39,7 @@ python3 -m connected_enterprise.design_flywheel verify --output /absolute/new/bu
 
 **Output**: local \`SPEC.json\`, \`SOURCE.json\`, \`SERVICES.json\`, native per-world \`RESULT.json\` and \`AUDIT.json\`, \`INDEX.json\` and **compact \`PUBLIC.json\`**. Keep the local output private: it contains source-bound account records and private simulation credentials in the runtime, even though it does not make any real monetary transfers. Publish only \`PUBLIC.json\`, which includes measured simulated cash/profit, designed comparison, source IDs and any bounded source-linked witness, never private account files. No claims without independent re-audit.
 
-The qualification workflow \`.github/workflows/native-design041.yml\` runs a clean exact-source demo, independent verify, and a fail-closed gate for **both** a better earned-funded successor and a positive matched incumbent comparison. If either is absent, retain the negative result; never cherry-pick another seed, weaken a threshold or change the confirmation pair.
+The qualification workflow \`.github/workflows/native-design041.yml\` runs a clean exact-source demo, independent verify, and a fail-closed gate for **both** a positive-net earned-funded successor and a positive matched incumbent comparison. If either is absent, retain the negative result; never cherry-pick another seed, weaken a threshold or change the confirmation pair.
 
 ## Boundary and next native engineering step
 
