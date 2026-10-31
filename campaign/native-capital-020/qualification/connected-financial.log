@@ -1,0 +1,69 @@
+test_abrupt_process_exit_after_finish_recovers_one_expense (test_connected_finance.ConnectedFinanceTests.test_abrupt_process_exit_after_finish_recovers_one_expense) ... ok
+test_abrupt_process_exit_after_reserve_recovers_one_expense (test_connected_finance.ConnectedFinanceTests.test_abrupt_process_exit_after_reserve_recovers_one_expense) ... ok
+test_changed_duplicate_payload_refused_without_further_spending (test_connected_finance.ConnectedFinanceTests.test_changed_duplicate_payload_refused_without_further_spending) ... ok
+test_checkpoint_from_another_account_key_or_contract_is_rejected (test_connected_finance.ConnectedFinanceTests.test_checkpoint_from_another_account_key_or_contract_is_rejected) ... ok
+test_competing_owner_cannot_open_live_account (test_connected_finance.ConnectedFinanceTests.test_competing_owner_cannot_open_live_account) ... ok
+test_earned_contract_is_state_bound_obligation_resolved_and_exactly_once (test_connected_finance.ConnectedFinanceTests.test_earned_contract_is_state_bound_obligation_resolved_and_exactly_once) ... ok
+test_export_is_detached_from_live_native_authority (test_connected_finance.ConnectedFinanceTests.test_export_is_detached_from_live_native_authority) ... ok
+test_finish_committed_then_interrupted_replay_survives_advanced_state (test_connected_finance.ConnectedFinanceTests.test_finish_committed_then_interrupted_replay_survives_advanced_state) ... ok
+test_future_income_does_not_fund_and_seed_requires_explicit_flag (test_connected_finance.ConnectedFinanceTests.test_future_income_does_not_fund_and_seed_requires_explicit_flag) ... ok
+test_native_operation_commit_before_ack_returns_original_prefix_snapshot (test_connected_finance.ConnectedFinanceTests.test_native_operation_commit_before_ack_returns_original_prefix_snapshot) ... ok
+test_new_journal_write_requires_current_complete_native_audit (test_connected_finance.ConnectedFinanceTests.test_new_journal_write_requires_current_complete_native_audit) ... ok
+test_operating_checkpoint_preserves_state_and_accepts_native_advancement (test_connected_finance.ConnectedFinanceTests.test_operating_checkpoint_preserves_state_and_accepts_native_advancement) ... ok
+test_operating_queue_buyer_current_and_time_tampering_rejected (test_connected_finance.ConnectedFinanceTests.test_operating_queue_buyer_current_and_time_tampering_rejected) ... ok
+test_private_wal_tamper_is_rejected_on_reopen (test_connected_finance.ConnectedFinanceTests.test_private_wal_tamper_is_rejected_on_reopen) ... ok
+test_public_audit_prohibits_commitment_operations_in_execute_entries (test_connected_finance.ConnectedFinanceTests.test_public_audit_prohibits_commitment_operations_in_execute_entries) ... ok
+test_public_audit_rejects_direct_native_writer_bypass (test_connected_finance.ConnectedFinanceTests.test_public_audit_rejects_direct_native_writer_bypass) ... ok
+test_public_audit_rejects_duplicate_native_claim (test_connected_finance.ConnectedFinanceTests.test_public_audit_rejects_duplicate_native_claim) ... ok
+test_public_audit_requires_every_native_action_to_be_journaled (test_connected_finance.ConnectedFinanceTests.test_public_audit_requires_every_native_action_to_be_journaled) ... ok
+test_public_audit_requires_journal_native_causal_order (test_connected_finance.ConnectedFinanceTests.test_public_audit_requires_journal_native_causal_order) ... ok
+test_recovery_refuses_signed_unsupported_native_request_before_mutation (test_connected_finance.ConnectedFinanceTests.test_recovery_refuses_signed_unsupported_native_request_before_mutation) ... ok
+test_reserve_committed_then_interrupted_recovers_same_plan (test_connected_finance.ConnectedFinanceTests.test_reserve_committed_then_interrupted_recovers_same_plan) ... ok
+test_seed_cost_commit_before_ack_is_recovered_without_double_charge (test_connected_finance.ConnectedFinanceTests.test_seed_cost_commit_before_ack_is_recovered_without_double_charge) ... ok
+test_source_drift_and_public_receipt_tampering_fail_closed (test_connected_finance.ConnectedFinanceTests.test_source_drift_and_public_receipt_tampering_fail_closed) ... ok
+test_valid_checkpoint_refuses_native_tape_rollback (test_connected_finance.ConnectedFinanceTests.test_valid_checkpoint_refuses_native_tape_rollback) ... ok
+test_extra_native_cost_at_each_pending_boundary_rejects_before_mutation (test_connected_recovery_preflight.ConnectedRecoveryPreflightTests.test_extra_native_cost_at_each_pending_boundary_rejects_before_mutation) ... ok
+test_valid_zero_reserve_and_finish_tails_recover_once (test_connected_recovery_preflight.ConnectedRecoveryPreflightTests.test_valid_zero_reserve_and_finish_tails_recover_once) ... ok
+test_certified_interruption_before_native_rejection_recovers_terminally (test_connected_rejections.ConnectedRejectionTests.test_certified_interruption_before_native_rejection_recovers_terminally) ... ok
+test_failed_rejection_save_requires_reopen_and_preserves_durable_result (test_connected_rejections.ConnectedRejectionTests.test_failed_rejection_save_requires_reopen_and_preserves_durable_result) ... ok
+test_forged_rejection_cannot_hide_committed_action_or_invent_failure (test_connected_rejections.ConnectedRejectionTests.test_forged_rejection_cannot_hide_committed_action_or_invent_failure) ... ok
+test_marker_save_rejected_before_write_recovers_from_certificate (test_connected_rejections.ConnectedRejectionTests.test_marker_save_rejected_before_write_recovers_from_certificate) ... ok
+test_nonreproducible_error_preserves_pending (test_connected_rejections.ConnectedRejectionTests.test_nonreproducible_error_preserves_pending) ... ok
+test_partial_earned_spend_never_retires_committed_reservation (test_connected_rejections.ConnectedRejectionTests.test_partial_earned_spend_never_retires_committed_reservation) ... ok
+test_preexisting_ambiguous_pending_is_not_retired (test_connected_rejections.ConnectedRejectionTests.test_preexisting_ambiguous_pending_is_not_retired) ... ok
+test_rejected_earned_reservation_leaves_no_proof_or_native_commit (test_connected_rejections.ConnectedRejectionTests.test_rejected_earned_reservation_leaves_no_proof_or_native_commit) ... FAIL
+test_rejected_marker_cannot_hide_uncovered_native_cost (test_connected_rejections.ConnectedRejectionTests.test_rejected_marker_cannot_hide_uncovered_native_cost) ... ok
+test_rejected_seed_spend_has_zero_financial_coverage (test_connected_rejections.ConnectedRejectionTests.test_rejected_seed_spend_has_zero_financial_coverage) ... FAIL
+test_stale_native_cost_is_terminal_without_charging (test_connected_rejections.ConnectedRejectionTests.test_stale_native_cost_is_terminal_without_charging) ... ok
+test_uncertified_legacy_pending_rejection_remains_fail_closed (test_connected_rejections.ConnectedRejectionTests.test_uncertified_legacy_pending_rejection_remains_fail_closed) ... ok
+test_unknown_trade_rejection_allows_cost_audit_reopen_and_stable_duplicate (test_connected_rejections.ConnectedRejectionTests.test_unknown_trade_rejection_allows_cost_audit_reopen_and_stable_duplicate) ... ok
+test_value_error_after_native_commit_stays_pending_and_recovers_once (test_connected_rejections.ConnectedRejectionTests.test_value_error_after_native_commit_stays_pending_and_recovers_once) ... ok
+test_duplicate_indexed_native_identity_is_still_rejected (test_connected_audit_prefixes.ExactCanonicalAuditPrefixes.test_duplicate_indexed_native_identity_is_still_rejected) ... ok
+test_every_prefix_equals_independent_complete_canonical_serialization (test_connected_audit_prefixes.ExactCanonicalAuditPrefixes.test_every_prefix_equals_independent_complete_canonical_serialization) ... ok
+
+======================================================================
+FAIL: test_rejected_earned_reservation_leaves_no_proof_or_native_commit (test_connected_rejections.ConnectedRejectionTests.test_rejected_earned_reservation_leaves_no_proof_or_native_commit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/8ae627a67fcf/p0-native/tests/test_connected_rejections.py", line 79, in test_rejected_earned_reservation_leaves_no_proof_or_native_commit
+    self.assertEqual(self.status(), 'REJECTED')
+AssertionError: 'COMPLETE' != 'REJECTED'
+- COMPLETE
++ REJECTED
+
+
+======================================================================
+FAIL: test_rejected_seed_spend_has_zero_financial_coverage (test_connected_rejections.ConnectedRejectionTests.test_rejected_seed_spend_has_zero_financial_coverage)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/8ae627a67fcf/p0-native/tests/test_connected_rejections.py", line 69, in test_rejected_seed_spend_has_zero_financial_coverage
+    self.assertEqual(self.status(), 'REJECTED')
+AssertionError: 'COMPLETE' != 'REJECTED'
+- COMPLETE
++ REJECTED
+
+
+----------------------------------------------------------------------
+Ran 42 tests in 69.166s
+
+FAILED (failures=2)

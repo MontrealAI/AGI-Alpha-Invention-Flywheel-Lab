@@ -1,0 +1,87 @@
+import copy
+from pathlib import Path
+import shutil
+import tempfile
+import unittest
+
+from commercial.terms import prospective_terms
+from connected_enterprise.finance import JournalAccount, SOURCE_PATHS, audit_journal
+from enterprise.services import SOURCE_PATHS as SERVICE_SOURCE_PATHS, prepare_services
+from experiments.commerce006 import PINS
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class NativeCapitalAdverseStateTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.fixture = tempfile.TemporaryDirectory(prefix='native-capital-source-')
+        cls.root = Path(cls.fixture.name)
+        for name in set(SOURCE_PATHS) | set(SERVICE_SOURCE_PATHS) | set(PINS):
+            target = cls.root / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(ROOT / name, target)
+        cls.manifest = prepare_services(cls.root, 'services')
+        cls.job = next(j for j in cls.manifest['jobs'] if j['service_id'] == 'reconciliation')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.fixture.cleanup()
+
+    def open(self, path):
+        return JournalAccount(self.root, self.manifest, path, opening=20_000_000,
+                              working=0, contract='native-prospective-v1:adverse-regression')
+
+    def settle(self, account):
+        terms = prospective_terms('o', 2_000_000, 20, 2, residual=100_000,
+                                  premium=10_000, coverage_limit=100_000, payout_delay_hours=2)
+        account.execute('register_terms', {'id': 't', 'terms': terms}, 0)
+        account.execute('wallet', {'buyer': 'b', 'amount': 2_000_000}, 0)
+        account.execute('offer', {'id': 'o', 'buyer': 'b', 'price': 2_000_000,
+                                 'job_id': self.job['id'], 'deadline': 10, 'terms_id': 't'}, 0)
+        for action, moment in [('consent', 0), ('fund', 0), ('prepare', 1), ('release', 2)]:
+            account.execute('event', {'id': 'o', 'event_id': action, 'action': action}, moment)
+
+    def test_reversal_keeps_distinct_claim_service_and_registered_residual(self):
+        with tempfile.TemporaryDirectory(prefix='native-capital-account-') as tmp:
+            path = Path(tmp) / 'account.sqlite'
+            with self.open(path) as account:
+                self.settle(account)
+                account.execute('event', {'id': 'o', 'event_id': 'late-reversal', 'action': 'late_reversal'}, 3)
+                reversed_state = account.snapshot()['summary']
+                self.assertEqual(reversed_state['tailReserve'], 200_000)
+                self.assertEqual(reversed_state['payables'], 0)
+                self.assertTrue(reversed_state['investmentStopped'])
+                account.execute('claim', {'id': 'o', 'claim_id': 'distinct-support-claim',
+                                         'amount': 50_000, 'kind': 'covered'}, 4)
+                claimed = account.snapshot()['summary']
+                self.assertEqual((claimed['tailReserve'], claimed['payables']), (150_000, 50_000))
+                account.execute('resolve_claim', {'id': 'o', 'claim_id': 'distinct-support-claim',
+                                                 'settlement_id': 'pay', 'resolution': 'pay'}, 5)
+                account.execute('recover_claim', {'id': 'o', 'claim_id': 'distinct-support-claim',
+                                                 'settlement_id': 'recover', 'amount': 50_000, 'source_tx': 'support-recovery'}, 6)
+                profit = account.snapshot()['summary']['profit']
+                account.execute('mature', {'id': 'o', 'event_id': 'maturity'}, 21)
+                matured = account.snapshot()['summary']
+                self.assertEqual((matured['tailReserve'], matured['payables']), (100_000, 0))
+                self.assertEqual(matured['profit'], profit)
+                account.execute('claim', {'id': 'o', 'claim_id': 'distinct-late-support',
+                                         'amount': 50_000, 'kind': 'ordinary'}, 22)
+                after = account.snapshot()['summary']
+                self.assertEqual((after['tailReserve'], after['payables']), (50_000, 50_000))
+                self.assertTrue(after['investmentStopped'])
+                self.assertEqual(after['unrestrictedEarned'], 0)
+                record = account.export()
+                self.assertTrue(account.audit()['accepted'])
+            with self.open(path) as restored:
+                self.assertEqual(restored.export(), record)
+                self.assertTrue(restored.audit()['accepted'])
+            self.assertTrue(audit_journal(record, root=self.root, manifest=self.manifest)['accepted'])
+            forged = copy.deepcopy(record)
+            forged['ledger']['summary']['tailReserve'] = 0
+            with self.assertRaises(ValueError):
+                audit_journal(forged, root=self.root, manifest=self.manifest)
+
+
+if __name__ == '__main__':
+    unittest.main()

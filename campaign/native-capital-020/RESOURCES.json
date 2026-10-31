@@ -1,0 +1,2139 @@
+{
+  "charged_cpu_seconds": 1232.412714413,
+  "initial_setup_cpu_bound_seconds": 60.0,
+  "jobs": [
+    {
+      "label": "entry-policy",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; print(Path('README.md').read_text()[:7000]); print(Path('CHARTER.md').read_text()[:8000])"
+      ],
+      "start_utc": "2026-10-30T23:49:53.579434+00:00",
+      "wall_seconds": 0.12602639198303223,
+      "waited_child_cpu_seconds": 0.021181,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-account",
+      "command": [
+        "sed",
+        "-n",
+        "280,660p",
+        "adaptive_enterprise/account.py"
+      ],
+      "start_utc": "2026-10-30T23:50:11.842785+00:00",
+      "wall_seconds": 0.12127375602722168,
+      "waited_child_cpu_seconds": 0.0027469999999999994,
+      "peak_sampled_process_group_rss_bytes": 26628096,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-inspect",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; print(Path('README.md').read_text()[:6000]); print(Path('CHARTER.md').read_text()[:6000]); print(Path('AGENTS.md').read_text()[:5000]); print(Path('vendor/alpha_claim/protected_exchange.py').read_text())"
+      ],
+      "start_utc": "2026-10-30T23:50:19.755103+00:00",
+      "wall_seconds": 0.12601494789123535,
+      "waited_child_cpu_seconds": 0.021996,
+      "peak_sampled_process_group_rss_bytes": 26886144,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-finance",
+      "command": [
+        "sed",
+        "-n",
+        "115,355p",
+        "connected_enterprise/finance.py"
+      ],
+      "start_utc": "2026-10-30T23:50:28.624419+00:00",
+      "wall_seconds": 0.12280678749084473,
+      "waited_child_cpu_seconds": 0.002105,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-tests",
+      "command": [
+        "sed",
+        "-n",
+        "1,205p",
+        "tests/test_connected_finance.py"
+      ],
+      "start_utc": "2026-10-30T23:50:29.008394+00:00",
+      "wall_seconds": 0.12214469909667969,
+      "waited_child_cpu_seconds": 0.0023870000000000002,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-pin-inspect",
+      "command": [
+        "rg",
+        "-n",
+        "PINS|protected_exchange.py|engine\\(",
+        "tests/test_commerce006.py",
+        "tests/test_connected_finance.py",
+        "commercial/ledger.py",
+        "tests/test_frozen006_boundary.py"
+      ],
+      "start_utc": "2026-10-30T23:50:46.123499+00:00",
+      "wall_seconds": 0.12151598930358887,
+      "waited_child_cpu_seconds": 0.007179,
+      "peak_sampled_process_group_rss_bytes": 27000832,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-preserve-legacy",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; import hashlib; p=Path('vendor/alpha_claim/protected_exchange.py'); raw=p.read_bytes(); assert hashlib.sha256(raw).hexdigest()=='7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272'; Path('vendor/alpha_claim/protected_exchange_legacy.py').write_bytes(raw); print('legacy native source preserved')"
+      ],
+      "start_utc": "2026-10-30T23:50:49.872129+00:00",
+      "wall_seconds": 0.12499570846557617,
+      "waited_child_cpu_seconds": 0.029031999999999995,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-journal-audit",
+      "command": [
+        "sed",
+        "-n",
+        "365,735p",
+        "connected_enterprise/finance.py"
+      ],
+      "start_utc": "2026-10-30T23:51:35.838394+00:00",
+      "wall_seconds": 0.12260746955871582,
+      "waited_child_cpu_seconds": 0.002573,
+      "peak_sampled_process_group_rss_bytes": 26628096,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-audit-inspect",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; print(Path('commercial/ledger.py').read_text()[-4800:]); print(Path('experiments/commerce006.py').read_text()[0:1800]); print(Path('commercial/ledger.py').read_text()[:1000])"
+      ],
+      "start_utc": "2026-10-30T23:53:00.454696+00:00",
+      "wall_seconds": 0.12315249443054199,
+      "waited_child_cpu_seconds": 0.022723,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-bind-pins",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; import hashlib; p=Path('experiments/commerce006.py'); s=p.read_text(); current=hashlib.sha256(Path('vendor/alpha_claim/protected_exchange.py').read_bytes()).hexdigest(); s=s.replace(\"'vendor/alpha_claim/protected_exchange.py':'7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272'\",\"'vendor/alpha_claim/protected_exchange.py':'\"+current+\"'\"); terms=hashlib.sha256(Path('commercial/terms.py').read_bytes()).hexdigest(); s=s.replace(\"PINS['vendor/alpha_claim/protected_exchange_legacy.py'] = LEGACY_ENGINE_SHA256\",\"PINS['vendor/alpha_claim/protected_exchange_legacy.py'] = LEGACY_ENGINE_SHA256\\nPINS['commercial/terms.py'] = '\"+terms+\"'\"); p.write_text(s); print(current,terms)"
+      ],
+      "start_utc": "2026-10-30T23:53:12.701175+00:00",
+      "wall_seconds": 0.13077664375305176,
+      "waited_child_cpu_seconds": 0.030570999999999994,
+      "peak_sampled_process_group_rss_bytes": 28389376,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-first-check",
+      "command": [
+        "python3",
+        "-c",
+        "import py_compile; [py_compile.compile(p,doraise=True) for p in ['commercial/terms.py','commercial/ledger.py','experiments/commerce006.py','vendor/alpha_claim/protected_exchange.py','vendor/alpha_claim/protected_exchange_legacy.py']]; print('five native modules compile')"
+      ],
+      "start_utc": "2026-10-30T23:53:31.805606+00:00",
+      "wall_seconds": 0.12684893608093262,
+      "waited_child_cpu_seconds": 0.049706,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-financial-check",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path\nfrom commercial.persistence import memory_engine\nfrom commercial.terms import prospective_terms\nfrom experiments.commerce006 import engine\nfrom vendor.alpha_claim.contracts import digest\n\ndef opened(version):\n return memory_engine(engine(version=version),key=b'N'*32,contract='native-unit',validate=lambda task:None,check=lambda task,artifact:{'accepted':True,'decisive':True},opening=10_000_000,working=0)\ndef settle(ex,terms=None):\n ex.wallet('buyer',2_000_000)\n if terms is not None: ex.register_terms('t',terms,0)\n extra={'terms_id':'t','now':0} if terms is not None else {}\n ex.offer('o','buyer',2_000_000,'nonrecourse-simulated',{'task':1},10,**extra)\n row=ex.order('o'); bound={k:row[k] for k in ['id','buyer','price','rail','task_hash','contract','deadline']}\n ex.event('o','consent','consent',{'buyer':'buyer','termsHash':digest(bound)},0)\n ex.event('o','fund','fund',ex.provider.issue(ex.order('o'),'funded'),0)\n ex.event('o','prepare','prepare',{'artifact':1},1)\n ex.event('o','release','release',ex.provider.issue(ex.order('o'),'cleared'),2)\ndef refused(call):\n try: call()\n except ValueError: return\n raise AssertionError('expected rejection')\n\nold=opened('legacy-permanent-v1'); new=opened('prospective-v1')\nsettle(old);settle(new);assert old.snapshot()==new.snapshot()\nprint('legacy permanent snapshot parity PASS')\nold.close();new.close()\nex=opened('prospective-v1');settle(ex,prospective_terms('o',2_000_000,20,2,premium=10_000,fee=2000))\nbefore=ex.snapshot();assert before['tailReserve']==2_200_000\nrefused(lambda:ex.prospective_event('mature',{'id':'o'},20))\nex.prospective_event('claim',{'id':'o','claim_id':'c','amount':400_000,'kind':'disputed'},20)\nassert ex.snapshot()['payables']==400_000 and ex.snapshot()['tailReserve']==1_800_000\nprofit=ex.snapshot()['profit'];ex.prospective_event('mature',{'id':'o'},21)\nassert ex.snapshot()['tailReserve']==0 and ex.snapshot()['payables']==400_000 and ex.snapshot()['profit']==profit\nex.prospective_event('resolve_claim',{'id':'o','claim_id':'c','resolution':'deny'},22)\nassert ex.snapshot()['payables']==0 and ex.snapshot()['profit']==1_988_000\nex.prospective_event('mature',{'id':'o'},21)\nex.close();print('boundary claim, reserve release, retained provision, denial and duplicate maturity PASS')\nex=opened('prospective-v1');settle(ex,prospective_terms('o',2_000_000,20,2,coverage_limit=1_000_000,deductible=100_000,payout_delay_hours=3))\nex.prospective_event('claim',{'id':'o','claim_id':'c','amount':600_000,'kind':'covered'},3)\nex.prospective_event('resolve_claim',{'id':'o','claim_id':'c','resolution':'pay'},4)\nassert ex.snapshot()['payables']==0 and ex.snapshot()['recoveryIncome']==0\nrefused(lambda:ex.prospective_event('recover_claim',{'id':'o','claim_id':'c','amount':500_000,'source_tx':'r'},5))\nex.prospective_event('recover_claim',{'id':'o','claim_id':'c','amount':500_000,'source_tx':'r'},6)\nassert ex.snapshot()['recoveryIncome']==500_000\nrefused(lambda:ex.prospective_event('recover_claim',{'id':'o','claim_id':'c','amount':500_001,'source_tx':'changed'},6))\nex.prospective_event('mature',{'id':'o'},21)\nex.prospective_event('claim',{'id':'o','claim_id':'late','amount':50_000,'kind':'ordinary'},22)\nassert ex.snapshot()['payables']==50_000 and ex.snapshot()['investmentStopped'] and ex.snapshot()['unrestrictedEarned']==0\nex.close();print('coverage only after collected recovery, delay, deductible, over-recovery refusal, late excess fail-closed PASS')\n"
+      ],
+      "start_utc": "2026-10-30T23:53:44.565023+00:00",
+      "wall_seconds": 0.12213706970214844,
+      "waited_child_cpu_seconds": 0.07617599999999998,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-legacy-regressions",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_commerce006.py",
+        "-v"
+      ],
+      "start_utc": "2026-10-30T23:53:55.798116+00:00",
+      "wall_seconds": 0.7547392845153809,
+      "waited_child_cpu_seconds": 0.311714,
+      "peak_sampled_process_group_rss_bytes": 27865088,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-new-native",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; p=Path('commercial/ledger.py').read_text(); print(p[p.index('    def export(self):'):p.index('    def close(self):')]); print(Path('commercial/terms.py').read_text())"
+      ],
+      "start_utc": "2026-10-30T23:54:28.777559+00:00",
+      "wall_seconds": 0.12234878540039062,
+      "waited_child_cpu_seconds": 0.028647,
+      "peak_sampled_process_group_rss_bytes": 20316160,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-rebind-pins",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; import hashlib,re; p=Path('experiments/commerce006.py'); s=p.read_text(); h=hashlib.sha256(Path('vendor/alpha_claim/protected_exchange.py').read_bytes()).hexdigest(); s=re.sub(r\"('vendor/alpha_claim/protected_exchange.py':')[a-f0-9]{64}\",lambda m:m[1]+h,s); p.write_text(s); print(h)"
+      ],
+      "start_utc": "2026-10-30T23:54:32.596518+00:00",
+      "wall_seconds": 0.13866901397705078,
+      "waited_child_cpu_seconds": 0.032095,
+      "peak_sampled_process_group_rss_bytes": 28127232,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-terms-tables",
+      "command": [
+        "rg",
+        "-n",
+        "prospective_terms|prospective_orders|terms_json|matured|CREATE TABLE",
+        "vendor/alpha_claim/protected_exchange.py"
+      ],
+      "start_utc": "2026-10-30T23:55:11.760029+00:00",
+      "wall_seconds": 0.13017487525939941,
+      "waited_child_cpu_seconds": 0.0032900000000000004,
+      "peak_sampled_process_group_rss_bytes": 28311552,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-claims",
+      "command": [
+        "sed",
+        "-n",
+        "420,510p",
+        "vendor/alpha_claim/protected_exchange.py"
+      ],
+      "start_utc": "2026-10-30T23:55:14.582024+00:00",
+      "wall_seconds": 0.12929725646972656,
+      "waited_child_cpu_seconds": 0.0028200000000000005,
+      "peak_sampled_process_group_rss_bytes": 9437184,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-rebind-terms-pin",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; import hashlib,re; p=Path('experiments/commerce006.py'); s=p.read_text(); h=hashlib.sha256(Path('commercial/terms.py').read_bytes()).hexdigest(); s=re.sub(r\"(PINS\\['commercial/terms.py'\\] = ')[a-f0-9]{64}\",lambda m:m[1]+h,s); p.write_text(s); print(h)"
+      ],
+      "start_utc": "2026-10-30T23:55:32.390440+00:00",
+      "wall_seconds": 0.12237095832824707,
+      "waited_child_cpu_seconds": 0.028118999999999998,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-final-pin",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; import hashlib,re; p=Path('experiments/commerce006.py'); s=p.read_text(); a=hashlib.sha256(Path('vendor/alpha_claim/protected_exchange.py').read_bytes()).hexdigest(); b=hashlib.sha256(Path('commercial/terms.py').read_bytes()).hexdigest(); s=re.sub(r\"('vendor/alpha_claim/protected_exchange.py':')[a-f0-9]{64}\",lambda m:m[1]+a,s); s=re.sub(r\"(PINS\\['commercial/terms.py'\\] = ')[a-f0-9]{64}\",lambda m:m[1]+b,s); p.write_text(s); print(a,b)"
+      ],
+      "start_utc": "2026-10-30T23:56:04.528882+00:00",
+      "wall_seconds": 0.1312265396118164,
+      "waited_child_cpu_seconds": 0.030908999999999996,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-service-closure",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; s=Path('adaptive_enterprise/instruments.py').read_text(); print(s[:4200]); print(Path('enterprise/services.py').read_text()[:1800]); print(Path('connected_enterprise/engine.py').read_text()[:5500])"
+      ],
+      "start_utc": "2026-10-30T23:56:20.385222+00:00",
+      "wall_seconds": 0.12470221519470215,
+      "waited_child_cpu_seconds": 0.022066999999999996,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-adaptive-manifest",
+      "command": [
+        "rg",
+        "-n",
+        "-A65",
+        "^def load_jobs|^def prepare_services",
+        "adaptive_enterprise/instruments.py"
+      ],
+      "start_utc": "2026-10-30T23:56:25.768106+00:00",
+      "wall_seconds": 0.12829136848449707,
+      "waited_child_cpu_seconds": 0.002669,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-manifest-schema",
+      "command": [
+        "rg",
+        "-n",
+        "-A32",
+        "^def _validate_manifest",
+        "adaptive_enterprise/instruments.py"
+      ],
+      "start_utc": "2026-10-30T23:56:29.644525+00:00",
+      "wall_seconds": 0.12461471557617188,
+      "waited_child_cpu_seconds": 0.0026869999999999997,
+      "peak_sampled_process_group_rss_bytes": 28127232,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-repin-collision-guard",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; import hashlib,re; p=Path('experiments/commerce006.py'); s=p.read_text(); h=hashlib.sha256(Path('vendor/alpha_claim/protected_exchange.py').read_bytes()).hexdigest(); s=re.sub(r\"('vendor/alpha_claim/protected_exchange.py':')[a-f0-9]{64}\",lambda m:m[1]+h,s); p.write_text(s); print(h)"
+      ],
+      "start_utc": "2026-10-30T23:56:30.184636+00:00",
+      "wall_seconds": 0.1218106746673584,
+      "waited_child_cpu_seconds": 0.025906999999999996,
+      "peak_sampled_process_group_rss_bytes": 28127232,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-freeze-source",
+      "command": [
+        "head",
+        "-65",
+        "connected_enterprise/runner.py"
+      ],
+      "start_utc": "2026-10-30T23:57:01.066154+00:00",
+      "wall_seconds": 0.12299394607543945,
+      "waited_child_cpu_seconds": 0.0022319999999999996,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-source-closure",
+      "command": [
+        "rg",
+        "-n",
+        "-A25",
+        "^def source_paths",
+        "adaptive_enterprise/runner.py"
+      ],
+      "start_utc": "2026-10-30T23:57:04.938282+00:00",
+      "wall_seconds": 0.12179398536682129,
+      "waited_child_cpu_seconds": 0.003055,
+      "peak_sampled_process_group_rss_bytes": 28127232,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-final-changedcase",
+      "command": [
+        "python3",
+        "-c",
+        "from commercial.persistence import memory_engine\nfrom commercial.terms import prospective_terms\nfrom experiments.commerce006 import engine\nfrom vendor.alpha_claim.contracts import digest\nimport hashlib\nfrom pathlib import Path\nassert hashlib.sha256(Path('vendor/alpha_claim/protected_exchange_legacy.py').read_bytes()).hexdigest()=='7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272'\nex=memory_engine(engine(version='prospective-v1'),key=b'F'*32,contract='native-prospective-v1:fixture',validate=lambda task:None,check=lambda task,artifact:{'accepted':True,'decisive':True},opening=10_000_000,working=0)\nterms=prospective_terms('o',2_000_000,20,2,coverage_limit=1_000_000,deductible=100_000,premium=10_000,payout_delay_hours=3)\nassert terms['clock_unit']=='INTEGER_HOURS'\nex.register_terms('t',terms,0);ex.wallet('b',2_000_000);ex.offer('o','b',2_000_000,'nonrecourse-simulated',{'task':1},10,terms_id='t',now=0)\nrow=ex.order('o');bound={k:row[k] for k in ['id','buyer','price','rail','task_hash','contract','deadline']}\nex.event('o','consent','consent',{'buyer':'b','termsHash':digest(bound)},0)\nex.event('o','fund','fund',ex.provider.issue(ex.order('o'),'funded'),0)\nex.event('o','prepare','prepare',{'artifact':1},1)\nex.event('o','release','release',ex.provider.issue(ex.order('o'),'cleared'),2)\nex.prospective_event('claim',{'id':'o','claim_id':'c','amount':600_000,'kind':'covered'},3)\nex.prospective_event('resolve_claim',{'id':'o','claim_id':'c','settlement_id':'pay1','resolution':'pay'},4)\ndef refuse(op,args,now):\n before=ex.snapshot()\n try:ex.prospective_event(op,args,now)\n except ValueError:pass\n else:raise AssertionError('rejection expected')\n assert before==ex.snapshot()\nrefuse('recover_claim',{'id':'o','claim_id':'c','settlement_id':'early','amount':100_000,'source_tx':'r0'},5)\nex.prospective_event('recover_claim',{'id':'o','claim_id':'c','settlement_id':'recovery1','amount':200_000,'source_tx':'r1'},6)\nrefuse('recover_claim',{'id':'o','claim_id':'c','settlement_id':'duplicate-source','amount':100_000,'source_tx':'r1'},6)\nex.prospective_event('recover_claim',{'id':'o','claim_id':'c','settlement_id':'recovery2','amount':300_000,'source_tx':'r2'},7)\nassert ex.snapshot()['recoveryIncome']==500_000 and ex.snapshot()['profit']==1_890_000\nrefuse('recover_claim',{'id':'o','claim_id':'c','settlement_id':'over','amount':1,'source_tx':'r3'},7)\nex.prospective_event('mature',{'id':'o'},21)\nassert ex.snapshot()['tailReserve']==0 and ex.snapshot()['payables']==0\nex.close()\nprint('native changedcase PASS: immutable legacy hash; explicit hour clock; costed coverage; exact delay; two collected installments; duplicate tx and excess recovery refuse unchanged; maturity no residual')\n"
+      ],
+      "start_utc": "2026-10-30T23:57:19.207047+00:00",
+      "wall_seconds": 0.12824034690856934,
+      "waited_child_cpu_seconds": 0.075575,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-1",
+      "command": [
+        "git",
+        "diff",
+        "10bdb2c5787f95158642b068756ba30b58140562",
+        "--",
+        "commercial/terms.py",
+        "commercial/ledger.py",
+        "experiments/commerce006.py"
+      ],
+      "start_utc": "2026-10-30T23:57:53.119187+00:00",
+      "wall_seconds": 0.12466597557067871,
+      "waited_child_cpu_seconds": 0.007963,
+      "peak_sampled_process_group_rss_bytes": 27865088,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-2",
+      "command": [
+        "git",
+        "diff",
+        "10bdb2c5787f95158642b068756ba30b58140562",
+        "--",
+        "vendor/alpha_claim/protected_exchange.py"
+      ],
+      "start_utc": "2026-10-30T23:57:56.998591+00:00",
+      "wall_seconds": 0.12440276145935059,
+      "waited_child_cpu_seconds": 0.006844,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-3",
+      "command": [
+        "cat",
+        "commercial/terms.py"
+      ],
+      "start_utc": "2026-10-30T23:57:57.381978+00:00",
+      "wall_seconds": 0.1222081184387207,
+      "waited_child_cpu_seconds": 0.0015700000000000002,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "checkpoint-001",
+      "command": [
+        "python3",
+        "-c",
+        "import json,shutil,datetime; from pathlib import Path; p=Path('p0-native/campaign/native-capital-020'); shutil.copyfile('upload/Pasted text(20261030-234749).txt',p/'MANDATE.txt'); (p/'CHECKPOINT-001.json').write_text(json.dumps({'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'state':'IMPLEMENTATION_IN_PROGRESS','native_author':'complete, independent review active','root':'Account/journal/source-transition and CLI integration in progress','resources':json.loads(Path('P0_RESOURCES.json').read_text())},indent=2)); print('checkpoint preserved')"
+      ],
+      "start_utc": "2026-10-30T23:58:09.292647+00:00",
+      "wall_seconds": 0.15264487266540527,
+      "waited_child_cpu_seconds": 0.082526,
+      "peak_sampled_process_group_rss_bytes": 27865088,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-4",
+      "command": [
+        "sed",
+        "-n",
+        "1,270p",
+        "vendor/alpha_claim/protected_exchange.py"
+      ],
+      "start_utc": "2026-10-30T23:58:15.317614+00:00",
+      "wall_seconds": 0.1256122589111328,
+      "waited_child_cpu_seconds": 0.0029179999999999996,
+      "peak_sampled_process_group_rss_bytes": 28131328,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-5",
+      "command": [
+        "sed",
+        "-n",
+        "270,420p",
+        "vendor/alpha_claim/protected_exchange.py"
+      ],
+      "start_utc": "2026-10-30T23:58:15.712205+00:00",
+      "wall_seconds": 0.12446713447570801,
+      "waited_child_cpu_seconds": 0.002196,
+      "peak_sampled_process_group_rss_bytes": 28131328,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-6",
+      "command": [
+        "sed",
+        "-n",
+        "510,755p",
+        "vendor/alpha_claim/protected_exchange.py"
+      ],
+      "start_utc": "2026-10-30T23:58:19.269211+00:00",
+      "wall_seconds": 0.13254380226135254,
+      "waited_child_cpu_seconds": 0.0026369999999999996,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-7",
+      "command": [
+        "rg",
+        "-n",
+        "prospective|resolve_claim|recover_claim|matur",
+        "tests",
+        "commercial/account.py",
+        "commercial/finance.py",
+        "commercial/persistence.py"
+      ],
+      "start_utc": "2026-10-30T23:58:19.680121+00:00",
+      "wall_seconds": 0.13516449928283691,
+      "waited_child_cpu_seconds": 0.011106999999999999,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 2,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-8",
+      "command": [
+        "rg",
+        "-n",
+        "class Account|class JournalAccount|def audit_account|def authorize|prospective",
+        "commercial",
+        "connected_enterprise",
+        "adaptive_enterprise",
+        "tests/test_commerce007.py"
+      ],
+      "start_utc": "2026-10-30T23:58:22.365456+00:00",
+      "wall_seconds": 0.1420886516571045,
+      "waited_child_cpu_seconds": 0.029328999999999994,
+      "peak_sampled_process_group_rss_bytes": 27000832,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-earned-formula",
+      "command": [
+        "sed",
+        "-n",
+        "205,275p",
+        "vendor/alpha_claim/protected_exchange.py"
+      ],
+      "start_utc": "2026-10-30T23:58:28.540363+00:00",
+      "wall_seconds": 0.13933181762695312,
+      "waited_child_cpu_seconds": 0.0034389999999999993,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-9",
+      "command": [
+        "sed",
+        "-n",
+        "1,180p",
+        "tests/test_commerce007.py"
+      ],
+      "start_utc": "2026-10-30T23:59:01.061513+00:00",
+      "wall_seconds": 0.12825250625610352,
+      "waited_child_cpu_seconds": 0.002738,
+      "peak_sampled_process_group_rss_bytes": 27869184,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-10",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path;import hashlib,subprocess; old=subprocess.check_output([\"git\",\"show\",\"10bdb2c5787f95158642b068756ba30b58140562:vendor/alpha_claim/protected_exchange.py\"]); new=Path(\"vendor/alpha_claim/protected_exchange_legacy.py\").read_bytes(); print({\"legacy_byte_equal\":old==new,\"old_sha256\":hashlib.sha256(old).hexdigest(),\"new_sha256\":hashlib.sha256(new).hexdigest()})"
+      ],
+      "start_utc": "2026-10-30T23:59:01.458776+00:00",
+      "wall_seconds": 0.13359785079956055,
+      "waited_child_cpu_seconds": 0.040311,
+      "peak_sampled_process_group_rss_bytes": 27869184,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-adverse-inspect",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; p=Path('vendor/alpha_claim/protected_exchange.py'); s=p.read_text(); print(s[s.index('    def snapshot'):s.index('    def cost')]); print(s[s.index('    def prospective_event'):s.index('    def event')]); print(Path('tests/test_native_capital_native.py').read_text() if Path('tests/test_native_capital_native.py').exists() else 'no native test file')"
+      ],
+      "start_utc": "2026-10-30T23:59:05.035060+00:00",
+      "wall_seconds": 0.12940359115600586,
+      "waited_child_cpu_seconds": 0.027906999999999998,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-test-fixture-inspect",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; print(Path('tests/test_adaptive_account.py').read_text()[:6500]); print([p.name for p in Path('tests').glob('*capital*')])"
+      ],
+      "start_utc": "2026-10-30T23:59:11.057647+00:00",
+      "wall_seconds": 0.1377565860748291,
+      "waited_child_cpu_seconds": 0.03285199999999999,
+      "peak_sampled_process_group_rss_bytes": 28127232,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-fixture-sourcepaths",
+      "command": [
+        "python3",
+        "-c",
+        "from enterprise.services import SOURCE_PATHS; print(SOURCE_PATHS); from connected_enterprise.finance import SOURCE_PATHS as f; print(f)"
+      ],
+      "start_utc": "2026-10-30T23:59:16.598945+00:00",
+      "wall_seconds": 0.13754844665527344,
+      "waited_child_cpu_seconds": 0.096245,
+      "peak_sampled_process_group_rss_bytes": 28131328,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-repin-adverse-repair",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; import hashlib,re; p=Path('experiments/commerce006.py'); s=p.read_text(); h=hashlib.sha256(Path('vendor/alpha_claim/protected_exchange.py').read_bytes()).hexdigest(); s=re.sub(r\"('vendor/alpha_claim/protected_exchange.py':')[a-f0-9]{64}\",lambda m:m[1]+h,s); p.write_text(s); print(h)"
+      ],
+      "start_utc": "2026-10-30T23:59:53.568140+00:00",
+      "wall_seconds": 0.12828278541564941,
+      "waited_child_cpu_seconds": 0.023054,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "compile-root",
+      "command": [
+        "python3",
+        "-m",
+        "py_compile",
+        "adaptive_enterprise/account.py",
+        "connected_enterprise/finance.py",
+        "connected_enterprise/upgrades.py",
+        "tests/test_native_capital.py"
+      ],
+      "start_utc": "2026-10-30T23:59:56.637076+00:00",
+      "wall_seconds": 0.12277865409851074,
+      "waited_child_cpu_seconds": 0.049026,
+      "peak_sampled_process_group_rss_bytes": 27869184,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "public-capital-tests-001",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_native_capital.py",
+        "-v"
+      ],
+      "start_utc": "2026-10-31T00:00:02.822374+00:00",
+      "wall_seconds": 16.9934663772583,
+      "waited_child_cpu_seconds": 16.694413,
+      "peak_sampled_process_group_rss_bytes": 28311552,
+      "exit_code": 1,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-adverse-public-regression",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_native_capital_native.py",
+        "-v"
+      ],
+      "start_utc": "2026-10-31T00:00:31.628948+00:00",
+      "wall_seconds": 3.6251983642578125,
+      "waited_child_cpu_seconds": 3.524712,
+      "peak_sampled_process_group_rss_bytes": 28311552,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-11",
+      "command": [
+        "git",
+        "diff",
+        "--",
+        "vendor/alpha_claim/protected_exchange.py",
+        "experiments/commerce006.py"
+      ],
+      "start_utc": "2026-10-31T00:00:42.681379+00:00",
+      "wall_seconds": 0.12717461585998535,
+      "waited_child_cpu_seconds": 0.007091999999999999,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-12",
+      "command": [
+        "cat",
+        "tests/test_native_capital_native.py"
+      ],
+      "start_utc": "2026-10-31T00:00:43.077565+00:00",
+      "wall_seconds": 0.004032135009765625,
+      "waited_child_cpu_seconds": 0.0024999999999999996,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "native-repin-maturity-event",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; import hashlib,re; p=Path('experiments/commerce006.py'); s=p.read_text(); h=hashlib.sha256(Path('vendor/alpha_claim/protected_exchange.py').read_bytes()).hexdigest(); s=re.sub(r\"('vendor/alpha_claim/protected_exchange.py':')[a-f0-9]{64}\",lambda m:m[1]+h,s); p.write_text(s); print(h)"
+      ],
+      "start_utc": "2026-10-31T00:00:59.452116+00:00",
+      "wall_seconds": 0.12784385681152344,
+      "waited_child_cpu_seconds": 0.028201999999999998,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-13",
+      "command": [
+        "python3",
+        "-c",
+        "import sys,tempfile\nfrom pathlib import Path\nsys.path.insert(0,\"tests\")\nfrom test_native_capital_native import NativeCapitalAdverseStateTests as T\nT.setUpClass()\ntry:\n t=T(\"test_reversal_keeps_distinct_claim_service_and_registered_residual\")\n with tempfile.TemporaryDirectory(prefix=\"review-prior-claim-\") as tmp:\n  with t.open(Path(tmp)/\"account.sqlite\") as a:\n   t.settle(a)\n   a.execute(\"claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"amount\":50000,\"kind\":\"covered\"},3)\n   a.execute(\"event\",{\"id\":\"o\",\"event_id\":\"subsequent-reversal\",\"action\":\"late_reversal\"},4)\n   s=a.snapshot()[\"summary\"]\n   assert (s[\"tailReserve\"],s[\"payables\"])==(150000,50000),s\n   a.execute(\"resolve_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"pay1\",\"resolution\":\"pay\"},5)\n   a.execute(\"recover_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"recover1\",\"amount\":50000,\"source_tx\":\"prior-recovery\"},5)\n   before=a.snapshot()[\"summary\"].copy()\n   try:a.execute(\"recover_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"recover2\",\"amount\":1,\"source_tx\":\"prior-recovery\"},6)\n   except ValueError:pass\n   else:raise AssertionError(\"duplicate recovery accepted\")\n   assert a.snapshot()[\"summary\"]==before\n   try:a.execute(\"mature\",{\"id\":\"o\"},20)\n   except ValueError:pass\n   else:raise AssertionError(\"inclusive boundary released\")\n   assert a.snapshot()[\"summary\"][\"tailReserve\"]==150000\n   a.execute(\"mature\",{\"id\":\"o\"},21)\n   assert a.snapshot()[\"summary\"][\"tailReserve\"]==100000\n   assert a.audit()[\"accepted\"]\n   print({\"prior_claim_survives_reversal\":True,\"duplicate_recovery_rejected\":True,\"inclusive_maturity_boundary_preserved\":True,\"matured_residual\":100000,\"audit_accepted\":True})\nfinally:T.tearDownClass()\n"
+      ],
+      "start_utc": "2026-10-31T00:01:02.348457+00:00",
+      "wall_seconds": 3.226839542388916,
+      "waited_child_cpu_seconds": 3.081658,
+      "peak_sampled_process_group_rss_bytes": 28135424,
+      "exit_code": 1,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-14",
+      "command": [
+        "sed",
+        "-n",
+        "212,290p",
+        "commercial/ledger.py"
+      ],
+      "start_utc": "2026-10-31T00:01:39.560353+00:00",
+      "wall_seconds": 0.1396315097808838,
+      "waited_child_cpu_seconds": 0.0026279999999999993,
+      "peak_sampled_process_group_rss_bytes": 28172288,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-15",
+      "command": [
+        "sed",
+        "-n",
+        "423,460p",
+        "vendor/alpha_claim/protected_exchange.py"
+      ],
+      "start_utc": "2026-10-31T00:01:39.968720+00:00",
+      "wall_seconds": 0.1431138515472412,
+      "waited_child_cpu_seconds": 0.010504,
+      "peak_sampled_process_group_rss_bytes": 28172288,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "public-capital-tests-002",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_native_capital*.py",
+        "-v"
+      ],
+      "start_utc": "2026-10-31T00:01:35.883363+00:00",
+      "wall_seconds": 27.575031518936157,
+      "waited_child_cpu_seconds": 27.034112,
+      "peak_sampled_process_group_rss_bytes": 28835840,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "capital-inspect",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; print(Path('connected_enterprise/runner.py').read_text()); print(Path('adaptive_enterprise/instruments.py').read_text()[:8000]); print(Path('adaptive_enterprise/instruments.py').read_text()[-9000:])"
+      ],
+      "start_utc": "2026-10-31T00:02:08.959631+00:00",
+      "wall_seconds": 0.13759636878967285,
+      "waited_child_cpu_seconds": 0.029675999999999998,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-16",
+      "command": [
+        "python3",
+        "-c",
+        "import sys,tempfile\nfrom pathlib import Path\nsys.path.insert(0,\"tests\")\nfrom test_native_capital_native import NativeCapitalAdverseStateTests as T\nT.setUpClass()\ntry:\n t=T(\"test_reversal_keeps_distinct_claim_service_and_registered_residual\")\n with tempfile.TemporaryDirectory(prefix=\"review-prior-claim-\") as tmp:\n  with t.open(Path(tmp)/\"account.sqlite\") as a:\n   t.settle(a)\n   a.execute(\"claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"amount\":50000,\"kind\":\"covered\"},3)\n   a.execute(\"event\",{\"id\":\"o\",\"event_id\":\"subsequent-reversal\",\"action\":\"late_reversal\"},4)\n   s=a.snapshot()[\"summary\"]\n   assert (s[\"tailReserve\"],s[\"payables\"])==(150000,50000),s\n   a.execute(\"resolve_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"pay1\",\"resolution\":\"pay\"},5)\n   a.execute(\"recover_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"recover1\",\"amount\":50000,\"source_tx\":\"prior-recovery\"},5)\n   before=a.snapshot()[\"summary\"].copy()\n   try:a.execute(\"recover_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"recover2\",\"amount\":1,\"source_tx\":\"prior-recovery\"},6)\n   except ValueError:pass\n   else:raise AssertionError(\"duplicate recovery accepted\")\n   assert a.snapshot()[\"summary\"]==before\n   try:a.execute(\"mature\",{\"id\":\"o\",\"event_id\":\"early-attempt\"},20)\n   except ValueError:pass\n   else:raise AssertionError(\"inclusive boundary released\")\n   assert a.snapshot()[\"summary\"][\"tailReserve\"]==150000\n   a.execute(\"mature\",{\"id\":\"o\",\"event_id\":\"actual-maturity\"},21)\n   assert a.snapshot()[\"summary\"][\"tailReserve\"]==100000\n   after=a.snapshot()[\"summary\"].copy()\n   try:a.execute(\"mature\",{\"id\":\"o\",\"event_id\":\"duplicate-maturity\"},22)\n   except ValueError:pass\n   else:raise AssertionError(\"second maturity accepted\")\n   assert a.snapshot()[\"summary\"]==after\n   assert a.audit()[\"accepted\"]\n   print({\"prior_claim_survives_reversal\":True,\"duplicate_recovery_rejected\":True,\"inclusive_maturity_boundary_preserved\":True,\"valid_later_maturity_succeeds\":True,\"second_maturity_rejected\":True,\"matured_residual\":100000,\"audit_accepted\":True})\nfinally:T.tearDownClass()\n"
+      ],
+      "start_utc": "2026-10-31T00:02:17.426837+00:00",
+      "wall_seconds": 5.153318166732788,
+      "waited_child_cpu_seconds": 5.051788,
+      "peak_sampled_process_group_rss_bytes": 28311552,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-17",
+      "command": [
+        "cat",
+        "connected_enterprise/upgrades.py"
+      ],
+      "start_utc": "2026-10-31T00:02:22.864748+00:00",
+      "wall_seconds": 0.004056453704833984,
+      "waited_child_cpu_seconds": 0.0022179999999999995,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "capital-signatures",
+      "command": [
+        "rg",
+        "-n",
+        "^def prepare_services|^def source_paths|^def _source|^def execute_job|^SOURCE",
+        "adaptive_enterprise/instruments.py",
+        "adaptive_enterprise/runner.py",
+        "commercial/ledger.py"
+      ],
+      "start_utc": "2026-10-31T00:02:25.420624+00:00",
+      "wall_seconds": 0.13596606254577637,
+      "waited_child_cpu_seconds": 0.008066,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "capital-source-size",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; from connected_enterprise.runner import source_paths; p=Path.cwd(); paths=source_paths(p); print(len(paths),sum((p/x).stat().st_size for x in paths)); from adaptive_enterprise.instruments import prepare_services; import inspect; print(inspect.getsource(prepare_services)[:5000])"
+      ],
+      "start_utc": "2026-10-31T00:02:30.279846+00:00",
+      "wall_seconds": 0.14671850204467773,
+      "waited_child_cpu_seconds": 0.13871499999999998,
+      "peak_sampled_process_group_rss_bytes": 15335424,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-18",
+      "command": [
+        "git",
+        "diff",
+        "10bdb2c5787f95158642b068756ba30b58140562",
+        "--",
+        "adaptive_enterprise/account.py",
+        "connected_enterprise/finance.py"
+      ],
+      "start_utc": "2026-10-31T00:02:35.398709+00:00",
+      "wall_seconds": 0.16060757637023926,
+      "waited_child_cpu_seconds": 0.009836999999999999,
+      "peak_sampled_process_group_rss_bytes": 28184576,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-19",
+      "command": [
+        "sed",
+        "-n",
+        "125,215p",
+        "commercial/ledger.py"
+      ],
+      "start_utc": "2026-10-31T00:02:42.973726+00:00",
+      "wall_seconds": 0.13996434211730957,
+      "waited_child_cpu_seconds": 0.002939999999999999,
+      "peak_sampled_process_group_rss_bytes": 28184576,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-20",
+      "command": [
+        "sed",
+        "-n",
+        "124,280p",
+        "connected_enterprise/finance.py"
+      ],
+      "start_utc": "2026-10-31T00:02:43.385485+00:00",
+      "wall_seconds": 0.14034748077392578,
+      "waited_child_cpu_seconds": 0.002816,
+      "peak_sampled_process_group_rss_bytes": 6160384,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-21",
+      "command": [
+        "sed",
+        "-n",
+        "250,325p",
+        "adaptive_enterprise/account.py"
+      ],
+      "start_utc": "2026-10-31T00:03:10.019954+00:00",
+      "wall_seconds": 0.15016674995422363,
+      "waited_child_cpu_seconds": 0.0028460000000000004,
+      "peak_sampled_process_group_rss_bytes": 28286976,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-22",
+      "command": [
+        "sed",
+        "-n",
+        "477,530p",
+        "adaptive_enterprise/account.py"
+      ],
+      "start_utc": "2026-10-31T00:03:10.444079+00:00",
+      "wall_seconds": 0.006140947341918945,
+      "waited_child_cpu_seconds": 0.002467,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "upgrade-tests-001",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_native_source_upgrade.py",
+        "-v"
+      ],
+      "start_utc": "2026-10-31T00:02:58.005105+00:00",
+      "wall_seconds": 28.226757287979126,
+      "waited_child_cpu_seconds": 27.762942000000002,
+      "peak_sampled_process_group_rss_bytes": 28442624,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-23",
+      "command": [
+        "sed",
+        "-n",
+        "650,765p",
+        "connected_enterprise/finance.py"
+      ],
+      "start_utc": "2026-10-31T00:03:47.570201+00:00",
+      "wall_seconds": 0.00429844856262207,
+      "waited_child_cpu_seconds": 0.0019879999999999997,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-engine-selector",
+      "command": [
+        "rg",
+        "-n",
+        "native_engine",
+        "commercial/ledger.py"
+      ],
+      "start_utc": "2026-10-31T00:03:50.296122+00:00",
+      "wall_seconds": 0.1409463882446289,
+      "waited_child_cpu_seconds": 0.0024339999999999995,
+      "peak_sampled_process_group_rss_bytes": 22937600,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-24",
+      "command": [
+        "rg",
+        "-n",
+        "-A64",
+        "-B3",
+        "def _pending_native_coverage|def _pending_native|def source_identity|def _assert_owner",
+        "connected_enterprise/finance.py",
+        "adaptive_enterprise/account.py"
+      ],
+      "start_utc": "2026-10-31T00:03:54.509165+00:00",
+      "wall_seconds": 0.14013385772705078,
+      "waited_child_cpu_seconds": 0.006181000000000001,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "bind-historical-root",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; p=Path('adaptive_enterprise/account.py');s=p.read_text().replace('verify_historical(ticket, manifest)','verify_historical(ticket, manifest, root=root)').replace('verify_historical(ticket, self.manifest)','verify_historical(ticket, self.manifest, root=self.root)');p.write_text(s); p=Path('connected_enterprise/finance.py');s=p.read_text().replace('def _validate_source_history(journal, record, manifest):','def _validate_source_history(journal, record, manifest, root):').replace('verify_historical(ticket, manifest)','verify_historical(ticket, manifest, root=root)').replace('verify_historical(ticket, self.manifest)','verify_historical(ticket, self.manifest, root=self.root)').replace('_validate_source_history(journal, record, manifest)','_validate_source_history(journal, record, manifest, root)');p.write_text(s)"
+      ],
+      "start_utc": "2026-10-31T00:04:56.897891+00:00",
+      "wall_seconds": 0.1441354751586914,
+      "waited_child_cpu_seconds": 0.029915,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "ordinary-upgrade-tests-002",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_native_source_upgrade.py",
+        "-v"
+      ],
+      "start_utc": "2026-10-31T00:04:57.301660+00:00",
+      "wall_seconds": 26.872379064559937,
+      "waited_child_cpu_seconds": 26.214261,
+      "peak_sampled_process_group_rss_bytes": 28573696,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-25",
+      "command": [
+        "cat",
+        "connected_enterprise/upgrades.py"
+      ],
+      "start_utc": "2026-10-31T00:05:30.328028+00:00",
+      "wall_seconds": 0.0036253929138183594,
+      "waited_child_cpu_seconds": 0.001986,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-26",
+      "command": [
+        "sed",
+        "-n",
+        "136,148p",
+        "commercial/ledger.py"
+      ],
+      "start_utc": "2026-10-31T00:05:30.623555+00:00",
+      "wall_seconds": 0.14197111129760742,
+      "waited_child_cpu_seconds": 0.002429,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-27",
+      "command": [
+        "sed",
+        "-n",
+        "175,234p",
+        "connected_enterprise/finance.py"
+      ],
+      "start_utc": "2026-10-31T00:05:31.025736+00:00",
+      "wall_seconds": 0.004052639007568359,
+      "waited_child_cpu_seconds": 0.0018809999999999999,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-28",
+      "command": [
+        "rg",
+        "-n",
+        "-A38",
+        "-B5",
+        "_assert_source_write",
+        "adaptive_enterprise/account.py"
+      ],
+      "start_utc": "2026-10-31T00:05:31.312299+00:00",
+      "wall_seconds": 0.14554929733276367,
+      "waited_child_cpu_seconds": 0.003078,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-29",
+      "command": [
+        "rg",
+        "--files",
+        "tests",
+        "-g",
+        "*native*",
+        "-g",
+        "*upgrade*"
+      ],
+      "start_utc": "2026-10-31T00:06:10.814537+00:00",
+      "wall_seconds": 0.1386699676513672,
+      "waited_child_cpu_seconds": 0.005522999999999999,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-30",
+      "command": [
+        "cat",
+        "tests/test_native_source_upgrade.py"
+      ],
+      "start_utc": "2026-10-31T00:06:13.696013+00:00",
+      "wall_seconds": 0.004465818405151367,
+      "waited_child_cpu_seconds": 0.001869,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "capital-compile",
+      "command": [
+        "python3",
+        "-c",
+        "import py_compile; [py_compile.compile(p,doraise=True) for p in ['connected_enterprise/capital.py','connected_enterprise/runner.py','connected_enterprise/engine.py']]; print('capital modules compile')"
+      ],
+      "start_utc": "2026-10-31T00:07:35.764776+00:00",
+      "wall_seconds": 0.17205238342285156,
+      "waited_child_cpu_seconds": 0.04549899999999999,
+      "peak_sampled_process_group_rss_bytes": 5111808,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "inspect-push-triggers",
+      "command": [
+        "rg",
+        "-n",
+        "-A12",
+        "^on:|^  push:|^  pull_request:|^    branches:",
+        ".github/workflows"
+      ],
+      "start_utc": "2026-10-31T00:07:47.439168+00:00",
+      "wall_seconds": 0.14901518821716309,
+      "waited_child_cpu_seconds": 0.0073560000000000006,
+      "peak_sampled_process_group_rss_bytes": 12320768,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "checkpoint-002",
+      "command": [
+        "python3",
+        "-c",
+        "import json,datetime;from pathlib import Path;p=Path('p0-native/campaign/native-capital-020');(p/'CHECKPOINT-002.json').write_text(json.dumps({'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'state':'IMPLEMENTATION_AND_QUALIFICATION','completed':'Native terms/claims/maturity;9publictests;4initialpristineupgrades;ordinarycontractupgrade4tests','findings':'Late-reversalresidualandmaturityretryrepaired;ordinaryactivationandportablehistoricalrootsourceguardrepairunderlatesttests','remaining':'Latest6upgradetests;canonicalCLIcomposedverification;sourcefreeze/bundle;independentreconciliation','resources':json.loads(Path('P0_RESOURCES.json').read_text())},indent=2)); print('checkpoint preserved')"
+      ],
+      "start_utc": "2026-10-31T00:07:47.969641+00:00",
+      "wall_seconds": 0.17104887962341309,
+      "waited_child_cpu_seconds": 0.028521,
+      "peak_sampled_process_group_rss_bytes": 27525120,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "latest-upgrade-tests-003",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_native_source_upgrade.py",
+        "-v"
+      ],
+      "start_utc": "2026-10-31T00:07:20.534455+00:00",
+      "wall_seconds": 37.231319189071655,
+      "waited_child_cpu_seconds": 36.756147,
+      "peak_sampled_process_group_rss_bytes": 28672000,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "resource-snapshot",
+      "command": [
+        "python3",
+        "-c",
+        "import json; from pathlib import Path;s=json.loads(Path('P0_RESOURCES.json').read_text());print(json.dumps({'charged_cpu_seconds':s['charged_cpu_seconds'],'job_count':len(s['jobs']),'active':s['active'],'failed_jobs':[x['label'] for x in s['jobs'] if x['exit_code'] or x['limit_failure']]}))"
+      ],
+      "start_utc": "2026-10-31T00:08:53.440048+00:00",
+      "wall_seconds": 0.16251373291015625,
+      "waited_child_cpu_seconds": 0.03063,
+      "wrapper_cpu_seconds": 0.088324167,
+      "peak_sampled_process_group_rss_bytes": 28520448,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-31",
+      "command": [
+        "python3",
+        "-c",
+        "import copy,resource,shutil,sys\nfrom pathlib import Path\nsys.path.insert(0,\"tests\")\nfrom test_native_source_upgrade import NativeSourceUpgradeTests as T, CONTRACT\nfrom commercial.terms import prospective_terms\nT.setUpClass()\nt=T(\"test_pristine_old_verifier_transition_preserves_account_money_and_obligations\")\ntry:\n t.setUp()\n ticket=t.authorize()\n untouched=copy.deepcopy(ticket)\n t.a=t.upgrade(ticket)\n fallback=t.new/\"historical-source-versions\"/ticket[\"body\"][\"from_source\"][\"sha256\"]\n fallback.parent.mkdir()\n shutil.move(str(t.old),str(fallback))\n assert not t.old.exists()\n assert t.a.audit()[\"accepted\"]\n t.a.close();t.a=t.reopen()\n a=t.a\n job=next(j for j in t.manifest[\"jobs\"] if j[\"service_id\"]==\"reconciliation\" and j[\"accepted\"])\n terms=prospective_terms(\"new-prospective\",1000000,10,5)\n a.execute(\"register_terms\",{\"id\":\"new-terms\",\"terms\":terms},4)\n a.execute(\"wallet\",{\"buyer\":\"new-buyer\",\"amount\":1000000},4)\n a.execute(\"offer\",{\"id\":\"new-prospective\",\"buyer\":\"new-buyer\",\"price\":1000000,\"job_id\":job[\"id\"],\"deadline\":8,\"terms_id\":\"new-terms\"},4)\n for action,day in [(\"consent\",4),(\"fund\",4),(\"prepare\",5),(\"release\",5)]:\n  a.execute(\"event\",{\"id\":\"new-prospective\",\"action\":action,\"event_id\":\"new-\"+action},day)\n  used=resource.getrusage(resource.RUSAGE_SELF).ru_utime+resource.getrusage(resource.RUSAGE_SELF).ru_stime+resource.getrusage(resource.RUSAGE_CHILDREN).ru_utime+resource.getrusage(resource.RUSAGE_CHILDREN).ru_stime\n  assert used<26,(\"independent-test-budget-near-boundary\",used)\n assert a.snapshot()[\"summary\"][\"tailReserve\"]==101400000\n a.execute(\"mature\",{\"id\":\"new-prospective\",\"event_id\":\"new-maturity\"},11)\n assert a.snapshot()[\"summary\"][\"tailReserve\"]==100200000\n assert a.export()[\"source_transitions\"][\"upgrade-1\"]==untouched\n assert a.audit()[\"accepted\"]\n print({\"ordinary_account_upgraded\":True,\"historical_original_path_absent\":True,\"portable_inventory_fallback_audited\":True,\"new_prospective_order_collected\":True,\"old_permanent_tail_retained\":100200000,\"signed_ticket_unchanged\":True})\nfinally:\n t.tearDown()\n T.tearDownClass()\n"
+      ],
+      "start_utc": "2026-10-31T00:08:45.915553+00:00",
+      "wall_seconds": 10.524452209472656,
+      "waited_child_cpu_seconds": 9.696032,
+      "peak_sampled_process_group_rss_bytes": 28704768,
+      "exit_code": 1,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-32",
+      "command": [
+        "rg",
+        "-n",
+        "mkdir|makedirs|root.*resolve|context.*path|input.*path",
+        "adaptive_enterprise/instruments.py",
+        "enterprise/services.py",
+        "commercial/ledger.py",
+        "commercial/service.py",
+        "commercial/service_verifier.py"
+      ],
+      "start_utc": "2026-10-31T00:09:39.395132+00:00",
+      "wall_seconds": 0.17810583114624023,
+      "waited_child_cpu_seconds": 0.015090000000000001,
+      "wrapper_cpu_seconds": 0.114580696,
+      "peak_sampled_process_group_rss_bytes": 28475392,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-33",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; import json; files=sorted(Path(\".github/workflows\").glob(\"*\")); print(json.dumps([{ \"path\":str(p),\"text\":p.read_text()} for p in files],indent=2))"
+      ],
+      "start_utc": "2026-10-31T00:09:39.839482+00:00",
+      "wall_seconds": 0.16086959838867188,
+      "waited_child_cpu_seconds": 0.026095999999999998,
+      "wrapper_cpu_seconds": 0.092236954,
+      "peak_sampled_process_group_rss_bytes": 9961472,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "capital-cli-pause-resume",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_native_capital_cli.py",
+        "-k",
+        "register_pause",
+        "-v"
+      ],
+      "start_utc": "2026-10-31T00:09:29.061951+00:00",
+      "wall_seconds": 11.790955543518066,
+      "waited_child_cpu_seconds": 11.565954,
+      "wrapper_cpu_seconds": 4.516935166,
+      "peak_sampled_process_group_rss_bytes": 28594176,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-34",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path\nimport hashlib,json,re,subprocess\nout=[]\nfor p in sorted(Path(\".github/workflows\").glob(\"*\")):\n text=p.read_text()\n match=re.search(r\"(?m)^on:\\s*\\n(?:(?:[ \\t].*|\\s*)\\n)*\",text)\n out.append({\"path\":str(p),\"sha256\":hashlib.sha256(p.read_bytes()).hexdigest(),\"events\":match.group(0) if match else \"UNPARSED\"})\nprint(json.dumps(out,indent=2))\nprint(\"workflow_changes=\"+subprocess.check_output([\"git\",\"diff\",\"--name-only\",\"10bdb2c5787f95158642b068756ba30b58140562\",\"--\",\".github/workflows\"],text=True))\n"
+      ],
+      "start_utc": "2026-10-31T00:09:47.470784+00:00",
+      "wall_seconds": 0.1770322322845459,
+      "waited_child_cpu_seconds": 0.08764699999999999,
+      "wrapper_cpu_seconds": 0.109280118,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "verify-slot-control",
+      "command": [
+        "python3",
+        "-c",
+        "import fcntl,subprocess,sys,json;from pathlib import Path;f=Path('P0_SLOT_1.lock').open('a+');fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB);p=subprocess.run([sys.executable,'p0_meter.py','--label','expected-third-job-refusal','--','python3','-c','raise RuntimeError(\"must-not-run\")'],capture_output=True,text=True);assert p.returncode==75,(p.returncode,p.stderr);print(json.dumps({'two_slot_guard':'PASS','third_job_exit':p.returncode,'third_job_message':p.stderr.strip()}))"
+      ],
+      "start_utc": "2026-10-31T00:10:35.934314+00:00",
+      "wall_seconds": 0.009724855422973633,
+      "waited_child_cpu_seconds": 0.006393999999999999,
+      "wrapper_cpu_seconds": 0.042730542,
+      "peak_sampled_process_group_rss_bytes": 2752512,
+      "exit_code": -15,
+      "limit_failure": "JOB_CPU_LIMIT",
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "verify-slot-control-repaired",
+      "command": [
+        "python3",
+        "-c",
+        "import fcntl,subprocess,sys,json;from pathlib import Path;f=Path('P0_SLOT_1.lock').open('a+');fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB);p=subprocess.run([sys.executable,'p0_meter.py','--label','expected-third-job-refusal','--','python3','-c','raise RuntimeError(\"must-not-run\")'],capture_output=True,text=True);assert p.returncode==75,(p.returncode,p.stderr);print(json.dumps({'two_slot_guard':'PASS','third_job_exit':p.returncode,'third_job_message':p.stderr.strip()}))"
+      ],
+      "start_utc": "2026-10-31T00:11:38.324468+00:00",
+      "wall_seconds": 0.1634504795074463,
+      "waited_child_cpu_seconds": 0.06906,
+      "wrapper_cpu_seconds": 0.094488183,
+      "peak_sampled_process_group_rss_bytes": 3538944,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "inspect-capital-public-api",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; p=Path('connected_enterprise/capital.py').read_text();print(p[:9000]);print(Path('connected_enterprise/runner.py').read_text()[-5000:])"
+      ],
+      "start_utc": "2026-10-31T00:14:11.432682+00:00",
+      "wall_seconds": 0.15849685668945312,
+      "waited_child_cpu_seconds": 0.02262,
+      "wrapper_cpu_seconds": 0.091425676,
+      "peak_sampled_process_group_rss_bytes": 3276800,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "inspect-capital-audit",
+      "command": [
+        "rg",
+        "-n",
+        "^def |seed_only|advance_financial|seal_checkpoint|verify_checkpoint|EARNED|reexecute",
+        "connected_enterprise/capital.py"
+      ],
+      "start_utc": "2026-10-31T00:14:24.109381+00:00",
+      "wall_seconds": 0.16057538986206055,
+      "waited_child_cpu_seconds": 0.004129,
+      "wrapper_cpu_seconds": 0.101813088,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-capital-operation",
+      "command": [
+        "sed",
+        "-n",
+        "169,435p",
+        "connected_enterprise/capital.py"
+      ],
+      "start_utc": "2026-10-31T00:14:27.076619+00:00",
+      "wall_seconds": 0.005111217498779297,
+      "waited_child_cpu_seconds": 0.002653,
+      "wrapper_cpu_seconds": 0.037023611,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "hardened-upgrade-tests-004",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_native_source_upgrade.py",
+        "-v"
+      ],
+      "start_utc": "2026-10-31T00:15:32.732051+00:00",
+      "wall_seconds": 47.35930252075195,
+      "waited_child_cpu_seconds": 46.80918200000001,
+      "wrapper_cpu_seconds": 19.359172342,
+      "peak_sampled_process_group_rss_bytes": 85721088,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "inspect-working-state",
+      "command": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "start_utc": "2026-10-31T00:17:46.884557+00:00",
+      "wall_seconds": 0.17220711708068848,
+      "waited_child_cpu_seconds": 0.10328199999999998,
+      "wrapper_cpu_seconds": 0.106231787,
+      "peak_sampled_process_group_rss_bytes": 4288512,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "checkpoint-003",
+      "command": [
+        "python3",
+        "-c",
+        "import json,datetime;from pathlib import Path;p=Path('p0-native/campaign/native-capital-020');s=json.loads(Path('P0_RESOURCES.json').read_text());v={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'state':'IMPLEMENTATION_FINANCIAL_PASSES_CLI_REPAIR','source_upgrade_tests':'8 latest hardened cases passed; real two-writer race added awaiting composed run','public_lifecycle_tests':'9 passed earlier edition; final compose pending','independent_findings':['late reversal residual lost: repaired','premature maturity poisoned event identity: repaired','ordinary account activation: repaired','historical invalid original path blocked fallback: repaired','arrival/tax crash resume and claim-cost lineage: repair active'],'resources':s,'resource_control_limits':'Original namespace-based sampledRSS and crossjobconcurrency unverified. A false liveCPU guard stopped one slot-control probe (actual childCPU0.006394). CurrentUUID/flock/hostPID controls repaired; refusedthirdjob proof passed. KernelwaitedchildCPU retained; no whole-phase resource-qualified claim.'};(p/'CHECKPOINT-003.json').write_text(json.dumps(v,indent=2));print(json.dumps({'checkpoint':str(p/'CHECKPOINT-003.json'),'charged_cpu_seconds':s['charged_cpu_seconds']}))"
+      ],
+      "start_utc": "2026-10-31T00:18:43.059844+00:00",
+      "wall_seconds": 0.16022682189941406,
+      "waited_child_cpu_seconds": 0.024207,
+      "wrapper_cpu_seconds": 0.089062863,
+      "peak_sampled_process_group_rss_bytes": 1835008,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "operator-configs",
+      "command": [
+        "python3",
+        "-c",
+        "import json;from pathlib import Path;from connected_enterprise.capital import default_config;p=Path('examples/native_capital020');p.mkdir(parents=True,exist_ok=True);c=default_config();(p/'central.json').write_text(json.dumps(c,indent=2)+'\\n');a={**c,'claims':[{'hour':3,'order_index':0,'amount':250000000,'kind':'provider_default'}]};(p/'provider_default.json').write_text(json.dumps(a,indent=2)+'\\n');d={**c,'decline_every':1};(p/'outside_choice.json').write_text(json.dumps(d,indent=2)+'\\n');print('3 prospective configurations written')"
+      ],
+      "start_utc": "2026-10-31T00:20:11.177671+00:00",
+      "wall_seconds": 0.17440485954284668,
+      "waited_child_cpu_seconds": 0.042657,
+      "wrapper_cpu_seconds": 0.110988577,
+      "peak_sampled_process_group_rss_bytes": 2359296,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "normalize-and-check-configs",
+      "command": [
+        "python3",
+        "-c",
+        "import json;from pathlib import Path;p=Path('examples/native_capital020');[(q.write_text(q.read_text().removesuffix(chr(92)+'n')+chr(10)),json.loads(q.read_text())) for q in p.glob('*.json')];print('All3 configurations parse')"
+      ],
+      "start_utc": "2026-10-31T00:21:00.070799+00:00",
+      "wall_seconds": 0.16496825218200684,
+      "waited_child_cpu_seconds": 0.025001,
+      "wrapper_cpu_seconds": 0.094399398,
+      "peak_sampled_process_group_rss_bytes": 1703936,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "checkpoint-004",
+      "command": [
+        "python3",
+        "-c",
+        "import json,datetime;from pathlib import Path;p=Path('p0-native/campaign/native-capital-020');s=json.loads(Path('P0_RESOURCES.json').read_text());(p/'CHECKPOINT-004.json').write_text(json.dumps({'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'state':'PREPARING_COMPOSED_QUALIFICATION','source_upgrade':'8hardenedordinaryaccounttestsPASS;two-writer-raceaddedawaitingfinaltest','native_public':'9priorPASS;late-reversalandretryidentityrepaired','runtime':'3orderfrozenCLIresumePASS;matchedcomparisonandcrashrepairtestsactive','publication':'Declaredworkflowpushfiltersdonotmatchcandidatebranch;GitHubmainstill10bdb,repositoryrulesetsreturnedempty;PRwouldtriggerunallocatedCI. Conditionalbranchonlypublicationunderreview.','resource_scope':'Prior sampledRSS/concurrencyunverified duePIDnamespacecontrolissue; repairedUUID/flock/hostPIDroot+subtree monitoringandkernelwaitedCPUretained. No wholephase complianceclaim.','resources':s},indent=2));print(json.dumps({'cpu_charged':s['charged_cpu_seconds'],'active_jobs':[v['label'] for v in s['active'].values()]}))"
+      ],
+      "start_utc": "2026-10-31T00:22:11.075796+00:00",
+      "wall_seconds": 0.18909883499145508,
+      "waited_child_cpu_seconds": 0.027229,
+      "wrapper_cpu_seconds": 0.125379455,
+      "peak_sampled_process_group_rss_bytes": 2359296,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "legacy-account-regressions",
+      "command": [
+        "python3",
+        "-c",
+        "import subprocess,sys;from pathlib import Path;p=Path('campaign/native-capital-020/qualification');p.mkdir(exist_ok=True);log=p/'legacy-account-finance.log';cmd=[sys.executable,'-m','unittest','discover','-s','tests','-p','test_adaptive_account.py','-v'];f=log.open('w');r=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT);f.close();print(log.read_text()[-14000:]);raise SystemExit(r.returncode)"
+      ],
+      "start_utc": "2026-10-31T00:23:20.071587+00:00",
+      "wall_seconds": 5.448245286941528,
+      "waited_child_cpu_seconds": 5.474928,
+      "wrapper_cpu_seconds": 0.58427822,
+      "peak_sampled_process_group_rss_bytes": 9306112,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "inspect-comparison-claim",
+      "command": [
+        "sed",
+        "-n",
+        "445,495p",
+        "connected_enterprise/capital.py"
+      ],
+      "start_utc": "2026-10-31T00:24:28.858423+00:00",
+      "wall_seconds": 0.005189657211303711,
+      "waited_child_cpu_seconds": 0.002889,
+      "wrapper_cpu_seconds": 0.035742096,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "capital-repair-context",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; s=Path('connected_enterprise/capital.py').read_text(); print(s[s.index('def operate'):s.index('def _score')]); print(s[s.index('def _score'):s.index('def audit_output')]); print(Path('tests/test_native_capital_cli.py').read_text()); print(Path('examples/native_capital020/provider_default.json').read_text())"
+      ],
+      "start_utc": "2026-10-31T00:30:12.104702+00:00",
+      "wall_seconds": 0.17650699615478516,
+      "waited_child_cpu_seconds": 0.026247,
+      "wrapper_cpu_seconds": 0.106289327,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "upgrade-two-writer-race",
+      "command": [
+        "python3",
+        "-c",
+        "import subprocess,sys;from pathlib import Path;p=Path('campaign/native-capital-020/qualification');p.mkdir(exist_ok=True);log=p/'two-writer-upgrade.log';f=log.open('w');r=subprocess.run([sys.executable,'-m','unittest','discover','-s','tests','-p','test_native_source_upgrade.py','-k','two_writers','-v'],stdout=f,stderr=subprocess.STDOUT);f.close();print(log.read_text());raise SystemExit(r.returncode)"
+      ],
+      "start_utc": "2026-10-31T00:30:30.103237+00:00",
+      "wall_seconds": 6.741494655609131,
+      "waited_child_cpu_seconds": 6.468111,
+      "wrapper_cpu_seconds": 0.761393525,
+      "peak_sampled_process_group_rss_bytes": 9306112,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-35",
+      "command": [
+        "sed",
+        "-n",
+        "1,170p",
+        "/workspace/scratch/8ae627a67fcf/p0_meter.py"
+      ],
+      "start_utc": "2026-10-31T00:30:40.541792+00:00",
+      "wall_seconds": 0.006178379058837891,
+      "waited_child_cpu_seconds": 0.0033640000000000007,
+      "wrapper_cpu_seconds": 0.038607801,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-36",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path; p=Path('campaign/native-capital-020/independent/test_ordinary_portable_upgrade.py'); p.parent.mkdir(parents=True,exist_ok=True); p.write_text(\"import copy, datetime, hashlib, json, os, resource, shutil, signal, sys, time, traceback\\nfrom pathlib import Path\\n\\nROOT = Path(__file__).resolve().parents[3]\\nsys.path.insert(0, str(ROOT))\\nsys.path.insert(0, str(ROOT / 'tests'))\\nfrom test_native_source_upgrade import NativeSourceUpgradeTests as T\\nfrom commercial.terms import prospective_terms\\nfrom connected_enterprise.finance import source_identity\\n\\ndef tree_cpu(pid):\\n    total, pending, seen = 0.0, [pid], set()\\n    while pending:\\n        current = pending.pop()\\n        if current in seen:\\n            continue\\n        seen.add(current)\\n        path = Path('/proc') / str(current) / 'stat'\\n        try:\\n            raw = path.read_text()\\n            fields = raw[raw.rfind(')') + 2:].split()\\n            total += sum(int(fields[i]) for i in [11, 12, 13, 14]) / os.sysconf('SC_CLK_TCK')\\n            pending.extend(map(int, (path.parent / 'task' / str(current) / 'children').read_text().split()))\\n        except (OSError, ValueError, IndexError):\\n            pass\\n    return total\\n\\ndef main():\\n    started, start_cpu = time.monotonic(), resource.getrusage(resource.RUSAGE_SELF)\\n    raw = Path('/proc/self/stat').read_text()\\n    host_pid = int(raw.split(' ', 1)[0])\\n    def enforce(signum, frame):\\n        if tree_cpu(host_pid) > 28:\\n            raise RuntimeError('INDEPENDENT_30_CPU_ENVELOPE_APPROACHING')\\n    signal.signal(signal.SIGALRM, enforce)\\n    signal.setitimer(signal.ITIMER_REAL, .2, .2)\\n    result = {'schema': 'agi-alpha/native020-independent-upgrade/v1', 'accepted': False,\\n              'source_sha256': source_identity(ROOT)['sha256'],\\n              'test_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),\\n              'historical_commit': '10bdb2c5787f95158642b068756ba30b58140562',\\n              'scope': 'Financial Account/Journal source transition only; no legacy engine queue or STATE migration.',\\n              'independence': 'Different same-session reviewing agent and independently composed sequence; shared model, host, tools and source fixture.',\\n              'cpu_limit_seconds': 30, 'early_stop_seconds': 28}\\n    t, initialized = None, False\\n    try:\\n        T.setUpClass()\\n        initialized = True\\n        t = T('test_pristine_old_verifier_transition_preserves_account_money_and_obligations')\\n        t.setUp()\\n        ticket = t.authorize()\\n        untouched = copy.deepcopy(ticket)\\n        key_path = t.path.with_name(t.path.name + '.adaptive-simulation-key')\\n        key_identity = key_path.stat().st_ino\\n        t.a = t.upgrade(ticket)\\n        fallback = t.new / 'historical-source-versions' / ticket['body']['from_source']['sha256']\\n        fallback.parent.mkdir()\\n        shutil.move(str(t.old), str(fallback))\\n        t.old.mkdir()\\n        assert list(t.old.iterdir()) == []\\n        assert t.a.audit()['accepted']\\n        t.a.close()\\n        t.a = t.reopen()\\n        a = t.a\\n        assert key_path.stat().st_ino == key_identity\\n        job = next(j for j in t.manifest['jobs'] if j['service_id'] == 'reconciliation' and j['accepted'])\\n        terms = prospective_terms('new-prospective', 1_000_000, 10, 5)\\n        a.execute('register_terms', {'id': 'new-terms', 'terms': terms}, 4)\\n        a.execute('wallet', {'buyer': 'new-buyer', 'amount': 1_000_000}, 4)\\n        a.execute('offer', {'id': 'new-prospective', 'buyer': 'new-buyer', 'price': 1_000_000,\\n                           'job_id': job['id'], 'deadline': 8, 'terms_id': 'new-terms'}, 4)\\n        for action, day in [('consent', 4), ('fund', 4), ('prepare', 5), ('release', 5)]:\\n            a.execute('event', {'id': 'new-prospective', 'action': action, 'event_id': 'new-' + action}, day)\\n        assert a.snapshot()['summary']['tailReserve'] == 101_400_000\\n        a.execute('mature', {'id': 'new-prospective', 'event_id': 'new-maturity'}, 11)\\n        record = a.export()\\n        assert record['ledger']['summary']['tailReserve'] == 100_200_000\\n        assert record['source_transitions']['upgrade-1'] == untouched\\n        assert record['ledger']['actions'][:len(t.original['ledger']['actions'])] == t.original['ledger']['actions']\\n        assert a.audit()['accepted']\\n        assert source_identity(ROOT)['sha256'] == result['source_sha256']\\n        result.update(accepted=True, ordinary_legacy_account_preserved=True, private_key_inode_unchanged=True,\\n                      invalid_empty_original_source_skipped=True, inventory_bound_fallback_audited=True,\\n                      new_prospective_order_accepted_and_collected=True, original_permanent_tail_microUSD=100_200_000,\\n                      signed_ticket_unchanged=True, prior_native_actions_unchanged=True,\\n                      final_summary=record['ledger']['summary'])\\n        output = Path(__file__).parent / 'ordinary_portable_upgrade_public_record.json'\\n        output.write_text(json.dumps(record, indent=2) + '\\\\n')\\n        result['public_record_sha256'] = hashlib.sha256(output.read_bytes()).hexdigest()\\n    except BaseException:\\n        result['error'] = traceback.format_exc()\\n    finally:\\n        signal.setitimer(signal.ITIMER_REAL, 0)\\n        if t is not None:\\n            t.tearDown()\\n        if initialized:\\n            T.tearDownClass()\\n        self_cpu, children = resource.getrusage(resource.RUSAGE_SELF), resource.getrusage(resource.RUSAGE_CHILDREN)\\n        result['cpu_seconds_including_waited_children'] = self_cpu.ru_utime + self_cpu.ru_stime - start_cpu.ru_utime - start_cpu.ru_stime + children.ru_utime + children.ru_stime\\n        result['wall_seconds'] = time.monotonic() - started\\n        result['finished_utc'] = datetime.datetime.now(datetime.timezone.utc).isoformat()\\n        if result['cpu_seconds_including_waited_children'] > 30:\\n            result.update(accepted=False, resource_failure='INDEPENDENT_30_CPU_LIMIT_EXCEEDED')\\n        receipt = Path(__file__).parent / 'ordinary_portable_upgrade_receipt.json'\\n        receipt.write_text(json.dumps(result, indent=2) + '\\\\n')\\n        print(json.dumps(result, sort_keys=True))\\n    return 0 if result['accepted'] else 1\\n\\nif __name__ == '__main__':\\n    raise SystemExit(main())\\n\")"
+      ],
+      "start_utc": "2026-10-31T00:31:29.808661+00:00",
+      "wall_seconds": 0.17761516571044922,
+      "waited_child_cpu_seconds": 0.023281,
+      "wrapper_cpu_seconds": 0.109646522,
+      "peak_sampled_process_group_rss_bytes": 1572864,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-37",
+      "command": [
+        "python3",
+        "campaign/native-capital-020/independent/test_ordinary_portable_upgrade.py"
+      ],
+      "start_utc": "2026-10-31T00:31:30.264976+00:00",
+      "wall_seconds": 14.499367237091064,
+      "waited_child_cpu_seconds": 14.311596,
+      "wrapper_cpu_seconds": 1.52710895,
+      "peak_sampled_process_group_rss_bytes": 48578560,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-38",
+      "command": [
+        "python3",
+        "-c",
+        "import hashlib,json\nfrom pathlib import Path\nbase=Path(\"campaign/native-capital-020/independent\")\nledger=json.loads(Path(\"/workspace/scratch/8ae627a67fcf/P0_RESOURCES.json\").read_text())\nlabels={\"review-13\",\"review-16\",\"review-31\",\"review-37\"}\njobs=[j for j in ledger[\"jobs\"] if j[\"label\"] in labels]\nout={\"schema\":\"agi-alpha/native020-independent-resource-and-failure-record/v1\",\"jobs\":jobs,\n \"observed_failures\":[\n {\"label\":\"review-13\",\"observed_exception\":\"ValueError: IDEMPOTENT_CONNECTED_ACTION_PAYLOAD_CHANGED\",\"location\":\"connected_enterprise/finance.py _entry\",\"trigger\":\"After a rejected inclusive-boundary maturity, rightful later maturity reused the semantic operation key.\",\"disposition\":\"Repaired with mandatory bounded maturity event_id and separate attempt identity; review-16 passed.\"},\n {\"label\":\"review-31\",\"observed_exception\":\"ValueError: BOUNDED_PINNED_HISTORICAL_SOURCE_REQUIRED\",\"location\":\"connected_enterprise/upgrades.py verify_historical/source_inventory\",\"trigger\":\"An invalid empty original directory caused immediate rejection before the valid inventory-bound portable fallback could be tried.\",\"disposition\":\"Resolver now skips invalid candidates; review-37 passed with deliberately empty old directory.\"}],\n \"historical_source_limit\":\"Failed command, resource result, and directly observed exception are retained. Complete pre-repair mutable source editions were not checkpointed by this reviewer and are not fabricated here.\",\n \"resource_control_scope\":\"Earlier waited-child CPU measurements are retained; historical cross-job RSS/concurrency sampling before wrapper repair remains unverified. review-37 uses the repaired UUID/flock/host-PID resource control.\"}\n(base/\"resources_and_failures.json\").write_text(json.dumps(out,indent=2)+\"\\n\")\nfor p in sorted(base.glob(\"*\")):\n print(p.name,p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())\n"
+      ],
+      "start_utc": "2026-10-31T00:32:17.773390+00:00",
+      "wall_seconds": 0.17046427726745605,
+      "waited_child_cpu_seconds": 0.024909,
+      "wrapper_cpu_seconds": 0.097009972,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-39",
+      "command": [
+        "rg",
+        "--files",
+        "connected_enterprise",
+        "campaign/native-capital-020",
+        "docs"
+      ],
+      "start_utc": "2026-10-31T00:32:23.079079+00:00",
+      "wall_seconds": 0.17243695259094238,
+      "waited_child_cpu_seconds": 0.010075999999999998,
+      "wrapper_cpu_seconds": 0.103023293,
+      "peak_sampled_process_group_rss_bytes": 2359296,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "inspect-independent-receipt",
+      "command": [
+        "python3",
+        "-c",
+        "import json;from pathlib import Path;p=Path('campaign/native-capital-020/independent');print([(x.name,x.stat().st_size) for x in p.iterdir()]);print(Path('tests/test_native_capital_cli.py').read_text()[:2000])"
+      ],
+      "start_utc": "2026-10-31T00:32:26.913534+00:00",
+      "wall_seconds": 0.18607282638549805,
+      "waited_child_cpu_seconds": 0.032914,
+      "wrapper_cpu_seconds": 0.132231703,
+      "peak_sampled_process_group_rss_bytes": 2228224,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-40",
+      "command": [
+        "cat",
+        "docs/native-capital020/OPERATOR.md"
+      ],
+      "start_utc": "2026-10-31T00:32:30.129727+00:00",
+      "wall_seconds": 0.006209611892700195,
+      "waited_child_cpu_seconds": 0.0032530000000000002,
+      "wrapper_cpu_seconds": 0.032156278,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-41",
+      "command": [
+        "cat",
+        "connected_enterprise/capital.py"
+      ],
+      "start_utc": "2026-10-31T00:32:30.438264+00:00",
+      "wall_seconds": 0.006066322326660156,
+      "waited_child_cpu_seconds": 0.0026049999999999997,
+      "wrapper_cpu_seconds": 0.036588931,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-42",
+      "command": [
+        "sed",
+        "-n",
+        "165,300p",
+        "connected_enterprise/capital.py"
+      ],
+      "start_utc": "2026-10-31T00:32:34.387334+00:00",
+      "wall_seconds": 0.0072689056396484375,
+      "waited_child_cpu_seconds": 0.0028520000000000004,
+      "wrapper_cpu_seconds": 0.043716303,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "capital-repair-compile",
+      "command": [
+        "python3",
+        "-c",
+        "import py_compile; [py_compile.compile(p,doraise=True) for p in ['connected_enterprise/capital.py','connected_enterprise/runner.py','connected_enterprise/engine.py','tests/test_native_capital_cli.py']]; print('four modules compile')"
+      ],
+      "start_utc": "2026-10-31T00:33:34.097321+00:00",
+      "wall_seconds": 0.19341659545898438,
+      "waited_child_cpu_seconds": 0.04699999999999999,
+      "wrapper_cpu_seconds": 0.132596546,
+      "peak_sampled_process_group_rss_bytes": 2359296,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "connected-financial-regressions",
+      "command": [
+        "python3",
+        "campaign/native-capital-020/run_qualification.py",
+        "--name",
+        "connected-financial",
+        "test_connected_finance",
+        "test_connected_recovery_preflight",
+        "test_connected_rejections",
+        "test_connected_audit_prefixes"
+      ],
+      "start_utc": "2026-10-31T00:33:03.555675+00:00",
+      "wall_seconds": 69.32494902610779,
+      "waited_child_cpu_seconds": 68.486656,
+      "wrapper_cpu_seconds": 7.390279236,
+      "peak_sampled_process_group_rss_bytes": 46116864,
+      "exit_code": 1,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "capital-cli-recovery-comparison",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path\nimport subprocess,sys\np=Path('/workspace/scratch/8ae627a67fcf/capital-cli-qa-20261031.log')\nr=subprocess.run([sys.executable,'-m','unittest','discover','-s','tests','-p','test_native_capital_cli.py','-v'],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)\np.write_text(r.stdout)\nprint(r.stdout)\nprint('persistent_log='+str(p))\nraise SystemExit(r.returncode)\n"
+      ],
+      "start_utc": "2026-10-31T00:33:53.209992+00:00",
+      "wall_seconds": 71.58579206466675,
+      "waited_child_cpu_seconds": 70.31634199999999,
+      "wrapper_cpu_seconds": 9.557119077,
+      "peak_sampled_process_group_rss_bytes": 9306112,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "inspect-final-precheck",
+      "command": [
+        "python3",
+        "-c",
+        "from connected_enterprise.finance import source_identity;import json,sys,importlib.metadata;from pathlib import Path;print(json.dumps({'financial_source':source_identity(Path.cwd())['sha256'],'python':sys.version,'dependencies':{x:importlib.metadata.version(x) for x in ['pycryptodome','numpy']}}));print([(p.name,p.stat().st_size) for p in Path('campaign/native-capital-020/qualification').glob('*')])"
+      ],
+      "start_utc": "2026-10-31T00:35:05.258765+00:00",
+      "wall_seconds": 0.2271130084991455,
+      "waited_child_cpu_seconds": 0.069846,
+      "wrapper_cpu_seconds": 0.156965283,
+      "peak_sampled_process_group_rss_bytes": 1179648,
+      "exit_code": 1,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "inspect-rejection-regression",
+      "command": [
+        "sed",
+        "-n",
+        "1,100p",
+        "tests/test_connected_rejections.py"
+      ],
+      "start_utc": "2026-10-31T00:35:14.704156+00:00",
+      "wall_seconds": 0.005523204803466797,
+      "waited_child_cpu_seconds": 0.002335,
+      "wrapper_cpu_seconds": 0.039738958,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "dependency-receipt",
+      "command": [
+        "python3",
+        "-c",
+        "import json,sys,importlib.metadata as m,re;from pathlib import Path;req=Path('requirements-commercial010.txt').read_text();packages={};names=[re.split(r'[<>=!~; ]',x.strip())[0] for x in req.splitlines() if x.strip() and not x.startswith('#')];[(packages.update({n:m.version(n)}) if m.packages_distributions().get(n) or any(d.metadata['Name'].lower()==n.lower() for d in m.distributions()) else packages.update({n:'METADATA_UNAVAILABLE'})) for n in names];v={'python':sys.version,'declared_requirements':req,'distribution_versions':packages,'paid_provider_calls':0,'host_and_model_billing':None};Path('campaign/native-capital-020/DEPENDENCIES.json').write_text(json.dumps(v,indent=2));print(json.dumps(v))"
+      ],
+      "start_utc": "2026-10-31T00:35:54.298219+00:00",
+      "wall_seconds": 0.7397830486297607,
+      "waited_child_cpu_seconds": 0.6903379999999999,
+      "wrapper_cpu_seconds": 0.168599151,
+      "peak_sampled_process_group_rss_bytes": 19173376,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "stale-spend-repaired-regressions",
+      "command": [
+        "python3",
+        "campaign/native-capital-020/run_qualification.py",
+        "--name",
+        "stale-spend-repaired",
+        "test_connected_rejections"
+      ],
+      "start_utc": "2026-10-31T00:35:53.054856+00:00",
+      "wall_seconds": 21.353169202804565,
+      "waited_child_cpu_seconds": 21.120748,
+      "wrapper_cpu_seconds": 3.365522585,
+      "peak_sampled_process_group_rss_bytes": 42266624,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "capital-final-compile",
+      "command": [
+        "python3",
+        "-c",
+        "import py_compile; [py_compile.compile(p,doraise=True) for p in ['connected_enterprise/capital.py','connected_enterprise/runner.py','connected_enterprise/engine.py','tests/test_native_capital_cli.py']]; print('capital final source compiles')"
+      ],
+      "start_utc": "2026-10-31T00:36:23.447096+00:00",
+      "wall_seconds": 0.26123857498168945,
+      "waited_child_cpu_seconds": 0.05790100000000001,
+      "wrapper_cpu_seconds": 0.206882353,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-43",
+      "command": [
+        "rg",
+        "-n",
+        "-A6",
+        "-B7",
+        "tax_provisioned|ACCEPTANCE|accepted_hour|TERMS.*PRODUCTION|terms_sha256|register_terms",
+        "connected_enterprise/capital.py"
+      ],
+      "start_utc": "2026-10-31T00:36:43.112551+00:00",
+      "wall_seconds": 0.219390869140625,
+      "waited_child_cpu_seconds": 0.007461,
+      "wrapper_cpu_seconds": 0.14747425,
+      "peak_sampled_process_group_rss_bytes": 2621440,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-44",
+      "command": [
+        "sed",
+        "-n",
+        "1,240p",
+        "tests/test_native_capital_cli.py"
+      ],
+      "start_utc": "2026-10-31T00:36:43.591111+00:00",
+      "wall_seconds": 0.006470680236816406,
+      "waited_child_cpu_seconds": 0.002945,
+      "wrapper_cpu_seconds": 0.037664308,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-45",
+      "command": [
+        "python3",
+        "-c",
+        "import hashlib,json\nfrom pathlib import Path\nfiles=[\"commercial/terms.py\",\"commercial/ledger.py\",\"experiments/commerce006.py\",\"vendor/alpha_claim/protected_exchange.py\",\"vendor/alpha_claim/protected_exchange_legacy.py\",\"adaptive_enterprise/account.py\",\"connected_enterprise/finance.py\",\"connected_enterprise/upgrades.py\",\"connected_enterprise/capital.py\",\"tests/test_native_capital_cli.py\",\"docs/native-capital020/OPERATOR.md\"]\nreport={\"schema\":\"agi-alpha/native020-independent-source-review/v1\",\"status\":\"NO_REMAINING_BLOCKING_FINDINGS_IN_REVIEWED_SCOPE_COMPOSED_QUALIFICATION_SEPARATE\",\"source_files_sha256\":{p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in files},\"reviewed_scope\":[\"Native prospective terms, claims, maturity, collected recovery and legacy financial conservation\",\"Owner-authenticated Account/Journal source transitions and portable historical verifier resolution\",\"Narrow capital queue replay, claim completeness, all-cost per-order funding lineage, tax provision and matched no-receipt-financing ablation\"],\"repaired_findings\":[\"Late reversal formerly discarded prospective residual tail and blocked claim remedies\",\"Premature maturity formerly poisoned the eventual legitimate maturity operation identity\",\"Ordinary legacy contract originally could not activate prospective source-transition operations\",\"Invalid original verifier directory formerly prevented valid portable fallback\",\"Source-transition admission needed pre-save forward and unique-key checks\",\"Acceptance-hour reporting lacked native prepare binding\",\"Tax provision label previously implied full payment\",\"Production commitment formerly preceded immutable native order-terms registration\"],\"independent_execution\":{\"script\":\"campaign/native-capital-020/independent/test_ordinary_portable_upgrade.py\",\"receipt\":\"campaign/native-capital-020/independent/ordinary_portable_upgrade_receipt.json\",\"accepted\":True,\"financial_source_sha256\":\"8319314987c44f7c8032ad1000d04523b3c749d92dcf6acd725fa7ef09d0088a\",\"earlier_public_claim_and_reversal_test\":\"review-16 in resources_and_failures.json\"},\"publication_review\":{\"workflow_file_count\":9,\"workflow_files_changed_from_base\":False,\"candidate_branch_matches_any_declared_push_filter\":False,\"pull_request_would_trigger_CI\":True,\"repository_rule_clearance_independently_verified\":False,\"actions_taken\":\"No push, PR, workflow dispatch, merge, or release by this reviewer\"},\"limits\":[\"Different reviewing agent, same model/host/tools/data; not external certification\",\"Full legacy operating-engine queue/STATE source migration is unimplemented and remains guarded\",\"Only one source-transition count is exercised by this reviewer\",\"No competent conventional-finance comparison, fresh commercial confirmation, broad-service validation, annual scale bridge, observed demand or actual enterprise profit is established\",\"Complete pre-repair mutable source editions were not independently checkpointed; retained failed commands/observations are not represented as complete bad-source archives\",\"Earlier cross-job memory/concurrency monitoring uncertainty remains preserved; later passing independent execution used repaired wrapper controls\"]}\nPath(\"campaign/native-capital-020/independent/REVIEW.json\").write_text(json.dumps(report,indent=2)+\"\\n\")\nprint({\"review_written\":True,\"sha256\":hashlib.sha256(Path(\"campaign/native-capital-020/independent/REVIEW.json\").read_bytes()).hexdigest()})\n"
+      ],
+      "start_utc": "2026-10-31T00:37:19.781413+00:00",
+      "wall_seconds": 0.23308253288269043,
+      "waited_child_cpu_seconds": 0.032192,
+      "wrapper_cpu_seconds": 0.166584842,
+      "peak_sampled_process_group_rss_bytes": 2097152,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "freeze-final-qualification",
+      "command": [
+        "python3",
+        "-c",
+        "from pathlib import Path;import json,datetime,hashlib;from connected_enterprise.runner import identity;from connected_enterprise.finance import source_identity;p=Path('campaign/native-capital-020');s={'schema':'agi-alpha/native-capital020-source-freeze/v1','registered_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'base_commit':'10bdb2c5787f95158642b068756ba30b58140562','source':identity(Path.cwd()),'financial_source':source_identity(Path.cwd()),'configs':{q.name:hashlib.sha256(q.read_bytes()).hexdigest() for q in Path('examples/native_capital020').glob('*.json')},'qualification':'Local deterministic engineering, not fresh statistical confirmation','tests':['test_native_capital','test_native_capital_native','test_native_source_upgrade','test_native_capital_cli','test_adaptive_account','test_connected_finance','test_connected_recovery_preflight','test_connected_rejections','test_connected_audit_prefixes','test_commerce006'],'operating_cases':['12arrival central recycling matched no-receipt financing control','registered provider default retains outstanding liability','allbuyersoutsidechoice preserves negative result'],'acceptance':['Exact independent native and operating audits','All scheduled central settlements/maturities; repeated prior-earned funding and positive conditional complete-cost profit','No invented recovery, oldtailrelease, reseed, discarded claims or sourceauthority waiver','Adverse/declined cases remain explicit; no conventional-finance, live-commerce, annualscale or capability claim']};(p/'SOURCE_FREEZE.json').write_text(json.dumps(s,indent=2));(p/'CHECKPOINT-005.json').write_text(json.dumps({'at':s['registered_utc'],'state':'FINAL_SOURCE_FROZEN_COMPOSED_CHECKS_START','source_sha256':s['source']['sha256'],'financial_source_sha256':s['financial_source']['sha256'],'limits':'Same original1800CPU/90min; no renewal; no whole-phase resourcequalificationclaim'},indent=2));print(json.dumps({'source_sha256':s['source']['sha256'],'financial_source_sha256':s['financial_source']['sha256'],'files':len(s['source']['files'])}))"
+      ],
+      "start_utc": "2026-10-31T00:38:05.940264+00:00",
+      "wall_seconds": 0.2426595687866211,
+      "waited_child_cpu_seconds": 0.11456,
+      "wrapper_cpu_seconds": 0.173325317,
+      "peak_sampled_process_group_rss_bytes": 1966080,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "final-native-composed",
+      "command": [
+        "python3",
+        "campaign/native-capital-020/run_qualification.py",
+        "--name",
+        "final-native",
+        "test_native_capital",
+        "test_native_capital_native",
+        "test_native_source_upgrade",
+        "test_native_capital_cli"
+      ],
+      "start_utc": "2026-10-31T00:38:06.454764+00:00",
+      "wall_seconds": 160.97424817085266,
+      "waited_child_cpu_seconds": 158.596838,
+      "wrapper_cpu_seconds": 35.508923878,
+      "peak_sampled_process_group_rss_bytes": 56635392,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "final-legacy-composed",
+      "command": [
+        "python3",
+        "campaign/native-capital-020/run_qualification.py",
+        "--name",
+        "final-legacy",
+        "test_adaptive_account",
+        "test_connected_finance",
+        "test_connected_recovery_preflight",
+        "test_connected_rejections",
+        "test_connected_audit_prefixes",
+        "test_commerce006"
+      ],
+      "start_utc": "2026-10-31T00:38:06.454764+00:00",
+      "wall_seconds": 171.6187674999237,
+      "waited_child_cpu_seconds": 396.134608,
+      "wrapper_cpu_seconds": 39.122064077,
+      "peak_sampled_process_group_rss_bytes": 47181824,
+      "exit_code": 1,
+      "limit_failure": "JOB_CPU_LIMIT_POSTMEASUREMENT",
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-46-UNEXECUTED-checkpoint-only",
+      "command": [
+        "python3",
+        "-c",
+        "import hashlib,json,shutil\nfrom pathlib import Path\nfrom connected_enterprise.finance import source_identity\nbase=Path(\"campaign/native-capital-020/independent\")\narchive=base/\"historical-83193149\"\narchive.mkdir(exist_ok=False)\nnames=[\"ordinary_portable_upgrade_receipt.json\",\"ordinary_portable_upgrade_public_record.json\",\"test_ordinary_portable_upgrade.py\",\"resources_and_failures.json\",\"REVIEW.json\"]\nfor name in names:shutil.copyfile(base/name,archive/name)\nscript=\"import argparse, copy, hashlib, json, os, resource, signal, sys, tempfile, time, traceback\\nfrom pathlib import Path\\n\\nROOT = Path(__file__).resolve().parents[3]\\nsys.path.insert(0, str(ROOT))\\nfrom commercial.ledger import digest\\nfrom commercial.terms import prospective_terms\\nfrom connected_enterprise.finance import JournalAccount, SOURCE_PATHS, source_identity\\nfrom adaptive_enterprise.account import audit_account\\nfrom adaptive_enterprise.instruments import SOURCE_PATHS as SERVICE_SOURCES, prepare_services, execute_job\\nfrom experiments.commerce006 import PINS\\nfrom test_ordinary_portable_upgrade import tree_cpu\\n\\nMICRO = 1_000_000\\nHERE = Path(__file__).resolve().parent\\n\\ndef run_authorized():\\n    import shutil\\n    protocol = json.loads((HERE / 'maturity_successor_protocol.json').read_text())\\n    started = time.monotonic()\\n    initial = resource.getrusage(resource.RUSAGE_SELF)\\n    host_pid = int(Path('/proc/self/stat').read_text().split(' ', 1)[0])\\n    def stop(signum, frame):\\n        if tree_cpu(host_pid) > 35 or time.monotonic() - started > 115:\\n            raise RuntimeError('PROSPECTIVE_40_CPU_120_WALL_PROOF_BOUND_APPROACHING')\\n    signal.signal(signal.SIGALRM, stop)\\n    signal.setitimer(signal.ITIMER_REAL, .2, .2)\\n    receipt = {'schema': 'agi-alpha/native020-maturity-successor-proof/v1', 'accepted': False,\\n               'protocol_sha256': hashlib.sha256((HERE / 'maturity_successor_protocol.json').read_bytes()).hexdigest(),\\n               'scope': 'Fixed authored capital-mechanism engineering case; no market, frontier-model, external-commerce or annual-profit qualification.',\\n               'test_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}\\n    last_record = None\\n    try:\\n        assert source_identity(ROOT)['sha256'] == protocol['financial_source_sha256'], 'REGISTERED_FINANCIAL_SOURCE_CHANGED'\\n        with tempfile.TemporaryDirectory(prefix='maturity-successor-proof-') as temp:\\n            root = Path(temp) / 'source'\\n            for name in set(SOURCE_PATHS) | set(SERVICE_SOURCES) | set(PINS):\\n                target = root / name\\n                target.parent.mkdir(parents=True, exist_ok=True)\\n                shutil.copyfile(ROOT / name, target)\\n            assert source_identity(root) == source_identity(ROOT)\\n            manifest = prepare_services(root, 'services', cohort_seed=2610312001)\\n            jobs = sorted((j for j in manifest['jobs'] if j['service_id'] == 'reconciliation' and j['accepted']), key=lambda j: j['id'])\\n            assert len(jobs) >= 6\\n            account_path = Path(temp) / 'same-account.sqlite'\\n            with JournalAccount(root, manifest, account_path, opening=500 * MICRO, working=100 * MICRO,\\n                                contract='native020/maturity-funds-successor-fixed-mechanism') as a:\\n                key_path = account_path.with_name(account_path.name + '.adaptive-simulation-key')\\n                key_inode = key_path.stat().st_ino\\n                service_receipts = []\\n                def produce(ident, buyer, job, arrival, settled, maturity, price, cost, allow_seed):\\n                    terms = prospective_terms(ident, price, maturity, settled, premium=0, fee=0)\\n                    a.execute('register_terms', {'id': 'terms-' + ident, 'terms': terms}, arrival)\\n                    work = {'job_id': job['id'], 'artifact_sha256': job['artifact_sha256'], 'terms_sha256': digest(terms),\\n                            'resource_contract': 'Fixed authored prepaid complete synthetic production/checking/delivery/support invoice'}\\n                    funding = a.spend('production-' + ident, 'production_contract', cost, arrival, work,\\n                                      expected_net=price - cost, allow_seed=allow_seed)\\n                    assert funding is not None\\n                    a.execute('wallet', {'buyer': buyer, 'amount': price}, arrival)\\n                    a.execute('offer', {'id': ident, 'buyer': buyer, 'price': price,\\n                                       'job_id': job['id'], 'deadline': settled, 'terms_id': 'terms-' + ident}, arrival)\\n                    for action in ['consent', 'fund']:\\n                        a.execute('event', {'id': ident, 'event_id': ident + '-' + action, 'action': action}, arrival)\\n                    execution = execute_job(root, job)\\n                    assert execution['accepted'] is True and execution['artifact_sha256'] == job['artifact_sha256']\\n                    a.execute('event', {'id': ident, 'event_id': ident + '-prepare', 'action': 'prepare'}, arrival)\\n                    a.execute('event', {'id': ident, 'event_id': ident + '-release', 'action': 'release'}, settled)\\n                    service_receipts.append({'order_id': ident, 'job_id': job['id'], 'execution': execution,\\n                                             'funding': funding, 'price_microUSD': price, 'cost_microUSD': cost,\\n                                             'complete_modeled_profit_microUSD': price - cost})\\n                    return funding\\n                for i in range(5):\\n                    produce('prior-' + str(i), 'buyer-' + str(i), jobs[i], 2 * i, 2 * i + 1, 20 + 2 * i,\\n                            100 * MICRO, 50 * MICRO, True)\\n                    last_record = a.export()\\n                before = copy.deepcopy(a.export())\\n                state = before['ledger']['summary']\\n                assert (state['profit'], state['cash'], state['tailReserve'], state['available']) == (250 * MICRO, 750 * MICRO, 501 * MICRO, 149 * MICRO)\\n                planned_terms = prospective_terms('successor', 200 * MICRO, 35, 30, premium=0, fee=0)\\n                planned_work = {'job_id': jobs[5]['id'], 'artifact_sha256': jobs[5]['artifact_sha256'],\\n                                'terms_sha256': digest(planned_terms),\\n                                'resource_contract': 'Fixed authored prepaid complete synthetic production/checking/delivery/support invoice'}\\n                deferred = a.spend('production-successor', 'production_contract', 150 * MICRO, 11, planned_work,\\n                                   expected_net=50 * MICRO, allow_seed=False)\\n                assert deferred is None\\n                assert a.export()['ledger'] == before['ledger']\\n                after_deferral = copy.deepcopy(a.snapshot())\\n                a.advance_financial(29)\\n                after_release = copy.deepcopy(a.export())\\n                released = after_release['ledger']['summary']\\n                assert released['cash'] == state['cash'] and released['profit'] == state['profit']\\n                assert state['tailReserve'] - released['tailReserve'] == 501 * MICRO\\n                assert released['tailReserve'] == 0 and released['available'] == 650 * MICRO\\n                prior_prefix = copy.deepcopy(after_release['ledger']['actions'])\\n                funding = produce('successor', 'successor-buyer', jobs[5], 29, 30, 35, 200 * MICRO, 150 * MICRO, False)\\n                assert funding['funding'] == 'EARNED'\\n                record = a.export()\\n                reserve = next(e for e in record['ledger']['actions'] if e['op'] == 'reserve' and e['args']['id'] == funding['plan_id'])\\n                maturity_events = [e for e in record['ledger']['actions'] if e['op'] == 'mature']\\n                assert len(maturity_events) == 5 and all(e['seq'] < reserve['seq'] for e in maturity_events)\\n                assert reserve['args']['amount'] == 150 * MICRO and reserve['before']['unrestrictedEarned'] >= 150 * MICRO\\n                assert record['ledger']['actions'][:len(prior_prefix)] == prior_prefix\\n                final = record['ledger']['summary']\\n                assert (final['profit'], final['cash'], final['tailReserve']) == (300 * MICRO, 800 * MICRO, 200_200_000)\\n                assert final['payables'] == 0 and key_path.stat().st_ino == key_inode\\n                assert a.audit()['accepted'] and audit_account(record, root=root, manifest=manifest)['accepted']\\n                last_record = record\\n                receipt.update(accepted=True, before_release=state, denied_funding_at_hour=11,\\n                               after_deferral=after_deferral, after_release=released, final_summary=final,\\n                               release_without_income_microUSD=501 * MICRO, successor_contribution_microUSD=50 * MICRO,\\n                               successor_protection_tail_microUSD=200_200_000, funding_lineage={'reservation': reserve,\\n                               'prior_maturity_sequences': [e['seq'] for e in maturity_events]},\\n                               distinct_service_job_ids=[r['job_id'] for r in service_receipts],\\n                               service_receipts=service_receipts, same_private_key_inode=True)\\n    except BaseException:\\n        receipt['error'] = traceback.format_exc()\\n    finally:\\n        signal.setitimer(signal.ITIMER_REAL, 0)\\n        own, children = resource.getrusage(resource.RUSAGE_SELF), resource.getrusage(resource.RUSAGE_CHILDREN)\\n        receipt['cpu_seconds_including_waited_children'] = own.ru_utime + own.ru_stime - initial.ru_utime - initial.ru_stime + children.ru_utime + children.ru_stime\\n        receipt['wall_seconds'] = time.monotonic() - started\\n        if last_record is not None:\\n            path = HERE / 'maturity_successor_public_record.json'\\n            path.write_text(json.dumps(last_record, indent=2) + '\\\\n')\\n            receipt['public_record_sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()\\n        if receipt['cpu_seconds_including_waited_children'] > 40 or receipt['wall_seconds'] > 120:\\n            receipt.update(accepted=False, resource_failure='REGISTERED_INDEPENDENT_PROOF_BOUND_EXCEEDED')\\n        (HERE / 'maturity_successor_receipt.json').write_text(json.dumps(receipt, indent=2) + '\\\\n')\\n        print(json.dumps(receipt, sort_keys=True))\\n    return 0 if receipt['accepted'] else 1\\n\\nif __name__ == '__main__':\\n    parser = argparse.ArgumentParser()\\n    parser.add_argument('--execute-authorized', action='store_true')\\n    args = parser.parse_args()\\n    if not args.execute_authorized:\\n        print(json.dumps({'status': 'UNEXECUTED_REQUIRES_NEW_ALLOCATION', 'no_fixture_or_account_created': True}))\\n        raise SystemExit(0)\\n    raise SystemExit(run_authorized())\\n\"\n(base/\"test_maturity_funds_successor.py\").write_text(script)\nprotocol={\"schema\":\"agi-alpha/native020-maturity-successor-preregistration/v1\",\"execution_status\":\"UNEXECUTED_STOPPED_BEFORE_LAUNCH\",\"stop_reason\":\"Owner stopped all further experiments after a separate composed qualification harness exceeded its300CPU per-job limit. No causal proof or portable rerun was launched.\",\"source_scope\":\"Fixed authored native financial mechanism only; no legacy operating queue conversion, market, frontier-model, external-commerce or annual-profit claim.\",\"financial_source_sha256\":source_identity(Path.cwd())[\"sha256\"],\"script_sha256\":hashlib.sha256((base/\"test_maturity_funds_successor.py\").read_bytes()).hexdigest(),\"model\":{\"currency\":\"SIMULATED_USD\",\"opening\":500,\"working\":100,\"first_orders\":5,\"distinct_accepted_service_jobs\":6,\"first_price\":100,\"first_production_cost\":50,\"first_arrival_hours\":[0,2,4,6,8],\"first_settlement_hours\":[1,3,5,7,9],\"first_maturity_boundaries\":[20,22,24,26,28],\"premium\":0,\"payment_fee\":0,\"tax\":0,\"before_release\":{\"profit\":250,\"cash\":750,\"tail\":501,\"available\":149},\"counterfactual_hour\":11,\"counterfactual_production\":150,\"counterfactual_expected_profit\":50,\"counterfactual_required_outcome\":\"DEFER_UNCHANGED_NATIVE_HISTORY_PROFIT_AND_TAIL\",\"release_hour\":29,\"released_tail\":501,\"release_income\":0,\"after_release\":{\"profit\":250,\"cash\":750,\"tail\":0,\"available\":650},\"successor_price\":200,\"successor_production\":150,\"successor_funding\":\"EARNED_ONLY\",\"successor_arrival_hour\":29,\"successor_collection_hour\":30,\"successor_maturity_boundary\":35,\"successor_contribution\":50,\"final\":{\"profit\":300,\"cash\":800,\"tail\":200.2},\"service_cohort_seed\":2610312001},\"limits\":{\"total_cpu_seconds_including_children\":40,\"wall_seconds\":120,\"external_spending\":0,\"paid_calls\":0,\"outreach\":0,\"real_transactions\":0},\"stopping\":\"Single fixed mechanism case; retain failure and stop, no retuning or favorable rerun.\",\"future_execution_command_after_new_allocation\":\"python3 campaign/native-capital-020/independent/test_maturity_funds_successor.py --execute-authorized\",\"independence\":\"Same model, host, tools and source helpers; separate reviewing agent, not external certification.\",\"prepared_not_executed\":True}\n(base/\"maturity_successor_protocol.json\").write_text(json.dumps(protocol,indent=2)+\"\\n\")\nstatus={\"status\":\"UNEXECUTED\",\"experimental_job_launched\":False,\"fixtures_created\":0,\"accounts_created\":0,\"experimental_cpu_seconds\":0,\"ordinary_portable_bdd_rerun\":\"NOT_LAUNCHED\",\"earlier831_proof_preserved\":[{\"path\":str(archive/name),\"sha256\":hashlib.sha256((archive/name).read_bytes()).hexdigest()} for name in names],\"numeric_expectations_are\":\"Predeclared authored mechanism expectations, never measurements or achieved results.\"}\n(base/\"maturity_successor_UNEXECUTED.json\").write_text(json.dumps(status,indent=2)+\"\\n\")\nprint({\"prepared_without_execution\":True,\"protocol_sha256\":hashlib.sha256((base/\"maturity_successor_protocol.json\").read_bytes()).hexdigest(),\"script_sha256\":protocol[\"script_sha256\"],\"original831_evidence_archived\":True})\n"
+      ],
+      "start_utc": "2026-10-31T00:47:30.765557+00:00",
+      "wall_seconds": 0.36008405685424805,
+      "waited_child_cpu_seconds": 0.046746,
+      "wrapper_cpu_seconds": 0.300331562,
+      "peak_sampled_process_group_rss_bytes": 2621440,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-47-source-read-only",
+      "command": [
+        "sed",
+        "-n",
+        "425,477p",
+        "connected_enterprise/finance.py"
+      ],
+      "start_utc": "2026-10-31T00:47:58.114073+00:00",
+      "wall_seconds": 0.00822758674621582,
+      "waited_child_cpu_seconds": 0.004506999999999999,
+      "wrapper_cpu_seconds": 0.039712719,
+      "peak_sampled_process_group_rss_bytes": 0,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "review-48-static-addendum-only",
+      "command": [
+        "python3",
+        "-c",
+        "import hashlib,json\nfrom pathlib import Path\nfrom connected_enterprise.finance import source_identity\nbase=Path(\"campaign/native-capital-020/independent\")\nprotocol=json.loads((base/\"maturity_successor_protocol.json\").read_text())\nfinancial=source_identity(Path.cwd())[\"sha256\"]\nassert financial==protocol[\"financial_source_sha256\"]\nreport={\"schema\":\"agi-alpha/native020-independent-final-clock-review/v1\",\"financial_source_sha256\":financial,\"finance_file_sha256\":hashlib.sha256(Path(\"connected_enterprise/finance.py\").read_bytes()).hexdigest(),\"scope\":\"Read-only review of JournalAccount.spend current stale-day/due-event prelude; not an independent rerun or complete old/new source equivalence claim.\",\"finding\":\"No new blocking issue in the reviewed condition. Due financial events are processed only for a nonstale requested day. A funded stale commitment still reaches the mandatory native writer and its canonical rejection path; no stale request releases reserves or commits cash. An unfunded request can safely defer without a native financial action.\",\"earlier831_evidence\":\"Preserved unchanged in historical-83193149; it is not relabeled as final-financial-source execution.\",\"new_experiments_launched\":False,\"maturity_successor_proof\":\"UNEXECUTED; only source and preregistration saved.\",\"compatibility_qualification\":\"Partial/pending after owner-reported harness main-guard failure and real per-job CPU overrun. No resource-pass or composed compatibility-pass inferred.\",\"independence\":\"Same-session AI review, shared model/host/tools; not external certification.\"}\n(base/\"REVIEW_BDD_ADDENDUM.json\").write_text(json.dumps(report,indent=2)+\"\\n\")\nprint({\"static_review_saved\":True,\"financial_source_sha256\":financial,\"no_experiment\":True})\n"
+      ],
+      "start_utc": "2026-10-31T00:48:24.168453+00:00",
+      "wall_seconds": 0.3401002883911133,
+      "waited_child_cpu_seconds": 0.047615000000000005,
+      "wrapper_cpu_seconds": 0.257404402,
+      "peak_sampled_process_group_rss_bytes": 2621440,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "preserve-failed-harness-and-fix-guard",
+      "command": [
+        "python3",
+        "-"
+      ],
+      "start_utc": "2026-10-31T00:50:35.038628+00:00",
+      "wall_seconds": 0.32019662857055664,
+      "waited_child_cpu_seconds": 0.034670999999999993,
+      "wrapper_cpu_seconds": 0.255983973,
+      "peak_sampled_process_group_rss_bytes": 4456448,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "partial-candidate-report",
+      "command": [
+        "python3",
+        "-"
+      ],
+      "start_utc": "2026-10-31T00:52:41.021499+00:00",
+      "wall_seconds": 0.36916399002075195,
+      "waited_child_cpu_seconds": 0.13716399999999998,
+      "wrapper_cpu_seconds": 0.298338351,
+      "peak_sampled_process_group_rss_bytes": 4194304,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    },
+    {
+      "label": "publication-precheck",
+      "command": [
+        "python3",
+        "-"
+      ],
+      "start_utc": "2026-10-31T00:54:18.094607+00:00",
+      "wall_seconds": 13.895958423614502,
+      "waited_child_cpu_seconds": 0.127475,
+      "wrapper_cpu_seconds": 3.610478001,
+      "peak_sampled_process_group_rss_bytes": 22675456,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    }
+  ],
+  "active": {
+    "169c6496a7304d4d8b7ab6c8124b9493": {
+      "label": "assemble-key-free-candidate",
+      "pgid": 220799,
+      "slot": 0,
+      "live_cpu_seconds": 0.038499336,
+      "live_rss_bytes": 16683008,
+      "heartbeat": 1793408156.1687539
+    }
+  },
+  "scope": "Kernel waited-child CPU plus conservative setup and one-second wrapper allowances; model/connector billing unknown",
+  "peak_aggregate_reported_rss_bytes": 128237568
+}

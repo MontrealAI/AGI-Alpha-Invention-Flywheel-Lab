@@ -1,0 +1,40 @@
+import argparse
+import datetime
+import json
+from pathlib import Path
+import resource
+import sys
+import unittest
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / 'tests'))
+from connected_enterprise.finance import source_identity
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--name', required=True)
+    parser.add_argument('modules', nargs='+')
+    args = parser.parse_args()
+    directory = ROOT / 'campaign/native-capital-020/qualification'
+    directory.mkdir(exist_ok=True)
+    suite = unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(name) for name in args.modules)
+    with (directory / (args.name + '.log')).open('w') as stream:
+        result = unittest.TextTestRunner(stream=stream, verbosity=2).run(suite)
+    usage = resource.getrusage(resource.RUSAGE_SELF)
+    children = resource.getrusage(resource.RUSAGE_CHILDREN)
+    receipt = {'schema': 'agi-alpha/native-capital-qualification/v1',
+               'finished_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+               'modules': args.modules, 'tests': result.testsRun,
+               'failures': len(result.failures), 'errors': len(result.errors),
+               'accepted': result.wasSuccessful(), 'financial_source': source_identity(ROOT),
+               'self_and_waited_child_cpu_seconds': usage.ru_utime + usage.ru_stime + children.ru_utime + children.ru_stime,
+               'scope': 'Local engineering regressions; no hosted CI, fresh commercial confirmation or external certification.'}
+    (directory / (args.name + '.json')).write_text(json.dumps(receipt, indent=2))
+    print(json.dumps({k: v for k, v in receipt.items() if k != 'financial_source'}, sort_keys=True))
+    if not result.wasSuccessful():
+        print((directory / (args.name + '.log')).read_text()[-12000:])
+    raise SystemExit(not result.wasSuccessful())
+
+if __name__ == '__main__':
+    main()

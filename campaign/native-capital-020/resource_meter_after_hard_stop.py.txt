@@ -1,0 +1,90 @@
+import argparse, datetime, fcntl, json, os, pathlib, resource, signal, subprocess, sys, time, uuid
+ROOT=pathlib.Path('/workspace/scratch/8ae627a67fcf')
+(ROOT/'tmp').mkdir(exist_ok=True)
+os.environ['TMPDIR']=str(ROOT/'tmp')
+STATE=ROOT/'P0_RESOURCES.json'
+LOCK=ROOT/'P0_RESOURCES.lock'
+DEADLINE=datetime.datetime.fromisoformat('2026-10-31T01:18:31.543150+00:00').timestamp()
+def update(fn):
+ with LOCK.open('a+') as lock:
+  fcntl.flock(lock,fcntl.LOCK_EX)
+  s=json.loads(STATE.read_text()) if STATE.exists() else {'charged_cpu_seconds':60.0,'initial_setup_cpu_bound_seconds':60.0,'jobs':[],'active':{},'scope':'Kernel waited-child CPU plus conservative setup and one-second wrapper allowances; model/connector billing unknown'}
+  result=fn(s);STATE.write_text(json.dumps(s,indent=2)+'\n');return result
+def group_usage(pgid):
+ cpu=rss=0
+ for path in pathlib.Path('/proc').glob('[0-9]*/stat'):
+  try:
+   raw=path.read_text();fields=raw[raw.rfind(')')+2:].split()
+   if int(fields[2])==pgid:
+    cpu+=(int(fields[11])+int(fields[12])+int(fields[13])+int(fields[14]))/os.sysconf('SC_CLK_TCK');rss+=int(fields[21])*os.sysconf('SC_PAGE_SIZE')
+  except (OSError,ValueError,IndexError):pass
+ return cpu,rss
+def disk_bytes():
+ total=0
+ for base,dirs,files in os.walk(ROOT):
+  for name in files:
+   try:total+=(pathlib.Path(base)/name).lstat().st_size
+   except OSError:pass
+ return total
+def main():
+ p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('--cwd',default=str(ROOT));p.add_argument('command',nargs=argparse.REMAINDER);a=p.parse_args();cmd=a.command
+ if cmd and cmd[0]=='--':cmd=cmd[1:]
+ start=time.time();ident=uuid.uuid4().hex;used=resource.getrusage(resource.RUSAGE_CHILDREN);peak=0;reason=None;last_disk_check=0
+ host_monitor=ROOT/('P0_HOST_'+ident+'.json')
+ slot_stream=None;slot_number=None
+ for n in range(2):
+  stream=(ROOT/('P0_SLOT_'+str(n)+'.lock')).open('a+')
+  try:fcntl.flock(stream,fcntl.LOCK_EX|fcntl.LOCK_NB);slot_stream=stream;slot_number=n;break
+  except BlockingIOError:stream.close()
+ if slot_stream is None:
+  print('P0_MAXIMUM_TWO_ACTIVE_JOBS_REFUSED',file=sys.stderr);return 75
+ def admit(s):
+  if start>=DEADLINE or s['charged_cpu_seconds']>=1800 or len(s['active'])>=2:raise SystemExit('P0_ALLOCATION_REFUSED')
+  s['active'][ident]={'label':a.label,'pgid':None,'slot':slot_number,'live_cpu_seconds':0,'live_rss_bytes':0,'heartbeat':start};return s['charged_cpu_seconds']
+ charged=update(admit)
+ def limits():
+  resource.setrlimit(resource.RLIMIT_CPU,(300,301));resource.setrlimit(resource.RLIMIT_AS,(2147483648,2147483648))
+  raw=pathlib.Path('/proc/self/stat').read_text();fields=raw[raw.rfind(')')+2:].split()
+  host_monitor.write_text(json.dumps({'host_pgid':int(fields[2]),'host_pid':int(raw.split(' ',1)[0])}))
+ try:
+  child=subprocess.Popen(cmd,cwd=a.cwd,start_new_session=True,preexec_fn=limits)
+  host_pgid=json.loads(host_monitor.read_text())['host_pgid']
+  update(lambda s:s['active'][ident].update(pgid=host_pgid))
+  while child.poll() is None:
+   cpu,rss=group_usage(host_pgid);peak=max(peak,rss)
+   def remaining(s):
+    s['active'][ident].update(live_cpu_seconds=cpu+time.process_time(),live_rss_bytes=rss+resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,heartbeat=time.time())
+    live_cpu=sum(x.get('live_cpu_seconds',0) for x in s['active'].values())
+    live_rss=sum(x.get('live_rss_bytes',0) for x in s['active'].values())
+    s['peak_aggregate_reported_rss_bytes']=max(s.get('peak_aggregate_reported_rss_bytes',0),live_rss)
+    return s['charged_cpu_seconds']+live_cpu,live_rss
+   total,mem=update(remaining)
+   if time.time()>=DEADLINE:reason='TOTAL_WALL_LIMIT'
+   elif time.time()-start>600:reason='JOB_WALL_LIMIT'
+   elif cpu+time.process_time()>300:reason='JOB_CPU_LIMIT'
+   elif total>=1800:reason='TOTAL_CPU_LIMIT'
+   elif mem>2147483648:reason='TOTAL_MEMORY_LIMIT'
+   elif time.time()-last_disk_check>=1:
+    last_disk_check=time.time()
+    if disk_bytes()>536870912:reason='WORKSPACE_DISK_LIMIT'
+   if reason:
+    os.killpg(child.pid,signal.SIGTERM)
+    try:child.wait(timeout=3)
+    except subprocess.TimeoutExpired:os.killpg(child.pid,signal.SIGKILL)
+    break
+   time.sleep(.1)
+  code=child.wait()
+  host_monitor.unlink(missing_ok=True)
+ except BaseException:
+  if 'child' in locals() and child.poll() is None:
+   os.killpg(child.pid,signal.SIGKILL);child.wait()
+  update(lambda s:s['active'].pop(ident,None));raise
+ end=resource.getrusage(resource.RUSAGE_CHILDREN);cpu=end.ru_utime+end.ru_stime-used.ru_utime-used.ru_stime
+ wrapper_cpu=time.process_time()
+ if cpu+wrapper_cpu>300:reason=reason or 'JOB_CPU_LIMIT_POSTMEASUREMENT'
+ receipt={'label':a.label,'command':cmd,'start_utc':datetime.datetime.fromtimestamp(start,datetime.timezone.utc).isoformat(),'wall_seconds':time.time()-start,'waited_child_cpu_seconds':cpu,'wrapper_cpu_seconds':wrapper_cpu,'peak_sampled_process_group_rss_bytes':peak,'exit_code':code,'limit_failure':reason,'shell_cpu_allowance_seconds':.1}
+ def finish(s):
+  s['active'].pop(ident,None);s['charged_cpu_seconds']+=cpu+wrapper_cpu+.1;s['jobs'].append(receipt)
+  if s['charged_cpu_seconds']>1800:receipt['limit_failure']='TOTAL_CPU_LIMIT_POSTMEASUREMENT'
+ update(finish);print(json.dumps({'p0_receipt':receipt}),file=sys.stderr);return code if not receipt['limit_failure'] else 125
+if __name__=='__main__':raise SystemExit(main())

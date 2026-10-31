@@ -25,9 +25,9 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def source_paths(root):
     names=set(inherited_paths(root))
-    for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*'),('campaign/completion-015','*')]:
+    for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('tests','test_native_capital*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('examples/native_capital020','*.json'),('docs/native-capital020','*.md')]:
         names.update(p.relative_to(root).as_posix() for p in (root/folder).glob(pattern) if p.is_file())
-    names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','verification/scan_adaptive_cancellation_history.py','evidence/cancellation-retirement/HISTORICAL_SCAN.json','evidence/cancellation-retirement/COUNTEREXAMPLE.before.json','docs/connected014/OPERATOR.md','AGENTS.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())
+    names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','verification/scan_adaptive_cancellation_history.py','evidence/cancellation-retirement/HISTORICAL_SCAN.json','evidence/cancellation-retirement/COUNTEREXAMPLE.before.json','docs/connected014/OPERATOR.md','AGENTS.md','README.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
@@ -201,9 +201,41 @@ def main():
         s=sub.add_parser(name);s.add_argument('--output',required=True)
         if name=='run':s.add_argument('--smoke',action='store_true')
     s=sub.add_parser('package');s.add_argument('--output',required=True);s.add_argument('--archive',required=True)
+    for name in ['register','comparison']:
+        s=sub.add_parser(name);s.add_argument('--config',required=True);s.add_argument('--output',required=True)
+    for name in ['operate','scoreboard']:
+        s=sub.add_parser(name);s.add_argument('--output',required=True)
+        if name=='operate':s.add_argument('--max-events',type=int)
+    s=sub.add_parser('_capital');s.add_argument('--output',required=True);s.add_argument('--action',required=True,choices=['register','operate','audit','scoreboard','comparison']);s.add_argument('--max-events',type=int)
     args=p.parse_args();raw_output=Path(args.output).expanduser()
     if any(q.is_symlink() for q in [raw_output,*raw_output.parents]):raise ValueError('OUTPUT_SYMLINK_REFUSED')
     output=raw_output.resolve()
+    from . import capital
+    if args.command in {'register','comparison'}:
+        from commercial.ledger import strict_json
+        capital.freeze(ROOT,strict_json(Path(args.config).read_bytes()),output,comparison=args.command=='comparison')
+        action='comparison' if args.command=='comparison' else 'register'
+        return subprocess.call([sys.executable,'-m','connected_enterprise','_capital','--action',action,'--output',str(output)],cwd=output/'source')
+    if args.command=='_capital':
+        if args.action=='register':
+            registered=capital.register(output);result={'schema':registered['schema'],'registration_sha256':registered['sha256'],'opportunities':len(registered['opportunities'])}
+        elif args.action=='operate':
+            from .engine import run_native_capital
+            operated=run_native_capital(output,max_events=args.max_events)
+            result={'complete':operated['complete'],'summary':operated['summary'],'processed_events':operated['state']['processed_events'],'source_sha256':operated['source_sha256']}
+        elif args.action=='comparison':result=capital.comparison(output)
+        else:
+            checked=capital.audit_output(output)
+            write(output/'CAPITAL_AUDIT.json',checked)
+            result=({'accepted':checked['accepted'],'arms':{k:v['scoreboard'] for k,v in checked['arms'].items()}} if 'arms' in checked
+                    else checked['scoreboard'] if args.action=='scoreboard' else {'accepted':checked['accepted'],'scoreboard':checked['scoreboard']})
+        print(json.dumps(result,sort_keys=True));return 0
+    if args.command in {'operate','scoreboard'} or args.command in {'resume','audit'} and capital.is_capital(output):
+        capital.read_freeze(output)
+        action='operate' if args.command=='resume' else args.command
+        command=[sys.executable,'-m','connected_enterprise','_capital','--action',action,'--output',str(output)]
+        if args.command=='operate' and args.max_events is not None:command.extend(['--max-events',str(args.max_events)])
+        return subprocess.call(command,cwd=output/'source')
     if args.command=='run':freeze(output,args.smoke)
     if args.command in {'run','resume','audit'}:
         frozen=read_freeze(output);command='_worker' if args.command!='audit' else '_audit'

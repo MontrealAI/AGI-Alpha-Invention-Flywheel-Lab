@@ -1,0 +1,83 @@
+{
+  "schema": "agi-alpha/native020-independent-resource-and-failure-record/v1",
+  "jobs": [
+    {
+      "label": "review-13",
+      "command": [
+        "python3",
+        "-c",
+        "import sys,tempfile\nfrom pathlib import Path\nsys.path.insert(0,\"tests\")\nfrom test_native_capital_native import NativeCapitalAdverseStateTests as T\nT.setUpClass()\ntry:\n t=T(\"test_reversal_keeps_distinct_claim_service_and_registered_residual\")\n with tempfile.TemporaryDirectory(prefix=\"review-prior-claim-\") as tmp:\n  with t.open(Path(tmp)/\"account.sqlite\") as a:\n   t.settle(a)\n   a.execute(\"claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"amount\":50000,\"kind\":\"covered\"},3)\n   a.execute(\"event\",{\"id\":\"o\",\"event_id\":\"subsequent-reversal\",\"action\":\"late_reversal\"},4)\n   s=a.snapshot()[\"summary\"]\n   assert (s[\"tailReserve\"],s[\"payables\"])==(150000,50000),s\n   a.execute(\"resolve_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"pay1\",\"resolution\":\"pay\"},5)\n   a.execute(\"recover_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"recover1\",\"amount\":50000,\"source_tx\":\"prior-recovery\"},5)\n   before=a.snapshot()[\"summary\"].copy()\n   try:a.execute(\"recover_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"recover2\",\"amount\":1,\"source_tx\":\"prior-recovery\"},6)\n   except ValueError:pass\n   else:raise AssertionError(\"duplicate recovery accepted\")\n   assert a.snapshot()[\"summary\"]==before\n   try:a.execute(\"mature\",{\"id\":\"o\"},20)\n   except ValueError:pass\n   else:raise AssertionError(\"inclusive boundary released\")\n   assert a.snapshot()[\"summary\"][\"tailReserve\"]==150000\n   a.execute(\"mature\",{\"id\":\"o\"},21)\n   assert a.snapshot()[\"summary\"][\"tailReserve\"]==100000\n   assert a.audit()[\"accepted\"]\n   print({\"prior_claim_survives_reversal\":True,\"duplicate_recovery_rejected\":True,\"inclusive_maturity_boundary_preserved\":True,\"matured_residual\":100000,\"audit_accepted\":True})\nfinally:T.tearDownClass()\n"
+      ],
+      "start_utc": "2026-10-31T00:01:02.348457+00:00",
+      "wall_seconds": 3.226839542388916,
+      "waited_child_cpu_seconds": 3.081658,
+      "peak_sampled_process_group_rss_bytes": 28135424,
+      "exit_code": 1,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-16",
+      "command": [
+        "python3",
+        "-c",
+        "import sys,tempfile\nfrom pathlib import Path\nsys.path.insert(0,\"tests\")\nfrom test_native_capital_native import NativeCapitalAdverseStateTests as T\nT.setUpClass()\ntry:\n t=T(\"test_reversal_keeps_distinct_claim_service_and_registered_residual\")\n with tempfile.TemporaryDirectory(prefix=\"review-prior-claim-\") as tmp:\n  with t.open(Path(tmp)/\"account.sqlite\") as a:\n   t.settle(a)\n   a.execute(\"claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"amount\":50000,\"kind\":\"covered\"},3)\n   a.execute(\"event\",{\"id\":\"o\",\"event_id\":\"subsequent-reversal\",\"action\":\"late_reversal\"},4)\n   s=a.snapshot()[\"summary\"]\n   assert (s[\"tailReserve\"],s[\"payables\"])==(150000,50000),s\n   a.execute(\"resolve_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"pay1\",\"resolution\":\"pay\"},5)\n   a.execute(\"recover_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"recover1\",\"amount\":50000,\"source_tx\":\"prior-recovery\"},5)\n   before=a.snapshot()[\"summary\"].copy()\n   try:a.execute(\"recover_claim\",{\"id\":\"o\",\"claim_id\":\"prior-covered\",\"settlement_id\":\"recover2\",\"amount\":1,\"source_tx\":\"prior-recovery\"},6)\n   except ValueError:pass\n   else:raise AssertionError(\"duplicate recovery accepted\")\n   assert a.snapshot()[\"summary\"]==before\n   try:a.execute(\"mature\",{\"id\":\"o\",\"event_id\":\"early-attempt\"},20)\n   except ValueError:pass\n   else:raise AssertionError(\"inclusive boundary released\")\n   assert a.snapshot()[\"summary\"][\"tailReserve\"]==150000\n   a.execute(\"mature\",{\"id\":\"o\",\"event_id\":\"actual-maturity\"},21)\n   assert a.snapshot()[\"summary\"][\"tailReserve\"]==100000\n   after=a.snapshot()[\"summary\"].copy()\n   try:a.execute(\"mature\",{\"id\":\"o\",\"event_id\":\"duplicate-maturity\"},22)\n   except ValueError:pass\n   else:raise AssertionError(\"second maturity accepted\")\n   assert a.snapshot()[\"summary\"]==after\n   assert a.audit()[\"accepted\"]\n   print({\"prior_claim_survives_reversal\":True,\"duplicate_recovery_rejected\":True,\"inclusive_maturity_boundary_preserved\":True,\"valid_later_maturity_succeeds\":True,\"second_maturity_rejected\":True,\"matured_residual\":100000,\"audit_accepted\":True})\nfinally:T.tearDownClass()\n"
+      ],
+      "start_utc": "2026-10-31T00:02:17.426837+00:00",
+      "wall_seconds": 5.153318166732788,
+      "waited_child_cpu_seconds": 5.051788,
+      "peak_sampled_process_group_rss_bytes": 28311552,
+      "exit_code": 0,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-31",
+      "command": [
+        "python3",
+        "-c",
+        "import copy,resource,shutil,sys\nfrom pathlib import Path\nsys.path.insert(0,\"tests\")\nfrom test_native_source_upgrade import NativeSourceUpgradeTests as T, CONTRACT\nfrom commercial.terms import prospective_terms\nT.setUpClass()\nt=T(\"test_pristine_old_verifier_transition_preserves_account_money_and_obligations\")\ntry:\n t.setUp()\n ticket=t.authorize()\n untouched=copy.deepcopy(ticket)\n t.a=t.upgrade(ticket)\n fallback=t.new/\"historical-source-versions\"/ticket[\"body\"][\"from_source\"][\"sha256\"]\n fallback.parent.mkdir()\n shutil.move(str(t.old),str(fallback))\n assert not t.old.exists()\n assert t.a.audit()[\"accepted\"]\n t.a.close();t.a=t.reopen()\n a=t.a\n job=next(j for j in t.manifest[\"jobs\"] if j[\"service_id\"]==\"reconciliation\" and j[\"accepted\"])\n terms=prospective_terms(\"new-prospective\",1000000,10,5)\n a.execute(\"register_terms\",{\"id\":\"new-terms\",\"terms\":terms},4)\n a.execute(\"wallet\",{\"buyer\":\"new-buyer\",\"amount\":1000000},4)\n a.execute(\"offer\",{\"id\":\"new-prospective\",\"buyer\":\"new-buyer\",\"price\":1000000,\"job_id\":job[\"id\"],\"deadline\":8,\"terms_id\":\"new-terms\"},4)\n for action,day in [(\"consent\",4),(\"fund\",4),(\"prepare\",5),(\"release\",5)]:\n  a.execute(\"event\",{\"id\":\"new-prospective\",\"action\":action,\"event_id\":\"new-\"+action},day)\n  used=resource.getrusage(resource.RUSAGE_SELF).ru_utime+resource.getrusage(resource.RUSAGE_SELF).ru_stime+resource.getrusage(resource.RUSAGE_CHILDREN).ru_utime+resource.getrusage(resource.RUSAGE_CHILDREN).ru_stime\n  assert used<26,(\"independent-test-budget-near-boundary\",used)\n assert a.snapshot()[\"summary\"][\"tailReserve\"]==101400000\n a.execute(\"mature\",{\"id\":\"new-prospective\",\"event_id\":\"new-maturity\"},11)\n assert a.snapshot()[\"summary\"][\"tailReserve\"]==100200000\n assert a.export()[\"source_transitions\"][\"upgrade-1\"]==untouched\n assert a.audit()[\"accepted\"]\n print({\"ordinary_account_upgraded\":True,\"historical_original_path_absent\":True,\"portable_inventory_fallback_audited\":True,\"new_prospective_order_collected\":True,\"old_permanent_tail_retained\":100200000,\"signed_ticket_unchanged\":True})\nfinally:\n t.tearDown()\n T.tearDownClass()\n"
+      ],
+      "start_utc": "2026-10-31T00:08:45.915553+00:00",
+      "wall_seconds": 10.524452209472656,
+      "waited_child_cpu_seconds": 9.696032,
+      "peak_sampled_process_group_rss_bytes": 28704768,
+      "exit_code": 1,
+      "limit_failure": null,
+      "wrapper_cpu_allowance_seconds": 1.0
+    },
+    {
+      "label": "review-37",
+      "command": [
+        "python3",
+        "campaign/native-capital-020/independent/test_ordinary_portable_upgrade.py"
+      ],
+      "start_utc": "2026-10-31T00:31:30.264976+00:00",
+      "wall_seconds": 14.499367237091064,
+      "waited_child_cpu_seconds": 14.311596,
+      "wrapper_cpu_seconds": 1.52710895,
+      "peak_sampled_process_group_rss_bytes": 48578560,
+      "exit_code": 0,
+      "limit_failure": null,
+      "shell_cpu_allowance_seconds": 0.1
+    }
+  ],
+  "observed_failures": [
+    {
+      "label": "review-13",
+      "observed_exception": "ValueError: IDEMPOTENT_CONNECTED_ACTION_PAYLOAD_CHANGED",
+      "location": "connected_enterprise/finance.py _entry",
+      "trigger": "After a rejected inclusive-boundary maturity, rightful later maturity reused the semantic operation key.",
+      "disposition": "Repaired with mandatory bounded maturity event_id and separate attempt identity; review-16 passed."
+    },
+    {
+      "label": "review-31",
+      "observed_exception": "ValueError: BOUNDED_PINNED_HISTORICAL_SOURCE_REQUIRED",
+      "location": "connected_enterprise/upgrades.py verify_historical/source_inventory",
+      "trigger": "An invalid empty original directory caused immediate rejection before the valid inventory-bound portable fallback could be tried.",
+      "disposition": "Resolver now skips invalid candidates; review-37 passed with deliberately empty old directory."
+    }
+  ],
+  "historical_source_limit": "Failed command, resource result, and directly observed exception are retained. Complete pre-repair mutable source editions were not checkpointed by this reviewer and are not fabricated here.",
+  "resource_control_scope": "Earlier waited-child CPU measurements are retained; historical cross-job RSS/concurrency sampling before wrapper repair remains unverified. review-37 uses the repaired UUID/flock/host-PID resource control."
+}

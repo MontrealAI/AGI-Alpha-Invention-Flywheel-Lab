@@ -291,3 +291,8 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
         _write(output/'RESULT.json',result)
         return result
     finally:account.close()
+
+
+def run_native_capital(output, *, max_events=None):
+    from .capital import operate
+    return operate(output, max_events=max_events)

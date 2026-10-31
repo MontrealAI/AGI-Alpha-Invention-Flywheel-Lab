@@ -1,0 +1,34 @@
+{
+  "schema": "agi-alpha/native-capital020-hard-stop/v1",
+  "recorded_utc": "2026-10-31T00:50:35.070944+00:00",
+  "status": "PARTIAL_CANDIDATE_RESOURCE_QUALIFICATION_FAILED",
+  "failed_job": {
+    "label": "final-legacy-composed",
+    "command": [
+      "python3",
+      "campaign/native-capital-020/run_qualification.py",
+      "--name",
+      "final-legacy",
+      "test_adaptive_account",
+      "test_connected_finance",
+      "test_connected_recovery_preflight",
+      "test_connected_rejections",
+      "test_connected_audit_prefixes",
+      "test_commerce006"
+    ],
+    "start_utc": "2026-10-31T00:38:06.454764+00:00",
+    "wall_seconds": 171.6187674999237,
+    "waited_child_cpu_seconds": 396.134608,
+    "wrapper_cpu_seconds": 39.122064077,
+    "peak_sampled_process_group_rss_bytes": 47181824,
+    "exit_code": 1,
+    "limit_failure": "JOB_CPU_LIMIT_POSTMEASUREMENT",
+    "shell_cpu_allowance_seconds": 0.1
+  },
+  "cause": "Root qualification helper lacked multiprocessing __main__ guard. Spawned workers reran entire suite; concurrent writes also corrupted raw log with NUL bytes. No whole-cycle resource qualification.",
+  "response": "Affected qualification and all further experiments stopped. Corrected launcher syntax-validated only; no legacy-suite retry, new default12 run, causal maturity probe or portable rerun in this cycle. Publication/checkpoint headroom only.",
+  "native_result": "22 composed native lifecycle/source-upgrade/CLI tests passed at frozen source0a41cbe703772ddd831497fc094b0379f0eae99d4d24f9c62a40098e3aa3db4e",
+  "before_harness_sha256": "c8b1c0562bbed2bdacaf6775607c41eaa0f6c1e905e10277d5830aa1d4b894fb",
+  "corrected_harness_sha256": "fcdb865342cecc187633be0f27d73a1e9b9a90a30936dc41d24cc9d90d0fd302",
+  "remaining_gate": "Fresh verification allocation must validate descendant CPU controls, run corrected compatibility launcher, retain raw12-arrival operating/comparison/adverse traces, and execute the explicitly unexecuted causal maturity probe. No CI, merge or release authorized."
+}

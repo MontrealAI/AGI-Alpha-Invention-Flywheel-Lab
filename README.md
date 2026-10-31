@@ -16,6 +16,14 @@ The completed economic run demonstrates conditional earned-financed expansion: t
 
 The final integration and release status is tracked in [PR #28](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/28). A source branch or successful smoke check alone does not establish publication or operation of a downloaded release. Earlier editions and their original claims, failures and URLs are preserved below.
 
+The opt-in [native capital lifecycle P0 candidate](docs/native-capital020/OPERATOR.md)
+adds prospective terms, claims, maturity, authenticated owned-account source
+upgrades, and registered `register` / `operate` / `resume` / `audit` /
+`comparison` / `scoreboard` commands through this same canonical interface.
+See [its qualification checkpoint](campaign/native-capital-020/README.md) for
+actual results and limits. It is a separate candidate; no merge or release is
+implied, and modeled profit remains conditional on declared costs and buyers.
+
 ## Current executed outcome - 30 October 2026
 
 **Commercial 010: CONDITIONAL_SIMULATED_GO.** Actual autonomous production supplied 19,000 synthetic source rows across 19 orders: 16 deliveries passed the separate checker and three orders were rejected. The completed four-arm experiment supports fixed-capability repeated delivery financed by prior unrestricted simulated earnings; invention improvement is not a prerequisite. See the [machine-readable result](campaign/commercial-010/RESULT.json), [browser-readable paper](docs/commercial010/REPORT.md) and [compiled PDF](docs/commercial010/paper.pdf).
