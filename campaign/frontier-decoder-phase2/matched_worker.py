@@ -93,6 +93,7 @@ try:
     final_min_cost = min(c['cost'] for c in candidates) if not used_fallback else None
     first_goal_seconds = (work['first_goal_seconds'] if work is not None else
                           (decode_seconds if not used_fallback and a.variant != 'anchor' else None))
+    if used_fallback: first_goal_seconds = None  # No goal: sentinel is not a timing.
     reduction_seconds = time.perf_counter() - validation_start
     answer = {'status': 'complete', 'variant': a.variant, 'extension_file': str(extension_file),
               'stim_version': stim.__version__, 'import_seconds': import_seconds,

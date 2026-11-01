@@ -65,3 +65,14 @@ The narrow frontier-reuse hypothesis remains untested until executable receipts
 establish otherwise. Neither generic list decoding nor a broad novelty claim is
 asserted. No vendor worktree, binary, shot archive, private input or credential is
 committed here.
+
+## First public CI attempt (failed, retained)
+Run41356814542 compiled both variants and passed all six candidate-list C++ tests
+and three upstream regressions. Pristine compilation431.07s, modified56.19s.
+Python binding tests then failed before importing: `PyObject_ClearManagedDict`
+undefined. Upstream MODULE selectsPython3.13 but initial hosted runtime was3.12.
+Cross-binary Python checks and diagnostic shots did not run. The next attempt
+aligns runtime3.13 with upstream; no kernel or frozen scientific setting changes.
+Compact source-bound evidence is in `CI_ATTEMPT_1.json`; full public job logs remain
+on GitHub. This research is not an established industry flagship or evidence of
+newly economical useful computation or profit.

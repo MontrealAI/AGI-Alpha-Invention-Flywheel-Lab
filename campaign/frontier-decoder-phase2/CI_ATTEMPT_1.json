@@ -1,0 +1,114 @@
+{
+  "run": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41356814542",
+  "head": "7c5303c6443abb7046de6bc97000afa79f76e284",
+  "status": "FAIL",
+  "reason": "Python ABI mismatch: upstream MODULE toolchain 3.13, test runtime 3.12; ImportError undefined symbol PyObject_ClearManagedDict",
+  "executed_phase2_shots": 0,
+  "cross_binary_python_tests": "NOT RUN",
+  "setup_build_elapsed_seconds": 529.626520448,
+  "steps": [
+    {
+      "label": "init",
+      "exit": 0,
+      "seconds": 0.005462938000000861
+    },
+    {
+      "label": "fetch",
+      "exit": 0,
+      "seconds": 1.1757262460000035
+    },
+    {
+      "label": "checkout",
+      "exit": 0,
+      "seconds": 0.16591846400000065
+    },
+    {
+      "label": "source_identity",
+      "exit": 0,
+      "seconds": 0.0025941399999993564
+    },
+    {
+      "label": "tools",
+      "exit": 0,
+      "seconds": 0.41530288700000284
+    },
+    {
+      "label": "python_deps",
+      "exit": 0,
+      "seconds": 7.238435430000003
+    },
+    {
+      "label": "compiler",
+      "exit": 0,
+      "seconds": 0.1648289769999991
+    },
+    {
+      "label": "pristine_build",
+      "exit": 0,
+      "seconds": 431.072372494
+    },
+    {
+      "label": "pristine_regressions",
+      "exit": 0,
+      "seconds": 16.810015761999978
+    },
+    {
+      "label": "apply",
+      "exit": 0,
+      "seconds": 0.0028734840000197437
+    },
+    {
+      "label": "patch",
+      "exit": 0,
+      "seconds": 0.0045385930000065855
+    },
+    {
+      "label": "modified_build",
+      "exit": 0,
+      "seconds": 56.19122917900006
+    },
+    {
+      "label": "cpp_tests",
+      "exit": 0,
+      "seconds": 15.994644440999991
+    },
+    {
+      "label": "interface_tests",
+      "exit": 1,
+      "seconds": 0.1153673929999286
+    }
+  ],
+  "cpp_tests_executed": [
+    "DecodersStripZeroProbabilityErrors",
+    "DecoderErrorIndexMapsAreInOriginalDemCoordinates",
+    "DecodeToErrorsThrowsOnInvalidSymptom",
+    "MultipleClassesAndFirstGoalCompatibility",
+    "SameClassConfigurationsAreNotMerged",
+    "MergedOriginalIdsAndCorrelatedSeparator",
+    "EmptySyndromeAndNoGoalStatus",
+    "RejectsIncompatibleConfigurationAndKeepsCapConvention",
+    "CapAfterFirstGoalRetainsValidPrediction"
+  ],
+  "source_commit": "838d4f64acc16b5c15adda01302a719400329d4b",
+  "patch_sha256": "973e62b569ca1878ddd06722a5f7c03dd967922db28be27c28b5892600678998",
+  "protocol_sha256": "690f67c6244d0586c6fabe79e7d71d87e75e12227a0b801622913c4a975f2863",
+  "lock_pristine": "156661a78ab90569e8bbae753e0401bfb4f5d39192f7fbf90bfa3b4f1fb4dc76",
+  "lock_modified": "156661a78ab90569e8bbae753e0401bfb4f5d39192f7fbf90bfa3b4f1fb4dc76",
+  "extensions": {
+    "pristine": [
+      {
+        "name": "tesseract_decoder.so",
+        "sha256": "561e0bfb036c7e122b238c0c93798cffc2fc2f7c4650795d53efd3caf0e195d9"
+      }
+    ],
+    "modified": [
+      {
+        "name": "tesseract_decoder.so",
+        "sha256": "b5a7e1e2b2b851d7e45c5c57e45ba2526b42f168fb43df3f8ae10e117744f24f"
+      }
+    ]
+  },
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "lesson": "Align hosted runtime with pinned upstream Python3.13 toolchain; no algorithm/protocol changes. Prior failures remain failures."
+}

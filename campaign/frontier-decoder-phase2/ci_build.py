@@ -26,6 +26,9 @@ try:
  receipt['patch_sha256']=sha(HERE/'terminal_list.patch')
  receipt['protocol_sha256']=sha(HERE/'FROZEN_PROTOCOL.md')
  receipt['source_commit']=run('source_identity',['git','rev-parse','HEAD'],source).strip()
+ assert 'DEFAULT_PYTHON_VERSION = \"3.13\"' in (source/'MODULE.bazel').read_text()
+ assert sys.version_info[:2]==(3,13), 'Runtime must match pinned upstream Python3.13 toolchain'
+ receipt['python_toolchain']='3.13 (pinned upstream MODULE; runtime major/minor asserted)'
  run('tools',['curl','--fail','--location','--proto','=https','--tlsv1.2','--output',str(ROOT/'bazelisk'),'https://github.com/bazelbuild/bazelisk/releases/download/v1.30.0/bazelisk-linux-amd64'])
  assert sha(ROOT/'bazelisk')=='a248ae2b2b62b5baebb748f6fba7203bff1a27e5d01b55399a8406744cb539e8'
  (ROOT/'bazelisk').chmod(0o755)
