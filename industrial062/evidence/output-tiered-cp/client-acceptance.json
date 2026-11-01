@@ -1,0 +1,78 @@
+{
+  "accepted": true,
+  "errors": [],
+  "metrics": {
+    "revenue": 1475936567.0,
+    "operating_cost": 19400000.0,
+    "production_cost": 138293015.0,
+    "freight_cost": 212928191.8314451,
+    "holding_cost": 3499989.0027750675,
+    "total_cost": 374121195.8342202,
+    "profit": 1101815371.1657798,
+    "freight_by_leg": {
+      "supplier_to_factory": 145394916.301563,
+      "factory_to_cdc": 13598190.490034165,
+      "cdc_to_rdc": 34556886.90256529,
+      "node_to_customer": 19378198.137282643
+    },
+    "holding_by_component": {
+      "factory_material_cycle": 515333.9210005478,
+      "supplier_to_factory_in_transit": 180894.7470838356,
+      "central_warehouse_cycle": 672808.5071942465,
+      "factory_to_cdc_in_transit": 523982.69291945203,
+      "regional_center_cycle": 535285.3755578082,
+      "cdc_to_rdc_in_transit": 617851.6398213698,
+      "node_to_customer_in_transit": 453832.1191978077
+    },
+    "service_coverage": 0.7500002450905904,
+    "pieces_within_service_distance": 1530047,
+    "demand_pieces": 2040062,
+    "open_factories": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06"
+    ],
+    "open_warehouses": [
+      "C01",
+      "C02",
+      "R01",
+      "R02",
+      "R03",
+      "R04",
+      "R05",
+      "R06",
+      "R07",
+      "R08"
+    ],
+    "node_throughput": {
+      "C01": 1047848,
+      "C02": 992214,
+      "R01": 671469,
+      "R02": 239997,
+      "R03": 138921,
+      "R04": 52532,
+      "R05": 258282,
+      "R06": 99999,
+      "R07": 99999,
+      "R08": 478863
+    },
+    "warehouse_operating_cost": {
+      "C01": 1200000,
+      "C02": 1200000,
+      "R01": 1000000,
+      "R02": 900000,
+      "R03": 700000,
+      "R04": 500000,
+      "R05": 900000,
+      "R06": 500000,
+      "R07": 500000,
+      "R08": 1000000
+    }
+  },
+  "producer_cost_delta_yuan": 1.1920928955078125e-07,
+  "solution_sha256": "2d6f660eb06bc63650b0000fba3b68c189322afe4365b05caadcd88253f35988",
+  "scope": "Unchanged public client rules/accounting in a separate process; no hidden expert comparison, external certification or commercial acceptance."
+}

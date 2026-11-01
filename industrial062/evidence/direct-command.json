@@ -1,0 +1,26 @@
+{
+  "children_system_cpu_seconds": 1.95201,
+  "children_user_cpu_seconds": 199.730271,
+  "command": [
+    "timeout",
+    "-k",
+    "5s",
+    "90s",
+    "python",
+    "industrial062/construct.py",
+    "--case",
+    "15_network_direct",
+    "--output",
+    "industrial062/output-direct",
+    "--seconds",
+    "60"
+  ],
+  "exit_code": 0,
+  "finished_utc": "2026-11-01T23:00:48.494321+00:00",
+  "maximum_child_rss_KiB": 554476,
+  "schema": "agi-alpha/overnight022-command-resource/v1",
+  "scope": "Reaped local command and descendants; excludes assistant inference, tool transport, external CI, preceding clone/review and unmeasured host billing. Maximum RSS is a kernel high-water mark, not concurrent aggregate memory. No allocation or quota is created by this receipt.",
+  "started_utc": "2026-11-01T22:59:46.105619+00:00",
+  "total_measured_command_cpu_seconds": 201.682281,
+  "wall_seconds": 62.38883324399649
+}
