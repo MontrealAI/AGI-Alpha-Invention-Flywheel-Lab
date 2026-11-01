@@ -24,9 +24,15 @@ These are the default project-site addresses, **not a statement that deployment 
 
 On a phone, tap **Open the full paper** for the native PDF reader. If inline preview is unsupported or blank, **Download PDF** remains available above and beside the preview. The original PDF is not tagged for accessibility; the HTML summary and navigation are accessible alternatives, not a claim of full PDF accessibility remediation.
 
+## Retroactive Sensor Lab
+
+The proposed fifth allowlisted HTML page is **[Retroactive Sensor Lab](sensor-lab.html)**, with its local-only **[sensor constructor module](sensor-engine.mjs)**. This optional user-interactive demonstration operates entirely on pasted CSV or its clearly labeled synthetic sample. It makes no network calls and never publishes or uploads the user-provided archive. Its output includes source-row references, SHA-256 fingerprints of the input bytes and explicit unknown intervals. It is not a certified physical or scientific measurement. Run `node --test tests/test_sensor_engine.mjs` plus the existing site tests before publication.
+
+The published site must continue to copy **only explicitly named public HTML, PDF and module files**. The original manuscripts and all unpublished accounts or archives remain outside the boundary.
+
 ## What is published
 
-The build copies **only** four named HTML pages, the three named public PDFs, a checksum manifest, and `.nojekyll`. It does not export the repository, accounts, experiment outputs, credentials, or local workspace. Pull requests validate and build only; deployment is restricted to `main`, with Pages/OIDC permissions limited to the deployment job. Existing manuscript paths and release `PAPER.pdf` files are untouched.
+The build copies **only** the five named HTML pages, the three named public PDFs, the single local sensor-engine module, a checksum manifest, and `.nojekyll`. It does not export the repository, accounts, experiment outputs, credentials, or local workspace. Pull requests validate and build only; deployment is restricted to `main`, with Pages/OIDC permissions limited to the deployment job. Existing manuscript paths and release `PAPER.pdf` files are untouched.
 
 Local check (Python standard library only):
 

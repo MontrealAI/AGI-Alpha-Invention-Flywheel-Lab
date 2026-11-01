@@ -7,6 +7,12 @@ Discover valuable possibilities. Construct the missing means. Build enterprises 
 
 The website separates native SIM business operation, consequential capability, retained discovery, and scientific expansion. Each needs its own evidence; simulated profit is not actual revenue. [Pages setup and publication boundary](docs/research/PAGES.md).
 
+## Executable breakthrough experiment: historical sensors
+
+**Transformational Intelligence creates the means for new activities—not just faster versions of existing tasks.** A new, separately bounded [Retroactive Sensor Lab](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/sensor-lab.html) demonstrates a question-defined historical indicator from two CSV archives, with inspectable source-row evidence and explicit UNKNOWNs for missing or conflicting observations. The embedded fixture is **synthetic**, the construction is **developer-authored**, and this is **not** a real-world sensor, autonomous source discovery, demonstrated commercial demand, or US$3B achievement.
+
+See the [three-opportunity comparison, commercial mechanism and evidence plan](docs/harness/RETROACTIVE_SENSOR_PILOT.md) and [deterministic engine](docs/research/sensor-engine.mjs). Run `node --test tests/test_sensor_engine.mjs` for the focused test suite. Public Pages publication of the new site requires its own reviewed merge and successful deployment; an open branch alone does not make the new URL live. The original source documents used privately for design are **not in this repository**.
+
 ## Current default: connected enterprise completion015
 
 The default path operates eight **simulated** 70-day businesses: voluntary buyer choice, qualified orders, executed reconciliation/KPI/evidence work, separate artifact checking, collection, full modeled costs, native earnings reservations, acquisition/capacity and subsequent delivery. Use the [operator guide](docs/connected014/OPERATOR.md), [achieved-results report](docs/completion015/REPORT.md), [inspected PDF](docs/completion015/PAPER.pdf) and [full-record reconstruction commands](docs/completion015/ARTIFACTS.md) and [scale-model reconciliation](docs/completion015/SCALE_RECONCILIATION.md).

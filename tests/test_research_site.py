@@ -62,11 +62,17 @@ class ResearchSiteTests(unittest.TestCase):
             self.assertIn('prefers-reduced-motion', text)
             self.assertIn('font-size:clamp(1.8rem,7vw,2.75rem)', text)
             self.assertNotIn('↗', text)
-            if name != 'index.html':
+            if name not in ('index.html', 'sensor-lab.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Your browser does not display embedded PDFs', text)
 
+    def test_local_sensor_is_explicit_and_distributable(self):
+        lab = (self.source / 'sensor-lab.html').read_text()
+        self.assertIn('SYNTHETIC FIXTURE', lab)
+        self.assertIn('sensor-engine.mjs', lab)
+        self.assertIn('Export evidence JSON', lab)
+        self.assertIn('independently certified', (self.source / 'sensor-engine.mjs').read_text())
 
 
 if __name__ == '__main__':

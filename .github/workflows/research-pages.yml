@@ -5,6 +5,7 @@ on:
       - 'docs/research/**'
       - 'scripts/build_research_site.py'
       - 'tests/test_research_site.py'
+      - 'tests/test_sensor_engine.mjs'
       - '.github/workflows/research-pages.yml'
   push:
     branches: [main]
@@ -31,9 +32,12 @@ jobs:
             docs/research
             scripts/build_research_site.py
             tests/test_research_site.py
+            tests/test_sensor_engine.mjs
           sparse-checkout-cone-mode: false
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
+      - name: Execute deterministic retroactive-sensor tests
+        run: node --test tests/test_sensor_engine.mjs
       - name: Build only the public research shelf
         run: python3 scripts/build_research_site.py --output "$RUNNER_TEMP/research-site"
       - name: Upload the allowlisted Pages artifact
