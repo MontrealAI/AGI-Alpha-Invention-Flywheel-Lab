@@ -100,11 +100,17 @@ def _check_buyer_origins(config, seed, buyers):
         key = canonical(['connected014', seed, ident, 'budget'])
         uniform = int.from_bytes(hashlib.sha256(key).digest()[:8], 'big') / 2**64
         expected = int((180 + 400 * uniform) * 1_000_000 * config['buyer_budget_multiplier_bps'] / 10000)
+        if 'complete_offer_policy' in config:
+            from .complete_offer_market import request_profile,private_atom
+            expected=request_profile(config['complete_offer_policy'],ident)['atoms'][private_atom(config['complete_offer_policy'],ident,seed)]['budget_microUSD']
         if buyer['initial_budget'] != expected:
             raise ValueError('FROZEN_INITIAL_BUYER_BUDGET_CHANGED')
 
 
 def _check_market_decisions(result, tape):
+    if 'complete_offer_policy' in result['config']:
+        from .complete_offer_audit import audit_market
+        return audit_market(result,tape)
     cfg, seed = result['config'], result['seed']
     buyers = {row['id']: row for row in result['buyers']}
     offers = [row for row in result['decisions'] if row.get('kind') == 'offer']
@@ -209,7 +215,7 @@ def _check_customer_lifecycle(result):
     pending_reactivations = {}
     outside = {}
     for decision in result['decisions']:
-        if decision.get('outside_spend'):
+        if decision.get('outside_spend') or ('complete_offer_policy' in cfg and decision.get('buyer_choice') in {'human','rival','self_service'}):
             outside.setdefault(decision['time'], []).append(decision)
     responses = 0
     outreach_units = {};candidate_ids={};public_buyers={}
@@ -254,7 +260,13 @@ def _check_customer_lifecycle(result):
             if customer not in owned and not buyer['onboarded'] and buyer['last_exposure'] != moment:
                 raise ValueError('UNONBOARDED_PAID_PROSPECT_RECEIVED_FREE_FOLLOWUP')
             service = ('reconciliation', 'kpi_variance', 'evidence_matrix')[buyer['service_index'] % 3]
-            if order['offer']['service_id'] != service:
+            if 'complete_offer_policy' in cfg:
+                from .complete_offer_market import request_profile
+                allowed=request_profile(cfg['complete_offer_policy'],customer)['services']
+                if order['job_id'] not in cfg['complete_offer_policy']['requested_jobs'][customer]:raise ValueError('UNREQUESTED_CUSTOMER_JOB')
+                if order['offer']['service_id'] not in allowed:raise ValueError('UNREQUESTED_COMPLETE_OUTCOME')
+                if cfg['complete_offer_policy']['selection']=='restricted' and order['offer']['service_id']!=service:raise ValueError('RESTRICTED_SCOPE_CHANGED')
+            elif order['offer']['service_id'] != service:
                 raise ValueError('CUSTOMER_SERVICE_NEED_CHANGED_WITHOUT_DELIVERY')
             buyer['onboarded'], buyer['pending'] = True, order['id']
         elif kind in {'COLLECTION', 'REFUND'}:
@@ -307,7 +319,7 @@ def _check_cost_semantics(result, tape, lifecycle):
         if 'terms' in row:add(row['id']+'-prospective-charges',row['fee']+row['premium'],row['qualified_time'],'prospective_contract_charges')
     for row in result['investments']:
         category = 'acquisition_contract' if row['kind'] == 'acquisition' else 'capacity_contract'
-        if row['kind'] == 'capacity' and row['cost'] != cfg['capacity_price']:
+        if row['kind'] == 'capacity' and row['cost'] != cfg['capacity_price']*row.get('capacity_units',1):
             raise ValueError('CAPACITY_COST_DIFFERS_FROM_DECLARED_SUPPLIER_CONTRACT')
         add(row['id'], row['cost'], row['purchased_time'], category)
     tax_paid = 0
@@ -355,7 +367,7 @@ def _check_commercial_result(result):
     expansion = []
     for investment in result['investments']:
         field = 'acquisition_source_plan_id' if investment['kind'] == 'acquisition' else 'capacity_source_plan_id'
-        used = [row for row in settled if row.get(field) == investment['plan_id']]
+        used = [row for row in settled if (row.get(field)==investment['plan_id'] if investment['kind']=='acquisition' else investment['plan_id'] in row.get('capacity_source_plan_ids',[row.get(field)]))]
         expansion.append({'plan_id': investment['plan_id'], 'kind': investment['kind'], 'cost': investment['cost'],
                           'funding': investment['funding_receipt']['funding'], 'later_settled_order_ids': [row['id'] for row in used],
                           'scoped_collections': sum(row['price'] for row in used)})
@@ -588,14 +600,16 @@ def audit(root, manifest, result):
         fee = (price * cfg['payment_bps'] + 9999) // 10000 + cfg['payment_fixed']
         onboard = 0 if row['customer_id'] in onboarding_seen else cfg['onboarding_cost']
         onboarding_seen.add(row['customer_id'])
-        production = cfg['production_cost'] + cfg['supplier_unit_cost']
+        units=row['offer']['capacity_units'] if 'complete_offer_policy' in cfg else 1
+        if 'complete_offer_policy' in cfg and row.get('capacity_units')!=units:raise ValueError('COMPLETE_SCOPE_CAPACITY_UNITS_CHANGED')
+        production = units*(cfg['production_cost'] + cfg['supplier_unit_cost'])
         premium=_check_order_terms(result,row,offers[ident],tape,operating)
-        expected_cost = production + cfg['support_cost'] + fee + onboard + premium
+        expected_cost = production + units*cfg['support_cost'] + fee + onboard + premium
         if row.get('method_plan'):expected_cost+=row['method_plan']['cost']
         contract=cfg.get('mechanism_policy',{}).get('cost_contract')
         if contract is not None and row.get('method_plan'):
             if contract['production_envelope_microUSD']!=cfg['production_cost'] or resource['work'].get('production_envelope_microUSD')!=cfg['production_cost'] or row['method_plan'].get('cost_contract')!=contract:raise ValueError('COMMON_PRODUCTION_COST_NOT_SOURCE_BOUND')
-        if row.get('fee') != fee or row.get('onboarding') != onboard or row.get('production_cost') != production or row.get('support_cost') != cfg['support_cost'] or row['complete_cost'] != expected_cost or funding['amount'] != (expected_cost-fee-premium if 'terms' in row else expected_cost) or row.get('resource_cost',expected_cost-fee-premium) != expected_cost-fee-premium:
+        if row.get('fee') != fee or row.get('onboarding') != onboard or row.get('production_cost') != production or row.get('support_cost') != units*cfg['support_cost'] or row['complete_cost'] != expected_cost or funding['amount'] != (expected_cost-fee-premium if 'terms' in row else expected_cost) or row.get('resource_cost',expected_cost-fee-premium) != expected_cost-fee-premium:
             raise ValueError('COMPLETE_PRODUCTION_FEES_SUPPORT_ONBOARDING_COST_MISMATCH')
         native = native_orders[ident]
         offered = offers[ident]
@@ -760,7 +774,9 @@ def _check_investments(result, tape, orders):
             units = _integer(work.get('units_per_day'), 'CAPACITY_FINANCED_UNITS', positive=True)
             if (lead != _integer(cfg.get('capacity_lead_hours'), 'FROZEN_CAPACITY_LEAD', positive=True)
                     or duration != _integer(cfg.get('capacity_duration_hours'), 'FROZEN_CAPACITY_DURATION', positive=True)
-                    or units != 1):
+                    or units != row.get('capacity_units',1)
+                    or ('capacity_menu' not in cfg.get('strategic_allocation_policy',{}) and units!=1)
+                    or ('capacity_menu' in cfg.get('strategic_allocation_policy',{}) and units>cfg['strategic_allocation_policy']['capacity_menu']['max_quantity'])):
                 raise ValueError('CAPACITY_TERMS_DIFFER_FROM_FROZEN_SUPPLIER_CONTRACT')
             if (request.get('id') != row.get('id') or request.get('kind') != 'capacity_contract'
                     or _integer(request.get('amount'), 'CAPACITY_FINANCED_COST', positive=True) != cost
@@ -773,14 +789,21 @@ def _check_investments(result, tape, orders):
                 raise ValueError('CAPACITY_LIFETIME_DIFFERS_FROM_FINANCED_CONTRACT')
     for order in orders.values():
         day = order['qualified_time'] // 24
-        qualified_daily[day] = qualified_daily.get(day, 0) + 1
+        units=order.get('capacity_units',1)
+        if 'complete_offer_policy' in result['config']:
+            cfg=result['config'];previous=qualified_daily.get(day,0)
+            available=[i for i in result['investments'] if i['kind']=='capacity' and i['activation_time']<=order['qualified_time'] and order['production_time']<i['expiry_time']]
+            available=[i for i in available for _ in range(i.get('capacity_units',1))]
+            expected=[available[index-cfg['initial_slots']]['plan_id'] for index in range(previous,previous+units) if index>=cfg['initial_slots'] and index-cfg['initial_slots']<len(available)]
+            if len(expected)!=max(0,previous+units-cfg['initial_slots'])-max(0,previous-cfg['initial_slots']) or order.get('capacity_source_plan_ids')!=expected or order.get('capacity_source_plan_id')!=(expected[0] if expected else None):raise ValueError('ALL_PACKET_CAPACITY_UNITS_REQUIRE_CURRENT_AUTHORITY')
+        qualified_daily[day] = qualified_daily.get(day, 0) + units
         acquisition = order.get('acquisition_source_plan_id')
         if acquisition is None and order['customer_id'] not in owned:
             raise ValueError('NONOWNED_CUSTOMER_WITHOUT_PAID_ACCESS')
         if acquisition is not None and (order['customer_id'], acquisition, order.get('exposure_time')) not in exposure_keys:
             raise ValueError('ACQUIRED_ORDER_WITHOUT_ACTUAL_PRIOR_EXPOSURE')
-        for field in ['acquisition_source_plan_id', 'capacity_source_plan_id']:
-            ident = order.get(field)
+        references=[('acquisition_source_plan_id',order.get('acquisition_source_plan_id'))]+[('capacity_source_plan_id',ident) for ident in order.get('capacity_source_plan_ids',[order.get('capacity_source_plan_id')])]
+        for field,ident in references:
             if ident is None:
                 continue
             if ident not in investments:
@@ -795,14 +818,14 @@ def _check_investments(result, tape, orders):
             if field.startswith('capacity'):
                 key = (ident, day)
                 capacity_use[key] = capacity_use.get(key, 0) + 1
-                if capacity_use[key] > 1:
+                if capacity_use[key] > investment.get('capacity_units',1):
                     raise ValueError('PAID_CAPACITY_UNIT_REUSED_WITHIN_DAY')
             if order['outcome'] == 'SETTLED':
                 linked += 1
     cfg = result['config']
     for day, count in qualified_daily.items():
         moment = day * 24
-        active = sum(row['kind'] == 'capacity' and row['activation_time'] <= moment < row['expiry_time'] for row in investments.values())
+        active = sum(row.get('capacity_units',1) for row in investments.values() if row['kind'] == 'capacity' and row['activation_time'] <= moment < row['expiry_time'])
         capacity = min(cfg['maximum_slots'], cfg['initial_slots'] + active)
         if cfg['supplier_outage_start_day'] <= day < cfg['supplier_outage_start_day'] + cfg['supplier_outage_days']:
             capacity = 0

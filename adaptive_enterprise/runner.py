@@ -47,7 +47,13 @@ def protocol(smoke=False):
 
 
 def source_paths(root):
-    result=[]
+    # Frozen workers must carry every source-bound service dependency, including
+    # optional admitted services outside the historical adaptive directories.
+    from .instruments import SOURCE_PATHS
+    required=set(SOURCE_PATHS)|{'connected_enterprise/__init__.py'}
+    if any(not (root/name).is_file() for name in required):
+        raise ValueError('ADAPTIVE_INSTRUMENT_SOURCE_DEPENDENCY_MISSING')
+    result=[root/name for name in sorted(required)]
     for directory in ['adaptive_enterprise','commercial','enterprise','vendor/alpha_claim','portfolio_scale','portfolio25']:
         result += [p for p in (root/directory).glob('*') if p.is_file() and p.suffix in {'.py','.json','.md'}]
     result += [root/p for p in ['vendor/__init__.py','experiments/__init__.py','experiments/commerce006.py','requirements-commercial010.txt','flywheel/__init__.py','flywheel/strategy.py','flywheel/evidence_executor.py','flywheel/retention.py','flywheel/archive_v2.py','scripts/reassemble_enterprise011.py']]

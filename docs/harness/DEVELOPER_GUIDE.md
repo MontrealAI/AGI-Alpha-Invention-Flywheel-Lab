@@ -1,6 +1,33 @@
 # Developer map: mechanisms that must actually run
 
-Start with [AGENTS.md](../../AGENTS.md). Reuse the canonical enterprise and existing mechanisms; do not build a parallel framework or ledger. This map distinguishes code from demonstrated advantage. The main baseline is [main `3d439d96`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/3d439d96f6f95361c2811cd91f2a081b61a9cc92); this guide also inspects [candidate `00753caa`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/00753caa57d04da4c621f4bdffc0f2cd2a4e9871), which contains lifecycle/discovery and sequence integration. Those additions were still qualifying at authoring. Check their exact current commit and public qualification before treating them as released. Do not infer that an old owner is still active.
+Start with [AGENTS.md](../../AGENTS.md). Reuse the canonical enterprise and existing mechanisms; do not build a parallel framework or ledger. This map distinguishes executable code, qualified operation, economic advantage and the broader mission.
+
+### Read the current evidence before adopting
+
+At this documentation checkpoint, [main `de639de2`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/de639de28f52020dee818d3fcec2f36d441b160e) is the verified main baseline. This documentation is prepared against [PR85 source `7e88de74`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/7e88de74c4f5c7156f90e085ae7983e3c09b8a9a), a candidate, not proof of merger or released operation. Pending integration/qualification work includes [PR70](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/70), [PR74](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/74), [PR76](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/76), [PR82](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/82), [PR84](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/84) and [PR85](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/85). This is a navigation snapshot, not a permanent status registry: inspect each exact current head, dependencies, reviews, Actions receipts, merge and downloaded-release evidence. Do not import whole older files over newer mechanisms or infer that completed owners remain active. Follow the current [operator guide](../connected014/OPERATOR.md) and [resource policy](RESOURCE_POLICY.md).
+
+## Mission: construct economically reachable possibilities
+
+Invent the **complete productive arrangement**: a valuable accepted outcome, the means to produce and verify it, and terms under which beneficiaries, producers, funders and other participants voluntarily prefer participation to their available alternatives. Discover these together rather than fixing a low-value service and optimizing its transaction rate indefinitely. A missing process, measurement, interface, representation, contract, financing structure or allocation of risk/work can be the enabling invention. Known effective methods remain usable without new novelty proofs.
+
+For the next concrete proposal, write one compact arrangement card:
+
+- **Outcome and alternatives:** who benefits, what complete outcome matters, what independent observation accepts it, and what the strongest existing complete route costs. Demand/value assumptions remain explicit; a modeled buyer is not a customer.
+- **Binding constraint and construction:** what prevents worthwhile cooperation or delivery, which means are missing, what executable change could remove that constraint, and which assumptions could falsify it. Do not claim historical impossibility because our first method failed.
+- **Participation and authority:** each participant's contribution, information, outside option, incentive, compensation, exposure and right to decline. Model strategic responses where relevant; neither truthful cooperation nor universal equilibrium is assumed. No fabricated agreements, coercion, concealed costs or unauthorized external coordination.
+- **Costs, cash and acceptance:** include search/construction, failed attempts, verification, onboarding, operation, maintenance, financing and remaining obligations. Separate expected value from currently available funds. Bind a request and checker before execution; pay through the canonical account and check the delivered outcome independently.
+- **Successor enabled:** name a second useful opportunity and the specific cycle-created asset it needs. Test whether that successor is economically reachable with the asset and not through the strongest feasible matched alternative without it. Preserve seed, cash, liabilities and full cost boundaries; do not give the successor free equipment, information or research.
+
+Use this card to choose the smallest decisive construction and delivery, not to build another planning framework. The intended result is a growing set of sustainably achievable valuable outcomes—not more transactions, mechanism complexity or dependence on the system. A simpler existing service or voluntary withdrawal can still win.
+
+### Keep the achievement levels separate
+
+1. **Implemented means:** a working interface, instrument, contract model or constructor, with checked applicability and correctness.
+2. **Useful sustainable delivery:** accepted output and collected conditional or actual revenue exceed complete costs with obligations covered; label simulation versus actual commerce.
+3. **Connected enabling cycle:** the first cycle makes a specific otherwise-uneconomic successor reachable. Financing and causal capability are measured separately; temporal sequence alone proves neither.
+4. **Better discovery/construction:** a retained procedure finds or builds better sequences on fresh tasks against equal-content ordinary reuse and strong conventional methods, with acquisition and verification costs counted. Better tools alone do not establish this.
+
+Current bounded mapping, composition, critics, native finance and optional policies are building blocks, not evidence that all four levels or a full Blue Sky breakthrough have been achieved. Developer-authored methods, known adaptations and autonomous discoveries must remain labeled separately. New claims need proportionate evidence; established mechanisms do not incur a redundant research-proof gate.
 
 ## Implementation and claim boundaries
 
@@ -87,3 +114,4 @@ There is no arbitrary maximum buyer count, business count, service catalogue, tr
 Separate business-scale semantics from finite execution: resumable batches, scalable state/indexes and validated aggregation can support larger workloads while each experiment and job respects actual platform resources, native cash/obligations, permissions and security. Do not disable resource guards, assume infinite demand or replace an artificial ceiling with another magic number. Trace the full path through admission, planning, execution, persistence, restart, audit and reporting; accepting a large number at one interface is not scale support.
 
 Scale tests must exercise meaningful demand/fulfillment/settlement workloads, conservation and duplicate/recovery behavior, with complete cost and explicit horizon. Validate aggregate calculations against tractable native executions and preserve adverse regions. Report measured limits and unresolved bottlenecks honestly; do not change an in-flight cohort or fabricate profit to meet a stress target. Current scale-cap repairs are implementation work requiring their own qualification, not something this guidance itself implements.
+

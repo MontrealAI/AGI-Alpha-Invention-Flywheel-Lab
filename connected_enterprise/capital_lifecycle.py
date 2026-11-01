@@ -67,9 +67,9 @@ def capital_metrics(result):
         for delivery in wrapper['allocation']['deliveries']:
             selection=delivery['selection']
             if selection['decision']['selected'] is not None:continue
-            p=selection['problem'];public=copy.deepcopy(p['public']);public['available']=10**15
-            unlimited=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],public)
-            if unlimited['decision']['selected'] is not None:
+            p=selection['problem'];public=copy.deepcopy(p['public']);public['available']=max(public['available'],10**15)
+            unlimited=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],public,market_context=p.get('market_context'))
+            if unlimited['decision']['selected'] is not None and unlimited['decision']['selected']['required_current_cash']>p['public']['available']:
                 individual.append({'time':wrapper['time'],'customer_id':delivery['customer_id'],
                     'actual_available':p['public']['available'],
                     'positive_option_cash_required':unlimited['decision']['selected']['required_current_cash']})
