@@ -33,20 +33,23 @@ def economics(raw, artifact, *, budget, value, transport=20*USD, rival=None, out
     # Only the self-service route buys and keeps the full stock; contractor
     # quotes are pieces-only with producer-retained residues. Salvage is an
     # explicit realizable outside bid, not an inferred physical scrap value.
+    gross_alternatives=alternatives.copy()
     alternatives['self_service']-=outside_salvage
-    if rival is not None:alternatives['cheap_rival']=rival
-    outside=min(alternatives.values())
+    if rival is not None:
+        alternatives['cheap_rival']=rival;gross_alternatives['cheap_rival']=rival
+    affordable={k:c for k,c in alternatives.items() if gross_alternatives[k]<=budget}
+    outside=min(affordable.values()) if affordable else value
     costs={'material':material,'cutting':n*USD,'shipping':transport,
         'source_checking':(len(raw['stocks'])+n)*250000,'production':3*USD,
         'acquisition':2*USD,'maintenance':USD,'payment_fee':200000}
     quote=min(budget,value,outside-10*USD)
     viable=quote>sum(costs.values())+fixed_cost and quote>0
     price=quote if viable else None
-    best_outside_utility=max(0,max(value-c for c in alternatives.values() if c<=budget) if any(c<=budget for c in alternatives.values()) else 0)
+    best_outside_utility=max([0]+[value-c for c in affordable.values()])
     buy=price is not None and value-price>best_outside_utility and price<=budget
     return {'price_microUSD':price,'costs_microUSD':costs,'alternatives_microUSD':alternatives,
-        'budget_microUSD':budget,'value_microUSD':value,'best_outside_utility_microUSD':best_outside_utility,
-        'buyer_choice':'BUY' if buy else 'NO_PURCHASE_FROM_US','buyer_surplus_microUSD':value-price if buy else 0,
+        'gross_alternatives_microUSD':gross_alternatives,'budget_microUSD':budget,'value_microUSD':value,'best_outside_utility_microUSD':best_outside_utility,
+        'buyer_choice':'BUY' if buy else 'NO_PURCHASE_FROM_US','seller_decision':'OFFER' if viable else 'NO_BID','buyer_surplus_microUSD':value-price if buy else 0,
         'minimum_saving_microUSD':10*USD,'outside_salvage_microUSD':outside_salvage,
         'fixed_cost_considered_microUSD':fixed_cost,
         'residual_title_terms':'Pieces-only purchase; supplier retains all unused stock and remnants. Buyer may decline and use self-service, including its declared realizable salvage bid.',

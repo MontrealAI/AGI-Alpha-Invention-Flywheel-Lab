@@ -59,6 +59,18 @@ class MaterialCycleTests(unittest.TestCase):
                 self.assertEqual(before,a.snapshot()['summary'])
                 self.assertTrue(a.audit()['accepted'])
             finally:a.close()
+    def test_future_salvage_is_not_upfront_buyer_cash(self):
+        # Gross self-service first-stock acquisition is 1302, beyond this buyer's
+        # 1250 budget; a later 70 salvage sale must not make it affordable.
+        result=economics(self.raw,self.art,budget=1250*USD,value=1500*USD,outside_salvage=70*USD)
+        self.assertEqual(result['best_outside_utility_microUSD'],0)
+        self.assertEqual(result['gross_alternatives_microUSD']['self_service'],1302*USD)
+    def test_salvage_control_is_seller_no_bid_not_buyer_refusal(self):
+        result=economics(self.raw,self.art,budget=1500*USD,value=1500*USD,outside_salvage=70*USD,fixed_cost=30*USD)
+        self.assertEqual(result['seller_decision'],'NO_BID')
+        self.assertIsNone(result['price_microUSD'])
+        self.assertEqual(result['buyer_choice'],'NO_PURCHASE_FROM_US')
+
     def test_cross_job_stock_reuse_rejected(self):
         raw=copy.deepcopy(self.raw);raw['order_id']='duplicate-material'
         b,_=solve(raw)
