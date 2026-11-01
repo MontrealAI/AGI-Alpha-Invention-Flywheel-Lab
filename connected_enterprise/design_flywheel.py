@@ -106,8 +106,13 @@ def find_native_successor(result):
                       if o["outcome"] == "SETTLED" and o["collection_time"] is not None
                       and o["acceptance_time"] is not None and _margin(o) > 0),
                      key=lambda o: (o["collection_time"], o["id"]))
+    relevant_investments = [i for i in result["investments"]
+                            if i["kind"] in ("acquisition", "capacity")]
+    by_plan = {i["plan_id"]: i for i in relevant_investments}
+    if len(by_plan) != len(relevant_investments):
+        raise ValueError("DUPLICATE_NATIVE_PLAN_INVENTORY")
     witnesses = []
-    for investment in result["investments"]:
+    for investment in relevant_investments:
         if investment["kind"] not in ("acquisition", "capacity"):
             continue
         if investment["funding_receipt"].get("funding") != "EARNED":
@@ -117,12 +122,33 @@ def find_native_successor(result):
                 return order.get("acquisition_source_plan_id") == investment["plan_id"]
             return (order.get("capacity_source_plan_id") == investment["plan_id"]
                     or investment["plan_id"] in order.get("capacity_source_plan_ids", []))
+        linked_orders = [o for o in result["orders"] if linked(o)]
         successors = [o for o in settled if linked(o)
                       and o["qualified_time"] >= investment["activation_time"]
                       and o["collection_time"] > investment["purchased_time"]]
-        if not successors:
+        if not successors or any(o["qualified_time"] < investment["activation_time"]
+                                 for o in linked_orders):
             continue
-        net = sum(_margin(o) for o in successors) - investment["cost"]
+        required_plans = {investment["plan_id"]}
+        for order in linked_orders:
+            extra = order.get("capacity_source_plan_ids", [])
+            if not isinstance(extra, list):
+                raise ValueError("INVALID_NATIVE_ORDER_PLAN_LINKS")
+            linked_plans = [order.get("acquisition_source_plan_id"),
+                            order.get("capacity_source_plan_id"), *extra]
+            if any(p is not None and (not isinstance(p, str) or not p) for p in linked_plans):
+                raise ValueError("INVALID_NATIVE_ORDER_PLAN_LINKS")
+            required_plans.update(p for p in linked_plans if p is not None)
+        if any(p not in by_plan or by_plan[p]["funding_receipt"].get("funding") != "EARNED"
+               for p in required_plans):
+            continue
+        paid_contribution = sum(_margin(o) for o in linked_orders
+                                if o["outcome"] == "SETTLED" and o["collection_time"] is not None)
+        uncollected_cost = sum(o["complete_cost"] for o in linked_orders
+                               if o["outcome"] != "SETTLED" or o["collection_time"] is None)
+        scoped_contribution = paid_contribution - uncollected_cost
+        total_invoices = sum(by_plan[p]["cost"] for p in required_plans)
+        net = scoped_contribution - total_invoices
         for first in settled:
             if first["collection_time"] >= investment["purchased_time"]:
                 continue
@@ -139,18 +165,22 @@ def find_native_successor(result):
                 "binding_constraint_changed": "customer_access" if investment["kind"] == "acquisition" else "productive_capacity",
                 "native_investment": investment["id"], "native_plan_id": investment["plan_id"],
                 "investment_time": investment["purchased_time"], "investment_cost_microUSD": investment["cost"],
+                "all_required_native_plan_ids": sorted(required_plans),
+                "all_required_invoices_microUSD": total_invoices,
                 "funding": "EARNED", "successor_paid_order": second["id"],
                 "successor_service": second["offer"]["service_id"],
                 "successor_customer": second["customer_id"],
                 "successor_collection_hour": second["collection_time"],
                 "successor_margin_microUSD": _margin(second),
-                "source_linked_paid_order_ids": [o["id"] for o in successors],
-                "source_linked_total_order_contribution_microUSD": sum(_margin(o) for o in successors),
+                "source_linked_paid_order_ids": [o["id"] for o in linked_orders if o["outcome"] == "SETTLED"],
+                "source_linked_uncollected_order_ids": [o["id"] for o in linked_orders if o["outcome"] != "SETTLED"],
+                "source_linked_total_order_contribution_microUSD": scoped_contribution,
                 "net_after_native_investment_microUSD": net,
                 "distinct_opportunity": True,
                 "positive_incremental_collected_contribution": net > 0,
                 "strictly_better_per_order_margin": _margin(second) > _margin(first),
-                "source_link_type": investment["kind"]
+                "source_link_type": investment["kind"],
+                "scope": "CONSERVATIVE_SOURCE_LINKED_CONTRIBUTION_NOT_CAUSAL_UPLIFT"
             })
     witnesses.sort(key=lambda w: (
         not w["positive_incremental_collected_contribution"],
