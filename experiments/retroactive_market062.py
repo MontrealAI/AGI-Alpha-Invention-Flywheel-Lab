@@ -233,7 +233,7 @@ def run(root, output):
 
 def verify(root,output):
     from connected_enterprise.finance import audit_journal
-    from experiments.retroactive_market062_verify import check_measurement
+    from experiments.retroactive_market062_verify import check_measurement, check_native_claim_binding
     root=Path(root).resolve();output=Path(output).resolve()
     p=json.loads((output/'PROTOCOL.json').read_text())
     if p!=protocol():raise ValueError('PROTOCOL_TAMPERED')
@@ -252,6 +252,7 @@ def verify(root,output):
         entry=report['arms'][arm]
         if digest(exported)!=entry['owner_export_sha256'] or exported['ledger']['summary']!=entry['summary']:
             raise ValueError('NATIVE_ACCOUNT_SUMMARY_MISMATCH')
+        check_native_claim_binding(arm, exported, entry, report['measurements'], p)
     shared,direct,adverse=(report['arms'][k] for k in ('shared','direct','cheap_rival'))
     if not(shared['summary']['profit']>0 and direct['summary']['profit']<0 and
            adverse['summary']['collections']==0 and shared['after_two']['profit']>0 and
