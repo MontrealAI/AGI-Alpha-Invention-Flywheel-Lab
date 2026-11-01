@@ -233,7 +233,7 @@ def run(root, output):
 
 def verify(root,output):
     from connected_enterprise.finance import audit_journal
-    from experiments.retroactive_market062_verify import check_measurement, check_native_claim_binding
+    from experiments.retroactive_market062_verify import check_measurement, check_native_claim_binding, check_public_economic_claims
     root=Path(root).resolve();output=Path(output).resolve()
     p=json.loads((output/'PROTOCOL.json').read_text())
     if p!=protocol():raise ValueError('PROTOCOL_TAMPERED')
@@ -260,6 +260,7 @@ def verify(root,output):
         raise ValueError('CONNECTED_ECONOMIC_BOUNDARY_NOT_DEMONSTRATED')
     if (report['protocol_sha256'],report['archive_sha256'],report['manifest_sha256'])!=(digest(p),digest(raw),digest(manifest)):
         raise ValueError('STATED_EVIDENCE_BOUNDARY_CHANGED')
+    check_public_economic_claims(report, p)
     return {'status':'PASSED_CONDITIONAL_SIMULATION_ONLY','shared_profit_microUSD':shared['summary']['profit'],
             'direct_profit_microUSD':direct['summary']['profit'],
             'no_bid_profit_microUSD':adverse['summary']['profit'],
