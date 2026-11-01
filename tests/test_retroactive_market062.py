@@ -1,6 +1,6 @@
 import copy,unittest
 from experiments.retroactive_market062 import construct,streams,request,protocol,deal_decision,MICRO
-from experiments.retroactive_market062_verify import check_measurement
+from experiments.retroactive_market062_verify import check_measurement,check_native_claim_binding,check_public_economic_claims
 
 class Market062Tests(unittest.TestCase):
     def test_instrument_realized_and_independently_checked(self):
@@ -43,5 +43,104 @@ class Market062Tests(unittest.TestCase):
         direct=2*p['quote_microUSD']-2*p['fixed_per_independent_buyer']-2*per-p['fixed_shared']['failed_search']-p['fixed_shared']['support_and_maintenance']
         self.assertEqual((two,final,direct),(153*MICRO,987*MICRO,-1480*MICRO))
         self.assertGreater(two,p['earned_only_successor_adapter_microUSD'])
+
+
+class NativePublicClaimBindingTests(unittest.TestCase):
+    @staticmethod
+    def fixture():
+        p=protocol()
+        measurement={buyer:{'sha256':buyer} for buyer in 'ABC'}
+        before={'cash':100153*MICRO,'profit':153*MICRO,'collections':3000*MICRO,
+                'expenses':2847*MICRO,'available':100033*MICRO,'unrestrictedEarned':153*MICRO}
+        receipt={'funding':'EARNED','amount':120*MICRO,'plan_id':'native-adapter-plan'}
+        request={'operation':'spend','id':'third-sensor-adapter',
+                 'kind':'new_archival_signal_instrument','amount':120*MICRO,'day':3,
+                 'work':{'source_measurement':['A','B'],'new_domain':'leakage-anomaly',
+                         'new_archives':['flow','pressure'],'expected_successor':'C'},
+                 'expected_net':834*MICRO,'allow_seed':False}
+        native={'ledger':{'config':{'contract':'market062-shared'},
+                 'orders':[{'id':'market062-'+buyer,'buyer':buyer,'state':'released',
+                            'price':str(1500*MICRO)} for buyer in 'ABC'],
+                 'actions':[{'op':'reserve','args':{'id':receipt['plan_id']},'before':before}]},
+                'connected_journal':{'entries':[{'key':'spend:third-sensor-adapter',
+                     'status':'COMPLETE','funding':'EARNED','request':request,'receipt':receipt}]}}
+        reported={'sales':[{'id':'market062-'+buyer,'status':'ACCEPTED_AND_COLLECTED',
+                  'native_collection_microUSD':1500*MICRO,'artifact':measurement[buyer]}
+                  for buyer in 'ABC'],'decision':{'choice':'SHARED_CONTRACT'},
+                  'earned_receipt':copy.deepcopy(receipt),'after_two':copy.deepcopy(before)}
+        return p,measurement,native,reported
+
+    def test_native_receipt_and_sales_are_bound(self):
+        p,m,n,r=self.fixture()
+        self.assertTrue(check_native_claim_binding('shared',n,r,m,p))
+
+    def test_advertised_adapter_receipt_cannot_be_forged(self):
+        p,m,n,r=self.fixture()
+        r['earned_receipt']['amount']=1
+        with self.assertRaisesRegex(ValueError,'NATIVE_EARNED_ADAPTER_RECEIPT_UNBOUND'):
+            check_native_claim_binding('shared',n,r,m,p)
+        p,m,n,r=self.fixture()
+        n['connected_journal']['entries'][0]['funding']='SEED'
+        with self.assertRaisesRegex(ValueError,'NATIVE_EARNED_ADAPTER_RECEIPT_UNBOUND'):
+            check_native_claim_binding('shared',n,r,m,p)
+
+    def test_claimed_successor_requires_native_paid_order(self):
+        p,m,n,r=self.fixture()
+        n['ledger']['orders'][-1]['state']='refunded'
+        with self.assertRaisesRegex(ValueError,'NATIVE_SALE_REPORT_NOT_SUPPORTED_BY_LEDGER'):
+            check_native_claim_binding('shared',n,r,m,p)
+        p,m,n,r=self.fixture()
+        r['sales'][-1]['native_collection_microUSD']=999*MICRO
+        with self.assertRaisesRegex(ValueError,'NATIVE_SALE_REPORT_NOT_SUPPORTED_BY_LEDGER'):
+            check_native_claim_binding('shared',n,r,m,p)
+
+    def test_preinvestment_earned_profit_must_equal_native_prefix(self):
+        p,m,n,r=self.fixture()
+        r['after_two']['profit']+=MICRO
+        with self.assertRaisesRegex(ValueError,'NATIVE_EARNINGS_PREFIX_NOT_BOUND'):
+            check_native_claim_binding('shared',n,r,m,p)
+
+
+class PublicEconomicScopeTests(unittest.TestCase):
+    def fixture(self):
+        p=protocol()
+        arms={'direct':{'summary':{'profit':-1480*MICRO}},
+              'shared':{'summary':{'profit':987*MICRO},'earned_receipt':{'funding':'EARNED'}},
+              'cheap_rival':{'summary':{'profit':-60*MICRO},'decision':{'choice':'NO_BID'}}}
+        conclusions={
+            'shared_positive':True,'matched_direct_negative':True,
+            'earned_funded':True,'cheap_rival_no_bid':True,
+            'actual_revenue_microUSD':0,'real_demand_observed':False,
+            'complete_actual_host_cost_known':False,
+            'recursive_or_market_novelty_proven':False,
+            'successor_output_preconstructed_for_native_registration':True,
+            'causal_necessity_of_adapter_not_proven':True,
+            'ordinary_pooled_rival_excluded':False}
+        fixed=sum(p['fixed_shared'].values())
+        per=sum(p['per_order'].values())
+        sensitivity={'ten_percent_fixed_cost_overrun_stage1_profit_microUSD':
+                     int(2*p['quote_microUSD']-fixed*110//100-2*per-p['stage1_tax_microUSD']),
+                     'first_stage_profit_hurdle_microUSD':p['earned_only_successor_adapter_microUSD']}
+        return p,{'arms':arms,'conclusions':conclusions,'sensitivity':sensitivity}
+
+    def test_authored_scenario_scope_is_explicit(self):
+        p,r=self.fixture()
+        self.assertTrue(check_public_economic_claims(r,p))
+
+    def test_fake_real_revenue_and_causal_reclassification_rejected(self):
+        for name,value in [('actual_revenue_microUSD',1500*MICRO),
+                           ('real_demand_observed',True),
+                           ('causal_necessity_of_adapter_not_proven',False),
+                           ('complete_actual_host_cost_known',True)]:
+            p,r=self.fixture()
+            r['conclusions'][name]=value
+            with self.assertRaisesRegex(ValueError,'PUBLIC_ECONOMIC_SCOPE_OR_CLAIM_TAMPERED'):
+                check_public_economic_claims(r,p)
+
+    def test_invented_profit_sensitivity_rejected(self):
+        p,r=self.fixture()
+        r['sensitivity']['ten_percent_fixed_cost_overrun_stage1_profit_microUSD']=200*MICRO
+        with self.assertRaisesRegex(ValueError,'PUBLIC_ECONOMIC_SENSITIVITY_TAMPERED'):
+            check_public_economic_claims(r,p)
 
 if __name__=='__main__':unittest.main()

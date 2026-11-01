@@ -31,3 +31,102 @@ def check_measurement(question,sources,result):
     if result.get('event_count')!=sum(x['status']=='EVENT' for x in observations):raise ValueError('EVENT_COUNT_TAMPERED')
     if result.get('unknown_count')!=sum(x['status']=='UNKNOWN' for x in observations):raise ValueError('UNKNOWN_COUNT_TAMPERED')
     return True
+
+
+def check_native_claim_binding(arm, exported, reported, measurements, protocol):
+    """Cross-check public sales and earned expansion against an already audited native export."""
+    if arm not in ('direct', 'shared', 'cheap_rival'):
+        raise ValueError('UNKNOWN_NATIVE_COMPARISON_ARM')
+    tape = exported.get('ledger', {})
+    if tape.get('config', {}).get('contract') != 'market062-' + arm:
+        raise ValueError('NATIVE_COMPARISON_ARM_IDENTITY_MISMATCH')
+    buyers = ('A', 'B', 'C') if arm == 'shared' else ('A', 'B') if arm == 'direct' else ()
+    orders = tape.get('orders', [])
+    sales = reported.get('sales')
+    if not isinstance(orders, list) or not isinstance(sales, list) or len(orders) != len(buyers) or len(sales) != len(buyers):
+        raise ValueError('NATIVE_SALE_DENOMINATOR_MISMATCH')
+    order_index = {o.get('id'): o for o in orders if isinstance(o, dict)}
+    sale_index = {s.get('id'): s for s in sales if isinstance(s, dict)}
+    ids = {'market062-' + buyer for buyer in buyers}
+    if set(order_index) != ids or set(sale_index) != ids:
+        raise ValueError('NATIVE_SALE_IDENTITY_MISMATCH')
+    for buyer in buyers:
+        ident = 'market062-' + buyer
+        native, claim = order_index[ident], sale_index[ident]
+        requirements = {
+            'native_state': (native.get('state'), 'released'),
+            'native_buyer': (native.get('buyer'), buyer),
+            'native_price': (native.get('price'), str(protocol['quote_microUSD'])),
+            'reported_state': (claim.get('status'), 'ACCEPTED_AND_COLLECTED'),
+            'reported_collection': (claim.get('native_collection_microUSD'), protocol['quote_microUSD']),
+            'reported_artifact': (claim.get('artifact'), measurements[buyer])}
+        for field, (actual, expected) in requirements.items():
+            if actual != expected:
+                raise ValueError('NATIVE_SALE_REPORT_NOT_SUPPORTED_BY_LEDGER:' + field)
+    expected_choice = 'NO_BID' if arm == 'cheap_rival' else 'SHARED_CONTRACT'
+    if reported.get('decision', {}).get('choice') != expected_choice:
+        raise ValueError('NATIVE_VOLUNTARY_CHOICE_REPORT_MISMATCH')
+    if arm != 'shared':
+        if reported.get('earned_receipt') is not None:
+            raise ValueError('UNFUNDED_ARM_CLAIMS_EARNED_EXPANSION')
+        return True
+    journal = exported.get('connected_journal', {})
+    entries = journal.get('entries', []) if isinstance(journal, dict) else []
+    matching = [e for e in entries if isinstance(e, dict) and e.get('key') == 'spend:third-sensor-adapter']
+    if len(matching) != 1:
+        raise ValueError('NATIVE_ADAPTER_EXPENSE_MISSING_OR_DUPLICATED')
+    entry = matching[0]
+    expected_request = {'operation': 'spend', 'id': 'third-sensor-adapter',
+        'kind': 'new_archival_signal_instrument',
+        'amount': protocol['earned_only_successor_adapter_microUSD'], 'day': 3,
+        'work': {'source_measurement': ['A', 'B'], 'new_domain': 'leakage-anomaly',
+                 'new_archives': ['flow', 'pressure'], 'expected_successor': 'C'},
+        'expected_net': 834 * 1_000_000, 'allow_seed': False}
+    receipt = reported.get('earned_receipt')
+    if (entry.get('status') != 'COMPLETE' or entry.get('funding') != 'EARNED' or
+            entry.get('request') != expected_request or not isinstance(receipt, dict) or
+            receipt != entry.get('receipt') or receipt.get('funding') != 'EARNED' or
+            receipt.get('amount') != expected_request['amount']):
+        raise ValueError('NATIVE_EARNED_ADAPTER_RECEIPT_UNBOUND')
+    plan_id = receipt.get('plan_id')
+    reserves = [a for a in tape.get('actions', []) if isinstance(a, dict) and
+                a.get('op') == 'reserve' and a.get('args', {}).get('id') == plan_id]
+    if len(reserves) != 1 or not isinstance(reported.get('after_two'), dict):
+        raise ValueError('NATIVE_EARNINGS_PREFIX_NOT_BOUND')
+    before = reserves[0].get('before', {})
+    for field in ('cash', 'profit', 'collections', 'expenses', 'available', 'unrestrictedEarned'):
+        if reported['after_two'].get(field) != before.get(field):
+            raise ValueError('NATIVE_EARNINGS_PREFIX_NOT_BOUND')
+    return True
+
+
+def check_public_economic_claims(report, protocol):
+    """Derive economic flags from audited arm summaries; keep real-world nonclaims fixed."""
+    arms = report.get('arms')
+    if not isinstance(arms, dict) or set(arms) != {'direct', 'shared', 'cheap_rival'}:
+        raise ValueError('PUBLIC_ECONOMIC_ARM_INVENTORY_MISMATCH')
+    shared, direct, rival = (arms[name] for name in ('shared', 'direct', 'cheap_rival'))
+    expected = {
+        'shared_positive': shared['summary']['profit'] > 0,
+        'matched_direct_negative': direct['summary']['profit'] < 0,
+        'earned_funded': shared['earned_receipt']['funding'] == 'EARNED',
+        'cheap_rival_no_bid': rival['decision']['choice'] == 'NO_BID',
+        'actual_revenue_microUSD': 0,
+        'real_demand_observed': False,
+        'complete_actual_host_cost_known': False,
+        'recursive_or_market_novelty_proven': False,
+        'successor_output_preconstructed_for_native_registration': True,
+        'causal_necessity_of_adapter_not_proven': True,
+        'ordinary_pooled_rival_excluded': False}
+    if report.get('conclusions') != expected:
+        raise ValueError('PUBLIC_ECONOMIC_SCOPE_OR_CLAIM_TAMPERED')
+    fixed = sum(protocol['fixed_shared'].values())
+    per = sum(protocol['per_order'].values())
+    sensitivity = {
+        'ten_percent_fixed_cost_overrun_stage1_profit_microUSD':
+            int(2*protocol['quote_microUSD'] - fixed*110//100 -
+                2*per - protocol['stage1_tax_microUSD']),
+        'first_stage_profit_hurdle_microUSD': protocol['earned_only_successor_adapter_microUSD']}
+    if report.get('sensitivity') != sensitivity:
+        raise ValueError('PUBLIC_ECONOMIC_SENSITIVITY_TAMPERED')
+    return True
