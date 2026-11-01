@@ -1,0 +1,180 @@
+{
+  "schema": "industrial062/operating-redesign-result/v1",
+  "rows": [
+    {
+      "case": "14_network_tiered",
+      "accepted": true,
+      "source_customers": 389,
+      "annual_pieces": 2040062,
+      "annual_cost_yuan": 374121195.8342202,
+      "cost_components_yuan": {
+        "production_cost": 138293015.0,
+        "operating_cost": 19400000.0,
+        "freight_cost": 212928191.8314451,
+        "holding_cost": 3499989.0027750675
+      },
+      "coverage": 0.7500002450905904,
+      "source_model_lower_bound_yuan": 374120744.47777313,
+      "solver_status": "OPTIMAL",
+      "source_cost_rounding_bound_yuan": 408.01132682379256,
+      "open_factories": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06"
+      ],
+      "open_warehouses": [
+        "C01",
+        "C02",
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08"
+      ],
+      "delivery_pieces_by_node_type": {
+        "F": 0,
+        "C": 0,
+        "R": 2040062
+      },
+      "distance_multiplier_stress_fixed_plan_coverage": {
+        "1": 0.7500002450905904,
+        "1.01": 0.7412730593481963,
+        "1.05": 0.7377560093761856,
+        "1.1": 0.7241985782785033
+      },
+      "solution_sha256": "2d6f660eb06bc63650b0000fba3b68c189322afe4365b05caadcd88253f35988"
+    },
+    {
+      "case": "15_network_direct",
+      "accepted": true,
+      "source_customers": 389,
+      "annual_pieces": 2040062,
+      "annual_cost_yuan": 348938532.43974984,
+      "cost_components_yuan": {
+        "production_cost": 138293015.0,
+        "operating_cost": 14600000.0,
+        "freight_cost": 194789571.44374472,
+        "holding_cost": 1255945.9960051
+      },
+      "coverage": 0.7500002450905904,
+      "source_model_lower_bound_yuan": 339440621.5495731,
+      "solver_status": "FEASIBLE",
+      "source_cost_rounding_bound_yuan": 408.01132682379256,
+      "open_factories": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06"
+      ],
+      "open_warehouses": [
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R07"
+      ],
+      "delivery_pieces_by_node_type": {
+        "F": 1231117,
+        "C": 0,
+        "R": 808945
+      },
+      "distance_multiplier_stress_fixed_plan_coverage": {
+        "1": 0.7500002450905904,
+        "1.01": 0.7309694509284522,
+        "1.05": 0.7250093379514936,
+        "1.1": 0.7086068952806336
+      },
+      "solution_sha256": "2e3fedf17de5fa4007796c0f05746e4ac42f31a11abbd1d823d082a423212201"
+    },
+    {
+      "case": "16_network_mixed",
+      "accepted": true,
+      "source_customers": 389,
+      "annual_pieces": 2040062,
+      "annual_cost_yuan": 363773831.01457626,
+      "cost_components_yuan": {
+        "production_cost": 138293015.0,
+        "operating_cost": 18800000.0,
+        "freight_cost": 203302028.35265326,
+        "holding_cost": 3378787.6619230127
+      },
+      "coverage": 0.7500002450905904,
+      "source_model_lower_bound_yuan": 357803895.07227314,
+      "solver_status": "FEASIBLE",
+      "source_cost_rounding_bound_yuan": 408.01132682379256,
+      "open_factories": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06"
+      ],
+      "open_warehouses": [
+        "C01",
+        "C02",
+        "R01",
+        "R02",
+        "R03",
+        "R04",
+        "R05",
+        "R06",
+        "R07",
+        "R08"
+      ],
+      "delivery_pieces_by_node_type": {
+        "F": 0,
+        "C": 0,
+        "R": 2040062
+      },
+      "distance_multiplier_stress_fixed_plan_coverage": {
+        "1": 0.7500002450905904,
+        "1.01": 0.7420098016628907,
+        "1.05": 0.7411127701020851,
+        "1.1": 0.7275058307051452
+      },
+      "solution_sha256": "9a618efe3fd2518b503d4cfd905331151b0c260e9f72c8193456e1a05512b1a7"
+    }
+  ],
+  "same_underlying_demand": true,
+  "counterfactuals_not_additive_sales": true,
+  "observed_our_buyers": 0,
+  "enterprise_collections": 0,
+  "funded_expansion_proved": false,
+  "baseline_prior_costs_and_native_accounts": "Unmodified and not pooled; no customer cost savings booked as vendor income.",
+  "direct_vs_hierarchical_annual_source_cost_reduction_yuan": 25182663.394470334,
+  "direct_vs_hierarchical_solver_bound_implied_minimum_reduction_yuan": 25182212.038023293,
+  "limits": [
+    "Source-model results, not executed physical relocation or realized savings.",
+    "All three contracts are public task variants of the same manufacturer network; no additional buyers or repeated sales inferred.",
+    "Newly uneconomic activity and industrial fee/WTP not established; original tasks came from already-paid engineering.",
+    "Transition capital, lease exits, redundancy, implementation, financing, live distance uncertainty, vendor costs and collection terms are not supplied.",
+    "Direct/mixed feasible solutions have open optimization gaps; CP-SAT optimal status for tiered refers to the rounded-cost formulation.",
+    "Bounds depend on complete correct source-model formulation; no independent formal optimality certificate.",
+    "Distance stress perturbs source geometry prospectively as a sensitivity only, not a change to base acceptance.",
+    "Actual assistant, tool and host cost remain unknown; first failed solver lacks complete external resource accounting."
+  ],
+  "additional_robust_offer": {
+    "accepted_original_client_contract": true,
+    "accepted_additional_distance_clause": true,
+    "nominal_cost_yuan": 347689465.93480825,
+    "nominal_coverage": 0.7591494768296257,
+    "worst_case_cost_yuan": 349611331.3412488,
+    "worst_case_coverage": 0.7512369722096681,
+    "nominal_reduction_vs_tiered_yuan": 26431729.899411917,
+    "conservative_annual_implementation_plus_fee_headroom_yuan": 24509413.13652432,
+    "assumption": "Authored up-to10percent terminal distance/transit stress, not empirical calibration. Additional offer, not revised original acceptance.",
+    "no_causal_speed_or_cost_claim": "Robust solve had120seconds versus nominal60; its better nominal incumbent is not evidence that robust constraints reduce cost.",
+    "vendor_price_or_customer_agreement": null,
+    "vendor_collections": 0
+  }
+}
