@@ -1,0 +1,67 @@
+{
+  "schema": "agi-alpha/PR88-independent-public-artifact-qualification/v1",
+  "observation_utc": "2026-11-01T00:44:10Z",
+  "owner_boundary": "Read-only exact-run assessment; PR77 owner retains design integration; PR40 finance owner controls native source/account; this is not a main release.",
+  "historical": {
+    "pr": 77,
+    "head": "cd5281b0ae7b484572bfb35ccb7e51ef5b3be4b3",
+    "run": 41251886324,
+    "artifact_id": 13061987087,
+    "archive_sha256": "8a504d88046b3d1ea93d36da3ce084b09b20852b393a1d3f42f1ba2db2e1e53f",
+    "source_sha256": "ad6153820a081a57f6f99590b957a30ba4fb92fb80925755edc66e598d13da63"
+  },
+  "corrected": {
+    "pr": 88,
+    "head": "4b72ebdc6f9b11dc8ed413126b77bfff9fceeed1",
+    "run": 41255905518,
+    "artifact_id": 13063689513,
+    "archive_sha256": "15a5b50451db7a9ce7b37d9402c852b22f0e5dffe48a70d26ff3842ad27a54ad",
+    "source_sha256": "0977b8e9920ecd1415d1cf26500c5cf4dcddc1ad33337afcd35940f4871c5293",
+    "native_design_job": "success",
+    "native_design_tests_passed": 16
+  },
+  "verified_read_only": {
+    "archives_match_github_declared_sha256": true,
+    "each_zip_exactly_one_public_json": true,
+    "same_exposed_spec": true,
+    "economic_records_equal_after_removing_source_sha_and_added_witness_fields": true,
+    "frozen_seeds": {
+      "development": 341014,
+      "confirmation": 341015
+    },
+    "selected": "earned_distribution",
+    "confirmation_profit_microUSD": {
+      "incumbent": 35609126,
+      "earned_distribution": 73953692
+    },
+    "confirmation_delta_microUSD": 38344566,
+    "source_linked_contribution_microUSD": 50443207,
+    "required_invoices_microUSD": 1250000,
+    "net_source_linked_contribution_microUSD": 49193207,
+    "linked_paid_orders": [
+      "order-0001",
+      "order-0003"
+    ],
+    "linked_uncollected_orders": [],
+    "witness_scope": "CONSERVATIVE_SOURCE_LINKED_CONTRIBUTION_NOT_CAUSAL_UPLIFT"
+  },
+  "qualification": {
+    "corrected_exact_head_native_workflow": "ACHIEVED",
+    "all_original_failed_runs": "IMMUTABLE",
+    "original_pr77_bounded_campaign_run_41251886350": "FAILED",
+    "pr88_full_hosted_campaign": "IN_PROGRESS_AT_LAST_CHECK",
+    "pr88_released_main": "NOT_ACHIEVED",
+    "pr88_actual_public_download": "NOT_ACHIEVED",
+    "original_account_authenticated_queue_migration": "BLOCKED_HANDOFF",
+    "P1_causal_profitability": "UNQUALIFIED",
+    "P2_recursive_discovery": "UNQUALIFIED",
+    "external_paid_commerce": "NONE",
+    "T365_complete_cost_3billion": "UNQUALIFIED"
+  },
+  "limitations": [
+    "Comparison inspects already-generated key-free PUBLIC.json only, not private Account/JournalAccount or producer rerun.",
+    "Positive fresh result is one exposed, author-defined synthetic world and does not establish model-calibrated buyer behavior, external sales, full host/model billing or causal generalization.",
+    "Exact-head workflow passing unit and gate tests does not establish normal integration, protected release or downloaded operation."
+  ],
+  "next": "PR77 owner reviews PR88 exact-head correction and independently confirms source-matched complete qualification; PR40 original signed account remains separate P0 blocker."
+}
