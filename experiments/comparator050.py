@@ -179,7 +179,15 @@ def validate_recorded_cells(output,frozen,phase,configs,arms,seed,report):
         if not checked['accepted'] or row!=public_row(registered['config'],phase,row['case'],row['arm'],result,checked,True):raise ValueError('RECORDED_NATIVE_CELL_CHANGED')
 
 
+def validate_report_identity(frozen,phase,report):
+    if (report.get('source_sha256')!=frozen['source']['sha256']
+            or report.get('protocol_sha256')!=digest(PROTOCOL) or report.get('phase')!=phase
+            or report.get('authority')!=[]):
+        raise ValueError('RECORDED_COMPARATOR_IDENTITY_CHANGED')
+
+
 def verify_development(output,frozen,development):
+    validate_report_identity(frozen,'development',development)
     expected={(case,str(share)) for case in PROTOCOL['cases'] for share in SHARES}
     if development.get('status')!='COMPLETED' or development.get('phase')!='development' or development.get('source_sha256')!=frozen['source']['sha256'] or development.get('protocol_sha256')!=digest(PROTOCOL) or len(development['rows'])!=6 or {(r['case'],r['arm']) for r in development['rows']}!=expected:raise ValueError('COMPLETE_SOURCE_BOUND_TUNING_REQUIRED')
     from connected_enterprise.verify import audit
@@ -230,7 +238,7 @@ def operate(output,phase,max_events=None):
         configs,selection=selected_evaluation(output,frozen);arms=ARMS;seed=PROTOCOL['seed'];public=output/'PUBLIC.json'
     manifest=frozen['manifests'][phase]
     report=read(public) if public.exists() else {'protocol_sha256':digest(PROTOCOL),'source_sha256':frozen['source']['sha256'],'phase':phase,'rows':[],'status':'RUNNING','authority':[]}
-    if report['source_sha256']!=frozen['source']['sha256'] or report['protocol_sha256']!=digest(PROTOCOL) or report['phase']!=phase:raise ValueError('RECORDED_COMPARATOR_IDENTITY_CHANGED')
+    validate_report_identity(frozen,phase,report)
     from connected_enterprise.engine import run_world
     from connected_enterprise.verify import audit
     validate_recorded_cells(output,frozen,phase,configs,arms,seed,report)
@@ -269,6 +277,7 @@ def verify(output):
     totals={}
     for phase,configs,arms,seed,name in [('development',frozen['configs']['development'],tuple(str(s) for s in SHARES),PROTOCOL['development_seed'],'DEVELOPMENT.json'),('evaluation',evaluation,ARMS,PROTOCOL['seed'],'PUBLIC.json')]:
         report=read(output/name);expected={(case,arm) for case in PROTOCOL['cases'] for arm in arms}
+        validate_report_identity(frozen,phase,report)
         if report['status']!='COMPLETED' or len(report['rows'])!=len(expected) or {(r['case'],r['arm']) for r in report['rows']}!=expected:raise ValueError('COMPLETE_COMPARATOR_COVERAGE_REQUIRED')
         if phase=='evaluation' and (report.get('five_policy_comparison_complete') is not True or report.get('selection_sha256')!=digest(selection)):raise ValueError('FROZEN_TUNING_NOT_BOUND_TO_EVALUATION')
         for row in report['rows']:

@@ -653,5 +653,141 @@ class StartupAcquisitionTests(unittest.TestCase):
         self.assertEqual(result['summary']['payables'], 0)
 
 
+class StartupExperimentIdentityTests(unittest.TestCase):
+    """Real native worlds distinguish native validity from fixed-study identity."""
+    @classmethod
+    def setUpClass(cls):
+        from experiments import startup_acquisition048 as study
+        cls.study=study
+        cls.temporary=tempfile.TemporaryDirectory(prefix='.startup048-identity-',dir=ROOT)
+        cls.folder=Path(cls.temporary.name);cls.output=cls.folder/'comparison'
+        cls.frozen=study.register(cls.output)
+        cfg=cls.frozen['configs']['positive']['on']
+        cls.correct=run_world(ROOT,cls.frozen['manifest'],cfg,study.SEED,'competitive_growth',cls.output/'private'/'positive-on',source=cls.frozen['source'])
+        cls.other_seed=run_world(ROOT,cls.frozen['manifest'],cfg,study.SEED+1,'competitive_growth',cls.folder/'wrong-seed',source=cls.frozen['source'])
+        cls.native_checks=[audit(ROOT,cls.frozen['manifest'],world)['accepted'] for world in (cls.correct,cls.other_seed)]
+
+    @classmethod
+    def tearDownClass(cls):
+        import shutil
+        generated=ROOT/'.startup048-inputs'/cls.study.digest(str(cls.output))[:16]
+        if generated.exists():shutil.rmtree(generated)
+        cls.temporary.cleanup()
+
+    def setUp(self):
+        self.study.write(self.output/'PREREGISTRATION.json',self.frozen)
+        self.study.write(self.output/'private'/'positive-on'/'RESULT.json',self.correct)
+        (self.output/'VERIFY.json').unlink(missing_ok=True)
+
+    def saved_summary(self, frozen, world, status='COMPLETED'):
+        # Exact production coverage stays16. The real substituted world is first,
+        # so identity refusal must precede any missing later fixture or audit.
+        rows=[{'case':case,'arm':arm} for case in self.study.CASES for arm in ('off','on') if (case,arm)!=('positive','on')]
+        new=[o for o in world['orders'] if o['customer_id'] not in {f'SIM-customer-{i:03d}' for i in range(4)}]
+        row={'case':'positive','arm':'on','complete':world['complete'],'audit_accepted':True,'result_sha256':self.study.digest(world),
+            'summary':world['summary'],'paid_jobs':world['paid_jobs'],
+            'new_paid_customers':len({o['customer_id'] for o in new if o['outcome']=='SETTLED'}),
+            'refunded_jobs':sum(o['outcome']=='REFUNDED' for o in world['orders']),
+            'actual_exposures':sum(x['realized_exposures'] for x in world['channels']['exposures_by_day'].values()),
+            'investments':[{k:i[k] for k in ('id','plan_id','kind','cost','purchased_time','activation_time','expiry_time')}|
+                {'funding':i['funding_receipt']['funding'],'native_plan_id':i['funding_receipt']['plan_id']} for i in world['investments']],
+            'orders':[{k:o.get(k) for k in ('id','job_id','customer_id','price','complete_cost','outcome','qualified_time','collection_time','acquisition_source_plan_id')} for o in world['orders']],
+            'commercial_gate':world['conditional_simulated_commercial_success']}
+        self.study.write(self.output/'SUMMARY.json',{'protocol_sha256':self.study.digest(frozen),'status':status,'rows':[row]+rows,'actual_profit_usd':None,'authority':[]})
+
+    def test_real_valid_other_seed_cannot_be_substituted_for_registered_world(self):
+        from unittest.mock import patch
+        self.assertEqual(self.native_checks,[True,True])
+        self.assertEqual(self.correct['config'],self.other_seed['config'])
+        self.assertEqual(self.correct['seed'],self.frozen['protocol']['seed'])
+        self.assertEqual(self.other_seed['seed'],self.frozen['protocol']['seed']+1)
+        self.study._require_world_identity(self.frozen,'positive','on',self.correct)
+        saved={'case':'positive','arm':'on','result_sha256':self.study.digest(self.correct)}
+        self.assertEqual(self.study._saved_result(self.output,self.frozen,saved),self.correct)
+        with self.assertRaisesRegex(ValueError,'SAVED_NATIVE_WORLD_IDENTITY_CHANGED'):
+            self.study._require_world_identity(self.frozen,'positive','on',self.other_seed)
+        self.study.write(self.output/'private'/'positive-on'/'RESULT.json',self.other_seed)
+        self.saved_summary(self.frozen,self.other_seed)
+        with patch.object(self.study,'audit',side_effect=AssertionError('WRONG_STUDY_WORLD_REACHED_AUDIT')):
+            with self.assertRaisesRegex(ValueError,'SAVED_NATIVE_WORLD_IDENTITY_CHANGED'):
+                self.study.verify(self.output)
+        self.assertFalse((self.output/'VERIFY.json').exists())
+
+    def test_native_arm_completion_config_source_and_resume_identity(self):
+        from unittest.mock import patch
+        for key,value in (('arm','baseline'),('complete',False),('config',{}),('source',{})):
+            with self.subTest(field=key):
+                world=copy.deepcopy(self.correct);world[key]=value
+                with self.assertRaisesRegex(ValueError,'SAVED_NATIVE_WORLD_IDENTITY_CHANGED'):
+                    self.study._require_world_identity(self.frozen,'positive','on',world)
+        self.study.write(self.output/'private'/'positive-on'/'RESULT.json',self.other_seed)
+        self.saved_summary(self.frozen,self.other_seed,status='RUNNING')
+        with patch.object(self.study,'run_world',side_effect=AssertionError('CHANGED_PREFIX_CREATED_ANOTHER_ACCOUNT')):
+            with self.assertRaisesRegex(ValueError,'SAVED_NATIVE_WORLD_IDENTITY_CHANGED'):
+                self.study.run(self.output)
+        self.assertFalse((self.output/'VERIFY.json').exists())
+
+    def test_rehashed_registration_cannot_change_seed_cohort_horizon_or_configs(self):
+        variants=[]
+        for key,value in (('seed',self.study.SEED+1),('cohort_seed',self.study.COHORT+1),('horizon_days',9),('cases',['positive']),('arms',['on'])):
+            changed=copy.deepcopy(self.frozen);changed['protocol'][key]=value
+            variants.append((key,changed,'FIXED_STARTUP_REGISTRATION_CHANGED'))
+        changed=copy.deepcopy(self.frozen);changed['configs']['positive']['on']['horizon_days']=9
+        variants.append(('case config',changed,'FIXED_STARTUP_CONFIGS_CHANGED'))
+        changed=copy.deepcopy(self.frozen);changed['manifest']['native_engine']='legacy-permanent-v1'
+        variants.append(('native engine',changed,'FIXED_STARTUP_INVENTORY_CHANGED'))
+        changed=copy.deepcopy(self.frozen);changed['manifest']['cohort_provenance']['finite_admission']['packet_jobs']=2
+        variants.append(('inventory',changed,'FIXED_STARTUP_INVENTORY_CHANGED'))
+        for name,frozen,error in variants:
+            with self.subTest(changed=name):
+                self.study.write(self.output/'PREREGISTRATION.json',frozen)
+                self.saved_summary(frozen,self.correct)
+                with self.assertRaisesRegex(ValueError,error):self.study.verify(self.output)
+                self.assertFalse((self.output/'VERIFY.json').exists())
+
+    def test_cohort_origin_is_reconstructed_even_when_generation_labels_are_forged(self):
+        other=prepare_complete_offer_services(ROOT,str((self.folder/'other-cohort').relative_to(ROOT)),
+            cohort_seed=self.study.COHORT+1,jobs_per_service=32,packet_jobs=1)
+        other['native_engine']='exact-permanent-v2'
+        other['cohort_provenance']['cohort_seed_sha256']=self.study.digest(self.study.COHORT)
+        other['cohort_provenance']['finite_admission']['cohort_seed_sha256']=self.study.digest(self.study.COHORT)
+        frozen=copy.deepcopy(self.frozen);frozen['manifest']=other
+        frozen['configs']={case:{arm:self.study.fixture(other,arm=='on',case) for arm in ('off','on')} for case in self.study.CASES}
+        with self.assertRaisesRegex(ValueError,'ADMITTED_GENERATION_ORIGIN_MISMATCH'):
+            self.study._validate_registration(frozen)
+
+
+class StartupExperimentSummaryTests(unittest.TestCase):
+    """Inert claim-schema checks require no additional business experiment."""
+    def test_summary_claims_cannot_expand_beyond_the_fixed_simulation_contract(self):
+        from experiments import startup_acquisition048 as study
+        good={'protocol_sha256':'a'*64,'rows':[],'status':'RUNNING','actual_profit_usd':None,'authority':[]}
+        study._require_summary(good)
+        study._require_summary(dict(good,status='COMPLETED',process_cpu_seconds=1,wall_seconds=2))
+        for key,value in (('actual_profit_usd',3000000000),('authority',['spend']),('actual_commerce',True),('status','UNREGISTERED')):
+            with self.subTest(field=key),self.assertRaisesRegex(ValueError,'FIXED_STARTUP_SUMMARY_CLAIMS_CHANGED'):
+                study._require_summary(dict(good,**{key:value}))
+        missing=dict(good);del missing['actual_profit_usd']
+        with self.assertRaisesRegex(ValueError,'FIXED_STARTUP_SUMMARY_CLAIMS_CHANGED'):study._require_summary(missing)
+
+    def test_verify_and_resume_reject_false_claims_before_native_work_or_receipt(self):
+        from experiments import startup_acquisition048 as study
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory(prefix='.startup048-summary-',dir=ROOT) as folder:
+            output=Path(folder)
+            frozen={'source':study.source()}
+            study.write(output/'PREREGISTRATION.json',frozen)
+            for command in ('verify','run'):
+                for key,value in (('actual_profit_usd',3000000000),('authority',['spend']),('unregistered_claim',True)):
+                    with self.subTest(command=command,field=key):
+                        summary={'protocol_sha256':study.digest(frozen),'rows':[],'status':'COMPLETED' if command=='verify' else 'RUNNING','actual_profit_usd':None,'authority':[]}
+                        summary[key]=value;study.write(output/'SUMMARY.json',summary)
+                        with patch.object(study,'_validate_registration',side_effect=AssertionError('FALSE_CLAIM_REACHED_WORLD_VALIDATION')):
+                            with self.assertRaisesRegex(ValueError,'FIXED_STARTUP_SUMMARY_CLAIMS_CHANGED'):
+                                getattr(study,command)(output)
+                        self.assertFalse((output/'VERIFY.json').exists())
+                        self.assertFalse((output/'private').exists())
+
+
 if __name__ == '__main__':
     unittest.main()

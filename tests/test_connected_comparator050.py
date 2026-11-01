@@ -129,7 +129,7 @@ class TuningSelectionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             output=Path(temporary)
             development=self.development()
-            development.update(phase='development',source_sha256='s',protocol_sha256=c.digest(c.PROTOCOL))
+            development.update(phase='development',source_sha256='s',protocol_sha256=c.digest(c.PROTOCOL),authority=[])
             frozen={'source':{'sha256':'s'},'configs':{'development':{case:{str(share):{'config':{},'engine_arm':'competitive_growth'} for share in c.SHARES} for case in c.PROTOCOL['cases']}},'manifests':{'development':{}}}
             c.write(output/'DEVELOPMENT.json',development)
             c.write(output/'SELECTED.json',c.choose(development))
@@ -150,6 +150,100 @@ class TuningSelectionTests(unittest.TestCase):
                 c.persisted_after_resume(original,dict(resumed,owned_account={'journal':'changed'}),output)
             with self.assertRaisesRegex(ValueError,'NOT_PERSISTED_BYTES'):
                 c.persisted_after_resume(original,dict(resumed,resource_seconds=99),output)
+
+
+class ComparatorHeaderTests(unittest.TestCase):
+    def fixture(self,output):
+        # Pure wrapper fixture: the native checker is stubbed, never represented
+        # as a real financial audit. Actual public_row reconciliation still runs.
+        frozen={'source':{'sha256':'f'*64},'configs':{'development':{}},
+                'manifests':{'development':{},'evaluation':{}}}
+        evaluation={}
+        selection={'evaluation_cost_attribution':{'central':1,'no_demand':1},
+                   'tuning_expense_microUSD':2}
+        for phase,arms,seed,name in (
+                ('development',tuple(str(s) for s in c.SHARES),c.PROTOCOL['development_seed'],'DEVELOPMENT.json'),
+                ('evaluation',c.ARMS,c.PROTOCOL['seed'],'PUBLIC.json')):
+            configs=frozen['configs']['development'] if phase=='development' else evaluation
+            rows=[]
+            for case in c.PROTOCOL['cases']:
+                configs[case]={}
+                for arm in arms:
+                    config={'opening':c.PROTOCOL['opening_microUSD_per_account'],
+                            'horizon_days':c.PROTOCOL['horizon_days']}
+                    engine_arm='baseline' if arm=='capability_only' else 'competitive_growth'
+                    configs[case][arm]={'config':config,'engine_arm':engine_arm}
+                    result={'config':config,'seed':seed,'arm':engine_arm,'source':frozen['source'],
+                            'complete':True,'summary':{'profit':0,'revenue':0,'recoveryIncome':0,'expenses':0},
+                            'owned_account':{'ledger':{'actions_sha256':'a'*64}},
+                            'paid_jobs':0,'customers':0,'repeat_customers':0,'orders':[],
+                            'channels':{'exposures_by_day':{}},'investments':[],
+                            'conditional_simulated_commercial_success':False}
+                    folder=output/'private'/phase/(case+'-'+arm)
+                    folder.mkdir(parents=True)
+                    c.write(folder/'RESULT.json',result)
+                    rows.append(c.public_row(config,phase,case,arm,result,{'accepted':True},True))
+            report={'source_sha256':frozen['source']['sha256'],'protocol_sha256':c.digest(c.PROTOCOL),
+                    'phase':phase,'status':'COMPLETED','rows':rows,'authority':[],
+                    'wall_seconds':0.0,'process_cpu_seconds':0.0}
+            if phase=='evaluation':
+                report.update(five_policy_comparison_complete=True,selection_sha256=c.digest(selection))
+            c.write(output/name,report)
+        return frozen,evaluation,selection
+
+    def test_final_verify_binds_valid_headers_with_existing_row_reconciliation(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output=Path(temporary)
+            frozen,evaluation,selection=self.fixture(output)
+            with patch.object(c,'plan',return_value=(output,frozen)), \
+                    patch.object(c,'selected_evaluation',return_value=(evaluation,selection)), \
+                    patch('connected_enterprise.verify.audit',return_value={'accepted':True}) as checker:
+                value=c.verify(output)
+            self.assertTrue(value['accepted'])
+            self.assertEqual(value['worlds'],{'development':6,'evaluation':10})
+            self.assertEqual(value['public_sha256'],c.digest(c.read(output/'PUBLIC.json')))
+            self.assertEqual(checker.call_count,16)
+
+    def test_final_verify_rejects_header_only_changes_and_missing_fields(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output=Path(temporary)
+            frozen,evaluation,selection=self.fixture(output)
+            original=c.read(output/'PUBLIC.json')
+            for field,value in (('source_sha256','0'*64),('protocol_sha256','0'*64),
+                                ('phase','development'),('authority',['spend'])):
+                for missing in (False,True):
+                    with self.subTest(field=field,missing=missing):
+                        report=copy.deepcopy(original)
+                        if missing:report.pop(field)
+                        else:report[field]=value
+                        c.write(output/'PUBLIC.json',report)
+                        (output/'VERIFY.json').unlink(missing_ok=True)
+                        with patch.object(c,'plan',return_value=(output,frozen)), \
+                                patch.object(c,'selected_evaluation',return_value=(evaluation,selection)), \
+                                patch('connected_enterprise.verify.audit',return_value={'accepted':True}) as checker:
+                            with self.assertRaisesRegex(ValueError,'RECORDED_COMPARATOR_IDENTITY_CHANGED'):
+                                c.verify(output)
+                        self.assertEqual(checker.call_count,6)
+                        self.assertFalse((output/'VERIFY.json').exists())
+                        self.assertEqual(report['rows'],original['rows'])
+
+    def test_operate_and_development_reject_false_authority_before_checking_or_execution(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output=Path(temporary)
+            frozen,evaluation,selection=self.fixture(output)
+            report=c.read(output/'PUBLIC.json');report['authority']=['spend']
+            c.write(output/'PUBLIC.json',report)
+            with patch.object(c,'plan',return_value=(output,frozen)), \
+                    patch.object(c,'selected_evaluation',return_value=(evaluation,selection)), \
+                    patch('connected_enterprise.engine.run_world') as execute:
+                with self.assertRaisesRegex(ValueError,'RECORDED_COMPARATOR_IDENTITY_CHANGED'):
+                    c.operate(output,'evaluation')
+            execute.assert_not_called()
+            development=c.read(output/'DEVELOPMENT.json');development['authority']=['spend']
+            with patch('connected_enterprise.verify.audit') as checker:
+                with self.assertRaisesRegex(ValueError,'RECORDED_COMPARATOR_IDENTITY_CHANGED'):
+                    c.verify_development(output,frozen,development)
+            checker.assert_not_called()
 
 
 if __name__=='__main__':

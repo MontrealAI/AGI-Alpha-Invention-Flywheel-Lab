@@ -6,7 +6,7 @@ import importlib.util
 import json
 from pathlib import Path
 import time
-from adaptive_enterprise.instruments import prepare_complete_offer_services
+from adaptive_enterprise.instruments import audit_admission, prepare_complete_offer_services
 from commercial.ledger import digest
 from connected_enterprise.engine import run_world
 from connected_enterprise.runner import identity
@@ -42,12 +42,8 @@ def write(path, value):
         stream.write('\n')
 
 
-def register(output):
-    output.mkdir(parents=True, exist_ok=False)
-    relative = '.startup048-inputs/' + digest(str(output))[:16]
-    manifest = prepare_complete_offer_services(ROOT, relative, cohort_seed=COHORT, jobs_per_service=32, packet_jobs=1)
-    manifest['native_engine'] = 'exact-permanent-v2'
-    protocol = {'schema': 'startup048-fixed-comparison/v1', 'cases': list(CASES), 'arms': ['off', 'on'],
+def protocol():
+    return {'schema': 'startup048-fixed-comparison/v1', 'cases': list(CASES), 'arms': ['off', 'on'],
                 'seed': SEED, 'cohort_seed': COHORT, 'horizon_days': 8, 'opening_microUSD_per_separate_account': 100000000000,
                 'primary_metric': 'Actual paid newly reached customers and complete modeled enterprise profit, with canonical independent audit',
                 'comparison': 'Identical public offers, outside choices, inventory, channel and payment environment within each pair; candidate pays extra USD5 development plus USD0.05 startup evaluation and actual native acquisition/support/fulfillment costs.',
@@ -55,7 +51,54 @@ def register(output):
                 'stopping_rule': 'Complete these exact16 eight-day worlds and drain; preserve negative/refunded outcomes. No seed replacement, horizon extension or optional favorable retry.',
                 'exposure': 'Builder-visible finite authored engineering cases, not untouched holdouts or empirical demand',
                 'actual_host_model_engineering_billing_usd': None, 'authority': []}
-    frozen = {'protocol': protocol, 'source': source(), 'manifest': manifest,
+
+
+def _validate_registration(frozen):
+    if frozen['protocol'] != protocol():
+        raise ValueError('FIXED_STARTUP_REGISTRATION_CHANGED')
+    manifest = frozen['manifest']
+    admission = manifest.get('cohort_provenance', {}).get('finite_admission', {})
+    geometry = {'primitive_jobs_per_service': 32, 'packet_jobs': 1, 'packet_rows_per_kind': 40, 'chunk_size': 64}
+    if manifest.get('native_engine') != 'exact-permanent-v2' or any(type(admission.get(k)) is not int or admission[k] != v for k,v in geometry.items()):
+        raise ValueError('FIXED_STARTUP_INVENTORY_CHANGED')
+    expected = {case: {arm: fixture(manifest, arm == 'on', case) for arm in ('off', 'on')} for case in CASES}
+    if frozen['configs'] != expected:
+        raise ValueError('FIXED_STARTUP_CONFIGS_CHANGED')
+    # A generation label is insufficient: reconstruct the admitted raw origins.
+    audit_admission(ROOT, manifest, cohort_seed=COHORT)
+
+
+def _require_world_identity(frozen, case, arm, result):
+    if (type(result.get('seed')) is not int or result['seed'] != SEED or result['seed'] != frozen['protocol']['seed']
+            or result.get('arm') != 'competitive_growth' or result.get('complete') is not True
+            or result.get('config') != frozen['configs'][case][arm] or result.get('source') != frozen['source']):
+        raise ValueError('SAVED_NATIVE_WORLD_IDENTITY_CHANGED')
+
+
+def _saved_result(output, frozen, row):
+    result = json.loads((output / 'private' / (row['case'] + '-' + row['arm']) / 'RESULT.json').read_text())
+    if digest(result) != row['result_sha256']:
+        raise ValueError('SAVED_NATIVE_RESULT_REAUDIT_FAILED')
+    _require_world_identity(frozen, row['case'], row['arm'], result)
+    if not audit(ROOT, frozen['manifest'], result)['accepted']:
+        raise ValueError('SAVED_NATIVE_RESULT_REAUDIT_FAILED')
+    return result
+
+
+def _require_summary(summary):
+    required = {'protocol_sha256', 'rows', 'status', 'actual_profit_usd', 'authority'}
+    if (not required <= set(summary) or set(summary) - required - {'process_cpu_seconds', 'wall_seconds'}
+            or summary['actual_profit_usd'] is not None or summary['authority'] != []
+            or summary['status'] not in {'RUNNING', 'COMPLETED'}):
+        raise ValueError('FIXED_STARTUP_SUMMARY_CLAIMS_CHANGED')
+
+
+def register(output):
+    output.mkdir(parents=True, exist_ok=False)
+    relative = '.startup048-inputs/' + digest(str(output))[:16]
+    manifest = prepare_complete_offer_services(ROOT, relative, cohort_seed=COHORT, jobs_per_service=32, packet_jobs=1)
+    manifest['native_engine'] = 'exact-permanent-v2'
+    frozen = {'protocol': protocol(), 'source': source(), 'manifest': manifest,
               'configs': {case: {arm: fixture(manifest, arm == 'on', case) for arm in ('off', 'on')} for case in CASES}}
     write(output / 'PREREGISTRATION.json', frozen)
     return frozen
@@ -68,9 +111,15 @@ def run(output):
     result_path = output / 'SUMMARY.json'
     summary = json.loads(result_path.read_text()) if result_path.exists() else {
         'protocol_sha256': digest(frozen), 'rows': [], 'status': 'RUNNING', 'actual_profit_usd': None, 'authority': []}
+    _require_summary(summary)
+    _validate_registration(frozen)
     if summary['protocol_sha256'] != digest(frozen) or summary['status'] == 'COMPLETED':
         raise ValueError('PREREGISTRATION_CHANGED_OR_FIXED_COMPARISON_COMPLETE')
     completed = {(row['case'], row['arm']) for row in summary['rows']}
+    if len(completed) != len(summary['rows']) or not completed <= {(case, arm) for case in CASES for arm in ('off', 'on')}:
+        raise ValueError('MATCHED_COVERAGE_REQUIRED')
+    for row in summary['rows']:
+        _saved_result(output, frozen, row)
     start, cpu = time.monotonic(), time.process_time()
     for case in CASES:
         for arm in ('off', 'on'):
@@ -79,6 +128,7 @@ def run(output):
             cfg = frozen['configs'][case][arm]
             folder = output / 'private' / (case + '-' + arm)
             result = run_world(ROOT, frozen['manifest'], cfg, SEED, 'competitive_growth', folder, source=frozen['source'])
+            _require_world_identity(frozen, case, arm, result)
             checked = audit(ROOT, frozen['manifest'], result)
             new = [o for o in result['orders'] if o['customer_id'] not in {f'SIM-customer-{i:03d}' for i in range(4)}]
             row = {'case': case, 'arm': arm, 'complete': result['complete'], 'audit_accepted': checked['accepted'],
@@ -106,13 +156,13 @@ def verify(output):
     summary = json.loads((output / 'SUMMARY.json').read_text())
     if frozen['source'] != source() or summary['protocol_sha256'] != digest(frozen) or summary['status'] != 'COMPLETED':
         raise ValueError('SOURCE_PROTOCOL_OR_COMPLETION_CHANGED')
+    _require_summary(summary)
+    _validate_registration(frozen)
     expected = {(case, arm) for case in CASES for arm in ('off', 'on')}
     if {(row['case'], row['arm']) for row in summary['rows']} != expected or len(summary['rows']) != len(expected):
         raise ValueError('MATCHED_COVERAGE_REQUIRED')
     for row in summary['rows']:
-        result = json.loads((output / 'private' / (row['case'] + '-' + row['arm']) / 'RESULT.json').read_text())
-        if digest(result) != row['result_sha256'] or result['config'] != frozen['configs'][row['case']][row['arm']] or result['source'] != frozen['source'] or not audit(ROOT, frozen['manifest'], result)['accepted']:
-            raise ValueError('SAVED_NATIVE_RESULT_REAUDIT_FAILED')
+        result = _saved_result(output, frozen, row)
         new=[o for o in result['orders'] if o['customer_id'] not in {f'SIM-customer-{i:03d}' for i in range(4)}]
         expected_row={'case':row['case'],'arm':row['arm'],'complete':result['complete'],'audit_accepted':True,'result_sha256':digest(result),'summary':result['summary'],'paid_jobs':result['paid_jobs'],
             'new_paid_customers':len({o['customer_id'] for o in new if o['outcome']=='SETTLED'}),'refunded_jobs':sum(o['outcome']=='REFUNDED' for o in result['orders']),

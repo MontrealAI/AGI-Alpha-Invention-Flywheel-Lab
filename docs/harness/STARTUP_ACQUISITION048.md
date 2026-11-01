@@ -200,4 +200,27 @@ python3 -m experiments.startup_acquisition048 verify --output /absolute/new/star
 
 The driver freezes source, full configs, seed, finite inventory, cases, cost scope and stopping rule before opening any account. `run` retains each private simulation account and continues an interrupted incomplete registered run; completed cells are skipped and a completed comparison refuses a new run. `verify` reconstructs all saved native financial/operating results and public summary fields. Keep the complete private output for authentic continuation; publish only reviewed compact synthetic summaries. Registration creates no customer, collected money, account migration or external authority.
 
+The fixed-comparison verifier also binds each world to the registered seed and
+native `competitive_growth` arm, rather than treating a valid native world as
+proof that it belongs to this experiment. It requires completed worlds, the
+unchanged source, canonical case/arm configurations and the exact fixed protocol.
+The declared 32 primitive jobs per service, one packet with 40 rows per component
+kind, 64-record admission
+window and exact native engine are checked, and the cohort's raw origins are
+independently reconstructed. A self-consistently rewritten protocol hash or
+generation label cannot substitute another seed, cohort, horizon or design.
+Completed rows are identity-checked and natively re-audited before an interrupted
+comparison skips them. Only the driver's declared summary fields are accepted;
+actual commercial profit remains null and authority remains empty. Verification
+rejects identity or claim changes before writing an accepted receipt.
+
+An exposed two-cell pre-fix reproduction used actual fresh native accounts: the
+registered seed was 2611010483, while a substituted world used 2611010484. Its
+native audit correctly accepted its own history, but the old experiment wrapper
+incorrectly accepted its membership. New fixed-seed regression accounts both
+pass native audit and only the registered world passes the experiment identity
+guard. Historical development receipts retain their earlier source and are not
+rewritten as qualification of this correction. Native completed-trace auditing
+already rejected paused histories; its existing guard remains mandatory.
+
 Tried qualified seed acquisition → actual paid access and new native customers became feasible; complete enterprise profit remained negative and refunds lost more → startup funding repairs one constraint without proving a viable business → retain the opt-in contract, preserve all losses, integrate the unified-access repair and qualify the final composed source before normal adoption/release.
