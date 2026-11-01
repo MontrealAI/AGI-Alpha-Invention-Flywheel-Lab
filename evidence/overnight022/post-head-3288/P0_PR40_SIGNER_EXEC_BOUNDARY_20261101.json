@@ -1,0 +1,45 @@
+{
+  "schema": "agi-alpha/p0-independent-signer-trust-boundary/v1",
+  "observed_on": "2026-11-01",
+  "evidence_branch": "evidence/operator022-prepared-3288",
+  "main_at_inspection": "3c553dd5087d4594a996dd82f53d13d5e65db124",
+  "reviewed_pr": 40,
+  "reviewed_exact_head": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+  "exact_source_file": "connected_enterprise/upgrades.py",
+  "github_blob_sha": "9866d004c412fc05c9f6292cf898307f177359df",
+  "source_provenance": [
+    "authorize_upgrade reads codec_source directly from selected target_root/connected_enterprise/transition_evidence.py",
+    "The historical signing subprocess opens JournalAccount and holds a._account._key",
+    "The signing subprocess executes exec(p['codec_source'],codec) within that privileged frame before hmac.new(a._account._key,...)"
+  ],
+  "finding": "SECURITY_TRUST_BOUNDARY_VIOLATION_UNTRUSTED_TARGET_EXECUTED_IN_HISTORICAL_HMAC_SIGNER",
+  "proof_scope": "Standalone synthetic frame-access probe with dummy object only; never opens real account or reads key material.",
+  "proof_script_sha256": "c1342fa1f3c7fd885744b6d7eb872acee71a1576a7eaf1f54107970f704db6e4",
+  "synthetic_probe_result": {
+    "separate_exec_globals": true,
+    "caller_owner_object_visible": true,
+    "privileged_object_reference_accessible": true,
+    "real_account_accessed": false,
+    "actual_credential_material_exposed": false,
+    "local_measured_cpu_seconds": 0.000107
+  },
+  "severity": "P0 security no-go for PR40 until owner-reviewed redesign and exact-source adversarial qualification",
+  "safe_repair_contract": [
+    "Never execute or import bytes taken from target_root in the historical signer process that has native signing authority.",
+    "Produce proposed CAS descriptor/blobs in an unprivileged preparation process; use a pinned trusted transition codec or data-only validator in the signer.",
+    "Signer must independently authenticate original historical account/journal/queue and verify descriptor, raw blob hash/size, source identity, transition counter, path and pending liabilities before signing.",
+    "Preserve original key/identity, nonempty operating queue, write-ahead recovery and crash/fork/replay/tamper rejection. Existing ticket/archive guards remain unchanged.",
+    "Add synthetic replacement-target-code regression that confirms malformed or active-content target cannot run while privileged signer is open; never put real credentials in artifacts.",
+    "Run owner-held isolated account tests, current-main composition, full source-matched CI, protected merge and downloaded-release audit before P0 adoption."
+  ],
+  "permission_boundary": "Read-only on native owner account, PR40 branch, actual keys and original signed histories; this evidence record is not release runtime and must not be merged wholesale.",
+  "historical_acceptance": {
+    "qualified_permanent_term_runtime": "achieved",
+    "auth_original_account_continuation": "partial/unqualified",
+    "pr40_signer_trust_boundary": "failed_security_review",
+    "composed_p0_native_release": "blocked",
+    "economic_profit_or_recursive_improvement": "not established"
+  },
+  "cost_note": "Synthetic local probe only; whole engineering, CI and host billing unknown; no external spending.",
+  "next_decision": "Existing PR40 integration owner fixes signer trust boundary before any private-key-bearing original-account transition or PR40 release."
+}
