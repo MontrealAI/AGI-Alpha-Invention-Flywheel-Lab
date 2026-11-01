@@ -256,6 +256,21 @@ def verify_composed_binding(binding, current_files, publication, qualification, 
         raise ValueError('COMPOSED_ACTUAL_QUALIFICATION_REQUIRED')
     return binding
 
+def compose_binding(registration, current_files, publication, qualification, qualification_sha, history_archive):
+    """Bind a new qualified source without rewriting the retained registration."""
+    prior = historical_source(history_archive, registration['historical_files'])
+    binding = dict(registration)
+    binding.update(current_files=dict(current_files),
+        current_source_sha256=canonical_digest(current_files),
+        source_delta={p:{'before_sha256':prior.get(p),'after_sha256':current_files.get(p)}
+                      for p in sorted(set(prior)|set(current_files))
+                      if prior.get(p)!=current_files.get(p)},
+        qualification_sha256=qualification_sha,
+        source_archive_sha256=qualification['source_archive']['sha256'],
+        public_archive_sha256=qualification['public_archive']['sha256'])
+    return verify_composed_binding(binding, current_files, publication, qualification,
+                                   qualification_sha, history_archive)
+
 def prepare(qualification, output, source_commit, papers):
     source_commit = commit(source_commit)
     current = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
@@ -280,13 +295,9 @@ def prepare(qualification, output, source_commit, papers):
         history_archive = ROOT
         if not registration.is_file() or registration.is_symlink():
             raise ValueError('PAPER_EXECUTING_SOURCE_CHANGED')
-        composed = dict(read(registration))
         # Only actual clean qualification supplies acceptance; registration alone grants nothing.
-        composed.update(qualification_sha256=digest(qualification/'QUALIFICATION.json'),
-                        source_archive_sha256=receipt['source_archive']['sha256'],
-                        public_archive_sha256=receipt['public_archive']['sha256'])
-        verify_composed_binding(composed, identity(ROOT)['files'], publication, receipt,
-                                digest(qualification/'QUALIFICATION.json'), history_archive)
+        composed = compose_binding(read(registration), identity(ROOT)['files'], publication, receipt,
+                                   digest(qualification/'QUALIFICATION.json'), history_archive)
         for row in receipt['commands']:
             for stream in ['stdout', 'stderr']:
                 name = row[stream]

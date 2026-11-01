@@ -2,6 +2,7 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
+import shutil
 import tempfile
 import unittest
 import contextlib
@@ -112,6 +113,77 @@ class ReleaseIntegrityTests(unittest.TestCase):
         (self.assets/'COMPOSED_PUBLICATION.json').unlink();release.seal(self.assets,self.manifest)
         with self.assertRaisesRegex(ValueError,'COMPOSED_PUBLICATION_REQUIRED'):
             release.verify_assets(self.assets,COMMIT)
+
+    def prepare_fixture(self):
+        # Exercise actual prepare/copy/seal/verify logic with explicitly
+        # synthetic qualification, mocking only Git and source-identity plumbing.
+        self.composed_asset_fixture()
+        checkout = self.root/'checkout';checkout.mkdir()
+        qualification = self.root/'qualification';qualification.mkdir()
+        for name in ('connected014-source.zip','connected014-keyfree.zip','QUALIFICATION.json'):
+            shutil.copyfile(self.assets/name,qualification/name)
+        with zipfile.ZipFile(qualification/'connected014-source.zip') as archive:
+            for name in archive.namelist():
+                if name.startswith(release.HISTORICAL_SNAPSHOTS):
+                    target=checkout/name;target.parent.mkdir(parents=True,exist_ok=True)
+                    target.write_bytes(archive.read(name))
+        registration=checkout/'evidence/strategic024-publication/COMPOSED_SOURCE_BINDING.json'
+        registration.parent.mkdir(parents=True)
+        shutil.copyfile(PATH.parents[1]/registration.relative_to(checkout),registration)
+        q=release.read(qualification/'QUALIFICATION.json')
+        for row in q['commands']:
+            for stream in ('stdout','stderr'):
+                log=qualification/row[stream];log.write_text('synthetic executed-command fixture\n')
+                q['logs'][log.name]=release.digest(log)
+        release.write(qualification/'QUALIFICATION.json',q)
+        return checkout,qualification,registration
+
+    def execute_prepare_fixture(self,checkout,qualification):
+        with patch.object(release,'ROOT',checkout), \
+             patch.object(release.subprocess,'check_output',side_effect=[COMMIT+'\n','']), \
+             patch('connected_enterprise.runner.identity',return_value=self.source_manifest['executing_source']):
+            return release.prepare(qualification,self.root/'prepared',COMMIT,self.assets)
+
+    def test_prepare_constructs_actual_composition_without_mutating_historical_registration(self):
+        checkout,qualification,registration=self.prepare_fixture()
+        before=registration.read_bytes()
+        self.assertNotEqual(release.read(registration)['current_files'],
+                            self.source_manifest['executing_source']['files'])
+        self.execute_prepare_fixture(checkout,qualification)
+        binding=release.read(self.root/'prepared/COMPOSED_PUBLICATION.json')
+        self.assertEqual(binding['current_files'],self.source_manifest['executing_source']['files'])
+        self.assertEqual(registration.read_bytes(),before)
+        release.verify_assets(self.root/'prepared',COMMIT)
+
+    def test_prepare_changed_historical_source_still_fails_before_assets(self):
+        checkout,qualification,_=self.prepare_fixture()
+        leaf=checkout/release.HISTORICAL_SNAPSHOTS/'connected_enterprise/engine.py.txt'
+        leaf.write_bytes(leaf.read_bytes()+b'changed')
+        with self.assertRaisesRegex(ValueError,'HISTORICAL_SOURCE_CHANGED'):
+            self.execute_prepare_fixture(checkout,qualification)
+        self.assertFalse((self.root/'prepared').exists())
+
+    def test_prepare_changed_historical_paper_still_fails_before_assets(self):
+        checkout,qualification,_=self.prepare_fixture()
+        (self.assets/'PAPER.pdf').write_bytes(b'changed paper')
+        with self.assertRaisesRegex(ValueError,'PUBLICATION_FILE_HASH_CHANGED'):
+            self.execute_prepare_fixture(checkout,qualification)
+        self.assertFalse((self.root/'prepared').exists())
+
+    def test_prepare_rejected_qualification_still_fails_before_assets(self):
+        checkout,qualification,_=self.prepare_fixture()
+        q=release.read(qualification/'QUALIFICATION.json');q['accepted']=False
+        release.write(qualification/'QUALIFICATION.json',q)
+        with self.assertRaisesRegex(ValueError,'ACCEPTED_CLEAN_OPERATION'):
+            self.execute_prepare_fixture(checkout,qualification)
+        self.assertFalse((self.root/'prepared').exists())
+
+    def test_prepare_changed_execution_log_still_fails_before_assets(self):
+        checkout,qualification,_=self.prepare_fixture()
+        (qualification/'0.stdout').write_text('changed log')
+        with self.assertRaisesRegex(ValueError,'EXECUTION_LOG_BYTES_CHANGED'):
+            self.execute_prepare_fixture(checkout,qualification)
+        self.assertFalse((self.root/'prepared').exists())
 
     def test_wrong_commit_or_tag_is_rejected(self):
         with self.assertRaisesRegex(ValueError, 'SOURCE_OR_TAG'):
