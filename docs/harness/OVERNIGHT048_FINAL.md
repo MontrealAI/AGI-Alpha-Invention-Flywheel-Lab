@@ -1,6 +1,6 @@
 # AGI ALPHA — morning progress handoff, 1 November 2026
 
-Checkpoint: 08:15 UTC. Final merge, publication and downloaded operation are still pending their gates.
+Checkpoint: 08:43 UTC. Final merge, publication and downloaded operation are still pending their gates.
 
 **An audited operating simulation and reproducible account-year results exist. The latest implementation is not yet a qualified released enterprise. Actual commercial profit and US$3 billion trailing-365-day profit remain unestablished.** No default policy promotion follows from these experiments.
 
@@ -14,10 +14,10 @@ Checkpoint: 08:15 UTC. Final merge, publication and downloaded operation are sti
 | Selected candidate source | 277 files; SHA256 `718b0b4055a2b0d195b0b204a0067d2cf58b3a36ebd5836f98a8fd24a9a6110d` |
 | Prepared source ZIP | 302 members, 1,156,782 bytes; SHA256 `e874b65c9db93cd85064d896ff2fc2e6af892815a10a7090328536cb1d6d6207` |
 | Current qualification | Clean five-command run/resume/native-audit/package/public-audit accepted; completed resume financially unchanged; release preparation and verification accepted |
-| Hosted full CI | New-head run **RUNNING** at this checkpoint; both review threads resolved after substantive repairs |
+| Hosted full CI | All 14 hosted workflows passed on eada9217. The original two review threads are resolved; a later owned-operating-cost finding and a confirmed candidate-admission defect are being repaired before merge |
 | Final qualified merge / release | **PENDING** — record final commit, tree, tag, source and asset identities after the required gates |
 | Downloaded final default operation | **PENDING** — require actual downloaded bytes, all command exits, native/public/wheel audits and unchanged resume |
-| Annual reproduction on the current source | **RUNNING** from the qualified archive before publication; later actual-release asset/member-byte comparison is **PENDING**. Historical annual results below remain separate. |
+| Annual reproduction on the current source | **RUNNING** from the qualified archive before publication. This 718b source will differ from the pending optional-startup repairs and will remain version-specific. Historical annual results below remain separate. |
 
 Released main already has inspected [downloaded operation 41279434535](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41279434535): six commands exited zero, required audits/wheel checks accepted and resume preserved finances. Its actual operation-evidence artifact SHA256 is `8b6904ba822c4f38a9c11208b002a0fd36d726f86505201ec3eef662d38776af`. This does not qualify the newer candidate.
 
@@ -27,7 +27,7 @@ Review fixes have source-specific evidence: 21 startup checks, 32 composed/seque
 
 Selective v2 plus strategic-game allocation is also explicitly `UNAVAILABLE`: ordinary option value overstated an exposed stressed benefit (225 versus 9/4 microUSD against a 100 microUSD fee). Twenty focused tests and 17 independently repeated pure tests verify rejection before account creation/valuation, while fixed prepaid v1 game recourse remains supported. This is an applicability correction, not a game-aware selective valuation claim.
 
-The new annual reproduction registered four fresh accounts from the qualified `e874…` source archive before publication. All 277 base source files match `718b…`; its one content-addressed reproduction registration makes the experiment source 278 files, SHA256 `d1f28bd1b1f358a61f23670729bb6248085104c46fd47b2c9ecaeea6dcb0a8c4`, freeze SHA256 `339419372e5f0493a8fe093697f2a82fc09c90ec3a8343faaf22d66e6543dc5c`. Only the label and evidence role changed from the original input. The four accounts preserved their two-event paused prefixes; the same-account resume began at 08:06:41 UTC. Last inspected at 08:15:00: central baseline day 212, growth day 163; adverse cases queued at their original checkpoints. No year result is claimed yet. The eventual published archive hash and all executing member bytes must be checked separately; matching code does not change this run's pre-publication acquisition origin.
+The new annual reproduction registered four fresh accounts from the qualified `e874…` source archive before publication. All 277 base source files match `718b…`; its one content-addressed reproduction registration makes the experiment source 278 files, SHA256 `d1f28bd1b1f358a61f23670729bb6248085104c46fd47b2c9ecaeea6dcb0a8c4`, freeze SHA256 `339419372e5f0493a8fe093697f2a82fc09c90ec3a8343faaf22d66e6543dc5c`. Only the label and evidence role changed from the original input. The four accounts preserved their two-event paused prefixes; the same-account resume began at 08:06:41 UTC. Last inspected at 08:42:51: both central cases and adverse baseline completed 365 days and passed native/operating audit, matching the original complete financial dictionaries; adverse growth was at day 327. The separate full-package audit and annual-scoreboard command remain pending until all four finish. A later review found additional optional-startup operating-cost and candidate-admission defects, so this frozen 718b run will **not** be relabeled as the later repaired/released source. The eventual actual-release source/member comparison must record that difference, while preserving this run's pre-publication origin. Generated service-input files are separately manifest-bound runtime outputs; 278 is the executing source inventory count, not the total directory file count.
 
 ## Four completed native account years
 
@@ -91,3 +91,4 @@ Next, inspect and qualify that owner's published source, reconcile access throug
 The complete requested stress matrix remains unfinished: broader defaults/refunds/delays, overlapping/exhausted channels, imitation, provider budgets, large-market aggregation and complete equivalent-outcome human/human-plus-AI/frontier-AI comparisons. Actual host/model/engineering bills, empirical demand and real commercial profit remain unknown. No paid API/service, real transaction, outreach or production deployment authority is created by this document.
 
 Completion lead: fill the **PENDING** merge/release, actual downloaded default-operation and final-release annual-reproduction rows only from their receipts; preserve every source boundary above.
+
