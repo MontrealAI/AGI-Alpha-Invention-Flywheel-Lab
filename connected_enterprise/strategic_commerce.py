@@ -181,7 +181,7 @@ def rederive(result):
     if result!=expected:raise ValueError('STRATEGIC_COMMERCE_DECISION_CHANGED')
     return expected
 
-def allocate_actions(observation, deliveries, investments, riskpolicy, *, allow_seed=True, max_delivery_slots=1, earned_deduction=0):
+def allocate_actions(observation, deliveries, investments, riskpolicy, *, allow_seed=True, max_delivery_slots=1, earned_deduction=0, strategic_game=None):
     """Joint finite native-state-bound delivery/price/method and expansion choice.
 
     deliveries contain ALL alternatives of the declared finite shortlist. No
@@ -191,13 +191,13 @@ def allocate_actions(observation, deliveries, investments, riskpolicy, *, allow_
     """
     from adaptive_enterprise.allocation import allocate
     options=_action_options(observation,deliveries,investments,riskpolicy)
-    decision=allocate(observation,options,riskpolicy,allow_seed=allow_seed,max_delivery_slots=max_delivery_slots,earned_deduction=earned_deduction)
-    return {'schema':'connected-joint-actions/v1','risk_scope':'Scenario conditional expectations, not realized worst-case losses; conservative floor to microUSD. Native cash locks bound present commitments.','observation':copy.deepcopy(observation),
+    decision=allocate(observation,options,riskpolicy,allow_seed=allow_seed,max_delivery_slots=max_delivery_slots,earned_deduction=earned_deduction,strategic_game=strategic_game)
+    return {**({'strategic_game':copy.deepcopy(strategic_game)} if strategic_game is not None else {}),'schema':'connected-joint-actions/v1','risk_scope':'Scenario conditional expectations, not realized worst-case losses; conservative floor to microUSD. Native cash locks bound present commitments.','observation':copy.deepcopy(observation),
             'deliveries':copy.deepcopy(deliveries),'investments':copy.deepcopy(investments),
             'riskpolicy':copy.deepcopy(riskpolicy),'allow_seed':allow_seed,'max_delivery_slots':max_delivery_slots,'earned_deduction':earned_deduction,'decision':decision}
 
 def rederive_actions(record):
-    expected=allocate_actions(record['observation'],record['deliveries'],record['investments'],record['riskpolicy'],allow_seed=record['allow_seed'],max_delivery_slots=record['max_delivery_slots'],earned_deduction=record['earned_deduction'])
+    expected=allocate_actions(record['observation'],record['deliveries'],record['investments'],record['riskpolicy'],allow_seed=record['allow_seed'],max_delivery_slots=record['max_delivery_slots'],earned_deduction=record['earned_deduction'],strategic_game=record.get('strategic_game'))
     if record!=expected:raise ValueError('JOINT_ALLOCATION_CHANGED')
     return expected
 
@@ -275,6 +275,7 @@ def cash_opportunity_diagnostic(record, *, relaxed_available, declared_allocatio
     """
     from adaptive_enterprise.allocation import allocate, _diagnostic_result
     from fractions import Fraction
+    if 'strategic_game' in record:raise ValueError('STRATEGIC_GAME_CASH_DIAGNOSTIC_UNAVAILABLE')
     rederive_actions(record)
     if type(operating_envelope) is not int or operating_envelope<0:raise ValueError('NONNEGATIVE_OPERATING_ENVELOPE_REQUIRED')
     observation=record['observation']

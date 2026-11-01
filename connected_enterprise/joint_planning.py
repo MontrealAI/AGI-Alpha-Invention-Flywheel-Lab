@@ -5,10 +5,13 @@ from adaptive_enterprise.allocation import default_riskpolicy
 from .strategic_commerce import select,allocate_actions
 
 def validate_allocation_policy(policy):
-    if not isinstance(policy,dict) or set(policy)-{'sequence','capacity_menu'}!={'risk','max_customers'} or type(policy['max_customers']) is not int or not 1<=policy['max_customers']<=8:
+    if not isinstance(policy,dict) or set(policy)-{'sequence','capacity_menu','strategic_game'}!={'risk','max_customers'} or type(policy['max_customers']) is not int or not 1<=policy['max_customers']<=8:
         raise ValueError('EXPLICIT_BOUNDED_JOINT_ALLOCATION_POLICY_REQUIRED')
     if not isinstance(policy['risk'],dict) or set(policy['risk'])!=set(default_riskpolicy()):
         raise ValueError('EXACT_JOINT_RISK_POLICY_REQUIRED')
+    if 'strategic_game' in policy:
+        from adaptive_enterprise.strategic_game import validate_game
+        validate_game(policy['strategic_game'],policy['risk']['scenarios'])
     if 'capacity_menu' in policy:
         q=policy['capacity_menu']
         if set(q)!={'max_quantity','opportunity_delay_hours','retention_bps'} or any(type(v) is not int or v<0 for v in q.values()) or q['opportunity_delay_hours']<1 or q['retention_bps']>10000:
@@ -127,7 +130,7 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
     if 'capacity_menu' in policy:
         capacity_receipt=capacity_recourse(cfg,prepared['event']['time'],snapshot,operating_envelope,deliveries,state['investments'],slots,risk)
         investments.extend(capacity_receipt['options'])
-    allocation=allocate_actions(snapshot,deliveries,investments,risk,allow_seed=True,max_delivery_slots=slots,earned_deduction=operating_envelope)
+    allocation=allocate_actions(snapshot,deliveries,investments,risk,allow_seed=True,max_delivery_slots=slots,earned_deduction=operating_envelope,strategic_game=policy.get('strategic_game'))
     if allocation['decision']['optimality_scope']=='NONE':raise ValueError('JOINT_PLANNING_SHORTLIST_EXCEEDS_DECLARED_FINITE_BOUND')
     fixed_evaluation=cfg['exposure_cost']*prepared['outreach_units']+cfg['qualification_cost']*len(deliveries) if menu_enabled else None
     cost_receipt={'fixed_evaluation_cost':fixed_evaluation,'hold_net_after_evaluation':-fixed_evaluation,

@@ -247,6 +247,20 @@ def _prepare_plan(state,account,jobs):
                 if net<=0:raise ValueError('POSITIVE_SEQUENCE_EXPECTATION_REQUIRED')
                 prepared['channel_predicted_net']=prepared['capacity_predicted_net']=net
 
+        if 'strategic_game' in cfg['strategic_allocation_policy']:
+            from adaptive_enterprise.strategic_game import investment_expected_net
+            prepared['game_investment_predictions']={}
+            for option in joint['allocation']['decision']['selected_options']:
+                if option['kind']=='delivery':continue
+                ident=option['id']
+                if 'first_investment' in option['execution'] and not ('channel_menu_policy' in cfg and option['execution']['first_investment']=='acquisition'):
+                    ident=('channel-' if option['execution']['first_investment']=='acquisition' else 'capacity-')+str(day)
+                net=investment_expected_net(joint['allocation']['decision'],option['id'])
+                if net<1:raise ValueError('POSITIVE_GAME_INVESTMENT_EXPECTATION_REQUIRED')
+                prepared['game_investment_predictions'][ident]=net
+                if option['kind']=='capacity':prepared['capacity_predicted_net']=net
+                else:prepared['channel_predicted_net']=net
+
         capacity_invoice=sum(o['upfront_cost'] for o in prepared['capacity_options']) if 'capacity_options' in prepared else cfg['capacity_price']*bool(prepared['capacity_purchase'])
         liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-capacity_invoice
     capacity_only_customers=set()
@@ -377,6 +391,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                     for option in p.get('channel_purchases',[]):
                         contract_id=option['execution']['contract_id'];terms=cfg['channels'][contract_id];invoice=terms['price_microUSD']+terms['support_microUSD'];ident=option['id']
                         predicted=(sum(cfg['strategic_allocation_policy']['risk']['scenarios'][k]*(option['future_net_cash'][k]-invoice) for k in cfg['strategic_allocation_policy']['risk']['scenarios'])//10000 if 'first_investment' in option['execution'] else next(iter(option['future_net_cash'].values()))-invoice)
+                        if 'game_investment_predictions' in p:predicted=p['game_investment_predictions'][ident]
                         receipt=cost(ident,invoice,t,'acquisition_contract',{'terms':terms,'contract_id':contract_id,'investment':'expiring_contact_access'},earned_only=True,expected_net=predicted)
                         if receipt:
                             purchase=book.purchase(contract_id,day,receipt['plan_id']);state['investments'].append({'id':ident,'plan_id':receipt['plan_id'],'kind':'acquisition','contract_id':contract_id,'purchased_time':t,'activation_time':purchase['activation_day']*24,'expiry_time':purchase['expiry_day']*24,'cost':invoice,'funding_receipt':receipt,'contract_receipt':purchase,'predicted_net':predicted});_event(state,t,'INVESTMENT',ident,source_plan_id=receipt['plan_id'],investment_kind='acquisition',contract_id=contract_id)
@@ -389,6 +404,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                     for option in p['capacity_options']:
                         units=option['execution']['purchased_units'];ident=option['id'];invoice=units*cfg['capacity_price']
                         weights=cfg['strategic_allocation_policy']['risk']['scenarios'];predicted=sum(weights[k]*option['future_net_cash'][k] for k in weights)//10000-invoice
+                        if 'game_investment_predictions' in p:predicted=p['game_investment_predictions'][ident]
                         receipt=cost(ident,invoice,t,'capacity_contract',{'units_per_day':units,'lead_hours':cfg['capacity_lead_hours'],'duration_hours':cfg['capacity_duration_hours']},earned_only=True,expected_net=predicted)
                         if receipt:
                             state['investments'].append({'id':ident,'plan_id':receipt['plan_id'],'kind':'capacity','capacity_units':units,'purchased_time':t,'activation_time':t+cfg['capacity_lead_hours'],'expiry_time':t+cfg['capacity_lead_hours']+cfg['capacity_duration_hours'],'cost':invoice,'funding_receipt':receipt,'predicted_net':predicted})

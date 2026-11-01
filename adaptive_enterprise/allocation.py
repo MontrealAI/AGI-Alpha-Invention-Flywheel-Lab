@@ -51,7 +51,11 @@ def _cash(values, scenarios, *, signed):
     return values
 
 
-def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery_slots=None, earned_deduction=0, _diagnostic_cash_limit=None):
+def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery_slots=None, earned_deduction=0, _diagnostic_cash_limit=None, strategic_game=None):
+    if strategic_game is not None:
+        from .strategic_game import validate_game
+        validate_game(strategic_game,riskpolicy['scenarios'])
+        if _diagnostic_cash_limit is not None:raise ValueError('GAME_CASH_COUNTERFACTUAL_NOT_COMPOSED')
     if type(earned_deduction) is not int or earned_deduction<0:raise ValueError("NONNEGATIVE_EARNED_OPERATING_DEDUCTION_REQUIRED")
     if max_delivery_slots is not None and (type(max_delivery_slots) is not int or max_delivery_slots<0):raise ValueError("FINITE_DELIVERY_CAPACITY_REQUIRED")
     if type(allow_seed) is not bool:raise ValueError("EXPLICIT_SEED_PERMISSION_REQUIRED")
@@ -197,6 +201,7 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
                     if len(expanded)>max_states:
                         return _diagnostic_result({**base,'decision':'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET','optimality_scope':'NONE'}) if _diagnostic_cash_limit is not None else {**base,'decision':'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET','optimality_scope':'NONE'}
             baskets=expanded
+    game_candidates=[]
     best_key = (Fraction(0), Fraction(0), 0)
     for chosen in baskets:
         base['states_evaluated'] += 1
@@ -232,6 +237,17 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
             continue
         expected = sum((Fraction(scenarios[s], 10000) * net[s] for s in scenarios), Fraction(0))
         score = expected - Fraction(riskpolicy['downside_penalty_bps'], 10000) * downside
+        if strategic_game is not None:
+            # Complete financially feasible set, before expected-value winner pruning.
+            positive={sid:{} for sid in scenarios};option_rows=[]
+            for o in chosen:
+                own={sid:o['future_net_cash'][sid]-o['upfront_cost'] for sid in scenarios}
+                option_rows.append({'id':o['id'],'kind':o['kind'],'funding':o['execution'].get('funding','EARNED'),'net':own})
+                for sid,value in own.items():positive[sid][o['kind']]=positive[sid].get(o['kind'],0)+max(0,value)
+            for joint in joints:
+                for sid,value in joint['net_cash'].items():positive[sid]['interaction']=positive[sid].get('interaction',0)+max(0,value)
+            game_candidates.append({'selected':sorted(selected),'reserve_amount':reservation,'net':net,'positive_by_kind':positive,'options':option_rows,
+                'payload':{'selected_options':copy.deepcopy(chosen),'upfront_cost':upfront,'worst_later_reserve':later,'interactions':copy.deepcopy(joints)}})
         key = (score, expected, -reservation)
         if reservation <= 0 or expected < 1 or key <= best_key:
             continue
@@ -241,6 +257,22 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
                     reserve_amount=reservation, expected_net=expected.numerator // expected.denominator,
                     expected_net_fraction=str(expected), risk_adjusted_value=str(score),
                     interactions=copy.deepcopy(joints), decision='CANDIDATE_ALLOCATION')
+    if strategic_game is not None:
+        from .strategic_game import select_game, compact_certificate
+        certificate=select_game([{k:v for k,v in candidate.items() if k!='payload'} for candidate in game_candidates],strategic_game,riskpolicy,state_digest)
+        base['strategic_game_certificate']=certificate
+        if certificate['selected_index'] is None:
+            base.update(selected=[],selected_options=[],decision='DECOMPOSE_RESPONSE_SET',optimality_scope='NONE',authorized_digest=None,upfront_cost=0,worst_later_reserve=0,reserve_amount=0,expected_net=0,expected_net_fraction='0',risk_adjusted_value='0',predicted_scenario_cash=dict.fromkeys(scenarios,0),interactions=[])
+            return base
+        row=certificate['alternatives'][certificate['selected_index']];candidate=game_candidates[certificate['selected_index']]
+        base['strategic_game_certificate']=compact_certificate(certificate)
+        exact={sid:Fraction(row['scenario_responses'][sid]['seller_net']) for sid in scenarios}
+        expected=Fraction(row['expected_net'])
+        base.update(**candidate['payload'],selected=candidate['selected'],reserve_amount=candidate['reserve_amount'],
+            predicted_scenario_cash={sid:value.numerator//value.denominator for sid,value in exact.items()},
+            expected_net=expected.numerator//expected.denominator,expected_net_fraction=str(expected),risk_adjusted_value=row['risk_adjusted'],
+            decision='CANDIDATE_ALLOCATION' if candidate['selected'] else 'RETAIN_CASH',
+            optimality_scope='EXACT_FINITE_FOLLOWER_MINIMAX_REGRET_DECLARED_STRESS')
     if _diagnostic_cash_limit is not None:return _diagnostic_result(base)
     base['unallocated_budget'] = budget - base['reserve_amount']
     plan_content = {'selected': base['selected'], 'options_sha256': base['options_sha256'],
@@ -249,6 +281,7 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
     if allow_seed:plan_content['funding_policy']=base['funding_policy']
     if max_delivery_slots is not None:plan_content['max_delivery_slots']=max_delivery_slots
     if earned_deduction:plan_content['earned_operating_deduction']=earned_deduction
+    if strategic_game is not None:plan_content['strategic_game_certificate_sha256']=digest(base['strategic_game_certificate'])
     base['plan_id'] = 'adaptive012-allocation-' + digest(plan_content)[:24]
     base['action_id'] = 'allocation-' + digest(plan_content)[:24]
     if base['selected']:

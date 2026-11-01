@@ -6,13 +6,16 @@ from adaptive_enterprise.strategies import offer_catalog
 from .strategic_commerce import rederive_actions,selected_delivery
 from .joint_planning import investment_option
 
-def check_capacity_effect(option, row, cfg, moment, risk):
+def check_capacity_effect(option, row, cfg, moment, risk, game_decision=None):
     execution=option['execution'];units=execution['purchased_units']
     expected={'id':option['id'],'kind':'capacity','capacity_units':units,
         'cost':option['upfront_cost'],'purchased_time':moment,
         'activation_time':moment+cfg['capacity_lead_hours'],
         'expiry_time':moment+cfg['capacity_lead_hours']+cfg['capacity_duration_hours'],
         'predicted_net':sum(risk['scenarios'][k]*option['future_net_cash'][k] for k in risk['scenarios'])//10000-option['upfront_cost']}
+    if game_decision is not None:
+        from adaptive_enterprise.strategic_game import investment_expected_net
+        expected['predicted_net']=investment_expected_net(game_decision,option['id'])
     if row is None or any(row.get(k)!=v for k,v in expected.items()) or option['upfront_cost']!=units*cfg['capacity_price']:
         raise ValueError('SELECTED_CAPACITY_QUANTITY_NOT_NATIVE_EXECUTED')
 
@@ -77,6 +80,7 @@ def audit_decisions(root,manifest,result,lifecycle):
         elif 'evaluation_cost' in wrapper:raise ValueError('UNREGISTERED_COMMON_EVALUATION_RECEIPT')
         risk=copy.deepcopy(cfg['strategic_allocation_policy']['risk']);risk['authorized_allocation']=min(risk['authorized_allocation'],max(0,summary['available']-operating))
         if record['riskpolicy']!=risk or record['earned_deduction']!=operating or record['allow_seed'] is not True:raise ValueError('JOINT_TOTAL_OR_EARNED_RESERVE_CHANGED')
+        if record.get('strategic_game')!=cfg['strategic_allocation_policy'].get('strategic_game'):raise ValueError('UNREGISTERED_STRATEGIC_RESPONSE_GAME')
         previous_investments=[i for i in result['investments'] if i['purchased_time']<moment]
         usable=[i for i in previous_investments if i['kind']=='capacity' and i['activation_time']<=moment and moment+cfg['production_hours']<i['expiry_time']]
         slots=min(cfg['maximum_slots'],cfg['initial_slots']+sum(i.get('capacity_units',1) for i in usable))
@@ -160,13 +164,25 @@ def audit_decisions(root,manifest,result,lifecycle):
                 ident=option['id'] if 'channel_menu_policy' in cfg and option['execution']['first_investment']=='acquisition' else ('channel-' if option['execution']['first_investment']=='acquisition' else 'capacity-')+str(day)
                 native=next((i for i in result['investments'] if i['id']==ident),None)
                 expected_net=sum(risk['scenarios'][k]*(option['future_net_cash'][k]-option['upfront_cost']) for k in risk['scenarios'])//10000
+                if 'strategic_game' in record:
+                    from adaptive_enterprise.strategic_game import investment_expected_net
+                    expected_net=investment_expected_net(record['decision'],option['id'])
                 if native is None or native['cost']!=option['upfront_cost'] or native['predicted_net']!=expected_net:raise ValueError('SEQUENCE_FIRST_NATIVE_INVOICE_CHANGED')
                 investments.add(ident)
         if 'capacity_menu' in cfg['strategic_allocation_policy']:
             for option in record['decision']['selected_options']:
                 if option['kind']=='capacity':
                     row=next((i for i in result['investments'] if i['id']==option['id']),None)
-                    check_capacity_effect(option,row,cfg,moment,risk)
+                    check_capacity_effect(option,row,cfg,moment,risk,record['decision'] if 'strategic_game' in record else None)
+        if 'strategic_game' in record:
+            from adaptive_enterprise.strategic_game import investment_expected_net
+            for option in record['decision']['selected_options']:
+                if option['kind']=='delivery':continue
+                ident=option['id']
+                if 'first_investment' in option['execution'] and not ('channel_menu_policy' in cfg and option['execution']['first_investment']=='acquisition'):
+                    ident=('channel-' if option['execution']['first_investment']=='acquisition' else 'capacity-')+str(day)
+                native=next((i for i in result['investments'] if i['id']==ident),None)
+                if native is None or native['cost']!=option['upfront_cost'] or native['predicted_net']!=investment_expected_net(record['decision'],option['id']):raise ValueError('NATIVE_INVESTMENT_NOT_CHOSEN_GAME_FORECAST')
         selected_investments|=investments
         if events[moment][1]['channel_selected']!=(any(o['kind']=='acquisition' for o in record['decision']['selected_options']) if 'channel_menu_policy' in cfg else ('channel-'+str(day) in investments)) or events[moment][1]['capacity_selected']!=(any(o['kind']=='capacity' for o in record['decision']['selected_options']) if 'capacity_menu' in cfg['strategic_allocation_policy'] else ('capacity-'+str(day) in investments)):raise ValueError('SELECTED_INVESTMENT_FLAGS_CHANGED')
         choices=[d for d in result['decisions'] if d.get('kind') in {'offer','outside_choice'} and d['time']==moment]
