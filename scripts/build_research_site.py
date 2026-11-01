@@ -14,7 +14,8 @@ PAPERS = (
     'transformational-autonomous-enterprises-v1.pdf',
 )
 PAGES = ('index.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html')
-FILES = PAPERS + PAGES + ('publication-manifest.json',)
+ASSETS = ('alpha.css', 'alpha.js', 'alpha-mark.svg')
+FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 
 
 class Links(HTMLParser):

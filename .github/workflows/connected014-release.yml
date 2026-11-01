@@ -123,6 +123,27 @@ jobs:
           name: connected014-wheel-utility-${{ github.sha }}
           path: ${{ runner.temp }}/RELEASED_WHEEL.json
           if-no-files-found: error
+      - name: Install the released flexibility experiment's pinned numerical runtime
+        run: python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+      - name: Operate and independently audit flexibility from actual downloaded release source
+        id: released_flexibility
+        working-directory: ${{ runner.temp }}/downloaded-release-operation/source
+        run: |
+          python -m connected_enterprise.transformational063 run --root "$PWD" --output "$RUNNER_TEMP/released-transformational063"
+          python -m connected_enterprise.transformational063 audit --root "$PWD" --output "$RUNNER_TEMP/released-transformational063"
+      - name: Retain released flexibility evidence without recovery authority
+        if: always() && steps.released_flexibility.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: transformational063-released-operation-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/released-transformational063/REPORT.json
+            ${{ runner.temp }}/released-transformational063/PROTOCOL.json
+            ${{ runner.temp }}/released-transformational063/SOURCE.json
+            ${{ runner.temp }}/released-transformational063/AUDIT.json
+            ${{ runner.temp }}/released-transformational063/source
+            ${{ runner.temp }}/released-transformational063/public
+          if-no-files-found: error
       - name: Retain successful downloaded operation
         if: always() && steps.operation.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
