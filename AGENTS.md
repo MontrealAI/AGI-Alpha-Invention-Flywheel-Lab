@@ -24,6 +24,12 @@ Aim to expand the valuable outcomes that can be sustainably achieved through vol
 
 Seek a connected sequence: cycle one creates a useful capability, information, relationship, productive asset or unrestricted earnings that makes a specific successor economically reachable. Demonstrate the successor's acceptance and full costs, and distinguish **financed by**, **enabled by**, and merely **later than**. For a new causal enabling claim, compare against the strongest feasible route without that cycle-created asset under matched starting resources. Better equipment is not by itself a better inventor: improved discovery of such sequences is a further claim requiring fresh equal-content and strong conventional controls. This mission is not a claim that the current finite mechanisms have already delivered a full transformational breakthrough.
 
+### Keep the flagship ahead of supporting work
+
+Select a consequential frontier problem, identify the missing means preventing a valuable activity, then construct and test those means and pursue profitable complete delivery with large consequences. Keep that flagship explicit: a small decisive test is appropriate when the consequence is large, and known methods remain eligible when they enable the construction.
+
+Link each supporting task—checkers, dashboards, routine optimization, papers or infrastructure—to a concrete flagship dependency and the next consequential test or delivery it enables. Supporting work must not substitute for the flagship. When it dominates, reprioritize toward removing the missing-means constraint rather than expanding support for its own sake. This is a selection and execution discipline, not another admission-checker project, a novelty requirement for every component, a guarantee of breakthrough or profit, or permission to weaken evidence and authority boundaries.
+
 ## Learn, consolidate, delete
 
 - Prospectively retain compact registered-arm denominators, outcomes and complete costs, plus a short **tried → outcome → why (or unknown) → next/avoid** lesson. Consolidate repeated lessons by failure class; improve the fix, regression or applicability rule rather than accumulating transcripts.

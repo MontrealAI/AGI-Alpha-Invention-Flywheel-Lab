@@ -34,6 +34,12 @@ For a justified fresh selection, compare at least three materially different con
 
 Use this card to choose a decisive prototype and delivery for the ambitious construction, not the smallest ambition or another planning framework. Test an actual native profitable first opportunity leading to a better second opportunity; neither assumed demand nor impressive scope establishes that sequence. The intended result is a growing set of sustainably achievable valuable outcomes—not more transactions, mechanism complexity or dependence on the system. A simpler existing service or voluntary withdrawal can still win.
 
+### Flagship first; support must enable it
+
+Select a consequential frontier problem and name the missing means that prevents a valuable activity. Construct and test those means, then pursue profitable complete delivery whose consequence is large. A small decisive test can serve a large ambition; established methods are eligible when they enable that construction.
+
+For each checker, dashboard, routine optimization, paper or infrastructure task, state the concrete flagship dependency it removes and the consequential test or delivery it enables. Do not let tractable support become the substitute objective; reprioritize when it dominates. Keep this connection concise and operational, not a new admission-checker project. Neither ambition nor this guidance guarantees breakthrough/profit, requires novelty in every component, or relaxes evidence and permissions.
+
 ### Close one native business episode
 
 Follow one auditable path: **offer → funding → qualified order → useful production → independent acceptance → collection → obligations covered → reinvestment or retained cash**. A generated invoice, passing test or modeled order alone is not commercial success. Bind the checker before delivery and retain source-matched receipts for the complete episode. Conditional simulation may proceed without live buyers; observed-commerce claims require observed commerce, not simulated demand.
