@@ -300,6 +300,29 @@ def choose_from_development(spec, development):
             "observed_ranking": [list(row) for row in sorted(rows, key=lambda r: (r[0] is None, -(r[0] or 0), r[1]))]}
 
 
+def _heldout_recommendation(spec, selected, challenger, incumbent, delta):
+    """Holdout veto for a development winner; never authorizes a native action."""
+    distinct = selected is not None and selected != spec["incumbent"]
+    incumbent_viable = bool(incumbent and incumbent["observed"]["obligations_covered"]
+                            and incumbent["observed"]["profit_microUSD"] > 0)
+    challenger_accepted = bool(
+        distinct and challenger and challenger["observed"]["obligations_covered"]
+        and challenger["observed"]["profit_microUSD"] > 0
+        and delta is not None and delta > 0)
+    recommended = (selected if challenger_accepted else
+                   spec["incumbent"] if incumbent_viable else None)
+    return {
+        "development_candidate": selected if distinct else None,
+        "recommended_policy": recommended,
+        "challenger_accepted": challenger_accepted,
+        "reason": ("POSITIVE_MATCHED_HOLDOUT_CHALLENGER" if challenger_accepted else
+                   "KEEP_VIABLE_INCUMBENT" if incumbent_viable else
+                   "NO_SUPPORTED_PROFITABLE_POLICY"),
+        "evidence_scope": "ONE_FROZEN_SIMULATED_HOLDOUT_NO_GENERAL_CAUSAL_CLAIM",
+        "native_financial_action_authority": [],
+    }
+
+
 def _public(spec, source, development, selection, confirmation, discovery):
     selected = selection["selected"]
     challenger = confirmation.get(selected) if selected else None
@@ -309,22 +332,21 @@ def _public(spec, source, development, selection, confirmation, discovery):
     else:
         delta = None
     witness = challenger["observed"]["source_linked_successor"] if challenger else None
+    holdout = _heldout_recommendation(spec, selected, challenger, incumbent, delta)
+    funded_witness_accepted = bool(holdout["challenger_accepted"] and witness and
+                                   witness["positive_incremental_collected_contribution"])
     return {
         "schema": SCHEMA, "status": "CONDITIONAL_SIMULATED_EXECUTION",
         "source_sha256": source["sha256"], "spec_sha256": digest(spec),
         "discovered_binding_constraints": discovery,
         "development": {d["id"]: development[d["id"]]["observed"] for d in spec["designs"] if d["id"] in development},
         "selection": selection,
+        "heldout_recommendation": holdout,
         "confirmation": {k: v["observed"] for k, v in sorted(confirmation.items())},
         "matched_confirmation_profit_delta_microUSD": delta,
         "connected_earned_successor_witness": witness,
-        "confirmed_positive_funded_successor_opportunity":
-            bool(witness and witness["positive_incremental_collected_contribution"] and
-                 challenger["observed"]["obligations_covered"] and
-                 challenger["observed"]["profit_microUSD"] > 0),
-        "comparative_advantage_on_one_fresh_seed":
-            bool(delta is not None and delta > 0 and
-                 challenger["observed"]["obligations_covered"]),
+        "confirmed_positive_funded_successor_opportunity": funded_witness_accepted,
+        "comparative_advantage_on_one_fresh_seed": holdout["challenger_accepted"],
         "retained_mechanism": ({
             "id": "observed-funded-channel-or-capacity",
             "applicability": "Positive collected native margin, available earned funds, eligible unserved buyer or unmet capacity, checked current obligations",
@@ -333,7 +355,7 @@ def _public(spec, source, development, selection, confirmation, discovery):
             "selected_executable_policy": selected,
             "execution_authority": [], "current_proof": None,
             "scope": "Candidate lesson, not qualified autonomous invention or general causal strategy advantage"
-        } if witness else None),
+        } if funded_witness_accepted else None),
         "limits": [
             "Exposed/finitely authored buyer values, costs, demand, channel and competitor assumptions; no real buyers or collections.",
             "Three current native digital services; only enumerated executable native policies, not open-ended business design invention.",
@@ -477,6 +499,7 @@ def main(argv=None):
                          root, args.output)
     print(json.dumps({
         "source_sha256": public["source_sha256"], "selected": public["selection"]["selected"],
+        "heldout_recommendation": public["heldout_recommendation"]["recommended_policy"],
         "heldout_profit_delta_microUSD": public["matched_confirmation_profit_delta_microUSD"],
         "funded_successor": public["connected_earned_successor_witness"],
         "better_opportunity": public["confirmed_positive_funded_successor_opportunity"],
