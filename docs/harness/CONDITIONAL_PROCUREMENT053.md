@@ -14,6 +14,11 @@ including an integrated provider. Both receive identical inputs, prices,
 availability, expiry, budget, assembly cost, and scenario disclosures. Both rank
 by **total cost, number of selected quotes, then sorted quote identifiers**.
 Positive-cost redundancy cannot improve a complete three-service cover.
+Available quotes whose own price plus assembly cannot fit the current budget are
+excluded from grammar construction, not rejected as observations. Budgets beyond
+the grammar's integer representation use an explicitly labeled `ordinary_fallback`
+route with the unchanged exact budget and ordinary verifier; no silent cash cap or
+symbolic-invention claim is made for that route.
 
 A symbolic plan is not delivery: every selected component is freshly executed
 through its existing adapter and the complete output passes `audit_bundle`.

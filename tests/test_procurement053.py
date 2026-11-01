@@ -71,6 +71,49 @@ class ProcurementTests(unittest.TestCase):
             self.assertEqual(composed['quote_ids'], self.ordinary(observations)['quote_ids'])
             self.assertTrue(candidate.execute(self.raw, observations, composed, now=self.now)['accepted'])
 
+    def test_unaffordable_large_quote_does_not_poison_affordable_bundle(self):
+        quotes = copy.deepcopy(self.quotes)
+        next(q for q in quotes if q['id']=='evidence_matrix_alternate')['cost_microUSD']=10_000_010_000
+        selected = candidate.select(self.raw, quotes, now=self.now, budget_microUSD=self.budget)
+        self.assertEqual(selected['quote_ids'], self.ordinary(quotes)['quote_ids'])
+        self.assertEqual(selected['total_microUSD'], 5_500_000)
+        self.assertEqual(selected['search']['route'], 'symbolic_compose')
+        self.assertTrue(candidate.execute(self.raw, quotes, selected, now=self.now)['accepted'])
+
+    def test_exact_budget_boundaries_and_labeled_large_budget_fallback(self):
+        for budget in (0, candidate.ASSEMBLY-1, candidate.ASSEMBLY, 5_499_999,
+                       5_500_000, 10_000_000_000, 10_000_009_999, 10_000_010_000):
+            with self.subTest(budget=budget):
+                selected = candidate.select(self.raw, self.quotes, now=self.now, budget_microUSD=budget)
+                ordinary = self.ordinary(budget=budget)
+                for key in ('status','quote_ids','total_microUSD'):
+                    self.assertEqual(selected[key], ordinary[key])
+                route = ('ordinary_fallback' if budget<2_000_000 or budget//10000>1_000_000
+                         else 'symbolic_compose')
+                self.assertEqual(selected['search']['route'], route)
+        quotes=copy.deepcopy(self.quotes)
+        for q in quotes:
+            q['cost_microUSD']=30_000_000_000 if q['service_id']=='operations_bundle' else 10_000_000_000
+        # Primitive cover and integrated provider tie on price; fewer quotes wins.
+        for budget in (30_000_249_999, 30_000_250_000):
+            selected=candidate.select(self.raw, quotes, now=self.now, budget_microUSD=budget)
+            ordinary=self.ordinary(quotes,budget=budget)
+            for key in ('status','quote_ids','total_microUSD'):
+                self.assertEqual(selected[key],ordinary[key])
+            self.assertEqual(selected['search']['route'],'ordinary_fallback')
+            if selected['status']=='READY':
+                self.assertEqual(selected['quote_ids'],['integrated_provider'])
+                self.assertTrue(candidate.execute(self.raw,quotes,selected,now=self.now)['accepted'])
+        for budget in (-1, True, 1.5, '8000000', None):
+            for policy in ('composed','ordinary'):
+                with self.subTest(budget=budget,policy=policy), self.assertRaises(ValueError):
+                    candidate.select(self.raw,self.quotes,now=self.now,budget_microUSD=budget,policy=policy)
+        for cost in (0,-10000,True,1,1.5):
+            quotes=copy.deepcopy(self.quotes);quotes[1]['cost_microUSD']=cost
+            for policy in ('composed','ordinary'):
+                with self.subTest(cost=cost,policy=policy), self.assertRaises(ValueError):
+                    candidate.select(self.raw,quotes,now=self.now,budget_microUSD=40_000_000_000,policy=policy)
+
     def ordinary(self, quotes=None, now=None, budget=None):
         return ordinary_select(self.quotes if quotes is None else quotes, candidate.SERVICES,
             self.now if now is None else now, self.budget if budget is None else budget, candidate.ASSEMBLY)

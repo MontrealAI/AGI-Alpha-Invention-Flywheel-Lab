@@ -78,29 +78,39 @@ def select(raw,quotes,*,now,budget_microUSD,policy='composed'):
         result=ordinary_select(quotes,SERVICES,now,budget_microUSD,ASSEMBLY)
     elif policy=='composed':
         # Exact cents are grammar resource units, never a dollars-per-operation conversion.
-        valid=sorted((q for q in quotes if q['available'] and q['valid_from']<=now<q['valid_until']),
+        valid=sorted((q for q in quotes if q['available'] and q['valid_from']<=now<q['valid_until']
+                      and q['cost_microUSD']+ASSEMBLY<=budget_microUSD),
                      key=lambda q:q['id'])
-        # External identifiers remain unrestricted by internal step names. Fixed-width
-        # ranks preserve external lexicographic ties without overflowing ID bounds.
-        provider_ids={q['id']:f'provider_{index:02d}' for index,q in enumerate(valid)}
-        external_ids={generated:external for external,generated in provider_ids.items()}
-        assembly_id='internal_assemble_complete'
-        mechanisms=[dict(id=provider_ids[q['id']],requires=sorted('source_'+x for x in coverage(q)),provides=sorted('result_'+x for x in coverage(q)),
-                         cost=q['cost_microUSD']//10000,effect='pure',origin='externally_supplied')for q in valid]
-        mechanisms.append(dict(id=assembly_id,requires=sorted('result_'+s for s in SERVICES),
-            provides=['accepted_complete_bundle'],cost=ASSEMBLY//10000,effect='pure',origin='developer_supplied'))
-        # Repository grammar bounds are finite experiment limits, not business ceilings.
-        spec=dict(schema=core.SCHEMA,purpose=dict(initial=sorted('source_'+s for s in SERVICES),
-            goal=['accepted_complete_bundle'],max_cost=max(1,min(1000000,budget_microUSD//10000)),
-            max_steps=4,max_states=20000,allowed_effects=['pure']),mechanisms=mechanisms,candidate_bridges=[])
-        plan=core.compose(spec);checked=core.audit(spec,plan)
-        if not checked['accepted']:raise ValueError('SYMBOLIC_PLAN_INDEPENDENT_AUDIT_FAILED')
-        if plan['status']=='SYMBOLIC_PLAN_FOUND':
-            ids=sorted(external_ids[x] for x in plan['sequence'] if x!=assembly_id)
-            result=dict(status='READY',quote_ids=ids,total_microUSD=plan['cost_units']*10000)
-        else:result=dict(status='NO_COMPLETE_AFFORDABLE_BUNDLE',quote_ids=[],total_microUSD=None)
-        result['search']=dict(states_expanded=plan['states_expanded'],spec_sha256=digest(spec),
-            plan_sha256=digest(plan),scope='Finite supplied grammar search, not autonomous invention')
+        # The grammar's bounded integer representation is not a cash ceiling.
+        # Use the competent ordinary route explicitly rather than clipping funds.
+        if not valid or budget_microUSD//10000>1_000_000:
+            result=ordinary_select(quotes,SERVICES,now,budget_microUSD,ASSEMBLY)
+            result['search']=dict(route='ordinary_fallback',
+                reason=('NO_CURRENT_INDIVIDUALLY_AFFORDABLE_QUOTE' if not valid else
+                        'CURRENT_BUDGET_OUTSIDE_GRAMMAR_RESOURCE_RANGE'),
+                scope='Ordinary exact enumeration; no symbolic plan or invention advantage claimed')
+        else:
+            # External identifiers remain unrestricted by internal step names. Fixed-width
+            # ranks preserve external lexicographic ties without overflowing ID bounds.
+            provider_ids={q['id']:f'provider_{index:02d}' for index,q in enumerate(valid)}
+            external_ids={generated:external for external,generated in provider_ids.items()}
+            assembly_id='internal_assemble_complete'
+            mechanisms=[dict(id=provider_ids[q['id']],requires=sorted('source_'+x for x in coverage(q)),provides=sorted('result_'+x for x in coverage(q)),
+                             cost=q['cost_microUSD']//10000,effect='pure',origin='externally_supplied')for q in valid]
+            mechanisms.append(dict(id=assembly_id,requires=sorted('result_'+s for s in SERVICES),
+                provides=['accepted_complete_bundle'],cost=ASSEMBLY//10000,effect='pure',origin='developer_supplied'))
+            # Repository grammar bounds are finite experiment limits, not business ceilings.
+            spec=dict(schema=core.SCHEMA,purpose=dict(initial=sorted('source_'+s for s in SERVICES),
+                goal=['accepted_complete_bundle'],max_cost=budget_microUSD//10000,
+                max_steps=4,max_states=20000,allowed_effects=['pure']),mechanisms=mechanisms,candidate_bridges=[])
+            plan=core.compose(spec);checked=core.audit(spec,plan)
+            if not checked['accepted']:raise ValueError('SYMBOLIC_PLAN_INDEPENDENT_AUDIT_FAILED')
+            if plan['status']=='SYMBOLIC_PLAN_FOUND':
+                ids=sorted(external_ids[x] for x in plan['sequence'] if x!=assembly_id)
+                result=dict(status='READY',quote_ids=ids,total_microUSD=plan['cost_units']*10000)
+            else:result=dict(status='NO_COMPLETE_AFFORDABLE_BUNDLE',quote_ids=[],total_microUSD=None)
+            result['search']=dict(route='symbolic_compose',states_expanded=plan['states_expanded'],spec_sha256=digest(spec),
+                plan_sha256=digest(plan),scope='Finite supplied grammar search, not autonomous invention')
     else:raise ValueError('REGISTERED_POLICY_REQUIRED')
     audited=audit_selection(result,quotes,SERVICES,now,budget_microUSD,ASSEMBLY)
     if not audited['accepted']:raise ValueError('ORDINARY_COMPLETE_BUNDLE_COMPARISON_REJECTED:'+str(audited))
