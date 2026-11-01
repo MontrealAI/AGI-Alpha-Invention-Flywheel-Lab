@@ -62,7 +62,7 @@ def check_native_claim_binding(arm, exported, reported, measurements, protocol):
             'reported_artifact': (claim.get('artifact'), measurements[buyer])}
         for field, (actual, expected) in requirements.items():
             if actual != expected:
-                raise ValueError('NATIVE_SALE_REPORT_NOT_SUPPORTED_BY_LEDGER:' + field)
+                raise ValueError('NATIVE_SALE_REPORT_NOT_SUPPORTED_BY_LEDGER:' + field + (':type=' + type(actual).__name__ + ':amount=' + str(actual) if field == 'native_price' else ''))
     expected_choice = 'NO_BID' if arm == 'cheap_rival' else 'SHARED_CONTRACT'
     if reported.get('decision', {}).get('choice') != expected_choice:
         raise ValueError('NATIVE_VOLUNTARY_CHOICE_REPORT_MISMATCH')
