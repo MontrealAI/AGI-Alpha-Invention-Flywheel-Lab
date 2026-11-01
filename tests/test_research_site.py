@@ -60,6 +60,8 @@ class ResearchSiteTests(unittest.TestCase):
             self.assertIn('name="viewport"', text)
             self.assertIn('Skip to content', text)
             self.assertIn('prefers-reduced-motion', text)
+            self.assertIn('font-size:clamp(1.8rem,7vw,2.75rem)', text)
+            self.assertNotIn('↗', text)
             if name != 'index.html':
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
