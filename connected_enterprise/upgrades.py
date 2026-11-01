@@ -19,6 +19,19 @@ from connected_enterprise.transition_evidence import ticket_body, current_store_
 DOMAIN = b'native-source-transition\n'
 _HISTORICAL_AUDITS = {}
 MAX_TICKET_BYTES = 16_000_000
+# Exact reviewed implementation; this is a narrow signer's codec allowlist, not
+# permission to execute new replacement-runtime Python in an account owner.
+PINNED_OWNER_EVIDENCE_CODEC_SHA256 = 'edce19ed4addf94027f3d040e5a5779ec150a867df8ed5b6bf8a0f1e2c0868a9'
+
+
+def reviewed_owner_codec_source(target_root):
+    owner_bytes = Path(__file__).with_name('transition_evidence.py').read_bytes()
+    if hashlib.sha256(owner_bytes).hexdigest() != PINNED_OWNER_EVIDENCE_CODEC_SHA256:
+        raise ValueError('OWNER_EVIDENCE_CODEC_SOURCE_CHANGED')
+    candidate = (Path(target_root) / 'connected_enterprise/transition_evidence.py').read_bytes()
+    if hashlib.sha256(candidate).hexdigest() != PINNED_OWNER_EVIDENCE_CODEC_SHA256:
+        raise ValueError('UNREVIEWED_TARGET_EVIDENCE_CODEC')
+    return owner_bytes.decode('utf-8')
 
 
 def preflight_ticket_size(output):
@@ -122,12 +135,15 @@ def authorize_upgrade(*, historical_root, target_root, manifest, path, opening,
                'contract': contract, 'expected': expected_state_digest,
                'target': target, 'ident': ident, 'day': day, 'verifier_files': files,
                'operating': operating, 'evidence_dir': str(Path(evidence_dir).absolute()) if evidence_dir else None,
-               'codec_source': (target_root/'connected_enterprise/transition_evidence.py').read_text() if evidence_dir else None}
+               'codec_source': reviewed_owner_codec_source(target_root) if evidence_dir else None}
     code = AUTHORIZATION_REUSE_HELPER + '''import json,sys,hashlib,hmac,contextlib,importlib.util
 from pathlib import Path
 from connected_enterprise.finance import JournalAccount
 from commercial.ledger import canonical,digest
 p=json.load(sys.stdin)
+if p['evidence_dir']:
+ if not isinstance(p.get('codec_source'),str) or hashlib.sha256(p['codec_source'].encode('utf-8')).hexdigest()!='edce19ed4addf94027f3d040e5a5779ec150a867df8ed5b6bf8a0f1e2c0868a9':
+  raise ValueError('UNREVIEWED_OWNER_SIGNING_CODEC')
 scope=contextlib.nullcontext()
 if p['evidence_dir'] and importlib.util.find_spec('connected_enterprise.transition_evidence'):
  from connected_enterprise.transition_evidence import evidence_directory
