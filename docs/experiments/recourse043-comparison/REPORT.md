@@ -29,6 +29,6 @@ Operation, in-process canonical audits and summaries used **560.887385 CPU secon
 
 ## Evidence and next decision
 
-`PROTOCOL.json`, `PREPARATION.json`, `CONFIGS.json`, `MANIFEST.json`, `COMPARISON.json` and the eight `worlds/*/SUMMARY.json` bind membership, inputs, costs, source and audited outcomes. Authoritative accounts and complete results remain local under `worlds/*/private`; no signing/recovery authority is in this report.
+The public-safe handoff includes `PROTOCOL.json`, `COMPARISON.json`, `SOURCE.json`, `RESOURCES.json`, `INDEPENDENT_REVIEW.json` and eight copied `summaries/*.json`. Preparation, full configurations and admitted manifest remain retained local inputs (`PREPARATION.json`, `CONFIGS.json`, `MANIFEST.json`); their hashes are in the handoff. Authoritative accounts and complete results remain local under `worlds/*/private`; no signing/recovery authority is included.
 
 The repair can recover economically useful voluntary alternatives and can improve complete modeled contribution, but activating a paid retry allowance in a market with no worthwhile quotes wastes cost. Default policy remains unchanged. A later conditional activation rule should pay for its own decision/search and preserve public-information/native-funding/recovery semantics; do not retroactively waive these eight worlds' fees or tune their seeds. Neither more architectures nor an unconditional rollout follows from this small comparison.
