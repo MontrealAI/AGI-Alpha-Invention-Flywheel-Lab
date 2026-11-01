@@ -207,12 +207,16 @@ def _check_customer_lifecycle(result):
     if set(result['channels']['exposures_by_day']) != {str(day) for day in range(cfg['horizon_days'])}:
         raise ValueError('CHANNEL_EXPOSURE_DAYS_DIFFER_FROM_FROZEN_HORIZON')
     buyers = {row['id']: row for row in result['buyers']}
-    owned = set(sorted(buyers)[:4])
+    from .audience055 import owned_customer_ids
+    owned = owned_customer_ids(cfg,buyers)
     state = {ident: {'known': ident in owned, 'active': True, 'onboarded': False,
                      'purchases': 0, 'retention_decision_count': 0, 'pending': None,
                      'service_index': int(ident.rsplit('-', 1)[1]) % 3,
                      'last_exposure': None, 'next_need_time': 0} for ident in buyers}
     orders = {row['id']: row for row in result['orders']}
+    used_jobs=[]
+    if 'recurring_request_policy' in cfg:
+        for buyer in state.values():buyer.update(outside_spend=0,our_settled_spend=0,pending_commitments={})
     pending_reactivations = {}
     outside = {}
     for decision in result['decisions']:
@@ -231,6 +235,10 @@ def _check_customer_lifecycle(result):
         candidates = [ident for ident, buyer in state.items() if buyer['known'] and buyer['active']
                       and buyer['pending'] is None and buyer['next_need_time'] <= moment
                       and (ident in owned or buyer['onboarded'] or ident in exposed)]
+        if 'recurring_request_policy' in cfg:
+            from .recurring055 import public_candidate,consumed_job_ids
+            consumed=consumed_job_ids(cfg,result['decisions'],before=moment)
+            candidates=[ident for ident in candidates if public_candidate(cfg,dict(state[ident],id=ident),moment,used_jobs,consumed)]
         candidate_ids[moment]=sorted(candidates,key=lambda ident:(state[ident]['next_need_time'],ident));public_buyers[moment]=copy.deepcopy(state)
         outreach_units[moment] = channel_day['attempted_slots'] + sum(ident not in exposed for ident in candidates)
     for event in result['events']:
@@ -270,12 +278,18 @@ def _check_customer_lifecycle(result):
             elif order['offer']['service_id'] != service:
                 raise ValueError('CUSTOMER_SERVICE_NEED_CHANGED_WITHOUT_DELIVERY')
             buyer['onboarded'], buyer['pending'] = True, order['id']
+            used_jobs.append(order['job_id'])
+            if 'recurring_request_policy' in cfg:
+                buyer['pending_commitments'][order['id']]=order['price']
         elif kind in {'COLLECTION', 'REFUND'}:
             order = orders[event['order_id']]
             buyer = state[order['customer_id']]
             if buyer['pending'] != order['id']:
                 raise ValueError('COLLECTION_OR_REFUND_WITHOUT_PENDING_CUSTOMER_ORDER')
             buyer['pending'] = None
+            if 'recurring_request_policy' in cfg:
+                buyer['pending_commitments'].pop(order['id'])
+                if kind=='COLLECTION':buyer['our_settled_spend']+=order['price']
             buyer['next_need_time'] = moment + 7 * 24
             if kind == 'COLLECTION':
                 count = buyer['retention_decision_count']
@@ -286,6 +300,7 @@ def _check_customer_lifecycle(result):
         elif kind == 'BUSINESS_DECISION':
             for decision in outside.get(moment, []):
                 state[decision['customer_id']]['next_need_time'] = moment + 7 * 24
+                if 'recurring_request_policy' in cfg:state[decision['customer_id']]['outside_spend']+=decision['outside_spend']
     if pending_reactivations:
         raise ValueError('UNRESOLVED_PAID_REACTIVATION_RESPONSE')
     if set(outreach_units) != {day * 24 for day in range(cfg['horizon_days'])}:

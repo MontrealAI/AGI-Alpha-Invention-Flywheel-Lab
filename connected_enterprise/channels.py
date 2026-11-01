@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+from .audience055 import channel_population
 
 SCHEMA = 'agi-alpha/connected014-channel-book/v1'
 MICRO = 1_000_000
@@ -139,7 +140,7 @@ class ChannelBook:
                 self.state['events'].append({'day':instance['expiry_day'],'kind':'CHANNEL_EXPIRED','source_plan_id':plan,'contract_id':instance['contract_id'],'realized_exposures':instance['realized_exposures'],'potential_slots_used':instance['potential_slots_used'],'potential_slots':instance['potential_slots']})
             if instance['state']!='ACTIVE' or day<instance['activation_day'] or day>=instance['expiry_day']:
                 continue
-            pool=ids[terms['owned_audience_count']:]
+            pool=channel_population(ids,terms)
             for slot in range(terms['slots_per_day']):
                 instance['potential_slots_used']+=1;attempted_slots+=1
                 identity=f'{plan}/{slot}'
@@ -238,7 +239,7 @@ def audit_channel_history(channels, contracts, seed, buyers):
                     'potential_slots_used': instance['potential_slots_used'], 'potential_slots': instance['potential_slots']})
                 event_days[plan].append(day)
             if instance['state'] != 'ACTIVE' or day < instance['activation_day'] or day >= instance['expiry_day']:continue
-            pool = population[terms['owned_audience_count']:]
+            pool = channel_population(population, terms)
             for slot in range(terms['slots_per_day']):
                 attempted += 1; instance['potential_slots_used'] += 1; identity = str(plan) + '/' + str(slot)
                 candidate = None

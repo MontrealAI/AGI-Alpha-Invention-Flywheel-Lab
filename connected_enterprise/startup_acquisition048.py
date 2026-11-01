@@ -1,6 +1,7 @@
 """Opt-in, day-zero public complete-offer acquisition; never general seed expansion."""
 from fractions import Fraction
 from commercial.ledger import digest
+from .audience055 import owned_customer_ids, reachability
 
 SCHEMA = 'connected-startup-acquisition/v1'
 
@@ -109,7 +110,7 @@ def _future_operating_counts(cfg, terms, lead, days, owned, buyers, jobs, market
 
 
 def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None, _frontier=None):
-    """No valuation or paid reservation for an inconsistent or empty audience.
+    """No paid reservation for an inconsistent or empty audience.
 
     This startup guard does not repair legacy owned-access semantics. It refuses
     to rely on them unless initialized public ownership and channel exclusion
@@ -117,6 +118,14 @@ def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None, _
     """
     policy = validate_policy(cfg)
     known = {ident for ident, buyer in buyers.items() if buyer['known']}
+    if 'recurring_request_policy' in cfg:
+        # The recurring public screen/valuation is covered by the mandatory
+        # daily strategic-planning maintenance already prepaid by the engine.
+        # A nonempty candidate incurs the additional startup certificate fee
+        # before options()/cash-authority validation. No model billing is implied.
+        from .recurring_acquisition055 import forecast
+        if 'audience_policy' not in cfg or known != owned_customer_ids(cfg, buyers):return []
+        return [ident for ident in policy['contract_ids'] if forecast(cfg, buyers, {}, 0, ident, cfg['initial_slots'], jobs=jobs, used_jobs=used_jobs) is not None]
     eligible = []
     slots = cfg['initial_slots']
     if cfg['supplier_outage_start_day'] <= 0 < cfg['supplier_outage_start_day'] + cfg['supplier_outage_days']:
@@ -129,7 +138,10 @@ def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None, _
     frontier = _frontier
     for contract_id in policy['contract_ids']:
         terms = cfg['channels'][contract_id]
-        owned = set(sorted(buyers)[:terms['owned_audience_count']])
+        owned = owned_customer_ids(cfg, buyers) if 'audience_policy' in cfg else set(sorted(buyers)[:terms['owned_audience_count']])
+        reach = reachability(cfg, buyers, {}, 0, contract_id) if 'audience_policy' in cfg else None
+        if reach is not None and not reach['potential_customer_ids']:
+            continue
         if owned != known or owned == set(buyers) or terms['activation_reliability_bps'] == 0 or terms['realization_bps'] == 0:
             continue
         lead = terms['lead_days']
@@ -140,7 +152,7 @@ def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None, _
         if frontier is None:
             frontier = _admission_frontier(cfg, buyers, jobs, menu_fn)
         for ident, buyer in sorted(buyers.items()):
-            if ident in owned or buyer['onboarded'] or buyer.get('pending_commitments', {}) or ident not in frontier:
+            if ident in owned or buyer['onboarded'] or buyer.get('pending_commitments', {}) or ident not in frontier or reach is not None and ident not in reach['potential_customer_ids']:
                 continue
             menu = _frontier_menu(menu_fn({'used_jobs': sorted(used_jobs)}, jobs, dict(buyer, id=ident), cfg), frontier[ident])
             if any(offer['capacity_units'] <= slots for entry, offer, anchor in menu):
@@ -162,6 +174,8 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
     from .complete_offer_market import compile_market
     from .strategic_commerce import select
     from .joint_planning import investment_option
+    if 'recurring_request_policy' in cfg:
+        return _recurring_options(cfg, buyers, jobs, used_jobs, snapshot, operating, available, slots, scenarios)
     market = compile_market(cfg['complete_offer_policy'])
     menu_fn = _prepared_menu(offer_menu_fn, market)
     frontier = _admission_frontier(cfg, buyers, jobs, menu_fn)
@@ -172,11 +186,12 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
         days = min(terms['duration_days'], cfg['horizon_days'] - lead)
         if days <= 0 or lead * 24 + cfg['production_hours'] + cfg['acceptance_hours'] + cfg['clearing_hours'] >= cfg['horizon_days'] * 24:
             continue
-        owned = set(sorted(buyers)[:terms['owned_audience_count']])
+        owned = owned_customer_ids(cfg, buyers) if 'audience_policy' in cfg else set(sorted(buyers)[:terms['owned_audience_count']])
+        reach = reachability(cfg, buyers, {}, 0, contract_id) if 'audience_policy' in cfg else None
         public = []
         used = set(used_jobs)
         for ident, buyer in sorted(buyers.items()):
-            if ident in owned or buyer['known'] or buyer['onboarded'] or buyer.get('pending_commitments',{}) or ident not in frontier:
+            if ident in owned or buyer['known'] or buyer['onboarded'] or buyer.get('pending_commitments',{}) or ident not in frontier or reach is not None and ident not in reach['potential_customer_ids']:
                 continue
             tentative = {'used_jobs': sorted(used)}
             choices = []
@@ -207,8 +222,8 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
             continue
         # One declared request per unique prospect; no free repeats or invented
         # conversion. Worst public modeled collection belief is already charged.
-        pool = len(set(buyers) - owned)
-        contacts = min(Fraction(pool), Fraction(terms['slots_per_day'] * days * terms['activation_reliability_bps'] * terms['realization_bps'] * (10000 - terms['overlap_bps']), 10000**3))
+        pool = len(reach['potential_customer_ids']) if reach is not None else len(set(buyers) - owned)
+        contacts = min(Fraction(pool), Fraction(reach['expected_contact_bound_fraction'])) if reach is not None else min(Fraction(pool), Fraction(terms['slots_per_day'] * days * terms['activation_reliability_bps'] * terms['realization_bps'] * (10000 - terms['overlap_bps']), 10000**3))
         qualified_contacts = contacts * Fraction(len(public), pool)
         outage_start = cfg['supplier_outage_start_day']
         outage_end = outage_start + cfg['supplier_outage_days']
@@ -249,6 +264,37 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
             'future_cost_envelope': future_costs, 'future_operating_cash_lock': evaluation,
             'admission_scope': 'First opportunity under initial native priority; every possible earlier nonempty menu competes for the existing shortlist, and all its admitted requested complete work is excluded. No later priority improvement or free access assumed.',
             'contact_fraction': str(contacts), 'qualified_contact_fraction': str(qualified_contacts), 'prospect_fraction': str(prospects), 'net_fraction': str(benefit - invoice),
+            'option_inputs_sha256': digest(execution), 'authority': []}
+        if reach is not None:execution['startup_contract']['audience'] = reach
+        validate_option(option)
+        result.append(option)
+    return result
+
+
+def _recurring_options(cfg, buyers, jobs, used_jobs, snapshot, operating, available, slots, scenarios):
+    from .joint_planning import investment_option
+    from .recurring_acquisition055 import forecast
+    known = {ident for ident, buyer in buyers.items() if buyer['known']}
+    if 'audience_policy' not in cfg or known != owned_customer_ids(cfg, buyers):return []
+    result = []
+    policy = cfg['startup_acquisition_policy']
+    for ident in policy['contract_ids']:
+        predicted = forecast(cfg, buyers, {}, 0, ident, slots, jobs=jobs, used_jobs=used_jobs)
+        if predicted is None:continue
+        net = Fraction(predicted['net_fraction'])
+        invoice = predicted['invoice_microUSD']
+        if net <= 0 or invoice + predicted['cash_lock'] > available:continue
+        option = investment_option('startup-channel-' + ident, 'acquisition', invoice, net.numerator // net.denominator, scenarios, 0, cfg['channels'][ident])
+        execution = option['execution']
+        execution.update(funding='SEED_OR_EARNED', contract_id=ident, cash_lock=predicted['cash_lock'],
+            forecast_scope=predicted['scope'], recurring_forecast=predicted)
+        execution['startup_contract'] = {'schema': SCHEMA, 'time': 0, 'policy_sha256': digest(policy),
+            'native_state_digest': snapshot['state_digest'], 'observed_available': snapshot['summary']['available'],
+            'operating_commitment': operating, 'current_slots': slots,
+            'qualified_public_offers': predicted['public_offers'], 'future_cost_envelope': predicted['amounts_fraction'],
+            'future_operating_cash_lock': predicted['future_operating_cash_lock'], 'audience': predicted['audience'],
+            'admission_scope': 'Finite future dated requests; public fixed-capacity calendar, complete equivalents and conserved annual budget prior, no private draw or guaranteed repeat.',
+            'contact_fraction': predicted['contact_fraction'], 'net_fraction': predicted['net_fraction'],
             'option_inputs_sha256': digest(execution), 'authority': []}
         validate_option(option)
         result.append(option)

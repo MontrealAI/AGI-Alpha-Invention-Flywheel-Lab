@@ -124,7 +124,11 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
         for exposure in prepared['exposures']:public_buyers[exposure['customer_id']]['known']=True
         for response in prepared['reactivations']:public_buyers[response['customer_id']]['active']=response['responded']
         margins=[o['price']-o['complete_cost'] for o in state['orders'] if o['outcome']=='SETTLED']
-        investments.extend(menu_options(cfg,state['arm'],day,public_buyers,book['contacts'],live,margins,slots,risk['scenarios']))
+        extra={}
+        if 'recurring_request_policy' in cfg:
+            from .recurring055 import consumed_job_ids
+            extra={'jobs':jobs,'used_jobs':set(state['used_jobs'])|{d['selection']['problem']['job_id'] for d in deliveries},'consumed_jobs':consumed_job_ids(cfg,state['decisions'],before=prepared['event']['time'])}
+        investments.extend(menu_options(cfg,state['arm'],day,public_buyers,book['contacts'],live,margins,slots,risk['scenarios'],**extra))
     elif prepared['channel_purchase']:
         terms=cfg['channels']['pilot'];invoice=terms['price_microUSD']+terms['support_microUSD']
         investments.append(investment_option('channel-'+str(day),'acquisition',invoice,prepared['channel_predicted_net'],risk['scenarios'],day,terms))

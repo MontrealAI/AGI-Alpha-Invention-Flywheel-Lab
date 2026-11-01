@@ -53,7 +53,13 @@ def fresh_account_config(manifest, *, prospective_policy=None, root=None):
 
 
 def validate_config(cfg):
-    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','monetary_policy','complete_offer_policy','refusal_recourse_policy','startup_acquisition_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','monetary_policy','complete_offer_policy','refusal_recourse_policy','startup_acquisition_policy','audience_policy','recurring_request_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+    if 'audience_policy' in cfg:
+        from .audience055 import validate_policy as validate_audience
+        validate_audience(cfg)
+    if 'recurring_request_policy' in cfg:
+        from .recurring055 import validate_policy as validate_recurring
+        validate_recurring(cfg)
     for key in ['horizon_days','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
     # Explicit finite scenario population; no universal market ceiling.
@@ -130,12 +136,14 @@ def _record_exposure(state,when,exposure,response=None):
 def _buyers(cfg,seed):
     from .complete_offer_market import compile_market
     market=compile_market(cfg['complete_offer_policy']) if 'complete_offer_policy' in cfg else None
+    from .audience055 import owned_customer_ids
+    owned=owned_customer_ids(cfg,[{'id':f'SIM-customer-{i:03d}'} for i in range(cfg['customer_pool'])])
     result=[]
     for i in range(cfg['customer_pool']):
         ident=f'SIM-customer-{i:03d}';budget=int((180+400*draw(seed,ident,'budget'))*MICRO*cfg['buyer_budget_multiplier_bps']/10000)
         if 'complete_offer_policy' in cfg:
             budget=market.profile(ident)['atoms'][market.atom(ident,seed)]['budget_microUSD']
-        result.append({'id':ident,'initial_budget':budget,'remaining_budget':budget,'pending_commitments':{},'outside_spend':0,'our_settled_spend':0,'known':i<4,'active':True,'purchases':0,'onboarded':False,'next_need_time':0,'acquisition_source_plan_id':None,'exposure_time':0 if i<4 else None,'retention_decision_count':0,'service_index':i%3,'last_quote':None})
+        result.append({'id':ident,'initial_budget':budget,'remaining_budget':budget,'pending_commitments':{},'outside_spend':0,'our_settled_spend':0,'known':ident in owned,'active':True,'purchases':0,'onboarded':False,'next_need_time':0,'acquisition_source_plan_id':None,'exposure_time':0 if ident in owned else None,'retention_decision_count':0,'service_index':i%3,'last_quote':None})
     return result
 
 def _initial(cfg,seed,arm,source):
@@ -178,7 +186,12 @@ def _offer_menu(state,jobs,buyer,cfg,*,_market=None):
     used={key for ident in state['used_jobs'] for key in jobs[ident]['job']['work_keys']}
     # Work is already keyed by admitted job identity. Never scan unrelated jobs.
     requested=[]
-    for ident in cfg['complete_offer_policy']['requested_jobs'][buyer['id']]:
+    requested_ids=cfg['complete_offer_policy']['requested_jobs'][buyer['id']]
+    if 'recurring_request_policy' in cfg:
+        from .recurring055 import request_ids,consumed_job_ids
+        when=state.get('queue',[{'time':state.get('last_time',0)}])[0]['time']
+        requested_ids=request_ids(cfg,buyer['id'],when,state['used_jobs'],consumed_job_ids(cfg,state.get('decisions',[]),before=when))
+    for ident in requested_ids:
         if ident not in jobs:continue
         entry=jobs[ident]
         if entry['job']['id']!=ident:raise ValueError('ADMITTED_JOB_INDEX_IDENTITY_CHANGED')
@@ -202,7 +215,8 @@ def _prepare_plan(state,account,jobs,*,recourse_preflight=False,selective_purcha
     prepared={'event':copy.deepcopy(ev),'before':account.snapshot() if snapshot_override is None else copy.deepcopy(snapshot_override),'orders':[],'declines':[],'exposures':[],'reactivations':[],'channel_purchase':False,'capacity_purchase':False}
     if ev['kind']!='plan':return prepared
     book=ChannelBook(seed,cfg['channels'],state['channel_state']);exposures=book.expose(day,state['buyers']);prepared['channel_after']=book.export();prepared['exposures']=exposures
-    simulated=copy.deepcopy(state);byid={b['id']:b for b in simulated['buyers']};owned_ids={b['id'] for b in state['buyers'][:4]};exposed_ids={x['customer_id'] for x in exposures}
+    from .audience055 import owned_customer_ids
+    simulated=copy.deepcopy(state);byid={b['id']:b for b in simulated['buyers']};owned_ids=owned_customer_ids(cfg,state['buyers']);exposed_ids={x['customer_id'] for x in exposures}
     for x in exposures:
         b=byid[x['customer_id']]
         if not b['onboarded']:b['acquisition_source_plan_id']=x['source_plan_id'];b['exposure_time']=t
@@ -218,6 +232,10 @@ def _prepare_plan(state,account,jobs,*,recourse_preflight=False,selective_purcha
     slots=min(cfg['maximum_slots'],slots)
     if cfg['supplier_outage_start_day']<=day<cfg['supplier_outage_start_day']+cfg['supplier_outage_days']:slots=0
     candidates=sorted((b for b in simulated['buyers'] if b['known'] and b['active'] and not b['pending_commitments'] and b['next_need_time']<=t and (b['id'] in owned_ids or b['onboarded'] or b['id'] in exposed_ids)),key=lambda b:(b['next_need_time'],b['id']))
+    if 'recurring_request_policy' in cfg:
+        from .recurring055 import public_candidate,consumed_job_ids
+        consumed=consumed_job_ids(cfg,state['decisions'],before=t)
+        candidates=[b for b in candidates if public_candidate(cfg,b,t,state['used_jobs'],consumed)]
     stats=prepared['channel_after']['exposures_by_day'][str(day)]
     prepared['outreach_units']=stats['attempted_slots']+sum(b['id'] not in exposed_ids for b in candidates)
     # Reserve the maximum qualification bill before commitments, including lost offers.
@@ -252,6 +270,11 @@ def _prepare_plan(state,account,jobs,*,recourse_preflight=False,selective_purcha
             context=public_market.context(b['id'],observed)
             chosen=actual_choice(context,public_market.atom(b['id'],seed),b['remaining_budget'],service if price is not None else None,price,draw(seed,[day,b['id']],'complete-offer-tie'))
             decision={'kind':'offer' if price is not None else 'outside_choice','time':t,'customer_id':b['id'],'service_id':service,'price':price,'human_price':None,'public_rival_price':None,'chosen':chosen['provider']=='us','buyer_choice':chosen['provider'],'outside_option_name':chosen['name'],'outside_service_id':chosen['service_id'],'market_context':context,'information':'Public request and independent value/budget hypotheses; private atom belongs only to buyer environment. Outside contracts independently available per request.'}
+            if 'recurring_request_policy' in cfg:
+                from .recurring055 import request_ids
+                active=request_ids(cfg,b['id'],t,state['used_jobs'],consumed)
+                if len(active)!=1:raise ValueError('ONE_CURRENT_COMPLETE_REQUEST_REQUIRED')
+                decision['request_job_id']=active[0]
             if chosen['provider'] not in {'us','decline'}:
                 decision['outside_spend']=chosen['spend'];b['remaining_budget']-=chosen['spend'];b['next_need_time']=t+7*24
             return decision
@@ -420,6 +443,10 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
         expected_buyers={f'SIM-customer-{i:03d}' for i in range(cfg['customer_pool'])}
         admitted={j['id'] for j in manifest['jobs']}
         if set(requests)!=expected_buyers or any(not set(ids)<=admitted for ids in requests.values()):raise ValueError('PREDECLARED_ADMITTED_CUSTOMER_REQUESTS_REQUIRED')
+        if 'recurring_request_policy' in cfg:
+            from .complete_offer_market import compile_market
+            market=compile_market(cfg['complete_offer_policy']);services={j['id']:j['service_id'] for j in manifest['jobs']}
+            if any(services[ident] not in market.profile(buyer)['services'] for buyer,ids in requests.items() for ident in ids):raise ValueError('RECURRING_REQUEST_COMPLETE_OUTCOME_MISMATCH')
     if arm not in {'baseline','channel','growth','competitive_growth'}:raise ValueError('REGISTERED_COMMERCIAL_OPTION_ARM_REQUIRED')
     if source is None:
         from .runner import identity
