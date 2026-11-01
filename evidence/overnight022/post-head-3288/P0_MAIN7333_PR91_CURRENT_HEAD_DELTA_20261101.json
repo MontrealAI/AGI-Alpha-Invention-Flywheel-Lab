@@ -1,0 +1,65 @@
+{
+  "schema": "agi-alpha/main7333-forward-refresh/v1",
+  "observed_date_utc": "2026-11-01",
+  "source_main": "7333cb483a9fb261177e89a094f72ab896aab82c",
+  "merge": "PR91 normal merge after previously qualified 49a6 main; preserve native commitments while replanning on buyer refusal",
+  "workflow_at_inspection": {
+    "campaign": "IN_PROGRESS",
+    "release": "IN_PROGRESS",
+    "adaptive": "IN_PROGRESS",
+    "commerce": "IN_PROGRESS",
+    "consequential007": "SUCCESS",
+    "consequential009": "SUCCESS"
+  },
+  "release_verdict": "NOT YET QUALIFIED AT THIS NEW HEAD",
+  "last_qualified_release": "connected014-49a6bd6941a7e3c3d161e447f56a1cb5b78e3e2c",
+  "pr88_base": "c5f6d34a42d411c1c8af92c5fb06e9abf1e57e6b",
+  "pr88_source_binding_187_file_history": "0977b8e9920ecd1415d1cf26500c5cf4dcddc1ad33337afcd35940f4871c5293",
+  "new_main_composed_source_binding": {
+    "blob_sha1": "e2910b130487846ae171994515f3895b4cecb38e",
+    "source_sha256": "8ea5bff31a9d6b92dacefa15813f4c353916ebf2971919fbaa1ff06bd91fd901",
+    "file_count": 226
+  },
+  "pr77_integration_guard": "Do not copy older 187-entry PR88 current-source binding; regenerate against reviewed present source and run source matched qualification. Original seeds unchanged.",
+  "p0_native_pr40_head": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+  "p0_finance": {
+    "main_blob_sha1": "cbe5f09c87196ef32d43ce2afa10015cf78a544d",
+    "main_source_paths": 41,
+    "pr40_source_paths": 23,
+    "shared": 14,
+    "union": 50,
+    "main_only": 27,
+    "pr40_only": 9,
+    "new_dependency": "connected_enterprise/refusal_recourse.py"
+  },
+  "archive_preflight": {
+    "source": "flywheel/archive_v2.py same unchanged 10000-file/512MiB guards",
+    "main_git_blobs": 9996,
+    "main_archive_eligible": 9957,
+    "pr40_new_paths_vs_8ab_missing_on_current_main": 84,
+    "hypothetical_forward_archive_files": 10041,
+    "over_by": 41,
+    "minimum_lossless_replacement_if_index_plus_manifest": 43,
+    "bytes_unmeasured": true,
+    "merged_tree_not_tested": true,
+    "historical_removed_files_preserved": true
+  },
+  "qualification_scopes": {
+    "main7333": "PENDING_CI_AND_RELEASE_DOWNLOAD",
+    "main49a6": "QUALIFIED_RELEASE_DOWNLOAD",
+    "pr88_c5f6": "QUALIFIED_EXACT_HEAD_PR_FULL_SUITE_1075_TESTS_NO_RELEASE",
+    "p0_nonempty_signed_account_transition": "BLOCKED_UNAVAILABLE_OWNER_HANDOFF",
+    "p1": "UNQUALIFIED",
+    "p2": "UNQUALIFIED",
+    "actual_external_commerce": "NONE_NEW"
+  },
+  "constraints": {
+    "source_writer": "Existing integration owner",
+    "recovery_keys": "Not accessed",
+    "liabilities": "Unchanged",
+    "historical_failures": "Unchanged",
+    "external_spending_usd": 0,
+    "hosted_workflows_started_by_this_review": 0
+  },
+  "next_decision": "Track exact new-main 7333 CI before treating it as qualified. P0 owner's safe forward composition must include 50 authoritative source paths and remove or losslessly compact >=43 loose archive files under unchanged guard before public release qualification. Original same-account signed queue continuation still required."
+}
