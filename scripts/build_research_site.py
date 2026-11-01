@@ -13,8 +13,8 @@ PAPERS = (
     'out-reflect-self-correcting-evidence-20261021.pdf',
     'transformational-autonomous-enterprises-v1.pdf',
 )
-PAGES = ('index.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html')
-FILES = PAPERS + PAGES + ('publication-manifest.json',)
+PAGES = ('index.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html', 'sensor-lab.html')
+FILES = PAPERS + PAGES + ('publication-manifest.json', 'sensor-engine.mjs')
 
 
 class Links(HTMLParser):
