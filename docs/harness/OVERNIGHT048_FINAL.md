@@ -1,15 +1,15 @@
 # AGI ALPHA — morning progress handoff, 1 November 2026
 
-Checkpoint: 11:24 UTC. PR98 merged normally as 99769a8a after all 14 exact-head workflows and five resolved review findings. Main-branch publication gates and actual downloaded operation remain running/pending.
+Checkpoint: 11:47 UTC. PR98 is merged, but main997 publication failed at the frozen historical worker-interruption probe after all 1,524 current tests passed. A separately versioned current active-worker checker is being tested. No 997 release or downloaded final operation exists.
 
 **An audited operating simulation and reproducible account-year results exist. The latest implementation is not yet a qualified released enterprise. Actual commercial profit and US$3 billion trailing-365-day profit remain unestablished.** No default policy promotion follows from these experiments.
 
 | State | Current work |
 | --- | --- |
 | Done | PR98 qualified normal merge; P0 previous release/downloaded operation; four primary account years plus four source-specific reproductions; finite comparator/P4 results; reviewed identity/admission corrections |
-| Running | Six applicable main-branch workflows; release qualification passed, publisher waiting for same-main checks; actual downloaded operation follows publication |
-| Blocked | Unified audience repair remains unpublished; original signed-account migration remains NO-GO. Final publication awaits the required pipeline gates |
-| Next | Publish the corrected exact source, finish required qualification, merge normally, inspect same-main release and operate its actual downloaded bytes |
+| Running | Current active-worker readiness checker 054, deterministic interruption regressions and independent review; normal qualified follow-up integration remains required |
+| Blocked | Final release/download pending the checker repair and required gates; unified audience repair unpublished; original signed-account migration remains NO-GO |
+| Next | Qualify and merge the separately versioned checker repair, preserve the failed997 record, finish same-main publication, then download and operate actual released bytes |
 
 ## Source identities and gates
 
@@ -21,11 +21,11 @@ Checkpoint: 11:24 UTC. PR98 merged normally as 99769a8a after all 14 exact-head 
 | Selected current candidate source | 277 files; SHA256 `ba510738584bb95d95a794dfb29eac3851407920e9c599cbd23abfc5ef80ffec` |
 | Prepared current candidate source ZIP | 302 members, 1,172,686 bytes; SHA256 `a1c1aff0cb4c25eceac20514e353586ee8a7c17090c3b8bc7b834c57a4a1267e` |
 | Current local qualification, directly inspected | 106 composed/native/fee/source/publication/identity checks passed in 204.453 seconds; fresh no-Git five-command run/resume/native-audit/package/public-audit accepted, financially unchanged resume; clean committed-source release prepare/verify accepted |
-| PR qualification | All14 workflows succeeded on exact f402a0b0; bounded suite 1,524 tests/OK in 883.638 seconds, release suite 434 tests/OK in 814.574 seconds; five threads resolved. Main push has six separately applicable workflows |
+| PR qualification | All14 workflows succeeded on exact f402a0b0; bounded suite 1,524 tests/OK in 883.638 seconds, release suite 434 tests/OK in 814.574 seconds; five threads resolved. Main push has six separately applicable workflows | Main997 passed 1,524 current tests but its overall bounded workflow failed the historical interruption probe; publication correctly stopped.
 | Experiment-identity review repair | Published and independently reviewed: fixed startup protocol/config/cohort/seed/native arm/completion, native audit of skipped completed cells, null actual-profit/empty-authority summary schema; comparator source/protocol/phase/authority headers. The wrong-seed counterexample was independently reproduced. Current exact-head gates remain required |
 | Composed-future admission correction | Published/reviewed: native nonempty-menu priority, all higher-priority requested-work exclusion, current-delivery customer exclusion, full paid pool preserved, planner/auditor reconstruction. Complete windows require one through six days, derived from the 168-hour cooldown; longer windows are explicitly UNAVAILABLE |
 | Reviewed corrections | The merged main contains the owned-cost/frontier, fixed-experiment identity, comparator headers and complete-future admission/cooldown repairs. No new profitable startup result or default promotion is established |
-| Final qualified merge / release | Merge complete at `99769a8a…`; tag `connected014-99769a8a4d19a8cfc1b3c6d05084d7ed99b76849` remains **PENDING publication** and actual asset inspection |
+| Final qualified merge / release | PR98 merge at `99769a8a4d19a8cfc1b3c6d05084d7ed99b76849` is complete; its release is **BLOCKED/UNPUBLISHED**. Final release identity awaits a separately qualified checker-fix integration |
 | Downloaded final default operation | **PENDING** — require actual downloaded bytes, all command exits, native/public/wheel audits and unchanged resume |
 | Four-case annual reproduction on 718b | **COMPLETED** from the locally qualified archive before publication; all five register/pause/resume/audit/scoreboard commands exited zero, the canonical four-world package audit accepted, and all annual financial/count results match the primary source. Public evidence is pinned at `70be5025` |
 | Annual operation of the later repaired final release | **PENDING** — the frozen 718b reproduction remains source-specific; later optional-startup repairs change the final source |
@@ -49,6 +49,12 @@ Coherent account-year: task `2611010481-central-growth`, native-account configur
 The later startup repairs change the final source; the completed 718b study remains a prepublication annual/default-money regression. Final repaired-release annual operation is separately pending. Executing-source membership excludes manifest-bound generated inputs. Original signed authority was not accessed/migrated and primary accounts were untouched.
 
 The composed forecast repair has source-specific engineering evidence. Nineteen pure controls reproduce native four-place starvation, five/six-place admission, shared-work and same-current-customer conflicts. Forty focused component checks passed; the combined 106-test run also operated the unchanged 14-day native fixture through actual acquisition, EARNED two-unit capacity, settled packets, game/native audit and unchanged resume. The bounded forecast is conditional on future eligibility and remaining work; current proposal buyers are conservatively excluded. Test-only admitted/disjoint controls leave historical factories and results unchanged.
+
+## Main997 publication failure and bounded checker repair
+
+[Bounded run 41300637969, job 124830633300](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41300637969/job/124830633300) passed all 1,524 current tests in 1512.613 seconds, then failed the immutable cycle 001 worker-bounds probe. Artifact 13082132066 is 75,600 bytes, SHA256 `a8bcbe0d49b1184a5058b97d5a965000b1efc18ad507a0d75dd0dde371b0f0fd`. Its actual traceback shows SIGINT during `STARTED.json` creation before the historical runner entered its protected try. Memory/file/fd checks passed, partial evidence stayed unchanged and restart refused, but `INTERRUPTED.json` was absent. The overall main gate and publisher remain failed; downloaded operation was skipped.
+
+The pinned historical worker/probe/closure/paper and failed receipt stay unchanged. Current checker 054 will verify an exact live protected worker, stop that owned child at a confirmed barrier, then send real SIGINT to the parent and require interruption/no completion, child termination, immutable restart evidence and all original resource checks. This repairs the current checker readiness assumption and qualifies active-worker interruption. The original early-STARTED startup defect remains **PRESERVED_NOT_REPAIRED**; no every-initialization-point recovery claim is made.
 
 ## Four primary native account years, separately reproduced
 
@@ -125,4 +131,4 @@ Next, inspect and qualify that owner's published source, reconcile access throug
 
 The complete requested stress matrix remains unfinished: broader defaults/refunds/delays, overlapping/exhausted channels, imitation, provider budgets, large-market aggregation and complete equivalent-outcome human/human-plus-AI/frontier-AI comparisons. Actual host/model/engineering bills, empirical demand and real commercial profit remain unknown. No paid API/service, real transaction, outreach or production deployment authority is created by this document.
 
-Completion lead: finish exact main 99769a8a applicable gates, inspect publication and actual assets, then operate/audit/resume downloaded bytes and complete the funded-next-opportunity reproduction. Preserve the 652e6… primary and 718b/d1f28… annual reproduction boundaries.
+Completion lead: finish the separately versioned active-worker checker repair, qualify and integrate normally, then inspect publication and operate actual downloaded bytes. Preserve failed main997 and its original early-start defect; preserve 652e6… primary and 718b/d1f28… annual boundaries.
