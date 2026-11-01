@@ -30,8 +30,30 @@ def default_config():
         'cost_evidence':'AUTHORED_RESOURCE_ENVELOPES. Executed deterministic service/checker costs include acquisition, qualification, setup/development/failures, production, supplier, prepaid support, fees, maintenance, taxes. Host/model billing unavailable, never asserted zero. Human hours/wages are scenarios, not measurements or automatic sales.',
         'limits':['Synthetic non-personal work only; no actual customers or payments.','Finite authored buyer/channel/supplier contracts, no empirical conversion calibration.','Permanent native principal/fee protection tails remain; seed may back reserves.','No paid inference: capable-frontier AI economics represented by disclosed envelopes; actual executors are deterministic.','Finite frozen service inventory is an edition resource, not a universal market ceiling.']}
 
+def fresh_account_config(manifest, *, prospective_policy=None, root=None):
+    """Default exact-money registration for a NEW account, never a history upgrade.
+
+    Returns (config, copied manifest). Historical default_config() and explicit
+    legacy registrations remain unchanged. The caller must create a fresh account
+    path and still declare finite market inputs/costs; this grants no demand/cash.
+    """
+    if not isinstance(manifest, dict):
+        raise ValueError('FRESH_SERVICE_MANIFEST_REQUIRED')
+    cfg = default_config()
+    cfg['monetary_policy'] = 'exact-integer-v2'
+    registered = copy.deepcopy(manifest)
+    if prospective_policy is None:
+        registered['native_engine'] = 'exact-permanent-v2'
+    else:
+        cfg['prospective_policy'] = copy.deepcopy(prospective_policy)
+        registered['native_engine'] = 'exact-prospective-v2'
+    from adaptive_enterprise.instruments import _validate_manifest
+    _validate_manifest(Path(__file__).resolve().parents[1] if root is None else root, registered)
+    return validate_config(cfg), registered
+
+
 def validate_config(cfg):
-    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','monetary_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
     for key in ['horizon_days','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
     # Explicit finite scenario population; no universal market ceiling.
@@ -42,10 +64,11 @@ def validate_config(cfg):
     if cfg['production_hours']+cfg['acceptance_hours']+cfg['clearing_hours']>cfg['payment_deadline_hours']:raise ValueError('COMPLETE_LIFECYCLE_EXCEEDS_PAYMENT_DEADLINE')
     for key in ['opening','working','setup_cost','maintenance_daily','exposure_cost','qualification_cost','onboarding_cost','production_cost','support_cost','supplier_unit_cost','capacity_price','payment_fixed']:
         if type(cfg[key]) is not int or cfg[key]<0:raise ValueError('INTEGER_RESOURCE_COST_REQUIRED')
+    if 'monetary_policy' in cfg and cfg['monetary_policy']!='exact-integer-v2':raise ValueError('EXPLICIT_EXACT_MONETARY_POLICY_REQUIRED')
     if 'cash_diagnostic_available' in cfg and (type(cfg['cash_diagnostic_available']) is not int or not 0<=cfg['cash_diagnostic_available']<=10**15):raise ValueError('FINITE_DIAGNOSTIC_CASH_REQUIRED')
     if 'prospective_policy' in cfg:
         from .capital_lifecycle import validate_policy
-        validate_policy(cfg['prospective_policy'])
+        validate_policy(cfg['prospective_policy'],exact_money='monetary_policy' in cfg)
     if 'mechanism_policy' in cfg:
         from .mechanism_choice import validate_policy
         validate_policy(cfg['mechanism_policy'])
@@ -245,7 +268,7 @@ def _prepare_plan(state,account,jobs):
         if 'prospective_policy' in cfg:
             from .capital_lifecycle import terms_for
             collection=production_time+cfg['acceptance_hours']+cfg['clearing_hours']
-            terms=terms_for(ident,price,collection,cfg['prospective_policy'],fee,deadline=t+cfg['payment_deadline_hours'])
+            terms=terms_for(ident,price,collection,cfg['prospective_policy'],fee,deadline=t+cfg['payment_deadline_hours'],exact_money='monetary_policy' in cfg)
             order.update(terms=terms,terms_id='terms-'+ident,terms_sha256=digest(terms),premium=terms['premium_microUSD'],resource_cost=cost-fee-terms['premium_microUSD'])
         if method_plan:order['method_plan']=method_plan
         if joint_choice:order.update(joint_allocation_sha256=joint['id'],joint_option_id=joint_choice['joint_option_id'])
@@ -254,7 +277,7 @@ def _prepare_plan(state,account,jobs):
 
 def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events=None,failpoint=None):
     cfg=validate_config(copy.deepcopy(config));root=Path(root).resolve();output=Path(output).resolve();output.mkdir(parents=True,exist_ok=True)
-    expected_engine='prospective-v1' if 'prospective_policy' in cfg else 'legacy-permanent-v1'
+    expected_engine=('exact-prospective-v2' if 'prospective_policy' in cfg else 'exact-permanent-v2') if 'monetary_policy' in cfg else ('prospective-v1' if 'prospective_policy' in cfg else 'legacy-permanent-v1')
     if manifest.get('native_engine','legacy-permanent-v1')!=expected_engine:raise ValueError('FRESH_POLICY_NATIVE_ENGINE_REGISTRATION_MISMATCH')
     if arm not in {'baseline','channel','growth','competitive_growth'}:raise ValueError('REGISTERED_COMMERCIAL_OPTION_ARM_REQUIRED')
     if source is None:

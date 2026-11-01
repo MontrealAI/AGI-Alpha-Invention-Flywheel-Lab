@@ -376,7 +376,7 @@ def _validate_manifest(root,manifest):
         raise ValueError('ADAPTIVE_SERVICE_SCOPE_REQUIRED')
     if set(manifest)-{'native_engine'}!={'schema','scope','currency','account_namespace','source_hashes','jobs','attempts','cohort_provenance','resource_receipt'} or manifest['attempts']!=[]:
         raise ValueError('EXACT_ADAPTIVE_MANIFEST_REQUIRED')
-    if 'native_engine' in manifest and manifest['native_engine'] not in {'legacy-permanent-v1','prospective-v1'}:
+    if 'native_engine' in manifest and manifest['native_engine'] not in {'legacy-permanent-v1','prospective-v1','exact-permanent-v2','exact-prospective-v2'}:
         raise ValueError('DECLARED_NATIVE_ENGINE_REQUIRED')
     if set(manifest.get('source_hashes',{}))!=set(SOURCE_PATHS) or not isinstance(manifest.get('jobs'),list) or not 1<=len(manifest['jobs'])<=1000:
         raise ValueError('ADAPTIVE_BOUNDED_SOURCE_AND_COHORT_REQUIRED')

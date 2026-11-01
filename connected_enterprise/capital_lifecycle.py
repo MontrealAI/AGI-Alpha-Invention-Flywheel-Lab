@@ -10,7 +10,7 @@ def default_policy():
             'counterparty_obligations': 'Buyer pays modeled price; producer supplies independently accepted artifact; claims remain producer obligations'}
 
 
-def validate_policy(raw):
+def validate_policy(raw, *, exact_money=False):
     if not isinstance(raw,dict) or set(raw)!=set(default_policy()):
         raise ValueError('EXACT_FRESH_PROSPECTIVE_POLICY_REQUIRED')
     p=copy.deepcopy(raw)
@@ -18,11 +18,14 @@ def validate_policy(raw):
         raise ValueError('EXPLICIT_FRESH_PROSPECTIVE_POLICY_REQUIRED')
     for key in ['protection_hours', 'residual_microUSD', 'premium_microUSD',
                 'coverage_limit_microUSD', 'deductible_microUSD', 'payout_delay_hours']:
-        if type(p[key]) is not int or not 0 <= p[key] <= 10**12:
+        if type(p[key]) is not int or (p[key] < 0 or ((not exact_money or not key.endswith('_microUSD')) and p[key] > 10**12)):
             raise ValueError('BOUNDED_OPERATING_POLICY_INTEGER_REQUIRED')
     if not 1 <= p['protection_hours'] <= 24 * 365:
         raise ValueError('FINITE_POSITIVE_OPERATING_PROTECTION_REQUIRED')
-    from commercial.terms import prospective_terms
+    if exact_money:
+        from commercial.terms_exact_v2 import prospective_terms
+    else:
+        from commercial.terms import prospective_terms
     prospective_terms('policy-validation', max(1_000_000, p['residual_microUSD']),
                       1 + p['protection_hours'], 1, residual=p['residual_microUSD'],
                       premium=p['premium_microUSD'], coverage_limit=p['coverage_limit_microUSD'],
@@ -34,9 +37,12 @@ def validate_policy(raw):
     return p
 
 
-def terms_for(order_id, price, collection, policy, fee, *, deadline=None):
-    from commercial.terms import prospective_terms
-    p = validate_policy(policy)
+def terms_for(order_id, price, collection, policy, fee, *, deadline=None, exact_money=False):
+    if exact_money:
+        from commercial.terms_exact_v2 import prospective_terms
+    else:
+        from commercial.terms import prospective_terms
+    p = validate_policy(policy,exact_money=exact_money)
     if p['mode'] == 'permanent':
         return None
     return prospective_terms(order_id, price, max(collection, deadline or collection) + p['protection_hours'], collection,

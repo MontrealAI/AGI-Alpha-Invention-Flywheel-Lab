@@ -1,0 +1,7 @@
+# Qualification is not an automatic economic campaign
+
+The legacy strategic024 and sequence026 full comparison workflows run on deliberate changes to their registered protocol, runner/configuration, reducer or workflow paths, or via `workflow_dispatch` at an explicit source revision. Ordinary runtime, documentation and regression-test changes no longer automatically repeat those full cohorts. Sequence026 also tracks its imported strategic024 protocol and commoncost026 configuration.
+
+All existing mandatory correctness tests, native finance/ownership/recovery audits, source/package binding, clean smoke, release qualification, wheel checks and actual downloaded released-system operation remain. The root campaign still discovers every current test. Existing required main push gates and all actually observed same-head push workflows remain required; no queued/in-flight result is cancelled, waived or retroactively reclassified.
+
+A release or smoke pass is not a new economic comparison. Old results remain bound to their original source/protocol. A new profit, policy superiority or economic-default promotion claim requires the applicable deliberate campaign and complete source-matched favorable/adverse evidence; this scheduling split supplies none. Keep all registered worlds and audit/reducer checks when a campaign is requested. No change is made to the current complete-offer032 protocol.

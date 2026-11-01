@@ -17,7 +17,6 @@ from commercial.native_engine import engine
 
 SCOPE = 'SIMULATED'
 UNIT = 'simulated-microUSD'
-MAX_AMOUNT = 10**12
 _AUDITED_CONTENT = set()
 _ADAPTIVE_ACCOUNT_CAPABILITY = object()
 _NO_EXPECTED_BEFORE = object()
@@ -43,8 +42,8 @@ def digest(value):
 
 
 def amount(value, *, positive=False):
-    if type(value) is not int or not (1 if positive else 0) <= value <= MAX_AMOUNT:
-        raise ValueError('BOUNDED_INTEGER_MONETARY_AMOUNT_REQUIRED')
+    if type(value) is not int or value < (1 if positive else 0):
+        raise ValueError('EXACT_INTEGER_MONETARY_AMOUNT_REQUIRED')
     return value
 
 
@@ -141,7 +140,7 @@ class TapeExchange:
         self.root = Path(root)
         self.manifest = copy.deepcopy(manifest)
         self.native_engine = self.manifest.get('native_engine', 'legacy-permanent-v1')
-        if self.native_engine not in {'legacy-permanent-v1', 'prospective-v1'}:
+        if self.native_engine not in {'legacy-permanent-v1', 'prospective-v1','exact-permanent-v2','exact-prospective-v2'}:
             raise ValueError('EXPLICIT_SUPPORTED_NATIVE_ENGINE_REQUIRED')
         self.jobs = load_jobs(root, manifest)
         amount(opening)
@@ -241,7 +240,7 @@ class TapeExchange:
             raise ValueError('EXACT_ACTION_ARGUMENT_SCHEMA_REQUIRED')
         if 'crash' in args and type(args['crash']) is not bool:
             raise ValueError('EXPLICIT_CRASH_BOOLEAN_REQUIRED')
-        if op in {'register_terms', 'claim', 'resolve_claim', 'mature', 'recover_claim'} and self.native_engine != 'prospective-v1':
+        if op in {'register_terms', 'claim', 'resolve_claim', 'mature', 'recover_claim'} and self.native_engine not in {'prospective-v1','exact-prospective-v2'}:
             raise ValueError('PROSPECTIVE_NATIVE_ENGINE_OPT_IN_REQUIRED')
         if _expected_before is _NO_EXPECTED_BEFORE:
             before = self.ex.snapshot()
@@ -335,7 +334,7 @@ class TapeExchange:
         exported = {'config': self.config, 'actions': self.actions, 'actions_sha256': digest(self.actions),
                 'journal': journal, 'orders': states, 'investments': investments, 'investment_witnesses': witnesses,
                 'invoices': invoices, 'receivables': receivables, 'summary': self.ex.snapshot()}
-        if self.native_engine == 'prospective-v1':
+        if self.native_engine in {'prospective-v1','exact-prospective-v2'}:
             prospective = {
                 'prospective_terms': [dict(x) for x in self.ex.db.execute('SELECT * FROM prospective_terms ORDER BY id')],
                 'prospective_orders': [dict(x) for x in self.ex.db.execute('SELECT * FROM prospective_orders ORDER BY order_id')],
@@ -489,7 +488,7 @@ def _audit_native_impl(tape, *, root, manifest, expected_actions_sha256=None, _s
                 raise ValueError('EVENT_DERIVED_BALANCE_MISMATCH')
         rebuilt = replay.export()
         derived_keys = ['config', 'summary', 'journal', 'orders', 'investments', 'investment_witnesses', 'invoices', 'receivables']
-        if replay.native_engine == 'prospective-v1':
+        if replay.native_engine in {'prospective-v1','exact-prospective-v2'}:
             prospective_keys = {'prospective_terms', 'prospective_orders', 'prospective_claims'}
             actual_keys = prospective_keys.intersection(rebuilt)
             if actual_keys != prospective_keys.intersection(tape):
