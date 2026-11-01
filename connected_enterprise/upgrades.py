@@ -4,6 +4,8 @@ Historical verifiers run in their pinned source directory. No account secret
 is exported, and a transition never replaces the native monetary history.
 """
 import copy
+import contextvars
+from contextlib import contextmanager
 import hashlib
 import hmac
 import json
@@ -18,7 +20,25 @@ from connected_enterprise.transition_evidence import ticket_body, current_store_
 
 DOMAIN = b'native-source-transition\n'
 _HISTORICAL_AUDITS = {}
+_OWNER_AUTHORIZED_HISTORY = contextvars.ContextVar('owner_authorized_historical_audit', default=frozenset())
 MAX_TICKET_BYTES = 16_000_000
+
+
+@contextmanager
+def _owner_authenticated_history(tickets, key):
+    """Only callers holding an existing Account key may authorize historical code."""
+    if not isinstance(key, bytes) or len(key) < 16:
+        raise ValueError('OWNED_ACCOUNT_HMAC_AUTHORITY_REQUIRED')
+    signed = set()
+    for ticket in tickets:
+        ticket_body(ticket, key=key)
+        signed.add(digest(ticket))
+    token = _OWNER_AUTHORIZED_HISTORY.set(_OWNER_AUTHORIZED_HISTORY.get() | frozenset(signed))
+    try:
+        yield
+    finally:
+        _OWNER_AUTHORIZED_HISTORY.reset(token)
+
 # Exact reviewed implementation; this is a narrow signer's codec allowlist, not
 # permission to execute new replacement-runtime Python in an account owner.
 PINNED_OWNER_EVIDENCE_CODEC_SHA256 = 'edce19ed4addf94027f3d040e5a5779ec150a867df8ed5b6bf8a0f1e2c0868a9'
@@ -66,6 +86,8 @@ def source_inventory(root):
 
 
 def verify_historical(ticket, manifest, *, root=None):
+    if digest(ticket) not in _OWNER_AUTHORIZED_HISTORY.get():
+        raise ValueError('INDEPENDENT_HISTORICAL_VERIFIER_AUTHORITY_REQUIRED')
     body = ticket_body(ticket)
     candidates = [Path(body['historical_root']).absolute()]
     if root is not None:
@@ -98,7 +120,9 @@ with scope:
  r=audit_journal(p['record'],root=p['root'],manifest=p['manifest'])
  assert r['accepted'];print(json.dumps(r,sort_keys=True))
 """
-    env = {**os.environ, 'PYTHONPATH': str(root), 'PYTHONDONTWRITEBYTECODE': '1'}
+    env = {'PYTHONPATH': str(root), 'PYTHONDONTWRITEBYTECODE': '1',
+           'PYTHONNOUSERSITE': '1', 'PATH': '/usr/bin:/bin',
+           'LANG': 'C.UTF-8', 'LC_ALL': 'C.UTF-8'}
     done = subprocess.run([sys.executable, '-c', code], input=json.dumps(payload),
                           text=True, capture_output=True, cwd=root, env=env, timeout=60)
     if done.returncode:
