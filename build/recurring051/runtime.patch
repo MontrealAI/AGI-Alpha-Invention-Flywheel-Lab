@@ -1,0 +1,266 @@
+--- a/connected_enterprise/billion036.py
++++ b/connected_enterprise/billion036.py
+@@ -54,6 +54,8 @@
+             raise ValueError('EXACT_100K_AND_60_CALENDAR_MONTHS_REQUIRED')
+     cases = []
+     for name, cfg in sorted(value['configs'].items()):
++        if 'buyer_income_policy' in cfg or 'complete_offer_policy' in cfg:
++            raise ValueError('FIXED_BUYER_BOUND_UNAVAILABLE_FOR_REPLENISHED_OR_COMPLETE_MARKET')
+         # Current _buyers has fixed, non-replenishing lifetime budgets:
+         # int((180 + 400*draw)*MICRO*multiplier/10000); draw in [0,1).
+         # A deliberately generous upper bound ignores competition and costs.
+--- a/connected_enterprise/complete_offer_audit.py
++++ b/connected_enterprise/complete_offer_audit.py
+@@ -5,6 +5,8 @@
+ def audit_market(result,tape):
+     from .verify import _private_draw
+     cfg=result['config'];policy=cfg['complete_offer_policy'];seed=result['seed']
++    from .buyer_income import public_context,income_index,received_by
++    incomes=income_index(result)
+     market=compile_market(policy)
+     buyers={b['id']:b for b in result['buyers']}
+     choices=[d for d in result['decisions'] if d.get('kind') in {'offer','outside_choice'}]
+@@ -18,7 +20,7 @@
+         seen.add(key)
+         committed=sum(o['price'] for o in result['orders'] if o['customer_id']==ident and o['qualified_time']<t and (o['id'] not in refunds or refunds[o['id']]>t))
+         observed=outside.get(ident,0)+committed
+-        context=market.context(ident,observed)
++        context=public_context(market.context(ident,observed),cfg,t)
+         if d.get('market_context')!=context or d.get('human_price') is not None or d.get('public_rival_price') is not None:raise ValueError('COMPLETE_MARKET_CONTEXT_NOT_REDERIVED')
+         price=d['price'];service=d['service_id']
+         if d['kind']=='offer':
+@@ -37,7 +39,7 @@
+             if pick['price']!=price or pick['service_id']!=service:raise ValueError('COMPLETE_SCOPE_OR_QUOTE_CHANGED')
+         elif price is not None:raise ValueError('NO_BID_CANNOT_HAVE_PRICE')
+         index=market.atom(ident,seed)
+-        budget=market.profile(ident)['atoms'][index]['budget_microUSD']
++        budget=market.profile(ident)['atoms'][index]['budget_microUSD']+received_by(incomes,ident,t)
+         chosen=actual_choice(context,index,budget-observed,service if price is not None else None,price,_private_draw(seed,[t//24,ident],'complete-offer-tie'))
+         if d['buyer_choice']!=chosen['provider'] or d['chosen'] is not (chosen['provider']=='us') or d.get('outside_option_name')!=chosen['name'] or d.get('outside_service_id')!=chosen['service_id']:raise ValueError('VOLUNTARY_COMPLETE_SCOPE_CHOICE_CHANGED')
+         if chosen['provider']=='us':
+--- a/connected_enterprise/engine.py
++++ b/connected_enterprise/engine.py
+@@ -53,7 +53,7 @@
+ 
+ 
+ def validate_config(cfg):
+-    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','monetary_policy','complete_offer_policy','refusal_recourse_policy','startup_acquisition_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
++    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','monetary_policy','complete_offer_policy','refusal_recourse_policy','startup_acquisition_policy','buyer_income_policy','public_budget_gate'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+     for key in ['horizon_days','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
+         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
+     # Explicit finite scenario population; no universal market ceiling.
+@@ -104,6 +104,10 @@
+     if 'capacity_menu' in cfg.get('strategic_allocation_policy',{}):
+         if 'complete_offer_policy' not in cfg or cfg['capacity_price']<=0:raise ValueError('COSTED_COMPLETE_CAPACITY_MENU_REQUIRED')
+         if cfg['strategic_allocation_policy']['capacity_menu']['opportunity_delay_hours']<max(cfg['production_hours'],cfg['capacity_lead_hours']):raise ValueError('FUTURE_CAPACITY_AFTER_CURRENT_PRODUCTION_AND_ACTIVATION_REQUIRED')
++    from .buyer_income import validate_configuration as validate_buyer_income
++    validate_buyer_income(cfg)
++    from .public_budget_gate051 import validate as validate_budget_gate
++    validate_budget_gate(cfg)
+     contracts=validate_contracts(cfg['channels'])
+     if 'channel_menu_policy' in cfg:
+         from .channel_menu import validate_policy
+@@ -144,6 +148,11 @@
+         'market':{'rival_cash':500*MICRO,'rival_collections':0,'rival_expenses':0,'rival_initial_cash':500*MICRO,'rival_observations':[],'public_rival_bps':cfg['price_pressure_bps'],'supplier_cash':100*MICRO,'supplier_initial_cash':100*MICRO,'supplier_collections':0,'supplier_expenses':0},'stop_reasons':[]}
+     _schedule(s,0,'startup','000-startup')
+     for day in range(cfg['horizon_days']):_schedule(s,day*24,'plan',f'plan-{day:04d}')
++    if 'buyer_income_policy' in cfg:
++        from .buyer_income import due_days
++        for buyer in s['buyers']:buyer['external_income_total']=0
++        for day in due_days(cfg['buyer_income_policy'],cfg['horizon_days']):
++            _schedule(s,day*24,'buyer_income',f'000-income-{day:06d}')
+     return s
+ 
+ def _offer(jobs,state,buyer,cfg):
+@@ -167,7 +176,7 @@
+     return entry,offer,anchor
+ 
+ 
+-def _offer_menu(state,jobs,buyer,cfg,*,_market=None):
++def _offer_menu(state,jobs,buyer,cfg,*,_market=None,_at_time=None):
+     """Admitted public request alternatives, without private value or budget."""
+     from .complete_offer_market import request_profile
+     profile=request_profile(cfg['complete_offer_policy'],buyer['id']) if _market is None else _market.profile(buyer['id'])
+@@ -185,6 +194,11 @@
+         requested.append(entry)
+     options=[]
+     for service in services:
++        if 'public_budget_gate' in cfg:
++            if _at_time is None:raise ValueError('PUBLIC_BUDGET_GATE_CLOCK_REQUIRED')
++            from .public_budget_gate051 import admits
++            spent=buyer['outside_spend']+buyer['our_settled_spend']+sum(buyer['pending_commitments'].values())
++            if not admits(profile,service,spent,cfg,_at_time):continue
+         entries=[entry for entry in requested if entry['job']['accepted'] and entry['job']['service_id']==service and entry['artifact'].get('outcome_scope')=='complete_outcome' and not used.intersection(entry['job']['work_keys'])]
+         if not entries:continue
+         entry=min(entries,key=lambda x:x['job']['id'])
+@@ -249,7 +263,8 @@
+         if 'complete_offer_policy' in cfg:
+             from .complete_offer_market import actual_choice
+             observed=b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values())
+-            context=public_market.context(b['id'],observed)
++            from .buyer_income import public_context
++            context=public_context(public_market.context(b['id'],observed),cfg,t)
+             chosen=actual_choice(context,public_market.atom(b['id'],seed),b['remaining_budget'],service if price is not None else None,price,draw(seed,[day,b['id']],'complete-offer-tie'))
+             decision={'kind':'offer' if price is not None else 'outside_choice','time':t,'customer_id':b['id'],'service_id':service,'price':price,'human_price':None,'public_rival_price':None,'chosen':chosen['provider']=='us','buyer_choice':chosen['provider'],'outside_option_name':chosen['name'],'outside_service_id':chosen['service_id'],'market_context':context,'information':'Public request and independent value/budget hypotheses; private atom belongs only to buyer environment. Outside contracts independently available per request.'}
+             if chosen['provider'] not in {'us','decline'}:
+@@ -271,7 +286,7 @@
+     joint=None; joint_by_customer={}; joint_selected={}
+     if 'strategic_policy' in cfg:
+         from .joint_planning import plan_actions
+-        joint=plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,_offer,draw,**({'offer_menu_fn':lambda s,j,b,c:_offer_menu(s,j,b,c,_market=public_market)} if 'complete_offer_policy' in cfg else {}))
++        joint=plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,_offer,draw,**({'offer_menu_fn':lambda s,j,b,c:_offer_menu(s,j,b,c,_market=public_market,_at_time=t)} if 'complete_offer_policy' in cfg else {}))
+         prepared['joint_action']=joint
+         joint_by_customer={d['customer_id']:d for d in joint['allocation']['deliveries']}
+         from .strategic_commerce import selected_delivery
+@@ -449,6 +464,8 @@
+             if state['current'] is None:
+                 if 'strategic_policy' in cfg and state['queue'][0]['kind']=='plan':
+                     now=state['queue'][0]['time'];cost('maintenance-'+str(now//24),cfg['maintenance_daily'],now,'maintenance')
++                    if 'public_budget_gate' in cfg:
++                        cost('public-budget-gate-'+str(now//24),cfg['public_budget_gate']['daily_cost_microUSD'],now,'public_affordability_preflight')
+                     if 'startup_acquisition_policy' in cfg and now==0:
+                         from .startup_acquisition048 import preflight as startup_preflight
+                         if startup_preflight(cfg,{b['id']:b for b in state['buyers']},jobs,_offer_menu,state['used_jobs']):
+@@ -484,6 +501,14 @@
+             if kind=='startup':
+                 cost('complete-development-setup',cfg['setup_cost'],t,'development_integration_qualification_and_failed_search')
+                 _event(state,t,'STARTUP_FUNDED',ev['id'])
++            elif kind=='buyer_income':
++                from .buyer_income import EVIDENCE
++                policy=cfg['buyer_income_policy']
++                for buyer in state['buyers']:
++                    if draw(seed,[day,buyer['id']],'buyer-external-income')<policy['receipt_bps']/10000:
++                        amount=policy['income_microUSD'];buyer['remaining_budget']+=amount;buyer['external_income_total']+=amount
++                        _event(state,t,'EXTERNAL_BUYER_INCOME',f"external-income-{day:06d}-{buyer['id']}",customer_id=buyer['id'],amount_microUSD=amount,evidence_role=EVIDENCE)
+             elif kind=='plan':
+                 if p.get('joint_action'):state.setdefault('joint_actions',{})[p['joint_action']['id']]=p['joint_action']
+                 cost('maintenance-'+str(day),cfg['maintenance_daily'],t,'maintenance')
+@@ -597,7 +622,7 @@
+         for b in state['buyers']:
+-            if b['initial_budget']!=b['remaining_budget']+b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values()) or b['remaining_budget']<0:raise ValueError('SHARED_BUYER_BUDGET_CONSERVATION')
++            if b['initial_budget']+b.get('external_income_total',0)!=b['remaining_budget']+b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values()) or b['remaining_budget']<0:raise ValueError('SHARED_BUYER_BUDGET_CONSERVATION')
+--- a/connected_enterprise/joint_planning.py
++++ b/connected_enterprise/joint_planning.py
+@@ -109,7 +109,8 @@
+             extra={}
+             if menu_enabled:
+                 spend=buyer['outside_spend']+buyer['our_settled_spend']+sum(buyer['pending_commitments'].values())
+-                extra['market_context']=public_market.context(buyer['id'],spend,True)
++                from .buyer_income import public_context
++                extra['market_context']=public_context(public_market.context(buyer['id'],spend,True),cfg,day*24)
+             selection=select(cfg['strategic_policy'],cfg.get('mechanism_policy'),job['id'],offer,state.get('mechanism_memory'),public,**extra)
+             delivery={'id':'quote-'+str(day)+'-'+buyer['id']+('-offer-'+str(offer_index) if menu_enabled else ''),'customer_id':buyer['id'],'onboarding':onboard,
+                                'exclusive_group':'customer-'+buyer['id'],'selection':selection,'requires':[]}
+--- a/connected_enterprise/strategic_audit.py
++++ b/connected_enterprise/strategic_audit.py
+@@ -68,6 +68,12 @@
+         snapshot=record['observation'];charges=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')=='maintenance-'+str(day)]
+         if len(charges)!=1 or charges[0]['day']!=moment or charges[0]['args'].get('amount')!=cfg['maintenance_daily']:raise ValueError('NATIVE_PREPAID_PLANNING_REQUIRED')
+         charge=charges[0]
++        if 'public_budget_gate' in cfg:
++            fees=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')=='public-budget-gate-'+str(day)]
++            fee=cfg['public_budget_gate']['daily_cost_microUSD']
++            if len(fees)!=1 or fees[0]['day']!=moment or fees[0]['seq']!=charge['seq']+1 or fees[0]['args']['amount']!=fee or fees[0]['before']['available']<fee or fees[0]['before']['cash']-fees[0]['after']['cash']!=fee:
++                raise ValueError('PUBLIC_BUDGET_GATE_NOT_PREPAID')
++            charge=fees[0]
+         if 'startup_acquisition_policy' in cfg and moment==0:
+             from .startup_acquisition048 import preflight as startup_preflight
+             from .engine import _offer_menu
+@@ -123,6 +129,14 @@
+             menu=[]
+             consumed={key for jobid in used for key in jobs[jobid]['work_keys']}
+             for service in services:
++                if 'public_budget_gate' in cfg:
++                    from .buyer_income import public_accrued
++                    refunds_by_id={a['args']['id']:a['day'] for a in tape['actions'] if a['op']=='event' and a['args']['action']=='refund'}
++                    observed=sum(d.get('outside_spend',0) for d in result['decisions'] if d.get('customer_id')==ident and d['time']<moment)
++                    observed+=sum(o['price'] for o in result['orders'] if o['customer_id']==ident and o['qualified_time']<moment and (o['id'] not in refunds_by_id or refunds_by_id[o['id']]>moment))
++                    # Independent bound reconstruction, not the producer's admits helper.
++                    upper=max(a['budget_microUSD'] for a in profile['atoms'])+public_accrued(cfg,moment)-observed
++                    if upper<min(profile['price_grids'][service]):continue
+                 available=[j for j in jobs.values() if j['id'] not in used and j['accepted'] and j['service_id']==service and artifacts[j['id']]['outcome_scope']=='complete_outcome' and ('complete_offer_policy' not in cfg or (j['id'] in cfg['complete_offer_policy']['requested_jobs'][ident] and not consumed.intersection(j['work_keys'])))]
+                 if available:menu.append(min(available,key=lambda j:j['id']))
+             if menu:considered+=1
+@@ -217,7 +231,8 @@
+                 outside=sum(d.get('outside_spend',0) for d in result['decisions'] if d.get('customer_id')==ident and d['time']<moment)
+                 refunds={a['args']['id']:a['day'] for a in tape['actions'] if a['op']=='event' and a['args']['action']=='refund'}
+                 committed=sum(o['price'] for o in result['orders'] if o['customer_id']==ident and o['qualified_time']<moment and (o['id'] not in refunds or refunds[o['id']]>moment))
+-                if problem.get('market_context')!=market_context(cfg['complete_offer_policy'],ident,outside+committed):raise ValueError('COMPLETE_MARKET_FORECAST_READS_PRIVATE_STATE')
++                from .buyer_income import public_context
++                if problem.get('market_context')!=public_context(market_context(cfg['complete_offer_policy'],ident,outside+committed),cfg,moment):raise ValueError('COMPLETE_MARKET_FORECAST_READS_PRIVATE_STATE')
+                 if delivery.get('capacity_units')!=offer['capacity_units'] or delivery.get('work_keys')!=job['work_keys']:raise ValueError('COMPLETE_PRODUCTION_WORK_OR_UNITS_CHANGED')
+             elif 'market_context' in problem:raise ValueError('UNAUTHORIZED_COMPLETE_MARKET')
+             memory=problem['memory']
+--- a/connected_enterprise/verify.py
++++ b/connected_enterprise/verify.py
+@@ -85,9 +85,12 @@
+             raise ValueError('BUYER_PENDING_COMMITMENTS_REQUIRED')
+         if spent != settled.get(customer, 0) or commitments != pending.get(customer, {}):
+             raise ValueError('BUYER_CROSS_SERVICE_COMMITMENT_OR_SPEND_MISMATCH')
+-        if initial != remaining + spent + outside + sum(commitments.values()):
++        if initial + _integer(row.get('external_income_total',0),'EXTERNAL_BUYER_INCOME') != remaining + spent + outside + sum(commitments.values()):
+             raise ValueError('BUYER_BUDGET_CONSERVATION_FAILURE')
+-    return {'buyers_checked': len(indexed), 'buyer_initial_budget': sum(row['initial_budget'] for row in buyers)}
++    receipt={'buyers_checked': len(indexed), 'buyer_initial_budget': sum(row['initial_budget'] for row in buyers)}
++    if any('external_income_total' in row for row in buyers):
++        receipt['external_buyer_income_microUSD']=sum(row['external_income_total'] for row in buyers)
++    return receipt
+ 
+ 
+ def _check_buyer_origins(config, seed, buyers):
+@@ -109,6 +112,8 @@
+ 
+ 
+ def _check_market_decisions(result, tape):
++    from .buyer_income import income_index,received_by
++    incomes=income_index(result)
+     if 'complete_offer_policy' in result['config']:
+         from .complete_offer_audit import audit_market
+         return audit_market(result,tape)
+@@ -165,7 +170,7 @@
+             raise ValueError('PRICE_POLICY_USES_UNREGISTERED_INFORMATION_OR_HUMAN_ANCHOR')
+         committed = sum(row['price'] for row in result['orders'] if row['customer_id'] == customer
+                         and row['qualified_time'] < moment and (row['id'] not in refunds or refunds[row['id']] > moment))
+-        available = buyers[customer]['initial_budget'] - outside.get(customer, 0) - committed
++        available = buyers[customer]['initial_budget'] + received_by(incomes,customer,moment) - outside.get(customer, 0) - committed
+         value = int(anchor * (1.1 + _private_draw(seed, customer, 'value')) * cfg['value_bps'] / 10000)
+         rival_price = decision['public_rival_price']
+         options = [('decline', 0)]
+@@ -310,6 +315,8 @@
+     for day in range(cfg['horizon_days']):
+         moment = day * 24
+         add('maintenance-' + str(day), cfg['maintenance_daily'], moment, 'maintenance')
++        if 'public_budget_gate' in cfg:
++            add('public-budget-gate-'+str(day),cfg['public_budget_gate']['daily_cost_microUSD'],moment,'public_affordability_preflight')
+         if 'refusal_recourse_policy' in cfg:
+             policy=cfg['refusal_recourse_policy'];selective=policy['schema']=='connected-selective-refusal-recourse/v2'
+             if selective:add('recourse-evaluation-'+str(day),policy['daily_evaluation_cost'],moment,'selective_recourse_public_evaluation')
+@@ -550,6 +557,10 @@
+     required = set(SERVICE_SOURCES) | set(FINANCE_SOURCES) | {
+         'connected_enterprise/engine.py', 'connected_enterprise/channels.py',
+         'connected_enterprise/verify.py', 'connected_enterprise/scale.py', 'connected_enterprise/pricing.py'}
++    if 'buyer_income_policy' in result['config'] or 'public_budget_gate' in result['config']:
++        required.add('connected_enterprise/buyer_income.py')
++    if 'public_budget_gate' in result['config']:
++        required.add('connected_enterprise/public_budget_gate051.py')
+     if not required <= set(result.get('source', {}).get('files', {})):
+         raise ValueError('COMPLETE_EXECUTING_SOURCE_BINDING_REQUIRED')
+     source_receipt = check_source(root, result['source'])
+@@ -721,6 +732,8 @@
+         raise ValueError('FULL_ENTERPRISE_COSTS_DO_NOT_RECONCILE')
+     budget_receipt = check_budgets(result['buyers'], list(orders.values()))
+     _check_buyer_origins(result['config'], result['seed'], result['buyers'])
++    from .buyer_income import audit_income
++    income_receipt=audit_income(result)
+     cost_semantics = _check_cost_semantics(result, tape, lifecycle_receipt,startup_evaluation_required=strategic_receipt.get('startup_evaluation_required',False))
+     commercial_receipt = _check_commercial_result(result)
+     investment_receipt = _check_investments(result, tape, orders)
+@@ -733,7 +746,7 @@
+             'verifier_source_sha256': EXECUTING_VERIFIER_SHA256,
+             'verifier_matches_world_source_snapshot': result['source']['files'].get('connected_enterprise/verify.py') == EXECUTING_VERIFIER_SHA256,
+             'collections_microUSD': collections, 'complete_costs_microUSD': expense,
+-            **source_receipt, **budget_receipt, **investment_receipt, **channel_receipt, **market_receipt,
++            **source_receipt, **budget_receipt, **income_receipt, **investment_receipt, **channel_receipt, **market_receipt,
+             **{k:v for k,v in lifecycle_receipt.items() if k!='daily_public_buyers'}, **cost_semantics, **commercial_receipt, **strategic_receipt}
+     return json.loads(canonical(receipt))
+ 
