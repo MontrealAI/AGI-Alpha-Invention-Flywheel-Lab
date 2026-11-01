@@ -204,6 +204,65 @@ class NativeDesignSearch041Tests(unittest.TestCase):
         })
         self.assertIsNone(find_native_successor(v))
 
+    def test_shared_enabler_refund_cannot_hide_outside_anchor_order(self):
+        v = case()
+        v["orders"][1]["price"] = 70
+        v["orders"][1]["complete_cost"] = 10
+        v["orders"][1]["capacity_source_plan_id"] = "shared-capacity"
+        v["investments"][0]["cost"] = 5
+        v["investments"].append({
+            "kind": "capacity", "id": "slot-shared", "plan_id": "shared-capacity",
+            "purchased_time": 80, "activation_time": 96, "expiry_time": 300,
+            "cost": 5, "funding_receipt": {"funding": "EARNED"},
+        })
+        loss = order("capacity-only-refund", "buyer4", "evidence_matrix", 100, 80,
+                     135, 195)
+        loss.update(outcome="REFUNDED", collection_time=None,
+                    capacity_source_plan_id="shared-capacity")
+        v["orders"].append(loss)
+        w = find_native_successor(v)
+        self.assertEqual(w["all_required_native_plan_ids"],
+                         ["earned-plan-4", "shared-capacity"])
+        self.assertEqual(w["source_linked_uncollected_order_ids"],
+                         ["capacity-only-refund"])
+        self.assertEqual(w["net_after_native_investment_microUSD"], -30)
+        self.assertFalse(w["positive_incremental_collected_contribution"])
+        self.assertEqual(w["source_link_scope"],
+                         "COMPLETE_CONNECTED_NATIVE_ENABLER_COMPONENT")
+
+    def test_transitive_joint_enabler_loss_cannot_be_left_out(self):
+        v = case()
+        v["orders"][1].update(price=120, complete_cost=10,
+                              capacity_source_plan_id="shared-capacity")
+        v["investments"][0]["cost"] = 5
+        for name, plan in (("slot-1", "shared-capacity"), ("slot-2", "third-plan")):
+            v["investments"].append({
+                "kind": "capacity", "id": name, "plan_id": plan,
+                "purchased_time": 80, "activation_time": 96, "expiry_time": 300,
+                "cost": 5, "funding_receipt": {"funding": "EARNED"},
+            })
+        bridge = order("bridge", "buyer6", "reconciliation", 5, 3, 130, 170)
+        bridge.update(capacity_source_plan_id="shared-capacity",
+                      capacity_source_plan_ids=["third-plan"])
+        loss = order("third-only-refund", "buyer7", "evidence_matrix", 100, 150, 135, 190)
+        loss.update(outcome="REFUNDED", collection_time=None,
+                    capacity_source_plan_id="third-plan")
+        v["orders"].extend([bridge, loss])
+        w = find_native_successor(v)
+        self.assertEqual(w["all_required_native_plan_ids"],
+                         ["earned-plan-4", "shared-capacity", "third-plan"])
+        self.assertEqual(w["net_after_native_investment_microUSD"], -53)
+        self.assertFalse(w["positive_incremental_collected_contribution"])
+
+    def test_unrelated_refund_not_charged_to_unconnected_enabler(self):
+        v = case()
+        unrelated = order("unrelated", "buyer9", "evidence_matrix", 100, 999, 130, 190)
+        unrelated.update(outcome="REFUNDED", collection_time=None)
+        v["orders"].append(unrelated)
+        w = find_native_successor(v)
+        self.assertEqual(w["net_after_native_investment_microUSD"], 26)
+        self.assertNotIn("unrelated", w["source_linked_uncollected_order_ids"])
+
     def test_duplicate_source_plan_inventory_rejected(self):
         v = case()
         v["investments"].append(dict(v["investments"][0]))
