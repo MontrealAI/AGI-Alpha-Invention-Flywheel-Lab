@@ -1,5 +1,23 @@
 # Research papers
 
+## Foundry v2 - Autonomous Enterprises: Activate. Evolve. Scale.
+
+[Read the original PDF](autonomous-enterprises-foundry-v2.pdf) · [Browser reading page (when Pages is enabled)](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/foundry-v2.html) · [Website setup](PAGES.md)
+
+**Subtitle:** A Foundry of Discovery Instruments; SUCCESSOR Ω Harness  
+**Author:** Vincent Boucher, MONTREAL.AI / QUEBEC.AI  
+**Edition:** 22 October 2026, reproducible local research edition; 33 PDF pages. “Foundry v2” is the supplied filename/version label.
+
+The paper studies reusable thermal-fluid fixtures, an assembly/calibration station and a qualified research instrument. It reports a new pulse-calorimetry measurement method, a distinct simulated successor, calibration and model-discrepancy challenges, and conditional voluntary commissioning. These are the manuscript’s reported results, not an independent rerun performed for this addition. Physical construction, actual customers, EVM execution and installed thermal execution are NOT RUN. Adding the paper does not qualify current runtime work or change the commercial scoreboard.
+
+The supplied PDF is preserved byte-for-byte (459,457 bytes):
+
+```text
+SHA-256 67f2d38922cdaa1bf28e916a494679fabf1463ba84fe56e620dfd192b20d16b3
+```
+
+The [research shelf source](index.html) offers all three original papers. The GitHub PDF link works independently of Pages. The browser website requires the one-time [Pages setup](PAGES.md) and a successful deployment; a committed HTML file alone does not mean the site is live. Existing manuscripts and historical URLs remain unchanged.
+
 ## Transformational Autonomous Enterprises - SUCCESSOR Ω Harness
 
 [Read the original PDF](transformational-autonomous-enterprises-v1.pdf)
@@ -52,3 +70,4 @@ Existing paper editions remain unchanged:
 ## Historical development archives
 
 At the owner's request, three obsolete Enterprise 011 development ZIPs were removed from the current tree. Their original bytes remain in Git history: [development 003](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/d334d4e06aa29138dd5466ec35a30f2220cebcdb/evidence/enterprise011/development-003-raw.zip), [development 002](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/d334d4e06aa29138dd5466ec35a30f2220cebcdb/evidence/enterprise011/development-002-raw.zip), and [development 000 smoke](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/d334d4e06aa29138dd5466ec35a30f2220cebcdb/evidence/enterprise011/development-000-smoke-original.zip). Historical archive manifests and amendment records remain unchanged. Required replay archives and current audit records remain present. This cleanup is not new economic qualification.
+

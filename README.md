@@ -1,6 +1,8 @@
 # AGI-Alpha-Invention-Flywheel-Lab
 Blue Sky and Beyond-Human Foresight: structural discovery, executable strategy invention, adversarial verification, and fresh successors. Experimental research.
 
+**Research papers:** [Foundry v2 — read the original PDF](docs/research/autonomous-enterprises-foundry-v2.pdf) · [All papers](docs/research/README.md) · [Browser website setup](docs/research/PAGES.md).
+
 ## Current default: connected enterprise completion015
 
 The default path operates eight **simulated** 70-day businesses: voluntary buyer choice, qualified orders, executed reconciliation/KPI/evidence work, separate artifact checking, collection, full modeled costs, native earnings reservations, acquisition/capacity and subsequent delivery. Use the [operator guide](docs/connected014/OPERATOR.md), [achieved-results report](docs/completion015/REPORT.md), [inspected PDF](docs/completion015/PAPER.pdf) and [full-record reconstruction commands](docs/completion015/ARTIFACTS.md) and [scale-model reconciliation](docs/completion015/SCALE_RECONCILIATION.md).
@@ -44,3 +46,4 @@ The exact former 250 MiB `archive_v2.py` is preserved under
 those original bytes against its unchanged hash; current cap qualification does
 not relabel altered current source as a historical reproduction. This transport
 repair changes no commercial policy, seed, cost, financial method or verdict.
+
