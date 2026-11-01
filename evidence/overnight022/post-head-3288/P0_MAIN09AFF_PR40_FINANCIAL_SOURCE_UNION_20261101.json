@@ -1,0 +1,69 @@
+{
+  "schema": "agi-alpha/p0-current-main-pr40-source-inventory-review/v1",
+  "as_of_utc": "2026-11-01",
+  "main_commit": "09aff387197d56b9a96e128e449b6334b9437e47",
+  "main_pr74_normal_merge": true,
+  "main_exact_head_workflows": {
+    "total": 6,
+    "conclusion": "SUCCESS",
+    "downloaded_operation_run": 41261271067,
+    "downloaded_operation_conclusion": "SUCCESS"
+  },
+  "proposed_native_pr": 40,
+  "proposed_native_head": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+  "pr40_state": "DRAFT_NOT_MERGED",
+  "main_finance_blob_sha": "8a10cab0cd53bdb063f7332ef5a415dfb3c5d05a",
+  "pr40_finance_blob_sha": "c01e5cd97fb32b3e5fcd5cea190424d8f4f5d5ec",
+  "source_inventory": {
+    "main_paths": 29,
+    "pr40_paths": 23,
+    "shared_paths": 14,
+    "union_paths": 38,
+    "omitted_by_pr40": [
+      "connected_enterprise/sequence_channels.py",
+      "connected_enterprise/sequence_planning.py",
+      "connected_enterprise/sequence_window.py",
+      "connected_enterprise/capital_lifecycle.py",
+      "connected_enterprise/scale.py",
+      "connected_enterprise/channel_menu.py",
+      "connected_enterprise/mechanism_choice.py",
+      "connected_enterprise/strategic_commerce.py",
+      "connected_enterprise/joint_planning.py",
+      "connected_enterprise/strategic_audit.py",
+      "adaptive_enterprise/allocation.py",
+      "adaptive_enterprise/instruments.py",
+      "adaptive_enterprise/strategies.py",
+      "adaptive_enterprise/checkers.py",
+      "portfolio25/pricing.py"
+    ],
+    "omitted_by_main": [
+      "connected_enterprise/transition_evidence.py",
+      "vendor/alpha_claim/protected_exchange_legacy.py",
+      "connected_enterprise/upgrades.py",
+      "connected_enterprise/migration.py",
+      "connected_enterprise/operations.py",
+      "connected_enterprise/runner.py",
+      "connected_enterprise/channels.py",
+      "connected_enterprise/pricing.py",
+      "connected_enterprise/recovery.py"
+    ],
+    "method": "Read exact candidate and main connected_enterprise/finance.py SOURCE_PATHS tuple; set-difference and set-union, NOT a transitive runtime dependency audit",
+    "source_closure_qualified": false
+  },
+  "consequential_overlaps_to_semantically_merge": [
+    "connected_enterprise/engine.py",
+    "connected_enterprise/finance.py",
+    "connected_enterprise/verify.py",
+    "commercial/ledger.py",
+    "connected_enterprise/runner.py"
+  ],
+  "original_signed_account_handoff": "UNAVAILABLE_FROM_OBSERVED_TASK_INTERFACE",
+  "original_account_migration_qualified": false,
+  "no_old_history_erased": true,
+  "historical_failures_unchanged": true,
+  "original_accounts_keys_modified": false,
+  "latest_archive_composition_verified": false,
+  "release_verdict": "NATIVE_P0_NO_GO",
+  "remedy": "The single finance integration owner must semantically compose both source inventories and transitive executable dependencies on current main, then independently validate old signed same-account nonempty queue continuation and protected release/downloaded operation; do not overwrite either branch or manually resign any old history.",
+  "scope": "Independent read-only P0 source inventory review. No account access, keys, merge, lease, guard, source file mutation, external paid services, or actual commerce."
+}
