@@ -1,0 +1,120 @@
+{
+  "scope": "separate public CI attempt; local failures unchanged",
+  "steps": [
+    {
+      "label": "init",
+      "exit": 0,
+      "seconds": 0.0050035800000003405
+    },
+    {
+      "label": "fetch",
+      "exit": 0,
+      "seconds": 0.6737028190000025
+    },
+    {
+      "label": "checkout",
+      "exit": 0,
+      "seconds": 0.21594606800000093
+    },
+    {
+      "label": "source_identity",
+      "exit": 0,
+      "seconds": 0.002956580999999403
+    },
+    {
+      "label": "tools",
+      "exit": 0,
+      "seconds": 0.16520241899999988
+    },
+    {
+      "label": "python_deps",
+      "exit": 0,
+      "seconds": 10.097332367999996
+    },
+    {
+      "label": "compiler",
+      "exit": 0,
+      "seconds": 0.016359440000002223
+    },
+    {
+      "label": "pristine_build",
+      "exit": 0,
+      "seconds": 518.024060284
+    },
+    {
+      "label": "pristine_regressions",
+      "exit": 0,
+      "seconds": 19.72394472899998
+    },
+    {
+      "label": "apply",
+      "exit": 0,
+      "seconds": 0.005465453000056186
+    },
+    {
+      "label": "patch",
+      "exit": 0,
+      "seconds": 0.004510472999982085
+    },
+    {
+      "label": "modified_build",
+      "exit": 0,
+      "seconds": 67.92461589200002
+    },
+    {
+      "label": "cpp_tests",
+      "exit": 0,
+      "seconds": 20.058844688000022
+    },
+    {
+      "label": "interface_tests",
+      "exit": 0,
+      "seconds": 1.1221947159999672
+    },
+    {
+      "label": "cross_build_tests",
+      "exit": 0,
+      "seconds": 0.9173901279999654
+    }
+  ],
+  "setup_build_elapsed_seconds": 639.211835703,
+  "patch_sha256": "973e62b569ca1878ddd06722a5f7c03dd967922db28be27c28b5892600678998",
+  "protocol_sha256": "690f67c6244d0586c6fabe79e7d71d87e75e12227a0b801622913c4a975f2863",
+  "source_commit": "838d4f64acc16b5c15adda01302a719400329d4b",
+  "python_toolchain": "3.13 (pinned upstream MODULE; runtime major/minor asserted)",
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "python": "3.13.17 (main, Oct 22 2026, 02:40:32) [GCC 13.3.0]",
+  "bazel_sha256": "7f775b54bbec487efaf0f49ccda1d2ed02cd34f582edfdd6aeeec76e39ef585c",
+  "lock_pristine": "156661a78ab90569e8bbae753e0401bfb4f5d39192f7fbf90bfa3b4f1fb4dc76",
+  "lock_modified": "156661a78ab90569e8bbae753e0401bfb4f5d39192f7fbf90bfa3b4f1fb4dc76",
+  "extensions": {
+    "pristine": [
+      {
+        "name": "tesseract_decoder.so",
+        "sha256": "561e0bfb036c7e122b238c0c93798cffc2fc2f7c4650795d53efd3caf0e195d9"
+      }
+    ],
+    "modified": [
+      {
+        "name": "tesseract_decoder.so",
+        "sha256": "b5a7e1e2b2b851d7e45c5c57e45ba2526b42f168fb43df3f8ae10e117744f24f"
+      }
+    ]
+  },
+  "cpp_tests_executed": [
+    "DecodersStripZeroProbabilityErrors",
+    "DecoderErrorIndexMapsAreInOriginalDemCoordinates",
+    "DecodeToErrorsThrowsOnInvalidSymptom",
+    "MultipleClassesAndFirstGoalCompatibility",
+    "SameClassConfigurationsAreNotMerged",
+    "MergedOriginalIdsAndCorrelatedSeparator",
+    "EmptySyndromeAndNoGoalStatus",
+    "RejectsIncompatibleConfigurationAndKeepsCapConvention",
+    "CapAfterFirstGoalRetainsValidPrediction"
+  ],
+  "status": "BUILD_AND_CORRECTNESS_PASS",
+  "run_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41357844990",
+  "tested_head": "d995dc430324ded6fd55767f3eff618c17698b1d",
+  "cross_build_cases": 11,
+  "duplicate_goal_branch_covered": false
+}

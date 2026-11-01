@@ -1,3 +1,5 @@
+**Terminal update:** [RESULT.md](RESULT.md) records successful executable qualification but a negative frozen diagnostic: no competing logical classes. No further tuning.
+
 # Single-frontier quantum decoder: phase-two construction
 
 This is a **separate public CI build and diagnostic attempt**, not a successful

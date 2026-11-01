@@ -1,0 +1,437 @@
+{
+  "protocol": "phase2 frozen candidate-generation diagnostic, not confirmation",
+  "protocol_sha256": "690f67c6244d0586c6fabe79e7d71d87e75e12227a0b801622913c4a975f2863",
+  "circuit_sha256": "85cb45a9693792cedb937831756323f020af2782dd07948abe1767da381f71a1",
+  "dem_sha256": "99116a9447074bb60a910f7d157ef836553e5350131b0906728e9e5d0606c86b",
+  "extension_provenance": {
+    "pristine": [
+      {
+        "path": "/home/runner/work/_temp/frontier-phase2/pristine/tesseract_decoder.so",
+        "sha256": "561e0bfb036c7e122b238c0c93798cffc2fc2f7c4650795d53efd3caf0e195d9"
+      }
+    ],
+    "modified": [
+      {
+        "path": "/home/runner/work/_temp/frontier-phase2/modified/tesseract_decoder.so",
+        "sha256": "b5a7e1e2b2b851d7e45c5c57e45ba2526b42f168fb43df3f8ae10e117744f24f"
+      }
+    ]
+  },
+  "registered_cases": {
+    "development_seed": 2026110102,
+    "development_indices": [
+      0,
+      1,
+      2,
+      8
+    ],
+    "fresh_seed": 2026110201,
+    "fresh_shots": 16,
+    "sample_batch": 1
+  },
+  "settings": {
+    "order": 0,
+    "beam": 5,
+    "pqlimit": 200000,
+    "list_goal_cap": 64,
+    "whole_worker_timeout_seconds": 45,
+    "total_seconds_cap": 900,
+    "address_space_bytes": 2147483648,
+    "variant_order": [
+      "A",
+      "B",
+      "C"
+    ]
+  },
+  "driver_import_seconds": 0.06372835699994539,
+  "driver_prep_seconds": 0.3631950770000003,
+  "elapsed_seconds": 86.12326660099995,
+  "stop_reason": "finished_no_competing_classes_stop_branch",
+  "variants": {
+    "A": {
+      "planned_calls": 20,
+      "attempted": 20,
+      "never_run": 0,
+      "complete": 20,
+      "timeouts": 0,
+      "errors": 0,
+      "fallback_calls": 0,
+      "search_failure_calls": 0,
+      "minimum_failures_including_fallback": 0,
+      "mass_failures_including_fallback": 0,
+      "decision_disagreements": 0,
+      "mass_only_wins": 0,
+      "mass_only_losses": 0,
+      "multilogical_pools": 0,
+      "max_candidate_count": 1,
+      "candidate_count_sum": 20,
+      "low_confidence_calls": 0,
+      "invalid_candidates": 0,
+      "actual_configs": [
+        {
+          "beam": 5,
+          "beam_climbing": false,
+          "no_revisit_dets": true,
+          "orders": 20,
+          "pqlimit": 200000
+        }
+      ],
+      "rejected_completed_shots": 0,
+      "subprocess_seconds": {
+        "sum": 27.42878905800012,
+        "median": 1.3113694250000094,
+        "max": 2.0193665130000227,
+        "count": 20
+      },
+      "worker_seconds": {
+        "sum": 26.06783206199998,
+        "median": 1.2421151375000363,
+        "max": 1.95318620799992,
+        "count": 20
+      },
+      "import_seconds": {
+        "sum": 6.7572623949997705,
+        "median": 0.33688990650000505,
+        "max": 0.3473012339999286,
+        "count": 20
+      },
+      "prep_seconds": {
+        "sum": 16.601962425999545,
+        "median": 0.8296529824999652,
+        "max": 0.8431754629999659,
+        "count": 20
+      },
+      "decode_seconds": {
+        "sum": 2.34200445099998,
+        "median": 0.05252681600001097,
+        "max": 0.7721707279999919,
+        "count": 20
+      },
+      "validation_fallback_reduction_seconds": {
+        "sum": 0.003892342999961329,
+        "median": 0.00019803899999715213,
+        "max": 0.00022714299996096088,
+        "count": 20
+      },
+      "maxrss_kib": {
+        "sum": 2819460,
+        "median": 140892,
+        "max": 141984,
+        "count": 20
+      },
+      "first_goal_cost": {
+        "sum": 1745.6713512460767,
+        "median": 85.29078459349913,
+        "max": 133.09775982704687,
+        "count": 20
+      },
+      "final_min_cost": {
+        "sum": 1745.6713512460767,
+        "median": 85.29078459349913,
+        "max": 133.09775982704687,
+        "count": 20
+      },
+      "first_goal_seconds": {
+        "sum": 2.34200445099998,
+        "median": 0.05252681600001097,
+        "max": 0.7721707279999919,
+        "count": 20
+      },
+      "final_collection_seconds": {
+        "sum": 2.34200445099998,
+        "median": 0.05252681600001097,
+        "max": 0.7721707279999919,
+        "count": 20
+      },
+      "cost_improvement_after_first": {
+        "sum": 0,
+        "median": 0,
+        "max": 0,
+        "count": 20
+      },
+      "search_work": {
+        "pushed": "unknown",
+        "popped": "unknown",
+        "expanded": "unknown",
+        "max_queue": "unknown",
+        "max_arena": "unknown",
+        "raw_goals": "unknown",
+        "duplicate_goals": "unknown"
+      },
+      "class_count_histogram": {
+        "1": 20
+      },
+      "stop_reasons": {
+        "legacy_first_goal_or_failure": 20
+      }
+    },
+    "B": {
+      "planned_calls": 20,
+      "attempted": 20,
+      "never_run": 0,
+      "complete": 20,
+      "timeouts": 0,
+      "errors": 0,
+      "fallback_calls": 0,
+      "search_failure_calls": 0,
+      "minimum_failures_including_fallback": 0,
+      "mass_failures_including_fallback": 0,
+      "decision_disagreements": 0,
+      "mass_only_wins": 0,
+      "mass_only_losses": 0,
+      "multilogical_pools": 0,
+      "max_candidate_count": 1,
+      "candidate_count_sum": 20,
+      "low_confidence_calls": 0,
+      "invalid_candidates": 0,
+      "actual_configs": [
+        {
+          "beam": 5,
+          "beam_climbing": false,
+          "no_revisit_dets": false,
+          "orders": 20,
+          "pqlimit": 200000
+        }
+      ],
+      "rejected_completed_shots": 0,
+      "subprocess_seconds": {
+        "sum": 27.975866011999983,
+        "median": 1.307849790500029,
+        "max": 2.4079777679999097,
+        "count": 20
+      },
+      "worker_seconds": {
+        "sum": 26.643459385000142,
+        "median": 1.240424924000024,
+        "max": 2.343593038999984,
+        "count": 20
+      },
+      "import_seconds": {
+        "sum": 6.742633401000035,
+        "median": 0.336352146500019,
+        "max": 0.34310734100006357,
+        "count": 20
+      },
+      "prep_seconds": {
+        "sum": 16.57947363599976,
+        "median": 0.8291732359999742,
+        "max": 0.8352453749999995,
+        "count": 20
+      },
+      "decode_seconds": {
+        "sum": 2.9658079270002418,
+        "median": 0.052148626000018794,
+        "max": 1.15712205300008,
+        "count": 20
+      },
+      "validation_fallback_reduction_seconds": {
+        "sum": 0.0036916589999691496,
+        "median": 0.00018872599997621364,
+        "max": 0.00020862899998519424,
+        "count": 20
+      },
+      "maxrss_kib": {
+        "sum": 2819156,
+        "median": 141196,
+        "max": 142168,
+        "count": 20
+      },
+      "first_goal_cost": {
+        "sum": 1745.6713512460767,
+        "median": 85.29078459349913,
+        "max": 133.09775982704687,
+        "count": 20
+      },
+      "final_min_cost": {
+        "sum": 1745.6713512460767,
+        "median": 85.29078459349913,
+        "max": 133.09775982704687,
+        "count": 20
+      },
+      "first_goal_seconds": {
+        "sum": 2.9658079270002418,
+        "median": 0.052148626000018794,
+        "max": 1.15712205300008,
+        "count": 20
+      },
+      "final_collection_seconds": {
+        "sum": 2.9658079270002418,
+        "median": 0.052148626000018794,
+        "max": 1.15712205300008,
+        "count": 20
+      },
+      "cost_improvement_after_first": {
+        "sum": 0,
+        "median": 0,
+        "max": 0,
+        "count": 20
+      },
+      "search_work": {
+        "pushed": "unknown",
+        "popped": "unknown",
+        "expanded": "unknown",
+        "max_queue": "unknown",
+        "max_arena": "unknown",
+        "raw_goals": "unknown",
+        "duplicate_goals": "unknown"
+      },
+      "class_count_histogram": {
+        "1": 20
+      },
+      "stop_reasons": {
+        "legacy_first_goal_or_failure": 20
+      }
+    },
+    "C": {
+      "planned_calls": 20,
+      "attempted": 20,
+      "never_run": 0,
+      "complete": 20,
+      "timeouts": 0,
+      "errors": 0,
+      "fallback_calls": 0,
+      "search_failure_calls": 0,
+      "minimum_failures_including_fallback": 0,
+      "mass_failures_including_fallback": 0,
+      "decision_disagreements": 0,
+      "mass_only_wins": 0,
+      "mass_only_losses": 0,
+      "multilogical_pools": 0,
+      "max_candidate_count": 64,
+      "candidate_count_sum": 1280,
+      "low_confidence_calls": 0,
+      "invalid_candidates": 0,
+      "actual_configs": [
+        {
+          "beam": 5,
+          "beam_climbing": false,
+          "no_revisit_dets": false,
+          "orders": 20,
+          "pqlimit": 200000
+        }
+      ],
+      "rejected_completed_shots": 0,
+      "subprocess_seconds": {
+        "sum": 29.60073240799977,
+        "median": 1.3920881980000104,
+        "max": 2.523183553000081,
+        "count": 20
+      },
+      "worker_seconds": {
+        "sum": 28.220163562999915,
+        "median": 1.3234665085000188,
+        "max": 2.4550912799999196,
+        "count": 20
+      },
+      "import_seconds": {
+        "sum": 6.779562452999812,
+        "median": 0.3382471529999975,
+        "max": 0.35488254799997776,
+        "count": 20
+      },
+      "prep_seconds": {
+        "sum": 16.461067129000185,
+        "median": 0.8224146615000336,
+        "max": 0.836924745000033,
+        "count": 20
+      },
+      "decode_seconds": {
+        "sum": 4.575183850999906,
+        "median": 0.14121176499998,
+        "max": 1.2768975259999706,
+        "count": 20
+      },
+      "validation_fallback_reduction_seconds": {
+        "sum": 0.04952557999990859,
+        "median": 0.0023815525000259186,
+        "max": 0.0037482039999758854,
+        "count": 20
+      },
+      "maxrss_kib": {
+        "sum": 2828956,
+        "median": 141544,
+        "max": 142000,
+        "count": 20
+      },
+      "first_goal_cost": {
+        "sum": 1745.6713512460767,
+        "median": 85.29078459349913,
+        "max": 133.09775982704687,
+        "count": 20
+      },
+      "final_min_cost": {
+        "sum": 1745.6713512460767,
+        "median": 85.29078459349913,
+        "max": 133.09775982704687,
+        "count": 20
+      },
+      "first_goal_seconds": {
+        "sum": 3.064652342,
+        "median": 0.053712151,
+        "max": 1.201381585,
+        "count": 20
+      },
+      "final_collection_seconds": {
+        "sum": 4.575183850999906,
+        "median": 0.14121176499998,
+        "max": 1.2768975259999706,
+        "count": 20
+      },
+      "cost_improvement_after_first": {
+        "sum": 0,
+        "median": 0,
+        "max": 0,
+        "count": 20
+      },
+      "search_work": {
+        "pushed": {
+          "sum": 318960,
+          "max": 51990
+        },
+        "popped": {
+          "sum": 132414,
+          "max": 39805
+        },
+        "expanded": {
+          "sum": 4409,
+          "max": 761
+        },
+        "max_queue": {
+          "sum": 220441,
+          "max": 36197
+        },
+        "max_arena": {
+          "sum": 318940,
+          "max": 51989
+        },
+        "raw_goals": {
+          "sum": 1280,
+          "max": 64
+        },
+        "duplicate_goals": {
+          "sum": 0,
+          "max": 0
+        }
+      },
+      "class_count_histogram": {
+        "1": 20
+      },
+      "stop_reasons": {
+        "goal_limit": 20
+      }
+    }
+  },
+  "competence_anchor": "not_requested",
+  "errors": [],
+  "limitations": [
+    "Finite-pool mass, not entire logical coset",
+    "Baseline push/pop counts unknown without separate telemetry replay",
+    "Equal push ceiling is not equal actual work",
+    "Shared CPU and twenty shots do not establish tail-latency superiority",
+    "Whole-worker timeout includes import/preparation and is not intrinsic decode time",
+    "No hardware validation or profit evidence"
+  ],
+  "run_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41357844990",
+  "tested_head": "d995dc430324ded6fd55767f3eff618c17698b1d",
+  "interpretation": "Negative under frozen settings: no competing logical class on20syndromes; stop branch, no tuning. Engineering qualification only."
+}
