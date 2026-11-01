@@ -98,3 +98,35 @@ def check_native_claim_binding(arm, exported, reported, measurements, protocol):
         if reported['after_two'].get(field) != before.get(field):
             raise ValueError('NATIVE_EARNINGS_PREFIX_NOT_BOUND')
     return True
+
+
+def check_public_economic_claims(report, protocol):
+    """Derive economic flags from audited arm summaries; keep real-world nonclaims fixed."""
+    arms = report.get('arms')
+    if not isinstance(arms, dict) or set(arms) != {'direct', 'shared', 'cheap_rival'}:
+        raise ValueError('PUBLIC_ECONOMIC_ARM_INVENTORY_MISMATCH')
+    shared, direct, rival = (arms[name] for name in ('shared', 'direct', 'cheap_rival'))
+    expected = {
+        'shared_positive': shared['summary']['profit'] > 0,
+        'matched_direct_negative': direct['summary']['profit'] < 0,
+        'earned_funded': shared['earned_receipt']['funding'] == 'EARNED',
+        'cheap_rival_no_bid': rival['decision']['choice'] == 'NO_BID',
+        'actual_revenue_microUSD': 0,
+        'real_demand_observed': False,
+        'complete_actual_host_cost_known': False,
+        'recursive_or_market_novelty_proven': False,
+        'successor_output_preconstructed_for_native_registration': True,
+        'causal_necessity_of_adapter_not_proven': True,
+        'ordinary_pooled_rival_excluded': False}
+    if report.get('conclusions') != expected:
+        raise ValueError('PUBLIC_ECONOMIC_SCOPE_OR_CLAIM_TAMPERED')
+    fixed = sum(protocol['fixed_shared'].values())
+    per = sum(protocol['per_order'].values())
+    sensitivity = {
+        'ten_percent_fixed_cost_overrun_stage1_profit_microUSD':
+            int(2*protocol['quote_microUSD'] - fixed*110//100 -
+                2*per - protocol['stage1_tax_microUSD']),
+        'first_stage_profit_hurdle_microUSD': protocol['earned_only_successor_adapter_microUSD']}
+    if report.get('sensitivity') != sensitivity:
+        raise ValueError('PUBLIC_ECONOMIC_SENSITIVITY_TAMPERED')
+    return True
