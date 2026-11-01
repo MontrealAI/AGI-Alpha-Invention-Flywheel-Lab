@@ -52,11 +52,12 @@ def prepare():
     patch=patch.replace("+                policy=cfg['buyer_income_policy']", "+                income=cfg['buyer_income_policy']")
     patch=patch.replace("+                    if draw(seed,[day,buyer['id']],'buyer-external-income')<policy['receipt_bps']/10000:", "+                    if draw(seed,[day,buyer['id']],'buyer-external-income')<income['receipt_bps']/10000:")
     patch=patch.replace("+                        amount=policy['income_microUSD'];buyer['remaining_budget']+=amount;buyer['external_income_total']+=amount", "+                        amount=income['income_microUSD']\n+                        buyer['remaining_budget']+=amount;buyer['external_income_total']+=amount")
-    # Explicit file boundaries are required when recounting a multi-file plain diff.
     patch=''.join(('diff --git '+line[4:].strip()+' '+line[4:].strip().replace('a/','b/',1)+'\n' if line.startswith('--- a/') else '')+line for line in patch.splitlines(keepends=True))
     transport=Path(os.environ['RUNNER_TEMP'])/'recurring051.patch';transport.write_text(patch)
-    run('git','apply','--recount','--check',str(transport))
-    run('git','apply','--recount',str(transport))
+    # Compact transport has a zero-trailing-context hunk. Exact file hashes,
+    # not fuzzy patch placement, determine which bytes may be tested/uploaded.
+    run('git','apply','--recount','--unidiff-zero','--check',str(transport))
+    run('git','apply','--recount','--unidiff-zero',str(transport))
     for path,(_,after) in EXPECTED.items():
         if sha(path)!=after:raise ValueError('LOCAL_TESTED_BYTES_MISMATCH:'+path)
     from connected_enterprise.runner import identity
