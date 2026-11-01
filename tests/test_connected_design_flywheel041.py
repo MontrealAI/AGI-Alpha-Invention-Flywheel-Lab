@@ -153,5 +153,63 @@ class NativeDesignSearch041Tests(unittest.TestCase):
             choose_from_development(spec, dev)
 
 
+
+    def test_source_linked_loss_must_reduce_scoped_investment_surplus(self):
+        v = case()
+        v["orders"] = [
+            v["orders"][0],
+            order("gain", "buyer1", "kpi_variance", 28, 0, 120, 160, "earned-plan-4"),
+            order("loss", "buyer2", "evidence_matrix", 1, 26, 124, 166, "earned-plan-4"),
+        ]
+        v["investments"][0]["cost"] = 4
+        w = find_native_successor(v)
+        self.assertEqual(w["net_after_native_investment_microUSD"], -1)
+        self.assertFalse(w["positive_incremental_collected_contribution"])
+
+    def test_all_required_capacity_and_acquisition_invoices_are_charged(self):
+        v = case()
+        v["orders"][1]["price"] = 40
+        v["orders"][1]["complete_cost"] = 18
+        v["orders"][1]["capacity_source_plan_id"] = "earned-capacity"
+        v["investments"][0]["cost"] = 15
+        v["investments"].append({
+            "kind": "capacity", "id": "slot-1", "plan_id": "earned-capacity",
+            "purchased_time": 80, "activation_time": 96, "expiry_time": 300,
+            "cost": 15, "funding_receipt": {"funding": "EARNED"},
+        })
+        w = find_native_successor(v)
+        self.assertEqual(w["all_required_invoices_microUSD"], 30)
+        self.assertEqual(w["net_after_native_investment_microUSD"], -8)
+        self.assertFalse(w["positive_incremental_collected_contribution"])
+
+    def test_refunded_work_costs_count_without_credited_collection(self):
+        v = case()
+        refunded = order("refund", "buyer3", "evidence_matrix", 100, 35,
+                         130, 190, "earned-plan-4")
+        refunded["outcome"] = "REFUNDED"
+        refunded["collection_time"] = None
+        v["orders"].append(refunded)
+        w = find_native_successor(v)
+        self.assertEqual(w["net_after_native_investment_microUSD"], -9)
+        self.assertEqual(w["source_linked_uncollected_order_ids"], ["refund"])
+
+    def test_second_enabler_must_have_source_bound_earned_funding(self):
+        v = case()
+        v["orders"][1]["capacity_source_plan_id"] = "other-plan"
+        self.assertIsNone(find_native_successor(v))
+        v["investments"].append({
+            "kind": "capacity", "id": "slot-2", "plan_id": "other-plan",
+            "purchased_time": 80, "activation_time": 96, "expiry_time": 300,
+            "cost": 2, "funding_receipt": {"funding": "SEED"},
+        })
+        self.assertIsNone(find_native_successor(v))
+
+    def test_duplicate_source_plan_inventory_rejected(self):
+        v = case()
+        v["investments"].append(dict(v["investments"][0]))
+        with self.assertRaisesRegex(ValueError, "DUPLICATE_NATIVE_PLAN_INVENTORY"):
+            find_native_successor(v)
+
+
 if __name__ == "__main__":
     unittest.main()
