@@ -1,0 +1,24 @@
+name: Historical measurement offline replay
+on:
+  pull_request:
+    paths:
+      - 'research/historical_measurement/**'
+      - '.github/workflows/historical-measurement.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Eight offline regressions and exact four-output historical replay
+        working-directory: research/historical_measurement
+        run: python -m unittest -v test_replay
