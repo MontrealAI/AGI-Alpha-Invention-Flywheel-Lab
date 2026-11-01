@@ -43,6 +43,34 @@ class ProcurementTests(unittest.TestCase):
                         candidate.select(self.raw, self.quotes, now=self.now,
                                          budget_microUSD=self.budget)
 
+    def test_provider_identifiers_cannot_collide_with_internal_steps(self):
+        adversarial = ('assemble_complete', 'internal_assemble_complete',
+                       'provider_00', 'provider_23', 'a'*64, 'z'*64)
+        for identifier in adversarial:
+            quotes = copy.deepcopy(self.quotes)
+            quotes[0]['id'] = identifier
+            for observations in (quotes, list(reversed(quotes))):
+                with self.subTest(identifier=identifier, reversed=observations is not quotes):
+                    composed = candidate.select(self.raw, observations, now=self.now,
+                                                budget_microUSD=self.budget)
+                    ordinary = self.ordinary(observations)
+                    self.assertEqual(composed['quote_ids'], ordinary['quote_ids'])
+                    self.assertEqual(composed['total_microUSD'], ordinary['total_microUSD'])
+                    self.assertIn(identifier, composed['quote_ids'])
+                    self.assertTrue(candidate.execute(self.raw, observations, composed,
+                                                      now=self.now)['accepted'])
+        # Equal-price choices must retain ORIGINAL quote-ID ordering, not input order.
+        quotes = copy.deepcopy(self.quotes)
+        for q, identifier in zip(quotes, ('provider_00','assemble_complete',
+                'internal_assemble_complete','provider_01','provider_23','a'*64,'z'*64)):
+            q['id'] = identifier
+            if q['service_id'] != 'operations_bundle': q['cost_microUSD'] = 1750000
+        for observations in (quotes, list(reversed(quotes))):
+            composed = candidate.select(self.raw, observations, now=self.now,
+                                        budget_microUSD=self.budget)
+            self.assertEqual(composed['quote_ids'], self.ordinary(observations)['quote_ids'])
+            self.assertTrue(candidate.execute(self.raw, observations, composed, now=self.now)['accepted'])
+
     def ordinary(self, quotes=None, now=None, budget=None):
         return ordinary_select(self.quotes if quotes is None else quotes, candidate.SERVICES,
             self.now if now is None else now, self.budget if budget is None else budget, candidate.ASSEMBLY)
