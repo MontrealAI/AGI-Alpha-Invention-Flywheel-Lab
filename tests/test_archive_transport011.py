@@ -96,6 +96,8 @@ class ArchiveTransport011Tests(unittest.TestCase):
             self.assertEqual((destination / FREEZE).read_bytes(), freeze_raw)
             self.assertEqual((destination / 'flywheel/archive_v2.py').read_bytes(), historical.read_bytes())
             self.assertEqual(receipt['substituted_original_inputs']['flywheel/archive_v2.py']['sha256'], expected)
+            self.assertEqual((destination / 'tests/test_archive_v2.py').read_bytes(),
+                             (ROOT / SNAPSHOTS['tests/test_archive_v2.py']).read_bytes())
             for name, source_hash in frozen['sources'].items():
                 self.assertEqual(hashlib.sha256((destination / name).read_bytes()).hexdigest(), source_hash, name)
 

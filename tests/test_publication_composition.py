@@ -17,6 +17,16 @@ class ComposedPublicationTests(unittest.TestCase):
         self.binding = json.loads((BASE/'COMPOSED_SOURCE_BINDING.json').read_text())
         self.publication = json.loads((ROOT/'docs/completion015/PUBLICATION.json').read_text())
         self.current = identity(ROOT)['files']
+        # The retained registration describes its historical source tree. Build
+        # a fresh synthetic registration for this test's current bytes instead
+        # of modifying that evidence whenever the optional source set grows.
+        prior = self.binding['historical_files']
+        self.binding.update(current_files=self.current,
+            current_source_sha256=release.canonical_digest(self.current),
+            source_delta={p:{'before_sha256':prior.get(p),'after_sha256':self.current.get(p)}
+                          for p in sorted(set(prior)|set(self.current))
+                          if prior.get(p)!=self.current.get(p)})
+        self.registration = copy.deepcopy(self.binding)
         self.receipt = {'accepted':True, 'no_git_execution':True,
                         'completed_resume_financially_unchanged':True,
                         'source_sha256':release.canonical_digest(self.current), 'source_files':self.current,
@@ -55,7 +65,7 @@ class ComposedPublicationTests(unittest.TestCase):
             self.assertEqual(release.historical_source(path,self.binding['historical_files']),self.binding['historical_files'])
 
     def test_registration_alone_is_not_qualification(self):
-        self.binding = json.loads((BASE/'COMPOSED_SOURCE_BINDING.json').read_text())
+        self.binding = copy.deepcopy(self.registration)
         with self.assertRaisesRegex(ValueError,'ACTUAL_QUALIFICATION'):self.verify()
 
     def test_unaccepted_qualification_fails(self):

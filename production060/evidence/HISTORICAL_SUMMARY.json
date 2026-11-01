@@ -1,0 +1,103 @@
+{
+  "schema": "production060/independent-technical-acceptance/v1",
+  "status": "final",
+  "source_errors": [],
+  "independent_audit_passed": true,
+  "all_registered_requests_feasible": false,
+  "request_counts": {
+    "expected_requests": 261,
+    "batch_completed_requests": 261,
+    "independently_accepted_requests": 254,
+    "independently_supported_capacity_refusals": 7,
+    "other_rejections_or_unverified": 0,
+    "not_yet_batch_completed": 0
+  },
+  "cohorts": {
+    "development": {
+      "expected_requests": 7,
+      "batch_completed_requests": 7,
+      "independently_accepted_requests": 7,
+      "independently_supported_capacity_refusals": 0,
+      "other_rejections_or_unverified": 0,
+      "not_yet_batch_completed": 0
+    },
+    "heldout_logistics": {
+      "expected_requests": 254,
+      "batch_completed_requests": 254,
+      "independently_accepted_requests": 247,
+      "independently_supported_capacity_refusals": 7,
+      "other_rejections_or_unverified": 0,
+      "not_yet_batch_completed": 0
+    },
+    "heldout_clean": {
+      "expected_requests": 61,
+      "batch_completed_requests": 61,
+      "independently_accepted_requests": 60,
+      "independently_supported_capacity_refusals": 1,
+      "other_rejections_or_unverified": 0,
+      "not_yet_batch_completed": 0
+    }
+  },
+  "batch_summary_snapshot": {
+    "sha256": "60d31c9f16f906069753c9270528ab718fc67ba3c86839af0485e0f3e5dd050b",
+    "loaded_before_audit": true,
+    "completed": 261,
+    "accepted": 254,
+    "cpu_s": 2791.5430220000026,
+    "wall_s": 2804.9174788770397
+  },
+  "source_binding": {
+    "evaluation_sha256": "240ebb4cb66fb0ee9b43ee384b70f8351107dd9c6673d22d46fc450340edff27",
+    "checker_sha256": "c7bf65ea6aba50f9f0efb2567b32b9d86dab01103b666396798428031dfb041c",
+    "audit_script_sha256": "95ab892de8acdf82ac0212498d0e73d65f2b9b8a1935056b92464661c4dee77a",
+    "resources_sha256": "3a5a6ab0db42199a8f75e6ea0847f18cf8d38104fc84e29999be5d7a3acd7d07",
+    "frozen_data_file_count_checked": 268,
+    "frozen_config": {
+      "loading_min": 10,
+      "plant_cleaning_min": 10,
+      "driver_preparation_min": 15,
+      "unloading_min": 10,
+      "site_cleaning_min": 15,
+      "driver_break_min": 15,
+      "driver_meal_min": 30,
+      "default_load_m3": 7.5,
+      "activation_weight": 120,
+      "travel_weight": 1,
+      "lateness_weight": 10,
+      "missing_travel": "refuse",
+      "window_size": 3,
+      "candidate_trucks": 6,
+      "random_seed": 60,
+      "time_limit_s": 1.5
+    }
+  },
+  "accepted_totals": {
+    "orders": 8870,
+    "volume_m3": "143447.23",
+    "loads": 25238,
+    "total_lateness_min": 2639870.499999999,
+    "days_with_missing_mix": 189,
+    "days_with_driver_review_flags": 177
+  },
+  "quarantined_travel_incomplete_ids": [
+    "cdp_o45_08d",
+    "cdp_o50_d"
+  ],
+  "physical_quality_certified": false,
+  "driver_legal_compliance_certified": false,
+  "limits": [
+    "finite real-data benchmark logistics under declared defaults; no physical concrete-quality or driving-law certification",
+    "source-missing mix retained as disclosed exception, never converted into physical quality feasibility",
+    "all failed requests remain denominators; positive client load sizes are not silently shrunk to fleet capacity",
+    "ordinary technical breadth only; no retained/cold superiority or commercial profit inference",
+    "two preregistered travel-incomplete days remain quarantined outside261finite-travel requests; no mix-compatibility or freshness certification"
+  ],
+  "unexpected_rejection_ids": [],
+  "telemetry": {
+    "wall_s": 13.781889418998617,
+    "process_cpu_s": 13.77820301,
+    "external_model_billing": null
+  },
+  "original_full_audit_sha256": "e3d2b6d95d9fa661e5cd8c28e8df7ceb98c2f35601136a763b840efafc9188b6",
+  "distribution_note": "Compact historical report; detailed261row audits retained in original evidence bundle. Not source-matched qualification of this integration."
+}

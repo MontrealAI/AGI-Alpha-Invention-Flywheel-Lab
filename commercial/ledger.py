@@ -63,6 +63,12 @@ def read_bound(root, path, expected):
 
 
 def load_jobs(root, manifest):
+    if isinstance(manifest, dict) and manifest.get('schema') == 'inventory061/native-services/v1':
+        from inventory061.service import load_contracts
+        return load_contracts(root, manifest)
+    if isinstance(manifest, dict) and manifest.get('schema') == 'production060/native-services/v1':
+        from production060.service import load_contracts
+        return load_contracts(root, manifest)
     if isinstance(manifest, dict) and manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
         from adaptive_enterprise.instruments import load_jobs as adaptive_jobs
         return adaptive_jobs(root, manifest)
@@ -189,6 +195,12 @@ class TapeExchange:
 
     def check(self, task, artifact):
         self.validate(task)
+        if self.manifest.get('schema') == 'inventory061/native-services/v1':
+            from inventory061.service import check_delivery
+            return check_delivery(self.root, self.manifest, task['job_id'], artifact)
+        if self.manifest.get('schema') == 'production060/native-services/v1':
+            from production060.service import check_delivery
+            return check_delivery(self.root, self.manifest, task['job_id'], artifact)
         if self.manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
             from adaptive_enterprise.instruments import check_job
             checked = check_job(self.root, self.manifest, self.jobs[task['job_id']]['job'], artifact)
@@ -236,6 +248,12 @@ class TapeExchange:
         if op not in schemas or not isinstance(args, dict):
             raise ValueError('ACTION_ARGUMENTS_REQUIRED')
         optional = {'source_tx', 'crash'} if op == 'event' else {'terms_id'} if op == 'offer' else set()
+        dynamic_prepare = (op == 'event' and args.get('action') == 'prepare'
+                           and self.manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1'})
+        if dynamic_prepare:
+            optional = optional | {'artifact_sha256'}
+            if not isinstance(args.get('artifact_sha256'), str) or len(args['artifact_sha256']) != 64:
+                raise ValueError('PRODUCTION060_ACTUAL_DELIVERY_HASH_REQUIRED')
         if not schemas[op] <= set(args) or set(args) - schemas[op] - optional:
             raise ValueError('EXACT_ACTION_ARGUMENT_SCHEMA_REQUIRED')
         if 'crash' in args and type(args['crash']) is not bool:
@@ -267,7 +285,16 @@ class TapeExchange:
                 payload = self.ex.provider.issue(row, 'funded' if action == 'fund' else 'cleared', a.get('source_tx'))
             elif action == 'prepare':
                 task = json.loads(row['task'])
-                payload = self.jobs[task['job_id']]['artifact']
+                if self.manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1'}:
+                    if self.manifest.get('schema') == 'inventory061/native-services/v1':
+                        from inventory061.service import delivery
+                    else:
+                        from production060.service import delivery
+                    payload = delivery(self.root, self.manifest, task['job_id'])
+                    if digest(payload) != a['artifact_sha256']:
+                        raise ValueError('PRODUCTION060_ACTUAL_DELIVERY_HASH_CHANGED')
+                else:
+                    payload = self.jobs[task['job_id']]['artifact']
             elif action in {'refund', 'cancel', 'late_reversal'}:
                 payload = {}
             else:
@@ -421,8 +448,16 @@ class _NativePrefixReplay:
                             'job': job, 'artifact': current['artifact'], 'receipt': current['receipt']}:
                         raise ValueError('AUDITED_JOB_AUTHORITY_CHANGED')
                 _validate_manifest(root, manifest)
-            elif load_jobs(root, manifest) != self._replay.jobs:
-                raise ValueError('AUDITED_JOB_AUTHORITY_CHANGED')
+            else:
+                current_jobs = load_jobs(root, manifest)
+                if current_jobs != self._replay.jobs:
+                    raise ValueError('AUDITED_JOB_AUTHORITY_CHANGED')
+                if manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1'}:
+                    if manifest.get('schema') == 'inventory061/native-services/v1':
+                        from inventory061.service import rebind_prepared
+                    else:
+                        from production060.service import rebind_prepared
+                    rebind_prepared(root, manifest, tape['actions'][:self._length], current_jobs)
         return self._replay, self._length
 
     def accept(self, tape, *, root, manifest):
@@ -440,7 +475,7 @@ def _native_replay_context(tape, *, root, manifest, session):
     c = tape['config']
     with tempfile.TemporaryDirectory(prefix='commercial010-audit-') as tmp:
         owned = None
-        if manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
+        if manifest.get('schema') == 'agi-alpha/adaptive012-services/v1' or manifest.get('account_namespace') == 'adaptive012':
             from commercial.single_writer import SingleWriterExchange
             owned = SingleWriterExchange(Path(tmp)/'replay.sqlite', root=root, manifest=manifest,
                 opening=c['opening'], working=c['working'], contract=c['contract'], durable=False,
@@ -519,6 +554,20 @@ def _audit_native_impl(tape, *, root, manifest, expected_actions_sha256=None, _s
         if digest(manifest) != c['manifest_sha256'] or tape['config'] != c:
             raise ValueError('SOURCE_COHORT_MISMATCH')
         jobs = fresh_jobs
+    if manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1'}:
+        # Dynamic outputs are not the precommitted request placeholders in
+        # jobs. Rebind all historical preparations at the end too, for both
+        # complete public replay and private financial-prefix reuse.
+        current_jobs = load_jobs(root, manifest)
+        if current_jobs != jobs:
+            raise ValueError('AUDITED_JOB_AUTHORITY_CHANGED')
+        if manifest.get('schema') == 'inventory061/native-services/v1':
+            from inventory061.service import rebind_prepared
+        else:
+            from production060.service import rebind_prepared
+        rebind_prepared(root, manifest, tape['actions'], current_jobs)
+        if digest(manifest) != c['manifest_sha256'] or tape['config'] != c:
+            raise ValueError('SOURCE_COHORT_MISMATCH')
     if _session is not None:
         _session.accept(tape, root=root, manifest=manifest)
     return ({'accepted': True, 'scope': SCOPE, 'actions_sha256': tape['actions_sha256'],

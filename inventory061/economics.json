@@ -1,0 +1,40 @@
+{
+  "schema": "inventory061/conditional-economics/v1",
+  "primary_seed_usd": 100000,
+  "target_trailing_365_day_complete_cost_profit_usd": 3000000000,
+  "fixed_price_usd": 5000,
+  "price_status": "CONDITIONAL_MODEL_INPUT_NOT_OBSERVED_QUOTE_ORDER_OR_WILLINGNESS_TO_PAY",
+  "observed_buyers": 0,
+  "fixed_costs_usd": {
+    "complete_construction_including_failed_searches": 10400,
+    "operator_integration": 1600,
+    "acquisition_including_refusals": 480,
+    "annual_maintenance": 4000,
+    "annual_hosting": 600,
+    "annual_support": 720
+  },
+  "production_prepaid_costs_usd": {
+    "modeled_per_job_review": 100,
+    "unknown_AI_billing_conservative_allocation": 10400,
+    "prepaid_error_handling_allowance": 50
+  },
+  "compute_usd_per_cpu_hour": 0.1,
+  "payment_percent": 0.029,
+  "payment_fixed_usd": 0.3,
+  "native_fee_usd": 0.2,
+  "native_residual_usd": 1,
+  "tax_rate_positive_income": 0.25,
+  "fixed_endpoint_hour_exclusive": 8760,
+  "actual_total_AI_billing_usd": null,
+  "actual_total_host_billing_usd": null,
+  "allocation_status": "Conservative conditional modeled allocations, not observed invoices; unknown actual billing remains unknown and is not assumed zero. The extra AI allocation is charged in addition to all construction costs.",
+  "demand_boundary": "One original public client scenario; no contact, commission, operational permission, observed adoption, repeated-year sale or actual money transfer.",
+  "outside_options": [
+    "No purchase and retain cash if benefit or willingness to pay is absent",
+    "Use the portable accepted instrument without any compelled future royalty",
+    "Ordinary empirical quantile construction ties the selected quality result",
+    "Gurobi Modeler or another current complete specialist/agent offering; complete prices unknown",
+    "Human specialist plus freely available optimization tools"
+  ],
+  "no_purchase_arm": "A separately labeled matched counterfactual fresh account with the same original seed; no pooling, resetting the primary, topup or migration. It declines before new construction and retains cash."
+}
