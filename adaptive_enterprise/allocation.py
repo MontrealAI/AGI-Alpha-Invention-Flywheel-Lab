@@ -51,7 +51,10 @@ def _cash(values, scenarios, *, signed):
     return values
 
 
-def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery_slots=None, earned_deduction=0, _diagnostic_cash_limit=None, strategic_game=None):
+def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery_slots=None, earned_deduction=0, _diagnostic_cash_limit=None, strategic_game=None, mandatory_ids=()):
+    if not isinstance(mandatory_ids,(tuple,list)) or any(not isinstance(i,str) for i in mandatory_ids) or len(set(mandatory_ids))!=len(mandatory_ids):raise ValueError('UNIQUE_COMMITTED_OPTION_IDS_REQUIRED')
+    mandatory=set(mandatory_ids)
+    if mandatory and not mandatory <= {o['id'] for o in options}:raise ValueError('COMMITTED_OPTION_MISSING')
     if strategic_game is not None:
         from .strategic_game import validate_game
         validate_game(strategic_game,riskpolicy['scenarios'])
@@ -177,6 +180,7 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
             'cash_semantics': 'future_net_cash is hypothetical future net cash AFTER explicit later liabilities and BEFORE upfront cost. Reservation covers upfront plus each action\'s worst later cost, at least any forecast negative future cash, plus worst negative interactions. Future receipts never fund present commitments.',
             'optimality_scope': 'EXACT_FINITE_SHORTLIST_WITH_DECLARED_SCENARIOS',
             'later_obligation_release_rule': 'Do not release a reservation before its later obligations are incurred/settled or protected by an additional native reservation. Forecast returns are not permission to release.'}
+    if mandatory:base['mandatory_ids']=sorted(mandatory)
     if allow_seed:base['funding_policy']='EXPLICIT_PER_ACTION_SEED_OR_EARNED'
     if max_delivery_slots is not None:base['max_delivery_slots']=max_delivery_slots
     if earned_deduction:base['earned_operating_deduction']=earned_deduction
@@ -202,10 +206,11 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
                         return _diagnostic_result({**base,'decision':'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET','optimality_scope':'NONE'}) if _diagnostic_cash_limit is not None else {**base,'decision':'DECOMPOSE_SHORTLIST_OR_INCREASE_AUTHORIZED_PLANNING_BUDGET','optimality_scope':'NONE'}
             baskets=expanded
     game_candidates=[]
-    best_key = (Fraction(0), Fraction(0), 0)
+    best_key = None if mandatory else (Fraction(0), Fraction(0), 0)
     for chosen in baskets:
         base['states_evaluated'] += 1
         selected = {o['id'] for o in chosen}
+        if not mandatory <= selected:continue
         if max_delivery_slots is not None and sum(o['execution'].get('capacity_units',1) for o in chosen if o['kind']=='delivery')>max_delivery_slots:continue
         if any(not set(o['requires']) <= selected for o in chosen):
             continue
@@ -249,7 +254,7 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
             game_candidates.append({'selected':sorted(selected),'reserve_amount':reservation,'net':net,'positive_by_kind':positive,'options':option_rows,
                 'payload':{'selected_options':copy.deepcopy(chosen),'upfront_cost':upfront,'worst_later_reserve':later,'interactions':copy.deepcopy(joints)}})
         key = (score, expected, -reservation)
-        if reservation <= 0 or expected < 1 or key <= best_key:
+        if (not mandatory and (reservation <= 0 or expected < 1)) or (best_key is not None and key <= best_key):
             continue
         best_key = key
         base.update(selected=sorted(selected), selected_options=copy.deepcopy(chosen),
@@ -259,7 +264,10 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
                     interactions=copy.deepcopy(joints), decision='CANDIDATE_ALLOCATION')
     if strategic_game is not None:
         from .strategic_game import select_game, compact_certificate
-        certificate=select_game([{k:v for k,v in candidate.items() if k!='payload'} for candidate in game_candidates],strategic_game,riskpolicy,state_digest)
+        if mandatory and not any(set(c['selected'])==mandatory for c in game_candidates):
+            base.update(decision='COMMITTED_HOLD_NOT_FEASIBLE',optimality_scope='NONE',authorized_digest=None)
+            return base
+        certificate=select_game([{k:v for k,v in candidate.items() if k!='payload'} for candidate in game_candidates],strategic_game,riskpolicy,state_digest,mandatory_ids=sorted(mandatory))
         base['strategic_game_certificate']=certificate
         if certificate['selected_index'] is None:
             base.update(selected=[],selected_options=[],decision='DECOMPOSE_RESPONSE_SET',optimality_scope='NONE',authorized_digest=None,upfront_cost=0,worst_later_reserve=0,reserve_amount=0,expected_net=0,expected_net_fraction='0',risk_adjusted_value='0',predicted_scenario_cash=dict.fromkeys(scenarios,0),interactions=[])
@@ -273,6 +281,9 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
             expected_net=expected.numerator//expected.denominator,expected_net_fraction=str(expected),risk_adjusted_value=row['risk_adjusted'],
             decision='CANDIDATE_ALLOCATION' if candidate['selected'] else 'RETAIN_CASH',
             optimality_scope='EXACT_FINITE_FOLLOWER_MINIMAX_REGRET_DECLARED_STRESS')
+    if mandatory and not mandatory <= set(base['selected']):
+        base.update(decision='COMMITTED_BASKET_NOT_FEASIBLE',optimality_scope='NONE',authorized_digest=None)
+        return base
     if _diagnostic_cash_limit is not None:return _diagnostic_result(base)
     base['unallocated_budget'] = budget - base['reserve_amount']
     plan_content = {'selected': base['selected'], 'options_sha256': base['options_sha256'],
@@ -281,6 +292,7 @@ def allocate(observation, options, riskpolicy, *, allow_seed=False, max_delivery
     if allow_seed:plan_content['funding_policy']=base['funding_policy']
     if max_delivery_slots is not None:plan_content['max_delivery_slots']=max_delivery_slots
     if earned_deduction:plan_content['earned_operating_deduction']=earned_deduction
+    if mandatory:plan_content['mandatory_ids']=sorted(mandatory)
     if strategic_game is not None:plan_content['strategic_game_certificate_sha256']=digest(base['strategic_game_certificate'])
     base['plan_id'] = 'adaptive012-allocation-' + digest(plan_content)[:24]
     base['action_id'] = 'allocation-' + digest(plan_content)[:24]

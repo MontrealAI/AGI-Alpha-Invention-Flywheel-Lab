@@ -20,6 +20,28 @@ def check_capacity_effect(option, row, cfg, moment, risk, game_decision=None):
         raise ValueError('SELECTED_CAPACITY_QUANTITY_NOT_NATIVE_EXECUTED')
 
 
+def _recourse_choices(record,wrapper,choices,needs,cfg):
+    from .refusal_recourse import recourse
+    trace=wrapper.get('refusal_recourse')
+    if not isinstance(trace,dict) or set(trace)!={'policy','attempts','rounds'} or trace['policy']!=cfg['refusal_recourse_policy']:raise ValueError('EXACT_REFUSAL_RECOURSE_TRACE_REQUIRED')
+    remaining=list(needs);active=record;attempts=[];rounds=[];bound={}
+    for choice in choices:
+        selected={o['execution']['customer_id']:o for o in active['decision']['selected_options'] if o['kind']=='delivery'}
+        expected=next((ident for ident in remaining if ident in selected),remaining[0] if remaining else None)
+        ident=choice['customer_id']
+        if ident!=expected or choice.get('joint_recourse_round')!=len(rounds):raise ValueError('RECOURSE_READS_UNOBSERVED_OR_DUPLICATE_RESPONSE')
+        remaining.remove(ident);bound[ident]=(active,selected.get(ident),len(rounds))
+        if choice['kind']=='offer':
+            option=selected.get(ident)
+            if option is None or choice.get('joint_option_id')!=option['id']:raise ValueError('RECOURSE_QUOTE_NOT_CURRENT_SELECTED_ACTION')
+            attempts.append({'customer_id':ident,'option_id':option['id'],'accepted':choice['buyer_choice']=='us'})
+            if choice['buyer_choice']!='us':
+                active=recourse(record,attempts)
+                rounds.append({'after_attempts':len(attempts),'allocation':active})
+    if remaining or trace['attempts']!=attempts or trace['rounds']!=rounds:raise ValueError('REFUSAL_RECOURSE_NOT_REDERIVED')
+    return bound
+
+
 def audit_decisions(root,manifest,result,lifecycle):
     cfg=result['config']
     if 'strategic_policy' not in cfg:
@@ -45,7 +67,14 @@ def audit_decisions(root,manifest,result,lifecycle):
         if wrapper['id']!=key or actions.get(key)!=wrapper:raise ValueError('JOINT_ALLOCATION_ID_CHANGED')
         snapshot=record['observation'];charges=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')=='maintenance-'+str(day)]
         if len(charges)!=1 or charges[0]['day']!=moment or charges[0]['args'].get('amount')!=cfg['maintenance_daily']:raise ValueError('NATIVE_PREPAID_PLANNING_REQUIRED')
-        charge=charges[0];seq=charge['seq']+1;summary=charge['after'];state_digest=digest({'config':tape['config'],'actions_sha256':prefixes[seq],'summary':summary})
+        charge=charges[0]
+        if 'refusal_recourse_policy' in cfg:
+            paid=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')=='recourse-planning-'+str(day)]
+            if len(paid)!=1 or paid[0]['day']!=moment or paid[0]['seq']!=charge['seq']+1 or paid[0]['args'].get('amount')!=cfg['refusal_recourse_policy']['daily_planning_cost']:raise ValueError('NATIVE_PREPAID_REFUSAL_RECOURSE_REQUIRED')
+            charge=paid[0]
+            fee=cfg['refusal_recourse_policy']['daily_planning_cost'];before=charge['before'];after=charge['after']
+            if before['available']<fee or before.get('investmentStopped') or before['cash']-after['cash']!=fee or before['payables']!=after['payables']:raise ValueError('RECOURSE_PLANNING_NOT_CASH_PREPAID')
+        seq=charge['seq']+1;summary=charge['after'];state_digest=digest({'config':tape['config'],'actions_sha256':prefixes[seq],'summary':summary})
         if snapshot['sequence']!=seq or snapshot['summary']!=summary or snapshot['actions_sha256']!=prefixes[seq] or snapshot['state_digest']!=state_digest:raise ValueError('JOINT_CASH_NOT_CURRENT_NATIVE_PREFIX')
         candidates=lifecycle['daily_candidate_ids_recomputed'][moment];buyers=lifecycle['daily_public_buyers'][moment]
         operating=cfg['exposure_cost']*lifecycle['daily_outreach_units_recomputed'][moment]+cfg['qualification_cost']*len(candidates)*(4 if 'complete_offer_policy' in cfg else 1)
@@ -186,14 +215,25 @@ def audit_decisions(root,manifest,result,lifecycle):
         selected_investments|=investments
         if events[moment][1]['channel_selected']!=(any(o['kind']=='acquisition' for o in record['decision']['selected_options']) if 'channel_menu_policy' in cfg else ('channel-'+str(day) in investments)) or events[moment][1]['capacity_selected']!=(any(o['kind']=='capacity' for o in record['decision']['selected_options']) if 'capacity_menu' in cfg['strategic_allocation_policy'] else ('capacity-'+str(day) in investments)):raise ValueError('SELECTED_INVESTMENT_FLAGS_CHANGED')
         choices=[d for d in result['decisions'] if d.get('kind') in {'offer','outside_choice'} and d['time']==moment]
-        if [d['customer_id'] for d in choices]!=needs:raise ValueError('EVERY_OBSERVED_NEED_REQUIRES_ONE_JOINT_DECISION')
+        recourse_bound=None
+        if 'refusal_recourse_policy' in cfg:
+            recourse_bound=_recourse_choices(record,wrapper,choices,needs,cfg)
+        else:
+            if 'refusal_recourse' in wrapper or any('joint_recourse_round' in d for d in choices):raise ValueError('UNREGISTERED_REFUSAL_RECOURSE')
+            if [d['customer_id'] for d in choices]!=needs:raise ValueError('EVERY_OBSERVED_NEED_REQUIRES_ONE_JOINT_DECISION')
         capacity_only_customers=set()
         if 'complete_offer_policy' in cfg:
             from .capacity_signal import capacity_declined_customers
             capacity_only_customers=capacity_declined_customers(record)
         for choice in choices:
             if choice.get('joint_allocation_sha256')!=key:raise ValueError('JOINT_DECISION_REFERENCE_MISSING')
-            option=selected.get(choice['customer_id']);quotes+=1
+            active_record=record
+            if recourse_bound is not None:
+                active_record,option,active_round=recourse_bound[choice['customer_id']]
+                from .capacity_signal import capacity_declined_customers
+                capacity_only_customers=capacity_declined_customers(active_record)
+            else:option=selected.get(choice['customer_id'])
+            quotes+=1
             if option is None:
                 no_bids+=1
                 if 'complete_offer_policy' in cfg:
@@ -202,10 +242,11 @@ def audit_decisions(root,manifest,result,lifecycle):
                     if reasons!=[expected_reason]:raise ValueError('CAPACITY_ONLY_OPPORTUNITY_NOT_REDERIVED')
                 if choice['kind']!='outside_choice' or choice.get('joint_option_id') is not None:raise ValueError('UNSELECTED_CUSTOMER_WAS_QUOTED')
                 continue
-            contract=selected_delivery(record,option['id'])
+            contract=selected_delivery(active_record,option['id'])
             if choice['kind']!='offer' or choice.get('joint_option_id')!=option['id'] or choice['price']!=contract['price']:raise ValueError('JOINT_SELECTED_QUOTE_NOT_USED')
             if choice['chosen']:
                 order=next(o for o in result['orders'] if o['customer_id']==choice['customer_id'] and o['qualified_time']==moment)
+                if recourse_bound is not None and order.get('joint_recourse_round')!=active_round:raise ValueError('ORDER_RECOURSE_SELECTION_CHANGED')
                 if order['offer']!=contract['offer'] or order.get('method_plan')!=contract['method_plan'] or order['complete_cost']!=contract['complete_cost'] or order.get('joint_option_id')!=option['id']:raise ValueError('JOINT_SELECTED_METHOD_NOT_EXECUTED')
     if {i['id'] for i in result['investments']}!=selected_investments:raise ValueError('JOINT_SELECTED_INVESTMENTS_NOT_NATIVE_EXECUTED')
     return {'joint_plans_rederived':len(actions),'joint_states_evaluated':states,'strategic_quotes_and_no_bids_rederived':quotes,'strategic_no_bids_rederived':no_bids,'joint_optimality_scope':'Exact declared finite shortlist under public conditional-mean forecasts; not a global or long-horizon optimum.'}
