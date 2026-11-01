@@ -68,6 +68,12 @@ def audit_decisions(root,manifest,result,lifecycle):
         snapshot=record['observation'];charges=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')=='maintenance-'+str(day)]
         if len(charges)!=1 or charges[0]['day']!=moment or charges[0]['args'].get('amount')!=cfg['maintenance_daily']:raise ValueError('NATIVE_PREPAID_PLANNING_REQUIRED')
         charge=charges[0]
+        if 'public_budget_gate' in cfg:
+            fees=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')=='public-budget-gate-'+str(day)]
+            fee=cfg['public_budget_gate']['daily_cost_microUSD']
+            if len(fees)!=1 or fees[0]['day']!=moment or fees[0]['seq']!=charge['seq']+1 or fees[0]['args']['amount']!=fee or fees[0]['before']['available']<fee or fees[0]['before']['cash']-fees[0]['after']['cash']!=fee:
+                raise ValueError('PUBLIC_BUDGET_GATE_NOT_PREPAID')
+            charge=fees[0]
         if 'startup_acquisition_policy' in cfg and moment==0:
             from .startup_acquisition048 import preflight as startup_preflight
             from .engine import _offer_menu
@@ -123,6 +129,14 @@ def audit_decisions(root,manifest,result,lifecycle):
             menu=[]
             consumed={key for jobid in used for key in jobs[jobid]['work_keys']}
             for service in services:
+                if 'public_budget_gate' in cfg:
+                    from .buyer_income import public_accrued
+                    refunds_by_id={a['args']['id']:a['day'] for a in tape['actions'] if a['op']=='event' and a['args']['action']=='refund'}
+                    observed=sum(d.get('outside_spend',0) for d in result['decisions'] if d.get('customer_id')==ident and d['time']<moment)
+                    observed+=sum(o['price'] for o in result['orders'] if o['customer_id']==ident and o['qualified_time']<moment and (o['id'] not in refunds_by_id or refunds_by_id[o['id']]>moment))
+                    # Independent bound reconstruction, not the producer's admits helper.
+                    upper=max(a['budget_microUSD'] for a in profile['atoms'])+public_accrued(cfg,moment)-observed
+                    if upper<min(profile['price_grids'][service]):continue
                 available=[j for j in jobs.values() if j['id'] not in used and j['accepted'] and j['service_id']==service and artifacts[j['id']]['outcome_scope']=='complete_outcome' and ('complete_offer_policy' not in cfg or (j['id'] in cfg['complete_offer_policy']['requested_jobs'][ident] and not consumed.intersection(j['work_keys'])))]
                 if available:menu.append(min(available,key=lambda j:j['id']))
             if menu:considered+=1
@@ -217,7 +231,8 @@ def audit_decisions(root,manifest,result,lifecycle):
                 outside=sum(d.get('outside_spend',0) for d in result['decisions'] if d.get('customer_id')==ident and d['time']<moment)
                 refunds={a['args']['id']:a['day'] for a in tape['actions'] if a['op']=='event' and a['args']['action']=='refund'}
                 committed=sum(o['price'] for o in result['orders'] if o['customer_id']==ident and o['qualified_time']<moment and (o['id'] not in refunds or refunds[o['id']]>moment))
-                if problem.get('market_context')!=market_context(cfg['complete_offer_policy'],ident,outside+committed):raise ValueError('COMPLETE_MARKET_FORECAST_READS_PRIVATE_STATE')
+                from .buyer_income import public_context
+                if problem.get('market_context')!=public_context(market_context(cfg['complete_offer_policy'],ident,outside+committed),cfg,moment):raise ValueError('COMPLETE_MARKET_FORECAST_READS_PRIVATE_STATE')
                 if delivery.get('capacity_units')!=offer['capacity_units'] or delivery.get('work_keys')!=job['work_keys']:raise ValueError('COMPLETE_PRODUCTION_WORK_OR_UNITS_CHANGED')
             elif 'market_context' in problem:raise ValueError('UNAUTHORIZED_COMPLETE_MARKET')
             memory=problem['memory']

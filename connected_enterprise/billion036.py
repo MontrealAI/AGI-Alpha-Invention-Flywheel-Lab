@@ -54,6 +54,8 @@ def preflight(registration):
             raise ValueError('EXACT_100K_AND_60_CALENDAR_MONTHS_REQUIRED')
     cases = []
     for name, cfg in sorted(value['configs'].items()):
+        if 'buyer_income_policy' in cfg or 'complete_offer_policy' in cfg:
+            raise ValueError('FIXED_BUYER_BOUND_UNAVAILABLE_FOR_REPLENISHED_OR_COMPLETE_MARKET')
         # Current _buyers has fixed, non-replenishing lifetime budgets:
         # int((180 + 400*draw)*MICRO*multiplier/10000); draw in [0,1).
         # A deliberately generous upper bound ignores competition and costs.

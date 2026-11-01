@@ -109,7 +109,8 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
             extra={}
             if menu_enabled:
                 spend=buyer['outside_spend']+buyer['our_settled_spend']+sum(buyer['pending_commitments'].values())
-                extra['market_context']=public_market.context(buyer['id'],spend,True)
+                from .buyer_income import public_context
+                extra['market_context']=public_context(public_market.context(buyer['id'],spend,True),cfg,day*24)
             selection=select(cfg['strategic_policy'],cfg.get('mechanism_policy'),job['id'],offer,state.get('mechanism_memory'),public,**extra)
             delivery={'id':'quote-'+str(day)+'-'+buyer['id']+('-offer-'+str(offer_index) if menu_enabled else ''),'customer_id':buyer['id'],'onboarding':onboard,
                                'exclusive_group':'customer-'+buyer['id'],'selection':selection,'requires':[]}
