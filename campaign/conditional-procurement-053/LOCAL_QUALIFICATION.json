@@ -1,0 +1,124 @@
+{
+  "scope": "LOCAL_ENGINEERING_AND_AUTHORED_NATIVE_SIMULATION_NOT_RELEASE_QUALIFICATION",
+  "base_commit": "e92381ce49a23933999443afee73cb04b975aa12",
+  "source_sha256": "773ad46976fa7fd0a80ab74fc6e2f87e94d6280097558cae9728f7eb65f08c44",
+  "source_file_count": 287,
+  "local_tests": {
+    "candidate": 25,
+    "incumbent": 14,
+    "passed": 39
+  },
+  "native_experiment": {
+    "source_binding_sha256": "5be994473d46c0c2cbc1af331cb573c06d5d8b5d4974cabcd0dcd6fe591a2a9a",
+    "preregistration_sha256": "5fb66eb1c26aed6980b85964180019545bd2d95c4efbcde6ebbe3c61106cbe97",
+    "scenario_accounts": 10,
+    "all_origin_native_independent_reopen_checks_passed": true,
+    "ordinary_control_matches_each_case": true,
+    "profit_microUSD_per_policy": {
+      "central": 68809520,
+      "expired": 14135520,
+      "provider_default": 2465520,
+      "no_demand": -25100000,
+      "unaffordable": 14135520
+    },
+    "scope": "Authored quotes, demand and cost envelopes. No actual supplier/customer agreements or commerce."
+  },
+  "limits": [
+    "Actual engineering/model/host billing unknown; per-account profit is not complete campaign profit.",
+    "No discovery or invention-superiority claim. Prior losses are not erased or pooled.",
+    "Full CI, independent review, merge, release and downloaded operation pending."
+  ],
+  "publication_wrapper_tests": {
+    "base": "e92381ce49a23933999443afee73cb04b975aa12",
+    "command": [
+      "python",
+      "-m",
+      "unittest",
+      "-v",
+      "tests.test_publication_composition",
+      "tests.test_publication_binding",
+      "tests.test_connected_release"
+    ],
+    "returncode": 1,
+    "operating_source_sha256": "773ad46976fa7fd0a80ab74fc6e2f87e94d6280097558cae9728f7eb65f08c44",
+    "operating_source_unchanged": true,
+    "changed_wrapper_fields": [
+      "current_files",
+      "current_source_sha256",
+      "source_delta"
+    ],
+    "wrapper_sha256": "a7f112b7807663530f917deda8fabe02cc635e2c9feac87a047c9aa953ccb40f",
+    "original_wrapper_sha256": "d737880615816bb1f879d7c31a06b3a6565935342e987a0bf9b15f4a37588088",
+    "qualification_status": "NOT_QUALIFIED_REGISTRATION_ONLY",
+    "scope": "Targeted synthetic publication guard regression; NOT clean qualification or release.",
+    "tests_run": 71,
+    "passed": 64,
+    "failures": 2,
+    "errors": 5,
+    "composition_tests_passed": 17,
+    "historical_binding_tests_passed": 10,
+    "remaining_blocker": "Seven release tests require non-Git temporary ancestry; both /tmp/.git and /workspace/.git exist. No guards disabled.",
+    "unittest_elapsed_seconds": 4.861
+  },
+  "preserved_hosted_failure": {
+    "head": "71ccd516b7987afc111299482ae392bfbf44d2c0",
+    "run": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41307450140",
+    "passed_before_failure": 14,
+    "failed_stage": "native setup: ModuleNotFoundError cryptography",
+    "correction": "Install existing pinned native dependencies; require and trigger on requirements file. Native adapter itself unchanged."
+  },
+  "semantic_correction": "Standalone quote source binding now includes canonical instrument production/checker closure; stale-source negative test added.",
+  "prior_qualified_source": {
+    "head": "fca9ca32f1a9899d3114df43c9dc992e3e2b97bb",
+    "source_sha256": "1e55793ef475e3e28a0b268fd85813e2dbbde5667988efd5911003738722e5f7",
+    "hosted_workflows_passed": 14
+  },
+  "preserved_review_counterexample": {
+    "comment": 4435833164,
+    "head": "fca9ca32f1a9899d3114df43c9dc992e3e2b97bb",
+    "valid_quote_id": "assemble_complete",
+    "ordinary": "READY at5500000microUSD",
+    "composed": "ContractError DUPLICATE_MECHANISM_ID",
+    "fix": "Generated fixed-width provider IDs in sorted external-ID order, separate assembly ID, reverse map; external admissibility and ties unchanged."
+  },
+  "independent_namespace_review": {
+    "unit_tests_passed": 9,
+    "fixed_seed_comparisons_passed": 120,
+    "scope": "24quotes, ties, expiry, availability, reversed order, actual execution; no accounts or commercial validation."
+  },
+  "prior_namespace_qualified_source": {
+    "head": "6b57a2ad9e8a0d59ee9ffb6fcd8d5b407da13422",
+    "source_sha256": "a0c98a8b173f004e7534705e8159fd93c8b0d3a1ae5f8151913434b338fb7fab",
+    "hosted_workflows_passed": 14
+  },
+  "preserved_affordability_counterexample": {
+    "comment": 4435883292,
+    "head": "6b57a2ad9e8a0d59ee9ffb6fcd8d5b407da13422",
+    "alternate_quote_microUSD": 10000010000,
+    "budget_microUSD": 8000000,
+    "ordinary": "READY at5500000microUSD",
+    "composed": "ContractError POSITIVE_INTEGER_RESOURCE_COST_REQUIRED",
+    "fix": "Filter exact current affordability including assembly before grammar construction; explicitly labeled exact ordinary fallback when no individually affordable quotes or budget exceeds grammar representation. No quote admissibility change or budget clipping."
+  },
+  "independent_affordability_review": {
+    "unit_tests_passed": 11,
+    "fixed_seed_comparisons_passed": 180,
+    "scope": "Boundary budgets, huge costs, expiry, availability; every READY output executed, no accounts or commercial validation."
+  },
+  "prior_affordability_qualified_source": {
+    "head": "69ff7fcf8e2d72d17ad1433931825d69e64fad77",
+    "source_sha256": "5ae9cc872934a8e8b69aebf3f6aeed8fa4e98a55783aecbcceaf5db9912aa66c",
+    "hosted_workflows_passed": 14
+  },
+  "current_main_composition": {
+    "base": "e92381ce49a23933999443afee73cb04b975aa12",
+    "source_files": 287,
+    "inherited_main_files": 15,
+    "changed_operating_inputs": [
+      "AGENTS.md",
+      "docs/harness/DEVELOPER_GUIDE.md"
+    ],
+    "independent_tests_passed": 27,
+    "scope": "Main site/guidance inherited unchanged; current wrapper regenerated; no runtime/default policy change. Fresh exact-head CI pending."
+  }
+}

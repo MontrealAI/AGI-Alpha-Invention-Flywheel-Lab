@@ -1,0 +1,38 @@
+name: Conditional procurement 053 opt-in qualification
+on:
+  pull_request:
+    paths:
+      - '**/*.py'
+      - 'requirements-commercial010.txt'
+      - 'campaign/conditional-procurement-053/PROTOCOL.json'
+      - 'docs/harness/CONDITIONAL_PROCUREMENT053.md'
+      - '.github/workflows/conditional-procurement053.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: conditional-procurement053-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  focused-qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install canonical pinned native-engine dependencies
+        run: python -m pip install -r requirements-commercial010.txt
+      - name: Explicit geometry regression discovery
+        run: python -m unittest discover -s tests -p 'test_packet_geometry051.py' -v
+      - name: Explicit procurement and adapter regression discovery
+        run: python -m unittest discover -s tests -p 'test_procurement053.py' -v
+      - name: Explicit native accounting regression discovery
+        run: python -m unittest discover -s tests -p 'test_native_procurement053.py' -v
+      - name: Explicit source closure and extracted entry point discovery
+        run: python -m unittest discover -s tests -p 'test_procurement_source053.py' -v
+      # No campaign execution, no publication, no credentials, and no uploads.
+      # Tests use temporary local fixtures; no recovery files leave this job.
