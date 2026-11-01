@@ -53,12 +53,16 @@ def check_native_claim_binding(arm, exported, reported, measurements, protocol):
     for buyer in buyers:
         ident = 'market062-' + buyer
         native, claim = order_index[ident], sale_index[ident]
-        if (native.get('state') != 'released' or native.get('buyer') != buyer or
-                native.get('price') != protocol['quote_microUSD'] or
-                claim.get('status') != 'ACCEPTED_AND_COLLECTED' or
-                claim.get('native_collection_microUSD') != protocol['quote_microUSD'] or
-                claim.get('artifact') != measurements[buyer]):
-            raise ValueError('NATIVE_SALE_REPORT_NOT_SUPPORTED_BY_LEDGER')
+        requirements = {
+            'native_state': (native.get('state'), 'released'),
+            'native_buyer': (native.get('buyer'), buyer),
+            'native_price': (native.get('price'), protocol['quote_microUSD']),
+            'reported_state': (claim.get('status'), 'ACCEPTED_AND_COLLECTED'),
+            'reported_collection': (claim.get('native_collection_microUSD'), protocol['quote_microUSD']),
+            'reported_artifact': (claim.get('artifact'), measurements[buyer])}
+        for field, (actual, expected) in requirements.items():
+            if actual != expected:
+                raise ValueError('NATIVE_SALE_REPORT_NOT_SUPPORTED_BY_LEDGER:' + field)
     expected_choice = 'NO_BID' if arm == 'cheap_rival' else 'SHARED_CONTRACT'
     if reported.get('decision', {}).get('choice') != expected_choice:
         raise ValueError('NATIVE_VOLUNTARY_CHOICE_REPORT_MISMATCH')
