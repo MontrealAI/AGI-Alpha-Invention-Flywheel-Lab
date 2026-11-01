@@ -12,6 +12,14 @@ The overnight integration adds exact quote arithmetic, finite chunked admission,
 
 The [full-year report](../../campaign/account-year-048/REPORT.md) records four separately funded native simulations from its pinned public source-equivalent snapshot. New code does not relabel those results. This navigation snapshot is not a permanent status registry: refresh exact heads, current owners, reviews, Actions and release receipts. Preserve owner work when integrating. Follow the [operator guide](../connected014/OPERATOR.md) and [resource policy](RESOURCE_POLICY.md).
 
+## Public delivery and large inputs
+
+Apply the [public-build default](../../AGENTS.md#public-builds-and-compact-learning-by-default): deliver authorized project code, compact reproducible evidence and lessons on GitHub, not only as private bundles. Keep the exact source revision, commands, outcomes (including failures), limitations and a concise tried → outcome → lesson → next/avoid record.
+
+For large public inputs, record verified URLs, dataset version, retrieval/filtering instructions and available content hashes. Disclose missing identity evidence rather than inventing it. Stream or process bounded slices transiently; retain the smallest useful reproduction and essential claim/source/failure evidence instead of unnecessary raw data, archives or generated bundles. A compact summary must not hide failed arms, costs or dependencies.
+
+Keep private documents, customer data, credentials, signing material and internal conversations out of public outputs. Existing spending, access, formal approval, merge and deployment boundaries still apply; do not invent renewal approvals for already-authorized ordinary public engineering. This update neither deletes existing data nor authorizes history rewriting.
+
 ## Mission: construct economically reachable possibilities
 
 Invent the **complete productive arrangement**: a valuable accepted outcome, the means to produce and verify it, and terms under which beneficiaries, producers, funders and other participants voluntarily prefer participation to their available alternatives. Discover these together rather than fixing a low-value service and optimizing its transaction rate indefinitely. A missing process, measurement, interface, representation, contract, financing structure or allocation of risk/work can be the enabling invention. Known effective methods remain usable without new novelty proofs.

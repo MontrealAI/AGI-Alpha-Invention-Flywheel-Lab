@@ -6,6 +6,14 @@ Build publicly in this repository: visible branches/PRs, GitHub Actions, qualifi
 
 Read [the developer/mechanism guide](docs/harness/DEVELOPER_GUIDE.md), [operator guide](docs/connected014/OPERATOR.md) and [resource policy](docs/harness/RESOURCE_POLICY.md). These current instructions supersede older blanket failure-file retention, stale campaign renewal gates and obsolete owner labels. Historical source snapshots, outcomes and permissions still describe their original scope.
 
+## Public builds and compact learning by default
+
+For user-authorized project work, publish code, compact reproducible evidence and distilled lessons through public GitHub branches and PRs by default, rather than delivering only a private file bundle. Ordinary already-authorized public engineering does not need a recurring publication approval.
+
+Reference large public datasets by verified source URLs, version or release identifiers, hashes when available, and retrieval instructions. Use bounded transient processing (streaming, slices or temporary downloads); retain useful conclusions, small reproductions and essential source/failure evidence, not unnecessary raw datasets, archives or generated bundles. Do not invent missing hashes or treat a URL alone as proof of the analyzed bytes.
+
+The public default excludes private user documents, customer data, credentials, signing material and internal conversations. It grants no new spending, access changes, formal PR approval, merge or deployment authority. This guidance update does not itself authorize deleting existing data or rewriting history; apply the retention safeguards below to any separately scoped cleanup.
+
 ## Invent the complete productive arrangement
 
 **Transformational intelligence changes the game.** The defining shift is **from optimizing an enterprise to constructing the conditions under which better enterprises become possible**. Discover the valuable outcome, the means of producing and verifying it, and the arrangement that makes each participant's involvement worthwhile—together. The object of invention is the complete productive arrangement, not a transaction counter, a catalogue of mechanisms or dependence on this machine.
