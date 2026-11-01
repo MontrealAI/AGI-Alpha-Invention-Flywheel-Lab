@@ -96,13 +96,14 @@ def _check_buyer_origins(config, seed, buyers):
     expected_ids = {f'SIM-customer-{i:03d}' for i in range(config['customer_pool'])}
     if set(indexed) != expected_ids:
         raise ValueError('FROZEN_FINITE_BUYER_POPULATION_CHANGED')
+    from .complete_offer_market import compile_market
+    market=compile_market(config['complete_offer_policy']) if 'complete_offer_policy' in config else None
     for ident, buyer in indexed.items():
         key = canonical(['connected014', seed, ident, 'budget'])
         uniform = int.from_bytes(hashlib.sha256(key).digest()[:8], 'big') / 2**64
         expected = int((180 + 400 * uniform) * 1_000_000 * config['buyer_budget_multiplier_bps'] / 10000)
         if 'complete_offer_policy' in config:
-            from .complete_offer_market import request_profile,private_atom
-            expected=request_profile(config['complete_offer_policy'],ident)['atoms'][private_atom(config['complete_offer_policy'],ident,seed)]['budget_microUSD']
+            expected=market.profile(ident)['atoms'][market.atom(ident,seed)]['budget_microUSD']
         if buyer['initial_budget'] != expected:
             raise ValueError('FROZEN_INITIAL_BUYER_BUDGET_CHANGED')
 
