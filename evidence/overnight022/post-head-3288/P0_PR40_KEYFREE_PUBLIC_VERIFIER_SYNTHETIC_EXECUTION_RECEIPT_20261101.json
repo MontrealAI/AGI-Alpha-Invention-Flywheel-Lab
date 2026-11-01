@@ -1,0 +1,75 @@
+{
+  "schema": "agi-alpha/p0-independent-public-verifier-boundary-review/v1",
+  "date_utc": "2026-11-01",
+  "pinned_refs": {
+    "main": "4a87b455373be72811ad3a0c654a116c3604a374",
+    "pr40": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+    "pr40_upgrades_blob": "9866d004c412fc05c9f6292cf898307f177359df",
+    "pr99": "4496bcc606e85cacf0103fa46fc0092ad0ae8c56"
+  },
+  "synthetic_probe": {
+    "script": "P0_PR40_PUBLIC_VERIFIER_SYNTHETIC_IMPORT_PROBE_20261101.py",
+    "script_sha256": "e7c5cc4e0c48b5e53d23e7ec352f60e0e3943f291009dcbe6619ce00477de636",
+    "script_git_blob_sha": "06d19abc02207f1ea7bf256b9efcb9ff87f91bb8",
+    "invocation": "python3 evidence/overnight022/post-head-3288/P0_PR40_PUBLIC_VERIFIER_SYNTHETIC_IMPORT_PROBE_20261101.py",
+    "output": {
+      "schema": "agi-alpha/keyfree-public-historical-verifier-synthetic-probe/v1",
+      "exact_reviewed_upgrades_git_blob": "9866d004c412fc05c9f6292cf898307f177359df",
+      "historical_python_import_executed": true,
+      "real_account_or_keys_touched": false,
+      "scope": "ISOLATED_MOCK_BOUNDARY_NOT_REAL_FINANCIAL_ACCOUNT",
+      "self_consistent_source_inventory": true,
+      "synthetic_audit_accepted": true,
+      "ticket_signature_verified": false,
+      "verdict": "UNTRUSTED_CODE_EXECUTION_PRIMITIVE_REPRODUCED_IN_SYNTHETIC_ANALOGUE"
+    },
+    "qualification": "LOCAL_SYNTHETIC_ANALOGUE_PASS; NOT END_TO_END_REPOSITORY_EXPLOIT",
+    "method": "Copied the exact reviewed verify_historical subprocess import invocation, PYTHONPATH/cwd selection, and ticket-provided historical root/file-map comparison. Stubbed parent load_jobs and journal semantics; only touched a temporary marker. No original account, signing key, private data, historic financial proof, or network I/O.",
+    "caveats": [
+      "Not an end-to-end invocation of PR40's full audit_account; upstream manifest and financial validation were deliberately stubbed.",
+      "The synthetic ticket does not conform to all real transition schema fields; only code-import boundary was exercised.",
+      "No demonstration of forged genuine financial receipts, owner HMAC access, or real historical-account acceptance."
+    ]
+  },
+  "trust_boundary": {
+    "finding": "The key-free public verifier's source comparison checks agreement with file hashes supplied by ticket_body(ticket) without an independent review/qualification trust root. The subprocess resolves connected_enterprise.finance from selected historical_root, and inherits os.environ.",
+    "priority": "P0_NO_GO",
+    "repair_requirements": [
+      "Before any load_jobs or subprocess dispatch, require a verifier identity independently authorized by a trusted source/release policy, not from the ticket's verifier_files/from_source alone.",
+      "Separate untrusted evidence canonicality checking from executable historical verifier selection; execute only reviewed pinned code under least privilege with a sanitized environment, or use a nonexecuting data-only canonical verifier.",
+      "Preserve HMAC owner validation for real upgrades, immutable account/ledger/queue/obligations and recovery; key-free public audit must remain genuinely independent.",
+      "Negative regression: self-consistent fake ticket and fake historical source must be rejected without importing its finance module or creating marker; positive original source and successive account lineage retain exact public audit after trusted approval."
+    ]
+  },
+  "integration": {
+    "owner": "existing PR40 financial integration owner",
+    "new_financial_writes": false,
+    "new_keys": false,
+    "main_modified": false,
+    "release_modified": false,
+    "archive_guard_modified": false,
+    "old_failures_preserved": true,
+    "account_hand_off": "UNKNOWN_NO_AUTHENTICATED_ORIGINAL_ACCOUNT_CHECKPOINT",
+    "decision": "KEEP_NATIVE_CAPITAL_P0_RELEASE_BLOCKED_PENDING_TRUST_GATES_AND_AUTHENTICATED_MIGRATION"
+  },
+  "acceptance": {
+    "permanent_term_current_main_release": "ACHIEVED_PREVIOUSLY",
+    "public_verifier_code_execution_synthetic": "ACHIEVED_NARROW_SYNTHETIC",
+    "public_verifier_secure_historical_audit": "BLOCKED",
+    "signer_isolation": "PARTIAL_DRAFT_ONLY",
+    "original_signed_nonempty_queue_migration": "BLOCKED",
+    "native_capital_composed_release": "BLOCKED",
+    "p1_full_cost_causal_profit": "UNQUALIFIED",
+    "p2_recursive_discovery": "UNQUALIFIED",
+    "real_commerce": "NOT_OBSERVED",
+    "trailing_365_profit_3b": "NOT_ESTABLISHED"
+  },
+  "resource_record": {
+    "local_probe_execution": "one zero-exit synthetic subprocess reproduction; CPU/wall and hosted billing not measured",
+    "new_spend_usd": 0
+  },
+  "links": {
+    "pr40": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/40",
+    "pr99": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/99"
+  }
+}
