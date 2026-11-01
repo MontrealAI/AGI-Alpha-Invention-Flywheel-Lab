@@ -1,0 +1,219 @@
+--- a/connected_enterprise/complete_offer_audit.py
++++ b/connected_enterprise/complete_offer_audit.py
+@@ -1,10 +1,11 @@
+ """Reconstruct voluntary complete-scope decisions from native offers and public inputs."""
+-from .complete_offer_market import request_profile,private_atom,market_context,actual_choice
++from .complete_offer_market import compile_market,actual_choice
+ 
+ 
+ def audit_market(result,tape):
+     from .verify import _private_draw
+     cfg=result['config'];policy=cfg['complete_offer_policy'];seed=result['seed']
++    market=compile_market(policy)
+     buyers={b['id']:b for b in result['buyers']}
+     choices=[d for d in result['decisions'] if d.get('kind') in {'offer','outside_choice'}]
+     orders={(o['customer_id'],o['qualified_time']):o for o in result['orders']}
+@@ -17,7 +18,7 @@
+         seen.add(key)
+         committed=sum(o['price'] for o in result['orders'] if o['customer_id']==ident and o['qualified_time']<t and (o['id'] not in refunds or refunds[o['id']]>t))
+         observed=outside.get(ident,0)+committed
+-        context=market_context(policy,ident,observed)
++        context=market.context(ident,observed)
+         if d.get('market_context')!=context or d.get('human_price') is not None or d.get('public_rival_price') is not None:raise ValueError('COMPLETE_MARKET_CONTEXT_NOT_REDERIVED')
+         price=d['price'];service=d['service_id']
+         if d['kind']=='offer':
+@@ -35,8 +36,8 @@
+             if pick['job_id'] not in policy['requested_jobs'][ident]:raise ValueError('UNREQUESTED_CUSTOMER_JOB')
+             if pick['price']!=price or pick['service_id']!=service:raise ValueError('COMPLETE_SCOPE_OR_QUOTE_CHANGED')
+         elif price is not None:raise ValueError('NO_BID_CANNOT_HAVE_PRICE')
+-        index=private_atom(policy,ident,seed)
+-        budget=request_profile(policy,ident)['atoms'][index]['budget_microUSD']
++        index=market.atom(ident,seed)
++        budget=market.profile(ident)['atoms'][index]['budget_microUSD']
+         chosen=actual_choice(context,index,budget-observed,service if price is not None else None,price,_private_draw(seed,[t//24,ident],'complete-offer-tie'))
+         if d['buyer_choice']!=chosen['provider'] or d['chosen'] is not (chosen['provider']=='us') or d.get('outside_option_name')!=chosen['name'] or d.get('outside_service_id')!=chosen['service_id']:raise ValueError('VOLUNTARY_COMPLETE_SCOPE_CHOICE_CHANGED')
+         if chosen['provider']=='us':
+--- a/connected_enterprise/complete_offer_market.py
++++ b/connected_enterprise/complete_offer_market.py
+@@ -5,6 +5,8 @@
+ """
+ import copy
+ import hashlib
++import json
++from dataclasses import dataclass
+ from fractions import Fraction
+ 
+ SCHEMA='connected-complete-offer-market/v1'
+@@ -46,6 +48,43 @@
+     if len(ids)!=len(set(ids)):raise ValueError('UNIQUE_REQUEST_PROFILES_REQUIRED')
+     return p
+ 
++@dataclass(frozen=True, slots=True)
++class MarketProfiles:
++    """Validated, immutable public-profile snapshot for ONE operation or audit.
++
++    No process-wide cache, account authority, buyer private draw or live balance
++    is retained. A new operation must compile its own current policy. Encoded
++    profiles prevent returned dictionaries from changing later answers.
++    """
++    encoded_profiles: tuple[str, ...]
++    policy_sha256: str
++
++    def profile(self, buyer_id):
++        index=int(hashlib.sha256(('public-request:'+buyer_id).encode()).hexdigest(),16)%len(self.encoded_profiles)
++        return json.loads(self.encoded_profiles[index])
++
++    def context(self, buyer_id, observed_spend, rival_available=True):
++        _int(observed_spend)
++        if type(rival_available) is not bool:raise ValueError('PUBLIC_RIVAL_ELIGIBILITY_REQUIRED')
++        return {'profile':self.profile(buyer_id),'observed_spend':observed_spend,'rival_available':rival_available}
++
++    def atom(self, buyer_id, seed):
++        return _atom_from_profile(self.profile(buyer_id),buyer_id,seed)
++
++
++def compile_market(policy):
++    """Validate ALL request identities/profiles once, before creating a snapshot.
++
++    Deep copying first makes the validation and compilation concern exactly the
++    same bytes. This is query preparation, not permission to use a stale policy.
++    """
++    frozen=copy.deepcopy(policy)
++    validate_policy(frozen)
++    encoded=lambda value:json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False)
++    return MarketProfiles(tuple(encoded(p) for p in frozen['profiles']),
++                          hashlib.sha256(encoded(frozen).encode()).hexdigest())
++
++
+ def request_profile(policy,buyer_id):
+     validate_policy(policy)
+     index=int(hashlib.sha256(('public-request:'+buyer_id).encode()).hexdigest(),16)%len(policy['profiles'])
+@@ -64,7 +103,10 @@
+ 
+ def private_atom(policy,buyer_id,seed):
+     """Environment-only draw. Must not be supplied to the selling policy."""
+-    r=request_profile(policy,buyer_id)
++    return _atom_from_profile(request_profile(policy,buyer_id),buyer_id,seed)
++
++
++def _atom_from_profile(r,buyer_id,seed):
+     n=int(hashlib.sha256(f'private-complete-offer:{seed}:{buyer_id}'.encode()).hexdigest(),16)%10000
+     for i,a in enumerate(r['atoms']):
+         n-=a['weight_bps']
+--- a/connected_enterprise/engine.py
++++ b/connected_enterprise/engine.py
+@@ -116,12 +116,13 @@
+     if response is not None:_event(state,when,'REACTIVATION_RESPONSE',exposure['exposure_id']+'-reactivation',**response)
+ 
+ def _buyers(cfg,seed):
++    from .complete_offer_market import compile_market
++    market=compile_market(cfg['complete_offer_policy']) if 'complete_offer_policy' in cfg else None
+     result=[]
+     for i in range(cfg['customer_pool']):
+         ident=f'SIM-customer-{i:03d}';budget=int((180+400*draw(seed,ident,'budget'))*MICRO*cfg['buyer_budget_multiplier_bps']/10000)
+         if 'complete_offer_policy' in cfg:
+-            from .complete_offer_market import request_profile,private_atom
+-            budget=request_profile(cfg['complete_offer_policy'],ident)['atoms'][private_atom(cfg['complete_offer_policy'],ident,seed)]['budget_microUSD']
++            budget=market.profile(ident)['atoms'][market.atom(ident,seed)]['budget_microUSD']
+         result.append({'id':ident,'initial_budget':budget,'remaining_budget':budget,'pending_commitments':{},'outside_spend':0,'our_settled_spend':0,'known':i<4,'active':True,'purchases':0,'onboarded':False,'next_need_time':0,'acquisition_source_plan_id':None,'exposure_time':0 if i<4 else None,'retention_decision_count':0,'service_index':i%3,'last_quote':None})
+     return result
+ 
+@@ -154,18 +155,25 @@
+     return entry,offer,anchor
+ 
+ 
+-def _offer_menu(state,jobs,buyer,cfg):
++def _offer_menu(state,jobs,buyer,cfg,*,_market=None):
+     """Admitted public request alternatives, without private value or budget."""
+     from .complete_offer_market import request_profile
+-    profile=request_profile(cfg['complete_offer_policy'],buyer['id'])
++    profile=request_profile(cfg['complete_offer_policy'],buyer['id']) if _market is None else _market.profile(buyer['id'])
+     services=profile['services']
+     if cfg['complete_offer_policy']['selection']=='restricted':
+         service=SERVICES[buyer['service_index']%3]
+         services=[service] if service in services else []
+     used={key for ident in state['used_jobs'] for key in jobs[ident]['job']['work_keys']}
++    # Work is already keyed by admitted job identity. Never scan unrelated jobs.
++    requested=[]
++    for ident in cfg['complete_offer_policy']['requested_jobs'][buyer['id']]:
++        if ident not in jobs:continue
++        entry=jobs[ident]
++        if entry['job']['id']!=ident:raise ValueError('ADMITTED_JOB_INDEX_IDENTITY_CHANGED')
++        requested.append(entry)
+     options=[]
+     for service in services:
+-        entries=[entry for entry in jobs.values() if entry['job']['id'] in cfg['complete_offer_policy']['requested_jobs'][buyer['id']] and entry['job']['accepted'] and entry['job']['service_id']==service and entry['artifact'].get('outcome_scope')=='complete_outcome' and not used.intersection(entry['job']['work_keys'])]
++        entries=[entry for entry in requested if entry['job']['accepted'] and entry['job']['service_id']==service and entry['artifact'].get('outcome_scope')=='complete_outcome' and not used.intersection(entry['job']['work_keys'])]
+         if not entries:continue
+         entry=min(entries,key=lambda x:x['job']['id'])
+         offer=copy.deepcopy(next(o for o in offer_catalog(include_packet=True) if o['service_id']==service and o['method']==entry['artifact']['method']))
+@@ -219,14 +227,16 @@
+     if state['arm'] in {'growth','competitive_growth'} and profitable and lost_capacity>=2 and slots<cfg['maximum_slots'] and live_capacity<cfg['maximum_slots']-cfg['initial_slots'] and remaining>7 and ('strategic_policy' in cfg or earned>cfg['capacity_price']+channel_invoice+operating_envelope+2*MICRO):
+         capacity_forecast=sum(margin_history)/len(margin_history)*min(remaining,5)*.5;prepared['capacity_purchase']=capacity_forecast>cfg['capacity_price'];prepared['capacity_predicted_net']=int(capacity_forecast-cfg['capacity_price'])
+     liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-cfg['capacity_price']*bool(prepared['capacity_purchase'])
++    from .complete_offer_market import compile_market
++    public_market=compile_market(cfg['complete_offer_policy']) if 'complete_offer_policy' in cfg else None
+     rival_capacity=2;rival_bps=state['market']['public_rival_bps'];rival_cash=state['market']['rival_cash']
+     def buyer_choice(b,service,anchor,price=None):
+         nonlocal rival_capacity,rival_cash
+         if 'complete_offer_policy' in cfg:
+-            from .complete_offer_market import market_context,private_atom,actual_choice
++            from .complete_offer_market import actual_choice
+             observed=b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values())
+-            context=market_context(cfg['complete_offer_policy'],b['id'],observed)
+-            chosen=actual_choice(context,private_atom(cfg['complete_offer_policy'],b['id'],seed),b['remaining_budget'],service if price is not None else None,price,draw(seed,[day,b['id']],'complete-offer-tie'))
++            context=public_market.context(b['id'],observed)
++            chosen=actual_choice(context,public_market.atom(b['id'],seed),b['remaining_budget'],service if price is not None else None,price,draw(seed,[day,b['id']],'complete-offer-tie'))
+             decision={'kind':'offer' if price is not None else 'outside_choice','time':t,'customer_id':b['id'],'service_id':service,'price':price,'human_price':None,'public_rival_price':None,'chosen':chosen['provider']=='us','buyer_choice':chosen['provider'],'outside_option_name':chosen['name'],'outside_service_id':chosen['service_id'],'market_context':context,'information':'Public request and independent value/budget hypotheses; private atom belongs only to buyer environment. Outside contracts independently available per request.'}
+             if chosen['provider'] not in {'us','decline'}:
+                 decision['outside_spend']=chosen['spend'];b['remaining_budget']-=chosen['spend'];b['next_need_time']=t+7*24
+@@ -247,7 +257,7 @@
+     joint=None; joint_by_customer={}; joint_selected={}
+     if 'strategic_policy' in cfg:
+         from .joint_planning import plan_actions
+-        joint=plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,_offer,draw,**({'offer_menu_fn':_offer_menu} if 'complete_offer_policy' in cfg else {}))
++        joint=plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,_offer,draw,**({'offer_menu_fn':lambda s,j,b,c:_offer_menu(s,j,b,c,_market=public_market)} if 'complete_offer_policy' in cfg else {}))
+         prepared['joint_action']=joint
+         joint_by_customer={d['customer_id']:d for d in joint['allocation']['deliveries']}
+         from .strategic_commerce import selected_delivery
+--- a/connected_enterprise/joint_planning.py
++++ b/connected_enterprise/joint_planning.py
+@@ -71,6 +71,8 @@
+     risk=copy.deepcopy(policy['risk']);risk['authorized_allocation']=min(risk['authorized_allocation'],available)
+     deliveries=[];tentative=copy.deepcopy(state);needs=[];considered_customers=0
+     menu_enabled='complete_offer_policy' in cfg
++    from .complete_offer_market import compile_market
++    public_market=compile_market(cfg['complete_offer_policy']) if menu_enabled else None
+     if menu_enabled and offer_menu_fn is None:raise ValueError('ADMITTED_COMPLETE_OFFER_MENU_REQUIRED')
+     for buyer in candidates:
+         if draw_fn(state['seed'],[day,buyer['id']],'need')>=cfg['arrival_bps']/10000:continue
+@@ -94,9 +96,8 @@
+                 'native_state_digest':snapshot['state_digest'],'profit_tax_bps':cfg['profit_tax_bps']}
+             extra={}
+             if menu_enabled:
+-                from .complete_offer_market import market_context
+                 spend=buyer['outside_spend']+buyer['our_settled_spend']+sum(buyer['pending_commitments'].values())
+-                extra['market_context']=market_context(cfg['complete_offer_policy'],buyer['id'],spend,True)
++                extra['market_context']=public_market.context(buyer['id'],spend,True)
+             selection=select(cfg['strategic_policy'],cfg.get('mechanism_policy'),job['id'],offer,state.get('mechanism_memory'),public,**extra)
+             delivery={'id':'quote-'+str(day)+'-'+buyer['id']+('-offer-'+str(offer_index) if menu_enabled else ''),'customer_id':buyer['id'],'onboarding':onboard,
+                                'exclusive_group':'customer-'+buyer['id'],'selection':selection,'requires':[]}
+--- a/connected_enterprise/verify.py
++++ b/connected_enterprise/verify.py
+@@ -96,13 +96,14 @@
+     expected_ids = {f'SIM-customer-{i:03d}' for i in range(config['customer_pool'])}
+     if set(indexed) != expected_ids:
+         raise ValueError('FROZEN_FINITE_BUYER_POPULATION_CHANGED')
++    from .complete_offer_market import compile_market
++    market=compile_market(config['complete_offer_policy']) if 'complete_offer_policy' in config else None
+     for ident, buyer in indexed.items():
+         key = canonical(['connected014', seed, ident, 'budget'])
+         uniform = int.from_bytes(hashlib.sha256(key).digest()[:8], 'big') / 2**64
+         expected = int((180 + 400 * uniform) * 1_000_000 * config['buyer_budget_multiplier_bps'] / 10000)
+         if 'complete_offer_policy' in config:
+-            from .complete_offer_market import request_profile,private_atom
+-            expected=request_profile(config['complete_offer_policy'],ident)['atoms'][private_atom(config['complete_offer_policy'],ident,seed)]['budget_microUSD']
++            expected=market.profile(ident)['atoms'][market.atom(ident,seed)]['budget_microUSD']
+         if buyer['initial_budget'] != expected:
+             raise ValueError('FROZEN_INITIAL_BUYER_BUDGET_CHANGED')
+ 
