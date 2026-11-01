@@ -22,7 +22,7 @@ let latest=null, wasChanged=false;
 [t,h].forEach(el=>el.addEventListener('input',()=>{wasChanged=true}));
 const hash=async text=>{if(!globalThis.crypto?.subtle)return 'unavailable';let z=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)));return [...z].map(n=>n.toString(16).padStart(2,'0')).join('')};
 function addCell(row,v){let el=document.createElement('td');el.textContent=String(v);row.append(el)}
-function render(r){by('definition').textContent='Co-occurrence at identical UTC timestamps: temperature ≥ '+r.rule.temperature_c_gte+'°C AND humidity ≥ '+r.rule.humidity_pct+'%.';
+function render(r){by('definition').textContent='Co-occurrence at identical UTC timestamps: temperature ≥ '+r.rule.temperature_c_gte+'°C AND humidity ≥ '+r.rule.humidity_pct_gte+'%.';
  by('met').textContent=r.summary.met;by('unknown').textContent=r.summary.unknown;by('coverage').textContent=r.summary.coverage===null?'N/A':Math.round(r.summary.coverage*100)+'%';
  const chart=by('chart'),tbody=by('daily-rows');chart.replaceChildren();tbody.replaceChildren();
  for(const d of r.days){const tr=document.createElement('tr');[d.date,d.met,d.not_met,d.unknown].forEach(x=>addCell(tr,x));tbody.append(tr);

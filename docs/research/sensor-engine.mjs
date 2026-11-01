@@ -4,11 +4,12 @@ const LIMIT = 100000;
 export function parseCsv(text, required) {
   if (typeof text !== 'string' || text.length > 6000000) throw Error('CSV must be text under 6 MB.');
   const rows = [];
-  let row = [], field = '', quoted = false, closed = false;
+  let row = [], field = '', quoted = false, closed = false, lineNumber = 1, rowStartLine = 1;
   const pushField = () => { row.push(field); field = ''; closed = false; };
-  const pushRow = () => { pushField(); if (row.some(v => v.trim())) rows.push(row); row = []; };
+  const pushRow = () => { pushField(); if (row.some(v => v.trim())) rows.push({values: row, sourceLine: rowStartLine}); row = []; rowStartLine = lineNumber; };
   for (let i = 0; i < text.length; i++) {
     const c = text[i];
+    if (c === '\r' || (c === '\n' && text[i - 1] !== '\r')) lineNumber++;
     if (quoted) {
       if (c === '"' && text[i + 1] === '"') { field += '"'; i++; }
       else if (c === '"') { quoted = false; closed = true; }
@@ -25,13 +26,13 @@ export function parseCsv(text, required) {
   if (field || row.length || closed) pushRow();
   if (rows.length < 2) throw Error('CSV needs a header and at least one observation.');
   if (rows.length - 1 > LIMIT) throw Error('CSV exceeds the 100,000-observation limit.');
-  const cols = rows.shift().map(s => s.trim().replace(/^\uFEFF/, ''));
+  const cols = rows.shift().values.map(s => s.trim().replace(/^\uFEFF/, ''));
   if (new Set(cols).size !== cols.length || required.some(c => !cols.includes(c))) {
     throw Error('CSV must have unique headers including ' + required.join(', ') + '.');
   }
-  const records = rows.map((values, i) => {
-    if (values.length !== cols.length) throw Error('Malformed CSV observation ' + (i + 2) + '.');
-    return Object.fromEntries(cols.map((c, j) => [c, values[j].trim()] ).concat([['_row', i + 2]]));
+  const records = rows.map(({values, sourceLine}) => {
+    if (values.length !== cols.length) throw Error('Malformed CSV observation ' + sourceLine + '.');
+    return Object.fromEntries(cols.map((c, j) => [c, values[j].trim()] ).concat([['_row', sourceLine]]));
   });
   return records;
 }

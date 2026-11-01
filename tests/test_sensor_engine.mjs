@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {parseCsv,constructSensor,toCsv} from '../docs/research/sensor-engine.mjs';
 const temp = 'timestamp,temperature_c\n2026-07-01T10:00:00Z,34\n2026-07-01T12:00:00Z,30\n2026-07-02T10:00:00Z,35\n';
 const hum = 'timestamp,humidity_pct\n2026-07-01T10:00:00Z,80\n2026-07-01T12:00:00Z,82\n';
@@ -37,4 +38,22 @@ test('does not invent a successful measurement where no temporal join exists',()
  const r=constructSensor({temperatureCsv:temp,humidityCsv:'timestamp,humidity_pct\n2025-01-01T10:00:00Z,80'});
  assert.equal(r.summary.measured,0);assert.equal(r.summary.coverage,0);
  assert.match(r.warning,/Unknown intervals/);
+});
+
+test('preserves original CSV line numbers through blanks and multiline quoted cells',()=>{
+ const source='timestamp,temperature_c,note\r\n\r\n2026-07-01T10:00:00Z,34,"line one\r\nline two"\r\n2026-07-01T12:00:00Z,30,ok\r\n';
+ const rows=parseCsv(source,['timestamp','temperature_c']);
+ assert.deepEqual(rows.map(r=>r._row),[3,5]);
+ assert.match(rows[0].note,/line one\r\nline two/);
+ const r=constructSensor({temperatureCsv:source,humidityCsv:'timestamp,humidity_pct\n\n2026-07-01T10:00:00Z,80\n2026-07-01T12:00:00Z,82\n'});
+ assert.deepEqual(r.evidence.map(e=>e.temperature_rows),[[3],[5]]);
+ assert.deepEqual(r.evidence.map(e=>e.humidity_rows),[[3],[4]]);
+});
+test('identifies malformed source observations using physical, not filtered, rows',()=>{
+ assert.throws(()=>parseCsv('timestamp,temperature_c\n\n2026-07-01T10:00:00Z,33\n\n2026-07-01T12:00:00Z,32,extra',['timestamp','temperature_c']),/observation 5/);
+});
+test('displayed humidity definition references the exported threshold rule',()=>{
+ const html=readFileSync(new URL('../docs/research/sensor-lab.html',import.meta.url),'utf8');
+ assert.ok(html.includes("r.rule.humidity_pct_gte+'%."));
+ assert.ok(!html.includes("r.rule.humidity_pct+'%."));
 });
