@@ -1,0 +1,57 @@
+{
+  "protocol": "diagnostic_not_confirmation",
+  "circuit_path": "upstream/testdata/bivariatebicyclecodes/r=6,d=6,p=0.002,noise=si1000,c=bivariate_bicycle_Z,nkd=[[72,12,6]],q=144,iscolored=True,A_poly=x^3+y+y^2,B_poly=y^3+x+x^2.stim",
+  "circuit_sha256": "85cb45a9693792cedb937831756323f020af2782dd07948abe1767da381f71a1",
+  "dem_sha256": "99116a9447074bb60a910f7d157ef836553e5350131b0906728e9e5d0606c86b",
+  "noise": "0.002",
+  "shots": 128,
+  "requested_shots": 128,
+  "seed": 2026110103,
+  "sample_batch": 1,
+  "stim_version": "1.16.0",
+  "tesseract_version": "0.1.1.dev20261021032048",
+  "detectors": 432,
+  "observables": 12,
+  "dem_errors": 16164,
+  "settings": {
+    "diversify": true,
+    "orders": 4,
+    "beam": 10,
+    "pqlimit": 10000,
+    "move_cap": 1024,
+    "expansion_cap": 256
+  },
+  "prep": {
+    "pair_attempts": 200000,
+    "moves": 1024,
+    "rank": 426,
+    "zero_syndrome_mechanisms": 0
+  },
+  "prep_seconds": 7.550766583008226,
+  "total_seconds": 204.64458980201744,
+  "same_pool_min_failures": 32,
+  "same_pool_mass_failures": 32,
+  "disagreements": 0,
+  "mass_only_wins": 0,
+  "mass_only_losses": 0,
+  "invalid_searches": 426,
+  "fallback_shots": 33,
+  "rejected_shots": 0,
+  "mean_classes": 1.0,
+  "mean_pool": 257.015625,
+  "mean_seeds": 1.015625,
+  "kernel_seconds_quantiles": {
+    "0.5": 1.435972388018854,
+    "0.99": 2.855510531664477,
+    "0.999": 3.417904341390301,
+    "1": 3.4941720059723593
+  },
+  "maxrss_kib": 449660,
+  "compact_witnesses": [],
+  "limitations": [
+    "No matched strongest baseline or hardware validation",
+    "Partial-pool mass, not exact coset partition function",
+    "DEM mechanisms not microscopic circuit-fault assignments",
+    "Shared CPU tail estimates, not hard real-time guarantee"
+  ]
+}

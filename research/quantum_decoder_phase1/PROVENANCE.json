@@ -1,0 +1,53 @@
+{
+  "archive_sha256": "22c951939bd5164099f18a6ffb35838bc6f8b5417f48ec056ea53accfe25f6ca",
+  "archive_published": false,
+  "original_file_sha256": {
+    "default_sanity.py": "456a40951a7de8c290bd96667a3a9e06d8e1cfd2fd8736635fbdd45eb49d3c4b",
+    "diagnostic.py": "456b2159e4bc00d202e7785629bccd0cf66a72ce86eb019824c511935bfd1be0",
+    "diagnostic_repair_snapshot.py": "ad5395875ae2ba33ca79e15a132ebe59630d96f05e1b02497307315a694a1856",
+    "diversify.py": "0f8456960b8fab9957ee2f7c481d05b121806e110bfb9533dc017a9b49a5a28e",
+    "independent_semantics_oracle.py": "507575ad32fadb1487bf3e9f148cd05ba8bc06ae32da9541755c24e5550bce38",
+    "kernel.py": "adfa0655d989f3b69ee373eed0c938004f3cf1e0da7e1fd23a777de12b617358",
+    "kernel_initial_reconstructed.py": "586a491bc9a738e64ecf370fa5e58c67f3979e8274bedda2e104488aa5434ab3",
+    "test_kernel.py": "98dc48bb0347bd692e9e8a22c3ead0c7e6a1e31283bfdddfa5ae2e5c466d0dec",
+    "requirements.txt": "f329136222e19d6a30f7746d7ca54b39d43f094553cd42e4536b681e91beaa81",
+    "diagnostic_p001.json": "e9797bad171d933f3e9da8b6b5fef376f9e12ccbcd0d0e10d488695353859761",
+    "diagnostic_p002.json": "03e9932e749421ad9df15af10a954bcc153a4e2537b086e441862a28d8394523",
+    "repair_p002.json": "bfd0aabb3e4d8f2283275fcd06fbefabb2732aefdeb16465c92f4196e5bacf94",
+    "replay_p002.json": "5c49f929ff96120c8d6abb8f8a3977b82490eb66471b1737573ed8f25cc22d4e",
+    "default_sanity.json": "b7d0310a7bcc6c73dee3b2246bc5643d864060cce6e688e61fa1984a6a8fe54b"
+  },
+  "upstream_inspected_revision": "838d4f64acc16b5c15adda01302a719400329d4b",
+  "upstream_repository": "https://github.com/quantumlib/tesseract-decoder",
+  "circuit_inputs": [
+    {
+      "circuit_path": "upstream/testdata/bivariatebicyclecodes/r=6,d=6,p=0.001,noise=si1000,c=bivariate_bicycle_Z,nkd=[[72,12,6]],q=144,iscolored=True,A_poly=x^3+y+y^2,B_poly=y^3+x+x^2.stim",
+      "circuit_sha256": "ad8e873640e9df904eda417387a952ddad2084e472c37ce9efd0329f54622c42",
+      "dem_sha256": "e6e7a2611cf207c28b4aff3f99f8afc0ca66d6be08f124f9b3b946dcd701d369",
+      "noise": "0.001"
+    },
+    {
+      "circuit_path": "upstream/testdata/bivariatebicyclecodes/r=6,d=6,p=0.002,noise=si1000,c=bivariate_bicycle_Z,nkd=[[72,12,6]],q=144,iscolored=True,A_poly=x^3+y+y^2,B_poly=y^3+x+x^2.stim",
+      "circuit_sha256": "85cb45a9693792cedb937831756323f020af2782dd07948abe1767da381f71a1",
+      "dem_sha256": "99116a9447074bb60a910f7d157ef836553e5350131b0906728e9e5d0606c86b",
+      "noise": "0.002"
+    }
+  ],
+  "installed_distribution_fingerprints": {
+    "tesseract_decoder-0.1.1.dev20261021032048.dist-info": {
+      "METADATA": "767d9344105231c759506f83a39a41a9b704bb5556b4b88cf46c97bbde0ceb50",
+      "RECORD": "bd9e25bdcf32c20329987403211bec4adc4f2257bfacd43cdde020a5ce167b0b",
+      "WHEEL": "a10c716699d776a7b5f28a1f7f93e82b48d20f0d2ffc0805b6eaded4f9daef9c"
+    },
+    "stim-1.16.0.dist-info": {
+      "METADATA": "20dabf73a1e09748038ad3cfda1307b9d5dbba138ae923125694a5fa4d68df1d",
+      "RECORD": "a895a579aeab2323fcff80ef33648563bb777e4a6279440e00217a1c1d7982d0",
+      "WHEEL": "b40ad1e4df54976de0a343902219f27fbed3bc20eb34efbef032b05c5a0f93e9"
+    },
+    "numpy-2.5.4.dist-info": {
+      "METADATA": "e2b909d6a37d76c2bc130f528d7fed0c517322bce16dc7846b6a6df30e200403",
+      "RECORD": "6509f5d6a7f685de486efc55706f00dbd712c0c41fc1d619031341a92cafbebb",
+      "WHEEL": "ac90a994678616346852fc495a154e351832198199a0e921c9e8f4b372b28e82"
+    }
+  }
+}
