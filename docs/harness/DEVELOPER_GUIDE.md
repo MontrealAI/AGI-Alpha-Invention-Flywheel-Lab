@@ -12,6 +12,13 @@ The [full-year report](../../campaign/account-year-048/REPORT.md) records four s
 
 ## Mission: construct economically reachable possibilities
 
+The separate [compounding055 operating guide](COMPOUNDING055.md) describes a fresh,
+opt-in recurring small-export business, unified owned/reachable observations,
+dated complete requests, public exhaustion holds, and ordinary repeat-contribution
+acquisition forecasts. Its source, account-year results and qualification must be
+read separately from the existing integration owner's release. It supplies no
+original-account migration, discovery advantage or billion-dollar achievement.
+
 Invent the **complete productive arrangement**: a valuable accepted outcome, the means to produce and verify it, and terms under which beneficiaries, producers, funders and other participants voluntarily prefer participation to their available alternatives. Discover these together rather than fixing a low-value service and optimizing its transaction rate indefinitely. A missing process, measurement, interface, representation, contract, financing structure or allocation of risk/work can be the enabling invention. Known effective methods remain usable without new novelty proofs.
 
 For the next concrete proposal, write one compact arrangement card:

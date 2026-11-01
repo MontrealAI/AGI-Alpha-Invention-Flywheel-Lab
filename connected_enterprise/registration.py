@@ -66,6 +66,8 @@ def validate(value):
             if set(human) != {'hours', 'loaded_usd_hour'} or any(type(v) not in {int, float} or v < 0 for v in human.values()):
                 raise ValueError('NONNEGATIVE_EXPLICIT_HUMAN_ASSUMPTIONS_REQUIRED')
     native_engine(configs)
+    from .runner import _workload
+    _workload(configs)
     canonical(result)
     return result
 

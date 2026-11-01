@@ -101,6 +101,10 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in required):
             raise ValueError('COMPARATOR050_SOURCE_DEPENDENCY_MISSING')
         names.update(required)
+    if (root/'connected_enterprise/compounding055.py').is_file():
+        required={'experiments/compounding_candidates055.py','campaign/compounding-enterprise-055/CANDIDATES.json','campaign/compounding-enterprise-055/SCREEN.json','campaign/compounding-enterprise-055/PROTOCOL.md','docs/harness/COMPOUNDING055.md'}
+        if any(not (root/name).is_file() for name in required):raise ValueError('COMPOUNDING055_SOURCE_DEPENDENCY_MISSING')
+        names.update(required)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
@@ -255,7 +259,8 @@ def worker(output,max_events=None):
             manifest=json.loads(manifest_path.read_text())
             if manifest!=_service_manifest(manifest,f['configs']):raise ValueError('SOURCE_BOUND_SERVICE_MANIFEST_ENGINE_CHANGED')
         else:
-            manifest=_service_manifest(prepare_services(root,'service-inputs',cohort_seed=f['protocol']['service_cohort_seed']),f['configs']);write(manifest_path,manifest)
+            count,chunk=_workload(f['configs'])
+            manifest=_service_manifest(prepare_services(root,'service-inputs',cohort_seed=f['protocol']['service_cohort_seed'],jobs_per_service=count,chunk_size=chunk),f['configs']);write(manifest_path,manifest)
         payloads=[(str(root),manifest,str(output),f,t,max_events) for t in tasks(f['protocol'])];items=[]
         with ProcessPoolExecutor(max_workers=min(f['protocol']['workers'],len(payloads)),mp_context=multiprocessing.get_context('spawn')) as pool:
             for item in pool.map(_task,payloads):
@@ -279,8 +284,22 @@ def comparison(output,control=None,candidate=None):
                   evidence_role=f['protocol'].get('evidence_role','reproduction'),funding_authority=False)
     return result
 
+def _workload(configs):
+    declarations={(c['recurring_request_policy']['jobs_per_service'],c['recurring_request_policy']['chunk_size']) if 'recurring_request_policy' in c else (32,64) for c in configs.values()}
+    if len(declarations)!=1:raise ValueError('ONE_SOURCE_BOUND_WORKLOAD_DECLARATION_REQUIRED')
+    return next(iter(declarations))
+
 def _service_manifest(manifest,configs):
     from .registration import native_engine
+    if any('recurring_request_policy' in c for c in configs.values()):
+        count,chunk=_workload(configs)
+        admission=manifest.get('cohort_provenance',{}).get('finite_admission',{})
+        from adaptive_enterprise.strategies import PRIMITIVE_SERVICES
+        from adaptive_enterprise.instruments import BUNDLE_INDICES
+        expected={'primitive_jobs_per_service':count,'chunk_size':chunk,'packet_jobs':0,
+            'packet_rows_per_kind':None,'primitive_services':list(PRIMITIVE_SERVICES),
+            'bundle_indices':list(BUNDLE_INDICES),'total_jobs':len(PRIMITIVE_SERVICES)*count+len(BUNDLE_INDICES)}
+        if any(admission.get(key)!=value for key,value in expected.items()) or len(manifest.get('jobs',[]))!=expected['total_jobs'] or manifest.get('cohort_provenance',{}).get('generator')!='adaptive_enterprise.instruments.synthetic_raw':raise ValueError('FROZEN_WORKLOAD_ADMISSION_CHANGED')
     engine=native_engine(configs);selected=copy.deepcopy(manifest)
     selected.pop('native_engine',None)
     if engine!='legacy-permanent-v1':selected['native_engine']=engine
@@ -294,7 +313,12 @@ def audit_output(output):
     from adaptive_enterprise.runner import _validate_manifest_origin
     if manifest!=_service_manifest(manifest,f['configs']):raise ValueError('SOURCE_BOUND_SERVICE_MANIFEST_ENGINE_CHANGED')
     origin_manifest=copy.deepcopy(manifest);origin_manifest.pop('native_engine',None)
-    cohort=_validate_manifest_origin({'protocol':{'service_cohort_seed':f['protocol']['service_cohort_seed']}},origin_manifest,output/'source')
+    if any('recurring_request_policy' in cfg for cfg in f['configs'].values()):
+        from adaptive_enterprise.instruments import audit_admission
+        count,chunk=_workload(f['configs']);declaration=origin_manifest['cohort_provenance']['finite_admission']
+        if declaration['primitive_jobs_per_service']!=count or declaration['chunk_size']!=chunk:raise ValueError('FROZEN_WORKLOAD_ADMISSION_CHANGED')
+        cohort=audit_admission(output/'source',origin_manifest,cohort_seed=f['protocol']['service_cohort_seed'])
+    else:cohort=_validate_manifest_origin({'protocol':{'service_cohort_seed':f['protocol']['service_cohort_seed']}},origin_manifest,output/'source')
     stored=json.loads((output/'REPORT.json').read_text());indices=stored.get('worlds_index',[])
     expected_tasks=tasks(f['protocol'])
     if len(indices)!=len(expected_tasks):raise ValueError('REGISTERED_WORLD_INDEX_REQUIRED')

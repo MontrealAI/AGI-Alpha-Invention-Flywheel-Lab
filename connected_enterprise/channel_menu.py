@@ -1,6 +1,7 @@
 """Bounded paid contact-menu hypotheses; no free reach or spending authority."""
 from fractions import Fraction
 from commercial.ledger import digest
+from .audience055 import owned_customer_ids, reachability
 
 def validate_policy(policy,contracts):
     if not isinstance(policy,dict) or set(policy)!={'schema','contract_ids','conversion_bps'} or policy['schema']!='connected-channel-menu/v1':raise ValueError('EXPLICIT_CHANNEL_MENU_POLICY_REQUIRED')
@@ -9,7 +10,7 @@ def validate_policy(policy,contracts):
     if type(policy['conversion_bps']) is not int or not 0<=policy['conversion_bps']<=10000:raise ValueError('DECLARED_CHANNEL_CONVERSION_HYPOTHESIS_REQUIRED')
     return policy
 
-def menu_options(cfg,arm,day,buyers,contacts,live,margins,slots,scenarios):
+def menu_options(cfg,arm,day,buyers,contacts,live,margins,slots,scenarios, *, jobs=None,used_jobs=(),consumed_jobs=()):
     """Inputs are dated public operating history, not future exposure/buyer draws.
 
     Existing live rights consume a conservative shared reach allowance. All new
@@ -23,18 +24,31 @@ def menu_options(cfg,arm,day,buyers,contacts,live,margins,slots,scenarios):
     remaining=cfg['horizon_days']-day;options=[]
     for ident in policy['contract_ids']:
         terms=cfg['channels'][ident]
-        owned=set(sorted(buyers)[:terms['owned_audience_count']])
+        owned=owned_customer_ids(cfg,buyers) if 'audience_policy' in cfg else set(sorted(buyers)[:terms['owned_audience_count']])
         if sum(x['contract_id']==ident for x in live)>=terms['max_active_tranches']:continue
         days=min(terms['duration_days'],remaining-terms['lead_days'])
         if days<=0:continue
-        reachable=sum(i not in owned and (not b['onboarded'] or not b['active']) and len(contacts.get(i,[]))<terms['max_contacts_per_customer'] for i,b in buyers.items())
+        reach=reachability(cfg,buyers,contacts,day,ident) if 'audience_policy' in cfg else None
+        reachable=len(reach['potential_customer_ids']) if reach is not None else sum(i not in owned and (not b['onboarded'] or not b['active']) and len(contacts.get(i,[]))<terms['max_contacts_per_customer'] for i,b in buyers.items())
         if not reachable:continue
         potential=Fraction(terms['slots_per_day']*days*terms['activation_reliability_bps']*terms['realization_bps']*(10000-terms['overlap_bps']),10000**3)
+        if reach is not None:potential=min(potential,Fraction(reach['expected_contact_bound_fraction']))
         live_reach=Fraction(0)
         for x in live:
             t=cfg['channels'][x['contract_id']];active_days=max(0,min(day+terms['lead_days']+days,x['expiry_day'])-max(day+terms['lead_days'],x['activation_day']))
             live_reach+=Fraction(t['slots_per_day']*active_days*t['activation_reliability_bps']*t['realization_bps']*(10000-t['overlap_bps']),10000**3)
         contacts_forecast=min(potential,max(Fraction(0),Fraction(reachable)-live_reach))
+        if 'recurring_request_policy' in cfg:
+            from .recurring_acquisition055 import forecast
+            predicted=forecast(cfg,buyers,contacts,day,ident,slots,jobs=jobs,contact_fraction=contacts_forecast,used_jobs=used_jobs,consumed_jobs=consumed_jobs)
+            if predicted is None:continue
+            net=Fraction(predicted['net_fraction'])
+            if net<=0:continue
+            invoice=predicted['invoice_microUSD']
+            option=investment_option('channel-'+str(day)+'-'+ident,'acquisition',invoice,net.numerator//net.denominator,scenarios,day,terms)
+            option['execution'].update(contract_id=ident,cash_lock=predicted['cash_lock'],forecast_scope=predicted['scope'],recurring_forecast=predicted)
+            options.append(option)
+            continue
         deliveries=min(Fraction(slots*days),contacts_forecast*Fraction(policy['conversion_bps'],10000))
         # No unpaid future capacity assumed. Extra attempts/qualification costs
         # are charged in the hypothesis as well as actual native operation.
@@ -45,5 +59,6 @@ def menu_options(cfg,arm,day,buyers,contacts,live,margins,slots,scenarios):
         o['execution']['contract_id']=ident
         o['execution']['forecast_scope']='Declared conversion hypothesis, observed settled margins, after-modeled-tax haircut, full attempt costs, shared live reach saturation, current capacity only; not income or calibrated demand.'
         o['execution']['forecast_inputs']={'reachable':reachable,'live_reach_fraction':str(live_reach),'new_contact_fraction':str(contacts_forecast),'delivery_fraction':str(deliveries),'current_slots':slots,'conversion_bps':policy['conversion_bps']}
+        if reach is not None:o['execution']['forecast_inputs']['audience']=reach
         options.append(o)
     return options

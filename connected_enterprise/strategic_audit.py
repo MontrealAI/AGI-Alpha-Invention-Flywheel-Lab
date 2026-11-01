@@ -124,6 +124,10 @@ def audit_decisions(root,manifest,result,lifecycle):
             consumed={key for jobid in used for key in jobs[jobid]['work_keys']}
             for service in services:
                 available=[j for j in jobs.values() if j['id'] not in used and j['accepted'] and j['service_id']==service and artifacts[j['id']]['outcome_scope']=='complete_outcome' and ('complete_offer_policy' not in cfg or (j['id'] in cfg['complete_offer_policy']['requested_jobs'][ident] and not consumed.intersection(j['work_keys'])))]
+                if 'recurring_request_policy' in cfg:
+                    from .recurring055 import request_ids,consumed_job_ids
+                    active=request_ids(cfg,ident,moment,used,consumed_job_ids(cfg,result['decisions'],before=moment))
+                    available=[j for j in available if j['id'] in active]
                 if available:menu.append(min(available,key=lambda j:j['id']))
             if menu:considered+=1
             for job in menu:used.add(job['id']);expected_deliveries.append((ident,job))
@@ -150,14 +154,19 @@ def audit_decisions(root,manifest,result,lifecycle):
         profitable=bool(margins and sum(margins)>0);remaining=cfg['horizon_days']-day;pilot=cfg['channels']['pilot'];invoice=pilot['price_microUSD']+pilot['support_microUSD']
         failed={e['source_plan_id'] for e in result['channels']['events'] if e['day']<=day and e['kind']=='CHANNEL_ACTIVATION_FAILED'}
         live_channels=[i for i in previous_investments if i['kind']=='acquisition' and i['expiry_time']>moment and i['plan_id'] not in failed]
-        owned=set(sorted(buyers)[:4]);contacts=result['channels']['contacts']
+        from .audience055 import owned_customer_ids
+        owned=owned_customer_ids(cfg,buyers);contacts=result['channels']['contacts']
         reachable=sum(ident not in owned and (not b['onboarded'] or not b['active']) and sum(c['day']<=day for c in contacts.get(ident,[]))<pilot.get('max_contacts_per_customer',3) for ident,b in buyers.items())
         expected_investments=[]
         if 'channel_menu_policy' in cfg:
             from .channel_menu import menu_options
             dated_contacts={ident:[c for c in rows if c['day']<=day] for ident,rows in contacts.items()}
             live=[{'contract_id':i['contract_receipt']['contract_id'],'activation_day':i['activation_time']//24,'expiry_day':i['expiry_time']//24} for i in live_channels]
-            expected_investments.extend(menu_options(cfg,result['arm'],day,buyers,dated_contacts,live,margins,slots,risk['scenarios']))
+            extra={}
+            if 'recurring_request_policy' in cfg:
+                from .recurring055 import consumed_job_ids
+                extra={'jobs':{ident:{'job':job,'artifact':artifacts[ident]} for ident,job in jobs.items()},'used_jobs':used,'consumed_jobs':consumed_job_ids(cfg,result['decisions'],before=moment)}
+            expected_investments.extend(menu_options(cfg,result['arm'],day,buyers,dated_contacts,live,margins,slots,risk['scenarios'],**extra))
         elif result['arm']!='baseline' and profitable and reachable>0 and remaining>pilot['lead_days']+7 and not live_channels:
             forecast=sum(margins)/len(margins)*min(reachable,4)*.4*(pilot['activation_reliability_bps']*pilot['realization_bps']/10000**2)
             if forecast>invoice:expected_investments.append(investment_option('channel-'+str(day),'acquisition',invoice,int(forecast-invoice),risk['scenarios'],day,pilot))

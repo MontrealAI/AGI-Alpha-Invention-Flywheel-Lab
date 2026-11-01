@@ -12,10 +12,18 @@ def audit_market(result,tape):
     if len(orders)!=len(result['orders']):raise ValueError('ONE_COMPLETE_ORDER_PER_REQUEST')
     refunds={a['args']['id']:a['day'] for a in tape['actions'] if a['op']=='event' and a['args']['action']=='refund'}
     outside={};seen=set();offered=0
+    if 'recurring_request_policy' in cfg:
+        from .recurring055 import consumed_job_ids
+        consumed_job_ids(cfg,result['decisions'])
     for d in choices:
         ident=d['customer_id'];t=d['time'];key=(ident,t)
         if ident not in buyers or key in seen or _private_draw(seed,[t//24,ident],'need')>=cfg['arrival_bps']/10000:raise ValueError('UNIQUE_OBSERVED_COMPLETE_REQUEST_REQUIRED')
         seen.add(key)
+        if 'recurring_request_policy' in cfg:
+            from .recurring055 import request_ids,consumed_job_ids
+            used=[o['job_id'] for o in result['orders'] if o['qualified_time']<t]
+            active=request_ids(cfg,ident,t,used,consumed_job_ids(cfg,result['decisions'],before=t))
+            if active!=[d.get('request_job_id')]:raise ValueError('COMPLETE_REQUEST_IDENTITY_OR_WINDOW_CHANGED')
         committed=sum(o['price'] for o in result['orders'] if o['customer_id']==ident and o['qualified_time']<t and (o['id'] not in refunds or refunds[o['id']]>t))
         observed=outside.get(ident,0)+committed
         context=market.context(ident,observed)
@@ -34,6 +42,7 @@ def audit_market(result,tape):
                 if index:allocation=rounds[index-1]['allocation']
             pick=selected_delivery(allocation,d['joint_option_id'])
             if pick['job_id'] not in policy['requested_jobs'][ident]:raise ValueError('UNREQUESTED_CUSTOMER_JOB')
+            if 'recurring_request_policy' in cfg and pick['job_id']!=d['request_job_id']:raise ValueError('ORDER_DIFFERS_FROM_CURRENT_COMPLETE_REQUEST')
             if pick['price']!=price or pick['service_id']!=service:raise ValueError('COMPLETE_SCOPE_OR_QUOTE_CHANGED')
         elif price is not None:raise ValueError('NO_BID_CANNOT_HAVE_PRICE')
         index=market.atom(ident,seed)
