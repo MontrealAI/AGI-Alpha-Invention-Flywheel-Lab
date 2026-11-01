@@ -1,0 +1,77 @@
+{
+  "schema": "agi-alpha/p0-historical-verifier-gated-review/v1",
+  "observation_date_utc": "2026-11-01",
+  "source_at_refresh": {
+    "main": "e4e2d6c50d0d7fb83da18ef276ebc9c02dfbe8c9",
+    "latest_confirmed_downloaded_permanent_release": "4a87b455373be72811ad3a0c654a116c3604a374",
+    "financial_owner_draft_pr40": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+    "signer_reviewer_pr99": "4496bcc606e85cacf0103fa46fc0092ad0ae8c56",
+    "new_draft_review_pr107": "0471c954cd7786bb960f0dfbea38910a657bb842"
+  },
+  "review_pr": 107,
+  "review_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/107",
+  "branch": "review/pr40-public-verifier-auth-boundary-20261101",
+  "base": "review/pr40-owner-codec-closure-20261101",
+  "scope": "Four files: connected_enterprise/upgrades.py, connected_enterprise/finance.py, adaptive_enterprise/account.py, and tests/test_connected_historical_owner_execution_boundary.py.",
+  "changes": [
+    "Key-free history verifier fails closed before inspecting ticket-supplied executable source; existing HMAC-owner controls exact-ticket authorization in scoped nonpersistent context.",
+    "Historical verifier subprocess has fixed minimized environment, not wholesale inherited os.environ.",
+    "Owner JournalAccount/account audit and recovery use narrowly scoped authenticated source tickets.",
+    "Six key-free synthetic negative and mock-positive regressions are selected by connected test workflows.",
+    "After PR107 first-head adaptive test failure, native Account restores self-contained standalone adaptive audit without importing connected_enterprise when history is empty."
+  ],
+  "immutable_prior_ci": {
+    "original_review_head": "d664c3285930cf559d8fd7001fe4c84196e5fbcf",
+    "adaptive_run": 41320844689,
+    "adaptive_conclusion": "failure",
+    "observed_failures": "151 adaptive tests completed with one setUpClass error in test_adaptive_runner.AdaptiveRunnerTests; subprocess adaptive_enterprise run --smoke returned exit code 1. Captured child stderr unavailable in job logs. The independently reviewed standalone source closure lacks connected_enterprise, while initial PR107 Account.audit imported it unconditionally; this is a source-specific root-cause hypothesis, not retrieved child traceback.",
+    "other_runs_already_passed": [
+      41320844664,
+      41320844509
+    ]
+  },
+  "current_review_ci": {
+    "head": "0471c954cd7786bb960f0dfbea38910a657bb842",
+    "runs": [
+      41321134950,
+      41321134949,
+      41321134888,
+      41321135022,
+      41321134917,
+      41321134928,
+      41321134879
+    ],
+    "conclusion": "in_progress_at_last_inspection; no assertion of exact-head complete qualification"
+  },
+  "integrity_and_authority": {
+    "original_task": "01a18fa7-ffc6-7384-8bb4-ea6012cfb0f7",
+    "original_task_status": "NOT_ACCESSIBLE_BY_AVAILABLE_AUTOMATION_PEEK; NO_INACTIVITY_INFERENCE",
+    "owner": "Existing PR40 native-capital integration owner, not reviewer PR107",
+    "financial_account_write": false,
+    "original_account_keys_accessed": false,
+    "original_liabilities_modified": false,
+    "original_failed_runs_reclassified": false,
+    "archive_guard_changed": false,
+    "main_updated_by_this_review": false,
+    "real_commerce": false,
+    "new_spending": false
+  },
+  "limits": [
+    "An owner HMAC authorized ticket does not independently prove executable historical Python is secure or provide sandbox isolation.",
+    "Key-free portable auditing of historical source transitions now fails closed; an independently reviewed verifier allowlist or non-executing historical verifier is required for public portable audit.",
+    "Original signed-account nonempty operating queue migration, maturity, due claims, full authorizations, and arbitrary historical source-version succession are not qualified.",
+    "Old PR40/99 source archive count exceeds unchanged 10,000-file cap; semantic current-main integration with preservation of retired files is required.",
+    "Full PR107 exact-head CI, protected merge, release, clean downloaded operation and native commercial/recursive claims are not established."
+  ],
+  "acceptance": {
+    "permanent_term_published_downloaded_engineering_operation": "achieved_on_prior_exact_release",
+    "synthetic_historical_verifier_closed_code_boundary": "implemented_unqualified",
+    "historical_keyfree_audit": "blocked_pending_independently_trusted_verifier",
+    "original_signed_nonempty_queue_migration": "blocked",
+    "protected_native_capital_release": "blocked",
+    "P1_causal_earned_expansion": "unqualified",
+    "P2_recursive_discovery_advantage": "unqualified",
+    "actual_commerce_and_T365_3b_profit": "not_established"
+  },
+  "next_decision": "Review actual revised head CI; fix independently established source-specific correctness failures without weakening tests; retain finance-owner exclusive account custody; obtain authentic predecessor checkpoint before overlapping native financial writes. Require independent non-executing/publicly trusted historical verification and released-byte audit before P0 promotion."
+}
