@@ -9,8 +9,10 @@ Dependencies already present in the tested environment: Python 3.12, NumPy, Pill
 ```sh
 python -m unittest discover -v
 (cd economics && python -m unittest -v)
+python ../historical_measurement/replay.py  # reconstruct frozen baseline CSVs first
 OPENBLAS_NUM_THREADS=1 python benchmark.py --source ../historical_measurement --data ../historical_measurement --out evidence --rounds 3
 python audit.py --source ../historical_measurement --evidence evidence
+python cache_replay.py --source ../historical_measurement --evidence evidence
 python window_experiment.py --source ../historical_measurement --data ../historical_measurement --out evidence/windows.json
 ```
 
