@@ -85,9 +85,12 @@ def check_budgets(buyers, orders):
             raise ValueError('BUYER_PENDING_COMMITMENTS_REQUIRED')
         if spent != settled.get(customer, 0) or commitments != pending.get(customer, {}):
             raise ValueError('BUYER_CROSS_SERVICE_COMMITMENT_OR_SPEND_MISMATCH')
-        if initial != remaining + spent + outside + sum(commitments.values()):
+        if initial + _integer(row.get('external_income_total',0),'EXTERNAL_BUYER_INCOME') != remaining + spent + outside + sum(commitments.values()):
             raise ValueError('BUYER_BUDGET_CONSERVATION_FAILURE')
-    return {'buyers_checked': len(indexed), 'buyer_initial_budget': sum(row['initial_budget'] for row in buyers)}
+    receipt={'buyers_checked': len(indexed), 'buyer_initial_budget': sum(row['initial_budget'] for row in buyers)}
+    if any('external_income_total' in row for row in buyers):
+        receipt['external_buyer_income_microUSD']=sum(row['external_income_total'] for row in buyers)
+    return receipt
 
 
 def _check_buyer_origins(config, seed, buyers):
@@ -109,6 +112,8 @@ def _check_buyer_origins(config, seed, buyers):
 
 
 def _check_market_decisions(result, tape):
+    from .buyer_income import income_index,received_by
+    incomes=income_index(result)
     if 'complete_offer_policy' in result['config']:
         from .complete_offer_audit import audit_market
         return audit_market(result,tape)
@@ -165,7 +170,7 @@ def _check_market_decisions(result, tape):
             raise ValueError('PRICE_POLICY_USES_UNREGISTERED_INFORMATION_OR_HUMAN_ANCHOR')
         committed = sum(row['price'] for row in result['orders'] if row['customer_id'] == customer
                         and row['qualified_time'] < moment and (row['id'] not in refunds or refunds[row['id']] > moment))
-        available = buyers[customer]['initial_budget'] - outside.get(customer, 0) - committed
+        available = buyers[customer]['initial_budget'] + received_by(incomes,customer,moment) - outside.get(customer, 0) - committed
         value = int(anchor * (1.1 + _private_draw(seed, customer, 'value')) * cfg['value_bps'] / 10000)
         rival_price = decision['public_rival_price']
         options = [('decline', 0)]
@@ -310,6 +315,8 @@ def _check_cost_semantics(result, tape, lifecycle, *, startup_evaluation_require
     for day in range(cfg['horizon_days']):
         moment = day * 24
         add('maintenance-' + str(day), cfg['maintenance_daily'], moment, 'maintenance')
+        if 'public_budget_gate' in cfg:
+            add('public-budget-gate-'+str(day),cfg['public_budget_gate']['daily_cost_microUSD'],moment,'public_affordability_preflight')
         if 'refusal_recourse_policy' in cfg:
             policy=cfg['refusal_recourse_policy'];selective=policy['schema']=='connected-selective-refusal-recourse/v2'
             if selective:add('recourse-evaluation-'+str(day),policy['daily_evaluation_cost'],moment,'selective_recourse_public_evaluation')
@@ -550,6 +557,10 @@ def audit(root, manifest, result):
     required = set(SERVICE_SOURCES) | set(FINANCE_SOURCES) | {
         'connected_enterprise/engine.py', 'connected_enterprise/channels.py',
         'connected_enterprise/verify.py', 'connected_enterprise/scale.py', 'connected_enterprise/pricing.py'}
+    if 'buyer_income_policy' in result['config'] or 'public_budget_gate' in result['config']:
+        required.add('connected_enterprise/buyer_income.py')
+    if 'public_budget_gate' in result['config']:
+        required.add('connected_enterprise/public_budget_gate051.py')
     if not required <= set(result.get('source', {}).get('files', {})):
         raise ValueError('COMPLETE_EXECUTING_SOURCE_BINDING_REQUIRED')
     source_receipt = check_source(root, result['source'])
@@ -721,6 +732,8 @@ def audit(root, manifest, result):
         raise ValueError('FULL_ENTERPRISE_COSTS_DO_NOT_RECONCILE')
     budget_receipt = check_budgets(result['buyers'], list(orders.values()))
     _check_buyer_origins(result['config'], result['seed'], result['buyers'])
+    from .buyer_income import audit_income
+    income_receipt=audit_income(result)
     cost_semantics = _check_cost_semantics(result, tape, lifecycle_receipt,startup_evaluation_required=strategic_receipt.get('startup_evaluation_required',False))
     commercial_receipt = _check_commercial_result(result)
     investment_receipt = _check_investments(result, tape, orders)
@@ -733,7 +746,7 @@ def audit(root, manifest, result):
             'verifier_source_sha256': EXECUTING_VERIFIER_SHA256,
             'verifier_matches_world_source_snapshot': result['source']['files'].get('connected_enterprise/verify.py') == EXECUTING_VERIFIER_SHA256,
             'collections_microUSD': collections, 'complete_costs_microUSD': expense,
-            **source_receipt, **budget_receipt, **investment_receipt, **channel_receipt, **market_receipt,
+            **source_receipt, **budget_receipt, **income_receipt, **investment_receipt, **channel_receipt, **market_receipt,
             **{k:v for k,v in lifecycle_receipt.items() if k!='daily_public_buyers'}, **cost_semantics, **commercial_receipt, **strategic_receipt}
     return json.loads(canonical(receipt))
 

@@ -5,6 +5,8 @@ from .complete_offer_market import compile_market,actual_choice
 def audit_market(result,tape):
     from .verify import _private_draw
     cfg=result['config'];policy=cfg['complete_offer_policy'];seed=result['seed']
+    from .buyer_income import public_context,income_index,received_by
+    incomes=income_index(result)
     market=compile_market(policy)
     buyers={b['id']:b for b in result['buyers']}
     choices=[d for d in result['decisions'] if d.get('kind') in {'offer','outside_choice'}]
@@ -18,7 +20,7 @@ def audit_market(result,tape):
         seen.add(key)
         committed=sum(o['price'] for o in result['orders'] if o['customer_id']==ident and o['qualified_time']<t and (o['id'] not in refunds or refunds[o['id']]>t))
         observed=outside.get(ident,0)+committed
-        context=market.context(ident,observed)
+        context=public_context(market.context(ident,observed),cfg,t)
         if d.get('market_context')!=context or d.get('human_price') is not None or d.get('public_rival_price') is not None:raise ValueError('COMPLETE_MARKET_CONTEXT_NOT_REDERIVED')
         price=d['price'];service=d['service_id']
         if d['kind']=='offer':
@@ -37,7 +39,7 @@ def audit_market(result,tape):
             if pick['price']!=price or pick['service_id']!=service:raise ValueError('COMPLETE_SCOPE_OR_QUOTE_CHANGED')
         elif price is not None:raise ValueError('NO_BID_CANNOT_HAVE_PRICE')
         index=market.atom(ident,seed)
-        budget=market.profile(ident)['atoms'][index]['budget_microUSD']
+        budget=market.profile(ident)['atoms'][index]['budget_microUSD']+received_by(incomes,ident,t)
         chosen=actual_choice(context,index,budget-observed,service if price is not None else None,price,_private_draw(seed,[t//24,ident],'complete-offer-tie'))
         if d['buyer_choice']!=chosen['provider'] or d['chosen'] is not (chosen['provider']=='us') or d.get('outside_option_name')!=chosen['name'] or d.get('outside_service_id')!=chosen['service_id']:raise ValueError('VOLUNTARY_COMPLETE_SCOPE_CHOICE_CHANGED')
         if chosen['provider']=='us':
