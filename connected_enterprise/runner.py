@@ -217,8 +217,11 @@ def worker(output,max_events=None):
     from adaptive_enterprise.instruments import prepare_services
     with RunLock(output):
         manifest_path=output/'SERVICES.json'
-        if manifest_path.exists():manifest=json.loads(manifest_path.read_text())
-        else:manifest=prepare_services(root,'service-inputs',cohort_seed=f['protocol']['service_cohort_seed']);write(manifest_path,manifest)
+        if manifest_path.exists():
+            manifest=json.loads(manifest_path.read_text())
+            if manifest!=_service_manifest(manifest,f['configs']):raise ValueError('SOURCE_BOUND_SERVICE_MANIFEST_ENGINE_CHANGED')
+        else:
+            manifest=_service_manifest(prepare_services(root,'service-inputs',cohort_seed=f['protocol']['service_cohort_seed']),f['configs']);write(manifest_path,manifest)
         payloads=[(str(root),manifest,str(output),f,t,max_events) for t in tasks(f['protocol'])];items=[]
         with ProcessPoolExecutor(max_workers=min(f['protocol']['workers'],len(payloads)),mp_context=multiprocessing.get_context('spawn')) as pool:
             for item in pool.map(_task,payloads):
@@ -242,12 +245,22 @@ def comparison(output,control=None,candidate=None):
                   evidence_role=f['protocol'].get('evidence_role','reproduction'),funding_authority=False)
     return result
 
+def _service_manifest(manifest,configs):
+    from .registration import native_engine
+    engine=native_engine(configs);selected=copy.deepcopy(manifest)
+    selected.pop('native_engine',None)
+    if engine!='legacy-permanent-v1':selected['native_engine']=engine
+    return selected
+
+
 def audit_output(output):
     output=Path(output).resolve();f=read_freeze(output);manifest=json.loads((output/'SERVICES.json').read_text());receipts=[];items=[];results=[]
     from .verify import audit
     from .scale import analyze
     from adaptive_enterprise.runner import _validate_manifest_origin
-    cohort=_validate_manifest_origin({'protocol':{'service_cohort_seed':f['protocol']['service_cohort_seed']}},manifest,output/'source')
+    if manifest!=_service_manifest(manifest,f['configs']):raise ValueError('SOURCE_BOUND_SERVICE_MANIFEST_ENGINE_CHANGED')
+    origin_manifest=copy.deepcopy(manifest);origin_manifest.pop('native_engine',None)
+    cohort=_validate_manifest_origin({'protocol':{'service_cohort_seed':f['protocol']['service_cohort_seed']}},origin_manifest,output/'source')
     stored=json.loads((output/'REPORT.json').read_text());indices=stored.get('worlds_index',[])
     expected_tasks=tasks(f['protocol'])
     if len(indices)!=len(expected_tasks):raise ValueError('REGISTERED_WORLD_INDEX_REQUIRED')
