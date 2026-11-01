@@ -1,6 +1,6 @@
 # AGI ALPHA — morning progress handoff, 1 November 2026
 
-Checkpoint: 09:48 UTC. Annual reproduction/public evidence is complete; 13 of 14 current CI workflows have passed. A new experiment seed-binding finding blocks merge while its correction is implemented and reviewed.
+Checkpoint: 10:10 UTC. The fixed experiment-identity and report-header corrections are published and locally qualified. Their exact-head hosted gates are running; merge/release/downloaded final operation remain pending.
 
 **An audited operating simulation and reproducible account-year results exist. The latest implementation is not yet a qualified released enterprise. Actual commercial profit and US$3 billion trailing-365-day profit remain unestablished.** No default policy promotion follows from these experiments.
 
@@ -9,14 +9,14 @@ Checkpoint: 09:48 UTC. Annual reproduction/public evidence is complete; 13 of 14
 | Item | Exact identity / checkpoint state |
 | --- | --- |
 | Released main, last inspected | `3c553dd5087d4594a996dd82f53d13d5e65db124` |
-| Current public candidate after peer-accepted owned-cost/frontier repairs | [PR98](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/98), head `b88a89a8bb6c276f2557b381bb9862b212a357ea` |
-| Local commit equivalent to the current public candidate | `d3204dfe3ef9de9847e664ec4404c553e56f2895`; Git tree `f73df8a4b94265a1eb8dd3fdbef3831c61113a8b`; independently checked against the public commit |
-| Selected current candidate source | 277 files; SHA256 `86823cf289706f3bd7dcb79d4c7c9404d8ae7d4fe66ae9c29d0c271fc8eac0ea` |
-| Prepared current candidate source ZIP | 302 members, 1,162,879 bytes; SHA256 `c9a34938d0a6c04e812d7b63c9791bdf21ce5e538c223a6c080fa0145afeb297` |
-| Current local qualification, directly inspected | 67 publication checks plus clean five-command run/resume/native-audit/package/public-audit accepted; native/public audits accepted and completed resume financially unchanged; release preparation and verification accepted. Required hosted gates and normal integration/release remain separate |
-| Hosted full CI on b88a89a8 | Thirteen of 14 workflows passed; only bounded campaign qualification remains pending. Earlier eada9217 passes remain bound to that earlier source |
-| New review blocker on b88 | Startup experiment verification does not compare the saved native seed to the preregistered seed. A source-bound correction and rejection regression are in progress; its new exact source must pass qualification before merge |
-| Latest owned-cost and frontier repair | Peer-accepted engineering corrections are bound to public b88a89a8 / source 86823c…; full current hosted gates, qualified merge/release and downloaded final operation remain **PENDING**. No new profitable startup result or default promotion is established |
+| Current public candidate | [PR98](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/98), head `a962fd43a8cbce92c227d46a71621b17fbfff7b5` |
+| Local commit equivalent to the current public candidate | `2ea179abd021607add0a8064c4bc404383d1bea1`; Git tree `62c09abb0c167723aab44ee1c77c3c797753682c`; independently checked against the public commit |
+| Selected current candidate source | 277 files; SHA256 `f6eda5a53dfccad4d10f9edbe581a3902ee9750f6372184a651f359652522b39` |
+| Prepared current candidate source ZIP | 302 members, 1,167,982 bytes; SHA256 `e7e2e15f420c544d76083d4803bc834c9b8222a5a1f2310fc6384a69e48cac01` |
+| Current local qualification, directly inspected | 76 composed source/publication/identity tests passed; fresh no-Git five-command run/resume/native-audit/package/public-audit accepted, with financially unchanged resume. Release prepare/verify accepted from a clean committed checkout |
+| Hosted full CI on a962fd43 | Current exact-head workflows are running. Earlier b88 passed all14, including 1,508 full-suite tests, before its seed-verifier finding was repaired; those passes remain tied to b88 |
+| Experiment-identity review repair | Published and independently reviewed: fixed startup protocol/config/cohort/seed/native arm/completion, native audit of skipped completed cells, null actual-profit/empty-authority summary schema; comparator source/protocol/phase/authority headers. The wrong-seed counterexample was independently reproduced. Current exact-head gates remain required |
+| Latest owned-cost and frontier repair | Peer-accepted engineering corrections are bound to public a962fd43 / source f6eda5…; full current hosted gates, qualified merge/release and downloaded final operation remain **PENDING**. No new profitable startup result or default promotion is established |
 | Final qualified merge / release | **PENDING** — record final commit, tree, tag, source and asset identities after the required gates |
 | Downloaded final default operation | **PENDING** — require actual downloaded bytes, all command exits, native/public/wheel audits and unchanged resume |
 | Four-case annual reproduction on 718b | **COMPLETED** from the locally qualified archive before publication; all five register/pause/resume/audit/scoreboard commands exited zero, the canonical four-world package audit accepted, and all annual financial/count results match the primary source. Public evidence is pinned at `70be5025` |
@@ -115,4 +115,4 @@ Next, inspect and qualify that owner's published source, reconcile access throug
 
 The complete requested stress matrix remains unfinished: broader defaults/refunds/delays, overlapping/exhausted channels, imitation, provider budgets, large-market aggregation and complete equivalent-outcome human/human-plus-AI/frontier-AI comparisons. Actual host/model/engineering bills, empirical demand and real commercial profit remain unknown. No paid API/service, real transaction, outreach or production deployment authority is created by this document.
 
-Completion lead: retain the exact-b88a89a8 gate results, fix and qualify the seed-binding correction on its new source, and fill the **PENDING** merge/release, actual downloaded default-operation and later-final-release annual-reproduction rows only from their receipts. Preserve the completed 652e6… primary and 718b/d1f28… reproduction boundaries above.
+Completion lead: complete exact-a962fd43 hosted gates, refresh heads/review threads, merge normally, then inspect same-main publication and actual downloaded operation. Fill final receipt fields only from actual evidence; preserve the completed 652e6… primary and 718b/d1f28… reproduction boundaries.
