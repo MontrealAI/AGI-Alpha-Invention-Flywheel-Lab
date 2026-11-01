@@ -1,0 +1,417 @@
+diff --git a/src/tesseract.cc b/src/tesseract.cc
+index 8749867..b3ce80e 100644
+--- a/src/tesseract.cc
++++ b/src/tesseract.cc
+@@ -17,11 +17,13 @@
+ #include <algorithm>
+ #include <boost/functional/hash.hpp>  // For boost::hash_range
+ #include <cassert>
++#include <chrono>
+ #include <cmath>
+ #include <cstdint>
+ #include <iostream>
+ #include <limits>
+ #include <numeric>
++#include <set>
+ #include <utility>
+ 
+ namespace {
+@@ -501,9 +503,41 @@ void TesseractDecoder::decode_to_errors(const std::vector<uint64_t>& detections,
+   decode_to_errors_with_graph(detections, detector_order_index, detector_beam, active_d2e);
+ }
+ 
++CandidateListResult TesseractDecoder::decode_to_error_candidates(
++    const std::vector<uint64_t>& detections, size_t detector_order_index,
++    size_t detector_beam, size_t max_unique_goals) {
++  if (config.no_revisit_dets) {
++    throw std::invalid_argument("Candidate lists require no_revisit_dets=false.");
++  }
++  if (max_unique_goals == 0 || max_unique_goals > 64) {
++    throw std::invalid_argument("max_unique_goals must be between 1 and 64.");
++  }
++  if (config.pqlimit == 0 || config.pqlimit == std::numeric_limits<size_t>::max()) {
++    throw std::invalid_argument("Candidate lists require a finite positive pqlimit.");
++  }
++  if (config.sparsify_errors) build_sparse_d2e(detections);
++  const auto& active_d2e = config.sparsify_errors ? sparse_d2e : d2e;
++  CandidateListResult result;
++  decode_to_errors_with_graph(detections, detector_order_index, detector_beam,
++                             active_d2e, &result, max_unique_goals);
++  return result;
++}
++
+ void TesseractDecoder::decode_to_errors_with_graph(
+     const std::vector<uint64_t>& detections, size_t detector_order_index, size_t detector_beam,
+-    const std::vector<std::vector<int>>& active_d2e) {
++    const std::vector<std::vector<int>>& active_d2e, CandidateListResult* collector,
++    size_t max_unique_goals) {
++  using CandidateClock = std::chrono::steady_clock;
++  const auto candidate_start = collector ? CandidateClock::now() : CandidateClock::time_point{};
++  std::set<std::vector<size_t>> seen_candidates;
++  ScopeExit finalize_candidates([&]() {
++    if (collector) {
++      collector->elapsed_seconds =
++          std::chrono::duration<double>(CandidateClock::now() - candidate_start).count();
++      collector->max_arena = error_chain_arena.size();
++      low_confidence_flag = collector->candidates.empty();
++    }
++  });
+   const std::vector<size_t>& detector_at_position =
+       config.detector_orders.at(detector_order_index).get_order();
+ 
+@@ -541,6 +575,7 @@ void TesseractDecoder::decode_to_errors_with_graph(
+   }
+ 
+   if (initial_cost == INF) {
++    if (collector) collector->stop_reason = "initial_infinite_cost";
+     low_confidence_flag = true;
+     return;
+   }
+@@ -553,10 +588,12 @@ void TesseractDecoder::decode_to_errors_with_graph(
+ 
+   pq.push({initial_cost, min_num_dets, 0, -1});
+   size_t num_pq_pushed = 1;
++  if (collector) { collector->pushed = 1; collector->max_queue = 1; }
+ 
+   while (!pq.empty()) {
+     const Node node = pq.top();
+     pq.pop();
++    if (collector) ++collector->popped;
+ 
+     if (node.num_dets > max_num_dets) continue;
+ 
+@@ -566,6 +603,49 @@ void TesseractDecoder::decode_to_errors_with_graph(
+                                     detector_cost_tuples, active_d2e);
+ 
+     if (node.num_dets == 0) {
++      if (collector) {
++        ++collector->raw_goals;
++        std::vector<size_t> chain;
++        for (int64_t walker = node.error_chain_idx; walker != -1;
++             walker = error_chain_arena[walker].parent_idx) {
++          chain.push_back(error_chain_arena[walker].error_index);
++        }
++        std::sort(chain.begin(), chain.end());
++        std::vector<size_t> canonical;
++        for (size_t i = 0; i < chain.size();) {
++          size_t j = i + 1;
++          while (j < chain.size() && chain[j] == chain[i]) ++j;
++          if ((j - i) % 2) canonical.push_back(chain[i]);
++          i = j;
++        }
++        boost::dynamic_bitset<> checked(num_detectors, false);
++        ErrorCandidate candidate;
++        for (size_t ei : canonical) {
++          for (int d : errors[ei].symptom.detectors) checked.flip(d);
++          candidate.errors.push_back(error_to_dem_error[ei]);
++          candidate.cost += errors[ei].likelihood_cost;
++        }
++        if (checked != initial_detectors) {
++          throw std::runtime_error("Candidate goal failed independent syndrome validation.");
++        }
++        if (!seen_candidates.insert(canonical).second) {
++          ++collector->duplicate_goals;
++          continue;
++        }
++        candidate.observables = get_flipped_observables(candidate.errors);
++        if (collector->candidates.empty()) {
++          predicted_errors_buffer = candidate.errors;
++          collector->first_goal_seconds =
++              std::chrono::duration<double>(CandidateClock::now() - candidate_start).count();
++        }
++        collector->candidates.push_back(std::move(candidate));
++        if (collector->candidates.size() >= max_unique_goals) {
++          collector->stop_reason = "goal_limit";
++          return;
++        }
++        // Do not tighten the residual beam using the zero-detector terminal state.
++        continue;
++      }
+       if (config.create_visualization) {
+         visualizer.add_activated_errors(node.error_chain_idx, error_chain_arena);
+         visualizer.add_activated_detectors(detectors, num_detectors);
+@@ -644,6 +724,7 @@ void TesseractDecoder::decode_to_errors_with_graph(
+       }
+     }
+ 
++    if (collector) ++collector->expanded;
+     next_detector_cost_tuples = detector_cost_tuples;
+ 
+     size_t min_detector = std::numeric_limits<size_t>::max();
+@@ -723,8 +804,13 @@ void TesseractDecoder::decode_to_errors_with_graph(
+ 
+       pq.push({next_cost, next_num_dets, node.depth + 1, (int64_t)(error_chain_arena.size() - 1)});
+       ++num_pq_pushed;
++      if (collector) {
++        collector->pushed = num_pq_pushed;
++        collector->max_queue = std::max(collector->max_queue, pq.size());
++      }
+ 
+       if (num_pq_pushed > config.pqlimit) {
++        if (collector) collector->stop_reason = "push_limit";
+         if (config.verbose) {
+           std::cout << "setting low confidence flag" << std::endl;
+         }
+@@ -737,6 +823,7 @@ void TesseractDecoder::decode_to_errors_with_graph(
+   if (!pq.empty()) {
+     throw std::runtime_error("Priority queue should be empty after decoding failure.");
+   }
++  if (collector) collector->stop_reason = "queue_exhausted";
+   if (config.verbose) {
+     std::cout << "Decoding failed to converge within beam limit." << std::endl;
+   }
+diff --git a/src/tesseract.h b/src/tesseract.h
+index 4196219..0a64bd5 100644
+--- a/src/tesseract.h
++++ b/src/tesseract.h
+@@ -90,6 +90,28 @@ struct ErrorProbabilityUpdate {
+   double probability;
+ };
+ 
++// Opt-in partial terminal list. This is not a complete top-K or coset enumeration.
++struct ErrorCandidate {
++  std::vector<size_t> errors;  // Original flattened DEM IDs.
++  double cost = 0;
++  std::vector<int> observables;
++};
++
++struct CandidateListResult {
++  std::vector<ErrorCandidate> candidates;
++  size_t pushed = 0;
++  size_t popped = 0;
++  size_t expanded = 0;
++  size_t max_queue = 0;
++  size_t max_arena = 0;
++  size_t raw_goals = 0;
++  size_t duplicate_goals = 0;
++  std::string stop_reason;
++  bool truncated = true;  // Even exhaustion only covers the detector-driven search.
++  double first_goal_seconds = -1;
++  double elapsed_seconds = 0;
++};
++
+ struct TesseractDecoder : public Decoder {
+   TesseractConfig config;
+   Visualizer visualizer;
+@@ -106,6 +128,10 @@ struct TesseractDecoder : public Decoder {
+   void decode_to_errors(const std::vector<uint64_t>& detections, size_t detector_order_index,
+                         size_t detector_beam);
+ 
++  // Continues one frontier after goals. Requires no_revisit_dets=false and finite pqlimit.
++  CandidateListResult decode_to_error_candidates(const std::vector<uint64_t>& detections,
++      size_t detector_order_index, size_t detector_beam, size_t max_unique_goals = 64);
++
+   // Returns the bitwise XOR of the observables flipped by the errors in the given array, indexed by
+   // the original flattened DEM error indices.
+   std::vector<int> get_flipped_observables(const std::vector<size_t>& predicted_errors) const;
+@@ -183,7 +209,9 @@ struct TesseractDecoder : public Decoder {
+   void build_sparse_d2e(const std::vector<uint64_t>& detections);
+   void decode_to_errors_with_graph(const std::vector<uint64_t>& detections,
+                                    size_t detector_order_index, size_t detector_beam,
+-                                   const std::vector<std::vector<int>>& active_d2e);
++                                   const std::vector<std::vector<int>>& active_d2e,
++                                   CandidateListResult* collector = nullptr,
++                                   size_t max_unique_goals = 64);
+ };
+ 
+ }  // namespace tesseract_decoder
+diff --git a/src/tesseract.pybind.h b/src/tesseract.pybind.h
+index b06a92a..11e328d 100644
+--- a/src/tesseract.pybind.h
++++ b/src/tesseract.pybind.h
+@@ -341,6 +341,24 @@ void add_tesseract_module(py::module& root) {
+                 `TesseractConfig` object.
+             )pbdoc");
+ 
++  py::class_<ErrorCandidate>(m, "ErrorCandidate")
++      .def_readonly("errors", &ErrorCandidate::errors)
++      .def_readonly("cost", &ErrorCandidate::cost)
++      .def_readonly("observables", &ErrorCandidate::observables);
++  py::class_<CandidateListResult>(m, "CandidateListResult")
++      .def_readonly("candidates", &CandidateListResult::candidates)
++      .def_readonly("pushed", &CandidateListResult::pushed)
++      .def_readonly("popped", &CandidateListResult::popped)
++      .def_readonly("expanded", &CandidateListResult::expanded)
++      .def_readonly("max_queue", &CandidateListResult::max_queue)
++      .def_readonly("max_arena", &CandidateListResult::max_arena)
++      .def_readonly("raw_goals", &CandidateListResult::raw_goals)
++      .def_readonly("duplicate_goals", &CandidateListResult::duplicate_goals)
++      .def_readonly("stop_reason", &CandidateListResult::stop_reason)
++      .def_readonly("truncated", &CandidateListResult::truncated)
++      .def_readonly("first_goal_seconds", &CandidateListResult::first_goal_seconds)
++      .def_readonly("elapsed_seconds", &CandidateListResult::elapsed_seconds);
++
+   py_tesseract_decoder
+       .def(py::init<TesseractConfig>(), py::arg("config"), R"pbdoc(
+         The constructor for the `TesseractDecoder` class.
+@@ -350,6 +368,27 @@ void add_tesseract_module(py::module& root) {
+         config : TesseractConfig
+             The configuration object for the decoder.
+       )pbdoc")
++      .def(
++          "decode_to_error_candidates",
++          [](TesseractDecoder& self, const py::array_t<bool>& syndrome, size_t det_order,
++             size_t det_beam, size_t max_unique_goals) {
++            if ((size_t)syndrome.size() != self.num_detectors) {
++              throw std::invalid_argument("Syndrome size does not match decoder detectors.");
++            }
++            std::vector<uint64_t> detections;
++            auto values = syndrome.unchecked<1>();
++            for (size_t i = 0; i < (size_t)values.size(); ++i) {
++              if (values(i)) detections.push_back(i);
++            }
++            return self.decode_to_error_candidates(detections, det_order, det_beam,
++                                                   max_unique_goals);
++          },
++          py::arg("syndrome"), py::arg("det_order"), py::arg("det_beam"),
++          py::arg("max_unique_goals") = 64,
++          py::call_guard<py::scoped_ostream_redirect, py::scoped_estream_redirect>(),
++          "Continue one bounded frontier after valid goals. Requires no_revisit_dets=false. "
++          "Candidate errors use original flattened DEM IDs. Costs/mass cover only the "
++          "deduplicated partial list, not all errors or a certified top-K list.")
+       .def(
+           "decode_to_errors",
+           [](TesseractDecoder& self, const py::array_t<bool>& syndrome) {
+diff --git a/src/tesseract.test.cc b/src/tesseract.test.cc
+index 1154958..b35be9d 100644
+--- a/src/tesseract.test.cc
++++ b/src/tesseract.test.cc
+@@ -1172,5 +1172,138 @@ TEST(utils, GariSourcePrefixB8Decodes) {
+   EXPECT_EQ(simplex.decode(shots[1].hits), (std::vector<int>{1}));
+ }
+ 
++
++TEST(TesseractCandidateList, MultipleClassesAndFirstGoalCompatibility) {
++  stim::DetectorErrorModel dem(R"DEM(
++    error(0.1) D0
++    error(0.08) D0 L0
++    error(0.05) D0 L1
++  )DEM");
++  TesseractConfig config{dem};
++  config.no_revisit_dets = false;
++  TesseractDecoder decoder(config);
++  decoder.decode_to_errors({0}, 0, 5);
++  auto original = decoder.predicted_errors_buffer;
++  auto original_cost = decoder.cost_from_errors(original);
++  auto one = decoder.decode_to_error_candidates({0}, 0, 5, 1);
++  ASSERT_EQ(one.candidates.size(), 1);
++  EXPECT_DOUBLE_EQ(one.candidates[0].cost, original_cost);
++  EXPECT_EQ(one.candidates[0].observables, decoder.get_flipped_observables(original));
++  EXPECT_EQ(one.stop_reason, "goal_limit");
++  auto list = decoder.decode_to_error_candidates({0}, 0, 5);
++  ASSERT_EQ(list.candidates.size(), 3);
++  EXPECT_EQ(list.stop_reason, "queue_exhausted");
++  EXPECT_TRUE(list.truncated);
++  EXPECT_FALSE(decoder.low_confidence_flag);
++  EXPECT_EQ(list.pushed, 4);
++  EXPECT_EQ(list.popped, 4);
++  EXPECT_EQ(list.expanded, 1);
++  EXPECT_EQ(list.max_queue, 3);
++  EXPECT_EQ(list.max_arena, 3);
++  EXPECT_EQ(list.raw_goals, 3);
++  EXPECT_EQ(list.duplicate_goals, 0);
++  EXPECT_GE(list.first_goal_seconds, 0);
++  EXPECT_GE(list.elapsed_seconds, list.first_goal_seconds);
++  for (const auto& candidate : list.candidates) {
++    ASSERT_EQ(candidate.errors.size(), 1);
++    EXPECT_DOUBLE_EQ(candidate.cost, decoder.cost_from_errors(candidate.errors));
++    EXPECT_EQ(candidate.observables, decoder.get_flipped_observables(candidate.errors));
++  }
++}
++
++TEST(TesseractCandidateList, SameClassConfigurationsAreNotMerged) {
++  stim::DetectorErrorModel dem(R"DEM(
++    error(0.1) D0
++    error(0.08) D0 D1
++    error(0.07) D1
++    error(0.05) D0 L0
++  )DEM");
++  TesseractConfig config{dem};
++  config.no_revisit_dets = false;
++  TesseractDecoder decoder(config);
++  auto list = decoder.decode_to_error_candidates({0}, 0, 5);
++  size_t class_zero = 0;
++  size_t class_one = 0;
++  for (const auto& candidate : list.candidates) {
++    class_zero += candidate.observables.empty();
++    class_one += candidate.observables == std::vector<int>{0};
++  }
++  EXPECT_GE(class_zero, 2);
++  EXPECT_GE(class_one, 1);
++  EXPECT_EQ(list.raw_goals, list.candidates.size() + list.duplicate_goals);
++}
++
++TEST(TesseractCandidateList, MergedOriginalIdsAndCorrelatedSeparator) {
++  stim::DetectorErrorModel dem(R"DEM(
++    error(0.1) D0 D1 ^ D1 L0
++    error(0.2) D0 L0
++    error(0) D3 L2
++    error(0.05) D0 L1
++  )DEM");
++  TesseractConfig config{dem};
++  config.no_revisit_dets = false;
++  TesseractDecoder decoder(config);
++  auto list = decoder.decode_to_error_candidates({0}, 0, 5);
++  ASSERT_EQ(list.candidates.size(), 2);
++  for (const auto& candidate : list.candidates) {
++    ASSERT_EQ(candidate.errors.size(), 1);
++    EXPECT_NE(candidate.errors[0], 2);  // Removed zero-probability error.
++    EXPECT_DOUBLE_EQ(candidate.cost, decoder.cost_from_errors(candidate.errors));
++    EXPECT_EQ(candidate.observables, decoder.get_flipped_observables(candidate.errors));
++    EXPECT_TRUE(candidate.observables == std::vector<int>{0} ||
++                candidate.observables == std::vector<int>{1});
++  }
++}
++
++TEST(TesseractCandidateList, EmptySyndromeAndNoGoalStatus) {
++  stim::DetectorErrorModel dem("error(0.1) D0\ndetector D1");
++  TesseractConfig config{dem};
++  config.no_revisit_dets = false;
++  TesseractDecoder decoder(config);
++  auto empty = decoder.decode_to_error_candidates({}, 0, 5);
++  ASSERT_EQ(empty.candidates.size(), 1);
++  EXPECT_TRUE(empty.candidates[0].errors.empty());
++  EXPECT_DOUBLE_EQ(empty.candidates[0].cost, 0);
++  EXPECT_TRUE(empty.truncated);  // Disconnected cycles are not enumerated.
++  EXPECT_FALSE(decoder.low_confidence_flag);
++  auto impossible = decoder.decode_to_error_candidates({1}, 0, 5);
++  EXPECT_TRUE(impossible.candidates.empty());
++  EXPECT_EQ(impossible.stop_reason, "initial_infinite_cost");
++  EXPECT_TRUE(decoder.low_confidence_flag);
++}
++
++TEST(TesseractCandidateList, RejectsIncompatibleConfigurationAndKeepsCapConvention) {
++  stim::DetectorErrorModel dem("error(0.1) D0\nerror(0.05) D0 L0");
++  TesseractConfig config{dem};
++  TesseractDecoder default_decoder(config);
++  EXPECT_THROW(default_decoder.decode_to_error_candidates({0}, 0, 5), std::invalid_argument);
++  config.no_revisit_dets = false;
++  config.pqlimit = 1;
++  TesseractDecoder decoder(config);
++  auto capped = decoder.decode_to_error_candidates({0}, 0, 5);
++  EXPECT_TRUE(capped.candidates.empty());
++  EXPECT_EQ(capped.stop_reason, "push_limit");
++  EXPECT_EQ(capped.pushed, 2);  // Existing P+1 convention, not queue length.
++  EXPECT_EQ(capped.max_arena, 1);
++  EXPECT_TRUE(decoder.low_confidence_flag);
++  EXPECT_THROW(decoder.decode_to_error_candidates({0}, 0, 5, 0), std::invalid_argument);
++  EXPECT_THROW(decoder.decode_to_error_candidates({0}, 0, 5, 65), std::invalid_argument);
++}
++
++TEST(TesseractCandidateList, CapAfterFirstGoalRetainsValidPrediction) {
++  stim::DetectorErrorModel dem("error(0.4) D0\nerror(0.05) D0 D1\nerror(0.1) D1");
++  TesseractConfig config{dem};
++  config.no_revisit_dets = false;
++  config.pqlimit = 3;
++  TesseractDecoder decoder(config);
++  auto list = decoder.decode_to_error_candidates({0}, 0, 5);
++  ASSERT_EQ(list.candidates.size(), 1);
++  EXPECT_EQ(list.stop_reason, "push_limit");
++  EXPECT_EQ(list.pushed, 4);
++  EXPECT_EQ(decoder.predicted_errors_buffer, list.candidates[0].errors);
++  EXPECT_FALSE(decoder.low_confidence_flag);
++  EXPECT_TRUE(list.truncated);
++}
++
+ }  // namespace
+ }  // namespace tesseract_decoder

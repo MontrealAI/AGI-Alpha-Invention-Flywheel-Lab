@@ -1,0 +1,69 @@
+name: Frontier decoder phase-two bounded diagnostic
+on:
+  push:
+    branches: [research/frontier-decoder-phase2-ci]
+    paths:
+      - 'campaign/frontier-decoder-phase2/**'
+      - '.github/workflows/frontier-phase2.yml'
+permissions:
+  contents: read
+concurrency:
+  group: frontier-phase2-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  kernel-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: campaign/frontier-decoder-phase2
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Pinned matched builds and correctness gates (40 minute total bound)
+        timeout-minutes: 41
+        run: python campaign/frontier-decoder-phase2/ci_build.py
+      - name: Frozen twenty-shot matched diagnostic (15 minute total bound)
+        timeout-minutes: 16
+        shell: bash
+        run: |
+          set -euo pipefail
+          R="$RUNNER_TEMP/frontier-phase2"
+          C="$R/source/testdata/bivariatebicyclecodes/r=6,d=6,p=0.002,noise=si1000,c=bivariate_bicycle_Z,nkd=[[72,12,6]],q=144,iscolored=True,A_poly=x^3+y+y^2,B_poly=y^3+x+x^2.stim"
+          echo "85cb45a9693792cedb937831756323f020af2782dd07948abe1767da381f71a1  $C" | sha256sum --check
+          timeout --signal=TERM --kill-after=5s 910s python campaign/frontier-decoder-phase2/run_diagnostic.py \
+            --pristine-extension-dir "$R/pristine" --modified-extension-dir "$R/modified" \
+            --helper-dir "$R/source/src/py" --deps "$R/deps" --circuit "$C" --output "$R/diagnostic.json"
+          python - <<'PYCODE'
+          import json, os, pathlib
+          result=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'frontier-phase2/diagnostic.json').read_text())
+          if result.get('errors') or any(v['invalid_candidates'] for v in result['variants'].values()):
+              raise SystemExit('Correctness/worker failure: stop; no success claim')
+          print('Scientific stop reason:', result['stop_reason'])
+          PYCODE
+      - name: Compact evidence only; no artifacts or cache uploads
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'frontier-phase2'
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as summary:
+              for name in ['build_receipt.json','diagnostic.json']:
+                  path=root/name
+                  if path.exists():
+                      value=json.loads(path.read_text())
+                      if name=='diagnostic.json': value.pop('compact_witnesses',None)
+                      compact=json.dumps(value,indent=2)
+                      print(name+'\n'+compact)
+                      summary.write('### '+name+'\n```json\n'+compact+'\n```\n')
+                  else:
+                      print(name+': NOT PRODUCED')
+                      summary.write(name+': NOT PRODUCED\n')
+          PY
