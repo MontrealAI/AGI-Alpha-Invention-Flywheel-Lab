@@ -333,8 +333,10 @@ def _public(spec, source, development, selection, confirmation, discovery):
         delta = None
     witness = challenger["observed"]["source_linked_successor"] if challenger else None
     holdout = _heldout_recommendation(spec, selected, challenger, incumbent, delta)
-    funded_witness_accepted = bool(holdout["challenger_accepted"] and witness and
-                                   witness["positive_incremental_collected_contribution"])
+    funded_successor_exists = bool(witness and witness["positive_incremental_collected_contribution"] and
+                                   challenger["observed"]["obligations_covered"] and
+                                   challenger["observed"]["profit_microUSD"] > 0)
+    retained_successor = funded_successor_exists and holdout["challenger_accepted"]
     return {
         "schema": SCHEMA, "status": "CONDITIONAL_SIMULATED_EXECUTION",
         "source_sha256": source["sha256"], "spec_sha256": digest(spec),
@@ -345,7 +347,7 @@ def _public(spec, source, development, selection, confirmation, discovery):
         "confirmation": {k: v["observed"] for k, v in sorted(confirmation.items())},
         "matched_confirmation_profit_delta_microUSD": delta,
         "connected_earned_successor_witness": witness,
-        "confirmed_positive_funded_successor_opportunity": funded_witness_accepted,
+        "confirmed_positive_funded_successor_opportunity": funded_successor_exists,
         "comparative_advantage_on_one_fresh_seed": holdout["challenger_accepted"],
         "retained_mechanism": ({
             "id": "observed-funded-channel-or-capacity",
@@ -355,7 +357,7 @@ def _public(spec, source, development, selection, confirmation, discovery):
             "selected_executable_policy": selected,
             "execution_authority": [], "current_proof": None,
             "scope": "Candidate lesson, not qualified autonomous invention or general causal strategy advantage"
-        } if funded_witness_accepted else None),
+        } if retained_successor else None),
         "limits": [
             "Exposed/finitely authored buyer values, costs, demand, channel and competitor assumptions; no real buyers or collections.",
             "Three current native digital services; only enumerated executable native policies, not open-ended business design invention.",
