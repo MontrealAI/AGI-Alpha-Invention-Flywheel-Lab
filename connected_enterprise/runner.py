@@ -48,6 +48,9 @@ def source_paths(root):
         'docs/portable_offer/README.md', 'docs/portable_offer/PARTNER_PILOT.md',
         'tests/test_portable_offer.py', 'tests/test_partner_offer043.py',
         '.github/workflows/proof-led-partner043.yml',
+        'commercial/outcome_market045.py', 'tests/test_outcome_market045.py',
+        'campaign/market045/INPUT.json', 'docs/market045/OPERATOR.md',
+        '.github/workflows/outcome-market045.yml',
     ) if (root/name).is_file())
     return sorted(name for name in names if (root/name).is_file())
 

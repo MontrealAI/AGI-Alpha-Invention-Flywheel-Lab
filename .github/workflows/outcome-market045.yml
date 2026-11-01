@@ -1,0 +1,57 @@
+name: Outcome Market 045 — source-bound coalition invention
+on:
+  pull_request:
+    paths:
+      - 'commercial/outcome_market045.py'
+      - 'commercial/portable_offer.py'
+      - 'commercial/partner_offer.py'
+      - 'connected_enterprise/runner.py'
+      - 'tests/test_outcome_market045.py'
+      - 'campaign/market045/**'
+      - 'docs/market045/**'
+      - '.github/workflows/outcome-market045.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  coalition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --only-binary=:all: -r requirements-commercial010.txt
+      - name: Check original real service proof, partner contracts and the coalition solver
+        run: |
+          python -m unittest discover -s tests -p 'test_portable_offer.py' -v
+          python -m unittest discover -s tests -p 'test_partner_offer043.py' -v
+          python -m unittest discover -s tests -p 'test_outcome_market045.py' -v
+      - name: Execute synthetic service, independently verify and construct new feasible economic coalition
+        run: |
+          python -m commercial.outcome_market045 demo --output "$RUNNER_TEMP/market045"
+          python -m commercial.outcome_market045 verify --path "$RUNNER_TEMP/market045"
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'market045/market/COALITION.json'
+          record=json.loads(p.read_bytes()); result=record['result']; coalition=result['winning_coalition']
+          assert result['status']=='CONDITIONALLY_FEASIBLE_COALITION'
+          assert coalition['enterprise_retained_gain_if_collected_cents']==10600
+          assert coalition['bids']==['build-core','partner-reach','proof-check','trace-bridge']
+          assert result['funding_authority'] is False and result['actual_collections_cents']==0
+          assert record['settlement_instruction'] is None and record['native_account_mutation'] is False
+          PY
+      - name: Upload only public synthetic proof manifest and proposal
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: outcome-market045-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/market045/proof/MANIFEST.json
+            ${{ runner.temp }}/market045/proof/VERDICT.json
+            ${{ runner.temp }}/market045/market/COALITION.json
+          retention-days: 7
+          if-no-files-found: error

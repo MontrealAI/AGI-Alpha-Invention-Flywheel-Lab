@@ -1,0 +1,131 @@
+{
+  "bids": [
+    {
+      "activation_cost_cents": 3000,
+      "coverage": [
+        "delivery",
+        "portable-trace",
+        "distribution"
+      ],
+      "evidence_ref": "declared-direct-incumbent",
+      "expiry_day": 60,
+      "failure_guarantee_cents": 6000,
+      "id": "direct-incumbent",
+      "minimum_gain_cents": 7500,
+      "noncollection_loss_cents": 6000,
+      "provider": "legacy-direct",
+      "requires": [],
+      "rights": "PERMITTED",
+      "settled_cost_cents": 53500
+    },
+    {
+      "activation_cost_cents": 2500,
+      "coverage": [
+        "delivery"
+      ],
+      "evidence_ref": "declared-build-core",
+      "expiry_day": 60,
+      "failure_guarantee_cents": 5000,
+      "id": "build-core",
+      "minimum_gain_cents": 4000,
+      "noncollection_loss_cents": 5000,
+      "provider": "maker",
+      "requires": [],
+      "rights": "PERMITTED",
+      "settled_cost_cents": 16000
+    },
+    {
+      "activation_cost_cents": 600,
+      "coverage": [
+        "portable-trace"
+      ],
+      "evidence_ref": "declared-trace-bridge",
+      "expiry_day": 60,
+      "failure_guarantee_cents": 1000,
+      "id": "trace-bridge",
+      "minimum_gain_cents": 1000,
+      "noncollection_loss_cents": 1000,
+      "provider": "integrator",
+      "requires": [
+        "build-core"
+      ],
+      "rights": "PERMITTED",
+      "settled_cost_cents": 4200
+    },
+    {
+      "activation_cost_cents": 500,
+      "coverage": [
+        "independent-proof"
+      ],
+      "evidence_ref": "declared-proof-check",
+      "expiry_day": 60,
+      "failure_guarantee_cents": 1000,
+      "id": "proof-check",
+      "minimum_gain_cents": 1500,
+      "noncollection_loss_cents": 1000,
+      "provider": "independent-checker",
+      "requires": [],
+      "rights": "PERMITTED",
+      "settled_cost_cents": 6500
+    },
+    {
+      "activation_cost_cents": 1500,
+      "coverage": [
+        "distribution"
+      ],
+      "evidence_ref": "declared-partner-reach",
+      "expiry_day": 60,
+      "failure_guarantee_cents": 2000,
+      "id": "partner-reach",
+      "minimum_gain_cents": 2200,
+      "noncollection_loss_cents": 2000,
+      "provider": "partner",
+      "requires": [],
+      "rights": "PERMITTED",
+      "settled_cost_cents": 8800
+    }
+  ],
+  "buyer": {
+    "available_cash_cents": 100000,
+    "buyer_budget_cents": 59900,
+    "buyer_declared_value_cents": 85000,
+    "buyer_outside_surplus_cents": 10000,
+    "current_day": 2,
+    "max_noncollection_loss_cents": 20000,
+    "maximum_counterparties": 6,
+    "protected_cash_cents": 30000,
+    "required": [
+      "delivery",
+      "independent-proof",
+      "distribution",
+      "portable-trace"
+    ],
+    "schema": "agi-alpha/complementary-outcome-market045/v1",
+    "scope": "SYNTHETIC_PUBLIC_WORKLOAD"
+  },
+  "description": "Developer-authored synthetic terms, not accepted market quotes or validated customer demand.",
+  "order": {
+    "currency": "USD",
+    "invoices": [
+      {
+        "amount_cents": 15000,
+        "customer": "SYNTHETIC",
+        "id": "inv-1"
+      }
+    ],
+    "order_id": "MARKET-045",
+    "payments": [
+      {
+        "amount_cents": 15000,
+        "customer": "SYNTHETIC",
+        "id": "pay-1",
+        "invoice_refs": [
+          "inv-1"
+        ]
+      }
+    ],
+    "require_complete": true,
+    "scope": "SYNTHETIC_PUBLIC_WORKLOAD"
+  },
+  "price_cents": 59900
+}
