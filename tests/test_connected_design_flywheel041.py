@@ -75,6 +75,33 @@ class NativeDesignSearch041Tests(unittest.TestCase):
             mutation(bad)
             self.assertIsNone(find_native_successor(bad))
 
+    def test_investment_payback_counts_losing_settlements_and_refunds(self):
+        for outcome in ("SETTLED", "REFUNDED", "QUALITY_REJECTED"):
+            with self.subTest(outcome=outcome):
+                bad = case()
+                loss = order("loss", "SIM-customer-006", "reconciliation",
+                             5, 55, 128, 170, "earned-plan-4")
+                loss["outcome"] = outcome
+                if outcome != "SETTLED":
+                    loss["collection_time"] = None
+                bad["orders"].append(loss)
+                witness = find_native_successor(bad)
+                self.assertIsNotNone(witness)
+                self.assertFalse(witness["positive_incremental_collected_contribution"])
+                self.assertLess(witness["net_after_native_investment_microUSD"], 0)
+                self.assertEqual(witness["source_linked_delivery_cost_microUSD"], 67)
+                self.assertEqual(witness["source_linked_total_order_contribution_microUSD"],
+                                 28 + (5 if outcome == "SETTLED" else 0) - 55)
+
+    def test_unrelated_losses_do_not_create_fictitious_investment_attribution(self):
+        scenario = case()
+        scenario["orders"].append(order("unrelated", "SIM-customer-006",
+                                        "reconciliation", 5, 55, 128, 170, "other-plan"))
+        witness = find_native_successor(scenario)
+        self.assertTrue(witness["positive_incremental_collected_contribution"])
+        self.assertEqual(witness["net_after_native_investment_microUSD"], 26)
+        self.assertEqual(witness["source_linked_paid_order_ids"], ["successor"])
+
     def test_better_is_not_assumed_from_a_new_customer_alone(self):
         bad = case()
         bad["orders"][1]["complete_cost"] = 38

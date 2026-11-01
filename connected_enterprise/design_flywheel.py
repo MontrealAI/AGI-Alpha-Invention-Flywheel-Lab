@@ -117,12 +117,21 @@ def find_native_successor(result):
                 return order.get("acquisition_source_plan_id") == investment["plan_id"]
             return (order.get("capacity_source_plan_id") == investment["plan_id"]
                     or investment["plan_id"] in order.get("capacity_source_plan_ids", []))
+        # A source-linked investment also bears the losses of linked deliveries
+        # that were refunded, rejected, or settled below cost. Never construct a
+        # favorable payback witness by filtering those losses out.
+        linked_orders = [o for o in result["orders"] if linked(o)
+                         and o["qualified_time"] >= investment["activation_time"]]
         successors = [o for o in settled if linked(o)
                       and o["qualified_time"] >= investment["activation_time"]
                       and o["collection_time"] > investment["purchased_time"]]
         if not successors:
             continue
-        net = sum(_margin(o) for o in successors) - investment["cost"]
+        collections = sum(o["price"] for o in linked_orders
+                          if o["outcome"] == "SETTLED" and o["collection_time"] is not None)
+        delivery_cost = sum(o["complete_cost"] for o in linked_orders)
+        linked_contribution = collections - delivery_cost
+        net = linked_contribution - investment["cost"]
         for first in settled:
             if first["collection_time"] >= investment["purchased_time"]:
                 continue
@@ -144,8 +153,13 @@ def find_native_successor(result):
                 "successor_customer": second["customer_id"],
                 "successor_collection_hour": second["collection_time"],
                 "successor_margin_microUSD": _margin(second),
-                "source_linked_paid_order_ids": [o["id"] for o in successors],
-                "source_linked_total_order_contribution_microUSD": sum(_margin(o) for o in successors),
+                "source_linked_paid_order_ids": [o["id"] for o in linked_orders
+                                                 if o["outcome"] == "SETTLED" and o["collection_time"] is not None],
+                "source_linked_nonsettled_order_ids": [o["id"] for o in linked_orders
+                                                       if o["outcome"] != "SETTLED" or o["collection_time"] is None],
+                "source_linked_collections_microUSD": collections,
+                "source_linked_delivery_cost_microUSD": delivery_cost,
+                "source_linked_total_order_contribution_microUSD": linked_contribution,
                 "net_after_native_investment_microUSD": net,
                 "distinct_opportunity": True,
                 "positive_incremental_collected_contribution": net > 0,

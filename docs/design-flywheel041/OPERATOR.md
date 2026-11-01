@@ -18,6 +18,8 @@ It then freezes that selected design and runs it with a new predeclared seed alo
 4. A different customer or complete service outcome and **positive collected order contribution net of the actual source-linked investment invoice**, with positive overall native enterprise complete-cost profit. A higher per-order margin is reported only as a separate diagnostic.
 5. A matched baseline comparison with positive incremental complete-cost profit to claim superiority on this particular fresh seed.
 
+For source-linked investment payback, **all orders attributed to the same native plan** contribute to the cost calculation: settled losing orders reduce collected contribution, and rejected/refunded/uncollected orders retain their production costs without fictional collections. The native investment invoice is deducted separately. The positive successor witness still requires an accepted, collected, profitable successor; unlinked losses remain in overall native enterprise profit and cannot be reassigned to a favorable plan. This refinement must be evaluated on the original frozen 341014/341015 worlds, not retroactively deemed a pass from the older source.
+
 No single development run is statistically sufficient to prove out-of-sample generality; this is a small execution demonstration. Better per-order margin does not, by itself, prove positive lifetime contribution of the investment. No separate native account's funds are pooled into another account. The comparison is an explicitly conditional, simulated synthetic business.
 
 ## Reproduction
