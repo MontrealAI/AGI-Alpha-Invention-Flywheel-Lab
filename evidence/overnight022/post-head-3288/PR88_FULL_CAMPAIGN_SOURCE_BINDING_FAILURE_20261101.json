@@ -1,0 +1,81 @@
+{
+  "schema": "agi-alpha/pr77-pr88-campaign-independent-failure-review/v1",
+  "as_of_utc": "2026-11-01",
+  "scope": "Read-only exact-commit GitHub Actions and pinned-source review; no financial account, key, branch implementation, test threshold, release guard, or prior failure modified.",
+  "repo": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+  "current_main_at_review": "09aff387197d56b9a96e128e449b6334b9437e47",
+  "current_main_release": {
+    "tag": "connected014-09aff387197d56b9a96e128e449b6334b9437e47",
+    "release_status": "PUBLISHED_PUBLIC_PRERELEASE",
+    "main_exact_head_six_workflows": "SUCCESS",
+    "downloaded_operation": {
+      "run_id": 41261271067,
+      "job_id": 124719041555,
+      "conclusion": "SUCCESS",
+      "public_asset_download_accepted": true,
+      "operation_success_reported": true
+    },
+    "qualification_tier": "ENGINEERING_ONLY_NOT_NEW_COMMERCE"
+  },
+  "prior_pr77": {
+    "head": "cd5281b0ae7b484572bfb35ccb7e51ef5b3be4b3",
+    "native_design_run_id": 41251886324,
+    "native_design_conclusion": "SUCCESS",
+    "campaign_run_id": 41251886350,
+    "qualify_job_id": 124686947800,
+    "qualify_conclusion": "FAILURE",
+    "campaign_test_count": 1070,
+    "campaign_failures": 10,
+    "campaign_errors": 1
+  },
+  "corrected_pr88": {
+    "head": "4b72ebdc6f9b11dc8ed413126b77bfff9fceeed1",
+    "base_pr": 77,
+    "remains_draft": true,
+    "native_design_run_id": 41255905518,
+    "native_design_conclusion": "SUCCESS",
+    "campaign_run_id": 41255905540,
+    "qualify_job_id": 124698892589,
+    "qualify_conclusion": "FAILURE",
+    "campaign_test_count": 1075,
+    "campaign_failures": 10,
+    "campaign_errors": 1,
+    "publication_jobs": "SKIPPED",
+    "no_new_public_release": true
+  },
+  "failure_analysis": {
+    "first_error": "test_publication_composition.ComposedPublicationTests.test_actual_current_map_and_declared_delta_are_exact: ValueError COMPOSED_SOURCE_DELTA_CHANGED",
+    "cascading_failures": "Ten synthetic negative-control test expectations see the same source mismatch before their intended tamper/qualification checks; do not interpret them as ten independent financial failures.",
+    "gate": "scripts/release_connected014.py verify_composed_binding lines 223-229 checks exact current_files, current_source_sha256, and source_delta against historical_source",
+    "fixture": "evidence/strategic024-publication/COMPOSED_SOURCE_BINDING.json",
+    "frozen_fixture_source_members": 185,
+    "source_path_discovery": "connected_enterprise/runner.py source_paths enumerates connected_enterprise/*.py and tests/test_connected*.py",
+    "added_pr77_source_members": [
+      "connected_enterprise/design_flywheel.py",
+      "tests/test_connected_design_flywheel041.py"
+    ],
+    "predicted_pr77_pr88_members": 187,
+    "attribution": "The same 10 FAIL + 1 ERROR occurred on original PR77 with 1070 tests, before PR88's five additional tests increased the count to 1075; PR88 did not introduce this previously existing failure.",
+    "source_guard_behavior": "FAIL_CLOSED_CORRECT",
+    "complete_campaign_qualified": false
+  },
+  "owner_safe_next_steps": [
+    "Preserve both failed campaign runs as failed and the exact frozen 341014/341015 outcomes unchanged.",
+    "Reconcile synthetic composed-publication fixture to a reviewed exact candidate source without replacing historical publication hashes or pretending a release has passed.",
+    "Ensure tests still reject omitted/forged source deltas, stale qualifications, failed commands, unbound audits, and modified historical snapshots before any new full-suite execution.",
+    "Independently qualify the actual corrected candidate on an exact pinned head, then only use normal protected merge/release and downloaded operation.",
+    "Do not touch native-capital owner account or competing financial source; current main release remains an engineering baseline."
+  ],
+  "actual_original_signed_native_account_checkpoint": "NOT_ACCESSIBLE",
+  "account_access": "NOT_ATTEMPTED",
+  "simulation_reexposed": false,
+  "actual_commercial_revenue_claim": false,
+  "new_paid_services": false,
+  "actual_costs": "GITHUB_ACTIONS_ACCOUNT_BILLING_NOT_MEASURED",
+  "evidence_urls": [
+    "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41251886350",
+    "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41255905540",
+    "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41255905518",
+    "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41261271067"
+  ]
+}
