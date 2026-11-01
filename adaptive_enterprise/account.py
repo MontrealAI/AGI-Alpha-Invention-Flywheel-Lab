@@ -368,12 +368,15 @@ class Account:
                 self._connected_source_bound = True
             self._verify_reservations()
             if any(e['op'] == 'finish' and _requires_resolution(self._proofs.get(e['args']['id'], {}).get('body', {}).get('plan', {})) for e in self._owner.export()['actions']):
-                from connected_enterprise.upgrades import _owner_authenticated_history
                 pending = self._pending_source_transition()
-                history = [*self._source_transitions.values(), *([pending] if pending is not None else [])]
-                with _owner_authenticated_history(history, self._key):
-                    audit_account(self.export(), root=self.root, manifest=self.manifest,
-                                  pending_source_transition=pending)
+                if not self._source_transitions and pending is None:
+                    audit_account(self.export(), root=self.root, manifest=self.manifest)
+                else:
+                    from connected_enterprise.upgrades import _owner_authenticated_history
+                    history = [*self._source_transitions.values(), *([pending] if pending is not None else [])]
+                    with _owner_authenticated_history(history, self._key):
+                        audit_account(self.export(), root=self.root, manifest=self.manifest,
+                                      pending_source_transition=pending)
         except BaseException:
             self.close()
             raise
@@ -698,6 +701,8 @@ class Account:
     def audit(self):
         self._assert_owner()
         self._verify_reservations()
+        if not self._source_transitions:
+            return audit_account(self.export(), root=self.root, manifest=self.manifest)
         from connected_enterprise.upgrades import _owner_authenticated_history
         with _owner_authenticated_history(self._source_transitions.values(), self._key):
             return audit_account(self.export(), root=self.root, manifest=self.manifest)
