@@ -1,0 +1,43 @@
+{
+  "schema": "agi-alpha/compounding055-publication-binding-lesson/v1",
+  "tried": "Qualify PR102 source f57f039f119557613aa6781663fa869dfc240bbf with the market-index publication regressions.",
+  "original_failure": {
+    "run_id": 41311001516,
+    "job_id": 124861158299,
+    "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41311001516/job/124861158299",
+    "evidence": "Decoded hosted job log independently inspected; original failed run remains unchanged.",
+    "tests_run": 53,
+    "failures": 10,
+    "errors": 1,
+    "reason": "COMPOSED_SOURCE_DELTA_CHANGED: the current publication registration still named the earlier 277-file source map after this branch added commercial construction source. This is a current binding failure, not an observed native runtime failure."
+  },
+  "repair": {
+    "path": "evidence/strategic024-publication/COMPOSED_SOURCE_BINDING.json",
+    "existing_functions": [
+      "connected_enterprise.runner.identity",
+      "scripts.release_connected014.historical_source",
+      "scripts.release_connected014.canonical_digest",
+      "scripts.release_connected014.write"
+    ],
+    "changed_fields": ["current_files", "current_source_sha256", "source_delta"],
+    "old_current_source_sha256": "ba510738584bb95d95a794dfb29eac3851407920e9c599cbd23abfc5ef80ffec",
+    "current_source_sha256": "f830eea0ae7b746368e4bdd7d19ec7bc3c4ea3394ca9e1249f13133d5aa78987",
+    "current_identity_files": 290,
+    "historical_identity_files": 149,
+    "declared_delta_files": 165,
+    "binding_file_sha256": "007df5fa2d74b945826387de4e7217d27e457319fad6eaf47465ff4714508b0a",
+    "all_other_binding_fields_preserved": true,
+    "qualification_status": "NOT_QUALIFIED_REGISTRATION_ONLY",
+    "qualification_and_archive_hashes_remain_null": true,
+    "canonical_operating_identity_changed_by_refresh": false
+  },
+  "independently_executed_verification": {
+    "command": "python3 -m unittest tests.test_publication_binding tests.test_publication_composition -v",
+    "returncode": 0,
+    "tests_run": 27,
+    "failures": 0,
+    "errors": 0,
+    "scope": "Focused historical-byte preservation and current-registration regressions only; not full CI, clean operation, qualification, merge or release. The full 53-test hosted step was not rerun by this receipt."
+  },
+  "next_or_avoid": "Refresh only the current source map/hash/delta whenever the canonical source inventory changes, then rerun exact-head CI. Preserve historical paper/source bytes and failed run evidence; registration supplies no qualification."
+}

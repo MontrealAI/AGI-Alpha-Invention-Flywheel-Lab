@@ -1,0 +1,161 @@
+{
+  "annual_operation": "RUNNING_FIXED_TEN_ACCOUNT_EXPERIMENT; separate final receipt required",
+  "billing": "UNKNOWN_ACTUAL_HOST_ASSISTANT_COSTS; NO_MODEL_API_CALLS; POSITIVE_MODELED_ENVELOPES_NOT_MEASURED_INVOICES",
+  "canonical_source_sha256": "f830eea0ae7b746368e4bdd7d19ec7bc3c4ea3394ca9e1249f13133d5aa78987",
+  "clean_archive": {
+    "accepted": true,
+    "children_cpu_seconds": 78.547872,
+    "completed_resume_financially_unchanged": true,
+    "no_git_execution": true,
+    "public_archive": {
+      "bytes": 1584079,
+      "extraction": {
+        "crc_verified": true,
+        "files": 617,
+        "uncompressed_bytes": 5813035
+      },
+      "sha256": "adfe7dd36b200eeca8d28db7e3455f5104851a41d29d2ae663a6b93ba500da63"
+    },
+    "source_archive": {
+      "bytes": 1223251,
+      "extraction": {
+        "crc_verified": true,
+        "files": 315,
+        "uncompressed_bytes": 4151653
+      },
+      "sha256": "85ebff1fe98920c463722422b1c98773ff629a9a74bf9180436c158b7f82defa"
+    },
+    "source_sha256": "f830eea0ae7b746368e4bdd7d19ec7bc3c4ea3394ca9e1249f13133d5aa78987",
+    "wall_seconds": 55.68298642599984
+  },
+  "clean_archive_commands": [
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "connected_enterprise",
+        "run",
+        "--output",
+        "/workspace/scratch/0050f2b11839/qualification055-clean/operation",
+        "--smoke"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "connected_enterprise",
+        "resume",
+        "--output",
+        "/workspace/scratch/0050f2b11839/qualification055-clean/operation"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "connected_enterprise",
+        "audit",
+        "--output",
+        "/workspace/scratch/0050f2b11839/qualification055-clean/operation"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "connected_enterprise",
+        "package",
+        "--output",
+        "/workspace/scratch/0050f2b11839/qualification055-clean/operation",
+        "--archive",
+        "/workspace/scratch/0050f2b11839/qualification055-clean/connected014-keyfree.zip"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "connected_enterprise",
+        "audit",
+        "--output",
+        "/workspace/scratch/0050f2b11839/qualification055-clean/public-copy"
+      ],
+      "returncode": 0
+    }
+  ],
+  "connected_tests": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_connected*.py",
+      "-q"
+    ],
+    "count": 462,
+    "cpu_seconds": 1334.347586,
+    "exit_code": 0,
+    "stderr_sha256": "fcde24c4e89250bd0a5159868355d1a528c271823d11cbdc52309e1cde203dbd",
+    "wall_seconds": 1355.8130912100023
+  },
+  "new_business_from_extracted_archive": {
+    "audit": {
+      "accepted": true,
+      "resource_cpu_metadata": "Command resource observations retained, not independently reproduced timing measurements",
+      "schema": "agi-alpha/connected014-package-audit/v1",
+      "scope": "NATIVE_FINANCE_AND_OPERATING_SEMANTICS_WITH_ARTIFACT_REEXECUTION_AND_REPORT_REDERIVATION",
+      "service_cohort": {
+        "accepted": true,
+        "accepted_jobs": 104,
+        "admission_sha256": "d91d20a1c5c2acf58583fff4d33b0792d2686b168e9b4b810c45a5efc8530cb9",
+        "chunks": 4,
+        "manifest_sha256": "f8eb23509f5a4d84c4110e885b2bbb4c13adf0982c3178925e13303a419c0d87",
+        "schema": "agi-alpha/finite-service-admission048/v1",
+        "scope": "Exact synthetic origin and independent complete-artifact checks; no demand, capacity or financial authority.",
+        "total_jobs": 104
+      },
+      "simulation_keys_required": false,
+      "source_sha256": "78d9828739c430f9e5fd9fe84279e2fae33a01ae3e64b1bcb0d23a0773e2eedb",
+      "worlds": 4
+    },
+    "audit_exit": 0,
+    "claim": "Fresh exposed engineering accounts; no original-account migration or annual-commercial confirmation",
+    "completed_resume_exit": 0,
+    "horizon_days": 14,
+    "registered_worlds": 4,
+    "run_exit": 0
+  },
+  "preserved_hosted_failure": {
+    "cause": "COMPOSED_SOURCE_DELTA_CHANGED; full tests did not qualify this head. Current registration refreshed separately, historical evidence preserved.",
+    "errors": 1,
+    "failures": 10,
+    "head": "f57f039f119557613aa6781663fa869dfc240bbf",
+    "job": 124861158113,
+    "market_index_run": 41311001516,
+    "run": 41311001517,
+    "tests": 1560
+  },
+  "primary_registered_source_sha256": "c688c9ece849825340ed9617f93a8823b2545ef8ff1228a79eddba09f2a77dae",
+  "publication_binding_tests": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_publication_binding",
+      "tests.test_publication_composition",
+      "-v"
+    ],
+    "count": 27,
+    "exit_code": 0
+  },
+  "schema": "compounding055/local-qualification/v1",
+  "scope": "LOCAL_SOURCE_MATCHED_ENGINEERING_NOT_MERGE_OR_RELEASE_QUALIFICATION"
+}
