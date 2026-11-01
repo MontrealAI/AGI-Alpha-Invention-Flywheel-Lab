@@ -53,7 +53,7 @@ def fresh_account_config(manifest, *, prospective_policy=None, root=None):
 
 
 def validate_config(cfg):
-    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','monetary_policy','complete_offer_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','monetary_policy','complete_offer_policy','refusal_recourse_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
     for key in ['horizon_days','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
     # Explicit finite scenario population; no universal market ceiling.
@@ -69,6 +69,11 @@ def validate_config(cfg):
         from .complete_offer_market import validate_policy as validate_market
         validate_market(cfg['complete_offer_policy'])
         if 'strategic_policy' not in cfg or 'sequence' in cfg.get('strategic_allocation_policy',{}):raise ValueError('COMPLETE_OFFER_REQUIRES_SINGLE_OPPORTUNITY_JOINT_POLICY')
+    if 'refusal_recourse_policy' in cfg:
+        policy=cfg['refusal_recourse_policy']
+        if not isinstance(policy,dict) or set(policy)!={'schema','daily_planning_cost'} or policy['schema']!='connected-refusal-recourse/v1' or type(policy['daily_planning_cost'])is not int or policy['daily_planning_cost']<=0:raise ValueError('EXPLICIT_PREPAID_REFUSAL_RECOURSE_REQUIRED')
+        if 'strategic_policy' not in cfg or 'complete_offer_policy' not in cfg:raise ValueError('REFUSAL_RECOURSE_REQUIRES_COMPLETE_PUBLIC_MARKET')
+        if cfg.get('strategic_allocation_policy',{}).get('risk',{}).get('interactions'):raise ValueError('REFUSAL_RECOURSE_INTERACTIONS_UNSUPPORTED')
     if 'cash_diagnostic_available' in cfg and (type(cfg['cash_diagnostic_available']) is not int or not 0<=cfg['cash_diagnostic_available']<=10**15):raise ValueError('FINITE_DIAGNOSTIC_CASH_REQUIRED')
     if 'prospective_policy' in cfg:
         from .capital_lifecycle import validate_policy
@@ -290,7 +295,15 @@ def _prepare_plan(state,account,jobs):
     if joint is not None and 'complete_offer_policy' in cfg:
         from .capacity_signal import capacity_declined_customers
         capacity_only_customers=capacity_declined_customers(joint['allocation'])
-    for b in candidates:
+    recourse_enabled='refusal_recourse_policy' in cfg
+    recourse_round=0
+    if recourse_enabled:
+        joint['refusal_recourse']={'policy':copy.deepcopy(cfg['refusal_recourse_policy']),'attempts':[],'rounds':[]}
+    remaining_buyers=list(candidates)
+    while remaining_buyers:
+        selected_first=next((buyer for buyer in remaining_buyers if buyer['id'] in joint_selected),None) if recourse_enabled else None
+        b=selected_first if selected_first is not None else remaining_buyers[0]
+        remaining_buyers.remove(b)
         if draw(seed,[day,b['id']],'need')>=cfg['arrival_bps']/10000:continue
         service=SERVICES[b['service_index']%3];human=cfg['human_comparator'][service];anchor=int((human['hours']*human['loaded_usd_hour']+2)*MICRO)
         selected=_offer(jobs,simulated,b,cfg);blocked=None;method_plan=None;joint_choice=None
@@ -322,11 +335,25 @@ def _prepare_plan(state,account,jobs):
             prepared['declines'].append({'kind':blocked,'customer_id':b['id'],'time':t})
             choice=buyer_choice(b,service,anchor)
             if joint is not None:choice.update(joint_allocation_sha256=joint['id'],joint_option_id=None)
+            if recourse_enabled:choice['joint_recourse_round']=recourse_round
             prepared['declines'].append(choice)
             continue
         decision=buyer_choice(b,service,anchor,price)
         if joint_choice:decision.update(joint_allocation_sha256=joint['id'],joint_option_id=joint_choice['joint_option_id'])
+        if recourse_enabled:decision['joint_recourse_round']=recourse_round
         prepared['declines'].append(decision)
+        if recourse_enabled:
+            trace=joint['refusal_recourse']
+            trace['attempts'].append({'customer_id':b['id'],'option_id':joint_choice['joint_option_id'],'accepted':decision['buyer_choice']=='us'})
+            if decision['buyer_choice']!='us':
+                from .refusal_recourse import recourse
+                from .strategic_commerce import selected_delivery
+                from .capacity_signal import capacity_declined_customers
+                renewed=recourse(joint['allocation'],trace['attempts'])
+                trace['rounds'].append({'after_attempts':len(trace['attempts']),'allocation':renewed})
+                recourse_round+=1
+                joint_selected={option['execution']['customer_id']:selected_delivery(renewed,option['id']) for option in renewed['decision']['selected_options'] if option['kind']=='delivery'}
+                capacity_only_customers=capacity_declined_customers(renewed)
         if decision['buyer_choice']!='us':continue
         ident=f"order-{len(state['orders'])+len(prepared['orders']):04d}"
         order={'id':ident,'customer_id':b['id'],'job_id':entry['job']['id'],'work_keys':entry['job']['work_keys'],'offer':offer,'price':price,
@@ -345,6 +372,7 @@ def _prepare_plan(state,account,jobs):
             order.update(terms=terms,terms_id='terms-'+ident,terms_sha256=digest(terms),premium=terms['premium_microUSD'],resource_cost=cost-fee-terms['premium_microUSD'])
         if method_plan:order['method_plan']=method_plan
         if joint_choice:order.update(joint_allocation_sha256=joint['id'],joint_option_id=joint_choice['joint_option_id'])
+        if recourse_enabled:order['joint_recourse_round']=recourse_round
         prepared['orders'].append(order);simulated['used_jobs'].append(order['job_id']);liquidity-=cost+price
     return prepared
 
@@ -386,6 +414,15 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
             if state['current'] is None:
                 if 'strategic_policy' in cfg and state['queue'][0]['kind']=='plan':
                     now=state['queue'][0]['time'];cost('maintenance-'+str(now//24),cfg['maintenance_daily'],now,'maintenance')
+                    if 'refusal_recourse_policy' in cfg:
+                        ident='recourse-planning-'+str(now//24);fee=cfg['refusal_recourse_policy']['daily_planning_cost']
+                        prior=[a for a in account.export()['ledger']['actions'] if a['op']=='cost' and a['args'].get('id')==ident]
+                        if prior:
+                            if len(prior)!=1 or prior[0]['args']!={'id':ident,'amount':fee} or prior[0]['day']!=now:raise ValueError('RECOURSE_PREPAYMENT_REPLAY_CHANGED')
+                            funding_before=prior[0]['before']
+                        else:funding_before=account.snapshot()['summary']
+                        if funding_before['available']<fee or funding_before.get('investmentStopped'):raise ValueError('RECOURSE_PLANNING_NOT_FUNDED')
+                        cost(ident,fee,now,'prepaid_finite_refusal_recourse')
                 state['current']=_prepare_plan(state,account,jobs);_write(path,account.seal_checkpoint(state))
             p=state['current'];ev=p['event'];t=ev['time'];day=t//24;kind=ev['kind'];byid={b['id']:b for b in state['buyers']}
             if kind=='startup':

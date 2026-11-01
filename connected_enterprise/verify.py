@@ -307,6 +307,7 @@ def _check_cost_semantics(result, tape, lifecycle):
     for day in range(cfg['horizon_days']):
         moment = day * 24
         add('maintenance-' + str(day), cfg['maintenance_daily'], moment, 'maintenance')
+        if 'refusal_recourse_policy' in cfg:add('recourse-planning-'+str(day),cfg['refusal_recourse_policy']['daily_planning_cost'],moment,'prepaid_finite_refusal_recourse')
         units = lifecycle['daily_outreach_units_recomputed'][moment]
         add('outreach-' + str(day), cfg['exposure_cost'] * units, moment, 'outreach_including_failed_and_unused_slots')
         attempts = sum(row.get('kind') == 'offer' and row['time'] == moment for row in result['decisions'])
@@ -582,6 +583,16 @@ def audit(root, manifest, result):
     resource_requests = {entry['receipt']['id']: entry['request']
                          for entry in result['owned_account']['connected_journal']['entries']
                          if entry['request']['operation'] == 'spend'}
+    # Validate causal public decisions before resolving method plans from recourse rounds.
+    lifecycle_receipt = _check_customer_lifecycle(result)
+    from .strategic_audit import audit_decisions
+    strategic_receipt = audit_decisions(root, manifest, result, lifecycle_receipt)
+    market_receipt = _check_market_decisions(result, tape)
+    verified_allocations = dict(result.get('joint_actions', {}))
+    for wrapper in result.get('joint_actions', {}).values():
+        for round_record in wrapper.get('refusal_recourse', {}).get('rounds', []):
+            allocation = round_record['allocation']
+            verified_allocations[digest(allocation)] = {'allocation': allocation}
     used = set()
     onboarding_seen = set()
     collections, accepted = 0, 0
@@ -644,7 +655,7 @@ def audit(root, manifest, result):
                 positions={(e.get('order_id'),e['kind']):i for i,e in enumerate(result['events']) if e.get('order_id') is not None}
                 prior=[o for o in orders.values() if o['production_time']<=row['qualified_time'] and positions.get((o['id'],'PRODUCTION'),len(result['events']))<positions.get((row['id'],'QUALIFIED_ORDER'),-1) and o.get('method_execution',{}).get('mode')=='critic_retain' and o.get('method_execution',{}).get('memory')==memory]
                 if not prior:raise ValueError('RETAINED_CONTEXT_HAS_NO_PRIOR_OPERATING_ACQUISITION')
-            audit_order(root,manifest,row,result['owned_account'],cfg['mechanism_policy'],result.get('joint_actions'))
+            audit_order(root,manifest,row,result['owned_account'],cfg['mechanism_policy'],verified_allocations)
         elif 'method_plan' in row:raise ValueError('UNAUTHORIZED_METHOD_POLICY')
         if row.get('method_plan',{}).get('mode')=='csv_backend':
             from .csv_backend029 import execute_service
@@ -703,10 +714,6 @@ def audit(root, manifest, result):
         raise ValueError('FULL_ENTERPRISE_COSTS_DO_NOT_RECONCILE')
     budget_receipt = check_budgets(result['buyers'], list(orders.values()))
     _check_buyer_origins(result['config'], result['seed'], result['buyers'])
-    lifecycle_receipt = _check_customer_lifecycle(result)
-    from .strategic_audit import audit_decisions
-    strategic_receipt=audit_decisions(root,manifest,result,lifecycle_receipt)
-    market_receipt = _check_market_decisions(result, tape)
     cost_semantics = _check_cost_semantics(result, tape, lifecycle_receipt)
     commercial_receipt = _check_commercial_result(result)
     investment_receipt = _check_investments(result, tape, orders)

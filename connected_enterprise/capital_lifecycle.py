@@ -62,7 +62,12 @@ def capital_metrics(result):
     for wrapper in result.get('joint_actions',{}).values():
         if 'cash_diagnostic_available' in result['config']:
             from .strategic_commerce import cash_opportunity_diagnostic
-            diagnostic=cash_opportunity_diagnostic(wrapper['allocation'],relaxed_available=max(wrapper['allocation']['observation']['summary']['available'],result['config']['cash_diagnostic_available']),declared_allocation_ceiling=result['config']['strategic_allocation_policy']['risk']['authorized_allocation'],operating_envelope=wrapper['operating_envelope'])
+            if 'strategic_game' in wrapper['allocation']:
+                # The available relaxation helper does not preserve this game's
+                # objective. Report unknown, never a fake zero or a late run failure.
+                diagnostic={'status':'UNAVAILABLE','reason':'STRATEGIC_GAME_CASH_DIAGNOSTIC_UNAVAILABLE'}
+            else:
+                diagnostic=cash_opportunity_diagnostic(wrapper['allocation'],relaxed_available=max(wrapper['allocation']['observation']['summary']['available'],result['config']['cash_diagnostic_available']),declared_allocation_ceiling=result['config']['strategic_allocation_policy']['risk']['authorized_allocation'],operating_envelope=wrapper['operating_envelope'])
             decision_local.append({'time':wrapper['time'],'diagnostic':diagnostic})
         for delivery in wrapper['allocation']['deliveries']:
             selection=delivery['selection']

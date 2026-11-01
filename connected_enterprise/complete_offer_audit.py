@@ -25,7 +25,13 @@ def audit_market(result,tape):
             from .strategic_commerce import selected_delivery
             wrapper=result.get('joint_actions',{}).get(d.get('joint_allocation_sha256'))
             if wrapper is None:raise ValueError('COMPLETE_OFFER_SELECTION_RECEIPT_REQUIRED')
-            pick=selected_delivery(wrapper['allocation'],d['joint_option_id'])
+            allocation=wrapper['allocation']
+            if 'refusal_recourse_policy' in cfg:
+                index=d.get('joint_recourse_round')
+                rounds=wrapper.get('refusal_recourse',{}).get('rounds',[])
+                if type(index)is not int or not 0<=index<=len(rounds):raise ValueError('COMPLETE_RECOURSE_ROUND_REQUIRED')
+                if index:allocation=rounds[index-1]['allocation']
+            pick=selected_delivery(allocation,d['joint_option_id'])
             if pick['job_id'] not in policy['requested_jobs'][ident]:raise ValueError('UNREQUESTED_CUSTOMER_JOB')
             if pick['price']!=price or pick['service_id']!=service:raise ValueError('COMPLETE_SCOPE_OR_QUOTE_CHANGED')
         elif price is not None:raise ValueError('NO_BID_CANNOT_HAVE_PRICE')

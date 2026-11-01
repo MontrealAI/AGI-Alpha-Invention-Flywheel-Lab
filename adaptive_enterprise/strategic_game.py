@@ -35,9 +35,12 @@ def validate_game(policy,scenarios):
     return policy
 
 
-def select_game(baskets,policy,risk,state_digest):
+def select_game(baskets,policy,risk,state_digest,mandatory_ids=()):
     """Rank complete native-feasible basket receipts; no authority returned."""
     validate_game(policy,risk['scenarios'])
+    if not isinstance(mandatory_ids,(tuple,list)) or any(not isinstance(x,str) for x in mandatory_ids) or len(set(mandatory_ids))!=len(mandatory_ids):raise ValueError('UNIQUE_GAME_COMMITMENTS_REQUIRED')
+    mandatory=set(mandatory_ids)
+    if any(not mandatory<=set(b['selected']) for b in baskets):raise ValueError('GAME_COMMITMENTS_REMOVED')
     count=len(baskets)*sum(len(x['responses']) for x in policy['scenarios'].values())
     if count>policy['max_response_states']:
         return {'status':'UNRESOLVED_RESPONSE_BOUND','selected_index':None,'response_states_required':count,'authorized_digest':None,'policy_sha256':digest(policy)}
@@ -63,21 +66,21 @@ def select_game(baskets,policy,risk,state_digest):
         expected=sum((Fraction(risk['scenarios'][s],10000)*n for s,n in nets.items()),Fraction(0));downside=max(Fraction(0),-min(nets.values()))
         option_expected={o['id']:sum((Fraction(risk['scenarios'][sid],10000)*value for sid,value in option_nets[o['id']].items()),Fraction(0)) for o in b['options']}
         earned_positive=all(option_expected[o['id']]>=1 for o in b['options'] if o['funding']=='EARNED')
-        eligible=not b['selected'] or expected>=1 and downside<=risk['worst_loss_limit'] and earned_positive
+        eligible=set(b['selected'])==mandatory or expected>=1 and downside<=risk['worst_loss_limit'] and earned_positive
         rows.append({'index':index,'selected':b['selected'],'reserve_amount':b['reserve_amount'],'scenario_responses':scenario_rows,'expected_net':str(expected),'downside':str(downside),'risk_adjusted':str(expected-Fraction(risk['downside_penalty_bps'],10000)*downside),'eligible_after_response':eligible,'option_expected_net_fraction':{k:str(v) for k,v in option_expected.items()}})
     eligible=[r for r in rows if r['eligible_after_response']]
-    if not eligible or not any(not r['selected'] for r in eligible):raise ValueError('COMPLETE_FEASIBLE_HOLD_REQUIRED')
+    if not eligible or not any(set(r['selected'])==mandatory for r in eligible):raise ValueError('COMPLETE_FEASIBLE_HOLD_REQUIRED')
     best={s:max(Fraction(r['scenario_responses'][s]['seller_net']) for r in eligible) for s in risk['scenarios']}
     for r in rows:
         regrets={s:best[s]-Fraction(r['scenario_responses'][s]['seller_net']) for s in best}
         r['regret_by_scenario']={s:str(v) for s,v in regrets.items()};r['worst_regret']=str(max(regrets.values()))
     winner=min(eligible,key=lambda r:(Fraction(r['worst_regret']),-Fraction(r['risk_adjusted']),-Fraction(r['expected_net']),r['reserve_amount'],r['selected']))
-    inputs={'baskets':copy.deepcopy(baskets),'policy':copy.deepcopy(policy),'risk':copy.deepcopy(risk),'native_state_digest':state_digest}
+    inputs={**({'mandatory_ids':sorted(mandatory)} if mandatory else {}),'baskets':copy.deepcopy(baskets),'policy':copy.deepcopy(policy),'risk':copy.deepcopy(risk),'native_state_digest':state_digest}
     return {'schema':SCHEMA,'status':'EXACT_COMPLETE_DECLARED_FEASIBLE_SET','selected_index':winner['index'],'selected_option_expected_net_fraction':winner['option_expected_net_fraction'],'inputs':inputs,'inputs_sha256':digest(inputs),'alternatives':rows,'scenario_best_feasible':{s:str(v) for s,v in best.items()},'response_states_evaluated':count,'authorized_digest':None,'scope':'Current-basket reduced-form positive-net-contribution stress and exact follower best response/minimax regret. Public hypothetical capture/cost/budget, not actual rival behavior or calibrated demand. Costs, negative contributions and native cash locks unchanged. Capacity recourse remains its frozen forecast model; no full-game/horizon equilibrium claim.'}
 
 
 def rederive(record):
-    i=record['inputs'];expected=select_game(i['baskets'],i['policy'],i['risk'],i['native_state_digest'])
+    i=record['inputs'];expected=select_game(i['baskets'],i['policy'],i['risk'],i['native_state_digest'],i.get('mandatory_ids',()))
     if expected!=record:raise ValueError('FINITE_GAME_CERTIFICATE_CHANGED')
     return expected
 
