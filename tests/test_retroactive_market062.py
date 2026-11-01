@@ -60,7 +60,7 @@ class NativePublicClaimBindingTests(unittest.TestCase):
                  'expected_net':834*MICRO,'allow_seed':False}
         native={'ledger':{'config':{'contract':'market062-shared'},
                  'orders':[{'id':'market062-'+buyer,'buyer':buyer,'state':'released',
-                            'price':1500*MICRO} for buyer in 'ABC'],
+                            'price':str(1500*MICRO)} for buyer in 'ABC'],
                  'actions':[{'op':'reserve','args':{'id':receipt['plan_id']},'before':before}]},
                 'connected_journal':{'entries':[{'key':'spend:third-sensor-adapter',
                      'status':'COMPLETE','funding':'EARNED','request':request,'receipt':receipt}]}}
