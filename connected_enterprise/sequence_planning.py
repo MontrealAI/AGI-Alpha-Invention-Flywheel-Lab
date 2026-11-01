@@ -8,9 +8,9 @@ from .sequence_window import compare_window
 
 
 def sequence_options(cfg, moment, snapshot, operating, jobs, used, investments,
-                     public_buyers, contacts, failed_channels, scenarios, current_delivery_reserve=0, channel_state=None):
+                     public_buyers, contacts, failed_channels, scenarios, current_delivery_reserve=0, channel_state=None, *, offer_menu_fn=None, current_delivery_customer_ids=()):
     if cfg['strategic_allocation_policy']['sequence'].get('composition')=='complete-offer-quantity-v1':
-        return _complete_menu_options(cfg,moment,snapshot,operating,jobs,used,investments,public_buyers,scenarios,current_delivery_reserve,channel_state)
+        return _complete_menu_options(cfg,moment,snapshot,operating,jobs,used,investments,public_buyers,scenarios,current_delivery_reserve,channel_state,offer_menu_fn,current_delivery_customer_ids)
     if 'channel_menu_policy' in cfg:
         return _menu_options(cfg,moment,snapshot,operating,jobs,used,investments,public_buyers,scenarios,current_delivery_reserve,channel_state)
     policy=cfg['strategic_allocation_policy']['sequence']
@@ -119,7 +119,7 @@ def _menu_options(cfg,moment,snapshot,operating,jobs,used,investments,buyers,sce
     return options
 
 
-def _complete_menu_options(cfg,moment,snapshot,operating,jobs,used,investments,buyers,scenarios,delivery_reserve,channel_state):
+def _complete_menu_options(cfg,moment,snapshot,operating,jobs,used,investments,buyers,scenarios,delivery_reserve,channel_state,offer_menu_fn=None,current_delivery_customer_ids=()):
     """Compose existing paired-channel and quantity forecasts for admitted work.
 
     Context groups share only public request/budget hypotheses. A counted future
@@ -129,9 +129,23 @@ def _complete_menu_options(cfg,moment,snapshot,operating,jobs,used,investments,b
     costed invoice can execute; subsequent observations must replan everything.
     """
     if cfg['complete_offer_policy']['selection']=='restricted':raise ValueError('RESTRICTED_COMPLETE_SEQUENCE_LIFECYCLE_UNAVAILABLE')
+    delay=cfg['strategic_allocation_policy']['sequence']['window_delay_days']
+    if type(delay) is not int or not 1<=delay<7:raise ValueError('COMPLETE_SEQUENCE_LONG_WINDOW_LIFECYCLE_UNAVAILABLE')
+    if not isinstance(current_delivery_customer_ids,(list,tuple)) or any(not isinstance(ident,str) for ident in current_delivery_customer_ids) or len(current_delivery_customer_ids)!=len(set(current_delivery_customer_ids)) or not set(current_delivery_customer_ids)<=set(buyers):raise ValueError('EXACT_CURRENT_DELIVERY_CUSTOMER_CONTEXT_REQUIRED')
+    current_customers=set(current_delivery_customer_ids)
     from .channel_menu import validate_policy
     from .sequence_channels import forecast_contract
-    from .complete_offer_market import market_context
+    from .complete_offer_market import compile_market
+    from .startup_acquisition048 import _admission_frontier,_prepared_menu
+    if offer_menu_fn is None:
+        from .engine import _offer_menu
+        offer_menu_fn=_offer_menu
+    market=compile_market(cfg['complete_offer_policy'])
+    menu_fn=_prepared_menu(offer_menu_fn,market)
+    # Every future-eligible buyer within <168h retains observed need priority
+    # and expenditure: any interim outside purchase or completed/refunded order
+    # instead gives a 168h cooldown; an uncleared order remains pending.
+    frontier=_admission_frontier(cfg,buyers,jobs,menu_fn)
     if channel_state is None:raise ValueError('OBSERVED_CHANNEL_BOOK_REQUIRED')
     policy=cfg['strategic_allocation_policy']['sequence'];future=moment+24*policy['window_delay_days'];finish=future+cfg['production_hours']
     menu=validate_policy(cfg['channel_menu_policy'],cfg['channels'])
@@ -149,15 +163,18 @@ def _complete_menu_options(cfg,moment,snapshot,operating,jobs,used,investments,b
     groups={}
     for ident,buyer in sorted(buyers.items()):
         pending=bool(buyer['pending_commitments']) if 'pending_commitments' in buyer else buyer.get('pending') is not None
-        if not buyer['active'] or pending or buyer['next_need_time']>future:continue
+        if not buyer['active'] or pending or buyer['next_need_time']>future or ident not in frontier or ident in current_customers:continue
         spend=buyer['observed_spend'] if 'observed_spend' in buyer else buyer['outside_spend']+buyer['our_settled_spend']+sum(buyer['pending_commitments'].values())
-        context=market_context(cfg['complete_offer_policy'],ident,spend,True);key=digest(context)
-        group=groups.setdefault(key,{'context':context,'ids':[]});group['ids'].append(ident)
+        context=market.context(ident,spend,True);context_hash=digest(context);blocked=frontier[ident][1];blocked_hash=digest(sorted(blocked))
+        key=digest({'public_context_sha256':context_hash,'higher_priority_requested_work_sha256':blocked_hash})
+        group=groups.setdefault(key,{'context':context,'context_sha256':context_hash,'blocked':blocked,'blocked_sha256':blocked_hash,'ids':[]})
+        group['ids'].append(ident)
     options=[]
     for group_id,group in sorted(groups.items()):
         context=group['context'];ids=group['ids']
         common=set.intersection(*(set(cfg['complete_offer_policy']['requested_jobs'][ident]) for ident in ids))
-        available=[entry for ident,entry in sorted(jobs.items()) if ident in common and ident not in used and entry['job']['accepted'] and entry['artifact'].get('outcome_scope')=='complete_outcome' and not consumed.intersection(entry['job']['work_keys'])]
+        unavailable_work=consumed|group['blocked']
+        available=[entry for ident,entry in sorted(jobs.items()) if ident in common and ident not in used and entry['job']['accepted'] and entry['artifact'].get('outcome_scope')=='complete_outcome' and not unavailable_work.intersection(entry['job']['work_keys'])]
         for service in context['profile']['services']:
             cohort=[];work=set(consumed)
             for entry in available:
@@ -176,7 +193,11 @@ def _complete_menu_options(cfg,moment,snapshot,operating,jobs,used,investments,b
             for contract_id in menu['contract_ids']:
                 channel=forecast_contract(cfg['channels'],channel_state,buyers,moment//24,future//24,contract_id,owned_contact_count=policy['owned_contact_count'],target_customer_ids=ids)
                 forecast=compare_window(cfg,policy,selection,cash,now_hours=moment,future_existing_slots=slots,unused_inventory=len(cohort),eligible_new_contacts=len(ids),allow_channel=channel['new_tranche_admissible'],allow_capacity=not outage and remaining>0,channel_forecast=channel,max_capacity_quantity=remaining)
-                profile={'service':service,'public_context_sha256':group_id,'customer_ids':ids,'admitted_job_ids':[e['job']['id'] for e in cohort],
+                profile={'service':service,'public_context_sha256':group['context_sha256'],'customer_ids':ids,'admitted_job_ids':[e['job']['id'] for e in cohort],
+                    'higher_priority_requested_work_sha256':group['blocked_sha256'],
+                    'preceding_possible_menus':{ident:frontier[ident][0] for ident in ids},
+                    'excluded_current_delivery_customer_ids':sorted(current_customers),
+                    'admission_scope':'Observed native priority for a window strictly shorter than the 168-hour post-transaction cooldown; standalone possible predecessor menus and all their requested complete work constrain every route. Admission is necessary, not a guarantee of future arrival or purchase.',
                     'admitted_work_keys':sorted({key for e in cohort for key in e['job']['work_keys']}),'capacity_units':units,'forecast':forecast}
                 for route in forecast['routes']:
                     quantity=route['capacity_quantity']

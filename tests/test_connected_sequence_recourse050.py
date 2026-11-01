@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from adaptive_enterprise.instruments import prepare_complete_offer_services
+from adaptive_enterprise.instruments import prepare_complete_offer_services,load_jobs
 from connected_enterprise.engine import run_world,validate_config
 from connected_enterprise.sequence_window import compare_window,future_recourse_envelope
 from connected_enterprise.verify import audit
@@ -73,7 +73,15 @@ class NativeSequenceRecourseCompatibility(unittest.TestCase):
             folder=Path(temporary)
             manifest=prepare_complete_offer_services(ROOT,str(folder.relative_to(ROOT)/'services'),cohort_seed=261101051,packet_jobs=8,packet_rows=12)
             for name,policy in (('v1',{'schema':'connected-refusal-recourse/v1','daily_planning_cost':10000}),('v2',{'schema':'connected-selective-refusal-recourse/v2','daily_planning_cost':10000,'daily_evaluation_cost':5000})):
-                cfg=fixture.config(manifest);cfg['horizon_days']=5;cfg['refusal_recourse_policy']=policy
+                # New053 regression control: explicit six-place admission and
+                # disjoint owned/prospect requests. The old shared-work study
+                # factory remains unchanged and no longer certifies these
+                # impossible five-day future prospects.
+                cfg=fixture.admitted_control(manifest,load_jobs(ROOT,manifest),maximum=6)
+                for profile in cfg['complete_offer_policy']['profiles']:
+                    for atom in profile['atoms']:
+                        atom['values']={s:150000000 if s=='receivables_packet' else 45000000 for s in profile['services']}
+                cfg['horizon_days']=5;cfg['refusal_recourse_policy']=policy
                 path=folder/name
                 paused=run_world(ROOT,manifest,cfg,261101051,'competitive_growth',path,stop_after_events=2)
                 self.assertFalse(paused['complete'])

@@ -138,7 +138,7 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
         investments=sequence_options(cfg,prepared['event']['time'],snapshot,operating_envelope,jobs,
             set(state['used_jobs'])|{d['selection']['problem']['job_id'] for d in deliveries},
             state['investments'],public_buyers,prepared['channel_after']['contacts'],failed,risk['scenarios'],
-            sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in deliveries),channel_state=prepared['channel_after'])
+            sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in deliveries),channel_state=prepared['channel_after'],offer_menu_fn=offer_menu_fn,current_delivery_customer_ids=sorted({d['customer_id'] for d in deliveries}))
     if 'startup_acquisition_policy' in cfg:
         from .startup_acquisition048 import options as startup_options
         investments.extend(startup_options(cfg,state['arm'],prepared['event']['time'],snapshot,operating_envelope,jobs,set(state['used_jobs'])|{d['selection']['problem']['job_id'] for d in deliveries},{b['id']:b for b in state['buyers']},risk['scenarios'],offer_menu_fn,prior_orders=bool(state['orders']),prior_investments=bool(state['investments'])))

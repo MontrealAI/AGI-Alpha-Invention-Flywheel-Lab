@@ -170,6 +170,7 @@ def audit_decisions(root,manifest,result,lifecycle):
                 expected_investments.append(investment_option('capacity-'+str(day),'capacity',cfg['capacity_price'],int(forecast-cfg['capacity_price']),risk['scenarios'],day,contract))
         if 'sequence' in cfg['strategic_allocation_policy']:
             from .sequence_planning import sequence_options
+            from .engine import _offer_menu
             sequence_buyers=buyers
             if cfg['strategic_allocation_policy']['sequence'].get('composition')=='complete-offer-quantity-v1':
                 sequence_buyers=copy.deepcopy(buyers)
@@ -182,7 +183,7 @@ def audit_decisions(root,manifest,result,lifecycle):
                 {ident:{'job':job,'artifact':artifacts[ident]} for ident,job in jobs.items()},
                 used,previous_investments,sequence_buyers,contacts,failed,risk['scenarios'],
                 sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in record['deliveries']),
-                channel_state=sequence_book.export() if 'channel_menu_policy' in cfg else None)
+                channel_state=sequence_book.export() if 'channel_menu_policy' in cfg else None,offer_menu_fn=_offer_menu if 'complete_offer_policy' in cfg else None,current_delivery_customer_ids=sorted({ident for ident,job in expected_deliveries}))
         if 'startup_acquisition_policy' in cfg:
             from .startup_acquisition048 import options as startup_options
             from .engine import _offer_menu

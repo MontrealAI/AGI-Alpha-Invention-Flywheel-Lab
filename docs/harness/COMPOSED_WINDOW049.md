@@ -29,6 +29,62 @@ future existing-customer access; all initial-owned and acquired-active contact
 costs are charged conservatively. The forecast counts target-group contacts but
 pays for the full channel's unsuccessful and irrelevant attempts/qualification.
 
+## Native admission and bounded lifecycle applicability
+
+Reach is not native shortlist admission. Before grouping or valuing complete
+offers, the forecast counts every possible higher-priority standalone nonempty
+menu under observed `(next_need_time, id)` order. Empty menus consume no place;
+zero-value, capacity-infeasible, inactive and unknown potential predecessors
+still compete conservatively for the existing `max_customers`. Blocker menus
+are not tentatively deduplicated: an absent earlier buyer could leave their
+requested work available to a later predecessor. Each credited pool excludes
+all admitted requested accepted complete work of its predecessors, including
+alternatives beyond the current minimum job. Groups separate incompatible work
+exclusions; `public_context_sha256` still hashes the actual market context.
+
+The same safe pool constrains acquisition, channel-plus-capacity and capacity-only
+routes. Only target IDs are restricted: the full buyer population remains in
+`ChannelBook` forecasts, paid-pool dilution, unsuccessful slots and operating
+costs. Native candidate ordering, physical capacity, ledger and policy defaults
+are unchanged. A fixed exposed control with four nonempty zero-value owned menus
+rejects later prospects at four shortlist places even after hypothetical paid
+exposure in the actual pure planner. Explicit five/six-place controls with
+disjoint requested work admit the corresponding prospects; these are new test
+controls, not changes to the historical study factory or cohorts.
+
+Complete-composed windows now require an integer delay of one through six days.
+Seven days or longer are explicitly
+`COMPLETE_SEQUENCE_LONG_WINDOW_LIFECYCLE_UNAVAILABLE` before account creation or
+low-level forecast valuation. For any buyer still eligible within less than
+168 hours, observed priority and expenditure cannot change in between: outside
+purchases and all completed orders, including default or quality refunds, set
+the next need 168 hours after that event; an uncleared order remains pending.
+This is a necessary admission bound conditional on future eligibility, not a
+guarantee of survival, arrival, available inventory, acceptance or profit. The
+default two-day window remains supported. Longer and restricted-service lifecycle
+composition require a separately modeled and independently reconstructed route.
+
+All currently proposed delivery buyers are also excluded from future credit,
+even when the outer allocator eventually holds their current quote. Otherwise
+it could choose a current order and a future investment justified by another job
+for that same buyer, despite the known pending/cooldown conflict. This conservative
+exclusion matches the existing maximum-shortlist cash preflight and can forgo
+feasible conditional opportunities; it is not joint-horizon optimality. Current
+buyers remain possible blockers and remain in the paid population. Native
+planning passes its actual proposal IDs and canonical menu callback; the auditor
+independently reconstructs both. Later actions still observe, replan and reserve.
+
+New pure controls cover both investment kinds, nonminimum shared work, current
+versus future customer conflicts, full paid-pool costs, callback/profile reuse,
+private-state invariance and the strict six/seven-day boundary. A native blocked
+case retains setup, maintenance, owned outreach and qualification expenses,
+independent audit and unchanged same-account resume. Earlier four-world and
+five-policy financial results remain bound to their original sources.
+The five-day native recourse regression separately declares a six-place,
+profitable-owned, disjoint-request control so an admitted forecast actually
+exercises v1/v2 future-fee reconstruction and tamper rejection. It does not alter
+the study factory, old cohorts, policies or fixed seed to relabel old results.
+
 This composition requires `complete_offer_policy.selection: menu`.
 `selection: restricted` remains supported by ordinary complete-offer operation,
 but its combination with `complete-offer-quantity-v1` is explicitly
@@ -133,8 +189,7 @@ and quantity regressions remain required. Full source-qualified integration and
 downloaded-release operation are separate gates.
 
 Restricted regressions compare the empty actual menu with the rejected
-forecast, require rejection before valuation/account creation, retain exact menu
-forecast golden parity, and operate/audit/resume the ordinary restricted path
+forecast, require rejection before valuation/account creation, and operate/audit/resume the ordinary restricted path
 without the unsupported composition. Existing menu composition still exercises
 actual earned-funded acquisition, complementary capacity and native delivery.
 

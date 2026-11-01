@@ -22,7 +22,42 @@ def config(manifest,composed=True):
  if composed:cfg['strategic_allocation_policy']['sequence']={'schema':'public-sequence-window/v1','composition':'complete-offer-quantity-v1','provenance':'Exposed integration hypotheses; finite public contact seeds, never realized future draws.','window_delay_days':2,'owned_contact_count':4,'owned_available_bps':2500,'service_share_bps':10000,'arrival_bps':10000,'future_rival_price_bps':9000}
  return cfg
 
+def admitted_control(manifest,jobs,maximum=4):
+ """New exposed053 admission controls; never the historical study factory."""
+ cfg=config(manifest);cfg.update(initial_slots=3,maximum_slots=3)
+ cfg['strategic_allocation_policy']['max_customers']=maximum
+ cfg['strategic_allocation_policy']['sequence']['window_delay_days']=1
+ cfg['channels']['pilot']['slots_per_day']=4
+ base=cfg['complete_offer_policy']['profiles'][0];profiles=[]
+ for i in range(16):
+  p=copy.deepcopy(base);p['id']='admission053-profile-'+str(i)
+  p['atoms']=[{'weight_bps':10000,'budget_microUSD':2000000000,'values':{s:(150000000 if s=='receivables_packet' else 45000000) if i in (8,11) else 0 for s in p['services']}}]
+  profiles.append(p)
+ cfg['complete_offer_policy']['profiles']=profiles
+ primitive=sorted(ident for ident,e in jobs.items() if e['job']['service_id']=='reconciliation' and e['job']['accepted'] and e['artifact'].get('outcome_scope')=='complete_outcome')
+ packets=sorted(ident for ident,e in jobs.items() if e['job']['service_id']=='receivables_packet' and e['job']['accepted'] and e['artifact'].get('outcome_scope')=='complete_outcome')
+ cfg['complete_offer_policy']['requested_jobs']={f'SIM-customer-{i:03d}':([primitive[i]] if i<4 else packets[:2] if i==4 else packets[2:3] if i==5 else []) for i in range(8)}
+ return cfg
+
 class ComposedWindowOperating(unittest.TestCase):
+ def test_blocked_admission_keeps_native_costs_audit_and_same_account_resume(self):
+  from adaptive_enterprise.instruments import load_jobs
+  with tempfile.TemporaryDirectory(prefix='.composed-admission053-',dir=ROOT) as tmp:
+   folder=Path(tmp);manifest=prepare_complete_offer_services(ROOT,str(folder.relative_to(ROOT)/'jobs'),cohort_seed=2611010531,packet_jobs=3,packet_rows=12)
+   cfg=admitted_control(manifest,load_jobs(ROOT,manifest));cfg['horizon_days']=4
+   paused=run_world(ROOT,manifest,cfg,2611010531,'competitive_growth',folder/'world',stop_after_events=2)
+   prefix=copy.deepcopy(paused['owned_account']['ledger']['actions'])
+   result=run_world(ROOT,manifest,cfg,2611010531,'competitive_growth',folder/'world')
+   self.assertTrue(audit(ROOT,manifest,result)['accepted']);self.assertEqual(result['orders'],[]);self.assertEqual(result['investments'],[])
+   self.assertEqual(result['owned_account']['ledger']['actions'][:len(prefix)],prefix)
+   self.assertEqual(result['summary']['expenses'],sum(c['amount'] for c in result['costs']))
+   for category in ('development_integration_qualification_and_failed_search','maintenance','outreach_including_failed_and_unused_slots','qualification_including_lost_offers'):
+    self.assertGreater(sum(c['amount'] for c in result['costs'] if c['category']==category),0)
+   for w in result['joint_actions'].values():
+    self.assertEqual({d['customer_id'] for d in w['allocation']['deliveries']},{f'SIM-customer-{i:03d}' for i in range(4)})
+    self.assertFalse(any('first_investment' in o['execution'] for o in w['allocation']['investments']))
+   resumed=run_world(ROOT,manifest,cfg,2611010531,'competitive_growth',folder/'world')
+   self.assertEqual(result['owned_account'],resumed['owned_account']);self.assertTrue(audit(ROOT,manifest,resumed)['accepted'])
  def test_restricted_composition_rejected_before_account_but_ordinary_path_resumes(self):
   with tempfile.TemporaryDirectory(prefix='.restricted-composed051-',dir=ROOT) as tmp:
    folder=Path(tmp);manifest=prepare_complete_offer_services(ROOT,str(folder.relative_to(ROOT)/'jobs'),cohort_seed=2611010511,packet_jobs=8,packet_rows=12)
@@ -67,6 +102,10 @@ class ComposedWindowOperating(unittest.TestCase):
     self.assertEqual(len(keys),len(set(keys)))
     self.assertTrue(all(r['delivery_capacity_units']==profile['capacity_units'] for r in profile['forecast']['routes']))
     if option['kind']=='capacity':self.assertEqual(option['upfront_cost'],option['execution']['purchased_units']*cfg['capacity_price'])
+   for wrapper in calls:
+    current={d['customer_id'] for d in wrapper['allocation']['deliveries']}
+    for option in wrapper['allocation']['investments']:
+     if 'first_investment' in option['execution']:self.assertTrue(current.isdisjoint(option['execution']['forecast']['customer_ids']))
    selected=[o for w in calls for o in w['allocation']['decision']['selected_options'] if 'first_investment' in o['execution']]
    self.assertTrue(any(o['kind']=='capacity' and o['execution'].get('purchased_units')==2 for o in selected))
    self.assertTrue(any(o['kind']=='acquisition' for o in selected))
@@ -92,22 +131,108 @@ class ComposedWindowForecasts(unittest.TestCase):
   self.cfg=config({'jobs':[x['job'] for x in self.jobs.values()]})
   self.buyers={f'SIM-customer-{i:03d}':{'id':f'SIM-customer-{i:03d}','onboarded':False,'active':True,'pending_commitments':{},'next_need_time':0,'outside_spend':0,'our_settled_spend':0} for i in range(8)}
   self.obs={'scope':'SIMULATED','state_digest':'a'*64,'summary':{'available':1000000000,'unrestrictedEarned':1000000000}}
- def options(self,*,used=(),investments=(),buyers=None,delivery_reserve=0):
+ def options(self,*,used=(),investments=(),buyers=None,delivery_reserve=0,moment=0,current_customers=(),menu_fn=None):
   from connected_enterprise.sequence_planning import sequence_options
   from connected_enterprise.channels import ChannelBook
-  book=ChannelBook(1,self.cfg['channels']);book.expose(0,list(self.buyers.values()))
-  return sequence_options(self.cfg,0,self.obs,0,self.jobs,set(used),list(investments),self.buyers if buyers is None else buyers,{},set(),self.cfg['strategic_allocation_policy']['risk']['scenarios'],current_delivery_reserve=delivery_reserve,channel_state=book.export())
+  book=ChannelBook(1,self.cfg['channels']);book.expose(moment//24,list(self.buyers.values()))
+  return sequence_options(self.cfg,moment,self.obs,0,self.jobs,set(used),list(investments),self.buyers if buyers is None else buyers,{},set(),self.cfg['strategic_allocation_policy']['risk']['scenarios'],current_delivery_reserve=delivery_reserve,channel_state=book.export(),offer_menu_fn=menu_fn,current_delivery_customer_ids=current_customers)
+ def admission_case(self,maximum=4):
+  from connected_enterprise.engine import _buyers
+  for i in range(4):
+   ident='owned-'+str(i);self.jobs[ident]={'job':{'id':ident,'service_id':'reconciliation','accepted':True,'work_keys':['owned-work-'+str(i)]},'artifact':{'method':'canonical','outcome_scope':'complete_outcome'}}
+  self.cfg=admitted_control({'jobs':[e['job'] for e in self.jobs.values()]},self.jobs,maximum)
+  self.buyers={b['id']:b for b in _buyers(self.cfg,2611010531)}
  def test_restricted_packet_only_empty_menu_rejected_before_forecast_valuation(self):
   from connected_enterprise.engine import _offer_menu
-  menu=self.options();self.assertTrue(any(o['kind']=='acquisition' for o in menu));self.assertTrue(any(o['kind']=='capacity' and o['execution']['purchased_units']==2 for o in menu))
+  menu=self.options();self.assertFalse(any(o['kind']=='acquisition' for o in menu));self.assertTrue(any(o['kind']=='capacity' and o['execution']['purchased_units']==2 for o in menu))
   self.cfg['complete_offer_policy']['selection']='restricted'
   for index,buyer in enumerate(self.buyers.values()):buyer['service_index']=index%3
   for buyer in self.buyers.values():self.assertEqual(_offer_menu({'used_jobs':[]},self.jobs,buyer,self.cfg),[])
   with self.assertRaisesRegex(ValueError,'RESTRICTED_COMPLETE_SEQUENCE_LIFECYCLE_UNAVAILABLE'):validate_config(self.cfg)
   with patch('connected_enterprise.sequence_planning.select',side_effect=AssertionError('UNAVAILABLE_PROFILE_VALUED')),patch('connected_enterprise.sequence_channels.forecast_contract',side_effect=AssertionError('UNAVAILABLE_REACH_VALUED')):
    with self.assertRaisesRegex(ValueError,'RESTRICTED_COMPLETE_SEQUENCE_LIFECYCLE_UNAVAILABLE'):self.options()
- def test_menu_forecast_golden_parity_after_restricted_unavailable_guard(self):
-  self.assertEqual(digest(self.options()),'8d9dffb806f2cda9784a7ba3d9370133638f273aea1c2af238aa490975c1da6d')
+ def test_shared_work_frontier_retains_only_the_admitted_owned_context(self):
+  rows=self.options();self.assertTrue(rows)
+  self.assertTrue(all(o['execution']['forecast']['customer_ids']==['SIM-customer-000'] for o in rows))
+  from connected_enterprise.complete_offer_market import market_context
+  for row in rows:self.assertEqual(row['execution']['forecast']['public_context_sha256'],digest(market_context(self.cfg['complete_offer_policy'],'SIM-customer-000',0,True)))
+ def test_native_priority_blocks_acquisition_and_actual_paid_exposure_control(self):
+  from connected_enterprise.engine import _initial,_prepare_plan
+  from connected_enterprise.channels import ChannelBook
+  self.admission_case();self.assertEqual(self.options(),[])
+  def planned():
+   state=_initial(self.cfg,2611010531,'competitive_growth',{})
+   book=ChannelBook(2611010531,self.cfg['channels']);book.expose(0,state['buyers']);book.purchase('pilot',0,'HYPOTHETICAL-PAID-ACCESS')
+   state['channel_state']=book.export();state['queue']=[{'kind':'plan','id':'plan-0001','time':24}]
+   return _prepare_plan(state,None,self.jobs,snapshot_override=self.obs)
+  blocked=planned()
+  self.assertTrue({'SIM-customer-004','SIM-customer-005'}<={x['customer_id'] for x in blocked['exposures']})
+  self.assertEqual({d['customer_id'] for d in blocked['joint_action']['allocation']['deliveries']},{f'SIM-customer-{i:03d}' for i in range(4)})
+  self.assertEqual(blocked['orders'],[])
+  self.cfg['strategic_allocation_policy']['max_customers']=5
+  rows=self.options();self.assertTrue(any(o['kind']=='acquisition' for o in rows))
+  self.assertTrue(all(o['execution']['forecast']['customer_ids']==['SIM-customer-004'] for o in rows))
+  self.assertEqual([o['customer_id'] for o in planned()['orders']],['SIM-customer-004'])
+  self.cfg['strategic_allocation_policy']['max_customers']=6
+  rows=self.options();self.assertEqual({ident for o in rows for ident in o['execution']['forecast']['customer_ids']},{'SIM-customer-004','SIM-customer-005'})
+  self.assertTrue(all(r['candidate']['attempted_slots_to_window']==4 for o in rows for r in o['execution']['forecast']['forecast']['channel_forecast']['rows']))
+ def test_admission_blocks_capacity_routes_and_keeps_acquired_control(self):
+  self.admission_case();self.cfg.update(initial_slots=1,maximum_slots=3)
+  for ident in ('SIM-customer-004','SIM-customer-005'):
+   self.buyers[ident].update(onboarded=True,next_need_time=168,our_settled_spend=120000000)
+  self.assertEqual(self.options(moment=168),[])
+  self.cfg['strategic_allocation_policy']['max_customers']=5
+  rows=self.options(moment=168)
+  self.assertTrue(any(o['kind']=='capacity' and o['execution']['purchased_units']==2 for o in rows))
+  self.assertTrue(all(o['execution']['forecast']['customer_ids']==['SIM-customer-004'] for o in rows))
+ def test_all_predecessor_requested_work_and_current_customers_are_excluded(self):
+  self.admission_case(maximum=6)
+  self.cfg['complete_offer_policy']['requested_jobs']['SIM-customer-000']=['owned-0','packet-0','packet-1']
+  rows=self.options(used=['packet-0'])
+  self.assertTrue(rows);self.assertTrue(all('SIM-customer-004' not in o['execution']['forecast']['customer_ids'] for o in rows))
+  self.assertEqual(self.options(used=['packet-0'],current_customers=['SIM-customer-005']),[])
+  with self.assertRaisesRegex(ValueError,'EXACT_CURRENT_DELIVERY_CUSTOMER_CONTEXT_REQUIRED'):self.options(current_customers=['not-a-buyer'])
+ def test_current_delivery_and_different_future_job_cannot_share_a_customer(self):
+  from adaptive_enterprise.strategies import offer_catalog
+  from connected_enterprise.strategic_commerce import select,allocate_actions
+  from connected_enterprise.complete_offer_market import market_context
+  self.jobs['primitive']={'job':{'id':'primitive','service_id':'reconciliation','accepted':True,'work_keys':['primitive-work']},'artifact':{'method':'canonical','outcome_scope':'complete_outcome'}}
+  self.cfg['complete_offer_policy']['requested_jobs']={ident:['primitive','packet-0','packet-1','packet-2'] if ident=='SIM-customer-000' else [] for ident in self.buyers}
+  self.cfg['strategic_allocation_policy']['sequence']['owned_available_bps']=10000
+  rows=self.options(used=['primitive','packet-0']);self.assertTrue(rows)
+  offer=next(o for o in offer_catalog(include_packet=True) if o['service_id']=='reconciliation' and o['method']=='canonical')
+  public={'anchor':30000000,'public_rival_price':27000000,'base_cost':sum(self.cfg[k] for k in ('production_cost','supplier_unit_cost','support_cost','onboarding_cost')),'payment_bps':self.cfg['payment_bps'],'payment_fixed':self.cfg['payment_fixed'],'available':self.obs['summary']['available'],'reserve_buffer':1000000,'quote_cost':0,'native_state_digest':self.obs['state_digest'],'profit_tax_bps':self.cfg['profit_tax_bps']}
+  selected=select(self.cfg['strategic_policy'],self.cfg['mechanism_policy'],'primitive',offer,None,public,market_context=market_context(self.cfg['complete_offer_policy'],'SIM-customer-000',0,True))
+  delivery={'id':'current-primitive','customer_id':'SIM-customer-000','selection':selected,'onboarding':self.cfg['onboarding_cost'],'exclusive_group':'customer-000','requires':[],'capacity_units':1,'work_keys':['primitive-work']}
+  old_context=allocate_actions(self.obs,[delivery],rows,self.cfg['strategic_allocation_policy']['risk'],max_delivery_slots=1)
+  self.assertTrue(any(o['kind']=='delivery' for o in old_context['decision']['selected_options']))
+  self.assertTrue(any(o['kind']=='capacity' for o in old_context['decision']['selected_options']))
+  self.assertEqual(self.options(used=['primitive','packet-0'],current_customers=['SIM-customer-000']),[])
+ def test_cooldown_window_boundary_rejects_before_valuation_and_account(self):
+  for delay in (7,8,30):
+   with self.subTest(delay=delay):
+    self.cfg['strategic_allocation_policy']['sequence']['window_delay_days']=delay
+    with self.assertRaisesRegex(ValueError,'COMPLETE_SEQUENCE_LONG_WINDOW_LIFECYCLE_UNAVAILABLE'):validate_config(self.cfg)
+    with patch('connected_enterprise.sequence_planning.select',side_effect=AssertionError('LONG_WINDOW_VALUED')):
+     with self.assertRaisesRegex(ValueError,'COMPLETE_SEQUENCE_LONG_WINDOW_LIFECYCLE_UNAVAILABLE'):self.options()
+    with tempfile.TemporaryDirectory(prefix='.composed-long-window-',dir=ROOT) as tmp,patch('connected_enterprise.engine.JournalAccount',side_effect=AssertionError('LONG_WINDOW_OPENED_ACCOUNT')):
+     output=Path(tmp)/'blocked'
+     with self.assertRaisesRegex(ValueError,'COMPLETE_SEQUENCE_LONG_WINDOW_LIFECYCLE_UNAVAILABLE'):run_world(ROOT,{'jobs':[]},self.cfg,1,'competitive_growth',output)
+     self.assertFalse(output.exists())
+  self.cfg['strategic_allocation_policy']['sequence']['window_delay_days']=6
+  validate_config(self.cfg);self.assertTrue(self.options())
+ def test_profile_compilation_callback_and_hidden_state_preserve_admission(self):
+  from connected_enterprise import complete_offer_market as market
+  from connected_enterprise.engine import _offer_menu
+  self.admission_case(maximum=6)
+  with patch.object(market,'validate_policy',wraps=market.validate_policy) as validate:expected=self.options()
+  self.assertEqual(sum('requested_jobs' in call.args[0] for call in validate.call_args_list),1)
+  calls=[]
+  def menu(state,jobs,buyer,cfg):calls.append(buyer['id']);return _offer_menu(state,jobs,buyer,cfg)
+  self.assertEqual(expected,self.options(menu_fn=menu));self.assertTrue(calls)
+  changed=copy.deepcopy(self.buyers)
+  for buyer in changed.values():buyer.update(remaining_budget=0,initial_budget=10**30,private_atom=1)
+  self.assertEqual(expected,self.options(buyers=changed))
  def test_two_unit_complement_and_three_unit_production_cost(self):
   rows=self.options();self.assertTrue(rows);self.assertEqual(len(rows),len({row['id'] for row in rows}))
   packet=next(o for o in rows if o['kind']=='capacity' and o['execution']['purchased_units']==2)
