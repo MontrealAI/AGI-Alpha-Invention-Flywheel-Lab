@@ -1,7 +1,11 @@
 # AGI-Alpha-Invention-Flywheel-Lab
-Blue Sky and Beyond-Human Foresight: structural discovery, executable strategy invention, adversarial verification, and fresh successors. Experimental research.
+**Transformational intelligence changes the game.**
 
-**Research papers:** [Foundry v2 — read the original PDF](docs/research/autonomous-enterprises-foundry-v2.pdf) · [All papers](docs/research/README.md) · [Browser website setup](docs/research/PAGES.md).
+Discover valuable possibilities. Construct the missing means. Build enterprises that fund what comes next. This is a research and engineering mission, not a claim of achieved general intelligence or civilization-scale economic results.
+
+**Explore:** [AGI ALPHA website](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/) · [Foundry v2 PDF](docs/research/autonomous-enterprises-foundry-v2.pdf) · [All research papers](docs/research/README.md) · [Verified release — 1 November 2026](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/connected014-4a87b455373be72811ad3a0c654a116c3604a374).
+
+The website separates native SIM business operation, consequential capability, retained discovery, and scientific expansion. Each needs its own evidence; simulated profit is not actual revenue. [Pages setup and publication boundary](docs/research/PAGES.md).
 
 ## Current default: connected enterprise completion015
 
