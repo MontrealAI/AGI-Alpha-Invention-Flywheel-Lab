@@ -20,9 +20,13 @@ This first result addresses only exact-UTC co-occurrence for user-provided CSVs 
 
 **Initial selection: A, for the construction experiment**, because a useful artifact and an independently inspectable failure mode can be built with no external authority or paid services. This is a selection for a small first *experiment*, not a finding that A has the highest expected long-term profit or even that a new market exists. Opportunity selection must be reopened with independently sourced demand, complete costs, strength of alternatives and strategic responses. Do not lock the firm to historical sensors.
 
+## Market evidence and existing alternatives
+
+This is not a claim to have invented historical analytics as a category. [Google Earth Engine](https://earthengine.google.com/) already supports large historical archives and commercial analysis; [Planet Analytics](https://account.planet.com/products/satellite-imagery-analysis/) already offers on-demand and retrospective geospatial analytics; [NASA Harmonized Landsat/Sentinel-2](https://hls.gsfc.nasa.gov/data-access-and-tools/) offers established archived analytical products. Those are serious incumbent alternatives, not assumed deficient competitors. The differentiator to test is low-cost **question-specific, source-inspectable and uncertainty-preserving measurement contracts** with complete outcome assurance and voluntary commercial participation. Independent buyer demand and complete cost advantage remain unknown.
+
 ## Playable technical experiment
 
-Public site: [Retroactive Sensor Lab](sensor-lab.html). Pure local calculation: [sensor-engine.mjs](sensor-engine.mjs). Tests: [sensor-engine Node tests](../../tests/test_sensor_engine.mjs).
+Public site: [Retroactive Sensor Lab](../research/sensor-lab.html). Pure local calculation: [sensor-engine.mjs](../research/sensor-engine.mjs). Tests: [sensor-engine Node tests](../../tests/test_sensor_engine.mjs).
 
 1. Read two UTC timestamp/value CSV archives supplied by the user. The embedded fixture is deliberately fabricated and clearly labeled.
 2. Define a question by setting two independent thresholds.
@@ -36,11 +40,11 @@ The browser prototype is deterministic and local-only. Do not misrepresent it as
 
 Run focused tests from the repository root:
 
-\`\`\`sh
+```sh
 node --test tests/test_sensor_engine.mjs
 python3 -m unittest discover -s tests -p 'test_research_site.py' -v
 python3 scripts/build_research_site.py --output /tmp/agi-alpha-sensor-site-FRESH
-\`\`\`
+```
 
 The GitHub Pages build must remain explicitly allowlisted: no repository export, no private archives, no credentials, no user files or uncontrolled third-party scripts. Updating the page means building, checking and releasing from exact current source with the established CI and deployment boundary. Other repository owners retain their branches and account authority.
 
