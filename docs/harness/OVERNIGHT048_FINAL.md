@@ -1,13 +1,13 @@
 # AGI ALPHA — morning progress handoff, 1 November 2026
 
-Checkpoint: 10:52 UTC. Composed native admission/cooldown and experiment-identity corrections are published and locally qualified. Exact-head hosted gates are running; final merge, release and downloaded operation remain pending.
+Checkpoint: 11:24 UTC. PR98 merged normally as 99769a8a after all 14 exact-head workflows and five resolved review findings. Main-branch publication gates and actual downloaded operation remain running/pending.
 
 **An audited operating simulation and reproducible account-year results exist. The latest implementation is not yet a qualified released enterprise. Actual commercial profit and US$3 billion trailing-365-day profit remain unestablished.** No default policy promotion follows from these experiments.
 
 | State | Current work |
 | --- | --- |
-| Done | P0 qualified release/downloaded operation; four primary account years plus four source-specific reproductions; finite comparator/P4 results; reviewed experiment-identity and composed-admission corrections |
-| Running | Exact-f402a0b0 hosted qualification, followed by normal merge, same-main release and actual downloaded operation |
+| Done | PR98 qualified normal merge; P0 previous release/downloaded operation; four primary account years plus four source-specific reproductions; finite comparator/P4 results; reviewed identity/admission corrections |
+| Running | Six applicable main-branch workflows; release qualification passed, publisher waiting for same-main checks; actual downloaded operation follows publication |
 | Blocked | Unified audience repair remains unpublished; original signed-account migration remains NO-GO. Final publication awaits the required pipeline gates |
 | Next | Publish the corrected exact source, finish required qualification, merge normally, inspect same-main release and operate its actual downloaded bytes |
 
@@ -15,22 +15,22 @@ Checkpoint: 10:52 UTC. Composed native admission/cooldown and experiment-identit
 
 | Item | Exact identity / checkpoint state |
 | --- | --- |
-| Released main, last inspected | `3c553dd5087d4594a996dd82f53d13d5e65db124` |
-| Current public candidate | [PR98](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/98), head `f402a0b093cfebb052a84f7ad09655f41c1e5659` |
-| Local commit equivalent to the current public candidate | `971b8d38d7b7ee9bf8672f22365e35c381df7799`; Git tree `3e1579f6a7a8e68dc736c3e8724011678c044395`; independently checked against the public commit |
+| Previously qualified release | `3c553dd5087d4594a996dd82f53d13d5e65db124` |
+| Qualified normal merge | [PR98](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/98) merged at `99769a8a4d19a8cfc1b3c6d05084d7ed99b76849`; head `f402a0b093cfebb052a84f7ad09655f41c1e5659` |
+| Local commit sharing the exact merged-main tree | `971b8d38d7b7ee9bf8672f22365e35c381df7799`; Git tree `3e1579f6a7a8e68dc736c3e8724011678c044395`; independently checked against the public commit |
 | Selected current candidate source | 277 files; SHA256 `ba510738584bb95d95a794dfb29eac3851407920e9c599cbd23abfc5ef80ffec` |
 | Prepared current candidate source ZIP | 302 members, 1,172,686 bytes; SHA256 `a1c1aff0cb4c25eceac20514e353586ee8a7c17090c3b8bc7b834c57a4a1267e` |
-| Current local qualification, directly inspected | 106 composed/native/fee/source/publication/identity checks passed in204.453s; fresh no-Git five-command run/resume/native-audit/package/public-audit accepted, financially unchanged resume; clean committed-source release prepare/verify accepted |
-| Hosted full CI on f402a0b0 | Running: 8 of14 passed at the latest read-only monitor check, no failures or unresolved threads. Earlier b88/a962 passes remain source-specific |
+| Current local qualification, directly inspected | 106 composed/native/fee/source/publication/identity checks passed in 204.453 seconds; fresh no-Git five-command run/resume/native-audit/package/public-audit accepted, financially unchanged resume; clean committed-source release prepare/verify accepted |
+| PR qualification | All14 workflows succeeded on exact f402a0b0; bounded suite 1,524 tests/OK in 883.638 seconds, release suite 434 tests/OK in 814.574 seconds; five threads resolved. Main push has six separately applicable workflows |
 | Experiment-identity review repair | Published and independently reviewed: fixed startup protocol/config/cohort/seed/native arm/completion, native audit of skipped completed cells, null actual-profit/empty-authority summary schema; comparator source/protocol/phase/authority headers. The wrong-seed counterexample was independently reproduced. Current exact-head gates remain required |
-| Composed-future admission correction | Published/reviewed: native nonempty-menu priority, all higher-priority requested-work exclusion, current-delivery customer exclusion, full paid pool preserved, planner/auditor reconstruction. Complete windows require1–6days, derived from168h cooldown; longer windows are explicitly UNAVAILABLE |
-| Latest owned-cost and frontier repair | Peer-accepted engineering corrections are bound to public f402a0b0 / source ba5107…; full current hosted gates, qualified merge/release and downloaded final operation remain **PENDING**. No new profitable startup result or default promotion is established |
-| Final qualified merge / release | **PENDING** — record final commit, tree, tag, source and asset identities after the required gates |
+| Composed-future admission correction | Published/reviewed: native nonempty-menu priority, all higher-priority requested-work exclusion, current-delivery customer exclusion, full paid pool preserved, planner/auditor reconstruction. Complete windows require one through six days, derived from the 168-hour cooldown; longer windows are explicitly UNAVAILABLE |
+| Reviewed corrections | The merged main contains the owned-cost/frontier, fixed-experiment identity, comparator headers and complete-future admission/cooldown repairs. No new profitable startup result or default promotion is established |
+| Final qualified merge / release | Merge complete at `99769a8a…`; tag `connected014-99769a8a4d19a8cfc1b3c6d05084d7ed99b76849` remains **PENDING publication** and actual asset inspection |
 | Downloaded final default operation | **PENDING** — require actual downloaded bytes, all command exits, native/public/wheel audits and unchanged resume |
 | Four-case annual reproduction on 718b | **COMPLETED** from the locally qualified archive before publication; all five register/pause/resume/audit/scoreboard commands exited zero, the canonical four-world package audit accepted, and all annual financial/count results match the primary source. Public evidence is pinned at `70be5025` |
 | Annual operation of the later repaired final release | **PENDING** — the frozen 718b reproduction remains source-specific; later optional-startup repairs change the final source |
 
-Released main already has inspected [downloaded operation 41279434535](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41279434535): six commands exited zero, required audits/wheel checks accepted and resume preserved finances. Its actual operation-evidence artifact SHA256 is `8b6904ba822c4f38a9c11208b002a0fd36d726f86505201ec3eef662d38776af`. This does not qualify the newer candidate.
+The previous qualified 3c release has inspected [downloaded operation 41279434535](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41279434535): six commands exited zero, required audits/wheel checks accepted and resume preserved finances. Its actual operation-evidence artifact SHA256 is `8b6904ba822c4f38a9c11208b002a0fd36d726f86505201ec3eef662d38776af`. The merged 997 source has separate pending release/download gates.
 
 The earlier `90231bed` bounded workflow remains a historical failure: two failures among 1,485 tests, involving a stale 257-job rejection expectation and shared test output. The repaired positive 779-record admission and isolated invalid-input fixtures passed four focused tests in 10.957 seconds with peer review. Later clean qualification is separately accepted; it does not rewrite the failed run or substitute for the new hosted full CI.
 
@@ -48,7 +48,7 @@ Coherent account-year: task `2611010481-central-growth`, native-account configur
 
 The later startup repairs change the final source; the completed 718b study remains a prepublication annual/default-money regression. Final repaired-release annual operation is separately pending. Executing-source membership excludes manifest-bound generated inputs. Original signed authority was not accessed/migrated and primary accounts were untouched.
 
-The composed forecast repair has source-specific engineering evidence. Nineteen pure controls reproduce native four-place starvation, five/six-place admission, shared-work and same-current-customer conflicts. Forty focused component checks passed; the combined106-test run also operated the unchanged14-day native fixture through actual acquisition, EARNED two-unit capacity, settled packets, game/native audit and unchanged resume. The bounded forecast is conditional on future eligibility and remaining work; current proposal buyers are conservatively excluded. Test-only admitted/disjoint controls leave historical factories and results unchanged.
+The composed forecast repair has source-specific engineering evidence. Nineteen pure controls reproduce native four-place starvation, five/six-place admission, shared-work and same-current-customer conflicts. Forty focused component checks passed; the combined 106-test run also operated the unchanged 14-day native fixture through actual acquisition, EARNED two-unit capacity, settled packets, game/native audit and unchanged resume. The bounded forecast is conditional on future eligibility and remaining work; current proposal buyers are conservatively excluded. Test-only admitted/disjoint controls leave historical factories and results unchanged.
 
 ## Four primary native account years, separately reproduced
 
@@ -125,4 +125,4 @@ Next, inspect and qualify that owner's published source, reconcile access throug
 
 The complete requested stress matrix remains unfinished: broader defaults/refunds/delays, overlapping/exhausted channels, imitation, provider budgets, large-market aggregation and complete equivalent-outcome human/human-plus-AI/frontier-AI comparisons. Actual host/model/engineering bills, empirical demand and real commercial profit remain unknown. No paid API/service, real transaction, outreach or production deployment authority is created by this document.
 
-Completion lead: complete exact-f402a0b0 hosted gates, refresh heads/review threads, merge normally, then inspect same-main publication and actual downloaded operation. Fill final receipt fields only from actual evidence; preserve the 652e6… primary and718b/d1f28… annual reproduction boundaries.
+Completion lead: finish exact main 99769a8a applicable gates, inspect publication and actual assets, then operate/audit/resume downloaded bytes and complete the funded-next-opportunity reproduction. Preserve the 652e6… primary and 718b/d1f28… annual reproduction boundaries.
