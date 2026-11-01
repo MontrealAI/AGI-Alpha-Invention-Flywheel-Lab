@@ -368,8 +368,15 @@ class Account:
                 self._connected_source_bound = True
             self._verify_reservations()
             if any(e['op'] == 'finish' and _requires_resolution(self._proofs.get(e['args']['id'], {}).get('body', {}).get('plan', {})) for e in self._owner.export()['actions']):
-                audit_account(self.export(), root=self.root, manifest=self.manifest,
-                              pending_source_transition=self._pending_source_transition())
+                pending = self._pending_source_transition()
+                if not self._source_transitions and pending is None:
+                    audit_account(self.export(), root=self.root, manifest=self.manifest)
+                else:
+                    from connected_enterprise.upgrades import _owner_authenticated_history
+                    history = [*self._source_transitions.values(), *([pending] if pending is not None else [])]
+                    with _owner_authenticated_history(history, self._key):
+                        audit_account(self.export(), root=self.root, manifest=self.manifest,
+                                      pending_source_transition=pending)
         except BaseException:
             self.close()
             raise
@@ -666,7 +673,9 @@ class Account:
         signed = hmac.new(self._key, b'connected014-journal\n' + canonical(original['body']), hashlib.sha256).hexdigest()
         if not hmac.compare_digest(signed, str(original['signature'])):
             raise ValueError('ORIGINAL_SOURCE_ENVELOPE_SIGNATURE_MISMATCH')
-        verify_historical(ticket, self.manifest, root=self.root)
+        from connected_enterprise.upgrades import _owner_authenticated_history
+        with _owner_authenticated_history([ticket], self._key):
+            verify_historical(ticket, self.manifest, root=self.root)
         if body['id'] in self._source_transitions and self._source_transitions[body['id']] != ticket:
             raise ValueError('SOURCE_TRANSITION_AUTHORIZATION_COLLISION')
         proposed={**self._source_transitions,body['id']:copy.deepcopy(ticket)}
@@ -692,7 +701,11 @@ class Account:
     def audit(self):
         self._assert_owner()
         self._verify_reservations()
-        return audit_account(self.export(), root=self.root, manifest=self.manifest)
+        if not self._source_transitions:
+            return audit_account(self.export(), root=self.root, manifest=self.manifest)
+        from connected_enterprise.upgrades import _owner_authenticated_history
+        with _owner_authenticated_history(self._source_transitions.values(), self._key):
+            return audit_account(self.export(), root=self.root, manifest=self.manifest)
 
     def close(self):
         if self._closed:

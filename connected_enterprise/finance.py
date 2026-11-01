@@ -210,7 +210,9 @@ class JournalAccount:
                     or authority['prior_record']['ledger'] != self._account.export()['ledger']
                     or {k: v for k, v in header.items() if k != 'source'} != {k: v for k, v in self._header.items() if k != 'source'}):
                 raise ValueError('SOURCE_UPGRADE_PRIOR_AUTHORITY_CHANGED')
-            verify_historical(ticket, self.manifest, root=self.root)
+            from .upgrades import _owner_authenticated_history
+            with _owner_authenticated_history([ticket], self._account._key):
+                verify_historical(ticket, self.manifest, root=self.root)
             args = transition_args(ticket)
             history = body.get('source_history', [])
             seen_sources = {t['body']['from_source']['sha256'] for t in history}
@@ -251,7 +253,9 @@ class JournalAccount:
         if pending:
             if len(pending) != 1 or pending[0] is not self._journal['entries'][-1]:
                 raise ValueError('ONE_FINAL_PENDING_CONNECTED_ACTION_REQUIRED')
-            _audit_journal(self.export(), root=self.root, manifest=self.manifest, pending_key=pending[0]['key'])
+            from .upgrades import _owner_authenticated_history
+            with _owner_authenticated_history(self._journal.get('source_history', ()), self._account._key):
+                _audit_journal(self.export(), root=self.root, manifest=self.manifest, pending_key=pending[0]['key'])
         for entry in self._journal['entries']:
             if entry['status'] == 'PENDING':
                 # Only fresh-format intents carry a preattempt certificate.
@@ -515,7 +519,9 @@ class JournalAccount:
     def audit(self):
         with self._mutex:
             self._assert_current()
-            return audit_journal(self.export(), root=self.root, manifest=self.manifest)
+            from .upgrades import _owner_authenticated_history
+            with _owner_authenticated_history(self._journal.get('source_history', ()), self._account._key):
+                return audit_journal(self.export(), root=self.root, manifest=self.manifest)
 
     def seal_checkpoint(self, state, *, anchored=False):
         with self._mutex:
