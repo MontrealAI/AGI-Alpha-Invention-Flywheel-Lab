@@ -70,6 +70,8 @@ def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None):
         if owned != known or owned == set(buyers) or terms['activation_reliability_bps'] == 0 or terms['realization_bps'] == 0:
             continue
         lead = terms['lead_days']
+        if lead < 1:
+            continue
         if min(terms['duration_days'], cfg['horizon_days'] - lead) <= 0 or lead * 24 + cfg['production_hours'] + cfg['acceptance_hours'] + cfg['clearing_hours'] >= cfg['horizon_days'] * 24:
             continue
         for ident, buyer in sorted(buyers.items()):
@@ -155,7 +157,18 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
             'outreach_microUSD': (attempt_slots + days * pool) * cfg['exposure_cost'],
             'qualification_microUSD': quote_evaluations * cfg['qualification_cost'],
             'maintenance_microUSD': (lead + days) * cfg['maintenance_daily']}
-        evaluation = sum(future_costs[k] for k in ('outreach_microUSD', 'qualification_microUSD', 'maintenance_microUSD'))
+        if 'refusal_recourse_policy' in cfg:
+            from .refusal_recourse import validate_policy as validate_recourse, SELECTIVE_SCHEMA
+            recourse = validate_recourse(cfg['refusal_recourse_policy'])
+            future_days = max(0, lead + days - 1)
+            daily_evaluation = recourse['daily_evaluation_cost'] if recourse['schema'] == SELECTIVE_SCHEMA else 0
+            daily_allowance = recourse['daily_planning_cost']
+            future_costs.update(recourse_policy_sha256=digest(recourse), recourse_planning_days=future_days,
+                recourse_daily_evaluation_microUSD=daily_evaluation, recourse_daily_allowance_microUSD=daily_allowance,
+                recourse_evaluation_microUSD=future_days*daily_evaluation,
+                recourse_allowance_microUSD=future_days*daily_allowance)
+        evaluation = sum(future_costs.get(k, 0) for k in ('outreach_microUSD', 'qualification_microUSD', 'maintenance_microUSD',
+            'recourse_evaluation_microUSD', 'recourse_allowance_microUSD'))
         benefit = prospects * margin - evaluation
         invoice = terms['price_microUSD'] + terms['support_microUSD']
         net = benefit.numerator // benefit.denominator - invoice
@@ -165,7 +178,7 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
         option = investment_option('startup-channel-' + contract_id, 'acquisition', invoice, net, scenarios, 0, terms)
         option['execution'].update(funding='SEED_OR_EARNED', contract_id=contract_id,
                                    cash_lock=cash_lock,
-                                   forecast_scope='DAY_ZERO_PUBLIC_COMPLETE_OFFERS; worst declared collection belief, explicit conversion haircut and conservative future full-menu evaluation/maintenance costs, no hidden future draws; not demand, income or spendable cash.')
+                                   forecast_scope='DAY_ZERO_PUBLIC_COMPLETE_OFFERS; worst declared collection belief, explicit conversion haircut and conservative future full-menu evaluation/maintenance/recourse costs, no hidden future draws; not demand, income or spendable cash.')
         execution = option['execution']
         execution['startup_contract'] = {'schema': SCHEMA, 'time': 0, 'policy_sha256': digest(policy),
             'native_state_digest': snapshot['state_digest'], 'observed_available': snapshot['summary']['available'],

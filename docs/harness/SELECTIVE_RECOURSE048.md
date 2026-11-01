@@ -46,3 +46,26 @@ All nine registered worlds and a separate-process full native/operating re-audit
 Selective bought all 14 allowances in uncertain demand and held on every day in the other two cases. Every selective account paid $0.14 evaluation. Avoiding the fixed fee helps in the hold cases, but no recourse wins all three comparisons after costs; no default promotion is justified. The no-alternative fixture's first considered buyer did not purchase; its negative result remains.
 
 `RESULTS.json` binds these exposed authored results to the earlier exact 228-member comparison source `d0981cc06cb96682aadede96106f1391e452806add82cc4eedceb6df3759bee4`. The subsequent source adds explicit release inventory members and consumes authenticated exact win-probability fractions when supplied, falling back to the historical decimal display interpretation otherwise. A tiny positive refusal probability must survive a rounded display of 1. These later changes have focused regression evidence; they do not rename the earlier worlds as execution of the final integrated source. Full integration/release qualification is separate.
+# Future sequence-window cash bounds
+
+The sequence forecast includes known recourse fees for native planning events
+strictly after its already prepaid current prefix, through the future decision
+inclusive and before the terminal operating horizon. V1 reserves its mandatory
+daily planning fee. V2 reserves its mandatory daily evaluation plus a declared
+conservative upper bound for every optional future allowance; that bound does
+not purchase allowances or charge native fees when the selective policy holds.
+
+This fixed amount is deducted once per route from the full future cash bound,
+alongside existing maintenance and contact costs. It is not multiplied by buyers,
+profiles or public channel seeds. Mandatory fees are common costs before the
+baseline comparison, so they can cancel from the incremental objective when
+liquidity is ample. They still reduce actual prefunded delivery feasibility.
+Metadata distinguishes mandatory expense from optional allowance cash protection.
+No-policy forecast bytes are unchanged. Native funding, accounting, retry choice
+and future reauthorization remain independent guards; this repairs a forecast
+cash-bound omission, not an observed native overdraft.
+
+`python3 -m unittest discover -s tests -p test_connected_sequence_recourse050.py -v`
+checks clock boundaries, absent/invalid policies, the known-fee cash counterexample,
+shared-cost cancellation and V1/V2 native audit, interruption, unchanged resume
+and rejection of forged future-fee metadata.

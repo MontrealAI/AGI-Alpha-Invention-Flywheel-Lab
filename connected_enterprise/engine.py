@@ -71,6 +71,7 @@ def validate_config(cfg):
         sequence=cfg.get('strategic_allocation_policy',{}).get('sequence')
         composed=sequence is not None and sequence.get('composition')=='complete-offer-quantity-v1'
         if 'strategic_policy' not in cfg or sequence is not None and not composed:raise ValueError('COMPLETE_OFFER_REQUIRES_SINGLE_OPPORTUNITY_JOINT_POLICY')
+        if composed and cfg['complete_offer_policy']['selection']=='restricted':raise ValueError('RESTRICTED_COMPLETE_SEQUENCE_LIFECYCLE_UNAVAILABLE')
         if composed and ('capacity_menu' not in cfg['strategic_allocation_policy'] or 'channel_menu_policy' not in cfg or cfg['strategic_policy'].get('ranking_arithmetic')!='exact-rational-v1'):raise ValueError('COMPLETE_SEQUENCE_REQUIRES_EXACT_QUANTITY_AND_COSTED_CHANNEL_MENU')
         if composed and any(terms.get('owned_audience_count',4)!=4 for terms in cfg['channels'].values()):raise ValueError('COMPLETE_SEQUENCE_REQUIRES_COHERENT_FOUR_OWNED_AUDIENCE')
         if composed and (sequence.get('owned_contact_count')!=4 or 'requested_jobs' not in cfg['complete_offer_policy']):raise ValueError('COMPLETE_SEQUENCE_REQUIRES_ACTUAL_OWNED_COUNT_AND_REQUESTED_WORK')

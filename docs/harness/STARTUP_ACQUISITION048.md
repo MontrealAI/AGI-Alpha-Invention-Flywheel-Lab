@@ -64,6 +64,44 @@ These corrections identify a new source and new exposed regression outcome.
 The 32 historical development-world receipts below remain bound to their original
 sources; their economics and qualification claims are not rewritten.
 
+## Recurring refusal-recourse fee correction
+
+The subsequent PR98 review found that the startup forecast omitted known
+recurring refusal-recourse fees. A valuable public request could consequently
+justify acquisition even when its declared future planning bill made the window
+uneconomic. The corrected envelope includes fixed v1 daily allowance fees, or
+selective v2 daily evaluation plus a conservative allowance for buying the daily
+retry contract. Both totals reduce the forecast and increase its current planning
+cash lock. The allowance is an upper bound for selective v2, not a forecast or
+instruction that it must be purchased.
+
+The fee window is exactly the remaining native planning days before channel
+expiry: days 1 through `lead_days + live_days - 1`, capped by the registered
+operating horizon. Day zero is excluded because its recurring-fee prefix is
+already prepaid, or its selective allowance is held in the current operating
+envelope. The one-time startup evaluation fee is not multiplied into a recurring
+bill. Actual fees continue to be charged only by their existing native events;
+forecasts create neither cash nor a second expense.
+
+Regressions cover both schemas, nonzero lead time, exact future fee counts, a
+positive request becoming a hold under expensive recurring fees, and present
+cash that covers the old commitment but cannot protect the new fee envelope.
+Accounting profit does not substitute for available cash. Separate native cases
+prepay the declared v1/v2 daily bills, make no acquisition or delivery, reconcile
+all expenses, preserve original prefixes through pause/resume and pass the
+independent auditor. Selective hold does not incur an allowance invoice.
+
+Startup acquisition now explicitly requires positive lead time for its selected
+channel. Purchase follows the current day's exposure step, so this contract does
+not pretend a zero-lead channel has already delivered access. Unsupported
+zero-lead startup terms hold before evaluation or acquisition payment, including
+a one-day term with no reachable exposure. General channel definitions and
+non-startup semantics are unchanged.
+
+This is a new source-specific engineering correction. Prior development receipts
+and their original forecasts remain historical results; they are not relabeled
+as evidence for the repaired composition or complete real-world billing.
+
 ## Honest seed and earned provenance
 
 Only a typed source-bound startup acquisition option is admitted as `SEED_OR_EARNED`. Ordinary capacity/instrument/channel expansion stays `EARNED`. Execution passes seed permission only for that chosen startup contract, and the `JournalAccount` chooses actual funding from current available/eligible funds. There is no full-seed-repayment gate.

@@ -128,6 +128,7 @@ def _complete_menu_options(cfg,moment,snapshot,operating,jobs,used,investments,b
     or assuming an inaccessible job will match a future contact. Only the first
     costed invoice can execute; subsequent observations must replan everything.
     """
+    if cfg['complete_offer_policy']['selection']=='restricted':raise ValueError('RESTRICTED_COMPLETE_SEQUENCE_LIFECYCLE_UNAVAILABLE')
     from .channel_menu import validate_policy
     from .sequence_channels import forecast_contract
     from .complete_offer_market import market_context

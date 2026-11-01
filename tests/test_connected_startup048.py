@@ -127,6 +127,94 @@ class StartupAcquisitionTests(unittest.TestCase):
         snapshot['summary']['available']=option['upfront_cost']+current
         self.assertEqual(options(*args()),[])
 
+    def test_recurring_recourse_fees_change_startup_value_and_cash_feasibility(self):
+        from commercial.ledger import digest
+        snapshot={'state_digest':'a'*64,'summary':{'available':100000000000,'unrestrictedEarned':0,'investmentStopped':False}}
+        policies=({'schema':'connected-refusal-recourse/v1','daily_planning_cost':1000},
+                  {'schema':'connected-selective-refusal-recourse/v2','daily_planning_cost':1000,'daily_evaluation_cost':2000})
+        for policy in policies:
+            with self.subTest(policy=policy['schema']):
+                cfg=fixture(self.manifest);cfg['channels']['pilot'].update(lead_days=3,duration_days=2)
+                buyers={b['id']:b for b in _buyers(cfg,2611010482)}
+                args=lambda:(cfg,'competitive_growth',0,snapshot,0,self.jobs,set(),buyers,cfg['strategic_allocation_policy']['risk']['scenarios'],_offer_menu)
+                no_recourse=options(*args())[0]
+                cfg['refusal_recourse_policy']=copy.deepcopy(policy)
+                costed=options(*args())[0];certificate=costed['execution']['startup_contract'];envelope=certificate['future_cost_envelope']
+                future_days=4
+                fees=future_days*(policy['daily_planning_cost']+policy.get('daily_evaluation_cost',0))
+                self.assertEqual(envelope['recourse_planning_days'],future_days)
+                self.assertEqual(envelope['recourse_policy_sha256'],digest(policy))
+                self.assertEqual(envelope['recourse_evaluation_microUSD'],future_days*policy.get('daily_evaluation_cost',0))
+                self.assertEqual(envelope['recourse_allowance_microUSD'],future_days*policy['daily_planning_cost'])
+                self.assertEqual(no_recourse['future_net_cash']['baseline']-costed['future_net_cash']['baseline'],fees)
+                self.assertEqual(costed['execution']['cash_lock']-no_recourse['execution']['cash_lock'],fees)
+                snapshot['summary']['available']=costed['upfront_cost']+costed['execution']['cash_lock']-fees
+                self.assertTrue(no_recourse['upfront_cost']+no_recourse['execution']['cash_lock']<=snapshot['summary']['available'])
+                self.assertEqual(options(*args()),[])
+                snapshot['summary']['available']=100000000000
+                if policy['schema']=='connected-selective-refusal-recourse/v2':
+                    cfg['refusal_recourse_policy']['daily_evaluation_cost']=1000000000
+                else:cfg['refusal_recourse_policy']['daily_planning_cost']=1000000000
+                self.assertEqual(options(*args()),[])
+                snapshot['summary']['profit']=10**18
+                self.assertEqual(options(*args()),[])
+                snapshot['summary'].pop('profit')
+
+    def test_recourse_fee_window_excludes_day_zero_and_clips_to_operating_horizon(self):
+        snapshot={'state_digest':'a'*64,'summary':{'available':100000000000,'unrestrictedEarned':0,'investmentStopped':False}}
+        for lead,duration,horizon,expected in ((1,1,8,1),(2,1,8,2),(3,20,4,3)):
+            with self.subTest(lead=lead,duration=duration,horizon=horizon):
+                cfg=fixture(self.manifest);cfg['horizon_days']=horizon
+                cfg['channels']['pilot'].update(lead_days=lead,duration_days=duration,price_microUSD=1,support_microUSD=0)
+                cfg['refusal_recourse_policy']={'schema':'connected-refusal-recourse/v1','daily_planning_cost':1}
+                buyers={b['id']:b for b in _buyers(cfg,2611010482)}
+                rows=options(cfg,'competitive_growth',0,snapshot,0,self.jobs,set(),buyers,cfg['strategic_allocation_policy']['risk']['scenarios'],_offer_menu)
+                envelope=rows[0]['execution']['startup_contract']['future_cost_envelope']
+                self.assertEqual(envelope['recourse_planning_days'],expected)
+                self.assertEqual(envelope['recourse_allowance_microUSD'],expected)
+
+    def test_zero_lead_startup_channel_holds_without_evaluation_or_native_invoice(self):
+        cfg=fixture(self.manifest);cfg['horizon_days']=4
+        cfg['channel_menu_policy']['contract_ids']=['extended','pilot']
+        cfg['startup_acquisition_policy']['contract_ids']=['extended']
+        cfg['channels']['extended'].update(lead_days=0,duration_days=1)
+        self.assertEqual(validate_config(cfg)['channels']['extended']['lead_days'],0)
+        buyers={b['id']:b for b in _buyers(cfg,2611010482)}
+        self.assertEqual(preflight(cfg,buyers,self.jobs,_offer_menu),[])
+        cfg['channels']['extended']['duration_days']=5
+        self.assertEqual(preflight(cfg,buyers,self.jobs,_offer_menu),[])
+        cfg['channels']['extended']['duration_days']=1
+        result=run_world(ROOT,self.manifest,cfg,2611010482,'competitive_growth',self.folder/'unsupported-zero-lead')
+        self.assertTrue(audit(ROOT,self.manifest,result)['accepted'])
+        self.assertEqual(result['investments'],[])
+        self.assertFalse(any(c['id']=='startup-acquisition-evaluation' for c in result['costs']))
+
+    def test_native_recurring_fee_contract_holds_startup_and_resumes_without_forced_allowance(self):
+        import json
+        policies=({'schema':'connected-refusal-recourse/v1','daily_planning_cost':1000000000},
+                  {'schema':'connected-selective-refusal-recourse/v2','daily_planning_cost':100000,'daily_evaluation_cost':1000000000})
+        for number,policy in enumerate(policies):
+            with self.subTest(policy=policy['schema']):
+                cfg=fixture(self.manifest);cfg['horizon_days']=4;cfg['refusal_recourse_policy']=copy.deepcopy(policy)
+                target=self.folder/('recurring-fee-hold-'+str(number))
+                paused=run_world(ROOT,self.manifest,cfg,2611010482,'competitive_growth',target,stop_after_events=2)
+                self.assertFalse(paused['complete']);prefix=copy.deepcopy(paused['owned_account']['ledger']['actions'])
+                result=run_world(ROOT,self.manifest,cfg,2611010482,'competitive_growth',target)
+                self.assertTrue(audit(ROOT,self.manifest,json.loads(json.dumps(result,sort_keys=True)))['accepted'])
+                self.assertEqual(result['investments'],[]);self.assertEqual(result['orders'],[])
+                self.assertEqual(result['summary']['collections'],0);self.assertEqual(result['summary']['payables'],0)
+                self.assertLess(result['summary']['profit'],0)
+                self.assertEqual(result['owned_account']['ledger']['actions'][:len(prefix)],prefix)
+                self.assertEqual(sum(c['id']=='startup-acquisition-evaluation' for c in result['costs']),1)
+                evaluation=sum(c['amount'] for c in result['costs'] if c['category']=='selective_recourse_public_evaluation')
+                allowance=sum(c['amount'] for c in result['costs'] if c['category']=='prepaid_finite_refusal_recourse')
+                self.assertEqual(evaluation,4*policy.get('daily_evaluation_cost',0))
+                self.assertEqual(allowance,0 if 'daily_evaluation_cost' in policy else 4*policy['daily_planning_cost'])
+                self.assertEqual(result['summary']['expenses'],sum(c['amount'] for c in result['costs']))
+                again=run_world(ROOT,self.manifest,cfg,2611010482,'competitive_growth',target)
+                self.assertEqual(again['owned_account'],result['owned_account'])
+                self.assertTrue(audit(ROOT,self.manifest,again)['accepted'])
+
     def test_startup_profile_preparation_validates_once_and_preserves_callback(self):
         from unittest.mock import patch
         from connected_enterprise import complete_offer_market as market

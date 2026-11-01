@@ -23,6 +23,28 @@ def config(manifest,composed=True):
  return cfg
 
 class ComposedWindowOperating(unittest.TestCase):
+ def test_restricted_composition_rejected_before_account_but_ordinary_path_resumes(self):
+  with tempfile.TemporaryDirectory(prefix='.restricted-composed051-',dir=ROOT) as tmp:
+   folder=Path(tmp);manifest=prepare_complete_offer_services(ROOT,str(folder.relative_to(ROOT)/'jobs'),cohort_seed=2611010511,packet_jobs=8,packet_rows=12)
+   blocked=config(manifest);blocked['complete_offer_policy']['selection']='restricted'
+   with patch('connected_enterprise.engine.JournalAccount',side_effect=AssertionError('UNAVAILABLE_MODE_OPENED_ACCOUNT')):
+    with self.assertRaisesRegex(ValueError,'RESTRICTED_COMPLETE_SEQUENCE_LIFECYCLE_UNAVAILABLE'):
+     run_world(ROOT,manifest,blocked,2611010511,'competitive_growth',folder/'blocked')
+   self.assertFalse((folder/'blocked'/'account.sqlite').exists())
+   cfg=config(manifest,composed=False);cfg['horizon_days']=4;cfg['complete_offer_policy']['selection']='restricted'
+   partial=run_world(ROOT,manifest,cfg,2611010511,'competitive_growth',folder/'world',stop_after_events=2)
+   self.assertFalse(partial['complete'])
+   result=run_world(ROOT,manifest,cfg,2611010511,'competitive_growth',folder/'world')
+   self.assertTrue(audit(ROOT,manifest,result)['accepted']);self.assertTrue(result['orders'])
+   self.assertFalse(any(o['offer']['service_id']=='receivables_packet' for o in result['orders']))
+   from connected_enterprise.engine import SERVICES
+   for wrapper in result['joint_actions'].values():
+    for delivery in wrapper['allocation']['deliveries']:
+     ident=delivery['customer_id'];job=delivery['selection']['problem']['job_id']
+     self.assertIn(job,cfg['complete_offer_policy']['requested_jobs'][ident])
+     self.assertIn(delivery['selection']['problem']['offer']['service_id'],SERVICES)
+   resumed=run_world(ROOT,manifest,cfg,2611010511,'competitive_growth',folder/'world')
+   self.assertEqual(result['owned_account'],resumed['owned_account']);self.assertTrue(audit(ROOT,manifest,resumed)['accepted'])
  def test_native_weighted_sequence_flags_public_information_and_audit(self):
   with tempfile.TemporaryDirectory(prefix='.composed-window049-',dir=ROOT) as tmp:
    folder=Path(tmp);manifest=prepare_complete_offer_services(ROOT,str(folder.relative_to(ROOT)/'jobs'),cohort_seed=261101049,packet_jobs=24,packet_rows=12)
@@ -75,6 +97,17 @@ class ComposedWindowForecasts(unittest.TestCase):
   from connected_enterprise.channels import ChannelBook
   book=ChannelBook(1,self.cfg['channels']);book.expose(0,list(self.buyers.values()))
   return sequence_options(self.cfg,0,self.obs,0,self.jobs,set(used),list(investments),self.buyers if buyers is None else buyers,{},set(),self.cfg['strategic_allocation_policy']['risk']['scenarios'],current_delivery_reserve=delivery_reserve,channel_state=book.export())
+ def test_restricted_packet_only_empty_menu_rejected_before_forecast_valuation(self):
+  from connected_enterprise.engine import _offer_menu
+  menu=self.options();self.assertTrue(any(o['kind']=='acquisition' for o in menu));self.assertTrue(any(o['kind']=='capacity' and o['execution']['purchased_units']==2 for o in menu))
+  self.cfg['complete_offer_policy']['selection']='restricted'
+  for index,buyer in enumerate(self.buyers.values()):buyer['service_index']=index%3
+  for buyer in self.buyers.values():self.assertEqual(_offer_menu({'used_jobs':[]},self.jobs,buyer,self.cfg),[])
+  with self.assertRaisesRegex(ValueError,'RESTRICTED_COMPLETE_SEQUENCE_LIFECYCLE_UNAVAILABLE'):validate_config(self.cfg)
+  with patch('connected_enterprise.sequence_planning.select',side_effect=AssertionError('UNAVAILABLE_PROFILE_VALUED')),patch('connected_enterprise.sequence_channels.forecast_contract',side_effect=AssertionError('UNAVAILABLE_REACH_VALUED')):
+   with self.assertRaisesRegex(ValueError,'RESTRICTED_COMPLETE_SEQUENCE_LIFECYCLE_UNAVAILABLE'):self.options()
+ def test_menu_forecast_golden_parity_after_restricted_unavailable_guard(self):
+  self.assertEqual(digest(self.options()),'8d9dffb806f2cda9784a7ba3d9370133638f273aea1c2af238aa490975c1da6d')
  def test_two_unit_complement_and_three_unit_production_cost(self):
   rows=self.options();self.assertTrue(rows);self.assertEqual(len(rows),len({row['id'] for row in rows}))
   packet=next(o for o in rows if o['kind']=='capacity' and o['execution']['purchased_units']==2)

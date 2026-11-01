@@ -19,6 +19,28 @@ def _expected_deliveries(n, p, extra, q, limit):
                for j,b in enumerate(_binomial(extra,q)))
 
 
+def future_recourse_envelope(config, now_hours, future_hours):
+    """Bound future native planning fees; the present prefix is already prepaid."""
+    policy=config.get('refusal_recourse_policy')
+    if policy is None:return None
+    from .refusal_recourse import validate_policy,SELECTIVE_SCHEMA
+    validate_policy(policy)
+    if any(type(x) is not int or x<0 for x in (now_hours,future_hours)) or future_hours<now_hours or type(config['horizon_days']) is not int or config['horizon_days']<1:
+        raise ValueError('BOUND_FUTURE_NATIVE_PLANNING_CLOCK_REQUIRED')
+    first=now_hours//24+1
+    last=min(future_hours//24,config['horizon_days']-1)
+    events=max(0,last-first+1)
+    selective=policy['schema']==SELECTIVE_SCHEMA
+    mandatory=policy['daily_evaluation_cost'] if selective else policy['daily_planning_cost']
+    optional=policy['daily_planning_cost'] if selective else 0
+    return {'schema':'sequence-future-recourse-cost/v1','policy_sha256':digest(policy),
+        'future_native_planning_events':events,'first_future_planning_hour':24*first if events else None,
+        'last_future_planning_hour':24*last if events else None,
+        'mandatory_cost_microUSD':events*mandatory,'optional_allowance_cash_bound_microUSD':events*optional,
+        'total_cash_bound_microUSD':events*(mandatory+optional),
+        'scope':'Count native planning events strictly after the already prepaid current prefix, through the future decision inclusive, and before the terminal horizon. v1 allowance is mandatory; v2 evaluation is mandatory and every optional allowance is conservatively prefunded, never assumed purchased.'}
+
+
 def compare_window(config, policy, selection, observation, *, now_hours,
                    future_existing_slots, unused_inventory, eligible_new_contacts,
                    existing_channel_probability="0", allow_channel=True, allow_capacity=True, channel_forecast=None, max_capacity_quantity=None):
@@ -68,6 +90,9 @@ def compare_window(config, policy, selection, observation, *, now_hours,
                        config['capacity_lead_hours']+config['capacity_duration_hours'])
     if horizon >= config['horizon_days']*24:
         channel_active = capacity_active = False
+    recourse=future_recourse_envelope(config,now_hours,horizon)
+    recourse_cash=0 if recourse is None else recourse['total_cash_bound_microUSD']
+    recourse_common_cost=0 if recourse is None else recourse['mandatory_cost_microUSD']
     available = observation['summary']['available']
     earned = observation['summary']['unrestrictedEarned']
     arrival = F(policy['arrival_bps'],10000)*F(policy['service_share_bps'],10000)
@@ -92,7 +117,7 @@ def compare_window(config, policy, selection, observation, *, now_hours,
         if channel and not allow_channel or capacity and not allow_capacity: continue
         cost = channel*invoice + quantity*config['capacity_price']
         feasible = cost <= min(available,earned)
-        cash = max(0,available-cost-config['maintenance_daily']*policy['window_delay_days'])
+        cash = max(0,available-cost-config['maintenance_daily']*policy['window_delay_days']-recourse_cash)
         # Treat all future delivery cost+principal locks as simultaneous: no
         # forecast collections, reserve releases or earned cash can fund them.
         if channel_forecast is not None:
@@ -126,11 +151,11 @@ def compare_window(config, policy, selection, observation, *, now_hours,
                 qualification=sum(F(x['realized_contacts_to_window']) for x in samples)/len(samples)
                 costed_contacts=channel_forecast.get('total_owned_contact_count',owned)*quote_cost*policy['window_delay_days']+outreach*config['exposure_cost']+qualification*(4 if composed else 1)*config['qualification_cost']
             else:costed_contacts=contacts*quote_cost
-            values[forecast['belief']]=count*contribution-costed_contacts-cost
+            values[forecast['belief']]=count*contribution-costed_contacts-cost-recourse_common_cost
             counts[forecast['belief']]=str(count)
         routes.append({'channel':channel,'capacity':capacity,'first_action_cost':(invoice if channel else cost),
                        'contingent_later_capacity_cost':(quantity*config['capacity_price'] if channel and capacity else 0),**({'capacity_quantity':quantity,'delivery_capacity_units':units} if composed else {}),
-                       'current_cash_feasible':feasible,'future_delivery_cash_limit':limit,**({'future_contact_reserve_microUSD':contact_cash} if channel_forecast is not None else {}),
+                       'current_cash_feasible':feasible,'future_delivery_cash_limit':limit,**({'future_contact_reserve_microUSD':contact_cash} if channel_forecast is not None else {}),**({'future_recourse_cash_bound_microUSD':recourse_cash} if recourse is not None else {}),
                        'expected_deliveries':counts,'_values':values})
     baseline=routes[0]['_values']
     for route in routes:
@@ -138,5 +163,6 @@ def compare_window(config, policy, selection, observation, *, now_hours,
     return {'schema':'two-stage-window/v1','current_state_digest':observation['state_digest'],
             'public_hypotheses_sha256':digest(policy),'selection_sha256':digest(selection),
             'future_window_hours':horizon,'routes':routes,**({'channel_forecast':channel_forecast} if channel_forecast is not None else {}),
+            **({'future_recourse_cost':recourse} if recourse is not None else {}),
             'scope':'AUTHORED_PUBLIC_ONE_WINDOW_RECOURSE_FORECAST_NOT_EXECUTION',
             'limits':'Same costed delivery profile used for a declared future service mix. Combined route buys channel first and forecasts capacity at the next daily decision; that purchase is not authorized. No calibrated demand, repeated customer availability, future method benefit or native execution claimed. Activation failure/reach are explicit hypotheses; no retry credit assumed. First actions require native reservation, and actual future delivery must replan.'}

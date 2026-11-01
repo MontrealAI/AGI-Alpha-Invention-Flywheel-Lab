@@ -29,6 +29,31 @@ future existing-customer access; all initial-owned and acquired-active contact
 costs are charged conservatively. The forecast counts target-group contacts but
 pays for the full channel's unsuccessful and irrelevant attempts/qualification.
 
+This composition requires `complete_offer_policy.selection: menu`.
+`selection: restricted` remains supported by ordinary complete-offer operation,
+but its combination with `complete-offer-quantity-v1` is explicitly
+`RESTRICTED_COMPLETE_SEQUENCE_LIFECYCLE_UNAVAILABLE`. Configuration validation
+rejects it before account creation or spending, and the sequence entry point
+rejects it before service/channel valuation. It does not silently substitute a
+menu policy or return a differently modeled profitable forecast.
+
+PR98 source `90231bed6579640d171cdb428707c8d50c9cfd30` accepted restricted
+composition but valued every service in the profile: the packet-only fixture
+had an empty executable restricted menu and positive acquisition/two-unit
+capacity forecasts. Filtering to each buyer's current primitive service is not
+a complete repair. Actual settled purchases increment `service_index`, then
+set the next need to collection time plus seven days. Current offers can settle
+before the hypothetical window, so current index, pending state and cooldown
+cannot certify which restricted service is executable then. This lifecycle
+transition is not yet composed into the public future-window model.
+
+Repair051 therefore marks that combination unavailable. Supporting it later
+requires an explicit, independently reconstructed public lifecycle model, not
+free work or assumed unchanged indices. Menu grouping, requested-work rules,
+full paid-pool contact dilution and costed attempted/irrelevant reach are
+unchanged. Historical four-world results retain their original source; this is
+separate correctness evidence, not a new economic advantage.
+
 A packet's three units and complete production/checking/support/onboarding,
 payment, tax and evaluation costs stay attached to its actual admitted profile.
 The forecast clips the declared quantity menu to actual current supplier room
@@ -91,7 +116,7 @@ must be inspected before claiming a run completed.
 
 This two-policy engineering pair is **not** the requested competent-baseline,
 commerce-only, capability-only, joint and tuned-fixed-split comparison. That
-broader comparator scope remains outstanding. No joint-policy superiority,
+separate five-policy design is described in [COMPARATOR050_OPERATING.md](COMPARATOR050_OPERATING.md). Its [completed 16-world source-specific receipt](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/9695384e61ef7f6875d182b2226646e2a5e92cfc/campaign/comparator-050/RESULTS.json) retains all losses and shows zero expansion invoices across all 16 accounts; it does not establish investment-allocation benefit. No joint-policy superiority,
 fresh discovery-method benefit, annual profit, actual commerce or US$3billion
 milestone is claimed here, even if this finite composition works profitably.
 
@@ -106,6 +131,12 @@ Pure cases cover disjoint work, strict expiry, outages, no demand, empty reach,
 liquidity, inactive buyers and seed/earned funding distinctions. Existing sequence
 and quantity regressions remain required. Full source-qualified integration and
 downloaded-release operation are separate gates.
+
+Restricted regressions compare the empty actual menu with the rejected
+forecast, require rejection before valuation/account creation, retain exact menu
+forecast golden parity, and operate/audit/resume the ordinary restricted path
+without the unsupported composition. Existing menu composition still exercises
+actual earned-funded acquisition, complementary capacity and native delivery.
 
 Development found public lifecycle replay omitted expenditure fields needed by
 the new path: reconstruct them from native prior observations, do not read final
