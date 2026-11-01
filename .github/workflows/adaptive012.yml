@@ -9,6 +9,7 @@ concurrency:
   cancel-in-progress: true
 permissions:
   contents: read
+  actions: read
 jobs:
   adaptive-current:
     runs-on: ubuntu-latest
@@ -18,21 +19,30 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
       - run: python3 -m pip install -r requirements-commercial010.txt
+      - name: Identify optional exact-input prior cohort
+        id: prior-cohort
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/adaptive_cohort_reuse036.py lookup --output "$RUNNER_TEMP/adaptive036"
       - name: Current adaptive behavior, ownership, inference and obligations
-        run: python3 -m unittest discover -s tests -p 'test_adaptive*.py' -v
+        run: |
+          python3 -m unittest discover -s tests -p 'test_cohort_reuse036.py' -v
+          python3 -m unittest discover -s tests -p 'test_adaptive*.py' -v
       - name: Imported allocation and ownership actual discovery
         run: |
           python3 -m unittest discover -s tests -p 'test_transformational_portfolio.py' -v
           python3 -m unittest discover -s tests -p 'test_tape_writer_lease.py' -v
           python3 -m unittest discover -s tests -p 'test_commercial010_owned_exchange.py' -v
       - name: Current default end-to-end operating edition
+        if: steps.prior-cohort.outputs.reuse != 'true'
         run: |
           python3 -m adaptive_enterprise run --output "$RUNNER_TEMP/adaptive012-current"
-          python3 -m adaptive_enterprise audit --financial-only --output "$RUNNER_TEMP/adaptive012-current"
+          python3 -m adaptive_enterprise audit --financial-only --output "$RUNNER_TEMP/adaptive012-current" > "$RUNNER_TEMP/adaptive012-current/FINANCIAL_AUDIT.json"
       - name: Published package integrity and all native accounts
         run: |
           python3 scripts/reassemble_enterprise011.py --manifest artifacts/adaptive012-parts/INDEX.json --output "$RUNNER_TEMP/adaptive012-published.zip"
@@ -46,6 +56,25 @@ jobs:
           cd "$RUNNER_TEMP/adaptive012-no-git"
           python3 -m adaptive_enterprise run --smoke --output "$RUNNER_TEMP/adaptive012-clean"
           python3 -m adaptive_enterprise audit --output "$RUNNER_TEMP/adaptive012-clean"
+      - name: Bind executed cohort for future optional reuse
+        if: success() && steps.prior-cohort.outputs.reuse != 'true'
+        run: python3 scripts/adaptive_cohort_reuse036.py record --output "$RUNNER_TEMP/adaptive036" --cohort "$RUNNER_TEMP/adaptive012-current"
+      - name: Preserve compact executed-cohort receipt
+        if: success() && steps.prior-cohort.outputs.reuse != 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: adaptive-cohort036-receipt
+          path: ${{ runner.temp }}/adaptive036/COHORT_RECEIPT.json
+          if-no-files-found: ignore
+          retention-days: 30
+      - name: Preserve reuse provenance, not fresh confirmation
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: adaptive036-current-qualification
+          path: ${{ runner.temp }}/adaptive036/REUSE.json
+          if-no-files-found: warn
+          retention-days: 30
       - name: Preserve public key-free evidence including failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

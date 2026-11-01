@@ -5,8 +5,11 @@ investment admission come from the existing ProtectedExchange implementation.
 """
 from __future__ import annotations
 import copy
+from contextlib import contextmanager
 import hashlib
 import json
+import os
+import shutil
 from pathlib import Path
 import stat
 import tempfile
@@ -357,7 +360,113 @@ def audit(tape, *, root, manifest, expected_actions_sha256=None):
     return checked
 
 
-def _audit_native_and_jobs(tape, *, root, manifest, expected_actions_sha256=None):
+class _NativePrefixReplay:
+    """Ephemeral private verifier state; never a portable/public audit receipt.
+
+    Only native replay is incremental. All exported derived fields, service
+    bindings, reservation proofs and connected journal checks still run fresh.
+    The owner guard rebinds source/account/key/writer identity before AND after.
+    """
+    def __init__(self, owner_guard):
+        self.owner_guard = owner_guard
+        self._pid = os.getpid()
+        self._tmp = self._owned = self._replay = None
+        self._identity = self._config = self._prefix = None
+        self._length = 0
+
+    def close(self):
+        try:
+            if self._owned is not None:
+                self._owned.close()
+            elif self._replay is not None:
+                self._replay.close()
+        finally:
+            self._owned = self._replay = None
+            if self._tmp is not None and os.getpid() == self._pid:
+                shutil.rmtree(self._tmp)
+            self._tmp = None
+            self._identity = self._config = self._prefix = None
+            self._length = 0
+
+    def begin(self, tape, *, root, manifest):
+        identity = canonical([self.owner_guard(), str(Path(root).absolute()), manifest])
+        config = canonical(tape['config'])
+        # Compare actual complete prefix bytes, not mtimes, size, supplied head,
+        # or an externally supplied digest. Rewind/change falls back to replay.
+        reusable = (self._replay is not None and identity == self._identity
+                    and config == self._config and len(tape['actions']) >= self._length
+                    and canonical(tape['actions'][:self._length]) == self._prefix)
+        if not reusable:
+            self.close()
+            self._pid = os.getpid()
+            self._tmp = Path(tempfile.mkdtemp(prefix='native-prefix037-'))
+            from commercial.single_writer import SingleWriterExchange
+            c = tape['config']
+            self._owned = SingleWriterExchange(self._tmp/'replay.sqlite', root=root, manifest=manifest,
+                opening=c['opening'], working=c['working'], contract=c['contract'], durable=False,
+                _account_capability=_ADAPTIVE_ACCOUNT_CAPABILITY)
+            self._replay = self._owned._exchange
+            self._identity, self._config = identity, config
+        else:
+            self._owned.lease.assert_owner()
+            # Reuse deterministic adaptive service acceptance only after every
+            # source/input/artifact/receipt byte is rebound to the same manifest.
+            # Other schemas keep their full historical qualification.
+            if manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
+                from adaptive_enterprise.instruments import _validate_manifest, _read
+                _validate_manifest(root, manifest)
+                for job in manifest['jobs']:
+                    current = {field: _read(root, job[field], job[field + '_sha256'])
+                               for field in ['input', 'artifact', 'receipt']}
+                    if job['accepted'] and self._replay.jobs.get(job['id']) != {
+                            'job': job, 'artifact': current['artifact'], 'receipt': current['receipt']}:
+                        raise ValueError('AUDITED_JOB_AUTHORITY_CHANGED')
+                _validate_manifest(root, manifest)
+            elif load_jobs(root, manifest) != self._replay.jobs:
+                raise ValueError('AUDITED_JOB_AUTHORITY_CHANGED')
+        return self._replay, self._length
+
+    def accept(self, tape, *, root, manifest):
+        if canonical([self.owner_guard(), str(Path(root).absolute()), manifest]) != self._identity:
+            raise ValueError('PREFIX_OWNER_OR_SOURCE_CHANGED')
+        self._prefix = canonical(tape['actions'])
+        self._length = len(tape['actions'])
+
+
+@contextmanager
+def _native_replay_context(tape, *, root, manifest, session):
+    if session is not None:
+        yield session.begin(tape, root=root, manifest=manifest)
+        return
+    c = tape['config']
+    with tempfile.TemporaryDirectory(prefix='commercial010-audit-') as tmp:
+        owned = None
+        if manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
+            from commercial.single_writer import SingleWriterExchange
+            owned = SingleWriterExchange(Path(tmp)/'replay.sqlite', root=root, manifest=manifest,
+                opening=c['opening'], working=c['working'], contract=c['contract'], durable=False,
+                _account_capability=_ADAPTIVE_ACCOUNT_CAPABILITY)
+            replay = owned._exchange
+        else:
+            replay = TapeExchange(Path(tmp)/'replay.sqlite', root=root, manifest=manifest,
+                opening=c['opening'], working=c['working'], contract=c['contract'], durable=False)
+        try:
+            yield replay, 0
+        finally:
+            owned.close() if owned is not None else replay.close()
+
+
+def _audit_native_and_jobs(tape, *, root, manifest, expected_actions_sha256=None, _session=None):
+    try:
+        return _audit_native_impl(tape, root=root, manifest=manifest,
+            expected_actions_sha256=expected_actions_sha256, _session=_session)
+    except BaseException:
+        if _session is not None:
+            _session.close()
+        raise
+
+
+def _audit_native_impl(tape, *, root, manifest, expected_actions_sha256=None, _session=None):
     """One complete native replay and call-local, freshly rebound job authority."""
     if not isinstance(tape, dict) or tape.get('config', {}).get('scope') != SCOPE or tape['config'].get('currency') != UNIT:
         raise ValueError('SIMULATED_SCOPE_AND_UNIT_REQUIRED')
@@ -370,41 +479,28 @@ def _audit_native_and_jobs(tape, *, root, manifest, expected_actions_sha256=None
     c = copy.deepcopy(tape['config'])
     if set(c) != {'schema', 'scope', 'currency', 'opening', 'working', 'contract', 'manifest_sha256'} or c['schema'] != 'agi-alpha/commercial010-tape/v1':
         raise ValueError('EXACT_TAPE_CONFIG_REQUIRED')
-    with tempfile.TemporaryDirectory(prefix='commercial010-audit-') as tmp:
-        owned = None
-        if manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
-            from commercial.single_writer import SingleWriterExchange
-            owned = SingleWriterExchange(Path(tmp) / 'replay.sqlite', root=root, manifest=manifest,
-                                         opening=c['opening'], working=c['working'], contract=c['contract'], durable=False,
-                                         _account_capability=_ADAPTIVE_ACCOUNT_CAPABILITY)
-            replay = owned._exchange
-        else:
-            replay = TapeExchange(Path(tmp) / 'replay.sqlite', root=root, manifest=manifest,
-                                  opening=c['opening'], working=c['working'], contract=c['contract'], durable=False)
-        try:
-            for seq, event in enumerate(tape['actions']):
-                if event.get('seq') != seq:
-                    raise ValueError('EVENT_SEQUENCE_OR_OPENING_STATE_MISMATCH')
-                after = replay.execute(event['op'], event['args'], event['day'],
-                                       _expected_before=event.get('before'))
-                if after != event.get('after'):
-                    raise ValueError('EVENT_DERIVED_BALANCE_MISMATCH')
-            rebuilt = replay.export()
-            derived_keys = ['config', 'summary', 'journal', 'orders', 'investments', 'investment_witnesses', 'invoices', 'receivables']
-            if replay.native_engine == 'prospective-v1':
-                prospective_keys = {'prospective_terms', 'prospective_orders', 'prospective_claims'}
-                actual_keys = prospective_keys.intersection(rebuilt)
-                if actual_keys != prospective_keys.intersection(tape):
-                    raise ValueError('PROSPECTIVE_TAPE_EXPORTED_STATE_PRESENCE_MISMATCH')
-                derived_keys += sorted(actual_keys)
-            elif any(key in tape for key in ['prospective_terms', 'prospective_orders', 'prospective_claims']):
-                raise ValueError('LEGACY_TAPE_CANNOT_ASSERT_PROSPECTIVE_STATE')
-            for key in derived_keys:
-                if rebuilt[key] != tape.get(key):
-                    raise ValueError('DERIVED_' + key.upper() + '_MISMATCH')
-            jobs = replay.jobs
-        finally:
-            owned.close() if owned is not None else replay.close()
+    with _native_replay_context(tape, root=root, manifest=manifest, session=_session) as (replay, start):
+        for seq, event in enumerate(tape['actions'][start:], start):
+            if event.get('seq') != seq:
+                raise ValueError('EVENT_SEQUENCE_OR_OPENING_STATE_MISMATCH')
+            after = replay.execute(event['op'], event['args'], event['day'],
+                                   _expected_before=event.get('before'))
+            if after != event.get('after'):
+                raise ValueError('EVENT_DERIVED_BALANCE_MISMATCH')
+        rebuilt = replay.export()
+        derived_keys = ['config', 'summary', 'journal', 'orders', 'investments', 'investment_witnesses', 'invoices', 'receivables']
+        if replay.native_engine == 'prospective-v1':
+            prospective_keys = {'prospective_terms', 'prospective_orders', 'prospective_claims'}
+            actual_keys = prospective_keys.intersection(rebuilt)
+            if actual_keys != prospective_keys.intersection(tape):
+                raise ValueError('PROSPECTIVE_TAPE_EXPORTED_STATE_PRESENCE_MISMATCH')
+            derived_keys += sorted(actual_keys)
+        elif any(key in tape for key in ['prospective_terms', 'prospective_orders', 'prospective_claims']):
+            raise ValueError('LEGACY_TAPE_CANNOT_ASSERT_PROSPECTIVE_STATE')
+        for key in derived_keys:
+            if rebuilt[key] != tape.get(key):
+                raise ValueError('DERIVED_' + key.upper() + '_MISMATCH')
+        jobs = replay.jobs
     if manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
         from adaptive_enterprise.instruments import _validate_manifest
         _validate_manifest(root, manifest)
@@ -424,5 +520,7 @@ def _audit_native_and_jobs(tape, *, root, manifest, expected_actions_sha256=None
         if digest(manifest) != c['manifest_sha256'] or tape['config'] != c:
             raise ValueError('SOURCE_COHORT_MISMATCH')
         jobs = fresh_jobs
+    if _session is not None:
+        _session.accept(tape, root=root, manifest=manifest)
     return ({'accepted': True, 'scope': SCOPE, 'actions_sha256': tape['actions_sha256'],
              'summary': rebuilt['summary'], 'orders': rebuilt['orders'], 'investments': rebuilt['investments']}, jobs)
