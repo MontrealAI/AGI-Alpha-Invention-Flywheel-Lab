@@ -6,7 +6,7 @@ import tempfile
 import unittest
 import zipfile
 from flywheel.archive_v2 import build, extract, materialize_cycle004, PREFIX
-from flywheel.legacy import materialize
+from flywheel.legacy import materialize, MANIFEST as LEGACY_MANIFEST, EDITION, PINS
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -15,7 +15,25 @@ class ArchiveTests(unittest.TestCase):
     def test_no_git_legacy_snapshot_and_historical_replay_sources(self):
         with tempfile.TemporaryDirectory(prefix="alpha-no-git-", dir="/tmp") as temporary:
             root = Path(temporary)
-            build(ROOT, root / "source.zip")
+            # This test qualifies the two frozen replay closures, not an
+            # ever-growing monorepo archive. Keep the actual current bytes and
+            # retained snapshots used by both materializers in a bounded input
+            # projection; each materializer still verifies every frozen hash.
+            names = (set(json.loads((ROOT / LEGACY_MANIFEST).read_text()))
+                     | set(json.loads((ROOT / EDITION).read_text())) | set(PINS))
+            for cycle in ("cycle-001", "cycle-004"):
+                names.update(p.relative_to(ROOT).as_posix()
+                             for p in (ROOT / "historical" / cycle).rglob("*.txt")
+                             if p.is_file())
+            source = root / "source"
+            for name in sorted(names):
+                target = source / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / name, target)
+            (source / ".git").mkdir()
+            (source / ".git" / "config").write_text("inert test metadata\n")
+            built = build(source, root / "source.zip")
+            self.assertEqual(set(built["manifest"]["files"]), names)
             extract(root / "source.zip", root / "unpacked")
             unpacked = root / "unpacked"
             self.assertFalse((unpacked / ".git").exists())
