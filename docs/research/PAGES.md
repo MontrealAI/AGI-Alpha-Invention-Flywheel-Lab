@@ -26,7 +26,7 @@ On a phone, tap **Open the full paper** for the native PDF reader. If inline pre
 
 ## Retroactive Sensor Lab
 
-The proposed fifth allowlisted HTML page is **[Retroactive Sensor Lab](sensor-lab.html)**, with its local-only **[sensor constructor module](sensor-engine.mjs)**. This optional user-interactive demonstration operates entirely on pasted CSV or its clearly labeled synthetic sample. It makes no network calls and never publishes or uploads the user-provided archive. Its output includes source-row references, SHA-256 fingerprints of the input bytes and explicit unknown intervals. It is not a certified physical or scientific measurement. Run \`node --test tests/test_sensor_engine.mjs\` plus the existing site tests before publication.
+The proposed fifth allowlisted HTML page is **[Retroactive Sensor Lab](sensor-lab.html)**, with its local-only **[sensor constructor module](sensor-engine.mjs)**. This optional user-interactive demonstration operates entirely on pasted CSV or its clearly labeled synthetic sample. It makes no network calls and never publishes or uploads the user-provided archive. Its output includes source-row references, SHA-256 fingerprints of the input bytes and explicit unknown intervals. It is not a certified physical or scientific measurement. Run `node --test tests/test_sensor_engine.mjs` plus the existing site tests before publication.
 
 The published site must continue to copy **only explicitly named public HTML, PDF and module files**. The original manuscripts and all unpublished accounts or archives remain outside the boundary.
 
