@@ -12,6 +12,14 @@ The overnight integration adds exact quote arithmetic, finite chunked admission,
 
 The [full-year report](../../campaign/account-year-048/REPORT.md) records four separately funded native simulations from its pinned public source-equivalent snapshot. New code does not relabel those results. This navigation snapshot is not a permanent status registry: refresh exact heads, current owners, reviews, Actions and release receipts. Preserve owner work when integrating. Follow the [operator guide](../connected014/OPERATOR.md) and [resource policy](RESOURCE_POLICY.md).
 
+## Public delivery and large inputs
+
+Apply the [public-build default](../../AGENTS.md#public-builds-and-compact-learning-by-default): deliver authorized project code, compact reproducible evidence and lessons on GitHub, not only as private bundles. Keep the exact source revision, commands, outcomes (including failures), limitations and a concise tried → outcome → lesson → next/avoid record.
+
+For large public inputs, record verified URLs, dataset version, retrieval/filtering instructions and available content hashes. Disclose missing identity evidence rather than inventing it. Stream or process bounded slices transiently; retain the smallest useful reproduction and essential claim/source/failure evidence instead of unnecessary raw data, archives or generated bundles. A compact summary must not hide failed arms, costs or dependencies.
+
+Keep private documents, customer data, credentials, signing material and internal conversations out of public outputs. Existing spending, access, formal approval, merge and deployment boundaries still apply; do not invent renewal approvals for already-authorized ordinary public engineering. This update neither deletes existing data nor authorizes history rewriting.
+
 ## Mission: construct economically reachable possibilities
 
 Invent the **complete productive arrangement**: a valuable accepted outcome, the means to produce and verify it, and terms under which beneficiaries, producers, funders and other participants voluntarily prefer participation to their available alternatives. Discover these together rather than fixing a low-value service and optimizing its transaction rate indefinitely. A missing process, measurement, interface, representation, contract, financing structure or allocation of risk/work can be the enabling invention. Known effective methods remain usable without new novelty proofs.
@@ -25,6 +33,12 @@ For a justified fresh selection, compare at least three materially different con
 - **Successor enabled:** name a second useful opportunity and the specific cycle-created asset it needs. Test whether that successor is economically reachable with the asset and not through the strongest feasible matched alternative without it. Match permitted information, actions and full costs; allow the strong ordinary alternative to purchase or build its own means. Do not lock its seed artificially or give the successor free equipment, information or research. Preserve actual cash and liabilities.
 
 Use this card to choose a decisive prototype and delivery for the ambitious construction, not the smallest ambition or another planning framework. Test an actual native profitable first opportunity leading to a better second opportunity; neither assumed demand nor impressive scope establishes that sequence. The intended result is a growing set of sustainably achievable valuable outcomes—not more transactions, mechanism complexity or dependence on the system. A simpler existing service or voluntary withdrawal can still win.
+
+### Flagship first; support must enable it
+
+Select a consequential frontier problem and name the missing means that prevents a valuable activity. Construct and test those means, then pursue profitable complete delivery whose consequence is large. A small decisive test can serve a large ambition; established methods are eligible when they enable that construction.
+
+For each checker, dashboard, routine optimization, paper or infrastructure task, state the concrete flagship dependency it removes and the consequential test or delivery it enables. Do not let tractable support become the substitute objective; reprioritize when it dominates. Keep this connection concise and operational, not a new admission-checker project. Neither ambition nor this guidance guarantees breakthrough/profit, requires novelty in every component, or relaxes evidence and permissions.
 
 ### Close one native business episode
 

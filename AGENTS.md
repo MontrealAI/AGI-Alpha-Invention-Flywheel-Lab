@@ -6,6 +6,14 @@ Build publicly in this repository: visible branches/PRs, GitHub Actions, qualifi
 
 Read [the developer/mechanism guide](docs/harness/DEVELOPER_GUIDE.md), [operator guide](docs/connected014/OPERATOR.md) and [resource policy](docs/harness/RESOURCE_POLICY.md). These current instructions supersede older blanket failure-file retention, stale campaign renewal gates and obsolete owner labels. Historical source snapshots, outcomes and permissions still describe their original scope.
 
+## Public builds and compact learning by default
+
+For user-authorized project work, publish code, compact reproducible evidence and distilled lessons through public GitHub branches and PRs by default, rather than delivering only a private file bundle. Ordinary already-authorized public engineering does not need a recurring publication approval.
+
+Reference large public datasets by verified source URLs, version or release identifiers, hashes when available, and retrieval instructions. Use bounded transient processing (streaming, slices or temporary downloads); retain useful conclusions, small reproductions and essential source/failure evidence, not unnecessary raw datasets, archives or generated bundles. Do not invent missing hashes or treat a URL alone as proof of the analyzed bytes.
+
+The public default excludes private user documents, customer data, credentials, signing material and internal conversations. It grants no new spending, access changes, formal PR approval, merge or deployment authority. This guidance update does not itself authorize deleting existing data or rewriting history; apply the retention safeguards below to any separately scoped cleanup.
+
 ## Invent the complete productive arrangement
 
 **Transformational intelligence changes the game.** The defining shift is **from optimizing an enterprise to constructing the conditions under which better enterprises become possible**. Discover the valuable outcome, the means of producing and verifying it, and the arrangement that makes each participant's involvement worthwhile—together. The object of invention is the complete productive arrangement, not a transaction counter, a catalogue of mechanisms or dependence on this machine.
@@ -15,6 +23,12 @@ Search jointly over beneficiary outcomes, production methods, measurement/verifi
 Aim to expand the valuable outcomes that can be sustainably achieved through voluntary cooperation. Count construction, search, unsuccessful attempts, acquisition, production, checking, maintenance, financing and residual obligations. Use real available native cash for actions; uncertain future value is a planning input, not revenue or funding. Profit supports continuation, but maximizing transaction count or organizational complexity is not the objective.
 
 Seek a connected sequence: cycle one creates a useful capability, information, relationship, productive asset or unrestricted earnings that makes a specific successor economically reachable. Demonstrate the successor's acceptance and full costs, and distinguish **financed by**, **enabled by**, and merely **later than**. For a new causal enabling claim, compare against the strongest feasible route without that cycle-created asset under matched starting resources. Better equipment is not by itself a better inventor: improved discovery of such sequences is a further claim requiring fresh equal-content and strong conventional controls. This mission is not a claim that the current finite mechanisms have already delivered a full transformational breakthrough.
+
+### Keep the flagship ahead of supporting work
+
+Select a consequential frontier problem, identify the missing means preventing a valuable activity, then construct and test those means and pursue profitable complete delivery with large consequences. Keep that flagship explicit: a small decisive test is appropriate when the consequence is large, and known methods remain eligible when they enable the construction.
+
+Link each supporting task—checkers, dashboards, routine optimization, papers or infrastructure—to a concrete flagship dependency and the next consequential test or delivery it enables. Supporting work must not substitute for the flagship. When it dominates, reprioritize toward removing the missing-means constraint rather than expanding support for its own sake. This is a selection and execution discipline, not another admission-checker project, a novelty requirement for every component, a guarantee of breakthrough or profit, or permission to weaken evidence and authority boundaries.
 
 ## Learn, consolidate, delete
 
