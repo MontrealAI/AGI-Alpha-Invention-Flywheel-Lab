@@ -1,8 +1,15 @@
 # AGI ALPHA — morning progress handoff, 1 November 2026
 
-Checkpoint: 10:10 UTC. The fixed experiment-identity and report-header corrections are published and locally qualified. Their exact-head hosted gates are running; merge/release/downloaded final operation remain pending.
+Checkpoint: 10:28 UTC. Published experiment-identity corrections are locally qualified and their hosted release tests passed; composed-future admission remains a separate active review blocker. No merge or new release is claimed.
 
 **An audited operating simulation and reproducible account-year results exist. The latest implementation is not yet a qualified released enterprise. Actual commercial profit and US$3 billion trailing-365-day profit remain unestablished.** No default policy promotion follows from these experiments.
+
+| State | Current work |
+| --- | --- |
+| Done | P0 qualified release and downloaded operation; four primary account years plus four separately labeled reproductions; fixed finite comparator and P4 results; current experiment-identity repair |
+| Running | Composed-future native admission correction, regression tests and independent review; current-head hosted qualification |
+| Blocked | Final merge/release until the admission correction passes its own gates; unified audience repair unpublished; original signed-account migration remains NO-GO |
+| Next | Publish the corrected exact source, finish required qualification, merge normally, inspect same-main release and operate its actual downloaded bytes |
 
 ## Source identities and gates
 
@@ -16,6 +23,7 @@ Checkpoint: 10:10 UTC. The fixed experiment-identity and report-header correctio
 | Current local qualification, directly inspected | 76 composed source/publication/identity tests passed; fresh no-Git five-command run/resume/native-audit/package/public-audit accepted, with financially unchanged resume. Release prepare/verify accepted from a clean committed checkout |
 | Hosted full CI on a962fd43 | Current exact-head workflows are running. Earlier b88 passed all14, including 1,508 full-suite tests, before its seed-verifier finding was repaired; those passes remain tied to b88 |
 | Experiment-identity review repair | Published and independently reviewed: fixed startup protocol/config/cohort/seed/native arm/completion, native audit of skipped completed cells, null actual-profit/empty-authority summary schema; comparator source/protocol/phase/authority headers. The wrong-seed counterexample was independently reproduced. Current exact-head gates remain required |
+| New composed-future admission blocker | The complete-offer sequence forecast can credit later prospects that higher-priority nonempty native menus exclude. The startup frontier guard covers only startup; an independently reviewed sequence-path repair and regression are in progress. No merge/release is claimed |
 | Latest owned-cost and frontier repair | Peer-accepted engineering corrections are bound to public a962fd43 / source f6eda5…; full current hosted gates, qualified merge/release and downloaded final operation remain **PENDING**. No new profitable startup result or default promotion is established |
 | Final qualified merge / release | **PENDING** — record final commit, tree, tag, source and asset identities after the required gates |
 | Downloaded final default operation | **PENDING** — require actual downloaded bytes, all command exits, native/public/wheel audits and unchanged resume |
