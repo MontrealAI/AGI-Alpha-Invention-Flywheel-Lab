@@ -1,0 +1,190 @@
+{
+  "schema_version": "cdp060-normalized-v1",
+  "id": "cdp_o5_03d",
+  "kind": "dynamic",
+  "source_filename_kind": "dynamic",
+  "orders": [
+    {
+      "id": 1,
+      "client_id": 1,
+      "volume_m3": 7.5,
+      "default_load_m3": 0.0,
+      "release_min": 0.0,
+      "requested_min": 510.0,
+      "interval_min": 0.0,
+      "mix_id": 168,
+      "usage": "PLANCHER"
+    },
+    {
+      "id": 2,
+      "client_id": 1,
+      "volume_m3": 5.0,
+      "default_load_m3": 0.0,
+      "release_min": 0.0,
+      "requested_min": 470.0,
+      "interval_min": 0.0,
+      "mix_id": 139,
+      "usage": "TOPPING"
+    },
+    {
+      "id": 3,
+      "client_id": 1,
+      "volume_m3": 5.0,
+      "default_load_m3": 0.0,
+      "release_min": 0.0,
+      "requested_min": 595.0,
+      "interval_min": 0.0,
+      "mix_id": 277,
+      "usage": "BALCON"
+    },
+    {
+      "id": 4,
+      "client_id": 2,
+      "volume_m3": 1.5,
+      "default_load_m3": 0.0,
+      "release_min": 651.0166666666667,
+      "requested_min": 780.0,
+      "interval_min": 0.0,
+      "mix_id": 329,
+      "usage": "BALCON"
+    },
+    {
+      "id": 5,
+      "client_id": 3,
+      "volume_m3": 4.0,
+      "default_load_m3": 0.0,
+      "release_min": 851.65,
+      "requested_min": 1020.0,
+      "interval_min": 0.0,
+      "mix_id": 188,
+      "usage": "NULL"
+    }
+  ],
+  "travel_minutes": [
+    [
+      8.399999999999999,
+      46.199999999999996,
+      117.6,
+      99.39999999999999,
+      68.6,
+      43.4,
+      124.6,
+      117.6
+    ],
+    [
+      8.399999999999999,
+      46.199999999999996,
+      117.6,
+      99.39999999999999,
+      68.6,
+      43.4,
+      124.6,
+      117.6
+    ],
+    [
+      8.399999999999999,
+      46.199999999999996,
+      117.6,
+      99.39999999999999,
+      68.6,
+      43.4,
+      124.6,
+      117.6
+    ],
+    [
+      79.8,
+      85.39999999999999,
+      102.19999999999999,
+      107.8,
+      92.39999999999999,
+      107.8,
+      103.6,
+      102.19999999999999
+    ],
+    [
+      118.99999999999999,
+      110.6,
+      18.2,
+      51.8,
+      81.19999999999999,
+      148.39999999999998,
+      7.0,
+      18.2
+    ]
+  ],
+  "source_car_travel_minutes": [
+    [
+      6.0,
+      33.0,
+      84.0,
+      71.0,
+      49.0,
+      31.0,
+      89.0,
+      84.0
+    ],
+    [
+      6.0,
+      33.0,
+      84.0,
+      71.0,
+      49.0,
+      31.0,
+      89.0,
+      84.0
+    ],
+    [
+      6.0,
+      33.0,
+      84.0,
+      71.0,
+      49.0,
+      31.0,
+      89.0,
+      84.0
+    ],
+    [
+      57.0,
+      61.0,
+      73.0,
+      77.0,
+      66.0,
+      77.0,
+      74.0,
+      73.0
+    ],
+    [
+      85.0,
+      79.0,
+      13.0,
+      37.0,
+      58.0,
+      106.0,
+      5.0,
+      13.0
+    ]
+  ],
+  "travel_row_mapping_verified": true,
+  "missing_travel_order_ids": [],
+  "operating_data_complete": true,
+  "travel_minutes_multiplier_applied": 1.4,
+  "travel_orientation": "rows=orders in exported order_id order; columns=plant pseudoID1..8",
+  "return_travel_model": "site-to-plant equals the corresponding plant-to-site travel time, per source symmetric assumption",
+  "n_orders": 5,
+  "total_quantity_m3": 23.0,
+  "dynamic_order_count": 2,
+  "missing_mix_order_ids": [],
+  "mix_data_complete": true,
+  "source_instance_specs": {
+    "number_of_Orders": 5.0,
+    "TotalConcreteQuantityOrdered": 23.0
+  },
+  "source_quantity_total_reconciled": true,
+  "source": {
+    "filename": "cdp_o5_03d.mat",
+    "sha256": "c516291968d2e770869a4dde3a64fb003de4ba2e33232d6b990edbbb3d4854e8",
+    "bytes": 1872,
+    "file_id": "4927cfca-c6d8-46fb-b443-ee2d30ffee74"
+  },
+  "clock_policy": "minutes since operational-day midnight; calendar components deliberately discarded; no cross-day chronology inferred"
+}

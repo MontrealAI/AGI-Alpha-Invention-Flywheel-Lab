@@ -29,6 +29,23 @@ SOURCE_PATHS = ('connected_enterprise/startup_acquisition048.py','connected_ente
                 'vendor/alpha_claim/protected_exchange.py')
 
 
+SOURCE_PATHS += ('production060/service.py', 'production060/native.py',
+                 'production060/acceptance.py', 'production060/dispatch.py',
+                 'production060/business.py', 'production060/evaluation.json')
+
+
+# Inventory061 source closure extends identities only; native protection is unchanged.
+SOURCE_PATHS += ('inventory061/__init__.py', 'inventory061/service.py', 'inventory061/native.py',
+                 'inventory061/operate.py', 'inventory061/constructor.py', 'inventory061/quality_constructor.py',
+                 'inventory061/independent_acceptance.py', 'inventory061/economics.json',
+                 'inventory061/QUALITY_CONTRACT_V2.json', 'inventory061/REGISTRATION.json',
+                 'inventory061/LICENSE-OR-License.txt',
+                 'inventory061/inputs/brief.md', 'inventory061/inputs/problem_description.md',
+                 'inventory061/inputs/params.yaml', 'inventory061/inputs/01.json',
+                 'inventory061/inputs/program/_inventory_engine.py',
+                 'inventory061/inputs/program/_inventory_objective.py')
+
+
 def source_identity(root):
     root = Path(root).absolute()
     files = {}
@@ -417,9 +434,10 @@ class JournalAccount:
                 'source': self.source, 'manifest_sha256': digest(self.manifest)}
 
     def _audit_incremental(self):
-        # Legacy service schemas retain full replay; the measured optimization
-        # is deliberately limited to canonical adaptive service accounts.
-        if self.manifest.get('schema') != 'agi-alpha/adaptive012-services/v1':
+        # Only qualified source-bound services reuse a private financial
+        # prefix; production060 also rebinds every dynamic prepared output.
+        if self.manifest.get('schema') not in {'agi-alpha/adaptive012-services/v1',
+                                              'production060/native-services/v1'}:
             return self.audit()
         with self._mutex:
             try:

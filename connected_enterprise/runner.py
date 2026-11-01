@@ -101,6 +101,22 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in required):
             raise ValueError('COMPARATOR050_SOURCE_DEPENDENCY_MISSING')
         names.update(required)
+    if (root/'production060/service.py').is_file():
+        from production060.service import source_paths as production_paths
+        names.update(production_paths(root))
+        names.update(p.relative_to(root).as_posix() for p in (root/'production060/data').rglob('*.json') if p.is_file())
+        names.update(p.relative_to(root).as_posix() for p in (root/'tests').glob('test_production060*.py') if p.is_file())
+        names.update(name for name in ('production060/README.md', 'production060/data/README.md',
+                     'production060/PUBLIC_PROVENANCE.json', 'production060/evidence/ordinary/summary.json',
+                     'production060/evidence/HISTORICAL_SUMMARY.json', 'requirements-engineering061.txt')
+                     if (root/name).is_file())
+    if (root/'inventory061/service.py').is_file():
+        from inventory061.service import SOURCES as inventory_sources
+        names.update(inventory_sources)
+        names.update(p.relative_to(root).as_posix() for p in (root/'tests').glob('test_inventory061*.py') if p.is_file())
+        names.update(p.relative_to(root).as_posix() for p in (root/'inventory061').glob('*.md') if p.is_file())
+        names.update(name for name in ('inventory061/deliveries/reference/solution.json',)
+                     if (root/name).is_file())
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
