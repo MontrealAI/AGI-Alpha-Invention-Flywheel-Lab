@@ -63,6 +63,9 @@ def read_bound(root, path, expected):
 
 
 def load_jobs(root, manifest):
+    if isinstance(manifest, dict) and manifest.get('schema') == 'agi-alpha/material054-services/v1':
+        from connected_enterprise.material_service054 import load_jobs as material_jobs
+        return material_jobs(root, manifest)
     if isinstance(manifest, dict) and manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
         from adaptive_enterprise.instruments import load_jobs as adaptive_jobs
         return adaptive_jobs(root, manifest)
@@ -189,6 +192,11 @@ class TapeExchange:
 
     def check(self, task, artifact):
         self.validate(task)
+        if self.manifest.get('schema') == 'agi-alpha/material054-services/v1':
+            from connected_enterprise.material_service054 import check_job
+            checked = check_job(self.root, self.manifest, self.jobs[task['job_id']]['job'], artifact)
+            return {'accepted': checked['receipt']['accepted'], 'decisive': True, 'scope': SCOPE,
+                    'authority': checked['job']['receipt_sha256']}
         if self.manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
             from adaptive_enterprise.instruments import check_job
             checked = check_job(self.root, self.manifest, self.jobs[task['job_id']]['job'], artifact)
@@ -252,6 +260,14 @@ class TapeExchange:
             amount(a['amount'])
             self.ex.wallet(a['buyer'], a['amount'])
         elif op == 'offer':
+            if self.manifest.get('schema') == 'agi-alpha/material054-services/v1':
+                if any(r['op'] == 'offer' and r['args']['job_id'] == a['job_id'] for r in self.actions):
+                    raise ValueError('MATERIAL_JOB_ALREADY_COMMITTED')
+                job = self.jobs[a['job_id']]['job']
+                if job['parent_job_id'] is not None:
+                    parents = [r for r in self.actions if r['op'] == 'offer' and r['args']['job_id'] == job['parent_job_id']]
+                    if len(parents) != 1 or self.ex.order(parents[0]['args']['id'])['state'] != 'released':
+                        raise ValueError('MATERIAL_PARENT_NOT_RELEASED')
             amount(a['price'], positive=True)
             extra = {'terms_id': a['terms_id'], 'now': day} if 'terms_id' in a else {}
             self.ex.offer(a['id'], a['buyer'], a['price'], 'nonrecourse-simulated',
@@ -440,7 +456,7 @@ def _native_replay_context(tape, *, root, manifest, session):
     c = tape['config']
     with tempfile.TemporaryDirectory(prefix='commercial010-audit-') as tmp:
         owned = None
-        if manifest.get('schema') == 'agi-alpha/adaptive012-services/v1':
+        if manifest.get('schema') in {'agi-alpha/adaptive012-services/v1', 'agi-alpha/material054-services/v1'}:
             from commercial.single_writer import SingleWriterExchange
             owned = SingleWriterExchange(Path(tmp)/'replay.sqlite', root=root, manifest=manifest,
                 opening=c['opening'], working=c['working'], contract=c['contract'], durable=False,
@@ -523,3 +539,4 @@ def _audit_native_impl(tape, *, root, manifest, expected_actions_sha256=None, _s
         _session.accept(tape, root=root, manifest=manifest)
     return ({'accepted': True, 'scope': SCOPE, 'actions_sha256': tape['actions_sha256'],
              'summary': rebuilt['summary'], 'orders': rebuilt['orders'], 'investments': rebuilt['investments']}, jobs)
+

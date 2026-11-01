@@ -614,3 +614,4 @@ def prepare_complete_offer_services(root, relative, *, cohort_seed=0, jobs_per_s
     from commercial.persistence import atomic_bytes
     atomic_bytes(root/relative/'MANIFEST.json',canonical(manifest)+b'\n');load_jobs(root,manifest)
     return manifest
+
