@@ -55,12 +55,16 @@ class ResearchSiteTests(unittest.TestCase):
             site.validate(self.source)
 
     def test_mobile_and_pdf_fallbacks_present(self):
-        text = (self.source / 'foundry-v2.html').read_text()
-        self.assertIn('name="viewport"', text)
-        self.assertIn('type="application/pdf"', text)
-        self.assertIn('download>', text)
-        self.assertIn('Skip to content', text)
-        self.assertIn('Your browser does not display embedded PDFs', text)
+        for name in site.PAGES:
+            text = (self.source / name).read_text()
+            self.assertIn('name="viewport"', text)
+            self.assertIn('Skip to content', text)
+            self.assertIn('prefers-reduced-motion', text)
+            if name != 'index.html':
+                self.assertIn('type="application/pdf"', text)
+                self.assertIn('download>', text)
+                self.assertIn('Your browser does not display embedded PDFs', text)
+
 
 
 if __name__ == '__main__':

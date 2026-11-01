@@ -13,7 +13,7 @@ PAPERS = (
     'out-reflect-self-correcting-evidence-20261021.pdf',
     'transformational-autonomous-enterprises-v1.pdf',
 )
-PAGES = ('index.html', 'foundry-v2.html')
+PAGES = ('index.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html')
 FILES = PAPERS + PAGES + ('publication-manifest.json',)
 
 

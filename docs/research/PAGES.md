@@ -2,7 +2,7 @@
 
 The [original Foundry v2 PDF](autonomous-enterprises-foundry-v2.pdf) is always available in this public repository. GitHub can preview it; use its download control if your browser does not show the preview. This link does not depend on GitHub Pages, an Actions artifact, or an expiring attachment.
 
-The website adds a simple research shelf, a dedicated Foundry v2 reading page, and visible open/download fallbacks. PDFs remain unchanged. No login, third-party viewer, tracking, API key, paid service, or local setup is needed to read the published site.
+The website adds a simple research shelf, dedicated reading pages for all three papers, and visible open/download fallbacks. PDFs remain unchanged. No login, third-party viewer, tracking, API key, paid service, or local setup is needed to read the published site.
 
 ## One-time owner setup
 
@@ -26,7 +26,7 @@ On a phone, tap **Open the full paper** for the native PDF reader. If inline pre
 
 ## What is published
 
-The build copies **only** two named HTML pages, the three named public PDFs, a checksum manifest, and `.nojekyll`. It does not export the repository, accounts, experiment outputs, credentials, or local workspace. Pull requests validate and build only; deployment is restricted to `main`, with Pages/OIDC permissions limited to the deployment job. Existing manuscript paths and release `PAPER.pdf` files are untouched.
+The build copies **only** four named HTML pages, the three named public PDFs, a checksum manifest, and `.nojekyll`. It does not export the repository, accounts, experiment outputs, credentials, or local workspace. Pull requests validate and build only; deployment is restricted to `main`, with Pages/OIDC permissions limited to the deployment job. Existing manuscript paths and release `PAPER.pdf` files are untouched.
 
 Local check (Python standard library only):
 
