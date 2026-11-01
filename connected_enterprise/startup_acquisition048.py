@@ -39,14 +39,7 @@ def validate_option(option):
     return option
 
 
-def _prepared_menu(offer_menu_fn, market):
-    from .engine import _offer_menu
-    if offer_menu_fn is _offer_menu:
-        return lambda state, jobs, buyer, cfg: offer_menu_fn(state, jobs, buyer, cfg, _market=market)
-    return offer_menu_fn
-
-
-def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None):
+def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=()):
     """No valuation or paid reservation for an inconsistent or empty audience.
 
     This startup guard does not repair legacy owned-access semantics. It refuses
@@ -61,9 +54,6 @@ def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None):
         slots = 0
     if not slots:
         return []
-    from .complete_offer_market import compile_market
-    market = compile_market(cfg['complete_offer_policy']) if _market is None else _market
-    menu_fn = _prepared_menu(offer_menu_fn, market)
     for contract_id in policy['contract_ids']:
         terms = cfg['channels'][contract_id]
         owned = set(sorted(buyers)[:terms['owned_audience_count']])
@@ -75,7 +65,7 @@ def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None):
         for ident, buyer in sorted(buyers.items()):
             if ident in owned or buyer['onboarded'] or buyer.get('pending_commitments', {}):
                 continue
-            menu = menu_fn({'used_jobs': sorted(used_jobs)}, jobs, dict(buyer, id=ident), cfg)
+            menu = offer_menu_fn({'used_jobs': sorted(used_jobs)}, jobs, dict(buyer, id=ident), cfg)
             if any(offer['capacity_units'] <= slots for entry, offer, anchor in menu):
                 eligible.append(contract_id)
                 break
@@ -92,13 +82,11 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
         slots = 0
     if not slots or not available or snapshot['summary'].get('investmentStopped'):
         return []
-    from .complete_offer_market import compile_market
+    from .complete_offer_market import market_context
     from .strategic_commerce import select
     from .joint_planning import investment_option
-    market = compile_market(cfg['complete_offer_policy'])
-    menu_fn = _prepared_menu(offer_menu_fn, market)
     result = []
-    for contract_id in preflight(cfg, buyers, jobs, menu_fn, used_jobs, _market=market):
+    for contract_id in preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs):
         terms = cfg['channels'][contract_id]
         lead = terms['lead_days']
         days = min(terms['duration_days'], cfg['horizon_days'] - lead)
@@ -106,16 +94,13 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
             continue
         owned = set(sorted(buyers)[:terms['owned_audience_count']])
         public = []
-        maximum_menu_size = 0
         used = set(used_jobs)
         for ident, buyer in sorted(buyers.items()):
             if ident in owned or buyer['known'] or buyer['onboarded'] or buyer.get('pending_commitments',{}):
                 continue
             tentative = {'used_jobs': sorted(used)}
             choices = []
-            menu = menu_fn(tentative, jobs, dict(buyer,id=ident), cfg)
-            maximum_menu_size = max(maximum_menu_size, len(menu), len(market.profile(ident)['services']))
-            for entry, offer, anchor in menu:
+            for entry, offer, anchor in offer_menu_fn(tentative, jobs, dict(buyer,id=ident), cfg):
                 units = offer['capacity_units']
                 if units > slots:
                     continue
@@ -125,7 +110,7 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
                          'available': available, 'reserve_buffer': 1000000, 'quote_cost': 0,
                          'native_state_digest': snapshot['state_digest'], 'profit_tax_bps': cfg['profit_tax_bps']}
                 selected = select(cfg['strategic_policy'], cfg.get('mechanism_policy'), entry['job']['id'], offer, None, facts,
-                                  market_context=market.context(ident, 0))
+                                  market_context=market_context(cfg['complete_offer_policy'], ident, 0))
                 for row in selected['candidates']:
                     conservative = min(Fraction(f['net_after_modeled_tax_fraction']) for f in row['forecasts'])
                     if conservative > 0:
@@ -148,29 +133,20 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
         usable_days = days - max(0, min(lead + days, outage_end) - max(lead, outage_start))
         prospects = min(qualified_contacts * Fraction(policy['conversion_bps'] * cfg['arrival_bps'], 10000**2), Fraction(slots * usable_days, max(p['capacity_units'] for p in public)))
         margin = min(Fraction(p['conservative_net_fraction']) for p in public)
-        attempt_slots = terms['slots_per_day'] * days
-        quote_evaluations = days * min(pool, cfg['strategic_allocation_policy']['max_customers']) * maximum_menu_size
-        future_costs = {'attempt_slots': attempt_slots, 'continuing_prospect_outreach_units': days * pool, 'maximum_menu_size': maximum_menu_size,
-            'qualification_evaluations': quote_evaluations, 'maintenance_days': lead + days,
-            'outreach_microUSD': (attempt_slots + days * pool) * cfg['exposure_cost'],
-            'qualification_microUSD': quote_evaluations * cfg['qualification_cost'],
-            'maintenance_microUSD': (lead + days) * cfg['maintenance_daily']}
-        evaluation = sum(future_costs[k] for k in ('outreach_microUSD', 'qualification_microUSD', 'maintenance_microUSD'))
+        evaluation = terms['slots_per_day'] * days * cfg['exposure_cost'] + contacts * cfg['qualification_cost']
         benefit = prospects * margin - evaluation
         invoice = terms['price_microUSD'] + terms['support_microUSD']
         net = benefit.numerator // benefit.denominator - invoice
-        cash_lock = max(p['current_cash_lock'] for p in public) * slots + evaluation
-        if net <= 0 or invoice + cash_lock > available:
+        if net <= 0:
             continue
         option = investment_option('startup-channel-' + contract_id, 'acquisition', invoice, net, scenarios, 0, terms)
         option['execution'].update(funding='SEED_OR_EARNED', contract_id=contract_id,
-                                   cash_lock=cash_lock,
-                                   forecast_scope='DAY_ZERO_PUBLIC_COMPLETE_OFFERS; worst declared collection belief, explicit conversion haircut and conservative future full-menu evaluation/maintenance costs, no hidden future draws; not demand, income or spendable cash.')
+                                   cash_lock=max(p['current_cash_lock'] for p in public) * slots,
+                                   forecast_scope='DAY_ZERO_PUBLIC_COMPLETE_OFFERS; worst declared collection belief, explicit conversion haircut, no hidden future draws; not demand, income or spendable cash.')
         execution = option['execution']
         execution['startup_contract'] = {'schema': SCHEMA, 'time': 0, 'policy_sha256': digest(policy),
             'native_state_digest': snapshot['state_digest'], 'observed_available': snapshot['summary']['available'],
             'operating_commitment': operating, 'current_slots': slots, 'qualified_public_offers': public,
-            'future_cost_envelope': future_costs, 'future_operating_cash_lock': evaluation,
             'contact_fraction': str(contacts), 'qualified_contact_fraction': str(qualified_contacts), 'prospect_fraction': str(prospects), 'net_fraction': str(benefit - invoice),
             'option_inputs_sha256': digest(execution), 'authority': []}
         validate_option(option)

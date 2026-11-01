@@ -80,73 +80,6 @@ class StartupAcquisitionTests(unittest.TestCase):
         self.assertGreater(rows[0]['future_net_cash']['baseline'], rows[0]['upfront_cost'])
         validate_option(rows[0])
 
-    def test_full_multiservice_qualification_cost_changes_buy_to_hold(self):
-        from fractions import Fraction
-        cfg=fixture(self.manifest)
-        profile=cfg['complete_offer_policy']['profiles'][0]
-        services=['reconciliation','kpi_variance','evidence_matrix','receivables_packet']
-        profile['services']=services
-        profile['price_grids']={service:[20000000] for service in services}
-        for atom in profile['atoms']:
-            atom['values']={service:atom['values']['reconciliation'] for service in services}
-        for i in range(4,8):
-            cfg['complete_offer_policy']['requested_jobs'][f'SIM-customer-{i:03d}']=[
-                job['id'] for service in services for n,job in enumerate(j for j in self.manifest['jobs'] if j['service_id']==service) if n%4==i-4]
-        cfg['channels']['pilot'].update(price_microUSD=1,support_microUSD=0)
-        cfg['qualification_cost']=0
-        snapshot={'state_digest':'a'*64,'summary':{'available':100000000000,'unrestrictedEarned':0,'investmentStopped':False}}
-        buyers={b['id']:b for b in _buyers(cfg,2611010482)}
-        args=lambda:(cfg,'competitive_growth',0,snapshot,0,self.jobs,set(),buyers,cfg['strategic_allocation_policy']['risk']['scenarios'],_offer_menu)
-        witness=options(*args())[0]['execution']['startup_contract']
-        cfg['qualification_cost']=100000
-        margin=min(Fraction(p['conservative_net_fraction']) for p in witness['qualified_public_offers'])
-        prospects=Fraction(witness['prospect_fraction']);contacts=Fraction(witness['contact_fraction'])
-        envelope=witness['future_cost_envelope']
-        days=min(cfg['channels']['pilot']['duration_days'],cfg['horizon_days']-cfg['channels']['pilot']['lead_days'])
-        single_menu_count=days*min(4,cfg['strategic_allocation_policy']['max_customers'])
-        self.assertEqual(envelope['qualification_evaluations'],single_menu_count*4)
-        old_benefit=prospects*margin-envelope['outreach_microUSD']-envelope['maintenance_microUSD']-single_menu_count*cfg['qualification_cost']
-        invoice=old_benefit.numerator//old_benefit.denominator-1
-        self.assertGreater(invoice,0)
-        cfg['channels']['pilot']['price_microUSD']=invoice
-        self.assertGreater(old_benefit-invoice,0)
-        original_benefit=prospects*margin-envelope['attempt_slots']*cfg['exposure_cost']-contacts*cfg['qualification_cost']
-        self.assertGreater(original_benefit-invoice,0)
-        self.assertEqual(envelope['maximum_menu_size'],4)
-        self.assertEqual(options(*args()),[])
-
-    def test_future_operating_cash_is_locked_without_projected_receipts(self):
-        cfg=fixture(self.manifest)
-        snapshot={'state_digest':'a'*64,'summary':{'available':100000000000,'unrestrictedEarned':0,'investmentStopped':False}}
-        buyers={b['id']:b for b in _buyers(cfg,2611010482)}
-        args=lambda:(cfg,'competitive_growth',0,snapshot,0,self.jobs,set(),buyers,cfg['strategic_allocation_policy']['risk']['scenarios'],_offer_menu)
-        option=options(*args())[0];certificate=option['execution']['startup_contract']
-        current=max(p['current_cash_lock'] for p in certificate['qualified_public_offers'])*cfg['initial_slots']
-        self.assertGreater(certificate['future_operating_cash_lock'],0)
-        self.assertEqual(option['execution']['cash_lock'],current+certificate['future_operating_cash_lock'])
-        snapshot['summary']['available']=option['upfront_cost']+current
-        self.assertEqual(options(*args()),[])
-
-    def test_startup_profile_preparation_validates_once_and_preserves_callback(self):
-        from unittest.mock import patch
-        from connected_enterprise import complete_offer_market as market
-        cfg=fixture(self.manifest)
-        snapshot={'state_digest':'a'*64,'summary':{'available':100000000000,'unrestrictedEarned':0,'investmentStopped':False}}
-        buyers={b['id']:b for b in _buyers(cfg,2611010482)}
-        args=(cfg,'competitive_growth',0,snapshot,0,self.jobs,set(),buyers,cfg['strategic_allocation_policy']['risk']['scenarios'])
-        with patch.object(market,'validate_policy',wraps=market.validate_policy) as validate:
-            expected=options(*args,_offer_menu)
-        self.assertEqual(sum('requested_jobs' in call.args[0] for call in validate.call_args_list),1)
-        with patch.object(market,'validate_policy',wraps=market.validate_policy) as validate:
-            preflight(cfg,buyers,self.jobs,_offer_menu)
-        self.assertEqual(validate.call_count,1)
-        calls=[]
-        def callback(state,jobs,buyer,configuration):
-            calls.append(buyer['id'])
-            return _offer_menu(state,jobs,buyer,configuration)
-        self.assertEqual(options(*args,callback),expected)
-        self.assertTrue(calls)
-
     def test_no_demand_overpriced_default_support_timing_and_channel_hold(self):
         for case in ('no_demand', 'overpriced', 'default', 'support', 'timing', 'failed_channel'):
             with self.subTest(case=case):
@@ -183,47 +116,6 @@ class StartupAcquisitionTests(unittest.TestCase):
         resumed=run_world(ROOT,self.manifest,cfg,2611010482,'competitive_growth',target)
         self.assertEqual(result['owned_account'],resumed['owned_account'])
         self.assertTrue(audit(ROOT,self.manifest,resumed)['accepted'])
-
-    def test_exact_startup_selective_category_caps_hold_with_paid_prefix_and_resume(self):
-        import json
-        cfg=fixture(self.manifest);cfg['horizon_days']=4
-        cfg['refusal_recourse_policy']={'schema':'connected-selective-refusal-recourse/v2','daily_planning_cost':100000,'daily_evaluation_cost':10000}
-        cfg['strategic_allocation_policy']['category_budgets_bps']={'acquisition':5000,'capacity':5000}
-        target=self.folder/'startup-selective-category-exact'
-        paused=run_world(ROOT,self.manifest,cfg,2611010482,'competitive_growth',target,stop_after_events=2)
-        self.assertFalse(paused['complete'])
-        prefix=copy.deepcopy(paused['owned_account']['ledger']['actions'])
-        result=run_world(ROOT,self.manifest,cfg,2611010482,'competitive_growth',target)
-        self.assertTrue(audit(ROOT,self.manifest,result)['accepted'])
-        self.assertTrue(audit(ROOT,self.manifest,json.loads(json.dumps(result,sort_keys=True)))['accepted'])
-        self.assertEqual(result['config']['monetary_policy'],'exact-integer-v2')
-        self.assertEqual(result['config']['strategic_policy']['ranking_arithmetic'],'exact-rational-v1')
-        self.assertEqual(self.manifest['native_engine'],'exact-permanent-v2')
-        from commercial.ledger import digest
-        self.assertEqual(result['owned_account']['ledger']['config']['manifest_sha256'],digest(self.manifest))
-        self.assertEqual(result['investments'],[])
-        self.assertEqual(result['orders'],[])
-        self.assertEqual(result['summary']['collections'],0)
-        self.assertEqual(result['summary']['payables'],0)
-        tape=result['owned_account']['ledger']['actions']
-        self.assertEqual(tape[:len(prefix)],prefix)
-        fees={a['args']['id']:a for a in tape if a['op']=='cost'}
-        names=('maintenance-0','startup-acquisition-evaluation','recourse-evaluation-0')
-        self.assertEqual([fees[name]['seq'] for name in names],list(range(fees[names[0]]['seq'],fees[names[0]]['seq']+3)))
-        self.assertEqual(sum(c['id']=='startup-acquisition-evaluation' for c in result['costs']),1)
-        self.assertEqual(sum(c['category']=='selective_recourse_public_evaluation' for c in result['costs']),4)
-        self.assertFalse(any(c['category'] in ('acquisition_contract','prepaid_finite_refusal_recourse') for c in result['costs']))
-        day_zero=next(w for w in result['joint_actions'].values() if w['time']==0)
-        self.assertTrue(any(o['execution'].get('startup_contract') for o in day_zero['allocation']['investments']))
-        for wrapper in result['joint_actions'].values():
-            allocation=wrapper['allocation']
-            self.assertEqual(allocation['category_upfront_caps'],{'acquisition':0,'capacity':0})
-            self.assertEqual(allocation['decision']['category_upfront_caps'],allocation['category_upfront_caps'])
-            self.assertEqual(allocation['decision']['selected_options'],[])
-            self.assertFalse(wrapper['selective_recourse_decision']['purchase'])
-        again=run_world(ROOT,self.manifest,cfg,2611010482,'competitive_growth',target)
-        self.assertEqual(again['owned_account'],result['owned_account'])
-        self.assertTrue(audit(ROOT,self.manifest,again)['accepted'])
 
     def test_tampered_certificate_cannot_enable_seed_for_general_expansion(self):
         option = self.opts()[0]

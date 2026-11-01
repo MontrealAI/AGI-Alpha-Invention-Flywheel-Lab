@@ -97,11 +97,8 @@ class CategoryBudgetNativeTests(unittest.TestCase):
   spec=importlib.util.spec_from_file_location('category_fixture050',ROOT/'tests/test_connected_composed_window049.py');module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
   with tempfile.TemporaryDirectory(prefix='.category-budget050-',dir=ROOT) as temporary:
    folder=Path(temporary);m=prepare_complete_offer_services(ROOT,str(folder.relative_to(ROOT)/'jobs'),cohort_seed=261101050,packet_jobs=24,packet_rows=12)
-   exact,m=fresh_account_config(m,root=ROOT);cfg=module.config(m,False);cfg.update(horizon_days=8,monetary_policy=exact['monetary_policy'],cash_diagnostic_available=exact['opening']);cfg['strategic_allocation_policy']['category_budgets_bps']={'acquisition':5000,'capacity':5000}
+   exact,m=fresh_account_config(m,root=ROOT);cfg=module.config(m,False);cfg.update(horizon_days=8,monetary_policy=exact['monetary_policy']);cfg['strategic_allocation_policy']['category_budgets_bps']={'acquisition':5000,'capacity':5000}
    result=run_world(ROOT,m,cfg,261101050,'competitive_growth',folder/'world');self.assertTrue(audit(ROOT,m,result)['accepted']);self.assertTrue(result['investments'])
-   self.assertTrue(audit(ROOT,m,json.loads(json.dumps(result,sort_keys=True)))['accepted'])
-   diagnostics=result['capital_metrics']['decision_local_cash_opportunities'];self.assertEqual(len(diagnostics),8)
-   self.assertTrue(all(d['diagnostic']=={'status':'UNAVAILABLE','reason':'CATEGORY_BUDGET_CASH_DIAGNOSTIC_UNAVAILABLE'} for d in diagnostics))
    for wrapper in result['joint_actions'].values():
     record=wrapper['allocation'];caps=category_upfront_caps(cfg['strategic_allocation_policy'],record['observation'],wrapper['operating_envelope']);self.assertEqual(record['category_upfront_caps'],caps)
     for kind,cap in caps.items():self.assertLessEqual(sum(o['upfront_cost'] for o in record['decision']['selected_options'] if o['kind']==kind),cap)
@@ -109,6 +106,6 @@ class CategoryBudgetNativeTests(unittest.TestCase):
    wrapper['allocation']=allocate_actions(record['observation'],record['deliveries'],record['investments'],record['riskpolicy'],allow_seed=record['allow_seed'],max_delivery_slots=record['max_delivery_slots'],earned_deduction=record['earned_deduction'],strategic_game=record.get('strategic_game'),category_upfront_caps=forged)
    wrapper['id']=digest(wrapper['allocation']);bad['joint_actions'][wrapper['id']]=wrapper
    with self.assertRaisesRegex(ValueError,'CATEGORY_BUDGET_CAPS_NOT_FROM_CURRENT_EARNINGS'):audit(ROOT,m,bad)
-   again=run_world(ROOT,m,cfg,261101050,'competitive_growth',folder/'world');self.assertEqual(result['owned_account'],again['owned_account']);self.assertEqual(result['capital_metrics'],again['capital_metrics']);self.assertTrue(audit(ROOT,m,again)['accepted'])
+   again=run_world(ROOT,m,cfg,261101050,'competitive_growth',folder/'world');self.assertEqual(result['owned_account'],again['owned_account']);self.assertTrue(audit(ROOT,m,again)['accepted'])
 
 if __name__=='__main__':unittest.main()

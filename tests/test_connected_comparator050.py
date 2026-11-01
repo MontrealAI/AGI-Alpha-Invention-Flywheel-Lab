@@ -137,20 +137,6 @@ class TuningSelectionTests(unittest.TestCase):
                 c.selected_evaluation(output,frozen)
             self.assertFalse((output/'EVALUATION_FROZEN.json').exists())
 
-    def test_completed_resume_receipt_binds_persisted_telemetry_without_changing_money(self):
-        with tempfile.TemporaryDirectory() as temporary:
-            output=Path(temporary)
-            original={'owned_account':{'journal':'unchanged'},'resource_seconds':17.5}
-            resumed={'owned_account':{'journal':'unchanged'},'resource_seconds':0.001}
-            c.write(output/'RESULT.json',resumed)
-            result=c.persisted_after_resume(original,resumed,output)
-            self.assertEqual(c.digest(result),c.digest(resumed))
-            self.assertNotEqual(c.digest(result),c.digest(original))
-            with self.assertRaisesRegex(ValueError,'CHANGED_NATIVE_HISTORY'):
-                c.persisted_after_resume(original,dict(resumed,owned_account={'journal':'changed'}),output)
-            with self.assertRaisesRegex(ValueError,'NOT_PERSISTED_BYTES'):
-                c.persisted_after_resume(original,dict(resumed,resource_seconds=99),output)
-
 
 if __name__=='__main__':
     unittest.main()

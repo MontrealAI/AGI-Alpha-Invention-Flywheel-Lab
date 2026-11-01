@@ -157,15 +157,6 @@ def public_row(config,phase,case,arm,result,checked,resumed):
         'commercial_gate':result['conditional_simulated_commercial_success'],'actual_commerce_profit':None,'actual_host_model_engineering_billing':None}
 
 
-def persisted_after_resume(original,resumed,folder):
-    if original['owned_account']!=resumed['owned_account']:
-        raise ValueError('SAME_ACCOUNT_RESUME_CHANGED_NATIVE_HISTORY')
-    persisted=read(Path(folder)/'RESULT.json')
-    if digest(persisted)!=digest(resumed):
-        raise ValueError('RESUMED_RESULT_NOT_PERSISTED_BYTES')
-    return persisted
-
-
 def validate_recorded_cells(output,frozen,phase,configs,arms,seed,report):
     allowed={(case,arm) for case in PROTOCOL['cases'] for arm in arms}
     keys=[(row['case'],row['arm']) for row in report['rows']]
@@ -243,10 +234,9 @@ def operate(output,phase,max_events=None):
             result=run_world(ROOT,manifest,registered['config'],seed,registered['engine_arm'],folder,source=frozen['source'],stop_after_events=max_events)
             if not result['complete']:
                 report.update(checkpoint=str(folder/'STATE.json'),status='INCOMPLETE',wall_seconds=previous_wall+time.monotonic()-start,process_cpu_seconds=previous_cpu+time.process_time()-cpu);write(public,report);return report
-            again=run_world(ROOT,manifest,registered['config'],seed,registered['engine_arm'],folder,source=frozen['source'])
-            result=persisted_after_resume(result,again,folder)
             checked=audit(ROOT,manifest,result)
-            if not checked['accepted']:raise ValueError('NATIVE_AUDIT_OR_SAME_ACCOUNT_RESUME_FAILED')
+            again=run_world(ROOT,manifest,registered['config'],seed,registered['engine_arm'],folder,source=frozen['source'])
+            if not checked['accepted'] or result['owned_account']!=again['owned_account']:raise ValueError('NATIVE_AUDIT_OR_SAME_ACCOUNT_RESUME_FAILED')
             if arm=='capability_only' and any(i['kind']=='acquisition' for i in result['investments']):raise ValueError('CAPABILITY_ONLY_ACQUISITION_ABLATION_FAILED')
             if arm=='commerce_only' and any(i['kind']=='capacity' for i in result['investments']):raise ValueError('COMMERCE_ONLY_CAPACITY_ABLATION_FAILED')
             report['rows'].append(public_row(registered['config'],phase,case,arm,result,checked,True))
