@@ -1,0 +1,71 @@
+{
+  "schema": "agi-alpha/p0-historical-executable-source-review/v1",
+  "date_utc": "2026-11-01",
+  "scope": "NONFINANCIAL_INDEPENDENT_REVIEW_ONLY",
+  "main_source_at_refresh": "e92381ce49a23933999443afee73cb04b975aa12",
+  "main_public_release_tag": "connected014-e92381ce49a23933999443afee73cb04b975aa12",
+  "main_release_evidence": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41322778137",
+  "main_release_claim": "Permanent-term public release downloaded-operation job succeeded; not a native-capital migration, new revenue or economic confirmation.",
+  "prior_financial_owner": {
+    "pr": 40,
+    "head": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+    "integration_boundary": "UNAVAILABLE_AUTHENTIC_ORIGINAL_ACCOUNT_HANDOFF; no overlapping financial writes"
+  },
+  "review_parent": {
+    "pr": 107,
+    "head": "0471c954cd7786bb960f0dfbea38910a657bb842",
+    "upgrade_blob": "ab114988129a1e4ad07708264ce4b9452834fc46"
+  },
+  "review_child": {
+    "pr": 108,
+    "head": "f325c07738a9c79d48ce30b28f0802caf006b5da",
+    "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/108",
+    "upgrades_blob": "fa020bb62daac9019ba07168fc667c5eb14f33ae",
+    "regression_blob": "64754cce7b5f774e5ae8c888488c28c09dcf9a81",
+    "state": "DRAFT_UNMERGED_UNRELEASED"
+  },
+  "finding": {
+    "issue": "Historical source_inventory validates .py only and ignores importable unsigned .pyc caches; PYTHONDONTWRITEBYTECODE=1 does not disable cache reads.",
+    "synthetic_before": "Vetted .py content SHA unchanged, timestamp-valid unsigned __pycache__ imported EVIL.",
+    "synthetic_after": "Private empty PYTHONPYCACHEPREFIX imported vetted GOOD.",
+    "probe_sha256": "4bd73a4ceec54ac77af093c9f33f9375acfc73d05bea81e1aab2e17cda723753",
+    "owner_env": "Original signer also inherited os.environ; review child scrubs parent variables.",
+    "remaining_executable_gap": "Synthetic shared-library name shadowing succeeds even under private cache prefix; .so is not part of .py inventory. Independent trusted execution remains unresolved.",
+    "native_extension_probe_sha256": "db422475f43c60737aec8b362d90ec2b8c5de85df40f1a7bee7ba723ed09ff7e",
+    "claim_limit": "Synthetic import-integrity primitives, not exploitation of an authentic account or verified full queue transition."
+  },
+  "ci_at_checkpoint": {
+    "source_sha": "f325c07738a9c79d48ce30b28f0802caf006b5da",
+    "consequential_007": {
+      "status": "FAILED",
+      "run": 41325870428,
+      "artifact": 13091525738,
+      "artifact_sha256": "c2abbf610f6d9144457234cc09bfc88262aee34ccd80b88f26b8ae7a256a05ce",
+      "exact_failure": "FileNotFoundError: [Errno 2] No such file or directory: .../conditional-exchange/artifacts/exchange.sqlite-journal",
+      "reason": "launch-or-monitor-error",
+      "note": "Pre-existing conditional-exchange worker class; causal relation to review patch not established; do not relabel or retry unchanged."
+    },
+    "consequential_009": {
+      "status": "SUCCESS",
+      "run": 41325870348
+    },
+    "commercial_010": {
+      "status": "SUCCESS",
+      "run": 41325870365
+    },
+    "other_workflows": "IN_PROGRESS at checkpoint; no qualification verdict granted."
+  },
+  "acceptance": {
+    "permanent_term_public_download": "ACHIEVED_CURRENT_MAIN",
+    "isolated_bytecode_patch": "IMPLEMENTED_PARTIAL",
+    "full_pr108_qualification": "FAILED_OR_INCOMPLETE",
+    "secure_history_verifier": "BLOCKED",
+    "original_signed_nonempty_queue_migration": "BLOCKED",
+    "composed_native_capital_release": "BLOCKED",
+    "observed_commerce": "UNESTABLISHED",
+    "recursive_discovery": "UNESTABLISHED",
+    "trailing_365_day_3b_usd_profit": "UNESTABLISHED"
+  },
+  "resources_and_obligations": "No real spending or transaction. No native account, key, financial ledger, journal, obligation or original task owner changed. Only synthetic ephemeral modules, review branch, source-pinned CI and separate evidence record.",
+  "next_decision": "Qualify security review without executing historical untrusted bytecode/native extensions. Preserve current account authority, source/queue provenance and prior failures. Remediate the conditional-exchange worker race before repeating failed CI; integrate only via financial owner with authenticated handoff, full protected source-matched release and independent downloaded audit."
+}
