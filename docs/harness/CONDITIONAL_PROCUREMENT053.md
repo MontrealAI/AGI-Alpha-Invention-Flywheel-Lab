@@ -25,9 +25,11 @@ machine-discovered invention or an advantage over competent ordinary commerce.
 ## Reproduce and verify
 
 Use Python 3.12 and an otherwise qualified checkout. The focused modules use the
-standard library; no model API, extra paid service, or credential is required:
+standard library directly; the reused native engine requires the repository's pinned
+cryptography dependencies. No model API, paid service, or credential is required:
 
 ```sh
+python -m pip install -r requirements-commercial010.txt
 python -m unittest discover -s tests -p 'test_packet_geometry051.py' -v
 python -m unittest discover -s tests -p 'test_procurement053.py' -v
 python -m unittest discover -s tests -p 'test_native_procurement053.py' -v

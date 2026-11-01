@@ -26,6 +26,23 @@ class ProcurementTests(unittest.TestCase):
         self.now = 24
         self.budget = 8_000_000
 
+    def test_transitive_production_sources_bind_quotes(self):
+        from pathlib import Path
+        from unittest.mock import patch
+        from adaptive_enterprise.instruments import SOURCE_PATHS
+        self.assertTrue(set(SOURCE_PATHS) <= set(candidate.DEPENDENCIES))
+        original = Path.read_bytes
+        for name in ('commercial/service.py', 'commercial/service_verifier.py',
+                     'adaptive_enterprise/strategies.py', 'commercial/ledger.py'):
+            with self.subTest(changed=name):
+                def changed(path):
+                    raw = original(path)
+                    return raw+b'\n# changed source' if path.as_posix().endswith('/'+name) else raw
+                with patch.object(Path, 'read_bytes', changed):
+                    with self.assertRaisesRegex(ValueError, 'QUOTE_SOURCE_OR_INPUT_CHANGED'):
+                        candidate.select(self.raw, self.quotes, now=self.now,
+                                         budget_microUSD=self.budget)
+
     def ordinary(self, quotes=None, now=None, budget=None):
         return ordinary_select(self.quotes if quotes is None else quotes, candidate.SERVICES,
             self.now if now is None else now, self.budget if budget is None else budget, candidate.ASSEMBLY)

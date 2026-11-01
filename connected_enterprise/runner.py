@@ -110,6 +110,7 @@ def source_paths(root):
             'mechanism_harness/__init__.py',
             'mechanism_harness/core.py',
             'scripts/run_conditional_procurement053.py',
+            'requirements-commercial010.txt',
             'campaign/conditional-procurement-053/PROTOCOL.json',
             'tests/test_packet_geometry051.py',
             'tests/test_procurement053.py',

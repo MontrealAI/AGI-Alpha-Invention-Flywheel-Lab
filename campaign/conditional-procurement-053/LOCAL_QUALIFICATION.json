@@ -1,16 +1,16 @@
 {
   "scope": "LOCAL_ENGINEERING_AND_AUTHORED_NATIVE_SIMULATION_NOT_RELEASE_QUALIFICATION",
   "base_commit": "99769a8a4d19a8cfc1b3c6d05084d7ed99b76849",
-  "source_sha256": "e726dc9946ca05606cd4f3c83938ca769612359e24b85128c43f7e022759857f",
+  "source_sha256": "1e55793ef475e3e28a0b268fd85813e2dbbde5667988efd5911003738722e5f7",
   "source_file_count": 287,
   "local_tests": {
-    "candidate": 21,
+    "candidate": 22,
     "incumbent": 14,
-    "passed": 35
+    "passed": 36
   },
   "native_experiment": {
-    "source_binding_sha256": "ccba05e0709d0dc1edcffb2d1e9b4185594bfb4083c537e522ff59404ce9780f",
-    "preregistration_sha256": "797c65491bd202ac27e3dfb85bda307dec541f7cfb16a8ecface729a6327a1ed",
+    "source_binding_sha256": "a664cb68c8345dad5eeb01daaba39a4012103f5d91144774a6af7462e9fd99d0",
+    "preregistration_sha256": "f4ab5ee7ebc967033a06e0919c42adbac1ebefbfcf4291b5634086116ec92ee4",
     "scenario_accounts": 10,
     "all_origin_native_independent_reopen_checks_passed": true,
     "ordinary_control_matches_each_case": true,
@@ -40,15 +40,15 @@
       "tests.test_connected_release"
     ],
     "returncode": 1,
-    "elapsed_seconds": 1.6386208970216103,
-    "operating_source_sha256": "e726dc9946ca05606cd4f3c83938ca769612359e24b85128c43f7e022759857f",
+    "elapsed_seconds": 1.9654596769833006,
+    "operating_source_sha256": "1e55793ef475e3e28a0b268fd85813e2dbbde5667988efd5911003738722e5f7",
     "operating_source_unchanged": true,
     "changed_wrapper_fields": [
       "current_files",
       "current_source_sha256",
       "source_delta"
     ],
-    "wrapper_sha256": "2e91a31b4c94911e70d2aa33e87896e6f992f0a3242038e9ec7608143a7f04ec",
+    "wrapper_sha256": "33ca8b21ccba0be9e7d527fa638fd7b45e1f2373089788673e1c4da56f3d8f67",
     "original_wrapper_sha256": "d737880615816bb1f879d7c31a06b3a6565935342e987a0bf9b15f4a37588088",
     "qualification_status": "NOT_QUALIFIED_REGISTRATION_ONLY",
     "scope": "Targeted synthetic publication guard regression; NOT clean qualification or release.",
@@ -59,6 +59,14 @@
     "composition_tests_passed": 17,
     "historical_binding_tests_passed": 10,
     "remaining_blocker": "Seven release tests require non-Git temporary ancestry; both /tmp/.git and /workspace/.git exist. No guards disabled.",
-    "unittest_elapsed_seconds": 1.421
-  }
+    "unittest_elapsed_seconds": 1.745
+  },
+  "preserved_hosted_failure": {
+    "head": "71ccd516b7987afc111299482ae392bfbf44d2c0",
+    "run": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41307450140",
+    "passed_before_failure": 14,
+    "failed_stage": "native setup: ModuleNotFoundError cryptography",
+    "correction": "Install existing pinned native dependencies; require and trigger on requirements file. Native adapter itself unchanged."
+  },
+  "semantic_correction": "Standalone quote source binding now includes canonical instrument production/checker closure; stale-source negative test added."
 }

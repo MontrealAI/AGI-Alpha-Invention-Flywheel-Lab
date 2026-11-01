@@ -10,14 +10,17 @@ from pathlib import Path
 from mechanism_harness import core
 from commercial.ledger import digest
 from adaptive_enterprise.bundles import _validate_raw, audit_bundle, PROMISE, SCOPE
-from adaptive_enterprise.instruments import produce
+from adaptive_enterprise.instruments import produce, SOURCE_PATHS as INSTRUMENT_SOURCES
 
 SERVICES=('evidence_matrix','kpi_variance','reconciliation')
 ASSEMBLY=250000
-DEPENDENCIES=('connected_enterprise/conditional_procurement053.py',
-              'connected_enterprise/procurement_verify053.py','mechanism_harness/core.py',
-              'adaptive_enterprise/instruments.py','adaptive_enterprise/bundles.py',
-              'adaptive_enterprise/checkers.py','enterprise/services.py','enterprise/checkers.py')
+# Reuse the native production/checker closure, not a hand-picked subset.
+DEPENDENCIES=tuple(sorted(set(INSTRUMENT_SOURCES)|{
+    'connected_enterprise/conditional_procurement053.py',
+    'connected_enterprise/procurement_verify053.py',
+    'mechanism_harness/__init__.py', 'mechanism_harness/core.py',
+    'commercial/ledger.py',
+}))
 
 
 def sources():
