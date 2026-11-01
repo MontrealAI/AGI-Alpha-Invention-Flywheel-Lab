@@ -1,0 +1,135 @@
+{
+  "schema": "agi-alpha/p0-independent-security-and-release-checkpoint/v1",
+  "date_utc": "2026-11-01",
+  "scope": "READ_ONLY_CURRENT_MAIN_AND_OWNER_SOURCE; SEPARATE_NONRUNTIME_EVIDENCE",
+  "authoritative_native_account_modified": false,
+  "private_keys_opened": false,
+  "external_transactions": 0,
+  "external_customers": 0,
+  "external_collections_usd": 0,
+  "actual_host_model_billing_usd": null,
+  "owner_boundary": {
+    "native_task": "01a18fa7-ffc6-7384-8bb4-ea6012cfb0f7",
+    "actual_task_lookup": "NOT_ACCESSIBLE; DO_NOT_INFER_INACTIVITY",
+    "native_integration_pr": 40,
+    "native_pr_head": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+    "review_pr": 99,
+    "review_head": "4496bcc606e85cacf0103fa46fc0092ad0ae8c56",
+    "financial_ownership": "unchanged; no overlap"
+  },
+  "current_main": {
+    "sha": "4a87b455373be72811ad3a0c654a116c3604a374",
+    "source_tree_github_blobs": 9973,
+    "eligible_archive_blobs": 9934,
+    "eligible_archive_bytes": 460225886,
+    "all_six_exact_head_workflow_groups": "COMPLETED_SUCCESS",
+    "release": {
+      "tag": "connected014-4a87b455373be72811ad3a0c654a116c3604a374",
+      "published_at": "2026-11-01T13:08:37Z",
+      "release_workflow_run": 41307467053,
+      "release_workflow_conclusion": "success",
+      "qualified_actual_public_asset_download_and_operation": true,
+      "operation_job_id": 124857650247,
+      "operation_job_conclusion": "success",
+      "published_operation_artifact_id": 13085172209,
+      "wheel_qualification_artifact_id": 13085117452
+    },
+    "claim_tier": "permanent-term exact-head engineering reproduction only; not native migration or new profit"
+  },
+  "source_reconciliation": {
+    "historical_base": "8abfb96d4ef859e30ca344d7933ec2a2f49012c1",
+    "base_eligible": 9998,
+    "pr40_eligible_standalone": 10085,
+    "pr99_eligible_standalone": 10086,
+    "genuine_native_new_paths_not_in_base_or_main": 84,
+    "review_only_new_paths": 1,
+    "intentionally_retired_historical_paths_not_to_restore": 326,
+    "safe_tree_preflight_native_loose_count": 10018,
+    "safe_tree_preflight_with_review_loose_count": 10019,
+    "unchanged_archive_guard_files": 10000,
+    "minimum_loose_replacements_if_two_packaging_artifacts_added": {
+      "native": 20,
+      "review": 21
+    },
+    "status": "FILE-NAME PREFLIGHT ONLY; NO SEMANTIC COMPOSITION OR EXECUTING ARCHIVE; guards unmodified"
+  },
+  "security_finding": {
+    "classification": "CONDITIONAL_PUBLIC_VERIFIER_EXECUTION_TRUST_BOUNDARY; STATIC_SOURCE_CALL_PATH, NOT A FULL EXPLOIT",
+    "source_sha": "ced6c1cb004887dcdafaea59a2976020be649f8e",
+    "source_git_blob_sha": {
+      "connected_enterprise/finance.py": "c01e5cd97fb32b3e5fcd5cea190424d8f4f5d5ec",
+      "connected_enterprise/upgrades.py": "9866d004c412fc05c9f6292cf898307f177359df",
+      "connected_enterprise/transition_evidence.py": "2397091ef8e1960ad13950693d5b3cd04e2ff7c5"
+    },
+    "audit_call_path": [
+      "public audit_journal",
+      "_audit_journal",
+      "_validate_source_history",
+      "validate_ticket(ticket) without HMAC key",
+      "verify_historical(ticket)",
+      "ticket_body(ticket) without HMAC key",
+      "historical root from ticket",
+      "inventory compared to ticket-supplied hashes",
+      "subprocess imports selected historical finance with inherited env"
+    ],
+    "read_only_static_conditions_confirmed": 9,
+    "full_fake_signed_history_or_exploit_reproduced": false,
+    "prior_signer_codec_pin_covers_this_path": false,
+    "required_gate": "Independent trusted historical-source provenance bound to approved release/source transition; fail closed before any import; minimize isolated subprocess environment; adversarial public audit rejection before execution",
+    "owner_comment": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/40#issuecomment-6558462327"
+  },
+  "acceptance_matrix": [
+    {
+      "stage": "newer_permanent_term_public_release",
+      "status": "achieved",
+      "scope": "Current main4a87 exact-head 6 workflows success; published tag and downloaded-release operation job success"
+    },
+    {
+      "stage": "native_source_composition",
+      "status": "partial",
+      "scope": "Filename preflight 10018/10019 exceeds archive guard; financial semantic conflicts remain"
+    },
+    {
+      "stage": "historical_signer_security",
+      "status": "partial",
+      "scope": "PR99 key-free signer tests pass; campaign cancelled and dynamic exec remains"
+    },
+    {
+      "stage": "keyfree_historical_verifier_trust",
+      "status": "blocked",
+      "scope": "New source-pinned unsafe call path; no end-to-end exploit attempted"
+    },
+    {
+      "stage": "authenticated_nonempty_queue_migration",
+      "status": "blocked",
+      "scope": "Actual owner checkpoint unavailable; no account/key access"
+    },
+    {
+      "stage": "prospective_maturity_reinvest_native_release",
+      "status": "blocked",
+      "scope": "No composed downloadable native-capital release"
+    },
+    {
+      "stage": "P1_causal_business_expansion",
+      "status": "unqualified",
+      "scope": "Modeled bounded scenarios only; complete-cost validated matched cohort not shown"
+    },
+    {
+      "stage": "P2_reusable_discovery_advantage",
+      "status": "unqualified",
+      "scope": "No fresh causal current/successor advantage shown"
+    },
+    {
+      "stage": "trailing_365_complete_cost_profit_3b",
+      "status": "unestablished",
+      "scope": "Not achieved in native released commerce; no real external revenue"
+    }
+  ],
+  "resource_notes": {
+    "incremental_hosted_compute_started_by_this_checkpoint": false,
+    "new_spending": false,
+    "connector_tool_resources": "unmeasured",
+    "host_model_billing": "unknown"
+  },
+  "next_decision": "Keep released permanent-term main; owner to require independent trusted historical-source provenance and nonempty same-account transition, reconcile current financial source, safely compact archive without weakening 10000 guard, qualify exact head and download/audit native-capital released bytes. No takeover of owner account or self-authorized release."
+}
