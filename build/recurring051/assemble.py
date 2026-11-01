@@ -41,7 +41,6 @@ def prepare():
     for path,(before,after) in EXPECTED.items():
         if before is not None and sha(path)!=before:raise ValueError('BASE_BYTES_CHANGED:'+path)
         if before is None and path!='tests/test_connected_recurring_income051.py' and sha(path)!=after:raise ValueError('NEW_BYTES_CHANGED:'+path)
-    # Recover one known transport transcription, then require exact local test bytes.
     compressed=(ROOT/'build/recurring051/tests.py.gz').read_bytes()
     encoded=base64.b64encode(compressed).decode()
     if encoded.count('HopypypYqg2aeX6')!=1:raise ValueError('KNOWN_TEST_TRANSPORT_REQUIRED')
@@ -53,6 +52,8 @@ def prepare():
     patch=patch.replace("+                policy=cfg['buyer_income_policy']", "+                income=cfg['buyer_income_policy']")
     patch=patch.replace("+                    if draw(seed,[day,buyer['id']],'buyer-external-income')<policy['receipt_bps']/10000:", "+                    if draw(seed,[day,buyer['id']],'buyer-external-income')<income['receipt_bps']/10000:")
     patch=patch.replace("+                        amount=policy['income_microUSD'];buyer['remaining_budget']+=amount;buyer['external_income_total']+=amount", "+                        amount=income['income_microUSD']\n+                        buyer['remaining_budget']+=amount;buyer['external_income_total']+=amount")
+    # Explicit file boundaries are required when recounting a multi-file plain diff.
+    patch=''.join(('diff --git '+line[4:].strip()+' '+line[4:].strip().replace('a/','b/',1)+'\n' if line.startswith('--- a/') else '')+line for line in patch.splitlines(keepends=True))
     transport=Path(os.environ['RUNNER_TEMP'])/'recurring051.patch';transport.write_text(patch)
     run('git','apply','--recount','--check',str(transport))
     run('git','apply','--recount',str(transport))
