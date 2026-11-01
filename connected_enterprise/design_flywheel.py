@@ -111,6 +111,24 @@ def find_native_successor(result):
     by_plan = {i["plan_id"]: i for i in relevant_investments}
     if len(by_plan) != len(relevant_investments):
         raise ValueError("DUPLICATE_NATIVE_PLAN_INVENTORY")
+    # Attribute a joint native enabling package over its entire connected
+    # source-plan component, including failed work using a shared enabler.
+    # Charging a companion invoice but silently omitting its other losses
+    # can otherwise convert a losing joint arrangement into a positive witness.
+    links_by_order = []
+    orders_for_plan = {}
+    for index, order in enumerate(result["orders"]):
+        extra = order.get("capacity_source_plan_ids", [])
+        if not isinstance(extra, list):
+            raise ValueError("INVALID_NATIVE_ORDER_PLAN_LINKS")
+        raw = [order.get("acquisition_source_plan_id"),
+               order.get("capacity_source_plan_id"), *extra]
+        if any(p is not None and (not isinstance(p, str) or not p) for p in raw):
+            raise ValueError("INVALID_NATIVE_ORDER_PLAN_LINKS")
+        plans = frozenset(p for p in raw if p is not None)
+        links_by_order.append(plans)
+        for plan in sorted(plans):
+            orders_for_plan.setdefault(plan, []).append(index)
     witnesses = []
     for investment in relevant_investments:
         if investment["kind"] not in ("acquisition", "capacity"):
@@ -122,23 +140,27 @@ def find_native_successor(result):
                 return order.get("acquisition_source_plan_id") == investment["plan_id"]
             return (order.get("capacity_source_plan_id") == investment["plan_id"]
                     or investment["plan_id"] in order.get("capacity_source_plan_ids", []))
-        linked_orders = [o for o in result["orders"] if linked(o)]
+        direct_orders = [o for o in result["orders"] if linked(o)]
         successors = [o for o in settled if linked(o)
                       and o["qualified_time"] >= investment["activation_time"]
                       and o["collection_time"] > investment["purchased_time"]]
         if not successors or any(o["qualified_time"] < investment["activation_time"]
-                                 for o in linked_orders):
+                                 for o in direct_orders):
             continue
-        required_plans = {investment["plan_id"]}
-        for order in linked_orders:
-            extra = order.get("capacity_source_plan_ids", [])
-            if not isinstance(extra, list):
-                raise ValueError("INVALID_NATIVE_ORDER_PLAN_LINKS")
-            linked_plans = [order.get("acquisition_source_plan_id"),
-                            order.get("capacity_source_plan_id"), *extra]
-            if any(p is not None and (not isinstance(p, str) or not p) for p in linked_plans):
-                raise ValueError("INVALID_NATIVE_ORDER_PLAN_LINKS")
-            required_plans.update(p for p in linked_plans if p is not None)
+        required_plans = set()
+        reached_order_indices = set()
+        pending = [investment["plan_id"]]
+        while pending:
+            plan = pending.pop()
+            if plan in required_plans:
+                continue
+            required_plans.add(plan)
+            for index in orders_for_plan.get(plan, ()):
+                if index in reached_order_indices:
+                    continue
+                reached_order_indices.add(index)
+                pending.extend(sorted(links_by_order[index] - required_plans))
+        linked_orders = [result["orders"][i] for i in sorted(reached_order_indices)]
         if any(p not in by_plan or by_plan[p]["funding_receipt"].get("funding") != "EARNED"
                for p in required_plans):
             continue
@@ -166,6 +188,7 @@ def find_native_successor(result):
                 "native_investment": investment["id"], "native_plan_id": investment["plan_id"],
                 "investment_time": investment["purchased_time"], "investment_cost_microUSD": investment["cost"],
                 "all_required_native_plan_ids": sorted(required_plans),
+                "source_link_scope": "COMPLETE_CONNECTED_NATIVE_ENABLER_COMPONENT",
                 "all_required_invoices_microUSD": total_invoices,
                 "funding": "EARNED", "successor_paid_order": second["id"],
                 "successor_service": second["offer"]["service_id"],
