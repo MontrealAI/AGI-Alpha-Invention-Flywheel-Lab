@@ -101,6 +101,26 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in required):
             raise ValueError('COMPARATOR050_SOURCE_DEPENDENCY_MISSING')
         names.update(required)
+    if (root/'connected_enterprise/conditional_procurement053.py').is_file():
+        # Additive experimental entry point; absence preserves the legacy inventory.
+        # Keep the complete runnable and independently testable closure in snapshots.
+        required={
+            'connected_enterprise/conditional_procurement053.py',
+            'connected_enterprise/procurement_verify053.py',
+            'mechanism_harness/__init__.py',
+            'mechanism_harness/core.py',
+            'scripts/run_conditional_procurement053.py',
+            'campaign/conditional-procurement-053/PROTOCOL.json',
+            'tests/test_packet_geometry051.py',
+            'tests/test_procurement053.py',
+            'tests/test_native_procurement053.py',
+            'tests/test_procurement_source053.py',
+            'docs/harness/CONDITIONAL_PROCUREMENT053.md',
+            '.github/workflows/conditional-procurement053.yml',
+        }
+        if any(not (root/name).is_file() for name in required):
+            raise ValueError('CONDITIONAL_PROCUREMENT_SOURCE_DEPENDENCY_MISSING')
+        names.update(required)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):

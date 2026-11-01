@@ -20,6 +20,8 @@ SOURCE_PATHS = ('connected_enterprise/packet_contract.py','connected_enterprise/
 CONSTRAINTS = ['preserve_source_rows', 'explicit_money_units', 'unique_record_identity', 'referential_customer_consistency']
 BUNDLE_INDICES = (8,9,10,11,12,13,14,16)
 ADMISSION_SCHEMA = 'agi-alpha/finite-service-admission048/v1'
+PACKET_GEOMETRY_SCHEMA = 'agi-alpha/finite-service-admission048/v2'
+_DEFAULT_PACKET_ROWS = object()
 
 
 def canonical(value):
@@ -298,11 +300,27 @@ def _finite_windows(count, window):
         yield start, min(window, count-start)
 
 
-def _admission_record(manifest, primitive_count, packet_count, packet_rows, window):
+def _packet_geometry(packet_count, rows):
+    if (type(packet_count) is not int or packet_count < 1 or type(rows) is not list
+            or len(rows) != packet_count or any(type(n) is not int or not 4 <= n <= 1000 for n in rows)):
+        raise ValueError('EXACT_BOUNDED_PACKET_ROW_VECTOR_REQUIRED')
+    return list(rows)
+
+
+def _packet_inventory(packet_count, rows):
+    return {'jobs': packet_count, 'rows_by_job': list(rows),
+            'scope': 'Explicit finite coherent entity/period inventory, not sales or market size.'}
+
+
+def _admission_record(manifest, primitive_count, packet_count, packet_rows, window, *, packet_rows_by_job=None):
     from adaptive_enterprise.strategies import PRIMITIVE_SERVICES
     if type(primitive_count) is not int or primitive_count < 32 or type(packet_count) is not int or packet_count < 0:
         raise ValueError('FINITE_DECLARED_SERVICE_COUNTS_REQUIRED')
-    if (packet_count == 0 and packet_rows is not None or packet_count > 0 and
+    if packet_rows_by_job is not None:
+        _packet_geometry(packet_count, packet_rows_by_job)
+        if packet_rows is not None:
+            raise ValueError('SCALAR_AND_VECTOR_PACKET_GEOMETRY_CONFLICT')
+    elif (packet_count == 0 and packet_rows is not None or packet_count > 0 and
             (type(packet_rows) is not int or not 4 <= packet_rows <= 1000)):
         raise ValueError('BOUNDED_PACKET_ROWS_REQUIRED')
     seed_hash = manifest['cohort_provenance'].get('cohort_seed_sha256')
@@ -314,17 +332,22 @@ def _admission_record(manifest, primitive_count, packet_count, packet_rows, wind
     chunks = []
     for start, count in _finite_windows(total, window):
         chunks.append({'start': start, 'count': count, 'jobs_sha256': digest(manifest['jobs'][start:start+count])})
-    return {'schema': ADMISSION_SCHEMA, 'primitive_jobs_per_service': primitive_count,
+    result = {'schema': ADMISSION_SCHEMA, 'primitive_jobs_per_service': primitive_count,
             'primitive_services': list(PRIMITIVE_SERVICES), 'bundle_indices': list(BUNDLE_INDICES),
             'packet_jobs': packet_count, 'packet_rows_per_kind': packet_rows,
             'chunk_size': window, 'total_jobs': total, 'chunks': chunks,
             'source_sha256': digest(manifest['source_hashes']),
             'cohort_seed_sha256': manifest['cohort_provenance']['cohort_seed_sha256']}
+    if packet_rows_by_job is not None:
+        result['schema'] = PACKET_GEOMETRY_SCHEMA
+        del result['packet_rows_per_kind']
+        result['packet_rows_by_job'] = list(packet_rows_by_job)
+    return result
 
 
-def _seal_admission(manifest, primitive_count, packet_count, packet_rows, window):
+def _seal_admission(manifest, primitive_count, packet_count, packet_rows, window, *, packet_rows_by_job=None):
     manifest['cohort_provenance']['finite_admission'] = _admission_record(
-        manifest, primitive_count, packet_count, packet_rows, window)
+        manifest, primitive_count, packet_count, packet_rows, window, packet_rows_by_job=packet_rows_by_job)
 
 
 def _validate_admission(manifest):
@@ -336,8 +359,18 @@ def _validate_admission(manifest):
         return
     if not isinstance(admission, dict):
         raise ValueError('FINITE_SOURCE_BOUND_ADMISSION_REQUIRED')
+    vector = None
+    if admission.get('schema') == PACKET_GEOMETRY_SCHEMA:
+        vector = _packet_geometry(admission.get('packet_jobs'), admission.get('packet_rows_by_job'))
+        if 'packet_rows_per_kind' in admission:
+            raise ValueError('SCALAR_AND_VECTOR_PACKET_GEOMETRY_CONFLICT')
+        if manifest['cohort_provenance'].get('packet_inventory') != _packet_inventory(admission['packet_jobs'], vector):
+            raise ValueError('PACKET_INVENTORY_GEOMETRY_MISMATCH')
+    elif admission.get('schema') != ADMISSION_SCHEMA:
+        raise ValueError('FINITE_ADMISSION_SCHEMA_REQUIRED')
     expected = _admission_record(manifest, admission.get('primitive_jobs_per_service'),
-        admission.get('packet_jobs'), admission.get('packet_rows_per_kind'), admission.get('chunk_size'))
+        admission.get('packet_jobs'), admission.get('packet_rows_per_kind'), admission.get('chunk_size'),
+        packet_rows_by_job=vector)
     if canonical(admission) != canonical(expected):
         raise ValueError('FINITE_ADMISSION_BINDING_MISMATCH')
     primitive_count = admission['primitive_jobs_per_service']
@@ -379,12 +412,14 @@ def audit_admission(root, manifest, *, cohort_seed):
     for start, count in _finite_windows(admission['packet_jobs'], admission['chunk_size']) if admission['packet_jobs'] else ():
         for index in range(start, start+count):
             job = manifest['jobs'][offset]
-            expected = synthetic_input(index=index, cohort_seed=cohort_seed, rows=admission['packet_rows_per_kind'])
+            rows = (admission['packet_rows_by_job'][index] if admission['schema'] == PACKET_GEOMETRY_SCHEMA
+                    else admission['packet_rows_per_kind'])
+            expected = synthetic_input(index=index, cohort_seed=cohort_seed, rows=rows)
             if canonical(_read(root, job['input'], job['input_sha256'])) != canonical(expected):
                 raise ValueError('ADMITTED_PACKET_ORIGIN_MISMATCH')
             offset += 1
     checked = load_jobs(root, manifest)
-    return {'schema': ADMISSION_SCHEMA, 'accepted': True, 'total_jobs': offset,
+    return {'schema': admission['schema'], 'accepted': True, 'total_jobs': offset,
             'accepted_jobs': len(checked), 'chunks': len(admission['chunks']),
             'admission_sha256': digest(admission), 'manifest_sha256': digest(manifest),
             'scope': 'Exact synthetic origin and independent complete-artifact checks; no demand, capacity or financial authority.'}
@@ -588,17 +623,25 @@ def execute_offer(root,manifest,offer,job_id,context=None):
                 'outcome_scope':offer['scope'],'operation_count':0,'process_cpu_seconds':time.process_time()-start,'model_calls':0}
 
 
-def prepare_complete_offer_services(root, relative, *, cohort_seed=0, jobs_per_service=32, packet_jobs=8, packet_rows=40, chunk_size=64):
+def prepare_complete_offer_services(root, relative, *, cohort_seed=0, jobs_per_service=32, packet_jobs=8, packet_rows=_DEFAULT_PACKET_ROWS, chunk_size=64, packet_rows_by_job=None):
     """Explicit opt-in finite primitive plus coherent-packet admission; not demand."""
-    if type(packet_jobs) is not int or packet_jobs<1 or type(packet_rows) is not int or not 4<=packet_rows<=1000:
-        raise ValueError('BOUNDED_PACKET_INVENTORY_REQUIRED')
+    if packet_rows_by_job is not None:
+        packet_rows_by_job = _packet_geometry(packet_jobs, packet_rows_by_job)
+        if packet_rows is not _DEFAULT_PACKET_ROWS:
+            raise ValueError('SCALAR_AND_VECTOR_PACKET_GEOMETRY_CONFLICT')
+        packet_rows = None
+    else:
+        packet_rows = 40 if packet_rows is _DEFAULT_PACKET_ROWS else packet_rows
+        if type(packet_jobs) is not int or packet_jobs<1 or type(packet_rows) is not int or not 4<=packet_rows<=1000:
+            raise ValueError('BOUNDED_PACKET_INVENTORY_REQUIRED')
     from connected_enterprise.packet_contract import synthetic_input,work_contract
     from adaptive_enterprise.checkers import audit_delivery
     root=Path(root);start=time.process_time()
     manifest=prepare_services(root,relative,cohort_seed=cohort_seed,jobs_per_service=jobs_per_service,chunk_size=chunk_size)
     for start_index, count in _finite_windows(packet_jobs, chunk_size):
         for index in range(start_index, start_index+count):
-            raw=synthetic_input(index=index,cohort_seed=cohort_seed,rows=packet_rows)
+            rows = packet_rows_by_job[index] if packet_rows_by_job is not None else packet_rows
+            raw=synthetic_input(index=index,cohort_seed=cohort_seed,rows=rows)
             artifact=produce(raw,'receivables_packet');checked=audit_delivery('receivables_packet',raw,artifact)
             if not checked['accepted']:raise ValueError('PACKET_ADMISSION_REJECTED')
             base=Path(relative)/raw['order_id']
@@ -609,8 +652,10 @@ def prepare_complete_offer_services(root, relative, *, cohort_seed=0, jobs_per_s
             job['receipt']=str(base/'acceptance.json');job['receipt_sha256']=_write(root,job['receipt'],receipt)
             manifest['jobs'].append(job)
     manifest['cohort_provenance']['packet_inventory']={'jobs':packet_jobs,'rows_per_kind':packet_rows,'scope':'Explicit finite coherent entity/period inventory, not sales or market size.'}
+    if packet_rows_by_job is not None:
+        manifest['cohort_provenance']['packet_inventory'] = _packet_inventory(packet_jobs, packet_rows_by_job)
     manifest['resource_receipt']['process_cpu_seconds']=time.process_time()-start
-    _seal_admission(manifest, jobs_per_service, packet_jobs, packet_rows, chunk_size)
+    _seal_admission(manifest, jobs_per_service, packet_jobs, packet_rows, chunk_size, packet_rows_by_job=packet_rows_by_job)
     from commercial.persistence import atomic_bytes
     atomic_bytes(root/relative/'MANIFEST.json',canonical(manifest)+b'\n');load_jobs(root,manifest)
     return manifest

@@ -1,0 +1,64 @@
+{
+  "scope": "LOCAL_ENGINEERING_AND_AUTHORED_NATIVE_SIMULATION_NOT_RELEASE_QUALIFICATION",
+  "base_commit": "99769a8a4d19a8cfc1b3c6d05084d7ed99b76849",
+  "source_sha256": "e726dc9946ca05606cd4f3c83938ca769612359e24b85128c43f7e022759857f",
+  "source_file_count": 287,
+  "local_tests": {
+    "candidate": 21,
+    "incumbent": 14,
+    "passed": 35
+  },
+  "native_experiment": {
+    "source_binding_sha256": "ccba05e0709d0dc1edcffb2d1e9b4185594bfb4083c537e522ff59404ce9780f",
+    "preregistration_sha256": "797c65491bd202ac27e3dfb85bda307dec541f7cfb16a8ecface729a6327a1ed",
+    "scenario_accounts": 10,
+    "all_origin_native_independent_reopen_checks_passed": true,
+    "ordinary_control_matches_each_case": true,
+    "profit_microUSD_per_policy": {
+      "central": 68809520,
+      "expired": 14135520,
+      "provider_default": 2465520,
+      "no_demand": -25100000,
+      "unaffordable": 14135520
+    },
+    "scope": "Authored quotes, demand and cost envelopes. No actual supplier/customer agreements or commerce."
+  },
+  "limits": [
+    "Actual engineering/model/host billing unknown; per-account profit is not complete campaign profit.",
+    "No discovery or invention-superiority claim. Prior losses are not erased or pooled.",
+    "Full CI, independent review, merge, release and downloaded operation pending."
+  ],
+  "publication_wrapper_tests": {
+    "base": "99769a8a4d19a8cfc1b3c6d05084d7ed99b76849",
+    "command": [
+      "python",
+      "-m",
+      "unittest",
+      "-v",
+      "tests.test_publication_composition",
+      "tests.test_publication_binding",
+      "tests.test_connected_release"
+    ],
+    "returncode": 1,
+    "elapsed_seconds": 1.6386208970216103,
+    "operating_source_sha256": "e726dc9946ca05606cd4f3c83938ca769612359e24b85128c43f7e022759857f",
+    "operating_source_unchanged": true,
+    "changed_wrapper_fields": [
+      "current_files",
+      "current_source_sha256",
+      "source_delta"
+    ],
+    "wrapper_sha256": "2e91a31b4c94911e70d2aa33e87896e6f992f0a3242038e9ec7608143a7f04ec",
+    "original_wrapper_sha256": "d737880615816bb1f879d7c31a06b3a6565935342e987a0bf9b15f4a37588088",
+    "qualification_status": "NOT_QUALIFIED_REGISTRATION_ONLY",
+    "scope": "Targeted synthetic publication guard regression; NOT clean qualification or release.",
+    "tests_run": 71,
+    "passed": 64,
+    "failures": 2,
+    "errors": 5,
+    "composition_tests_passed": 17,
+    "historical_binding_tests_passed": 10,
+    "remaining_blocker": "Seven release tests require non-Git temporary ancestry; both /tmp/.git and /workspace/.git exist. No guards disabled.",
+    "unittest_elapsed_seconds": 1.421
+  }
+}
