@@ -71,6 +71,8 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
     risk=copy.deepcopy(policy['risk']);risk['authorized_allocation']=min(risk['authorized_allocation'],available)
     deliveries=[];tentative=copy.deepcopy(state);needs=[];considered_customers=0
     menu_enabled='complete_offer_policy' in cfg
+    from .complete_offer_market import compile_market
+    public_market=compile_market(cfg['complete_offer_policy']) if menu_enabled else None
     if menu_enabled and offer_menu_fn is None:raise ValueError('ADMITTED_COMPLETE_OFFER_MENU_REQUIRED')
     for buyer in candidates:
         if draw_fn(state['seed'],[day,buyer['id']],'need')>=cfg['arrival_bps']/10000:continue
@@ -94,9 +96,8 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
                 'native_state_digest':snapshot['state_digest'],'profit_tax_bps':cfg['profit_tax_bps']}
             extra={}
             if menu_enabled:
-                from .complete_offer_market import market_context
                 spend=buyer['outside_spend']+buyer['our_settled_spend']+sum(buyer['pending_commitments'].values())
-                extra['market_context']=market_context(cfg['complete_offer_policy'],buyer['id'],spend,True)
+                extra['market_context']=public_market.context(buyer['id'],spend,True)
             selection=select(cfg['strategic_policy'],cfg.get('mechanism_policy'),job['id'],offer,state.get('mechanism_memory'),public,**extra)
             delivery={'id':'quote-'+str(day)+'-'+buyer['id']+('-offer-'+str(offer_index) if menu_enabled else ''),'customer_id':buyer['id'],'onboarding':onboard,
                                'exclusive_group':'customer-'+buyer['id'],'selection':selection,'requires':[]}

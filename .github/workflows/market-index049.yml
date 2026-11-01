@@ -1,0 +1,81 @@
+name: Native market indexing 049 parity
+on:
+  pull_request:
+    paths:
+      - 'connected_enterprise/complete_offer_market.py'
+      - 'connected_enterprise/complete_offer_audit.py'
+      - 'connected_enterprise/engine.py'
+      - 'connected_enterprise/joint_planning.py'
+      - 'connected_enterprise/verify.py'
+      - 'tests/test_connected_market_index049.py'
+      - 'scripts/qualify_market_index049.py'
+      - '.github/workflows/market-index049.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: market-index049-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  native-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: candidate
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: '7333cb483a9fb261177e89a094f72ab896aab82c'
+          path: control
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install --only-binary=:all: -r candidate/requirements-commercial010.txt
+      - name: Prepared-profile, native acceptance and publication regressions
+        working-directory: candidate
+        run: python -m unittest tests.test_connected_market_index049 tests.test_publication_binding tests.test_publication_composition -v
+      - name: Execute fixed original and optimized businesses, then audit separately
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp candidate/scripts/qualify_market_index049.py control/scripts/qualify_market_index049.py
+          for arm in control candidate; do
+            for case in small acquisition; do
+              python "$arm/scripts/qualify_market_index049.py" run --case "$case" --output "$RUNNER_TEMP/market049-$arm-$case" --max-events 1000
+              python "$arm/scripts/qualify_market_index049.py" verify --case "$case" --output "$RUNNER_TEMP/market049-$arm-$case"
+            done
+          done
+      - name: Require exact audited semantic parity, retain positive and negative outcomes
+        shell: python
+        run: |
+          import json, os
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP']);reports={}
+          for case in ('small','acquisition'):
+              a=root/f'market049-control-{case}';b=root/f'market049-candidate-{case}'
+              assert json.loads((a/'SEMANTICS.json').read_text()) == json.loads((b/'SEMANTICS.json').read_text())
+              reports[case]={arm:json.loads((folder/'PUBLIC.json').read_text()) for arm,folder in [('control',a),('candidate',b)]}
+          assert reports['small']['candidate']['summary']['profit'] < 0
+          assert reports['acquisition']['candidate']['paid_acquired_customers'] > 0
+          out={'cases':reports,'scope':'Native semantics preserved; not profit uplift, real commerce or annual-scale achievement.'}
+          (root/'market049-parity.json').write_text(json.dumps(out,sort_keys=True,indent=2)+'\n')
+          print(json.dumps(out,sort_keys=True))
+      - name: Retain only allowlisted public summaries
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: market049-public-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/market049-parity.json
+            ${{ runner.temp }}/market049-control-small/PUBLIC.json
+            ${{ runner.temp }}/market049-candidate-small/PUBLIC.json
+            ${{ runner.temp }}/market049-control-acquisition/PUBLIC.json
+            ${{ runner.temp }}/market049-candidate-acquisition/PUBLIC.json
+          if-no-files-found: warn
+          retention-days: 7

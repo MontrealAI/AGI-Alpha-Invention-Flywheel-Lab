@@ -116,12 +116,13 @@ def _record_exposure(state,when,exposure,response=None):
     if response is not None:_event(state,when,'REACTIVATION_RESPONSE',exposure['exposure_id']+'-reactivation',**response)
 
 def _buyers(cfg,seed):
+    from .complete_offer_market import compile_market
+    market=compile_market(cfg['complete_offer_policy']) if 'complete_offer_policy' in cfg else None
     result=[]
     for i in range(cfg['customer_pool']):
         ident=f'SIM-customer-{i:03d}';budget=int((180+400*draw(seed,ident,'budget'))*MICRO*cfg['buyer_budget_multiplier_bps']/10000)
         if 'complete_offer_policy' in cfg:
-            from .complete_offer_market import request_profile,private_atom
-            budget=request_profile(cfg['complete_offer_policy'],ident)['atoms'][private_atom(cfg['complete_offer_policy'],ident,seed)]['budget_microUSD']
+            budget=market.profile(ident)['atoms'][market.atom(ident,seed)]['budget_microUSD']
         result.append({'id':ident,'initial_budget':budget,'remaining_budget':budget,'pending_commitments':{},'outside_spend':0,'our_settled_spend':0,'known':i<4,'active':True,'purchases':0,'onboarded':False,'next_need_time':0,'acquisition_source_plan_id':None,'exposure_time':0 if i<4 else None,'retention_decision_count':0,'service_index':i%3,'last_quote':None})
     return result
 
@@ -154,18 +155,25 @@ def _offer(jobs,state,buyer,cfg):
     return entry,offer,anchor
 
 
-def _offer_menu(state,jobs,buyer,cfg):
+def _offer_menu(state,jobs,buyer,cfg,*,_market=None):
     """Admitted public request alternatives, without private value or budget."""
     from .complete_offer_market import request_profile
-    profile=request_profile(cfg['complete_offer_policy'],buyer['id'])
+    profile=request_profile(cfg['complete_offer_policy'],buyer['id']) if _market is None else _market.profile(buyer['id'])
     services=profile['services']
     if cfg['complete_offer_policy']['selection']=='restricted':
         service=SERVICES[buyer['service_index']%3]
         services=[service] if service in services else []
     used={key for ident in state['used_jobs'] for key in jobs[ident]['job']['work_keys']}
+    # Work is already keyed by admitted job identity. Never scan unrelated jobs.
+    requested=[]
+    for ident in cfg['complete_offer_policy']['requested_jobs'][buyer['id']]:
+        if ident not in jobs:continue
+        entry=jobs[ident]
+        if entry['job']['id']!=ident:raise ValueError('ADMITTED_JOB_INDEX_IDENTITY_CHANGED')
+        requested.append(entry)
     options=[]
     for service in services:
-        entries=[entry for entry in jobs.values() if entry['job']['id'] in cfg['complete_offer_policy']['requested_jobs'][buyer['id']] and entry['job']['accepted'] and entry['job']['service_id']==service and entry['artifact'].get('outcome_scope')=='complete_outcome' and not used.intersection(entry['job']['work_keys'])]
+        entries=[entry for entry in requested if entry['job']['accepted'] and entry['job']['service_id']==service and entry['artifact'].get('outcome_scope')=='complete_outcome' and not used.intersection(entry['job']['work_keys'])]
         if not entries:continue
         entry=min(entries,key=lambda x:x['job']['id'])
         offer=copy.deepcopy(next(o for o in offer_catalog(include_packet=True) if o['service_id']==service and o['method']==entry['artifact']['method']))
@@ -219,14 +227,16 @@ def _prepare_plan(state,account,jobs):
     if state['arm'] in {'growth','competitive_growth'} and profitable and lost_capacity>=2 and slots<cfg['maximum_slots'] and live_capacity<cfg['maximum_slots']-cfg['initial_slots'] and remaining>7 and ('strategic_policy' in cfg or earned>cfg['capacity_price']+channel_invoice+operating_envelope+2*MICRO):
         capacity_forecast=sum(margin_history)/len(margin_history)*min(remaining,5)*.5;prepared['capacity_purchase']=capacity_forecast>cfg['capacity_price'];prepared['capacity_predicted_net']=int(capacity_forecast-cfg['capacity_price'])
     liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-cfg['capacity_price']*bool(prepared['capacity_purchase'])
+    from .complete_offer_market import compile_market
+    public_market=compile_market(cfg['complete_offer_policy']) if 'complete_offer_policy' in cfg else None
     rival_capacity=2;rival_bps=state['market']['public_rival_bps'];rival_cash=state['market']['rival_cash']
     def buyer_choice(b,service,anchor,price=None):
         nonlocal rival_capacity,rival_cash
         if 'complete_offer_policy' in cfg:
-            from .complete_offer_market import market_context,private_atom,actual_choice
+            from .complete_offer_market import actual_choice
             observed=b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values())
-            context=market_context(cfg['complete_offer_policy'],b['id'],observed)
-            chosen=actual_choice(context,private_atom(cfg['complete_offer_policy'],b['id'],seed),b['remaining_budget'],service if price is not None else None,price,draw(seed,[day,b['id']],'complete-offer-tie'))
+            context=public_market.context(b['id'],observed)
+            chosen=actual_choice(context,public_market.atom(b['id'],seed),b['remaining_budget'],service if price is not None else None,price,draw(seed,[day,b['id']],'complete-offer-tie'))
             decision={'kind':'offer' if price is not None else 'outside_choice','time':t,'customer_id':b['id'],'service_id':service,'price':price,'human_price':None,'public_rival_price':None,'chosen':chosen['provider']=='us','buyer_choice':chosen['provider'],'outside_option_name':chosen['name'],'outside_service_id':chosen['service_id'],'market_context':context,'information':'Public request and independent value/budget hypotheses; private atom belongs only to buyer environment. Outside contracts independently available per request.'}
             if chosen['provider'] not in {'us','decline'}:
                 decision['outside_spend']=chosen['spend'];b['remaining_budget']-=chosen['spend'];b['next_need_time']=t+7*24
@@ -247,7 +257,7 @@ def _prepare_plan(state,account,jobs):
     joint=None; joint_by_customer={}; joint_selected={}
     if 'strategic_policy' in cfg:
         from .joint_planning import plan_actions
-        joint=plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,_offer,draw,**({'offer_menu_fn':_offer_menu} if 'complete_offer_policy' in cfg else {}))
+        joint=plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,_offer,draw,**({'offer_menu_fn':lambda s,j,b,c:_offer_menu(s,j,b,c,_market=public_market)} if 'complete_offer_policy' in cfg else {}))
         prepared['joint_action']=joint
         joint_by_customer={d['customer_id']:d for d in joint['allocation']['deliveries']}
         from .strategic_commerce import selected_delivery
