@@ -1,0 +1,1271 @@
+{
+  "actual_profit": null,
+  "actual_revenue": 0,
+  "arm": "off",
+  "audit": {
+    "accepted": true,
+    "buyer_initial_budget": 9580000000,
+    "buyers_checked": 24,
+    "collections_microUSD": 350000000,
+    "commercial_counters_recomputed": {
+      "accepted_jobs": 7,
+      "actual_collections": 0,
+      "actual_customers": 0,
+      "actual_profit": null,
+      "conditional_simulated_commercial_success": false,
+      "customers": 4,
+      "paid_jobs": 7,
+      "profitable_earned_continuations": 3,
+      "repeat_customers": 2
+    },
+    "complete_costs_microUSD": 242320000,
+    "complete_operating_cost_contracts_recomputed": 72,
+    "customer_lifecycles_recomputed": 24,
+    "daily_candidate_ids_recomputed": {
+      "0": [
+        "SIM-customer-000",
+        "SIM-customer-001",
+        "SIM-customer-002",
+        "SIM-customer-003"
+      ],
+      "120": [],
+      "144": [],
+      "168": [
+        "SIM-customer-000",
+        "SIM-customer-002"
+      ],
+      "192": [
+        "SIM-customer-000",
+        "SIM-customer-002"
+      ],
+      "216": [],
+      "24": [
+        "SIM-customer-001",
+        "SIM-customer-003"
+      ],
+      "240": [],
+      "264": [
+        "SIM-customer-003"
+      ],
+      "288": [
+        "SIM-customer-003",
+        "SIM-customer-001"
+      ],
+      "312": [],
+      "336": [],
+      "360": [
+        "SIM-customer-000",
+        "SIM-customer-002"
+      ],
+      "384": [
+        "SIM-customer-002"
+      ],
+      "408": [],
+      "432": [],
+      "456": [
+        "SIM-customer-003"
+      ],
+      "48": [
+        "SIM-customer-001"
+      ],
+      "480": [],
+      "504": [],
+      "528": [
+        "SIM-customer-001",
+        "SIM-customer-000"
+      ],
+      "552": [
+        "SIM-customer-000",
+        "SIM-customer-002"
+      ],
+      "576": [
+        "SIM-customer-017",
+        "SIM-customer-002"
+      ],
+      "600": [
+        "SIM-customer-013",
+        "SIM-customer-019"
+      ],
+      "624": [
+        "SIM-customer-018"
+      ],
+      "648": [
+        "SIM-customer-009",
+        "SIM-customer-021",
+        "SIM-customer-022"
+      ],
+      "72": [],
+      "96": []
+    },
+    "daily_outreach_units_recomputed": {
+      "0": 4,
+      "120": 0,
+      "144": 0,
+      "168": 2,
+      "192": 2,
+      "216": 0,
+      "24": 2,
+      "240": 0,
+      "264": 1,
+      "288": 2,
+      "312": 0,
+      "336": 0,
+      "360": 2,
+      "384": 1,
+      "408": 0,
+      "432": 0,
+      "456": 1,
+      "48": 1,
+      "480": 0,
+      "504": 0,
+      "528": 2,
+      "552": 2,
+      "576": 3,
+      "600": 4,
+      "624": 4,
+      "648": 4,
+      "72": 0,
+      "96": 0
+    },
+    "enterprise_offers_recomputed": 14,
+    "independence": "Separate checking code in the same agent session and host; not independent institutions or live counterparties.",
+    "joint_optimality_scope": "Exact declared finite shortlist under public conditional-mean forecasts; not a global or long-horizon optimum.",
+    "joint_plans_rederived": 28,
+    "joint_states_evaluated": 1899,
+    "native_actions_sha256": "fc1517493e9b6b88a534f473043c6e7d2e714ccf0aca5d0498414c50cadff8a9",
+    "obligations_covered": true,
+    "orders_reexecuted": 7,
+    "paid_channel_contracts_checked": 2,
+    "paid_exposures_checked": 7,
+    "paid_reactivation_responses_recomputed": 0,
+    "productive_expansion_receipts_recomputed": 2,
+    "productive_investments_checked": 2,
+    "schema": "agi-alpha/connected014-independent-audit/v1",
+    "scope": "NATIVE_FINANCIAL_AND_OPERATING_SEMANTICS",
+    "settled_capability_uses_checked": 2,
+    "source_files_checked": 226,
+    "source_sha256": "8ea5bff31a9d6b92dacefa15813f4c353916ebf2971919fbaa1ff06bd91fd901",
+    "strategic_no_bids_rederived": 7,
+    "strategic_quotes_and_no_bids_rederived": 21,
+    "tax_provision_recomputed_microUSD": 26920000,
+    "unavailable_offer_outside_choices_recomputed": 7,
+    "verifier_matches_world_source_snapshot": true,
+    "verifier_source_sha256": "73072fcae301c1f5f09948079044a9173f772f78f4c114b101013107019525b1",
+    "voluntary_buyer_decisions_recomputed": 21
+  },
+  "case": "positive",
+  "complete": true,
+  "conditional_simulated_commercial_success": false,
+  "config": {
+    "acceptance_hours": 1,
+    "arrival_bps": 7000,
+    "buyer_budget_multiplier_bps": 10000,
+    "capacity_duration_hours": 504,
+    "capacity_lead_hours": 24,
+    "capacity_price": 8000000,
+    "channel_menu_policy": {
+      "contract_ids": [
+        "extended",
+        "pilot"
+      ],
+      "conversion_bps": 4000,
+      "schema": "connected-channel-menu/v1"
+    },
+    "channels": {
+      "extended": {
+        "activation_reliability_bps": 9000,
+        "contact_cooldown_days": 7,
+        "duration_days": 21,
+        "failure_credit_bps": 0,
+        "lead_days": 3,
+        "max_active_tranches": 2,
+        "max_contacts_per_customer": 3,
+        "overlap_bps": 5000,
+        "owned_audience_count": 4,
+        "prepaid_retry_attempts": 1,
+        "price_microUSD": 20000000,
+        "realization_bps": 6500,
+        "retry_delay_days": 1,
+        "slots_per_day": 4,
+        "support_microUSD": 500000
+      },
+      "pilot": {
+        "activation_reliability_bps": 9500,
+        "contact_cooldown_days": 7,
+        "duration_days": 21,
+        "failure_credit_bps": 0,
+        "lead_days": 2,
+        "max_active_tranches": 2,
+        "max_contacts_per_customer": 3,
+        "overlap_bps": 2500,
+        "owned_audience_count": 4,
+        "prepaid_retry_attempts": 1,
+        "price_microUSD": 6000000,
+        "realization_bps": 7500,
+        "retry_delay_days": 1,
+        "slots_per_day": 2,
+        "support_microUSD": 250000
+      }
+    },
+    "clearing_hours": 48,
+    "complete_offer_policy": {
+      "profiles": [
+        {
+          "atoms": [
+            {
+              "budget_microUSD": 180000000,
+              "values": {
+                "evidence_matrix": 20000000,
+                "kpi_variance": 20000000,
+                "receivables_packet": 45000000,
+                "reconciliation": 25000000
+              },
+              "weight_bps": 3000
+            },
+            {
+              "budget_microUSD": 400000000,
+              "values": {
+                "evidence_matrix": 35000000,
+                "kpi_variance": 35000000,
+                "receivables_packet": 120000000,
+                "reconciliation": 45000000
+              },
+              "weight_bps": 4000
+            },
+            {
+              "budget_microUSD": 800000000,
+              "values": {
+                "evidence_matrix": 50000000,
+                "kpi_variance": 50000000,
+                "receivables_packet": 200000000,
+                "reconciliation": 60000000
+              },
+              "weight_bps": 3000
+            }
+          ],
+          "id": "declared-positive",
+          "outside_options": [
+            {
+              "delay_cost": 0,
+              "name": "human-reconciliation",
+              "price": 45000000,
+              "provider": "human",
+              "quality_bps": 10000,
+              "service_id": "reconciliation"
+            },
+            {
+              "delay_cost": 0,
+              "name": "rival-reconciliation",
+              "price": 30000000,
+              "provider": "rival",
+              "quality_bps": 10000,
+              "service_id": "reconciliation"
+            },
+            {
+              "delay_cost": 12000000,
+              "name": "self_service-reconciliation",
+              "price": 3000000,
+              "provider": "self_service",
+              "quality_bps": 8000,
+              "service_id": "reconciliation"
+            },
+            {
+              "delay_cost": 0,
+              "name": "human-kpi_variance",
+              "price": 45000000,
+              "provider": "human",
+              "quality_bps": 10000,
+              "service_id": "kpi_variance"
+            },
+            {
+              "delay_cost": 0,
+              "name": "rival-kpi_variance",
+              "price": 30000000,
+              "provider": "rival",
+              "quality_bps": 10000,
+              "service_id": "kpi_variance"
+            },
+            {
+              "delay_cost": 12000000,
+              "name": "self_service-kpi_variance",
+              "price": 3000000,
+              "provider": "self_service",
+              "quality_bps": 8000,
+              "service_id": "kpi_variance"
+            },
+            {
+              "delay_cost": 0,
+              "name": "human-evidence_matrix",
+              "price": 45000000,
+              "provider": "human",
+              "quality_bps": 10000,
+              "service_id": "evidence_matrix"
+            },
+            {
+              "delay_cost": 0,
+              "name": "rival-evidence_matrix",
+              "price": 30000000,
+              "provider": "rival",
+              "quality_bps": 10000,
+              "service_id": "evidence_matrix"
+            },
+            {
+              "delay_cost": 12000000,
+              "name": "self_service-evidence_matrix",
+              "price": 3000000,
+              "provider": "self_service",
+              "quality_bps": 8000,
+              "service_id": "evidence_matrix"
+            },
+            {
+              "delay_cost": 0,
+              "name": "human-receivables_packet",
+              "price": 120000000,
+              "provider": "human",
+              "quality_bps": 10000,
+              "service_id": "receivables_packet"
+            },
+            {
+              "delay_cost": 0,
+              "name": "rival-receivables_packet",
+              "price": 85000000,
+              "provider": "rival",
+              "quality_bps": 10000,
+              "service_id": "receivables_packet"
+            },
+            {
+              "delay_cost": 20000000,
+              "name": "self_service-receivables_packet",
+              "price": 10000000,
+              "provider": "self_service",
+              "quality_bps": 8000,
+              "service_id": "receivables_packet"
+            }
+          ],
+          "price_grids": {
+            "evidence_matrix": [
+              15000000,
+              25000000
+            ],
+            "kpi_variance": [
+              15000000,
+              25000000
+            ],
+            "receivables_packet": [
+              30000000,
+              50000000,
+              75000000
+            ],
+            "reconciliation": [
+              15000000,
+              25000000
+            ]
+          },
+          "services": [
+            "reconciliation",
+            "kpi_variance",
+            "evidence_matrix",
+            "receivables_packet"
+          ]
+        }
+      ],
+      "requested_jobs": {
+        "SIM-customer-000": [
+          "adaptive012-reconciliation-0364b3e261-068",
+          "adaptive012-reconciliation-40fb7f8910-055",
+          "adaptive012-reconciliation-6c4b68ea1f-093",
+          "adaptive012-reconciliation-b86f0e87e5-036",
+          "adaptive012-kpi_variance-04a5c28de5-045",
+          "adaptive012-kpi_variance-3afee6dec2-027",
+          "adaptive012-kpi_variance-78726e0591-069",
+          "adaptive012-kpi_variance-bb0e9009f3-084",
+          "adaptive012-evidence_matrix-001b043226-084",
+          "adaptive012-evidence_matrix-45856c36d7-045",
+          "adaptive012-evidence_matrix-82cc8e80d8-031",
+          "adaptive012-evidence_matrix-bfd09b81f5-017",
+          "packet-029f313e21a4abdf",
+          "packet-418235d9d1f0c16f",
+          "packet-8611fa50ad27b043",
+          "packet-bd3e1dd240c70f51"
+        ],
+        "SIM-customer-001": [
+          "adaptive012-reconciliation-039cae14b8-076",
+          "adaptive012-reconciliation-44076fe358-008",
+          "adaptive012-reconciliation-7036ee2796-038",
+          "adaptive012-reconciliation-bcd758ba59-065",
+          "adaptive012-kpi_variance-05a288fcd3-017",
+          "adaptive012-kpi_variance-4100d5a364-080",
+          "adaptive012-kpi_variance-7a52dc7e6c-092",
+          "adaptive012-kpi_variance-bbb6849ab4-083",
+          "adaptive012-evidence_matrix-0111dae2ac-090",
+          "adaptive012-evidence_matrix-49d32fa4f0-029",
+          "adaptive012-evidence_matrix-834f751957-082",
+          "adaptive012-evidence_matrix-c2697f492d-072",
+          "packet-02a1ae3873134e8f",
+          "packet-429a8bce8b6bca84",
+          "packet-8967fc59e3dad8a1",
+          "packet-c1b8af8fc0ea0b26"
+        ],
+        "SIM-customer-002": [
+          "adaptive012-reconciliation-03f3238557-092",
+          "adaptive012-reconciliation-44b58a8e51-000",
+          "adaptive012-reconciliation-7726167d72-003",
+          "adaptive012-reconciliation-c6b7fe6a08-010",
+          "adaptive012-kpi_variance-06d5428631-013",
+          "adaptive012-kpi_variance-456d184278-022",
+          "adaptive012-kpi_variance-7d22d2629d-010",
+          "adaptive012-kpi_variance-bd4acd9350-031",
+          "adaptive012-evidence_matrix-03b97aa8cd-051",
+          "adaptive012-evidence_matrix-4fe53d8e89-089",
+          "adaptive012-evidence_matrix-869d2a33cc-000",
+          "adaptive012-evidence_matrix-c3f31f2d38-054",
+          "packet-05715a4a24648062",
+          "packet-448a07ff9d1d8f54",
+          "packet-89c90d5d295b8092",
+          "packet-c351fca4e75a9c58"
+        ],
+        "SIM-customer-003": [
+          "adaptive012-reconciliation-0566f5d08a-032",
+          "adaptive012-reconciliation-45363cc62f-050",
+          "adaptive012-reconciliation-78a9a973c6-022",
+          "adaptive012-reconciliation-cbf978de8d-027",
+          "adaptive012-kpi_variance-07547ed0ff-076",
+          "adaptive012-kpi_variance-4639efa69a-089",
+          "adaptive012-kpi_variance-8ae9d9ac34-039",
+          "adaptive012-kpi_variance-bee530e673-072",
+          "adaptive012-evidence_matrix-094d8273a7-059",
+          "adaptive012-evidence_matrix-5117d62798-024",
+          "adaptive012-evidence_matrix-88a2e23bce-055",
+          "adaptive012-evidence_matrix-c6bcf70e34-015",
+          "packet-0622da6c306f2bdb",
+          "packet-46e6759daf69edfc",
+          "packet-8f5767e9f59a26ab",
+          "packet-c6397f87874ba476"
+        ],
+        "SIM-customer-004": [
+          "adaptive012-reconciliation-05c1ab0e00-059",
+          "adaptive012-reconciliation-4565ca49b5-049",
+          "adaptive012-reconciliation-7b301b5496-013",
+          "adaptive012-reconciliation-cc639b0370-005",
+          "adaptive012-kpi_variance-09bd46861c-005",
+          "adaptive012-kpi_variance-4692627d40-046",
+          "adaptive012-kpi_variance-8d4462d9d7-020",
+          "adaptive012-kpi_variance-c1fa999d57-032",
+          "adaptive012-evidence_matrix-0cc6050d19-042",
+          "adaptive012-evidence_matrix-5247b3dafd-052",
+          "adaptive012-evidence_matrix-89c4a3261b-021",
+          "adaptive012-evidence_matrix-c7cebb3bfd-061",
+          "packet-0868c5070436a8e7",
+          "packet-48fed31092f56978",
+          "packet-8f597b5915fce54a",
+          "packet-c72e6dada464c718"
+        ],
+        "SIM-customer-005": [
+          "adaptive012-reconciliation-05d0ea19d3-025",
+          "adaptive012-reconciliation-49865e3d3c-047",
+          "adaptive012-reconciliation-7cef5aaf4f-067",
+          "adaptive012-reconciliation-cd4b8571f8-019",
+          "adaptive012-kpi_variance-0c9b5a00fb-090",
+          "adaptive012-kpi_variance-47f8ba7f4f-068",
+          "adaptive012-kpi_variance-8fd93fb18f-081",
+          "adaptive012-kpi_variance-c23a83d66f-025",
+          "adaptive012-evidence_matrix-0df14ef5d2-007",
+          "adaptive012-evidence_matrix-55423d3f46-002",
+          "adaptive012-evidence_matrix-8c8824ce47-026",
+          "adaptive012-evidence_matrix-c82e35d1b0-039",
+          "packet-0bdda22caac285a6",
+          "packet-4c253705c5a40aa6",
+          "packet-90ee5823399b8e3b",
+          "packet-ce3e242389f501a7"
+        ],
+        "SIM-customer-006": [
+          "adaptive012-reconciliation-065acc0cb2-043",
+          "adaptive012-reconciliation-4a899d1abf-011",
+          "adaptive012-reconciliation-8075d722e4-016",
+          "adaptive012-reconciliation-cd551cd7dc-018",
+          "adaptive012-kpi_variance-0e4144575d-088",
+          "adaptive012-kpi_variance-4ab6c539ac-061",
+          "adaptive012-kpi_variance-8ffcb62067-036",
+          "adaptive012-kpi_variance-c54ee11630-085",
+          "adaptive012-evidence_matrix-0e751e036f-010",
+          "adaptive012-evidence_matrix-560411375b-078",
+          "adaptive012-evidence_matrix-8ccf1b9f10-068",
+          "adaptive012-evidence_matrix-cca9bd6aa3-033",
+          "packet-0da5a74438df080c",
+          "packet-51ec8f4b1994bbe2",
+          "packet-90fef3ba3324199e",
+          "packet-d6925055acd746fb"
+        ],
+        "SIM-customer-007": [
+          "adaptive012-reconciliation-0c42729266-054",
+          "adaptive012-reconciliation-4ab2ade252-081",
+          "adaptive012-reconciliation-86e27c3bb9-017",
+          "adaptive012-reconciliation-cd84149d55-026",
+          "adaptive012-kpi_variance-102ca685e8-074",
+          "adaptive012-kpi_variance-4e52d3ec1c-078",
+          "adaptive012-kpi_variance-992fe89bbe-026",
+          "adaptive012-kpi_variance-c706cea09c-058",
+          "adaptive012-evidence_matrix-10eb519542-053",
+          "adaptive012-evidence_matrix-5829716338-018",
+          "adaptive012-evidence_matrix-8cfd22dadc-001",
+          "adaptive012-evidence_matrix-cf99df93fa-006",
+          "packet-10297b803907dced",
+          "packet-527053baf32677f3",
+          "packet-9683ac6f78718ee0",
+          "packet-d98102d49ecc74c6"
+        ],
+        "SIM-customer-008": [
+          "adaptive012-reconciliation-0cc3b86bc6-007",
+          "adaptive012-reconciliation-4ea0225522-042",
+          "adaptive012-reconciliation-92c0877903-080",
+          "adaptive012-reconciliation-cd8fac7910-004",
+          "adaptive012-kpi_variance-10f9904fc3-008",
+          "adaptive012-kpi_variance-4f06e36faf-006",
+          "adaptive012-kpi_variance-9a0ea4effd-055",
+          "adaptive012-kpi_variance-cb83e4c007-075",
+          "adaptive012-evidence_matrix-11c093bc96-040",
+          "adaptive012-evidence_matrix-5908b23515-027",
+          "adaptive012-evidence_matrix-9113625817-038",
+          "adaptive012-evidence_matrix-d030623271-030",
+          "packet-13ce3440bc973fe9",
+          "packet-55ee45d5d336e68d",
+          "packet-97d97b5fa01028f9",
+          "packet-d9ecf62341058b88"
+        ],
+        "SIM-customer-009": [
+          "adaptive012-reconciliation-0d4803cadb-079",
+          "adaptive012-reconciliation-503c101c7b-091",
+          "adaptive012-reconciliation-933e9f0cdc-084",
+          "adaptive012-reconciliation-d0ada4b863-087",
+          "adaptive012-kpi_variance-1266644679-050",
+          "adaptive012-kpi_variance-4fcf38f8df-034",
+          "adaptive012-kpi_variance-9b609ea752-087",
+          "adaptive012-kpi_variance-ceb5126e32-004",
+          "adaptive012-evidence_matrix-15aa42358f-081",
+          "adaptive012-evidence_matrix-5938be7819-057",
+          "adaptive012-evidence_matrix-920ba4ca82-086",
+          "adaptive012-evidence_matrix-d1116eb9fc-036",
+          "packet-142669fdf1242db6",
+          "packet-5c326e77af785c72",
+          "packet-98d5807bc45ab4e3",
+          "packet-db2b1c43af7b96cb"
+        ],
+        "SIM-customer-010": [
+          "adaptive012-reconciliation-0fcbf4f34c-051",
+          "adaptive012-reconciliation-52e739f2c0-045",
+          "adaptive012-reconciliation-974ffe7b61-056",
+          "adaptive012-reconciliation-d32c316b72-090",
+          "adaptive012-kpi_variance-1b3d633290-042",
+          "adaptive012-kpi_variance-52f71e6f45-047",
+          "adaptive012-kpi_variance-9d03cb5ff4-064",
+          "adaptive012-kpi_variance-d242b0cd8d-051",
+          "adaptive012-evidence_matrix-1b7f6a58e3-075",
+          "adaptive012-evidence_matrix-5e1e6f110a-014",
+          "adaptive012-evidence_matrix-95504c8c07-028",
+          "adaptive012-evidence_matrix-d276657efc-074",
+          "packet-179a8ea3a88a4f92",
+          "packet-6238caae4400177a",
+          "packet-9b9c8f204918fe10",
+          "packet-dc8f3a458a064c8c"
+        ],
+        "SIM-customer-011": [
+          "adaptive012-reconciliation-119b72e554-070",
+          "adaptive012-reconciliation-547dee3959-012",
+          "adaptive012-reconciliation-97d2534d6c-028",
+          "adaptive012-reconciliation-d83f69f6a4-020",
+          "adaptive012-kpi_variance-1d742f05cf-041",
+          "adaptive012-kpi_variance-5517244c83-024",
+          "adaptive012-kpi_variance-9d6d9dbb62-070",
+          "adaptive012-kpi_variance-d2921eeeae-082",
+          "adaptive012-evidence_matrix-1c13314308-020",
+          "adaptive012-evidence_matrix-5ed47b6cc0-008",
+          "adaptive012-evidence_matrix-965e9a86de-073",
+          "adaptive012-evidence_matrix-d3e2447ffd-037",
+          "packet-18708b27fc02a892",
+          "packet-62db976ef27b161b",
+          "packet-9db1f4df72d5bec5",
+          "packet-e0e82682fb8e6738"
+        ],
+        "SIM-customer-012": [
+          "adaptive012-reconciliation-1203402b48-002",
+          "adaptive012-reconciliation-564b007236-086",
+          "adaptive012-reconciliation-98049183d8-015",
+          "adaptive012-reconciliation-da827363b9-072",
+          "adaptive012-kpi_variance-2225d630c5-016",
+          "adaptive012-kpi_variance-555cd12fe6-057",
+          "adaptive012-kpi_variance-9d9a54341e-021",
+          "adaptive012-kpi_variance-d42ad490ae-095",
+          "adaptive012-evidence_matrix-1cce9e0e8f-058",
+          "adaptive012-evidence_matrix-5fe12a9b02-062",
+          "adaptive012-evidence_matrix-98fa8d9162-004",
+          "adaptive012-evidence_matrix-d499807d4c-035",
+          "packet-1ab9dfa5c449221e",
+          "packet-64d51b0d6725cdbe",
+          "packet-9e336e512bb28ef9",
+          "packet-e1bd20a44799e3fe"
+        ],
+        "SIM-customer-013": [
+          "adaptive012-reconciliation-136da80902-069",
+          "adaptive012-reconciliation-579bae2a88-078",
+          "adaptive012-reconciliation-9ae2e1a208-031",
+          "adaptive012-reconciliation-dc3a9c497a-074",
+          "adaptive012-kpi_variance-27c7273baa-003",
+          "adaptive012-kpi_variance-5c599b2b8b-040",
+          "adaptive012-kpi_variance-a0d0c9dc19-059",
+          "adaptive012-kpi_variance-d9a59549ea-037",
+          "adaptive012-evidence_matrix-23c51fc5f0-087",
+          "adaptive012-evidence_matrix-61e199ac7c-032",
+          "adaptive012-evidence_matrix-999ce989a1-023",
+          "adaptive012-evidence_matrix-d66c2fa979-011",
+          "packet-243077be2503c3ac",
+          "packet-64d814cfdc67b399",
+          "packet-a1573b88c598bf98",
+          "packet-e75122ba1ffba5e1"
+        ],
+        "SIM-customer-014": [
+          "adaptive012-reconciliation-137f28abe4-064",
+          "adaptive012-reconciliation-5921169a6a-040",
+          "adaptive012-reconciliation-a0c9666aa2-063",
+          "adaptive012-reconciliation-dd009a9da1-083",
+          "adaptive012-kpi_variance-283e78e2e2-000",
+          "adaptive012-kpi_variance-5c8f82e661-018",
+          "adaptive012-kpi_variance-a306073c6c-052",
+          "adaptive012-kpi_variance-e2010a1899-038",
+          "adaptive012-evidence_matrix-26dce392d4-070",
+          "adaptive012-evidence_matrix-646ac902db-092",
+          "adaptive012-evidence_matrix-9ccc5f074b-050",
+          "adaptive012-evidence_matrix-e029bddf30-049",
+          "packet-2795570967e7c5c8",
+          "packet-65c6c1fa30059941",
+          "packet-a3b22475a255e454",
+          "packet-edced6a451c388a6"
+        ],
+        "SIM-customer-015": [
+          "adaptive012-reconciliation-14f5550b7a-071",
+          "adaptive012-reconciliation-5c141aea2a-035",
+          "adaptive012-reconciliation-a600c7ec46-029",
+          "adaptive012-reconciliation-dd7192811c-095",
+          "adaptive012-kpi_variance-295347b159-053",
+          "adaptive012-kpi_variance-61489feb45-009",
+          "adaptive012-kpi_variance-a3e593976e-002",
+          "adaptive012-kpi_variance-e415f6672b-044",
+          "adaptive012-evidence_matrix-3188791180-094",
+          "adaptive012-evidence_matrix-65388f0a05-083",
+          "adaptive012-evidence_matrix-a1260c1c07-044",
+          "adaptive012-evidence_matrix-e3f3c0c5aa-003",
+          "packet-27e8053554a04913",
+          "packet-6a4c3d00975c1a4f",
+          "packet-a7a74849cb0ba45d",
+          "packet-f23a290c86521cf7"
+        ],
+        "SIM-customer-016": [
+          "adaptive012-reconciliation-1fdbc40da4-077",
+          "adaptive012-reconciliation-5e9aab7f47-009",
+          "adaptive012-reconciliation-a7afb4c745-052",
+          "adaptive012-reconciliation-e9f28b8733-021",
+          "adaptive012-kpi_variance-298b46735a-065",
+          "adaptive012-kpi_variance-6a98981e7a-023",
+          "adaptive012-kpi_variance-a8766f0d92-093",
+          "adaptive012-kpi_variance-ecefdc8265-060",
+          "adaptive012-evidence_matrix-36c9922705-043",
+          "adaptive012-evidence_matrix-676d563dbd-012",
+          "adaptive012-evidence_matrix-a324e8477b-085",
+          "adaptive012-evidence_matrix-e663459488-093",
+          "packet-2ac415661ec96e44",
+          "packet-6a56baa6ba96cf56",
+          "packet-a803595343c29c2b",
+          "packet-f510e478d34a5145"
+        ],
+        "SIM-customer-017": [
+          "adaptive012-reconciliation-204194e2c0-034",
+          "adaptive012-reconciliation-5f4ebcd0cd-089",
+          "adaptive012-reconciliation-ac2068e14f-075",
+          "adaptive012-reconciliation-eab2acc8e9-057",
+          "adaptive012-kpi_variance-2bd8044376-079",
+          "adaptive012-kpi_variance-6aa87ff76a-048",
+          "adaptive012-kpi_variance-aa71588cb6-035",
+          "adaptive012-kpi_variance-ee965e9ec7-071",
+          "adaptive012-evidence_matrix-38f59c550c-005",
+          "adaptive012-evidence_matrix-6c3c81e06c-088",
+          "adaptive012-evidence_matrix-aabad1a2d7-034",
+          "adaptive012-evidence_matrix-ea41c4a593-076",
+          "packet-2c5c501fef9472e5",
+          "packet-6bb8e5b8cb390aaa",
+          "packet-a8530e34a89d99fe",
+          "packet-f6f4608d27f1d986"
+        ],
+        "SIM-customer-018": [
+          "adaptive012-reconciliation-2d96c1fb7b-023",
+          "adaptive012-reconciliation-60d2e65257-044",
+          "adaptive012-reconciliation-ada2cb5213-024",
+          "adaptive012-reconciliation-ec390d5c05-058",
+          "adaptive012-kpi_variance-2e13ac5559-028",
+          "adaptive012-kpi_variance-6b28b60b6c-054",
+          "adaptive012-kpi_variance-aaad89d349-062",
+          "adaptive012-kpi_variance-f1d2fada4a-066",
+          "adaptive012-evidence_matrix-3aeaa9cc45-041",
+          "adaptive012-evidence_matrix-6f34da9e88-046",
+          "adaptive012-evidence_matrix-ab2b5c0625-009",
+          "adaptive012-evidence_matrix-ec7c686bc9-064",
+          "packet-2cf569b9e604deea",
+          "packet-6ef74d1920800882",
+          "packet-a9177253ecaac596",
+          "packet-f826b93b77fa17b8"
+        ],
+        "SIM-customer-019": [
+          "adaptive012-reconciliation-2f06c0e382-037",
+          "adaptive012-reconciliation-61f6d95472-039",
+          "adaptive012-reconciliation-b09c1e8a7d-066",
+          "adaptive012-reconciliation-ec62bb0ad5-041",
+          "adaptive012-kpi_variance-2f2f4c517a-056",
+          "adaptive012-kpi_variance-6ca8036954-073",
+          "adaptive012-kpi_variance-ac9809e8b3-015",
+          "adaptive012-kpi_variance-f2daee8003-043",
+          "adaptive012-evidence_matrix-3d0ad27880-048",
+          "adaptive012-evidence_matrix-7048dd41a8-016",
+          "adaptive012-evidence_matrix-acb2d3c999-095",
+          "adaptive012-evidence_matrix-eef0ab10f9-047",
+          "packet-358ce650903fae7b",
+          "packet-70dab1bdb3d52512",
+          "packet-a92e4ed286a3c727",
+          "packet-f993bc620d6f121a"
+        ],
+        "SIM-customer-020": [
+          "adaptive012-reconciliation-388b5a39bc-088",
+          "adaptive012-reconciliation-63550d14eb-033",
+          "adaptive012-reconciliation-b0a0168181-048",
+          "adaptive012-reconciliation-ef43aaf79b-053",
+          "adaptive012-kpi_variance-317c67fa18-012",
+          "adaptive012-kpi_variance-6fb6d18111-067",
+          "adaptive012-kpi_variance-ad39052b1f-001",
+          "adaptive012-kpi_variance-f7f5b5c2bd-086",
+          "adaptive012-evidence_matrix-3e64236b8b-091",
+          "adaptive012-evidence_matrix-71b37f5c73-022",
+          "adaptive012-evidence_matrix-ad65d96560-080",
+          "adaptive012-evidence_matrix-f205084ceb-071",
+          "packet-369a70a58dd29a6d",
+          "packet-7554ecf1f7ceeacc",
+          "packet-abb463757b96a722",
+          "packet-fa4c766c70d7333c"
+        ],
+        "SIM-customer-021": [
+          "adaptive012-reconciliation-38a1c69378-061",
+          "adaptive012-reconciliation-657b2aeb42-094",
+          "adaptive012-reconciliation-b0fb4c680e-073",
+          "adaptive012-reconciliation-f2196d64b6-006",
+          "adaptive012-kpi_variance-32f8d88c32-077",
+          "adaptive012-kpi_variance-705bf40795-029",
+          "adaptive012-kpi_variance-b1d7d2c8d6-063",
+          "adaptive012-kpi_variance-fe67936a54-094",
+          "adaptive012-evidence_matrix-3f3f65feb8-025",
+          "adaptive012-evidence_matrix-734937f8a5-069",
+          "adaptive012-evidence_matrix-ae1a636045-079",
+          "adaptive012-evidence_matrix-f6dea08fe0-077",
+          "packet-37aeb85476db8818",
+          "packet-779988e781ccb4f4",
+          "packet-b1c80b74012d5865",
+          "packet-fb55a5c9c37eb8e3"
+        ],
+        "SIM-customer-022": [
+          "adaptive012-reconciliation-3b4ddeebb0-062",
+          "adaptive012-reconciliation-65f30b2f6b-082",
+          "adaptive012-reconciliation-b30ba09a2b-014",
+          "adaptive012-reconciliation-fa7a19d8b1-085",
+          "adaptive012-kpi_variance-33c53bd24b-033",
+          "adaptive012-kpi_variance-706bf934a1-049",
+          "adaptive012-kpi_variance-b7647e4cec-091",
+          "adaptive012-kpi_variance-ff0244bfe5-014",
+          "adaptive012-evidence_matrix-3ff8751485-060",
+          "adaptive012-evidence_matrix-7828536ce0-056",
+          "adaptive012-evidence_matrix-b4e41c296f-065",
+          "adaptive012-evidence_matrix-fe295c0e04-067",
+          "packet-3a045febedb7e625",
+          "packet-7df42ae5aece917d",
+          "packet-b6786061a4670c01",
+          "packet-fb8cae7bbadb6787"
+        ],
+        "SIM-customer-023": [
+          "adaptive012-reconciliation-3eb015208b-046",
+          "adaptive012-reconciliation-6760b48178-001",
+          "adaptive012-reconciliation-b5b2ea0966-060",
+          "adaptive012-reconciliation-fc128ff44f-030",
+          "adaptive012-kpi_variance-34f97268e1-030",
+          "adaptive012-kpi_variance-719136a4ea-011",
+          "adaptive012-kpi_variance-b989970608-019",
+          "adaptive012-kpi_variance-ffe447b5c8-007",
+          "adaptive012-evidence_matrix-42fd82e4c8-019",
+          "adaptive012-evidence_matrix-789f73d600-063",
+          "adaptive012-evidence_matrix-b4e76047b0-013",
+          "adaptive012-evidence_matrix-fe4ea98ca3-066",
+          "packet-3c9a3937c2eb171d",
+          "packet-7ec1659bd8ee64a5",
+          "packet-b8ae177fba77824e",
+          "packet-ff57319526ba6d3f"
+        ]
+      },
+      "schema": "connected-complete-offer-market/v1",
+      "selection": "menu"
+    },
+    "cost_evidence": "AUTHORED_RESOURCE_ENVELOPES. Executed deterministic service/checker costs include acquisition, qualification, setup/development/failures, production, supplier, prepaid support, fees, maintenance, taxes. Host/model billing unavailable, never asserted zero. Human hours/wages are scenarios, not measurements or automatic sales.",
+    "customer_pool": 24,
+    "epoch_utc": "2026-11-01T00:00:00Z",
+    "exposure_cost": 50000,
+    "horizon_days": 28,
+    "human_comparator": {
+      "evidence_matrix": {
+        "hours": 0.8,
+        "loaded_usd_hour": 55
+      },
+      "kpi_variance": {
+        "hours": 0.65,
+        "loaded_usd_hour": 60
+      },
+      "reconciliation": {
+        "hours": 0.65,
+        "loaded_usd_hour": 34.75
+      }
+    },
+    "initial_slots": 3,
+    "limits": [
+      "Synthetic non-personal work only; no actual customers or payments.",
+      "Finite authored buyer/channel/supplier contracts, no empirical conversion calibration.",
+      "Permanent native principal/fee protection tails remain; seed may back reserves.",
+      "No paid inference: capable-frontier AI economics represented by disclosed envelopes; actual executors are deterministic.",
+      "Finite frozen service inventory is an edition resource, not a universal market ceiling."
+    ],
+    "maintenance_daily": 100000,
+    "maximum_slots": 12,
+    "mechanism_policy": {
+      "accept_collect_bps": 9700,
+      "cost_contract": {
+        "basis": "COMMON_COMPLETE_PRODUCTION_REPLACEMENT",
+        "covered_operations": [
+          "produce",
+          "acceptance_check"
+        ],
+        "production_envelope_microUSD": 1500000,
+        "schema": "connected-method-cost-contract/v1"
+      },
+      "costs": {
+        "conventional": {
+          "discovery": 0,
+          "execution": 0,
+          "failed_attempts": 0,
+          "integration": 0,
+          "maintenance": 0,
+          "retrieval": 0,
+          "verification": 0
+        },
+        "critic_retain": {
+          "discovery": 1000000,
+          "execution": 0,
+          "failed_attempts": 100000,
+          "integration": 500000,
+          "maintenance": 10000,
+          "retrieval": 10000,
+          "verification": 300000
+        },
+        "generated": {
+          "discovery": 0,
+          "execution": 0,
+          "failed_attempts": 0,
+          "integration": 0,
+          "maintenance": 0,
+          "retrieval": 0,
+          "verification": 0
+        },
+        "ordinary_reuse": {
+          "discovery": 0,
+          "execution": 0,
+          "failed_attempts": 0,
+          "integration": 0,
+          "maintenance": 0,
+          "retrieval": 10000,
+          "verification": 200000
+        }
+      },
+      "future_equivalent_jobs": 0,
+      "mode": "optimize",
+      "public_basis": "Common production envelope covers direct/generated/conventional execution and ordinary acceptance once. No measured savings claimed. Extra critic adjudication/comparison/retention and reused-memory retrieval/revalidation use explicit authored positive envelopes; host/model billing remains unknown."
+    },
+    "native_time_unit": "hour",
+    "nonpayment_bps": 200,
+    "onboarding_cost": 500000,
+    "opening": 5000000000,
+    "payment_bps": 290,
+    "payment_deadline_hours": 240,
+    "payment_fixed": 300000,
+    "price_pressure_bps": 9000,
+    "production_cost": 1500000,
+    "production_hours": 2,
+    "profit_tax_bps": 2000,
+    "qualification_cost": 150000,
+    "retention_bps": 9700,
+    "schema": "agi-alpha/connected014-config/v1",
+    "scope": "SIMULATED",
+    "setup_cost": 130000000,
+    "strategic_allocation_policy": {
+      "max_customers": 2,
+      "risk": {
+        "authorized_allocation": 5000000000,
+        "downside_penalty_bps": 2500,
+        "interactions": [],
+        "max_states": 262144,
+        "scenarios": {
+          "ai_parity_price_war": 3000,
+          "baseline": 5000,
+          "differentiated_verified_service": 2000
+        },
+        "worst_loss_limit": 5000000000
+      }
+    },
+    "strategic_policy": {
+      "connected_beliefs": {
+        "ai_parity_price_war": {
+          "max_budget_microUSD": 600000000,
+          "max_value_bps": 21000,
+          "min_budget_microUSD": 0,
+          "min_value_bps": 7000,
+          "rival_available_bps": 8000
+        },
+        "baseline": {
+          "max_budget_microUSD": 600000000,
+          "max_value_bps": 21000,
+          "min_budget_microUSD": 0,
+          "min_value_bps": 7000,
+          "rival_available_bps": 8000
+        },
+        "differentiated_verified_service": {
+          "max_budget_microUSD": 600000000,
+          "max_value_bps": 21000,
+          "min_budget_microUSD": 0,
+          "min_value_bps": 7000,
+          "rival_available_bps": 8000
+        }
+      },
+      "demand_model": "connected_range",
+      "price_bps": [
+        5500,
+        6999,
+        8999,
+        9299,
+        9999
+      ],
+      "public_basis": "Frozen public independent value/budget range hypotheses; same-value complete-service alternatives. Not realized buyer utility, budget, scenario label or future draw. Rival availability is uncertain, not queried.",
+      "rival_cost_bps": 3000,
+      "rival_price_bps": [
+        5500,
+        7000,
+        9000,
+        10000
+      ],
+      "rival_response": "observed_quote",
+      "scenarios": [
+        {
+          "accept_prob": 0.97,
+          "collect_prob": 0.97,
+          "cost_shock": 1,
+          "human_price_factor": 1.18,
+          "id": "baseline",
+          "no_purchase_loss": 1.3,
+          "our_buyer_friction": 0.02,
+          "our_quality_loss": 0.035,
+          "repeat_horizon": 0,
+          "repeat_probability": 0.55,
+          "rival_buyer_friction": 0.04,
+          "rival_cost_ratio": 1.15,
+          "rival_quality_loss": 0.12,
+          "self_service_cost": 0.52,
+          "self_service_risk": 0.2,
+          "temperature": 0.1,
+          "weight": 0.5
+        },
+        {
+          "accept_prob": 0.92,
+          "collect_prob": 0.94,
+          "cost_shock": 1,
+          "human_price_factor": 1.12,
+          "id": "ai_parity_price_war",
+          "no_purchase_loss": 1.1,
+          "our_buyer_friction": 0.025,
+          "our_quality_loss": 0.04,
+          "repeat_horizon": 0,
+          "repeat_probability": 0.3,
+          "rival_buyer_friction": 0.025,
+          "rival_cost_ratio": 0.75,
+          "rival_quality_loss": 0.04,
+          "self_service_cost": 0.22,
+          "self_service_risk": 0.11,
+          "temperature": 0.085,
+          "weight": 0.3
+        },
+        {
+          "accept_prob": 0.985,
+          "collect_prob": 0.99,
+          "cost_shock": 1,
+          "human_price_factor": 1.25,
+          "id": "differentiated_verified_service",
+          "no_purchase_loss": 1.55,
+          "our_buyer_friction": 0.01,
+          "our_quality_loss": 0.01,
+          "repeat_horizon": 0,
+          "repeat_probability": 0.68,
+          "rival_buyer_friction": 0.06,
+          "rival_cost_ratio": 1.3,
+          "rival_quality_loss": 0.2,
+          "self_service_cost": 0.62,
+          "self_service_risk": 0.26,
+          "temperature": 0.1,
+          "weight": 0.2
+        }
+      ],
+      "schema": "connected-strategic-commerce/v1"
+    },
+    "supplier_outage_days": 0,
+    "supplier_outage_start_day": -1,
+    "supplier_unit_cost": 250000,
+    "support_cost": 250000,
+    "value_bps": 10000,
+    "working": 25000000
+  },
+  "config_sha256": "ffb24ba4d202f23974874209b657a47d11c83d827f8a53b3cc24c13ed6fb11be",
+  "cpu_seconds_self_and_waited_children": 58.73168,
+  "customers": 4,
+  "expenses_by_cost_event_category": {
+    "acquisition_contract": 12500000,
+    "development_integration_qualification_and_failed_search": 130000000,
+    "maintenance": 2800000,
+    "outreach_including_failed_and_unused_slots": 1850000,
+    "production_contract": 56250000,
+    "qualification_including_lost_offers": 12000000,
+    "tax_provision": 26920000
+  },
+  "free_disk_bytes": 354074624,
+  "investments": [
+    {
+      "activation_time": 576,
+      "capacity_units": null,
+      "contract_id": "pilot",
+      "cost": 6250000,
+      "expiry_time": 1080,
+      "id": "channel-22-pilot",
+      "kind": "acquisition",
+      "plan_id": "connected014-resource-d7008218a5af724e257a8cbebcf7e78c",
+      "purchased_time": 528
+    },
+    {
+      "activation_time": 600,
+      "capacity_units": null,
+      "contract_id": "pilot",
+      "cost": 6250000,
+      "expiry_time": 1104,
+      "id": "channel-23-pilot",
+      "kind": "acquisition",
+      "plan_id": "connected014-resource-b77f7ad87c294a945641d35c45c00bff",
+      "purchased_time": 552
+    }
+  ],
+  "manifest_sha256": "55e572206e5dbc043028b23adeb0e9967aa0237adcb012bbb9bf0617ffb2c456",
+  "orders": [
+    {
+      "capacity_units": 3,
+      "collection_time": 75,
+      "complete_cost": 8250000,
+      "customer_id": "SIM-customer-003",
+      "id": "order-0000",
+      "job_id": "packet-0622da6c306f2bdb",
+      "joint_recourse_round": null,
+      "outcome": "SETTLED",
+      "price": 50000000,
+      "qualified_time": 24
+    },
+    {
+      "capacity_units": 3,
+      "collection_time": 99,
+      "complete_cost": 8250000,
+      "customer_id": "SIM-customer-001",
+      "id": "order-0001",
+      "job_id": "packet-02a1ae3873134e8f",
+      "joint_recourse_round": null,
+      "outcome": "SETTLED",
+      "price": 50000000,
+      "qualified_time": 48
+    },
+    {
+      "capacity_units": 3,
+      "collection_time": 339,
+      "complete_cost": 7750000,
+      "customer_id": "SIM-customer-001",
+      "id": "order-0002",
+      "job_id": "packet-429a8bce8b6bca84",
+      "joint_recourse_round": null,
+      "outcome": "SETTLED",
+      "price": 50000000,
+      "qualified_time": 288
+    },
+    {
+      "capacity_units": 3,
+      "collection_time": 507,
+      "complete_cost": 7750000,
+      "customer_id": "SIM-customer-003",
+      "id": "order-0003",
+      "job_id": "packet-46e6759daf69edfc",
+      "joint_recourse_round": null,
+      "outcome": "SETTLED",
+      "price": 50000000,
+      "qualified_time": 456
+    },
+    {
+      "capacity_units": 3,
+      "collection_time": 579,
+      "complete_cost": 7750000,
+      "customer_id": "SIM-customer-001",
+      "id": "order-0004",
+      "job_id": "packet-8967fc59e3dad8a1",
+      "joint_recourse_round": null,
+      "outcome": "SETTLED",
+      "price": 50000000,
+      "qualified_time": 528
+    },
+    {
+      "capacity_units": 3,
+      "collection_time": 675,
+      "complete_cost": 8250000,
+      "customer_id": "SIM-customer-018",
+      "id": "order-0005",
+      "job_id": "packet-2cf569b9e604deea",
+      "joint_recourse_round": null,
+      "outcome": "SETTLED",
+      "price": 50000000,
+      "qualified_time": 624
+    },
+    {
+      "capacity_units": 3,
+      "collection_time": 699,
+      "complete_cost": 8250000,
+      "customer_id": "SIM-customer-021",
+      "id": "order-0006",
+      "job_id": "packet-37aeb85476db8818",
+      "joint_recourse_round": null,
+      "outcome": "SETTLED",
+      "price": 50000000,
+      "qualified_time": 648
+    }
+  ],
+  "paid_jobs": 7,
+  "planning_fee": 0,
+  "private_state": "Retained locally; never exported",
+  "profitable_earned_continuations": 3,
+  "protocol_sha256": "179729c2c583a532b487c7ff87709671d68c2c98a6ab5847339fd76c48692e29",
+  "recourse": {
+    "accepted_followup_orders": 0,
+    "attempts": 0,
+    "refusals": 0,
+    "rounds": 0
+  },
+  "repeat_customers": 2,
+  "resource_scope": "CPU since process start including imports and waited children; wall since runner module entry, interpreter startup excluded; actual billing unknown",
+  "result_sha256": "24d2d9cbeb5678f8b8b893e8629bab382fa09056d2fe068c19bb0d3ecb2ec49b",
+  "runner_sha256": "8a7b3ffb12d5a02c0756de98807310c2032a9ede8d62cee573d6d166c7a43df2",
+  "seed": 2611010513,
+  "source_sha256": "8ea5bff31a9d6b92dacefa15813f4c353916ebf2971919fbaa1ff06bd91fd901",
+  "status": "COMPLETED",
+  "summary": {
+    "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+    "available": 4731280000,
+    "cash": 5107680000,
+    "collections": 350000000,
+    "conditionalEarned": 82680000,
+    "custodyReserve": 0,
+    "custodyRestricted": 0,
+    "earnedProtectionBacking": 0,
+    "equityProtectionBacking": 376400000,
+    "expensePaid": 242320000,
+    "expenses": 242320000,
+    "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+    "investmentStopped": false,
+    "netEarnedAfterIncurredObligations": 107680000,
+    "payables": 0,
+    "profit": 107680000,
+    "recoveryIncome": 0,
+    "reservedInvestment": 0,
+    "revenue": 350000000,
+    "strictEarnedControl": 0,
+    "tailReserve": 351400000,
+    "unrestrictedEarned": 107680000,
+    "workingCapital": 25000000
+  },
+  "trailing_profit": {
+    "accounting_basis": "Recognized revenue plus recovery income minus incurred expenses; signed revisions retained. Seed and principal reserve releases are not profit. Payables remain incurred expenses even when unpaid. Taxes enter only when recorded as native expense; no added hypothetical tax/depreciation.",
+    "complete_365_day_operating_history": false,
+    "event_prefix_max_deviation_microUSD": 0,
+    "included_native_actions": 115,
+    "interval": {
+      "boundary": "[start,end); all same-hour actions included or excluded together",
+      "clock": "native integer hours from opening",
+      "end_hour_exclusive": 672,
+      "start_hour_inclusive": 0
+    },
+    "limits": [
+      "Requires independent native and operating audits of the source result.",
+      "Existing modeled cost coverage and unknown host/model billing are unchanged.",
+      "No annualization, pooled enterprises, forward inference, or spending authority.",
+      "Post-operating settlement drain remains on the account but is excluded from this operating-window measure."
+    ],
+    "native_actions_sha256": "fc1517493e9b6b88a534f473043c6e7d2e714ccf0aca5d0498414c50cadff8a9",
+    "native_endpoint_summary": {
+      "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+      "available": 4647600000,
+      "cash": 5023600000,
+      "collections": 250000000,
+      "conditionalEarned": 0,
+      "custodyReserve": 100000000,
+      "custodyRestricted": 100000000,
+      "earnedProtectionBacking": 0,
+      "equityProtectionBacking": 376000000,
+      "expensePaid": 226400000,
+      "expenses": 226400000,
+      "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+      "investmentStopped": false,
+      "netEarnedAfterIncurredObligations": 23600000,
+      "payables": 0,
+      "profit": 23600000,
+      "recoveryIncome": 0,
+      "reservedInvestment": 0,
+      "revenue": 250000000,
+      "strictEarnedControl": 0,
+      "tailReserve": 251000000,
+      "unrestrictedEarned": 23600000,
+      "workingCapital": 25000000
+    },
+    "obligation_scope": "Endpoint native summary preserved, not a new reserve-coverage or complete-cost qualification.",
+    "observed_window_flows_microUSD": {
+      "expenses": 226400000,
+      "recoveryIncome": 0,
+      "revenue": 250000000
+    },
+    "observed_window_profit_microUSD": 23600000,
+    "operating_complete": true,
+    "prefix_before_end_microUSD": {
+      "expenses": 226400000,
+      "recoveryIncome": 0,
+      "revenue": 250000000
+    },
+    "prefix_before_start_microUSD": {
+      "expenses": 0,
+      "recoveryIncome": 0,
+      "revenue": 0
+    },
+    "prefix_difference_microUSD": {
+      "expenses": 226400000,
+      "recoveryIncome": 0,
+      "revenue": 250000000
+    },
+    "qualification": "INSUFFICIENT_OPERATING_HORIZON",
+    "schema": "agi-alpha/native-trailing-profit/v1",
+    "scope": "ONE_ACCOUNT_EXACT_MODELED_ACCRUAL_PROFIT_NOT_FORWARD_PROJECTION",
+    "settlement_drain_actions_excluded": 4,
+    "trailing_365_day_profit_microUSD": null
+  },
+  "wall_seconds": 59.428726841986645
+}
