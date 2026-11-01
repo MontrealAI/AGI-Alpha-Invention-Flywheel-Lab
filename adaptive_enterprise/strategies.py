@@ -10,7 +10,7 @@ import math
 from pathlib import Path
 
 PRIMITIVE_SERVICES = ('reconciliation', 'kpi_variance', 'evidence_matrix')
-SERVICES = PRIMITIVE_SERVICES + ('operations_bundle',)
+SERVICES = PRIMITIVE_SERVICES + ('operations_bundle','receivables_packet')
 FIELDS = {'id', 'service_id', 'segment', 'qualification', 'problem', 'outcome', 'scope',
           'method', 'production_pipeline', 'verification', 'price_microUSD', 'payment',
           'renewal', 'remedy', 'deadline_hours', 'support', 'channel', 'context',
@@ -31,7 +31,7 @@ def validate_offer(offer):
     for key in ['id', 'segment', 'problem', 'outcome', 'verification', 'payment', 'renewal', 'remedy', 'support', 'channel', 'context', 'provenance']:
         if not isinstance(offer[key], str) or not offer[key].strip():
             raise ValueError('COMPLETE_OFFER_TEXT_REQUIRED:' + key)
-    if offer['scope'] not in {'complete_outcome', 'intake_readiness'} or offer['method'] not in {'canonical', 'generated_schema', 'staged_readiness','operations_bundle'}:
+    if offer['scope'] not in {'complete_outcome', 'intake_readiness'} or offer['method'] not in {'canonical', 'generated_schema', 'staged_readiness','operations_bundle','receivables_packet'}:
         raise ValueError('EXECUTABLE_OFFER_METHOD_AND_SCOPE_REQUIRED')
     if (offer['method'] == 'staged_readiness') != (offer['scope'] == 'intake_readiness'):
         raise ValueError('STAGED_SCOPE_MUST_BE_EXPLICIT')
@@ -44,12 +44,15 @@ def validate_offer(offer):
     expected = {'canonical': ['validate_canonical_input', 'execute_service', 'independent_acceptance'],
                 'generated_schema': ['infer_typed_mapping', 'execute_mapping', 'execute_service', 'independent_acceptance'],
                 'staged_readiness': ['infer_typed_mapping', 'report_missing_or_ambiguous_facts', 'independent_acceptance'],
-                'operations_bundle':['execute_distinct_components','independent_joint_acceptance']}
+                'operations_bundle':['execute_distinct_components','independent_joint_acceptance'],
+                'receivables_packet':['reconcile_common_source','derive_aging_and_kpi','construct_evidence_memo','independent_packet_acceptance']}
     if offer['production_pipeline'] != expected[offer['method']]:
         raise ValueError('METHOD_MUST_MATCH_EXECUTABLE_PIPELINE')
     if (offer['service_id']=='operations_bundle')!=(offer['method']=='operations_bundle'):
         raise ValueError('BUNDLE_REQUIRES_QUALIFIED_COMBINED_METHOD')
-    if offer['capacity_units']!=(3 if offer['service_id']=='operations_bundle' else 1):
+    if (offer['service_id']=='receivables_packet')!=(offer['method']=='receivables_packet'):
+        raise ValueError('PACKET_REQUIRES_QUALIFIED_COHERENT_METHOD')
+    if offer['capacity_units']!=(3 if offer['service_id'] in {'operations_bundle','receivables_packet'} else 1):
         raise ValueError('CAPACITY_MUST_MATCH_ACTUAL_COMPONENT_PRODUCTION')
     for key in set(offer) & (PUBLIC_METADATA - {'applicable_job_ids', 'evidence_level'}):
         if type(offer[key]) not in {int,float} or not math.isfinite(offer[key]) or offer[key]<0:
@@ -59,7 +62,7 @@ def validate_offer(offer):
     return offer
 
 
-def offer_catalog():
+def offer_catalog(*, include_packet=False):
     offers = []
     for service in PRIMITIVE_SERVICES:
         for method, scope, price in [('canonical', 'complete_outcome', 35_000_000),
@@ -98,6 +101,15 @@ def offer_catalog():
                   applicability=['All three primitive contracts independently qualify complete outcomes','The same component work may not be sold twice'],
                   falsifiers=['Any failed component acceptance','Duplicate work identity','Unfunded joint obligation','Negative complete-cost bundle contribution'])
     offers.append(validate_offer(bundle))
+    if include_packet:
+        packet=copy.deepcopy(bundle)
+        packet.update(id='receivables_packet:receivables_packet',service_id='receivables_packet',method='receivables_packet',
+            problem='One authorized entity and period requires a coherent source-bound receivables outcome.',
+            outcome='Reconciled receivables, derived aging/KPI and evidence-backed exception memo from one source.',
+            production_pipeline=['reconcile_common_source','derive_aging_and_kpi','construct_evidence_memo','independent_packet_acceptance'],
+            verification='Independent packet checker rederives all three components and their shared source/entity/period bindings.',
+            applicability=['One explicit entity and period','Same source rows feed all three components','Voluntary request accepts the complete receivables scope'])
+        offers.append(validate_offer(packet))
     return offers
 
 

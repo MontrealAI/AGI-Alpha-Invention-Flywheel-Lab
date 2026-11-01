@@ -26,6 +26,14 @@ class BuyerPopulation(unittest.TestCase):
   self.assertTrue(any(int(x['customer_id'].rsplit('-',1)[1])>200 for x in xs))
   self.assertLessEqual(len(xs),257-terms['owned_audience_count'])
   audit_channel_history(book.export(),cfg['channels'],2610312234,buyers)
+ def test_complete_request_map_has_no_hidden_population_cap(self):
+  from tests.test_connected_complete_offer import fixture
+  from connected_enterprise.complete_offer_market import validate_policy
+  cfg=fixture({'jobs':[]},'menu');p=cfg['complete_offer_policy']
+  p['requested_jobs']={f'SIM-customer-{i:03d}':[] for i in range(10001)}
+  self.assertEqual(len(validate_policy(p)['requested_jobs']),10001)
+  p['requested_jobs']['SIM-customer-000']=['same','same']
+  with self.assertRaises(ValueError):validate_policy(p)
  def test_full_native_audit_with_257_configured_buyers(self):
   with tempfile.TemporaryDirectory(prefix='.buyer-population-',dir=ROOT) as folder:
    folder=Path(folder);manifest=prepare_services(ROOT,str(folder.relative_to(ROOT)/'jobs'),cohort_seed=2610312234)
