@@ -112,11 +112,15 @@ def source_paths(root):
                      if (root/name).is_file())
     if (root/'inventory061/service.py').is_file():
         from inventory061.service import SOURCES as inventory_sources
-        names.update(inventory_sources)
-        names.update(p.relative_to(root).as_posix() for p in (root/'tests').glob('test_inventory061*.py') if p.is_file())
-        names.update(p.relative_to(root).as_posix() for p in (root/'inventory061').glob('*.md') if p.is_file())
-        names.update(name for name in ('inventory061/deliveries/reference/solution.json',)
-                     if (root/name).is_file())
+        # Legacy-only source copies may intentionally omit optional client data.
+        # Export this opt-in service wholly or not at all; explicit activation
+        # still requires every byte through its manifest and finance closure.
+        if all((root/name).is_file() for name in inventory_sources):
+            names.update(inventory_sources)
+            names.update(p.relative_to(root).as_posix() for p in (root/'tests').glob('test_inventory061*.py') if p.is_file())
+            names.update(p.relative_to(root).as_posix() for p in (root/'inventory061').glob('*.md') if p.is_file())
+            names.update(name for name in ('inventory061/deliveries/reference/solution.json',)
+                         if (root/name).is_file())
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):

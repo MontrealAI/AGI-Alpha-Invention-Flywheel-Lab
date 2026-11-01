@@ -21,6 +21,7 @@ SOURCES = ('inventory061/__init__.py', 'inventory061/service.py',
            'inventory061/independent_acceptance.py', 'inventory061/economics.json',
            'inventory061/QUALITY_CONTRACT_V2.json', 'inventory061/REGISTRATION.json',
            'inventory061/LICENSE-OR-License.txt', 'production060/service.py',
+           'production060/acceptance.py',
            'commercial/ledger.py', 'connected_enterprise/finance.py') + INPUTS
 
 

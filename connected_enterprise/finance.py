@@ -29,13 +29,14 @@ SOURCE_PATHS = ('connected_enterprise/startup_acquisition048.py','connected_ente
                 'vendor/alpha_claim/protected_exchange.py')
 
 
-SOURCE_PATHS += ('production060/service.py', 'production060/native.py',
+PRODUCTION_SOURCE_PATHS = ('production060/service.py', 'production060/native.py',
                  'production060/acceptance.py', 'production060/dispatch.py',
                  'production060/business.py', 'production060/evaluation.json')
 
 
-# Inventory061 source closure extends identities only; native protection is unchanged.
-SOURCE_PATHS += ('inventory061/__init__.py', 'inventory061/service.py', 'inventory061/native.py',
+# Bind complete domain dependencies only when that service manifest is active.
+# Legacy services do not execute these optional producers or require their data.
+INVENTORY_SOURCE_PATHS = ('inventory061/__init__.py', 'inventory061/service.py', 'inventory061/native.py',
                  'inventory061/operate.py', 'inventory061/constructor.py', 'inventory061/quality_constructor.py',
                  'inventory061/independent_acceptance.py', 'inventory061/economics.json',
                  'inventory061/QUALITY_CONTRACT_V2.json', 'inventory061/REGISTRATION.json',
@@ -43,13 +44,23 @@ SOURCE_PATHS += ('inventory061/__init__.py', 'inventory061/service.py', 'invento
                  'inventory061/inputs/brief.md', 'inventory061/inputs/problem_description.md',
                  'inventory061/inputs/params.yaml', 'inventory061/inputs/01.json',
                  'inventory061/inputs/program/_inventory_engine.py',
-                 'inventory061/inputs/program/_inventory_objective.py')
+                 'inventory061/inputs/program/_inventory_objective.py',
+                 'production060/service.py', 'production060/acceptance.py')
 
 
-def source_identity(root):
+def source_paths_for_manifest(manifest=None):
+    schema = manifest.get('schema') if isinstance(manifest, dict) else None
+    if schema == 'production060/native-services/v1':
+        return SOURCE_PATHS + PRODUCTION_SOURCE_PATHS
+    if schema == 'inventory061/native-services/v1':
+        return SOURCE_PATHS + INVENTORY_SOURCE_PATHS
+    return SOURCE_PATHS
+
+
+def source_identity(root, manifest=None):
     root = Path(root).absolute()
     files = {}
-    for name in SOURCE_PATHS:
+    for name in source_paths_for_manifest(manifest):
         path = root / name
         if not path.is_file() or any(p.is_symlink() for p in [path, *path.parents]):
             raise ValueError('REGULAR_CONNECTED_FINANCE_SOURCE_REQUIRED:' + name)
@@ -117,7 +128,7 @@ class JournalAccount:
         self._native_prefix = None
         self._prefix_owner_binding, self._prefix_generation = None, 0
         self.journal_path = self.path.with_name(self.path.name + '.connected-journal.json')
-        self.source = source_identity(self.root)
+        self.source = source_identity(self.root, self.manifest)
         self._header = {'schema': SCHEMA, 'scope': 'SIMULATED_LOCAL_POSIX',
                         'source': self.source, 'manifest_sha256': digest(manifest),
                         'opening': opening, 'working': working, 'contract': contract}
@@ -136,7 +147,7 @@ class JournalAccount:
         if self._journal_failed:
             raise ValueError('CONNECTED_JOURNAL_DURABILITY_REQUIRES_REOPEN')
         self._account._assert_owner()
-        if source_identity(self.root) != self.source:
+        if source_identity(self.root, self.manifest) != self.source:
             raise ValueError('CONNECTED_FINANCE_SOURCE_CHANGED')
 
     def _signature(self, body):
@@ -640,7 +651,7 @@ def _audit_journal(record, *, root, manifest, pending_key=None, _native_session=
     if not isinstance(journal, dict) or digest(journal) != record.get('connected_journal_sha256'):
         raise ValueError('CONNECTED_JOURNAL_PUBLIC_IDENTITY_MISMATCH')
     tape = record['ledger']
-    if journal.get('source') != source_identity(root) or journal.get('manifest_sha256') != digest(manifest):
+    if journal.get('source') != source_identity(root, manifest) or journal.get('manifest_sha256') != digest(manifest):
         raise ValueError('CONNECTED_JOURNAL_PUBLIC_SOURCE_MISMATCH')
     if journal.get('schema') != SCHEMA or any(journal.get(k) != tape['config'].get(k) for k in ['opening', 'working', 'contract']):
         raise ValueError('CONNECTED_JOURNAL_NATIVE_AUTHORITY_MISMATCH')

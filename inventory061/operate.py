@@ -62,7 +62,7 @@ def operate(root, state_dir, arm='conditional'):
     economics = strict_json((root/'inventory061/economics.json').read_bytes())
     manifest = prepare_manifest(root, delivery_path=f'inventory061/deliveries/{arm}/solution.json')
     save(state_dir/'manifest.json', manifest)
-    source = source_identity(root)
+    source = source_identity(root, manifest)
     save(state_dir/'source-closure.json', source)
     report = {'schema': 'inventory061/native-first-engineering-example/v1', 'arm': arm,
               'scope': 'CONDITIONAL_NATIVE_SIMULATION_WITH_REAL_PUBLIC_INPUT_AND_ACTUAL_PRODUCTION',
