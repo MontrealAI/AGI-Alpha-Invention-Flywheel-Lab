@@ -54,6 +54,57 @@ def reviewed_owner_codec_source(target_root):
     return owner_bytes.decode('utf-8')
 
 
+# A signed ticket's .py inventory does not cover native module precedence,
+# sourceless bytecode, or executable archives. Reject before historical imports;
+# this does not make historical Python a sandbox or authorize unknown sources.
+_UNREGISTERED_IMPORT_SUFFIXES = ('.so', '.pyd', '.dll', '.dylib', '.pyo', '.pth', '.egg', '.whl', '.zip')
+
+
+def _reject_unregistered_python_executables(root):
+    root = Path(root).absolute()
+    for item in (root, *root.parents):
+        if item.is_symlink():
+            raise ValueError('HISTORICAL_SOURCE_SYMLINK_REFUSED')
+    if not root.is_dir():
+        raise ValueError('PINNED_HISTORICAL_SOURCE_DIRECTORY_REQUIRED')
+    for item in root.rglob('*'):
+        if item.is_symlink():
+            raise ValueError('HISTORICAL_SOURCE_SYMLINK_REFUSED')
+        if item.is_file() and (item.suffix.lower() in _UNREGISTERED_IMPORT_SUFFIXES
+                              or item.suffix.lower() == '.pyc' and '__pycache__' not in item.parts):
+            raise ValueError('UNREGISTERED_HISTORICAL_EXECUTABLE_REFUSED')
+
+
+def _run_pinned_historical_python(root, code, payload):
+    """Use isolated interpreter startup and reject unsigned native imports both
+    before launch and in the child before historical code enters sys.path.
+    """
+    from tempfile import TemporaryDirectory
+    root = Path(root).absolute()
+    _reject_unregistered_python_executables(root)
+    with TemporaryDirectory(prefix='agi-alpha-pinned-history-pycache-') as cache:
+        # -I ignores PYTHONPATH and cwd during startup; installed packages remain
+        # available. The trusted -c bootstrap inserts the tree only after checks.
+        bootstrap = f"""import pathlib,sys
+root=pathlib.Path({str(root)!r})
+blocked={_UNREGISTERED_IMPORT_SUFFIXES!r}
+for item in (root,*root.parents):
+ if item.is_symlink():raise SystemExit('HISTORICAL_SOURCE_SYMLINK_REFUSED')
+for item in root.rglob('*'):
+ if item.is_symlink():raise SystemExit('HISTORICAL_SOURCE_SYMLINK_REFUSED')
+ if item.is_file() and (item.suffix.lower() in blocked or (item.suffix.lower()=='.pyc' and '__pycache__' not in item.parts)):
+  raise SystemExit('UNREGISTERED_HISTORICAL_EXECUTABLE_REFUSED')
+sys.pycache_prefix={cache!r}
+sys.dont_write_bytecode=True
+sys.path.insert(0,str(root))
+"""
+        env = {'PYTHONPATH': str(root), 'PYTHONDONTWRITEBYTECODE': '1',
+               'PYTHONPYCACHEPREFIX': cache, 'PYTHONNOUSERSITE': '1',
+               'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8', 'LC_ALL': 'C.UTF-8'}
+        return subprocess.run([sys.executable, '-I', '-c', bootstrap + code], input=json.dumps(payload),
+                              text=True, capture_output=True, cwd=root, env=env, timeout=60)
+
+
 def preflight_ticket_size(output):
     """Reject an impossible v1 upgrade before changing its operator descriptor."""
     from .migration import _read
@@ -72,6 +123,7 @@ def preflight_ticket_size(output):
 
 def source_inventory(root):
     root = Path(root).absolute()
+    _reject_unregistered_python_executables(root)
     files = {}
     for path in sorted(root.rglob('*.py')):
         relative = path.relative_to(root)
@@ -120,11 +172,7 @@ with scope:
  r=audit_journal(p['record'],root=p['root'],manifest=p['manifest'])
  assert r['accepted'];print(json.dumps(r,sort_keys=True))
 """
-    env = {'PYTHONPATH': str(root), 'PYTHONDONTWRITEBYTECODE': '1',
-           'PYTHONNOUSERSITE': '1', 'PATH': '/usr/bin:/bin',
-           'LANG': 'C.UTF-8', 'LC_ALL': 'C.UTF-8'}
-    done = subprocess.run([sys.executable, '-c', code], input=json.dumps(payload),
-                          text=True, capture_output=True, cwd=root, env=env, timeout=60)
+    done = _run_pinned_historical_python(root, code, payload)
     if done.returncode:
         raise ValueError('PINNED_HISTORICAL_AUDIT_FAILED:' + done.stderr[-1200:])
     receipt = json.loads(done.stdout)
@@ -200,9 +248,7 @@ with scope, JournalAccount(p['root'],p['manifest'],p['path'],opening=p['opening'
  if reuse and clean_authorization_snapshot(p['root'],p['path'],p['operating'])!=after:raise ValueError('OWNER_AUTHORITY_CHANGED_DURING_AUTHORIZATION')
  print(json.dumps({'body':body,'signature':hmac.new(a._account._key,b'native-source-transition\\n'+canonical(body),hashlib.sha256).hexdigest()},sort_keys=True))
 '''
-    env = {**os.environ, 'PYTHONPATH': str(historical_root), 'PYTHONDONTWRITEBYTECODE': '1'}
-    done = subprocess.run([sys.executable, '-c', code], input=json.dumps(payload),
-                          text=True, capture_output=True, cwd=historical_root, env=env, timeout=60)
+    done = _run_pinned_historical_python(historical_root, code, payload)
     if done.returncode:
         raise ValueError('SOURCE_UPGRADE_AUTHORIZATION_FAILED:' + done.stderr[-1200:])
     ticket = json.loads(done.stdout)
