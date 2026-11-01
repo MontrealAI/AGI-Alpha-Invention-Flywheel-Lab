@@ -8,6 +8,38 @@ The separately active customer-access owner remains responsible for one owned/re
 
 The four-owned/eight-prospect fixture is a deliberately narrow consistent case. Tests reject legacy owned-count mismatches of 0, 6 and 48, and a full-owned empty pool; an actual mismatched world incurs neither evaluation nor acquisition charge and passes independent audit. The complete new Section 7 access matrix—four and 48 owned, partial/overlapping/exhausted/delayed eligibility, multiple channels and cooldown versus permanent impossibility—still depends on the access owner's unified repair. The original PR93 cohort and its incurred empty-channel expense are untouched.
 
+## Initial native admission precondition
+
+Reach alone does not admit a prospect to the native planner's finite shortlist.
+The startup contract now credits only a fresh prospect's first opportunity under
+initial public `(next_need_time, id)` priority. Every possible higher-priority
+standalone nonempty menu counts toward the existing `max_customers`, including
+unknown competitors and owned menus with zero public value or excessive capacity
+requirements. Empty owned menus consume no shortlist position. No later purchase,
+cooldown, priority improvement, absent buyer or private need draw is assumed.
+This conservative applicability bound changes neither native candidate ordering
+nor its resource limit, and it grants no free access to unknown buyers.
+
+Blocker menus are inspected independently, without tentative work exclusion:
+an absent earlier buyer can leave source work available to another predecessor.
+Each credited alternative must also be disjoint from **all** admitted requested
+accepted complete work of higher-priority possible blockers, including work that
+is not their current minimum job. Otherwise a later choice of remaining source
+work could erase the prospect's offer before valuation. Free structural preflight
+and paid forecast construction use the same bound and source-work filter. The
+full paid channel population remains the contact dilution denominator, and all
+buyer identities remain in the operating cost bound.
+
+A fixed five-buyer regression gives four owned buyers nonempty zero-value menus
+with no outside purchase. Four shortlist positions then exclude the valuable
+fifth buyer even after hypothetical paid exposure in the actual pure planner.
+Startup preflight holds without evaluation or acquisition charges; a native hold
+still pays setup, maintenance, owned outreach and qualification and independently
+audits/resumes. A separately declared five-position control admits the prospect's
+forecast and actual pure planned order. Shared-work and oversized-blocker checks
+retain the conservative bound. These are finite exposed correctness controls,
+not an economic seed search or a new default/scale claim.
+
 ## Explicit contract and public qualification
 
 `startup_acquisition_policy` requires exactly:
@@ -63,6 +95,47 @@ mutation before it commits, with unchanged account state after restoration.
 These corrections identify a new source and new exposed regression outcome.
 The 32 historical development-world receipts below remain bound to their original
 sources; their economics and qualification claims are not rewritten.
+
+## Owned-candidate operating cost correction
+
+A later review found that the future operating bound counted only newly reachable
+prospects. Native outreach also charges eligible owned candidates, including
+buyers with empty requests who decline every day. Native qualification charges
+every evaluated menu row, even for zero-value owned menus that produce no offer.
+The old prospect-only maximum could consequently omit both recurring bills.
+
+The corrected public upper bound covers days 1 through `lead_days + live_days - 1`,
+clipped by the registered horizon. The current prepaid maintenance prefix and
+current operating deduction cover day zero. Each future day protects one possible
+continuing outreach charge per declared buyer, plus the selected channel's live
+attempted slots. This deliberately allows prospective activity throughout the
+window: a separate permitted channel might deliver earlier access. The bound
+neither grants access nor reads private need, budget, purchases or future draws.
+It also does not authorize or prepay another future channel purchase.
+
+Qualification uses the sum of the largest `max_customers` public menu-width
+bounds across owned and prospective buyers on each future planning day. Empty
+menus contribute zero qualification, while nonempty menus include their declared
+profile alternatives. Work merely evaluated on day zero can remain available if
+the buyer refuses, so tentative quote work is retained in this cost upper bound.
+Maintenance and known recourse fees are each counted once per future planning
+event. All these shared operating costs reduce forecast value and increase its
+current cash lock once; actual expenses still arise only from native events.
+
+New fixed regressions make both omissions decisive. With five buyers, four owned
+empty requests, five future plans and a 200,000 microUSD outreach unit cost, the
+old complete outreach budget was 3,000,000 microUSD. Owned activity alone costs
+4,000,000 microUSD natively even when the corrected policy holds. A separate
+narrow-prospect/wide-owned case incurs 35 actual future menu evaluations against
+the old five-evaluation bound. Its follow-up fixture explicitly declares five
+shortlist positions and disjoint prospect work to separate the fee omission from
+the admission constraint above; its corrected conservative bound is 45. The
+earlier fee-only source's two-position fixture had a bound of 40. Both
+old-cost counterfactuals buy and the corrected costs hold. Native independent
+audit, exact expense reconciliation, unchanged prefix/resume and present-cash
+hold checks accompany the boundaries. These are exposed engineering regressions,
+not a new profitable startup result. Earlier development receipts and the frozen
+year reproduction retain their original source and economics.
 
 ## Recurring refusal-recourse fee correction
 

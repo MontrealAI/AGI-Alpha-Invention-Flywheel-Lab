@@ -5,6 +5,7 @@ import unittest
 from adaptive_enterprise.instruments import prepare_complete_offer_services, load_jobs
 from connected_enterprise.engine import _buyers, _offer_menu, run_world, validate_config
 from connected_enterprise.channels import validate_contracts
+from connected_enterprise import joint_planning # Keep native aliases outside startup-only valuation mocks.
 from connected_enterprise.startup_acquisition048 import options, preflight, reference, validate_option
 from connected_enterprise.verify import audit
 from scripts.run_commoncost026 import config
@@ -50,6 +51,59 @@ def fixture(manifest, enabled=True, case='positive'):
     elif case == 'failed_channel':
         cfg['channels']['pilot']['activation_reliability_bps'] = 0
     cfg['channels'] = validate_contracts(cfg['channels'])
+    return cfg
+
+
+def owned_operating_fixture(manifest, wide=False):
+    """Fixed public cost counterexamples, not a demand or discovery result."""
+    cfg = fixture(manifest)
+    cfg.update(customer_pool=5, horizon_days=6, exposure_cost=200000)
+    cfg['strategic_allocation_policy']['max_customers'] = 5
+    cfg['startup_acquisition_policy']['conversion_bps'] = 10000
+    cfg['channels']['pilot'].update(price_microUSD=1, support_microUSD=0)
+    profile = cfg['complete_offer_policy']['profiles'][0]
+    profile['outside_options'] = []
+    cfg['complete_offer_policy']['requested_jobs'] = {f'SIM-customer-{i:03d}':
+        [] if i < 4 else [j['id'] for j in manifest['jobs'] if j['service_id'] == 'reconciliation'] for i in range(5)}
+    if wide:
+        # Public profile hashing assigns narrow to 002/003/004 and wide to
+        # 000/001. No private atom, future response or seed search selects this.
+        services = ['reconciliation', 'kpi_variance', 'evidence_matrix', 'receivables_packet']
+        profile['id'] = 'fixed-narrow-prospect'
+        wide_profile = {'id': 'fixed-wide-owned', 'services': services,
+            'price_grids': {s: [20000000] for s in services},
+            'atoms': [{'weight_bps': 10000, 'budget_microUSD': 200000000, 'values': dict.fromkeys(services, 0)}],
+            'outside_options': []}
+        cfg['complete_offer_policy']['profiles'] = [profile, wide_profile]
+        for i in (0, 1):
+            cfg['complete_offer_policy']['requested_jobs'][f'SIM-customer-{i:03d}'] = [
+                sorted(j['id'] for j in manifest['jobs'] if j['service_id']==service and j['accepted'])[i if service!='receivables_packet' else 0] for service in services]
+        cfg['complete_offer_policy']['requested_jobs']['SIM-customer-004'] = sorted(
+            j['id'] for j in manifest['jobs'] if j['service_id']=='reconciliation' and j['accepted'])[2:]
+        cfg.update(exposure_cost=0, qualification_cost=200000, maintenance_daily=1)
+    return cfg
+
+
+def priority_fixture(manifest, jobs, maximum=4):
+    """Critic's fixed public admission counterexample; no economic seed search."""
+    cfg=fixture(manifest)
+    cfg.update(customer_pool=5,horizon_days=4,arrival_bps=10000,exposure_cost=1,qualification_cost=1,
+        maintenance_daily=1,production_cost=1,supplier_unit_cost=1,support_cost=1,onboarding_cost=1,
+        payment_bps=0,payment_fixed=1,profit_tax_bps=0)
+    cfg['strategic_allocation_policy']['max_customers']=maximum
+    cfg['mechanism_policy']['cost_contract']['production_envelope_microUSD']=1
+    cfg['startup_acquisition_policy'].update(conversion_bps=10000,planning_cost_microUSD=1)
+    cfg['channels']['pilot'].update(price_microUSD=100,support_microUSD=0)
+    base=cfg['complete_offer_policy']['profiles'][0]
+    profiles=[]
+    for i in range(16):
+        profile=copy.deepcopy(base);profile['id']='fixed-priority-profile-'+str(i);profile['outside_options']=[]
+        profile['atoms']=[{'weight_bps':10000,'budget_microUSD':200000000,'values':{'reconciliation':100000000 if i==8 else 0}}]
+        profiles.append(profile)
+    cfg['complete_offer_policy']['profiles']=profiles
+    ids=sorted(ident for ident,entry in jobs.items() if entry['job']['service_id']=='reconciliation'
+        and entry['job']['accepted'] and entry['artifact'].get('outcome_scope')=='complete_outcome')
+    cfg['complete_offer_policy']['requested_jobs']={f'SIM-customer-{i:03d}':[ids[i]] for i in range(5)}
     return cfg
 
 
@@ -127,6 +181,191 @@ class StartupAcquisitionTests(unittest.TestCase):
         snapshot['summary']['available']=option['upfront_cost']+current
         self.assertEqual(options(*args()),[])
 
+    def test_owned_empty_requests_change_outreach_value_and_current_cash_to_hold(self):
+        from fractions import Fraction
+        cfg=owned_operating_fixture(self.manifest);cfg['exposure_cost']=0
+        snapshot={'state_digest':'a'*64,'summary':{'available':100000000000,'unrestrictedEarned':0,'investmentStopped':False}}
+        buyers={b['id']:b for b in _buyers(cfg,2611010482)}
+        args=lambda:(cfg,'competitive_growth',0,snapshot,0,self.jobs,set(),buyers,cfg['strategic_allocation_policy']['risk']['scenarios'],_offer_menu)
+        certificate=options(*args())[0]['execution']['startup_contract'];envelope=certificate['future_cost_envelope']
+        self.assertEqual(envelope['future_planning_days'],5)
+        self.assertEqual(envelope['continuing_owned_outreach_units'],20)
+        self.assertEqual(envelope['continuing_prospect_outreach_units'],5)
+        self.assertEqual(envelope['attempt_slots'],10)
+        self.assertEqual(envelope['qualification_evaluations'],5)
+        self.assertEqual(envelope['maintenance_days'],5)
+        gross=Fraction(certificate['prospect_fraction'])*min(Fraction(p['conservative_net_fraction']) for p in certificate['qualified_public_offers'])
+        cfg['exposure_cost']=200000
+        old_outreach=(10+5)*cfg['exposure_cost']
+        old_maintenance=6*cfg['maintenance_daily']
+        old_net=gross-old_outreach-envelope['qualification_microUSD']-old_maintenance-1
+        self.assertGreater(old_net,0,'The omitted owned fee must be decisive, not a losing old case')
+        self.assertLess(gross-35*cfg['exposure_cost']-envelope['qualification_microUSD']-envelope['maintenance_microUSD']-1,0)
+        self.assertEqual(options(*args()),[])
+        cfg['exposure_cost']=50000
+        option=options(*args())[0];certificate=option['execution']['startup_contract'];envelope=certificate['future_cost_envelope']
+        current=max(p['current_cash_lock'] for p in certificate['qualified_public_offers'])*cfg['initial_slots']
+        old_operating=15*cfg['exposure_cost']+envelope['qualification_microUSD']+old_maintenance
+        snapshot['summary']['available']=option['upfront_cost']+current+old_operating
+        self.assertLess(snapshot['summary']['available'],option['upfront_cost']+option['execution']['cash_lock'])
+        self.assertEqual(options(*args()),[])
+        snapshot['summary']['profit']=10**18
+        self.assertEqual(options(*args()),[],'Forecast or accounting profit cannot fund owned operating bills')
+
+    def test_wider_owned_menus_change_future_qualification_buy_to_hold(self):
+        from fractions import Fraction
+        from connected_enterprise.complete_offer_market import compile_market
+        cfg=owned_operating_fixture(self.manifest,wide=True);fee=cfg['qualification_cost'];cfg['qualification_cost']=0
+        market=compile_market(cfg['complete_offer_policy'])
+        self.assertEqual(market.profile('SIM-customer-004')['services'],['reconciliation'])
+        self.assertEqual(len(market.profile('SIM-customer-000')['services']),4)
+        snapshot={'state_digest':'a'*64,'summary':{'available':100000000000,'unrestrictedEarned':0,'investmentStopped':False}}
+        buyers={b['id']:b for b in _buyers(cfg,2611010482)}
+        args=lambda:(cfg,'competitive_growth',0,snapshot,0,self.jobs,set(),buyers,cfg['strategic_allocation_policy']['risk']['scenarios'],_offer_menu)
+        certificate=options(*args())[0]['execution']['startup_contract'];envelope=certificate['future_cost_envelope']
+        self.assertEqual(envelope['maximum_menu_size'],4)
+        self.assertEqual(envelope['daily_qualification_bound'],9)
+        self.assertEqual(envelope['qualification_evaluations'],45)
+        gross=Fraction(certificate['prospect_fraction'])*min(Fraction(p['conservative_net_fraction']) for p in certificate['qualified_public_offers'])
+        old_evaluations=5 # One newly reachable narrow-menu buyer on each live day.
+        self.assertGreater(gross-old_evaluations*fee-envelope['maintenance_microUSD']-1,0)
+        self.assertLess(gross-envelope['qualification_evaluations']*fee-envelope['maintenance_microUSD']-1,0)
+        cfg['qualification_cost']=fee
+        self.assertEqual(options(*args()),[])
+
+    def test_native_owned_operating_cost_windows_hold_and_resume_without_invoice(self):
+        import json
+        for wide in (False,True):
+            with self.subTest(wide_owned_menu=wide):
+                cfg=owned_operating_fixture(self.manifest,wide=wide)
+                target=self.folder/('owned-operating-hold-'+str(wide))
+                paused=run_world(ROOT,self.manifest,cfg,2611010482,'competitive_growth',target,stop_after_events=2)
+                prefix=copy.deepcopy(paused['owned_account']['ledger']['actions'])
+                result=run_world(ROOT,self.manifest,cfg,2611010482,'competitive_growth',target)
+                self.assertTrue(audit(ROOT,self.manifest,json.loads(json.dumps(result,sort_keys=True)))['accepted'])
+                self.assertEqual(result['investments'],[]);self.assertEqual(result['orders'],[])
+                self.assertEqual(result['owned_account']['ledger']['actions'][:len(prefix)],prefix)
+                self.assertEqual(sum(c['id']=='startup-acquisition-evaluation' for c in result['costs']),1)
+                self.assertEqual(result['summary']['expenses'],sum(c['amount'] for c in result['costs']))
+                future=[w for w in result['joint_actions'].values() if 24<=w['time']<6*24]
+                self.assertEqual(len(future),5)
+                for wrapper in future:
+                    self.assertTrue({f'SIM-customer-{i:03d}' for i in range(4)}<=set(wrapper['candidate_ids']))
+                if wide:
+                    evaluations=sum(len(w['allocation']['deliveries']) for w in future)
+                    self.assertEqual(evaluations,35) # A shared packet is evaluated once per native shortlist.
+                    actual=sum(c['amount'] for c in result['costs'] if c['id'] in {f'qualification-{d}' for d in range(1,6)})
+                    self.assertEqual(actual,evaluations*cfg['qualification_cost'])
+                    self.assertGreater(actual,5*cfg['qualification_cost'])
+                    self.assertLessEqual(evaluations,45)
+                else:
+                    actual=sum(c['amount'] for c in result['costs'] if c['id'] in {f'outreach-{d}' for d in range(1,6)})
+                    self.assertEqual(actual,20*cfg['exposure_cost'])
+                    self.assertGreater(actual,15*cfg['exposure_cost'],'Owned activity alone exceeds the old complete outreach budget')
+                    self.assertLessEqual(actual,35*cfg['exposure_cost'])
+                again=run_world(ROOT,self.manifest,cfg,2611010482,'competitive_growth',target)
+                self.assertEqual(again['owned_account'],result['owned_account'])
+
+    def test_initial_priority_frontier_matches_actual_planner_and_five_place_control(self):
+        from unittest.mock import patch
+        from connected_enterprise.engine import _initial,_prepare_plan
+        from connected_enterprise.channels import ChannelBook
+        from connected_enterprise.complete_offer_market import compile_market
+        cfg=priority_fixture(self.manifest,self.jobs)
+        buyers={b['id']:b for b in _buyers(cfg,2611010521)}
+        market=compile_market(cfg['complete_offer_policy'])
+        self.assertTrue(all(market.profile(f'SIM-customer-{i:03d}')['atoms'][0]['values']['reconciliation']==0 for i in range(4)))
+        self.assertGreater(market.profile('SIM-customer-004')['atoms'][0]['values']['reconciliation'],0)
+        snapshot={'scope':'SIMULATED','state_digest':'a'*64,'summary':{'available':100000000000,'unrestrictedEarned':0,'investmentStopped':False}}
+        args=lambda:(cfg,'competitive_growth',0,snapshot,0,self.jobs,set(),buyers,cfg['strategic_allocation_policy']['risk']['scenarios'],_offer_menu)
+        with patch('connected_enterprise.strategic_commerce.select',side_effect=AssertionError('UNADMITTED_STARTUP_VALUATION')):
+            self.assertEqual(preflight(cfg,buyers,self.jobs,_offer_menu),[])
+            self.assertEqual(options(*args()),[])
+        # This is a bounded pure planner control with hypothetical paid access,
+        # not a native payment, production receipt or economic experiment.
+        def prepared():
+            state=_initial(cfg,2611010521,'competitive_growth',{})
+            book=ChannelBook(2611010521,cfg['channels']);book.expose(0,state['buyers'])
+            book.purchase('pilot',0,'HYPOTHETICAL-PAID-ACCESS')
+            state['channel_state']=book.export();state['queue']=[{'kind':'plan','id':'plan-0001','time':24}]
+            return _prepare_plan(state,None,self.jobs,snapshot_override=snapshot)
+        blocked=prepared()
+        self.assertEqual([x['customer_id'] for x in blocked['exposures']],['SIM-customer-004'])
+        self.assertEqual({d['customer_id'] for d in blocked['joint_action']['allocation']['deliveries']},{f'SIM-customer-{i:03d}' for i in range(4)})
+        self.assertEqual(blocked['orders'],[])
+        choices=[d for d in blocked['declines'] if d.get('buyer_choice')]
+        self.assertEqual(len(choices),5)
+        self.assertTrue(all(d['buyer_choice']=='decline' and not d.get('outside_spend') for d in choices))
+        cfg['strategic_allocation_policy']['max_customers']=5
+        self.assertEqual(preflight(cfg,buyers,self.jobs,_offer_menu),['pilot'])
+        row=options(*args())[0]['execution']['startup_contract']
+        self.assertEqual([p['customer_id'] for p in row['qualified_public_offers']],['SIM-customer-004'])
+        self.assertEqual(row['qualified_public_offers'][0]['preceding_possible_menus'],4)
+        allowed=prepared()
+        self.assertEqual([o['customer_id'] for o in allowed['orders']],['SIM-customer-004'])
+
+    def test_unadmitted_native_startup_holds_free_but_pays_normal_owned_operation(self):
+        cfg=priority_fixture(self.manifest,self.jobs)
+        target=self.folder/'priority-blocked-native'
+        paused=run_world(ROOT,self.manifest,cfg,2611010521,'competitive_growth',target,stop_after_events=2)
+        prefix=copy.deepcopy(paused['owned_account']['ledger']['actions'])
+        result=run_world(ROOT,self.manifest,cfg,2611010521,'competitive_growth',target)
+        self.assertTrue(audit(ROOT,self.manifest,result)['accepted'])
+        self.assertEqual(result['orders'],[]);self.assertEqual(result['investments'],[])
+        self.assertFalse(any(c['id']=='startup-acquisition-evaluation' or c['category']=='acquisition_contract' for c in result['costs']))
+        self.assertEqual(sum(c['amount'] for c in result['costs'] if c['category']=='development_integration_qualification_and_failed_search'),cfg['setup_cost'])
+        self.assertEqual(sum(c['amount'] for c in result['costs'] if c['category']=='maintenance'),4)
+        self.assertEqual(sum(c['amount'] for c in result['costs'] if c['category']=='outreach_including_failed_and_unused_slots'),16)
+        self.assertEqual(sum(c['amount'] for c in result['costs'] if c['category']=='qualification_including_lost_offers'),16)
+        self.assertEqual(result['summary']['expenses'],sum(c['amount'] for c in result['costs']))
+        self.assertEqual(result['owned_account']['ledger']['actions'][:len(prefix)],prefix)
+        again=run_world(ROOT,self.manifest,cfg,2611010521,'competitive_growth',target)
+        self.assertEqual(again['owned_account'],result['owned_account'])
+
+    def test_frontier_excludes_all_earlier_requested_work_not_only_first_menu(self):
+        from unittest.mock import patch
+        cfg=priority_fixture(self.manifest,self.jobs,maximum=5)
+        ids=sorted(ident for ident,entry in self.jobs.items() if entry['job']['service_id']=='reconciliation'
+            and entry['job']['accepted'] and entry['artifact'].get('outcome_scope')=='complete_outcome')
+        requests=cfg['complete_offer_policy']['requested_jobs']
+        requests['SIM-customer-000']=[ids[0],ids[5]]
+        requests['SIM-customer-004']=[ids[5]]
+        buyers={b['id']:b for b in _buyers(cfg,2611010521)}
+        first=_offer_menu({'used_jobs':[]},self.jobs,buyers['SIM-customer-000'],cfg)[0][0]['job']
+        self.assertEqual(first['id'],ids[0])
+        self.assertFalse(set(first['work_keys'])&set(self.jobs[ids[5]]['job']['work_keys']))
+        snapshot={'state_digest':'a'*64,'summary':{'available':100000000000,'unrestrictedEarned':0,'investmentStopped':False}}
+        args=lambda:(cfg,'competitive_growth',0,snapshot,0,self.jobs,set(),buyers,cfg['strategic_allocation_policy']['risk']['scenarios'],_offer_menu)
+        with patch('connected_enterprise.strategic_commerce.select',side_effect=AssertionError('SHARED_WORK_STARTUP_VALUATION')):
+            self.assertEqual(preflight(cfg,buyers,self.jobs,_offer_menu),[])
+            self.assertEqual(preflight(cfg,buyers,self.jobs,_offer_menu,used_jobs=[ids[0]]),[])
+            self.assertEqual(options(*args()),[])
+        requests['SIM-customer-004']=[ids[6]]
+        self.assertEqual(preflight(cfg,buyers,self.jobs,_offer_menu),['pilot'])
+        self.assertEqual(options(*args())[0]['execution']['startup_contract']['qualified_public_offers'][0]['job_id'],ids[6])
+
+    def test_possible_blockers_are_standalone_and_count_before_capacity_or_value(self):
+        from unittest.mock import patch
+        cfg=priority_fixture(self.manifest,self.jobs)
+        buyers={b['id']:b for b in _buyers(cfg,2611010521)}
+        def oversized_owned(state,jobs,buyer,configuration):
+            menu=_offer_menu(state,jobs,buyer,configuration)
+            if buyer['known']:
+                menu=copy.deepcopy(menu)
+                for entry,offer,anchor in menu:offer['capacity_units']=16
+            return menu
+        self.assertTrue(all(_offer_menu({'used_jobs':[]},self.jobs,buyers[f'SIM-customer-{i:03d}'],cfg) for i in range(4)))
+        # Even a caller's tentative work exclusions must not erase possible
+        # predecessors: their earlier refusal/absence can leave that work live.
+        tentative=[j for i in range(4) for j in cfg['complete_offer_policy']['requested_jobs'][f'SIM-customer-{i:03d}']]
+        with patch('connected_enterprise.strategic_commerce.select',side_effect=AssertionError('BLOCKER_VALUATION_STARTED')):
+            self.assertEqual(preflight(cfg,buyers,self.jobs,oversized_owned,used_jobs=tentative),[])
+            shared=cfg['complete_offer_policy']['requested_jobs']['SIM-customer-000']
+            for i in range(1,4):
+                cfg['complete_offer_policy']['requested_jobs'][f'SIM-customer-{i:03d}']=shared[:]
+            self.assertEqual(preflight(cfg,buyers,self.jobs,oversized_owned),[],
+                'Standalone blocker identities must not disappear through tentative shared-work deduplication')
+
     def test_recurring_recourse_fees_change_startup_value_and_cash_feasibility(self):
         from commercial.ledger import digest
         snapshot={'state_digest':'a'*64,'summary':{'available':100000000000,'unrestrictedEarned':0,'investmentStopped':False}}
@@ -172,6 +411,11 @@ class StartupAcquisitionTests(unittest.TestCase):
                 envelope=rows[0]['execution']['startup_contract']['future_cost_envelope']
                 self.assertEqual(envelope['recourse_planning_days'],expected)
                 self.assertEqual(envelope['recourse_allowance_microUSD'],expected)
+                self.assertEqual(envelope['future_planning_days'],expected)
+                self.assertEqual(envelope['maintenance_days'],expected)
+                self.assertEqual(envelope['continuing_owned_outreach_units'],4*expected)
+                self.assertEqual(envelope['continuing_prospect_outreach_units'],4*expected)
+                self.assertEqual(envelope['qualification_evaluations'],4*expected)
 
     def test_zero_lead_startup_channel_holds_without_evaluation_or_native_invoice(self):
         cfg=fixture(self.manifest);cfg['horizon_days']=4

@@ -46,7 +46,69 @@ def _prepared_menu(offer_menu_fn, market):
     return offer_menu_fn
 
 
-def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None):
+def _admission_frontier(cfg, buyers, jobs, menu_fn):
+    """Conservative first-opportunity admission under initial native priority.
+
+    Every possible standalone nonempty predecessor consumes a shortlist place,
+    whether profitable, physically feasible or currently reachable. This does
+    not grant unknown buyers access or assume later cooldown/priority changes.
+    """
+    frontier = {}
+    preceding = 0
+    blocked_work = frozenset()
+    cap = cfg['strategic_allocation_policy']['max_customers']
+    for ident in sorted(buyers, key=lambda key: (buyers[key]['next_need_time'], key)):
+        if preceding >= cap:
+            break
+        buyer = dict(buyers[ident], id=ident)
+        frontier[ident] = (preceding, blocked_work)
+        # Never tentatively deduplicate blocker menus: absent earlier buyers
+        # can leave work available to multiple later possible predecessors.
+        if menu_fn({'used_jobs': []}, jobs, buyer, cfg):
+            preceding += 1
+            work = set()
+            for job_id in cfg['complete_offer_policy']['requested_jobs'][ident]:
+                entry = jobs.get(job_id)
+                if entry is not None and entry['job']['accepted'] and entry['artifact'].get('outcome_scope') == 'complete_outcome':
+                    work.update(entry['job']['work_keys'])
+            blocked_work = blocked_work.union(work)
+    return frontier
+
+
+def _frontier_menu(menu, admission):
+    return [(entry, offer, anchor) for entry, offer, anchor in menu
+            if not admission[1].intersection(entry['job']['work_keys'])]
+
+
+def _future_operating_counts(cfg, terms, lead, days, owned, buyers, jobs, market, menu_fn):
+    """Public upper bounds, never predictions of private future activity.
+
+    The current planning prefix is already prepaid or held by ``operating``.
+    Owned buyers can remain candidates even with no requested work or purchase.
+    Potential prospect activity is bounded throughout the window, including
+    earlier access from another allowed channel. This grants no such access.
+    Empty menus cost outreach but consume no paid evaluation or shortlist slot.
+    """
+    future_days = lead + days - 1
+    menu_sizes = {}
+    for ident, buyer in sorted(buyers.items()):
+        # Day-zero tentative quotes need not execute. Their source work can
+        # still be evaluated later, so do not remove it from this cost bound.
+        menu = menu_fn({'used_jobs': []}, jobs, dict(buyer, id=ident), cfg)
+        menu_sizes[ident] = max(len(menu), len(market.profile(ident)['services'])) if menu else 0
+    cap = cfg['strategic_allocation_policy']['max_customers']
+    daily = sum(sorted(menu_sizes.values(), reverse=True)[:cap])
+    return {'future_planning_days': future_days, 'channel_live_days': days,
+        'attempt_slots': terms['slots_per_day'] * days,
+        'continuing_owned_outreach_units': future_days * len(owned),
+        'continuing_prospect_outreach_units': future_days * (len(buyers) - len(owned)),
+        'maximum_menu_size': max(menu_sizes.values(), default=0),
+        'daily_qualification_bound': daily,
+        'qualification_evaluations': future_days * daily,
+        'maintenance_days': future_days}
+
+
+def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None, _frontier=None):
     """No valuation or paid reservation for an inconsistent or empty audience.
 
     This startup guard does not repair legacy owned-access semantics. It refuses
@@ -64,6 +126,7 @@ def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None):
     from .complete_offer_market import compile_market
     market = compile_market(cfg['complete_offer_policy']) if _market is None else _market
     menu_fn = _prepared_menu(offer_menu_fn, market)
+    frontier = _frontier
     for contract_id in policy['contract_ids']:
         terms = cfg['channels'][contract_id]
         owned = set(sorted(buyers)[:terms['owned_audience_count']])
@@ -74,10 +137,12 @@ def preflight(cfg, buyers, jobs, offer_menu_fn, used_jobs=(), *, _market=None):
             continue
         if min(terms['duration_days'], cfg['horizon_days'] - lead) <= 0 or lead * 24 + cfg['production_hours'] + cfg['acceptance_hours'] + cfg['clearing_hours'] >= cfg['horizon_days'] * 24:
             continue
+        if frontier is None:
+            frontier = _admission_frontier(cfg, buyers, jobs, menu_fn)
         for ident, buyer in sorted(buyers.items()):
-            if ident in owned or buyer['onboarded'] or buyer.get('pending_commitments', {}):
+            if ident in owned or buyer['onboarded'] or buyer.get('pending_commitments', {}) or ident not in frontier:
                 continue
-            menu = menu_fn({'used_jobs': sorted(used_jobs)}, jobs, dict(buyer, id=ident), cfg)
+            menu = _frontier_menu(menu_fn({'used_jobs': sorted(used_jobs)}, jobs, dict(buyer, id=ident), cfg), frontier[ident])
             if any(offer['capacity_units'] <= slots for entry, offer, anchor in menu):
                 eligible.append(contract_id)
                 break
@@ -99,8 +164,9 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
     from .joint_planning import investment_option
     market = compile_market(cfg['complete_offer_policy'])
     menu_fn = _prepared_menu(offer_menu_fn, market)
+    frontier = _admission_frontier(cfg, buyers, jobs, menu_fn)
     result = []
-    for contract_id in preflight(cfg, buyers, jobs, menu_fn, used_jobs, _market=market):
+    for contract_id in preflight(cfg, buyers, jobs, menu_fn, used_jobs, _market=market, _frontier=frontier):
         terms = cfg['channels'][contract_id]
         lead = terms['lead_days']
         days = min(terms['duration_days'], cfg['horizon_days'] - lead)
@@ -108,15 +174,13 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
             continue
         owned = set(sorted(buyers)[:terms['owned_audience_count']])
         public = []
-        maximum_menu_size = 0
         used = set(used_jobs)
         for ident, buyer in sorted(buyers.items()):
-            if ident in owned or buyer['known'] or buyer['onboarded'] or buyer.get('pending_commitments',{}):
+            if ident in owned or buyer['known'] or buyer['onboarded'] or buyer.get('pending_commitments',{}) or ident not in frontier:
                 continue
             tentative = {'used_jobs': sorted(used)}
             choices = []
-            menu = menu_fn(tentative, jobs, dict(buyer,id=ident), cfg)
-            maximum_menu_size = max(maximum_menu_size, len(menu), len(market.profile(ident)['services']))
+            menu = _frontier_menu(menu_fn(tentative, jobs, dict(buyer,id=ident), cfg), frontier[ident])
             for entry, offer, anchor in menu:
                 units = offer['capacity_units']
                 if units > slots:
@@ -136,7 +200,8 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
                 continue
             best = sorted(choices, key=lambda x: (-x[0], x[1], x[2], x[3], x[4]))[0]
             public.append({'customer_id': ident, 'job_id': best[1], 'capacity_units': best[2],
-                           'conservative_net_fraction': str(best[0]), 'current_cash_lock': best[3], 'selection_sha256': best[4]})
+                           'conservative_net_fraction': str(best[0]), 'current_cash_lock': best[3], 'selection_sha256': best[4],
+                           'preceding_possible_menus': frontier[ident][0], 'higher_priority_requested_work_sha256': digest(sorted(frontier[ident][1]))})
             used.add(best[1])
         if not public:
             continue
@@ -150,17 +215,15 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
         usable_days = days - max(0, min(lead + days, outage_end) - max(lead, outage_start))
         prospects = min(qualified_contacts * Fraction(policy['conversion_bps'] * cfg['arrival_bps'], 10000**2), Fraction(slots * usable_days, max(p['capacity_units'] for p in public)))
         margin = min(Fraction(p['conservative_net_fraction']) for p in public)
-        attempt_slots = terms['slots_per_day'] * days
-        quote_evaluations = days * min(pool, cfg['strategic_allocation_policy']['max_customers']) * maximum_menu_size
-        future_costs = {'attempt_slots': attempt_slots, 'continuing_prospect_outreach_units': days * pool, 'maximum_menu_size': maximum_menu_size,
-            'qualification_evaluations': quote_evaluations, 'maintenance_days': lead + days,
-            'outreach_microUSD': (attempt_slots + days * pool) * cfg['exposure_cost'],
-            'qualification_microUSD': quote_evaluations * cfg['qualification_cost'],
-            'maintenance_microUSD': (lead + days) * cfg['maintenance_daily']}
+        future_costs = _future_operating_counts(cfg, terms, lead, days, owned, buyers, jobs, market, menu_fn)
+        outreach_units = sum(future_costs[k] for k in ('attempt_slots', 'continuing_owned_outreach_units', 'continuing_prospect_outreach_units'))
+        future_costs.update(outreach_microUSD=outreach_units * cfg['exposure_cost'],
+            qualification_microUSD=future_costs['qualification_evaluations'] * cfg['qualification_cost'],
+            maintenance_microUSD=future_costs['maintenance_days'] * cfg['maintenance_daily'])
         if 'refusal_recourse_policy' in cfg:
             from .refusal_recourse import validate_policy as validate_recourse, SELECTIVE_SCHEMA
             recourse = validate_recourse(cfg['refusal_recourse_policy'])
-            future_days = max(0, lead + days - 1)
+            future_days = future_costs['future_planning_days']
             daily_evaluation = recourse['daily_evaluation_cost'] if recourse['schema'] == SELECTIVE_SCHEMA else 0
             daily_allowance = recourse['daily_planning_cost']
             future_costs.update(recourse_policy_sha256=digest(recourse), recourse_planning_days=future_days,
@@ -184,6 +247,7 @@ def options(cfg, arm, moment, snapshot, operating, jobs, used_jobs, buyers, scen
             'native_state_digest': snapshot['state_digest'], 'observed_available': snapshot['summary']['available'],
             'operating_commitment': operating, 'current_slots': slots, 'qualified_public_offers': public,
             'future_cost_envelope': future_costs, 'future_operating_cash_lock': evaluation,
+            'admission_scope': 'First opportunity under initial native priority; every possible earlier nonempty menu competes for the existing shortlist, and all its admitted requested complete work is excluded. No later priority improvement or free access assumed.',
             'contact_fraction': str(contacts), 'qualified_contact_fraction': str(qualified_contacts), 'prospect_fraction': str(prospects), 'net_fraction': str(benefit - invoice),
             'option_inputs_sha256': digest(execution), 'authority': []}
         validate_option(option)
