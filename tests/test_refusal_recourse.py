@@ -140,6 +140,42 @@ class SelectiveRecourse(unittest.TestCase):
         self.assertFalse(self.choice(record,225)['purchase'])
         self.assertFalse(self.choice(record,226)['purchase'])
 
+    def test_game_stress_cannot_be_bought_using_unstressed_conditional_value(self):
+        from fractions import Fraction
+        from unittest.mock import patch
+        original=self.uncertain()
+        game={'schema':'connected-finite-follower-regret/v1','public_basis':'Exposed conditional recourse stress counterexample','max_response_states':4096,
+            'scenarios':{'case':{'budget':0,'responses':[{'id':'hold','haircut_bps':{},'capture_bps':0,'cost':0},{'id':'stress','haircut_bps':{'delivery':9900},'capture_bps':10000,'cost':0}]}}}
+        stressed=allocate_actions(original['observation'],original['deliveries'],original['investments'],original['riskpolicy'],allow_seed=True,max_delivery_slots=3,strategic_game=game)
+        rederive_actions(json.loads(json.dumps(stressed)))
+        renewed=recourse(stressed,[response(deliveries(stressed)[0],False)])
+        alternative=deliveries(renewed)[0]
+        net=Fraction(renewed['decision']['strategic_game_certificate']['selected_option_expected_net_fraction'][alternative['id']])
+        self.assertEqual(net,Fraction(9,2))
+        self.assertEqual(net*Fraction(1,2),Fraction(9,4))
+        self.assertLess(net*Fraction(1,2),100)
+        self.assertTrue(self.choice(original,100)['purchase'])
+        self.assertEqual(self.choice(original,100)['expected_increment_microUSD'],{'numerator':225,'denominator':1})
+        with patch('connected_enterprise.refusal_recourse.rederive_actions',side_effect=AssertionError('UNSUPPORTED_VALUATION_STARTED')):
+            with self.assertRaisesRegex(ValueError,'SELECTIVE_RECOURSE_STRATEGIC_GAME_UNAVAILABLE'):
+                self.choice(stressed,100)
+
+    def test_malformed_game_and_orphaned_certificate_fail_before_valuation(self):
+        from unittest.mock import patch
+        original=self.uncertain()
+        malformed=[dict(copy.deepcopy(original),strategic_game=value) for value in (None,{},False)]
+        for value in (None,{},False):
+            orphan=copy.deepcopy(original);orphan['decision']['strategic_game_certificate']=value
+            malformed.append(orphan)
+        scope_only=copy.deepcopy(original)
+        scope_only['decision']['optimality_scope']='EXACT_FINITE_FOLLOWER_MINIMAX_REGRET_DECLARED_STRESS'
+        malformed.append(scope_only)
+        with patch('connected_enterprise.refusal_recourse.rederive_actions',side_effect=AssertionError('UNSUPPORTED_VALUATION_STARTED')):
+            for record in malformed:
+                with self.subTest(game=record.get('strategic_game'),certificate=record['decision'].get('strategic_game_certificate')):
+                    with self.assertRaisesRegex(ValueError,'SELECTIVE_RECOURSE_STRATEGIC_GAME_UNAVAILABLE'):
+                        self.choice(record)
+
     def test_no_alternative_certain_acceptance_capacity_and_liquidity_hold(self):
         for record in (self.uncertain(1),fixture(),self.uncertain(slots=0),self.uncertain(cash=500),self.uncertain(count=2,slots=6)):
             with self.subTest(record=record['decision']['selected']):self.assertFalse(self.choice(record)['purchase'])

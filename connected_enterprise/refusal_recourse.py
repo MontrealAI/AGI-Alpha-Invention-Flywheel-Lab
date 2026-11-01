@@ -24,6 +24,12 @@ def validate_policy(policy):
 def selective_decision(record,policy,candidate_ids):
     validate_policy(policy)
     if policy['schema']!=SELECTIVE_SCHEMA:raise ValueError('SELECTIVE_RECOURSE_POLICY_REQUIRED')
+    # The v2 conditional benefit uses unstressed option contributions. A game
+    # certificate cannot make that valuation valid; reject before reconstruction
+    # or valuation, including malformed policies and orphaned certificates.
+    decision=record.get('decision')
+    if 'strategic_game' in record or isinstance(decision,dict) and ('strategic_game_certificate' in decision or decision.get('optimality_scope')=='EXACT_FINITE_FOLLOWER_MINIMAX_REGRET_DECLARED_STRESS'):
+        raise ValueError('SELECTIVE_RECOURSE_STRATEGIC_GAME_UNAVAILABLE')
     rederive_actions(record)
     if len(candidate_ids)!=len(set(candidate_ids)):raise ValueError('UNIQUE_PUBLIC_RECOURSE_CANDIDATES_REQUIRED')
     selected=[o for o in record['decision']['selected_options'] if o['kind']=='delivery']

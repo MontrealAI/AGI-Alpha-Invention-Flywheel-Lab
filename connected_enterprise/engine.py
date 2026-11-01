@@ -77,8 +77,9 @@ def validate_config(cfg):
         if composed and (sequence.get('owned_contact_count')!=4 or 'requested_jobs' not in cfg['complete_offer_policy']):raise ValueError('COMPLETE_SEQUENCE_REQUIRES_ACTUAL_OWNED_COUNT_AND_REQUESTED_WORK')
     if 'refusal_recourse_policy' in cfg:
         policy=cfg['refusal_recourse_policy']
-        from .refusal_recourse import validate_policy as validate_recourse
+        from .refusal_recourse import SELECTIVE_SCHEMA,validate_policy as validate_recourse
         validate_recourse(policy)
+        if policy['schema']==SELECTIVE_SCHEMA and 'strategic_game' in cfg.get('strategic_allocation_policy',{}):raise ValueError('SELECTIVE_RECOURSE_STRATEGIC_GAME_UNAVAILABLE')
         if 'strategic_policy' not in cfg or 'complete_offer_policy' not in cfg:raise ValueError('REFUSAL_RECOURSE_REQUIRES_COMPLETE_PUBLIC_MARKET')
         if cfg.get('strategic_allocation_policy',{}).get('risk',{}).get('interactions'):raise ValueError('REFUSAL_RECOURSE_INTERACTIONS_UNSUPPORTED')
     if 'startup_acquisition_policy' in cfg:
