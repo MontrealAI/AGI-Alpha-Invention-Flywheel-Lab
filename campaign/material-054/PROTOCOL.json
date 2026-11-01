@@ -1,0 +1,44 @@
+{
+  "schema": "material054/protocol/v1",
+  "registered_before_execution": "2026-11-01T17:06:00Z",
+  "scope": "Finite authored simulation and actual deterministic software execution; no real material, buyer, certification, money or industrial actuation",
+  "objective": "Test whether a source-bound remnant inventory and accepted cut plan can connect two voluntary material-fulfillment opportunities through one native account",
+  "selected_constraint": "Cross-order material reuse needs explicit dimensions, grades, source identities, exactly-once stock use and costed handover, not just a low trim-loss objective",
+  "known_alternatives": [
+    "Exact ordinary mixed-integer cutting-stock optimization with identical inventory and terms",
+    "Equal-content ordinary reuse of the exact same inventory and artifact",
+    "Direct virgin stock plus self-service cutting",
+    "Human-plus-software contractor",
+    "Existing broker/partner",
+    "No purchase"
+  ],
+  "first_input": "Published mathematical optimization tutorial: roll width 9, lengths/counts 2:4,3:2,4:6,5:6,6:2,7:2,8:2. Integer mm conversion is authored. This is a textbook instance, not an industrial measurement.",
+  "primary_source": "https://scipbook.readthedocs.io/en/latest/bpp.html",
+  "comparisons": [
+    "candidate exact finite dynamic programming versus independent ordinary MILP",
+    "equal-content ordinary reuse",
+    "successor with first-cycle remnants versus strongest registered virgin-stock route without those remnants",
+    "cheap competitor refusal",
+    "low beneficiary value refusal",
+    "expensive transport refusal",
+    "corrupt grade/provenance/double-use refusal"
+  ],
+  "resources": {
+    "max_solver_states_per_call": 1000000,
+    "first_stock_count": 16,
+    "native_opening_microUSD": 100000000000,
+    "modeled_setup_microUSD": 30000000,
+    "successor_connector_microUSD": 8000000
+  },
+  "cost_scope": "All modeled material, cutting, shipping, production, source checking, acquisition, construction/search/unsuccessful tests, maintenance, payment fees and 20 percent positive-profit tax provision. Host/model/developer actual billing remains unknown.",
+  "stopping": "Execute one first order and one newly observed successor from one fresh isolated account; retain no-purchase/adverse comparisons; independently check conservation, native audit, collected revenue and residual obligations. Stop after terminal decision and compact receipt. Do not annualize or scale buyer counts.",
+  "claims": {
+    "autonomous_discovery": false,
+    "new_optimizer": false,
+    "physical_validation": false,
+    "market_calibration": false,
+    "target_3_billion_achieved": false
+  },
+  "residual_title": "Pieces-only fulfillment: supplier retains offcuts. Central buyer has zero realizable outside salvage bid; compare a 70 USD salvage bid that can defeat the offer. This is an authored market assumption, not physical worthlessness or consent.",
+  "qualification_note": "Development comparison; zero-kerf textbook and finite authored prices, not untouched industrial holdout."
+}
