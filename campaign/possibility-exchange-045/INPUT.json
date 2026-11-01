@@ -1,0 +1,164 @@
+{
+  "schema": "agi-alpha/possibility-exchange/v1",
+  "scope": "SYNTHETIC_PUBLIC_HYPOTHESIS",
+  "capital_cents": 10000000,
+  "protected_cents": 1500000,
+  "risk_reserve_cents": 500000,
+  "provider_min_gain_cents": 1000000,
+  "buyers": [
+    {
+      "id": "buyer0",
+      "maximum_value_cents": 3000000,
+      "outside_utility_cents": 0,
+      "budget_cents": 3000000,
+      "minimum_gain_cents": 200000,
+      "source": {
+        "format": "canonical",
+        "order": {
+          "scope": "SYNTHETIC_PUBLIC_WORKLOAD",
+          "currency": "USD",
+          "order_id": "O-C00",
+          "require_complete": true,
+          "invoices": [
+            {
+              "id": "I-C00",
+              "customer": "C00",
+              "amount_cents": 10000
+            }
+          ],
+          "payments": [
+            {
+              "id": "P-C00",
+              "customer": "C00",
+              "amount_cents": 10000,
+              "invoice_refs": [
+                "I-C00"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "buyer1",
+      "maximum_value_cents": 3000000,
+      "outside_utility_cents": 0,
+      "budget_cents": 3000000,
+      "minimum_gain_cents": 200000,
+      "source": {
+        "format": "legacy",
+        "id": "O-C01",
+        "currency": "USD",
+        "require_complete": true,
+        "invoice_rows": [
+          {
+            "key": "I-C01",
+            "party": "C01",
+            "amount_minor": 10001
+          }
+        ],
+        "settlement_rows": [
+          {
+            "key": "P-C01",
+            "party": "C01",
+            "amount_minor": 10001,
+            "applies_to": [
+              "I-C01"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "buyer2",
+      "maximum_value_cents": 3000000,
+      "outside_utility_cents": 0,
+      "budget_cents": 3000000,
+      "minimum_gain_cents": 200000,
+      "source": {
+        "format": "canonical",
+        "order": {
+          "scope": "SYNTHETIC_PUBLIC_WORKLOAD",
+          "currency": "USD",
+          "order_id": "O-C02",
+          "require_complete": true,
+          "invoices": [
+            {
+              "id": "I-C02",
+              "customer": "C02",
+              "amount_cents": 10002
+            }
+          ],
+          "payments": [
+            {
+              "id": "P-C02",
+              "customer": "C02",
+              "amount_cents": 10002,
+              "invoice_refs": [
+                "I-C02"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "buyer3",
+      "maximum_value_cents": 500000,
+      "outside_utility_cents": 300000,
+      "budget_cents": 500000,
+      "minimum_gain_cents": 200000,
+      "source": {
+        "format": "legacy",
+        "id": "O-C03",
+        "currency": "USD",
+        "require_complete": true,
+        "invoice_rows": [
+          {
+            "key": "I-C03",
+            "party": "C03",
+            "amount_minor": 10003
+          }
+        ],
+        "settlement_rows": [
+          {
+            "key": "P-C03",
+            "party": "C03",
+            "amount_minor": 10003,
+            "applies_to": [
+              "I-C03"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "methods": [
+    {
+      "id": "direct",
+      "kind": "direct_specialist",
+      "min_buyers": 1,
+      "max_buyers": 1,
+      "setup_cents": 0,
+      "unit_cents": 3800000,
+      "verification_cents": 100000,
+      "qualification_cents": 250000,
+      "partner_setup_cents": 0,
+      "partner_cost_cents": 0,
+      "partner_gain_cents": 0
+    },
+    {
+      "id": "invented-shared-evidence",
+      "kind": "shared_proof",
+      "min_buyers": 3,
+      "max_buyers": 4,
+      "setup_cents": 3800000,
+      "unit_cents": 600000,
+      "verification_cents": 200000,
+      "qualification_cents": 250000,
+      "partner_setup_cents": 250000,
+      "partner_cost_cents": 100000,
+      "partner_gain_cents": 80000
+    }
+  ]
+}

@@ -40,6 +40,19 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in DEPENDENCIES):
             raise ValueError('FUNDED_DISCOVERY_SOURCE_DEPENDENCY_MISSING')
         names.update(DEPENDENCIES)
+    if (root/'commercial/possibility_exchange.py').is_file():
+        required={
+            'commercial/possibility_exchange.py','commercial/possibility_audit.py',
+            'commercial/service.py','commercial/service_verifier.py',
+            'scripts/run_possibility_exchange045.py',
+            'tests/test_possibility_exchange045.py',
+            'campaign/possibility-exchange-045/INPUT.json',
+            'campaign/possibility-exchange-045/ADVERSE.json',
+            'campaign/possibility-exchange-045/REPORT.md',
+            '.github/workflows/market-genesis045.yml'}
+        if any(not (root/name).is_file() for name in required):
+            raise ValueError('MARKET_GENESIS_SOURCE_DEPENDENCY_MISSING')
+        names.update(required)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
