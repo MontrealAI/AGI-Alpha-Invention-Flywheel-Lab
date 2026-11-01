@@ -194,7 +194,7 @@ def run(root, output):
                      amount=p['earned_only_successor_adapter_microUSD'],day=3,
                      work={'source_measurement':['A','B'],'new_domain':'leakage-anomaly',
                            'new_archives':['flow','pressure'],'expected_successor':'C'},
-                     expected_net=1,allow_seed=False)
+                     expected_net=834*MICRO,allow_seed=False)
                 if earned is None or earned.get('funding')!='EARNED':
                     raise ValueError('NO_EARNINGS_FUNDED_EXPANSION')
                 successor=_pay(account,'C','evidence_matrix-market062-C',p['quote_microUSD'],4)
@@ -221,7 +221,12 @@ def run(root, output):
                            'cheap_rival_no_bid':results['cheap_rival']['decision']['choice']=='NO_BID',
                            'actual_revenue_microUSD':0,'real_demand_observed':False,
                            'complete_actual_host_cost_known':False,
-                           'recursive_or_market_novelty_proven':False}}
+                           'recursive_or_market_novelty_proven':False,
+                           'successor_output_preconstructed_for_native_registration':True,
+                           'causal_necessity_of_adapter_not_proven':True,
+                           'ordinary_pooled_rival_excluded':False},
+            'sensitivity':{'ten_percent_fixed_cost_overrun_stage1_profit_microUSD':int(2*p['quote_microUSD']-sum(p['fixed_shared'].values())*110//100-2*sum(p['per_order'].values())-p['stage1_tax_microUSD']),
+                           'first_stage_profit_hurdle_microUSD':p['earned_only_successor_adapter_microUSD']}}
     dump(output/'RESULT.json',report)
     return report
 
