@@ -5,10 +5,13 @@ from adaptive_enterprise.allocation import default_riskpolicy
 from .strategic_commerce import select,allocate_actions
 
 def validate_allocation_policy(policy):
-    if not isinstance(policy,dict) or set(policy)-{'sequence','capacity_menu','strategic_game'}!={'risk','max_customers'} or type(policy['max_customers']) is not int or not 1<=policy['max_customers']<=8:
+    if not isinstance(policy,dict) or set(policy)-{'sequence','capacity_menu','strategic_game','category_budgets_bps'}!={'risk','max_customers'} or type(policy['max_customers']) is not int or not 1<=policy['max_customers']<=8:
         raise ValueError('EXPLICIT_BOUNDED_JOINT_ALLOCATION_POLICY_REQUIRED')
     if not isinstance(policy['risk'],dict) or set(policy['risk'])!=set(default_riskpolicy()):
         raise ValueError('EXACT_JOINT_RISK_POLICY_REQUIRED')
+    if 'category_budgets_bps' in policy:
+        shares=policy['category_budgets_bps']
+        if not isinstance(shares,dict) or set(shares)!={'acquisition','capacity'} or any(type(v) is not int or not 0<=v<=10000 for v in shares.values()) or sum(shares.values())!=10000:raise ValueError('EXACT_CATEGORY_BUDGET_BASIS_POINTS_REQUIRED')
     if 'strategic_game' in policy:
         from adaptive_enterprise.strategic_game import validate_game
         validate_game(policy['strategic_game'],policy['risk']['scenarios'])
@@ -16,8 +19,17 @@ def validate_allocation_policy(policy):
         q=policy['capacity_menu']
         if set(q)!={'max_quantity','opportunity_delay_hours','retention_bps'} or any(type(v) is not int or v<0 for v in q.values()) or q['opportunity_delay_hours']<1 or q['retention_bps']>10000:
             raise ValueError('EXPLICIT_FINITE_CAPACITY_MENU_POLICY_REQUIRED')
-        if 'sequence' in policy:raise ValueError('CAPACITY_MENU_SEQUENCE_NOT_COMPOSED')
+        if 'sequence' in policy and policy['sequence'].get('composition')!='complete-offer-quantity-v1':raise ValueError('CAPACITY_MENU_SEQUENCE_NOT_COMPOSED')
     return policy
+
+def category_upfront_caps(policy, snapshot, operating):
+    if 'category_budgets_bps' not in policy:return None
+    validate_allocation_policy(policy)
+    if type(operating) is not int or operating<0:raise ValueError('NONNEGATIVE_EARNED_OPERATING_DEDUCTION_REQUIRED')
+    earned=snapshot['summary']['unrestrictedEarned']
+    if type(earned) is not int or earned<0:raise ValueError('EXACT_CURRENT_ELIGIBLE_EARNINGS_REQUIRED')
+    eligible=max(0,earned-operating)
+    return {kind:eligible*bps//10000 for kind,bps in policy['category_budgets_bps'].items()}
 
 def investment_option(ident,kind,cost,predicted_net,scenarios,day,contract):
     return {'id':ident,'kind':kind,'upfront_cost':cost,'later_liabilities':dict.fromkeys(scenarios,0),
@@ -71,6 +83,8 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
     risk=copy.deepcopy(policy['risk']);risk['authorized_allocation']=min(risk['authorized_allocation'],available)
     deliveries=[];tentative=copy.deepcopy(state);needs=[];considered_customers=0
     menu_enabled='complete_offer_policy' in cfg
+    from .complete_offer_market import compile_market
+    public_market=compile_market(cfg['complete_offer_policy']) if menu_enabled else None
     if menu_enabled and offer_menu_fn is None:raise ValueError('ADMITTED_COMPLETE_OFFER_MENU_REQUIRED')
     for buyer in candidates:
         if draw_fn(state['seed'],[day,buyer['id']],'need')>=cfg['arrival_bps']/10000:continue
@@ -94,9 +108,8 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
                 'native_state_digest':snapshot['state_digest'],'profit_tax_bps':cfg['profit_tax_bps']}
             extra={}
             if menu_enabled:
-                from .complete_offer_market import market_context
                 spend=buyer['outside_spend']+buyer['our_settled_spend']+sum(buyer['pending_commitments'].values())
-                extra['market_context']=market_context(cfg['complete_offer_policy'],buyer['id'],spend,True)
+                extra['market_context']=public_market.context(buyer['id'],spend,True)
             selection=select(cfg['strategic_policy'],cfg.get('mechanism_policy'),job['id'],offer,state.get('mechanism_memory'),public,**extra)
             delivery={'id':'quote-'+str(day)+'-'+buyer['id']+('-offer-'+str(offer_index) if menu_enabled else ''),'customer_id':buyer['id'],'onboarding':onboard,
                                'exclusive_group':'customer-'+buyer['id'],'selection':selection,'requires':[]}
@@ -125,12 +138,15 @@ def plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,offer_f
         investments=sequence_options(cfg,prepared['event']['time'],snapshot,operating_envelope,jobs,
             set(state['used_jobs'])|{d['selection']['problem']['job_id'] for d in deliveries},
             state['investments'],public_buyers,prepared['channel_after']['contacts'],failed,risk['scenarios'],
-            sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in deliveries),channel_state=prepared['channel_after'])
+            sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in deliveries),channel_state=prepared['channel_after'],offer_menu_fn=offer_menu_fn,current_delivery_customer_ids=sorted({d['customer_id'] for d in deliveries}))
+    if 'startup_acquisition_policy' in cfg:
+        from .startup_acquisition048 import options as startup_options
+        investments.extend(startup_options(cfg,state['arm'],prepared['event']['time'],snapshot,operating_envelope,jobs,set(state['used_jobs'])|{d['selection']['problem']['job_id'] for d in deliveries},{b['id']:b for b in state['buyers']},risk['scenarios'],offer_menu_fn,prior_orders=bool(state['orders']),prior_investments=bool(state['investments'])))
     capacity_receipt=None
     if 'capacity_menu' in policy:
         capacity_receipt=capacity_recourse(cfg,prepared['event']['time'],snapshot,operating_envelope,deliveries,state['investments'],slots,risk)
         investments.extend(capacity_receipt['options'])
-    allocation=allocate_actions(snapshot,deliveries,investments,risk,allow_seed=True,max_delivery_slots=slots,earned_deduction=operating_envelope,strategic_game=policy.get('strategic_game'))
+    allocation=allocate_actions(snapshot,deliveries,investments,risk,allow_seed=True,max_delivery_slots=slots,earned_deduction=operating_envelope,strategic_game=policy.get('strategic_game'),category_upfront_caps=category_upfront_caps(policy,snapshot,operating_envelope))
     if allocation['decision']['optimality_scope']=='NONE':raise ValueError('JOINT_PLANNING_SHORTLIST_EXCEEDS_DECLARED_FINITE_BOUND')
     fixed_evaluation=cfg['exposure_cost']*prepared['outreach_units']+cfg['qualification_cost']*len(deliveries) if menu_enabled else None
     cost_receipt={'fixed_evaluation_cost':fixed_evaluation,'hold_net_after_evaluation':-fixed_evaluation,

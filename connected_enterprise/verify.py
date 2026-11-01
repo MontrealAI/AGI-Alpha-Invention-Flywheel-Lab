@@ -96,13 +96,14 @@ def _check_buyer_origins(config, seed, buyers):
     expected_ids = {f'SIM-customer-{i:03d}' for i in range(config['customer_pool'])}
     if set(indexed) != expected_ids:
         raise ValueError('FROZEN_FINITE_BUYER_POPULATION_CHANGED')
+    from .complete_offer_market import compile_market
+    market=compile_market(config['complete_offer_policy']) if 'complete_offer_policy' in config else None
     for ident, buyer in indexed.items():
         key = canonical(['connected014', seed, ident, 'budget'])
         uniform = int.from_bytes(hashlib.sha256(key).digest()[:8], 'big') / 2**64
         expected = int((180 + 400 * uniform) * 1_000_000 * config['buyer_budget_multiplier_bps'] / 10000)
         if 'complete_offer_policy' in config:
-            from .complete_offer_market import request_profile,private_atom
-            expected=request_profile(config['complete_offer_policy'],ident)['atoms'][private_atom(config['complete_offer_policy'],ident,seed)]['budget_microUSD']
+            expected=market.profile(ident)['atoms'][market.atom(ident,seed)]['budget_microUSD']
         if buyer['initial_budget'] != expected:
             raise ValueError('FROZEN_INITIAL_BUYER_BUDGET_CHANGED')
 
@@ -297,17 +298,23 @@ def _check_customer_lifecycle(result):
             'daily_outreach_units_recomputed': outreach_units,**({'daily_candidate_ids_recomputed':candidate_ids,'daily_public_buyers':public_buyers} if 'strategic_policy' in cfg else {})}
 
 
-def _check_cost_semantics(result, tape, lifecycle):
+def _check_cost_semantics(result, tape, lifecycle, *, startup_evaluation_required=False):
     cfg = result['config']
     expected = {}
     def add(ident, amount, moment, category):
         if amount:
             expected[ident] = {'amount': amount, 'time': moment, 'category': category}
     add('complete-development-setup', cfg['setup_cost'], 0, 'development_integration_qualification_and_failed_search')
+    if 'startup_acquisition_policy' in cfg and startup_evaluation_required:
+        add('startup-acquisition-evaluation',cfg['startup_acquisition_policy']['planning_cost_microUSD'],0,'prepaid_startup_acquisition_evaluation')
     for day in range(cfg['horizon_days']):
         moment = day * 24
         add('maintenance-' + str(day), cfg['maintenance_daily'], moment, 'maintenance')
-        if 'refusal_recourse_policy' in cfg:add('recourse-planning-'+str(day),cfg['refusal_recourse_policy']['daily_planning_cost'],moment,'prepaid_finite_refusal_recourse')
+        if 'refusal_recourse_policy' in cfg:
+            policy=cfg['refusal_recourse_policy'];selective=policy['schema']=='connected-selective-refusal-recourse/v2'
+            if selective:add('recourse-evaluation-'+str(day),policy['daily_evaluation_cost'],moment,'selective_recourse_public_evaluation')
+            wrapper=next(w for w in result['joint_actions'].values() if w['time']==moment)
+            if not selective or wrapper['selective_recourse_decision']['purchase']:add('recourse-planning-'+str(day),policy['daily_planning_cost'],moment,'prepaid_finite_refusal_recourse')
         units = lifecycle['daily_outreach_units_recomputed'][moment]
         add('outreach-' + str(day), cfg['exposure_cost'] * units, moment, 'outreach_including_failed_and_unused_slots')
         attempts = sum(row.get('kind') == 'offer' and row['time'] == moment for row in result['decisions'])
@@ -714,7 +721,7 @@ def audit(root, manifest, result):
         raise ValueError('FULL_ENTERPRISE_COSTS_DO_NOT_RECONCILE')
     budget_receipt = check_budgets(result['buyers'], list(orders.values()))
     _check_buyer_origins(result['config'], result['seed'], result['buyers'])
-    cost_semantics = _check_cost_semantics(result, tape, lifecycle_receipt)
+    cost_semantics = _check_cost_semantics(result, tape, lifecycle_receipt,startup_evaluation_required=strategic_receipt.get('startup_evaluation_required',False))
     commercial_receipt = _check_commercial_result(result)
     investment_receipt = _check_investments(result, tape, orders)
     channel_receipt = check_channels(result['channels'], result['investments'], result['buyers'],
@@ -741,6 +748,11 @@ def _check_investments(result, tape, orders):
     resource_requests = {entry['receipt']['plan_id']: entry['request']
                          for entry in result['owned_account']['connected_journal']['entries']
                          if entry['request']['operation'] == 'spend' and entry['receipt'].get('plan_id')}
+    from .startup_acquisition048 import reference as startup_reference
+    for entry in result['owned_account']['connected_journal']['entries']:
+        if entry['request']['operation']=='spend' and entry['request'].get('work',{}).get('startup_contract') is not None:
+            key=startup_reference(entry['receipt'])
+            resource_receipts[key]=entry['receipt'];resource_requests[key]=entry['request']
     linked = 0
     exposure_keys = {(customer, row['source_plan_id'], row['day'] * 24)
                      for customer, rows in result['channels']['contacts'].items() for row in rows}
@@ -755,12 +767,20 @@ def _check_investments(result, tape, orders):
         if activation < moment or (expiry is not None and _integer(expiry, 'INVESTMENT_EXPIRY') <= activation):
             raise ValueError('INVESTMENT_ACTIVATION_EXPIRY_CAUSAL_ORDER')
         reserve, finish = reservations.get(ident), finished.get(ident)
-        if reserve is None or finish is None or reserve['day'] > moment or finish['day'] > activation or finish['args']['amount'] != cost:
-            raise ValueError('PRODUCTIVE_CAPABILITY_NOT_NATIVE_EARNED_FUNDED')
-        if reserve['before']['unrestrictedEarned'] < cost:
-            raise ValueError('FUTURE_COLLECTIONS_OR_RESTRICTED_FUNDS_FINANCE_INVESTMENT')
-        if row.get('funding_receipt', {}).get('funding') != 'EARNED':
-            raise ValueError('PRODUCTIVE_INVESTMENT_EARNED_FUNDING_RECEIPT_REQUIRED')
+        funding=row.get('funding_receipt',{})
+        if funding.get('funding')=='SEED':
+            request=resource_requests.get(ident,{})
+            startup=request.get('work',{}).get('startup_contract')
+            native=tape['actions'][funding['native_event_sequence']]
+            if 'startup_acquisition_policy' not in result['config'] or row['kind']!='acquisition' or moment!=0 or not isinstance(startup,dict) or startup.get('schema')!='connected-startup-acquisition/v1' or startup.get('time')!=0 or request.get('allow_seed') is not True or funding.get('plan_id') is not None or ident!=startup_reference(funding) or native['op']!='cost' or native['day']!=0 or native['args']['amount']!=cost or native['before']['available']<cost or native['before'].get('investmentStopped'):
+                raise ValueError('SEED_ACQUISITION_REQUIRES_EXACT_NATIVE_STARTUP_CONTRACT')
+        else:
+            if reserve is None or finish is None or reserve['day'] > moment or finish['day'] > activation or finish['args']['amount'] != cost:
+                raise ValueError('PRODUCTIVE_CAPABILITY_NOT_NATIVE_EARNED_FUNDED')
+            if reserve['before']['unrestrictedEarned'] < cost:
+                raise ValueError('FUTURE_COLLECTIONS_OR_RESTRICTED_FUNDS_FINANCE_INVESTMENT')
+            if funding.get('funding') != 'EARNED':
+                raise ValueError('PRODUCTIVE_INVESTMENT_EARNED_FUNDING_RECEIPT_REQUIRED')
         if row['funding_receipt'] != resource_receipts.get(ident):
             raise ValueError('PRODUCTIVE_INVESTMENT_RECEIPT_NOT_NATIVE_SOURCE_BOUND')
         request = resource_requests[ident]

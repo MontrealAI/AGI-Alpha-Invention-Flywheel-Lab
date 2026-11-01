@@ -1,0 +1,265 @@
+{
+  "cases": [
+    {
+      "after": {
+        "changing.csv": "name,bytes\na.py,41\nb.py,71\n",
+        "stable.csv": "id,n\nx,17\ny,23\n"
+      },
+      "before": {
+        "changing.csv": "name,bytes\na.py,41\nb.py,59\n",
+        "stable.csv": "id,n\nx,17\ny,23\n"
+      },
+      "contract": {
+        "claims": [
+          {
+            "column": "bytes",
+            "id": "distribution_manifest",
+            "kind": "integer_sum",
+            "source": "changing.csv"
+          },
+          {
+            "column": "n",
+            "id": "stable_total",
+            "kind": "integer_sum",
+            "source": "stable.csv"
+          },
+          {
+            "column": "id",
+            "id": "stable_identity",
+            "kind": "unique_key",
+            "source": "stable.csv"
+          }
+        ],
+        "sources": [
+          "changing.csv",
+          "stable.csv"
+        ]
+      },
+      "id": "distribution_manifest:localized"
+    },
+    {
+      "after": {
+        "changing.csv": "name,bytes\na.py,41\nb.py,71\n",
+        "stable.csv": "id,n\nz,31\nz,37\n"
+      },
+      "before": {
+        "changing.csv": "name,bytes\na.py,41\nb.py,59\n",
+        "stable.csv": "id,n\nx,17\ny,23\n"
+      },
+      "contract": {
+        "claims": [
+          {
+            "column": "bytes",
+            "id": "distribution_manifest",
+            "kind": "integer_sum",
+            "source": "changing.csv"
+          },
+          {
+            "column": "n",
+            "id": "stable_total",
+            "kind": "integer_sum",
+            "source": "stable.csv"
+          },
+          {
+            "column": "id",
+            "id": "stable_identity",
+            "kind": "unique_key",
+            "source": "stable.csv"
+          }
+        ],
+        "sources": [
+          "changing.csv",
+          "stable.csv"
+        ]
+      },
+      "id": "distribution_manifest:all_changed"
+    },
+    {
+      "after": {
+        "changing.csv": "serial,status\nA,pass\nA,fail\n",
+        "stable.csv": "id,n\nx,17\ny,23\n"
+      },
+      "before": {
+        "changing.csv": "serial,status\nA,pass\nB,pass\n",
+        "stable.csv": "id,n\nx,17\ny,23\n"
+      },
+      "contract": {
+        "claims": [
+          {
+            "column": "serial",
+            "id": "manufacturing_sample",
+            "kind": "unique_key",
+            "source": "changing.csv"
+          },
+          {
+            "column": "n",
+            "id": "stable_total",
+            "kind": "integer_sum",
+            "source": "stable.csv"
+          },
+          {
+            "column": "id",
+            "id": "stable_identity",
+            "kind": "unique_key",
+            "source": "stable.csv"
+          }
+        ],
+        "sources": [
+          "changing.csv",
+          "stable.csv"
+        ]
+      },
+      "id": "manufacturing_sample:localized"
+    },
+    {
+      "after": {
+        "changing.csv": "serial,status\nA,pass\nA,fail\n",
+        "stable.csv": "id,n\nz,31\nz,37\n"
+      },
+      "before": {
+        "changing.csv": "serial,status\nA,pass\nB,pass\n",
+        "stable.csv": "id,n\nx,17\ny,23\n"
+      },
+      "contract": {
+        "claims": [
+          {
+            "column": "serial",
+            "id": "manufacturing_sample",
+            "kind": "unique_key",
+            "source": "changing.csv"
+          },
+          {
+            "column": "n",
+            "id": "stable_total",
+            "kind": "integer_sum",
+            "source": "stable.csv"
+          },
+          {
+            "column": "id",
+            "id": "stable_identity",
+            "kind": "unique_key",
+            "source": "stable.csv"
+          }
+        ],
+        "sources": [
+          "changing.csv",
+          "stable.csv"
+        ]
+      },
+      "id": "manufacturing_sample:all_changed"
+    },
+    {
+      "after": {
+        "changing.csv": "sensor,reading\nA,-7\nB,-11\n",
+        "stable.csv": "id,n\nx,17\ny,23\n"
+      },
+      "before": {
+        "changing.csv": "sensor,reading\nA,-7\nB,11\n",
+        "stable.csv": "id,n\nx,17\ny,23\n"
+      },
+      "contract": {
+        "claims": [
+          {
+            "column": "reading",
+            "id": "measurement_batch",
+            "kind": "integer_sum",
+            "source": "changing.csv"
+          },
+          {
+            "column": "n",
+            "id": "stable_total",
+            "kind": "integer_sum",
+            "source": "stable.csv"
+          },
+          {
+            "column": "id",
+            "id": "stable_identity",
+            "kind": "unique_key",
+            "source": "stable.csv"
+          }
+        ],
+        "sources": [
+          "changing.csv",
+          "stable.csv"
+        ]
+      },
+      "id": "measurement_batch:localized"
+    },
+    {
+      "after": {
+        "changing.csv": "sensor,reading\nA,-7\nB,-11\n",
+        "stable.csv": "id,n\nz,31\nz,37\n"
+      },
+      "before": {
+        "changing.csv": "sensor,reading\nA,-7\nB,11\n",
+        "stable.csv": "id,n\nx,17\ny,23\n"
+      },
+      "contract": {
+        "claims": [
+          {
+            "column": "reading",
+            "id": "measurement_batch",
+            "kind": "integer_sum",
+            "source": "changing.csv"
+          },
+          {
+            "column": "n",
+            "id": "stable_total",
+            "kind": "integer_sum",
+            "source": "stable.csv"
+          },
+          {
+            "column": "id",
+            "id": "stable_identity",
+            "kind": "unique_key",
+            "source": "stable.csv"
+          }
+        ],
+        "sources": [
+          "changing.csv",
+          "stable.csv"
+        ]
+      },
+      "id": "measurement_batch:all_changed"
+    }
+  ],
+  "protocol": {
+    "arms": [
+      "full_recompute",
+      "ordinary_reuse",
+      "retained_method"
+    ],
+    "authority": [],
+    "case_ids": [
+      "distribution_manifest:localized",
+      "distribution_manifest:all_changed",
+      "manufacturing_sample:localized",
+      "manufacturing_sample:all_changed",
+      "measurement_batch:localized",
+      "measurement_batch:all_changed"
+    ],
+    "cases_sha256": "826bbc5777ed45bd62376cfeff81c2ace51d839b411b31145e19b589681d7f81",
+    "claims_excluded": [
+      "autonomous discovery",
+      "retained-method superiority",
+      "commercial profit",
+      "physical validation"
+    ],
+    "cost_scope": {
+      "acquisition": "Recompute and audit predecessor once, fully charged to each reuse arm; no amortization",
+      "adaptation": "Exact plan/content hash validation each arm",
+      "host_model_engineering_usd": null,
+      "profit_usd": null,
+      "verification": "Full current-input audit each arm"
+    },
+    "evidence_role": "developer_authored_finite_engineering_comparison",
+    "primary_metric": "independently accepted successor artifacts; no retained-method advantage if ordinary reuse ties",
+    "schema": "evidence-revalidation048/v1",
+    "secondary_metric": "CSV row visits including acquisition, production and full current-input audit",
+    "stopping_rule": "One fixed execution of every arm on all six cases; no seed search, replacement or favorable retry"
+  },
+  "source": {
+    "experiments/evidence_revalidation048.py": "e767fe4cf3f0d3adf9b00119c9bc740cdeef9460ee49cc8d1485b32477493c71",
+    "tests/test_evidence_revalidation048.py": "b2ea9ba6d705b9b691ca385faf98c2dcab37bd7bd243a2f230c8ff7496ad2f9a"
+  }
+}

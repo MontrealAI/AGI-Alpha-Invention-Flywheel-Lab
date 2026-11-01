@@ -10,6 +10,18 @@ SCHEMA = 'agi-alpha/connected014-registration/v1'
 ARMS = {'baseline', 'channel', 'growth', 'competitive_growth'}
 
 
+def native_engine(configs):
+    engines = {
+        ('exact-prospective-v2' if 'prospective_policy' in cfg else 'exact-permanent-v2')
+        if 'monetary_policy' in cfg else
+        ('prospective-v1' if 'prospective_policy' in cfg else 'legacy-permanent-v1')
+        for cfg in configs.values()
+    }
+    if len(engines) != 1:
+        raise ValueError('ONE_SOURCE_BOUND_SERVICE_MANIFEST_ENGINE_REQUIRED')
+    return next(iter(engines))
+
+
 def validate(value):
     fields = {'schema', 'label', 'evidence_role', 'seeds', 'configs', 'arms',
               'control_arm', 'candidate_arm', 'service_cohort_seed', 'workers'}
@@ -53,6 +65,7 @@ def validate(value):
         for human in cfg['human_comparator'].values():
             if set(human) != {'hours', 'loaded_usd_hour'} or any(type(v) not in {int, float} or v < 0 for v in human.values()):
                 raise ValueError('NONNEGATIVE_EXPLICIT_HUMAN_ASSUMPTIONS_REQUIRED')
+    native_engine(configs)
     canonical(result)
     return result
 

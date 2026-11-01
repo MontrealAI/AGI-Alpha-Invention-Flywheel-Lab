@@ -86,4 +86,71 @@ class RefusalRecourseOperating(unittest.TestCase):
    self.assertTrue(audit(ROOT,exactm,exactresult)['accepted']);self.assertEqual(exactresult['summary'],result['summary'])
    badcfg=copy.deepcopy(cfg);badcfg['strategic_allocation_policy']['risk']['interactions']=[{'unsupported':True}]
    with self.assertRaises(ValueError):validate_config(badcfg)
+
+class SelectiveRecourseOperating(unittest.TestCase):
+ def test_fixed_game_audits_but_selective_game_rejects_before_account_or_fees(self):
+  from unittest.mock import patch
+  with tempfile.TemporaryDirectory(prefix='.recourse-game-',dir=ROOT) as folder:
+   folder=Path(folder)
+   m=prepare_complete_offer_services(ROOT,str(folder.relative_to(ROOT)/'jobs'),cohort_seed=2611010481,packet_jobs=8,packet_rows=40)
+   cfg=config(m)
+   game={'schema':'connected-finite-follower-regret/v1','public_basis':'Exposed fixed recourse compatibility fixture','max_response_states':4096,
+    'scenarios':{k:{'budget':0,'responses':[{'id':'hold','haircut_bps':{},'capture_bps':0,'cost':0},{'id':'stress','haircut_bps':{'delivery':100},'capture_bps':5000,'cost':0}]} for k in cfg['strategic_allocation_policy']['risk']['scenarios']}}
+   cfg['strategic_allocation_policy']['strategic_game']=game
+   fixed=run_world(ROOT,m,cfg,2,'competitive_growth',folder/'fixed')
+   self.assertTrue(audit(ROOT,m,fixed)['accepted'])
+   wrapper=next(iter(fixed['joint_actions'].values()))
+   self.assertIn('strategic_game_certificate',wrapper['allocation']['decision'])
+   self.assertTrue(wrapper['refusal_recourse']['attempts'])
+   self.assertEqual(sum(c['amount'] for c in fixed['costs'] if c['category']=='prepaid_finite_refusal_recourse'),100_000)
+   self.assertFalse(any(c['category']=='selective_recourse_public_evaluation' for c in fixed['costs']))
+   tampered=copy.deepcopy(fixed)
+   next(iter(tampered['joint_actions'].values()))['allocation']['decision']['strategic_game_certificate']['expected_net_fraction']='1000000000000'
+   with self.assertRaises(ValueError):audit(ROOT,m,tampered)
+   for i,value in enumerate((game,None,{},False)):
+    unsupported=copy.deepcopy(cfg)
+    unsupported['refusal_recourse_policy']={'schema':'connected-selective-refusal-recourse/v2','daily_planning_cost':100_000,'daily_evaluation_cost':10_000}
+    unsupported['strategic_allocation_policy']['strategic_game']=value
+    output=folder/('unsupported-'+str(i))
+    with self.subTest(game=value),patch('connected_enterprise.engine.JournalAccount',side_effect=AssertionError('UNSUPPORTED_ACCOUNT_OPENED')):
+     with self.assertRaisesRegex(ValueError,'SELECTIVE_RECOURSE_STRATEGIC_GAME_UNAVAILABLE'):
+      run_world(ROOT,m,unsupported,2,'competitive_growth',output)
+    self.assertFalse(output.exists(),'Unsupported composition must reject before account creation or prepaid costs')
+
+ def test_purchase_hold_exact_quote_public_audit_and_charge_recovery(self):
+  from unittest.mock import patch
+  from connected_enterprise import engine
+  with tempfile.TemporaryDirectory(prefix='.selective-recourse-',dir=ROOT) as folder:
+   folder=Path(folder)
+   m=prepare_complete_offer_services(ROOT,str(folder.relative_to(ROOT)/'jobs'),cohort_seed=2611010481,packet_jobs=8,packet_rows=40)
+   cfg=config(m);cfg['refusal_recourse_policy']={'schema':'connected-selective-refusal-recourse/v2','daily_planning_cost':100_000,'daily_evaluation_cost':10_000}
+   cfg['strategic_policy']['ranking_arithmetic']='exact-rational-v1'
+   result=run_world(ROOT,m,cfg,2,'competitive_growth',folder/'purchase')
+   self.assertTrue(audit(ROOT,m,result)['accepted'])
+   wrapper=next(iter(result['joint_actions'].values()))
+   self.assertTrue(wrapper['selective_recourse_decision']['purchase'])
+   self.assertEqual(sum(c['amount'] for c in result['costs'] if c['category']=='prepaid_finite_refusal_recourse'),100_000)
+   self.assertEqual(sum(c['amount'] for c in result['costs'] if c['category']=='selective_recourse_public_evaluation'),10_000)
+   for mutate in (lambda x:next(iter(x['joint_actions'].values()))['selective_recourse_decision'].update(purchase=False),lambda x:next(iter(x['joint_actions'].values()))['selective_recourse_decision']['expected_increment_microUSD'].update(numerator=1)):
+    bad=copy.deepcopy(result);mutate(bad)
+    with self.assertRaises(ValueError):audit(ROOT,m,bad)
+   holdcfg=copy.deepcopy(cfg);holdcfg['strategic_allocation_policy']['max_customers']=1
+   hold=run_world(ROOT,m,holdcfg,2,'competitive_growth',folder/'hold')
+   self.assertTrue(audit(ROOT,m,hold)['accepted'])
+   holdwrapper=next(iter(hold['joint_actions'].values()))
+   self.assertFalse(holdwrapper['selective_recourse_decision']['purchase'])
+   self.assertNotIn('refusal_recourse',holdwrapper)
+   self.assertFalse(any(c['category']=='prepaid_finite_refusal_recourse' for c in hold['costs']))
+   self.assertEqual(sum(c['amount'] for c in hold['costs'] if c['category']=='selective_recourse_public_evaluation'),10_000)
+   trajectory=lambda r:[(a['op'],a['day'],a['before'],a['after']) for a in r['owned_account']['ledger']['actions']]
+   original_prepare=engine._prepare_plan
+   def fail_after_allowance(*args,**kwargs):
+    if kwargs.get('selective_purchase') is True:raise RuntimeError('AFTER_SELECTIVE_ALLOWANCE_BEFORE_PLAN')
+    return original_prepare(*args,**kwargs)
+   with patch.object(engine,'_prepare_plan',fail_after_allowance):
+    with self.assertRaisesRegex(RuntimeError,'AFTER_SELECTIVE_ALLOWANCE_BEFORE_PLAN'):
+     run_world(ROOT,m,cfg,2,'competitive_growth',folder/'recover')
+   recovered=run_world(ROOT,m,cfg,2,'competitive_growth',folder/'recover')
+   self.assertTrue(audit(ROOT,m,recovered)['accepted']);self.assertEqual(trajectory(result),trajectory(recovered));self.assertEqual(result['decisions'],recovered['decisions'])
+
 if __name__=='__main__':unittest.main()

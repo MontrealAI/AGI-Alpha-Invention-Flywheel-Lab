@@ -53,7 +53,7 @@ def fresh_account_config(manifest, *, prospective_policy=None, root=None):
 
 
 def validate_config(cfg):
-    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','monetary_policy','complete_offer_policy','refusal_recourse_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
+    if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','monetary_policy','complete_offer_policy','refusal_recourse_policy','startup_acquisition_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
     for key in ['horizon_days','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
         if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
     # Explicit finite scenario population; no universal market ceiling.
@@ -68,12 +68,24 @@ def validate_config(cfg):
     if 'complete_offer_policy' in cfg:
         from .complete_offer_market import validate_policy as validate_market
         validate_market(cfg['complete_offer_policy'])
-        if 'strategic_policy' not in cfg or 'sequence' in cfg.get('strategic_allocation_policy',{}):raise ValueError('COMPLETE_OFFER_REQUIRES_SINGLE_OPPORTUNITY_JOINT_POLICY')
+        sequence=cfg.get('strategic_allocation_policy',{}).get('sequence')
+        composed=sequence is not None and sequence.get('composition')=='complete-offer-quantity-v1'
+        if 'strategic_policy' not in cfg or sequence is not None and not composed:raise ValueError('COMPLETE_OFFER_REQUIRES_SINGLE_OPPORTUNITY_JOINT_POLICY')
+        if composed and cfg['complete_offer_policy']['selection']=='restricted':raise ValueError('RESTRICTED_COMPLETE_SEQUENCE_LIFECYCLE_UNAVAILABLE')
+        if composed and (type(sequence.get('window_delay_days')) is not int or not 1<=sequence['window_delay_days']<7):raise ValueError('COMPLETE_SEQUENCE_LONG_WINDOW_LIFECYCLE_UNAVAILABLE')
+        if composed and ('capacity_menu' not in cfg['strategic_allocation_policy'] or 'channel_menu_policy' not in cfg or cfg['strategic_policy'].get('ranking_arithmetic')!='exact-rational-v1'):raise ValueError('COMPLETE_SEQUENCE_REQUIRES_EXACT_QUANTITY_AND_COSTED_CHANNEL_MENU')
+        if composed and any(terms.get('owned_audience_count',4)!=4 for terms in cfg['channels'].values()):raise ValueError('COMPLETE_SEQUENCE_REQUIRES_COHERENT_FOUR_OWNED_AUDIENCE')
+        if composed and (sequence.get('owned_contact_count')!=4 or 'requested_jobs' not in cfg['complete_offer_policy']):raise ValueError('COMPLETE_SEQUENCE_REQUIRES_ACTUAL_OWNED_COUNT_AND_REQUESTED_WORK')
     if 'refusal_recourse_policy' in cfg:
         policy=cfg['refusal_recourse_policy']
-        if not isinstance(policy,dict) or set(policy)!={'schema','daily_planning_cost'} or policy['schema']!='connected-refusal-recourse/v1' or type(policy['daily_planning_cost'])is not int or policy['daily_planning_cost']<=0:raise ValueError('EXPLICIT_PREPAID_REFUSAL_RECOURSE_REQUIRED')
+        from .refusal_recourse import SELECTIVE_SCHEMA,validate_policy as validate_recourse
+        validate_recourse(policy)
+        if policy['schema']==SELECTIVE_SCHEMA and 'strategic_game' in cfg.get('strategic_allocation_policy',{}):raise ValueError('SELECTIVE_RECOURSE_STRATEGIC_GAME_UNAVAILABLE')
         if 'strategic_policy' not in cfg or 'complete_offer_policy' not in cfg:raise ValueError('REFUSAL_RECOURSE_REQUIRES_COMPLETE_PUBLIC_MARKET')
         if cfg.get('strategic_allocation_policy',{}).get('risk',{}).get('interactions'):raise ValueError('REFUSAL_RECOURSE_INTERACTIONS_UNSUPPORTED')
+    if 'startup_acquisition_policy' in cfg:
+        from .startup_acquisition048 import validate_policy as validate_startup
+        validate_startup(cfg)
     if 'cash_diagnostic_available' in cfg and (type(cfg['cash_diagnostic_available']) is not int or not 0<=cfg['cash_diagnostic_available']<=10**15):raise ValueError('FINITE_DIAGNOSTIC_CASH_REQUIRED')
     if 'prospective_policy' in cfg:
         from .capital_lifecycle import validate_policy
@@ -116,12 +128,13 @@ def _record_exposure(state,when,exposure,response=None):
     if response is not None:_event(state,when,'REACTIVATION_RESPONSE',exposure['exposure_id']+'-reactivation',**response)
 
 def _buyers(cfg,seed):
+    from .complete_offer_market import compile_market
+    market=compile_market(cfg['complete_offer_policy']) if 'complete_offer_policy' in cfg else None
     result=[]
     for i in range(cfg['customer_pool']):
         ident=f'SIM-customer-{i:03d}';budget=int((180+400*draw(seed,ident,'budget'))*MICRO*cfg['buyer_budget_multiplier_bps']/10000)
         if 'complete_offer_policy' in cfg:
-            from .complete_offer_market import request_profile,private_atom
-            budget=request_profile(cfg['complete_offer_policy'],ident)['atoms'][private_atom(cfg['complete_offer_policy'],ident,seed)]['budget_microUSD']
+            budget=market.profile(ident)['atoms'][market.atom(ident,seed)]['budget_microUSD']
         result.append({'id':ident,'initial_budget':budget,'remaining_budget':budget,'pending_commitments':{},'outside_spend':0,'our_settled_spend':0,'known':i<4,'active':True,'purchases':0,'onboarded':False,'next_need_time':0,'acquisition_source_plan_id':None,'exposure_time':0 if i<4 else None,'retention_decision_count':0,'service_index':i%3,'last_quote':None})
     return result
 
@@ -154,18 +167,25 @@ def _offer(jobs,state,buyer,cfg):
     return entry,offer,anchor
 
 
-def _offer_menu(state,jobs,buyer,cfg):
+def _offer_menu(state,jobs,buyer,cfg,*,_market=None):
     """Admitted public request alternatives, without private value or budget."""
     from .complete_offer_market import request_profile
-    profile=request_profile(cfg['complete_offer_policy'],buyer['id'])
+    profile=request_profile(cfg['complete_offer_policy'],buyer['id']) if _market is None else _market.profile(buyer['id'])
     services=profile['services']
     if cfg['complete_offer_policy']['selection']=='restricted':
         service=SERVICES[buyer['service_index']%3]
         services=[service] if service in services else []
     used={key for ident in state['used_jobs'] for key in jobs[ident]['job']['work_keys']}
+    # Work is already keyed by admitted job identity. Never scan unrelated jobs.
+    requested=[]
+    for ident in cfg['complete_offer_policy']['requested_jobs'][buyer['id']]:
+        if ident not in jobs:continue
+        entry=jobs[ident]
+        if entry['job']['id']!=ident:raise ValueError('ADMITTED_JOB_INDEX_IDENTITY_CHANGED')
+        requested.append(entry)
     options=[]
     for service in services:
-        entries=[entry for entry in jobs.values() if entry['job']['id'] in cfg['complete_offer_policy']['requested_jobs'][buyer['id']] and entry['job']['accepted'] and entry['job']['service_id']==service and entry['artifact'].get('outcome_scope')=='complete_outcome' and not used.intersection(entry['job']['work_keys'])]
+        entries=[entry for entry in requested if entry['job']['accepted'] and entry['job']['service_id']==service and entry['artifact'].get('outcome_scope')=='complete_outcome' and not used.intersection(entry['job']['work_keys'])]
         if not entries:continue
         entry=min(entries,key=lambda x:x['job']['id'])
         offer=copy.deepcopy(next(o for o in offer_catalog(include_packet=True) if o['service_id']==service and o['method']==entry['artifact']['method']))
@@ -177,9 +197,9 @@ def _offer_menu(state,jobs,buyer,cfg):
 def _resource_units(offer,cfg):
     return offer['capacity_units'] if 'complete_offer_policy' in cfg else 1
 
-def _prepare_plan(state,account,jobs):
+def _prepare_plan(state,account,jobs,*,recourse_preflight=False,selective_purchase=None,snapshot_override=None):
     cfg=state['config'];seed=state['seed'];ev=state['queue'][0];t=ev['time'];day=t//24
-    prepared={'event':copy.deepcopy(ev),'before':account.snapshot(),'orders':[],'declines':[],'exposures':[],'reactivations':[],'channel_purchase':False,'capacity_purchase':False}
+    prepared={'event':copy.deepcopy(ev),'before':account.snapshot() if snapshot_override is None else copy.deepcopy(snapshot_override),'orders':[],'declines':[],'exposures':[],'reactivations':[],'channel_purchase':False,'capacity_purchase':False}
     if ev['kind']!='plan':return prepared
     book=ChannelBook(seed,cfg['channels'],state['channel_state']);exposures=book.expose(day,state['buyers']);prepared['channel_after']=book.export();prepared['exposures']=exposures
     simulated=copy.deepcopy(state);byid={b['id']:b for b in simulated['buyers']};owned_ids={b['id'] for b in state['buyers'][:4]};exposed_ids={x['customer_id'] for x in exposures}
@@ -202,6 +222,8 @@ def _prepare_plan(state,account,jobs):
     prepared['outreach_units']=stats['attempted_slots']+sum(b['id'] not in exposed_ids for b in candidates)
     # Reserve the maximum qualification bill before commitments, including lost offers.
     operating_envelope=(0 if 'strategic_policy' in cfg else cfg['maintenance_daily'])+cfg['exposure_cost']*prepared['outreach_units']+cfg['qualification_cost']*len(candidates)*(4 if 'complete_offer_policy' in cfg else 1)
+    selective=cfg.get('refusal_recourse_policy',{}).get('schema')=='connected-selective-refusal-recourse/v2'
+    if selective and (recourse_preflight or selective_purchase is False):operating_envelope+=cfg['refusal_recourse_policy']['daily_planning_cost']
     prepared['operating_cost_envelope']=operating_envelope
     earned=prepared['before']['summary']['unrestrictedEarned'];margin_history=[o['price']-o['complete_cost'] for o in state['orders'] if o['outcome']=='SETTLED']
     live_channels=[i for i in prepared['channel_after']['instances'].values() if i['state'] not in {'FAILED','EXPIRED'} and i['expiry_day']>day]
@@ -219,14 +241,16 @@ def _prepare_plan(state,account,jobs):
     if state['arm'] in {'growth','competitive_growth'} and profitable and lost_capacity>=2 and slots<cfg['maximum_slots'] and live_capacity<cfg['maximum_slots']-cfg['initial_slots'] and remaining>7 and ('strategic_policy' in cfg or earned>cfg['capacity_price']+channel_invoice+operating_envelope+2*MICRO):
         capacity_forecast=sum(margin_history)/len(margin_history)*min(remaining,5)*.5;prepared['capacity_purchase']=capacity_forecast>cfg['capacity_price'];prepared['capacity_predicted_net']=int(capacity_forecast-cfg['capacity_price'])
     liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-cfg['capacity_price']*bool(prepared['capacity_purchase'])
+    from .complete_offer_market import compile_market
+    public_market=compile_market(cfg['complete_offer_policy']) if 'complete_offer_policy' in cfg else None
     rival_capacity=2;rival_bps=state['market']['public_rival_bps'];rival_cash=state['market']['rival_cash']
     def buyer_choice(b,service,anchor,price=None):
         nonlocal rival_capacity,rival_cash
         if 'complete_offer_policy' in cfg:
-            from .complete_offer_market import market_context,private_atom,actual_choice
+            from .complete_offer_market import actual_choice
             observed=b['outside_spend']+b['our_settled_spend']+sum(b['pending_commitments'].values())
-            context=market_context(cfg['complete_offer_policy'],b['id'],observed)
-            chosen=actual_choice(context,private_atom(cfg['complete_offer_policy'],b['id'],seed),b['remaining_budget'],service if price is not None else None,price,draw(seed,[day,b['id']],'complete-offer-tie'))
+            context=public_market.context(b['id'],observed)
+            chosen=actual_choice(context,public_market.atom(b['id'],seed),b['remaining_budget'],service if price is not None else None,price,draw(seed,[day,b['id']],'complete-offer-tie'))
             decision={'kind':'offer' if price is not None else 'outside_choice','time':t,'customer_id':b['id'],'service_id':service,'price':price,'human_price':None,'public_rival_price':None,'chosen':chosen['provider']=='us','buyer_choice':chosen['provider'],'outside_option_name':chosen['name'],'outside_service_id':chosen['service_id'],'market_context':context,'information':'Public request and independent value/budget hypotheses; private atom belongs only to buyer environment. Outside contracts independently available per request.'}
             if chosen['provider'] not in {'us','decline'}:
                 decision['outside_spend']=chosen['spend'];b['remaining_budget']-=chosen['spend'];b['next_need_time']=t+7*24
@@ -247,7 +271,7 @@ def _prepare_plan(state,account,jobs):
     joint=None; joint_by_customer={}; joint_selected={}
     if 'strategic_policy' in cfg:
         from .joint_planning import plan_actions
-        joint=plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,_offer,draw,**({'offer_menu_fn':_offer_menu} if 'complete_offer_policy' in cfg else {}))
+        joint=plan_actions(state,jobs,candidates,prepared,slots,operating_envelope,_offer,draw,**({'offer_menu_fn':lambda s,j,b,c:_offer_menu(s,j,b,c,_market=public_market)} if 'complete_offer_policy' in cfg else {}))
         prepared['joint_action']=joint
         joint_by_customer={d['customer_id']:d for d in joint['allocation']['deliveries']}
         from .strategic_commerce import selected_delivery
@@ -274,6 +298,10 @@ def _prepare_plan(state,account,jobs):
                 net=sum(weights[k]*(picks[0]['future_net_cash'][k]-picks[0]['upfront_cost']) for k in weights)//10000
                 if net<=0:raise ValueError('POSITIVE_SEQUENCE_EXPECTATION_REQUIRED')
                 prepared['channel_predicted_net']=prepared['capacity_predicted_net']=net
+            if cfg['strategic_allocation_policy']['sequence'].get('composition')=='complete-offer-quantity-v1':
+                prepared['channel_purchase']=bool(prepared.get('channel_purchases'))
+                prepared['capacity_options']=[o for o in joint['allocation']['decision']['selected_options'] if o['kind']=='capacity']
+                prepared['capacity_purchase']=bool(prepared['capacity_options'])
 
         if 'strategic_game' in cfg['strategic_allocation_policy']:
             from adaptive_enterprise.strategic_game import investment_expected_net
@@ -281,7 +309,7 @@ def _prepare_plan(state,account,jobs):
             for option in joint['allocation']['decision']['selected_options']:
                 if option['kind']=='delivery':continue
                 ident=option['id']
-                if 'first_investment' in option['execution'] and not ('channel_menu_policy' in cfg and option['execution']['first_investment']=='acquisition'):
+                if 'first_investment' in option['execution'] and not ('channel_menu_policy' in cfg and option['execution']['first_investment']=='acquisition') and 'purchased_units' not in option['execution']:
                     ident=('channel-' if option['execution']['first_investment']=='acquisition' else 'capacity-')+str(day)
                 net=investment_expected_net(joint['allocation']['decision'],option['id'])
                 if net<1:raise ValueError('POSITIVE_GAME_INVESTMENT_EXPECTATION_REQUIRED')
@@ -291,11 +319,18 @@ def _prepare_plan(state,account,jobs):
 
         capacity_invoice=sum(o['upfront_cost'] for o in prepared['capacity_options']) if 'capacity_options' in prepared else cfg['capacity_price']*bool(prepared['capacity_purchase'])
         liquidity=prepared['before']['summary']['available']-operating_envelope-channel_invoice*bool(prepared['channel_purchase'])-capacity_invoice
+    if recourse_preflight:return prepared
+    selective_choice=None
+    if selective:
+        from .refusal_recourse import selective_decision
+        selective_choice=selective_decision(joint['allocation'],cfg['refusal_recourse_policy'],joint['candidate_ids'])
+        if selective_choice['purchase'] is not selective_purchase:raise ValueError('SELECTIVE_RECOURSE_PREPAYMENT_DECISION_CHANGED')
+        joint['selective_recourse_decision']=selective_choice
     capacity_only_customers=set()
     if joint is not None and 'complete_offer_policy' in cfg:
         from .capacity_signal import capacity_declined_customers
         capacity_only_customers=capacity_declined_customers(joint['allocation'])
-    recourse_enabled='refusal_recourse_policy' in cfg
+    recourse_enabled='refusal_recourse_policy' in cfg and (not selective or selective_choice['purchase'])
     recourse_round=0
     if recourse_enabled:
         joint['refusal_recourse']={'policy':copy.deepcopy(cfg['refusal_recourse_policy']),'attempts':[],'rounds':[]}
@@ -414,7 +449,28 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
             if state['current'] is None:
                 if 'strategic_policy' in cfg and state['queue'][0]['kind']=='plan':
                     now=state['queue'][0]['time'];cost('maintenance-'+str(now//24),cfg['maintenance_daily'],now,'maintenance')
-                    if 'refusal_recourse_policy' in cfg:
+                    if 'startup_acquisition_policy' in cfg and now==0:
+                        from .startup_acquisition048 import preflight as startup_preflight
+                        if startup_preflight(cfg,{b['id']:b for b in state['buyers']},jobs,_offer_menu,state['used_jobs']):
+                            fee=cfg['startup_acquisition_policy']['planning_cost_microUSD']
+                            prior=[a for a in account.export()['ledger']['actions'] if a['op']=='cost' and a['args'].get('id')=='startup-acquisition-evaluation']
+                            funding=prior[0]['before'] if prior else account.snapshot()['summary']
+                            if funding['available']<fee or funding.get('investmentStopped'):raise ValueError('STARTUP_EVALUATION_NOT_PREPAID')
+                            cost('startup-acquisition-evaluation',fee,now,'prepaid_startup_acquisition_evaluation')
+                    selective_purchase=None
+                    if cfg.get('refusal_recourse_policy',{}).get('schema')=='connected-selective-refusal-recourse/v2':
+                        from .refusal_recourse import selective_decision
+                        from .finance import _native_snapshot
+                        fee=cfg['refusal_recourse_policy']['daily_evaluation_cost'];ident='recourse-evaluation-'+str(now//24)
+                        tape=account.export()['ledger'];prior=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')==ident]
+                        before=prior[0]['before'] if prior else account.snapshot()['summary']
+                        if before['available']<fee or before.get('investmentStopped'):raise ValueError('RECOURSE_EVALUATION_NOT_FUNDED')
+                        cost(ident,fee,now,'selective_recourse_public_evaluation')
+                        tape=account.export()['ledger'];evaluation=next(a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')==ident)
+                        original_snapshot=_native_snapshot(tape,evaluation,account.snapshot()['filesystem'])
+                        preflight=_prepare_plan(state,account,jobs,recourse_preflight=True,snapshot_override=original_snapshot)
+                        selective_purchase=selective_decision(preflight['joint_action']['allocation'],cfg['refusal_recourse_policy'],preflight['joint_action']['candidate_ids'])['purchase']
+                    if 'refusal_recourse_policy' in cfg and selective_purchase is not False:
                         ident='recourse-planning-'+str(now//24);fee=cfg['refusal_recourse_policy']['daily_planning_cost']
                         prior=[a for a in account.export()['ledger']['actions'] if a['op']=='cost' and a['args'].get('id')==ident]
                         if prior:
@@ -423,7 +479,7 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                         else:funding_before=account.snapshot()['summary']
                         if funding_before['available']<fee or funding_before.get('investmentStopped'):raise ValueError('RECOURSE_PLANNING_NOT_FUNDED')
                         cost(ident,fee,now,'prepaid_finite_refusal_recourse')
-                state['current']=_prepare_plan(state,account,jobs);_write(path,account.seal_checkpoint(state))
+                state['current']=_prepare_plan(state,account,jobs,**({'selective_purchase':selective_purchase} if 'strategic_policy' in cfg and state['queue'][0]['kind']=='plan' and cfg.get('refusal_recourse_policy',{}).get('schema')=='connected-selective-refusal-recourse/v2' else {}));_write(path,account.seal_checkpoint(state))
             p=state['current'];ev=p['event'];t=ev['time'];day=t//24;kind=ev['kind'];byid={b['id']:b for b in state['buyers']}
             if kind=='startup':
                 cost('complete-development-setup',cfg['setup_cost'],t,'development_integration_qualification_and_failed_search')
@@ -452,9 +508,13 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                         contract_id=option['execution']['contract_id'];terms=cfg['channels'][contract_id];invoice=terms['price_microUSD']+terms['support_microUSD'];ident=option['id']
                         predicted=(sum(cfg['strategic_allocation_policy']['risk']['scenarios'][k]*(option['future_net_cash'][k]-invoice) for k in cfg['strategic_allocation_policy']['risk']['scenarios'])//10000 if 'first_investment' in option['execution'] else next(iter(option['future_net_cash'].values()))-invoice)
                         if 'game_investment_predictions' in p:predicted=p['game_investment_predictions'][ident]
-                        receipt=cost(ident,invoice,t,'acquisition_contract',{'terms':terms,'contract_id':contract_id,'investment':'expiring_contact_access'},earned_only=True,expected_net=predicted)
+                        startup=option['execution'].get('startup_contract');work={'terms':terms,'contract_id':contract_id,'investment':'expiring_contact_access'}
+                        if startup is not None:work['startup_contract']=startup
+                        receipt=cost(ident,invoice,t,'acquisition_contract',work,earned_only=startup is None,expected_net=predicted)
                         if receipt:
-                            purchase=book.purchase(contract_id,day,receipt['plan_id']);state['investments'].append({'id':ident,'plan_id':receipt['plan_id'],'kind':'acquisition','contract_id':contract_id,'purchased_time':t,'activation_time':purchase['activation_day']*24,'expiry_time':purchase['expiry_day']*24,'cost':invoice,'funding_receipt':receipt,'contract_receipt':purchase,'predicted_net':predicted});_event(state,t,'INVESTMENT',ident,source_plan_id=receipt['plan_id'],investment_kind='acquisition',contract_id=contract_id)
+                            from .startup_acquisition048 import reference
+                            source_ref=reference(receipt) if startup is not None else receipt['plan_id']
+                            purchase=book.purchase(contract_id,day,source_ref,**({'startup_funding':receipt['funding']} if startup is not None else {}));state['investments'].append({'id':ident,'plan_id':source_ref,'kind':'acquisition','contract_id':contract_id,'purchased_time':t,'activation_time':purchase['activation_day']*24,'expiry_time':purchase['expiry_day']*24,'cost':invoice,'funding_receipt':receipt,'contract_receipt':purchase,'predicted_net':predicted});_event(state,t,'INVESTMENT',ident,source_plan_id=source_ref,investment_kind='acquisition',contract_id=contract_id)
                 elif p['channel_purchase']:
                     terms=cfg['channels']['pilot'];invoice=terms['price_microUSD']+terms['support_microUSD'];ident='channel-'+str(day)
                     receipt=cost(ident,invoice,t,'acquisition_contract',{'terms':terms,'investment':'expiring_contact_access'},earned_only=True,expected_net=p['channel_predicted_net'])

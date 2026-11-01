@@ -5,6 +5,7 @@ Stackelberg optimization is not a global equilibrium or enterprise scale proof.
 """
 import copy
 import math
+from fractions import Fraction
 from commercial.ledger import digest
 from portfolio25.pricing import validate_scenarios, _choice_prices
 from .mechanism_choice import MODES, validate_policy as validate_method_policy
@@ -16,7 +17,7 @@ POLICY_FIELDS = {'schema','public_basis','price_bps','rival_price_bps','rival_co
 RANK = {'default':0,'conventional':1,'generated':2,'ordinary_reuse':3,'critic_retain':4,'csv_backend':5}
 
 def validate_policy(policy):
-    if set(policy)-{'demand_model','connected_beliefs'}!=POLICY_FIELDS or policy['schema']!='connected-strategic-commerce/v1':
+    if set(policy)-{'demand_model','connected_beliefs','ranking_arithmetic'}!=POLICY_FIELDS or policy['schema']!='connected-strategic-commerce/v1':
         raise ValueError('EXPLICIT_FINITE_STRATEGIC_POLICY_REQUIRED')
     if not isinstance(policy['public_basis'],str) or not policy['public_basis'].strip():
         raise ValueError('PUBLIC_BELIEF_PROVENANCE_REQUIRED')
@@ -38,6 +39,9 @@ def validate_policy(policy):
             if set(b)!={'min_value_bps','max_value_bps','min_budget_microUSD','max_budget_microUSD','rival_available_bps'} or any(type(v) is not int or not 0<=v<=10**15 for v in b.values()):raise ValueError('BOUNDED_PUBLIC_BUYER_PRIOR_REQUIRED')
             if b['min_value_bps']>b['max_value_bps'] or b['min_budget_microUSD']>b['max_budget_microUSD'] or b['rival_available_bps']>10000:raise ValueError('VALID_PUBLIC_BUYER_INTERVAL_REQUIRED')
     elif 'connected_beliefs' in policy:raise ValueError('UNUSED_BUYER_BELIEFS_REFUSED')
+    if 'ranking_arithmetic' in policy:
+        if policy['ranking_arithmetic']!='exact-rational-v1' or policy['rival_response']!='observed_quote':raise ValueError('EXACT_RANKING_REQUIRES_DECLARED_RATIONAL_OBSERVED_QUOTE_MODEL')
+        if sum((Fraction(str(s['weight'])) for s in policy['scenarios']),Fraction(0))!=1:raise ValueError('EXACT_SCENARIO_WEIGHTS_MUST_SUM_ONE')
     # This first connected edition deliberately does not monetize hypothetical repeat work.
     if any(s['repeat_horizon']!=0 or s['cost_shock']!=1 for s in policy['scenarios']):
         raise ValueError('SINGLE_ORDER_EXACT_PREPAID_COST_EDITION_REQUIRED')
@@ -73,6 +77,35 @@ def _belief_choice(price, rival, public, policy, scenario):
     with_rival=probs(True);without=probs(False);a=b['rival_available_bps']/10000
     return tuple(a*x+(1-a)*y for x,y in zip(with_rival,without))
 
+def _exact_belief_choice(price, rival, public, policy, scenario):
+    if policy.get('demand_model','portfolio_logit')!='connected_range':
+        raise ValueError('EXACT_LOGIT_FORECAST_UNAVAILABLE')
+    b=policy['connected_beliefs'][scenario['id']];h=public['anchor']
+    def coverage(x,lo,hi):
+        if x<=lo:return Fraction(1)
+        if x>hi or hi==lo:return Fraction(0)
+        return (hi-x)/(hi-lo)
+    def probs(include_rival):
+        options={'human':h,'us':price}
+        if include_rival and rival is not None:options['rival']=rival
+        cheapest=min(options.values());ties=[k for k,v in options.items() if v==cheapest]
+        q=coverage(cheapest,Fraction(h*b['min_value_bps'],10000),Fraction(h*b['max_value_bps'],10000))*coverage(cheapest,Fraction(b['min_budget_microUSD']),Fraction(b['max_budget_microUSD']))
+        decline_tie=int(b['min_value_bps']==b['max_value_bps'] and h*b['min_value_bps']==cheapest*10000)
+        return tuple(q/(len(ties)+decline_tie) if k in ties else Fraction(0) for k in ('us','rival'))
+    with_rival=probs(True);without=probs(False);a=Fraction(b['rival_available_bps'],10000)
+    return tuple(a*x+(1-a)*y for x,y in zip(with_rival,without))
+
+def _exact_market_probability(ctx,service_id,price):
+    from .complete_offer_market import _choices
+    atoms=[a for a in ctx['profile']['atoms'] if a['budget_microUSD']>=ctx['observed_spend']]
+    weight=sum(a['weight_bps'] for a in atoms)
+    if not weight:return Fraction(0)
+    probability=Fraction(0)
+    for atom in atoms:
+        choices=_choices(ctx,atom,atom['budget_microUSD']-ctx['observed_spend'],service_id,price)
+        if any(c['name']=='us' for c in choices):probability+=Fraction(atom['weight_bps'],weight*len(choices))
+    return probability
+
 def _response(price, public, policy, scenario):
     anchor=public['anchor']
     if policy['rival_response']=='observed_quote':return public['public_rival_price']
@@ -94,6 +127,8 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
     Public prefix/deductions must be reconstructed by the calling operating audit.
     """
     validate_policy(policy);_public(public)
+    exact=policy.get('ranking_arithmetic')=='exact-rational-v1'
+    if exact and market_context is None and policy.get('demand_model','portfolio_logit')!='connected_range':raise ValueError('EXACT_LOGIT_FORECAST_UNAVAILABLE')
     if market_context is not None:
         from .complete_offer_market import validate_context
         validate_context(market_context)
@@ -129,26 +164,39 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
             reserve=cost+price+public['reserve_buffer']
             feasible=reserve<=cash_limit and price>cost
             if not feasible:continue
-            forecasts=[]; expected=0.0
+            forecasts=[]; expected=0.0; expected_exact=Fraction(0)
             for sc in policy['scenarios']:
                 rival=_response(price,public,policy,sc)
-                if market_context is not None:
-                    from .complete_offer_market import win_probability
-                    win=win_probability(market_context,offer['service_id'],price)
-                else:win,_=_belief_choice(price,rival,public,policy,sc)
-                paid=sc['accept_prob']*sc['collect_prob']
-                # All fulfillment costs are prepaid on a win, even on nonpayment.
-                net=paid*price-cost
-                tax=paid*max(0,price-cost)*public['profit_tax_bps']/10000
-                contribution=win*(net-tax)-public['quote_cost']
-                expected+=sc['weight']*contribution
+                fraction_fields={}
+                if exact:
+                    win_exact=_exact_market_probability(market_context,offer['service_id'],price) if market_context is not None else _exact_belief_choice(price,rival,public,policy,sc)[0]
+                    paid_exact=Fraction(str(sc['accept_prob']))*Fraction(str(sc['collect_prob']))
+                    tax_exact=paid_exact*max(0,price-cost)*Fraction(public['profit_tax_bps'],10000)
+                    contribution_exact=win_exact*(paid_exact*price-cost-tax_exact)-public['quote_cost']
+                    expected_exact+=Fraction(str(sc['weight']))*contribution_exact
+                    win=float(win_exact);paid=float(paid_exact);contribution=float(contribution_exact)
+                    fraction_fields={'win_probability_fraction':str(win_exact),'accept_collect_probability_fraction':str(paid_exact),'net_after_modeled_tax_fraction':str(contribution_exact)}
+                else:
+                    if market_context is not None:
+                        from .complete_offer_market import win_probability
+                        win=win_probability(market_context,offer['service_id'],price)
+                    else:win,_=_belief_choice(price,rival,public,policy,sc)
+                    paid=sc['accept_prob']*sc['collect_prob']
+                    # All fulfillment costs are prepaid on a win, even on nonpayment.
+                    net=paid*price-cost
+                    tax=paid*max(0,price-cost)*public['profit_tax_bps']/10000
+                    contribution=win*(net-tax)-public['quote_cost']
+                    expected+=sc['weight']*contribution
                 forecasts.append({'belief':sc['id'],'rival_price':rival,'win_probability':win,
-                                  'accept_collect_probability':paid,'net_after_modeled_tax':contribution})
+                                  'accept_collect_probability':paid,'net_after_modeled_tax':contribution,**fraction_fields})
             row={'mode':mode,'price':price,'cost':cost,'fee':fee,'required_current_cash':reserve,
-                 'expected_net':expected,'forecasts':forecasts}
+                 'expected_net':float(expected_exact) if exact else expected,'forecasts':forecasts,
+                 **({'expected_net_fraction':str(expected_exact)} if exact else {})}
             rows.append(row)
-            # Strict tolerance and declared stable tie order avoid numerical fake superiority.
-            if expected>0 and (best is None or expected>best['expected_net']+1e-9 or
+            if exact:
+                if expected_exact>0 and (best is None or expected_exact>Fraction(best['expected_net_fraction']) or expected_exact==Fraction(best['expected_net_fraction']) and (RANK[mode],price)<(RANK[best['mode']],best['price'])):best=row
+            # Historical policies retain their numerical ranking and receipts.
+            elif expected>0 and (best is None or expected>best['expected_net']+1e-9 or
                abs(expected-best['expected_net'])<=1e-9 and (RANK[mode],price)<(RANK[best['mode']],best['price'])):best=row
     decision={'schema':'connected-strategic-decision/v1','problem_sha256':digest(problem),
               'selected':copy.deepcopy(best),'feasible_candidates':len(rows),'candidate_rows_sha256':digest(rows),
@@ -159,6 +207,10 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
     if market_context is not None:
         decision['buyer_belief_source']='Independent public complete-outcome value/budget atoms and declared outside contracts; same geometry as actual choice'
         decision['limits']='Finite applicable offers and price/method shortlist; observed-spend-truncated prior, not full choice-history inference. Outside contracts independently available; no shared rival capacity game.'
+    if exact:
+        decision['ranking_arithmetic']='exact-rational-v1'
+        decision['scope']='EXACT_FINITE_RATIONAL_PRICE_METHOD_RANKING_UNDER_DECLARED_PUBLIC_BELIEFS'
+        decision['arithmetic_scope']='Declared decimal scenario weights/probabilities are interpreted as rationals. Display floats never determine ranking. Joint allocation conservatively floors each exact scenario contribution to native microUSD; no sub-microUSD basket optimality claim.'
     if _diagnostic_available is not None:
         decision['diagnostic_available']=_diagnostic_available
         decision['scope']='COUNTERFACTUAL_CASH_CANDIDATES_NOT_EXECUTABLE'
@@ -181,7 +233,7 @@ def rederive(result):
     if result!=expected:raise ValueError('STRATEGIC_COMMERCE_DECISION_CHANGED')
     return expected
 
-def allocate_actions(observation, deliveries, investments, riskpolicy, *, allow_seed=True, max_delivery_slots=1, earned_deduction=0, strategic_game=None, mandatory_ids=()):
+def allocate_actions(observation, deliveries, investments, riskpolicy, *, allow_seed=True, max_delivery_slots=1, earned_deduction=0, strategic_game=None, mandatory_ids=(), category_upfront_caps=None):
     """Joint finite native-state-bound delivery/price/method and expansion choice.
 
     deliveries contain ALL alternatives of the declared finite shortlist. No
@@ -191,13 +243,13 @@ def allocate_actions(observation, deliveries, investments, riskpolicy, *, allow_
     """
     from adaptive_enterprise.allocation import allocate
     options=_action_options(observation,deliveries,investments,riskpolicy)
-    decision=allocate(observation,options,riskpolicy,allow_seed=allow_seed,max_delivery_slots=max_delivery_slots,earned_deduction=earned_deduction,strategic_game=strategic_game,mandatory_ids=mandatory_ids)
-    return {**({'mandatory_ids':sorted(mandatory_ids)} if mandatory_ids else {}),**({'strategic_game':copy.deepcopy(strategic_game)} if strategic_game is not None else {}),'schema':'connected-joint-actions/v1','risk_scope':'Scenario conditional expectations, not realized worst-case losses; conservative floor to microUSD. Native cash locks bound present commitments.','observation':copy.deepcopy(observation),
+    decision=allocate(observation,options,riskpolicy,allow_seed=allow_seed,max_delivery_slots=max_delivery_slots,earned_deduction=earned_deduction,strategic_game=strategic_game,mandatory_ids=mandatory_ids,category_upfront_caps=category_upfront_caps)
+    return {**({'category_upfront_caps':copy.deepcopy(category_upfront_caps)} if category_upfront_caps is not None else {}),**({'mandatory_ids':sorted(mandatory_ids)} if mandatory_ids else {}),**({'strategic_game':copy.deepcopy(strategic_game)} if strategic_game is not None else {}),'schema':'connected-joint-actions/v1','risk_scope':'Scenario conditional expectations, not realized worst-case losses; conservative floor to microUSD. Native cash locks bound present commitments.','observation':copy.deepcopy(observation),
             'deliveries':copy.deepcopy(deliveries),'investments':copy.deepcopy(investments),
             'riskpolicy':copy.deepcopy(riskpolicy),'allow_seed':allow_seed,'max_delivery_slots':max_delivery_slots,'earned_deduction':earned_deduction,'decision':decision}
 
 def rederive_actions(record):
-    expected=allocate_actions(record['observation'],record['deliveries'],record['investments'],record['riskpolicy'],allow_seed=record['allow_seed'],max_delivery_slots=record['max_delivery_slots'],earned_deduction=record['earned_deduction'],strategic_game=record.get('strategic_game'),mandatory_ids=record.get('mandatory_ids',()))
+    expected=allocate_actions(record['observation'],record['deliveries'],record['investments'],record['riskpolicy'],allow_seed=record['allow_seed'],max_delivery_slots=record['max_delivery_slots'],earned_deduction=record['earned_deduction'],strategic_game=record.get('strategic_game'),mandatory_ids=record.get('mandatory_ids',()),category_upfront_caps=record.get('category_upfront_caps'))
     if record!=expected:raise ValueError('JOINT_ALLOCATION_CHANGED')
     return expected
 
@@ -239,10 +291,11 @@ def _action_options(observation,deliveries,investments,riskpolicy,diagnostic_ava
             if result!=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],p['public'],_diagnostic_available=diagnostic_available,market_context=p.get('market_context')):raise ValueError('DIAGNOSTIC_CANDIDATES_CHANGED')
         p=result['problem'];pub=p['public']
         if pub['native_state_digest']!=observation['state_digest']:raise ValueError('JOINT_NATIVE_PREFIX_CHANGED')
-        if any(abs(s['weight']-riskpolicy['scenarios'].get(s['id'],-1)/10000)>1e-12 for s in p['policy']['scenarios']):
+        exact=p['policy'].get('ranking_arithmetic')=='exact-rational-v1'
+        if any((Fraction(str(s['weight']))!=Fraction(riskpolicy['scenarios'].get(s['id'],-1),10000)) if exact else abs(s['weight']-riskpolicy['scenarios'].get(s['id'],-1)/10000)>1e-12 for s in p['policy']['scenarios']):
             raise ValueError('JOINT_SCENARIO_WEIGHTS_MUST_MATCH_PUBLIC_BELIEFS')
         for n,row in enumerate(result['candidates']):
-            sc_net={x['belief']:math.floor(x['net_after_modeled_tax']) for x in row['forecasts']}
+            sc_net={x['belief']:math.floor(Fraction(x['net_after_modeled_tax_fraction'])) if exact else math.floor(x['net_after_modeled_tax']) for x in row['forecasts']}
             if set(sc_net)!=set(riskpolicy['scenarios']):raise ValueError('MATCHED_JOINT_BELIEFS_REQUIRED')
             option={'id':d['id']+'-'+str(n),'kind':'delivery','upfront_cost':row['cost'],
                     'later_liabilities':dict.fromkeys(sc_net,0),
@@ -257,7 +310,10 @@ def _action_options(observation,deliveries,investments,riskpolicy,diagnostic_ava
             options.append(option)
     if not isinstance(investments,list) or len(options)+len(investments)>128:raise ValueError('FINITE_COSTED_INVESTMENTS_REQUIRED')
     for o in investments:
-        if o['kind'] not in {'acquisition','capacity','instrument'} or o['execution'].get('funding')!='EARNED':
+        if o['execution'].get('funding')=='SEED_OR_EARNED':
+            from .startup_acquisition048 import validate_option
+            validate_option(o)
+        elif o['kind'] not in {'acquisition','capacity','instrument'} or o['execution'].get('funding')!='EARNED':
             raise ValueError('EARNED_COSTED_EXPANSION_ONLY')
         # Existing allocation validates full liabilities, benefit overlap, source evidence and dependencies.
         options.append(copy.deepcopy(o))
@@ -275,6 +331,7 @@ def cash_opportunity_diagnostic(record, *, relaxed_available, declared_allocatio
     """
     from adaptive_enterprise.allocation import allocate, _diagnostic_result
     from fractions import Fraction
+    if 'category_upfront_caps' in record:raise ValueError('CATEGORY_BUDGET_CASH_DIAGNOSTIC_UNAVAILABLE')
     if 'strategic_game' in record:raise ValueError('STRATEGIC_GAME_CASH_DIAGNOSTIC_UNAVAILABLE')
     rederive_actions(record)
     if type(operating_envelope) is not int or operating_envelope<0:raise ValueError('NONNEGATIVE_OPERATING_ENVELOPE_REQUIRED')

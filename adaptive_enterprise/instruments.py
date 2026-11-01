@@ -18,6 +18,8 @@ SOURCE_PATHS = ('connected_enterprise/packet_contract.py','connected_enterprise/
                 'adaptive_enterprise/strategies.py','adaptive_enterprise/bundles.py', 'enterprise/services.py', 'enterprise/checkers.py',
                 'commercial/service.py', 'commercial/service_verifier.py')
 CONSTRAINTS = ['preserve_source_rows', 'explicit_money_units', 'unique_record_identity', 'referential_customer_consistency']
+BUNDLE_INDICES = (8,9,10,11,12,13,14,16)
+ADMISSION_SCHEMA = 'agi-alpha/finite-service-admission048/v1'
 
 
 def canonical(value):
@@ -289,9 +291,112 @@ def _read(root, path, expected):
     return read_bound(root, path, expected)
 
 
-def prepare_services(root, relative, cohort_seed=0, *, jobs_per_service=32):
-    if type(jobs_per_service) is not int or not 32<=jobs_per_service<=256:
+def _finite_windows(count, window):
+    if type(count) is not int or count < 1 or type(window) is not int or window < 1:
+        raise ValueError('FINITE_POSITIVE_ADMISSION_AND_WINDOW_REQUIRED')
+    for start in range(0, count, window):
+        yield start, min(window, count-start)
+
+
+def _admission_record(manifest, primitive_count, packet_count, packet_rows, window):
+    from adaptive_enterprise.strategies import PRIMITIVE_SERVICES
+    if type(primitive_count) is not int or primitive_count < 32 or type(packet_count) is not int or packet_count < 0:
+        raise ValueError('FINITE_DECLARED_SERVICE_COUNTS_REQUIRED')
+    if (packet_count == 0 and packet_rows is not None or packet_count > 0 and
+            (type(packet_rows) is not int or not 4 <= packet_rows <= 1000)):
+        raise ValueError('BOUNDED_PACKET_ROWS_REQUIRED')
+    seed_hash = manifest['cohort_provenance'].get('cohort_seed_sha256')
+    if type(seed_hash) is not str or len(seed_hash) != 64 or any(c not in '0123456789abcdef' for c in seed_hash):
+        raise ValueError('EXACT_GENERATION_SEED_COMMITMENT_REQUIRED')
+    total = len(PRIMITIVE_SERVICES)*primitive_count+len(BUNDLE_INDICES)+packet_count
+    if len(manifest['jobs']) != total:
+        raise ValueError('FINITE_ADMISSION_COUNT_MISMATCH')
+    chunks = []
+    for start, count in _finite_windows(total, window):
+        chunks.append({'start': start, 'count': count, 'jobs_sha256': digest(manifest['jobs'][start:start+count])})
+    return {'schema': ADMISSION_SCHEMA, 'primitive_jobs_per_service': primitive_count,
+            'primitive_services': list(PRIMITIVE_SERVICES), 'bundle_indices': list(BUNDLE_INDICES),
+            'packet_jobs': packet_count, 'packet_rows_per_kind': packet_rows,
+            'chunk_size': window, 'total_jobs': total, 'chunks': chunks,
+            'source_sha256': digest(manifest['source_hashes']),
+            'cohort_seed_sha256': manifest['cohort_provenance']['cohort_seed_sha256']}
+
+
+def _seal_admission(manifest, primitive_count, packet_count, packet_rows, window):
+    manifest['cohort_provenance']['finite_admission'] = _admission_record(
+        manifest, primitive_count, packet_count, packet_rows, window)
+
+
+def _validate_admission(manifest):
+    from adaptive_enterprise.strategies import PRIMITIVE_SERVICES
+    admission = manifest['cohort_provenance'].get('finite_admission')
+    if admission is None:
+        if len(manifest['jobs']) > 1000:
+            raise ValueError('FINITE_SOURCE_BOUND_ADMISSION_REQUIRED')
+        return
+    if not isinstance(admission, dict):
+        raise ValueError('FINITE_SOURCE_BOUND_ADMISSION_REQUIRED')
+    expected = _admission_record(manifest, admission.get('primitive_jobs_per_service'),
+        admission.get('packet_jobs'), admission.get('packet_rows_per_kind'), admission.get('chunk_size'))
+    if canonical(admission) != canonical(expected):
+        raise ValueError('FINITE_ADMISSION_BINDING_MISMATCH')
+    primitive_count = admission['primitive_jobs_per_service']
+    for index, job in enumerate(manifest['jobs']):
+        service = (PRIMITIVE_SERVICES[index//primitive_count] if index < len(PRIMITIVE_SERVICES)*primitive_count
+                   else 'operations_bundle' if index < len(PRIMITIVE_SERVICES)*primitive_count+len(BUNDLE_INDICES)
+                   else 'receivables_packet')
+        if not isinstance(job, dict) or job.get('service_id') != service:
+            raise ValueError('FINITE_ADMISSION_SERVICE_ORDER_MISMATCH')
+
+
+def audit_admission(root, manifest, *, cohort_seed):
+    """Reconstruct declared origins without exposing a generation seed to policy."""
+    from adaptive_enterprise.strategies import PRIMITIVE_SERVICES
+    from connected_enterprise.packet_contract import synthetic_input
+    _validate_manifest(root, manifest)
+    admission = manifest['cohort_provenance'].get('finite_admission')
+    if (type(cohort_seed) is not int or not 0 <= cohort_seed <= 10**15 or admission is None
+            or admission['cohort_seed_sha256'] != digest(cohort_seed)):
+        raise ValueError('DECLARED_GENERATION_ORIGIN_REQUIRED')
+    offset = 0
+    for service in PRIMITIVE_SERVICES:
+        for start, count in _finite_windows(admission['primitive_jobs_per_service'], admission['chunk_size']):
+            for index in range(start, start+count):
+                job = manifest['jobs'][offset]
+                expected = synthetic_raw(service, index, cohort_seed)
+                if canonical(_read(root, job['input'], job['input_sha256'])) != canonical(expected):
+                    raise ValueError('ADMITTED_GENERATION_ORIGIN_MISMATCH')
+                offset += 1
+    for index in range(len(BUNDLE_INDICES)):
+        job = manifest['jobs'][offset]
+        ident = 'adaptive012-operations_bundle-'+(digest(cohort_seed)[:10]+'-' if cohort_seed else '')+str(index).zfill(3)
+        raw = _read(root, job['input'], job['input_sha256'])
+        wanted = [manifest['jobs'][i*admission['primitive_jobs_per_service']+BUNDLE_INDICES[index]]['id']
+                  for i in range(len(PRIMITIVE_SERVICES))]
+        if job['id'] != ident or raw.get('work_keys') != wanted:
+            raise ValueError('ADMITTED_BUNDLE_ORIGIN_MISMATCH')
+        offset += 1
+    for start, count in _finite_windows(admission['packet_jobs'], admission['chunk_size']) if admission['packet_jobs'] else ():
+        for index in range(start, start+count):
+            job = manifest['jobs'][offset]
+            expected = synthetic_input(index=index, cohort_seed=cohort_seed, rows=admission['packet_rows_per_kind'])
+            if canonical(_read(root, job['input'], job['input_sha256'])) != canonical(expected):
+                raise ValueError('ADMITTED_PACKET_ORIGIN_MISMATCH')
+            offset += 1
+    checked = load_jobs(root, manifest)
+    return {'schema': ADMISSION_SCHEMA, 'accepted': True, 'total_jobs': offset,
+            'accepted_jobs': len(checked), 'chunks': len(admission['chunks']),
+            'admission_sha256': digest(admission), 'manifest_sha256': digest(manifest),
+            'scope': 'Exact synthetic origin and independent complete-artifact checks; no demand, capacity or financial authority.'}
+
+
+def prepare_services(root, relative, cohort_seed=0, *, jobs_per_service=32, chunk_size=64):
+    if type(jobs_per_service) is not int or jobs_per_service<32:
         raise ValueError("FINITE_ADMITTED_INVENTORY_REQUIRED")
+    if type(chunk_size) is not int or chunk_size < 1:
+        raise ValueError('FINITE_POSITIVE_ADMISSION_AND_WINDOW_REQUIRED')
+    if type(cohort_seed) is not int or not 0 <= cohort_seed <= 10**15:
+        raise ValueError('BOUNDED_COHORT_GENERATION_SEED_REQUIRED')
     from adaptive_enterprise.checkers import audit_delivery
     from adaptive_enterprise.strategies import PRIMITIVE_SERVICES
     root, target = Path(root).absolute(), Path(relative)
@@ -301,24 +406,25 @@ def prepare_services(root, relative, cohort_seed=0, *, jobs_per_service=32):
     jobs = []
     start = time.process_time()
     for service_id in PRIMITIVE_SERVICES:
-        for index in range(jobs_per_service):
-            raw = synthetic_raw(service_id, index,cohort_seed)
-            plan = infer_plan(raw)
-            method = 'staged_readiness' if plan['status'] != 'READY' else ('canonical' if service_id!='reconciliation' or index<8 else 'generated_schema')
-            artifact = produce(raw, method)
-            checked = audit_delivery(service_id, raw, artifact)
-            base = target / raw['order_id']
-            job = {'id': raw['order_id'], 'service_id': service_id, 'accepted': checked['accepted'],'work_keys':[raw['order_id']]}
-            for field, name, value in [('input','input.json',raw), ('artifact','artifact.json',artifact)]:
-                job[field] = str(base/name)
-                job[field+'_sha256'] = _write(root, job[field], value)
-            receipt = {**checked, 'input_sha256':job['input_sha256'], 'artifact_sha256':job['artifact_sha256'],
-                       'checker_source_sha256':source_hashes['adaptive_enterprise/checkers.py']}
-            job['receipt'] = str(base/'acceptance.json')
-            job['receipt_sha256'] = _write(root, job['receipt'], receipt)
-            jobs.append(job)
-    component_jobs=copy.deepcopy(jobs)
-    for bundle_index,index in enumerate([8,9,10,11,12,13,14,16]):
+        for start_index, count in _finite_windows(jobs_per_service, chunk_size):
+            for index in range(start_index, start_index+count):
+                raw = synthetic_raw(service_id, index,cohort_seed)
+                plan = infer_plan(raw)
+                method = 'staged_readiness' if plan['status'] != 'READY' else ('canonical' if service_id!='reconciliation' or index<8 else 'generated_schema')
+                artifact = produce(raw, method)
+                checked = audit_delivery(service_id, raw, artifact)
+                base = target / raw['order_id']
+                job = {'id': raw['order_id'], 'service_id': service_id, 'accepted': checked['accepted'],'work_keys':[raw['order_id']]}
+                for field, name, value in [('input','input.json',raw), ('artifact','artifact.json',artifact)]:
+                    job[field] = str(base/name)
+                    job[field+'_sha256'] = _write(root, job[field], value)
+                receipt = {**checked, 'input_sha256':job['input_sha256'], 'artifact_sha256':job['artifact_sha256'],
+                           'checker_source_sha256':source_hashes['adaptive_enterprise/checkers.py']}
+                job['receipt'] = str(base/'acceptance.json')
+                job['receipt_sha256'] = _write(root, job['receipt'], receipt)
+                jobs.append(job)
+    component_jobs=jobs[:]
+    for bundle_index,index in enumerate(BUNDLE_INDICES):
         components=[]
         for service_id in PRIMITIVE_SERVICES:
             job=[j for j in component_jobs if j['service_id']==service_id][index]
@@ -342,6 +448,7 @@ def prepare_services(root, relative, cohort_seed=0, *, jobs_per_service=32):
     if jobs_per_service!=32:
         manifest['cohort_provenance']['jobs_per_service']=jobs_per_service
         manifest['cohort_provenance']['inventory_scope']='Equal predeclared finite synthetic workload inventory, not market size or free business capacity. Actual enterprise delivery costs remain native prepaid contracts.'
+    _seal_admission(manifest, jobs_per_service, 0, None, chunk_size)
     _write(root,str(target/'MANIFEST.json'),manifest)
     load_jobs(root,manifest)
     return manifest
@@ -385,28 +492,41 @@ def _validate_manifest(root,manifest):
         raise ValueError('EXACT_ADAPTIVE_MANIFEST_REQUIRED')
     if 'native_engine' in manifest and manifest['native_engine'] not in {'legacy-permanent-v1','prospective-v1','exact-permanent-v2','exact-prospective-v2'}:
         raise ValueError('DECLARED_NATIVE_ENGINE_REQUIRED')
-    if set(manifest.get('source_hashes',{}))!=set(SOURCE_PATHS) or not isinstance(manifest.get('jobs'),list) or not 1<=len(manifest['jobs'])<=1000:
+    if set(manifest.get('source_hashes',{}))!=set(SOURCE_PATHS) or not isinstance(manifest.get('jobs'),list) or not manifest['jobs'] or not isinstance(manifest.get('cohort_provenance'),dict):
         raise ValueError('ADAPTIVE_BOUNDED_SOURCE_AND_COHORT_REQUIRED')
+    _validate_admission(manifest)
     for name,expected in manifest['source_hashes'].items():
         source=Path(root)/name
         if source.is_symlink() or any(p.is_symlink() for p in source.parents) or hashlib.sha256(source.read_bytes()).hexdigest()!=expected or hashlib.sha256((Path(__file__).resolve().parents[1]/name).read_bytes()).hexdigest()!=expected:
             raise ValueError('ADAPTIVE_EXECUTING_SOURCE_CHANGED')
 
 
-def load_jobs(root,manifest):
+def iter_checked_job_chunks(root, manifest):
     _validate_manifest(root,manifest)
-    jobs={};seen=set()
-    for job in manifest['jobs']:
-        fields={'id','service_id','accepted','work_keys','input','input_sha256','artifact','artifact_sha256','receipt','receipt_sha256'}
-        if not isinstance(job,dict) or set(job)!=fields or not isinstance(job.get('id'),str) or not job['id'] or job['id'] in seen or type(job['accepted']) is not bool:
-            raise ValueError('UNIQUE_ADAPTIVE_JOB_REQUIRED')
-        seen.add(job['id'])
-        checked=_check_job(root,manifest,job)
-        if job['accepted']:
-            jobs[job['id']]=checked
+    admission = manifest['cohort_provenance'].get('finite_admission')
+    window = admission['chunk_size'] if admission else 64
+    seen=set()
+    for start, count in _finite_windows(len(manifest['jobs']), window):
+        checked_chunk=[]
+        for job in manifest['jobs'][start:start+count]:
+            fields={'id','service_id','accepted','work_keys','input','input_sha256','artifact','artifact_sha256','receipt','receipt_sha256'}
+            if not isinstance(job,dict) or set(job)!=fields or not isinstance(job.get('id'),str) or not job['id'] or job['id'] in seen or type(job['accepted']) is not bool:
+                raise ValueError('UNIQUE_ADAPTIVE_JOB_REQUIRED')
+            seen.add(job['id'])
+            checked=_check_job(root,manifest,job)
+            checked_chunk.append(checked)
+        yield checked_chunk
+    _validate_manifest(root, manifest)
+
+
+def load_jobs(root,manifest):
+    jobs={}
+    for chunk in iter_checked_job_chunks(root, manifest):
+        for checked in chunk:
+            if checked['job']['accepted']:
+                jobs[checked['job']['id']]=checked
     if not jobs:
         raise ValueError('NO_ACCEPTED_ADAPTIVE_ARTIFACTS')
-    _validate_manifest(root, manifest)
     return jobs
 
 
@@ -468,27 +588,29 @@ def execute_offer(root,manifest,offer,job_id,context=None):
                 'outcome_scope':offer['scope'],'operation_count':0,'process_cpu_seconds':time.process_time()-start,'model_calls':0}
 
 
-def prepare_complete_offer_services(root, relative, *, cohort_seed=0, jobs_per_service=32, packet_jobs=8, packet_rows=40):
+def prepare_complete_offer_services(root, relative, *, cohort_seed=0, jobs_per_service=32, packet_jobs=8, packet_rows=40, chunk_size=64):
     """Explicit opt-in finite primitive plus coherent-packet admission; not demand."""
-    if type(packet_jobs) is not int or not 1<=packet_jobs<=128 or type(packet_rows) is not int or not 1<=packet_rows<=1000:
+    if type(packet_jobs) is not int or packet_jobs<1 or type(packet_rows) is not int or not 4<=packet_rows<=1000:
         raise ValueError('BOUNDED_PACKET_INVENTORY_REQUIRED')
     from connected_enterprise.packet_contract import synthetic_input,work_contract
     from adaptive_enterprise.checkers import audit_delivery
     root=Path(root);start=time.process_time()
-    manifest=prepare_services(root,relative,cohort_seed=cohort_seed,jobs_per_service=jobs_per_service)
-    for index in range(packet_jobs):
-        raw=synthetic_input(index=index,cohort_seed=cohort_seed,rows=packet_rows)
-        artifact=produce(raw,'receivables_packet');checked=audit_delivery('receivables_packet',raw,artifact)
-        if not checked['accepted']:raise ValueError('PACKET_ADMISSION_REJECTED')
-        base=Path(relative)/raw['order_id']
-        job={'id':raw['order_id'],'service_id':'receivables_packet','accepted':True,'work_keys':work_contract(raw)['work_keys']}
-        for field,name,value in [('input','input.json',raw),('artifact','artifact.json',artifact)]:
-            job[field]=str(base/name);job[field+'_sha256']=_write(root,job[field],value)
-        receipt={**checked,'input_sha256':job['input_sha256'],'artifact_sha256':job['artifact_sha256'],'checker_source_sha256':manifest['source_hashes']['adaptive_enterprise/checkers.py']}
-        job['receipt']=str(base/'acceptance.json');job['receipt_sha256']=_write(root,job['receipt'],receipt)
-        manifest['jobs'].append(job)
+    manifest=prepare_services(root,relative,cohort_seed=cohort_seed,jobs_per_service=jobs_per_service,chunk_size=chunk_size)
+    for start_index, count in _finite_windows(packet_jobs, chunk_size):
+        for index in range(start_index, start_index+count):
+            raw=synthetic_input(index=index,cohort_seed=cohort_seed,rows=packet_rows)
+            artifact=produce(raw,'receivables_packet');checked=audit_delivery('receivables_packet',raw,artifact)
+            if not checked['accepted']:raise ValueError('PACKET_ADMISSION_REJECTED')
+            base=Path(relative)/raw['order_id']
+            job={'id':raw['order_id'],'service_id':'receivables_packet','accepted':True,'work_keys':work_contract(raw)['work_keys']}
+            for field,name,value in [('input','input.json',raw),('artifact','artifact.json',artifact)]:
+                job[field]=str(base/name);job[field+'_sha256']=_write(root,job[field],value)
+            receipt={**checked,'input_sha256':job['input_sha256'],'artifact_sha256':job['artifact_sha256'],'checker_source_sha256':manifest['source_hashes']['adaptive_enterprise/checkers.py']}
+            job['receipt']=str(base/'acceptance.json');job['receipt_sha256']=_write(root,job['receipt'],receipt)
+            manifest['jobs'].append(job)
     manifest['cohort_provenance']['packet_inventory']={'jobs':packet_jobs,'rows_per_kind':packet_rows,'scope':'Explicit finite coherent entity/period inventory, not sales or market size.'}
     manifest['resource_receipt']['process_cpu_seconds']=time.process_time()-start
+    _seal_admission(manifest, jobs_per_service, packet_jobs, packet_rows, chunk_size)
     from commercial.persistence import atomic_bytes
     atomic_bytes(root/relative/'MANIFEST.json',canonical(manifest)+b'\n');load_jobs(root,manifest)
     return manifest
