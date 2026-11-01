@@ -1,0 +1,129 @@
+[
+  {
+    "scenario": "disjoint_observables_and_seasons",
+    "windows": {
+      "road": [
+        "2024-06-20",
+        "2024-06-21"
+      ],
+      "canopy": [
+        "2024-04-20",
+        "2024-04-21"
+      ]
+    },
+    "output_rows": {
+      "road": 12,
+      "canopy": 1
+    },
+    "observation_image_overlap": 0,
+    "separate_counts": {
+      "metadata_reads": 5,
+      "metadata_bytes": 374167,
+      "image_reads": 28,
+      "image_bytes": 6808133,
+      "source_hash_checks": 28,
+      "image_decodes": 28,
+      "shared_scene_feature_computations": 24,
+      "pavement_roi_feature_computations": 24,
+      "recorded_semantic_rows_replayed": 3,
+      "fresh_model_calls": 0,
+      "fresh_model_image_interpretations": 0,
+      "canopy_roi_feature_computations": 4
+    },
+    "ordinary_shared_counts": {
+      "metadata_reads": 5,
+      "metadata_bytes": 374167,
+      "image_reads": 28,
+      "image_bytes": 6808133,
+      "source_hash_checks": 28,
+      "image_decodes": 28,
+      "shared_scene_feature_computations": 24,
+      "pavement_roi_feature_computations": 24,
+      "recorded_semantic_rows_replayed": 3,
+      "canopy_roi_feature_computations": 4,
+      "fresh_model_calls": 0,
+      "fresh_model_image_interpretations": 0
+    },
+    "commissioned_counts": {
+      "metadata_reads": 5,
+      "metadata_bytes": 374167,
+      "image_reads": 28,
+      "image_bytes": 6808133,
+      "source_hash_checks": 28,
+      "image_decodes": 28,
+      "shared_scene_feature_computations": 24,
+      "pavement_roi_feature_computations": 24,
+      "recorded_semantic_rows_replayed": 3,
+      "canopy_roi_feature_computations": 4,
+      "fresh_model_calls": 0,
+      "fresh_model_image_interpretations": 0,
+      "verification_metadata_reads": 5,
+      "verification_metadata_bytes": 374167,
+      "verification_source_rows": 13
+    },
+    "outputs_identical": true,
+    "explanation": "No generic sharing discount: only actually common calibration/observation work may be shared."
+  },
+  {
+    "scenario": "disjoint_observation_windows_shared_calibration",
+    "windows": {
+      "road": [
+        "2024-06-20",
+        "2024-06-21"
+      ],
+      "promenade": [
+        "2024-07-10",
+        "2024-07-11"
+      ]
+    },
+    "output_rows": {
+      "road": 12,
+      "promenade": 11
+    },
+    "observation_image_overlap": 0,
+    "separate_counts": {
+      "metadata_reads": 4,
+      "metadata_bytes": 633698,
+      "image_reads": 47,
+      "image_bytes": 10979002,
+      "source_hash_checks": 47,
+      "image_decodes": 47,
+      "shared_scene_feature_computations": 47,
+      "pavement_roi_feature_computations": 47,
+      "recorded_semantic_rows_replayed": 5,
+      "fresh_model_calls": 0,
+      "fresh_model_image_interpretations": 0
+    },
+    "ordinary_shared_counts": {
+      "metadata_reads": 2,
+      "metadata_bytes": 316849,
+      "image_reads": 35,
+      "image_bytes": 8147932,
+      "source_hash_checks": 35,
+      "image_decodes": 35,
+      "shared_scene_feature_computations": 35,
+      "pavement_roi_feature_computations": 47,
+      "recorded_semantic_rows_replayed": 5,
+      "fresh_model_calls": 0,
+      "fresh_model_image_interpretations": 0
+    },
+    "commissioned_counts": {
+      "metadata_reads": 2,
+      "metadata_bytes": 316849,
+      "image_reads": 35,
+      "image_bytes": 8147932,
+      "source_hash_checks": 35,
+      "image_decodes": 35,
+      "shared_scene_feature_computations": 35,
+      "pavement_roi_feature_computations": 47,
+      "recorded_semantic_rows_replayed": 5,
+      "fresh_model_calls": 0,
+      "fresh_model_image_interpretations": 0,
+      "verification_metadata_reads": 2,
+      "verification_metadata_bytes": 316849,
+      "verification_source_rows": 23
+    },
+    "outputs_identical": true,
+    "explanation": "No generic sharing discount: only actually common calibration/observation work may be shared."
+  }
+]

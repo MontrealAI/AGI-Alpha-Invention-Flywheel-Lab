@@ -1,0 +1,37 @@
+{
+  "request": {
+    "schema": "historical-measurement-batch/1",
+    "queries": [
+      "road",
+      "promenade",
+      "canopy"
+    ],
+    "purpose": "historical sampled observations",
+    "fresh_model_inference": false,
+    "windows": {}
+  },
+  "request_sha256": "0fcf441c6966147aa99c413a444349924636c6af8d25c87355bd9915b2f100f4",
+  "source_bindings": {
+    "manifest.json": "3266d3b7ebc9df6ce743eb9ad1757d34f3daaf6d295c09ea0431761df58e9e12",
+    "v2/production_native_responses.json": "c48448d059f2816408387fc9efcb904e0f5e3dfbaeb3204debc06224364d672f",
+    "v3_canopy/manifest.json": "669a5db8ae379979792370e09f04797db90cb9cf9b7946f38fa082f8944048cf",
+    "v3_canopy/native_predictions.json": "b7ddc6be4f67b61d29bb6cac6a2161119e83a73c17211cd3b9f87d40f9e409af",
+    "v3_canopy/probes/proposal.json": "15c7dab7dc6fb86e2394311b254d17ca0160da4f0f177736e62298a5d726106e"
+  },
+  "outputs": {
+    "road": {
+      "rows": 338,
+      "sha256": "ad1f5a8c7ae1574d50f52e93908fa1a0563327f74c0c8879c519b10d9193116c"
+    },
+    "promenade": {
+      "rows": 338,
+      "sha256": "f3209b1987999106a935a039fd4e84c6e8ffcbcc2e69d50f0e6b56d3021a5033"
+    },
+    "canopy": {
+      "rows": 61,
+      "sha256": "bd405214e4322c6f3b4f43761d3ea53bf40771b2cfe4fcd37ad923f3170e0a70"
+    }
+  },
+  "native_financial_admission": false,
+  "producer_sha256": "c460eb02f7ba33e5fdbcba656242c08645fa0db44706de2a7d440a26703cabe2"
+}

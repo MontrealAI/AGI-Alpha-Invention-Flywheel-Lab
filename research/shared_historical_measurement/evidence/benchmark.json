@@ -1,0 +1,360 @@
+{
+  "schema": "shared-production-benchmark/1",
+  "runs": [
+    {
+      "mode": "separate",
+      "round": 0,
+      "wall_seconds": 37.75159896898549,
+      "cpu_seconds": 37.746703648,
+      "counts": {
+        "metadata_reads": 7,
+        "metadata_bytes": 691016,
+        "image_reads": 738,
+        "image_bytes": 171800503,
+        "source_hash_checks": 738,
+        "image_decodes": 738,
+        "shared_scene_feature_computations": 676,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0,
+        "canopy_roi_feature_computations": 62
+      },
+      "validation": {
+        "matched_state_route_and_canopy_quality_rows": 737,
+        "maximum_pavement_feature_derived_distance_difference": 0,
+        "gcc_tolerance": 1e-12
+      },
+      "output_hashes": {
+        "road": "ad1f5a8c7ae1574d50f52e93908fa1a0563327f74c0c8879c519b10d9193116c",
+        "promenade": "f3209b1987999106a935a039fd4e84c6e8ffcbcc2e69d50f0e6b56d3021a5033",
+        "canopy": "bd405214e4322c6f3b4f43761d3ea53bf40771b2cfe4fcd37ad923f3170e0a70"
+      },
+      "verification_wall_seconds": 0
+    },
+    {
+      "mode": "ordinary_shared",
+      "round": 0,
+      "wall_seconds": 28.449013794015627,
+      "cpu_seconds": 28.199409759000005,
+      "counts": {
+        "metadata_reads": 5,
+        "metadata_bytes": 374167,
+        "image_reads": 400,
+        "image_bytes": 94023258,
+        "source_hash_checks": 400,
+        "image_decodes": 400,
+        "shared_scene_feature_computations": 338,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "canopy_roi_feature_computations": 62,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0
+      },
+      "validation": {
+        "matched_state_route_and_canopy_quality_rows": 737,
+        "maximum_pavement_feature_derived_distance_difference": 0,
+        "gcc_tolerance": 1e-12
+      },
+      "output_hashes": {
+        "road": "ad1f5a8c7ae1574d50f52e93908fa1a0563327f74c0c8879c519b10d9193116c",
+        "promenade": "f3209b1987999106a935a039fd4e84c6e8ffcbcc2e69d50f0e6b56d3021a5033",
+        "canopy": "bd405214e4322c6f3b4f43761d3ea53bf40771b2cfe4fcd37ad923f3170e0a70"
+      },
+      "verification_wall_seconds": 0
+    },
+    {
+      "mode": "commissioned",
+      "round": 0,
+      "wall_seconds": 25.287731257034466,
+      "cpu_seconds": 25.204467195000007,
+      "counts": {
+        "metadata_reads": 5,
+        "metadata_bytes": 374167,
+        "image_reads": 400,
+        "image_bytes": 94023258,
+        "source_hash_checks": 400,
+        "image_decodes": 400,
+        "shared_scene_feature_computations": 338,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "canopy_roi_feature_computations": 62,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0,
+        "verification_metadata_reads": 5,
+        "verification_metadata_bytes": 374167,
+        "verification_source_rows": 737
+      },
+      "validation": {
+        "matched_state_route_and_canopy_quality_rows": 737,
+        "maximum_pavement_feature_derived_distance_difference": 0,
+        "gcc_tolerance": 1e-12
+      },
+      "output_hashes": {
+        "road": "ad1f5a8c7ae1574d50f52e93908fa1a0563327f74c0c8879c519b10d9193116c",
+        "promenade": "f3209b1987999106a935a039fd4e84c6e8ffcbcc2e69d50f0e6b56d3021a5033",
+        "canopy": "bd405214e4322c6f3b4f43761d3ea53bf40771b2cfe4fcd37ad923f3170e0a70"
+      },
+      "verification_wall_seconds": 0.006632440956309438
+    },
+    {
+      "mode": "ordinary_shared",
+      "round": 1,
+      "wall_seconds": 21.298312961997,
+      "cpu_seconds": 21.291432981,
+      "counts": {
+        "metadata_reads": 5,
+        "metadata_bytes": 374167,
+        "image_reads": 400,
+        "image_bytes": 94023258,
+        "source_hash_checks": 400,
+        "image_decodes": 400,
+        "shared_scene_feature_computations": 338,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "canopy_roi_feature_computations": 62,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0
+      },
+      "validation": {
+        "matched_state_route_and_canopy_quality_rows": 737,
+        "maximum_pavement_feature_derived_distance_difference": 0,
+        "gcc_tolerance": 1e-12
+      },
+      "output_hashes": {
+        "road": "ad1f5a8c7ae1574d50f52e93908fa1a0563327f74c0c8879c519b10d9193116c",
+        "promenade": "f3209b1987999106a935a039fd4e84c6e8ffcbcc2e69d50f0e6b56d3021a5033",
+        "canopy": "bd405214e4322c6f3b4f43761d3ea53bf40771b2cfe4fcd37ad923f3170e0a70"
+      },
+      "verification_wall_seconds": 0
+    },
+    {
+      "mode": "commissioned",
+      "round": 1,
+      "wall_seconds": 21.360325638961513,
+      "cpu_seconds": 21.34822055500001,
+      "counts": {
+        "metadata_reads": 5,
+        "metadata_bytes": 374167,
+        "image_reads": 400,
+        "image_bytes": 94023258,
+        "source_hash_checks": 400,
+        "image_decodes": 400,
+        "shared_scene_feature_computations": 338,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "canopy_roi_feature_computations": 62,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0,
+        "verification_metadata_reads": 5,
+        "verification_metadata_bytes": 374167,
+        "verification_source_rows": 737
+      },
+      "validation": {
+        "matched_state_route_and_canopy_quality_rows": 737,
+        "maximum_pavement_feature_derived_distance_difference": 0,
+        "gcc_tolerance": 1e-12
+      },
+      "output_hashes": {
+        "road": "ad1f5a8c7ae1574d50f52e93908fa1a0563327f74c0c8879c519b10d9193116c",
+        "promenade": "f3209b1987999106a935a039fd4e84c6e8ffcbcc2e69d50f0e6b56d3021a5033",
+        "canopy": "bd405214e4322c6f3b4f43761d3ea53bf40771b2cfe4fcd37ad923f3170e0a70"
+      },
+      "verification_wall_seconds": 0.007565703010186553
+    },
+    {
+      "mode": "separate",
+      "round": 1,
+      "wall_seconds": 37.05324978096178,
+      "cpu_seconds": 37.04881121700001,
+      "counts": {
+        "metadata_reads": 7,
+        "metadata_bytes": 691016,
+        "image_reads": 738,
+        "image_bytes": 171800503,
+        "source_hash_checks": 738,
+        "image_decodes": 738,
+        "shared_scene_feature_computations": 676,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0,
+        "canopy_roi_feature_computations": 62
+      },
+      "validation": {
+        "matched_state_route_and_canopy_quality_rows": 737,
+        "maximum_pavement_feature_derived_distance_difference": 0,
+        "gcc_tolerance": 1e-12
+      },
+      "output_hashes": {
+        "road": "ad1f5a8c7ae1574d50f52e93908fa1a0563327f74c0c8879c519b10d9193116c",
+        "promenade": "f3209b1987999106a935a039fd4e84c6e8ffcbcc2e69d50f0e6b56d3021a5033",
+        "canopy": "bd405214e4322c6f3b4f43761d3ea53bf40771b2cfe4fcd37ad923f3170e0a70"
+      },
+      "verification_wall_seconds": 0
+    },
+    {
+      "mode": "commissioned",
+      "round": 2,
+      "wall_seconds": 19.6417226769845,
+      "cpu_seconds": 19.638555242999985,
+      "counts": {
+        "metadata_reads": 5,
+        "metadata_bytes": 374167,
+        "image_reads": 400,
+        "image_bytes": 94023258,
+        "source_hash_checks": 400,
+        "image_decodes": 400,
+        "shared_scene_feature_computations": 338,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "canopy_roi_feature_computations": 62,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0,
+        "verification_metadata_reads": 5,
+        "verification_metadata_bytes": 374167,
+        "verification_source_rows": 737
+      },
+      "validation": {
+        "matched_state_route_and_canopy_quality_rows": 737,
+        "maximum_pavement_feature_derived_distance_difference": 0,
+        "gcc_tolerance": 1e-12
+      },
+      "output_hashes": {
+        "road": "ad1f5a8c7ae1574d50f52e93908fa1a0563327f74c0c8879c519b10d9193116c",
+        "promenade": "f3209b1987999106a935a039fd4e84c6e8ffcbcc2e69d50f0e6b56d3021a5033",
+        "canopy": "bd405214e4322c6f3b4f43761d3ea53bf40771b2cfe4fcd37ad923f3170e0a70"
+      },
+      "verification_wall_seconds": 0.007712794991675764
+    },
+    {
+      "mode": "separate",
+      "round": 2,
+      "wall_seconds": 34.93030769698089,
+      "cpu_seconds": 34.92059253100001,
+      "counts": {
+        "metadata_reads": 7,
+        "metadata_bytes": 691016,
+        "image_reads": 738,
+        "image_bytes": 171800503,
+        "source_hash_checks": 738,
+        "image_decodes": 738,
+        "shared_scene_feature_computations": 676,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0,
+        "canopy_roi_feature_computations": 62
+      },
+      "validation": {
+        "matched_state_route_and_canopy_quality_rows": 737,
+        "maximum_pavement_feature_derived_distance_difference": 0,
+        "gcc_tolerance": 1e-12
+      },
+      "output_hashes": {
+        "road": "ad1f5a8c7ae1574d50f52e93908fa1a0563327f74c0c8879c519b10d9193116c",
+        "promenade": "f3209b1987999106a935a039fd4e84c6e8ffcbcc2e69d50f0e6b56d3021a5033",
+        "canopy": "bd405214e4322c6f3b4f43761d3ea53bf40771b2cfe4fcd37ad923f3170e0a70"
+      },
+      "verification_wall_seconds": 0
+    },
+    {
+      "mode": "ordinary_shared",
+      "round": 2,
+      "wall_seconds": 20.464768599020317,
+      "cpu_seconds": 20.40607018099999,
+      "counts": {
+        "metadata_reads": 5,
+        "metadata_bytes": 374167,
+        "image_reads": 400,
+        "image_bytes": 94023258,
+        "source_hash_checks": 400,
+        "image_decodes": 400,
+        "shared_scene_feature_computations": 338,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "canopy_roi_feature_computations": 62,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0
+      },
+      "validation": {
+        "matched_state_route_and_canopy_quality_rows": 737,
+        "maximum_pavement_feature_derived_distance_difference": 0,
+        "gcc_tolerance": 1e-12
+      },
+      "output_hashes": {
+        "road": "ad1f5a8c7ae1574d50f52e93908fa1a0563327f74c0c8879c519b10d9193116c",
+        "promenade": "f3209b1987999106a935a039fd4e84c6e8ffcbcc2e69d50f0e6b56d3021a5033",
+        "canopy": "bd405214e4322c6f3b4f43761d3ea53bf40771b2cfe4fcd37ad923f3170e0a70"
+      },
+      "verification_wall_seconds": 0
+    }
+  ],
+  "summary": {
+    "separate": {
+      "median_wall_seconds": 37.05324978096178,
+      "median_cpu_seconds": 37.04881121700001,
+      "counts": {
+        "metadata_reads": 7,
+        "metadata_bytes": 691016,
+        "image_reads": 738,
+        "image_bytes": 171800503,
+        "source_hash_checks": 738,
+        "image_decodes": 738,
+        "shared_scene_feature_computations": 676,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0,
+        "canopy_roi_feature_computations": 62
+      }
+    },
+    "ordinary_shared": {
+      "median_wall_seconds": 21.298312961997,
+      "median_cpu_seconds": 21.291432981,
+      "counts": {
+        "metadata_reads": 5,
+        "metadata_bytes": 374167,
+        "image_reads": 400,
+        "image_bytes": 94023258,
+        "source_hash_checks": 400,
+        "image_decodes": 400,
+        "shared_scene_feature_computations": 338,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "canopy_roi_feature_computations": 62,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0
+      }
+    },
+    "commissioned": {
+      "median_wall_seconds": 21.360325638961513,
+      "median_cpu_seconds": 21.34822055500001,
+      "counts": {
+        "metadata_reads": 5,
+        "metadata_bytes": 374167,
+        "image_reads": 400,
+        "image_bytes": 94023258,
+        "source_hash_checks": 400,
+        "image_decodes": 400,
+        "shared_scene_feature_computations": 338,
+        "pavement_roi_feature_computations": 676,
+        "recorded_semantic_rows_replayed": 433,
+        "canopy_roi_feature_computations": 62,
+        "fresh_model_calls": 0,
+        "fresh_model_image_interpretations": 0,
+        "verification_metadata_reads": 5,
+        "verification_metadata_bytes": 374167,
+        "verification_source_rows": 737
+      }
+    }
+  },
+  "all_output_hashes_equal": true,
+  "limitations": [
+    "Warm local filesystem cache; image bytes read are process-level reads, not measured physical disk traffic.",
+    "No source acquisition, fresh model interpretation, setup labor, calibration labor, independent physical validation or maintenance billed/measured.",
+    "Historical recorded native readings replayed; no standalone model API integration.",
+    "No customers, observed prices, financial admission, account mutations or revenue.",
+    "Shared ordinary implementation intentionally identical to commissioned production: no novelty or savings over competent sharing claimed."
+  ]
+}
