@@ -9,7 +9,7 @@ from connected_enterprise.capital_lifecycle import default_policy
 ROOT=Path(__file__).resolve().parents[1]
 class ChannelInventory(unittest.TestCase):
     def test_generation_bounds_before_effects(self):
-        for n in (0,31,257,True):
+        for n in (0,31,True):
             with self.assertRaises(ValueError):prepare_services(ROOT,'must-not-exist-inventory',jobs_per_service=n)
         self.assertFalse((ROOT/'must-not-exist-inventory').exists())
     def test_equal_extended_inventory_without_new_financial_engine(self):

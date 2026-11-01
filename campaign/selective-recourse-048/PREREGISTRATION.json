@@ -1,0 +1,19 @@
+{
+  "schema": "connected-selective-recourse-comparison/v1",
+  "scope": "FINITE_AUTHORED_ENGINEERING_COMPARISON",
+  "opening_microUSD_per_separate_account": 100000000000,
+  "horizon_days": 14,
+  "seed": 2611010482,
+  "service_cohort_seed": 2611010483,
+  "packet_jobs": 16,
+  "packet_rows": 40,
+  "cases": ["uncertain", "no_demand", "no_alternative"],
+  "arms": ["none", "fixed", "selective"],
+  "daily_allowance_microUSD": 100000,
+  "daily_selective_evaluation_microUSD": 10000,
+  "primary_metric": "Complete modeled native profit; all fees, losses, liabilities and separate capital retained.",
+  "comparison": "Each case holds configuration, public hypotheses and keyed exogenous draws identical across none/fixed/selective, except explicit recourse policy and its costs. One coherent account per cell; no pooling, no demand calibration, no method/discovery advantage claim.",
+  "stopping_rule": "Complete exactly nine registered worlds with 14 daily planning events plus settlement drain; independently audit each. On failure preserve authentic account and compact failure; do not replace seed, extend losing arm or alter assumptions.",
+  "cost_scope": "Native setup75USD, common strategic integration5USD, daily maintenance0.10USD, outreach0.05USD, qualification0.15USD per evaluated offer, onboarding0.50USD, production1.50USD per resource unit, supplier0.25USD, support0.25USD, payment2.90percent plus0.30USD, tax20percent of positive margins, and explicit recourse/evaluation fees. Complete deterministic production/checking envelope; actual host/model/engineering billing unknown.",
+  "inference_limits": "Synthetic public two-atom independent buyer hypotheses and authored outside choice. Finite developer-authored operation, not actual commerce, a scientific holdout, annual profit or proof of optimal recourse. The selective heuristic values only the first planned quote's refusal branch and requires exact preservation of other planned deliveries. It reserves the potential allowance during hold planning but does not incur or permanently reserve that fee. Defaults remain unchanged."
+}

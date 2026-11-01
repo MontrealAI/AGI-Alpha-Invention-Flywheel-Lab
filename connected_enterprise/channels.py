@@ -79,7 +79,7 @@ class ChannelBook:
                 if plan!=instance.get('source_plan_id') or instance.get('contract_id') not in self.contracts or instance.get('terms')!=self.contracts[instance['contract_id']]:
                     raise ValueError('CHANNEL_CONTRACT_INSTANCE_BINDING_CHANGED')
 
-    def purchase(self,contract_id,day,source_plan_id):
+    def purchase(self,contract_id,day,source_plan_id, *, startup_funding=None):
         if contract_id not in self.contracts or type(day) is not int or day<0 or not isinstance(source_plan_id,str) or not source_plan_id or len(source_plan_id)>160:
             raise ValueError('BOUND_PAID_CHANNEL_PURCHASE_REQUIRED')
         if source_plan_id in self.state['purchase_receipts']:
@@ -95,6 +95,9 @@ class ChannelBook:
             raise ValueError('CHANNEL_SUPPLIER_TRANCHE_LIMIT')
         activate=day+terms['lead_days']
         receipt={'schema':'agi-alpha/connected014-channel-purchase/v1','scope':'SIMULATED_CONTRACT_NOT_RECEIPT_OF_DEMAND','contract_id':contract_id,'source_plan_id':source_plan_id,'purchased_day':day,'activation_day':activate,'expiry_day':activate+terms['duration_days'],'terms':copy.deepcopy(terms),'invoice_microUSD':terms['price_microUSD']+terms['support_microUSD'],'finance_requirement':'Native earned-funded invoice must precede this contract; ChannelBook has no financial authority.','failure_remedy':'Prepaid bounded activation retries within original expiry, with no guaranteed reach. Any declared failure credit remains a provider receivable until separately collected.','potential_slots':terms['slots_per_day']*terms['duration_days']}
+        if startup_funding is not None:
+            if startup_funding not in {'SEED','EARNED'} or day!=0:raise ValueError('DAY_ZERO_EXPLICIT_STARTUP_FUNDING_REQUIRED')
+            receipt['finance_requirement']='Explicit startup contract paid from native '+startup_funding+' cash before contact access; not an earned-reservation claim.'
         self.state['purchase_receipts'][source_plan_id]=copy.deepcopy(receipt)
         self.state['instances'][source_plan_id]={**copy.deepcopy(receipt),'state':'SCHEDULED','potential_slots_used':0,'realized_exposures':0,'unused_slots':0,'failure_credit_due_microUSD':0,'activation_attempts':0,'next_activation_day':activate}
         self.state['events'].append({'day':day,'kind':'PAID_CHANNEL_PURCHASED','contract_id':contract_id,'source_plan_id':source_plan_id,'invoice_microUSD':receipt['invoice_microUSD']})

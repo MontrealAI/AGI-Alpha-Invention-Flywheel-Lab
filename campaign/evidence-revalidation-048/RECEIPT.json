@@ -1,0 +1,51 @@
+{
+  "actual_host_model_engineering_usd": null,
+  "actual_profit_usd": null,
+  "authority": [],
+  "commands": [
+    {
+      "command": "python3 -m unittest discover -s tests -p test_evidence_revalidation048.py -v",
+      "exit_code": 0,
+      "tests": 10
+    },
+    {
+      "command": "python3 -m experiments.evidence_revalidation048 register --output /workspace/scratch/e7f5c46f9c09/evidence048",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m experiments.evidence_revalidation048 run --output /workspace/scratch/e7f5c46f9c09/evidence048",
+      "exit_code": 0
+    },
+    {
+      "checked_rows": 18,
+      "command": "python3 -m experiments.evidence_revalidation048 verify --output /workspace/scratch/e7f5c46f9c09/evidence048",
+      "exit_code": 0
+    }
+  ],
+  "files": {
+    "PREREGISTRATION.json": "29cd152bbdf86390de9477d05da3ad3340f6d9b5dc36ddee3592f6ea3180c11d",
+    "RESULT.json": "a01dca058119fcb89151b7635a971033de77d0b7edbe6a6d7ba3fdfc20aa5225"
+  },
+  "parent_commit": "86a73f44bfd11b549cb02682f45aab8706c9cf94",
+  "process_cpu_seconds": 0.018372048000000002,
+  "python": "3.12.14",
+  "scope": "Local directly executed builder-visible engineering evidence; no hosted qualification, merge, release, native commerce or discovery superiority",
+  "scores": {
+    "full_recompute": {
+      "accepted": 6,
+      "lifecycle_row_visits": 72,
+      "producer_row_visits": 36
+    },
+    "ordinary_reuse": {
+      "accepted": 6,
+      "lifecycle_row_visits": 132,
+      "producer_row_visits": 24
+    },
+    "retained_method": {
+      "accepted": 6,
+      "lifecycle_row_visits": 132,
+      "producer_row_visits": 24
+    }
+  },
+  "wall_seconds": 0.018448289999469125
+}

@@ -21,7 +21,7 @@ def _expected_deliveries(n, p, extra, q, limit):
 
 def compare_window(config, policy, selection, observation, *, now_hours,
                    future_existing_slots, unused_inventory, eligible_new_contacts,
-                   existing_channel_probability="0", allow_channel=True, allow_capacity=True, channel_forecast=None):
+                   existing_channel_probability="0", allow_channel=True, allow_capacity=True, channel_forecast=None, max_capacity_quantity=None):
     """Compare no investment/channel/capacity/both on one common cashflow model.
 
     policy is authored PUBLIC forecast input, never a realized buyer observation.
@@ -31,7 +31,8 @@ def compare_window(config, policy, selection, observation, *, now_hours,
     """
     required = {'schema','provenance','window_delay_days','owned_contact_count',
                 'owned_available_bps','service_share_bps','arrival_bps','future_rival_price_bps'}
-    if set(policy) != required or policy['schema'] != 'public-sequence-window/v1':
+    composed=policy.get('composition')=='complete-offer-quantity-v1'
+    if set(policy) != required|({'composition'} if composed else set()) or policy['schema'] != 'public-sequence-window/v1':
         raise ValueError('EXPLICIT_PUBLIC_TRANSITION_HYPOTHESES_REQUIRED')
     if not isinstance(policy['provenance'],str) or not policy['provenance'].strip():
         raise ValueError('PUBLIC_HYPOTHESIS_PROVENANCE_REQUIRED')
@@ -52,7 +53,9 @@ def compare_window(config, policy, selection, observation, *, now_hours,
     row = selection['decision']['selected']
     if row is None:
         return {'schema':'two-stage-window/v1','decision':'NO_ADMISSIBLE_DELIVERY_PROFILE','routes':[]}
-    full_base = sum(config[k] for k in ('production_cost','supplier_unit_cost','support_cost','onboarding_cost'))+config.get('prospective_policy',{}).get('premium_microUSD',0)
+    units=selection['problem']['offer'].get('capacity_units',1) if composed else 1
+    if type(units) is not int or units<1:raise ValueError('EXACT_FUTURE_COMPONENT_CAPACITY_REQUIRED')
+    full_base = units*sum(config[k] for k in ('production_cost','supplier_unit_cost','support_cost'))+config['onboarding_cost']+config.get('prospective_policy',{}).get('premium_microUSD',0)
     extra_onboarding = max(0, full_base-selection['problem']['public']['base_cost'])
     future_cost = row['cost']+extra_onboarding
     required_cash = row['required_current_cash']+extra_onboarding
@@ -72,36 +75,48 @@ def compare_window(config, policy, selection, observation, *, now_hours,
     extra = min(eligible_new_contacts, terms['slots_per_day'], 8)
     reach = F(terms['realization_bps'],10000)*F(10000-terms['overlap_bps'],10000)
     activation = F(terms['activation_reliability_bps'],10000) if channel_active else F(0)
-    quote_cost = config['exposure_cost']+config['qualification_cost']
+    quote_cost = config['exposure_cost']+(4 if composed else 1)*config['qualification_cost']
     invoice = terms['price_microUSD']+terms['support_microUSD']
     existing = F(existing_channel_probability)
     if not 0 <= existing <= 1: raise ValueError('PUBLIC_CHANNEL_PROBABILITY_REQUIRED')
     routes=[]
-    for channel,capacity in ((False,False),(True,False),(False,True),(True,True)):
+    if composed:
+        declared=config['strategic_allocation_policy']['capacity_menu']['max_quantity']
+        if type(declared) is not int or declared<0 or max_capacity_quantity is not None and (type(max_capacity_quantity) is not int or max_capacity_quantity<0):raise ValueError('FINITE_NONNEGATIVE_SUPPLIER_QUANTITY_REQUIRED')
+        supplier_room=max(0,config['maximum_slots']-config['initial_slots'])
+        if max_capacity_quantity is not None:supplier_room=min(supplier_room,max_capacity_quantity)
+        quantities=range(min(declared,supplier_room)+1) if allow_capacity else (0,)
+    else:quantities=(0,1)
+    for channel,quantity in ((channel,k) for channel in (False,True) for k in quantities) if composed else ((False,0),(True,0),(False,1),(True,1)):
+        capacity=bool(quantity)
         if channel and not allow_channel or capacity and not allow_capacity: continue
-        cost = channel*invoice + capacity*config['capacity_price']
+        cost = channel*invoice + quantity*config['capacity_price']
         feasible = cost <= min(available,earned)
         cash = max(0,available-cost-config['maintenance_daily']*policy['window_delay_days'])
         # Treat all future delivery cost+principal locks as simultaneous: no
         # forecast collections, reserve releases or earned cash can fund them.
         if channel_forecast is not None:
             route_samples=[r['candidate' if channel else 'baseline'] for r in channel_forecast['rows']]
-            contact_cash=max(x['attempted_slots_to_window']*config['exposure_cost']+x['realized_contacts_to_window']*config['qualification_cost'] for x in route_samples)+owned*quote_cost*policy['window_delay_days']
+            costed_owned=channel_forecast.get('total_owned_contact_count',owned)
+            contact_cash=max(x['attempted_slots_to_window']*config['exposure_cost']+x['realized_contacts_to_window']*(4 if composed else 1)*config['qualification_cost'] for x in route_samples)+costed_owned*quote_cost*policy['window_delay_days']
             cash=max(0,cash-contact_cash)
         cap_ready = capacity_active and (not channel or config['capacity_lead_hours']+24 <= horizon-now_hours)
-        limit = min(unused_inventory, config['maximum_slots'], future_existing_slots+int(capacity and cap_ready),
+        if composed:
+            purchase_delay=24 if channel else 0
+            cap_ready=purchase_delay+config['capacity_lead_hours']<=horizon-now_hours and horizon-now_hours+config['production_hours']<purchase_delay+config['capacity_lead_hours']+config['capacity_duration_hours']
+        limit = min(unused_inventory, config['maximum_slots']//units, (future_existing_slots+quantity*int(capacity and cap_ready))//units,
                     cash//required_cash)
         if horizon >= config['horizon_days']*24: limit=0
         values={};counts={}
         for forecast in row['forecasts']:
-            win=F(str(forecast['win_probability']))
+            win=F(forecast.get('win_probability_fraction',str(forecast['win_probability'])))
             p=arrival*F(policy['owned_available_bps'],10000)*win
             q=arrival*reach*win
             plain=_expected_deliveries(owned,p,0,F(0),limit)
             with_channel=_expected_deliveries(owned,p,extra,q,limit)
             access=activation if channel else existing
             count=(1-access)*plain+access*with_channel
-            paid=F(str(forecast['accept_collect_probability']))
+            paid=F(forecast.get('accept_collect_probability_fraction',str(forecast['accept_collect_probability'])))
             contribution=paid*row['price']-future_cost-paid*max(0,row['price']-future_cost)*F(config['profit_tax_bps'],10000)
             contacts=owned*F(policy['owned_available_bps'],10000)+access*extra*reach
             if channel_forecast is not None:
@@ -109,12 +124,12 @@ def compare_window(config, policy, selection, observation, *, now_hours,
                 count=sum(_expected_deliveries(owned,p,x['window_contacts'],arrival*win,limit) for x in samples)/len(samples)
                 outreach=sum(F(x['attempted_slots_to_window']) for x in samples)/len(samples)
                 qualification=sum(F(x['realized_contacts_to_window']) for x in samples)/len(samples)
-                costed_contacts=owned*quote_cost*policy['window_delay_days']+outreach*config['exposure_cost']+qualification*config['qualification_cost']
+                costed_contacts=channel_forecast.get('total_owned_contact_count',owned)*quote_cost*policy['window_delay_days']+outreach*config['exposure_cost']+qualification*(4 if composed else 1)*config['qualification_cost']
             else:costed_contacts=contacts*quote_cost
             values[forecast['belief']]=count*contribution-costed_contacts-cost
             counts[forecast['belief']]=str(count)
         routes.append({'channel':channel,'capacity':capacity,'first_action_cost':(invoice if channel else cost),
-                       'contingent_later_capacity_cost':(config['capacity_price'] if channel and capacity else 0),
+                       'contingent_later_capacity_cost':(quantity*config['capacity_price'] if channel and capacity else 0),**({'capacity_quantity':quantity,'delivery_capacity_units':units} if composed else {}),
                        'current_cash_feasible':feasible,'future_delivery_cash_limit':limit,**({'future_contact_reserve_microUSD':contact_cash} if channel_forecast is not None else {}),
                        'expected_deliveries':counts,'_values':values})
     baseline=routes[0]['_values']

@@ -59,13 +59,15 @@ def capital_metrics(result):
     maturities=[a for a in actions if a['op']=='mature']
     individual=[];decision_local=[]
     from .strategic_commerce import select
-    for wrapper in result.get('joint_actions',{}).values():
+    for wrapper in sorted(result.get('joint_actions',{}).values(),key=lambda value:value['time']):
         if 'cash_diagnostic_available' in result['config']:
             from .strategic_commerce import cash_opportunity_diagnostic
             if 'strategic_game' in wrapper['allocation']:
                 # The available relaxation helper does not preserve this game's
                 # objective. Report unknown, never a fake zero or a late run failure.
                 diagnostic={'status':'UNAVAILABLE','reason':'STRATEGIC_GAME_CASH_DIAGNOSTIC_UNAVAILABLE'}
+            elif 'category_upfront_caps' in wrapper['allocation']:
+                diagnostic={'status':'UNAVAILABLE','reason':'CATEGORY_BUDGET_CASH_DIAGNOSTIC_UNAVAILABLE'}
             else:
                 diagnostic=cash_opportunity_diagnostic(wrapper['allocation'],relaxed_available=max(wrapper['allocation']['observation']['summary']['available'],result['config']['cash_diagnostic_available']),declared_allocation_ceiling=result['config']['strategic_allocation_policy']['risk']['authorized_allocation'],operating_envelope=wrapper['operating_envelope'])
             decision_local.append({'time':wrapper['time'],'diagnostic':diagnostic})

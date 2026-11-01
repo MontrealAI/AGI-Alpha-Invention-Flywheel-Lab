@@ -5,6 +5,8 @@ or human wage anchor. Neither a forecast nor an outside option moves native cash
 """
 import copy
 import hashlib
+import json
+from dataclasses import dataclass
 from fractions import Fraction
 
 SCHEMA='connected-complete-offer-market/v1'
@@ -46,6 +48,43 @@ def validate_policy(p):
     if len(ids)!=len(set(ids)):raise ValueError('UNIQUE_REQUEST_PROFILES_REQUIRED')
     return p
 
+@dataclass(frozen=True, slots=True)
+class MarketProfiles:
+    """Validated, immutable public-profile snapshot for ONE operation or audit.
+
+    No process-wide cache, account authority, buyer private draw or live balance
+    is retained. A new operation must compile its own current policy. Encoded
+    profiles prevent returned dictionaries from changing later answers.
+    """
+    encoded_profiles: tuple[str, ...]
+    policy_sha256: str
+
+    def profile(self, buyer_id):
+        index=int(hashlib.sha256(('public-request:'+buyer_id).encode()).hexdigest(),16)%len(self.encoded_profiles)
+        return json.loads(self.encoded_profiles[index])
+
+    def context(self, buyer_id, observed_spend, rival_available=True):
+        _int(observed_spend)
+        if type(rival_available) is not bool:raise ValueError('PUBLIC_RIVAL_ELIGIBILITY_REQUIRED')
+        return {'profile':self.profile(buyer_id),'observed_spend':observed_spend,'rival_available':rival_available}
+
+    def atom(self, buyer_id, seed):
+        return _atom_from_profile(self.profile(buyer_id),buyer_id,seed)
+
+
+def compile_market(policy):
+    """Validate ALL request identities/profiles once, before creating a snapshot.
+
+    Deep copying first makes the validation and compilation concern exactly the
+    same bytes. This is query preparation, not permission to use a stale policy.
+    """
+    frozen=copy.deepcopy(policy)
+    validate_policy(frozen)
+    encoded=lambda value:json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False)
+    return MarketProfiles(tuple(encoded(p) for p in frozen['profiles']),
+                          hashlib.sha256(encoded(frozen).encode()).hexdigest())
+
+
 def request_profile(policy,buyer_id):
     validate_policy(policy)
     index=int(hashlib.sha256(('public-request:'+buyer_id).encode()).hexdigest(),16)%len(policy['profiles'])
@@ -64,7 +103,10 @@ def validate_context(ctx):
 
 def private_atom(policy,buyer_id,seed):
     """Environment-only draw. Must not be supplied to the selling policy."""
-    r=request_profile(policy,buyer_id)
+    return _atom_from_profile(request_profile(policy,buyer_id),buyer_id,seed)
+
+
+def _atom_from_profile(r,buyer_id,seed):
     n=int(hashlib.sha256(f'private-complete-offer:{seed}:{buyer_id}'.encode()).hexdigest(),16)%10000
     for i,a in enumerate(r['atoms']):
         n-=a['weight_bps']

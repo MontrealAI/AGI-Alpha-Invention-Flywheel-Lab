@@ -51,7 +51,7 @@ def audit_decisions(root,manifest,result,lifecycle):
     if not isinstance(actions,dict) or len(actions)!=cfg['horizon_days']:raise ValueError('COMPLETE_JOINT_PLANNING_CALENDAR_REQUIRED')
     jobs={j['id']:j for j in manifest['jobs']};artifacts={j['id']:read_bound(root,j['artifact'],j['artifact_sha256']) for j in manifest['jobs']}
     events={e['time']:(i,e) for i,e in enumerate(result['events']) if e['kind']=='BUSINESS_DECISION'}
-    states=0;quotes=0;no_bids=0;selected_investments=set()
+    states=0;quotes=0;no_bids=0;selected_investments=set();startup_evaluation_required=False
     if 'sequence' in cfg['strategic_allocation_policy'] and 'channel_menu_policy' in cfg:
         from .channels import ChannelBook
         sequence_book=ChannelBook(result['seed'],cfg['channels'])
@@ -68,7 +68,34 @@ def audit_decisions(root,manifest,result,lifecycle):
         snapshot=record['observation'];charges=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')=='maintenance-'+str(day)]
         if len(charges)!=1 or charges[0]['day']!=moment or charges[0]['args'].get('amount')!=cfg['maintenance_daily']:raise ValueError('NATIVE_PREPAID_PLANNING_REQUIRED')
         charge=charges[0]
-        if 'refusal_recourse_policy' in cfg:
+        if 'startup_acquisition_policy' in cfg and moment==0:
+            from .startup_acquisition048 import preflight as startup_preflight
+            from .engine import _offer_menu
+            needs_evaluation=startup_preflight(cfg,lifecycle['daily_public_buyers'][0],{ident:{'job':job,'artifact':artifacts[ident]} for ident,job in jobs.items()},_offer_menu)
+            startup_evaluation_required=bool(needs_evaluation)
+            paid=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')=='startup-acquisition-evaluation']
+            fee=cfg['startup_acquisition_policy']['planning_cost_microUSD']
+            if not needs_evaluation:
+                if paid:raise ValueError('STARTUP_EMPTY_OR_INCONSISTENT_REACH_CANNOT_BE_CHARGED')
+            else:
+                if len(paid)!=1 or paid[0]['day']!=0 or paid[0]['seq']!=charge['seq']+1 or paid[0]['args']['amount']!=fee or paid[0]['before']['available']<fee or paid[0]['before'].get('investmentStopped') or paid[0]['before']['cash']-paid[0]['after']['cash']!=fee or paid[0]['before']['payables']!=paid[0]['after']['payables']:raise ValueError('STARTUP_PLANNING_NOT_CASH_PREPAID')
+                charge=paid[0]
+        selective=cfg.get('refusal_recourse_policy',{}).get('schema')=='connected-selective-refusal-recourse/v2'
+        selective_purchase=True
+        if selective:
+            from .refusal_recourse import selective_decision
+            expected_selective=selective_decision(record,cfg['refusal_recourse_policy'],wrapper['candidate_ids'])
+            if wrapper.get('selective_recourse_decision')!=expected_selective:raise ValueError('SELECTIVE_RECOURSE_DECISION_NOT_PUBLIC_REDERIVED')
+            selective_purchase=expected_selective['purchase']
+            evaluation=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')=='recourse-evaluation-'+str(day)]
+            fee=cfg['refusal_recourse_policy']['daily_evaluation_cost']
+            if len(evaluation)!=1 or evaluation[0]['day']!=moment or evaluation[0]['seq']!=charge['seq']+1 or evaluation[0]['args']!={'id':'recourse-evaluation-'+str(day),'amount':fee}:raise ValueError('SELECTIVE_EVALUATION_NOT_PREPAID')
+            before=evaluation[0]['before'];after=evaluation[0]['after']
+            if before['available']<fee or before.get('investmentStopped') or before['cash']-after['cash']!=fee or before['payables']!=after['payables']:raise ValueError('SELECTIVE_EVALUATION_NOT_CASH_FUNDED')
+            charge=evaluation[0]
+            if not selective_purchase and any(a['op']=='cost' and a['args'].get('id')=='recourse-planning-'+str(day) for a in tape['actions']):raise ValueError('SELECTIVE_HOLD_CHARGED_ALLOWANCE')
+        elif 'selective_recourse_decision' in wrapper:raise ValueError('UNREGISTERED_SELECTIVE_RECOURSE')
+        if 'refusal_recourse_policy' in cfg and selective_purchase:
             paid=[a for a in tape['actions'] if a['op']=='cost' and a['args'].get('id')=='recourse-planning-'+str(day)]
             if len(paid)!=1 or paid[0]['day']!=moment or paid[0]['seq']!=charge['seq']+1 or paid[0]['args'].get('amount')!=cfg['refusal_recourse_policy']['daily_planning_cost']:raise ValueError('NATIVE_PREPAID_REFUSAL_RECOURSE_REQUIRED')
             charge=paid[0]
@@ -78,6 +105,7 @@ def audit_decisions(root,manifest,result,lifecycle):
         if snapshot['sequence']!=seq or snapshot['summary']!=summary or snapshot['actions_sha256']!=prefixes[seq] or snapshot['state_digest']!=state_digest:raise ValueError('JOINT_CASH_NOT_CURRENT_NATIVE_PREFIX')
         candidates=lifecycle['daily_candidate_ids_recomputed'][moment];buyers=lifecycle['daily_public_buyers'][moment]
         operating=cfg['exposure_cost']*lifecycle['daily_outreach_units_recomputed'][moment]+cfg['qualification_cost']*len(candidates)*(4 if 'complete_offer_policy' in cfg else 1)
+        if selective and not selective_purchase:operating+=cfg['refusal_recourse_policy']['daily_planning_cost']
         if wrapper['operating_envelope']!=operating or wrapper['candidate_ids']!=candidates:raise ValueError('JOINT_OPERATING_RESERVE_CHANGED')
         from .verify import _private_draw
         needs=[ident for ident in candidates if _private_draw(result['seed'],[day,ident],'need')<cfg['arrival_bps']/10000]
@@ -110,6 +138,8 @@ def audit_decisions(root,manifest,result,lifecycle):
         risk=copy.deepcopy(cfg['strategic_allocation_policy']['risk']);risk['authorized_allocation']=min(risk['authorized_allocation'],max(0,summary['available']-operating))
         if record['riskpolicy']!=risk or record['earned_deduction']!=operating or record['allow_seed'] is not True:raise ValueError('JOINT_TOTAL_OR_EARNED_RESERVE_CHANGED')
         if record.get('strategic_game')!=cfg['strategic_allocation_policy'].get('strategic_game'):raise ValueError('UNREGISTERED_STRATEGIC_RESPONSE_GAME')
+        from .joint_planning import category_upfront_caps
+        if record.get('category_upfront_caps')!=category_upfront_caps(cfg['strategic_allocation_policy'],snapshot,operating):raise ValueError('CATEGORY_BUDGET_CAPS_NOT_FROM_CURRENT_EARNINGS')
         previous_investments=[i for i in result['investments'] if i['purchased_time']<moment]
         usable=[i for i in previous_investments if i['kind']=='capacity' and i['activation_time']<=moment and moment+cfg['production_hours']<i['expiry_time']]
         slots=min(cfg['maximum_slots'],cfg['initial_slots']+sum(i.get('capacity_units',1) for i in usable))
@@ -140,11 +170,23 @@ def audit_decisions(root,manifest,result,lifecycle):
                 expected_investments.append(investment_option('capacity-'+str(day),'capacity',cfg['capacity_price'],int(forecast-cfg['capacity_price']),risk['scenarios'],day,contract))
         if 'sequence' in cfg['strategic_allocation_policy']:
             from .sequence_planning import sequence_options
+            sequence_buyers=buyers
+            if cfg['strategic_allocation_policy']['sequence'].get('composition')=='complete-offer-quantity-v1':
+                sequence_buyers=copy.deepcopy(buyers)
+                refund_times={a['args']['id']:a['day'] for a in tape['actions'] if a['op']=='event' and a['args']['action']=='refund'}
+                for ident,buyer in sequence_buyers.items():
+                    outside=sum(d.get('outside_spend',0) for d in result['decisions'] if d.get('customer_id')==ident and d['time']<moment)
+                    committed=sum(o['price'] for o in result['orders'] if o['customer_id']==ident and o['qualified_time']<moment and (o['id'] not in refund_times or refund_times[o['id']]>moment))
+                    buyer['observed_spend']=outside+committed
             expected_investments=sequence_options(cfg,moment,snapshot,operating,
                 {ident:{'job':job,'artifact':artifacts[ident]} for ident,job in jobs.items()},
-                used,previous_investments,buyers,contacts,failed,risk['scenarios'],
+                used,previous_investments,sequence_buyers,contacts,failed,risk['scenarios'],
                 sum(max((r['required_current_cash'] for r in d['selection']['candidates']),default=0) for d in record['deliveries']),
                 channel_state=sequence_book.export() if 'channel_menu_policy' in cfg else None)
+        if 'startup_acquisition_policy' in cfg:
+            from .startup_acquisition048 import options as startup_options
+            from .engine import _offer_menu
+            expected_investments.extend(startup_options(cfg,result['arm'],moment,snapshot,operating,{ident:{'job':job,'artifact':artifacts[ident]} for ident,job in jobs.items()},used,buyers,risk['scenarios'],_offer_menu,prior_orders=any(o['qualified_time']<moment for o in result['orders']),prior_investments=bool(previous_investments)))
         if 'capacity_menu' in cfg['strategic_allocation_policy']:
             from .joint_planning import capacity_recourse
             expected_capacity=capacity_recourse(cfg,moment,snapshot,operating,record['deliveries'],previous_investments,slots,risk)
@@ -188,9 +230,9 @@ def audit_decisions(root,manifest,result,lifecycle):
         if 'sequence' in cfg['strategic_allocation_policy']:
             picked=[o for o in record['decision']['selected_options'] if 'first_investment' in o['execution']]
             if len(picked)>1:raise ValueError('ONE_NATIVE_SEQUENCE_FIRST_ACTION_REQUIRED')
-            investments=set()
+            investments={o['id'] for o in record['decision']['selected_options'] if o['kind']!='delivery' and 'first_investment' not in o['execution']} if cfg['strategic_allocation_policy']['sequence'].get('composition')=='complete-offer-quantity-v1' else set()
             for option in picked:
-                ident=option['id'] if 'channel_menu_policy' in cfg and option['execution']['first_investment']=='acquisition' else ('channel-' if option['execution']['first_investment']=='acquisition' else 'capacity-')+str(day)
+                ident=option['id'] if 'purchased_units' in option['execution'] or 'channel_menu_policy' in cfg and option['execution']['first_investment']=='acquisition' else ('channel-' if option['execution']['first_investment']=='acquisition' else 'capacity-')+str(day)
                 native=next((i for i in result['investments'] if i['id']==ident),None)
                 expected_net=sum(risk['scenarios'][k]*(option['future_net_cash'][k]-option['upfront_cost']) for k in risk['scenarios'])//10000
                 if 'strategic_game' in record:
@@ -208,7 +250,7 @@ def audit_decisions(root,manifest,result,lifecycle):
             for option in record['decision']['selected_options']:
                 if option['kind']=='delivery':continue
                 ident=option['id']
-                if 'first_investment' in option['execution'] and not ('channel_menu_policy' in cfg and option['execution']['first_investment']=='acquisition'):
+                if 'first_investment' in option['execution'] and not ('channel_menu_policy' in cfg and option['execution']['first_investment']=='acquisition') and 'purchased_units' not in option['execution']:
                     ident=('channel-' if option['execution']['first_investment']=='acquisition' else 'capacity-')+str(day)
                 native=next((i for i in result['investments'] if i['id']==ident),None)
                 if native is None or native['cost']!=option['upfront_cost'] or native['predicted_net']!=investment_expected_net(record['decision'],option['id']):raise ValueError('NATIVE_INVESTMENT_NOT_CHOSEN_GAME_FORECAST')
@@ -216,7 +258,7 @@ def audit_decisions(root,manifest,result,lifecycle):
         if events[moment][1]['channel_selected']!=(any(o['kind']=='acquisition' for o in record['decision']['selected_options']) if 'channel_menu_policy' in cfg else ('channel-'+str(day) in investments)) or events[moment][1]['capacity_selected']!=(any(o['kind']=='capacity' for o in record['decision']['selected_options']) if 'capacity_menu' in cfg['strategic_allocation_policy'] else ('capacity-'+str(day) in investments)):raise ValueError('SELECTED_INVESTMENT_FLAGS_CHANGED')
         choices=[d for d in result['decisions'] if d.get('kind') in {'offer','outside_choice'} and d['time']==moment]
         recourse_bound=None
-        if 'refusal_recourse_policy' in cfg:
+        if 'refusal_recourse_policy' in cfg and selective_purchase:
             recourse_bound=_recourse_choices(record,wrapper,choices,needs,cfg)
         else:
             if 'refusal_recourse' in wrapper or any('joint_recourse_round' in d for d in choices):raise ValueError('UNREGISTERED_REFUSAL_RECOURSE')
@@ -249,4 +291,4 @@ def audit_decisions(root,manifest,result,lifecycle):
                 if recourse_bound is not None and order.get('joint_recourse_round')!=active_round:raise ValueError('ORDER_RECOURSE_SELECTION_CHANGED')
                 if order['offer']!=contract['offer'] or order.get('method_plan')!=contract['method_plan'] or order['complete_cost']!=contract['complete_cost'] or order.get('joint_option_id')!=option['id']:raise ValueError('JOINT_SELECTED_METHOD_NOT_EXECUTED')
     if {i['id'] for i in result['investments']}!=selected_investments:raise ValueError('JOINT_SELECTED_INVESTMENTS_NOT_NATIVE_EXECUTED')
-    return {'joint_plans_rederived':len(actions),'joint_states_evaluated':states,'strategic_quotes_and_no_bids_rederived':quotes,'strategic_no_bids_rederived':no_bids,'joint_optimality_scope':'Exact declared finite shortlist under public conditional-mean forecasts; not a global or long-horizon optimum.'}
+    return {**({'startup_evaluation_required':startup_evaluation_required} if 'startup_acquisition_policy' in cfg else {}),'joint_plans_rederived':len(actions),'joint_states_evaluated':states,'strategic_quotes_and_no_bids_rederived':quotes,'strategic_no_bids_rederived':no_bids,'joint_optimality_scope':'Exact declared finite shortlist under public conditional-mean forecasts; not a global or long-horizon optimum.'}

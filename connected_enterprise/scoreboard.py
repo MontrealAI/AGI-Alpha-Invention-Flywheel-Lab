@@ -128,8 +128,11 @@ def _world(task, result, directory):
             'service_ids_with_qualified_orders': known_services,
             'forecast_investment_net_microUSD': [{'investment_id': row['id'], 'predicted_net_microUSD': row.get('predicted_net'),
                                                   'realized_complete_enterprise_increment_microUSD': None} for row in result['investments']],
-            'trailing_twelve_month_profit_microUSD': None,
-            'annual_profit_status': 'NOT_COMPUTED_NO_SHORT_COHORT_ANNUALIZATION',
+            'trailing_twelve_month_profit_microUSD': growth['trailing_profit']['trailing_365_day_profit_microUSD'],
+            'trailing_365_profit_observer': copy.deepcopy(growth['trailing_profit']),
+            'annual_profit_status': ('RECONCILED_DECLARED_365_DAY_MODELED_WINDOW'
+                                    if growth['trailing_profit']['complete_365_day_operating_history']
+                                    else 'NOT_COMPUTED_NO_SHORT_COHORT_ANNUALIZATION'),
             'measured_host_billing_microUSD': None, 'measured_frontier_inference_billing_microUSD': None,
             'resource_receipt': copy.deepcopy(result.get('resource_receipt')),
             'resource_receipt_scope': 'Final run_world invocation only; prior paused invocations are not accumulated here. Retain durable command receipts for complete lifecycle resource accounting.',

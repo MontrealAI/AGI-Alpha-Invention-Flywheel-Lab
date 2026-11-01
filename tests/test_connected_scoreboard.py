@@ -102,6 +102,31 @@ class ConnectedScoreboardTests(unittest.TestCase):
         self.assertEqual(world['growth_ledger'][0]['recorded_counts']['contacts'], 1)
         self.assertEqual(world['growth_ledger'][1]['recorded_counts']['settled_orders'], 1)
 
+    def test_declared_complete_year_displays_reconciled_observer_without_certifying_authority(self):
+        self.config['horizon_days'] = 365
+        self.frozen.pop('sha256')
+        self.frozen['sha256'] = digest(self.frozen)
+        self.write('FROZEN.json', self.frozen)
+        self.report['frozen_sha256'] = self.frozen['sha256']
+        self.save_result()
+        world = scoreboard(self.output)['businesses'][0]
+        self.assertEqual(world['trailing_twelve_month_profit_microUSD'], 160)
+        self.assertEqual(world['trailing_365_profit_observer']['interval']['end_hour_exclusive'], 8760)
+        self.assertEqual(world['annual_profit_status'], 'RECONCILED_DECLARED_365_DAY_MODELED_WINDOW')
+        self.assertIn('NOT_ACCOUNT_AUTHORITY_AUDIT', world['verification']['financial_display'])
+        self.assertIsNone(world['actual_external_commerce']['profit_microUSD'])
+
+    def test_declared_short_horizon_remains_unavailable_even_with_profit(self):
+        self.config['horizon_days'] = 364
+        self.frozen.pop('sha256')
+        self.frozen['sha256'] = digest(self.frozen)
+        self.write('FROZEN.json', self.frozen)
+        self.report['frozen_sha256'] = self.frozen['sha256']
+        self.save_result()
+        world = scoreboard(self.output)['businesses'][0]
+        self.assertIsNone(world['trailing_twelve_month_profit_microUSD'])
+        self.assertFalse(world['trailing_365_profit_observer']['complete_365_day_operating_history'])
+
     def test_separately_seeded_businesses_are_retained_without_pooled_money(self):
         second = copy.deepcopy(self.result)
         second['seed'] = 13

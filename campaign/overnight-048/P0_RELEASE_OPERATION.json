@@ -1,0 +1,193 @@
+{
+  "artifact_id": 13072449976,
+  "artifact_sha256": "8b6904ba822c4f38a9c11208b002a0fd36d726f86505201ec3eef662d38776af",
+  "hosted_operation": {
+    "accepted": true,
+    "actual_release_download": true,
+    "commands": [
+      {
+        "command": [
+          "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+          "-m",
+          "connected_enterprise",
+          "run",
+          "--output",
+          "/home/runner/work/_temp/downloaded-release-operation/operation"
+        ],
+        "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+        "returncode": 0,
+        "stderr": "01-run.stderr",
+        "stdout": "01-run.stdout",
+        "wall_seconds": 323.385829953
+      },
+      {
+        "command": [
+          "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+          "-m",
+          "connected_enterprise",
+          "resume",
+          "--output",
+          "/home/runner/work/_temp/downloaded-release-operation/operation"
+        ],
+        "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+        "returncode": 0,
+        "stderr": "02-resume.stderr",
+        "stdout": "02-resume.stdout",
+        "wall_seconds": 17.21158871399996
+      },
+      {
+        "command": [
+          "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+          "-m",
+          "connected_enterprise",
+          "audit",
+          "--output",
+          "/home/runner/work/_temp/downloaded-release-operation/operation"
+        ],
+        "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+        "returncode": 0,
+        "stderr": "03-audit.stderr",
+        "stdout": "03-audit.stdout",
+        "wall_seconds": 8.885379310999951
+      },
+      {
+        "command": [
+          "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+          "-m",
+          "connected_enterprise",
+          "package",
+          "--output",
+          "/home/runner/work/_temp/downloaded-release-operation/operation",
+          "--archive",
+          "/home/runner/work/_temp/downloaded-release-operation/.downloaded-operation-candidate.zip"
+        ],
+        "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+        "returncode": 0,
+        "stderr": "04-package-actual-operation.stderr",
+        "stdout": "04-package-actual-operation.stdout",
+        "wall_seconds": 9.035763267999982
+      },
+      {
+        "command": [
+          "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+          "-m",
+          "connected_enterprise",
+          "audit",
+          "--output",
+          "/home/runner/work/_temp/downloaded-release-operation/downloaded-operation-public"
+        ],
+        "cwd": "/home/runner/work/_temp/downloaded-release-operation/downloaded-operation-public/source",
+        "returncode": 0,
+        "stderr": "05-actual-operation-public-audit.stderr",
+        "stdout": "05-actual-operation-public-audit.stdout",
+        "wall_seconds": 8.884903520000023
+      },
+      {
+        "command": [
+          "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python",
+          "-m",
+          "connected_enterprise",
+          "audit",
+          "--output",
+          "/home/runner/work/_temp/downloaded-release-operation/published-keyfree"
+        ],
+        "cwd": "/home/runner/work/_temp/downloaded-release-operation/published-keyfree/source",
+        "returncode": 0,
+        "stderr": "06-released-public-audit.stderr",
+        "stdout": "06-released-public-audit.stdout",
+        "wall_seconds": 1.818073030999983
+      }
+    ],
+    "completed_resume_financially_unchanged": true,
+    "downloaded_operation_package": {
+      "bytes": 3302054,
+      "path": "downloaded-operation-keyfree.zip",
+      "scope": "ACTUAL_DOWNLOADED_IMPLEMENTATION_RUN_KEY_FREE_AUDIT_AND_REPRODUCTION_NOT_ACCOUNT_TAKEOVER",
+      "sha256": "a5e4c3d3ff3f7adcaae3adea1c8965770540067bab762fd84d65e4783486d1a0"
+    },
+    "downloaded_operation_public_audit": {
+      "accepted": true,
+      "resource_cpu_metadata": "Command resource observations retained, not independently reproduced timing measurements",
+      "schema": "agi-alpha/connected014-package-audit/v1",
+      "scope": "NATIVE_FINANCE_AND_OPERATING_SEMANTICS_WITH_ARTIFACT_REEXECUTION_AND_REPORT_REDERIVATION",
+      "service_cohort": {
+        "registered_jobs_rederived": 104
+      },
+      "simulation_keys_required": false,
+      "source_sha256": "efa9d94f058e0780ae082f1b2d9c5ebc669ebea1f79063d55d05fca98b6126d5",
+      "worlds": 8
+    },
+    "native_and_operating_audit": {
+      "accepted": true,
+      "resource_cpu_metadata": "Command resource observations retained, not independently reproduced timing measurements",
+      "schema": "agi-alpha/connected014-package-audit/v1",
+      "scope": "NATIVE_FINANCE_AND_OPERATING_SEMANTICS_WITH_ARTIFACT_REEXECUTION_AND_REPORT_REDERIVATION",
+      "service_cohort": {
+        "registered_jobs_rederived": 104
+      },
+      "simulation_keys_required": false,
+      "source_sha256": "efa9d94f058e0780ae082f1b2d9c5ebc669ebea1f79063d55d05fca98b6126d5",
+      "worlds": 8
+    },
+    "released_public_audit": {
+      "accepted": true,
+      "resource_cpu_metadata": "Command resource observations retained, not independently reproduced timing measurements",
+      "schema": "agi-alpha/connected014-package-audit/v1",
+      "scope": "NATIVE_FINANCE_AND_OPERATING_SEMANTICS_WITH_ARTIFACT_REEXECUTION_AND_REPORT_REDERIVATION",
+      "service_cohort": {
+        "registered_jobs_rederived": 104
+      },
+      "simulation_keys_required": false,
+      "source_sha256": "efa9d94f058e0780ae082f1b2d9c5ebc669ebea1f79063d55d05fca98b6126d5",
+      "worlds": 2
+    },
+    "resources": {
+      "children_cpu_seconds": 1200.10957,
+      "coverage": "COMPLETED_WAITED_PROCESS_TREE",
+      "historical_cpu_reference_exceeded": false,
+      "kernel_cpu_deltas_seconds": {
+        "children_system": 87.438474,
+        "children_user": 1112.671096,
+        "self_system": 0.139964,
+        "self_user": 0.81998
+      },
+      "self_cpu_seconds": 0.959944,
+      "total_measured_cpu_seconds": 1201.069514,
+      "wall_seconds": 369.89488030399997
+    },
+    "schema": "agi-alpha/connected014-downloaded-release-operation/v1",
+    "scope": "SIMULATED_RELEASED_DEFAULT_EXPERIMENT_REPRODUCTION_NOT_UNTOUCHED_CONFIRMATION",
+    "source_commit": "3c553dd5087d4594a996dd82f53d13d5e65db124",
+    "source_sha256": "efa9d94f058e0780ae082f1b2d9c5ebc669ebea1f79063d55d05fca98b6126d5",
+    "tag": "connected014-3c553dd5087d4594a996dd82f53d13d5e65db124"
+  },
+  "provenance": "Direct inspection of downloaded GitHub Actions artifact; not another business execution.",
+  "release_download": {
+    "actual_release_download": true,
+    "files": {
+      "COMPOSED_PUBLICATION.json": "00df511fc22d9691947daf24d78241534d96127797eebdd5f877a496409c2105",
+      "PAPER.pdf": "c3726ba198621ba1f7b69e6fe87df9e70e0d1e39e1192f65fe60fb71f006bf13",
+      "PAPER.tex": "f0a211b90150302a3ec160fb6b4d63b2ecc2552c4bd41e751f4c80d9eac5d898",
+      "PDF_QA.json": "280222804fa4f1a543e0ea67cc284e5c9880c8111fe35cbc857d9e9367446bc0",
+      "PUBLICATION.json": "cad3eeeb678a7c76a280cfb6a94f095e3eadb2612d0defdd0d9b31fed2c57384",
+      "QUALIFICATION.json": "3fa3be4c470233a0816a034fc001120a569bff2f24f4eb4abd2b506f58e014c9",
+      "RELEASE_GATE.json": "aef054ee6edb8f1009323f473e5516e05ec9a2826106bd8cf88541a3dc283773",
+      "RELEASE_MANIFEST.json": "83e8c172ceb008b1fccca9c76e61282414b21831823f5fc36748f5c852803198",
+      "RELEASE_NOTES.md": "8b1f92e8cd481492188a552da8d148adbb2c51fb05677937bffa28dafbdaa279",
+      "REPORT.md": "31b4df2007a82c18bd111ef36b39de041bd5e7743a9c7929522d78c70bf14e35",
+      "SHA256SUMS.txt": "3cd641dcf55ab04119c7df04e7e56e1ea4e000b2e1d2c849cb0fafb32d1dd4a3",
+      "connected014-keyfree.zip": "a3bc9d99c2b514d170b1a5aeeed7516008afdd49c3e55c7d4fc205a6910aaa4e",
+      "connected014-source.zip": "c2f60b0d300a183a6e10373df8cf6287c2b77d595c6c070660476b1dad40e603",
+      "index.html": "666f57c3dd7956b0d2278a456c774a814e35184cda1c12171529a997d2a1e509"
+    },
+    "release_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/connected014-3c553dd5087d4594a996dd82f53d13d5e65db124",
+    "schema": "agi-alpha/connected014-actual-release-download/v1",
+    "source_commit": "3c553dd5087d4594a996dd82f53d13d5e65db124",
+    "source_sha256": "efa9d94f058e0780ae082f1b2d9c5ebc669ebea1f79063d55d05fca98b6126d5",
+    "tag": "connected014-3c553dd5087d4594a996dd82f53d13d5e65db124"
+  },
+  "release_immutable": false,
+  "schema": "agi-alpha/overnight048-p0-inspection/v1",
+  "workflow_run_id": 41279434535,
+  "workflow_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41279434535"
+}

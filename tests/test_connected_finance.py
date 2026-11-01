@@ -80,6 +80,20 @@ class ConnectedFinanceTests(unittest.TestCase):
         self.assertNotIn('key', exported['connected_journal'])
         self.assertEqual(exported['obligation_resolutions'][receipt['plan_id']]['later_incurred_microUSD'], 10_000)
 
+    def test_startup_contract_source_drift_rejects_before_financial_mutation(self):
+        before = self.account.export()
+        path = self.root / 'connected_enterprise/startup_acquisition048.py'
+        original = path.read_bytes()
+        try:
+            path.write_bytes(original + b'\n')
+            with self.assertRaisesRegex(ValueError, 'CONNECTED_FINANCE_SOURCE_CHANGED'):
+                self.spend(allow_seed=True)
+            with self.assertRaisesRegex(ValueError, 'CONNECTED_FINANCE_SOURCE_CHANGED'):
+                self.account.cost('unrelated-after-source-drift', 1, 0)
+        finally:
+            path.write_bytes(original)
+        self.assertEqual(self.account.export(), before)
+
     def test_future_income_does_not_fund_and_seed_requires_explicit_flag(self):
         before = self.account.export()
         self.assertIsNone(self.spend())

@@ -53,7 +53,13 @@ displaying separate businesses, daily/cohort growth records, costs, cash,
 recognized profit, reserves and obligations. Stored audit receipts are labeled
 recorded receipts; this display cannot replace `audit` or authorize spending.
 Unmeasured host/frontier billing, retention fractions, causal investment returns
-and short-horizon trailing-year profit remain `null`. Attributed asset use is
+and short-horizon trailing-year profit remain `null`. For a completed declared
+operating horizon of at least365days, the scoreboard displays the existing
+exact `scale.trailing_profit` observer and its native[ending-hour-8760,ending-hour)
+window. It reconciles recognized revenue plus recovery minus incurred expenses;
+settlement drain does not extend that operating window. This recorded modeled
+result remains subject to independent native/operating audit and does not
+establish actual commerce or measured external billing. Attributed asset use is
 nonadditive. The example is a declared 49-day engineering reproduction with
 permanent liabilities, not a fresh commercial or annual-profit confirmation.
 
@@ -114,6 +120,19 @@ python3 -m pip install -r requirements-commercial010.txt
 Use a clean, reviewable source tree and **new, normalized absolute paths**. Replace the example `/tmp` directories with durable private storage for continued operation. Do not reuse a previous output path for a fresh run. The runner freezes its selected source bytes, protocol and configurations into the output before launching the frozen copy. A clean extracted source tree does not need `.git`; its source hash remains authoritative and its Git commit field can be `null`.
 
 ## Start, inspect and audit
+
+For a **fresh custom registration** that uses exact integer money, include
+`"monetary_policy": "exact-integer-v2"` in every case configuration. The
+canonical worker derives `exact-permanent-v2` (or `exact-prospective-v2` when
+the corresponding prospective policy is also registered) on its newly generated
+service manifest. All cases sharing this manifest must use the same native
+engine; mixed engine registrations fail before accounts are created. Existing
+legacy configurations retain their original manifest version and behavior.
+Resume and independent audit reject a manifest version that differs from the
+frozen configurations, while the full service-cohort and artifact-origin checks
+still apply. This selects the format of a new simulation; it does not upgrade or
+reset an existing signed account. The finite account-year input and cost/claim
+boundaries are in `campaign/account-year-048/PROTOCOL.md`.
 
 From the repository root, run a short development qualification:
 

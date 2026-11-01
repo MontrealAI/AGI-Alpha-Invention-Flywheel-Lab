@@ -67,6 +67,40 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in required):
             raise ValueError('FLYWHEEL_WHEEL_SOURCE_DEPENDENCY_MISSING')
         names.update(required)
+    names.update(name for name in ('scripts/run_selective_recourse048.py','campaign/selective-recourse-048/PREREGISTRATION.json','docs/harness/SELECTIVE_RECOURSE048.md','tests/test_refusal_recourse.py') if (root/name).is_file())
+    if (root/'connected_enterprise/startup_acquisition048.py').is_file():
+        required={
+            'experiments/evidence_revalidation048.py',
+            'experiments/startup_acquisition048.py',
+            'scripts/run_commoncost026.py',
+            'scripts/qualify_market_index049.py',
+            '.github/workflows/market-index049.yml',
+            'tests/test_evidence_revalidation048.py',
+            'docs/harness/DEVELOPER_GUIDE.md',
+            'docs/harness/RESOURCE_POLICY.md',
+            'docs/harness/CATEGORY_BUDGETS050.md',
+            'docs/harness/CHUNKED_ADMISSION048.md',
+            'docs/harness/COMPOSED_WINDOW049.md',
+            'docs/harness/EVIDENCE_REVALIDATION048.md',
+            'docs/harness/EXACT_SELECTION048.md',
+            'docs/harness/MARKET_INDEX049.md',
+            'docs/harness/STARTUP_ACQUISITION048.md',
+        }
+        required.update('campaign/'+folder+'/'+name for folder,files in {
+            'account-year-048':('INPUT.json','PROTOCOL.md','REPORT.md','RESULTS.json'),
+            'composed-window-049':('PROTOCOL.json','REPORT.md','RESULTS.json'),
+            'evidence-revalidation-048':('PREREGISTRATION.json','RECEIPT.json','RESULT.json'),
+            'startup-acquisition-048':('PRE_GUARD_DEVELOPMENT.json','GUARDED_DEVELOPMENT.json','LOCAL_FOCUSED_CHECKS.json'),
+            'selective-recourse-048':('RESULTS.json',),
+        }.items() for name in files)
+        if any(not (root/name).is_file() for name in required):
+            raise ValueError('OVERNIGHT048_SOURCE_DEPENDENCY_MISSING')
+        names.update(required)
+    if (root/'experiments/comparator050.py').is_file():
+        required={'experiments/comparator050.py','campaign/comparator-050/PROTOCOL.json','docs/harness/COMPARATOR050_OPERATING.md','docs/harness/COMPARATOR050_BENCHMARKS.md'}
+        if any(not (root/name).is_file() for name in required):
+            raise ValueError('COMPARATOR050_SOURCE_DEPENDENCY_MISSING')
+        names.update(required)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
@@ -217,8 +251,11 @@ def worker(output,max_events=None):
     from adaptive_enterprise.instruments import prepare_services
     with RunLock(output):
         manifest_path=output/'SERVICES.json'
-        if manifest_path.exists():manifest=json.loads(manifest_path.read_text())
-        else:manifest=prepare_services(root,'service-inputs',cohort_seed=f['protocol']['service_cohort_seed']);write(manifest_path,manifest)
+        if manifest_path.exists():
+            manifest=json.loads(manifest_path.read_text())
+            if manifest!=_service_manifest(manifest,f['configs']):raise ValueError('SOURCE_BOUND_SERVICE_MANIFEST_ENGINE_CHANGED')
+        else:
+            manifest=_service_manifest(prepare_services(root,'service-inputs',cohort_seed=f['protocol']['service_cohort_seed']),f['configs']);write(manifest_path,manifest)
         payloads=[(str(root),manifest,str(output),f,t,max_events) for t in tasks(f['protocol'])];items=[]
         with ProcessPoolExecutor(max_workers=min(f['protocol']['workers'],len(payloads)),mp_context=multiprocessing.get_context('spawn')) as pool:
             for item in pool.map(_task,payloads):
@@ -242,12 +279,22 @@ def comparison(output,control=None,candidate=None):
                   evidence_role=f['protocol'].get('evidence_role','reproduction'),funding_authority=False)
     return result
 
+def _service_manifest(manifest,configs):
+    from .registration import native_engine
+    engine=native_engine(configs);selected=copy.deepcopy(manifest)
+    selected.pop('native_engine',None)
+    if engine!='legacy-permanent-v1':selected['native_engine']=engine
+    return selected
+
+
 def audit_output(output):
     output=Path(output).resolve();f=read_freeze(output);manifest=json.loads((output/'SERVICES.json').read_text());receipts=[];items=[];results=[]
     from .verify import audit
     from .scale import analyze
     from adaptive_enterprise.runner import _validate_manifest_origin
-    cohort=_validate_manifest_origin({'protocol':{'service_cohort_seed':f['protocol']['service_cohort_seed']}},manifest,output/'source')
+    if manifest!=_service_manifest(manifest,f['configs']):raise ValueError('SOURCE_BOUND_SERVICE_MANIFEST_ENGINE_CHANGED')
+    origin_manifest=copy.deepcopy(manifest);origin_manifest.pop('native_engine',None)
+    cohort=_validate_manifest_origin({'protocol':{'service_cohort_seed':f['protocol']['service_cohort_seed']}},origin_manifest,output/'source')
     stored=json.loads((output/'REPORT.json').read_text());indices=stored.get('worlds_index',[])
     expected_tasks=tasks(f['protocol'])
     if len(indices)!=len(expected_tasks):raise ValueError('REGISTERED_WORLD_INDEX_REQUIRED')
