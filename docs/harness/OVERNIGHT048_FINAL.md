@@ -1,15 +1,15 @@
 # AGI ALPHA — morning progress handoff, 1 November 2026
 
-Checkpoint: 11:47 UTC. PR98 is merged, but main997 publication failed at the frozen historical worker-interruption probe after all 1,524 current tests passed. A separately versioned current active-worker checker is being tested. No 997 release or downloaded final operation exists.
+Checkpoint: 07:21 EST (12:21 UTC). PR98 is merged; main 997 remains failed/unpublished. PR100 passed its focused canonical Ubuntu active-worker checkpoint, while full PR qualification and normal integration/release remain pending. No 997 release or downloaded final operation exists.
 
 **An audited operating simulation and reproducible account-year results exist. The latest implementation is not yet a qualified released enterprise. Actual commercial profit and US$3 billion trailing-365-day profit remain unestablished.** No default policy promotion follows from these experiments.
 
 | State | Current work |
 | --- | --- |
-| Done | PR98 qualified normal merge; P0 previous release/downloaded operation; four primary account years plus four source-specific reproductions; finite comparator/P4 results; reviewed identity/admission corrections |
-| Running | Current active-worker readiness checker 054, deterministic interruption regressions and independent review; normal qualified follow-up integration remains required |
-| Blocked | Final release/download pending the checker repair and required gates; unified audience repair unpublished; original signed-account migration remains NO-GO |
-| Next | Qualify and merge the separately versioned checker repair, preserve the failed997 record, finish same-main publication, then download and operate actual released bytes |
+| Done | PR98 qualified normal merge; previous release/downloaded operation; four primary account years plus four source-specific reproductions; finite comparator/P4 results; reviewed corrections; PR100 focused Ubuntu checker checkpoint |
+| Running | PR100 full qualification at head 9de386c6: 4 of 7 full PR gates green, 3 pending; normal qualified integration remains required |
+| Blocked | Final release/download awaits full PR100 qualification and integration; unified audience repair unpublished; original signed-account migration remains NO-GO |
+| Next | Finish exact-head PR100 gates, integrate normally, qualify/publish the resulting main, then download and operate actual released bytes; preserve failed main 997 |
 
 ## Source identities and gates
 
@@ -18,10 +18,13 @@ Checkpoint: 11:47 UTC. PR98 is merged, but main997 publication failed at the fro
 | Previously qualified release | `3c553dd5087d4594a996dd82f53d13d5e65db124` |
 | Qualified normal merge | [PR98](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/98) merged at `99769a8a4d19a8cfc1b3c6d05084d7ed99b76849`; head `f402a0b093cfebb052a84f7ad09655f41c1e5659` |
 | Local commit sharing the exact merged-main tree | `971b8d38d7b7ee9bf8672f22365e35c381df7799`; Git tree `3e1579f6a7a8e68dc736c3e8724011678c044395`; independently checked against the public commit |
-| Selected current candidate source | 277 files; SHA256 `ba510738584bb95d95a794dfb29eac3851407920e9c599cbd23abfc5ef80ffec` |
-| Prepared current candidate source ZIP | 302 members, 1,172,686 bytes; SHA256 `a1c1aff0cb4c25eceac20514e353586ee8a7c17090c3b8bc7b834c57a4a1267e` |
-| Current local qualification, directly inspected | 106 composed/native/fee/source/publication/identity checks passed in 204.453 seconds; fresh no-Git five-command run/resume/native-audit/package/public-audit accepted, financially unchanged resume; clean committed-source release prepare/verify accepted |
-| PR qualification | All14 workflows succeeded on exact f402a0b0; bounded suite 1,524 tests/OK in 883.638 seconds, release suite 434 tests/OK in 814.574 seconds; five threads resolved. Main push has six separately applicable workflows | Main997 passed 1,524 current tests but its overall bounded workflow failed the historical interruption probe; publication correctly stopped.
+| Merged 997 source before the checker follow-up | 277 files; SHA256 `ba510738584bb95d95a794dfb29eac3851407920e9c599cbd23abfc5ef80ffec` |
+| Prepared PR98 / merged-997 source ZIP | 302 members, 1,172,686 bytes; SHA256 `a1c1aff0cb4c25eceac20514e353586ee8a7c17090c3b8bc7b834c57a4a1267e` |
+| PR98 / merged-997 local qualification, directly inspected | 106 composed/native/fee/source/publication/identity checks passed in 204.453 seconds; fresh no-Git five-command run/resume/native-audit/package/public-audit accepted, financially unchanged resume; clean committed-source release prepare/verify accepted |
+| PR98 qualification | All 14 workflows succeeded on exact f402a0b0; bounded suite 1,524 tests/OK in 883.638 seconds, release suite 434 tests/OK in 814.574 seconds; five threads resolved. Main push has six separately applicable workflows |
+| Main 997 publication gate | Main 997 passed all 1,524 current tests, but its overall bounded workflow failed the immutable historical interruption probe; publication stopped and downloaded operation was skipped |
+| Current checker follow-up | [PR100](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/100), head `9de386c6c7cb52adda583fe9972c5ff0d47dbdbc`, tree `68cdbe792188ae604286169348d7a377aa494033`; focused Ubuntu acceptance is separate from full PR qualification |
+| PR100 full gates | 4 of 7 full PR gates green, 3 pending at this checkpoint; no PR100 merge, release or downloaded-operation claim |
 | Experiment-identity review repair | Published and independently reviewed: fixed startup protocol/config/cohort/seed/native arm/completion, native audit of skipped completed cells, null actual-profit/empty-authority summary schema; comparator source/protocol/phase/authority headers. The wrong-seed counterexample was independently reproduced. Current exact-head gates remain required |
 | Composed-future admission correction | Published/reviewed: native nonempty-menu priority, all higher-priority requested-work exclusion, current-delivery customer exclusion, full paid pool preserved, planner/auditor reconstruction. Complete windows require one through six days, derived from the 168-hour cooldown; longer windows are explicitly UNAVAILABLE |
 | Reviewed corrections | The merged main contains the owned-cost/frontier, fixed-experiment identity, comparator headers and complete-future admission/cooldown repairs. No new profitable startup result or default promotion is established |
@@ -50,11 +53,15 @@ The later startup repairs change the final source; the completed 718b study rema
 
 The composed forecast repair has source-specific engineering evidence. Nineteen pure controls reproduce native four-place starvation, five/six-place admission, shared-work and same-current-customer conflicts. Forty focused component checks passed; the combined 106-test run also operated the unchanged 14-day native fixture through actual acquisition, EARNED two-unit capacity, settled packets, game/native audit and unchanged resume. The bounded forecast is conditional on future eligibility and remaining work; current proposal buyers are conservatively excluded. Test-only admitted/disjoint controls leave historical factories and results unchanged.
 
-## Main997 publication failure and bounded checker repair
+## Main 997 publication failure and bounded checker repair
 
 [Bounded run 41300637969, job 124830633300](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41300637969/job/124830633300) passed all 1,524 current tests in 1512.613 seconds, then failed the immutable cycle 001 worker-bounds probe. Artifact 13082132066 is 75,600 bytes, SHA256 `a8bcbe0d49b1184a5058b97d5a965000b1efc18ad507a0d75dd0dde371b0f0fd`. Its actual traceback shows SIGINT during `STARTED.json` creation before the historical runner entered its protected try. Memory/file/fd checks passed, partial evidence stayed unchanged and restart refused, but `INTERRUPTED.json` was absent. The overall main gate and publisher remain failed; downloaded operation was skipped.
 
-The pinned historical worker/probe/closure/paper and failed receipt stay unchanged. Current checker 054 will verify an exact live protected worker, stop that owned child at a confirmed barrier, then send real SIGINT to the parent and require interruption/no completion, child termination, immutable restart evidence and all original resource checks. This repairs the current checker readiness assumption and qualifies active-worker interruption. The original early-STARTED startup defect remains **PRESERVED_NOT_REPAIRED**; no every-initialization-point recovery claim is made.
+The pinned historical worker/probe/closure/paper and failed receipt stay unchanged. At exact PR100 head `9de386c6c7cb52adda583fe9972c5ff0d47dbdbc`, canonical Ubuntu [active-worker-bounds054 run 41305069238, job 124843688389](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41305069238/job/124843688389) passed all 8 tests with no skips and exercised the normal checker CLI against its separately frozen 128-file closure. The completion lead downloaded compact artifact `13082527201`: 2,880 bytes, SHA256 `e39ecb572cb63fb2c7b257364ad28166018738ee60ade37086a3b22cde8a9412`, and inspected all three allowlisted JSON receipts. All resource checks were true; real parent SIGINT naturally terminated the active worker, forced cleanup was false, and partial hashes/restart evidence were preserved.
+
+Independent final-integration review accepted this canonical proof, and automatic code review on the exact PR100 head completed with no findings.
+
+This accepts the versioned checker's protected-active-worker interruption checkpoint. It does not repair the original early `STARTED.json` defect, which remains **PRESERVED_NOT_REPAIRED**, or establish recovery at every initialization point. Full PR100 qualification is still incomplete (4 of 7 full gates green); normal merge, resulting-main publication and actual downloaded operation remain pending. Main 997 remains failed/unpublished.
 
 ## Four primary native account years, separately reproduced
 
@@ -79,7 +86,7 @@ The table covers four primary accounts and four corresponding fresh reproduction
 
 ## Usable fresh simulation path
 
-These five CLI forms have recorded zero-exit execution in [PROTOCOL.md](../../campaign/account-year-048/PROTOCOL.md) and [RESULTS.json](../../campaign/account-year-048/RESULTS.json). Use Python3.12 and pinned dependencies from the selected source. Replace the example with one **new normalized absolute private output path**, consistently; this creates four separately funded simulation accounts, not a continuation of the original signed business.
+These five CLI forms have recorded zero-exit execution in [PROTOCOL.md](../../campaign/account-year-048/PROTOCOL.md) and [RESULTS.json](../../campaign/account-year-048/RESULTS.json). Use Python 3.12 and pinned dependencies from the selected source. Replace the example with one **new normalized absolute private output path**, consistently; this creates four separately funded simulation accounts, not a continuation of the original signed business.
 
 ```sh
 python3 -m connected_enterprise register --config campaign/account-year-048/INPUT.json --output /absolute/new/account-year048
@@ -131,4 +138,4 @@ Next, inspect and qualify that owner's published source, reconcile access throug
 
 The complete requested stress matrix remains unfinished: broader defaults/refunds/delays, overlapping/exhausted channels, imitation, provider budgets, large-market aggregation and complete equivalent-outcome human/human-plus-AI/frontier-AI comparisons. Actual host/model/engineering bills, empirical demand and real commercial profit remain unknown. No paid API/service, real transaction, outreach or production deployment authority is created by this document.
 
-Completion lead: finish the separately versioned active-worker checker repair, qualify and integrate normally, then inspect publication and operate actual downloaded bytes. Preserve failed main997 and its original early-start defect; preserve 652e6… primary and 718b/d1f28… annual boundaries.
+Completion lead: finish the remaining exact-head PR100 qualification gates, integrate normally, then inspect resulting-main publication and operate actual downloaded bytes. Preserve failed main 997 and its original early-STARTED defect; preserve 652e6… primary and 718b/d1f28… annual boundaries.
