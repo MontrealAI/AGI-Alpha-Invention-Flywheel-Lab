@@ -4,7 +4,7 @@ import unittest
 
 from connected_enterprise.design_flywheel import (
     example_spec, validate, find_native_successor,
-    choose_from_development, discover_applicable_designs, _covered,
+    choose_from_development, discover_applicable_designs, _covered, _public,
 )
 
 
@@ -151,6 +151,113 @@ class NativeDesignSearch041Tests(unittest.TestCase):
         dev["earned_distribution"]["audit_accepted"] = False
         with self.assertRaisesRegex(ValueError, "INDEPENDENT_NATIVE_AUDIT"):
             choose_from_development(spec, dev)
+
+
+
+    def test_source_linked_loss_must_reduce_scoped_investment_surplus(self):
+        v = case()
+        v["orders"] = [
+            v["orders"][0],
+            order("gain", "buyer1", "kpi_variance", 28, 0, 120, 160, "earned-plan-4"),
+            order("loss", "buyer2", "evidence_matrix", 1, 26, 124, 166, "earned-plan-4"),
+        ]
+        v["investments"][0]["cost"] = 4
+        w = find_native_successor(v)
+        self.assertEqual(w["net_after_native_investment_microUSD"], -1)
+        self.assertFalse(w["positive_incremental_collected_contribution"])
+
+    def test_all_required_capacity_and_acquisition_invoices_are_charged(self):
+        v = case()
+        v["orders"][1]["price"] = 40
+        v["orders"][1]["complete_cost"] = 18
+        v["orders"][1]["capacity_source_plan_id"] = "earned-capacity"
+        v["investments"][0]["cost"] = 15
+        v["investments"].append({
+            "kind": "capacity", "id": "slot-1", "plan_id": "earned-capacity",
+            "purchased_time": 80, "activation_time": 96, "expiry_time": 300,
+            "cost": 15, "funding_receipt": {"funding": "EARNED"},
+        })
+        w = find_native_successor(v)
+        self.assertEqual(w["all_required_invoices_microUSD"], 30)
+        self.assertEqual(w["net_after_native_investment_microUSD"], -8)
+        self.assertFalse(w["positive_incremental_collected_contribution"])
+
+    def test_refunded_work_costs_count_without_credited_collection(self):
+        v = case()
+        refunded = order("refund", "buyer3", "evidence_matrix", 100, 35,
+                         130, 190, "earned-plan-4")
+        refunded["outcome"] = "REFUNDED"
+        refunded["collection_time"] = None
+        v["orders"].append(refunded)
+        w = find_native_successor(v)
+        self.assertEqual(w["net_after_native_investment_microUSD"], -9)
+        self.assertEqual(w["source_linked_uncollected_order_ids"], ["refund"])
+
+    def test_second_enabler_must_have_source_bound_earned_funding(self):
+        v = case()
+        v["orders"][1]["capacity_source_plan_id"] = "other-plan"
+        self.assertIsNone(find_native_successor(v))
+        v["investments"].append({
+            "kind": "capacity", "id": "slot-2", "plan_id": "other-plan",
+            "purchased_time": 80, "activation_time": 96, "expiry_time": 300,
+            "cost": 2, "funding_receipt": {"funding": "SEED"},
+        })
+        self.assertIsNone(find_native_successor(v))
+
+    def test_duplicate_source_plan_inventory_rejected(self):
+        v = case()
+        v["investments"].append(dict(v["investments"][0]))
+        with self.assertRaisesRegex(ValueError, "DUPLICATE_NATIVE_PLAN_INVENTORY"):
+            find_native_successor(v)
+
+
+    def test_heldout_loss_vetoes_development_winner_and_retained_method(self):
+        spec = example_spec()
+        def row(profit, funded=True, covered=True):
+            return {"observed": {"profit_microUSD": profit,
+                "obligations_covered": covered,
+                "source_linked_successor": (
+                    {"positive_incremental_collected_contribution": True} if funded else None)}}
+        development = {"incumbent": row(10), "earned_distribution": row(20)}
+        selection = {"selected": "earned_distribution"}
+        def report(inc, contender):
+            return _public(spec, {"sha256": "frozen-source"}, development, selection,
+                {"incumbent": inc, "earned_distribution": contender}, {})
+        losing = report(row(16), row(8))
+        self.assertEqual(losing["selection"]["selected"], "earned_distribution")
+        self.assertEqual(losing["heldout_recommendation"]["recommended_policy"], "incumbent")
+        self.assertFalse(losing["heldout_recommendation"]["challenger_accepted"])
+        self.assertTrue(losing["confirmed_positive_funded_successor_opportunity"])
+        self.assertFalse(losing["comparative_advantage_on_one_fresh_seed"])
+        self.assertIsNone(losing["retained_mechanism"])
+        tied = report(row(16), row(16))
+        self.assertFalse(tied["heldout_recommendation"]["challenger_accepted"])
+        self.assertEqual(tied["heldout_recommendation"]["recommended_policy"], "incumbent")
+        winning = report(row(8), row(16))
+        self.assertTrue(winning["heldout_recommendation"]["challenger_accepted"])
+        self.assertEqual(winning["heldout_recommendation"]["recommended_policy"], "earned_distribution")
+        self.assertTrue(winning["confirmed_positive_funded_successor_opportunity"])
+        self.assertIsNotNone(winning["retained_mechanism"])
+        self.assertEqual(winning["heldout_recommendation"]["native_financial_action_authority"], [])
+        unviable = report(row(-8, covered=False), row(-2))
+        self.assertIsNone(unviable["heldout_recommendation"]["recommended_policy"])
+        self.assertFalse(unviable["heldout_recommendation"]["challenger_accepted"])
+
+    def test_incumbent_successor_is_not_rebranded_as_new_method(self):
+        spec = example_spec()
+        incumbent = {"observed": {"profit_microUSD": 11, "obligations_covered": True,
+            "source_linked_successor": {"positive_incremental_collected_contribution": True}}}
+        report = _public(spec, {"sha256": "frozen-source"},
+            {"incumbent": incumbent}, {"selected": "incumbent"},
+            {"incumbent": incumbent}, {})
+        self.assertEqual(report["heldout_recommendation"]["recommended_policy"], "incumbent")
+        self.assertIsNone(report["heldout_recommendation"]["development_candidate"])
+        self.assertTrue(report["confirmed_positive_funded_successor_opportunity"])
+        self.assertFalse(report["comparative_advantage_on_one_fresh_seed"])
+        self.assertIsNone(report["retained_mechanism"])
+        no_bid = _public(spec, {"sha256": "frozen-source"},
+            {"incumbent": incumbent}, {"selected": None}, {}, {})
+        self.assertIsNone(no_bid["heldout_recommendation"]["recommended_policy"])
 
 
 if __name__ == "__main__":

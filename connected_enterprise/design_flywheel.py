@@ -106,8 +106,13 @@ def find_native_successor(result):
                       if o["outcome"] == "SETTLED" and o["collection_time"] is not None
                       and o["acceptance_time"] is not None and _margin(o) > 0),
                      key=lambda o: (o["collection_time"], o["id"]))
+    relevant_investments = [i for i in result["investments"]
+                            if i["kind"] in ("acquisition", "capacity")]
+    by_plan = {i["plan_id"]: i for i in relevant_investments}
+    if len(by_plan) != len(relevant_investments):
+        raise ValueError("DUPLICATE_NATIVE_PLAN_INVENTORY")
     witnesses = []
-    for investment in result["investments"]:
+    for investment in relevant_investments:
         if investment["kind"] not in ("acquisition", "capacity"):
             continue
         if investment["funding_receipt"].get("funding") != "EARNED":
@@ -117,12 +122,33 @@ def find_native_successor(result):
                 return order.get("acquisition_source_plan_id") == investment["plan_id"]
             return (order.get("capacity_source_plan_id") == investment["plan_id"]
                     or investment["plan_id"] in order.get("capacity_source_plan_ids", []))
+        linked_orders = [o for o in result["orders"] if linked(o)]
         successors = [o for o in settled if linked(o)
                       and o["qualified_time"] >= investment["activation_time"]
                       and o["collection_time"] > investment["purchased_time"]]
-        if not successors:
+        if not successors or any(o["qualified_time"] < investment["activation_time"]
+                                 for o in linked_orders):
             continue
-        net = sum(_margin(o) for o in successors) - investment["cost"]
+        required_plans = {investment["plan_id"]}
+        for order in linked_orders:
+            extra = order.get("capacity_source_plan_ids", [])
+            if not isinstance(extra, list):
+                raise ValueError("INVALID_NATIVE_ORDER_PLAN_LINKS")
+            linked_plans = [order.get("acquisition_source_plan_id"),
+                            order.get("capacity_source_plan_id"), *extra]
+            if any(p is not None and (not isinstance(p, str) or not p) for p in linked_plans):
+                raise ValueError("INVALID_NATIVE_ORDER_PLAN_LINKS")
+            required_plans.update(p for p in linked_plans if p is not None)
+        if any(p not in by_plan or by_plan[p]["funding_receipt"].get("funding") != "EARNED"
+               for p in required_plans):
+            continue
+        paid_contribution = sum(_margin(o) for o in linked_orders
+                                if o["outcome"] == "SETTLED" and o["collection_time"] is not None)
+        uncollected_cost = sum(o["complete_cost"] for o in linked_orders
+                               if o["outcome"] != "SETTLED" or o["collection_time"] is None)
+        scoped_contribution = paid_contribution - uncollected_cost
+        total_invoices = sum(by_plan[p]["cost"] for p in required_plans)
+        net = scoped_contribution - total_invoices
         for first in settled:
             if first["collection_time"] >= investment["purchased_time"]:
                 continue
@@ -139,18 +165,22 @@ def find_native_successor(result):
                 "binding_constraint_changed": "customer_access" if investment["kind"] == "acquisition" else "productive_capacity",
                 "native_investment": investment["id"], "native_plan_id": investment["plan_id"],
                 "investment_time": investment["purchased_time"], "investment_cost_microUSD": investment["cost"],
+                "all_required_native_plan_ids": sorted(required_plans),
+                "all_required_invoices_microUSD": total_invoices,
                 "funding": "EARNED", "successor_paid_order": second["id"],
                 "successor_service": second["offer"]["service_id"],
                 "successor_customer": second["customer_id"],
                 "successor_collection_hour": second["collection_time"],
                 "successor_margin_microUSD": _margin(second),
-                "source_linked_paid_order_ids": [o["id"] for o in successors],
-                "source_linked_total_order_contribution_microUSD": sum(_margin(o) for o in successors),
+                "source_linked_paid_order_ids": [o["id"] for o in linked_orders if o["outcome"] == "SETTLED"],
+                "source_linked_uncollected_order_ids": [o["id"] for o in linked_orders if o["outcome"] != "SETTLED"],
+                "source_linked_total_order_contribution_microUSD": scoped_contribution,
                 "net_after_native_investment_microUSD": net,
                 "distinct_opportunity": True,
                 "positive_incremental_collected_contribution": net > 0,
                 "strictly_better_per_order_margin": _margin(second) > _margin(first),
-                "source_link_type": investment["kind"]
+                "source_link_type": investment["kind"],
+                "scope": "CONSERVATIVE_SOURCE_LINKED_CONTRIBUTION_NOT_CAUSAL_UPLIFT"
             })
     witnesses.sort(key=lambda w: (
         not w["positive_incremental_collected_contribution"],
@@ -270,6 +300,29 @@ def choose_from_development(spec, development):
             "observed_ranking": [list(row) for row in sorted(rows, key=lambda r: (r[0] is None, -(r[0] or 0), r[1]))]}
 
 
+def _heldout_recommendation(spec, selected, challenger, incumbent, delta):
+    """Holdout veto for a development winner; never authorizes a native action."""
+    distinct = selected is not None and selected != spec["incumbent"]
+    incumbent_viable = bool(incumbent and incumbent["observed"]["obligations_covered"]
+                            and incumbent["observed"]["profit_microUSD"] > 0)
+    challenger_accepted = bool(
+        distinct and challenger and challenger["observed"]["obligations_covered"]
+        and challenger["observed"]["profit_microUSD"] > 0
+        and delta is not None and delta > 0)
+    recommended = (selected if challenger_accepted else
+                   spec["incumbent"] if incumbent_viable else None)
+    return {
+        "development_candidate": selected if distinct else None,
+        "recommended_policy": recommended,
+        "challenger_accepted": challenger_accepted,
+        "reason": ("POSITIVE_MATCHED_HOLDOUT_CHALLENGER" if challenger_accepted else
+                   "KEEP_VIABLE_INCUMBENT" if incumbent_viable else
+                   "NO_SUPPORTED_PROFITABLE_POLICY"),
+        "evidence_scope": "ONE_FROZEN_SIMULATED_HOLDOUT_NO_GENERAL_CAUSAL_CLAIM",
+        "native_financial_action_authority": [],
+    }
+
+
 def _public(spec, source, development, selection, confirmation, discovery):
     selected = selection["selected"]
     challenger = confirmation.get(selected) if selected else None
@@ -279,22 +332,23 @@ def _public(spec, source, development, selection, confirmation, discovery):
     else:
         delta = None
     witness = challenger["observed"]["source_linked_successor"] if challenger else None
+    holdout = _heldout_recommendation(spec, selected, challenger, incumbent, delta)
+    funded_successor_exists = bool(witness and witness["positive_incremental_collected_contribution"] and
+                                   challenger["observed"]["obligations_covered"] and
+                                   challenger["observed"]["profit_microUSD"] > 0)
+    retained_successor = funded_successor_exists and holdout["challenger_accepted"]
     return {
         "schema": SCHEMA, "status": "CONDITIONAL_SIMULATED_EXECUTION",
         "source_sha256": source["sha256"], "spec_sha256": digest(spec),
         "discovered_binding_constraints": discovery,
         "development": {d["id"]: development[d["id"]]["observed"] for d in spec["designs"] if d["id"] in development},
         "selection": selection,
+        "heldout_recommendation": holdout,
         "confirmation": {k: v["observed"] for k, v in sorted(confirmation.items())},
         "matched_confirmation_profit_delta_microUSD": delta,
         "connected_earned_successor_witness": witness,
-        "confirmed_positive_funded_successor_opportunity":
-            bool(witness and witness["positive_incremental_collected_contribution"] and
-                 challenger["observed"]["obligations_covered"] and
-                 challenger["observed"]["profit_microUSD"] > 0),
-        "comparative_advantage_on_one_fresh_seed":
-            bool(delta is not None and delta > 0 and
-                 challenger["observed"]["obligations_covered"]),
+        "confirmed_positive_funded_successor_opportunity": funded_successor_exists,
+        "comparative_advantage_on_one_fresh_seed": holdout["challenger_accepted"],
         "retained_mechanism": ({
             "id": "observed-funded-channel-or-capacity",
             "applicability": "Positive collected native margin, available earned funds, eligible unserved buyer or unmet capacity, checked current obligations",
@@ -303,7 +357,7 @@ def _public(spec, source, development, selection, confirmation, discovery):
             "selected_executable_policy": selected,
             "execution_authority": [], "current_proof": None,
             "scope": "Candidate lesson, not qualified autonomous invention or general causal strategy advantage"
-        } if witness else None),
+        } if retained_successor else None),
         "limits": [
             "Exposed/finitely authored buyer values, costs, demand, channel and competitor assumptions; no real buyers or collections.",
             "Three current native digital services; only enumerated executable native policies, not open-ended business design invention.",
@@ -447,6 +501,7 @@ def main(argv=None):
                          root, args.output)
     print(json.dumps({
         "source_sha256": public["source_sha256"], "selected": public["selection"]["selected"],
+        "heldout_recommendation": public["heldout_recommendation"]["recommended_policy"],
         "heldout_profit_delta_microUSD": public["matched_confirmation_profit_delta_microUSD"],
         "funded_successor": public["connected_earned_successor_witness"],
         "better_opportunity": public["confirmed_positive_funded_successor_opportunity"],
