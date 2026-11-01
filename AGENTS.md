@@ -6,6 +6,16 @@ Build publicly in this repository: visible branches/PRs, GitHub Actions, qualifi
 
 Read [the developer/mechanism guide](docs/harness/DEVELOPER_GUIDE.md), [operator guide](docs/connected014/OPERATOR.md) and [resource policy](docs/harness/RESOURCE_POLICY.md). These current instructions supersede older blanket failure-file retention, stale campaign renewal gates and obsolete owner labels. Historical source snapshots, outcomes and permissions still describe their original scope.
 
+## Invent the complete productive arrangement
+
+The defining shift is **from optimizing an enterprise to constructing the conditions under which better enterprises become possible**. Discover the valuable outcome, the means of producing and verifying it, and the arrangement that makes each participant's involvement worthwhile—together. The object of invention is the complete productive arrangement, not a transaction counter, a catalogue of mechanisms or dependence on this machine.
+
+Search jointly over beneficiary outcomes, production methods, measurement/verification, financing, incentives and allocation of work and risk. The missing means may be an interface, process, instrument, representation, contract or coordination arrangement rather than a new algorithm. Compare strong existing complete alternatives, including human-plus-AI, self-service, partners and no purchase. Participation must be voluntary and worthwhile under explicit outside options; never force demand, hide risks, manufacture dependency or infer consent from modeled surplus. A proposed contract or partner is not an executed agreement or spending authority.
+
+Aim to expand the valuable outcomes that can be sustainably achieved through voluntary cooperation. Count construction, search, unsuccessful attempts, acquisition, production, checking, maintenance, financing and residual obligations. Use real available native cash for actions; uncertain future value is a planning input, not revenue or funding. Profit supports continuation, but maximizing transaction count or organizational complexity is not the objective.
+
+Seek a connected sequence: cycle one creates a useful capability, information, relationship, productive asset or unrestricted earnings that makes a specific successor economically reachable. Demonstrate the successor's acceptance and full costs, and distinguish **financed by**, **enabled by**, and merely **later than**. For a new causal enabling claim, compare against the strongest feasible route without that cycle-created asset under matched starting resources. Better equipment is not by itself a better inventor: improved discovery of such sequences is a further claim requiring fresh equal-content and strong conventional controls. This mission is not a claim that the current finite mechanisms have already delivered a full transformational breakthrough.
+
 ## Learn, consolidate, delete
 
 - After an attempt, keep a short **tried → outcome → why (or unknown) → next/avoid** lesson. Consolidate repeated lessons by failure class; improve the fix, regression or applicability rule rather than accumulating transcripts.
@@ -33,7 +43,7 @@ Report commercial success, invention, retained-method advantage and physical/sci
 
 ### Practical invention and operating loop
 
-1. Fix the useful outcome, permissions and acceptance contract; distinguish hard constraints from assumptions and prerequisites of the current method. Start from the strongest applicable known solution.
+1. Discover and compare valuable complete outcomes jointly with their production and participation arrangements. Then freeze the selected permissions and acceptance contract for execution; distinguish hard constraints from assumptions and prerequisites of the current method. Do not silently relax acceptance after seeing results. Start from the strongest applicable known complete alternative.
 2. Identify the binding constraint. Compare direct execution, reuse, causal transfer, complementary composition, a missing connector/instrument, and changing the process so the constraint no longer matters. Change the means, not the required outcome.
 3. Make the proposal executable: permitted inputs, current state, prerequisites, actions/branches, outputs, effects, complete costs and stopping conditions. Check interfaces and shared resources; a sequence of impressive names is not a working mechanism.
 4. Let evidence-grounded criticism propose a checkable counterexample or discriminating test. Adjudicate before repair. Resolve important uncertainty, act acceptably despite it, remove the dependency, or stop; consider that all initial explanations may be wrong.
@@ -50,3 +60,4 @@ Build for open-ended profitable expansion: **no arbitrary ceiling on buyers, bus
 Remove arbitrary business-scale rejection limits rather than merely raising their constants. Use scalable state, streaming/batching or equivalent execution and validated aggregation, with meaningful workload and financial-conservation tests—not just large-integer acceptance. Finite experiment horizons and actual platform capacity, liquidity, obligations, permissions and security remain enforceable. A resource-bounded checkpoint is not a universal commercial ceiling. Do not weaken guards or alter historical cohorts to manufacture scale.
 
 Completion requires source-matched tests, independent review, normal qualified merge, public release and verified operation from that release—not just a plan, local pass or successful workflow badge. Report blockers exactly and continue independent useful work. Never claim a message was delivered, a task is active, a merge happened or a result is qualified without a receipt. Update concise developer guidance when an implementation or its qualification changes; preserve historical facts without preserving unnecessary bulk.
+
