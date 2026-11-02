@@ -1,0 +1,54 @@
+{
+  "request_id": "baseline",
+  "before": {
+    "summary": {
+      "reservedInvestment": 0,
+      "revenue": 0,
+      "expenses": 1500200000,
+      "recoveryIncome": 0,
+      "profit": -1500200000,
+      "cash": 98499800000,
+      "collections": 0,
+      "expensePaid": 1500200000,
+      "payables": 0,
+      "custodyRestricted": 40000000000,
+      "custodyReserve": 40000000000,
+      "tailReserve": 0,
+      "workingCapital": 0,
+      "available": 58499800000,
+      "unrestrictedEarned": 0,
+      "strictEarnedControl": 0,
+      "equityProtectionBacking": 40000000000,
+      "earnedProtectionBacking": 0,
+      "netEarnedAfterIncurredObligations": -1500200000,
+      "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+      "conditionalEarned": 0,
+      "investmentStopped": false,
+      "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+    },
+    "state_digest": "36ba315787abd0ece13389ca399ac44ad80b58b50560397df4fd191079036048",
+    "actions_sha256": "d70e2c95046bbfbcabccc861eef6f477b1e7bf08be454a0b28fefec33f87254c",
+    "sequence": 6,
+    "scope": "SIMULATED",
+    "ownership": "MANDATORY_SINGLE_LOCAL_POSIX_WRITER",
+    "filesystem": "tmpfs"
+  },
+  "funding": "SEED",
+  "journal_request": {
+    "operation": "spend",
+    "id": "construct-baseline",
+    "kind": "industrial_network_complete_plan",
+    "amount": 19700000000,
+    "day": 10,
+    "work": {
+      "request_sha256": "ef8a282469aa4d4421ec93515818dc7574772617d6749082bdacbc47a76aaa32",
+      "cost_envelope_usd": 19700,
+      "actual_billing": "unknown",
+      "fresh_output_required": true
+    },
+    "expected_net": 19499800000,
+    "allow_seed": true
+  },
+  "authorized_at_ns": 1793584539910077742,
+  "output_absent": true
+}

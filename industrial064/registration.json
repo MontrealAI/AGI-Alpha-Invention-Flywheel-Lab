@@ -1,0 +1,32 @@
+{
+  "schema": "industrial064/registration/v1",
+  "requests": [
+    {
+      "id": "baseline",
+      "input_path": "industrial064/inputs/baseline.json",
+      "input_sha256": "e92e7cbdd5b24b963e249541bb1ad3830651a2fd645a7ab593c12986df0ba560",
+      "distance_margin": 0.1,
+      "cost_ceiling_yuan": 375000000
+    },
+    {
+      "id": "demand105",
+      "input_path": "industrial064/inputs/demand105.json",
+      "input_sha256": "8f1d725b9dde27f5ddb48c884782d6911c18f65f906721fe7a553ec826313b4e",
+      "distance_margin": 0.1,
+      "cost_ceiling_yuan": 400000000
+    }
+  ],
+  "source": "industrial062@91220d0793d1c9d6e21d5d2c8213d662d29db4de; OR-License@2bda4b8d6ddd4bd1cb62b89acee0c7c2f1914d47",
+  "scope": "One historical manufacturer, two planning requests; second authored +5% customer-product annual demand rounded up. Not separate buyers, new demand evidence, physical operation or previously-uneconomic breakthrough.",
+  "registered_before_generation": true,
+  "experiment": "One 120-second CP-SAT solve per accepted funded request, 155-second outer timeout. No retry or changing acceptance after output. Any failure refunds and preserves incurred costs.",
+  "causal_sequence": "First funded offer and resource authorization precede baseline production. First collected full-cost profit, tax and maturity precede EARNED-only successor resource reservation. Only then generate demand105 output.",
+  "no_precomputed_output": true,
+  "comparators": "Identical qualified direct network via human+AI, specialist and selfservice; no algorithmic superiority; lowest total authored procurement cost with strict participation slack. Savings not receipts.",
+  "paper_use": {
+    "OUT-EXECUTE": "Retain conventional constructor/checker, revalidate exact new input/output; no boundary equality saving claimed.",
+    "OUT-EVOLVE": "Retain usable constructor, generate genuinely different successor after native earned authorization; no better-inventor claim.",
+    "OUT-REFLECT": "Independent source client semantics plus explicit robust-distance and cost checks; no external physical certification."
+  },
+  "cost_scope": "USD vendor engineering service only; all modeled costs expensed, positive profit taxed25%; support/remedy prepaid; native residual obligations retained. Unknown actual billing remains unknown. No annualization."
+}
