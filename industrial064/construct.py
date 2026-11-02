@@ -20,7 +20,7 @@ def construct(root, request, output):
         folder = Path(td); shutil.copyfile(root/request['input_path'], folder/'01.json')
         code = 'from industrial062.construct import construct; from pathlib import Path; construct(Path(__import__("sys").argv[1]),Path(__import__("sys").argv[2]),120,0.10)'
         try:
-            proc = subprocess.run([sys.executable, '-c', code, str(folder), str(output)], cwd=root, capture_output=True, text=True, timeout=TIMEOUT_SECONDS)
+            proc = subprocess.run([sys.executable, '-c', code, str(folder), str(output)], cwd=root, capture_output=True, text=False, timeout=TIMEOUT_SECONDS)
         except subprocess.TimeoutExpired as exc:
             raise ProducerFailure('PRODUCER_TIMEOUT', timeout_seconds=TIMEOUT_SECONDS,
                                   stdout=_stream_commitment(exc.stdout), stderr=_stream_commitment(exc.stderr),
