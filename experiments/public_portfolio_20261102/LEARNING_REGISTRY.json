@@ -4,7 +4,7 @@
   "owner": "coordinator",
   "branch": "codex/public-portfolio-five-20261102-b9221b22",
   "base_commit": "a842861dcf532ee8b769f39248c4c1faabfb628a",
-  "stage": "FIVE_SCIENTIFIC_ROUTES_CLOSED_R2_SAME_ACCOUNT_RECOVERY_QUALIFIED_AWAITING_DISPATCH",
+  "stage": "FIVE_SCIENTIFIC_ROUTES_CLOSED_R2_EXPLICIT_CASE_EXECUTION_QUALIFIED",
   "accounts": "R1 closed25/110 with complete-source qualification FAILED; R2 fresh110 separately seeded source-qualification comparisons, no migrated/copied/pooled funds.",
   "lessons": [
     {
@@ -41,6 +41,13 @@
       "outcome": "HOST_INTERRUPTION_WITH39COMPLETE_AND4DURABLE_PARTIAL_ACCOUNTS",
       "why": "Execution session and workers disappeared; current controller has no scheduler resume entry point. Native journals, account authority and obligations survive.",
       "next": "Explicit execution-only recovery amendment, deterministic authenticated-prefix reconstruction and peer-reviewed same-account continuation; never rerun a case with new capital."
+    },
+    {
+      "route": "integration",
+      "tried": "Long-lived four-account prefix reconstruction controller",
+      "outcome": "ONE_ACTUAL_SAME_ACCOUNT_RECOVERY_COMPLETE_THEN_SECOND_HOST_INTERRUPTION",
+      "why": "Process/session disappearance recurred; cause unknown. Reconstructing via repeated temporary JournalAccount checks was costly.",
+      "next": "Use explicit case-boundary calls; qualify authenticated one-pass read-only prefix reconstruction separately. Keep full business horizon and all original account histories."
     }
   ],
   "route_evidence": {
@@ -166,17 +173,12 @@
   "r2_public_preregistration_commit": "be1cdbfb0e56c8e60c33ce9d2bbf1ca0b10f64f6",
   "r2_financial_source_sha256": "bb74d40f7a84ca155189f908c091db32b27093e203e0d63696f327a9a2492901",
   "r2_execution_checkpoint": {
-    "completed_accounts": 39,
-    "interrupted_accounts": 4,
+    "completed_accounts": 40,
+    "interrupted_accounts": 3,
     "unstarted_accounts": 67,
-    "original_worker_session_available": false,
     "account_reset_or_reseed": false,
-    "next_action": "Qualify and publicly register same-account authenticated prefix reconstruction before any continuation; keep original model/source unchanged.",
-    "recovery_qualification": {
-      "constructor_fixtures_passed": 12,
-      "independent_peer_checks_passed": 8,
-      "driver_sha256": "e067f29f2bea2815165ef914d7c887060f4003e42d0a059373e63f3f0fa73beb",
-      "actual_account_continuation": "NOT_YET_PERFORMED"
-    }
+    "observed_actual_recovery": "interface-earned-only-k2 COMPLETE with exact prefix match before second host interruption",
+    "next_action": "Prospectively published once-only original worker calls beside separately qualified fast same-account recovery",
+    "interrupted_process_resource_totals": null
   }
 }

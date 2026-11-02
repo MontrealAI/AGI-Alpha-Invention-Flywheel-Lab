@@ -37,7 +37,11 @@ jobs:
           python -m unittest tests.test_public_portfolio_20261102 -v
           python experiments/public_portfolio_20261102/verification/r2_guard_tests_002.py --output "$RUNNER_TEMP/public-portfolio-r2-guards.json"
           python -m unittest experiments.public_portfolio_20261102.verification.test_recovery -v
+          python -m unittest experiments.public_portfolio_20261102.verification.test_dispatch_case -v
           python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output "$RUNNER_TEMP/public-portfolio-artifact-replay.json"
+      - name: Recheck the ten retained native portfolio financial exports
+        if: hashFiles('experiments/public_portfolio_20261102/evidence/economics-r2/public/RESULTS.json') != ''
+        run: python experiments/public_portfolio_20261102/verification/r2_recheck_retained.py --public-root experiments/public_portfolio_20261102/evidence/economics-r2/public --audit-receipts experiments/public_portfolio_20261102/evidence/economics-r2/audit-receipts --output "$RUNNER_TEMP/public-portfolio-retained-finance.json"
       - name: Verify the inspected research edition and retained evidence identities
         run: python docs/transformational063/verify_publication.py
       - name: Blue Sky probes, open scale and historical-custody regressions
@@ -56,6 +60,7 @@ jobs:
           path: |
             ${{ runner.temp }}/public-portfolio-r2-guards.json
             ${{ runner.temp }}/public-portfolio-artifact-replay.json
+            ${{ runner.temp }}/public-portfolio-retained-finance.json
             ${{ runner.temp }}/blue-sky064-probes/RESULT.json
             ${{ runner.temp }}/flexibility063-technical
             ${{ runner.temp }}/transformational063/REPORT.json
