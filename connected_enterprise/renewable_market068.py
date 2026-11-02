@@ -10,7 +10,7 @@ from hashlib import sha256
 from json import dumps
 
 MICRO = 1_000_000
-SCHEMA = 'agi-alpha/renewable-paid-work-market068/v1'
+SCHEMA = 'agi-alpha/renewable-paid-work-market068/v2'
 
 
 def digest(value):
@@ -121,6 +121,7 @@ def simulate(case:Scenario):
     for month in range(1,a.months+1):
         if stopped:
             rows.append({'month':month,'status':'HALTED_PREPAYMENT_REQUIRED','closing_cash_micro':cash,
+                        'protected_tail_micro':outstanding_tail,
                         'trailing_12_profit_micro':None,'new_customers':0,'accepted_deliveries':0})
             continue
         begin_cash=cash
@@ -140,14 +141,16 @@ def simulate(case:Scenario):
         admitted=min(requested,monthly_serviceable,a.monthly_capacity_packets)
         # Reserve enough to fund even 100% acceptance and all payment fees, before collection.
         worst_fees_per_attempt=(a.quote_micro*a.payment_bps+9999)//10000
-        maximum_commit_cost=a.first_attempt_micro+a.accepted_completion_micro+worst_fees_per_attempt
+        maximum_commit_cost=(a.first_attempt_micro+a.accepted_completion_micro+worst_fees_per_attempt+
+                             a.tail_per_accepted_micro)
         existing_obligations=outstanding_tail
         available_before_collection=cash-existing_obligations
         if available_before_collection<fixed:
             stopped=True
             rows.append({'month':month,'status':'STOP_NOT_ENOUGH_CASH_FOR_FIXED_COST',
                          'opening_cash_micro':begin_cash,'minimum_fixed_required_micro':fixed,
-                         'closing_cash_micro':cash,'trailing_12_profit_micro':None,
+                         'closing_cash_micro':cash,'protected_tail_micro':outstanding_tail,
+                         'trailing_12_profit_micro':None,
                          'new_customers':0,'accepted_deliveries':0})
             continue
         affordable=(available_before_collection-fixed)//maximum_commit_cost
@@ -158,7 +161,8 @@ def simulate(case:Scenario):
         fees=accepted*a.quote_micro*a.payment_bps//10000
         # Monthly recurring work is from EXISTING customers; new ones start next month.
         # Outreach purchases may use only cash left after old tails and current production.
-        marketing_budget=max(0,available_before_collection-fixed-production-fees)
+        tail_new=accepted*a.tail_per_accepted_micro
+        marketing_budget=max(0,available_before_collection-fixed-production-fees-tail_new)
         proposed=a.monthly_marketing_target_micro+max(0,prior_profit)*a.prior_profit_reinvestment_bps//10000
         marketing_budget=min(marketing_budget,proposed) if can_sell else 0
         # Each contact reserves the worst-case onboarding fee; only conversions pay it.
@@ -187,14 +191,13 @@ def simulate(case:Scenario):
         revenue=accepted*a.quote_micro
         credit_losses=(accepted-actually_paid)*a.quote_micro
         collections=actually_paid*a.quote_micro
-        expense_before_tax=fixed+production+fees+acquisition+onboarding+credit_losses
+        expense_before_tax=fixed+production+fees+acquisition+onboarding+credit_losses+tail_new
         pretax=revenue-expense_before_tax
         tax=max(0,pretax)*a.income_tax_bps//10000
         expense=expense_before_tax+tax
         profit=revenue-expense
-        cash+=collections-(fixed+production+fees+acquisition+onboarding+tax)
-        tail_new=accepted*a.tail_per_accepted_micro
-        # Prior month's support tails mature after one month; no income arises on release.
+        cash+=collections-(existing_obligations+fixed+production+fees+acquisition+onboarding+tax)
+        # Previous protected support is paid at maturity; new supported work is accrued now.
         outstanding_tail=tail_new
         if cash<outstanding_tail:
             # A realistic sponsor needs further cash to reserve its obligations.
@@ -203,7 +206,7 @@ def simulate(case:Scenario):
         else:
             status='SIMULATED_FUNDED' if attempted==requested else 'SIMULATED_FUNDED_PARTIAL_CAPACITY'
             trailing=(sum(row['profit_micro'] for row in rows[-11:] if 'profit_micro' in row)+profit if month>=12 and all('profit_micro' in r for r in rows[-11:]) else None)
-        if cash!=a.opening_equity_micro+sum(r.get('profit_micro',0) for r in rows)+profit:
+        if cash-outstanding_tail!=a.opening_equity_micro+sum(r.get('profit_micro',0) for r in rows)+profit:
             raise AssertionError('CASH_AND_PROFIT_RECONCILIATION_FAILED')
         if active+uncontacted+warm_ready+dormant_eligible+dormant_unavailable+exhausted != eligible_total:
             raise AssertionError('CUSTOMER_STOCK_MUST_BE_CONSERVED')
@@ -228,6 +231,7 @@ def simulate(case:Scenario):
              'accepted_deliveries':accepted,'paid_deliveries':actually_paid,
              'revenue_micro':revenue,'collections_micro':collections,'credit_loss_micro':credit_losses,
              'production_micro':production,'processing_micro':fees,'outreach_micro':acquisition,
+             'support_accrual_micro':tail_new,'support_cash_settled_micro':existing_obligations,
              'onboarding_micro':onboarding,'fixed_micro':fixed,'tax_micro':tax,'expense_micro':expense,
              'profit_micro':profit,'trailing_12_profit_micro':trailing,
              'human_office_comparable_cost_per_packet_micro':a.full_human_office_cost_micro,
@@ -245,6 +249,7 @@ def simulate(case:Scenario):
             'qualification_limitations':['Neither buyer choice nor customer consent has been observed',
                 'No individual orders, native JournalAccount receipts, real collections, or source-backed production at projected volume',
                 'Source job counts do not imply identical tasks, demand or purchase rights',
+                'Support tails are conservatively treated as fully payable after one month; earlier v1 reserve-release forecasts omitted this expense',
                 'Collection loss, onboarding, support, tax, fixed costs and AI resources are scenario assumptions',
                 'Initial capital is a declared simulated equity scenario, not an authorized investment',
                 'Comparing human-office avoidable cost is not proof of service price or market capture',
