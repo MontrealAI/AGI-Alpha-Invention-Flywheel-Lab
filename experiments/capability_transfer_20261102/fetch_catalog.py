@@ -2,6 +2,7 @@ import argparse, hashlib, json, time, urllib.error, urllib.parse, urllib.request
 from pathlib import Path
 
 BASE = 'https://data.mendeley.com/public-api/datasets/zh58byr53c'
+FOLDER_BASE = 'https://data.mendeley.com/public-api/datasets/publics/zh58byr53c'
 VERSION = 2
 MAX_RESPONSE = 4_000_000
 
@@ -63,7 +64,11 @@ class Recorder:
             return None
 
 def endpoint(kind='',**query):
-    return BASE+('/'+kind if kind else '')+'?'+urllib.parse.urlencode({'version':VERSION,**query})
+    # Official public folder resource has an additional /publics/ component.
+    # Files and metadata have the shorter documented aliases. The website
+    # proxy mapping remains subject to the actual recorded HTTP response.
+    base=FOLDER_BASE if kind=='folders' else BASE
+    return base+('/'+kind if kind else '')+'?'+urllib.parse.urlencode({'version':VERSION,**query})
 
 def priority(entry):
     name=str(entry.get('name',entry.get('filename',entry.get('label','')))).lower()

@@ -7,6 +7,9 @@ class Response(io.BytesIO):
         super().__init__(json.dumps(payload).encode()); self.status=status; self.headers={'Content-Type':'application/json'}
 
 class CatalogBoundaryTests(unittest.TestCase):
+    def test_documented_public_folder_route_is_distinct(self):
+        self.assertEqual(endpoint('folders'),'https://data.mendeley.com/public-api/datasets/publics/zh58byr53c/folders?version=2')
+        self.assertEqual(endpoint('files',folder_id='root'),'https://data.mendeley.com/public-api/datasets/zh58byr53c/files?version=2&folder_id=root')
     def test_http_success_with_remote_error_rejected(self):
         for x in [{'error':400},{'errors':['bad request']},{},None,{'files':[{'id':'x'}]}]:
             with self.subTest(payload=x), self.assertRaises(ValueError): catalog_entries(x)

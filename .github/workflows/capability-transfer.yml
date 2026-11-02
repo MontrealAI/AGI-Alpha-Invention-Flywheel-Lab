@@ -22,9 +22,15 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install numpy==2.3.5 scipy==1.17.0 cryptography==50.0.2
-      - run: python -m unittest experiments.capability_transfer_20261102.test_instrument experiments.capability_transfer_20261102.test_catalog -v
+      - run: python -m unittest experiments.capability_transfer_20261102.test_instrument experiments.capability_transfer_20261102.test_catalog experiments.capability_transfer_20261102.test_economics -v
       - name: Replay the frozen numerical experiment
         run: python -m experiments.capability_transfer_20261102.run_stage_b run --freeze experiments/capability_transfer_20261102/FROZEN_STAGE_B_SERIALIZATION_FIX.json --output /tmp/cell-pack-numerical
+      - name: Reproduce the post-result diagnostic against the original receipt
+        run: python -m experiments.capability_transfer_20261102.run_midpoint_diagnostic --result experiments/capability_transfer_20261102/results/STAGE_B_RESULT.json --output /tmp/cell-pack-midpoint
+      - name: Independently replay the retained public cost account
+        run: |
+          gzip -dc experiments/capability_transfer_20261102/results/RESEARCH_ACCOUNT_PUBLIC.json.gz > /tmp/cell-pack-public-account.json
+          python -m experiments.capability_transfer_20261102.economics audit --artifact experiments/capability_transfer_20261102/results/STAGE_B_RESULT.json --public /tmp/cell-pack-public-account.json --registration-sha256 e94112d4784abbd81af4ee277e5a12fe354d3237c79e887b90f379da3506bb5c
       - uses: actions/upload-artifact@v4
         if: always()
         with:
