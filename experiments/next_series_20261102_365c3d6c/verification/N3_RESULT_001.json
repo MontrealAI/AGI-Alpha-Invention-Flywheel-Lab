@@ -1,0 +1,269 @@
+{
+  "reviewer": "independent_scientist",
+  "scope": "FINITE_AUTHORED_MODEL_AND_SOURCE_SCOPE_REVIEW",
+  "independence": "Exact Fraction polynomial/compliance references, direct tensor contractions, and adaptive quadrature are separate from candidate Polynomial/lstsq/Legendre construction. No candidate reference labels or raw measured strain values are used.",
+  "registered_denominator": 26,
+  "passed": 26,
+  "failed": 0,
+  "cases": [
+    {
+      "case": "normal_nu_-0.2_xx",
+      "expected_identified": false,
+      "actual": "UNIDENTIFIED",
+      "independent_H_error": 0.0,
+      "independent_observation_gap": 1.6781840267475825e-20,
+      "target_change_per_unit": 0.1622214211307658,
+      "pass": true
+    },
+    {
+      "case": "normal_nu_-0.2_difference",
+      "expected_identified": true,
+      "actual": "IDENTIFIED_MODEL_ONLY",
+      "independent_H_error": 0.0,
+      "target_truth_mpa": 50.0,
+      "corner_maximum_error_mpa": 0.5000000000000426,
+      "reported_radius_mpa": 0.49999999999999967,
+      "pass": true
+    },
+    {
+      "case": "normal_nu_0.0_xx",
+      "expected_identified": true,
+      "actual": "IDENTIFIED_MODEL_ONLY",
+      "independent_H_error": 0.0,
+      "target_truth_mpa": 120.0,
+      "corner_maximum_error_mpa": 0.20000000000003126,
+      "reported_radius_mpa": 0.2,
+      "pass": true
+    },
+    {
+      "case": "normal_nu_0.0_difference",
+      "expected_identified": true,
+      "actual": "IDENTIFIED_MODEL_ONLY",
+      "independent_H_error": 0.0,
+      "target_truth_mpa": 50.0,
+      "corner_maximum_error_mpa": 0.4000000000000341,
+      "reported_radius_mpa": 0.39999999999999997,
+      "pass": true
+    },
+    {
+      "case": "normal_nu_0.3_xx",
+      "expected_identified": false,
+      "actual": "UNIDENTIFIED",
+      "independent_H_error": 0.0,
+      "independent_observation_gap": 1.4823076576950256e-21,
+      "target_change_per_unit": 0.3665083330689155,
+      "pass": true
+    },
+    {
+      "case": "normal_nu_0.3_difference",
+      "expected_identified": true,
+      "actual": "IDENTIFIED_MODEL_ONLY",
+      "independent_H_error": 0.0,
+      "target_truth_mpa": 50.0,
+      "corner_maximum_error_mpa": 0.30769230769234923,
+      "reported_radius_mpa": 0.3076923076923077,
+      "pass": true
+    },
+    {
+      "case": "tilted_missing_shear",
+      "expected_identified": false,
+      "actual": "UNIDENTIFIED",
+      "independent_H_error": 2.117582368135751e-22,
+      "independent_observation_gap": 2.2816950016662715e-20,
+      "target_change_per_unit": 0.16391402572981847,
+      "pass": true
+    },
+    {
+      "case": "three_exact_axes_normal",
+      "expected_identified": true,
+      "actual": "IDENTIFIED_MODEL_ONLY",
+      "independent_H_error": 0.0,
+      "target_truth_mpa": 120.0,
+      "corner_maximum_error_mpa": 0.500000000000071,
+      "reported_radius_mpa": 0.5000000000000001,
+      "pass": true
+    },
+    {
+      "case": "six_rational_directions_normal",
+      "expected_identified": true,
+      "actual": "IDENTIFIED_MODEL_ONLY",
+      "independent_H_error": 8.470329472543003e-22,
+      "target_truth_mpa": 120.0,
+      "corner_maximum_error_mpa": 0.5000000000001137,
+      "reported_radius_mpa": 0.5000000000000003,
+      "pass": true
+    },
+    {
+      "case": "six_rational_directions_shear",
+      "expected_identified": true,
+      "actual": "IDENTIFIED_MODEL_ONLY",
+      "independent_H_error": 8.470329472543003e-22,
+      "target_truth_mpa": 25.0,
+      "corner_maximum_error_mpa": 0.32051282051286023,
+      "reported_radius_mpa": 0.32051282051282054,
+      "pass": true
+    },
+    {
+      "case": "analytic_tilted_direction_counterexample",
+      "readings_strain": [
+        8.820307770793024e-22,
+        0.0
+      ],
+      "xx_minus_zz_change_strain": 0.0001,
+      "pass": true
+    },
+    {
+      "case": "exact_polynomial_integrals_and_boundary",
+      "derivative_integrals": {
+        "2": "0",
+        "3": "0",
+        "4": "0"
+      },
+      "boundary_derivatives_zero_through_order": 5,
+      "pass": true
+    },
+    {
+      "case": "compact_field",
+      "halfwidths_mm": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "amplitude_mpa": -100,
+      "reference_max_error_mpa": 2.1316282072803006e-14,
+      "independent_quadrature_mean_max_mpa": 4.6629367034256575e-15,
+      "exact_reference_divergence_zero": true,
+      "boundary_stress_max_mpa": 0.0,
+      "center_energy_density_mpa": 0.026020408163265306,
+      "pass": true
+    },
+    {
+      "case": "compact_field",
+      "halfwidths_mm": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "amplitude_mpa": 100,
+      "reference_max_error_mpa": 2.1316282072803006e-14,
+      "independent_quadrature_mean_max_mpa": 4.6629367034256575e-15,
+      "exact_reference_divergence_zero": true,
+      "boundary_stress_max_mpa": 0.0,
+      "center_energy_density_mpa": 0.026020408163265306,
+      "pass": true
+    },
+    {
+      "case": "compact_field",
+      "halfwidths_mm": [
+        1.0,
+        0.5,
+        2.0
+      ],
+      "amplitude_mpa": -100,
+      "reference_max_error_mpa": 1.4210854715202004e-14,
+      "independent_quadrature_mean_max_mpa": 5.773159728050814e-15,
+      "exact_reference_divergence_zero": true,
+      "boundary_stress_max_mpa": 0.0,
+      "center_energy_density_mpa": 0.03427424152290303,
+      "pass": true
+    },
+    {
+      "case": "compact_field",
+      "halfwidths_mm": [
+        1.0,
+        0.5,
+        2.0
+      ],
+      "amplitude_mpa": 100,
+      "reference_max_error_mpa": 1.4210854715202004e-14,
+      "independent_quadrature_mean_max_mpa": 5.773159728050814e-15,
+      "exact_reference_divergence_zero": true,
+      "boundary_stress_max_mpa": 0.0,
+      "center_energy_density_mpa": 0.03427424152290303,
+      "pass": true
+    },
+    {
+      "case": "compact_field",
+      "halfwidths_mm": [
+        2.0,
+        1.0,
+        0.5
+      ],
+      "amplitude_mpa": -100,
+      "reference_max_error_mpa": 3.552713678800501e-15,
+      "independent_quadrature_mean_max_mpa": 2.3314683517128287e-15,
+      "exact_reference_divergence_zero": true,
+      "boundary_stress_max_mpa": 0.0,
+      "center_energy_density_mpa": 0.019859467455621307,
+      "pass": true
+    },
+    {
+      "case": "compact_field",
+      "halfwidths_mm": [
+        2.0,
+        1.0,
+        0.5
+      ],
+      "amplitude_mpa": 100,
+      "reference_max_error_mpa": 3.552713678800501e-15,
+      "independent_quadrature_mean_max_mpa": 2.3314683517128287e-15,
+      "exact_reference_divergence_zero": true,
+      "boundary_stress_max_mpa": 0.0,
+      "center_energy_density_mpa": 0.019859467455621307,
+      "pass": true
+    },
+    {
+      "case": "scoring_target_scope",
+      "offset_strain": -0.002,
+      "centered_rmse": 1.9964119147252198e-19,
+      "absolute_rmse": 0.002,
+      "pass": true
+    },
+    {
+      "case": "scoring_target_scope",
+      "offset_strain": 0.0,
+      "centered_rmse": 0.0,
+      "absolute_rmse": 0.0,
+      "pass": true
+    },
+    {
+      "case": "scoring_target_scope",
+      "offset_strain": 0.002,
+      "centered_rmse": 1.9964119147252198e-19,
+      "absolute_rmse": 0.002,
+      "pass": true
+    },
+    {
+      "case": "bad_H_shape",
+      "pass": true
+    },
+    {
+      "case": "empty_measurements",
+      "pass": true
+    },
+    {
+      "case": "unstable_material",
+      "pass": true
+    },
+    {
+      "case": "nonsymmetric_stress",
+      "pass": true
+    },
+    {
+      "case": "negative_width",
+      "pass": true
+    }
+  ],
+  "raw_measurement_rows_opened": 0,
+  "physical_admission": false,
+  "successor_physical_admission": false,
+  "resource": {
+    "wall_s": 0.4558854410006461,
+    "process_cpu_s": 0.4553989999999996
+  },
+  "source_sha256": {
+    "verification/verify_n3.py": "f6e74ec0fca7e6c2414578d96de0a40a0924c6e755614b9d20836951e1a79ec9",
+    "n3/instrument.py": "edfd296f0de3fcf3a94496922fa0b35a50e47afc9fd256f2744b57b66ce22889",
+    "n3/CONTRACT.md": "f31c76fc1c244176cd24eb56d95e7944ed2221d88e2f0b04c4a6ff54203aabb0"
+  }
+}

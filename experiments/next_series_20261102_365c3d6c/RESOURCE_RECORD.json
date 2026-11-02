@@ -1,0 +1,140 @@
+{
+  "campaign": "next-series-20261102-365c3d6c",
+  "compiled_utc": "2026-11-02T20:27:08.717713+00:00",
+  "source_freeze": "28d9a23f6436d40655035c87bd9cc497ecd12812",
+  "scope": "Resource record, not an economic cost estimate or allocation/quota.",
+  "local_confirmatory_programs": [
+    {
+      "result": "n1/RESULT_001.json",
+      "sha256": "2ef6f9dbd1b2f17089e9f3f216e6507128f2e98c325b13e4ca5f88b4883a1677",
+      "attempt": 1,
+      "measured_inside_program": {
+        "wall_s": 0.0027882119993591914,
+        "process_cpu_s": 0.002773000000000003,
+        "economic_model_and_host_cost": "UNKNOWN"
+      },
+      "includes_interpreter_startup_imports": false
+    },
+    {
+      "result": "verification/N1_RESULT_001.json",
+      "sha256": "4633e425e5165c4487a9166d38b58ff26ce34aa337fd9ffe27783764a8a0cbf6",
+      "attempt": 1,
+      "measured_inside_program": {
+        "wall_s": 0.0015834769983484875,
+        "process_cpu_s": 0.0015680000000000017
+      },
+      "includes_interpreter_startup_imports": false
+    },
+    {
+      "result": "n3/RESULT_001.json",
+      "sha256": "11125457ee08b4310b5cb24c2a0bc7417afcdcd7185197667b77d97545e8f13e",
+      "attempt": 1,
+      "measured_inside_program": {
+        "economic_resource_cost": "UNKNOWN",
+        "inference_research_and_verification_not_in_program_timer": true,
+        "process_cpu_seconds": 0.5968250000000002,
+        "wall_seconds": 0.5490543939995405
+      },
+      "includes_interpreter_startup_imports": false
+    },
+    {
+      "result": "verification/N3_RESULT_001.json",
+      "sha256": "cac95f779ff87bc971cbc8a9a3c32d174bd3150c9cae32756a7904f36b8f96b2",
+      "attempt": 1,
+      "measured_inside_program": {
+        "wall_s": 0.4558854410006461,
+        "process_cpu_s": 0.4553989999999996
+      },
+      "includes_interpreter_startup_imports": false
+    }
+  ],
+  "n3_constructor_command_wrapper": {
+    "children_system_cpu_seconds": 0.020323,
+    "children_user_cpu_seconds": 1.375573,
+    "command": [
+      "python3",
+      "experiments/next_series_20261102_365c3d6c/n3/run.py",
+      "--output",
+      "experiments/next_series_20261102_365c3d6c/n3/RESULT_001.json"
+    ],
+    "exit_code": 0,
+    "finished_utc": "2026-11-02T20:21:32.611780+00:00",
+    "maximum_child_rss_KiB": 24048,
+    "schema": "agi-alpha/overnight022-command-resource/v1",
+    "scope": "Reaped local command and descendants; excludes assistant inference, tool transport, external CI, preceding clone/review and unmeasured host billing. Maximum RSS is a kernel high-water mark, not concurrent aggregate memory. No allocation or quota is created by this receipt.",
+    "started_utc": "2026-11-02T20:21:31.924386+00:00",
+    "total_measured_command_cpu_seconds": 1.3958959999999998,
+    "wall_seconds": 0.6873912020000716
+  },
+  "double_counting_warning": "The wrapper contains the N3 internal timer; do not add both as disjoint resource consumption. CPU may exceed wall time due to numerical-library threads. Independent program timings do not include prior research or construction.",
+  "predecessor_and_preflight_receipts": "PREDECESSOR_REPRODUCTION.json",
+  "additional_measured_components": {
+    "w1_unit_tests": 8,
+    "w1_lp_cases": 48,
+    "runtime_preflight_tests_per_execution": 16,
+    "runtime_preflight_executions": 2
+  },
+  "work_performed_but_not_completely_priced": [
+    "Source discovery and reading for water, optics and three N3 arrangements",
+    "Failed public retrieval attempts, legitimate alternate routes, byte hashing and provenance interpretation",
+    "Repository permissions/ownership preflight, isolation, public freeze and result publication",
+    "Constructor design and coding; pre-freeze static-review repair of empty evidence checks",
+    "Independent source inspection, independently authored mathematical references and economic challenge",
+    "Report, claim ledger, learning registry, charts, source/attempt preservation and CI monitoring"
+  ],
+  "economic_unknowns": {
+    "total_included_inference_cost": "UNKNOWN",
+    "agent_token_usage": "UNKNOWN",
+    "complete_host_tool_cost": "UNKNOWN",
+    "complete_research_elapsed_effort": "UNKNOWN",
+    "human_specialist_attention_hours": "UNKNOWN",
+    "supported_loaded_human_wages": "UNKNOWN",
+    "cost_per_commercially_accepted_artifact": "UNKNOWN",
+    "support_remedy_and_refresh_costs": "UNKNOWN",
+    "opportunity_cost": "UNKNOWN"
+  },
+  "human_intervention": {
+    "new_human_specialist_work_solicited": false,
+    "new_outsider_contact": false,
+    "scope": "User supplied the assignment and predecessor context; original studies and repository include prior human work. No measured end-to-end autonomy or human-cost comparison is asserted."
+  },
+  "successful_compact_source_acquisition": [
+    {
+      "source": "Water publisher supplement",
+      "bytes": 1634588,
+      "sha256": "97f37f427764ff8cee536aa22f4b340dfcd8382d6993e1ca9e32f055e2239f61",
+      "detail": "n1/SOURCE_MANIFEST.json"
+    },
+    {
+      "source": "Optical author code/data archive",
+      "bytes": 685338,
+      "sha256": "143f580df04ca36cf73e77c0282a9d52bdef4334bf898359890e2d0d96677a07",
+      "detail": "verification/N2_DEFERRED.md"
+    },
+    {
+      "source": "NIST residual-strain dataset README",
+      "bytes": 7111,
+      "sha256": "6da6531af5871cdc0c000352a5373a9d7eb7c2aed7c6b843d6d376c538d36dc6",
+      "detail": "n3/CONTRACT.md"
+    },
+    {
+      "source": "NIST build metadata README",
+      "bytes": 14191,
+      "sha256": "907c1a85f15ffb05951a3fa7b8ae2538cdc78e264f1c866b686e783405101fc7",
+      "detail": "n3/CONTRACT.md"
+    }
+  ],
+  "retrieval_scope": "This compact list is not a total network-byte meter. Browser/search responses, metadata, predecessor fetches and transport overhead are unmetered. No fresh raw water CSV or raw NIST EDD array was retrieved.",
+  "operating_state": {
+    "paid_model_api_calls": 0,
+    "new_paid_evidence_purchases": 0,
+    "outsider_contacts": 0,
+    "real_transactions": 0,
+    "physical_actuations": 0,
+    "native_accounts_created": 0,
+    "native_financial_trajectories": 0,
+    "k2_executions": 0,
+    "complete_economic_cost": "UNKNOWN"
+  },
+  "ci": "Normal authorized hosted workflow reproduction is separate from original confirmation. Exact-head run statuses and durations require CI receipts; no CI pass is inferred from these local timers."
+}

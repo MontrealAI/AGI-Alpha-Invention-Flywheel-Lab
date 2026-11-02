@@ -1,0 +1,28 @@
+# Shared learning and next finite decisions
+
+These are observed lessons and prospective next questions. They do not amend the frozen predecessor claims, denominators or rules, and do not preregister an unexecuted successor by implication.
+
+| Retained observation or control | What changed the decision | Next finite question and stopping condition |
+|---|---|---|
+| W1 stock replay: 8/8 unit checks and 48/48 independent LP cases agree | Stock arithmetic remains reusable inside its original counter, cyclic-buffer and uncertainty assumptions. It does not provide chemistry or batch release. | Reuse only after a source-bound adapter qualifies the relevant batches. Do not spend the next stage on another buffer optimum. |
+| N1 publisher supplement recovered; numbered diagram elements are valves | The earlier 503 was a retrieval outcome. Better process knowledge still does not authenticate archive channel identities. | Inspect only a newly declared source route that could supply the tag dictionary and installed/release evidence; stop if it cannot change the admission decision. The known 2026 thesis remains a possible, uninspected route. |
+| N1 synthetic public channels remain HOLD even with favorable values | Numerical quality cannot replace source identity. The checker also has an explicit model-positive case, so it is not rewarded for arbitrary refusal. | Freeze an intended-use proxy only after authoritative calibration, clock, state, batch and release bindings exist. Fresh-date selection must then precede sensor retrieval. |
+| Pre-freeze review found empty-provenance loopholes | A null-only check was too weak; empty and malformed evidence needed explicit refusal. Repair and added controls preceded confirmation. | Retain these implementation controls when adapting the interface. Never treat string presence alone as independent verification of physical evidence. |
+| N2 author code generates the reflected observations used in reconstruction | Measured transmission matrices are not measured validation of the whole reflector/calibration instrument. | Reopen for a measured independent observable or a separately justified invariant decision with independent labels, access burden and calibration lineage. Otherwise decline another ideal sweep. |
+| N3 exact-axis difference is identifiable only within the stated material/direction/support class | A useful invariant can fail with small direction changes and unknown shear. The nu=0 exception prevents a false universal claim. | Record actual observation directions and target dependencies before fitting. A new nuisance class requires a fresh claim and check. |
+| N3 mechanically admissible compact fields share uniform averages and differ by 200 MPa at the center | Mechanical equilibrium and a good average fit do not make a local quantity identifiable. | Obtain independent local truth or a measurement with demonstrably different support. Repeating the same average adds no identifying information for this pair. |
+| NIST method and dataset metadata give one prerequisite HOLD for the intended new use | Mean correction matches the original declared variation-comparison purpose; transferring its score to absolute local stress is unsupported. | Require calibrated diffraction-to-bulk conversion, spatial kernels, direction/shear closure, absolute reference and same-specimen independent truth before a physical local-stress benchmark. Stop the proposed physical extension if a bounded source search cannot provide them. |
+| Three complete arrangements were compared, including strong incumbents | A generic scheduler, chemical optimizer or simulation wrapper is not automatically a missing productive means. | Keep unrelated compute/grid delivery and chemical transfer available only after isolating a specific complete-service obstruction with independent acceptance. Keep non-entry available without a numerical story. |
+| No priced scope-matched buyer choice or full production cost was observed | Mathematical acceptance does not identify voluntary demand or an economically optimal investment. | For an authorized future economic stage, register actual eligible actors/outside options and supported cost/terms ranges. Leave unidentified parameters unknown; no physical output may trigger collection. |
+| Working-cash feasibility depends on the order of commitments | Optional reach/capacity spending can make already accepted work unfundable. | A qualified later native trajectory must reserve obligations and fulfillment before expansion, preserve one account, and report dated peak shortfall and completed trailing profit separately. No such trajectory ran here. |
+
+## Methods applied through executable choices
+
+- **OUT-LEARN:** source identity failures changed the next required observation rather than extending a favorable sweep.
+- **OUT-REFLECT:** independent empty-provenance, tilted-direction, spatial-null and scoring-offset controls tried to fool the acceptance mechanism.
+- **OUT-THINK / OUT-DESIGN:** the observation operator and constrained stress witness made the missing information explicit.
+- **OUT-STRATEGISE:** complete alternative arrangements, non-entry, joint capital/working-cash constraints and unidentified buyer payoffs remained in the selection.
+- **OUT-EXECUTE:** separately frozen constructor and verifier programs ran once; original outcomes and resource limits were retained.
+- **OUT-EVOLVE:** only verified interfaces and their invalidation conditions are retained. No new physical K2 or inherited commercial superiority is asserted.
+
+These labels describe implemented choices. They do not substitute for the source, result or economic evidence in this campaign.

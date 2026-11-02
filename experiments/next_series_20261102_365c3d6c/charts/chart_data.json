@@ -1,0 +1,147 @@
+{
+  "role": "DISPLAY_ONLY_NO_EXPERIMENT_EXECUTION",
+  "input_identities": {
+    "water": {
+      "path": "n1/ORIGINAL_W1.json",
+      "sha256": "c92e1c300edb14ba8651fa5d7d5e09435802ba8b687c709f3db906fc1c75404f"
+    },
+    "model": {
+      "path": "n3/RESULT_001.json",
+      "sha256": "11125457ee08b4310b5cb24c2a0bc7417afcdcd7185197667b77d97545e8f13e"
+    }
+  },
+  "panel_a": {
+    "scope": "Compact unchanged historical W1 record; not new N1 confirmation.",
+    "source_commit": "a5df603854f98cbd673204258c8d768e0c759975",
+    "rows": [
+      {
+        "date": "2022-08-15",
+        "observed_counter_increment_l": 5570.0,
+        "quality_status": "HOLD",
+        "quantity_1000_l_day": "CONDITIONAL_PASS",
+        "qualified_delivered_volume_l": null
+      },
+      {
+        "date": "2022-09-15",
+        "observed_counter_increment_l": 1060.0,
+        "quality_status": "HOLD",
+        "quantity_1000_l_day": "CONDITIONAL_PASS",
+        "qualified_delivered_volume_l": null
+      },
+      {
+        "date": "2022-10-15",
+        "observed_counter_increment_l": 360.0,
+        "quality_status": "HOLD",
+        "quantity_1000_l_day": "INSUFFICIENT",
+        "qualified_delivered_volume_l": null
+      },
+      {
+        "date": "2022-12-15",
+        "observed_counter_increment_l": 2660.0,
+        "quality_status": "HOLD",
+        "quantity_1000_l_day": "CONDITIONAL_PASS",
+        "qualified_delivered_volume_l": null
+      },
+      {
+        "date": "2023-01-15",
+        "observed_counter_increment_l": 0.0,
+        "quality_status": "HOLD",
+        "quantity_1000_l_day": "INSUFFICIENT",
+        "qualified_delivered_volume_l": null
+      },
+      {
+        "date": "2023-02-15",
+        "observed_counter_increment_l": null,
+        "quality_status": "HOLD",
+        "quantity_1000_l_day": "ABSTAIN_MISSING",
+        "qualified_delivered_volume_l": null
+      },
+      {
+        "date": "2023-03-15",
+        "observed_counter_increment_l": 0.0,
+        "quality_status": "HOLD",
+        "quantity_1000_l_day": "INSUFFICIENT",
+        "qualified_delivered_volume_l": null
+      }
+    ]
+  },
+  "panel_b": {
+    "scope": "authored compact eigenstrain model, not NIST gauge or part",
+    "registered_spatial_case_denominator": 6,
+    "rows": [
+      {
+        "source_spatial_case_index": 0,
+        "halfwidths_mm": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "center_xx_mpa": -99.99999999999999,
+        "uniform_average_max_abs_mpa": 3.229743404144225e-14,
+        "scope": "authored compact eigenstrain model, not NIST gauge or part"
+      },
+      {
+        "source_spatial_case_index": 1,
+        "halfwidths_mm": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "center_xx_mpa": 99.99999999999999,
+        "uniform_average_max_abs_mpa": 3.229743404144225e-14,
+        "scope": "authored compact eigenstrain model, not NIST gauge or part"
+      },
+      {
+        "source_spatial_case_index": 2,
+        "halfwidths_mm": [
+          1.0,
+          0.5,
+          2.0
+        ],
+        "center_xx_mpa": -99.99999999999999,
+        "uniform_average_max_abs_mpa": 4.2346307667015526e-14,
+        "scope": "authored compact eigenstrain model, not NIST gauge or part"
+      },
+      {
+        "source_spatial_case_index": 3,
+        "halfwidths_mm": [
+          1.0,
+          0.5,
+          2.0
+        ],
+        "center_xx_mpa": 99.99999999999999,
+        "uniform_average_max_abs_mpa": 4.2346307667015526e-14,
+        "scope": "authored compact eigenstrain model, not NIST gauge or part"
+      },
+      {
+        "source_spatial_case_index": 4,
+        "halfwidths_mm": [
+          2.0,
+          1.0,
+          0.5
+        ],
+        "center_xx_mpa": -100.0,
+        "uniform_average_max_abs_mpa": 1.917675816320158e-14,
+        "scope": "authored compact eigenstrain model, not NIST gauge or part"
+      },
+      {
+        "source_spatial_case_index": 5,
+        "halfwidths_mm": [
+          2.0,
+          1.0,
+          0.5
+        ],
+        "center_xx_mpa": 100.0,
+        "uniform_average_max_abs_mpa": 1.917675816320158e-14,
+        "scope": "authored compact eigenstrain model, not NIST gauge or part"
+      }
+    ],
+    "uniform_mean_display": "Stored maximum absolute uniform-average component, not an invented signed scalar mean. Both members of each pair are plotted."
+  },
+  "transformations": [
+    "Date labels formatted for display; all seven source dates retained.",
+    "Missing quantity retained as null and displayed without a bar or zero marker.",
+    "Six recorded spatial cases grouped by exact halfwidth triple; no additional field calculations.",
+    "Annotation gives maximum of the six stored uniform_average_max_abs_mpa values."
+  ]
+}
