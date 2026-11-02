@@ -23,7 +23,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install numerical dependencies
-        run: python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
       - name: Reproduce separately registered model controls
         env:
           SERIES: experiments/next_series_20261102_365c3d6c
