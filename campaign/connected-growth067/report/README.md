@@ -100,6 +100,7 @@ The earlier 066 distribution-first policy exposed a real modeled failure: buying
 
 - [Public run 41467872078](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41467872078)
 - [Public artifact 13157389058](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41467872078/artifacts/13157389058) — artifact download may require GitHub sign-in and the artifact currently expires on 9 November 2026; this report and its compact data are browser-readable.
+- [Durable exact public case ZIP](native-evidence/growth067-dev-100000-distribution_first.zip) · [Checksum, privacy scope, and public replay instructions](native-evidence/README.md)
 - [Frozen executed source 8d615b1](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/8d615b1e850f81838b7ff77f87fee8964bf1f280)
 - [Frozen preregistration](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/8d615b1e850f81838b7ff77f87fee8964bf1f280/growth067/PREREGISTRATION.json)
 - [Public independent-result receipt](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/142#issuecomment-6581992041)
@@ -118,7 +119,7 @@ The later workflow-only repair head `c07d5f5ecc7d8e214a4f4d262cde3d1f41e9117a` i
 
 ## Reproduce the figures
 
-The committed chart data and replay receipt preserve this report after the Actions artifact expires. Full canonical-account re-audit still requires the original public ZIP; these compact chart files are not a replacement for its complete event and source package. Download that artifact before expiry and verify its SHA-256. The extraction script accepts that ZIP and the independently replayed compact receipt, uses standard-library integer accounting, and asserts the endpoint and cost reconciliation. Chart generation converts exact values to display coordinates only and uses step plots.
+The committed chart data, replay receipt, and durable exact public ZIP preserve this selected case after the Actions artifact expires. Full canonical-account re-audit uses that ZIP plus the frozen public source; compact chart files alone are not a replacement for its complete event and source package. Verify the ZIP SHA-256 and follow the linked public replay instructions. The extraction script accepts that ZIP and the independently replayed compact receipt, uses standard-library integer accounting, and asserts the endpoint and cost reconciliation. Chart generation converts exact values to display coordinates only and uses step plots.
 
 ```sh
 python3 extract_report_data.py --artifact /path/to/growth067-100k-distribution.zip --audit independent-replay.json --output /tmp/growth067-report-reproduction
