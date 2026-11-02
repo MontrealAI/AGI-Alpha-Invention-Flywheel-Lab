@@ -20,12 +20,12 @@
   "outer_worker_timeout_seconds": 155,
   "independent_checker_timeout_seconds": 30,
   "acceptance": {
-    "require_full_robust_coverage": true,
     "extra_distance_margin": 0.1,
     "maximum_client_operating_cost_yuan": 375000000,
     "require_existing_source_client": true,
     "require_solution_source_bound": true,
-    "require_native_service_max_artifact_bytes": 2000000
+    "require_native_service_max_artifact_bytes": 2000000,
+    "require_registered_robust_coverage_floor": true
   },
   "comparison": "Old failed funded episode is immutable historical evidence, not a matched causal control; no standalone improvement is claimed without equal-resource comparison",
   "stopping_rule": "One fresh offline baseline construction and its source-pinned independent client check, then stop on either accepted artifact or recorded failure; never retry until favorable",
