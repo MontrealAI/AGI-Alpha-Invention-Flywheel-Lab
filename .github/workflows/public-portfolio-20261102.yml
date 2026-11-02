@@ -25,7 +25,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install exact public computational dependencies
-        run: python -m pip install --only-binary=:all: -r requirements-cycle004.txt -r requirements-commercial010.txt
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-cycle004.txt -r requirements-commercial010.txt
       - name: Source, approval, funding, replay, renewal and tamper regressions
         run: |
           python -m unittest tests.test_public_portfolio_20261102 -v
