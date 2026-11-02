@@ -46,6 +46,16 @@ def load_registry(root):
                     for name in value:
                         checked_path(root, name)
                     found[target.id] = tuple(value)
+    # A literal first assignment is not authoritative if later Python binds the
+    # same registry name. Refuse unsupported writes rather than certify a stale
+    # lexical inventory as the effective source dependency closure.
+    bindings = {name: [] for name in REGISTRIES}
+    for node in ast.walk(program):
+        if isinstance(node, ast.Name) and node.id in bindings and isinstance(node.ctx, (ast.Store, ast.Del)):
+            bindings[node.id].append(node)
+    for name, nodes in bindings.items():
+        if len(nodes) != (1 if name in found else 0):
+            raise ValueError('P0_REGISTRY_REBIND_OR_DYNAMIC_WRITE:' + name)
     if 'SOURCE_PATHS' not in found:
         raise ValueError('P0_BASE_FINANCIAL_REGISTRY_MISSING')
     routes = {s for node in ast.walk(program) if isinstance(node, ast.FunctionDef) and node.name == 'source_paths_for_manifest'
