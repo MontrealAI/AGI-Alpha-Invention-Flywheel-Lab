@@ -3,7 +3,6 @@ from pathlib import Path
 from collections import defaultdict
 import numpy as np
 from ortools.sat.python import cp_model
-from scipy.sparse import coo_matrix
 
 ROOT=Path(__file__).resolve().parent
 
@@ -86,11 +85,10 @@ def construct(folder,output,seconds,margin=0):
         for j,(threshold,amount) in enumerate(tiers):
             low=max(1,threshold);high=tiers[j+1][0]-1 if j+1<len(tiers) else U
             z=add('warehouse_tier',(n,j),amount,1);term(lo,z,-low);term(hi,z,-high);term(one,z,1)
-    rr=[];cc=[];vv=[];lbs=[];ubs=[]
-    for r,coeffs in rows.items():
-        at=len(lbs);lbs.append(lower.get(r,-np.inf));ubs.append(upper.get(r,np.inf))
-        for i,v in coeffs.items():rr.append(at);cc.append(i);vv.append(v)
-    matrix=coo_matrix((vv,(rr,cc)),shape=(len(lbs),len(cost))).tocsc()
+    # The CP-SAT equations below are built directly from rows.  An additional
+    # COO -> CSC matrix would duplicate the entire constraint graph and was
+    # never read by the solver or the output.
+    constraint_count=len(rows)
     scale=10000
     model=cp_model.CpModel();variables=[model.new_int_var(0,int(u),str(i)) for i,u in enumerate(ub)]
     for row,coeffs in rows.items():
@@ -104,7 +102,7 @@ def construct(folder,output,seconds,margin=0):
     value=float(np.dot(np.array(cost),x)) if feasible else None
     rounding=4*U*max(abs(a-b/scale) for a,b in zip(cost,coefficients))
     output.mkdir(parents=True,exist_ok=False)
-    receipt={'producer_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'terminal_distance_margin':margin,'input_sha256':hashlib.sha256((folder/'01.json').read_bytes()).hexdigest(),'variables':len(cost),'constraints':len(lbs),'status':solver.status_name(status),'objective_yuan':value,'rounded_objective_yuan':solver.objective_value/scale if feasible else None,'rounded_dual_bound_yuan':solver.best_objective_bound/scale,'source_objective_lower_bound_yuan':solver.best_objective_bound/scale-rounding,'rounding_error_bound_yuan':rounding,'CPU_seconds':time.process_time()-cpu,'wall_seconds':time.monotonic()-t,'solver':'OR-Tools CP-SAT9.15.6755; four workers; seed62','novel_algorithm_claim':False,'service_floor_unchanged':d['service_coverage_floor'],'enterprise_collections':0,'economic_scope':'Client operating-cost model only; no realized savings, purchase, vendor revenue, or funded expansion.'}
+    receipt={'producer_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'terminal_distance_margin':margin,'input_sha256':hashlib.sha256((folder/'01.json').read_bytes()).hexdigest(),'variables':len(cost),'constraints':constraint_count,'status':solver.status_name(status),'objective_yuan':value,'rounded_objective_yuan':solver.objective_value/scale if feasible else None,'rounded_dual_bound_yuan':solver.best_objective_bound/scale,'source_objective_lower_bound_yuan':solver.best_objective_bound/scale-rounding,'rounding_error_bound_yuan':rounding,'CPU_seconds':time.process_time()-cpu,'wall_seconds':time.monotonic()-t,'solver':'OR-Tools CP-SAT9.15.6755; four workers; seed62','novel_algorithm_claim':False,'service_floor_unchanged':d['service_coverage_floor'],'enterprise_collections':0,'economic_scope':'Client operating-cost model only; no realized savings, purchase, vendor revenue, or funded expansion.'}
     if feasible:
         solution={k:[] for k in ['production','factory_to_cdc','cdc_to_rdc','customer_service']+(['factory_to_rdc'] if d['variant']=='direct' else [])}
         fields={'production':['factory','product'],'factory_to_cdc':['factory','cdc','product'],'cdc_to_rdc':['cdc','rdc','product'],'factory_to_rdc':['factory','rdc','product'],'customer_service':['customer','product','node']}
