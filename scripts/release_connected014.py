@@ -28,6 +28,8 @@ PAPERS = ('PAPER.pdf', 'PAPER.tex', 'index.html', 'REPORT.md', 'PUBLICATION.json
 REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.yml', 'adaptive012.yml', 'commercial010.yml')
 # Terminal measurement009 is manual-only; path changes never renew its expired allocation.
 CONDITIONAL_WORKFLOWS = {
+    'next072.yml': ('next072/', 'experiments/next_series_20261102/',
+                    'requirements-next072.txt', '.github/workflows/next072.yml'),
     'transformational063.yml': ('flexibility063/', 'connected_enterprise/transformational063.py',
                                'campaign/transformational-063/', 'docs/transformational063/',
                                'research/blue_sky064/', 'campaign/blue-sky-064/',

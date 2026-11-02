@@ -1,0 +1,1086 @@
+{
+  "actual_new_assays_avoided_by_this_replay": 0,
+  "actual_research_and_inference_cost_usd": null,
+  "all_retrospective_outcomes_are_already_public": true,
+  "allocation_boundary_gate": {
+    "name": "experimental_allocation_boundary",
+    "observed_or_assumed": true,
+    "status": "PASS"
+  },
+  "break_even_offer_price": null,
+  "buyer_maximum_offer_price": null,
+  "capital_and_terms_comparisons": [
+    {
+      "capital_hypothesis_usd": 0,
+      "cash": {
+        "capital_if_actually_received": 0,
+        "capital_is_secured_or_received": false,
+        "constraints": [
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t0_setup_after_conditional_funding_receipt",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t1_committed_work_before_acceptance",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t2_accepted_report_balance_collection",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t3_settle_maintenance_tax_and_financing",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "analysis contract price >= received deposit + accepted balance collection",
+            "left": null,
+            "name": "collections_bounded_by_accepted_contract",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          }
+        ],
+        "events": [
+          {
+            "cash": null,
+            "event": "t0_setup_after_conditional_funding_receipt",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t1_committed_work_before_acceptance",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t2_accepted_report_balance_collection",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t3_settle_maintenance_tax_and_financing",
+            "protected": null
+          }
+        ],
+        "funding_dates_requiring_evidence": [
+          "t0_setup_after_conditional_funding_receipt",
+          "t1_committed_work_before_acceptance",
+          "t2_accepted_report_balance_collection",
+          "t3_settle_maintenance_tax_and_financing"
+        ],
+        "maximum_cash_shortfall": null,
+        "native_account_or_transition_executed": false,
+        "reserve_release_rule": "Existing refund, collateral and warranty protection stays through all events; no release milestone is evidenced. Customer-deposit liability releases only at the explicitly conditional accepted-report event.",
+        "status": "HOLD",
+        "terms": "payment_after_acceptance"
+      },
+      "financing_constraints": [
+        {
+          "name": "voluntary_funding_dilution_control_and_downside_terms",
+          "observed_or_assumed": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "discounted investor distributions >= supplied principal + required investor return",
+          "left": null,
+          "name": "investor_participation",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        }
+      ],
+      "joint_entry_status": "HOLD"
+    },
+    {
+      "capital_hypothesis_usd": 0,
+      "cash": {
+        "capital_if_actually_received": 0,
+        "capital_is_secured_or_received": false,
+        "constraints": [
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t0_setup_after_conditional_funding_receipt",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t1_committed_work_before_acceptance",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t2_accepted_report_balance_collection",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t3_settle_maintenance_tax_and_financing",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "analysis contract price >= received deposit + accepted balance collection",
+            "left": null,
+            "name": "collections_bounded_by_accepted_contract",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          }
+        ],
+        "events": [
+          {
+            "cash": null,
+            "event": "t0_setup_after_conditional_funding_receipt",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t1_committed_work_before_acceptance",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t2_accepted_report_balance_collection",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t3_settle_maintenance_tax_and_financing",
+            "protected": null
+          }
+        ],
+        "funding_dates_requiring_evidence": [
+          "t0_setup_after_conditional_funding_receipt",
+          "t1_committed_work_before_acceptance",
+          "t2_accepted_report_balance_collection",
+          "t3_settle_maintenance_tax_and_financing"
+        ],
+        "maximum_cash_shortfall": null,
+        "native_account_or_transition_executed": false,
+        "reserve_release_rule": "Existing refund, collateral and warranty protection stays through all events; no release milestone is evidenced. Customer-deposit liability releases only at the explicitly conditional accepted-report event.",
+        "status": "HOLD",
+        "terms": "refundable_deposit_then_acceptance"
+      },
+      "financing_constraints": [
+        {
+          "name": "voluntary_funding_dilution_control_and_downside_terms",
+          "observed_or_assumed": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "discounted investor distributions >= supplied principal + required investor return",
+          "left": null,
+          "name": "investor_participation",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        }
+      ],
+      "joint_entry_status": "HOLD"
+    },
+    {
+      "capital_hypothesis_usd": 100000,
+      "cash": {
+        "capital_if_actually_received": 100000,
+        "capital_is_secured_or_received": false,
+        "constraints": [
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t0_setup_after_conditional_funding_receipt",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t1_committed_work_before_acceptance",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t2_accepted_report_balance_collection",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t3_settle_maintenance_tax_and_financing",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "analysis contract price >= received deposit + accepted balance collection",
+            "left": null,
+            "name": "collections_bounded_by_accepted_contract",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          }
+        ],
+        "events": [
+          {
+            "cash": null,
+            "event": "t0_setup_after_conditional_funding_receipt",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t1_committed_work_before_acceptance",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t2_accepted_report_balance_collection",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t3_settle_maintenance_tax_and_financing",
+            "protected": null
+          }
+        ],
+        "funding_dates_requiring_evidence": [
+          "t0_setup_after_conditional_funding_receipt",
+          "t1_committed_work_before_acceptance",
+          "t2_accepted_report_balance_collection",
+          "t3_settle_maintenance_tax_and_financing"
+        ],
+        "maximum_cash_shortfall": null,
+        "native_account_or_transition_executed": false,
+        "reserve_release_rule": "Existing refund, collateral and warranty protection stays through all events; no release milestone is evidenced. Customer-deposit liability releases only at the explicitly conditional accepted-report event.",
+        "status": "HOLD",
+        "terms": "payment_after_acceptance"
+      },
+      "financing_constraints": [
+        {
+          "name": "voluntary_funding_dilution_control_and_downside_terms",
+          "observed_or_assumed": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "discounted investor distributions >= supplied principal + required investor return",
+          "left": null,
+          "name": "investor_participation",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        }
+      ],
+      "joint_entry_status": "HOLD"
+    },
+    {
+      "capital_hypothesis_usd": 100000,
+      "cash": {
+        "capital_if_actually_received": 100000,
+        "capital_is_secured_or_received": false,
+        "constraints": [
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t0_setup_after_conditional_funding_receipt",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t1_committed_work_before_acceptance",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t2_accepted_report_balance_collection",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t3_settle_maintenance_tax_and_financing",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "analysis contract price >= received deposit + accepted balance collection",
+            "left": null,
+            "name": "collections_bounded_by_accepted_contract",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          }
+        ],
+        "events": [
+          {
+            "cash": null,
+            "event": "t0_setup_after_conditional_funding_receipt",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t1_committed_work_before_acceptance",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t2_accepted_report_balance_collection",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t3_settle_maintenance_tax_and_financing",
+            "protected": null
+          }
+        ],
+        "funding_dates_requiring_evidence": [
+          "t0_setup_after_conditional_funding_receipt",
+          "t1_committed_work_before_acceptance",
+          "t2_accepted_report_balance_collection",
+          "t3_settle_maintenance_tax_and_financing"
+        ],
+        "maximum_cash_shortfall": null,
+        "native_account_or_transition_executed": false,
+        "reserve_release_rule": "Existing refund, collateral and warranty protection stays through all events; no release milestone is evidenced. Customer-deposit liability releases only at the explicitly conditional accepted-report event.",
+        "status": "HOLD",
+        "terms": "refundable_deposit_then_acceptance"
+      },
+      "financing_constraints": [
+        {
+          "name": "voluntary_funding_dilution_control_and_downside_terms",
+          "observed_or_assumed": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "discounted investor distributions >= supplied principal + required investor return",
+          "left": null,
+          "name": "investor_participation",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        }
+      ],
+      "joint_entry_status": "HOLD"
+    },
+    {
+      "capital_hypothesis_usd": 1000000000,
+      "cash": {
+        "capital_if_actually_received": 1000000000,
+        "capital_is_secured_or_received": false,
+        "constraints": [
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t0_setup_after_conditional_funding_receipt",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t1_committed_work_before_acceptance",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t2_accepted_report_balance_collection",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t3_settle_maintenance_tax_and_financing",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "analysis contract price >= received deposit + accepted balance collection",
+            "left": null,
+            "name": "collections_bounded_by_accepted_contract",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          }
+        ],
+        "events": [
+          {
+            "cash": null,
+            "event": "t0_setup_after_conditional_funding_receipt",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t1_committed_work_before_acceptance",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t2_accepted_report_balance_collection",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t3_settle_maintenance_tax_and_financing",
+            "protected": null
+          }
+        ],
+        "funding_dates_requiring_evidence": [
+          "t0_setup_after_conditional_funding_receipt",
+          "t1_committed_work_before_acceptance",
+          "t2_accepted_report_balance_collection",
+          "t3_settle_maintenance_tax_and_financing"
+        ],
+        "maximum_cash_shortfall": null,
+        "native_account_or_transition_executed": false,
+        "reserve_release_rule": "Existing refund, collateral and warranty protection stays through all events; no release milestone is evidenced. Customer-deposit liability releases only at the explicitly conditional accepted-report event.",
+        "status": "HOLD",
+        "terms": "payment_after_acceptance"
+      },
+      "financing_constraints": [
+        {
+          "name": "voluntary_funding_dilution_control_and_downside_terms",
+          "observed_or_assumed": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "discounted investor distributions >= supplied principal + required investor return",
+          "left": null,
+          "name": "investor_participation",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        }
+      ],
+      "joint_entry_status": "HOLD"
+    },
+    {
+      "capital_hypothesis_usd": 1000000000,
+      "cash": {
+        "capital_if_actually_received": 1000000000,
+        "capital_is_secured_or_received": false,
+        "constraints": [
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t0_setup_after_conditional_funding_receipt",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t1_committed_work_before_acceptance",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t2_accepted_report_balance_collection",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "actual cash at this event >= still-protected obligations",
+            "left": null,
+            "name": "t3_settle_maintenance_tax_and_financing",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          },
+          {
+            "expression": "analysis contract price >= received deposit + accepted balance collection",
+            "left": null,
+            "name": "collections_bounded_by_accepted_contract",
+            "relation": ">=",
+            "right": null,
+            "status": "HOLD"
+          }
+        ],
+        "events": [
+          {
+            "cash": null,
+            "event": "t0_setup_after_conditional_funding_receipt",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t1_committed_work_before_acceptance",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t2_accepted_report_balance_collection",
+            "protected": null
+          },
+          {
+            "cash": null,
+            "event": "t3_settle_maintenance_tax_and_financing",
+            "protected": null
+          }
+        ],
+        "funding_dates_requiring_evidence": [
+          "t0_setup_after_conditional_funding_receipt",
+          "t1_committed_work_before_acceptance",
+          "t2_accepted_report_balance_collection",
+          "t3_settle_maintenance_tax_and_financing"
+        ],
+        "maximum_cash_shortfall": null,
+        "native_account_or_transition_executed": false,
+        "reserve_release_rule": "Existing refund, collateral and warranty protection stays through all events; no release milestone is evidenced. Customer-deposit liability releases only at the explicitly conditional accepted-report event.",
+        "status": "HOLD",
+        "terms": "refundable_deposit_then_acceptance"
+      },
+      "financing_constraints": [
+        {
+          "name": "voluntary_funding_dilution_control_and_downside_terms",
+          "observed_or_assumed": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "discounted investor distributions >= supplied principal + required investor return",
+          "left": null,
+          "name": "investor_participation",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        }
+      ],
+      "joint_entry_status": "HOLD"
+    }
+  ],
+  "capital_received": 0,
+  "complete_provider_cost_after_explicit_tax": null,
+  "current_primary_prior_art": [
+    {
+      "name": "Rubbi et al. 2026, Many Needles in a Haystack",
+      "scope": "Threshold-oriented probability-of-hit allocation; credited primary acquisition, with a declared reference-quantile adaptation.",
+      "url": "https://proceedings.mlr.press/v306/rubbi26a.html"
+    },
+    {
+      "name": "Qin et al. 2025, NAIAD",
+      "scope": "Existing single-effect-informed combinatorial perturbation prediction and adaptive recommendation; full framework is not reproduced here.",
+      "url": "https://proceedings.mlr.press/v267/qin25g.html"
+    },
+    {
+      "name": "Tosh et al. 2025, BATCHIE",
+      "scope": "Existing complete adaptive experimental arrangement demonstrated with prospective drug-combination measurements; different endpoint from this replay.",
+      "url": "https://www.nature.com/articles/s41467-024-55287-7"
+    }
+  ],
+  "economic_evidence_status": "HOLD",
+  "full_naiad_or_batchie_framework_superiority": "NOT_TESTED",
+  "full_profile_counts_are_not_assay_money_costs": true,
+  "generic_adaptive_platform_missing_means_claim": "SOURCE_REJECTED",
+  "generic_platform_rejection_is_independent_of_allocation_outcome": true,
+  "independent_verification_binding": {
+    "accepted": true,
+    "policies_verified": 42,
+    "primary_policy": "probability_of_hit",
+    "sha256": "8ed0965f1ba2bfc4abbad85c2a1b4d36f98df482db4e49414e01b7b5fb519880"
+  },
+  "information": "Published inputs and source-bound replay results are common information; monetary values, attention, assay-specific costs and private preferences are unobserved.",
+  "input_values_are": "Unmeasured unless separately sourced; supplied numbers are conditional scenario inputs, never observed demand.",
+  "joint_participation_constraints": [
+    {
+      "name": "accepted_source_bound_research_artifact",
+      "observed_or_assumed": true,
+      "status": "PASS"
+    },
+    {
+      "expression": "analysis price >= complete costs + explicit taxes + requested operator surplus",
+      "left": null,
+      "name": "operator_complete_cost_profit",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    },
+    {
+      "expression": "buyer value - miss loss - switching/attention - best outside utility >= analysis price",
+      "left": null,
+      "name": "buyer_voluntary_price_ceiling",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    },
+    {
+      "expression": "competent human complete same-algorithm cost >= offer price + buyer switching/attention",
+      "left": null,
+      "name": "equal_quality_specialist_outside_option",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    },
+    {
+      "expression": "supplier payment >= complete incremental supplier cost + supplier outside surplus",
+      "left": null,
+      "name": "supplier_voluntary_participation",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    },
+    {
+      "name": "declared_supplier_terms_and_obligations",
+      "observed_or_assumed": null,
+      "status": "HOLD"
+    },
+    {
+      "name": "scope_matched_acceptance",
+      "observed_or_assumed": true,
+      "status": "PASS"
+    },
+    {
+      "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+      "left": null,
+      "name": "lab_choice_over_non_entry",
+      "relation": ">=",
+      "right": 0.0,
+      "status": "HOLD"
+    },
+    {
+      "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+      "left": null,
+      "name": "lab_choice_over_public_complete_outcome_self_service",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    },
+    {
+      "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+      "left": null,
+      "name": "lab_choice_over_full_measurement",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    },
+    {
+      "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+      "left": null,
+      "name": "lab_choice_over_internal_human_specialist_same_algorithm",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    }
+  ],
+  "laboratory_choice_menu": {
+    "full_measurement": {
+      "constraints": [
+        {
+          "name": "scope_matched_acceptance",
+          "observed_or_assumed": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_non_entry",
+          "relation": ">=",
+          "right": 0.0,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_public_complete_outcome_self_service",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_internal_human_specialist_same_algorithm",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_source_bound_analysis_offer",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        }
+      ],
+      "net_utility": null,
+      "status": "HOLD"
+    },
+    "internal_human_specialist_same_algorithm": {
+      "constraints": [
+        {
+          "name": "scope_matched_acceptance",
+          "observed_or_assumed": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_non_entry",
+          "relation": ">=",
+          "right": 0.0,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_public_complete_outcome_self_service",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_full_measurement",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_source_bound_analysis_offer",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        }
+      ],
+      "net_utility": null,
+      "status": "HOLD"
+    },
+    "non_entry": {
+      "incremental_utility_reference": 0,
+      "status": "AVAILABLE_NO_NEW_COMMITMENT",
+      "sunk_research_cost_is_not_erased": true
+    },
+    "public_complete_outcome_self_service": {
+      "constraints": [
+        {
+          "name": "scope_matched_acceptance",
+          "observed_or_assumed": true,
+          "status": "PASS"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_non_entry",
+          "relation": ">=",
+          "right": 0.0,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_full_measurement",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_internal_human_specialist_same_algorithm",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_source_bound_analysis_offer",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        }
+      ],
+      "net_utility": null,
+      "status": "HOLD"
+    },
+    "separately_qualified_prospective_study": {
+      "constraints": [
+        {
+          "name": "scope_matched_acceptance",
+          "observed_or_assumed": false,
+          "status": "REFUSE"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_non_entry",
+          "relation": ">=",
+          "right": 0.0,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_public_complete_outcome_self_service",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_full_measurement",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_internal_human_specialist_same_algorithm",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_source_bound_analysis_offer",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        }
+      ],
+      "net_utility": null,
+      "status": "REFUSE"
+    },
+    "source_bound_analysis_offer": {
+      "constraints": [
+        {
+          "name": "scope_matched_acceptance",
+          "observed_or_assumed": true,
+          "status": "PASS"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_non_entry",
+          "relation": ">=",
+          "right": 0.0,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_public_complete_outcome_self_service",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_full_measurement",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        },
+        {
+          "expression": "laboratory net utility of chosen option >= eligible outside option utility",
+          "left": null,
+          "name": "lab_choice_over_internal_human_specialist_same_algorithm",
+          "relation": ">=",
+          "right": null,
+          "status": "HOLD"
+        }
+      ],
+      "net_utility": null,
+      "status": "HOLD"
+    }
+  },
+  "native_collections": 0,
+  "next_investment_scope": "A failed boundary rejects this allocation contract. A passed boundary alone does not establish feature value: inspect the fixed no-feature, static, simpler and hash controls. Any resulting fresh-study proposal still needs independent domain-specific truth, complete cost, buyer acceptance and funding evidence.",
+  "orders_executed": 0,
+  "participants": {
+    "analysis_operator": "Seeks complete-cost after-tax profit while preserving current and future obligations.",
+    "assay_supplier": "Accepts only funded, scope-defined work covering its complete incremental costs and outside surplus.",
+    "human_specialist": "100% human attention plus genuine conventional software; same data, algorithm and retained means allowed.",
+    "investor_lender": "Seeks acceptable discounted distributions, downside and dilution/control terms.",
+    "research_lab": "Chooses measured scientific decision value net complete outlay, attention and missed-target loss.",
+    "same_algorithm_rival": "May adopt the identical tool; no durable method exclusivity is assumed."
+  },
+  "profit_milestone": {
+    "completed_trailing_365_day_profit_usd": null,
+    "usd_3_billion_established": false
+  },
+  "registered_primary_allocation_method": "probability_of_hit",
+  "report_and_allocation_service_are_separate": {
+    "analysis_report_has_observed_willing_buyer": false,
+    "experimental_allocation_service_status": "REFUSE",
+    "negative_analysis_report_technical_gate": {
+      "name": "truthful_source_bound_report",
+      "observed_or_assumed": true,
+      "status": "PASS"
+    },
+    "negative_boundary_result_cannot_qualify_budget_crossing_service": true
+  },
+  "retained_obligations": "Principal and restricted reserves are not expenses; future collections are unavailable before acceptance. Existing obligations and sunk research are retained.",
+  "rival_cost_gap_compression_sensitivity": [
+    {
+      "evidence_role": "unmeasured timing sensitivity; 6\u201318 months is a user hypothesis",
+      "expression": "rival complete equivalent-offer price >= focal offer price + customer switching cost",
+      "left": null,
+      "months": 3,
+      "name": "same_quality_rival_price_at_3_months",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    },
+    {
+      "evidence_role": "unmeasured timing sensitivity; 6\u201318 months is a user hypothesis",
+      "expression": "rival complete equivalent-offer price >= focal offer price + customer switching cost",
+      "left": null,
+      "months": 6,
+      "name": "same_quality_rival_price_at_6_months",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    },
+    {
+      "evidence_role": "unmeasured timing sensitivity; 6\u201318 months is a user hypothesis",
+      "expression": "rival complete equivalent-offer price >= focal offer price + customer switching cost",
+      "left": null,
+      "months": 12,
+      "name": "same_quality_rival_price_at_12_months",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    },
+    {
+      "evidence_role": "unmeasured timing sensitivity; 6\u201318 months is a user hypothesis",
+      "expression": "rival complete equivalent-offer price >= focal offer price + customer switching cost",
+      "left": null,
+      "months": 18,
+      "name": "same_quality_rival_price_at_18_months",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    },
+    {
+      "evidence_role": "unmeasured timing sensitivity; 6\u201318 months is a user hypothesis",
+      "expression": "rival complete equivalent-offer price >= focal offer price + customer switching cost",
+      "left": null,
+      "months": 24,
+      "name": "same_quality_rival_price_at_24_months",
+      "relation": ">=",
+      "right": null,
+      "status": "HOLD"
+    }
+  ],
+  "schema": "next072/finite-symbolic-economic-screen/v1",
+  "scope_matched_financial_admission": "NOT_ESTABLISHED",
+  "solution_concept": "Finite outside-option best-response inequalities and joint voluntary/cash feasibility; unknown inputs yield HOLD. No calibrated equilibrium or optimum is claimed.",
+  "source_bound_question": "Does this fixed six-feature single-profile representation identify large measured residuals under the credited primary method and complete reference budget?",
+  "unknown_inputs": [
+    "accepted_balance_collection",
+    "acquisition_cash",
+    "acquisition_cost",
+    "analysis_price",
+    "buyer_analysis_attention_and_switching_cost",
+    "buyer_analysis_loss",
+    "buyer_analysis_value",
+    "buyer_best_outside_utility",
+    "channel_cost",
+    "collateral_reserve",
+    "committed_refund_reserve",
+    "compute_and_inference_cost",
+    "customer_deposit_received",
+    "depreciation_cost",
+    "equity_fraction_given_to_investor",
+    "expected_default_loss",
+    "financing_fee_and_interest_cost",
+    "fulfillment_cash",
+    "full_measurement_residual_loss",
+    "full_measurement_total_cost",
+    "full_measurement_value",
+    "human_same_algorithm_full_cost",
+    "initial_financing_fee_cash",
+    "interest_repayment_cash",
+    "internal_analysis_residual_loss",
+    "internal_analysis_value",
+    "investor_discounted_distribution",
+    "investor_required_return",
+    "license_cost",
+    "maintenance_and_remedy_cash",
+    "minimum_operator_profit",
+    "principal_repayment_cash",
+    "public_interpretation_cost",
+    "public_outcome_value",
+    "public_retrieval_cost",
+    "public_verification_cost",
+    "research_and_failed_attempt_cost",
+    "review_and_qualification_cost",
+    "rival_complete_offer_price_at_12_months",
+    "rival_complete_offer_price_at_18_months",
+    "rival_complete_offer_price_at_24_months",
+    "rival_complete_offer_price_at_3_months",
+    "rival_complete_offer_price_at_6_months",
+    "setup_cash",
+    "setup_cost",
+    "study_residual_loss",
+    "study_total_cost",
+    "study_value",
+    "supplier_complete_incremental_cost",
+    "supplier_deposit_cash",
+    "supplier_outside_surplus",
+    "supplier_payment",
+    "support_and_remedy_cost",
+    "tax_cash",
+    "tax_expense",
+    "warranty_reserve"
+  ]
+}
