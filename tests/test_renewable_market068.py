@@ -54,7 +54,8 @@ class MarketRenewal068Tests(unittest.TestCase):
         for a,b in zip(r,r[1:]):self.assertEqual(a['closing_cash_micro'],b['opening_cash_micro'])
     def test_cash_revenue_and_cost_match(self):
         a=Scenario();r=simulate(a)['rows']
-        self.assertEqual(r[-1]['closing_cash_micro'],a.opening_equity_micro+sum(x['profit_micro'] for x in r))
+        self.assertEqual(r[-1]['closing_cash_micro']-r[-1]['protected_tail_micro'],
+                         a.opening_equity_micro+sum(x['profit_micro'] for x in r))
         for x in r:
             self.assertEqual(x['profit_micro'],x['revenue_micro']-x['expense_micro'])
             self.assertGreaterEqual(x['cash_available_after_tail_micro'],0)
