@@ -146,10 +146,19 @@ def simulate(case:Scenario):
         existing_obligations=outstanding_tail
         available_before_collection=cash-existing_obligations
         if available_before_collection<fixed:
+            # A halt cancels unaffordable new operations, not already due support.
+            # The previous month's accrual is a real reserved payable and is
+            # discharged exactly once without a second profit expense.
+            cash-=existing_obligations
+            outstanding_tail=0
+            if cash!=a.opening_equity_micro+sum(r.get('profit_micro',0) for r in rows):
+                raise AssertionError('HALT_MATURITY_AND_PROFIT_RECONCILIATION_FAILED')
             stopped=True
             rows.append({'month':month,'status':'STOP_NOT_ENOUGH_CASH_FOR_FIXED_COST',
                          'opening_cash_micro':begin_cash,'minimum_fixed_required_micro':fixed,
+                         'support_cash_settled_micro':existing_obligations,
                          'closing_cash_micro':cash,'protected_tail_micro':outstanding_tail,
+                         'cash_available_after_tail_micro':cash,
                          'trailing_12_profit_micro':None,
                          'new_customers':0,'accepted_deliveries':0})
             continue
