@@ -1,0 +1,344 @@
+{
+  "audit_scope": "Local read-only inspection of actual entire decompressed nine-member payload; no upload/re-encoding/new network or scientific runs",
+  "payload_sha256": "f72adad9a681232ce1661f88a9d33fa766aee393ef4e781ab520616a968e68b6",
+  "payload_bytes": 2910465,
+  "chunk_count": 49,
+  "part006_sha256": "fa9d84dfcb2a5e5e94af1a9ad16bbfd2b617fc76124b63b170781b5da835c993",
+  "source_doi": "10.18434/mds2-2950",
+  "source_urls": [
+    "https://data.nist.gov/od/ds/mds2-2950/training_pairs.zip",
+    "https://data.nist.gov/od/ds/mds2-2950/modified_pix2pix.zip"
+  ],
+  "inventory": [
+    {
+      "path": "train.npz",
+      "bytes": 185746,
+      "sha256": "05ac49e1833184c886f1b3a3f734f8e10a6a4d1154a1e6fe0a6cca2bfa071fae",
+      "arrays": [
+        {
+          "key": "mask",
+          "shape": [
+            1030,
+            128,
+            128
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 255,
+          "array_sha256": "b9e6eec17da5acffe136b7645d9a18f69a6a9fb1a26a8b5cdf0fa697793759aa",
+          "exact_match_original_source_decode": true
+        }
+      ],
+      "origin": "Public NIST mds2-2950 training_pairs.zip decoded mask/height images",
+      "object_arrays_or_pickle": false
+    },
+    {
+      "path": "val_train.npz",
+      "bytes": 20790,
+      "sha256": "65b7c2117be088e08a4ac6f2f279147aeb9dde419bd1772171a37ebf5846f72b",
+      "arrays": [
+        {
+          "key": "mask",
+          "shape": [
+            114,
+            128,
+            128
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 255,
+          "array_sha256": "11c6a9232209a4e725958c122526fcba5267da4ed66d54008637e47064b96566",
+          "exact_match_original_source_decode": true
+        }
+      ],
+      "origin": "Public NIST mds2-2950 training_pairs.zip decoded mask/height images",
+      "object_arrays_or_pickle": false
+    },
+    {
+      "path": "test.npz",
+      "bytes": 669963,
+      "sha256": "e6f48b7afb3e5dc1a3535750cc9a158eee9ba5d6ab0607c10e2fdadabb53ce6f",
+      "arrays": [
+        {
+          "key": "mask",
+          "shape": [
+            300,
+            128,
+            128
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 255,
+          "array_sha256": "dad634230811e6e5a1315963c7cb3af78a1aa92612d5685bf9c17cc48e92fe26",
+          "exact_match_original_source_decode": true
+        },
+        {
+          "key": "height",
+          "shape": [
+            300,
+            128,
+            128
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 232,
+          "array_sha256": "42cfafa46e77ddd8e4c7227a5cfb53ac91b3ff53d05e038d32ff0884dbda69c4",
+          "exact_match_original_source_decode": true
+        }
+      ],
+      "origin": "Public NIST mds2-2950 training_pairs.zip decoded mask/height images",
+      "object_arrays_or_pickle": false
+    },
+    {
+      "path": "test_lineage.json",
+      "bytes": 79120,
+      "sha256": "830d6f70db7fcfaac891ff229fac6368b4f3e7745519e303134434cdbac7ad1a",
+      "json_root": "list",
+      "all_object_keys": [
+        "crc32",
+        "name",
+        "receipt",
+        "sha256",
+        "size",
+        "source_split"
+      ],
+      "string_value_count": 1200,
+      "string_values_complete_allowlist": "Public NIST member paths, public freeze commit, SHA256 hashes, literal test/NISTmds2-2950 only",
+      "unclassified_string_values": 0,
+      "origin": "Authored deterministic experiment metrics/choices or public-source member lineage; no conversation or user-upload content"
+    },
+    {
+      "path": "baseline_raw_arrays.npz",
+      "bytes": 2005646,
+      "sha256": "1224b0e69c4af8f3bd4e617fc014576edd239af4c002b2124feff148ecc1879c",
+      "arrays": [
+        {
+          "key": "pix2pix_real",
+          "shape": [
+            300,
+            128,
+            128
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 255,
+          "array_sha256": "8e5af1d91c3c21dd55fd41b327ca3f41762b2cb1346eef1f08dbdb4fcb583d54",
+          "exact_match_original_source_decode": true
+        },
+        {
+          "key": "pix2pix_fake",
+          "shape": [
+            300,
+            128,
+            128
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 207,
+          "array_sha256": "f82704525cb655783b60a471e7e1b31d0295a6ce2f764e2c30d243092118ebdb",
+          "exact_match_original_source_decode": true
+        },
+        {
+          "key": "L1_real",
+          "shape": [
+            300,
+            128,
+            128
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 255,
+          "array_sha256": "8e5af1d91c3c21dd55fd41b327ca3f41762b2cb1346eef1f08dbdb4fcb583d54",
+          "exact_match_original_source_decode": true
+        },
+        {
+          "key": "L1_fake",
+          "shape": [
+            300,
+            128,
+            128
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 147,
+          "array_sha256": "291ac7c7a2be1e88d6a682eadbf4eec775fce9b0311c05c658a6c7ba414bda66",
+          "exact_match_original_source_decode": true
+        },
+        {
+          "key": "MSE_real",
+          "shape": [
+            300,
+            128,
+            128
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 255,
+          "array_sha256": "8e5af1d91c3c21dd55fd41b327ca3f41762b2cb1346eef1f08dbdb4fcb583d54",
+          "exact_match_original_source_decode": true
+        },
+        {
+          "key": "MSE_fake",
+          "shape": [
+            300,
+            128,
+            128
+          ],
+          "dtype": "uint8",
+          "min": 0,
+          "max": 162,
+          "array_sha256": "af311f20c9e0d36eea487730f618f4688b595731ed8c2ec204f3f0cf897519a4",
+          "exact_match_original_source_decode": true
+        }
+      ],
+      "origin": "Public NIST mds2-2950 modified_pix2pix.zip three test_200 author real/fake PNG sets",
+      "object_arrays_or_pickle": false
+    },
+    {
+      "path": "baseline_lineage.json",
+      "bytes": 481959,
+      "sha256": "1246a0304edc1fdbc799e53a06cefc0ef4f9750d5440a26019e490378f95f9f4",
+      "json_root": "list",
+      "all_object_keys": [
+        "crc32",
+        "name",
+        "receipt",
+        "sha256"
+      ],
+      "string_value_count": 5400,
+      "string_values_complete_allowlist": "Public NIST member paths, public freeze commit, SHA256 hashes, literal test/NISTmds2-2950 only",
+      "unclassified_string_values": 0,
+      "origin": "Authored deterministic experiment metrics/choices or public-source member lineage; no conversation or user-upload content"
+    },
+    {
+      "path": "baseline_binding.json",
+      "bytes": 284,
+      "sha256": "3738ccebe97bb64513adfbb01b9a51c1c075ebf35805753f14f44c4ce4a665c4",
+      "json_root": "dict",
+      "all_object_keys": [
+        "L1",
+        "MSE",
+        "exact_raw",
+        "exact_source_roundtrip",
+        "mismatches",
+        "pix2pix"
+      ],
+      "string_value_count": 0,
+      "string_values_complete_allowlist": "Public NIST member paths, public freeze commit, SHA256 hashes, literal test/NISTmds2-2950 only",
+      "unclassified_string_values": 0,
+      "origin": "Authored deterministic experiment metrics/choices or public-source member lineage; no conversation or user-upload content"
+    },
+    {
+      "path": "artifact/results.json",
+      "bytes": 375306,
+      "sha256": "d549778d23ff111341ac0a7ddfad6871757a15dbe95bac3a775560942fa1f098",
+      "json_root": "dict",
+      "all_object_keys": [
+        "L1",
+        "MSE",
+        "active_rmse_um",
+        "all",
+        "annular_wall100",
+        "author_L1",
+        "author_MSE",
+        "author_pix2pix",
+        "baseline_binding",
+        "blur3",
+        "blur3_annular_wall100_padded16.png",
+        "blur3_continuous_ridge50_padded16.png",
+        "blur3_two_level_terrace_padded16.png",
+        "choice",
+        "choice_prediction_error",
+        "commercial_acceptance",
+        "continuous_ridge50",
+        "count",
+        "development_count",
+        "exact_archive_match",
+        "exact_raw",
+        "exact_source_roundtrip",
+        "fiducial",
+        "fullfield_rmse_um",
+        "generatedmask_novelty",
+        "hindsight_oracle_unavailable_to_policy",
+        "independent_test_slides",
+        "inverse_exact_archived_recipe",
+        "mask_audit",
+        "mean_patch_active_rmse_um",
+        "mean_patch_fullfield_rmse_um",
+        "member",
+        "mismatches",
+        "models",
+        "native_revenue",
+        "newmask_physical_acceptance",
+        "per_patch",
+        "physical_truth",
+        "pix2pix",
+        "point0",
+        "point0_annular_wall100_padded16.png",
+        "point0_continuous_ridge50_padded16.png",
+        "point0_two_level_terrace_padded16.png",
+        "public_freeze",
+        "random",
+        "runtime_seconds",
+        "source",
+        "spatial0",
+        "spatial0_annular_wall100_padded16.png",
+        "spatial0_continuous_ridge50_padded16.png",
+        "spatial0_two_level_terrace_padded16.png",
+        "strata",
+        "target_feature_mae_um",
+        "test_count",
+        "test_dihedral_train_matches",
+        "test_exact_dev_matches",
+        "test_exact_train_matches",
+        "test_fiducial_indices",
+        "train_count",
+        "two_level_terrace",
+        "unique_train_masks",
+        "zero_target_excess_mean_um"
+      ],
+      "string_value_count": 1838,
+      "string_values_complete_allowlist": "Public NIST member paths, public freeze commit, SHA256 hashes, literal test/NISTmds2-2950 only",
+      "unclassified_string_values": 0,
+      "origin": "Authored deterministic experiment metrics/choices or public-source member lineage; no conversation or user-upload content"
+    },
+    {
+      "path": "artifact/decisions_before_truth.json",
+      "bytes": 4286,
+      "sha256": "b431920921ea66bb8031e167519a40a5658c04f03be9a9db97ff0473f764c51e",
+      "json_root": "dict",
+      "all_object_keys": [
+        "annular_wall100",
+        "author_L1",
+        "author_MSE",
+        "author_pix2pix",
+        "blur3",
+        "choices",
+        "continuous_ridge50",
+        "fitted_model_file_sha256",
+        "physical_heights_used_for_selection",
+        "point0",
+        "predicted_active_rmse_um",
+        "predictions_sha256",
+        "public_final_freeze",
+        "selected_index",
+        "selected_member",
+        "spatial0",
+        "target_file_sha256",
+        "two_level_terrace"
+      ],
+      "string_value_count": 27,
+      "string_values_complete_allowlist": "Public NIST member paths, public freeze commit, SHA256 hashes, literal test/NISTmds2-2950 only",
+      "unclassified_string_values": 0,
+      "origin": "Authored deterministic experiment metrics/choices or public-source member lineage; no conversation or user-upload content"
+    }
+  ],
+  "lineage_checks": {
+    "test_public_members": 300,
+    "baseline_public_members": 1800,
+    "name_crc_size_checks": "pass"
+  },
+  "private_content_assessment": "No private uploads, credentials, signing authority, user messages, or free-text conversation fields in inspected payload. Established by complete structured array/content inventory and exact matches to public-source decode and authored outputs, not a generic secret scanner. Hashes are source/artifact identifiers, not signing secrets.",
+  "limits": "No fresh public download performed. Public origin relies on earlier recorded NIST range acquisition, member CRC/SHA manifests and source code; whole source ZIP hashes were not independently verified from partial ranges. This audit is evidence for reviewer, not permission to bypass denial.",
+  "status": "PASS actual content inventory and provenance checks"
+}
