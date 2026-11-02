@@ -1,0 +1,9 @@
+{
+  "schema": "public-portfolio-r2-independent-guard-amendment/v1",
+  "original_result": "r2_guard_results_001.json",
+  "original_outcome": "13 passes and1 test-harness cleanup error; no failed assertions",
+  "adjudication": "The stale-lease financial audit correctly rejected lost ownership and closed cached acceptance. The fixture then exited a normal account context whose cleanup also correctly rejected the released writer lease. The fixture did not expect that valid fail-closed cleanup response.",
+  "correction": "Separate r2_guard_tests_002.py retains the original14 tests and overrides only the stale-lease fixture lifecycle to expect both audit rejection and owner-cleanup rejection. Canonical source, lease behavior, acceptance criteria and original evidence remain unchanged.",
+  "prospective": "Freeze this checker amendment before its first execution. No R2 business reproduction has been started and no account is rerun or reseeded.",
+  "stopping": "One complete corrected14-test suite on the same canonical source; retain both001 and002 outcomes."
+}

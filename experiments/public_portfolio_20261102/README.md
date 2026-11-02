@@ -16,6 +16,9 @@ The [portfolio registration](PORTFOLIO_PROTOCOL.json), route preregistrations, [
 
 ## Native economics
 
+The original R1 campaign stopped at an exclusive account boundary after25/110 completed businesses. Independent review demonstrated a missing imported-helper source dependency, so complete executable source-closure qualification **FAILED**. [Original checkpoint, costs and independent diagnosis](evidence/economics-r1/README.md) remain visible. The [R2 amendment](QUALIFICATION_AMENDMENT_R2.json) registers a separate source-qualification reproduction of the unchanged110-case economic model. It binds helpers and package initializers, uses the existing exact owner/source/manifest/action-prefix replay guards, includes the portfolio in standard release packaging, and reserves independent accounts for four local workers. It neither migrates nor resets R1 accounts or pools their money.
+
+
 The [economic protocol](ECONOMICS_PROTOCOL.json) prospectively registers110 separate three-year businesses:22 scenarios for each route. It includes the USD100,000, USD1 million and USD1 billion hypothetical initial-equity comparisons, non-entry, unresolved rights, refusal, imitation, failed qualification, delayed collections, provider reversal, maintenance, matched working-capital controls and earned-only successor investment. Demand, prices, integration costs and financing assumptions are explicitly authored and uncalibrated. Hypothetical capital is neither profit nor secured financing.
 
 The offering is nonexclusive access to **already constructed computational evidence packages with separately costed checking/support**. Copies are not fresh scientific discoveries or physical deployments. Free public-source integration and strong conventional, hybrid and autonomous competitors remain buyer options. Physical/flight/industrial deployment gates remain closed; primary unresolved-rights arms refuse licensing.
@@ -30,7 +33,7 @@ Use the repository's pinned computational dependencies:
 python -m pip install -r requirements-cycle004.txt -r requirements-commercial010.txt
 python -m unittest tests.test_public_portfolio_20261102 -v
 python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output /absolute/new-artifact-replay.json
-python -m experiments.public_portfolio_20261102.economics --root "$PWD" --output /absolute/new-economic-reproduction --products experiments/public_portfolio_20261102/PRODUCTS.json
+python -m experiments.public_portfolio_20261102.qualification_run --root "$PWD" --output /absolute/new-economic-reproduction --products experiments/public_portfolio_20261102/PRODUCTS.json
 ```
 
 Economic reproduction creates explicitly fresh comparison accounts; it does not resume, migrate, reseed or take over an existing business. Keep `private/` account authority out of public outputs. Only `public/` supports key-free replay. Exact commands, scopes, output locations and data retrieval instructions for each scientific construction are in its linked report. External ACC model files are source-addressed references; unavailable licensing/dependencies are disclosed rather than redistributed.

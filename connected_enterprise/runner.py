@@ -141,6 +141,14 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in required):
             raise ValueError('BLUE_SKY064_SOURCE_DEPENDENCY_MISSING')
         names.update(required)
+    if (root/'experiments/public_portfolio_20261102/service.py').is_file():
+        from experiments.public_portfolio_20261102.service import source_paths as portfolio_paths
+        names.update(portfolio_paths(root))
+        names.update(p.relative_to(root).as_posix()
+                     for p in (root/'experiments/public_portfolio_20261102').rglob('*.md') if p.is_file())
+        names.update(name for name in ('experiments/public_portfolio_20261102/products.py',
+                     'tests/test_public_portfolio_20261102.py', 'requirements-cycle004.txt',
+                     '.github/workflows/public-portfolio-20261102.yml') if (root/name).is_file())
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):

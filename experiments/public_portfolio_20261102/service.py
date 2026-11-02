@@ -6,13 +6,18 @@ from commercial.ledger import canonical, digest
 from commercial.persistence import atomic_bytes
 from production060.service import safe_path, read_json
 
-SCHEMA = 'public-portfolio-20261102/native-services/v1'
+SCHEMA = 'public-portfolio-20261102/native-services/v2'
 PREFIX = 'experiments/public_portfolio_20261102/'
 REGISTRY = PREFIX + 'FROZEN_SOURCES.json'
 APPROVAL = PREFIX + 'verification/PRODUCT_APPROVALS.json'
 VERIFIER = PREFIX + 'verification/verify_artifacts.py'
 SOURCES = (PREFIX + '__init__.py', PREFIX + 'service.py', PREFIX + 'native.py',
-           PREFIX + 'economics.py', PREFIX + 'ECONOMICS_PROTOCOL.json', REGISTRY)
+           PREFIX + 'economics.py', PREFIX + 'ECONOMICS_PROTOCOL.json', REGISTRY,
+           'experiments/__init__.py', 'production060/__init__.py',
+           'production060/service.py', 'production060/acceptance.py',
+           'commercial/__init__.py', 'commercial/tape_lease.py',
+           'adaptive_enterprise/__init__.py', 'connected_enterprise/__init__.py',
+           'vendor/__init__.py', 'vendor/alpha_claim/__init__.py')
 
 def source_paths(root):
     registry = read_json(root, REGISTRY)

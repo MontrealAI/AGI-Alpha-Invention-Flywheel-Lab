@@ -32,6 +32,11 @@ jobs:
           python -m unittest discover -s tests -p 'test_connected_transformational*.py' -v
       - name: Execute fresh synthetic technical comparison
         run: python -m flexibility063.experiment --output "$RUNNER_TEMP/flexibility063-technical"
+      - name: Qualify the five-route source and actual artifact contracts
+        run: |
+          python -m unittest tests.test_public_portfolio_20261102 -v
+          python experiments/public_portfolio_20261102/verification/r2_guard_tests_002.py --output "$RUNNER_TEMP/public-portfolio-r2-guards.json"
+          python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output "$RUNNER_TEMP/public-portfolio-artifact-replay.json"
       - name: Verify the inspected research edition and retained evidence identities
         run: python docs/transformational063/verify_publication.py
       - name: Blue Sky probes, open scale and historical-custody regressions
@@ -48,6 +53,8 @@ jobs:
         with:
           name: transformational063-public-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
           path: |
+            ${{ runner.temp }}/public-portfolio-r2-guards.json
+            ${{ runner.temp }}/public-portfolio-artifact-replay.json
             ${{ runner.temp }}/blue-sky064-probes/RESULT.json
             ${{ runner.temp }}/flexibility063-technical
             ${{ runner.temp }}/transformational063/REPORT.json

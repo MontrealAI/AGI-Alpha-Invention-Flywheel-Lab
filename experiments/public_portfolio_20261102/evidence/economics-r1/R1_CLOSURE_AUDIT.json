@@ -1,0 +1,22 @@
+{
+  "schema": "public-portfolio-r1-independent-source-closure-audit/v1",
+  "source_revision": "0a31ba0a86c1a5a20a3e453de86129e1ff58cad5",
+  "verdict": "FAILED_COMPLETE_EXECUTABLE_SOURCE_CLOSURE",
+  "executing_imported_helper": "production060/service.py",
+  "import_edge": "portfolio service imports production060.service.safe_path/read_json; production060.service imports production060.acceptance at module import",
+  "dependencies": [
+    {
+      "path": "production060/service.py",
+      "sha256_of_unchanged_current_bytes": "120026d95f7004737cd43616bfe9e7871c0864735ca1a1d24624d806f3cb83ab",
+      "covered_by_r1_financial_source_identity": false
+    },
+    {
+      "path": "production060/acceptance.py",
+      "sha256_of_unchanged_current_bytes": "c7bf65ea6aba50f9f0efb2567b32b9d86dab01103b666396798428031dfb041c",
+      "covered_by_r1_financial_source_identity": false
+    }
+  ],
+  "covered_financial_source_files": 144,
+  "arithmetic_qualification": "Existing arithmetic/ledger replay may still be internally consistent; absence of a helper hash prevents complete source qualification. No helper mutation or key access occurred.",
+  "repair_rule": "Preserve R1 source/accounts/results; new prospective R2 must bind helpers or replace them by fully source-bound own helpers, qualify guard against changed/missing helper bytes, and use explicit fresh comparison histories rather than claiming R1 migration."
+}
