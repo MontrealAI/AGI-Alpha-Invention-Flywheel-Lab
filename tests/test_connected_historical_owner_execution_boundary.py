@@ -110,11 +110,14 @@ class PublishedHistoricalVerifierSelectionTests(unittest.TestCase):
         cls.temp.cleanup()
 
     def _ticket(self, root, history=None):
+        from commercial.ledger import digest
+        files = upgrades.source_inventory(root)
+        finance_files = {name: files[name] for name in upgrades._LEGACY_FINANCE_SOURCE_PATHS}
         body = {
             'schema': 'agi-alpha/native-source-transition/v1',
             'historical_root': str(root),
-            'from_source': {'sha256': 'a' * 64},
-            'verifier_files': upgrades.source_inventory(root),
+            'from_source': {'files': finance_files, 'sha256': digest(finance_files)},
+            'verifier_files': files,
             'prior_record': {'connected_journal': {'source_history': history or []}},
         }
         return {'body': body, 'signature': '0' * 64}
@@ -131,8 +134,22 @@ class PublishedHistoricalVerifierSelectionTests(unittest.TestCase):
         }
         for commit, root in self.roots.items():
             with self.subTest(commit=commit):
-                self.assertEqual(digest(upgrades.source_inventory(root)), expected[commit])
-                self.assertIn(expected[commit], upgrades.PINNED_PUBLIC_HISTORICAL_INVENTORIES)
+                files = upgrades.source_inventory(root)
+                self.assertEqual(digest(files), expected[commit])
+                allowed_sources = {
+                    '9facd934d9ae763691e8a51052a67793cac5b48e':
+                        'ac0c950a110608cde5a4821779be7ba4960ae7b84d4a87b435ae759d28200b46',
+                    '10bdb2c5787f95158642b068756ba30b58140562':
+                        '772ba934fbfdd59a5e357ae1dc9918796a126c5a7ea77e7cf0fb90308154dd60',
+                }
+                if commit in allowed_sources:
+                    self.assertIn(expected[commit], upgrades.PINNED_PUBLIC_HISTORICAL_INVENTORIES)
+                    self.assertEqual(upgrades.PINNED_PUBLIC_HISTORICAL_SOURCES[expected[commit]],
+                                     allowed_sources[commit])
+                    finance_files = {name: files[name] for name in upgrades._LEGACY_FINANCE_SOURCE_PATHS}
+                    self.assertEqual(digest(finance_files), allowed_sources[commit])
+                else:
+                    self.assertNotIn(expected[commit], upgrades.PINNED_PUBLIC_HISTORICAL_INVENTORIES)
 
     def test_known_exact_source_may_reach_public_verifier_without_owner_key(self):
         root = self.roots['9facd934d9ae763691e8a51052a67793cac5b48e']
@@ -143,6 +160,72 @@ class PublishedHistoricalVerifierSelectionTests(unittest.TestCase):
         ) as execute:
             self.assertTrue(upgrades.verify_historical(ticket, {}, root=root)['accepted'])
             self.assertEqual(execute.call_count, 1)
+
+
+    def test_other_valid_financial_source_cannot_pair_with_pinned_python(self):
+        earlier = self.roots['9facd934d9ae763691e8a51052a67793cac5b48e']
+        later = self.roots['10bdb2c5787f95158642b068756ba30b58140562']
+        ticket = self._ticket(later)
+        ticket['body']['from_source'] = self._ticket(earlier)['body']['from_source']
+        with patch('commercial.ledger.load_jobs') as jobs, patch.object(
+            upgrades, '_run_pinned_historical_python'
+        ) as execute:
+            with self.assertRaisesRegex(ValueError, 'INDEPENDENT_HISTORICAL_VERIFIER_AUTHORITY_REQUIRED'):
+                upgrades.verify_historical(ticket, {}, root=later)
+            jobs.assert_not_called()
+            execute.assert_not_called()
+
+    def test_forged_financial_files_under_pinned_hash_are_refused(self):
+        root = self.roots['9facd934d9ae763691e8a51052a67793cac5b48e']
+        ticket = self._ticket(root)
+        ticket['body']['from_source']['files']['commercial/ledger.py'] = '0' * 64
+        with patch('commercial.ledger.load_jobs') as jobs, patch.object(
+            upgrades, '_run_pinned_historical_python'
+        ) as execute:
+            with self.assertRaisesRegex(ValueError, 'INDEPENDENT_HISTORICAL_VERIFIER_AUTHORITY_REQUIRED'):
+                upgrades.verify_historical(ticket, {}, root=root)
+            jobs.assert_not_called()
+            execute.assert_not_called()
+
+    def test_nested_mismatched_financial_source_refused_before_outer_replay(self):
+        earlier = self.roots['9facd934d9ae763691e8a51052a67793cac5b48e']
+        later = self.roots['10bdb2c5787f95158642b068756ba30b58140562']
+        inner = self._ticket(later)
+        inner['body']['from_source'] = self._ticket(earlier)['body']['from_source']
+        outer = self._ticket(earlier, history=[inner])
+        with patch('commercial.ledger.load_jobs') as jobs, patch.object(
+            upgrades, '_run_pinned_historical_python'
+        ) as execute:
+            with self.assertRaisesRegex(ValueError, 'INDEPENDENT_HISTORICAL_VERIFIER_AUTHORITY_REQUIRED'):
+                upgrades.verify_historical(outer, {}, root=earlier)
+            jobs.assert_not_called()
+            execute.assert_not_called()
+
+    def test_known_pair_with_nested_known_pair_can_reach_mock_verifier(self):
+        earlier = self.roots['9facd934d9ae763691e8a51052a67793cac5b48e']
+        later = self.roots['10bdb2c5787f95158642b068756ba30b58140562']
+        outer = self._ticket(earlier, history=[self._ticket(later)])
+        receipt = SimpleNamespace(returncode=0, stdout=json.dumps({'accepted': True}), stderr='')
+        with patch('commercial.ledger.load_jobs'), patch.object(
+            upgrades, '_run_pinned_historical_python', return_value=receipt
+        ) as execute:
+            self.assertTrue(upgrades.verify_historical(outer, {}, root=earlier)['accepted'])
+            self.assertEqual(execute.call_count, 1)
+
+    def test_unreviewed_third_archive_not_authorized_for_keyfree_execution(self):
+        root = self.roots['9c74bc5a8de61167a9c157c9cd2532c4a9b7577d']
+        files = upgrades.source_inventory(root)
+        ticket = {'body': {'verifier_files': files,
+                           'from_source': {'files': {}, 'sha256': '0' * 64},
+                           'prior_record': {'connected_journal': {'source_history': []}}},
+                  'signature': '0' * 64}
+        with patch('commercial.ledger.load_jobs') as jobs, patch.object(
+            upgrades, '_run_pinned_historical_python'
+        ) as execute:
+            with self.assertRaisesRegex(ValueError, 'INDEPENDENT_HISTORICAL_VERIFIER_AUTHORITY_REQUIRED'):
+                upgrades.verify_historical(ticket, {}, root=root)
+            jobs.assert_not_called()
+            execute.assert_not_called()
 
     def test_extra_unsigned_python_is_refused_before_historical_execution(self):
         root = self.roots['10bdb2c5787f95158642b068756ba30b58140562']
