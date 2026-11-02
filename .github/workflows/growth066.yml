@@ -14,17 +14,41 @@ jobs:
     timeout-minutes: 360
     outputs:
       matrix: ${{ steps.matrix.outputs.value }}
+      execute: ${{ steps.execution.outputs.execute }}
     steps:
+      - name: Record hosted job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: pip install numpy==2.3.5 cryptography==50.0.0
       - run: python -m unittest discover -s tests -p 'test_growth066*.py' -q
+      - name: Prevent duplicate campaigns for this metadata-only repair
+        id: execution
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python - <<'PY_GATE'
+          import os, re, subprocess
+          anchor='8d615b1e850f81838b7ff77f87fee8964bf1f280'
+          head=os.environ.get('HEAD_SHA','')
+          if not re.fullmatch('[0-9a-f]{40}',head):raise SystemExit('Exact head SHA required; refuse duplicate execution')
+          subprocess.run(['git','cat-file','-e',anchor+'^{commit}'],check=True)
+          subprocess.run(['git','cat-file','-e',head+'^{commit}'],check=True)
+          changed=set(subprocess.check_output(['git','diff','--name-only',anchor,head],text=True).splitlines())
+          allowed={'.github/workflows/growth066.yml','.github/workflows/growth067.yml','campaign/connected-growth067/WORKFLOW_QUALIFICATION.md'}
+          execute=not(changed and changed<=allowed)
+          print({'executed_source_anchor':anchor,'head':head,'changed':sorted(changed),'execute_economic_campaign':execute})
+          with open(os.environ['GITHUB_OUTPUT'],'a') as stream:stream.write('execute='+str(execute).lower()+'\n')
+          PY_GATE
       - id: matrix
         run: echo "value=$(python -m growth066.ci plan)" >> "$GITHUB_OUTPUT"
   development:
     needs: plan
+    if: needs.plan.outputs.execute == 'true'
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -32,6 +56,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
+      - name: Record hosted job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
@@ -52,6 +78,8 @@ jobs:
     outputs:
       matrix: ${{ steps.select.outputs.value }}
     steps:
+      - name: Record hosted job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
@@ -78,6 +106,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
+      - name: Record hosted job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
