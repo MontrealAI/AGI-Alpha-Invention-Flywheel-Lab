@@ -32,6 +32,7 @@ Public [KIT4 data](https://doi.org/10.5281/zenodo.1203914) and the [KTC dataset 
 
 ## Economic and successor admission remain separate
 
-The primary simulation retains exactly **US$100,000** of initial capital and the **US$3 billion trailing-365-day complete-cost profit** objective, without a profit ceiling. These cards execute no financial world and record no revenue, funding or progress toward that amount. No price, market size, willingness to pay or human-equivalent task-hours are inferred from the scientific papers.
+New simulations follow the [variable-capital mandate](../../AGENTS.md#active-direction-blue-sky-only): choose starting capital jointly with strategy and financing, retaining **US$100,000** as a historical/reference comparison rather than a mandatory primary seed. **US$1 billion** is an eligible financing hypothesis, not secured funds or a ceiling. The **US$3 billion trailing-365-day complete-cost profit** objective remains a milestone without a profit ceiling; historical registered arms remain unchanged. These cards execute no financial world and record no revenue, funding or progress toward that amount. No price, market size, willingness to pay or human-equivalent task-hours are inferred from the scientific papers.
 
 A later commercial experiment must deliver the specific construction, allow buyer refusal and complete substitutes, charge all construction, failed work and validation, and use reconciled native accounts. A fresh successor must attempt a different valuable activity with and without the retained means under matched resources. A finite-game optimum must disclose its actions, information, horizon, incentives, costs and bound or gap. None of these findings is established by naming a candidate.
+
