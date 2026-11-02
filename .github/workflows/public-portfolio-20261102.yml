@@ -33,6 +33,7 @@ jobs:
           python -m unittest experiments.public_portfolio_20261102.verification.test_recovery -v
           python -m unittest experiments.public_portfolio_20261102.verification.test_dispatch_case -v
           python -m unittest experiments.public_portfolio_20261102.verification.test_recovery_fast -v
+          python -m unittest experiments.public_portfolio_20261102.verification.test_finalize_run -v
       - name: Independently reconstruct frozen actual scientific artifacts
         run: python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output "$RUNNER_TEMP/public-portfolio-artifact-replay.json"
       - name: Recheck the ten retained native financial exports

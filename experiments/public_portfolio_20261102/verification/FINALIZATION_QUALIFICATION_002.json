@@ -1,0 +1,37 @@
+{
+  "schema": "public-portfolio/finalization-admission-qualification/v2",
+  "status": "PASS",
+  "tests_run": 5,
+  "failures": 0,
+  "errors": 0,
+  "wall_seconds": 0.06634576999931596,
+  "source_hashes": {
+    "experiments/public_portfolio_20261102/finalize_run.py": "4738f988c6584a20bc3e59b519dceccc8fc0ae37eda53bd36df711e388e06795",
+    "experiments/public_portfolio_20261102/verification/test_finalize_run.py": "62c9268dd2be9c2449a94f1e837a7cd149d697119462dbac4ca071cf6be6d00d"
+  },
+  "scope": "Admission-only metadata guard fixtures: incomplete110 denominator, existingRESULT overwrite, and actualfailureSTOP rejected before summary writes. No positive financial finding or campaignaccount mutation claimed. Final actual110 reconciliation must execute on real complete public exports and independently audit separately. Exact new summary/observer/calendar/customer consistency also passed on three already-complete original public exports, with no account opening or file modification.",
+  "prior_admission_qualification": {
+    "tests_run": 3,
+    "source_hashes": {
+      "experiments/public_portfolio_20261102/finalize_run.py": "4f7112f6d45d46bdb0dbe4a5f98c59165733ca6e3dff40a79fcf0efd91fe0f29",
+      "experiments/public_portfolio_20261102/verification/test_finalize_run.py": "14ef96263160cd72171d3ff6ee9ae48d2c641948ca91db8d44f66d07eb719cd9"
+    },
+    "scope": "Admission-only metadata guard fixtures: incomplete110 denominator, existingRESULT overwrite, and actualfailureSTOP rejected before summary writes. No positive financial finding or campaignaccount mutation claimed. Final actual110 reconciliation must execute on real complete public exports and independently audit separately."
+  },
+  "review_correction": "Independent execution reviewer identified state finalsummary vs native ledger mirror gap. Added exact summary/observer/calendar/distinct-collected-customer consistency before _compact; negative fixture rejects changedsummary before any observer/summarywrite. No account/source/predicate or actual result changed.",
+  "real_public_read_only_consistency_checks": [
+    "purpose-central-100k",
+    "interface-central-100k",
+    "interface-earned-only-k2"
+  ],
+  "preceding_review_correction_qualification": {
+    "tests_run": 4,
+    "source_hashes": {
+      "experiments/public_portfolio_20261102/finalize_run.py": "912d2aebabb8ca9250ba24ec27d84afb0f23925f802e6fee3fe8505bec09e140",
+      "experiments/public_portfolio_20261102/verification/test_finalize_run.py": "f249f38c8aaf4cf9b59167048360e65acae88b542ea4a41e9750121a7631f046"
+    },
+    "review_correction": "Independent execution reviewer identified state finalsummary vs native ledger mirror gap. Added exact summary/observer/calendar/distinct-collected-customer consistency before _compact; negative fixture rejects changedsummary before any observer/summarywrite. No account/source/predicate or actual result changed."
+  },
+  "admission_race_correction": "Recheck STOP and all110 COMPLETE statuses after all worker slots are held; metadata-only race fixture injects STOP at slot acquisition and requires refusal before reading cases/writing results.",
+  "known_output_limit": "Exclusive multi-file writes never overwrite. A host interruption after CHECKS/TELEMETRY but before RESULTS requires explicit exact-byte read-only reconciliation of surviving artifacts; accounts remain unchanged."
+}
