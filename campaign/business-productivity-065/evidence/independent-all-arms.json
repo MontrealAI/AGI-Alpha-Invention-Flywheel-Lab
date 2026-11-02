@@ -1,0 +1,46 @@
+{
+  "accepted": true,
+  "scope": "SOURCE_MATCHED_NATIVE_REPLAY_AND_ACTUAL_DELIVERY_ACCEPTANCE_NOT_OBSERVED_COMMERCE",
+  "arms": [
+    {
+      "arm": "conditional",
+      "accepted": true,
+      "profit_microUSD": 112223999,
+      "deliveries": 2,
+      "accepted_deliveries": 2,
+      "decision": "TWO_ACCEPTED_DELIVERIES_SECOND_EARNED_FUNDED_SIM"
+    },
+    {
+      "arm": "no_demand",
+      "accepted": true,
+      "profit_microUSD": -90000000,
+      "deliveries": 0,
+      "accepted_deliveries": 0,
+      "decision": "NO_PURCHASE_RETAIN_INCURRED_COST_NO_COLLECTION"
+    },
+    {
+      "arm": "payment_delay",
+      "accepted": true,
+      "profit_microUSD": 65183999,
+      "deliveries": 1,
+      "accepted_deliveries": 1,
+      "decision": "SUCCESSOR_DECLINED_NO_UNRESTRICTED_EARNED_FUNDS"
+    },
+    {
+      "arm": "competitive_imitation",
+      "accepted": true,
+      "profit_microUSD": -20475000,
+      "deliveries": 1,
+      "accepted_deliveries": 1,
+      "decision": "SUCCESSOR_DECLINED_NO_UNRESTRICTED_EARNED_FUNDS"
+    },
+    {
+      "arm": "insufficient_earned_cash",
+      "accepted": true,
+      "profit_microUSD": 65183999,
+      "deliveries": 1,
+      "accepted_deliveries": 1,
+      "decision": "SUCCESSOR_DECLINED_NO_UNRESTRICTED_EARNED_FUNDS"
+    }
+  ]
+}

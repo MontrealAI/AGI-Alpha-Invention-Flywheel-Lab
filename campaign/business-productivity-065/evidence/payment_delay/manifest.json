@@ -1,0 +1,57 @@
+{
+  "schema": "business-productivity065/native-services/v1",
+  "native_engine": "exact-prospective-v2",
+  "account_namespace": "adaptive012",
+  "source_hashes": {
+    "business_productivity065/PREREGISTRATION.json": "e88e0561b8c56ee24d056b08a9c67a0c0334e42630777d92e600431631b10ce3",
+    "business_productivity065/__init__.py": "a1fbdf81663cdc37e756b61bc07955cdfc8c0d0681f69dd3add9b7d1d39fd618",
+    "business_productivity065/acceptance.py": "d744b50525a11c66ab74c12fc5fd791e70c36a1e2ba399a8907407eed65f425f",
+    "business_productivity065/analyze.py": "187e3e912ab0abf15b7ee450128acddfcf5712d3360dbff584ba37663fc77eb0",
+    "business_productivity065/native.py": "6256dd9bd5eb79687f475d5dacaa53aab5c0cbc199296a7e21a645e9070a2fe4",
+    "business_productivity065/run.py": "59da3d877ce6b1850fe81a4733d184eccb7123c692accbdf9fdcc26381b394b2",
+    "business_productivity065/scenario_plus20.json": "f9f454a71f0b3b7571ed19b0a04931dd40b3754796af0ad009d820f157ef4e9c",
+    "business_productivity065/service.py": "5c5c760b954f6ee8e5705a8d78ffd9aff1b879385a5fbb574dd0db2b872d5a84",
+    "business_productivity065/verify.py": "ddb61fbdb77d29329caecb24a7a2c7f4859d36416cf639058f83712ae3287a4a",
+    "commercial/ledger.py": "aec3154bce91bd82296a6e2e7e76b5071f042e7522328aa5cca21ff70d6556f3",
+    "connected_enterprise/finance.py": "845a8aeed4f3669ea83d48ef600a2d76d8ef0d74ed6fbe8cf2558bea6ea5ad74",
+    "inventory061/LICENSE-OR-License.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "inventory061/QUALITY_CONTRACT_V2.json": "5b3d0397222ed816ec8f0bfa950ecbfa6559af7382d043dc4efb4f4272ee3d84",
+    "inventory061/constructor.py": "a5ddb6b026df94e549be73168d39996932da3e4c13608718b67110cbaa609a6c",
+    "inventory061/independent_acceptance.py": "0d5f7f55dd216a025e6de442ef70d47107e0c2e08738ca7e8070127c25cc5df1",
+    "inventory061/inputs/01.json": "c949fac0c2fe39c8ada57d028152072b4aa722a415343c2b16ad454f4afab649",
+    "inventory061/inputs/brief.md": "294948637c42a5e0f6c87b1125a14ef4b88a5179fceb0d71b45b36c4ef53c0e8",
+    "inventory061/inputs/params.yaml": "add849298baea9e6d8fe5d9cf0441acf248548ff76a25cf562c6351f0c22bee8",
+    "inventory061/inputs/problem_description.md": "d05da00a1ced1f6c6ddfc63fe87a72aa0338cccd91bafeb6ec44ecf3a10a5c26",
+    "inventory061/inputs/program/_inventory_engine.py": "2567686d09d69df44fe95f2945e2fe2af66786006b87d58100a0e15a09e80ca2",
+    "inventory061/inputs/program/_inventory_objective.py": "00fb6c9d7b3b2d567bb2f84344dd72b767c2898400fe14a3acd2c2bf16be58f4",
+    "inventory061/quality_constructor.py": "1f1a1214fd1c22322ee1ae1a9f9e618321347cee82a39fd79747541d9a115a47",
+    "production060/acceptance.py": "c7bf65ea6aba50f9f0efb2567b32b9d86dab01103b666396798428031dfb041c",
+    "production060/service.py": "120026d95f7004737cd43616bfe9e7871c0864735ca1a1d24624d806f3cb83ab"
+  },
+  "jobs": [
+    {
+      "id": "original",
+      "request": {
+        "id": "original",
+        "instance_path": "inventory061/inputs/01.json",
+        "scenario": "original",
+        "instance_sha256": "c949fac0c2fe39c8ada57d028152072b4aa722a415343c2b16ad454f4afab649",
+        "input_canonical_sha256": "128ce3632a2af201a38996f0e6e5a3fb5da6bcef523e3f27dc4ac212a7e3bd0b",
+        "quality": "each48_joint_successes_at_least347_of365"
+      },
+      "delivery_path": "business_productivity065/deliveries/payment_delay-original.json"
+    },
+    {
+      "id": "plus20",
+      "request": {
+        "id": "plus20",
+        "instance_path": "business_productivity065/scenario_plus20.json",
+        "scenario": "demand_plus20pct_ceil",
+        "instance_sha256": "f9f454a71f0b3b7571ed19b0a04931dd40b3754796af0ad009d820f157ef4e9c",
+        "input_canonical_sha256": "7bbd9c1977e406c8568084dc25ce3809add086362647b9e7cd53d72d0bd84614",
+        "quality": "each48_joint_successes_at_least347_of365"
+      },
+      "delivery_path": "business_productivity065/deliveries/payment_delay-plus20.json"
+    }
+  ]
+}

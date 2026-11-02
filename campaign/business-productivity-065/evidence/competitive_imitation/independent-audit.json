@@ -1,0 +1,49 @@
+{
+  "accepted": true,
+  "scope": "SIMULATED",
+  "actions_sha256": "0102239d93b0f79489015f806b8e8e57324a10e6ad76fd0ace07699672b5246c",
+  "summary": {
+    "reservedInvestment": 0,
+    "revenue": 75000000,
+    "expenses": 95475000,
+    "recoveryIncome": 0,
+    "profit": -20475000,
+    "cash": 99979525000,
+    "collections": 75000000,
+    "expensePaid": 95475000,
+    "payables": 0,
+    "custodyRestricted": 0,
+    "custodyReserve": 0,
+    "tailReserve": 10000000,
+    "workingCapital": 0,
+    "available": 99969525000,
+    "unrestrictedEarned": 0,
+    "strictEarnedControl": 0,
+    "equityProtectionBacking": 10000000,
+    "earnedProtectionBacking": 0,
+    "netEarnedAfterIncurredObligations": -20475000,
+    "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+    "conditionalEarned": 0,
+    "investmentStopped": false,
+    "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+  },
+  "orders": [
+    {
+      "id": "first",
+      "buyer": "sim-buyer-first",
+      "price": "75000000",
+      "state": "released",
+      "refund_due": "0",
+      "compensation_due": "0",
+      "custody": 0
+    }
+  ],
+  "investments": [],
+  "state_bound_reservations": 0,
+  "signature_scope": "Public audit verifies native finance and state/action commitments. Private local HMAC authenticity is checked only by the account owner.",
+  "connected_journal_entries": 10,
+  "connected_rejected_entries": 0,
+  "connected_native_actions_covered": 10,
+  "source_bound_resource_spend_microUSD": 90000000,
+  "journal_authenticity_scope": "Public source/native commitments verified; private local WAL HMAC checked only on owner reopen."
+}

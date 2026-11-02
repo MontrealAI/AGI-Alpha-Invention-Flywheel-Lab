@@ -1,0 +1,269 @@
+{
+  "arm": "conditional",
+  "scope": "ACTUAL_PRODUCTION_CONDITIONAL_NATIVE_SIM_ECONOMICS",
+  "primary_seed_usd": 100000,
+  "preregistration_sha256": "e88e0561b8c56ee24d056b08a9c67a0c0334e42630777d92e600431631b10ce3",
+  "source_sha256": "1417c5119f7b77e9ce5cdd18683ecb19816fac1b4cb9bbc1c62ec587f124fe31",
+  "observed_buyers": 0,
+  "deliveries": [
+    {
+      "job": "original",
+      "production": {
+        "command": [
+          "python",
+          "inventory061/quality_constructor.py",
+          "--input",
+          "inventory061/inputs/01.json",
+          "--output",
+          "/absolute/new/producer-output"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 7.945850798045285,
+        "reaped_cpu_seconds": 7.928399999999999,
+        "max_rss_kib": 79928,
+        "external_model_calls": 0,
+        "actual_total_model_billing": null,
+        "native_funding_receipt": {
+          "id": "first-complete-lifecycle",
+          "kind": "inventory_engineering",
+          "amount": 90000000,
+          "day": 0,
+          "funding": "SEED",
+          "plan_id": null,
+          "work_sha256": "1efea02b2896590eea728507435f126495fb07c48c405d52aa57f4aee7737d81",
+          "source_sha256": "1417c5119f7b77e9ce5cdd18683ecb19816fac1b4cb9bbc1c62ec587f124fe31",
+          "native_event_sequence": 0,
+          "native_actions_sha256": "7c296b87dfade998368b890cd1ae1e9385dee0428dc16ddd56d21eeb2cee1542",
+          "obligation_receipt_sha256": null,
+          "prepaid_support_microUSD": 0
+        },
+        "funding_before_process": true,
+        "stderr": "",
+        "command_scope": "Portable equivalent of executed command; absolute workspace prefixes removed, measured resource values unchanged."
+      },
+      "accepted": true,
+      "artifact_sha256": "665b95539f123146079127799f2cd666b8c676d3d1083384503b14728801386f",
+      "metrics": {
+        "average_cycle_service": 0.9509703196347032,
+        "minimum_cycle_service": 0.9506849315068493,
+        "RDC_product_pairs_below_95_percent": 0,
+        "holding_cost_yuan_per_2023_year": 9900076.470255068
+      }
+    },
+    {
+      "job": "plus20",
+      "production": {
+        "command": [
+          "python",
+          "inventory061/quality_constructor.py",
+          "--input",
+          "business_productivity065/scenario_plus20.json",
+          "--output",
+          "/absolute/new/producer-output"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 5.312484689988196,
+        "reaped_cpu_seconds": 5.302132000000001,
+        "max_rss_kib": 80040,
+        "external_model_calls": 0,
+        "actual_total_model_billing": null,
+        "native_funding_receipt": {
+          "id": "successor-earned-reservation",
+          "kind": "inventory_scenario_revision",
+          "amount": 35000000,
+          "day": 75,
+          "funding": "EARNED",
+          "plan_id": "connected014-resource-d15dd882f1b68d2346d906cb2c682b66",
+          "work_sha256": "2015414178492da5b89708d5e57f4087509ea29116f013acf7ac623e7f1f5273",
+          "source_sha256": "1417c5119f7b77e9ce5cdd18683ecb19816fac1b4cb9bbc1c62ec587f124fe31",
+          "native_event_sequence": 12,
+          "native_actions_sha256": "d0ad45eebcc9045adfc1554e322aaf22a3f95c111c41019a6ad84956e583c946",
+          "obligation_receipt_sha256": "315af0ebeb1206a5b44b83774e73a2458e7495865cf8f7ad694828b8db7cf58d",
+          "prepaid_support_microUSD": 10000
+        },
+        "funding_before_process": true,
+        "stderr": "",
+        "command_scope": "Portable equivalent of executed command; absolute workspace prefixes removed, measured resource values unchanged."
+      },
+      "accepted": true,
+      "artifact_sha256": "76fb45582c4b05d280b67c0b64b801dfd288a5ef6217dba947f83269de96cae5",
+      "metrics": {
+        "average_cycle_service": 0.9509132420091324,
+        "minimum_cycle_service": 0.9506849315068493,
+        "RDC_product_pairs_below_95_percent": 0,
+        "holding_cost_yuan_per_2023_year": 11884761.656047672
+      }
+    }
+  ],
+  "costs": [
+    {
+      "id": "first-complete-lifecycle",
+      "amount_usd": 90.0,
+      "hour": 0
+    },
+    {
+      "id": "payment-first",
+      "amount_usd": 5.5200000000000005,
+      "hour": 25
+    },
+    {
+      "id": "tax-first",
+      "amount_usd": 16.2959998,
+      "hour": 74
+    },
+    {
+      "id": "successor-complete-lifecycle",
+      "amount_usd": 35.0,
+      "hour": 75
+    },
+    {
+      "id": "payment-second",
+      "amount_usd": 3.2,
+      "hour": 100
+    },
+    {
+      "id": "tax-final",
+      "amount_usd": 11.759999959999998,
+      "hour": 239
+    }
+  ],
+  "funding_checks": [
+    {
+      "amount_usd": 35.0,
+      "summary_before": {
+        "reservedInvestment": 0,
+        "revenue": 180000000,
+        "expenses": 114816001,
+        "recoveryIncome": 0,
+        "profit": 65183999,
+        "cash": 100065183999,
+        "collections": 180000000,
+        "expensePaid": 114816001,
+        "payables": 0,
+        "custodyRestricted": 0,
+        "custodyReserve": 0,
+        "tailReserve": 10000000,
+        "workingCapital": 0,
+        "available": 100055183999,
+        "unrestrictedEarned": 65183999,
+        "strictEarnedControl": 55183999,
+        "equityProtectionBacking": 10000000,
+        "earnedProtectionBacking": 0,
+        "netEarnedAfterIncurredObligations": 65183999,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "conditionalEarned": 65183999,
+        "investmentStopped": false,
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+      },
+      "receipt": {
+        "id": "successor-earned-reservation",
+        "kind": "inventory_scenario_revision",
+        "amount": 35000000,
+        "day": 75,
+        "funding": "EARNED",
+        "plan_id": "connected014-resource-d15dd882f1b68d2346d906cb2c682b66",
+        "work_sha256": "2015414178492da5b89708d5e57f4087509ea29116f013acf7ac623e7f1f5273",
+        "source_sha256": "1417c5119f7b77e9ce5cdd18683ecb19816fac1b4cb9bbc1c62ec587f124fe31",
+        "native_event_sequence": 12,
+        "native_actions_sha256": "d0ad45eebcc9045adfc1554e322aaf22a3f95c111c41019a6ad84956e583c946",
+        "obligation_receipt_sha256": "315af0ebeb1206a5b44b83774e73a2458e7495865cf8f7ad694828b8db7cf58d",
+        "prepaid_support_microUSD": 10000
+      },
+      "refusal_unchanged": null,
+      "allow_seed": false
+    }
+  ],
+  "actual_billing": null,
+  "decision": "TWO_ACCEPTED_DELIVERIES_SECOND_EARNED_FUNDED_SIM",
+  "summary": {
+    "reservedInvestment": 0,
+    "revenue": 280000000,
+    "expenses": 167776001,
+    "recoveryIncome": 0,
+    "profit": 112223999,
+    "cash": 100112223999,
+    "collections": 280000000,
+    "expensePaid": 167776001,
+    "payables": 0,
+    "custodyRestricted": 0,
+    "custodyReserve": 0,
+    "tailReserve": 20000000,
+    "workingCapital": 0,
+    "available": 100092223999,
+    "unrestrictedEarned": 112223999,
+    "strictEarnedControl": 92223999,
+    "equityProtectionBacking": 20000000,
+    "earnedProtectionBacking": 0,
+    "netEarnedAfterIncurredObligations": 112223999,
+    "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+    "conditionalEarned": 112223999,
+    "investmentStopped": false,
+    "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+  },
+  "native_audit": {
+    "accepted": true,
+    "scope": "SIMULATED",
+    "actions_sha256": "5ae4a2c557b04ef4a97962b75579c40c64cf6ab325bcc9a9da0de228ef486ff4",
+    "summary": {
+      "reservedInvestment": 0,
+      "revenue": 280000000,
+      "expenses": 167776001,
+      "recoveryIncome": 0,
+      "profit": 112223999,
+      "cash": 100112223999,
+      "collections": 280000000,
+      "expensePaid": 167776001,
+      "payables": 0,
+      "custodyRestricted": 0,
+      "custodyReserve": 0,
+      "tailReserve": 20000000,
+      "workingCapital": 0,
+      "available": 100092223999,
+      "unrestrictedEarned": 112223999,
+      "strictEarnedControl": 92223999,
+      "equityProtectionBacking": 20000000,
+      "earnedProtectionBacking": 0,
+      "netEarnedAfterIncurredObligations": 112223999,
+      "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+      "conditionalEarned": 112223999,
+      "investmentStopped": false,
+      "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+    },
+    "orders": [
+      {
+        "id": "first",
+        "buyer": "sim-buyer-first",
+        "price": "180000000",
+        "state": "released",
+        "refund_due": "0",
+        "compensation_due": "0",
+        "custody": 0
+      },
+      {
+        "id": "second",
+        "buyer": "sim-buyer-second",
+        "price": "100000000",
+        "state": "released",
+        "refund_due": "0",
+        "compensation_due": "0",
+        "custody": 0
+      }
+    ],
+    "investments": [
+      {
+        "id": "connected014-resource-d15dd882f1b68d2346d906cb2c682b66",
+        "cap": "35000000",
+        "state": "complete",
+        "actual": "35000000"
+      }
+    ],
+    "state_bound_reservations": 1,
+    "signature_scope": "Public audit verifies native finance and state/action commitments. Private local HMAC authenticity is checked only by the account owner.",
+    "connected_journal_entries": 22,
+    "connected_rejected_entries": 0,
+    "connected_native_actions_covered": 23,
+    "source_bound_resource_spend_microUSD": 125000000,
+    "journal_authenticity_scope": "Public source/native commitments verified; private local WAL HMAC checked only on owner reopen."
+  },
+  "public_export_sha256": "03aed9252a05b3b11a162a901992bbf58d391b93f297e95f9d7c5b720018cdb2"
+}
