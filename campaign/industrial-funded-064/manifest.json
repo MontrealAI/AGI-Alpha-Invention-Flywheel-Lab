@@ -1,0 +1,58 @@
+{
+  "schema": "industrial064/native-services/v1",
+  "native_engine": "exact-prospective-v2",
+  "account_namespace": "adaptive012",
+  "source_hashes": {
+    "commercial/ledger.py": "cb16b5534f5b8b9d9f5de190a270538780106c066101cda1ba9097b386b16aae",
+    "connected_enterprise/finance.py": "1c3fb2b531bb7ee32bcb5b16e7d4cb84a83e6537feb23b70ffe803dc626c8eb4",
+    "industrial062/accept_client.py": "f7474e9bfdb43d9cefa67f96e0f12194714ed9e447bd37a06448135747d3fbb9",
+    "industrial062/assess_geometry.py": "4a27c70e44b737fea5d6df606aea6cb8b1431d815fa3e6539dace64b0ffb2cc7",
+    "industrial062/assess_stress.py": "a1ab54f8c3a4916dc9f19f1ac6d190e99ba28677108a0446f8c72af82dce8a59",
+    "industrial062/construct.py": "71d0566cf2ec123f062216a5c1f62328bea3b19341772cde4e188edeed75f26f",
+    "industrial062/fetch_inputs.py": "f2b823a4819c13226d2fee0e100fb0ced42a9595e79abe392b489bb39b95379b",
+    "industrial062/inputs/14_network_tiered/_network_engine.py": "a8c982378137f295f69ffe1dbf2eb80323b73d6d59568a7a9cd88a42a61cc93f",
+    "industrial062/inputs/14_network_tiered/_network_objective.py": "99d74f781d2cfcfe285696f24de31f9395de8e6ce4ff8b416d65cefb8b76e8e4",
+    "industrial062/inputs/15_network_direct/_network_delivery.py": "5ba8fa56dd929f535a346e26143ae31fb786d834d5355c09d1fc599f15521257",
+    "industrial062/inputs/15_network_direct/_network_engine.py": "ba37753ede954c2a093b7d287bae1631d3e8f928693125fa8d836c74b925f7e5",
+    "industrial062/inputs/15_network_direct/_network_objective.py": "99d74f781d2cfcfe285696f24de31f9395de8e6ce4ff8b416d65cefb8b76e8e4",
+    "industrial062/inputs/16_network_mixed/_network_engine.py": "30c530da150387eed78cf0258bbe6a5a18aa8a5e626a43dc93055783be181935",
+    "industrial062/inputs/16_network_mixed/_network_mixed.py": "28faf325ac4e78278b8791f20b79f24df6808efde30b6bba55af64e00cad97fc",
+    "industrial062/inputs/16_network_mixed/_network_objective.py": "452ef93a0d7fc991c162db3b3a65588a85b85979b87054cd362358afda0319b3",
+    "industrial064/__init__.py": "99dfc12abf04b0a749efc7a1aa20cbdbbdb574f7a6738e2ccbdf82f03f761aa9",
+    "industrial064/acceptance.py": "fae0372ecb2c423e16d1762f69fa13c747f37197eaa9777ec40f438780b2a202",
+    "industrial064/construct.py": "7da7258c9a2169602ec8158ace836e2bf3b17075ea165f0950eee05f5104e742",
+    "industrial064/economics.json": "310e28de5e1fd8f3b3d734d68bc285e89421253a6e4c3a8eb3d7ada029aad91f",
+    "industrial064/inputs/baseline.json": "e92e7cbdd5b24b963e249541bb1ad3830651a2fd645a7ab593c12986df0ba560",
+    "industrial064/inputs/demand105.json": "8f1d725b9dde27f5ddb48c884782d6911c18f65f906721fe7a553ec826313b4e",
+    "industrial064/native.py": "1002179f209e20a12cc123abbd3d1a4e1a4d2b6a20466817c889e2589b90adf2",
+    "industrial064/operate.py": "aa6a76a9d8abeee190776e40cadeef95125a7f304056a138a4fceb64fee36317",
+    "industrial064/registration.json": "13803c7148f37d05110e3407ccb8dd869fbb396a222dec3b38ec07e23aba5db6",
+    "industrial064/service.py": "854c4d27c4acb37ef315a22156c47e0786a2cb1deccedee14aec5f52c4124756",
+    "production060/acceptance.py": "c7bf65ea6aba50f9f0efb2567b32b9d86dab01103b666396798428031dfb041c",
+    "production060/service.py": "120026d95f7004737cd43616bfe9e7871c0864735ca1a1d24624d806f3cb83ab"
+  },
+  "jobs": [
+    {
+      "id": "baseline",
+      "request": {
+        "id": "baseline",
+        "input_path": "industrial064/inputs/baseline.json",
+        "input_sha256": "e92e7cbdd5b24b963e249541bb1ad3830651a2fd645a7ab593c12986df0ba560",
+        "distance_margin": 0.1,
+        "cost_ceiling_yuan": 375000000
+      },
+      "delivery_path": "industrial064/deliveries/baseline.json"
+    },
+    {
+      "id": "demand105",
+      "request": {
+        "id": "demand105",
+        "input_path": "industrial064/inputs/demand105.json",
+        "input_sha256": "8f1d725b9dde27f5ddb48c884782d6911c18f65f906721fe7a553ec826313b4e",
+        "distance_margin": 0.1,
+        "cost_ceiling_yuan": 400000000
+      },
+      "delivery_path": "industrial064/deliveries/demand105.json"
+    }
+  ]
+}
