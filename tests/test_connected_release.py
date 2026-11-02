@@ -322,6 +322,18 @@ class ReleaseIntegrityTests(unittest.TestCase):
                     release.publish(self.assets, COMMIT, 'owner/repo', 7, 1)
             command.assert_not_called()
 
+    def test_missing_next072_run_blocks_publication_before_workflow_is_observed(self):
+        applicability = {'changed_paths':['next072/policy.py'],
+                         'base_commit':'c'*40, 'conservative_all_conditionals':False}
+        baseline = {name:{'head_sha':COMMIT} for name in release.REQUIRED_WORKFLOWS}
+        with patch.object(release, 'qualifying_runs', return_value=baseline), \
+             patch.object(release, 'push_applicability', return_value=applicability), \
+             patch.object(release, 'gh', return_value={'workflow_runs':[]}), \
+             patch.object(release.subprocess, 'run') as command:
+            with self.assertRaisesRegex(TimeoutError, 'EXACT_MAIN_WORKFLOW_GATE_TIMEOUT'):
+                release.publish(self.assets, COMMIT, 'owner/repo', 7, 1)
+            command.assert_not_called()
+
     def test_download_rejects_retargeted_tag_before_fetching_assets(self):
         responses = [{'object':{'sha':'b'*40, 'type':'commit'}}, {'tag_name':release.tag(COMMIT)}]
         with patch.object(release, 'gh', side_effect=responses), patch.object(release.subprocess, 'run') as command:
@@ -578,6 +590,23 @@ class WorkflowGateTests(unittest.TestCase):
         self.assertNotIn('enterprise011.yml', required)
         self.assertNotIn('connected014.yml', required)
         self.assertNotIn('measurement009.yml', required)
+
+    def test_next072_paths_require_qualification_without_an_observed_run(self):
+        for path in ('next072/policy.py', 'next072/nested/check.py',
+                     'experiments/next_series_20261102/REPORT.md',
+                     'requirements-next072.txt', '.github/workflows/next072.yml'):
+            with self.subTest(path=path):
+                self.assertEqual(release.applicable_workflows([path]),
+                                 set(release.REQUIRED_WORKFLOWS) | {'next072.yml'})
+        self.assertIn('next072.yml', release.applicable_workflows([], conservative=True))
+
+    def test_next072_near_miss_paths_do_not_require_its_workflow(self):
+        for path in ('next072_other/policy.py', 'next072.py',
+                     'experiments/next_series_20261103/REPORT.md',
+                     'requirements-next072.txt.bak', '.github/workflows/next072.yml.bak'):
+            with self.subTest(path=path):
+                self.assertEqual(release.applicable_workflows([path]),
+                                 set(release.REQUIRED_WORKFLOWS))
 
     def test_retired_measurement_not_implied_but_observed_extras_remain_gated(self):
         required = release.applicable_workflows(['docs/next009/PAPER.pdf'], ['extra-security.yml', release.OWN_WORKFLOW])

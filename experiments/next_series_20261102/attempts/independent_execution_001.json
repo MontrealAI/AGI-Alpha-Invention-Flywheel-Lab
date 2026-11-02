@@ -1,0 +1,90 @@
+{
+  "actual_new_assays_avoided": 0,
+  "actual_or_native_sale_or_collection": false,
+  "actual_raw_workbook_identity": {
+    "bytes": 10905627,
+    "git_blob": "f35c9efe3bf0f917068b2aaf2c2236b593c06e2c",
+    "sha256": "1b652c352d4dabdd20324d7fd74d331898fa22c51cf6fa28ff65aa1322a6c78f"
+  },
+  "commands": [
+    {
+      "argv": [
+        "python",
+        "-m",
+        "next072.independent_verify",
+        "--workbook",
+        "/workspace/scratch/e4f4c9b4bd3c/agi-alpha-portfolio/next072/downloads/suppl-qqplot.xlsx",
+        "--attempt",
+        "/workspace/scratch/e4f4c9b4bd3c/agi-alpha-portfolio/experiments/next_series_20261102/attempts/confirmation_001",
+        "--freeze",
+        "experiments/next_series_20261102/FREEZE.json",
+        "--public-commit",
+        "f987625eb06d82b9c630d5f4e6e1ff1ea0be75c6",
+        "--output",
+        "/workspace/scratch/e4f4c9b4bd3c/agi-alpha-portfolio/experiments/next_series_20261102/attempts/independent_001.json"
+      ],
+      "exit_code": 0,
+      "registered_measured_invocations": 1
+    },
+    {
+      "argv": [
+        "python",
+        "-m",
+        "next072.economic_check",
+        "--verification",
+        "/workspace/scratch/e4f4c9b4bd3c/agi-alpha-portfolio/experiments/next_series_20261102/attempts/independent_001.json",
+        "--output",
+        "/workspace/scratch/e4f4c9b4bd3c/agi-alpha-portfolio/experiments/next_series_20261102/attempts/economic_001.json"
+      ],
+      "exit_code": 0,
+      "registered_measured_invocations": 1
+    }
+  ],
+  "complete_data_denominator": {
+    "identified_pairs": 124,
+    "identified_readouts": 1000,
+    "invalid_records": 0,
+    "source_rows": 124000,
+    "valid_pair_readout_records": 124000
+  },
+  "complete_policy_denominator": {
+    "policies": 42,
+    "query_receipts": 966
+  },
+  "economic_runtime_measurement": "Not instrumented inside the frozen economic CLI; no duration or CPU cost inferred.",
+  "economic_status": "HOLD",
+  "economic_unknown_input_count": 56,
+  "external_human_or_laboratory_actions": 0,
+  "file_sha256": {
+    "experiments/next_series_20261102/attempts/confirmation_001/compact_evidence.json": "f902ca04f2cf20e71877a30671c341f124ab1357df4199ca76ca009e29001672",
+    "experiments/next_series_20261102/attempts/confirmation_001/resource_receipt.json": "c3abfe4473d4523aa60c7f499425ac9652d638bcd7c90598e9e5210610e44ae2",
+    "experiments/next_series_20261102/attempts/confirmation_001/results.json": "9a30c87d6179247bd12157e1beb14adf649fb3bdd9e268ebe4aa9a46a7e60abb",
+    "experiments/next_series_20261102/attempts/economic_001.json": "86231a7479a55cfc63eab3eee6188d8f96d3be9e06ce9a1bf0678b4f7de4dfd2",
+    "experiments/next_series_20261102/attempts/independent_001.json": "8ed0965f1ba2bfc4abbad85c2a1b4d36f98df482db4e49414e01b7b5fb519880"
+  },
+  "freeze_document_sha256": "35b1fc34346732c0966830ed34f505a6058c78252c253d0587fa6ae64afbacb0",
+  "frozen_source_hashes_rechecked_after_execution": true,
+  "independent_resource_measurement": {
+    "cpu_seconds": 9.253918088,
+    "finished_utc": "2026-11-02T20:46:21.400068+00:00",
+    "peak_rss_kib_linux": 89228,
+    "started_utc": "2026-11-02T20:46:12.302304+00:00",
+    "wall_seconds": 9.097794626002724
+  },
+  "independent_verdict_accepted": true,
+  "measured_verifier_retries": 0,
+  "public_freeze_commit": "f987625eb06d82b9c630d5f4e6e1ff1ea0be75c6",
+  "qualification_limits": [
+    "No independent cell-level sampling or normalization validation.",
+    "40 genes shared between reference and confirmation pairs; no unseen-gene transfer.",
+    "All outcomes already public; oracle masking is retrospective.",
+    "No prospective physical or biological delivery, observed demand, complete-cost advantage, K2 or trailing-365-day profit."
+  ],
+  "recorded_utc": "2026-11-02T20:47:21.357432+00:00",
+  "research_and_inference_and_host_money_cost": "UNKNOWN; included resources are not economically free.",
+  "schema": "next072/independent-execution/v1",
+  "scientific_boundary_met": true,
+  "source_changes_after_public_freeze": 0,
+  "strongest_matched_control_limitation": "PoH14 targets equals additive magnitude and UCB14, below linear ridge and kernel exploitation15; no superiority over those controls. Ordinary same-content reuse is exactly tied.",
+  "working_directory": "/workspace/scratch/e4f4c9b4bd3c/agi-alpha-portfolio"
+}
