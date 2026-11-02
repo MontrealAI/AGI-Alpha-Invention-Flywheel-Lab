@@ -10,7 +10,7 @@ The ambition is an enterprise whose useful achievements expand what it can disco
 
 **Start here:** explore the [Blue Sky frontier](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/#frontier), the [active charter](campaign/blue-sky-064/CHARTER.md), [candidate evidence](campaign/blue-sky-064/CANDIDATES.md) and [constructive mechanisms](campaign/blue-sky-064/MECHANISMS.md). The mission admits a flagship only when a consequential new productive possibility is demonstrated. No current candidate has earned that verdict; conventional work is retained as historical evidence and a strong control.
 
-The primary challenge starts with **US$100,000 simulated capital** and targets **US$3 billion trailing-365-day profit after complete costs**. This is an unachieved objective, not a forecast or a ceiling. Native simulated operation, useful capability, inherited advantage and physical expansion each require separate evidence. Simulated profit is not actual revenue. [Pages setup and publication boundary](docs/research/PAGES.md).
+New work [chooses starting capital jointly with strategy and financing](AGENTS.md#active-direction-blue-sky-only), rather than requiring a fixed primary seed. **US$100,000 is a historical/reference comparison**; **US$1 billion is an eligible financing hypothesis**, not secured funds or a ceiling. The target remains **US$3 billion trailing-365-day profit after complete costs**. This is an unachieved objective, not a forecast or a ceiling. Native simulated operation, useful capability, inherited advantage and physical expansion each require separate evidence. Simulated profit is not actual revenue. [Pages setup and publication boundary](docs/research/PAGES.md).
 
 ## Blue Sky only: construct the missing means
 
@@ -85,4 +85,5 @@ The exact former 250 MiB `archive_v2.py` is preserved under
 those original bytes against its unchanged hash; current cap qualification does
 not relabel altered current source as a historical reproduction. This transport
 repair changes no commercial policy, seed, cost, financial method or verdict.
+
 
