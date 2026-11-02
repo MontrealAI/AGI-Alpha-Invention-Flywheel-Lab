@@ -135,7 +135,7 @@ def source_paths(root):
                          if p.is_file() and '__pycache__' not in p.parts
                          and p.suffix in {'.py', '.json', '.md', '.csv', '.txt'})
         names.update(p.relative_to(root).as_posix() for p in (root/'.github/workflows').glob('*.yml') if p.is_file())
-        required={'tests/__init__.py', 'tests/test_strategic024.py', 'tests/test_compact_failure_export031.py',
+        required={'tests/test_strategic024.py', 'tests/test_compact_failure_export031.py',
                   'tests/test_blue_sky064.py', 'tests/test_historical_publication063.py',
                   'docs/harness/OUT_PAPERS.md'}
         if any(not (root/name).is_file() for name in required):

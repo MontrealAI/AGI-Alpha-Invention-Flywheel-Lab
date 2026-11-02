@@ -273,8 +273,11 @@ class CurrentWorkflowPlatformTests(unittest.TestCase):
                 self.assertIn(required, qualification)
 
     def test_existing_operating_export_privacy_contract_remains_in_force(self):
-        from tests.test_compact_failure_export031 import CompactFailureTests
-        CompactFailureTests().assert_workflow_upload_contract(
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('compact_fixture064', ROOT/'tests/test_compact_failure_export031.py')
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        module.CompactFailureTests().assert_workflow_upload_contract(
             (ROOT/'.github/workflows/connected014-release.yml').read_text())
 
 

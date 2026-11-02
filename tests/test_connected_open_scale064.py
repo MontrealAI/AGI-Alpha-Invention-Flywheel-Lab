@@ -1,5 +1,6 @@
 """Scale invariants, not evidence of demand or an achieved profit milestone."""
 import copy
+import importlib.util
 from fractions import Fraction
 from pathlib import Path
 import shutil
@@ -17,6 +18,13 @@ from connected_enterprise.strategic_commerce import select, rederive, validate_p
 from experiments.commerce006 import PINS
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def fixture_module(name):
+    spec = importlib.util.spec_from_file_location('open_scale064_'+name, Path(__file__).with_name(name+'.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 class OpenScale064(unittest.TestCase):
@@ -124,8 +132,7 @@ class OpenScale064(unittest.TestCase):
         self.assertEqual(choice['utility'], 10**22-10**20)
 
     def test_declared_price_menu_and_cost_ratios_are_not_probability_caps(self):
-        from tests.test_strategic024 import StrategicChoice
-        fixture = StrategicChoice(); fixture.setUp()
+        fixture = fixture_module('test_strategic024').StrategicChoice(); fixture.setUp()
         fixture.policy.update(price_bps=list(range(1, 103)), rival_price_bps=[40_000], rival_cost_bps=40_000)
         self.assertEqual(validate_policy(fixture.policy), fixture.policy)
         malformed = copy.deepcopy(fixture.policy)
@@ -133,8 +140,7 @@ class OpenScale064(unittest.TestCase):
         with self.assertRaises(ValueError): validate_policy(malformed)
 
     def test_exact_conditional_best_response_is_scale_equivariant_and_cash_constrained(self):
-        from tests.test_strategic024 import StrategicChoice
-        fixture = StrategicChoice(); fixture.setUp()
+        fixture = fixture_module('test_strategic024').StrategicChoice(); fixture.setUp()
         fixture.policy['ranking_arithmetic'] = 'exact-rational-v1'
         fixture.public['payment_bps'] = 0
         original = select(fixture.policy, fixture.methods, 'j', fixture.offer, None, fixture.public)
@@ -262,7 +268,7 @@ class OpenScale064NativeMoney(unittest.TestCase):
     def test_lazy_plan_order_matches_original_eager_short_trace(self):
         from unittest.mock import patch
         from connected_enterprise.engine import _initial, run_world
-        from tests.test_connected_engine import stable
+        stable = fixture_module('test_connected_engine').stable
         cfg = default_config()
         cfg.update(horizon_days=3, customer_pool=4, monetary_policy='exact-integer-v2')
         original = _initial
