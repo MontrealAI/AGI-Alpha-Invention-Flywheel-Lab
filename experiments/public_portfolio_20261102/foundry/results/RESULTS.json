@@ -1,0 +1,1938 @@
+{
+  "schema": "public-foundry-stage1/v1",
+  "correctness_controls": {
+    "bare_interface_fresnel_error": 6.938893903907228e-18,
+    "quarter_wave_analytic_error": 1.0408340855860843e-17,
+    "rejections": {
+      "negative_thickness": true,
+      "nonfinite_thickness": true,
+      "wrong_material": true,
+      "wrong_units_nanometres_as_um": true,
+      "outside_wavelength": true,
+      "outside_incidence": true,
+      "wrong_polarization": true,
+      "shape_mismatch": true
+    },
+    "passed": true
+  },
+  "K1": {
+    "thickness_um": [
+      0.22725799005480424,
+      0.028258020168831312
+    ],
+    "objective": 0.006420552360308497,
+    "objective_evaluations": 240,
+    "cpu_seconds": 0.361283679,
+    "wall_seconds": 0.3613586519986711,
+    "optimizer": "scipy differential_evolution; no global-optimality claim",
+    "validation": {
+      "accepted": true,
+      "physics_checks_passed": true,
+      "primary_worst_mean": 0.9923216232604778,
+      "cross_solver_max_error": 2.3314683517128287e-15,
+      "minimum_absorption": 0.0007587504822034186,
+      "boundary_residual_max": 7.021666937153402e-16,
+      "cases": [
+        {
+          "angle_deg": 0,
+          "polarization": "s",
+          "thickness_relative_shift": -0.015,
+          "mean_absorption": 0.0013859124129949106,
+          "mean_useful_transmission": 0.9949722562233264,
+          "max_reflectance": 0.01538687358891076
+        },
+        {
+          "angle_deg": 0,
+          "polarization": "s",
+          "thickness_relative_shift": 0,
+          "mean_absorption": 0.001404556225545187,
+          "mean_useful_transmission": 0.9944478605838996,
+          "max_reflectance": 0.018778996393464552
+        },
+        {
+          "angle_deg": 0,
+          "polarization": "s",
+          "thickness_relative_shift": 0.015,
+          "mean_absorption": 0.0014227587054522256,
+          "mean_useful_transmission": 0.9936965672111697,
+          "max_reflectance": 0.022477285722639816
+        },
+        {
+          "angle_deg": 0,
+          "polarization": "p",
+          "thickness_relative_shift": -0.015,
+          "mean_absorption": 0.0013859124129949106,
+          "mean_useful_transmission": 0.9949722562233264,
+          "max_reflectance": 0.01538687358891076
+        },
+        {
+          "angle_deg": 0,
+          "polarization": "p",
+          "thickness_relative_shift": 0,
+          "mean_absorption": 0.001404556225545187,
+          "mean_useful_transmission": 0.9944478605838996,
+          "max_reflectance": 0.018778996393464552
+        },
+        {
+          "angle_deg": 0,
+          "polarization": "p",
+          "thickness_relative_shift": 0.015,
+          "mean_absorption": 0.0014227587054522256,
+          "mean_useful_transmission": 0.9936965672111697,
+          "max_reflectance": 0.022477285722639816
+        },
+        {
+          "angle_deg": 15,
+          "polarization": "s",
+          "thickness_relative_shift": -0.015,
+          "mean_absorption": 0.0014089228240800147,
+          "mean_useful_transmission": 0.9948738242786365,
+          "max_reflectance": 0.01304911789959015
+        },
+        {
+          "angle_deg": 15,
+          "polarization": "s",
+          "thickness_relative_shift": 0,
+          "mean_absorption": 0.001428216394986082,
+          "mean_useful_transmission": 0.9945882799062761,
+          "max_reflectance": 0.01628120549713914
+        },
+        {
+          "angle_deg": 15,
+          "polarization": "s",
+          "thickness_relative_shift": 0.015,
+          "mean_absorption": 0.0014470571969977936,
+          "mean_useful_transmission": 0.9940699537622292,
+          "max_reflectance": 0.019851346421365004
+        },
+        {
+          "angle_deg": 15,
+          "polarization": "p",
+          "thickness_relative_shift": -0.015,
+          "mean_absorption": 0.0013781895059303442,
+          "mean_useful_transmission": 0.9956025765156526,
+          "max_reflectance": 0.011163282671464221
+        },
+        {
+          "angle_deg": 15,
+          "polarization": "p",
+          "thickness_relative_shift": 0,
+          "mean_absorption": 0.0013972450232441543,
+          "mean_useful_transmission": 0.9953413289982549,
+          "max_reflectance": 0.013949454260224824
+        },
+        {
+          "angle_deg": 15,
+          "polarization": "p",
+          "thickness_relative_shift": 0.015,
+          "mean_absorption": 0.0014159162397427304,
+          "mean_useful_transmission": 0.9948808115942703,
+          "max_reflectance": 0.017028714686884043
+        },
+        {
+          "angle_deg": 30,
+          "polarization": "s",
+          "thickness_relative_shift": -0.015,
+          "mean_absorption": 0.0014750288674166706,
+          "mean_useful_transmission": 0.9923216232604778,
+          "max_reflectance": 0.017913612588029336
+        },
+        {
+          "angle_deg": 30,
+          "polarization": "s",
+          "thickness_relative_shift": 0,
+          "mean_absorption": 0.001496494584047431,
+          "mean_useful_transmission": 0.992864470997552,
+          "max_reflectance": 0.015941968608778407
+        },
+        {
+          "angle_deg": 30,
+          "polarization": "s",
+          "thickness_relative_shift": 0.015,
+          "mean_absorption": 0.0015174929282977154,
+          "mean_useful_transmission": 0.9931663244359927,
+          "max_reflectance": 0.014036956139575018
+        },
+        {
+          "angle_deg": 30,
+          "polarization": "p",
+          "thickness_relative_shift": -0.015,
+          "mean_absorption": 0.0013542184742472373,
+          "mean_useful_transmission": 0.9958872548356148,
+          "max_reflectance": 0.008104413603215501
+        },
+        {
+          "angle_deg": 30,
+          "polarization": "p",
+          "thickness_relative_shift": 0,
+          "mean_absorption": 0.0013739582425787943,
+          "mean_useful_transmission": 0.9960902571747206,
+          "max_reflectance": 0.0071561395487334135
+        },
+        {
+          "angle_deg": 30,
+          "polarization": "p",
+          "thickness_relative_shift": 0.015,
+          "mean_absorption": 0.0013934638586942307,
+          "mean_useful_transmission": 0.9961708337091871,
+          "max_reflectance": 0.006735930717529124
+        }
+      ]
+    }
+  },
+  "K2": [
+    {
+      "task_id": "spectral-routing-A",
+      "wavelength_shift_um": 0,
+      "arms": {
+        "retained_procedure": {
+          "thickness_um": [
+            0.20376386661446444,
+            0.17755689903476365,
+            0.18079003254333167,
+            0.22037538793702016,
+            0.17210430725696677,
+            0.24591503660208386,
+            0.1657777363673954,
+            0.25563112571432844,
+            0.1680900766776628,
+            0.22785487642076002,
+            0.17265152030116837,
+            0.34224743577819894
+          ],
+          "objective": 0.09089402358738925,
+          "objective_evaluations": 1968,
+          "cpu_seconds": 9.328763721,
+          "wall_seconds": 9.341300330001104,
+          "optimizer": "scipy differential_evolution; no global-optimality claim",
+          "validation": {
+            "accepted": true,
+            "physics_checks_passed": true,
+            "primary_worst_mean": 0.8609059129391974,
+            "cross_solver_max_error": 6.661338147750939e-15,
+            "minimum_absorption": 0.002559437404906984,
+            "boundary_residual_max": 7.782704976483341e-16,
+            "cases": [
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021451245907695243,
+                "mean_pass_transmission": 0.9125886282152872,
+                "mean_stop_reflection": 0.9339583010047651
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021720104736232912,
+                "mean_pass_transmission": 0.9116962240789107,
+                "mean_stop_reflection": 0.9297797531579813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022144663482558207,
+                "mean_pass_transmission": 0.9145253959325659,
+                "mean_stop_reflection": 0.9179085715131896
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021451245907695243,
+                "mean_pass_transmission": 0.9125886282152872,
+                "mean_stop_reflection": 0.9339583010047651
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021720104736232912,
+                "mean_pass_transmission": 0.9116962240789107,
+                "mean_stop_reflection": 0.9297797531579813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022144663482558207,
+                "mean_pass_transmission": 0.9145253959325659,
+                "mean_stop_reflection": 0.9179085715131896
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021659512448917017,
+                "mean_pass_transmission": 0.911337185191634,
+                "mean_stop_reflection": 0.9398880907999969
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021829461329426977,
+                "mean_pass_transmission": 0.9078864736950573,
+                "mean_stop_reflection": 0.9403208192850283
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022132048598414514,
+                "mean_pass_transmission": 0.9077387555262921,
+                "mean_stop_reflection": 0.9353534957422123
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021900339848119586,
+                "mean_pass_transmission": 0.9181326896364165,
+                "mean_stop_reflection": 0.9251595394973927
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.022078939103924222,
+                "mean_pass_transmission": 0.9152052063065305,
+                "mean_stop_reflection": 0.9257082541967573
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022386244392037742,
+                "mean_pass_transmission": 0.9151871339574575,
+                "mean_stop_reflection": 0.9195738247318401
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.02234741235900298,
+                "mean_pass_transmission": 0.8981532481246965,
+                "mean_stop_reflection": 0.9419738807558268
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.022468091070726136,
+                "mean_pass_transmission": 0.9017599833204755,
+                "mean_stop_reflection": 0.9512854571263737
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02256075265165988,
+                "mean_pass_transmission": 0.8988109041954552,
+                "mean_stop_reflection": 0.9559999565396174
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023435176463430983,
+                "mean_pass_transmission": 0.9271700523828871,
+                "mean_stop_reflection": 0.8609059129391974
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023503176891663313,
+                "mean_pass_transmission": 0.9289756185448256,
+                "mean_stop_reflection": 0.8822586656813521
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.023606621274655716,
+                "mean_pass_transmission": 0.9272353421214236,
+                "mean_stop_reflection": 0.8935107507894043
+              }
+            ]
+          }
+        },
+        "ordinary_equal_content": {
+          "thickness_um": [
+            0.20376386661446444,
+            0.17755689903476365,
+            0.18079003254333167,
+            0.22037538793702016,
+            0.17210430725696677,
+            0.24591503660208386,
+            0.1657777363673954,
+            0.25563112571432844,
+            0.1680900766776628,
+            0.22785487642076002,
+            0.17265152030116837,
+            0.34224743577819894
+          ],
+          "objective": 0.09089402358738925,
+          "objective_evaluations": 1968,
+          "cpu_seconds": 9.945142764000002,
+          "wall_seconds": 9.948835814999256,
+          "optimizer": "scipy differential_evolution; no global-optimality claim",
+          "validation": {
+            "accepted": true,
+            "physics_checks_passed": true,
+            "primary_worst_mean": 0.8609059129391974,
+            "cross_solver_max_error": 6.661338147750939e-15,
+            "minimum_absorption": 0.002559437404906984,
+            "boundary_residual_max": 7.782704976483341e-16,
+            "cases": [
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021451245907695243,
+                "mean_pass_transmission": 0.9125886282152872,
+                "mean_stop_reflection": 0.9339583010047651
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021720104736232912,
+                "mean_pass_transmission": 0.9116962240789107,
+                "mean_stop_reflection": 0.9297797531579813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022144663482558207,
+                "mean_pass_transmission": 0.9145253959325659,
+                "mean_stop_reflection": 0.9179085715131896
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021451245907695243,
+                "mean_pass_transmission": 0.9125886282152872,
+                "mean_stop_reflection": 0.9339583010047651
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021720104736232912,
+                "mean_pass_transmission": 0.9116962240789107,
+                "mean_stop_reflection": 0.9297797531579813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022144663482558207,
+                "mean_pass_transmission": 0.9145253959325659,
+                "mean_stop_reflection": 0.9179085715131896
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021659512448917017,
+                "mean_pass_transmission": 0.911337185191634,
+                "mean_stop_reflection": 0.9398880907999969
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021829461329426977,
+                "mean_pass_transmission": 0.9078864736950573,
+                "mean_stop_reflection": 0.9403208192850283
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022132048598414514,
+                "mean_pass_transmission": 0.9077387555262921,
+                "mean_stop_reflection": 0.9353534957422123
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021900339848119586,
+                "mean_pass_transmission": 0.9181326896364165,
+                "mean_stop_reflection": 0.9251595394973927
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.022078939103924222,
+                "mean_pass_transmission": 0.9152052063065305,
+                "mean_stop_reflection": 0.9257082541967573
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022386244392037742,
+                "mean_pass_transmission": 0.9151871339574575,
+                "mean_stop_reflection": 0.9195738247318401
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.02234741235900298,
+                "mean_pass_transmission": 0.8981532481246965,
+                "mean_stop_reflection": 0.9419738807558268
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.022468091070726136,
+                "mean_pass_transmission": 0.9017599833204755,
+                "mean_stop_reflection": 0.9512854571263737
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02256075265165988,
+                "mean_pass_transmission": 0.8988109041954552,
+                "mean_stop_reflection": 0.9559999565396174
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023435176463430983,
+                "mean_pass_transmission": 0.9271700523828871,
+                "mean_stop_reflection": 0.8609059129391974
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023503176891663313,
+                "mean_pass_transmission": 0.9289756185448256,
+                "mean_stop_reflection": 0.8822586656813521
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.023606621274655716,
+                "mean_pass_transmission": 0.9272353421214236,
+                "mean_stop_reflection": 0.8935107507894043
+              }
+            ]
+          }
+        },
+        "equal_content_no_discovery_procedure": {
+          "thickness_um": [
+            0.20376386661446444,
+            0.17755689903476365,
+            0.18079003254333167,
+            0.22037538793702016,
+            0.17210430725696677,
+            0.24591503660208386,
+            0.1657777363673954,
+            0.25563112571432844,
+            0.1680900766776628,
+            0.22785487642076002,
+            0.17265152030116837,
+            0.34224743577819894
+          ],
+          "objective": 0.09089402358738925,
+          "objective_evaluations": 1968,
+          "cpu_seconds": 9.841909795,
+          "wall_seconds": 9.853262361000816,
+          "optimizer": "scipy differential_evolution; no global-optimality claim",
+          "validation": {
+            "accepted": true,
+            "physics_checks_passed": true,
+            "primary_worst_mean": 0.8609059129391974,
+            "cross_solver_max_error": 6.661338147750939e-15,
+            "minimum_absorption": 0.002559437404906984,
+            "boundary_residual_max": 7.782704976483341e-16,
+            "cases": [
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021451245907695243,
+                "mean_pass_transmission": 0.9125886282152872,
+                "mean_stop_reflection": 0.9339583010047651
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021720104736232912,
+                "mean_pass_transmission": 0.9116962240789107,
+                "mean_stop_reflection": 0.9297797531579813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022144663482558207,
+                "mean_pass_transmission": 0.9145253959325659,
+                "mean_stop_reflection": 0.9179085715131896
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021451245907695243,
+                "mean_pass_transmission": 0.9125886282152872,
+                "mean_stop_reflection": 0.9339583010047651
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021720104736232912,
+                "mean_pass_transmission": 0.9116962240789107,
+                "mean_stop_reflection": 0.9297797531579813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022144663482558207,
+                "mean_pass_transmission": 0.9145253959325659,
+                "mean_stop_reflection": 0.9179085715131896
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021659512448917017,
+                "mean_pass_transmission": 0.911337185191634,
+                "mean_stop_reflection": 0.9398880907999969
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021829461329426977,
+                "mean_pass_transmission": 0.9078864736950573,
+                "mean_stop_reflection": 0.9403208192850283
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022132048598414514,
+                "mean_pass_transmission": 0.9077387555262921,
+                "mean_stop_reflection": 0.9353534957422123
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021900339848119586,
+                "mean_pass_transmission": 0.9181326896364165,
+                "mean_stop_reflection": 0.9251595394973927
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.022078939103924222,
+                "mean_pass_transmission": 0.9152052063065305,
+                "mean_stop_reflection": 0.9257082541967573
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022386244392037742,
+                "mean_pass_transmission": 0.9151871339574575,
+                "mean_stop_reflection": 0.9195738247318401
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.02234741235900298,
+                "mean_pass_transmission": 0.8981532481246965,
+                "mean_stop_reflection": 0.9419738807558268
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.022468091070726136,
+                "mean_pass_transmission": 0.9017599833204755,
+                "mean_stop_reflection": 0.9512854571263737
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02256075265165988,
+                "mean_pass_transmission": 0.8988109041954552,
+                "mean_stop_reflection": 0.9559999565396174
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023435176463430983,
+                "mean_pass_transmission": 0.9271700523828871,
+                "mean_stop_reflection": 0.8609059129391974
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023503176891663313,
+                "mean_pass_transmission": 0.9289756185448256,
+                "mean_stop_reflection": 0.8822586656813521
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.023606621274655716,
+                "mean_pass_transmission": 0.9272353421214236,
+                "mean_stop_reflection": 0.8935107507894043
+              }
+            ]
+          }
+        },
+        "fresh_specialist_no_inheritance": {
+          "thickness_um": [
+            0.20376386661446444,
+            0.17755689903476365,
+            0.18079003254333167,
+            0.22037538793702016,
+            0.17210430725696677,
+            0.24591503660208386,
+            0.1657777363673954,
+            0.25563112571432844,
+            0.1680900766776628,
+            0.22785487642076002,
+            0.17265152030116837,
+            0.34224743577819894
+          ],
+          "objective": 0.09089402358738943,
+          "objective_evaluations": 1968,
+          "cpu_seconds": 9.600863061999998,
+          "wall_seconds": 9.60405490300036,
+          "optimizer": "scipy differential_evolution; no global-optimality claim",
+          "validation": {
+            "accepted": true,
+            "physics_checks_passed": true,
+            "primary_worst_mean": 0.8609059129391974,
+            "cross_solver_max_error": 6.661338147750939e-15,
+            "minimum_absorption": 0.002559437404906984,
+            "boundary_residual_max": 7.782704976483341e-16,
+            "cases": [
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021451245907695243,
+                "mean_pass_transmission": 0.9125886282152872,
+                "mean_stop_reflection": 0.9339583010047651
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021720104736232912,
+                "mean_pass_transmission": 0.9116962240789107,
+                "mean_stop_reflection": 0.9297797531579813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022144663482558207,
+                "mean_pass_transmission": 0.9145253959325659,
+                "mean_stop_reflection": 0.9179085715131896
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021451245907695243,
+                "mean_pass_transmission": 0.9125886282152872,
+                "mean_stop_reflection": 0.9339583010047651
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021720104736232912,
+                "mean_pass_transmission": 0.9116962240789107,
+                "mean_stop_reflection": 0.9297797531579813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022144663482558207,
+                "mean_pass_transmission": 0.9145253959325659,
+                "mean_stop_reflection": 0.9179085715131896
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021659512448917017,
+                "mean_pass_transmission": 0.911337185191634,
+                "mean_stop_reflection": 0.9398880907999969
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.021829461329426977,
+                "mean_pass_transmission": 0.9078864736950573,
+                "mean_stop_reflection": 0.9403208192850283
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022132048598414514,
+                "mean_pass_transmission": 0.9077387555262921,
+                "mean_stop_reflection": 0.9353534957422123
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.021900339848119586,
+                "mean_pass_transmission": 0.9181326896364165,
+                "mean_stop_reflection": 0.9251595394973927
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.022078939103924222,
+                "mean_pass_transmission": 0.9152052063065305,
+                "mean_stop_reflection": 0.9257082541967573
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.022386244392037742,
+                "mean_pass_transmission": 0.9151871339574575,
+                "mean_stop_reflection": 0.9195738247318401
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.02234741235900298,
+                "mean_pass_transmission": 0.8981532481246965,
+                "mean_stop_reflection": 0.9419738807558268
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.022468091070726136,
+                "mean_pass_transmission": 0.9017599833204755,
+                "mean_stop_reflection": 0.9512854571263737
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02256075265165988,
+                "mean_pass_transmission": 0.8988109041954552,
+                "mean_stop_reflection": 0.9559999565396174
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023435176463430983,
+                "mean_pass_transmission": 0.9271700523828871,
+                "mean_stop_reflection": 0.8609059129391974
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023503176891663313,
+                "mean_pass_transmission": 0.9289756185448256,
+                "mean_stop_reflection": 0.8822586656813521
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.023606621274655716,
+                "mean_pass_transmission": 0.9272353421214236,
+                "mean_stop_reflection": 0.8935107507894043
+              }
+            ]
+          }
+        }
+      },
+      "no_mechanism": {
+        "mean_pass_transmission": 0.9660444048800242,
+        "mean_stop_reflection": 0.033268688849932906,
+        "accepted": false
+      },
+      "manufacturing_and_angle_distribution_shift": {
+        "accepted": false,
+        "physics_checks_passed": true,
+        "primary_worst_mean": 0.22185895655409557,
+        "cross_solver_max_error": 6.661338147750939e-15,
+        "minimum_absorption": 0.0021743509917827933,
+        "boundary_residual_max": 1.283695372222837e-15,
+        "cases": [
+          {
+            "angle_deg": 35,
+            "polarization": "s",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.023322832061245243,
+            "mean_pass_transmission": 0.821031780533774,
+            "mean_stop_reflection": 0.5890879560188879
+          },
+          {
+            "angle_deg": 35,
+            "polarization": "s",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.02274629920352665,
+            "mean_pass_transmission": 0.8907793667394366,
+            "mean_stop_reflection": 0.9504868855528649
+          },
+          {
+            "angle_deg": 35,
+            "polarization": "s",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.0246670811644083,
+            "mean_pass_transmission": 0.8924459607501538,
+            "mean_stop_reflection": 0.9341755191162214
+          },
+          {
+            "angle_deg": 35,
+            "polarization": "p",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.02401966600886487,
+            "mean_pass_transmission": 0.8897372453623064,
+            "mean_stop_reflection": 0.4028929084990357
+          },
+          {
+            "angle_deg": 35,
+            "polarization": "p",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.024273170658440178,
+            "mean_pass_transmission": 0.930932877595777,
+            "mean_stop_reflection": 0.8373480199850064
+          },
+          {
+            "angle_deg": 35,
+            "polarization": "p",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.026237556585191904,
+            "mean_pass_transmission": 0.931780770225141,
+            "mean_stop_reflection": 0.8035612727404543
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "s",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.023596451713317375,
+            "mean_pass_transmission": 0.7675104518814593,
+            "mean_stop_reflection": 0.5482069296920875
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "s",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.022971672718932096,
+            "mean_pass_transmission": 0.8681314896237872,
+            "mean_stop_reflection": 0.9459190654213384
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "s",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.02435956329200333,
+            "mean_pass_transmission": 0.8762337398713596,
+            "mean_stop_reflection": 0.9609841070491687
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "p",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.024611530743177058,
+            "mean_pass_transmission": 0.89219750166562,
+            "mean_stop_reflection": 0.3113117679572807
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "p",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.025192008344038612,
+            "mean_pass_transmission": 0.9289950642651927,
+            "mean_stop_reflection": 0.7597159483174635
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "p",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.026557867778288724,
+            "mean_pass_transmission": 0.9338980793944364,
+            "mean_stop_reflection": 0.8203541742209549
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "s",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.023560755096371077,
+            "mean_pass_transmission": 0.6884639465129301,
+            "mean_stop_reflection": 0.5182439915308126
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "s",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.023186945507053906,
+            "mean_pass_transmission": 0.83649699233287,
+            "mean_stop_reflection": 0.935553789173997
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "s",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.02411378498106974,
+            "mean_pass_transmission": 0.8573699026133773,
+            "mean_stop_reflection": 0.9739003186115266
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "p",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.025042440986897167,
+            "mean_pass_transmission": 0.881039928517565,
+            "mean_stop_reflection": 0.22185895655409557
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "p",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.026179877954232718,
+            "mean_pass_transmission": 0.924641175252172,
+            "mean_stop_reflection": 0.645468742654282
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "p",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.02709627641151328,
+            "mean_pass_transmission": 0.9370126975561992,
+            "mean_stop_reflection": 0.8131163380940578
+          }
+        ]
+      },
+      "best_complete_alternative_already_allowed_same_means": true,
+      "retained_vs_equal_content_objective_delta": 0.0
+    },
+    {
+      "task_id": "spectral-routing-B",
+      "wavelength_shift_um": -0.025,
+      "arms": {
+        "retained_procedure": {
+          "thickness_um": [
+            0.2023420872493487,
+            0.17938866738362316,
+            0.1824586974282353,
+            0.22820345787930246,
+            0.1620458681926361,
+            0.2518860612230756,
+            0.1479532636336989,
+            0.2456658381259226,
+            0.16235307275888602,
+            0.23321399680882726,
+            0.1762561180170927,
+            0.2541056469801554
+          ],
+          "objective": 0.09026941821560992,
+          "objective_evaluations": 1968,
+          "cpu_seconds": 8.367640037999998,
+          "wall_seconds": 8.423991959998602,
+          "optimizer": "scipy differential_evolution; no global-optimality claim",
+          "validation": {
+            "accepted": true,
+            "physics_checks_passed": true,
+            "primary_worst_mean": 0.8617930523077598,
+            "cross_solver_max_error": 6.106226635438361e-15,
+            "minimum_absorption": 0.0026138152037331816,
+            "boundary_residual_max": 7.468261590855958e-16,
+            "cases": [
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023166242603209385,
+                "mean_pass_transmission": 0.9170121519008357,
+                "mean_stop_reflection": 0.9330730413744813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023667240941189317,
+                "mean_pass_transmission": 0.9190516119613797,
+                "mean_stop_reflection": 0.9277186881705545
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02421922848879186,
+                "mean_pass_transmission": 0.9200776048221613,
+                "mean_stop_reflection": 0.9141664584318038
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023166242603209385,
+                "mean_pass_transmission": 0.9170121519008357,
+                "mean_stop_reflection": 0.9330730413744813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023667240941189317,
+                "mean_pass_transmission": 0.9190516119613797,
+                "mean_stop_reflection": 0.9277186881705545
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02421922848879186,
+                "mean_pass_transmission": 0.9200776048221613,
+                "mean_stop_reflection": 0.9141664584318038
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023219991171911307,
+                "mean_pass_transmission": 0.9130601626787375,
+                "mean_stop_reflection": 0.9396888086240784
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023632274164245612,
+                "mean_pass_transmission": 0.9134985363349466,
+                "mean_stop_reflection": 0.9392936094424892
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024163219096431043,
+                "mean_pass_transmission": 0.9156062339507793,
+                "mean_stop_reflection": 0.9332036582860849
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023485724685694615,
+                "mean_pass_transmission": 0.9196533241880558,
+                "mean_stop_reflection": 0.9249055359029709
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.02388654628517464,
+                "mean_pass_transmission": 0.9200584601310092,
+                "mean_stop_reflection": 0.9244863514149309
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024402997265017674,
+                "mean_pass_transmission": 0.9218466575147822,
+                "mean_stop_reflection": 0.9170615118927519
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.02360614681785416,
+                "mean_pass_transmission": 0.9048124142801566,
+                "mean_stop_reflection": 0.9427576927081595
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023831563569067307,
+                "mean_pass_transmission": 0.9029279934817488,
+                "mean_stop_reflection": 0.9516317989138429
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024108550028210232,
+                "mean_pass_transmission": 0.9000425684634966,
+                "mean_stop_reflection": 0.9558933762450993
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.024871449965930006,
+                "mean_pass_transmission": 0.9311297789919261,
+                "mean_stop_reflection": 0.8617930523077598
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.025035428854138432,
+                "mean_pass_transmission": 0.9296497374534692,
+                "mean_stop_reflection": 0.8826284701837703
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.025280862990198435,
+                "mean_pass_transmission": 0.9279237662121035,
+                "mean_stop_reflection": 0.8931659956677716
+              }
+            ]
+          }
+        },
+        "ordinary_equal_content": {
+          "thickness_um": [
+            0.2023420872493487,
+            0.17938866738362316,
+            0.1824586974282353,
+            0.22820345787930246,
+            0.1620458681926361,
+            0.2518860612230756,
+            0.1479532636336989,
+            0.2456658381259226,
+            0.16235307275888602,
+            0.23321399680882726,
+            0.1762561180170927,
+            0.2541056469801554
+          ],
+          "objective": 0.09026941821560992,
+          "objective_evaluations": 1968,
+          "cpu_seconds": 8.789199387000004,
+          "wall_seconds": 8.790245754998978,
+          "optimizer": "scipy differential_evolution; no global-optimality claim",
+          "validation": {
+            "accepted": true,
+            "physics_checks_passed": true,
+            "primary_worst_mean": 0.8617930523077598,
+            "cross_solver_max_error": 6.106226635438361e-15,
+            "minimum_absorption": 0.0026138152037331816,
+            "boundary_residual_max": 7.468261590855958e-16,
+            "cases": [
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023166242603209385,
+                "mean_pass_transmission": 0.9170121519008357,
+                "mean_stop_reflection": 0.9330730413744813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023667240941189317,
+                "mean_pass_transmission": 0.9190516119613797,
+                "mean_stop_reflection": 0.9277186881705545
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02421922848879186,
+                "mean_pass_transmission": 0.9200776048221613,
+                "mean_stop_reflection": 0.9141664584318038
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023166242603209385,
+                "mean_pass_transmission": 0.9170121519008357,
+                "mean_stop_reflection": 0.9330730413744813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023667240941189317,
+                "mean_pass_transmission": 0.9190516119613797,
+                "mean_stop_reflection": 0.9277186881705545
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02421922848879186,
+                "mean_pass_transmission": 0.9200776048221613,
+                "mean_stop_reflection": 0.9141664584318038
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023219991171911307,
+                "mean_pass_transmission": 0.9130601626787375,
+                "mean_stop_reflection": 0.9396888086240784
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023632274164245612,
+                "mean_pass_transmission": 0.9134985363349466,
+                "mean_stop_reflection": 0.9392936094424892
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024163219096431043,
+                "mean_pass_transmission": 0.9156062339507793,
+                "mean_stop_reflection": 0.9332036582860849
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023485724685694615,
+                "mean_pass_transmission": 0.9196533241880558,
+                "mean_stop_reflection": 0.9249055359029709
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.02388654628517464,
+                "mean_pass_transmission": 0.9200584601310092,
+                "mean_stop_reflection": 0.9244863514149309
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024402997265017674,
+                "mean_pass_transmission": 0.9218466575147822,
+                "mean_stop_reflection": 0.9170615118927519
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.02360614681785416,
+                "mean_pass_transmission": 0.9048124142801566,
+                "mean_stop_reflection": 0.9427576927081595
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023831563569067307,
+                "mean_pass_transmission": 0.9029279934817488,
+                "mean_stop_reflection": 0.9516317989138429
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024108550028210232,
+                "mean_pass_transmission": 0.9000425684634966,
+                "mean_stop_reflection": 0.9558933762450993
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.024871449965930006,
+                "mean_pass_transmission": 0.9311297789919261,
+                "mean_stop_reflection": 0.8617930523077598
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.025035428854138432,
+                "mean_pass_transmission": 0.9296497374534692,
+                "mean_stop_reflection": 0.8826284701837703
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.025280862990198435,
+                "mean_pass_transmission": 0.9279237662121035,
+                "mean_stop_reflection": 0.8931659956677716
+              }
+            ]
+          }
+        },
+        "equal_content_no_discovery_procedure": {
+          "thickness_um": [
+            0.2023420872493487,
+            0.17938866738362316,
+            0.1824586974282353,
+            0.22820345787930246,
+            0.1620458681926361,
+            0.2518860612230756,
+            0.1479532636336989,
+            0.2456658381259226,
+            0.16235307275888602,
+            0.23321399680882726,
+            0.1762561180170927,
+            0.2541056469801554
+          ],
+          "objective": 0.09026941821560992,
+          "objective_evaluations": 1968,
+          "cpu_seconds": 8.635320727,
+          "wall_seconds": 8.636712011999407,
+          "optimizer": "scipy differential_evolution; no global-optimality claim",
+          "validation": {
+            "accepted": true,
+            "physics_checks_passed": true,
+            "primary_worst_mean": 0.8617930523077598,
+            "cross_solver_max_error": 6.106226635438361e-15,
+            "minimum_absorption": 0.0026138152037331816,
+            "boundary_residual_max": 7.468261590855958e-16,
+            "cases": [
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023166242603209385,
+                "mean_pass_transmission": 0.9170121519008357,
+                "mean_stop_reflection": 0.9330730413744813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023667240941189317,
+                "mean_pass_transmission": 0.9190516119613797,
+                "mean_stop_reflection": 0.9277186881705545
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02421922848879186,
+                "mean_pass_transmission": 0.9200776048221613,
+                "mean_stop_reflection": 0.9141664584318038
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023166242603209385,
+                "mean_pass_transmission": 0.9170121519008357,
+                "mean_stop_reflection": 0.9330730413744813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023667240941189317,
+                "mean_pass_transmission": 0.9190516119613797,
+                "mean_stop_reflection": 0.9277186881705545
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02421922848879186,
+                "mean_pass_transmission": 0.9200776048221613,
+                "mean_stop_reflection": 0.9141664584318038
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023219991171911307,
+                "mean_pass_transmission": 0.9130601626787375,
+                "mean_stop_reflection": 0.9396888086240784
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023632274164245612,
+                "mean_pass_transmission": 0.9134985363349466,
+                "mean_stop_reflection": 0.9392936094424892
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024163219096431043,
+                "mean_pass_transmission": 0.9156062339507793,
+                "mean_stop_reflection": 0.9332036582860849
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023485724685694615,
+                "mean_pass_transmission": 0.9196533241880558,
+                "mean_stop_reflection": 0.9249055359029709
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.02388654628517464,
+                "mean_pass_transmission": 0.9200584601310092,
+                "mean_stop_reflection": 0.9244863514149309
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024402997265017674,
+                "mean_pass_transmission": 0.9218466575147822,
+                "mean_stop_reflection": 0.9170615118927519
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.02360614681785416,
+                "mean_pass_transmission": 0.9048124142801566,
+                "mean_stop_reflection": 0.9427576927081595
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023831563569067307,
+                "mean_pass_transmission": 0.9029279934817488,
+                "mean_stop_reflection": 0.9516317989138429
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024108550028210232,
+                "mean_pass_transmission": 0.9000425684634966,
+                "mean_stop_reflection": 0.9558933762450993
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.024871449965930006,
+                "mean_pass_transmission": 0.9311297789919261,
+                "mean_stop_reflection": 0.8617930523077598
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.025035428854138432,
+                "mean_pass_transmission": 0.9296497374534692,
+                "mean_stop_reflection": 0.8826284701837703
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.025280862990198435,
+                "mean_pass_transmission": 0.9279237662121035,
+                "mean_stop_reflection": 0.8931659956677716
+              }
+            ]
+          }
+        },
+        "fresh_specialist_no_inheritance": {
+          "thickness_um": [
+            0.2023420872493487,
+            0.17938866738362316,
+            0.1824586974282353,
+            0.22820345787930246,
+            0.1620458681926361,
+            0.2518860612230756,
+            0.1479532636336989,
+            0.2456658381259226,
+            0.16235307275888602,
+            0.23321399680882726,
+            0.1762561180170927,
+            0.2541056469801554
+          ],
+          "objective": 0.09026941821560944,
+          "objective_evaluations": 1968,
+          "cpu_seconds": 7.991378807000004,
+          "wall_seconds": 7.992481838000458,
+          "optimizer": "scipy differential_evolution; no global-optimality claim",
+          "validation": {
+            "accepted": true,
+            "physics_checks_passed": true,
+            "primary_worst_mean": 0.8617930523077598,
+            "cross_solver_max_error": 6.106226635438361e-15,
+            "minimum_absorption": 0.0026138152037331816,
+            "boundary_residual_max": 7.468261590855958e-16,
+            "cases": [
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023166242603209385,
+                "mean_pass_transmission": 0.9170121519008357,
+                "mean_stop_reflection": 0.9330730413744813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023667240941189317,
+                "mean_pass_transmission": 0.9190516119613797,
+                "mean_stop_reflection": 0.9277186881705545
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02421922848879186,
+                "mean_pass_transmission": 0.9200776048221613,
+                "mean_stop_reflection": 0.9141664584318038
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023166242603209385,
+                "mean_pass_transmission": 0.9170121519008357,
+                "mean_stop_reflection": 0.9330730413744813
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023667240941189317,
+                "mean_pass_transmission": 0.9190516119613797,
+                "mean_stop_reflection": 0.9277186881705545
+              },
+              {
+                "angle_deg": 0,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.02421922848879186,
+                "mean_pass_transmission": 0.9200776048221613,
+                "mean_stop_reflection": 0.9141664584318038
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023219991171911307,
+                "mean_pass_transmission": 0.9130601626787375,
+                "mean_stop_reflection": 0.9396888086240784
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023632274164245612,
+                "mean_pass_transmission": 0.9134985363349466,
+                "mean_stop_reflection": 0.9392936094424892
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024163219096431043,
+                "mean_pass_transmission": 0.9156062339507793,
+                "mean_stop_reflection": 0.9332036582860849
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.023485724685694615,
+                "mean_pass_transmission": 0.9196533241880558,
+                "mean_stop_reflection": 0.9249055359029709
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.02388654628517464,
+                "mean_pass_transmission": 0.9200584601310092,
+                "mean_stop_reflection": 0.9244863514149309
+              },
+              {
+                "angle_deg": 15,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024402997265017674,
+                "mean_pass_transmission": 0.9218466575147822,
+                "mean_stop_reflection": 0.9170615118927519
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.02360614681785416,
+                "mean_pass_transmission": 0.9048124142801566,
+                "mean_stop_reflection": 0.9427576927081595
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.023831563569067307,
+                "mean_pass_transmission": 0.9029279934817488,
+                "mean_stop_reflection": 0.9516317989138429
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "s",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.024108550028210232,
+                "mean_pass_transmission": 0.9000425684634966,
+                "mean_stop_reflection": 0.9558933762450993
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": -0.015,
+                "mean_absorption": 0.024871449965930006,
+                "mean_pass_transmission": 0.9311297789919261,
+                "mean_stop_reflection": 0.8617930523077598
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0,
+                "mean_absorption": 0.025035428854138432,
+                "mean_pass_transmission": 0.9296497374534692,
+                "mean_stop_reflection": 0.8826284701837703
+              },
+              {
+                "angle_deg": 30,
+                "polarization": "p",
+                "thickness_relative_shift": 0.015,
+                "mean_absorption": 0.025280862990198435,
+                "mean_pass_transmission": 0.9279237662121035,
+                "mean_stop_reflection": 0.8931659956677716
+              }
+            ]
+          }
+        }
+      },
+      "no_mechanism": {
+        "mean_pass_transmission": 0.9659989817999143,
+        "mean_stop_reflection": 0.033303523044042896,
+        "accepted": false
+      },
+      "manufacturing_and_angle_distribution_shift": {
+        "accepted": false,
+        "physics_checks_passed": true,
+        "primary_worst_mean": 0.2355407746061668,
+        "cross_solver_max_error": 7.216449660063518e-15,
+        "minimum_absorption": 0.0022017784732489692,
+        "boundary_residual_max": 8.550339214846361e-16,
+        "cases": [
+          {
+            "angle_deg": 35,
+            "polarization": "s",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.024426220961037304,
+            "mean_pass_transmission": 0.8723715532525461,
+            "mean_stop_reflection": 0.6012617563304581
+          },
+          {
+            "angle_deg": 35,
+            "polarization": "s",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.023989319619448536,
+            "mean_pass_transmission": 0.8975785160104744,
+            "mean_stop_reflection": 0.951095303236514
+          },
+          {
+            "angle_deg": 35,
+            "polarization": "s",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.02667833932366686,
+            "mean_pass_transmission": 0.8830042374762093,
+            "mean_stop_reflection": 0.9297285867195496
+          },
+          {
+            "angle_deg": 35,
+            "polarization": "p",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.025283540771402584,
+            "mean_pass_transmission": 0.9200198636612289,
+            "mean_stop_reflection": 0.4128570300151812
+          },
+          {
+            "angle_deg": 35,
+            "polarization": "p",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.02577766159134147,
+            "mean_pass_transmission": 0.9344988828343598,
+            "mean_stop_reflection": 0.8377711433765885
+          },
+          {
+            "angle_deg": 35,
+            "polarization": "p",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.02832347292600253,
+            "mean_pass_transmission": 0.9233142509435639,
+            "mean_stop_reflection": 0.7984444939844602
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "s",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.024884407511753203,
+            "mean_pass_transmission": 0.8295672325211403,
+            "mean_stop_reflection": 0.5670630198094793
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "s",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.0240658319782338,
+            "mean_pass_transmission": 0.8841561773425417,
+            "mean_stop_reflection": 0.9466546875285001
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "s",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.026696456118041813,
+            "mean_pass_transmission": 0.881244494791697,
+            "mean_stop_reflection": 0.9589165142107325
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "p",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.02600001264975684,
+            "mean_pass_transmission": 0.9221198656812513,
+            "mean_stop_reflection": 0.3237532616603001
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "p",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.02669682305938538,
+            "mean_pass_transmission": 0.9373749671590398,
+            "mean_stop_reflection": 0.758988627478849
+          },
+          {
+            "angle_deg": 40,
+            "polarization": "p",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.02878692358214671,
+            "mean_pass_transmission": 0.9323444889698259,
+            "mean_stop_reflection": 0.8166811998351646
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "s",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.024832486443373925,
+            "mean_pass_transmission": 0.7511390362242655,
+            "mean_stop_reflection": 0.5446443117681146
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "s",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.024038378896727323,
+            "mean_pass_transmission": 0.8600137212164516,
+            "mean_stop_reflection": 0.9361652043065837
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "s",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.02643885096127722,
+            "mean_pass_transmission": 0.8686509761585003,
+            "mean_stop_reflection": 0.9730268193873787
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "p",
+            "thickness_relative_shift": -0.1,
+            "mean_absorption": 0.026571226966920918,
+            "mean_pass_transmission": 0.9108648417386025,
+            "mean_stop_reflection": 0.2355407746061668
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "p",
+            "thickness_relative_shift": 0,
+            "mean_absorption": 0.027711559337684915,
+            "mean_pass_transmission": 0.937918424153189,
+            "mean_stop_reflection": 0.6423333223260855
+          },
+          {
+            "angle_deg": 45,
+            "polarization": "p",
+            "thickness_relative_shift": 0.1,
+            "mean_absorption": 0.029289740919425995,
+            "mean_pass_transmission": 0.9374128419245462,
+            "mean_stop_reflection": 0.8108002531883058
+          }
+        ]
+      },
+      "best_complete_alternative_already_allowed_same_means": true,
+      "retained_vs_equal_content_objective_delta": 0.0
+    }
+  ],
+  "stage_verdict": "computational instrument and fresh successor accepted; conventional tie prevents discovery superiority and no new economically attainable frontier established",
+  "source_identity": {
+    "optics.py": "ab9b400d370b314e866b451a63163589a20bd9ed4c29c5757063b76b3ba41728",
+    "run.py": "16eedb9ce545117217747fa310e18a265493b7cb55441814768045274101c4f5",
+    "silica.yml": "6f5dc13b9a76e26437e0b3e4719b4895964ebd85e09643c85a1a3c596394bcf3",
+    "magnesium_fluoride.yml": "659b28dcf221d35350ec1787e5e713a5a5ae2a4b6fb7d144cff5bac265168bc5",
+    "tantalum_pentoxide.yml": "4b397b398f51eaec1111413e77c4ef03c1c35bdb0c403c9481ea20d974e5f570",
+    "PREREGISTRATION.json": "c3393cdaed76cdf72b1f0ebdfaac7122c23c85f573075e0929f809642011abad"
+  },
+  "actual_artifacts_are_computational": true,
+  "physical_device_built": false,
+  "actual_revenue_established": false,
+  "internal_human_assistance_requested_minutes": 0,
+  "user_oversight_minutes": "unknown, not zero by assumption",
+  "human_productivity_advantage": "unresolved; no timed competent-human construction observed",
+  "cpu_seconds": 73.30266449599999,
+  "wall_seconds": 73.39333533600075,
+  "peak_rss_kib": 63696,
+  "costs": "ECONOMIC_INPUTS.json gives estimates; actual model/host billing unknown; canonical accounts executed by portfolio coordinator separately"
+}

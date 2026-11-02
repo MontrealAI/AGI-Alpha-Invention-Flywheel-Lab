@@ -1,0 +1,24 @@
+# External continuous bridge: meaningful rejection boundary
+
+Source and protocol were frozen at portfolio commit `4c330c73030966ffef6b248cb33eeabe79d6471d` before one registered evaluation. The original benchmark was pinned at `verivital/ARCH-COMP2025@7ed57810ab679ed6c757d330cb9647a52c2e579d`; the exact specification, dynamics and neural-network bytes matched all three registered SHA-256 digests. The external code/model weights were read transiently and were not republished. Independent acceptance is a separate verifier receipt; producer completion is not its substitute.
+
+The external problem introduced genuine continuous dynamics, acceleration lag, quadratic drag, a supplied neural controller and a five-second safe-distance contract. This is stronger grounding than the earlier authored finite line/fault examples, but remains a published engineering model rather than physical measurement or a road-vehicle safety claim.
+
+| Registered check | Executed outcome | Supported interpretation |
+|---|---|---|
+| Original NN, all 16 initial-box corners plus 16 fixed interior points | All 32 sampled trajectories had nonnegative safety margin; minimum 24.205560760700784 | Consistent point simulation; does not prove all-initial-set or between-grid safety |
+| Independent scalar network and separately expressed ODE, RK45 versus NumPy/DOP853 | Largest absolute state discrepancy 6.252776074688882e-13, below preregistered 1e-6 | Cross-implementation/integrator agreement on the same 32 points |
+| Directed interval/Picard attempt over entire initial box | Inconclusive after 0.15 s: lower enclosure margin became negative | Overapproximation cannot certify; no actual unsafe trajectory established |
+| Fixed 16-way initial-box refinement | Every box inconclusive after 0.21–0.25 s | Registered refinement also insufficient; no outcome-dependent retuning |
+| Conventional fixed command −2, numerical check | All 32 sampled trajectories nonnegative, minimum 26.720000000000006 | Point agreement with a separate analytic witness |
+| Conventional fixed command −2, exact rational witness | Lower margin 668/25 = 26.72 for full stated initial box and 5 s under supplied ODE | Model-conditional safe-distance proof, subject to independent derivation check |
+| Full CommonRoad SafeACC execution | Blocked: qpsolvers, commonroad and commonroad_dc absent; models/scenarios also require an explicit mapping | No SafeACC reproduction, comparison victory or borrowed safety guarantee |
+| Earlier finite certificate→continuous plant abstraction | No sound abstraction constructed | Finite computational acceptance cannot be sold as physical acceptance |
+
+The exact conventional witness uses V = 161/5, mu = 1/10000 and A = 2 + mu*V²/2 = 1025921/500000. Each velocity stays positive and nonincreasing: the lower bound is 1974079/100000. If w is lead minus ego velocity, a first-crossing comparison yields w(t) >= w(0)(1 − mu*V*t), whose five-second fraction is 9839/10000 > 0. Thus separation grows while ego velocity falls. The formal safe-distance margin cannot decline below the initial minimum 668/25. These inequalities rely on the supplied fixed inputs, correct initial box, lag/drag equations and five-second horizon. They are neither a universal controller theorem nor proof of physical parameter validity.
+
+The experiment exposes a consequential purpose trap. Fixed braking preserves the external formal safety inequality, but ego final speed is 20.843–21.041 m/s versus 27.537–28.447 m/s for the original NN in these trajectories. It does not establish set-speed tracking, comfort or the intended complete ACC function. Accordingly the fallback's **full-purpose bridge is rejected**, rather than declaring success by dropping a productive requirement. The original neural controller's universal safety remains unresolved because its interval attempts abstained. A sampled pass is not promoted into that missing proof.
+
+One registered computation used 10.656195863 process CPU seconds and 10.659087500000169 elapsed seconds. This excludes research, source construction and subsequent verification. Actual model/host billing and human-productivity comparison remain unknown. The code made no model API request, transaction, purchase, outreach or device command.
+
+The decision changed: retain the source-bound simulation and exact safety witness as bounded instruments; refuse original-NN universal safety, the finite-to-continuous bridge and commercial physical certification. The next discriminating construction is a sound relational/Taylor-model abstraction or a qualified established verifier preserving the original NN and full tracking requirements, with counterexamples and external acceptance. A further brute-force sample sweep would not close the identified gap. Any next stage must be prospectively registered, independently checked and costed on the parent's continuing native account where applicable.

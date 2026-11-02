@@ -1,0 +1,147 @@
+{
+  "schema": "public-foundry-preregistration/v1",
+  "experiment_id": "public-portfolio-20261102-foundry",
+  "owner": "foundry constructor, integration by portfolio coordinator",
+  "base_source": "a842861dcf532ee8b769f39248c4c1faabfb628a",
+  "registration_status": "prospective; source freeze before confirmatory execution",
+  "scientific_purpose": "construct a reusable uncertainty-challenged planar optical design instrument, then a distinct spectral-routing successor; a generic optimizer alone does not earn flagship admission",
+  "K1": {
+    "function": "near-IR antireflection entrance coating",
+    "wavelength_um": [
+      0.8,
+      1.06
+    ],
+    "layers": [
+      "MgF2",
+      "Ta2O5"
+    ],
+    "bounds_um": [
+      [
+        0.01,
+        0.3
+      ],
+      [
+        0.005,
+        0.1
+      ]
+    ],
+    "acceptance": "minimum over 18 angle/polarization/thickness worlds of wavelength-mean useful transmission >=0.975; cross-solver error <1e-8, boundary residual <1e-8 and passive absorption >=-1e-10",
+    "construction_seed": 202611021,
+    "differential_evolution": {
+      "maxiter": 36,
+      "popsize": 4,
+      "polish": false,
+      "tol": 1e-05
+    }
+  },
+  "K2": {
+    "function": "two-band spectral-routing optical filter; component relevant to spectral matching, not a complete thermal generator",
+    "different_function": "preserve short-band transmission while reflecting long-band photons, rather than maximize broadband entrance throughput",
+    "consequence": "potential photon/heat recycling; actual energy-system benefit unmeasured and no consequence advantage established",
+    "task_families": [
+      {
+        "id": "spectral-routing-A",
+        "wavelength_shift_um": 0,
+        "seed": 202611022
+      },
+      {
+        "id": "spectral-routing-B",
+        "wavelength_shift_um": -0.025,
+        "seed": 202611023
+      }
+    ],
+    "passband_um": [
+      0.8,
+      1.0
+    ],
+    "stopband_um": [
+      1.24,
+      1.49
+    ],
+    "layers": [
+      "Ta2O5",
+      "SiO2",
+      "Ta2O5",
+      "SiO2",
+      "Ta2O5",
+      "SiO2",
+      "Ta2O5",
+      "SiO2",
+      "Ta2O5",
+      "SiO2",
+      "Ta2O5",
+      "SiO2"
+    ],
+    "bounds_um": [
+      0.02,
+      0.35
+    ],
+    "acceptance": "minimum over 18 angle/polarization/thickness worlds: mean pass transmission >=0.80 and mean stop reflection >=0.80, plus unchanged physics checks",
+    "differential_evolution": {
+      "maxiter": 40,
+      "popsize": 4,
+      "polish": false,
+      "tol": 1e-05
+    }
+  },
+  "frozen_means": [
+    "optics.py",
+    "three material source YAMLs",
+    "public robust objective/search procedure; K1 optimum not a K2 initialization"
+  ],
+  "controls": [
+    "retained procedure",
+    "ordinary reuse with identical artifact content",
+    "equal content without claimed discovery procedure; uses ordinary same standard optimizer",
+    "fresh specialist without inherited kernel; recursive-scattering implementation with same search budget and public constants",
+    "bare substrate no mechanism",
+    "off-design 10% thickness and 35/40/45 degree disturbance",
+    "input rejection",
+    "Fresnel analytic limit",
+    "quarter-wave analytic limit",
+    "separate boundary linear system",
+    "constructor-independent verifier after freeze"
+  ],
+  "comparability": "ordinary equal-content and unrestricted specialist may tie; no empirical discovery-superiority or human productivity claim unless controls support it; fresh solver does not pay fictitious human rebuild wages",
+  "confirmation": {
+    "task_generation": "declared deterministic physical task grid; no authored random hidden material truth; code verification distinct from empirical physical validation",
+    "design_grid": "19 wavelengths, angles 0/25 degrees, s/p, +/-1% common thickness variation",
+    "acceptance_grid": "121 K1 wavelengths; 120 K2 wavelengths; angles 0/15/30; s/p; common thickness -1.5/0/+1.5%; mean-band thresholds are finite-sample not continuum guarantee",
+    "external_verifier": "parent-owned evaluator holds independent adverse cases; constructor will not read its hidden source/results before own freeze",
+    "leakage": "K2 optimization/acceptance public semantics prospectively fixed; no cached target answers or access to future measured truth; construction source independent of evaluator tests; no learned discovery claim"
+  },
+  "physical_envelope": {
+    "geometry": "planar coherent isotropic room-temperature layers on semi-infinite silica substrate",
+    "wavelength_um": [
+      0.7,
+      1.5
+    ],
+    "angle_deg": [
+      0,
+      45
+    ],
+    "max_total_thickness_um": 6,
+    "materials": "published silica dispersion; MgF2 ordinary-ray scalar approximation requires film metrology; deposited Ta2O5 complex n includes absorption",
+    "missing_validation": [
+      "fabricated stack",
+      "ellipsometry of specific deposition",
+      "roughness/scattering",
+      "temperature dependence",
+      "anisotropy",
+      "adhesion/stress and lifetime",
+      "empirical absorption confidence intervals",
+      "commercial acceptance"
+    ]
+  },
+  "source_hashes": {
+    "silica.yml": "6f5dc13b9a76e26437e0b3e4719b4895964ebd85e09643c85a1a3c596394bcf3",
+    "tantalum_pentoxide.yml": "4b397b398f51eaec1111413e77c4ef03c1c35bdb0c403c9481ea20d974e5f570",
+    "magnesium_fluoride.yml": "659b28dcf221d35350ec1787e5e713a5a5ae2a4b6fb7d144cff5bac265168bc5",
+    "run.py": "16eedb9ce545117217747fa310e18a265493b7cb55441814768045274101c4f5",
+    "optics.py": "ab9b400d370b314e866b451a63163589a20bd9ed4c29c5757063b76b3ba41728"
+  },
+  "rights": "CC0 material database, independently implemented classical equations; no exclusive IP assumption",
+  "stopping": "one frozen deterministic matrix; no rerun until favorable. Stop successor inheritance claim if K1 fails. A K2 failure is retained and does not count as capability transfer. Correct only demonstrated implementation defects transparently with new prospective version.",
+  "economics": "no alternate ledger; coordinator executes separately preregistered canonical accounts with full costs and comparison capital including USD100k and USD1B; no market calibration claimed here",
+  "actual_vs_modeled": "only CPU/wall resource consumption measured; public optical constants are prior measured material inputs, not new device measurements; all economic costs/markets are estimates and unknown actual host/model bills remain unknown"
+}

@@ -1,0 +1,68 @@
+{
+  "schema": "public-portfolio-independent-science/v1",
+  "route": "purpose",
+  "source_hashes": {
+    "experiments/public_portfolio_20261102/purpose/PREREGISTRATION.json": "911a557faf7c69022b76abad4bc23749f95d86509a2a6d397191fd019e2ca9fd",
+    "experiments/public_portfolio_20261102/purpose/__init__.py": "8c692e9995b3ac250750e6316658ee1f6036a9c6b03566e13d215a3fc89355b3",
+    "experiments/public_portfolio_20261102/purpose/diagnosis.py": "70792582b86755c3f967d7806a86fb300a71a90cd85fe661f87e39b8598b1399",
+    "experiments/public_portfolio_20261102/purpose/experiment.py": "3e1974cc3bb8ff3c5fb13637b506bc9361c6aa1541ff08b1fa63702996ae95e8",
+    "experiments/public_portfolio_20261102/purpose/kernel.py": "a55a5865a17b088a837d4e2574d4bb8efe55e3f0d1e78d6e7d7e2a3b34437075",
+    "experiments/public_portfolio_20261102/purpose/specialist.py": "66cd34472d7752e09e463042fd25cbac5900378657f039b096ae7d48b6eb06f0"
+  },
+  "checker_sha256": "e37ff7341cfca401885b98acdce107a532d781e4633c5539f6544014cd5ea2a1",
+  "protocol_sha256": "ba33ab89ce5eb867e22d601eb654256f263dd42a3522e88bce0399352c37a8a2",
+  "annex_sha256": "442335717989ee98e1ac5951faae3b43d28633b9ba46eac42f09f2d8359bed0c",
+  "nonce_commitment_sha256": "82e582eb59dc658fd20b9490327d7b6c383d2d3125e8e0d0cf4877251068893f",
+  "checks": [
+    {
+      "check": "finite_games_independent_exhaustive_truth",
+      "passed": true,
+      "cases": 64,
+      "mismatches": []
+    },
+    {
+      "check": "every_emitted_policy_preserves_robust_outcomes",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "check": "goal_only_success_rejected_when_future_recovery_impossible",
+      "passed": true
+    },
+    {
+      "check": "undeclared_successor_rejected",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "empty_adversarial_branch_rejected",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "invalid_horizon_rejected",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "new_function_active_diagnosis",
+      "passed": true
+    },
+    {
+      "check": "unidentifiable_faults_refused",
+      "passed": true
+    },
+    {
+      "check": "unsafe_identification_probe_refused",
+      "passed": true
+    },
+    {
+      "check": "source_unchanged_during_verification",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "wall_seconds": 0.03453469276428223,
+  "cpu_seconds": 0.03452501000000008,
+  "scope": "Computational contract only; no physical validation, external demand or industry-creation superiority inferred"
+}
