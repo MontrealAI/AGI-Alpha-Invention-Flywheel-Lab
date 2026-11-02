@@ -19,6 +19,7 @@ class Cell:
         if not np.isfinite(p).all() or (p<=0).any(): raise ValueError('POSITIVE_FINITE_CELL_PARAMETERS_REQUIRED')
         if len(x)<2 or len(x)!=len(y) or not np.isfinite(x).all() or not np.isfinite(y).all(): raise ValueError('FINITE_OCV_CURVE_REQUIRED')
         if x[0]!=0 or x[-1]!=1 or (np.diff(x)<=0).any() or (np.diff(y)<0).any(): raise ValueError('MONOTONE_FULL_SOC_CURVE_REQUIRED')
+        object.__setattr__(self,'soc',tuple(float(v) for v in x)); object.__setattr__(self,'ocv_v',tuple(float(v) for v in y))
 
     def voltage(self,soc):
         if np.any(np.asarray(soc)<-1e-9) or np.any(np.asarray(soc)>1+1e-9): raise ValueError('SOC_OUTSIDE_QUALIFIED_DOMAIN')
@@ -41,7 +42,9 @@ class Ladder:
         self.one=cho_solve(self.factor,np.ones(self.n)); self.g=float(self.one.sum())
 
     def currents(self,soc,polarization,total_a):
-        e=np.array([c.voltage(z) for c,z in zip(self.cells,soc)])-np.asarray(polarization)
+        soc=np.asarray(soc,float); polarization=np.asarray(polarization,float)
+        if soc.shape!=(self.n,) or polarization.shape!=(self.n,) or not np.isfinite(np.r_[soc,polarization,total_a]).all() or np.ndim(total_a)!=0: raise ValueError('FINITE_STATE_AND_SCALAR_LOAD_REQUIRED')
+        e=np.array([c.voltage(z) for c,z in zip(self.cells,soc)])-polarization
         v=cho_solve(self.factor,e)
         terminal=(v.sum()-total_a)/self.g
         current=v-terminal*self.one
