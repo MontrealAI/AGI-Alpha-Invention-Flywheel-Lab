@@ -1,6 +1,6 @@
-import unittest
+import json, unittest
 import numpy as np
-from experiments.capability_transfer_20261102.instrument import Cell,Ladder
+from experiments.capability_transfer_20261102.instrument import Cell,Ladder,minimum_separating_probe
 
 class InstrumentBoundaryTests(unittest.TestCase):
     def setUp(self):
@@ -18,5 +18,8 @@ class InstrumentBoundaryTests(unittest.TestCase):
         for q,r,t in [(0,.02,30),(2,-.02,30),(2,.02,0)]:
             with self.assertRaises(ValueError): Cell(q,r,.01,t,(0.,1.),(2.5,4.2))
         with self.assertRaises(ValueError): Ladder([self.cell]*4,[-.1]*3)
+    def test_probe_evidence_serializes_without_numpy_scalar_coercion(self):
+        result=minimum_separating_probe([self.cell,self.cell]); json.dumps(result,allow_nan=False)
+        self.assertIsNone(result['selected']); self.assertEqual(result['evaluated_probes'],21)
 
 if __name__=='__main__': unittest.main()

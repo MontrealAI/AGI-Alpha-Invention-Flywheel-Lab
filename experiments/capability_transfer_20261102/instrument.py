@@ -91,7 +91,7 @@ def minimum_separating_probe(cells,observation_error_v=.002,nominal_capacity_ah=
         for rate in rates:
             t=fraction/rate*3600
             values=[isolated_trace(c,rate*nominal_capacity_ah,t,step_s=1,rest_s=300)['voltage_v'][-1] for c in cells]
-            distance=abs(values[0]-values[1]); rows.append({'fraction':fraction,'c_rate':rate,'discharge_seconds':t,'rest_seconds':300,'total_seconds':t+300,'terminal_separation_v':distance,'separates':distance>2*observation_error_v})
+            distance=float(abs(values[0]-values[1])); rows.append({'fraction':fraction,'c_rate':rate,'discharge_seconds':t,'rest_seconds':300,'total_seconds':t+300,'terminal_separation_v':distance,'separates':distance>2*observation_error_v})
     possible=[r for r in rows if r['separates']]
     best=min(possible,key=lambda r:(r['total_seconds'],r['fraction'],r['c_rate'])) if possible else None
     return {'scope':'finite_two_model_observation_design_only','observation_error_bound_v':observation_error_v,'nominal_capacity_ah':nominal_capacity_ah,'prior_short_observation_seconds':600,'reset_and_soc_preparation_cost':'UNRESOLVED','evaluated_probes':len(rows),'probes':rows,'selected':best,'optimality_gap_seconds_in_menu':0 if best else None,'full_c20_discharge_seconds':20*3600,'physical_safety_qualified':False}
