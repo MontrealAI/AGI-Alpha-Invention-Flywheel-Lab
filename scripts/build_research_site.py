@@ -12,8 +12,15 @@ PAPERS = (
     'autonomous-enterprises-foundry-v2.pdf',
     'out-reflect-self-correcting-evidence-20261021.pdf',
     'transformational-autonomous-enterprises-v1.pdf',
+    'out-learn-20261021.pdf',
+    'out-think-20261021.pdf',
+    'out-design-20261021.pdf',
+    'out-strategise-20261020.pdf',
+    'out-execute-20261021.pdf',
+    'out-evolve-20261020.pdf',
 )
-PAGES = ('index.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html')
+PAGES = ('index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
+         'out-series.html', 'out-learn.html', 'out-think.html', 'out-design.html', 'out-strategise.html', 'out-execute.html', 'out-evolve.html')
 ASSETS = ('alpha.css', 'alpha.js', 'alpha-mark.svg')
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 
@@ -43,7 +50,7 @@ def validate(source):
     manifest = json.loads((source / 'publication-manifest.json').read_text())
     entries = manifest['papers']
     if manifest['schema_version'] != 1 or len(entries) != len(PAPERS) or {p['file'] for p in entries} != set(PAPERS):
-        raise ValueError('Manifest must describe exactly the three public papers')
+        raise ValueError('Manifest must describe exactly the allowlisted public papers')
     for item in entries:
         data = (source / item['file']).read_bytes()
         if not data.startswith(b'%PDF-') or len(data) != item['bytes'] or hashlib.sha256(data).hexdigest() != item['sha256']:

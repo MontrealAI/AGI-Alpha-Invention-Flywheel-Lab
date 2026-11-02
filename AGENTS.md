@@ -55,6 +55,14 @@ Use structural mapping, executable strategy construction/composition, evidence-g
 
 Report commercial success, invention, retained-method advantage and physical/scientific expansion separately. Transformational work must remove a consequential constraint and validate the enabling instrument; routine repair is not automatically transformation. Optimality claims apply only to the tested feasible set, information and assumptions, never to all strategies or markets.
 
+### Apply the published papers to the flagship
+
+Use the [practical paper map](docs/harness/OUT_PAPERS.md) and its browser-reading links: **OUT-LEARN** (observation/calibration), **OUT-THINK** (executable representations), **OUT-DESIGN** (usable capacity and safe transitions), **OUT-STRATEGISE** (information plus robust construction), **OUT-EXECUTE** (qualified boundary reuse), and **OUT-EVOLVE** (retained means enabling fresh work). Select by the actual missing means; do not force a six-stage pipeline or substitute paper/framework work for consequential delivery.
+
+The earlier **Foundry v2** (qualified instruments and successor construction), **Transformational Autonomous Enterprises** (mission-relative revalidation), and **Out-Reflect** (scope-aware, fault-bounded evidence) remain required references when relevant; the same map supplies their browser links, use conditions and limits. Preserve the previous readers/PDFs, current 063 report/paper and historical provenance links. Apply the strongest suitable method, not a mandatory reading or stage ceremony.
+
+For each adopted mechanism, record its flagship dependency, paper/page and assumptions, actual executable path/output, acceptance evidence, complete costs and reuse/invalidation conditions in the existing arrangement card or receipt. A paper link is not an implementation, a finite theorem is not a production guarantee, and a useful instrument is not yet profitable funded expansion. Keep the existing strongest-method, cash/obligation and authority boundaries.
+
 ### Practical invention and operating loop
 
 1. When fresh selection is justified, compare at least three materially different consequential possibilities jointly across valuable outcomes, business arrangements, and production/verification means. Include a new outcome, capability or coordination arrangement rather than only variants of the current service. Poor economics can justify replacing the service, market, contract or production means. Preserve frozen campaigns and accounts as evidence; a separately registered independent campaign may search beyond their catalogue. Do not silently change an active comparison or repeat selection without cause. Then freeze the selected permissions and acceptance contract for execution; distinguish hard constraints from assumptions and prerequisites of the current method. Do not silently relax acceptance after seeing results. Start from the strongest applicable known complete alternative.

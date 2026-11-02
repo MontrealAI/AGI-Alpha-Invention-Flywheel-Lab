@@ -54,19 +54,65 @@ class ResearchSiteTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'outside publication'):
             site.validate(self.source)
 
+    def test_out_collection_links_every_reader_and_original(self):
+        slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
+        collection = (self.source / 'out-series.html').read_text()
+        homepage = (self.source / 'index.html').read_text()
+        self.assertEqual(len(site.PAPERS), 9)
+        self.assertEqual(len(site.PAGES), 12)
+        self.assertIn('out-series.html', homepage)
+        for slug in slugs:
+            reader = 'out-' + slug + '.html'
+            self.assertIn(reader, collection)
+            self.assertIn(reader, homepage)
+            text = (self.source / reader).read_text()
+            self.assertIn('When to reach for this paper', text)
+            self.assertIn('Scope and evidence', text)
+            self.assertIn('OUT_PAPERS.md', text)
+            self.assertIn('SHA-256:', text)
+            self.assertIn('aria-label="Continue reading"', text)
+            matches = [x for x in site.PAPERS if x.startswith('out-' + slug + '-')]
+            self.assertEqual(len(matches), 1)
+            self.assertIn('data="' + matches[0] + '#view=FitH"', text)
+
+    def test_manifest_cannot_repeat_or_omit_a_paper(self):
+        import json
+        path = self.source / 'publication-manifest.json'
+        manifest = json.loads(path.read_text())
+        manifest['papers'][-1] = manifest['papers'][0]
+        path.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, 'allowlisted'):
+            site.validate(self.source)
+
     def test_mobile_and_pdf_fallbacks_present(self):
         for name in site.PAGES:
             text = (self.source / name).read_text()
             self.assertIn('name="viewport"', text)
             self.assertIn('Skip to content', text)
-            styles = text if name != 'index.html' else (self.source / 'alpha.css').read_text()
+            styles = text if name != 'studio.html' else (self.source / 'alpha.css').read_text()
             self.assertIn('prefers-reduced-motion', styles)
             self.assertIn('@media(max-width:', styles)
             self.assertNotIn('↗', text)
-            if name != 'index.html':
+            if name not in ('index.html', 'out-series.html', 'studio.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Your browser does not display embedded PDFs', text)
+
+    def test_preferred_home_design_keeps_studio_and_published_anchors(self):
+        home = (self.source / 'index.html').read_text()
+        studio = (self.source / 'studio.html').read_text()
+        self.assertIn('background:#f7f6fb', home)
+        self.assertIn('studio.html#build', home)
+        for anchor in ('build', 'evidence', 'research', 'papers'):
+            self.assertIn('id="' + anchor + '"', home)
+        self.assertIn('src="alpha.js"', studio)
+        self.assertIn('href="index.html"', studio)
+        self.assertIn('id="dispatch-form"', studio)
+        for name in ('foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html'):
+            self.assertIn(name, home)
+        self.assertIn('docs/transformational063/REPORT.md', home)
+        self.assertIn('docs/transformational063/paper.pdf', home)
+        self.assertIn('campaign/transformational-063', home)
 
     def test_external_script_and_unknown_asset_are_rejected(self):
         for link in ('https://example.com/tracker.js', 'account-recovery.json'):
