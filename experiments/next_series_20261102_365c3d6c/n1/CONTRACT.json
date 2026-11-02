@@ -1,0 +1,282 @@
+{
+  "experiment_id": "N1-20261102-365c3d6c",
+  "execution_status": "SOURCE_AND_CASES_PREPARED_NOT_EXECUTED_AT_FREEZE",
+  "question": "Does explicit failure propagation prevent ungrounded public channel, calibration, state or release claims from admitting quality-qualified delivery?",
+  "actual_proxy_contract": {
+    "status": "NOT_DEFINED_PREREQUISITES_MISSING",
+    "intended_use": null,
+    "conductivity_limit_uS_cm": null,
+    "temperature_basis": null,
+    "coverage_requirement": null,
+    "calibration_validity": null,
+    "measurement_uncertainty": null,
+    "mixing_and_release_rule": null,
+    "excluded_claims": [
+      "potability",
+      "microbiological safety",
+      "unmeasured contaminants",
+      "seasonal reliability",
+      "physical water revenue"
+    ]
+  },
+  "public_policy": {
+    "maximum_gap_s": null,
+    "maximum_clock_offset_s": null
+  },
+  "authored_model_policy": {
+    "intent": "Implementation control only, no claimed physical intended use or source-justified water threshold.",
+    "conductivity_limit_uS_cm": 1000,
+    "absolute_uncertainty_uS_cm": 1,
+    "maximum_gap_s": 5,
+    "maximum_clock_offset_s": 0.1,
+    "sampling_times_s": [
+      0,
+      5,
+      10
+    ],
+    "batch_end_s": 10,
+    "release_s": 12,
+    "discharge_interval_s": [
+      12,
+      13
+    ],
+    "counter_increment_l": 10,
+    "units": "Authored seconds, microS/cm and liters; model-only outputs cannot admit physical water.",
+    "mixing": "No cross-batch mixing permitted in authored fixture.",
+    "acceptance": "MODEL_PASS only if all registered synthetic evidence and coverage/state/calibration checks hold. Every physical_admission remains false."
+  },
+  "authored_cases": [
+    {
+      "id": "public_channel_1",
+      "expected_status": "HOLD",
+      "required_reasons": [
+        "UNKNOWN_CHANNEL_IDENTITY",
+        "UNKNOWN_INSTALLED_CALIBRATION",
+        "UNKNOWN_BATCH_RELEASE_RULE",
+        "PROXY_NOT_DEFINED",
+        "PUBLIC_ADAPTER_NOT_ADMITTED"
+      ]
+    },
+    {
+      "id": "public_channel_2",
+      "expected_status": "HOLD",
+      "required_reasons": [
+        "UNKNOWN_CHANNEL_IDENTITY",
+        "UNKNOWN_INSTALLED_CALIBRATION",
+        "UNKNOWN_BATCH_RELEASE_RULE",
+        "PROXY_NOT_DEFINED",
+        "PUBLIC_ADAPTER_NOT_ADMITTED"
+      ]
+    },
+    {
+      "id": "public_channel_3",
+      "expected_status": "HOLD",
+      "required_reasons": [
+        "UNKNOWN_CHANNEL_IDENTITY",
+        "UNKNOWN_INSTALLED_CALIBRATION",
+        "UNKNOWN_BATCH_RELEASE_RULE",
+        "PROXY_NOT_DEFINED",
+        "PUBLIC_ADAPTER_NOT_ADMITTED"
+      ]
+    },
+    {
+      "id": "public_channel_4",
+      "expected_status": "HOLD",
+      "required_reasons": [
+        "UNKNOWN_CHANNEL_IDENTITY",
+        "UNKNOWN_INSTALLED_CALIBRATION",
+        "UNKNOWN_BATCH_RELEASE_RULE",
+        "PROXY_NOT_DEFINED",
+        "PUBLIC_ADAPTER_NOT_ADMITTED"
+      ]
+    },
+    {
+      "id": "complete_authored_model",
+      "expected_status": "MODEL_PASS",
+      "required_reasons": []
+    },
+    {
+      "id": "wrong_stream",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "WRONG_STREAM"
+      ]
+    },
+    {
+      "id": "unit_error",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "UNIT_MISMATCH"
+      ]
+    },
+    {
+      "id": "temperature_error",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "TEMPERATURE_BASIS_MISMATCH"
+      ]
+    },
+    {
+      "id": "counter_reset",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "COUNTER_RESET_OR_INVALID"
+      ]
+    },
+    {
+      "id": "reversal_transition",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "REVERSAL_OR_UNKNOWN"
+      ]
+    },
+    {
+      "id": "stale_calibration",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "STALE_CALIBRATION"
+      ]
+    },
+    {
+      "id": "timestamp_offset",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "TIMESTAMP_OFFSET_OR_UNKNOWN"
+      ]
+    },
+    {
+      "id": "missing_release",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "MISSING_RELEASE_EVENT"
+      ]
+    },
+    {
+      "id": "gap_at_batch_boundary",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "GAP_OR_SAMPLE_CROSSES_BATCH"
+      ]
+    },
+    {
+      "id": "unresolved_mixing",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "UNRESOLVED_BATCH_MIXING"
+      ]
+    },
+    {
+      "id": "nonfinite_value",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "NONFINITE_OR_MISSING_SAMPLE"
+      ]
+    },
+    {
+      "id": "missing_samples",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "MISSING_SAMPLES"
+      ]
+    },
+    {
+      "id": "early_release",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "RELEASE_BEFORE_COMPLETE_OBSERVATION_OR_UNKNOWN"
+      ]
+    },
+    {
+      "id": "recycle_counter",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "RECYCLE_OR_UNKNOWN_COUNTER_ROUTE"
+      ]
+    },
+    {
+      "id": "uncertainty_crosses_limit",
+      "expected_status": "MODEL_REJECT",
+      "required_reasons": [
+        "OUTSIDE_PROXY_ENVELOPE"
+      ]
+    },
+    {
+      "id": "unknown_tag",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "UNKNOWN_SOURCE_TAG"
+      ]
+    },
+    {
+      "id": "nonmonotone_clock",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "NONMONOTONE_CLOCK"
+      ]
+    },
+    {
+      "id": "empty_mapping",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "UNKNOWN_CHANNEL_IDENTITY"
+      ]
+    },
+    {
+      "id": "malformed_evidence",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "INVALID_EVIDENCE"
+      ]
+    },
+    {
+      "id": "malformed_mapping",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "UNKNOWN_CHANNEL_IDENTITY"
+      ]
+    },
+    {
+      "id": "malformed_calibration",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "UNKNOWN_INSTALLED_CALIBRATION"
+      ]
+    },
+    {
+      "id": "blank_release_provenance",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "UNKNOWN_BATCH_RELEASE_RULE"
+      ]
+    },
+    {
+      "id": "blank_state_provenance",
+      "expected_status": "MODEL_HOLD",
+      "required_reasons": [
+        "UNKNOWN_STATE_TAG"
+      ]
+    }
+  ],
+  "case_design": "Finite deterministic counterexamples, not sampled empirical frequencies. One positive authored fixture prevents an always-HOLD implementation from passing all controls. Four public channel cases inject zero conductivity deliberately; numeric favorability cannot establish identity. Each negative control must include its targeted reason, not merely any rejection.",
+  "comparator_permissions": "Independent conventional specialist receives identical paper, supplement, archive metadata and sensor documentation; may reconstruct all flows/states and use the same code/algebra. Shared-host procedural independence is not external laboratory certification.",
+  "fresh_date_plan": {
+    "status": "NOT_STARTED_PREREQUISITE_STOP",
+    "selection_receipt": null,
+    "registered_dates": [],
+    "selected_count": 0,
+    "rule_if_a_later_adapter_is_admitted": "Under a NEW registration, use archive metadata only, exclude all seven W1 dates, group by calendar month, sort available filenames by date and select the lexicographically first previously unexamined date per represented month. Publish the complete list before retrieving measurements, retain missing/zero-output/maintenance days, and disclose uncovered states.",
+    "reason": "No source-supported identity/calibration/release adapter or usable actual proxy contract is admitted."
+  },
+  "resources": {
+    "execution": "Python standard library; no network needed to execute authored suite. Actual platform limits apply; no invented universal CPU allowance.",
+    "record": "Runner records process CPU and wall time. Model/tool economic resource costs and complete human-service cost remain UNKNOWN.",
+    "spend": "No paid calls, purchases or physical actions; no native business account."
+  },
+  "stopping_conditions": [
+    "Any unexpected authored outcome fails this frozen control set; retain attempt and seek independent diagnosis.",
+    "Do not rerun under changed source as the original confirmation; repairs require an explicitly separate stage.",
+    "Missing source prerequisites stop fresh sensor sampling and qualified-volume calculation.",
+    "No physical promotion or native collection follows from implementation-control success."
+  ],
+  "pre_freeze_review": "Independent static review identified empty or wrong-typed evidence as a potential model-admission gap. Code and six targeted controls were corrected before execution/public source freeze; no executed earlier result exists."
+}

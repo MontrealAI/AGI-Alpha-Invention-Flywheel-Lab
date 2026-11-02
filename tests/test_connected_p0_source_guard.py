@@ -69,5 +69,24 @@ class JoinPreflightTests(unittest.TestCase):
             inspect(self.a, self.b, self.c)
 
 
+    def test_late_registry_writes_cannot_hide_missing_source_dependencies(self):
+        baseline = (self.c / 'connected_enterprise/finance.py').read_text()
+        cases = (
+            ("SOURCE_PATHS += ('ghost.py',)", 'SOURCE_PATHS'),
+            ("del SOURCE_PATHS", 'SOURCE_PATHS'),
+            ("if True:\n SOURCE_PATHS = ('a.py',)", 'SOURCE_PATHS'),
+            ("def mutate():\n global SOURCE_PATHS\n SOURCE_PATHS = ('a.py',)", 'SOURCE_PATHS'),
+            ("SOURCE_PATHS: tuple = ('a.py',)", 'SOURCE_PATHS'),
+            ("INVENTORY_SOURCE_PATHS += ('ghost.py',)", 'INVENTORY_SOURCE_PATHS'),
+        )
+        for addition, registry in cases:
+            with self.subTest(addition=addition):
+                self.registry(self.c, baseline + '\n' + addition + '\n')
+                with self.assertRaisesRegex(ValueError, 'P0_REGISTRY_REBIND_OR_DYNAMIC_WRITE:' + registry):
+                    inspect(self.a, self.b, self.c)
+        self.registry(self.c, baseline)
+        self.assertTrue(inspect(self.a, self.b, self.c)['registry_complete'])
+
+
 if __name__ == '__main__':
     unittest.main()

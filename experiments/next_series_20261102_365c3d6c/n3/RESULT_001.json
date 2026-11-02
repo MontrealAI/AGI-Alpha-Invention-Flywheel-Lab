@@ -1,0 +1,367 @@
+{
+  "centering_cases": [
+    {
+      "absolute_rmse_strain": 0.001,
+      "centered_rmse_strain": 4.6947331210536226e-20,
+      "offset_strain": -0.001,
+      "pass": true
+    },
+    {
+      "absolute_rmse_strain": 0.0,
+      "centered_rmse_strain": 0.0,
+      "offset_strain": 0.0,
+      "pass": true
+    },
+    {
+      "absolute_rmse_strain": 0.001,
+      "centered_rmse_strain": 6.45229351406325e-20,
+      "offset_strain": 0.001,
+      "pass": true
+    }
+  ],
+  "commercial_admission": false,
+  "denominators": {
+    "centering_cases": 3,
+    "invalid_input_cases": 10,
+    "operator_cases": 7,
+    "spatial_cases": 6
+  },
+  "invalid_input_cases": [
+    {
+      "case": "nonfinite_E",
+      "pass": true
+    },
+    {
+      "case": "zero_E",
+      "pass": true
+    },
+    {
+      "case": "nu_half",
+      "pass": true
+    },
+    {
+      "case": "nu_minus_one",
+      "pass": true
+    },
+    {
+      "case": "nonunit_q",
+      "pass": true
+    },
+    {
+      "case": "nonfinite_strain",
+      "pass": true
+    },
+    {
+      "case": "negative_uncertainty",
+      "pass": true
+    },
+    {
+      "case": "nonfinite_target",
+      "pass": true
+    },
+    {
+      "case": "zero_width",
+      "pass": true
+    },
+    {
+      "case": "nonfinite_amplitude",
+      "pass": true
+    }
+  ],
+  "k2_executed": false,
+  "model_pass": true,
+  "native_accounts_opened": 0,
+  "operator_cases": [
+    {
+      "case": "exact_xz_xx",
+      "pass": true,
+      "result": {
+        "estimate_mpa": null,
+        "null_direction": [
+          0.3665083330689155,
+          0.8551861104941365,
+          0.3665083330689159,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "observation_gap_per_mpa": 1.4823076576950256e-21,
+        "radius_mpa": null,
+        "scope": "declared local linear model only",
+        "status": "UNIDENTIFIED",
+        "target_gap_per_mpa": 0.3665083330689155,
+        "witness_shift_mpa": [
+          73.3016666137831,
+          171.0372220988273,
+          73.30166661378318,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "witness_target_change_mpa": 73.3016666137831
+      }
+    },
+    {
+      "case": "exact_xz_difference",
+      "pass": true,
+      "result": {
+        "estimate_mpa": 50.00000000000007,
+        "interval_mpa": [
+          49.692307692307764,
+          50.30769230769238
+        ],
+        "maximum_corner_error_mpa": 0.30769230769237055,
+        "noise_corners": 4,
+        "radius_mpa": 0.3076923076923077,
+        "scope": "common-support material/direction model, no physical admission",
+        "status": "IDENTIFIED_MODEL_ONLY",
+        "target_residual": 5.130409383913161e-16,
+        "target_truth_mpa": 50.0,
+        "weights_mpa_per_strain": [
+          153846.15384615393,
+          -153846.1538461538
+        ]
+      }
+    },
+    {
+      "case": "exact_xyz_xx",
+      "pass": true,
+      "result": {
+        "estimate_mpa": 120.0000000000001,
+        "interval_mpa": [
+          119.5000000000001,
+          120.5000000000001
+        ],
+        "maximum_corner_error_mpa": 0.5000000000000995,
+        "noise_corners": 8,
+        "radius_mpa": 0.5000000000000001,
+        "scope": "common-support material/direction model, no physical admission",
+        "status": "IDENTIFIED_MODEL_ONLY",
+        "target_residual": 7.452772611325793e-16,
+        "target_truth_mpa": 120.0,
+        "weights_mpa_per_strain": [
+          269230.76923076937,
+          115384.6153846154,
+          115384.61538461538
+        ]
+      }
+    },
+    {
+      "case": "tilted_xz_difference",
+      "pass": true,
+      "result": {
+        "estimate_mpa": null,
+        "null_direction": [
+          0.08888267024040145,
+          -0.007486679445477975,
+          -0.07503135548941703,
+          -0.7245058455609297,
+          0.0,
+          0.6793418844759093
+        ],
+        "observation_gap_per_mpa": 2.286988957586611e-20,
+        "radius_mpa": null,
+        "scope": "declared local linear model only",
+        "status": "UNIDENTIFIED",
+        "target_gap_per_mpa": 0.16391402572981847,
+        "witness_shift_mpa": [
+          17.77653404808029,
+          -1.497335889095595,
+          -15.006271097883406,
+          -144.90116911218593,
+          0.0,
+          135.86837689518185
+        ],
+        "witness_target_change_mpa": 32.78280514596369
+      }
+    },
+    {
+      "case": "six_xx",
+      "pass": true,
+      "result": {
+        "estimate_mpa": 120.0,
+        "interval_mpa": [
+          119.5,
+          120.5
+        ],
+        "maximum_corner_error_mpa": 0.5000000000000142,
+        "noise_corners": 64,
+        "radius_mpa": 0.5,
+        "scope": "common-support material/direction model, no physical admission",
+        "status": "IDENTIFIED_MODEL_ONLY",
+        "target_residual": 4.887931734211927e-16,
+        "target_truth_mpa": 120.0,
+        "weights_mpa_per_strain": [
+          269230.7692307692,
+          115384.61538461539,
+          115384.61538461545,
+          -6.468942482432178e-12,
+          -2.102085771079903e-11,
+          8.567768520054797e-12
+        ]
+      }
+    },
+    {
+      "case": "six_xy",
+      "pass": true,
+      "result": {
+        "estimate_mpa": 25.00000000000002,
+        "interval_mpa": [
+          24.692307692307715,
+          25.307692307692328
+        ],
+        "maximum_corner_error_mpa": 0.30769230769233147,
+        "noise_corners": 64,
+        "radius_mpa": 0.30769230769230793,
+        "scope": "common-support material/direction model, no physical admission",
+        "status": "IDENTIFIED_MODEL_ONLY",
+        "target_residual": 4.939457968389731e-16,
+        "target_truth_mpa": 25.0,
+        "weights_mpa_per_strain": [
+          -76923.07692307692,
+          -76923.07692307697,
+          -1.4791870675671215e-11,
+          153846.1538461539,
+          3.8875555165336944e-11,
+          4.341579023779619e-11
+        ]
+      }
+    },
+    {
+      "case": "zero_nu_exact_xz_xx",
+      "pass": true,
+      "result": {
+        "estimate_mpa": 120.00000000000003,
+        "interval_mpa": [
+          119.80000000000003,
+          120.20000000000003
+        ],
+        "maximum_corner_error_mpa": 0.20000000000003126,
+        "noise_corners": 4,
+        "radius_mpa": 0.2,
+        "scope": "common-support material/direction model, no physical admission",
+        "status": "IDENTIFIED_MODEL_ONLY",
+        "target_residual": 2.220446049250313e-16,
+        "target_truth_mpa": 120.0,
+        "weights_mpa_per_strain": [
+          200000.00000000003,
+          0.0
+        ]
+      }
+    }
+  ],
+  "physical_admission": false,
+  "resources": {
+    "economic_resource_cost": "UNKNOWN",
+    "inference_research_and_verification_not_in_program_timer": true,
+    "process_cpu_seconds": 0.5968250000000002,
+    "wall_seconds": 0.5490543939995405
+  },
+  "schema": "n3-metrology-365c/v1",
+  "source_admission": {
+    "datasets_assessed": 1,
+    "empirical_target_errors_measured": 0,
+    "missing": [
+      "effective diffraction to bulk constitutive calibration",
+      "direction/shear closure",
+      "known matching gauge kernels",
+      "absolute systematic reference uncertainty",
+      "same-specimen independent local stress truth",
+      "supported beneficiary release criterion"
+    ],
+    "nominal_locations_reported_by_source": 2248,
+    "raw_rows_retrieved": 0,
+    "status": "HOLD_DATASET_PREREQUISITES"
+  },
+  "source_sha256": {
+    "CONTRACT.md": "f31c76fc1c244176cd24eb56d95e7944ed2221d88e2f0b04c4a6ff54203aabb0",
+    "instrument.py": "edfd296f0de3fcf3a94496922fa0b35a50e47afc9fd256f2744b57b66ce22889",
+    "run.py": "f130d6ac9b8905450fb84643b8e6b237b9f33487020cbdf523f6f640e44e5322"
+  },
+  "spatial_cases": [
+    {
+      "boundary_stress_max_mpa": 0.0,
+      "center_xx_mpa": -99.99999999999999,
+      "finite_difference_divergence_max_mpa_per_mm": 4.8332452706745244e-08,
+      "halfwidths_mm": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "pass": true,
+      "scope": "authored compact eigenstrain model, not NIST gauge or part",
+      "sum_sampled_energy_densities_mpa": 0.12403415889314207,
+      "uniform_average_max_abs_mpa": 3.229743404144225e-14
+    },
+    {
+      "boundary_stress_max_mpa": 0.0,
+      "center_xx_mpa": 99.99999999999999,
+      "finite_difference_divergence_max_mpa_per_mm": 4.8332452706745244e-08,
+      "halfwidths_mm": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "pass": true,
+      "scope": "authored compact eigenstrain model, not NIST gauge or part",
+      "sum_sampled_energy_densities_mpa": 0.12403415889314207,
+      "uniform_average_max_abs_mpa": 3.229743404144225e-14
+    },
+    {
+      "boundary_stress_max_mpa": 0.0,
+      "center_xx_mpa": -99.99999999999999,
+      "finite_difference_divergence_max_mpa_per_mm": 1.2162900997481074e-07,
+      "halfwidths_mm": [
+        1.0,
+        0.5,
+        2.0
+      ],
+      "pass": true,
+      "scope": "authored compact eigenstrain model, not NIST gauge or part",
+      "sum_sampled_energy_densities_mpa": 0.12193656627004093,
+      "uniform_average_max_abs_mpa": 4.2346307667015526e-14
+    },
+    {
+      "boundary_stress_max_mpa": 0.0,
+      "center_xx_mpa": 99.99999999999999,
+      "finite_difference_divergence_max_mpa_per_mm": 1.2162900997481074e-07,
+      "halfwidths_mm": [
+        1.0,
+        0.5,
+        2.0
+      ],
+      "pass": true,
+      "scope": "authored compact eigenstrain model, not NIST gauge or part",
+      "sum_sampled_energy_densities_mpa": 0.12193656627004093,
+      "uniform_average_max_abs_mpa": 4.2346307667015526e-14
+    },
+    {
+      "boundary_stress_max_mpa": 0.0,
+      "center_xx_mpa": -100.0,
+      "finite_difference_divergence_max_mpa_per_mm": 9.348872254122398e-08,
+      "halfwidths_mm": [
+        2.0,
+        1.0,
+        0.5
+      ],
+      "pass": true,
+      "scope": "authored compact eigenstrain model, not NIST gauge or part",
+      "sum_sampled_energy_densities_mpa": 0.0727104372573983,
+      "uniform_average_max_abs_mpa": 1.917675816320158e-14
+    },
+    {
+      "boundary_stress_max_mpa": 0.0,
+      "center_xx_mpa": 100.0,
+      "finite_difference_divergence_max_mpa_per_mm": 9.348872254122398e-08,
+      "halfwidths_mm": [
+        2.0,
+        1.0,
+        0.5
+      ],
+      "pass": true,
+      "scope": "authored compact eigenstrain model, not NIST gauge or part",
+      "sum_sampled_energy_densities_mpa": 0.0727104372573983,
+      "uniform_average_max_abs_mpa": 1.917675816320158e-14
+    }
+  ]
+}

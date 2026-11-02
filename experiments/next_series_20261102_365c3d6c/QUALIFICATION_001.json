@@ -1,0 +1,58 @@
+{
+  "created_utc": "2026-11-02T20:30:52.909022+00:00",
+  "scope": "Workflow syntax repair only; original model results unchanged",
+  "failed_runs": [
+    {
+      "id": 41518432976,
+      "head_sha": "28d9a23f6436d40655035c87bd9cc497ecd12812",
+      "status": "completed",
+      "conclusion": "failure",
+      "event": "push"
+    },
+    {
+      "id": 41519572200,
+      "head_sha": "00946cf112e457eabf0e5aa8163e931cb562cf54",
+      "status": "completed",
+      "conclusion": "failure",
+      "event": "push"
+    }
+  ],
+  "local_before_parse": "ScannerError: mapping values are not allowed here; line26,column54",
+  "local_after_parse": "PASS",
+  "original_workflow_sha256": "a64b003a47ef88c62988ebbf8bf91d9c555772ceab0f3b3675ba18678d4889fe",
+  "repaired_workflow_sha256": "7064d654b066f672743eb78bbb505b240d6f281755e976ae4885e62bb3f47712",
+  "changed_frozen_bindings": [
+    ".github/workflows/next-series-365c.yml"
+  ],
+  "unchanged_other_frozen_bindings": 19,
+  "unchanged_original_results": {
+    "n1/RESULT_001.json": "2ef6f9dbd1b2f17089e9f3f216e6507128f2e98c325b13e4ca5f88b4883a1677",
+    "n3/RESULT_001.json": "11125457ee08b4310b5cb24c2a0bc7417afcdcd7185197667b77d97545e8f13e",
+    "verification/N1_RESULT_001.json": "4633e425e5165c4487a9166d38b58ff26ce34aa337fd9ffe27783764a8a0cbf6",
+    "verification/N3_RESULT_001.json": "cac95f779ff87bc971cbc8a9a3c32d174bd3150c9cae32756a7904f36b8f96b2"
+  },
+  "runtime_preflight_tests": 16,
+  "runtime_preflight_passed": 16,
+  "runtime_preflight_receipt": {
+    "children_system_cpu_seconds": 0.0559,
+    "children_user_cpu_seconds": 0.366051,
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_connected_platform_runtime064",
+      "-v"
+    ],
+    "exit_code": 0,
+    "finished_utc": "2026-11-02T20:30:09.465848+00:00",
+    "maximum_child_rss_KiB": 19968,
+    "schema": "agi-alpha/overnight022-command-resource/v1",
+    "scope": "Reaped local command and descendants; excludes assistant inference, tool transport, external CI, preceding clone/review and unmeasured host billing. Maximum RSS is a kernel high-water mark, not concurrent aggregate memory. No allocation or quota is created by this receipt.",
+    "started_utc": "2026-11-02T20:30:08.798087+00:00",
+    "total_measured_command_cpu_seconds": 0.421951,
+    "wall_seconds": 0.6677855449997878
+  },
+  "hosted_qualification": "PENDING_REPAIRED_SOURCE",
+  "scientific_confirmation_rerun_locally": false,
+  "lookup_limit": "The connector did not support the check-suite subresource endpoint; no claim is based on that unavailable response. Public workflow-run records and local parser independently establish the syntax failure."
+}
