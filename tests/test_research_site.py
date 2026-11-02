@@ -59,7 +59,7 @@ class ResearchSiteTests(unittest.TestCase):
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
         self.assertEqual(len(site.PAPERS), 9)
-        self.assertEqual(len(site.PAGES), 11)
+        self.assertEqual(len(site.PAGES), 12)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
             reader = 'out-' + slug + '.html'
@@ -89,14 +89,25 @@ class ResearchSiteTests(unittest.TestCase):
             text = (self.source / name).read_text()
             self.assertIn('name="viewport"', text)
             self.assertIn('Skip to content', text)
-            styles = text if name != 'index.html' else (self.source / 'alpha.css').read_text()
+            styles = text if name != 'studio.html' else (self.source / 'alpha.css').read_text()
             self.assertIn('prefers-reduced-motion', styles)
             self.assertIn('@media(max-width:', styles)
             self.assertNotIn('↗', text)
-            if name not in ('index.html', 'out-series.html'):
+            if name not in ('index.html', 'out-series.html', 'studio.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Your browser does not display embedded PDFs', text)
+
+    def test_preferred_home_design_keeps_studio_and_published_anchors(self):
+        home = (self.source / 'index.html').read_text()
+        studio = (self.source / 'studio.html').read_text()
+        self.assertIn('background:#f7f6fb', home)
+        self.assertIn('studio.html#build', home)
+        for anchor in ('build', 'evidence', 'research', 'papers'):
+            self.assertIn('id="' + anchor + '"', home)
+        self.assertIn('src="alpha.js"', studio)
+        self.assertIn('href="index.html"', studio)
+        self.assertIn('id="dispatch-form"', studio)
 
     def test_external_script_and_unknown_asset_are_rejected(self):
         for link in ('https://example.com/tracker.js', 'account-recovery.json'):
