@@ -179,6 +179,8 @@ jobs:
           python -m unittest experiments.public_portfolio_20261102.verification.test_finalize_run -v
           python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output "$RUNNER_TEMP/released-portfolio-artifacts.json"
           python experiments/public_portfolio_20261102/verification/r2_recheck_retained.py --public-root experiments/public_portfolio_20261102/evidence/economics-r2/public --audit-receipts experiments/public_portfolio_20261102/evidence/economics-r2/audit-receipts --output "$RUNNER_TEMP/released-portfolio-finance.json"
+          python experiments/public_portfolio_20261102/verification/r2_recheck_recovered_retained.py --public-root experiments/public_portfolio_20261102/evidence/economics-r2/public --original-four-report experiments/public_portfolio_20261102/verification/r2_actual_recovery_audit_001.json --output "$RUNNER_TEMP/released-portfolio-recovered-four.json"
+          python experiments/public_portfolio_20261102/verification/r2_additional_recovery_replay.py --public-root experiments/public_portfolio_20261102/evidence/economics-r2/public --output "$RUNNER_TEMP/released-portfolio-recovered-two.json"
       - name: Retain released portfolio computational qualification
         if: always() && steps.released_portfolio.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -188,6 +190,8 @@ jobs:
             ${{ runner.temp }}/released-portfolio-guards.json
             ${{ runner.temp }}/released-portfolio-artifacts.json
             ${{ runner.temp }}/released-portfolio-finance.json
+            ${{ runner.temp }}/released-portfolio-recovered-four.json
+            ${{ runner.temp }}/released-portfolio-recovered-two.json
           if-no-files-found: error
       - name: Retain successful downloaded operation
         if: always() && steps.operation.outcome == 'success'
