@@ -123,6 +123,16 @@ class NativePublicClaimBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'NATIVE_COMPLETE_COST_SCHEDULE_MISMATCH'):
             check_native_claim_binding('shared',n,r,m,p)
 
+    def test_earned_spend_cannot_precede_costed_stage_one(self):
+        p,m,n,r=self.fixture()
+        tape=n['ledger']['actions']
+        tax=next(a for a in tape if a.get('op')=='cost'
+                 and a['args']['id']=='first-stage-profit-tax')
+        tape.remove(tax)
+        tape.append(tax)
+        with self.assertRaisesRegex(ValueError,'EARNED_RESERVATION_PRE_COST_BOUNDARY'):
+            check_native_claim_binding('shared',n,r,m,p)
+
     def test_no_bid_still_charges_unwon_prospecting(self):
         p=protocol()
         n={'ledger':{'config':{'contract':'market062-cheap_rival'},'orders':[],
