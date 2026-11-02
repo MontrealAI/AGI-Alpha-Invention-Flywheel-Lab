@@ -24,18 +24,28 @@ _HISTORICAL_AUDITS = {}
 _OWNER_AUTHORIZED_HISTORY = contextvars.ContextVar('owner_authorized_historical_audit', default=frozenset())
 MAX_TICKET_BYTES = 16_000_000
 
-# Independently pinned Python inventory identities for the three immutable
-# successor022 historical distributions. The values were derived from every
-# .py member SHA-256 in historical/successor022/MANIFEST.json at the exact
-# public source, not from a transition ticket. This is a narrowly scoped
-# executable provenance allowlist, NOT a security audit of the legacy Python,
-# a signature for historical financial activity, or permission for arbitrary
-# historical roots. Adding entries requires separate review and requalification.
-PINNED_PUBLIC_HISTORICAL_INVENTORIES = frozenset({
-    '166f7bd870713590b31bfe76cf0dbb0184f63684005cd0e98bcea297dae5ed8b', # 9facd934
-    '7b04fd501ec510dfff0ae71a3dcbeae4b62151945eb102d9aca637ec9008c50e', # 10bdb2c5
-    '60c3bad4de77f0e8dd113a2fe9fdb7fb212186ded1324099f6808196bc6cc2a8', # 9c74bc5a
-})
+# These two complete published Python closures are independently paired with
+# their nine-file legacy financial source identities, reconstructed from the
+# byte-pinned historical/successor022/MANIFEST.json and the legacy
+# connected_enterprise.finance.SOURCE_PATHS. Neither identity is supplied by
+# a transition ticket. The third archived closure remains unreviewed for
+# key-free execution; owner-authenticated transitions remain a separate path.
+# This limits executable provenance, not the authority of a signed account.
+_LEGACY_FINANCE_SOURCE_PATHS = (
+    'connected_enterprise/finance.py', 'adaptive_enterprise/account.py',
+    'commercial/ledger.py', 'commercial/persistence.py',
+    'commercial/single_writer.py', 'commercial/tape_lease.py',
+    'experiments/commerce006.py', 'vendor/alpha_claim/contracts.py',
+    'vendor/alpha_claim/protected_exchange.py',
+)
+PINNED_PUBLIC_HISTORICAL_SOURCES = {
+    # Complete Python inventory SHA256 -> original finance source_identity SHA256.
+    '166f7bd870713590b31bfe76cf0dbb0184f63684005cd0e98bcea297dae5ed8b':
+        'ac0c950a110608cde5a4821779be7ba4960ae7b84d4a87b435ae759d28200b46',  # 9facd934
+    '7b04fd501ec510dfff0ae71a3dcbeae4b62151945eb102d9aca637ec9008c50e':
+        '772ba934fbfdd59a5e357ae1dc9918796a126c5a7ea77e7cf0fb90308154dd60',  # 10bdb2c5
+}
+PINNED_PUBLIC_HISTORICAL_INVENTORIES = frozenset(PINNED_PUBLIC_HISTORICAL_SOURCES)
 
 
 def _approved_public_history_closure(body):
@@ -51,7 +61,21 @@ def _approved_public_history_closure(body):
         fingerprint = hashlib.sha256(json.dumps(
             files, sort_keys=True, separators=(',', ':'), ensure_ascii=True
         ).encode('utf-8')).hexdigest()
-        if fingerprint not in PINNED_PUBLIC_HISTORICAL_INVENTORIES:
+        expected_source = PINNED_PUBLIC_HISTORICAL_SOURCES.get(fingerprint)
+        if expected_source is None:
+            return False
+        # A pinned executable inventory alone must not be combined with an
+        # unrelated financial source identity. Validate this at every nested
+        # historical layer before load_jobs or any historical Python import.
+        try:
+            finance_files = {name: files[name] for name in _LEGACY_FINANCE_SOURCE_PATHS}
+        except KeyError:
+            return False
+        source = prior.get('from_source')
+        if (not isinstance(source, dict) or set(source) != {'files', 'sha256'}
+                or source['files'] != finance_files
+                or source['sha256'] != expected_source
+                or digest(finance_files) != expected_source):
             return False
         record = prior.get('prior_record')
         if not isinstance(record, dict):
