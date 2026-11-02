@@ -10,7 +10,7 @@ from hashlib import sha256
 from json import dumps
 
 MICRO = 1_000_000
-SCHEMA = 'agi-alpha/renewable-paid-work-market068/v2'
+SCHEMA = 'agi-alpha/renewable-paid-work-market068/v3'
 
 
 def digest(value):
@@ -34,6 +34,7 @@ class Scenario:
     followup_conversion_bps: int = 1000
     winback_conversion_bps: int = 2000
     winback_consent_bps: int = 4000
+    followup_permission_bps: int = 10000
     acceptance_bps: int = 9500
     collection_bps: int = 9900
     quote_micro: int = 95 * MICRO
@@ -64,7 +65,7 @@ class Scenario:
                 raise ValueError('NONNEGATIVE_INTEGER_REQUIRED:'+k)
         for k in ('serviceable_bps','customer_monthly_purchase_bps','monthly_retention_bps',
                   'cold_conversion_bps','followup_conversion_bps','winback_conversion_bps',
-                  'winback_consent_bps','acceptance_bps','collection_bps','avoidable_human_cost_bps',
+                  'winback_consent_bps','followup_permission_bps','acceptance_bps','collection_bps','avoidable_human_cost_bps',
                   'payment_bps','prior_profit_reinvestment_bps','income_tax_bps'):
             if fields[k]>10000:raise ValueError('BASIS_POINTS_REQUIRED:'+k)
         for k in ('paid_hours_per_job_year','hours_per_packet','customer_monthly_packets',
@@ -190,7 +191,13 @@ def simulate(case:Scenario):
         cold_contacts=min(uncontacted,remaining//(a.cold_contact_micro+a.onboarding_micro))
         cold_new=cold_contacts*a.cold_conversion_bps//10000
         uncontacted-=cold_contacts
-        warm_ready+=cold_contacts-cold_new
+        # An unsuccessful cold contact does not automatically grant a second-contact right.
+        # Eligibility is an explicit sensitivity assumption, NOT evidence of consent.
+        cold_nonbuyers=cold_contacts-cold_new
+        permitted_followup=cold_nonbuyers*a.followup_permission_bps//10000
+        warm_ready+=permitted_followup
+        disallowed_followup=cold_nonbuyers-permitted_followup
+        exhausted+=disallowed_followup
         new_customers=followup_new+winback_new+cold_new
         active+=new_customers
         acquisition=(followups*a.followup_contact_micro+winback_contacts*a.winback_contact_micro+
@@ -230,6 +237,9 @@ def simulate(case:Scenario):
              'eligible_organizations':eligible_total,'active_customers':active,'retained':retained,'churned':churned,
              'new_customers':new_customers,'new_cold':cold_new,'new_followup':followup_new,'reactivated':winback_new,
              'cold_contacts':cold_contacts,'followup_contacts':followups,'winback_contacts':winback_contacts,
+             'followup_permission_author_assumption_bps':a.followup_permission_bps,
+             'followup_rights_assumed_new':permitted_followup,
+             'followup_rights_denied_new':disallowed_followup,
              'never_contacted':uncontacted,'warm_followup_pending':warm_ready,'dormant_eligible':dormant_eligible,
              'dormant_unavailable':dormant_unavailable,'exhausted_contact_rights':exhausted,
              'underlying_serviceable_packets_month':monthly_serviceable,'customer_requested_packets':requested,
@@ -256,6 +266,7 @@ def simulate(case:Scenario):
             'market_unconstrained_by_initial_loaded_customer_list':True,
             'trailing_12_milestone_months':milestones,'rows':rows,
             'qualification_limitations':['Neither buyer choice nor customer consent has been observed',
+                'Default 100% second-contact eligibility is an authored legacy assumption, not permission; the no_followup_rights stress sets it to zero and records rejected repeat contacts',
                 'No individual orders, native JournalAccount receipts, real collections, or source-backed production at projected volume',
                 'Source job counts do not imply identical tasks, demand or purchase rights',
                 'Support tails are conservatively treated as fully payable after one month; earlier v1 reserve-release forecasts omitted this expense',
@@ -274,6 +285,7 @@ def cases():
         'central_unvalidated':b,
         'small_100k_no_extra_finance':replace(b,opening_equity_micro=100_000*MICRO),
         'no_paid_acquisition':replace(b,monthly_marketing_target_micro=0,prior_profit_reinvestment_bps=0),
+        'no_followup_rights':replace(b,followup_permission_bps=0),
         'weak_conversion':replace(b,cold_conversion_bps=100,followup_conversion_bps=200),
         'more_expensive_outreach':replace(b,cold_contact_micro=125*MICRO),
         'low_retention':replace(b,monthly_retention_bps=8500),
