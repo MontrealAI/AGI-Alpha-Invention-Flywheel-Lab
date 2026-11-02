@@ -1,0 +1,341 @@
+{
+  "schema": "flexibility063/technical-experiment/v1",
+  "source_files_sha256": {
+    "flexibility063/kernel.py": "cf891a227f887cab632f3c7fd1357a3f01481cf073d4de6233d4542b7134ed97",
+    "flexibility063/verify.py": "39ebdfa2e759b675e3fe506e62f3b656438ab9af49de35bff5444518a3049afe",
+    "flexibility063/experiment.py": "bf162de1f9d37429bb74e24f7bd1fc9692d6a190b690f9bf2a100c7701900066"
+  },
+  "registration_sha256": "a36385bd0a1a18f66ddd55bb510477704005bee844076e78a170a1bb5c790733",
+  "profiles_sha256": "18a4d8b48535d21215ea908fbb57b3de263c2f0fef951452b6a00a53010ca578",
+  "scope": "SYNTHETIC_COMPUTATIONAL_EVIDENCE_NOT_PHYSICAL_OPERATION",
+  "candidate_probes": [
+    {
+      "candidate": "pooled-flexibility-contract",
+      "kind": "exact-dispatch-probe",
+      "test": "100 kWh derated event; four individually 40 kWh profiles; frozen full dispatch follows",
+      "status": "EXECUTE_REGISTERED_DISPATCH"
+    },
+    {
+      "candidate": "retrospective-measurement-identifiability",
+      "kind": "inverse-prerequisite-probe",
+      "unknowns": 2,
+      "independent_measurements": 1,
+      "indistinguishable_vectors": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "same_observation": true,
+      "status": "HOLD_UNIDENTIFIABLE_WITHOUT_NEW_OBSERVATION",
+      "limitation": "Toy rank test does not evaluate ESA products or prove impossibility of historical measurement."
+    },
+    {
+      "candidate": "complementary-manufacturing-process",
+      "kind": "finite-interface-feasibility-probe",
+      "required": [
+        "heat-treated",
+        "milled"
+      ],
+      "single_provider_feasible": false,
+      "joined_process_feasible": true,
+      "status": "FEASIBLE_EXISTING_COORDINATION",
+      "limitation": "Set interface test has no machine qualification, tolerances, traceability or price evidence; active industrial-network owner preserved."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "cycle-1",
+      "request_sha256": "e8cb48cd314859c9e0e8b957bfbd077c40f843bb7ae5434a180b0d178ea3b72b",
+      "controls": {
+        "individual": {
+          "feasible": false,
+          "reason": "NO_INDIVIDUAL_MEETS_PRECOMMITTED_CONTRACT",
+          "wall_seconds": 0.024593581998487934,
+          "cpu_seconds": 0.05497500000000044
+        },
+        "conventional": {
+          "feasible": true,
+          "receipt": {
+            "accepted": true,
+            "errors": [],
+            "input_sha256": "e8cb48cd314859c9e0e8b957bfbd077c40f843bb7ae5434a180b0d178ea3b72b",
+            "artifact_sha256": "2e98ef91b424286099133b65be04b79ef7cf40ac9ace04c896b83e2bd7c854aa",
+            "delivered_wh": [
+              100000,
+              0,
+              0,
+              0
+            ],
+            "participant_cost_microUSD": {
+              "load-1": 4000000,
+              "load-2": 6000000,
+              "load-3": 5052800,
+              "load-4": 0
+            },
+            "participant_payments_microUSD": 18052800,
+            "scope": "SYNTHETIC_COMPUTATION_ONLY",
+            "independence": "Separate integer replay; same host and agent family; no external certification"
+          },
+          "participant_payment_microUSD": 18052800,
+          "artifact_sha256": "2e98ef91b424286099133b65be04b79ef7cf40ac9ace04c896b83e2bd7c854aa",
+          "wall_seconds": 0.02442936200532131,
+          "cpu_seconds": 0.035660999999999776
+        },
+        "pooled": {
+          "feasible": true,
+          "receipt": {
+            "accepted": true,
+            "errors": [],
+            "input_sha256": "e8cb48cd314859c9e0e8b957bfbd077c40f843bb7ae5434a180b0d178ea3b72b",
+            "artifact_sha256": "2e98ef91b424286099133b65be04b79ef7cf40ac9ace04c896b83e2bd7c854aa",
+            "delivered_wh": [
+              100000,
+              0,
+              0,
+              0
+            ],
+            "participant_cost_microUSD": {
+              "load-1": 4000000,
+              "load-2": 6000000,
+              "load-3": 5052800,
+              "load-4": 0
+            },
+            "participant_payments_microUSD": 18052800,
+            "scope": "SYNTHETIC_COMPUTATION_ONLY",
+            "independence": "Separate integer replay; same host and agent family; no external certification"
+          },
+          "participant_payment_microUSD": 18052800,
+          "artifact_sha256": "2e98ef91b424286099133b65be04b79ef7cf40ac9ace04c896b83e2bd7c854aa",
+          "wall_seconds": 0.019102928999927826,
+          "cpu_seconds": 0.02670599999999984
+        }
+      },
+      "ordinary_tie": true
+    },
+    {
+      "id": "cycle-2",
+      "request_sha256": "9d6bc6c18f1a7bb96bc190b3230ec7ecbd450b8e17e16eb8159c0281e1c5dfc1",
+      "controls": {
+        "individual": {
+          "feasible": false,
+          "reason": "NO_INDIVIDUAL_MEETS_PRECOMMITTED_CONTRACT",
+          "wall_seconds": 0.01262420900457073,
+          "cpu_seconds": 0.01262099999999955
+        },
+        "conventional": {
+          "feasible": true,
+          "receipt": {
+            "accepted": true,
+            "errors": [],
+            "input_sha256": "9d6bc6c18f1a7bb96bc190b3230ec7ecbd450b8e17e16eb8159c0281e1c5dfc1",
+            "artifact_sha256": "61cb2fb6436a93ef7f30793fa331682119aaa6783fdbffe0c3c7a9ecbd29cd2c",
+            "delivered_wh": [
+              110000,
+              0,
+              0,
+              0
+            ],
+            "participant_cost_microUSD": {
+              "load-1": 4000000,
+              "load-2": 6000000,
+              "load-3": 7158000,
+              "load-4": 0
+            },
+            "participant_payments_microUSD": 20158000,
+            "scope": "SYNTHETIC_COMPUTATION_ONLY",
+            "independence": "Separate integer replay; same host and agent family; no external certification"
+          },
+          "participant_payment_microUSD": 20158000,
+          "artifact_sha256": "61cb2fb6436a93ef7f30793fa331682119aaa6783fdbffe0c3c7a9ecbd29cd2c",
+          "wall_seconds": 0.02000882699212525,
+          "cpu_seconds": 0.030263000000000206
+        },
+        "pooled": {
+          "feasible": true,
+          "receipt": {
+            "accepted": true,
+            "errors": [],
+            "input_sha256": "9d6bc6c18f1a7bb96bc190b3230ec7ecbd450b8e17e16eb8159c0281e1c5dfc1",
+            "artifact_sha256": "61cb2fb6436a93ef7f30793fa331682119aaa6783fdbffe0c3c7a9ecbd29cd2c",
+            "delivered_wh": [
+              110000,
+              0,
+              0,
+              0
+            ],
+            "participant_cost_microUSD": {
+              "load-1": 4000000,
+              "load-2": 6000000,
+              "load-3": 7158000,
+              "load-4": 0
+            },
+            "participant_payments_microUSD": 20158000,
+            "scope": "SYNTHETIC_COMPUTATION_ONLY",
+            "independence": "Separate integer replay; same host and agent family; no external certification"
+          },
+          "participant_payment_microUSD": 20158000,
+          "artifact_sha256": "61cb2fb6436a93ef7f30793fa331682119aaa6783fdbffe0c3c7a9ecbd29cd2c",
+          "wall_seconds": 0.014978973005781882,
+          "cpu_seconds": 0.02771499999999988
+        }
+      },
+      "ordinary_tie": true
+    },
+    {
+      "id": "cycle-3",
+      "request_sha256": "393f4487e1f79d142ef388ad6b03bc72e0ffd6e17a0abb398a14436317f31ea5",
+      "controls": {
+        "individual": {
+          "feasible": false,
+          "reason": "NO_INDIVIDUAL_MEETS_PRECOMMITTED_CONTRACT",
+          "wall_seconds": 0.017249660988454707,
+          "cpu_seconds": 0.01721199999999995
+        },
+        "conventional": {
+          "feasible": true,
+          "receipt": {
+            "accepted": true,
+            "errors": [],
+            "input_sha256": "393f4487e1f79d142ef388ad6b03bc72e0ffd6e17a0abb398a14436317f31ea5",
+            "artifact_sha256": "ce35176dff2dd46e9f9c3c5280dc3fb219e41f335caa5ffb586223b7e70c28ad",
+            "delivered_wh": [
+              120000,
+              0,
+              0,
+              0
+            ],
+            "participant_cost_microUSD": {
+              "load-1": 4000000,
+              "load-2": 6000000,
+              "load-3": 8000000,
+              "load-4": 1579000
+            },
+            "participant_payments_microUSD": 23579000,
+            "scope": "SYNTHETIC_COMPUTATION_ONLY",
+            "independence": "Separate integer replay; same host and agent family; no external certification"
+          },
+          "participant_payment_microUSD": 23579000,
+          "artifact_sha256": "ce35176dff2dd46e9f9c3c5280dc3fb219e41f335caa5ffb586223b7e70c28ad",
+          "wall_seconds": 0.004705872997874394,
+          "cpu_seconds": 0.004703000000000179
+        },
+        "pooled": {
+          "feasible": true,
+          "receipt": {
+            "accepted": true,
+            "errors": [],
+            "input_sha256": "393f4487e1f79d142ef388ad6b03bc72e0ffd6e17a0abb398a14436317f31ea5",
+            "artifact_sha256": "ce35176dff2dd46e9f9c3c5280dc3fb219e41f335caa5ffb586223b7e70c28ad",
+            "delivered_wh": [
+              120000,
+              0,
+              0,
+              0
+            ],
+            "participant_cost_microUSD": {
+              "load-1": 4000000,
+              "load-2": 6000000,
+              "load-3": 8000000,
+              "load-4": 1579000
+            },
+            "participant_payments_microUSD": 23579000,
+            "scope": "SYNTHETIC_COMPUTATION_ONLY",
+            "independence": "Separate integer replay; same host and agent family; no external certification"
+          },
+          "participant_payment_microUSD": 23579000,
+          "artifact_sha256": "ce35176dff2dd46e9f9c3c5280dc3fb219e41f335caa5ffb586223b7e70c28ad",
+          "wall_seconds": 0.004242640992742963,
+          "cpu_seconds": 0.00424000000000041
+        }
+      },
+      "ordinary_tie": true
+    },
+    {
+      "id": "successor-two-events",
+      "request_sha256": "3beeb637d6f33327ed8d479a7070a3925a28c24ae9b4a8bf00340458a07f1b22",
+      "controls": {
+        "individual": {
+          "feasible": false,
+          "reason": "NO_INDIVIDUAL_MEETS_PRECOMMITTED_CONTRACT",
+          "wall_seconds": 0.019492842999170534,
+          "cpu_seconds": 0.019489999999999952
+        },
+        "conventional": {
+          "feasible": true,
+          "receipt": {
+            "accepted": true,
+            "errors": [],
+            "input_sha256": "3beeb637d6f33327ed8d479a7070a3925a28c24ae9b4a8bf00340458a07f1b22",
+            "artifact_sha256": "7b2c51e7853e216370e254ec0be67bd6341b78e70bf969ce81800797b827c515",
+            "delivered_wh": [
+              65000,
+              65000,
+              0,
+              0
+            ],
+            "participant_cost_microUSD": {
+              "load-1": 8000000,
+              "load-2": 8526600,
+              "load-3": 0,
+              "load-4": 0
+            },
+            "participant_payments_microUSD": 18526600,
+            "scope": "SYNTHETIC_COMPUTATION_ONLY",
+            "independence": "Separate integer replay; same host and agent family; no external certification"
+          },
+          "participant_payment_microUSD": 18526600,
+          "artifact_sha256": "7b2c51e7853e216370e254ec0be67bd6341b78e70bf969ce81800797b827c515",
+          "wall_seconds": 0.04117523299646564,
+          "cpu_seconds": 0.059172999999999865
+        },
+        "pooled": {
+          "feasible": true,
+          "receipt": {
+            "accepted": true,
+            "errors": [],
+            "input_sha256": "3beeb637d6f33327ed8d479a7070a3925a28c24ae9b4a8bf00340458a07f1b22",
+            "artifact_sha256": "7b2c51e7853e216370e254ec0be67bd6341b78e70bf969ce81800797b827c515",
+            "delivered_wh": [
+              65000,
+              65000,
+              0,
+              0
+            ],
+            "participant_cost_microUSD": {
+              "load-1": 8000000,
+              "load-2": 8526600,
+              "load-3": 0,
+              "load-4": 0
+            },
+            "participant_payments_microUSD": 18526600,
+            "scope": "SYNTHETIC_COMPUTATION_ONLY",
+            "independence": "Separate integer replay; same host and agent family; no external certification"
+          },
+          "participant_payment_microUSD": 18526600,
+          "artifact_sha256": "7b2c51e7853e216370e254ec0be67bd6341b78e70bf969ce81800797b827c515",
+          "wall_seconds": 0.03943376999814063,
+          "cpu_seconds": 0.05458599999999958
+        }
+      },
+      "ordinary_tie": true
+    }
+  ],
+  "direct_frontier_ai": "NOT_EXECUTED_NO_SEPARATELY_BILLABLE_API_AUTHORITY",
+  "actual_model_host_billing": "UNKNOWN",
+  "algorithmic_superiority": "NOT_ESTABLISHED",
+  "physical_or_new_industry_enablement": "NOT_ESTABLISHED",
+  "successor": {
+    "fresh_request_id": "successor-two-events",
+    "equal_resource_ordinary_may_rebuild": true,
+    "ordinary_accepted": true,
+    "inherited_accepted": true,
+    "payment_delta_microUSD": 0,
+    "retained_advantage": "NOT_ESTABLISHED",
+    "construction_cost_treatment": "Native economics reports construction; neither arm is credited a proprietary algorithm."
+  }
+}

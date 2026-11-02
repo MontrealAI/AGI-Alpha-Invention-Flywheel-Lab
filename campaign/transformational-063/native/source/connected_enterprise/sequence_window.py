@@ -1,0 +1,168 @@
+"""Finite two-stage contract forecast, not financial or execution authority.
+
+Evaluate one shared future delivery window under explicit public hypotheses.
+Existing one-order quote/method selection supplies price, cost and win beliefs.
+No hidden customer values, scenario draws or future receipts enter funding.
+"""
+from fractions import Fraction as F
+from math import comb, floor
+from commercial.ledger import digest
+from connected_enterprise.strategic_commerce import rederive
+
+
+def _binomial(n, p):
+    return [F(comb(n, k)) * p**k * (1-p)**(n-k) for k in range(n+1)]
+
+
+def _expected_deliveries(n, p, extra, q, limit):
+    return sum(a*b*min(i+j, limit) for i,a in enumerate(_binomial(n,p))
+               for j,b in enumerate(_binomial(extra,q)))
+
+
+def future_recourse_envelope(config, now_hours, future_hours):
+    """Bound future native planning fees; the present prefix is already prepaid."""
+    policy=config.get('refusal_recourse_policy')
+    if policy is None:return None
+    from .refusal_recourse import validate_policy,SELECTIVE_SCHEMA
+    validate_policy(policy)
+    if any(type(x) is not int or x<0 for x in (now_hours,future_hours)) or future_hours<now_hours or type(config['horizon_days']) is not int or config['horizon_days']<1:
+        raise ValueError('BOUND_FUTURE_NATIVE_PLANNING_CLOCK_REQUIRED')
+    first=now_hours//24+1
+    last=min(future_hours//24,config['horizon_days']-1)
+    events=max(0,last-first+1)
+    selective=policy['schema']==SELECTIVE_SCHEMA
+    mandatory=policy['daily_evaluation_cost'] if selective else policy['daily_planning_cost']
+    optional=policy['daily_planning_cost'] if selective else 0
+    return {'schema':'sequence-future-recourse-cost/v1','policy_sha256':digest(policy),
+        'future_native_planning_events':events,'first_future_planning_hour':24*first if events else None,
+        'last_future_planning_hour':24*last if events else None,
+        'mandatory_cost_microUSD':events*mandatory,'optional_allowance_cash_bound_microUSD':events*optional,
+        'total_cash_bound_microUSD':events*(mandatory+optional),
+        'scope':'Count native planning events strictly after the already prepaid current prefix, through the future decision inclusive, and before the terminal horizon. v1 allowance is mandatory; v2 evaluation is mandatory and every optional allowance is conservatively prefunded, never assumed purchased.'}
+
+
+def compare_window(config, policy, selection, observation, *, now_hours,
+                   future_existing_slots, unused_inventory, eligible_new_contacts,
+                   existing_channel_probability="0", allow_channel=True, allow_capacity=True, channel_forecast=None, max_capacity_quantity=None):
+    """Compare no investment/channel/capacity/both on one common cashflow model.
+
+    policy is authored PUBLIC forecast input, never a realized buyer observation.
+    The caller must reconstruct and bind it, inventory and slots to native state.
+    Baseline subtraction prevents assigning existing business profit to expansion.
+    Future production must be reselected/re-reserved after actual observations.
+    """
+    required = {'schema','provenance','window_delay_days','owned_contact_count',
+                'owned_available_bps','service_share_bps','arrival_bps','future_rival_price_bps'}
+    composed=policy.get('composition')=='complete-offer-quantity-v1'
+    if set(policy) != required|({'composition'} if composed else set()) or policy['schema'] != 'public-sequence-window/v1':
+        raise ValueError('EXPLICIT_PUBLIC_TRANSITION_HYPOTHESES_REQUIRED')
+    if not isinstance(policy['provenance'],str) or not policy['provenance'].strip():
+        raise ValueError('PUBLIC_HYPOTHESIS_PROVENANCE_REQUIRED')
+    for key in required-{'schema','provenance'}:
+        if type(policy[key]) is not int or policy[key] < 0:
+            raise ValueError('NONNEGATIVE_INTEGER_TRANSITION_REQUIRED')
+    if not 1 <= policy['window_delay_days'] <= 30 or policy['owned_contact_count'] > 8:
+        raise ValueError('FINITE_TWO_STAGE_WINDOW_REQUIRED')
+    if policy['future_rival_price_bps']>30000:raise ValueError('FINITE_FUTURE_RIVAL_HYPOTHESIS_REQUIRED')
+    if any(policy[k] > 10000 for k in ('owned_available_bps','service_share_bps','arrival_bps')):
+        raise ValueError('PUBLIC_TRANSITION_BASIS_POINTS_REQUIRED')
+    for value in (now_hours, future_existing_slots, unused_inventory, eligible_new_contacts):
+        if type(value) is not int or value < 0:
+            raise ValueError('BOUND_CURRENT_PUBLIC_STATE_REQUIRED')
+    rederive(selection)
+    if selection['problem']['public']['native_state_digest'] != observation['state_digest']:
+        raise ValueError('CURRENT_NATIVE_STATE_BINDING_REQUIRED')
+    row = selection['decision']['selected']
+    if row is None:
+        return {'schema':'two-stage-window/v1','decision':'NO_ADMISSIBLE_DELIVERY_PROFILE','routes':[]}
+    units=selection['problem']['offer'].get('capacity_units',1) if composed else 1
+    if type(units) is not int or units<1:raise ValueError('EXACT_FUTURE_COMPONENT_CAPACITY_REQUIRED')
+    full_base = units*sum(config[k] for k in ('production_cost','supplier_unit_cost','support_cost'))+config['onboarding_cost']+config.get('prospective_policy',{}).get('premium_microUSD',0)
+    extra_onboarding = max(0, full_base-selection['problem']['public']['base_cost'])
+    future_cost = row['cost']+extra_onboarding
+    required_cash = row['required_current_cash']+extra_onboarding
+    terms = config['channels'][channel_forecast['contract_id'] if channel_forecast is not None else 'pilot']
+    horizon = now_hours + 24*policy['window_delay_days']
+    channel_active = (terms['lead_days']*24 <= horizon-now_hours <
+                      (terms['lead_days']+terms['duration_days'])*24)
+    capacity_active = (config['capacity_lead_hours'] <= horizon-now_hours and
+                       horizon-now_hours+config['production_hours'] <
+                       config['capacity_lead_hours']+config['capacity_duration_hours'])
+    if horizon >= config['horizon_days']*24:
+        channel_active = capacity_active = False
+    recourse=future_recourse_envelope(config,now_hours,horizon)
+    recourse_cash=0 if recourse is None else recourse['total_cash_bound_microUSD']
+    recourse_common_cost=0 if recourse is None else recourse['mandatory_cost_microUSD']
+    available = observation['summary']['available']
+    earned = observation['summary']['unrestrictedEarned']
+    arrival = F(policy['arrival_bps'],10000)*F(policy['service_share_bps'],10000)
+    owned = len(channel_forecast['owned_customer_ids']) if channel_forecast is not None else policy['owned_contact_count']
+    extra = min(eligible_new_contacts, terms['slots_per_day'], 8)
+    reach = F(terms['realization_bps'],10000)*F(10000-terms['overlap_bps'],10000)
+    activation = F(terms['activation_reliability_bps'],10000) if channel_active else F(0)
+    quote_cost = config['exposure_cost']+(4 if composed else 1)*config['qualification_cost']
+    invoice = terms['price_microUSD']+terms['support_microUSD']
+    existing = F(existing_channel_probability)
+    if not 0 <= existing <= 1: raise ValueError('PUBLIC_CHANNEL_PROBABILITY_REQUIRED')
+    routes=[]
+    if composed:
+        declared=config['strategic_allocation_policy']['capacity_menu']['max_quantity']
+        if type(declared) is not int or declared<0 or max_capacity_quantity is not None and (type(max_capacity_quantity) is not int or max_capacity_quantity<0):raise ValueError('FINITE_NONNEGATIVE_SUPPLIER_QUANTITY_REQUIRED')
+        supplier_room=max(0,config['maximum_slots']-config['initial_slots'])
+        if max_capacity_quantity is not None:supplier_room=min(supplier_room,max_capacity_quantity)
+        quantities=range(min(declared,supplier_room)+1) if allow_capacity else (0,)
+    else:quantities=(0,1)
+    for channel,quantity in ((channel,k) for channel in (False,True) for k in quantities) if composed else ((False,0),(True,0),(False,1),(True,1)):
+        capacity=bool(quantity)
+        if channel and not allow_channel or capacity and not allow_capacity: continue
+        cost = channel*invoice + quantity*config['capacity_price']
+        feasible = cost <= min(available,earned)
+        cash = max(0,available-cost-config['maintenance_daily']*policy['window_delay_days']-recourse_cash)
+        # Treat all future delivery cost+principal locks as simultaneous: no
+        # forecast collections, reserve releases or earned cash can fund them.
+        if channel_forecast is not None:
+            route_samples=[r['candidate' if channel else 'baseline'] for r in channel_forecast['rows']]
+            costed_owned=channel_forecast.get('total_owned_contact_count',owned)
+            contact_cash=max(x['attempted_slots_to_window']*config['exposure_cost']+x['realized_contacts_to_window']*(4 if composed else 1)*config['qualification_cost'] for x in route_samples)+costed_owned*quote_cost*policy['window_delay_days']
+            cash=max(0,cash-contact_cash)
+        cap_ready = capacity_active and (not channel or config['capacity_lead_hours']+24 <= horizon-now_hours)
+        if composed:
+            purchase_delay=24 if channel else 0
+            cap_ready=purchase_delay+config['capacity_lead_hours']<=horizon-now_hours and horizon-now_hours+config['production_hours']<purchase_delay+config['capacity_lead_hours']+config['capacity_duration_hours']
+        limit = min(unused_inventory, config['maximum_slots']//units, (future_existing_slots+quantity*int(capacity and cap_ready))//units,
+                    cash//required_cash)
+        if horizon >= config['horizon_days']*24: limit=0
+        values={};counts={}
+        for forecast in row['forecasts']:
+            win=F(forecast.get('win_probability_fraction',str(forecast['win_probability'])))
+            p=arrival*F(policy['owned_available_bps'],10000)*win
+            q=arrival*reach*win
+            plain=_expected_deliveries(owned,p,0,F(0),limit)
+            with_channel=_expected_deliveries(owned,p,extra,q,limit)
+            access=activation if channel else existing
+            count=(1-access)*plain+access*with_channel
+            paid=F(forecast.get('accept_collect_probability_fraction',str(forecast['accept_collect_probability'])))
+            contribution=paid*row['price']-future_cost-paid*max(0,row['price']-future_cost)*F(config['profit_tax_bps'],10000)
+            contacts=owned*F(policy['owned_available_bps'],10000)+access*extra*reach
+            if channel_forecast is not None:
+                samples=[r['candidate' if channel else 'baseline'] for r in channel_forecast['rows']]
+                count=sum(_expected_deliveries(owned,p,x['window_contacts'],arrival*win,limit) for x in samples)/len(samples)
+                outreach=sum(F(x['attempted_slots_to_window']) for x in samples)/len(samples)
+                qualification=sum(F(x['realized_contacts_to_window']) for x in samples)/len(samples)
+                costed_contacts=channel_forecast.get('total_owned_contact_count',owned)*quote_cost*policy['window_delay_days']+outreach*config['exposure_cost']+qualification*(4 if composed else 1)*config['qualification_cost']
+            else:costed_contacts=contacts*quote_cost
+            values[forecast['belief']]=count*contribution-costed_contacts-cost-recourse_common_cost
+            counts[forecast['belief']]=str(count)
+        routes.append({'channel':channel,'capacity':capacity,'first_action_cost':(invoice if channel else cost),
+                       'contingent_later_capacity_cost':(quantity*config['capacity_price'] if channel and capacity else 0),**({'capacity_quantity':quantity,'delivery_capacity_units':units} if composed else {}),
+                       'current_cash_feasible':feasible,'future_delivery_cash_limit':limit,**({'future_contact_reserve_microUSD':contact_cash} if channel_forecast is not None else {}),**({'future_recourse_cash_bound_microUSD':recourse_cash} if recourse is not None else {}),
+                       'expected_deliveries':counts,'_values':values})
+    baseline=routes[0]['_values']
+    for route in routes:
+        route['incremental_net_microUSD']={k:floor(v-baseline[k]) for k,v in route.pop('_values').items()}
+    return {'schema':'two-stage-window/v1','current_state_digest':observation['state_digest'],
+            'public_hypotheses_sha256':digest(policy),'selection_sha256':digest(selection),
+            'future_window_hours':horizon,'routes':routes,**({'channel_forecast':channel_forecast} if channel_forecast is not None else {}),
+            **({'future_recourse_cost':recourse} if recourse is not None else {}),
+            'scope':'AUTHORED_PUBLIC_ONE_WINDOW_RECOURSE_FORECAST_NOT_EXECUTION',
+            'limits':'Same costed delivery profile used for a declared future service mix. Combined route buys channel first and forecasts capacity at the next daily decision; that purchase is not authorized. No calibrated demand, repeated customer availability, future method benefit or native execution claimed. Activation failure/reach are explicit hypotheses; no retry credit assumed. First actions require native reservation, and actual future delivery must replan.'}

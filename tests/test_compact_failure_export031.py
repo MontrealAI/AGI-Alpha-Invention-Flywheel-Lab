@@ -52,7 +52,7 @@ class CompactFailureTests(unittest.TestCase):
   self.assertEqual(len(operation),1)
   steps=re.split(r'(?m)^      - ',operation[0])
   uploads=[step for step in steps if re.search(r'(?m)^        uses: actions/upload-artifact@',step)]
-  self.assertEqual(len(uploads),3)
+  self.assertEqual(len(uploads),4)
   failure=[step for step in uploads if re.search(r'(?m)^        if: failure\(\)',step)]
   self.assertEqual(len(failure),1)
   self.assertIn("        if: failure() && steps.operation.outcome != 'success' && steps.compact_failure.outcome == 'success'\n",failure[0])
@@ -69,6 +69,16 @@ class CompactFailureTests(unittest.TestCase):
    '${{ runner.temp }}/downloaded-release-operation/DOWNLOADED_RELEASE_RUN.json',
    '${{ runner.temp }}/downloaded-release-operation/downloaded-operation-keyfree.zip'])
   self.assertIn('          path: |\n',success[0])
+  flexibility=[step for step in uploads if 'name: transformational063-released-operation-' in step]
+  self.assertEqual(len(flexibility),1)
+  self.assertIn("        if: always() && steps.released_flexibility.outcome == 'success'\n",flexibility[0])
+  self.assertEqual(re.findall(r'(?m)^            (.+)$',flexibility[0]),[
+   '${{ runner.temp }}/released-transformational063/REPORT.json',
+   '${{ runner.temp }}/released-transformational063/PROTOCOL.json',
+   '${{ runner.temp }}/released-transformational063/SOURCE.json',
+   '${{ runner.temp }}/released-transformational063/AUDIT.json',
+   '${{ runner.temp }}/released-transformational063/source',
+   '${{ runner.temp }}/released-transformational063/public'])
   self.assertFalse(any('*.stdout' in step or '*.stderr' in step or 'failed-operation-keyfree' in step for step in uploads))
  def test_workflow_exports_only_compact_failure(self):
   text=(P.parents[1]/'.github/workflows/connected014-release.yml').read_text()
@@ -76,6 +86,8 @@ class CompactFailureTests(unittest.TestCase):
   for changed in (text.replace(" && steps.compact_failure.outcome == 'success'",''),
                   text.replace('/FAILURE_LESSON.json','/*.stderr'),
                   text.replace('/RELEASED_WHEEL.json','/*.stdout'),
+                  text.replace("always() && steps.released_flexibility.outcome == 'success'",'always()'),
+                  text.replace('/released-transformational063/public','/released-transformational063/private'),
                   text.replace("always() && steps.operation.outcome == 'success'",'always()'),
                   text.replace('downloaded-operation-keyfree.zip','failed-operation-keyfree.zip')):
    with self.assertRaises(AssertionError): self.assert_workflow_upload_contract(changed)

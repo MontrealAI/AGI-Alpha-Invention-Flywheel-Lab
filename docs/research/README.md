@@ -1,5 +1,7 @@
 # Research papers
 
+The [AGI ALPHA homepage](index.html) combines the public research collection with a local synthetic flexibility-pool studio. Its downloadable dispatch is independently checked in the browser; it is separate from native financial acceptance and controls no devices. The [063 research edition](../transformational063/REPORT.md) connects the technical comparison to simulated commercial operation and its limitations.
+
 ## Foundry v2 - Autonomous Enterprises: Activate. Evolve. Scale.
 
 [Read the original PDF](autonomous-enterprises-foundry-v2.pdf) · [Browser reading page (when Pages is enabled)](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/foundry-v2.html) · [Website setup](PAGES.md)

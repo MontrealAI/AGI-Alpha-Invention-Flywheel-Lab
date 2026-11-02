@@ -1,11 +1,33 @@
-# AGI-Alpha-Invention-Flywheel-Lab
-**Transformational intelligence changes the game.**
+# 🌌♾️ AGI ALPHA Flywheel
 
-Discover valuable possibilities. Construct the missing means. Build enterprises that fund what comes next. This is a research and engineering mission, not a claim of achieved general intelligence or civilization-scale economic results.
+### The enterprise that invents its next economy.
+
+**Transformational intelligence changes the game.** Invent the possibility. Construct the means. Deliver the value. Finance what comes next.
+
+The ambition is an enterprise whose useful achievements expand what it can discover, construct and sustainably deliver: from a first working instrument to new productive capabilities in science, energy, manufacturing and exploration. Every step must earn its evidence.
 
 **Explore:** [AGI ALPHA website](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/) · [Foundry v2 PDF](docs/research/autonomous-enterprises-foundry-v2.pdf) · [All research papers](docs/research/README.md) · [Verified release — 1 November 2026](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/connected014-4a87b455373be72811ad3a0c654a116c3604a374).
 
-The website separates native SIM business operation, consequential capability, retained discovery, and scientific expansion. Each needs its own evidence; simulated profit is not actual revenue. [Pages setup and publication boundary](docs/research/PAGES.md).
+**Start here:** use the website’s local capacity-pooling studio, inspect the [current experiment](campaign/transformational-063/README.md), or follow the canonical operating instructions below. The browser tool runs locally without an account, upload or payment.
+
+The primary challenge starts with **US$100,000 simulated capital** and targets **US$3 billion trailing-365-day profit after complete costs**. This is an unachieved objective, not a forecast or a ceiling. Native simulated operation, useful capability, inherited advantage and physical expansion each require separate evidence. Simulated profit is not actual revenue. [Pages setup and publication boundary](docs/research/PAGES.md).
+
+## From possibility to a tested productive arrangement
+
+The new [flexibility063 experiment](flexibility063/REGISTRATION.json) asks whether individually subthreshold loads can jointly deliver a useful capacity commitment while every participant covers its stated outside option. It connects an executable dispatch artifact and independent constraint checking to the existing financial engine. Inputs, buyers, contracts and payments are synthetic or simulated; no energy device is controlled.
+
+The conventional method is a first-class competitor. Aggregation is established engineering: passing this experiment does not establish a new industry, a novel optimization algorithm, a physically qualified grid service or superior frontier-model performance. Fresh successor work tests the inherited asset against a control allowed to construct the same means.
+
+| Decision | Evidence required |
+| --- | --- |
+| Commercial | Repeat accepted delivery, positive complete modeled profit and covered obligations |
+| Blue Sky flagship | A consequential enabling effect beyond unsupported novelty or market-size claims |
+| Investment | Positive incremental value under matched complete-cost comparisons |
+| Successor | Fresh accepted work benefits from the inherited productive asset after transfer and maintenance costs |
+
+Accounting profit, project payback, available cash and the funding source of each investment remain separate. A technical tie does not veto viable commerce; opening capital does not become earned profit.
+
+The executed four-period central scenario delivers four accepted planning artifacts, earns **$70.65 modeled net profit** after a declared tax provision, and finances a **$15 instrument** from native unrestricted earnings. Copycat and no-purchase scenarios each lose **$128**. Supplier failure leaves **$2.40** net profit but fails the repeat-delivery criterion. The ordinary solver and independent included generalist match the technical result; the retained instrument does not establish successor advantage. These are finite synthetic planning contracts, not energy sales or actual commerce. See the [research report](docs/transformational063/REPORT.md) and [replayable key-free evidence](campaign/transformational-063/native).
 
 ## Current default: connected enterprise completion015
 

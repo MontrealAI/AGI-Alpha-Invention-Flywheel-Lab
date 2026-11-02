@@ -1,0 +1,13 @@
+{
+  "schema": "flexibility063/registration/v1",
+  "status": "frozen-before-execution",
+  "scope": "SYNTHETIC_DISPATCH_COMPUTATION_NOT_GRID_OPERATION",
+  "candidate_probes": ["pooled-flexibility-contract", "retrospective-measurement-identifiability", "complementary-manufacturing-process"],
+  "technical_contract": {"slot_minutes": 60, "base_target_wh": [100000, 0, 0, 0], "derating_ppm": 50000, "energy_conservation": "exact integer Wh per device", "participant_compensation": "declared event displacement cost plus positive fixed margin for active devices"},
+  "controls": ["individual-subthreshold-service", "ordinary-scipy-highs-milp-same-information", "equal-resource-successor-free-to-rebuild-same-milp"],
+  "fresh_successor": "two-event contract; unchanged solver and checks",
+  "stopping_rule": "one frozen run of all profiles; infeasible and refused profiles remain in denominator; no physical feasibility or novelty inference",
+  "economic_boundary": "participant payments are modeled physical-service costs, not enterprise revenue; native planning contract and complete enterprise costs are reported separately",
+  "unknowns": ["actual grid telemetry", "regulatory qualification", "device response", "real willingness to pay", "actual model and host billing"],
+  "algorithmic_novelty_expected": false
+}
