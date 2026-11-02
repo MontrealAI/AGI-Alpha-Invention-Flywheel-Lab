@@ -11,6 +11,13 @@ COMPATIBILITY_MAIN = 'a842861dcf532ee8b769f39248c4c1faabfb628a'
 COMPATIBILITY_DEPENDENCIES = {
     'experiments/commerce006.py': '2fc529131885c75752dab8dbd77d85b5a36d4c0b43cb5e7e53286c997cc0a52f'}
 
+def contract_dependencies(root):
+    contract = json.loads(regular(root, 'campaign/cycle-007/ECONOMICS_CONTRACT.json').read_text())
+    market = contract['market_source_manifest']
+    if set(market) != {'path', 'sha256'} or not market['path'].startswith('campaign/cycle-007/'):
+        raise ValueError('HISTORICAL_BOUND_MARKET_SCOPE_REQUIRED')
+    return {market['path']: market['sha256']}
+
 def regular(root, name):
     relative = Path(name)
     if relative.is_absolute() or '..' in relative.parts or str(relative) != name:
@@ -34,7 +41,7 @@ def stage(root, output):
         raise ValueError('INCONSISTENT_FROZEN_ABSENCE_CONTRACT')
     extras = {name: hashlib.sha256(regular(root, name).read_bytes()).hexdigest()
               for name in (FREEZE, 'run_cycle007_repaired.py') if name not in files}
-    for name, expected in COMPATIBILITY_DEPENDENCIES.items():
+    for name, expected in (COMPATIBILITY_DEPENDENCIES | contract_dependencies(root)).items():
         if hashlib.sha256(regular(root, name).read_bytes()).hexdigest() != expected:
             raise ValueError('PINNED_COMPATIBILITY_HELPER_CHANGED:' + name)
         if name not in files:
@@ -53,6 +60,7 @@ def stage(root, output):
         'unchanged_orchestration_files': extras, 'expected_absent_paths': freeze.get('expected_absent_paths', []),
         'additional_compatibility_main': COMPATIBILITY_MAIN,
         'additional_compatibility_dependencies': COMPATIBILITY_DEPENDENCIES,
+        'transitive_frozen_contract_dependencies': contract_dependencies(root),
         'historical_limit': 'The original95-file freeze omitted commerce006. This explicit helper pin qualifies current exposed compatibility, not the original freeze or a new scientific result.',
         'scope': 'Historical source reproduction only; no current portfolio qualification or rewritten evidence.'}
     (output / 'ISOLATED_STAGE.json').write_text(json.dumps(receipt, indent=2) + '\n')
@@ -64,7 +72,7 @@ def verify_stage(root, output):
     if regular(output, FREEZE).read_bytes() != raw:
         raise ValueError('STAGED_FREEZE_CHANGED')
     freeze = json.loads(raw)
-    expected = dict(freeze['files']) | COMPATIBILITY_DEPENDENCIES
+    expected = dict(freeze['files']) | COMPATIBILITY_DEPENDENCIES | contract_dependencies(root)
     expected['run_cycle007_repaired.py'] = hashlib.sha256(regular(root, 'run_cycle007_repaired.py').read_bytes()).hexdigest()
     for name, checksum in expected.items():
         if hashlib.sha256(regular(output, name).read_bytes()).hexdigest() != checksum:
