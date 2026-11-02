@@ -24,6 +24,49 @@ _HISTORICAL_AUDITS = {}
 _OWNER_AUTHORIZED_HISTORY = contextvars.ContextVar('owner_authorized_historical_audit', default=frozenset())
 MAX_TICKET_BYTES = 16_000_000
 
+# Historical code is a separate subprocess, not a trusted source of public
+# diagnostics. Never propagate its arbitrary stdout/stderr into an exception:
+# even an owner-authenticated old module might print signing material.
+# The small allowlist preserves stable transition failure categories without
+# copying arbitrary content or revealing exception arguments.
+_SAFE_HISTORICAL_CHILD_CODES = frozenset({
+    'PRIOR_AUTHORITY_CHANGED', 'STALE_SOURCE_UPGRADE_CHECKPOINT',
+    'OPERATING_SOURCE_AUTHORITY_CHANGED', 'SOURCE_UPGRADE_CLOCK_ROLLBACK',
+    'SOURCE_AUTHORITY_MISSING', 'SOURCE_TRANSITION_SIGNATURE_MISMATCH',
+    'SIGNATURE_MISMATCH', 'SOURCE_OR_AUTHORITY_CHANGED',
+    'SOURCE_TRANSITION_CHECKPOINT_CHANGED', 'RETRY_AUTHORITY_CHANGED',
+    'RETRY_AUTHORIZATION_CHANGED', 'SOURCE_UPGRADE_EXCEEDS_EXISTING_TICKET_BOUND',
+    'OPERATING_CHECKPOINT_SOURCE_OR_AUTHORITY_CHANGED',
+    'INDEPENDENT_HISTORICAL_VERIFIER_AUTHORITY_REQUIRED',
+    'STAGED_HISTORICAL_SOURCE_CHANGED_BEFORE_IMPORT',
+})
+
+
+def _safe_historical_child_failure(done):
+    stream = getattr(done, 'stderr', '')
+    if isinstance(stream, bytes):
+        raw = stream
+        lines = stream.decode('utf-8', errors='replace').splitlines()
+    elif isinstance(stream, str):
+        raw = stream.encode('utf-8', errors='replace')
+        lines = stream.splitlines()
+    else:
+        raw, lines = b'', []
+    code = None
+    for line in reversed(lines):
+        for kind in ('ValueError: ', 'RuntimeError: '):
+            if line.startswith(kind):
+                claimed = line[len(kind):].split(':', 1)[0].split(' ', 1)[0]
+                if claimed in _SAFE_HISTORICAL_CHILD_CODES:
+                    code = claimed
+                break
+        if code is not None:
+            break
+    status = getattr(done, 'returncode', None)
+    status = status if type(status) is int else 'unknown'
+    result = f'child_exit={status};stderr_bytes={len(raw)}'
+    return result + (f';child_reported_code={code}' if code else '')
+
 
 @contextmanager
 def _owner_authenticated_history(tickets, key):
@@ -199,7 +242,7 @@ with scope:
 """
     done = _run_pinned_historical_python(root, code, payload, body['verifier_files'])
     if done.returncode:
-        raise ValueError('PINNED_HISTORICAL_AUDIT_FAILED:' + done.stderr[-1200:])
+        raise ValueError('PINNED_HISTORICAL_AUDIT_FAILED:' + _safe_historical_child_failure(done))
     receipt = json.loads(done.stdout)
     if not receipt.get('accepted'):
         raise ValueError('PINNED_HISTORICAL_AUDIT_NOT_ACCEPTED')
@@ -272,7 +315,7 @@ with scope, JournalAccount(p['root'],p['manifest'],p['path'],opening=p['opening'
 '''
     done = _run_pinned_historical_python(historical_root, code, payload, files)
     if done.returncode:
-        raise ValueError('SOURCE_UPGRADE_AUTHORIZATION_FAILED:' + done.stderr[-1200:])
+        raise ValueError('SOURCE_UPGRADE_AUTHORIZATION_FAILED:' + _safe_historical_child_failure(done))
     ticket = json.loads(done.stdout)
     if source_identity(target_root)!=target:raise ValueError('TARGET_CHANGED_DURING_AUTHORIZATION')
     if source_inventory(historical_root) != files:
