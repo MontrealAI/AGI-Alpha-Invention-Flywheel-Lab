@@ -1,6 +1,6 @@
 # Five original routes: scientific status and replay
 
-This is a retrospective source review of [PR153 at commit `8c13a60859f58c5b0a332eaa433f2ff84c584e8a`][pin], not a new evaluation or a third portfolio. It is reporting outside the paired-acquisition scientific freeze. Every result below belongs to that pinned portfolio and its disclosed receipts.
+This is a retrospective source review and reproducibility replay of [PR153 at commit `8c13a60859f58c5b0a332eaa433f2ff84c584e8a`][pin], not a newly sampled evaluation or a third portfolio. It is reporting outside the paired-acquisition scientific freeze. The original results below belong to that pinned portfolio and its disclosed receipts.
 
 ## Original results
 
@@ -51,7 +51,13 @@ python "$portfolio/verification/verify_arrangement.py" \
 
 The final command should reproduce **exit 1, `passed: false`**, with the specific endpoint check recording `cases: 12, accepted: 0`. Inspect that receipt: an arbitrary exception or other failure is not a successful reproduction. [Original arrangement checker][arrangement-entry].
 
-[`verify_science.py`][science-entry] has no `--route all`; its base arrangement route omits the wrapper's added participation/endpoint checks. [`verify_artifacts.py`][artifact-entry] checks **only four routes**, so its passing status cannot cover original arrangement. The disclosed nonce is a public reproduction seed, not an account credential. Output timing fields and inventories need not be byte-identical to earlier receipts. Replaying exposed cases is reproducibility, not fresh independent confirmation. These commands were inspected but **not executed for this synthesis**.
+[`verify_science.py`][science-entry] has no `--route all`; its base arrangement route omits the wrapper's added participation/endpoint checks. [`verify_artifacts.py`][artifact-entry] checks **only four routes**, so its passing status cannot cover original arrangement. The disclosed nonce is a public reproduction seed, not an account credential. Output timing fields and inventories need not be byte-identical to earlier receipts. Replaying exposed cases is reproducibility, not fresh independent confirmation.
+
+### Actual account-free replay
+
+On 2026-11-02, all five original verifiers were rerun sequentially from an isolated, read-only materialization of **54 files whose Git blob identities and sizes matched the pin**. Python 3.12.14, NumPy 2.3.5 and SciPy 1.17.0 were already available. The exact disclosed stage-one nonce was used. An execution-only wrapper invoked unchanged entrypoints, recorded imports and exit codes, and prohibited financial/operating imports and network/subprocess operations inside each scientific process.
+
+**Purpose 10/10, interface 10/10, complementarity 9/9 and foundry 13/13 passed with exit 0. Original arrangement reproduced 15/16, exit 1**, with exactly the recorded endpoint failure: twelve cases, zero accepted, no exception. Check names and pass/fail sequences matched all five original receipts. The separate saved-artifact replay passed both stages for its four routes. All 54 files remained unchanged; observed repository imports matched the verified scientific closure. No accounts or campaigns ran. Timing and continuous-ACC extensions were not rerun. Source hashes, exits, counts and runtime identities are recorded in [FIVE_ROUTE_REPLAY.json](FIVE_ROUTE_REPLAY.json).
 
 [pin]: https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/8c13a60859f58c5b0a332eaa433f2ff84c584e8a
 [approvals]: https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/8c13a60859f58c5b0a332eaa433f2ff84c584e8a/experiments/public_portfolio_20261102/verification/PRODUCT_APPROVALS.json

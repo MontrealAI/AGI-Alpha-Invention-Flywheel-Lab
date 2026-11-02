@@ -1,0 +1,104 @@
+{
+  "schema": "public-portfolio-independent-science/v1",
+  "route": "arrangement",
+  "source_hashes": {
+    "experiments/public_portfolio_20261102/arrangement/PREREGISTRATION.json": "5356ba4ee939fedb119a1442a8852840e1a5d59026585636e5bf8e32b591e2ec",
+    "experiments/public_portfolio_20261102/arrangement/experiment.py": "dfcddfed75a2aa95041db08a4c46b66be2cfda3957e3931a3b19f937a7bd4e06",
+    "experiments/public_portfolio_20261102/arrangement/orbital.py": "1f77772f6ac0bf0f77e1c3512238b9e312eb4ada3388d8872f9dc9490002a1a5",
+    "experiments/public_portfolio_20261102/arrangement/timing_extension.py": "0c5c0f15de04c61805fd1cc4639dd317767b9cb1e429053d615bd2d875353632"
+  },
+  "checker_sha256": "e37ff7341cfca401885b98acdce107a532d781e4633c5539f6544014cd5ea2a1",
+  "protocol_sha256": "ba33ab89ce5eb867e22d601eb654256f263dd42a3522e88bce0399352c37a8a2",
+  "annex_sha256": "442335717989ee98e1ac5951faae3b43d28633b9ba46eac42f09f2d8359bed0c",
+  "nonce_commitment_sha256": "82e582eb59dc658fd20b9490327d7b6c383d2d3125e8e0d0cf4877251068893f",
+  "checks": [
+    {
+      "check": "independent_cw_ode_integration",
+      "passed": true,
+      "cases": 12,
+      "max_absolute_state_error": 2.426986611681059e-09
+    },
+    {
+      "check": "cw_zero_time_identity",
+      "passed": true
+    },
+    {
+      "check": "cw_time_composition",
+      "passed": true
+    },
+    {
+      "check": "impulse_columns_match_state_transition",
+      "passed": true
+    },
+    {
+      "check": "gaussian_disk_probability_below_conservative_bound",
+      "passed": true,
+      "cases": 8,
+      "failures": []
+    },
+    {
+      "check": "singular_covariance_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "nonfinite_orbital_input_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "selected_contract_is_voluntary_and_prefunded",
+      "passed": true,
+      "outcome": "model_refusal"
+    },
+    {
+      "check": "no_demand_refused",
+      "passed": true
+    },
+    {
+      "check": "no_prefunding_refused",
+      "passed": true
+    },
+    {
+      "check": "execution_default_refused",
+      "passed": true
+    },
+    {
+      "check": "withdrawn_consent_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "truthy_string_consent_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "nonfinite_model_envelope_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "different_successor_endpoint_design_independent_ode",
+      "passed": false,
+      "cases": 12,
+      "accepted": 0,
+      "max_absolute_endpoint_error": 0.0,
+      "failures": [],
+      "scope": "Endpoint only; no continuous approach corridor or integrated collision probability"
+    },
+    {
+      "check": "source_unchanged_during_verification",
+      "passed": true
+    }
+  ],
+  "passed": false,
+  "wall_seconds": 0.591071605682373,
+  "cpu_seconds": 0.591038914,
+  "scope": "Computational contract only; no physical validation, external demand or industry-creation superiority inferred",
+  "checker_chain_sha256": {
+    "verify_science.py": "e37ff7341cfca401885b98acdce107a532d781e4633c5539f6544014cd5ea2a1",
+    "verify_arrangement.py": "f6543f9c39d21e85e8fff84fe78047cd2ab094b0f254255140192bd1d42ba1bc"
+  },
+  "amendment": "Final arrangement API adaptation adds preregistered refusal and successor endpoint cases before first arrangement outcome; earlier route checker is unchanged"
+}

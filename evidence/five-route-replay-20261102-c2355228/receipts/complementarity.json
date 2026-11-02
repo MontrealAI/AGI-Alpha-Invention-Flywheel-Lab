@@ -1,0 +1,73 @@
+{
+  "schema": "public-portfolio-independent-science/v1",
+  "route": "complementarity",
+  "source_hashes": {
+    "experiments/public_portfolio_20261102/complementarity/PREREGISTRATION.json": "8c420598312fa2818aa140bff68c58fba3348e693dc2f45d5e3f150c06ffe0ee",
+    "experiments/public_portfolio_20261102/complementarity/fresh.py": "40fd58ae795ea0568e3e6f656d2cf62659ba795581ba7a8a02bbe10afd719187",
+    "experiments/public_portfolio_20261102/complementarity/thermal.py": "0b59d6e09c119da9798b735b991ccc79aefca093fcce96a1a59e5b7631fffa38"
+  },
+  "checker_sha256": "e37ff7341cfca401885b98acdce107a532d781e4633c5539f6544014cd5ea2a1",
+  "protocol_sha256": "ba33ab89ce5eb867e22d601eb654256f263dd42a3522e88bce0399352c37a8a2",
+  "annex_sha256": "442335717989ee98e1ac5951faae3b43d28633b9ba46eac42f09f2d8359bed0c",
+  "nonce_commitment_sha256": "82e582eb59dc658fd20b9490327d7b6c383d2d3125e8e0d0cf4877251068893f",
+  "checks": [
+    {
+      "check": "independent_complementarity_feasibility",
+      "passed": true,
+      "feasible": [
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "check": "independent_energy_and_inventory_conservation",
+      "passed": true,
+      "residuals": {
+        "heat_kw": 0.0,
+        "storage_kwh": 7.105427357601002e-15,
+        "electrical_excess_kw": 0.0,
+        "source_excess_kw": 0.0,
+        "initial_final_kwh": 0.0
+      }
+    },
+    {
+      "check": "storage_tampering_rejected",
+      "passed": true
+    },
+    {
+      "check": "insufficient_power_without_source_refused",
+      "passed": true
+    },
+    {
+      "check": "super_carnot_fraction_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "nonfinite_thermal_demand_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "independent_water_and_salt_balances",
+      "passed": true,
+      "cases": 32,
+      "max_error_kg_h": 5.684341886080802e-14
+    },
+    {
+      "check": "inverted_salt_concentration_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "source_unchanged_during_verification",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "wall_seconds": 0.26126742362976074,
+  "cpu_seconds": 0.29806300999999996,
+  "scope": "Computational contract only; no physical validation, external demand or industry-creation superiority inferred"
+}

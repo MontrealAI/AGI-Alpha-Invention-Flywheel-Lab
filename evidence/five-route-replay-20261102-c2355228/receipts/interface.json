@@ -1,0 +1,73 @@
+{
+  "schema": "public-portfolio-independent-science/v1",
+  "route": "interface",
+  "source_hashes": {
+    "experiments/public_portfolio_20261102/interface/PREREGISTRATION.json": "31c7b83fb4c76469824473b0e631e1f9508b4e8d81dcdc9e27f6720f151c0336",
+    "experiments/public_portfolio_20261102/interface/__init__.py": "d5ceb3f094269b6dd4fc85dc52b52235113ff57bdda3f733e80a03d58d33608d",
+    "experiments/public_portfolio_20261102/interface/instrument.py": "3dcb3f1b968ee4d648679640ce3806aaebc4bc7725ac6e178b8df13b6d4a3e19",
+    "experiments/public_portfolio_20261102/interface/study.py": "d3804e0b12abe9e9c70ff4c6a6ade97b8a9bb03debd0e67e669a448ed9b5d59e"
+  },
+  "checker_sha256": "e37ff7341cfca401885b98acdce107a532d781e4633c5539f6544014cd5ea2a1",
+  "protocol_sha256": "ba33ab89ce5eb867e22d601eb654256f263dd42a3522e88bce0399352c37a8a2",
+  "annex_sha256": "442335717989ee98e1ac5951faae3b43d28633b9ba46eac42f09f2d8359bed0c",
+  "nonce_commitment_sha256": "82e582eb59dc658fd20b9490327d7b6c383d2d3125e8e0d0cf4877251068893f",
+  "checks": [
+    {
+      "check": "independent_beer_lambert_exact_recovery",
+      "passed": true,
+      "cases": 64,
+      "max_absolute_error": 9.603429163007604e-15
+    },
+    {
+      "check": "propagated_density_intervals_cover_bounded_measurement_noise",
+      "passed": true,
+      "cases": 64
+    },
+    {
+      "check": "strong_standard_linear_inversion_ties",
+      "passed": true
+    },
+    {
+      "check": "independent_known_geometry_spatial_reconstruction",
+      "passed": true,
+      "rays": 12,
+      "pixels": 4,
+      "max_absolute_error": 4.718447854656915e-15
+    },
+    {
+      "check": "rank_deficient_geometry_refused",
+      "passed": true,
+      "outcome": "refused"
+    },
+    {
+      "check": "nonpositive_corrected_signal_refused",
+      "passed": true,
+      "outcome": "refused"
+    },
+    {
+      "check": "nonfinite_observation_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "mismatched_energy_shape_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "coherent_gain_mismatch_exposes_declared_identifiability_limit",
+      "passed": true,
+      "accepted_under_wrong_model": true,
+      "actual_density_error": 0.34999999999999487,
+      "interpretation": "Expected negative control: data-only guard is not physical model validation"
+    },
+    {
+      "check": "source_unchanged_during_verification",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "wall_seconds": 0.004594087600708008,
+  "cpu_seconds": 0.004593029999999998,
+  "scope": "Computational contract only; no physical validation, external demand or industry-creation superiority inferred"
+}

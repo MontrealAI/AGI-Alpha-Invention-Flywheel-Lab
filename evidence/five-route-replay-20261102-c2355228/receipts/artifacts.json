@@ -1,0 +1,245 @@
+{
+  "schema": "public-portfolio-independent-artifact-replay/v1",
+  "checker_sha256": "21a95a5267c729897daf753a702634c3b146878427325b23f62d4de55748a1e0",
+  "base_checker_sha256": "e37ff7341cfca401885b98acdce107a532d781e4633c5539f6544014cd5ea2a1",
+  "routes": {
+    "purpose": {
+      "checks": [
+        {
+          "stage": "K1",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K1_00.json",
+          "passed": true
+        },
+        {
+          "stage": "K1",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K1_01.json",
+          "passed": true
+        },
+        {
+          "stage": "K1",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K1_02.json",
+          "passed": true
+        },
+        {
+          "stage": "K1",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K1_03.json",
+          "passed": true
+        },
+        {
+          "stage": "K1",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K1_04.json",
+          "passed": true
+        },
+        {
+          "stage": "K1",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K1_05.json",
+          "passed": true
+        },
+        {
+          "stage": "K1",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K1_06.json",
+          "passed": true
+        },
+        {
+          "stage": "K1",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K1_07.json",
+          "passed": true
+        },
+        {
+          "stage": "K1",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K1_08.json",
+          "passed": true
+        },
+        {
+          "stage": "K1",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K1_09.json",
+          "passed": true
+        },
+        {
+          "stage": "K2",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K2_00.json",
+          "passed": true
+        },
+        {
+          "stage": "K2",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K2_01.json",
+          "passed": true
+        },
+        {
+          "stage": "K2",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K2_02.json",
+          "passed": true
+        },
+        {
+          "stage": "K2",
+          "path": "experiments/public_portfolio_20261102/purpose/results/K2_03.json",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "k1_accepted": true,
+      "k2_accepted": true,
+      "scope": "All10 saved delivery and4 diagnosis certificates independently reconstructed on their authored finite graphs; no continuous physical validity"
+    },
+    "interface": {
+      "passed": true,
+      "k1_accepted": true,
+      "k2_accepted": true,
+      "k1_saved_spectra": 64,
+      "k1_independent_output_error": 4.440892098500626e-16,
+      "k2_saved_rays": 99,
+      "k2_independent_output_error": 9.325873406851315e-15,
+      "localized_cell": 6,
+      "scope": "Independent replay of saved64-spectrum K1 artifact and one99-ray K2 artifact; producer aggregate192/16-case counts are not independently measured physical reliability"
+    },
+    "complementarity": {
+      "passed": true,
+      "k1_accepted": true,
+      "k2_accepted": true,
+      "schedules": [
+        {
+          "case": "K1-continuous-process-heat",
+          "arm": "A+B-retained",
+          "passed": true,
+          "max_residual": 2.2737367544323206e-13
+        },
+        {
+          "case": "K1-continuous-process-heat",
+          "arm": "conventional-unrestricted",
+          "passed": true,
+          "max_residual": 2.2737367544323206e-13
+        },
+        {
+          "case": "K1-continuous-process-heat",
+          "arm": "equal-content-ordinary-reuse",
+          "passed": true,
+          "max_residual": 2.2737367544323206e-13
+        },
+        {
+          "case": "K1-continuous-process-heat",
+          "arm": "no-inheritance-fresh-build",
+          "passed": true,
+          "max_residual": 2.2737367544323206e-13
+        },
+        {
+          "case": "K2-hypersaline-water-recovery",
+          "arm": "A+B-retained",
+          "passed": true,
+          "max_residual": 1.8189894035458565e-12
+        },
+        {
+          "case": "K2-hypersaline-water-recovery",
+          "arm": "conventional-unrestricted",
+          "passed": true,
+          "max_residual": 1.8189894035458565e-12
+        },
+        {
+          "case": "K2-hypersaline-water-recovery",
+          "arm": "equal-content-ordinary-reuse",
+          "passed": true,
+          "max_residual": 1.8189894035458565e-12
+        },
+        {
+          "case": "K2-hypersaline-water-recovery",
+          "arm": "no-inheritance-fresh-build",
+          "passed": true,
+          "max_residual": 1.8189894035458565e-12
+        }
+      ],
+      "mass_balance_error_kg_h": 0.0,
+      "scope": "Independent primal energy/storage/source/electrical constraints for all saved feasible schedules and brine mass balance; infeasibility and plant performance are distinct claims"
+    },
+    "foundry": {
+      "passed": true,
+      "k1_accepted": true,
+      "k2_accepted": true,
+      "designs": [
+        {
+          "design": "K1",
+          "passed": true,
+          "worlds": 18,
+          "independent_worst_mean": 0.9923216232604777,
+          "minimum_absorption": 0.0007587504822028635,
+          "max_maxwell_residual": 9.605435040895068e-16,
+          "max_producer_metric_difference": 2.220446049250313e-16
+        },
+        {
+          "design": "spectral-routing-A/retained_procedure",
+          "passed": true,
+          "worlds": 18,
+          "independent_worst_mean": 0.8609059129391974,
+          "minimum_absorption": 0.0025594374049064707,
+          "max_maxwell_residual": 1.4223209249618572e-15,
+          "max_producer_metric_difference": 3.3306690738754696e-16
+        },
+        {
+          "design": "spectral-routing-A/ordinary_equal_content",
+          "passed": true,
+          "worlds": 18,
+          "independent_worst_mean": 0.8609059129391974,
+          "minimum_absorption": 0.0025594374049064707,
+          "max_maxwell_residual": 1.4223209249618572e-15,
+          "max_producer_metric_difference": 3.3306690738754696e-16
+        },
+        {
+          "design": "spectral-routing-A/equal_content_no_discovery_procedure",
+          "passed": true,
+          "worlds": 18,
+          "independent_worst_mean": 0.8609059129391974,
+          "minimum_absorption": 0.0025594374049064707,
+          "max_maxwell_residual": 1.4223209249618572e-15,
+          "max_producer_metric_difference": 3.3306690738754696e-16
+        },
+        {
+          "design": "spectral-routing-A/fresh_specialist_no_inheritance",
+          "passed": true,
+          "worlds": 18,
+          "independent_worst_mean": 0.8609059129391974,
+          "minimum_absorption": 0.0025594374049064707,
+          "max_maxwell_residual": 1.4223209249618572e-15,
+          "max_producer_metric_difference": 3.3306690738754696e-16
+        },
+        {
+          "design": "spectral-routing-B/retained_procedure",
+          "passed": true,
+          "worlds": 18,
+          "independent_worst_mean": 0.8617930523077598,
+          "minimum_absorption": 0.002613815203732682,
+          "max_maxwell_residual": 1.8204912514346685e-15,
+          "max_producer_metric_difference": 2.220446049250313e-16
+        },
+        {
+          "design": "spectral-routing-B/ordinary_equal_content",
+          "passed": true,
+          "worlds": 18,
+          "independent_worst_mean": 0.8617930523077598,
+          "minimum_absorption": 0.002613815203732682,
+          "max_maxwell_residual": 1.8204912514346685e-15,
+          "max_producer_metric_difference": 2.220446049250313e-16
+        },
+        {
+          "design": "spectral-routing-B/equal_content_no_discovery_procedure",
+          "passed": true,
+          "worlds": 18,
+          "independent_worst_mean": 0.8617930523077598,
+          "minimum_absorption": 0.002613815203732682,
+          "max_maxwell_residual": 1.8204912514346685e-15,
+          "max_producer_metric_difference": 2.220446049250313e-16
+        },
+        {
+          "design": "spectral-routing-B/fresh_specialist_no_inheritance",
+          "passed": true,
+          "worlds": 18,
+          "independent_worst_mean": 0.8617930523077598,
+          "minimum_absorption": 0.002613815203732682,
+          "max_maxwell_residual": 1.8204912514346685e-15,
+          "max_producer_metric_difference": 2.220446049250313e-16
+        }
+      ],
+      "scope": "All declared18-world K1 and8 K2 arm/task designs reconstructed through independent batched Maxwell boundary equations; no fabricated-device, continuous-band or industrial-system guarantee"
+    }
+  },
+  "passed": true,
+  "wall_seconds": 0.5298638343811035,
+  "scope": "Frozen saved output contracts only; actual commerce and physical validation unestablished"
+}

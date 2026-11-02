@@ -1,0 +1,84 @@
+{
+  "schema": "public-portfolio-independent-science/v1",
+  "route": "foundry",
+  "source_hashes": {
+    "experiments/public_portfolio_20261102/foundry/PREREGISTRATION.json": "c3393cdaed76cdf72b1f0ebdfaac7122c23c85f573075e0929f809642011abad",
+    "experiments/public_portfolio_20261102/foundry/magnesium_fluoride.yml": "659b28dcf221d35350ec1787e5e713a5a5ae2a4b6fb7d144cff5bac265168bc5",
+    "experiments/public_portfolio_20261102/foundry/optics.py": "ab9b400d370b314e866b451a63163589a20bd9ed4c29c5757063b76b3ba41728",
+    "experiments/public_portfolio_20261102/foundry/plot_results.py": "a5e4e64e31b00f6258d0578bdbf0a9eefaece3e1d889aa0cfd463143d9ef1a16",
+    "experiments/public_portfolio_20261102/foundry/run.py": "16eedb9ce545117217747fa310e18a265493b7cb55441814768045274101c4f5",
+    "experiments/public_portfolio_20261102/foundry/silica.yml": "6f5dc13b9a76e26437e0b3e4719b4895964ebd85e09643c85a1a3c596394bcf3",
+    "experiments/public_portfolio_20261102/foundry/tantalum_pentoxide.yml": "4b397b398f51eaec1111413e77c4ef03c1c35bdb0c403c9481ea20d974e5f570"
+  },
+  "checker_sha256": "e37ff7341cfca401885b98acdce107a532d781e4633c5539f6544014cd5ea2a1",
+  "protocol_sha256": "ba33ab89ce5eb867e22d601eb654256f263dd42a3522e88bce0399352c37a8a2",
+  "annex_sha256": "442335717989ee98e1ac5951faae3b43d28633b9ba46eac42f09f2d8359bed0c",
+  "nonce_commitment_sha256": "82e582eb59dc658fd20b9490327d7b6c383d2d3125e8e0d0cf4877251068893f",
+  "checks": [
+    {
+      "check": "independent_bare_fresnel_reflectance",
+      "passed": true
+    },
+    {
+      "check": "zero_thickness_is_bare_interface",
+      "passed": true
+    },
+    {
+      "check": "independent_single_layer_airy_response",
+      "passed": true
+    },
+    {
+      "check": "normal_incidence_polarization_equality",
+      "passed": true
+    },
+    {
+      "check": "lossless_multilayer_energy_conservation",
+      "passed": true,
+      "cases": 16,
+      "max_error": 1.1102230246251565e-15
+    },
+    {
+      "check": "absorbing_layer_nonnegative_dissipation",
+      "passed": true,
+      "minimum_absorption": 0.0009421577313702967
+    },
+    {
+      "check": "negative_thickness_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "nonfinite_thickness_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "unsupported_angle_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "unsupported_wavelength_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "empty_wavelengths_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "multidimensional_wavelengths_refused",
+      "passed": true,
+      "outcome": "exception_rejection"
+    },
+    {
+      "check": "source_unchanged_during_verification",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "wall_seconds": 0.008054018020629883,
+  "cpu_seconds": 0.00805292199999999,
+  "scope": "Computational contract only; no physical validation, external demand or industry-creation superiority inferred"
+}
