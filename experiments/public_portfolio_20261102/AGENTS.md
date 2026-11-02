@@ -18,6 +18,8 @@ The R2 controller reserves each independent case exclusively and uses one native
 
 If the host loses an in-memory scheduler, preserve the account and use a separately published execution-only recovery amendment. Reconstruct historical controller state in a disposable verification replay; require exact authenticated requests, native actions, proof bodies, cash and obligations before appending only the missing suffix through the original owner. Disposable signatures never become account authority. The unchanged financial function, separately hashed recovery adapter, 12 interruption fixtures and eight independent peer checks establish this bounded recovery contract; successful fixtures do not establish completion of interrupted campaign accounts.
 
+The qualified fast adapter uses a read-only native view after normal original authentication and full audit. It executes frozen financial gating on historical snapshots and requires exact entire original-export equality without ignored signatures or hashes. Its16 boundary tests and11 independent checks cover repeated interruption and read-only completed-result closeout. Bind exact source, qualification and review before use. One-case calls retain the full modeled horizon; an actual guard failure stops dispatch, while a genuine host interruption can continue only the same authenticated account.
+
 ## Separate the warranted claims
 
 V2 products are nonexclusive copies of independently checked computational evidence plus modeled checking/support. A copy is not another scientific discovery or physical deployment. Approval does not confer commercial rights or customer consent. Unresolved-rights and missing-scientific-acceptance gates must refuse offers.

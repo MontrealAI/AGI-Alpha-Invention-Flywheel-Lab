@@ -175,6 +175,7 @@ jobs:
           python experiments/public_portfolio_20261102/verification/r2_guard_tests_002.py --output "$RUNNER_TEMP/released-portfolio-guards.json"
           python -m unittest experiments.public_portfolio_20261102.verification.test_recovery -v
           python -m unittest experiments.public_portfolio_20261102.verification.test_dispatch_case -v
+          python -m unittest experiments.public_portfolio_20261102.verification.test_recovery_fast -v
           python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output "$RUNNER_TEMP/released-portfolio-artifacts.json"
           python experiments/public_portfolio_20261102/verification/r2_recheck_retained.py --public-root experiments/public_portfolio_20261102/evidence/economics-r2/public --audit-receipts experiments/public_portfolio_20261102/evidence/economics-r2/audit-receipts --output "$RUNNER_TEMP/released-portfolio-finance.json"
       - name: Retain released portfolio computational qualification

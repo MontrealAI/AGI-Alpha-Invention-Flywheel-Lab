@@ -32,6 +32,7 @@ jobs:
           python experiments/public_portfolio_20261102/verification/r2_guard_tests_002.py --output "$RUNNER_TEMP/public-portfolio-r2-guards.json"
           python -m unittest experiments.public_portfolio_20261102.verification.test_recovery -v
           python -m unittest experiments.public_portfolio_20261102.verification.test_dispatch_case -v
+          python -m unittest experiments.public_portfolio_20261102.verification.test_recovery_fast -v
       - name: Independently reconstruct frozen actual scientific artifacts
         run: python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output "$RUNNER_TEMP/public-portfolio-artifact-replay.json"
       - name: Recheck the ten retained native financial exports
