@@ -78,6 +78,12 @@ Use structural mapping, executable strategy construction/composition, evidence-g
 
 Report commercial success, invention, retained-method advantage and physical/scientific expansion separately. Transformational work must remove a consequential constraint and validate the enabling instrument; routine repair is not automatically transformation. Optimality claims apply only to the tested feasible set, information and assumptions, never to all strategies or markets.
 
+### Foundational and flagship research
+
+**Transformational Intelligence: Learning to Change the Game** is our most important, flagship paper. **AGI ALPHA: A Scalable Substrate for Intelligence Organizations** is our foundational paper. Use the [research foundations in practice](docs/harness/RESEARCH_FOUNDATIONS.md) guide for both and for **Invent the Economy**, **The World as an Output**, **Beyond the Production Frontier**, and **Beyond the Original Problem**; the [research library](docs/research/README.md) provides stable browser readers and byte-preserved editions.
+
+Apply these papers to the current consequential work: separate authorized purpose from inherited means, construct and test missing means or voluntary productive arrangements, use explicit authority and validator-gated evidence, and retain useful instruments for fresh successor work. Record the applicable paper/page, assumptions, executable change, strongest complete alternative, acceptance, full costs and reuse limits in the existing candidate or receipt. Read the relevant mechanism, not a mandatory sequential syllabus. Paper publication is not experimental reproduction, current qualification, achieved AGI/ASI, commercial profit or additional authority; preserve each paper's stated model and comparison limits.
+
 ### Apply the published papers to the flagship
 
 Use the [practical paper map](docs/harness/OUT_PAPERS.md) and its browser-reading links: **OUT-LEARN** (observation/calibration), **OUT-THINK** (executable representations), **OUT-DESIGN** (usable capacity and safe transitions), **OUT-STRATEGISE** (information plus robust construction), **OUT-EXECUTE** (qualified boundary reuse), and **OUT-EVOLVE** (retained means enabling fresh work). Select by the actual missing means; do not force a six-stage pipeline or substitute paper/framework work for consequential delivery.
