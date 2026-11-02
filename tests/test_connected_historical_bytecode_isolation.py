@@ -32,19 +32,20 @@ class HistoricalPythonCacheIsolationTests(unittest.TestCase):
                                                  'PYTHONDONTWRITEBYTECODE': '1'})
             self.assertEqual(old.returncode, 0, old.stderr)
             self.assertEqual(old.stdout.strip(), 'EVIL')
-            checked = upgrades._run_pinned_historical_python(root, code, {})
+            checked = upgrades._run_pinned_historical_python(root, code, {}, upgrades.source_inventory(root))
             self.assertEqual(checked.returncode, 0, checked.stderr)
             self.assertEqual(checked.stdout.strip(), 'GOOD')
             self.assertEqual(vetted, hashlib.sha256(path.read_bytes()).hexdigest())
 
     def test_private_parent_environment_is_not_inherited(self):
         with tempfile.TemporaryDirectory(prefix='native-history-environment-') as folder:
-            program = ('import json,os,sys;print(json.dumps({'
+            (Path(folder) / 'synthetic_fixture.py').write_text('MARKER=1\\n')
+            program = ('import json,os,sys;print(json.dumps({' 
                        '"marker":os.getenv("AGI_ALPHA_SYNTHETIC_SECRET"),'
                        '"cache":sys.pycache_prefix,'
                        '"no_write":sys.dont_write_bytecode}))')
             with patch.dict(os.environ, {'AGI_ALPHA_SYNTHETIC_SECRET': 'not-for-child'}):
-                completed = upgrades._run_pinned_historical_python(Path(folder), program, {})
+                completed = upgrades._run_pinned_historical_python(Path(folder), program, {}, upgrades.source_inventory(Path(folder)))
             self.assertEqual(completed.returncode, 0, completed.stderr)
             outcome = json.loads(completed.stdout)
             self.assertIsNone(outcome['marker'])
