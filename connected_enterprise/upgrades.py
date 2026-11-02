@@ -75,16 +75,25 @@ def _reject_unregistered_python_executables(root):
             raise ValueError('UNREGISTERED_HISTORICAL_EXECUTABLE_REFUSED')
 
 
-def _run_pinned_historical_python(root, code, payload):
-    """Use isolated interpreter startup and reject unsigned native imports both
-    before launch and in the child before historical code enters sys.path.
+def _run_pinned_historical_python(root, code, payload, expected_inventory):
+    """Execute only a freshly staged, byte-verified Python import closure.
+
+    The original root remains the financial/evidence-data root; its Python
+    modules are not on sys.path. This is defense in depth, not independent
+    authentication of a ticket-selected historical verifier or a sandbox.
     """
     from tempfile import TemporaryDirectory
+    from .historical_snapshot import stage_verified_python_closure
     root = Path(root).absolute()
     _reject_unregistered_python_executables(root)
-    with TemporaryDirectory(prefix='agi-alpha-pinned-history-pycache-') as cache:
-        # -I ignores PYTHONPATH and cwd during startup; installed packages remain
-        # available. The trusted -c bootstrap inserts the tree only after checks.
+    with TemporaryDirectory(prefix='agi-alpha-pinned-history-') as directory:
+        private = Path(directory)
+        snapshot = stage_verified_python_closure(root, private / 'source',
+                                                  expected_inventory, source_inventory)
+        cache = private / 'cache'
+        cache.mkdir(mode=0o700)
+        # -I excludes PYTHONPATH and cwd during startup. The child still
+        # checks the original file tree, then imports only the staged bytes.
         bootstrap = f"""import pathlib,sys
 root=pathlib.Path({str(root)!r})
 blocked={_UNREGISTERED_IMPORT_SUFFIXES!r}
@@ -94,15 +103,18 @@ for item in root.rglob('*'):
  if item.is_symlink():raise SystemExit('HISTORICAL_SOURCE_SYMLINK_REFUSED')
  if item.is_file() and (item.suffix.lower() in blocked or (item.suffix.lower()=='.pyc' and '__pycache__' not in item.parts)):
   raise SystemExit('UNREGISTERED_HISTORICAL_EXECUTABLE_REFUSED')
-sys.pycache_prefix={cache!r}
+sys.pycache_prefix={str(cache)!r}
 sys.dont_write_bytecode=True
-sys.path.insert(0,str(root))
+sys.path.insert(0,{str(snapshot)!r})
 """
-        env = {'PYTHONPATH': str(root), 'PYTHONDONTWRITEBYTECODE': '1',
-               'PYTHONPYCACHEPREFIX': cache, 'PYTHONNOUSERSITE': '1',
+        env = {'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONNOUSERSITE': '1',
                'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8', 'LC_ALL': 'C.UTF-8'}
-        return subprocess.run([sys.executable, '-I', '-c', bootstrap + code], input=json.dumps(payload),
-                              text=True, capture_output=True, cwd=root, env=env, timeout=60)
+        done = subprocess.run([sys.executable, '-I', '-c', bootstrap + code],
+                              input=json.dumps(payload), text=True,
+                              capture_output=True, cwd=root, env=env, timeout=60)
+        if source_inventory(root) != expected_inventory:
+            raise ValueError('PINNED_HISTORICAL_SOURCE_CHANGED_DURING_EXECUTION')
+        return done
 
 
 def preflight_ticket_size(output):
@@ -172,7 +184,7 @@ with scope:
  r=audit_journal(p['record'],root=p['root'],manifest=p['manifest'])
  assert r['accepted'];print(json.dumps(r,sort_keys=True))
 """
-    done = _run_pinned_historical_python(root, code, payload)
+    done = _run_pinned_historical_python(root, code, payload, body['verifier_files'])
     if done.returncode:
         raise ValueError('PINNED_HISTORICAL_AUDIT_FAILED:' + done.stderr[-1200:])
     receipt = json.loads(done.stdout)
@@ -248,7 +260,7 @@ with scope, JournalAccount(p['root'],p['manifest'],p['path'],opening=p['opening'
  if reuse and clean_authorization_snapshot(p['root'],p['path'],p['operating'])!=after:raise ValueError('OWNER_AUTHORITY_CHANGED_DURING_AUTHORIZATION')
  print(json.dumps({'body':body,'signature':hmac.new(a._account._key,b'native-source-transition\\n'+canonical(body),hashlib.sha256).hexdigest()},sort_keys=True))
 '''
-    done = _run_pinned_historical_python(historical_root, code, payload)
+    done = _run_pinned_historical_python(historical_root, code, payload, files)
     if done.returncode:
         raise ValueError('SOURCE_UPGRADE_AUTHORIZATION_FAILED:' + done.stderr[-1200:])
     ticket = json.loads(done.stdout)
