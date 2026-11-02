@@ -54,12 +54,16 @@ No physical measurement file was evaluated for the results above. See [acquisiti
 
 The public work is [PR #147](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/147). Publication of this checkpoint does not itself claim qualified merge, release or operation from a release.
 
+The canonical package inventory now includes a fixed 39-member public closure through `release_inventory.py`. It rejects missing or linked members and ignores unlisted datasets, private state and caches. A three-line inventory hook leaves all 42 finance-bound source files and frozen scientific/accounting code unchanged. Twenty-nine relevant tests and the retained public-account replay passed from a fresh, extracted 98-file dependency closure. This focused local check does not substitute for the complete release gates. The campaign workflow now also qualifies relevant main pushes.
+
+[Review PR #149](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/149), commit `f926677385e22bef3ae7cb20a90446902fdb2596`, independently identified missing mandatory platform-start markers in both workflow jobs. Its workflow-only correction and known action pins have been incorporated into the combined candidate. The original failing runs remain failures; this is source adoption of a narrow repair, not a formal approval or a claim that the separate review branch passed all checks. Actual released-package inclusion and operation still require their own receipts.
+
 ## Reproduce from the repository root
 
 Use Python 3.12 with NumPy 2.3.5, SciPy 1.17.0 and cryptography 50.0.2. Plotting additionally requires Matplotlib. Install dependencies in a suitable isolated environment; these commands create only local research outputs.
 
 ```sh
-python -m unittest experiments.capability_transfer_20261102.test_instrument experiments.capability_transfer_20261102.test_catalog experiments.capability_transfer_20261102.test_economics -v
+python -m unittest experiments.capability_transfer_20261102.test_instrument experiments.capability_transfer_20261102.test_catalog experiments.capability_transfer_20261102.test_economics experiments.capability_transfer_20261102.test_release_inventory -v
 
 python -m experiments.capability_transfer_20261102.run_stage_b run \
   --freeze experiments/capability_transfer_20261102/FROZEN_STAGE_B_SERIALIZATION_FIX.json \
