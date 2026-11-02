@@ -62,8 +62,11 @@ class NativePublicClaimBindingTests(unittest.TestCase):
                  'orders':[{'id':'market062-'+buyer,'buyer':buyer,'state':'released',
                             'price':str(1500*MICRO)} for buyer in 'ABC'],
                  'actions':([{'op':'offer','args':{'id':'market062-'+buyer,'buyer':buyer,
-                            'job_id':'evidence_matrix-market062-'+buyer}} for buyer in 'ABC'] +
-                            [{'op':'reserve','args':{'id':receipt['plan_id']},'before':before}])},
+                            'job_id':'evidence_matrix-market062-'+buyer}} for buyer in 'AB'] +
+                            [{'op':'reserve','args':{'id':receipt['plan_id']},'before':before},
+                             {'op':'finish','args':{'id':receipt['plan_id']}},
+                             {'op':'offer','args':{'id':'market062-C','buyer':'C',
+                              'job_id':'evidence_matrix-market062-C'}}])},
                 'connected_journal':{'entries':[{'key':'spend:third-sensor-adapter',
                      'status':'COMPLETE','funding':'EARNED','request':request,'receipt':receipt}]}}
         reported={'sales':[{'id':'market062-'+buyer,'status':'ACCEPTED_AND_COLLECTED',
@@ -80,7 +83,8 @@ class NativePublicClaimBindingTests(unittest.TestCase):
         # Every job ID here names a valid accepted service, but paying for
         # A's measurement cannot support a report about buyer C's output.
         p,m,n,r=self.fixture()
-        n['ledger']['actions'][2]['args']['job_id']='evidence_matrix-market062-A'
+        next(a for a in n['ledger']['actions'] if a.get('op')=='offer'
+             and a['args']['id']=='market062-C')['args']['job_id']='evidence_matrix-market062-A'
         with self.assertRaisesRegex(ValueError,'NATIVE_OFFER_DELIVERABLE_IDENTITY_MISMATCH'):
             check_native_claim_binding('shared',n,r,m,p)
 
@@ -91,8 +95,24 @@ class NativePublicClaimBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'NATIVE_OFFER_DELIVERABLE_IDENTITY_MISMATCH'):
             check_native_claim_binding('shared',n,r,m,p)
         p,m,n,r=self.fixture()
-        n['ledger']['actions'][2]['args']['buyer']='A'
+        next(a for a in n['ledger']['actions'] if a.get('op')=='offer'
+             and a['args']['id']=='market062-C')['args']['buyer']='A'
         with self.assertRaisesRegex(ValueError,'NATIVE_OFFER_DELIVERABLE_IDENTITY_MISMATCH'):
+            check_native_claim_binding('shared',n,r,m,p)
+
+    def test_earnings_expense_must_precede_successor_offer(self):
+        p,m,n,r=self.fixture()
+        tape=n['ledger']['actions']
+        successor=next(a for a in tape if a.get('op')=='offer'
+                       and a['args']['id']=='market062-C')
+        tape.remove(successor)
+        tape.insert(2,successor)
+        with self.assertRaisesRegex(ValueError,'EARNED_ADAPTER_NOT_BEFORE_SUCCESSOR_OFFER'):
+            check_native_claim_binding('shared',n,r,m,p)
+        p,m,n,r=self.fixture()
+        n['ledger']['actions']=[a for a in n['ledger']['actions']
+            if a.get('op')!='finish']
+        with self.assertRaisesRegex(ValueError,'EARNED_ADAPTER_NOT_BEFORE_SUCCESSOR_OFFER'):
             check_native_claim_binding('shared',n,r,m,p)
 
     def test_advertised_adapter_receipt_cannot_be_forged(self):
