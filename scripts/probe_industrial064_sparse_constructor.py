@@ -1,6 +1,8 @@
 """One source-bound offline industrial construction; never opens or mutates a native account."""
 import argparse
 import hashlib
+import subprocess
+from importlib.metadata import version
 import json
 import resource
 import sys
@@ -48,6 +50,9 @@ def run(out):
     receipt = {
         "schema": "agi-alpha/industrial064-no-account-prototype-result/v1",
         "protocol_sha256": file_digest(PROTOCOL),
+        "checked_out_git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+        "python_version": sys.version.split()[0],
+        "dependency_versions": {name: version(name) for name in ("ortools", "numpy", "scipy")},
         "source_file_sha256": source,
         "source_bound_input_sha256": req["input_sha256"],
         "source_head": "GitHub Actions checks out its exact PR head, not an inferred main",
