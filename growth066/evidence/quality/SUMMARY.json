@@ -1,0 +1,460 @@
+{
+  "accepted": true,
+  "actual_model_billing": null,
+  "actual_packets_produced": 6,
+  "cases": [
+    {
+      "acceptance": {
+        "accepted": true,
+        "checker_scope": "Exact synthetic construction truth; no financial postings, legal assurance or real-world accuracy claim",
+        "errors": [],
+        "input_sha256": "fb517eacc1f8def333a5338b9180250b0f118e4a5f32b8963f1a80b61aafcbaf",
+        "matched_groups": 24,
+        "output_sha256": "6258d7c6c6cb7276fdd00af574cf8f3984d1c474927786e154617b1fddceb2b4",
+        "process_cpu_seconds": 0.0010185220000000009,
+        "reported_exceptions": 14,
+        "schema": "growth066/reconciliation-acceptance/v1",
+        "wall_seconds": 0.001017943024635315
+      },
+      "checks": {
+        "bytes": 1553,
+        "path": "growth066/evidence/quality/66101-checks.json",
+        "sha256": "5a7dbd9c159b20bf3e23930b639bc2b1ae2ebcc1ec14af2181cb3e5088577c22"
+      },
+      "corruption_controls": [
+        {
+          "control": "false_match",
+          "errors": [
+            "MATCHES_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "omitted_exception",
+          "errors": [
+            "EXCEPTIONS_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "corrupt_balance",
+          "errors": [
+            "BRIDGE_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "reused_match",
+          "errors": [
+            "UNIQUE_NONEMPTY_SETTLEMENT_REQUIRED"
+          ],
+          "rejected": true
+        }
+      ],
+      "exceptions": 14,
+      "input": {
+        "bytes": 26791,
+        "path": "growth066/evidence/quality/66101-input.json",
+        "sha256": "5c847ba8cdbef6ee1af660c2bb81a31321e611b30976e3627b6f5189297409a6"
+      },
+      "input_rows": {
+        "bank": 43,
+        "invoices": 53,
+        "payments": 55
+      },
+      "matches": 24,
+      "output": {
+        "bytes": 10366,
+        "path": "growth066/evidence/quality/66101-output.json",
+        "sha256": "75043934ad5115f42f0c2fcb3e01a5e9b275c1ff3ce1d696ba0ce610ff79ec3a"
+      },
+      "production_process_cpu_seconds": 0.0009809179999999973,
+      "production_wall_seconds": 0.00098058907315135,
+      "seed": 66101,
+      "truth_sha256": "61cc497e7f910d117dfd6ff640bf887e33cd289e95bee622007e47f2f0c3542c",
+      "truth_source": "Reconstruct with bound quality.make_case(seed); truth never passed to producer"
+    },
+    {
+      "acceptance": {
+        "accepted": true,
+        "checker_scope": "Exact synthetic construction truth; no financial postings, legal assurance or real-world accuracy claim",
+        "errors": [],
+        "input_sha256": "e61865750484f542ed428ac985a425391746b288a72888401e98ff8b046bffc1",
+        "matched_groups": 24,
+        "output_sha256": "8358f38c6b0cd362e96b001ff8fc941a3a003b7b69b58a3af5e66c89cfbe94e4",
+        "process_cpu_seconds": 0.0011792529999999912,
+        "reported_exceptions": 14,
+        "schema": "growth066/reconciliation-acceptance/v1",
+        "wall_seconds": 0.0011784529779106379
+      },
+      "checks": {
+        "bytes": 1555,
+        "path": "growth066/evidence/quality/66102-checks.json",
+        "sha256": "f85a29d899ada921e03cfab05f7f9a2a7b32d7bf036cee5f3cafa78f12fba37a"
+      },
+      "corruption_controls": [
+        {
+          "control": "false_match",
+          "errors": [
+            "MATCHES_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "omitted_exception",
+          "errors": [
+            "EXCEPTIONS_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "corrupt_balance",
+          "errors": [
+            "BRIDGE_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "reused_match",
+          "errors": [
+            "UNIQUE_NONEMPTY_SETTLEMENT_REQUIRED"
+          ],
+          "rejected": true
+        }
+      ],
+      "exceptions": 14,
+      "input": {
+        "bytes": 26784,
+        "path": "growth066/evidence/quality/66102-input.json",
+        "sha256": "aa7e44658a5693656f4654aeed48d4d2e76f6f436b060d62ab7d99518ef00d47"
+      },
+      "input_rows": {
+        "bank": 43,
+        "invoices": 53,
+        "payments": 55
+      },
+      "matches": 24,
+      "output": {
+        "bytes": 10358,
+        "path": "growth066/evidence/quality/66102-output.json",
+        "sha256": "f876e8b02745f38c191f8a65cd52366bcf559d2be6ec9df7e5937b0cc76da2b4"
+      },
+      "production_process_cpu_seconds": 0.0007210739999999882,
+      "production_wall_seconds": 0.000722461030818522,
+      "seed": 66102,
+      "truth_sha256": "b58d84d51bc4c67e7aec7b6c82fe397a3764221075535b0f323072fe3c7d37c7",
+      "truth_source": "Reconstruct with bound quality.make_case(seed); truth never passed to producer"
+    },
+    {
+      "acceptance": {
+        "accepted": true,
+        "checker_scope": "Exact synthetic construction truth; no financial postings, legal assurance or real-world accuracy claim",
+        "errors": [],
+        "input_sha256": "8af9844b4eecd69d9f1a4f46647a6e7e75384b692245e6a241e2993106ee4acd",
+        "matched_groups": 24,
+        "output_sha256": "5012f0f115c34b822a1dfc461da208355f239fcaa41bc91d3520a8cd924b390b",
+        "process_cpu_seconds": 0.002600645999999998,
+        "reported_exceptions": 14,
+        "schema": "growth066/reconciliation-acceptance/v1",
+        "wall_seconds": 0.002603220986202359
+      },
+      "checks": {
+        "bytes": 1553,
+        "path": "growth066/evidence/quality/66103-checks.json",
+        "sha256": "6de9cb235288e72ab33e08d9c4efb6c9ed6101a576fb2ca1fbdc099cbb132f1e"
+      },
+      "corruption_controls": [
+        {
+          "control": "false_match",
+          "errors": [
+            "MATCHES_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "omitted_exception",
+          "errors": [
+            "EXCEPTIONS_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "corrupt_balance",
+          "errors": [
+            "BRIDGE_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "reused_match",
+          "errors": [
+            "UNIQUE_NONEMPTY_SETTLEMENT_REQUIRED"
+          ],
+          "rejected": true
+        }
+      ],
+      "exceptions": 14,
+      "input": {
+        "bytes": 26790,
+        "path": "growth066/evidence/quality/66103-input.json",
+        "sha256": "85d74d76c87112a1c2a345e0d45eb3662c77790bddb110287470c4a558f87542"
+      },
+      "input_rows": {
+        "bank": 43,
+        "invoices": 53,
+        "payments": 55
+      },
+      "matches": 24,
+      "output": {
+        "bytes": 10357,
+        "path": "growth066/evidence/quality/66103-output.json",
+        "sha256": "a95a13e6dfe4dcd3c593a28abca147b02cf57ecc9c2d4050d424bb1224795725"
+      },
+      "production_process_cpu_seconds": 0.001784077000000009,
+      "production_wall_seconds": 0.0017822399968281388,
+      "seed": 66103,
+      "truth_sha256": "a778491b11b3b10c9433d5d8dfa0175f7ca6035ca14ae64e5fbf4ff5275cb446",
+      "truth_source": "Reconstruct with bound quality.make_case(seed); truth never passed to producer"
+    },
+    {
+      "acceptance": {
+        "accepted": true,
+        "checker_scope": "Exact synthetic construction truth; no financial postings, legal assurance or real-world accuracy claim",
+        "errors": [],
+        "input_sha256": "13d86ed4a086f5d046010c69fcdef65bca998de3fb0616a40c835bd46d060fb8",
+        "matched_groups": 24,
+        "output_sha256": "e3f9320526b76ffab9b786d5eaadeb1a8a83730b9cb47bf00ec5dc1129426ee5",
+        "process_cpu_seconds": 0.0013623630000000053,
+        "reported_exceptions": 14,
+        "schema": "growth066/reconciliation-acceptance/v1",
+        "wall_seconds": 0.0013607280561700463
+      },
+      "checks": {
+        "bytes": 1556,
+        "path": "growth066/evidence/quality/66104-checks.json",
+        "sha256": "b23b0f2fa8536359ecd1acaa38e84232a47376a53d376f552c8a090d12c98fc4"
+      },
+      "corruption_controls": [
+        {
+          "control": "false_match",
+          "errors": [
+            "MATCHES_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "omitted_exception",
+          "errors": [
+            "EXCEPTIONS_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "corrupt_balance",
+          "errors": [
+            "BRIDGE_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "reused_match",
+          "errors": [
+            "UNIQUE_NONEMPTY_SETTLEMENT_REQUIRED"
+          ],
+          "rejected": true
+        }
+      ],
+      "exceptions": 14,
+      "input": {
+        "bytes": 26782,
+        "path": "growth066/evidence/quality/66104-input.json",
+        "sha256": "a637b65d1d1d1d2c5e8073ecc3247d9727361472299b278bda2c6eb5397719d6"
+      },
+      "input_rows": {
+        "bank": 43,
+        "invoices": 53,
+        "payments": 55
+      },
+      "matches": 24,
+      "output": {
+        "bytes": 10358,
+        "path": "growth066/evidence/quality/66104-output.json",
+        "sha256": "57e7c58433ed28d35e735b5ef703c5878e7bced5084bc00ed6c400ced6d2ea7e"
+      },
+      "production_process_cpu_seconds": 0.0014190590000000003,
+      "production_wall_seconds": 0.0014193810056895018,
+      "seed": 66104,
+      "truth_sha256": "3bd72430c1cc30afc2c3be11eb1283e0230a97a86c4f32d61ec917cd48fa17ed",
+      "truth_source": "Reconstruct with bound quality.make_case(seed); truth never passed to producer"
+    },
+    {
+      "acceptance": {
+        "accepted": true,
+        "checker_scope": "Exact synthetic construction truth; no financial postings, legal assurance or real-world accuracy claim",
+        "errors": [],
+        "input_sha256": "32423fec0d4d2933ef1359ee483800e16ba3034ec3c02ef5552015bd32b041a9",
+        "matched_groups": 24,
+        "output_sha256": "9bcfc439b934e58499943db6d47d9e64703d1defc3ccac6fdd17d4126ca30646",
+        "process_cpu_seconds": 0.0011562890000000048,
+        "reported_exceptions": 14,
+        "schema": "growth066/reconciliation-acceptance/v1",
+        "wall_seconds": 0.0011552139185369015
+      },
+      "checks": {
+        "bytes": 1555,
+        "path": "growth066/evidence/quality/66105-checks.json",
+        "sha256": "929339adaf497f3af4642dfc1d33d7e202b412e88054541d96bad260630aa055"
+      },
+      "corruption_controls": [
+        {
+          "control": "false_match",
+          "errors": [
+            "MATCHES_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "omitted_exception",
+          "errors": [
+            "EXCEPTIONS_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "corrupt_balance",
+          "errors": [
+            "BRIDGE_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "reused_match",
+          "errors": [
+            "UNIQUE_NONEMPTY_SETTLEMENT_REQUIRED"
+          ],
+          "rejected": true
+        }
+      ],
+      "exceptions": 14,
+      "input": {
+        "bytes": 26802,
+        "path": "growth066/evidence/quality/66105-input.json",
+        "sha256": "708ee872a5fe43244f41f32ce7df7a2ed0d59c6c3eb2b7aff638c3eda69d2af3"
+      },
+      "input_rows": {
+        "bank": 43,
+        "invoices": 53,
+        "payments": 55
+      },
+      "matches": 24,
+      "output": {
+        "bytes": 10373,
+        "path": "growth066/evidence/quality/66105-output.json",
+        "sha256": "c574bfcf412be92017447dfefdd0b78b3f83b26d3b1ee3af699206488869098a"
+      },
+      "production_process_cpu_seconds": 0.0007866840000000097,
+      "production_wall_seconds": 0.000787922996096313,
+      "seed": 66105,
+      "truth_sha256": "53adaf0cfbba88f8975c3ed01732dab385f248ba3999d029421e1ad644c4d374",
+      "truth_source": "Reconstruct with bound quality.make_case(seed); truth never passed to producer"
+    },
+    {
+      "acceptance": {
+        "accepted": true,
+        "checker_scope": "Exact synthetic construction truth; no financial postings, legal assurance or real-world accuracy claim",
+        "errors": [],
+        "input_sha256": "c2f5ae47ffae62f84021ab82a1971301f7a85197c222c639071b490fd8735c7a",
+        "matched_groups": 24,
+        "output_sha256": "43279a686f5e593269daa492c2bccee3c2fa934d7514da377c1ee8cd4d890496",
+        "process_cpu_seconds": 0.0015337980000000029,
+        "reported_exceptions": 14,
+        "schema": "growth066/reconciliation-acceptance/v1",
+        "wall_seconds": 0.0015327408909797668
+      },
+      "checks": {
+        "bytes": 1556,
+        "path": "growth066/evidence/quality/66106-checks.json",
+        "sha256": "f2fb8dc0a099e646cf58a698ce43ce416e793d37a3bdf9ababaf1cc74e7228a1"
+      },
+      "corruption_controls": [
+        {
+          "control": "false_match",
+          "errors": [
+            "MATCHES_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "omitted_exception",
+          "errors": [
+            "EXCEPTIONS_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "corrupt_balance",
+          "errors": [
+            "BRIDGE_MISMATCH"
+          ],
+          "rejected": true
+        },
+        {
+          "control": "reused_match",
+          "errors": [
+            "UNIQUE_NONEMPTY_SETTLEMENT_REQUIRED"
+          ],
+          "rejected": true
+        }
+      ],
+      "exceptions": 14,
+      "input": {
+        "bytes": 26790,
+        "path": "growth066/evidence/quality/66106-input.json",
+        "sha256": "c5eac74ce8b46f0e3f708cc591920dfbbfae86c47c95cc3a4de0ac233e44af93"
+      },
+      "input_rows": {
+        "bank": 43,
+        "invoices": 53,
+        "payments": 55
+      },
+      "matches": 24,
+      "output": {
+        "bytes": 10359,
+        "path": "growth066/evidence/quality/66106-output.json",
+        "sha256": "f515284193510ddd96a45ef9ddeea545e03b117245e81304a2cd2b1a41a55b46"
+      },
+      "production_process_cpu_seconds": 0.0008297770000000038,
+      "production_wall_seconds": 0.0008296170271933079,
+      "seed": 66106,
+      "truth_sha256": "18885b2d462923e8e44270f2e3f06743ff4794a2b37a53de25a8b3c180fba27f",
+      "truth_source": "Reconstruct with bound quality.make_case(seed); truth never passed to producer"
+    }
+  ],
+  "checker_sha256": "a9182a234f21f140b0593c47edb6e202d9ceccbccfa43cc898a273929009584d",
+  "development_seeds": [
+    6601,
+    6602,
+    6603
+  ],
+  "failed_cases": [],
+  "heldout_seeds": [
+    66101,
+    66102,
+    66103,
+    66104,
+    66105,
+    66106
+  ],
+  "max_rss_kib": 10752,
+  "model_API_calls": 0,
+  "process_cpu_seconds": 0.08028623100000001,
+  "producer_sha256": "7962b3da0f58aed809706ff455c94885e6303c5fb82e4dedeff09ad243eedb63",
+  "producer_unchanged_after": true,
+  "python": "3.12.14",
+  "schema": "growth066/heldout-quality-evaluation/v1",
+  "scope": "ACTUAL_EXECUTION_ON_SIX_PROCEDURALLY_WITHHELD_SYNTHETIC_PACKETS_NOT_CUSTOMER_GENERALIZATION",
+  "total_exceptions": 84,
+  "total_input_rows": 906,
+  "total_matches": 144,
+  "wall_seconds": 0.08029120496939868
+}

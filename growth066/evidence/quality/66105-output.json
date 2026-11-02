@@ -1,0 +1,526 @@
+{
+  "bridge": {
+    "bank_activity_cents": 1428177,
+    "closing_balance_cents": 1799085,
+    "matched_bank_cents": 1418673,
+    "matched_fee_cents": 10855,
+    "opening_balance_cents": 370908,
+    "payment_gross_cents": 1437758,
+    "unmatched_bank_cents": 9504,
+    "unmatched_payment_gross_cents": 8230
+  },
+  "exceptions": [
+    {
+      "code": "AMBIGUOUS_AMOUNT",
+      "record_ids": [
+        "b-66105-0039",
+        "p-66105-0049",
+        "p-66105-0050"
+      ]
+    },
+    {
+      "code": "AMOUNT_MISMATCH",
+      "record_ids": [
+        "b-66105-0041",
+        "p-66105-0052"
+      ]
+    },
+    {
+      "code": "DUPLICATE_BANK_REFERENCE",
+      "record_ids": [
+        "b-66105-0037",
+        "b-66105-0038"
+      ]
+    },
+    {
+      "code": "INVALID_CURRENCY",
+      "record_ids": [
+        "b-66105-0042"
+      ]
+    },
+    {
+      "code": "INVALID_CURRENCY",
+      "record_ids": [
+        "p-66105-0053"
+      ]
+    },
+    {
+      "code": "INVALID_DATE",
+      "record_ids": [
+        "b-66105-0043"
+      ]
+    },
+    {
+      "code": "INVALID_DATE",
+      "record_ids": [
+        "p-66105-0054"
+      ]
+    },
+    {
+      "code": "INVALID_INVOICE_REFERENCE",
+      "record_ids": [
+        "p-66105-0055"
+      ]
+    },
+    {
+      "code": "MISSING_REFERENCE",
+      "record_ids": [
+        "b-66105-0039"
+      ]
+    },
+    {
+      "code": "MISSING_REFERENCE",
+      "record_ids": [
+        "p-66105-0049"
+      ]
+    },
+    {
+      "code": "MISSING_REFERENCE",
+      "record_ids": [
+        "p-66105-0050"
+      ]
+    },
+    {
+      "code": "UNMATCHED_BANK",
+      "record_ids": [
+        "b-66105-0040"
+      ]
+    },
+    {
+      "code": "UNMATCHED_PAYMENT",
+      "record_ids": [
+        "p-66105-0051"
+      ]
+    },
+    {
+      "code": "UNPAID_INVOICE",
+      "record_ids": [
+        "i-66105-0053"
+      ]
+    }
+  ],
+  "matches": [
+    {
+      "bank_ids": [
+        "b-66105-0001"
+      ],
+      "fee_cents": 0,
+      "gross_cents": 29433,
+      "invoice_ids": [
+        "i-66105-0001"
+      ],
+      "net_cents": 29433,
+      "payment_ids": [
+        "p-66105-0001"
+      ],
+      "settlement_id": "s-66105-0000"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0002",
+        "b-66105-0003"
+      ],
+      "fee_cents": 383,
+      "gross_cents": 38305,
+      "invoice_ids": [
+        "i-66105-0002",
+        "i-66105-0003"
+      ],
+      "net_cents": 37922,
+      "payment_ids": [
+        "p-66105-0002",
+        "p-66105-0003"
+      ],
+      "settlement_id": "s-66105-0001"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0004"
+      ],
+      "fee_cents": 1363,
+      "gross_cents": 136375,
+      "invoice_ids": [
+        "i-66105-0004",
+        "i-66105-0005",
+        "i-66105-0006"
+      ],
+      "net_cents": 135012,
+      "payment_ids": [
+        "p-66105-0004",
+        "p-66105-0005",
+        "p-66105-0006"
+      ],
+      "settlement_id": "s-66105-0002"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0005",
+        "b-66105-0006"
+      ],
+      "fee_cents": 167,
+      "gross_cents": 16770,
+      "invoice_ids": [
+        "i-66105-0007"
+      ],
+      "net_cents": 16603,
+      "payment_ids": [
+        "p-66105-0007"
+      ],
+      "settlement_id": "s-66105-0003"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0007"
+      ],
+      "fee_cents": 0,
+      "gross_cents": 43657,
+      "invoice_ids": [
+        "i-66105-0008",
+        "i-66105-0009"
+      ],
+      "net_cents": 43657,
+      "payment_ids": [
+        "p-66105-0008",
+        "p-66105-0009"
+      ],
+      "settlement_id": "s-66105-0004"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0008",
+        "b-66105-0009"
+      ],
+      "fee_cents": 851,
+      "gross_cents": 85110,
+      "invoice_ids": [
+        "i-66105-0010",
+        "i-66105-0011",
+        "i-66105-0012"
+      ],
+      "net_cents": 84259,
+      "payment_ids": [
+        "p-66105-0010",
+        "p-66105-0011",
+        "p-66105-0012"
+      ],
+      "settlement_id": "s-66105-0005"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0010"
+      ],
+      "fee_cents": 432,
+      "gross_cents": 43207,
+      "invoice_ids": [
+        "i-66105-0013"
+      ],
+      "net_cents": 42775,
+      "payment_ids": [
+        "p-66105-0013"
+      ],
+      "settlement_id": "s-66105-0006"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0011",
+        "b-66105-0012"
+      ],
+      "fee_cents": 444,
+      "gross_cents": 44461,
+      "invoice_ids": [
+        "i-66105-0014",
+        "i-66105-0015"
+      ],
+      "net_cents": 44017,
+      "payment_ids": [
+        "p-66105-0014",
+        "p-66105-0015"
+      ],
+      "settlement_id": "s-66105-0007"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0013"
+      ],
+      "fee_cents": 0,
+      "gross_cents": 117695,
+      "invoice_ids": [
+        "i-66105-0016",
+        "i-66105-0017",
+        "i-66105-0018"
+      ],
+      "net_cents": 117695,
+      "payment_ids": [
+        "p-66105-0016",
+        "p-66105-0017",
+        "p-66105-0018"
+      ],
+      "settlement_id": "s-66105-0008"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0014",
+        "b-66105-0015"
+      ],
+      "fee_cents": 237,
+      "gross_cents": 23776,
+      "invoice_ids": [
+        "i-66105-0019"
+      ],
+      "net_cents": 23539,
+      "payment_ids": [
+        "p-66105-0019"
+      ],
+      "settlement_id": "s-66105-0009"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0016"
+      ],
+      "fee_cents": 501,
+      "gross_cents": 50173,
+      "invoice_ids": [
+        "i-66105-0020",
+        "i-66105-0021"
+      ],
+      "net_cents": 49672,
+      "payment_ids": [
+        "p-66105-0020",
+        "p-66105-0021"
+      ],
+      "settlement_id": "s-66105-0010"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0017",
+        "b-66105-0018"
+      ],
+      "fee_cents": 879,
+      "gross_cents": 87980,
+      "invoice_ids": [
+        "i-66105-0022",
+        "i-66105-0023",
+        "i-66105-0024"
+      ],
+      "net_cents": 87101,
+      "payment_ids": [
+        "p-66105-0022",
+        "p-66105-0023",
+        "p-66105-0024"
+      ],
+      "settlement_id": "s-66105-0011"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0019"
+      ],
+      "fee_cents": 0,
+      "gross_cents": 21184,
+      "invoice_ids": [
+        "i-66105-0025"
+      ],
+      "net_cents": 21184,
+      "payment_ids": [
+        "p-66105-0025"
+      ],
+      "settlement_id": "s-66105-0012"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0020",
+        "b-66105-0021"
+      ],
+      "fee_cents": 709,
+      "gross_cents": 70997,
+      "invoice_ids": [
+        "i-66105-0026",
+        "i-66105-0027"
+      ],
+      "net_cents": 70288,
+      "payment_ids": [
+        "p-66105-0026",
+        "p-66105-0027"
+      ],
+      "settlement_id": "s-66105-0013"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0022"
+      ],
+      "fee_cents": 1150,
+      "gross_cents": 115039,
+      "invoice_ids": [
+        "i-66105-0028",
+        "i-66105-0029",
+        "i-66105-0030"
+      ],
+      "net_cents": 113889,
+      "payment_ids": [
+        "p-66105-0028",
+        "p-66105-0029",
+        "p-66105-0030"
+      ],
+      "settlement_id": "s-66105-0014"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0023",
+        "b-66105-0024"
+      ],
+      "fee_cents": 364,
+      "gross_cents": 36422,
+      "invoice_ids": [
+        "i-66105-0031"
+      ],
+      "net_cents": 36058,
+      "payment_ids": [
+        "p-66105-0031"
+      ],
+      "settlement_id": "s-66105-0015"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0025"
+      ],
+      "fee_cents": 0,
+      "gross_cents": 71494,
+      "invoice_ids": [
+        "i-66105-0032",
+        "i-66105-0033"
+      ],
+      "net_cents": 71494,
+      "payment_ids": [
+        "p-66105-0032",
+        "p-66105-0033"
+      ],
+      "settlement_id": "s-66105-0016"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0026",
+        "b-66105-0027"
+      ],
+      "fee_cents": 1163,
+      "gross_cents": 116304,
+      "invoice_ids": [
+        "i-66105-0034",
+        "i-66105-0035",
+        "i-66105-0036"
+      ],
+      "net_cents": 115141,
+      "payment_ids": [
+        "p-66105-0034",
+        "p-66105-0035",
+        "p-66105-0036"
+      ],
+      "settlement_id": "s-66105-0017"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0028"
+      ],
+      "fee_cents": 456,
+      "gross_cents": 45613,
+      "invoice_ids": [
+        "i-66105-0037"
+      ],
+      "net_cents": 45157,
+      "payment_ids": [
+        "p-66105-0037"
+      ],
+      "settlement_id": "s-66105-0018"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0029",
+        "b-66105-0030"
+      ],
+      "fee_cents": 789,
+      "gross_cents": 78970,
+      "invoice_ids": [
+        "i-66105-0038",
+        "i-66105-0039"
+      ],
+      "net_cents": 78181,
+      "payment_ids": [
+        "p-66105-0038",
+        "p-66105-0039"
+      ],
+      "settlement_id": "s-66105-0019"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0031"
+      ],
+      "fee_cents": 0,
+      "gross_cents": 59727,
+      "invoice_ids": [
+        "i-66105-0040",
+        "i-66105-0041",
+        "i-66105-0042"
+      ],
+      "net_cents": 59727,
+      "payment_ids": [
+        "p-66105-0040",
+        "p-66105-0041",
+        "p-66105-0042"
+      ],
+      "settlement_id": "s-66105-0020"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0032",
+        "b-66105-0033"
+      ],
+      "fee_cents": 148,
+      "gross_cents": 14816,
+      "invoice_ids": [
+        "i-66105-0043"
+      ],
+      "net_cents": 14668,
+      "payment_ids": [
+        "p-66105-0043"
+      ],
+      "settlement_id": "s-66105-0021"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0034"
+      ],
+      "fee_cents": 303,
+      "gross_cents": 30337,
+      "invoice_ids": [
+        "i-66105-0044",
+        "i-66105-0045"
+      ],
+      "net_cents": 30034,
+      "payment_ids": [
+        "p-66105-0044",
+        "p-66105-0045"
+      ],
+      "settlement_id": "s-66105-0022"
+    },
+    {
+      "bank_ids": [
+        "b-66105-0035",
+        "b-66105-0036"
+      ],
+      "fee_cents": 516,
+      "gross_cents": 51683,
+      "invoice_ids": [
+        "i-66105-0046",
+        "i-66105-0047",
+        "i-66105-0048"
+      ],
+      "net_cents": 51167,
+      "payment_ids": [
+        "p-66105-0046",
+        "p-66105-0047",
+        "p-66105-0048"
+      ],
+      "settlement_id": "s-66105-0023"
+    }
+  ],
+  "packet_id": "synthetic-merchant-66105",
+  "schema": "growth066/reconciliation-output/v1"
+}
