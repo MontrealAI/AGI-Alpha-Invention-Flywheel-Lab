@@ -33,7 +33,7 @@ class UnregisteredHistoricalImports(unittest.TestCase):
         (cache / 'inspected.cpython-311.pyc').write_bytes(b'untrusted-cache')
         self.assertIn('inspected.py', upgrades.source_inventory(self.root))
         self.assertEqual(upgrades._run_pinned_historical_python(self.root,
-                         "import inspected;print(inspected.RESULT)", upgrades.source_inventory(self.root)).stdout.strip(), 'APPROVED')
+                         "import inspected;print(inspected.RESULT)", {}, upgrades.source_inventory(self.root)).stdout.strip(), 'APPROVED')
         direct = self.root / 'inspected.pyc'
         direct.write_bytes(b'untrusted-sourceless-code')
         with self.assertRaisesRegex(ValueError, 'UNREGISTERED_HISTORICAL_EXECUTABLE_REFUSED'):
@@ -42,7 +42,7 @@ class UnregisteredHistoricalImports(unittest.TestCase):
     def test_child_preflight_still_rejects_if_parent_precheck_is_bypassed(self):
         (self.root / 'inspected.so').write_bytes(b'unsigned-synthetic-native-file')
         with patch.object(upgrades, '_reject_unregistered_python_executables'):
-            result = upgrades._run_pinned_historical_python(self.root, "print('CODE_RAN')", upgrades.source_inventory(self.root))
+            result = upgrades._run_pinned_historical_python(self.root, "print('CODE_RAN')", {}, upgrades.source_inventory(self.root))
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('UNREGISTERED_HISTORICAL_EXECUTABLE_REFUSED', result.stderr)
         self.assertNotIn('CODE_RAN', result.stdout)
@@ -51,7 +51,7 @@ class UnregisteredHistoricalImports(unittest.TestCase):
         marker = self.root / 'unexpected-startup-execution'
         (self.root / 'sitecustomize.py').write_text("from pathlib import Path\nPath("+repr(str(marker))+").write_text('unexpected')\n")
         result = upgrades._run_pinned_historical_python(self.root,
-                          'import sys;print(sys.flags.isolated)', upgrades.source_inventory(self.root))
+                          'import sys;print(sys.flags.isolated)', {}, upgrades.source_inventory(self.root))
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(result.stdout.strip(), '1')
         self.assertFalse(marker.exists())
