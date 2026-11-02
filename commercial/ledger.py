@@ -63,6 +63,9 @@ def read_bound(root, path, expected):
 
 
 def load_jobs(root, manifest):
+    if isinstance(manifest, dict) and manifest.get('schema') == 'portfolio071/native-services/v1':
+        from portfolio071.service import load_contracts
+        return load_contracts(root, manifest)
     if isinstance(manifest, dict) and manifest.get('schema') == 'flexibility063/native-services/v1':
         from flexibility063.service import load_contracts
         return load_contracts(root, manifest)
@@ -198,6 +201,9 @@ class TapeExchange:
 
     def check(self, task, artifact):
         self.validate(task)
+        if self.manifest.get('schema') == 'portfolio071/native-services/v1':
+            from portfolio071.service import check_delivery
+            return check_delivery(self.root, self.manifest, task['job_id'], artifact)
         if self.manifest.get('schema') == 'flexibility063/native-services/v1':
             from flexibility063.service import check_delivery
             return check_delivery(self.root, self.manifest, task['job_id'], artifact)

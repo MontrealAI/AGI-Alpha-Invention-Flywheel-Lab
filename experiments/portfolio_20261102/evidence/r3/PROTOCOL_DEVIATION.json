@@ -1,0 +1,46 @@
+{
+  "changed_decisions": [],
+  "constructor_changed": false,
+  "corrected_verifier_sha256": "b9af768541541a626a5983f65c8639b2c6e08db31fb64512d647d512e3065dfa",
+  "evaluation_stage": "Disclosed original case recheck following implementation correction; no new blind confirmation claim.",
+  "issue": "Root source audit found checker used 1e-7 times scale, while frozen preregistration requires absolute 1e-6 plus relative 1e-8 times scale.",
+  "original_artifacts_rechecked": [
+    {
+      "accepted": true,
+      "case": "k1",
+      "corrected_tolerance": 2.8000000000000003e-06,
+      "maximum_violation": 0.0,
+      "old_tolerance": 1.8e-05,
+      "unchanged_artifact_sha256": "e2e005861f069e36efb5886c68281b735b6c5f4af5346f395fa9627555458632",
+      "unchanged_request_sha256": "c029eed22cbe9b73ccb5579e4da34b98b447a3587a3c2f99d8f02224daa43d7d"
+    },
+    {
+      "accepted": true,
+      "case": "k2",
+      "corrected_tolerance": 3.2e-06,
+      "maximum_violation": 1.4210854715202004e-14,
+      "old_tolerance": 2.2e-05,
+      "unchanged_artifact_sha256": "bc3ea44d687d1ce59b7af6fde72d67410e26ab8be7259eb66c3c49b51af1c662",
+      "unchanged_request_sha256": "d1e6b0cf12e806311d517f451ae89f54a913650d9724bc931979779768c24c4c"
+    }
+  ],
+  "original_results_sha256": "3d8f74824f9202c4edda419145527169c9b2415ebc470adcfd106faae397a7dc",
+  "original_verifier_sha256": "026e3f5a264d4f4ac11b3d1d96e4ddfa59a17ac95b8319e541079eae29dd826e",
+  "post_disclosure_regression_guards": [
+    {
+      "accepted": true,
+      "case": "within_registered_tolerance",
+      "injected_residual": 1.6e-06,
+      "original_tolerance_would_accept": true
+    },
+    {
+      "accepted": false,
+      "case": "between_registered_and_initial_tolerances",
+      "injected_residual": 1.26e-05,
+      "original_tolerance_would_accept": true
+    }
+  ],
+  "preregistration_changed": false,
+  "remaining_scope": "Independent checks of an idealized engineering model, without physical qualification.",
+  "schema": "portfolio071/implementation-correction/v1"
+}

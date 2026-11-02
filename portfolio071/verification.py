@@ -53,7 +53,10 @@ def _thermal(request, artifact):
     flows = {name: _vector(artifact.get(name), n, name) for name in output_names}
     store = _vector(artifact.get("storage_kwh"), n + 1, "storage_kwh")
     scale = max([1.0] + source + demand + limits + [p[name] for name in nonnegative])
-    tol = 1e-7 * scale
+    # R1_R3_PREREGISTRATION: absolute 1e-6 plus relative 1e-8.
+    # Initial 1e-7*scale implementation was corrected after source audit;
+    # original evidence and the identical-case recheck are retained.
+    tol = 1e-6 + 1e-8 * scale
     violations = {}
 
     def enforce(name, violation):
