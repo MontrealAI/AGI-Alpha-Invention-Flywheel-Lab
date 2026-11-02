@@ -1,0 +1,106 @@
+name: Paired acquisition numerical qualification
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_run:
+    workflows: [Connected 014 immutable release and downloaded operation]
+    types: [completed]
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: paired-acquisition-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+env:
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  PAIR_FREEZE_SHA: db80989740105baeca37be68b7fa9615c436965ea9ea160712f258ca3da490dc
+  PAIR_SOURCE_COMMIT: ${{ github.event.workflow_run.head_sha || github.event.pull_request.head.sha || github.sha }}
+jobs:
+  qualify-paired-source:
+    if: github.event_name != 'workflow_run'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install pinned public CPU dependencies
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt -r experiments/paired_acquisition_20261102/requirements.txt
+      - name: Verify economic and source-integrity failure handling
+        run: python -m unittest experiments.paired_acquisition_20261102.test_economic_frontier experiments.paired_acquisition_20261102.test_runner_guards -v
+      - name: Qualify the canonical source package and fresh engineering fixture
+        run: python scripts/qualify_connected014.py --smoke --output "$RUNNER_TEMP/paired-clean"
+      - name: Reproduce the fixed numerical contract from exported source
+        working-directory: ${{ runner.temp }}/paired-clean/extracted-source
+        run: python -m experiments.paired_acquisition_20261102.run --output "$RUNNER_TEMP/paired-numerical" --expected-freeze-sha256 "$PAIR_FREEZE_SHA" --source-commit "$PAIR_SOURCE_COMMIT" --execution-label exported-source-reproduction
+      - name: Retain public numerical and source-qualification receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: paired-acquisition-source-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/paired-clean/QUALIFICATION.json
+            ${{ runner.temp }}/paired-numerical/SCIENCE.json
+            ${{ runner.temp }}/paired-numerical/ECONOMIC_INPUTS.json
+            ${{ runner.temp }}/paired-numerical/ECONOMICS.json
+            ${{ runner.temp }}/paired-numerical/RETAINED_INTERFACE.json
+            ${{ runner.temp }}/paired-numerical/SUMMARY.json
+            ${{ runner.temp }}/paired-numerical/EXECUTION.json
+            ${{ runner.temp }}/paired-numerical/FAILURE.json
+          if-no-files-found: error
+  reproduce-published-paired-source:
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install pinned public CPU dependencies
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt -r experiments/paired_acquisition_20261102/requirements.txt
+      - name: Download the exact canonical public release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: python scripts/release_connected014.py download --source-commit "$PAIR_SOURCE_COMMIT" --repository "$GITHUB_REPOSITORY" --assets "$RUNNER_TEMP/paired-release-download" --receipt "$RUNNER_TEMP/PAIRED_RELEASE_DOWNLOAD.json"
+      - name: Verify downloaded source and its fresh engineering operation
+        id: operation
+        run: python scripts/release_connected014.py operate-download --assets "$RUNNER_TEMP/paired-release-download" --source-commit "$PAIR_SOURCE_COMMIT" --output "$RUNNER_TEMP/paired-downloaded-operation" --actual-release-download
+      - name: Reproduce the registered science from actual released bytes
+        working-directory: ${{ runner.temp }}/paired-downloaded-operation/source
+        run: python -m experiments.paired_acquisition_20261102.run --output "$RUNNER_TEMP/paired-released-numerical" --expected-freeze-sha256 "$PAIR_FREEZE_SHA" --source-commit "$PAIR_SOURCE_COMMIT" --execution-label actual-released-source-reproduction
+      - name: Retain only public released-source and numerical evidence
+        if: always() && steps.operation.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: paired-acquisition-released-${{ github.event.workflow_run.head_sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/PAIRED_RELEASE_DOWNLOAD.json
+            ${{ runner.temp }}/paired-downloaded-operation/DOWNLOADED_RELEASE_RUN.json
+            ${{ runner.temp }}/paired-released-numerical/SCIENCE.json
+            ${{ runner.temp }}/paired-released-numerical/ECONOMIC_INPUTS.json
+            ${{ runner.temp }}/paired-released-numerical/ECONOMICS.json
+            ${{ runner.temp }}/paired-released-numerical/RETAINED_INTERFACE.json
+            ${{ runner.temp }}/paired-released-numerical/SUMMARY.json
+            ${{ runner.temp }}/paired-released-numerical/EXECUTION.json
+            ${{ runner.temp }}/paired-released-numerical/FAILURE.json
+          if-no-files-found: error

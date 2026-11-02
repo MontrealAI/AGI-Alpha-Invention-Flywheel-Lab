@@ -1,0 +1,58 @@
+{
+  "schema": "paired-acquisition/registered-economic-plan/v1",
+  "scope": "One ray with a three-energy-channel bundle under the registered synthetic quality contract. These are not full 99-ray K2 acquisition costs or specimen dose. No physical delivery or funding inferred.",
+  "available_cash_hypotheses_usd": [100000, 1000000, 1000000000],
+  "specimen_exposure_caps": [1, 2],
+  "fixed_budgets": {
+    "light_frames": 2,
+    "light_readings": 12,
+    "dark_frames": null,
+    "dark_readings": null,
+    "blank_frames": 1,
+    "specimen_exposures": null,
+    "source_photons": null,
+    "specimen_photons": null,
+    "elapsed_seconds": null,
+    "swap_operations": 1
+  },
+  "resources_per_ray": {
+    "single_read": {
+      "light_frames": 1, "light_readings": 6, "dark_frames": null,
+      "dark_readings": null, "blank_frames": 0, "specimen_exposures": 1,
+      "source_photons": null, "specimen_photons": null,
+      "elapsed_seconds": null, "swap_operations": 0
+    },
+    "independent_calibration": {
+      "light_frames": 2, "light_readings": 12, "dark_frames": null,
+      "dark_readings": null, "blank_frames": 1, "specimen_exposures": 1,
+      "source_photons": null, "specimen_photons": null,
+      "elapsed_seconds": null, "swap_operations": 0
+    },
+    "paired_swap": {
+      "light_frames": 2, "light_readings": 12, "dark_frames": null,
+      "dark_readings": null, "blank_frames": 0, "specimen_exposures": 2,
+      "source_photons": null, "specimen_photons": null,
+      "elapsed_seconds": null, "swap_operations": 1
+    },
+    "ordinary_paired_swap": {
+      "light_frames": 2, "light_readings": 12, "dark_frames": null,
+      "dark_readings": null, "blank_frames": 0, "specimen_exposures": 2,
+      "source_photons": null, "specimen_photons": null,
+      "elapsed_seconds": null, "swap_operations": 1
+    }
+  },
+  "quality_binding": "Paired and ordinary methods require the complete numerical receipt. Independent calibration requires all 80 K1 and 12 K2 interval-coverage checks, complete separated-field decisions, boundary abstention and true-area coverage. The single-read method is refused for the expanded unequal-gain scope when its registered coherent counterexample is observed. None is physically qualified.",
+  "rights_and_capacity": "unresolved",
+  "complete_episode_cost_scope": false,
+  "cash_usd_per_unit": null,
+  "opportunity_usd_per_unit": null,
+  "other_cash_cost_usd": null,
+  "other_opportunity_cost_usd": null,
+  "protected_cash_usd": null,
+  "prior_campaign_cost_usd": null,
+  "offer_hypothesis": null,
+  "price_basis": null,
+  "commercial_365_day_profit_usd": null,
+  "capital_selected_for_execution_usd": null,
+  "native_account_operations": 0
+}
