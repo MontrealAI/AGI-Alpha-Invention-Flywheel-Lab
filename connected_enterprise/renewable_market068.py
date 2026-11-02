@@ -140,7 +140,10 @@ def simulate(case:Scenario):
         admitted=min(requested,monthly_serviceable,a.monthly_capacity_packets)
         # Reserve enough to fund even 100% acceptance and all payment fees, before collection.
         worst_fees_per_attempt=(a.quote_micro*a.payment_bps+9999)//10000
-        maximum_commit_cost=a.first_attempt_micro+a.accepted_completion_micro+worst_fees_per_attempt
+        # Current accepted work creates a support obligation even if collection is delayed.
+        # Protect its worst-case cash requirement before committing the attempt.
+        maximum_commit_cost=(a.first_attempt_micro+a.accepted_completion_micro+
+                             worst_fees_per_attempt+a.tail_per_accepted_micro)
         existing_obligations=outstanding_tail
         available_before_collection=cash-existing_obligations
         if available_before_collection<fixed:
@@ -156,9 +159,10 @@ def simulate(case:Scenario):
         actually_paid=accepted*a.collection_bps//10000
         production=attempted*a.first_attempt_micro+accepted*a.accepted_completion_micro
         fees=accepted*a.quote_micro*a.payment_bps//10000
+        tail_new=accepted*a.tail_per_accepted_micro
         # Monthly recurring work is from EXISTING customers; new ones start next month.
         # Outreach purchases may use only cash left after old tails and current production.
-        marketing_budget=max(0,available_before_collection-fixed-production-fees)
+        marketing_budget=max(0,available_before_collection-fixed-production-fees-tail_new)
         proposed=a.monthly_marketing_target_micro+max(0,prior_profit)*a.prior_profit_reinvestment_bps//10000
         marketing_budget=min(marketing_budget,proposed) if can_sell else 0
         # Each contact reserves the worst-case onboarding fee; only conversions pay it.
@@ -193,7 +197,6 @@ def simulate(case:Scenario):
         expense=expense_before_tax+tax
         profit=revenue-expense
         cash+=collections-(fixed+production+fees+acquisition+onboarding+tax)
-        tail_new=accepted*a.tail_per_accepted_micro
         # Prior month's support tails mature after one month; no income arises on release.
         outstanding_tail=tail_new
         if cash<outstanding_tail:
