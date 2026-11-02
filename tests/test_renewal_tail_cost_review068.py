@@ -55,16 +55,26 @@ class AccruedSupportAndAdmissionReview068(unittest.TestCase):
         self.assertEqual(without[-1]['trailing_12_profit_micro']-with_cost[-1]['trailing_12_profit_micro'],
                          12*50*5*MICRO)
 
-    def test_fixed_cost_stop_retains_original_protected_obligation(self):
-        a=priced_case(opening_customers=1,monthly_retention_bps=10000,
+    def test_fixed_cost_stop_pays_matured_support_before_halting(self):
+        a=priced_case(months=4,opening_customers=1,monthly_retention_bps=10000,
                       opening_equity_micro=5*MICRO,annual_fixed_micro=24*MICRO,
                       tail_per_accepted_micro=MICRO,collection_bps=0)
-        first,second=simulate(a)['rows']
+        first,second,third,fourth=simulate(a)['rows']
         self.assertEqual(first['accepted_deliveries'],1)
         self.assertEqual(first['protected_tail_micro'],MICRO)
         self.assertEqual(second['status'],'STOP_NOT_ENOUGH_CASH_FOR_FIXED_COST')
-        self.assertEqual(second['protected_tail_micro'],MICRO)
-        self.assertEqual(second['closing_cash_micro'],MICRO)
+        self.assertEqual(second['opening_cash_micro'],first['closing_cash_micro'])
+        self.assertEqual(second['support_cash_settled_micro'],MICRO)
+        self.assertEqual(second['protected_tail_micro'],0)
+        self.assertEqual(second['closing_cash_micro'],0)
+        self.assertEqual(second['closing_cash_micro'],
+                         a.opening_equity_micro+first['profit_micro'])
+        for row in (third,fourth):
+            self.assertEqual(row['status'],'HALTED_PREPAYMENT_REQUIRED')
+            self.assertEqual(row['closing_cash_micro'],second['closing_cash_micro'])
+            self.assertEqual(row['protected_tail_micro'],0)
+        self.assertEqual(sum(x.get('support_cash_settled_micro',0) for x in
+                             (first,second,third,fourth)),MICRO)
 
 
 if __name__=='__main__':
