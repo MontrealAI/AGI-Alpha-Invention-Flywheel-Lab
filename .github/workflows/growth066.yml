@@ -1,0 +1,93 @@
+name: Connected reconciliation growth 066
+on:
+  pull_request:
+    paths:
+      - 'growth066/*.py'
+      - 'growth066/PREREGISTRATION.json'
+      - 'tests/test_growth066*.py'
+      - '.github/workflows/growth066.yml'
+permissions:
+  contents: read
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    outputs:
+      matrix: ${{ steps.matrix.outputs.value }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy==2.3.5 cryptography==50.0.0
+      - run: python -m unittest discover -s tests -p 'test_growth066*.py' -q
+      - id: matrix
+        run: echo "value=$(python -m growth066.ci plan)" >> "$GITHUB_OUTPUT"
+  development:
+    needs: plan
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy==2.3.5 cryptography==50.0.0
+      - run: python -m growth066.ci case --case-json "$CASE"
+        env:
+          CASE: ${{ toJSON(matrix) }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: growth066-${{ matrix.id }}
+          path: public-evidence/
+          retention-days: 1
+  select:
+    needs: development
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    outputs:
+      matrix: ${{ steps.select.outputs.value }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy==2.3.5 cryptography==50.0.0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: growth066-dev-*
+          path: incoming
+          merge-multiple: true
+      - id: select
+        run: echo "value=$(python -m growth066.ci select)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: growth066-locked-selection
+          path: public-evidence/LOCKED_SELECTION.json
+          retention-days: 1
+  holdout:
+    needs: select
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix: ${{ fromJSON(needs.select.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy==2.3.5 cryptography==50.0.0
+      - run: python -m growth066.ci case --case-json "$CASE"
+        env:
+          CASE: ${{ toJSON(matrix) }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: growth066-${{ matrix.id }}
+          path: public-evidence/
+          retention-days: 1

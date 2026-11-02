@@ -1,0 +1,56 @@
+{
+  "acceptance": {
+    "accepted": true,
+    "checker_scope": "Exact synthetic construction truth; no financial postings, legal assurance or real-world accuracy claim",
+    "errors": [],
+    "input_sha256": "32423fec0d4d2933ef1359ee483800e16ba3034ec3c02ef5552015bd32b041a9",
+    "matched_groups": 24,
+    "output_sha256": "9bcfc439b934e58499943db6d47d9e64703d1defc3ccac6fdd17d4126ca30646",
+    "process_cpu_seconds": 0.0011562890000000048,
+    "reported_exceptions": 14,
+    "schema": "growth066/reconciliation-acceptance/v1",
+    "wall_seconds": 0.0011552139185369015
+  },
+  "corruption_controls": [
+    {
+      "control": "false_match",
+      "errors": [
+        "MATCHES_MISMATCH"
+      ],
+      "rejected": true
+    },
+    {
+      "control": "omitted_exception",
+      "errors": [
+        "EXCEPTIONS_MISMATCH"
+      ],
+      "rejected": true
+    },
+    {
+      "control": "corrupt_balance",
+      "errors": [
+        "BRIDGE_MISMATCH"
+      ],
+      "rejected": true
+    },
+    {
+      "control": "reused_match",
+      "errors": [
+        "UNIQUE_NONEMPTY_SETTLEMENT_REQUIRED"
+      ],
+      "rejected": true
+    }
+  ],
+  "exceptions": 14,
+  "input_rows": {
+    "bank": 43,
+    "invoices": 53,
+    "payments": 55
+  },
+  "matches": 24,
+  "production_process_cpu_seconds": 0.0007866840000000097,
+  "production_wall_seconds": 0.000787922996096313,
+  "seed": 66105,
+  "truth_sha256": "53adaf0cfbba88f8975c3ed01732dab385f248ba3999d029421e1ad644c4d374",
+  "truth_source": "Reconstruct with bound quality.make_case(seed); truth never passed to producer"
+}

@@ -63,6 +63,9 @@ def read_bound(root, path, expected):
 
 
 def load_jobs(root, manifest):
+    if isinstance(manifest, dict) and manifest.get('schema') == 'growth066/native-services/v1':
+        from growth066.service import load_contracts
+        return load_contracts(root, manifest)
     if isinstance(manifest, dict) and manifest.get('schema') == 'flexibility063/native-services/v1':
         from flexibility063.service import load_contracts
         return load_contracts(root, manifest)
@@ -198,6 +201,9 @@ class TapeExchange:
 
     def check(self, task, artifact):
         self.validate(task)
+        if self.manifest.get('schema') == 'growth066/native-services/v1':
+            from growth066.service import check_delivery
+            return check_delivery(self.root, self.manifest, task['job_id'], artifact)
         if self.manifest.get('schema') == 'flexibility063/native-services/v1':
             from flexibility063.service import check_delivery
             return check_delivery(self.root, self.manifest, task['job_id'], artifact)
@@ -254,8 +260,9 @@ class TapeExchange:
         if op not in schemas or not isinstance(args, dict):
             raise ValueError('ACTION_ARGUMENTS_REQUIRED')
         optional = {'source_tx', 'crash'} if op == 'event' else {'terms_id'} if op == 'offer' else set()
+        if op=='offer' and self.manifest.get('schema')=='growth066/native-services/v1':optional=optional|{'decision_sha256'}
         dynamic_prepare = (op == 'event' and args.get('action') == 'prepare'
-                           and self.manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1', 'flexibility063/native-services/v1'})
+                           and self.manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1', 'flexibility063/native-services/v1', 'growth066/native-services/v1'})
         if dynamic_prepare:
             optional = optional | {'artifact_sha256'}
             if not isinstance(args.get('artifact_sha256'), str) or len(args['artifact_sha256']) != 64:
@@ -276,6 +283,9 @@ class TapeExchange:
             amount(a['amount'])
             self.ex.wallet(a['buyer'], a['amount'])
         elif op == 'offer':
+            if self.manifest.get('schema')=='growth066/native-services/v1':
+                from growth066.service import validate_offer
+                validate_offer(self.root,self.manifest,a,self.actions,self.ex.snapshot())
             amount(a['price'], positive=True)
             extra = {'terms_id': a['terms_id'], 'now': day} if 'terms_id' in a else {}
             self.ex.offer(a['id'], a['buyer'], a['price'], 'nonrecourse-simulated',
@@ -291,14 +301,19 @@ class TapeExchange:
                 payload = self.ex.provider.issue(row, 'funded' if action == 'fund' else 'cleared', a.get('source_tx'))
             elif action == 'prepare':
                 task = json.loads(row['task'])
-                if self.manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1', 'flexibility063/native-services/v1'}:
-                    if self.manifest.get('schema') == 'flexibility063/native-services/v1':
+                if self.manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1', 'flexibility063/native-services/v1', 'growth066/native-services/v1'}:
+                    if self.manifest.get('schema') == 'growth066/native-services/v1':
+                        from growth066.service import delivery
+                    elif self.manifest.get('schema') == 'flexibility063/native-services/v1':
                         from flexibility063.service import delivery
                     elif self.manifest.get('schema') == 'inventory061/native-services/v1':
                         from inventory061.service import delivery
                     else:
                         from production060.service import delivery
                     payload = delivery(self.root, self.manifest, task['job_id'])
+                    if self.manifest.get('schema')=='growth066/native-services/v1':
+                        from growth066.service import validate_prepared_order
+                        validate_prepared_order(self.root,self.manifest,task['job_id'],payload,int(row['price']))
                     if digest(payload) != a['artifact_sha256']:
                         raise ValueError('PRODUCTION060_ACTUAL_DELIVERY_HASH_CHANGED')
                 else:
@@ -460,8 +475,10 @@ class _NativePrefixReplay:
                 current_jobs = load_jobs(root, manifest)
                 if current_jobs != self._replay.jobs:
                     raise ValueError('AUDITED_JOB_AUTHORITY_CHANGED')
-                if manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1', 'flexibility063/native-services/v1'}:
-                    if manifest.get('schema') == 'flexibility063/native-services/v1':
+                if manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1', 'flexibility063/native-services/v1', 'growth066/native-services/v1'}:
+                    if manifest.get('schema') == 'growth066/native-services/v1':
+                        from growth066.service import rebind_prepared
+                    elif manifest.get('schema') == 'flexibility063/native-services/v1':
                         from flexibility063.service import rebind_prepared
                     elif manifest.get('schema') == 'inventory061/native-services/v1':
                         from inventory061.service import rebind_prepared
@@ -564,14 +581,16 @@ def _audit_native_impl(tape, *, root, manifest, expected_actions_sha256=None, _s
         if digest(manifest) != c['manifest_sha256'] or tape['config'] != c:
             raise ValueError('SOURCE_COHORT_MISMATCH')
         jobs = fresh_jobs
-    if manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1', 'flexibility063/native-services/v1'}:
+    if manifest.get('schema') in {'production060/native-services/v1', 'inventory061/native-services/v1', 'flexibility063/native-services/v1', 'growth066/native-services/v1'}:
         # Dynamic outputs are not the precommitted request placeholders in
         # jobs. Rebind all historical preparations at the end too, for both
         # complete public replay and private financial-prefix reuse.
         current_jobs = load_jobs(root, manifest)
         if current_jobs != jobs:
             raise ValueError('AUDITED_JOB_AUTHORITY_CHANGED')
-        if manifest.get('schema') == 'flexibility063/native-services/v1':
+        if manifest.get('schema') == 'growth066/native-services/v1':
+            from growth066.service import rebind_prepared
+        elif manifest.get('schema') == 'flexibility063/native-services/v1':
             from flexibility063.service import rebind_prepared
         elif manifest.get('schema') == 'inventory061/native-services/v1':
             from inventory061.service import rebind_prepared
