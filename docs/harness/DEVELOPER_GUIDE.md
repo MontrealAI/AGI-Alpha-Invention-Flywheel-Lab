@@ -92,6 +92,12 @@ A sound theorem, established engineering/economic result or successful historica
 5. Consolidate a few-word lesson, preserve a useful fix/regression, then delete redundant terminal artifacts under [lean policy](../packaging/LEAN_EXPERIMENTS.md). Preserve true dependencies or migrate them safely. A loss can invalidate a policy without invalidating its useful mechanism code.
 6. Publish and inspect actual GitHub Actions receipts, qualified release artifacts and a downloaded released-system run. Choose adoption/defaults using established theory with checked applicability or suitable empirical evidence, and correctness tests—not mandatory novelty research. Preserve a stronger incumbent when the relevant comparison shows it wins; labels such as “joint”, “discovery” or “optimal” are not evidence.
 
+## Six OUT papers: choose a construction, not a slogan
+
+The [operational paper map](OUT_PAPERS.md) links all six original browser-readable manuscripts and gives page-specific use conditions, executable artifacts, invalidation rules and cost boundaries. Apply the relevant mechanism to the arrangement card's missing means: construct an observation instrument, reasoning interface, usable release of capacity, robust conditional strategy, reusable boundary contract or successor-enabling capability. These are choices, not a mandatory pipeline.
+
+Use the implementation map above to identify actual current call paths; where the paper's construction is absent, label it a proposed integration and implement only what the flagship requires. Retain a compact dependency → construction → qualification → continuation record beside the existing receipt. Publication and synthetic manuscript results do not establish current integration, physical validity, better discovery or profitable expansion. Preserve full-cost native financing and accepted delivery as the operating result.
+
 ## Practical recipes
 
 These are ways to choose and build useful work, not a mandatory multi-agent pipeline. Apply established methods directly when their assumptions fit. The extra fresh/crossed comparisons below support **new advantage claims**, not permission to use known engineering. None guarantees commercial or recursive success.

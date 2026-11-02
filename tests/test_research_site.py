@@ -54,6 +54,36 @@ class ResearchSiteTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'outside publication'):
             site.validate(self.source)
 
+    def test_out_collection_links_every_reader_and_original(self):
+        slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
+        collection = (self.source / 'out-series.html').read_text()
+        homepage = (self.source / 'index.html').read_text()
+        self.assertEqual(len(site.PAPERS), 9)
+        self.assertEqual(len(site.PAGES), 11)
+        self.assertIn('out-series.html', homepage)
+        for slug in slugs:
+            reader = 'out-' + slug + '.html'
+            self.assertIn(reader, collection)
+            self.assertIn(reader, homepage)
+            text = (self.source / reader).read_text()
+            self.assertIn('When to reach for this paper', text)
+            self.assertIn('Scope and evidence', text)
+            self.assertIn('OUT_PAPERS.md', text)
+            self.assertIn('SHA-256:', text)
+            self.assertIn('aria-label="Continue reading"', text)
+            matches = [x for x in site.PAPERS if x.startswith('out-' + slug + '-')]
+            self.assertEqual(len(matches), 1)
+            self.assertIn('data="' + matches[0] + '#view=FitH"', text)
+
+    def test_manifest_cannot_repeat_or_omit_a_paper(self):
+        import json
+        path = self.source / 'publication-manifest.json'
+        manifest = json.loads(path.read_text())
+        manifest['papers'][-1] = manifest['papers'][0]
+        path.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, 'allowlisted'):
+            site.validate(self.source)
+
     def test_mobile_and_pdf_fallbacks_present(self):
         for name in site.PAGES:
             text = (self.source / name).read_text()
@@ -62,7 +92,7 @@ class ResearchSiteTests(unittest.TestCase):
             self.assertIn('prefers-reduced-motion', text)
             self.assertIn('font-size:clamp(1.8rem,7vw,2.75rem)', text)
             self.assertNotIn('↗', text)
-            if name != 'index.html':
+            if name not in ('index.html', 'out-series.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Your browser does not display embedded PDFs', text)
