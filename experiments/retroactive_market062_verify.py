@@ -43,6 +43,37 @@ def check_native_claim_binding(arm, exported, reported, measurements, protocol):
     buyers = ('A', 'B', 'C') if arm == 'shared' else ('A', 'B') if arm == 'direct' else ()
     orders = tape.get('orders', [])
     sales = reported.get('sales')
+    # A valid account proves what was charged, not that all authored service,
+    # acquisition, independent checking, failed-quote and tax costs were paid.
+    # Bind every required modeled cost to the original frozen protocol.
+    required_costs = {}
+    if arm == 'cheap_rival':
+        required_costs['cheap-rival-prospecting'] = protocol['no_bid_search_microUSD']
+    else:
+        if arm == 'shared':
+            for name, amount in protocol['fixed_shared'].items():
+                required_costs['shared-' + name] = amount
+        else:
+            for name in ('failed_search', 'support_and_maintenance'):
+                required_costs['direct-' + name] = protocol['fixed_shared'][name]
+        for buyer in buyers:
+            for name, amount in protocol['per_order'].items():
+                required_costs['market062-' + buyer + '-' + name] = amount
+            if arm == 'direct':
+                required_costs['market062-' + buyer + '-bespoke-source-setup'] = protocol['fixed_per_independent_buyer']
+        if arm == 'shared':
+            required_costs['first-stage-profit-tax'] = protocol['stage1_tax_microUSD']
+            required_costs['second-stage-profit-tax'] = protocol['stage2_tax_microUSD']
+    costs = {}
+    for action in tape.get('actions', []):
+        if not isinstance(action, dict) or action.get('op') != 'cost':
+            continue
+        args = action.get('args', {})
+        if not isinstance(args, dict) or args.get('id') in costs:
+            raise ValueError('NATIVE_COMPLETE_COST_SCHEDULE_MISMATCH')
+        costs[args.get('id')] = args.get('amount')
+    if costs != required_costs:
+        raise ValueError('NATIVE_COMPLETE_COST_SCHEDULE_MISMATCH')
     if not isinstance(orders, list) or not isinstance(sales, list) or len(orders) != len(buyers) or len(sales) != len(buyers):
         raise ValueError('NATIVE_SALE_DENOMINATOR_MISMATCH')
     order_index = {o.get('id'): o for o in orders if isinstance(o, dict)}
