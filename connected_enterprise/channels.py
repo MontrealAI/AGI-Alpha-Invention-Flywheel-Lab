@@ -33,11 +33,11 @@ def validate_contracts(contracts):
         if not isinstance(ident,str) or not ident or len(ident)>120 or not isinstance(terms,dict) or not REQUIRED <= set(terms) or set(terms)-REQUIRED-OPTIONAL:
             raise ValueError('EXACT_CHANNEL_TERMS_REQUIRED')
         for key,value in terms.items():
-            if type(value) is not int or value<0 or value>10**12:
+            if type(value) is not int or value<0:
                 raise ValueError('BOUNDED_INTEGER_CHANNEL_TERMS_REQUIRED')
             if key.endswith('_bps') and value>10000:
                 raise ValueError('CHANNEL_BASIS_POINTS_REQUIRED')
-        if not 1<=terms['slots_per_day']<=100000 or not 1<=terms['duration_days']<=3650 or terms['lead_days']>3650 or terms['price_microUSD']<1:
+        if terms['slots_per_day']<1 or terms['duration_days']<1 or terms['price_microUSD']<1:
             raise ValueError('FINITE_PAID_CHANNEL_CAPACITY_REQUIRED')
         terms.setdefault('failure_credit_bps',0)
         terms.setdefault('max_active_tranches',2)
@@ -46,9 +46,9 @@ def validate_contracts(contracts):
         terms.setdefault('owned_audience_count',4)
         terms.setdefault('prepaid_retry_attempts',0)
         terms.setdefault('retry_delay_days',1)
-        if terms['prepaid_retry_attempts']>10 or not 1<=terms['retry_delay_days']<=365:
+        if terms['retry_delay_days']<1:
             raise ValueError('BOUNDED_PREPAID_CHANNEL_RETRY_REQUIRED')
-        if not 1<=terms['max_active_tranches']<=1000 or not 1<=terms['max_contacts_per_customer']<=1000:
+        if terms['max_active_tranches']<1 or terms['max_contacts_per_customer']<1:
             raise ValueError('FINITE_SUPPLIER_AND_CONTACT_LIMIT_REQUIRED')
     return result
 
@@ -124,6 +124,28 @@ class ChannelBook:
                 attempt_day=instance['next_activation_day']
                 if attempt_day>=instance['expiry_day']:
                     instance['state']='FAILED';break
+                if terms['activation_reliability_bps']==0:
+                    due=(min(day,instance['expiry_day']-1)-attempt_day)//terms['retry_delay_days']+1
+                    count=min(due,terms['prepaid_retry_attempts']+1-instance['activation_attempts'])
+                    last_due=attempt_day+(count-1)*terms['retry_delay_days']
+                    if instance['activation_attempts']+count>terms['prepaid_retry_attempts'] or last_due+terms['retry_delay_days']>=instance['expiry_day']:
+                        count-=1
+                    if count>1:
+                        first_attempt=instance['activation_attempts']+1
+                        last=attempt_day+(count-1)*terms['retry_delay_days']
+                        instance['activation_attempts']+=count
+                        retry_day=last+terms['retry_delay_days']
+                        retry=instance['activation_attempts']<=terms['prepaid_retry_attempts'] and retry_day<instance['expiry_day']
+                        instance['state']='RETRY_SCHEDULED' if retry else 'FAILED'
+                        instance['next_activation_day']=retry_day if retry else last
+                        if not retry:instance['failure_credit_due_microUSD']=terms['price_microUSD']*terms['failure_credit_bps']//10000
+                        self.state['events'].append({'day':attempt_day,'kind':'CHANNEL_ACTIVATION_FAILURE_RUN',
+                            'source_plan_id':plan,'contract_id':instance['contract_id'],
+                            'first_activation_attempt':first_attempt,'activation_attempts':count,
+                            'last_attempt_day':last,'next_retry_day':retry_day if retry else None,
+                            'final_state':instance['state'],'failure_credit_due_microUSD':instance['failure_credit_due_microUSD'],
+                            'credit_status':'RECEIVABLE_NOT_CASH' if not retry else 'NOT_APPLICABLE'})
+                        continue
                 attempt=instance['activation_attempts']
                 active=_draw(self.seed,attempt_day,plan,'activation' if attempt==0 else 'prepaid-activation-retry-'+str(attempt))<terms['activation_reliability_bps']
                 instance['activation_attempts']+=1
@@ -140,13 +162,30 @@ class ChannelBook:
             if instance['state']!='ACTIVE' or day<instance['activation_day'] or day>=instance['expiry_day']:
                 continue
             pool=ids[terms['owned_audience_count']:]
+            if not pool or terms['realization_bps']==0:
+                slots=terms['slots_per_day']
+                instance['potential_slots_used']+=slots;attempted_slots+=slots
+                instance['unused_slots']+=slots;unused_slots+=slots
+                continue
+            rankings={}
+            eligible={customer for customer in pool if customer not in exposed
+                      and len(self.state['contacts'].get(customer,[]))<terms['max_contacts_per_customer']
+                      and (not self.state['contacts'].get(customer) or day-self.state['contacts'][customer][-1]['day']>=terms['contact_cooldown_days'])}
             for slot in range(terms['slots_per_day']):
+                if not eligible:
+                    remaining=terms['slots_per_day']-slot
+                    instance['potential_slots_used']+=remaining;attempted_slots+=remaining
+                    instance['unused_slots']+=remaining;unused_slots+=remaining
+                    break
                 instance['potential_slots_used']+=1;attempted_slots+=1
                 identity=f'{plan}/{slot}'
                 if not pool or _draw(self.seed,day,identity,'reach-realization')>=terms['realization_bps']:
                     instance['unused_slots']+=1;unused_slots+=1;continue
                 shared=_draw(self.seed,day,identity,'overlapping-audience')<terms['overlap_bps']
-                ranking=sorted(pool,key=lambda customer:(_draw(self.seed,day,customer,'shared-audience' if shared else instance['contract_id']+'-audience'),customer))
+                stage='shared-audience' if shared else instance['contract_id']+'-audience'
+                if stage not in rankings:
+                    rankings[stage]=sorted(pool,key=lambda customer:(_draw(self.seed,day,customer,stage),customer))
+                ranking=rankings[stage]
                 candidate=ranking[slot % len(ranking)]
                 history=self.state['contacts'].get(candidate,[])
                 fatigue=len(history)>=terms['max_contacts_per_customer']
@@ -156,6 +195,7 @@ class ChannelBook:
                 exposure_id='channel-exposure-'+_digest([plan,day,slot,candidate])[:24]
                 row={'customer_id':candidate,'source_plan_id':plan,'contract_id':instance['contract_id'],'exposure_id':exposure_id}
                 result.append(row);exposed.add(candidate)
+                eligible.discard(candidate)
                 self.state['contacts'].setdefault(candidate,[]).append({'day':day,'exposure_id':exposure_id,'source_plan_id':plan})
                 instance['realized_exposures']+=1
                 self.state['events'].append({'day':day,'kind':'POTENTIAL_CUSTOMER_EXPOSED','customer_id':candidate,'source_plan_id':plan,'contract_id':instance['contract_id'],'exposure_id':exposure_id,'scope':'Exposure only; qualification, voluntary decision and budget remain separate.'})
@@ -217,6 +257,30 @@ def audit_channel_history(channels, contracts, seed, buyers):
                 when = instance['next_activation_day']
                 if when >= instance['expiry_day']:
                     instance['state'] = 'FAILED'; break
+                if terms['activation_reliability_bps'] == 0:
+                    last_due = min(day, instance['expiry_day']-1)
+                    count = min((last_due-when)//terms['retry_delay_days']+1,
+                                terms['prepaid_retry_attempts']+1-instance['activation_attempts'])
+                    terminal_day = when+(count-1)*terms['retry_delay_days']
+                    if instance['activation_attempts']+count > terms['prepaid_retry_attempts'] or terminal_day+terms['retry_delay_days'] >= instance['expiry_day']:
+                        count -= 1
+                    if count > 1:
+                        first_attempt = instance['activation_attempts']+1
+                        last = when+(count-1)*terms['retry_delay_days']
+                        instance['activation_attempts'] += count; attempts += count
+                        after = last+terms['retry_delay_days']
+                        retry = instance['activation_attempts'] <= terms['prepaid_retry_attempts'] and after < instance['expiry_day']
+                        instance['state'] = 'RETRY_SCHEDULED' if retry else 'FAILED'
+                        instance['next_activation_day'] = after if retry else last
+                        if not retry:instance['failure_credit_due_microUSD'] = terms['price_microUSD']*terms['failure_credit_bps']//10000
+                        events.append({'day':when,'kind':'CHANNEL_ACTIVATION_FAILURE_RUN',
+                            'source_plan_id':plan,'contract_id':instance['contract_id'],
+                            'first_activation_attempt':first_attempt,'activation_attempts':count,
+                            'last_attempt_day':last,'next_retry_day':after if retry else None,
+                            'final_state':instance['state'],'failure_credit_due_microUSD':instance['failure_credit_due_microUSD'],
+                            'credit_status':'RECEIVABLE_NOT_CASH' if not retry else 'NOT_APPLICABLE'})
+                        event_days[plan].append(day)
+                        continue
                 attempt = instance['activation_attempts']
                 active = uniform(when, plan, 'activation' if attempt == 0 else 'prepaid-activation-retry-' + str(attempt)) < terms['activation_reliability_bps']
                 instance['activation_attempts'] += 1; attempts += 1
@@ -239,13 +303,29 @@ def audit_channel_history(channels, contracts, seed, buyers):
                 event_days[plan].append(day)
             if instance['state'] != 'ACTIVE' or day < instance['activation_day'] or day >= instance['expiry_day']:continue
             pool = population[terms['owned_audience_count']:]
+            if not pool or terms['realization_bps'] == 0:
+                slots = terms['slots_per_day']
+                attempted += slots; instance['potential_slots_used'] += slots
+                unused += slots; instance['unused_slots'] += slots
+                continue
+            rankings = {}
+            eligible = {customer for customer in pool if customer not in exposed
+                        and len(contacts.get(customer, [])) < terms['max_contacts_per_customer']
+                        and (not contacts.get(customer) or day-contacts[customer][-1]['day'] >= terms['contact_cooldown_days'])}
             for slot in range(terms['slots_per_day']):
+                if not eligible:
+                    remaining = terms['slots_per_day']-slot
+                    attempted += remaining; instance['potential_slots_used'] += remaining
+                    unused += remaining; instance['unused_slots'] += remaining
+                    break
                 attempted += 1; instance['potential_slots_used'] += 1; identity = str(plan) + '/' + str(slot)
                 candidate = None
                 if pool and uniform(day, identity, 'reach-realization') < terms['realization_bps']:
                     shared = uniform(day, identity, 'overlapping-audience') < terms['overlap_bps']
                     stage = 'shared-audience' if shared else instance['contract_id'] + '-audience'
-                    ranking = sorted(pool, key=lambda customer: (uniform(day, customer, stage), customer))
+                    if stage not in rankings:
+                        rankings[stage] = sorted(pool, key=lambda customer: (uniform(day, customer, stage), customer))
+                    ranking = rankings[stage]
                     candidate = ranking[slot % len(ranking)]
                     history = contacts.get(candidate, [])
                     if candidate in exposed or len(history) >= terms['max_contacts_per_customer'] or (history and day - history[-1]['day'] < terms['contact_cooldown_days']):candidate = None
@@ -254,6 +334,7 @@ def audit_channel_history(channels, contracts, seed, buyers):
                 ident = 'channel-exposure-' + commitment([plan, day, slot, candidate])[:24]
                 row = {'customer_id': candidate, 'source_plan_id': plan, 'contract_id': instance['contract_id'], 'exposure_id': ident}
                 exposures.append(row); exposed.add(candidate); instance['realized_exposures'] += 1
+                eligible.discard(candidate)
                 contacts.setdefault(candidate, []).append({'day': day, 'exposure_id': ident, 'source_plan_id': plan})
                 events.append({'day': day, 'kind': 'POTENTIAL_CUSTOMER_EXPOSED', **row,
                     'scope': 'Exposure only; qualification, voluntary decision and budget remain separate.'})
@@ -281,5 +362,6 @@ def audit_channel_history(channels, contracts, seed, buyers):
         elif kind == 'CHANNEL_ACTIVATED':live_states[plan] = 'ACTIVE'
         elif kind == 'CHANNEL_ACTIVATION_FAILED_RETRY_SCHEDULED':live_states[plan] = 'RETRY_SCHEDULED'
         elif kind == 'CHANNEL_ACTIVATION_FAILED':live_states[plan] = 'FAILED'
+        elif kind == 'CHANNEL_ACTIVATION_FAILURE_RUN':live_states[plan] = event['final_state']
         elif kind == 'CHANNEL_EXPIRED':live_states[plan] = 'EXPIRED'
     return {'activation_by_plan': activations, 'activation_attempts_checked': attempts, 'exposure_days_checked': len(days)}

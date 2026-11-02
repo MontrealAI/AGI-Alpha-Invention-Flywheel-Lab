@@ -16,6 +16,13 @@ POLICY_FIELDS = {'schema','public_basis','price_bps','rival_price_bps','rival_co
                  'rival_response','scenarios'}
 RANK = {'default':0,'conventional':1,'generated':2,'ordinary_reuse':3,'critic_retain':4,'csv_backend':5}
 
+def _display_fraction(value):
+    try:
+        display=float(value)
+    except OverflowError:
+        return None
+    return display if math.isfinite(display) else None
+
 def validate_policy(policy):
     if set(policy)-{'demand_model','connected_beliefs','ranking_arithmetic'}!=POLICY_FIELDS or policy['schema']!='connected-strategic-commerce/v1':
         raise ValueError('EXPLICIT_FINITE_STRATEGIC_POLICY_REQUIRED')
@@ -23,9 +30,9 @@ def validate_policy(policy):
         raise ValueError('PUBLIC_BELIEF_PROVENANCE_REQUIRED')
     for field in ('price_bps','rival_price_bps'):
         grid=policy[field]
-        if not isinstance(grid,list) or not 1<=len(grid)<=101 or grid!=sorted(set(grid)) or any(type(v) is not int or not 1<=v<=30000 for v in grid):
+        if not isinstance(grid,list) or not grid or grid!=sorted(set(grid)) or any(type(v) is not int or v<1 for v in grid):
             raise ValueError('BOUNDED_UNIQUE_PRICE_GRID_REQUIRED')
-    if type(policy['rival_cost_bps']) is not int or not 0<=policy['rival_cost_bps']<=30000 or policy['rival_response'] not in {'observed_quote','finite_best_response'}:
+    if type(policy['rival_cost_bps']) is not int or policy['rival_cost_bps']<0 or policy['rival_response'] not in {'observed_quote','finite_best_response'}:
         raise ValueError('DECLARED_RIVAL_RESPONSE_REQUIRED')
     validate_scenarios(policy['scenarios'])
     if len({s['id'] for s in policy['scenarios']})!=len(policy['scenarios']):raise ValueError('UNIQUE_PUBLIC_SCENARIO_IDS_REQUIRED')
@@ -36,7 +43,7 @@ def validate_policy(policy):
         if set(beliefs)!={s['id'] for s in policy['scenarios']} or policy['rival_response']!='observed_quote':
             raise ValueError('CONNECTED_PUBLIC_PRIORS_AND_OBSERVED_RIVAL_REQUIRED')
         for b in beliefs.values():
-            if set(b)!={'min_value_bps','max_value_bps','min_budget_microUSD','max_budget_microUSD','rival_available_bps'} or any(type(v) is not int or not 0<=v<=10**15 for v in b.values()):raise ValueError('BOUNDED_PUBLIC_BUYER_PRIOR_REQUIRED')
+            if set(b)!={'min_value_bps','max_value_bps','min_budget_microUSD','max_budget_microUSD','rival_available_bps'} or any(type(v) is not int or v<0 for v in b.values()):raise ValueError('BOUNDED_PUBLIC_BUYER_PRIOR_REQUIRED')
             if b['min_value_bps']>b['max_value_bps'] or b['min_budget_microUSD']>b['max_budget_microUSD'] or b['rival_available_bps']>10000:raise ValueError('VALID_PUBLIC_BUYER_INTERVAL_REQUIRED')
     elif 'connected_beliefs' in policy:raise ValueError('UNUSED_BUYER_BELIEFS_REFUSED')
     if 'ranking_arithmetic' in policy:
@@ -50,7 +57,7 @@ def validate_policy(policy):
 def _public(public):
     if set(public)!=PUBLIC_FIELDS:raise ValueError('ONLY_EXPLICIT_PUBLIC_OBSERVATIONS_ALLOWED')
     for field in PUBLIC_FIELDS-{'native_state_digest'}:
-        if type(public[field]) is not int or not 0<=public[field]<=10**15:raise ValueError('BOUNDED_PUBLIC_INTEGER_REQUIRED')
+        if type(public[field]) is not int or public[field]<0:raise ValueError('BOUNDED_PUBLIC_INTEGER_REQUIRED')
     if public['anchor']<1 or public['payment_bps']>10000 or public['profit_tax_bps']>10000:
         raise ValueError('VALID_PUBLIC_PRICE_AND_TAX_REQUIRED')
     h=public['native_state_digest']
@@ -120,6 +127,24 @@ def _response(price, public, policy, scenario):
     return best[1] # Rational rival withdrawal remains available.
 
 def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_available=None, market_context=None):
+    """Preserve ordinary traces; promote compatible overflow to exact arithmetic."""
+    try:
+        return _select(policy, method_policy, job_id, offer, memory, public,
+                       _diagnostic_available=_diagnostic_available, market_context=market_context)
+    except OverflowError as error:
+        compatible=(policy.get('rival_response')=='observed_quote'
+                    and (market_context is not None or policy.get('demand_model')=='connected_range'))
+        if policy.get('ranking_arithmetic')=='exact-rational-v1' or not compatible:
+            raise ValueError('NUMERICAL_MODEL_REQUIRES_RATIONAL_PUBLIC_INTERVALS_OR_ATOMS_FOR_SCALED_EXECUTION') from error
+        promoted=copy.deepcopy(policy);promoted['ranking_arithmetic']='exact-rational-v1'
+        result=_select(promoted, method_policy, job_id, offer, memory, public,
+                       _diagnostic_available=_diagnostic_available, market_context=market_context)
+        result['problem']['policy']=copy.deepcopy(policy)
+        result['decision']['problem_sha256']=digest(result['problem'])
+        result['decision']['arithmetic_promotion']='FLOAT_RANGE_EXCEEDED_RATIONAL_COMPATIBLE_PUBLIC_MODEL'
+        return result
+
+def _select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_available=None, market_context=None):
     """Choose one admitted offer's execution method and price, or no bid.
 
     Cash feasibility is conservative: today's full cost plus native principal
@@ -174,7 +199,7 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
                     tax_exact=paid_exact*max(0,price-cost)*Fraction(public['profit_tax_bps'],10000)
                     contribution_exact=win_exact*(paid_exact*price-cost-tax_exact)-public['quote_cost']
                     expected_exact+=Fraction(str(sc['weight']))*contribution_exact
-                    win=float(win_exact);paid=float(paid_exact);contribution=float(contribution_exact)
+                    win=float(win_exact);paid=float(paid_exact);contribution=_display_fraction(contribution_exact)
                     fraction_fields={'win_probability_fraction':str(win_exact),'accept_collect_probability_fraction':str(paid_exact),'net_after_modeled_tax_fraction':str(contribution_exact)}
                 else:
                     if market_context is not None:
@@ -187,10 +212,12 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
                     tax=paid*max(0,price-cost)*public['profit_tax_bps']/10000
                     contribution=win*(net-tax)-public['quote_cost']
                     expected+=sc['weight']*contribution
+                    if not math.isfinite(contribution) or not math.isfinite(expected):
+                        raise OverflowError('FLOAT_FINANCIAL_FORECAST_RANGE_EXCEEDED')
                 forecasts.append({'belief':sc['id'],'rival_price':rival,'win_probability':win,
                                   'accept_collect_probability':paid,'net_after_modeled_tax':contribution,**fraction_fields})
             row={'mode':mode,'price':price,'cost':cost,'fee':fee,'required_current_cash':reserve,
-                 'expected_net':float(expected_exact) if exact else expected,'forecasts':forecasts,
+                 'expected_net':_display_fraction(expected_exact) if exact else expected,'forecasts':forecasts,
                  **({'expected_net_fraction':str(expected_exact)} if exact else {})}
             rows.append(row)
             if exact:
@@ -210,7 +237,7 @@ def select(policy, method_policy, job_id, offer, memory, public, *, _diagnostic_
     if exact:
         decision['ranking_arithmetic']='exact-rational-v1'
         decision['scope']='EXACT_FINITE_RATIONAL_PRICE_METHOD_RANKING_UNDER_DECLARED_PUBLIC_BELIEFS'
-        decision['arithmetic_scope']='Declared decimal scenario weights/probabilities are interpreted as rationals. Display floats never determine ranking. Joint allocation conservatively floors each exact scenario contribution to native microUSD; no sub-microUSD basket optimality claim.'
+        decision['arithmetic_scope']='Declared decimal scenario weights/probabilities are interpreted as rationals. Display floats never determine ranking and are null when outside floating-point range; exact fractions remain authoritative. Joint allocation conservatively floors each exact scenario contribution to native microUSD; no sub-microUSD basket optimality claim.'
     if _diagnostic_available is not None:
         decision['diagnostic_available']=_diagnostic_available
         decision['scope']='COUNTERFACTUAL_CASH_CANDIDATES_NOT_EXECUTABLE'
@@ -291,7 +318,7 @@ def _action_options(observation,deliveries,investments,riskpolicy,diagnostic_ava
             if result!=select(p['policy'],p['method_policy'],p['job_id'],p['offer'],p['memory'],p['public'],_diagnostic_available=diagnostic_available,market_context=p.get('market_context')):raise ValueError('DIAGNOSTIC_CANDIDATES_CHANGED')
         p=result['problem'];pub=p['public']
         if pub['native_state_digest']!=observation['state_digest']:raise ValueError('JOINT_NATIVE_PREFIX_CHANGED')
-        exact=p['policy'].get('ranking_arithmetic')=='exact-rational-v1'
+        exact=result['decision'].get('ranking_arithmetic')=='exact-rational-v1'
         if any((Fraction(str(s['weight']))!=Fraction(riskpolicy['scenarios'].get(s['id'],-1),10000)) if exact else abs(s['weight']-riskpolicy['scenarios'].get(s['id'],-1)/10000)>1e-12 for s in p['policy']['scenarios']):
             raise ValueError('JOINT_SCENARIO_WEIGHTS_MUST_MATCH_PUBLIC_BELIEFS')
         for n,row in enumerate(result['candidates']):

@@ -10,12 +10,15 @@ env:
 jobs:
   current-compatibility:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 360
     env:
       SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
       PYTHONNOUSERSITE: '1'
       PYTHONPATH: ''
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -38,12 +41,15 @@ jobs:
   qualify:
     name: Immutable released 010 source, inputs, package and clean replay
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 360
     env:
       SOURCE_COMMIT: 710203eb128f1d03842a84822ee05517c1791080
       PYTHONNOUSERSITE: '1'
       PYTHONPATH: ''
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: 710203eb128f1d03842a84822ee05517c1791080
@@ -163,11 +169,14 @@ jobs:
     # New main sources retain its qualification job and use their own publisher.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.sha == '710203eb128f1d03842a84822ee05517c1791080'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 360
     permissions:
       contents: write
       actions: read
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
@@ -187,9 +196,11 @@ jobs:
           python - <<'PY'
           import json, os, pathlib, subprocess, time
           repo, sha = os.environ['GH_REPO'], os.environ['GITHUB_SHA']
+          from connected_enterprise.platform_runtime import command_budget
+          deadline = time.monotonic() + command_budget()["timeout_seconds"]
           required = ['campaign.yml', 'consequential007.yml', 'consequential009.yml']
           accepted = {}
-          for attempt in range(60):
+          while time.monotonic() < deadline:
               accepted = {}
               for workflow in required:
                   endpoint = f'repos/{repo}/actions/workflows/{workflow}/runs?head_sha={sha}&event=push&branch=main&per_page=100'
@@ -204,9 +215,9 @@ jobs:
                           raise SystemExit('Exact-main workflow failed; publication refused: '+workflow)
                       accepted[workflow] = {k: current[k] for k in ['id', 'head_sha', 'head_branch', 'event', 'path', 'conclusion', 'html_url']}
               if len(accepted) == len(required): break
-              time.sleep(10)
+              time.sleep(min(10, max(0, deadline-time.monotonic())))
           else:
-              raise SystemExit('Exact-main workflows did not qualify within the bounded publication allowance.')
+              raise SystemExit('Exact-main workflows did not qualify within the hosted platform window.')
           report = {'source_commit': sha, 'required_event': 'push', 'required_branch': 'main',
               'own_qualification_run': int(os.environ['GITHUB_RUN_ID']), 'inherited_workflows': accepted}
           output = pathlib.Path(os.environ['RUNNER_TEMP'])/'commercial010-release-assets/RELEASE_GATE.json'

@@ -1,6 +1,6 @@
 # Research papers
 
-The [AGI ALPHA homepage](index.html) presents the public research collection and links to a separate [local synthetic flexibility-pool studio](studio.html). Its downloadable dispatch is independently checked in the browser; it is separate from native financial acceptance and controls no devices. The [063 research edition](../transformational063/REPORT.md) connects the technical comparison to simulated commercial operation and its limitations.
+The [AGI ALPHA homepage](index.html) leads with Blue Sky-only productive possibilities and explicit admission evidence. The separate [historical studio](studio.html) preserves the conventional063 preview and its negative controls. Its downloadable dispatch is a local browser computation, separate from native financial acceptance, and controls no devices. The [063 research edition](../transformational063/REPORT.md) retains its original findings and limitations.
 
 ## Foundry v2 - Autonomous Enterprises: Activate. Evolve. Scale.
 

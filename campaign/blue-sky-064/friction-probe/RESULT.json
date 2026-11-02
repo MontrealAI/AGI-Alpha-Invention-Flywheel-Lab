@@ -1,0 +1,56 @@
+{
+  "schema": "friction064/feasibility-result/v1",
+  "scope": "COMPUTATIONAL_SOURCE_PROBE_NOT_PHYSICAL_VALIDATION",
+  "sources": {
+    "code_sha256": "94da2880d1afdc140f6e8e00bbae4e2a56015bf1511f2dcf76b0eab5d170bb84",
+    "source_data_zip_sha256": "9d8e41cfd762874522eb67b82232d3a8401d9207f9bfe0abfdf3092ae409682f",
+    "fig4_xlsx_sha256": "522924c1c57ccbd3bd04f3bacd0be27451575ca4bac6fb506c25120227a43497",
+    "paper_pdf_sha256": "7ccd0317f71b733047be2669a8fbd835a38a950c7021877efa0c80050c809998",
+    "registration_sha256": "df25ef7d23f3873fd25b10f1a996d7c35d5611c2d1327e7417c631d295f9290e",
+    "probe_sha256": "e8a9ae6d489bbf52013164353545094968417c0834326110ad86e37de472c09f"
+  },
+  "independent_forward_replay": {
+    "profiles": 32,
+    "max_absolute_difference": 6.661338147750939e-16,
+    "minimum_sampled_dF_dP": 1.2542272207014025,
+    "all_sampled_curves_monotonic": true,
+    "meaning": "Scalar independent Hertz replay matches released vector model; neither is external physical validation."
+  },
+  "published_curve_calibration": {
+    "published_observations": 15,
+    "train_count": 8,
+    "holdout_count": 7,
+    "fitted_nonnegative_scale": 1.0824633261791003,
+    "heldout_rmse": 0.005186774828416592,
+    "heldout_max_abs_error": 0.011234718391520682,
+    "meaning": "Alternating heldout points from one previously published device; not independently acquired data or cross-device validation."
+  },
+  "exact_obstruction": {
+    "dF_ddelta": "sum of positive local shear strengths times radii over active contacts > 0",
+    "dP_ddelta": "sum 1.5*sqrt(radius*penetration) > 0",
+    "consequence": "dF/dP >0 on any loaded interval for every fixed height/radius distribution in this grammar",
+    "monotonic_uniform_error_lower_bound": 0.04,
+    "target_tolerance": 0.005,
+    "witness_points": [
+      {
+        "P": 0.08,
+        "F": 0.13
+      },
+      {
+        "P": 0.12,
+        "F": 0.05
+      }
+    ],
+    "target_impossible_in_hertz_grammar": true
+  },
+  "full_alternative_admission": {
+    "passive_force_limiter_and_snapthrough_routes_not_excluded": true,
+    "negative_differential_friction_already_exists": true,
+    "actual_beneficiary_specific_acceptance_contract": false,
+    "baseline_exclusion_constraints_added": false,
+    "new_primitive_construction_authorized_by_admission": false
+  },
+  "blue_sky_verdict": "HOLD_COMPLETE_ALTERNATIVES_AND_BENEFICIARY_RESIDUAL_UNRESOLVED",
+  "next": "Do not create a new clutch blueprint merely to rename known overload release. Establish a genuine consequential unmet outcome after full alternatives, then construct its missing means.",
+  "wall_seconds": 2.97298042201146
+}

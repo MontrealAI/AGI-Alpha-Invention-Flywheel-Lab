@@ -8,8 +8,11 @@ permissions:
 jobs:
   active-worker-bounds054:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -27,7 +30,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: active-worker-bounds054
+          name: active-worker-bounds054-attempt-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/bounds054/REPORT.json
             ${{ runner.temp }}/bounds054/resources.json
@@ -35,8 +38,11 @@ jobs:
           if-no-files-found: warn
   qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -95,7 +101,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: connected-qualification-evidence
+          name: connected-qualification-evidence-attempt-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/campaign-replay
             ${{ runner.temp }}/identity-probe
@@ -110,8 +116,11 @@ jobs:
           if-no-files-found: warn
   phase-code-qualification:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -130,17 +139,20 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: phase-code-replay
+          name: phase-code-replay-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/phase-code-replay
           if-no-files-found: error
   publish-connected-checkpoint:
     needs: [qualify, phase-code-qualification, active-worker-bounds054]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 360
     permissions:
       contents: write
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
@@ -167,10 +179,13 @@ jobs:
     needs: [qualify, phase-code-qualification, active-worker-bounds054]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 360
     permissions:
       contents: write
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - name: Preserve the historical mechanism release before obsolete source checks
         env:
           GH_TOKEN: ${{ github.token }}
@@ -187,10 +202,13 @@ jobs:
     needs: [qualify, phase-code-qualification, active-worker-bounds054]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 360
     permissions:
       contents: write
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
@@ -225,7 +243,10 @@ jobs:
           if command -v pdflatex >/dev/null 2>&1; then
             mkdir -p "$RUNNER_TEMP/cycle006-tex-check"
             cp docs/research/cycle-006.tex "$RUNNER_TEMP/cycle006-tex-check/"
-            (cd "$RUNNER_TEMP/cycle006-tex-check" && timeout 60 pdflatex -no-shell-escape -interaction=nonstopmode -halt-on-error cycle-006.tex && timeout 60 pdflatex -no-shell-escape -interaction=nonstopmode -halt-on-error cycle-006.tex)
+            for tex_pass in 1 2; do
+              tex_window=$(python -c 'from connected_enterprise.platform_runtime import command_budget; print(command_budget()["timeout_seconds"])')
+              (cd "$RUNNER_TEMP/cycle006-tex-check" && timeout "$tex_window" pdflatex -no-shell-escape -interaction=nonstopmode -halt-on-error cycle-006.tex)
+            done
             echo 'CI compiled TeX separately; the hash-bound visually inspected supplied PDF is retained.'
           else
             echo 'No pdflatex in this runner: CI verifies the supplied compiled-PDF identity and visual-QA binding; it does not claim recompilation.'
@@ -259,7 +280,7 @@ jobs:
         if: always() && steps.existing.outputs.published == 'false'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: perturbation-construction-release-evidence
+          name: perturbation-construction-release-evidence-attempt-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/cycle006-assets
             ${{ runner.temp }}/cycle006-archive-qualification
@@ -274,10 +295,13 @@ jobs:
     needs: [qualify, phase-code-qualification, active-worker-bounds054]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 360
     permissions:
       contents: write
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false

@@ -52,7 +52,7 @@ class CompactFailureTests(unittest.TestCase):
   self.assertEqual(len(operation),1)
   steps=re.split(r'(?m)^      - ',operation[0])
   uploads=[step for step in steps if re.search(r'(?m)^        uses: actions/upload-artifact@',step)]
-  self.assertEqual(len(uploads),4)
+  self.assertEqual(len(uploads),5)
   failure=[step for step in uploads if re.search(r'(?m)^        if: failure\(\)',step)]
   self.assertEqual(len(failure),1)
   self.assertIn("        if: failure() && steps.operation.outcome != 'success' && steps.compact_failure.outcome == 'success'\n",failure[0])
@@ -63,6 +63,10 @@ class CompactFailureTests(unittest.TestCase):
   for step in success+wheel:
    self.assertIn("        if: always() && steps.operation.outcome == 'success'\n",step)
   self.assertEqual(re.findall(r'(?m)^          path: (.+)$',wheel[0]),['${{ runner.temp }}/RELEASED_WHEEL.json'])
+  blue_sky=[step for step in uploads if 'name: blue-sky064-released-operation-' in step]
+  self.assertEqual(len(blue_sky),1)
+  self.assertIn("        if: always() && steps.released_blue_sky.outcome == 'success'\n",blue_sky[0])
+  self.assertEqual(re.findall(r'(?m)^          path: (.+)$',blue_sky[0]),['${{ runner.temp }}/released-blue-sky064/RESULT.json'])
   self.assertEqual(len(success),1)
   self.assertEqual(re.findall(r'(?m)^            (.+)$',success[0]),[
    '${{ runner.temp }}/RELEASE_DOWNLOAD.json',
@@ -86,6 +90,8 @@ class CompactFailureTests(unittest.TestCase):
   for changed in (text.replace(" && steps.compact_failure.outcome == 'success'",''),
                   text.replace('/FAILURE_LESSON.json','/*.stderr'),
                   text.replace('/RELEASED_WHEEL.json','/*.stdout'),
+                  text.replace("always() && steps.released_blue_sky.outcome == 'success'",'always()'),
+                  text.replace('/released-blue-sky064/RESULT.json','/released-blue-sky064/private'),
                   text.replace("always() && steps.released_flexibility.outcome == 'success'",'always()'),
                   text.replace('/released-transformational063/public','/released-transformational063/private'),
                   text.replace("always() && steps.operation.outcome == 'success'",'always()'),

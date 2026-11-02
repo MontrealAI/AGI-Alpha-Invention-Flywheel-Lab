@@ -1,0 +1,17 @@
+{
+  "schema": "friction064/feasibility-probe/v1",
+  "scope": "COMPUTATIONAL_SOURCE_PROBE_NOT_PHYSICAL_VALIDATION",
+  "candidate": "passive hold-in-window and release-on-overload contact",
+  "beneficiary_problem": "Protect delicate handled objects when a normal-load input rises beyond its intended holding range; this is a literature-supported problem family, not an actual buyer contract.",
+  "target_pressure": [0.02, 0.04, 0.06, 0.08, 0.10, 0.12],
+  "target_friction": [0.03, 0.07, 0.11, 0.13, 0.09, 0.05],
+  "uniform_error_tolerance": 0.005,
+  "target_status": "AUTHORED_DIAGNOSTIC_NOT_BUYER_REQUIREMENT",
+  "model_control": "Published independent-Hertz height/radius surface grammar; all positive radii and material shear strengths",
+  "full_alternatives": ["passive overload clutches and force limiters", "snap-through passive grippers", "negative differential material contacts", "strong BEM inverse design and arbitrary target profiles"],
+  "source_curve_check": "Published Figure4B design curve, fit one nonnegative scale on even-indexed experimental static-friction observations; evaluate odd indices without refitting. Report RMSE; this reuses existing published measurements, not a new experiment.",
+  "construction_stop": "No new primitive/CAD admission if the complete outcome is already available from ordinary mechanical alternatives or target has no justified beneficiary acceptance contract.",
+  "source_model_probe": {"profile_seed": 640112, "profiles": 32, "asperities": 64, "compression_steps": 257, "radii": [1,3]},
+  "finite_execution_budget": {"wall_seconds": 60, "no_network_in_experiment": true},
+  "no_claims": ["new physical law", "new industry", "new science", "physical safety", "real buyer or sale", "universal optimality", "US3B profit"]
+}

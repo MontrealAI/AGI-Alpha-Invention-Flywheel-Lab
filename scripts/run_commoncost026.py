@@ -25,6 +25,27 @@ from connected_enterprise.mechanism_choice import MODES
 from commercial.ledger import digest
 from portfolio25.pricing import SCENARIOS
 
+def inventory_content_fingerprint(manifest):
+    """Compare content across staging folders without changing native authority.
+
+    Native admission commits full job rows, including their relative paths.
+    Validate that original commitment before making a detached comparison view;
+    only that view's three staging paths and path-dependent chunk hashes change.
+    Source, seed, order, chunk boundaries, content hashes and other metadata stay.
+    Physical source/input integrity remains the native loader/auditor's job.
+    """
+    from adaptive_enterprise.instruments import _validate_admission
+    _validate_admission(manifest)
+    jobs=[copy.deepcopy({key:value for key,value in job.items() if key not in {'input','artifact','receipt'}})
+          for job in manifest['jobs']]
+    cohort=copy.deepcopy(manifest['cohort_provenance'])
+    admission=cohort.get('finite_admission')
+    if admission is not None:
+        for chunk in admission['chunks']:
+            start,count=chunk['start'],chunk['count']
+            chunk['jobs_sha256']=digest(jobs[start:start+count])
+    return digest({'cohort':cohort,'jobs':jobs,'source_hashes':copy.deepcopy(manifest['source_hashes'])})
+
 PROTOCOL={'schema':'commoncost026-public-fresh-comparison/v1',
  'smoke':{'horizon_days':14,'seeds':[2610311740],'cases':['central']},
  'scale':{'horizon_days':28,'seeds':[2610311737,2610311738],'cases':['central','parity','adverse']},
@@ -86,7 +107,7 @@ def main():
         relative='.commoncost026-inputs/'+a.stage+'-'+a.case+'-'+str(a.seed)+'-'+a.arm
         manifest=prepare_services(ROOT,relative,cohort_seed=PROTOCOL['service_cohort_seed'])
         cfg=config(a.stage,a.case,a.arm);source=identity(ROOT)
-        receipt.update(inventory_count=len(manifest['jobs']),inventory_fingerprint=digest({'cohort':manifest['cohort_provenance'],'jobs':[{k:v for k,v in job.items() if k not in {'input','artifact','receipt'}} for job in manifest['jobs']]}),config=cfg,config_sha256=digest(cfg),source=source,manifest_sha256=digest(manifest));write()
+        receipt.update(inventory_count=len(manifest['jobs']),inventory_fingerprint=inventory_content_fingerprint(manifest),config=cfg,config_sha256=digest(cfg),source=source,manifest_sha256=digest(manifest));write()
         result=run_world(ROOT,manifest,cfg,a.seed,'competitive_growth',out/'private',source=source)
         checked=audit(ROOT,manifest,result)
         joint=result.get('joint_actions',result.get('operating_state',{}).get('joint_actions',{}))

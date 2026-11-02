@@ -6,9 +6,9 @@ MICRO=1_000_000
 
 def price(anchor,legacy_price,public_rival_price,base_resource_cost,payment_bps,payment_fixed,recent_own_choices):
     terms={'anchor':anchor,'legacy_price':legacy_price,'public_rival_price':public_rival_price,'base_resource_cost':base_resource_cost,'payment_bps':payment_bps,'payment_fixed':payment_fixed}
-    if any(type(v) is not int or v<0 or v>10**15 for v in terms.values()) or anchor<1 or legacy_price<1 or payment_bps>10000:
+    if any(type(v) is not int or v<0 for v in terms.values()) or anchor<1 or legacy_price<1 or payment_bps>10000:
         raise ValueError('BOUNDED_INTEGER_PUBLIC_PRICING_TERMS_REQUIRED')
-    if not isinstance(recent_own_choices,list) or len(recent_own_choices)>1000 or any(type(choice) is not bool for choice in recent_own_choices):
+    if not isinstance(recent_own_choices,list) or any(type(choice) is not bool for choice in recent_own_choices):
         raise ValueError('ONLY_PUBLIC_BOOLEAN_OWN_OFFER_OUTCOMES_ALLOWED')
     if payment_bps==10000:return None
     contribution_margin=MICRO

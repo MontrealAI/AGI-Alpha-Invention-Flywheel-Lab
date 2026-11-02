@@ -12,12 +12,12 @@ from fractions import Fraction
 SCHEMA='connected-complete-offer-market/v1'
 
 def _int(x,minimum=0):
-    if type(x) is not int or not minimum<=x<=10**15:raise ValueError('BOUNDED_INTEGER_REQUIRED')
+    if type(x) is not int or x<minimum:raise ValueError('BOUNDED_INTEGER_REQUIRED')
     return x
 
 def validate_policy(p):
     if not isinstance(p,dict) or set(p) not in ({'schema','profiles','selection'},{'schema','profiles','selection','requested_jobs'}) or p['schema']!=SCHEMA or p['selection'] not in {'restricted','menu'}:raise ValueError('EXPLICIT_COMPLETE_OFFER_POLICY_REQUIRED')
-    if not isinstance(p['profiles'],list) or not 1<=len(p['profiles'])<=16:raise ValueError('BOUNDED_REQUEST_PROFILES_REQUIRED')
+    if not isinstance(p['profiles'],list) or not p['profiles']:raise ValueError('BOUNDED_REQUEST_PROFILES_REQUIRED')
     if 'requested_jobs' in p:
         requests=p['requested_jobs']
         if not isinstance(requests,dict) or not requests:raise ValueError('BOUNDED_PUBLIC_JOB_REQUESTS_REQUIRED')
@@ -27,19 +27,19 @@ def validate_policy(p):
     for r in p['profiles']:
         if set(r)!={'id','services','price_grids','atoms','outside_options'}:raise ValueError('EXACT_REQUEST_PROFILE_REQUIRED')
         ids.append(r['id'])
-        if not isinstance(r['id'],str) or not r['id'] or not 1<=len(r['services'])<=4 or len(set(r['services']))!=len(r['services']):raise ValueError('UNIQUE_APPLICABLE_SERVICES_REQUIRED')
+        if not isinstance(r['id'],str) or not r['id'] or not r['services'] or len(set(r['services']))!=len(r['services']):raise ValueError('UNIQUE_APPLICABLE_SERVICES_REQUIRED')
         if set(r['price_grids'])!=set(r['services']):raise ValueError('COMPLETE_PRICE_GRID_REQUIRED')
         for grid in r['price_grids'].values():
-            if not isinstance(grid,list) or not 1<=len(grid)<=8 or grid!=sorted(set(grid)):raise ValueError('BOUNDED_UNIQUE_PRICE_GRID_REQUIRED')
+            if not isinstance(grid,list) or not grid or grid!=sorted(set(grid)):raise ValueError('BOUNDED_UNIQUE_PRICE_GRID_REQUIRED')
             for price in grid:_int(price,1)
-        if not isinstance(r['atoms'],list) or not 1<=len(r['atoms'])<=32:raise ValueError('FINITE_VALUE_BUDGET_PRIOR_REQUIRED')
+        if not isinstance(r['atoms'],list) or not r['atoms']:raise ValueError('FINITE_VALUE_BUDGET_PRIOR_REQUIRED')
         for a in r['atoms']:
             if set(a)!={'weight_bps','budget_microUSD','values'} or set(a['values'])!=set(r['services']):raise ValueError('INDEPENDENT_VALUE_BUDGET_ATOM_REQUIRED')
             _int(a['weight_bps'],1);_int(a['budget_microUSD'])
             for v in a['values'].values():_int(v)
         if sum(a['weight_bps'] for a in r['atoms'])!=10000:raise ValueError('ATOM_WEIGHTS_SUM_10000_REQUIRED')
         names=[]
-        if not isinstance(r['outside_options'],list) or len(r['outside_options'])>12:raise ValueError('FINITE_OUTSIDE_MENU_REQUIRED')
+        if not isinstance(r['outside_options'],list):raise ValueError('FINITE_OUTSIDE_MENU_REQUIRED')
         for o in r['outside_options']:
             if set(o)!={'name','provider','service_id','price','quality_bps','delay_cost'} or o['provider'] not in {'human','rival','self_service'} or o['service_id'] not in r['services']:raise ValueError('APPLICABLE_OUTSIDE_OUTCOME_REQUIRED')
             names.append(o['name']);_int(o['price']);_int(o['delay_cost']);_int(o['quality_bps'])

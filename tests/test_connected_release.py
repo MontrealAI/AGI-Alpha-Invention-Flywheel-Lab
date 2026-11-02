@@ -643,30 +643,37 @@ class WorkflowGateTests(unittest.TestCase):
 
     def test_platform_aligned_operating_timeout_has_finite_receipt_reserve(self):
         publish = ['release', 'publish', '--assets', '/unused', '--source-commit', COMMIT,
-                   '--repository', 'owner/repo', '--run-id', '7', '--timeout-seconds', '2400']
+                   '--repository', 'owner/repo', '--run-id', '7', '--timeout-seconds', '2700']
         operate = ['release', 'operate-download', '--assets', '/unused', '--source-commit', COMMIT,
                    '--output', '/unused-operation', '--timeout-seconds', '21301']
-        with patch.object(release.sys, 'argv', publish), patch.object(release, 'publish', return_value={}) as action, contextlib.redirect_stdout(io.StringIO()):
+        with patch.dict(release.os.environ, {}, clear=True), patch.object(release.sys, 'argv', publish), patch.object(release, 'publish', return_value={}) as action, contextlib.redirect_stdout(io.StringIO()):
             release.main()
-            self.assertEqual(action.call_args.args[-1], 2400)
-        with patch.object(release.sys, 'argv', operate), patch.object(release, 'operate_download') as action, contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(action.call_args.args[-1], 2700)
+        hosted={'GITHUB_ACTIONS':'true','AGI_JOB_START_EPOCH':'1000'}
+        with patch.dict(release.os.environ, hosted, clear=True), patch.object(release.sys, 'argv', operate), patch.object(release, 'operate_download') as action, contextlib.redirect_stderr(io.StringIO()):
             with self.assertRaises(SystemExit) as error:
                 release.main()
             self.assertEqual(error.exception.code, 2)
             action.assert_not_called()
-        with patch.object(release.sys, 'argv', [*publish[:-1], '2401']), patch.object(release, 'publish') as action, contextlib.redirect_stderr(io.StringIO()):
+        with patch.dict(release.os.environ, hosted, clear=True), patch.object(release.sys, 'argv', [*publish[:-1], '21301']), patch.object(release, 'publish') as action, contextlib.redirect_stderr(io.StringIO()):
             with self.assertRaises(SystemExit):
                 release.main()
             action.assert_not_called()
 
 class ProspectivePlatformPolicyTests(unittest.TestCase):
-    def test_default_operation_deadline_is_platform_ceiling_less_reserve(self):
+    def test_hosted_default_operation_deadline_is_platform_ceiling_less_reserve(self):
         args=['release','operate-download','--assets','/unused','--source-commit',COMMIT,'--output','/unused-operation']
-        with patch.object(release.sys,'argv',args), patch.object(release,'operate_download',return_value={}) as operation, contextlib.redirect_stdout(io.StringIO()):
+        with patch.dict(release.os.environ, {'GITHUB_ACTIONS':'true','AGI_JOB_START_EPOCH':'1000'}, clear=True), patch('connected_enterprise.platform_runtime.time.time',return_value=1000), patch.object(release.sys,'argv',args), patch.object(release,'operate_download',return_value={}) as operation, contextlib.redirect_stdout(io.StringIO()):
             release.main()
         self.assertEqual(operation.call_args.args[3],21300)
         self.assertEqual(release.HOSTED_JOB_LIMIT_SECONDS,21600)
         self.assertEqual(release.RECEIPT_SHUTDOWN_RESERVE_SECONDS,300)
+
+    def test_standalone_operation_does_not_invent_a_subscription_deadline(self):
+        args=['release','operate-download','--assets','/unused','--source-commit',COMMIT,'--output','/unused-operation']
+        with patch.dict(release.os.environ, {}, clear=True), patch.object(release.sys,'argv',args), patch.object(release,'operate_download',return_value={}) as operation, contextlib.redirect_stdout(io.StringIO()):
+            release.main()
+        self.assertIsNone(operation.call_args.args[3])
 
 if __name__ == '__main__':
     unittest.main()

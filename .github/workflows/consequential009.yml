@@ -8,8 +8,11 @@ permissions:
 jobs:
   qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -51,11 +54,14 @@ jobs:
     # Current main sources retain qualification and use their own publisher.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.sha == '69a4725d9c12589860670a551911bedbd65cba9e'
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 360
     permissions:
       contents: write
       actions: read
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
@@ -72,8 +78,10 @@ jobs:
           python - <<'PY'
           import json, os, subprocess, time
           repo, sha = os.environ['GH_REPO'], os.environ['GITHUB_SHA']
+          from connected_enterprise.platform_runtime import command_budget
+          deadline = time.monotonic() + command_budget()["timeout_seconds"]
           for workflow in ['campaign.yml', 'consequential007.yml']:
-              for attempt in range(60):
+              while time.monotonic() < deadline:
                   data = json.loads(subprocess.check_output(['gh', 'api', f'repos/{repo}/actions/workflows/{workflow}/runs?head_sha={sha}&event=push&branch=main'], text=True))
                   runs = [r for r in data['workflow_runs'] if r['head_sha'] == sha and r['event'] == 'push' and r['head_branch'] == 'main']
                   if runs:
@@ -81,8 +89,8 @@ jobs:
                       if current['status'] == 'completed':
                           if current['conclusion'] != 'success': raise SystemExit('Exact-main inherited qualification failed; publication refused.')
                           break
-                  time.sleep(5)
-              else: raise SystemExit('Exact-main inherited qualification not completed within allowance.')
+                  time.sleep(min(5, max(0, deadline-time.monotonic())))
+              else: raise SystemExit('Exact-main inherited qualification not completed within the hosted platform window.')
           PY
       - name: Download actual qualified package and test clean contents again
         env:

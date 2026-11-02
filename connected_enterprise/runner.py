@@ -129,6 +129,18 @@ def source_paths(root):
         names.update(p.relative_to(root).as_posix() for p in (root/'docs/transformational063').glob('*')
                      if p.is_file() and p.suffix in {'.tex', '.bib', '.pdf', '.md', '.py', '.json', '.svg', '.png'})
         names.update(name for name in ('.github/workflows/transformational063.yml',) if (root/name).is_file())
+    if (root/'research/blue_sky064/probe.py').is_file():
+        for folder in ('research/blue_sky064', 'campaign/blue-sky-064'):
+            names.update(p.relative_to(root).as_posix() for p in (root/folder).rglob('*')
+                         if p.is_file() and '__pycache__' not in p.parts
+                         and p.suffix in {'.py', '.json', '.md', '.csv', '.txt'})
+        names.update(p.relative_to(root).as_posix() for p in (root/'.github/workflows').glob('*.yml') if p.is_file())
+        required={'tests/test_strategic024.py', 'tests/test_compact_failure_export031.py',
+                  'tests/test_blue_sky064.py', 'tests/test_historical_publication063.py',
+                  'docs/harness/OUT_PAPERS.md'}
+        if any(not (root/name).is_file() for name in required):
+            raise ValueError('BLUE_SKY064_SOURCE_DEPENDENCY_MISSING')
+        names.update(required)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
