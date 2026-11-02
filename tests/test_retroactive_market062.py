@@ -228,4 +228,53 @@ class PublicEconomicScopeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'PUBLIC_ECONOMIC_SENSITIVITY_TAMPERED'):
             check_public_economic_claims(r,p)
 
+
+class CompetentOrdinaryPoolingControlTests(unittest.TestCase):
+    def test_source_matched_pool_without_adapter_can_deliver_same_successor(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from connected_enterprise.finance import JournalAccount
+        from experiments.retroactive_market062 import ROOT,make_manifest,_pay,_deliver
+        p=protocol()
+        with TemporaryDirectory(prefix='.market062-ordinary-pooling-',dir=ROOT) as directory:
+            output=Path(directory)
+            manifest,measurement=make_manifest(ROOT,output,list('ABC'),streams())
+            self.assertEqual(set(measurement),set('ABC'))
+            account=JournalAccount(ROOT,manifest,output/'ordinary-pooled.sqlite',
+                                   opening=p['opening_microUSD'],working=0,
+                                   contract='market062-ordinary-pooling-control')
+            try:
+                for name,amount in p['fixed_shared'].items():
+                    account.cost('shared-'+name,amount,0)
+                orders={name:_pay(account,name,'evidence_matrix-market062-'+name,
+                                  p['quote_microUSD'],0) for name in 'AB'}
+                for day,name in enumerate('AB',1):
+                    _deliver(account,orders[name],name,p,day)
+                account.cost('first-stage-profit-tax',p['stage1_tax_microUSD'],2)
+                self.assertEqual(account.snapshot()['summary']['profit'],153*MICRO)
+                successor=_pay(account,'C','evidence_matrix-market062-C',
+                               p['quote_microUSD'],4)
+                _deliver(account,successor,'C',p,4)
+                account.cost('second-stage-profit-tax',p['stage2_tax_microUSD'],4)
+                exported=account.export()
+                audit=account.audit()
+                summary=account.snapshot()['summary']
+            finally:
+                account.close()
+            self.assertTrue(audit['accepted'])
+            self.assertEqual([o['state'] for o in exported['ledger']['orders']],
+                             ['released','released','released'])
+            self.assertEqual([o['id'] for o in exported['ledger']['orders']],
+                             ['market062-A','market062-B','market062-C'])
+            self.assertFalse([e for e in exported['connected_journal']['entries']
+                              if e.get('key')=='spend:third-sensor-adapter'])
+            expected=(3*p['quote_microUSD']-sum(p['fixed_shared'].values())
+                      -3*sum(p['per_order'].values())
+                      -p['stage1_tax_microUSD']-p['stage2_tax_microUSD'])
+            self.assertEqual(expected,1107*MICRO)
+            self.assertEqual(summary['profit'],expected)
+            self.assertEqual(summary['collections'],3*p['quote_microUSD'])
+            self.assertEqual(summary['profit']-987*MICRO,
+                             p['earned_only_successor_adapter_microUSD'])
+
 if __name__=='__main__':unittest.main()
