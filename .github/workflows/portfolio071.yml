@@ -8,6 +8,7 @@ on:
       - 'commercial/ledger.py'
       - 'connected_enterprise/finance.py'
       - 'requirements-portfolio071.txt'
+      - 'scripts/replay_portfolio071_parallel.py'
       - '.github/workflows/portfolio071.yml'
   push:
     branches: [main]
@@ -18,13 +19,14 @@ on:
       - 'commercial/ledger.py'
       - 'connected_enterprise/finance.py'
       - 'requirements-portfolio071.txt'
+      - 'scripts/replay_portfolio071_parallel.py'
       - '.github/workflows/portfolio071.yml'
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
   group: portfolio071-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   independent-portfolio-replay:
     runs-on: ubuntu-latest
@@ -42,8 +44,10 @@ jobs:
           python -m pip install --only-binary=:all: -r requirements-portfolio071.txt
       - name: Participation, source binding, native accounting and tampering regressions
         run: python -m unittest discover -s tests -p 'test_portfolio071*.py' -v
-      - name: Reproduce all five routes and independent native audits
-        run: python -m portfolio071.reproduce --output "$RUNNER_TEMP/portfolio071" --download-sensor
+      - name: Reproduce independent scientific routes
+        run: python -m portfolio071.reproduce --output "$RUNNER_TEMP/portfolio071" --download-sensor --skip-economics
+      - name: Execute all registered independent native accounts
+        run: python -m scripts.replay_portfolio071_parallel --reproduction-output "$RUNNER_TEMP/portfolio071"
       - name: Independently reconcile every exported native account
         run: python -m portfolio071.verify_economics --root "$RUNNER_TEMP/portfolio071/native-source" --campaign "$RUNNER_TEMP/portfolio071/economics" --output "$RUNNER_TEMP/portfolio071/INDEPENDENT_ECONOMIC_AUDIT.json"
       - name: Publish compact public evidence only
@@ -54,6 +58,7 @@ jobs:
           path: |
             ${{ runner.temp }}/portfolio071/SUMMARY.json
             ${{ runner.temp }}/portfolio071/INDEPENDENT_ECONOMIC_AUDIT.json
+            ${{ runner.temp }}/portfolio071/ORCHESTRATION.json
             ${{ runner.temp }}/portfolio071/r1/*.json
             ${{ runner.temp }}/portfolio071/r3/*.json
             ${{ runner.temp }}/portfolio071/r5/*.json

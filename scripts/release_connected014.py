@@ -28,6 +28,11 @@ PAPERS = ('PAPER.pdf', 'PAPER.tex', 'index.html', 'REPORT.md', 'PUBLICATION.json
 REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.yml', 'adaptive012.yml', 'commercial010.yml')
 # Terminal measurement009 is manual-only; path changes never renew its expired allocation.
 CONDITIONAL_WORKFLOWS = {
+    'portfolio071.yml': ('portfolio071/', 'experiments/portfolio_20261102/',
+                         'tests/test_portfolio071*.py', 'commercial/ledger.py',
+                         'connected_enterprise/finance.py', 'requirements-portfolio071.txt',
+                         'scripts/replay_portfolio071_parallel.py',
+                         '.github/workflows/portfolio071.yml'),
     'transformational063.yml': ('flexibility063/', 'connected_enterprise/transformational063.py',
                                'campaign/transformational-063/', 'docs/transformational063/',
                                'research/blue_sky064/', 'campaign/blue-sky-064/',
@@ -389,10 +394,16 @@ def observed_retired_manual_runs(workflows, source_commit):
     accepted = qualifying_runs(observed, source_commit, event='workflow_dispatch') if observed else {}
     return observed, accepted
 
+def conditional_path_matches(path, pattern):
+    # Directory prefixes retain their existing meaning; '*' cannot cross '/'.
+    if pattern.endswith('/'):
+        return path.startswith(pattern)
+    return re.fullmatch(re.escape(pattern).replace(r'\*', '[^/]*'), path) is not None
+
 def applicable_workflows(changed_paths, observed=(), conservative=False):
     required = set(REQUIRED_WORKFLOWS)
     for name, prefixes in CONDITIONAL_WORKFLOWS.items():
-        if conservative or any(path == prefix or (prefix.endswith('/') and path.startswith(prefix)) for path in changed_paths for prefix in prefixes):
+        if conservative or any(conditional_path_matches(path, prefix) for path in changed_paths for prefix in prefixes):
             required.add(name)
     for name in observed:
         if name != OWN_WORKFLOW:

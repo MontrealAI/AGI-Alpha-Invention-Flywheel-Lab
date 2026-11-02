@@ -298,8 +298,8 @@ class ReleaseIntegrityTests(unittest.TestCase):
                 release.verify_assets(self.assets,COMMIT)
 
     def test_moved_main_and_wrong_existing_tag_never_create_release(self):
-        gate = {name:{'head_sha':COMMIT} for name in release.REQUIRED_WORKFLOWS}
         applicability = {'changed_paths':['connected_enterprise/finance.py'], 'base_commit':'c'*40, 'conservative_all_conditionals':False}
+        gate = {name:{'head_sha':COMMIT} for name in release.applicable_workflows(applicability['changed_paths'])}
         with patch.object(release, 'qualifying_runs', return_value=gate), patch.object(release, 'push_applicability', return_value=applicability), patch.object(release.subprocess, 'run') as command:
             def moved(endpoint, optional=False):
                 if '/actions/' in endpoint:
@@ -320,6 +320,18 @@ class ReleaseIntegrityTests(unittest.TestCase):
             with patch.object(release, 'gh', side_effect=wrong_tag):
                 with self.assertRaisesRegex(ValueError, 'TAG_SOURCE'):
                     release.publish(self.assets, COMMIT, 'owner/repo', 7, 1)
+            command.assert_not_called()
+
+    def test_missing_portfolio_run_blocks_publication_before_workflow_is_observed(self):
+        applicability = {'changed_paths':['portfolio071/reproduce.py'],
+                         'base_commit':'c'*40, 'conservative_all_conditionals':False}
+        baseline = {name:{'head_sha':COMMIT} for name in release.REQUIRED_WORKFLOWS}
+        with patch.object(release, 'qualifying_runs', return_value=baseline), \
+             patch.object(release, 'push_applicability', return_value=applicability), \
+             patch.object(release, 'gh', return_value={'workflow_runs':[]}), \
+             patch.object(release.subprocess, 'run') as command:
+            with self.assertRaisesRegex(TimeoutError, 'EXACT_MAIN_WORKFLOW_GATE_TIMEOUT'):
+                release.publish(self.assets, COMMIT, 'owner/repo', 7, 1)
             command.assert_not_called()
 
     def test_download_rejects_retargeted_tag_before_fetching_assets(self):
@@ -578,6 +590,27 @@ class WorkflowGateTests(unittest.TestCase):
         self.assertNotIn('enterprise011.yml', required)
         self.assertNotIn('connected014.yml', required)
         self.assertNotIn('measurement009.yml', required)
+
+    def test_portfolio_paths_require_qualification_without_an_observed_run(self):
+        for path in ('portfolio071/reproduce.py', 'portfolio071/nested/check.py',
+                     'experiments/portfolio_20261102/evidence/RESULTS.json',
+                     'tests/test_portfolio071.py', 'tests/test_portfolio071_economics.py',
+                     'commercial/ledger.py', 'connected_enterprise/finance.py',
+                     'scripts/replay_portfolio071_parallel.py',
+                     'requirements-portfolio071.txt', '.github/workflows/portfolio071.yml'):
+            with self.subTest(path=path):
+                self.assertEqual(release.applicable_workflows([path]),
+                                 set(release.REQUIRED_WORKFLOWS) | {'portfolio071.yml'})
+
+    def test_unchanged_or_unrelated_paths_do_not_require_portfolio(self):
+        for paths in ([], ['README.md'], ['portfolio071_other/tool.py'],
+                      ['experiments/portfolio_20261103/RESULTS.json'],
+                      ['tests/test_portfolio071/nested.py'],
+                      ['tests/test_portfolio071_economics.py.bak'],
+                      ['scripts/replay_portfolio071_parallel.py.bak']):
+            with self.subTest(paths=paths):
+                self.assertEqual(release.applicable_workflows(paths),
+                                 set(release.REQUIRED_WORKFLOWS))
 
     def test_retired_measurement_not_implied_but_observed_extras_remain_gated(self):
         required = release.applicable_workflows(['docs/next009/PAPER.pdf'], ['extra-security.yml', release.OWN_WORKFLOW])
