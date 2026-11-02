@@ -103,6 +103,20 @@ def check_native_claim_binding(arm, exported, reported, measurements, protocol):
                 a.get('op') == 'reserve' and a.get('args', {}).get('id') == plan_id]
     if len(reserves) != 1 or not isinstance(reported.get('after_two'), dict):
         raise ValueError('NATIVE_EARNINGS_PREFIX_NOT_BOUND')
+    # An earned-funded expense is not a predecessor of the successor merely
+    # because both occur in one valid account. Verify native event ordering:
+    # the adapter must be finished before the C instrument is offered.
+    actions = tape.get('actions', [])
+    finished = [i for i, action in enumerate(actions) if isinstance(action, dict)
+                and action.get('op') == 'finish'
+                and isinstance(action.get('args'), dict)
+                and action['args'].get('id') == plan_id]
+    successor_offers = [i for i, action in enumerate(actions) if isinstance(action, dict)
+                        and action.get('op') == 'offer'
+                        and isinstance(action.get('args'), dict)
+                        and action['args'].get('id') == 'market062-C']
+    if len(finished) != 1 or len(successor_offers) != 1 or successor_offers[0] <= finished[0]:
+        raise ValueError('EARNED_ADAPTER_NOT_BEFORE_SUCCESSOR_OFFER')
     before = reserves[0].get('before', {})
     for field in ('cash', 'profit', 'collections', 'expenses', 'available', 'unrestrictedEarned'):
         if reported['after_two'].get(field) != before.get(field):
