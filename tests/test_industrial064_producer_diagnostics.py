@@ -31,6 +31,15 @@ class ProducerDiagnosticsTests(unittest.TestCase):
         self.assertEqual(raised.exception.diagnostics['stderr']['bytes'], len(secret))
         self.assertNotIn(secret, str(raised.exception))
 
+    def test_binary_stderr_never_needs_decoding_or_leaks(self):
+        data=b'\xff\xfe\x00\x80'
+        with patch('industrial064.construct.subprocess.run', return_value=subprocess.CompletedProcess([], 3, b'', data)) as run:
+            with self.assertRaises(ProducerFailure) as raised: construct(self.root, self.request, self.output)
+        self.assertIs(run.call_args.kwargs['text'], False)
+        self.assertEqual(raised.exception.diagnostics['stderr']['bytes'], len(data))
+        self.assertEqual(raised.exception.diagnostics['returncode'], 3)
+        self.assertNotIn(repr(data), str(raised.exception))
+
     def test_timeout_is_distinct_from_nonzero_and_has_no_retry(self):
         with patch('industrial064.construct.subprocess.run', side_effect=subprocess.TimeoutExpired(['python'], 155, output=b'timing', stderr=b'diag')) as run:
             with self.assertRaises(ProducerFailure) as raised: construct(self.root, self.request, self.output)
