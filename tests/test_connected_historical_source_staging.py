@@ -69,11 +69,11 @@ class HistoricalSourceStaging(unittest.TestCase):
         observed = []
         def raced_run(*args, **kwargs):
             script = args[0][-1]
-            match = re.search(r"snapshot=pathlib\\.Path\\(([^)]+)\\)", script)
+            match = re.search(r"snapshot=pathlib\.Path\(([^)]+)\)", script)
             self.assertIsNotNone(match)
             staged = Path(ast.literal_eval(match.group(1))) / 'inspected.py'
             staged.chmod(0o600)
-            staged.write_text("RESULT='UNREGISTERED'\\n")
+            staged.write_text("RESULT='UNREGISTERED'\n")
             completed = original_run(*args, **kwargs)
             observed.append(completed)
             return completed
