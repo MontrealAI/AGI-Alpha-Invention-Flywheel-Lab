@@ -8,7 +8,7 @@ permissions:
   contents: read
 concurrency:
   group: connected014-release-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   release-qualification:
     runs-on: ubuntu-latest
@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: |
-          python -m pip install --only-binary=:all: -r requirements-commercial010.txt
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt
       - name: Release integrity and source-bound finance/lifecycle regressions
         run: python -m unittest discover -s tests -p 'test_connected*.py' -v
       - name: Operate exact clean package, resume and independently audit public copy

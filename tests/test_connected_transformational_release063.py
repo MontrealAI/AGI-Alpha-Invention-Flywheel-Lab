@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 from scripts.release_connected014 import applicable_workflows
 
 
@@ -16,6 +17,11 @@ class TransformationalReleaseTests(unittest.TestCase):
 
     def test_unrelated_historical_source_does_not_renew_the_experiment(self):
         self.assertNotIn('transformational063.yml', applicable_workflows(['docs/next009/PAPER.pdf']))
+
+    def test_superseded_pr_cancellation_preserves_main_release_operation(self):
+        text = (Path(__file__).resolve().parents[1] / '.github/workflows/connected014-release.yml').read_text()
+        self.assertIn('group: connected014-release-${{ github.event.pull_request.number || github.ref }}', text)
+        self.assertIn("cancel-in-progress: ${{ github.event_name == 'pull_request' }}", text)
 
 
 if __name__ == '__main__':
