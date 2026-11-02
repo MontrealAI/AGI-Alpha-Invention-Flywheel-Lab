@@ -92,10 +92,13 @@ def _run_pinned_historical_python(root, code, payload, expected_inventory):
                                                   expected_inventory, source_inventory)
         cache = private / 'cache'
         cache.mkdir(mode=0o700)
-        # -I excludes PYTHONPATH and cwd during startup. The child still
-        # checks the original file tree, then imports only the staged bytes.
-        bootstrap = f"""import pathlib,sys
+        expected_digest = hashlib.sha256(json.dumps(
+            expected_inventory, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+        # -I excludes PYTHONPATH and cwd during startup. Before importing any
+        # historical modules, the child checks the original and staged trees.
+        bootstrap = f"""import pathlib,sys,hashlib,json
 root=pathlib.Path({str(root)!r})
+snapshot=pathlib.Path({str(snapshot)!r})
 blocked={_UNREGISTERED_IMPORT_SUFFIXES!r}
 for item in (root,*root.parents):
  if item.is_symlink():raise SystemExit('HISTORICAL_SOURCE_SYMLINK_REFUSED')
@@ -103,6 +106,15 @@ for item in root.rglob('*'):
  if item.is_symlink():raise SystemExit('HISTORICAL_SOURCE_SYMLINK_REFUSED')
  if item.is_file() and (item.suffix.lower() in blocked or (item.suffix.lower()=='.pyc' and '__pycache__' not in item.parts)):
   raise SystemExit('UNREGISTERED_HISTORICAL_EXECUTABLE_REFUSED')
+actual_inventory={{}}
+for item in snapshot.rglob('*'):
+ if item.is_symlink():raise SystemExit('STAGED_HISTORICAL_SOURCE_SYMLINK_REFUSED')
+ if item.is_file():
+  if item.suffix.lower() in blocked or item.suffix.lower()=='.pyc':raise SystemExit('STAGED_UNREGISTERED_EXECUTABLE_REFUSED')
+  if item.suffix=='.py':
+   actual_inventory[item.relative_to(snapshot).as_posix()]=hashlib.sha256(item.read_bytes()).hexdigest()
+actual_digest=hashlib.sha256(json.dumps(actual_inventory,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+if actual_digest!={expected_digest!r}:raise SystemExit('STAGED_HISTORICAL_SOURCE_CHANGED_BEFORE_IMPORT')
 sys.pycache_prefix={str(cache)!r}
 sys.dont_write_bytecode=True
 sys.path.insert(0,{str(snapshot)!r})
@@ -112,7 +124,7 @@ sys.path.insert(0,{str(snapshot)!r})
         done = subprocess.run([sys.executable, '-I', '-c', bootstrap + code],
                               input=json.dumps(payload), text=True,
                               capture_output=True, cwd=root, env=env, timeout=60)
-        if source_inventory(root) != expected_inventory:
+        if source_inventory(root) != expected_inventory or source_inventory(snapshot) != expected_inventory:
             raise ValueError('PINNED_HISTORICAL_SOURCE_CHANGED_DURING_EXECUTION')
         return done
 
