@@ -1,0 +1,227 @@
+{
+  "schema": "business-productivity065/preregistration/v1",
+  "registered_utc": "2026-11-02T11:36:00Z",
+  "base_commit": "0d1591d74faa4bb9595bc7a9ae120b069a1029af",
+  "purpose": "Actual useful inventory engineering productivity test with conditional simulated economics, not Blue Sky novelty or autonomous discovery. Known prior inventory constructor outcomes are exposed reuse, not fresh algorithm evidence.",
+  "selected": "Inventory engineering: 54 policies, six commitments, independent exact accounting and reproducible artifact.",
+  "not_selected": [
+    {
+      "candidate": "Public procurement decision package",
+      "reason": "Useful but comparable independent buyer acceptance not currently specified."
+    },
+    {
+      "candidate": "Industrial production scheduling",
+      "reason": "Useful neighboring capability; inventory acceptance offers cleaner controlled reusable-software comparison."
+    }
+  ],
+  "inputs": [
+    {
+      "id": "original",
+      "path": "inventory061/inputs/01.json",
+      "sha256": "c949fac0c2fe39c8ada57d028152072b4aa722a415343c2b16ad454f4afab649",
+      "scope": "Pinned public OR-License task13 instance, not observed buyer input"
+    },
+    {
+      "id": "plus20",
+      "path": "business_productivity065/scenario_plus20.json",
+      "sha256": "f9f454a71f0b3b7571ed19b0a04931dd40b3754796af0ad009d820f157ef4e9c",
+      "scope": "Authored stress scenario ceil(6*daily_units/5); otherwise unchanged"
+    }
+  ],
+  "acceptance": {
+    "policies": 54,
+    "cdc_commitments": 6,
+    "joint_pairs": 48,
+    "minimum_successes": 347,
+    "historical_anchors": 365,
+    "checker": "Independent exact rational source accounting and structural checks adapted from inventory061, with each input hash precommitted. No future performance guarantee.",
+    "outputs": "Two actual policy JSON deliverables, runnable producer/checker, source/acceptance receipts, usable interpretation and scenario comparison.",
+    "controls": "Human workers receive the identical public constructor, data, conventional automation, specifications and acceptance. No artificial manual solving of 54 policies."
+  },
+  "finite_design": {
+    "requests": 2,
+    "arms": [
+      "conditional",
+      "no_demand",
+      "payment_delay",
+      "competitive_imitation",
+      "insufficient_earned_cash"
+    ],
+    "primary_seed_usd": 100000,
+    "horizon_hours": 240,
+    "repairs": "At most two producer attempts per request for adjudicated defects. Charge all work. Never relax acceptance, resample economics or search until profit.",
+    "stop": "Complete two-request workflow and registered sensitivity, or record exact failed acceptance/funding/authority condition.",
+    "permissions": "Included capabilities only; no API keys or model API calls, purchases, real transactions or outreach."
+  },
+  "costs": {
+    "currency": "USD",
+    "first": {
+      "input_tokens_estimated": 5000000,
+      "output_tokens_estimated": 500000,
+      "other_resources_usd": 15
+    },
+    "second": {
+      "input_tokens_estimated": 2000000,
+      "output_tokens_estimated": 200000,
+      "other_resources_usd": 5
+    },
+    "price_proxy": {
+      "model": "GPT-6 Astra",
+      "input_per_million_usd": 10,
+      "output_per_million_usd": 50,
+      "url": "https://openai.com/index/gpt-6-astra/",
+      "checked": "2026-11-02",
+      "status": "Public frontier model valuation only, not actual bill or universally best model."
+    },
+    "first_sensitivity_tokens": [
+      [
+        1000000,
+        100000
+      ],
+      [
+        5000000,
+        500000
+      ],
+      [
+        20000000,
+        2000000
+      ]
+    ],
+    "second_sensitivity_tokens": [
+      [
+        500000,
+        50000
+      ],
+      [
+        2000000,
+        200000
+      ],
+      [
+        8000000,
+        800000
+      ]
+    ],
+    "allocation_percent": {
+      "research_selection": 15,
+      "acquisition_including_failures": 10,
+      "onboarding": 10,
+      "development": 20,
+      "production": 10,
+      "independent_verification": 15,
+      "correction_failed_attempts": 10,
+      "delivery": 5,
+      "bounded_support": 5
+    },
+    "allocation_basis": "Authored planning envelopes, not observed tokens. Central first roughly 50 context-heavy agent work units at 100k input/10k output per unit; reuse second 20 units. Stage shares reflect reading/integration/verification workload. Sensitivity deliberately includes 0.2x and4x cost; actual call/token telemetry unavailable. CPU timings do not calibrate these budgets.",
+    "other_resources_basis": "First15 and second5 are modeled channel/tool/hosting allocations; all acquisition labor is already in agent tokens. No actual channel purchase.",
+    "payment_percent": 0.029,
+    "payment_fixed_usd": 0.3,
+    "tax_positive_profit": 0.2,
+    "native_residual_usd": 10,
+    "native_fee_usd": 3,
+    "actual_billing": null,
+    "actual_whole_agent_tokens": null,
+    "human_intervention": "No production human workers used. User authorization observed but user labor duration unknown. Sensitivity adds0/15/60minutes at61.09USD/hour; positive intervention case is hybrid, not erased.",
+    "boundary": "Development expensed once. All stage tokens include unsuccessful work/support; do not double charge support expense and reserve. Native contingent residual restricts cash and becomes expense only if paid; payment/tax separately charged."
+  },
+  "human": {
+    "hours": [
+      5.5,
+      9,
+      14.25
+    ],
+    "loaded_hourly_usd": [
+      46.95,
+      61.09,
+      86.53
+    ],
+    "turnkey_hours": [
+      2,
+      4
+    ],
+    "conventional_software_usd": [
+      0,
+      15
+    ],
+    "status": "Bottom-up estimated task hours, not measured human trial. BLS/O*NET2025OR wage quartiles32.86/42.76/60.57 multiplied by June2026private compensation/wage46.89/32.82.",
+    "stage_hours_low_high": {
+      "research": [
+        0.5,
+        1
+      ],
+      "acquisition": [
+        0.5,
+        2
+      ],
+      "onboarding": [
+        0.5,
+        1
+      ],
+      "adaptation": [
+        0.5,
+        2
+      ],
+      "batch_production": [
+        0.5,
+        1
+      ],
+      "independent_validation": [
+        1.5,
+        3
+      ],
+      "correction": [
+        0.25,
+        1
+      ],
+      "sensitivity": [
+        0.5,
+        1.5
+      ],
+      "delivery": [
+        0.5,
+        1
+      ],
+      "support": [
+        0.25,
+        0.75
+      ]
+    },
+    "sources": [
+      "https://www.onetonline.org/link/localwages/15-2031.00",
+      "https://www.onetonline.org/link/summary/15-2031.00",
+      "https://www.bls.gov/charts/employer-costs-for-employee-compensation/costs-per-hour.htm"
+    ]
+  },
+  "market": {
+    "status": "All demand, offers, willingness, consent and collections are explicitly SIM. No observed customers. Inventory savings never equated to revenue.",
+    "quotes_usd": [
+      180,
+      100
+    ],
+    "conditional_complete_alternatives_first": {
+      "human": 550,
+      "turnkey_human": 200,
+      "human_plus_AI": 200,
+      "autonomous_competitor": 200,
+      "self_service_opportunity_cost": 240
+    },
+    "conditional_complete_alternatives_second": {
+      "human": 250,
+      "turnkey_human": 120,
+      "human_plus_AI": 120,
+      "autonomous_competitor": 120,
+      "self_service_opportunity_cost": 120
+    },
+    "value_assumptions_usd": [
+      300,
+      150
+    ],
+    "choice": "Select lowest accessible complete accepted offer only if value exceeds price; otherwise no purchase. Comparator prices are scenario assumptions, not observed quotes.",
+    "no_demand": "No buyer value; retain incurred development/research/acquisition costs, no collection.",
+    "payment_delay": "First accepted but not released until after successor decision. No future collection or seed substitution for earned-funding claim.",
+    "competitive_imitation": "Same-quality competitor causes matching first75/second40; unchanged production cost. Retain loss.",
+    "insufficient_earned_cash": "Attempt1000USD earned reservation after first collection, expect atomic refusal; cannot substitute seed.",
+    "outside_options": "Human+AI, autonomous competitor, selfservice and no purchase remain separate from primary100%human classicsoftware comparison. Turnkey2h*46.95=93.90 can defeat180quote; not guaranteed demand."
+  },
+  "reported_results": "Actual artifact/acceptance/resources; estimated whole-agent costs; estimated human-time comparator; break-even surface; native simulation profit/cash/seed/earned funding separately. No measured whole-agent speedup, proprietary advantage, real commerce, annualization or3B milestone."
+}
