@@ -1,0 +1,205 @@
+{
+  "schema": 1,
+  "scope": "prospective source manifest and finite dependency retrieval receipts",
+  "records": [
+    {
+      "id": "n1_publisher",
+      "url": "https://www.nature.com/articles/s44221-024-00314-6",
+      "attempt_utc": "2026-11-02T20:20:43.935414+00:00",
+      "status": 200,
+      "bytes": 404734,
+      "sha256": "1be1b686bb42a445862b5420b8b055023e0bcd60712dd95ce05d446715d700ff"
+    },
+    {
+      "id": "n1_figshare_metadata",
+      "url": "https://api.figshare.com/v2/articles/24991158",
+      "attempt_utc": "2026-11-02T20:20:43.936029+00:00",
+      "status": 200,
+      "bytes": 67448,
+      "sha256": "31333b52afe1d5ea849589869a65643adb09b46a27ffd5fb1c43b2dd9c4b652f",
+      "version_doi": "10.6084/m9.figshare.24991158.v1",
+      "license": {
+        "value": 1,
+        "name": "CC BY 4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "file_metadata_records": 193,
+      "measurement_files_retrieved": 0
+    },
+    {
+      "id": "n2_arxiv",
+      "url": "https://arxiv.org/html/1904.02644",
+      "attempt_utc": "2026-11-02T20:20:43.936539+00:00",
+      "status": 200,
+      "bytes": 690717,
+      "sha256": "5f6e5daecfbcf8f83689256dbfcda30f0592d6e2227af3f0e248c7801cee30f2"
+    },
+    {
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs44221-024-00314-6/MediaObjects/44221_2024_314_MOESM1_ESM.pdf",
+      "attempt_utc": "2026-11-02T20:21:25.049264+00:00",
+      "status": 200,
+      "bytes": 1634588,
+      "sha256": "97f37f427764ff8cee536aa22f4b340dfcd8382d6993e1ca9e32f055e2239f61",
+      "id": "n1_publisher_supplement",
+      "inspected_pages": {
+        "table_s1": {
+          "pdf_page": 7,
+          "printed_page": 19
+        },
+        "figure_s2": {
+          "pdf_page": 8,
+          "printed_page": 20
+        }
+      },
+      "visual_inspection": true
+    },
+    {
+      "id": "n3_k1_condition_mean_workbook",
+      "url": "https://raw.githubusercontent.com/const-ae/linear_perturbation_prediction-Paper/bfa6eeea2bd145a1af2ec0127a2e808cc38456a9/source_data/suppl-qqplot.xlsx",
+      "repository_commit": "bfa6eeea2bd145a1af2ec0127a2e808cc38456a9",
+      "path": "source_data/suppl-qqplot.xlsx",
+      "git_blob": "f35c9efe3bf0f917068b2aaf2c2236b593c06e2c",
+      "bytes": 10905627,
+      "status": "NOT_RETRIEVED_BEFORE_FREEZE",
+      "panel_selection": "1000 genes ranked only by control mean expression; seed1; full exported pair-by-gene table",
+      "pair_population": "Original measured pairs enriched using a fitness screen; no genome-wide representativeness claim",
+      "license_notice_path": "next072/THIRD_PARTY_NOTICES.md"
+    },
+    {
+      "id": "n3_author_export_code",
+      "repository_commit": "bfa6eeea2bd145a1af2ec0127a2e808cc38456a9",
+      "path": "notebooks/double_perturbation_analysis.Rmd",
+      "git_blob": "1bddcfd59402dacf32b048f8b93ff97fd90f7732",
+      "source_locations": {
+        "control_rank": "expr_rank_df: ground_truth and ctrl only",
+        "residual": "ground_truth_df: AB-(A+B-ctrl)",
+        "panel": "filter_gt_df: seed1 and control rank<=1000",
+        "export": "write_xlsx(filter_gt_df, suppl-qqplot.xlsx)"
+      },
+      "confirmation_values_inspected": false
+    },
+    {
+      "id": "n3_author_mean_extraction",
+      "repository_commit": "bfa6eeea2bd145a1af2ec0127a2e808cc38456a9",
+      "path": "benchmark/src/run_ground_truth_for_combinatorial_perturbations.py",
+      "git_blob": "72a73e7f4ea28e73b9bf369a5bfafce9363dff86",
+      "mean_operation": "condition-filtered expression matrix mean along cell axis",
+      "standard_error_helper_used": false
+    },
+    {
+      "id": "prior_scientific_record",
+      "repository": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+      "commit": "a5df603854f98cbd673204258c8d768e0c759975",
+      "root": "portfolio/blue-sky-20261102-dot",
+      "read": [
+        "I1/REPORT.md",
+        "I1/group_summary.json",
+        "I1/remaining_controls.json",
+        "W1/REPORT.md",
+        "W1/results.json",
+        "W1/MAPPING_ASSESSMENT.md",
+        "C1/SCREEN.md",
+        "ECONOMIC_REVIEW.md",
+        "verification/INTERFACE_VERDICT.md",
+        "verification/WATER_VERDICT.md",
+        "verification/WATER_OBSERVED_REPLAY.json",
+        "verification/WATER_RAW_SUBSET_AUDIT.json"
+      ],
+      "pr": 152,
+      "pr_state_at_check": "open",
+      "merged_at_check": false,
+      "exact_head_workflows_checked": 10,
+      "exact_head_workflow_successes": 10
+    },
+    {
+      "id": "current_required_instructions",
+      "repository": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+      "commit": "4c7413eab19908dd83fb4e7b23b7bf7bd0e341d2",
+      "git_blobs": {
+        "AGENTS.md": "ae5ab61154bf0b2a82d6a77f4ec2ab6878955049",
+        "COMMERCIAL_COMPARISON.md": "4b690b8b23514da9b4770479146030f0b6c3f862",
+        "docs/harness/DEVELOPER_GUIDE.md": "37fe308904ce21353279db9922a76cca50a88d87",
+        "docs/harness/RESEARCH_FOUNDATIONS.md": "47e5e8d9e210fe8c59af7c9b0c680218efe81c35"
+      },
+      "local_read_bytes_match_live_pinned_blobs": true
+    },
+    {
+      "id": "n3_expression_unit_provenance",
+      "publication_doi": "10.1038/s41592-025-02772-6",
+      "url": "https://www.nature.com/articles/s41592-025-02772-6.pdf",
+      "alternative_public_article": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12328236/",
+      "source_location": "main text p.1657, double-perturbation dataset description",
+      "supported_units": "log-transformed RNA-seq expression values",
+      "not_revalidated": [
+        "raw counts",
+        "upstream normalization convention",
+        "log base"
+      ],
+      "author_preparation_code": {
+        "path": "benchmark/src/prepare_perturbation_data.py",
+        "git_blob": "a39483515264b4154b830cb14d827371a902c5a0",
+        "repository_commit": "bfa6eeea2bd145a1af2ec0127a2e808cc38456a9",
+        "scope": "loads processed GEARS/scFoundation data; not an independent raw-normalization audit"
+      }
+    },
+    {
+      "id": "poh_2026",
+      "url": "https://raw.githubusercontent.com/mlresearch/v306/main/assets/rubbi26a/rubbi26a.pdf",
+      "attempt_utc": "2026-11-02T20:39:31.252312+00:00",
+      "status": 200,
+      "bytes": 2626459,
+      "sha256": "e83a7138a524094f9121c5f0feed2700580d00373e6ce20ba337b72b97c31668"
+    },
+    {
+      "id": "naiad_2025",
+      "url": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/qin25g/qin25g.pdf",
+      "attempt_utc": "2026-11-02T20:39:31.452619+00:00",
+      "status": 200,
+      "bytes": 12074190,
+      "sha256": "983b2da8aed78f0aced27053301c15f0f67ebd0fac706435bb6800e309dd64eb"
+    },
+    {
+      "id": "batchie_complete_outside_option",
+      "url": "https://www.nature.com/articles/s41467-024-55287-7",
+      "doi": "10.1038/s41467-024-55287-7",
+      "source_locations": [
+        "Results: Adaptive experimental design for combination drug screens",
+        "Methods: Pediatric sarcoma combination screen, Study design"
+      ],
+      "decision": "Generic active combination screening is already supplied, including a prospective physical loop; no matched reproduction or superiority claim in NEXT072"
+    },
+    {
+      "id": "poh_pre_freeze_primary_revision",
+      "url": "https://proceedings.mlr.press/v306/rubbi26a.html",
+      "source_locations": [
+        "section4.1 equation2",
+        "Algorithm1"
+      ],
+      "adaptation": "Fixed nearest-rank empirical75th-percentile threshold from initial references only; same model, budgets, batches and standardization as controls; rank Gaussian z to avoid finite-precision CDF ties",
+      "limits": "Uncalibrated model score; no biological probability or theorem guarantee; UCB retained as control; no outcomes retrieved at revision"
+    }
+  ],
+  "research_transport_outcomes": [
+    {
+      "source": "https://www.nature.com/articles/s41592-025-02772-6",
+      "route": "web lookup direct open",
+      "outcome": "500/inaccessible identity-provider redirect; primary published text available through indexed article/PDF search; no access-control bypass"
+    },
+    {
+      "source": "https://github.com/Lotfollahi-lab/ExperimentalDesign",
+      "route": "actual software link from PoH proceedings page via web lookup",
+      "outcome": "404; no author implementation retrieved or copied"
+    },
+    {
+      "source": "PoH and NAIAD proceedings PDF links",
+      "route": "web lookup click",
+      "outcome": "unsupported application/octet-stream; ordinary public raw requests later returned200, with byte/hash receipts above"
+    },
+    {
+      "source": "arXiv1904.02644 actual links",
+      "route": "inspected HTML anchors and data-availability phrases",
+      "outcome": "no ready measured complete multi-reflector plus one-way reference dataset exposed in inspected source; no claim about all possible repositories"
+    }
+  ],
+  "resource_accounting_limit": "Public research calls, included inference and attention were not fully metered. Retained retrieval receipts measure named successful byte transfers; failed retrieval descriptions are outcomes, not physical evidence. Complete research monetary cost remains UNKNOWN."
+}

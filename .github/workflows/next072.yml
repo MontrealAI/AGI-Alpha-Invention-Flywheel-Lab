@@ -1,0 +1,87 @@
+name: NEXT072 source-bound research allocation and independent admission
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'next072/**'
+      - 'experiments/next_series_20261102/**'
+      - 'requirements-next072.txt'
+      - '.github/workflows/next072.yml'
+  pull_request:
+    paths:
+      - 'next072/**'
+      - 'experiments/next_series_20261102/**'
+      - 'requirements-next072.txt'
+      - '.github/workflows/next072.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: next072-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install pinned public analysis dependencies
+        run: python -m pip install --only-binary=:all: -r requirements-next072.txt
+      - name: Validate frozen source and authored independent controls
+        run: |
+          python -m next072.freeze
+          python -m unittest discover -s next072 -t . -p 'test_*.py' -v
+      - name: Reproduce the frozen source-bound test without adding a fresh confirmation
+        env:
+          NEXT072_CHECKED_OUT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python -m next072.run \
+            --execution-kind engineering_reproduction \
+            --freeze "$NEXT072_CHECKED_OUT_SHA" \
+            --download \
+            --workbook "$RUNNER_TEMP/next072-input/suppl-qqplot.xlsx" \
+            --output "$RUNNER_TEMP/next072-reproduction"
+      - name: Independently recompute source observations and allocation receipts
+        env:
+          NEXT072_CHECKED_OUT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python -m next072.independent_verify \
+            --workbook "$RUNNER_TEMP/next072-input/suppl-qqplot.xlsx" \
+            --attempt "$RUNNER_TEMP/next072-reproduction" \
+            --freeze experiments/next_series_20261102/FREEZE.json \
+            --public-commit "$NEXT072_CHECKED_OUT_SHA" \
+            --output "$RUNNER_TEMP/next072-verification.json"
+      - name: Execute the finite voluntary-choice and cash admission model
+        run: |
+          python -m next072.economic_check \
+            --verification "$RUNNER_TEMP/next072-verification.json" \
+            --output "$RUNNER_TEMP/next072-economic.json"
+      - name: Plot recorded query events and finite control summaries
+        run: |
+          python -m next072.plot_results \
+            --attempt "$RUNNER_TEMP/next072-reproduction" \
+            --output "$RUNNER_TEMP/next072-figures"
+      - name: Retain compact evidence and attempt-specific receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: next072-public-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/next072-reproduction/*.json
+            ${{ runner.temp }}/next072-verification.json
+            ${{ runner.temp }}/next072-economic.json
+            ${{ runner.temp }}/next072-figures
+          if-no-files-found: warn
