@@ -75,7 +75,8 @@ class OwnerCodecSigningBoundaryTests(unittest.TestCase):
         self.assertEqual(worker.call_count, 1)
         payload = json.loads(worker.call_args.kwargs['input'])
         self.assertEqual(payload['codec_source'], self.reviewed.decode('utf-8'))
-        script = worker.call_args.args[0][2]
+        script = worker.call_args.args[0][-1]
+        self.assertEqual(worker.call_args.args[0][1:3], ['-I', '-c'])
         compile(script, 'synthetic-owner-subprocess', 'exec')
         self.assertLess(script.index("UNREVIEWED_OWNER_SIGNING_CODEC"),
                         script.index("with scope, JournalAccount"))

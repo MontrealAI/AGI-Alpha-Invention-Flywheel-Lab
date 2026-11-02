@@ -19,7 +19,9 @@ class HistoricalVerifierAuthorityBoundaryTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory(prefix='historical-verifier-boundary-')
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
-        self.inventory = {'connected_enterprise/finance.py': 'a' * 64}
+        (self.root / 'connected_enterprise').mkdir()
+        (self.root / 'connected_enterprise/finance.py').write_text('SYNTHETIC_ONLY=True\n')
+        self.inventory = upgrades.source_inventory(self.root)
         self.key = b'unit-test-only-key-material-32byte'
         body = {'schema': 'agi-alpha/native-source-transition/v1',
                 'historical_root': str(self.root), 'verifier_files': self.inventory,
@@ -47,15 +49,14 @@ class HistoricalVerifierAuthorityBoundaryTests(unittest.TestCase):
 
     def test_authenticated_owner_scope_allows_exact_ticket_only(self):
         receipt = SimpleNamespace(returncode=0, stdout=json.dumps({'accepted': True}), stderr='')
-        with patch.object(upgrades, 'source_inventory', return_value=self.inventory), \
-             patch('commercial.ledger.load_jobs'), \
+        with patch('commercial.ledger.load_jobs'), \
              patch.object(upgrades.subprocess, 'run', return_value=receipt) as execute, \
              patch.dict(os.environ, {'HISTORICAL_TEST_PRIVATE_MARKER': 'must-not-inherit'}):
             with upgrades._owner_authenticated_history([self.ticket], self.key):
                 assert upgrades.verify_historical(self.ticket, {}, root=self.root)['accepted']
             env = execute.call_args.kwargs['env']
             self.assertNotIn('HISTORICAL_TEST_PRIVATE_MARKER', env)
-            self.assertEqual(env['PYTHONPATH'], str(self.root))
+            self.assertNotIn('PYTHONPATH', env)
             self.assertEqual(env['PYTHONNOUSERSITE'], '1')
             self.assertEqual(execute.call_count, 1)
         with self.assertRaisesRegex(ValueError, 'INDEPENDENT_HISTORICAL_VERIFIER_AUTHORITY_REQUIRED'):
