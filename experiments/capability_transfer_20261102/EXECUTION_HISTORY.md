@@ -1,0 +1,21 @@
+# Numerical execution history
+
+The prospective source freeze `1d400d7ac4a0f21fc7faf5892f3161b713ce16390ce439fad38de10df99dc86e`, published at source `6b3e7f290c44aae4666295bcfad9229623ff47b7`, ran the registered numerical evaluation. The process failed while serializing the result because a NumPy boolean in the probe menu was not JSON serializable. No scientific result file or accepted verdict was produced. The original empty output directory and public source history are retained; no score was silently accepted.
+
+The correction converts the already computed voltage separation to a Python float, so its comparison produces a serializable boolean. It changes no model, seed, acceptance threshold, probe action, comparator or numerical outcome calculation. A regression checks JSON serialization. The next freeze `FROZEN_STAGE_B_SERIALIZATION_FIX.json` binds this corrected source before the same registered evaluation is rerun into a different output directory.
+
+The corrected source was published in commit `f920b361ebb140ab08758afe7d0fb6a5f43ee800` before the rerun. Its freeze SHA256 is `05bb81b18d96b1e4a6ab1110a26974dfe5cef2002bf8ac33e6141c160ceb408b`. The run produced original result SHA256 `4c36506559fb88cdcfde81f76a12daf0af3ed369a67b0306499b0ecea2d39a8c`: numerical checks passed; the anticipated impossibility criterion did not. Recorded CPU 71.8549 s and wall 71.8591 s cover the instrumented evaluation interval, not all exports, construction, included assistant use or the complete session.
+
+A separately labeled post-result midpoint diagnostic then found a common prediction accepted in both original worlds. No frozen source, model, horizon, threshold or original receipt was changed. The diagnostic supersedes the old unconditional abstention recommendation only for this finite task; see `CLAIM_CORRECTIONS.md` and `INDEPENDENT_NUMERICAL_REVIEW.md`.
+
+The frozen numerical experiment was replayed successfully by the numerical job in hosted workflow run `41487782250` at source `34b56f4052c7defaab4c18327f8051d60d4abe6b`. This is an implementation replay, not physical validation or a business outcome.
+
+## Hosted strict-reference failure and explicit replay repair
+
+Hosted workflow run `41489928442`, job `125429977760`, at source prefix `dc05`, completed the full frozen Stage B with result SHA-256 `b196184e4bb862ab9feaf4c082427b7a8b68b98d8099c3a7496c90bafb769fa2`. Its source hashes and scientific acceptance match the registered experiment, but its two reference hashes are `a0585832e912eb191d6409b2375c380444fb190abcb651464ede204900aff51b` and `0591b4b55803e53f433a1a9bd71bb4161a8bc0f7bb522b309f5a6665606e9bd7`, different from the historical local hashes.
+
+The subsequent strict diagnostic failed exact historical-reference agreement. Its reported worst NRMSE was `0.09958526892410419` and worst peak-relative error `0.06009770633032472`; both remain below the unchanged `0.1` scientific limits. The job nevertheless failed its declared bitwise-reproduction gate. The failed job remains recorded and its downloaded Stage B receipt is retained; the first hosted workflow omitted the midpoint CSV from its artifact upload.
+
+The repair adds optional `--replay-result` to the unfrozen diagnostic runner. Default mode remains strict historical reproduction. Replay mode requires a complete passing Stage B receipt with the identical frozen sources, freeze and claim map, and exact recomputed agreement with that replay's references. Historical disagreement remains explicit in the new receipt; no model, horizon, scientific threshold or frozen file is changed. The original `results/MIDPOINT_DIAGNOSTIC.json` remains the archived diagnostic from before this repair.
+
+Local validation uses a fresh full frozen Stage B replay, SHA-256 `2f0f4fb977103def16c1c5fcabc204c87ed7f4dcb87f4b18cceff54ba368d472`. The fresh local replay qualifies; the supplied hosted receipt is rejected locally because its reference bits differ. Five targeted integrity tests cover wrong source/freeze, contradictory claim scope, incomplete or unqualified receipts, and preservation of the original-receipt guard. These local checks do not establish hosted portability success; that requires a new same-environment hosted Stage B and diagnostic execution.

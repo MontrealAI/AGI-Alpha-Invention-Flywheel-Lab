@@ -1,0 +1,102 @@
+{
+  "stage": "public_metadata_only",
+  "dataset_doi": "10.17632/zh58byr53c.2",
+  "attempts": [
+    {
+      "url": "https://data.mendeley.com/public-api/datasets/zh58byr53c?version=2",
+      "status": 200,
+      "response_received": true,
+      "content_type": "application/json; charset=utf-8",
+      "bytes": 7726,
+      "sha256": "01d3ee204dfb92af2608f77041dff5d655d9d0a1a4d56d06618825f6f86ea48f",
+      "truncated": false,
+      "hash_scope": "complete_response",
+      "file": "response-000.bin",
+      "schema": {
+        "type": "object",
+        "keys": [
+          "articles",
+          "available",
+          "categories",
+          "channel",
+          "confidential",
+          "contributors",
+          "created_on",
+          "customer_id",
+          "data_licence",
+          "description",
+          "doi",
+          "funders",
+          "id",
+          "institutions",
+          "links",
+          "method",
+          "modified_on",
+          "name",
+          "owner",
+          "owner_id",
+          "publish_date",
+          "related_links",
+          "repository",
+          "size",
+          "version",
+          "versions"
+        ],
+        "array_lengths": {
+          "contributors": 8,
+          "versions": 2,
+          "articles": 0,
+          "categories": 6,
+          "institutions": 4,
+          "related_links": 0,
+          "funders": 1
+        },
+        "remote_error": null
+      }
+    },
+    {
+      "url": "https://data.mendeley.com/public-api/datasets/zh58byr53c/files?version=2&folder_id=root",
+      "status": 200,
+      "response_received": true,
+      "content_type": "application/json; charset=utf-8",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "truncated": false,
+      "hash_scope": "complete_response",
+      "file": "response-001.bin",
+      "schema": {
+        "type": "list",
+        "length": 0,
+        "first_entry_keys": null
+      },
+      "entry_count": 0,
+      "empty_catalog": true,
+      "named_entries": []
+    },
+    {
+      "url": "https://data.mendeley.com/public-api/datasets/zh58byr53c/folders?version=2",
+      "status": 404,
+      "response_received": true,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 177,
+      "sha256": "2336610445e5fbe686aa0b826a8fbec6e566a304c1c614497901c3859b43eff2",
+      "truncated": false,
+      "hash_scope": "complete_response",
+      "file": "response-002.bin",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    }
+  ],
+  "elapsed_seconds": 0.7882446080000136,
+  "metadata_received": true,
+  "access_denied": false,
+  "files_found": 0,
+  "folders_found": 0,
+  "folders_visited": 0,
+  "folder_visit_budget": 16,
+  "traversal_complete": false,
+  "format_candidates": [],
+  "measurement_files_downloaded": 0,
+  "scientific_verdict": "NOT_EVALUATED",
+  "success": false,
+  "route_basis": "Public website proxy; official API documents separate versioned dataset metadata, files with folder_id, and folders with parent_id. Proxy mappings are verified only by recorded responses."
+}

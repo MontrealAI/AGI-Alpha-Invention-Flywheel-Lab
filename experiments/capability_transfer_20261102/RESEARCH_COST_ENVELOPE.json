@@ -1,0 +1,20 @@
+{
+  "schema": "agi-alpha/capability-transfer-cost-envelope/v1",
+  "campaign_id": "independent-cell-pack-research-20261102",
+  "scope": "SIMULATED_COST_ONLY",
+  "clock_start_utc": "2026-11-02T17:00:00Z",
+  "observation_end_hour": 24,
+  "capital_levels_microUSD": [10999000000, 11000000000, 100000000000, 1000000000000, 1000000000000000],
+  "working_reserve_microUSD": 10000000000,
+  "cost_items": [
+    {"id":"research-selection","category":"research","amount_microUSD":250000000,"at_hour":0,"basis":"Authored USD250 economic resource envelope for opportunity/source selection, not measured model billing or a human wage."},
+    {"id":"instrument-construction","category":"construction","amount_microUSD":250000000,"at_hour":1,"basis":"Authored USD250 resource envelope for numerical construction, including failed implementation work; not an actual charge."},
+    {"id":"independent-evaluation","category":"verification","amount_microUSD":250000000,"at_hour":2,"basis":"Authored USD250 resource envelope for independent numerical and accounting verification; no physical laboratory work performed."},
+    {"id":"preserve-and-review","category":"maintenance","amount_microUSD":250000000,"at_hour":3,"basis":"Authored USD250 envelope for source-bound result preservation and review. No sales, future revenue, industrial deployment or real commitment assumed."}
+  ],
+  "unpriced_resources": [
+    "Actual included-agent token use and economic inference cost are not exposed; the USD1000 total is a transparent sensitivity assumption, not measured complete cost.",
+    "Actual chat-session-wide compute, orchestration and oversight are not measured by local process CPU receipts.",
+    "External physical qualification, insurance, certification, deployment and market acquisition have not occurred or been priced; no business-profit claim is permitted."
+  ]
+}

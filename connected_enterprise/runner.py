@@ -141,6 +141,9 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in required):
             raise ValueError('BLUE_SKY064_SOURCE_DEPENDENCY_MISSING')
         names.update(required)
+    if (root/'experiments/capability_transfer_20261102/release_inventory.py').is_file():
+        from experiments.capability_transfer_20261102.release_inventory import source_paths as capability_transfer_paths
+        names.update(capability_transfer_paths(root))
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
