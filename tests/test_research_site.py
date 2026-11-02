@@ -58,8 +58,8 @@ class ResearchSiteTests(unittest.TestCase):
         slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
-        self.assertEqual(len(site.PAPERS), 9)
-        self.assertEqual(len(site.PAGES), 12)
+        self.assertEqual(len(site.PAPERS), 15)
+        self.assertEqual(len(site.PAGES), 18)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
             reader = 'out-' + slug + '.html'
@@ -74,6 +74,27 @@ class ResearchSiteTests(unittest.TestCase):
             matches = [x for x in site.PAPERS if x.startswith('out-' + slug + '-')]
             self.assertEqual(len(matches), 1)
             self.assertIn('data="' + matches[0] + '#view=FitH"', text)
+
+    def test_flagship_foundation_and_six_new_readers(self):
+        import json
+        home = (self.source / 'index.html').read_text()
+        slugs = ('transformational-intelligence', 'agi-alpha', 'invent-the-economy',
+                 'the-world-as-an-output', 'beyond-the-production-frontier', 'beyond-the-original-problem')
+        self.assertLess(home.index('Flagship paper'), home.index('Foundational paper'))
+        self.assertLess(home.index('Foundational paper'), home.index('out-collection'))
+        self.assertNotIn('from exactly US$100,000', home)
+        self.assertIn('jointly chosen', home)
+        for slug in slugs:
+            self.assertIn(slug + '.html', home)
+            page = (self.source / (slug + '.html')).read_text()
+            self.assertIn('RESEARCH_FOUNDATIONS.md', page)
+            self.assertIn('Scope and evidence', page)
+            self.assertIn('SHA-256:', page)
+            self.assertIn('aria-label="Continue reading"', page)
+            self.assertIn('type="application/pdf"', page)
+            self.assertIn('download>', page)
+        self.assertIn('Learning to Change the Game', (self.source / 'transformational-intelligence.html').read_text())
+        self.assertIn('A Scalable Substrate for Intelligence Organizations', (self.source / 'agi-alpha.html').read_text())
 
     def test_manifest_cannot_repeat_or_omit_a_paper(self):
         import json

@@ -1,5 +1,82 @@
 # Research papers
 
+## Flagship and foundational reading
+
+Read **Transformational Intelligence: Learning to Change the Game** first; it is our flagship paper. **AGI ALPHA: A Scalable Substrate for Intelligence Organizations** is our foundational paper. Use [the practical research guide](../harness/RESEARCH_FOUNDATIONS.md) to turn these ideas into construction, evaluation and operating decisions.
+
+### Transformational Intelligence: Learning to Change the Game
+
+**Flagship paper** · Vincent Boucher · October 2026 · 24 pages.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/transformational-intelligence.html) · [Original PDF](transformational-intelligence-202610.pdf)
+
+Identify removable restrictions in representations, information channels, coordination and intermediate objectives. Construct a different formulation and test whether it better serves the authorized purpose.
+
+**Scope:** The paper gives exact illustrative, model-conditional results and an evaluation program. A standard unrestricted planner matches its intervention policy; it does not establish a new causal-discovery algorithm or an LLM breakthrough. Hosting is not independent reproduction.
+
+Exact supplied PDF: 305,040 bytes; SHA-256 `d7170e8217e3bf6aa1b84868c1c76c5994c6995c5297ed092d7e72a6430c664f`.
+
+### AGI ALPHA: A Scalable Substrate for Intelligence Organizations
+
+**Foundational paper** · Vincent Boucher · 30 April 2026 · 198 pages.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/agi-alpha.html) · [Original PDF](agi-alpha-foundation-20260430.pdf)
+
+A proposed organizational substrate connecting agents, bounded jobs, validators, tools, memory, settlement, governance and retained capabilities.
+
+**Scope:** This is a theoretical systems and implementation-architecture paper. Its architecture and ambitions do not establish achieved AGI, ASI, empirical superiority, guaranteed returns or civilization-scale capability; claims require scoped evidence dockets. Hosting is not independent reproduction.
+
+Exact supplied PDF: 5,926,237 bytes; SHA-256 `4b290d5a8232364b8808c0af8a96e7c9b152afd7ac3f5ba05668a538e073791a`.
+
+### Invent the Economy: Transformational Intelligence for Creating Viable Markets
+
+**Economic construction** · Vincent Boucher · October 2026 · 22 pages.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/invent-the-economy.html) · [Original PDF](invent-the-economy-202610.pdf)
+
+Invent the technical capability and voluntarily accepted commercial arrangement together. Distinguish participant benefit, expected contribution, liquidity and realized exchange.
+
+**Scope:** Analytic and supplied-model results are not autonomous business creation, real buyer commitments or a token-price forecast. Positive expected contribution can still require unavailable prefunding. Hosting is not independent reproduction.
+
+Exact supplied PDF: 285,994 bytes; SHA-256 `61e92a47b32cbca12b705094b982dddaca03b3dfe2b7f657bbf30eb8d56bba79`.
+
+### The World as an Output: Constructive Sufficiency for Reusable Discovery
+
+**Reusable discovery** · Vincent Boucher · 20 October 2026 · 23 pages.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/the-world-as-an-output.html) · [Original PDF](the-world-as-an-output-20261020.pdf)
+
+Construct a reusable experimental interface that preserves intended work while reducing its dependence on nuisance dynamics. Test repeated use and changed successor demands.
+
+**Scope:** The guarantees assume supplied structural bounds and disturbance contracts. Synthetic replay is not unknown-law discovery, physical validation, autonomous business creation or superiority over unrestricted engineering. Hosting is not independent reproduction.
+
+Exact supplied PDF: 313,266 bytes; SHA-256 `2a34c0ad813b6dddf8c6176a475d85f231ea06b53b641496de31626c3d786fde`.
+
+### Beyond the Production Frontier: Transformational Intelligence from Verified Discovery to Stellar-Scale Civilization
+
+**Productive capacity** · Vincent Boucher · 19 October 2026 · 26 pages.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/beyond-the-production-frontier.html) · [Original PDF](beyond-the-production-frontier-20261019.pdf)
+
+Search over complementary production requirements, investment timing and qualification delays. Keep knowledge, commercial surplus, installed capacity and human benefit separate.
+
+**Scope:** Exact finite capital-formation results use supplied synthetic models, not AI-discovered technology or measured industrial growth. Every bridge from discovery to wealth and physical capacity needs its own evidence. Hosting is not independent reproduction.
+
+Exact supplied PDF: 316,308 bytes; SHA-256 `3e5c4bcdb8a6d70ca4bdf1e3285705650e773436555c69ef2ca8d07a5a0e3d00`.
+
+### Beyond the Original Problem: Transformational Intelligence for Expanding What Is Possible
+
+**Purpose-preserving reformulation** · Vincent Boucher · 19 October 2026 · Revised edition · 24 pages.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/beyond-the-original-problem.html) · [Original PDF](beyond-the-original-problem-20261019.pdf)
+
+Separate the intended purpose from inherited intermediate tasks. Test complementary changes to measurement and objectives, while preserving required outputs and future obligations.
+
+**Scope:** The finite synthetic results are classical and model-conditional; an unrestricted linear-algebra baseline matches the example. Current correctness does not justify forgetting future obligations. Hosting is not independent reproduction.
+
+Exact supplied PDF: 307,256 bytes; SHA-256 `3a8c1d3c31bd425eb1a639c2a0c61a54e5efe8bd02684f9ce0dc5f20717b6192`.
+
+
 The [AGI ALPHA homepage](index.html) leads with Blue Sky-only productive possibilities and explicit admission evidence. The separate [historical studio](studio.html) preserves the conventional063 preview and its negative controls. Its downloadable dispatch is a local browser computation, separate from native financial acceptance, and controls no devices. The [063 research edition](../transformational063/REPORT.md) retains its original findings and limitations.
 
 ## Foundry v2 - Autonomous Enterprises: Activate. Evolve. Scale.
@@ -18,7 +95,7 @@ The supplied PDF is preserved byte-for-byte (459,457 bytes):
 SHA-256 67f2d38922cdaa1bf28e916a494679fabf1463ba84fe56e620dfd192b20d16b3
 ```
 
-The [research shelf source](index.html) offers all nine original papers. The GitHub PDF link works independently of Pages. The browser website requires the one-time [Pages setup](PAGES.md) and a successful deployment; a committed HTML file alone does not mean the site is live. Existing manuscripts and historical URLs remain unchanged.
+The [research shelf source](index.html) offers all fifteen original papers. The GitHub PDF link works independently of Pages. The browser website requires the one-time [Pages setup](PAGES.md) and a successful deployment; a committed HTML file alone does not mean the site is live. Existing manuscripts and historical URLs remain unchanged.
 
 ## Transformational Autonomous Enterprises - SUCCESSOR Ω Harness
 
