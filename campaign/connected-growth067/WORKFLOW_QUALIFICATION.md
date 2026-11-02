@@ -1,0 +1,9 @@
+# Workflow qualification correction (no experiment rerun)
+
+The executed Growth067 source is commit `8d615b1e850f81838b7ff77f87fee8964bf1f280`, frozen preregistration SHA256 `4bfb47a46e5bbd676bfd2ad24eaff5630b20883dd5b438cbbd564d3c1e32a088`, native run [41467872078](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41467872078). Growth066 remains [41457055412](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41457055412) at `6ead07d963ffb22da3c94ba23443b68d99492adc`.
+
+At the executed067 head, 11 inherited workflows passed and three failed the existing platform guard: the four jobs in each new066/067 workflow omitted a first-step `AGI_JOB_START_EPOCH` marker. Those failures remain part of the record. They were not economic or native arithmetic failures.
+
+This later, workflow-only correction records the epoch before checkout, preserving the standard runner and 360-minute platform limit. It does not change any production, acceptance, market, game, accounting, preregistration or financial-evidence file. Current workflow qualification and historical economic execution therefore have different commit identities; passing later CI is not a claim that the earlier head passed every guard.
+
+Both plan jobs still execute their complete technical tests. Only economic campaign duplication is suppressed when comparison with the exact executed067 source head contains a nonempty diff exclusively in these two workflow files and this note. Changed source paths or an empty diff retain economic execution; the original source is not silently qualified by this guard. The check also handles reopening the same metadata correction without relying on an optional event.before field. Missing comparison commits fail the gate rather than silently waiving checks. Original running campaigns are neither cancelled nor reset. No new account or replacement result is created by this correction.

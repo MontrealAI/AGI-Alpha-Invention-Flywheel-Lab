@@ -50,6 +50,9 @@ INVENTORY_SOURCE_PATHS = ('inventory061/__init__.py', 'inventory061/service.py',
 
 def source_paths_for_manifest(manifest=None):
     schema = manifest.get('schema') if isinstance(manifest, dict) else None
+    if schema == 'growth067/native-services/v1':
+        from growth067.service import source_paths
+        return tuple(dict.fromkeys(SOURCE_PATHS+tuple(source_paths(Path(__file__).resolve().parents[1]))))
     if schema == 'growth066/native-services/v1':
         from growth066.service import source_paths
         return tuple(dict.fromkeys(SOURCE_PATHS + tuple(source_paths(Path(__file__).resolve().parents[1]))))
@@ -454,7 +457,7 @@ class JournalAccount:
         # Only qualified source-bound services reuse a private financial
         # prefix; production060 also rebinds every dynamic prepared output.
         if self.manifest.get('schema') not in {'agi-alpha/adaptive012-services/v1',
-                                              'production060/native-services/v1','growth066/native-services/v1'}:
+                                              'production060/native-services/v1','growth066/native-services/v1','growth067/native-services/v1'}:
             return self.audit()
         with self._mutex:
             try:
