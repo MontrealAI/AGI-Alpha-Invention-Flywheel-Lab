@@ -2,7 +2,7 @@
   "request_id": "N3B-independent-spatial-requests-001",
   "scope": "Prospective authored engineering targets, not real customer demand. Select an exact historically printed heldout recipe using only its mask and frozen forward predictions, then evaluate actual withheld printed height. Separately generated new masks remain MODEL ONLY without manufactured truth.",
   "source": "NIST10.18434/mds2-2950; same material, printer and5s exposure as source; no cross-machine or multilayer claim",
-  "grid": "Targets defined on central8x8 native pattern; surrounding4-native-pixel border on each side has target0. Expand by nearest-neighbor to128x128 only after source border mapping is confirmed. Until then coordinate mapping is HOLD, not guessed.",
+  "grid": "Targets central8x8 native pattern,4-nativepixel zero border, nearest-neighbor expand16x16 to128x128. Confirmed active[32:96]\u00b2; native80um pitch, fullfield1280um square, active640um square.",
   "target_rules": [
     {
       "id": "continuous_ridge50",
@@ -25,7 +25,7 @@
   "access": "Verifier read source protocol and directory metadata, not anyN3Bpairedimage outcomes or fittedmodel. Shared public pairedfiles are accessible, not secret truth. N3Arawtraining observation did not supply theseN3Btargets.",
   "new_mask_construction": {
     "required": true,
-    "output": "For each same independently fixedtarget, construct a genuinely new8x8 grayscalePNG and source-bound recipe, not only selectarchive inventory. Use fixed5s sourceexposure and integers0..255; surrounding4nativepixelborder fixed0. Record quantization, exactmodelidentity, sourcepixelcoordinates, optimizertermination and modeledresidual. Unknown lateralSI pitch remainsunknown, not borrowed fromN3A.",
+    "output": "For each same independently fixedtarget, construct a genuinely new8x8 grayscalePNG and source-bound recipe, not only selectarchive inventory. Use fixed5s sourceexposure and integers0..255; surrounding4nativepixelborder fixed0. Record quantization, exactmodelidentity, sourcepixelcoordinates, optimizertermination and modeledresidual. Source nativepitch80um; sourcegeometry not new SI calibration.",
     "acceptance": "Finite output/range/units/numericalobjective can pass. If no model-feasible design found reportHOLD with bestcandidate; never claim manufacturedacceptance from ownforwardmodel. Archivedselection provides independentphysicalcontrol but does not validate newmask.",
     "controls": "Ordinaryexistingmethod gets samefrozenforwardmodel,target,initialization/searchbudget andmaskrights; sourcepublished200epochmodels fixed beforevalues. Do not choose model usingtesttarget errors."
   }
