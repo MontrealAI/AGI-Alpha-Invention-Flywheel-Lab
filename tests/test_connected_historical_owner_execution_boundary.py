@@ -20,7 +20,7 @@ class HistoricalVerifierAuthorityBoundaryTests(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         (self.root / 'connected_enterprise').mkdir()
-        (self.root / 'connected_enterprise/finance.py').write_text('SYNTHETIC_ONLY=True\\n')
+        (self.root / 'connected_enterprise/finance.py').write_text('SYNTHETIC_ONLY=True\n')
         self.inventory = upgrades.source_inventory(self.root)
         self.key = b'unit-test-only-key-material-32byte'
         body = {'schema': 'agi-alpha/native-source-transition/v1',
