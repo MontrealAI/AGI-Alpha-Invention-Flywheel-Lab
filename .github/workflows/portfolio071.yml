@@ -8,7 +8,7 @@ on:
       - 'commercial/ledger.py'
       - 'connected_enterprise/finance.py'
       - 'requirements-portfolio071.txt'
-      - 'scripts/replay_portfolio071_parallel.py'
+      - 'scripts/*portfolio071*.py'
       - '.github/workflows/portfolio071.yml'
   push:
     branches: [main]
@@ -19,7 +19,7 @@ on:
       - 'commercial/ledger.py'
       - 'connected_enterprise/finance.py'
       - 'requirements-portfolio071.txt'
-      - 'scripts/replay_portfolio071_parallel.py'
+      - 'scripts/*portfolio071*.py'
       - '.github/workflows/portfolio071.yml'
   workflow_dispatch:
 permissions:
@@ -32,6 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
+      - name: Record hosted job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
