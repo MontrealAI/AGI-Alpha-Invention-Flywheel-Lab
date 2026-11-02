@@ -62,6 +62,30 @@ class HistoricalSourceStaging(unittest.TestCase):
         self.assertEqual(observed[0].returncode, 0, observed[0].stderr)
         self.assertEqual(observed[0].stdout.strip(), 'PINNED')
 
+    def test_staged_source_mutation_is_refused_in_child_before_import(self):
+        import ast
+        import re
+        original_run = upgrades.subprocess.run
+        observed = []
+        def raced_run(*args, **kwargs):
+            script = args[0][-1]
+            match = re.search(r"snapshot=pathlib\\.Path\\(([^)]+)\\)", script)
+            self.assertIsNotNone(match)
+            staged = Path(ast.literal_eval(match.group(1))) / 'inspected.py'
+            staged.chmod(0o600)
+            staged.write_text("RESULT='UNREGISTERED'\\n")
+            completed = original_run(*args, **kwargs)
+            observed.append(completed)
+            return completed
+        with patch.object(upgrades.subprocess, 'run', side_effect=raced_run):
+            with self.assertRaisesRegex(ValueError, 'CHANGED_DURING_EXECUTION'):
+                upgrades._run_pinned_historical_python(
+                    self.root, 'import inspected;print(inspected.RESULT)', {}, self.inventory)
+        self.assertEqual(len(observed), 1)
+        self.assertNotEqual(observed[0].returncode, 0)
+        self.assertIn('STAGED_HISTORICAL_SOURCE_CHANGED_BEFORE_IMPORT', observed[0].stderr)
+        self.assertNotIn('UNREGISTERED', observed[0].stdout)
+
     def test_clean_launcher_uses_isolation_without_parent_environment(self):
         with patch.dict(os.environ, {'AGI_ALPHA_SYNTHETIC_PARENT_MARKER': 'NOT_FOR_CHILD'}):
             done = upgrades._run_pinned_historical_python(
