@@ -16,10 +16,14 @@ jobs:
     timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - name: Retrieve public versioned metadata only
+        run: python -m unittest experiments.capability_transfer_20261102.test_catalog -v
+      - name: Acquire catalog with semantic response checks
         run: python experiments/capability_transfer_20261102/fetch_catalog.py --output /tmp/cell-pack-catalog
       - uses: actions/upload-artifact@v4
         if: always()
