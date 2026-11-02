@@ -53,6 +53,16 @@ def check_native_claim_binding(arm, exported, reported, measurements, protocol):
     for buyer in buyers:
         ident = 'market062-' + buyer
         native, claim = order_index[ident], sale_index[ident]
+        # Audit of a valid native order alone cannot establish WHICH accepted
+        # service was offered to this buyer. Tie its source-bound offer action
+        # to the exact independently checked historical measurement job.
+        offers = [action for action in tape.get('actions', [])
+                  if isinstance(action, dict) and action.get('op') == 'offer'
+                  and isinstance(action.get('args'), dict)
+                  and action['args'].get('id') == ident]
+        if (len(offers) != 1 or offers[0]['args'].get('buyer') != buyer
+                or offers[0]['args'].get('job_id') != 'evidence_matrix-market062-' + buyer):
+            raise ValueError('NATIVE_OFFER_DELIVERABLE_IDENTITY_MISMATCH')
         requirements = {
             'native_state': (native.get('state'), 'released'),
             'native_buyer': (native.get('buyer'), buyer),
