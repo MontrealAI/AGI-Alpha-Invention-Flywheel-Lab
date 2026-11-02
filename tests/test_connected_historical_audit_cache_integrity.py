@@ -2,6 +2,7 @@
 import hashlib
 import hmac
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -40,7 +41,7 @@ class HistoricalAuditCacheIntegrityTests(unittest.TestCase):
                     'historical_root': str(root), 'verifier_files': inventory,
                     'from_source': {'sha256': 'd' * 64},
                     'prior_record': {'connected_journal': {'source_history': [nested]}}}
-            key = b'local-synthetic-test-only-hmac-key-32'
+            key = os.urandom(32)
             ticket = {'body': body, 'signature': hmac.new(key, upgrades.DOMAIN + canonical(body), hashlib.sha256).hexdigest()}
             invocations = []
 
