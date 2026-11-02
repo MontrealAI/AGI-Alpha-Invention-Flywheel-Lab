@@ -1,0 +1,223 @@
+{
+  "experiment_id": "N1-20261102-365c3d6c",
+  "phase": "finite_source_provenance_dependency",
+  "predecessor_commit": "a5df603854f98cbd673204258c8d768e0c759975",
+  "sources": [
+    {
+      "id": "paper",
+      "url": "https://doi.org/10.1038/s44221-024-00314-6",
+      "authors": [
+        "Bessette",
+        "Pratt",
+        "Winter"
+      ],
+      "locator": "Controller integration section; historical W1/MAPPING_ASSESSMENT.md at pinned predecessor",
+      "sha256": null,
+      "supports": "Published downstream diluate conductivity instrument location; no numbered archive channel identity established here."
+    },
+    {
+      "id": "supplement",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs44221-024-00314-6/MediaObjects/44221_2024_314_MOESM1_ESM.pdf",
+      "sha256": "97f37f427764ff8cee536aa22f4b340dfcd8382d6993e1ca9e32f055e2239f61",
+      "bytes": 1634588,
+      "pdf_pages": 22,
+      "locators": {
+        "table": "PDF page 7, printed page 19, Table S1",
+        "diagram": "PDF page 8, printed page 20, Figure S2C"
+      },
+      "rights": "Publisher supplementary material; author credit retained; link and compact original summaries only, no redistributed PDF."
+    },
+    {
+      "id": "archive",
+      "url": "https://doi.org/10.6084/m9.figshare.24991158",
+      "metadata_url": "https://api.figshare.com/v2/articles/24991158",
+      "version": 1,
+      "retrieval_response_sha256": "31333b52afe1d5ea849589869a65643adb09b46a27ffd5fb1c43b2dd9c4b652f",
+      "receipt_scope": "Independent provenance reader computed response hash; body was not retained. This is a retrieval receipt, not a self-contained immutable replay input.",
+      "file_count": 193,
+      "file_types": [
+        "csv"
+      ],
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "credit": "Bessette, Pratt and Winter",
+      "supports": "Archive descriptions name conductivity1_DS through conductivity4_DS as sensors 1 through 4, units microS/cm. Descriptions do not establish physical stream or released-batch mapping."
+    },
+    {
+      "id": "sensor_instructions",
+      "url": "https://sensorex.com/wp-content/uploads/2021/09/TCS3020-Instructions.pdf",
+      "sha256": null,
+      "inspection": "Independent provenance reader inspected publicly indexed manufacturer instructions; original bytes not retained.",
+      "supports": "Manufacturer calibration procedure; does not prove installed span, calibration identity, calibration date or physical installation."
+    },
+    {
+      "id": "sensor_specifications",
+      "url": "https://sensorex.com/wp-content/uploads/2018/09/TCS3020-Specification-Sheet.pdf",
+      "sha256": null,
+      "inspection": "Independent provenance reader inspected publicly indexed primary specification; original bytes not retained.",
+      "supports": "Sensor family and temperature-element options; no installed temperature-compensation proof."
+    },
+    {
+      "id": "thesis_uninspected",
+      "url": "https://dspace.mit.edu/entities/publication/bec7ff50-942f-44af-aa01-46868098c735",
+      "title": "Control, design, and field validation of photovoltaic electrodialysis desalination systems for decentralized applications",
+      "author": "Jonathan Bessette",
+      "date": "2026-02",
+      "reported_size_mb": 78.43,
+      "metadata_md5": "1c19f6f905a4367956aba90f3d0d4e08",
+      "license": "CC BY-NC-ND 4.0",
+      "inspection": "METADATA_ONLY; full thesis and supplements NOT_INSPECTED. No claim of absence in this source."
+    }
+  ],
+  "source_facts": [
+    {
+      "claim": "Physical state definitions are available",
+      "source": "supplement",
+      "locator": "Table S1; PDF p7 / printed p19",
+      "value": {
+        "state_machine": [
+          {
+            "state": 1,
+            "name": "Reset/Off",
+            "valves": "All Off"
+          },
+          {
+            "state": 2,
+            "name": "Low-Power",
+            "valves": "All Off"
+          },
+          {
+            "state": 3,
+            "name": "Pre-Fill",
+            "valves": "Feed Valves On, Reversal"
+          },
+          {
+            "state": 4,
+            "name": "Fill All",
+            "valves": "Feed Valves On"
+          },
+          {
+            "state": 5,
+            "name": "Fill Diluate",
+            "valves": "Concentrate Tank Valve On"
+          },
+          {
+            "state": 6,
+            "name": "Recirculate",
+            "valves": "Both Tank Valves On"
+          },
+          {
+            "state": 7,
+            "name": "Drain Diluate",
+            "valves": "Bypass to Product On"
+          },
+          {
+            "state": 8,
+            "name": "Drain Concentrate",
+            "valves": "Drain Valve On"
+          },
+          {
+            "state": 9,
+            "name": "Post Batch Checks",
+            "valves": "Prior Valves On"
+          }
+        ]
+      },
+      "limit": "A state description is not an archived state-tag dictionary or authenticated per-batch release event."
+    },
+    {
+      "claim": "Outlet conductivity instrument specification",
+      "source": "supplement",
+      "locator": "Table S1; PDF p7 / printed p19",
+      "value": {
+        "model": "Sensorex TCS3020",
+        "stated_accuracy": "0.05% of span or 0.1 microS/cm",
+        "stated_range_uS_cm": [
+          0,
+          2000000
+        ],
+        "resolution_uS_cm": 0.1,
+        "sampling_after_averaging_s": 2
+      },
+      "limit": "Maximum instrument range is not installed span. No installed calibration certificate, date, uncertainty or temperature basis is established."
+    },
+    {
+      "claim": "Separate clocks must not be conflated",
+      "source": "supplement",
+      "locator": "Table S1 caption; PDF p7 / printed p19",
+      "value": {
+        "plc_sampling_ms": 100
+      },
+      "limit": "The 100 ms PLC statement, 2 s conductivity averaging and main-text 100 Hz readout statement are different descriptions. Archive aggregation/clock alignment remains unresolved."
+    },
+    {
+      "claim": "Process diagram shows multiple conductivity positions and routing",
+      "source": "supplement",
+      "locator": "Figure S2C; PDF p8 / printed p20",
+      "value": "Four main-loop conductivity C icons and an electrode-rinse conductivity icon are drawn. Labels 1 through 10 identify valves, not archive sensor channels.",
+      "limit": "Do not assign CSV conductivity1_DS to diagram valve 1 or choose a channel by its numerical value."
+    },
+    {
+      "claim": "Product-flow instrument specification is distinct from registered liters",
+      "source": "supplement",
+      "locator": "Table S1; PDF p7 / printed p19",
+      "value": {
+        "model": "PRM WM200PVX",
+        "resolution": "1 pulse / 10 gal.",
+        "stated_range": "5-130 GPM",
+        "stated_accuracy": "plus/minus 2% res."
+      },
+      "limit": "No unverified pulse-to-archive-liter conversion or one-pass route mapping is added; historical W1 counter arithmetic remains its original conditional result."
+    }
+  ],
+  "adapter_evidence": {
+    "channel_to_stream": null,
+    "installed_calibration": null,
+    "temperature_compensation": null,
+    "clock_alignment": null,
+    "archive_state_tag": null,
+    "batch_release_rule": null,
+    "batch_mixing_rule": null,
+    "one_pass_quantity_route": null,
+    "proxy_contract": null
+  },
+  "missing_observation_contract": [
+    "channel_to_stream",
+    "installed_calibration",
+    "temperature_compensation",
+    "clock_alignment",
+    "archive_state_tag",
+    "batch_release_rule",
+    "batch_mixing_rule",
+    "one_pass_quantity_route",
+    "proxy_contract"
+  ],
+  "retrieval_phase": "Exploratory source retrieval completed before prospective authored-control freeze; no fresh sensor confirmation inspected.",
+  "finite_routes_record": [
+    {
+      "route": "DOI/publisher landing through web retrieval",
+      "observed": "Redirect/retrieval error; not physical evidence."
+    },
+    {
+      "route": "Direct public publisher HTML and linked supplementary PDF",
+      "observed": "Succeeded; supplement bytes and SHA256 recorded. Repairs earlier W1 transport limitation without altering W1 outcomes."
+    },
+    {
+      "route": "Figshare DOI and public metadata API",
+      "observed": "DOI web request denied with HTTP403; public API succeeded; no CSV data fetched for N1."
+    },
+    {
+      "route": "Public manufacturer instructions/specifications",
+      "observed": "Publicly indexed primary pages inspected; installed metrology remains unknown."
+    },
+    {
+      "route": "Bounded exact author/title/public-code searches",
+      "observed": "No authenticated PLC tag dictionary found in inspected results. A namesake account is not attributed to the authors."
+    },
+    {
+      "route": "MIT 2026 thesis",
+      "observed": "Metadata found; content not inspected. Remains a concrete possible next evidence route, not a negative full-text search."
+    }
+  ],
+  "finite_retrieval_stop": "Stop this source-dependency stage after the listed publisher/supplement, archive metadata, primary manufacturer and bounded public-code routes. The uninspected thesis is disclosed; this stage does not claim all public sources are exhausted. No unrelated optimizer or fresh sensor download substitutes for missing semantics."
+}

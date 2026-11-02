@@ -1,0 +1,239 @@
+{
+  "reviewer": "independent_scientist",
+  "scope": "INDEPENDENT_AUTHORED_IMPLEMENTATION_CONTROLS_AND_DIRECT_PROVENANCE_REVIEW",
+  "independence": "Reference fixtures and expected decisions authored separately; candidate mapping is invoked but never supplies reference labels. See N1_PROVENANCE_REVIEW.md for direct source inspection.",
+  "registered_denominator": 18,
+  "passed": 18,
+  "failed": 0,
+  "cases": [
+    {
+      "case": "complete",
+      "expected": "MODEL_PASS",
+      "actual": "MODEL_PASS",
+      "pass": true,
+      "reasons": []
+    },
+    {
+      "case": "exact_envelope_boundary",
+      "expected": "MODEL_PASS",
+      "actual": "MODEL_PASS",
+      "pass": true,
+      "reasons": []
+    },
+    {
+      "case": "above_envelope_boundary",
+      "expected": "MODEL_REJECT",
+      "actual": "MODEL_REJECT",
+      "pass": true,
+      "reasons": [
+        "OUTSIDE_PROXY_ENVELOPE"
+      ]
+    },
+    {
+      "case": "wrong_stream",
+      "expected": "MODEL_HOLD",
+      "actual": "MODEL_HOLD",
+      "pass": true,
+      "reasons": [
+        "WRONG_STREAM"
+      ]
+    },
+    {
+      "case": "empty_mapping",
+      "expected": "MODEL_HOLD",
+      "actual": "MODEL_HOLD",
+      "pass": true,
+      "reasons": [
+        "UNKNOWN_CHANNEL_IDENTITY",
+        "UNKNOWN_SOURCE_TAG"
+      ]
+    },
+    {
+      "case": "empty_calibration",
+      "expected": "MODEL_HOLD",
+      "actual": "MODEL_HOLD",
+      "pass": true,
+      "reasons": [
+        "UNKNOWN_INSTALLED_CALIBRATION"
+      ]
+    },
+    {
+      "case": "empty_state_evidence",
+      "expected": "MODEL_HOLD",
+      "actual": "MODEL_HOLD",
+      "pass": true,
+      "reasons": [
+        "UNKNOWN_STATE_TAG"
+      ]
+    },
+    {
+      "case": "missing_release",
+      "expected": "MODEL_HOLD",
+      "actual": "MODEL_HOLD",
+      "pass": true,
+      "reasons": [
+        "MISSING_RELEASE_EVENT",
+        "RELEASE_BATCH_MISMATCH",
+        "RELEASE_BEFORE_COMPLETE_OBSERVATION_OR_UNKNOWN",
+        "UNBOUND_DISCHARGE_INTERVAL"
+      ]
+    },
+    {
+      "case": "unknown_reversal",
+      "expected": "MODEL_HOLD",
+      "actual": "MODEL_HOLD",
+      "pass": true,
+      "reasons": [
+        "REVERSAL_OR_UNKNOWN"
+      ]
+    },
+    {
+      "case": "stale_calibration",
+      "expected": "MODEL_HOLD",
+      "actual": "MODEL_HOLD",
+      "pass": true,
+      "reasons": [
+        "STALE_CALIBRATION"
+      ]
+    },
+    {
+      "case": "wrong_batch_sample",
+      "expected": "MODEL_HOLD",
+      "actual": "MODEL_HOLD",
+      "pass": true,
+      "reasons": [
+        "GAP_OR_SAMPLE_CROSSES_BATCH"
+      ]
+    },
+    {
+      "case": "infinite_sample",
+      "expected": "MODEL_HOLD",
+      "actual": "MODEL_HOLD",
+      "pass": true,
+      "reasons": [
+        "NONFINITE_OR_MISSING_SAMPLE"
+      ]
+    },
+    {
+      "case": "counter_reset",
+      "expected": "MODEL_HOLD",
+      "actual": "MODEL_HOLD",
+      "pass": true,
+      "reasons": [
+        "COUNTER_RESET_OR_INVALID"
+      ]
+    },
+    {
+      "case": "public_channel_1",
+      "expected": "HOLD",
+      "actual": "HOLD",
+      "pass": true,
+      "reasons": [
+        "EXCESSIVE_OR_UNKNOWN_SAMPLE_GAP",
+        "PROXY_NOT_DEFINED",
+        "PUBLIC_ADAPTER_NOT_ADMITTED",
+        "TIMESTAMP_OFFSET_OR_UNKNOWN",
+        "UNKNOWN_BATCH_MIXING_RULE",
+        "UNKNOWN_BATCH_RELEASE_RULE",
+        "UNKNOWN_CHANNEL_IDENTITY",
+        "UNKNOWN_CLOCK_ALIGNMENT",
+        "UNKNOWN_INSTALLED_CALIBRATION",
+        "UNKNOWN_QUANTITY_ROUTE",
+        "UNKNOWN_SOURCE_TAG",
+        "UNKNOWN_STATE_TAG",
+        "UNKNOWN_TEMPERATURE_COMPENSATION"
+      ]
+    },
+    {
+      "case": "public_channel_2",
+      "expected": "HOLD",
+      "actual": "HOLD",
+      "pass": true,
+      "reasons": [
+        "EXCESSIVE_OR_UNKNOWN_SAMPLE_GAP",
+        "PROXY_NOT_DEFINED",
+        "PUBLIC_ADAPTER_NOT_ADMITTED",
+        "TIMESTAMP_OFFSET_OR_UNKNOWN",
+        "UNKNOWN_BATCH_MIXING_RULE",
+        "UNKNOWN_BATCH_RELEASE_RULE",
+        "UNKNOWN_CHANNEL_IDENTITY",
+        "UNKNOWN_CLOCK_ALIGNMENT",
+        "UNKNOWN_INSTALLED_CALIBRATION",
+        "UNKNOWN_QUANTITY_ROUTE",
+        "UNKNOWN_SOURCE_TAG",
+        "UNKNOWN_STATE_TAG",
+        "UNKNOWN_TEMPERATURE_COMPENSATION"
+      ]
+    },
+    {
+      "case": "public_channel_3",
+      "expected": "HOLD",
+      "actual": "HOLD",
+      "pass": true,
+      "reasons": [
+        "EXCESSIVE_OR_UNKNOWN_SAMPLE_GAP",
+        "PROXY_NOT_DEFINED",
+        "PUBLIC_ADAPTER_NOT_ADMITTED",
+        "TIMESTAMP_OFFSET_OR_UNKNOWN",
+        "UNKNOWN_BATCH_MIXING_RULE",
+        "UNKNOWN_BATCH_RELEASE_RULE",
+        "UNKNOWN_CHANNEL_IDENTITY",
+        "UNKNOWN_CLOCK_ALIGNMENT",
+        "UNKNOWN_INSTALLED_CALIBRATION",
+        "UNKNOWN_QUANTITY_ROUTE",
+        "UNKNOWN_SOURCE_TAG",
+        "UNKNOWN_STATE_TAG",
+        "UNKNOWN_TEMPERATURE_COMPENSATION"
+      ]
+    },
+    {
+      "case": "public_channel_4",
+      "expected": "HOLD",
+      "actual": "HOLD",
+      "pass": true,
+      "reasons": [
+        "EXCESSIVE_OR_UNKNOWN_SAMPLE_GAP",
+        "PROXY_NOT_DEFINED",
+        "PUBLIC_ADAPTER_NOT_ADMITTED",
+        "TIMESTAMP_OFFSET_OR_UNKNOWN",
+        "UNKNOWN_BATCH_MIXING_RULE",
+        "UNKNOWN_BATCH_RELEASE_RULE",
+        "UNKNOWN_CHANNEL_IDENTITY",
+        "UNKNOWN_CLOCK_ALIGNMENT",
+        "UNKNOWN_INSTALLED_CALIBRATION",
+        "UNKNOWN_QUANTITY_ROUTE",
+        "UNKNOWN_SOURCE_TAG",
+        "UNKNOWN_STATE_TAG",
+        "UNKNOWN_TEMPERATURE_COMPENSATION"
+      ]
+    },
+    {
+      "case": "public_evidence_remains_unresolved",
+      "pass": true,
+      "expected_unknown_fields": [
+        "channel_to_stream",
+        "installed_calibration",
+        "temperature_compensation",
+        "clock_alignment",
+        "archive_state_tag",
+        "batch_release_rule",
+        "batch_mixing_rule",
+        "one_pass_quantity_route",
+        "proxy_contract"
+      ]
+    }
+  ],
+  "physical_admission": false,
+  "fresh_sensor_dates": 0,
+  "empirical_error_rate": null,
+  "resource": {
+    "wall_s": 0.0015834769983484875,
+    "process_cpu_s": 0.0015680000000000017
+  },
+  "source_sha256": {
+    "verification/verify_n1.py": "9d0c7fe15fe38f54b28f5c418e7549cf2534eb88ca6dd62602ac6afb47e3413f",
+    "n1/adapter.py": "2bfc6039da44d28e6c34826d7304309a47847596eddd2f5654c62f64ae9f56ca",
+    "n1/SOURCE_MANIFEST.json": "69281cbd03ba84625bba10191704c1245fb2579b3b1a2e28862f209d17333abe",
+    "n1/CONTRACT.json": "515c8dc403399f1c06f755218ae2f887afa2968077aa43bafe1293aa889d1487"
+  }
+}

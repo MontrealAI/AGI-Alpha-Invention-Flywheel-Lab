@@ -1,0 +1,98 @@
+{
+  "w1_unit_001": {
+    "children_system_cpu_seconds": 0.019434,
+    "children_user_cpu_seconds": 0.057845999999999995,
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "/tmp/next-series-pr152/portfolio/blue-sky-20261102-dot/W1",
+      "-v"
+    ],
+    "exit_code": 0,
+    "finished_utc": "2026-11-02T20:10:41.801143+00:00",
+    "maximum_child_rss_KiB": 15744,
+    "schema": "agi-alpha/overnight022-command-resource/v1",
+    "scope": "Reaped local command and descendants; excludes assistant inference, tool transport, external CI, preceding clone/review and unmeasured host billing. Maximum RSS is a kernel high-water mark, not concurrent aggregate memory. No allocation or quota is created by this receipt.",
+    "started_utc": "2026-11-02T20:10:41.723350+00:00",
+    "total_measured_command_cpu_seconds": 0.07727999999999999,
+    "wall_seconds": 0.0777936079994106
+  },
+  "w1_lp_001": {
+    "children_system_cpu_seconds": 0.08843899999999999,
+    "children_user_cpu_seconds": 1.8059949999999998,
+    "command": [
+      "python3",
+      "/tmp/next-series-pr152/portfolio/blue-sky-20261102-dot/verification/replay_water.py",
+      "/tmp/next-series-pr152/portfolio/blue-sky-20261102-dot/W1/water.py",
+      "/tmp/next-series-pr152/portfolio/blue-sky-20261102-dot/W1/results.json"
+    ],
+    "exit_code": 0,
+    "finished_utc": "2026-11-02T20:11:09.523065+00:00",
+    "maximum_child_rss_KiB": 61588,
+    "schema": "agi-alpha/overnight022-command-resource/v1",
+    "scope": "Reaped local command and descendants; excludes assistant inference, tool transport, external CI, preceding clone/review and unmeasured host billing. Maximum RSS is a kernel high-water mark, not concurrent aggregate memory. No allocation or quota is created by this receipt.",
+    "started_utc": "2026-11-02T20:11:08.972037+00:00",
+    "total_measured_command_cpu_seconds": 1.894434,
+    "wall_seconds": 0.5510303159990144
+  },
+  "runtime_preflight_001": {
+    "children_system_cpu_seconds": 0.14957499999999999,
+    "children_user_cpu_seconds": 0.591252,
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_connected_platform_runtime064",
+      "-v"
+    ],
+    "exit_code": 0,
+    "finished_utc": "2026-11-02T20:14:18.734347+00:00",
+    "maximum_child_rss_KiB": 23832,
+    "schema": "agi-alpha/overnight022-command-resource/v1",
+    "scope": "Reaped local command and descendants; excludes assistant inference, tool transport, external CI, preceding clone/review and unmeasured host billing. Maximum RSS is a kernel high-water mark, not concurrent aggregate memory. No allocation or quota is created by this receipt.",
+    "started_utc": "2026-11-02T20:14:17.755027+00:00",
+    "total_measured_command_cpu_seconds": 0.740827,
+    "wall_seconds": 0.9792921200005367
+  },
+  "w1_summary": {
+    "unit_tests": 8,
+    "unit_passed": 8,
+    "lp_cases": 48,
+    "lp_passed": 48,
+    "maximum_capacity_gap_l": 9.094947017729282e-13,
+    "original_quality_holds": 7,
+    "new_raw_water_dates": 0,
+    "scope": "Predecessor reproduction; no new physical acceptance"
+  },
+  "input_identities": {
+    "W1/water.py": "a4ae918fd2c64c68467f6b777497aaf403c70439c687665eb8410b7ad18da7a2",
+    "W1/results.json": "c5c6f15d3b14fda602b31f8bf2beb1b1ac31947d2c377a8fe5857db3f6b19855",
+    "W1/test_water.py": "33abd8aad0dcc72c30957e9a245fe799b2bac8f07f4bfd6565661a9f55c91b8a",
+    "verification/replay_water.py": "02699c8a82a5e72436b8d5af01ae2565ee914d232bb50cf75caabfc26a7852b7",
+    "verification/water_lp.py": "f3f8a946e79b08121359c508b6331e63af5938a55491d3d6b7ed17b3bfe2ccdd"
+  },
+  "water_predecessor_source": "a5df603854f98cbd673204258c8d768e0c759975",
+  "runtime_preflight_source": "4c7413eab19908dd83fb4e7b23b7bf7bd0e341d2",
+  "workflow_preflight_002": {
+    "children_system_cpu_seconds": 0.053304,
+    "children_user_cpu_seconds": 0.363625,
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_connected_platform_runtime064",
+      "-v"
+    ],
+    "exit_code": 0,
+    "finished_utc": "2026-11-02T20:20:05.707799+00:00",
+    "maximum_child_rss_KiB": 19972,
+    "schema": "agi-alpha/overnight022-command-resource/v1",
+    "scope": "Reaped local command and descendants; excludes assistant inference, tool transport, external CI, preceding clone/review and unmeasured host billing. Maximum RSS is a kernel high-water mark, not concurrent aggregate memory. No allocation or quota is created by this receipt.",
+    "started_utc": "2026-11-02T20:20:05.047761+00:00",
+    "total_measured_command_cpu_seconds": 0.416929,
+    "wall_seconds": 0.6601114550012426
+  }
+}
