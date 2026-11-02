@@ -53,6 +53,26 @@ python experiments/capability_transfer_20261102/plot_result.py \
   --output /absolute/new/midpoint-diagnostic/midpoint_result.svg
 ```
 
-The default freeze is the adjacent `FROZEN_STAGE_B_SERIALIZATION_FIX.json`; `--freeze` can select a relocated copy with the same required digest. The runner verifies the original receipt, freeze, all five frozen sources and pair before computing references. It requires exact reference-hash agreement and uses a new output directory, returning nonzero on failed qualification. It refuses existing output paths and never edits original files. The JSON includes runtime versions, the runner's source hash and the CSV digest, but excludes timestamps, run durations and absolute paths. Different numerical environments can fail strict floating-point reference-hash agreement and are not silently accepted.
+The default freeze is the adjacent `FROZEN_STAGE_B_SERIALIZATION_FIX.json`; `--freeze` can select a relocated copy with the same required digest. The runner verifies the original receipt, freeze, all five frozen sources and pair before computing references. Default mode requires exact historical reference-hash agreement. It uses a new output directory, returns nonzero on failed qualification, refuses existing output paths and never edits original files. The JSON includes runtime versions, the runner's source hash and the CSV digest, but excludes timestamps, run durations and absolute paths. Different numerical environments can fail strict floating-point reference-hash agreement.
 
-The CSV-export version was executed once with Python 3.12.14, NumPy 2.3.5 and SciPy 1.17.0. Its diagnostic SHA-256 is `9d97d819d494ac364468c4d92d473747bbc62e39eb2ac4c888fe1691a000a47e`; its CSV exactly matches the initial plot input, SHA-256 `49f6c28db9749423414cbab11e5d4b0b4f0d19bd2d71e086221d9b2bf536aebe`. All scientific metrics remain unchanged. Before adding CSV export, two runs produced byte-identical JSON and checks confirmed refusal of an existing output directory and an altered original receipt. All frozen sources and the original result remain unchanged.
+The archived CSV-export diagnostic was executed with Python 3.12.14, NumPy 2.3.5 and SciPy 1.17.0. Its SHA-256 is `9d97d819d494ac364468c4d92d473747bbc62e39eb2ac4c888fe1691a000a47e`; its CSV exactly matches the initial plot input, SHA-256 `49f6c28db9749423414cbab11e5d4b0b4f0d19bd2d71e086221d9b2bf536aebe`. Before adding CSV export, two runs produced byte-identical JSON and checks confirmed refusal of an existing output directory and an altered original receipt. These historical receipts remain unchanged.
+
+### Explicit portability mode
+
+Hosted run `41489928442`, job `125429977760`, passed the full frozen Stage B but failed the diagnostic's exact historical-reference comparison. Its reported NRMSE and peak error still passed the original scientific tolerances. That failure remains in [execution history](EXECUTION_HISTORY.md); it is not relabeled as a success.
+
+For a different numerical environment, first execute the complete frozen Stage B and then explicitly supply that same-environment receipt:
+
+```sh
+python -m experiments.capability_transfer_20261102.run_stage_b run \
+  --freeze experiments/capability_transfer_20261102/FROZEN_STAGE_B_SERIALIZATION_FIX.json \
+  --output /absolute/new/stage-b-replay
+python experiments/capability_transfer_20261102/run_midpoint_diagnostic.py \
+  --result experiments/capability_transfer_20261102/results/STAGE_B_RESULT.json \
+  --replay-result /absolute/new/stage-b-replay/RESULT.json \
+  --output /absolute/new/midpoint-replay
+```
+
+The original receipt and frozen-source guards remain mandatory. The replay must have the same complete Stage B schema, freeze, sources and claim map; literal acceptance flags; the registered 128 fixtures and seed; both configurations and all three completed trace grids; and finite errors below the existing `1e-8` static and `1e-4 A` trace limits. The recomputed references must match the replay's hashes **exactly**. No new floating-point tolerance is introduced.
+
+`reference_hashes_match` continues to report historical agreement. `origin_bitwise_reference_mismatch` exposes historical disagreement, while `replay_reference_hashes_match` and `reference_acceptance_hashes_match` identify the explicit acceptance target. The replay's file digest is recorded and checked again after recomputation. A valid receipt from another numerical environment can still fail this exact replay match and produce a retained failure diagnostic. Fresh execution provenance belongs to the producing workflow; unsigned receipt contents alone do not prove when or how it ran. This remains an exploratory diagnostic of the original synthetic pair.

@@ -31,6 +31,58 @@ def source_hashes():
     return {name: digest((HERE / name).read_bytes()) for name in SOURCE_NAMES}
 
 
+def checked_replay_error(value, limit):
+    if type(value) not in (int, float) or not np.isfinite(value) or not 0 <= value < limit:
+        raise ValueError('REPLAY_NUMERICAL_QUALIFICATION_FAILED')
+    return value
+
+
+def read_replay_result(path, original, sources):
+    data = path.read_bytes()
+    replay = json.loads(data)
+    if type(replay) is not dict or set(replay) != set(original) or replay.get('schema') != original['schema'] or replay.get('evidence_class') != original['evidence_class'] or type(replay.get('physical_measurement_count')) is not int or replay['physical_measurement_count'] != 0:
+        raise ValueError('REPLAY_NOT_FULL_FROZEN_STAGE_B_RECEIPT')
+    if replay.get('freeze_sha256') != FREEZE_SHA256 or replay.get('source_hashes') != sources:
+        raise ValueError('REPLAY_FROZEN_SOURCE_OR_RECEIPT_MISMATCH')
+    if replay.get('claims') != original['claims']:
+        raise ValueError('REPLAY_CLAIM_SCOPE_MISMATCH')
+    numerical, claims = replay['numerical_verification'], replay['claims']
+    if type(numerical) is not dict or type(claims) is not dict or numerical.get('numerical_constructor_accepted') is not True or claims.get('finite_numerical_implementation_accepted') is not True or claims.get('finite_observation_design') is not True:
+        raise ValueError('REPLAY_NUMERICAL_QUALIFICATION_FAILED')
+    expected = original['numerical_verification']
+    if numerical.get('fixture_seed') != expected['fixture_seed'] or numerical.get('nodal_cases') != expected['nodal_cases']:
+        raise ValueError('REPLAY_INCOMPLETE_NUMERICAL_CHECKS')
+    for key in ('max_current_difference_a', 'max_terminal_voltage_difference_v', 'max_kcl_residual_a', 'max_kvl_residual_v'):
+        checked_replay_error(numerical.get(key), 1e-8)
+    maximum_trace_error = checked_replay_error(numerical.get('max_trace_error_a'), 1e-4)
+    probe = numerical.get('probe_check')
+    if type(probe) is not dict or probe.get('accepted') is not True or replay['probe_independent_check'] != probe:
+        raise ValueError('REPLAY_NUMERICAL_QUALIFICATION_FAILED')
+    checks = numerical.get('trace_checks')
+    if type(checks) is not list or len(checks) != len(expected['trace_checks']):
+        raise ValueError('REPLAY_INCOMPLETE_NUMERICAL_CHECKS')
+    trace_errors = []
+    for check, registered in zip(checks, expected['trace_checks']):
+        if type(check) is not dict or check.get('capacities_ah') != registered['capacities_ah']:
+            raise ValueError('REPLAY_INCOMPLETE_NUMERICAL_CHECKS')
+        runs = check.get('step_s_runs')
+        if type(runs) is not dict or set(runs) != set(registered['step_s_runs']):
+            raise ValueError('REPLAY_INCOMPLETE_NUMERICAL_CHECKS')
+        for run in runs.values():
+            if type(run) is not dict or run.get('requested_horizon_completed') is not True:
+                raise ValueError('REPLAY_INCOMPLETE_NUMERICAL_CHECKS')
+            metrics = run.get('metrics_against_independent_analytic_reference')
+            if type(metrics) is not dict or metrics.get('complete_trace_used') is not True:
+                raise ValueError('REPLAY_INCOMPLETE_NUMERICAL_CHECKS')
+            trace_errors.append(checked_replay_error(metrics.get('max_abs_difference_a'), 1e-4))
+    if max(trace_errors) != maximum_trace_error:
+        raise ValueError('REPLAY_INCONSISTENT_NUMERICAL_SUMMARY')
+    hashes = numerical.get('reference_trace_hashes')
+    if type(hashes) is not list or len(hashes) != 2 or any(type(value) is not str or len(value) != 64 or any(character not in '0123456789abcdef' for character in value) for value in hashes):
+        raise ValueError('REPLAY_INVALID_REFERENCE_HASHES')
+    return replay, digest(data)
+
+
 def common_midpoint(hypothesis_currents):
     values = np.stack(hypothesis_currents)
     if values.ndim != 3 or values.shape[0] != 2 or not np.isfinite(values).all():
@@ -38,12 +90,13 @@ def common_midpoint(hypothesis_currents):
     return np.mean(values, axis=0)
 
 
-def evaluate(result_path, freeze_path):
+def evaluate(result_path, freeze_path, replay_path=None):
     result = read_bound_json(result_path, RESULT_SHA256, 'ORIGINAL_RESULT_DIGEST_MISMATCH')
     freeze = read_bound_json(freeze_path, FREEZE_SHA256, 'ORIGINAL_FREEZE_DIGEST_MISMATCH')
     sources = source_hashes()
     if result['freeze_sha256'] != FREEZE_SHA256 or result['source_hashes'] != freeze['sources'] or sources != freeze['sources']:
         raise ValueError('FROZEN_SOURCE_OR_RECEIPT_MISMATCH')
+    replay, replay_digest = read_replay_result(replay_path, result, sources) if replay_path is not None else (None, None)
     sys.dont_write_bytecode = True
     spec = importlib.util.spec_from_file_location('frozen_midpoint_verifier', HERE / 'verifier.py')
     verifier = importlib.util.module_from_spec(spec)
@@ -65,14 +118,17 @@ def evaluate(result_path, freeze_path):
         metrics['all_contracts_pass'] = all(metrics['nrmse_contract_pass_per_branch']) and all(metrics['peak_contract_pass_per_branch'])
         worlds.append({'capacity_ah': capacity, 'metrics': metrics})
     source_unchanged = source_hashes() == sources
-    inputs_unchanged = digest(result_path.read_bytes()) == RESULT_SHA256 and digest(freeze_path.read_bytes()) == FREEZE_SHA256
+    inputs_unchanged = digest(result_path.read_bytes()) == RESULT_SHA256 and digest(freeze_path.read_bytes()) == FREEZE_SHA256 and (replay_path is None or digest(replay_path.read_bytes()) == replay_digest)
     hashes_match = reference_hashes == result['numerical_verification']['reference_trace_hashes']
+    replay_hashes = replay['numerical_verification']['reference_trace_hashes'] if replay is not None else None
+    replay_hashes_match = reference_hashes == replay_hashes if replay is not None else None
+    accepted_reference_hashes = hashes_match if replay is None else replay_hashes_match
     contracts_pass = all(world['metrics']['all_contracts_pass'] for world in worlds)
-    accepted = bool(source_unchanged and inputs_unchanged and hashes_match and symmetric and contracts_pass)
+    accepted = bool(source_unchanged and inputs_unchanged and accepted_reference_hashes and symmetric and contracts_pass)
     largest_rmse = max(max(world['metrics']['rmse_a_per_branch']) for world in worlds)
     peaks = [np.max(np.abs(current), axis=0) for current in currents]
     report = {
-        'schema': 'agi-alpha/cell-pack-post-result-diagnostic/v2',
+        'schema': 'agi-alpha/cell-pack-post-result-diagnostic/v3',
         'evidence_class': 'EXPLORATORY_POST_RESULT_SYNTHETIC_NUMERICAL_DIAGNOSTIC',
         'method_selected_after_stage_b_result': True,
         'prospective_confirmation': False,
@@ -87,6 +143,15 @@ def evaluate(result_path, freeze_path):
         'recomputed_reference_trace_hashes': reference_hashes,
         'recorded_reference_trace_hashes': result['numerical_verification']['reference_trace_hashes'],
         'reference_hashes_match': hashes_match,
+        'origin_bitwise_reference_mismatch': not hashes_match,
+        'reference_validation_mode': 'STRICT_HISTORICAL_REFERENCE' if replay is None else 'SOURCE_BOUND_SAME_ENVIRONMENT_REPLAY',
+        'reference_acceptance_target': 'original_result' if replay is None else 'qualified_stage_b_replay',
+        'reference_acceptance_hashes_match': accepted_reference_hashes,
+        'replay_result_sha256': replay_digest,
+        'replay_reference_trace_hashes': replay_hashes,
+        'replay_reference_hashes_match': replay_hashes_match,
+        'replay_full_numerical_qualification_checked': replay is not None,
+        'replay_provenance_scope': 'Replay mode checks the supplied full Stage B receipt, frozen sources, existing numerical tolerances and exact local reference hashes. Fresh execution provenance belongs to the producing workflow; an unsigned receipt alone does not prove its execution time or origin.',
         'common_policy': 'Predict the arithmetic mean of both frozen hypothesis current trajectories. Actual-world identity is never an input to common_midpoint; truth labels are used only for evaluation.',
         'common_policy_invariant_to_hypothesis_order': bool(symmetric),
         'common_prediction_sha256': verifier.sha({'time_s': references[0]['time_s'].tolist(), 'current_a': prediction.tolist()}),
@@ -116,11 +181,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--result', type=Path, required=True)
     parser.add_argument('--freeze', type=Path, default=HERE / 'FROZEN_STAGE_B_SERIALIZATION_FIX.json')
+    parser.add_argument('--replay-result', type=Path)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     if args.output.exists() or args.output.is_symlink():
         raise FileExistsError('REQUIRE_NEW_OUTPUT_DIRECTORY')
-    report, traces = evaluate(args.result, args.freeze)
+    report, traces = evaluate(args.result, args.freeze, args.replay_result)
     args.output.mkdir(parents=True, exist_ok=False)
     trace_path = args.output / 'midpoint_reference_traces.csv'
     with trace_path.open('x', encoding='utf-8', newline='') as stream:
@@ -131,7 +197,7 @@ def main():
     receipt = args.output / 'DIAGNOSTIC.json'
     with receipt.open('xb') as stream:
         stream.write(data)
-    print(json.dumps({'diagnostic_sha256': digest(data), 'trace_csv_sha256': report['trace_csv_sha256'], 'diagnostic_accepted': report['diagnostic_accepted'], 'reference_hashes_match': report['reference_hashes_match'], 'max_nrmse': report['max_nrmse'], 'max_peak_relative_error': report['max_peak_relative_error']}, sort_keys=True))
+    print(json.dumps({'diagnostic_sha256': digest(data), 'trace_csv_sha256': report['trace_csv_sha256'], 'diagnostic_accepted': report['diagnostic_accepted'], 'reference_validation_mode': report['reference_validation_mode'], 'reference_hashes_match': report['reference_hashes_match'], 'origin_bitwise_reference_mismatch': report['origin_bitwise_reference_mismatch'], 'replay_reference_hashes_match': report['replay_reference_hashes_match'], 'reference_acceptance_hashes_match': report['reference_acceptance_hashes_match'], 'max_nrmse': report['max_nrmse'], 'max_peak_relative_error': report['max_peak_relative_error']}, sort_keys=True))
     return 0 if report['diagnostic_accepted'] else 2
 
 

@@ -52,18 +52,22 @@ The selected physical source is [Piombo et al., Mendeley Data v2](https://data.m
 
 No physical measurement file was evaluated for the results above. See [acquisition history](ACQUISITION_HISTORY.md) and [bounded access alternatives](DATA_ACCESS_OPTIONS.md) for the exact access state. A successful numerical CI job is not evidence of physical data acquisition or scientific transfer. The numerical job at source `34b56f4052c7defaab4c18327f8051d60d4abe6b` passed in [run 41487782250](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41487782250). The latest-head status must be checked separately.
 
+The corrected public folder route remained HTTP 404 in runs 41489928442 and 41491843820; dataset metadata was received but root files were empty. Zero measurements were downloaded. This is an access checkpoint for the attempted routes, not proof that the publisher has no files. The data-acquisition gate remains failed, so combined qualification, main integration, release and released-source operation are not claimed.
+
 The public work is [PR #147](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/147). Publication of this checkpoint does not itself claim qualified merge, release or operation from a release.
 
-The canonical package inventory now includes a fixed 39-member public closure through `release_inventory.py`. It rejects missing or linked members and ignores unlisted datasets, private state and caches. A three-line inventory hook leaves all 42 finance-bound source files and frozen scientific/accounting code unchanged. Twenty-nine relevant tests and the retained public-account replay passed from a fresh, extracted 98-file dependency closure. This focused local check does not substitute for the complete release gates. The campaign workflow now also qualifies relevant main pushes.
+The canonical package inventory now includes a fixed 40-member public closure through `release_inventory.py`. It rejects missing or linked members and ignores unlisted datasets, private state and caches. A three-line inventory hook leaves all 42 finance-bound source files and frozen scientific/accounting code unchanged. Before the portability-test addition, 29 relevant tests and the retained public-account replay passed from a fresh, extracted 98-file dependency closure. This focused local check does not substitute for the complete release gates. The campaign workflow now also qualifies relevant main pushes.
 
 [Review PR #149](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/149), commit `f926677385e22bef3ae7cb20a90446902fdb2596`, independently identified missing mandatory platform-start markers in both workflow jobs. Its workflow-only correction and known action pins have been incorporated into the combined candidate. The original failing runs remain failures; this is source adoption of a narrow repair, not a formal approval or a claim that the separate review branch passed all checks. Actual released-package inclusion and operation still require their own receipts.
+
+The hosted Stage B replay also exposed a diagnostic portability fault: the original bitwise reference hashes differed between machines even though the original numerical checks and all prediction tolerances passed. Historical diagnostic bytes remain unchanged. The optional `--replay-result` mode preserves the exact original receipt/freeze/source guards, requires a complete passing Stage B receipt for the same frozen source, and requires exact reference-hash agreement with that replay in the current environment. It reports historical bitwise disagreement explicitly and adds no numerical tolerance. Default mode retains strict historical matching. The source-bound replay mode has local positive and incompatible-receipt rejection evidence; hosted acceptance must be read from its own new workflow result. See the independent review and execution history for precise provenance.
 
 ## Reproduce from the repository root
 
 Use Python 3.12 with NumPy 2.3.5, SciPy 1.17.0 and cryptography 50.0.2. Plotting additionally requires Matplotlib. Install dependencies in a suitable isolated environment; these commands create only local research outputs.
 
 ```sh
-python -m unittest experiments.capability_transfer_20261102.test_instrument experiments.capability_transfer_20261102.test_catalog experiments.capability_transfer_20261102.test_economics experiments.capability_transfer_20261102.test_release_inventory -v
+python -m unittest experiments.capability_transfer_20261102.test_instrument experiments.capability_transfer_20261102.test_catalog experiments.capability_transfer_20261102.test_economics experiments.capability_transfer_20261102.test_release_inventory experiments.capability_transfer_20261102.test_midpoint_diagnostic -v
 
 python -m experiments.capability_transfer_20261102.run_stage_b run \
   --freeze experiments/capability_transfer_20261102/FROZEN_STAGE_B_SERIALIZATION_FIX.json \
@@ -71,6 +75,7 @@ python -m experiments.capability_transfer_20261102.run_stage_b run \
 
 python -m experiments.capability_transfer_20261102.run_midpoint_diagnostic \
   --result experiments/capability_transfer_20261102/results/STAGE_B_RESULT.json \
+  --replay-result /tmp/cell-pack-stage-b-new/RESULT.json \
   --output /tmp/cell-pack-midpoint-new
 
 python -m experiments.capability_transfer_20261102.plot_result \
@@ -84,4 +89,4 @@ python -m experiments.capability_transfer_20261102.economics audit \
   --registration-sha256 e94112d4784abbd81af4ee277e5a12fe354d3237c79e887b90f379da3506bb5c
 ```
 
-Use fresh output directories. A fresh Stage B run records fresh timings, so its whole-file hash differs from the retained original; the midpoint diagnostic deliberately binds to the original receipt. Its exact reference hashes also bind the numerical environment. No raw measurement dataset or reproducible trajectory bulk is committed. The compact [evidence manifest](results/MANIFEST.json) supplies retained artifact hashes.
+Use fresh output directories. A fresh Stage B run records fresh timings, so its whole-file hash differs from the retained original. The diagnostic always binds to the exact original receipt and frozen source; replay mode additionally binds to the supplied qualified reference run in the current numerical environment. The retained historical diagnostic records the earlier runner version in commit `dc05c7e21071859e53679819b080df369a047fd7`; a new run emits a new source-bound receipt. No raw measurement dataset or reproducible trajectory bulk is committed. The compact [evidence manifest](results/MANIFEST.json) supplies retained artifact hashes.

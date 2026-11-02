@@ -45,6 +45,7 @@ MEMBERS = (
     'test_catalog.py',
     'test_economics.py',
     'test_instrument.py',
+    'test_midpoint_diagnostic.py',
     'test_release_inventory.py',
     'verifier.py',
 )
