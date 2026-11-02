@@ -1,4 +1,6 @@
-# Read the papers in your browser
+# Explore the flywheel and read the papers
+
+The homepage now introduces the invention flywheel and includes a local synthetic flexibility-pool studio. Visitors can edit four site offers, construct a dispatch, inspect independently replayed constraints and download the result. A separate hypothetical calculator distinguishes allocated margin, cash timing, buyer savings and comparative surplus. These browser calculations control no devices, contact no service and create no order, payment or native financial record.
 
 The [original Foundry v2 PDF](autonomous-enterprises-foundry-v2.pdf) is always available in this public repository. GitHub can preview it; use its download control if your browser does not show the preview. This link does not depend on GitHub Pages, an Actions artifact, or an expiring attachment.
 
@@ -28,12 +30,13 @@ On a phone, tap **Open the full paper** for the native PDF reader. If inline pre
 
 ## What is published
 
-The build copies **only** eleven named HTML pages, the nine named public PDFs, a checksum manifest, and `.nojekyll`. It does not export the repository, accounts, experiment outputs, credentials, or local workspace. Pull requests validate and build only; deployment is restricted to `main`, with Pages/OIDC permissions limited to the deployment job. Existing manuscript paths and release `PAPER.pdf` files are untouched.
+The build copies **only** eleven named HTML pages, the nine named public PDFs, `alpha.css`, `alpha.js`, `alpha-mark.svg`, a checksum manifest, and `.nojekyll`. It does not export the repository, accounts, experiment outputs, credentials, or local workspace. Pull requests validate and build only; deployment is restricted to `main`, with Pages/OIDC permissions limited to the deployment job. Existing manuscript paths and release `PAPER.pdf` files are untouched.
 
 Local check (Python standard library only):
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_research_site.py' -v
+node --test tests/test_alpha_site.cjs
 python3 scripts/build_research_site.py --output /tmp/research-site-NEW
 python3 -m http.server 8000 --directory /tmp/research-site-NEW
 ```

@@ -1,10 +1,11 @@
-name: Research papers website
+name: AGI ALPHA website
 on:
   pull_request:
     paths:
       - 'docs/research/**'
       - 'scripts/build_research_site.py'
       - 'tests/test_research_site.py'
+      - 'tests/test_alpha_site.cjs'
       - '.github/workflows/research-pages.yml'
   push:
     branches: [main]
@@ -12,6 +13,7 @@ on:
       - 'docs/research/**'
       - 'scripts/build_research_site.py'
       - 'tests/test_research_site.py'
+      - 'tests/test_alpha_site.cjs'
       - '.github/workflows/research-pages.yml'
   workflow_dispatch:
 permissions:
@@ -31,10 +33,13 @@ jobs:
             docs/research
             scripts/build_research_site.py
             tests/test_research_site.py
+            tests/test_alpha_site.cjs
           sparse-checkout-cone-mode: false
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
-      - name: Build only the public research shelf
+      - name: Check exact dispatch, acceptance and financial distinctions
+        run: node --test tests/test_alpha_site.cjs
+      - name: Build only the public website allowlist
         run: python3 scripts/build_research_site.py --output "$RUNNER_TEMP/research-site"
       - name: Upload the allowlisted Pages artifact
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
@@ -57,6 +62,6 @@ jobs:
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
         with:
           enablement: false
-      - name: Deploy the public research shelf
+      - name: Deploy the public website
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

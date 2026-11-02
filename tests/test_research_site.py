@@ -89,13 +89,30 @@ class ResearchSiteTests(unittest.TestCase):
             text = (self.source / name).read_text()
             self.assertIn('name="viewport"', text)
             self.assertIn('Skip to content', text)
-            self.assertIn('prefers-reduced-motion', text)
-            self.assertIn('font-size:clamp(1.8rem,7vw,2.75rem)', text)
+            styles = text if name != 'index.html' else (self.source / 'alpha.css').read_text()
+            self.assertIn('prefers-reduced-motion', styles)
+            self.assertIn('@media(max-width:', styles)
             self.assertNotIn('↗', text)
             if name not in ('index.html', 'out-series.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Your browser does not display embedded PDFs', text)
+
+    def test_external_script_and_unknown_asset_are_rejected(self):
+        for link in ('https://example.com/tracker.js', 'account-recovery.json'):
+            with self.subTest(link=link):
+                page = self.source / 'index.html'
+                original = page.read_text()
+                page.write_text(original + f'<script src="{link}"></script>')
+                with self.assertRaises(ValueError):
+                    site.validate(self.source)
+                page.write_text(original)
+
+    def test_allowlisted_interactive_assets_are_required_regular_files(self):
+        asset = self.source / 'alpha.js'
+        asset.unlink()
+        with self.assertRaisesRegex(ValueError, 'regular'):
+            site.validate(self.source)
 
 
 

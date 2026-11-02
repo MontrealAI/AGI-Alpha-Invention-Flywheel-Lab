@@ -121,6 +121,14 @@ def source_paths(root):
             names.update(p.relative_to(root).as_posix() for p in (root/'inventory061').glob('*.md') if p.is_file())
             names.update(name for name in ('inventory061/deliveries/reference/solution.json',)
                          if (root/name).is_file())
+    if (root/'flexibility063/service.py').is_file():
+        from flexibility063.service import source_paths as flexibility_sources
+        names.update(flexibility_sources(root))
+        names.update(p.relative_to(root).as_posix() for p in (root/'tests').glob('test_flexibility063*.py') if p.is_file())
+        names.update(p.relative_to(root).as_posix() for p in (root/'campaign/transformational-063').rglob('*') if p.is_file() and '__pycache__' not in p.parts)
+        names.update(p.relative_to(root).as_posix() for p in (root/'docs/transformational063').glob('*')
+                     if p.is_file() and p.suffix in {'.tex', '.bib', '.pdf', '.md', '.py', '.json', '.svg', '.png'})
+        names.update(name for name in ('.github/workflows/transformational063.yml',) if (root/name).is_file())
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):

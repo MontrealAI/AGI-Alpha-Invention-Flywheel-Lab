@@ -1,0 +1,27 @@
+{
+  "schema": "transformational063/regression-receipt/v1",
+  "tests_run": 21,
+  "passed": 21,
+  "wall_seconds_reported_by_unittest": 113.07,
+  "native_source_sha256": "b962739069069f7004c0bca52f3d4c6b60dbb7c26299517220ef050c3e06c5ff",
+  "test_source_sha256": {
+    "tests/test_connected_transformational063.py": "54db93f2896c82fe46f53efe0b33a4e408fea11c0ba3d6569bba143c0410a090"
+  },
+  "log_sha256": "8d79c40fc885c04f9667526139f8efb25e2a04b199f8c974ba0f3a9bc359b6c4",
+  "scope": "14 implemented numerical decision regressions plus 7 operating audit cases in tests.test_connected_transformational063 only; release tests are excluded from this receipt; capitalization/amortization variant remains unsupported; raw log not duplicated.",
+  "executed_command": [
+    "python",
+    "-m",
+    "unittest",
+    "tests.test_connected_transformational063",
+    "-v"
+  ],
+  "reproduction_command": [
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_connected_transformational063",
+    "tests.test_connected_transformational_release063",
+    "-v"
+  ]
+}

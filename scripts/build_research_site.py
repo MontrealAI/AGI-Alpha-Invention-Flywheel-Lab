@@ -21,7 +21,8 @@ PAPERS = (
 )
 PAGES = ('index.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
          'out-series.html', 'out-learn.html', 'out-think.html', 'out-design.html', 'out-strategise.html', 'out-execute.html', 'out-evolve.html')
-FILES = PAPERS + PAGES + ('publication-manifest.json',)
+ASSETS = ('alpha.css', 'alpha.js', 'alpha-mark.svg')
+FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 
 
 class Links(HTMLParser):

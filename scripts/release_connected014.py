@@ -24,7 +24,15 @@ OPERATING_HANG_TIMEOUT_SECONDS = HOSTED_JOB_LIMIT_SECONDS - RECEIPT_SHUTDOWN_RES
 PAPERS = ('PAPER.pdf', 'PAPER.tex', 'index.html', 'REPORT.md', 'PUBLICATION.json', 'PDF_QA.json')
 REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.yml', 'adaptive012.yml', 'commercial010.yml')
 # Terminal measurement009 is manual-only; path changes never renew its expired allocation.
-CONDITIONAL_WORKFLOWS = {}
+CONDITIONAL_WORKFLOWS = {
+    'transformational063.yml': ('flexibility063/', 'connected_enterprise/transformational063.py',
+                               'campaign/transformational-063/', 'docs/transformational063/',
+                               'tests/test_connected_transformational063.py',
+                               'tests/test_flexibility063.py', '.github/workflows/transformational063.yml'),
+    'research-pages.yml': ('docs/research/', 'scripts/build_research_site.py',
+                           'tests/test_research_site.py', 'tests/test_alpha_site.cjs',
+                           '.github/workflows/research-pages.yml'),
+}
 RETIRED_MANUAL_WORKFLOWS = ('measurement009.yml',)
 OWN_WORKFLOW = 'connected014-release.yml'
 
