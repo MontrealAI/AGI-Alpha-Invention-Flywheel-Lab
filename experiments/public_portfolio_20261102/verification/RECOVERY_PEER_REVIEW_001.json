@@ -1,0 +1,59 @@
+{
+  "schema": "public-portfolio/independent-same-account-recovery-peer-review/v1",
+  "verdict": "NO_BLOCKING_DEFECT_FOR_DECLARED_SAME_ACCOUNT_RECOVERY",
+  "review_kind": "Independent static code review, source/input hash verification and independently authored8-check disposable NONBUSINESS smoke; constructor12-test receipt reviewed, not falsely claimed as independently rerun12tests",
+  "candidate_source_hashes": {
+    "recovery_run.py": "e067f29f2bea2815165ef914d7c887060f4003e42d0a059373e63f3f0fa73beb",
+    "RECOVERY_AMENDMENT_R2_001.json": "b089f2da8606c280eb01cf45c4ed57e929ce6bdaf58a5c426a678407e9c4124c",
+    "verification/test_recovery.py": "b4faeeafe584f09d194c2c99ba3dc2c6c686c48278d64e71832e25c21cec8587"
+  },
+  "native_financial_source_sha256": "bb74d40f7a84ca155189f908c091db32b27093e203e0d63696f327a9a2492901",
+  "economic_model_changed": false,
+  "original_business_accounts_opened_by_reviewer": 0,
+  "reviewed_safety_properties": [
+    "Original JournalAccount reopens its original local authority and performs only its existing authenticated pending-intent recovery; no account key or cash balance is copied into a new business.",
+    "Historical decisions observe only disposable reconstructed history. Each request, plan, funding/status/receipt, obligation and native action matches the authenticated original prefix before any suffix executes.",
+    "Only temporary action-proof signatures, their aggregate attempt account-record digest and the resulting journal digest are normalized; proof bodies, native actions, account/snapshot/cash/obligations and all other journal fields remain exact.",
+    "The live original export must remain unchanged through reconstruction; full semantic equality and exact complete prefix are mandatory before switching to the original owner. Existing frozen native methods continue to enforce source, lease, cash, reservations and idempotence.",
+    "Mid-begin, pending intent/earned reserve, historical refusal, lost-result and same-hour multiple maturity boundaries have meaningful constructor fixtures. Independent smoke additionally rejects a mismatched past request without original changes, appends exactly one missing cost to the same fixture account and repeats reconstruction without duplicate action.",
+    "Existing completed results are not recovery targets. Existing manifest/account/aggregation skips require byte equality, corrupted partial public bytes fail without overwrite, and all39completed evidence plus43manifests are hash-protected.",
+    "All four original interrupted accounts must recover before any never-started scenario is commissioned; actual failures stop new scheduling and are retained. No campaign reset or favorable scenario selection is introduced."
+  ],
+  "independent_public_checkpoint_verification": {
+    "checkpoint_sha256": "a5cf4299b448b5c8f063f205617abd8bbf717868815e00b92a39038838630665",
+    "registered_case_ids_and_canonical_public_filenames_validated": true,
+    "files_hashed": 199,
+    "complete_case_records": 39,
+    "total_existing_manifests": 43,
+    "scope_failures": 0,
+    "hash_failures": 0
+  },
+  "evidence": [
+    {
+      "path": "verification/RECOVERY_QUALIFICATION_001.json",
+      "sha256": "0fa036d9a108023305dcca25bb14fa32c7dcaad43a06697adb48deab0589418c",
+      "scope": "Constructor12/12 compact nonbusiness fixtures; original43accounts not opened"
+    },
+    {
+      "path": "verification/r2_recovery_peer_smoke.py",
+      "sha256": "b1488508c9d84c19b34bec7af6042b38d6e83922c155751cbea0e648d3f5b389",
+      "scope": "Independent disposable fixture source"
+    },
+    {
+      "path": "verification/r2_recovery_peer_smoke_001.json",
+      "sha256": "cf32acfda5e77fb41f99443e38ce5ef6e1e4d40a04c534a28cb9d176e1e5fdf2",
+      "scope": "Independent8/8 checks"
+    }
+  ],
+  "adoption_boundary": {
+    "actual_four_account_recovery": "NOT_YET_PERFORMED_AT_REVIEW",
+    "full110_campaign_completion": "NOT_ESTABLISHED_BY_REVIEW",
+    "prospective_publication": "Integration owner must verify exact published driver/amendment/tests/review and checkpoint hash before invoking; publication_sha format validation in code is not independent proof of GitHub publication",
+    "new_adapter_provenance": "Recovery adapter is outside original closed financial source and must remain separately disclosed/hash-bound, never represented as original controller support",
+    "trusted_input_scope": "The actual root-generated checkpoint paths and all199filehashes were independently validated; no general malicious-checkpoint or hostile-host security claim is made"
+  },
+  "resource_boundary": "Original interrupted process cost/cause remains unknown; new recovery/reconstruction resource use is separate, not fabricated zero or exact whole-campaign runtime",
+  "formal_pr_approval": false,
+  "permission_grant": false,
+  "source_and_scientific_limits": "R1 helper-closure failure remains unqualified. This engineering recovery establishes neither market calibration, physical qualification, industry creation, actual commerce nor the USD3bprofit objective."
+}

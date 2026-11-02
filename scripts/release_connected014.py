@@ -28,6 +28,9 @@ PAPERS = ('PAPER.pdf', 'PAPER.tex', 'index.html', 'REPORT.md', 'PUBLICATION.json
 REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.yml', 'adaptive012.yml', 'commercial010.yml')
 # Terminal measurement009 is manual-only; path changes never renew its expired allocation.
 CONDITIONAL_WORKFLOWS = {
+    'public-portfolio-20261102.yml': ('experiments/public_portfolio_20261102/',
+                                    'tests/test_public_portfolio_20261102.py',
+                                    '.github/workflows/public-portfolio-20261102.yml'),
     'transformational063.yml': ('flexibility063/', 'connected_enterprise/transformational063.py',
                                'campaign/transformational-063/', 'docs/transformational063/',
                                'research/blue_sky064/', 'campaign/blue-sky-064/',

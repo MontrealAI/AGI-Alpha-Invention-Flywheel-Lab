@@ -167,6 +167,23 @@ jobs:
             ${{ runner.temp }}/released-transformational063/source
             ${{ runner.temp }}/released-transformational063/public
           if-no-files-found: error
+      - name: Operate the five-route computational service from the actual downloaded release
+        id: released_portfolio
+        working-directory: ${{ runner.temp }}/downloaded-release-operation/source
+        run: |
+          python -m unittest tests.test_public_portfolio_20261102 -v
+          python experiments/public_portfolio_20261102/verification/r2_guard_tests_002.py --output "$RUNNER_TEMP/released-portfolio-guards.json"
+          python -m unittest experiments.public_portfolio_20261102.verification.test_recovery -v
+          python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output "$RUNNER_TEMP/released-portfolio-artifacts.json"
+      - name: Retain released portfolio computational qualification
+        if: always() && steps.released_portfolio.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-portfolio-released-operation-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/released-portfolio-guards.json
+            ${{ runner.temp }}/released-portfolio-artifacts.json
+          if-no-files-found: error
       - name: Retain successful downloaded operation
         if: always() && steps.operation.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -1,0 +1,9 @@
+{
+  "schema": "public-portfolio-independent-supplement-amendment/v1",
+  "original_checker": "verify_finance_supplement.py",
+  "original_scope": "Additional pre-quote cash/profile read-only reconstruction, outside the frozen primary finance checker",
+  "original_failure": "Optional partial-summary input was read successfully, but report metadata tried hashing absent full RESULTS.json and raised FileNotFoundError before any verdict was written.",
+  "correction": "Separate r2_finance_supplement.py hashes the actual supplied summary and reads the public run's own frozen protocol.json; model, acceptance, account history and original source stay unchanged.",
+  "independence_limit": "This is a reporting interface correction after a failed audit attempt, not a fresh scientific or financial experiment. No account was rerun or reseeded and no source guard was weakened.",
+  "stopping": "Retain this failure record and perform the read-only corrected audit on the same immutable public exports."
+}

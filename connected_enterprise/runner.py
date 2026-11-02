@@ -149,6 +149,23 @@ def source_paths(root):
         names.update(name for name in ('experiments/public_portfolio_20261102/products.py',
                      'tests/test_public_portfolio_20261102.py', 'requirements-cycle004.txt',
                      '.github/workflows/public-portfolio-20261102.yml') if (root/name).is_file())
+        extra_manifest='experiments/public_portfolio_20261102/RELEASE_EXTRAS.json'
+        if (root/extra_manifest).is_file():
+            extra=strict_json((root/extra_manifest).read_bytes())
+            if (not isinstance(extra,dict) or set(extra)!={'schema','files'}
+                    or extra['schema']!='public-portfolio/release-extras/v1'
+                    or not isinstance(extra['files'],list)
+                    or any(not isinstance(name,str) for name in extra['files'])
+                    or len(set(extra['files']))!=len(extra['files'])):
+                raise ValueError('PORTFOLIO_EXACT_RELEASE_EXTRAS_REQUIRED')
+            for name in extra['files']:
+                path=Path(name)
+                if (not name.startswith('experiments/public_portfolio_20261102/')
+                        or path.is_absolute() or '..' in path.parts or path.as_posix()!=name
+                        or path.suffix not in {'.py','.json','.md','.svg','.txt'}
+                        or not (root/path).is_file()):
+                    raise ValueError('PORTFOLIO_PUBLIC_RELEASE_EXTRA_REQUIRED')
+            names.update([extra_manifest,*extra['files']])
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):

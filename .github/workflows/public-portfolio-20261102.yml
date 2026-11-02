@@ -30,6 +30,7 @@ jobs:
         run: |
           python -m unittest tests.test_public_portfolio_20261102 -v
           python experiments/public_portfolio_20261102/verification/r2_guard_tests_002.py --output "$RUNNER_TEMP/public-portfolio-r2-guards.json"
+          python -m unittest experiments.public_portfolio_20261102.verification.test_recovery -v
       - name: Independently reconstruct frozen actual scientific artifacts
         run: python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output "$RUNNER_TEMP/public-portfolio-artifact-replay.json"
       - name: Retain compact source-bound qualification receipt

@@ -18,6 +18,8 @@ The [portfolio registration](PORTFOLIO_PROTOCOL.json), route preregistrations, [
 
 The original R1 campaign stopped at an exclusive account boundary after25/110 completed businesses. Independent review demonstrated a missing imported-helper source dependency, so complete executable source-closure qualification **FAILED**. [Original checkpoint, costs and independent diagnosis](evidence/economics-r1/README.md) remain visible. The [R2 amendment](QUALIFICATION_AMENDMENT_R2.json) registers a separate source-qualification reproduction of the unchanged110-case economic model. It binds helpers and package initializers, uses the existing exact owner/source/manifest/action-prefix replay guards, includes the portfolio in standard release packaging, and reserves independent accounts for four local workers. It neither migrates nor resets R1 accounts or pools their money.
 
+The host session subsequently disappeared after39 complete R2 accounts, leaving four durable partial accounts and67 unstarted plans. The [checkpoint](evidence/economics-r2/HOST_INTERRUPTION_CHECKPOINT.json) preserves every denominator. A separate [execution-only recovery amendment](RECOVERY_AMENDMENT_R2_001.json) reconstructs the original prefix before appending to those same accounts; it changes no economic branch, world, capital or source closure. [Twelve interruption fixtures](verification/RECOVERY_QUALIFICATION_001.json) and [eight independent peer checks](verification/RECOVERY_PEER_REVIEW_001.json) qualify the recovery procedure. Actual four-account continuation and full110-case completion remain separate execution conditions. Original interrupted CPU/wall totals and actual model billing are unavailable, never zero.
+
 
 The [economic protocol](ECONOMICS_PROTOCOL.json) prospectively registers110 separate three-year businesses:22 scenarios for each route. It includes the USD100,000, USD1 million and USD1 billion hypothetical initial-equity comparisons, non-entry, unresolved rights, refusal, imitation, failed qualification, delayed collections, provider reversal, maintenance, matched working-capital controls and earned-only successor investment. Demand, prices, integration costs and financing assumptions are explicitly authored and uncalibrated. Hypothetical capital is neither profit nor secured financing.
 
@@ -32,6 +34,7 @@ Use the repository's pinned computational dependencies:
 ```sh
 python -m pip install -r requirements-cycle004.txt -r requirements-commercial010.txt
 python -m unittest tests.test_public_portfolio_20261102 -v
+python -m unittest experiments.public_portfolio_20261102.verification.test_recovery -v
 python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output /absolute/new-artifact-replay.json
 python -m experiments.public_portfolio_20261102.qualification_run --root "$PWD" --output /absolute/new-economic-reproduction --products experiments/public_portfolio_20261102/PRODUCTS.json
 ```
