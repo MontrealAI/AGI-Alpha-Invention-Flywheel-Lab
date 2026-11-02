@@ -18,6 +18,8 @@ class OwnerCodecSigningBoundaryTests(unittest.TestCase):
         self.historical = root / 'historical'
         self.target = root / 'candidate'
         self.historical.mkdir()
+        self.synthetic_source = self.historical / 'inspected.py'
+        self.synthetic_source.write_text("SYNTHETIC_SOURCE = 'review-only'\n")
         (self.target / 'connected_enterprise').mkdir(parents=True)
         self.reviewed = Path(upgrades.__file__).with_name('transition_evidence.py').read_bytes()
         self.codec = self.target / 'connected_enterprise/transition_evidence.py'
@@ -31,7 +33,6 @@ class OwnerCodecSigningBoundaryTests(unittest.TestCase):
     def owner_call(self, **overrides):
         options = {**self.args, **overrides}
         with patch.object(finance, 'source_identity', return_value={'sha256': 'fixture-source'}), \
-             patch.object(upgrades, 'source_inventory', return_value=[]), \
              patch.object(upgrades.subprocess, 'run') as worker:
             worker.return_value = SimpleNamespace(returncode=0, stderr='',
                                                   stdout=json.dumps({'body': {}, 'signature': 'fixture'}))
@@ -88,6 +89,18 @@ class OwnerCodecSigningBoundaryTests(unittest.TestCase):
         payload = json.loads(worker.call_args.kwargs['input'])
         self.assertIsNone(payload['codec_source'])
         self.assertIsNone(payload['evidence_dir'])
+
+    def test_missing_historical_inventory_fails_before_owner_subprocess(self):
+        self.synthetic_source.unlink()
+        with self.assertRaisesRegex(ValueError, 'BOUNDED_PINNED_HISTORICAL_SOURCE_REQUIRED'):
+            self.owner_call()
+        self.assertFalse(self.worker_called_on_error)
+
+    def test_historical_symlink_fails_before_owner_subprocess(self):
+        (self.historical / 'alias.py').symlink_to(self.synthetic_source)
+        with self.assertRaisesRegex(ValueError, 'HISTORICAL_SOURCE_SYMLINK_REFUSED'):
+            self.owner_call()
+        self.assertFalse(self.worker_called_on_error)
 
 
 if __name__ == '__main__':
