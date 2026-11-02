@@ -1,0 +1,181 @@
+{
+  "arm": "insufficient_earned_cash",
+  "scope": "ACTUAL_PRODUCTION_CONDITIONAL_NATIVE_SIM_ECONOMICS",
+  "primary_seed_usd": 100000,
+  "preregistration_sha256": "e88e0561b8c56ee24d056b08a9c67a0c0334e42630777d92e600431631b10ce3",
+  "source_sha256": "1417c5119f7b77e9ce5cdd18683ecb19816fac1b4cb9bbc1c62ec587f124fe31",
+  "observed_buyers": 0,
+  "deliveries": [
+    {
+      "job": "original",
+      "production": {
+        "command": [
+          "python",
+          "inventory061/quality_constructor.py",
+          "--input",
+          "inventory061/inputs/01.json",
+          "--output",
+          "/absolute/new/producer-output"
+        ],
+        "exit_code": 0,
+        "wall_seconds": 12.770085764990654,
+        "reaped_cpu_seconds": 12.552229,
+        "max_rss_kib": 80032,
+        "external_model_calls": 0,
+        "actual_total_model_billing": null,
+        "native_funding_receipt": {
+          "id": "first-complete-lifecycle",
+          "kind": "inventory_engineering",
+          "amount": 90000000,
+          "day": 0,
+          "funding": "SEED",
+          "plan_id": null,
+          "work_sha256": "1efea02b2896590eea728507435f126495fb07c48c405d52aa57f4aee7737d81",
+          "source_sha256": "1417c5119f7b77e9ce5cdd18683ecb19816fac1b4cb9bbc1c62ec587f124fe31",
+          "native_event_sequence": 0,
+          "native_actions_sha256": "7c296b87dfade998368b890cd1ae1e9385dee0428dc16ddd56d21eeb2cee1542",
+          "obligation_receipt_sha256": null,
+          "prepaid_support_microUSD": 0
+        },
+        "funding_before_process": true,
+        "stderr": "",
+        "command_scope": "Portable equivalent of executed command; absolute workspace prefixes removed, measured resource values unchanged."
+      },
+      "accepted": true,
+      "artifact_sha256": "665b95539f123146079127799f2cd666b8c676d3d1083384503b14728801386f",
+      "metrics": {
+        "average_cycle_service": 0.9509703196347032,
+        "minimum_cycle_service": 0.9506849315068493,
+        "RDC_product_pairs_below_95_percent": 0,
+        "holding_cost_yuan_per_2023_year": 9900076.470255068
+      }
+    }
+  ],
+  "costs": [
+    {
+      "id": "first-complete-lifecycle",
+      "amount_usd": 90.0,
+      "hour": 0
+    },
+    {
+      "id": "payment-first",
+      "amount_usd": 5.5200000000000005,
+      "hour": 25
+    },
+    {
+      "id": "tax-first",
+      "amount_usd": 16.2959998,
+      "hour": 74
+    }
+  ],
+  "funding_checks": [
+    {
+      "amount_usd": 1000,
+      "summary_before": {
+        "reservedInvestment": 0,
+        "revenue": 180000000,
+        "expenses": 114816001,
+        "recoveryIncome": 0,
+        "profit": 65183999,
+        "cash": 100065183999,
+        "collections": 180000000,
+        "expensePaid": 114816001,
+        "payables": 0,
+        "custodyRestricted": 0,
+        "custodyReserve": 0,
+        "tailReserve": 10000000,
+        "workingCapital": 0,
+        "available": 100055183999,
+        "unrestrictedEarned": 65183999,
+        "strictEarnedControl": 55183999,
+        "equityProtectionBacking": 10000000,
+        "earnedProtectionBacking": 0,
+        "netEarnedAfterIncurredObligations": 65183999,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "conditionalEarned": 65183999,
+        "investmentStopped": false,
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+      },
+      "receipt": null,
+      "refusal_unchanged": true,
+      "allow_seed": false
+    }
+  ],
+  "actual_billing": null,
+  "decision": "SUCCESSOR_DECLINED_NO_UNRESTRICTED_EARNED_FUNDS",
+  "summary": {
+    "reservedInvestment": 0,
+    "revenue": 180000000,
+    "expenses": 114816001,
+    "recoveryIncome": 0,
+    "profit": 65183999,
+    "cash": 100065183999,
+    "collections": 180000000,
+    "expensePaid": 114816001,
+    "payables": 0,
+    "custodyRestricted": 0,
+    "custodyReserve": 0,
+    "tailReserve": 10000000,
+    "workingCapital": 0,
+    "available": 100055183999,
+    "unrestrictedEarned": 65183999,
+    "strictEarnedControl": 55183999,
+    "equityProtectionBacking": 10000000,
+    "earnedProtectionBacking": 0,
+    "netEarnedAfterIncurredObligations": 65183999,
+    "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+    "conditionalEarned": 65183999,
+    "investmentStopped": false,
+    "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+  },
+  "native_audit": {
+    "accepted": true,
+    "scope": "SIMULATED",
+    "actions_sha256": "c16f521568dc0962f7975b9a7ab0e698d3acae790399e2205634b174122dd132",
+    "summary": {
+      "reservedInvestment": 0,
+      "revenue": 180000000,
+      "expenses": 114816001,
+      "recoveryIncome": 0,
+      "profit": 65183999,
+      "cash": 100065183999,
+      "collections": 180000000,
+      "expensePaid": 114816001,
+      "payables": 0,
+      "custodyRestricted": 0,
+      "custodyReserve": 0,
+      "tailReserve": 10000000,
+      "workingCapital": 0,
+      "available": 100055183999,
+      "unrestrictedEarned": 65183999,
+      "strictEarnedControl": 55183999,
+      "equityProtectionBacking": 10000000,
+      "earnedProtectionBacking": 0,
+      "netEarnedAfterIncurredObligations": 65183999,
+      "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+      "conditionalEarned": 65183999,
+      "investmentStopped": false,
+      "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+    },
+    "orders": [
+      {
+        "id": "first",
+        "buyer": "sim-buyer-first",
+        "price": "180000000",
+        "state": "released",
+        "refund_due": "0",
+        "compensation_due": "0",
+        "custody": 0
+      }
+    ],
+    "investments": [],
+    "state_bound_reservations": 0,
+    "signature_scope": "Public audit verifies native finance and state/action commitments. Private local HMAC authenticity is checked only by the account owner.",
+    "connected_journal_entries": 11,
+    "connected_rejected_entries": 0,
+    "connected_native_actions_covered": 11,
+    "source_bound_resource_spend_microUSD": 90000000,
+    "journal_authenticity_scope": "Public source/native commitments verified; private local WAL HMAC checked only on owner reopen."
+  },
+  "public_export_sha256": "fd13ec3e496ed6134e355b481540dabb476020e04aa99aba11267174d6c187e9"
+}

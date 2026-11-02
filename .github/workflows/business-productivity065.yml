@@ -1,0 +1,37 @@
+name: Business productivity 065
+on:
+  pull_request:
+    paths:
+      - 'business_productivity065/**'
+      - 'tests/test_business_productivity065*'
+      - 'commercial/ledger.py'
+      - 'connected_enterprise/finance.py'
+      - '.github/workflows/business-productivity065.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install public reproducibility dependencies
+        run: python -m pip install numpy==2.3.5 scipy==1.17.0 cryptography==50.0.0
+      - name: Boundary and historical-account regressions
+        run: |
+          python -m unittest discover -s tests -p 'test_business_productivity065*.py' -v
+          python -m unittest discover -s tests -p 'test_inventory061*.py' -v
+          python -m unittest discover -s tests -p 'test_connected_finance.py' -v
+      - name: Reproduce registered finite cases in new isolated accounts
+        run: |
+          for arm in conditional no_demand payment_delay competitive_imitation insufficient_earned_cash; do
+            python -m business_productivity065.run --root "$PWD" --arm "$arm" --output "$RUNNER_TEMP/productivity065-$arm"
+          done
+      - name: Validate observed native outcomes
+        run: python -m business_productivity065.verify --states "$RUNNER_TEMP"

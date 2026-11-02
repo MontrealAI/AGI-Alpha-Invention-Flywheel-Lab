@@ -1,0 +1,70 @@
+{
+  "same_export": true,
+  "new_actions": 0,
+  "reseeded": false,
+  "audit": {
+    "accepted": true,
+    "scope": "SIMULATED",
+    "actions_sha256": "5ae4a2c557b04ef4a97962b75579c40c64cf6ab325bcc9a9da0de228ef486ff4",
+    "summary": {
+      "reservedInvestment": 0,
+      "revenue": 280000000,
+      "expenses": 167776001,
+      "recoveryIncome": 0,
+      "profit": 112223999,
+      "cash": 100112223999,
+      "collections": 280000000,
+      "expensePaid": 167776001,
+      "payables": 0,
+      "custodyRestricted": 0,
+      "custodyReserve": 0,
+      "tailReserve": 20000000,
+      "workingCapital": 0,
+      "available": 100092223999,
+      "unrestrictedEarned": 112223999,
+      "strictEarnedControl": 92223999,
+      "equityProtectionBacking": 20000000,
+      "earnedProtectionBacking": 0,
+      "netEarnedAfterIncurredObligations": 112223999,
+      "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+      "conditionalEarned": 112223999,
+      "investmentStopped": false,
+      "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+    },
+    "orders": [
+      {
+        "id": "first",
+        "buyer": "sim-buyer-first",
+        "price": "180000000",
+        "state": "released",
+        "refund_due": "0",
+        "compensation_due": "0",
+        "custody": 0
+      },
+      {
+        "id": "second",
+        "buyer": "sim-buyer-second",
+        "price": "100000000",
+        "state": "released",
+        "refund_due": "0",
+        "compensation_due": "0",
+        "custody": 0
+      }
+    ],
+    "investments": [
+      {
+        "id": "connected014-resource-d15dd882f1b68d2346d906cb2c682b66",
+        "cap": "35000000",
+        "state": "complete",
+        "actual": "35000000"
+      }
+    ],
+    "state_bound_reservations": 1,
+    "signature_scope": "Public audit verifies native finance and state/action commitments. Private local HMAC authenticity is checked only by the account owner.",
+    "connected_journal_entries": 22,
+    "connected_rejected_entries": 0,
+    "connected_native_actions_covered": 23,
+    "source_bound_resource_spend_microUSD": 125000000,
+    "journal_authenticity_scope": "Public source/native commitments verified; private local WAL HMAC checked only on owner reopen."
+  }
+}
