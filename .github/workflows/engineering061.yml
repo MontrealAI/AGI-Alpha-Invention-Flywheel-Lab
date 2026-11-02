@@ -38,7 +38,7 @@ jobs:
         run: |
           python industrial062/fetch_inputs.py
           python scripts/materialize_industrial064.py
-          python scripts/probe_industrial064_sparse_constructor.py --output "$RUNNER_TEMP/industrial064-sparse-free"
+          python -m scripts.probe_industrial064_sparse_constructor --output "$RUNNER_TEMP/industrial064-sparse-free"
       - name: Retain compact standalone receipt on failure or success
         if: always() && github.event_name == 'pull_request' && github.event.pull_request.number == 127
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
