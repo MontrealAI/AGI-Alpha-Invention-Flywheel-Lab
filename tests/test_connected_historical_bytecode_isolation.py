@@ -39,7 +39,7 @@ class HistoricalPythonCacheIsolationTests(unittest.TestCase):
 
     def test_private_parent_environment_is_not_inherited(self):
         with tempfile.TemporaryDirectory(prefix='native-history-environment-') as folder:
-            (Path(folder) / 'synthetic_fixture.py').write_text('MARKER=1\\n')
+            (Path(folder) / 'synthetic_fixture.py').write_text('MARKER=1\n')
             program = ('import json,os,sys;print(json.dumps({' 
                        '"marker":os.getenv("AGI_ALPHA_SYNTHETIC_SECRET"),'
                        '"cache":sys.pycache_prefix,'
