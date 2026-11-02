@@ -58,15 +58,25 @@ class NativePublicClaimBindingTests(unittest.TestCase):
                  'work':{'source_measurement':['A','B'],'new_domain':'leakage-anomaly',
                          'new_archives':['flow','pressure'],'expected_successor':'C'},
                  'expected_net':834*MICRO,'allow_seed':False}
+        before_costs={'shared-'+k:v for k,v in p['fixed_shared'].items()}
+        before_costs.update({'market062-'+buyer+'-'+k:v
+                             for buyer in 'AB' for k,v in p['per_order'].items()})
+        before_costs['first-stage-profit-tax']=p['stage1_tax_microUSD']
+        after_costs={'market062-C-'+k:v for k,v in p['per_order'].items()}
+        after_costs['second-stage-profit-tax']=p['stage2_tax_microUSD']
         native={'ledger':{'config':{'contract':'market062-shared'},
                  'orders':[{'id':'market062-'+buyer,'buyer':buyer,'state':'released',
                             'price':str(1500*MICRO)} for buyer in 'ABC'],
-                 'actions':([{'op':'offer','args':{'id':'market062-'+buyer,'buyer':buyer,
+                 'actions':([{'op':'cost','args':{'id':k,'amount':v}}
+                             for k,v in before_costs.items()] +
+                            [{'op':'offer','args':{'id':'market062-'+buyer,'buyer':buyer,
                             'job_id':'evidence_matrix-market062-'+buyer}} for buyer in 'AB'] +
                             [{'op':'reserve','args':{'id':receipt['plan_id']},'before':before},
                              {'op':'finish','args':{'id':receipt['plan_id']}},
                              {'op':'offer','args':{'id':'market062-C','buyer':'C',
-                              'job_id':'evidence_matrix-market062-C'}}])},
+                              'job_id':'evidence_matrix-market062-C'}}] +
+                            [{'op':'cost','args':{'id':k,'amount':v}}
+                             for k,v in after_costs.items()])},
                 'connected_journal':{'entries':[{'key':'spend:third-sensor-adapter',
                      'status':'COMPLETE','funding':'EARNED','request':request,'receipt':receipt}]}}
         reported={'sales':[{'id':'market062-'+buyer,'status':'ACCEPTED_AND_COLLECTED',
@@ -99,6 +109,30 @@ class NativePublicClaimBindingTests(unittest.TestCase):
              and a['args']['id']=='market062-C')['args']['buyer']='A'
         with self.assertRaisesRegex(ValueError,'NATIVE_OFFER_DELIVERABLE_IDENTITY_MISMATCH'):
             check_native_claim_binding('shared',n,r,m,p)
+
+    def test_full_authored_cost_schedule_is_mandatory(self):
+        p,m,n,r=self.fixture()
+        self.assertTrue(check_native_claim_binding('shared',n,r,m,p))
+        n['ledger']['actions']=[a for a in n['ledger']['actions']
+            if not(a.get('op')=='cost' and a['args']['id']=='market062-C-independent_check')]
+        with self.assertRaisesRegex(ValueError,'NATIVE_COMPLETE_COST_SCHEDULE_MISMATCH'):
+            check_native_claim_binding('shared',n,r,m,p)
+        p,m,n,r=self.fixture()
+        next(a for a in n['ledger']['actions'] if a.get('op')=='cost'
+             and a['args']['id']=='shared-failed_search')['args']['amount']=0
+        with self.assertRaisesRegex(ValueError,'NATIVE_COMPLETE_COST_SCHEDULE_MISMATCH'):
+            check_native_claim_binding('shared',n,r,m,p)
+
+    def test_no_bid_still_charges_unwon_prospecting(self):
+        p=protocol()
+        n={'ledger':{'config':{'contract':'market062-cheap_rival'},'orders':[],
+                     'actions':[{'op':'cost','args':{'id':'cheap-rival-prospecting',
+                                                   'amount':p['no_bid_search_microUSD']}}]}}
+        r={'sales':[],'decision':{'choice':'NO_BID'},'earned_receipt':None}
+        self.assertTrue(check_native_claim_binding('cheap_rival',n,r,{},p))
+        n['ledger']['actions'].clear()
+        with self.assertRaisesRegex(ValueError,'NATIVE_COMPLETE_COST_SCHEDULE_MISMATCH'):
+            check_native_claim_binding('cheap_rival',n,r,{},p)
 
     def test_earnings_expense_must_precede_successor_offer(self):
         p,m,n,r=self.fixture()
