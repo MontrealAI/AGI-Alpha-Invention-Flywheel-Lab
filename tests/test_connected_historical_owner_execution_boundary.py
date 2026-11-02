@@ -86,5 +86,108 @@ class HistoricalVerifierAuthorityBoundaryTests(unittest.TestCase):
             execute.assert_not_called()
 
 
+
+class PublishedHistoricalVerifierSelectionTests(unittest.TestCase):
+    """Public selection trusts only byte-identical archived code distributions."""
+    @classmethod
+    def setUpClass(cls):
+        from tests.connected_legacy_fixture import materialize
+        cls.temp = tempfile.TemporaryDirectory(prefix='pinned-public-verifier-')
+        cls.roots = {}
+        base = Path(cls.temp.name)
+        repo = Path(__file__).resolve().parents[1]
+        for commit in (
+            '9facd934d9ae763691e8a51052a67793cac5b48e',
+            '10bdb2c5787f95158642b068756ba30b58140562',
+            '9c74bc5a8de61167a9c157c9cd2532c4a9b7577d',
+        ):
+            root = base / commit
+            materialize(repo, commit, root)
+            cls.roots[commit] = root
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.temp.cleanup()
+
+    def _ticket(self, root, history=None):
+        body = {
+            'schema': 'agi-alpha/native-source-transition/v1',
+            'historical_root': str(root),
+            'from_source': {'sha256': 'a' * 64},
+            'verifier_files': upgrades.source_inventory(root),
+            'prior_record': {'connected_journal': {'source_history': history or []}},
+        }
+        return {'body': body, 'signature': '0' * 64}
+
+    def test_pinned_manifest_fingerprints_match_every_archived_python_byte(self):
+        from commercial.ledger import digest
+        expected = {
+            '9facd934d9ae763691e8a51052a67793cac5b48e':
+                '166f7bd870713590b31bfe76cf0dbb0184f63684005cd0e98bcea297dae5ed8b',
+            '10bdb2c5787f95158642b068756ba30b58140562':
+                '7b04fd501ec510dfff0ae71a3dcbeae4b62151945eb102d9aca637ec9008c50e',
+            '9c74bc5a8de61167a9c157c9cd2532c4a9b7577d':
+                '60c3bad4de77f0e8dd113a2fe9fdb7fb212186ded1324099f6808196bc6cc2a8',
+        }
+        for commit, root in self.roots.items():
+            with self.subTest(commit=commit):
+                self.assertEqual(digest(upgrades.source_inventory(root)), expected[commit])
+                self.assertIn(expected[commit], upgrades.PINNED_PUBLIC_HISTORICAL_INVENTORIES)
+
+    def test_known_exact_source_may_reach_public_verifier_without_owner_key(self):
+        root = self.roots['9facd934d9ae763691e8a51052a67793cac5b48e']
+        ticket = self._ticket(root)
+        receipt = SimpleNamespace(returncode=0, stdout=json.dumps({'accepted': True}), stderr='')
+        with patch('commercial.ledger.load_jobs'), patch.object(
+            upgrades, '_run_pinned_historical_python', return_value=receipt
+        ) as execute:
+            self.assertTrue(upgrades.verify_historical(ticket, {}, root=root)['accepted'])
+            self.assertEqual(execute.call_count, 1)
+
+    def test_extra_unsigned_python_is_refused_before_historical_execution(self):
+        root = self.roots['10bdb2c5787f95158642b068756ba30b58140562']
+        ticket = self._ticket(root)
+        extra = root / 'untrusted_extra.py'
+        try:
+            extra.write_text('SYNTHETIC_UNREVIEWED = True\n')
+            with patch('commercial.ledger.load_jobs') as jobs, patch.object(
+                upgrades, '_run_pinned_historical_python'
+            ) as execute:
+                with self.assertRaisesRegex(ValueError, 'PINNED_HISTORICAL_VERIFIER_CHANGED'):
+                    upgrades.verify_historical(ticket, {}, root=root)
+                jobs.assert_not_called()
+                execute.assert_not_called()
+        finally:
+            extra.unlink(missing_ok=True)
+
+    def test_whitelisted_outer_source_cannot_hide_untrusted_nested_verifier(self):
+        root = self.roots['9facd934d9ae763691e8a51052a67793cac5b48e']
+        inner = {'body': {'schema': 'agi-alpha/native-source-transition/v1',
+                          'verifier_files': {'foreign.py': '0' * 64},
+                          'prior_record': {'connected_journal': {'source_history': []}}},
+                 'signature': '0' * 64}
+        ticket = self._ticket(root, history=[inner])
+        with patch('commercial.ledger.load_jobs') as jobs, patch.object(
+            upgrades, '_run_pinned_historical_python'
+        ) as execute:
+            with self.assertRaisesRegex(ValueError, 'INDEPENDENT_HISTORICAL_VERIFIER_AUTHORITY_REQUIRED'):
+                upgrades.verify_historical(ticket, {}, root=root)
+            jobs.assert_not_called()
+            execute.assert_not_called()
+
+    def test_unreviewed_ticket_closure_cannot_self_attest_as_trusted(self):
+        root = self.roots['9facd934d9ae763691e8a51052a67793cac5b48e']
+        ticket = self._ticket(root)
+        ticket['body']['verifier_files']['invented.py'] = '0' * 64
+        with patch('commercial.ledger.load_jobs') as jobs, patch.object(
+            upgrades, '_run_pinned_historical_python'
+        ) as execute:
+            with self.assertRaisesRegex(ValueError, 'INDEPENDENT_HISTORICAL_VERIFIER_AUTHORITY_REQUIRED'):
+                upgrades.verify_historical(ticket, {}, root=root)
+            jobs.assert_not_called()
+            execute.assert_not_called()
+
+
+
 if __name__ == '__main__':
     unittest.main()
