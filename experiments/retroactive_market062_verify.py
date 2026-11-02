@@ -138,6 +138,20 @@ def check_native_claim_binding(arm, exported, reported, measurements, protocol):
     # because both occur in one valid account. Verify native event ordering:
     # the adapter must be finished before the C instrument is offered.
     actions = tape.get('actions', [])
+    reservation_at = [i for i, action in enumerate(actions) if isinstance(action, dict)
+                      and action.get('op') == 'reserve'
+                      and isinstance(action.get('args'), dict)
+                      and action['args'].get('id') == plan_id]
+    first_stage = {'shared-' + name for name in protocol['fixed_shared']}
+    first_stage.update('market062-' + buyer + '-' + name
+                       for buyer in ('A', 'B') for name in protocol['per_order'])
+    first_stage.add('first-stage-profit-tax')
+    if len(reservation_at) != 1 or any(
+            i >= reservation_at[0] for i, action in enumerate(actions)
+            if isinstance(action, dict) and action.get('op') == 'cost'
+            and isinstance(action.get('args'), dict)
+            and action['args'].get('id') in first_stage):
+        raise ValueError('EARNED_RESERVATION_PRE_COST_BOUNDARY')
     finished = [i for i, action in enumerate(actions) if isinstance(action, dict)
                 and action.get('op') == 'finish'
                 and isinstance(action.get('args'), dict)
