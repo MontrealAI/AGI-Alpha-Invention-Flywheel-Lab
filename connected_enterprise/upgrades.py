@@ -19,6 +19,7 @@ from commercial.ledger import canonical, digest
 from connected_enterprise.transition_evidence import ticket_body, current_store_directory
 
 DOMAIN = b'native-source-transition\n'
+# Legacy synthetic tests clear this mapping; it is never trusted or populated.
 _HISTORICAL_AUDITS = {}
 _OWNER_AUTHORIZED_HISTORY = contextvars.ContextVar('owner_authorized_historical_audit', default=frozenset())
 MAX_TICKET_BYTES = 16_000_000
@@ -181,10 +182,10 @@ def verify_historical(ticket, manifest, *, root=None):
     root = selected
     from commercial.ledger import load_jobs
     load_jobs(root, manifest)
-    cache_key = digest({'ticket': ticket, 'manifest': manifest, 'root': str(root),
-                        'verifier_files': body['verifier_files']})
-    if cache_key in _HISTORICAL_AUDITS:
-        return copy.deepcopy(_HISTORICAL_AUDITS[cache_key])
+    # Never reuse an earlier process result: a signed outer ticket can contain
+    # nested v2 CAS references whose storage changes without changing this
+    # ticket, the source inventory, or the manifest. Replaying the historical
+    # verifier must check that entire transitive evidence chain on each audit.
     payload = {'record': body['prior_record'], 'manifest': manifest, 'root': str(root), 'evidence_dir': current_store_directory()}
     code = """import json,sys,contextlib,importlib.util
 from connected_enterprise.finance import audit_journal
@@ -205,9 +206,6 @@ with scope:
     if source_inventory(root) != body['verifier_files']:
         raise ValueError('HISTORICAL_VERIFIER_CHANGED_DURING_AUDIT')
     load_jobs(root, manifest)
-    if len(_HISTORICAL_AUDITS) >= 128:
-        _HISTORICAL_AUDITS.pop(next(iter(_HISTORICAL_AUDITS)))
-    _HISTORICAL_AUDITS[cache_key] = copy.deepcopy(receipt)
     return receipt
 
 
