@@ -24,6 +24,50 @@ _HISTORICAL_AUDITS = {}
 _OWNER_AUTHORIZED_HISTORY = contextvars.ContextVar('owner_authorized_historical_audit', default=frozenset())
 MAX_TICKET_BYTES = 16_000_000
 
+# Independently pinned Python inventory identities for the three immutable
+# successor022 historical distributions. The values were derived from every
+# .py member SHA-256 in historical/successor022/MANIFEST.json at the exact
+# public source, not from a transition ticket. This is a narrowly scoped
+# executable provenance allowlist, NOT a security audit of the legacy Python,
+# a signature for historical financial activity, or permission for arbitrary
+# historical roots. Adding entries requires separate review and requalification.
+PINNED_PUBLIC_HISTORICAL_INVENTORIES = frozenset({
+    '166f7bd870713590b31bfe76cf0dbb0184f63684005cd0e98bcea297dae5ed8b', # 9facd934
+    '7b04fd501ec510dfff0ae71a3dcbeae4b62151945eb102d9aca637ec9008c50e', # 10bdb2c5
+    '60c3bad4de77f0e8dd113a2fe9fdb7fb212186ded1324099f6808196bc6cc2a8', # 9c74bc5a
+})
+
+
+def _approved_public_history_closure(body):
+    """Check every historical Python layer before executing even the first."""
+    todo = [body]
+    while todo:
+        prior = todo.pop()
+        if not isinstance(prior, dict):
+            return False
+        files = prior.get('verifier_files')
+        if not isinstance(files, dict) or not files or len(files) > 4000:
+            return False
+        fingerprint = hashlib.sha256(json.dumps(
+            files, sort_keys=True, separators=(',', ':'), ensure_ascii=True
+        ).encode('utf-8')).hexdigest()
+        if fingerprint not in PINNED_PUBLIC_HISTORICAL_INVENTORIES:
+            return False
+        record = prior.get('prior_record')
+        if not isinstance(record, dict):
+            return False
+        journal = record.get('connected_journal')
+        if not isinstance(journal, dict):
+            return False
+        history = journal.get('source_history', [])
+        if not isinstance(history, list):
+            return False
+        # A legacy verifier can itself replay older historical modules. Validate
+        # all nested ticket-selected source identities here, not after import.
+        for inner in history:
+            todo.append(ticket_body(inner))
+    return True
+
 # Historical code is a separate subprocess, not a trusted source of public
 # diagnostics. Never propagate its arbitrary stdout/stderr into an exception:
 # even an owner-authenticated old module might print signing material.
@@ -206,9 +250,10 @@ def source_inventory(root):
 
 
 def verify_historical(ticket, manifest, *, root=None):
-    if digest(ticket) not in _OWNER_AUTHORIZED_HISTORY.get():
-        raise ValueError('INDEPENDENT_HISTORICAL_VERIFIER_AUTHORITY_REQUIRED')
+    owner_authorized = digest(ticket) in _OWNER_AUTHORIZED_HISTORY.get()
     body = ticket_body(ticket)
+    if not owner_authorized and not _approved_public_history_closure(body):
+        raise ValueError('INDEPENDENT_HISTORICAL_VERIFIER_AUTHORITY_REQUIRED')
     candidates = [Path(body['historical_root']).absolute()]
     if root is not None:
         candidates.append(Path(root).absolute() / 'historical-source-versions' / body['from_source']['sha256'])
