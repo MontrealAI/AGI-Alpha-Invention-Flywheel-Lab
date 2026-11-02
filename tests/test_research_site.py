@@ -108,6 +108,11 @@ class ResearchSiteTests(unittest.TestCase):
         self.assertIn('src="alpha.js"', studio)
         self.assertIn('href="index.html"', studio)
         self.assertIn('id="dispatch-form"', studio)
+        for name in ('foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html'):
+            self.assertIn(name, home)
+        self.assertIn('docs/transformational063/REPORT.md', home)
+        self.assertIn('docs/transformational063/paper.pdf', home)
+        self.assertIn('campaign/transformational-063', home)
 
     def test_external_script_and_unknown_asset_are_rejected(self):
         for link in ('https://example.com/tracker.js', 'account-recovery.json'):

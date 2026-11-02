@@ -1,8 +1,36 @@
-# Use the OUT papers to construct the flagship
+# Use the published papers to construct the flagship
 
-These six user-authorized research manuscripts are **tools for the consequential activity**, not six mandatory stages or evidence that their mechanisms are deployed here. Start with the [flagship and arrangement card](DEVELOPER_GUIDE.md#mission-construct-economically-reachable-possibilities); select only mechanisms that remove its missing-means constraint. Passing their examples, publishing papers or building a generic framework does not establish useful delivery, profitable funded expansion or a scientific breakthrough.
+These nine user-authorized research manuscripts are **tools for the consequential activity**, not mandatory stages or evidence that their mechanisms are deployed here. Start with the [flagship and arrangement card](DEVELOPER_GUIDE.md#mission-construct-economically-reachable-possibilities); select only mechanisms that remove its missing-means constraint. Passing their examples, publishing papers or building a generic framework does not establish useful delivery, profitable funded expansion or a scientific breakthrough.
 
-The browser readers below preserve the original PDFs. Page references refer to those supplied editions (20–21 October 2026). Their theorems, synthetic companion results and proposed integrations are manuscript claims; this publication does not independently reproduce companions, qualify a physical system or import their guarantees into this repository. For actual implemented paths and limitations, use the [implementation map](DEVELOPER_GUIDE.md#implementation-and-claim-boundaries).
+The browser readers below preserve the original PDFs. Page references refer to the supplied editions identified below (20–23 October 2026). Their theorems, synthetic companion results and proposed integrations are manuscript claims; this publication does not independently reproduce companions, qualify a physical system or import their guarantees into this repository. For actual implemented paths and limitations, use the [implementation map](DEVELOPER_GUIDE.md#implementation-and-claim-boundaries).
+
+## Earlier papers remain part of the working library
+
+Keep the original readers and PDFs available alongside the six-paper OUT collection; new publications do not retire earlier evidence. The [research shelf and provenance](../research/README.md) retains editions and hashes. The existing [063 report](../transformational063/REPORT.md), [paper](../transformational063/paper.pdf) and [campaign evidence](../../campaign/transformational-063/README.md) are separately scoped executed research, not validation of every manuscript. Preserve their existing links and historical publication records; use the current implementation map and source-matched receipts for current runtime claims.
+
+### Foundry v2 — construct and qualify a reusable discovery instrument
+
+[Read in the browser](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/foundry-v2.html) · 22 October 2026 · pp. 8–19, 22–26, 29–30
+
+**Use when:** consequential investigations share expensive experimental infrastructure. The case study constructs configurable fixtures → assembly/calibration station → qualified dynamic instrument, then distinguishes a new software method from a separately commissioned successor module. Carry interfaces, calibration/reset envelopes, dependencies, checker and cumulative costs into the capability manifest; reconstruct changed observations, parameters and acceptance for the successor.
+
+**Execute and retain:** validate initial and subsequent samples before mutating accepted history; preserve schedule identity, units, timing, command boundaries and pulse/recovery windows. Check reset and mission against separately implemented dynamics and fixed model-discrepancy challenges. The manuscript's hidden flow/power mismatch passes its residual checks while violating the unchanged accuracy requirement: independent metrology and uncertainty qualification remain necessary. Compare existing/new capability × separate/shared commissioning with voluntary opt-in, complete costs and capacity. A conventional specialist and centralized lab remain strong alternatives. The thermal findings are simulated; the actual harness path handled bound reports/review/recovery, not installed thermal execution. Affordability is not demand, cash receipts or profit; physical construction and customer acceptance were not demonstrated.
+
+### Transformational Autonomous Enterprises — revalidate inheritance for each mission
+
+[Read in the browser](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/transformational-enterprises.html) · research edition 01, 23 October 2026 · printed pp. 3–7, 9–16, 18–22 (PDF pages one higher)
+
+**Use when:** repeated missions can reuse stable executable modules but repeated generic qualification is costly. Retain content-bound modules and evaluator-owned generic checks; always perform fresh mission-specific input/output acceptance and grant authority separately. Bind relevant source, dependencies, policy, checker and check inputs. A descendant inherits compatible structure and history, not a current proof or permission.
+
+**Execute and retain:** carry exact mission/output identities and module-change lineage across handoffs; requalify changed algebra, contexts and backend bindings. Weighted quantity propagation and Boolean reachability cannot share a kernel merely because their graph structure matches. Compare direct specialist delivery and full replay; retain failed work and deduplicate ancestor costs without treating unknown billing as zero. The reported finite checking savings are not total-cost savings: the direct specialist had lower pooled CPU and better final median wall time. Pinned local API journeys and disposable mock-token EVM settlement are not an installed market dispatcher, real payments or production-host qualification. The paper's historical US$100/value target does not replace this repository's current US$100,000-seed/$3B-profit objective.
+
+### OUT-REFLECT — construct evidence that can expose its own blind spots
+
+[Read in the browser](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/out-reflect.html) · revised 21 October 2026 · pp. 3–10, 12–17, 19–22
+
+**Use when:** an important acceptance check cannot distinguish a consequential error or relies on fallible reference answers. Construct admissible probes with a justified purpose-relative separation/correction guarantee; in the manuscript's polynomial family, moment-shaped inputs yield a decodable audit code. Keep intended purpose, candidate scope, reference identity, actual evidence, fault domains and authority separate.
+
+**Execute and retain:** verify the supported language and deletion-rank obligation, decode independently of the candidate, and check residuals against complete original responses—not just compressed coordinates. Report unsupported scope or inconsistent premises rather than choosing a convenient culprit. Reuse old answers only under unchanged or explicitly compatible target semantics; retain cumulative acquisition costs and the whole-lineage fault budget. Retain compact sufficient replay evidence without default bulk archival. Repeated records from one source are not independent fault domains; a coherent wrong reference or excess corruption can yield a uniquely wrong answer. Compare cheaper purpose-only checks and strong coding specialists. Charge formalization, failed search, source qualification, precision, acquisition, decoding and maintenance. The exact synthetic adapter is not a robust noisy physical decoder, production integration, universal self-certification or profitable business.
 
 ## Choose by the missing means
 
