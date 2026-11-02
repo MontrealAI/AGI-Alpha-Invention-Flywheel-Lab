@@ -61,7 +61,9 @@ class NativePublicClaimBindingTests(unittest.TestCase):
         native={'ledger':{'config':{'contract':'market062-shared'},
                  'orders':[{'id':'market062-'+buyer,'buyer':buyer,'state':'released',
                             'price':str(1500*MICRO)} for buyer in 'ABC'],
-                 'actions':[{'op':'reserve','args':{'id':receipt['plan_id']},'before':before}]},
+                 'actions':([{'op':'offer','args':{'id':'market062-'+buyer,'buyer':buyer,
+                            'job_id':'evidence_matrix-market062-'+buyer}} for buyer in 'ABC'] +
+                            [{'op':'reserve','args':{'id':receipt['plan_id']},'before':before}])},
                 'connected_journal':{'entries':[{'key':'spend:third-sensor-adapter',
                      'status':'COMPLETE','funding':'EARNED','request':request,'receipt':receipt}]}}
         reported={'sales':[{'id':'market062-'+buyer,'status':'ACCEPTED_AND_COLLECTED',
@@ -73,6 +75,25 @@ class NativePublicClaimBindingTests(unittest.TestCase):
     def test_native_receipt_and_sales_are_bound(self):
         p,m,n,r=self.fixture()
         self.assertTrue(check_native_claim_binding('shared',n,r,m,p))
+
+    def test_valid_but_wrong_delivered_service_is_not_sensor_sale(self):
+        # Every job ID here names a valid accepted service, but paying for
+        # A's measurement cannot support a report about buyer C's output.
+        p,m,n,r=self.fixture()
+        n['ledger']['actions'][2]['args']['job_id']='evidence_matrix-market062-A'
+        with self.assertRaisesRegex(ValueError,'NATIVE_OFFER_DELIVERABLE_IDENTITY_MISMATCH'):
+            check_native_claim_binding('shared',n,r,m,p)
+
+    def test_missing_or_swapped_offer_identity_is_not_accepted(self):
+        p,m,n,r=self.fixture()
+        n['ledger']['actions']=[a for a in n['ledger']['actions']
+            if a.get('op')!='offer' or a['args']['id']!='market062-C']
+        with self.assertRaisesRegex(ValueError,'NATIVE_OFFER_DELIVERABLE_IDENTITY_MISMATCH'):
+            check_native_claim_binding('shared',n,r,m,p)
+        p,m,n,r=self.fixture()
+        n['ledger']['actions'][2]['args']['buyer']='A'
+        with self.assertRaisesRegex(ValueError,'NATIVE_OFFER_DELIVERABLE_IDENTITY_MISMATCH'):
+            check_native_claim_binding('shared',n,r,m,p)
 
     def test_advertised_adapter_receipt_cannot_be_forged(self):
         p,m,n,r=self.fixture()
