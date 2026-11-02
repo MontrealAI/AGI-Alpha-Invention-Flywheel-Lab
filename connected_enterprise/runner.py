@@ -166,6 +166,44 @@ def source_paths(root):
                         or not (root/path).is_file()):
                     raise ValueError('PORTFOLIO_PUBLIC_RELEASE_EXTRA_REQUIRED')
             names.update([extra_manifest,*extra['files']])
+    # Include the independently frozen paired-acquisition study as one complete
+    # public source/evidence unit. Missing members must not silently disappear.
+    paired = 'experiments/paired_acquisition_20261102'
+    if (root/paired).exists():
+        required = {f'{paired}/{name}' for name in (
+            '__init__.py',
+            'instrument.py',
+            'verifier.py',
+            'economic_frontier.py',
+            'run.py',
+            'test_economic_frontier.py',
+            'test_runner_guards.py',
+            'requirements.txt',
+            'PERMISSIONS.json',
+            'REGISTRY.json',
+            'PREREGISTRATION.md',
+            'VERIFIER_CONTRACT.md',
+            'ECONOMIC_CONTRACT.md',
+            'ECONOMIC_PLAN.json',
+            'OPPORTUNITIES.md',
+            'SOURCES.md',
+            'SOURCE_MANIFEST.json',
+            'README.md',
+            'FIVE_ROUTE_STATUS.md',
+            'INDEPENDENT_REVIEW.md',
+            'ECONOMIC_REVIEW.md',
+            'evidence/SCIENCE.json',
+            'evidence/ECONOMICS.json',
+            'evidence/ECONOMIC_INPUTS.json',
+            'evidence/RETAINED_INTERFACE.json',
+            'evidence/SUMMARY.json',
+            'evidence/EXECUTION.json',
+            'evidence/LOCAL_TESTS.json',
+        )}
+        required.add('.github/workflows/paired-acquisition-20261102.yml')
+        if any(not (root/name).is_file() for name in required):
+            raise ValueError('PAIRED_ACQUISITION_SOURCE_DEPENDENCY_MISSING')
+        names.update(required)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
@@ -432,3 +470,4 @@ def main():
     return 1
 
 if __name__=='__main__':raise SystemExit(main())
+

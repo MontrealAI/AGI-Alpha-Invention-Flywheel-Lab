@@ -1,0 +1,2462 @@
+[
+  {
+    "actual_offer_sent": false,
+    "authority_granted": false,
+    "break_even_inequalities": [
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "-1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "independent_calibration",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "paired_swap",
+        "matched_tie_scope": "Same stipulated acquisition resources and episode cost assumptions, including shared unknowns; upstream AI/human labor advantage unmeasured.",
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": true
+      }
+    ],
+    "case_id": "cash-100000-specimen-cap-1",
+    "cash_schedule": "All remaining acquisition-episode cash costs before any receipt; no borrowing or conditional receivable funds.",
+    "choices": {
+      "independent_calibration": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      },
+      "ordinary_paired_swap": {
+        "budget": "refused",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_REFUSED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "paired_swap": {
+        "budget": "refused",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_REFUSED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "single_read": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "refused",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "QUALITY_REFUSED",
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "1",
+          "light_readings": "6",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      }
+    },
+    "commercial_profit_qualified": false,
+    "conditional_resource_pareto_frontier": [],
+    "economic_source_sha256": "ce46bce0ab48fb9a47fdb287bacfeb9bb216e6454f4fe1cc212bf5dfc055321c",
+    "input_sha256": "84132712738d7383589b813c46e8388905b95abb5c41c931cb409a2437b9b0a3",
+    "native_account_executed": false,
+    "non_entry": {
+      "available": true,
+      "delivers_required_measurement": false,
+      "forgone_outcome_value_usd": null,
+      "incremental_acquisition_cash_cost_usd": "0",
+      "prior_campaign_cost_usd": null
+    },
+    "offer_model": "Conditional accepted-delivery arithmetic; failure/default risk and actual counterparty participation are not established.",
+    "ordinary_control": "Identical stipulated protocol resources/costs; no measured AI versus human labor advantage.",
+    "permission_contract_sha256": "9ce0d14a7e9a7e1a1a4b1d324cd150efa366740a744e306323a28805329734af",
+    "price_basis": null,
+    "schema": "paired-acquisition/economic-frontier/v1",
+    "scientific_contract_sha256": "0282eedaf89374ac1d0f9f781aba146b4255a882b063fdcc2e2ae2d5c73e377c",
+    "scope": "CONDITIONAL_FINITE_ACQUISITION_DECISION_NOT_COMMERCIAL_PROFIT"
+  },
+  {
+    "actual_offer_sent": false,
+    "authority_granted": false,
+    "break_even_inequalities": [
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "-1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "independent_calibration",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "paired_swap",
+        "matched_tie_scope": "Same stipulated acquisition resources and episode cost assumptions, including shared unknowns; upstream AI/human labor advantage unmeasured.",
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": true
+      }
+    ],
+    "case_id": "cash-100000-specimen-cap-2",
+    "cash_schedule": "All remaining acquisition-episode cash costs before any receipt; no borrowing or conditional receivable funds.",
+    "choices": {
+      "independent_calibration": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      },
+      "ordinary_paired_swap": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "paired_swap": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "single_read": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "refused",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "QUALITY_REFUSED",
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "1",
+          "light_readings": "6",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      }
+    },
+    "commercial_profit_qualified": false,
+    "conditional_resource_pareto_frontier": [],
+    "economic_source_sha256": "ce46bce0ab48fb9a47fdb287bacfeb9bb216e6454f4fe1cc212bf5dfc055321c",
+    "input_sha256": "85a6589cec443362dab93a5a7088af6a7b2a959911ff4e8d1496cb7d13dd1146",
+    "native_account_executed": false,
+    "non_entry": {
+      "available": true,
+      "delivers_required_measurement": false,
+      "forgone_outcome_value_usd": null,
+      "incremental_acquisition_cash_cost_usd": "0",
+      "prior_campaign_cost_usd": null
+    },
+    "offer_model": "Conditional accepted-delivery arithmetic; failure/default risk and actual counterparty participation are not established.",
+    "ordinary_control": "Identical stipulated protocol resources/costs; no measured AI versus human labor advantage.",
+    "permission_contract_sha256": "9ce0d14a7e9a7e1a1a4b1d324cd150efa366740a744e306323a28805329734af",
+    "price_basis": null,
+    "schema": "paired-acquisition/economic-frontier/v1",
+    "scientific_contract_sha256": "0282eedaf89374ac1d0f9f781aba146b4255a882b063fdcc2e2ae2d5c73e377c",
+    "scope": "CONDITIONAL_FINITE_ACQUISITION_DECISION_NOT_COMMERCIAL_PROFIT"
+  },
+  {
+    "actual_offer_sent": false,
+    "authority_granted": false,
+    "break_even_inequalities": [
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "-1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "independent_calibration",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "paired_swap",
+        "matched_tie_scope": "Same stipulated acquisition resources and episode cost assumptions, including shared unknowns; upstream AI/human labor advantage unmeasured.",
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": true
+      }
+    ],
+    "case_id": "cash-1000000-specimen-cap-1",
+    "cash_schedule": "All remaining acquisition-episode cash costs before any receipt; no borrowing or conditional receivable funds.",
+    "choices": {
+      "independent_calibration": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      },
+      "ordinary_paired_swap": {
+        "budget": "refused",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_REFUSED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "paired_swap": {
+        "budget": "refused",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_REFUSED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "single_read": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "refused",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "QUALITY_REFUSED",
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "1",
+          "light_readings": "6",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      }
+    },
+    "commercial_profit_qualified": false,
+    "conditional_resource_pareto_frontier": [],
+    "economic_source_sha256": "ce46bce0ab48fb9a47fdb287bacfeb9bb216e6454f4fe1cc212bf5dfc055321c",
+    "input_sha256": "c71723e887b5c6dfba491b5b70f38bf7ef3aeafee07bb44d16ecee385cdf20ca",
+    "native_account_executed": false,
+    "non_entry": {
+      "available": true,
+      "delivers_required_measurement": false,
+      "forgone_outcome_value_usd": null,
+      "incremental_acquisition_cash_cost_usd": "0",
+      "prior_campaign_cost_usd": null
+    },
+    "offer_model": "Conditional accepted-delivery arithmetic; failure/default risk and actual counterparty participation are not established.",
+    "ordinary_control": "Identical stipulated protocol resources/costs; no measured AI versus human labor advantage.",
+    "permission_contract_sha256": "9ce0d14a7e9a7e1a1a4b1d324cd150efa366740a744e306323a28805329734af",
+    "price_basis": null,
+    "schema": "paired-acquisition/economic-frontier/v1",
+    "scientific_contract_sha256": "0282eedaf89374ac1d0f9f781aba146b4255a882b063fdcc2e2ae2d5c73e377c",
+    "scope": "CONDITIONAL_FINITE_ACQUISITION_DECISION_NOT_COMMERCIAL_PROFIT"
+  },
+  {
+    "actual_offer_sent": false,
+    "authority_granted": false,
+    "break_even_inequalities": [
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "-1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "independent_calibration",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "paired_swap",
+        "matched_tie_scope": "Same stipulated acquisition resources and episode cost assumptions, including shared unknowns; upstream AI/human labor advantage unmeasured.",
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": true
+      }
+    ],
+    "case_id": "cash-1000000-specimen-cap-2",
+    "cash_schedule": "All remaining acquisition-episode cash costs before any receipt; no borrowing or conditional receivable funds.",
+    "choices": {
+      "independent_calibration": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      },
+      "ordinary_paired_swap": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "paired_swap": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "single_read": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "refused",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "QUALITY_REFUSED",
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "1",
+          "light_readings": "6",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      }
+    },
+    "commercial_profit_qualified": false,
+    "conditional_resource_pareto_frontier": [],
+    "economic_source_sha256": "ce46bce0ab48fb9a47fdb287bacfeb9bb216e6454f4fe1cc212bf5dfc055321c",
+    "input_sha256": "cd2671f456b6196ccf12bf4504335198881c6c7686571f78fe16269155c14551",
+    "native_account_executed": false,
+    "non_entry": {
+      "available": true,
+      "delivers_required_measurement": false,
+      "forgone_outcome_value_usd": null,
+      "incremental_acquisition_cash_cost_usd": "0",
+      "prior_campaign_cost_usd": null
+    },
+    "offer_model": "Conditional accepted-delivery arithmetic; failure/default risk and actual counterparty participation are not established.",
+    "ordinary_control": "Identical stipulated protocol resources/costs; no measured AI versus human labor advantage.",
+    "permission_contract_sha256": "9ce0d14a7e9a7e1a1a4b1d324cd150efa366740a744e306323a28805329734af",
+    "price_basis": null,
+    "schema": "paired-acquisition/economic-frontier/v1",
+    "scientific_contract_sha256": "0282eedaf89374ac1d0f9f781aba146b4255a882b063fdcc2e2ae2d5c73e377c",
+    "scope": "CONDITIONAL_FINITE_ACQUISITION_DECISION_NOT_COMMERCIAL_PROFIT"
+  },
+  {
+    "actual_offer_sent": false,
+    "authority_granted": false,
+    "break_even_inequalities": [
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "-1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "independent_calibration",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "paired_swap",
+        "matched_tie_scope": "Same stipulated acquisition resources and episode cost assumptions, including shared unknowns; upstream AI/human labor advantage unmeasured.",
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": true
+      }
+    ],
+    "case_id": "cash-1000000000-specimen-cap-1",
+    "cash_schedule": "All remaining acquisition-episode cash costs before any receipt; no borrowing or conditional receivable funds.",
+    "choices": {
+      "independent_calibration": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      },
+      "ordinary_paired_swap": {
+        "budget": "refused",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_REFUSED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "paired_swap": {
+        "budget": "refused",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_REFUSED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "single_read": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "refused",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "QUALITY_REFUSED",
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "1",
+          "light_readings": "6",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      }
+    },
+    "commercial_profit_qualified": false,
+    "conditional_resource_pareto_frontier": [],
+    "economic_source_sha256": "ce46bce0ab48fb9a47fdb287bacfeb9bb216e6454f4fe1cc212bf5dfc055321c",
+    "input_sha256": "2f9e6bee07d45735c4c02f1c4525ba8bb3ffff83ead4335c28794116fa062b50",
+    "native_account_executed": false,
+    "non_entry": {
+      "available": true,
+      "delivers_required_measurement": false,
+      "forgone_outcome_value_usd": null,
+      "incremental_acquisition_cash_cost_usd": "0",
+      "prior_campaign_cost_usd": null
+    },
+    "offer_model": "Conditional accepted-delivery arithmetic; failure/default risk and actual counterparty participation are not established.",
+    "ordinary_control": "Identical stipulated protocol resources/costs; no measured AI versus human labor advantage.",
+    "permission_contract_sha256": "9ce0d14a7e9a7e1a1a4b1d324cd150efa366740a744e306323a28805329734af",
+    "price_basis": null,
+    "schema": "paired-acquisition/economic-frontier/v1",
+    "scientific_contract_sha256": "0282eedaf89374ac1d0f9f781aba146b4255a882b063fdcc2e2ae2d5c73e377c",
+    "scope": "CONDITIONAL_FINITE_ACQUISITION_DECISION_NOT_COMMERCIAL_PROFIT"
+  },
+  {
+    "actual_offer_sent": false,
+    "authority_granted": false,
+    "break_even_inequalities": [
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "-1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "independent_calibration",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "single_read",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "-1",
+          "light_readings": "-6",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "independent_calibration",
+        "matched_tie_scope": null,
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "-1",
+          "specimen_photons": null,
+          "swap_operations": "-1"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": false
+      },
+      {
+        "complete_cost_delta_usd": null,
+        "condition": "delta_other_cash + delta_other_opportunity + sum(delta_resource * (cash_rate + opportunity_rate)) <= 0",
+        "left": "paired_swap",
+        "matched_tie_scope": "Same stipulated acquisition resources and episode cost assumptions, including shared unknowns; upstream AI/human labor advantage unmeasured.",
+        "other_cash_delta_usd": null,
+        "other_opportunity_delta_usd": null,
+        "quality_and_budget_comparison_admitted": false,
+        "resource_deltas": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "0",
+          "light_readings": "0",
+          "source_photons": null,
+          "specimen_exposures": "0",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        },
+        "right": "ordinary_paired_swap",
+        "stipulated_protocol_cost_tie": true
+      }
+    ],
+    "case_id": "cash-1000000000-specimen-cap-2",
+    "cash_schedule": "All remaining acquisition-episode cash costs before any receipt; no borrowing or conditional receivable funds.",
+    "choices": {
+      "independent_calibration": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "blank_frames",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "1",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      },
+      "ordinary_paired_swap": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "paired_swap": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "HOLD",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds",
+            "swap_operations"
+          ],
+          "total_usd": null
+        },
+        "quality": "accepted",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "2",
+          "light_readings": "12",
+          "source_photons": null,
+          "specimen_exposures": "2",
+          "specimen_photons": null,
+          "swap_operations": "1"
+        }
+      },
+      "single_read": {
+        "budget": "unresolved",
+        "cash_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "complete_episode_cost_scope": false,
+        "complete_episode_cost_usd": null,
+        "conditional_cash_feasibility": "unresolved",
+        "conditional_offer_price_interval_usd": null,
+        "offer_state": "REFUSE",
+        "opportunity_cost": {
+          "known_subtotal_usd": "0",
+          "missing": [
+            "other_episode_cost_usd",
+            "light_frames",
+            "light_readings",
+            "dark_frames",
+            "dark_readings",
+            "specimen_exposures",
+            "source_photons",
+            "specimen_photons",
+            "elapsed_seconds"
+          ],
+          "total_usd": null
+        },
+        "quality": "refused",
+        "quality_receipt_sha256": "fed85891583d9170218ec39e4f77bac4e24303f722a2218b7625b6a3ee6285d5",
+        "reasons": [
+          "QUALITY_REFUSED",
+          "RESOURCE_BUDGET_UNRESOLVED",
+          "RIGHTS_CAPACITY_UNRESOLVED",
+          "FINANCE_UNRESOLVED",
+          "COMPLETE_COST_OR_PARTICIPATION_TERMS_UNKNOWN"
+        ],
+        "required_cash_including_protection_usd": null,
+        "resources": {
+          "blank_frames": "0",
+          "dark_frames": null,
+          "dark_readings": null,
+          "elapsed_seconds": null,
+          "light_frames": "1",
+          "light_readings": "6",
+          "source_photons": null,
+          "specimen_exposures": "1",
+          "specimen_photons": null,
+          "swap_operations": "0"
+        }
+      }
+    },
+    "commercial_profit_qualified": false,
+    "conditional_resource_pareto_frontier": [],
+    "economic_source_sha256": "ce46bce0ab48fb9a47fdb287bacfeb9bb216e6454f4fe1cc212bf5dfc055321c",
+    "input_sha256": "70248d3c57583743fd3732c7d6db2fab4992dfcb60be31924682741beadd2a46",
+    "native_account_executed": false,
+    "non_entry": {
+      "available": true,
+      "delivers_required_measurement": false,
+      "forgone_outcome_value_usd": null,
+      "incremental_acquisition_cash_cost_usd": "0",
+      "prior_campaign_cost_usd": null
+    },
+    "offer_model": "Conditional accepted-delivery arithmetic; failure/default risk and actual counterparty participation are not established.",
+    "ordinary_control": "Identical stipulated protocol resources/costs; no measured AI versus human labor advantage.",
+    "permission_contract_sha256": "9ce0d14a7e9a7e1a1a4b1d324cd150efa366740a744e306323a28805329734af",
+    "price_basis": null,
+    "schema": "paired-acquisition/economic-frontier/v1",
+    "scientific_contract_sha256": "0282eedaf89374ac1d0f9f781aba146b4255a882b063fdcc2e2ae2d5c73e377c",
+    "scope": "CONDITIONAL_FINITE_ACQUISITION_DECISION_NOT_COMMERCIAL_PROFIT"
+  }
+]
