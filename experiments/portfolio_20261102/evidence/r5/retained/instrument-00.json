@@ -1,0 +1,106 @@
+{
+  "class_assumption": "Time-invariant nonnegative linear compartment map, column sums at most one, noiseless measurements within declared numerical tolerance.",
+  "dimension": 3,
+  "fit_cpu_seconds": 0.0005156530000000048,
+  "fit_wall_seconds": 0.0005211930001678411,
+  "probe_errors": [
+    0.0,
+    5.551115123125783e-17
+  ],
+  "qualification_limit": "Finite probes check implementation in the supplied class; they do not establish the class, physical linearity, or arbitrary future drift.",
+  "queries": [
+    {
+      "input": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "observed": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "input": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "observed": [
+        0.3297557187343278,
+        0.19251404359867008,
+        0.2676898996526527
+      ]
+    },
+    {
+      "input": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "observed": [
+        0.1531965203142393,
+        0.5470691809177933,
+        0.18834313451002965
+      ]
+    },
+    {
+      "input": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "observed": [
+        0.3839724116267452,
+        0.2592318223501669,
+        0.31506852309151406
+      ]
+    },
+    {
+      "input": [
+        0.16666666666666666,
+        0.3333333333333333,
+        0.5
+      ],
+      "observed": [
+        0.298010999040507,
+        0.3440579787474596,
+        0.2649302896578757
+      ]
+    },
+    {
+      "input": [
+        0.6428571428571429,
+        0.2857142857142857,
+        0.07142857142857142
+      ],
+      "observed": [
+        0.2831828543923323,
+        0.29858106702924075,
+        0.24840358271467908
+      ]
+    }
+  ],
+  "query_count": 6,
+  "query_receipt_sha256": "d5ff6ed425e088e8d7bbaaaadd6fe03db28ff55152687f7a8ca012e44627cca9",
+  "schema": "portfolio071.transport.instrument.v1",
+  "tolerance": 1e-08,
+  "transition": [
+    [
+      0.3297557187343278,
+      0.1531965203142393,
+      0.3839724116267452
+    ],
+    [
+      0.19251404359867008,
+      0.5470691809177933,
+      0.2592318223501669
+    ],
+    [
+      0.2676898996526527,
+      0.18834313451002965,
+      0.31506852309151406
+    ]
+  ]
+}

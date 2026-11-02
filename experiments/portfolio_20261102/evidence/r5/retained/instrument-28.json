@@ -1,0 +1,106 @@
+{
+  "class_assumption": "Time-invariant nonnegative linear compartment map, column sums at most one, noiseless measurements within declared numerical tolerance.",
+  "dimension": 3,
+  "fit_cpu_seconds": 0.0002282979999999879,
+  "fit_wall_seconds": 0.0002301360000274144,
+  "probe_errors": [
+    0.0,
+    5.551115123125783e-17
+  ],
+  "qualification_limit": "Finite probes check implementation in the supplied class; they do not establish the class, physical linearity, or arbitrary future drift.",
+  "queries": [
+    {
+      "input": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "observed": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "input": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "observed": [
+        0.13628186030560047,
+        0.06273645041032491,
+        0.35520016013673716
+      ]
+    },
+    {
+      "input": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "observed": [
+        0.09644008286180508,
+        0.18255034458790062,
+        0.6757248559955615
+      ]
+    },
+    {
+      "input": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "observed": [
+        0.36507365525717683,
+        0.15063565434751938,
+        0.3273445969730728
+      ]
+    },
+    {
+      "input": [
+        0.16666666666666666,
+        0.3333333333333333,
+        0.5
+      ],
+      "observed": [
+        0.2373971653001235,
+        0.1466240171047807,
+        0.44811394384117975
+      ]
+    },
+    {
+      "input": [
+        0.6428571428571429,
+        0.2857142857142857,
+        0.07142857142857142
+      ],
+      "observed": [
+        0.14124076638962868,
+        0.10324750617086043,
+        0.44478896158471093
+      ]
+    }
+  ],
+  "query_count": 6,
+  "query_receipt_sha256": "2c93be0df4c3c958edad26fdd0fa7334fdbe582b66cea7a40309289059cba541",
+  "schema": "portfolio071.transport.instrument.v1",
+  "tolerance": 1e-08,
+  "transition": [
+    [
+      0.13628186030560047,
+      0.09644008286180508,
+      0.36507365525717683
+    ],
+    [
+      0.06273645041032491,
+      0.18255034458790062,
+      0.15063565434751938
+    ],
+    [
+      0.35520016013673716,
+      0.6757248559955615,
+      0.3273445969730728
+    ]
+  ]
+}
