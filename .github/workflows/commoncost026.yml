@@ -37,6 +37,7 @@ jobs:
       - name: Focused decision and package checks
         run: |
           python -m unittest discover -s tests -p 'test_common_cost*.py' -v
+          python -m unittest discover -s tests -p 'test_connected_common_cost_inventory064.py' -v
           python -m unittest discover -s tests -p 'test_strategic024.py' -v
       - name: Run fixed native business and separate financial/operating audit
         run: python scripts/run_commoncost026.py --stage smoke --case central --seed 2610311740 --arm '${{ matrix.arm }}' --output "$RUNNER_TEMP/commoncost026"
