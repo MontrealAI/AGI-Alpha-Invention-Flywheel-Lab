@@ -16,7 +16,7 @@ concurrency:
 jobs:
   qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 360
     permissions:
       contents: read
       actions: read
@@ -31,6 +31,9 @@ jobs:
       artifact_name: ${{ steps.identity.outputs.artifact_name }}
       artifact_id: ${{ steps.qualified-assets.outputs.artifact-id }}
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - name: Record checkout/dependency resource baseline
         run: |
           export RUN_ROOT="$RUNNER_TEMP/measurement009-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
@@ -304,7 +307,7 @@ jobs:
     needs: [qualify]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 360
     permissions:
       contents: write
       actions: read
@@ -316,6 +319,9 @@ jobs:
       QUALIFIED_ARTIFACT_ID: ${{ needs.qualify.outputs.artifact_id }}
       RELEASE_TAG: measurement-construction-20261030-r1
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - name: Preserve existing releases and require both exact-main historical gates
         id: gates
         run: |
@@ -338,7 +344,12 @@ jobs:
               with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('existing=true\n')
               raise SystemExit(0)
           if 'tag' in present:raise SystemExit('Tag exists without a release; refuse reuse.')
-          for attempt in range(180):
+          started=int(os.environ['AGI_JOB_START_EPOCH']); observed=time.time()
+          if started>observed:raise SystemExit('Hosted job clock regressed; publication refused.')
+          remaining=21600-300-(observed-started)
+          if remaining<=0:raise SystemExit('Hosted platform window exhausted; publication refused.')
+          deadline=time.monotonic()+remaining
+          while time.monotonic()<deadline:
               gates={}
               for workflow in ('campaign.yml','consequential007.yml'):
                   data=get(f'repos/{repo}/actions/workflows/{workflow}/runs?head_sha={sha}&event=push&per_page=100')
@@ -349,8 +360,8 @@ jobs:
                       if latest['conclusion']!='success':raise SystemExit('Historical exact-main gate failed: '+workflow)
                       gates[workflow]={'run_id':latest['id'],'run_attempt':latest['run_attempt'],'source_sha':sha,'conclusion':'success','url':latest['html_url']}
               if len(gates)==2:break
-              time.sleep(5)
-          else:raise SystemExit('Both exact-main historical gates did not complete within publication allowance.')
+              time.sleep(min(5,max(0,deadline-time.monotonic())))
+          else:raise SystemExit('Both exact-main historical gates did not complete within the hosted platform window.')
           observed_main=get(f'repos/{repo}/git/ref/heads/main')['object']['sha']
           relationship=get(f'repos/{repo}/compare/{sha}...{observed_main}')
           if relationship.get('status') not in ('ahead','identical') or relationship.get('merge_base_commit',{}).get('sha')!=sha:

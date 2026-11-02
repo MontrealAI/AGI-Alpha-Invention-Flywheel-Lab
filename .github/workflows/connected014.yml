@@ -10,8 +10,11 @@ concurrency:
 jobs:
   connected-qualification:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -25,12 +28,12 @@ jobs:
       - name: Native finance, business lifecycle, live crash recovery and independent checker regressions
         run: python -m unittest discover -s tests -p 'test_connected*.py' -v
       - name: Clean source archive, fresh operation, resume and public key-free audit
-        run: python scripts/qualify_connected014.py --smoke --output "$RUNNER_TEMP/connected014-clean" --timeout-seconds 900
+        run: python scripts/qualify_connected014.py --smoke --output "$RUNNER_TEMP/connected014-clean"
       - name: Preserve qualified receipts and failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: connected014-${{ github.event.pull_request.head.sha || github.sha }}
+          name: connected014-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/connected014-clean/QUALIFICATION.json
             ${{ runner.temp }}/connected014-clean/*.stdout

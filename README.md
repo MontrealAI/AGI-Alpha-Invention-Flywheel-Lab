@@ -8,13 +8,24 @@ The ambition is an enterprise whose useful achievements expand what it can disco
 
 **Explore:** [AGI ALPHA website](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/) · [Foundry v2 PDF](docs/research/autonomous-enterprises-foundry-v2.pdf) · [All research papers](docs/research/README.md) · [Verified release — 1 November 2026](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/connected014-4a87b455373be72811ad3a0c654a116c3604a374).
 
-**Start here:** use the website’s local capacity-pooling studio, inspect the [current experiment](campaign/transformational-063/README.md), or follow the canonical operating instructions below. The browser tool runs locally without an account, upload or payment.
+**Start here:** explore the [Blue Sky frontier](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/#frontier), the [active charter](campaign/blue-sky-064/CHARTER.md), [candidate evidence](campaign/blue-sky-064/CANDIDATES.md) and [constructive mechanisms](campaign/blue-sky-064/MECHANISMS.md). The mission admits a flagship only when a consequential new productive possibility is demonstrated. No current candidate has earned that verdict; conventional work is retained as historical evidence and a strong control.
 
 The primary challenge starts with **US$100,000 simulated capital** and targets **US$3 billion trailing-365-day profit after complete costs**. This is an unachieved objective, not a forecast or a ceiling. Native simulated operation, useful capability, inherited advantage and physical expansion each require separate evidence. Simulated profit is not actual revenue. [Pages setup and publication boundary](docs/research/PAGES.md).
 
-## From possibility to a tested productive arrangement
+## Blue Sky only: construct the missing means
 
-The new [flexibility063 experiment](flexibility063/REGISTRATION.json) asks whether individually subthreshold loads can jointly deliver a useful capacity commitment while every participant covers its stated outside option. It connects an executable dispatch artifact and independent constraint checking to the existing financial engine. Inputs, buyers, contracts and payments are synthetic or simulated; no energy device is controlled.
+Search valuable outcomes, instruments, production processes, acceptance, participant incentives and financing together. Use the strongest applicable established mechanisms; construct new means when the accepted outcome remains out of reach. Admit a genuinely changed productive frontier, not a larger number, routine optimization or more impressive description. A small decisive construction should serve a large consequence in science, materials, energy, manufacturing or other new economic activity.
+
+The active search compares three materially different possibilities and executes discriminating probes. Observed numerical success, physical validity, commercial profit and successor advantage retain separate evidence. The [first probe](campaign/blue-sky-064/PROBE_NOTE.md) preserves a real model obstruction and the complete-alternative/calibration gaps that prevent admission. No breakthrough or new industry is inferred from an attractive fit.
+
+There is no arbitrary ceiling on buyers, productive capabilities, money, profit or candidate generation. Current engineering uses the actual execution platform window rather than a 30-minute mission cutoff. Financial conservation, security, real supplier capacity and historical experiment conditions remain intact. Included ChatGPT/Codex work makes no paid model API calls and activates no new paid services; standard public GitHub Actions compute is a separate free GitHub facility.
+
+Any game-theoretic optimum is conditional on an explicit game, information and feasible set, with an exact solution or reported bound. The US$3 billion objective remains open; no universal optimality or profit guarantee is asserted.
+
+<details>
+<summary>Historical 063: a conventional construction and its negative controls</summary>
+
+The historical [flexibility063 experiment](flexibility063/REGISTRATION.json) asks whether individually subthreshold loads can jointly deliver a useful capacity commitment while every participant covers its stated outside option. It connects an executable dispatch artifact and independent constraint checking to the existing financial engine. Inputs, buyers, contracts and payments are synthetic or simulated; no energy device is controlled. It is not the Blue Sky flagship.
 
 The conventional method is a first-class competitor. Aggregation is established engineering: passing this experiment does not establish a new industry, a novel optimization algorithm, a physically qualified grid service or superior frontier-model performance. Fresh successor work tests the inherited asset against a control allowed to construct the same means.
 
@@ -29,9 +40,11 @@ Accounting profit, project payback, available cash and the funding source of eac
 
 The executed four-period central scenario delivers four accepted planning artifacts, earns **$70.65 modeled net profit** after a declared tax provision, and finances a **$15 instrument** from native unrestricted earnings. Copycat and no-purchase scenarios each lose **$128**. Supplier failure leaves **$2.40** net profit but fails the repeat-delivery criterion. The ordinary solver and independent included generalist match the technical result; the retained instrument does not establish successor advantage. These are finite synthetic planning contracts, not energy sales or actual commerce. See the [research report](docs/transformational063/REPORT.md) and [replayable key-free evidence](campaign/transformational-063/native).
 
-## Current default: connected enterprise completion015
+</details>
 
-The default path operates eight **simulated** 70-day businesses: voluntary buyer choice, qualified orders, executed reconciliation/KPI/evidence work, separate artifact checking, collection, full modeled costs, native earnings reservations, acquisition/capacity and subsequent delivery. Use the [operator guide](docs/connected014/OPERATOR.md), [achieved-results report](docs/completion015/REPORT.md), [inspected PDF](docs/completion015/PAPER.pdf) and [full-record reconstruction commands](docs/completion015/ARTIFACTS.md) and [scale-model reconciliation](docs/completion015/SCALE_RECONCILIATION.md).
+## Historical operating reproduction: connected enterprise completion015
+
+The retained engineering entry point reproduces eight **simulated** 70-day businesses: voluntary buyer choice, qualified orders, executed reconciliation/KPI/evidence work, separate artifact checking, collection, full modeled costs, native earnings reservations, acquisition/capacity and subsequent delivery. This is historical qualification, not selection of a new flagship. Use the [operator guide](docs/connected014/OPERATOR.md), [achieved-results report](docs/completion015/REPORT.md), [inspected PDF](docs/completion015/PAPER.pdf) and [full-record reconstruction commands](docs/completion015/ARTIFACTS.md) and [scale-model reconciliation](docs/completion015/SCALE_RECONCILIATION.md).
 
 ```sh
 python3 -m pip install -r requirements-commercial010.txt
@@ -44,7 +57,7 @@ The completed economic run demonstrates conditional earned-financed expansion: t
 
 The final integration and release status is tracked in [PR #28](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/28). A source branch or successful smoke check alone does not establish publication or operation of a downloaded release. Earlier editions and their original claims, failures and URLs are preserved below.
 
-## Current executed outcome - 30 October 2026
+## Historical executed outcome - 30 October 2026
 
 **Commercial 010: CONDITIONAL_SIMULATED_GO.** Actual autonomous production supplied 19,000 synthetic source rows across 19 orders: 16 deliveries passed the separate checker and three orders were rejected. The completed four-arm experiment supports fixed-capability repeated delivery financed by prior unrestricted simulated earnings; invention improvement is not a prerequisite. See the [machine-readable result](campaign/commercial-010/RESULT.json), [browser-readable paper](docs/commercial010/REPORT.md) and [compiled PDF](docs/commercial010/paper.pdf).
 

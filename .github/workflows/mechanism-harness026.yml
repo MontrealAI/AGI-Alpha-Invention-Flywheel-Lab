@@ -13,8 +13,11 @@ permissions:
 jobs:
   bounded-offline-qualification:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false

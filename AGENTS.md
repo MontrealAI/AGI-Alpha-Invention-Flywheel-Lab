@@ -1,5 +1,17 @@
 # AGI ALPHA Flywheel: developer instructions
 
+## Active direction: Blue Sky only
+
+New mission work must pursue consequential newly attainable productive possibilities. The object of invention is the complete arrangement: valuable outcome, missing productive means, acceptance, voluntary participation and funded expansion. Established mathematics, engineering and economic mechanisms are welcome components. A routine service, optimizer, dashboard, paper or renamed historical example is not an eligible flagship by itself.
+
+Use the [064 charter](campaign/blue-sky-064/CHARTER.md), [constructive mechanisms](campaign/blue-sky-064/MECHANISMS.md) and [current candidate evidence](campaign/blue-sky-064/CANDIDATES.md). Compare strong complete alternatives with equal construction, coordination and financing permissions. A technical tie does not automatically disqualify a genuinely new enabling construction; an incumbent complete route that already delivers the same outcome within the same full budget does falsify an alleged residual. If no candidate earns admission, continue constructive research and report the failed or unresolved condition. Do not promote a conventional fallback, invent a victory or write the desired paper in advance.
+
+The primary challenge remains exactly US$100,000 simulated initial capital to US$3 billion trailing-365-day profit after complete costs. It is an unachieved milestone, not a ceiling. Game-theoretic optimality must name the game, information, feasible actions, incentive assumptions and proof or gap; it is not a claim of a globally optimal enterprise or guaranteed profit.
+
+Use included ChatGPT/Codex capabilities. Do not access paid model APIs, obtain or use model API keys, activate billing, buy services, or enable paid runners/custom images/GPU capacity. Standard public-repository GitHub Actions compute is free under GitHub's policy and is separate from ChatGPT Pro; never describe it as part of the Pro subscription or claim an account-wide billing audit. Existing account storage/billing settings are not permission for new charges.
+
+Remove discretionary engineering mission timeouts and universal business-scale ceilings. Use actual platform windows, streaming/batching and resumable work; a standard GitHub-hosted job has a non-removable six-hour boundary. Cash conservation, protected obligations, supplier contracts, security, acceptance, interruption recovery and finite registered experiment conditions remain binding. Preserve historical limits and outcomes in their original source: new authority does not retroactively turn an interrupted experiment into a pass. Old experiments and conventional controls may be reproduced for engineering evidence, but they are not the new Blue Sky flagship.
+
 ## Current mandate
 
 Build publicly in this repository: visible branches/PRs, GitHub Actions, qualified integration and releases, then an actual released-system run. Begin with current main, exact candidate source, executed evidence, current owner and existing work. Choose opportunities for consequential enabling potential, not only the latest trace’s local bottleneck. Name the constraint whose removal could open an important class of useful work and a decisive executable prototype before adding a framework; small prototypes need not imply small ambition. Historical discussion is context, not present authority; old completed assignments are not active ownership. Use the canonical `AGENTS.md`, not a competing `Agent.md`.

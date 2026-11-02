@@ -18,7 +18,7 @@ jobs:
   business:
     name: ${{ matrix.case }} / ${{ matrix.seed }} / ${{ matrix.arm }}
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 360
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -27,6 +27,9 @@ jobs:
         seed: [2610311726]
         arm: [joint, sequence]
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false

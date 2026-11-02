@@ -16,17 +16,23 @@ import time
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from connected_enterprise.platform_runtime import (
+    HOSTED_JOB_LIMIT_SECONDS, RECEIPT_SHUTDOWN_RESERVE_SECONDS,
+    COMMAND_WINDOW_SECONDS, command_budget,
+)
 LIMIT = 256_000_000
 HISTORICAL_CPU_REFERENCE_SECONDS = 2400
-HOSTED_JOB_LIMIT_SECONDS = 6 * 60 * 60
-RECEIPT_SHUTDOWN_RESERVE_SECONDS = 5 * 60
-OPERATING_HANG_TIMEOUT_SECONDS = HOSTED_JOB_LIMIT_SECONDS - RECEIPT_SHUTDOWN_RESERVE_SECONDS
+OPERATING_HANG_TIMEOUT_SECONDS = COMMAND_WINDOW_SECONDS
 PAPERS = ('PAPER.pdf', 'PAPER.tex', 'index.html', 'REPORT.md', 'PUBLICATION.json', 'PDF_QA.json')
 REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.yml', 'adaptive012.yml', 'commercial010.yml')
 # Terminal measurement009 is manual-only; path changes never renew its expired allocation.
 CONDITIONAL_WORKFLOWS = {
     'transformational063.yml': ('flexibility063/', 'connected_enterprise/transformational063.py',
                                'campaign/transformational-063/', 'docs/transformational063/',
+                               'research/blue_sky064/', 'campaign/blue-sky-064/',
+                               'tests/test_blue_sky064.py', 'tests/test_connected_open_scale064.py',
+                               'tests/test_historical_publication063.py',
                                'tests/test_connected_transformational063.py',
                                'tests/test_flexibility063.py', '.github/workflows/transformational063.yml'),
     'research-pages.yml': ('docs/research/', 'scripts/build_research_site.py',
@@ -421,11 +427,12 @@ def push_applicability(repository, source_commit):
     return {'base_commit':before, 'changed_paths':sorted(changed), 'comparison_method':method,
             'conservative_all_conditionals':False}
 
-def publish(directory, source_commit, repository, run_id, timeout):
+def publish(directory, source_commit, repository, run_id, timeout=None):
+    timeout = command_budget(timeout)['timeout_seconds']
+    deadline = None if timeout is None else time.monotonic()+timeout
     directory = Path(directory)
     manifest = verify_assets(directory, source_commit)
     applicability = push_applicability(repository, source_commit)
-    deadline = time.monotonic()+timeout
     while True:
         observed = gh(f'repos/{repository}/actions/runs?head_sha={source_commit}&event=push&branch=main&per_page=100')['workflow_runs']
         names = [row['path'].removeprefix('.github/workflows/') for row in observed
@@ -438,9 +445,9 @@ def publish(directory, source_commit, repository, run_id, timeout):
         manual_observed, manual_accepted = observed_retired_manual_runs(manual_runs, source_commit)
         if set(accepted) == required and set(manual_accepted) == set(manual_observed):
             break
-        if time.monotonic() >= deadline:
+        if deadline is not None and time.monotonic() >= deadline:
             raise TimeoutError('EXACT_MAIN_WORKFLOW_GATE_TIMEOUT')
-        time.sleep(min(10, max(0, deadline-time.monotonic())))
+        time.sleep(10 if deadline is None else min(10, max(0, deadline-time.monotonic())))
     if gh(f'repos/{repository}/git/ref/heads/main')['object']['sha'] != source_commit:
         raise ValueError('MAIN_MOVED_BEFORE_PUBLICATION')
     release_tag = tag(source_commit)
@@ -711,7 +718,10 @@ def compact_failure(output, source_commit):
     discard_disposable_failure_outputs(output)
     return result
 
-def operate_download(directory, output, source_commit, timeout, actual_release_download=False):
+def operate_download(directory, output, source_commit, timeout=None, actual_release_download=False):
+    budget = command_budget(timeout)
+    timeout = budget['timeout_seconds']
+    deadline = None if timeout is None else time.monotonic()+timeout
     directory, output = Path(directory).resolve(), Path(output).resolve()
     manifest = verify_assets(directory, source_commit)
     if output.exists() or any(path.is_symlink() for path in [output, *output.parents]):
@@ -725,19 +735,22 @@ def operate_download(directory, output, source_commit, timeout, actual_release_d
         raise ValueError('DOWNLOADED_OPERATION_MUST_HAVE_NO_GIT_ANCESTRY')
     sys.path.insert(0, str(ROOT))
     from scripts.qualify_connected014 import run_command, native_state
-    deadline = time.monotonic()+timeout
     commands = []
     receipt = {'schema':'agi-alpha/connected014-downloaded-release-operation/v1', 'accepted':False,
                'source_commit':source_commit, 'source_sha256':manifest['source_sha256'],
                'tag':manifest['tag'], 'actual_release_download':actual_release_download, 'commands':commands,
                'scope':'SIMULATED_RELEASED_DEFAULT_EXPERIMENT_REPRODUCTION_NOT_UNTOUCHED_CONFIRMATION',
+               'runtime_budget':budget,
                'resource_policy':{'policy_version':'platform-aligned-telemetry-v2',
                    'cpu_limit_seconds':None, 'cpu_acceptance_gate':False,
                    'historical_cpu_reference_seconds':HISTORICAL_CPU_REFERENCE_SECONDS,
-                   'hosted_job_limit_seconds':HOSTED_JOB_LIMIT_SECONDS,
-                   'receipt_shutdown_reserve_seconds':RECEIPT_SHUTDOWN_RESERVE_SECONDS,
+                   'hosted_job_limit_seconds':budget['platform_limit_seconds'],
+                   'supported_hosted_job_limit_seconds':HOSTED_JOB_LIMIT_SECONDS,
+                   'active_platform_limit_seconds':budget['platform_limit_seconds'],
+                   'receipt_shutdown_reserve_seconds':budget['receipt_reserve_seconds'],
                    'wall_limit_seconds':timeout, 'measurement':'POSIX kernel RUSAGE_SELF plus RUSAGE_CHILDREN deltas; includes waited descendants.',
-                   'enforcement':'CPU is measured after each completed subprocess and at final receipt, never an acceptance or spending gate. A finite platform-aligned wall deadline terminates hangs and leaves receipt/shutdown time; no retry or extra experiment is authorized.',
+                   'enforcement':('CPU is telemetry, never an acceptance or spending gate. The hosted-job window deducts setup/work and leaves receipt/shutdown time; no retry or extra experiment is authorized.' if budget['platform_limit_seconds'] is not None else
+                                  'No GitHub or ChatGPT deadline or entitlement is inferred for standalone execution. An optional explicit deadline and external host/user interruption remain effective; owned subprocess groups are drained and reaped. CPU is telemetry; no retry or extra experiment is authorized.'),
                    'scope':'Run, resume, native/operating audits, key-free packaging, public-copy audit and wrapper work after verified-asset/output-root admission. Initial asset verification and unavailable host/model billing are excluded.'}}
     def measure():
         measured = cpu_delta(cpu_start, cpu_usage())
@@ -818,19 +831,18 @@ def main():
         elif name == 'publish':
             sub.add_argument('--repository', required=True)
             sub.add_argument('--run-id', required=True, type=int)
-            sub.add_argument('--timeout-seconds', type=int, default=900)
+            sub.add_argument('--timeout-seconds', type=int)
         elif name == 'operate-download':
             sub.add_argument('--output', required=True)
-            sub.add_argument('--timeout-seconds', type=int, default=OPERATING_HANG_TIMEOUT_SECONDS)
+            sub.add_argument('--timeout-seconds', type=int)
             sub.add_argument('--actual-release-download', action='store_true')
         elif name == 'download':
             sub.add_argument('--repository', required=True)
             sub.add_argument('--receipt', required=True)
     args = parser.parse_args()
-    if args.command == 'publish' and not 1 <= args.timeout_seconds <= 2400:
-        parser.error('publish timeout-seconds must be 1..2400')
-    if args.command == 'operate-download' and not 1 <= args.timeout_seconds <= OPERATING_HANG_TIMEOUT_SECONDS:
-        parser.error(f'operate-download timeout-seconds must be 1..{OPERATING_HANG_TIMEOUT_SECONDS} (hosted job ceiling minus receipt reserve)')
+    if args.command in {'publish', 'operate-download'}:
+        try: args.timeout_seconds = command_budget(args.timeout_seconds)['timeout_seconds']
+        except (ValueError, TimeoutError) as error: parser.error(str(error))
     if args.command == 'compact-failure':
         result = compact_failure(args.output, args.source_commit)
     elif args.command == 'prepare':

@@ -101,6 +101,8 @@
     "campaign/transformational-063/native/source/vendor/alpha_claim/protected_exchange_exact_v2.py": "04a790f7982bd9ac0569f4da0bd37910b623d4c7c6210cbce80d7fd5aeac92dd",
     "campaign/transformational-063/native/source/vendor/alpha_claim/protected_exchange_prospective_exact_v2.py": "4ddf6e0ba78b7405f658dba8632e3a1304ac2f940b978e5315a454f43a911b30",
     "campaign/transformational-063/native/source/vendor/alpha_claim/protected_exchange_prospective_v1.py": "cc23e6f064302b38750caa3d755345cb6318b524d3bbdc0f9b86e6f6a4be7565",
+    "campaign/transformational-063/regression-source/PROVENANCE.json": "7af4a8f64cdcbec3badf00c925cd26fce096b09f0d4173e2499d14879e299f85",
+    "campaign/transformational-063/regression-source/tests/test_connected_transformational063.py": "54db93f2896c82fe46f53efe0b33a4e408fea11c0ba3d6569bba143c0410a090",
     "docs/transformational063/PDF_QA.json": "c2440f2b9a3ad53b872d5f06774bd2705075498bc223639411dd76d6ef624c4e",
     "docs/transformational063/REPORT.md": "944fece93e10001f494e45594875cba97644ddb5c7cd5756b86ad27c4ea286d5",
     "docs/transformational063/SOURCE_REVIEW.md": "509a846d75b5eb02cae88f55c3d91a48feaa9029692eb7442eef25ac56037a48",
@@ -116,5 +118,15 @@
     "publication.json",
     "verify_publication.py"
   ],
-  "reason": "Avoid circular self/metadata hashing. Integrity is repository-local and is not external certification."
+  "reason": "Avoid circular self/metadata hashing. Integrity is repository-local and is not external certification.",
+  "historical_source_custody": {
+    "schema": "transformational063/historical-custody/v1",
+    "original_publication_revision": "f7e67944ffc1c379dca007d7f07aa8eab5044de0",
+    "original_bound_file_count": 107,
+    "original_bound_hashes_preserved": true,
+    "technical_and_native_source": "campaign/transformational-063/native/source",
+    "regression_source_provenance": "campaign/transformational-063/regression-source/PROVENANCE.json",
+    "default_verification": "Validate this edition against its own retained source and original evidence; do not relabel later code as the historical source.",
+    "strict_current_source_option": "--require-current-source"
+  }
 }

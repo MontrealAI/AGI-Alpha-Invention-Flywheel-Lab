@@ -16,13 +16,16 @@ jobs:
   smoke:
     name: Native smoke / ${{ matrix.arm }}
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 360
     strategy:
       fail-fast: false
       max-parallel: 2
       matrix:
         arm: [incumbent, joint]
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -71,7 +74,7 @@ jobs:
     name: Matched 28-day / ${{ matrix.case }} / ${{ matrix.seed }} / ${{ matrix.arm }}
     needs: smoke
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 360
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -80,6 +83,9 @@ jobs:
         seed: [2610311737, 2610311738]
         arm: [incumbent, joint]
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -125,8 +131,11 @@ jobs:
     if: always()
     needs: [smoke, scale]
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}

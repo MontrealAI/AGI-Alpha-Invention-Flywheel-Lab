@@ -22,7 +22,9 @@ Keep private documents, customer data, credentials, signing material and interna
 
 ## Mission: construct economically reachable possibilities
 
-### Flexibility063: a bounded integrated experiment
+The active [064 charter](../../campaign/blue-sky-064/CHARTER.md) admits only consequential newly attainable productive possibilities as flagships. Read the [candidate evidence](../../campaign/blue-sky-064/CANDIDATES.md) and [mechanism discipline](../../campaign/blue-sky-064/MECHANISMS.md); all current cards remain HOLD. Conventional controls and historical operating reproductions remain evidence, not fallback mission selections. Current engineering uses actual platform windows rather than discretionary mission timers, with included ChatGPT/Codex and no paid model APIs or new paid services.
+
+### Historical flexibility063: a bounded integrated experiment
 
 The [063 campaign](../../campaign/transformational-063/README.md) connects a synthetic flexibility-pooling instrument, independent integer dispatch replay, a local browser studio and the canonical funded account. `flexibility063.kernel.solve` constructs schedules; `flexibility063.verify.verify` checks energy, capacities, participant outside options, derating and budget. `flexibility063.service` binds frozen requests and actual late-produced output bytes. The native entry is `python -m connected_enterprise.transformational063 run --root /absolute/source --output /absolute/new/experiment`; its `audit` subcommand independently replays the public account exports. This is a fresh experiment, never a migration or a top-up of an existing business.
 

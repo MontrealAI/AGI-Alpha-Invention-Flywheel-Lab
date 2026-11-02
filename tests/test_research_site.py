@@ -114,6 +114,18 @@ class ResearchSiteTests(unittest.TestCase):
         self.assertIn('docs/transformational063/paper.pdf', home)
         self.assertIn('campaign/transformational-063', home)
 
+    def test_blue_sky_primary_preserves_conventional_history_separately(self):
+        home = (self.source / 'index.html').read_text()
+        studio = (self.source / 'studio.html').read_text()
+        self.assertIn('id="frontier"', home)
+        self.assertIn('Blue Sky flagship', home)
+        self.assertNotIn('id="dispatch-form"', home)
+        self.assertNotIn('src="alpha.js"', home)
+        self.assertIn('Historical experiment / 063', home)
+        self.assertIn('Historical research / Experiment 063', studio)
+        self.assertIn('BLUE SKY: NOT_ESTABLISHED', studio)
+        self.assertNotIn('research-history.html', home)
+
     def test_external_script_and_unknown_asset_are_rejected(self):
         for link in ('https://example.com/tracker.js', 'account-recovery.json'):
             with self.subTest(link=link):

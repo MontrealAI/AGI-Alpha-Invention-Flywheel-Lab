@@ -1,4 +1,4 @@
-name: Transformational intelligence 063
+name: Blue Sky frontier and historical operating controls
 on:
   pull_request:
   push:
@@ -12,8 +12,11 @@ concurrency:
 jobs:
   qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -31,6 +34,10 @@ jobs:
         run: python -m flexibility063.experiment --output "$RUNNER_TEMP/flexibility063-technical"
       - name: Verify the inspected research edition and retained evidence identities
         run: python docs/transformational063/verify_publication.py
+      - name: Blue Sky probes, open scale and historical-custody regressions
+        run: |
+          python -m unittest tests.test_blue_sky064 tests.test_connected_open_scale064 tests.test_historical_publication063 -v
+          python -m research.blue_sky064 --output "$RUNNER_TEMP/blue-sky064-probes"
       - name: Operate and independently audit native simulated commercial cycles
         run: |
           python -m connected_enterprise.transformational063 run --root "$GITHUB_WORKSPACE" --output "$RUNNER_TEMP/transformational063"
@@ -39,8 +46,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: transformational063-public-${{ github.event.pull_request.head.sha || github.sha }}
+          name: transformational063-public-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
           path: |
+            ${{ runner.temp }}/blue-sky064-probes/RESULT.json
             ${{ runner.temp }}/flexibility063-technical
             ${{ runner.temp }}/transformational063/REPORT.json
             ${{ runner.temp }}/transformational063/PROTOCOL.json

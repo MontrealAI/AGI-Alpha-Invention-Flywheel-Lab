@@ -17,6 +17,7 @@ import zipfile
 REPOSITORY=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(REPOSITORY))
 from connected_enterprise.runner import identity, source_paths
+from connected_enterprise.platform_runtime import command_budget
 
 LIMIT_BYTES=256_000_000
 
@@ -49,31 +50,53 @@ def native_state(output):
     if not result:raise ValueError('EXECUTED_NATIVE_WORLD_REQUIRED')
     return result
 
+def _terminate_process_group(child):
+    """Drain and reap this invocation's POSIX group, including orphaned children."""
+    try: os.killpg(child.pid,signal.SIGTERM)
+    except ProcessLookupError: pass
+    drain=time.monotonic()+5
+    while True:
+        try: child.wait(timeout=max(0,drain-time.monotonic()))
+        except subprocess.TimeoutExpired: pass
+        try: os.killpg(child.pid,0)
+        except ProcessLookupError: break
+        remaining=drain-time.monotonic()
+        if remaining<=0: break
+        time.sleep(min(0.05,remaining))
+    try: os.killpg(child.pid,signal.SIGKILL)
+    except ProcessLookupError: pass
+    child.wait()
+
+
 def run_command(command,cwd,log,deadline,commands):
-    remaining=deadline-time.monotonic()
-    if remaining<=0:raise TimeoutError('CLEAN_QUALIFICATION_WALL_BOUNDARY')
+    remaining=None if deadline is None else deadline-time.monotonic()
+    if remaining is not None and remaining<=0:raise TimeoutError('CLEAN_QUALIFICATION_WALL_BOUNDARY')
     start=time.monotonic();env={**os.environ,'PYTHONPATH':str(cwd),'PYTHONNOUSERSITE':'1','PYTHONDONTWRITEBYTECODE':'1'}
     with log.with_suffix('.stdout').open('w') as stdout,log.with_suffix('.stderr').open('w') as stderr:
         child=subprocess.Popen(command,cwd=cwd,env=env,stdout=stdout,stderr=stderr,start_new_session=True)
         try:returncode=child.wait(timeout=remaining)
         except subprocess.TimeoutExpired:
-            os.killpg(child.pid,signal.SIGTERM)
-            try:child.wait(timeout=5)
-            except subprocess.TimeoutExpired:os.killpg(child.pid,signal.SIGKILL);child.wait()
+            _terminate_process_group(child)
             raise TimeoutError('CLEAN_QUALIFICATION_WALL_BOUNDARY')
+        except BaseException:
+            _terminate_process_group(child)
+            raise
     record={'command':command,'cwd':str(cwd),'returncode':returncode,'wall_seconds':time.monotonic()-start,'stdout':log.with_suffix('.stdout').name,'stderr':log.with_suffix('.stderr').name}
     commands.append(record)
     if returncode:raise RuntimeError('CLEAN_COMMAND_FAILED:'+str(command)+':see '+str(log.with_suffix('.stderr')))
     return record
 
-def qualify(output,smoke,timeout_seconds):
+def qualify(output,smoke,timeout_seconds=None):
     output=Path(output).expanduser()
     if any(p.is_symlink() for p in [output,*output.parents]):raise ValueError('UNSYMLINKED_QUALIFICATION_ROOT_REQUIRED')
     output=output.resolve()
     if output.exists():raise FileExistsError('NEW_QUALIFICATION_OUTPUT_REQUIRED')
-    output.mkdir(parents=True);start=time.monotonic();deadline=start+timeout_seconds;cpu0=resource.getrusage(resource.RUSAGE_CHILDREN);commands=[]
+    output.mkdir(parents=True);start=time.monotonic();cpu0=resource.getrusage(resource.RUSAGE_CHILDREN);commands=[]
     receipt={'schema':'agi-alpha/connected014-clean-qualification/v1','accepted':False,'mode':'ENGINEERING_SMOKE' if smoke else 'REGISTERED_CONFIRMATION_REPRODUCTION','commands':commands,'started_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())}
     try:
+        budget=command_budget(timeout_seconds)
+        timeout_seconds=budget['timeout_seconds'];deadline=None if timeout_seconds is None else start+timeout_seconds
+        receipt['runtime_budget']=budget
         dependencies={}
         for line in (REPOSITORY/'requirements-commercial010.txt').read_text().splitlines():
             if not line.strip() or line.lstrip().startswith('#'):continue
@@ -127,9 +150,10 @@ def qualify(output,smoke,timeout_seconds):
     return receipt
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--output',required=True);parser.add_argument('--smoke',action='store_true');parser.add_argument('--timeout-seconds',type=int,default=1200)
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--output',required=True);parser.add_argument('--smoke',action='store_true');parser.add_argument('--timeout-seconds',type=int)
     args=parser.parse_args()
-    if not 60<=args.timeout_seconds<=1500:parser.error('timeout-seconds must be60..1500')
+    try: command_budget(args.timeout_seconds)
+    except (ValueError,TimeoutError) as error: parser.error(str(error))
     qualify(args.output,args.smoke,args.timeout_seconds)
 
 if __name__=='__main__':main()

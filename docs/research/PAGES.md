@@ -1,6 +1,6 @@
 # Explore the flywheel and read the papers
 
-The preferred purple-and-white homepage introduces the invention flywheel and links to the separate [interactive studio](studio.html). Visitors can edit four site offers, construct a dispatch, inspect independently replayed constraints and download the result. A separate hypothetical calculator distinguishes allocated margin, cash timing, buyer savings and comparative surplus. These browser calculations control no devices, contact no service and create no order, payment or native financial record.
+The preferred purple-and-white homepage introduces the Blue Sky-only invention frontier and its admission evidence. The separate [historical research studio](studio.html) preserves the conventional063 interaction with its original negative findings. Its dispatch and hypothetical calculator run locally, control no devices, contact no service and create no order, payment or native financial record.
 
 The [original Foundry v2 PDF](autonomous-enterprises-foundry-v2.pdf) is always available in this public repository. GitHub can preview it; use its download control if your browser does not show the preview. This link does not depend on GitHub Pages, an Actions artifact, or an expiring attachment.
 

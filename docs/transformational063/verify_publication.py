@@ -38,14 +38,14 @@ def required_paths(root):
              'source-provenance.json', 'PDF_QA.json']
     paths = {str(EDITION / name) for name in names}
     paths.update(str(CAMPAIGN / name) for name in ['ADMISSION.md', 'LESSONS.md', 'README.md', 'TECHNICAL.json', 'REGRESSION_RECEIPT.json'])
-    for directory in [root / CAMPAIGN / 'native', root / CAMPAIGN / 'direct-generalist']:
+    for directory in [root / CAMPAIGN / 'native', root / CAMPAIGN / 'direct-generalist', root / CAMPAIGN / 'regression-source']:
         for path in directory.rglob('*'):
             if path.is_file() and '__pycache__' not in path.parts and path.suffix != '.pyc':
                 paths.add(str(path.relative_to(root)))
     return paths
 
 
-def verify(root):
+def verify(root, require_current_source=False):
     root = Path(root).resolve()
     metadata = read_json(root / EDITION / 'publication.json')
     if metadata['schema'] != 'transformational063/publication/v1' or set(metadata['sha256']) != required_paths(root):
@@ -62,20 +62,30 @@ def verify(root):
     if qa['pages'] < 1 or len(qa['rendered_page_sha256']) != qa['pages'] or qa['latex_overfull_boxes'] or qa['undefined_references']:
         raise ValueError('PDF_QA_INCOMPLETE')
     technical = read_json(root / CAMPAIGN / 'TECHNICAL.json')
-    for name, expected in technical['source_files_sha256'].items():
-        if sha(safe_file(root, name)) != expected:
-            raise ValueError('TECHNICAL_SOURCE_CHANGED:' + name)
-    regression = read_json(root / CAMPAIGN / 'REGRESSION_RECEIPT.json')
-    for name, expected in regression['test_source_sha256'].items():
-        if sha(safe_file(root, name)) != expected:
-            raise ValueError('RECORDED_REGRESSION_SOURCE_CHANGED:' + name)
     native = root / CAMPAIGN / 'native'
+    for name, expected in technical['source_files_sha256'].items():
+        if sha(safe_file(native / 'source', name)) != expected:
+            raise ValueError('HISTORICAL_TECHNICAL_SOURCE_CHANGED:' + name)
+        if require_current_source and sha(safe_file(root, name)) != expected:
+            raise ValueError('CURRENT_TECHNICAL_SOURCE_CHANGED:' + name)
+    regression = read_json(root / CAMPAIGN / 'REGRESSION_RECEIPT.json')
+    provenance = read_json(root / CAMPAIGN / 'regression-source' / 'PROVENANCE.json')
+    if provenance['schema'] != 'transformational063/historical-regression-source/v1' or set(provenance['files']) != set(regression['test_source_sha256']):
+        raise ValueError('HISTORICAL_REGRESSION_SOURCE_COVERAGE_CHANGED')
+    for name, expected in regression['test_source_sha256'].items():
+        retained = provenance['files'][name]
+        if retained['sha256'] != expected or sha(safe_file(root, retained['snapshot_path'])) != expected:
+            raise ValueError('HISTORICAL_REGRESSION_SOURCE_CHANGED:' + name)
+        if require_current_source and sha(safe_file(root, name)) != expected:
+            raise ValueError('CURRENT_REGRESSION_SOURCE_CHANGED:' + name)
     if (native / 'private').exists() or any('adaptive-simulation-key' in p.name for p in native.rglob('*')):
         raise ValueError('PRIVATE_RECOVERY_NOT_PUBLICATION')
     source = read_json(native / 'SOURCE.json')
     for name, expected in source['files'].items():
-        if sha(safe_file(root, name)) != expected or sha(safe_file(native / 'source', name)) != expected:
-            raise ValueError('NATIVE_CURRENT_OR_FROZEN_SOURCE_CHANGED:' + name)
+        if sha(safe_file(native / 'source', name)) != expected:
+            raise ValueError('HISTORICAL_NATIVE_SOURCE_CHANGED:' + name)
+        if require_current_source and sha(safe_file(root, name)) != expected:
+            raise ValueError('CURRENT_NATIVE_SOURCE_CHANGED:' + name)
     report = read_json(native / 'REPORT.json')
     audit = read_json(native / 'AUDIT.json')
     if report['source_sha256'] != source['sha256'] or not audit['accepted'] or set(audit['scenarios']) != set(report['scenarios']):
@@ -84,12 +94,15 @@ def verify(root):
         raise ValueError('EXPERIMENT_SCOPE_CHANGED')
     receipt = {'accepted': True, 'schema': 'transformational063/publication-check/v1',
                'pdf_sha256': sha(pdf), 'pages': qa['pages'], 'native_source_sha256': source['sha256'],
-               'scope': 'Publication bytes, current/frozen source and recorded visual/audit bindings; native operating audit is a separate replay.'}
+               'require_current_source': require_current_source,
+               'scope': 'Historical publication, retained technical/native/regression source and recorded visual/audit bindings. Current source is checked only when explicitly requested; native operating audit is a separate replay.'}
     return receipt
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', type=Path, default=Path(__file__).resolve().parents[2])
+    parser.add_argument('--require-current-source', action='store_true',
+                        help='Also require current code and tests to match this historical edition; use only for exact-source qualification.')
     args = parser.parse_args()
-    print(json.dumps(verify(args.root), sort_keys=True))
+    print(json.dumps(verify(args.root, require_current_source=args.require_current_source), sort_keys=True))

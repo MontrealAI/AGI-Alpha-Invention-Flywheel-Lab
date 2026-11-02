@@ -55,7 +55,7 @@ def fresh_account_config(manifest, *, prospective_policy=None, root=None):
 def validate_config(cfg):
     if set(cfg)-{'mechanism_policy','strategic_policy','strategic_allocation_policy','channel_menu_policy','prospective_policy','cash_diagnostic_available','monetary_policy','complete_offer_policy','refusal_recourse_policy','startup_acquisition_policy'}!=set(default_config()) or cfg['scope']!='SIMULATED' or cfg['native_time_unit']!='hour':raise ValueError('EXACT_CONNECTED_CONFIGURATION_REQUIRED')
     for key in ['horizon_days','initial_slots','maximum_slots','production_hours','acceptance_hours','clearing_hours','payment_deadline_hours','capacity_lead_hours','capacity_duration_hours']:
-        if type(cfg[key]) is not int or not 1<=cfg[key]<=10000:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
+        if type(cfg[key]) is not int or cfg[key]<1:raise ValueError('FINITE_POSITIVE_RESOURCE_REQUIRED:'+key)
     # Explicit finite scenario population; no universal market ceiling.
     if type(cfg['customer_pool']) is not int or cfg['customer_pool']<1:raise ValueError('FINITE_POSITIVE_BUYER_POPULATION_REQUIRED')
     for key in ['nonpayment_bps','arrival_bps','retention_bps','payment_bps','profit_tax_bps']:
@@ -86,7 +86,7 @@ def validate_config(cfg):
     if 'startup_acquisition_policy' in cfg:
         from .startup_acquisition048 import validate_policy as validate_startup
         validate_startup(cfg)
-    if 'cash_diagnostic_available' in cfg and (type(cfg['cash_diagnostic_available']) is not int or not 0<=cfg['cash_diagnostic_available']<=10**15):raise ValueError('FINITE_DIAGNOSTIC_CASH_REQUIRED')
+    if 'cash_diagnostic_available' in cfg and (type(cfg['cash_diagnostic_available']) is not int or cfg['cash_diagnostic_available']<0):raise ValueError('FINITE_DIAGNOSTIC_CASH_REQUIRED')
     if 'prospective_policy' in cfg:
         from .capital_lifecycle import validate_policy
         validate_policy(cfg['prospective_policy'],exact_money='monetary_policy' in cfg)
@@ -143,7 +143,7 @@ def _initial(cfg,seed,arm,source):
         'investments':[],'costs':[],'channel_state':ChannelBook(seed,cfg['channels']).export(),'used_jobs':[],'decisions':[],'current':None,'processed_events':0,'last_time':0,'tax_paid':0,
         'market':{'rival_cash':500*MICRO,'rival_collections':0,'rival_expenses':0,'rival_initial_cash':500*MICRO,'rival_observations':[],'public_rival_bps':cfg['price_pressure_bps'],'supplier_cash':100*MICRO,'supplier_initial_cash':100*MICRO,'supplier_collections':0,'supplier_expenses':0},'stop_reasons':[]}
     _schedule(s,0,'startup','000-startup')
-    for day in range(cfg['horizon_days']):_schedule(s,day*24,'plan',f'plan-{day:04d}')
+    _schedule(s,0,'plan','plan-0000')
     return s
 
 def _offer(jobs,state,buyer,cfg):
@@ -589,6 +589,8 @@ def run_world(root,manifest,config,seed,arm,output,source=None,stop_after_events
                 _event(state,t,'PROTECTION_MATURITY',ev['id'],order_id=o['id'])
                 if before['profit']!=after['profit'] or before['cash']!=after['cash']:raise ValueError('MATURITY_CANNOT_CREATE_CASH_OR_PROFIT')
             else:raise ValueError('UNKNOWN_OPERATING_EVENT')
+            if kind=='plan' and day+1<cfg['horizon_days']:
+                _schedule(state,(day+1)*24,'plan',f'plan-{day+1:04d}')
             if failpoint:failpoint('after_event_before_checkpoint',state,account)
             state['queue'].pop(0);state['last_time']=t;state['processed_events']+=1;state['current']=None;_write(path,account.seal_checkpoint(state));performed+=1
         audit=account.audit();owned=account.export();summary=audit['summary'];settled=[o for o in state['orders'] if o['outcome']=='SETTLED'];customers={o['customer_id'] for o in settled};earned=[o for o in settled if o['funding_receipt']['funding']=='EARNED' and o['price']>o['complete_cost']]

@@ -1,0 +1,259 @@
+{
+  "actual_model_host_billing": "UNKNOWN",
+  "blue_sky_verdict": "HOLD_COMPLETE_ALTERNATIVES_BENEFICIARY_AND_PHYSICAL_TRANSFER_UNRESOLVED",
+  "calibration_consistency": {
+    "interpretation": "Exact coefficient-box consistency under the authored interpretation of published plus/minus errors; not simultaneous confidence, physical falsification or a future discrepancy bound.",
+    "results": [
+      {
+        "consistent_without_extra_discrepancy": true,
+        "family": "Batch1_R496",
+        "minimum_extra_relative_force_discrepancy": 0.0,
+        "original_slope_intersection": [
+          0.34683405738899376,
+          0.3493624399591538
+        ],
+        "paired_rows": 10,
+        "phase": "d"
+      },
+      {
+        "consistent_without_extra_discrepancy": false,
+        "family": "Batch1_R496",
+        "minimum_extra_relative_force_discrepancy": 0.04459665044885655,
+        "original_slope_intersection": [
+          0.3842968481070444,
+          0.3507884580918746
+        ],
+        "paired_rows": 10,
+        "phase": "s"
+      },
+      {
+        "consistent_without_extra_discrepancy": true,
+        "family": "Batch2_R507",
+        "minimum_extra_relative_force_discrepancy": 0.0,
+        "original_slope_intersection": [
+          0.23505287903167524,
+          0.24135780429041068
+        ],
+        "paired_rows": 8,
+        "phase": "d"
+      },
+      {
+        "consistent_without_extra_discrepancy": true,
+        "family": "Batch2_R507",
+        "minimum_extra_relative_force_discrepancy": 0.0,
+        "original_slope_intersection": [
+          0.27067393623736535,
+          0.2761645419947885
+        ],
+        "paired_rows": 8,
+        "phase": "s"
+      },
+      {
+        "consistent_without_extra_discrepancy": false,
+        "family": "Batch2_R1543",
+        "minimum_extra_relative_force_discrepancy": 0.08164536001900621,
+        "original_slope_intersection": [
+          0.21857288667262348,
+          0.18579740667228792
+        ],
+        "paired_rows": 8,
+        "phase": "d"
+      },
+      {
+        "consistent_without_extra_discrepancy": false,
+        "family": "Batch2_R1543",
+        "minimum_extra_relative_force_discrepancy": 0.019192164055732156,
+        "original_slope_intersection": [
+          0.2519864208510649,
+          0.24250579582992646
+        ],
+        "paired_rows": 8,
+        "phase": "s"
+      }
+    ]
+  },
+  "exact_obstruction": {
+    "impossible_in_increasing_hertz_grammar": true,
+    "proof": "For Pi<Pj an increasing g has g(Pi)<=g(Pj). Uniform error e implies target_i-e<=target_j+e, hence e>=(target_i-target_j)/2. Every loaded fixed-height positive-radius Hertz array has dF/ddelta>0 and dP/ddelta>0.",
+    "target_tolerance": 0.005,
+    "uniform_error_lower_bound": 0.04,
+    "witness_points": [
+      {
+        "F": 0.13,
+        "P": 0.08
+      },
+      {
+        "F": 0.05,
+        "P": 0.12
+      }
+    ]
+  },
+  "forward_replay": {
+    "author_code_sha256": "94da2880d1afdc140f6e8e00bbae4e2a56015bf1511f2dcf76b0eab5d170bb84",
+    "downloaded_author_code_comparison": "EXECUTED",
+    "downloaded_author_code_max_absolute_difference": 6.661338147750939e-16,
+    "minimum_sampled_dF_dP": 1.2542272207014682,
+    "profiles": 32,
+    "scalar_vector_formula_max_absolute_difference": 6.661338147750939e-16
+  },
+  "frozen_registration_hashes": {
+    "MIXED_REGISTRATION.json": "6eece869fb53ed7d6977a88b01ce0ba78af6a5d6931aea9df99c51b4c6f348fa",
+    "REGISTRATION.json": "df25ef7d23f3873fd25b10f1a996d7c35d5611c2d1327e7417c631d295f9290e"
+  },
+  "mixed_composition": {
+    "families": [
+      {
+        "E_star_MPa": 2.08,
+        "count": 8,
+        "height_mm": 0.12,
+        "id": "Batch1_R496",
+        "parameters": {
+          "B_d": {
+            "CI95_OLS": [
+              0.8875825491638439,
+              0.8988807862450744
+            ],
+            "holdout_n": 7,
+            "holdout_rmse": 0.0011433510929616355,
+            "slope": 0.8932316677044592,
+            "train_n": 3
+          },
+          "B_s": {
+            "CI95_OLS": [
+              0.8903260330856042,
+              0.9079560534881592
+            ],
+            "holdout_n": 7,
+            "holdout_rmse": 0.0012304232251464972,
+            "slope": 0.8991410432868817,
+            "train_n": 3
+          },
+          "sigma_d": {
+            "CI95_OLS": [
+              0.36219687393907174,
+              0.40500510173419724
+            ],
+            "holdout_n": 7,
+            "holdout_rmse": 0.001714534622236096,
+            "slope": 0.3836009878366345,
+            "train_n": 3
+          },
+          "sigma_s": {
+            "CI95_OLS": [
+              0.3422516012250297,
+              0.42439204292400107
+            ],
+            "holdout_n": 7,
+            "holdout_rmse": 0.002960952271671507,
+            "slope": 0.3833218220745154,
+            "train_n": 3
+          }
+        },
+        "radius_mm": 0.496
+      },
+      {
+        "E_star_MPa": 1.59,
+        "count": 56,
+        "height_mm": 0.084,
+        "id": "Batch2_R1543",
+        "parameters": {
+          "B_d": {
+            "CI95_OLS": [
+              0.7793067550916339,
+              1.004437447917221
+            ],
+            "holdout_n": 5,
+            "holdout_rmse": 0.017073512012485106,
+            "slope": 0.8918721015044274,
+            "train_n": 3
+          },
+          "B_s": {
+            "CI95_OLS": [
+              0.7964728056593546,
+              0.9937259500312188
+            ],
+            "holdout_n": 5,
+            "holdout_rmse": 0.015807769102430973,
+            "slope": 0.8950993778452867,
+            "train_n": 3
+          },
+          "sigma_d": {
+            "CI95_OLS": [
+              0.21536764629367258,
+              0.24454440182659973
+            ],
+            "holdout_n": 5,
+            "holdout_rmse": 0.0037420472798356764,
+            "slope": 0.22995602406013615,
+            "train_n": 3
+          },
+          "sigma_s": {
+            "CI95_OLS": [
+              0.2673195337188238,
+              0.2819608006711698
+            ],
+            "holdout_n": 5,
+            "holdout_rmse": 0.001936990509088561,
+            "slope": 0.2746401671949968,
+            "train_n": 3
+          }
+        },
+        "radius_mm": 1.543
+      }
+    ],
+    "homogeneous_exact_no_go": "For every homogeneous positive family, Fs/Fd=cs/cd is constant regardless of the height distribution.",
+    "independent_interval_best_ratio_increase": 0.7203049847542802,
+    "independent_interval_worst_ratio_increase": -0.30332276904934896,
+    "interval_function_pass": false,
+    "interval_scope": "Approximate independent OLS intervals from three training rows; not simultaneous confidence or valid mixedmaterial physical prediction.",
+    "nominal_function_pass": true,
+    "nominal_ratio_increase": 0.17212125749297225,
+    "ordinary_composition_control": "An equally resourced ordinary constructor may assemble the same families; no superiority is claimed.",
+    "physical_transfer": "NOT_ESTABLISHED; source macro sigma disagreement remains.",
+    "prescribed_before_after": [
+      {
+        "dynamic_force_N": 0.04271352018282576,
+        "family_area_mm2": [
+          0.12465839649444299,
+          0.0
+        ],
+        "hold_slide_ratio": 1.0058831605981602,
+        "indentation_mm": 0.01,
+        "normal_force_N": 0.015625463070826982,
+        "static_force_N": 0.04296481068177408
+      },
+      {
+        "dynamic_force_N": 3.9902611168911863,
+        "family_area_mm2": [
+          1.24658396494443,
+          17.373359232728763
+        ],
+        "hold_slide_ratio": 1.1780044180911324,
+        "indentation_mm": 0.1,
+        "normal_force_N": 2.881804323146981,
+        "static_force_N": 4.700545225035074
+      }
+    ],
+    "threshold": 0.05
+  },
+  "native_accounts_or_real_transfers": false,
+  "published_curve_calibration": {
+    "fitted_nonnegative_scale": 1.0824633261791003,
+    "heldout_max_abs_error": 0.011234718391520682,
+    "heldout_rmse": 0.005186774828416592,
+    "holdout_count": 7,
+    "published_observations": 15,
+    "scope": "Reused published points from one device; no newly acquired or cross-device evidence.",
+    "train_count": 8
+  },
+  "schema": "blue-sky064/portable-prerequisite-reproduction/v1",
+  "scope": "COMPUTATIONAL_SOURCE_PROBES_NOT_FLAGSHIP_OR_PHYSICAL_VALIDATION",
+  "source_hashes": {
+    "__init__.py": "a4f54d47106fafe433efbe49cac5a36e97e582c1e155bfc1a5a8bece299a819a",
+    "__main__.py": "a74abf81bad35cad8f7430896b249b0a59b97ec64af2b215e0a2316a02a57f8c",
+    "fetch_author_model.py": "4362fa687bf26c42d8180279dc0eb56d54369db58b43e698be9a97696dbf17ed",
+    "probe.py": "ac6dea71281b1163970d75426f8cf25394f8a285e4371c0abee13aaee2a78859",
+    "public_calibration.json": "7aedc8e4c3e7181e381055d3815378b3f5bfe7b5b9386fd5748803d495ab1ced"
+  },
+  "wall_seconds": 1.5088460319966543
+}

@@ -1,0 +1,17 @@
+{
+  "schema": "friction064/mixed-hold-slide-probe/v1",
+  "scope": "COMPUTATIONAL_COMPOSITION_HYPOTHESIS_USING_PUBLISHED_CALIBRATION",
+  "function": "Load-selective static-hold/dynamic-slide ratio, beyond a homogeneous surface's constant ratio",
+  "source": "FigS9 raw single-microcontact measurements, not macro TableS2 free coefficients",
+  "fit": "origin least squares; first 3 rows from each static/dynamic family block for fitting; remaining numeric rows held out",
+  "families": ["Batch1_R496", "Batch2_R1543"],
+  "geometry": {"asperities": 64, "pitch_mm": 1.5, "family_A_count": 8, "family_A_height_mm": 0.12, "family_B_count": 56, "family_B_height_mm": 0.084},
+  "test_indentation_mm": [0.01, 0.10],
+  "necessary_construction_target": {"increase_in_static_dynamic_ratio_at_least": 0.05},
+  "uncertainty_test": "Coefficients fitted to training rows with approximate Student t confidence intervals; report robustness under all independent coefficient interval endpoints; NOT externally calibrated coverage",
+  "homogeneous_control": "Every height-only single calibrated family has constant Fs/Fd, independent of normal force",
+  "equal_resource_ordinary_control": "May assemble same separately calibrated families with same information; no exclusive construction or algorithmic superiority claimed",
+  "admission_limits": ["No buyer-specific contract", "Mixed surface material compliance and transfer of single-contact calibration not experimentally verified", "Source macro calibration discrepancy remains", "Only published velocity0.1mm/s applies", "No manufacturing, safety or actual commerce"],
+  "finite_budget_wall_seconds": 60,
+  "stopping": "One prescribed geometry, no parameter or threshold retuning; accept only modeled function test, HOLD physical/newindustry claims"
+}
