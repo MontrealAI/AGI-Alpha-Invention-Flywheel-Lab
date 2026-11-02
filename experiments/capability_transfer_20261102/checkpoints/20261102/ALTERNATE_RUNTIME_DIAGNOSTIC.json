@@ -1,0 +1,225 @@
+{
+  "additional_probe_needed_within_exact_two_world_contract": false,
+  "both_world_contracts_pass": true,
+  "common_policy": "Predict the arithmetic mean of both frozen hypothesis current trajectories. Actual-world identity is never an input to common_midpoint; truth labels are used only for evaluation.",
+  "common_policy_invariant_to_hypothesis_order": true,
+  "common_prediction_sha256": "3a44613e888cdbc4c83a9ab18af80fad6e6e23e2f3da6e0669aa8072ea0265f8",
+  "cost_correction": {
+    "A_hours_assumption": 1.04,
+    "F_hours_nominal_capacity_scenario_assumption": 20.0,
+    "F_max_hours_for_half_saving_given_A": 2.08,
+    "actual_F_unmeasured": true,
+    "half_saving_iff": "F<=2*A",
+    "saving_fraction": "6*A/(F+10*A)",
+    "saving_fraction_in_that_conditional_scenario": 0.20526315789473684,
+    "status": "F=20 h is an assumed nominal-capacity scenario, not a universal measured lower bound."
+  },
+  "diagnostic_accepted": true,
+  "diagnostic_source_sha256": "9582d4c4c1d99bfb90aedc2fda00c8e00a5bd0c18bb559b5c2039bf93f6a3ec3",
+  "evidence_class": "EXPLORATORY_POST_RESULT_SYNTHETIC_NUMERICAL_DIAGNOSTIC",
+  "freeze_sha256": "05bb81b18d96b1e4a6ab1110a26974dfe5cef2002bf8ac33e6141c160ceb408b",
+  "frozen_source_modified": false,
+  "input_receipts_unchanged": true,
+  "interpretation": "A common prediction meets the stated contract despite unresolved exact model identity within this two-model set. The margin below the 0.2 A RMSE limit is only about 0.829 mA. Additional hypotheses, physical model error, a changed horizon or another objective can invalidate the conclusion. Prior construction and qualification are not free.",
+  "max_nrmse": 0.09958526892410824,
+  "max_peak_relative_error": 0.06009770633030969,
+  "method_selected_after_stage_b_result": true,
+  "midpoint_current_conservation_max_residual_a": 4.956035581926699e-13,
+  "midpoint_last_time_abs_error_a_per_branch": [
+    0.4018445321618658,
+    0.13394083814259883,
+    0.13394908077728473,
+    0.13395461324196
+  ],
+  "midpoint_peak_a_per_branch": [
+    2.6097609168148406,
+    2.0707370084963372,
+    1.9995968549814447,
+    2.0093464547716766
+  ],
+  "min_rmse_margin_a": 0.0008294621517835332,
+  "origin_bitwise_reference_mismatch": true,
+  "original_result_sha256": "4c36506559fb88cdcfde81f76a12daf0af3ed369a67b0306499b0ecea2d39a8c",
+  "original_stage_b_claims": {
+    "finite_identifiability_counterexample": false,
+    "finite_numerical_implementation_accepted": true,
+    "finite_observation_design": true,
+    "new_industry_established": false,
+    "physical_K1_qualified": false,
+    "physical_K2_qualified": false,
+    "revenue_established": false,
+    "scientific_transfer_advantage_over_incumbent": false
+  },
+  "peak_acceptance_interval_intersections_a_per_branch": [
+    [
+      2.498967010669717,
+      2.870737008496325
+    ],
+    [
+      1.8636633076467035,
+      2.277810709345971
+    ],
+    [
+      1.8239148488022061,
+      2.1892908073833794
+    ],
+    [
+      1.8400445410321664,
+      2.1911826378881383
+    ]
+  ],
+  "physical_measurement_count": 0,
+  "physical_models_validated": false,
+  "prospective_confirmation": false,
+  "recomputed_reference_trace_hashes": [
+    "ee0a450bfd2a9995b072831dff7641defb0ea034ca45ee94b456f94c85cfcb29",
+    "df8cbaad02396d2d02ad0034cb4ec2e6f630ff13c6977d55cdcd9c9a58bee8fb"
+  ],
+  "recorded_reference_trace_hashes": [
+    "fa6278b2e61d6e00d9fda8b82039a08b99f571594c65bcca5573bfd8b17f7e2c",
+    "c1f3eae1ae63c15669d22d38eec6fa41d8768803854569bd1838be00f777fee9"
+  ],
+  "reference_acceptance_hashes_match": true,
+  "reference_acceptance_target": "qualified_stage_b_replay",
+  "reference_hashes_match": false,
+  "reference_validation_mode": "SOURCE_BOUND_SAME_ENVIRONMENT_REPLAY",
+  "replay_full_numerical_qualification_checked": true,
+  "replay_provenance_scope": "Replay mode checks the supplied full Stage B receipt, frozen sources, existing numerical tolerances and exact local reference hashes. Fresh execution provenance belongs to the producing workflow; an unsigned receipt alone does not prove its execution time or origin.",
+  "replay_reference_hashes_match": true,
+  "replay_reference_trace_hashes": [
+    "ee0a450bfd2a9995b072831dff7641defb0ea034ca45ee94b456f94c85cfcb29",
+    "df8cbaad02396d2d02ad0034cb4ec2e6f630ff13c6977d55cdcd9c9a58bee8fb"
+  ],
+  "replay_result_sha256": "fb52e1cab0410a69753837c4475a1db4ec306af7358f85b99fb595baf8f80637",
+  "runtime": {
+    "numpy": "2.3.5",
+    "python": "3.12.14",
+    "scipy": "1.17.0"
+  },
+  "schema": "agi-alpha/cell-pack-post-result-diagnostic/v3",
+  "scope": "The exact two frozen synthetic worlds and registered 2100-second interval. The midpoint policy was selected after Stage B; parameters, thresholds and original results are unchanged.",
+  "source_hashes": {
+    "PREREGISTRATION.md": "3bb45964face70b36ea834dd189eb1da14bbf76dc23584071ac3300abfe162d3",
+    "STAGE_B.md": "55d537018277e915d465022a292a73f0c0936b6e901b3bb9c852a1a05c20eb0e",
+    "instrument.py": "e1bd26b79e35e19de28a1c473b89701562b6d035f0e72e7dcffbfe98d3ca1dd4",
+    "run_stage_b.py": "573ad26bbdcfdf356f8866cfe75e27ddc8df90e11408ab831368396827269eb8",
+    "verifier.py": "d8fe39246161b52e359c646bcc319a232a1d62977d6c47a5725f9ab011d11a0c"
+  },
+  "thresholds": {
+    "horizon_s": 2100.0,
+    "normalization_current_per_branch_a": 2.0,
+    "nrmse_limit": 0.1,
+    "peak_relative_error_limit": 0.1,
+    "points": 4201,
+    "step_s": 0.5,
+    "total_current_a": 8.0
+  },
+  "trace_csv_file": "midpoint_reference_traces.csv",
+  "trace_csv_sha256": "e75344f766e88f100b98e772288e89091e6338fd327c7f9dad6e65cb665c7a95",
+  "worlds": [
+    {
+      "capacity_ah": [
+        2.0,
+        2.0,
+        2.0,
+        2.0
+      ],
+      "metrics": {
+        "all_contracts_pass": true,
+        "complete_trace_used": true,
+        "max_abs_difference_a": 0.4018445321618658,
+        "nrmse_contract_pass_per_branch": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "nrmse_per_branch": [
+          0.09958526892410824,
+          0.03344169820515569,
+          0.033146738897697973,
+          0.03299961070933826
+        ],
+        "peak_abs_error_a_per_branch": [
+          0.0,
+          0.0,
+          0.026975199243228776,
+          0.03514747970850829
+        ],
+        "peak_contract_pass_per_branch": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "peak_relative_error_per_branch": [
+          0.0,
+          0.0,
+          0.013310752601663086,
+          0.017191285880456562
+        ],
+        "rmse_a_per_branch": [
+          0.19917053784821648,
+          0.06688339641031138,
+          0.06629347779539595,
+          0.06599922141867652
+        ]
+      }
+    },
+    {
+      "capacity_ah": [
+        3.0,
+        2.0,
+        2.0,
+        2.0
+      ],
+      "metrics": {
+        "all_contracts_pass": true,
+        "complete_trace_used": true,
+        "max_abs_difference_a": 0.4018445321618658,
+        "nrmse_contract_pass_per_branch": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "nrmse_per_branch": [
+          0.09958526892410824,
+          0.03344169820515569,
+          0.033146738897697973,
+          0.03299961070933826
+        ],
+        "peak_abs_error_a_per_branch": [
+          0.1668690950404006,
+          0.0,
+          0.009332484632917915,
+          0.01736223850973273
+        ],
+        "peak_contract_pass_per_branch": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "peak_relative_error_per_branch": [
+          0.06009770633030969,
+          0.0,
+          0.00468906783036248,
+          0.008716052249808396
+        ],
+        "rmse_a_per_branch": [
+          0.19917053784821648,
+          0.06688339641031138,
+          0.06629347779539595,
+          0.06599922141867652
+        ]
+      }
+    }
+  ],
+  "worlds_last_time_branch_difference_a": [
+    0.8036890643237316,
+    0.26788167628519766,
+    0.26789816155456947,
+    0.26790922648392
+  ]
+}

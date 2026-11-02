@@ -1,0 +1,803 @@
+{
+  "ablations": {
+    "equal_sharing": {
+      "complete_trace_used": true,
+      "max_abs_difference_a": 0.7766300118552412,
+      "nrmse_per_branch": [
+        0.19315751314068114,
+        0.06966806753960991,
+        0.06487279171919248,
+        0.0687749883260453
+      ],
+      "peak_abs_error_a_per_branch": [
+        0.7766300118552412,
+        0.07073700849633724,
+        0.009735629651473232,
+        0.008015783738056115
+      ],
+      "peak_relative_error_per_branch": [
+        0.27970237609595155,
+        0.034160305343508016,
+        0.004891626357039376,
+        0.004024019704884071
+      ],
+      "rmse_a_per_branch": [
+        0.3863150262813623,
+        0.13933613507921982,
+        0.12974558343838496,
+        0.1375499766520906
+      ]
+    },
+    "no_interconnect": {
+      "complete_trace_used": true,
+      "max_abs_difference_a": 0.6097609168148406,
+      "nrmse_per_branch": [
+        0.05905810821322179,
+        0.009364148691636433,
+        0.02542962582311034,
+        0.04223477670738796
+      ],
+      "peak_abs_error_a_per_branch": [
+        0.03012819936396305,
+        0.07073685739442226,
+        0.009735780753388212,
+        0.008015934839971095
+      ],
+      "peak_relative_error_per_branch": [
+        0.010850635207185023,
+        0.03416023237339431,
+        0.004891702277563921,
+        0.004024095559860103
+      ],
+      "rmse_a_per_branch": [
+        0.11811621642644358,
+        0.018728297383272866,
+        0.05085925164622068,
+        0.08446955341477592
+      ]
+    }
+  },
+  "claims": {
+    "finite_identifiability_counterexample": false,
+    "finite_numerical_implementation_accepted": true,
+    "finite_observation_design": true,
+    "new_industry_established": false,
+    "physical_K1_qualified": false,
+    "physical_K2_qualified": false,
+    "revenue_established": false,
+    "scientific_transfer_advantage_over_incumbent": false
+  },
+  "constructed_artifact": {
+    "action": "ABSTAIN_ON_UNIDENTIFIED_WHOLE_DISCHARGE_PREDICTION",
+    "candidate_capacity_ah": [
+      2,
+      3
+    ],
+    "next_measurement": {
+      "c_rate": 0.75,
+      "discharge_seconds": 1439.9999999999998,
+      "fraction": 0.3,
+      "rest_seconds": 300,
+      "separates": true,
+      "terminal_separation_v": 0.011103920118343158,
+      "total_seconds": 1739.9999999999998
+    },
+    "observed_short_difference_v": 8.881784197001252e-16,
+    "physical_prior_qualified": false,
+    "remaining_costs": [
+      "initial600s characterization",
+      "SOC preparation and reset",
+      "prior construction and qualification",
+      "temperature and aging qualification",
+      "independent physical confirmation"
+    ]
+  },
+  "cost_bound": {
+    "exact_fraction": "39/190",
+    "full_anchors": 10,
+    "full_hours_lower_bound_model": 30.4,
+    "half_burden_gate": false,
+    "maximum_fraction_saved_at_shared_lower_bound": 0.20526315789473684,
+    "per_anchor_hours_approximation": 1.04,
+    "per_anchor_hours_required_for_half_saving": 10.0,
+    "saved_channel_hours": 6.24,
+    "scope": "occupied-channel hours under unchanged shared acquisition and equal per-anchor rates; not a universal dollar-cost bound",
+    "shared_hours_lower_bound": 20.0,
+    "source": "https://doi.org/10.1016/j.dib.2024.110227",
+    "sparse_anchors": 4,
+    "sparse_hours_lower_bound_model": 24.16,
+    "unmodeled_common_costs": [
+      "charging",
+      "other rests",
+      "calibration",
+      "checking",
+      "shared-prior acquisition"
+    ]
+  },
+  "evidence_class": "EXECUTED_SYNTHETIC_NUMERICAL_EXPERIMENT",
+  "freeze_sha256": "05bb81b18d96b1e4a6ab1110a26974dfe5cef2002bf8ac33e6141c160ceb408b",
+  "numerical_verification": {
+    "fixture_seed": 20261102,
+    "identifiability_counterexample": {
+      "complete_trace_rmse_separation_a": [
+        0.39834107569643296,
+        0.13376679282062276,
+        0.1325869555907919,
+        0.13199844283735304
+      ],
+      "half_separation_minimax_rmse_lower_bound_a": [
+        0.19917053784821648,
+        0.06688339641031138,
+        0.06629347779539595,
+        0.06599922141867652
+      ],
+      "last_time_branch_difference_a": [
+        0.8036890643237316,
+        0.26788167628519766,
+        0.26789816155456947,
+        0.26790922648392
+      ],
+      "peak_10_percent_acceptance_intervals_disjoint": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "peak_10_percent_both_world_guarantee_impossible": false,
+      "scope": "For any predictor receiving only the identical registered short-test observations, at least one of these two synthetic worlds must fail any disjoint peak-acceptance intervals. No probability or physical prevalence is inferred.",
+      "world_a_peak_a": [
+        2.6097609168148406,
+        2.0707370084963372,
+        2.0265720542246735,
+        2.044493934480185
+      ],
+      "world_b_peak_a": [
+        2.776630011855241,
+        2.0707370084963372,
+        1.9902643703485268,
+        1.9919842162619439
+      ]
+    },
+    "max_current_difference_a": 3.3857361358968774e-12,
+    "max_kcl_residual_a": 3.836930773104541e-13,
+    "max_kvl_residual_v": 1.7468665403086447e-15,
+    "max_terminal_voltage_difference_v": 1.1590728377086634e-13,
+    "max_trace_error_a": 3.2102473568329515e-06,
+    "nodal_cases": 128,
+    "numerical_constructor_accepted": true,
+    "probe_check": {
+      "accepted": true,
+      "constructor_menu_matches": true,
+      "constructor_selects_menu_minimum": true,
+      "evaluated_probes": 21,
+      "independence": "Probe choice receives both registered hypotheses and no actual-world identity. Only after selection does the observation-only inference routine receive the voltage; truth labels are used solely by this evaluator.",
+      "max_terminal_separation_difference_v": 3.698224837478392e-08,
+      "observation_only_decisions": [
+        {
+          "compatible_hypotheses_from_observation_only": [
+            0
+          ],
+          "correct": true,
+          "measurement_error_v": -0.002,
+          "observation_v": 3.943936819001054,
+          "world_for_evaluation_only": 0
+        },
+        {
+          "compatible_hypotheses_from_observation_only": [
+            0
+          ],
+          "correct": true,
+          "measurement_error_v": 0.0,
+          "observation_v": 3.9459368190010538,
+          "world_for_evaluation_only": 0
+        },
+        {
+          "compatible_hypotheses_from_observation_only": [
+            0
+          ],
+          "correct": true,
+          "measurement_error_v": 0.002,
+          "observation_v": 3.9479368190010535,
+          "world_for_evaluation_only": 0
+        },
+        {
+          "compatible_hypotheses_from_observation_only": [
+            1
+          ],
+          "correct": true,
+          "measurement_error_v": -0.002,
+          "observation_v": 3.955040739119397,
+          "world_for_evaluation_only": 1
+        },
+        {
+          "compatible_hypotheses_from_observation_only": [
+            1
+          ],
+          "correct": true,
+          "measurement_error_v": 0.0,
+          "observation_v": 3.957040739119397,
+          "world_for_evaluation_only": 1
+        },
+        {
+          "compatible_hypotheses_from_observation_only": [
+            1
+          ],
+          "correct": true,
+          "measurement_error_v": 0.002,
+          "observation_v": 3.9590407391193967,
+          "world_for_evaluation_only": 1
+        }
+      ],
+      "prior_observation_compatible_hypotheses": [
+        0,
+        1
+      ],
+      "scope": "Optimality only within 21 specified probes and a two-model synthetic hypothesis set. Reset/SOC preparation and physical qualification remain unresolved.",
+      "selected_by_independent_enumeration": {
+        "c_rate": 0.75,
+        "common_extracted_ah": 0.5999999999999999,
+        "common_imposed_current_a": 1.5,
+        "discharge_seconds": 1439.9999999999998,
+        "fraction": 0.3,
+        "predicted_endpoints_v": [
+          3.9459368190010538,
+          3.957040739119397
+        ],
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.011103920118343158,
+        "total_seconds": 1739.9999999999998
+      },
+      "selection_invariant_to_hypothesis_order": true
+    },
+    "reference_trace_hashes": [
+      "ee0a450bfd2a9995b072831dff7641defb0ea034ca45ee94b456f94c85cfcb29",
+      "df8cbaad02396d2d02ad0034cb4ec2e6f630ff13c6977d55cdcd9c9a58bee8fb"
+    ],
+    "trace_checks": [
+      {
+        "capacities_ah": [
+          2.0,
+          2.0,
+          2.0,
+          2.0
+        ],
+        "step_s_runs": {
+          "0.5": {
+            "metrics_against_independent_analytic_reference": {
+              "complete_trace_used": true,
+              "max_abs_difference_a": 3.2102473568329515e-06,
+              "nrmse_per_branch": [
+                4.464017081665184e-07,
+                4.6032660262400494e-07,
+                4.3170133415484985e-07,
+                4.0849901179294634e-07
+              ],
+              "peak_abs_error_a_per_branch": [
+                1.9539925233402755e-14,
+                2.842170943040401e-14,
+                1.619889387960427e-06,
+                1.4930776490729158e-06
+              ],
+              "peak_relative_error_per_branch": [
+                7.48724724456784e-15,
+                1.3725407578938473e-14,
+                7.993248424518342e-07,
+                7.302920414153896e-07
+              ],
+              "rmse_a_per_branch": [
+                8.928034163330368e-07,
+                9.206532052480099e-07,
+                8.634026683096997e-07,
+                8.169980235858927e-07
+              ]
+            },
+            "requested_horizon_completed": true
+          },
+          "1.0": {
+            "metrics_against_independent_analytic_reference": {
+              "complete_trace_used": true,
+              "max_abs_difference_a": 3.0836206272866207e-06,
+              "nrmse_per_branch": [
+                4.458480568066842e-07,
+                4.606868239868985e-07,
+                4.3105746334695936e-07,
+                4.0848814432246827e-07
+              ],
+              "peak_abs_error_a_per_branch": [
+                1.9539925233402755e-14,
+                2.842170943040401e-14,
+                1.628939597431156e-06,
+                1.4885395547281632e-06
+              ],
+              "peak_relative_error_per_branch": [
+                7.48724724456784e-15,
+                1.3725407578938473e-14,
+                8.037906191818502e-07,
+                7.280723750871025e-07
+              ],
+              "rmse_a_per_branch": [
+                8.916961136133684e-07,
+                9.21373647973797e-07,
+                8.621149266939187e-07,
+                8.169762886449365e-07
+              ]
+            },
+            "requested_horizon_completed": true
+          },
+          "2.0": {
+            "metrics_against_independent_analytic_reference": {
+              "complete_trace_used": true,
+              "max_abs_difference_a": 3.097028653975542e-06,
+              "nrmse_per_branch": [
+                4.45521220514652e-07,
+                4.6319556162421946e-07,
+                4.3024780105284156e-07,
+                4.08828645846456e-07
+              ],
+              "peak_abs_error_a_per_branch": [
+                1.9539925233402755e-14,
+                2.842170943040401e-14,
+                6.650754258430425e-07,
+                9.38975786901608e-07
+              ],
+              "peak_relative_error_per_branch": [
+                7.48724724456784e-15,
+                1.3725407578938473e-14,
+                3.2817754216231284e-07,
+                4.592705450109555e-07
+              ],
+              "rmse_a_per_branch": [
+                8.91042441029304e-07,
+                9.263911232484389e-07,
+                8.604956021056831e-07,
+                8.17657291692912e-07
+              ]
+            },
+            "requested_horizon_completed": true
+          }
+        }
+      },
+      {
+        "capacities_ah": [
+          3.0,
+          2.0,
+          2.0,
+          2.0
+        ],
+        "step_s_runs": {
+          "0.5": {
+            "metrics_against_independent_analytic_reference": {
+              "complete_trace_used": true,
+              "max_abs_difference_a": 2.923258686671204e-06,
+              "nrmse_per_branch": [
+                2.920485658880106e-07,
+                4.374126843869454e-07,
+                4.239036970255767e-07,
+                4.048132847730513e-07
+              ],
+              "peak_abs_error_a_per_branch": [
+                3.187360793077687e-07,
+                2.842170943040401e-14,
+                1.123392237900589e-06,
+                9.724084257811683e-07
+              ],
+              "peak_relative_error_per_branch": [
+                1.1479242028893906e-07,
+                1.3725407578938473e-14,
+                5.644437264903985e-07,
+                4.881607082238535e-07
+              ],
+              "rmse_a_per_branch": [
+                5.840971317760212e-07,
+                8.748253687738908e-07,
+                8.478073940511534e-07,
+                8.096265695461025e-07
+              ]
+            },
+            "requested_horizon_completed": true
+          },
+          "1.0": {
+            "metrics_against_independent_analytic_reference": {
+              "complete_trace_used": true,
+              "max_abs_difference_a": 2.921394449906245e-06,
+              "nrmse_per_branch": [
+                2.966621280345828e-07,
+                4.3552682073900283e-07,
+                4.275420359974546e-07,
+                4.1227582259734084e-07
+              ],
+              "peak_abs_error_a_per_branch": [
+                3.133886483652759e-07,
+                2.842170943040401e-14,
+                3.537713837431511e-07,
+                9.784900463216673e-07
+              ],
+              "peak_relative_error_per_branch": [
+                1.128665493880048e-07,
+                1.3725407578938473e-14,
+                1.7775095821036592e-07,
+                4.912137547745492e-07
+              ],
+              "rmse_a_per_branch": [
+                5.933242560691656e-07,
+                8.710536414780057e-07,
+                8.550840719949092e-07,
+                8.245516451946817e-07
+              ]
+            },
+            "requested_horizon_completed": true
+          },
+          "2.0": {
+            "metrics_against_independent_analytic_reference": {
+              "complete_trace_used": true,
+              "max_abs_difference_a": 3.1086653757839144e-06,
+              "nrmse_per_branch": [
+                3.0053361086654745e-07,
+                4.6277222917136355e-07,
+                4.4501997139924374e-07,
+                4.254221454157129e-07
+              ],
+              "peak_abs_error_a_per_branch": [
+                4.162521296535715e-07,
+                2.842170943040401e-14,
+                2.1335399402744315e-07,
+                9.59984429727001e-07
+              ],
+              "peak_relative_error_per_branch": [
+                1.4991270996723373e-07,
+                1.3725407578938473e-14,
+                1.0719883340197228e-07,
+                4.819237129943022e-07
+              ],
+              "rmse_a_per_branch": [
+                6.010672217330949e-07,
+                9.255444583427271e-07,
+                8.900399427984875e-07,
+                8.508442908314258e-07
+              ]
+            },
+            "requested_horizon_completed": true
+          }
+        }
+      }
+    ]
+  },
+  "physical_measurement_count": 0,
+  "probe": {
+    "evaluated_probes": 21,
+    "full_c20_discharge_seconds": 72000,
+    "nominal_capacity_ah": 2.0,
+    "observation_error_bound_v": 0.002,
+    "optimality_gap_seconds_in_menu": 0,
+    "physical_safety_qualified": false,
+    "prior_short_observation_seconds": 600,
+    "probes": [
+      {
+        "c_rate": 0.15,
+        "discharge_seconds": 1200.0000000000002,
+        "fraction": 0.05,
+        "rest_seconds": 300,
+        "separates": false,
+        "terminal_separation_v": 0.0,
+        "total_seconds": 1500.0000000000002
+      },
+      {
+        "c_rate": 0.5,
+        "discharge_seconds": 360.0,
+        "fraction": 0.05,
+        "rest_seconds": 300,
+        "separates": false,
+        "terminal_separation_v": 0.0,
+        "total_seconds": 660.0
+      },
+      {
+        "c_rate": 0.75,
+        "discharge_seconds": 240.0,
+        "fraction": 0.05,
+        "rest_seconds": 300,
+        "separates": false,
+        "terminal_separation_v": 0.0,
+        "total_seconds": 540.0
+      },
+      {
+        "c_rate": 0.15,
+        "discharge_seconds": 2400.0000000000005,
+        "fraction": 0.1,
+        "rest_seconds": 300,
+        "separates": false,
+        "terminal_separation_v": 0.0,
+        "total_seconds": 2700.0000000000005
+      },
+      {
+        "c_rate": 0.5,
+        "discharge_seconds": 720.0,
+        "fraction": 0.1,
+        "rest_seconds": 300,
+        "separates": false,
+        "terminal_separation_v": 0.0,
+        "total_seconds": 1020.0
+      },
+      {
+        "c_rate": 0.75,
+        "discharge_seconds": 480.0,
+        "fraction": 0.1,
+        "rest_seconds": 300,
+        "separates": false,
+        "terminal_separation_v": 0.0,
+        "total_seconds": 780.0
+      },
+      {
+        "c_rate": 0.15,
+        "discharge_seconds": 4800.000000000001,
+        "fraction": 0.2,
+        "rest_seconds": 300,
+        "separates": false,
+        "terminal_separation_v": 1.2327415532809027e-08,
+        "total_seconds": 5100.000000000001
+      },
+      {
+        "c_rate": 0.5,
+        "discharge_seconds": 1440.0,
+        "fraction": 0.2,
+        "rest_seconds": 300,
+        "separates": false,
+        "terminal_separation_v": 1.2327415532809027e-08,
+        "total_seconds": 1740.0
+      },
+      {
+        "c_rate": 0.75,
+        "discharge_seconds": 960.0,
+        "fraction": 0.2,
+        "rest_seconds": 300,
+        "separates": false,
+        "terminal_separation_v": 1.2327415532809027e-08,
+        "total_seconds": 1260.0
+      },
+      {
+        "c_rate": 0.15,
+        "discharge_seconds": 7200.0,
+        "fraction": 0.3,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.011103920118343158,
+        "total_seconds": 7500.0
+      },
+      {
+        "c_rate": 0.5,
+        "discharge_seconds": 2160.0,
+        "fraction": 0.3,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.011103920118343158,
+        "total_seconds": 2460.0
+      },
+      {
+        "c_rate": 0.75,
+        "discharge_seconds": 1439.9999999999998,
+        "fraction": 0.3,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.011103920118343158,
+        "total_seconds": 1739.9999999999998
+      },
+      {
+        "c_rate": 0.15,
+        "discharge_seconds": 9600.000000000002,
+        "fraction": 0.4,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.04441564349112426,
+        "total_seconds": 9900.000000000002
+      },
+      {
+        "c_rate": 0.5,
+        "discharge_seconds": 2880.0,
+        "fraction": 0.4,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.0444156434911247,
+        "total_seconds": 3180.0
+      },
+      {
+        "c_rate": 0.75,
+        "discharge_seconds": 1920.0,
+        "fraction": 0.4,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.0444156434911247,
+        "total_seconds": 2220.0
+      },
+      {
+        "c_rate": 0.15,
+        "discharge_seconds": 12000.0,
+        "fraction": 0.5,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.09993524408284049,
+        "total_seconds": 12300.0
+      },
+      {
+        "c_rate": 0.5,
+        "discharge_seconds": 3600.0,
+        "fraction": 0.5,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.09993524408284049,
+        "total_seconds": 3900.0
+      },
+      {
+        "c_rate": 0.75,
+        "discharge_seconds": 2400.0,
+        "fraction": 0.5,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.09993524408284049,
+        "total_seconds": 2700.0
+      },
+      {
+        "c_rate": 0.15,
+        "discharge_seconds": 14400.0,
+        "fraction": 0.6,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.17766272189349142,
+        "total_seconds": 14700.0
+      },
+      {
+        "c_rate": 0.5,
+        "discharge_seconds": 4320.0,
+        "fraction": 0.6,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.17766272189349142,
+        "total_seconds": 4620.0
+      },
+      {
+        "c_rate": 0.75,
+        "discharge_seconds": 2879.9999999999995,
+        "fraction": 0.6,
+        "rest_seconds": 300,
+        "separates": true,
+        "terminal_separation_v": 0.17766272189349142,
+        "total_seconds": 3179.9999999999995
+      }
+    ],
+    "reset_and_soc_preparation_cost": "UNRESOLVED",
+    "scope": "finite_two_model_observation_design_only",
+    "selected": {
+      "c_rate": 0.75,
+      "discharge_seconds": 1439.9999999999998,
+      "fraction": 0.3,
+      "rest_seconds": 300,
+      "separates": true,
+      "terminal_separation_v": 0.011103920118343158,
+      "total_seconds": 1739.9999999999998
+    }
+  },
+  "probe_independent_check": {
+    "accepted": true,
+    "constructor_menu_matches": true,
+    "constructor_selects_menu_minimum": true,
+    "evaluated_probes": 21,
+    "independence": "Probe choice receives both registered hypotheses and no actual-world identity. Only after selection does the observation-only inference routine receive the voltage; truth labels are used solely by this evaluator.",
+    "max_terminal_separation_difference_v": 3.698224837478392e-08,
+    "observation_only_decisions": [
+      {
+        "compatible_hypotheses_from_observation_only": [
+          0
+        ],
+        "correct": true,
+        "measurement_error_v": -0.002,
+        "observation_v": 3.943936819001054,
+        "world_for_evaluation_only": 0
+      },
+      {
+        "compatible_hypotheses_from_observation_only": [
+          0
+        ],
+        "correct": true,
+        "measurement_error_v": 0.0,
+        "observation_v": 3.9459368190010538,
+        "world_for_evaluation_only": 0
+      },
+      {
+        "compatible_hypotheses_from_observation_only": [
+          0
+        ],
+        "correct": true,
+        "measurement_error_v": 0.002,
+        "observation_v": 3.9479368190010535,
+        "world_for_evaluation_only": 0
+      },
+      {
+        "compatible_hypotheses_from_observation_only": [
+          1
+        ],
+        "correct": true,
+        "measurement_error_v": -0.002,
+        "observation_v": 3.955040739119397,
+        "world_for_evaluation_only": 1
+      },
+      {
+        "compatible_hypotheses_from_observation_only": [
+          1
+        ],
+        "correct": true,
+        "measurement_error_v": 0.0,
+        "observation_v": 3.957040739119397,
+        "world_for_evaluation_only": 1
+      },
+      {
+        "compatible_hypotheses_from_observation_only": [
+          1
+        ],
+        "correct": true,
+        "measurement_error_v": 0.002,
+        "observation_v": 3.9590407391193967,
+        "world_for_evaluation_only": 1
+      }
+    ],
+    "prior_observation_compatible_hypotheses": [
+      0,
+      1
+    ],
+    "scope": "Optimality only within 21 specified probes and a two-model synthetic hypothesis set. Reset/SOC preparation and physical qualification remain unresolved.",
+    "selected_by_independent_enumeration": {
+      "c_rate": 0.75,
+      "common_extracted_ah": 0.5999999999999999,
+      "common_imposed_current_a": 1.5,
+      "discharge_seconds": 1439.9999999999998,
+      "fraction": 0.3,
+      "predicted_endpoints_v": [
+        3.9459368190010538,
+        3.957040739119397
+      ],
+      "rest_seconds": 300,
+      "separates": true,
+      "terminal_separation_v": 0.011103920118343158,
+      "total_seconds": 1739.9999999999998
+    },
+    "selection_invariant_to_hypothesis_order": true
+  },
+  "resources": {
+    "actual_model_cost_usd": null,
+    "actual_model_tokens": null,
+    "cpu_seconds": 67.649123011,
+    "wall_seconds": 67.6558976639999
+  },
+  "schema": "agi-alpha/cell-pack-stage-b-result/v1",
+  "short_trace": {
+    "current_a": 0.75,
+    "duration_s": 600,
+    "max_difference_v": 8.881784197001252e-16
+  },
+  "source_hashes": {
+    "PREREGISTRATION.md": "3bb45964face70b36ea834dd189eb1da14bbf76dc23584071ac3300abfe162d3",
+    "STAGE_B.md": "55d537018277e915d465022a292a73f0c0936b6e901b3bb9c852a1a05c20eb0e",
+    "instrument.py": "e1bd26b79e35e19de28a1c473b89701562b6d035f0e72e7dcffbfe98d3ca1dd4",
+    "run_stage_b.py": "573ad26bbdcfdf356f8866cfe75e27ddc8df90e11408ab831368396827269eb8",
+    "verifier.py": "d8fe39246161b52e359c646bcc319a232a1d62977d6c47a5725f9ab011d11a0c"
+  },
+  "stronger_short_trace": {
+    "argument": "Both models have the same OCV as a function of cumulative discharge through 0.4 Ah and identical R0, Rp and tau; identical current histories in that range yield identical observed voltage histories.",
+    "identical_within_1e_minus_12_v": true,
+    "max_voltage_difference_v": 8.881784197001252e-16,
+    "probes": [
+      {
+        "current_a": 0.75,
+        "duration_s": 600.0,
+        "identical_within_1e_minus_12_v": true,
+        "max_voltage_difference_v": 8.881784197001252e-16,
+        "maximum_discharged_ah": 0.125
+      },
+      {
+        "current_a": 1.0,
+        "duration_s": 1440.0,
+        "identical_within_1e_minus_12_v": true,
+        "max_voltage_difference_v": 8.881784197001252e-16,
+        "maximum_discharged_ah": 0.4
+      }
+    ]
+  }
+}
