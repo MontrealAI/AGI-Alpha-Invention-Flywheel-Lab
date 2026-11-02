@@ -38,7 +38,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install pinned numerical and existing native dependencies
-        run: python -m pip install --only-binary=:all: -r requirements-portfolio071.txt
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-portfolio071.txt
       - name: Participation, source binding, native accounting and tampering regressions
         run: python -m unittest discover -s tests -p 'test_portfolio071*.py' -v
       - name: Reproduce all five routes and independent native audits

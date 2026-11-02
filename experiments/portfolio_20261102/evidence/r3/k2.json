@@ -1,0 +1,153 @@
+{
+  "artifact": {
+    "charge_kw": [
+      90.16047532841499,
+      100.0,
+      0.0,
+      0.0,
+      0.0,
+      27.173913043478258
+    ],
+    "cop": 3.0121363636363636,
+    "cpu_seconds": 0.0017189049999999928,
+    "delivered_kw": [
+      79.99999999999999,
+      80.0,
+      80.0,
+      80.0,
+      80.0,
+      80.0
+    ],
+    "direct_heat_kw": [
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      0.0,
+      0.0
+    ],
+    "discharge_kw": [
+      0.0,
+      0.0,
+      80.0,
+      80.0,
+      0.0,
+      0.0
+    ],
+    "electric_kw": [
+      56.49162414512698,
+      59.75825071302458,
+      0.0,
+      0.0,
+      26.559222539122036,
+      35.58069758637816
+    ],
+    "electricity_kwh": 178.38979498365177,
+    "model": "fixed COP, hourly mixing, explicit storage loss; physical qualification absent",
+    "pump_hot_kw": [
+      170.16047532841498,
+      180.0,
+      0.0,
+      0.0,
+      80.0,
+      107.17391304347825
+    ],
+    "schema": "portfolio071/thermal-design/v1",
+    "solver_status": 0,
+    "status": "feasible",
+    "storage_kwh": [
+      0.0,
+      82.9476373021418,
+      174.69879439023538,
+      87.21817626793424,
+      0.0,
+      -0.0,
+      25.0
+    ],
+    "task": "thermal_continuity"
+  },
+  "evidence_stage": "Identical original artifact rechecked after tolerance implementation correction; not new blind confirmation.",
+  "independent_receipt": {
+    "accepted": true,
+    "artifact_sha256": "bc3ea44d687d1ce59b7af6fde72d67410e26ab8be7259eb66c3c49b51af1c662",
+    "checks": {
+      "charge_limit": 0.0,
+      "direct_temperature_eligibility": 0.0,
+      "discharge_limit": 0.0,
+      "electric_limit": 0.0,
+      "heat_delivery_conservation": 0.0,
+      "heat_pump_fixed_cop": 0.0,
+      "initial_storage": 0.0,
+      "nonnegative_charge_kw": 0.0,
+      "nonnegative_cold_source": 0.0,
+      "nonnegative_delivered_kw": 0.0,
+      "nonnegative_direct_heat_kw": 0.0,
+      "nonnegative_discharge_kw": 0.0,
+      "nonnegative_electric_kw": 0.0,
+      "nonnegative_pump_hot_kw": 0.0,
+      "nonnegative_storage": 0.0,
+      "pump_hot_capacity": 0.0,
+      "purpose_demand": 1.4210854715202004e-14,
+      "recovery_equipment_capacity": 0.0,
+      "source_heat_available": 0.0,
+      "storage_capacity": 0.0,
+      "storage_energy_conservation": 0.0,
+      "terminal_storage": 0.0
+    },
+    "computed_cop_upper_bound": 3.0121363636363636,
+    "direct_heat_eligible": false,
+    "hours": 6,
+    "max_violation": 1.4210854715202004e-14,
+    "numeric_tolerance": 3.2e-06,
+    "physical_qualification": false,
+    "purpose": "thermal_continuity",
+    "reason": "Conservation and declared design envelope satisfied",
+    "request_sha256": "d1e6b0cf12e806311d517f451ae89f54a913650d9724bc931979779768c24c4c",
+    "schema": "portfolio071/independent-scientific-verdict/v1",
+    "scope": "Independent arithmetic verification of a supplied one-hour engineering model, not measured plant validation.",
+    "verifier_sha256": "b9af768541541a626a5983f65c8639b2c6e08db31fb64512d647d512e3065dfa"
+  },
+  "request": {
+    "approach_c": 5.0,
+    "carnot_fraction": 0.45,
+    "electric_limit_kw": [
+      70.0,
+      70.0,
+      70.0,
+      70.0,
+      70.0,
+      70.0
+    ],
+    "final_storage_min_kwh": 25.0,
+    "heat_demand_kw": [
+      80.0,
+      80.0,
+      80.0,
+      80.0,
+      80.0,
+      80.0
+    ],
+    "hours": 6,
+    "initial_storage_kwh": 0.0,
+    "pump_capacity_kw": 180.0,
+    "recovery_capacity_kw": 150.0,
+    "schema": "portfolio071/thermal-request/v1",
+    "sink_temp_c": 90.0,
+    "source_heat_kw": [
+      150,
+      150,
+      0,
+      0,
+      150,
+      150
+    ],
+    "source_temp_c": 45.0,
+    "storage_capacity_kwh": 220.0,
+    "storage_charge_limit_kw": 100.0,
+    "storage_discharge_limit_kw": 100.0,
+    "storage_eta": 0.92,
+    "storage_loss_per_hour": 0.003,
+    "task": "thermal_continuity"
+  },
+  "scope": "One actual runnable design; no installed equipment or actual industrial production."
+}

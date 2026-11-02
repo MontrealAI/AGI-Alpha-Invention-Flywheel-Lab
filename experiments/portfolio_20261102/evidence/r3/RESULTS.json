@@ -1,0 +1,1272 @@
+{
+  "capital_and_economic_scope": "Technical output only. Equipment cost, sites, fabrication, qualification and customer adoption are absent from this model and must be separately modeled.",
+  "conventional_scope": "Same deterministic LP and construction permissions available to ordinary engineering; exact tie in returned physical dispatch.",
+  "evidence_stage": "Disclosed original case recheck following implementation correction; no new blind confirmation claim.",
+  "factorial": [
+    {
+      "expected": false,
+      "feasible": false,
+      "pump": false,
+      "recovery": false
+    },
+    {
+      "expected": false,
+      "feasible": false,
+      "pump": false,
+      "recovery": true
+    },
+    {
+      "expected": false,
+      "feasible": false,
+      "pump": true,
+      "recovery": false
+    },
+    {
+      "expected": true,
+      "feasible": true,
+      "pump": true,
+      "recovery": true
+    }
+  ],
+  "freeze": {
+    "producer_sha256": "173f6298a0a09dc98d31f0ef57055404085e4f97683dfd8021b3e32da035cbdf",
+    "public_source_freeze": "cecbe47f408290fb7acf9a62521c5ed86a7743ae",
+    "scope": "Finite independently specified engineering cases, no measured physical qualification.",
+    "seed": 71130219,
+    "verifier_sha256": "fb44459d827afbd9e5b059696c81a5652a28fd216207e0b2951e89993397ad9b"
+  },
+  "fresh_cases": [
+    {
+      "accepted": true,
+      "artifact_hash": "e2e005861f069e36efb5886c68281b735b6c5f4af5346f395fa9627555458632",
+      "case": "k1",
+      "expected": "feasible",
+      "source_hash": "c029eed22cbe9b73ccb5579e4da34b98b447a3587a3c2f99d8f02224daa43d7d"
+    },
+    {
+      "accepted": true,
+      "artifact_hash": "bc3ea44d687d1ce59b7af6fde72d67410e26ab8be7259eb66c3c49b51af1c662",
+      "case": "k2",
+      "expected": "feasible",
+      "source_hash": "d1e6b0cf12e806311d517f451ae89f54a913650d9724bc931979779768c24c4c"
+    },
+    {
+      "analytic_max_heat_kw": 84.07387612806714,
+      "case": "independent_one_hour_0",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.4086492483800605,
+        "electric_limit_kw": [
+          57.3486088310097
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          69.78131718629572
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 51.72039534233224,
+        "recovery_capacity_kw": 169.4281720187936,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 106.05013551826646,
+        "source_heat_kw": [
+          84.07387612806714
+        ],
+        "source_temp_c": 116.2252786185685,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 0.0,
+      "case": "independent_one_hour_1",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.20046181473063063,
+        "electric_limit_kw": [
+          30.089544061716538
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          1.0
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 90.2264045514844,
+        "recovery_capacity_kw": 30.177263758864736,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 136.70457399171073,
+        "source_heat_kw": [
+          13.128124467351839
+        ],
+        "source_temp_c": 40.803338138315596,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 6.135303163239021,
+      "case": "independent_one_hour_2",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.4084290883057219,
+        "electric_limit_kw": [
+          4.176346725761215
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          5.092301625488387
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 202.54933801255495,
+        "recovery_capacity_kw": 67.9849041850311,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 120.56315891863336,
+        "source_heat_kw": [
+          65.20726498761476
+        ],
+        "source_temp_c": 19.712634022399655,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 39.51274494974623,
+      "case": "independent_one_hour_3",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.33102389927686554,
+        "electric_limit_kw": [
+          26.906888534987658
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          44.25427434371578
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 29.217921675171304,
+        "recovery_capacity_kw": 39.51274494974623,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 116.75368553270616,
+        "source_heat_kw": [
+          176.2448397435215
+        ],
+        "source_temp_c": 130.00540484906477,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 40.33276518167833,
+      "case": "independent_one_hour_4",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.4154872125014334,
+        "electric_limit_kw": [
+          33.854643148707794
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          33.476195100793014
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 177.93240313755922,
+        "recovery_capacity_kw": 122.81511683408858,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 69.95886976136214,
+        "source_heat_kw": [
+          40.33276518167833
+        ],
+        "source_temp_c": 84.45107634705747,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 75.78251288499091,
+      "case": "independent_one_hour_5",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.4452910805805099,
+        "electric_limit_kw": [
+          67.11920555824729
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          84.87641443118983
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 135.13785195567078,
+        "recovery_capacity_kw": 58.218542273307534,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 110.836006531712,
+        "source_heat_kw": [
+          176.6895204744289
+        ],
+        "source_temp_c": 80.69098695718966,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 95.24363965741614,
+      "case": "independent_one_hour_6",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.5982375806490386,
+        "electric_limit_kw": [
+          47.88360072296469
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          79.0522209156554
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 95.24363965741614,
+        "recovery_capacity_kw": 153.4334432858788,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 123.07855381528017,
+        "source_heat_kw": [
+          149.51866149751967
+        ],
+        "source_temp_c": 78.90054633196044,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 18.038288483810835,
+      "case": "independent_one_hour_7",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.33989234205484153,
+        "electric_limit_kw": [
+          3.7151621140773816
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          20.202883101868135
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 41.24815122177144,
+        "recovery_capacity_kw": 141.59507556312911,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 71.66557323905755,
+        "source_heat_kw": [
+          72.92169809073908
+        ],
+        "source_temp_c": 57.17702945191267,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 6.909370665073474,
+      "case": "independent_one_hour_8",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.36068034046306613,
+        "electric_limit_kw": [
+          47.46974337890545
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          5.734777652010983
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 130.21846047071935,
+        "recovery_capacity_kw": 136.01328043582777,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 73.44712578707882,
+        "source_heat_kw": [
+          6.198295321666518
+        ],
+        "source_temp_c": 70.39609196815107,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 54.97244324832913,
+      "case": "independent_one_hour_9",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.23306278408671696,
+        "electric_limit_kw": [
+          41.70450513128629
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          61.56913643812863
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 197.96177115494103,
+        "recovery_capacity_kw": 38.791237672044176,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 100.795190559135,
+        "source_heat_kw": [
+          27.29644782468402
+        ],
+        "source_temp_c": 43.79326836552775,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 46.786836982286005,
+      "case": "independent_one_hour_10",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.2895846250605242,
+        "electric_limit_kw": [
+          33.7635451980221
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          38.833074695297384
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 134.72203596041928,
+        "recovery_capacity_kw": 52.60203627223202,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 110.59807991200255,
+        "source_heat_kw": [
+          43.70011215422281
+        ],
+        "source_temp_c": 113.17100188488295,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 15.694945260280285,
+      "case": "independent_one_hour_11",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.5768661535347663,
+        "electric_limit_kw": [
+          27.336381993927084
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          17.57833869151392
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 56.831557921161796,
+        "recovery_capacity_kw": 24.31083097160892,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 128.86005235294806,
+        "source_heat_kw": [
+          14.475553453947317
+        ],
+        "source_temp_c": 120.61842157613856,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 2.043898332751174,
+      "case": "independent_one_hour_12",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.2724498533174654,
+        "electric_limit_kw": [
+          67.49498989701321
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          1.6964356161834744
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 167.38720830184425,
+        "recovery_capacity_kw": 99.66498771572368,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 98.79812319394499,
+        "source_heat_kw": [
+          1.268454822198417
+        ],
+        "source_temp_c": 69.83452642656614,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 24.60345555172421,
+      "case": "independent_one_hour_13",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.35197062079143676,
+        "electric_limit_kw": [
+          55.74575397038053
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          27.55587021793112
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 24.60345555172421,
+        "recovery_capacity_kw": 50.63392076828315,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 69.96073463434017,
+        "source_heat_kw": [
+          133.32013267746322
+        ],
+        "source_temp_c": 49.04336042068297,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 26.985303535992816,
+      "case": "independent_one_hour_14",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.43223069708008066,
+        "electric_limit_kw": [
+          46.268674654192246
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          22.397801934874035
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 165.49644814721933,
+        "recovery_capacity_kw": 23.812514948206758,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 99.48532989548382,
+        "source_heat_kw": [
+          43.50425859624071
+        ],
+        "source_temp_c": 90.29413337098619,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 55.91751659650701,
+      "case": "independent_one_hour_15",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.31183510369326684,
+        "electric_limit_kw": [
+          14.309192599138667
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          62.627618588087856
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 96.54555242665207,
+        "recovery_capacity_kw": 96.13637641569599,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 73.75119585516883,
+        "source_heat_kw": [
+          55.91751659650701
+        ],
+        "source_temp_c": 143.8786524468784,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 101.05164767087862,
+      "case": "independent_one_hour_16",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.3297168487003646,
+        "electric_limit_kw": [
+          38.59793839067707
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          83.87286756682926
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 166.97886107714518,
+        "recovery_capacity_kw": 78.4120418516636,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 108.18365712171122,
+        "source_heat_kw": [
+          83.12926371670571
+        ],
+        "source_temp_c": 89.64528822749979,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 39.784434139519604,
+      "case": "independent_one_hour_17",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.4660513240575428,
+        "electric_limit_kw": [
+          53.01998806956641
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          44.55856623626196
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 61.37084975155283,
+        "recovery_capacity_kw": 22.17513667486978,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 99.99639985154727,
+        "source_heat_kw": [
+          51.26620258522356
+        ],
+        "source_temp_c": 31.991378399794623,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 32.167593936820296,
+      "case": "independent_one_hour_18",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.3335196738991523,
+        "electric_limit_kw": [
+          31.205360147176783
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          26.699102967560844
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 119.888643284328,
+        "recovery_capacity_kw": 22.908401320595022,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 93.8535504682525,
+        "source_heat_kw": [
+          44.51272456710172
+        ],
+        "source_temp_c": 68.14081777031808,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 66.27306196264564,
+      "case": "independent_one_hour_19",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.4076356526078998,
+        "electric_limit_kw": [
+          26.395754913921074
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          74.22582939816313
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 128.69258417524046,
+        "recovery_capacity_kw": 161.10031311136675,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 129.6433255199022,
+        "source_heat_kw": [
+          49.40192175901627
+        ],
+        "source_temp_c": 97.32585770002049,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 21.59018511542849,
+      "case": "independent_one_hour_20",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.3820323881927957,
+        "electric_limit_kw": [
+          15.203479083196072
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          17.919853645805645
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 161.6266977056256,
+        "recovery_capacity_kw": 172.47706913271324,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 123.14776040032609,
+        "source_heat_kw": [
+          123.06873245212003
+        ],
+        "source_temp_c": 25.19008257150071,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 85.99030020188566,
+      "case": "independent_one_hour_21",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.5271845794130037,
+        "electric_limit_kw": [
+          68.01414245797365
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          96.30913622611195
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 202.8425888503659,
+        "recovery_capacity_kw": 125.05454418081368,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 74.58760232178327,
+        "source_heat_kw": [
+          83.66983114707138
+        ],
+        "source_temp_c": 79.56948543774526,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 7.741439730733597,
+      "case": "independent_one_hour_22",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.23131960346329825,
+        "electric_limit_kw": [
+          6.717139430412811
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          6.425394976508885
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 47.81271050197831,
+        "recovery_capacity_kw": 157.27325038183574,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 98.22411887382488,
+        "source_heat_kw": [
+          3.6487068859442173
+        ],
+        "source_temp_c": 32.68101635328712,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 110.67398222674295,
+      "case": "independent_one_hour_23",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.3179158247187827,
+        "electric_limit_kw": [
+          71.49982283188511
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          123.95486009395212
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 110.67398222674295,
+        "recovery_capacity_kw": 118.29365826418626,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 139.18850785662417,
+        "source_heat_kw": [
+          133.38507571186088
+        ],
+        "source_temp_c": 130.8821137145481,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 87.41130894666749,
+      "case": "independent_one_hour_24",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.5133914656142484,
+        "electric_limit_kw": [
+          79.50047241654097
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          72.55138642573401
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 128.40920227297045,
+        "recovery_capacity_kw": 112.22767565975755,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 62.16508212653565,
+        "source_heat_kw": [
+          62.77500464400904
+        ],
+        "source_temp_c": 22.922844719767433,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 97.0371272354126,
+      "case": "independent_one_hour_25",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.595096195874607,
+        "electric_limit_kw": [
+          54.076056324109416
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          108.68158250366211
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 207.89764219690298,
+        "recovery_capacity_kw": 71.07171269668572,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 97.46670980202842,
+        "source_heat_kw": [
+          127.97905721470119
+        ],
+        "source_temp_c": 47.654560610951314,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 37.75546833600836,
+      "case": "independent_one_hour_26",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.25307710120943316,
+        "electric_limit_kw": [
+          78.58582019819977
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          31.33703871888694
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 37.75546833600836,
+        "recovery_capacity_kw": 139.51627210826553,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 134.287447392471,
+        "source_heat_kw": [
+          140.8718614036335
+        ],
+        "source_temp_c": 103.2720606956804,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 60.242608230007676,
+      "case": "independent_one_hour_27",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.25711058111863605,
+        "electric_limit_kw": [
+          32.62707345625429
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          67.4717212176086
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 139.27141817203756,
+        "recovery_capacity_kw": 100.61259904645499,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 65.24273403361114,
+        "source_heat_kw": [
+          159.883746369534
+        ],
+        "source_temp_c": 27.42539488537382,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 26.26242369533172,
+      "case": "independent_one_hour_28",
+      "expected_feasible": true,
+      "independent_acceptance": true,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.34251244413675813,
+        "electric_limit_kw": [
+          46.17201831130273
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          21.797811667125327
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 26.26242369533172,
+        "recovery_capacity_kw": 110.20199740329089,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 127.52268557073917,
+        "source_heat_kw": [
+          159.16444109901337
+        ],
+        "source_temp_c": 63.35322091749889,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": true
+    },
+    {
+      "analytic_max_heat_kw": 32.57747748902208,
+      "case": "independent_one_hour_29",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.4392594944087529,
+        "electric_limit_kw": [
+          27.078561708410476
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          36.48677478770473
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 153.26583307866997,
+        "recovery_capacity_kw": 32.57747748902208,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 62.63365377749149,
+        "source_heat_kw": [
+          164.10460424904633
+        ],
+        "source_temp_c": 87.08369841460811,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 0.0,
+      "case": "independent_one_hour_30",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.21618754773866927,
+        "electric_limit_kw": [
+          77.47112510738637
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          1.0
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 128.564583042866,
+        "recovery_capacity_kw": 106.86738360906647,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 126.06222431444304,
+        "source_heat_kw": [
+          0.11118153866428893
+        ],
+        "source_temp_c": 17.47094228824091,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    },
+    {
+      "analytic_max_heat_kw": 89.96697439242946,
+      "case": "independent_one_hour_31",
+      "expected_feasible": false,
+      "independent_acceptance": false,
+      "request": {
+        "approach_c": 5.0,
+        "carnot_fraction": 0.315465991709789,
+        "electric_limit_kw": [
+          57.892677658544386
+        ],
+        "final_storage_min_kwh": 0.0,
+        "heat_demand_kw": [
+          100.76301131952101
+        ],
+        "hours": 1,
+        "initial_storage_kwh": 0.0,
+        "pump_capacity_kw": 183.47359124143605,
+        "recovery_capacity_kw": 65.1865820327855,
+        "schema": "portfolio071/thermal-request/v1",
+        "sink_temp_c": 80.12034572533665,
+        "source_heat_kw": [
+          69.55248254929272
+        ],
+        "source_temp_c": 58.98967529978314,
+        "storage_capacity_kwh": 0.0,
+        "storage_charge_limit_kw": 0.0,
+        "storage_discharge_limit_kw": 0.0,
+        "storage_eta": 0.92,
+        "storage_loss_per_hour": 0.003,
+        "task": "heat_delivery"
+      },
+      "returned_feasible": false
+    }
+  ],
+  "implementation_correction": {
+    "changed_decisions": [],
+    "constructor_changed": false,
+    "corrected_verifier_sha256": "b9af768541541a626a5983f65c8639b2c6e08db31fb64512d647d512e3065dfa",
+    "evaluation_stage": "Disclosed original case recheck following implementation correction; no new blind confirmation claim.",
+    "issue": "Root source audit found checker used 1e-7 times scale, while frozen preregistration requires absolute 1e-6 plus relative 1e-8 times scale.",
+    "original_artifacts_rechecked": [
+      {
+        "accepted": true,
+        "case": "k1",
+        "corrected_tolerance": 2.8000000000000003e-06,
+        "maximum_violation": 0.0,
+        "old_tolerance": 1.8e-05,
+        "unchanged_artifact_sha256": "e2e005861f069e36efb5886c68281b735b6c5f4af5346f395fa9627555458632",
+        "unchanged_request_sha256": "c029eed22cbe9b73ccb5579e4da34b98b447a3587a3c2f99d8f02224daa43d7d"
+      },
+      {
+        "accepted": true,
+        "case": "k2",
+        "corrected_tolerance": 3.2e-06,
+        "maximum_violation": 1.4210854715202004e-14,
+        "old_tolerance": 2.2e-05,
+        "unchanged_artifact_sha256": "bc3ea44d687d1ce59b7af6fde72d67410e26ab8be7259eb66c3c49b51af1c662",
+        "unchanged_request_sha256": "d1e6b0cf12e806311d517f451ae89f54a913650d9724bc931979779768c24c4c"
+      }
+    ],
+    "original_results_sha256": "3d8f74824f9202c4edda419145527169c9b2415ebc470adcfd106faae397a7dc",
+    "original_verifier_sha256": "026e3f5a264d4f4ac11b3d1d96e4ddfa59a17ac95b8319e541079eae29dd826e",
+    "post_disclosure_regression_guards": [
+      {
+        "accepted": true,
+        "case": "within_registered_tolerance",
+        "injected_residual": 1.6e-06,
+        "original_tolerance_would_accept": true
+      },
+      {
+        "accepted": false,
+        "case": "between_registered_and_initial_tolerances",
+        "injected_residual": 1.26e-05,
+        "original_tolerance_would_accept": true
+      }
+    ],
+    "preregistration_changed": false,
+    "remaining_scope": "Independent checks of an idealized engineering model, without physical qualification.",
+    "schema": "portfolio071/implementation-correction/v1"
+  },
+  "invalid_contracts": [
+    {
+      "field": "storage_eta",
+      "refused": true
+    },
+    {
+      "field": "carnot_fraction",
+      "refused": true
+    },
+    {
+      "field": "source_temp_c",
+      "refused": true
+    },
+    {
+      "field": "storage_loss_per_hour",
+      "refused": true
+    }
+  ],
+  "k1_accepted": true,
+  "k2_accepted": true,
+  "limitations": [
+    "Fixed-COP constant-temperature approximation",
+    "One-hour discretization with no subhour control validation",
+    "No measured engineering parameter fit",
+    "Storage permits simultaneous charge and discharge; no complementarity or cycling-wear guarantee",
+    "No piping/pressure/transient/hygiene or field equipment qualification",
+    "Finite cases cannot certify arbitrary physical systems"
+  ],
+  "new_industry_or_discovery_advantage": false,
+  "no_inherited_storage_k2": {
+    "meaning": "Asset removal makes outage continuity infeasible; an unrestricted conventional engineer may build the same storage.",
+    "status": "infeasible"
+  },
+  "ordinary_reuse_and_fresh_complete_design_equal": true,
+  "physical_qualification": false,
+  "resistance_control": {
+    "k1": {
+      "efficiency_assumption": 0.98,
+      "electricity_kwh": 489.7959183673469,
+      "feasible": false,
+      "method": "ordinary electric resistance without storage",
+      "scope": "Same hourly power constraint; unrestricted conventional co-design may build the same heat pump and storage."
+    },
+    "k2": {
+      "efficiency_assumption": 0.98,
+      "electricity_kwh": 489.7959183673469,
+      "feasible": false,
+      "method": "ordinary electric resistance without storage",
+      "scope": "Same hourly power constraint; unrestricted conventional co-design may build the same heat pump and storage."
+    }
+  },
+  "schema": "portfolio071/thermal-independent-evaluation/v1",
+  "tampering": [
+    {
+      "case": "free_heat",
+      "reason": "Declared thermal purpose or physics constraint violated",
+      "rejected": true
+    },
+    {
+      "case": "free_electricity",
+      "reason": "Declared thermal purpose or physics constraint violated",
+      "rejected": true
+    },
+    {
+      "case": "negative_inventory",
+      "reason": "Declared thermal purpose or physics constraint violated",
+      "rejected": true
+    },
+    {
+      "case": "terminal_shortfall",
+      "reason": "Declared thermal purpose or physics constraint violated",
+      "rejected": true
+    },
+    {
+      "case": "invented_initial_storage",
+      "reason": "Declared thermal purpose or physics constraint violated",
+      "rejected": true
+    },
+    {
+      "case": "lost_hour",
+      "reason": "vector length mismatch: delivered_kw",
+      "rejected": true
+    }
+  ]
+}

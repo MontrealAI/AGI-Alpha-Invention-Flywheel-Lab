@@ -1,0 +1,415 @@
+{
+  "commercial_data_rights": "unresolved; research-only use",
+  "constructor_sha256": "911f26a72d634c5d52c09fe63823139457128fa96bbc12b05cd74c19480ea264",
+  "fresh_successor": "The parameter-free frame can be reconstructed exactly; a fresh fit on the same fit-set must tie.",
+  "heldout_access": "none in constructor",
+  "k1": {
+    "frame": {
+      "calibration_error": 0.0,
+      "fit_cpu_seconds": 0.3675386079999998,
+      "fit_wall_seconds": 0.3675586959998327,
+      "input_dimensions": 136,
+      "ood_limit": 1.1345990680045646,
+      "parameters": {
+        "C": 10.0,
+        "gamma": "0.01"
+      },
+      "representation": "frame",
+      "support_vectors": 260,
+      "task": "identity"
+    },
+    "ratio_only": {
+      "calibration_error": 0.0,
+      "fit_cpu_seconds": 0.25459716200000004,
+      "fit_wall_seconds": 0.25461271300082444,
+      "input_dimensions": 128,
+      "ood_limit": 1.1604720698215658,
+      "parameters": {
+        "C": 10.0,
+        "gamma": "0.01"
+      },
+      "representation": "ratio_only",
+      "support_vectors": 244,
+      "task": "identity"
+    },
+    "raw": {
+      "calibration_error": 0.0,
+      "fit_cpu_seconds": 0.4033200979999998,
+      "fit_wall_seconds": 0.4034050659993227,
+      "input_dimensions": 128,
+      "ood_limit": 1.4262245149593509,
+      "parameters": {
+        "C": 1.0,
+        "gamma": "scale"
+      },
+      "representation": "raw",
+      "support_vectors": 610,
+      "task": "identity"
+    },
+    "signed_log": {
+      "calibration_error": 0.0,
+      "fit_cpu_seconds": 0.3907196150000001,
+      "fit_wall_seconds": 0.3907572660009464,
+      "input_dimensions": 128,
+      "ood_limit": 1.4243068014338507,
+      "parameters": {
+        "C": 10.0,
+        "gamma": "scale"
+      },
+      "representation": "signed_log",
+      "support_vectors": 328,
+      "task": "identity"
+    }
+  },
+  "k1_frozen_before_k2_fit": true,
+  "k1_sha256": "dce14217cdc7d935990b4a9f583f006d119a304184c19ffc3e451e7b97a01b9b",
+  "k2": {
+    "frame": {
+      "calibration_error": 0.19110979659773175,
+      "fit_cpu_seconds": 1.3551544739999999,
+      "fit_wall_seconds": 1.3552479009995295,
+      "input_dimensions": 136,
+      "ood_limit": 1.1345990680045646,
+      "parameters": {
+        "C": 10.0,
+        "gamma": "scale"
+      },
+      "representation": "frame",
+      "support_vectors": 635,
+      "task": "concentration"
+    },
+    "ratio_only": {
+      "calibration_error": 0.31346066779472714,
+      "fit_cpu_seconds": 2.014364574999999,
+      "fit_wall_seconds": 2.0144952709997597,
+      "input_dimensions": 128,
+      "ood_limit": 1.1604720698215658,
+      "parameters": {
+        "C": 1.0,
+        "gamma": "scale"
+      },
+      "representation": "ratio_only",
+      "support_vectors": 1813,
+      "task": "concentration"
+    },
+    "raw": {
+      "calibration_error": 0.19683473213186975,
+      "fit_cpu_seconds": 1.7639957630000005,
+      "fit_wall_seconds": 1.7643997159993887,
+      "input_dimensions": 128,
+      "ood_limit": 1.4262245149593509,
+      "parameters": {
+        "C": 10.0,
+        "gamma": "0.01"
+      },
+      "representation": "raw",
+      "support_vectors": 743,
+      "task": "concentration"
+    },
+    "signed_log": {
+      "calibration_error": 0.18314125794219782,
+      "fit_cpu_seconds": 1.4384111969999998,
+      "fit_wall_seconds": 1.4384914860002027,
+      "input_dimensions": 128,
+      "ood_limit": 1.4243068014338507,
+      "parameters": {
+        "C": 10.0,
+        "gamma": "scale"
+      },
+      "representation": "signed_log",
+      "support_vectors": 701,
+      "task": "concentration"
+    }
+  },
+  "k2_sha256": "4f0cb7238e61f57af9db020cbab58004061f5b89dfcc1279c6ab0b896ae3a97a",
+  "ordinary_reuse": "The same frozen frame and model are available without a claimed discovery procedure; identical predictions are required.",
+  "physical_instrument": false,
+  "roundtrip_max_relative_error": 1.0892983375604761e-15,
+  "schema": "portfolio071.sensor-interface.training.v1",
+  "train_rows": 3436,
+  "train_sha256": "45b02178639400716c52e303667c7e8b7f13f5304e4e4e942e7c70cfd3b57ed5",
+  "tune_rows": 197,
+  "tune_sha256": "a199226f8483855aed02e64c53780cb06bb9014bfdb2c350f7863731780cba7e",
+  "tuning": [
+    {
+      "C": 1.0,
+      "gamma": "scale",
+      "mode": "raw",
+      "task": "identity",
+      "tune_loss": 0.19115756781361293
+    },
+    {
+      "C": 10.0,
+      "gamma": "scale",
+      "mode": "raw",
+      "task": "identity",
+      "tune_loss": 0.20070121973702648
+    },
+    {
+      "C": 100.0,
+      "gamma": "scale",
+      "mode": "raw",
+      "task": "identity",
+      "tune_loss": 0.19448249735790835
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.01,
+      "mode": "raw",
+      "task": "identity",
+      "tune_loss": 0.2068752467248708
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.1,
+      "mode": "raw",
+      "task": "identity",
+      "tune_loss": 0.2082030672455275
+    },
+    {
+      "C": 1.0,
+      "gamma": "scale",
+      "mode": "signed_log",
+      "task": "identity",
+      "tune_loss": 0.18798192965737537
+    },
+    {
+      "C": 10.0,
+      "gamma": "scale",
+      "mode": "signed_log",
+      "task": "identity",
+      "tune_loss": 0.1875320538733103
+    },
+    {
+      "C": 100.0,
+      "gamma": "scale",
+      "mode": "signed_log",
+      "task": "identity",
+      "tune_loss": 0.1875320538733103
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.01,
+      "mode": "signed_log",
+      "task": "identity",
+      "tune_loss": 0.19656444504005488
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.1,
+      "mode": "signed_log",
+      "task": "identity",
+      "tune_loss": 0.21128839432656543
+    },
+    {
+      "C": 1.0,
+      "gamma": "scale",
+      "mode": "frame",
+      "task": "identity",
+      "tune_loss": 0.18470175438596492
+    },
+    {
+      "C": 10.0,
+      "gamma": "scale",
+      "mode": "frame",
+      "task": "identity",
+      "tune_loss": 0.18157967292092925
+    },
+    {
+      "C": 100.0,
+      "gamma": "scale",
+      "mode": "frame",
+      "task": "identity",
+      "tune_loss": 0.1846596831352928
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.01,
+      "mode": "frame",
+      "task": "identity",
+      "tune_loss": 0.18157967292092925
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.1,
+      "mode": "frame",
+      "task": "identity",
+      "tune_loss": 0.18743998554899555
+    },
+    {
+      "C": 1.0,
+      "gamma": "scale",
+      "mode": "ratio_only",
+      "task": "identity",
+      "tune_loss": 0.18775938502169398
+    },
+    {
+      "C": 10.0,
+      "gamma": "scale",
+      "mode": "ratio_only",
+      "task": "identity",
+      "tune_loss": 0.18116771906058438
+    },
+    {
+      "C": 100.0,
+      "gamma": "scale",
+      "mode": "ratio_only",
+      "task": "identity",
+      "tune_loss": 0.1877279575437426
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.01,
+      "mode": "ratio_only",
+      "task": "identity",
+      "tune_loss": 0.18116771906058438
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.1,
+      "mode": "ratio_only",
+      "task": "identity",
+      "tune_loss": 0.18743998554899555
+    },
+    {
+      "C": 1.0,
+      "gamma": "scale",
+      "mode": "raw",
+      "task": "concentration",
+      "tune_loss": 0.09343996101597839
+    },
+    {
+      "C": 10.0,
+      "gamma": "scale",
+      "mode": "raw",
+      "task": "concentration",
+      "tune_loss": 0.07660395613425874
+    },
+    {
+      "C": 100.0,
+      "gamma": "scale",
+      "mode": "raw",
+      "task": "concentration",
+      "tune_loss": 0.08721494139811907
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.01,
+      "mode": "raw",
+      "task": "concentration",
+      "tune_loss": 0.07422849284545543
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.1,
+      "mode": "raw",
+      "task": "concentration",
+      "tune_loss": 0.11816792642794816
+    },
+    {
+      "C": 1.0,
+      "gamma": "scale",
+      "mode": "signed_log",
+      "task": "concentration",
+      "tune_loss": 0.07785955981142592
+    },
+    {
+      "C": 10.0,
+      "gamma": "scale",
+      "mode": "signed_log",
+      "task": "concentration",
+      "tune_loss": 0.06878439116354072
+    },
+    {
+      "C": 100.0,
+      "gamma": "scale",
+      "mode": "signed_log",
+      "task": "concentration",
+      "tune_loss": 0.07836365048648379
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.01,
+      "mode": "signed_log",
+      "task": "concentration",
+      "tune_loss": 0.07249559735640912
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.1,
+      "mode": "signed_log",
+      "task": "concentration",
+      "tune_loss": 0.11820155055770738
+    },
+    {
+      "C": 1.0,
+      "gamma": "scale",
+      "mode": "frame",
+      "task": "concentration",
+      "tune_loss": 0.08250505930391606
+    },
+    {
+      "C": 10.0,
+      "gamma": "scale",
+      "mode": "frame",
+      "task": "concentration",
+      "tune_loss": 0.07698428177284981
+    },
+    {
+      "C": 100.0,
+      "gamma": "scale",
+      "mode": "frame",
+      "task": "concentration",
+      "tune_loss": 0.07757397593433739
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.01,
+      "mode": "frame",
+      "task": "concentration",
+      "tune_loss": 0.07836666141298862
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.1,
+      "mode": "frame",
+      "task": "concentration",
+      "tune_loss": 0.14568479249914415
+    },
+    {
+      "C": 1.0,
+      "gamma": "scale",
+      "mode": "ratio_only",
+      "task": "concentration",
+      "tune_loss": 0.13533493898573284
+    },
+    {
+      "C": 10.0,
+      "gamma": "scale",
+      "mode": "ratio_only",
+      "task": "concentration",
+      "tune_loss": 0.14229754532756428
+    },
+    {
+      "C": 100.0,
+      "gamma": "scale",
+      "mode": "ratio_only",
+      "task": "concentration",
+      "tune_loss": 0.1673610187430747
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.01,
+      "mode": "ratio_only",
+      "task": "concentration",
+      "tune_loss": 0.14791619195185599
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.1,
+      "mode": "ratio_only",
+      "task": "concentration",
+      "tune_loss": 0.16483282016927114
+    }
+  ]
+}
