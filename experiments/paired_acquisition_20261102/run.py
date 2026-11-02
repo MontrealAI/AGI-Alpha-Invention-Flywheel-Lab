@@ -193,6 +193,7 @@ def execute(output, expected, source_commit, label):
             verify_sources(expected)
             source_after = True
         except Exception as source_error:
+            source_after = False
             source_after_error = f'{type(source_error).__name__}: {source_error}'
         failure = {'schema': 'paired-acquisition/execution-failure/v1',
                    'experiment_id': IDENTITY, 'source_commit': source_commit,
