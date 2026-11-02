@@ -9,7 +9,8 @@ import shutil
 FREEZE = 'campaign/cycle-007/REPAIRED_REPRODUCTION_FREEZE.json'
 COMPATIBILITY_MAIN = 'a842861dcf532ee8b769f39248c4c1faabfb628a'
 COMPATIBILITY_DEPENDENCIES = {
-    'experiments/commerce006.py': '2fc529131885c75752dab8dbd77d85b5a36d4c0b43cb5e7e53286c997cc0a52f'}
+    'experiments/commerce006.py': '2fc529131885c75752dab8dbd77d85b5a36d4c0b43cb5e7e53286c997cc0a52f',
+    'campaign/cycle-007/ECONOMICS_SOURCES.json': '9bb9410fa5b6fb0d5b185342796cb5f900ad8eb2709657315a249bc5f219050c'}
 
 def regular(root, name):
     relative = Path(name)
