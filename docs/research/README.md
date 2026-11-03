@@ -4,17 +4,19 @@
 
 **Inventing Economic Possibility.**
 
-Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Edition 1.0.0 · 26 pages.
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Edition 1.1.0 · 28 pages.
 
-[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/super-alpha.html) · [Complete PDF](super-alpha.pdf) · [LaTeX, exact model and build instructions](../super-alpha/README.md) · [Versioned publication](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/super-alpha-v1.0.0)
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/super-alpha.html) · [Complete PDF](super-alpha.pdf) · [LaTeX, exact model and build instructions](../super-alpha/README.md) · [Versioned publication](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/super-alpha-v1.1.0)
 
 *Invent what becomes possible.* SUPER ALPHA develops a constructive research programme for creating valuable activities that were previously uneconomic, establishing an extraordinary advantage, capturing sustainable profit, and compounding capabilities and earnings into greater productive power. Four independently evaluated loops connect commerce, capability inheritance, improved discovery, and physical production.
 
-The paper joins productive means, acceptance, voluntary participation, financing and value capture in a complete economic arrangement. Scientific capability foundries, on-demand historical observation and adaptive industrial infrastructure illustrate prospective industry directions. Its exact authored model is reproducible from the accompanying source.
+The paper joins productive means, acceptance, voluntary participation, financing and value capture in a complete economic arrangement. Edition 1.1 turns commercial shortfalls into construction targets, calculates the minimum capital for an ordered cash plan, and tests whether a successor qualifies before an advantage closes. Scientific capability foundries, on-demand historical observation and adaptive industrial infrastructure illustrate prospective industry directions. Its exact authored model is reproducible from the accompanying source.
 
 **Scope:** A framework and conditional exact model, not a new commercial deployment, actual demand measurement, autonomous scientific discovery, or physical production result. The US$3 billion trailing-365-day complete-cost profit objective remains unachieved. Financial surplus, available cash, successor capability and physical capacity retain separate evidence requirements. Prior manuscripts and experimental results remain unchanged.
 
-PDF SHA-256: `37fc425350e752a416f8de88f8dd15f6fbe19c9194bfbd2a0bdc8b4245ca819d`. The [publication manifest](publication-manifest.json) records the exact published edition.
+**Preserved first edition:** [Version 1.0.0, original PDF and source](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/super-alpha-v1.0.0).
+
+PDF SHA-256: `d57528596fb30a1ed3435b89cf1aebbf9f6a590cec75d05dc294ddc3de5ae7bc`. The [publication manifest](publication-manifest.json) records the exact published edition.
 
 ## AGI ALPHA FLYWHEEL 2026 11 02 Report
 

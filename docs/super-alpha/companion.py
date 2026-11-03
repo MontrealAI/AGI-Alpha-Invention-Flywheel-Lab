@@ -75,6 +75,105 @@ def admission(available, needed):
             "fundable": available >= needed}
 
 
+def event(label, receipt=0, outflow=0, financing=0, reserve=0):
+    return {"label": label, "settled_receipt": receipt, "cash_outflow": outflow,
+            "financing_received": financing, "reserve_after": reserve}
+
+
+def funding_requirement(events):
+    if not isinstance(events, (list, tuple)) or not events:
+        raise ValueError("A finite ordered plan must include an explicit opening-reserve event")
+    fields = {"label", "settled_receipt", "cash_outflow", "financing_received", "reserve_after"}
+    receipts = outflows = financing = required = 0
+    prefixes = []
+    for index, row in enumerate(events):
+        if not isinstance(row, dict) or set(row) != fields:
+            raise ValueError("Every event must use the exact settled-flow and reserve schema")
+        if not isinstance(row["label"], str) or not row["label"].strip():
+            raise ValueError("Every event needs a nonempty label")
+        for field in fields - {"label"}:
+            integer(field, row[field])
+        active_flows = sum(row[field] > 0 for field in ("settled_receipt", "cash_outflow", "financing_received"))
+        if active_flows > 1:
+            raise ValueError("Split receipts, outflows and financing into explicitly ordered events")
+        if index == 0 and active_flows:
+            raise ValueError("Event zero specifies opening reserves before any cash flow")
+        receipts += row["settled_receipt"]
+        outflows += row["cash_outflow"]
+        financing += row["financing_received"]
+        prefix_requirement = max(0, row["reserve_after"] + outflows - receipts - financing)
+        required = max(required, prefix_requirement)
+        prefixes.append({"event_index": index, **row, "cumulative_receipts": receipts,
+                         "cumulative_outflows": outflows, "cumulative_financing_received": financing,
+                         "opening_cash_required_at_prefix": prefix_requirement})
+    return {"minimum_opening_cash": required, "ordered_prefixes": prefixes,
+            "settled_receipts": receipts, "cash_outflows": outflows,
+            "financing_received": financing, "terminal_reserve": events[-1]["reserve_after"],
+            "net_nonfinancing_cash_flow": receipts - outflows,
+            "terminal_cash_at_minimum_opening": required + receipts + financing - outflows}
+
+
+def renewal_screen(opening_available, upfront_cost, settled_rate, qualification_delay, deadline):
+    for name, number in (("opening_available", opening_available), ("upfront_cost", upfront_cost),
+                         ("settled_rate", settled_rate), ("qualification_delay", qualification_delay),
+                         ("deadline", deadline)):
+        integer(name, number)
+    shortfall = max(0, upfront_cost - opening_available)
+    wait = Fraction(shortfall, settled_rate) if settled_rate else (Fraction(0) if not shortfall else None)
+    earliest = wait + qualification_delay if wait is not None else None
+    latest_start = deadline - qualification_delay
+    minimum_opening = max(0, upfront_cost - settled_rate * latest_start) if latest_start >= 0 else None
+    return {"opening_available_cash": opening_available, "upfront_successor_cost": upfront_cost,
+            "net_unrestricted_settled_rate": settled_rate, "qualification_delay": qualification_delay,
+            "deadline": deadline, "earliest_cash_ready_time": exact(wait) if wait is not None else None,
+            "earliest_qualification_time": exact(earliest) if earliest is not None else None,
+            "latest_start_time": latest_start,
+            "minimum_opening_available_cash_for_deadline": minimum_opening,
+            "can_qualify_by_deadline": earliest is not None and earliest <= deadline,
+            "deadline_equality_is_accepted": True}
+
+
+def renewal_examples():
+    plans = {
+        "settled_before_successor": [event("opening"), event("predecessor cost", outflow=100),
+                                     event("predecessor accepted and invoiced"),
+                                     event("predecessor collection", receipt=120),
+                                     event("successor cost", outflow=110),
+                                     event("accepted successor collection", receipt=145)],
+        "reserve_fifteen": [event("opening"), event("predecessor cost", outflow=100),
+                            event("predecessor accepted and collected; protect reserve", receipt=120, reserve=15),
+                            event("successor cost", outflow=110, reserve=15),
+                            event("accepted successor collection", receipt=145, reserve=15)],
+        "delayed_collection_with_reserve": [event("opening"), event("predecessor cost", outflow=100),
+                                           event("predecessor accepted; protect reserve", reserve=15),
+                                           event("successor cost before predecessor collection", outflow=110, reserve=15),
+                                           event("late predecessor collection", receipt=120, reserve=15),
+                                           event("accepted successor collection", receipt=145, reserve=15)]
+    }
+    cases = {}
+    for name, plan in plans.items():
+        required = funding_requirement(plan)
+        cases[name] = {**required, "recognized_revenue": 265, "recognized_expense": 210,
+                       "recognized_profit": 55, "reference_opening_cash": 100,
+                       "fundable_at_reference_opening": required["minimum_opening_cash"] <= 100,
+                       "hypothetical_terminal_cash_at_reference_if_all_events_occur": 155}
+    return {
+        "funding": {
+            "scope": "Minimum cash requirements of fixed authored event sequences; no executed accounts or received funding. Events are strictly ordered, with at most one positive cash-flow category per event. Event zero sets opening reserves. Financing counts only when actually received in the declared plan; a commitment or invoice is not a receipt.",
+            "accounting": "The three cases retain stipulated recognized revenue 265 and expensed costs 210. Reserve 15 restricts cash without adding expense. In the 105-unit case, acceptance and settlement occur together before the reserve is required after that event; in the 225-unit case, acceptance requires the reserve before delayed collection. Positive hypothetical terminal cash is not evidence that an underfunded prefix can execute.",
+            "cases": cases
+        },
+        "deadline": {
+            "scope": "Conditional fixed-path renewal screen with constant net unrestricted settled surplus, no financing, an upfront construction cost and deterministic qualification delay. The predecessor continues without interference, and the successor is only a qualified-path hypothesis. Times beyond the deadline are arithmetic under the constant-rate assumption, not achieved continuation. No profit change is inferred from changing the assumed delay or available cash.",
+            "cases": {
+                "base_misses_deadline": renewal_screen(20, 60, 10, 3, 6),
+                "ten_more_available_units": renewal_screen(30, 60, 10, 3, 6),
+                "one_less_qualification_period": renewal_screen(20, 60, 10, 2, 6)
+            }
+        }
+    }
+
+
 def evaluate():
     arms = []
     for name, fixed, variable in (("ordinary", 20, 12), ("new", 30, 7)):
@@ -92,6 +191,12 @@ def evaluate():
                      "earlier_asset_construction": 16 if inherited else 0,
                      "complete_history_cost": 40}
                     for policy in ("reference", "revised") for inherited in (False, True)]
+    target_cases = {
+        "baseline": arrangement(10, 30, 7, True, price=10, price_cap=10),
+        "fixed_cost_ten": arrangement(10, 10, 7, True, price=10, price_cap=10),
+        "variable_cost_five": arrangement(10, 30, 5, True, price=10, price_cap=10),
+        "seventeen_buyers": arrangement(17, 30, 7, True, price=10, price_cap=10)
+    }
     return {
         "schema_version": 1,
         "kind": "authored_exact_analytical_illustration",
@@ -145,6 +250,14 @@ def evaluate():
             "procedure_saving_without_artifact": 0, "procedure_saving_with_artifact": 0,
             "complete_history_saving": 0, "improved_inventor_established": False
         },
+        "construction_targets": {
+            "scope": "A separate prospective price-10 scenario with desired profit 20. Each target changes one stated burden or cohort size, with all construction costs included. These are economic specifications, not achieved constructions or measured additional demand; incurred historical costs are unchanged.",
+            "desired_profit": 20, "price_response_cap": 10, "buyer_value": 13,
+            "baseline_complete_cost_gap": target_cases["baseline"]["complete_production_cost"] + 20 - 10 * 10,
+            "cases": {name: {**row, "meets_desired_profit": row["forced_delivery_profit"] >= 20}
+                      for name, row in target_cases.items()}
+        },
+        "funded_renewal": renewal_examples(),
         "qualification": {"illustration_computes": True, "real_demand_observed": False,
                           "physical_product_validated": False, "discovery_advantage_established": False,
                           "native_simulation_profit_claimed": False, "super_alpha_demonstrated": False}

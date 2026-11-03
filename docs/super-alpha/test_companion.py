@@ -4,7 +4,7 @@ from fractions import Fraction
 from pathlib import Path
 import unittest
 
-from companion import admission, arrangement, cost, evaluate, quantities
+from companion import admission, arrangement, cost, evaluate, event, funding_requirement, quantities, renewal_screen
 
 
 class CompanionTests(unittest.TestCase):
@@ -112,6 +112,103 @@ class CompanionTests(unittest.TestCase):
             cost(True, 30, 7, True)
         with self.assertRaises(ValueError):
             admission(0, -1)
+
+
+    def test_prefix_requirement_is_necessary_and_sufficient(self):
+        options = [("receipt", 1), ("receipt", 3), ("outflow", 1), ("outflow", 3), ("financing", 2)]
+        for opening_reserve, actions, reserves in itertools.product((0, 2), itertools.product(options, repeat=3),
+                                                                    itertools.product((0, 2), repeat=3)):
+            plan = [event("opening", reserve=opening_reserve)]
+            for index, ((kind, amount), reserve) in enumerate(zip(actions, reserves)):
+                plan.append(event(str(index), reserve=reserve, **{kind: amount}))
+            result = funding_requirement(plan)
+            candidates = range(sum(row["cash_outflow"] for row in plan) + max(row["reserve_after"] for row in plan) + 1)
+            feasible = []
+            for initial in candidates:
+                cash = initial
+                valid = True
+                for row in plan:
+                    cash += row["settled_receipt"] + row["financing_received"] - row["cash_outflow"]
+                    valid = valid and cash >= row["reserve_after"]
+                if valid:
+                    feasible.append(initial)
+            self.assertEqual(result["minimum_opening_cash"], min(feasible))
+
+    def test_construction_targets_meet_the_goal_and_near_misses_do_not(self):
+        targets = evaluate()["construction_targets"]
+        self.assertEqual(targets["baseline_complete_cost_gap"], 20)
+        expected = {"baseline": 0, "fixed_cost_ten": 20, "variable_cost_five": 20, "seventeen_buyers": 21}
+        for name, profit in expected.items():
+            self.assertEqual(targets["cases"][name]["forced_delivery_profit"], profit)
+            self.assertEqual(targets["cases"][name]["meets_desired_profit"], profit >= 20)
+        for n, fixed, variable, profit in ((10, 11, 7, 19), (10, 30, 6, 10), (16, 30, 7, 18)):
+            row = arrangement(n, fixed, variable, True, price=10, price_cap=10)
+            self.assertEqual(row["forced_delivery_profit"], profit)
+            self.assertLess(profit, targets["desired_profit"])
+
+    def test_event_order_and_received_financing_cannot_be_netted_away(self):
+        outgoing = event("pay", outflow=100)
+        incoming = event("collect", receipt=100)
+        finance = event("receive financing", financing=100)
+        opening = event("opening")
+        self.assertEqual(funding_requirement([opening, outgoing, incoming])["minimum_opening_cash"], 100)
+        self.assertEqual(funding_requirement([opening, incoming, outgoing])["minimum_opening_cash"], 0)
+        self.assertEqual(funding_requirement([opening, outgoing, finance])["minimum_opening_cash"], 100)
+        self.assertEqual(funding_requirement([opening, finance, outgoing])["minimum_opening_cash"], 0)
+        self.assertEqual(funding_requirement([event("opening", reserve=7)])["minimum_opening_cash"], 7)
+        self.assertEqual(funding_requirement([opening, finance])["net_nonfinancing_cash_flow"], 0)
+        protected_before_collection = [opening, outgoing, event("reserve due before collection", reserve=15),
+                                       event("collect", receipt=120, reserve=15),
+                                       event("successor payment", outflow=110, reserve=15)]
+        self.assertEqual(funding_requirement(protected_before_collection)["minimum_opening_cash"], 115)
+        for invalid in ([], [incoming], [opening, event("netted", receipt=100, outflow=100)],
+                        [opening, event("netted funding", financing=100, outflow=100)],
+                        [opening, event("negative", outflow=-1)],
+                        [opening, {**event("promise"), "financing_committed": 100}]):
+            with self.assertRaises(ValueError):
+                funding_requirement(invalid)
+
+    def test_same_profit_and_positive_terminal_cash_do_not_fund_every_prefix(self):
+        cases = evaluate()["funded_renewal"]["funding"]["cases"]
+        expected = {"settled_before_successor": 100, "reserve_fifteen": 105,
+                    "delayed_collection_with_reserve": 225}
+        for name, required in expected.items():
+            row = cases[name]
+            self.assertEqual(row["minimum_opening_cash"], required)
+            self.assertEqual(row["recognized_profit"], 55)
+            self.assertEqual(row["hypothetical_terminal_cash_at_reference_if_all_events_occur"], 155)
+            self.assertEqual(row["recognized_revenue"] - row["recognized_expense"], 55)
+            self.assertEqual(row["fundable_at_reference_opening"], required <= 100)
+            self.assertEqual(row["financing_received"], 0)
+
+    def test_renewal_deadline_examples_and_exact_boundaries(self):
+        cases = evaluate()["funded_renewal"]["deadline"]["cases"]
+        self.assertEqual(cases["base_misses_deadline"]["earliest_qualification_time"], 7)
+        self.assertFalse(cases["base_misses_deadline"]["can_qualify_by_deadline"])
+        for name in ("ten_more_available_units", "one_less_qualification_period"):
+            self.assertEqual(cases[name]["earliest_qualification_time"], 6)
+            self.assertTrue(cases[name]["can_qualify_by_deadline"])
+        fractional = renewal_screen(0, 1, 2, 1, 2)
+        self.assertEqual(fractional["earliest_qualification_time"], "3/2")
+        self.assertTrue(fractional["can_qualify_by_deadline"])
+        self.assertFalse(renewal_screen(0, 1, 2, 1, 1)["can_qualify_by_deadline"])
+
+    def test_renewal_formula_matches_cash_at_latest_start(self):
+        for opening, upfront, rate, delay, deadline in itertools.product((0, 2, 4), (0, 2, 4, 6),
+                                                                       range(4), range(5), range(6)):
+            row = renewal_screen(opening, upfront, rate, delay, deadline)
+            possible = delay <= deadline and opening + rate * (deadline - delay) >= upfront
+            self.assertEqual(row["can_qualify_by_deadline"], possible)
+            if row["earliest_qualification_time"] is not None:
+                self.assertEqual(Fraction(row["earliest_qualification_time"]) <= deadline, possible)
+        zero = renewal_screen(20, 60, 0, 3, 6)
+        self.assertIsNone(zero["earliest_qualification_time"])
+        self.assertFalse(zero["can_qualify_by_deadline"])
+        self.assertTrue(renewal_screen(60, 60, 0, 3, 3)["can_qualify_by_deadline"])
+        self.assertFalse(renewal_screen(60, 60, 0, 4, 3)["can_qualify_by_deadline"])
+        for arguments in ((20, 60, -1, 3, 6), (20, 60, 10, -1, 6), (True, 60, 10, 3, 6)):
+            with self.assertRaises(ValueError):
+                renewal_screen(*arguments)
 
 
 if __name__ == "__main__":
