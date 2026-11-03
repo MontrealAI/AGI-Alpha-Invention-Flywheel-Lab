@@ -56,6 +56,7 @@ jobs:
           python -m unittest enterprise078.transactional_admission.test_admission.DeliveryTests enterprise078.transactional_admission.test_admission.CompleteOfferTests -v
           python -m unittest enterprise078.transactional_admission.test_snapshot -v
           python -m unittest enterprise078.transactional_admission.test_capacity_evidence -v
+          python -m unittest enterprise078.transactional_admission.test_catalog -v
       - name: Original scientific acceptance tests on frozen source
         run: |
           cd "$RUNNER_TEMP/enterprise078-science"

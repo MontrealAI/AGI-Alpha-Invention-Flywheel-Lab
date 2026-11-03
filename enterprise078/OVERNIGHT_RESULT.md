@@ -1,119 +1,42 @@
-# Overnight construction result — 3 November 2026 UTC
+# Enterprise078 current continuation checkpoint — 3 November 2026
 
-## Complete eight-world replay and capacity decision — 3 November 2026
+## Native catalog preparation constructed; activation remains blocked
 
-All eight exposed PR176 public cases now pass the exact source-pinned **read-only fee correction** and unchanged full native replay. Newly downloaded central, favorable, ordinary_no_inheritance and reference_100k archives were hash-verified, including their nested public packages and frozen source manifests. The six original cost-reconciliation failures remain failures; this is not a rerun or retroactive green workflow. Original source b70bbe7287d547d0d145e7f76e7264c172d031d6 and correction1c8fc184a432a6b84d6f28280580a6354a71a2b8 are unchanged. Native-to-daily aggregation deviation is zero in all eight cases. [Compact complete evidence](evidence/COMPANION_EIGHT_WORLD_REPLAY.json).
+Preregistered at [2bbbb607](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/2bbbb607a3cad3036d3571dd9d56f274ad754fc4). The new [catalog preparation component](transactional_admission/CATALOG_PREPARATION.md) uses canonical BusinessAccount/JournalAccount checkpoint sealing and verification to bind a distinct accepted SQL/CSV contract, delivered byte hashes, candidate source hashes, proposal-chain predecessor and original financial-history prefix. It preserves the original manifest, native source pins, tape, journal, signing authority and balances.
 
-Each row is a separate hypothetical-equity account, never pooled. Exact native interval: **2026-11-03 00:00 UTC to2027-11-03 00:00 UTC, exclusive endpoint**. USD:
+This is **PREPARED_NOT_ACTIVE**, not a financial catalog transition. There is no activation API, new native job registration, offer or spend. No proposal was written to original authority. Two proposals were constructed only on a separately identified fresh test fixture. Eight controls passed: accepted typed binding without financial mutation; stale-head/overwrite refusal; lab-type refusal; signature-tampering refusal; changed-source refusal; missing-tail refusal; valid prefix after a subsequent zero-value native event; authenticated same-account reopen preserving the fixture's100USD loss. The existing no-reseed/failed-admission controls ran first. All39 combined local regressions passed. [Key-free source-bound receipt](evidence/CATALOG_PREPARATION.json).
 
-| Case | Equity | Native trailing365 profit | Revenue | Incurred costs | Cash | Tail reserve | Accepted/collected |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| central | 25,000 | 110,600 | 222,000 | 111,400 | 135,600 | 12,000 | 24/24 |
-| favorable | 25,000 | 120,125 | 240,000 | 119,875 | 145,125 | 13,500 | 27/27 |
-| ordinary_no_inheritance | 25,000 | 110,600 | 222,000 | 111,400 | 135,600 | 12,000 | 24/24 |
-| reference_100k | 100,000 | 129,762.50 | 252,000 | 122,237.50 | 229,762.50 | 13,000 | 26/26 |
-| adverse | 100,000 | -36,900 | 12,000 | 48,900 | 63,100 | 12,300.40 | 3/2 |
-| illiquid | 25,000 | -687.50 | 12,000 | 12,687.50 | 24,312.50 | 12,300.20 | 1/1 |
-| weak | 25,000 | -10,050 | 0 | 10,050 | 14,950 | 0 | 0/0 |
-| no_financing | 0 | -2,700 | 0 | 2,700 | 0 | 0 | 0/0 |
+An externally retained expected-head receipt is required to detect proposal-tail loss. Torn records fail closed; they are not reset or re-signed. Rollback of all local storage without an external anchor is outside this local POSIX claim. Signed proposal envelopes remain private; no key or signing state was uploaded. These are exposed development checks, not independent approval of migration. Current-head hosted qualification remains a separate gate; previous headf91cbcb4 broad observed execution checks passed. Main215b22a5 and unchanged AGENTS were refreshed. Other owners' branches/accounts and automations were untouched.
 
-All payables are zero except no_financing2700USD. Protected working capital is1300USD per funded case except adverse3900USD. Separate noncash8% annual equity opportunity charges are2000USD on25k and8000USD on100k; they are not double-counted cash expenses. Whole actual development/model/host bills remain UNKNOWN. Thus these are exact native modeled profits, not updated complete-economic-cost results or real commerce. Ordinary no-inheritance ties central exactly; no discovery/retention advantage is established. Do not extrapolate18 buyers/72 opportunities to3billionUSD.
+## Original enterprise remains unchanged
 
-Built a [read-only capacity evidence instrument](transactional_admission/CAPACITY_EVIDENCE.md) with five tests. It reconciles lease spend commands with completed journal receipts and keeps uncontacted rows separate from buyer intent. The four positive cases each spent5000USD on two earned-funded leases; their18/23/18/20 capacity skips had no buyer response. Expected_net equaled lease cost, not a calibrated forecast. This evidence identifies a missing intent/return mechanism; it does not establish a losing counterfactual lease policy. No PR176 source or accounts were edited; PR177 independently owns the prospective privacy export repair.
+Original revised central authority was available, reopened under the native POSIX lock and passed full audit with unchanged export66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f. No financial action was added.
 
-The lead's previous head8ef6faa0 has all observed execution checks passing, with publication steps skipped. Main215b22a5 and AGENTS were refreshed. The original account again reopened under its native POSIX lock and audited with identical export66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f. No financial action added. Original declared[0,8760) profit19574.55USD remains historical, with no calendar mapping; capital25,000 equity, revenue42,000, expense22,425.45, cash44,574.55, tail1500, payable0USD. Updated complete-cost profit remains UNKNOWN.
-
-**Next decisive construction:** the lead's native append-only typed catalog transition, not more database infrastructure. Current persistence config and journal header bind the original source/manifest; there is no supported catalog-append operation. Qualify an explicit native upgrade preserving old tape, liabilities, source-specific replay and signing authority on fresh fixtures before original-account use. Then compare a fully costed voluntary SQL/CSV offer against strong ordinary alternatives. For capacity, use paid explicit time-bounded intent or conservative decisions rather than skipped contacts. Investment stays deferred. No formal approval, merge or release;3billionUSD not reached.
-
-
----
-
-## Live-source delivery continuation — 3 November 2026
-
-Source preregistration: fad21fecfeae75ed9a695cc5389531a46c8513c1. The previous lead head ece7d202 now has all observed execution checks passing (publication jobs skipped); current main remains215b22a5ed73b82ac1d909328d60157c48bd9958.
-
-Constructed `transactional_admission.snapshot.deliver`: ordinary SQLite online backup creates a coherent standalone database from committed WAL state with the writer connection open, derives the CSV from that snapshot, checks exact typed acceptance, then publishes a complete new directory under a POSIX publisher lock. This removes the offline-input dependency; it does not grant financial catalog admission. The original guard against exporting a live main file without its WAL remains intact.
-
-Seven registered development tests passed; all33 admission/snapshot/runtime/platform tests passed together. An actual100,000-record live-source delivery passed:5,947,392-byte database,31 groups,47 total units; CSV596 bytes. Delivery CPU0.535016451s/wall0.540906457s excludes setup, construction, tests and model/host billing. [Source-bound receipt](evidence/LIVE_SNAPSHOT.json) records the new snapshot hash; original artifact bytes remain unchanged. Sustained concurrent-write latency and physical power-loss behavior are not established. Strong ordinary SQLite is both implementation and comparator; no new flagship or discovery advantage is claimed.
-
-Original revised central authority was available and reopened under the native lock. Full audit and export66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f remain unchanged. No new financial action or SQL/CSV sale. Historical native profit remains19,574.55USD on25,000USD hypothetical equity over declared[0,8760) hours, without a calendar mapping; revenue42,000, expense22,425.45, cash44,574.55, tail reserve1,500, available43,074.55, payable0USD. Updated complete-cost profit remains UNKNOWN.
-
-PR176's matrix41581454145 is now terminal: source tests passed, weak/no_financing passed, six financial-world jobs failed. Newly completed central125737816669, favorable125737816559, ordinary_no_inheritance125737816597 and reference_100k125737816604 all fail at frozen review.py line96 with COMPLETE_MODELED_COST_RECONCILIATION_FAILED. This matches the previously diagnosed fee-timing failure location, but their corrected full replay is NOT claimed here. Preserve their output and failed verdicts; do not rerun the matrix. Previous four-case corrected results remain separately scoped. PR176 stays owned by its active author.
-
-Next consequential dependency is the lead's explicit append-only typed catalog/history transition, qualified on fresh fixtures while preserving the immutable original manifest, native prefix, authority and historical pins. A snapshot producer cannot solve that accounting boundary. Do not expand supporting database infrastructure further before that transition and a complete voluntary, fully costed offer. Whole-development/host/model costs and reachable demand remain unknown; investment stays deferred. No merge, release or formal approval.
-
-
----
-
-## Continuation: typed transactional acceptance and loss-preserving replay
-
-The original revised central account reopened under its native POSIX lock and passed full audit with unchanged export `66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f`. No financial actions were added. Current main was refreshed to `215b22a5ed73b82ac1d909328d60157c48bd9958`; the previous lead head678d384 passed all observed required execution checks, with publication jobs skipped. Qualification of this new implementation remains a separate exact-head gate.
-
-Preregistration `90f25c850dd52481dcc553371ce8839fb20af684` precedes the new [typed service construction](transactional_admission/README.md). Fifteen new tests passed, including six native no-reseed/changed-manifest/exclusive-writer/loss-preservation controls on fresh explicitly labeled fixtures. Eleven existing staging/platform tests passed. The initial corruption-test error and precise fixture correction remain in [qualification evidence](evidence/ADMISSION_QUALIFICATION.json); no recovery guard changed. The original largest actual database/CSV passes the distinct typed acceptance contract with unchanged hashes; see [typed receipt](evidence/TRANSACTIONAL_TYPED_RECEIPT.json). The inspected [original hosted archive](evidence/transactional-hosted-original.zip) is now retained byte-for-byte (SHA2564b1ce6f48ce0a0a74e0e7ec5be16391eec584508f922cc19f139628c8f356ec1), containing only previously inspected public receipts and generated output.
-
-**Admission remains deferred.** There is no qualified append-only native catalog transition. The original lab manifest remains unchanged. The new read-only offer comparison refuses missing consent, superior/tied outside options, incomplete costs, nonpositive complete surplus and insufficient whole-delivery earnings. Even an authored favorable fixture cannot grant native admission. All new construction and full model/host costs remain unknown; updated complete-cost profit is UNKNOWN. Test prices/cost vectors are engineering sensitivities, not buyer calibration or an expected-net forecast.
-
-### Companion completed-case read-only verification
-
-PR176 remains independently owned at inspected head1c8fc184a432a6b84d6f28280580a6354a71a2b8. Downloaded all four currently completed public artifacts from run41581454145, verified outer ZIP and inner public-package hashes, frozen source identities, native full replay and the exact published fee erratum. The original adverse/illiquid failed reviewer verdicts were reproduced and preserved; the corrected read-only reconciliation passed without changing source, account, native verifier or evidence. Weak/no-financing original reviewers passed and still pass. No matrix was rerun. Four other worlds were still running at inspection, so the eight-world campaign is not declared passed.
-
-All amounts below are USD, each a separate fresh modeled account, never pooled. Period: **2026-11-03 00:00 UTC through 2027-11-03 00:00 UTC, exclusive endpoint**.
-
-| Case | Hypothetical equity | Native trailing365 profit | Revenue | Incurred cost | Cash | Tail reserve | Payables | Accepted / collected |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| adverse | 100,000 | -36,900 | 12,000 | 48,900 | 63,100 | 12,300.40 | 0 | 3 / 2 |
-| illiquid | 25,000 | -687.50 | 12,000 | 12,687.50 | 24,312.50 | 12,300.20 | 0 | 1 / 1 |
-| weak | 25,000 | -10,050 | 0 | 10,050 | 14,950 | 0 | 0 | 0 / 0 |
-| no_financing | 0 | -2,700 | 0 | 2,700 | 0 | 0 | 2,700 | 0 / 0 |
-
-These exact native losses exclude separately reported noncash 8% equity opportunity charges of8,000/2,000/2,000/0USD and unknown actual model/host/whole-development costs. Additional protected working capital is3,900/1,300/1,300/0USD. Native-to-daily aggregation deviation is zero in every replay. [Detailed source-bound receipts](evidence/COMPANION_COMPLETED_REPLAY.json) retain the adverse nonpayment and unpaid no-financing obligations. No new commercial result is inferred from these losses or from contacts skipped for lack of capacity.
-
-**Decisive next action:** independently qualify an explicit append-only typed catalog/history transition with the financial owner on fresh fixtures, then a genuinely complete voluntary SQL/CSV offer and conservative funded delivery scenario on the original history. Until then, keep investment deferred. Do not multiply the18-buyer fixture, invent positive expected_net or overwrite PR176's old shared-native source onto main. No formal approval, merge or release occurred.
-
----
-
-**The US$3 billion milestone is not reached.** The existing central model still reportsUS$19,574.55 profit over its declared complete [0, 8760) hour window onUS$25,000 hypothetical initial equity. The new computational construction has no native revenue or profit. Its research/construction costs have not been attributed to that historical account, so an updated whole-enterprise complete-cost profit is UNKNOWN; the unchanged ledger is not evidence that this new work was free. Do not add its output count to commercial orders.
-
-## What now works
-
-A reusable transactional data package produces an actual persisted event database, then derives a different materialized-view/CSV output from that asset. All eight preregistered cases passed, including process exit before commit, committed reply loss, conflicting retries, malformed input and interrupted projection. The largest delivered database contains100,000 actual synthetic records and 31 groups. It is 5,947,392 bytes, not a modeled copy count. The independently downloaded file reconciles to 47 total units in both events and derived state. There is no physical actuation or real financial data.
-
-Measured complete experiment CPU including child processes: 2.67600055 seconds; wall: 2.730226918 seconds. These exclude research, source construction, model inference, CI dependencies and verification outside this command. Whole construction and model/host billing are unknown, not zero. Ordinary SQLite transaction and uniqueness mechanisms are retained; no novel algorithm or out-learning advantage is claimed.
-
-## Exact evidence
-
-- [Primary source233cae8](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/233cae832ff79f56fb472b7b072fb72ccba51392/enterprise078/transactional_data)
-- Protocol frozen atc58b4cc3a8abf65b3945d09d98a2e10c88cf9791 before implementation and execution.
-- [Hosted run41578688039](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41578688039):43 current-runtime/platform tests,14 frozen scientific tests,15 account replays, six finance mutation checks and eight transactional cases passed.
-- [Original hosted evidence archive](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41578688039/artifacts/13204178131): SHA2564b1ce6f48ce0a0a74e0e7ec5be16391eec584508f922cc19f139628c8f356ec1; artifact13204178131. Includes the actual largest database/CSV, all eight results and source/binding receipts. It contains no account authority. Hosted retention currently ends1February2027; preserve this verified public artifact in the repository when the execution workspace is stable.
-- [Transactional results](evidence/TRANSACTIONAL_RESULTS.json), [source](evidence/TRANSACTIONAL_SOURCE.json), [original-account reopening](evidence/AUTHORITY_RECOVERY_PUBLIC.json).
-
-The original078 scientific freeze, revised liquidity experiment and all failures remain unchanged. Five original integration failures were real introduced regressions. The repair restores both shared native directories byte-for-byte to main and stages 306 original scientific files with explicit historical overrides; no recovery pin or financial authority is rewritten. A separate agent verified the composition and dedicated hosted receipt. Full repository checks remain a separate gate; consult the current PR before merge/release.
-
-## Original authority recovered; investment deferred
-
-The local workspace returned after the interruption. The original revised central JournalAccount reopened through its original source and passed audit with the **identical** key-free export digest66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f. No balance, source, job catalog or private authority was copied, reset or changed.
-
-| Native value | USD |
+| Original native quantity | USD |
 |---|---:|
-| Recognized revenue / collections | 42000.00 |
-| Incurred expenses / payments | 22425.45 |
-| Profit / unrestricted earnings | 19574.55 |
-| Cash | 44574.55 |
-| Available cash | 43074.55 |
-| Retained liability reserve | 1500.00 |
+| Hypothetical initial equity | 25,000.00 |
+| Revenue / collections | 42,000.00 |
+| Incurred expenses / payments | 22,425.45 |
+| Historical native profit | 19,574.55 |
+| Cash | 44,574.55 |
+| Liability reserve | 1,500.00 |
+| Available cash | 43,074.55 |
 | Payables | 0.00 |
 
-Its last financial action is hour 181; the original experiment declares an 8760-hour operating endpoint. This is not evidence of continuous year-round throughput or a real calendar-year operation. Calendar dates for future commercial scenarios must be registered explicitly before operation.
+That historical result uses declared[0,8760) hours, with last financial action at181 and no established calendar-year mapping. New construction/model/host cost attribution remains UNKNOWN, not zero; updated complete-cost profit is UNKNOWN. SQL/CSV commercial revenue remains unexecuted.
 
-The new database service is not part of that immutable original catalog. Positive available earnings do not make this new type admitted or a complete offer executable. Accordingly, **no successor investment or sale was booked**. Charging an invented expected surplus merely to pass investment admission would contradict the prior liquidity lesson.
+## Retained productive and annual evidence
 
-## Decision and next construction
+The actual100,000-record database/CSV and live-WAL snapshot producer remain qualified within their recorded engineering scopes. The inspected original hosted archive13204178131 is preserved at[evidence/transactional-hosted-original.zip](evidence/transactional-hosted-original.zip), SHA2564b1ce6f48ce0a0a74e0e7ec5be16391eec584508f922cc19f139628c8f356ec1. This is actual generated output, not modeled commercial volume.
 
-Retain the correct ordinary transaction package as a candidate productive asset. The first financial test must establish source-compatible admission of a genuinely new service on the same authoritative history, with independently accepted binary/CSV delivery and no old-history rewrite. Coordinate with the financial owner; do not weaken guards, relabel database output as a laboratory job or substitute a fresh balance. Preserve liquidity while that dependency is unresolved.
+All eight companion cases have exact corrected read-only native/operating replay, with six original failed reviewer verdicts preserved. [Complete table and decision](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/f91cbcb45197a115915a83edac7e671adf267bba/enterprise078/OVERNIGHT_RESULT.md) and [durable compact evidence](evidence/COMPANION_EIGHT_WORLD_REPLAY.json) retain the source and every separate account result. Period2026-11-03T00:00UTC to2027-11-03T00:00UTC exclusive: central110600, favorable120125, ordinary110600, reference100k129762.50, adverse-36900, illiquid-687.50, weak-10050, no-financing-2700USD native profit. Never pool them. Ordinary ties central; no discovery advantage. Actual complete bills remain unknown. PR176 retains its branch/account ownership; PR177 owns its prospective privacy repair.
 
-In parallel, define a complete commissioned-data-transformation offer against strong ordinary SQL, [Flyway](https://www.red-gate.com/products/flyway/) and [Liquibase](https://www.liquibase.com/pricing), internal engineering and no purchase. Their availability makes high willingness-to-pay an uncertainty rather than a default. Existing software-sector size is not reachable demand. Before scale, resolve voluntary budgets/outside options, distribution costs/overlap, support/correction burden, funded capacity and exact native-to-aggregate reconciliation. No credible US$3 billion region has been established.
+The capacity diagnosis remains decisive: skipped contacts contain no buyer response, and spend-sized expected_net is not a calibrated return. A future capacity policy must pay for explicit qualified intent or use a conservative decision. No counterfactual policy profit was manufactured.
 
-Eight hourly continuation occurrences and a morning report around 08:00 America/Toronto3November are configured. Scheduled work is not a completed run. Continue the mission from actual source, account availability and receipts; do not claim uninterrupted execution or guaranteed attainment.
+## Next decisive construction
 
-The workspace disconnected again after the successful original-account audit and independent database download. No financial mutation occurred. Recheck actual access and locks before continuation; do not assume a stable workspace from an earlier successful read.
+Implement the activation and replay portions of the native upgrade on fresh fixtures: append an explicit typed catalog event, preserve old financial history/liabilities, route historical events through their exact original sources and reject unauthenticated or ambiguous transitions. The preparation record alone must never enable sale or investment. Only after independent qualification should the original authority be considered for transition and a fully costed voluntary SQL/CSV offer evaluated against strong conventional SQL/Flyway/Liquibase and no purchase.
+
+No native guard or historical pin may be weakened, no balance copied, no lab job relabeled, and no positive expected_net invented. Original science825cabc0, revisione020b7ab, publication950e35a2 and all15 original account outcomes remain immutable. Prior integration failures and c58 shallow-SHA failure stay preserved in[the earlier source-linked checkpoint](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/f91cbcb45197a115915a83edac7e671adf267bba/enterprise078/OVERNIGHT_RESULT.md).
+
+No formal approval, merge, release, outside spending or real commerce occurred. The3billionUSD complete trailing365 milestone remains unmet.

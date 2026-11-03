@@ -1,6 +1,6 @@
 # Enterprise078 overnight execution checkpoint
 
-**Latest:** all eight companion public cases now pass exact corrected read-only replay with unchanged native audit; six original reviewer failures remain preserved. Central and ordinary control tie at110600USD native annual profit; reference100k reaches129762.50USD, with complete actual costs unknown. Capacity spend was real within the model but skipped contacts supplied no buyer intent. A tested read-only diagnosis and full table are in [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md). Original authority audited unchanged. Typed native catalog transition remains unresolved; no new financial action or3billionUSD result.
+**Latest:** native-signed inactive catalog preparation is constructed on fresh fixtures: two append-only proposals, eight controls and39 combined local regressions passed. It binds accepted SQL/CSV, candidate source and original financial prefix without changing money/history. Activation and combined native replay remain unimplemented; no proposal or financial action was written to original authority. Original account audited unchanged. Read [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md); investment remains deferred and complete new-work cost unknown.
 
 Activated by the owner on2November2026 Toronto. Target remains one enterprise's US$3billion trailing365-day complete-modeled-cost profit. It is not achieved. This checkpoint is operational guidance, not a replacement for the owner's full mandate.
 
