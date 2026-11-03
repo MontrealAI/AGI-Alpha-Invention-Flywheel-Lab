@@ -88,5 +88,44 @@ class JoinPreflightTests(unittest.TestCase):
         self.assertTrue(inspect(self.a, self.b, self.c)['registry_complete'])
 
 
+class PairedAcquisitionReleaseClosureTests(unittest.TestCase):
+    def registered(self):
+        import json
+        root = Path(__file__).resolve().parents[1]
+        folder = 'experiments/paired_acquisition_20261102'
+        manifest = json.loads((root / folder / 'SOURCE_MANIFEST.json').read_text())
+        self.assertEqual(len(manifest['files']), 16)
+        extras = ('SOURCE_MANIFEST.json', 'README.md', 'FIVE_ROUTE_STATUS.md',
+                  'INDEPENDENT_REVIEW.md', 'ECONOMIC_REVIEW.md',
+                  'evidence/SCIENCE.json', 'evidence/ECONOMICS.json',
+                  'evidence/ECONOMIC_INPUTS.json', 'evidence/RETAINED_INTERFACE.json',
+                  'evidence/SUMMARY.json', 'evidence/EXECUTION.json',
+                  'evidence/LOCAL_TESTS.json')
+        required = {folder + '/' + name for name in (*manifest['files'], *extras)}
+        required.add('.github/workflows/paired-acquisition-20261102.yml')
+        self.assertEqual(len(required), 29)
+        return root, required
+
+    def test_current_release_inventory_keeps_independent_study_and_workflow(self):
+        from connected_enterprise.runner import source_paths
+        root, required = self.registered()
+        self.assertTrue(all((root / name).is_file() for name in required))
+        self.assertEqual(sorted(required - set(source_paths(root))), [])
+
+    def test_missing_economic_receipt_refuses_release_source_inventory(self):
+        from unittest.mock import patch
+        from connected_enterprise.runner import source_paths
+        root, required = self.registered()
+        target = root / 'experiments/paired_acquisition_20261102/evidence/ECONOMICS.json'
+        self.assertIn(target.relative_to(root).as_posix(), required)
+        original = Path.is_file
+        def absent(path):
+            return False if path == target else original(path)
+        with patch.object(Path, 'is_file', absent):
+            with self.assertRaisesRegex(ValueError, 'PAIRED_ACQUISITION_SOURCE_DEPENDENCY_MISSING'):
+                source_paths(root)
+
+
+
 if __name__ == '__main__':
     unittest.main()
