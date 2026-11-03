@@ -1,0 +1,38 @@
+{
+  "schema": "public-portfolio-independent-continuous-property/v1",
+  "checker_sha256": "de54752ae0a46af8e2ba48e00bf9274fc25730c85ec80c1342a57c48440d157d",
+  "protocol_sha256": "58d9bb694c9187844a03695a1c937ccb5fdcacde0f98e12fde5ad68c2c60b96c",
+  "exact_bounds": {
+    "A_mps2": "1025921/500000",
+    "minimum_velocity_mps": "1974079/100000",
+    "relative_velocity_factor": "9839/10000",
+    "minimum_safe_distance_margin_m": "668/25"
+  },
+  "checks": {
+    "acceleration_interval_lower_face_points_inward": true,
+    "acceleration_interval_upper_face_points_inward": true,
+    "velocity_stays_positive": true,
+    "lead_stays_faster_until_five_seconds": true,
+    "uniform_initial_safety_margin_positive": true,
+    "external_input_bytes_match_pinned_protocol": true
+  },
+  "source_input_hash_checks": {
+    "Specifications.txt": true,
+    "dynamicsACC.m": true,
+    "controller_5_20.mat": true
+  },
+  "source_identity_audit": "supported",
+  "passed": true,
+  "independent_derivation": [
+    "Under equal constant commands uL=uE=-2, each acceleration obeys a_dot=-2a-4-mu*v^2. Starting a=0, the interval[-A,0] is invariant while0<=v<=V: the lower-face derivative is2A-4-mu*v^2>=0 and upper-face derivative is-4-mu*v^2<0.",
+    "Velocity cannot increase since a<=0 and cannot reach zero by5s because v>=30-5A>0. This closes the preceding velocity/acceleration invariant bootstrap.",
+    "For w=vL-vE and z=aL-aE, z_dot=-2z-mu*(vL+vE)*w, z(0)=0. Before a first zero of w, z<=0 implies0<w<=w0. Variation of constants then gives z>=-mu*V*w0, since vL+vE<=2V and the exponential integral is<=1/2.",
+    "Therefore w(t)>=w0*(1-mu*V*t)>0 through5s, contradicting a first zero. The separation grows while ego velocity falls, so d=xL-xE-10-(7/5)*vE is at least its minimum initial margin668/25m.",
+    "This is a conditional analytic theorem for a conventional constant-braking controller and the supplied ODE/initial box only. It does not prove the original neural controller, velocity tracking/comfort, actuator or physical-road safety. Those purposes cannot be dropped to promote a full benchmark win."
+  ],
+  "formal_ode_safe_distance_constant_braking": "supported",
+  "original_neural_controller_universal_safety": "unresolved",
+  "full_speed_tracking_and_comfort": "unresolved",
+  "physical_road_safety": "unresolved",
+  "blue_sky_admission": "unresolved"
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "arrangement-timing-extension-preregistration/v1",
+  "experiment_id": "public-portfolio-20261102-arrangement-02",
+  "status": "prospective_not_run",
+  "parent_source": "46bae5337db2d481d05ff4ab3a466332b84be193",
+  "retained_initial_failure": "evidence-confirmation-01/RESULTS.json",
+  "observation_motivating_construction": "All twelve fixed-half-time K2 endpoint designs failed the unchanged <=5m/s fuel condition, despite endpoint residual accuracy. All compensation contracts refused under the registered best-Nash-per-participant outside-option requirement.",
+  "purpose": "Construct a different second-impulse timing while preserving the same two-impulse count, endpoint position/velocity and <=5m/s acceptance. This extension tests technical usefulness only; no compensating contract, revenue or original failure is overwritten.",
+  "construction": "Enumerate second impulse at finite fractions of the mission, including the terminal epoch. Solve each classical CW boundary-value system and choose minimum total impulse. The final impulse at T satisfies velocity as part of the endpoint; no later operation or third impulse is granted.",
+  "second_burn_fractions": [0.2, 0.35, 0.5, 0.65, 0.8, 1.0],
+  "fresh_confirmation_seed": 2026110241,
+  "fresh_cases": 12,
+  "population": "n uniform(.0008,.0014) rad/s, duration uniform(6000,10000)s, initial positions uniform(-250,250)m with zero relative velocity, deterministic stand-off target [500+20*case,30,10]m with zero relative velocity. New draws after original confirmation; synthetic mathematics only.",
+  "controls": ["original fixed-half-time two-impulse design", "equal-content ordinary timing enumeration", "fresh direct classical specialist matrix-exponential dynamics with identical timing choices", "after-mission, zero-time and nonfinite timing refusals"],
+  "acceptance": {"total_delta_v_mps": 5.0, "constructor_endpoint_norm_residual": 1e-7, "independent_ode_endpoint_norm_error": 1e-5, "direct_specialist_fuel_difference": 1e-7, "max_condition_number": 1e10},
+  "success_rule": "Report exact count accepted under unchanged criteria, paired against inherited half-time and unrestricted ordinary/direct alternatives. A quality tie defeats better-discovery claims, not mathematical acceptance. No specified number of favorable cases is assumed.",
+  "costs": "Record measured CPU/wall and number of linear solves. Six-timing search costs more setup/evaluation than one fixed timing; ordinary and fresh specialist pay identical finite search costs. No extra spending, fictional salaries, new ledger, account reset or financing is introduced; parent canonical business history retains incurred R&D losses.",
+  "independence": "Parent commits complete extension source/prereg before first execution. Constructor sees no new outcomes before freeze. Verifier may add independently chosen undisclosed fresh cases. Shared host procedural separation is not external certification.",
+  "limits": "No proof of flight or continuous approach safety, physical dynamics error, operator demand, legal rights, enforceability or new industry. Original CREAM complete-alternative finding unchanged.",
+  "stopping": "Execute one finite twelve-case stage plus invalid timing controls after freeze. Preserve all failed accepted counts and stop this stage at that endpoint. Do not relax fuel/accuracy or retune on its draws. Any later construction requires new prospective source/protocol."
+}

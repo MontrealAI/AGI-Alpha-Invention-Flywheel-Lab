@@ -25,14 +25,25 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install existing pinned CPU runtime
-        run: python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt
+        # YAML wrapper repair only; no frozen scientific source is changed.
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt
       - name: Independent outcome and native-boundary checks
         run: python -m unittest discover -s experiments/outlearning_20261102_906c4f4d -t . -p 'test_*.py' -v
+      - name: Checkout the original preconfirmation source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 85c8a3e98f31bac9d3867a022aaa758623335083
+          path: frozen-source
+          persist-credentials: false
       - name: Reproduce frozen comparison
+        working-directory: frozen-source
         run: |
-          FREEZE=$(python -c "from commercial.ledger import digest,strict_json;from pathlib import Path;print(digest(strict_json(Path('experiments/outlearning_20261102_906c4f4d/FREEZE.json').read_bytes())))")
+          FREEZE=80aec9bd90d6416e531fef3b5d2c49bc3dd62bf48359f350568631c762ad9bb5
           python -m experiments.outlearning_20261102_906c4f4d.study run --output "$RUNNER_TEMP/outlearning" --expected-freeze "$FREEZE" --label reproduction
-          python -m experiments.outlearning_20261102_906c4f4d.independent_replay --output "$RUNNER_TEMP/outlearning" --expected-freeze "$FREEZE" --receipt "$RUNNER_TEMP/outlearning/INDEPENDENT_REPLAY.json"
+          # Add the separately reviewed checker only after original-source production.
+          cp ../experiments/outlearning_20261102_906c4f4d/postfreeze_replay.py experiments/outlearning_20261102_906c4f4d/postfreeze_replay.py
+          python -m experiments.outlearning_20261102_906c4f4d.postfreeze_replay --output "$RUNNER_TEMP/outlearning" --expected-freeze "$FREEZE" --receipt "$RUNNER_TEMP/outlearning/INDEPENDENT_REPLAY.json"
       - name: Retain compact public qualification receipts
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

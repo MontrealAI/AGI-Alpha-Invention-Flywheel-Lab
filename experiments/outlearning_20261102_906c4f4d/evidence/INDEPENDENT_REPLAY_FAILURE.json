@@ -1,0 +1,39 @@
+{
+  "schema": "outlearning-replay-verifier-failure/v1",
+  "frozen_source_unchanged": true,
+  "freeze_sha256": "80aec9bd90d6416e531fef3b5d2c49bc3dd62bf48359f350568631c762ad9bb5",
+  "original_verifier_exit_code": 1,
+  "original_error": "CONSTRUCTION_REPLAY_MISMATCH:construction",
+  "first_difference": {
+    "path": "construction.trace[7].phases.provider-361df6b0b0",
+    "recorded_keys": [
+      "0"
+    ],
+    "regenerated_keys": [
+      0
+    ],
+    "recorded_key_types": [
+      "str"
+    ],
+    "regenerated_key_types": [
+      "int"
+    ],
+    "values_equal": true,
+    "explanation": "JSON object keys are strings; the regenerated Python phase cache uses integer keys. Direct dictionary equality fails despite identical persisted canonical JSON."
+  },
+  "canonical_JSON_equal": true,
+  "recorded_canonical_sha256": "504c8472928cd533cdcc98f178e6a7bad2c2578ec13450bea457fa1e8c052938",
+  "replayed_canonical_sha256": "504c8472928cd533cdcc98f178e6a7bad2c2578ec13450bea457fa1e8c052938",
+  "scientific_methods_or_trials_changed": false,
+  "full_replay_verdict": "PENDING_SERIALIZATION_REVIEW",
+  "original_failed_verifier_sha256": "6bb4f74fe3b81b8a2d9df72aeb500933dbae34c3fbb6a833535a57e75abc7bec",
+  "initial_recursive_diagnostic": {
+    "path": "construction.trace[7].phases.provider-361df6b0b0.0",
+    "recorded_type": "bool",
+    "replayed_type": "NoneType",
+    "recorded": true,
+    "replayed": null
+  },
+  "additional_representation_difference": "Finite role assignments use Python tuples in regenerated metadata and arrays/lists after JSON persistence.",
+  "proposed_correction": "Canonical JSON equality only for construction metadata; program, probe, outcome, source, identity and account checks retain original equality and audits."
+}

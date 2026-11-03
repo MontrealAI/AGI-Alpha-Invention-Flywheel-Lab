@@ -1,0 +1,95 @@
+{
+  "schema": "public-foundry-economic-inputs/v1",
+  "status": "scenario estimates, not measured prices or buyer commitments",
+  "business": "qualified optical-design blueprints plus separately costed prototype/metrology validation; no fee for generic intelligence",
+  "buyer": "optical-component or energy-system R&D team needing a specified spectral function",
+  "buyer_alternatives": [
+    "competent conventional thin-film engineer with existing automated tools",
+    "in-house design",
+    "other AI-enabled design vendors",
+    "buy standard filter",
+    "defer or refuse"
+  ],
+  "purchase_rule": "voluntary only when complete verified offering beats all complete alternatives after adoption, uncertainty and delay; scientific novelty supplies no willingness-to-pay multiplier",
+  "rights": "public-data CC0 and independently implemented classical equations; no patent/exclusivity assumption; third-party legal review unperformed",
+  "one_time_cost_estimates_usd": {
+    "research_including_failed_candidates": 50000,
+    "tooling_and_software_qualification": 25000,
+    "first_device_external_prototype_and_ellipsometry": 30000,
+    "business_setup_legal_insurance": 15000
+  },
+  "per_accepted_delivery_estimates_usd": {
+    "acquisition": 1000,
+    "requirements_onboarding": 500,
+    "model_compute_and_tools": 200,
+    "independent_design_verification": 800,
+    "correction_failure_allowance": 1000,
+    "external_deposition_metrology": 5000,
+    "logistics": 300,
+    "rights_and_legal_allocation": 300,
+    "support_maintenance_tail": 800,
+    "warranty_liability_provision": 1000,
+    "fixed_overhead_allocation": 1000
+  },
+  "human_attention_estimate": {
+    "scenario": "hybrid physical qualification case, not observed autonomous operation",
+    "domain_engineer_hours": 4,
+    "loaded_usd_per_hour": 125,
+    "safety_or_rights_review_if_indispensable": "additional quoted specialist input; not waived by the model",
+    "internal_measured_assistance_requested_minutes": 0,
+    "actual_user_oversight_minutes": "unknown",
+    "human_comparator": "competent conventional workers with real automated thin-film tools; no timed baseline observed; productivity advantage unresolved"
+  },
+  "offer_price_scenarios_usd": [
+    0,
+    10000,
+    20000,
+    40000
+  ],
+  "complete_alternative_cost_scenarios_usd": [
+    5000,
+    15000,
+    30000
+  ],
+  "price_and_cost_provenance": "explicit order-of-magnitude hypotheses; no quotes, market survey or observed procurement calibration",
+  "commercialization_delay_days": [
+    90,
+    365,
+    730
+  ],
+  "collection_delay_days": [
+    0,
+    30,
+    90,
+    180
+  ],
+  "qualification_failure_scenarios": [
+    0,
+    0.2,
+    0.5,
+    1.0
+  ],
+  "finite_reachable_buyer_scenarios": [
+    0,
+    20,
+    200
+  ],
+  "supplier_and_capacity": "external coating/metrology capacity must be bought and qualified; no free factory; scenario bottleneck 1\u201310 accepted deliveries/month; actual capacity and yield unknown",
+  "commissioning_capex_if_manufacture_offered": "not modeled or available: a fabrication facility requires separate engineering, quotes, commissioning, capex/depreciation, staff, energy, scrap and decommissioning. Software revenue must not be multiplied into manufacturing revenue",
+  "capital_comparisons_usd": [
+    0,
+    100000,
+    1000000,
+    1000000000
+  ],
+  "financing": "capital amounts are hypotheses; parent native-account implementation must explicitly seed each distinct comparison, or use qualified native financing only; no funds secured",
+  "cost_gap_compression_months": [
+    3,
+    6,
+    12,
+    18,
+    24
+  ],
+  "scale_verdict": "no evidence-bounded USD3B annual profit region established; extrapolating 200 hypothetical buyers or modeled device savings is not profit",
+  "actual_resource_measurement": "run.py records CPU/wall/peakRSS. Actual host/model billing unknown and not zero by assumption. No incremental purchase or paid model API used."
+}

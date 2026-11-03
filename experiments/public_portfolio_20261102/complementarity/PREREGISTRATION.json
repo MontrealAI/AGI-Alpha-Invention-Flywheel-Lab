@@ -1,0 +1,42 @@
+{
+  "schema": "public-portfolio-route-preregistration/v1",
+  "experiment_id": "public-portfolio-20261102-complementarity-v1",
+  "owner": "/root/complementarity",
+  "registered_date": "2026-11-02",
+  "base_commit": "a842861dcf532ee8b769f39248c4c1faabfb628a",
+  "stage": "finite computational engineering prerequisite, not physical or market confirmation",
+  "status_at_write": "source implemented, syntax compiled; no registered solver outcomes run",
+  "source_sha256": {
+    "thermal.py": "0b59d6e09c119da9798b735b991ccc79aefca093fcce96a1a59e5b7631fffa38",
+    "fresh.py": "40fd58ae795ea0568e3e6f656d2cf62659ba795581ba7a8a02bbe10afd719187",
+    "README.md": "673e46df3d7f9f99053c02a77db70808eb6b9cab250ea05be87abcece145bd8a"
+  },
+  "purpose": "Construct and check continuous thermal delivery plus a different industrial water-recovery balance while preserving every power, energy and mass obligation.",
+  "k1": "48-hour 500 kW heat duty at 110 C, 300 kW electrical limit, intermittent source; costed heat pump A and storage B must jointly preserve delivery",
+  "k2": "Different function: 5000 kg/h hypersaline feed, salt fractions 0.07 to 0.20, 70 C assumed evaporation, heat-recovery assumptions exposed; retained kernel constructs utility dispatch at 75 C",
+  "retained_means": "Versioned equations, applicability checks and dispatch implementation only; no learned weights, stored answers, customer authority or account cash transfer",
+  "controls": ["unchanged", "A only", "B only", "A+B", "unrestricted conventional A+B", "equal-content ordinary reuse", "fresh thermal-output LP without importing retained kernel"],
+  "independence_limits": ["Constructor authored the public source cases and knows them; they are not blinded physical holdouts", "Fresh LP has different variables and construction but the same constructor and declared mathematics", "HiGHS algorithms are cross-algorithm checks, not independent scientific implementations", "Separate verifier owns additional fresh adversarial cases; constructor may not inspect hidden verifier material"],
+  "finite_schedule": {
+    "public_cases": 2,
+    "arms_per_case": 7,
+    "adverse_cases": ["zero source", "50 kW grid", "0.20 Carnot fraction", "0.90 hourly storage retention"],
+    "time_step_hours": [1.0, 0.5, 0.25],
+    "modeled_hours_per_case": 48,
+    "seed_policy": "deterministic declared public inputs; no stochastic reruns or favorable-seed search",
+    "stopping": "Execute the registered 18 arm/case runs and 3 time-step checks once; keep all outcomes. Recoverable code failure requires an append-only correction and changed-source evidence, not silent acceptance tuning. Physical qualification is a separate stage."
+  },
+  "acceptance": {
+    "feasible_schedules": "All independently reconstructed heat/storage equalities and power/source/storage bounds must hold with absolute tolerance 1e-6 in declared kW/kWh units",
+    "initial_final_storage": "Both fixed to zero; no free initial heat or omitted tail",
+    "water_and_salt": "Feed equals product plus brine; inlet salt equals concentrate salt; no water-quality acceptance inferred",
+    "pure_water_property_check": "Linear latent approximation differs by at most 0.005 relative from three frozen NIST IAPWS table values at 40,70,100 C; this says nothing about brine boiling-point elevation",
+    "solver_comparison": "Feasibility status must agree and accepted feasible electrical energy must agree within 1e-5 relative under constant prices",
+    "convergence": "Report all time-step results; differences above 0.01 relative block any claim of time-step convergence",
+    "reject_claims_if": ["Conventional complete route ties: no unique enabling or algorithmic superiority claim", "K2 depends on unvalidated thermal or brine assumptions: physical qualification unresolved", "No measured buyer choice or full lifecycle physical costs: actual commerce absent", "K2 consequence not independently established: no more-consequential-successor claim"]
+  },
+  "scientific_contract": {"physics": "First law, bounded source flow, Carnot upper bound, finite lossy storage and salt/water conservation", "authored_inputs": ["source and demand profiles", "0.45 Carnot fraction", "storage efficiencies and losses", "six effective latent-heat reuses", "0.75 sensible-heat recovery", "power/capacity values", "electricity price"], "public_measured_plant_data": "none", "external_steps": ["vendor compressor/heat-exchanger map", "brine boiling-point elevation and scaling", "pilot cycle data and output purity", "pressure/vacuum and electrical review", "site-specific installation and commissioning"]},
+  "economics_handoff": {"canonical_account_owner": "/root", "account_mutations_by_route": "none", "usd_100000": "reference design/pilot hypothesis", "usd_1000000000": "separate financing hypothesis, not available funds", "cash_or_revenue_claim": "none from this science experiment", "full_cost_scope": "README provides complete industrial categories and deliberately uncalibrated cost envelopes; must remain conditional", "price_and_buyer_choice": "unvalidated; unrestricted conventional outside options and refusal required", "horizon": "root account simulation preregistration governs finances; 48-hour physical screening is not annual profit"},
+  "source_facts": [{"url":"https://www.energy.gov/nepa/articles/cx-030820-cost-effective-integration-pcm-thermal-energy-storage-and-wet-compression", "fact":"Heat-pump plus thermal-storage integration is existing research; generic pair is not a novelty result"}, {"url":"https://www.nist.gov/document/nistir5078-tab1pdf", "downloaded_bytes":84823, "sha256":"8134235cf070ad053f006d4e98ebdccd12a621ad86fb3752d38bbce0fbb9cf1f", "property_rows":[[40,2406.0],[70,2333.0],[100,2256.4]]}],
+  "execution_boundary": "Included local tools only; no paid models, keys, spending, orders, outreach, physical operation, private material or other-owner account access"
+}

@@ -1,0 +1,13 @@
+{
+  "schema": "outlearning-postfreeze-ci-wrapper-repair/v1",
+  "frozen_commit": "85c8a3e98f31bac9d3867a022aaa758623335083",
+  "freeze_sha256": "80aec9bd90d6416e531fef3b5d2c49bc3dd62bf48359f350568631c762ad9bb5",
+  "original_failed_workflow": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41554874154",
+  "original_defect": "An unquoted colon-space in the pip --only-binary=:all: command made the workflow invalid YAML.",
+  "repair": "Use a YAML block scalar; test current integration head, then separately checkout the exact frozen commit for original-source production. Copy the separately reviewed postfreeze replay checker only after production completes.",
+  "checker_correction": "postfreeze_replay.py compares construction metadata in its canonical JSON wire representation; other program, probe, outcome, account and source checks remain unchanged.",
+  "original_checker_failure": "evidence/INDEPENDENT_REPLAY_FAILURE.json",
+  "new_confirmation_samples": 0,
+  "scientific_or_cost_protocol_retuned": false,
+  "qualification_status": "See the checks attached to the exact PR revision; this receipt does not claim a hosted pass."
+}

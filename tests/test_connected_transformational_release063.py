@@ -15,6 +15,16 @@ class TransformationalReleaseTests(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertIn('research-pages.yml', applicable_workflows([path]))
 
+    def test_portfolio_source_and_evidence_require_their_same_source_qualification(self):
+        for path in ('experiments/public_portfolio_20261102/native.py',
+                     'experiments/public_portfolio_20261102/evidence/economics-r2/RESULTS.json',
+                     'tests/test_public_portfolio_20261102.py',
+                     '.github/workflows/public-portfolio-20261102.yml'):
+            with self.subTest(path=path):
+                self.assertIn('public-portfolio-20261102.yml', applicable_workflows([path]))
+        self.assertNotIn('public-portfolio-20261102.yml',
+                         applicable_workflows(['docs/next009/PAPER.pdf']))
+
     def test_unrelated_historical_source_does_not_renew_the_experiment(self):
         self.assertNotIn('transformational063.yml', applicable_workflows(['docs/next009/PAPER.pdf']))
 

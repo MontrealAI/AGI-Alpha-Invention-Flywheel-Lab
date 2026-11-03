@@ -1,0 +1,20 @@
+{
+  "schema": "public-portfolio/independent-fast-recovery-checks/v3",
+  "checker_sha256": "7e5db3664ddce87c2b49c175fa18a29f7977f6adb379af6f439721719b24088f",
+  "fast_recovery_source_sha256": "7ad1153471a7091c7173fb936473d810c0a01e9e9ba1295ec4b03812974e937a",
+  "checks": {
+    "changed_historical_request_refused": true,
+    "bad_reconstruction_did_not_change_original": true,
+    "changed_source_refused_at_append_boundary": true,
+    "source_rejection_preserved_original": true,
+    "exact_original_action_prefix_preserved": true,
+    "exact_entire_original_export_matched": true,
+    "only_one_missing_action_appended": true,
+    "original_capital_cash_expenses_conserved": true,
+    "full_canonical_native_replay": true,
+    "no_historical_original_execution": true,
+    "second_reconstruction_adds_no_duplicate": true
+  },
+  "passed": true,
+  "scope": "Independent disposable NONBUSINESS fixture only. No original campaign account, key, wallet or cash was read, copied, reopened or changed. The in-memory source fault is reverted before cleanup; actual source files stay unchanged."
+}

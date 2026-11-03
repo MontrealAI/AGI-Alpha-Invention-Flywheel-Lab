@@ -1,0 +1,1679 @@
+{
+  "schema": "public-portfolio-r1-independent-prefix-audit/v1",
+  "checker_sha256": "7fac4de9652c7957117a3499c984e5cf0c25a3c802ca1e915150f9f32ff168fa",
+  "frozen_primary_checker_sha256": "e765dbbc28455bd14ab3c119ce014fbc36ac508e9d108a6232254487124869b8",
+  "partial_summary_sha256": "8e99ba7306468c9aff59a7dedc4ec122996ac570b27c80b70ba509603846dee3",
+  "registered_campaign_accounts": 110,
+  "completed_accounts_checked": 25,
+  "campaign_completed": false,
+  "arithmetic_checks_passed": true,
+  "independent_native_prefix_account_replays": 2,
+  "native_replay_denominator_scope": "Only completed accounts in original predeclared subset; never reported as the planned10/110 campaign completion",
+  "complete_executable_source_qualification": false,
+  "source_closure_verdict": "FAILED_COMPLETE_EXECUTABLE_SOURCE_CLOSURE",
+  "cases": [
+    {
+      "case_id": "purpose-rights-unresolved",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "rights_or_demand_failure_refuses_sales",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-central-100k",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": true,
+      "obligations_covered": true,
+      "native_audit": {
+        "accepted": true,
+        "scope": "SIMULATED",
+        "actions_sha256": "a7b6273d7894b15d1b5941a594616a82179c1b6b308ef6821bcdf0b3ac35cae4",
+        "summary": {
+          "reservedInvestment": 0,
+          "revenue": 0,
+          "expenses": 27000000000,
+          "recoveryIncome": 0,
+          "profit": -27000000000,
+          "cash": 73000000000,
+          "collections": 0,
+          "expensePaid": 27000000000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 0,
+          "workingCapital": 0,
+          "available": 73000000000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 0,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -27000000000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "orders": [],
+        "investments": [],
+        "state_bound_reservations": 0,
+        "signature_scope": "Public audit verifies native finance and state/action commitments. Private local HMAC authenticity is checked only by the account owner.",
+        "connected_journal_entries": 49,
+        "connected_rejected_entries": 0,
+        "connected_native_actions_covered": 49,
+        "source_bound_resource_spend_microUSD": 21600000000,
+        "journal_authenticity_scope": "Public source/native commitments verified; private local WAL HMAC checked only on owner reopen."
+      }
+    },
+    {
+      "case_id": "purpose-central-1m",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-central-1b",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-non-entry",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": 0,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-no-demand",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "rights_or_demand_failure_refuses_sales",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-low-wtp",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-immediate-copy",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-copy-3m",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-copy-6m",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-copy-30m",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-stable-gap",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-failed-qualification",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-costly-maintenance",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -18000000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-delayed-collections",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-provider-default",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-financing-refusal",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": 0,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-working-capital-aware",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": false
+    },
+    {
+      "case_id": "purpose-working-capital-greedy",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": false
+    },
+    {
+      "case_id": "purpose-earned-only-k2",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-ordinary-reuse",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "purpose-no-inheritance",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1800000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "interface-rights-unresolved",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "rights_or_demand_failure_refuses_sales",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1200000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    },
+    {
+      "case_id": "interface-central-100k",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1200000000,
+      "native_full_replay": true,
+      "obligations_covered": true,
+      "native_audit": {
+        "accepted": true,
+        "scope": "SIMULATED",
+        "actions_sha256": "16804f5e0d46a00341d4205554add45b42141cf6cccefd2202a0249ce5a9dc0d",
+        "summary": {
+          "reservedInvestment": 0,
+          "revenue": 16000000000,
+          "expenses": 27848800000,
+          "recoveryIncome": 0,
+          "profit": -11848800000,
+          "cash": 88151200000,
+          "collections": 16000000000,
+          "expensePaid": 27848800000,
+          "payables": 0,
+          "custodyRestricted": 0,
+          "custodyReserve": 0,
+          "tailReserve": 320000000,
+          "workingCapital": 0,
+          "available": 87831200000,
+          "unrestrictedEarned": 0,
+          "strictEarnedControl": 0,
+          "equityProtectionBacking": 320000000,
+          "earnedProtectionBacking": 0,
+          "netEarnedAfterIncurredObligations": -11848800000,
+          "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+          "conditionalEarned": 0,
+          "investmentStopped": false,
+          "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment"
+        },
+        "orders": [
+          {
+            "id": "interface-central-100k-k1-initial-0",
+            "buyer": "interface-p00",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-initial-1",
+            "buyer": "interface-p01",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-initial-2",
+            "buyer": "interface-p02",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-initial-3",
+            "buyer": "interface-p03",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-initial-4",
+            "buyer": "interface-p04",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-initial-5",
+            "buyer": "interface-p05",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-initial-6",
+            "buyer": "interface-p06",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-initial-7",
+            "buyer": "interface-p07",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-renewal-0",
+            "buyer": "interface-p00",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-renewal-1",
+            "buyer": "interface-p01",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-renewal-2",
+            "buyer": "interface-p02",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-renewal-3",
+            "buyer": "interface-p03",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-renewal-4",
+            "buyer": "interface-p04",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-renewal-5",
+            "buyer": "interface-p05",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-renewal-6",
+            "buyer": "interface-p06",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          },
+          {
+            "id": "interface-central-100k-k1-renewal-7",
+            "buyer": "interface-p07",
+            "price": "1000000000",
+            "state": "released",
+            "refund_due": "0",
+            "compensation_due": "0",
+            "custody": 0
+          }
+        ],
+        "investments": [],
+        "state_bound_reservations": 0,
+        "signature_scope": "Public audit verifies native finance and state/action commitments. Private local HMAC authenticity is checked only by the account owner.",
+        "connected_journal_entries": 202,
+        "connected_rejected_entries": 0,
+        "connected_native_actions_covered": 202,
+        "source_bound_resource_spend_microUSD": 24245600000,
+        "journal_authenticity_scope": "Public source/native commitments verified; private local WAL HMAC checked only on owner reopen."
+      }
+    },
+    {
+      "case_id": "interface-central-1m",
+      "checks": [
+        {
+          "check": "capital_is_not_income",
+          "passed": true
+        },
+        {
+          "check": "complete_profit_identity",
+          "passed": true
+        },
+        {
+          "check": "all_event_prefixes_conserve_cash_profit_and_earned_funds",
+          "passed": true,
+          "invalid_sequences": []
+        },
+        {
+          "check": "independent_exact_completed_365_day_profit",
+          "passed": true
+        },
+        {
+          "check": "all_monthly_windows_use_exact_native_event_boundaries",
+          "passed": true,
+          "failed_months": []
+        },
+        {
+          "check": "independent_cumulative_tax_assessments",
+          "passed": true,
+          "failed_sequences": []
+        },
+        {
+          "check": "buyer_wallet_never_topped_up_and_orders_not_duplicated",
+          "passed": true
+        },
+        {
+          "check": "only_registered_route_products_offered",
+          "passed": true
+        },
+        {
+          "check": "reported_obligation_coverage_matches_native_state",
+          "passed": true
+        },
+        {
+          "check": "collected_order_count_matches_native_orders",
+          "passed": true
+        },
+        {
+          "check": "independent_current_price_game_arithmetic",
+          "passed": true,
+          "failures": []
+        }
+      ],
+      "passed": true,
+      "independent_trailing365_profit_microUSD": -1200000000,
+      "native_full_replay": false,
+      "obligations_covered": true
+    }
+  ],
+  "overall_verdict": "UNQUALIFIED_SOURCE_CLOSURE_WITH_PRESERVED_PARTIAL_ARITHMETIC_EVIDENCE",
+  "limits": "R1 helpers were unchanged but unbound. Internal arithmetic/native replay is not full source qualification. No R1 account reset, balance copy or result substitution is authorized.",
+  "wall_seconds": 4.1662890911102295
+}

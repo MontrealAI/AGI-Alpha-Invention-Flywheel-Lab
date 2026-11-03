@@ -1,0 +1,56 @@
+{
+  "schema": "public-portfolio-route-preregistration-v1",
+  "experiment_id": "public-portfolio-20261102-interface-v1",
+  "route": "Constructed Discovery Interface",
+  "owner": "portfolio/interface",
+  "base_source": "a842861dcf532ee8b769f39248c4c1faabfb628a",
+  "status_at_registration": "construction complete; no registered confirmation executed",
+  "purpose": "Test a reference-normalized spectral interface for nondestructive material estimation and fresh spatial-defect reconstruction without estimating common source-gain histories.",
+  "K1": {
+    "input": "Simultaneous sample/open-beam/dark observations at 50,100,150 keV; no material truth provided to estimator.",
+    "output": "Aluminum/copper mass areal density (g/cm^2), conditional deterministic component bounds and abstention diagnostics.",
+    "physical_model": "Ideal narrow-beam monochromatic Beer-Lambert attenuation using NIST SRD126 coefficients.",
+    "binding_model_nuisance": "Arbitrary positive source gain shared by sample/reference in each energy/ray, plus measured dark offset.",
+    "construction": "Subtract dark, form log(reference)-log(sample), apply full-rank three-energy/two-material decoder; check orthogonal residual and nonnegativity intervals.",
+    "exact_bound": "With each corrected signal independently within relative eps<1 of its ideal value, each log-ratio error is at most log((1+eps)/(1-eps)); multiply by decoder row one-norms.",
+    "not_covered": ["unknown sample/reference gain mismatch", "unknown polychromatic spectrum", "unbounded scatter", "saturation", "unmeasured dark error outside declared corrected-signal envelope", "unknown extra materials", "NIST coefficient uncertainty", "clinical use"],
+    "confirmation_cases": 192,
+    "registered_arms": ["64 analytic noiseless mixtures", "64 bounded-noise mixtures", "64 shifted gain/dark mixtures"],
+    "acceptance": "All 192 estimates accepted and within declared component bounds. Analytic maximum error <=1e-10 g/cm^2. Strong comparator must agree within1e-10. This qualifies only model-conditional implementation, never physical accuracy.",
+    "seed": 2026110203101
+  },
+  "K2": {
+    "different_function": "Reconstruct spatial aluminum/copper density and localize an interior low-density cell from multi-angle rays; K1 only answers integrated material quantities.",
+    "why_consequential_if_physically_qualified": "Nondestructive spatial defect localization serves structural qualification whereas integrated composition cannot locate a defect. This is potential consequence, not an established new industry.",
+    "new_construction": "Ray/cell path-length matrix, full-rank spatial inversion, propagated density intervals and localization decision.",
+    "retained": "Frozen spectral normalization, coefficient basis, decoder, residual and uncertainty contract; no K2 truth or precomputed answers.",
+    "task_family": "16 fresh authored four-by-four Al/Cu density grids, one strongly depleted cell, nine angles and eleven offsets (99 rays), cell width0.25cm.",
+    "seed": 2026110203102,
+    "acceptance": "All16 geometries full rank, all16 outputs accepted and within propagated intervals, and all16 depleted cells correctly localized. This is grid-model qualification, not physical porosity metrology.",
+    "controls": ["no inheritance recompiles spectral interface with same facts", "equal-content ordinary reuse via standard flat-field/log plus independent SVD", "direct spatial specialist via least-squares", "rank-deficient geometry refusal"],
+    "retained_advantage_rule": "No algorithmic/discovery advantage if ordinary or no-inheritance controls tie. Saved implementation content is distinct from a better discovery procedure. No invented human-hours benchmark."
+  },
+  "failure_tests": [
+    "Nonpositive dark-corrected signal must reject.",
+    "A one-g/cm^2 unmodeled iron layer must reject through spectral residual.",
+    "Rank-deficient tomography must reject.",
+    "A coherent sample/reference gain mismatch equivalent to +[0.2,0.03]g/cm^2 is expected to evade residual detection; record as an explicit scope failure, never universal fault-detection success."
+  ],
+  "truth_access": {
+    "constructor_inputs": "Only declared spectra/geometry/current observation arrays and uncertainty envelope.",
+    "authored_truth": "The developer authored the fixture family and public seeds. This is not a blinded external trial. Function-level data-flow separation does not make shared-host truth cryptographically hidden.",
+    "independent_adversary": "Separate portfolio verifier specifies additional cases. Route constructor does not inspect verifier hidden files/seeds/truth."
+  },
+  "baseline": "Competent conventional engineer allowed identical calibration, spectral/reference channels, source facts and geometry; standard flat-field/log decomposition and least-squares reconstruction. Expected tie is retained.",
+  "business": {
+    "offer": "Prospective industrial inspection software/qualification integration; no physical production or actual customer established.",
+    "price_and_market": "Uncalibrated authored scenarios recorded separately; buyer refusal against incumbent XCT, in-house reconstruction and no purchase required.",
+    "finance": "Root integrates all route scenarios using existing JournalAccount and adaptive Account. This route creates no replacement ledger or operating account.",
+    "capital": "Compare non-entry, staged entry,100000USD, relevant1000000000USD hypothesis and justified intermediate scales; received committed funds must be accounted natively.",
+    "earned_K2": "Unestablished at scientific registration; no inferred earned funding.",
+    "human_baseline": "Conventional software retains machine-speed linear algebra. No observed human baseline hours, autonomous model token count, actual industrial billing, or physical qualification labor measured."
+  },
+  "measurement": "Wall/CPU seconds and exact executed case counts; zero human intervention inside deterministic run, upstream user direction unmeasured; deployment costs are estimates and actual host/model billing unknown.",
+  "stopping": "One finite registered192-case K1/16-case K2 pass plus specified failure cases; preserve bounded negative/tie. Any corrected protocol gets a prospective amendment and new identity before rerun; do not tune this confirmation to success.",
+  "publication": "Only original research code, tiny numeric reference extract with source attribution, authored fixtures and qualified results. No private prompt, conversation, data or account authority."
+}

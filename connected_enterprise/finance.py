@@ -53,6 +53,9 @@ def source_paths_for_manifest(manifest=None):
     if schema == 'outlearning-906c4f4d/native-services/v1':
         from experiments.outlearning_20261102_906c4f4d.service import source_paths
         return tuple(dict.fromkeys(SOURCE_PATHS + tuple(source_paths(Path(__file__).resolve().parents[1]))))
+    if schema == 'public-portfolio-20261102/native-services/v2':
+        from experiments.public_portfolio_20261102.service import source_paths
+        return tuple(dict.fromkeys(SOURCE_PATHS + tuple(source_paths(Path(__file__).resolve().parents[1]))))
     if schema == 'flexibility063/native-services/v1':
         from flexibility063.service import source_paths
         return tuple(dict.fromkeys(SOURCE_PATHS + tuple(source_paths(Path(__file__).resolve().parents[1]))))
@@ -451,10 +454,11 @@ class JournalAccount:
                 'source': self.source, 'manifest_sha256': digest(self.manifest)}
 
     def _audit_incremental(self):
-        # Only qualified source-bound services reuse a private financial
-        # prefix; production060 also rebinds every dynamic prepared output.
+        # A private exact prefix still binds owner, lease, source, manifest,
+        # every prior action byte and all dynamic prepared outputs.
         if self.manifest.get('schema') not in {'agi-alpha/adaptive012-services/v1',
-                                              'production060/native-services/v1'}:
+                                              'production060/native-services/v1',
+                                              'public-portfolio-20261102/native-services/v2'}:
             return self.audit()
         with self._mutex:
             try:
