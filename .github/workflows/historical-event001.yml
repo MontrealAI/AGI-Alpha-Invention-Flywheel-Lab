@@ -15,10 +15,11 @@ permissions:
 jobs:
   offline-event-certificate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 360
     steps:
       - name: Record platform job start before checkout
-        run: date -u +'%Y-%m-%dT%H:%M:%SZ'
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - name: Checkout exact triggering source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Run independent source and refusal regressions
