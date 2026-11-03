@@ -1,5 +1,7 @@
 # Use the published papers to construct the flagship
 
+See the [current edition-by-edition application audit](PAPER_APPLICATION_AUDIT.md) for newer papers, actual source/check paths, non-implementations and remaining operational gaps. Earlier instructions below retain their stated scope.
+
 These nine user-authorized research manuscripts are **tools for the consequential activity**, not mandatory stages or evidence that their mechanisms are deployed here. Start with the [flagship and arrangement card](DEVELOPER_GUIDE.md#mission-construct-economically-reachable-possibilities); select only mechanisms that remove its missing-means constraint. Passing their examples, publishing papers or building a generic framework does not establish useful delivery, profitable funded expansion or a scientific breakthrough.
 
 The browser readers below preserve the original PDFs. Page references refer to the supplied editions identified below (20–23 October 2026). Their theorems, synthetic companion results and proposed integrations are manuscript claims; this publication does not independently reproduce companions, qualify a physical system or import their guarantees into this repository. For actual implemented paths and limitations, use the [implementation map](DEVELOPER_GUIDE.md#implementation-and-claim-boundaries).
