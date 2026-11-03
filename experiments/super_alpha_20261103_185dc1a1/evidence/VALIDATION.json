@@ -5,7 +5,7 @@
     "failures": 0,
     "run": 25
   },
-  "hosted_exact_source_status": "See pull-request exact-head workflow receipt; no hosted pass inferred from local tests.",
+  "hosted_exact_source_status": "First dedicated hosted run failed at a9b50b1910c7bd8f229c9d7f2d8ea7003ce13d06. Dependency-only workflow correction requires a new exact-source hosted result; no pass inferred from local tests.",
   "liquidity_regression": {
     "positive_profit_preserved_microUSD": 90000000,
     "requested_spend": "native available cash plus one microUSD",
@@ -26,6 +26,36 @@
     "passed": 1,
     "stage": "financial adapter tests before primary account creation",
     "tests": 7
+  },
+  "retained_hosted_failure": {
+    "run_id": 41642657528,
+    "run_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41642657528",
+    "source_commit": "a9b50b1910c7bd8f229c9d7f2d8ea7003ce13d06",
+    "python_version": "3.12.15",
+    "stage": "Test independent outcomes, disclosure and native continuity",
+    "tests": 25,
+    "passed": 18,
+    "errors": 7,
+    "failures": 0,
+    "error": "ModuleNotFoundError: No module named 'cryptography'",
+    "cause": "The dedicated workflow omitted installation of the existing pinned native-account dependencies required by vendor.alpha_claim.protected_exchange.",
+    "skipped_stages": [
+      "Reproduce every registered case on the exact PR source",
+      "Independently replay the original key-free native research history"
+    ],
+    "verdict": "FAILED_RETAINED_NOT_RETROACTIVELY_RECLASSIFIED"
+  },
+  "hosted_packaging_correction": {
+    "scope": "Workflow prerequisite installation and reproduction documentation only; all nine frozen protocol/core files and original native account preserved.",
+    "install_command": "python -m pip install --only-binary=:all: -r requirements-commercial010.txt",
+    "existing_dependency_specification_git_blob": "a69183f86436c1e7585a7a3c36a1017cfbfe7883",
+    "pinned_dependencies": {
+      "cryptography": "50.0.2",
+      "cffi": "2.1.1",
+      "pycparser": "3.11"
+    },
+    "local_passing_runtime_versions_match": true,
+    "hosted_status": "AWAITING_NEW_EXACT_SOURCE_EXECUTION"
   },
   "schema": "super-alpha-185dc1a1/local-validation/v1",
   "source_commit": "f7ff17a4d24cad1426e0e7d3c1fde690abc2c02e",

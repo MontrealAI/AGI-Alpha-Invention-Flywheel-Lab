@@ -29,7 +29,7 @@ The selected hypothesis was: **make complete, verifiable multi-provider computat
 
 **The service models ideal secure internals; cryptography is not implemented.** The protected quantity is a submitted ask in a known finite domain, not true production cost, public capability descriptions, or arbitrary private knowledge. Truthful bids, strategic equilibrium, real security, real supplier consent and actual demand remain unestablished. No attack on MapXchange or another deployed product was conducted.
 
-Four providers each have one-block capacity. The predecessor needs three blocks; a fresh successor needs four. Each private ask is one of 200, 300, 600 or 700 cents, giving 256 worlds. All 16 exclusion masks and six price caps are evaluated. The complete campaign checks **172,032 counterfactual offers, with zero ordinary-control mismatches**. These are exhaustive authored cases, not customers or conversion probabilities. All 25 focused regression tests pass.
+Four providers each have one-block capacity. The predecessor needs three blocks; a fresh successor needs four. Each private ask is one of 200, 300, 600 or 700 cents, giving 256 worlds. All 16 exclusion masks and six price caps are evaluated. The complete campaign checks **172,032 counterfactual offers, with zero ordinary-control mismatches**. These are exhaustive authored cases, not customers or conversion probabilities. All 25 focused regression tests pass locally; hosted qualification is recorded separately in [VALIDATION.json](evidence/VALIDATION.json).
 
 | Released outputs | Minimum possible ask vectors | Exact full-vector reconstruction |
 | --- | ---: | ---: |
@@ -81,9 +81,10 @@ This is a specific unresolved opportunity, not an admitted successor. A random-r
 - Executed implementation: [f7ff17a4](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/f7ff17a4d24cad1426e0e7d3c1fde690abc2c02e); [source hashes](evidence/SOURCE.json).
 - [Compact results and complete semantic result hash](evidence/SUMMARY.json), [original key-free native history](evidence/FINANCE_PUBLIC.json), [financial summary](evidence/FINANCE_REPORT.json), and [validation history](evidence/VALIDATION.json). Full repetitive per-world rows are regenerated, not archived publicly.
 
-From this source, with Python 3.12 or newer and the standard library:
+Use Python 3.12 and install the existing [native-account dependencies](../../requirements-commercial010.txt): `cryptography==50.0.2`, `cffi==2.1.1`, and `pycparser==3.11`. The mathematical mechanism uses the standard library; the canonical financial runtime also imports these pinned dependencies. They are local software packages, not model API services.
 
 ```bash
+python -m pip install --only-binary=:all: -r requirements-commercial010.txt
 python -m unittest -v experiments.super_alpha_20261103_185dc1a1.test_mechanism experiments.super_alpha_20261103_185dc1a1.test_finance
 python -m experiments.super_alpha_20261103_185dc1a1.run --output /absolute/new/technical-reproduction
 python -m experiments.super_alpha_20261103_185dc1a1.finance audit-public --root "$PWD" --evidence experiments/super_alpha_20261103_185dc1a1/evidence/FINANCE_PUBLIC.json
@@ -91,4 +92,4 @@ python -m experiments.super_alpha_20261103_185dc1a1.finance audit-public --root 
 
 The dedicated exact-head workflow hashes **all** regenerated scientific results, including every per-world row, and compares that hash with SUMMARY.json. Only source/time and runtime/cache telemetry are excluded; executable hashes must match. Public financial audit replays the original account without opening another. Same-account resume requires the original complete private recovery directory and unchanged scientific source; a newly opened account is a separate reproduction and must not be pooled.
 
-The first financial test attempt had six pre-expense errors because sparse retrieval omitted an unchanged pinned source file. The exact original source was restored; that initial failure and the correction remain in VALIDATION.json. No protocol, historical account, acceptance or economic result was rewritten. The scope is an isolated draft PR, not merge, release, deployment or commercial adoption. No paid model API, purchases, real transactions, outreach or private source documents were used.
+The first financial test attempt had six pre-expense errors because sparse retrieval omitted an unchanged pinned source file. The exact original source was restored; that initial failure and the correction remain in VALIDATION.json. The first [hosted run](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41642657528), at `a9b50b1910c7bd8f229c9d7f2d8ea7003ce13d06`, then passed 18 tests and errored on seven because its clean Python 3.12.15 environment lacked `cryptography`; campaign reproduction and public financial audit were skipped. The workflow correction installs the existing pinned dependency specification before testing. That failed run remains failed, and the corrected source requires its own hosted result. No protocol, historical account, acceptance or economic result was rewritten. The scope is an isolated draft PR, not merge, release, deployment or commercial adoption. No paid model API, purchases, real transactions, outreach or private source documents were used.
