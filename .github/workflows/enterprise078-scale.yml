@@ -39,7 +39,7 @@ jobs:
           PY
       - name: Native, operating, source and platform regressions
         run: |
-          python -m unittest enterprise078_scale.test_scale enterprise078.test_enterprise078 tests.test_connected_finance tests.test_connected_p0_source_guard.JoinPreflightTests tests.test_connected_platform_runtime064.CurrentWorkflowPlatformTests.test_all_current_jobs_use_the_public_standard_runner_and_platform_window -v
+          python -m unittest enterprise078_scale.test_scale tests.test_enterprise078_scale_export_guard enterprise078.test_enterprise078 tests.test_connected_finance tests.test_connected_p0_source_guard.JoinPreflightTests tests.test_connected_platform_runtime064.CurrentWorkflowPlatformTests.test_all_current_jobs_use_the_public_standard_runner_and_platform_window -v
       - name: Export public source and build identity
         run: |
           python - <<'PY'
@@ -81,18 +81,19 @@ jobs:
       - name: Existing native runtime dependencies
         run: python -m pip install --disable-pip-version-check -r requirements-commercial010.txt
       - name: Operate one independent registered native account and fully replay it
-        run: python -m enterprise078_scale.run --output "$RUNNER_TEMP/enterprise078-scale" --world '${{ matrix.world }}'
+        shell: bash
+        run: |
+          set +e
+          python -m enterprise078_scale.run --output "$RUNNER_TEMP/enterprise078-scale" --world '${{ matrix.world }}' > "$RUNNER_TEMP/e078-world.stdout" 2> "$RUNNER_TEMP/e078-world.stderr"
+          status=$?
+          set -e
+          python scripts/enterprise078_scale_export_guard.py --output-root "$RUNNER_TEMP/enterprise078-scale" --upload-root "$RUNNER_TEMP/enterprise078-scale-export" --stdout "$RUNNER_TEMP/e078-world.stdout" --stderr "$RUNNER_TEMP/e078-world.stderr" --exit-code "$status" --world '${{ matrix.world }}'
+          exit "$status"
       - name: Retain compact key-free evidence and failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: enterprise078-scale-${{ matrix.world }}
-          path: |
-            ${{ runner.temp }}/enterprise078-scale/enterprise078-scale-keyfree.zip
-            ${{ runner.temp }}/enterprise078-scale/PUBLIC_PACKAGE.json
-            ${{ runner.temp }}/enterprise078-scale/public/CAMPAIGN.json
-            ${{ runner.temp }}/enterprise078-scale/public/${{ matrix.world }}/result.json
-            ${{ runner.temp }}/enterprise078-scale/public/${{ matrix.world }}/review.json
-            ${{ runner.temp }}/enterprise078-scale/*.failure.txt
+          path: ${{ runner.temp }}/enterprise078-scale-export/
           retention-days: 7
           if-no-files-found: error
