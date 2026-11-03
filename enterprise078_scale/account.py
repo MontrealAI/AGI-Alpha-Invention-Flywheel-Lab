@@ -60,3 +60,4 @@ def expected_requests(cmd,known_wallets):
     if op in ('release','refund'):
         return [ex('event',{'id':a['order_id'],'action':op,'event_id':a['order_id']+'-'+op})]
     raise ValueError('UNKNOWN_OPERATION_IN_REPLAY')
+
