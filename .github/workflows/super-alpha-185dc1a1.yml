@@ -1,0 +1,34 @@
+name: Super Alpha confidential-production decisive replay
+on:
+  pull_request:
+    paths:
+      - 'experiments/super_alpha_20261103_185dc1a1/**'
+      - '.github/workflows/super-alpha-185dc1a1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  registered-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Test independent outcomes, disclosure and native continuity
+        run: python -m unittest -v experiments.super_alpha_20261103_185dc1a1.test_mechanism experiments.super_alpha_20261103_185dc1a1.test_finance
+      - name: Reproduce every registered case on the exact PR source
+        env:
+          EXECUTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python -m experiments.super_alpha_20261103_185dc1a1.run --output "$RUNNER_TEMP/super-alpha-evidence" --source-commit "$EXECUTED_SHA" --compare experiments/super_alpha_20261103_185dc1a1/evidence/RESULTS.json
+      - name: Independently replay the original key-free native research history
+        run: |
+          python -m experiments.super_alpha_20261103_185dc1a1.finance audit-public --root "$GITHUB_WORKSPACE" --evidence experiments/super_alpha_20261103_185dc1a1/evidence/FINANCE_PUBLIC.json
