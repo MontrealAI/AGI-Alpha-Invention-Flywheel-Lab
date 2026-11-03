@@ -1,5 +1,32 @@
 # Overnight construction result — 3 November 2026 UTC
 
+## Continuation: typed transactional acceptance and loss-preserving replay
+
+The original revised central account reopened under its native POSIX lock and passed full audit with unchanged export `66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f`. No financial actions were added. Current main was refreshed to `215b22a5ed73b82ac1d909328d60157c48bd9958`; the previous lead head678d384 passed all observed required execution checks, with publication jobs skipped. Qualification of this new implementation remains a separate exact-head gate.
+
+Preregistration `90f25c850dd52481dcc553371ce8839fb20af684` precedes the new [typed service construction](transactional_admission/README.md). Fifteen new tests passed, including six native no-reseed/changed-manifest/exclusive-writer/loss-preservation controls on fresh explicitly labeled fixtures. Eleven existing staging/platform tests passed. The initial corruption-test error and precise fixture correction remain in [qualification evidence](evidence/ADMISSION_QUALIFICATION.json); no recovery guard changed. The original largest actual database/CSV passes the distinct typed acceptance contract with unchanged hashes; see [typed receipt](evidence/TRANSACTIONAL_TYPED_RECEIPT.json). The inspected [original hosted archive](evidence/transactional-hosted-original.zip) is now retained byte-for-byte (SHA2564b1ce6f48ce0a0a74e0e7ec5be16391eec584508f922cc19f139628c8f356ec1), containing only previously inspected public receipts and generated output.
+
+**Admission remains deferred.** There is no qualified append-only native catalog transition. The original lab manifest remains unchanged. The new read-only offer comparison refuses missing consent, superior/tied outside options, incomplete costs, nonpositive complete surplus and insufficient whole-delivery earnings. Even an authored favorable fixture cannot grant native admission. All new construction and full model/host costs remain unknown; updated complete-cost profit is UNKNOWN. Test prices/cost vectors are engineering sensitivities, not buyer calibration or an expected-net forecast.
+
+### Companion completed-case read-only verification
+
+PR176 remains independently owned at inspected head1c8fc184a432a6b84d6f28280580a6354a71a2b8. Downloaded all four currently completed public artifacts from run41581454145, verified outer ZIP and inner public-package hashes, frozen source identities, native full replay and the exact published fee erratum. The original adverse/illiquid failed reviewer verdicts were reproduced and preserved; the corrected read-only reconciliation passed without changing source, account, native verifier or evidence. Weak/no-financing original reviewers passed and still pass. No matrix was rerun. Four other worlds were still running at inspection, so the eight-world campaign is not declared passed.
+
+All amounts below are USD, each a separate fresh modeled account, never pooled. Period: **2026-11-03 00:00 UTC through 2027-11-03 00:00 UTC, exclusive endpoint**.
+
+| Case | Hypothetical equity | Native trailing365 profit | Revenue | Incurred cost | Cash | Tail reserve | Payables | Accepted / collected |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| adverse | 100,000 | -36,900 | 12,000 | 48,900 | 63,100 | 12,300.40 | 0 | 3 / 2 |
+| illiquid | 25,000 | -687.50 | 12,000 | 12,687.50 | 24,312.50 | 12,300.20 | 0 | 1 / 1 |
+| weak | 25,000 | -10,050 | 0 | 10,050 | 14,950 | 0 | 0 | 0 / 0 |
+| no_financing | 0 | -2,700 | 0 | 2,700 | 0 | 0 | 2,700 | 0 / 0 |
+
+These exact native losses exclude separately reported noncash 8% equity opportunity charges of8,000/2,000/2,000/0USD and unknown actual model/host/whole-development costs. Additional protected working capital is3,900/1,300/1,300/0USD. Native-to-daily aggregation deviation is zero in every replay. [Detailed source-bound receipts](evidence/COMPANION_COMPLETED_REPLAY.json) retain the adverse nonpayment and unpaid no-financing obligations. No new commercial result is inferred from these losses or from contacts skipped for lack of capacity.
+
+**Decisive next action:** independently qualify an explicit append-only typed catalog/history transition with the financial owner on fresh fixtures, then a genuinely complete voluntary SQL/CSV offer and conservative funded delivery scenario on the original history. Until then, keep investment deferred. Do not multiply the18-buyer fixture, invent positive expected_net or overwrite PR176's old shared-native source onto main. No formal approval, merge or release occurred.
+
+---
+
 **The US$3 billion milestone is not reached.** The existing central model still reportsUS$19,574.55 profit over its declared complete [0, 8760) hour window onUS$25,000 hypothetical initial equity. The new computational construction has no native revenue or profit. Its research/construction costs have not been attributed to that historical account, so an updated whole-enterprise complete-cost profit is UNKNOWN; the unchanged ledger is not evidence that this new work was free. Do not add its output count to commercial orders.
 
 ## What now works

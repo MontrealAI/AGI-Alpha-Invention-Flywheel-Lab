@@ -50,6 +50,10 @@ jobs:
       - name: Current finance and platform regressions
         run: |
           python -m unittest enterprise078.test_runtime tests.test_connected_finance tests.test_connected_p0_source_guard.JoinPreflightTests tests.test_connected_platform_runtime064.CurrentWorkflowPlatformTests -v
+      - name: Refuse old-account reseeding before transactional admission checks
+        run: |
+          python -m unittest enterprise078.transactional_admission.test_admission.NativeBoundaryTests -v
+          python -m unittest enterprise078.transactional_admission.test_admission.DeliveryTests enterprise078.transactional_admission.test_admission.CompleteOfferTests -v
       - name: Original scientific acceptance tests on frozen source
         run: |
           cd "$RUNNER_TEMP/enterprise078-science"
@@ -68,6 +72,17 @@ jobs:
         run: |
           python -m py_compile enterprise078/transactional_data/operator.py enterprise078/transactional_data/acceptance.py enterprise078/transactional_data/run.py
           python -m enterprise078.transactional_data.run --output "$RUNNER_TEMP/enterprise078-transactional"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          from enterprise078.transactional_admission.contract import request,accept
+          from enterprise078.transactional_data.run import fixture
+          root=Path(os.environ['RUNNER_TEMP'])/'enterprise078-transactional'
+          events=fixture(100000)
+          receipt=accept(request('sql-csv-hosted-100000',events),events,root/'largest_gateway/delivery.sqlite',root/'largest_gateway/derived.csv')
+          assert receipt['accepted'] and not receipt['native_catalog_admitted']
+          (root/'TYPED_RECEIPT.json').write_text(json.dumps(receipt,sort_keys=True,indent=2)+'\n')
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -79,5 +94,6 @@ jobs:
             ${{ runner.temp }}/enterprise078-transactional/RESULTS.json
             ${{ runner.temp }}/enterprise078-transactional/RESULTS.partial.json
             ${{ runner.temp }}/enterprise078-transactional/SOURCE.json
+            ${{ runner.temp }}/enterprise078-transactional/TYPED_RECEIPT.json
             ${{ runner.temp }}/enterprise078-transactional/largest_gateway/delivery.sqlite
             ${{ runner.temp }}/enterprise078-transactional/largest_gateway/derived.csv

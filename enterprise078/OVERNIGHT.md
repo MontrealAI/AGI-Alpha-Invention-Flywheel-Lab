@@ -1,12 +1,12 @@
 # Enterprise078 overnight execution checkpoint
 
-**Latest:** workspace recovered long enough to audit the original revised central account unchanged, then disconnected again. Recheck actual access before financial work. Dedicated233cae8 hosted verification and all eight transactional cases passed. Updated whole-enterprise profit after the new, unattributed construction costs is UNKNOWN. No new commercial action occurred: source-compatible new-service admission and a complete voluntary offer remain unresolved. Read [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md) first; the interruption section below records the earlier boundary.
+**Latest:** typed SQL/CSV acceptance and six native boundary controls are constructed;15 new tests and11 staging/platform tests passed locally. Original account reopened and audited unchanged; no financial action. All four completed companion cases were independently replayed with the published fee correction, preserving losses and two original failed reviews. Original public artifact bytes are retained. Read [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md). Native catalog transition remains unqualified and complete new-work cost unknown; no successor investment is admitted.
 
 Activated by the owner on2November2026 Toronto. Target remains one enterprise's US$3billion trailing365-day complete-modeled-cost profit. It is not achieved. This checkpoint is operational guidance, not a replacement for the owner's full mandate.
 
 ## Current ownership and authority
 
-This branch owns Enterprise078. Main remains a704d03bbbf855c50c3fd758e7f9ef548bcf527c. PR175 and lab ACK ambiguity079 have a separate owner; P0 financial recovery, PR161/163/167/168 and Growth067 remain separate. Public absence is not inactivity. A separate existing commercial automation remains active; this branch's new overnight worker must avoid overlapping writes and verify the current head before publishing.
+This branch owns Enterprise078. Main was refreshed to215b22a5ed73b82ac1d909328d60157c48bd9958. PR175 and lab ACK ambiguity079 have a separate owner; P0 financial recovery, PR161/163/167/168 and Growth067 remain separate. Public absence is not inactivity. A separate existing commercial automation remains active; this branch's new overnight worker must avoid overlapping writes and verify the current head before publishing.
 
 Hourly continuation is scheduled for eight overnight occurrences, with a separate morning report around08:00 America/Toronto3November. A task configuration is not evidence of completed execution. Original private account authority is retained only in the original execution workspace and was not uploaded.
 
