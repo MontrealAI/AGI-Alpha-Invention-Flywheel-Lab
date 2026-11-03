@@ -67,6 +67,30 @@ class FinitePhysicalSourceTests(unittest.TestCase):
                 z.writestr(name,sample.getvalue())
         with self.assertRaisesRegex(ValueError,"SOURCE_MATRIX_INVALID_Uel"):
             run.load_physical(buf.getvalue())
+    def test_unregistered_public_mat_member_does_not_change_frozen_cases(self):
+        registered = sorted(set(run.LABELS) | {run.PROTOCOL["cases"]["background"]})
+        sample = io.BytesIO()
+        savemat(sample,{"Uel":np.zeros((16,79)),"CurrentPattern":np.zeros((16,79)),"MeasPattern":np.zeros((16,16))})
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf,"w") as z:
+            for name in registered:
+                z.writestr(name,sample.getvalue())
+            z.writestr("unrelated_existing_mat_file.mat",sample.getvalue())
+        rows, hashes, count = run.load_physical(buf.getvalue())
+        self.assertEqual(set(rows),set(registered))
+        self.assertEqual(set(hashes),set(registered))
+        self.assertEqual(count,len(registered)+1)
+    def test_duplicate_registered_basename_refuses(self):
+        registered = sorted(set(run.LABELS) | {run.PROTOCOL["cases"]["background"]})
+        sample = io.BytesIO()
+        savemat(sample,{"Uel":np.zeros((16,79)),"CurrentPattern":np.zeros((16,79)),"MeasPattern":np.zeros((16,16))})
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf,"w") as z:
+            for name in registered:
+                z.writestr(name,sample.getvalue())
+            z.writestr("other/"+registered[0],sample.getvalue())
+        with self.assertRaisesRegex(ValueError,"AMBIGUOUS_SOURCE_CASE"):
+            run.load_physical(buf.getvalue())
     def test_trailing_source_manifests_do_not_create_funding(self):
         self.assertIn("No native 365-day profit", run.PROTOCOL["claim_boundaries"])
         self.assertIn("No financial Account or JournalAccount opened or mutated",run.PROTOCOL["integrity"])
