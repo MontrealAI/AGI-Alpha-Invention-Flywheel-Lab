@@ -1,0 +1,93 @@
+{
+  "checker_sha256": "1fd025189b6473a1a568b62a4273139819a8a26857ca7cb2f0dfb47a6cf7ebbf",
+  "contract": {
+    "alphabet": [
+      "a",
+      "b"
+    ],
+    "buyer_supplied_assumptions": {
+      "deterministic": true,
+      "local_probe_authorized": true,
+      "reliable_reset": true,
+      "state_bound_valid": true
+    },
+    "case": "buyer_local",
+    "long_holdout_count": 40,
+    "max_queries": 20000,
+    "max_states": 4,
+    "max_verification_queries": 20000,
+    "oracle_version": "public-AALpy:4c7b4a8746460fd84eaccb48d4891e5e0ac90883:babe305cb27825a52279c60df167f1439cfd49a31c534bedc39f3de79cdf381c",
+    "query_budget_semantics": "max_queries=learning; max_verification_queries=independent checks",
+    "schema": "omega/finite-compatibility/v1",
+    "scope": "BUYER_LOCAL_ORACLE_CONDITIONAL_ON_SUPPLIED_ASSUMPTIONS"
+  },
+  "dependencies": {
+    "pydot": {
+      "python_files": 7,
+      "python_source_manifest_sha256": "763f3c2041d9ca7a3f6edd974e7459553569a29922c7e6d2a8bc210760dd15f8",
+      "version": "4.0.1"
+    },
+    "pyparsing": {
+      "python_files": 17,
+      "python_source_manifest_sha256": "34659f5c8ce47b2dec6f79b2c547681da5674cbb29c41bbe432cee25dfdc1065",
+      "version": "3.3.3"
+    }
+  },
+  "limitations": [
+    "Local prospective selection, not yet public preregistration",
+    "Public teaching model unless separately established as measured protocol",
+    "No field restoration, demand, financial mutation or Super Alpha evidence",
+    "Shared supplied checker, not external certification",
+    "Complete setup and human effort are not measured"
+  ],
+  "model_path": "DotModels/Angluin_Mealy.dot",
+  "model_sha256": "babe305cb27825a52279c60df167f1439cfd49a31c534bedc39f3de79cdf381c",
+  "registration_sha256": "714b0da386b4afeeafaf77ca0bf0248f28fe751e8d66e5590002497a0ad5a2c8",
+  "rows": [
+    {
+      "accepted": {
+        "accepted": true,
+        "checked": 295,
+        "conditional_on_buyer_assumptions": true,
+        "long_holdout_traces": 40,
+        "oracle_calls": 590,
+        "scope": "BUYER_LOCAL_ORACLE_CONDITIONAL_ON_SUPPLIED_ASSUMPTIONS"
+      },
+      "adapter_sha256": "d51d576c4280d4e93e9a72f6fb5f2395d66bbcc532328a0e385334e5270485af",
+      "all_measured_input_symbols": 5818,
+      "all_measured_oracle_calls": 846,
+      "checking_input_symbols": 4276,
+      "checking_oracle_calls": 590,
+      "learning_input_symbols": 1538,
+      "learning_oracle_calls": 255,
+      "method": "registered_learner",
+      "portable_smoke_input_symbols": 4,
+      "portable_smoke_oracle_calls": 1
+    },
+    {
+      "accepted": {
+        "accepted": true,
+        "checked": 295,
+        "conditional_on_buyer_assumptions": true,
+        "long_holdout_traces": 40,
+        "oracle_calls": 590,
+        "scope": "BUYER_LOCAL_ORACLE_CONDITIONAL_ON_SUPPLIED_ASSUMPTIONS"
+      },
+      "adapter_sha256": "d51d576c4280d4e93e9a72f6fb5f2395d66bbcc532328a0e385334e5270485af",
+      "all_measured_input_symbols": 4522,
+      "all_measured_oracle_calls": 688,
+      "checking_input_symbols": 4276,
+      "checking_oracle_calls": 590,
+      "learning_input_symbols": 242,
+      "learning_oracle_calls": 97,
+      "method": "aalpy_lstar_wmethod",
+      "portable_smoke_input_symbols": 4,
+      "portable_smoke_oracle_calls": 1
+    }
+  ],
+  "schema": "omega/public-specialist-case-diagnostic/v1",
+  "scope": "ONE_UNFAMILIAR_PUBLIC_SOFTWARE_MODEL_NOT_FIELD_VALIDATION",
+  "script_sha256": "6db4f8ac43bb7d29d58a2065160ad6dbdc870ed59b9549f3d5628ab960666c91",
+  "selection_sha256": "7a118c9283ca7ed9b6abff26ced67b4570f4d5f02a2cd4d16b227ae4d3b5de50",
+  "source_commit": "4c7b4a8746460fd84eaccb48d4891e5e0ac90883"
+}
