@@ -7,7 +7,7 @@ Use Python 3.12 on a local Linux filesystem in a directory controlled by the ope
 
 ```sh
 python -m omega.compatibility --output /absolute/new/adapter
-python -m unittest omega.test_compatibility omega.test_compatibility_security -v
+python -m unittest omega.test_compatibility omega.test_compatibility_security omega.test_compatibility_crash -v
 ```
 
 Output paths and all ancestors must be real directories, not symlink aliases. Select a new private output directory when an existing path conflicts. Keep the checkpoint and original input for a resumable interruption; never replace another owner's files or copy a financial balance.
@@ -35,9 +35,17 @@ All 45 focused Linux tests passed after repository-import adaptation: 18 existin
 
 Full composed repository, financial source-binding, campaign smoke, final-head CI, merge, release and downloaded-release operation are not established by these focused tests. This is a draft prospective correction, not production certification.
 
-Advisory locks cover cooperating writers, not malicious same-user interference or privileged attackers. Whole-package multi-file crash atomicity, Windows and network/distributed filesystems remain unqualified. Byte bounds are not a CPU/memory process sandbox. Existing finite learning and conformance limits are unchanged.
+Advisory locks cover cooperating writers, not malicious same-user interference or privileged attackers. The process-interruption recovery tests below do not establish power-loss durability or arbitrary multi-file transaction atomicity. Windows and network/distributed filesystems remain unqualified. Byte bounds are not a CPU/memory process sandbox. Existing finite learning and conformance limits are unchanged.
 
 ## Historical evidence
 No frozen operating source, accounts, financial results, campaign registrations or historical specialist checker hashes are changed. Existing packages and experiments remain qualified only against their original source. Regenerate and requalify a prospective product under this edition before claiming its acceptance; never rewrite an old source hash to make it pass. The PR #198 economic comparison remains incomplete.
 
 Lesson: validate reads as well as writes, retain verified bytes, and enforce cooperating ownership at the actual output boundary. Continue with composed qualification before release.
+
+## Process-interruption recovery regression
+
+Five additional Linux tests exercise 27 terminated package builds: before/after six publication writes, every file/directory fsync in an initial build, an interrupted accepted-package rebuild, and two SIGKILL cases with live reader/writer contention. On the reviewed module above, partial fresh packages fail acceptance, every interrupted build resumes in its original directory, accepted immutable members remain unchanged, and competing cooperating writers fail without modifying outputs. The manifest is the final acceptance boundary; intermediate files are not an accepted product.
+
+Run the command above from the repository root. Tests use private temporary directories and authored local oracles; they do not open business accounts or resume economic campaigns. A successful test run qualifies these interleavings on its actual host, not power failure, hostile same-user interference, external hardware, or general production readiness. Abrupt termination can leave randomly named pending files and repeat safe reset probes before checkpoint persistence. Recovery ignores leftover pending files; repeated crashes can consume storage. Preserve needed recovery state and never delete an active lock.
+
+Tried → abruptly terminate individual writes and whole builds; outcome → same-directory recovery and fail-closed partial-package acceptance passed locally; lesson → publish the manifest last and test readers alongside writers; next/avoid → rerun on each proposed host, without promoting this evidence into cross-platform or power-loss certification. Runtime, historical source bindings, accounts and economic results are unchanged.
