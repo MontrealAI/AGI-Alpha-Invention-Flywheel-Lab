@@ -27,7 +27,7 @@ def pin_source(root=None):
         if any(p.is_symlink() for p in (path, *path.parents)) or not path.is_file():
             raise ValueError("PINNED_REGULAR_PARTNER_REVIEW_SOURCE_REQUIRED")
         raw = path.read_bytes()
-        observed = hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\\0" + raw).hexdigest()
+        observed = hashlib.sha1(b"blob " + str(len(raw)).encode() + bytes([0]) + raw).hexdigest()
         if observed != expected:
             raise ValueError("PARTNER_REVIEW_INCUMBENT_SOURCE_CHANGED:" + relative)
     return dict(PINNED)
