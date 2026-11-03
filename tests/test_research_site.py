@@ -58,7 +58,7 @@ class ResearchSiteTests(unittest.TestCase):
         slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
-        self.assertEqual(len(site.PAPERS), 17)
+        self.assertEqual(len(site.PAPERS), 18)
         self.assertEqual(len(site.PAGES), 20)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
@@ -105,19 +105,19 @@ class ResearchSiteTests(unittest.TestCase):
         parser = site.Links()
         parser.feed(reader)
         self.assertIn('agi-alpha-flywheel-20261102.pdf', parser.links)
-        self.assertIn('agi-alpha-flywheel-20261102.pdf#view=FitH', parser.links)
+        self.assertIn('agi-alpha-flywheel-20261102-v1.1.pdf', parser.links)
+        self.assertIn('agi-alpha-flywheel-20261102-v1.1.pdf#view=FitH', parser.links)
         self.assertIn('https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/agi-alpha-flywheel/paper.tex', parser.links)
         self.assertIn('https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/agi-alpha-flywheel', parser.links)
         self.assertIn('transformational-intelligence.html', parser.links)
         self.assertIn('agi-alpha.html', parser.links)
-        for anchor in ('abstract', 'idea', 'flows', 'read-title', 'reader', 'reproduce'):
+        for anchor in ('abstract', 'idea', 'flows', 'study', 'evidence', 'limits', 'read-title', 'reader', 'reproduce'):
             self.assertIn(anchor, parser.ids)
-        self.assertIn('finite constructed illustration', reader)
-        self.assertIn('Scope and evidence', reader)
+        self.assertIn('Where the evidence ends', reader)
         self.assertIn('SHA-256:', reader)
         self.assertIn('aria-label="Continue reading"', reader)
         manifest = json.loads((self.source / 'publication-manifest.json').read_text())
-        paper = next(item for item in manifest['papers'] if item['file'] == 'agi-alpha-flywheel-20261102.pdf')
+        paper = next(item for item in manifest['papers'] if item['file'] == 'agi-alpha-flywheel-20261102-v1.1.pdf')
         self.assertIn('<code>' + paper['sha256'] + '</code>', reader)
 
     def test_unresolved_publication_metadata_is_rejected(self):

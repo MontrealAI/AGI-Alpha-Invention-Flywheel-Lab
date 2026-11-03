@@ -12,13 +12,13 @@ def package(output):
     verify()
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=True)
+    manifest = json.loads((ROOT / 'PUBLICATION.json').read_text())
     pdf = ROOT / 'AGI_ALPHA_FLYWHEEL.pdf'
     if not pdf.exists():
-        pdf = ROOT.parent / 'research/agi-alpha-flywheel-20261102.pdf'
+        pdf = ROOT.parent / 'research' / manifest['pdf']['file']
     published = output / 'AGI_ALPHA_FLYWHEEL.pdf'
     if pdf.resolve() != published:
         shutil.copyfile(pdf, published)
-    manifest = json.loads((ROOT / 'PUBLICATION.json').read_text())
     archive = output / 'AGI_ALPHA_FLYWHEEL_SOURCE.zip'
     with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for name in sorted(list(manifest['source_sha256']) + ['PUBLICATION.json']):

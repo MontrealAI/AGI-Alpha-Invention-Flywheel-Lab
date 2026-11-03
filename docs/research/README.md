@@ -44,17 +44,15 @@ Exact supplied PDF: 5,926,237 bytes; SHA-256 `4b290d5a8232364b8808c0af8a96e7c9b1
 
 ### AGI ALPHA FLYWHEEL: Inventing What Becomes Possible
 
-**Architecture and research synthesis** · Vincent Boucher · MONTREAL.AI · 2 November 2026 · Edition 1.0 · 18 pages.
+**Operational synthesis and exact construction study** · Vincent Boucher · MONTREAL.AI · 2 November 2026 · Edition 1.1 · 24 pages.
 
-[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/agi-alpha-flywheel.html) · [PDF](agi-alpha-flywheel-20261102.pdf) · [LaTeX source](../agi-alpha-flywheel/paper.tex) · [References and reproducible example](../agi-alpha-flywheel/)
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/agi-alpha-flywheel.html) · [Revised PDF](agi-alpha-flywheel-20261102-v1.1.pdf) · [LaTeX source](../agi-alpha-flywheel/paper.tex) · [Reproduce the construction study](../agi-alpha-flywheel/examples/FOUNDRY.md)
 
-Study how useful work can create a better starting point for further invention. Search the valuable outcome, production, verification, voluntary participation and financing together. Keep reusable knowledge, qualified capability and unrestricted earned cash distinct; test what each contributes to a fresh successor.
+Make useful invention a repeatable productive activity. This revision constructs typed measurement programs, verifies them independently, and compares fresh, frozen, accumulating, and conventional construction across 12 three-generation episodes. It distinguishes reuse, constructive succession, funded recurrence, and improvement of discovery, and corrects the distinction between conditional continuation and the initial complete-policy frontier.
 
-**Scope:** This edition is an architecture and research synthesis with a finite constructed illustration. Its historical findings retain their original evidence boundaries. Technical enablement, complete-cost profit, available cash and improved discovery are separate claims. It does not establish real customer revenue, general recursive improvement, achieved AGI or ASI, physical deployment, or the US$3 billion trailing-365-day profit objective. New capital and financing are jointly selected; US$100,000 is a historical/reference case.
+**Scope:** The authored exact computational study operates on supplied observation contracts. Physical measurement, industrial demand, improved autonomous discovery, actual commercial profit, and the US$3 billion trailing-365-day objective remain unestablished. Prospective capital and financing are jointly selected; historical fixed-capital results retain their original scope. Runtime operation counts are not monetary business costs.
 
-This paper extends the research programme while preserving **Transformational Intelligence: Learning to Change the Game** as the flagship and **AGI ALPHA: A Scalable Substrate for Intelligence Organizations** as the foundation.
-
-SHA-256: `1fd0f4a37ac2b399f0cd6c433900f5399d7a8037539d358107d89a606e21600e`.
+**Preserved first edition:** [Original 18-page PDF](agi-alpha-flywheel-20261102.pdf) · [Version 1.0.0 release and original source](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/agi-alpha-flywheel-v1.0.0). Edition 1.1 adds actual program construction and stronger comparisons; it does not overwrite the first edition.
 
 ### Invent the Economy: Transformational Intelligence for Creating Viable Markets
 

@@ -34,6 +34,8 @@ def pdf_facts(path):
 def check_sources():
     tex = (ROOT / 'paper.tex').read_text()
     bib = (ROOT / 'references.bib').read_text()
+    if re.search(r'PLACEHOLDER|TODO_RESULT_', tex):
+        raise ValueError('Unresolved manuscript content')
     cited = {key.strip() for group in re.findall(r'\\cite\w*\{([^}]+)\}', tex) for key in group.split(',')}
     defined = set(re.findall(r'@\w+\s*\{\s*([^,\s]+)', bib))
     if cited != defined:
@@ -42,6 +44,7 @@ def check_sources():
     actual = subprocess.check_output([sys.executable, str(ROOT / 'examples/succession.py')], text=True)
     if json.loads(actual) != json.loads((ROOT / 'examples/example-results.json').read_text()):
         raise ValueError('Stored example differs from current executable source')
+    subprocess.run([sys.executable, str(ROOT / 'examples/check_foundry.py')], check=True)
     return len(cited)
 
 
@@ -62,7 +65,7 @@ def verify(build_only=False):
         bad = re.findall(r'^.*(?:Overfull \\[hv]box|undefined references|Citation .* undefined|LaTeX Error|Package .* Error).*$', log, re.M)
         if bad:
             raise ValueError('Compilation defects: ' + '; '.join(bad))
-        return {'status': 'PASS', 'scope': 'local build and exact example', 'pages': pages, 'citations': citations}
+        return {'status': 'PASS', 'scope': 'local build, construction study, and funding illustration', 'pages': pages, 'citations': citations}
     manifest = json.loads((ROOT / 'PUBLICATION.json').read_text())
     for name, expected in manifest['source_sha256'].items():
         path = ROOT / name
@@ -71,7 +74,10 @@ def verify(build_only=False):
         if sha256(path) != expected:
             raise ValueError(f'Source identity changed: {name}')
     standalone = ROOT / 'AGI_ALPHA_FLYWHEEL.pdf'
-    pdf = standalone if standalone.exists() else ROOT.parent / 'research/agi-alpha-flywheel-20261102.pdf'
+    published_name = manifest['pdf']['file']
+    if Path(published_name).name != published_name:
+        raise ValueError('Publication PDF must be a filename')
+    pdf = standalone if standalone.exists() else ROOT.parent / 'research' / published_name
     if sha256(pdf) != manifest['pdf']['sha256'] or pdf.stat().st_size != manifest['pdf']['bytes']:
         raise ValueError('Published PDF identity changed')
     pages = pdf_facts(pdf)

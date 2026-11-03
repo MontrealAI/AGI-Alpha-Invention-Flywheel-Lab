@@ -1,0 +1,26 @@
+\begin{tikzpicture}[
+  card/.style={rounded corners=3pt,draw=line,fill=pale,text width=43mm,minimum height=39mm,inner sep=3mm,align=left},
+  title/.style={font=\sffamily\bfseries\small,text=violetink},
+  arrow/.style={-{Stealth[length=5pt]},line width=.9pt,draw=tealink}
+]
+\node[card] (gap) at (0,0) {
+  {\sffamily\bfseries\small\color{violetink}1 / The missing distinction}\\[2mm]
+  $\displaystyle m=(z_1+z_2)/2$\\[2mm]
+  Same average. Different local states.\\[1mm]
+  {\footnotesize The observation cannot identify the target.}
+};
+\node[card,right=6mm of gap] (build) {
+  {\sffamily\bfseries\small\color{violetink}2 / The constructed means}\\[2mm]
+  $\displaystyle d=(z_1-z_2)/2$\\[-1mm]
+  $\displaystyle z_1=m+d$\\[2mm]
+  {\footnotesize Add legitimate information; qualify its reconstruction.}
+};
+\node[card,right=6mm of build] (next) {
+  {\sffamily\bfseries\small\color{violetink}3 / A different instrument}\\[2mm]
+  $\displaystyle (A',q')\longmapsto p'$\\[2mm]
+  New specification. New program.\\[1mm]
+  {\footnotesize Retained means help construction; acceptance is renewed.}
+};
+\draw[arrow] (gap.east)--(build.west);
+\draw[arrow] (build.east)--(next.west);
+\end{tikzpicture}

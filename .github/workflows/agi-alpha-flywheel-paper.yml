@@ -3,13 +3,13 @@ on:
   pull_request:
     paths:
       - 'docs/agi-alpha-flywheel/**'
-      - 'docs/research/agi-alpha-flywheel-20261102.pdf'
+      - 'docs/research/agi-alpha-flywheel-*.pdf'
       - '.github/workflows/agi-alpha-flywheel-paper.yml'
   push:
     branches: [main]
     paths:
       - 'docs/agi-alpha-flywheel/**'
-      - 'docs/research/agi-alpha-flywheel-20261102.pdf'
+      - 'docs/research/agi-alpha-flywheel-*.pdf'
       - '.github/workflows/agi-alpha-flywheel-paper.yml'
   workflow_dispatch:
 permissions:
@@ -31,13 +31,13 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             docs/agi-alpha-flywheel
-            docs/research/agi-alpha-flywheel-20261102.pdf
+            docs/research/agi-alpha-flywheel-*.pdf
           sparse-checkout-cone-mode: false
       - name: Install the standard LaTeX and PDF toolchain
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends latexmk texlive-latex-extra texlive-fonts-recommended poppler-utils
-      - name: Compile and check the manuscript and exact example
+      - name: Compile and verify the manuscript and reproducible constructions
         run: |
           make -C docs/agi-alpha-flywheel check
           python3 docs/agi-alpha-flywheel/verify_publication.py

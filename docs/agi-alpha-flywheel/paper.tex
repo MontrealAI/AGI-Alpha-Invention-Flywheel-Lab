@@ -13,7 +13,7 @@
 \usepackage{graphicx,xcolor,booktabs,tabularx,array,multirow}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,calc,positioning,backgrounds}
-\usepackage{titlesec,fancyhdr,enumitem,caption,needspace}
+\usepackage{titlesec,fancyhdr,enumitem,caption,needspace,etoolbox}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{xurl}
 \usepackage[colorlinks=true,linkcolor=violetink,citecolor=violetink,urlcolor=tealink,bookmarksnumbered=true]{hyperref}
@@ -28,12 +28,12 @@
 \definecolor{brightgold}{HTML}{E8BF70}
 \definecolor{brightteal}{HTML}{83D6CE}
 \hypersetup{pdftitle={AGI ALPHA FLYWHEEL: Inventing What Becomes Possible},pdfauthor={Vincent Boucher},pdfsubject={Transformational intelligence for compounding discovery, production, and enterprise},pdfkeywords={AGI ALPHA, transformational intelligence, invention, autonomous enterprise, capability inheritance, open-ended learning}}
-\newcommand{\edition}{1.0}
+\newcommand{\edition}{1.1}
 \newcommand{\evidencecommit}{e67aa09031583f976a39c8406ae86585b02cde76}
 \newcommand{\repo}{https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab}
 \newcommand{\paperurl}{https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/agi-alpha-flywheel.html}
 \newcommand{\smallcaps}[1]{{\sffamily\bfseries\textls[75]{\MakeUppercase{#1}}}}
-\newcommand{\lead}[1]{\par\medskip\noindent{\sffamily\bfseries\color{violetink}#1}\par\smallskip}
+\newcommand{\lead}[1]{\par\Needspace{5\baselineskip}\medskip\noindent{\sffamily\bfseries\color{violetink}#1}\par\smallskip}
 \newcommand{\claim}[1]{\par\medskip\noindent{\large\sffamily\bfseries\color{ink}#1}\par\medskip}
 \newcommand{\kw}[1]{{\sffamily\bfseries #1}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -50,6 +50,7 @@
 \titleformat{\subsubsection}{\normalsize\sffamily\bfseries\color{ink}}{\thesubsubsection}{.65em}{}
 \titlespacing*{\section}{0pt}{19pt}{8pt}
 \titlespacing*{\subsection}{0pt}{12pt}{5pt}
+\pretocmd{\section}{\Needspace{8\baselineskip}}{}{}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5.7pt}
 \setlength{\emergencystretch}{2em}
@@ -80,7 +81,7 @@
   \draw[brightgold,line width=2.0pt,opacity=.9] ([xshift=2.4cm,yshift=3cm]current page.south west) -- ([xshift=18.6cm,yshift=3cm]current page.south west);
 \end{tikzpicture}
 \vspace*{7mm}
-{\sffamily\bfseries\small\textls[150]{MONTREAL.AI}\hfill\color{brightgold}RESEARCH / 01}
+{\sffamily\bfseries\small\textls[150]{MONTREAL.AI}\hfill\color{brightgold}RESEARCH / 02}
 \vspace{17mm}
 
 {\sffamily\bfseries\fontsize{16}{20}\selectfont\textls[100]{AGI ALPHA}}\\[3mm]
@@ -117,52 +118,213 @@
 \nopagecolor\color{ink}
 \setcounter{page}{2}
 
+
 \pdfbookmark[0]{Abstract and reading guide}{abstract}
 {\smallcaps{The thesis}}\\[2mm]
-{\LARGE\sffamily\bfseries Intelligence can build the conditions\\for its next useful invention.}
-\vspace{5mm}
+{\LARGE\sffamily\bfseries Make useful invention\\a repeatable productive activity.}
+\vspace{4mm}
 
 \section*{Abstract}
-An autonomous enterprise can complete more work without becoming a better inventor, and can invent a useful tool without creating a viable business. AGI ALPHA FLYWHEEL studies the connection: how accepted work can leave behind reusable knowledge, qualified productive means, and available earnings that make a more consequential successor attainable. Building on \emph{Transformational Intelligence}, we make the complete productive arrangement the object of search: the outcome, its production and verification, participation, financing, and allocation of obligations. The central test is whether a gain survives into subsequent work and changes what can be achieved after its full burden is counted.
+AGI ALPHA FLYWHEEL studies an enterprise that searches for valuable outcomes, constructs missing means, and carries useful gains into further invention. Its object is the complete productive arrangement: what becomes possible, how it is produced and accepted, who participates, and how continuation is funded. Building on \emph{Transformational Intelligence}, we ask when a constructed instrument becomes a starting point for a different instrument, and when the procedure for discovering such transitions improves.
 
-We develop an architecture for this succession, a state model that separates capability from evidence and cash from profit, and three distinct lineage claims: a successor may be financed by prior earnings, enabled by an inherited instrument, or discovered more effectively by an improved search procedure. A reproducible finite construction shows how retained means and collected earnings can jointly cross a funding threshold even when neither suffices alone. A second experimental design separates better equipment from better invention. Public repository evidence supplies working constructions, conventional-method ties, information limits, and negative economic results; it does not establish an autonomous new industry or the US\$3 billion trailing-year profit objective. The contribution is a synthesis, a precise evaluation discipline, and a research program for turning invention into a repeatable source of new productive possibilities.
+This revised edition makes construction executable. A finite study synthesizes typed measurement programs from observation models and target quantities, verifies their certificates independently, and executes them on separate latent inputs. Twelve declared episodes of three generations compare fresh construction, a frozen first-generation library, accumulating inheritance, and a conventional rank-aware compiler. Exact identifiability tests distinguish an unavailable answer from exhausted search. Executed arithmetic, archive traffic, and runtime are reported in their declared units. Each arm accepts 30 programs and certifies six unidentifiable requests. Accumulation reduces expression-search work, while conventional compilation wins the complete arithmetic comparison; execution work is unchanged.
+
+We distinguish reuse, constructive succession, funded recurrence, and improvement of discovery. A composition result corrects a common frontier claim: constructing a tool can improve a continuation state or a bounded search procedure, while a complete initial policy class may already contain the plan that constructs and uses it. An economic model then connects productive gains to acceptance, competition, liquidity, and complete costs. Prior public results supply both useful constructions and failed successor or scale claims. The contribution is an operational synthesis, a reproducible construction study, and a testable route from invention to new productive activity.
 
 \lead{The question}
-What valuable activity becomes economically possible when intelligence can construct the missing means of producing, verifying, and organizing it?
+Which useful activity is missing because something necessary cannot yet be measured, constructed, coordinated, verified, or afforded?
 
 \lead{Read in three passes}
-For the idea, read Sections~\ref{sec:idea}--\ref{sec:mechanisms} and Figure~\ref{fig:wheel}. For the formal and economic model, read Sections~\ref{sec:model}--\ref{sec:example}. For evidence, comparisons, and the research frontier, read Sections~\ref{sec:tests}--\ref{sec:frontier}.
+For the idea and a concrete invention, read Sections~\ref{sec:idea}--\ref{sec:foundry}. For the architecture and its limits, read Sections~\ref{sec:arrangement}--\ref{sec:model}. For economic succession, improved discovery, and the next decisive test, read Sections~\ref{sec:economics}--\ref{sec:frontier}.
 
-\lead{Contribution and status}
-This is an architecture and research synthesis with an exact illustrative model and a source-bound evidence review. The illustrative arithmetic is executed by the companion program. Previously published experiments are cited in their original scopes; this paper does not recast them as new confirmation. The public source snapshot is \href{\repo/tree/\evidencecommit}{\texttt{e67aa0903158}}. Prospective capital is a design variable; US\$100,000 remains a historical reference, and US\$3 billion is an unachieved profit milestone, not a promised result or a ceiling.
+\lead{What this edition adds}
+The first edition's central numerical example stipulated a useful instrument and a lower successor cost. It established a funding relation, not instrument construction. This edition adds generated executable programs, independent algebraic and runtime checks, multigeneration controls, and a corrected reachability argument. The finite constructor is authored software. The broader autonomous enterprise and the US\$3 billion trailing-year complete-cost profit objective remain research goals.
 
 \vfill
-{\footnotesize\sffamily\color{muted}\textbf{Keywords}\quad transformational intelligence; productive arrangements; invention; capability inheritance; autonomous enterprise; open-ended discovery; funded succession.}
+{\footnotesize\sffamily\color{muted}\textbf{Keywords}\quad transformational intelligence; automated invention; productive arrangements; measurement programs; constructive succession; autonomous enterprise.}
 \clearpage
 
 \section{Build the next starting point}\label{sec:idea}
 
-Imagine asking a question about the past that nobody planned to measure: how did a particular production condition evolve before a failure? A simple archive lookup returns whatever the archive already records. A more ambitious response asks whether independent traces, a measurement model, and a calibrated reconstruction can create a defensible new series. Success would produce a useful answer and an instrument for answering a class of questions that had previously been uneconomic to investigate. Failure might reveal that the required distinction is absent from the available evidence. More fluent inference would not repair that absence.
+A useful invention changes more than the answer to today's question. It can change the means available for tomorrow's question. A measurement process can reveal a quantity that earlier observations could not identify. A compiler can turn a new specification into a qualified instrument. An interface can make previously incompatible resources productive together. An arrangement can make a small, unusual activity worth undertaking when its former fixed cost was prohibitive.
 
-Retrospective inference itself is established practice; the research question here concerns autonomous construction and qualification of a useful measurement process. This is a candidate direction, not a claim that arbitrary historical facts can be recovered. It illustrates the central object of AGI ALPHA: \emph{constructing a new route to an important outcome}. The route may depend on a measurement, a representation, a production process, a coordination rule, an agreement, or a combination of them. The opportunity and the means of serving it are designed together.
+AGI ALPHA aims to make the invention of useful capabilities a repeatable autonomous activity. It searches for valuable outcomes, identifies what blocks them, constructs or acquires the missing means, and follows the consequences into another activity. The product, customer grouping, production method, organization, and financing can all be objects of this search. Automating an existing job is one possible route; inherited job categories do not define the opportunity set.
 
-\emph{Transformational Intelligence} defines the relevant shift: identify a restriction in the current problem formulation, construct a different setup, preserve the authorized purpose, and show that the change matters~\citep{ti}. The present paper follows that change through its consequences. Does it leave a reusable means? Can that means be recognized and used in a different task? Can useful delivery cover its construction and continuing obligations? Does the resulting capability or available surplus enable the next opportunity? Does the procedure for finding such opportunities improve?
+\emph{Transformational Intelligence} supplies the central move: separate the authorized purpose from the inherited formulation, construct a different setup, and establish that the change matters~\citep{ti}. Here that move is followed through time. A successful project may leave an instrument, a constructor of related instruments, evidence about their applicability, or available earnings. The research question is whether those assets help a distinct successor after their complete burden is counted.
 
-\claim{A flywheel turns when a gain survives into the next decision.}
+\claim{The output of one invention can become the means of the next.}
 
-The word \emph{flywheel} names a proposed causal structure. It is not evidence of momentum. A growing archive may become harder to search. An expensive instrument may never be reused. A profitable delivery may leave its cash unavailable. A successor may succeed because a specialist supplied the answer. Each possibility changes what the enterprise should retain and what the researcher may claim.
+This proposition has several strengths. Reusing one tool amortizes its construction. Constructing a different tool with inherited means is a stronger technical relation. Funding later work from settled earnings is an economic relation. Becoming better at discovering such transitions is a further learning claim. None follows merely from the one before it.
 
-\subsection{Three things worth accumulating}
+\subsection{A stable charter, an expanding opportunity set}
 
-\textbf{Knowledge} includes supported relations, applicability conditions, counterexamples, and procedures for choosing useful next experiments. Its value depends on whether it changes a decision or reduces justified work. \textbf{Productive capability} consists of usable instruments, interfaces, processes, or installed assets that can deliver accepted outcomes in a specified environment. \textbf{Earned capital} consists of resources actually available from settled useful delivery, after restrictions and obligations. These stocks can complement one another, but none is a substitute for the others.
+The \textbf{authorized charter} states intended benefits, scope, and constraints. A \textbf{particular opportunity} states a beneficiary outcome and an acceptance contract. The enterprise may propose another opportunity within the charter; an experiment holds its particular outcome fixed during comparison. Thus a failed request for absolute local stress cannot be relabeled a successful request for a relative average. The average can support a separately specified offer if it has value.
 
-The most valuable output of an intelligent process may be a durable environment in which a difficult inference is no longer repeatedly needed. A source-preserving production process can make later claims cheaper to inspect. A calibrated fixture can make later experiments interpretable. A useful interface can make previously incompatible components composable. These are candidates for reducing the cost of future intelligence through construction, consistent with the broader research on reusable discovery and productive capacity~\citep{world,frontier}.
+This distinction permits ambition without moving a goalpost. A profitable current service can support a research programme without defining its permanent industry. A new instrument can serve a purpose its predecessor did not serve. Yet each comparison still has a definite output, complete alternatives, current authority, and an observable condition for acceptance.
 
-\subsection{A consequential objective with testable steps}
+\subsection{The running opportunity: measurements on demand}
 
-The research objective is a sustained expansion of valuable outcomes achievable through voluntary cooperation. The repository's commercial milestone is US\$3 billion of profit after complete costs over an observed trailing 365-day window~\citep{mandate}. The ambition directs opportunity selection; it supplies no evidence that a particular opportunity is large or viable. A small, decisive experiment can be appropriate when it tests a constraint on a consequential activity.
+Consider a small or unusual production run that needs a local condition measured to a specified accuracy. A custom measurement process may cost more than the activity can support. A proposed instrument foundry would construct and qualify that process, retain a useful constructor, and adapt it to another measurement problem. A related retrospective service would answer questions that were not anticipated when historical traces were collected.
 
-Ordinary profitable delivery remains worthwhile even when capability is fixed. Conversely, an early instrument may deserve finite research investment before it earns standalone revenue. The enterprise chooses among delivery, acquisition, research, reuse, construction, and holding resources. It need not force an invention into every transaction.
+These are consequential prospective activities, not validated markets. Their key obstruction is specific: the requested quantity must be identifiable from legitimately available information, and producing a defensible estimate must fit the activity's full resource envelope. The next section makes that obstruction and one construction precise.
+
+\section{Construct the missing measurement}\label{sec:measurement}
+
+\subsection{Why more inference can be insufficient}
+
+Let the state of a two-cell process be $z=(z_1,z_2)$. Suppose its only observation is the average
+\begin{equation}
+ m=(z_1+z_2)/2.
+\end{equation}
+The required output is $z_1$. The states $(1,-1)$ and $(0,0)$ both produce $m=0$ but require different answers. No procedure using only $m$ can always return the correct local value. The obstruction belongs to the observation channel, not the sophistication of an explanation.
+
+If a legitimate differential observation
+\begin{equation}
+ d=(z_1-z_2)/2
+\end{equation}
+can be added, the reconstruction is
+\begin{equation}
+ z_1=m+d,\qquad z_2=m-d.
+\label{eq:two}
+\end{equation}
+With each observation error bounded by $\varepsilon$, each reconstructed error is at most $2\varepsilon$. This bound follows by the triangle inequality; a correlated calibration bias still has to satisfy the assumed individual bounds. The useful instrument is the observation arrangement, its calibration, reconstruction, and acceptance together.
+
+A formula cannot install a sensor. In a physical application, the differential measurement must actually be available and qualified. In a retrospective application, the additional information must survive in accessible traces; a sensor installed today cannot recover an erased historical distinction. The finite study below constructs programs over supplied observations. It does not manufacture information absent from them.
+
+\subsection{From a formula to a constructor}
+
+Write the observation contract as $y=Az$ and the target as $qz$, with rational matrix $A$ and row $q$. A linear reconstruction exists exactly when
+\begin{equation}
+ q\in\operatorname{rowspan}(A)
+ \quad\Longleftrightarrow\quad
+ \ker(A)\subseteq\ker(q).
+\label{eq:identifiability}
+\end{equation}
+When it exists, a constructor can produce coefficients $w$ with $wA=q$ and an executable expression for $wy$. An independent verifier can check the equality without trusting the constructor's search. When it does not exist, a witness $h$ with $Ah=0$ and $qh\ne0$ establishes ambiguity: $z$ and $z+h$ look identical but require different answers. These are elementary linear-algebra facts, used here as constructive interfaces.
+
+Now change the mission. For a three-cell process, observations
+\[
+ m=(z_1+z_2+z_3)/3,\qquad d_{12}=z_1-z_2,\qquad d_{23}=z_2-z_3
+\]
+permit the different instrument
+\begin{equation}
+\begin{aligned}
+ z_1&=m+\tfrac23d_{12}+\tfrac13d_{23},\\
+ z_2&=m-\tfrac13d_{12}+\tfrac13d_{23},\\
+ z_3&=m-\tfrac13d_{12}-\tfrac23d_{23}.
+\end{aligned}
+\label{eq:three}
+\end{equation}
+If each observation error is bounded by $\varepsilon$, the respective output bounds are $2\varepsilon$, $\frac53\varepsilon$, and $2\varepsilon$. The previous formula does not solve this changed mission. A constructor that accepts a new $(A,q)$ can generate its reconstruction and its checks.
+
+\begin{figure}[htbp]
+\centering
+\input{figures/measurement.tex}
+\caption{\textbf{Constructive succession has an executable middle.} A missing distinction directs construction toward an observation or representation. A qualified program implements the reconstruction. A retained constructor or compatible subprogram can help build a different program. The algebraic examples assume the stated observations; the finite study measures program construction over supplied observation contracts. Physical observation acquisition and commercial delivery remain separate tests.}
+\label{fig:measurement}
+\end{figure}
+
+\Needspace{12\baselineskip}
+\subsection{What survives the first mission}
+
+Four assets have different uses. The \textbf{instrument} computes a specified output. Its \textbf{applicability contract} identifies valid inputs, quantities, units, versions, and errors. A \textbf{constructor} generates instruments for a declared family of specifications. A \textbf{discovery procedure} decides which specifications or constructions are worth investigating and how to search for them.
+
+The first three can be implemented while the fourth stays fixed. A compiler producing a new valid program is real construction, even when it uses established mathematics. It is not by itself evidence that the compiler has learned to be a better inventor. The distinction is central to the study and to the broader enterprise.
+
+\section{A finite instrument-foundry study}\label{sec:foundry}
+
+The companion study replaces the first edition's stipulated capability advantage with actual construction and execution. It is a deliberately small, exact domain: typed linear-expression programs for measurement targets. Its purpose is to expose what inheritance does, what it costs, and where it fails. The public protocol fixes the finite comparison before substantive execution; the package binds that protocol, source, and results.
+
+\subsection{Inputs, outputs, and independent acceptance}
+
+Each task supplies an observation matrix, target, versioned operator identity, allowed expression primitives, and compatible retained programs. The constructor sees the specification, not the independent latent inputs used for runtime acceptance. Its expression language contains observation reads, rational scaling, addition, subtraction, and calls to retained programs.
+
+A successful output is an actual expression with a coefficient certificate. The verifier independently expands the expression, checks its types and operator identity, and confirms that the resulting coefficients satisfy $wA=q$. Separate execution compares its output with $qz$ on fresh latent inputs. The symbolic identity establishes exact correctness within the declared rational linear model; the runtime inputs exercise implementation. Agreement on finite inputs alone would be weaker evidence.
+
+An impossibility certificate is also checked: $Ah=0$ and $qh\ne0$. Exhausting a finite search budget is a third, separate outcome. It does not establish nonidentifiability. A retained program from a changed observation operator or incompatible unit contract must be rejected or rebuilt; a familiar name cannot make it applicable.
+
+\subsection{Whole histories, distinct controls}
+
+The protocol declares 12 episodes, each with three successive target specifications. Four families cover shared substructure, disjoint targets, changed operator or type, and rank-deficient observations. Deterministic task transformations vary representations. These authored families stress the claimed mechanism; they are not random samples from industrial demand.
+
+The fresh arm constructs without a retained executable library. The frozen arm retains only qualified first-generation programs. The accumulating arm can retain qualified new programs across generations. The conventional arm uses a rank-aware compiler with reusable algebraic work and common-subexpression opportunities. The same acceptance conditions apply to all arms. The conventional method is a serious alternative with useful problem structure, not a deliberately restricted foil.
+
+A retained call has no invented execution discount: its body executes and its operations are counted. Costs of unsuccessful search, construction, checking, execution, library validation, retrieval, and storage remain visible. Rational coefficient size is tracked because one arithmetic operation on a large rational is not equivalent to one on a small integer. Wall and CPU measurements are reported separately from deterministic counters and have no claim to hardware-independent precision. Software development and workload authoring are supplied inputs outside these counters, as are the integer-level internals of rational arithmetic. Observation generation is common evaluation setup; program execution and independent target checks are charged.
+
+Let $\mathbf C_a$ denote the reported cost vector for arm $a$ over its complete three-generation history, with accepted results shown alongside it. The declared comparisons are
+\begin{equation}
+\Delta_{\rm reuse}=\mathbf C_{\rm fresh}-\mathbf C_{\rm accumulate},
+\qquad
+\Delta_{\rm succession}=\mathbf C_{\rm frozen}-\mathbf C_{\rm accumulate}.
+\label{eq:study}
+\end{equation}
+The first can capture ordinary reuse. The second asks whether retaining later constructions contributes beyond the first library. Neither is a universal scalar score: one component can improve while another worsens. Construction and retention costs are included from the start. Dropping the first generation would conceal the investment whose value is at issue.
+
+\subsection{Results and their interpretation}
+
+
+Every arm produced 30 accepted programs and six independently verified nonidentifiability certificates over its 36 requests. No primary request was rejected or exhausted. All seven separate adverse and execution-accounting controls passed. The constructors had the same accepted measurement capability on these tasks; inheritance changed work, not the observation span.
+
+\begin{table}[htbp]
+\centering\small
+\caption{\textbf{The conventional compiler wins the full comparison.} Exact scalar rational arithmetic over all 36 requests per arm, including unsuccessful expression search and independent acceptance. All arms have 30 accepted programs and six certified information-boundary results. Columns are operations, not time, money, or a complete economic cost.}
+\label{tab:foundry-phase}
+\begin{tabularx}{\textwidth}{@{}Yrrrr@{}}
+\toprule
+\textbf{Arm} & \textbf{Construct} & \textbf{Verify} & \textbf{Execute} & \textbf{Total}\\
+\midrule
+Fresh & 47,466 & 4,026 & 141 & 51,633\\
+Frozen first generation & 44,442 & 4,458 & 141 & 49,041\\
+Accumulating & 43,326 & 4,674 & 141 & 48,141\\
+Conventional rank-aware & 8,751 & 4,674 & 141 & 13,566\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Accumulation saves 3,492 counted operations against fresh construction and 900 against the frozen library. Construction/search saves 4,140 against fresh, partly offset by 648 additional verification operations. Expanded execution is exactly 141 in every arm. The observed benefit is therefore reduced constructor search, not faster execution of the delivered instruments. The conventional compiler removes much more unnecessary search: it uses 34,575 fewer total operations than accumulating expression synthesis. The complementary \emph{OUT-ACCELERATE} model follows construction through verification and acquisition delays under stipulated durations~\citep{outaccelerate}; neither those assumptions nor our arithmetic counters establish measured end-to-end acceleration.
+
+\begin{table}[htbp]
+\centering\small
+\caption{\textbf{Inheritance helps selectively.} Complete three-generation histories, summed over three episodes per family. Every cell has nine requests. The rank-deficient family has three accepted programs and six certified nonidentifiability results; each other family has nine accepted programs.}
+\label{tab:foundry-family}
+\begin{tabularx}{\textwidth}{@{}Yrrrr@{}}
+\toprule
+\textbf{Family} & \textbf{Fresh} & \textbf{Frozen} & \textbf{Accumulate} & \textbf{Conventional}\\
+\midrule
+Shared substructure & 8,082 & 5,202 & 4,158 & 3,819\\
+Disjoint targets & 3,321 & 3,609 & 3,753 & 2,661\\
+Changed identity/type & 8,082 & 8,082 & 8,082 & 5,094\\
+Rank-deficient & 32,148 & 32,148 & 32,148 & 1,992\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+In shared-substructure episodes, later retention saves 1,044 operations beyond freezing the first generation. In disjoint episodes, accumulation instead adds 432 operations relative to fresh construction. Changed operator or type invalidates earlier qualifications, eliminating the reuse advantage. Rank-aware nonidentifiability checks avoid the expression search's failed search burden. These authored families establish no estimate of the frequency of gains in naturally occurring work.
+
+\lead{An actual constructed lineage}
+In shared episode 1, the accumulating arm emits the following programs. Here $y_i$ is primitive observation $i$ under the same versioned six-dimensional operator; the names $p_1,p_2,p_3$ abbreviate serialized artifact identities.
+\begin{equation}
+ \underbrace{p_1=y_0+y_1}_{\texttt{26ce34730345}}
+ \quad\longrightarrow\quad
+ \underbrace{p_2=\operatorname{call}(p_1)+y_2}_{\texttt{96c34d77e688}}
+ \quad\longrightarrow\quad
+ \underbrace{p_3=\operatorname{call}(p_2)+y_3}_{\texttt{422d62f096b0}}.
+\label{eq:lineage}
+\end{equation}
+The retained certificates are respectively $(1,1,0,0,0,0)$, $(1,1,1,0,0,0)$, and $(1,1,1,1,0,0)$. The third program calls the second, which calls the first: dependency depth reaches two. Independent checks accept all three. Fully expanded execution takes one, two, and three additions per input, with no free macro discount. The conventional arm constructs identical artifacts in this episode. Thus the lineage demonstrates constructive succession while the comparator prevents it from being misreported as a unique advantage.
+
+Accumulating retention writes 13,155 archive bytes and reads 13,870 across the campaign; these bytes are traffic measurements, not a sum of disjoint business expenses. Archive writes are included within produced-artifact writes. Nine invalidation events occur in accumulating and conventional arms. Maximum rational numerator or denominator bit length is six in the expression arms and seven in the conventional arm. The complete record retains phase counts, artifact identities, archive traffic, execution visits, and descriptive timing.
+
+\claim{Retain useful constructions. Replace avoidable search with the strongest suitable method.}
+
+Within this exact linear domain, the conventional rank-aware compiler is the preferred route on the reported arithmetic measure. The frozen and accumulating comparisons still reveal a real conditional inheritance mechanism. They do not justify deploying a more expensive constructor merely because it has a more elaborate lineage.
+
+
+\subsection{What the finite result can establish}
+
+The study can establish that a declared constructor generated distinct accepted programs, that particular inherited calls participated in subsequent construction, and how this affected the specified cost measures. It can expose invalid retention, negative returns, or a superior conventional route. A tie with conventional compilation is useful evidence about the mechanism and a reason to use the conventional method.
+
+All arms operate within supplied observation contracts. Retaining expressions cannot enlarge $\operatorname{rowspan}(A)$ or identify an erased distinction. The study therefore tests construction and inheritance, not discovery of a new physical sensing principle, industrial demand, or improvement of a learned inventor. Those stronger claims need the changed observation, complete activity, or fresh discovery campaigns specified later.
 
 \section{Invent the complete productive arrangement}\label{sec:arrangement}
 
@@ -178,7 +340,7 @@ The unit of comparison is therefore a complete route to the same accepted outcom
 
 Three objects govern a candidate. The \textbf{purpose} states the authorized outcome and material requirements. The \textbf{formulation} states the current representations, information procedures, dependencies, and means. The \textbf{evaluation instrument} supplies evidence about whether the outcome was achieved. A transformation may revise the formulation. If an evaluation instrument proves inadequate, it may be improved under an explicit bridge between old and new measures; the revision must not retroactively erase a failure or silently replace the purpose~\citep{ti,original}.
 
-For example, a request for absolute local stress is not satisfied by recovering a relative average more accurately. The relative average may be useful for a different authorized purpose, but that is a separately specified offer. Likewise, improving a method of checking a claim does not license weaker acceptance. These distinctions protect the meaning of an outcome while leaving its means open to invention.
+Improving a method of checking a claim does not license weaker acceptance. These distinctions protect the meaning of an outcome while leaving its means open to invention.
 
 \subsection{The missing means may be a connection}
 
@@ -208,6 +370,17 @@ Figure~\ref{fig:wheel} makes the causal proposal visible. Selection starts with 
 \end{figure}
 
 The architecture has three feedback paths. The \textbf{production path} improves a route to accepted output. The \textbf{economic path} selects viable exchanges and finances further work from permitted resources. The \textbf{discovery path} revises how useful arrangements are found and constructed. One path may improve while another stalls. Keeping them distinct permits a profitable service to continue while an unhelpful research method is retired.
+
+
+\subsection{A constructive search procedure}
+
+The difficult step in the wheel is making the missing means. A candidate begins with an accepted outcome and the strongest complete alternatives. The procedure identifies the alleged binding dependency and asks whether the outcome needs it, or only the inherited method does. It then proposes executable interventions: use an existing instrument, acquire an observation, repair an interface, change representation, reorganize production, or remove the dependency.
+
+Structural correspondences propose candidates; verified objections turn into construction requirements. Each candidate declares inputs, prerequisites, actions, effects, acceptance, and resource use. A finite search either produces a qualified route, returns a scoped obstruction, or ends without one. The system retains the instrument, its applicability, its constructor, and its failures separately. It can also choose the incumbent, ordinary delivery, or no entry.
+
+In the running example, source and target share the relation between latent state, observation, and requested functional. The invariant is a reconstructible target in the observation row space. The missing bridge is either a compatible reconstruction program or additional informative observation. A type mismatch defeats program transfer; a null-space witness defeats inference from the existing observations. One objection calls for a new program, another for new information. Treating both as a request for more search would waste resources.
+
+This is a revisable research procedure, not a claim that the complete autonomous loop is implemented. The finite study implements a specified constructor inside it. Choosing a valuable unsupplied target, acquiring a genuinely missing observation, and negotiating a viable activity remain additional work.
 
 \subsection{Inheritance with a boundary}
 
@@ -271,42 +444,59 @@ The hypothesis set is also open to challenge. Both initial explanations can be w
 
 Dependencies, versions, assumptions, and acceptance conditions can travel with the output. This may reduce later reconstruction and make targeted revalidation economical. The benefit depends on completeness and correct interpretation of those records. A source pointer is not a proof, and a self-consistent provenance graph can still omit a decisive external fact. Evidence-producing construction should therefore be tested against deliberate omissions and changed dependencies, as well as ordinary successful cases.
 
+
 \section{What becomes reachable}\label{sec:model}
 
 Let the enterprise state be
 \begin{equation}
  x_t=(K_t,M_t,D_t,C_t,O_t,A_t),
 \end{equation}
-where $K_t$ is retained knowledge, $M_t$ usable productive means, $D_t$ evidence and exposure history, $C_t$ cash, $O_t$ obligations and commitments, and $A_t$ current authority. Keep the discovery procedure $\theta_t$ separate. A richer state and a better procedure are different interventions.
+where $K_t$ is retained knowledge, $M_t$ usable productive means, $D_t$ evidence and exposure history, $C_t$ cash, $O_t$ obligations and commitments, and $A_t$ current authority. The discovery procedure $\theta_t$ is separately specified. Richer equipment and a better search method are different interventions.
 
-Given charter $I$, acceptance instrument $V$, and a declared resource budget $B$, define the following set for deterministic executable policies in the stated model:
+\subsection{Three frontiers that should not be confused}
+
+For a fixed outcome contract $o$, validator $V_o$, and vector resource envelope $B$, define the \textbf{conditional continuation set}
 \begin{equation}
 \begin{split}
-\Reach(x;B,I,V)=\{y:\;&\exists\pi\in\Pi(I,A),\;y=\operatorname{Out}(x,\pi),\;V(y)=1,\\
- &\Cost_{\rm life}(x,\pi)\preceq B,\;
- \pi\text{ is fundable along its trajectory from }x\}.
+\Reach_{\rm cont}(x;B,o)=\{y:\;&\exists\pi\in\Pi(o,A),\
+y=\operatorname{Out}(x,\pi),\ V_o(y)=1,\\
+&\Cost_{\rm continuation}(x,\pi)\preceq B,\
+\pi\text{ is fundable throughout its trajectory}\}.
 \end{split}
 \label{eq:reachable}
 \end{equation}
-Here $\operatorname{Out}(x,\pi)$ is the actual modeled output of executing $\pi$ from $x$. A stochastic extension must specify its required success probability and resource-risk criterion over the outcome distribution; a favorable realization alone is insufficient. The budget may be a vector of money, time, energy, and other resources; the model need not invent a conversion rate between them. Lifecycle cost includes obtaining and maintaining the means, failures, and residual obligations. A plan that can be paid for only after an unavailable future receipt is outside the fundable set even if its terminal profit would be positive.
+The installed means in $x$ are given at this decision point. Their earlier construction cost has not vanished: it belongs in a whole-history comparison. Resource components can include time, money, energy, and storage; a justified exchange rate between them is not assumed.
 
-Equation~\eqref{eq:reachable} is an existential definition. It does not imply that the implemented search procedure can find every feasible plan. Three statements remain separate: an outcome is possible under a model; a procedure can discover it within budget; and an actual execution has achieved it. A win over selected baselines establishes a relative gain. Strict expansion beyond \emph{all} old routes requires a valid lower bound or exhaustive argument over a specified feasible set.
+The \textbf{initial complete-policy frontier} instead evaluates every admissible complete policy from a common initial state, including policies that construct tools, collect receipts, and later act. The \textbf{discovered frontier} is the subset actually found and qualified by a specified procedure within its search budget. A fourth observation, realized accepted execution, remains distinct from any feasible plan.
 
-\subsection{Capability gain is not automatically frontier expansion}
+\begin{proposition}[Construction is already inside a complete policy class]\label{prop:composition}
+Suppose the admissible policy class is closed under valid sequential composition. A prefix $p$ starts at $x_0$ and reaches $x_t$; a continuation $q$ from $x_t$ produces accepted output $y$. If $p;q$ respects the charter, authority, complete resource envelope, and funding path, then $y$ is in the initial complete-policy frontier for that envelope.
+\end{proposition}
+\begin{proof}
+The composed policy $p;q$ is an admissible witness from $x_0$. Its construction and continuation burdens are both included, and its trajectory includes both funding paths.
+\end{proof}
 
-An additional tool can preserve an old route and add a useful new one. But acquiring, integrating, selecting, and maintaining the tool consumes resources. Therefore even set inclusion is conditional: all old feasible outcomes remain feasible only if old routes stay available and the added burden consumes no binding resource. Real systems can become less capable through accumulation. End-to-end measurement, rather than tool count, determines the practical result.
+Consequently, inventing an instrument does not place its output outside an omniscient initial frontier that already permits inventing that instrument. It can change the conditional continuation set, improve a bounded procedure's ability to find a route, or install capacity that did not previously exist. These are substantial, testable changes. Comparing equal future budgets from unequal installed states answers a continuation question; it does not prove a gain after ignoring the history that created those states.
 
-The useful empirical question is often narrower and more answerable: does the candidate deliver the specified outcome at a lower complete cost, within a tighter deadline, under a new accepted condition, or at a budget where the strongest tested alternative fails? Report these dimensions explicitly. A scalar reward is appropriate only when its tradeoffs are justified and fixed before the comparison.
+This correction sharpens \emph{what becomes possible}. The intended claim concerns an actual situated enterprise, a declared resource envelope, and discoverable executable routes. Strict improvement beyond all prior routes requires an exhaustive argument or valid lower bound over a specified class. A favorable comparison with selected algorithms is a relative empirical result.
 
-\subsection{Three lineage relations}
+\subsection{Accumulation can reduce capability}
 
-\textbf{Financed by.} A source-bound record shows which previously available resources paid for the successor's commitments. Earnings-funded, seed-funded, and externally financed actions receive distinct labels. Financing proceeds are not operating revenue or earned profit.
+A new tool can add a route while its integration, selection, qualification, and maintenance consume a binding resource. Old interfaces may disappear. Therefore unconditional set inclusion is unwarranted. Even a useful library can become costly to search. The finite study exposes some of these burdens through validation, invalidation, serialization, and expression-search costs.
 
-\textbf{Enabled by.} Removing a retained asset changes the successor's accepted outcome, complete cost, or admissibility under the declared comparison. A strong alternative without that asset may acquire another instrument, construct its own, or avoid the supposed prerequisite. Mere use of the asset is insufficient evidence of necessity.
+For stochastic systems, define required acceptance probability and resource-risk conditions over a specified distribution. A favorable realized trajectory cannot establish reliable feasibility. Neither a higher tool count nor a monotone best result proves a better typical programme.
 
-\textbf{Discovered better by.} A revised discovery procedure finds or constructs better arrangements across fresh campaigns from matched starting capabilities, information, permissions, and resource envelopes. The relevant unit is the full discovery campaign, including unsuccessful candidates. A favorable descendant alone does not identify this effect.
+\subsection{Four causal relations across generations}
 
-These relations can join into a causal lineage, including jointly enabling parent sets. Their benefits need not add: two instruments can be complements or substitutes. Attribution must preserve that interaction rather than credit each parent with the entire successor result.
+\textbf{Reused by.} A later task invokes a qualified existing instrument. This can amortize investment without creating a distinct capability.
+
+\textbf{Constructed with.} Inherited means participate in constructing a different instrument. Remove the relevant inheritance, allow a strong alternative to rebuild or avoid it, and compare complete histories. A trace proves use; an intervention estimates contribution under the declared alternatives. The frozen-library arm helps separate later construction from perpetual reuse of the first tool.
+
+\textbf{Financed by.} A source-bound record shows which settled earnings, seed funds, or financing receipts paid for commitments. Available earnings can fund a tool that subsequently loses. Funding is neither causal technical benefit nor commercial validation.
+
+\textbf{Discovered better by.} A revised procedure finds better arrangements on fresh campaigns from matched resources, information, permissions, and means. Improvements attributable only to a larger inherited library belong to the equipment effect.
+
+These relations can form a causal lineage, including jointly necessary parent sets. Complements and substitutes make benefits nonadditive: two assets cannot each be credited with the entire same gain.
 
 \section{Economics that can finance a next step}\label{sec:economics}
 
@@ -318,6 +508,20 @@ C_t=C_0+\text{nonfinancing receipts}_t+\text{financing received}_t
 \end{equation}
 Nonfinancing receipts include settled customer collections and collected recoveries. Current available cash is $U_t=C_t-Q_t$, where $Q_t$ is the \emph{nonoverlapping} protected amount for custody, commitments, required buffers, and obligations that must be funded before further receipts. Exact category definitions belong to the account implementation. A restriction on cash is not automatically another expense, and the same obligation must not be subtracted twice.
 
+
+\subsection{When a new class of activity becomes viable}
+
+For $N>0$ accepted deliveries, suppose a declared arrangement has construction burden $F$, variable cost $v$ per delivery, and collected price $s$. Under these simplified immediate-cost assumptions,
+\begin{equation}
+ \Pi(N)=N(s-v)-F,\qquad s_{\rm break-even}=v+F/N.
+\label{eq:break-even}
+\end{equation}
+If a retained constructor reduces the complete adaptation burden to $F'<F$, it lowers this threshold by $(F-F')/N$. A small activity priced between the two thresholds becomes viable in this model. This is the economic reason to care about a constructor: it may open many low-volume activities whose repeated fixed construction was unaffordable.
+
+If the constructor was acquired earlier, $F'$ is a continuation burden; its origin is charged in the whole-programme comparison. The inequality does not supply $N$, $s$, $F'$, or accepted demand. The finite study's arithmetic counts cannot be substituted for those monetary quantities. A field evaluation must include acquisition, calibration, failed attempts, checking, integration, support, and continuing obligations, then test whether the constructor's reduction survives.
+
+Technology can be reused without being consumed by each use, a central distinction in models of endogenous technological change~\citep{romer}. Yet replicable knowledge and a private profit stream are different assets. Rivals can imitate, buyers can self-serve, and prices can fall. Physical inputs, authorized data, calibration, distribution, and reliable service can remain scarce. Productivity gains may accrue to users or other firms even when the originating enterprise captures little profit. An economic flywheel therefore needs a viable participation and value-capture arrangement as well as a useful technical inheritance.
+
 \subsection{Four separate decisions}
 
 \textbf{Commercial viability} asks whether accepted exchange can produce complete-cost profit under the stated conditions. \textbf{Investment value} asks whether an incremental use of resources is worthwhile against its alternatives. \textbf{Affordability} asks whether current resources can fund it while preserving obligations. \textbf{Successor benefit} asks whether the inherited means actually help the subsequent task. A business can pass the first while failing any of the others.
@@ -328,7 +532,7 @@ Positive profit does not imply affordable expansion. Revenue can be recognized b
 
 The enterprise must account for search and failed attempts, acquisition, onboarding, production, inference and tools, verification, correction, integration, maintenance, support, payment losses, financing terms, and taxes or provisions where applicable. Actual human work is included when it occurs. A hybrid operation is labeled as such; normal buyer participation is separately disclosed. Access through an included subscription does not establish zero economic resource cost. Unmeasured costs remain unknown or enter an explicitly labeled sensitivity range.
 
-Costs are recognized once under a consistent policy. A model that expenses development immediately must not charge the same amount again as depreciation. A model that capitalizes assets needs the corresponding depreciation, impairment, disposal, and cash treatment. Funding sources and outcome attribution remain distinct from either accounting choice. The existing native account is the operational authority; analytical views and pedagogical examples do not create another spendable balance.
+Costs are recognized once under a consistent policy; development expense and asset depreciation must not double-charge the same investment. Funding sources and outcome attribution remain distinct. The existing native account is the operational authority; analytical views and pedagogical examples do not create another spendable balance.
 
 \subsection{Voluntary participation and strategic response}
 
@@ -351,7 +555,7 @@ For a fixed endpoint $T$ after a full operating year, define
 \end{equation}
 Revenue, valuation, financing proceeds, cumulative multiyear profit, and annualized short runs are different quantities. Report initial capital, received financing, remaining obligations, accounting policy, and simulation or actual-commerce status alongside this observer. Prospective capital can be chosen jointly with the arrangement; historical fixed-capital experiments retain their original conditions~\citep{mandate}. Neither more funding nor a larger numerical target creates demand, an informative measurement, or an accepted product.
 
-\section{A finite construction of funded succession}\label{sec:example}
+\section{A funding illustration: capability and cash}\label{sec:example}
 
 The following example isolates a possible complementarity between retained means and earnings. Its integer units and opportunities are authored for explanation. They are not market estimates, native account records, or evidence that a system discovered the arrangement autonomously. All costs in this finite model are immediate; no financing, taxes, depreciation, hidden maintenance, or obligations exist unless a case explicitly introduces them.
 
@@ -418,9 +622,15 @@ Physical productive expansion & Installed, accepted output or capacity with life
 \end{tabularx}
 \end{table}
 
-\subsection{Cross the inventor with its equipment}
 
-Let $Q(\theta,M)$ be a preregistered campaign outcome, or a vector of accepted outcomes and complete costs, for discovery procedure $\theta$ and initial means $M$. Compare all four cells:
+\subsection{First compare complete systems; then cross the components}
+
+The primary discovery test compares complete systems from matched initial histories and resource envelopes on fresh campaigns. It includes the cost of acquiring each system's means and revising its discovery procedure. This establishes an end-to-end result without first pretending that software and memory have a unique natural boundary.
+
+A diagnostic factorial experiment then declares an executable interface. Let $\theta$ contain the search algorithm and its assigned parameters; let $M$ contain the typed tool library and other assigned equipment. Explicitly assign learned abstractions, prompts, caches, data exposure, selection rules, and adapters to one component or a fixed common input. A procedural library can encode a search method, so silently placing it in either box changes the claim.
+
+\Needspace{10\baselineskip}
+Let $Q(\theta,M)$ be a registered outcome vector, or a justified scalar, over the full discovery campaign. Compare:
 \begin{center}
 \begin{tabular}{@{}lcc@{}}
 \toprule
@@ -431,11 +641,13 @@ Revised procedure $\theta_1$ & $Q(\theta_1,M_0)$ & $Q(\theta_1,M_1)$\\
 \bottomrule
 \end{tabular}
 \end{center}
-Improvement in $Q(\theta_0,M_1)$ isolates the value of richer starting means under a fixed procedure. Improvement in $Q(\theta_1,M_0)$ tests a revised discovery process from the same means. The combined cell can reveal interaction. If a justified scalar $Q$ is used, its factorial interaction is
+All four cells must execute through compatible interfaces under the declared intervention. Adapter development and qualification are charged. If a revised method cannot operate with the original means, the missing cell is not an automatic failure score; the decomposition does not identify the desired effect without a separately justified intervention.
+
+With histories and other inputs controlled, the $M_0\!\to M_1$ comparison under fixed $\theta$ estimates the equipment effect, and the $\theta_0\!\to\theta_1$ comparison under fixed $M$ estimates the assigned procedure effect. For a justified scalar, the interaction is
 \begin{equation}
  Q(\theta_1,M_1)-Q(\theta_1,M_0)-Q(\theta_0,M_1)+Q(\theta_0,M_0).
 \end{equation}
-An interaction is not automatically positive. Keep acquisition costs, exposure histories, and the distinction between deployed assets and methods for discovering assets explicit. This crossed design is an evaluation proposal here, not a reported new experiment.
+Its sign is empirical. The decomposition is relative to the declared architecture, not an intrinsic separation of intelligence from knowledge. The instrument-foundry study holds its supplied constructors fixed; it does not report this discovery-improvement experiment.
 
 \subsection{Three comparison boundaries}
 
@@ -485,54 +697,64 @@ The evidence supports usable computational constructions, accounting distinction
 
 \section{Relation to prior work}\label{sec:related}
 
-The research does not originate transformational creativity, structural analogy, reusable programs, open-ended search, or recursive self-improvement. Boden's account distinguishes combination, exploration, and transformation of conceptual spaces~\citep{boden}. Gentner formalizes relational structure mapping~\citep{gentner}. DreamCoder jointly develops reusable program abstractions and search capability~\citep{dreamcoder}. POET co-generates challenges and solutions and uses transferred solutions as stepping stones~\citep{poet}.
+The research does not originate transformational creativity, structural analogy, reusable programs, open-ended search, or recursive self-improvement. Boden's account distinguishes combination, exploration, and transformation of conceptual spaces~\citep{boden}. Gentner formalizes relational structure mapping~\citep{gentner}. DreamCoder jointly develops reusable program abstractions and search capability~\citep{dreamcoder}. POWERPLAY searches for tasks and solver modifications together while retaining previously acquired skills~\citep{powerplay}. POET co-generates challenges and solutions and uses transferred solutions as stepping stones~\citep{poet}. These precedents make task generation, abstraction, and transfer established starting points rather than new claims of this paper.
 
-More recent systems directly investigate editable agents and improvement procedures. The Darwin G\"odel Machine maintains and evaluates self-modified coding agents~\citep{dgm}; Hyperagents makes both task and meta agents editable and reports accumulating meta-level improvements~\citep{hyperagents}. These are close precedents for research on improving the inventor. AGI ALPHA studies how such improvement procedures could interact with accepted production, continuing obligations, and fundable succession. Those economic and physical outcomes require evidence beyond the reported agent benchmarks.
+More recent systems directly investigate editable agents and improvement procedures. The Darwin G\"odel Machine maintains and evaluates self-modified coding agents~\citep{dgm}; Hyperagents makes both task and meta agents editable and reports accumulating meta-level improvements~\citep{hyperagents}. SkillCraft evaluates formation and reuse of executable higher-level tool compositions across tasks~\citep{skillcraft}. These are close precedents for research on reuse and improving the inventor. AGI ALPHA studies how such improvement procedures could interact with accepted production, continuing obligations, and fundable succession. Those economic and physical outcomes require evidence beyond the reported agent benchmarks.
 
 Within the AGI ALPHA series, the foundational substrate connects agents, jobs, validators, tools, memory, settlement, and governance~\citep{foundation}. \emph{Transformational Intelligence} treats the formulation as an object of discovery~\citep{ti}; \emph{Invent the Economy} develops voluntary viable arrangements~\citep{economy}; \emph{The World as an Output} and \emph{Beyond the Production Frontier} extend the means of discovery and production~\citep{world,frontier}. The OUT collection supplies more specialized constructions with their own conditional results. This paper integrates those ideas into a single account of successive enterprise states and asks for separate evidence of funding, enablement, and improved discovery.
 
-The contribution is therefore an operational synthesis and evaluation design: couple qualified inheritance to real resource constraints and complete productive arrangements, then follow the benefit through a successor. The elementary propositions and authored example clarify that synthesis. They are not presented as new mathematics, a new learning algorithm, or proof that this architecture dominates other organizations.
+The contribution is therefore an operational synthesis and evaluation design: couple qualified inheritance to real resource constraints and complete productive arrangements, then follow the benefit through a successor. The elementary propositions clarify that synthesis, and the executed program-construction study exposes its technical inheritance mechanism and stronger conventional alternative. They are not presented as new mathematics, a new learning algorithm, or proof that this architecture dominates other organizations.
 
-\section{The frontier to pursue}\label{sec:frontier}
 
-The destination is an enterprise capable of opening important classes of useful work. The present services and experiments are candidates and instruments for learning; they need not determine its permanent industry. Three prospective directions make the distinction concrete.
+\section{The next decisive demonstration}\label{sec:frontier}
 
-\subsection{Retrospective measurement as a service}
+The running opportunity provides a concrete progression from this study to consequential work. A prospective measurement foundry first selects a valuable question that cannot be served affordably by its strongest complete alternatives. The target stays fixed; the means remain open.
 
-A system might construct a new measurement series from existing traces for a question that was not anticipated when the traces were collected. A decisive first experiment would require a reconstruction target, a declared observation model, and independently withheld truth. Nonidentifiability, selective archives, calibration drift, and rights to use the traces are explicit failure conditions. Commercial viability would further require a beneficiary who accepts the scoped uncertainty and a complete delivery price that covers acquisition, checking, and support. The result could be an instrument for answering a class of new questions; arbitrary recovery of the unobserved is not the proposition.
+\textbf{Acquire the missing distinction.} Identify existing traces or permitted new measurements and compare their information with the required quantity. A null-space or other ambiguity witness specifies what is missing. If no informative observation can be acquired, stop or propose a different authorized outcome. For retrospective work, evidence must already survive.
 
-\subsection{A foundry for qualified scientific instruments}
+\textbf{Build and qualify the instrument.} Construct the actual observation and reconstruction process, including units, kernels, calibration, noise, and version boundaries. Use independently withheld external truth where applicable. For a physical process, install and test it; a simulator's correctness does not certify a specimen or sensor. Compare the full route with competent existing instruments, laboratories, software, and providers.
 
-A discovery system might build a measurement or experimental interface, use it to resolve one consequential uncertainty, and transfer its constructor to a distinct scientific task. The decisive chain contains independently reproduced measurements, a physically or otherwise appropriately validated instrument, and a fresh successor that loses a measurable benefit without it. Calibration, material variability, construction time, and failure costs can dominate. A simulation can select a design; it cannot certify its physical realization. The OUT-EVOLVE and reusable-discovery programs supply starting constructions and stated limits~\citep{outevolve,world}.
+\textbf{Deliver a complete activity.} Test a real beneficiary's acceptance, participation, and payment terms within existing authorization. Count acquisition, construction, failed work, checking, correction, integration, and support. A finite research programme can contain funded losses: an enabling instrument need not have its own buyer. Its investment belongs to the programme and must be justified by observed or explicitly uncertain downstream value.
 
-\subsection{New productive cooperation}
+\textbf{Construct a distinct successor.} Choose a materially changed request, generate its instrument, and independently qualify it. Compare whole histories against reconstruction from scratch, frozen first-generation reuse, and the strongest conventional constructor. Retain the method that performs best under the outcome and resource criteria.
 
-Familiar resources can be unable to deliver an important complete service because their interfaces, timing, verification, or risk allocation do not fit. A new arrangement might connect them into useful capacity. The decisive experiment compares complete delivery against competent existing coordinators and alternative organizations, including voluntary refusal. The invention must remove a consequential obstacle rather than merely redraw a known service. Installed output, accepted contracts, and residual support obligations determine whether technical coordination becomes productive expansion.
+\textbf{Test the inventor.} Only after defining a revised discovery procedure and compatible component interventions should a fresh campaign claim that the system has become better at finding such transitions. Human selection, repairs, and other assistance remain visible in the evidence record. Increasing automation is a target to measure.
 
-These directions are research candidates, not forecasts of new industries. Selection should favor consequential missing means and the experiments most likely to change a decision, without invented success probabilities or market values. If the original obstruction proves removable by an existing method, use that method. If the full arrangement remains unattractive, change the arrangement or leave the opportunity.
+This programme can also discover that another complete arrangement is better: a cooperative use of existing resources, a revised interface or contract, or a different industry. A prospective capital choice is made jointly with that arrangement. More capital can fund a missing means; it cannot establish that the means works or that buyers value the result.
 
 \subsection{What infinity means}
 
-The infinity mark names an open-ended research horizon: new purposes, instruments, and productive arrangements can enter the search. It does not assert infinite information, computation, memory, capital, or guaranteed improvement. A monotone best-so-far score $q\leq q_{\max}$ cannot accumulate net gains of a fixed $\varepsilon>0$ more than $\lfloor(q_{\max}-q_0)/\varepsilon\rfloor$ times. Genuine long-run progress must therefore be described through new accepted capabilities and changing opportunity sets, not an impossible endless rise on one bounded benchmark.
+The infinity mark names an open-ended research horizon. New useful outcomes and means can enter the search; current industries and benchmarks do not define its final boundary. Each actual experiment still has finite resources and a fixed endpoint. Memory is selective, information is incomplete, and accumulation can have negative returns.
 
-The stronger hypothesis is that learned construction can reduce the burden of future useful construction often enough to sustain a sequence of increasingly consequential achievements. The counterhypothesis is that search, verification, maintenance, imitation, and resource constraints absorb the gains. Fresh campaign comparisons, including losses and declining returns, distinguish them. The flywheel may accelerate, stall, simplify, or be replaced.
+A bounded best-so-far score $q\leq q_{\max}$ cannot accumulate net gains of a fixed $\varepsilon>0$ more than $\lfloor(q_{\max}-q_0)/\varepsilon\rfloor$ times. Long-run progress must be assessed through newly accepted capabilities and changing opportunity sets, with the burden of finding and sustaining them included.
+
+The central hypothesis is that useful construction can reduce the burden of future useful construction often enough to sustain consequential succession. Search, qualification, maintenance, imitation, and resource scarcity may absorb those gains. The flywheel can accelerate, stall, simplify, or be replaced. Its direction is a result to observe.
+
 
 \section{Conclusion}
 
-AGI ALPHA FLYWHEEL asks intelligence to leave behind more than completed work. A useful project can create an instrument, a better understanding of when it applies, and available resources for a different project. A further advance occurs when the enterprise becomes better at discovering those transitions. Each connection can be specified, implemented, and challenged.
+AGI ALPHA FLYWHEEL asks an enterprise to make useful invention a repeatable productive activity. It searches for an important outcome, constructs what is missing, qualifies the result, and tests whether something valuable survives into a different task. The object of invention is the complete arrangement that makes the activity possible.
 
-The central design choice is to search over the valuable outcome and the means of achieving it together. The central scientific discipline is to distinguish funding from causal enablement and better equipment from a better inventor. The central economic discipline is to make accepted value, complete costs, available cash, and continuing obligations agree.
+\Needspace{4\baselineskip}
+The revised construction study gives this proposal an executable centre: specifications become typed programs, certificates and fresh-input checks determine acceptance, and controlled libraries expose the effects of inheritance across generations. Established compilers remain full competitors. Construction over existing observations is separated from obtaining new information.
 
-The current evidence supports pieces of that construction and rejects several stronger claims. The next consequential demonstration is a connected sequence in which a new productive arrangement earns its continuation, an inherited means materially helps a distinct successor, and independent comparison reveals exactly why. The US\$3 billion objective remains ahead of the evidence. The research task is to build the means that could make such an outcome attainable and to discover, through execution, which proposed means deserve to survive.
+The formal and economic distinctions then determine what may be claimed. A continuation state can improve without expanding an omniscient initial policy frontier. A tool can help without making its constructor a better inventor. Productive value can grow without private profit, and profit can exist without currently available cash. Preserving these distinctions makes the larger ambition investigable.
+
+The next consequential result must connect a genuinely useful activity, its qualified enabling means, a distinct successor, and complete costs. A further result must show improved discovery of those transitions. The US\$3 billion objective remains ahead of the evidence. The programme advances by constructing the next necessary means and letting comparative evidence determine whether it deserves to survive.
 
 \claim{Build the next starting point. Then test what it makes possible.}
 
 \appendix
 \section{Reproduce, inspect, and extend}\label{sec:reproduce}
 
-The publication package contains editable LaTeX, a scholarly bibliography, the vector flywheel, a finite exact-arithmetic example, and a public source map. Build from \code{docs/agi-alpha-flywheel} with \code{make}. A TeX Live installation with pdfLaTeX, BibTeX, the recommended fonts, and the listed LaTeX packages is sufficient. The standalone source archive can also be uploaded to a LaTeX editor with \code{paper.tex} selected as its main file.
+The publication package contains editable LaTeX, a scholarly bibliography, the vector flywheel, the exact instrument-foundry study, the preserved funding illustration, and a public source map. Build from \code{docs/agi-alpha-flywheel} with \code{make}. A TeX Live installation with pdfLaTeX, BibTeX, the recommended fonts, and the listed LaTeX packages is sufficient. The standalone source archive can also be uploaded to a LaTeX editor with \code{paper.tex} selected as its main file.
 
-Run the explanatory construction with:
+Run the finite construction study and its independent acceptance controls with:
+\begin{quote}\small\ttfamily
+python3 examples/check\_foundry.py
+\end{quote} The public protocol was committed before substantive execution at \href{\repo/commit/fa7a1117b91340afb27288ec09adbc33926d9ba4}{\texttt{fa7a1117b913}}. The original executable and first result are preserved. The portable replay compares every scientific field, including source, protocol, workload, artifacts, and costs, while reporting Python-version metadata and excluding variable timing. Its source and results are bound in the publication manifest. The workload is authored and public, not a concealed holdout. Runtime observations must be read with the declared cost scope.
+
+The preserved funding illustration runs with:
 \begin{quote}\small\ttfamily
 python3 examples/succession.py --check\\
 python3 examples/succession.py
@@ -547,7 +769,7 @@ A future connected demonstration should bind its intended outcome, complete alte
 
 \subsection{A note on authorship and evidence}
 
-This manuscript presents Vincent Boucher's AGI ALPHA research program. Included AI assistance was used for synthesis, drafting, code preparation, and technical checking. The implemented illustrative example is authored, not autonomously discovered experimental evidence. Source-specific findings remain attributed to their public papers and records. Publication and reproducible arithmetic do not establish peer review, independent market validation, or completion of the broader program.
+This manuscript presents Vincent Boucher's AGI ALPHA research program. Included AI assistance was used for synthesis, drafting, code preparation, and technical checking. The finite constructor and workloads are authored software and specifications. Their executable outputs are measured within that domain; the study does not claim that an autonomous enterprise invented its own constructor or discovered industrial demand. Source-specific findings remain attributed to their public papers and records. Publication and reproducible arithmetic do not establish peer review, independent market validation, or completion of the broader program.
 
 \phantomsection
 \addcontentsline{toc}{section}{References}
