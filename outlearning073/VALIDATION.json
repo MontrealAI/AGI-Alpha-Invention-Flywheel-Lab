@@ -1,0 +1,28 @@
+{
+  "completed_account_reopen": {
+    "accounts": 7,
+    "public_records_unchanged": true
+  },
+  "exact_source_tests": {
+    "command": "python3 -m unittest -q tests.test_outlearning073_world tests.test_outlearning073_native tests.test_outlearning073_runner",
+    "reported_seconds": 2.963,
+    "result": "PASS",
+    "tests": 21
+  },
+  "frozen_commit": "599d9dda6b69a65c7b61366402e87c899cade5f5",
+  "frozen_sha256": "bac8d23df038e26315ae8b87ccb5f27776cb78726d4469c0359de85b89c14f00",
+  "legacy_finance_regressions": {
+    "reported_seconds": 28.972,
+    "result": "PASS",
+    "tests": 25
+  },
+  "preserved_development_failure": {
+    "cause": "Concurrent development changed the executing source after a staged test manifest was constructed. Guard remained unchanged; final static-source run passed.",
+    "command": "same 21-test command while runner source was still being edited",
+    "result": "20 passed, one ERROR: OUTLEARNING073_EXECUTING_SOURCE_CHANGED"
+  },
+  "primary_execution_exit_code": 0,
+  "public_replay_exit_code": 0,
+  "recovery_boundary": "Completed cases resume by auditing/reopening original authority; incomplete native phases preserve state and refuse automatic phase replay. The delayed case retains an uncollected obligation.",
+  "schema": "outlearning073/final-validation/v1"
+}
