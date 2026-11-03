@@ -1,5 +1,21 @@
 # Research papers
 
+## FLYWHEEL Ω — The Economy as an Output
+
+**Constructing better economic games and the means of their successors.**
+
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Edition 1.0.0 · 27 pages.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/flywheel-omega.html) · [Complete PDF](flywheel-omega.pdf) · [Editable LaTeX, exact study and build instructions](../flywheel-omega/README.md)
+
+*The next breakthrough may be the game that makes it possible.* FLYWHEEL Ω makes the complete productive arrangement an output of intelligence: useful outcomes, production and verification, participants’ actual choices, voluntary commitments, timed funding and reusable means for successors. Its central connection is that new productive capabilities also change strategic possibilities; incentive claims and expected collections must follow what participants can actually do.
+
+The paper joins exact conditional constructions and an exhaustive authored study with a pinned engineering counterexample. In the replayed V3 market, all 72 modeled single-report checks pass, yet two component purchases provide the joint services for 213 cents less. The new study examines complete composed choices and constructive routes to funded succession while retaining capable conventional construction and ordinary reuse as controls.
+
+**Scope:** The analytical study and source-bound branch evidence are distinct. The original checks, historical capital, financial accounts and outcomes retain their original scope. This publication does not establish broad autonomous market creation, observed buyer demand or real commercial profit. The US$3 billion trailing-365-day complete-cost profit milestone remains unachieved. Financed succession, capability enablement and improved discovery require separate evidence.
+
+PDF SHA-256: `25672651b4d459264d46f0ae5a5156d7e123219a90b719c6a40efd8ba849890c`. The [publication manifest](publication-manifest.json) records this edition’s exact published bytes. The flagship and foundational papers below retain their established roles; all previous editions remain available.
+
 ## SUPER ALPHA
 
 **Inventing Economic Possibility.**

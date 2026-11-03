@@ -1,0 +1,84 @@
+\documentclass[11pt,letterpaper]{article}
+\pdfinfoomitdate=1\pdftrailerid{}\pdfsuppressptexinfo=15
+\usepackage[T1]{fontenc}\usepackage[utf8]{inputenc}
+\usepackage{lmodern,mathpazo,microtype}
+\usepackage[margin=.88in,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx,xcolor,booktabs,tabularx,array,enumitem,tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
+\usepackage{titlesec,fancyhdr,needspace,placeins,listings,xurl}
+\usepackage[numbers,sort&compress]{natbib}
+\definecolor{ink}{HTML}{151224}\definecolor{violet}{HTML}{6842A2}
+\definecolor{gold}{HTML}{B18740}\definecolor{mint}{HTML}{176E68}
+\definecolor{brightgold}{HTML}{EDC277}\definecolor{brightmint}{HTML}{A0E1D2}
+\definecolor{pale}{HTML}{F2EFF7}\definecolor{muted}{HTML}{61596E}
+\usepackage[colorlinks=true,linkcolor=violet,citecolor=violet,urlcolor=mint,bookmarksnumbered]{hyperref}
+\hypersetup{pdftitle={FLYWHEEL OMEGA: The Economy as an Output},pdfauthor={Vincent Boucher},pdfsubject={Transformational Intelligence for constructing economically viable games and their successors},pdfkeywords={FLYWHEEL OMEGA, Transformational Intelligence, mechanism design, economic possibility, constructive succession, strategic composition}}
+\urlstyle{same}\setlength{\emergencystretch}{3em}
+\widowpenalty=10000\clubpenalty=10000\displaywidowpenalty=10000
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}\linespread{1.025}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\repo}{https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab}
+\newcommand{\omegaFW}{FLYWHEEL~$\Omega$}
+\newcommand{\lead}[1]{\Needspace{5\baselineskip}\par\medskip\noindent{\large\sffamily\bfseries\color{violet}#1}\par\smallskip}
+\newcommand{\thesis}[1]{\par\medskip{\sffamily\bfseries\large\color{violet}#1}\par\medskip}
+\newtheorem{proposition}{Proposition}\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+\setlist{leftmargin=1.35em,itemsep=3pt,topsep=5pt}
+\renewcommand{\arraystretch}{1.18}\setlength{\tabcolsep}{5pt}
+\titleformat{\section}{\Large\sffamily\bfseries\color{ink}}{\color{violet}\thesection}{.6em}{}
+\titleformat{\subsection}{\normalsize\sffamily\bfseries\color{ink}}{\thesubsection}{.6em}{}
+\titlespacing*{\section}{0pt}{18pt}{8pt}\titlespacing*{\subsection}{0pt}{12pt}{5pt}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\footnotesize\sffamily FLYWHEEL $\Omega$}
+\fancyhead[R]{\footnotesize\sffamily THE ECONOMY AS AN OUTPUT}
+\fancyfoot[L]{\scriptsize\sffamily MONTREAL.AI / QUEBEC.AI}\fancyfoot[R]{\small\color{violet}\thepage}
+\renewcommand{\headrulewidth}{.3pt}
+\lstset{basicstyle=\footnotesize\ttfamily,columns=fullflexible,breaklines=true,keepspaces=true,showstringspaces=false}
+\renewcommand{\topfraction}{.95}\renewcommand{\bottomfraction}{.9}\renewcommand{\textfraction}{.05}\renewcommand{\floatpagefraction}{.8}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}\pagecolor{ink}\color{white}\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+\fill[violet!30!ink] ([xshift=1.5cm,yshift=-6cm]current page.north east) circle (7cm);
+\foreach \r in {4.2,5.0,5.8,6.6}{\draw[white,opacity=.045,line width=.7pt] ([xshift=1.5cm,yshift=-6cm]current page.north east) circle (\r cm);}
+\draw[brightgold,line width=1.3pt] ([xshift=2.2cm,yshift=2.5cm]current page.south west)--([xshift=19.4cm,yshift=2.5cm]current page.south west);
+\end{tikzpicture}
+{\sffamily\small MONTREAL.AI / QUEBEC.AI\hfill\color{brightgold}RESEARCH EDITION 1.0}\par
+\vspace{20mm}
+{\sffamily\bfseries\fontsize{48}{54}\selectfont FLYWHEEL $\boldsymbol{\Omega}$}\par
+\vspace{11mm}
+{\sffamily\bfseries\fontsize{32}{37}\selectfont THE ECONOMY\\[6pt]AS AN OUTPUT}\par
+\vspace{9mm}
+{\sffamily\color{brightmint}\large TRANSFORMATIONAL INTELLIGENCE $\boldsymbol{\infty}$}\par
+\vspace{5mm}
+{\large Constructing better economic games\\and the means of their successors}\par
+\vspace{10mm}
+\begin{center}\begin{tikzpicture}[>=Latex,scale=.88]
+\draw[brightgold,opacity=.13,line width=12pt] (-3,0) .. controls (-1.7,2.15) and (-.5,2.15) .. (0,0) .. controls (.5,-2.15) and (1.7,-2.15) .. (3,0) .. controls (1.7,2.15) and (.5,2.15) .. (0,0) .. controls (-.5,-2.15) and (-1.7,-2.15) .. (-3,0);
+\draw[brightgold,line width=1.5pt,->] (-3,0) .. controls (-1.7,2.15) and (-.5,2.15) .. (0,0) .. controls (.5,-2.15) and (1.7,-2.15) .. (3,0);
+\draw[brightmint,line width=1.5pt,->] (3,0) .. controls (1.7,2.15) and (.5,2.15) .. (0,0) .. controls (-.5,-2.15) and (-1.7,-2.15) .. (-3,0);
+\node[text=white,font=\sffamily\small,align=center] at (-1.55,0) {CONSTRUCT\\POSSIBILITY};
+\node[text=white,font=\sffamily\small,align=center] at (1.55,0) {ENABLE\\SUCCESSION};
+\end{tikzpicture}\end{center}
+\vfill
+{\sffamily\bfseries\large The next breakthrough may be the game\\that makes it possible.}\par\vspace{8mm}
+{\large\bfseries Vincent Boucher}\par\smallskip
+President of MONTREAL.AI\par
+MONTREAL.AI\quad\textbullet\quad QUEBEC.AI\par\medskip
+{\small\color{white!75}Montr\'eal, Qu\'ebec, Canada\quad\textbullet\quad 3 November 2026}
+\vspace*{13mm}
+\end{titlepage}\nopagecolor\color{ink}\hypersetup{pageanchor=true}
+
+\input{sections/opening}
+\input{sections/construction}
+\input{sections/strategic}
+\input{sections/study}
+\input{sections/succession}
+\input{sections/evidence}
+\input{sections/horizon}
+\appendix
+\input{sections/appendix}
+\clearpage
+\bibliographystyle{plainnat}\bibliography{references}
+\end{document}

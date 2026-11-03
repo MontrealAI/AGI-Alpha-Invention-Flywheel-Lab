@@ -1,0 +1,148 @@
+\section{Formal assumptions and proofs}\label{app:proofs}
+
+The results below are elementary deductions for declared finite models. They connect known ideas in arbitrage-free pricing, mechanism design and program synthesis to the paper's constructive question \cite{datapr,conitzer2002,synthesis,cegis}. Their proofs establish those conditional statements; they do not establish empirical demand, unrestricted incentive compatibility or an autonomous invention advantage.
+
+\subsection{Composition and the effective price}\label{app:closure}
+
+Let $G$ be a finite set of services. A posted menu $\mathcal M\subseteq 2^G$ contains $\varnothing$ at price zero and assigns a finite nonnegative price to each offer. Let
+\[
+\mathcal F=\left\{\bigcup_{B\in\mathcal B}B:\mathcal B\subseteq\mathcal M\right\}
+\]
+be the complete family of reachable unions. Thus $\mathcal F$ is finite, contains $\varnothing$, and is closed under union. Extend $p$ to $\mathcal F$ by assigning $+\infty$ to outcomes not individually posted. Every member of $\mathcal F$ still has a finite-price implementing cart.
+
+The model requires more than a set representation. Every modeled combination must be permitted and executable. A cart delivers its union exactly once; repeated purchases add no service. The accepted output, quality, timing, rights, warranty and other material effects are the same for all carts with the same union. Payment is the sum of offer prices, with no omitted cart fee or composition cost. There are no conflicting capacity or permission constraints. These are assumptions to verify against the actual productive system, not consequences of the notation. Under them, removing repeated offers never increases cost, so a minimum over finitely many carts exists.
+
+Define the effective tariff by
+\begin{equation}
+(\mathsf Cp)(S)=
+\min_{\substack{\mathcal B\subseteq\mathcal M\\\cup_{B\in\mathcal B}B=S}}
+\ \sum_{B\in\mathcal B}p(B),\qquad S\in\mathcal F.
+\label{eq:appendix-closure}
+\end{equation}
+The empty cart has union $\varnothing$ and price zero. A tariff $q$ is \emph{union-subadditive} when $q(A\cup B)\le q(A)+q(B)$ for every $A,B\in\mathcal F$.
+
+\begin{proposition}[Effective tariff and budget-preserving equivalence]
+\label{prop:closure}
+On the fixed domain above, $\mathsf Cp\le p$, the operator $\mathsf C$ is monotone under pointwise price order, and $\mathsf C(\mathsf Cp)=\mathsf Cp$. Moreover, $\mathsf Cp$ is the greatest nonnegative union-subadditive tariff $q$ with $q(\varnothing)=0$ and $q\le p$.
+
+For a buyer with quasilinear utility $v(S)-x$, $v(\varnothing)=0$, hard budget $b\ge0$, and a zero-utility decline option, the maximum utility from feasible carts is exactly
+\begin{equation}
+\max\left\{0,\ \max_{\substack{S\in\mathcal F\\(\mathsf Cp)(S)\le b}}
+\bigl[v(S)-(\mathsf Cp)(S)\bigr]\right\}.
+\label{eq:appendix-buyer}
+\end{equation}
+The maximizing delivered-outcome/payment pairs agree between the cart model and this effective-tariff model.
+\end{proposition}
+
+\begin{proof}
+Every individually posted offer is a feasible one-item cart, so $\mathsf Cp\le p$; the inequality at unposted outcomes is immediate. If $p\le p'$ on a common reachable domain, every finite cart under $p'$ is available under $p$ at no larger cost. Minimizing gives $\mathsf Cp\le\mathsf Cp'$.
+
+The union of minimizing carts for $A$ and $B$ implements $A\cup B$ at cost no larger than their sum, after removing any repetitions. Hence $\mathsf Cp$ is union-subadditive. If $q\le p$ is any other union-subadditive tariff, repeated application of its inequality gives
+\[
+q(S)\le\sum_{B\in\mathcal B}q(B)
+       \le\sum_{B\in\mathcal B}p(B)
+\]
+for every cart implementing $S$. Taking the minimum yields $q\le\mathsf Cp$, proving greatestness. Applying this property to the already subadditive tariff $\mathsf Cp$ proves idempotence.
+
+Finally, any affordable cart delivering $S$ costs at least $(\mathsf Cp)(S)$. Replacing it by a minimizing cart preserves affordability and weakly improves utility, strictly so when its price falls. Conversely, the defining minimum supplies an affordable implementing cart for every outcome admitted in \eqref{eq:appendix-buyer}. This proves the equality and the correspondence of optimal outcome/payment pairs, including decline.
+\end{proof}
+
+The result preserves the full best-response correspondence. A selected revenue still requires a common tie convention, or a reported range over ties. A buyer's maximum utility alone does not determine seller revenue when several different outcomes attain it. The finite study makes refusal and seller-unfavorable ties explicit.
+
+One implementation uses a graph with nodes $U\in\mathcal F$ and edges
+$U\to U\cup B$ of weight $p(B)$ for each posted $B$. Set $D(\varnothing)=0$ and minimize the path weight to every reachable union. Nonnegative self-loops can be discarded; every remaining edge strictly enlarges the service set. Relaxing edges in increasing set cardinality therefore computes $D(S)=(\mathsf Cp)(S)$ in $O(|\mathcal F|\,|\mathcal M|)$ arithmetic operations. Enumerating all subsets of posted offers supplies an independent small-case control. The state space can itself be exponential in $|G|$; this is not a general efficient algorithm for unrestricted productive composition.
+
+If combining services changes quality, rights, production costs, settlement timing or permissible use, those distinctions belong in the state and acceptance contract. The set-union reduction then requires revision. It does not cover resale, coalitions, multiple identities, repeated consumption, strategic default, intertemporal commitments or general query determinacy. Query-based data pricing studies a richer information-determinacy relation \cite{datapr}.
+
+\subsection{What expanding the strategy model can invalidate}\label{app:strategy-expansion}
+
+For a fixed mechanism $m$, buyer type $\theta$ and intended action $a^*$, let $\mathcal D\subseteq\mathcal D'$ be two sets of feasible actions, both containing $a^*$. Utility for every action in $\mathcal D$ must remain the same in the two models. Define
+\[
+\operatorname{Reg}_{\mathcal D}(m,\theta,a^*)
+ =\max_{a\in\mathcal D}\{u(m,\theta,a)-u(m,\theta,a^*)\}.
+\]
+
+\begin{proposition}[Fixed-payoff strategy expansion]\label{prop:regret}
+For the nested action sets above,
+$\operatorname{Reg}_{\mathcal D'}\ge\operatorname{Reg}_{\mathcal D}$.
+Consequently, among a fixed set of candidate mechanisms with unchanged payoffs, the candidates with regret at most $\varepsilon$ for every tested participant/type under $\mathcal D'$ form a subset of those passing under $\mathcal D$. An analogous set inclusion holds for a fixed-profit function's worst-case lower bound over nested response sets.
+\end{proposition}
+
+\begin{proof}
+Maximization over a superset cannot decrease a maximum. Apply that inequality to every required participant/type constraint. For the last statement, an infimum over a larger response set cannot increase.
+\end{proof}
+
+This does not imply that actual equilibrium revenue always falls when actions are added. It also does not say that better productive means cannot help: a new construction can change costs, payoffs and the candidate arrangements themselves. The proposition applies to the narrower question of whether an existing certificate survives a more complete strategy model with its common payoffs held fixed.
+
+\subsection{A collection error can cross a funding boundary}\label{app:leakage}
+
+\begin{proposition}[Conditional successor funding gap]\label{prop:leakage}
+Fix one intended, accepted sale of $S$ in a deterministic cash sequence. Let $u$ be unrestricted cash before its production outlay, $c$ the cash outlay attributable to that sale, $r\ge0$ the additional amount that must remain protected afterward, and $K\ge0$ the upfront successor commitment. Suppose all earlier events are feasible, there are no other intervening flows, the buyer actually chooses $S$, and composition changes only the collected price, from $p(S)$ to $(\mathsf Cp)(S)$.
+
+The advertised-price calculation permits that commitment while the actual collection does not exactly when
+\begin{equation}
+u+(\mathsf Cp)(S)-c-r<K\le u+p(S)-c-r.
+\label{eq:appendix-leakage}
+\end{equation}
+The actual additional cash required is
+$K-[u+(\mathsf Cp)(S)-c-r]$, which is positive and no larger than $p(S)-(\mathsf Cp)(S)$.
+\end{proposition}
+
+\begin{proof}
+The two post-sale available balances differ by precisely
+$p(S)-(\mathsf Cp)(S)$. Affordability means that the relevant available balance is at least $K$; applying that test to both balances gives \eqref{eq:appendix-leakage} and the stated shortfall bound.
+\end{proof}
+
+The restriction to the same realized output is material. A changed effective tariff can also change the buyer's chosen outcome, participation, production cost and timing; those cases require re-solving the full route. The protected amount $r$ must arise from an actual declared obligation or reserve rule. It cannot be invented afterward to make a desired funding result hold. Profit, cash and the attribution of financing to earned receipts remain separate, as in the predecessor's ordered-cash analysis \cite{superalpha}.
+
+\subsection{The staged construction and its participation conditions}\label{app:staging}
+
+The authored two-service construction keeps the complete reference expense at nine units while changing when useful accepted work can be delivered. Ordinary final-only delivery costs nine upfront. Ordinary staging costs seven before accepted $A$ and two afterward. The connector costs two to build and permits accepted $A$ at cost three, followed by $B$ at cost four. Connector construction plus final-only payment still requires nine upfront. Both component prices are six; the posted joint price thirteen is dominated by the twelve-unit cart.
+
+At opening cash six, the joint connector-and-staging path is
+\[
+6\xrightarrow{\text{construct }2}4
+ \xrightarrow{A\text{ costs }3}1
+ \xrightarrow{A\text{ pays }6}7
+ \xrightarrow{B\text{ costs }4}3
+ \xrightarrow{B\text{ pays }6}9.
+\]
+The four minimum capital requirements are respectively $9,7,9,5$. For example, ordinary staging needs at least seven for its first output; after its six-unit receipt, capital seven leaves six, which covers continuation cost two. The joint route needs five for construction and the first output; that first receipt then covers continuation cost four. These ordered balances prove necessity and sufficiency under the fixed path assumptions. The same total expense nine and receipt twelve produce profit three whenever a route is executable.
+
+This four-route comparison fixes component prices and accepted deliveries to isolate the liquidity effect. It is not a price-optimality claim. With integer prices and refusal at zero surplus, an independently voluntary purchase of either seven-unit component can charge at most six. A different menu containing only the joint offer at thirteen is accepted for value fourteen and yields profit four, but requires nine upfront under the declared final-only route. At opening seven ordinary staging can tie the joint construction; at opening nine pure bundling can exceed its profit. The quoted joint price thirteen in the menu $(6,6,13)$ must also not be confused with guaranteed revenue in a restricted single-purchase game: all three individual offers then give utility one, and seller-unfavorable ties can select a component. The composed cart gives utility two and strictly wins.
+
+Each payment is earned only after independent acceptance of a useful output. The assumed buyer values are $v(A)=v(B)=7$ and $v(A\cup B)=14$, with sufficient cash to pay each six-unit installment. No better external offer is present in this particular authored instance. Accepted $A$ remains useful if continuation is declined, so its one-unit standalone surplus does not depend on a later promise. Given $A$, accepted $B$ adds value seven at price six. The continuation choice is therefore strictly worthwhile. Both parties can perform and settle the declared accepted exchange; enforcement and payment certainty are assumptions, not findings about an actual buyer. The composition model gives the same complete delivered services for twelve, with buyer surplus two.
+
+These conditions are essential to the construction. An intermediate artifact that has no independently accepted value does not justify the first earned receipt. A refundable advance is not substituted for that receipt. Uncertain acceptance, collection or continuation requires a contingent policy with its own failure costs and liquidity constraints.
+
+To expose an additional common lifecycle burden, charge a declared $h\ge0$ as an upfront expense in every first-episode plan. The four minimum capital requirements become $9+h,7+h,9+h,5+h$ and their completed profit becomes $3-h$. At opening six, the joint route is executable exactly when $h\le1$. This is a sensitivity statement about that payment timing. An actual unmeasured expense is unknown; $h=0$ in the reference calculation does not establish costless real research, computing or maintenance.
+
+For a second accepted task with the same staged prices and payment schedule, retaining the connector removes its two-unit reconstruction expense: the declared incremental expense is seven and profit five. Rebuilding costs nine and earns three. Ordinary reuse of the identical connector also costs seven and earns five. The first-cycle construction cost remains in every full-history account; it is not erased when reporting the incremental successor benefit. This is a fixed-menu inheritance comparison, not an optimal two-episode policy.
+
+The changed cash state permits a stronger continuation. With nine units available after the first episode and the connector already constructed, final-only production costs seven before collection. A fresh pure-bundle-only offer at thirteen gives the buyer positive surplus and produces the cash path $9\to6\to2\to15$. Its second-episode profit is six; total two-episode profit is nine. An ordinary controller with the same asset and contract options can make the same change. This alternative assumes that earlier component offers need not remain available for the fresh task; any continuing contractual commitment would have to be preserved. More opening capital, a legitimate credit contract, a stronger outside offer or another productive route can change the comparison further.
+
+\subsection{What finite counterexample-guided synthesis guarantees}\label{app:cegis}
+
+Counterexample-guided inductive synthesis is an established construction method \cite{cegis}. The following finite guarantee applies only when a verifier's counterexamples are sound constraints on every admissible solution, rather than arbitrary rejections of a current favorite.
+
+\begin{proposition}[Finite refinement with complete verification]\label{prop:cegis}
+Let $\mathcal C$ be a fixed finite family of $N$ exact specification constraints on a fixed candidate class. Start with a subset $\mathcal C_0$. At each iteration, a terminating complete solver either finds a candidate satisfying the accumulated constraints or correctly reports that none exists. A terminating complete verifier either accepts that candidate against every constraint in $\mathcal C$, or returns a violated member of $\mathcal C$. Retain each returned constraint permanently.
+
+There are at most $N-|\mathcal C_0|$ rejected candidates, followed by at most one accepting or infeasibility solver call. An accepted candidate satisfies all of $\mathcal C$; a correct infeasibility result certifies no solution in the declared candidate class.
+\end{proposition}
+
+\begin{proof}
+A candidate satisfies every accumulated constraint. Therefore a returned violated constraint is new. Each rejection strictly increases the accumulated subset of the finite family $\mathcal C$. After at most $N-|\mathcal C_0|$ such increases no further rejection is possible. Acceptance is sound by the complete verifier. If a subset of the required constraints has no solution, the full family has no solution either.
+\end{proof}
+
+The proposition does not bound useful wall-clock time, establish the truth of the specification, or guarantee numerical solver completeness. Floating-point tolerances, time limits and unmodeled strategies require separate treatment. If a productive construction adds new feasible actions, the old fixed family $\mathcal C$ may cease to describe the game. Retained constraints can be useful search hints only when their applicability is established; every resulting mechanism still faces current acceptance. Automated synthesis and dynamic mechanism design provide related, explicitly bounded formulations \cite{synthesis,dynamic}.
+
+A second elementary bound applies to a finite candidate class even when the specification is presented differently. If a complete terminating verifier rejects only invalid candidates, every rejection permanently excludes the current candidate without excluding valid ones, and the search never repeats an excluded candidate, at most the class's cardinality of candidates can be examined. The result is a verified candidate or exhaustion of that class. Neither version certifies that the class contains the useful construction the beneficiary needs.
+
+\section{Separating funding, inheritance and an improved inventor}\label{app:identification}
+
+A fresh successor comparison should distinguish four starting conditions: baseline cash with no inherited artifact, baseline cash with the artifact, additional unrestricted cash with no artifact, and both additional cash and the artifact. Preserve other obligations, information, rights, prices and deadlines. Charge artifact construction or acquisition where it occurs and retain predecessor expense in the full history. Equalize what the comparator may reconstruct, buy, coordinate or finance; otherwise an apparent enabling effect may be unequal permissions or an excluded conventional route.
+
+Within each condition, the current and proposed invention procedures receive identical available content and complete resource budgets. Compare accepted outcomes after search, unsuccessful attempts, verification, implementation and operating costs. Fresh tasks must be selected without consulting their outcomes, and declined or unfinished cases remain in the denominator. Record procedure effect at fixed resources, resource effect at fixed procedure, and any interaction separately. Ordinary content-identical reuse is required to distinguish useful memory from a better discovery procedure \cite{superalpha,outevolve,outaccelerate}.
+
+This protocol does not require every profitable business to prove a new discovery algorithm. It is required for the stronger claim that the inventor itself has improved. The authored study demonstrates conditional constructions and comparisons; the protocol defines a further empirical burden.
