@@ -1,5 +1,15 @@
 # Enterprise078 current continuation checkpoint — 3 November 2026
 
+## Candidate/executing-source defect reproduced and repaired — latest continuation
+
+Preregistered at e571e36dfcd23f9529dd496695525afa22593b29. A fresh-account counterexample against prior catalog implementation 1c0c2a61ba4218e38d143808bd404ac370ad2e12 failed with **INVALID_PROPOSAL_ACCEPTED**: changing candidate catalog bytes before the first proposal was not rejected. The old signer bound the supplied tree but did not compare it with the modules performing acceptance. This is a real preparation-source qualification failure, not a financial loss or a bypass of the original native account. The prior passing tests did not cover it; their results are retained with that limitation.
+
+The repaired catalog compares all four declared candidate files with their loaded module file bytes before preparation and recovery. Mismatch fails before creating the proposal directory or changing financial export. Nine native fixture controls and48 combined local regressions pass; the explicit nine no-reseed/failed-admission tests ran first. [Source, failure and verification receipt](evidence/EXECUTING_SOURCE_REPAIR.json). This is trusted local process/file checking, not protection against malicious process memory or an administrator mutating code. Old proposal source identities are not rewritten: their original runtime remains required; no old signed proposal is re-signed or upgraded by this repair.
+
+Original authority reopened under its native POSIX lock and audited with the same export below, with no proposal or financial action added. Main215b22a5 and unchanged AGENTS were refreshed. All observed execution checks for1c0c2a6 passed; publication steps skipped. New repair head requires its own hosted qualification. PR176/177 ownership and source remain untouched.
+
+**Native activation is still unimplemented.** This repair closes a demonstrated prerequisite defect; it does not admit a SQL/CSV sale. The next construction must implement an explicit source-versioned catalog event and mixed historical/new replay on fresh fixtures, preserving the fixed original manifest, source pins, authority and obligations. Neither another positive toy quote nor an inactive signed proposal establishes commercial operation. Actual complete costs and voluntary buyer calibration remain unresolved; investment stays deferred.
+
 ## Costed buyer-intent bundle construction — latest continuation
 
 Preregistered at c4632a499f4f26a64e4525de4f54d89ad1ef3dad. Added [intent.py](transactional_admission/intent.py), a read-only finite registered-bundle evaluator using the existing complete-offer comparator. It jointly checks shared finite buyer wallets and total earned-cash affordability, retains sunk acquisition cost under no entry, distinguishes explicit consent from uncontacted/refused leads, and keeps nonpayment losses. It evaluates only supplied registered bundles; it never manufactures demand, searches subsets for a desired profit, books money, or grants native admission. This addresses the companion's capacity decision defect without editing its owner branch or historical results.

@@ -38,6 +38,12 @@ def run():
         with BusinessAccount(root,manifest,path,**kwargs) as a:
             a.cost('fixture-incurred-failure',100000000,0)
             before=digest(a.export())
+            code=candidate/'enterprise078/transactional_admission/catalog.py'
+            raw=code.read_bytes();code.write_bytes(raw+b'\n# substituted candidate before first proposal\n')
+            refused(lambda:prepare(a,candidate,None,contract,events,db,csv))
+            assert not location(a).exists() and digest(a.export())==before
+            code.write_bytes(raw)
+            checks.append('candidate_must_match_executing_source_before_append')
             first=prepare(a,candidate,None,contract,events,db,csv)
             assert not first['native_catalog_admitted'] and first['financial_export_sha256']==before
             assert len(recover(a,candidate,first['head']))==1

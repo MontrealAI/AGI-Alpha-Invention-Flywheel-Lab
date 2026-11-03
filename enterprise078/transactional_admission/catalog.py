@@ -8,6 +8,7 @@ is mandatory to detect a missing/truncated tail under local POSIX custody.
 import hashlib
 import json
 import os
+import sys
 from pathlib import Path
 from .contract import accept, digest, TYPE
 
@@ -28,6 +29,24 @@ def source_identity(root):
     return result
 
 
+def executing_identity(root):
+    """Bind candidate files to loaded modules, not an arbitrary source tree.
+
+    This is a local trusted-process/file identity check, not attestation against
+    malicious process memory or an administrator changing files during execution.
+    Native source/manifest identity remains independently checked by the account.
+    """
+    candidate = source_identity(root)
+    for name, expected in candidate.items():
+        module = sys.modules.get(name[:-3].replace('/', '.'))
+        path = Path(module.__file__) if module is not None and getattr(module, '__file__', None) else None
+        if (path is None or not path.is_file() or path.is_symlink()
+                or any(p.is_symlink() for p in path.parents)
+                or hashlib.sha256(path.read_bytes()).hexdigest() != expected):
+            raise ValueError('CATALOG_EXECUTING_SOURCE_MISMATCH')
+    return candidate
+
+
 def location(account):
     # Account snapshot checks canonical ownership before any preparation IO.
     account.snapshot()
@@ -43,7 +62,7 @@ def recover(account, root, expected_head):
     files = sorted(directory.glob('*.json')) if directory.exists() else []
     previous = None
     states = []
-    current_source = source_identity(root)
+    current_source = executing_identity(root)
     for i,p in enumerate(files):
         if p.name != f'{i:08d}.json' or p.is_symlink() or not p.is_file():
             raise ValueError('CONTIGUOUS_REGULAR_PROPOSALS_REQUIRED')
@@ -77,7 +96,7 @@ def prepare(account, root, expected_head, contract, events, database, csv_path):
     if not receipt['accepted']:
         raise ValueError('ACCEPTED_TYPED_DELIVERY_REQUIRED')
     state = {'schema':SCHEMA,'sequence':len(states),'previous':expected_head,
-             'status':'PREPARED_NOT_ACTIVE','candidate_source':source_identity(root),
+             'status':'PREPARED_NOT_ACTIVE','candidate_source':executing_identity(root),
              'request':contract,'delivery':receipt}
     before = digest(account.export())
     envelope = account.seal_checkpoint(state)

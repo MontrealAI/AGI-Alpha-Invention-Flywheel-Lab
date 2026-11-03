@@ -17,7 +17,7 @@ class CatalogPreparationTests(unittest.TestCase):
                              capture_output=True,text=True)
             self.assertEqual(r.returncode,0,r.stderr)
             result=json.loads(r.stdout)
-            self.assertTrue(result['accepted']);self.assertEqual(len(result['checks']),8)
+            self.assertTrue(result['accepted']);self.assertEqual(len(result['checks']),9)
             self.assertFalse(result['native_catalog_admitted'])
 
 

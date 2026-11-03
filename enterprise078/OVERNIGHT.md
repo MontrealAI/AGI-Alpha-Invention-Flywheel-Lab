@@ -1,6 +1,6 @@
 # Enterprise078 overnight execution checkpoint
 
-**Latest:** costed buyer-intent bundle comparison constructed; nine new controls and48 combined regressions passed. Shared wallets, whole-bundle earned funding, refusal, nonpayment and sunk acquisition are preserved. No new financial action; original audit unchanged. Native activation remains unimplemented. All observed e2c8ff8 execution checks passed; new-head checks are separate. Read [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md).
+**Latest:** reproduced and repaired a catalog preparation source-binding defect: candidate bytes must match the modules performing acceptance before signing. Nine catalog controls and48 combined regressions pass locally; failed baseline preserved. Original audit unchanged, no financial action. Native activation remains unimplemented. Read [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md).
 
 Activated by the owner on2November2026 Toronto. Target remains one enterprise's US$3billion trailing365-day complete-modeled-cost profit. It is not achieved. This checkpoint is operational guidance, not a replacement for the owner's full mandate.
 
