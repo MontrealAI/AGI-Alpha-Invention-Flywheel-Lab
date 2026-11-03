@@ -1,0 +1,108 @@
+{
+  "schema": "agi-alpha/interior-eit-physical082/protocol/v1",
+  "registered_date_utc": "2026-11-03",
+  "base_commit": "54c50a3f9a96e140f42e7cb50c810607a75a2231",
+  "role": "FINITE_PHYSICAL_OBSERVATION_DEPENDENCY_TEST",
+  "flagship": "An affordable, credible non-invasive interior-property observatory that can qualify important hidden conditions without destructive access.",
+  "other_distinct_arrangements": [
+    "passive mixed-contact surface construction",
+    "resource-to-capital industrial feedstock conversion",
+    "no-deploy"
+  ],
+  "scope": "Does sparse boundary excitation retain a physically measured metal-versus-plastic inclusion distinction on unseen inclusion count? This is only an early EIT feasibility dependency, not imaging a unique interior property, instrument certification or customer demand.",
+  "source": {
+    "name": "Hauptmann et al. 2017 Open 2D Electrical Impedance Tomography KIT4 physical tank",
+    "doi": "10.5281/zenodo.1203914",
+    "archive_url": "https://zenodo.org/records/1203914/files/data_mat_files.zip?download=1",
+    "expected_md5": "ad9f03325cafc9aae8c0149927de8e06",
+    "dataset_license": "CC BY 4.0 per FIPS catalogue",
+    "input_fields": [
+      "Uel 16x79",
+      "CurrentPattern 16x79",
+      "MeasPattern 16x16"
+    ],
+    "original_file_naming": "datamat_X_Y.mat",
+    "physical_labels_source": "Hauptmann et al. 2017 arXiv:1704.01178, figures 3-5",
+    "actual_archive_sha256": "UNKNOWN_BEFORE_DOWNLOAD"
+  },
+  "cases": {
+    "background": "datamat_1_0.mat",
+    "development_plastic": [
+      "datamat_1_1.mat",
+      "datamat_2_1.mat",
+      "datamat_2_2.mat"
+    ],
+    "development_metal": [
+      "datamat_1_2.mat",
+      "datamat_1_3.mat",
+      "datamat_1_4.mat",
+      "datamat_2_3.mat",
+      "datamat_2_4.mat",
+      "datamat_2_5.mat",
+      "datamat_2_6.mat"
+    ],
+    "heldout_plastic": [
+      "datamat_3_1.mat",
+      "datamat_3_2.mat",
+      "datamat_3_3.mat"
+    ],
+    "heldout_metal": [
+      "datamat_3_4.mat",
+      "datamat_3_5.mat",
+      "datamat_3_6.mat"
+    ]
+  },
+  "physical_operation": {
+    "all_patterns": 79,
+    "retained_patterns": 4,
+    "measurements_per_pattern": 16,
+    "signal": "voltage difference from homogeneous 1.0 case",
+    "per_pattern_features": "all 16 adjacent electrode voltages; no test-data feature normalization",
+    "hardware_intervention": "NONE_REANALYSIS_ONLY"
+  },
+  "arm_rules": {
+    "ordinary_fisher": "For each of 79 patterns, rank regularized training class-mean squared contrast divided by pooled within-class variance; select four highest, ties lowest index.",
+    "ordinary_greedy_loo": "Greedy addition of four patterns, each maximizing leave-one-out balanced training correct count, then ordinary margin score as deterministic tiebreak, then lowest index; training only.",
+    "joint_count_robust": "For each pattern, score the smaller of count-1 and count-2 squared metal/plastic mean contrasts, divided by pooled training variance; choose four highest; ties lowest index. Count-group statistics from development only.",
+    "ordinary_all_patterns": "Strong full-observation upper-cost control using all 79 patterns.",
+    "common_classifier": "Class centroid nearest Euclidean after per-coordinate training-scale computed without heldout; train only on development. Ties resolve to no prediction (abstain).",
+    "no_deploy": "No paid offer or physical inference."
+  },
+  "measures": [
+    "source hash and ZIP member manifest",
+    "all heldout six labels, prediction and abstention",
+    "balanced accuracy with abstentions scored incorrect",
+    "selected excitation indices and distinct measurements",
+    "reported train leave-one-out accuracy",
+    "source and algorithm identities",
+    "comparative physical-data limit"
+  ],
+  "admission": "Sparse proposed method >=5 of 6 heldout classifications correct, exceeds best equal-budget competent ordinary control by >=1 heldout correct classification, no hidden-information use and no source/label invalidity. Otherwise NO_ENABLING_ADVANTAGE. Even if satisfied, commercial, physical, successor and scale remain UNQUALIFIED.",
+  "costs": {
+    "current_physically_measured_cost": "UNKNOWN",
+    "new_instrument_cost": "UNKNOWN",
+    "source_reanalysis_cpu": "MEASURE_IF_RUN",
+    "human_competitor": "UNKNOWN",
+    "model_host_billing": "UNKNOWN"
+  },
+  "integrity": [
+    "Download exact public archive and fail on MD5 mismatch; record its SHA256",
+    "Require exactly specified case files and Uel dimensions, finite numeric values, consistent CurrentPattern and MeasPattern",
+    "No heldout voltages or labels used in feature scaling, design or classifier fitting",
+    "Never replace/reseed cases after seeing results; no best-seed searching",
+    "Preserve all negative results and source failures",
+    "No financial Account or JournalAccount opened or mutated"
+  ],
+  "stopping": "One frozen physical sample split and exactly four named policies, one deterministic CI execution plus predeclared source-integrity and classifier regressions. Failure is retained; a correction requires prospectively distinct hash and explicit original-failure retention.",
+  "status": "REGISTERED_BEFORE_IMPLEMENTATION_OR_QUALIFICATION",
+  "claim_boundaries": [
+    "No real buyer",
+    "No source of customer payment",
+    "No native 365-day profit",
+    "No physically built/new EIT apparatus",
+    "No proof of internal-property uniqueness",
+    "No causal advantage to autonomous inventors",
+    "No release/deployment",
+    "No paid API, purchases, outreach or private data"
+  ]
+}
