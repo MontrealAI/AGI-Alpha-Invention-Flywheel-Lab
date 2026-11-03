@@ -28,6 +28,7 @@ jobs:
           WORKFLOW_REF: ${{ github.workflow_ref }}
           WORKFLOW_SHA: ${{ github.workflow_sha }}
         run: |
+          git fetch --no-tags --depth=1 origin "$WORKFLOW_SHA"
           python -m enterprise078.runtime --output "$RUNNER_TEMP/enterprise078-science"
           python - <<'PY'
           import hashlib,json,os,pathlib,subprocess
@@ -63,10 +64,20 @@ jobs:
           assert json.loads((root/'enterprise078-replay.json').read_text())['accepted'] is True
           assert json.loads((root/'enterprise078-challenges.json').read_text())['all_rejected'] is True
           PY
+      - name: Construct and fault-test transactional successor
+        run: |
+          python -m py_compile enterprise078/transactional_data/operator.py enterprise078/transactional_data/acceptance.py enterprise078/transactional_data/run.py
+          python -m enterprise078.transactional_data.run --output "$RUNNER_TEMP/enterprise078-transactional"
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: enterprise078-public-verification-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/enterprise078-binding.json
             ${{ runner.temp }}/enterprise078-replay.json
             ${{ runner.temp }}/enterprise078-challenges.json
+            ${{ runner.temp }}/enterprise078-transactional/RESULTS.json
+            ${{ runner.temp }}/enterprise078-transactional/RESULTS.partial.json
+            ${{ runner.temp }}/enterprise078-transactional/SOURCE.json
+            ${{ runner.temp }}/enterprise078-transactional/largest_gateway/delivery.sqlite
+            ${{ runner.temp }}/enterprise078-transactional/largest_gateway/derived.csv
