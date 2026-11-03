@@ -1,0 +1,3856 @@
+{
+  "attempts": [
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": "probe/p0",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "key": "probe/p0",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "Timeout proves no effect: rejected by timeout plus final one effect and later acknowledged same token.",
+        "H2": "Same-key retry can recover token without extra effect in this observed contract: provisionally committed; scope and pending behavior unresolved.",
+        "neither": "No late-pending conclusion from this probe."
+      },
+      "proposal": "same-key-lost-ack-retry",
+      "proposal_sha256": "251fecf58fdc1c3f7b9ef8574ffc12e6d2d278ee7342d8edd3033f64ec4906af",
+      "public_id": "k1-development-0",
+      "receipt": {
+        "cost_units": 3,
+        "effects": {
+          "p0": 1,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 2,
+            "token": "token-ac89bab08d4a1d09"
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 3,
+            "token": "token-ac89bab08d4a1d09"
+          }
+        ],
+        "remaining_units": 29,
+        "status": "observed"
+      },
+      "sequence": 0,
+      "session_label": "exploratory-0-separate-session"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": "probe/p0",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "key": "probe/p0",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "Timeout entails absence: rejected; the stipulated p0 lost ACK already performed an effect.",
+        "H2": "Same-key one-effect retry: committed within this authored shared contract.",
+        "neither": "This p0 probe does not decide pending p1 behavior."
+      },
+      "proposal": "same-key-lost-ack-retry",
+      "proposal_sha256": "251fecf58fdc1c3f7b9ef8574ffc12e6d2d278ee7342d8edd3033f64ec4906af",
+      "public_id": "k1-development-0",
+      "receipt": {
+        "cost_units": 3,
+        "effects": {
+          "p0": 1,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 2,
+            "token": "token-ac89bab08d4a1d09"
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 3,
+            "token": "token-ac89bab08d4a1d09"
+          }
+        ],
+        "remaining_units": 29,
+        "status": "observed"
+      },
+      "sequence": 1,
+      "session_label": "systematic-0"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": "probe/shared",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p1",
+          "key": "probe/shared",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "One shared key preserves both required intents: rejected; p1 absent after the public bound and zero counted effects.",
+        "H2": "Global-key collision suppresses a distinct intent: committed for this observed contract; use intent-distinct keys.",
+        "neither": "Late pending is excluded here by finite public bound and final absent observation."
+      },
+      "proposal": "cross-intent-same-key",
+      "proposal_sha256": "7058030b8418eaafb5edaff8bd66be1eea3a1043dece886e040ebaf8ce274188",
+      "public_id": "k1-development-0",
+      "receipt": {
+        "cost_units": 6,
+        "effects": {
+          "p0": 1,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 2
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 5,
+            "token": "token-ac89bab08d4a1d09"
+          },
+          {
+            "intent": "p1",
+            "status": "absent",
+            "time": 6
+          }
+        ],
+        "remaining_units": 23,
+        "status": "observed"
+      },
+      "sequence": 2,
+      "session_label": "systematic-0"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "An immediate absent read proves no eventual effect: rejected by later committed read.",
+        "H2": "The timed-out first write was pending: committed by absent-to-committed transition and one effect.",
+        "neither": "At the early absent read, already-visible commitment and permanent absence were both wrong; it was pending."
+      },
+      "proposal": "late-write-read-before-and-after-window",
+      "proposal_sha256": "cf323c065ec0079f205de50600245232ff26d28f580853859af68db17c5cb6a8",
+      "public_id": "k1-development-0",
+      "receipt": {
+        "cost_units": 5,
+        "effects": {
+          "p0": 0,
+          "p1": 1
+        },
+        "observations": [
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "absent",
+            "time": 2
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 5,
+            "token": "token-a6cb37c3f06d3050"
+          }
+        ],
+        "remaining_units": 18,
+        "status": "observed"
+      },
+      "sequence": 3,
+      "session_label": "systematic-0"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": null,
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "key": null,
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "Unkeyed retry after timeout is safe: rejected by two counted effects.",
+        "H2": "Lost ACK can hide an already committed effect: committed in stipulated p0 namespace.",
+        "neither": "Pending p1 remains a distinct explanation not adjudicated by this p0 probe."
+      },
+      "proposal": "unkeyed-lost-ack-retry-counterexample",
+      "proposal_sha256": "d2e51b346f17a0dc38296407f9c571ea95d9b1225f87be90bf6ffd928f50a306",
+      "public_id": "k1-development-0",
+      "receipt": {
+        "cost_units": 3,
+        "effects": {
+          "p0": 2,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 2,
+            "token": "token-d97e1583e22e2e37"
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 3,
+            "token": "token-d97e1583e22e2e37"
+          }
+        ],
+        "remaining_units": 15,
+        "status": "observed"
+      },
+      "sequence": 4,
+      "session_label": "systematic-0"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": "probe/p0",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "key": "probe/p0",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "Timeout entails absence: rejected; the stipulated p0 lost ACK already performed an effect.",
+        "H2": "Same-key one-effect retry: committed within this authored shared contract.",
+        "neither": "This p0 probe does not decide pending p1 behavior."
+      },
+      "proposal": "same-key-lost-ack-retry",
+      "proposal_sha256": "251fecf58fdc1c3f7b9ef8574ffc12e6d2d278ee7342d8edd3033f64ec4906af",
+      "public_id": "k1-development-1",
+      "receipt": {
+        "cost_units": 3,
+        "effects": {
+          "p0": 1,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 2,
+            "token": "token-ac89bab08d4a1d09"
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 3,
+            "token": "token-ac89bab08d4a1d09"
+          }
+        ],
+        "remaining_units": 29,
+        "status": "observed"
+      },
+      "sequence": 5,
+      "session_label": "systematic-1"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": "probe/shared",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p1",
+          "key": "probe/shared",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "One shared key preserves both effects: observed for this probe, not a general rule.",
+        "H2": "Global collision in this probe: rejected by one counted effect per intent.",
+        "neither": "Both writes settled by final committed reads under finite public bounds."
+      },
+      "proposal": "cross-intent-same-key",
+      "proposal_sha256": "7058030b8418eaafb5edaff8bd66be1eea3a1043dece886e040ebaf8ce274188",
+      "public_id": "k1-development-1",
+      "receipt": {
+        "cost_units": 6,
+        "effects": {
+          "p0": 1,
+          "p1": 1
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 2
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 5,
+            "token": "token-ac89bab08d4a1d09"
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 6,
+            "token": "token-7d634c0130e53ebb"
+          }
+        ],
+        "remaining_units": 23,
+        "status": "observed"
+      },
+      "sequence": 6,
+      "session_label": "systematic-1"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "An immediate absent read proves no eventual effect: rejected by later committed read.",
+        "H2": "The timed-out first write was pending: committed by absent-to-committed transition and one effect.",
+        "neither": "At the early absent read, already-visible commitment and permanent absence were both wrong; it was pending."
+      },
+      "proposal": "late-write-read-before-and-after-window",
+      "proposal_sha256": "cf323c065ec0079f205de50600245232ff26d28f580853859af68db17c5cb6a8",
+      "public_id": "k1-development-1",
+      "receipt": {
+        "cost_units": 5,
+        "effects": {
+          "p0": 0,
+          "p1": 1
+        },
+        "observations": [
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "absent",
+            "time": 2
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 5,
+            "token": "token-a6cb37c3f06d3050"
+          }
+        ],
+        "remaining_units": 18,
+        "status": "observed"
+      },
+      "sequence": 7,
+      "session_label": "systematic-1"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": null,
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "key": null,
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "Unkeyed retry after timeout is safe: rejected by two counted effects.",
+        "H2": "Lost ACK can hide an already committed effect: committed in stipulated p0 namespace.",
+        "neither": "Pending p1 remains a distinct explanation not adjudicated by this p0 probe."
+      },
+      "proposal": "unkeyed-lost-ack-retry-counterexample",
+      "proposal_sha256": "d2e51b346f17a0dc38296407f9c571ea95d9b1225f87be90bf6ffd928f50a306",
+      "public_id": "k1-development-1",
+      "receipt": {
+        "cost_units": 3,
+        "effects": {
+          "p0": 2,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 2,
+            "token": "token-d97e1583e22e2e37"
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 3,
+            "token": "token-d97e1583e22e2e37"
+          }
+        ],
+        "remaining_units": 15,
+        "status": "observed"
+      },
+      "sequence": 8,
+      "session_label": "systematic-1"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": "probe/p0",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "key": "probe/p0",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "Timeout entails absence: rejected; the stipulated p0 lost ACK already performed an effect.",
+        "H2": "Same-key one-effect retry: rejected by two independently counted effects.",
+        "neither": "This p0 probe does not decide pending p1 behavior."
+      },
+      "proposal": "same-key-lost-ack-retry",
+      "proposal_sha256": "251fecf58fdc1c3f7b9ef8574ffc12e6d2d278ee7342d8edd3033f64ec4906af",
+      "public_id": "k1-development-2",
+      "receipt": {
+        "cost_units": 3,
+        "effects": {
+          "p0": 2,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 2,
+            "token": "token-d97e1583e22e2e37"
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 3,
+            "token": "token-ac89bab08d4a1d09"
+          }
+        ],
+        "remaining_units": 29,
+        "status": "observed"
+      },
+      "sequence": 9,
+      "session_label": "systematic-2"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": "probe/shared",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p1",
+          "key": "probe/shared",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "One shared key preserves both effects: observed for this probe, not a general rule.",
+        "H2": "Global collision in this probe: rejected by one counted effect per intent.",
+        "neither": "Both writes settled by final committed reads under finite public bounds."
+      },
+      "proposal": "cross-intent-same-key",
+      "proposal_sha256": "7058030b8418eaafb5edaff8bd66be1eea3a1043dece886e040ebaf8ce274188",
+      "public_id": "k1-development-2",
+      "receipt": {
+        "cost_units": 6,
+        "effects": {
+          "p0": 1,
+          "p1": 1
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 2
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 5,
+            "token": "token-ac89bab08d4a1d09"
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 6,
+            "token": "token-7d634c0130e53ebb"
+          }
+        ],
+        "remaining_units": 23,
+        "status": "observed"
+      },
+      "sequence": 10,
+      "session_label": "systematic-2"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "An immediate absent read proves no eventual effect: rejected by later committed read.",
+        "H2": "The timed-out first write was pending: committed by absent-to-committed transition and one effect.",
+        "neither": "At the early absent read, already-visible commitment and permanent absence were both wrong; it was pending."
+      },
+      "proposal": "late-write-read-before-and-after-window",
+      "proposal_sha256": "cf323c065ec0079f205de50600245232ff26d28f580853859af68db17c5cb6a8",
+      "public_id": "k1-development-2",
+      "receipt": {
+        "cost_units": 5,
+        "effects": {
+          "p0": 0,
+          "p1": 1
+        },
+        "observations": [
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "absent",
+            "time": 2
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 5,
+            "token": "token-a6cb37c3f06d3050"
+          }
+        ],
+        "remaining_units": 18,
+        "status": "observed"
+      },
+      "sequence": 11,
+      "session_label": "systematic-2"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": null,
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "key": null,
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "Unkeyed retry after timeout is safe: rejected by two counted effects.",
+        "H2": "Lost ACK can hide an already committed effect: committed in stipulated p0 namespace.",
+        "neither": "Pending p1 remains a distinct explanation not adjudicated by this p0 probe."
+      },
+      "proposal": "unkeyed-lost-ack-retry-counterexample",
+      "proposal_sha256": "d2e51b346f17a0dc38296407f9c571ea95d9b1225f87be90bf6ffd928f50a306",
+      "public_id": "k1-development-2",
+      "receipt": {
+        "cost_units": 3,
+        "effects": {
+          "p0": 2,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 2,
+            "token": "token-d97e1583e22e2e37"
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 3,
+            "token": "token-ac89bab08d4a1d09"
+          }
+        ],
+        "remaining_units": 15,
+        "status": "observed"
+      },
+      "sequence": 12,
+      "session_label": "systematic-2"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": "probe/p0",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "key": "probe/p0",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "Timeout entails absence: rejected; the stipulated p0 lost ACK already performed an effect.",
+        "H2": "Same-key one-effect retry: rejected by two independently counted effects.",
+        "neither": "This p0 probe does not decide pending p1 behavior."
+      },
+      "proposal": "same-key-lost-ack-retry",
+      "proposal_sha256": "251fecf58fdc1c3f7b9ef8574ffc12e6d2d278ee7342d8edd3033f64ec4906af",
+      "public_id": "k1-development-3",
+      "receipt": {
+        "cost_units": 3,
+        "effects": {
+          "p0": 2,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 2,
+            "token": "token-d97e1583e22e2e37"
+          },
+          {
+            "intent": "p0",
+            "status": "unknown",
+            "time": 3
+          }
+        ],
+        "remaining_units": 29,
+        "status": "observed"
+      },
+      "sequence": 13,
+      "session_label": "systematic-3"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": "probe/shared",
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p1",
+          "key": "probe/shared",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "One shared key preserves both required intents: unresolved; no finite completion guarantee.",
+        "H2": "Global-key collision: unresolved because p1 may still be pending.",
+        "neither": "Unknown reads and zero current p1 effects preserve the pending explanation; do not label it absence."
+      },
+      "proposal": "cross-intent-same-key",
+      "proposal_sha256": "7058030b8418eaafb5edaff8bd66be1eea3a1043dece886e040ebaf8ce274188",
+      "public_id": "k1-development-3",
+      "receipt": {
+        "cost_units": 6,
+        "effects": {
+          "p0": 1,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 2
+          },
+          {
+            "intent": "p0",
+            "status": "unknown",
+            "time": 5
+          },
+          {
+            "intent": "p1",
+            "status": "unknown",
+            "time": 6
+          }
+        ],
+        "remaining_units": 23,
+        "status": "observed"
+      },
+      "sequence": 14,
+      "session_label": "systematic-3"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "An early unknown proves absence: rejected as unsupported.",
+        "H2": "A settled effect by this chosen finite wait: unresolved/not observed.",
+        "neither": "Zero current effects plus unknown reads and absent public bounds preserve pending uncertainty."
+      },
+      "proposal": "late-write-read-before-and-after-window",
+      "proposal_sha256": "cf323c065ec0079f205de50600245232ff26d28f580853859af68db17c5cb6a8",
+      "public_id": "k1-development-3",
+      "receipt": {
+        "cost_units": 5,
+        "effects": {
+          "p0": 0,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "unknown",
+            "time": 2
+          },
+          {
+            "intent": "p1",
+            "status": "unknown",
+            "time": 5
+          }
+        ],
+        "remaining_units": 18,
+        "status": "observed"
+      },
+      "sequence": 15,
+      "session_label": "systematic-3"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p0",
+          "key": null,
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "key": null,
+          "op": "write",
+          "value": {
+            "probe": 0
+          }
+        },
+        {
+          "intent": "p0",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "Unkeyed retry after timeout is safe: rejected by two counted effects.",
+        "H2": "Lost ACK can hide an already committed effect: committed in stipulated p0 namespace.",
+        "neither": "Pending p1 remains a distinct explanation not adjudicated by this p0 probe."
+      },
+      "proposal": "unkeyed-lost-ack-retry-counterexample",
+      "proposal_sha256": "d2e51b346f17a0dc38296407f9c571ea95d9b1225f87be90bf6ffd928f50a306",
+      "public_id": "k1-development-3",
+      "receipt": {
+        "cost_units": 3,
+        "effects": {
+          "p0": 2,
+          "p1": 0
+        },
+        "observations": [
+          {
+            "intent": "p0",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p0",
+            "status": "committed",
+            "time": 2,
+            "token": "token-d97e1583e22e2e37"
+          },
+          {
+            "intent": "p0",
+            "status": "unknown",
+            "time": 3
+          }
+        ],
+        "remaining_units": 15,
+        "status": "observed"
+      },
+      "sequence": 16,
+      "session_label": "systematic-3"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "An acknowledged immediate retry alone proves eventual exactly-once: rejected as a general rule (dev2 counted two).",
+        "H2": "Same-key pending recovery has one effect and committed final read: committed within this observed contract.",
+        "neither": "No unresolved pending effect after finite bound."
+      },
+      "proposal": "same-key-late-commit-retry",
+      "proposal_sha256": "d6ac5d1590fe2aa6447fc68b9b394fa21ccf8b92cb3ab5145bf25a503c9a489d",
+      "public_id": "k1-development-0",
+      "receipt": {
+        "cost_units": 5,
+        "effects": {
+          "p0": 0,
+          "p1": 1
+        },
+        "observations": [
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 2,
+            "token": "token-a6cb37c3f06d3050"
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 5,
+            "token": "token-a6cb37c3f06d3050"
+          }
+        ],
+        "remaining_units": 27,
+        "status": "observed"
+      },
+      "sequence": 17,
+      "session_label": "pending-key-validation-0"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "An acknowledged immediate retry alone proves eventual exactly-once: rejected as a general rule (dev2 counted two).",
+        "H2": "Same-key pending recovery has one effect and committed final read: committed within this observed contract.",
+        "neither": "No unresolved pending effect after finite bound."
+      },
+      "proposal": "same-key-late-commit-retry",
+      "proposal_sha256": "d6ac5d1590fe2aa6447fc68b9b394fa21ccf8b92cb3ab5145bf25a503c9a489d",
+      "public_id": "k1-development-1",
+      "receipt": {
+        "cost_units": 5,
+        "effects": {
+          "p0": 0,
+          "p1": 1
+        },
+        "observations": [
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 2,
+            "token": "token-a6cb37c3f06d3050"
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 5,
+            "token": "token-a6cb37c3f06d3050"
+          }
+        ],
+        "remaining_units": 27,
+        "status": "observed"
+      },
+      "sequence": 18,
+      "session_label": "pending-key-validation-1"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "An acknowledged immediate retry alone proves eventual exactly-once: rejected as a general rule (dev2 counted two).",
+        "H2": "Same-key pending recovery safe: rejected by dev2 two effects.",
+        "neither": "No unresolved pending effect after finite bound."
+      },
+      "proposal": "same-key-late-commit-retry",
+      "proposal_sha256": "d6ac5d1590fe2aa6447fc68b9b394fa21ccf8b92cb3ab5145bf25a503c9a489d",
+      "public_id": "k1-development-2",
+      "receipt": {
+        "cost_units": 5,
+        "effects": {
+          "p0": 0,
+          "p1": 2
+        },
+        "observations": [
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 2,
+            "token": "token-a6cb37c3f06d3050"
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 5,
+            "token": "token-7d634c0130e53ebb"
+          }
+        ],
+        "remaining_units": 27,
+        "status": "observed"
+      },
+      "sequence": 19,
+      "session_label": "pending-key-validation-2"
+    },
+    {
+      "actions": [
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "intent": "p1",
+          "key": "probe/p1",
+          "op": "write",
+          "value": {
+            "probe": 1
+          }
+        },
+        {
+          "op": "wait",
+          "ticks": 2
+        },
+        {
+          "intent": "p1",
+          "op": "read"
+        }
+      ],
+      "decision": {
+        "H1": "An acknowledged immediate retry alone proves eventual exactly-once: rejected as a general rule (dev2 counted two).",
+        "H2": "Safe keys already rejected by the independent p0 two-effect probe; current one effect is not eventual proof.",
+        "neither": "Unknown final read and no public bound preserve pending effects beyond this receipt."
+      },
+      "proposal": "same-key-late-commit-retry",
+      "proposal_sha256": "d6ac5d1590fe2aa6447fc68b9b394fa21ccf8b92cb3ab5145bf25a503c9a489d",
+      "public_id": "k1-development-3",
+      "receipt": {
+        "cost_units": 5,
+        "effects": {
+          "p0": 0,
+          "p1": 1
+        },
+        "observations": [
+          {
+            "intent": "p1",
+            "status": "timeout",
+            "time": 1
+          },
+          {
+            "intent": "p1",
+            "status": "committed",
+            "time": 2,
+            "token": "token-a6cb37c3f06d3050"
+          },
+          {
+            "intent": "p1",
+            "status": "unknown",
+            "time": 5
+          }
+        ],
+        "remaining_units": 27,
+        "status": "observed"
+      },
+      "sequence": 20,
+      "session_label": "pending-key-validation-3"
+    }
+  ],
+  "constructor_sha256": "ca71eee81a40cf32b07a6e51d1baa10bb2ed410e0696e6871aed02a8082d6c32",
+  "corrections": [
+    {
+      "action": "Requested public schema from coordinator; implemented only supplied rows/id integer summary schema. No confirmation data or outcomes read.",
+      "development_outcome": "All four K1 checks ran once; no failed-delivery code correction followed.",
+      "source_change": "Added K2 exact-output branch and build wrapper before any K2 execution.",
+      "trigger": "Public K2 output formula was missing from the first CONTRACT read."
+    }
+  ],
+  "development_checks": [
+    {
+      "artifact": {
+        "output": {
+          "archive0": {
+            "content": "source-object-83b8586a99a52e40ecc9",
+            "sha256": "9136e3ddf4280a472b1e9a25339ef588035f48c52ccef2051d2e9c549a49b712"
+          },
+          "archive1": {
+            "content": "source-object-9d33a8c1b735a15a0a5e",
+            "sha256": "c89ad49037eb5a676b2d1d7093318ad5e6cb2dc54bfa12afc4841f0bd6ddbd10"
+          }
+        },
+        "steps": [
+          {
+            "intent": "archive0",
+            "key": "k1-development-0/archive0",
+            "op": "write",
+            "value": "$output:archive0"
+          },
+          {
+            "else": [
+              {
+                "intent": "archive0",
+                "key": "k1-development-0/archive0",
+                "op": "write",
+                "value": "$output:archive0"
+              },
+              {
+                "else": [
+                  {
+                    "op": "stop",
+                    "reason": "retry did not acknowledge archive0"
+                  }
+                ],
+                "op": "if",
+                "test": {
+                  "intent": "archive0",
+                  "is": "committed"
+                },
+                "then": []
+              }
+            ],
+            "op": "if",
+            "test": {
+              "intent": "archive0",
+              "is": "committed"
+            },
+            "then": []
+          },
+          {
+            "intent": "archive1",
+            "key": "k1-development-0/archive1",
+            "op": "write",
+            "value": "$output:archive1"
+          },
+          {
+            "else": [
+              {
+                "intent": "archive1",
+                "key": "k1-development-0/archive1",
+                "op": "write",
+                "value": "$output:archive1"
+              },
+              {
+                "else": [
+                  {
+                    "op": "stop",
+                    "reason": "retry did not acknowledge archive1"
+                  }
+                ],
+                "op": "if",
+                "test": {
+                  "intent": "archive1",
+                  "is": "committed"
+                },
+                "then": []
+              }
+            ],
+            "op": "if",
+            "test": {
+              "intent": "archive1",
+              "is": "committed"
+            },
+            "then": []
+          }
+        ]
+      },
+      "construction_trace": {
+        "decision": "construct",
+        "development_mode": "frozen deterministic reuse of included-agent K1 code",
+        "hypotheses": {
+          "H1": "Timeout guarantees absence: rejected by the lost-ACK diagnostic.",
+          "H2": "One-effect same-key settlement: committed within the shared authored contract.",
+          "neither": "Late completion remains possible; key settlement is common-safe in the admitted model."
+        },
+        "primitive": "settle_intent",
+        "primitive_calls": [
+          {
+            "dependency": null,
+            "intent": "archive0",
+            "mode": "keyed",
+            "quiet_ticks": 0,
+            "steps_sha256": "5cfb5b115e57e11613696b1b485f6484b29f5a32822a23cb569c4978161a7c20"
+          },
+          {
+            "dependency": null,
+            "intent": "archive1",
+            "mode": "keyed",
+            "quiet_ticks": 0,
+            "steps_sha256": "00d252f1a85db821dde359f0d2b790045dfe57d62b39e7d1e1646ce24bd5c91e"
+          }
+        ],
+        "probe_resource_units": 3,
+        "probes": [
+          {
+            "actions": [
+              {
+                "intent": "p0",
+                "key": "diagnostic/p0",
+                "op": "write",
+                "value": {
+                  "probe": 0
+                }
+              },
+              {
+                "intent": "p0",
+                "key": "diagnostic/p0",
+                "op": "write",
+                "value": {
+                  "probe": 0
+                }
+              },
+              {
+                "intent": "p0",
+                "op": "read"
+              }
+            ],
+            "proposal_sha256": "db89ad89fe1696b59f34f2b639d29313d54c424b5363b2c3e209d364adcac50f",
+            "receipt": {
+              "cost_units": 3,
+              "effects": {
+                "p0": 1,
+                "p1": 0
+              },
+              "observations": [
+                {
+                  "intent": "p0",
+                  "status": "timeout",
+                  "time": 1
+                },
+                {
+                  "intent": "p0",
+                  "status": "committed",
+                  "time": 2,
+                  "token": "token-ac89bab08d4a1d09"
+                },
+                {
+                  "intent": "p0",
+                  "status": "committed",
+                  "time": 3,
+                  "token": "token-ac89bab08d4a1d09"
+                }
+              ],
+              "remaining_units": 29,
+              "status": "observed"
+            }
+          }
+        ],
+        "public": {
+          "deadline": 16,
+          "dependencies": {},
+          "diagnostic_budget": 32,
+          "id": "k1-development-0",
+          "intents": [
+            "archive0",
+            "archive1"
+          ],
+          "max_inflight": 2,
+          "objects": [
+            {
+              "content": "source-object-83b8586a99a52e40ecc9",
+              "intent": "archive0"
+            },
+            {
+              "content": "source-object-9d33a8c1b735a15a0a5e",
+              "intent": "archive1"
+            }
+          ],
+          "operation_unit_cost": 1,
+          "output_contract": "For each archive intent: exact content and sha256 of UTF-8 content.",
+          "probe_setup_units": 0,
+          "scope": "AUTHORED_SOFTWARE_SANDBOX_ONLY",
+          "stage": "K1",
+          "visibility_bound": 0
+        },
+        "retained_sha256": "2763ae1a0fa616ceb709a736846ab28cb24be1d3a8f6c91c37b34b6ae411f6c8",
+        "worst_execution_ticks": 4,
+        "worst_operation_units": 4
+      },
+      "constructor_sha256": "ca71eee81a40cf32b07a6e51d1baa10bb2ed410e0696e6871aed02a8082d6c32",
+      "development_ordinal": 0,
+      "public_id": "k1-development-0",
+      "verification": {
+        "accepted": true,
+        "accepted_schedules": 16,
+        "artifact_sha256": "4fe3be0c938b2ac762579475ef364a9b3c3fc977df3c458ef4a52caee32bc007",
+        "decision": "DELIVER",
+        "fault_schedules": 16,
+        "maximum_avoidable_loss_units": 0,
+        "maximum_operation_units": 4,
+        "output_ok": true,
+        "request_sha256": "617504f1b834fdb2126ded0438e1e890c958c89be65c4d536f3000c7760e972b",
+        "results": [
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 2,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "a5a34b743de6cb550faa427ae299b05954a16ec1ce4c8f337ec742d6d7410b34",
+            "end_time": 2,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "1c3680ebccfbc822529d9e3adf027ec8e7526f7b4b897c5b152d1696b050ef6b"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "674fdc52c57bf0d5594652f38965b6932c83d97557290411966effe61fff8cf2",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "8901da56d06c34d9c610cae11aad0a1db385798a75bde03c42b15b96b9eecd2c"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "a5a34b743de6cb550faa427ae299b05954a16ec1ce4c8f337ec742d6d7410b34",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "8901da56d06c34d9c610cae11aad0a1db385798a75bde03c42b15b96b9eecd2c"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "674fdc52c57bf0d5594652f38965b6932c83d97557290411966effe61fff8cf2",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "8901da56d06c34d9c610cae11aad0a1db385798a75bde03c42b15b96b9eecd2c"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "accf596c5a5f27b1046e28b96bce920c2cf7e8da767bd1241fd6bea083df0585",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "4e5ab5b9d423f42b08c5eaa2fc3cdd1bfe545f50a918fc9ad8b6aa95f81ccdab"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "a6f0d6fe692bf74cf647fcc5b0b8d95cf9f20be1b4e15e32c94a582640d26e98",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "f24a78c0c6cbb6d0c52725e26f3f04be161cf1a4d499d39c13caac55088499b0"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "accf596c5a5f27b1046e28b96bce920c2cf7e8da767bd1241fd6bea083df0585",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "f24a78c0c6cbb6d0c52725e26f3f04be161cf1a4d499d39c13caac55088499b0"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "a6f0d6fe692bf74cf647fcc5b0b8d95cf9f20be1b4e15e32c94a582640d26e98",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "f24a78c0c6cbb6d0c52725e26f3f04be161cf1a4d499d39c13caac55088499b0"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "674fdc52c57bf0d5594652f38965b6932c83d97557290411966effe61fff8cf2",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "4e5ab5b9d423f42b08c5eaa2fc3cdd1bfe545f50a918fc9ad8b6aa95f81ccdab"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "1df1b5cf24e5e0b8bb9a2b6a02806ccb162f516d4d33293261882638e0cd8041",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "f24a78c0c6cbb6d0c52725e26f3f04be161cf1a4d499d39c13caac55088499b0"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "674fdc52c57bf0d5594652f38965b6932c83d97557290411966effe61fff8cf2",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "f24a78c0c6cbb6d0c52725e26f3f04be161cf1a4d499d39c13caac55088499b0"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "1df1b5cf24e5e0b8bb9a2b6a02806ccb162f516d4d33293261882638e0cd8041",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "f24a78c0c6cbb6d0c52725e26f3f04be161cf1a4d499d39c13caac55088499b0"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "accf596c5a5f27b1046e28b96bce920c2cf7e8da767bd1241fd6bea083df0585",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "4e5ab5b9d423f42b08c5eaa2fc3cdd1bfe545f50a918fc9ad8b6aa95f81ccdab"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "a6f0d6fe692bf74cf647fcc5b0b8d95cf9f20be1b4e15e32c94a582640d26e98",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "f24a78c0c6cbb6d0c52725e26f3f04be161cf1a4d499d39c13caac55088499b0"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "accf596c5a5f27b1046e28b96bce920c2cf7e8da767bd1241fd6bea083df0585",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "f24a78c0c6cbb6d0c52725e26f3f04be161cf1a4d499d39c13caac55088499b0"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "a6f0d6fe692bf74cf647fcc5b0b8d95cf9f20be1b4e15e32c94a582640d26e98",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "f24a78c0c6cbb6d0c52725e26f3f04be161cf1a4d499d39c13caac55088499b0"
+          }
+        ],
+        "scope": "FINITE_AUTHORED_SOFTWARE_MODEL"
+      }
+    },
+    {
+      "artifact": {
+        "output": {
+          "archive0": {
+            "content": "source-object-f381f9325f865f50e74e",
+            "sha256": "39d1b07429622256a78c14dedbd956fc4158a2c48fe5b7871011d226d29102c7"
+          },
+          "archive1": {
+            "content": "source-object-83467f0030c3450e6285",
+            "sha256": "8fb79b7410d5d6167a727998816b7b29b4aa36d5d4eabb2fac76b5fc3fe920d7"
+          }
+        },
+        "steps": [
+          {
+            "intent": "archive0",
+            "key": "k1-development-1/archive0",
+            "op": "write",
+            "value": "$output:archive0"
+          },
+          {
+            "else": [
+              {
+                "intent": "archive0",
+                "key": "k1-development-1/archive0",
+                "op": "write",
+                "value": "$output:archive0"
+              },
+              {
+                "else": [
+                  {
+                    "op": "stop",
+                    "reason": "retry did not acknowledge archive0"
+                  }
+                ],
+                "op": "if",
+                "test": {
+                  "intent": "archive0",
+                  "is": "committed"
+                },
+                "then": []
+              }
+            ],
+            "op": "if",
+            "test": {
+              "intent": "archive0",
+              "is": "committed"
+            },
+            "then": []
+          },
+          {
+            "intent": "archive1",
+            "key": "k1-development-1/archive1",
+            "op": "write",
+            "value": "$output:archive1"
+          },
+          {
+            "else": [
+              {
+                "intent": "archive1",
+                "key": "k1-development-1/archive1",
+                "op": "write",
+                "value": "$output:archive1"
+              },
+              {
+                "else": [
+                  {
+                    "op": "stop",
+                    "reason": "retry did not acknowledge archive1"
+                  }
+                ],
+                "op": "if",
+                "test": {
+                  "intent": "archive1",
+                  "is": "committed"
+                },
+                "then": []
+              }
+            ],
+            "op": "if",
+            "test": {
+              "intent": "archive1",
+              "is": "committed"
+            },
+            "then": []
+          }
+        ]
+      },
+      "construction_trace": {
+        "decision": "construct",
+        "development_mode": "frozen deterministic reuse of included-agent K1 code",
+        "hypotheses": {
+          "H1": "Timeout guarantees absence: rejected by the lost-ACK diagnostic.",
+          "H2": "One-effect same-key settlement: committed within the shared authored contract.",
+          "neither": "Late completion remains possible; key settlement is common-safe in the admitted model."
+        },
+        "primitive": "settle_intent",
+        "primitive_calls": [
+          {
+            "dependency": null,
+            "intent": "archive0",
+            "mode": "keyed",
+            "quiet_ticks": 0,
+            "steps_sha256": "cbfd3e213d3530e3ad89992daf744532a4a540909bfd541910800424aea0e9ac"
+          },
+          {
+            "dependency": null,
+            "intent": "archive1",
+            "mode": "keyed",
+            "quiet_ticks": 0,
+            "steps_sha256": "8007f61d667ac1cb46964484a9340c7a5755d14f37fc28fa3fbd2b8142e39781"
+          }
+        ],
+        "probe_resource_units": 3,
+        "probes": [
+          {
+            "actions": [
+              {
+                "intent": "p0",
+                "key": "diagnostic/p0",
+                "op": "write",
+                "value": {
+                  "probe": 0
+                }
+              },
+              {
+                "intent": "p0",
+                "key": "diagnostic/p0",
+                "op": "write",
+                "value": {
+                  "probe": 0
+                }
+              },
+              {
+                "intent": "p0",
+                "op": "read"
+              }
+            ],
+            "proposal_sha256": "db89ad89fe1696b59f34f2b639d29313d54c424b5363b2c3e209d364adcac50f",
+            "receipt": {
+              "cost_units": 3,
+              "effects": {
+                "p0": 1,
+                "p1": 0
+              },
+              "observations": [
+                {
+                  "intent": "p0",
+                  "status": "timeout",
+                  "time": 1
+                },
+                {
+                  "intent": "p0",
+                  "status": "committed",
+                  "time": 2,
+                  "token": "token-ac89bab08d4a1d09"
+                },
+                {
+                  "intent": "p0",
+                  "status": "committed",
+                  "time": 3,
+                  "token": "token-ac89bab08d4a1d09"
+                }
+              ],
+              "remaining_units": 29,
+              "status": "observed"
+            }
+          }
+        ],
+        "public": {
+          "deadline": 16,
+          "dependencies": {},
+          "diagnostic_budget": 32,
+          "id": "k1-development-1",
+          "intents": [
+            "archive0",
+            "archive1"
+          ],
+          "max_inflight": 2,
+          "objects": [
+            {
+              "content": "source-object-f381f9325f865f50e74e",
+              "intent": "archive0"
+            },
+            {
+              "content": "source-object-83467f0030c3450e6285",
+              "intent": "archive1"
+            }
+          ],
+          "operation_unit_cost": 1,
+          "output_contract": "For each archive intent: exact content and sha256 of UTF-8 content.",
+          "probe_setup_units": 0,
+          "scope": "AUTHORED_SOFTWARE_SANDBOX_ONLY",
+          "stage": "K1",
+          "visibility_bound": 0
+        },
+        "retained_sha256": "2763ae1a0fa616ceb709a736846ab28cb24be1d3a8f6c91c37b34b6ae411f6c8",
+        "worst_execution_ticks": 4,
+        "worst_operation_units": 4
+      },
+      "constructor_sha256": "ca71eee81a40cf32b07a6e51d1baa10bb2ed410e0696e6871aed02a8082d6c32",
+      "development_ordinal": 1,
+      "public_id": "k1-development-1",
+      "verification": {
+        "accepted": true,
+        "accepted_schedules": 16,
+        "artifact_sha256": "417b23970119e5596107e23c030a3d9bdb77eca1bfa7254bcbbfa8c4add4b34d",
+        "decision": "DELIVER",
+        "fault_schedules": 16,
+        "maximum_avoidable_loss_units": 0,
+        "maximum_operation_units": 4,
+        "output_ok": true,
+        "request_sha256": "daa73bd82070d2bbdd149b2cb3c2cd212d1ba4a6691ca7a1066d240d2f472963",
+        "results": [
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 2,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "6b62880e9a4bc713a494d45a89b8668ad35ac3f06b77f3deafb6aabdff79e783",
+            "end_time": 2,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "af54b71bd99a2244cbe66bbbb8bff0384de18a05d63f3b77cf73a84a67950465"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "d6331c06b93d969e6bd7f7e518dda5620440937bb7a0edd1039af2d9c594eacc",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "8e87450d06c9a58b80eb4756ddc207f3f8edf26b33e94d354460d376841c7211"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "6b62880e9a4bc713a494d45a89b8668ad35ac3f06b77f3deafb6aabdff79e783",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "8e87450d06c9a58b80eb4756ddc207f3f8edf26b33e94d354460d376841c7211"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "d6331c06b93d969e6bd7f7e518dda5620440937bb7a0edd1039af2d9c594eacc",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "8e87450d06c9a58b80eb4756ddc207f3f8edf26b33e94d354460d376841c7211"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "566656f894700791086d98e8b612c181b8b66b5c6b924546969c521bed359f29",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "2c72be8b1ea5b425bd13ccc37da5061811f55f05f8ca2c3cdf2c013d73ee44a6"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "a1d0790e222fda54770579489d0c2da6933e04e11b35be6c19b28a0d29944476",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "19986d321c9044c78b85f574fc9669b50bfc10a2217e735d4c99f4a1d221ae1e"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "566656f894700791086d98e8b612c181b8b66b5c6b924546969c521bed359f29",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "19986d321c9044c78b85f574fc9669b50bfc10a2217e735d4c99f4a1d221ae1e"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "a1d0790e222fda54770579489d0c2da6933e04e11b35be6c19b28a0d29944476",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "19986d321c9044c78b85f574fc9669b50bfc10a2217e735d4c99f4a1d221ae1e"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "d6331c06b93d969e6bd7f7e518dda5620440937bb7a0edd1039af2d9c594eacc",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "2c72be8b1ea5b425bd13ccc37da5061811f55f05f8ca2c3cdf2c013d73ee44a6"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "13392a7cb024c66dc8f7d445b8f8ae77274dc3da8922e27a17861083c273cf9b",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "19986d321c9044c78b85f574fc9669b50bfc10a2217e735d4c99f4a1d221ae1e"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "d6331c06b93d969e6bd7f7e518dda5620440937bb7a0edd1039af2d9c594eacc",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "19986d321c9044c78b85f574fc9669b50bfc10a2217e735d4c99f4a1d221ae1e"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "13392a7cb024c66dc8f7d445b8f8ae77274dc3da8922e27a17861083c273cf9b",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "19986d321c9044c78b85f574fc9669b50bfc10a2217e735d4c99f4a1d221ae1e"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 3,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "566656f894700791086d98e8b612c181b8b66b5c6b924546969c521bed359f29",
+            "end_time": 3,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "2c72be8b1ea5b425bd13ccc37da5061811f55f05f8ca2c3cdf2c013d73ee44a6"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "a1d0790e222fda54770579489d0c2da6933e04e11b35be6c19b28a0d29944476",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "19986d321c9044c78b85f574fc9669b50bfc10a2217e735d4c99f4a1d221ae1e"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "566656f894700791086d98e8b612c181b8b66b5c6b924546969c521bed359f29",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "19986d321c9044c78b85f574fc9669b50bfc10a2217e735d4c99f4a1d221ae1e"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 4,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "a1d0790e222fda54770579489d0c2da6933e04e11b35be6c19b28a0d29944476",
+            "end_time": 4,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "19986d321c9044c78b85f574fc9669b50bfc10a2217e735d4c99f4a1d221ae1e"
+          }
+        ],
+        "scope": "FINITE_AUTHORED_SOFTWARE_MODEL"
+      }
+    },
+    {
+      "artifact": {
+        "output": {
+          "archive0": {
+            "content": "source-object-6fa82efb1eaed0c5599e",
+            "sha256": "0e925e065adbe274c44f714446a57ca968058ec6068d850e68be1d5e4bb19513"
+          },
+          "archive1": {
+            "content": "source-object-630ab39077ae319e7bc0",
+            "sha256": "7a464e28fafdeebde36431070a8dcc75eb57928c90044a7a5ce70bfad15ede99"
+          }
+        },
+        "steps": [
+          {
+            "intent": "archive0",
+            "key": null,
+            "op": "write",
+            "value": "$output:archive0"
+          },
+          {
+            "else": [
+              {
+                "op": "wait",
+                "ticks": 4
+              },
+              {
+                "intent": "archive0",
+                "op": "read"
+              },
+              {
+                "else": [
+                  {
+                    "else": [
+                      {
+                        "op": "stop",
+                        "reason": "neither absence nor acknowledged commitment for archive0"
+                      }
+                    ],
+                    "op": "if",
+                    "test": {
+                      "intent": "archive0",
+                      "is": "absent"
+                    },
+                    "then": [
+                      {
+                        "intent": "archive0",
+                        "key": null,
+                        "op": "write",
+                        "value": "$output:archive0"
+                      },
+                      {
+                        "else": [
+                          {
+                            "op": "stop",
+                            "reason": "retry did not acknowledge archive0"
+                          }
+                        ],
+                        "op": "if",
+                        "test": {
+                          "intent": "archive0",
+                          "is": "committed"
+                        },
+                        "then": []
+                      }
+                    ]
+                  }
+                ],
+                "op": "if",
+                "test": {
+                  "intent": "archive0",
+                  "is": "committed"
+                },
+                "then": []
+              }
+            ],
+            "op": "if",
+            "test": {
+              "intent": "archive0",
+              "is": "committed"
+            },
+            "then": []
+          },
+          {
+            "intent": "archive1",
+            "key": null,
+            "op": "write",
+            "value": "$output:archive1"
+          },
+          {
+            "else": [
+              {
+                "op": "wait",
+                "ticks": 4
+              },
+              {
+                "intent": "archive1",
+                "op": "read"
+              },
+              {
+                "else": [
+                  {
+                    "else": [
+                      {
+                        "op": "stop",
+                        "reason": "neither absence nor acknowledged commitment for archive1"
+                      }
+                    ],
+                    "op": "if",
+                    "test": {
+                      "intent": "archive1",
+                      "is": "absent"
+                    },
+                    "then": [
+                      {
+                        "intent": "archive1",
+                        "key": null,
+                        "op": "write",
+                        "value": "$output:archive1"
+                      },
+                      {
+                        "else": [
+                          {
+                            "op": "stop",
+                            "reason": "retry did not acknowledge archive1"
+                          }
+                        ],
+                        "op": "if",
+                        "test": {
+                          "intent": "archive1",
+                          "is": "committed"
+                        },
+                        "then": []
+                      }
+                    ]
+                  }
+                ],
+                "op": "if",
+                "test": {
+                  "intent": "archive1",
+                  "is": "committed"
+                },
+                "then": []
+              }
+            ],
+            "op": "if",
+            "test": {
+              "intent": "archive1",
+              "is": "committed"
+            },
+            "then": []
+          }
+        ]
+      },
+      "construction_trace": {
+        "decision": "construct",
+        "development_mode": "frozen deterministic reuse of included-agent K1 code",
+        "hypotheses": {
+          "H1": "Timeout guarantees absence: rejected by retained counterexample.",
+          "H2": "Safe keys: rejected",
+          "neither": "Pending effects remain possible until the public in-flight and visibility windows close."
+        },
+        "primitive": "settle_intent",
+        "primitive_calls": [
+          {
+            "dependency": null,
+            "intent": "archive0",
+            "mode": "bounded-read",
+            "quiet_ticks": 4,
+            "steps_sha256": "bba37cc442fa511574967c5aa6fa349b28cf6b62261f35f90b80de1d9443e050"
+          },
+          {
+            "dependency": null,
+            "intent": "archive1",
+            "mode": "bounded-read",
+            "quiet_ticks": 4,
+            "steps_sha256": "1aa7f572c950cbb5484082ff24010f73dd92c25e4a1cc1d34c34c55810ece848"
+          }
+        ],
+        "probe_resource_units": 3,
+        "probes": [
+          {
+            "actions": [
+              {
+                "intent": "p0",
+                "key": "diagnostic/p0",
+                "op": "write",
+                "value": {
+                  "probe": 0
+                }
+              },
+              {
+                "intent": "p0",
+                "key": "diagnostic/p0",
+                "op": "write",
+                "value": {
+                  "probe": 0
+                }
+              },
+              {
+                "intent": "p0",
+                "op": "read"
+              }
+            ],
+            "proposal_sha256": "db89ad89fe1696b59f34f2b639d29313d54c424b5363b2c3e209d364adcac50f",
+            "receipt": {
+              "cost_units": 3,
+              "effects": {
+                "p0": 2,
+                "p1": 0
+              },
+              "observations": [
+                {
+                  "intent": "p0",
+                  "status": "timeout",
+                  "time": 1
+                },
+                {
+                  "intent": "p0",
+                  "status": "committed",
+                  "time": 2,
+                  "token": "token-d97e1583e22e2e37"
+                },
+                {
+                  "intent": "p0",
+                  "status": "committed",
+                  "time": 3,
+                  "token": "token-ac89bab08d4a1d09"
+                }
+              ],
+              "remaining_units": 29,
+              "status": "observed"
+            }
+          }
+        ],
+        "public": {
+          "deadline": 16,
+          "dependencies": {},
+          "diagnostic_budget": 32,
+          "id": "k1-development-2",
+          "intents": [
+            "archive0",
+            "archive1"
+          ],
+          "max_inflight": 2,
+          "objects": [
+            {
+              "content": "source-object-6fa82efb1eaed0c5599e",
+              "intent": "archive0"
+            },
+            {
+              "content": "source-object-630ab39077ae319e7bc0",
+              "intent": "archive1"
+            }
+          ],
+          "operation_unit_cost": 1,
+          "output_contract": "For each archive intent: exact content and sha256 of UTF-8 content.",
+          "probe_setup_units": 0,
+          "scope": "AUTHORED_SOFTWARE_SANDBOX_ONLY",
+          "stage": "K1",
+          "visibility_bound": 2
+        },
+        "retained_sha256": "2763ae1a0fa616ceb709a736846ab28cb24be1d3a8f6c91c37b34b6ae411f6c8",
+        "worst_execution_ticks": 14,
+        "worst_operation_units": 14
+      },
+      "constructor_sha256": "ca71eee81a40cf32b07a6e51d1baa10bb2ed410e0696e6871aed02a8082d6c32",
+      "development_ordinal": 2,
+      "public_id": "k1-development-2",
+      "verification": {
+        "accepted": true,
+        "accepted_schedules": 16,
+        "artifact_sha256": "b971b81cc6b8f35268ff1b74d42e0a2477854f0e5cb6bdd06db2325c5c8ff827",
+        "decision": "DELIVER",
+        "fault_schedules": 16,
+        "maximum_avoidable_loss_units": 0,
+        "maximum_operation_units": 14,
+        "output_ok": true,
+        "request_sha256": "eb6a18443a885c4ccadae5bf813dd5b1ce033e528b5c85cb04f96aa9270e3e9b",
+        "results": [
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 2,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "60184fcb76a1911a8c220646b8127b35e5335a036fda5ccd188f3fb3b01e1f04",
+            "end_time": 2,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "1e04ef0ec9e1d99c4ad6177d1ea5c60d96cee93e3f4c2078ae7f4ca24f7b59a0"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 8,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "9542e0b0944dd381213c95b546a23e1645f9ef03a4559a0d08abf90364b13abc",
+            "end_time": 8,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "603f53329c6aa61b698d2de76eb4fabb9084a9a031dcbc2987e330dcd4bbed03"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 7,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "60184fcb76a1911a8c220646b8127b35e5335a036fda5ccd188f3fb3b01e1f04",
+            "end_time": 7,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "35851893f26788ba946bb288ef19b088b7baed66011da438e354ed3afef187f2"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 7,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "8bfb80048e17dcdc080dd9017c8f6ca07ba5d1374da9c4e2e40687aaaf4afae6",
+            "end_time": 7,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "35851893f26788ba946bb288ef19b088b7baed66011da438e354ed3afef187f2"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 8,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "27b2166cc2993d54d54d7150acf219904cbfbc9ef7e91c6ab127a10630cedd88",
+            "end_time": 8,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "ec33c3625e4487d908f565c378852ffc12854da058bee31e4783afd9b9b9914a"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 14,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "ab819f44efb53c09fb0895f2eed0557fceeecc71f74aec90748e94cafc7996b1",
+            "end_time": 14,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "27a7ad07920cef847cd0d394b1d92afc0f02c06f480cfafed48c475363ce3cec"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 13,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "27b2166cc2993d54d54d7150acf219904cbfbc9ef7e91c6ab127a10630cedd88",
+            "end_time": 13,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "e82426d458bab17d6be809c4b33be73bb5051e8ea1bb3c92a2f32fff7236ad1a"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 13,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "dfc45e27c2e6065cde29e67a12c04f3559be3fabb17fed7ea1973cc68b36ea24",
+            "end_time": 13,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "e82426d458bab17d6be809c4b33be73bb5051e8ea1bb3c92a2f32fff7236ad1a"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 7,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "86bed1d3fbe76b23ae4d53c0555c5e7f577ef6c5e7482c7d7e6ac7aff76b3701",
+            "end_time": 7,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "cd4a83871f64bdc87f8bd6de498a9cef2d7ce524e87298ba9a3f11ed4597191a"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 13,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "97139b15233cb8532bbf2dc2d2a3b0e005b61b76b21683a437c8fd595dcc6c05",
+            "end_time": 13,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "d0a47c11b10437172253b9cd452808ac58551dc9415666d8b01e410d0ad6cdce"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 12,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "86bed1d3fbe76b23ae4d53c0555c5e7f577ef6c5e7482c7d7e6ac7aff76b3701",
+            "end_time": 12,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "8afddb62b36fcca71687f894609f22132ac80d5af659bd2fced765ad6830c3cd"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 12,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "39d828a460bb850650a113b33b2d7ee21ef2afe87cef76787fa52e1a9c0d6f9e",
+            "end_time": 12,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "8afddb62b36fcca71687f894609f22132ac80d5af659bd2fced765ad6830c3cd"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 7,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "b6e1ed62f570a7771b41aa83edb6f623cabf6ca3621945439b776b466254669b",
+            "end_time": 7,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "cd4a83871f64bdc87f8bd6de498a9cef2d7ce524e87298ba9a3f11ed4597191a"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 13,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "5dd3a7f3e0d415c0178e9c8a2b31d89dce8d1101038d2bf830c1f61f00844cee",
+            "end_time": 13,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "d0a47c11b10437172253b9cd452808ac58551dc9415666d8b01e410d0ad6cdce"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 12,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "b6e1ed62f570a7771b41aa83edb6f623cabf6ca3621945439b776b466254669b",
+            "end_time": 12,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "8afddb62b36fcca71687f894609f22132ac80d5af659bd2fced765ad6830c3cd"
+          },
+          {
+            "accepted": true,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 12,
+            "counts": {
+              "archive0": 1,
+              "archive1": 1
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "acc5f26bdac336e5f8de100cfd0be454649b4cff5e9aa7538733c2f48d25fc38",
+            "end_time": 12,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": false,
+            "trace_sha256": "8afddb62b36fcca71687f894609f22132ac80d5af659bd2fced765ad6830c3cd"
+          }
+        ],
+        "scope": "FINITE_AUTHORED_SOFTWARE_MODEL"
+      }
+    },
+    {
+      "artifact": {
+        "output": {
+          "archive0": {
+            "content": "source-object-e41ba74faf05fd495cac",
+            "sha256": "64a34b27211aff026a854967e163e97383f55e07c39a33f740310666a9a63937"
+          },
+          "archive1": {
+            "content": "source-object-d75af6cdef5248e63431",
+            "sha256": "387531d286e90d44dbf1af05845af83a6895728d2a1aab419f11dff097bbe024"
+          }
+        },
+        "steps": [
+          {
+            "op": "stop",
+            "reason": "unresolved keys and no finite public settlement bounds"
+          }
+        ]
+      },
+      "construction_trace": {
+        "decision": "refuse",
+        "development_mode": "frozen deterministic reuse of included-agent K1 code",
+        "hypotheses": {
+          "H1": "Timeout guarantees absence: rejected by retained counterexample.",
+          "H2": "Safe keys: rejected",
+          "neither": "Pending effects remain possible until the public in-flight and visibility windows close."
+        },
+        "primitive": "settle_intent",
+        "primitive_calls": [],
+        "probe_resource_units": 3,
+        "probes": [
+          {
+            "actions": [
+              {
+                "intent": "p0",
+                "key": "diagnostic/p0",
+                "op": "write",
+                "value": {
+                  "probe": 0
+                }
+              },
+              {
+                "intent": "p0",
+                "key": "diagnostic/p0",
+                "op": "write",
+                "value": {
+                  "probe": 0
+                }
+              },
+              {
+                "intent": "p0",
+                "op": "read"
+              }
+            ],
+            "proposal_sha256": "db89ad89fe1696b59f34f2b639d29313d54c424b5363b2c3e209d364adcac50f",
+            "receipt": {
+              "cost_units": 3,
+              "effects": {
+                "p0": 2,
+                "p1": 0
+              },
+              "observations": [
+                {
+                  "intent": "p0",
+                  "status": "timeout",
+                  "time": 1
+                },
+                {
+                  "intent": "p0",
+                  "status": "committed",
+                  "time": 2,
+                  "token": "token-d97e1583e22e2e37"
+                },
+                {
+                  "intent": "p0",
+                  "status": "unknown",
+                  "time": 3
+                }
+              ],
+              "remaining_units": 29,
+              "status": "observed"
+            }
+          }
+        ],
+        "public": {
+          "deadline": 16,
+          "dependencies": {},
+          "diagnostic_budget": 32,
+          "id": "k1-development-3",
+          "intents": [
+            "archive0",
+            "archive1"
+          ],
+          "max_inflight": null,
+          "objects": [
+            {
+              "content": "source-object-e41ba74faf05fd495cac",
+              "intent": "archive0"
+            },
+            {
+              "content": "source-object-d75af6cdef5248e63431",
+              "intent": "archive1"
+            }
+          ],
+          "operation_unit_cost": 1,
+          "output_contract": "For each archive intent: exact content and sha256 of UTF-8 content.",
+          "probe_setup_units": 0,
+          "scope": "AUTHORED_SOFTWARE_SANDBOX_ONLY",
+          "stage": "K1",
+          "visibility_bound": null
+        },
+        "reason": "unresolved keys and no finite public settlement bounds",
+        "retained_sha256": "2763ae1a0fa616ceb709a736846ab28cb24be1d3a8f6c91c37b34b6ae411f6c8"
+      },
+      "constructor_sha256": "ca71eee81a40cf32b07a6e51d1baa10bb2ed410e0696e6871aed02a8082d6c32",
+      "development_ordinal": 3,
+      "public_id": "k1-development-3",
+      "verification": {
+        "accepted": false,
+        "accepted_schedules": 0,
+        "artifact_sha256": "bae8d52d44e0521ae3ebbee8a342c494954b5b83db4b86d31cf0b81b26f7a4cf",
+        "decision": "REFUSE",
+        "fault_schedules": 16,
+        "maximum_avoidable_loss_units": 0,
+        "maximum_operation_units": 0,
+        "output_ok": true,
+        "request_sha256": "b20e9fa0c3a6e56fa1409bbd5274bf40a06e5b2d292173832941300e0d59c1db",
+        "results": [
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "ack",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "drop_before",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "lost_ack",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "ack"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "drop_before"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "lost_ack"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          {
+            "accepted": false,
+            "avoidable_loss_units": 0,
+            "content_ok": true,
+            "cost_units": 0,
+            "counts": {
+              "archive0": 0,
+              "archive1": 0
+            },
+            "deadline_ok": true,
+            "dependency_ok": true,
+            "effects_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "end_time": 0,
+            "error": null,
+            "faults": {
+              "archive0": "late",
+              "archive1": "late"
+            },
+            "output_ok": true,
+            "stopped": true,
+            "trace_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          }
+        ],
+        "scope": "FINITE_AUTHORED_SOFTWARE_MODEL"
+      }
+    }
+  ],
+  "development_mode": "Included-agent development now; frozen deterministic reuse later. No autonomous model callable or model weight editing.",
+  "development_summary": [
+    {
+      "accepted_schedules": 16,
+      "decision": "DELIVER",
+      "fault_schedules": 16,
+      "maximum_avoidable_loss_units": 0,
+      "maximum_operation_units": 4,
+      "output_ok": true,
+      "public_id": "k1-development-0"
+    },
+    {
+      "accepted_schedules": 16,
+      "decision": "DELIVER",
+      "fault_schedules": 16,
+      "maximum_avoidable_loss_units": 0,
+      "maximum_operation_units": 4,
+      "output_ok": true,
+      "public_id": "k1-development-1"
+    },
+    {
+      "accepted_schedules": 16,
+      "decision": "DELIVER",
+      "fault_schedules": 16,
+      "maximum_avoidable_loss_units": 0,
+      "maximum_operation_units": 14,
+      "output_ok": true,
+      "public_id": "k1-development-2"
+    },
+    {
+      "accepted_schedules": 0,
+      "decision": "REFUSE",
+      "fault_schedules": 16,
+      "maximum_avoidable_loss_units": 0,
+      "maximum_operation_units": 0,
+      "output_ok": true,
+      "public_id": "k1-development-3"
+    }
+  ],
+  "freeze": {
+    "constructor_sha256": "ca71eee81a40cf32b07a6e51d1baa10bb2ed410e0696e6871aed02a8082d6c32",
+    "primitive_source_sha256": "27058ad1290888f19692f949eff69f1e46c6f5f6b9d3fa57aacf171ebac3b16a",
+    "retained_sha256": "2763ae1a0fa616ceb709a736846ab28cb24be1d3a8f6c91c37b34b6ae411f6c8",
+    "status": "constructor source frozen for K2; no K2 execution or outcomes by constructor author"
+  },
+  "primitive_source_sha256": "27058ad1290888f19692f949eff69f1e46c6f5f6b9d3fa57aacf171ebac3b16a",
+  "public_contract_final_sha256": "d1eefaa7472441b4387abf363823ada8c1ca228d7a87d82fc28e87beefcc6183",
+  "public_manifests": [
+    {
+      "ordinal": 0,
+      "public": {
+        "deadline": 16,
+        "dependencies": {},
+        "diagnostic_budget": 32,
+        "id": "k1-development-0",
+        "intents": [
+          "archive0",
+          "archive1"
+        ],
+        "max_inflight": 2,
+        "objects": [
+          {
+            "content": "source-object-83b8586a99a52e40ecc9",
+            "intent": "archive0"
+          },
+          {
+            "content": "source-object-9d33a8c1b735a15a0a5e",
+            "intent": "archive1"
+          }
+        ],
+        "operation_unit_cost": 1,
+        "output_contract": "For each archive intent: exact content and sha256 of UTF-8 content.",
+        "probe_setup_units": 0,
+        "scope": "AUTHORED_SOFTWARE_SANDBOX_ONLY",
+        "stage": "K1",
+        "visibility_bound": 0
+      }
+    },
+    {
+      "ordinal": 1,
+      "public": {
+        "deadline": 16,
+        "dependencies": {},
+        "diagnostic_budget": 32,
+        "id": "k1-development-1",
+        "intents": [
+          "archive0",
+          "archive1"
+        ],
+        "max_inflight": 2,
+        "objects": [
+          {
+            "content": "source-object-f381f9325f865f50e74e",
+            "intent": "archive0"
+          },
+          {
+            "content": "source-object-83467f0030c3450e6285",
+            "intent": "archive1"
+          }
+        ],
+        "operation_unit_cost": 1,
+        "output_contract": "For each archive intent: exact content and sha256 of UTF-8 content.",
+        "probe_setup_units": 0,
+        "scope": "AUTHORED_SOFTWARE_SANDBOX_ONLY",
+        "stage": "K1",
+        "visibility_bound": 0
+      }
+    },
+    {
+      "ordinal": 2,
+      "public": {
+        "deadline": 16,
+        "dependencies": {},
+        "diagnostic_budget": 32,
+        "id": "k1-development-2",
+        "intents": [
+          "archive0",
+          "archive1"
+        ],
+        "max_inflight": 2,
+        "objects": [
+          {
+            "content": "source-object-6fa82efb1eaed0c5599e",
+            "intent": "archive0"
+          },
+          {
+            "content": "source-object-630ab39077ae319e7bc0",
+            "intent": "archive1"
+          }
+        ],
+        "operation_unit_cost": 1,
+        "output_contract": "For each archive intent: exact content and sha256 of UTF-8 content.",
+        "probe_setup_units": 0,
+        "scope": "AUTHORED_SOFTWARE_SANDBOX_ONLY",
+        "stage": "K1",
+        "visibility_bound": 2
+      }
+    },
+    {
+      "ordinal": 3,
+      "public": {
+        "deadline": 16,
+        "dependencies": {},
+        "diagnostic_budget": 32,
+        "id": "k1-development-3",
+        "intents": [
+          "archive0",
+          "archive1"
+        ],
+        "max_inflight": null,
+        "objects": [
+          {
+            "content": "source-object-e41ba74faf05fd495cac",
+            "intent": "archive0"
+          },
+          {
+            "content": "source-object-d75af6cdef5248e63431",
+            "intent": "archive1"
+          }
+        ],
+        "operation_unit_cost": 1,
+        "output_contract": "For each archive intent: exact content and sha256 of UTF-8 content.",
+        "probe_setup_units": 0,
+        "scope": "AUTHORED_SOFTWARE_SANDBOX_ONLY",
+        "stage": "K1",
+        "visibility_bound": null
+      }
+    }
+  ],
+  "public_schema_receipt": "Coordinator supplied K2 schema in messages before source freeze; subsequently confirmed same formula in public CONTRACT.md after schema append. No K2 instance or outcome read.",
+  "resource_accounting": {
+    "agent_compute_and_inference_cost": "Unknown actual bills; must be separately and explicitly modeled, not zero.",
+    "construction_check_probe_units": 12,
+    "exploratory_and_systematic_probe_units": 91,
+    "resource_unit_usd": "Not assigned here.",
+    "total_probe_units": 103,
+    "verification_operation_units_all_64_schedules": 272
+  },
+  "retained_content": {
+    "applicability": "The authored sandbox's shared service contracts, stipulated probe effect-count instrument, first-write faults, and acknowledging subsequent calls. Finite K1 observations do not identify arbitrary live-service behavior.",
+    "invalidation": "Changing key guarantees, diagnostic fidelity, bounded visibility, subsequent-call ACK behavior, dependency semantics, output schema, or deadline requires revalidation.",
+    "observed_counterexamples": [
+      "A timeout can already have one effect; unkeyed immediate retry produced two.",
+      "One shared key suppressed the second distinct intent in a global-key contract.",
+      "An absent read immediately after timeout was followed by a committed late effect.",
+      "Same-key retries produced two effects when keys were unsupported.",
+      "An unbounded contract left reads unknown and a late effect unresolved."
+    ],
+    "origin": "Included-agent K1 development, followed by frozen deterministic reuse",
+    "primitive": "settle_intent",
+    "rules": [
+      "Give every intent a distinct request/intent key.",
+      "Use same-key retry only after an observable one-effect diagnostic for lost ACK.",
+      "Otherwise require both finite public in-flight and visibility bounds.",
+      "Wait their sum, read, and retry only on absent; preserve unknown as refusal.",
+      "Publish dependent output only after an acknowledged predecessor token.",
+      "Refuse unsupported output schemas, unresolved contracts, and excessive worst-case latency."
+    ],
+    "schema": "outlearning073.retained-settlement.v1",
+    "strong_control": "All substantive retained facts and the primitive source are available to the ordinary control."
+  },
+  "retained_sha256": "2763ae1a0fa616ceb709a736846ab28cb24be1d3a8f6c91c37b34b6ae411f6c8",
+  "schema": "outlearning073.agent_development.v1",
+  "scope": "K1 development only; no confirmation calls or outcomes",
+  "source_versions_at_generation": [
+    {
+      "AGENTS.md": "b1d92b618874fb7fb8e1dcf891014b9ba157bd49aa06dab41841bc43dadc82f4",
+      "outlearning073/CONTRACT.md": "560bac74a6d7a147e97c0baf32fd277283f5e271ecf2c7b684749414316fea47",
+      "outlearning073/OPPORTUNITIES.md": "75f7284d2f84b85461c3ccc0492893f4ce2b513e81791ed00b86cb9127d916c0",
+      "outlearning073/SOURCES.md": "16b1fd92d34fafc1b43bc968acec05d9ef3d71e985d94fd08fa58b994c4c7878"
+    },
+    {
+      "AGENTS.md": "b1d92b618874fb7fb8e1dcf891014b9ba157bd49aa06dab41841bc43dadc82f4",
+      "outlearning073/CONTRACT.md": "d1eefaa7472441b4387abf363823ada8c1ca228d7a87d82fc28e87beefcc6183",
+      "outlearning073/OPPORTUNITIES.md": "75f7284d2f84b85461c3ccc0492893f4ce2b513e81791ed00b86cb9127d916c0",
+      "outlearning073/SOURCES.md": "16b1fd92d34fafc1b43bc968acec05d9ef3d71e985d94fd08fa58b994c4c7878"
+    }
+  ],
+  "sources_sha256": {
+    "AGENTS.md": "b1d92b618874fb7fb8e1dcf891014b9ba157bd49aa06dab41841bc43dadc82f4",
+    "outlearning073/CONTRACT.md": "560bac74a6d7a147e97c0baf32fd277283f5e271ecf2c7b684749414316fea47",
+    "outlearning073/OPPORTUNITIES.md": "75f7284d2f84b85461c3ccc0492893f4ce2b513e81791ed00b86cb9127d916c0",
+    "outlearning073/SOURCES.md": "16b1fd92d34fafc1b43bc968acec05d9ef3d71e985d94fd08fa58b994c4c7878"
+  },
+  "total_probe_resource_units": 91
+}

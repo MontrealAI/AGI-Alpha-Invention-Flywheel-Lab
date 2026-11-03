@@ -1,0 +1,48 @@
+{
+  "schema": "outlearning073/world-development/v1",
+  "recorded_utc": "2026-11-03T00:24:55.198495+00:00",
+  "command": "python3 -m unittest tests.test_outlearning073_world -v",
+  "tests_run": 9,
+  "failures": 0,
+  "errors": 0,
+  "accepted": true,
+  "wall_seconds": 0.00708235799902468,
+  "cpu_seconds": 0.007046,
+  "source_sha256": {
+    "outlearning073/worlds.py": "1788b1ea692669486ba1bd83c316ad80f71a2579c3267082734821ee411a7305",
+    "outlearning073/verify.py": "ae8a24943578893e856d28d81b6a1d10e81c7dd10230d0d20677332fa5c75986",
+    "outlearning073/CONTRACT.md": "d1eefaa7472441b4387abf363823ada8c1ca228d7a87d82fc28e87beefcc6183",
+    "tests/test_outlearning073_world.py": "d739338c6b7087b1dd5f80f84297ea4a4a81bdfb9ae9e345a3155c2aec7ae4c8"
+  },
+  "confirmation_requests_executed": 0,
+  "k2_fixture": "Handcrafted structural fixture only; not registered confirmation generator",
+  "development_findings": {
+    "keyed_conditional_retry": {
+      "k1_development_0": {
+        "accepted_schedules": 16,
+        "total_schedules": 16,
+        "max_harm_units": 0
+      },
+      "k1_development_1": {
+        "accepted_schedules": 16,
+        "total_schedules": 16,
+        "max_harm_units": 0
+      },
+      "k1_development_2": {
+        "accepted_schedules": 4,
+        "total_schedules": 16,
+        "max_harm_units": 14
+      },
+      "k1_development_3": {
+        "accepted_schedules": 4,
+        "total_schedules": 16,
+        "max_harm_units": 14
+      }
+    },
+    "bounded_wait_read_retry_k1_development_2": {
+      "accepted_schedules": 16,
+      "total_schedules": 16,
+      "maximum_operation_units": 14
+    }
+  }
+}
