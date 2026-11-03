@@ -38,6 +38,8 @@ def zip_paths_safe(archive: Path) -> None:
         for member in z.infolist():
             path = PurePosixPath(member.filename)
             parts = path.parts
+            if tuple(member.filename.split("/")) != parts or member.is_dir():
+                raise ValueError("UNSAFE_PUBLIC_ARCHIVE_MEMBER")
             if (member.filename.startswith("/") or "\\" in member.filename
                     or not parts or parts[0] not in {"source", "public"}
                     or len(parts) < 2 or any(x in FORBIDDEN or x in {".", ".."} for x in parts)
@@ -109,6 +111,16 @@ def prepare(output: Path, upload: Path, stdout: Path, stderr: Path, code: int, w
         )
         for src, _ in paths:
             regular(output / src)
+        # The verified archive is canonical; standalone financial receipts must
+        # be exactly the same bytes, not post-packaging lookalikes.
+        with zipfile.ZipFile(archive) as z:
+            for src, _ in paths:
+                if not src.startswith("public/"):
+                    continue
+                standalone = regular(output / src)
+                member = z.getinfo(src)
+                if member.file_size != standalone.stat().st_size or hashlib.sha256(z.read(src)).hexdigest() != sha(standalone):
+                    raise ValueError("PUBLIC_STANDALONE_AND_ARCHIVE_MISMATCH")
     # An incomplete staging directory must never be a public upload path.
     with tempfile.TemporaryDirectory(prefix=".e078-private-stage-", dir=upload.parent) as temporary:
         stage = Path(temporary) / "approved"
