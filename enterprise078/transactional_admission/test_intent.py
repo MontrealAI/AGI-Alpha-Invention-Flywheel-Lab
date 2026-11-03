@@ -2,32 +2,19 @@ import copy
 import unittest
 from .offer import COSTS
 from .intent import evaluate
-from .choice import quote, subset_key
 
 
 def row(ident='a'):
     return dict(id=ident,buyer='buyer',price=200,value=500,outside=100,
                 costs={k: (50 if k=='production' else 0) for k in COSTS},
-                collected=200,response='consented',accepted=True,terms_id='fixture-contract-v1')
+                collected=200,response='consented',accepted=True)
 
 
 class IntentTests(unittest.TestCase):
     def run_case(self, rows=None, bundles=None, **kw):
         args=dict(wallets={'buyer':300},available=1000,earned=1000,sunk_acquisition=30)
-        rows = rows or [row()]
-        bundles = bundles or [['a']]
-        choices = {}
-        for ids in bundles:
-            group = [r for r in rows if r['id'] in ids]
-            # Explicit authored fixture evidence, not inferred by the evaluator.
-            choices.setdefault('buyer', {})[subset_key(sorted(set(ids)))] = dict(
-                joint_value=sum(r['value'] for r in group), quote=quote(group),
-                consent=all(r['response'] == 'consented' for r in group),
-                outside=dict(human=max(r['outside'] for r in group),
-                             competitor_ai=70, self_service=50, no_purchase=0))
-        args['buyer_choices'] = choices
         args.update(kw)
-        return evaluate(rows, bundles, **args)
+        return evaluate(rows or [row()], bundles or [['a']], **args)
 
     def test_uncontacted_not_demand(self):
         r=row();r['response']='uncontacted'

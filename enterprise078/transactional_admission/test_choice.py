@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from .choice import ALTERNATIVES, quote, subset_key
-from .intent import evaluate
+from .intent_v2 import evaluate
 from .offer import COSTS
 from .planning import plan
 

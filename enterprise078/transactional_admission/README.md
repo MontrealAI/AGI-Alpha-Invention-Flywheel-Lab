@@ -122,7 +122,7 @@ arrangement wins, retain that verdict.
 
 The separate repair registered in `WHOLE_BUYER_CHOICE.md` addresses independent
 [PR178](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/178).
-`intent.evaluate` is now explicitly **retrospective**. Every buyer needs an exact
+The new `intent_v2.evaluate` is explicitly **retrospective**. Every buyer needs an exact
 subset receipt containing joint gross value, four labeled outside net utilities,
 whole-package consent and a quote bound to each offer's price and `terms_id`.
 Individual values/consents are not joint evidence. Missing evidence refuses;
@@ -159,7 +159,7 @@ the quote's price is the buyer price, not an inferred partner payment.
 Focused reproduction:
 
 ```sh
-python -m unittest enterprise078.transactional_admission.test_intent enterprise078.transactional_admission.test_choice -v
+python -m unittest enterprise078.transactional_admission.test_intent_v2 enterprise078.transactional_admission.test_choice -v
 ```
 
 The first local focused run passed 38 tests. Independent implementation review
@@ -173,3 +173,19 @@ low-disk sparse checkout lacked unrelated frozen files. This is a local coverage
 blocker, not a source-guard waiver; full exact-head hosted qualification remains
 required. No original account, finance source, historical outcome, PR174 owner
 branch or PR178 reviewer branch is changed. Native activation is still missing.
+
+
+### Composition with concurrent owner work
+
+While this repair was being built, owner #174 advanced to `7586d3ed`, adopting
+PR178 and `joint_cost.py`. This branch composes that work without changing the
+reviewer's immutable `intent.py`/`offer.py` pins or repinning its historical tests.
+The repaired retrospective API is therefore separately named `intent_v2.py`.
+Legacy `intent.py`, reviewer and joint-cost outputs remain authored diagnostic
+controls; they are not prospective choice authority. Use `planning.plan` for
+predecision assumptions and `intent_v2.evaluate` for explicit exact-contract
+retrospective participation. There is still no native execution entry point.
+
+The composed local suite passes **90 tests**, including all original intent,
+PR178 review, owner joint-cost, repaired choice and delivery controls. This does
+not replace the two frozen-native controls pending full hosted qualification.
