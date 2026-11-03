@@ -94,3 +94,12 @@ host CPU/wall telemetry is not human labor or a free-resource economic estimate.
 Publish a draft companion PR, independent source-matched review and exact-head
 checks. No merge, release or adoption is implied by publication. No live operation
 is authorized. The US$3 billion complete trailing-365-day objective remains unmet.
+
+## Frozen finite numerical inputs
+
+Observation cases: `OBSERVATION_CASES.json`, 14 exposed authored fixtures, SHA256
+`397019f7fd2a34cd17baf8936f7b52c080ba1de512de6da92db6d26dd74925b8`.
+Seller costs/scenarios: `SELLER_FIXTURE.json`. Unit development already exercised
+financial mechanics before this numeric freeze; this is prospective registration
+of the full scenario, not untouched confirmatory evidence. Later correctness
+repairs must be disclosed and cannot create hidden-holdout or novelty claims.
