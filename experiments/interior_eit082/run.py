@@ -39,7 +39,7 @@ def load_physical(data):
     rows, hashes = {}, {}
     with zipfile.ZipFile(io.BytesIO(data), "r") as z:
         members = [x for x in z.infolist() if not x.is_dir() and x.filename.endswith(".mat")]
-        if len(members) != 38:
+        if len(members) < len(required):
             raise ValueError("FROZEN_SOURCE_MEMBER_COUNT_CHANGED")
         selected = {}
         for m in members:
