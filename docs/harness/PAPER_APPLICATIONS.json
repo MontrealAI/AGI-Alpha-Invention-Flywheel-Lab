@@ -1,0 +1,424 @@
+{
+  "schema": "paper-application-audit/v1",
+  "reviewed_base": "54c50a3f9a96e140f42e7cb50c810607a75a2231",
+  "scope": "Current 20-PDF website catalogue (19 works; one preserved earlier edition). Observed paths are partial evidence targets, never automatic proof of correct, optimal or deployed application.",
+  "papers": [
+    {
+      "paper": "super-alpha.pdf",
+      "pdf_sha256": "d57528596fb30a1ed3435b89cf1aebbf9f6a590cec75d05dc294ddc3de5ae7bc",
+      "title": "SUPER ALPHA 1.1",
+      "status": "standalone",
+      "pages": "Sections 5-7; edition 1.1",
+      "method": "Ordered-prefix funding need, voluntary arrangement and qualification before advantage expiry.",
+      "applicability": "Ordered cash events, disclosed reserves, received financing, stipulated demand and a declared advantage window.",
+      "observed_code": [
+        {
+          "path": "docs/super-alpha/companion.py",
+          "symbol": "funding_requirement",
+          "sha256": "19727e70b02e92edb0d8c2c7d4db111a574880f45b1e30687730c0c5fcdee432"
+        },
+        {
+          "path": "docs/super-alpha/companion.py",
+          "symbol": "renewal_screen",
+          "sha256": "19727e70b02e92edb0d8c2c7d4db111a574880f45b1e30687730c0c5fcdee432"
+        }
+      ],
+      "checks": [
+        {
+          "path": "docs/super-alpha/test_companion.py",
+          "symbol": "CompanionTests",
+          "sha256": "d358750a81283cd8dd8cd40ef32801684cfe35cf462e017dfeb554ae575e38a0"
+        }
+      ],
+      "gap": "Standalone exact model. Native spend protects current cash, but the whole-plan/deadline screens are not called by the canonical operating path.",
+      "next_step": "Adapt prefix/deadline checks to prospective native strategy when relevant; do not create spendable forecast funds."
+    },
+    {
+      "paper": "out-accelerate.pdf",
+      "pdf_sha256": "fbc59b486d7494ed97077adeaa81b6ee96bab5f27b3274ffd88df6edbf358669",
+      "title": "OUT-ACCELERATE",
+      "status": "standalone",
+      "pages": "Worked example and evaluation sections",
+      "method": "Compare complementary construction, verification, qualified reuse and fallback on full accepted-outcome time/cost.",
+      "applicability": "Supplied affine/quadratic tasks, exact arithmetic and stipulated durations/costs.",
+      "observed_code": [
+        {
+          "path": "docs/research/out-accelerate/acceleration_witness.py",
+          "symbol": "execute",
+          "sha256": "942e4ab2cc96cf0791eeabc86b2d10174c8fb26e4a088d47bad8bdddb2a83738"
+        }
+      ],
+      "checks": [
+        {
+          "path": "docs/research/out-accelerate/acceleration_witness.py",
+          "symbol": "run_checks",
+          "sha256": "942e4ab2cc96cf0791eeabc86b2d10174c8fb26e4a088d47bad8bdddb2a83738"
+        }
+      ],
+      "gap": "Seven supplied policies; ordinary workflow ties the best. No measured operating acceleration.",
+      "next_step": "Measure an applicable workload and complete lifecycle costs before promoting an accelerator."
+    },
+    {
+      "paper": "agi-alpha-flywheel-20261102.pdf",
+      "pdf_sha256": "1fd0f4a37ac2b399f0cd6c433900f5399d7a8037539d358107d89a606e21600e",
+      "title": "AGI ALPHA FLYWHEEL 1.0",
+      "status": "historical",
+      "pages": "Preserved first edition",
+      "method": "Original conditional succession model.",
+      "applicability": "Original frozen model and edition only.",
+      "observed_code": [],
+      "checks": [],
+      "gap": "Superseded research edition retained for provenance; current 1.1 code does not reproduce this edition by implication.",
+      "next_step": "Use its versioned first-edition release for reproduction; use 1.1 for current constructor claims."
+    },
+    {
+      "paper": "agi-alpha-flywheel-20261102-v1.1.pdf",
+      "pdf_sha256": "3170837d2ba6d0be1bd7a9469a5024899e5a7092c7d1c13a8d1f96b43afa6b58",
+      "title": "AGI ALPHA FLYWHEEL 1.1",
+      "status": "standalone",
+      "pages": "Constructive instrument-foundry study",
+      "method": "Synthesize typed observation programs; independently verify target equality and nonidentifiability; compare inherited and conventional construction.",
+      "applicability": "Supplied linear observation contract; bounded grammar plus rank fallback; exact types and coefficients.",
+      "observed_code": [
+        {
+          "path": "docs/agi-alpha-flywheel/examples/instrument_foundry.py",
+          "symbol": "verify_artifact",
+          "sha256": "a71d0623d537e06c9facbd1efeded205b485f9204305a2f9d5a072913637e77a"
+        }
+      ],
+      "checks": [
+        {
+          "path": "docs/agi-alpha-flywheel/examples/check_foundry.py",
+          "symbol": "main",
+          "sha256": "d6dfc62c3d95d8b1c55f066982467226433add6ad2cd23691687faff94bf40da"
+        }
+      ],
+      "gap": "Standalone finite constructor. Conventional 13,566 arithmetic operations beats accumulating 48,141; counts are not monetary costs.",
+      "next_step": "Keep conventional incumbent; integrate only for applicable accepted tasks with native complete costs and fresh comparisons."
+    },
+    {
+      "paper": "agi-alpha-flywheel-20261102-report.pdf",
+      "pdf_sha256": "c25f569f33027f2401345c7501f521e42eab5ca3891ffc3585a4bb4881a1d982",
+      "title": "AGI ALPHA FLYWHEEL 2026-11-02 Report",
+      "status": "report",
+      "pages": "All 110 financial summaries and stated evidence boundaries",
+      "method": "Source-bound synthesis and counterexample/negative-result retention.",
+      "applicability": "Separately registered cases and exact source; no pooled independent sample.",
+      "observed_code": [],
+      "checks": [],
+      "gap": "A report about prior executions, not a runtime mechanism or a new full replay.",
+      "next_step": "Follow its per-experiment source and audit paths; never pool accounts or infer unexecuted outcomes."
+    },
+    {
+      "paper": "transformational-intelligence-202610.pdf",
+      "pdf_sha256": "d7170e8217e3bf6aa1b84868c1c76c5994c6995c5297ed092d7e72a6430c664f",
+      "title": "Transformational Intelligence",
+      "status": "partial_runtime",
+      "pages": "Purpose/formulation distinction and evaluation programme",
+      "method": "Preserve authorized purpose, adjudicate defects, construct missing means and compare unrestricted alternatives.",
+      "applicability": "Declared finite event-plan language and independent frozen acceptance.",
+      "observed_code": [
+        {
+          "path": "mechanisms/criticism.py",
+          "symbol": "adjudicate",
+          "sha256": "69158ba8bf5b7ad135758612194eef94643eae9ba19255c8c9eeec4a6fbd9875"
+        },
+        {
+          "path": "mechanisms/criticism.py",
+          "symbol": "instrument_spec",
+          "sha256": "69158ba8bf5b7ad135758612194eef94643eae9ba19255c8c9eeec4a6fbd9875"
+        }
+      ],
+      "checks": [
+        {
+          "path": "tests/test_criticism005.py",
+          "symbol": "CriticismTests",
+          "sha256": "40326ba2eb0709637c29a6c0a2e7f52bab6c375c63e1a242a1539532f9d4bf74"
+        }
+      ],
+      "gap": "Bounded adjudicated repair exists; instrument_spec explicitly builds no instrument. No general autonomous reformulation or flagship selection optimizer.",
+      "next_step": "Use real missing-means construction on a consequential candidate; compare the strongest complete alternative."
+    },
+    {
+      "paper": "agi-alpha-foundation-20260430.pdf",
+      "pdf_sha256": "4b290d5a8232364b8808c0af8a96e7c9b152afd7ac3f5ba05668a538e073791a",
+      "title": "AGI ALPHA foundation",
+      "status": "partial_runtime",
+      "pages": "Organizational substrate, validators, settlement and evidence dockets",
+      "method": "Bounded explicit authority, acceptance-gated settlement and retained capability.",
+      "applicability": "Current native journal/service contracts and source identities; shared-host checker separation.",
+      "observed_code": [
+        {
+          "path": "connected_enterprise/finance.py",
+          "symbol": "JournalAccount.spend",
+          "sha256": "15047f90e9ffb06b5c405d2cdc93facd040fd5c1dfc5b2aadf2abaafb81595e2"
+        }
+      ],
+      "checks": [
+        {
+          "path": "tests/test_connected_finance.py",
+          "symbol": "ConnectedFinanceTests",
+          "sha256": "8f6ca8602e8c02312a9175eb8367f3d6f4fdfd5505bca94ba6f043e6d6192ecc"
+        }
+      ],
+      "gap": "Native spending and replay are substantive; the full 198-page architecture is not implemented or certified by these functions.",
+      "next_step": "Keep native authority/obligations; audit each additional architecture claim at its real call boundary."
+    },
+    {
+      "paper": "invent-the-economy-202610.pdf",
+      "pdf_sha256": "61e92a47b32cbca12b705094b982dddaca03b3dfe2b7f657bbf30eb8d56bba79",
+      "title": "Invent the Economy",
+      "status": "partial_runtime",
+      "pages": "Economic-possibility package and shared-construction conditions",
+      "method": "Joint means, voluntary outside options, prices, incentives, funding timing and risk.",
+      "applicability": "Authored finite buyer beliefs, action/price menu and funded current native state.",
+      "observed_code": [
+        {
+          "path": "connected_enterprise/strategic_commerce.py",
+          "symbol": "select",
+          "sha256": "88e34b6dc575a98caee9dd4ae988ceb202851648506907756e5343b582ef53d5"
+        },
+        {
+          "path": "connected_enterprise/strategic_audit.py",
+          "symbol": "audit_decisions",
+          "sha256": "e21244667a6e774d0f14575fcb762c99d18d07d6c92853b8067c174a48813af1"
+        }
+      ],
+      "checks": [
+        {
+          "path": "tests/test_connected_strategic_exact048.py",
+          "symbol": "ExactSelection048",
+          "sha256": "4ded727d76a919977974fb26afc9953713d2cba6dadb4e102bf9e6c2bbf0ccc1"
+        }
+      ],
+      "gap": "Existing optional strategic policies rederive decisions; no general invention of market/financing. PR191 original seller only replays a fixed cost-only arm.",
+      "next_step": "Use observable information, non-entry/staging/pivot and voluntary complete alternatives in a separate prospective seller experiment."
+    },
+    {
+      "paper": "the-world-as-an-output-20261020.pdf",
+      "pdf_sha256": "2a34c0ad813b6dddf8c6176a475d85f231ea06b53b641496de31626c3d786fde",
+      "title": "The World as an Output",
+      "status": "guidance_only",
+      "pages": "Protected operation language, support criterion and error envelope",
+      "method": "Construct a nuisance-independent interface preserving repeated future operations.",
+      "applicability": "Nonnegative structural model, admissible intervention/support and disturbance envelopes.",
+      "observed_code": [],
+      "checks": [],
+      "gap": "No corresponding protected-operation compiler identified in the inspected canonical operating path. Named construction hooks do not implement this theorem.",
+      "next_step": "Construct and independently qualify an interface only when nuisance dependence is the actual bottleneck."
+    },
+    {
+      "paper": "beyond-the-production-frontier-20261019.pdf",
+      "pdf_sha256": "3e5c4bcdb8a6d70ca4bdf1e3285705650e773436555c69ef2ca8d07a5a0e3d00",
+      "title": "Beyond the Production Frontier",
+      "status": "partial_runtime",
+      "pages": "Resource cuts, complementary capacity and timing",
+      "method": "Evaluate complementary capacity/investments, qualification delays and cash/physical constraints.",
+      "applicability": "Declared finite capacity/sequence model; forecast value separate from spendable cash.",
+      "observed_code": [
+        {
+          "path": "connected_enterprise/sequence_planning.py",
+          "symbol": "sequence_options",
+          "sha256": "b6d14036c00fe59d820bab44c75b973198c8545ea2ff51aa66786a5ef7b93eef"
+        }
+      ],
+      "checks": [
+        {
+          "path": "tests/test_sequence_observations.py",
+          "symbol": "SequenceObservations",
+          "sha256": "7de580442bb8d00402bed4fbcbda51c80234aa78de5bfc2da0c011e4fa600897"
+        }
+      ],
+      "gap": "Opt-in finite sequence planning is related machinery, not the paper's physical expansion certificate or installed productive capacity.",
+      "next_step": "Bind real qualification/resource prerequisites; establish the funded accepted successor against a matched complete route."
+    },
+    {
+      "paper": "beyond-the-original-problem-20261019.pdf",
+      "pdf_sha256": "3a8c1d3c31bd425eb1a639c2a0c61a54e5efe8bd02684f9ce0dc5f20717b6192",
+      "title": "Beyond the Original Problem",
+      "status": "partial_runtime",
+      "pages": "Purpose-preserving and complementary reformulation",
+      "method": "Distinguish purpose from inherited intermediate tasks; preserve outputs and future obligations.",
+      "applicability": "Supplied finite capabilities and event-plan semantics.",
+      "observed_code": [
+        {
+          "path": "mechanisms/construct.py",
+          "symbol": "reframe",
+          "sha256": "3a55dd4a241031f8b511a5d1d6bf4b6431ab7d917187f11462fb35c85f106fb7"
+        }
+      ],
+      "checks": [
+        {
+          "path": "tests/test_criticism005.py",
+          "symbol": "CriticismTests",
+          "sha256": "40326ba2eb0709637c29a6c0a2e7f52bab6c375c63e1a242a1539532f9d4bf74"
+        }
+      ],
+      "gap": "Bounded executable reframing and repair do not reproduce the paper's exact study or unrestricted scientific reformulation.",
+      "next_step": "Test individual and combined changes against unchanged independent acceptance and unrestricted conventional construction."
+    },
+    {
+      "paper": "autonomous-enterprises-foundry-v2.pdf",
+      "pdf_sha256": "67f2d38922cdaa1bf28e916a494679fabf1463ba84fe56e620dfd192b20d16b3",
+      "title": "Foundry v2",
+      "status": "guidance_only",
+      "pages": "pp. 8-19, 22-26, 29-30",
+      "method": "Qualify reusable thermal research infrastructure and a separately commissioned successor.",
+      "applicability": "Calibration/reset envelopes, separately implemented dynamics and discrepancy challenges.",
+      "observed_code": [],
+      "checks": [],
+      "gap": "Original supplied paper is retained; installed thermal execution, independent physical metrology and its exact companion are not established in this operating path.",
+      "next_step": "Use only for a matching instrument need, with independent uncertainty and successor qualification."
+    },
+    {
+      "paper": "transformational-autonomous-enterprises-v1.pdf",
+      "pdf_sha256": "640cba6e0371407577f708856efa4e4d3b685ed7349cecf48491f1660563fda0",
+      "title": "Transformational Autonomous Enterprises",
+      "status": "partial_runtime",
+      "pages": "Printed pp. 3-7, 9-16, 18-22",
+      "method": "Reuse compatible generic evidence but check current mission inputs/outputs and grant authority separately.",
+      "applicability": "Bound source, dependencies, context and evaluator; algebra/backend changes invalidate inheritance.",
+      "observed_code": [
+        {
+          "path": "mechanisms/memory.py",
+          "symbol": "acquire",
+          "sha256": "927fe08a6c85afba29577084cc37b19c21a6e7c6bccdd18ec68c51e43442e806"
+        },
+        {
+          "path": "mechanisms/memory.py",
+          "symbol": "_source_check",
+          "sha256": "927fe08a6c85afba29577084cc37b19c21a6e7c6bccdd18ec68c51e43442e806"
+        }
+      ],
+      "checks": [
+        {
+          "path": "tests/test_memory005.py",
+          "symbol": "MemoryAcquisitionTests",
+          "sha256": "4c7bf245ecbe94c4432b1a2b9a7e50e58d8f7a1d468cd6f37e243aed816f3e5b"
+        }
+      ],
+      "gap": "Source-bound retained procedures exist. This does not reproduce the paper's four-system benchmark or establish lower total cost than direct specialists.",
+      "next_step": "Bind current mission acceptance and authority; keep a direct specialist/equal-content control."
+    },
+    {
+      "paper": "out-reflect-self-correcting-evidence-20261021.pdf",
+      "pdf_sha256": "6f9e631fb7cc4c34950f3dd01aae23952b5b4fdd7f80d184f156d6a480529878",
+      "title": "OUT-REFLECT",
+      "status": "partial_runtime",
+      "pages": "pp. 3-10, 12-17, 19-22",
+      "method": "Construct evidence that exposes blind spots with explicit fault domains and scope.",
+      "applicability": "Categorical adapter assumes at most t distinct source groups are wrong; labels do not prove independence.",
+      "observed_code": [
+        {
+          "path": "mechanism_harness/evidence.py",
+          "symbol": "reflect",
+          "sha256": "c933d04174eec033e84e8c3659a254a923853bf11b684c2c60da87242e74ea28"
+        }
+      ],
+      "checks": [
+        {
+          "path": "tests/test_mechanism_harness_026.py",
+          "symbol": "EvidenceTests",
+          "sha256": "ceeea3d1ffc07e033328f790c213f3a5cd2ef33045e04e847d262d54739cf394"
+        }
+      ],
+      "gap": "Categorical recovery is not the paper's polynomial moment-code construction. Coherent errors outside assumed fault bound can produce a wrong answer.",
+      "next_step": "Use applicable evidence semantics, independent fault-domain justification and a discriminating external probe."
+    },
+    {
+      "paper": "out-learn-20261021.pdf",
+      "pdf_sha256": "01a8ea668f4c75cd0b5fafe3c5720e445bab7986abf27baee5bbba7d5e77febb",
+      "title": "OUT-LEARN",
+      "status": "guidance_only",
+      "pages": "pp. 3-10, 13-17",
+      "method": "Synthesize timing, polarity, weights and joint calibration to reject nuisance with response/error intervals.",
+      "applicability": "Polynomial drift plus bounded residual, stable gain/floor, no clipping and qualified reversal.",
+      "observed_code": [],
+      "checks": [],
+      "gap": "No general gain-calibration/nuisance-cancellation constructor identified in the canonical operating path. Later finite linear foundry is related, not this guarantee.",
+      "next_step": "Implement only for an actual measurement need; test gain drift, clipping, residuals and complete calibration costs."
+    },
+    {
+      "paper": "out-think-20261021.pdf",
+      "pdf_sha256": "22280da9d3c74b995b0770b3b1a633924a0849d4f72fad51facd8f78c0336029",
+      "title": "OUT-THINK",
+      "status": "guidance_only",
+      "pages": "pp. 3-10, 12-16, 18-21",
+      "method": "Compile a smaller representation preserving answers and update commutation.",
+      "applicability": "Explicit state/context/question/operation semantics; no secret reads of discarded state.",
+      "observed_code": [],
+      "checks": [],
+      "gap": "No canonical encoder/decoder/update-commutation proof implementing this paper identified. Memory retention is not representation equivalence.",
+      "next_step": "Require answer preservation and operation commutation, including future obligations, before discarding or migrating state."
+    },
+    {
+      "paper": "out-design-20261021.pdf",
+      "pdf_sha256": "65849e2f872b2dcdbc4a57baabb63e6a2644208c68dcc7c23ec0ee11ac1fe5dd",
+      "title": "OUT-DESIGN",
+      "status": "guidance_only",
+      "pages": "pp. 4-5, 7-13, 18-20",
+      "method": "Free usable capacity and check every prepare/qualify/promote/retire-or-restore state.",
+      "applicability": "Service equivalence, topology, resource vectors, in-flight state and rollback reserve.",
+      "observed_code": [],
+      "checks": [],
+      "gap": "Native finance recovery is not the paper's resource/topology transition solver; no general safe-migration construction identified.",
+      "next_step": "For an actual capacity bottleneck compare consolidation and buying spare capacity; verify intermediate states and no double-use of reserve."
+    },
+    {
+      "paper": "out-strategise-20261020.pdf",
+      "pdf_sha256": "8a848150f14c578106633324edb54bc59713a579c1318d9ea872d3d5b3ec7e77",
+      "title": "OUT-STRATEGISE",
+      "status": "guidance_only",
+      "pages": "pp. 3-8, 12-14, 17-19",
+      "method": "Choose observations plus one common executable continuation per residual-world leaf.",
+      "applicability": "Finite permitted world/test/module semantics; costed information and stated interaction assumptions.",
+      "observed_code": [],
+      "checks": [],
+      "gap": "Symbolic compose lacks observation branches and residual-world semantics. Expected-value market planning is not minimax common-completion proof.",
+      "next_step": "For uncertain seller strategy enforce information sets, pay for tests before revelation and compare robust completion/no-test/non-entry."
+    },
+    {
+      "paper": "out-execute-20261021.pdf",
+      "pdf_sha256": "85c6834e2dd496748f72a9099d3a70cb13047b49e09e3ed84ce911e1f1c530f3",
+      "title": "OUT-EXECUTE",
+      "status": "guidance_only",
+      "pages": "pp. 4-10, 11-18",
+      "method": "Reuse complete boundary value profiles with current attaining witnesses and exact equality.",
+      "applicability": "Complete finite domains, factor ownership/separability and unchanged outside semantics.",
+      "observed_code": [],
+      "checks": [],
+      "gap": "Existing exact-input source-bound reuse does not implement arbitrary boundary-profile composition. Reusing a scalar optimum cannot substitute for a complete profile.",
+      "next_step": "Prefer simpler fixed-input reuse when sufficient; otherwise verify every boundary row/current witness and fail closed on changed semantics."
+    },
+    {
+      "paper": "out-evolve-20261020.pdf",
+      "pdf_sha256": "5979bcaf704934ba42e4722389cbb1a9ef0cbc889e1b286428615a82a31e99bc",
+      "title": "OUT-EVOLVE",
+      "status": "partial_runtime",
+      "pages": "pp. 3-8, 12-18, 23-27",
+      "method": "Earn and qualify reusable means, then test a fresh different successor and stronger discovery separately.",
+      "applicability": "Qualified applicability and dependency identities; equal-content ordinary reuse and full campaign costs.",
+      "observed_code": [
+        {
+          "path": "mechanisms/memory.py",
+          "symbol": "acquire",
+          "sha256": "927fe08a6c85afba29577084cc37b19c21a6e7c6bccdd18ec68c51e43442e806"
+        },
+        {
+          "path": "mechanisms/memory.py",
+          "symbol": "_source_check",
+          "sha256": "927fe08a6c85afba29577084cc37b19c21a6e7c6bccdd18ec68c51e43442e806"
+        }
+      ],
+      "checks": [
+        {
+          "path": "tests/test_memory005.py",
+          "symbol": "MemoryAcquisitionTests",
+          "sha256": "4c7bf245ecbe94c4432b1a2b9a7e50e58d8f7a1d468cd6f37e243aed816f3e5b"
+        }
+      ],
+      "gap": "Bounded retained procedures are implemented; no demonstrated general inventor improvement or one executed physical/commercial flywheel.",
+      "next_step": "Freeze before successor; test removal, ordinary reuse and strongest unrestricted specialist with matched access and native costs."
+    }
+  ]
+}

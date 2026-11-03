@@ -1,5 +1,7 @@
 # Research foundations in practice
 
+See the [current edition-by-edition application audit](PAPER_APPLICATION_AUDIT.md) for newer papers, actual source/check paths, non-implementations and remaining operational gaps. Earlier instructions below retain their stated scope.
+
 ## Reading order and authority
 
 1. **Flagship:** [Transformational Intelligence: Learning to Change the Game](../research/transformational-intelligence-202610.pdf). Begin with the authorized purpose, not a frozen problem formulation. Distinguish intended outcomes, inherited means and evaluation instruments. Construct and test a better setup rather than merely renaming the task.

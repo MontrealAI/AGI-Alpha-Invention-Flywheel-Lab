@@ -1,5 +1,7 @@
 # Research papers
 
+[Actual application and remaining gaps](../harness/PAPER_APPLICATION_AUDIT.md) · [Edition-specific source map](../harness/PAPER_APPLICATIONS.json). Publication integrity and research replay do not establish operating adoption.
+
 ## SUPER ALPHA
 
 **Inventing Economic Possibility.**
@@ -151,7 +153,7 @@ The supplied PDF is preserved byte-for-byte (459,457 bytes):
 SHA-256 67f2d38922cdaa1bf28e916a494679fabf1463ba84fe56e620dfd192b20d16b3
 ```
 
-The [research shelf source](index.html) offers all seventeen papers. The GitHub PDF link works independently of Pages. The browser website requires the one-time [Pages setup](PAGES.md) and a successful deployment; a committed HTML file alone does not mean the site is live. Existing manuscripts and historical URLs remain unchanged.
+The [research shelf source](index.html) offers the current research catalogue. The GitHub PDF link works independently of Pages. The browser website requires the one-time [Pages setup](PAGES.md) and a successful deployment; a committed HTML file alone does not mean the site is live. Existing manuscripts and historical URLs remain unchanged.
 
 ## Transformational Autonomous Enterprises - SUCCESSOR Ω Harness
 
