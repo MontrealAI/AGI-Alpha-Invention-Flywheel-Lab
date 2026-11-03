@@ -11,6 +11,7 @@ from urllib.parse import unquote, urlsplit
 PAPERS = (
     'transformational-intelligence-202610.pdf',
     'agi-alpha-foundation-20260430.pdf',
+    'agi-alpha-flywheel-20261102.pdf',
     'invent-the-economy-202610.pdf',
     'the-world-as-an-output-20261020.pdf',
     'beyond-the-production-frontier-20261019.pdf',
@@ -26,7 +27,7 @@ PAPERS = (
     'out-execute-20261021.pdf',
     'out-evolve-20261020.pdf',
 )
-PAGES = ('transformational-intelligence.html', 'agi-alpha.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
+PAGES = ('transformational-intelligence.html', 'agi-alpha.html', 'agi-alpha-flywheel.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
          'out-series.html', 'out-learn.html', 'out-think.html', 'out-design.html', 'out-strategise.html', 'out-execute.html', 'out-evolve.html')
 ASSETS = ('alpha.css', 'alpha.js', 'alpha-mark.svg')
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
@@ -65,7 +66,10 @@ def validate(source):
     parsed = {}
     for name in PAGES:
         parser = Links()
-        parser.feed((source / name).read_text())
+        page = (source / name).read_text()
+        if 'PAPER_SHA256_PLACEHOLDER' in page or 'PAPER_PAGECOUNT_PLACEHOLDER' in page:
+            raise ValueError(f'Unresolved publication metadata: {name}')
+        parser.feed(page)
         parsed[name] = parser
     for name, parser in parsed.items():
         for link in parser.links:

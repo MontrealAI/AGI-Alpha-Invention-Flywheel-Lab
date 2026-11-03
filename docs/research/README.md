@@ -28,6 +28,20 @@ A proposed organizational substrate connecting agents, bounded jobs, validators,
 
 Exact supplied PDF: 5,926,237 bytes; SHA-256 `4b290d5a8232364b8808c0af8a96e7c9b152afd7ac3f5ba05668a538e073791a`.
 
+### AGI ALPHA FLYWHEEL: Inventing What Becomes Possible
+
+**Architecture and research synthesis** · Vincent Boucher · MONTREAL.AI · 2 November 2026 · Edition 1.0 · 18 pages.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/agi-alpha-flywheel.html) · [PDF](agi-alpha-flywheel-20261102.pdf) · [LaTeX source](../agi-alpha-flywheel/paper.tex) · [References and reproducible example](../agi-alpha-flywheel/)
+
+Study how useful work can create a better starting point for further invention. Search the valuable outcome, production, verification, voluntary participation and financing together. Keep reusable knowledge, qualified capability and unrestricted earned cash distinct; test what each contributes to a fresh successor.
+
+**Scope:** This edition is an architecture and research synthesis with a finite constructed illustration. Its historical findings retain their original evidence boundaries. Technical enablement, complete-cost profit, available cash and improved discovery are separate claims. It does not establish real customer revenue, general recursive improvement, achieved AGI or ASI, physical deployment, or the US$3 billion trailing-365-day profit objective. New capital and financing are jointly selected; US$100,000 is a historical/reference case.
+
+This paper extends the research programme while preserving **Transformational Intelligence: Learning to Change the Game** as the flagship and **AGI ALPHA: A Scalable Substrate for Intelligence Organizations** as the foundation.
+
+SHA-256: `1fd0f4a37ac2b399f0cd6c433900f5399d7a8037539d358107d89a606e21600e`.
+
 ### Invent the Economy: Transformational Intelligence for Creating Viable Markets
 
 **Economic construction** · Vincent Boucher · October 2026 · 22 pages.
@@ -95,7 +109,7 @@ The supplied PDF is preserved byte-for-byte (459,457 bytes):
 SHA-256 67f2d38922cdaa1bf28e916a494679fabf1463ba84fe56e620dfd192b20d16b3
 ```
 
-The [research shelf source](index.html) offers all fifteen original papers. The GitHub PDF link works independently of Pages. The browser website requires the one-time [Pages setup](PAGES.md) and a successful deployment; a committed HTML file alone does not mean the site is live. Existing manuscripts and historical URLs remain unchanged.
+The [research shelf source](index.html) offers all sixteen papers. The GitHub PDF link works independently of Pages. The browser website requires the one-time [Pages setup](PAGES.md) and a successful deployment; a committed HTML file alone does not mean the site is live. Existing manuscripts and historical URLs remain unchanged.
 
 ## Transformational Autonomous Enterprises - SUCCESSOR Ω Harness
 

@@ -1,0 +1,25 @@
+\begin{tikzpicture}[scale=1.22,every node/.style={font=\sffamily},>=Stealth]
+\foreach \a/\b/\col in {2/58/tealink,62/118/violetink,122/178/goldink,182/238/tealink,242/298/violetink,302/358/goldink}{
+  \fill[\col,opacity=.07] (\a:1.52) arc[start angle=\a,end angle=\b,radius=1.52] -- (\b:3.56) arc[start angle=\b,end angle=\a,radius=3.56] -- cycle;
+  \draw[\col!35,line width=.6pt] (\a:1.6)--(\a:3.48);
+}
+\foreach \r/\col/\start in {3.8/tealink/7,4.02/violetink/127,4.24/goldink/247}{
+  \draw[\col,opacity=.15,line width=5pt] (0,0) circle (\r);
+  \draw[\col,line width=1.3pt,-{Stealth[length=6pt]}] (\start:\r) arc[start angle=\start,end angle=\start+323,radius=\r];
+}
+\fill[ink] (0,0) circle (1.44);
+\node[white,align=center,font=\sffamily\bfseries\small] at (0,.16) {TRANSFORMATIONAL\\INTELLIGENCE};
+\node[brightgold,font=\Large] at (0,-.37) {$\infty$};
+\node[align=center,text=ink,font=\sffamily\bfseries\small] at (90:2.55) {Discover\\valuable outcomes};
+\node[align=center,text=ink,font=\sffamily\bfseries\small] at (30:2.55) {Locate\\the constraint};
+\node[align=center,text=ink,font=\sffamily\bfseries\small] at (-30:2.55) {Construct\\the missing means};
+\node[align=center,text=ink,font=\sffamily\bfseries\small] at (-90:2.55) {Test\\what changed};
+\node[align=center,text=ink,font=\sffamily\bfseries\small] at (-150:2.55) {Deliver\\on viable terms};
+\node[align=center,text=ink,font=\sffamily\bfseries\small] at (150:2.55) {Retain and fund\\the next possibility};
+\foreach \a in {60,0,-60,-120,-180,120}{
+  \draw[muted!60,line width=.8pt,->] (\a+15:3.37) arc[start angle=\a+15,end angle=\a-12,radius=3.37];
+}
+\node[anchor=west,text=tealink,font=\sffamily\bfseries\small] at (-4.1,-4.92) {KNOWLEDGE};
+\node[anchor=west,text=violetink,font=\sffamily\bfseries\small] at (-.75,-4.92) {CAPABILITY};
+\node[anchor=west,text=goldink,font=\sffamily\bfseries\small] at (2.35,-4.92) {EARNED CAPITAL};
+\end{tikzpicture}

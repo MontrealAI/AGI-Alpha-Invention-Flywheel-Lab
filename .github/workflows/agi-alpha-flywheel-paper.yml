@@ -1,0 +1,92 @@
+name: AGI ALPHA FLYWHEEL paper
+on:
+  pull_request:
+    paths:
+      - 'docs/agi-alpha-flywheel/**'
+      - 'docs/research/agi-alpha-flywheel-20261102.pdf'
+      - '.github/workflows/agi-alpha-flywheel-paper.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/agi-alpha-flywheel/**'
+      - 'docs/research/agi-alpha-flywheel-20261102.pdf'
+      - '.github/workflows/agi-alpha-flywheel-paper.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: flywheel-paper-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            docs/agi-alpha-flywheel
+            docs/research/agi-alpha-flywheel-20261102.pdf
+          sparse-checkout-cone-mode: false
+      - name: Install the standard LaTeX and PDF toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends latexmk texlive-latex-extra texlive-fonts-recommended poppler-utils
+      - name: Compile and check the manuscript and exact example
+        run: |
+          make -C docs/agi-alpha-flywheel check
+          python3 docs/agi-alpha-flywheel/verify_publication.py
+      - name: Assemble the inspected PDF and self-contained source
+        run: python3 docs/agi-alpha-flywheel/package.py --output "$RUNNER_TEMP/flywheel-publication"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: agi-alpha-flywheel-publication
+          path: ${{ runner.temp }}/flywheel-publication/
+          retention-days: 7
+  publish:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: docs/agi-alpha-flywheel
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: agi-alpha-flywheel-publication
+          path: ${{ runner.temp }}/flywheel-publication
+      - name: Publish the versioned research edition without overwriting prior assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(cat docs/agi-alpha-flywheel/VERSION)"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          tag="agi-alpha-flywheel-v${version}"
+          assets="$RUNNER_TEMP/flywheel-publication"
+          cd "$assets"
+          sha256sum --check SHA256SUMS
+          cd "$GITHUB_WORKSPACE"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Verifying the existing research edition without overwriting it."
+          else
+            gh release create "$tag" "$assets/AGI_ALPHA_FLYWHEEL.pdf" "$assets/AGI_ALPHA_FLYWHEEL_SOURCE.zip" "$assets/SHA256SUMS" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "AGI ALPHA FLYWHEEL · ${version}" --notes-file docs/agi-alpha-flywheel/RELEASE_NOTES.md --latest=false
+          fi
+          mkdir "$RUNNER_TEMP/verified-flywheel-publication"
+          gh release download "$tag" --repo "$GITHUB_REPOSITORY" --pattern AGI_ALPHA_FLYWHEEL.pdf --pattern AGI_ALPHA_FLYWHEEL_SOURCE.zip --pattern SHA256SUMS --dir "$RUNNER_TEMP/verified-flywheel-publication"
+          cd "$RUNNER_TEMP/verified-flywheel-publication"
+          sha256sum --check SHA256SUMS
+          cmp "$assets/SHA256SUMS" SHA256SUMS
