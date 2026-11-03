@@ -58,8 +58,8 @@ class ResearchSiteTests(unittest.TestCase):
         slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
-        self.assertEqual(len(site.PAPERS), 15)
-        self.assertEqual(len(site.PAGES), 18)
+        self.assertEqual(len(site.PAPERS), 16)
+        self.assertEqual(len(site.PAGES), 19)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
             reader = 'out-' + slug + '.html'
@@ -95,6 +95,36 @@ class ResearchSiteTests(unittest.TestCase):
             self.assertIn('download>', page)
         self.assertIn('Learning to Change the Game', (self.source / 'transformational-intelligence.html').read_text())
         self.assertIn('A Scalable Substrate for Intelligence Organizations', (self.source / 'agi-alpha.html').read_text())
+
+    def test_flywheel_synthesis_has_reader_pdf_and_source_links(self):
+        import json
+        home = (self.source / 'index.html').read_text()
+        reader = (self.source / 'agi-alpha-flywheel.html').read_text()
+        self.assertIn('agi-alpha-flywheel.html', home)
+        self.assertLess(home.index('Foundational paper'), home.index('id="flywheel-synthesis"'))
+        parser = site.Links()
+        parser.feed(reader)
+        self.assertIn('agi-alpha-flywheel-20261102.pdf', parser.links)
+        self.assertIn('agi-alpha-flywheel-20261102.pdf#view=FitH', parser.links)
+        self.assertIn('https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/agi-alpha-flywheel/paper.tex', parser.links)
+        self.assertIn('https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/agi-alpha-flywheel', parser.links)
+        self.assertIn('transformational-intelligence.html', parser.links)
+        self.assertIn('agi-alpha.html', parser.links)
+        for anchor in ('abstract', 'idea', 'flows', 'read-title', 'reader', 'reproduce'):
+            self.assertIn(anchor, parser.ids)
+        self.assertIn('finite constructed illustration', reader)
+        self.assertIn('Scope and evidence', reader)
+        self.assertIn('SHA-256:', reader)
+        self.assertIn('aria-label="Continue reading"', reader)
+        manifest = json.loads((self.source / 'publication-manifest.json').read_text())
+        paper = next(item for item in manifest['papers'] if item['file'] == 'agi-alpha-flywheel-20261102.pdf')
+        self.assertIn('<code>' + paper['sha256'] + '</code>', reader)
+
+    def test_unresolved_publication_metadata_is_rejected(self):
+        page = self.source / 'agi-alpha-flywheel.html'
+        page.write_text(page.read_text() + '<p>PAPER_SHA256_PLACEHOLDER</p>')
+        with self.assertRaisesRegex(ValueError, 'Unresolved publication metadata'):
+            site.validate(self.source)
 
     def test_manifest_cannot_repeat_or_omit_a_paper(self):
         import json
