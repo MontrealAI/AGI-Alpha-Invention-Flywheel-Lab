@@ -1,0 +1,17 @@
+# Preregistered joint-buyer choice falsification, 3 November 2026
+
+Owner: independent reviewer. Exact parent: `1c0c2a61ba4218e38d143808bd404ac370ad2e12` (Enterprise078 #174); no financial authority or native account. The prior owner's `enterprise078/transactional_admission/intent.py` and `offer.py` are immutable controls. No existing positive simulation, historical failure or financial source is changed.
+
+## Economically consequential missing instrument
+
+A buyer with one shared wallet can buy two *substitute* outputs whose individual stated values each clear price/outside-option screens. The same buyer's **joint** value need not be their sum. If a bundle's joint surplus is lower than the strongest viable human, competing-AI, self-service or no-purchase alternative, it is not a voluntary joint offer—even if each row passes. A rival can change its price and improve that outside option. This tests a missing joint-utility variable, not the buyer's true preferences; all valuation inputs below are authored counterexamples, not customer evidence.
+
+## Locked deterministic cases and acceptance
+
+All money is exact integer microUSD. Two rows for the same buyer, each price 200, collection 200, incremental complete cost 50, individual value 500, individual outside surplus 100, with wallet 500, earned=available=1000, sunk acquisition=30. Original per-row evaluator may select both; retain this as a **negative control**, not a retroactive test failure. Joint value for both outputs is 500, joint cost to buyer 400, and outside surplus 300 from the capable conventional alternative. The new joint-choice admission **must reject the two-output bundle**. The singleton has value 500, paid price 200 and strongest outside surplus 100; it may be conditionally preferred under the explicit exposure.
+
+Second case: single supplier and two distinct buyers with disjoint delivery costs and sufficiently funded full exposure; a joint review may keep that feasible outcome. Third: competitor price response makes a previously voluntary bundle inferior to the competing-AI outside option; the robust recommendation must no-bid or choose a viable smaller set. Fourth: any missing joint value or missing complete outside alternative fails closed, not zero. Fifth: rejected/unknown buyer worlds, partner refusal, nonpayment and negative collected profit cannot become paid wins. Sixth: source drift in the pinned incumbent evaluator must fail closed before comparison. Seventh: no actual native account, mutation, order, outreach, deployment, implied willingness-to-pay or new funding; return explicit conditional-only verdict.
+
+Declare candidate action: implement an additive, read-only adjudicator in `enterprise078_review/` and source-matched tests; run registered cases once through standard public-repo Actions. It must retain the incumbent's cash, complete-cost and explicit collection screens, never approve a native catalog activation, and use no account/key. No cherry-picking cases, relaxed acceptance, changed incumbent or claim of Nash equilibrium. If tests fail, preserve the failures and repair correctness before a distinct exact-head requalification.
+
+This is independent upstream risk qualification for #174's owner and the broader game-theoretic gap, not a second integration owner or an automatic release. No paid API, purchases, outreach, actual market, private data, physical actuation or production deployment.
