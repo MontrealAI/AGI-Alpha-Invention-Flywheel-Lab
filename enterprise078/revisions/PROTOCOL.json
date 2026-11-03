@@ -1,0 +1,18 @@
+{
+  "revision": "whole-delivery-liquidity-v2",
+  "parent_science_commit": "825cabc0edf2e6bf677a5b80ade274ae8dee38bb",
+  "parent_source_sha256": "d4f1010ade15ff9836e27ffe58fe93dd3d1fe6fa3315f67f98df0cafa4a05b66",
+  "changed_belief": "Affordable construction is insufficient when order exposure and production cannot also be funded. Original illiquid account earned-financed USD3000 but could not fulfill K2.",
+  "rule": "Before K2, require native earned cash for USD3000 construction AND available cash for construction, acquisition, production and full order exposure. Otherwise defer without spending or erasing profit.",
+  "cases": [
+    "central",
+    "illiquid",
+    "provider_failure"
+  ],
+  "frozen_comparison": "Same authored terms, amounts, outputs, complete obligations and common8760-hour endpoint. Three fresh separate accounts. Do not modify original histories. No technical matrix rerun.",
+  "expected_falsifier": "Central accepted deliveries change, illiquid spends before failed affordability, native profit disappears, source binding fails or an account is reseeded.",
+  "original_campaign_sha256": "0e93df8ea4f3c66e0208f32bafafe5bbd87ee9e923e86aea0cd44889a4901a80",
+  "revised_campaign_sha256": "5ab0ef71169f0d19f5bb605bb9c739df413dada360d2805d0d12884758d0a82a",
+  "patch_sha256": "e24b42e34d87d8c94050a3cb9901d0091e7ba97d39cafe9be4452cff746a6835",
+  "claim": "Developer-written operating improvement; no learned discovery claim; outcomes not yet run"
+}
