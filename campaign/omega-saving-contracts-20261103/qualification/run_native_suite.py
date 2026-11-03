@@ -16,6 +16,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import tempfile
 import time
 import unittest
 
@@ -51,8 +52,11 @@ def sources():
     result = subprocess.run(["rg", "--files", "-g", "*.py", "-g", "*.c",
                              "-g", "requirements*.txt"], cwd=ROOT,
                             capture_output=True, text=True, check=True)
+    names = set(result.stdout.splitlines()) | {"AGENTS.md"}
+    names.update(str(p.relative_to(ROOT)) for p in (ROOT / ".github/workflows").glob("*.yml"))
+    names.update(str(p.relative_to(ROOT)) for p in (ROOT / ".github/workflows").glob("*.yaml"))
     files = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
-             for name in sorted(result.stdout.splitlines())}
+             for name in sorted(names)}
     return {"files": files, "sha256": digest(files)}
 
 
@@ -74,12 +78,27 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", required=True)
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--only-failed", help="Preserved earlier receipt whose failed modules need follow-up")
+    parser.add_argument("--include", action="append", default=[], help="Additional exact unittest module")
     args = parser.parse_args()
     output = Path(args.output).resolve()
     os.chdir(ROOT)
     sys.path.insert(0, str(ROOT))
     modules = sorted({"tests." + path.stem for path in (ROOT / "tests").glob("test_*.py")
                       if path.name.startswith(PREFIXES)} | set(EXTRA_MODULES))
+    previous = None
+    if args.only_failed:
+        previous_path = Path(args.only_failed).resolve()
+        raw = previous_path.read_bytes()
+        prior = json.loads(raw)
+        if not prior.get("complete"):
+            raise ValueError("COMPLETE_PRESERVED_PRIOR_QUALIFICATION_REQUIRED")
+        modules = sorted({row["module"] for row in prior["module_results"] if not row["passed"]})
+        previous = {"path": str(previous_path), "sha256": hashlib.sha256(raw).hexdigest(),
+                    "prior_source_sha256": prior["source_after"]["sha256"]}
+    if any(not re.fullmatch(r"tests\.test_[a-zA-Z0-9_]+", name) for name in args.include):
+        raise ValueError("EXACT_TEST_MODULE_REQUIRED")
+    modules = sorted(set(modules) | set(args.include))
     source = sources()
     if args.resume:
         record = json.loads(output.read_text())
@@ -91,6 +110,10 @@ def main():
         record = {"schema": "omega-savings/composed-native-qualification/v1",
             "scope": "LOCAL_EXISTING_NATIVE_ADAPTIVE_CONNECTED_REGRESSIONS",
             "started_utc": now(), "source_before": source,
+            "selection_from": previous, "additional_modules": args.include,
+            "temporary_root": tempfile.gettempdir(),
+            "temporary_root_has_git_ancestry": any((p / ".git").exists() for p in
+                [Path(tempfile.gettempdir()).resolve(), *Path(tempfile.gettempdir()).resolve().parents]),
             "registered_modules": modules,
             "static_test_definitions": sum(len(re.findall(r"^    def test_", (ROOT / "tests" / (name.split(".")[-1] + ".py")).read_text(), re.M)) for name in modules),
             "module_results": [], "complete": False, "current_module": None}

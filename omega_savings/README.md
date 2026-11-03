@@ -43,7 +43,7 @@ acceptance, and may recommend declining or using the existing direct solution.
 the generated exact-request worker separately:
 
 ```bash
-python /tmp/omega-buyer-example/worker.py < /tmp/omega-buyer-example/request.json
+python /tmp/omega-buyer-example/worker.py /tmp/omega-buyer-example/request.json
 ```
 
 The worker refuses a changed request. For another request, construct and check a
@@ -51,6 +51,9 @@ new worker. Keep customer data local; the experiment's public examples contain
 only authored synthetic data. No natural-language goal interpreter or general
 project construction interface is implemented. No automatic account access,
 purchase, deployment or outbound communication occurs.
+
+The generated worker takes the request filename as its positional argument;
+redirecting JSON to standard input alone is not its CLI contract.
 
 Acceptance uses exact rational residuals and a strict row diagonal-dominance
 bound. Matrices outside that verifiable region are declined rather than silently
@@ -83,7 +86,22 @@ Use `--cadence-days 7 --variant cadence7` or30 for timing sensitivity, and
 cost. The published sensitivity grid uses only positive/adverse, adaptive,
 seeds701/702. Register each into a fresh output before running any confirmation.
 
-Run the separate held-out technical comparison from the exact frozen source:
+For the complete76-account registered grid, including the four sensitivity
+variants, use the checked orchestration scripts. The second command uses each
+account's frozen source and independently replays it after completion. A later
+invocation resumes unfinished authenticated accounts; it never reseeds them.
+
+```bash
+python campaign/omega-saving-contracts-20261103/prepare_comparison.py --output /tmp/omega-complete-reproduction --role reproduction
+python campaign/omega-saving-contracts-20261103/execute_comparison.py --output /tmp/omega-complete-reproduction --workers 4
+```
+
+Workers are an execution-concurrency choice. Each account keeps its own funds,
+history and observations; no account learns from another. Logs retain failed
+attempts and `ALL_COMPARISONS.json` identifies every missing or unaudited case.
+
+Run the separate technical comparison from the exact frozen source, labeling
+known-input repetitions as reproduction:
 
 ```bash
 OPENBLAS_NUM_THREADS=1 python -m omega_savings.experiment --output /tmp/omega-technical-reproduction --seeds 701,702,703 --role reproduction

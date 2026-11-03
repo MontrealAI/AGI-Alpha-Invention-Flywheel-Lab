@@ -329,6 +329,67 @@ class SavingsNative(unittest.TestCase):
             self.assertTrue(a.audit()['accepted'])
             self.assertGreater(checked.call_count, 0)
 
+    def test_raw_prefix_binding_rejects_even_equivalent_json_byte_changes(self):
+        m = self.manifest(self.contract())
+        a = self.account(m)
+        self.fulfill(a, m)
+        a.cost('qualify-raw-prefix', 0, 1)
+        self.assertTrue(a._native_prefix._omega_byte_bindings)
+        before = a.export()
+        path = self.root / m['jobs'][0]['output']
+        raw = path.read_bytes()
+        try:
+            path.write_bytes(raw + b'\n')
+            # The canonical native artifact is unchanged, but the private raw
+            # binding correctly refuses bytes changed since qualification.
+            with self.assertRaisesRegex(ValueError, 'PREPARED_BYTES'):
+                a.cost('must-rebind-raw-bytes', 0, 2)
+            self.assertEqual(a.export(), before)
+            self.assertEqual(a._native_prefix._omega_byte_bindings, {})
+        finally:
+            path.write_bytes(raw)
+        a.cost('must-rebind-raw-bytes', 0, 2)
+        self.assertTrue(a.audit()['accepted'])
+
+    def test_raw_prefix_reads_both_files_but_public_replay_requalifies_json(self):
+        m = self.manifest(self.contract())
+        a = self.account(m)
+        self.fulfill(a, m)
+        a.cost('prime-raw-read-test', 0, 1)
+        input_path = self.root / m['jobs'][0]['input']
+        output_path = self.root / m['jobs'][0]['output']
+        observed = set()
+        original_read = Path.read_bytes
+        def read(path):
+            if path in (input_path, output_path):
+                observed.add(path)
+            return original_read(path)
+        with patch.object(Path, 'read_bytes', read), patch.object(service, 'strict_json',
+                side_effect=AssertionError('historical output reparsed')):
+            a.cost('actual-raw-read', 0, 2)
+        self.assertEqual(observed, {input_path, output_path})
+        with patch.object(service, 'strict_json', side_effect=AssertionError('public replay parses')):
+            with self.assertRaisesRegex(AssertionError, 'public replay parses'):
+                a.audit()
+        self.assertEqual(a._native_prefix._omega_byte_bindings, {})
+        self.assertTrue(a.audit()['accepted'])
+
+    def test_raw_prefix_cache_cannot_authorize_changed_historical_actions(self):
+        m = self.manifest(self.contract())
+        a = self.account(m)
+        self.fulfill(a, m)
+        a.cost('prime-action-prefix', 0, 1)
+        actions = a._account._owner._exchange.actions
+        original = copy.deepcopy(actions[0])
+        try:
+            actions[0]['args']['amount'] += USD
+            with self.assertRaises(ValueError):
+                a.cost('must-replay-changed-prefix', 0, 2)
+            self.assertEqual(a._native_prefix._omega_byte_bindings, {})
+        finally:
+            actions[0] = original
+        self.assertTrue(a.audit()['accepted'])
+
     def test_unpaid_costs_and_changed_buyer_budget_cannot_release(self):
         m = self.manifest(self.contract())
         a = self.account(m)

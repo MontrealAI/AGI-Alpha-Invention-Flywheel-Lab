@@ -1,0 +1,58 @@
+{
+  "condition_bounds_planning_only": [
+    4.191345666651703,
+    4.115082117770793,
+    4.146702670123271,
+    4.166093185057385,
+    4.132361861679311,
+    4.191814855603741,
+    4.135427173334618,
+    4.1293268148639966
+  ],
+  "construction_scope": "finite developer-authored established-method compiler; no autonomous algorithm-invention claim",
+  "constructor_wall_seconds": 0.021779381000669673,
+  "count_model": {
+    "candidate_complete_proxy_units": 198600,
+    "cases": 8,
+    "common_inspection_scalar_ops": 24832,
+    "definition": "integer scalar-work proxy; rational and float operations are not equivalent hardware costs",
+    "dimensions": 32,
+    "direct_complete_proxy_units": 237776,
+    "direct_float_ops": 186752,
+    "execution_guard_scalar_ops": 40960,
+    "production_float_ops": 73848,
+    "production_verify_rational_ops": 26192,
+    "qualification_float_ops": 1235328,
+    "qualification_note": "separate direct reference solves and SVD condition diagnostics; SVD is a leading-order proxy",
+    "saved_proxy_units": 39176,
+    "selection_extra_scalar_ops": 32768,
+    "serialization_bytes": 229230
+  },
+  "feasible_methods": [
+    "direct",
+    "woodbury"
+  ],
+  "hypotheses": {
+    "declared_low_rank_updates": true,
+    "neither_reuse_hypothesis": false,
+    "observed_update_ranks": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "same_matrix": false
+  },
+  "method": "woodbury",
+  "policy": "adaptive",
+  "program": "# Generated known-method linear-response plan. No network or external actions.\nimport hashlib\nimport json\nimport sys\nimport warnings\nimport numpy as np\nfrom scipy.linalg import lu_factor, lu_solve, LinAlgWarning\n\nMETHOD = 'woodbury'\nREQUEST_SHA256 = '459805f947fcbe52f664edab6214750598d39625b45849a30496268f65935671'\n\ndef solve_payload(request):\n    observed = hashlib.sha256(json.dumps(request, sort_keys=True, separators=(\",\", \":\"), allow_nan=False).encode()).hexdigest()\n    if observed != REQUEST_SHA256:\n        raise ValueError(\"REQUEST_CHANGED\")\n    base = np.asarray(request[\"base_matrix\"], dtype=float)\n    cases = request[\"cases\"]\n    output = []\n    if METHOD == \"reuse\":\n        reference = np.asarray(cases[0][\"matrix\"], dtype=float)\n        if any(not np.array_equal(np.asarray(c[\"matrix\"], dtype=float), reference) for c in cases):\n            raise ValueError(\"REUSE_INAPPLICABLE\")\n    elif METHOD == \"woodbury\":\n        for case in cases:\n            update = case[\"update\"]\n            if update is None:\n                raise ValueError(\"WOODBURY_INAPPLICABLE\")\n            u, v = np.asarray(update[\"u\"], dtype=float), np.asarray(update[\"v\"], dtype=float)\n            a = np.asarray(case[\"matrix\"], dtype=float)\n            bound = 8 * np.finfo(float).eps * max(1.0, float(np.max(np.abs(a))))\n            if not np.allclose(a, base + u @ v.T, rtol=0, atol=bound):\n                raise ValueError(\"WOODBURY_INAPPLICABLE\")\n    with warnings.catch_warnings():\n        warnings.simplefilter(\"error\", LinAlgWarning)\n        shared = lu_factor(base if METHOD == \"woodbury\" else np.asarray(cases[0][\"matrix\"], dtype=float)) if METHOD != \"direct\" else None\n        updates = {}\n        for case in cases:\n            b = np.asarray(case[\"rhs\"], dtype=float)\n            if METHOD == \"direct\":\n                x = lu_solve(lu_factor(np.asarray(case[\"matrix\"], dtype=float)), b)\n            elif METHOD == \"reuse\":\n                x = lu_solve(shared, b)\n            else:\n                update = case[\"update\"]\n                key = json.dumps(update, sort_keys=True, separators=(\",\", \":\"))\n                if key not in updates:\n                    u = np.asarray(update[\"u\"], dtype=float)\n                    v = np.asarray(update[\"v\"], dtype=float)\n                    z = lu_solve(shared, u)\n                    small = np.eye(u.shape[1]) + v.T @ z\n                    updates[key] = (z, v, lu_factor(small))\n                z, v, small_factor = updates[key]\n                y = lu_solve(shared, b)\n                x = y - z @ lu_solve(small_factor, v.T @ y)\n            if not np.isfinite(x).all():\n                raise ValueError(\"NONFINITE_SOLUTION\")\n            output.append(x.tolist())\n    return output\n\nif __name__ == \"__main__\":\n    with open(sys.argv[1], encoding=\"utf-8\") as source:\n        request = json.load(source)\n    print(json.dumps({\"solutions\": solve_payload(request), \"request_sha256\": REQUEST_SHA256}, allow_nan=False))\n",
+  "program_sha256": "e757deaf4b731c15f7c7946e679cf3382849a7440746aca0cd17cb0d0f452e8f",
+  "reasons": [],
+  "request_sha256": "459805f947fcbe52f664edab6214750598d39625b45849a30496268f65935671",
+  "schema": "omega-savings/linear-plan/v1",
+  "status": "ready"
+}

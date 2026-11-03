@@ -388,44 +388,61 @@ def require_costs(root, manifest, actions, order):
         raise ValueError('EXACT_PRECOMMITTED_SAVINGS_TERMS_REQUIRED')
 
 
-def rebind_prepared(root, manifest, actions, jobs, *, _verified_prefix=0):
+def rebind_prepared(root, manifest, actions, jobs, *, _verified_prefix=0, _byte_bindings=None):
     """Rebind preparations, retaining a private already-verified prefix proof.
 
     Only the native replay session supplies ``_verified_prefix``, after matching
     the complete prior action bytes, owner, source, manifest and account. Public
     replay uses zero and independently checks every preparation. For a matched
-    prefix, the accepted artifact hash already binds its request hash and recipe;
-    read those actual input and output bytes again without repeating mathematics.
-    This avoids an all-history LRU scan evicting every useful semantic cache entry.
+    prefix, immutable private bindings retain the actual raw input/output hashes
+    only after full semantic qualification. Read and hash every file again; no
+    mtime, size, caller-supplied head or stored public receipt substitutes for its
+    current bytes. Missing bindings and public replay perform full qualification.
+    The map grows with already-verified history, without limiting market size.
     """
     if type(_verified_prefix) is not int or not 0 <= _verified_prefix <= len(actions):
         raise ValueError('EXACT_PRIVATE_VERIFIED_PREFIX_REQUIRED')
+    if _byte_bindings is not None and not isinstance(_byte_bindings, dict):
+        raise ValueError('PRIVATE_PREPARED_BYTE_BINDINGS_REQUIRED')
     current_jobs = load_contracts(root, manifest)
     if current_jobs != jobs:
         raise ValueError('SAVINGS_PREPARED_JOB_AUTHORITY_CHANGED')
     offers = {a['args']['id']: a['args']['job_id'] for a in actions if a['op'] == 'offer'}
+    rebound = {}
     for index, action in enumerate(actions):
         if action['op'] == 'event' and action['args']['action'] == 'prepare':
             job_id = offers[action['args']['id']]
-            if index < _verified_prefix:
-                if isinstance(current_jobs, ProceduralContracts):
-                    _ident(job_id)
-                    base = Path(manifest['output_dir']) / job_id
-                    input_path = str(base) + '.contract.json'
-                    output_path = str(base) + '.delivery.json'
-                else:
-                    job = current_jobs[job_id]['job']
-                    input_path, output_path = job['input'], job['output']
-                artifact = strict_json(_path(root, output_path).read_bytes())
-                if (digest(artifact) != action['args']['artifact_sha256']
-                        or hashlib.sha256(_path(root, input_path).read_bytes()).hexdigest()
-                        != artifact.get('contract_sha256')):
+            if isinstance(current_jobs, ProceduralContracts):
+                _ident(job_id)
+                base = Path(manifest['output_dir']) / job_id
+                input_path = str(base) + '.contract.json'
+                output_path = str(base) + '.delivery.json'
+            else:
+                job = current_jobs[job_id]['job']
+                input_path, output_path = job['input'], job['output']
+            authority = (job_id, input_path, output_path, action['args']['artifact_sha256'])
+            prior = (_byte_bindings or {}).get(index) if index < _verified_prefix else None
+            input_raw = _path(root, input_path).read_bytes()
+            artifact_raw = _path(root, output_path).read_bytes()
+            input_sha = hashlib.sha256(input_raw).hexdigest()
+            raw_output_sha = hashlib.sha256(artifact_raw).hexdigest()
+            if prior is not None:
+                if (not isinstance(prior, tuple) or len(prior) != 6
+                        or prior[:4] != authority or prior[4:] != (input_sha, raw_output_sha)):
                     raise ValueError('SAVINGS_PREPARED_BYTES_OR_ACCEPTANCE_CHANGED')
+                rebound[index] = prior
                 continue
-            artifact = delivery(root, manifest, job_id)
+            artifact = strict_json(artifact_raw)
             if (digest(artifact) != action['args']['artifact_sha256']
-                    or not check_delivery(root, manifest, job_id, artifact)['accepted']):
+                    or input_sha != artifact.get('contract_sha256')
+                    or not check_delivery(root, manifest, job_id, artifact)['accepted']
+                    or _path(root, output_path).read_bytes() != artifact_raw
+                    or _path(root, input_path).read_bytes() != input_raw):
                 raise ValueError('SAVINGS_PREPARED_BYTES_OR_ACCEPTANCE_CHANGED')
+            # Only fully qualified, byte-stable evidence may enter the private
+            # cache. Tuples prevent accidental mutation of binding fields.
+            rebound[index] = authority + (input_sha, raw_output_sha)
+    return rebound
 
 
 def fulfill(account, root, manifest, job_id, *, order_id, buyer, hour, consent=True, result=None):

@@ -1,4 +1,9 @@
-"""Same-account recovery qualification on explicitly nonbusiness test fixtures."""
+"""Recovery algorithm tests on fresh nonbusiness fixtures, NOT historical qualification.
+
+A narrowly scoped fixture source expectation follows each newly created fixture.
+Production recovery retains its immutable original source identity. Historical
+accounts must still be replayed with their exact original source snapshot.
+"""
 from __future__ import annotations
 import copy
 import hashlib
@@ -44,6 +49,13 @@ class RecoveryTests(unittest.TestCase):
         (cls.baseline / "control").mkdir(parents=True)
         cls.reference = economics._run_case(ROOT, cls.baseline, cls.products, cls.protocol, "interface", cls.scenario)
         cls.reference_export = json.loads((cls.baseline / "public" / "interface-recovery-guard-fixture" / "account.public.json").read_text())
+        cls.production_native_source = recovery_run.EXPECTED_NATIVE_SOURCE
+        cls.fixture_native_source = cls.reference_export["connected_journal"]["source"]["sha256"]
+        # These accounts were created above, exclusively for algorithm tests.
+        # Never apply this override to retained campaign evidence or live recovery.
+        cls.fixture_source_patch = patch.object(recovery_run, "EXPECTED_NATIVE_SOURCE", cls.fixture_native_source)
+        cls.fixture_source_patch.start()
+        cls.addClassCleanup(cls.fixture_source_patch.stop)
 
     @classmethod
     def tearDownClass(cls):
@@ -281,6 +293,21 @@ class RecoveryTests(unittest.TestCase):
             self.assertEqual([a["op"] for a in actual["ledger"]["actions"][-2:]], ["mature", "mature"])
         finally:
             account.close()
+
+
+    def test_17_original_source_guard_rejects_current_fixture_without_append(self):
+        if self.fixture_native_source == self.production_native_source:
+            # On the historical commit itself the fixture already is original.
+            self.assertEqual(recovery_run.EXPECTED_NATIVE_SOURCE, self.production_native_source)
+            return
+        output = self._interrupt("original-source-guard", entry_number=3)
+        tape = output / "private" / "interface-recovery-guard-fixture" / "account.sqlite.actions.jsonl"
+        before = tape.read_bytes()
+        with patch.object(recovery_run, "EXPECTED_NATIVE_SOURCE", self.production_native_source):
+            with self.assertRaisesRegex(ValueError, "ORIGINAL_SOURCE_REQUIRED"):
+                recovery_run.recover_case(ROOT, output, self.products, self.protocol, "interface", self.scenario)
+        self.assertEqual(tape.read_bytes(), before)
+        self.assertFalse((output / "public" / "interface-recovery-guard-fixture" / "RESULT.json").exists())
 
 
 if __name__ == "__main__":

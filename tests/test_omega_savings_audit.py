@@ -230,6 +230,31 @@ class SavingsOperatingAudit(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "NATIVE_EFFECT_OR_ORDER_CHANGED:claim"):
             replay.claim(replay.s["queue"].pop(0))
 
+    def test_earned_resource_replay_consumes_actual_native_proof_and_prefix(self):
+        job_id = self.state["orders"][0]["job"]
+        _, contract = service.contract_for(self.root, self.manifest, job_id)
+        hour = contract["collection_delay_hours"] + contract["claim_window_hours"] + 1
+        work = {"declared_unit_fixture": "known-capability-installation"}
+        with JournalAccount(self.root, self.manifest, self.root / "targeted-earned-private/account.sqlite",
+                opening=100_000 * USD, working=0, contract="targeted-earned-native-unit-test") as account:
+            outcome = service.fulfill(account, self.root, self.manifest, job_id,
+                order_id="earned-order", buyer="earned-buyer", hour=0)
+            self.assertEqual(outcome["status"], "released")
+            account.advance_financial(hour)
+            self.assertGreaterEqual(account.snapshot()["summary"]["unrestrictedEarned"], USD)
+            prefix = len(account.export()["ledger"]["actions"])
+            receipt = account.spend("targeted-earned", "known_method_package", USD,
+                hour, work, expected_net=2 * USD, allow_seed=True)
+            self.assertEqual(receipt["funding"], "EARNED")
+            record = account.export()
+        self.assertTrue(audit_journal(record, root=self.root, manifest=self.manifest)["accepted"])
+        evidence = _NativeEvidence(record)
+        evidence.cursor = prefix
+        self.assertEqual(evidence.spend("targeted-earned", "known_method_package", USD,
+            hour, work, 2 * USD), "EARNED")
+        self.assertEqual(evidence.cursor, len(record["ledger"]["actions"]))
+        self.assertEqual([a["op"] for a in record["ledger"]["actions"][prefix:]], ["reserve", "finish"])
+
 
 class TaxPrefixUnitCases(unittest.TestCase):
     """Small authored prefixes test tax logic, not financial qualification."""

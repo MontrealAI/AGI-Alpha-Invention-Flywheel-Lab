@@ -426,6 +426,7 @@ class _NativePrefixReplay:
         self._tmp = self._owned = self._replay = None
         self._identity = self._config = self._prefix = None
         self._length = 0
+        self._omega_byte_bindings = {}
 
     def close(self):
         try:
@@ -440,6 +441,7 @@ class _NativePrefixReplay:
             self._tmp = None
             self._identity = self._config = self._prefix = None
             self._length = 0
+            self._omega_byte_bindings = {}
 
     def begin(self, tape, *, root, manifest):
         identity = canonical([self.owner_guard(), str(Path(root).absolute()), manifest])
@@ -491,17 +493,20 @@ class _NativePrefixReplay:
                     else:
                         from production060.service import rebind_prepared
                     if manifest.get('schema') == 'omega-savings/native-services/v1':
-                        rebind_prepared(root, manifest, tape['actions'][:self._length], current_jobs,
-                                        _verified_prefix=self._length)
+                        self._omega_byte_bindings = rebind_prepared(root, manifest,
+                            tape['actions'][:self._length], current_jobs,
+                            _verified_prefix=self._length, _byte_bindings=self._omega_byte_bindings)
                     else:
                         rebind_prepared(root, manifest, tape['actions'][:self._length], current_jobs)
         return self._replay, self._length
 
-    def accept(self, tape, *, root, manifest):
+    def accept(self, tape, *, root, manifest, _omega_byte_bindings=None):
         if canonical([self.owner_guard(), str(Path(root).absolute()), manifest]) != self._identity:
             raise ValueError('PREFIX_OWNER_OR_SOURCE_CHANGED')
         self._prefix = canonical(tape['actions'])
         self._length = len(tape['actions'])
+        if _omega_byte_bindings is not None:
+            self._omega_byte_bindings = _omega_byte_bindings
 
 
 @contextmanager
@@ -550,6 +555,7 @@ def _audit_native_impl(tape, *, root, manifest, expected_actions_sha256=None, _s
     c = copy.deepcopy(tape['config'])
     if set(c) != {'schema', 'scope', 'currency', 'opening', 'working', 'contract', 'manifest_sha256'} or c['schema'] != 'agi-alpha/commercial010-tape/v1':
         raise ValueError('EXACT_TAPE_CONFIG_REQUIRED')
+    omega_byte_bindings = None
     with _native_replay_context(tape, root=root, manifest=manifest, session=_session) as (replay, start):
         for seq, event in enumerate(tape['actions'][start:], start):
             if event.get('seq') != seq:
@@ -609,13 +615,14 @@ def _audit_native_impl(tape, *, root, manifest, expected_actions_sha256=None, _s
         else:
             from production060.service import rebind_prepared
         if manifest.get('schema') == 'omega-savings/native-services/v1':
-            rebind_prepared(root, manifest, tape['actions'], current_jobs,
-                            _verified_prefix=start if _session is not None else 0)
+            omega_byte_bindings = rebind_prepared(root, manifest, tape['actions'], current_jobs,
+                _verified_prefix=start if _session is not None else 0,
+                _byte_bindings=_session._omega_byte_bindings if _session is not None else None)
         else:
             rebind_prepared(root, manifest, tape['actions'], current_jobs)
         if digest(manifest) != c['manifest_sha256'] or tape['config'] != c:
             raise ValueError('SOURCE_COHORT_MISMATCH')
     if _session is not None:
-        _session.accept(tape, root=root, manifest=manifest)
+        _session.accept(tape, root=root, manifest=manifest, _omega_byte_bindings=omega_byte_bindings)
     return ({'accepted': True, 'scope': SCOPE, 'actions_sha256': tape['actions_sha256'],
              'summary': rebuilt['summary'], 'orders': rebuilt['orders'], 'investments': rebuilt['investments']}, jobs)
