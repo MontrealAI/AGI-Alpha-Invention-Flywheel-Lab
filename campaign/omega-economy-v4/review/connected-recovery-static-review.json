@@ -1,0 +1,67 @@
+{
+  "schema": "connected-recovery-static-review/v1",
+  "source_commit": "4c06a48e75b7010d99c2d4f78c9864517bf14b01",
+  "files": [
+    {
+      "path": "connected_enterprise/finance.py",
+      "sha256": "15047f90e9ffb06b5c405d2cdc93facd040fd5c1dfc5b2aadf2abaafb81595e2",
+      "identical_to_pr201_8cd3757": true
+    },
+    {
+      "path": "adaptive_enterprise/account.py",
+      "sha256": "c675fb699a662a1492004c2423f2cee5c5735726d4b226289584df95cfcaa235",
+      "identical_to_pr201_8cd3757": true
+    },
+    {
+      "path": "commercial/ledger.py",
+      "sha256": "7febf3102ee931e686bdb71bef0cef3e0c43fa5e45ba8a194cf7f0e6833894c5",
+      "identical_to_pr201_8cd3757": true
+    },
+    {
+      "path": "commercial/persistence.py",
+      "sha256": "78c1eb1d82471843e32dd290ac3ea1b5b253d4edc1448cc954b5fafa5d6e0e15",
+      "identical_to_pr201_8cd3757": true
+    },
+    {
+      "path": "commercial/single_writer.py",
+      "sha256": "0d34de2e32dd2ad47b43c32edd4ccac01196c2858db7a32c7b7d2217ec2cf984",
+      "identical_to_pr201_8cd3757": true
+    },
+    {
+      "path": "commercial/tape_lease.py",
+      "sha256": "854ad7c0341a94fbfcc0ed3f450ab9116bbaf9666e4f6d5f118397a19f7f575c",
+      "identical_to_pr201_8cd3757": true
+    },
+    {
+      "path": "commercial/native_engine.py",
+      "sha256": "e5ca8f6a57672a07fd283eb7f8980c1d6cb35edb2719994561eb2c3431478223",
+      "identical_to_pr201_8cd3757": true
+    },
+    {
+      "path": "tests/test_connected_composed_window049.py",
+      "sha256": "7734b463cff827f6272c5f0c9d211ce6ad985e9d0bd417f66dc9391a517f3f33",
+      "identical_to_pr201_8cd3757": true
+    },
+    {
+      "path": "tests/test_connected_startup048.py",
+      "sha256": "91cedf5a57ee9a4f6ed51dd5fa0bb22e86e13cc966f17aea965244371e9fe978",
+      "identical_to_pr201_8cd3757": true
+    }
+  ],
+  "findings": [
+    "Journal action index is rebuilt call-locally from supplied native action list.",
+    "Native prefix identity retains strong owner and lease references; no id() based global action cache.",
+    "Tape replay executes and exactly compares every persisted action.",
+    "JournalAccount exports deep copies; no unscoped monkeypatch found before composed049.",
+    "Native tape append flushes and fsyncs but does not independently read back each appended event.",
+    "Completed run writes RESULT.json with original in-memory native actions before close; diagnostic repeat preserves it on matching failure."
+  ],
+  "causal_conclusion": "Not established. Original errors require missing/changed recovered action history relative to signed journal or checkpoint. First-run state was removed by test cleanup. No canonical code change proposed without a concrete reproduction.",
+  "original_aggregate": {
+    "tests": 510,
+    "errors": 2,
+    "failures": 0,
+    "log_sha256": "36810af94620556ef9baa67d2147dbfa503e1f11a70dce483cc3ff0d799a29d4"
+  },
+  "new_repeat": "Exactly one 510-test diagnostic repeat on immutable source in progress; canonical source unchanged; failure authority remains private."
+}

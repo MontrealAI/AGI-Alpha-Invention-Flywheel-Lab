@@ -1,3 +1,5 @@
+> Historical initial V4 report. See [FOLLOWUP_REPORT.md](FOLLOWUP_REPORT.md) for corrected authority/provenance checks, live reconciliation of the unchanged primary, the implemented operating decision and executed physical-data continuation. Original source-specific findings below remain preserved.
+
 # FLYWHEEL Ω V4 — executed continuation, objective not yet established
 
 Implemented and published on [PR206](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/206), stacked on the unchanged PR201 owner head `8cd375784c24b879ae1eb4835c6af4fb925cbf4c`. Qualified local runtime: `f1074b1e128069d5a4754b10955a73a3d95db7c5`. Main observed `54c50a3f9a96e140f42e7cb50c810607a75a2231`. This is an additive continuation: historical source, accounts, failures and protocols remain unchanged.

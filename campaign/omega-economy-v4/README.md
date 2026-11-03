@@ -15,12 +15,12 @@ python -m pip install -r requirements-omega-mechanisms-v3.txt
 python -m unittest discover -s tests -p 'test_omega*.py' -v
 python -m mechanism_harness.cart_campaign --output /absolute/new/cart-study.json
 python -m mechanism_harness.cart_campaign --audit --output /absolute/new/cart-study.json
-python -m mechanism_harness.cart_native run --output /absolute/new/cart-enterprise
+python -m mechanism_harness.cart_native run --arm adaptive --output /absolute/new/cart-enterprise
 python -m mechanism_harness.cart_native audit --output /absolute/new/cart-enterprise
-python -m mechanism_harness.cart_native resume --output /absolute/new/cart-enterprise
+python -m mechanism_harness.cart_native resume --arm adaptive --output /absolute/new/cart-enterprise
 ```
 
-Use a new directory for each independently funded counterfactual: `--arm standard`, `--arm full_control`, `--stress copycat`, `--stress no_demand`, or `--stress failed_acceptance`. The primary reference account starts with exactly simulated US$100,000. Do not sum independent accounts. Repeated campaign execution is reproduction of exposed fixtures, not fresh confirmation.
+Use a new directory for each independently funded counterfactual: `--arm generated`, `--arm standard`, `--arm full_control`, `--stress copycat`, `--stress no_demand`, `--stress payment_failure`, or `--stress failed_acceptance`. Pass the same arm and stress on resume. Each independent account starts with exactly simulated US$100,000. The original f1074b1 generated-central primary account remains preserved; a new corrected-source run is a separate qualification account, never its continuation or a reset. Do not sum independent accounts. Repeated campaign execution is reproduction of exposed fixtures, not fresh confirmation.
 
 ## Inputs, outputs and decisions
 
@@ -28,11 +28,15 @@ The fixed market generator provides services, outcome sets, resource-cost envelo
 
 The runtime chooses baskets by dynamic programming; the independent oracle enumerates affordable offer subsets and reconstructs unions. Unknown unions fail closed. Numerical MILP status does not replace exact checking; the full solver is a strong eligible control, not a proof of unrestricted game-theoretic optimality.
 
+The `adaptive` arm pays for the complete study, then chooses from its independently checked public alternatives before observing buyers. `DECISION.json` preserves contribution ties, the measured work frontier, the lexical tie convention and all sunk study work. Nonpositive modeled contribution selects nonentry before quotes, private buyer observations or orders. This gate does not learn actual demand, erase failed search costs or turn work counters into dollars.
+
 `STUDY.json` records all arms, constraints, checks and measured CPU. `REPORT.json` records each native opportunity, acceptance/refund, costs and financial summary. `NATIVE_EXPORT.json` is audited through canonical finance. `SOURCE.json` and `CONTRACT.json` pin dependencies and assumptions. Productive successor inputs, outputs, generated procedures and independent acceptance remain in the private operating record; compact results are public. Hypothetical coalition contribution promises are not collected native capital.
 
 ## Recovery and safe operation
 
 Keep the entire original output directory, including native action tape, journal, simulation authority and runtime. Resume with the same source and contract. A source mismatch fails closed: return to the pinned source rather than editing SOURCE.json, replacing authority or copying a balance. Stop competing writers before backup. Never upload account directories, signing material or private recovery bundles to GitHub. Public evidence uses an explicit file allowlist.
+
+`audit` validates a portable historical export without private authority. `resume` additionally opens the live native account under its ownership mechanism and requires its complete export to match the completed report. A later legitimate expense therefore makes an old completed report stale and resume rejects it without rewriting history. Missing tape, key or journal cannot authorize reseeding; an intact native history can reconstruct a missing derived SQLite cache. Pre-account bootstrap interruption is separately supported. A stale completed account needs a separately specified continuation protocol; do not delete its report to bypass the guard.
 
 If construction or acceptance fails, retain its result and incurred costs. A component failure refunds the whole contracted union; an absent collection is not revenue. A positive profit cannot authorize investment when unrestricted cash is insufficient. The earned-only successor policy is tested, but does not prove that a capable seed-funded ordinary alternative could not have constructed the successor sooner.
 
@@ -40,4 +44,4 @@ If construction or acceptance fails, retain its result and incurred costs. A com
 
 The annual schedule is a sparse complete 365-day synthetic account, not an annualization or market forecast. Dollar expenses are registered resource envelopes and declared modeled tax, not measured invoices or tax advice. Actual developer/model/infrastructure lifecycle cost, buyer willingness to pay, distribution, enforceability and scaling demand remain unknown. Resource telemetry does not fill those gaps. A mechanism repair, profitable simulation, retained knowledge and superior discovery are separate claims.
 
-The scope excludes a live commercial deployment and real transactions. The unresolved next requirements include source-grounded natural workloads, competitive full-cost advantage, supported multi-beneficiary conditional custody and justified channel/capacity expansion. No $3B or Blue Sky breakthrough follows from passing these tests.
+The scope excludes a live commercial deployment and real transactions. The separate KTC physical-data diagnostic tests a consequential information constraint; it does not establish a customer outcome, new physical intervention or economic advantage. Unresolved requirements include competitive full-cost advantage, supported multi-beneficiary conditional custody, online operating adaptation and justified channel/capacity expansion. No $3B or Blue Sky breakthrough follows from passing these tests.

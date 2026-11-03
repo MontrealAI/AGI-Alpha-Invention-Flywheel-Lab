@@ -17,7 +17,7 @@ from commercial.persistence import atomic_bytes
 from connected_enterprise.finance import JournalAccount,SOURCE_PATHS,audit_journal
 from adaptive_enterprise import instruments as substrate
 from adaptive_enterprise.checkers import audit_delivery
-from . import cart_program as v,cart_campaign as campaign,cooperative_construction as productive
+from . import cart_program as v,cart_campaign as campaign,cooperative_construction as productive,cart_decision as decider
 
 ROOT=Path(__file__).resolve().parents[1]
 CENT=10_000
@@ -25,7 +25,8 @@ OPENING=100_000*1_000_000
 CONTRACT='omega-private-mechanisms-v4-fresh-synthetic'
 TARIFF={'setup_cents':2000,'discovery_per_market_cents':500,'quote_cents':10,
         'maintenance_cents':1200,'successor_cents':500,'tax_bps':2000}
-ARMS=('generated','standard','full_control')
+ARMS=('generated','standard','full_control','adaptive')
+STRESSES=('central','no_demand','copycat','failed_acceptance','payment_failure')
 
 
 def save(path,value):atomic_bytes(Path(path),canonical(value)+b'\n')
@@ -38,7 +39,7 @@ def checked_path(output):
 
 
 def source_identity():
-    names=set(SOURCE_PATHS)|set(substrate.SOURCE_PATHS)|set(campaign.SOURCE_NAMES)|set(productive.source_identity())|{'mechanism_harness/cart_native.py','campaign/omega-economy-v4/SUCCESSOR_PROTOCOL.md'}
+    names=set(SOURCE_PATHS)|set(substrate.SOURCE_PATHS)|set(campaign.SOURCE_NAMES)|set(productive.source_identity())|{'mechanism_harness/cart_native.py','mechanism_harness/cart_decision.py','campaign/omega-economy-v4/SUCCESSOR_PROTOCOL.md','campaign/omega-economy-v4/REPAIR_PROTOCOL.md'}
     result={}
     for name in sorted(names):
         p=ROOT/name
@@ -83,6 +84,7 @@ def ledger_costs(study,records,successor):
            'v4-maintenance':TARIFF['maintenance_cents']*CENT}
     revenue=0
     for r in records:
+        if r['status']=='NONENTRY':continue
         spends[f"v4-quote-{r['ordinal']}"]=TARIFF['quote_cents']*CENT
         if r['status'] in ('SETTLED','REFUNDED'):
             spends[f"v4-production-{r['ordinal']}"]=r['outcome']['cost_cents']*CENT
@@ -97,8 +99,15 @@ def ledger_costs(study,records,successor):
     return spends,costs,revenue
 
 
+def require_existing_native_authority(out):
+    for suffix in ('.actions.jsonl','.adaptive-simulation-key','.connected-journal.json'):
+        authority=out/('account.sqlite'+suffix)
+        if not authority.is_file() or authority.is_symlink():
+            raise ValueError('EXISTING_NATIVE_AUTHORITY_REQUIRED_FOR_RESUME')
+
+
 def run(output,*,arm='generated',stress='central',resume=False):
-    if arm not in ARMS or stress not in ('central','no_demand','copycat','failed_acceptance','payment_failure'):
+    if arm not in ARMS or stress not in STRESSES:
         raise ValueError('REGISTERED_ARM_AND_STRESS_REQUIRED')
     out=checked_path(output);source=source_identity()
     if not resume:
@@ -109,7 +118,23 @@ def run(output,*,arm='generated',stress='central',resume=False):
         save(out/'SOURCE.json',source);save(out/'CONTRACT.json',{'arm':arm,'stress':stress,'tariff':TARIFF})
     elif not out.is_dir() or read(out/'SOURCE.json')!=source or read(out/'CONTRACT.json')!={'arm':arm,'stress':stress,'tariff':TARIFF}:
         raise ValueError('SOURCE_MATCHED_EXISTING_ACCOUNT_REQUIRED')
-    if (out/'REPORT.json').exists():audit(out);return read(out/'REPORT.json')
+    if resume:
+        history=(any((out/name).exists() for name in ('REPORT.json','STUDY.json','SUCCESSOR.json'))
+                 or any(out.glob('order-*.json'))
+                 or any(p.name!='account.sqlite.writer.lock' for p in out.glob('account.sqlite*')))
+        if history:require_existing_native_authority(out)
+    if (out/'REPORT.json').exists():
+        # Public audit validates a portable export; local resume must also own
+        # and reconcile the current native history. Never seed from a report.
+        audit(out)
+        require_existing_native_authority(out)
+        manifest=read(out/'MANIFEST.json')
+        account=JournalAccount(out/'runtime',manifest,out/'account.sqlite',opening=OPENING,working=0,contract=CONTRACT)
+        try:
+            if account.export()!=read(out/'NATIVE_EXPORT.json'):
+                raise ValueError('COMPLETED_NATIVE_ACCOUNT_DIFFERS_FROM_RECORDED_EXPORT')
+        finally:account.close()
+        return read(out/'REPORT.json')
     runtime=out/'runtime'
     if not (out/'MANIFEST.json').exists():
         for name in set(SOURCE_PATHS)|set(substrate.SOURCE_PATHS):
@@ -129,14 +154,24 @@ def run(output,*,arm='generated',stress='central',resume=False):
         else:
             study=campaign.execute();study['source']=campaign.source_identity();save(out/'STUDY.json',study)
         if not study['all_synthesized_programs_verified']:raise ValueError('NO_OPERATION_FROM_UNRESOLVED_MECHANISM')
+        decision=decider.select(study) if arm=='adaptive' else None
+        if decision is not None:
+            if (out/'DECISION.json').exists() and read(out/'DECISION.json')!=decision:
+                raise ValueError('PUBLIC_OPERATING_DECISION_CHANGED')
+            save(out/'DECISION.json',decision)
         frozen_id='v4-freeze-'+digest(campaign.logical(study))[:24]
         account.cost(frozen_id,0,1)  # source-bound publication before any private buyer selection
         ordinal=0
-        for case in study['cases']:
-            m=case['market'];p=selected_program(case,arm)
+        for case_index,case in enumerate(study['cases']):
+            m=case['market'];p=decider.selected_program(study,decision,case_index) if decision is not None else selected_program(case,arm)
             for typ in m['types']:
                 ordinal+=1;day=2+ordinal*3
                 file=out/f'order-{ordinal:03d}.json'
+                if decision is not None and decision['decisions'][case_index]['action']=='NONENTRY':
+                    r={'ordinal':ordinal,'day':day,'market_sha256':digest(m),'program_sha256':digest(p),
+                       'scheduled_type_id':typ['id'],'status':'NONENTRY','private_type_observed':False}
+                    if file.exists() and read(file)!=r:raise ValueError('FROZEN_NONENTRY_CHANGED')
+                    save(file,r);records.append(r);continue
                 if file.exists():
                     r=read(file)
                     if r['program_sha256']!=digest(p) or r['market_sha256']!=digest(m):raise ValueError('FROZEN_ORDER_CHANGED')
@@ -219,9 +254,9 @@ def run(output,*,arm='generated',stress='central',resume=False):
         exported=account.export();save(out/'NATIVE_EXPORT.json',exported)
         result={'schema':'omega/native-private-mechanisms/v4','source':source,'arm':arm,'stress':stress,
                 'study_logical_sha256':digest(campaign.logical(study)),'records_sha256':[digest(r) for r in records],
-                'native_summary':account.snapshot()['summary'],'native_audit':account.audit(),'tariff':TARIFF,
+                'native_summary':account.snapshot()['summary'],'native_audit':account.audit(),'tariff':TARIFF,'decision':decision,
                 'opportunities':len(records),'settled_buyers':sum(r['status']=='SETTLED' for r in records),
-                'declined_buyers':sum(r['status']=='DECLINED' for r in records),'refunded_buyers':sum(r['status']=='REFUNDED' for r in records),
+                'declined_buyers':sum(r['status']=='DECLINED' for r in records),'nonentry_opportunities':sum(r['status']=='NONENTRY' for r in records),'refunded_buyers':sum(r['status']=='REFUNDED' for r in records),
                 'successor':successor,'opening_microUSD':OPENING,'clock':{'start_day':0,'end_day':364,'days':365},
                 'actual_revenue_usd':0,'scope':'Generated private-information menus, executed source-bound outcomes, declared modeled costs and canonical native simulated commerce. No real buyers or complete-lifecycle superiority claim.'}
         if source!=source_identity():raise ValueError('SOURCE_CHANGED_DURING_RUN')
@@ -233,23 +268,38 @@ def run(output,*,arm='generated',stress='central',resume=False):
 
 def audit(output):
     out=checked_path(output);r=read(out/'REPORT.json');study=read(out/'STUDY.json');source=source_identity()
+    if r.get('schema')!='omega/native-private-mechanisms/v4' or r.get('arm') not in ARMS or r.get('stress') not in STRESSES:
+        raise ValueError('REGISTERED_REPORT_SCHEMA_AND_SCENARIO_REQUIRED')
     if (r['source']!=source or read(out/'SOURCE.json')!=source or r['actual_revenue_usd']!=0
             or r['opening_microUSD']!=OPENING or r['tariff']!=TARIFF
             or r['clock']!={'start_day':0,'end_day':364,'days':365}):raise ValueError('SOURCE_OR_CLAIM_CHANGED')
     if r['study_logical_sha256']!=digest(campaign.logical(study)):raise ValueError('STUDY_CHANGED')
     campaign.audit(study)
+    decision=r['decision']
+    if r['arm']=='adaptive':
+        decider.verify(study,decision)
+        if decision!=read(out/'DECISION.json'):raise ValueError('PUBLIC_OPERATING_DECISION_CHANGED')
+    elif decision is not None:raise ValueError('UNREGISTERED_OPERATING_DECISION')
     if read(out/'CONTRACT.json')!={'arm':r['arm'],'stress':r['stress'],'tariff':TARIFF}:raise ValueError('REGISTERED_CONTRACT_CHANGED')
     manifest=read(out/'MANIFEST.json');runtime=out/'runtime';exp=read(out/'NATIVE_EXPORT.json')
     audit_journal(exp,root=runtime,manifest=manifest)
     if exp['ledger']['summary']!=r['native_summary']:raise ValueError('FINANCIAL_SUMMARY_CHANGED')
     acts=exp['ledger']['actions'];journal=exp['connected_journal']['entries'];records=[];ordinal=0;native_ids=[]
-    for case,(seed,family) in zip(study['cases'],campaign.CASES):
+    for case_index,(case,(seed,family)) in enumerate(zip(study['cases'],campaign.CASES)):
         from .market_cases import market
         m=market(seed,family)
         if m!=case['market']:raise ValueError('PUBLIC_MARKET_CHANGED')
-        p=selected_program(case,r['arm'])
+        p=decider.selected_program(study,decision,case_index) if decision is not None else selected_program(case,r['arm'])
         for typ in m['types']:
             ordinal+=1;rec=read(out/f'order-{ordinal:03d}.json');records.append(rec)
+            if decision is not None and decision['decisions'][case_index]['action']=='NONENTRY':
+                expected={'ordinal':ordinal,'day':2+ordinal*3,'market_sha256':digest(m),'program_sha256':digest(p),
+                          'scheduled_type_id':typ['id'],'status':'NONENTRY','private_type_observed':False}
+                forbidden_quote=any(e['request'].get('operation')=='spend' and e['request'].get('id')==f'v4-quote-{ordinal}' for e in journal)
+                forbidden_order=any(a['op']=='offer' and a['args']['id'].startswith(f'v4-trade-{ordinal}-') for a in acts)
+                forbidden_wallet=any(a['op']=='wallet' and a['args']['buyer']==f'SIM-v4-buyer-{ordinal}' for a in acts)
+                if rec!=expected or forbidden_quote or forbidden_order or forbidden_wallet:raise ValueError('NONENTRY_MUST_PRECEDE_PRIVATE_OBSERVATION_AND_QUOTE')
+                continue
             private=private_type(typ,m,p,r['stress'],chooser=v.oracle_choose);choice=v.oracle_choose(m,p,private)
             if (rec['ordinal']!=ordinal or rec['day']!=2+ordinal*3 or rec['type_id']!=typ['id']
                     or rec['market_sha256']!=digest(m) or rec['program_sha256']!=digest(p)
@@ -305,9 +355,16 @@ def audit(output):
         if successor['market']!=market(392104,'substitute'):raise ValueError('FRESH_SUCCESSOR_CHANGED')
         payments=[e for e in journal if e['request'].get('operation')=='spend' and e['request'].get('id')=='v4-successor']
         if len(payments)!=1 or payments[0]['receipt']!=successor['funding'] or payments[0]['request']['allow_seed'] is not False:raise ValueError('EARNED_SUCCESSOR_REQUIRED')
+        expected_work={'source':source,'parent_memory_sha256':digest(study['cases'][-1]['memory_after']),
+                       'purpose':'Construct and verify fresh cart mechanism and source-grounded productive successor under registered combined R&D envelope'}
+        if payments[0]['request']['work']!=expected_work:raise ValueError('SUCCESSOR_FUNDING_PROVENANCE_CHANGED')
         if successor!=read(out/'SUCCESSOR.json') or successor['funding']['funding']!='EARNED':raise ValueError('UNSUPPORTED_SUCCESSOR_FUNDING')
         built=successor['construction'];ok=built['program'] is not None and v.verify(successor['market'],built['program'])['accepted']
         if successor['verified']!=ok:raise ValueError('UNVERIFIED_SUCCESSOR')
+        from .cart_synthesis import synthesize
+        reconstructed=synthesize(successor['market'],memory=study['cases'][-1]['memory_after'])
+        if campaign.logical(built)!=campaign.logical(reconstructed):
+            raise ValueError('SUCCESSOR_CONSTRUCTION_REPLAY_CHANGED')
         proof_check=productive.verify_production(successor['productive_proof'])
         if proof_check!=successor['productive_verification'] or not proof_check['accepted']:
             raise ValueError('UNVERIFIED_PRODUCTIVE_SUCCESSOR')
@@ -335,7 +392,7 @@ def audit(output):
     total=sum(spends.values())+sum(costs.values());summary=exp['ledger']['summary']
     if summary['revenue']!=revenue or summary['collections']!=revenue or summary['expenses']!=total or summary['profit']!=revenue-total:raise ValueError('COMPLETE_ACCOUNTING_NOT_RECONSTRUCTED')
     if r['records_sha256']!=[digest(x) for x in records] or r['opportunities']!=ordinal:raise ValueError('DENOMINATORS_CHANGED')
-    for field,status in (('settled_buyers','SETTLED'),('declined_buyers','DECLINED'),('refunded_buyers','REFUNDED')):
+    for field,status in (('settled_buyers','SETTLED'),('declined_buyers','DECLINED'),('refunded_buyers','REFUNDED'),('nonentry_opportunities','NONENTRY')):
         if r[field]!=sum(x['status']==status for x in records):raise ValueError('OPERATING_COUNTS_CHANGED')
     return {'accepted':True,'report_sha256':digest(r),'verified_expenses_microUSD':total,'verified_revenue_microUSD':revenue,
             'scope':'Canonical native financial audit plus independent complete outcome, buyer choice and contractual cost reconstruction.'}
@@ -344,7 +401,7 @@ def audit(output):
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('command',choices=('run','resume','audit'))
     p.add_argument('--output',type=Path,required=True);p.add_argument('--arm',choices=ARMS,default='generated')
-    p.add_argument('--stress',choices=('central','no_demand','copycat','failed_acceptance','payment_failure'),default='central')
+    p.add_argument('--stress',choices=STRESSES,default='central')
     a=p.parse_args(argv)
     r=audit(a.output) if a.command=='audit' else run(a.output,arm=a.arm,stress=a.stress,resume=a.command=='resume')
     print(json.dumps(r if a.command=='audit' else {k:r[k] for k in ('arm','stress','opportunities','settled_buyers','declined_buyers','refunded_buyers','native_summary','actual_revenue_usd','scope')},indent=2))

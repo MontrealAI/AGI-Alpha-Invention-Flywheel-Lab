@@ -1,0 +1,655 @@
+{
+  "schema": "omega/ktc-natural-residual/v1",
+  "protocol_sha256": "16904020e4c080b478c187534d02f21d9a3c940d55c39dd445c806ded386a958",
+  "preregistration_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/206",
+  "preregistration_public_time": "2026-11-03T23:08:30Z",
+  "archives": [
+    {
+      "name": "Codes_Python.zip",
+      "sha256": "330d76f3c7148d2840f7f207cd90d7a98eb1d972867b70188096043c9e3261a2",
+      "bytes": 3201639
+    },
+    {
+      "name": "EvaluationData.zip",
+      "sha256": "e1003c2b652280fa052a8655ec80893e480d8a377ab7e516fced125b3ebc45c0",
+      "bytes": 426229
+    },
+    {
+      "name": "EvaluationData_full.zip",
+      "sha256": "85c47f91c0cd15889a96108b389550edafd8bba46b40fd84447e63a62534ce42",
+      "bytes": 599040
+    }
+  ],
+  "receipts": [
+    {
+      "schema": "omega/ktc-residual/v1",
+      "level": 1,
+      "phantom": "A=data1",
+      "observations": "limited",
+      "category_argument": 1,
+      "input_sha256": {
+        "data1.mat": "eeade13f04e3ef89a160fcfc4e897457392d4abaae9c4d5f38204c0a1fb07456",
+        "ref.mat": "c4d885f4470f0c7142685f7b4183783cb94e993ebf03e1b371398f3203bcaeae"
+      },
+      "source_sha256": {
+        "KTCScoring.py": "b7229ae8638834672da67e6d10773d8c5d0e07840b9ecdbf93f226205224495a",
+        "KTCRegularization.py": "4ed7d9eff3729fd3111a28c2fb150882baf83dcf40b8ac010dcea459f9bc35cf",
+        "KTCcircmesh.py": "8f383acb67ff9a171ac8dd26dc6aa1ffd1e65d8ba9be769fd3e934e9c1a2a533",
+        "KTCAux.py": "1a6fb080479bc8653280cc4f5d04b9c6eee5b98368b4d10d40e23b0eaed6e066",
+        "KTCPlotting.py": "72dbdb045968fec3e4bcde3479432a6f7cbd4a3a40a7585d428524be52b59194",
+        "KTCFwd.py": "e9946ccac383fe533eb78d536ee97010faa324dac7918c88c2e9c0c0b09d24e0",
+        "main.py": "9ad61e967943cb38411d9695e2cd57643bbb45377aebcbd63b678c9381a7e28f",
+        "Main_TrainingData.py": "c876b6c2f33dcb8ddcfce40ca86cc63e6328a5c46fbdff9513ef205b0172d781",
+        "KTCMeshing.py": "bb77f35caf4fe9f7e98b0af2fafc536f2adbfd3e6901131684163ea5bbe66a6d",
+        "Main_SimData.py": "d7378ba2aa4c754404bc9078564d3dd1be439dc8b7ee4324f032249847a6a59f"
+      },
+      "versions": {
+        "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+        "numpy": "2.3.5",
+        "scipy": "1.17.0"
+      },
+      "protocol_sha256": "16904020e4c080b478c187534d02f21d9a3c940d55c39dd445c806ded386a958",
+      "status": "COMPLETE",
+      "output_sha256": "506175f4861b459befb6a00cb2d0e4440f33ee9c26e3500c32a267466343cddd",
+      "array_sha256": "e81e9e197ea0b35971a70b6c13176e9e2ad9714adae9941127abcae708a85ead",
+      "label_counts": {
+        "0": 59298,
+        "1": 6238
+      },
+      "wall_seconds": 94.75196312700064,
+      "cpu_seconds": 52.007183743
+    },
+    {
+      "schema": "omega/ktc-residual/v1",
+      "level": 1,
+      "phantom": "A=data1",
+      "observations": "full",
+      "category_argument": 1,
+      "input_sha256": {
+        "data1.mat": "726c0de67c8dc648357507b45bd40c9c4c76b00a02e3aeb2f9aec7b2d6437ba0",
+        "ref.mat": "c4d885f4470f0c7142685f7b4183783cb94e993ebf03e1b371398f3203bcaeae"
+      },
+      "source_sha256": {
+        "KTCScoring.py": "b7229ae8638834672da67e6d10773d8c5d0e07840b9ecdbf93f226205224495a",
+        "KTCRegularization.py": "4ed7d9eff3729fd3111a28c2fb150882baf83dcf40b8ac010dcea459f9bc35cf",
+        "KTCcircmesh.py": "8f383acb67ff9a171ac8dd26dc6aa1ffd1e65d8ba9be769fd3e934e9c1a2a533",
+        "KTCAux.py": "1a6fb080479bc8653280cc4f5d04b9c6eee5b98368b4d10d40e23b0eaed6e066",
+        "KTCPlotting.py": "72dbdb045968fec3e4bcde3479432a6f7cbd4a3a40a7585d428524be52b59194",
+        "KTCFwd.py": "e9946ccac383fe533eb78d536ee97010faa324dac7918c88c2e9c0c0b09d24e0",
+        "main.py": "9ad61e967943cb38411d9695e2cd57643bbb45377aebcbd63b678c9381a7e28f",
+        "Main_TrainingData.py": "c876b6c2f33dcb8ddcfce40ca86cc63e6328a5c46fbdff9513ef205b0172d781",
+        "KTCMeshing.py": "bb77f35caf4fe9f7e98b0af2fafc536f2adbfd3e6901131684163ea5bbe66a6d",
+        "Main_SimData.py": "d7378ba2aa4c754404bc9078564d3dd1be439dc8b7ee4324f032249847a6a59f"
+      },
+      "versions": {
+        "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+        "numpy": "2.3.5",
+        "scipy": "1.17.0"
+      },
+      "protocol_sha256": "16904020e4c080b478c187534d02f21d9a3c940d55c39dd445c806ded386a958",
+      "status": "COMPLETE",
+      "output_sha256": "e1b7db1e9f23d42a6213980fb275b07f38be9ccabb0ea4cae6c5ab3ac6c768df",
+      "array_sha256": "e81e9e197ea0b35971a70b6c13176e9e2ad9714adae9941127abcae708a85ead",
+      "label_counts": {
+        "0": 59298,
+        "1": 6238
+      },
+      "wall_seconds": 19.803568776000247,
+      "cpu_seconds": 19.748647967
+    },
+    {
+      "schema": "omega/ktc-residual/v1",
+      "level": 4,
+      "phantom": "A=data1",
+      "observations": "limited",
+      "category_argument": 4,
+      "input_sha256": {
+        "data1.mat": "5978a46027379abf4fbf2847283ec0a226649f0418f7ca601fe60fb38b4926ff",
+        "ref.mat": "c4d885f4470f0c7142685f7b4183783cb94e993ebf03e1b371398f3203bcaeae"
+      },
+      "source_sha256": {
+        "KTCScoring.py": "b7229ae8638834672da67e6d10773d8c5d0e07840b9ecdbf93f226205224495a",
+        "KTCRegularization.py": "4ed7d9eff3729fd3111a28c2fb150882baf83dcf40b8ac010dcea459f9bc35cf",
+        "KTCcircmesh.py": "8f383acb67ff9a171ac8dd26dc6aa1ffd1e65d8ba9be769fd3e934e9c1a2a533",
+        "KTCAux.py": "1a6fb080479bc8653280cc4f5d04b9c6eee5b98368b4d10d40e23b0eaed6e066",
+        "KTCPlotting.py": "72dbdb045968fec3e4bcde3479432a6f7cbd4a3a40a7585d428524be52b59194",
+        "KTCFwd.py": "e9946ccac383fe533eb78d536ee97010faa324dac7918c88c2e9c0c0b09d24e0",
+        "main.py": "9ad61e967943cb38411d9695e2cd57643bbb45377aebcbd63b678c9381a7e28f",
+        "Main_TrainingData.py": "c876b6c2f33dcb8ddcfce40ca86cc63e6328a5c46fbdff9513ef205b0172d781",
+        "KTCMeshing.py": "bb77f35caf4fe9f7e98b0af2fafc536f2adbfd3e6901131684163ea5bbe66a6d",
+        "Main_SimData.py": "d7378ba2aa4c754404bc9078564d3dd1be439dc8b7ee4324f032249847a6a59f"
+      },
+      "versions": {
+        "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+        "numpy": "2.3.5",
+        "scipy": "1.17.0"
+      },
+      "protocol_sha256": "16904020e4c080b478c187534d02f21d9a3c940d55c39dd445c806ded386a958",
+      "status": "COMPLETE",
+      "output_sha256": "0d5d576d4197bf1f6112361cb3f0f59d5f3f5dd863ac844f67d537040777cfab",
+      "array_sha256": "c4bd9699ef1eca68cb9284acdfd63c1d846299c7f02b842ccef6f37f21c28e40",
+      "label_counts": {
+        "0": 52012,
+        "1": 5985,
+        "2": 7539
+      },
+      "wall_seconds": 46.81247006299964,
+      "cpu_seconds": 44.514971474
+    },
+    {
+      "schema": "omega/ktc-residual/v1",
+      "level": 4,
+      "phantom": "A=data1",
+      "observations": "full",
+      "category_argument": 1,
+      "input_sha256": {
+        "data1.mat": "0b594132bfa96361395cf0e79c9b5742faacb60650fdcfed1592fd8301726ce4",
+        "ref.mat": "c4d885f4470f0c7142685f7b4183783cb94e993ebf03e1b371398f3203bcaeae"
+      },
+      "source_sha256": {
+        "KTCScoring.py": "b7229ae8638834672da67e6d10773d8c5d0e07840b9ecdbf93f226205224495a",
+        "KTCRegularization.py": "4ed7d9eff3729fd3111a28c2fb150882baf83dcf40b8ac010dcea459f9bc35cf",
+        "KTCcircmesh.py": "8f383acb67ff9a171ac8dd26dc6aa1ffd1e65d8ba9be769fd3e934e9c1a2a533",
+        "KTCAux.py": "1a6fb080479bc8653280cc4f5d04b9c6eee5b98368b4d10d40e23b0eaed6e066",
+        "KTCPlotting.py": "72dbdb045968fec3e4bcde3479432a6f7cbd4a3a40a7585d428524be52b59194",
+        "KTCFwd.py": "e9946ccac383fe533eb78d536ee97010faa324dac7918c88c2e9c0c0b09d24e0",
+        "main.py": "9ad61e967943cb38411d9695e2cd57643bbb45377aebcbd63b678c9381a7e28f",
+        "Main_TrainingData.py": "c876b6c2f33dcb8ddcfce40ca86cc63e6328a5c46fbdff9513ef205b0172d781",
+        "KTCMeshing.py": "bb77f35caf4fe9f7e98b0af2fafc536f2adbfd3e6901131684163ea5bbe66a6d",
+        "Main_SimData.py": "d7378ba2aa4c754404bc9078564d3dd1be439dc8b7ee4324f032249847a6a59f"
+      },
+      "versions": {
+        "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+        "numpy": "2.3.5",
+        "scipy": "1.17.0"
+      },
+      "protocol_sha256": "16904020e4c080b478c187534d02f21d9a3c940d55c39dd445c806ded386a958",
+      "status": "COMPLETE",
+      "output_sha256": "9b68c73f7a1827713a1fb77fc67d37d9ae66a5d0d88cafa8a91404e4c5e9afb9",
+      "array_sha256": "ccc95dab3d46d845702e8a512d778444fb3e636d045a5e2ce2d55805f888cd34",
+      "label_counts": {
+        "0": 54653,
+        "1": 4274,
+        "2": 6609
+      },
+      "wall_seconds": 29.958855214999858,
+      "cpu_seconds": 29.927189962
+    },
+    {
+      "schema": "omega/ktc-residual/v1",
+      "level": 7,
+      "phantom": "A=data1",
+      "observations": "limited",
+      "category_argument": 7,
+      "input_sha256": {
+        "data1.mat": "0fb1b6dfb58d25d08e0b12f160e8cc7f4f88541c8988b5d4af3030e919c36d24",
+        "ref.mat": "c4d885f4470f0c7142685f7b4183783cb94e993ebf03e1b371398f3203bcaeae"
+      },
+      "source_sha256": {
+        "KTCScoring.py": "b7229ae8638834672da67e6d10773d8c5d0e07840b9ecdbf93f226205224495a",
+        "KTCRegularization.py": "4ed7d9eff3729fd3111a28c2fb150882baf83dcf40b8ac010dcea459f9bc35cf",
+        "KTCcircmesh.py": "8f383acb67ff9a171ac8dd26dc6aa1ffd1e65d8ba9be769fd3e934e9c1a2a533",
+        "KTCAux.py": "1a6fb080479bc8653280cc4f5d04b9c6eee5b98368b4d10d40e23b0eaed6e066",
+        "KTCPlotting.py": "72dbdb045968fec3e4bcde3479432a6f7cbd4a3a40a7585d428524be52b59194",
+        "KTCFwd.py": "e9946ccac383fe533eb78d536ee97010faa324dac7918c88c2e9c0c0b09d24e0",
+        "main.py": "9ad61e967943cb38411d9695e2cd57643bbb45377aebcbd63b678c9381a7e28f",
+        "Main_TrainingData.py": "c876b6c2f33dcb8ddcfce40ca86cc63e6328a5c46fbdff9513ef205b0172d781",
+        "KTCMeshing.py": "bb77f35caf4fe9f7e98b0af2fafc536f2adbfd3e6901131684163ea5bbe66a6d",
+        "Main_SimData.py": "d7378ba2aa4c754404bc9078564d3dd1be439dc8b7ee4324f032249847a6a59f"
+      },
+      "versions": {
+        "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+        "numpy": "2.3.5",
+        "scipy": "1.17.0"
+      },
+      "protocol_sha256": "16904020e4c080b478c187534d02f21d9a3c940d55c39dd445c806ded386a958",
+      "status": "COMPLETE",
+      "output_sha256": "fab99399a58a18adc21fa1da62d377319d33a97149d54ace8aaf7c8386878727",
+      "array_sha256": "12aaa56709da3f9d4b18aa4e8c2ed1ad4e4b19b6034ae75cc0f3d402f6fc4408",
+      "label_counts": {
+        "0": 53960,
+        "1": 6704,
+        "2": 4872
+      },
+      "wall_seconds": 41.29293263499858,
+      "cpu_seconds": 36.018457349
+    },
+    {
+      "schema": "omega/ktc-residual/v1",
+      "level": 7,
+      "phantom": "A=data1",
+      "observations": "full",
+      "category_argument": 1,
+      "input_sha256": {
+        "data1.mat": "9d000aea21617a37b9fb74aa693beac9e6e6afec7cbe20fe30bc241e9596e8e0",
+        "ref.mat": "c4d885f4470f0c7142685f7b4183783cb94e993ebf03e1b371398f3203bcaeae"
+      },
+      "source_sha256": {
+        "KTCScoring.py": "b7229ae8638834672da67e6d10773d8c5d0e07840b9ecdbf93f226205224495a",
+        "KTCRegularization.py": "4ed7d9eff3729fd3111a28c2fb150882baf83dcf40b8ac010dcea459f9bc35cf",
+        "KTCcircmesh.py": "8f383acb67ff9a171ac8dd26dc6aa1ffd1e65d8ba9be769fd3e934e9c1a2a533",
+        "KTCAux.py": "1a6fb080479bc8653280cc4f5d04b9c6eee5b98368b4d10d40e23b0eaed6e066",
+        "KTCPlotting.py": "72dbdb045968fec3e4bcde3479432a6f7cbd4a3a40a7585d428524be52b59194",
+        "KTCFwd.py": "e9946ccac383fe533eb78d536ee97010faa324dac7918c88c2e9c0c0b09d24e0",
+        "main.py": "9ad61e967943cb38411d9695e2cd57643bbb45377aebcbd63b678c9381a7e28f",
+        "Main_TrainingData.py": "c876b6c2f33dcb8ddcfce40ca86cc63e6328a5c46fbdff9513ef205b0172d781",
+        "KTCMeshing.py": "bb77f35caf4fe9f7e98b0af2fafc536f2adbfd3e6901131684163ea5bbe66a6d",
+        "Main_SimData.py": "d7378ba2aa4c754404bc9078564d3dd1be439dc8b7ee4324f032249847a6a59f"
+      },
+      "versions": {
+        "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+        "numpy": "2.3.5",
+        "scipy": "1.17.0"
+      },
+      "protocol_sha256": "16904020e4c080b478c187534d02f21d9a3c940d55c39dd445c806ded386a958",
+      "status": "COMPLETE",
+      "output_sha256": "1279f2b8e2167b785b38d5a2c7fddd01abc4c3c63245bf7ee98daf9a252cc6a9",
+      "array_sha256": "de76bbef7a53a1b38ac5287a7d459884b5c5a01c12b13b5ce4b7a932a79209f8",
+      "label_counts": {
+        "0": 50563,
+        "1": 6238,
+        "2": 8735
+      },
+      "wall_seconds": 21.350292130000526,
+      "cpu_seconds": 21.34342259
+    }
+  ],
+  "scores": [
+    {
+      "level": 1,
+      "phantom": "A=data1",
+      "observations": "limited",
+      "arm": "organizer",
+      "truth_sha256": "8162487d82f7572e29de53d05c5659afe68f37dcac9252aae7e17a98765104c6",
+      "output_sha256": "506175f4861b459befb6a00cb2d0e4440f33ee9c26e3500c32a267466343cddd",
+      "scorer_sha256": "836521c28ba95cc4d1e191ebc4ef64ca8587fcf5bb4d82668fdc2af219cfad88",
+      "official_score": 0.9219247112580767,
+      "metric_source": "Independent separable implementation of exact published KTC SSIM formula; compare original_score_validation.json",
+      "class_metrics": {
+        "1": {
+          "intersection_over_union": 0.7935235652452709,
+          "truth_pixels": 4950,
+          "predicted_pixels": 6238,
+          "signed_area_error_pixels": 1288
+        },
+        "2": {
+          "intersection_over_union": 1.0,
+          "truth_pixels": 0,
+          "predicted_pixels": 0,
+          "signed_area_error_pixels": 0
+        }
+      },
+      "wall_seconds": 0.5300436640009139,
+      "cpu_seconds": 0.515794955
+    },
+    {
+      "level": 1,
+      "phantom": "A=data1",
+      "observations": "full",
+      "arm": "organizer",
+      "truth_sha256": "8162487d82f7572e29de53d05c5659afe68f37dcac9252aae7e17a98765104c6",
+      "output_sha256": "e1b7db1e9f23d42a6213980fb275b07f38be9ccabb0ea4cae6c5ab3ac6c768df",
+      "scorer_sha256": "836521c28ba95cc4d1e191ebc4ef64ca8587fcf5bb4d82668fdc2af219cfad88",
+      "official_score": 0.9219247112580767,
+      "metric_source": "Independent separable implementation of exact published KTC SSIM formula; compare original_score_validation.json",
+      "class_metrics": {
+        "1": {
+          "intersection_over_union": 0.7935235652452709,
+          "truth_pixels": 4950,
+          "predicted_pixels": 6238,
+          "signed_area_error_pixels": 1288
+        },
+        "2": {
+          "intersection_over_union": 1.0,
+          "truth_pixels": 0,
+          "predicted_pixels": 0,
+          "signed_area_error_pixels": 0
+        }
+      },
+      "wall_seconds": 0.21427402199878998,
+      "cpu_seconds": 0.21426659800000003
+    },
+    {
+      "level": 4,
+      "phantom": "A=data1",
+      "observations": "limited",
+      "arm": "organizer",
+      "truth_sha256": "55713b9b98574efcca70d7be481b12981000d0712444656e3192bd7dd354634d",
+      "output_sha256": "0d5d576d4197bf1f6112361cb3f0f59d5f3f5dd863ac844f67d537040777cfab",
+      "scorer_sha256": "836521c28ba95cc4d1e191ebc4ef64ca8587fcf5bb4d82668fdc2af219cfad88",
+      "official_score": 0.5412949346260518,
+      "metric_source": "Independent separable implementation of exact published KTC SSIM formula; compare original_score_validation.json",
+      "class_metrics": {
+        "1": {
+          "intersection_over_union": 0.4990105038818694,
+          "truth_pixels": 3862,
+          "predicted_pixels": 5985,
+          "signed_area_error_pixels": 2123
+        },
+        "2": {
+          "intersection_over_union": 0.4473441412943192,
+          "truth_pixels": 3442,
+          "predicted_pixels": 7539,
+          "signed_area_error_pixels": 4097
+        }
+      },
+      "wall_seconds": 0.19229246999930183,
+      "cpu_seconds": 0.19191411300000016
+    },
+    {
+      "level": 4,
+      "phantom": "A=data1",
+      "observations": "full",
+      "arm": "organizer",
+      "truth_sha256": "55713b9b98574efcca70d7be481b12981000d0712444656e3192bd7dd354634d",
+      "output_sha256": "9b68c73f7a1827713a1fb77fc67d37d9ae66a5d0d88cafa8a91404e4c5e9afb9",
+      "scorer_sha256": "836521c28ba95cc4d1e191ebc4ef64ca8587fcf5bb4d82668fdc2af219cfad88",
+      "official_score": 0.604323399059495,
+      "metric_source": "Independent separable implementation of exact published KTC SSIM formula; compare original_score_validation.json",
+      "class_metrics": {
+        "1": {
+          "intersection_over_union": 0.6357056694813028,
+          "truth_pixels": 3862,
+          "predicted_pixels": 4274,
+          "signed_area_error_pixels": 412
+        },
+        "2": {
+          "intersection_over_union": 0.5208049629293388,
+          "truth_pixels": 3442,
+          "predicted_pixels": 6609,
+          "signed_area_error_pixels": 3167
+        }
+      },
+      "wall_seconds": 0.29675598299945705,
+      "cpu_seconds": 0.296529193
+    },
+    {
+      "level": 7,
+      "phantom": "A=data1",
+      "observations": "limited",
+      "arm": "organizer",
+      "truth_sha256": "fb63bdac400f53823e097cba3fe2246f0833c96242ce0f9d2d6a99ac66c409ea",
+      "output_sha256": "fab99399a58a18adc21fa1da62d377319d33a97149d54ace8aaf7c8386878727",
+      "scorer_sha256": "836521c28ba95cc4d1e191ebc4ef64ca8587fcf5bb4d82668fdc2af219cfad88",
+      "official_score": 0.028828111039089915,
+      "metric_source": "Independent separable implementation of exact published KTC SSIM formula; compare original_score_validation.json",
+      "class_metrics": {
+        "1": {
+          "intersection_over_union": 0.10995418575593503,
+          "truth_pixels": 3956,
+          "predicted_pixels": 6704,
+          "signed_area_error_pixels": 2748
+        },
+        "2": {
+          "intersection_over_union": 0.0,
+          "truth_pixels": 4759,
+          "predicted_pixels": 4872,
+          "signed_area_error_pixels": 113
+        }
+      },
+      "wall_seconds": 0.18597001399939472,
+      "cpu_seconds": 0.18598056299999977
+    },
+    {
+      "level": 7,
+      "phantom": "A=data1",
+      "observations": "full",
+      "arm": "organizer",
+      "truth_sha256": "fb63bdac400f53823e097cba3fe2246f0833c96242ce0f9d2d6a99ac66c409ea",
+      "output_sha256": "1279f2b8e2167b785b38d5a2c7fddd01abc4c3c63245bf7ee98daf9a252cc6a9",
+      "scorer_sha256": "836521c28ba95cc4d1e191ebc4ef64ca8587fcf5bb4d82668fdc2af219cfad88",
+      "official_score": 0.4737733510134601,
+      "metric_source": "Independent separable implementation of exact published KTC SSIM formula; compare original_score_validation.json",
+      "class_metrics": {
+        "1": {
+          "intersection_over_union": 0.47696319907273255,
+          "truth_pixels": 3956,
+          "predicted_pixels": 6238,
+          "signed_area_error_pixels": 2282
+        },
+        "2": {
+          "intersection_over_union": 0.4213187276174426,
+          "truth_pixels": 4759,
+          "predicted_pixels": 8735,
+          "signed_area_error_pixels": 3976
+        }
+      },
+      "wall_seconds": 0.197532043001047,
+      "cpu_seconds": 0.1975416059999997
+    }
+  ],
+  "paired_input_validation": [
+    {
+      "level": 1,
+      "limited_observed_entries": 2356,
+      "full_observed_entries": 2356,
+      "common_observed_values_identical": true,
+      "corrected_ground_truth_equal": true
+    },
+    {
+      "level": 4,
+      "limited_observed_entries": 1200,
+      "full_observed_entries": 2356,
+      "common_observed_values_identical": true,
+      "corrected_ground_truth_equal": true
+    },
+    {
+      "level": 7,
+      "limited_observed_entries": 513,
+      "full_observed_entries": 2356,
+      "common_observed_values_identical": true,
+      "corrected_ground_truth_equal": true
+    }
+  ],
+  "full_minus_limited_official_score": {
+    "1": 0.0,
+    "4": 0.06302846443344312,
+    "7": 0.4449452399743702
+  },
+  "all_three_improve": false,
+  "registered_hypothesis_verdict": "REJECTED: level1 ties; its full/limited observations are identical, so the all-three strict-improvement criterion was a flawed design choice. Preserved without post-hoc weakening.",
+  "scorer_equivalence": {
+    "passed": true,
+    "absolute_tolerance": 1e-10,
+    "cases": [
+      {
+        "level": 1,
+        "identical_inputs": true,
+        "original_score": 0.9219247112580767,
+        "fast_score": 0.9219247112580767,
+        "absolute_error": 0.0,
+        "accepted": true,
+        "original_receipt_sha256": "4e313a6f39b8751ea5a70ebcb4b81427f762fea414e2b221e4694ab239ad6bc5",
+        "fast_receipt_sha256": "cab4d07cea3d77d1e46743b27088700ed9059ec2ffac23df55b347f20ac4c743"
+      },
+      {
+        "level": 4,
+        "identical_inputs": true,
+        "original_score": 0.5412949346260517,
+        "fast_score": 0.5412949346260518,
+        "absolute_error": 1.1102230246251565e-16,
+        "accepted": true,
+        "original_receipt_sha256": "820042c6d9cd1602288944c11273c2b5cb39cca9805f440b417b12bb95650b71",
+        "fast_receipt_sha256": "4622df621fafcc39e2fd95554e255876d79ed522f3e24550d0ad9d88d9e4410c"
+      }
+    ],
+    "max_absolute_error": 1.1102230246251565e-16,
+    "synthetic_controls_passed": true,
+    "independent_review_file": "INDEPENDENT_SCORER_REVIEW.json",
+    "independent_review_sha256": "a7dc1ac50e3c050c4947671d6391eb1992e84d98f3d743f3caaf2a48eabaccf4",
+    "reason": "Both original full-resolution controls and six synthetic controls accepted"
+  },
+  "stronger_exploratory_control": [
+    {
+      "level": 1,
+      "phantom": "A=data1",
+      "observations": "limited",
+      "arm": "CUQI3",
+      "truth_sha256": "8162487d82f7572e29de53d05c5659afe68f37dcac9252aae7e17a98765104c6",
+      "output_sha256": "1888e183c99e250e67dedc4c22e8686a649bf15fadf5df407da696f4b73ad006",
+      "scorer_sha256": "836521c28ba95cc4d1e191ebc4ef64ca8587fcf5bb4d82668fdc2af219cfad88",
+      "official_score": 0.9475343834536705,
+      "metric_source": "Independent separable implementation of exact published KTC SSIM formula; compare original_score_validation.json",
+      "class_metrics": {
+        "1": {
+          "intersection_over_union": 0.8479170456612698,
+          "truth_pixels": 4950,
+          "predicted_pixels": 5208,
+          "signed_area_error_pixels": 258
+        },
+        "2": {
+          "intersection_over_union": 1.0,
+          "truth_pixels": 0,
+          "predicted_pixels": 0,
+          "signed_area_error_pixels": 0
+        }
+      },
+      "wall_seconds": 0.624376661999122,
+      "cpu_seconds": 0.6206794200000001
+    },
+    {
+      "level": 4,
+      "phantom": "A=data1",
+      "observations": "limited",
+      "arm": "CUQI3",
+      "truth_sha256": "55713b9b98574efcca70d7be481b12981000d0712444656e3192bd7dd354634d",
+      "output_sha256": "6021b6cc15a3a50c57aa86c50cc88889db2a7da901cd73f90482227832660445",
+      "scorer_sha256": "836521c28ba95cc4d1e191ebc4ef64ca8587fcf5bb4d82668fdc2af219cfad88",
+      "official_score": 0.6449682230269311,
+      "metric_source": "Independent separable implementation of exact published KTC SSIM formula; compare original_score_validation.json",
+      "class_metrics": {
+        "1": {
+          "intersection_over_union": 0.49805240793201133,
+          "truth_pixels": 3862,
+          "predicted_pixels": 4599,
+          "signed_area_error_pixels": 737
+        },
+        "2": {
+          "intersection_over_union": 0.6253408852527795,
+          "truth_pixels": 3442,
+          "predicted_pixels": 4306,
+          "signed_area_error_pixels": 864
+        }
+      },
+      "wall_seconds": 0.6746803059995727,
+      "cpu_seconds": 0.668371322
+    },
+    {
+      "level": 7,
+      "phantom": "A=data1",
+      "observations": "limited",
+      "arm": "CUQI3",
+      "truth_sha256": "fb63bdac400f53823e097cba3fe2246f0833c96242ce0f9d2d6a99ac66c409ea",
+      "output_sha256": "c753b535589a422c2840f16edaee45562566c95889e879ec9f0cb76826e0e2e0",
+      "scorer_sha256": "836521c28ba95cc4d1e191ebc4ef64ca8587fcf5bb4d82668fdc2af219cfad88",
+      "official_score": 0.22932865422810766,
+      "metric_source": "Independent separable implementation of exact published KTC SSIM formula; compare original_score_validation.json",
+      "class_metrics": {
+        "1": {
+          "intersection_over_union": 0.014637002341920375,
+          "truth_pixels": 3956,
+          "predicted_pixels": 4709,
+          "signed_area_error_pixels": 753
+        },
+        "2": {
+          "intersection_over_union": 0.4538755845260026,
+          "truth_pixels": 4759,
+          "predicted_pixels": 5501,
+          "signed_area_error_pixels": 742
+        }
+      },
+      "wall_seconds": 0.2206445169995277,
+      "cpu_seconds": 0.22055183499999997
+    }
+  ],
+  "stronger_control_receipts": [
+    {
+      "level": 1,
+      "observations": "limited",
+      "arm": "CUQI3",
+      "qualification": "exploratory stronger conventional control, no retuning",
+      "source_commit": "c3a9465a3aeb5c2ced6c72aa357afa584fa9b9e7",
+      "source_sha256": {
+        "KTCScoring.py": "b7229ae8638834672da67e6d10773d8c5d0e07840b9ecdbf93f226205224495a",
+        "KTCRegularization.py": "4ed7d9eff3729fd3111a28c2fb150882baf83dcf40b8ac010dcea459f9bc35cf",
+        "KTCcircmesh.py": "8f383acb67ff9a171ac8dd26dc6aa1ffd1e65d8ba9be769fd3e934e9c1a2a533",
+        "KTCAux.py": "1a6fb080479bc8653280cc4f5d04b9c6eee5b98368b4d10d40e23b0eaed6e066",
+        "KTCPlotting.py": "72dbdb045968fec3e4bcde3479432a6f7cbd4a3a40a7585d428524be52b59194",
+        "examples.py": "90418e8805c55fe74c68fbc9dd7d3b15d1786d2f5fb3ab1e2040d739cc587e82",
+        "KTCFwd.py": "e9946ccac383fe533eb78d536ee97010faa324dac7918c88c2e9c0c0b09d24e0",
+        "main.py": "933c7f4c134ca8691694d0aefd104479c5a3063595580dc3369b4c718cd8f017",
+        "Main_TrainingData.py": "c876b6c2f33dcb8ddcfce40ca86cc63e6328a5c46fbdff9513ef205b0172d781",
+        "KTCMeshing.py": "bb77f35caf4fe9f7e98b0af2fafc536f2adbfd3e6901131684163ea5bbe66a6d",
+        "Main_SimData.py": "d7378ba2aa4c754404bc9078564d3dd1be439dc8b7ee4324f032249847a6a59f"
+      },
+      "input_sha256": {
+        "ref.mat": "c4d885f4470f0c7142685f7b4183783cb94e993ebf03e1b371398f3203bcaeae",
+        "data1.mat": "eeade13f04e3ef89a160fcfc4e897457392d4abaae9c4d5f38204c0a1fb07456"
+      },
+      "status": "COMPLETE",
+      "output_sha256": "1888e183c99e250e67dedc4c22e8686a649bf15fadf5df407da696f4b73ad006",
+      "array_sha256": "87981e8cb58ce5fde372963e804e62674fc0e77dc7acb5c22dbd3a113e1d6c83",
+      "wall_seconds": 15.646071846998893,
+      "cpu_seconds": 15.618444923000002
+    },
+    {
+      "level": 4,
+      "observations": "limited",
+      "arm": "CUQI3",
+      "qualification": "exploratory stronger conventional control, no retuning",
+      "source_commit": "c3a9465a3aeb5c2ced6c72aa357afa584fa9b9e7",
+      "source_sha256": {
+        "KTCScoring.py": "b7229ae8638834672da67e6d10773d8c5d0e07840b9ecdbf93f226205224495a",
+        "KTCRegularization.py": "4ed7d9eff3729fd3111a28c2fb150882baf83dcf40b8ac010dcea459f9bc35cf",
+        "KTCcircmesh.py": "8f383acb67ff9a171ac8dd26dc6aa1ffd1e65d8ba9be769fd3e934e9c1a2a533",
+        "KTCAux.py": "1a6fb080479bc8653280cc4f5d04b9c6eee5b98368b4d10d40e23b0eaed6e066",
+        "KTCPlotting.py": "72dbdb045968fec3e4bcde3479432a6f7cbd4a3a40a7585d428524be52b59194",
+        "examples.py": "90418e8805c55fe74c68fbc9dd7d3b15d1786d2f5fb3ab1e2040d739cc587e82",
+        "KTCFwd.py": "e9946ccac383fe533eb78d536ee97010faa324dac7918c88c2e9c0c0b09d24e0",
+        "main.py": "933c7f4c134ca8691694d0aefd104479c5a3063595580dc3369b4c718cd8f017",
+        "Main_TrainingData.py": "c876b6c2f33dcb8ddcfce40ca86cc63e6328a5c46fbdff9513ef205b0172d781",
+        "KTCMeshing.py": "bb77f35caf4fe9f7e98b0af2fafc536f2adbfd3e6901131684163ea5bbe66a6d",
+        "Main_SimData.py": "d7378ba2aa4c754404bc9078564d3dd1be439dc8b7ee4324f032249847a6a59f"
+      },
+      "input_sha256": {
+        "ref.mat": "c4d885f4470f0c7142685f7b4183783cb94e993ebf03e1b371398f3203bcaeae",
+        "data1.mat": "5978a46027379abf4fbf2847283ec0a226649f0418f7ca601fe60fb38b4926ff"
+      },
+      "status": "COMPLETE",
+      "output_sha256": "6021b6cc15a3a50c57aa86c50cc88889db2a7da901cd73f90482227832660445",
+      "array_sha256": "dee51d055eb34a4966432dd5e8e80a4e7c4678787f8d7d2dbad0ed4acc6dc398",
+      "wall_seconds": 14.302233643998989,
+      "cpu_seconds": 14.283803779000001
+    },
+    {
+      "level": 7,
+      "observations": "limited",
+      "arm": "CUQI3",
+      "qualification": "exploratory stronger conventional control, no retuning",
+      "source_commit": "c3a9465a3aeb5c2ced6c72aa357afa584fa9b9e7",
+      "source_sha256": {
+        "KTCScoring.py": "b7229ae8638834672da67e6d10773d8c5d0e07840b9ecdbf93f226205224495a",
+        "KTCRegularization.py": "4ed7d9eff3729fd3111a28c2fb150882baf83dcf40b8ac010dcea459f9bc35cf",
+        "KTCcircmesh.py": "8f383acb67ff9a171ac8dd26dc6aa1ffd1e65d8ba9be769fd3e934e9c1a2a533",
+        "KTCAux.py": "1a6fb080479bc8653280cc4f5d04b9c6eee5b98368b4d10d40e23b0eaed6e066",
+        "KTCPlotting.py": "72dbdb045968fec3e4bcde3479432a6f7cbd4a3a40a7585d428524be52b59194",
+        "examples.py": "90418e8805c55fe74c68fbc9dd7d3b15d1786d2f5fb3ab1e2040d739cc587e82",
+        "KTCFwd.py": "e9946ccac383fe533eb78d536ee97010faa324dac7918c88c2e9c0c0b09d24e0",
+        "main.py": "933c7f4c134ca8691694d0aefd104479c5a3063595580dc3369b4c718cd8f017",
+        "Main_TrainingData.py": "c876b6c2f33dcb8ddcfce40ca86cc63e6328a5c46fbdff9513ef205b0172d781",
+        "KTCMeshing.py": "bb77f35caf4fe9f7e98b0af2fafc536f2adbfd3e6901131684163ea5bbe66a6d",
+        "Main_SimData.py": "d7378ba2aa4c754404bc9078564d3dd1be439dc8b7ee4324f032249847a6a59f"
+      },
+      "input_sha256": {
+        "ref.mat": "c4d885f4470f0c7142685f7b4183783cb94e993ebf03e1b371398f3203bcaeae",
+        "data1.mat": "0fb1b6dfb58d25d08e0b12f160e8cc7f4f88541c8988b5d4af3030e919c36d24"
+      },
+      "status": "COMPLETE",
+      "output_sha256": "c753b535589a422c2840f16edaee45562566c95889e879ec9f0cb76826e0e2e0",
+      "array_sha256": "15a2e9bc3819a6084b224afd6f994965f773b7f9c586bae0f317f1ad05e67239",
+      "wall_seconds": 49.84195655300027,
+      "cpu_seconds": 44.869666280000004
+    }
+  ],
+  "scope": "Retrospective numerical reconstruction on physical measured data; additional full observations are privileged information, not an equal-information algorithm comparison; no physical intervention, commercial demand or autonomous discovery established."
+}

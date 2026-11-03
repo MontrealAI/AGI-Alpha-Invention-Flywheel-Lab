@@ -1,0 +1,257 @@
+{
+  "schema": "omega/public-evidence-operating-gate/v1",
+  "selector_source_sha256": "c681f5f490e04e538be956118d3c9e638c0e54b4dec3474752ccdfcdc1f34925",
+  "study_logical_sha256": "c0a2b310351ee537ca22eec59d832aa67ff87ee2be4d1c7114319d4d3105ea4e",
+  "policy": {
+    "objective": "Largest verified expected seller contribution in the declared public market; fixed lifecycle costs excluded.",
+    "nonentry": "Do not quote or observe a private buyer when no candidate has positive expected contribution.",
+    "positive_ties": "Remove only Pareto-dominated same-constructor construction rows and deviation checks; retain all remaining ties.",
+    "last_tie_break": "Lexical arm name, an explicit reproducibility convention with no economic superiority claim.",
+    "cost_boundary": "Work counts are comparable within this cart constructor only; all campaign work is already incurred and remains charged. Unknown dollar costs are not zero."
+  },
+  "decisions": [
+    {
+      "market_sha256": "e231037a0974406a0ab8ac8804e08344d4f63274392b8f0daf6040fbf7e1ed93",
+      "selected_arm": "equal_content_reuse",
+      "program_sha256": "55a2785f2a54db1f54ed844e6a0334ab1f2a79c5f9f3dab767b7a156494fc7ec",
+      "action": "OPERATE",
+      "expected_contribution_cents": "65887/43",
+      "contribution_ties": [
+        "bundle",
+        "equal_content_reuse",
+        "full_control",
+        "inherited"
+      ],
+      "workload_frontier": [
+        "equal_content_reuse",
+        "inherited"
+      ],
+      "lexical_tie_break_used": true,
+      "candidates": [
+        {
+          "arm": "inherited",
+          "eligible": true,
+          "program_sha256": "55a2785f2a54db1f54ed844e6a0334ab1f2a79c5f9f3dab767b7a156494fc7ec",
+          "expected_contribution_cents": "65887/43",
+          "construction_rows": 180,
+          "deviation_checks": 17,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "equal_content_reuse",
+          "eligible": true,
+          "program_sha256": "55a2785f2a54db1f54ed844e6a0334ab1f2a79c5f9f3dab767b7a156494fc7ec",
+          "expected_contribution_cents": "65887/43",
+          "construction_rows": 180,
+          "deviation_checks": 17,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "full_control",
+          "eligible": true,
+          "program_sha256": "55a2785f2a54db1f54ed844e6a0334ab1f2a79c5f9f3dab767b7a156494fc7ec",
+          "expected_contribution_cents": "65887/43",
+          "construction_rows": 181,
+          "deviation_checks": 17,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "separate",
+          "eligible": true,
+          "program_sha256": "f292e286c0b2a742e26a39829ff2183700a4985485a70fc0b6181786f6aa7af2",
+          "expected_contribution_cents": "63272/43",
+          "construction_rows": 184,
+          "deviation_checks": 31,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "bundle",
+          "eligible": true,
+          "program_sha256": "819239ffceebcbdafe63d8b7640a5bdf7f003f53c4f060851cb79788b6732b55",
+          "expected_contribution_cents": "65887/43",
+          "construction_rows": 181,
+          "deviation_checks": 17,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "nonentry",
+          "eligible": true,
+          "program_sha256": "a7b5f5c045b511ede0733b0da3028cbc0ddf2f4af0769402a7040a68be2e2b3b",
+          "expected_contribution_cents": "0",
+          "construction_rows": 0,
+          "deviation_checks": 9,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        }
+      ]
+    },
+    {
+      "market_sha256": "6994f5f22339bc1363a73d45ec545cb3e7a2355492694b00b9dd8daee40311f7",
+      "selected_arm": "equal_content_reuse",
+      "program_sha256": "59e52a3f68da5fc0b05b8b512ec6d183a2e9e3ec03ec409e2ab529b1a8ab7a37",
+      "action": "OPERATE",
+      "expected_contribution_cents": "47109/55",
+      "contribution_ties": [
+        "equal_content_reuse",
+        "full_control",
+        "inherited"
+      ],
+      "workload_frontier": [
+        "equal_content_reuse",
+        "inherited"
+      ],
+      "lexical_tie_break_used": true,
+      "candidates": [
+        {
+          "arm": "inherited",
+          "eligible": true,
+          "program_sha256": "59e52a3f68da5fc0b05b8b512ec6d183a2e9e3ec03ec409e2ab529b1a8ab7a37",
+          "expected_contribution_cents": "47109/55",
+          "construction_rows": 180,
+          "deviation_checks": 26,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "equal_content_reuse",
+          "eligible": true,
+          "program_sha256": "59e52a3f68da5fc0b05b8b512ec6d183a2e9e3ec03ec409e2ab529b1a8ab7a37",
+          "expected_contribution_cents": "47109/55",
+          "construction_rows": 180,
+          "deviation_checks": 26,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "full_control",
+          "eligible": true,
+          "program_sha256": "59e52a3f68da5fc0b05b8b512ec6d183a2e9e3ec03ec409e2ab529b1a8ab7a37",
+          "expected_contribution_cents": "47109/55",
+          "construction_rows": 181,
+          "deviation_checks": 26,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "separate",
+          "eligible": true,
+          "program_sha256": "dccc939ef691e1bc8864a302e1b692e3d7036c7605e738f4e234fcd298a5ffd2",
+          "expected_contribution_cents": "46567/55",
+          "construction_rows": 184,
+          "deviation_checks": 22,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "bundle",
+          "eligible": true,
+          "program_sha256": "3ff79be5d87f8d69e07a9528228340a1386d726aff8d08f4838d1e5fa05eecca",
+          "expected_contribution_cents": "39463/55",
+          "construction_rows": 181,
+          "deviation_checks": 14,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "nonentry",
+          "eligible": true,
+          "program_sha256": "d4ad053b7c07c83202734b5cea17cab2d63ea08b59ba6e2e23f3f38b1e4a46ae",
+          "expected_contribution_cents": "0",
+          "construction_rows": 0,
+          "deviation_checks": 9,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        }
+      ]
+    },
+    {
+      "market_sha256": "408b5ad7953ac73e2f1a4303f2d9b323ea9f29881426371507ca7950cb4b71a9",
+      "selected_arm": "full_control",
+      "program_sha256": "69688bdc3e9b02b58d81d2a31d612f7015ae600020c76bde5a57760833eafc66",
+      "action": "OPERATE",
+      "expected_contribution_cents": "11787/20",
+      "contribution_ties": [
+        "equal_content_reuse",
+        "full_control",
+        "inherited"
+      ],
+      "workload_frontier": [
+        "full_control"
+      ],
+      "lexical_tie_break_used": false,
+      "candidates": [
+        {
+          "arm": "inherited",
+          "eligible": true,
+          "program_sha256": "69688bdc3e9b02b58d81d2a31d612f7015ae600020c76bde5a57760833eafc66",
+          "expected_contribution_cents": "11787/20",
+          "construction_rows": 361,
+          "deviation_checks": 106,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "equal_content_reuse",
+          "eligible": true,
+          "program_sha256": "69688bdc3e9b02b58d81d2a31d612f7015ae600020c76bde5a57760833eafc66",
+          "expected_contribution_cents": "11787/20",
+          "construction_rows": 361,
+          "deviation_checks": 106,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "full_control",
+          "eligible": true,
+          "program_sha256": "69688bdc3e9b02b58d81d2a31d612f7015ae600020c76bde5a57760833eafc66",
+          "expected_contribution_cents": "11787/20",
+          "construction_rows": 181,
+          "deviation_checks": 48,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "separate",
+          "eligible": true,
+          "program_sha256": "0c8721c89388b37a7825d825169683750878d805b8e73375d870f4f6d1eb4c38",
+          "expected_contribution_cents": "23467/40",
+          "construction_rows": 184,
+          "deviation_checks": 52,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "bundle",
+          "eligible": true,
+          "program_sha256": "c7571f14863a6a7ee3378e8f3de047b30ce6b31d63b8e35cda6211c4dbb09808",
+          "expected_contribution_cents": "10659/20",
+          "construction_rows": 181,
+          "deviation_checks": 17,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        },
+        {
+          "arm": "nonentry",
+          "eligible": true,
+          "program_sha256": "a89ff8cf6cb6653bfb7dfb20b06e6dd4cbf0d2e9737629be1f6cd0512975331d",
+          "expected_contribution_cents": "0",
+          "construction_rows": 0,
+          "deviation_checks": 9,
+          "reason": "INDEPENDENT_CART_CHECK_ACCEPTED"
+        }
+      ]
+    }
+  ],
+  "sunk_study_work": {
+    "construction_rows_by_arm": {
+      "bundle": 543,
+      "cold": 721,
+      "equal_content_reuse": 721,
+      "full_control": 543,
+      "inherited": 721,
+      "nonentry": 0,
+      "separate": 552
+    },
+    "deviation_checks_by_arm": {
+      "bundle": 48,
+      "cold": 149,
+      "equal_content_reuse": 149,
+      "full_control": 91,
+      "inherited": 149,
+      "nonentry": 27,
+      "separate": 105
+    },
+    "independent_verification_checks": 544,
+    "basis": "All study arms and failed attempts remain incurred; selected-program work is not the cost of the complete study."
+  },
+  "unknown_complete_lifecycle_cost_usd": null,
+  "scope": "Decision gate over available verified programs using declared public expectations. No new invention advantage, observed demand, strategic response cycle or complete-cost optimality claim."
+}

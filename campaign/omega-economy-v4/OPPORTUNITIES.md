@@ -37,3 +37,7 @@ The repository's preserved PDFs were read locally with text extraction. Page num
 ## Scope of the next decision
 
 Run the registered finite experiment and retain every negative result. If ordinary shared commissioning or the conventional producer matches the result after complete costs, use it where commercially useful and reject the stronger inventor-superiority claim. If copying removes all willingness to pay, stop that offer rather than inventing exclusivity or sales. A follow-on claim requires a new natural task, independently accepted useful outcome and complete competent alternatives; cash-funded repetition alone does not establish this.
+
+## Executed continuation
+
+After the cooperative tie, the preregistered KTC physical-data diagnostic and a stronger released reconstruction were executed. See [the source-bound report](../omega-ktc-residual-20261103/REPORT.md). The all-three-improve hypothesis was rejected, including an exposed protocol design flaw; the stronger limited-data control beats the weaker full-data method in level4. No inventive, physical-intervention or commercial superiority is inferred.

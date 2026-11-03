@@ -49,16 +49,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for arm in generated standard full_control; do
+          for arm in generated standard full_control adaptive; do
             python -m mechanism_harness.cart_native run --arm "$arm" --output "$RUNNER_TEMP/cart-$arm"
             python -m mechanism_harness.cart_native audit --output "$RUNNER_TEMP/cart-$arm" > "$RUNNER_TEMP/omega-v4-$arm-audit.json"
+            sha256sum "$RUNNER_TEMP/cart-$arm/NATIVE_EXPORT.json" > "$RUNNER_TEMP/cart-$arm-before.sha256"
+            python -m mechanism_harness.cart_native resume --arm "$arm" --output "$RUNNER_TEMP/cart-$arm"
+            sha256sum -c "$RUNNER_TEMP/cart-$arm-before.sha256"
           done
-          sha256sum "$RUNNER_TEMP/cart-generated/NATIVE_EXPORT.json" > "$RUNNER_TEMP/cart-before.sha256"
-          python -m mechanism_harness.cart_native resume --output "$RUNNER_TEMP/cart-generated"
-          sha256sum -c "$RUNNER_TEMP/cart-before.sha256"
-          for stress in copycat no_demand failed_acceptance; do
+          for stress in copycat no_demand failed_acceptance payment_failure; do
             python -m mechanism_harness.cart_native run --stress "$stress" --output "$RUNNER_TEMP/cart-$stress"
             python -m mechanism_harness.cart_native audit --output "$RUNNER_TEMP/cart-$stress" > "$RUNNER_TEMP/omega-v4-$stress-audit.json"
+            sha256sum "$RUNNER_TEMP/cart-$stress/NATIVE_EXPORT.json" > "$RUNNER_TEMP/cart-$stress-before.sha256"
+            python -m mechanism_harness.cart_native resume --stress "$stress" --output "$RUNNER_TEMP/cart-$stress"
+            sha256sum -c "$RUNNER_TEMP/cart-$stress-before.sha256"
           done
       - name: Preserve explicit public allowlist only
         if: always()
