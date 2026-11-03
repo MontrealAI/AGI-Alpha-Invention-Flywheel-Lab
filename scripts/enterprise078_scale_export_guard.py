@@ -26,7 +26,7 @@ def sha(path: Path) -> str:
 
 
 def regular(path: Path) -> Path:
-    if path.is_symlink() or not path.is_file() or not stat.S_ISREG(path.stat().st_mode):
+    if any(part.is_symlink() for part in (path, *path.parents)) or not path.is_file() or not stat.S_ISREG(path.stat().st_mode):
         raise ValueError("EXPORT_INPUT_NOT_REGULAR")
     return path
 
