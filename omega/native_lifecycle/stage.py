@@ -21,6 +21,10 @@ NATIVE_BASE_PROFILES = {
         'commercial/ledger.py': '2f5e0dd65a4905a0bfbc205441cbb0a54c344d80234173a36627b11156e7de0e',
         'connected_enterprise/finance.py': '7cb5f3b14adc6b931fbccbf3cc4f75deb4d0cbe10e876787c09d87f1255d6f79',
     },
+    '6c540b2b7a69564e50a815a9c2b91a60e674008e': {
+        'commercial/ledger.py': '2d790b28da5a777544f7eb2dda42b5a7ac65fd2277a71271fe1de9b17fbeebea',
+        'connected_enterprise/finance.py': '33b33f97df5e14e5ce2770534603101e1b64420643f75b7a8a9a6add829110dc',
+    },
 }
 
 

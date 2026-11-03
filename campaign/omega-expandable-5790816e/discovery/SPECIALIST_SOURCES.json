@@ -1,0 +1,43 @@
+{
+  "AALpy": {
+    "commit": "4c7b4a8746460fd84eaccb48d4891e5e0ac90883",
+    "license": "MIT",
+    "license_sha256": "6a9059939bf76c15eb001afba9a953f1626dc8feb1e915c01a901691a23a0889",
+    "pyproject_sha256": "9d6909597d4e64a97dc57350185451176d7220ad0f4f299aab234d89c4d5a111",
+    "tree": "63c13c496dd0f7557344c2d8f3ea9f2282d7be66",
+    "url": "https://github.com/DES-Lab/AALpy"
+  },
+  "compatibility_source_sha256": "1fd025189b6473a1a568b62a4273139819a8a26857ca7cb2f0dfb47a6cf7ebbf",
+  "cost_limit": "No real expenditure or modelAPI call; total setup, hostallocation and human opportunitycost were not measured. Do notinferfree resources.",
+  "dependencies": {
+    "pydot": {
+      "license": "MIT; includes Python-2.0 derived module",
+      "license_files_sha256": {
+        "pydot-4.0.1.dist-info/licenses/LICENSES/MIT.txt": "b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0",
+        "pydot-4.0.1.dist-info/licenses/LICENSES/Python-2.0.txt": "893c2bafbb8133f7aa97e1f79a3ee3241ebca7025f56278e9e1f72bb98592f9d"
+      },
+      "upstream_json_url": "https://pypi.org/pypi/pydot/4.0.1/json",
+      "url": "https://pypi.org/project/pydot/4.0.1/",
+      "version": "4.0.1",
+      "wheel": "pydot-4.0.1-py3-none-any.whl",
+      "wheel_hash_verified_against_public_pypi_json": true,
+      "wheel_sha256": "869c0efadd2708c0be1f916eb669f3d664ca684bc57ffb7ecc08e70d5e93fee6"
+    },
+    "pyparsing": {
+      "license": "MIT",
+      "license_files_sha256": {
+        "pyparsing-3.3.3.dist-info/licenses/LICENSE": "a5425f9dc14ac74d4c5f0b679e941f2442e32cca7452a4418d5b1a49893ebe4e"
+      },
+      "upstream_json_url": "https://pypi.org/pypi/pyparsing/3.3.3/json",
+      "url": "https://pypi.org/project/pyparsing/3.3.3/",
+      "version": "3.3.3",
+      "wheel": "pyparsing-3.3.3-py3-none-any.whl",
+      "wheel_hash_verified_against_public_pypi_json": true,
+      "wheel_sha256": "ece8c00a69cf01b45d0b1dedabb469c90d8caf996d4fda40f147627a122849a4"
+    }
+  },
+  "original_lab_commit": "6ff45e25a85a590d4921aef6e197148252b92cce",
+  "python_version_observed": "3.12.14",
+  "scope": "diagnostic_source_and_dependencies_not_a_distribution_rights_clearance",
+  "setup_correction": "First launch failed before any experiment because pydot was absent. Installed pydot4.0.1 and pyparsing3.3.3 into an isolated directory; no algorithm, cases, acceptance or financial account changed. Initial scratch result was independently rerun. Repo-ready rerun adds dependency/source guards, explicit smoke counts and telemetry only."
+}

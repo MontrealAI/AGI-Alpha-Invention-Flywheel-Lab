@@ -16,7 +16,8 @@ class NativeConstructionProfileTests(unittest.TestCase):
         self.assertNotEqual(NATIVE_BASE_PROFILES[original], NATIVE_BASE_PROFILES[current])
 
     def test_mixed_unknown_missing_and_extra_native_identities_reject(self):
-        original, current = [copy.deepcopy(p) for p in NATIVE_BASE_PROFILES.values()]
+        original = copy.deepcopy(NATIVE_BASE_PROFILES['38846ad9b72ef04c10b2b97b3dbff52d1efc3790'])
+        current = copy.deepcopy(NATIVE_BASE_PROFILES['92f4351c99e6d86bf699117d1d9cd8f1ffcb5fbb'])
         mixed = dict(original, **{'commercial/ledger.py': current['commercial/ledger.py']})
         altered = dict(current, **{'commercial/ledger.py': '0' * 64})
         missing = {'commercial/ledger.py': current['commercial/ledger.py']}

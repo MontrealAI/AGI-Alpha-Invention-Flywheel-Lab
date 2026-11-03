@@ -50,6 +50,9 @@ INVENTORY_SOURCE_PATHS = ('inventory061/__init__.py', 'inventory061/service.py',
 
 def source_paths_for_manifest(manifest=None):
     schema = manifest.get('schema') if isinstance(manifest, dict) else None
+    if schema == 'omega/expansion-native/v1':
+        from omega.expansion_native import SOURCE_PATHS as EXPANSION_SOURCE_PATHS
+        return tuple(dict.fromkeys(SOURCE_PATHS + EXPANSION_SOURCE_PATHS))
     if schema == 'omega/native-product/v1':
         from omega.product import SOURCE_PATHS as OMEGA_SOURCE_PATHS
         return tuple(dict.fromkeys(SOURCE_PATHS + OMEGA_SOURCE_PATHS))
@@ -69,11 +72,18 @@ def source_paths_for_manifest(manifest=None):
 def source_identity(root, manifest=None):
     root = Path(root).absolute()
     files = {}
-    for name in source_paths_for_manifest(manifest):
-        path = root / name
-        if not path.is_file() or any(p.is_symlink() for p in [path, *path.parents]):
+    paths = [(name, root / name) for name in source_paths_for_manifest(manifest)]
+    # Deduplicate only checks within this call. Every source byte is read fresh;
+    # ancestors are rechecked after all reads, with no cross-call stat cache.
+    parents = {parent for _, path in paths for parent in path.parents}
+    if any(parent.is_symlink() for parent in parents):
+        raise ValueError('REGULAR_CONNECTED_FINANCE_SOURCE_REQUIRED:ancestor')
+    for name, path in paths:
+        if not path.is_file() or path.is_symlink():
             raise ValueError('REGULAR_CONNECTED_FINANCE_SOURCE_REQUIRED:' + name)
         files[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+    if any(parent.is_symlink() for parent in parents):
+        raise ValueError('REGULAR_CONNECTED_FINANCE_SOURCE_REQUIRED:ancestor')
     return {'files': files, 'sha256': digest(files)}
 
 
@@ -456,7 +466,7 @@ class JournalAccount:
     def _audit_incremental(self):
         # A private exact prefix still binds owner, lease, source, manifest,
         # every prior action byte and all dynamic prepared outputs.
-        if self.manifest.get('schema') not in {'agi-alpha/adaptive012-services/v1',
+        if self.manifest.get('schema') not in {'omega/expansion-native/v1', 'agi-alpha/adaptive012-services/v1',
                                               'production060/native-services/v1',
                                               'public-portfolio-20261102/native-services/v2'}:
             return self.audit()

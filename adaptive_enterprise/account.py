@@ -390,10 +390,24 @@ class Account:
 
     def snapshot(self):
         self._assert_owner()
-        tape = self._owner.export()
-        return {'summary': copy.deepcopy(tape['summary']),
-                'state_digest': digest({'config': tape['config'], 'actions_sha256': tape['actions_sha256'], 'summary': tape['summary']}),
-                'actions_sha256': tape['actions_sha256'], 'sequence': len(tape['actions']),
+        if getattr(self, 'manifest', {}).get('schema') == 'omega/expansion-native/v1':
+            # The snapshot needs current financial aggregates and history identity,
+            # not materialized invoices, every SQL row and investment witnesses.
+            # Recompute both from the live owned engine: no cached balance, digest,
+            # acceptance or source authority is introduced. Full export/audit is
+            # unchanged and remains the independent reconciliation interface.
+            exchange = self._owner._exchange
+            summary = copy.deepcopy(self._owner.snapshot())
+            actions_sha256 = digest(exchange.actions)
+            config, sequence = exchange.config, len(exchange.actions)
+        else:
+            # Historical schemas retain their exact existing code path.
+            tape = self._owner.export()
+            summary = copy.deepcopy(tape['summary'])
+            actions_sha256, config, sequence = tape['actions_sha256'], tape['config'], len(tape['actions'])
+        return {'summary': summary,
+                'state_digest': digest({'config': config, 'actions_sha256': actions_sha256, 'summary': summary}),
+                'actions_sha256': actions_sha256, 'sequence': sequence,
                 'scope': 'SIMULATED', 'ownership': 'MANDATORY_SINGLE_LOCAL_POSIX_WRITER',
                 'filesystem': self.filesystem}
 
