@@ -9,6 +9,7 @@ import re
 import shutil
 import stat
 import subprocess
+import tempfile
 import zipfile
 from pathlib import Path, PurePosixPath
 
@@ -67,11 +68,12 @@ def prepare(output: Path, upload: Path, stdout: Path, stderr: Path, code: int, w
         raise ValueError("INVALID_EXIT_STATUS")
     if upload.exists() or upload.is_symlink():
         raise ValueError("FRESH_UPLOAD_DIRECTORY_REQUIRED")
+    if any(part.is_symlink() for part in upload.parents):
+        raise ValueError("PUBLIC_EXPORT_PARENT_SYMLINK_REFUSED")
     if output.resolve() == upload.resolve() or output.resolve() in upload.resolve().parents:
         raise ValueError("PUBLIC_EXPORT_MUST_BE_SEPARATE")
     logs = (regular(stdout), regular(stderr))
     os.umask(0o077)
-    upload.mkdir(parents=True, mode=0o700)
     receipt = {
         "schema": "enterprise078-scale/sanitized-public-export/v1",
         "world": world,
@@ -105,10 +107,20 @@ def prepare(output: Path, upload: Path, stdout: Path, stderr: Path, code: int, w
             (f"public/{world}/result.json", f"{world}.result.json"),
             (f"public/{world}/review.json", f"{world}.review.json"),
         )
-        for src, dest in paths:
-            shutil.copyfile(regular(output / src), upload / dest)
-        receipt["files_sha256"] = {dest: sha(upload / dest) for _, dest in paths}
-    (upload / "SAFE_EXPORT_RECEIPT.json").write_text(json.dumps(receipt, sort_keys=True, indent=2) + "\n")
+        for src, _ in paths:
+            regular(output / src)
+    # An incomplete staging directory must never be a public upload path.
+    with tempfile.TemporaryDirectory(prefix=".e078-private-stage-", dir=upload.parent) as temporary:
+        stage = Path(temporary) / "approved"
+        stage.mkdir(mode=0o700)
+        if code == 0:
+            for src, dest in paths:
+                shutil.copyfile(regular(output / src), stage / dest)
+            receipt["files_sha256"] = {dest: sha(stage / dest) for _, dest in paths}
+        (stage / "SAFE_EXPORT_RECEIPT.json").write_text(json.dumps(receipt, sort_keys=True, indent=2) + "\n")
+        if upload.exists() or upload.is_symlink():
+            raise ValueError("FRESH_UPLOAD_DIRECTORY_REQUIRED")
+        os.rename(stage, upload)
     return receipt
 
 

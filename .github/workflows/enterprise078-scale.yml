@@ -80,7 +80,8 @@ jobs:
           python-version: '3.12'
       - name: Existing native runtime dependencies
         run: python -m pip install --disable-pip-version-check -r requirements-commercial010.txt
-      - name: Operate one independent registered native account and fully replay it
+      - name: Operate one independent registered native account and safely stage public evidence
+        id: stage_public_evidence
         shell: bash
         run: |
           set +e
@@ -88,12 +89,15 @@ jobs:
           status=$?
           set -e
           python scripts/enterprise078_scale_export_guard.py --output-root "$RUNNER_TEMP/enterprise078-scale" --upload-root "$RUNNER_TEMP/enterprise078-scale-export" --stdout "$RUNNER_TEMP/e078-world.stdout" --stderr "$RUNNER_TEMP/e078-world.stderr" --exit-code "$status" --world '${{ matrix.world }}'
-          exit "$status"
+          echo "financial_exit_code=$status" >> "$GITHUB_OUTPUT"
       - name: Retain compact key-free evidence and failures
-        if: always()
+        if: ${{ steps.stage_public_evidence.outcome == 'success' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: enterprise078-scale-${{ matrix.world }}
           path: ${{ runner.temp }}/enterprise078-scale-export/
           retention-days: 7
           if-no-files-found: error
+      - name: Preserve original financial world verdict after safe export
+        if: ${{ always() && steps.stage_public_evidence.outcome == 'success' }}
+        run: exit "${{ steps.stage_public_evidence.outputs.financial_exit_code }}"

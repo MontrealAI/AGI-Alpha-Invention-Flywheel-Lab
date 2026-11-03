@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import shutil
 import tempfile
 import unittest
 import zipfile
@@ -124,6 +125,29 @@ class PublicExportTests(unittest.TestCase):
         old.symlink_to(safe, target_is_directory=True)
         with self.assertRaisesRegex(ValueError, "INPUT_NOT_REGULAR"):
             self.prepare(0)
+
+    def test_staging_copy_failure_is_not_uploadable(self):
+        self.success_fixture()
+        original = shutil.copyfile
+        calls = 0
+        def fail_second_copy(src, dest, *args, **kwargs):
+            nonlocal calls
+            calls += 1
+            if calls == 2:
+                raise OSError("INJECTED_PARTIAL_COPY_FAILURE")
+            return original(src, dest, *args, **kwargs)
+        with patch("scripts.enterprise078_scale_export_guard.shutil.copyfile", side_effect=fail_second_copy):
+            with self.assertRaisesRegex(OSError, "INJECTED_PARTIAL_COPY_FAILURE"):
+                self.prepare(0)
+        self.assertFalse(self.upload.exists())
+        self.assertEqual(list(self.root.glob(".e078-private-stage-*")), [])
+
+    def test_workflow_only_uploads_after_stage_and_preserves_world_verdict(self):
+        workflow = Path(".github/workflows/enterprise078-scale.yml").read_text()
+        self.assertIn("id: stage_public_evidence", workflow)
+        self.assertIn("if: ${{ steps.stage_public_evidence.outcome == 'success' }}", workflow)
+        self.assertIn('echo "financial_exit_code=$status" >> "$GITHUB_OUTPUT"', workflow)
+        self.assertIn('exit "${{ steps.stage_public_evidence.outputs.financial_exit_code }}"', workflow)
 
     def test_workflow_never_uploads_old_wildcard_failure_logs(self):
         workflow = Path(".github/workflows/enterprise078-scale.yml").read_text()
