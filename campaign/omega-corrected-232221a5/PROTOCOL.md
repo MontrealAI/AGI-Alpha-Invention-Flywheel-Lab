@@ -134,6 +134,26 @@ advantage. Charge the chosen work, including subsequent qualification. These
 small execution envelopes exclude unknown actual research/model development
 bills; report that boundary, never relabel them as measured total R&D cost.
 
+Post-engineering-review amendment, before final-source confirmation: three tasks
+are prospective work, not compulsory obligations or signed customer demand.
+Withdrawal has zero cost and value and must compete. Register task-use value
+sensitivities of $0/$1/$3/$10 per task; the primary conditional case uses $3.
+Compare value minus complete action cost for direct construction and ordinary
+reuse against withdrawal. This assumed internal utility is never booked as
+revenue or cash. Zero/low task value must prevent construction. The amendment
+repairs a decision defect (savings alone do not justify unnecessary work); the
+earlier engineering attempt and qualification failure remain disclosed. It does
+not retune buyer demand, market policies or the 1,152-case comparison.
+
+Expanded confirmation registered after inspecting the first stress matrix:
+the initial 1,152 trajectories cross all-reached/all-unreached annual stress
+paths, not every independent quarterly acquisition realization. Preserve that
+stress result. Additionally execute all 16 four-quarter Boolean reach paths,
+each weighted 1/16, crossed with the same 16 worlds, six policies and six cost
+profiles (9,216 trajectories). No policy parameter is retuned. This expanded
+enumeration matches the policy's declared independent 1/2 quarterly acquisition
+model; it is a fresh set of modeled paths, not an empirical blind holdout.
+
 Report native recognized revenue, collections, incurred/paid costs, reserves,
 payables, refunds, unrestricted cash and rolling 365-day profit separately.
 Disclose noncash founder opportunity cost, assumed tax treatments, no capital
