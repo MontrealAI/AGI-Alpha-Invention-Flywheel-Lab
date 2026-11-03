@@ -27,6 +27,8 @@ jobs:
           python-version: '3.12'
       - name: Install pinned existing dependencies
         run: python -m pip install -r omega/requirements.txt
+      - name: Freeze the clean registered evaluation source
+        run: python -m omega.market_native register --output "$RUNNER_TEMP/omega-market"
       - name: Qualify buyer, seller, source, accounting and platform contracts
         run: >-
           python -m unittest
@@ -39,7 +41,6 @@ jobs:
           tests.test_connected_platform_runtime064 -q
       - name: Execute the complete registered conditional comparison
         run: |
-          python -m omega.market_native register --output "$RUNNER_TEMP/omega-market"
           python -m omega.market_native operate --output "$RUNNER_TEMP/omega-market" --max-steps 1
           python -m omega.market_native operate --output "$RUNNER_TEMP/omega-market"
           python -m omega.market_native audit --output "$RUNNER_TEMP/omega-market"
