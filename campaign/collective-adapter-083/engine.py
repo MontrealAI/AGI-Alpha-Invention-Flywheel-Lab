@@ -100,10 +100,20 @@ def construct(case):
     collateral_sufficient = case['seller_refund_collateral'] >= risk_capital_needed
     status = ('CONDITIONAL_ACCEPTED_NOT_COLLECTED' if success and collateral_sufficient else
               'FAILED_ACCEPTANCE_REFUND_DUE' if not success else 'INSUFFICIENT_REFUND_COLLATERAL')
+    # Hypothetical buyer escrow cannot be spent while it backs an unresolved refund.
+    # At construction time escrow + independent seller collateral must cover both
+    # all production costs and the full refund reserve. None of it is actual cash.
+    escrow = plan['price_total']
+    initial = escrow + case['seller_refund_collateral']
+    post_spend = initial - plan['construction_cost']
     return {'plan': plan, 'artifacts': produced, 'acceptance': accepted, 'economic_status': status,
             'conditional_cost_incurred': plan['construction_cost'],
             'conditional_refund_liability': refund, 'required_preconstruction_refund_collateral': risk_capital_needed,
-            'declared_hypothetical_collateral': case['seller_refund_collateral']}
+            'declared_hypothetical_collateral': case['seller_refund_collateral'],
+            'hypothetical_escrow_receipts': escrow, 'hypothetical_preconstruction_cash': initial,
+            'hypothetical_cash_after_cost': post_spend, 'refund_reserve_before_acceptance': escrow,
+            'refund_reserve_covered_before_acceptance': post_spend >= escrow,
+            'hypothetical_cash_after_full_refund': post_spend - refund}
 
 
 def run(output):
