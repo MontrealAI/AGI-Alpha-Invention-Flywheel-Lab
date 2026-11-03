@@ -2,6 +2,7 @@
 import copy
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from enterprise078.transactional_admission.choice import quote, subset_key
@@ -165,6 +166,11 @@ class PartnerPayoffTests(unittest.TestCase):
             )
             with self.assertRaisesRegex(ValueError, "PARTNER_REVIEW_INCUMBENT_SOURCE_CHANGED"):
                 pin_source(tmp)
+
+    def test_loaded_comparator_must_match_pinned_execution(self):
+        with patch("enterprise078_partner_review.guard.plan", self.check):
+            with self.assertRaisesRegex(ValueError, "EXECUTING_REVIEW_SOURCE_MISMATCH"):
+                pin_source()
 
     def test_no_input_mutation_and_no_native_ledger(self):
         rows, bundles = [offer()], [["a"]]
