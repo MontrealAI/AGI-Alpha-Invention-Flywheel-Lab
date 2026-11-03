@@ -74,6 +74,28 @@ class Tests(unittest.TestCase):
         self.assertLessEqual(p['shares']['alpha'], 30)
         self.assertEqual(sum(p['shares'].values()), 270)
 
+    def test_collateral_funds_all_refunds_at_the_right_time(self):
+        c = fixtures()['compatible_three']
+        r = construct(c)
+        self.assertEqual(r['hypothetical_escrow_receipts'], 270)
+        self.assertEqual(r['hypothetical_preconstruction_cash'], 530)
+        self.assertEqual(r['hypothetical_cash_after_cost'], 270)
+        self.assertEqual(r['refund_reserve_before_acceptance'], 270)
+        self.assertTrue(r['refund_reserve_covered_before_acceptance'])
+        failed = construct(fixtures()['failure_and_refund'])
+        self.assertEqual(failed['hypothetical_cash_after_full_refund'], 0)
+        self.assertEqual(failed['conditional_cost_incurred'], 260)
+
+    def test_hypothetical_cash_tampering_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp)/'new'; run(path)
+            result_path = path/'RESULT.json'
+            v = json.loads(result_path.read_text())
+            v['worlds']['compatible_three']['hypothetical_cash_after_cost'] += 1
+            result_path.write_text(json.dumps(v))
+            with self.assertRaisesRegex(ValueError, 'BROKEN_ESCROW_COLLATERAL'):
+                audit(path)
+
 
 if __name__ == '__main__':
     unittest.main()
