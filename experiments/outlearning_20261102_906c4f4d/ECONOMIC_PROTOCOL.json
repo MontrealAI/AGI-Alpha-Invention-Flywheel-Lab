@@ -1,0 +1,178 @@
+{
+  "schema": "agi-alpha/outlearning-economic-protocol/v1",
+  "currency": "USD converted to exact native microUSD",
+  "scope": "AUTHORED_CONDITIONAL_SIMULATION_NOT_OBSERVED_DEMAND",
+  "capital_usd": [
+    10000,
+    100000
+  ],
+  "primary_capital_usd": 10000,
+  "financing": "All equity received at inception; hypothetical, no debt or real funding, no top-ups. Capital is not revenue.",
+  "arms": [
+    "treatment",
+    "ordinary"
+  ],
+  "regions": [
+    "positive",
+    "weak",
+    "adverse"
+  ],
+  "schedule": "8 K1 opportunities then 12 K2 opportunities, one per independent modeled buyer; hourly native clock, 168 hours between opportunities plus explicit settlement/support drain. K2 stratified two fresh seeds per six composition families.",
+  "opening_research_usd": 1200,
+  "ordinary_retention_usd": 0,
+  "economic_modeling_cost_usd": 100,
+  "acquisition_per_opportunity_usd": 12,
+  "onboarding_per_purchase_usd": 8,
+  "qualification_per_opportunity_usd": 4,
+  "production_per_purchase_usd": 12,
+  "verification_per_purchase_usd": 5,
+  "support_per_purchase_usd": 7,
+  "maintenance_per_opportunity_usd": 1,
+  "payment_fixed_usd": 0.3,
+  "payment_bps": 290,
+  "tax_on_positive_pre_tax_profit_bps": 2000,
+  "unsafe_extra_correction_usd": 200,
+  "probe_and_call_costs": "Each actual probe sequence is paid through JournalAccount.spend before execution. Adverse public probe/call prices are multiplied by three while the actual probe budget stays USD24. Production buys a nonrefundable 48-call capacity lot per provider before customer funding; actual call utilization is measured separately and not charged twice. Unused capacity remains paid supplier capacity.",
+  "price_menus_usd": {
+    "K1": [
+      240,
+      480,
+      800
+    ],
+    "K2": [
+      600,
+      900,
+      1500
+    ]
+  },
+  "pricing_rule": "Highest menu price no greater than the lowest current published complete rival quote, and above public complete variable cost floor. Competitor quotes decline after each six observed opportunities. No hidden value, region label, future outcome or seed used by seller.",
+  "initial_complete_rival_quotes_usd": {
+    "K1": {
+      "human_software": 1100,
+      "human_AI": 900,
+      "autonomous": 850,
+      "self_service": 1000
+    },
+    "K2": {
+      "human_software": 2400,
+      "human_AI": 1800,
+      "autonomous": 1600,
+      "self_service": 2000
+    }
+  },
+  "rival_response": "After each six prior opportunities, all published quotes reduce by5percent (floor60percent). This is a disclosed scenario, not empirical rival behavior.",
+  "demand": {
+    "positive": {
+      "benefit_ranges_usd": {
+        "K1": [
+          1200,
+          2000
+        ],
+        "K2": [
+          2400,
+          4000
+        ]
+      },
+      "budget_ranges_usd": {
+        "K1": [
+          900,
+          1600
+        ],
+        "K2": [
+          1800,
+          3600
+        ]
+      },
+      "self_service_effort_usd": [
+        100,
+        400
+      ],
+      "delay_hours": 6,
+      "collection_success_per_100": 100,
+      "cost_multiplier": 1
+    },
+    "weak": {
+      "benefit_ranges_usd": {
+        "K1": [
+          150,
+          650
+        ],
+        "K2": [
+          350,
+          950
+        ]
+      },
+      "budget_ranges_usd": {
+        "K1": [
+          180,
+          700
+        ],
+        "K2": [
+          400,
+          1000
+        ]
+      },
+      "self_service_effort_usd": [
+        0,
+        60
+      ],
+      "delay_hours": 12,
+      "collection_success_per_100": 90,
+      "cost_multiplier": 1
+    },
+    "adverse": {
+      "benefit_ranges_usd": {
+        "K1": [
+          200,
+          900
+        ],
+        "K2": [
+          500,
+          1800
+        ]
+      },
+      "budget_ranges_usd": {
+        "K1": [
+          200,
+          950
+        ],
+        "K2": [
+          500,
+          1900
+        ]
+      },
+      "self_service_effort_usd": [
+        0,
+        30
+      ],
+      "delay_hours": 72,
+      "collection_success_per_100": 70,
+      "cost_multiplier": 3
+    }
+  },
+  "buyer_choice": "Voluntary maximum nonnegative utility among seller, complete human+software, human+AI, autonomous competitor, self-service and no purchase, constrained by independently drawn finite budget. Seller observes published quotes and accept/refuse only. Deterministic ties prefer outside option.",
+  "cost_sensitivity_multipliers": [
+    1,
+    3,
+    10
+  ],
+  "human_productivity": "Conventional software comparator executed; human attention/speed and loaded labor not measured. No fictional worker hours, measured human productivity advantage or price-derived willingness-to-pay claim.",
+  "acceptance": "Bound inert program replayed by independent evaluator: safety across all four declared schedules plus complete outcome on one precommitted actual schedule. Safe abort/refund earns zero revenue.",
+  "correction": "Unsafe or incomplete production is not accepted, funds refunded, costs retained, residual effects disclosed. Full refunds are not outcome acceptance. No silent correction retries.",
+  "support_hours": 48,
+  "liabilities": "Native principal+fee exposure remains reserved through dated maturity; later claims retain native protections. Simulation support envelope prepays maintenance and correction within this finite model, not real insurance.",
+  "accounting": "Immediate expensing of research, construction and all costs; no capitalized asset or amortization in native ledger. Tax provision is a declared 20 percent of positive pre-tax operating profit, not jurisdiction-specific tax advice. No interest or debt; equity opportunity cost shown separately and not a fabricated cash payment.",
+  "successor_funding": "Attempt retained-construction expenditure only after K1 settlement. Record actual EARNED versus SEED reservation. If no affordable funding, defer K2 without changing cash or liabilities. Primary linkage may be capability-only; do not pool accounts.",
+  "scale": "Finite 20-opportunity enterprise, no automatic demand expansion. Show break-even and complete-cost marginal sensitivities. No annualization, no multi-year total substituted for trailing-365-day profit. $3B remains unachieved; new channels or larger volume need separate evidence.",
+  "cost_provenance": "All dollar prices/costs/values are predeclared stress-test inputs, not estimates validated by customer research or observed invoices. Actual included-model tokens and billing unavailable. Measured CPU and wall seconds reported separately. No external charges incurred.",
+  "operating_schedule_rule": "K1 stratum modulo four; K2 (two times stratum plus replicate) modulo four in the frozen evaluator schedule order. Twelve K2 native jobs use replicates zero and one of each family. No result-dependent selection.",
+  "shared_development_probe_cost_usd": 35,
+  "shared_development_cost_inclusion": "Included inside opening research envelope, not additional; all method development runs and failed variants are also inside the same disclosed envelope, with measured units reported separately.",
+  "K2_retained_deployment_usd": 300,
+  "construction_and_deployment": "Common USD1200 opening research includes initial construction of both frozen procedures and shared/development evidence. Candidate USD300 is a hypothetical K2-specific deployment/qualification/support charge incurred at entry, not the earlier K1 code creation. Both same-stage constructors use the same runtime cost envelope. No measured $300 model-effort difference is asserted.",
+  "construction_work_cost": "Opening research, per-opportunity qualification and maintenance cover deterministic construction/orchestration, including failures and declines, at declared unknown-billing envelopes. Actual model generation occurred during development; no runtime model API calls.",
+  "no_deploy_reference": "Six separate reference accounts incur the same common research cost then hold cash without orders or new operational work. They are not pooled or counted as productive arrangements.",
+  "epoch_utc": "2026-11-03T00:00:00Z (simulated calendar, not actual operating events)",
+  "suppliers": "Each provider offers a finite prepaid 48-call lot at its public call price. Private production costs use a seeded 30-60%,60-90%,90-140% of quote range in positive/weak/adverse regions; outside surplus is10-30% of quote. Provider accepts only when its margin strictly exceeds outside surplus. No seller access to those private values; observed accept/refuse only. Contracts have1-hour lead, finite one-lot capacity, and no renewal in this cohort. These are authored incentives, not empirical estimates.",
+  "residual_exposure": "Residual effect losses are recorded as incurred costs plus explicit unresolved protocol obligations. Paying the modeled loss is not a simulated repair; any remaining obligation vetoes closed commercial success."
+}

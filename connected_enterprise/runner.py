@@ -25,6 +25,17 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def source_paths(root):
     names=set(inherited_paths(root))
+    outlearning = 'experiments/outlearning_20261102_906c4f4d'
+    if (root/outlearning/'service.py').is_file():
+        from experiments.outlearning_20261102_906c4f4d.service import source_paths as outlearning_paths
+        names.update(outlearning_paths(root))
+        for pattern in ('*.py', '*.md', '*.json'):
+            names.update(p.relative_to(root).as_posix() for p in (root/outlearning).glob(pattern)
+                         if p.is_file() and p.name != 'CONFIRMATION_LOCK.json')
+        workflow = '.github/workflows/outlearning-906c4f4d.yml'
+        if not (root/workflow).is_file():
+            raise ValueError('OUTLEARNING_SOURCE_DEPENDENCY_MISSING')
+        names.add(workflow)
     for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('campaign/connected-registrations','*.json')]:
         names.update(p.relative_to(root).as_posix() for p in (root/folder).glob(pattern) if p.is_file())
     names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','verification/scan_adaptive_cancellation_history.py','evidence/cancellation-retirement/HISTORICAL_SCAN.json','evidence/cancellation-retirement/COUNTEREXAMPLE.before.json','docs/connected014/OPERATOR.md','AGENTS.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())

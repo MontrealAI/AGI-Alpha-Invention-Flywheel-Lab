@@ -1,0 +1,1651 @@
+{
+  "schema": "outlearning-k1-development/v1",
+  "scope": "EXPOSED_DEVELOPMENT_NOT_CONFIRMATION",
+  "initial_explanations": [
+    "H1 request lost before effect",
+    "H2 effect committed but acknowledgement lost"
+  ],
+  "challenge": "Some observations cannot be represented by H1/H2 alone; construct additional state and a deployable protocol.",
+  "records": [
+    {
+      "task": {
+        "schema": "outlearning-public-task/v1",
+        "world_id": "0c2690798d0a7599",
+        "stage": "K1",
+        "providers": [
+          {
+            "id": "provider-037d14bcb9",
+            "probe_unit_microUSD": 250000,
+            "call_microUSD": 100000
+          }
+        ],
+        "probe_budget_microUSD": 24000000,
+        "max_steps": 48,
+        "order_token": "order",
+        "schedules": [
+          "healthy",
+          "lost_request",
+          "lost_ack",
+          "provider_refusal"
+        ],
+        "outcome": "exactly_once_single",
+        "maximum_program_nodes": 256,
+        "ops": [
+          "execute",
+          "reserve",
+          "commit",
+          "cancel",
+          "status",
+          "fence",
+          "wait"
+        ],
+        "responses": [
+          "DONE",
+          "ABSENT",
+          "RESERVED",
+          "CANCELLED",
+          "TIMEOUT",
+          "UNSUPPORTED",
+          "REFUSED",
+          "UNKNOWN"
+        ]
+      },
+      "observations": {
+        "ambiguous_ack": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 500000,
+          "remaining_microUSD": 23500000
+        },
+        "stable_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 22750000
+        },
+        "delayed_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "wait",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 9,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 10,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 11,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 21750000
+        },
+        "prepared": {
+          "observations": [
+            {
+              "op": "reserve",
+              "response": "RESERVED",
+              "effect_count": 0,
+              "hold_count": 1,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "CANCELLED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 4,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 20750000
+        },
+        "reconcile": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "CANCELLED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 20000000
+        }
+      },
+      "probe_cost_microUSD": 4000000
+    },
+    {
+      "task": {
+        "schema": "outlearning-public-task/v1",
+        "world_id": "81de3f07b513282a",
+        "stage": "K1",
+        "providers": [
+          {
+            "id": "provider-6a3e2feb64",
+            "probe_unit_microUSD": 250000,
+            "call_microUSD": 200000
+          }
+        ],
+        "probe_budget_microUSD": 24000000,
+        "max_steps": 48,
+        "order_token": "order",
+        "schedules": [
+          "healthy",
+          "lost_request",
+          "lost_ack",
+          "provider_refusal"
+        ],
+        "outcome": "exactly_once_single",
+        "maximum_program_nodes": 256,
+        "ops": [
+          "execute",
+          "reserve",
+          "commit",
+          "cancel",
+          "status",
+          "fence",
+          "wait"
+        ],
+        "responses": [
+          "DONE",
+          "ABSENT",
+          "RESERVED",
+          "CANCELLED",
+          "TIMEOUT",
+          "UNSUPPORTED",
+          "REFUSED",
+          "UNKNOWN"
+        ]
+      },
+      "observations": {
+        "ambiguous_ack": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 500000,
+          "remaining_microUSD": 23500000
+        },
+        "stable_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 22750000
+        },
+        "delayed_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "wait",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 9,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 10,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 11,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 21750000
+        },
+        "prepared": {
+          "observations": [
+            {
+              "op": "reserve",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "CANCELLED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 4,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 20750000
+        },
+        "reconcile": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "CANCELLED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 20000000
+        }
+      },
+      "probe_cost_microUSD": 4000000
+    },
+    {
+      "task": {
+        "schema": "outlearning-public-task/v1",
+        "world_id": "bde78de4746a57a8",
+        "stage": "K1",
+        "providers": [
+          {
+            "id": "provider-26ee9489ae",
+            "probe_unit_microUSD": 250000,
+            "call_microUSD": 200000
+          }
+        ],
+        "probe_budget_microUSD": 24000000,
+        "max_steps": 48,
+        "order_token": "order",
+        "schedules": [
+          "healthy",
+          "lost_request",
+          "lost_ack",
+          "provider_refusal"
+        ],
+        "outcome": "exactly_once_single",
+        "maximum_program_nodes": 256,
+        "ops": [
+          "execute",
+          "reserve",
+          "commit",
+          "cancel",
+          "status",
+          "fence",
+          "wait"
+        ],
+        "responses": [
+          "DONE",
+          "ABSENT",
+          "RESERVED",
+          "CANCELLED",
+          "TIMEOUT",
+          "UNSUPPORTED",
+          "REFUSED",
+          "UNKNOWN"
+        ]
+      },
+      "observations": {
+        "ambiguous_ack": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "ABSENT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 500000,
+          "remaining_microUSD": 23500000
+        },
+        "stable_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "ABSENT",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 22750000
+        },
+        "delayed_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "wait",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 9,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 10,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 11,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 21750000
+        },
+        "prepared": {
+          "observations": [
+            {
+              "op": "reserve",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "CANCELLED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 4,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 20750000
+        },
+        "reconcile": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "CANCELLED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 20000000
+        }
+      },
+      "probe_cost_microUSD": 4000000
+    },
+    {
+      "task": {
+        "schema": "outlearning-public-task/v1",
+        "world_id": "cc53cc58884473f5",
+        "stage": "K1",
+        "providers": [
+          {
+            "id": "provider-5e6a3c8b64",
+            "probe_unit_microUSD": 250000,
+            "call_microUSD": 100000
+          }
+        ],
+        "probe_budget_microUSD": 24000000,
+        "max_steps": 48,
+        "order_token": "order",
+        "schedules": [
+          "healthy",
+          "lost_request",
+          "lost_ack",
+          "provider_refusal"
+        ],
+        "outcome": "exactly_once_single",
+        "maximum_program_nodes": 256,
+        "ops": [
+          "execute",
+          "reserve",
+          "commit",
+          "cancel",
+          "status",
+          "fence",
+          "wait"
+        ],
+        "responses": [
+          "DONE",
+          "ABSENT",
+          "RESERVED",
+          "CANCELLED",
+          "TIMEOUT",
+          "UNSUPPORTED",
+          "REFUSED",
+          "UNKNOWN"
+        ]
+      },
+      "observations": {
+        "ambiguous_ack": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "UNKNOWN",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 500000,
+          "remaining_microUSD": 23500000
+        },
+        "stable_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "UNKNOWN",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 22750000
+        },
+        "delayed_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "wait",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 9,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 10,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "UNSUPPORTED",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 11,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 21750000
+        },
+        "prepared": {
+          "observations": [
+            {
+              "op": "reserve",
+              "response": "RESERVED",
+              "effect_count": 0,
+              "hold_count": 1,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "REFUSED",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 4,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 20750000
+        },
+        "reconcile": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "UNSUPPORTED",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "REFUSED",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 20000000
+        }
+      },
+      "probe_cost_microUSD": 4000000
+    },
+    {
+      "task": {
+        "schema": "outlearning-public-task/v1",
+        "world_id": "9acb6a2f30750857",
+        "stage": "K1",
+        "providers": [
+          {
+            "id": "provider-00f6f48a8f",
+            "probe_unit_microUSD": 250000,
+            "call_microUSD": 200000
+          }
+        ],
+        "probe_budget_microUSD": 24000000,
+        "max_steps": 48,
+        "order_token": "order",
+        "schedules": [
+          "healthy",
+          "lost_request",
+          "lost_ack",
+          "provider_refusal"
+        ],
+        "outcome": "exactly_once_single",
+        "maximum_program_nodes": 256,
+        "ops": [
+          "execute",
+          "reserve",
+          "commit",
+          "cancel",
+          "status",
+          "fence",
+          "wait"
+        ],
+        "responses": [
+          "DONE",
+          "ABSENT",
+          "RESERVED",
+          "CANCELLED",
+          "TIMEOUT",
+          "UNSUPPORTED",
+          "REFUSED",
+          "UNKNOWN"
+        ]
+      },
+      "observations": {
+        "ambiguous_ack": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "ABSENT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 500000,
+          "remaining_microUSD": 23500000
+        },
+        "stable_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "ABSENT",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 22750000
+        },
+        "delayed_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "wait",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 9,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 10,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "UNSUPPORTED",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 11,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 21750000
+        },
+        "prepared": {
+          "observations": [
+            {
+              "op": "reserve",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "CANCELLED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 4,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 20750000
+        },
+        "reconcile": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "UNSUPPORTED",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "REFUSED",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 20000000
+        }
+      },
+      "probe_cost_microUSD": 4000000
+    },
+    {
+      "task": {
+        "schema": "outlearning-public-task/v1",
+        "world_id": "11a68b10ddf40841",
+        "stage": "K1",
+        "providers": [
+          {
+            "id": "provider-f052d8e23a",
+            "probe_unit_microUSD": 250000,
+            "call_microUSD": 200000
+          }
+        ],
+        "probe_budget_microUSD": 24000000,
+        "max_steps": 48,
+        "order_token": "order",
+        "schedules": [
+          "healthy",
+          "lost_request",
+          "lost_ack",
+          "provider_refusal"
+        ],
+        "outcome": "exactly_once_single",
+        "maximum_program_nodes": 256,
+        "ops": [
+          "execute",
+          "reserve",
+          "commit",
+          "cancel",
+          "status",
+          "fence",
+          "wait"
+        ],
+        "responses": [
+          "DONE",
+          "ABSENT",
+          "RESERVED",
+          "CANCELLED",
+          "TIMEOUT",
+          "UNSUPPORTED",
+          "REFUSED",
+          "UNKNOWN"
+        ]
+      },
+      "observations": {
+        "ambiguous_ack": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "ABSENT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 500000,
+          "remaining_microUSD": 23500000
+        },
+        "stable_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "ABSENT",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 22750000
+        },
+        "delayed_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "wait",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 9,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 10,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "UNSUPPORTED",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 11,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 21750000
+        },
+        "prepared": {
+          "observations": [
+            {
+              "op": "reserve",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "CANCELLED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 4,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 20750000
+        },
+        "reconcile": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "UNSUPPORTED",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "CANCELLED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 20000000
+        }
+      },
+      "probe_cost_microUSD": 4000000
+    },
+    {
+      "task": {
+        "schema": "outlearning-public-task/v1",
+        "world_id": "fd16d283fb1edf5c",
+        "stage": "K1",
+        "providers": [
+          {
+            "id": "provider-2a52e3526a",
+            "probe_unit_microUSD": 250000,
+            "call_microUSD": 400000
+          }
+        ],
+        "probe_budget_microUSD": 24000000,
+        "max_steps": 48,
+        "order_token": "order",
+        "schedules": [
+          "healthy",
+          "lost_request",
+          "lost_ack",
+          "provider_refusal"
+        ],
+        "outcome": "exactly_once_single",
+        "maximum_program_nodes": 256,
+        "ops": [
+          "execute",
+          "reserve",
+          "commit",
+          "cancel",
+          "status",
+          "fence",
+          "wait"
+        ],
+        "responses": [
+          "DONE",
+          "ABSENT",
+          "RESERVED",
+          "CANCELLED",
+          "TIMEOUT",
+          "UNSUPPORTED",
+          "REFUSED",
+          "UNKNOWN"
+        ]
+      },
+      "observations": {
+        "ambiguous_ack": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "UNKNOWN",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 500000,
+          "remaining_microUSD": 23500000
+        },
+        "stable_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "UNKNOWN",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 22750000
+        },
+        "delayed_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "wait",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 9,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 10,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "UNSUPPORTED",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 11,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 21750000
+        },
+        "prepared": {
+          "observations": [
+            {
+              "op": "reserve",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "CANCELLED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 4,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 20750000
+        },
+        "reconcile": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "UNSUPPORTED",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "REFUSED",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 20000000
+        }
+      },
+      "probe_cost_microUSD": 4000000
+    },
+    {
+      "task": {
+        "schema": "outlearning-public-task/v1",
+        "world_id": "80ef5f7c57f0eb6c",
+        "stage": "K1",
+        "providers": [
+          {
+            "id": "provider-deb5bf6de2",
+            "probe_unit_microUSD": 250000,
+            "call_microUSD": 200000
+          }
+        ],
+        "probe_budget_microUSD": 24000000,
+        "max_steps": 48,
+        "order_token": "order",
+        "schedules": [
+          "healthy",
+          "lost_request",
+          "lost_ack",
+          "provider_refusal"
+        ],
+        "outcome": "exactly_once_single",
+        "maximum_program_nodes": 256,
+        "ops": [
+          "execute",
+          "reserve",
+          "commit",
+          "cancel",
+          "status",
+          "fence",
+          "wait"
+        ],
+        "responses": [
+          "DONE",
+          "ABSENT",
+          "RESERVED",
+          "CANCELLED",
+          "TIMEOUT",
+          "UNSUPPORTED",
+          "REFUSED",
+          "UNKNOWN"
+        ]
+      },
+      "observations": {
+        "ambiguous_ack": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "UNKNOWN",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 500000,
+          "remaining_microUSD": 23500000
+        },
+        "stable_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "status",
+              "response": "UNKNOWN",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 22750000
+        },
+        "delayed_retry": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "wait",
+              "response": "DONE",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 9,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "execute",
+              "response": "DONE",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 10,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "UNSUPPORTED",
+              "effect_count": 2,
+              "hold_count": 0,
+              "tick": 11,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 21750000
+        },
+        "prepared": {
+          "observations": [
+            {
+              "op": "reserve",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "commit",
+              "response": "UNSUPPORTED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "CANCELLED",
+              "effect_count": 0,
+              "hold_count": 0,
+              "tick": 4,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 1000000,
+          "remaining_microUSD": 20750000
+        },
+        "reconcile": {
+          "observations": [
+            {
+              "op": "execute",
+              "response": "TIMEOUT",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 1,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "fence",
+              "response": "UNSUPPORTED",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 2,
+              "measurement": "sandbox_ledger"
+            },
+            {
+              "op": "cancel",
+              "response": "REFUSED",
+              "effect_count": 1,
+              "hold_count": 0,
+              "tick": 3,
+              "measurement": "sandbox_ledger"
+            }
+          ],
+          "cost_microUSD": 750000,
+          "remaining_microUSD": 20000000
+        }
+      },
+      "probe_cost_microUSD": 4000000
+    }
+  ]
+}
