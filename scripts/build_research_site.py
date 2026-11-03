@@ -14,6 +14,7 @@ PAPERS = (
     'agi-alpha-foundation-20260430.pdf',
     'agi-alpha-flywheel-20261102.pdf',
     'agi-alpha-flywheel-20261102-v1.1.pdf',
+    'agi-alpha-flywheel-20261102-report.pdf',
     'invent-the-economy-202610.pdf',
     'the-world-as-an-output-20261020.pdf',
     'beyond-the-production-frontier-20261019.pdf',
@@ -29,7 +30,7 @@ PAPERS = (
     'out-execute-20261021.pdf',
     'out-evolve-20261020.pdf',
 )
-PAGES = ('out-accelerate.html', 'transformational-intelligence.html', 'agi-alpha.html', 'agi-alpha-flywheel.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
+PAGES = ('agi-alpha-flywheel-report-20261102.html', 'out-accelerate.html', 'transformational-intelligence.html', 'agi-alpha.html', 'agi-alpha-flywheel.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
          'out-series.html', 'out-learn.html', 'out-think.html', 'out-design.html', 'out-strategise.html', 'out-execute.html', 'out-evolve.html')
 ASSETS = ('alpha.css', 'alpha.js', 'alpha-mark.svg')
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)

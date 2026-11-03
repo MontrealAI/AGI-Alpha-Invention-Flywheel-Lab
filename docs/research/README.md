@@ -1,5 +1,17 @@
 # Research papers
 
+## AGI ALPHA FLYWHEEL 2026 11 02 Report
+
+**Constructing the means of consequential progress.**
+
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · Research period: 2 November 2026 · Published: 3 November · Edition 1.0.0 · 22 pages.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/agi-alpha-flywheel-report-20261102.html) · [Complete PDF](agi-alpha-flywheel-20261102-report.pdf) · [Editable LaTeX, evidence and audit](../agi-alpha-flywheel-report-20261102/README.md) · [Versioned publication](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/agi-alpha-flywheel-report-20261102-v1.0.0)
+
+A source-bound synthesis of executable instruments, measurement ambiguity, purpose-preserving decisions, discovery allocation, complete conventional comparisons and economic continuation. It includes all 110 compact financial case summaries, exact public source identities, selected computational reproductions and a small independent arithmetic path.
+
+**Scope:** Not one pooled experiment or a fresh physical/market sample. Conventional controls tie or win important comparisons. Actual revenue, physical expansion, improved discovery and the US$3 billion trailing-year objective remain unestablished. Prior research editions remain unchanged.
+
 ## ⚡♾️ OUT-ACCELERATE
 
 **Intelligence that accelerates the means of acceleration.**

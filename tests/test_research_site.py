@@ -58,8 +58,8 @@ class ResearchSiteTests(unittest.TestCase):
         slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
-        self.assertEqual(len(site.PAPERS), 18)
-        self.assertEqual(len(site.PAGES), 20)
+        self.assertEqual(len(site.PAPERS), 19)
+        self.assertEqual(len(site.PAGES), 21)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
             reader = 'out-' + slug + '.html'
@@ -119,6 +119,23 @@ class ResearchSiteTests(unittest.TestCase):
         manifest = json.loads((self.source / 'publication-manifest.json').read_text())
         paper = next(item for item in manifest['papers'] if item['file'] == 'agi-alpha-flywheel-20261102-v1.1.pdf')
         self.assertIn('<code>' + paper['sha256'] + '</code>', reader)
+
+    def test_experimental_report_has_intact_pdf_source_and_scope(self):
+        import json
+        name = 'agi-alpha-flywheel-20261102-report.pdf'
+        reader = (self.source / 'agi-alpha-flywheel-report-20261102.html').read_text()
+        home = (self.source / 'index.html').read_text()
+        self.assertIn('agi-alpha-flywheel-report-20261102.html', home)
+        parser = site.Links()
+        parser.feed(reader)
+        self.assertIn(name, parser.links)
+        self.assertIn(name + '#view=FitH', parser.links)
+        self.assertIn('https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/agi-alpha-flywheel-report-20261102', parser.links)
+        manifest = json.loads((self.source / 'publication-manifest.json').read_text())
+        entry = next(p for p in manifest['papers'] if p['file'] == name)
+        self.assertIn('<code>' + entry['sha256'] + '</code>', reader)
+        for text in ('110', '23 accounts', 'Scope and evidence', 'conventional', 'not a new full replay', '22 pages'):
+            self.assertIn(text, reader)
 
     def test_unresolved_publication_metadata_is_rejected(self):
         page = self.source / 'agi-alpha-flywheel.html'

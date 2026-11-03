@@ -1,0 +1,15 @@
+\begin{tikzpicture}[font=\small,>=Latex,b/.style={draw=violetink,rounded corners=2pt,align=center,inner sep=6pt},a/.style={->,draw=violetink,line width=.65pt}]
+\node[b,fill=pale,text width=14cm] (purpose) at (0,0) {\textbf{AUTHORIZED PURPOSE}\par Valuable outcome, acceptance, rights, resources and continuing obligations};
+\node[b,text width=6cm] (i1) at (-3.9,-2.1) {\textbf{INVENTION}\par Diagnose a missing observation, interface, instrument or productive arrangement};
+\node[b,text width=6cm] (o1) at (3.9,-2.1) {\textbf{OPERATION}\par Assemble a complete offer; establish voluntary participation and funding};
+\draw[a] (purpose.south)--(0,-.9)-|(i1.north);\draw[a] (purpose.south)--(0,-.9)-|(o1.north);
+\node[b,fill=pale,text width=6cm] (i2) at (-3.9,-4.7) {\textbf{CONSTRUCT AND CHECK}\par Executable artifact, strongest complete alternatives and fresh acceptance};
+\node[b,fill=pale,text width=6cm] (o2) at (3.9,-4.7) {\textbf{DELIVER AND ACCOUNT}\par Accepted result, collection, complete costs, cash and protected obligations};
+\draw[a] (i1)--(i2);\draw[a] (o1)--(o2);
+\draw[a] (i2.east)--node[above,font=\scriptsize,align=center]{qualified\\means}(o2.west);
+\node[b,text width=6cm] (i3) at (-3.9,-7.1) {\textbf{TEST THE SUCCESSOR}\par Distinct task; applicability, full transfer cost and equal-content control};
+\node[b,text width=6cm] (o3) at (3.9,-7.1) {\textbf{FUND CONTINUATION}\par Identified spendable resources and prospective commitments; retain cash when warranted};
+\draw[a] (i2)--(i3);\draw[a] (o2)--(o3);
+\draw[a] (o3.west)--node[above,font=\scriptsize,align=center]{authorized\\resources}(i3.east);
+\node[align=center,text width=14cm,font=\footnotesize\color{muted}] at (0,-9) {These arrows state separately testable relations.\par A retained artifact, simulated profit and improved discovery are different claims.};
+\end{tikzpicture}
