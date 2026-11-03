@@ -4,7 +4,7 @@ The preferred purple-and-white homepage introduces the Blue Sky-only invention f
 
 The [original Foundry v2 PDF](autonomous-enterprises-foundry-v2.pdf) is always available in this public repository. GitHub can preview it; use its download control if your browser does not show the preview. This link does not depend on GitHub Pages, an Actions artifact, or an expiring attachment.
 
-The website adds a simple research shelf, dedicated reading pages for all seventeen papers, and visible open/download fallbacks. PDFs remain unchanged. No login, third-party viewer, tracking, API key, paid service, or local setup is needed to read the published site.
+The website adds a simple research shelf, dedicated reading pages for every allowlisted paper, and visible open/download fallbacks. PDFs remain unchanged. No login, third-party viewer, tracking, API key, paid service, or local setup is needed to read the published site.
 
 ## One-time owner setup
 
@@ -30,7 +30,7 @@ On a phone, tap **Open the full paper** for the native PDF reader. If inline pre
 
 ## What is published
 
-The build copies **only** twenty named HTML pages, the seventeen named public PDFs, `alpha.css`, `alpha.js`, `alpha-mark.svg`, a checksum manifest, and `.nojekyll`. It does not export the repository, accounts, experiment outputs, credentials, or local workspace. Pull requests validate and build only; deployment is restricted to `main`, with Pages/OIDC permissions limited to the deployment job. Existing manuscript paths and release `PAPER.pdf` files are untouched.
+The build copies **only** the explicitly named HTML pages and public PDFs, `alpha.css`, `alpha.js`, `alpha-mark.svg`, a checksum manifest, and `.nojekyll`. It does not export the repository, accounts, experiment outputs, credentials, or local workspace. Pull requests validate and build only; deployment is restricted to `main`, with Pages/OIDC permissions limited to the deployment job. Existing manuscript paths and release `PAPER.pdf` files are untouched.
 
 Local check (Python standard library only):
 
@@ -44,3 +44,5 @@ python3 -m http.server 8000 --directory /tmp/research-site-NEW
 Use a new output directory for each build. Open `http://localhost:8000/` to preview; do not serve the whole repository or private workspace.
 
 Official guidance: [custom GitHub Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+
+The distinct [2 November experimental report reader](agi-alpha-flywheel-report-20261102.html) links the new report PDF, editable source, compact evidence and versioned release. Earlier flywheel research editions retain their reader and PDF paths.

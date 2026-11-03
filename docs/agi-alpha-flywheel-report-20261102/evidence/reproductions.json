@@ -1,0 +1,65 @@
+{
+  "schema": "agi-alpha-flywheel-report/reproductions/v1",
+  "date_utc": "2026-11-03",
+  "source_commit": "215b22a5ed73b82ac1d909328d60157c48bd9958",
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "runs": [
+    {
+      "procedure": "foundry",
+      "command": "python docs/agi-alpha-flywheel/examples/check_foundry.py",
+      "scope": "Exact scientific fields; timings and Python-version observation excluded",
+      "result": {
+        "status": "PASS",
+        "scope": "Exact scientific replay; original executable and result preserved",
+        "protocol_sha256": "6ca5081308beaf3805e7e53d2532edcf2380b91b4568bdc5a381003b80bbf8f7",
+        "source_sha256": "a71d0623d537e06c9facbd1efeded205b485f9204305a2f9d5a072913637e77a",
+        "requests_per_arm": 36
+      },
+      "full_local_output_sha256": "39de0be065de7c0310bbe2fbe96d1db063281ff7eee10e186630d4465fe330be"
+    },
+    {
+      "procedure": "n1",
+      "command": "python experiments/next_series_20261102_365c3d6c/verification/verify_n1.py --output <new-n1.json>",
+      "scope": "Existing separately implemented verifier; 18 exposed authored model/provenance cases",
+      "result": {
+        "registered_denominator": 18,
+        "passed": 18,
+        "failed": 0
+      },
+      "full_local_output_sha256": "149fa50eef8f0351df0a45772656a827c2530cf952b54df76c29a95fabcd9df5"
+    },
+    {
+      "procedure": "n3",
+      "command": "python experiments/next_series_20261102_365c3d6c/verification/verify_n3.py --output <new-n3.json>",
+      "scope": "Existing separately implemented verifier; 26 exposed authored model cases",
+      "result": {
+        "registered_denominator": 26,
+        "passed": 26,
+        "failed": 0
+      },
+      "full_local_output_sha256": "01b5cca5ff69fd141f971dd6a2e1aba4c6c634ee323c4a6e1a2a2a2350788287"
+    },
+    {
+      "procedure": "paired",
+      "command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m experiments.paired_acquisition_20261102.run --output <new-paired-directory> --expected-freeze-sha256 db80989740105baeca37be68b7fa9615c436965ea9ea160712f258ca3da490dc --source-commit 215b22a5ed73b82ac1d909328d60157c48bd9958 --execution-label report-engineering-reproduction",
+      "scope": "Original frozen computational contract; no native account or physical acquisition",
+      "result": {
+        "bulk_passed": 80,
+        "spatial_passed": 12,
+        "control_checks_passed": 8,
+        "limitation_witnesses_observed": 4,
+        "numerical_contract_accepted": true,
+        "frozen_files_checked_before_and_after": 16,
+        "native_account_actions": 0,
+        "actual_revenue_usd": 0,
+        "physical_qualification": false
+      },
+      "full_local_output_sha256": "c7e0d3a051842f3513f0b1514d2eca95737ee69582396020ae898d739047eb8e"
+    }
+  ],
+  "boundary": "Report preparation reruns of exposed public cases, not fresh confirmation, an external independent review, or replay of all 110 native financial accounts."
+}
