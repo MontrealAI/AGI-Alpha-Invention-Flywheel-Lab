@@ -1,0 +1,27 @@
+name: Public-demand 079 frozen read-only qualification
+on:
+  pull_request:
+    paths:
+      - 'campaign/public-demand-079/**'
+      - '.github/workflows/public-demand079.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-bound-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Verify frozen no-payment qualification
+        run: |
+          set -euo pipefail
+          cd campaign/public-demand-079
+          python3 -m unittest -v test_gateway.py
+          python3 gateway.py run "$RUNNER_TEMP/public-demand079.json"
+          python3 gateway.py audit "$RUNNER_TEMP/public-demand079.json"
+          cmp RESULT.json "$RUNNER_TEMP/public-demand079.json"
+          test "$(git rev-parse HEAD)" = '${{ github.event.pull_request.head.sha || github.sha }}'
