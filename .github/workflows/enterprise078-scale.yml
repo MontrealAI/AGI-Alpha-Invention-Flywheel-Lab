@@ -1,0 +1,113 @@
+name: Enterprise078 scale native qualification
+on:
+  push:
+    branches: ['experiment/enterprise078-scale-20261102']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: enterprise078-scale-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-and-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Existing native runtime dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-commercial010.txt
+      - name: Verify exact source identity and isolate the frozen test runtime
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          python scripts/enterprise078_scale_runtime.py --output "$RUNNER_TEMP/e078-scale-test-runtime" > "$RUNNER_TEMP/e078-scale-composition.json"
+      - name: Current native, isolated composition and safe-export regressions
+        run: |
+          python -m unittest tests.test_enterprise078_scale_runtime tests.test_enterprise078_scale_export_guard enterprise078.test_runtime tests.test_connected_finance tests.test_connected_p0_source_guard.JoinPreflightTests tests.test_connected_platform_runtime064.CurrentWorkflowPlatformTests.test_all_current_jobs_use_the_public_standard_runner_and_platform_window -v
+      - name: Original operating regressions on isolated frozen source
+        run: |
+          cd "$RUNNER_TEMP/e078-scale-test-runtime"
+          PYTHONPATH="$PWD" PYTHONNOUSERSITE=1 python -m unittest enterprise078_scale.test_scale enterprise078.test_enterprise078 -v
+      - name: Export unmodified public source and build identity from a fresh stage
+        run: |
+          python scripts/enterprise078_scale_runtime.py --output "$RUNNER_TEMP/e078-scale-export-runtime"
+          (
+          cd "$RUNNER_TEMP/e078-scale-export-runtime"
+          PYTHONPATH="$PWD" PYTHONNOUSERSITE=1 python - <<'PYTHON'
+          import pathlib,zipfile
+          from enterprise078_scale.run import copy_source
+          out=pathlib.Path('/tmp/e078-source');out.mkdir()
+          copy_source(out/'source')
+          with zipfile.ZipFile(out/'source.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for p in sorted((out/'source').rglob('*')):
+                  if p.is_file():z.write(p,p.relative_to(out/'source'))
+          PYTHON
+          )
+          python - <<'PYTHON'
+          import json,os,pathlib,subprocess
+          out=pathlib.Path('/tmp/e078-source')
+          composition=json.loads(pathlib.Path(os.environ['RUNNER_TEMP'],'e078-scale-composition.json').read_text())
+          (out/'BUILD.json').write_text(json.dumps({'commit':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'run_id':os.environ['GITHUB_RUN_ID'],'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],'composition':composition,'scope':'PUBLIC_SOURCE_NOT_ACCOUNT_AUTHORITY'},indent=2))
+          PYTHON
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: enterprise078-scale-source
+          path: |
+            /tmp/e078-source/source.zip
+            /tmp/e078-source/BUILD.json
+          retention-days: 7
+          if-no-files-found: error
+  financial-world:
+    needs: source-and-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        world: [central, favorable, weak, adverse, illiquid, no_financing, reference_100k, ordinary_no_inheritance]
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Existing native runtime dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-commercial010.txt
+      - name: Materialize unchanged scale and scientific runtime outside checkout
+        run: python scripts/enterprise078_scale_runtime.py --output "$RUNNER_TEMP/e078-scale-world-runtime"
+      - name: Operate one independent registered native account and safely stage public evidence
+        id: stage_public_evidence
+        shell: bash
+        run: |
+          set +e
+          (cd "$RUNNER_TEMP/e078-scale-world-runtime" && PYTHONPATH="$PWD" PYTHONNOUSERSITE=1 python -m enterprise078_scale.run --output "$RUNNER_TEMP/enterprise078-scale" --world '${{ matrix.world }}') > "$RUNNER_TEMP/e078-world.stdout" 2> "$RUNNER_TEMP/e078-world.stderr"
+          status=$?
+          set -e
+          python scripts/enterprise078_scale_export_guard.py --output-root "$RUNNER_TEMP/enterprise078-scale" --upload-root "$RUNNER_TEMP/enterprise078-scale-export" --stdout "$RUNNER_TEMP/e078-world.stdout" --stderr "$RUNNER_TEMP/e078-world.stderr" --exit-code "$status" --world '${{ matrix.world }}'
+          echo "financial_exit_code=$status" >> "$GITHUB_OUTPUT"
+      - name: Retain compact key-free evidence and failures
+        if: ${{ steps.stage_public_evidence.outcome == 'success' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: enterprise078-scale-${{ matrix.world }}
+          path: ${{ runner.temp }}/enterprise078-scale-export/
+          retention-days: 7
+          if-no-files-found: error
+      - name: Preserve original financial world verdict after safe export
+        if: ${{ always() && steps.stage_public_evidence.outcome == 'success' }}
+        run: exit "${{ steps.stage_public_evidence.outputs.financial_exit_code }}"
+
