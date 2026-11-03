@@ -1,12 +1,12 @@
 # Public source map
 
-This map identifies the public sources used by **AGI ALPHA FLYWHEEL** and the scope of the claims they support. The bibliography is in [references.bib](references.bib). Repository evidence is frozen at commit [e67aa09031583f976a39c8406ae86585b02cde76](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/e67aa09031583f976a39c8406ae86585b02cde76), observed on 2 November 2026. Later repository changes do not silently change this edition's evidence.
+This map identifies the public sources used by **AGI ALPHA FLYWHEEL** and the scope of the claims they support. The bibliography is in [references.bib](references.bib). The historical experimental baseline is frozen at commit [e67aa09031583f976a39c8406ae86585b02cde76](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/e67aa09031583f976a39c8406ae86585b02cde76), observed on 2 November 2026. Later research sources carry their own explicit pins and do not silently alter those experimental records.
 
 A conceptual source supports an idea or a stated model result. A repository report supports what its recorded experiment establishes within its declared scope. Neither alone establishes actual customers, physical deployment, general intelligence, or commercial profit outside its model.
 
 ## Research foundations
 
-The original manuscripts are preserved in the [research collection](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/e67aa09031583f976a39c8406ae86585b02cde76/docs/research/README.md). Author and edition metadata were checked against their title pages.
+The original manuscripts are preserved in the [research collection](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/e67aa09031583f976a39c8406ae86585b02cde76/docs/research/README.md). Additional manuscripts use the separately pinned source shown below. Author and edition metadata were checked against their title pages.
 
 | Citation key | Claim or mechanism used | Public source | Scope |
 | --- | --- | --- | --- |
@@ -23,6 +23,7 @@ The original manuscripts are preserved in the [research collection](https://gith
 | `outexecute` | Reuse complete boundary contracts while rechecking changed answers and acceptance. | [Out-Execute](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/e67aa09031583f976a39c8406ae86585b02cde76/docs/research/out-execute-20261021.pdf), Vincent Boucher, 21 October 2026. | Finite separable cost systems and complete boundary functions. |
 | `outevolve` | Construct and retain means that support distinct successor discovery or production. | [Out-Evolve](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/e67aa09031583f976a39c8406ae86585b02cde76/docs/research/out-evolve-20261020.pdf), Vincent Boucher, 20 October 2026. | Declared function classes and qualification conditions; no achieved enterprise claim. |
 | `outreflect` | Construct joint evidence that can identify a supported transformation despite bounded corruption. | [Out-Reflect](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/e67aa09031583f976a39c8406ae86585b02cde76/docs/research/out-reflect-self-correcting-evidence-20261021.pdf), Vincent Boucher, 21 October 2026. | Stated polynomial family, exact arithmetic and fault bound. |
+| `outaccelerate` | Acquisition costs and verification bottlenecks determine whether retained means reduce time to accepted outcomes. | [OUT-ACCELERATE](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/d6198584eeb0372564f1ae5cbfb50e1b288e508b/docs/research/out-accelerate.tex), Vincent Boucher, 2 November 2026, research edition 1.0. | Authored deterministic two-stage scheduling model with stipulated durations and an ordinary-workflow tie; no measured real-world acceleration or discovery-policy gain. |
 | `enterprises` | Reuse compatible generic checks while validating each mission and granting authority separately. | [Transformational Autonomous Enterprises](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/e67aa09031583f976a39c8406ae86585b02cde76/docs/research/transformational-autonomous-enterprises-v1.pdf), MONTREAL.AI, 23 October 2026, research edition 01. | Synthetic four-system comparison; its specialist comparator remains competitive. |
 
 ## Recorded experiments and current operating objective
@@ -46,13 +47,20 @@ The R2 report retains unpaid obligations and identifies 23 accounts with uncover
 | `gentner` | Relational structure and systematicity guide cross-domain analogy. | Dedre Gentner (1983), [Structure-Mapping](https://doi.org/10.1207/s15516709cog0702_3), *Cognitive Science* 7(2):155–170. | A mapping proposes a transfer; it does not validate the target implementation. |
 | `dreamcoder` | Program libraries and learned search policies bootstrap one another. | Kevin Ellis et al. (2021), [DreamCoder](https://doi.org/10.1145/3453483.3454080), PLDI; [institutional final-version record](https://hdl.handle.net/1721.1/145949). | Reusable executable abstractions are established prior work. |
 | `poet` | Jointly generated challenges and solutions support transferable stepping stones. | Rui Wang et al. (2019), [POET, version 3](https://arxiv.org/abs/1901.01753v3). | Open-ended search does not itself establish externally accepted economic value. |
+| `powerplay` | Jointly search for new tasks and solver modifications, with reuse and validation of retained capability. | Jürgen Schmidhuber (2013), [PowerPlay](https://doi.org/10.3389/fpsyg.2013.00313), *Frontiers in Psychology* 4:313. | Joint task–method search and capability accumulation are prior work; external productive value and funded succession require their own evidence. |
+| `skillcraft` | Construct, cache and reuse executable higher-level tool compositions across tasks. | Shiqi Chen et al. (2026), [SkillCraft, version 2](https://arxiv.org/abs/2603.00718v2), revised 10 March 2026. | Compositional tool reuse has an existing benchmark; token savings do not by themselves measure complete economic cost. |
 | `dgm` | Empirically evaluated self-modification and an archive of agent descendants. | Jenny Zhang et al. (2025; revised 2026), [Darwin Gödel Machine, version 3](https://arxiv.org/abs/2505.22954v3). | Coding-benchmark evidence is distinct from profitable enterprise operation. |
 | `hyperagents` | Edit the task agent and the procedure that generates subsequent improvements. | Jenny Zhang et al. (2026), [Hyperagents, version 1](https://arxiv.org/abs/2603.19461v1). | Editable meta-level improvement is prior work; an economic discovery advantage needs its own comparison. |
+| `romer` | Model technological change arising from intentional investment, with knowledge treated as nonrival and partially excludable. | Paul M. Romer (1990), [Endogenous Technological Change](https://doi.org/10.1086/261725), *Journal of Political Economy* 98(5, Part 2):S71–S102. | The growth mechanism depends on the model's market and technology assumptions; useful invention does not by itself establish retained enterprise profit. |
 | `myerson` | Private information restricts jointly achievable trade properties. | Roger B. Myerson and Mark A. Satterthwaite (1983), [Efficient mechanisms for bilateral trading](https://doi.org/10.1016/0022-0531(83)90048-0), *Journal of Economic Theory* 29(2):265–281. | The impossibility result applies under its bilateral-trade assumptions, not to every market or voluntary transaction. |
+
+## Revision source note
+
+This revision's typed linear-expression program study is an authored synthetic study supplied with the companion examples. Its [declared protocol](examples/FOUNDRY_PROTOCOL.md), executable source and generated results support its finite computational claims. Those artifacts are separate from the earlier economic and measurement records pinned above; they do not update those records or establish actual market profit, physical qualification or learned improvement of a discovery procedure.
 
 ## Attribution and reproducibility
 
 The paper's synthesis, definitions and deductions are distinguished from the cited manuscripts' results. New illustrative calculations belong to this edition's companion artifact and are labeled as authored examples. Published source claims keep their original assumptions, comparison boundaries and dates.
 
-Repository URLs are pinned to the evidence snapshot. DOI and versioned arXiv links identify external scholarly sources. Links provide provenance; they do not establish independent replication, practical superiority, scientific novelty of every component, or additional authority.
+Links to previously published repository evidence are pinned to the evidence snapshot. DOI and versioned arXiv links identify external scholarly sources. Links provide provenance; they do not establish independent replication, practical superiority, scientific novelty of every component, or additional authority.
 

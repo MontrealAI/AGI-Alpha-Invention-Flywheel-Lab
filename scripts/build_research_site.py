@@ -13,6 +13,7 @@ PAPERS = (
     'transformational-intelligence-202610.pdf',
     'agi-alpha-foundation-20260430.pdf',
     'agi-alpha-flywheel-20261102.pdf',
+    'agi-alpha-flywheel-20261102-v1.1.pdf',
     'invent-the-economy-202610.pdf',
     'the-world-as-an-output-20261020.pdf',
     'beyond-the-production-frontier-20261019.pdf',
@@ -68,7 +69,7 @@ def validate(source):
     for name in PAGES:
         parser = Links()
         page = (source / name).read_text()
-        if 'PAPER_SHA256_PLACEHOLDER' in page or 'PAPER_PAGECOUNT_PLACEHOLDER' in page:
+        if any(token in page for token in ('PAPER_SHA256_PLACEHOLDER', 'PAPER_PAGECOUNT_PLACEHOLDER', 'TODO_RESULT_')):
             raise ValueError(f'Unresolved publication metadata: {name}')
         parser.feed(page)
         parsed[name] = parser
