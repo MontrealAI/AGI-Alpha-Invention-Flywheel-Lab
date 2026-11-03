@@ -1,0 +1,12 @@
+\begin{tikzpicture}[>=Latex,
+box/.style={draw=violet!35,fill=pale,rounded corners=4pt,minimum height=1.5cm,text width=4.9cm,align=center,inner sep=9pt,font=\small},
+flow/.style={->,line width=1pt,draw=violet}]
+\node[box] (instruments) at (-3.35,2.1) {\textbf{Scientific capability}\\Calibrated instruments, qualified constructors, accepted experiments};
+\node[box] (industry) at (3.35,2.1) {\textbf{Productive infrastructure}\\Energy, materials, manufacturing, measurement and maintenance};
+\node[box] (closure) at (3.35,-1.3) {\textbf{Industrial expansion}\\Facilities supply more of the qualified inputs for further facilities};
+\node[box] (horizon) at (-3.35,-1.3) {\textbf{Larger physical frontiers}\\Progressively capable terrestrial and space-based production};
+\draw[flow] (instruments.east)--node[above,font=\scriptsize]{construct}(industry.west);
+\draw[flow] (industry.south)--node[right,align=left,font=\scriptsize]{qualify and\\replicate}(closure.north);
+\draw[flow] (closure.west)--node[above,font=\scriptsize]{extend}(horizon.east);
+\draw[flow,dashed] (closure.south) -- (3.35,-3) -- node[below,font=\scriptsize]{new instruments and resources} (-6.4,-3) -- (-6.4,2.1) -- (instruments.west);
+\end{tikzpicture}

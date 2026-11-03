@@ -9,6 +9,7 @@ import shutil
 from urllib.parse import unquote, urlsplit
 
 PAPERS = (
+    'super-alpha.pdf',
     'out-accelerate.pdf',
     'transformational-intelligence-202610.pdf',
     'agi-alpha-foundation-20260430.pdf',
@@ -30,9 +31,9 @@ PAPERS = (
     'out-execute-20261021.pdf',
     'out-evolve-20261020.pdf',
 )
-PAGES = ('agi-alpha-flywheel-report-20261102.html', 'out-accelerate.html', 'transformational-intelligence.html', 'agi-alpha.html', 'agi-alpha-flywheel.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
+PAGES = ('super-alpha.html', 'agi-alpha-flywheel-report-20261102.html', 'out-accelerate.html', 'transformational-intelligence.html', 'agi-alpha.html', 'agi-alpha-flywheel.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
          'out-series.html', 'out-learn.html', 'out-think.html', 'out-design.html', 'out-strategise.html', 'out-execute.html', 'out-evolve.html')
-ASSETS = ('alpha.css', 'alpha.js', 'alpha-mark.svg')
+ASSETS = ('super-alpha-card.svg', 'super-alpha-social.png', 'alpha.css', 'alpha.js', 'alpha-mark.svg')
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 
 
@@ -70,7 +71,7 @@ def validate(source):
     for name in PAGES:
         parser = Links()
         page = (source / name).read_text()
-        if any(token in page for token in ('PAPER_SHA256_PLACEHOLDER', 'PAPER_PAGECOUNT_PLACEHOLDER', 'TODO_RESULT_')):
+        if any(token in page for token in ('PAPER_SHA256_PLACEHOLDER', 'PAPER_PAGECOUNT_PLACEHOLDER', 'TODO_RESULT_', 'SUPER_ALPHA_PAGE_COUNT', 'SUPER_ALPHA_PDF_SHA')):
             raise ValueError(f'Unresolved publication metadata: {name}')
         parser.feed(page)
         parsed[name] = parser

@@ -1,0 +1,97 @@
+name: SUPER ALPHA paper
+on:
+  pull_request:
+    paths:
+      - 'docs/super-alpha/**'
+      - 'docs/research/super-alpha.pdf'
+      - '.github/workflows/super-alpha.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/super-alpha/**'
+      - 'docs/research/super-alpha.pdf'
+      - '.github/workflows/super-alpha.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: super-alpha-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    outputs:
+      publication_artifact_id: ${{ steps.publication_assets.outputs.artifact-id }}
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            docs/super-alpha
+            docs/research/super-alpha.pdf
+          sparse-checkout-cone-mode: false
+      - name: Install the standard LaTeX and PDF toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends latexmk lmodern texlive-latex-extra texlive-fonts-recommended poppler-utils
+      - name: Compile the paper and validate the analytical example
+        run: |
+          make -C docs/super-alpha check
+          python3 docs/super-alpha/verify.py
+      - name: Assemble the inspected paper and self-contained source
+        run: python3 docs/super-alpha/package.py --output "$RUNNER_TEMP/super-alpha-publication"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        id: publication_assets
+        with:
+          name: super-alpha-publication-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/super-alpha-publication/
+          if-no-files-found: error
+          retention-days: 7
+  publish:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: docs/super-alpha
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: ${{ needs.build.outputs.publication_artifact_id }}
+          path: ${{ runner.temp }}/super-alpha-publication
+          merge-multiple: true
+      - name: Publish and verify the paper edition
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(cat docs/super-alpha/VERSION)"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          tag="super-alpha-v${version}"
+          assets="$RUNNER_TEMP/super-alpha-publication"
+          cd "$assets"
+          sha256sum --check SHA256SUMS
+          cd "$GITHUB_WORKSPACE"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Verify existing edition; never overwrite an earlier release."
+          else
+            gh release create "$tag" "$assets/SUPER_ALPHA.pdf" "$assets/SUPER_ALPHA_SOURCE.zip" "$assets/SHA256SUMS" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "SUPER ALPHA · Inventing Economic Possibility" --notes-file docs/super-alpha/RELEASE_NOTES.md --latest=false
+          fi
+          mkdir "$RUNNER_TEMP/verified-super-alpha"
+          gh release download "$tag" --repo "$GITHUB_REPOSITORY" --pattern SUPER_ALPHA.pdf --pattern SUPER_ALPHA_SOURCE.zip --pattern SHA256SUMS --dir "$RUNNER_TEMP/verified-super-alpha"
+          cd "$RUNNER_TEMP/verified-super-alpha"
+          sha256sum --check SHA256SUMS
+          cmp "$assets/SHA256SUMS" SHA256SUMS

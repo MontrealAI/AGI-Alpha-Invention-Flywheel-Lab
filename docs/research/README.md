@@ -1,5 +1,21 @@
 # Research papers
 
+## SUPER ALPHA
+
+**Inventing Economic Possibility.**
+
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Edition 1.0.0 · 26 pages.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/super-alpha.html) · [Complete PDF](super-alpha.pdf) · [LaTeX, exact model and build instructions](../super-alpha/README.md) · [Versioned publication](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/super-alpha-v1.0.0)
+
+*Invent what becomes possible.* SUPER ALPHA develops a constructive research programme for creating valuable activities that were previously uneconomic, establishing an extraordinary advantage, capturing sustainable profit, and compounding capabilities and earnings into greater productive power. Four independently evaluated loops connect commerce, capability inheritance, improved discovery, and physical production.
+
+The paper joins productive means, acceptance, voluntary participation, financing and value capture in a complete economic arrangement. Scientific capability foundries, on-demand historical observation and adaptive industrial infrastructure illustrate prospective industry directions. Its exact authored model is reproducible from the accompanying source.
+
+**Scope:** A framework and conditional exact model, not a new commercial deployment, actual demand measurement, autonomous scientific discovery, or physical production result. The US$3 billion trailing-365-day complete-cost profit objective remains unachieved. Financial surplus, available cash, successor capability and physical capacity retain separate evidence requirements. Prior manuscripts and experimental results remain unchanged.
+
+PDF SHA-256: `37fc425350e752a416f8de88f8dd15f6fbe19c9194bfbd2a0bdc8b4245ca819d`. The [publication manifest](publication-manifest.json) records the exact published edition.
+
 ## AGI ALPHA FLYWHEEL 2026 11 02 Report
 
 **Constructing the means of consequential progress.**
