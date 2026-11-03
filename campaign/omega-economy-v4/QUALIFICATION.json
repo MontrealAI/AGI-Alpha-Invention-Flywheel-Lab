@@ -60,5 +60,42 @@
   },
   "whole_repository_qualification": false,
   "release_published": false,
-  "scope": "Exact immutable runtime source. Hosted and broader aggregate checks are separate."
+  "scope": "Exact immutable runtime source. Hosted and broader aggregate checks are separate.",
+  "final_publication_head_targeted_replay": {
+    "source_commit": "4c06a48e75b7010d99c2d4f78c9864517bf14b01",
+    "passed": 187,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "omega",
+        "tests": 146,
+        "seconds": 269.709,
+        "log_sha256": "8849f47dbbbb26be2dbb81e8bd0637783419b33a29914e087f19747509098b7e"
+      },
+      {
+        "name": "base_platform_liquidity",
+        "tests": 41,
+        "seconds": 2.809,
+        "log_sha256": "a33d63134c3d4632226d3f00f4e30af08a143eedc581d983d99e4d7e1364f432"
+      }
+    ],
+    "hosted_qualification": "pending/in_progress",
+    "merge": false,
+    "release": false
+  },
+  "aggregate": {
+    "tests": 510,
+    "passed": 508,
+    "errors": 2,
+    "seconds": 1224.749,
+    "status": "FAILED",
+    "source": "shared development checkout; source changed during broad run; causal explanation of native recovery errors not established",
+    "log_sha256": "36810af94620556ef9baa67d2147dbfa503e1f11a70dce483cc3ff0d799a29d4",
+    "exceptions": [
+      "JOURNALED_NATIVE_ACTION_NOT_COMMITTED",
+      "OPERATING_CHECKPOINT_NATIVE_PREFIX_MISMATCH"
+    ],
+    "isolated_final_source_reproductions": "Both pass; not substitute for failed aggregate",
+    "release_qualified": false
+  }
 }
