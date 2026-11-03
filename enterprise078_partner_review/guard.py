@@ -5,6 +5,7 @@ Not supplier consent evidence, an executed contract, a native admission or profi
 from __future__ import annotations
 
 import hashlib
+import inspect
 from pathlib import Path
 
 from enterprise078.transactional_admission.choice import (
@@ -30,6 +31,20 @@ def pin_source(root=None):
         observed = hashlib.sha1(b"blob " + str(len(raw)).encode() + bytes([0]) + raw).hexdigest()
         if observed != expected:
             raise ValueError("PARTNER_REVIEW_INCUMBENT_SOURCE_CHANGED:" + relative)
+    # Candidate-file hashes alone do not prove that these are the imported
+    # comparator functions. In actual review mode, bind the loaded callables too.
+    if root == Path(__file__).resolve().parents[1]:
+        bound = {
+            "enterprise078/transactional_admission/choice.py":
+                (money, quote, registered_rows, registered_bundles, subset_key),
+            "enterprise078/transactional_admission/planning.py": (plan,),
+        }
+        for relative, functions in bound.items():
+            expected_file = (root / relative).absolute()
+            for function in functions:
+                origin = inspect.getsourcefile(function)
+                if origin is None or Path(origin).absolute() != expected_file:
+                    raise ValueError("EXECUTING_REVIEW_SOURCE_MISMATCH:" + relative)
     return dict(PINNED)
 
 
