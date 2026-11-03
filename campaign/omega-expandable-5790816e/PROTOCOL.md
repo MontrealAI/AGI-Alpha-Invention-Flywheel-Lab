@@ -55,6 +55,14 @@ empirical frequencies. Compare non-entry, competent simple commerce,
 commerce-only/no new research, no inheritance, ordinary reuse and joint choices.
 Preserve every registered arm, including failed or incomplete execution.
 
+The numeric registration crosses all six policies, four worlds and three seeds
+with two policy configurations: four-week acquisition at a1% current-cash risk
+allocation, and weekly acquisition at10%. Both begin with eight requested
+contacts and can expand when observations and native funds permit. These are
+compared choices, not universal optimums or maximum scale. The primary uses the
+weekly configuration. All144 accounts remain separate. Audience and buyer-cost
+assumptions are explicit in REGISTRATION.json, not derived from target profit.
+
 The primary is a **fresh independent** combined MONTREAL.AI/QUEBEC.AI simulated
 enterprise, seeded exactly once with US$100,000. It is neither continuation nor
 recovery of the earlier reconstructed counterpart. Controls have separately

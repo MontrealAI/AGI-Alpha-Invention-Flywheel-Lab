@@ -1,0 +1,253 @@
+{
+  "cost_sensitivity": {
+    "additional_cost_per_collected_order_USD": [
+      0,
+      10,
+      100,
+      500
+    ],
+    "construction_additional_USD": [
+      0,
+      1000,
+      10000,
+      100000
+    ],
+    "scope": "Unpriced additive cost break-even reported separately; not a replay of changed liquidity or optimal strategy"
+  },
+  "currency": "USD",
+  "development_seeds": [
+    17,
+    29
+  ],
+  "evidence_role": "finite_authored_conditional_comparison",
+  "native_config": {
+    "claim_hours": 720,
+    "cost_batching": true,
+    "currency": "USD",
+    "engineering_fixture": false,
+    "income_tax_bps": 2500,
+    "opening_cents": 10000000,
+    "operating_hours": 8760,
+    "payment_bps": 290,
+    "payment_fixed_cents": 30,
+    "residual_bps": 100,
+    "unit_costs_cents": {
+      "compute": 100,
+      "hosting": 50,
+      "retry_envelope": 50,
+      "security": 50,
+      "self_service": 50,
+      "verification": 100
+    }
+  },
+  "no_new_license_grant": true,
+  "opening_USD": 100000,
+  "operating_hours": [
+    0,
+    8760
+  ],
+  "optimality": "No optimum claimed; matched causal heuristics",
+  "policies": [
+    "nonentry",
+    "simple",
+    "commerce_only",
+    "no_inheritance",
+    "ordinary_reuse",
+    "joint"
+  ],
+  "primary": {
+    "mode": "joint",
+    "profile": "weekly_expansion",
+    "seed": 57908161,
+    "world": "capability_gap"
+  },
+  "profiles": {
+    "four_week_reference": {
+      "cadence_days": 28,
+      "channel_duration_days": 3,
+      "channel_lead_days": 1,
+      "channel_setup_cents": 500,
+      "confirmation_seeds": [
+        57908161,
+        57908162,
+        57908163
+      ],
+      "contact_cents": 500,
+      "development_seeds": [
+        17,
+        29
+      ],
+      "enhancement_cents": 1500,
+      "fixed_contacts": 128,
+      "fulfillment_cents": 400,
+      "horizon_days": 365,
+      "hosting_cents_per_active_day": 10,
+      "initial_contacts": 8,
+      "price_cents": 29900,
+      "risk_bps": 100,
+      "settlement_days": 45,
+      "setup_cents": 2500,
+      "survey_cents": 500
+    },
+    "weekly_expansion": {
+      "cadence_days": 7,
+      "channel_duration_days": 3,
+      "channel_lead_days": 1,
+      "channel_setup_cents": 500,
+      "confirmation_seeds": [
+        57908161,
+        57908162,
+        57908163
+      ],
+      "contact_cents": 500,
+      "development_seeds": [
+        17,
+        29
+      ],
+      "enhancement_cents": 1500,
+      "fixed_contacts": 128,
+      "fulfillment_cents": 400,
+      "horizon_days": 365,
+      "hosting_cents_per_active_day": 10,
+      "initial_contacts": 8,
+      "price_cents": 29900,
+      "risk_bps": 1000,
+      "settlement_days": 45,
+      "setup_cents": 2500,
+      "survey_cents": 500
+    }
+  },
+  "scale_claim": "Each actual account independent; no pooled capital, annualization or projected-native substitution",
+  "schema": "omega/expandable-confirmation/v1",
+  "seeds": [
+    57908161,
+    57908162,
+    57908163
+  ],
+  "settlement_separate": true,
+  "source_identity": "Exact executable commit and file hashes are frozen before confirmation by reproduce.py",
+  "unknown_actual_complete_cost_profit": null,
+  "weights": null,
+  "worlds": {
+    "adverse_supplier": {
+      "activation_bps": 7000,
+      "audience": 100000,
+      "audience_overlap_bps": 3500,
+      "budget_cents": [
+        20000,
+        50000,
+        100000,
+        250000
+      ],
+      "channel_cost_multiplier": 3,
+      "collection_delay_hours": 480,
+      "delivery_bps": 8500,
+      "enhanced_effort_cents": 4000,
+      "imitation_day": 210,
+      "need_bps": 3500,
+      "own_effort_cents": 12000,
+      "payment_bps": 8500,
+      "reach_bps": 4500,
+      "refund_bps": 1500,
+      "rival_after_cents": 19900,
+      "rival_effort_cents": 10000,
+      "rival_price_cents": 39900,
+      "self_service_cents": 45000,
+      "value_cents": [
+        60000,
+        120000,
+        300000
+      ]
+    },
+    "capability_gap": {
+      "activation_bps": 9700,
+      "audience": 100000,
+      "audience_overlap_bps": 3500,
+      "budget_cents": [
+        20000,
+        50000,
+        100000,
+        250000
+      ],
+      "channel_cost_multiplier": 1,
+      "collection_delay_hours": 48,
+      "delivery_bps": 9900,
+      "enhanced_effort_cents": 4000,
+      "imitation_day": 210,
+      "need_bps": 3500,
+      "own_effort_cents": 12000,
+      "payment_bps": 9800,
+      "reach_bps": 8000,
+      "refund_bps": 300,
+      "rival_after_cents": 19900,
+      "rival_effort_cents": 10000,
+      "rival_price_cents": 39900,
+      "self_service_cents": 45000,
+      "value_cents": [
+        60000,
+        120000,
+        300000
+      ]
+    },
+    "competitive_parity": {
+      "activation_bps": 9700,
+      "audience": 100000,
+      "audience_overlap_bps": 3500,
+      "budget_cents": [
+        20000,
+        50000,
+        100000,
+        250000
+      ],
+      "channel_cost_multiplier": 1,
+      "collection_delay_hours": 48,
+      "delivery_bps": 9900,
+      "enhanced_effort_cents": 4000,
+      "imitation_day": 210,
+      "need_bps": 3500,
+      "own_effort_cents": 12000,
+      "payment_bps": 9800,
+      "reach_bps": 8000,
+      "refund_bps": 300,
+      "rival_after_cents": 9900,
+      "rival_effort_cents": 4000,
+      "rival_price_cents": 14900,
+      "self_service_cents": 18000,
+      "value_cents": [
+        60000,
+        120000,
+        300000
+      ]
+    },
+    "weak_need": {
+      "activation_bps": 9700,
+      "audience": 10000,
+      "audience_overlap_bps": 3500,
+      "budget_cents": [
+        20000,
+        50000,
+        100000,
+        250000
+      ],
+      "channel_cost_multiplier": 1,
+      "collection_delay_hours": 48,
+      "delivery_bps": 9900,
+      "enhanced_effort_cents": 4000,
+      "imitation_day": 210,
+      "need_bps": 400,
+      "own_effort_cents": 12000,
+      "payment_bps": 9800,
+      "reach_bps": 8000,
+      "refund_bps": 300,
+      "rival_after_cents": 19900,
+      "rival_effort_cents": 10000,
+      "rival_price_cents": 39900,
+      "self_service_cents": 25000,
+      "value_cents": [
+        60000,
+        120000,
+        300000
+      ]
+    }
+  }
+}
