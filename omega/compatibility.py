@@ -12,12 +12,142 @@ import hashlib
 import itertools
 import json
 import random
+import os
+import stat
+import secrets
+from contextlib import contextmanager
+try:
+    import fcntl
+except ImportError:
+    fcntl = None
 from pathlib import Path
 import time
 
 SCHEMA = 'omega/finite-compatibility/v1'
 ALPHABET = ('start', 'append', 'commit')
 CASES = ('legacy_queue', 'queue_revision', 'strict_revision')
+DEFAULT_MAX_LOCAL_FILE_BYTES = 16 * 1024 * 1024
+
+
+def _file_limit(value):
+    if type(value) is not int or value < 1:
+        raise ValueError('POSITIVE_LOCAL_FILE_BYTE_LIMIT_REQUIRED')
+    return value
+
+
+def _directory_fd(path, *, create=False):
+    """Open each directory without following links (POSIX; fail closed elsewhere)."""
+    if not hasattr(os, 'O_NOFOLLOW') or not hasattr(os, 'O_DIRECTORY'):
+        raise ValueError('SECURE_LOCAL_FILESYSTEM_REQUIRED')
+    absolute = Path(os.path.abspath(path))
+    fd = os.open(absolute.anchor, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        for part in absolute.parts[1:]:
+            if create:
+                try:
+                    os.mkdir(part, mode=0o700, dir_fd=fd)
+                except FileExistsError:
+                    pass
+            child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)
+            os.close(fd)
+            fd = child
+        return fd
+    except BaseException:
+        os.close(fd)
+        raise
+
+
+def _read_local(path, *, max_bytes=DEFAULT_MAX_LOCAL_FILE_BYTES):
+    max_bytes = _file_limit(max_bytes)
+    path = Path(path)
+    directory = _directory_fd(path.parent)
+    fd = None
+    try:
+        fd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory)
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode):
+            raise ValueError('REGULAR_LOCAL_FILE_REQUIRED')
+        if info.st_size > max_bytes:
+            raise ValueError('LOCAL_FILE_BYTE_LIMIT_EXCEEDED')
+        with os.fdopen(fd, 'rb') as handle:
+            fd = None
+            raw = handle.read(max_bytes + 1)
+            if len(raw) > max_bytes:
+                raise ValueError('LOCAL_FILE_BYTE_LIMIT_EXCEEDED')
+            return raw
+    finally:
+        if fd is not None:
+            os.close(fd)
+        os.close(directory)
+
+
+def _write_local(path, raw, *, immutable=False, max_bytes=DEFAULT_MAX_LOCAL_FILE_BYTES):
+    """Atomic replacement, never truncate a linked file or reuse a pending name."""
+    if len(raw) > _file_limit(max_bytes):
+        raise ValueError('LOCAL_FILE_BYTE_LIMIT_EXCEEDED')
+    path = Path(path)
+    directory = _directory_fd(path.parent, create=True)
+    pending = '.omega-' + secrets.token_hex(16) + '.pending'
+    fd = None
+    try:
+        try:
+            existing = os.stat(path.name, dir_fd=directory, follow_symlinks=False)
+        except FileNotFoundError:
+            existing = None
+        if existing is not None:
+            if not stat.S_ISREG(existing.st_mode):
+                raise ValueError('REGULAR_LOCAL_FILE_REQUIRED')
+            if immutable:
+                oldfd = os.open(path.name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory)
+                with os.fdopen(oldfd, 'rb') as handle:
+                    if not stat.S_ISREG(os.fstat(handle.fileno()).st_mode) or os.fstat(handle.fileno()).st_size != len(raw) or handle.read(len(raw) + 1) != raw:
+                        raise ValueError('EXISTING_DELIVERY_CHANGED')
+                return
+        fd = os.open(pending, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                     0o600, dir_fd=directory)
+        with os.fdopen(fd, 'wb') as handle:
+            fd = None
+            handle.write(raw)
+            handle.flush()
+            os.fsync(handle.fileno())
+        if immutable:
+            # Atomic no-clobber publication even if a competing creator appeared.
+            os.link(pending, path.name, src_dir_fd=directory, dst_dir_fd=directory, follow_symlinks=False)
+        else:
+            os.replace(pending, path.name, src_dir_fd=directory, dst_dir_fd=directory)
+        os.fsync(directory)
+    finally:
+        if fd is not None:
+            os.close(fd)
+        try:
+            os.unlink(pending, dir_fd=directory)
+        except FileNotFoundError:
+            pass
+        os.close(directory)
+
+
+@contextmanager
+def _exclusive_directory(path, *, name='.omega-delivery.lock'):
+    """Cooperating local POSIX writers only; never unlink an ownership lock."""
+    if fcntl is None:
+        raise ValueError('LOCAL_POSIX_LOCKING_REQUIRED')
+    directory = _directory_fd(path, create=True)
+    lock = None
+    try:
+        lock = os.open(name, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW | os.O_NONBLOCK,
+                       0o600, dir_fd=directory)
+        info = os.fstat(lock)
+        if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+            raise ValueError('PRIVATE_REGULAR_LOCK_REQUIRED')
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise ValueError('OUTPUT_ALREADY_IN_USE') from None
+        yield
+    finally:
+        if lock is not None:
+            os.close(lock)
+        os.close(directory)
 
 
 def canonical(value):
@@ -147,11 +277,13 @@ class ActiveLearner:
     A retained suffix set is generic test content, never inherited authority.
     """
     def __init__(self, query, contract, *, checkpoint=None, prior_suffixes=None,
-                 stop_after_queries=None):
+                 stop_after_queries=None, max_checkpoint_bytes=DEFAULT_MAX_LOCAL_FILE_BYTES):
         validate_contract(contract)
         self.oracle, self.contract = query, contract
         self.alphabet = tuple(contract['alphabet'])
         self.checkpoint = Path(checkpoint) if checkpoint else None
+        self.max_checkpoint_bytes = _file_limit(max_checkpoint_bytes)
+        self._checkpoint_digest = None
         self.cache = {}
         self.start_queries = 0
         self.stop_after_queries = stop_after_queries
@@ -163,7 +295,9 @@ class ActiveLearner:
             if suffix not in self.suffixes:
                 self.suffixes.append(suffix)
         if self.checkpoint and self.checkpoint.exists():
-            saved = json.loads(self.checkpoint.read_text())
+            raw = _read_local(self.checkpoint, max_bytes=self.max_checkpoint_bytes)
+            self._checkpoint_digest = hashlib.sha256(raw).hexdigest()
+            saved = json.loads(raw)
             if saved['contract_sha256'] != digest(contract):
                 raise ValueError('CHECKPOINT_ORACLE_OR_CONTRACT_CHANGED')
             if saved['payload_sha256'] != digest(saved['queries']):
@@ -181,10 +315,16 @@ class ActiveLearner:
             rows = [[list(k), list(v)] for k, v in sorted(self.cache.items())]
             value = {'contract_sha256': digest(self.contract), 'queries': rows,
                      'payload_sha256': digest(rows)}
-            self.checkpoint.parent.mkdir(parents=True, exist_ok=True)
-            temp = self.checkpoint.with_suffix('.pending')
-            temp.write_bytes(canonical(value) + b'\n')
-            temp.replace(self.checkpoint)
+            raw = canonical(value) + b'\n'
+            with _exclusive_directory(self.checkpoint.parent, name='.omega-checkpoint.lock'):
+                try:
+                    current = hashlib.sha256(_read_local(self.checkpoint, max_bytes=self.max_checkpoint_bytes)).hexdigest()
+                except FileNotFoundError:
+                    current = None
+                if current != self._checkpoint_digest:
+                    raise ValueError('CHECKPOINT_CHANGED_BY_ANOTHER_WRITER')
+                _write_local(self.checkpoint, raw, max_bytes=self.max_checkpoint_bytes)
+                self._checkpoint_digest = hashlib.sha256(raw).hexdigest()
 
     def query(self, word):
         word = tuple(word)
@@ -280,9 +420,22 @@ def independent_acceptance(adapter, contract, query=None):
     if query is None and contract['case'] == 'buyer_local':
         raise ValueError('BUYER_LOCAL_QUERY_CALLABLE_REQUIRED')
     query = local_oracle(contract['case']) if query is None else query
-    if (adapter.get('schema') != SCHEMA or adapter.get('alphabet') != contract['alphabet']
-            or not 1 <= len(adapter.get('transitions', {})) <= contract['max_states']):
+    if (not isinstance(adapter, dict) or adapter.get('schema') != SCHEMA or adapter.get('alphabet') != contract['alphabet']
+            or not isinstance(adapter.get('transitions'), dict)
+            or not 1 <= len(adapter['transitions']) <= contract['max_states']):
         return {'accepted': False, 'reason': 'INVALID_ADAPTER'}
+    transitions = adapter['transitions']
+    states = set(range(len(transitions)))
+    if (type(adapter.get('initial')) is not int or adapter['initial'] not in states
+            or set(transitions) != {str(state) for state in states}):
+        return {'accepted': False, 'reason': 'INVALID_ADAPTER'}
+    for row in transitions.values():
+        if not isinstance(row, dict) or set(row) != set(contract['alphabet']):
+            return {'accepted': False, 'reason': 'INVALID_ADAPTER'}
+        for step in row.values():
+            if (not isinstance(step, dict) or type(step.get('next')) is not int
+                    or step['next'] not in states or not isinstance(step.get('output'), str)):
+                return {'accepted': False, 'reason': 'INVALID_ADAPTER'}
     checked, holdout_checked = 0, 0
     # Saturating preflight avoids materializing an unaffordable exponential test
     # set or enormous long traces. It is a declared buyer budget, not a fixed N cap.
@@ -332,17 +485,30 @@ for symbol in sys.argv[1:]:
 
 
 def build_product(outputdir, contract=None, *, prior_suffixes=None, proceed=True,
-                  unavailable=False, stop_after_queries=None):
+                  unavailable=False, stop_after_queries=None, max_file_bytes=DEFAULT_MAX_LOCAL_FILE_BYTES):
+    max_file_bytes = _file_limit(max_file_bytes)
+    contract = package_contract() if contract is None else contract
+    validate_contract(contract)
+    if proceed is not True:
+        return {'accepted': False, 'status': 'BUYER_DECLINED', 'query_count': 0, 'manifest': {}, 'outputs': {}}
+    with _exclusive_directory(outputdir):
+        return _build_product_owned(outputdir, contract, prior_suffixes=prior_suffixes,
+                                    unavailable=unavailable, stop_after_queries=stop_after_queries,
+                                    max_file_bytes=max_file_bytes)
+
+
+def _build_product_owned(outputdir, contract=None, *, prior_suffixes=None, proceed=True,
+                         unavailable=False, stop_after_queries=None, max_file_bytes=DEFAULT_MAX_LOCAL_FILE_BYTES):
     contract = package_contract() if contract is None else contract
     validate_contract(contract)
     if proceed is not True:
         return {'accepted': False, 'status': 'BUYER_DECLINED', 'query_count': 0, 'manifest': {}, 'outputs': {}}
     outputdir = Path(outputdir)
-    outputdir.mkdir(parents=True, exist_ok=True)
+    os.close(_directory_fd(outputdir, create=True))
     start = time.perf_counter()
     learner = ActiveLearner(local_oracle(contract['case'], unavailable=unavailable), contract,
                             checkpoint=outputdir / 'checkpoint.json', prior_suffixes=prior_suffixes,
-                            stop_after_queries=stop_after_queries)
+                            stop_after_queries=stop_after_queries, max_checkpoint_bytes=max_file_bytes)
     try:
         adapter = learner.learn()
     except (QueryLimit, Paused, ConnectionError, ValueError) as exc:
@@ -364,16 +530,17 @@ def build_product(outputdir, contract=None, *, prior_suffixes=None, proceed=True
                 "Changed oracle version requires a fresh output directory and complete revalidation; do not edit a checkpoint.\n"
                 "Local help: `python3 compatibility.py --help-topic oracle_unavailable`. Unknown issues remain unresolved.\n"
                 "Unknown commands fail closed. No external model routing or paid account is implemented.\n"
+                "Use a private real output directory on a local POSIX filesystem; symbolic-link ancestors are rejected. Windows and network filesystems are not qualified.\n"
+                "One build owns an output directory at a time. Leave .omega-*.lock files in place; operating-system locks release when the process exits. Never delete an active lock.\n"
+                "Local file reads and writes default to 16 MiB per file. Set --max-file-bytes explicitly when required; library APIs also expose file/checkpoint/document byte limits. This is an input safety bound, not a business-scale limit.\n"
                 "No ongoing updates or personal support are promised. Stop if reset, permissions, resources or the bound are unknown.\n").encode()}
     for name, raw in payloads.items():
         path = outputdir / name
-        if path.exists() and path.read_bytes() != raw:
-            raise ValueError('EXISTING_DELIVERY_CHANGED')
-        path.write_bytes(raw)
+        _write_local(path, raw, immutable=True, max_bytes=max_file_bytes)
     manifest = {'schema': SCHEMA, 'contract_sha256': digest(contract),
                 'files': {name: hashlib.sha256(raw).hexdigest() for name, raw in payloads.items()}}
-    (outputdir / 'manifest.json').write_bytes(canonical(manifest) + b'\n')
-    acceptance = accept_product(outputdir, contract)
+    _write_local(outputdir / 'manifest.json', canonical(manifest) + b'\n', max_bytes=max_file_bytes)
+    acceptance = accept_product(outputdir, contract, max_file_bytes=max_file_bytes)
     return {'accepted': acceptance['accepted'], 'status': 'BUILT', 'manifest': manifest,
             'outputs': {'adapter': str(outputdir / 'adapter.json'), 'runner': str(outputdir / 'runner.py')},
             'query_count': len(learner.cache), 'new_queries': len(learner.cache) - learner.start_queries,
@@ -384,24 +551,28 @@ def build_product(outputdir, contract=None, *, prior_suffixes=None, proceed=True
             'next_action': 'USE_ONLY_WITHIN_ACCEPTED_CONTRACT; REVALIDATE_CHANGED_ORACLE'}
 
 
-def accept_product(path, contract):
+def accept_product(path, contract, *, max_file_bytes=DEFAULT_MAX_LOCAL_FILE_BYTES):
     path = Path(path)
     try:
-        manifest = json.loads((path / 'manifest.json').read_text())
+        manifest = json.loads(_read_local(path / 'manifest.json', max_bytes=max_file_bytes))
+        if not isinstance(manifest, dict):
+            return {'accepted': False, 'reason': 'MISSING_OR_INVALID_PACKAGE'}
         if manifest['schema'] != SCHEMA or manifest['contract_sha256'] != digest(contract):
             return {'accepted': False, 'reason': 'CONTRACT_BINDING_CHANGED'}
-        if set(manifest['files']) != {'adapter.json', 'runner.py', 'README.md', 'compatibility.py'}:
+        if not isinstance(manifest.get('files'), dict) or set(manifest['files']) != {'adapter.json', 'runner.py', 'README.md', 'compatibility.py'}:
             return {'accepted': False, 'reason': 'INCOMPLETE_PACKAGE'}
+        # Read each member once without following symlinks, opening special files,
+        # or rereading different bytes after integrity verification.
+        payloads = {name: _read_local(path / name, max_bytes=max_file_bytes) for name in manifest['files']}
         for name, sha in manifest['files'].items():
-            if (path / name).is_symlink() or hashlib.sha256((path / name).read_bytes()).hexdigest() != sha:
+            if hashlib.sha256(payloads[name]).hexdigest() != sha:
                 return {'accepted': False, 'reason': 'PACKAGE_INTEGRITY'}
-        if (path / 'compatibility.py').read_bytes() != Path(__file__).read_bytes():
+        if payloads['compatibility.py'] != _read_local(Path(__file__), max_bytes=max_file_bytes):
             return {'accepted': False, 'reason': 'LEARNER_EDITION_CHANGED'}
-        # Runner is part of the promised usable package, not arbitrary supplied code.
-        if (path / 'runner.py').read_text() != RUNNER:
+        if payloads['runner.py'] != RUNNER.encode():
             return {'accepted': False, 'reason': 'UNSUPPORTED_RUNNER'}
-        return independent_acceptance(json.loads((path / 'adapter.json').read_text()), contract)
-    except (OSError, KeyError, ValueError, TypeError):
+        return independent_acceptance(json.loads(payloads['adapter.json']), contract)
+    except (OSError, KeyError, ValueError, TypeError, RecursionError):
         return {'accepted': False, 'reason': 'MISSING_OR_INVALID_PACKAGE'}
 
 
@@ -425,7 +596,7 @@ def successor_comparison():
             'scope': 'ORDINARY_ACTIVE_LEARNING_AND_EQUAL_CONTENT_CONTROL; NO_METHOD_ADVANTAGE_ASSUMED'}
 
 
-def diagnose(topic, package_dir=None):
+def diagnose(topic, package_dir=None, *, max_document_bytes=DEFAULT_MAX_LOCAL_FILE_BYTES):
     """Deterministic local documentation lookup; not an all-purpose assistant."""
     if package_dir is not None:
         document = Path(package_dir) / 'README.md'
@@ -438,10 +609,11 @@ def diagnose(topic, package_dir=None):
     if topic not in markers:
         return {'status': 'UNRESOLVED', 'guidance': 'No known diagnosis. Pause the workflow and investigate locally; no external action is authorized.'}
     try:
-        raw = document.read_bytes()
-    except OSError:
-        return {'status': 'UNRESOLVED', 'guidance': 'Product documentation is unavailable. Restore the verified edition before proceeding.'}
-    matches = [{'line': i, 'text': line.strip()} for i, line in enumerate(raw.decode().splitlines(), 1)
+        raw = _read_local(document, max_bytes=max_document_bytes)
+        lines = raw.decode('utf-8').splitlines()
+    except (OSError, ValueError):
+        return {'status': 'UNRESOLVED', 'guidance': 'Product documentation is unavailable, unsafe, invalid UTF-8, or exceeds the configured file limit. Restore the verified edition in a private real directory before proceeding.'}
+    matches = [{'line': i, 'text': line.strip()} for i, line in enumerate(lines, 1)
                if markers[topic].lower() in line.lower() and line.strip()]
     if not matches:
         return {'status': 'UNRESOLVED', 'guidance': 'No matching guidance in the actual product documentation.'}
@@ -458,17 +630,26 @@ def main():
     parser.add_argument('--max-states', type=int, default=4)
     parser.add_argument('--max-queries', type=int, default=20000)
     parser.add_argument('--decline', action='store_true')
+    parser.add_argument('--max-file-bytes', type=int, default=DEFAULT_MAX_LOCAL_FILE_BYTES,
+                        help='Local input/output file safety limit in bytes; explicitly adjustable, default 16 MiB')
     args = parser.parse_args()
     if args.help_topic:
-        print(json.dumps(diagnose(args.help_topic, args.output), sort_keys=True))
+        print(json.dumps(diagnose(args.help_topic, args.output, max_document_bytes=args.max_file_bytes), sort_keys=True))
         return 0
     if not args.output:
         parser.error('--output is required for construction')
-    result = build_product(args.output, package_contract(args.case, max_states=args.max_states,
-                                                        max_queries=args.max_queries), proceed=not args.decline)
+    try:
+        result = build_product(args.output, package_contract(args.case, max_states=args.max_states,
+                                                            max_queries=args.max_queries), proceed=not args.decline, max_file_bytes=args.max_file_bytes)
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        print(json.dumps({'accepted': False, 'status': 'LOCAL_BUILD_FAILED',
+                          'error_type': type(exc).__name__,
+                          'guidance': 'Use a private real directory, check available storage and permissions, and retain existing checkpoints. Do not edit or delete account records.'}, sort_keys=True))
+        return 2
     print(json.dumps(result, sort_keys=True))
     return 0 if result['accepted'] or args.decline else 2
 
 
 if __name__ == '__main__':
     raise SystemExit(main())
+
