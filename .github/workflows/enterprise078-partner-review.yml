@@ -1,0 +1,32 @@
+name: Enterprise078 independent partner payoff falsification
+on:
+  push:
+    branches: ['review/enterprise078-partner-participation-081-20261103']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: enterprise078-partner-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  partner-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Bind source identity
+        env:
+          EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE"
+      - name: Execute pinned partner and incumbent joint-choice controls
+        run: |
+          PYTHONNOUSERSITE=1 python -m unittest enterprise078_partner_review.test_guard enterprise078.transactional_admission.test_choice -v
