@@ -64,8 +64,11 @@ route choice; no key is requested, account called, data uploaded or bill incurre
 
 Dependencies are pinned in `omega/requirements.txt`; license review must include
 the exact wheels and transitive/bundled notices before a real redistribution.
-NumPy/SciPy/cryptography being established open-source dependencies does not fill
-the missing root grant or establish contributor ownership. Contributions, privacy,
+Installed metadata inspected for the tested versions identifies BSD-3-Clause core
+terms for NumPy 2.3.5 and SciPy 1.17.0, and `Apache-2.0 OR BSD-3-Clause` for
+cryptography 50.0.2. Binary bundles include additional notices; this is not a
+completed distribution clearance. Those dependency grants do not fill the missing
+root grant or establish contributor ownership. Contributions, privacy,
 consumer obligations and platform eligibility remain unresolved launch checks.
 They do not structurally disable conditional simulated commerce.
 

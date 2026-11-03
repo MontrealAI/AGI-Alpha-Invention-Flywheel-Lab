@@ -1,0 +1,118 @@
+{
+  "business_source_commit": "50b6545e42f9b33788faf77cab1b5362f0d42bdd",
+  "dependency_license_inspection": {
+    "contributor_rights": "unresolved",
+    "cryptography_50.0.2": "Apache-2.0 OR BSD-3-Clause metadata expression",
+    "numpy_2.3.5": "BSD-3-Clause core text in installed metadata; bundled notices not fully cleared",
+    "root_repository_license": "not established; no grant invented",
+    "scipy_1.17.0": "BSD-3-Clause core text in installed metadata; bundled notices not fully cleared"
+  },
+  "exact_published_byte_checks": {
+    "all_equal": true,
+    "initial_combined_files": 43,
+    "repair_files": 5
+  },
+  "hosted_checks_observed": {
+    "all_repository_checks_passed_claimed": false,
+    "omega_continuation": {
+      "conclusion": "success",
+      "full_registered_reproduction_step": "success",
+      "job_id": 126067956443,
+      "run_id": 41679193535,
+      "status": "completed"
+    },
+    "omega_owner": {
+      "conclusion": "success",
+      "run_id": 41679193334,
+      "status": "completed"
+    },
+    "source": "e92117221602823feba80ac5ba4153062a31b4e4"
+  },
+  "local_tests": [
+    {
+      "command": "python -m unittest discover -s omega -t . -p 'test_*.py' -q",
+      "passed": 140,
+      "source": "e92117221602823feba80ac5ba4153062a31b4e4",
+      "wall_seconds": 65.015
+    },
+    {
+      "command": "python -m unittest discover -s tests -p 'test_connected_finance.py' -q",
+      "passed": 25,
+      "runtime_and_test_bytes_unchanged_in_corrected_source": true,
+      "source": "50b6545e42f9b33788faf77cab1b5362f0d42bdd"
+    },
+    {
+      "command": "python -m unittest discover -s tests -p 'test_connected_platform_runtime064.py' -q",
+      "passed": 16,
+      "runtime_and_test_bytes_unchanged_in_corrected_source": true,
+      "source": "50b6545e42f9b33788faf77cab1b5362f0d42bdd"
+    },
+    {
+      "command": "python -m unittest discover -s tests -p 'test_mechanism_harness_026.py' -q",
+      "passed": 30,
+      "runtime_and_test_bytes_unchanged_in_corrected_source": true,
+      "source": "50b6545e42f9b33788faf77cab1b5362f0d42bdd"
+    }
+  ],
+  "operator_source_commit": "e92117221602823feba80ac5ba4153062a31b4e4",
+  "private_recovery_package": {
+    "bytes": 384503,
+    "filename": "Omega_Corrected_Recovery_20261103.tar.gz",
+    "private_material_published": false,
+    "restored_copy_read_only_audit": "accepted",
+    "sha256": "ff496181e65550c801b0fa0d86eac3862bfd91bbb0883fe6fd381cfd6ea7eac3",
+    "source_restore_hashes_verified": 86
+  },
+  "publication": {
+    "draft_pr": 192,
+    "live_store_modified": false,
+    "merged": false,
+    "released": false
+  },
+  "qualified_local_test_total": 211,
+  "recorded_at_utc": "2026-11-03T17:07:26.203386+00:00",
+  "result_file_sha256": "295d817148f425b7761f51abd0e506dc01f3350975c577c87165eacaeb57c80c",
+  "retained_failures": {
+    "development_successor_caller": {
+      "incurred_successor_cost_microUSD": 5100000,
+      "lesson": "Caller expected absent top-level accepted field; use independently checked per-task evidence.",
+      "native_actions_sha256": "a589119810f3fa3145e6856b707cbe35718e7c77faf9430b25e166f98c44c0dd",
+      "registration_sha256": "f72221ca29594088fb817dd6eafcaee81e04aaef3a84b6800faa9608ae970831",
+      "status": "REJECTED"
+    },
+    "first_exact_source_direct_resume": {
+      "lesson": "SQLite is a derived clean-close cache; JSONL and signed authority are recovery state. An intervening test open masked the defect.",
+      "native_action_count": 52,
+      "native_actions_sha256": "77b1a153552f6401e24bddb7831679fb1f5f0c04f0a1fa672900b0c580e38400",
+      "operating_result": "FAILED_AFTER_FIRST_FUND_WITH_AUTHORITY_INTACT",
+      "source": "50b6545e42f9b33788faf77cab1b5362f0d42bdd",
+      "unit_tests_passed": 138
+    }
+  },
+  "runtime_environment": {
+    "hosted_pinned_dependency_install": "passed",
+    "hosted_python_requested": "3.12",
+    "local_dependencies": {
+      "cryptography": "50.0.2",
+      "numpy": "2.3.5",
+      "scipy": "1.17.0"
+    },
+    "local_python": "3.12.14"
+  },
+  "same_counterpart_completion": {
+    "derived_cache_repairs": 1,
+    "financial_actions_added_by_repair": 0,
+    "financial_prefix_unchanged": true,
+    "independent_frozen_audits_accepted": true,
+    "independent_reconcilers": 2,
+    "native_actions_sha256": "a6df3121bd55b2f0994ecfcc7d3e19f9bce28fbe96ca5c2de0c246aa3a915342",
+    "private_authority_unchanged": true,
+    "repeated_resume_unchanged": true,
+    "source_unchanged": true
+  },
+  "schema": "omega/corrected-qualification/v1",
+  "source_transition_test_attempt": {
+    "excluded_from_qualification": true,
+    "reason": "Command started before checkout finished and mixed old assertion/new runtime; rerun after verified stable e921172 passed140."
+  }
+}

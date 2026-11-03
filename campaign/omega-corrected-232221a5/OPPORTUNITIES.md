@@ -54,9 +54,13 @@ The registered [protocol](PROTOCOL.md) selects necessary operating work:
 `omega/primary_operator.py` executes them through existing native accounting and
 recovers the same conditional account; `omega/successor.py` constructs a portable
 batch/self-service artifact, checks changed authored requests and diagnoses
-known failures. Implementation and campaign comparisons were pending when this
-selection was written. The source-bound campaign report supplies execution
-receipts and final results; these paths alone are not proof of acceptance.
+known failures. The [source-bound result](REPORT.md) now records 9,216 conditional
+policy trajectories and one completed native counterpart. Ordinary reuse ties;
+the conventional control resolves one additional oversized case. Three founder
+sessions finance the qualified successor under authored assumptions. One explicit
+cache repair was needed on the frozen account; its failed direct-resume verdict
+is retained separately from corrected-source regressions. No Super Alpha admission
+or improved discovery follows from the operating result.
 
 This software successor deliberately uses the existing water workflow as an
 ordinary useful content/control. It does **not** relabel water optimization or

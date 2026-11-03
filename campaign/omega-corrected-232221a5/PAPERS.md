@@ -1,10 +1,11 @@
 # Paper application in the corrected operating experiment
 
 Research/access date: 2026-11-03. This map is a decision record, not a claim that
-the papers' full constructions have been implemented. New execution results
-must be attached to exact source in the campaign report. At this map's creation,
-the three new implementation paths below were being constructed and their
-comparisons were **pending**.
+the papers' full constructions have been implemented. Executed results are
+attached to exact source in [REPORT.md](REPORT.md) and
+[RESULT.json](RESULT.json). Business source `50b6545` and corrected operator
+`e921172` remain distinct; the first source's failed unattended recovery verdict
+is preserved. No entire paper construction is claimed from these scoped tests.
 
 ## Sources and editions
 
@@ -39,9 +40,9 @@ settlement, replay, and rolling-profit observation remain authoritative.
 
 | Alias | Executable boundary and planned check | Status when mapped |
 | --- | --- | --- |
-| P | `omega/primary_operator.py`, `omega/test_primary_operator.py`: public observation, dated native commands, exact historical-prefix reconstruction, restart, funding and successor admission | Implementation/testing pending; use native `connected_enterprise/finance.py`, not a replacement ledger |
-| C | `omega/competitive.py`, `omega/test_competitive.py`: optional information and reach, whole-bundle buyer choice, finite rival response, six matched policies | Implementation/testing pending; hidden scenario belongs to environment, not policy input |
-| S | `omega/successor.py`, `omega/test_successor.py`: `plan`, `construct`, `verify`, `comparison`; portable executable artifact and changed-work controls | Implementation/testing pending; a plan or manifest alone cannot activate capacity |
+| P | `omega/primary_operator.py`, `omega/test_primary_operator.py`: public observation, dated native commands, exact historical-prefix reconstruction, restart, funding and successor admission | 14 primary + 2 restricted-recovery checks pass on corrected source; retained native counterpart audited after one explicit cache repair; exact year $43,617 before founder opportunity cost |
+| C | `omega/competitive.py`, `omega/test_competitive.py`: optional information and reach, whole-bundle buyer choice, finite rival response, six matched policies | 14 behavioral tests pass; 9,216 trajectories executed; joint/staged/ordinary/no-research tie; scenario remains environment-only |
+| S | `omega/successor.py`, `omega/test_successor.py`: `plan`, `construct`, `verify`, `comparison`; portable executable artifact and changed-work controls | 7 tests pass; actual kit and 3 earned-funded task executions accepted; ordinary equal-content reuse ties, stronger conventional control resolves one additional oversized case |
 
 | Paper and exact passage | Applicable decision and assumptions | Code/check and required observable result | Boundary or non-adoption |
 | --- | --- | --- | --- |
@@ -59,10 +60,29 @@ settlement, replay, and rolling-profit observation remain authoritative.
 | [OUT-EXECUTE][execute], pp5–6: “Continuation equivalence” (Theorem4.1), “Exact semantic stopping” (Corollary4.2); p11, §8 | Its reusable object is a complete boundary value profile plus a current attaining witness. For the selected path, use simpler source-bound reuse and atomic native publication/recovery where sufficient. | P checks duplicate commands, crash/reopen and source identity; S rechecks current outputs. These tests are narrower than boundary-profile equivalence. | No arbitrary semantic-cache theorem is claimed. Same scalar profit or stale receipt is not equivalent future behavior; SQLite atomicity does not make arbitrary remote effects exactly-once. |
 | [OUT-THINK][think], p4, Figure1: “The two routes must agree.” See p5, Proposition3.2. | Retain enough state for current answers **and** future updates/obligations. State compression requires answer preservation and update commutation, not a smaller file alone. | P retains native history and obligations; restart tests rederive state. No new lossy representation is selected. | Encoder/decoder equivalence is not implemented by a checkpoint hash. Do not discard source needed by future operations. |
 
-These are acceptance requirements. At document creation, no new P/C/S result is
-being asserted. The campaign's eventual source-bound report must state which
-checks executed and any remaining gap. Already observed historical ties are
-preserved in the inventory and opportunity record below.
+These acceptance requirements now have the scoped behavioral checks below.
+A passing test does not establish an entire paper theorem or a real market.
+Optional information is available but not selected by the tied primary policy;
+no value-of-information or novel discovery advantage is inferred. Historical
+water/observation ties remain unchanged.
+
+## Behavioral enforcement on corrected source
+
+| Consequential requirement | Executed regression boundary | Observed result / limitation |
+| --- | --- | --- |
+| Simulated sales can operate | `test_product.ProductTest.test_three_products_idempotent_and_replay` | All three typed native offers can be accepted; primary chooses founder sessions only. |
+| Consent, one buyer budget and acceptance precede collection | `test_competitive.test_decline_and_one_joint_budget`; `test_primary_operator.test_one_budget_for_complete_selected_package`; `test_product.test_native_refusal_cannot_collect` | Decline/budget/rejected-output paths cannot create accepted revenue. |
+| Costs follow chosen actions and funded timing | `test_competitive.test_reach_is_revealed_after_paid_action_and_never_mints_orders`; `test_primary_operator.test_trace_and_tax_mutations_rejected` | No-contact acquisition still costs money; invented/altered charges fail replay. |
+| Nonentry, ordinary reuse and stopping compete | `test_competitive.test_research_optional_and_refund_feedback_can_stop`; `test_equivalent_ordinary_content_reuse_has_no_invented_bonus`; `test_primary_operator.test_withdrawal_and_native_tax_protected_illiquidity_compete` | No forced research; low task value stops successor work. |
+| Decisions cannot use future outcomes | `test_competitive.test_hidden_evaluator_fields_rejected`; `test_primary_operator.test_public_observation_excludes_hidden_environment` | Public schema and independently rederived policy decisions reject hidden evaluator fields. |
+| Profit is not available cash | `test_commercial_failures.test_collections_wait_for_delivery_acceptance_and_release`; primary withdrawal/illiquidity test; existing native finance reservation tests | Precollection income and illiquid profit cannot fund earned-only work. |
+| Artifact qualification precedes activated reuse | `test_successor.test_candidate_success_flag_does_not_replace_independent_acceptance`; primary forged-successor/spend test | Source, output, individual task acceptance and native funding receipt are checked. |
+| Recoverability retains authority and failed verdicts | `test_primary_operator.test_actual_postcommit_crashes_resume_once`; missing-authority/tape tests; `test_primary_recovery` | Corrected direct resume passes without an intervening open; original50b required one separately receipted cache repair. |
+| Claims cannot exceed recorded execution | `test_primary_operator.test_source_and_headline_mutations_rejected`; complete native sequence replay | Mutated profit/source/headline is rejected; actual full cost, Super Alpha and $3B claims remain unestablished. |
+
+The table abbreviates method names where the module identifies the class; exact
+callable definitions are in the cited test files. Native financial authority is
+reused, not replaced by this mapping document.
 
 ## Every catalogue entry: adopt, limit, or leave unused
 
