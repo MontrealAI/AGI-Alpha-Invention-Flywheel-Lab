@@ -17,6 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -27,20 +30,20 @@ jobs:
       - name: Preserve public source only, never account authority
         run: |
           git rev-parse HEAD > "$RUNNER_TEMP/SOURCE_COMMIT.txt"
-          git archive --format=zip --output="$RUNNER_TEMP/omega-runtime-source.zip" HEAD mechanism_harness adaptive_enterprise commercial connected_enterprise experiments vendor portfolio25 production060 inventory061 flexibility063 enterprise tests requirements-commercial010.txt
+          git archive --format=zip --output="$RUNNER_TEMP/omega-runtime-source.zip" HEAD mechanism_harness adaptive_enterprise commercial connected_enterprise experiments vendor portfolio25 production060 inventory061 flexibility063 enterprise tests campaign/omega-inventor requirements-commercial010.txt
       - name: Existing finite game regressions
         run: python -m unittest mechanism_harness.test_game_maker -v
-      - name: Qualify executable inventor when present
-        shell: bash
+      - name: Executable invention, source boundaries and native accounting regressions
         run: |
-          if test -f tests/test_omega_inventor.py; then
-            python -m pip install -r requirements-commercial010.txt
-            python -m unittest discover -s tests -p test_omega_inventor.py -v
-            python -m mechanism_harness.inventor run --output "$RUNNER_TEMP/omega-inventor"
-            python -m mechanism_harness.inventor audit --output "$RUNNER_TEMP/omega-inventor"
-          else
-            echo 'Registration/source acquisition stage; inventor not yet implemented.'
-          fi
+          python -m pip install -r requirements-commercial010.txt
+          python -m unittest discover -s tests -p test_omega_inventor.py -v
+      - name: Frozen construction, fresh confirmation and one native operating year
+        run: |
+          python -m mechanism_harness.inventor run --output "$RUNNER_TEMP/omega-inventor"
+          python -m mechanism_harness.inventor audit --output "$RUNNER_TEMP/omega-inventor"
+          sha256sum "$RUNNER_TEMP/omega-inventor/NATIVE_EXPORT.json" > "$RUNNER_TEMP/native-before.sha256"
+          python -m mechanism_harness.inventor resume --output "$RUNNER_TEMP/omega-inventor"
+          sha256sum -c "$RUNNER_TEMP/native-before.sha256"
       - name: Preserve reproducible source and public evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
