@@ -1,5 +1,19 @@
 # Research papers
 
+## ⚡♾️ OUT-ACCELERATE
+
+**Intelligence that accelerates the means of acceleration.**
+
+Vincent Boucher · MONTREAL.AI · 2 November 2026 · Research edition v1.0 · 21 pages.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/out-accelerate.html) · [Complete PDF](out-accelerate.pdf) · [LaTeX source](out-accelerate.tex) · [Bibliography](out-accelerate.bib) · [Reproducible companion](out-accelerate/README.md)
+
+Construct useful capabilities that make the next advance possible, then measure the complete route to accepted outcomes. The paper connects constraint removal, complementary construction, qualification, reuse, and funded continuation to the time required for fresh successor work.
+
+**Scope:** A research framework and exact analytical worked example with reproducible calculations. The conditional model does not establish autonomous invention, measured frontier-model acceleration, physical deployment, or commercial success. The US$3 billion trailing-365-day complete-cost profit objective remains unachieved.
+
+The [publication manifest](publication-manifest.json) records the PDF’s exact bytes and SHA-256. Source, figures, and the companion are versioned together; use a Git commit permalink to cite an immutable edition. Earlier manuscripts remain unchanged.
+
 ## Flagship and foundational reading
 
 Read **Transformational Intelligence: Learning to Change the Game** first; it is our flagship paper. **AGI ALPHA: A Scalable Substrate for Intelligence Organizations** is our foundational paper. Use [the practical research guide](../harness/RESEARCH_FOUNDATIONS.md) to turn these ideas into construction, evaluation and operating decisions.
@@ -109,7 +123,7 @@ The supplied PDF is preserved byte-for-byte (459,457 bytes):
 SHA-256 67f2d38922cdaa1bf28e916a494679fabf1463ba84fe56e620dfd192b20d16b3
 ```
 
-The [research shelf source](index.html) offers all sixteen papers. The GitHub PDF link works independently of Pages. The browser website requires the one-time [Pages setup](PAGES.md) and a successful deployment; a committed HTML file alone does not mean the site is live. Existing manuscripts and historical URLs remain unchanged.
+The [research shelf source](index.html) offers all seventeen papers. The GitHub PDF link works independently of Pages. The browser website requires the one-time [Pages setup](PAGES.md) and a successful deployment; a committed HTML file alone does not mean the site is live. Existing manuscripts and historical URLs remain unchanged.
 
 ## Transformational Autonomous Enterprises - SUCCESSOR Ω Harness
 
@@ -152,9 +166,9 @@ SHA-256 b624891e11ecf423f5e5d2ff0916f9171635cb1b7864bd615fff8ac27bf1868d
 
 ## The OUT collection
 
-[Explore the six-paper collection](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/out-series.html) · [Use the mechanisms in practice](../harness/OUT_PAPERS.md)
+[Explore the OUT collection](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/out-series.html) · [Use the mechanisms in practice](../harness/OUT_PAPERS.md)
 
-The following six author-supplied PDFs are preserved byte-for-byte. These are distinct research manuscripts, not a single version sequence. Reader pages are stable entry points; dated PDF filenames preserve the supplied editions. The summaries and operational guide do not independently reproduce their reported studies, establish deployment, or qualify commercial profit. No executable companion packages were supplied with these six PDFs.
+The original six author-supplied PDFs are preserved byte-for-byte. These are distinct research manuscripts, not a single version sequence. Reader pages are stable entry points; dated PDF filenames preserve the supplied editions. The summaries and operational guide do not independently reproduce their reported studies, establish deployment, or qualify commercial profit. No executable companion packages were supplied with these six PDFs.
 
 ### OUT-LEARN — Change What You Need to Know
 

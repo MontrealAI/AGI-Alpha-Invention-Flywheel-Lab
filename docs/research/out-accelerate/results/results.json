@@ -1,0 +1,1871 @@
+{
+  "evidence_status": "Authored exact analytical illustration, not an empirical AI benchmark. Durations, tool effects, and domain applicability are stipulated. Inputs are public and prespecified, not concealed confirmation data.",
+  "units": {
+    "time": "abstract elapsed time units",
+    "resource_work": "abstract worker-time units; concurrent stage work is summed"
+  },
+  "contract": "Return the exact integer result for the declared task. The certificate checker is valid only for the affine domain; other domains require full verification.",
+  "assumptions": [
+    "Two independent serial servers with an unlimited intermediate queue.",
+    "Acquisition and adaptation precede the batch and cannot overlap it.",
+    "All baseline and candidate input facts and permissions are identical.",
+    "A fourfold construction engine is available with zero incremental acquisition cost to every policy.",
+    "Each candidate bears its own stated search, construction, integration and qualification costs.",
+    "The comparison experiment itself is not a cost-free policy selector; no autonomous discovery performance is claimed.",
+    "Batches run consecutively, not simultaneously."
+  ],
+  "results": {
+    "baseline": {
+      "primary": {
+        "jobs": 12,
+        "accepted": 12,
+        "setup_ledger": {},
+        "setup_time": 0,
+        "construction_per_job": 4,
+        "verification_per_job": 12,
+        "verification_method": "full",
+        "elapsed_time": 148,
+        "resource_work": 192,
+        "trace": [
+          {
+            "job": 1,
+            "input": 1,
+            "value": 10,
+            "accepted": true,
+            "construction_end": 4,
+            "verification_start": 4,
+            "verification_end": 16
+          },
+          {
+            "job": 2,
+            "input": 2,
+            "value": 13,
+            "accepted": true,
+            "construction_end": 8,
+            "verification_start": 16,
+            "verification_end": 28
+          },
+          {
+            "job": 3,
+            "input": 3,
+            "value": 16,
+            "accepted": true,
+            "construction_end": 12,
+            "verification_start": 28,
+            "verification_end": 40
+          },
+          {
+            "job": 4,
+            "input": 4,
+            "value": 19,
+            "accepted": true,
+            "construction_end": 16,
+            "verification_start": 40,
+            "verification_end": 52
+          },
+          {
+            "job": 5,
+            "input": 5,
+            "value": 22,
+            "accepted": true,
+            "construction_end": 20,
+            "verification_start": 52,
+            "verification_end": 64
+          },
+          {
+            "job": 6,
+            "input": 6,
+            "value": 25,
+            "accepted": true,
+            "construction_end": 24,
+            "verification_start": 64,
+            "verification_end": 76
+          },
+          {
+            "job": 7,
+            "input": 7,
+            "value": 28,
+            "accepted": true,
+            "construction_end": 28,
+            "verification_start": 76,
+            "verification_end": 88
+          },
+          {
+            "job": 8,
+            "input": 8,
+            "value": 31,
+            "accepted": true,
+            "construction_end": 32,
+            "verification_start": 88,
+            "verification_end": 100
+          },
+          {
+            "job": 9,
+            "input": 9,
+            "value": 34,
+            "accepted": true,
+            "construction_end": 36,
+            "verification_start": 100,
+            "verification_end": 112
+          },
+          {
+            "job": 10,
+            "input": 10,
+            "value": 37,
+            "accepted": true,
+            "construction_end": 40,
+            "verification_start": 112,
+            "verification_end": 124
+          },
+          {
+            "job": 11,
+            "input": 11,
+            "value": 40,
+            "accepted": true,
+            "construction_end": 44,
+            "verification_start": 124,
+            "verification_end": 136
+          },
+          {
+            "job": 12,
+            "input": 12,
+            "value": 43,
+            "accepted": true,
+            "construction_end": 48,
+            "verification_start": 136,
+            "verification_end": 148
+          }
+        ]
+      },
+      "successor": {
+        "jobs": 10,
+        "accepted": 10,
+        "setup_ledger": {},
+        "setup_time": 0,
+        "construction_per_job": 8,
+        "verification_per_job": 20,
+        "verification_method": "full",
+        "elapsed_time": 208,
+        "resource_work": 280,
+        "trace": [
+          {
+            "job": 1,
+            "input": 101,
+            "value": 310,
+            "accepted": true,
+            "construction_end": 8,
+            "verification_start": 8,
+            "verification_end": 28
+          },
+          {
+            "job": 2,
+            "input": 102,
+            "value": 313,
+            "accepted": true,
+            "construction_end": 16,
+            "verification_start": 28,
+            "verification_end": 48
+          },
+          {
+            "job": 3,
+            "input": 103,
+            "value": 316,
+            "accepted": true,
+            "construction_end": 24,
+            "verification_start": 48,
+            "verification_end": 68
+          },
+          {
+            "job": 4,
+            "input": 104,
+            "value": 319,
+            "accepted": true,
+            "construction_end": 32,
+            "verification_start": 68,
+            "verification_end": 88
+          },
+          {
+            "job": 5,
+            "input": 105,
+            "value": 322,
+            "accepted": true,
+            "construction_end": 40,
+            "verification_start": 88,
+            "verification_end": 108
+          },
+          {
+            "job": 6,
+            "input": 106,
+            "value": 325,
+            "accepted": true,
+            "construction_end": 48,
+            "verification_start": 108,
+            "verification_end": 128
+          },
+          {
+            "job": 7,
+            "input": 107,
+            "value": 328,
+            "accepted": true,
+            "construction_end": 56,
+            "verification_start": 128,
+            "verification_end": 148
+          },
+          {
+            "job": 8,
+            "input": 108,
+            "value": 331,
+            "accepted": true,
+            "construction_end": 64,
+            "verification_start": 148,
+            "verification_end": 168
+          },
+          {
+            "job": 9,
+            "input": 109,
+            "value": 334,
+            "accepted": true,
+            "construction_end": 72,
+            "verification_start": 168,
+            "verification_end": 188
+          },
+          {
+            "job": 10,
+            "input": 110,
+            "value": 337,
+            "accepted": true,
+            "construction_end": 80,
+            "verification_start": 188,
+            "verification_end": 208
+          }
+        ]
+      },
+      "total_time": 356,
+      "total_resource_work": 472
+    },
+    "faster_construction": {
+      "primary": {
+        "jobs": 12,
+        "accepted": 12,
+        "setup_ledger": {},
+        "setup_time": 0,
+        "construction_per_job": 1,
+        "verification_per_job": 12,
+        "verification_method": "full",
+        "elapsed_time": 145,
+        "resource_work": 156,
+        "trace": [
+          {
+            "job": 1,
+            "input": 1,
+            "value": 10,
+            "accepted": true,
+            "construction_end": 1,
+            "verification_start": 1,
+            "verification_end": 13
+          },
+          {
+            "job": 2,
+            "input": 2,
+            "value": 13,
+            "accepted": true,
+            "construction_end": 2,
+            "verification_start": 13,
+            "verification_end": 25
+          },
+          {
+            "job": 3,
+            "input": 3,
+            "value": 16,
+            "accepted": true,
+            "construction_end": 3,
+            "verification_start": 25,
+            "verification_end": 37
+          },
+          {
+            "job": 4,
+            "input": 4,
+            "value": 19,
+            "accepted": true,
+            "construction_end": 4,
+            "verification_start": 37,
+            "verification_end": 49
+          },
+          {
+            "job": 5,
+            "input": 5,
+            "value": 22,
+            "accepted": true,
+            "construction_end": 5,
+            "verification_start": 49,
+            "verification_end": 61
+          },
+          {
+            "job": 6,
+            "input": 6,
+            "value": 25,
+            "accepted": true,
+            "construction_end": 6,
+            "verification_start": 61,
+            "verification_end": 73
+          },
+          {
+            "job": 7,
+            "input": 7,
+            "value": 28,
+            "accepted": true,
+            "construction_end": 7,
+            "verification_start": 73,
+            "verification_end": 85
+          },
+          {
+            "job": 8,
+            "input": 8,
+            "value": 31,
+            "accepted": true,
+            "construction_end": 8,
+            "verification_start": 85,
+            "verification_end": 97
+          },
+          {
+            "job": 9,
+            "input": 9,
+            "value": 34,
+            "accepted": true,
+            "construction_end": 9,
+            "verification_start": 97,
+            "verification_end": 109
+          },
+          {
+            "job": 10,
+            "input": 10,
+            "value": 37,
+            "accepted": true,
+            "construction_end": 10,
+            "verification_start": 109,
+            "verification_end": 121
+          },
+          {
+            "job": 11,
+            "input": 11,
+            "value": 40,
+            "accepted": true,
+            "construction_end": 11,
+            "verification_start": 121,
+            "verification_end": 133
+          },
+          {
+            "job": 12,
+            "input": 12,
+            "value": 43,
+            "accepted": true,
+            "construction_end": 12,
+            "verification_start": 133,
+            "verification_end": 145
+          }
+        ]
+      },
+      "successor": {
+        "jobs": 10,
+        "accepted": 10,
+        "setup_ledger": {},
+        "setup_time": 0,
+        "construction_per_job": 2,
+        "verification_per_job": 20,
+        "verification_method": "full",
+        "elapsed_time": 202,
+        "resource_work": 220,
+        "trace": [
+          {
+            "job": 1,
+            "input": 101,
+            "value": 310,
+            "accepted": true,
+            "construction_end": 2,
+            "verification_start": 2,
+            "verification_end": 22
+          },
+          {
+            "job": 2,
+            "input": 102,
+            "value": 313,
+            "accepted": true,
+            "construction_end": 4,
+            "verification_start": 22,
+            "verification_end": 42
+          },
+          {
+            "job": 3,
+            "input": 103,
+            "value": 316,
+            "accepted": true,
+            "construction_end": 6,
+            "verification_start": 42,
+            "verification_end": 62
+          },
+          {
+            "job": 4,
+            "input": 104,
+            "value": 319,
+            "accepted": true,
+            "construction_end": 8,
+            "verification_start": 62,
+            "verification_end": 82
+          },
+          {
+            "job": 5,
+            "input": 105,
+            "value": 322,
+            "accepted": true,
+            "construction_end": 10,
+            "verification_start": 82,
+            "verification_end": 102
+          },
+          {
+            "job": 6,
+            "input": 106,
+            "value": 325,
+            "accepted": true,
+            "construction_end": 12,
+            "verification_start": 102,
+            "verification_end": 122
+          },
+          {
+            "job": 7,
+            "input": 107,
+            "value": 328,
+            "accepted": true,
+            "construction_end": 14,
+            "verification_start": 122,
+            "verification_end": 142
+          },
+          {
+            "job": 8,
+            "input": 108,
+            "value": 331,
+            "accepted": true,
+            "construction_end": 16,
+            "verification_start": 142,
+            "verification_end": 162
+          },
+          {
+            "job": 9,
+            "input": 109,
+            "value": 334,
+            "accepted": true,
+            "construction_end": 18,
+            "verification_start": 162,
+            "verification_end": 182
+          },
+          {
+            "job": 10,
+            "input": 110,
+            "value": 337,
+            "accepted": true,
+            "construction_end": 20,
+            "verification_start": 182,
+            "verification_end": 202
+          }
+        ]
+      },
+      "total_time": 347,
+      "total_resource_work": 376
+    },
+    "trace_producer_only": {
+      "primary": {
+        "jobs": 12,
+        "accepted": 12,
+        "setup_ledger": {
+          "search": 4,
+          "producer_construction": 6,
+          "checker_construction": 0,
+          "integration": 2,
+          "qualification": 2
+        },
+        "setup_time": 14,
+        "construction_per_job": 5,
+        "verification_per_job": 12,
+        "verification_method": "full",
+        "elapsed_time": 163,
+        "resource_work": 218,
+        "trace": [
+          {
+            "job": 1,
+            "input": 1,
+            "value": 10,
+            "accepted": true,
+            "construction_end": 19,
+            "verification_start": 19,
+            "verification_end": 31
+          },
+          {
+            "job": 2,
+            "input": 2,
+            "value": 13,
+            "accepted": true,
+            "construction_end": 24,
+            "verification_start": 31,
+            "verification_end": 43
+          },
+          {
+            "job": 3,
+            "input": 3,
+            "value": 16,
+            "accepted": true,
+            "construction_end": 29,
+            "verification_start": 43,
+            "verification_end": 55
+          },
+          {
+            "job": 4,
+            "input": 4,
+            "value": 19,
+            "accepted": true,
+            "construction_end": 34,
+            "verification_start": 55,
+            "verification_end": 67
+          },
+          {
+            "job": 5,
+            "input": 5,
+            "value": 22,
+            "accepted": true,
+            "construction_end": 39,
+            "verification_start": 67,
+            "verification_end": 79
+          },
+          {
+            "job": 6,
+            "input": 6,
+            "value": 25,
+            "accepted": true,
+            "construction_end": 44,
+            "verification_start": 79,
+            "verification_end": 91
+          },
+          {
+            "job": 7,
+            "input": 7,
+            "value": 28,
+            "accepted": true,
+            "construction_end": 49,
+            "verification_start": 91,
+            "verification_end": 103
+          },
+          {
+            "job": 8,
+            "input": 8,
+            "value": 31,
+            "accepted": true,
+            "construction_end": 54,
+            "verification_start": 103,
+            "verification_end": 115
+          },
+          {
+            "job": 9,
+            "input": 9,
+            "value": 34,
+            "accepted": true,
+            "construction_end": 59,
+            "verification_start": 115,
+            "verification_end": 127
+          },
+          {
+            "job": 10,
+            "input": 10,
+            "value": 37,
+            "accepted": true,
+            "construction_end": 64,
+            "verification_start": 127,
+            "verification_end": 139
+          },
+          {
+            "job": 11,
+            "input": 11,
+            "value": 40,
+            "accepted": true,
+            "construction_end": 69,
+            "verification_start": 139,
+            "verification_end": 151
+          },
+          {
+            "job": 12,
+            "input": 12,
+            "value": 43,
+            "accepted": true,
+            "construction_end": 74,
+            "verification_start": 151,
+            "verification_end": 163
+          }
+        ]
+      },
+      "successor": {
+        "jobs": 10,
+        "accepted": 10,
+        "setup_ledger": {
+          "adaptation": 4,
+          "successor_requalification": 4
+        },
+        "setup_time": 8,
+        "construction_per_job": 9,
+        "verification_per_job": 20,
+        "verification_method": "full",
+        "elapsed_time": 217,
+        "resource_work": 298,
+        "trace": [
+          {
+            "job": 1,
+            "input": 101,
+            "value": 310,
+            "accepted": true,
+            "construction_end": 17,
+            "verification_start": 17,
+            "verification_end": 37
+          },
+          {
+            "job": 2,
+            "input": 102,
+            "value": 313,
+            "accepted": true,
+            "construction_end": 26,
+            "verification_start": 37,
+            "verification_end": 57
+          },
+          {
+            "job": 3,
+            "input": 103,
+            "value": 316,
+            "accepted": true,
+            "construction_end": 35,
+            "verification_start": 57,
+            "verification_end": 77
+          },
+          {
+            "job": 4,
+            "input": 104,
+            "value": 319,
+            "accepted": true,
+            "construction_end": 44,
+            "verification_start": 77,
+            "verification_end": 97
+          },
+          {
+            "job": 5,
+            "input": 105,
+            "value": 322,
+            "accepted": true,
+            "construction_end": 53,
+            "verification_start": 97,
+            "verification_end": 117
+          },
+          {
+            "job": 6,
+            "input": 106,
+            "value": 325,
+            "accepted": true,
+            "construction_end": 62,
+            "verification_start": 117,
+            "verification_end": 137
+          },
+          {
+            "job": 7,
+            "input": 107,
+            "value": 328,
+            "accepted": true,
+            "construction_end": 71,
+            "verification_start": 137,
+            "verification_end": 157
+          },
+          {
+            "job": 8,
+            "input": 108,
+            "value": 331,
+            "accepted": true,
+            "construction_end": 80,
+            "verification_start": 157,
+            "verification_end": 177
+          },
+          {
+            "job": 9,
+            "input": 109,
+            "value": 334,
+            "accepted": true,
+            "construction_end": 89,
+            "verification_start": 177,
+            "verification_end": 197
+          },
+          {
+            "job": 10,
+            "input": 110,
+            "value": 337,
+            "accepted": true,
+            "construction_end": 98,
+            "verification_start": 197,
+            "verification_end": 217
+          }
+        ]
+      },
+      "total_time": 380,
+      "total_resource_work": 516
+    },
+    "certificate_checker_only": {
+      "primary": {
+        "jobs": 12,
+        "accepted": 12,
+        "setup_ledger": {
+          "search": 4,
+          "producer_construction": 0,
+          "checker_construction": 6,
+          "integration": 2,
+          "qualification": 2
+        },
+        "setup_time": 14,
+        "construction_per_job": 4,
+        "verification_per_job": 12,
+        "verification_method": "full",
+        "elapsed_time": 162,
+        "resource_work": 206,
+        "trace": [
+          {
+            "job": 1,
+            "input": 1,
+            "value": 10,
+            "accepted": true,
+            "construction_end": 18,
+            "verification_start": 18,
+            "verification_end": 30
+          },
+          {
+            "job": 2,
+            "input": 2,
+            "value": 13,
+            "accepted": true,
+            "construction_end": 22,
+            "verification_start": 30,
+            "verification_end": 42
+          },
+          {
+            "job": 3,
+            "input": 3,
+            "value": 16,
+            "accepted": true,
+            "construction_end": 26,
+            "verification_start": 42,
+            "verification_end": 54
+          },
+          {
+            "job": 4,
+            "input": 4,
+            "value": 19,
+            "accepted": true,
+            "construction_end": 30,
+            "verification_start": 54,
+            "verification_end": 66
+          },
+          {
+            "job": 5,
+            "input": 5,
+            "value": 22,
+            "accepted": true,
+            "construction_end": 34,
+            "verification_start": 66,
+            "verification_end": 78
+          },
+          {
+            "job": 6,
+            "input": 6,
+            "value": 25,
+            "accepted": true,
+            "construction_end": 38,
+            "verification_start": 78,
+            "verification_end": 90
+          },
+          {
+            "job": 7,
+            "input": 7,
+            "value": 28,
+            "accepted": true,
+            "construction_end": 42,
+            "verification_start": 90,
+            "verification_end": 102
+          },
+          {
+            "job": 8,
+            "input": 8,
+            "value": 31,
+            "accepted": true,
+            "construction_end": 46,
+            "verification_start": 102,
+            "verification_end": 114
+          },
+          {
+            "job": 9,
+            "input": 9,
+            "value": 34,
+            "accepted": true,
+            "construction_end": 50,
+            "verification_start": 114,
+            "verification_end": 126
+          },
+          {
+            "job": 10,
+            "input": 10,
+            "value": 37,
+            "accepted": true,
+            "construction_end": 54,
+            "verification_start": 126,
+            "verification_end": 138
+          },
+          {
+            "job": 11,
+            "input": 11,
+            "value": 40,
+            "accepted": true,
+            "construction_end": 58,
+            "verification_start": 138,
+            "verification_end": 150
+          },
+          {
+            "job": 12,
+            "input": 12,
+            "value": 43,
+            "accepted": true,
+            "construction_end": 62,
+            "verification_start": 150,
+            "verification_end": 162
+          }
+        ]
+      },
+      "successor": {
+        "jobs": 10,
+        "accepted": 10,
+        "setup_ledger": {
+          "adaptation": 4,
+          "successor_requalification": 4
+        },
+        "setup_time": 8,
+        "construction_per_job": 8,
+        "verification_per_job": 20,
+        "verification_method": "full",
+        "elapsed_time": 216,
+        "resource_work": 288,
+        "trace": [
+          {
+            "job": 1,
+            "input": 101,
+            "value": 310,
+            "accepted": true,
+            "construction_end": 16,
+            "verification_start": 16,
+            "verification_end": 36
+          },
+          {
+            "job": 2,
+            "input": 102,
+            "value": 313,
+            "accepted": true,
+            "construction_end": 24,
+            "verification_start": 36,
+            "verification_end": 56
+          },
+          {
+            "job": 3,
+            "input": 103,
+            "value": 316,
+            "accepted": true,
+            "construction_end": 32,
+            "verification_start": 56,
+            "verification_end": 76
+          },
+          {
+            "job": 4,
+            "input": 104,
+            "value": 319,
+            "accepted": true,
+            "construction_end": 40,
+            "verification_start": 76,
+            "verification_end": 96
+          },
+          {
+            "job": 5,
+            "input": 105,
+            "value": 322,
+            "accepted": true,
+            "construction_end": 48,
+            "verification_start": 96,
+            "verification_end": 116
+          },
+          {
+            "job": 6,
+            "input": 106,
+            "value": 325,
+            "accepted": true,
+            "construction_end": 56,
+            "verification_start": 116,
+            "verification_end": 136
+          },
+          {
+            "job": 7,
+            "input": 107,
+            "value": 328,
+            "accepted": true,
+            "construction_end": 64,
+            "verification_start": 136,
+            "verification_end": 156
+          },
+          {
+            "job": 8,
+            "input": 108,
+            "value": 331,
+            "accepted": true,
+            "construction_end": 72,
+            "verification_start": 156,
+            "verification_end": 176
+          },
+          {
+            "job": 9,
+            "input": 109,
+            "value": 334,
+            "accepted": true,
+            "construction_end": 80,
+            "verification_start": 176,
+            "verification_end": 196
+          },
+          {
+            "job": 10,
+            "input": 110,
+            "value": 337,
+            "accepted": true,
+            "construction_end": 88,
+            "verification_start": 196,
+            "verification_end": 216
+          }
+        ]
+      },
+      "total_time": 378,
+      "total_resource_work": 494
+    },
+    "complementary_bundle": {
+      "primary": {
+        "jobs": 12,
+        "accepted": 12,
+        "setup_ledger": {
+          "search": 4,
+          "producer_construction": 6,
+          "checker_construction": 6,
+          "integration": 4,
+          "qualification": 4
+        },
+        "setup_time": 24,
+        "construction_per_job": 5,
+        "verification_per_job": 1,
+        "verification_method": "certificate",
+        "elapsed_time": 85,
+        "resource_work": 96,
+        "trace": [
+          {
+            "job": 1,
+            "input": 1,
+            "value": 10,
+            "accepted": true,
+            "construction_end": 29,
+            "verification_start": 29,
+            "verification_end": 30
+          },
+          {
+            "job": 2,
+            "input": 2,
+            "value": 13,
+            "accepted": true,
+            "construction_end": 34,
+            "verification_start": 34,
+            "verification_end": 35
+          },
+          {
+            "job": 3,
+            "input": 3,
+            "value": 16,
+            "accepted": true,
+            "construction_end": 39,
+            "verification_start": 39,
+            "verification_end": 40
+          },
+          {
+            "job": 4,
+            "input": 4,
+            "value": 19,
+            "accepted": true,
+            "construction_end": 44,
+            "verification_start": 44,
+            "verification_end": 45
+          },
+          {
+            "job": 5,
+            "input": 5,
+            "value": 22,
+            "accepted": true,
+            "construction_end": 49,
+            "verification_start": 49,
+            "verification_end": 50
+          },
+          {
+            "job": 6,
+            "input": 6,
+            "value": 25,
+            "accepted": true,
+            "construction_end": 54,
+            "verification_start": 54,
+            "verification_end": 55
+          },
+          {
+            "job": 7,
+            "input": 7,
+            "value": 28,
+            "accepted": true,
+            "construction_end": 59,
+            "verification_start": 59,
+            "verification_end": 60
+          },
+          {
+            "job": 8,
+            "input": 8,
+            "value": 31,
+            "accepted": true,
+            "construction_end": 64,
+            "verification_start": 64,
+            "verification_end": 65
+          },
+          {
+            "job": 9,
+            "input": 9,
+            "value": 34,
+            "accepted": true,
+            "construction_end": 69,
+            "verification_start": 69,
+            "verification_end": 70
+          },
+          {
+            "job": 10,
+            "input": 10,
+            "value": 37,
+            "accepted": true,
+            "construction_end": 74,
+            "verification_start": 74,
+            "verification_end": 75
+          },
+          {
+            "job": 11,
+            "input": 11,
+            "value": 40,
+            "accepted": true,
+            "construction_end": 79,
+            "verification_start": 79,
+            "verification_end": 80
+          },
+          {
+            "job": 12,
+            "input": 12,
+            "value": 43,
+            "accepted": true,
+            "construction_end": 84,
+            "verification_start": 84,
+            "verification_end": 85
+          }
+        ]
+      },
+      "successor": {
+        "jobs": 10,
+        "accepted": 10,
+        "setup_ledger": {
+          "adaptation": 4,
+          "successor_requalification": 4
+        },
+        "setup_time": 8,
+        "construction_per_job": 9,
+        "verification_per_job": 2,
+        "verification_method": "certificate",
+        "elapsed_time": 100,
+        "resource_work": 118,
+        "trace": [
+          {
+            "job": 1,
+            "input": 101,
+            "value": 310,
+            "accepted": true,
+            "construction_end": 17,
+            "verification_start": 17,
+            "verification_end": 19
+          },
+          {
+            "job": 2,
+            "input": 102,
+            "value": 313,
+            "accepted": true,
+            "construction_end": 26,
+            "verification_start": 26,
+            "verification_end": 28
+          },
+          {
+            "job": 3,
+            "input": 103,
+            "value": 316,
+            "accepted": true,
+            "construction_end": 35,
+            "verification_start": 35,
+            "verification_end": 37
+          },
+          {
+            "job": 4,
+            "input": 104,
+            "value": 319,
+            "accepted": true,
+            "construction_end": 44,
+            "verification_start": 44,
+            "verification_end": 46
+          },
+          {
+            "job": 5,
+            "input": 105,
+            "value": 322,
+            "accepted": true,
+            "construction_end": 53,
+            "verification_start": 53,
+            "verification_end": 55
+          },
+          {
+            "job": 6,
+            "input": 106,
+            "value": 325,
+            "accepted": true,
+            "construction_end": 62,
+            "verification_start": 62,
+            "verification_end": 64
+          },
+          {
+            "job": 7,
+            "input": 107,
+            "value": 328,
+            "accepted": true,
+            "construction_end": 71,
+            "verification_start": 71,
+            "verification_end": 73
+          },
+          {
+            "job": 8,
+            "input": 108,
+            "value": 331,
+            "accepted": true,
+            "construction_end": 80,
+            "verification_start": 80,
+            "verification_end": 82
+          },
+          {
+            "job": 9,
+            "input": 109,
+            "value": 334,
+            "accepted": true,
+            "construction_end": 89,
+            "verification_start": 89,
+            "verification_end": 91
+          },
+          {
+            "job": 10,
+            "input": 110,
+            "value": 337,
+            "accepted": true,
+            "construction_end": 98,
+            "verification_start": 98,
+            "verification_end": 100
+          }
+        ]
+      },
+      "total_time": 185,
+      "total_resource_work": 214
+    },
+    "bundle_and_faster_construction": {
+      "primary": {
+        "jobs": 12,
+        "accepted": 12,
+        "setup_ledger": {
+          "search": 4,
+          "producer_construction": 6,
+          "checker_construction": 6,
+          "integration": 4,
+          "qualification": 4
+        },
+        "setup_time": 24,
+        "construction_per_job": 2,
+        "verification_per_job": 1,
+        "verification_method": "certificate",
+        "elapsed_time": 49,
+        "resource_work": 60,
+        "trace": [
+          {
+            "job": 1,
+            "input": 1,
+            "value": 10,
+            "accepted": true,
+            "construction_end": 26,
+            "verification_start": 26,
+            "verification_end": 27
+          },
+          {
+            "job": 2,
+            "input": 2,
+            "value": 13,
+            "accepted": true,
+            "construction_end": 28,
+            "verification_start": 28,
+            "verification_end": 29
+          },
+          {
+            "job": 3,
+            "input": 3,
+            "value": 16,
+            "accepted": true,
+            "construction_end": 30,
+            "verification_start": 30,
+            "verification_end": 31
+          },
+          {
+            "job": 4,
+            "input": 4,
+            "value": 19,
+            "accepted": true,
+            "construction_end": 32,
+            "verification_start": 32,
+            "verification_end": 33
+          },
+          {
+            "job": 5,
+            "input": 5,
+            "value": 22,
+            "accepted": true,
+            "construction_end": 34,
+            "verification_start": 34,
+            "verification_end": 35
+          },
+          {
+            "job": 6,
+            "input": 6,
+            "value": 25,
+            "accepted": true,
+            "construction_end": 36,
+            "verification_start": 36,
+            "verification_end": 37
+          },
+          {
+            "job": 7,
+            "input": 7,
+            "value": 28,
+            "accepted": true,
+            "construction_end": 38,
+            "verification_start": 38,
+            "verification_end": 39
+          },
+          {
+            "job": 8,
+            "input": 8,
+            "value": 31,
+            "accepted": true,
+            "construction_end": 40,
+            "verification_start": 40,
+            "verification_end": 41
+          },
+          {
+            "job": 9,
+            "input": 9,
+            "value": 34,
+            "accepted": true,
+            "construction_end": 42,
+            "verification_start": 42,
+            "verification_end": 43
+          },
+          {
+            "job": 10,
+            "input": 10,
+            "value": 37,
+            "accepted": true,
+            "construction_end": 44,
+            "verification_start": 44,
+            "verification_end": 45
+          },
+          {
+            "job": 11,
+            "input": 11,
+            "value": 40,
+            "accepted": true,
+            "construction_end": 46,
+            "verification_start": 46,
+            "verification_end": 47
+          },
+          {
+            "job": 12,
+            "input": 12,
+            "value": 43,
+            "accepted": true,
+            "construction_end": 48,
+            "verification_start": 48,
+            "verification_end": 49
+          }
+        ]
+      },
+      "successor": {
+        "jobs": 10,
+        "accepted": 10,
+        "setup_ledger": {
+          "adaptation": 4,
+          "successor_requalification": 4
+        },
+        "setup_time": 8,
+        "construction_per_job": 3,
+        "verification_per_job": 2,
+        "verification_method": "certificate",
+        "elapsed_time": 40,
+        "resource_work": 58,
+        "trace": [
+          {
+            "job": 1,
+            "input": 101,
+            "value": 310,
+            "accepted": true,
+            "construction_end": 11,
+            "verification_start": 11,
+            "verification_end": 13
+          },
+          {
+            "job": 2,
+            "input": 102,
+            "value": 313,
+            "accepted": true,
+            "construction_end": 14,
+            "verification_start": 14,
+            "verification_end": 16
+          },
+          {
+            "job": 3,
+            "input": 103,
+            "value": 316,
+            "accepted": true,
+            "construction_end": 17,
+            "verification_start": 17,
+            "verification_end": 19
+          },
+          {
+            "job": 4,
+            "input": 104,
+            "value": 319,
+            "accepted": true,
+            "construction_end": 20,
+            "verification_start": 20,
+            "verification_end": 22
+          },
+          {
+            "job": 5,
+            "input": 105,
+            "value": 322,
+            "accepted": true,
+            "construction_end": 23,
+            "verification_start": 23,
+            "verification_end": 25
+          },
+          {
+            "job": 6,
+            "input": 106,
+            "value": 325,
+            "accepted": true,
+            "construction_end": 26,
+            "verification_start": 26,
+            "verification_end": 28
+          },
+          {
+            "job": 7,
+            "input": 107,
+            "value": 328,
+            "accepted": true,
+            "construction_end": 29,
+            "verification_start": 29,
+            "verification_end": 31
+          },
+          {
+            "job": 8,
+            "input": 108,
+            "value": 331,
+            "accepted": true,
+            "construction_end": 32,
+            "verification_start": 32,
+            "verification_end": 34
+          },
+          {
+            "job": 9,
+            "input": 109,
+            "value": 334,
+            "accepted": true,
+            "construction_end": 35,
+            "verification_start": 35,
+            "verification_end": 37
+          },
+          {
+            "job": 10,
+            "input": 110,
+            "value": 337,
+            "accepted": true,
+            "construction_end": 38,
+            "verification_start": 38,
+            "verification_end": 40
+          }
+        ]
+      },
+      "total_time": 89,
+      "total_resource_work": 118
+    },
+    "bundle_rebuilt_on_successor": {
+      "primary": {
+        "jobs": 12,
+        "accepted": 12,
+        "setup_ledger": {
+          "search": 4,
+          "producer_construction": 6,
+          "checker_construction": 6,
+          "integration": 4,
+          "qualification": 4
+        },
+        "setup_time": 24,
+        "construction_per_job": 2,
+        "verification_per_job": 1,
+        "verification_method": "certificate",
+        "elapsed_time": 49,
+        "resource_work": 60,
+        "trace": [
+          {
+            "job": 1,
+            "input": 1,
+            "value": 10,
+            "accepted": true,
+            "construction_end": 26,
+            "verification_start": 26,
+            "verification_end": 27
+          },
+          {
+            "job": 2,
+            "input": 2,
+            "value": 13,
+            "accepted": true,
+            "construction_end": 28,
+            "verification_start": 28,
+            "verification_end": 29
+          },
+          {
+            "job": 3,
+            "input": 3,
+            "value": 16,
+            "accepted": true,
+            "construction_end": 30,
+            "verification_start": 30,
+            "verification_end": 31
+          },
+          {
+            "job": 4,
+            "input": 4,
+            "value": 19,
+            "accepted": true,
+            "construction_end": 32,
+            "verification_start": 32,
+            "verification_end": 33
+          },
+          {
+            "job": 5,
+            "input": 5,
+            "value": 22,
+            "accepted": true,
+            "construction_end": 34,
+            "verification_start": 34,
+            "verification_end": 35
+          },
+          {
+            "job": 6,
+            "input": 6,
+            "value": 25,
+            "accepted": true,
+            "construction_end": 36,
+            "verification_start": 36,
+            "verification_end": 37
+          },
+          {
+            "job": 7,
+            "input": 7,
+            "value": 28,
+            "accepted": true,
+            "construction_end": 38,
+            "verification_start": 38,
+            "verification_end": 39
+          },
+          {
+            "job": 8,
+            "input": 8,
+            "value": 31,
+            "accepted": true,
+            "construction_end": 40,
+            "verification_start": 40,
+            "verification_end": 41
+          },
+          {
+            "job": 9,
+            "input": 9,
+            "value": 34,
+            "accepted": true,
+            "construction_end": 42,
+            "verification_start": 42,
+            "verification_end": 43
+          },
+          {
+            "job": 10,
+            "input": 10,
+            "value": 37,
+            "accepted": true,
+            "construction_end": 44,
+            "verification_start": 44,
+            "verification_end": 45
+          },
+          {
+            "job": 11,
+            "input": 11,
+            "value": 40,
+            "accepted": true,
+            "construction_end": 46,
+            "verification_start": 46,
+            "verification_end": 47
+          },
+          {
+            "job": 12,
+            "input": 12,
+            "value": 43,
+            "accepted": true,
+            "construction_end": 48,
+            "verification_start": 48,
+            "verification_end": 49
+          }
+        ]
+      },
+      "successor": {
+        "jobs": 10,
+        "accepted": 10,
+        "setup_ledger": {
+          "search": 4,
+          "producer_construction": 6,
+          "checker_construction": 6,
+          "integration": 4,
+          "qualification": 4,
+          "adaptation": 4,
+          "successor_requalification": 4
+        },
+        "setup_time": 32,
+        "construction_per_job": 3,
+        "verification_per_job": 2,
+        "verification_method": "certificate",
+        "elapsed_time": 64,
+        "resource_work": 82,
+        "trace": [
+          {
+            "job": 1,
+            "input": 101,
+            "value": 310,
+            "accepted": true,
+            "construction_end": 35,
+            "verification_start": 35,
+            "verification_end": 37
+          },
+          {
+            "job": 2,
+            "input": 102,
+            "value": 313,
+            "accepted": true,
+            "construction_end": 38,
+            "verification_start": 38,
+            "verification_end": 40
+          },
+          {
+            "job": 3,
+            "input": 103,
+            "value": 316,
+            "accepted": true,
+            "construction_end": 41,
+            "verification_start": 41,
+            "verification_end": 43
+          },
+          {
+            "job": 4,
+            "input": 104,
+            "value": 319,
+            "accepted": true,
+            "construction_end": 44,
+            "verification_start": 44,
+            "verification_end": 46
+          },
+          {
+            "job": 5,
+            "input": 105,
+            "value": 322,
+            "accepted": true,
+            "construction_end": 47,
+            "verification_start": 47,
+            "verification_end": 49
+          },
+          {
+            "job": 6,
+            "input": 106,
+            "value": 325,
+            "accepted": true,
+            "construction_end": 50,
+            "verification_start": 50,
+            "verification_end": 52
+          },
+          {
+            "job": 7,
+            "input": 107,
+            "value": 328,
+            "accepted": true,
+            "construction_end": 53,
+            "verification_start": 53,
+            "verification_end": 55
+          },
+          {
+            "job": 8,
+            "input": 108,
+            "value": 331,
+            "accepted": true,
+            "construction_end": 56,
+            "verification_start": 56,
+            "verification_end": 58
+          },
+          {
+            "job": 9,
+            "input": 109,
+            "value": 334,
+            "accepted": true,
+            "construction_end": 59,
+            "verification_start": 59,
+            "verification_end": 61
+          },
+          {
+            "job": 10,
+            "input": 110,
+            "value": 337,
+            "accepted": true,
+            "construction_end": 62,
+            "verification_start": 62,
+            "verification_end": 64
+          }
+        ]
+      },
+      "total_time": 113,
+      "total_resource_work": 142
+    }
+  },
+  "equal_content_conventional_comparator": {
+    "scope": "Supplied fixed ordinary workflow executes the same combined design and pays identical costs; no automated discovery or free selection is assumed.",
+    "supplied_policy": "supplied_ordinary_workflow",
+    "total_time": 89,
+    "total_resource_work": 118,
+    "tie_with_proposed_combination": true,
+    "finite_family_arithmetic_minimum": {
+      "policy": "bundle_and_faster_construction",
+      "time": 89,
+      "scope": "Transparent minimum over seven specified policies, not global optimality or autonomous optimization."
+    }
+  },
+  "checks": {
+    "checks_passed": true,
+    "coverage": [
+      "exact pipeline recurrence",
+      "frozen result totals",
+      "complementarity regressions",
+      "charged successor rebuilding",
+      "contract equality",
+      "corrupted products rejected",
+      "incorrect certificate coefficients/domain/input rejected",
+      "invalid transfer rejected",
+      "valid fallback retained",
+      "short-horizon loss",
+      "break-even equivalence"
+    ],
+    "short_horizon": {
+      "baseline": {
+        "jobs": 1,
+        "accepted": 1,
+        "setup_ledger": {},
+        "setup_time": 0,
+        "construction_per_job": 4,
+        "verification_per_job": 12,
+        "verification_method": "full",
+        "elapsed_time": 16,
+        "resource_work": 16,
+        "trace": [
+          {
+            "job": 1,
+            "input": 1,
+            "value": 10,
+            "accepted": true,
+            "construction_end": 4,
+            "verification_start": 4,
+            "verification_end": 16
+          }
+        ]
+      },
+      "faster_construction": {
+        "jobs": 1,
+        "accepted": 1,
+        "setup_ledger": {},
+        "setup_time": 0,
+        "construction_per_job": 1,
+        "verification_per_job": 12,
+        "verification_method": "full",
+        "elapsed_time": 13,
+        "resource_work": 13,
+        "trace": [
+          {
+            "job": 1,
+            "input": 1,
+            "value": 10,
+            "accepted": true,
+            "construction_end": 1,
+            "verification_start": 1,
+            "verification_end": 13
+          }
+        ]
+      },
+      "bundle_and_faster_construction": {
+        "jobs": 1,
+        "accepted": 1,
+        "setup_ledger": {
+          "search": 4,
+          "producer_construction": 6,
+          "checker_construction": 6,
+          "integration": 4,
+          "qualification": 4
+        },
+        "setup_time": 24,
+        "construction_per_job": 2,
+        "verification_per_job": 1,
+        "verification_method": "certificate",
+        "elapsed_time": 27,
+        "resource_work": 27,
+        "trace": [
+          {
+            "job": 1,
+            "input": 1,
+            "value": 10,
+            "accepted": true,
+            "construction_end": 26,
+            "verification_start": 26,
+            "verification_end": 27
+          }
+        ]
+      }
+    },
+    "invalid_transfer_attempt": {
+      "jobs": 4,
+      "accepted": 0,
+      "setup_ledger": {
+        "adaptation": 4,
+        "successor_requalification": 4
+      },
+      "setup_time": 8,
+      "construction_per_job": 2,
+      "verification_per_job": 1,
+      "verification_method": "certificate",
+      "elapsed_time": 17,
+      "resource_work": 20,
+      "trace": [
+        {
+          "job": 1,
+          "input": 3,
+          "value": 16,
+          "accepted": false,
+          "construction_end": 10,
+          "verification_start": 10,
+          "verification_end": 11
+        },
+        {
+          "job": 2,
+          "input": 4,
+          "value": 23,
+          "accepted": false,
+          "construction_end": 12,
+          "verification_start": 12,
+          "verification_end": 13
+        },
+        {
+          "job": 3,
+          "input": 5,
+          "value": 32,
+          "accepted": false,
+          "construction_end": 14,
+          "verification_start": 14,
+          "verification_end": 15
+        },
+        {
+          "job": 4,
+          "input": 6,
+          "value": 43,
+          "accepted": false,
+          "construction_end": 16,
+          "verification_start": 16,
+          "verification_end": 17
+        }
+      ]
+    },
+    "invalid_transfer_fallback": {
+      "jobs": 4,
+      "accepted": 4,
+      "setup_ledger": {
+        "adaptation": 4,
+        "successor_requalification": 4
+      },
+      "setup_time": 8,
+      "construction_per_job": 2,
+      "verification_per_job": 12,
+      "verification_method": "full",
+      "elapsed_time": 58,
+      "resource_work": 64,
+      "trace": [
+        {
+          "job": 1,
+          "input": 3,
+          "value": 16,
+          "accepted": true,
+          "construction_end": 10,
+          "verification_start": 10,
+          "verification_end": 22
+        },
+        {
+          "job": 2,
+          "input": 4,
+          "value": 23,
+          "accepted": true,
+          "construction_end": 12,
+          "verification_start": 22,
+          "verification_end": 34
+        },
+        {
+          "job": 3,
+          "input": 5,
+          "value": 32,
+          "accepted": true,
+          "construction_end": 14,
+          "verification_start": 34,
+          "verification_end": 46
+        },
+        {
+          "job": 4,
+          "input": 6,
+          "value": 43,
+          "accepted": true,
+          "construction_end": 16,
+          "verification_start": 46,
+          "verification_end": 58
+        }
+      ]
+    }
+  }
+}

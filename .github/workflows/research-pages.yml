@@ -42,6 +42,11 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
       - name: Check exact dispatch, acceptance and financial distinctions
         run: node --test tests/test_alpha_site.cjs
+      - name: Reproduce OUT-ACCELERATE exact worked example
+        run: |
+          python3 docs/research/out-accelerate/acceleration_witness.py --output-dir "$RUNNER_TEMP/out-accelerate-replay"
+          cmp docs/research/out-accelerate/results/results.json "$RUNNER_TEMP/out-accelerate-replay/results.json"
+          cmp docs/research/out-accelerate/results/summary.csv "$RUNNER_TEMP/out-accelerate-replay/summary.csv"
       - name: Build only the public website allowlist
         run: python3 scripts/build_research_site.py --output "$RUNNER_TEMP/research-site"
       - name: Upload the allowlisted Pages artifact
