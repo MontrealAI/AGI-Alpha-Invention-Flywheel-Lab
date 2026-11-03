@@ -52,10 +52,11 @@ def produce(request,method='ordinary_equal_content_controller',retained=None):
  else:
   if request.get('response_model')!='monotone_step': return {'id':request['id'],'kind':request['kind'],'status':'refused','reason':'UNSUPPORTED_RESPONSE_MODEL','learning':events}
   lo,hi=0,64;index=0
+  measure=lambda quantity: quantity>=request['hidden_threshold']
   while hi-lo>1:
    q=(lo+hi)//2;key=f'{request["id"]}/probe{index}';fault=FAULTS[index%3]
    ok,trace=execute(device,policy,key,q,fault)
-   response=device.effects.get(key,0)>=request['hidden_threshold']
+   response=measure(device.effects.get(key,0))
    rows.append({'key':key,'quantity':q,'trace':trace,'completed':ok,'measurement':response})
    if response: hi=q
    else: lo=q
