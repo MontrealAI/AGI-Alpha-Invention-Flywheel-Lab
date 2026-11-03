@@ -28,8 +28,15 @@ class PaperApplicationCoverage(unittest.TestCase):
         self.assertGreater(result['statuses']['guidance_only'], 0)
 
     def test_all_pr_workflow_invokes_gate_without_incomplete_runtime_export(self):
-        workflow = (ROOT / '.github/workflows/connected014.yml').read_text()
-        self.assertIn("run: python -m unittest discover -s tests -p 'test_paper_applications.py' -v", workflow)
+        for name in ('connected014.yml', 'connected014-release.yml'):
+            workflow = (ROOT / '.github/workflows' / name).read_text()
+            self.assertIn("run: python -m unittest discover -s tests -p 'test_paper_applications.py' -v", workflow)
+            self.assertIn('  pull_request:', workflow)
+            if name == 'connected014-release.yml':
+                self.assertIn('  push:\n    branches: [main]', workflow)
+                self.assertEqual(workflow.count('Check paper application coverage'), 1)
+                self.assertLess(workflow.index('Check paper application coverage'),
+                                workflow.index('Bind immutable release assets'))
         self.assertFalse(Path(__file__).name.startswith('test_connected'))
 
     def test_missing_paper_fails(self):
