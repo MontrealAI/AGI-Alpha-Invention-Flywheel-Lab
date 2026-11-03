@@ -4,7 +4,7 @@ import itertools
 import random
 import unittest
 
-from commercial.ledger import digest
+from fractions import Fraction
 from mechanism_harness import cart_program as carts
 from mechanism_harness.market_cases import market
 
@@ -51,6 +51,48 @@ class IndependentCartChoiceReview(unittest.TestCase):
                 self.assertEqual((actual['outcome_id'], actual['price_cents'],
                                   actual['utility_cents'], actual['seller_contribution_cents']),
                                  oracle(m, p, private))
+
+    def test_full_milp_matches_tiny_exhaustive_closed_menu_search(self):
+        from mechanism_harness.cart_synthesis import synthesize
+        rng = random.Random(23759)
+        for case in range(5):
+            m = market(1337, 'substitute', width=2)
+            m['types'] = m['types'][:2]
+            m['payment_bps'] = 0
+            for outcome in m['outcomes'][1:]:
+                outcome['cost_cents'] = rng.randrange(0, 3)
+            for typ in m['types']:
+                typ.update(values=[0] + [rng.randrange(0, 8) for _ in range(3)],
+                           budget_cents=rng.randrange(1, 7), outside_utility=0, weight=1)
+            cap = max(t['budget_cents'] for t in m['types']) + 1
+            best = Fraction(0)
+            for prices in itertools.product(range(cap + 1), repeat=3):
+                if prices[2] > prices[0] + prices[1]:
+                    continue
+                p = carts.null_program(m)
+                p['menu'] = [{'outcome_id': o['id'], 'price_cents': q}
+                             for o, q in zip(m['outcomes'][1:], prices)]
+                total = 0
+                valid = True
+                for typ in m['types']:
+                    private = {key: typ[key] for key in ('values', 'budget_cents', 'outside_utility')}
+                    outcome, price, utility, profit = oracle(m, p, private)
+                    if profit < 0 or (outcome != 'outside' and utility < 1):
+                        valid = False
+                        break
+                    # Independent strict-gap model: every affordable different
+                    # outcome must be at least one integer cent worse.
+                    for j, q in enumerate(prices, 1):
+                        if q <= typ['budget_cents'] and m['outcomes'][j]['id'] != outcome:
+                            if utility < typ['values'][j] - q + 1:
+                                valid = False
+                    total += profit
+                if valid:
+                    best = max(best, Fraction(total, len(m['types'])))
+            built = synthesize(m, mode='full')
+            with self.subTest(case=case):
+                self.assertIsNotNone(built['program'])
+                self.assertEqual(Fraction(built['verification']['expected_contribution_cents']), best)
 
     def test_changed_union_semantics_are_rejected(self):
         m = market(1337, 'substitute', width=2)
