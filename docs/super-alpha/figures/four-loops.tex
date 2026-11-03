@@ -1,0 +1,15 @@
+\begin{center}
+\begin{tikzpicture}[>=Latex,node distance=1.8cm,
+box/.style={draw=violet!30,rounded corners=5pt,line width=.8pt,fill=pale,text width=5.5cm,minimum height=2.05cm,align=left,inner sep=11pt,font=\small},
+flow/.style={->,line width=1pt,color=violet!65}]
+\node[box] (commerce) at (-3.45,2.2) {\textcolor{violet}{\sffamily\bfseries 01 / COMMERCE}\\[4pt]Accepted value becomes collected receipts and resources for continuation.};
+\node[box] (capability) at (3.45,2.2) {\textcolor{violet}{\sffamily\bfseries 02 / CAPABILITY}\\[4pt]Retained means change what a fresh successor can accomplish.};
+\node[box] (physical) at (-3.45,-2.2) {\textcolor{mint}{\sffamily\bfseries 04 / PHYSICAL PRODUCTION}\\[4pt]Qualified assets deliver more useful energy, materials and output.};
+\node[box] (discovery) at (3.45,-2.2) {\textcolor{mint}{\sffamily\bfseries 03 / DISCOVERY}\\[4pt]Improved construction policies find better possibilities at full cost.};
+\node[align=center,text width=5.6cm,font=\sffamily\bfseries\small,text=ink] (core) at (0,0) {TRANSFORMATIONAL\\INTELLIGENCE $\infty$\\[4pt]Complete productive\\arrangements};
+\draw[flow] (commerce.east)--(capability.west);
+\draw[flow] (capability.south)--(discovery.north);
+\draw[flow] (discovery.west)--(physical.east);
+\draw[flow] (physical.north)--(commerce.south);
+\end{tikzpicture}
+\end{center}
