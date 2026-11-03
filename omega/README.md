@@ -44,20 +44,27 @@ authority. We did not execute or benchmark an external paid-model arm.
 ## Reproduce the finite experiment
 
 ```sh
-python -m unittest omega.test_buyer omega.test_seller omega.test_http -v
+python -m unittest omega.test_buyer omega.test_seller omega.test_http omega.test_product omega.test_strategy omega.test_operate -v
 python -m omega experiment --output /tmp/omega-buyer-result.json
-python -m omega.seller --output /tmp/omega-private-seller-NEW
-python -c "from omega.seller import replay_audit; print(replay_audit('/tmp/omega-private-seller-NEW'))"
+python -m omega.operate --output /tmp/omega-private-seller-NEW
 ```
 
 Every output destination must be fresh. Do not delete another owner's account,
 reset a balance or copy signing/recovery keys into public artifacts. The seller
 source snapshot and native account are private continuation state. Its explicit
 `native-public-export.json` is key-free audit data, not spending authority.
-The seller is a separately registered US$100,000 reference arm, not a migration
-or chosen global capital optimum. The fixed endpoint is hour 8760. It books only
-registered research costs because no native product acceptance/collection adapter
-exists; modeled optional choices never mint revenue.
+The corrected seller runs distinct hypothetical accounts for the declared policy
+and market-world comparisons. It makes time-causal build, research, offer, stop
+and pivot decisions, with voluntary buyers, native acceptance, modeled payments,
+refunds, settlement and residual liabilities. See [cost assumptions](../campaign/omega-water-20261103/COSTS.md).
+The fixed endpoint is hour 8760. No hidden-world identity selects an action;
+only revealed public observations select the policy's common continuation.
+
+`omega.seller` is preserved as the **historical failed cost-only design**, not the
+current seller policy. Its US$24,800 loss was an authored budget, not actual
+spending, an optimized decision or a demand finding. Non-entry would dominate
+that closed zero-sales schedule. Never interpret either simulation as continued
+authority over an existing owner account or as evidence of actual commerce.
 
 ## Packages are optional, not orders
 
@@ -70,8 +77,9 @@ exists; modeled optional choices never mint revenue.
 
 USD is an authored modeling convention pending commercial currency confirmation.
 Self-service incumbents, ordinary providers, human-plus-AI and no purchase remain
-available. Hypothetical preference changes are sensitivity calculations, not
-customer consent, demand, contracts, revenue or proof of a viable enterprise.
+available. Hypothetical choices feed explicitly simulated consent and native revenue only
+inside the fictional account. They are not actual demand, consent, contracts,
+revenue or proof of a viable enterprise.
 Founder sessions consume human time and cannot support a fully autonomous claim.
 Actual bills, taxes, demand, deployment costs and human/AI productivity are unknown.
 

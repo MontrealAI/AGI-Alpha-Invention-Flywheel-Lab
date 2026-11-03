@@ -113,3 +113,75 @@ An added exhaustive integer oracle checks all possible allocations on the same
 optimality claim. This is post-result verification, not a new preregistered
 scientific arm or held-out evidence. Original scientific acceptance and outcome
 are unchanged. Re-run all checks after these repairs; do not relabel old evidence.
+
+## Seller correction after user review, 2026-11-03
+
+The first seller run was an authored fixed expense schedule with sales disabled.
+Its US$24,800 loss was neither strategic optimization nor evidence of commercial
+failure. In that closed zero-revenue model, non-entry would preserve US$100,000.
+The US$8,000 construction item was not measured execution cost or an established
+estimate. Preserve that run as a compact negative engineering lesson in
+HISTORICAL_REPORT.md / HISTORICAL_RESULT.json, not as the current business model.
+
+The corrected `omega.strategy` model is declared before its native execution,
+but after seeing the old failure. It is not a historical preregistration or an
+empirically calibrated demand model. It offers non-entry, paid information,
+staged capability construction, stop, subsequent product choices and pivots.
+Every observation leaf has one common executable continuation for every still
+compatible hidden world. Information is paid for before revealing the signal.
+The native `omega.product` adapter executes fictional but explicitly modeled
+orders, actual software artifact construction/checking, modeled session
+attendance/completion, payment, acceptance, refund, settlement and retained
+liabilities. Live customers, actual sessions, legal rights and real settlement
+are not prerequisites for the explicitly hypothetical simulation and are not
+claimed to exist.
+
+One independent native account per policy/world uses the US$100,000 reference
+capital; results are comparisons, not pooled money or copied balances. There
+are no top-ups, resets, loans, account migrations or changes to existing owners.
+Each run spans [0,8760) hours. Funding requires current unrestricted liquidity;
+forecast sales cannot finance their own costs. Accepted orders retain the full
+price plus native collateral through the inclusive 720-hour claim window;
+financial maturity at hour 721 releases collateral, not new revenue. A 1%
+residual reserve remains, and later excess claims still stop investment.
+
+Controls: exact expected-value finite policy, the same no-research policy class,
+robust maximin policy, static-all-products with voluntary non-entry/stop, and
+unconditional non-entry. Sixteen authored worlds combine four preference regimes,
+a noisy research signal and normal/adverse fulfillment. Every buyer retains
+no-purchase, free capable self-service and ordinary-provider alternatives. All
+outside methods can provide the same ordinary outcome. Three hypothetical new
+prospects per quarter are a bounded fixture, not a market-size forecast. Demand,
+reach, utilities, budgets, reliability and founder-access premiums are explicit
+assumptions; the rare founder preference is not validated willingness to pay.
+
+Costs and sources are recorded in COSTS.md. Packaging quantities range 20/80/160
+hours rather than asserting a fixed US$8,000. Unknown model billing/platform base
+costs are not measured zero, and nonzero sensitivities are required. Founder
+opportunity cost is separate from cash-paid service cost. Actual complete cost,
+taxes and real profit remain unknown. Claims of optimality mean only exhaustive
+optimization of this finite authored action/scenario set; no global strategic,
+game-theoretic or real-market optimum is claimed. No outcome is multiplied into
+a US$3B forecast. A full simulated year is not actual business operation.
+
+## Consumed-case and correction lineage
+
+The original 24 water fixtures and every seller world are authored and exposed.
+No rerun is counted as a fresh holdout or an independent market replication.
+The correction sequence was: fixed cost-only run; native product adapter and
+causal policy integration; actual-paid-cost enforcement; fuller session workload
+and private outside-choice observation repair; explicit free-core menu; separate
+autonomous machine-cost sensitivity. These are engineering revisions to already
+seen synthetic cases. Central priors and buyer premium remain authored inputs,
+not customer estimates. There is no empirical confidence interval, discovery
+claim, repeated-testing error guarantee or fresh confirmation inferred from these
+reruns. Independent adversarial reviewers checked causal and financial code;
+they did not supply independent market demand or physical water evidence.
+
+The exact finite policy comparison is useful for checking the decision machinery
+and financing arithmetic. It does not prove acceptable completion in every
+residual world: that is a separate robust policy question, and this robust model
+selects non-entry. Continuous-time research/delivery qualification, competition,
+imitation and advantage-expiry/renewal races are not modeled. Existing ordinary
+methods remain valid complete buyer alternatives, and ordinary equal-content
+reuse wins the successor tie. No blanket paper-compliance claim is made.
