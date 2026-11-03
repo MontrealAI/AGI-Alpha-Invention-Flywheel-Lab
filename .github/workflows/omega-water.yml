@@ -36,4 +36,5 @@ jobs:
           python -m omega experiment --output "$RUNNER_TEMP/omega-buyer.json"
           python -m omega.operate --output "$RUNNER_TEMP/omega-seller"
           python -c 'import os; from omega.operate import replay_audit; assert replay_audit(os.environ["RUNNER_TEMP"]+"/omega-seller")["accepted"]'
+          python -c 'import os; from dataclasses import replace; from omega import operate,strategy; game=strategy.make_game(costs=replace(strategy.Costs(),packaging_hours=0,research_cents=100,outreach_cents=100,webinar_facilitation_cents=0,ai_build_bill_cents=100000,founder_total_minutes=30,founder_slots_per_quarter=0)); path=os.environ["RUNNER_TEMP"]+"/omega-autonomous"; operate.run(path,game=game,modes=("expected",)); assert operate.replay_audit(path)["accepted"]'
           python -c 'import json,os; p=json.load(open(os.environ["RUNNER_TEMP"]+"/omega-buyer.json")); assert p["verdicts"]["super_alpha"]=="NOT_ESTABLISHED"; assert p["successor"]["ordinary_equal_content_reuse_identical"]; print(p["verdicts"])'

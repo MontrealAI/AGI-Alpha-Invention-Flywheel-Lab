@@ -42,3 +42,19 @@ class OperateTests(unittest.TestCase):
         finally:path.write_bytes(original)
 
 if __name__=='__main__':unittest.main()
+
+
+class MaturityOrderingTests(unittest.TestCase):
+    def test_double_digit_order_ids_match_native_export_order(self):
+        from unittest.mock import patch
+        game=strategy.make_game(costs=replace(strategy.Costs(),packaging_hours=0,research_cents=100,outreach_cents=100,webinar_facilitation_cents=0,ai_build_bill_cents=100000,founder_total_minutes=30,founder_slots_per_quarter=0))
+        policy=strategy.solve(game,'expected')
+        plan=strategy.execute(game,policy,'software_convenience:positive:normal')
+        wanted=operate.orders(plan)
+        self.assertEqual(len(wanted),12)
+        manifest={'costs':operate.costs(game),'claim_window_hours':720,'residual_bps':100,
+            'jobs':[{'id':f'job{i}','product':o['product'],'session_id':None} for i,(_,o) in enumerate(wanted)]}
+        with patch('omega.product.delivery',return_value={'test':'artifact'}):
+            commands=operate.expected_commands(plan,manifest,Path('/unused'))
+        matured=[args['id'] for op,args,hour in commands if op=='mature' and hour==7201]
+        self.assertEqual(matured,['order10','order11','order9'])

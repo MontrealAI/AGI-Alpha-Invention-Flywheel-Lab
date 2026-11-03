@@ -53,7 +53,7 @@ def expected_commands(plan,manifest,source):
             oi+=1
         if row['action']['kind']=='operate':
             maturity=row['maturity_hour']
-            for ident,terms in list(pending):
+            for ident,terms in sorted(pending, key=lambda item: item[0]):
                 if maturity>terms['maturity_day']:
                     add('mature',{'id':ident,'event_id':'maturity:'+ident+':'+digest(terms)[:20]},maturity)
                     pending.remove((ident,terms))
