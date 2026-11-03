@@ -174,3 +174,7 @@ README section and local error manually. Share no keys, customer data or private
 recovery state. Do not infer success, authorize spending or weaken validation from
 an unanswered help request. The command cannot diagnose arbitrary environment,
 security, physical-water or regulatory problems.
+
+## Compatibility adapter safety
+
+For the separate finite-state compatibility product, see [local filesystem safety and recovery](SECURITY_COMPATIBILITY.md). This prospective correction has focused Linux qualification only; historical economic experiments and their source bindings remain unchanged.
