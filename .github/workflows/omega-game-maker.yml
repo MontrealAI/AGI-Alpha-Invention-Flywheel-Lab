@@ -1,0 +1,33 @@
+name: FLYWHEEL Omega finite economic game qualification
+on:
+  pull_request:
+    paths:
+      - 'mechanism_harness/game_maker.py'
+      - 'mechanism_harness/game_maker_fixture.json'
+      - 'mechanism_harness/test_game_maker.py'
+      - 'mechanism_harness/core.py'
+      - 'docs/harness/ECONOMIC_GAME_MAKER.md'
+      - '.github/workflows/omega-game-maker.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-game-maker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Finite best-response and accounting regression
+        run: python -m unittest mechanism_harness.test_game_maker -v
+      - name: Reconstruct and rederive source-bound synthetic game
+        shell: bash
+        run: |
+          python -m mechanism_harness.game_maker \
+            mechanism_harness/game_maker_fixture.json \
+            --output "$RUNNER_TEMP/omega-game.json"
+          python -c 'import json,os,pathlib; from mechanism_harness.game_maker import rederive; spec=json.loads(pathlib.Path("mechanism_harness/game_maker_fixture.json").read_text()); result=json.loads((pathlib.Path(os.environ["RUNNER_TEMP"])/"omega-game.json").read_text()); assert rederive(spec,result)["accepted"]; assert result["winner"]["expected_profit"]=="41/10"; assert result["status"]=="EXACT_DECLARED_FINITE_GAME_OPTIMUM"'
