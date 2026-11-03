@@ -46,7 +46,9 @@ def load_physical(data):
             if m.file_size > 1_000_000 or m.filename.startswith("/") or ".." in Path(m.filename).parts or "\\" in m.filename:
                 raise ValueError("UNSAFE_ARCHIVE_MEMBER")
             base = Path(m.filename).name
-            if not re.fullmatch(r"datamat_[0-9]+_[0-9]+\.mat", base) or base in selected:
+            if not re.fullmatch(r"datamat_[0-9]+_[0-9]+\.mat", base):
+                continue
+            if base in selected:
                 raise ValueError("AMBIGUOUS_SOURCE_CASE")
             selected[base] = m
         if not required.issubset(selected):
