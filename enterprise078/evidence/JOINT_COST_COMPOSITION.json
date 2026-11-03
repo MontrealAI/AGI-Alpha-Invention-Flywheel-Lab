@@ -1,0 +1,74 @@
+{
+  "preregistration": "9c3b3528fbe0d654075a08810676696cbb22bfc8",
+  "review_source": "3e582a56a3b7e49cd3c51ea2d452836a0902a27c",
+  "review_three_files_byte_identical": true,
+  "source_sha256": {
+    "enterprise078_review/REGISTERED.md": "2e958fb979886964d9b28dce35ded29e6b41ad8b940b21bd3a66a16f4c60604f",
+    "enterprise078_review/joint_choice.py": "f1bb69a2e8e854e94adabebb8b956797802ddab094a5f303d499086aab3b6e85",
+    "enterprise078_review/test_joint_choice.py": "daf68f03cb2be7706e1bef6e0430ee653b83997f7e94e0210b82fc45ccb233bb",
+    "enterprise078/transactional_admission/joint_cost.py": "ad9307e5c0b70c2fcfc0ac02ce80190e889f01d7722e33c5055edd1e4a94cb5a",
+    "enterprise078/transactional_admission/test_joint_cost.py": "710a1ddf698ab93e27e6934fdef61591ae3f53b5e3bcea31995bf3ba1208aad0"
+  },
+  "focused_tests": 15,
+  "combined_tests": 63,
+  "original_audit": "accepted_unchanged",
+  "original_export": "66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f",
+  "original_mutations": 0,
+  "native_activation": false,
+  "complete_new_work_profit": null,
+  "units": "microUSD in authored unit-test fixtures, not market estimates",
+  "production_shock": {
+    "selected_bundle": [],
+    "conditional_worst_net_microUSD": -30,
+    "outcomes": [
+      {
+        "bundle": [],
+        "feasible": true,
+        "worst_net_microUSD": -30,
+        "cases": {
+          "base": {
+            "bundle": [],
+            "feasible": true,
+            "robust_net_microUSD": -30,
+            "reasons": []
+          },
+          "production_shock": {
+            "bundle": [],
+            "feasible": true,
+            "robust_net_microUSD": -30,
+            "reasons": []
+          }
+        }
+      },
+      {
+        "bundle": [
+          "a"
+        ],
+        "feasible": true,
+        "worst_net_microUSD": -80,
+        "cases": {
+          "base": {
+            "bundle": [
+              "a"
+            ],
+            "feasible": true,
+            "robust_net_microUSD": 120,
+            "reasons": []
+          },
+          "production_shock": {
+            "bundle": [
+              "a"
+            ],
+            "feasible": true,
+            "robust_net_microUSD": -80,
+            "reasons": []
+          }
+        }
+      }
+    ],
+    "native_catalog_admitted": false,
+    "native_mutations": 0,
+    "forecast_expected_net": null,
+    "scope": "authored separate scenarios, not native profit or observed buyer demand"
+  }
+}
