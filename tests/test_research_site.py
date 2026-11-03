@@ -59,7 +59,7 @@ class ResearchSiteTests(unittest.TestCase):
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
         self.assertEqual(len(site.PAPERS), 15)
-        self.assertEqual(len(site.PAGES), 18)
+        self.assertEqual(len(site.PAGES), 19)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
             reader = 'out-' + slug + '.html'
@@ -114,7 +114,7 @@ class ResearchSiteTests(unittest.TestCase):
             self.assertIn('prefers-reduced-motion', styles)
             self.assertIn('@media(max-width:', styles)
             self.assertNotIn('↗', text)
-            if name not in ('index.html', 'out-series.html', 'studio.html'):
+            if name not in ('index.html', 'out-series.html', 'studio.html', 'outlearning-906c4f4d.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
                 self.assertIn('Your browser does not display embedded PDFs', text)

@@ -1,0 +1,175 @@
+{
+  "schema": "outlearning-additional-development-probe/v1",
+  "origin": "Treatment constructor requested discriminating tests from actual K1 observations; independent evaluator executed; shared with ordinary baseline before freeze",
+  "rows": [
+    {
+      "development_record": 2,
+      "sequence": [
+        {
+          "op": "execute",
+          "token": "probe",
+          "fault": "request_lost"
+        },
+        {
+          "op": "fence",
+          "token": "probe"
+        },
+        {
+          "op": "execute",
+          "token": "probe"
+        },
+        {
+          "op": "fence",
+          "token": "probe"
+        },
+        {
+          "op": "cancel",
+          "token": "probe"
+        },
+        {
+          "op": "fence",
+          "token": "probe"
+        }
+      ],
+      "result": {
+        "observations": [
+          {
+            "op": "execute",
+            "response": "TIMEOUT",
+            "effect_count": 0,
+            "hold_count": 0,
+            "tick": 1,
+            "measurement": "sandbox_ledger"
+          },
+          {
+            "op": "fence",
+            "response": "ABSENT",
+            "effect_count": 0,
+            "hold_count": 0,
+            "tick": 2,
+            "measurement": "sandbox_ledger"
+          },
+          {
+            "op": "execute",
+            "response": "DONE",
+            "effect_count": 1,
+            "hold_count": 0,
+            "tick": 3,
+            "measurement": "sandbox_ledger"
+          },
+          {
+            "op": "fence",
+            "response": "DONE",
+            "effect_count": 1,
+            "hold_count": 0,
+            "tick": 4,
+            "measurement": "sandbox_ledger"
+          },
+          {
+            "op": "cancel",
+            "response": "CANCELLED",
+            "effect_count": 0,
+            "hold_count": 0,
+            "tick": 5,
+            "measurement": "sandbox_ledger"
+          },
+          {
+            "op": "fence",
+            "response": "ABSENT",
+            "effect_count": 0,
+            "hold_count": 0,
+            "tick": 6,
+            "measurement": "sandbox_ledger"
+          }
+        ],
+        "cost_microUSD": 1500000,
+        "remaining_microUSD": 22500000
+      }
+    },
+    {
+      "development_record": 4,
+      "sequence": [
+        {
+          "op": "execute",
+          "token": "probe",
+          "fault": "ack_lost"
+        },
+        {
+          "op": "status",
+          "token": "probe"
+        },
+        {
+          "op": "wait",
+          "token": "probe",
+          "ticks": 8
+        },
+        {
+          "op": "status",
+          "token": "probe"
+        },
+        {
+          "op": "cancel",
+          "token": "probe"
+        },
+        {
+          "op": "status",
+          "token": "probe"
+        }
+      ],
+      "result": {
+        "observations": [
+          {
+            "op": "execute",
+            "response": "TIMEOUT",
+            "effect_count": 1,
+            "hold_count": 0,
+            "tick": 1,
+            "measurement": "sandbox_ledger"
+          },
+          {
+            "op": "status",
+            "response": "ABSENT",
+            "effect_count": 1,
+            "hold_count": 0,
+            "tick": 2,
+            "measurement": "sandbox_ledger"
+          },
+          {
+            "op": "wait",
+            "response": "DONE",
+            "effect_count": 1,
+            "hold_count": 0,
+            "tick": 10,
+            "measurement": "sandbox_ledger"
+          },
+          {
+            "op": "status",
+            "response": "DONE",
+            "effect_count": 1,
+            "hold_count": 0,
+            "tick": 11,
+            "measurement": "sandbox_ledger"
+          },
+          {
+            "op": "cancel",
+            "response": "REFUSED",
+            "effect_count": 1,
+            "hold_count": 0,
+            "tick": 12,
+            "measurement": "sandbox_ledger"
+          },
+          {
+            "op": "status",
+            "response": "DONE",
+            "effect_count": 1,
+            "hold_count": 0,
+            "tick": 13,
+            "measurement": "sandbox_ledger"
+          }
+        ],
+        "cost_microUSD": 1500000,
+        "remaining_microUSD": 22500000
+      }
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "schema": "outlearning-model-construction-trace/v1",
+  "origin": "Included model agent read independent K1 observations, requested actual distinguishing sandbox probes, then generated executable Python. No paid model calls and no mocked model generator.",
+  "scope": "One-time model construction followed by a frozen deterministic observation-to-graph procedure; not autonomous weight changes or unbounded online model invention.",
+  "permitted_inputs": [
+    "INTERFACE.md",
+    "K1_DEVELOPMENT.json",
+    "K1_ADDITIONAL_PROBES.json"
+  ],
+  "unread_inputs": [
+    "world.py",
+    "evaluate.py",
+    "confirmation instances"
+  ],
+  "initial_hypotheses": [
+    "H1 request lost before productive effect",
+    "H2 productive effect committed with acknowledgement lost"
+  ],
+  "counterexample": {
+    "record": 2,
+    "observations": "Acknowledgement-lost execute produced one effect; immediate status said ABSENT; same-token replay produced two effects.",
+    "consequence": "Initial response-only loss hypotheses cannot authorize a safe retry."
+  },
+  "generated_probe_requests": [
+    {
+      "record": 2,
+      "purpose": "Test absent, present and compensated-absent fence reports without relying on unsafe replay.",
+      "receipt": "K1_ADDITIONAL_PROBES.json rows[0]",
+      "cost_microUSD": 1500000
+    },
+    {
+      "record": 4,
+      "purpose": "Test whether bounded waiting reveals a committed effect when fence is unsupported and compensation unavailable.",
+      "receipt": "K1_ADDITIONAL_PROBES.json rows[1]",
+      "cost_microUSD": 1500000
+    }
+  ],
+  "observed_revision": [
+    "Admit stale observation as neither original explanation.",
+    "Distinguish a successful empty-token cancellation from compensation of an actual effect.",
+    "Generate a bounded reconciliation graph using qualified fence or delayed query; use fixed-token replay only after a measured nonduplication probe.",
+    "For successor composition, create explicit rollback and unresolved-obligation branches; qualify reservation lifespan before depending on prepared effects."
+  ],
+  "executable_path": "treatment.construct -> costed probes -> profile expansion -> _compile -> inert call graph -> independent evaluator",
+  "retained_content": "RETAINED_CONTENT.json",
+  "baseline_content_shared": true,
+  "development_run": {
+    "command": "python -m experiments.outlearning_20261102_906c4f4d.evaluate --method experiments.outlearning_20261102_906c4f4d.treatment --phase development --output /tmp/unique.json",
+    "evidence_role": "EXPOSED_K1_DEVELOPMENT",
+    "summary": {
+      "accepted_worlds": 7,
+      "all_safe_worlds": 8,
+      "delivered_schedules": 21,
+      "harm_schedules": 0,
+      "operation_cost_microUSD": 10400000,
+      "probe_cost_microUSD": 17250000,
+      "residual_exposure_microUSD": 0,
+      "safe_abort_schedules": 11,
+      "schedules": 32,
+      "valid_programs": 8,
+      "worlds": 8
+    },
+    "method_sha256": "f8197920f4a6e5bdb0e74bdd4ed8de4423339c185ffc189a5db9bcc6e1cefb51"
+  },
+  "cost_boundary": {
+    "shared_initial_observation_probe_cost_microUSD": 32000000,
+    "additional_discrimination_microUSD": 3000000,
+    "treatment_development_probe_microUSD": 34500000,
+    "treatment_development_operation_microUSD": 20800000,
+    "actual_model_billing": null,
+    "human_labor_hours": null,
+    "cpu_time_is_human_labor": false
+  },
+  "limit": "No stronger-than-ordinary retained-method advantage has been evaluated. Conformance is limited to the declared synthetic semantics and disturbance schedules.",
+  "development_runs": [
+    {
+      "command": "python -m experiments.outlearning_20261102_906c4f4d.evaluate --method experiments.outlearning_20261102_906c4f4d.treatment --phase development --output /tmp/unique.json",
+      "evidence_role": "EXPOSED_K1_DEVELOPMENT",
+      "summary": {
+        "accepted_worlds": 7,
+        "all_safe_worlds": 8,
+        "delivered_schedules": 21,
+        "harm_schedules": 0,
+        "operation_cost_microUSD": 10400000,
+        "probe_cost_microUSD": 17250000,
+        "residual_exposure_microUSD": 0,
+        "safe_abort_schedules": 11,
+        "schedules": 32,
+        "valid_programs": 8,
+        "worlds": 8
+      },
+      "method_sha256": "f8197920f4a6e5bdb0e74bdd4ed8de4423339c185ffc189a5db9bcc6e1cefb51"
+    },
+    {
+      "evidence_role": "EXPOSED_K1_DEVELOPMENT_AFTER_PUBLIC_CRITIQUE",
+      "summary": {
+        "accepted_worlds": 7,
+        "all_safe_worlds": 8,
+        "delivered_schedules": 21,
+        "harm_schedules": 0,
+        "operation_cost_microUSD": 10400000,
+        "probe_cost_microUSD": 17250000,
+        "residual_exposure_microUSD": 0,
+        "safe_abort_schedules": 11,
+        "schedules": 32,
+        "valid_programs": 8,
+        "worlds": 8
+      },
+      "method_sha256": "a4188a77ad0225d57a7f4ddd18b1b5e88cfa8a77fbf4e6da91cc104c79dcb6c7"
+    }
+  ],
+  "prefreeze_revision": {
+    "origin": "Independent evaluator code review, based on public global-clock interface and finite token lifetime warning; no confirmation outcomes or instances.",
+    "critique": "A replay tested at reset phase can straddle an untested idempotency epoch when other providers advance global time.",
+    "model_generated_change": "For multi-provider tasks, reject reset-only replay transfer and seek current-state query, compensation or prepared execution; decline if no qualified construction remains. The exposed singleton case retains its contiguous reset-phase test.",
+    "validation": "Exactly one additional exposed K1 verification; no K2 trial or repeated success search."
+  },
+  "current_method_sha256": "a4188a77ad0225d57a7f4ddd18b1b5e88cfa8a77fbf4e6da91cc104c79dcb6c7"
+}

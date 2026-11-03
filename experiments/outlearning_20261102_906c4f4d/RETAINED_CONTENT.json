@@ -1,0 +1,15 @@
+{
+  "schema": "outlearning-equal-content-retention/v1",
+  "facts": {
+    "timeout": "A missing request and a missing acknowledgement need different continuations.",
+    "neither": "Stale absence, non-idempotent replay, expiring holds and opaque observations require expanded state.",
+    "fence": "A tested present/absent fence can discriminate without repeating an effect.",
+    "delay": "A tested bounded wait can qualify a stale query within its measured delay.",
+    "compensation": "Cancellation on an empty token is not evidence that an existing effect is compensable.",
+    "composition": "Single-provider completion does not imply safe complementary bundle completion.",
+    "scope": "Finite synthetic interface; conformance probes do not certify arbitrary providers.",
+    "clock_phase": "Reset-phase replay evidence does not qualify an unknown successor global-clock phase or epoch boundary; qualify the intended interval or choose another resolver."
+  },
+  "additional_observations": "K1_ADDITIONAL_PROBES.json",
+  "both_arms_receive_same_content": true
+}
