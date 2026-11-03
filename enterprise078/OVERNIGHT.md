@@ -1,6 +1,6 @@
 # Enterprise078 overnight execution checkpoint
 
-**Latest:** composed exact PR178 joint-buyer review and complete scenario-specific delivery costs;15 focused and63 combined regressions pass. Substitutes/rival response/cost shocks can reverse a quote to no entry. These are development fixtures, not calibrated demand or native profit. Original audit unchanged. Native activation remains unimplemented. Read [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md).
+**Latest:** distinct SQL/CSV service executed acceptance, collection, refund and full native replay in a separately identified fresh test account; four native controls and64 combined regressions pass locally. Original account audited unchanged. This is a prospective service dependency, not original-account activation; mixed historical/new transition remains unimplemented. Read [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md).
 
 Activated by the owner on2November2026 Toronto. Target remains one enterprise's US$3billion trailing365-day complete-modeled-cost profit. It is not achieved. This checkpoint is operational guidance, not a replacement for the owner's full mandate.
 
