@@ -1,0 +1,11 @@
+{
+  "schema": "outlearning073/development-validation/v1",
+  "status": "Development verification, not K2 confirmation",
+  "checks": [
+    {"command": "python3 -m unittest -q tests.test_connected_finance", "tests": 25, "result": "PASS", "reported_wall_seconds": 28.972},
+    {"command": "python3 -m unittest -q tests.test_outlearning073_world", "tests": 9, "result": "PASS", "reported_wall_seconds": 0.009},
+    {"command": "python3 -m unittest -q tests.test_outlearning073_native", "tests": 6, "result": "PASS", "source": "Native adapter author's observed development receipt", "reported_wall_seconds": 2.924}
+  ],
+  "source_matching": "Final runner and freeze are still being completed. Final exact-source checks will be separately recorded.",
+  "limits": "No confirmation outcome is implied; actual model/host billing remains unknown. Test accounts are disposable development simulations, never added to operating campaign balances."
+}
