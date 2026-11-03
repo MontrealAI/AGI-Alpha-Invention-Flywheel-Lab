@@ -10,7 +10,8 @@ from .study import ARMS, analyze, construct_program, save, verify_freeze
 
 
 ORIGINAL_VERIFIER_SHA256 = '6bb4f74fe3b81b8a2d9df72aeb500933dbae34c3fbb6a833535a57e75abc7bec'
-CORRECTION = 'Compare persisted and regenerated construction metadata in the canonical JSON wire representation; all other comparisons are unchanged.'
+CORRECTION = ('Compare construction metadata in canonical JSON; bind audited native opening capital and '
+              'manifest identity to each registered arm, and reject duplicate native account evidence.')
 
 
 def _same_construction_field(key, recorded, regenerated):
@@ -21,6 +22,29 @@ def _same_construction_field(key, recorded, regenerated):
 
 def _read(path):
     return strict_json(Path(path).read_bytes())
+
+
+def _bind_native_account(record, manifest, expected_manifest, capital, seen):
+    """Bind already-audited public evidence, never caller-supplied result labels.
+
+    The native export has no public owner ID. Its audited manifest commitment
+    binds the registered request set and every arm-specific delivery namespace.
+    """
+    exported = digest(record)
+    manifest_sha = digest(manifest)
+    if exported in seen['exports'] or manifest_sha in seen['manifests']:
+        raise ValueError('DUPLICATE_NATIVE_ACCOUNT_EVIDENCE')
+    if canonical(manifest) != canonical(expected_manifest):
+        raise ValueError('NATIVE_REGISTERED_MANIFEST_MISMATCH')
+    config = record['ledger']['config']
+    if (type(config['opening']) is not int or config['opening'] != capital * 1_000_000
+            or config['working'] != 0 or config['contract'] != 'outlearning-906c4f4d'):
+        raise ValueError('NATIVE_REGISTERED_CAPITAL_MISMATCH')
+    if (config['manifest_sha256'] != manifest_sha
+            or record['connected_journal']['manifest_sha256'] != manifest_sha):
+        raise ValueError('NATIVE_REGISTERED_ACCOUNT_IDENTITY_MISMATCH')
+    seen['exports'].add(exported)
+    seen['manifests'].add(manifest_sha)
 
 
 def replay(output, expected_freeze):
@@ -65,7 +89,8 @@ def replay(output, expected_freeze):
     if not run_input['economics'] and economic_path.exists():
         raise ValueError('UNREGISTERED_ECONOMIC_OUTPUT')
     if economic_path.exists():
-        from .economics import protocol
+        from .economics import cases, protocol, request_rows
+        from .service import prepare_manifest
         economics = _read(economic_path)
         if economics['freeze_sha256'] != expected_freeze or not economics['independent_accounts_not_pooled']:
             raise ValueError('ECONOMIC_IDENTITY_MISMATCH')
@@ -81,6 +106,8 @@ def replay(output, expected_freeze):
         if len(expected_accounts) != 18 or len(identities) != 18 or set(identities) != set(expected_accounts):
             raise ValueError('EXACT_EIGHTEEN_NATIVE_ACCOUNTS_REQUIRED')
         source = output/'native'/'source'
+        registered_requests = request_rows(cases())
+        seen_native = {'exports': set(), 'manifests': set()}
         for declared in economics['accounts']:
             identity = declared['identity']
             if (declared['arm'], declared['region'], declared['capital_USD']) != expected_accounts[identity]:
@@ -92,6 +119,9 @@ def replay(output, expected_freeze):
             checked = audit_journal(record, root=source, manifest=manifest)
             if not checked['accepted']:
                 raise ValueError('INDEPENDENT_NATIVE_AUDIT_REJECTED')
+            expected_manifest = prepare_manifest(source, registered_requests, identity)
+            _bind_native_account(record, manifest, expected_manifest,
+                                 expected_accounts[identity][2], seen_native)
             if declared['native_export_sha256'] != digest(record):
                 raise ValueError('NATIVE_EXPORT_BINDING_MISMATCH')
             summary = record['ledger']['summary']
