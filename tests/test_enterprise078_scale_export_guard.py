@@ -1,10 +1,12 @@
 """Adversarial tests for fail-closed Enterprise078 public workflow exports."""
 import hashlib
 import json
+import os
 import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from unittest.mock import patch
 from scripts.enterprise078_scale_export_guard import prepare
 
 
@@ -106,6 +108,22 @@ class PublicExportTests(unittest.TestCase):
         self.upload.rmdir()
         with self.assertRaisesRegex(ValueError, "INVALID_REGISTERED_WORLD"):
             prepare(self.output, self.upload, self.stdout, self.stderr, 1, "../private")
+
+    def test_source_identity_is_checked_out_code_not_virtual_pr_merge(self):
+        with patch.dict(os.environ, {"GITHUB_SHA": "0" * 40}):
+            receipt = self.prepare(1)
+        self.assertEqual(receipt["github_event_sha"], "0" * 40)
+        self.assertRegex(receipt["checked_out_source_sha"], r"^[a-f0-9]{40}$")
+        self.assertNotEqual(receipt["checked_out_source_sha"], receipt["github_event_sha"])
+
+    def test_symlinked_parent_directory_is_rejected(self):
+        self.success_fixture()
+        old = self.output / "public"
+        safe = self.output / "real_public"
+        old.rename(safe)
+        old.symlink_to(safe, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, "INPUT_NOT_REGULAR"):
+            self.prepare(0)
 
     def test_workflow_never_uploads_old_wildcard_failure_logs(self):
         workflow = Path(".github/workflows/enterprise078-scale.yml").read_text()
