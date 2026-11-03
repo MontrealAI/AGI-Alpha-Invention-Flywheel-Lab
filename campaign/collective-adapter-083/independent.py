@@ -3,7 +3,21 @@ import hashlib
 import itertools
 import json
 from pathlib import Path
-from engine import fixtures, apply_adapter, digest, SCHEMA
+from engine import fixtures, digest, SCHEMA
+
+FROZEN_CASE_DIGEST = '5caa2514128c438616db9572b89de6927322e2cecf03846b6afb9bb8098e7ef6'
+
+
+def independently_apply(artifact, message):
+    if artifact.get('schema') != SCHEMA or not isinstance(artifact.get('normalizer'), dict):
+        raise ValueError('INDEPENDENT_INVALID_ADAPTER')
+    mapping = artifact['normalizer'].get('source_fields')
+    if not isinstance(mapping, dict) or set(mapping) != {'event_type', 'measurement'} or len(set(mapping.values())) != 2:
+        raise ValueError('INDEPENDENT_INVALID_MAPPING')
+    if not isinstance(message, dict) or any(v not in message for v in mapping.values()):
+        raise ValueError('INDEPENDENT_MISSING_SOURCE_FIELD')
+    return {'event_type': message[mapping['event_type']], 'measurement': message[mapping['measurement']]}
+
 
 
 def ordinary_coalitions(case):
@@ -23,7 +37,8 @@ def ordinary_coalitions(case):
 def audit(folder):
     folder = Path(folder)
     result = json.loads((folder/'RESULT.json').read_text())
-    if result['schema'] != SCHEMA or result['source_world_digest'] != digest(fixtures()):
+    if (result['schema'] != SCHEMA or digest(fixtures()) != FROZEN_CASE_DIGEST
+            or result['source_world_digest'] != FROZEN_CASE_DIGEST):
         raise ValueError('CHANGED_REGISTRATION_OR_WORLD')
     if set(result['worlds']) != set(fixtures()): raise ValueError('LOST_REGISTERED_WORLD')
     if result.get('actual_buyers') != 0 or result.get('actual_collections') != 0 or result.get('actual_365_day_complete_cost_profit') is not None or result.get('target_3b_achieved') is not False or result.get('deployment_authorized') is not False:
@@ -36,6 +51,8 @@ def audit(folder):
         if tuple(row['plan']['buyers']) != oracle: raise ValueError('INCORRECT_COALITION_OR_ORDINARY_CONTROL')
         selected = [b for b in case['buyers'] if b['id'] in oracle]
         if not oracle:
+            if (folder/name).exists():
+                raise ValueError('UNAUTHORIZED_ADAPTER_FOR_REFUSED_CASE')
             if row['plan']['status'] != 'NO_FEASIBLE_VOLUNTARY_COALITION' or row['artifact_file_sha256'] or row['conditional_cost_incurred']:
                 raise ValueError('FALSE_NO_DEPLOY_OR_SPEND')
             continue
@@ -58,6 +75,10 @@ def audit(folder):
                 or row['refund_reserve_covered_before_acceptance'] != (collateral >= row['conditional_cost_incurred'])
                 or row['hypothetical_cash_after_full_refund'] != row['hypothetical_cash_after_cost'] - row['conditional_refund_liability']):
             raise ValueError('BROKEN_ESCROW_COLLATERAL_CASH_TIMELINE')
+        observed_files = {p.name for p in (folder/name).glob('*.json')} if (folder/name).is_dir() else set()
+        expected_files = {b['id'] + '.json' for b in selected}
+        if observed_files != expected_files or set(row['artifact_file_sha256']) != {b['id'] for b in selected}:
+            raise ValueError('UNAUTHORIZED_EXTRA_OR_MISSING_ADAPTER')
         for b in selected:
             artifact_path = folder/name/(b['id']+'.json')
             blob = artifact_path.read_bytes()
@@ -66,7 +87,9 @@ def audit(folder):
             art = json.loads(blob)
             if art['buyer_id'] != b['id'] or art['schema'] != SCHEMA:
                 raise ValueError('WRONG_BUYER_OR_ADAPTER')
-            found = all(apply_adapter(art, t['input']) == t['expected'] for t in b['tests'])
+            if art['normalizer']['source_fields'] != b['fields']:
+                raise ValueError('SOURCE_MAPPING_CHANGED_OR_UNAUTHORIZED')
+            found = all(independently_apply(art, t['input']) == t['expected'] for t in b['tests'])
             if row['acceptance'][b['id']] != found: raise ValueError('FALSE_ACCEPTANCE')
             checked += len(b['tests'])
         if not all(row['acceptance'].values()):
