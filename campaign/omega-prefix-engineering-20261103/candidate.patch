@@ -1,0 +1,194 @@
+diff --git a/connected_enterprise/finance.py b/connected_enterprise/finance.py
+index e94d53c..e64f1fc 100644
+--- a/connected_enterprise/finance.py
++++ b/connected_enterprise/finance.py
+@@ -457,6 +457,7 @@ class JournalAccount:
+         # A private exact prefix still binds owner, lease, source, manifest,
+         # every prior action byte and all dynamic prepared outputs.
+         if self.manifest.get('schema') not in {'agi-alpha/adaptive012-services/v1',
++                                              'omega/native-product/v1',
+                                               'production060/native-services/v1',
+                                               'public-portfolio-20261102/native-services/v2'}:
+             return self.audit()
+diff --git a/tests/test_omega_prefix_replay.py b/tests/test_omega_prefix_replay.py
+new file mode 100644
+index 0000000..f9085cc
+--- /dev/null
++++ b/tests/test_omega_prefix_replay.py
+@@ -0,0 +1,176 @@
++"""Engineering-only qualification of Omega's existing private replay prefix.
++
++Inherits the complete existing product tests, so bundle/nonpayment/recovery
++regressions exercise the candidate allowlist rather than a new implementation.
++"""
++import copy
++from pathlib import Path
++import shutil
++from unittest.mock import patch
++
++import test_omega_market_product as fixtures
++from commercial.ledger import _NativePrefixReplay, canonical, digest
++from connected_enterprise.finance import (JournalAccount, _audit_journal,
++    audit_journal, source_paths_for_manifest)
++from experiments.commerce006 import PINS
++from omega import product
++
++ROOT = Path(__file__).resolve().parents[1]
++
++
++class OmegaPrefixTests(fixtures.MarketProductTest):
++    def assert_equivalent(self, account, manifest):
++        self.assertEqual(account._audit_incremental(), account.audit())
++        self.assertIsNotNone(account._native_prefix)
++        self.assertEqual(account._native_prefix._length,
++                         len(account.export()['ledger']['actions']))
++
++    def test_every_native_entry_matches_full_replay(self):
++        manifest = self.manifest(prices=[149*product.MICRO], choices=fixtures.receipts())
++        with self.account(manifest) as account:
++            execute = account.execute
++            def checked(*args, **kwargs):
++                result = execute(*args, **kwargs)
++                self.assert_equivalent(account, manifest)
++                return result
++            with patch.object(account, 'execute', side_effect=checked):
++                self.assertEqual(self.one(account, manifest)['status'], 'released')
++
++    def test_warm_prefix_tamper_and_derived_state_equal_full_rejections(self):
++        manifest = self.manifest()
++        with self.account(manifest) as account:
++            self.one(account, manifest)
++            original = account.export()
++            changed = []
++            bad = copy.deepcopy(original); bad['ledger']['actions'][0]['args']['amount'] += 1
++            changed.append(bad)
++            bad = copy.deepcopy(bad); bad['ledger']['actions_sha256'] = digest(bad['ledger']['actions'])
++            changed.append(bad)
++            for key in ['summary', 'prospective_orders', 'prospective_terms', 'prospective_claims']:
++                bad = copy.deepcopy(original)
++                if key == 'summary': bad['ledger'][key]['cash'] += 1
++                else: bad['ledger'][key].append({'forged': True})
++                changed.append(bad)
++            for bad in changed:
++                self.assert_equivalent(account, manifest)
++                with self.assertRaises(ValueError) as full:
++                    audit_journal(bad, root=ROOT, manifest=manifest)
++                with self.assertRaises(ValueError) as cached:
++                    _audit_journal(bad, root=ROOT, manifest=manifest,
++                                   _native_session=account._native_prefix)
++                self.assertEqual(str(full.exception), str(cached.exception))
++                self.assertIsNone(account._native_prefix._replay)
++
++    def test_warm_request_and_historical_reversed_output_rebound(self):
++        manifest = self.manifest()
++        with self.account(manifest) as account:
++            self.one(account, manifest)
++            account.execute('event', {'id':'authored-order', 'action':'late_reversal',
++                                     'event_id':'engineering-reversal'}, 1)
++            for field in ('input', 'output'):
++                self.assert_equivalent(account, manifest)
++                target = ROOT/manifest['jobs'][0][field]
++                original = target.read_bytes()
++                try:
++                    if field == 'input': target.write_bytes(original+b' ')
++                    else:
++                        altered = product.delivery(ROOT, manifest, manifest['jobs'][0]['id'])
++                        altered['engineering_drift'] = True
++                        target.write_bytes(canonical(altered))
++                    with self.assertRaises(ValueError): account._audit_incremental()
++                    with self.assertRaises(ValueError): account.audit()
++                    self.assertIsNone(account._native_prefix._replay)
++                finally: target.write_bytes(original)
++                self.assert_equivalent(account, manifest)
++
++    def test_output_change_during_warm_audit_is_rejected(self):
++        manifest = self.manifest()
++        with self.account(manifest) as account:
++            self.one(account, manifest); self.assert_equivalent(account, manifest)
++            target = ROOT/manifest['jobs'][0]['output']; original = target.read_bytes()
++            artifact = product.delivery(ROOT, manifest, manifest['jobs'][0]['id'])
++            artifact['engineering_drift'] = True
++            calls = 0; rebind = product.rebind_prepared
++            def interfere(*args, **kwargs):
++                nonlocal calls
++                calls += 1
++                result = rebind(*args, **kwargs)
++                if calls == 1: target.write_bytes(canonical(artifact))
++                return result
++            try:
++                with patch.object(product, 'rebind_prepared', side_effect=interfere):
++                    with self.assertRaisesRegex(ValueError, 'PRODUCT_PREPARED'):
++                        account._audit_incremental()
++                self.assertGreaterEqual(calls, 2)
++                self.assertIsNone(account._native_prefix._replay)
++            finally: target.write_bytes(original)
++            self.assert_equivalent(account, manifest)
++
++    def test_real_source_change_invalidates_private_and_public_audits(self):
++        source = self.path/'source'
++        for name in sorted(set(source_paths_for_manifest({'schema':product.SCHEMA})) | set(PINS)):
++            target = source/name; target.parent.mkdir(parents=True, exist_ok=True)
++            shutil.copyfile(ROOT/name, target)
++        manifest = product.prepare_manifest(source, source/'products', hypothetical_rights=True)
++        with JournalAccount(source, manifest, self.path/'isolated.sqlite', opening=10000*product.MICRO,
++                            working=0, contract='ENGINEERING_ONLY_OMEGA_PREFIX') as account:
++            account.cost('one', 1, 0); account.cost('two', 1, 0)
++            self.assert_equivalent(account, manifest)
++            target = source/'omega/product.py'; original = target.read_bytes()
++            try:
++                target.write_bytes(original+b'\n')
++                with self.assertRaisesRegex(ValueError, 'SOURCE_CHANGED'): account._audit_incremental()
++                with self.assertRaisesRegex(ValueError, 'SOURCE_CHANGED'): account.audit()
++                self.assertIsNone(account._native_prefix._replay)
++            finally: target.write_bytes(original)
++            self.assert_equivalent(account, manifest)
++
++    def test_outer_journal_failure_discards_native_acceptance(self):
++        manifest = self.manifest()
++        with self.account(manifest) as account:
++            account.cost('one', 1, 0); self.assert_equivalent(account, manifest)
++            original = copy.deepcopy(account._journal)
++            try:
++                account._journal['entries'][0]['receipt']['summary']['cash'] += 1
++                with self.assertRaises(ValueError): account._audit_incremental()
++                self.assertIsNone(account._native_prefix._replay)
++            finally: account._journal = original
++            self.assert_equivalent(account, manifest)
++
++    def test_public_audit_and_reopen_are_cold_and_independent(self):
++        manifest = self.manifest()
++        with self.account(manifest) as account:
++            self.one(account, manifest); self.assert_equivalent(account, manifest)
++            record = account.export()
++            with patch.object(_NativePrefixReplay, 'begin', side_effect=AssertionError('cache forbidden')):
++                self.assertTrue(product.replay(record, root=ROOT, manifest=manifest)['accepted'])
++                self.assertTrue(account.audit()['accepted'])
++        with patch.object(_NativePrefixReplay, 'begin', side_effect=AssertionError('reopen must replay')):
++            with self.account(manifest) as reopened:
++                self.assertIsNone(reopened._native_prefix)
++                self.assertEqual(record, reopened.export())
++
++    def test_claim_boundary_and_earned_funding_keep_full_equivalence(self):
++        manifest = self.manifest(claim_window_hours=4)
++        with self.account(manifest) as account:
++            self.one(account, manifest)
++            # Seed can already cover the claim reserve, leaving some earnings
++            # usable before maturity. The earlier USD1 refusal expectation was
++            # invalid; require refusal above actual unrestricted capacity.
++            before = account.export()
++            summary = before['ledger']['summary']
++            self.assertGreater(summary['profit'], 0)
++            unfunded = min(summary['available'], summary['unrestrictedEarned']) + 1
++            self.assertIsNone(account.spend('unavailable', 'engineering', unfunded, 0,
++                                           {'test':True}, unfunded+1))
++            self.assertEqual(account.export(), before)
++            account.execute('claim', {'id':'authored-order', 'claim_id':'boundary',
++                'amount':product.MICRO, 'kind':'disputed'}, 4)
++            self.assert_equivalent(account, manifest)
++            account.advance_financial(5); self.assert_equivalent(account, manifest)
++            account.execute('resolve_claim', {'id':'authored-order', 'claim_id':'boundary',
++                'settlement_id':'denial', 'resolution':'deny'}, 5)
++            receipt = account.spend('earned', 'engineering', product.MICRO, 5,
++                                    {'test':True}, 2*product.MICRO)
++            self.assertEqual(receipt['funding'], 'EARNED')
++            self.assert_equivalent(account, manifest)

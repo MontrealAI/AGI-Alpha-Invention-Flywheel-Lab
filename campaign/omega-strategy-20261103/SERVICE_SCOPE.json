@@ -1,0 +1,399 @@
+{
+  "conclusion": "Substantive policy limitation and cohort economics, not proof of absent human-service demand. No full autonomous-service or observed-service-sales claim is supported.",
+  "created_utc": "2026-11-03T17:39:32.947994+00:00",
+  "currency": "USD",
+  "engineering_coverage": {
+    "boundary": "Three-product native tests exercise explicit authored orders. Session artifacts are fictional records. Strategy capacity/preparation tests force unit actions/draws; constructed-persona choice tests are not market-policy uptake or observed demand.",
+    "evidence": "Recorded local exact-source qualification at implementation77cbb9f; these tests were not rerun for this evidence file.",
+    "recorded_exit_code": 0,
+    "recorded_receipt": "campaign/omega-strategy-20261103/QUALIFICATION.json:local_exact_source_tests",
+    "recorded_tests_run": 176,
+    "relevant_passing_test_names": [
+      "omega.test_product.ProductTest.test_three_products_idempotent_and_replay",
+      "omega.test_product.ProductTest.test_failed_acceptance_refunds_and_keeps_costs",
+      "tests.test_omega_market_buyer.BuyerChoiceTests.test_private_access_requires_prerequisites_and_is_incremental",
+      "tests.test_omega_market_buyer.BuyerChoiceTests.test_sessions_alone_never_deliver_the_ordinary_outcome",
+      "tests.test_omega_market_buyer.BuyerChoiceTests.test_webinar_can_ease_one_complete_outside_method",
+      "tests.test_omega_market_strategy.MarketStrategyTests.test_private_time_is_paid_attempt_time_and_has_a_real_capacity_limit",
+      "tests.test_omega_market_strategy.MarketStrategyTests.test_offered_webinar_bears_preparation_cost_even_without_attendees"
+    ]
+  },
+  "founder_prior_limitation": {
+    "direct_eligible_buyer": {
+      "best_outside_net_utility_microUSD": 960040000,
+      "consent": false,
+      "declared_budget_cents": 2600000,
+      "declared_founder_access_value_cents": 2500000,
+      "expected_net_benefit_microUSD": 5452540000,
+      "expected_value_before_fees_microUSD": 25972650000,
+      "increment_over_best_outside_microUSD": 4492500000,
+      "input_recipe": {
+        "action": {
+          "channel": "community",
+          "construct_process": false,
+          "kind": "operate",
+          "price_cents": 29900,
+          "products": [
+            "founder_private"
+          ]
+        },
+        "founder_access": true,
+        "offer_function": "omega.market.quoted_offers",
+        "persona_function": "omega.market.persona",
+        "persona_id": "declared-eligible-founder-example",
+        "public_state": "market.PublicState() frozen defaults",
+        "remaining_persona_arguments": "frozen defaults",
+        "segment": "convenience"
+      },
+      "inputs_sha256": "38345b9186e1b662e5fed321e439fc1bd744dca54aca4ec94129c4352c925463",
+      "offered_products": [
+        "founder_private"
+      ],
+      "private_session_prerequisites_met": true,
+      "scope": "EXECUTED_FINITE_AUTHORED_BUYER_CALCULATION_NOT_DEMAND_CONSENT_OR_PAYMENT",
+      "selected_detail": {
+        "cash_outlay_microUSD": 20000110000,
+        "founder_access_value_microUSD": 24502500000,
+        "ordinary_outcome_value_microUSD": 1470150000,
+        "outside_id": "ordinary_reuse"
+      },
+      "selected_offer_ids": [
+        "founder_private"
+      ]
+    },
+    "direct_public_prior_prototype": {
+      "best_outside_net_utility_microUSD": 960040000,
+      "consent": false,
+      "declared_budget_cents": 70000,
+      "declared_founder_access_value_cents": 0,
+      "expected_net_benefit_microUSD": 960040000,
+      "expected_value_before_fees_microUSD": 1470150000,
+      "increment_over_best_outside_microUSD": 0,
+      "input_recipe": {
+        "action": {
+          "channel": "community",
+          "construct_process": false,
+          "kind": "operate",
+          "price_cents": 29900,
+          "products": [
+            "founder_private"
+          ]
+        },
+        "founder_access": false,
+        "offer_function": "omega.market.quoted_offers",
+        "persona_function": "omega.market.persona",
+        "persona_id": "public-prior-prototype",
+        "public_state": "market.PublicState() frozen defaults",
+        "remaining_persona_arguments": "frozen defaults",
+        "segment": "convenience"
+      },
+      "inputs_sha256": "e8c26431fe450afdd5e90f70efef02a16d74c6a68428617aec593d09271065dd",
+      "offered_products": [
+        "founder_private"
+      ],
+      "private_session_prerequisites_met": false,
+      "scope": "EXECUTED_FINITE_AUTHORED_BUYER_CALCULATION_NOT_DEMAND_CONSENT_OR_PAYMENT",
+      "selected_detail": {
+        "cash_outlay_microUSD": 110000,
+        "founder_access_value_microUSD": 0,
+        "ordinary_outcome_value_microUSD": 1470150000,
+        "outside_id": "ordinary_reuse"
+      },
+      "selected_offer_ids": []
+    },
+    "environment_only_access_frequency": "AUTHORED 0.005 probability, not estimated demand; the scope calculation does not sample it.",
+    "finding": "Private-session demand is absent from the current policy prior; zero uptake is not evidence of absent demand or an invalid price.",
+    "mechanism": [
+      "market._prototype_selection calls persona without founder_access=True; all prototypes have zero access value and unmet private prerequisites.",
+      "market_buyer.decide filters private offers for those prototypes. Adding private access gives forecast no benefit; choose breaks ties toward fewer offered products.",
+      "PublicState.weights, _posterior and _observe_weights cover only four ordinary segments; the permitted observation path does not learn a founder-access belief."
+    ],
+    "owner_correction_boundary": {
+      "interpretation": "The corrected owner strategy already represents a founder-access regime. Its different buyer/prior/cost/action model is not substituted validation of omega.market or observed service demand.",
+      "present_regime": "rare_founder_access",
+      "prior": "1/20 in that separate finite game",
+      "source_commit": "92f4351c99e6d86bf699117d1d9cd8f1ffcb5fbb",
+      "source_path": "omega/strategy.py"
+    }
+  },
+  "next_specific_fix_and_test": {
+    "founder": "In a separately registered revision, add an explicit uncertain founder-access/prerequisite belief and permitted costed observation channel to the public model. Test zero/low and positive-value regions, costly screening, lack of consent, buyer outside options, present funding and 105-minute/quarter-capacity limits. Verify that only public evidence changes the policy, and give ordinary reuse the same beliefs, rights and actions. Do not force service sales or fit the frozen evaluation cases.",
+    "frozen_policy_changed": false,
+    "webinar": "Before another service viability claim, specify a costed route to at least 20 qualifying paid attendees for a nonpartner USD99 standalone session (23 with the current partner commission), or independently establish different complete costs/prices. Test voluntary demand, failed acquisition, refunds and capacity. If testing software/webinar complements, compare complete matched bundles and allocate shared costs once; do not apply this standalone bound as a joint optimum."
+  },
+  "operation_scope": {
+    "actual_sessions_conducted": false,
+    "code_or_scenario_changes": false,
+    "evaluation_rerun": false,
+    "native_postings": 0,
+    "new_accounts": 0,
+    "real_transactions": false
+  },
+  "planned_offer_counts": {
+    "do_not_pool_accounts_or_claim_planned_release_as_delivery": true,
+    "evidence_role": "PRECOMMITTED_PLAN_DATA_NOT_NATIVE_DELIVERY_FINDINGS",
+    "founder_minutes_to_plan_count": {
+      "0": 48
+    },
+    "per_product": {
+      "founder_private": {
+        "consented_attempt_lineitems": 0,
+        "planned_refunded": 0,
+        "planned_released": 0,
+        "planned_unpaid": 0,
+        "policy_offer_rounds": 0
+      },
+      "group_webinar": {
+        "consented_attempt_lineitems": 0,
+        "planned_refunded": 0,
+        "planned_released": 0,
+        "planned_unpaid": 0,
+        "policy_offer_rounds": 0
+      },
+      "self_hosted": {
+        "consented_attempt_lineitems": 427,
+        "planned_refunded": 20,
+        "planned_released": 391,
+        "planned_unpaid": 16,
+        "policy_offer_rounds": 95
+      }
+    },
+    "planned_released_products_by_policy": {
+      "existing": {
+        "self_hosted": 54
+      },
+      "joint": {
+        "self_hosted": 120
+      },
+      "ordinary_reuse": {
+        "self_hosted": 120
+      },
+      "simple": {
+        "self_hosted": 16
+      },
+      "staged": {
+        "self_hosted": 81
+      }
+    },
+    "planned_released_software_workflows": {
+      "process": 157,
+      "water": 234
+    },
+    "price_99_distinction": "All 141 planned releases priced USD99 are self_hosted software. Zero webinar offers or planned releases. A shared price does not identify the product.",
+    "registered_account_plans": 48,
+    "software_prices_in_cents": {
+      "14900": {
+        "consented_software_attempts": 24,
+        "planned_released_software_items": 20,
+        "software_offer_rounds": 8
+      },
+      "29900": {
+        "consented_software_attempts": 216,
+        "planned_released_software_items": 188,
+        "software_offer_rounds": 51
+      },
+      "49900": {
+        "consented_software_attempts": 42,
+        "planned_released_software_items": 42,
+        "software_offer_rounds": 7
+      },
+      "9900": {
+        "consented_software_attempts": 145,
+        "planned_released_software_items": 141,
+        "software_offer_rounds": 29
+      }
+    }
+  },
+  "schema": "omega/service-offer-scope/v1",
+  "source": {
+    "component_sha256": {
+      "omega/market.py": "25a7544265c81e394dbb865e6312d749db93f125d851c0c172a8ec4cca4806f9",
+      "omega/market_buyer.py": "21c7402b7ba1409a810d0143d2e6f8b0316a15c58a73cffebd5d82c26346bd98",
+      "omega/product.py": "c14c340671ad7a2ab370603d5e11eb871fd15742a3536daf76bbf8058da6c51d"
+    },
+    "frozen_source_file_count": 71,
+    "frozen_source_hashes_sha256": "2dbcecb0270ec03be954d84d2d824bbcb0db2f7fc0544e4a358c71d65dc7b5be",
+    "implementation_commit": "77cbb9f78390c67da6fd00f81d79c19bd5014e2a",
+    "registration_sha256": "f10b17eff0d3f44875096e22fa068fd8fe9d168c3cbea10f10dd7c3750b11d59",
+    "this_evidence_file_is_outside_frozen_execution_files": true
+  },
+  "webinar_scope": {
+    "calculation_role": "EXECUTED_ARITHMETIC_PROJECTION_NOT_FORECAST_COLLECTION_OR_NATIVE_ACCOUNT",
+    "channel_session_projections": [
+      {
+        "after_tax_economic_break_even_attendees_repeat_and_first_launch": {
+          "first_launch": 20,
+          "repeat": 20
+        },
+        "all_prospects_pay_and_accept_repeat_projection": {
+          "after_tax_cash_contribution_cents": 5526,
+          "attendees": 4,
+          "economic_contribution_after_noncash_owner_time_cents": -104474,
+          "modeled_tax_cents": 1842,
+          "pretax_cash_contribution_cents": 7368,
+          "revenue_cents": 39600
+        },
+        "cash_break_even_attendees": 4,
+        "channel": "community",
+        "first_launch_at_cap_economic_contribution_cents": -104781,
+        "first_session_extra_launch_cents": 409,
+        "pretax_economic_break_even_attendees": 16,
+        "pretax_unit_contribution_cents": 8892,
+        "prospect_limit_for_one_session": 4,
+        "repeat_break_even_economic_margin_cents": {
+          "at_boundary": 2230,
+          "one_fewer": -4439
+        },
+        "repeat_session_fixed_cost_cents": {
+          "acquisition": 500,
+          "security_compliance": 1500,
+          "webinar_material": 2500,
+          "webinar_platform": 23700
+        },
+        "total_repeat_fixed_cash_cents": 28200,
+        "total_variable_cents_per_seat": 1008,
+        "variable_cost_cents_per_paid_accepted_seat": {
+          "channel_commission": 0,
+          "delivery_compute": 25,
+          "fraud_remedy_envelope": 50,
+          "hosting_download": 15,
+          "processing": 893,
+          "security_verification": 25
+        }
+      },
+      {
+        "after_tax_economic_break_even_attendees_repeat_and_first_launch": {
+          "first_launch": 20,
+          "repeat": 20
+        },
+        "all_prospects_pay_and_accept_repeat_projection": {
+          "after_tax_cash_contribution_cents": 57003,
+          "attendees": 12,
+          "economic_contribution_after_noncash_owner_time_cents": -52997,
+          "modeled_tax_cents": 19001,
+          "pretax_cash_contribution_cents": 76004,
+          "revenue_cents": 118800
+        },
+        "cash_break_even_attendees": 4,
+        "channel": "targeted",
+        "first_launch_at_cap_economic_contribution_cents": -53304,
+        "first_session_extra_launch_cents": 409,
+        "pretax_economic_break_even_attendees": 16,
+        "pretax_unit_contribution_cents": 8892,
+        "prospect_limit_for_one_session": 12,
+        "repeat_break_even_economic_margin_cents": {
+          "at_boundary": 355,
+          "one_fewer": -6314
+        },
+        "repeat_session_fixed_cost_cents": {
+          "acquisition": 3000,
+          "security_compliance": 1500,
+          "webinar_material": 2500,
+          "webinar_platform": 23700
+        },
+        "total_repeat_fixed_cash_cents": 30700,
+        "total_variable_cents_per_seat": 1008,
+        "variable_cost_cents_per_paid_accepted_seat": {
+          "channel_commission": 0,
+          "delivery_compute": 25,
+          "fraud_remedy_envelope": 50,
+          "hosting_download": 15,
+          "processing": 893,
+          "security_verification": 25
+        }
+      },
+      {
+        "after_tax_economic_break_even_attendees_repeat_and_first_launch": {
+          "first_launch": 23,
+          "repeat": 23
+        },
+        "all_prospects_pay_and_accept_repeat_projection": {
+          "after_tax_cash_contribution_cents": 25737,
+          "attendees": 8,
+          "economic_contribution_after_noncash_owner_time_cents": -84263,
+          "modeled_tax_cents": 8579,
+          "pretax_cash_contribution_cents": 34316,
+          "revenue_cents": 79200
+        },
+        "cash_break_even_attendees": 4,
+        "channel": "partner",
+        "first_launch_at_cap_economic_contribution_cents": -84570,
+        "first_session_extra_launch_cents": 409,
+        "pretax_economic_break_even_attendees": 18,
+        "pretax_unit_contribution_cents": 7902,
+        "prospect_limit_for_one_session": 8,
+        "repeat_break_even_economic_margin_cents": {
+          "at_boundary": 4634,
+          "one_fewer": -1292
+        },
+        "repeat_session_fixed_cost_cents": {
+          "acquisition": 1200,
+          "security_compliance": 1500,
+          "webinar_material": 2500,
+          "webinar_platform": 23700
+        },
+        "total_repeat_fixed_cash_cents": 28900,
+        "total_variable_cents_per_seat": 1998,
+        "variable_cost_cents_per_paid_accepted_seat": {
+          "channel_commission": 990,
+          "delivery_compute": 25,
+          "fraud_remedy_envelope": 50,
+          "hosting_download": 15,
+          "processing": 893,
+          "security_verification": 25
+        }
+      }
+    ],
+    "direct_training_buyer": {
+      "best_outside_net_utility_microUSD": 560040000,
+      "consent": false,
+      "declared_budget_cents": 70000,
+      "declared_founder_access_value_cents": 0,
+      "expected_net_benefit_microUSD": 970095000,
+      "expected_value_before_fees_microUSD": 1470150000,
+      "increment_over_best_outside_microUSD": 410055000,
+      "input_recipe": {
+        "action": {
+          "channel": "community",
+          "construct_process": false,
+          "kind": "operate",
+          "price_cents": 29900,
+          "products": [
+            "group_webinar"
+          ]
+        },
+        "founder_access": false,
+        "offer_function": "omega.market.quoted_offers",
+        "persona_function": "omega.market.persona",
+        "persona_id": "declared-training-webinar-example",
+        "public_state": "market.PublicState() frozen defaults",
+        "remaining_persona_arguments": "frozen defaults",
+        "segment": "training"
+      },
+      "inputs_sha256": "e0f06d135413abb96ad74f2a5fe3cebaa02ab0c3643079bf14cbd8ce5388dcc9",
+      "offered_products": [
+        "group_webinar"
+      ],
+      "private_session_prerequisites_met": false,
+      "scope": "EXECUTED_FINITE_AUTHORED_BUYER_CALCULATION_NOT_DEMAND_CONSENT_OR_PAYMENT",
+      "selected_detail": {
+        "cash_outlay_microUSD": 99110000,
+        "founder_access_value_microUSD": 0,
+        "ordinary_outcome_value_microUSD": 1470150000,
+        "outside_id": "free_core"
+      },
+      "selected_offer_ids": [
+        "group_webinar"
+      ]
+    },
+    "finding": "Adapter and buyer choice are enabled. A standalone USD99 session has positive per-seat cash contribution, but all three current channel cohort limits are below full modeled economic break-even.",
+    "limit": "This is standalone session arithmetic, not a full joint software/webinar bundle optimum, an impossibility theorem, or evidence that a 500-seat capacity will fill. Shared costs and complementary buyer value require a separate matched analysis.",
+    "optimistic_assumptions": "Every available prospect voluntarily buys, pays and accepts; no extra refunds, nonpayment, acquisition beyond the declared channel fee, or unmeasured obligations. Thus negative economic contribution at these caps is already an optimistic standalone bound.",
+    "owner_cents_per_hour": 20000,
+    "owner_minutes": 330,
+    "price_cents": 9900,
+    "session_cost_components": "Platform USD237 plus materials USD25, active-quarter security/compliance USD15, channel acquisition, and USD4.09 launch only if not already paid; frozen variable fees include processing, delivery, hosting, verification, fraud allowance and any partner commission.",
+    "tax_basis_points": 2500,
+    "tax_treatment": "Isolated-session projection uses the frozen 25% tax on positive annual modeled cash profit, rounded up to cents; no loss credit. Noncash owner opportunity cost is subtracted after tax, not tax-deducted in this model. This is not a jurisdictional tax claim."
+  }
+}

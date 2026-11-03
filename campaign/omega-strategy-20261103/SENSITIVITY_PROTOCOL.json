@@ -1,0 +1,50 @@
+{
+  "cases": [
+    "weak_free_substitutes-normal",
+    "weak_free_substitutes-adverse",
+    "convenience-normal",
+    "convenience-adverse",
+    "process-normal",
+    "process-adverse",
+    "training-normal",
+    "training-adverse"
+  ],
+  "declared_utc": "2026-11-03 17:18:07 UTC",
+  "native_postings": 0,
+  "policies": [
+    "nonentry",
+    "simple",
+    "existing",
+    "staged",
+    "ordinary_reuse",
+    "joint"
+  ],
+  "purpose": "Check whether costs and qualification timing change selected actions; no policy tuning and no original-account reseed.",
+  "role": "DEVELOPMENT_CASE_PLANNING_SENSITIVITY_NOT_NATIVE_ACCOUNT_OPERATION",
+  "schema": "omega/supplementary-cost-sensitivity/v1",
+  "scope_limit": "Cost multipliers apply only to prospective task resource estimates. They do not scale acquisition or delivery costs. Security envelope and qualification delay are separate dimensions. None is empirical market validation.",
+  "source_commit": "77cbb9f78390c67da6fd00f81d79c19bd5014e2a",
+  "source_policy_changed": false,
+  "variants": [
+    {
+      "cost_multiplier_bps": 5000,
+      "id": "task_half"
+    },
+    {
+      "cost_multiplier_bps": 100000,
+      "id": "task_tenfold"
+    },
+    {
+      "cost_multiplier_bps": 10000000,
+      "id": "task_thousandfold"
+    },
+    {
+      "id": "obligation_envelope_100x",
+      "security_compliance_cents_per_active_quarter": 150000
+    },
+    {
+      "id": "qualification_misses_window",
+      "process_qualification_hours": 721
+    }
+  ]
+}
