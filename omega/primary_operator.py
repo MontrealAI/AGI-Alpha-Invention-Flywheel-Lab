@@ -338,8 +338,10 @@ def _operate(output, interrupt_after=None):
     if state_path.exists():
         if not account_path.with_name('account.sqlite.adaptive-simulation-key').is_file():
             raise ValueError('SAME_COUNTERPART_PRIVATE_AUTHORITY_REQUIRED')
-        if not account_path.is_file() or not account_path.with_name('account.sqlite.connected-journal.json').is_file():
-            raise ValueError('SAME_COUNTERPART_NATIVE_DATABASE_AND_JOURNAL_REQUIRED')
+        required = [account_path.with_name('account.sqlite' + suffix) for suffix in
+                    ('.actions.jsonl', '.adaptive-account.json', '.connected-journal.json')]
+        if any(not path.is_file() or path.stat().st_size == 0 for path in required):
+            raise ValueError('SAME_COUNTERPART_ACTION_TAPE_AND_SIGNED_AUTHORITY_REQUIRED')
     with JournalAccount(source, manifest, account_path, opening=selected['opening_microUSD'], working=0,
                         contract='omega-primary-counterpart:' + digest(reg)) as account:
         if state_path.exists():

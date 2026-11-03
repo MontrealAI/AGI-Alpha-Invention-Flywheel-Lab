@@ -27,16 +27,34 @@ def compact_comparison(result):
         'complete_comparison_sha256': digest(result)}
 
 
-def main(output):
+def main(output, resume=False):
     output = Path(output).resolve()
-    output.mkdir(parents=True, exist_ok=False)
+    if not resume:
+        output.mkdir(parents=True, exist_ok=False)
     primary = output/'primary'
-    first = primary_operator.run(primary, root=ROOT, interrupt_after='first-fund')
+    repairs = []
+    if resume:
+        # Retain the failed exact-source run, its immutable source and its account.
+        # This recovery mode is deliberately scoped to the recorded first-fund
+        # interruption, not an implicit reset or an arbitrary checkpoint editor.
+        from omega.primary_recovery import rebuild_checkpoint, KNOWN_FROZEN_PRIMARY_SHA
+        frozen_sha = hashlib.sha256((primary/'source/omega/primary_operator.py').read_bytes()).hexdigest()
+        tape = (primary/'account.sqlite.actions.jsonl').read_bytes()
+        last = json.loads(tape.splitlines()[-1])
+        if frozen_sha != KNOWN_FROZEN_PRIMARY_SHA or last['op'] != 'event' or last['args'].get('action') != 'fund':
+            raise ValueError('EXACT_RETAINED_FIRST_FUND_FAILURE_REQUIRED')
+        first = {'complete':False,'interrupted_after':'first-fund',
+                 'scope':'Retained original process exit; first direct resume failed on derived-cache guard'}
+        repairs.append(rebuild_checkpoint(primary))
+    else:
+        first = primary_operator.run(primary, root=ROOT, interrupt_after='first-fund')
     if first.get('complete') is not False:
         raise ValueError('REGISTERED_FUND_CRASH_NOT_EXERCISED')
     second = primary_operator.run(primary, resume=True, interrupt_after='tax')
     if second.get('complete') is not False:
         raise ValueError('REGISTERED_TAX_CRASH_NOT_EXERCISED')
+    if resume and not (primary/'account.sqlite').exists():
+        repairs.append(rebuild_checkpoint(primary))
     result = primary_operator.run(primary, resume=True)
     before = (primary/'public-native.json').read_bytes()
     primary_operator.run(primary, resume=True)
@@ -71,10 +89,15 @@ def main(output):
     evidence = {
         'schema':'omega/corrected-compact-evidence/v1',
         'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
-        'source_hashes':primary_operator.source_hashes(ROOT),
+        'account_source_commit':'50b6545e42f9b33788faf77cab1b5362f0d42bdd' if repairs else
+                                subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+        'operator_source_hashes':primary_operator.source_hashes(ROOT),
+        'account_source_hashes':json.loads((primary/'registration.json').read_text())['source_hashes'],
         'primary':native, 'native_public_record_sha256':hashlib.sha256(before).hexdigest(),
         'process_crash_checks':{'after_fund':first,'after_tax':second,'repeat_resume_unchanged':True,
-                               'independent_frozen_replay':independent},
+                               'independent_frozen_replay':independent,
+                               'derived_cache_recovery_receipts':repairs,
+                               'frozen_50b_direct_unattended_resume_passed':False if repairs else None},
         'expanded_comparison':compact_comparison(expanded),
         'original_stress_comparison':compact_comparison(stress),
         'successor_comparison':{k:v for k,v in causal.items() if k not in {'arms','predecessor'}},
@@ -93,4 +116,6 @@ def main(output):
 if __name__ == '__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',required=True)
-    main(parser.parse_args().output)
+    parser.add_argument('--resume',action='store_true')
+    args=parser.parse_args()
+    main(args.output,resume=args.resume)

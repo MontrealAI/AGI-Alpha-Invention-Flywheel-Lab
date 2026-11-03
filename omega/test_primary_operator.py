@@ -7,7 +7,6 @@ import tempfile
 import unittest
 
 from commercial.ledger import canonical, digest
-from connected_enterprise.finance import JournalAccount
 from omega import competitive, primary_operator as primary, successor
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -79,9 +78,13 @@ class PrimaryDurabilityTests(unittest.TestCase):
         cls.temp = tempfile.TemporaryDirectory()
         cls.path = Path(cls.temp.name) / 'registered-test-counterpart'
         cls.interrupted_fund = primary.run(cls.path, root=ROOT, interrupt_after='first-fund')
-        cls.after_fund = cls.export()
+        # Read fsynced authoritative bytes only. Opening/closing an Account here
+        # would rebuild the optional SQLite cache and mask a crash recovery bug.
+        cls.cache_absent_after_fund = not (cls.path / 'account.sqlite').exists()
+        cls.after_fund = cls.tape_actions()
         cls.interrupted_tax = primary.run(cls.path, root=ROOT, resume=True, interrupt_after='tax')
-        cls.after_tax = cls.export()
+        cls.cache_absent_after_tax = not (cls.path / 'account.sqlite').exists()
+        cls.after_tax = cls.tape_actions()
         cls.result = primary.run(cls.path, root=ROOT, resume=True)
         cls.reg = primary.read(cls.path / 'registration.json')
         cls.manifest = primary.read(cls.path / 'manifest.json')
@@ -93,26 +96,24 @@ class PrimaryDurabilityTests(unittest.TestCase):
         cls.temp.cleanup()
 
     @classmethod
-    def export(cls):
-        reg = primary.read(cls.path / 'registration.json')
-        manifest = primary.read(cls.path / 'manifest.json')
-        with JournalAccount(cls.path / 'source', manifest, cls.path / 'account.sqlite',
-                            opening=100_000 * primary.MICRO, working=0,
-                            contract='omega-primary-counterpart:' + digest(reg)) as account:
-            return account.export()
+    def tape_actions(cls):
+        from commercial.ledger import strict_json
+        rows = [strict_json(raw) for raw in (cls.path / 'account.sqlite.actions.jsonl').read_bytes().splitlines()]
+        return rows[1:]
 
     def audit_state(self, state):
         return primary.derive_report(self.path, self.reg, self.manifest, self.record, state)
 
     def test_actual_postcommit_crashes_resume_once(self):
         self.assertFalse(self.interrupted_fund['complete']); self.assertFalse(self.interrupted_tax['complete'])
-        fund = self.after_fund['ledger']['actions'][-1]
+        self.assertTrue(self.cache_absent_after_fund); self.assertTrue(self.cache_absent_after_tax)
+        fund = self.after_fund[-1]
         self.assertEqual((fund['op'], fund['args']['action']), ('event', 'fund'))
-        tax = self.after_tax['ledger']['actions'][-1]
+        tax = self.after_tax[-1]
         self.assertEqual(tax['args']['id'], 'corrected-year-tax-sensitivity')
         actions = self.record['ledger']['actions']
         self.assertEqual(sum(a['op'] == 'cost' and a['args']['id'] == 'corrected-year-tax-sensitivity' for a in actions), 1)
-        self.assertEqual(canonical(actions[:-1]), canonical(self.after_tax['ledger']['actions']))
+        self.assertEqual(canonical(actions[:-1]), canonical(self.after_tax))
         self.assertEqual(digest(actions[:42]), primary.HISTORY_ACTIONS)
         self.assertEqual(actions[41]['after']['cash'], 75_200 * primary.MICRO)
         self.assertEqual(self.record['ledger']['config']['opening'], 100_000 * primary.MICRO)
@@ -147,15 +148,15 @@ class PrimaryDurabilityTests(unittest.TestCase):
         finally:
             temporary.rename(key)
 
-    def test_missing_native_database_cannot_trigger_fresh_initialization(self):
-        database = self.path / 'account.sqlite'; temporary = database.with_name('database-held-for-test.sqlite')
-        database.rename(temporary)
+    def test_missing_authoritative_tape_cannot_trigger_fresh_initialization(self):
+        tape = self.path / 'account.sqlite.actions.jsonl'; temporary = tape.with_name('actions-held-for-test.jsonl')
+        tape.rename(temporary)
         try:
-            with self.assertRaisesRegex(ValueError, 'SAME_COUNTERPART_NATIVE_DATABASE_AND_JOURNAL_REQUIRED'):
+            with self.assertRaisesRegex(ValueError, 'SAME_COUNTERPART_ACTION_TAPE_AND_SIGNED_AUTHORITY_REQUIRED'):
                 primary.run(self.path, root=ROOT, resume=True)
-            self.assertFalse(database.exists())
+            self.assertFalse(tape.exists())
         finally:
-            temporary.rename(database)
+            temporary.rename(tape)
 
     def test_forged_successor_outputs_status_and_spend_rejected(self):
         bad = copy.deepcopy(self.state); bad['successor_intent']['uses']['tasks'][0]['result']['error'] = 'FORGED'
