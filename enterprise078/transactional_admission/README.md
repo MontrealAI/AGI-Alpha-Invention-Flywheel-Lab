@@ -116,3 +116,76 @@ complete authored voluntary offer and justified downside funding scenario. Do no
 rename lab jobs, pass invented positive `expected_net`, or infer willingness to
 buy from capacity-skipped contacts in PR176. When the strongest ordinary complete
 arrangement wins, retain that verdict.
+
+
+## Complete buyer choice and prospective planning
+
+The separate repair registered in `WHOLE_BUYER_CHOICE.md` addresses independent
+[PR178](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/178).
+The new `intent_v2.evaluate` is explicitly **retrospective**. Every buyer needs an exact
+subset receipt containing joint gross value, four labeled outside net utilities,
+whole-package consent and a quote bound to each offer's price and `terms_id`.
+Individual values/consents are not joint evidence. Missing evidence refuses;
+complementary complete packages may qualify even when their parts do not.
+Partner participation likewise binds the exact partner package and contract.
+The deliberately failing old comparator is preserved byte-for-byte only as a
+source-hashed test control; do not use it for decisions.
+
+`planning.plan` is the separate prospective interface. Offer rows contain only
+id, buyer, price, terms_id and optional partner. Each registered scenario contains
+buyers, exact-package partners, collection_lower_bounds, complete package costs
+and assumptions_known_at. `costs` maps `choice.subset_key(full_bundle)` to all 15
+cost categories, including shared coordination, partner compensation and tails.
+No current receipts finance upfront commitments. Unknown bounds/costs refuse.
+It selects one fixed bundle by worst-case complete net across all scenarios, with
+no-entry winning ties. It cannot select a different action after discovering the
+realized scenario. Realized collected/accepted fields and future-dated assumptions
+are rejected. Lower bounds, timestamps, utilities and consent remain supplied
+**authored assumptions**, not authenticated customer evidence or future guarantees.
+Do not relabel forecasts or hindsight observations as predecision bounds. Each
+per-offer lower bound must hold in every registered package containing it; use
+distinct offer/contract IDs for package-dependent payment assumptions.
+
+Every candidate is a mutually exclusive proposed arrangement, not a simultaneous
+menu, an equilibrium, or an incentive-compatible mechanism. `terms_id` must name
+the complete payment, fulfillment, risk/refund and partner-obligation contract;
+a new obligation needs a new identity and refreshed participant evidence. The
+utility model uses nonnegative exact microUSD equivalents. All named alternatives
+must have a net utility or explicit `{'available': False}`; no-purchase remains
+available. Actual availability and all economic assumptions need independent
+support before practical reliance. Partner compensation enters complete costs;
+the quote's price is the buyer price, not an inferred partner payment.
+
+Focused reproduction:
+
+```sh
+python -m unittest enterprise078.transactional_admission.test_intent_v2 enterprise078.transactional_admission.test_choice -v
+```
+
+The first local focused run passed 38 tests. Independent implementation review
+then found blanket partner acceptance and insufficient package-cost expression;
+both were repaired before publication of implementation, adding two regressions.
+The revised 40 focused tests pass; independent re-review found no further
+substantive issue within the declared assumption model. The combined focused,
+delivery, complete-offer, capacity and snapshot suite passes 66 tests. An earlier full discovery ran 66 tests: 64
+passed, two could not materialize the historical 306-file science because the
+low-disk sparse checkout lacked unrelated frozen files. This is a local coverage
+blocker, not a source-guard waiver; full exact-head hosted qualification remains
+required. No original account, finance source, historical outcome, PR174 owner
+branch or PR178 reviewer branch is changed. Native activation is still missing.
+
+
+### Composition with concurrent owner work
+
+While this repair was being built, owner #174 advanced to `7586d3ed`, adopting
+PR178 and `joint_cost.py`. This branch composes that work without changing the
+reviewer's immutable `intent.py`/`offer.py` pins or repinning its historical tests.
+The repaired retrospective API is therefore separately named `intent_v2.py`.
+Legacy `intent.py`, reviewer and joint-cost outputs remain authored diagnostic
+controls; they are not prospective choice authority. Use `planning.plan` for
+predecision assumptions and `intent_v2.evaluate` for explicit exact-contract
+retrospective participation. There is still no native execution entry point.
+
+The composed local suite passes **90 tests**, including all original intent,
+PR178 review, owner joint-cost, repaired choice and delivery controls. This does
+not replace the two frozen-native controls pending full hosted qualification.

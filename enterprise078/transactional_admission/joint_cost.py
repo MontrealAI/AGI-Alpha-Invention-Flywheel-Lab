@@ -1,7 +1,9 @@
 """Compose the pinned buyer review with complete scenario-specific costs.
 
-Pure planning only: one shared decision evaluated across separate hypothetical
-worlds, never combined financial histories or forecast expected returns.
+Retrospective sensitivity only: the source-pinned reviewer consumes supplied
+collections and acceptance outcomes. Its ranking is NOT a causal decision rule.
+Use planning.plan for declared predecision assumptions; never pass future
+realized outcomes to a prospective policy. Historical outcomes remain unchanged.
 """
 import copy
 from enterprise078_review.joint_choice import review
@@ -39,4 +41,6 @@ def evaluate(rows, bundles, *, wallets, available, earned, sunk_acquisition, sce
             winner=r
     return {'selected_bundle':winner['bundle'],'conditional_worst_net_microUSD':winner['worst_net_microUSD'],
             'outcomes':results,'native_catalog_admitted':False,'native_mutations':0,
-            'forecast_expected_net':None,'scope':'authored separate scenarios, not native profit or observed buyer demand'}
+            'forecast_expected_net':None,'information_timing':'retrospective',
+            'prospective_selected_bundle':None,
+            'scope':'authored retrospective sensitivity, not a prospective decision rule, native profit or observed demand'}

@@ -1,8 +1,18 @@
 # Enterprise078 current continuation checkpoint — 3 November 2026
 
+## Separate whole-package and predecision repair candidate
+
+Draft PR179 composes the concurrent owner work without altering the original
+reviewer source pins, financial account or prior outcomes. It requires exact
+whole-buyer and partner package/terms consent, complete package cost envelopes,
+and separates retrospective outcomes from prospective assumptions. Native
+activation remains unimplemented. See transactional_admission/README.md for
+interfaces, qualification and limits. This is a repair candidate, not release
+or commercial acceptance.
+
 ## Joint buyer choice and complete cost-shock composition — latest continuation
 
-Adopted the three public review files from PR178 exact source3e582a56a3b7e49cd3c51ea2d452836a0902a27c byte-for-byte, without writing its owner branch or merging its PR. Their pinned incumbent comparator files still match the lead. The independent counterexample is material: two substitute outputs can each pass individual value/budget checks while their joint offer loses to conventional service. Wallet conservation is necessary but does not establish joint utility. The old comparator remains the immutable negative control; use the composed evaluator for these prospective decisions.
+Adopted the three public review files from PR178 exact source3e582a56a3b7e49cd3c51ea2d452836a0902a27c byte-for-byte, without writing its owner branch or merging its PR. Their pinned incumbent comparator files still match the lead. The independent counterexample is material: two substitute outputs can each pass individual value/budget checks while their joint offer loses to conventional service. Wallet conservation is necessary but does not establish joint utility. The old comparator remains the immutable negative control. The composed evaluator consumes supplied collection/acceptance outcomes and is a retrospective sensitivity diagnostic, not a prospective decision rule; the separate `planning.plan` repair consumes only declared predecision assumptions.
 
 Preregistered complete-cost composition at 9c3b3528fbe0d654075a08810676696cbb22bfc8. Added [joint_cost.py](transactional_admission/joint_cost.py), which requires an explicit complete cost vector for every offer in every declared buyer/rival scenario, reuses the unchanged source-pinned reviewer, and selects only a bundle feasible across the registered cases. It preserves each case separately and never pools accounts or invents expected returns. Production/correction/support/financing shocks can be supplied through the full cost vector; unknown costs defer, rather than becoming zero. Available/earned cash is the declared post-acquisition funding envelope; it does not include future collections. This is a conservative worst-case rule for the finite declared set, not a game equilibrium or global optimum.
 
