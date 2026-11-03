@@ -94,6 +94,24 @@ class IndependentCartChoiceReview(unittest.TestCase):
                 self.assertIsNotNone(built['program'])
                 self.assertEqual(Fraction(built['verification']['expected_contribution_cents']), best)
 
+    def test_zero_price_overlap_has_identical_canonical_cart(self):
+        m = market(1337, 'substitute', width=2)
+        service_sets = [[], ['a', 'b'], ['a'], ['c'], ['b'],
+                        ['a', 'c'], ['b', 'c'], ['a', 'b', 'c']]
+        names = ['outside', 'ab', 'a', 'c', 'b', 'ac', 'bc', 'abc']
+        m['outcomes'] = [{'id': name, 'services': services, 'cost_cents': 0}
+                         for name, services in zip(names, service_sets)]
+        for typ in m['types']:
+            typ['values'] = [0] * 8
+        p = carts.null_program(m)
+        p['menu'] = [{'outcome_id': 'ab', 'price_cents': 0},
+                     {'outcome_id': 'a', 'price_cents': 0},
+                     {'outcome_id': 'c', 'price_cents': 1}]
+        private = {'values': [0] * 7 + [10], 'budget_cents': 2, 'outside_utility': 0}
+        actual = carts.buyer_choose(m, p, private)
+        self.assertEqual(actual, carts.oracle_choose(m, p, private))
+        self.assertEqual(actual['basket'], ['ab', 'c'])
+
     def test_changed_union_semantics_are_rejected(self):
         m = market(1337, 'substitute', width=2)
         p = carts.null_program(m)

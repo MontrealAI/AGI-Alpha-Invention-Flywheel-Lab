@@ -102,8 +102,10 @@ def run(output,*,arm='generated',stress='central',resume=False):
         raise ValueError('REGISTERED_ARM_AND_STRESS_REQUIRED')
     out=checked_path(output);source=source_identity()
     if not resume:
-        out.mkdir(parents=True,exist_ok=True)
-        if any(out.iterdir()):raise FileExistsError('NEW_ACCOUNT_REQUIRED_USE_RESUME')
+        # Exclusive creation claims a fresh output before any source/authority write.
+        # An empty preexisting directory is not proof of ownership.
+        try:out.mkdir(parents=True,exist_ok=False)
+        except FileExistsError as exc:raise FileExistsError('NEW_ACCOUNT_REQUIRED_USE_RESUME') from exc
         save(out/'SOURCE.json',source);save(out/'CONTRACT.json',{'arm':arm,'stress':stress,'tariff':TARIFF})
     elif not out.is_dir() or read(out/'SOURCE.json')!=source or read(out/'CONTRACT.json')!={'arm':arm,'stress':stress,'tariff':TARIFF}:
         raise ValueError('SOURCE_MATCHED_EXISTING_ACCOUNT_REQUIRED')

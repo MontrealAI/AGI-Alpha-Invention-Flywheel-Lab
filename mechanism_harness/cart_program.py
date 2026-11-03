@@ -80,7 +80,8 @@ def cheapest_carts(m,p):
     for j,price in _entries(m,p):
         for out,(cost,basket) in list(states.items()):
             target=table[out][j];candidate=(cost+price,basket+(m['outcomes'][j]['id'],))
-            if target not in states or candidate<states[target]:states[target]=candidate
+            if target not in states or (candidate[0],len(candidate[1]),candidate[1]) < (states[target][0],len(states[target][1]),states[target][1]):
+                states[target]=candidate
     return states
 
 
@@ -104,7 +105,7 @@ def _select(m,t,rows):
         contribution=price-fee(price,m['payment_bps'])-m['outcomes'][out]['cost_cents']
         options.append((utility,contribution,out,price,basket))
     maximum=max(x[0] for x in options)
-    selected=min((x for x in options if x[0]==maximum),key=lambda x:(x[2]!=0,x[1],x[3],m['outcomes'][x[2]]['id'],x[4]))
+    selected=min((x for x in options if x[0]==maximum),key=lambda x:(x[2]!=0,x[1],x[3],m['outcomes'][x[2]]['id'],len(x[4]),x[4]))
     u,c,o,p,b=selected
     return {'outcome_id':m['outcomes'][o]['id'],'price_cents':p,'utility_cents':u,
             'seller_contribution_cents':c,'declined':o==0,'basket':list(b),

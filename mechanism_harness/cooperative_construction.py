@@ -226,7 +226,10 @@ def logical(value):
 
 
 def source_identity():
-    names=set(substrate.SOURCE_PATHS)|{'mechanism_harness/cooperative_construction.py','mechanism_harness/inventor.py','campaign/omega-economy-v4/COOPERATIVE_PROTOCOL.md'}
+    # Include the complete shared ledger dependency group: canonical JSON and
+    # source hashing must not silently change outside this receipt.
+    from connected_enterprise.finance import SOURCE_PATHS as FINANCIAL_SOURCE_PATHS
+    names=set(FINANCIAL_SOURCE_PATHS)|set(substrate.SOURCE_PATHS)|{'mechanism_harness/cooperative_construction.py','mechanism_harness/inventor.py','campaign/omega-economy-v4/COOPERATIVE_PROTOCOL.md'}
     result={}
     for name in sorted(names):
         p=ROOT/name

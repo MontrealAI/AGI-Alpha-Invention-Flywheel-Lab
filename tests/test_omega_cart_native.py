@@ -37,6 +37,12 @@ class CartNativeExecution(unittest.TestCase):
             cls.result=n.run(cls.path)
     @classmethod
     def tearDownClass(cls):cls.tmp.cleanup()
+    def test_existing_empty_output_is_not_fresh_authority(self):
+        out=Path(self.tmp.name)/'preexisting-empty';out.mkdir()
+        with self.assertRaisesRegex(FileExistsError,'NEW_ACCOUNT_REQUIRED'):
+            n.run(out)
+        self.assertEqual(list(out.iterdir()),[])
+
     def test_actual_acceptance_and_native_account(self):
         with small_native_fixture():self.assertTrue(n.audit(self.path)['accepted'])
         self.assertGreater(self.result['settled_buyers'],0)
