@@ -30,7 +30,7 @@ jobs:
           python-version: '3.13'
       - name: Install existing project dependencies
         run: python -m pip install -r requirements-commercial010.txt
-      - name: Test committed crash and exact original-account reopen
+      - name: Test committed crash and same-fixture-account reopen
         shell: bash
         run: |
           set -euo pipefail
