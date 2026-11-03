@@ -1,0 +1,110 @@
+{
+  "schema": "omega/cost-aware-continuation-evidence/v2",
+  "protocol_commit": "7b8d13b1f562bc076e9f53cb23c448725789b26e",
+  "parent_commit": "f91531a1603102bbf40b337db69dd97fd5260b02",
+  "local_runtime_base": "4a87b455373be72811ad3a0c654a116c3604a374",
+  "local_qualification": "RELEASED_BASE_PLUS_EXACT_INVENTOR_FILES_NOT_ALL_CURRENT_MAIN_DEPENDENCIES",
+  "python": "3.13.5",
+  "git_blobs": {
+    "mechanism_harness/economical_learning.py": "16db3b02ba07814df164f6dc875dca74d577ac3e",
+    "mechanism_harness/economical_native.py": "081e5095a5208a1cb633a78b64c978a4bd514e21",
+    "mechanism_harness/inventor_cost_audit.py": "d32b49bb8c655e31512e7a9474bb88848a05ab99",
+    "mechanism_harness/inventor.py": "72f0fa5176232e16474d0ebf2835a177e9a306da",
+    "mechanism_harness/inventor_native.py": "96d443629ee9fcce8c6544afc08db5d8d1de61e3",
+    "tests/test_omega_economical.py": "dab166bc93c2dbdceb3f6b5a3d4cf1b2f38dd60d",
+    "campaign/omega-inventor/PROTOCOL_V2.md": "32f6990d2c46d5e441eecff93969781d07cfe256"
+  },
+  "tests": {
+    "completed_suite_passed": 23,
+    "failed": 0,
+    "log_sha256": "cb890be1be75cae710e60874d4d9abbc5f8b3af4da76c9a61d71f65e2e5e3c3a",
+    "later_whole_suite_replays": "INTERRUPTED_NOT_PASSES",
+    "final_source_cli_run_audit_resume": "COMPLETED"
+  },
+  "campaigns": [
+    {
+      "development_seeds": [180101,180102,180103,180104],
+      "holdout_seeds": [280101,280102,280103,280104,280105,280106],
+      "confirmation_cases": 36,
+      "exhaustive_work": 200912,
+      "ordinary_pruned_work": 88340,
+      "inherited_work": 88340,
+      "old_use_work": 25152,
+      "new_use_work": 3504,
+      "fixed_conventional_use_work": 3504,
+      "verifier_calls": {"exhaustive":512,"cold":284,"inherited":284},
+      "outcome_parity": true,
+      "equal_content_tie": true,
+      "cpu_ns": {"cold_search":334628993,"equal_content_measure":31535209,"exhaustive_search":608374734,"fixed_measure":30006384,"inherited_search":364128321,"ordinary_with_check":32972789,"whole_confirmation":179612110}
+    },
+    {
+      "development_seeds": [180201,180202,180203,180204],
+      "holdout_seeds": [280201,280202,280203,280204,280205,280206],
+      "confirmation_cases": 36,
+      "exhaustive_work": 200912,
+      "ordinary_pruned_work": 88340,
+      "inherited_work": 69637,
+      "old_use_work": 25152,
+      "new_use_work": 3504,
+      "fixed_conventional_use_work": 3504,
+      "verifier_calls": {"exhaustive":512,"cold":284,"inherited":239},
+      "outcome_parity": true,
+      "equal_content_tie": true,
+      "cpu_ns": {"cold_search":339733161,"equal_content_measure":31915926,"exhaustive_search":598810657,"fixed_measure":31174522,"inherited_search":290482262,"ordinary_with_check":29984481,"whole_confirmation":148327830}
+    },
+    {
+      "development_seeds": [180301,180302,180303,180304],
+      "holdout_seeds": [280301,280302,280303,280304,280305,280306],
+      "confirmation_cases": 36,
+      "exhaustive_work": 200912,
+      "ordinary_pruned_work": 88340,
+      "inherited_work": 69637,
+      "old_use_work": 25152,
+      "new_use_work": 3504,
+      "fixed_conventional_use_work": 3504,
+      "verifier_calls": {"exhaustive":512,"cold":284,"inherited":239},
+      "outcome_parity": true,
+      "equal_content_tie": true,
+      "cpu_ns": {"cold_search":345063884,"equal_content_measure":33877796,"exhaustive_search":659474857,"fixed_measure":31431645,"inherited_search":299262420,"ordinary_with_check":30247342,"whole_confirmation":187360354}
+    }
+  ],
+  "cost_comparison": {
+    "ordinary_pruned_discovery": 265020,
+    "inherited_discovery": 227614,
+    "incremental_saved": 37406,
+    "acquire_plus_use": 238126,
+    "old_use_only": 75456,
+    "mapping_metric_is_not_complete_lifecycle_cost": true,
+    "strong_fixed_reuse_remains_better_on_total_measured_work": true
+  },
+  "native": {
+    "opportunities": 16,
+    "settled": 14,
+    "refused": 2,
+    "days": 365,
+    "opening_microUSD": 100000000000,
+    "collections_microUSD": 1386000000,
+    "expenses_microUSD": 889664000,
+    "profit_microUSD": 496336000,
+    "earned_funded_successor_microUSD": 50000000,
+    "audit": {
+      "accepted": true,
+      "report_sha256": "7c07e597cbe80cf2633942c1e8993a5fd1c2073e52f03df9cc26599ad003c7a3",
+      "scope": "Source-matched code-path audit; no external certification."
+    },
+    "resume_financial_export_unchanged": true,
+    "discovery_tariff": "UNCHANGED_AUTHORED_ENVELOPE_NOT_MEASURED_BILL"
+  },
+  "sha256": {
+    "V2_STUDY.json": "f5d381768e577d13dda461f2fd951f054b9bc34b0b53009b6509a2a5e4a696b7",
+    "V2_REPORT.json": "01c8dd4540d0dced12a1d5a32a403578a9c3fd88aa05c99b86378945ba3689c2",
+    "NATIVE_EXPORT.json": "52b1c0852ee0ebc4c19633fceeb29586f21fc79a757b0bf5e8ac52d4c7e0c73a"
+  },
+  "audit_fault": {
+    "original_missing_maintenance_pass_reproduced": true,
+    "historical_real_omission_claimed": false,
+    "repaired_faults_rejected": ["missing_fee","missing_maintenance","missing_tax_including_positive_tax","wrong_amount","wrong_day","duplicate_economic_fee","tampered_tax_basis","unreported_successor_spend"]
+  },
+  "actual_revenue_usd": 0,
+  "full_objective_achieved": false
+}

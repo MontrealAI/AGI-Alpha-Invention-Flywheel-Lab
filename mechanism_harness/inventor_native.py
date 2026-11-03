@@ -255,4 +255,6 @@ def audit_operation(output,result,source,expected_policy=None):
         raise ValueError('COMPLETE_YEAR_CLOCK_CHANGED')
     if [digest(r) for r in records]!=result['record_sha256'] or result!=read(output/'NATIVE_RESULT.json'):
         raise ValueError('OPERATING_REPORT_CHANGED')
+    from .inventor_cost_audit import audit_costs
+    audit_costs(exported,result,records,TARIFF,read(output/'TAX.json'))
     return {'accepted':True}

@@ -196,6 +196,7 @@ def source_identity():
     from connected_enterprise.finance import SOURCE_PATHS
     paths=set(SOURCE_PATHS)|set(substrate.SOURCE_PATHS)|{
         'mechanism_harness/inventor.py','mechanism_harness/inventor_native.py',
+        'mechanism_harness/inventor_cost_audit.py',
         'campaign/omega-inventor/PROTOCOL.md'}
     for name in paths:
         path=ROOT/name
