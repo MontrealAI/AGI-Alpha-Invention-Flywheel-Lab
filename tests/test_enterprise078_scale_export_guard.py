@@ -8,7 +8,7 @@ import unittest
 import zipfile
 from pathlib import Path
 from unittest.mock import patch
-from scripts.enterprise078_scale_export_guard import prepare
+from scripts.enterprise078_scale_export_guard import prepare, zip_paths_safe
 
 
 class PublicExportTests(unittest.TestCase):
@@ -38,6 +38,8 @@ class PublicExportTests(unittest.TestCase):
         archive = self.output / "enterprise078-scale-keyfree.zip"
         with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as z:
             z.writestr(member, "public test fixture")
+            for name in ("CAMPAIGN.json", "central/result.json", "central/review.json"):
+                z.writestr("public/" + name, (public / name).read_bytes())
         (self.output / "PUBLIC_PACKAGE.json").write_text(json.dumps({
             "archive": archive.name, "bytes": archive.stat().st_size,
             "sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
@@ -68,6 +70,23 @@ class PublicExportTests(unittest.TestCase):
         self.assertNotIn("PRIVATE_KEY_TEST_SENTINEL",
                          "".join(p.read_text(errors="replace") for p in self.upload.iterdir()))
         self.assertEqual(receipt["subprocess_exit_code"], 0)
+
+    def test_standalone_financial_receipt_cannot_diverge_from_verified_archive(self):
+        self.success_fixture()
+        (self.output / "public/central/review.json").write_text('{"accepted":false}')
+        with self.assertRaisesRegex(ValueError, "PUBLIC_STANDALONE_AND_ARCHIVE_MISMATCH"):
+            self.prepare(0)
+        self.assertFalse(self.upload.exists())
+
+    def test_zip_aliases_that_collide_on_extraction_are_refused(self):
+        for index, alias in enumerate(("source//a.py", "source/./a.py", "source/a.py/")):
+            with self.subTest(alias=alias):
+                archive = self.root / f"noncanonical-{index}.zip"
+                with zipfile.ZipFile(archive, "w") as z:
+                    z.writestr("source/a.py", "original")
+                    z.writestr(alias, "conflicting")
+                with self.assertRaisesRegex(ValueError, "UNSAFE_PUBLIC_ARCHIVE_MEMBER"):
+                    zip_paths_safe(archive)
 
     def test_altered_archive_digest_refused(self):
         self.success_fixture()
