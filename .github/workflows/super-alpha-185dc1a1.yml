@@ -28,7 +28,18 @@ jobs:
         env:
           EXECUTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          python -m experiments.super_alpha_20261103_185dc1a1.run --output "$RUNNER_TEMP/super-alpha-evidence" --source-commit "$EXECUTED_SHA" --compare experiments/super_alpha_20261103_185dc1a1/evidence/RESULTS.json
+          python -m experiments.super_alpha_20261103_185dc1a1.run --output "$RUNNER_TEMP/super-alpha-evidence" --source-commit "$EXECUTED_SHA"
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          expected = json.loads(Path('experiments/super_alpha_20261103_185dc1a1/evidence/SUMMARY.json').read_text())
+          actual = json.loads((Path(os.environ['RUNNER_TEMP']) / 'super-alpha-evidence/RESULTS.json').read_text())
+          assert expected['source_hashes'] == actual['source']['source_hashes'], 'EXECUTABLE_SOURCE_MISMATCH'
+          semantic = {key: value for key, value in actual.items() if key not in {'source', 'telemetry', 'ordinary_reuse_cache'}}
+          digest = hashlib.sha256(json.dumps(semantic, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+          assert digest == expected['semantic_results_sha256'], 'COMPLETE_REGISTERED_RESULT_MISMATCH'
+          print(json.dumps({'independent_reproduction': 'accepted', 'semantic_sha256': digest, 'cases': actual['complete_cases_independently_checked']}))
+          PY
       - name: Independently replay the original key-free native research history
         run: |
           python -m experiments.super_alpha_20261103_185dc1a1.finance audit-public --root "$GITHUB_WORKSPACE" --evidence experiments/super_alpha_20261103_185dc1a1/evidence/FINANCE_PUBLIC.json
