@@ -8,6 +8,7 @@ import os
 import re
 import shutil
 import stat
+import subprocess
 import zipfile
 from pathlib import Path, PurePosixPath
 
@@ -47,6 +48,18 @@ def zip_paths_safe(archive: Path) -> None:
             names.add(member.filename)
 
 
+def checked_out_source_sha() -> str:
+    try:
+        head = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=Path(__file__).resolve().parents[1],
+            text=True, stderr=subprocess.DEVNULL).strip()
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise ValueError("CHECKED_OUT_SOURCE_IDENTITY_UNAVAILABLE") from exc
+    if not re.fullmatch(r"[0-9a-f]{40}", head):
+        raise ValueError("INVALID_CHECKED_OUT_SOURCE_IDENTITY")
+    return head
+
+
 def prepare(output: Path, upload: Path, stdout: Path, stderr: Path, code: int, world: str) -> dict:
     if not WORLD.fullmatch(world):
         raise ValueError("INVALID_REGISTERED_WORLD")
@@ -71,7 +84,8 @@ def prepare(output: Path, upload: Path, stdout: Path, stderr: Path, code: int, w
         "raw_logs_uploaded": False,
         "original_historical_failures_reclassified": False,
         "export_guard_sha256": sha(Path(__file__)),
-        "github_head_sha": os.environ.get("GITHUB_SHA"),
+        "checked_out_source_sha": checked_out_source_sha(),
+        "github_event_sha": os.environ.get("GITHUB_SHA"),
         "github_run_id": os.environ.get("GITHUB_RUN_ID"),
     }
     if code == 0:
