@@ -10,7 +10,7 @@ All buyers, preferences, costs, consent fields and escrow are **authored simulat
 
 ## Observed finite development and registered cases
 
-On 3 November 2026 the first complete local source test passed **14/14**, the five preregistered authored worlds were executed exactly once and all were independently replayed: 12 source-visible input/output vectors over six generated adapter files, with no alternative seeds or discarded negative results.
+On 3 November 2026 the first complete local source test passed **16/16**, the five preregistered authored worlds were executed exactly once and all were independently replayed: 12 source-visible input/output vectors over six generated adapter files, with no alternative seeds or discarded negative results.
 
 | World | Conditional output | Incurred hypothetical construction cost | Refund due | Real deployment |
 | --- | --- | ---: | ---: | --- |
@@ -36,6 +36,6 @@ python3 -c 'from engine import run; run("/absolute/new/collective-083")'
 python3 -c 'from independent import audit; print(audit("/absolute/new/collective-083"))'
 ```
 
-The second command creates a fresh output directory once and refuses overwriting previous results. The independent audit refuses changed artifacts, missing worlds, altered case identity, inflated profit/collections, unpaid costs or invalid cost sharing. The source-matched public Actions job runs the same commands in an isolated temporary directory. The output can be reviewed without copying private keys or customer data because there are none.
+The second command creates a fresh output directory once and refuses overwriting previous results. The independent audit independently interprets the adapter (not the producer interpreter), pins the authored fixture hash, and refuses changed or unauthorized extra artifacts, missing worlds, altered case identity, inflated profit/collections, unpaid costs, fake source mappings or invalid cost sharing. The source-matched public Actions job runs the same commands in an isolated temporary directory. The output can be reviewed without copying private keys or customer data because there are none.
 
 **Decision:** retain an ordinary, already-known mechanism as a possible tool, but decline any commercial adoption or novelty claim until actual non-fictional, independently approved buyer requirements, verified competition and current authoritative funding become available. The high-stakes missing productive means remains establishing voluntary real demand and complete accepted delivery. Do not divert the owner's separately registered PR #198 compatibility research, PR #197 running native comparisons, or P0 custody work.
