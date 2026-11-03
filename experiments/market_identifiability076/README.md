@@ -1,0 +1,30 @@
+# Market identifiability 076 — a live need is not data access
+
+This is a finite, independent **commercial-access falsification experiment**, not a new enterprise, clinical decision, patient audit, payable opportunity, or US$3B profit. The operating decision is **NO_DEPLOY** for this public-only data route. The initial preregistration was committed separately at [4c8d111e](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/4c8d111e4fc9727bd6d10501ec715a1027e90afe), before the executable witness, tests or outcomes. The protocol's Git blob is `48edacd0134bda2ca92cdd4340590b268de05bc6`.
+
+## Verified live need versus actual buying
+
+At the 2 November 2026 evidence snapshot, the US Department of Veterans Affairs posted [notice 36C10B27Q0073](https://sam.gov/opp/650978c0876c4ea994b6976213322974/view), published **23 October 2026** with an indicated response date **6 November 2026**. It concerns healthcare data auditing/billing/coding optimization software. It is **sources-sought / request for information only**; the notice explicitly says not to submit a quote. It is a procurement-research signal, **not a solicitation, purchase, customer commitment, actual payment, consent to access claims or forecastable demand**. This experiment does not answer the RFI or contact the agency.
+
+Three materially different arrangements were compared before this experiment: (1) claim-level healthcare auditing (live notice but lacks authorized claim-level data), (2) [secure multiparty SaaS platform](https://sam.gov/opp/981dee6f523e4776ac546381be6b2ec9/view) (CBP's 20 October 2026 sources-sought, with FedRAMP/comparable security and managed-operations requirements not satisfied here), and (3) federal [contract change certification](https://www.usaspending.gov/award/CONT_AWD_20341522F00039_2036_GS00Q14OADS204_4732) (one completed/terminated historical IV&V award, while the public free USAspending service is a strong existing alternative). No-deploy is the fourth arm. None currently supplies an eligible customer contract, capability qualification, permitted private input or defensible complete economics under this environment.
+
+## The actual missing information instrument
+
+The official [CMS 2024 provider-and-service public dataset](https://catalog.data.gov/dataset/medicare-physician-other-practitioners-by-provider-and-service-2024-12-01) was updated **21 May 2026**, and the [published data dictionary](https://data.cms.gov/data-api/v1/dataset/335e5f35-eca6-482d-87b3-f99883e213e3/dictionary) exposes count and average payment columns, but not claim identifiers or clinical source notes. Its HCPCS/CPT descriptions can have separate AMA licensing obligations; **no such code descriptions are imported here**.
+
+The small executable construction in `proof.py` builds two *synthetic-only* underlying micro-claim worlds: two dated services for one fictitious beneficiary/provider/code at identical amounts. One has two different claim IDs; the other deliberately reuses an ID. The worlds project to precisely the same named CMS-style public aggregate fields (counts and four monetary averages). But an authorized ordinary claim-ID uniqueness check distinguishes their truth. Therefore a deterministic rule receiving only those aggregates **cannot decide both cases correctly**. This is a mathematical information-barrier witness for this example, **not** evidence of real duplicate claims, fraud, clinical coding errors, a complete interpretation of all CMS files, or a proof that no different information channel could work.
+
+A credible successor construction would require a **genuine new rights-cleared information channel** to the required claim-level fields, eligibility, safety and verified buyer acceptance, and must beat a competent authorized human-plus-conventional-software audit with full costs. Neither rights nor acceptance is present. Do not infer buyer consent or an invoice from this RFI. The observed source does not authorize outreach, health-data access, paid services or commercial execution.
+
+## Execute / audit independently
+
+On an exact source checkout, standard-library Python 3.12 suffices:
+
+```sh
+python3 -m unittest discover -v -s tests -p 'test_market_identifiability076.py'
+python3 -m experiments.market_identifiability076.proof --output /absolute/new/market076.json
+```
+
+Use a new nonexistent output path. The GitHub path-scoped [workflow](../../.github/workflows/market-identifiability076.yml) checks the preregistration's exact Git blob, runs six focused adversarial tests, then creates an independent offline refusal certificate. No real provider/patient records, external requests, model API calls, inference billing, transactions, contact, keys, financial account or simulated new customer are used. All input identifiers and monetary cells are invented **for proof only**. The public dataset is cited as a source *schema*, not downloaded or analyzed as observations; its content hash is **not** claimed to have been measured.
+
+**Stopping rule and verdict:** exactly one frozen indistinguishability pair, six registered tests and no parameter/seed search after seeing the result. Preserve any original and hosted failures unchanged. Current public-only arrangement is no-deploy; no profit, revenue, customer or fundable native cash is established. A successful repository workflow would establish only engineering reproduction of this information limitation, not commercial success or P0 native-account composition. The broader US$3 billion trailing-365-day complete-cost profit mission remains open, but its target cannot turn an RFI into demand or an aggregate into patient-level truth.
