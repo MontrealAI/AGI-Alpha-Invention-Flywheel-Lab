@@ -1,7 +1,9 @@
-name: Enterprise078 scale construction
+name: Enterprise078 scale native qualification
 on:
   push:
     branches: ['experiment/enterprise078-scale-20261102']
+    paths: ['enterprise078_scale/**', '.github/workflows/enterprise078-scale.yml']
+  pull_request:
     paths: ['enterprise078_scale/**', '.github/workflows/enterprise078-scale.yml']
   workflow_dispatch:
 permissions:
@@ -10,50 +12,87 @@ concurrency:
   group: enterprise078-scale-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  source-and-qualification:
+  source-and-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-      - name: Export only tracked public executable dependencies
-        run: |
-          python3 - <<'PY'
-          import hashlib,json,pathlib,subprocess,zipfile
-          from enterprise078.service import source_paths
-          root=pathlib.Path('.').resolve()
-          tracked=set(subprocess.check_output(['git','ls-files','-z']).decode().split('\0'))
-          names=set(source_paths(root))
-          names.update(n for n in tracked if n.startswith(('enterprise078/','enterprise078_scale/')) and pathlib.Path(n).suffix in {'.py','.json','.md'})
-          names.update(n for n in tracked if n.startswith('tests/') and pathlib.Path(n).suffix=='.py')
-          names.update(n for n in ('AGENTS.md','docs/harness/DEVELOPER_GUIDE.md','docs/harness/RESOURCE_POLICY.md','docs/connected014/OPERATOR.md','pyproject.toml','requirements.txt') if n in tracked)
-          assert names <= tracked
-          assert not any('/private/' in n or pathlib.Path(n).suffix in {'.pem','.key'} for n in names)
-          hashes={n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in sorted(names)}
-          out=pathlib.Path('/tmp/enterprise078-transfer');out.mkdir()
-          (out/'SOURCE.json').write_text(json.dumps({'commit':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'files':hashes},indent=2))
-          with zipfile.ZipFile(out/'source.zip','w',zipfile.ZIP_DEFLATED) as z:
-              for n in sorted(names):z.write(root/n,n)
-          print(json.dumps({'source_files':len(names),'zip_bytes':(out/'source.zip').stat().st_size}))
-          PY
-      - name: Run registered scale construction when present
-        run: |
-          if test -f enterprise078_scale/run.py; then
-            python3 -m unittest discover -s enterprise078_scale -p 'test_*.py' -v
-            python3 -m enterprise078_scale.run --output /tmp/enterprise078-scale-run
-          fi
-      - name: Upload public source transfer only
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
-          name: enterprise078-scale-public-source
-          path: /tmp/enterprise078-transfer/
-          retention-days: 1
+          python-version: '3.12'
+      - name: Existing native runtime dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-commercial010.txt
+      - name: Verify retained and additive source identities
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib
+          from commercial.ledger import digest
+          for name in ('enterprise078/FROZEN.json','enterprise078_scale/FROZEN.json'):
+              f=json.loads(pathlib.Path(name).read_text())
+              assert digest(f['files'])==f['sha256']
+              for n,h in f['files'].items():assert hashlib.sha256(pathlib.Path(n).read_bytes()).hexdigest()==h,n
+          PY
+      - name: Native, operating, source and platform regressions
+        run: |
+          python -m unittest enterprise078_scale.test_scale enterprise078.test_enterprise078 tests.test_connected_finance tests.test_connected_p0_source_guard.JoinPreflightTests tests.test_connected_platform_runtime064.CurrentWorkflowPlatformTests.test_all_current_jobs_use_the_public_standard_runner_and_platform_window -v
+      - name: Export public source and build identity
+        run: |
+          python - <<'PY'
+          import json,os,pathlib,subprocess,zipfile
+          from enterprise078_scale.run import copy_source
+          out=pathlib.Path('/tmp/e078-source');out.mkdir()
+          copy_source(out/'source')
+          with zipfile.ZipFile(out/'source.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for p in sorted((out/'source').rglob('*')):
+                  if p.is_file():z.write(p,p.relative_to(out/'source'))
+          (out/'BUILD.json').write_text(json.dumps({'commit':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'run_id':os.environ['GITHUB_RUN_ID'],'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],'scope':'PUBLIC_SOURCE_NOT_ACCOUNT_AUTHORITY'},indent=2))
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: enterprise078-scale-source
+          path: |
+            /tmp/e078-source/source.zip
+            /tmp/e078-source/BUILD.json
+          retention-days: 7
           if-no-files-found: error
-      - name: Upload compact key-free qualification receipts
+  financial-world:
+    needs: source-and-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        world: [central, favorable, weak, adverse, illiquid, no_financing, reference_100k, ordinary_no_inheritance]
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Existing native runtime dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements-commercial010.txt
+      - name: Operate one independent registered native account and fully replay it
+        run: python -m enterprise078_scale.run --output "$RUNNER_TEMP/enterprise078-scale" --world '${{ matrix.world }}'
+      - name: Retain compact key-free evidence and failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: enterprise078-scale-public-results
-          path: /tmp/enterprise078-scale-run/public/
+          name: enterprise078-scale-${{ matrix.world }}
+          path: |
+            ${{ runner.temp }}/enterprise078-scale/enterprise078-scale-keyfree.zip
+            ${{ runner.temp }}/enterprise078-scale/PUBLIC_PACKAGE.json
+            ${{ runner.temp }}/enterprise078-scale/public/CAMPAIGN.json
+            ${{ runner.temp }}/enterprise078-scale/public/${{ matrix.world }}/result.json
+            ${{ runner.temp }}/enterprise078-scale/public/${{ matrix.world }}/review.json
+            ${{ runner.temp }}/enterprise078-scale/*.failure.txt
           retention-days: 7
-          if-no-files-found: ignore
+          if-no-files-found: error
