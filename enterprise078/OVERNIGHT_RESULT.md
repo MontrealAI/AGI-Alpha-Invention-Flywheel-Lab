@@ -1,5 +1,33 @@
 # Overnight construction result — 3 November 2026 UTC
 
+## Complete eight-world replay and capacity decision — 3 November 2026
+
+All eight exposed PR176 public cases now pass the exact source-pinned **read-only fee correction** and unchanged full native replay. Newly downloaded central, favorable, ordinary_no_inheritance and reference_100k archives were hash-verified, including their nested public packages and frozen source manifests. The six original cost-reconciliation failures remain failures; this is not a rerun or retroactive green workflow. Original source b70bbe7287d547d0d145e7f76e7264c172d031d6 and correction1c8fc184a432a6b84d6f28280580a6354a71a2b8 are unchanged. Native-to-daily aggregation deviation is zero in all eight cases. [Compact complete evidence](evidence/COMPANION_EIGHT_WORLD_REPLAY.json).
+
+Each row is a separate hypothetical-equity account, never pooled. Exact native interval: **2026-11-03 00:00 UTC to2027-11-03 00:00 UTC, exclusive endpoint**. USD:
+
+| Case | Equity | Native trailing365 profit | Revenue | Incurred costs | Cash | Tail reserve | Accepted/collected |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| central | 25,000 | 110,600 | 222,000 | 111,400 | 135,600 | 12,000 | 24/24 |
+| favorable | 25,000 | 120,125 | 240,000 | 119,875 | 145,125 | 13,500 | 27/27 |
+| ordinary_no_inheritance | 25,000 | 110,600 | 222,000 | 111,400 | 135,600 | 12,000 | 24/24 |
+| reference_100k | 100,000 | 129,762.50 | 252,000 | 122,237.50 | 229,762.50 | 13,000 | 26/26 |
+| adverse | 100,000 | -36,900 | 12,000 | 48,900 | 63,100 | 12,300.40 | 3/2 |
+| illiquid | 25,000 | -687.50 | 12,000 | 12,687.50 | 24,312.50 | 12,300.20 | 1/1 |
+| weak | 25,000 | -10,050 | 0 | 10,050 | 14,950 | 0 | 0/0 |
+| no_financing | 0 | -2,700 | 0 | 2,700 | 0 | 0 | 0/0 |
+
+All payables are zero except no_financing2700USD. Protected working capital is1300USD per funded case except adverse3900USD. Separate noncash8% annual equity opportunity charges are2000USD on25k and8000USD on100k; they are not double-counted cash expenses. Whole actual development/model/host bills remain UNKNOWN. Thus these are exact native modeled profits, not updated complete-economic-cost results or real commerce. Ordinary no-inheritance ties central exactly; no discovery/retention advantage is established. Do not extrapolate18 buyers/72 opportunities to3billionUSD.
+
+Built a [read-only capacity evidence instrument](transactional_admission/CAPACITY_EVIDENCE.md) with five tests. It reconciles lease spend commands with completed journal receipts and keeps uncontacted rows separate from buyer intent. The four positive cases each spent5000USD on two earned-funded leases; their18/23/18/20 capacity skips had no buyer response. Expected_net equaled lease cost, not a calibrated forecast. This evidence identifies a missing intent/return mechanism; it does not establish a losing counterfactual lease policy. No PR176 source or accounts were edited; PR177 independently owns the prospective privacy export repair.
+
+The lead's previous head8ef6faa0 has all observed execution checks passing, with publication steps skipped. Main215b22a5 and AGENTS were refreshed. The original account again reopened under its native POSIX lock and audited with identical export66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f. No financial action added. Original declared[0,8760) profit19574.55USD remains historical, with no calendar mapping; capital25,000 equity, revenue42,000, expense22,425.45, cash44,574.55, tail1500, payable0USD. Updated complete-cost profit remains UNKNOWN.
+
+**Next decisive construction:** the lead's native append-only typed catalog transition, not more database infrastructure. Current persistence config and journal header bind the original source/manifest; there is no supported catalog-append operation. Qualify an explicit native upgrade preserving old tape, liabilities, source-specific replay and signing authority on fresh fixtures before original-account use. Then compare a fully costed voluntary SQL/CSV offer against strong ordinary alternatives. For capacity, use paid explicit time-bounded intent or conservative decisions rather than skipped contacts. Investment stays deferred. No formal approval, merge or release;3billionUSD not reached.
+
+
+---
+
 ## Live-source delivery continuation — 3 November 2026
 
 Source preregistration: fad21fecfeae75ed9a695cc5389531a46c8513c1. The previous lead head ece7d202 now has all observed execution checks passing (publication jobs skipped); current main remains215b22a5ed73b82ac1d909328d60157c48bd9958.

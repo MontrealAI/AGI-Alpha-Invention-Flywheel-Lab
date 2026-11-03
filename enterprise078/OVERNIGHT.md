@@ -1,6 +1,6 @@
 # Enterprise078 overnight execution checkpoint
 
-**Latest:** live-WAL snapshot producer now delivers an independently accepted standalone100,000-record database/CSV. Seven new development tests and33 combined regressions passed. Original account audited unchanged; no financial action. Previous lead ece7d202 broad checks passed. PR176 matrix now has six failed world reviews and two passes; four newly completed failures require corrected public replay. Read [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md). Native catalog transition and full-cost voluntary offer remain unresolved; investment deferred.
+**Latest:** all eight companion public cases now pass exact corrected read-only replay with unchanged native audit; six original reviewer failures remain preserved. Central and ordinary control tie at110600USD native annual profit; reference100k reaches129762.50USD, with complete actual costs unknown. Capacity spend was real within the model but skipped contacts supplied no buyer intent. A tested read-only diagnosis and full table are in [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md). Original authority audited unchanged. Typed native catalog transition remains unresolved; no new financial action or3billionUSD result.
 
 Activated by the owner on2November2026 Toronto. Target remains one enterprise's US$3billion trailing365-day complete-modeled-cost profit. It is not achieved. This checkpoint is operational guidance, not a replacement for the owner's full mandate.
 
