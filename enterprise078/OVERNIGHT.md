@@ -1,6 +1,6 @@
 # Enterprise078 overnight execution checkpoint
 
-**Latest:** native-signed inactive catalog preparation is constructed on fresh fixtures: two append-only proposals, eight controls and39 combined local regressions passed. It binds accepted SQL/CSV, candidate source and original financial prefix without changing money/history. Activation and combined native replay remain unimplemented; no proposal or financial action was written to original authority. Original account audited unchanged. Read [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md); investment remains deferred and complete new-work cost unknown.
+**Latest:** costed buyer-intent bundle comparison constructed; nine new controls and48 combined regressions passed. Shared wallets, whole-bundle earned funding, refusal, nonpayment and sunk acquisition are preserved. No new financial action; original audit unchanged. Native activation remains unimplemented. All observed e2c8ff8 execution checks passed; new-head checks are separate. Read [OVERNIGHT_RESULT.md](OVERNIGHT_RESULT.md).
 
 Activated by the owner on2November2026 Toronto. Target remains one enterprise's US$3billion trailing365-day complete-modeled-cost profit. It is not achieved. This checkpoint is operational guidance, not a replacement for the owner's full mandate.
 
