@@ -1,0 +1,14 @@
+{
+  "schema": "omega-water/v1",
+  "name": "Synthetic non-potable water production continuity",
+  "model_route": "local",
+  "freshwater_cap": 1,
+  "sources": [
+    {"id": "source_a", "capacity": 4, "upper_quality": [1, 7], "unit_cost_cents": 20, "consent": true},
+    {"id": "source_b", "capacity": 4, "upper_quality": [7, 1], "unit_cost_cents": 30, "consent": true}
+  ],
+  "sinks": [
+    {"id": "facility_x", "demand": 3, "max_quality": [4, 5], "fresh_unit_cost_cents": 100, "consent": true},
+    {"id": "facility_y", "demand": 3, "max_quality": [5, 4], "fresh_unit_cost_cents": 100, "consent": true}
+  ]
+}
