@@ -96,6 +96,64 @@ class CommittedInterruptionReview(TestCase):
                     self.assertEqual(again['native_summary'], result['native_summary'])
 
 
+    def test_second_committed_release_reopens_multiorder_business_without_double_spend(self):
+        """Cross-order crash: earlier accepted obligations remain while a later release commits.
+
+        The eight source-declared inputs are fixed before running either arm.
+        This is a new engineering interruption site, not a new commerce sample.
+        """
+        indices = (8, 9, 10, 11, 12, 13, 14, 16)
+        with TemporaryDirectory(prefix='omega201-multi-control-') as d:
+            with mock.patch.object(native, 'INDEXES', indices):
+                baseline = native.operate(Path(d), self.POLICY, self.SOURCE, 0)
+                self.assertTrue(native.audit_operation(
+                    Path(d), baseline, self.SOURCE, self.POLICY)['accepted'])
+                baseline_actions = native.read(Path(d) / 'NATIVE_EXPORT.json')['ledger']['actions']
+        self.assertGreaterEqual(baseline['settled'], 2,
+                                'fixed fixture must actually test more than one settlement')
+        with TemporaryDirectory(prefix='omega201-multi-interrupted-') as d:
+            root = Path(d)
+            execute = native.JournalAccount.execute
+            seen_releases = []
+
+            def postcommit(account, op, args, day):
+                receipt = execute(account, op, args, day)
+                if op == 'event' and args.get('action') == 'release':
+                    seen_releases.append(args['id'])
+                    if len(seen_releases) == 2:
+                        raise RuntimeError('INJECTED_SECOND_RELEASE_AFTER_COMMIT')
+                return receipt
+
+            with mock.patch.object(native, 'INDEXES', indices), mock.patch.object(
+                    native.JournalAccount, 'execute', postcommit):
+                with self.assertRaisesRegex(
+                        RuntimeError, 'INJECTED_SECOND_RELEASE_AFTER_COMMIT'):
+                    native.operate(root, self.POLICY, self.SOURCE, 0)
+            self.assertEqual(len(seen_releases), 2)
+            self.assertNotEqual(seen_releases[0], seen_releases[1])
+            self.assertTrue((root / 'account.sqlite').exists())
+            self.assertFalse((root / 'NATIVE_EXPORT.json').exists(),
+                             'interrupted business must not publish completed proof')
+
+            with mock.patch.object(native, 'INDEXES', indices):
+                recovered = native.operate(root, self.POLICY, self.SOURCE, 0)
+                self.assertTrue(native.audit_operation(
+                    root, recovered, self.SOURCE, self.POLICY)['accepted'])
+            recovered_actions = native.read(root / 'NATIVE_EXPORT.json')['ledger']['actions']
+            self.assertEqual(recovered['settled'], baseline['settled'])
+            self.assertEqual(recovered['refused'], baseline['refused'])
+            self.assertEqual(recovered['native_summary'], baseline['native_summary'])
+            self.assertEqual(len(recovered_actions), len(baseline_actions))
+            releases = [a['args']['id'] for a in recovered_actions
+                        if a['op'] == 'event' and a['args'].get('action') == 'release']
+            self.assertEqual(len(releases), recovered['settled'])
+            self.assertEqual(len(releases), len(set(releases)),
+                             'no already-accepted order may settle twice on recovery')
+            with mock.patch.object(native, 'INDEXES', indices):
+                final = native.operate(root, self.POLICY, self.SOURCE, 0)
+            self.assertEqual(final['native_summary'], recovered['native_summary'])
+
+
 if __name__ == '__main__':
     import unittest
     unittest.main()
