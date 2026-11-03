@@ -15,15 +15,28 @@ BASE_PINS = {
     'commercial/ledger.py': '7febf3102ee931e686bdb71bef0cef3e0c43fa5e45ba8a194cf7f0e6833894c5',
     'connected_enterprise/finance.py': '15047f90e9ffb06b5c405d2cdc93facd040fd5c1dfc5b2aadf2abaafb81595e2',
 }
+NATIVE_BASE_PROFILES = {
+    '38846ad9b72ef04c10b2b97b3dbff52d1efc3790': BASE_PINS,
+    '92f4351c99e6d86bf699117d1d9cd8f1ffcb5fbb': {
+        'commercial/ledger.py': '2f5e0dd65a4905a0bfbc205441cbb0a54c344d80234173a36627b11156e7de0e',
+        'connected_enterprise/finance.py': '7cb5f3b14adc6b931fbccbf3cc4f75deb4d0cbe10e876787c09d87f1255d6f79',
+    },
+}
+
+
+def native_basis(hashes):
+    for commit, expected in NATIVE_BASE_PROFILES.items():
+        if hashes == expected:
+            return commit
+    raise ValueError('EXACT_PR191_NATIVE_SOURCE_REQUIRED:unrecognized_or_mixed_profile')
 
 
 def stage(root, target):
     root, target = Path(root).resolve(), Path(target).absolute()
     if target.exists() or target.is_symlink() or any(p.is_symlink() for p in target.parents):
         raise ValueError('FRESH_SAFE_STAGED_RUNTIME_REQUIRED')
-    for name, expected in BASE_PINS.items():
-        if hashlib.sha256((root / name).read_bytes()).hexdigest() != expected:
-            raise ValueError('EXACT_PR191_NATIVE_SOURCE_REQUIRED:' + name)
+    native_hashes = {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in BASE_PINS}
+    basis = native_basis(native_hashes)
     names = sorted(set(SOURCE_PATHS) | set(SERVICE_PATHS) | set(PINS) | set(EXTRA_SOURCES))
     originals = {}
     for name in names:
@@ -51,6 +64,7 @@ def stage(root, target):
         path.write_text(code)
     receipt = {'schema': 'omega/lifecycle-staged-source/v1',
                'scope': 'FRESH_ENGINEERING_FIXTURE_ONLY_NEVER_OPEN_ORIGINAL_AUTHORITY',
+               'native_basis_commit': basis, 'native_basis_sha256': native_hashes,
                'original_sha256': originals,
                'staged_sha256': {n: hashlib.sha256((target / n).read_bytes()).hexdigest() for n in names},
                'modified_native_files': sorted(inserts), 'dispatch_insertions': 3}

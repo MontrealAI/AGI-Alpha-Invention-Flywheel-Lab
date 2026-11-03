@@ -3,7 +3,10 @@ on:
   pull_request:
     paths:
       - 'omega/**'
+      - 'commercial/ledger.py'
+      - 'connected_enterprise/finance.py'
       - 'campaign/omega-continuation-bdd6/**'
+      - 'campaign/omega-corrected-232221a5/**'
       - '.github/workflows/omega-continuation.yml'
   workflow_dispatch:
 permissions:
@@ -31,6 +34,7 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_connected_platform_runtime064.py' -v
           python -m unittest discover -s tests -p 'test_mechanism_harness_026.py' -v
+          python -m unittest discover -s tests -p 'test_connected_finance.py' -v
       - name: Registered observation comparison
         run: python -m omega.observation_run --output "$RUNNER_TEMP/omega-observation.json"
       - name: Native seller engineering fixture and same account recovery
@@ -38,3 +42,5 @@ jobs:
           python -m omega.seller_lifecycle --output "$RUNNER_TEMP/omega-delivery" --interrupt-after A-fund
           python -m omega.seller_lifecycle --output "$RUNNER_TEMP/omega-delivery" --resume
           python -m omega.seller_lifecycle --output "$RUNNER_TEMP/omega-delivery" --audit
+      - name: Corrected native commerce and complete acquisition-path comparison
+        run: python campaign/omega-corrected-232221a5/reproduce.py --output "$RUNNER_TEMP/omega-corrected"

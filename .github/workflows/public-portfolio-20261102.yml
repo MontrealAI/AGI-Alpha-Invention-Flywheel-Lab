@@ -21,6 +21,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
+      - name: Check out immutable runtime for historical evidence only
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 38846ad9b72ef04c10b2b97b3dbff52d1efc3790
+          path: historical-source
+          persist-credentials: false
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
@@ -38,13 +44,15 @@ jobs:
       - name: Independently reconstruct frozen actual scientific artifacts
         run: python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output "$RUNNER_TEMP/public-portfolio-artifact-replay.json"
       - name: Recheck the ten retained native financial exports
+        working-directory: historical-source
         if: hashFiles('experiments/public_portfolio_20261102/evidence/economics-r2/public/RESULTS.json') != ''
-        run: python experiments/public_portfolio_20261102/verification/r2_recheck_retained.py --public-root experiments/public_portfolio_20261102/evidence/economics-r2/public --audit-receipts experiments/public_portfolio_20261102/evidence/economics-r2/audit-receipts --output "$RUNNER_TEMP/public-portfolio-retained-finance.json"
+        run: python experiments/public_portfolio_20261102/verification/r2_recheck_retained.py --public-root "$GITHUB_WORKSPACE/experiments/public_portfolio_20261102/evidence/economics-r2/public" --audit-receipts "$GITHUB_WORKSPACE/experiments/public_portfolio_20261102/evidence/economics-r2/audit-receipts" --output "$RUNNER_TEMP/public-portfolio-retained-finance.json"
       - name: Recheck the separately retained recovery engineering evidence
+        working-directory: historical-source
         if: hashFiles('experiments/public_portfolio_20261102/evidence/economics-r2/public/RESULTS.json') != ''
         run: |
-          python experiments/public_portfolio_20261102/verification/r2_recheck_recovered_retained.py --public-root experiments/public_portfolio_20261102/evidence/economics-r2/public --original-four-report experiments/public_portfolio_20261102/verification/r2_actual_recovery_audit_001.json --output "$RUNNER_TEMP/public-portfolio-recovered-four.json"
-          python experiments/public_portfolio_20261102/verification/r2_additional_recovery_replay.py --public-root experiments/public_portfolio_20261102/evidence/economics-r2/public --output "$RUNNER_TEMP/public-portfolio-recovered-two.json"
+          python experiments/public_portfolio_20261102/verification/r2_recheck_recovered_retained.py --public-root "$GITHUB_WORKSPACE/experiments/public_portfolio_20261102/evidence/economics-r2/public" --original-four-report "$GITHUB_WORKSPACE/experiments/public_portfolio_20261102/verification/r2_actual_recovery_audit_001.json" --output "$RUNNER_TEMP/public-portfolio-recovered-four.json"
+          python experiments/public_portfolio_20261102/verification/r2_additional_recovery_replay.py --public-root "$GITHUB_WORKSPACE/experiments/public_portfolio_20261102/evidence/economics-r2/public" --output "$RUNNER_TEMP/public-portfolio-recovered-two.json"
       - name: Retain compact source-bound qualification receipt
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
