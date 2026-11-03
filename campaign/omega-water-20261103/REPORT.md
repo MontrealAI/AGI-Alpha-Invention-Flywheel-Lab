@@ -163,3 +163,17 @@ physical water deployment, measured customer benefit, acquisition economics and
 complete model/host/support cost remain unresolved. Simulated rights are explicit
 world assumptions, never a real license grant. No paid API, actual purchase,
 outreach, sale, session, deployment, merge or release occurred.
+
+## Historical source isolation in CI
+
+Exact-head Omega qualification passed on 92f4351: all 59 targeted tests, 16
+platform tests and both native execution/replay arms. Broader checks then exposed
+a source-bound historical-fixture mismatch. Production historical recovery pins
+and archived evidence are unchanged. Fresh nonbusiness recovery tests now scope
+the expected source to their own new fixture and separately test that the real
+original-source guard refuses it without appending. Retained financial/recovery
+audits run using the immutable pre-Omega runtime at 38846ad, while reading the
+current PR's retained evidence by absolute path. This preserves both historical
+authority and current evidence tamper detection; it is not a source rehash or
+account migration. Hosted qualification of this CI separation is reported in
+the PR status, separately from the already qualified Omega simulation.
