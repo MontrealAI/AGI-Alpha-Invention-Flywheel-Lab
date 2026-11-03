@@ -32,4 +32,13 @@ class HttpTests(unittest.TestCase):
         with self.assertRaises(HTTPError) as error:urlopen(Request(self.url+'/solve',b'{'))
         self.assertEqual(error.exception.code,400)
         with urlopen(self.url) as response:self.assertEqual(response.status,200)
+    def test_huge_integer_request_returns_resource_checkpoint(self):
+        body={'request':json.loads((ROOT/'omega/request.json').read_text()),'proposal':None}
+        body['request']['sources'][0]['capacity']=10**100
+        body['request']['sinks'][0]['demand']=10**100
+        request=Request(self.url+'/solve',json.dumps(body).encode(),{'Content-Type':'application/json','Origin':self.url})
+        with self.assertRaises(HTTPError) as error:urlopen(request)
+        self.assertEqual(error.exception.code,400)
+        self.assertEqual(json.load(error.exception),{'error':'RESOURCE_CHECKPOINT_NOT_INFEASIBILITY'})
+        with urlopen(self.url) as response:self.assertEqual(response.status,200)
 if __name__=='__main__':unittest.main()

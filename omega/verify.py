@@ -73,12 +73,17 @@ def exhaustive_optimum(request, *, max_candidates=1000000):
     each demand. Never invokes either constructor. Resource refusal is not an
     infeasibility proof. This is a verification oracle, not a scalable competitor.
     """
-    from math import prod
     validate(request)
+    if type(max_candidates) is not int or max_candidates <= 0:
+        raise ValueError('POSITIVE_CANDIDATE_BUDGET_REQUIRED')
     sources, sinks = request['sources'], request['sinks']
-    ranges = [range(min(source['capacity'],sink['demand'])+1) for sink in sinks for source in sources]
-    if prod(len(values) for values in ranges) > max_candidates:
-        raise RuntimeError('EXACT_ORACLE_RESOURCE_CHECKPOINT_NOT_INFEASIBILITY')
+    widths = [min(source['capacity'],sink['demand'])+1 for sink in sinks for source in sources]
+    candidate_count = 1
+    for width in widths:
+        if width > max_candidates // candidate_count:
+            raise RuntimeError('EXACT_ORACLE_RESOURCE_CHECKPOINT_NOT_INFEASIBILITY')
+        candidate_count *= width
+    ranges = [range(width) for width in widths]
     best, examined = None, 0
     ns = len(sources)
     for flat in product(*ranges):

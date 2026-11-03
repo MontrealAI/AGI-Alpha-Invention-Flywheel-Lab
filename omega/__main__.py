@@ -4,7 +4,10 @@ import argparse
 import html
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+import os
 from pathlib import Path
+import stat
+import tempfile
 from .runner import buyer, experiment
 
 PAGE = '''<!doctype html><html lang="en"><meta charset="utf-8"><title>FLYWHEEL Ω | Water resilience probe</title>
@@ -49,6 +52,34 @@ def serve(root, port):
     server.serve_forever()
 
 
+def write_result(destination, value):
+    destination = Path(destination)
+    payload = (json.dumps(value, indent=2, sort_keys=True) + '\n').encode()
+    descriptor, temporary = tempfile.mkstemp(prefix='.' + destination.name + '.', suffix='.partial', dir=destination.parent)
+    try:
+        with os.fdopen(descriptor, 'wb') as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        try:
+            os.link(temporary, destination)
+        except FileExistsError:
+            flags = os.O_RDONLY | getattr(os, 'O_NOFOLLOW', 0) | getattr(os, 'O_NONBLOCK', 0)
+            if destination.is_symlink():
+                raise FileExistsError('OUTPUT_EXISTS_AND_IS_NOT_IDENTICAL_REGULAR_FILE')
+            with os.fdopen(os.open(destination, flags), 'rb') as handle:
+                info = os.fstat(handle.fileno())
+                if not stat.S_ISREG(info.st_mode) or info.st_size != len(payload) or handle.read(len(payload) + 1) != payload:
+                    raise FileExistsError('OUTPUT_EXISTS_AND_IS_NOT_IDENTICAL_REGULAR_FILE')
+        directory = os.open(destination.parent, os.O_RDONLY)
+        try:
+            os.fsync(directory)
+        finally:
+            os.close(directory)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     commands=parser.add_subparsers(dest='command',required=True)
@@ -63,8 +94,7 @@ def main():
     else:
         value=experiment(root)
     destination=Path(args.output)
-    with destination.open('x') as handle:
-        json.dump(value,handle,indent=2,sort_keys=True); handle.write('\n')
+    write_result(destination, value)
     print(destination)
 
 
