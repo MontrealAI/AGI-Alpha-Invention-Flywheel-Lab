@@ -1,0 +1,26 @@
+{
+  "correction": "Absent manifest selects unchanged historical full-export path. Explicit expansion schema still selects live snapshot optimization.",
+  "date": "2026-11-03",
+  "failure": {
+    "commit": "6ff45e25a85a590d4921aef6e197148252b92cce",
+    "job": 126121395322,
+    "reason": "HistoricalSnapshotAccount intentionally implements the old read-only snapshot protocol without manifest; schema dispatch raised AttributeError.",
+    "workflow_run": 41692869255
+  },
+  "frozen_confirmation_commit": "6ff45e25a85a590d4921aef6e197148252b92cce",
+  "parent_commit": "6eba90f953af4c4db31bea056e9784ef3b17079d",
+  "qualification": {
+    "command": "python -m unittest tests.test_account_snapshot_expansion experiments.public_portfolio_20261102.verification.test_recovery_fast -v",
+    "log_sha256": "a8734d4ecd9b92aeed72a3bd81705e383a092f9fd1267f4f3a05959073d99da0",
+    "passed": 21,
+    "seconds": 433.865,
+    "tests": 21
+  },
+  "running_confirmation_changed": false,
+  "schema": "omega/snapshot-compatibility-correction/v1",
+  "scope": "Qualified targeted compatibility correction; earlier failing workflow remains failed.",
+  "source_hashes": {
+    "adaptive_enterprise/account.py": "cd100ea22589616112ff1caa1da984cb62bc121219be8720c2dbae943819713d",
+    "tests/test_account_snapshot_expansion.py": "9013f55877f91d5b18736d1c28e9492ce871ad7f664d476bb6ad5cf4c3471bfa"
+  }
+}

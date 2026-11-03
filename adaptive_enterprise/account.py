@@ -390,7 +390,7 @@ class Account:
 
     def snapshot(self):
         self._assert_owner()
-        if self.manifest.get('schema') == 'omega/expansion-native/v1':
+        if getattr(self, 'manifest', {}).get('schema') == 'omega/expansion-native/v1':
             # The snapshot needs current financial aggregates and history identity,
             # not materialized invoices, every SQL row and investment witnesses.
             # Recompute both from the live owned engine: no cached balance, digest,

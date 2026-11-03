@@ -7,8 +7,10 @@ import copy
 from pathlib import Path
 import tempfile
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
+from adaptive_enterprise.account import Account
 from commercial.ledger import digest
 from omega.expansion_native import NativeBridge
 from omega.test_expansion_native import order
@@ -25,6 +27,20 @@ def full_export_snapshot(account):
 
 
 class ExpansionSnapshotTests(unittest.TestCase):
+    def test_historical_readonly_wrapper_without_manifest_retains_export_path(self):
+        # FastPrefixRelay deliberately exposes only the old snapshot protocol;
+        # it is not an Account instance and has no manifest attribute.
+        tape = {'summary': {'cash': 123}, 'config': {'contract': 'historical'},
+                'actions': [], 'actions_sha256': digest([])}
+        calls = []
+        wrapper = SimpleNamespace(
+            _assert_owner=lambda: calls.append('guard'),
+            _owner=SimpleNamespace(export=lambda: calls.append('export') or tape),
+            filesystem='LOCAL_POSIX')
+        self.assertEqual(Account.snapshot(wrapper), full_export_snapshot(wrapper))
+        self.assertEqual(calls, ['guard', 'export', 'export'])
+        self.assertFalse(hasattr(wrapper, 'manifest'))
+
     def assertEquivalent(self, bridge):
         account = bridge.account._account
         self.assertEqual(account.snapshot(), full_export_snapshot(account))
