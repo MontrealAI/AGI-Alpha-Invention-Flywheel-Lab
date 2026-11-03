@@ -123,9 +123,10 @@ def robust_scores(X, y, names):
             raise ValueError("REGISTERED_COUNT_CLASS_MISSING")
         diff = X[ids_p].mean(axis=0) - X[ids_m].mean(axis=0)
         by_count[count] = (diff ** 2).sum(axis=1)
-    fisher = fisher_scores(X, y)
-    regularizer = np.maximum(0.05, np.max(fisher)) 
-    return np.minimum(by_count["1"], by_count["2"]) / regularizer
+    plastic = X[np.array(y) == "PLASTIC"]
+    metal = X[np.array(y) == "METAL"]
+    within = ((plastic - plastic.mean(axis=0)) ** 2).sum(axis=(0,2)) / len(plastic) + ((metal - metal.mean(axis=0)) ** 2).sum(axis=(0,2)) / len(metal)
+    return np.minimum(by_count["1"], by_count["2"]) / (0.05 + within)
 
 def rank_top(scores):
     return sorted(range(PATTERNS), key=lambda i: (-float(scores[i]), i))[:BUDGET]
