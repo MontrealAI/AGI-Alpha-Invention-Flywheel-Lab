@@ -8,6 +8,10 @@ closed model. The original source and compact evidence remain explicitly
 historical in [HISTORICAL_REPORT.md](HISTORICAL_REPORT.md) and
 [HISTORICAL_RESULT.json](HISTORICAL_RESULT.json).
 
+Executed source: [5e43e44](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/5e43e44b9d143efac7f9f9c535ef99ea5edb0f44). The changed source files were fetched through GitHub and compared byte-for-byte
+with the executed local source; native registration additionally binds all
+required source hashes.
+
 The correction implements and executes the business loop rather than blocking
 fictional sales on actual customers. It does not claim actual commerce. Exact
 source hashes, native outcome hashes, all policy/world results and conditional
@@ -61,7 +65,9 @@ premium**. At total founder willingness to pay of US$20,000 or less, the selecte
 policy is non-entry. At US$1,000 capital it also selects non-entry. Authored
 20/80/160 packaging hours give expected outcomes US$2,168.89/1,004.97/24.27.
 These are scenario calculations, not forecast accuracy or established costs.
-No policy is called globally optimal: exhaustive optimality is only within the
+Actions adapt between quarterly batches of three prospects, not between each
+individual within-quarter buyer. No policy is called globally optimal:
+exhaustive optimality is only within the
 declared finite prior, action set, observation model and horizon. It is not an
 equilibrium against arbitrary competitors or proof of real-market optimality.
 
@@ -70,6 +76,19 @@ An autonomous scenario must instead state its own machine, acquisition and
 support cost assumptions. Actual model/host/subscription allocation is unknown,
 not free, and optional founder access necessarily requires the founder's time.
 No US$8,000 construction figure is treated as measured or established.
+
+A separate **16-world autonomous software arm** also executed and independently
+replayed. It imposes no developer or webinar payroll, disables human founder
+slots and uses an authored US$1,000 machine-build envelope (US$400 allocated to
+software), US$1 research/reach actions and the disclosed marginal costs/fees.
+It selects software without research: **US$246.89 expected modeled profit**,
+worst **−US$430.91**. The equally permitted no-research policy ties exactly.
+Across its alternative worlds, 24 software orders accept and six refund; no
+founder or webinar orders occur. This proves the machinery no longer forbids
+autonomous ordinary sales, not that US$1 acquires three real prospects or that
+actual machine/hosting/support costs are known. The US$100 build-envelope pure
+sensitivity gives US$606.89 expected, again conditional on the same authored
+demand; it is not separately native-posted. All 96 accounts are independent.
 
 ## Buyer outcome and distinct achievements
 
@@ -99,23 +118,25 @@ customer value or market evidence.
 
 ## Verification and scope
 
-58 targeted tests pass across buyer, historical seller, HTTP, product, strategy
+59 targeted tests pass across buyer, historical seller, HTTP, product, strategy
 and native operator. Independent review rechecked the unpaid-cost bypass,
 information sets, exact native command sequencing, policy/source/report replay,
-claim maturity and account-reset refusal. All three products accept and refund
+claim maturity and account-reset refusal. An additional autonomous software
+run exposed a checker mismatch after order nine: native maturities sort order
+IDs lexicographically. The checker now follows that native ordering and retains
+a regression; no payments, balances or source history were rewritten. All three products accept and refund
 under dedicated tests; the central policy need not choose every product.
 Actual product preparation requires paid costs, not merely incurred payables.
 The downloadable bundle runs `python -m omega solve` outside the repository.
 
-The final 80-account run took 39.279 seconds wall time (35.205 user CPU, 3.847
-system CPU, 26,484 KB maximum RSS); independent replay took 2.486 seconds. These
-are execution-resource measurements, not dollar invoices. Actual assistant
+Exact execution-resource measurements are recorded in RESULT.json for the
+source-matched 80-account run and its independent replay. These are wall/CPU/RSS
+measurements, not dollar invoices. Actual assistant
 inference, host billing and complete costs remain unknown.
 
 Existing finance/platform tests passed locally. Additional legacy commerce tests
 were blocked by absent sparse-checkout fixtures and network access; this is not
-a whole-repository pass. Hosted CI must be inspected for the corrected exact
-head. Previously, all 12 broader workflows passed the prior 38846ad head; that
+a whole-repository pass. Hosted CI status is reported separately for the corrected exact head. Previously, all 12 broader workflows passed the prior 38846ad head; that
 is not substituted for verification of these new source changes. Browser visual
 render/download interaction remains unverified because the environment blocked
 browser startup; HTTP, repeated/invalid/cross-site flows and JavaScript syntax
