@@ -50,6 +50,9 @@ INVENTORY_SOURCE_PATHS = ('inventory061/__init__.py', 'inventory061/service.py',
 
 def source_paths_for_manifest(manifest=None):
     schema = manifest.get('schema') if isinstance(manifest, dict) else None
+    if schema == 'industrial064/native-services/v1':
+        from industrial064.service import source_paths
+        return tuple(dict.fromkeys(SOURCE_PATHS + tuple(source_paths(Path(__file__).resolve().parents[1], manifest))))
     if schema == 'flexibility063/native-services/v1':
         from flexibility063.service import source_paths
         return tuple(dict.fromkeys(SOURCE_PATHS + tuple(source_paths(Path(__file__).resolve().parents[1]))))
