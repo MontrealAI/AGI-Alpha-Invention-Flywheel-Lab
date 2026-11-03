@@ -1,0 +1,33 @@
+{
+  "schema": "public-portfolio/independent-finalization-checks/v2",
+  "checker_sha256": "037659210ca53f93fcde9c528c8b98ccd1f7dc88d58cf8abd8803f988e148b30",
+  "finalizer_source_sha256": "4738f988c6584a20bc3e59b519dceccc8fc0ae37eda53bd36df711e388e06795",
+  "checks": {
+    "public_consistency_purpose-central-100k": true,
+    "public_consistency_interface-central-100k": true,
+    "public_consistency_interface-earned-only-k2": true,
+    "wrong_compacted_profit_refused": true,
+    "wrong_trailing_profit_refused": true,
+    "wrong_window_calendar_refused": true,
+    "wrong_distinct_buyers_refused": true,
+    "active_slot_refuses_finalization_lock": true,
+    "all_idle_slots_held_prevent_new_worker": true,
+    "slots_released_after_finalization_context": true,
+    "stop_appearing_before_idle_lock_is_rechecked": true,
+    "stop_race_writes_no_results": true,
+    "reviewed_source_unchanged_during_checks": true
+  },
+  "passed": true,
+  "public_input_sha256": {
+    "purpose-central-100k/RESULT.json": "9c558330985c4f38e54bc79ab336c78abfffb32c1e48ea2df58f39b4af2535ea",
+    "purpose-central-100k/account.public.json": "21fd8ebcc6483d524af307331327ab6ef833c73db603fb0a6cf767735d1e1255",
+    "purpose-central-100k/aggregation.json": "9a000aea27c7346806be2fd4e0a94825e5c1866164ba4b1ccc45d5ff9199d7cf",
+    "interface-central-100k/RESULT.json": "cec39b3c98df20b1efc3bc7fd765a98e283c83daa00e33ebc1832bf89e00e257",
+    "interface-central-100k/account.public.json": "cc40648e87c865d6d857920447be040486a26d2289d7ec7c0d12fc7b355afbc7",
+    "interface-central-100k/aggregation.json": "357641cea0ebeed4ababf42f2a65afd5d5db43cd466dafc72bae23988918396d",
+    "interface-earned-only-k2/RESULT.json": "2d0680ac15f2f2a64fc28ba6115fb6559eaf40b39ddc9c77e565ea043de0daaa",
+    "interface-earned-only-k2/account.public.json": "5c9003a2cf3bc59af45a440ee0ac3ef42e71de46d4e4b3efed86cbf761a5a46b",
+    "interface-earned-only-k2/aggregation.json": "8514d6555156c37d6edd234a6dc47f341ca19881b2e3b93f22ed83f26f0a34a0"
+  },
+  "scope": "Three fixed complete public exports were read without mutation; fault tests alter copies or disposable metadata only. No private campaign account/key was read or opened. No110-case finalization or independent complete financial audit is claimed."
+}

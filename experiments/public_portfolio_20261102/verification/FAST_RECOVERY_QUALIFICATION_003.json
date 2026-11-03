@@ -1,0 +1,52 @@
+{
+  "schema": "public-portfolio/fast-prefix-recovery-qualification/v3",
+  "status": "PASS",
+  "started_at_utc": "2026-11-02T21:28:58.991505+00:00",
+  "wall_seconds": 201.93153433299813,
+  "tests_run": 16,
+  "failures": 0,
+  "errors": 0,
+  "source_hashes": {
+    "experiments/public_portfolio_20261102/recovery_fast.py": "7ad1153471a7091c7173fb936473d810c0a01e9e9ba1295ec4b03812974e937a",
+    "experiments/public_portfolio_20261102/recovery_run.py": "e067f29f2bea2815165ef914d7c887060f4003e42d0a059373e63f3f0fa73beb",
+    "experiments/public_portfolio_20261102/FAST_RECOVERY_AMENDMENT_R2_002.json": "0d0f259ded1e10443d00c3e61cc98330a15a008a2df82cdf2f03f18a10efcf30",
+    "experiments/public_portfolio_20261102/verification/test_recovery_fast.py": "1d880104f484b13ba660028bc17c9a60408176c6413ef08481320a762a1565aa",
+    "experiments/public_portfolio_20261102/verification/test_recovery.py": "b4faeeafe584f09d194c2c99ba3dc2c6c686c48278d64e71832e25c21cec8587",
+    "experiments/public_portfolio_20261102/verification/verify_finance.py": "e765dbbc28455bd14ab3c119ce014fbc36ac508e9d108a6232254487124869b8",
+    "experiments/public_portfolio_20261102/verification/verify_science.py": "e37ff7341cfca401885b98acdce107a532d781e4633c5539f6544014cd5ea2a1"
+  },
+  "source_unchanged_through_tests": true,
+  "native_source_sha256": "bb74d40f7a84ca155189f908c091db32b27093e203e0d63696f327a9a2492901",
+  "scope": "NONBUSINESS boundary fixtures only; no original R2 account opened/modified. Exact full original-prefix equality has no ignored fields. Frozen financial/native predicates unchanged. Sixteen tests include repeated explicit host interruptions with paid loss retained on same account, completedRESULT read-only closeout, corrupt-result refusal, and stale-review registration refusal. Metadata mocks are not businesses or financial findings.",
+  "tests": [
+    "test_01_mid_begin_exact_same_account",
+    "test_02_after_prepared_delivery_and_cash_collection",
+    "test_03_pending_native_intent_normal_authenticated_reopen",
+    "test_04_final_result_lost_after_complete_ledger",
+    "test_05_manifest_mismatch_rejected_before_live_append",
+    "test_06_controller_prefix_mismatch_rejected_before_append",
+    "test_07_complete_case_read_only_no_second_recovery",
+    "test_08_pending_earned_reservation_keeps_authority_and_obligation",
+    "test_09_historical_refused_spend_uses_historical_cash",
+    "test_10_changed_helper_identity_rejected_without_mutating_source",
+    "test_11_corrupt_partial_public_output_fails_without_overwrite",
+    "test_12_two_maturities_in_one_advance_switch_individually",
+    "test_13_complete_result_read_only_closeout_without_economic_rerun",
+    "test_14_corrupt_completed_result_closeout_rejected_read_only",
+    "test_15_two_explicit_host_interruptions_preserve_paid_original_prefix",
+    "test_16_review_of_another_candidate_cannot_register_recovery"
+  ],
+  "preserved_prior_qualification": {
+    "path": "experiments/public_portfolio_20261102/verification/FAST_RECOVERY_QUALIFICATION_002.json",
+    "sha256": "fa40d633e589eac2ac651155ce77dc040071e9c2bfb03058464ce0e15871b1d4",
+    "status": "FAIL",
+    "tests_run": 14,
+    "passed": 13,
+    "failure": "Changed historical request correctly rejected before append; inherited fixture expected recovery001 errorlabel instead of fast002 request/plan/funding label.",
+    "correction": "Override only fasttest06 expected diagnostic label, keeping same corrupted-request input and exact unchanged native-tape assertion. No financial predicate, pricing rule, plan, source guard or account changed."
+  },
+  "other_development_corrections": [
+    "Historical snapshot facade initially lacked export() required by frozen advance; added read-only original prefix export before any actual campaign use."
+  ],
+  "unknown_original_interrupted_process_resource_totals": null
+}

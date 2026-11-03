@@ -1,0 +1,24 @@
+{
+  "schema": "public-portfolio-independent-reproduction/v1",
+  "stage1": {
+    "nonce": "4c285531f59b9ffd5b75d1e7687348db8ced200b3c30705892dc113fe39a40a9",
+    "commitment_sha256": "82e582eb59dc658fd20b9490327d7b6c383d2d3125e8e0d0cf4877251068893f",
+    "protocol": "VERIFICATION_PROTOCOL.json",
+    "checker": "verify_science.py",
+    "arrangement_checker": "verify_arrangement.py",
+    "source_freezes": {
+      "interface_foundry": "211963d53628604482e66a34deba384c581cf684",
+      "purpose_complementarity": "34f0319d520fcab78796e4ee10d5401e7afd433d",
+      "arrangement": "46bae5337db2d481d05ff4ab3a466332b84be193"
+    }
+  },
+  "timing_followup": {
+    "nonce": "ef309b47f00e36cea4c4fc77b261749972a394b1ade7b6d1bae3507ef8e448be",
+    "commitment_sha256": "8c267336f599ad385ca1ef7f25e99d9a8fb314b082e69d7805b8658841861d81",
+    "protocol": "TIMING_VERIFICATION_PROTOCOL.json",
+    "checker": "verify_timing_followup.py",
+    "source_freeze": "4d49e8161e8253627c12f2e573cea36ed5b67bdc"
+  },
+  "disclosure": "Nonces revealed only after the registered independent evaluations completed. They are reproducibility seeds, not account credentials. Shared-host procedural separation only.",
+  "publication": "Preregistrations and source were committed locally before outcomes. Public publication occurred later; no public-before-outcome preregistration claim is made."
+}

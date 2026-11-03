@@ -1,0 +1,27 @@
+{
+  "schema": "public-portfolio/one-case-dispatch-admission-qualification/v1",
+  "status": "PASS",
+  "recorded_at_utc": "2026-11-02T21:10:37.049205+00:00",
+  "tests_run": 6,
+  "failures": 0,
+  "errors": 0,
+  "wall_seconds": 0.011,
+  "source_hashes": {
+    "experiments/public_portfolio_20261102/dispatch_case.py": "3071f7cba3c6bab60d647886db0688124de6f8867f7e74dea223b8eb09b2c521",
+    "experiments/public_portfolio_20261102/EXECUTION_AMENDMENT_R2_002.json": "162ae39190ddc5230c254bcac34c65a5fce8a11503099475421a03a70e879600",
+    "experiments/public_portfolio_20261102/verification/test_dispatch_case.py": "a219acb848a4c29bb1b8b6bab49d661226401bf40f543a75c3569d6c80586b49",
+    "experiments/public_portfolio_20261102/qualification_run.py": "de5db6ce1b43c83c2f131b5aedbdf205630d0d876fe06ebfe2791361e73e387f"
+  },
+  "native_source_sha256": "bb74d40f7a84ca155189f908c091db32b27093e203e0d63696f327a9a2492901",
+  "scope": "Admission mechanics only: original-worker once, no completecase reentry, actualfailure globalstop, four kernel slots, changed dispatch source refused before reservation. Mock worker outputs are explicitly nonbusiness guard fixtures, not financial acceptance. Actual unchanged worker/native guards retain their separate source-bound qualification. No actual R2 account opened or modified. Root-requested full native source mismatch and malformed publication SHA are now also refused before admission.",
+  "prior_admission_qualification": {
+    "tests_run": 4,
+    "source_hashes": {
+      "experiments/public_portfolio_20261102/dispatch_case.py": "df5f42e693d100616a9285d11c40f22510c9ce8e425ccbe854a4a462a3d8e7ad",
+      "experiments/public_portfolio_20261102/EXECUTION_AMENDMENT_R2_002.json": "162ae39190ddc5230c254bcac34c65a5fce8a11503099475421a03a70e879600",
+      "experiments/public_portfolio_20261102/verification/test_dispatch_case.py": "7f88cd38766bb416569e8e8095a91a60e89f0234d90f9eabca2878edc7ba8436",
+      "experiments/public_portfolio_20261102/qualification_run.py": "de5db6ce1b43c83c2f131b5aedbdf205630d0d876fe06ebfe2791361e73e387f"
+    },
+    "scope": "Initial4 admission tests passed; root review then required explicit full-native-source admission guard and publication SHA validation before any actual dispatch."
+  }
+}

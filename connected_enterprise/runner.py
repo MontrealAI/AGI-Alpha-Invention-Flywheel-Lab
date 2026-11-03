@@ -27,7 +27,7 @@ def source_paths(root):
     names=set(inherited_paths(root))
     for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('campaign/connected-registrations','*.json')]:
         names.update(p.relative_to(root).as_posix() for p in (root/folder).glob(pattern) if p.is_file())
-    names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','verification/scan_adaptive_cancellation_history.py','evidence/cancellation-retirement/HISTORICAL_SCAN.json','evidence/cancellation-retirement/COUNTEREXAMPLE.before.json','docs/connected014/OPERATOR.md','AGENTS.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())
+    names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','scripts/stage_cycle007_sources.py','verification/scan_adaptive_cancellation_history.py','evidence/cancellation-retirement/HISTORICAL_SCAN.json','evidence/cancellation-retirement/COUNTEREXAMPLE.before.json','docs/connected014/OPERATOR.md','AGENTS.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())
     names.update(p for p in ['campaign/overnight-022/OPERATOR_INPUT.json','scripts/measure_overnight022.py'] if (root/p).is_file())
     if (root/'connected_enterprise/funded_csv_adapter028.py').is_file():
         required={'mechanism_harness/'+name for name in ('__init__.py','__main__.py','core.py','evidence.py','experiment.py','operating027.py','study027.py')}
@@ -141,6 +141,31 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in required):
             raise ValueError('BLUE_SKY064_SOURCE_DEPENDENCY_MISSING')
         names.update(required)
+    if (root/'experiments/public_portfolio_20261102/service.py').is_file():
+        from experiments.public_portfolio_20261102.service import source_paths as portfolio_paths
+        names.update(portfolio_paths(root))
+        names.update(p.relative_to(root).as_posix()
+                     for p in (root/'experiments/public_portfolio_20261102').rglob('*.md') if p.is_file())
+        names.update(name for name in ('experiments/public_portfolio_20261102/products.py',
+                     'tests/test_public_portfolio_20261102.py', 'requirements-cycle004.txt',
+                     '.github/workflows/public-portfolio-20261102.yml') if (root/name).is_file())
+        extra_manifest='experiments/public_portfolio_20261102/RELEASE_EXTRAS.json'
+        if (root/extra_manifest).is_file():
+            extra=strict_json((root/extra_manifest).read_bytes())
+            if (not isinstance(extra,dict) or set(extra)!={'schema','files'}
+                    or extra['schema']!='public-portfolio/release-extras/v1'
+                    or not isinstance(extra['files'],list)
+                    or any(not isinstance(name,str) for name in extra['files'])
+                    or len(set(extra['files']))!=len(extra['files'])):
+                raise ValueError('PORTFOLIO_EXACT_RELEASE_EXTRAS_REQUIRED')
+            for name in extra['files']:
+                path=Path(name)
+                if (not name.startswith('experiments/public_portfolio_20261102/')
+                        or path.is_absolute() or '..' in path.parts or path.as_posix()!=name
+                        or path.suffix not in {'.py','.json','.md','.svg','.txt'}
+                        or not (root/path).is_file()):
+                    raise ValueError('PORTFOLIO_PUBLIC_RELEASE_EXTRA_REQUIRED')
+            names.update([extra_manifest,*extra['files']])
     # Include the independently frozen paired-acquisition study as one complete
     # public source/evidence unit. Missing members must not silently disappear.
     paired = 'experiments/paired_acquisition_20261102'

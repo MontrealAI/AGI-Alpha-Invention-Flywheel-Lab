@@ -1,0 +1,50 @@
+{
+  "schema": "public-portfolio/fast-prefix-recovery-qualification/v2",
+  "status": "FAIL",
+  "started_at_utc": "2026-11-02T21:19:16.935114+00:00",
+  "wall_seconds": 171.2238125490003,
+  "tests_run": 14,
+  "failures": 1,
+  "errors": 0,
+  "source_hashes": {
+    "experiments/public_portfolio_20261102/recovery_fast.py": "ac1e86129ae195dab0cf2893e9ccec9c5abfae9d1edd37c28444c6484f6f2920",
+    "experiments/public_portfolio_20261102/recovery_run.py": "e067f29f2bea2815165ef914d7c887060f4003e42d0a059373e63f3f0fa73beb",
+    "experiments/public_portfolio_20261102/FAST_RECOVERY_AMENDMENT_R2_002.json": "3290476d6201e30e7599f9e22e5b6695602c7593787fadb591d5bbc744dda2ec",
+    "experiments/public_portfolio_20261102/verification/test_recovery_fast.py": "abaf55d7ffcdab1bfa29fd74f94ca3dbe09edafd0cddef17fea9002f59a7c044",
+    "experiments/public_portfolio_20261102/verification/test_recovery.py": "b4faeeafe584f09d194c2c99ba3dc2c6c686c48278d64e71832e25c21cec8587",
+    "experiments/public_portfolio_20261102/verification/verify_finance.py": "e765dbbc28455bd14ab3c119ce014fbc36ac508e9d108a6232254487124869b8",
+    "experiments/public_portfolio_20261102/verification/verify_science.py": "e37ff7341cfca401885b98acdce107a532d781e4633c5539f6544014cd5ea2a1"
+  },
+  "source_unchanged_through_tests": true,
+  "native_source_sha256": "bb74d40f7a84ca155189f908c091db32b27093e203e0d63696f327a9a2492901",
+  "scope": "NONBUSINESS boundary fixtures only. No original R2 business account opened/modified. Exact full prefix equality includes original exported proof metadata and journal fields without ignored signature/hash fields; no original signer/key or company cash copied. A pure native verifier is not a business/fundsource. Fourteen tests retain original native/economic/source predicates, add read-only complete-result closeout and corrupt-result rejection.",
+  "tests": [
+    "test_01_mid_begin_exact_same_account",
+    "test_02_after_prepared_delivery_and_cash_collection",
+    "test_03_pending_native_intent_normal_authenticated_reopen",
+    "test_04_final_result_lost_after_complete_ledger",
+    "test_05_manifest_mismatch_rejected_before_live_append",
+    "test_06_controller_prefix_mismatch_rejected_before_append",
+    "test_07_complete_case_read_only_no_second_recovery",
+    "test_08_pending_earned_reservation_keeps_authority_and_obligation",
+    "test_09_historical_refused_spend_uses_historical_cash",
+    "test_10_changed_helper_identity_rejected_without_mutating_source",
+    "test_11_corrupt_partial_public_output_fails_without_overwrite",
+    "test_12_two_maturities_in_one_advance_switch_individually",
+    "test_13_complete_result_read_only_closeout_without_economic_rerun",
+    "test_14_corrupt_completed_result_closeout_rejected_read_only"
+  ],
+  "development_corrections": [
+    {
+      "observed": "First fast historical snapshot facade lacked export() required by unchanged advance_financial;3 selected tests raised AttributeError before live suffix.",
+      "correction": "Add read-only historical adaptive export, using exact native prefix and original exported metadata; no original file/model/guard/account changed."
+    }
+  ],
+  "unknown_original_interrupted_process_resource_totals": null,
+  "diagnostics": [
+    {
+      "test": "test_06_controller_prefix_mismatch_rejected_before_append (experiments.public_portfolio_20261102.verification.test_recovery_fast.FastRecoveryTests.test_06_controller_prefix_mismatch_rejected_before_append)",
+      "traceback": "ValueError: FAST_RECOVERY_EXACT_REQUEST_PLAN_FUNDING_PREFIX_REQUIRED:2\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/workspace/scratch/b9221b226d72/agi-alpha-portfolio-qualified/experiments/public_portfolio_20261102/verification/test_recovery.py\", line 156, in test_06_controller_prefix_mismatch_rejected_before_append\n    with self.assertRaisesRegex(ValueError, \"HISTORICAL_JOURNAL_REQUEST_OR_RESULT_MISMATCH\"):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: \"HISTORICAL_JOURNAL_REQUEST_OR_RESULT_MISMATCH\" does not match \"FAST_RECOVERY_EXACT_REQUEST_PLAN_FUNDING_PREFIX_REQUIRED:2\"\n"
+    }
+  ]
+}

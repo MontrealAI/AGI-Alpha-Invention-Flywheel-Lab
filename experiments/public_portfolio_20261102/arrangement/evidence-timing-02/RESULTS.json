@@ -1,0 +1,1382 @@
+{
+  "schema": "arrangement-timing-extension-result/v1",
+  "earlier_attempt": "evidence-confirmation-01/RESULTS.json",
+  "earlier_negative": "0/12 fixed-half-time endpoints satisfied total delta-v <=5m/s; 0/4 contracts accepted",
+  "protocol_sha256": "6cacdd2e3cf9d97524697f82cb018c0b0ffc34a6fdf7a0b96f0ada23a9750fa2",
+  "source_sha256": {
+    "orbital.py": "1f77772f6ac0bf0f77e1c3512238b9e312eb4ada3388d8872f9dc9490002a1a5",
+    "timing_extension.py": "0c5c0f15de04c61805fd1cc4639dd317767b9cb1e429053d615bd2d875353632"
+  },
+  "records": [
+    {
+      "case": 0,
+      "n_rad_s": 0.0008476201467030817,
+      "duration_s": 9396.030242874485,
+      "initial_state": [
+        55.987664177445765,
+        99.24122910314134,
+        -57.96955047627628,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        500.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            0.5800855415518332,
+            -0.16136323393233,
+            0.003087054951764003
+          ],
+          [
+            0.24310589540036462,
+            0.9140708363881129,
+            -0.04849789713326882
+          ]
+        ],
+        "fuel_mps": 1.5492078752746052,
+        "endpoint_residual": 1.1368684110974777e-13,
+        "accepted": true,
+        "condition": 23800.88492862835,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -3.5114180010681593,
+            -0.10720953680782741,
+            0.05158495208503282
+          ],
+          [
+            -1.4487877960773654,
+            0.8599171392636107,
+            0.06470210275890512
+          ]
+        ],
+        "fuel_mps": 5.199443036295632,
+        "endpoint_residual": 1.985456313707267e-12,
+        "accepted": false,
+        "condition": 145054.78393399823,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            0.5800855415518332,
+            -0.16136323393233,
+            0.003087054951764003
+          ],
+          [
+            0.24310589540036462,
+            0.9140708363881129,
+            -0.04849789713326882
+          ]
+        ],
+        "fuel_mps": 1.5492078752746052,
+        "endpoint_residual": 1.1368684110974777e-13,
+        "accepted": true,
+        "condition": 23800.88492862835,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            0.5800855415518317,
+            -0.16136323393232968,
+            0.0030870549517640466
+          ],
+          [
+            0.2431058954003647,
+            0.9140708363881171,
+            -0.04849789713326879
+          ]
+        ],
+        "fuel_mps": 1.549207875274608,
+        "endpoint_residual": 2.273739261648462e-13,
+        "accepted": true,
+        "condition": 23800.8849286283,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 1.084581095226026e-08,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 2.6645352591003757e-15
+    },
+    {
+      "case": 1,
+      "n_rad_s": 0.0013824783310425726,
+      "duration_s": 6198.2819138234,
+      "initial_state": [
+        -188.19037639858382,
+        123.98188795943116,
+        42.332867372026044,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        520.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            1.7366491622959312,
+            0.2899095880508669,
+            0.06912405012594262
+          ],
+          [
+            1.2901261067202128,
+            1.668206111196984,
+            0.08951033496632838
+          ]
+        ],
+        "fuel_mps": 3.8728072503704993,
+        "endpoint_residual": 4.965068306494546e-16,
+        "accepted": true,
+        "condition": 16764.119968765222,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -5.421906808703973,
+            0.07136271895268749,
+            -0.02038628484038575
+          ],
+          [
+            -0.8679050575476481,
+            1.8867529802951628,
+            -0.07428559039298024
+          ]
+        ],
+        "fuel_mps": 7.500542352192704,
+        "endpoint_residual": 1.8749718865899377e-12,
+        "accepted": false,
+        "condition": 89230.21618685599,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            1.7366491622959312,
+            0.2899095880508669,
+            0.06912405012594262
+          ],
+          [
+            1.2901261067202128,
+            1.668206111196984,
+            0.08951033496632838
+          ]
+        ],
+        "fuel_mps": 3.8728072503704993,
+        "endpoint_residual": 4.965068306494546e-16,
+        "accepted": true,
+        "condition": 16764.119968765222,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            1.736649162295942,
+            0.2899095880508646,
+            0.06912405012594268
+          ],
+          [
+            1.2901261067202308,
+            1.6682061111969841,
+            0.08951033496632835
+          ]
+        ],
+        "fuel_mps": 3.8728072503705206,
+        "endpoint_residual": 3.58724037616909e-15,
+        "accepted": true,
+        "condition": 16764.11996876519,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 2.6536591036718154e-08,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 2.1316282072803006e-14
+    },
+    {
+      "case": 2,
+      "n_rad_s": 0.0009808130554638582,
+      "duration_s": 8881.354346052856,
+      "initial_state": [
+        199.61600844550514,
+        51.900975022059356,
+        -128.38916646240824,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        540.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -3.926023859461752,
+            -0.7385810016617863,
+            0.05061308911823714
+          ],
+          [
+            -0.7166400556847934,
+            1.4062871272368835,
+            0.1264832750921887
+          ]
+        ],
+        "fuel_mps": 5.578631604375823,
+        "endpoint_residual": 3.8853634788089465e-12,
+        "accepted": false,
+        "condition": 126580.32433952499,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -3.926023859461752,
+            -0.7385810016617863,
+            0.05061308911823714
+          ],
+          [
+            -0.7166400556847934,
+            1.4062871272368835,
+            0.1264832750921887
+          ]
+        ],
+        "fuel_mps": 5.578631604375823,
+        "endpoint_residual": 3.8853634788089465e-12,
+        "accepted": false,
+        "condition": 126580.32433952499,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -3.926023859461752,
+            -0.7385810016617863,
+            0.05061308911823714
+          ],
+          [
+            -0.7166400556847934,
+            1.4062871272368835,
+            0.1264832750921887
+          ]
+        ],
+        "fuel_mps": 5.578631604375823,
+        "endpoint_residual": 3.8853634788089465e-12,
+        "accepted": false,
+        "condition": 126580.32433952499,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -3.9260238594616674,
+            -0.738581001661783,
+            0.05061308911823721
+          ],
+          [
+            -0.7166400556847566,
+            1.4062871272368642,
+            0.12648327509218865
+          ]
+        ],
+        "fuel_mps": 5.578631604375706,
+        "endpoint_residual": 2.278215603857922e-13,
+        "accepted": false,
+        "condition": 126580.32433951984,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 4.884827125833818e-08,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 1.1723955140041653e-13
+    },
+    {
+      "case": 3,
+      "n_rad_s": 0.0008891527466225409,
+      "duration_s": 6408.947453174521,
+      "initial_state": [
+        222.86933047844963,
+        -59.181739946520935,
+        0.964563625620201,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        560.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -0.592288284803386,
+            -0.37891323919259223,
+            -0.01481463443965695
+          ],
+          [
+            0.4037673020062583,
+            0.9784345607441575,
+            0.011880643366828064
+          ]
+        ],
+        "fuel_mps": 1.7618164496318407,
+        "endpoint_residual": 1.818989408840019e-12,
+        "accepted": true,
+        "condition": 21715.999456489742,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -4.3511905603121,
+            0.8464808101650271,
+            -0.026695277806485014
+          ],
+          [
+            -5.256273349971965,
+            -0.24695948861346204,
+            -0.022753241423651597
+          ]
+        ],
+        "fuel_mps": 9.694964409090508,
+        "endpoint_residual": 3.645077375123099e-12,
+        "accepted": false,
+        "condition": 173142.41551395762,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -0.592288284803386,
+            -0.37891323919259223,
+            -0.01481463443965695
+          ],
+          [
+            0.4037673020062583,
+            0.9784345607441575,
+            0.011880643366828064
+          ]
+        ],
+        "fuel_mps": 1.7618164496318407,
+        "endpoint_residual": 1.818989408840019e-12,
+        "accepted": true,
+        "condition": 21715.999456489742,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -0.5922882848033907,
+            -0.3789132391925915,
+            -0.014814634439656941
+          ],
+          [
+            0.4037673020062596,
+            0.9784345607441559,
+            0.011880643366828049
+          ]
+        ],
+        "fuel_mps": 1.7618164496318434,
+        "endpoint_residual": 1.8189894054517614e-12,
+        "accepted": true,
+        "condition": 21715.999456489797,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 1.2769359058445993e-08,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 2.6645352591003757e-15
+    },
+    {
+      "case": 4,
+      "n_rad_s": 0.0012494146452436254,
+      "duration_s": 8350.533999838077,
+      "initial_state": [
+        -145.2943600785474,
+        -245.4319888718478,
+        154.07742819116152,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        580.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -0.613600401997725,
+            0.3985335523972977,
+            -0.13607612073137765
+          ],
+          [
+            -0.11353139563921849,
+            1.4138532387921825,
+            -0.23541324551812023
+          ]
+        ],
+        "fuel_mps": 2.1820190416632,
+        "endpoint_residual": 3.4106168771517917e-13,
+        "accepted": true,
+        "condition": 27970.503123909704,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -3.6521890837627398,
+            -0.857445208360758,
+            0.0993371247867426
+          ],
+          [
+            1.689695872650601,
+            2.669831999550245,
+            -0.22748056603615568
+          ]
+        ],
+        "fuel_mps": 6.920586438343891,
+        "endpoint_residual": 3.846945371215717e-12,
+        "accepted": false,
+        "condition": 109788.38852492055,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -0.613600401997725,
+            0.3985335523972977,
+            -0.13607612073137765
+          ],
+          [
+            -0.11353139563921849,
+            1.4138532387921825,
+            -0.23541324551812023
+          ]
+        ],
+        "fuel_mps": 2.1820190416632,
+        "endpoint_residual": 3.4106168771517917e-13,
+        "accepted": true,
+        "condition": 27970.503123909704,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -0.61360040199772,
+            0.3985335523972978,
+            -0.1360761207313779
+          ],
+          [
+            -0.11353139563921429,
+            1.4138532387921863,
+            -0.23541324551811998
+          ]
+        ],
+        "fuel_mps": 2.1820190416631995,
+        "endpoint_residual": 3.41357023119242e-13,
+        "accepted": true,
+        "condition": 27970.503123909803,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 8.880004157699306e-09,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 4.440892098500626e-16
+    },
+    {
+      "case": 5,
+      "n_rad_s": 0.0009207250303339857,
+      "duration_s": 6333.974584045864,
+      "initial_state": [
+        -219.19699462575053,
+        -127.94427401167997,
+        213.7383336378411,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        600.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 0.8,
+        "burns_mps": [
+          [
+            -1.3739995105718845,
+            0.4875326439117222,
+            -0.012865326785981002
+          ],
+          [
+            -1.218839497270083,
+            1.0209777115408858,
+            -0.18871655151982086
+          ]
+        ],
+        "fuel_mps": 3.0591058321522007,
+        "endpoint_residual": 2.2737384654382303e-13,
+        "accepted": true,
+        "condition": 46299.55353048542,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -4.620834409575222,
+            1.5841736251660932,
+            0.8170924116679413
+          ],
+          [
+            -5.44797251082019,
+            -0.07566326971348483,
+            0.8424692898673865
+          ]
+        ],
+        "fuel_mps": 10.465958280325648,
+        "endpoint_residual": 6.366526425104673e-12,
+        "accepted": false,
+        "condition": 165803.0966644424,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 0.8,
+        "burns_mps": [
+          [
+            -1.3739995105718845,
+            0.4875326439117222,
+            -0.012865326785981002
+          ],
+          [
+            -1.218839497270083,
+            1.0209777115408858,
+            -0.18871655151982086
+          ]
+        ],
+        "fuel_mps": 3.0591058321522007,
+        "endpoint_residual": 2.2737384654382303e-13,
+        "accepted": true,
+        "condition": 46299.55353048542,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 0.8,
+        "burns_mps": [
+          [
+            -1.3739995105718805,
+            0.48753264391172135,
+            -0.012865326785981079
+          ],
+          [
+            -1.2188394972700973,
+            1.0209777115408876,
+            -0.18871655151982053
+          ]
+        ],
+        "fuel_mps": 3.0591058321522087,
+        "endpoint_residual": 2.7284841965512903e-12,
+        "accepted": true,
+        "condition": 46299.553530485086,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 2.2004045737530405e-08,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 7.993605777301127e-15
+    },
+    {
+      "case": 6,
+      "n_rad_s": 0.0009336931816009385,
+      "duration_s": 9980.039278504768,
+      "initial_state": [
+        94.03515677374725,
+        185.91089018913817,
+        109.13731137987088,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        620.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -1.3735743409131773,
+            0.02802143242750418,
+            1.0411951501385155
+          ],
+          [
+            -1.399745513543739,
+            0.9541581433368133,
+            1.0461280648069895
+          ]
+        ],
+        "fuel_mps": 3.7148289082962966,
+        "endpoint_residual": 1.1042438118641049e-16,
+        "accepted": true,
+        "condition": 30094.672111647167,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -3.756252316958486,
+            -0.8109293074954702,
+            -0.0049329146684740175
+          ],
+          [
+            0.17778006638279262,
+            1.7931088832597877,
+            -0.11134258372252297
+          ]
+        ],
+        "fuel_mps": 5.648130729583761,
+        "endpoint_residual": 5.684381473721807e-13,
+        "accepted": false,
+        "condition": 138748.92231498915,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -1.3735743409131773,
+            0.02802143242750418,
+            1.0411951501385155
+          ],
+          [
+            -1.399745513543739,
+            0.9541581433368133,
+            1.0461280648069895
+          ]
+        ],
+        "fuel_mps": 3.7148289082962966,
+        "endpoint_residual": 1.1042438118641049e-16,
+        "accepted": true,
+        "condition": 30094.672111647167,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -1.3735743409132006,
+            0.028021432427507202,
+            1.0411951501385255
+          ],
+          [
+            -1.3997455135437518,
+            0.9541581433368271,
+            1.0461280648069997
+          ]
+        ],
+        "fuel_mps": 3.714828908296342,
+        "endpoint_residual": 1.4211240639348326e-14,
+        "accepted": true,
+        "condition": 30094.672111647265,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 4.422984617122195e-08,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 4.529709940470639e-14
+    },
+    {
+      "case": 7,
+      "n_rad_s": 0.0012954538364541748,
+      "duration_s": 9978.724557473579,
+      "initial_state": [
+        126.1968028965079,
+        -155.45365388994765,
+        -182.66683416860374,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        640.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            1.9221032712136945,
+            -0.34309667070717254,
+            0.664239106218666
+          ],
+          [
+            -1.7294117368305333,
+            1.6743133164474513,
+            -0.7050124680904726
+          ]
+        ],
+        "fuel_mps": 4.5706126365403,
+        "endpoint_residual": 1.0103182026100663e-16,
+        "accepted": true,
+        "condition": 28847.309581008198,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            4.25820027770833,
+            -2.0244687275917217,
+            1.3692515743091385
+          ],
+          [
+            -3.9970726118079645,
+            3.355685373332,
+            -1.387167538164862
+          ]
+        ],
+        "fuel_mps": 10.309878741419137,
+        "endpoint_residual": 9.094947038958046e-12,
+        "accepted": false,
+        "condition": 80006.30316935419,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            1.9221032712136945,
+            -0.34309667070717254,
+            0.664239106218666
+          ],
+          [
+            -1.7294117368305333,
+            1.6743133164474513,
+            -0.7050124680904726
+          ]
+        ],
+        "fuel_mps": 4.5706126365403,
+        "endpoint_residual": 1.0103182026100663e-16,
+        "accepted": true,
+        "condition": 28847.309581008198,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            1.9221032712137085,
+            -0.34309667070717087,
+            0.6642391062186633
+          ],
+          [
+            -1.7294117368305537,
+            1.6743133164474413,
+            -0.7050124680904691
+          ]
+        ],
+        "fuel_mps": 4.570612636540318,
+        "endpoint_residual": 3.5245209804025386e-16,
+        "accepted": true,
+        "condition": 28847.309581007758,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 5.9525193102020424e-08,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 1.7763568394002505e-14
+    },
+    {
+      "case": 8,
+      "n_rad_s": 0.0008828858389823192,
+      "duration_s": 7827.139934253488,
+      "initial_state": [
+        -128.13058492675196,
+        51.37052359264635,
+        82.16671750990594,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        660.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            1.1590300322331213,
+            0.210494068929091,
+            -0.08502325074737783
+          ],
+          [
+            -0.9862814639672082,
+            1.1811645964722717,
+            0.11141638968534519
+          ]
+        ],
+        "fuel_mps": 2.7238802820087753,
+        "endpoint_residual": 9.095224653951113e-13,
+        "accepted": true,
+        "condition": 20831.45976578557,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -5.137659295218898,
+            0.815867845681987,
+            -0.196439640432723
+          ],
+          [
+            -3.9489583607326693,
+            0.5757908197193765,
+            -0.21196209849185688
+          ]
+        ],
+        "fuel_mps": 9.202084343730363,
+        "endpoint_residual": 1.833145422865473e-12,
+        "accepted": false,
+        "condition": 152243.1093618436,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            1.1590300322331213,
+            0.210494068929091,
+            -0.08502325074737783
+          ],
+          [
+            -0.9862814639672082,
+            1.1811645964722717,
+            0.11141638968534519
+          ]
+        ],
+        "fuel_mps": 2.7238802820087753,
+        "endpoint_residual": 9.095224653951113e-13,
+        "accepted": true,
+        "condition": 20831.45976578557,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            1.1590300322331242,
+            0.21049406892909184,
+            -0.0850232507473778
+          ],
+          [
+            -0.9862814639672178,
+            1.1811645964722677,
+            0.11141638968534527
+          ]
+        ],
+        "fuel_mps": 2.723880282008782,
+        "endpoint_residual": 9.095224611865448e-13,
+        "accepted": true,
+        "condition": 20831.45976578545,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 2.700537753502522e-08,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 6.661338147750939e-15
+    },
+    {
+      "case": 9,
+      "n_rad_s": 0.0009563865374444015,
+      "duration_s": 6160.560947805864,
+      "initial_state": [
+        228.51806865740957,
+        103.78916965378033,
+        -58.56129056833066,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        680.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -1.1669033562297617,
+            -0.41555817318411775,
+            -0.1608231467003947
+          ],
+          [
+            1.0117777723854375,
+            1.2791406552550197,
+            0.17002772361135415
+          ]
+        ],
+        "fuel_mps": 2.8888435675815622,
+        "endpoint_residual": 1.5202354861220294e-16,
+        "accepted": true,
+        "condition": 20078.154468572826,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -5.71262831527328,
+            1.036993640142002,
+            -0.33085087031174887
+          ],
+          [
+            -6.513595422773463,
+            -0.17341115807110014,
+            -0.3335674478650304
+          ]
+        ],
+        "fuel_mps": 12.339841349858043,
+        "endpoint_residual": 3.6397548114198775e-12,
+        "accepted": false,
+        "condition": 158873.7520374984,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -1.1669033562297617,
+            -0.41555817318411775,
+            -0.1608231467003947
+          ],
+          [
+            1.0117777723854375,
+            1.2791406552550197,
+            0.17002772361135415
+          ]
+        ],
+        "fuel_mps": 2.8888435675815622,
+        "endpoint_residual": 1.5202354861220294e-16,
+        "accepted": true,
+        "condition": 20078.154468572826,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            -1.166903356229758,
+            -0.41555817318411814,
+            -0.16082314670039474
+          ],
+          [
+            1.0117777723854344,
+            1.2791406552550204,
+            0.17002772361135413
+          ]
+        ],
+        "fuel_mps": 2.8888435675815574,
+        "endpoint_residual": 4.847427052338129e-16,
+        "accepted": true,
+        "condition": 20078.154468572804,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 2.6303872891505695e-08,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 4.884981308350689e-15
+    },
+    {
+      "case": 10,
+      "n_rad_s": 0.0010360902588275843,
+      "duration_s": 6912.227119950925,
+      "initial_state": [
+        25.69300856059965,
+        151.2922762996762,
+        -113.93918597904013,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        700.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            0.9508847427614564,
+            -0.08601152869903675,
+            0.11134687839438238
+          ],
+          [
+            -0.5360064449545967,
+            1.4832973392784328,
+            -0.16194716391052721
+          ]
+        ],
+        "fuel_mps": 2.546703174456825,
+        "endpoint_residual": 2.273738060980266e-13,
+        "accepted": true,
+        "condition": 17793.43008060143,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -6.399144938884845,
+            0.5170967502058297,
+            0.27329404230490956
+          ],
+          [
+            -4.392621307595022,
+            0.8801890603735656,
+            0.29314691404834303
+          ]
+        ],
+        "fuel_mps": 10.915337819972013,
+        "endpoint_residual": 2.5648922617946234e-12,
+        "accepted": false,
+        "condition": 125884.8708042138,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            0.9508847427614564,
+            -0.08601152869903675,
+            0.11134687839438238
+          ],
+          [
+            -0.5360064449545967,
+            1.4832973392784328,
+            -0.16194716391052721
+          ]
+        ],
+        "fuel_mps": 2.546703174456825,
+        "endpoint_residual": 2.273738060980266e-13,
+        "accepted": true,
+        "condition": 17793.43008060143,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 1.0,
+        "burns_mps": [
+          [
+            0.95088474276145,
+            -0.08601152869903589,
+            0.11134687839438258
+          ],
+          [
+            -0.5360064449545971,
+            1.483297339278438,
+            -0.16194716391052738
+          ]
+        ],
+        "fuel_mps": 2.546703174456824,
+        "endpoint_residual": 3.4106062200856444e-13,
+        "accepted": true,
+        "condition": 17793.430080601265,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 1.3825185583083476e-08,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 8.881784197001252e-16
+    },
+    {
+      "case": 11,
+      "n_rad_s": 0.001309795961903149,
+      "duration_s": 6798.766961534205,
+      "initial_state": [
+        -15.533583959984213,
+        -33.84338307337214,
+        129.49040349222844,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "target_state": [
+        720.0,
+        30.0,
+        10.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "timing_construction": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -6.740455727663912,
+            -0.7628622010283944,
+            -0.041616116135321936
+          ],
+          [
+            -0.5314495492534154,
+            2.689660037258273,
+            -0.1872627170922724
+          ]
+        ],
+        "fuel_mps": 9.531664800792598,
+        "endpoint_residual": 2.1571050947062164e-12,
+        "accepted": false,
+        "condition": 95880.66990070675,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "inherited_fixed_half_time": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -6.740455727663912,
+            -0.7628622010283944,
+            -0.041616116135321936
+          ],
+          [
+            -0.5314495492534154,
+            2.689660037258273,
+            -0.1872627170922724
+          ]
+        ],
+        "fuel_mps": 9.531664800792598,
+        "endpoint_residual": 2.1571050947062164e-12,
+        "accepted": false,
+        "condition": 95880.66990070675,
+        "systems_solved": 1,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "equal_content_ordinary_timing": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -6.740455727663912,
+            -0.7628622010283944,
+            -0.041616116135321936
+          ],
+          [
+            -0.5314495492534154,
+            2.689660037258273,
+            -0.1872627170922724
+          ]
+        ],
+        "fuel_mps": 9.531664800792598,
+        "endpoint_residual": 2.1571050947062164e-12,
+        "accepted": false,
+        "condition": 95880.66990070675,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "fresh_direct_specialist": {
+        "second_fraction": 0.5,
+        "burns_mps": [
+          [
+            -6.74045572766402,
+            -0.762862201028412,
+            -0.04161611613532201
+          ],
+          [
+            -0.531449549253412,
+            2.6896600372583177,
+            -0.18726271709227232
+          ]
+        ],
+        "fuel_mps": 9.531664800792749,
+        "endpoint_residual": 3.345563152416058e-12,
+        "accepted": false,
+        "condition": 95880.66990070822,
+        "systems_solved": 6,
+        "finite_timing_optimality_gap_mps": 0.0,
+        "scope": "finite-grid minimum-delta-v linear endpoint design only"
+      },
+      "numerical_replay_endpoint_error": 6.438487263762184e-08,
+      "ordinary_tie": true,
+      "direct_specialist_fuel_difference": 1.509903313490213e-13
+    }
+  ],
+  "checks": {
+    "all_replay_endpoint_tolerance": true,
+    "ordinary_equal_content_tie": true,
+    "direct_specialist_tie_tolerance": true,
+    "no_threshold_relaxation": true,
+    "invalid_timing_refused": true
+  },
+  "counts": {
+    "fresh_cases": 12,
+    "timing_accepted": 10,
+    "fixed_half_time_accepted": 0
+  },
+  "limits": [
+    "no continuous corridor clearance",
+    "no physical orbit validation",
+    "classical unrestricted timing specialist tie",
+    "no new commercial acceptance",
+    "original failed accounts/attempts not reset"
+  ],
+  "resources": {
+    "cpu_seconds": 1.950722075,
+    "wall_seconds": 0.3311448880012904,
+    "incremental_spending_usd": 0,
+    "human_intervention_minutes_after_assignment": 0,
+    "actual_model_host_billing": "unknown"
+  }
+}

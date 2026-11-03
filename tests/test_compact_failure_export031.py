@@ -52,7 +52,7 @@ class CompactFailureTests(unittest.TestCase):
   self.assertEqual(len(operation),1)
   steps=re.split(r'(?m)^      - ',operation[0])
   uploads=[step for step in steps if re.search(r'(?m)^        uses: actions/upload-artifact@',step)]
-  self.assertEqual(len(uploads),5)
+  self.assertEqual(len(uploads),6)
   failure=[step for step in uploads if re.search(r'(?m)^        if: failure\(\)',step)]
   self.assertEqual(len(failure),1)
   self.assertIn("        if: failure() && steps.operation.outcome != 'success' && steps.compact_failure.outcome == 'success'\n",failure[0])
@@ -83,6 +83,15 @@ class CompactFailureTests(unittest.TestCase):
    '${{ runner.temp }}/released-transformational063/AUDIT.json',
    '${{ runner.temp }}/released-transformational063/source',
    '${{ runner.temp }}/released-transformational063/public'])
+  portfolio=[step for step in uploads if 'name: public-portfolio-released-operation-' in step]
+  self.assertEqual(len(portfolio),1)
+  self.assertIn("        if: always() && steps.released_portfolio.outcome == 'success'\n",portfolio[0])
+  self.assertEqual(re.findall(r'(?m)^            (.+)$',portfolio[0]),[
+   '${{ runner.temp }}/released-portfolio-guards.json',
+   '${{ runner.temp }}/released-portfolio-artifacts.json',
+   '${{ runner.temp }}/released-portfolio-finance.json',
+   '${{ runner.temp }}/released-portfolio-recovered-four.json',
+   '${{ runner.temp }}/released-portfolio-recovered-two.json'])
   self.assertFalse(any('*.stdout' in step or '*.stderr' in step or 'failed-operation-keyfree' in step for step in uploads))
  def test_workflow_exports_only_compact_failure(self):
   text=(P.parents[1]/'.github/workflows/connected014-release.yml').read_text()
@@ -94,6 +103,8 @@ class CompactFailureTests(unittest.TestCase):
                   text.replace('/released-blue-sky064/RESULT.json','/released-blue-sky064/private'),
                   text.replace("always() && steps.released_flexibility.outcome == 'success'",'always()'),
                   text.replace('/released-transformational063/public','/released-transformational063/private'),
+                  text.replace("always() && steps.released_portfolio.outcome == 'success'",'always()'),
+                  text.replace('/released-portfolio-finance.json','/released-portfolio/private'),
                   text.replace("always() && steps.operation.outcome == 'success'",'always()'),
                   text.replace('downloaded-operation-keyfree.zip','failed-operation-keyfree.zip')):
    with self.assertRaises(AssertionError): self.assert_workflow_upload_contract(changed)
