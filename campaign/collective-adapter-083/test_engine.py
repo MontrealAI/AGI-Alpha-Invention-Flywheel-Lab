@@ -97,5 +97,31 @@ class Tests(unittest.TestCase):
                 audit(path)
 
 
+
+    def test_extra_adapter_after_no_rights_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp)/'new'; run(path)
+            forbidden = path/'rights_block'/'gamma.json'
+            forbidden.parent.mkdir(parents=True)
+            forbidden.write_text('{"schema":"forbidden"}')
+            with self.assertRaisesRegex(ValueError, 'UNAUTHORIZED_ADAPTER_FOR_REFUSED'):
+                audit(path)
+
+    def test_modified_source_mapping_rejected_even_with_hash_updated(self):
+        from engine import digest, wire
+        import hashlib
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp)/'new'; run(path)
+            artifact_path = path/'compatible_three'/'alpha.json'
+            artifact = json.loads(artifact_path.read_text())
+            artifact['normalizer']['source_fields']['measurement'] = 'evil'
+            artifact_path.write_bytes(wire(artifact) + b'\n')
+            result_path = path/'RESULT.json'
+            report = json.loads(result_path.read_text())
+            report['worlds']['compatible_three']['artifact_file_sha256']['alpha'] = hashlib.sha256(artifact_path.read_bytes()).hexdigest()
+            result_path.write_text(json.dumps(report))
+            with self.assertRaisesRegex(ValueError, 'SOURCE_MAPPING_CHANGED'):
+                audit(path)
+
 if __name__ == '__main__':
     unittest.main()
