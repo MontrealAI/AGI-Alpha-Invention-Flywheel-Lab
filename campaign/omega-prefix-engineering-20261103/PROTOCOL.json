@@ -1,0 +1,23 @@
+{
+  "schema": "omega-prefix-engineering-protocol/v1",
+  "scope": "FRESH_DISPOSABLE_ENGINEERING_ONLY_NOT_BUSINESS_OR_PRIMARY_CONTINUATION",
+  "base_commit": "77cbb9f78390c67da6fd00f81d79c19bd5014e2a",
+  "hypothesis": "The existing guarded native prefix can reduce repeated native replay work for Omega without changing any acceptance, authority, obligation or financial result.",
+  "production_change": "Add only omega/native-product/v1 to JournalAccount._audit_incremental's existing allowlist.",
+  "qualification": ["existing connected prefix suite", "existing production dynamic-output suite", "all existing market product regressions inherited in the new Omega prefix suite", "new every-entry equivalence, old-prefix and derived-state tamper, source/request/delivery rebinding, change-during-audit, outer-journal failure, public-audit independence, cold reopen, claim boundary and earned-funding checks"],
+  "performance": {
+    "useful_trace_jobs": [1, 3],
+    "repetitions": 2,
+    "arm_order": [["full", "guarded"], ["guarded", "full"]],
+    "trace": "Actual self-hosted water-kit construction, independent acceptance, complete native item costs, payment, release, maturity, and one earned-funded engineering action; record every native execute prefix and the final earned spend.",
+    "fixture_opening_microUSD": 10000000000,
+    "matched_information": "Both audit arms consume the same immutable in-memory exported prefixes, manifest, source and actual delivered files; each guarded pass starts cold.",
+    "metrics": ["process CPU seconds", "wall seconds", "native TapeExchange.execute call count", "audit result identity for every prefix"],
+    "construction_cost": "Measure trace construction separately; benchmark measures complete connected auditing of these traces, not an end-to-end business speedup.",
+    "success": "All qualification tests pass; all per-prefix audit results match; guarded native replay calls are fewer; median guarded CPU and wall are each below full for both trace lengths.",
+    "failure": "Any semantic mismatch fails qualification; timing tie or regression is reported without a speedup claim.",
+    "stopping": "One declared two-repeat measurement per trace; no tuning or selective reruns from timing. An implementation/test failure is retained separately before any adjudicated repair. Bound the added engineering work to approximately 15 minutes unless a concrete failure requires resolution."
+  },
+  "financial_scope": "Simulated fixture units are integer microUSD. Test capital is not mission capital, seed is never revenue, accounts are not pooled, real bill/host cost is unknown rather than zero. CPU/wall are engineering telemetry, not invented business costs.",
+  "isolation": "Do not open, modify or migrate any existing evaluation/primary account or edit the frozen omega-corrected worktree. No real payments, paid APIs, keys or network calls. Preserve public full replay and full reopen audit. No publication in this task."
+}

@@ -36,7 +36,8 @@ jobs:
           omega.test_strategy omega.test_operate omega.test_process omega.test_process_independent
           tests.test_omega_market_buyer tests.test_omega_market_strategy
           tests.test_omega_market_product tests.test_omega_market_native
-          tests.test_omega_market_native_adversarial tests.test_omega_qualification_pool
+          tests.test_omega_market_native_adversarial tests.test_omega_market_services
+          tests.test_omega_qualification_pool
           tests.test_fresh_native_capital.NativeCapitalTests.test_positive_profit_does_not_spend_committed_cash_and_stale_proof_fails
           tests.test_connected_platform_runtime064 -q
       - name: Execute the complete registered conditional comparison
