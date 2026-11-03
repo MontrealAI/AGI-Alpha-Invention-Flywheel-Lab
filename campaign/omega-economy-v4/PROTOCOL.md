@@ -1,0 +1,16 @@
+# Invent the Economy — prospective continuation
+
+Base: PR201 `8cd375784c24b879ae1eb4835c6af4fb925cbf4c`; main observed `54c50a3f9a96e140f42e7cb50c810607a75a2231`. Separate continuation branch preserves active owner work. Parent V4 protocol controls the three fresh confirmation markets; parent V3 data remain an exposed regression, never a fresh confirmation.
+
+## Questions and stopping rules
+
+1. Can generated public menus survive every supported affordable composed purchase, independently checked by enumeration and dynamic programming, while executing union production once and settling the chosen total? Preserve the 518+823 versus1554 counterexample. Run finite registered seeds 392101/complementary,392102/substitute,392103/competitive exactly once after implementation freeze; keep all arms and failures. Pilot cases use other seeds. Inherited/cold, equal-content reuse, full conventional, separate, bundle and nonentry have matched information and action sets. Solver resource safeguards are experiment bounds, not business limits. Stop each synthesis at its declared finite round/node constraints; unresolved stays unresolved.
+2. Does transferred constraint knowledge reduce complete acquisition-plus-use work, rather than only successor work? Report exact constraints/checks, measured CPU separately, ordinary equal-content reuse, and full solver. Do not translate CPU into invented labor or bills.
+3. Can native commerce and same-account recovery preserve accepted outputs, collection, costs, taxes and obligations? Fresh primary/reference starts at exactly $100,000; other arms are independent counterfactual accounts, never pooled. Run generated, standard and full-control 365-day accounts plus copycat/no-demand/failed-delivery cases. No historical identity is recovered or reseeded. Preserve profit when cash blocks successor investment.
+4. Which consequential opportunity merits construction beyond this repair? Compare at least three materially different source-grounded possibilities, including replacement of current service/model. Freeze the selected prototype's hypotheses and finite tests before running it. Technical feasibility, new economic attainability and demand are distinct verdicts. A conventional tie is retained and prevents claims of discovery superiority.
+
+## Financial and evidence boundary
+
+Use JournalAccount and mandatory underlying adaptive Account unchanged. All monetary amounts are simulated. Existing tariffs are declared envelopes, not measured bills. Unknown developer/model/host, sales, rights and deployment costs remain unknown. No scale claim follows from multiplying small-cohort margins by an assumed market. Report full [0,365) day window, costs, cash, protected obligations and gap to $3B. Source fingerprints, input/program/output identities, failures, tests and recovery receipts accompany results. Signing authority and account databases stay private.
+
+This assignment explicitly fixes primary capital at $100,000 and authorizes qualified integration/release; it supersedes differing general repository guidance for this continuation. It authorizes no paid APIs, purchases, real customers, outreach, real transactions, access changes or live deployment. No approval or CI pass is inferred from publication. Normal exact-source qualification and current ownership checks remain prerequisites for integration.
