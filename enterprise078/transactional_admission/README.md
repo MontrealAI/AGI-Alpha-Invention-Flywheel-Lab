@@ -1,5 +1,36 @@
 # Transactional delivery and admission boundary
 
+## Live source delivery increment
+
+`snapshot.deliver(source, destination, identity, events)` now constructs a portable
+database and derived CSV from a live committed WAL source using ordinary SQLite
+online backup. It opens the source read-only, projects only the destination,
+validates exact bytes with the existing typed checker and atomically publishes a
+new directory under a POSIX publisher lock. An existing destination is refused.
+Wrong commissioned input or interrupted acceptance publishes nothing. This does
+not change the original account or grant native catalog admission.
+
+Registered at `fad21fecfeae75ed9a695cc5389531a46c8513c1`; seven finite development
+tests pass, including100,000 actual records, held writer connection/nonempty WAL,
+later source append, refusal, acceptance exception and publisher exclusion.
+See [the measured delivery receipt](../evidence/LIVE_SNAPSHOT.json). The produced
+database has a new byte hash, as expected for a distinct backup; the original
+published database bytes remain untouched. These tests do not establish bounded
+latency under sustained concurrent writing or physical power-loss durability.
+
+```sh
+python -m unittest enterprise078.transactional_admission.test_snapshot -v
+```
+
+This removes a real delivery limitation of the selected SQL/CSV route: requiring
+an offline, checkpointed input. Strong conventional SQLite backup is both the
+implementation and comparator; no advantage over that method is claimed. This
+is a supporting productive capability, not admission of a new Blue Sky flagship,
+market demand, a financial transition or a profit result. Full construction and
+commercial cost remain unknown. Do not expand this supporting work into a generic
+database platform before qualifying the original-history catalog transition and
+complete voluntary offer.
+
 The new type is `enterprise078/transactional-database-and-derived-csv/v1`.
 `contract.request` binds exact synthetic input, requested projection and output
 columns. `contract.accept` validates a private temporary copy of exactly the

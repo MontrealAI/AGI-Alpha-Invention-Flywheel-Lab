@@ -1,5 +1,22 @@
 # Overnight construction result — 3 November 2026 UTC
 
+## Live-source delivery continuation — 3 November 2026
+
+Source preregistration: fad21fecfeae75ed9a695cc5389531a46c8513c1. The previous lead head ece7d202 now has all observed execution checks passing (publication jobs skipped); current main remains215b22a5ed73b82ac1d909328d60157c48bd9958.
+
+Constructed `transactional_admission.snapshot.deliver`: ordinary SQLite online backup creates a coherent standalone database from committed WAL state with the writer connection open, derives the CSV from that snapshot, checks exact typed acceptance, then publishes a complete new directory under a POSIX publisher lock. This removes the offline-input dependency; it does not grant financial catalog admission. The original guard against exporting a live main file without its WAL remains intact.
+
+Seven registered development tests passed; all33 admission/snapshot/runtime/platform tests passed together. An actual100,000-record live-source delivery passed:5,947,392-byte database,31 groups,47 total units; CSV596 bytes. Delivery CPU0.535016451s/wall0.540906457s excludes setup, construction, tests and model/host billing. [Source-bound receipt](evidence/LIVE_SNAPSHOT.json) records the new snapshot hash; original artifact bytes remain unchanged. Sustained concurrent-write latency and physical power-loss behavior are not established. Strong ordinary SQLite is both implementation and comparator; no new flagship or discovery advantage is claimed.
+
+Original revised central authority was available and reopened under the native lock. Full audit and export66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f remain unchanged. No new financial action or SQL/CSV sale. Historical native profit remains19,574.55USD on25,000USD hypothetical equity over declared[0,8760) hours, without a calendar mapping; revenue42,000, expense22,425.45, cash44,574.55, tail reserve1,500, available43,074.55, payable0USD. Updated complete-cost profit remains UNKNOWN.
+
+PR176's matrix41581454145 is now terminal: source tests passed, weak/no_financing passed, six financial-world jobs failed. Newly completed central125737816669, favorable125737816559, ordinary_no_inheritance125737816597 and reference_100k125737816604 all fail at frozen review.py line96 with COMPLETE_MODELED_COST_RECONCILIATION_FAILED. This matches the previously diagnosed fee-timing failure location, but their corrected full replay is NOT claimed here. Preserve their output and failed verdicts; do not rerun the matrix. Previous four-case corrected results remain separately scoped. PR176 stays owned by its active author.
+
+Next consequential dependency is the lead's explicit append-only typed catalog/history transition, qualified on fresh fixtures while preserving the immutable original manifest, native prefix, authority and historical pins. A snapshot producer cannot solve that accounting boundary. Do not expand supporting database infrastructure further before that transition and a complete voluntary, fully costed offer. Whole-development/host/model costs and reachable demand remain unknown; investment stays deferred. No merge, release or formal approval.
+
+
+---
+
 ## Continuation: typed transactional acceptance and loss-preserving replay
 
 The original revised central account reopened under its native POSIX lock and passed full audit with unchanged export `66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f`. No financial actions were added. Current main was refreshed to `215b22a5ed73b82ac1d909328d60157c48bd9958`; the previous lead head678d384 passed all observed required execution checks, with publication jobs skipped. Qualification of this new implementation remains a separate exact-head gate.
