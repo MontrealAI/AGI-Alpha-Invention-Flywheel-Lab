@@ -12,44 +12,60 @@ permissions:
 jobs:
   public-replay:
     runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Record hosted job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Bind wrapper and frozen scientific bytes
+      - name: Stage and bind exact historical science and current wrapper
         env:
           EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
           WORKFLOW_REF: ${{ github.workflow_ref }}
           WORKFLOW_SHA: ${{ github.workflow_sha }}
         run: |
+          python -m enterprise078.runtime --output "$RUNNER_TEMP/enterprise078-science"
           python - <<'PY'
           import hashlib,json,os,pathlib,subprocess
-          from commercial.ledger import digest
+          from enterprise078.runtime import EXPECTED_FREEZE
           head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
           assert head==os.environ['EXPECTED_HEAD']
-          frozen=json.loads(pathlib.Path('enterprise078/FROZEN.json').read_text())
-          assert digest(frozen['files'])==frozen['sha256']
-          for name,expected in frozen['files'].items():
-              assert hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest()==expected,name
-          receipt={'candidate':head,'scientific_freeze':'825cabc0edf2e6bf677a5b80ade274ae8dee38bb','frozen_digest':frozen['sha256'],'workflow_ref':os.environ['WORKFLOW_REF'],'workflow_sha':os.environ['WORKFLOW_SHA'],'files':len(frozen['files'])}
+          workflow='.github/workflows/enterprise078.yml'
+          executing=subprocess.check_output(['git','show',os.environ['WORKFLOW_SHA']+':'+workflow])
+          assert executing==pathlib.Path(workflow).read_bytes()
+          base={'commercial/ledger.py':'509d20b527af0ef23a79c2d5901dc1f0a6a77546','connected_enterprise/finance.py':'490c76754bfec4c066802cdcd2b6835e7ddc7a87'}
+          for name,expected in base.items():
+              assert subprocess.check_output(['git','hash-object',name],text=True).strip()==expected,name
+          receipt={'candidate':head,'scientific_freeze':'825cabc0edf2e6bf677a5b80ade274ae8dee38bb','frozen_digest':EXPECTED_FREEZE,'workflow_ref':os.environ['WORKFLOW_REF'],'workflow_sha':os.environ['WORKFLOW_SHA'],'files':306,'main_native_blobs':base,'composition':'historical science in isolated subprocess; current native runtime restored'}
           pathlib.Path(os.environ['RUNNER_TEMP'],'enterprise078-binding.json').write_text(json.dumps(receipt,indent=2))
           PY
       - name: Existing runtime dependencies
         run: |
           python -m pip install --disable-pip-version-check -r requirements-commercial010.txt
-      - name: Focused acceptance and unchanged native finance regressions
+      - name: Current finance and platform regressions
         run: |
-          python -m unittest enterprise078.test_enterprise078 tests.test_connected_finance tests.test_connected_p0_source_guard.JoinPreflightTests -v
-      - name: Downloaded public evidence only, no private account authority
+          python -m unittest enterprise078.test_runtime tests.test_connected_finance tests.test_connected_p0_source_guard.JoinPreflightTests tests.test_connected_platform_runtime064.CurrentWorkflowPlatformTests -v
+      - name: Original scientific acceptance tests on frozen source
+        run: |
+          cd "$RUNNER_TEMP/enterprise078-science"
+          python -m unittest enterprise078.test_enterprise078 -v
+      - name: Downloaded public evidence only
         run: |
           python -m enterprise078.replay --output "$RUNNER_TEMP/enterprise078-public" > "$RUNNER_TEMP/enterprise078-replay.json"
           python enterprise078/review.py "$RUNNER_TEMP/enterprise078-public/original" --challenges > "$RUNNER_TEMP/enterprise078-challenges.json"
+          python - <<'PY'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])
+          assert json.loads((root/'enterprise078-replay.json').read_text())['accepted'] is True
+          assert json.loads((root/'enterprise078-challenges.json').read_text())['all_rejected'] is True
+          PY
       - uses: actions/upload-artifact@v4
         with:
-          name: enterprise078-public-verification
+          name: enterprise078-public-verification-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/enterprise078-binding.json
             ${{ runner.temp }}/enterprise078-replay.json
