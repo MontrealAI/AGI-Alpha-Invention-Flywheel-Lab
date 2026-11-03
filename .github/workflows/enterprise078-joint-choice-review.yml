@@ -1,0 +1,25 @@
+name: Enterprise078 joint buyer choice independent counterexample
+on:
+  pull_request:
+    paths:
+      - 'enterprise078_review/**'
+      - '.github/workflows/enterprise078-joint-choice-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-joint-choice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record actual job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Check source-pinned buyer utility and rival-response counterexamples
+        run: python -m unittest enterprise078_review.test_joint_choice -v
