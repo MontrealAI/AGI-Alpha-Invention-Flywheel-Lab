@@ -24,6 +24,10 @@ class FinitePhysicalSourceTests(unittest.TestCase):
         self.assertEqual(len(run.TEST), 6)
         self.assertEqual(set(run.DEV) & set(run.TEST), set())
         self.assertEqual(run.PROTOCOL["authority"] if "authority" in run.PROTOCOL else run.PROTOCOL["role"], "FINITE_PHYSICAL_OBSERVATION_DEPENDENCY_TEST")
+    def test_preregistered_protocol_exact_blob_and_drift(self):
+        self.assertEqual(run.verified_protocol((run.HERE / "PROTOCOL.json").read_bytes()),run.PROTOCOL)
+        with self.assertRaisesRegex(ValueError,"REGISTERED_PROTOCOL_SOURCE_DRIFT"):
+            run.verified_protocol(b"{}")
     def test_no_hiding_the_frozen_test_cases(self):
         self.assertEqual(run.class_labels(run.TEST), ["PLASTIC"]*3 + ["METAL"]*3)
         self.assertEqual(len(run.LABELS), 16)
@@ -35,7 +39,7 @@ class FinitePhysicalSourceTests(unittest.TestCase):
     def test_strong_control_is_not_dummy(self):
         scores = run.fisher_scores(self.X,self.y)
         self.assertEqual(run.rank_top(scores)[0], 0)
-        selected = run.greedy_loo(self.X,self.y,scores)
+        selected = run.greedy_loo(self.X,self.y)
         self.assertIn(0,selected)
         self.assertEqual(len(set(selected)),run.BUDGET)
     def test_candidate_receives_only_development(self):

@@ -14,7 +14,12 @@ import numpy as np
 from scipy.io import loadmat
 
 HERE = Path(__file__).resolve().parent
-PROTOCOL = json.loads((HERE / "PROTOCOL.json").read_text())
+def verified_protocol(raw):
+    if hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest() != "e15b9be79875a974608771ad05ac44fed40fd9a5":
+        raise ValueError("REGISTERED_PROTOCOL_SOURCE_DRIFT")
+    return json.loads(raw.decode("utf-8"))
+
+PROTOCOL = verified_protocol((HERE / "PROTOCOL.json").read_bytes())
 MD5 = PROTOCOL["source"]["expected_md5"]
 URL = PROTOCOL["source"]["archive_url"]
 LABELS = {name: kind for role, kind in (("development_plastic", "PLASTIC"), ("development_metal", "METAL"), ("heldout_plastic", "PLASTIC"), ("heldout_metal", "METAL")) for name in PROTOCOL["cases"][role]}
@@ -133,7 +138,7 @@ def robust_scores(X, y, names):
 def rank_top(scores):
     return sorted(range(PATTERNS), key=lambda i: (-float(scores[i]), i))[:BUDGET]
 
-def greedy_loo(X, y, fisher):
+def greedy_loo(X, y):
     selected = []
     for _ in range(BUDGET):
         options = []
@@ -141,7 +146,7 @@ def greedy_loo(X, y, fisher):
             if i in selected:
                 continue
             accuracy, margin = loo_score(X, y, selected + [i])
-            options.append((accuracy, float(fisher[i]), margin, -i, i))
+            options.append((accuracy, margin, -i, i))
         selected.append(max(options)[-1])
     return selected
 
@@ -154,7 +159,7 @@ def evaluate(archive):
     fisher = fisher_scores(X, y)
     designs = {
         "ordinary_fisher": rank_top(fisher),
-        "ordinary_greedy_loo": greedy_loo(X, y, fisher),
+        "ordinary_greedy_loo": greedy_loo(X, y),
         "joint_count_robust": rank_top(robust_scores(X, y, DEV)),
         "ordinary_all_patterns": list(range(PATTERNS)),
     }
