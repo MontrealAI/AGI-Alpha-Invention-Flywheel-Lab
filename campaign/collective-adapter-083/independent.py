@@ -49,6 +49,15 @@ def audit(folder):
             raise ValueError('PARTICIPATION_OR_BUDGET_VIOLATION')
         if row['conditional_cost_incurred'] != row['plan']['construction_cost']:
             raise ValueError('FAILED_ATTEMPT_COST_ERASED')
+        escrow = row['plan']['price_total']
+        collateral = case['seller_refund_collateral']
+        if (row['hypothetical_escrow_receipts'] != escrow
+                or row['hypothetical_preconstruction_cash'] != escrow + collateral
+                or row['hypothetical_cash_after_cost'] != escrow + collateral - row['conditional_cost_incurred']
+                or row['refund_reserve_before_acceptance'] != escrow
+                or row['refund_reserve_covered_before_acceptance'] != (collateral >= row['conditional_cost_incurred'])
+                or row['hypothetical_cash_after_full_refund'] != row['hypothetical_cash_after_cost'] - row['conditional_refund_liability']):
+            raise ValueError('BROKEN_ESCROW_COLLATERAL_CASH_TIMELINE')
         for b in selected:
             artifact_path = folder/name/(b['id']+'.json')
             blob = artifact_path.read_bytes()
