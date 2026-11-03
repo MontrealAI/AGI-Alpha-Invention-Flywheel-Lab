@@ -1,0 +1,59 @@
+name: Enterprise078 scale construction
+on:
+  push:
+    branches: ['experiment/enterprise078-scale-20261102']
+    paths: ['enterprise078_scale/**', '.github/workflows/enterprise078-scale.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: enterprise078-scale-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-and-qualification:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Export only tracked public executable dependencies
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,pathlib,subprocess,zipfile
+          from enterprise078.service import source_paths
+          root=pathlib.Path('.').resolve()
+          tracked=set(subprocess.check_output(['git','ls-files','-z']).decode().split('\0'))
+          names=set(source_paths(root))
+          names.update(n for n in tracked if n.startswith(('enterprise078/','enterprise078_scale/')) and pathlib.Path(n).suffix in {'.py','.json','.md'})
+          names.update(n for n in tracked if n.startswith('tests/') and pathlib.Path(n).suffix=='.py')
+          names.update(n for n in ('AGENTS.md','docs/harness/DEVELOPER_GUIDE.md','docs/harness/RESOURCE_POLICY.md','docs/connected014/OPERATOR.md','pyproject.toml','requirements.txt') if n in tracked)
+          assert names <= tracked
+          assert not any('/private/' in n or pathlib.Path(n).suffix in {'.pem','.key'} for n in names)
+          hashes={n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in sorted(names)}
+          out=pathlib.Path('/tmp/enterprise078-transfer');out.mkdir()
+          (out/'SOURCE.json').write_text(json.dumps({'commit':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'files':hashes},indent=2))
+          with zipfile.ZipFile(out/'source.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for n in sorted(names):z.write(root/n,n)
+          print(json.dumps({'source_files':len(names),'zip_bytes':(out/'source.zip').stat().st_size}))
+          PY
+      - name: Run registered scale construction when present
+        run: |
+          if test -f enterprise078_scale/run.py; then
+            python3 -m unittest discover -s enterprise078_scale -p 'test_*.py' -v
+            python3 -m enterprise078_scale.run --output /tmp/enterprise078-scale-run
+          fi
+      - name: Upload public source transfer only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: enterprise078-scale-public-source
+          path: /tmp/enterprise078-transfer/
+          retention-days: 1
+          if-no-files-found: error
+      - name: Upload compact key-free qualification receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: enterprise078-scale-public-results
+          path: /tmp/enterprise078-scale-run/public/
+          retention-days: 7
+          if-no-files-found: ignore
