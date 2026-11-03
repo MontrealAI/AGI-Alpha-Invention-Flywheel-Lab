@@ -1,0 +1,75 @@
+\section{The game must contain the possibilities it creates}\label{sec:strategic}
+A mechanism is meaningful only in relation to what its participants can actually do. A seller may describe three offers as three separate choices. The production interface may nevertheless allow a buyer to combine the first two and reproduce the third. The advertised menu and the operational game then differ.
+
+This is especially important for an invention engine. It seeks reusable instruments, composable services and better interfaces. Those same capabilities can enlarge buyers' alternatives, create new suppliers or make imitation easier. The invention changes both the feasible production frontier and the strategic environment in which its value can be captured. A certification of the earlier game does not automatically transfer.
+
+\subsection{A concrete failure of an incomplete action space}
+The public Omega V3 branch constructs finite allocation and payment programs, checks single-report incentives and executes existing useful services. In its competitive market, a generated program offers the following prices \cite{omegav3,omegav4}:
+\begin{center}
+\begin{tabularx}{.85\linewidth}{@{}Yr@{}}\toprule
+Accepted services & Posted payment, cents\\\midrule
+First service, $A$ & 518\\
+Second service, $B$ & 823\\
+Joint services, $A\cup B$ & 1,554\\
+Both component purchases & $518+823=1,341$\\\bottomrule
+\end{tabularx}
+\end{center}
+The joint productive output is the union of the component services. When both purchases are feasible, the buyer can obtain that same outcome for \textbf{213 cents less}. The independent finite verifier accepts all 72 modeled type-to-report deviations, because those checks concern one report and one purchase. They do not include the cart containing both components. Four supported types assigned the joint output have sufficient budgets for the cheaper cart.
+
+For this paper, the original full conventional synthesis was independently replayed from public commit \nolinkurl{8cd375784c24b879ae1eb4835c6af4fb925cbf4c}. It reproduced the menu and the accepted 72-check result. The replay concerns this exact semantic case; it is not a new execution of the five historical financial accounts. The published V4 protocol records the obstruction and a proposed correction. No uncommitted continuation is treated as evidence here.
+
+The finding has a precise interpretation. The 72 checked inequalities can be correct while the model omits a profitable feasible action. Historical single-purchase calculations retain their stated semantics. A broader claim about composed purchases requires a broader game. A genuine one-purchase restriction could be a valid design choice, but its technological or contractual basis, enforcement costs and effects on participation would have to be supplied.
+
+\thesis{A productive arrangement is incomplete when its capabilities enable consequential choices that its incentive model cannot express.}
+
+\subsection{Make the action-space boundary explicit}
+Fix a participant's intended choice $a^\star$, other participants' behavior and the payoff function $u$. For a declared feasible deviation set $\mathcal D$, define
+\begin{equation}
+R_{\mathcal D}(a^\star)=\max\left\{0,\sup_{a\in\mathcal D}\bigl[u(a)-u(a^\star)\bigr]\right\}.
+\label{eq:regret}
+\end{equation}
+If $\mathcal D\subseteq\mathcal D'$, then $R_{\mathcal D'}(a^\star)\ge R_{\mathcal D}(a^\star)$. An exact certificate of zero regret on the smaller set says nothing about omitted actions except what follows from an additional completeness argument. This elementary result is proved in Appendix~\ref{app:proofs}. It holds with the payoff and intended choice fixed; it does not compare two independently redesigned games.
+
+The practical question is not whether a verifier tried many deviations. It is whether its language can represent the economically relevant ones. These may include repeated purchases, composition, partial participation, delay, self-service, switching, resale, multiple identities or a coalition. They need not all be permitted or relevant in every arrangement. Their inclusion or exclusion must follow the actual production, rights and commitment semantics.
+
+Classical mechanism design already distinguishes different incentive and information requirements. Automated logical synthesis and dynamic mechanism design make some of those boundaries explicit \cite{synthesis,dynamic}. The lesson here is to derive strategic tests from the constructed capability, rather than letting a convenient report format silently define the world.
+
+\subsection{The effective price of a composed outcome}
+Consider a finite family of service sets, closed under union and including the empty set. A cart delivers the union of its services once and costs the sum of its nonnegative posted prices. Repeated copies add no useful service. All rights and capacities permit the composition; no extra fees, quality differences, conflicting commitments or other effects are omitted. Under these assumptions, define
+\begin{equation}
+(\mathsf{C}p)(S)=
+\min_{\mathcal K:\,\bigcup_{B\in\mathcal K}B=S}
+\sum_{B\in\mathcal K}p(B).
+\label{eq:closure}
+\end{equation}
+This is the cheapest available way to acquire exactly the service set $S$. The minimum can be computed over a finite graph whose vertices are service unions and whose edges add an offered bundle. The companion uses an exact dynamic program and compares it with independently enumerated carts.
+
+The operator $\mathsf{C}$ never raises a price, preserves pointwise ordering of price menus, and is idempotent: closing an already closed menu makes no further change. Its output is the greatest union-subadditive tariff bounded above by the original prices. For any valuation $v$ and hard budget $b$, the best cart utility equals
+\begin{equation}
+\max_{S:\,(\mathsf{C}p)(S)\le b}
+\left[v(S)-(\mathsf{C}p)(S)\right].
+\label{eq:buyer}
+\end{equation}
+The empty purchase represents refusal at zero utility. The statement preserves all maximizing outcomes and their cheapest payments; it does not invent a seller-favorable rule when the buyer is indifferent. The proof and its boundary conditions appear in Proposition~\ref{prop:closure}.
+
+This construction adapts an established concern in arbitrage-free data pricing: information obtainable through several purchases can constrain the price of an equivalent result \cite{datapr}. The transfer is structural: in both settings, acquiring some outputs makes another output attainable. Its validity requires checking that reconstruction relation, its rights and its costs in the target arrangement. The simple service-union model here is considerably narrower than general query determinacy. For physical services, licenses, nonfungible evidence or time-dependent commitments, a richer transition system can be necessary. An unknown union or incompatible right should produce an unresolved case or refusal, not an invented equivalence.
+
+\subsection{Turn the counterexample into a construction}
+A counterexample is useful when it changes the next decision. The 213-cent case supplies an exact constraint: a joint offer cannot be treated as the buyer's cheapest way to obtain the same services while those components remain purchasable at a lower total. One response is to price and account for the actual cart. Another is to construct a joint deliverable with additional independently valuable functionality, so the outcomes are no longer equivalent. A third is to change the productive process so the lower realized price still supports worthwhile delivery.
+
+These responses have different burdens. For the same delivered outcome and participants, changing transfers alone does not increase real surplus; changed prices can nevertheless change which trades occur. Adding a label to the bundle cannot create buyer value. A new process must produce the accepted output and pay its full construction and operating costs. A restriction on composition needs a real basis and may make the product less attractive. The purpose of criticism is to find a viable arrangement, not to preserve the first proposal's preferred profit figure.
+
+An executable construction loop therefore carries the failure forward as a specification. It identifies which participant can act, the required inputs and permissions, the resulting accepted output, the payoff improvement and the original assumption that failed. The next candidate changes the relevant means, contract or interface and faces the same independent acceptance target. A disproved objection is discarded; an established one becomes a regression case and an applicability lesson.
+
+In a fixed finite candidate class, sound counterexamples that exclude each failed candidate yield a terminating search: a verified candidate is found or the class is exhausted. That is the familiar logic of counterexample-guided synthesis \cite{cegis}. Exhaustion applies only to the declared class and semantics. It can justify searching for a new primitive or a different formulation.
+
+\subsection{Strategic errors propagate into successor claims}
+Suppose an accepted outcome $S$ is sold, its cash cost is $c$, additional protected obligations are $r$, and unrestricted cash before those costs is $u$. A proposed successor requires an upfront expenditure $K$. Holding that outcome and those costs fixed, the condition
+\begin{equation}
+u+(\mathsf{C}p)(S)-c-r<K
+\ \le\ u+p(S)-c-r
+\label{eq:leakage}
+\end{equation}
+identifies a specific failure: the advertised price appears to fund the successor, while the feasible cheaper purchase does not. Proposition~\ref{prop:leakage} gives the exact shortfall. This is an elementary conditional cash calculation, not a new accounting theorem.
+
+Its significance is the connection. A productive interface determines feasible purchases. Purchases determine collected amounts. Collected amounts, costs and obligations determine reachable constructions. A forecast can balance perfectly while relying on a payment a rational participant would not make. A valid operating system must record what actually settles and re-evaluate the next action from that state. Finance cannot repair an omitted strategic model merely by relabeling its projected receipt.

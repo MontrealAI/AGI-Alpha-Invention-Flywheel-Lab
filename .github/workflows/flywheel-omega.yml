@@ -1,0 +1,154 @@
+name: FLYWHEEL OMEGA paper
+on:
+  pull_request:
+    paths:
+      - 'docs/flywheel-omega/**'
+      - 'docs/research/flywheel-omega.pdf'
+      - '.github/workflows/flywheel-omega.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/flywheel-omega/**'
+      - 'docs/research/flywheel-omega.pdf'
+      - '.github/workflows/flywheel-omega.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: flywheel-omega-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    outputs:
+      publication_artifact_id: ${{ steps.publication_assets.outputs.artifact-id }}
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            docs/flywheel-omega
+            docs/research/flywheel-omega.pdf
+          sparse-checkout-cone-mode: false
+      - name: Install the standard LaTeX and PDF toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends latexmk lmodern texlive-latex-extra texlive-fonts-recommended poppler-utils
+      - name: Compile, reproduce and bind the inspected edition
+        run: |
+          make -C docs/flywheel-omega check
+          python3 docs/flywheel-omega/verify.py
+      - name: Assemble the self-contained publication
+        run: python3 docs/flywheel-omega/package.py --output "$RUNNER_TEMP/flywheel-omega-publication"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        id: publication_assets
+        with:
+          name: flywheel-omega-publication-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flywheel-omega-publication/
+          if-no-files-found: error
+          retention-days: 7
+  publish:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: docs/flywheel-omega
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: ${{ needs.build.outputs.publication_artifact_id }}
+          path: ${{ runner.temp }}/flywheel-omega-publication
+          merge-multiple: true
+      - name: Publish or verify the immutable research edition
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(cat docs/flywheel-omega/VERSION)"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          tag="flywheel-omega-v${version}"
+          assets="$RUNNER_TEMP/flywheel-omega-publication"
+          cd "$assets"
+          sha256sum --check SHA256SUMS
+          cd "$GITHUB_WORKSPACE"
+
+          if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" > "$RUNNER_TEMP/existing-release.json" 2> "$RUNNER_TEMP/existing-release.error"; then
+            echo "Existing edition found. Verify it without replacing assets or moving the tag."
+            python3 - "$RUNNER_TEMP/existing-release.json" "$tag" <<'PY'
+          import json, sys
+          record = json.load(open(sys.argv[1]))
+          if record['tag_name'] != sys.argv[2] or record['draft'] or record['prerelease']:
+              raise SystemExit('Existing release metadata differs from this stable edition')
+          expected = {'FLYWHEEL_OMEGA.pdf', 'FLYWHEEL_OMEGA_SOURCE.zip', 'SHA256SUMS'}
+          if {item['name'] for item in record['assets']} != expected:
+              raise SystemExit('Existing release has a different asset set; never overwrite it')
+          PY
+          else
+            if ! grep -q 'HTTP 404' "$RUNNER_TEMP/existing-release.error"; then
+              cat "$RUNNER_TEMP/existing-release.error" >&2
+              exit 1
+            fi
+            if gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$tag" > "$RUNNER_TEMP/existing-tag.json" 2> "$RUNNER_TEMP/existing-tag.error"; then
+              tag_commit="$(gh api "repos/$GITHUB_REPOSITORY/commits/$tag" --jq '.sha')"
+              [[ "$tag_commit" == "$GITHUB_SHA" ]] || { echo 'Existing tag points to another commit; refusing to move it.' >&2; exit 1; }
+            else
+              if ! grep -q 'HTTP 404' "$RUNNER_TEMP/existing-tag.error"; then
+                cat "$RUNNER_TEMP/existing-tag.error" >&2
+                exit 1
+              fi
+              gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" \
+                -f "ref=refs/tags/$tag" -f "sha=$GITHUB_SHA" > "$RUNNER_TEMP/created-tag.json"
+            fi
+            gh release create "$tag" \
+              "$assets/FLYWHEEL_OMEGA.pdf" "$assets/FLYWHEEL_OMEGA_SOURCE.zip" "$assets/SHA256SUMS" \
+              --repo "$GITHUB_REPOSITORY" --verify-tag \
+              --title "FLYWHEEL Ω · The Economy as an Output" \
+              --notes-file docs/flywheel-omega/RELEASE_NOTES.md --latest=false
+          fi
+
+          verified="$RUNNER_TEMP/verified-flywheel-omega"
+          mkdir "$verified"
+          gh release download "$tag" --repo "$GITHUB_REPOSITORY" \
+            --pattern FLYWHEEL_OMEGA.pdf --pattern FLYWHEEL_OMEGA_SOURCE.zip \
+            --pattern SHA256SUMS --dir "$verified"
+          cmp "$assets/SHA256SUMS" "$verified/SHA256SUMS"
+          cd "$verified"
+          sha256sum --check SHA256SUMS
+          cd "$GITHUB_WORKSPACE"
+
+          tag_commit="$(gh api "repos/$GITHUB_REPOSITORY/commits/$tag" --jq '.sha')"
+          tree_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/commits/$tag_commit" --jq '.tree.sha')"
+          gh api "repos/$GITHUB_REPOSITORY/git/trees/$tree_sha?recursive=1" > "$RUNNER_TEMP/tag-tree.json"
+          python3 - "$RUNNER_TEMP/tag-tree.json" "$verified/FLYWHEEL_OMEGA_SOURCE.zip" <<'PY'
+          import hashlib, json, sys, zipfile
+          tree = json.load(open(sys.argv[1]))
+          if tree.get('truncated'):
+              raise SystemExit('Tag tree is incomplete; cannot verify source binding')
+          actual = {item['path']: item['sha'] for item in tree['tree'] if item['type'] == 'blob'}
+          with zipfile.ZipFile(sys.argv[2]) as source:
+              manifest = json.loads(source.read('PUBLICATION.json'))
+              entries = {'docs/flywheel-omega/' + name: source.read(name)
+                         for name in [*manifest['source_files'], 'PUBLICATION.json']}
+              entries['docs/research/flywheel-omega.pdf'] = source.read('FLYWHEEL_OMEGA.pdf')
+          for path, data in entries.items():
+              blob = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+              if actual.get(path) != blob:
+                  raise SystemExit('Immutable tag/source mismatch: ' + path)
+          print('Downloaded release bytes and every tagged publication source match the qualified artifact.')
+          PY
+          echo "Verified $tag at $tag_commit"
