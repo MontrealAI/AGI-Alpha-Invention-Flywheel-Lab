@@ -1,0 +1,45 @@
+{
+  "schema": "outlearning-process/public-confirmation-freeze/v1",
+  "campaign": "outlearning-process-20261102-a17c",
+  "base_main": "54f33ce6d3b19d37050717c2c1a4e1e4380caa6b",
+  "protocol_sha256": "636504f0084a3fd82b0a8cc882b2ec1c11cb64bb15f8479ae10640150ead75de",
+  "retained_sha256": "5c6d618d3b6c3cdc6b68244af818709cfd62983ffa16ef3c80857387246bad12",
+  "source_hashes": {
+    "reference.py": "a74814450138d4d2914eb9485fff3e314a71d3447b56442baf1dd59971bfca1c",
+    "run.py": "8d2683a5aa2d23b0fa66fe32890fd3a20e0fc684e72b34cacf64a5aa709923c7",
+    "science.py": "404ed7a87b773b54024f0c537b89812ff00d1fb3381d9692bff9df32d02b75fe",
+    "test_science.py": "b9d384c26c585dc5b1912198904aaa185e14d7678a302b451662500f3e4ad489",
+    "worker.py": "f6ccb242927e682a219546b2f276a0fa450aad4b5dbc14c69c262ce75976fc4b"
+  },
+  "confirmation_outcomes_at_freeze": "NOT_RUN",
+  "development": {
+    "cases": 12,
+    "seed_rule": "923000 + 100*j + i; j=0..3 for series,parallel,combined,reversible; i=0..2",
+    "source_role": "EXPOSED_DEVELOPMENT",
+    "retained_experiment_prefix": [[8.0, 1.0], [1.0, 0.0]],
+    "selection": "Greedy expected log-determinant on 22 fitted development models; no ground-truth rates used for selection",
+    "limits": "Known optimal-experiment-design operation in a developer-authored grammar, not unrestricted LLM discovery or weight modification"
+  },
+  "confirmation": {
+    "cases": 64,
+    "families_in_order": ["series", "parallel", "combined", "reversible", "nonlinear", "gain", "noisy", "limited"],
+    "seed_rule": "924000 + 100*j + i; j=0..7; i=0..7",
+    "arms": ["initial", "retained", "ordinary", "equal_content"],
+    "observations": "Only requested concentrations and public noise/cost limits; no rates, seed, family or future outcomes sent to worker",
+    "noise_bound": "0.001 except 0.06 in noisy cases",
+    "query_budget": "8 except 3 in limited cases",
+    "primary_metric": "Total assay queries including failures divided by independently accepted K2 designs",
+    "material_effect": "At least one fewer query per accepted K2 than the strong ordinary method, with no reduction in accepted designs and no increase in false design candidates",
+    "k1_acceptance": "All retained model forecasts within 0.025 absolute concentration of separate ODE reference at four fresh conditions",
+    "k2_acceptance": "Product yield at least 0.40; score regret at most 0.02 against exhaustive 108-design reference; K1 must also pass",
+    "score": "B yield minus 0.02*(PFR time+CSTR residence) minus 0.10*extraction fraction; this is a synthetic engineering score, not money",
+    "k1_k2_binding": "K1 hash committed in IPC before different PFR-separator-CSTR construction; K2 records inherited hash",
+    "comparison": "Ordinary/equal-content methods receive identical observations rights, retained recipe, graph vocabulary and budgets; ordinary starts with full graph family",
+    "uncertainty": "4000 paired bootstrap resamples with seed924999; conditional on balanced synthetic case set, not empirical chemistry",
+    "stopping": "One execution of each case/arm; resume unfinished cases without replacement or tuning; no reselection",
+    "independence": "Same-author independent ODE evaluator and separate worker process; not external blinding or a malicious-code sandbox",
+    "physical_limits": "No real experiments. First-order homogeneous kinetics, trusted clock/concentration standards, available intermediate feed and ideal separator are explicit assumptions. No physical process or novel industry claim follows from numerical success."
+  },
+  "economic_boundary": "Only independently accepted computational artifacts may support a subsequent prospectively registered native service simulation. No prices, demand, industrial savings or profit outcomes are asserted here. No public/private production accounts are changed.",
+  "preserved_engineering_failure": "One zero-state floating-point unit assertion initially used zero absolute tolerance; corrected to 1e-15 before development. Original failure retained locally. Ten focused tests then passed."
+}
