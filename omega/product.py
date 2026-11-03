@@ -39,7 +39,7 @@ def validate_costs(costs):
         if not isinstance(rows, dict) or not rows or any(not isinstance(k,str) or not k or len(k)>40 or type(v) is not int or v<0 for k,v in rows.items()):
             raise ValueError('ITEMIZED_NONNEGATIVE_MICROUSD_COSTS_REQUIRED')
 
-BUNDLE_PATHS = ('omega/__main__.py', 'omega/README.md', 'omega/__init__.py', 'omega/water.py', 'omega/verify.py', 'omega/runner.py',
+BUNDLE_PATHS = ('omega/__main__.py', 'omega/README.md', 'omega/help.py', 'omega/__init__.py', 'omega/water.py', 'omega/verify.py', 'omega/runner.py',
                 'omega/request.json', 'omega/requirements.txt',
                 'mechanism_harness/__init__.py', 'mechanism_harness/core.py',
                 'mechanism_harness/evidence.py', 'mechanism_harness/experiment.py')

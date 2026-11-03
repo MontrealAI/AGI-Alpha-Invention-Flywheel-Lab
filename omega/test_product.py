@@ -1,6 +1,7 @@
 """Actual native order acceptance and adversarial public replay tests."""
 import copy
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -179,6 +180,13 @@ class ProductTest(unittest.TestCase):
         self.assertEqual(json.loads(ran.stdout),artifact['buyer_result'])
         subprocess.run([sys.executable,'-m','omega','solve','--request','omega/request.json','--output','solved.json'],cwd=bundle,capture_output=True,text=True,check=True)
         self.assertEqual(json.loads((bundle/'solved.json').read_text()),artifact['buyer_result'])
+        env = {k:v for k,v in os.environ.items() if k != 'PYTHONPATH'}
+        help_run = subprocess.run([sys.executable,'-m','omega.help','model unavailable'],
+                                  cwd=bundle,env=env,capture_output=True,text=True,check=True)
+        help_result = json.loads(help_run.stdout)
+        self.assertEqual(help_result['status'],'DOCUMENTED')
+        self.assertEqual(help_result['network_calls'],0)
+        self.assertTrue(help_result['citations'])
 
     def test_maturity_releases_capital_not_income_and_late_claim_stops(self):
         m = self.manifest()

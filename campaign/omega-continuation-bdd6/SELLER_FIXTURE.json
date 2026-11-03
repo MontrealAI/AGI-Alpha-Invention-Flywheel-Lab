@@ -1,0 +1,53 @@
+{
+  "schema": "omega/seller-lifecycle-registration/v1",
+  "role": "ENGINEERING_FIXTURE_ONLY_NOT_MISSION_ACCOUNT",
+  "currency": "USD",
+  "opening_usd": 1000,
+  "price_usd": 299,
+  "costs_usd": {
+    "setup_documentation_security": 120,
+    "acquisition_per_paid_attempt": 5,
+    "processor_envelope_per_paid_attempt": 9,
+    "hosting_onboarding_per_paid_attempt": 1,
+    "refund_administration": 2,
+    "dispute_administration": 3,
+    "authored_dispute_processing_fee": 0.2
+  },
+  "founder_minutes": {
+    "unresolved_help": 5,
+    "dispute_review": 10,
+    "webinar_per_session": 150,
+    "private_per_session": 75
+  },
+  "founder_hourly_value_sensitivity_usd": [
+    0,
+    200,
+    2000
+  ],
+  "taxes": "UNKNOWN_NOT_ACCRUED",
+  "actual_host_model_full_development_cost": "UNKNOWN",
+  "capex_usd": 0,
+  "depreciation_usd": 0,
+  "financing_beyond_seed_usd": 0,
+  "cases": [
+    "accepted_download_then_late_dispute",
+    "funded_failed_download_refund",
+    "voluntary_no_purchase",
+    "model_unavailable_self_help_or_decline",
+    "crash_after_commit_before_ack",
+    "tampered_package",
+    "ambiguous_choice"
+  ],
+  "liquidity_regression": {
+    "requested_investment_usd": 1001,
+    "must_preserve_positive_accounting_profit": true,
+    "must_not_commit_if_available_insufficient": true
+  },
+  "native_sales_require": "product_specific_typed_acceptance",
+  "human_services_auto_complete": false,
+  "real_orders": 0,
+  "mission_account_mutations": 0,
+  "annual_profit_claim": false,
+  "aggregation_with_mission_forbidden": true,
+  "registration_timing": "Full scenario prospectively frozen; developer unit execution is exposed, not a hidden confirmation"
+}

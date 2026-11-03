@@ -1,7 +1,11 @@
 import copy
 import json
 from pathlib import Path
+import subprocess
+import sys
+import tempfile
 import unittest
+from .__main__ import write_result
 from .runner import buyer, cases, experiment, plan_path
 from .water import construct, conventional_milp
 from .verify import verify, exhaustive_optimum
@@ -81,6 +85,19 @@ class BuyerTests(unittest.TestCase):
         self.request['sinks'][0]['demand']=1000000000
         with self.assertRaisesRegex(RuntimeError,'RESOURCE_CHECKPOINT'): construct(self.request,max_states=50)
 
+    def test_arbitrary_integer_width_stops_before_machine_range_length(self):
+        self.request['sources'][0]['capacity']=10**100
+        self.request['sinks'][0]['demand']=10**100
+        with self.assertRaisesRegex(RuntimeError,'RESOURCE_CHECKPOINT_NOT_INFEASIBILITY'):
+            construct(self.request,max_states=50)
+        with self.assertRaisesRegex(RuntimeError,'EXACT_ORACLE_RESOURCE_CHECKPOINT_NOT_INFEASIBILITY'):
+            exhaustive_optimum(self.request,max_candidates=50)
+
+    def test_oracle_requires_positive_integer_budget(self):
+        for budget in [0,-1,True,1.5]:
+            with self.assertRaisesRegex(ValueError,'POSITIVE_CANDIDATE_BUDGET_REQUIRED'):
+                exhaustive_optimum(self.request,max_candidates=budget)
+
     def test_corner_enumeration_resource_checkpoint(self):
         self.request['freshwater_cap']=6
         self.request['sources']=[dict(id='zero'+str(i),capacity=0,upper_quality=[0,0],unit_cost_cents=0,consent=True) for i in range(15)]
@@ -96,5 +113,48 @@ class BuyerTests(unittest.TestCase):
         plan['allocation']=[[0,3],[3,0]]
         plan['objective']=[0,150]
         with self.assertRaisesRegex(ValueError,'QUALITY'):verify(self.request,plan)
+
+class ResultRecoveryTests(unittest.TestCase):
+    def test_identical_retry_preserves_completed_bytes_and_conflict_refuses(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output=Path(directory)/'receipt.json'
+            value={'accepted':True,'request':'fixture'}
+            write_result(output,value)
+            original=output.read_bytes(); inode=output.stat().st_ino
+            write_result(output,value)
+            self.assertEqual(output.read_bytes(),original)
+            self.assertEqual(output.stat().st_ino,inode)
+            with self.assertRaises(FileExistsError):write_result(output,{'accepted':False})
+            self.assertEqual(output.read_bytes(),original)
+
+    def test_process_exit_before_and_after_commit_can_be_retried(self):
+        script='''import os, sys
+from pathlib import Path
+import omega.__main__ as module
+real_link=module.os.link
+def interrupted(source,destination):
+    if sys.argv[2]=='after': real_link(source,destination)
+    os._exit(17)
+module.os.link=interrupted
+module.write_result(Path(sys.argv[1]),{'accepted':True,'request':'fixture'})
+'''
+        for point in ['before','after']:
+            with self.subTest(point=point),tempfile.TemporaryDirectory() as directory:
+                output=Path(directory)/'receipt.json'
+                result=subprocess.run([sys.executable,'-c',script,str(output),point],cwd=ROOT,check=False)
+                self.assertEqual(result.returncode,17)
+                self.assertEqual(output.exists(),point=='after')
+                if output.exists():self.assertEqual(json.loads(output.read_text()),{'accepted':True,'request':'fixture'})
+                write_result(output,{'accepted':True,'request':'fixture'})
+                self.assertEqual(json.loads(output.read_text()),{'accepted':True,'request':'fixture'})
+
+    def test_existing_symlink_is_not_followed_or_replaced(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target=Path(directory)/'original.json'; output=Path(directory)/'receipt.json'
+            target.write_text('private content')
+            output.symlink_to(target)
+            with self.assertRaises(FileExistsError):write_result(output,{'accepted':True})
+            self.assertTrue(output.is_symlink())
+            self.assertEqual(target.read_text(),'private content')
 
 if __name__=='__main__': unittest.main()

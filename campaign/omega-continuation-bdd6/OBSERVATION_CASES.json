@@ -1,0 +1,1089 @@
+{
+  "cases": [
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": 3
+        },
+        "true_world_id": "low_a"
+      },
+      "id": "separating_assay",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "separating_assay",
+        "context_id": "batch-predecessor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "reuse_route_a"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "reuse_route_b"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [
+          {
+            "context_id": "batch-predecessor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "predecessor"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": 4
+        },
+        "true_world_id": "low_a"
+      },
+      "id": "overlapping_error",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "overlapping_error",
+        "context_id": "batch-predecessor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "reuse_route_a"
+            ],
+            "id": "low_a",
+            "state": [
+              4,
+              6
+            ]
+          },
+          {
+            "accepted_actions": [
+              "reuse_route_b"
+            ],
+            "id": "high_a",
+            "state": [
+              6,
+              4
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [
+          {
+            "context_id": "batch-predecessor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 2,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "adverse_or_development"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": 3
+        },
+        "true_world_id": "low_a"
+      },
+      "id": "unaffordable_assay",
+      "request": {
+        "budget_cents": 99,
+        "case_id": "unaffordable_assay",
+        "context_id": "batch-predecessor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "reuse_route_a"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "reuse_route_b"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [
+          {
+            "context_id": "batch-predecessor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "adverse_or_development"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": 3
+        },
+        "true_world_id": "low_a"
+      },
+      "id": "permission_refused",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "permission_refused",
+        "context_id": "batch-predecessor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "reuse_route_a"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "reuse_route_b"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [
+          {
+            "context_id": "batch-predecessor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": false,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "adverse_or_development"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": null
+        },
+        "true_world_id": "low_a"
+      },
+      "id": "measurement_missing",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "measurement_missing",
+        "context_id": "batch-predecessor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "reuse_route_a"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "reuse_route_b"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [
+          {
+            "context_id": "batch-predecessor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "adverse_or_development"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": 20
+        },
+        "true_world_id": null
+      },
+      "id": "out_of_model_observation",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "out_of_model_observation",
+        "context_id": "batch-predecessor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "reuse_route_a"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "reuse_route_b"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [
+          {
+            "context_id": "batch-predecessor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "adverse_or_development"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": true
+        },
+        "true_world_id": "low_a"
+      },
+      "id": "invalid_boolean_observation",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "invalid_boolean_observation",
+        "context_id": "batch-predecessor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "reuse_route_a"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "reuse_route_b"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [
+          {
+            "context_id": "batch-predecessor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "adverse_or_development"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": "STALE_OBSERVATION",
+        "readings": {},
+        "true_world_id": "low_a"
+      },
+      "id": "stale_observation",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "stale_observation",
+        "context_id": "batch-predecessor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "reuse_route_a"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "reuse_route_b"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [
+          {
+            "context_id": "old-batch",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "adverse_or_development"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": 3,
+          "assay_b": 9
+        },
+        "true_world_id": "w28"
+      },
+      "id": "joint_panel_correlated_errors",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "joint_panel_correlated_errors",
+        "context_id": "batch-predecessor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "route22"
+            ],
+            "id": "w22",
+            "state": [
+              2,
+              2
+            ]
+          },
+          {
+            "accepted_actions": [
+              "route28"
+            ],
+            "id": "w28",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "route82"
+            ],
+            "id": "w82",
+            "state": [
+              8,
+              2
+            ]
+          },
+          {
+            "accepted_actions": [
+              "route88"
+            ],
+            "id": "w88",
+            "state": [
+              8,
+              8
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 20,
+            "setup_cost_cents": 30
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              0,
+              1
+            ],
+            "error_bound": 1,
+            "id": "assay_b",
+            "offset": 0,
+            "sample_cost_cents": 20,
+            "setup_cost_cents": 30
+          }
+        ]
+      },
+      "role": "adverse_or_development"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": 9
+        },
+        "true_world_id": "high_a"
+      },
+      "id": "successor_no_predecessor",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "successor_no_predecessor",
+        "context_id": "batch-successor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "successor_route_b"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "successor_route_a"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [
+          {
+            "context_id": "batch-successor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "successor_control"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": 9
+        },
+        "true_world_id": "high_a"
+      },
+      "id": "successor_inherited_recipe",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "successor_inherited_recipe",
+        "context_id": "batch-successor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "successor_route_b"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "successor_route_a"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [
+          {
+            "sensor_id": "assay_a",
+            "sensor_sha256": "d86b78666f576dc26923e0aace82702a56ada301d976631d825e54e4944aa031"
+          }
+        ],
+        "prior_observations": [
+          {
+            "context_id": "batch-successor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "successor_control"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": 9
+        },
+        "true_world_id": "high_a"
+      },
+      "id": "successor_ordinary_equal_content",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "successor_ordinary_equal_content",
+        "context_id": "batch-successor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "successor_route_b"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "successor_route_a"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [
+          {
+            "sensor_id": "assay_a",
+            "sensor_sha256": "d86b78666f576dc26923e0aace82702a56ada301d976631d825e54e4944aa031"
+          }
+        ],
+        "prior_observations": [
+          {
+            "context_id": "batch-successor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "successor_control"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": 9
+        },
+        "true_world_id": "high_a"
+      },
+      "id": "successor_cash_only",
+      "request": {
+        "budget_cents": 160,
+        "case_id": "successor_cash_only",
+        "context_id": "batch-successor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "successor_route_b"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "successor_route_a"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [
+          {
+            "context_id": "batch-successor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "successor_control"
+    },
+    {
+      "evaluation_only": {
+        "expected_input_error": null,
+        "readings": {
+          "assay_a": 9
+        },
+        "true_world_id": "high_a"
+      },
+      "id": "successor_no_sensing",
+      "request": {
+        "budget_cents": 100,
+        "case_id": "successor_no_sensing",
+        "context_id": "batch-successor",
+        "hypotheses": [
+          {
+            "accepted_actions": [
+              "successor_route_b"
+            ],
+            "id": "low_a",
+            "state": [
+              2,
+              8
+            ]
+          },
+          {
+            "accepted_actions": [
+              "successor_route_a"
+            ],
+            "id": "high_a",
+            "state": [
+              8,
+              2
+            ]
+          }
+        ],
+        "inherited_recipes": [],
+        "prior_observations": [
+          {
+            "context_id": "batch-successor",
+            "sensor_id": "bulk",
+            "sensor_sha256": "41cf8c5b32ed6f8fd742500471a5747f48b0303616d15616d115197ced06da6e",
+            "value": 10
+          }
+        ],
+        "schema": "omega-observation/v1",
+        "sensors": [
+          {
+            "authorized": true,
+            "coefficients": [
+              1,
+              1
+            ],
+            "error_bound": 0,
+            "id": "bulk",
+            "offset": 0,
+            "sample_cost_cents": 10,
+            "setup_cost_cents": 0
+          },
+          {
+            "authorized": false,
+            "coefficients": [
+              1,
+              0
+            ],
+            "error_bound": 1,
+            "id": "assay_a",
+            "offset": 0,
+            "sample_cost_cents": 40,
+            "setup_cost_cents": 60
+          }
+        ]
+      },
+      "role": "successor_control"
+    }
+  ],
+  "controls": "Identical successor state/action contract for all five arms; inherited and ordinary reuse receive identical recipe bytes; no predecessor rebuilds at declared setup cost; cash-only has 60 cents more spending capacity but identical costs; no sensing excludes additional measurement. Changed successor action labels prohibit reuse of predecessor action. Predecessor setup is retained in lifecycle accounting; setup savings are ordinary content reuse, not improved discovery.",
+  "currency": "USD",
+  "evidence_role": "finite_authored_dependency_investigation",
+  "model_semantics": "A and B are abstract process impurity indices; action acceptance is explicitly authored for the finite states, not physical water or material qualification. Bulk sum 10 aliases states. Candidate sees requests only; evaluator supplies readings through callback. Bounded integer errors permit arbitrary correlation; no probability distribution is asserted.",
+  "money_unit": "cents",
+  "not_revenue_or_native_ledger": true,
+  "registered_primary_outcomes": [
+    "guaranteed_decision_panel_status",
+    "selected_panel_cost_cents",
+    "actual_independently_accepted_action",
+    "rejected_or_missing_readings",
+    "ordinary_equal_content_difference",
+    "complete_conventional_comparison"
+  ],
+  "resource_bounds": {
+    "max_candidate_cells": 200000,
+    "max_candidate_panels": 65536,
+    "stopping_rule": "Execute exactly registered cases and controls once after source freeze; engineering correction retains failure and uses new source identity; no seed search or favorable replacement."
+  },
+  "schema": "omega-observation-cases/v1",
+  "uncertainties": [
+    "Hypothesis-class completeness unknown",
+    "Physical sensor calibration and error bounds unknown",
+    "All recipe/sample cost numbers authored, not supplier quotes",
+    "Actual buyer value, demand, hardware, electricity and founder effort unknown",
+    "Readable calibration content does not create physical sensor hardware or authority"
+  ]
+}

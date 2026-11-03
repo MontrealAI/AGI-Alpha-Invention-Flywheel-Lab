@@ -1,7 +1,6 @@
 """Integer water reuse constructor. A blueprint is not physical safety evidence."""
 from __future__ import annotations
 from itertools import product
-from math import prod
 from mechanism_harness.core import digest
 
 
@@ -57,9 +56,13 @@ def _sink_options(request, sink, max_options):
     if not sink['consent']:
         return []  # Cannot deliver its required production without its participation.
     choices = []
-    ranges = [range(min(s['capacity'], sink['demand']) + 1) if s['consent'] else range(1) for s in sources]
-    if prod(len(values) for values in ranges) > max_options:
-        raise RuntimeError('RESOURCE_CHECKPOINT_NOT_INFEASIBILITY')
+    widths = [min(s['capacity'], sink['demand']) + 1 if s['consent'] else 1 for s in sources]
+    option_count = 1
+    for width in widths:
+        if width > max_options // option_count:
+            raise RuntimeError('RESOURCE_CHECKPOINT_NOT_INFEASIBILITY')
+        option_count *= width
+    ranges = [range(width) for width in widths]
     for count, amounts in enumerate(product(*ranges), 1):
         if count > max_options:
             raise RuntimeError("RESOURCE_CHECKPOINT_NOT_INFEASIBILITY")
