@@ -1,0 +1,64 @@
+{
+  "schema": "omega-v4/local-runtime-qualification/v1",
+  "runtime_commit": "f1074b1e128069d5a4754b10955a73a3d95db7c5",
+  "original_and_liquidity_tests": {
+    "count": 130,
+    "passed": true,
+    "seconds": 133.037,
+    "log_sha256": "8e1390276706473a57f0c425e86913e600a90b25935927c3656a58b88e57502c"
+  },
+  "new_independent_tests": 46,
+  "native_tests": 10,
+  "crash_test_methods": 1,
+  "crash_fault_points": 8,
+  "total_test_methods": 187,
+  "clean_canonical_qualification": {
+    "accepted": true,
+    "source_sha256": "2483d87760cc28981a52abdcf5e27030d31cb9d54387a9552531f3602d3804bb",
+    "commands": [
+      {
+        "returncode": 0,
+        "wall_seconds": 22.675052102000336
+      },
+      {
+        "returncode": 0,
+        "wall_seconds": 5.633360898000319
+      },
+      {
+        "returncode": 0,
+        "wall_seconds": 3.774813042999085
+      },
+      {
+        "returncode": 0,
+        "wall_seconds": 4.380637650001518
+      },
+      {
+        "returncode": 0,
+        "wall_seconds": 10.94518078299916
+      }
+    ],
+    "completed_resume_financially_unchanged": true,
+    "source_archive": {
+      "bytes": 5859280,
+      "extraction": {
+        "crc_verified": true,
+        "files": 1250,
+        "uncompressed_bytes": 31053811
+      },
+      "sha256": "507d1cd58b30e205ada935bb38916889136ef17d7e22cfa52c3ff84c1e4b6ae0"
+    },
+    "public_archive": {
+      "bytes": 6357067,
+      "extraction": {
+        "crc_verified": true,
+        "files": 1550,
+        "uncompressed_bytes": 33074976
+      },
+      "sha256": "7ef7b40824ac81d9016e17d266725ae01273ae93d8842e15dcf2b20c5cef32a7"
+    },
+    "scope": "Existing canonical packaged engine, not an Omega V4 published release."
+  },
+  "whole_repository_qualification": false,
+  "release_published": false,
+  "scope": "Exact immutable runtime source. Hosted and broader aggregate checks are separate."
+}
