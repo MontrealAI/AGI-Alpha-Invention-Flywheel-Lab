@@ -1,0 +1,626 @@
+{
+  "construction_iterations": {
+    "code_corrections_after_fixture_outcomes": 1,
+    "corrected_client_acceptance_attempts": 1,
+    "fixture_attempts": 16,
+    "initial_generated_wave_implementations": 1,
+    "misfired_client_acceptance_attempts": 1,
+    "review_counterexamples_reproduced": 1,
+    "scope": "Counts actual included-agent source construction and listed fixture calls, not model weight updates or an autonomous Python generator."
+  },
+  "development": {
+    "corrections": [
+      {
+        "adjudication": "Public wrapper verifier.py exposes verify() but has no CLI main. Its zero exit was not acceptance.",
+        "failed_attempt": "Import-only wrapper mistaken for a CLI verifier invocation.",
+        "outcome": {
+          "accepted": true,
+          "message": "",
+          "score": 0.0
+        },
+        "repair": "Retained failed attempt and reran explicit verify() and evaluate() in independent process on the same small fixture."
+      },
+      {
+        "adjudication": "Original client accepts exact positive integer quantities and checks finiteness only for floats.",
+        "failed_attempt": "Reviewer counterexample: enormous positive integer quantity raised OverflowError with no trace.",
+        "outcome": "Huge integer fixture accepted by repaired constructor and original client; malformed JSON CLI exits2 with explicit trace.",
+        "repair": "Restrict math.isfinite to floating quantities; CLI JSON/I/O errors now emit failure trace."
+      }
+    ],
+    "fixture_attempts": [
+      {
+        "cpu_seconds": 3.8166999999998674e-05,
+        "name": "residual_augmenting_path_repairs_greedy_choice",
+        "observation": {
+          "maximum_flow": 2,
+          "requires_residual_reassignment": true
+        },
+        "passed": true,
+        "wall_seconds": 3.7686997529817745e-05
+      },
+      {
+        "cpu_seconds": 0.000265383000000001,
+        "name": "integer_and_string_slot_ids_preserved",
+        "observation": {
+          "applicability": {
+            "line_capacity_redundant_for_any_cardinality_legal_wave": true,
+            "max_lines": 10000,
+            "max_slot_top_k_line_sum": 1
+          },
+          "artifact_sha256": "bbb5aebd5c048cfb433247072b4578b8bb37eaaebe26dd4b347709b4fb62ede3",
+          "attempts": [
+            {
+              "method": "ordinary bipartite maximum flow, then SKU-overlap grouping",
+              "status": "constructed"
+            }
+          ],
+          "counts": {
+            "lines": 2,
+            "orders": 2,
+            "slots": 2
+          },
+          "decision": "constructed_pending_original_client_acceptance",
+          "final_local_check": {
+            "accepted": true,
+            "orders": 2,
+            "overlap_rate": 0.0,
+            "score": 0.0,
+            "sku_lines": 2,
+            "unique_sku_lines": 2,
+            "waves": 2
+          },
+          "generation": "Actual included-agent development; deterministic frozen ordinary software execution",
+          "initial_local_check": {
+            "accepted": true,
+            "orders": 2,
+            "overlap_rate": 0.0,
+            "score": 0.0,
+            "sku_lines": 2,
+            "unique_sku_lines": 2,
+            "waves": 2
+          },
+          "input_sha256": "aeb222073d8978239ad59bf7ec6d55f6241b8672dfb1eada24358498491a6ce1",
+          "local_search": {
+            "accepted_strict_improvements": 0,
+            "passes": 1,
+            "termination": "no improving eligible pair move/swap; local optimum only"
+          },
+          "primitive_calls": [
+            "canonical_contract",
+            "canonical_identity",
+            "exact_cover",
+            "validate_wave"
+          ],
+          "procedure": "typed-capacity-wave-construction-v1",
+          "resources": {
+            "actual_billing": null,
+            "max_rss_kib": 14080,
+            "model_api_calls": 0,
+            "process_cpu_seconds": 0.00025369499999999823,
+            "wall_seconds": 0.0002533010010665748
+          },
+          "retained_supplied": false
+        },
+        "passed": true,
+        "wall_seconds": 0.0002652889997989405
+      },
+      {
+        "cpu_seconds": 4.306999999995065e-06,
+        "name": "boolean_slot_rejected",
+        "observation": {
+          "rejected": "identifier must be an exact integer or nonempty string",
+          "trace": null
+        },
+        "passed": true,
+        "wall_seconds": 4.3359978008084e-06
+      },
+      {
+        "cpu_seconds": 0.0009989190000000009,
+        "name": "hall_capacity_failure_21_orders_for_20_places",
+        "observation": {
+          "rejected": "proven infeasible: eligible-slot maximum flow covers 20 of 21",
+          "trace": {
+            "applicability": {
+              "line_capacity_redundant_for_any_cardinality_legal_wave": true,
+              "max_lines": 10000,
+              "max_slot_top_k_line_sum": 4
+            },
+            "attempts": [
+              {
+                "method": "ordinary bipartite maximum flow, then SKU-overlap grouping",
+                "status": "started"
+              }
+            ],
+            "counts": {
+              "lines": 21,
+              "orders": 21,
+              "slots": 2
+            },
+            "decision": "failed_or_unsupported",
+            "error": "proven infeasible: eligible-slot maximum flow covers 20 of 21",
+            "generation": "Actual included-agent development; deterministic frozen ordinary software execution",
+            "input_sha256": "c45e924c84c5a025a781bd26ef4834644c8f4b89da52eeb14cacae36b9e9e11f",
+            "primitive_calls": [
+              "canonical_contract",
+              "canonical_identity",
+              "exact_cover",
+              "validate_wave"
+            ],
+            "procedure": "typed-capacity-wave-construction-v1",
+            "resources": {
+              "actual_billing": null,
+              "max_rss_kib": 14080,
+              "model_api_calls": 0,
+              "process_cpu_seconds": 0.0009865999999999972,
+              "wall_seconds": 0.0009856719989329576
+            },
+            "retained_supplied": false
+          }
+        },
+        "passed": true,
+        "wall_seconds": 0.0009988819983846042
+      },
+      {
+        "cpu_seconds": 1.603069329,
+        "name": "binding_line_capacity_uses_exact_milp",
+        "observation": {
+          "applicability": {
+            "line_capacity_redundant_for_any_cardinality_legal_wave": false,
+            "max_lines": 10,
+            "max_slot_top_k_line_sum": 18
+          },
+          "artifact_sha256": "df2707ed2240e167983d6c7bb5862ccec66bd640d5da901b4e59bbb3300d2582",
+          "attempts": [
+            {
+              "method": "ordinary wave-indexed binary MILP",
+              "status": "constructed"
+            }
+          ],
+          "counts": {
+            "lines": 18,
+            "orders": 3,
+            "slots": 1
+          },
+          "decision": "constructed_pending_original_client_acceptance",
+          "final_local_check": {
+            "accepted": true,
+            "orders": 3,
+            "overlap_rate": 0.0,
+            "score": 0.0,
+            "sku_lines": 18,
+            "unique_sku_lines": 18,
+            "waves": 3
+          },
+          "generation": "Actual included-agent development; deterministic frozen ordinary software execution",
+          "initial_local_check": {
+            "accepted": true,
+            "orders": 3,
+            "overlap_rate": 0.0,
+            "score": 0.0,
+            "sku_lines": 18,
+            "unique_sku_lines": 18,
+            "waves": 3
+          },
+          "input_sha256": "c1499520fcff15df455ff584b341dfbdaa8a1632bdec0e48941640824f6bd6ab",
+          "local_search": {
+            "accepted_strict_improvements": 0,
+            "passes": 1,
+            "termination": "no improving eligible pair move/swap; local optimum only"
+          },
+          "milp": {
+            "constraints": 9,
+            "library": "scipy.optimize.milp",
+            "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+            "mip_node_count": 1,
+            "status": 0,
+            "variables": 9,
+            "version": "1.17.0"
+          },
+          "primitive_calls": [
+            "canonical_contract",
+            "canonical_identity",
+            "exact_cover",
+            "validate_wave"
+          ],
+          "procedure": "typed-capacity-wave-construction-v1",
+          "resources": {
+            "actual_billing": null,
+            "max_rss_kib": 60932,
+            "model_api_calls": 0,
+            "process_cpu_seconds": 1.60304979,
+            "wall_seconds": 0.35836606600059895
+          },
+          "retained_supplied": false
+        },
+        "passed": true,
+        "wall_seconds": 0.358388599997852
+      },
+      {
+        "cpu_seconds": 0.0022709720000000377,
+        "name": "aggregate_capacity_false_positive_rejected_by_milp",
+        "observation": {
+          "rejected": "proven infeasible: The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+          "trace": {
+            "applicability": {
+              "line_capacity_redundant_for_any_cardinality_legal_wave": false,
+              "max_lines": 10,
+              "max_slot_top_k_line_sum": 24
+            },
+            "attempts": [
+              {
+                "method": "ordinary wave-indexed binary MILP",
+                "status": "started"
+              }
+            ],
+            "counts": {
+              "lines": 36,
+              "orders": 6,
+              "slots": 1
+            },
+            "decision": "failed_or_unsupported",
+            "error": "proven infeasible: The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+            "generation": "Actual included-agent development; deterministic frozen ordinary software execution",
+            "input_sha256": "352716046ea26d34cbf4324b532274a9baf99e49c0764955e4ececda8dda9723",
+            "milp": {
+              "constraints": 16,
+              "library": "scipy.optimize.milp",
+              "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+              "mip_node_count": null,
+              "status": 2,
+              "variables": 30,
+              "version": "1.17.0"
+            },
+            "primitive_calls": [
+              "canonical_contract",
+              "canonical_identity",
+              "exact_cover",
+              "validate_wave"
+            ],
+            "procedure": "typed-capacity-wave-construction-v1",
+            "resources": {
+              "actual_billing": null,
+              "max_rss_kib": 61316,
+              "model_api_calls": 0,
+              "process_cpu_seconds": 0.0022532650000000043,
+              "wall_seconds": 0.0022516349999932572
+            },
+            "retained_supplied": false
+          }
+        },
+        "passed": true,
+        "wall_seconds": 0.0022708439973939676
+      },
+      {
+        "cpu_seconds": 2.714000000003658e-05,
+        "name": "disjoint_eligibility_wave_rejected",
+        "observation": {
+          "rejected": "wave slot outside at least one order's eligibility",
+          "trace": null
+        },
+        "passed": true,
+        "wall_seconds": 2.7130998205393553e-05
+      },
+      {
+        "cpu_seconds": 3.367000000009668e-05,
+        "name": "duplicate_and_missing_order_rejected",
+        "observation": {
+          "rejected": "coverage failure: {'missing': ['b'], 'unknown': [], 'repeated': ['a']}",
+          "trace": null
+        },
+        "passed": true,
+        "wall_seconds": 3.3561002055648714e-05
+      },
+      {
+        "cpu_seconds": 1.7445999999976536e-05,
+        "name": "wrong_slot_json_type_rejected",
+        "observation": {
+          "rejected": "wave slot outside at least one order's eligibility",
+          "trace": null
+        },
+        "passed": true,
+        "wall_seconds": 1.7395999748259783e-05
+      },
+      {
+        "cpu_seconds": 2.0911000000012336e-05,
+        "name": "five_order_wave_rejected",
+        "observation": {
+          "rejected": "invalid whole-order wave cardinality or identity",
+          "trace": null
+        },
+        "passed": true,
+        "wall_seconds": 2.088200199068524e-05
+      },
+      {
+        "cpu_seconds": 0.00010458499999987936,
+        "name": "strict_integer_overlap_descent_preserves_feasibility",
+        "observation": {
+          "after": {
+            "accepted": true,
+            "orders": 4,
+            "overlap_rate": 0.5,
+            "score": -0.5,
+            "sku_lines": 4,
+            "unique_sku_lines": 2,
+            "waves": 2
+          },
+          "before": {
+            "accepted": true,
+            "orders": 4,
+            "overlap_rate": 0.0,
+            "score": 0.0,
+            "sku_lines": 4,
+            "unique_sku_lines": 4,
+            "waves": 2
+          },
+          "trace": {
+            "accepted_strict_improvements": 1,
+            "passes": 2,
+            "termination": "no improving eligible pair move/swap; local optimum only"
+          }
+        },
+        "passed": true,
+        "wall_seconds": 0.00010446699889143929
+      },
+      {
+        "acceptance_status": "No original validation occurred: wrapper has no CLI main; zero process exit established import only.",
+        "correction": "Recorded failed acceptance attempt; use explicit public verifier.verify(input_file, output_file) invocation.",
+        "cpu_seconds": 0.03995644399999998,
+        "name": "unmodified_original_client_verifier_small_fixture",
+        "observation": {
+          "artifact": {
+            "waves": [
+              {
+                "order_ids": [
+                  "a"
+                ],
+                "slot_id": "A",
+                "wave_id": 1
+              },
+              {
+                "order_ids": [
+                  "b"
+                ],
+                "slot_id": "B",
+                "wave_id": 2
+              }
+            ]
+          },
+          "client_exit_code": 0,
+          "client_stderr": "",
+          "client_stdout": ""
+        },
+        "passed": false,
+        "wall_seconds": 0.028298285000346368
+      },
+      {
+        "name": "original_client_verifier_and_evaluator_explicit_function_calls",
+        "observation": {
+          "accepted": true,
+          "message": "",
+          "score": 0.0
+        },
+        "passed": true,
+        "process_cpu_seconds": 0.0016765820000000028,
+        "waited_child_cpu_seconds": 0.029272,
+        "wall_seconds": 0.03083080299984431
+      },
+      {
+        "name": "review_counterexample_huge_positive_integer_quantity_before_fix",
+        "observation": {
+          "error": "int too large to convert to float",
+          "error_type": "OverflowError",
+          "failure_trace_available": false
+        },
+        "passed": false,
+        "wall_seconds": 0.00015802699999767356
+      },
+      {
+        "name": "huge_positive_integer_after_fix_and_original_client_acceptance",
+        "observation": {
+          "build_trace": {
+            "applicability": {
+              "line_capacity_redundant_for_any_cardinality_legal_wave": true,
+              "max_lines": 10000,
+              "max_slot_top_k_line_sum": 1
+            },
+            "artifact_sha256": "5bda9fde8dfbd1ae71d5c35d12bac237c57a82e57897f2e305f02d51dfd7c6a4",
+            "attempts": [
+              {
+                "method": "ordinary bipartite maximum flow, then SKU-overlap grouping",
+                "status": "constructed"
+              }
+            ],
+            "counts": {
+              "lines": 1,
+              "orders": 1,
+              "slots": 1
+            },
+            "decision": "constructed_pending_original_client_acceptance",
+            "final_local_check": {
+              "accepted": true,
+              "orders": 1,
+              "overlap_rate": 0.0,
+              "score": 0.0,
+              "sku_lines": 1,
+              "unique_sku_lines": 1,
+              "waves": 1
+            },
+            "generation": "Actual included-agent development; deterministic frozen ordinary software execution",
+            "initial_local_check": {
+              "accepted": true,
+              "orders": 1,
+              "overlap_rate": 0.0,
+              "score": 0.0,
+              "sku_lines": 1,
+              "unique_sku_lines": 1,
+              "waves": 1
+            },
+            "input_sha256": "262c4576cc6f77939f6f824144938a8bbc0d42abfa8bf018d9dd87fb7d423067",
+            "local_search": {
+              "accepted_strict_improvements": 0,
+              "passes": 1,
+              "termination": "no improving eligible pair move/swap; local optimum only"
+            },
+            "primitive_calls": [
+              "canonical_contract",
+              "canonical_identity",
+              "exact_cover",
+              "validate_wave"
+            ],
+            "procedure": "typed-capacity-wave-construction-v1",
+            "resources": {
+              "actual_billing": null,
+              "max_rss_kib": 14592,
+              "model_api_calls": 0,
+              "process_cpu_seconds": 0.0004019450000000008,
+              "wall_seconds": 0.00040107299719238654
+            },
+            "retained_supplied": false
+          },
+          "original_client": {
+            "accepted": true,
+            "message": ""
+          }
+        },
+        "passed": true
+      },
+      {
+        "name": "malformed_json_cli_emits_failure_trace",
+        "observation": {
+          "exit_code": 2,
+          "trace": {
+            "decision": "failed_or_unsupported",
+            "error": "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)",
+            "error_type": "JSONDecodeError",
+            "resources": {
+              "actual_billing": null
+            }
+          }
+        },
+        "passed": true
+      }
+    ],
+    "primary_case08_executed": false,
+    "resources": {
+      "actual_billing": null,
+      "correction": {
+        "process_cpu_seconds": 0.0016765820000000028,
+        "waited_child_cpu_seconds": 0.029272,
+        "wall_seconds": 0.03083080299984431
+      },
+      "max_rss_kib": 61316,
+      "model_api_calls": 0,
+      "previous_fixture_child_cpu_note": "Prior import-only process child CPU was not separately captured; unknown, not zero.",
+      "previous_fixture_child_cpu_seconds": null,
+      "process_cpu_seconds": 1.646969071,
+      "review_correction": {
+        "process_cpu_seconds": 0.002322848999999995,
+        "waited_child_cpu_seconds": 0.078076,
+        "wall_seconds": 0.0800747319990478
+      },
+      "wall_seconds": 0.3906359329994302
+    },
+    "schema": "operational075.wave-development.v1",
+    "source_wave_sha256": "68fba735057f1c97cbe1ec5fcff5684fdbdbf2eee1be7d6ad66bae1ac3ca6544",
+    "stage": "small_structural_development_only"
+  },
+  "freeze": {
+    "k2_read_or_executed": false,
+    "primary_case08_executed": false,
+    "source_sha256": "4894764ab11266b4c72f78ea6ed8d6f7420bbea2b9f0a4b3f20b9cb2e123f696",
+    "status": "source ready for root freeze before primary case08 execution"
+  },
+  "generation": "Executable Python produced by the actual included agent during this development. Frozen deterministic CPU algorithms afterwards; no model callable or model weight edits.",
+  "independent_code_review": {
+    "finding": "No core feasibility/scoring loophole identified; local optimum only; retained JSON does not cause algorithm selection.",
+    "limitations_addressed": "Positive exact integers avoid float conversion; CLI JSON/I/O failures produce a trace. Parser string order IDs and unique SKU codes match original source requirements.",
+    "scope": "Child agent reviewed ONLY wave.py; no source data, hidden solutions or K2 read."
+  },
+  "lessons": [
+    {
+      "next": "Construct complete grouping with exact per-slot quotas.",
+      "outcome": "Not used:2101 orders exceed132*5=660 wave quotas.",
+      "tried": "Naive one-order-per-wave service could appear convenient.",
+      "why": "Per-slot quota counts nonempty waves, not orders."
+    },
+    {
+      "next": "Use reduction only after a checked redundancy proof, otherwise per-wave MILP.",
+      "outcome": "Small fixture six orders each6 lines with five10-line waves is infeasible despite aggregate6<=20 and36<=50.",
+      "tried": "Aggregate order/line capacity as a general proof.",
+      "why": "Line packing is indivisible."
+    },
+    {
+      "next": "Invoke verifier.verify and evaluator.evaluate explicitly in separate process.",
+      "outcome": "No validation occurred; recorded failed acceptance attempt.",
+      "tried": "Invoke client verifier wrapper as CLI.",
+      "why": "Public adapter exposes a function and no CLI main."
+    }
+  ],
+  "retained_procedure": {
+    "entry": "operational075.wave.build(data,retained=None)->(artifact,trace)",
+    "steps": [
+      "Check source input and preserve typed identifiers without coercion.",
+      "Prove line-capacity redundancy using each slot's largest max_orders_per_wave eligible order line counts.",
+      "If redundant, solve standard bipartite maximum flow with slot capacity max_waves*max_orders_per_wave, then group no more than max_orders_per_wave per wave.",
+      "If not redundant, solve ordinary exact wave-indexed binary MILP; retain solver status and validate extracted incumbent.",
+      "Improve SKU overlap using strictly decreasing integer union-count local moves/swaps, preserving feasibility; no global optimality claim.",
+      "Check exact order coverage, typed slots, all-order slot intersection, per-wave capacities and per-slot wave quotas.",
+      "Obtain separate unmodified original client verifier/evaluator acceptance on the delivered artifact."
+    ]
+  },
+  "schema": "operational075.retained-construction.v1",
+  "source_contract": {
+    "files_sha256": {
+      "problem_description.md": "dcd94e590499cb579c2a6c5f1c3dd37dfeae797b9c0df73d9b2ef0d0d1344d7d",
+      "program/_wave_engine.py": "f24f0274a9e14cfdc0669a71e7d01a0157d76f8b39a41a22e2af4106d1b4bd51",
+      "program/_wave_objective.py": "222c17d13f613fc8b27589b8935ea2847fa5ee4c8f3c19460e6458a45ddf5b29",
+      "program/_wave_verifier.py": "2db38ecbf09956e0c4b43d05f78f90463199a7da816568700b4ced2cf77698bb",
+      "program/evaluator.py": "91f39e4dfa1d8e2014c7473414bb0fb188d9898996040be315de0a1440ffe751",
+      "program/verifier.py": "2fca460d908afca3832ce0ca5bd420d66ddea6ec3e38e50cac4d7043d151814f",
+      "testdata/08.json": "c922e1b892b4bb62e9080e94013f9e66ff0b8a7df2c42ac6f2b47a82aecb30f8"
+    },
+    "public_source_commit": "2bda4b8d6ddd4bd1cb62b89acee0c7c2f1914d47",
+    "public_task": "OR-License tasks/19_wave",
+    "schema_and_counts_only_before_primary": {
+      "eligible_slots_per_order": 2,
+      "global_top_four_lines_sum": 400,
+      "max_lines_per_wave": 10000,
+      "max_order_lines": 110,
+      "max_orders_per_wave": 4,
+      "max_waves_per_slot": 5,
+      "orders": 2101,
+      "sku_lines": 30547,
+      "slots": 132
+    }
+  },
+  "source_sha256": "4894764ab11266b4c72f78ea6ed8d6f7420bbea2b9f0a4b3f20b9cb2e123f696",
+  "transfer_limits": [
+    "K1 wave matching, batching and SKU objective do not solve irreversible routing or establish transfer.",
+    "The typed-identity and exact-cover instruments may be reused only after the successor revalidates entity, timing, eligibility and resource meanings.",
+    "A successor may need a new procedure; no causal necessity or retained-method superiority follows from an import.",
+    "The ordinary comparator receives identical substantive facts, software and primitives.",
+    "The optional retained argument is recorded metadata; algorithm selection uses checked input properties, not this JSON."
+  ],
+  "working_primitives": {
+    "canonical_contract": {
+      "entry": "operational075.wave.canonical_contract",
+      "scope": "K1 warehouse-wave schema and field semantics only.",
+      "source_sha256": "cf98729587c5fcf0f5d3ae6c60b703ad2a4ea8b86e7d7f2b25d3accaf1c3ab27"
+    },
+    "canonical_identity": {
+      "entry": "operational075.wave.canonical_identity",
+      "scope": "Exact JSON integer/nonempty-string identity only; bool and coercions rejected.",
+      "source_sha256": "a2afca91cf170c84ec0c0fd12ecdf9f76e80a61eb55aab92fd3db28980a07f51"
+    },
+    "exact_cover": {
+      "entry": "operational075.wave.exact_cover",
+      "scope": "Whole discrete item coverage only; no timing, causal or routing guarantee.",
+      "source_sha256": "e800c17ee5ca80fc48d23381a1abce8e77e9fb72484302e548227d34c28b0fd4"
+    },
+    "validate_wave": {
+      "entry": "operational075.wave.validate_wave",
+      "scope": "K1 order coverage, typed eligibility and resource capacities only. Independent client check remains necessary.",
+      "source_sha256": "b87f61c42c64d8d112f126baede35d11980989b15869a017bf31a1b5d426b773"
+    }
+  }
+}
