@@ -1,0 +1,20 @@
+{
+  "schema": "enterprise078/catalog-preparation-protocol/v1",
+  "role": "development fixture, not financial migration or fresh commerce",
+  "parent": "f91cbcb45197a115915a83edac7e671adf267bba",
+  "cases": [
+    "original no-reseed controls first",
+    "accepted typed delivery binds signed inactive proposal",
+    "same account reopen verifies proposal and unchanged loss",
+    "tampered proposal refused",
+    "changed candidate source refused",
+    "wrong expected head or removed tail refused",
+    "existing proposal cannot overwrite",
+    "wrong service type refused",
+    "new native action after proposal leaves signed prefix valid but activation absent"
+  ],
+  "authority": "Canonical BusinessAccount/JournalAccount seal_checkpoint and verify_checkpoint only; no key readout, new signer, native modification, original account mutation or balance copy.",
+  "boundary": "Append-only private preparation log is NOT an admitted catalog. No offer or spend is enabled. Transition activation requires separately implemented native execution and full historical replay.",
+  "loss": "Fresh test account incurs $100 once; unchanged across preparation.",
+  "stop": "Run finite cases; preserve failure; do not touch original authority with candidate preparation."
+}
