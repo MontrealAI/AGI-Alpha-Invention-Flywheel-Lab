@@ -1,0 +1,150 @@
+\section{An exact study of the institution that survives replacement}
+\label{sec:study}
+The study is a deliberately small, fully enumerable construction. Its purpose is to expose a lifecycle mechanism and its failure conditions. We supply the capabilities, contributions, replacement schedule, and action vocabulary. No model discovers these primitives; no customer purchases anything. The experiment tests exact planning, cash feasibility, and the consequences of retaining a useful artifact under those assumptions.
+
+\subsection{The frozen environment}
+There are 16 periods, divided into four supplier epochs of length four. Opening cash is 100 and the protected reserve is 20. The period is an abstract decision interval, not a month or a year. Each period permits one action. Payment precedes any collection. Development, renewal, and retirement consume a period during which no service is delivered.
+
+The institution begins with a legacy service already qualified and available to every arm. That endowment is deliberate: the comparison does not charge the baseline an invented setup burden. A provider-specific specialist can be constructed for 40 units. A portable capability can be constructed for 60 units and incurs one unit of maintenance in every period in which it is retained, including its construction and renewal periods.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Supplied nominal action contracts. Maintenance is additional when the portable asset is retained. All values are abstract cash units, not measured prices.}
+\begin{tabularx}{\textwidth}{@{}lrrX@{}}
+\toprule
+Action & Upfront & Receipt & Availability and effect\\
+\midrule
+Legacy delivery & 10 & 22 & Initially available; contribution 12.\\
+Build specialist F & 40 & 0 & Qualifies F for the current supplier epoch.\\
+Deliver with F & 12 & 42 & Requires current F qualification; contribution 30.\\
+Build portable P & 60 & 0 & Retains P and qualifies it for the current epoch.\\
+Deliver with P & 10 & 38 & Requires current P qualification; contribution 28 before maintenance.\\
+Renew P & 10 & 0 & Retained P receives current-epoch qualification.\\
+Idle & 0 & 0 & Maintenance still applies if P is retained.\\
+Retire P & 0 & 0 & Removes P and future upkeep; no salvage receipt.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+At a supplier change, current specialist and portable qualifications expire. The portable artifact remains available for renewal; the provider-specific specialist must be rebuilt. That difference is an authored property of the two contracts. It is not a measured universal property of portable versus provider-specific AI. Constructing a usable portability layer in a real system is precisely what the proposed industrial experiment must establish.
+
+The complete state is $(t,B,o,e_P,e_F)$: period, cash, whether P is retained, and the epochs for which P and F are qualified. Qualification expires implicitly when an epoch identifier differs from the current epoch. The optimizer can choose the legacy service, build or use either specialist, retain or retire P, renew it, or idle. It is allowed to choose neither new capability.
+
+All modeled service deliveries succeed and collect their specified receipt in the same period when demand is enabled. The default schedule is deterministic and known. There are no material capacity limits beyond one action per period, and no uncertain physical effects. These strong assumptions make the result exactly checkable; they also limit its commercial interpretation.
+
+\subsection{Four comparisons, not a protected protagonist}
+The \emph{full-option planner} has all actions. The \emph{no-portable planner} has the same cash rules and may rebuild F, use legacy, or idle; it tests the value of adding the supplied portable construction. The \emph{legacy-only control} uses the initial service or idles. Finally, an \emph{ordinary equal-content planner} has the same full action set and information. It reaches the same optimum. The ordinary control is not prohibited from retaining knowledge or constructing a portability layer.
+
+We also evaluate a supplied \emph{always-retain policy}: immediately build P, renew it at each epoch change, and otherwise deliver with it. This policy is not allowed to borrow. It returns infeasible when it cannot prefund a required action. Its purpose is to test the tempting but incorrect rule that institutional continuity should always be purchased.
+
+\subsection{Result: the stronger local component loses the horizon}
+\begin{table}[htbp]
+\centering
+\caption{Nominal exact result. The 100-unit initial balance is not revenue. The 20-unit reserve remains inside terminal cash.}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Policy & Collections & Outflows & Final cash & Cash surplus\\
+\midrule
+Legacy only & 352 & 160 & 292 & 192\\
+Best without P & 504 & 304 & 300 & 200\\
+Full option set & 456 & 226 & 330 & 230\\
+Ordinary equal-content & 456 & 226 & 330 & 230\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The nominal full-option policy builds P in period zero, delivers three times, then renews and delivers three times in each subsequent epoch. The no-portable optimum builds F at the start of each epoch and delivers three times. P has lower active-period contribution, yet retains 30 more cash units over the complete horizon. Its 230-unit surplus is 15\% higher than the 200-unit no-portable surplus, \emph{within this fixture}. This is not a measured business margin or an AI productivity estimate.
+
+The result has a useful second interpretation. The winning route collects \emph{less} revenue: 456 rather than 504. It wins because it spends less on reconstructing the means of delivery. Maximizing transaction value, isolated performance, or gross collections would not by itself identify the better funded trajectory.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=.96\textwidth,height=6.2cm,xlabel={Completed periods},ylabel={Cash units},xmin=0,xmax=16,ymin=0,ymax=350,xtick={0,4,8,12,16},ytick={0,100,200,300},grid=major,grid style={gray!15},legend style={at={(.02,.98)},anchor=north west,font=\small,draw=none,fill=white},tick label style={font=\small},label style={font=\small}]
+\addplot[very thick,color=gold] table[x=t,y=portable,col sep=comma]{cash.csv};\addlegendentry{Full option set}
+\addplot[thick,color=wine,dashed] table[x=t,y=no_portable,col sep=comma]{cash.csv};\addlegendentry{Best without P}
+\addplot[thin,color=muted,dotted] table[x=t,y=legacy,col sep=comma]{cash.csv};\addlegendentry{Legacy only}
+\addplot[gray,thin,domain=0:16] {20};
+\end{axis}
+\end{tikzpicture}
+\caption{The exact cash paths, including construction and renewal interruptions. No future collection pays for its own upfront cost. The horizontal line marks the protected reserve.}
+\end{figure}
+
+\subsection{The crossover is explicit}
+For a fixed sequence of $n$ complete epochs of length $L$, suppose rebuilding costs $D$, portable construction costs $B$, renewal costs $R$, and upkeep is $m$ per period. Let $g_F$ and $g_P$ be active-period contributions before portable upkeep. Each construction or renewal consumes one period. Conditional on financing both sequences,
+\begin{align}
+ S_F(n)&=n[(L-1)g_F-D],\\
+ S_P(n)&=n(L-1)g_P-B-(n-1)R-nLm.
+\end{align}
+Hence
+\begin{equation}
+ S_P-S_F=n\underbrace{[(L-1)(g_P-g_F)+D-R-Lm]}_{\text{per-epoch continuity benefit}}-B+R.
+ \label{eq:crossover}
+\end{equation}
+This is a comparison of two specified sequences, not proof that either is optimal in every environment. The exact planner establishes the nominal optimality separately.
+
+With the nominal parameters, $S_P-S_F=20n-50$. P loses by 30 in one epoch, loses by 10 in two, wins by 10 in three, and wins by 30 in four. The advantage is created by repeated avoided reconstruction. It is not a mysterious multiplier of intelligence.
+
+\begin{insight}[A distinction worth remembering]
+The best component is not necessarily the best institution. The best institution is not necessarily the most persistent one. Preserve a capability only when its supported future uses justify construction, renewal, and upkeep.
+\end{insight}
+
+\subsection{The sensitivity study includes losses and non-entry}
+Before executing the grid, the protocol fixed horizons $H\in\{8,12,16\}$, epoch lengths $L\in\{4,8\}$, opening cash $C\in\{40,70,100\}$, renewal costs $R\in\{5,10,25\}$, and upkeep $m\in\{0,1,3\}$. Their Cartesian product contains 162 environments. Both optimizers were checked against independently implemented forward reachability in every environment: 324 exact comparisons.
+
+Adding the portable option strictly improves terminal cash in 19 environments and ties in 143. The largest gain is 61 units. There are no negative optimum differences because the full feasible set contains the no-portable set. \emph{That nonnegativity is a mathematical inclusion property, not evidence of robust positive treatment effects in a population of businesses.} The grid is supplied, not sampled from a real market.
+
+Forced retention performs much worse: it is infeasible in 108 environments, loses to the no-portable optimum in 43, wins in 11, and ties in none. Infeasibility is an outcome, not a missing observation. These counts show why the institution must retain the option to delay, simplify, retire, or decline.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Diagnostic cases, including explanatory additions. Values are terminal cash; opening cash changes where stated. The full planner is free not to construct P.}
+\begin{tabularx}{\textwidth}{@{}Xrr@{}}
+\toprule
+Changed condition & Full & Without P\\
+\midrule
+No supplier turnover during 16 periods & 510 & 510\\
+No demand and no obligation to build & 100 & 100\\
+Portable upkeep rises to 5 & 300 & 300\\
+Portable renewal rises to 40 & 300 & 300\\
+Opening cash is only the reserve, 20 & 20 & 20\\
+Opening cash is 40 & 238 & 238\\
+Horizon is one four-period epoch & 150 & 150\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+With no turnover, the higher-contribution F route wins. With opening cash equal to the reserve, even a profitable legacy delivery cannot be prefunded. With a four-period horizon, the always-portable sequence ends at 120 while the optimum ends at 150. The favorable nominal result does not license an unconditional preference for portability.
+
+\subsection{Independent computation and its limits}
+The primary solver uses memoized backward induction. The second implementation enumerates all reachable states forward and re-specifies action effects independently, without calling the primary transition function. The two implementations agree on every registered grid comparison. They share the authored specification and constants; agreement cannot validate those economic assumptions.
+
+The companion also contains 35 unit tests covering planning and a local qualification/authority state machine. The latter preserves knowledge across export and restoration while rejecting inherited active proof or authority. Tests exercise changed context fields, expiry, revocation, unsupported actions, and missing owner approval. They establish behavior of this local software, not a hardened permission service or independent certification.
+
+The implementation limit of 32 periods is a declared finite test boundary, not a business-scale ceiling. No live frontier-model calls, real customer data, actual collections, or physical operations occur. CPU time spent on publication and software construction is not hidden inside the abstract model's cash values. The supplied build, renewal, and maintenance prices are model inputs, not measured complete costs of this research programme.
+
+\section{What must remain renewable}
+\label{sec:renewal}
+Useful capability is not merely installed capability. It must remain technically applicable, adequately evidenced, permitted, and affordable. This creates a renewal problem even when the underlying code remains unchanged.
+
+\subsection{Renewal is a capacity constraint}
+Suppose each deployed unit requires a current certificate, each certificate supports at most $\tau$ units of time, and the verification system can issue at most $v$ such unit-certificates per unit time. Let $B_0$ denote initially available remaining certified unit-time. For a horizon of length $T$, authorized productive unit-time is bounded by
+\begin{equation}
+ \int_0^T N_{\mathrm{active}}(t)\,dt\leq B_0+\tau vT.
+ \label{eq:renewal}
+\end{equation}
+Thus long-run average authorized deployment cannot exceed $\tau v$ under these assumptions. Adding unqualified machines does not remove that bound.
+
+This is a counting bound for a declared certification policy, not a physical law. A valid shared proof, a better production process, or a different independently justified validation architecture can change the unit of certification, $\tau$, or $v$. The productive invention may be the construction that makes those changes legitimate. It is not the deletion of the requirement while pretending reliability has been preserved.
+
+\subsection{Invent the renewal mechanism}
+A recurrent qualification burden can be approached in several ways. Improve the test. Construct an interface that makes irrelevant changes unable to affect the protected property. Preserve evidence during production so it need not be reconstructed afterward. Replace a fragile dependency. Or determine that full replay remains cheaper than maintaining a specialized reuse mechanism.
+
+These routes transform the conditions under which intelligence becomes useful. The right target is not the minimum number of checks. It is the lowest complete burden of maintaining the required accepted outcome, including missed failures and the cost of invalidating stale conclusions.
+
+A proof-producing interface may have large enabling value because many successors can use it. That does not make its value infinite. Integration, dependency tracking, compatibility testing, and obsolescence consume resources. The institution must compare its continued use with a clean rebuild and with simpler direct methods.
+
+\subsection{A renewal reserve is not a growth forecast}
+The operational reserve in the toy model is a supplied constant. A real institution needs a justified policy for existing obligations, rollback, incident response, and expected renewal work. Protecting those funds can prevent reinvestment even when accounting profit is positive. That is a cash decision, not a reason to erase the profit result.
+
+Likewise, available cash does not establish an attractive next project. The proposed investment must identify what will be built, what independent acceptance would establish, when cash will be consumed, which liabilities remain, and why the complete route is preferable to alternatives. If these conditions fail, preserving optionality can be the better action.
