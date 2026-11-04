@@ -1,0 +1,26 @@
+name: Physical battery measured-data acquisition
+on:
+  pull_request:
+    paths:
+      - 'research/battery_physical100/**'
+      - '.github/workflows/battery-physical100.yml'
+permissions:
+  contents: read
+jobs:
+  inspect-development-cell:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Register platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Test inspection integrity
+        run: python -B -m unittest research.battery_physical100.test_probe -v
+      - name: Inspect one hash-pinned physical development cell
+        run: python -B -m research.battery_physical100.probe
