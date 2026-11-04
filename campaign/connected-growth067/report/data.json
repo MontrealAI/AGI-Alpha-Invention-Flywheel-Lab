@@ -1,0 +1,5422 @@
+{
+  "schema": "agi-alpha/growth067-interim-report/v1",
+  "scope": "SELECTED_COMPLETED_CONTROL_CASE_NOT_CAMPAIGN_RESULT",
+  "source": {
+    "run_id": 41467872078,
+    "artifact_id": 13157389058,
+    "zip_sha256": "f7415b3200eb0984961b6c17e7a90bf8ce1559559ebf3ec425bb025a43480c95",
+    "native_actions_sha256": "837c47932100454ddbe45d7277efd91d9b8f36f950e642b485e575fa7a923e90",
+    "package": {
+      "case": {
+        "capital": 100000,
+        "funding_mode": "capital_available",
+        "grow": true,
+        "id": "dev-100000-distribution_first",
+        "policy_name": "distribution_first",
+        "seed": 670001,
+        "unit_cost": 10,
+        "world": "central"
+      },
+      "private_account_included": false,
+      "result_sha256": "3386b66b686f6f5fe230e3ea8ee2e846040862717eb163d95613a4ced2135252"
+    },
+    "executed_source_commit": "8d615b1e850f81838b7ff77f87fee8964bf1f280",
+    "preregistration_sha256": "4bfb47a46e5bbd676bfd2ad24eaff5630b20883dd5b438cbbd564d3c1e32a088",
+    "source_files_independently_matched": 68
+  },
+  "configuration": {
+    "funding_mode": "capital_available",
+    "grow": true,
+    "mode": "ECONOMIC",
+    "opening": 100000000000,
+    "policy_name": "distribution_first",
+    "seed": 670001,
+    "unit_cost": 10,
+    "world": "central"
+  },
+  "operating_end_hour": 43800,
+  "final_window": [
+    35040,
+    43800
+  ],
+  "sampling": "Prefix before integer hour t; all same-hour actions atomic. Event changes at h+1, rolling expiries at h+8761. Plot steps, not interpolation. Plot dollars derive from integer microUSD.",
+  "series": [
+    {
+      "hour": 0,
+      "day": "0",
+      "cash_microUSD": 100000000000,
+      "available_microUSD": 100000000000,
+      "protected_microUSD": 0,
+      "tail_microUSD": 0,
+      "profit_microUSD": 0,
+      "revenue_microUSD": 0,
+      "expenses_microUSD": 0
+    },
+    {
+      "hour": 1,
+      "day": "0.04166666666666666666666666667",
+      "cash_microUSD": 83370000000,
+      "available_microUSD": 83370000000,
+      "protected_microUSD": 0,
+      "tail_microUSD": 0,
+      "profit_microUSD": -16630000000,
+      "revenue_microUSD": 0,
+      "expenses_microUSD": 16630000000
+    },
+    {
+      "hour": 721,
+      "day": "30.04166666666666666666666667",
+      "cash_microUSD": 74543211625,
+      "available_microUSD": 74543211625,
+      "protected_microUSD": 0,
+      "tail_microUSD": 0,
+      "profit_microUSD": -25456788375,
+      "revenue_microUSD": 0,
+      "expenses_microUSD": 25456788375
+    },
+    {
+      "hour": 722,
+      "day": "30.08333333333333333333333333",
+      "cash_microUSD": 74543211625,
+      "available_microUSD": 54583211625,
+      "protected_microUSD": 19960000000,
+      "tail_microUSD": 0,
+      "profit_microUSD": -25456788375,
+      "revenue_microUSD": 0,
+      "expenses_microUSD": 25456788375
+    },
+    {
+      "hour": 723,
+      "day": "30.125",
+      "cash_microUSD": 74543211625,
+      "available_microUSD": 54583211625,
+      "protected_microUSD": 19960000000,
+      "tail_microUSD": 0,
+      "profit_microUSD": -25456788375,
+      "revenue_microUSD": 0,
+      "expenses_microUSD": 25456788375
+    },
+    {
+      "hour": 1081,
+      "day": "45.04166666666666666666666667",
+      "cash_microUSD": 92965331625,
+      "available_microUSD": 73749731625,
+      "protected_microUSD": 19215600000,
+      "tail_microUSD": 19215600000,
+      "profit_microUSD": -7034668375,
+      "revenue_microUSD": 19120000000,
+      "expenses_microUSD": 26154668375
+    },
+    {
+      "hour": 1441,
+      "day": "60.04166666666666666666666667",
+      "cash_microUSD": 88517368377,
+      "available_microUSD": 69301768377,
+      "protected_microUSD": 19215600000,
+      "tail_microUSD": 19215600000,
+      "profit_microUSD": -11482631623,
+      "revenue_microUSD": 19120000000,
+      "expenses_microUSD": 30602631623
+    },
+    {
+      "hour": 1442,
+      "day": "60.08333333333333333333333333",
+      "cash_microUSD": 88517368377,
+      "available_microUSD": 48541768377,
+      "protected_microUSD": 39975600000,
+      "tail_microUSD": 19215600000,
+      "profit_microUSD": -11482631623,
+      "revenue_microUSD": 19120000000,
+      "expenses_microUSD": 30602631623
+    },
+    {
+      "hour": 1443,
+      "day": "60.125",
+      "cash_microUSD": 88517368377,
+      "available_microUSD": 48541768377,
+      "protected_microUSD": 39975600000,
+      "tail_microUSD": 19215600000,
+      "profit_microUSD": -11482631623,
+      "revenue_microUSD": 19120000000,
+      "expenses_microUSD": 30602631623
+    },
+    {
+      "hour": 1801,
+      "day": "75.04166666666666666666666667",
+      "cash_microUSD": 107528248377,
+      "available_microUSD": 68567048377,
+      "protected_microUSD": 38961200000,
+      "tail_microUSD": 38961200000,
+      "profit_microUSD": 7528248377,
+      "revenue_microUSD": 38800000000,
+      "expenses_microUSD": 31271751623
+    },
+    {
+      "hour": 2161,
+      "day": "90.04166666666666666666666667",
+      "cash_microUSD": 101867598702,
+      "available_microUSD": 62906398702,
+      "protected_microUSD": 38961200000,
+      "tail_microUSD": 38961200000,
+      "profit_microUSD": 1867598702,
+      "revenue_microUSD": 38800000000,
+      "expenses_microUSD": 36932401298
+    },
+    {
+      "hour": 2162,
+      "day": "90.08333333333333333333333333",
+      "cash_microUSD": 101867598702,
+      "available_microUSD": 41666398702,
+      "protected_microUSD": 60201200000,
+      "tail_microUSD": 38961200000,
+      "profit_microUSD": 1867598702,
+      "revenue_microUSD": 38800000000,
+      "expenses_microUSD": 36932401298
+    },
+    {
+      "hour": 2163,
+      "day": "90.125",
+      "cash_microUSD": 101867598702,
+      "available_microUSD": 41666398702,
+      "protected_microUSD": 60201200000,
+      "tail_microUSD": 38961200000,
+      "profit_microUSD": 1867598702,
+      "revenue_microUSD": 38800000000,
+      "expenses_microUSD": 36932401298
+    },
+    {
+      "hour": 2521,
+      "day": "105.0416666666666666666666667",
+      "cash_microUSD": 121342158702,
+      "available_microUSD": 62153758702,
+      "protected_microUSD": 59188400000,
+      "tail_microUSD": 59188400000,
+      "profit_microUSD": 21342158702,
+      "revenue_microUSD": 58960000000,
+      "expenses_microUSD": 37617841298
+    },
+    {
+      "hour": 2881,
+      "day": "120.0416666666666666666666667",
+      "cash_microUSD": 113357380020,
+      "available_microUSD": 73336780020,
+      "protected_microUSD": 40020600000,
+      "tail_microUSD": 40020600000,
+      "profit_microUSD": 13357380020,
+      "revenue_microUSD": 58960000000,
+      "expenses_microUSD": 45602619980
+    },
+    {
+      "hour": 2882,
+      "day": "120.0833333333333333333333333",
+      "cash_microUSD": 113357380020,
+      "available_microUSD": 52756780020,
+      "protected_microUSD": 60600600000,
+      "tail_microUSD": 40020600000,
+      "profit_microUSD": 13357380020,
+      "revenue_microUSD": 58960000000,
+      "expenses_microUSD": 45602619980
+    },
+    {
+      "hour": 2883,
+      "day": "120.125",
+      "cash_microUSD": 113357380020,
+      "available_microUSD": 52756780020,
+      "protected_microUSD": 60600600000,
+      "tail_microUSD": 40020600000,
+      "profit_microUSD": 13357380020,
+      "revenue_microUSD": 58960000000,
+      "expenses_microUSD": 45602619980
+    },
+    {
+      "hour": 3241,
+      "day": "135.0416666666666666666666667",
+      "cash_microUSD": 132716020020,
+      "available_microUSD": 72588620020,
+      "protected_microUSD": 60127400000,
+      "tail_microUSD": 60127400000,
+      "profit_microUSD": 32716020020,
+      "revenue_microUSD": 79000000000,
+      "expenses_microUSD": 46283979980
+    },
+    {
+      "hour": 3601,
+      "day": "150.0416666666666666666666667",
+      "cash_microUSD": 124067868766,
+      "available_microUSD": 83653268766,
+      "protected_microUSD": 40414600000,
+      "tail_microUSD": 40414600000,
+      "profit_microUSD": 24067868766,
+      "revenue_microUSD": 79000000000,
+      "expenses_microUSD": 54932131234
+    },
+    {
+      "hour": 3602,
+      "day": "150.0833333333333333333333333",
+      "cash_microUSD": 124067868766,
+      "available_microUSD": 61453268766,
+      "protected_microUSD": 62614600000,
+      "tail_microUSD": 40414600000,
+      "profit_microUSD": 24067868766,
+      "revenue_microUSD": 79000000000,
+      "expenses_microUSD": 54932131234
+    },
+    {
+      "hour": 3603,
+      "day": "150.125",
+      "cash_microUSD": 124067868766,
+      "available_microUSD": 61453268766,
+      "protected_microUSD": 62614600000,
+      "tail_microUSD": 40414600000,
+      "profit_microUSD": 24067868766,
+      "revenue_microUSD": 79000000000,
+      "expenses_microUSD": 54932131234
+    },
+    {
+      "hour": 3961,
+      "day": "165.0416666666666666666666667",
+      "cash_microUSD": 144295908766,
+      "available_microUSD": 82871508766,
+      "protected_microUSD": 61424400000,
+      "tail_microUSD": 61424400000,
+      "profit_microUSD": 44295908766,
+      "revenue_microUSD": 99940000000,
+      "expenses_microUSD": 55644091234
+    },
+    {
+      "hour": 4321,
+      "day": "180.0416666666666666666666667",
+      "cash_microUSD": 134860310743,
+      "available_microUSD": 93629510743,
+      "protected_microUSD": 41230800000,
+      "tail_microUSD": 41230800000,
+      "profit_microUSD": 34860310743,
+      "revenue_microUSD": 99940000000,
+      "expenses_microUSD": 65079689257
+    },
+    {
+      "hour": 4322,
+      "day": "180.0833333333333333333333333",
+      "cash_microUSD": 134860310743,
+      "available_microUSD": 68429510743,
+      "protected_microUSD": 66430800000,
+      "tail_microUSD": 41230800000,
+      "profit_microUSD": 34860310743,
+      "revenue_microUSD": 99940000000,
+      "expenses_microUSD": 65079689257
+    },
+    {
+      "hour": 4323,
+      "day": "180.125",
+      "cash_microUSD": 134860310743,
+      "available_microUSD": 68429510743,
+      "protected_microUSD": 66430800000,
+      "tail_microUSD": 41230800000,
+      "profit_microUSD": 34860310743,
+      "revenue_microUSD": 99940000000,
+      "expenses_microUSD": 65079689257
+    },
+    {
+      "hour": 4681,
+      "day": "195.0416666666666666666666667",
+      "cash_microUSD": 158392070743,
+      "available_microUSD": 92720070743,
+      "protected_microUSD": 65672000000,
+      "tail_microUSD": 65672000000,
+      "profit_microUSD": 58392070743,
+      "revenue_microUSD": 124300000000,
+      "expenses_microUSD": 65907929257
+    },
+    {
+      "hour": 5041,
+      "day": "210.0416666666666666666666667",
+      "cash_microUSD": 147999827259,
+      "available_microUSD": 102401227259,
+      "protected_microUSD": 45598600000,
+      "tail_microUSD": 45598600000,
+      "profit_microUSD": 47999827259,
+      "revenue_microUSD": 124300000000,
+      "expenses_microUSD": 76300172741
+    },
+    {
+      "hour": 5042,
+      "day": "210.0833333333333333333333333",
+      "cash_microUSD": 147999827259,
+      "available_microUSD": 73601227259,
+      "protected_microUSD": 74398600000,
+      "tail_microUSD": 45598600000,
+      "profit_microUSD": 47999827259,
+      "revenue_microUSD": 124300000000,
+      "expenses_microUSD": 76300172741
+    },
+    {
+      "hour": 5043,
+      "day": "210.125",
+      "cash_microUSD": 147999827259,
+      "available_microUSD": 73601227259,
+      "protected_microUSD": 74398600000,
+      "tail_microUSD": 45598600000,
+      "profit_microUSD": 47999827259,
+      "revenue_microUSD": 124300000000,
+      "expenses_microUSD": 76300172741
+    },
+    {
+      "hour": 5401,
+      "day": "225.0416666666666666666666667",
+      "cash_microUSD": 174893267259,
+      "available_microUSD": 101361867259,
+      "protected_microUSD": 73531400000,
+      "tail_microUSD": 73531400000,
+      "profit_microUSD": 74893267259,
+      "revenue_microUSD": 152140000000,
+      "expenses_microUSD": 77246732741
+    },
+    {
+      "hour": 5761,
+      "day": "240.0416666666666666666666667",
+      "cash_microUSD": 163551439324,
+      "available_microUSD": 110994939324,
+      "protected_microUSD": 52556500000,
+      "tail_microUSD": 52556500000,
+      "profit_microUSD": 63551439324,
+      "revenue_microUSD": 152140000000,
+      "expenses_microUSD": 88588560676
+    },
+    {
+      "hour": 5762,
+      "day": "240.0833333333333333333333333",
+      "cash_microUSD": 163551439324,
+      "available_microUSD": 79674939324,
+      "protected_microUSD": 83876500000,
+      "tail_microUSD": 52556500000,
+      "profit_microUSD": 63551439324,
+      "revenue_microUSD": 152140000000,
+      "expenses_microUSD": 88588560676
+    },
+    {
+      "hour": 5763,
+      "day": "240.125",
+      "cash_microUSD": 163551439324,
+      "available_microUSD": 79674939324,
+      "protected_microUSD": 83876500000,
+      "tail_microUSD": 52556500000,
+      "profit_microUSD": 63551439324,
+      "revenue_microUSD": 152140000000,
+      "expenses_microUSD": 88588560676
+    },
+    {
+      "hour": 6121,
+      "day": "255.0416666666666666666666667",
+      "cash_microUSD": 192763279324,
+      "available_microUSD": 109865979324,
+      "protected_microUSD": 82897300000,
+      "tail_microUSD": 82897300000,
+      "profit_microUSD": 92763279324,
+      "revenue_microUSD": 182380000000,
+      "expenses_microUSD": 89616720676
+    },
+    {
+      "hour": 6481,
+      "day": "270.0416666666666666666666667",
+      "cash_microUSD": 180066051559,
+      "available_microUSD": 121569351559,
+      "protected_microUSD": 58496700000,
+      "tail_microUSD": 58496700000,
+      "profit_microUSD": 80066051559,
+      "revenue_microUSD": 182380000000,
+      "expenses_microUSD": 102313948441
+    },
+    {
+      "hour": 6482,
+      "day": "270.0833333333333333333333333",
+      "cash_microUSD": 180066051559,
+      "available_microUSD": 86769351559,
+      "protected_microUSD": 93296700000,
+      "tail_microUSD": 58496700000,
+      "profit_microUSD": 80066051559,
+      "revenue_microUSD": 182380000000,
+      "expenses_microUSD": 102313948441
+    },
+    {
+      "hour": 6483,
+      "day": "270.125",
+      "cash_microUSD": 180066051559,
+      "available_microUSD": 86769351559,
+      "protected_microUSD": 93296700000,
+      "tail_microUSD": 58496700000,
+      "profit_microUSD": 80066051559,
+      "revenue_microUSD": 182380000000,
+      "expenses_microUSD": 102313948441
+    },
+    {
+      "hour": 6841,
+      "day": "285.0416666666666666666666667",
+      "cash_microUSD": 212349771559,
+      "available_microUSD": 120321671559,
+      "protected_microUSD": 92028100000,
+      "tail_microUSD": 92028100000,
+      "profit_microUSD": 112349771559,
+      "revenue_microUSD": 215800000000,
+      "expenses_microUSD": 103450228441
+    },
+    {
+      "hour": 7201,
+      "day": "300.0416666666666666666666667",
+      "cash_microUSD": 198479991350,
+      "available_microUSD": 134338291350,
+      "protected_microUSD": 64141700000,
+      "tail_microUSD": 64141700000,
+      "profit_microUSD": 98479991350,
+      "revenue_microUSD": 215800000000,
+      "expenses_microUSD": 117320008650
+    },
+    {
+      "hour": 7202,
+      "day": "300.0833333333333333333333333",
+      "cash_microUSD": 198479991350,
+      "available_microUSD": 96358291350,
+      "protected_microUSD": 102121700000,
+      "tail_microUSD": 64141700000,
+      "profit_microUSD": 98479991350,
+      "revenue_microUSD": 215800000000,
+      "expenses_microUSD": 117320008650
+    },
+    {
+      "hour": 7203,
+      "day": "300.125",
+      "cash_microUSD": 198479991350,
+      "available_microUSD": 96358291350,
+      "protected_microUSD": 102121700000,
+      "tail_microUSD": 64141700000,
+      "profit_microUSD": 98479991350,
+      "revenue_microUSD": 215800000000,
+      "expenses_microUSD": 117320008650
+    },
+    {
+      "hour": 7561,
+      "day": "315.0416666666666666666666667",
+      "cash_microUSD": 233951511350,
+      "available_microUSD": 132967411350,
+      "protected_microUSD": 100984100000,
+      "tail_microUSD": 100984100000,
+      "profit_microUSD": 133951511350,
+      "revenue_microUSD": 252520000000,
+      "expenses_microUSD": 118568488650
+    },
+    {
+      "hour": 7921,
+      "day": "330.0416666666666666666666667",
+      "cash_microUSD": 218990001708,
+      "available_microUSD": 148296301708,
+      "protected_microUSD": 70693700000,
+      "tail_microUSD": 70693700000,
+      "profit_microUSD": 118990001708,
+      "revenue_microUSD": 252520000000,
+      "expenses_microUSD": 133529998292
+    },
+    {
+      "hour": 7922,
+      "day": "330.0833333333333333333333333",
+      "cash_microUSD": 218990001708,
+      "available_microUSD": 107316301708,
+      "protected_microUSD": 111673700000,
+      "tail_microUSD": 70693700000,
+      "profit_microUSD": 118990001708,
+      "revenue_microUSD": 252520000000,
+      "expenses_microUSD": 133529998292
+    },
+    {
+      "hour": 7923,
+      "day": "330.125",
+      "cash_microUSD": 218990001708,
+      "available_microUSD": 107316301708,
+      "protected_microUSD": 111673700000,
+      "tail_microUSD": 70693700000,
+      "profit_microUSD": 118990001708,
+      "revenue_microUSD": 252520000000,
+      "expenses_microUSD": 133529998292
+    },
+    {
+      "hour": 8281,
+      "day": "345.0416666666666666666666667",
+      "cash_microUSD": 256953801708,
+      "available_microUSD": 146829101708,
+      "protected_microUSD": 110124700000,
+      "tail_microUSD": 110124700000,
+      "profit_microUSD": 156953801708,
+      "revenue_microUSD": 291820000000,
+      "expenses_microUSD": 134866198292
+    },
+    {
+      "hour": 8641,
+      "day": "360.0416666666666666666666667",
+      "cash_microUSD": 239404858630,
+      "available_microUSD": 162755858630,
+      "protected_microUSD": 76649000000,
+      "tail_microUSD": 76649000000,
+      "profit_microUSD": 139404858630,
+      "revenue_microUSD": 291820000000,
+      "expenses_microUSD": 152415141370
+    },
+    {
+      "hour": 8642,
+      "day": "360.0833333333333333333333333",
+      "cash_microUSD": 239404858630,
+      "available_microUSD": 121355858630,
+      "protected_microUSD": 118049000000,
+      "tail_microUSD": 76649000000,
+      "profit_microUSD": 139404858630,
+      "revenue_microUSD": 291820000000,
+      "expenses_microUSD": 152415141370
+    },
+    {
+      "hour": 8643,
+      "day": "360.125",
+      "cash_microUSD": 239404858630,
+      "available_microUSD": 121355858630,
+      "protected_microUSD": 118049000000,
+      "tail_microUSD": 76649000000,
+      "profit_microUSD": 139404858630,
+      "revenue_microUSD": 291820000000,
+      "expenses_microUSD": 152415141370
+    },
+    {
+      "hour": 9001,
+      "day": "375.0416666666666666666666667",
+      "cash_microUSD": 277890298630,
+      "available_microUSD": 161268498630,
+      "protected_microUSD": 116621800000,
+      "tail_microUSD": 116621800000,
+      "profit_microUSD": 177890298630,
+      "revenue_microUSD": 331660000000,
+      "expenses_microUSD": 153769701370
+    },
+    {
+      "hour": 9361,
+      "day": "390.0416666666666666666666667",
+      "cash_microUSD": 259439269222,
+      "available_microUSD": 179598669222,
+      "protected_microUSD": 79840600000,
+      "tail_microUSD": 79840600000,
+      "profit_microUSD": 159439269222,
+      "revenue_microUSD": 331660000000,
+      "expenses_microUSD": 172220730778
+    },
+    {
+      "hour": 9362,
+      "day": "390.0833333333333333333333333",
+      "cash_microUSD": 259439269222,
+      "available_microUSD": 130518669222,
+      "protected_microUSD": 128920600000,
+      "tail_microUSD": 79840600000,
+      "profit_microUSD": 159439269222,
+      "revenue_microUSD": 331660000000,
+      "expenses_microUSD": 172220730778
+    },
+    {
+      "hour": 9363,
+      "day": "390.125",
+      "cash_microUSD": 259439269222,
+      "available_microUSD": 130518669222,
+      "protected_microUSD": 128920600000,
+      "tail_microUSD": 79840600000,
+      "profit_microUSD": 159439269222,
+      "revenue_microUSD": 331660000000,
+      "expenses_microUSD": 172220730778
+    },
+    {
+      "hour": 9721,
+      "day": "405.0416666666666666666666667",
+      "cash_microUSD": 305517469222,
+      "available_microUSD": 177817869222,
+      "protected_microUSD": 127699600000,
+      "tail_microUSD": 127699600000,
+      "profit_microUSD": 205517469222,
+      "revenue_microUSD": 379360000000,
+      "expenses_microUSD": 173842530778
+    },
+    {
+      "hour": 10081,
+      "day": "420.0416666666666666666666667",
+      "cash_microUSD": 284898216181,
+      "available_microUSD": 196564116181,
+      "protected_microUSD": 88334100000,
+      "tail_microUSD": 88334100000,
+      "profit_microUSD": 184898216181,
+      "revenue_microUSD": 379360000000,
+      "expenses_microUSD": 194461783819
+    },
+    {
+      "hour": 10082,
+      "day": "420.0833333333333333333333333",
+      "cash_microUSD": 284898216181,
+      "available_microUSD": 139804116181,
+      "protected_microUSD": 145094100000,
+      "tail_microUSD": 88334100000,
+      "profit_microUSD": 184898216181,
+      "revenue_microUSD": 379360000000,
+      "expenses_microUSD": 194461783819
+    },
+    {
+      "hour": 10083,
+      "day": "420.125",
+      "cash_microUSD": 284898216181,
+      "available_microUSD": 139804116181,
+      "protected_microUSD": 145094100000,
+      "tail_microUSD": 88334100000,
+      "profit_microUSD": 184898216181,
+      "revenue_microUSD": 379360000000,
+      "expenses_microUSD": 194461783819
+    },
+    {
+      "hour": 10441,
+      "day": "435.0416666666666666666666667",
+      "cash_microUSD": 337120176181,
+      "available_microUSD": 194545876181,
+      "protected_microUSD": 142574300000,
+      "tail_microUSD": 142574300000,
+      "profit_microUSD": 237120176181,
+      "revenue_microUSD": 433420000000,
+      "expenses_microUSD": 196299823819
+    },
+    {
+      "hour": 10801,
+      "day": "450.0416666666666666666666667",
+      "cash_microUSD": 315127008856,
+      "available_microUSD": 212459108856,
+      "protected_microUSD": 102667900000,
+      "tail_microUSD": 102667900000,
+      "profit_microUSD": 215127008856,
+      "revenue_microUSD": 433420000000,
+      "expenses_microUSD": 218292991144
+    },
+    {
+      "hour": 10802,
+      "day": "450.0833333333333333333333333",
+      "cash_microUSD": 315127008856,
+      "available_microUSD": 150539108856,
+      "protected_microUSD": 164587900000,
+      "tail_microUSD": 102667900000,
+      "profit_microUSD": 215127008856,
+      "revenue_microUSD": 433420000000,
+      "expenses_microUSD": 218292991144
+    },
+    {
+      "hour": 10803,
+      "day": "450.125",
+      "cash_microUSD": 315127008856,
+      "available_microUSD": 150539108856,
+      "protected_microUSD": 164587900000,
+      "tail_microUSD": 102667900000,
+      "profit_microUSD": 215127008856,
+      "revenue_microUSD": 433420000000,
+      "expenses_microUSD": 218292991144
+    },
+    {
+      "hour": 11161,
+      "day": "465.0416666666666666666666667",
+      "cash_microUSD": 372623328856,
+      "available_microUSD": 210237028856,
+      "protected_microUSD": 162386300000,
+      "tail_microUSD": 162386300000,
+      "profit_microUSD": 272623328856,
+      "revenue_microUSD": 492940000000,
+      "expenses_microUSD": 220316671144
+    },
+    {
+      "hour": 11521,
+      "day": "480.0416666666666666666666667",
+      "cash_microUSD": 348028065323,
+      "available_microUSD": 233421265323,
+      "protected_microUSD": 114606800000,
+      "tail_microUSD": 114606800000,
+      "profit_microUSD": 248028065323,
+      "revenue_microUSD": 492940000000,
+      "expenses_microUSD": 244911934677
+    },
+    {
+      "hour": 11522,
+      "day": "480.0833333333333333333333333",
+      "cash_microUSD": 348028065323,
+      "available_microUSD": 167001265323,
+      "protected_microUSD": 181026800000,
+      "tail_microUSD": 114606800000,
+      "profit_microUSD": 248028065323,
+      "revenue_microUSD": 492940000000,
+      "expenses_microUSD": 244911934677
+    },
+    {
+      "hour": 11523,
+      "day": "480.125",
+      "cash_microUSD": 348028065323,
+      "available_microUSD": 167001265323,
+      "protected_microUSD": 181026800000,
+      "tail_microUSD": 114606800000,
+      "profit_microUSD": 248028065323,
+      "revenue_microUSD": 492940000000,
+      "expenses_microUSD": 244911934677
+    },
+    {
+      "hour": 11881,
+      "day": "495.0416666666666666666666667",
+      "cash_microUSD": 409465665323,
+      "available_microUSD": 231046865323,
+      "protected_microUSD": 178418800000,
+      "tail_microUSD": 178418800000,
+      "profit_microUSD": 309465665323,
+      "revenue_microUSD": 556540000000,
+      "expenses_microUSD": 247074334677
+    },
+    {
+      "hour": 12241,
+      "day": "510.0416666666666666666666667",
+      "cash_microUSD": 382419541497,
+      "available_microUSD": 258150841497,
+      "protected_microUSD": 124268700000,
+      "tail_microUSD": 124268700000,
+      "profit_microUSD": 282419541497,
+      "revenue_microUSD": 556540000000,
+      "expenses_microUSD": 274120458503
+    },
+    {
+      "hour": 12242,
+      "day": "510.0833333333333333333333333",
+      "cash_microUSD": 382419541497,
+      "available_microUSD": 185370841497,
+      "protected_microUSD": 197048700000,
+      "tail_microUSD": 124268700000,
+      "profit_microUSD": 282419541497,
+      "revenue_microUSD": 556540000000,
+      "expenses_microUSD": 274120458503
+    },
+    {
+      "hour": 12243,
+      "day": "510.125",
+      "cash_microUSD": 382419541497,
+      "available_microUSD": 185370841497,
+      "protected_microUSD": 197048700000,
+      "tail_microUSD": 124268700000,
+      "profit_microUSD": 282419541497,
+      "revenue_microUSD": 556540000000,
+      "expenses_microUSD": 274120458503
+    },
+    {
+      "hour": 12601,
+      "day": "525.0416666666666666666666667",
+      "cash_microUSD": 450522541497,
+      "available_microUSD": 255518841497,
+      "protected_microUSD": 195003700000,
+      "tail_microUSD": 195003700000,
+      "profit_microUSD": 350522541497,
+      "revenue_microUSD": 627040000000,
+      "expenses_microUSD": 276517458503
+    },
+    {
+      "hour": 12961,
+      "day": "540.0416666666666666666666667",
+      "cash_microUSD": 420383853397,
+      "available_microUSD": 284999353397,
+      "protected_microUSD": 135384500000,
+      "tail_microUSD": 135384500000,
+      "profit_microUSD": 320383853397,
+      "revenue_microUSD": 627040000000,
+      "expenses_microUSD": 306656146603
+    },
+    {
+      "hour": 12962,
+      "day": "540.0833333333333333333333333",
+      "cash_microUSD": 420383853397,
+      "available_microUSD": 202859353397,
+      "protected_microUSD": 217524500000,
+      "tail_microUSD": 135384500000,
+      "profit_microUSD": 320383853397,
+      "revenue_microUSD": 627040000000,
+      "expenses_microUSD": 306656146603
+    },
+    {
+      "hour": 12963,
+      "day": "540.125",
+      "cash_microUSD": 420383853397,
+      "available_microUSD": 202859353397,
+      "protected_microUSD": 217524500000,
+      "tail_microUSD": 135384500000,
+      "profit_microUSD": 320383853397,
+      "revenue_microUSD": 627040000000,
+      "expenses_microUSD": 306656146603
+    },
+    {
+      "hour": 13321,
+      "day": "555.0416666666666666666666667",
+      "cash_microUSD": 496311453397,
+      "available_microUSD": 282064953397,
+      "protected_microUSD": 214246500000,
+      "tail_microUSD": 214246500000,
+      "profit_microUSD": 396311453397,
+      "revenue_microUSD": 705640000000,
+      "expenses_microUSD": 309328546603
+    },
+    {
+      "hour": 13681,
+      "day": "570.0416666666666666666666667",
+      "cash_microUSD": 463725437107,
+      "available_microUSD": 313184937107,
+      "protected_microUSD": 150540500000,
+      "tail_microUSD": 150540500000,
+      "profit_microUSD": 363725437107,
+      "revenue_microUSD": 705640000000,
+      "expenses_microUSD": 341914562893
+    },
+    {
+      "hour": 13682,
+      "day": "570.0833333333333333333333333",
+      "cash_microUSD": 463725437107,
+      "available_microUSD": 223064937107,
+      "protected_microUSD": 240660500000,
+      "tail_microUSD": 150540500000,
+      "profit_microUSD": 363725437107,
+      "revenue_microUSD": 705640000000,
+      "expenses_microUSD": 341914562893
+    },
+    {
+      "hour": 13683,
+      "day": "570.125",
+      "cash_microUSD": 463725437107,
+      "available_microUSD": 223064937107,
+      "protected_microUSD": 240660500000,
+      "tail_microUSD": 150540500000,
+      "profit_microUSD": 363725437107,
+      "revenue_microUSD": 705640000000,
+      "expenses_microUSD": 341914562893
+    },
+    {
+      "hour": 14041,
+      "day": "585.0416666666666666666666667",
+      "cash_microUSD": 547303757107,
+      "available_microUSD": 309954857107,
+      "protected_microUSD": 237348900000,
+      "tail_microUSD": 237348900000,
+      "profit_microUSD": 447303757107,
+      "revenue_microUSD": 792160000000,
+      "expenses_microUSD": 344856242893
+    },
+    {
+      "hour": 14401,
+      "day": "600.0416666666666666666666667",
+      "cash_microUSD": 511083971974,
+      "available_microUSD": 344352571974,
+      "protected_microUSD": 166731400000,
+      "tail_microUSD": 166731400000,
+      "profit_microUSD": 411083971974,
+      "revenue_microUSD": 792160000000,
+      "expenses_microUSD": 381076028026
+    },
+    {
+      "hour": 14402,
+      "day": "600.0833333333333333333333333",
+      "cash_microUSD": 511083971974,
+      "available_microUSD": 245232571974,
+      "protected_microUSD": 265851400000,
+      "tail_microUSD": 166731400000,
+      "profit_microUSD": 411083971974,
+      "revenue_microUSD": 792160000000,
+      "expenses_microUSD": 381076028026
+    },
+    {
+      "hour": 14403,
+      "day": "600.125",
+      "cash_microUSD": 511083971974,
+      "available_microUSD": 245232571974,
+      "protected_microUSD": 265851400000,
+      "tail_microUSD": 166731400000,
+      "profit_microUSD": 411083971974,
+      "revenue_microUSD": 792160000000,
+      "expenses_microUSD": 381076028026
+    },
+    {
+      "hour": 14761,
+      "day": "615.0416666666666666666666667",
+      "cash_microUSD": 603008531974,
+      "available_microUSD": 340799931974,
+      "protected_microUSD": 262208600000,
+      "tail_microUSD": 262208600000,
+      "profit_microUSD": 503008531974,
+      "revenue_microUSD": 887320000000,
+      "expenses_microUSD": 384311468026
+    },
+    {
+      "hour": 15121,
+      "day": "630.0416666666666666666666667",
+      "cash_microUSD": 563329966902,
+      "available_microUSD": 379852366902,
+      "protected_microUSD": 183477600000,
+      "tail_microUSD": 183477600000,
+      "profit_microUSD": 463329966902,
+      "revenue_microUSD": 887320000000,
+      "expenses_microUSD": 423990033098
+    },
+    {
+      "hour": 15122,
+      "day": "630.0833333333333333333333333",
+      "cash_microUSD": 563329966902,
+      "available_microUSD": 271852366902,
+      "protected_microUSD": 291477600000,
+      "tail_microUSD": 183477600000,
+      "profit_microUSD": 463329966902,
+      "revenue_microUSD": 887320000000,
+      "expenses_microUSD": 423990033098
+    },
+    {
+      "hour": 15123,
+      "day": "630.125",
+      "cash_microUSD": 563329966902,
+      "available_microUSD": 271852366902,
+      "protected_microUSD": 291477600000,
+      "tail_microUSD": 183477600000,
+      "profit_microUSD": 463329966902,
+      "revenue_microUSD": 887320000000,
+      "expenses_microUSD": 423990033098
+    },
+    {
+      "hour": 15481,
+      "day": "645.0416666666666666666666667",
+      "cash_microUSD": 663137086902,
+      "available_microUSD": 375995086902,
+      "protected_microUSD": 287142000000,
+      "tail_microUSD": 287142000000,
+      "profit_microUSD": 563137086902,
+      "revenue_microUSD": 990640000000,
+      "expenses_microUSD": 427502913098
+    },
+    {
+      "hour": 15841,
+      "day": "660.0416666666666666666666667",
+      "cash_microUSD": 619319090824,
+      "available_microUSD": 418841290824,
+      "protected_microUSD": 200477800000,
+      "tail_microUSD": 200477800000,
+      "profit_microUSD": 519319090824,
+      "revenue_microUSD": 990640000000,
+      "expenses_microUSD": 471320909176
+    },
+    {
+      "hour": 15842,
+      "day": "660.0833333333333333333333333",
+      "cash_microUSD": 619319090824,
+      "available_microUSD": 299501290824,
+      "protected_microUSD": 319817800000,
+      "tail_microUSD": 200477800000,
+      "profit_microUSD": 519319090824,
+      "revenue_microUSD": 990640000000,
+      "expenses_microUSD": 471320909176
+    },
+    {
+      "hour": 15843,
+      "day": "660.125",
+      "cash_microUSD": 619319090824,
+      "available_microUSD": 299501290824,
+      "protected_microUSD": 319817800000,
+      "tail_microUSD": 200477800000,
+      "profit_microUSD": 519319090824,
+      "revenue_microUSD": 990640000000,
+      "expenses_microUSD": 471320909176
+    },
+    {
+      "hour": 16201,
+      "day": "675.0416666666666666666666667",
+      "cash_microUSD": 729559010824,
+      "available_microUSD": 414580810824,
+      "protected_microUSD": 314978200000,
+      "tail_microUSD": 314978200000,
+      "profit_microUSD": 629559010824,
+      "revenue_microUSD": 1104760000000,
+      "expenses_microUSD": 475200989176
+    },
+    {
+      "hour": 16561,
+      "day": "690.0416666666666666666666667",
+      "cash_microUSD": 681514659489,
+      "available_microUSD": 461855059489,
+      "protected_microUSD": 219659600000,
+      "tail_microUSD": 219659600000,
+      "profit_microUSD": 581514659489,
+      "revenue_microUSD": 1104760000000,
+      "expenses_microUSD": 523245340511
+    },
+    {
+      "hour": 16562,
+      "day": "690.0833333333333333333333333",
+      "cash_microUSD": 681514659489,
+      "available_microUSD": 329975059489,
+      "protected_microUSD": 351539600000,
+      "tail_microUSD": 219659600000,
+      "profit_microUSD": 581514659489,
+      "revenue_microUSD": 1104760000000,
+      "expenses_microUSD": 523245340511
+    },
+    {
+      "hour": 16563,
+      "day": "690.125",
+      "cash_microUSD": 681514659489,
+      "available_microUSD": 329975059489,
+      "protected_microUSD": 351539600000,
+      "tail_microUSD": 219659600000,
+      "profit_microUSD": 581514659489,
+      "revenue_microUSD": 1104760000000,
+      "expenses_microUSD": 523245340511
+    },
+    {
+      "hour": 16921,
+      "day": "705.0416666666666666666666667",
+      "cash_microUSD": 804158019489,
+      "available_microUSD": 457115219489,
+      "protected_microUSD": 347042800000,
+      "tail_microUSD": 347042800000,
+      "profit_microUSD": 704158019489,
+      "revenue_microUSD": 1231720000000,
+      "expenses_microUSD": 527561980511
+    },
+    {
+      "hour": 17281,
+      "day": "720.0416666666666666666666667",
+      "cash_microUSD": 751223845422,
+      "available_microUSD": 507673245422,
+      "protected_microUSD": 243550600000,
+      "tail_microUSD": 243550600000,
+      "profit_microUSD": 651223845422,
+      "revenue_microUSD": 1231720000000,
+      "expenses_microUSD": 580496154578
+    },
+    {
+      "hour": 17282,
+      "day": "720.0833333333333333333333333",
+      "cash_microUSD": 751223845422,
+      "available_microUSD": 361873245422,
+      "protected_microUSD": 389350600000,
+      "tail_microUSD": 243550600000,
+      "profit_microUSD": 651223845422,
+      "revenue_microUSD": 1231720000000,
+      "expenses_microUSD": 580496154578
+    },
+    {
+      "hour": 17283,
+      "day": "720.125",
+      "cash_microUSD": 751223845422,
+      "available_microUSD": 361873245422,
+      "protected_microUSD": 389350600000,
+      "tail_microUSD": 243550600000,
+      "profit_microUSD": 651223845422,
+      "revenue_microUSD": 1231720000000,
+      "expenses_microUSD": 580496154578
+    },
+    {
+      "hour": 17641,
+      "day": "735.0416666666666666666666667",
+      "cash_microUSD": 886908205422,
+      "available_microUSD": 502429405422,
+      "protected_microUSD": 384478800000,
+      "tail_microUSD": 384478800000,
+      "profit_microUSD": 786908205422,
+      "revenue_microUSD": 1372180000000,
+      "expenses_microUSD": 585271794578
+    },
+    {
+      "hour": 18001,
+      "day": "750.0416666666666666666666667",
+      "cash_microUSD": 828439739657,
+      "available_microUSD": 558271139657,
+      "protected_microUSD": 270168600000,
+      "tail_microUSD": 270168600000,
+      "profit_microUSD": 728439739657,
+      "revenue_microUSD": 1372180000000,
+      "expenses_microUSD": 643740260343
+    },
+    {
+      "hour": 18002,
+      "day": "750.0833333333333333333333333",
+      "cash_microUSD": 828439739657,
+      "available_microUSD": 399031139657,
+      "protected_microUSD": 429408600000,
+      "tail_microUSD": 270168600000,
+      "profit_microUSD": 728439739657,
+      "revenue_microUSD": 1372180000000,
+      "expenses_microUSD": 643740260343
+    },
+    {
+      "hour": 18003,
+      "day": "750.125",
+      "cash_microUSD": 828439739657,
+      "available_microUSD": 399031139657,
+      "protected_microUSD": 429408600000,
+      "tail_microUSD": 270168600000,
+      "profit_microUSD": 728439739657,
+      "revenue_microUSD": 1372180000000,
+      "expenses_microUSD": 643740260343
+    },
+    {
+      "hour": 18361,
+      "day": "765.0416666666666666666666667",
+      "cash_microUSD": 976585499657,
+      "available_microUSD": 552545699657,
+      "protected_microUSD": 424039800000,
+      "tail_microUSD": 424039800000,
+      "profit_microUSD": 876585499657,
+      "revenue_microUSD": 1525540000000,
+      "expenses_microUSD": 648954500343
+    },
+    {
+      "hour": 18721,
+      "day": "780.0416666666666666666666667",
+      "cash_microUSD": 912662107616,
+      "available_microUSD": 615793907616,
+      "protected_microUSD": 296868200000,
+      "tail_microUSD": 296868200000,
+      "profit_microUSD": 812662107616,
+      "revenue_microUSD": 1525540000000,
+      "expenses_microUSD": 712877892384
+    },
+    {
+      "hour": 18722,
+      "day": "780.0833333333333333333333333",
+      "cash_microUSD": 912662107616,
+      "available_microUSD": 441073907616,
+      "protected_microUSD": 471588200000,
+      "tail_microUSD": 296868200000,
+      "profit_microUSD": 812662107616,
+      "revenue_microUSD": 1525540000000,
+      "expenses_microUSD": 712877892384
+    },
+    {
+      "hour": 18723,
+      "day": "780.125",
+      "cash_microUSD": 912662107616,
+      "available_microUSD": 441073907616,
+      "protected_microUSD": 471588200000,
+      "tail_microUSD": 296868200000,
+      "profit_microUSD": 812662107616,
+      "revenue_microUSD": 1525540000000,
+      "expenses_microUSD": 712877892384
+    },
+    {
+      "hour": 19081,
+      "day": "795.0416666666666666666666667",
+      "cash_microUSD": 1074544387616,
+      "available_microUSD": 609537587616,
+      "protected_microUSD": 465006800000,
+      "tail_microUSD": 465006800000,
+      "profit_microUSD": 974544387616,
+      "revenue_microUSD": 1693120000000,
+      "expenses_microUSD": 718575612384
+    },
+    {
+      "hour": 19441,
+      "day": "810.0416666666666666666666667",
+      "cash_microUSD": 1003597458268,
+      "available_microUSD": 679284758268,
+      "protected_microUSD": 324312700000,
+      "tail_microUSD": 324312700000,
+      "profit_microUSD": 903597458268,
+      "revenue_microUSD": 1693120000000,
+      "expenses_microUSD": 789522541732
+    },
+    {
+      "hour": 19442,
+      "day": "810.0833333333333333333333333",
+      "cash_microUSD": 1003597458268,
+      "available_microUSD": 487404758268,
+      "protected_microUSD": 516192700000,
+      "tail_microUSD": 324312700000,
+      "profit_microUSD": 903597458268,
+      "revenue_microUSD": 1693120000000,
+      "expenses_microUSD": 789522541732
+    },
+    {
+      "hour": 19443,
+      "day": "810.125",
+      "cash_microUSD": 1003597458268,
+      "available_microUSD": 487404758268,
+      "protected_microUSD": 516192700000,
+      "tail_microUSD": 324312700000,
+      "profit_microUSD": 903597458268,
+      "revenue_microUSD": 1693120000000,
+      "expenses_microUSD": 789522541732
+    },
+    {
+      "hour": 19801,
+      "day": "825.0416666666666666666666667",
+      "cash_microUSD": 1182114258268,
+      "available_microUSD": 672385558268,
+      "protected_microUSD": 509728700000,
+      "tail_microUSD": 509728700000,
+      "profit_microUSD": 1082114258268,
+      "revenue_microUSD": 1877920000000,
+      "expenses_microUSD": 795805741732
+    },
+    {
+      "hour": 20161,
+      "day": "840.0416666666666666666666667",
+      "cash_microUSD": 1104274719573,
+      "available_microUSD": 748161619573,
+      "protected_microUSD": 356113100000,
+      "tail_microUSD": 356113100000,
+      "profit_microUSD": 1004274719573,
+      "revenue_microUSD": 1877920000000,
+      "expenses_microUSD": 873645280427
+    },
+    {
+      "hour": 20162,
+      "day": "840.0833333333333333333333333",
+      "cash_microUSD": 1104274719573,
+      "available_microUSD": 533361619573,
+      "protected_microUSD": 570913100000,
+      "tail_microUSD": 356113100000,
+      "profit_microUSD": 1004274719573,
+      "revenue_microUSD": 1877920000000,
+      "expenses_microUSD": 873645280427
+    },
+    {
+      "hour": 20163,
+      "day": "840.125",
+      "cash_microUSD": 1104274719573,
+      "available_microUSD": 533361619573,
+      "protected_microUSD": 570913100000,
+      "tail_microUSD": 356113100000,
+      "profit_microUSD": 1004274719573,
+      "revenue_microUSD": 1877920000000,
+      "expenses_microUSD": 873645280427
+    },
+    {
+      "hour": 20521,
+      "day": "855.0416666666666666666666667",
+      "cash_microUSD": 1302497919573,
+      "available_microUSD": 740500819573,
+      "protected_microUSD": 561997100000,
+      "tail_microUSD": 561997100000,
+      "profit_microUSD": 1202497919573,
+      "revenue_microUSD": 2083120000000,
+      "expenses_microUSD": 880622080427
+    },
+    {
+      "hour": 20881,
+      "day": "870.0416666666666666666666667",
+      "cash_microUSD": 1216606032204,
+      "available_microUSD": 822468232204,
+      "protected_microUSD": 394137800000,
+      "tail_microUSD": 394137800000,
+      "profit_microUSD": 1116606032204,
+      "revenue_microUSD": 2083120000000,
+      "expenses_microUSD": 966513967796
+    },
+    {
+      "hour": 20882,
+      "day": "870.0833333333333333333333333",
+      "cash_microUSD": 1216606032204,
+      "available_microUSD": 587628232204,
+      "protected_microUSD": 628977800000,
+      "tail_microUSD": 394137800000,
+      "profit_microUSD": 1116606032204,
+      "revenue_microUSD": 2083120000000,
+      "expenses_microUSD": 966513967796
+    },
+    {
+      "hour": 20883,
+      "day": "870.125",
+      "cash_microUSD": 1216606032204,
+      "available_microUSD": 587628232204,
+      "protected_microUSD": 628977800000,
+      "tail_microUSD": 394137800000,
+      "profit_microUSD": 1116606032204,
+      "revenue_microUSD": 2083120000000,
+      "expenses_microUSD": 966513967796
+    },
+    {
+      "hour": 21241,
+      "day": "885.0416666666666666666666667",
+      "cash_microUSD": 1435347072204,
+      "available_microUSD": 814014472204,
+      "protected_microUSD": 621332600000,
+      "tail_microUSD": 621332600000,
+      "profit_microUSD": 1335347072204,
+      "revenue_microUSD": 2309560000000,
+      "expenses_microUSD": 974212927796
+    },
+    {
+      "hour": 21601,
+      "day": "900.0416666666666666666666667",
+      "cash_microUSD": 1340942389514,
+      "available_microUSD": 904717789514,
+      "protected_microUSD": 436224600000,
+      "tail_microUSD": 436224600000,
+      "profit_microUSD": 1240942389514,
+      "revenue_microUSD": 2309560000000,
+      "expenses_microUSD": 1068617610486
+    },
+    {
+      "hour": 21602,
+      "day": "900.0833333333333333333333333",
+      "cash_microUSD": 1340942389514,
+      "available_microUSD": 645217789514,
+      "protected_microUSD": 695724600000,
+      "tail_microUSD": 436224600000,
+      "profit_microUSD": 1240942389514,
+      "revenue_microUSD": 2309560000000,
+      "expenses_microUSD": 1068617610486
+    },
+    {
+      "hour": 21603,
+      "day": "900.125",
+      "cash_microUSD": 1340942389514,
+      "available_microUSD": 645217789514,
+      "protected_microUSD": 695724600000,
+      "tail_microUSD": 436224600000,
+      "profit_microUSD": 1240942389514,
+      "revenue_microUSD": 2309560000000,
+      "expenses_microUSD": 1068617610486
+    },
+    {
+      "hour": 21961,
+      "day": "915.0416666666666666666666667",
+      "cash_microUSD": 1582345789514,
+      "available_microUSD": 895388189514,
+      "protected_microUSD": 686957600000,
+      "tail_microUSD": 686957600000,
+      "profit_microUSD": 1482345789514,
+      "revenue_microUSD": 2559460000000,
+      "expenses_microUSD": 1077114210486
+    },
+    {
+      "hour": 22321,
+      "day": "930.0416666666666666666666667",
+      "cash_microUSD": 1478523055616,
+      "available_microUSD": 997107455616,
+      "protected_microUSD": 481415600000,
+      "tail_microUSD": 481415600000,
+      "profit_microUSD": 1378523055616,
+      "revenue_microUSD": 2559460000000,
+      "expenses_microUSD": 1180936944384
+    },
+    {
+      "hour": 22322,
+      "day": "930.0833333333333333333333333",
+      "cash_microUSD": 1478523055616,
+      "available_microUSD": 714147455616,
+      "protected_microUSD": 764375600000,
+      "tail_microUSD": 481415600000,
+      "profit_microUSD": 1378523055616,
+      "revenue_microUSD": 2559460000000,
+      "expenses_microUSD": 1180936944384
+    },
+    {
+      "hour": 22323,
+      "day": "930.125",
+      "cash_microUSD": 1478523055616,
+      "available_microUSD": 714147455616,
+      "protected_microUSD": 764375600000,
+      "tail_microUSD": 481415600000,
+      "profit_microUSD": 1378523055616,
+      "revenue_microUSD": 2559460000000,
+      "expenses_microUSD": 1180936944384
+    },
+    {
+      "hour": 22681,
+      "day": "945.0416666666666666666666667",
+      "cash_microUSD": 1741719415616,
+      "available_microUSD": 986935615616,
+      "protected_microUSD": 754783800000,
+      "tail_microUSD": 754783800000,
+      "profit_microUSD": 1641719415616,
+      "revenue_microUSD": 2831920000000,
+      "expenses_microUSD": 1190200584384
+    },
+    {
+      "hour": 23041,
+      "day": "960.0416666666666666666666667",
+      "cash_microUSD": 1627570312117,
+      "available_microUSD": 1099603912117,
+      "protected_microUSD": 527966400000,
+      "tail_microUSD": 527966400000,
+      "profit_microUSD": 1527570312117,
+      "revenue_microUSD": 2831920000000,
+      "expenses_microUSD": 1304349687883
+    },
+    {
+      "hour": 23042,
+      "day": "960.0833333333333333333333333",
+      "cash_microUSD": 1627570312117,
+      "available_microUSD": 791083912117,
+      "protected_microUSD": 836486400000,
+      "tail_microUSD": 527966400000,
+      "profit_microUSD": 1527570312117,
+      "revenue_microUSD": 2831920000000,
+      "expenses_microUSD": 1304349687883
+    },
+    {
+      "hour": 23043,
+      "day": "960.125",
+      "cash_microUSD": 1627570312117,
+      "available_microUSD": 791083912117,
+      "protected_microUSD": 836486400000,
+      "tail_microUSD": 527966400000,
+      "profit_microUSD": 1527570312117,
+      "revenue_microUSD": 2831920000000,
+      "expenses_microUSD": 1304349687883
+    },
+    {
+      "hour": 23401,
+      "day": "975.0416666666666666666666667",
+      "cash_microUSD": 1913834752117,
+      "available_microUSD": 1088540552117,
+      "protected_microUSD": 825294200000,
+      "tail_microUSD": 825294200000,
+      "profit_microUSD": 1813834752117,
+      "revenue_microUSD": 3128260000000,
+      "expenses_microUSD": 1314425247883
+    },
+    {
+      "hour": 23761,
+      "day": "990.0416666666666666666666667",
+      "cash_microUSD": 1787227235009,
+      "available_microUSD": 1212249535009,
+      "protected_microUSD": 574977700000,
+      "tail_microUSD": 574977700000,
+      "profit_microUSD": 1687227235009,
+      "revenue_microUSD": 3128260000000,
+      "expenses_microUSD": 1441032764991
+    },
+    {
+      "hour": 23762,
+      "day": "990.0833333333333333333333333",
+      "cash_microUSD": 1787227235009,
+      "available_microUSD": 870249535009,
+      "protected_microUSD": 916977700000,
+      "tail_microUSD": 574977700000,
+      "profit_microUSD": 1687227235009,
+      "revenue_microUSD": 3128260000000,
+      "expenses_microUSD": 1441032764991
+    },
+    {
+      "hour": 23763,
+      "day": "990.125",
+      "cash_microUSD": 1787227235009,
+      "available_microUSD": 870249535009,
+      "protected_microUSD": 916977700000,
+      "tail_microUSD": 574977700000,
+      "profit_microUSD": 1687227235009,
+      "revenue_microUSD": 3128260000000,
+      "expenses_microUSD": 1441032764991
+    },
+    {
+      "hour": 24121,
+      "day": "1005.041666666666666666666667",
+      "cash_microUSD": 2104094555009,
+      "available_microUSD": 1200003455009,
+      "protected_microUSD": 904091100000,
+      "tail_microUSD": 904091100000,
+      "profit_microUSD": 2004094555009,
+      "revenue_microUSD": 3456280000000,
+      "expenses_microUSD": 1452185444991
+    },
+    {
+      "hour": 24481,
+      "day": "1020.041666666666666666666667",
+      "cash_microUSD": 1965367770094,
+      "available_microUSD": 1334190770094,
+      "protected_microUSD": 631177000000,
+      "tail_microUSD": 631177000000,
+      "profit_microUSD": 1865367770094,
+      "revenue_microUSD": 3456280000000,
+      "expenses_microUSD": 1590912229906
+    },
+    {
+      "hour": 24482,
+      "day": "1020.083333333333333333333333",
+      "cash_microUSD": 1965367770094,
+      "available_microUSD": 956610770094,
+      "protected_microUSD": 1008757000000,
+      "tail_microUSD": 631177000000,
+      "profit_microUSD": 1865367770094,
+      "revenue_microUSD": 3456280000000,
+      "expenses_microUSD": 1590912229906
+    },
+    {
+      "hour": 24483,
+      "day": "1020.125",
+      "cash_microUSD": 1965367770094,
+      "available_microUSD": 956610770094,
+      "protected_microUSD": 1008757000000,
+      "tail_microUSD": 631177000000,
+      "profit_microUSD": 1865367770094,
+      "revenue_microUSD": 3456280000000,
+      "expenses_microUSD": 1590912229906
+    },
+    {
+      "hour": 24841,
+      "day": "1035.041666666666666666666667",
+      "cash_microUSD": 2316141690094,
+      "available_microUSD": 1320634290094,
+      "protected_microUSD": 995507400000,
+      "tail_microUSD": 995507400000,
+      "profit_microUSD": 2216141690094,
+      "revenue_microUSD": 3819400000000,
+      "expenses_microUSD": 1603258309906
+    },
+    {
+      "hour": 25201,
+      "day": "1050.041666666666666666666667",
+      "cash_microUSD": 2163404574201,
+      "available_microUSD": 1464731074201,
+      "protected_microUSD": 698673500000,
+      "tail_microUSD": 698673500000,
+      "profit_microUSD": 2063404574201,
+      "revenue_microUSD": 3819400000000,
+      "expenses_microUSD": 1755995425799
+    },
+    {
+      "hour": 25202,
+      "day": "1050.083333333333333333333333",
+      "cash_microUSD": 2163404574201,
+      "available_microUSD": 1048931074201,
+      "protected_microUSD": 1114473500000,
+      "tail_microUSD": 698673500000,
+      "profit_microUSD": 2063404574201,
+      "revenue_microUSD": 3819400000000,
+      "expenses_microUSD": 1755995425799
+    },
+    {
+      "hour": 25203,
+      "day": "1050.125",
+      "cash_microUSD": 2163404574201,
+      "available_microUSD": 1048931074201,
+      "protected_microUSD": 1114473500000,
+      "tail_microUSD": 698673500000,
+      "profit_microUSD": 2063404574201,
+      "revenue_microUSD": 3819400000000,
+      "expenses_microUSD": 1755995425799
+    },
+    {
+      "hour": 25561,
+      "day": "1065.041666666666666666666667",
+      "cash_microUSD": 2549012454201,
+      "available_microUSD": 1449828354201,
+      "protected_microUSD": 1099184100000,
+      "tail_microUSD": 1099184100000,
+      "profit_microUSD": 2449012454201,
+      "revenue_microUSD": 4218580000000,
+      "expenses_microUSD": 1769567545799
+    },
+    {
+      "hour": 25921,
+      "day": "1080.041666666666666666666667",
+      "cash_microUSD": 2380527790448,
+      "available_microUSD": 1609910390448,
+      "protected_microUSD": 770617400000,
+      "tail_microUSD": 770617400000,
+      "profit_microUSD": 2280527790448,
+      "revenue_microUSD": 4218580000000,
+      "expenses_microUSD": 1938052209552
+    },
+    {
+      "hour": 25922,
+      "day": "1080.083333333333333333333333",
+      "cash_microUSD": 2380527790448,
+      "available_microUSD": 1149950390448,
+      "protected_microUSD": 1230577400000,
+      "tail_microUSD": 770617400000,
+      "profit_microUSD": 2280527790448,
+      "revenue_microUSD": 4218580000000,
+      "expenses_microUSD": 1938052209552
+    },
+    {
+      "hour": 25923,
+      "day": "1080.125",
+      "cash_microUSD": 2380527790448,
+      "available_microUSD": 1149950390448,
+      "protected_microUSD": 1230577400000,
+      "tail_microUSD": 770617400000,
+      "profit_microUSD": 2280527790448,
+      "revenue_microUSD": 4218580000000,
+      "expenses_microUSD": 1938052209552
+    },
+    {
+      "hour": 26281,
+      "day": "1095.041666666666666666666667",
+      "cash_microUSD": 2808330550448,
+      "available_microUSD": 1593376950448,
+      "protected_microUSD": 1214953600000,
+      "tail_microUSD": 1214953600000,
+      "profit_microUSD": 2708330550448,
+      "revenue_microUSD": 4661440000000,
+      "expenses_microUSD": 1953109449552
+    },
+    {
+      "hour": 26641,
+      "day": "1110.041666666666666666666667",
+      "cash_microUSD": 2623761805212,
+      "available_microUSD": 1772533405212,
+      "protected_microUSD": 851228400000,
+      "tail_microUSD": 851228400000,
+      "profit_microUSD": 2523761805212,
+      "revenue_microUSD": 4661440000000,
+      "expenses_microUSD": 2137678194788
+    },
+    {
+      "hour": 26642,
+      "day": "1110.083333333333333333333333",
+      "cash_microUSD": 2623761805212,
+      "available_microUSD": 1270933405212,
+      "protected_microUSD": 1352828400000,
+      "tail_microUSD": 851228400000,
+      "profit_microUSD": 2523761805212,
+      "revenue_microUSD": 4661440000000,
+      "expenses_microUSD": 2137678194788
+    },
+    {
+      "hour": 26643,
+      "day": "1110.125",
+      "cash_microUSD": 2623761805212,
+      "available_microUSD": 1270933405212,
+      "protected_microUSD": 1352828400000,
+      "tail_microUSD": 851228400000,
+      "profit_microUSD": 2523761805212,
+      "revenue_microUSD": 4661440000000,
+      "expenses_microUSD": 2137678194788
+    },
+    {
+      "hour": 27001,
+      "day": "1125.041666666666666666666667",
+      "cash_microUSD": 3087673645212,
+      "available_microUSD": 1754604445212,
+      "protected_microUSD": 1333069200000,
+      "tail_microUSD": 1333069200000,
+      "profit_microUSD": 2987673645212,
+      "revenue_microUSD": 5141680000000,
+      "expenses_microUSD": 2154006354788
+    },
+    {
+      "hour": 27361,
+      "day": "1140.041666666666666666666667",
+      "cash_microUSD": 2883119883245,
+      "available_microUSD": 1949895983245,
+      "protected_microUSD": 933223900000,
+      "tail_microUSD": 933223900000,
+      "profit_microUSD": 2783119883245,
+      "revenue_microUSD": 5141680000000,
+      "expenses_microUSD": 2358560116755
+    },
+    {
+      "hour": 27362,
+      "day": "1140.083333333333333333333333",
+      "cash_microUSD": 2883119883245,
+      "available_microUSD": 1403415983245,
+      "protected_microUSD": 1479703900000,
+      "tail_microUSD": 933223900000,
+      "profit_microUSD": 2783119883245,
+      "revenue_microUSD": 5141680000000,
+      "expenses_microUSD": 2358560116755
+    },
+    {
+      "hour": 27363,
+      "day": "1140.125",
+      "cash_microUSD": 2883119883245,
+      "available_microUSD": 1403415983245,
+      "protected_microUSD": 1479703900000,
+      "tail_microUSD": 933223900000,
+      "profit_microUSD": 2783119883245,
+      "revenue_microUSD": 5141680000000,
+      "expenses_microUSD": 2358560116755
+    },
+    {
+      "hour": 27721,
+      "day": "1155.041666666666666666666667",
+      "cash_microUSD": 3387487803245,
+      "available_microUSD": 1930403503245,
+      "protected_microUSD": 1457084300000,
+      "tail_microUSD": 1457084300000,
+      "profit_microUSD": 3287487803245,
+      "revenue_microUSD": 5663800000000,
+      "expenses_microUSD": 2376312196755
+    },
+    {
+      "hour": 28081,
+      "day": "1170.041666666666666666666667",
+      "cash_microUSD": 3162426045412,
+      "available_microUSD": 2148939845412,
+      "protected_microUSD": 1013486200000,
+      "tail_microUSD": 1013486200000,
+      "profit_microUSD": 3062426045412,
+      "revenue_microUSD": 5663800000000,
+      "expenses_microUSD": 2601373954588
+    },
+    {
+      "hour": 28082,
+      "day": "1170.083333333333333333333333",
+      "cash_microUSD": 3162426045412,
+      "available_microUSD": 1545459845412,
+      "protected_microUSD": 1616966200000,
+      "tail_microUSD": 1013486200000,
+      "profit_microUSD": 3062426045412,
+      "revenue_microUSD": 5663800000000,
+      "expenses_microUSD": 2601373954588
+    },
+    {
+      "hour": 28083,
+      "day": "1170.125",
+      "cash_microUSD": 3162426045412,
+      "available_microUSD": 1545459845412,
+      "protected_microUSD": 1616966200000,
+      "tail_microUSD": 1013486200000,
+      "profit_microUSD": 3062426045412,
+      "revenue_microUSD": 5663800000000,
+      "expenses_microUSD": 2601373954588
+    },
+    {
+      "hour": 28441,
+      "day": "1185.041666666666666666666667",
+      "cash_microUSD": 3724348245412,
+      "available_microUSD": 2127223045412,
+      "protected_microUSD": 1597125200000,
+      "tail_microUSD": 1597125200000,
+      "profit_microUSD": 3624348245412,
+      "revenue_microUSD": 6245500000000,
+      "expenses_microUSD": 2621151754588
+    },
+    {
+      "hour": 28801,
+      "day": "1200.041666666666666666666667",
+      "cash_microUSD": 3477045919810,
+      "available_microUSD": 2360961119810,
+      "protected_microUSD": 1116084800000,
+      "tail_microUSD": 1116084800000,
+      "profit_microUSD": 3377045919810,
+      "revenue_microUSD": 6245500000000,
+      "expenses_microUSD": 2868454080190
+    },
+    {
+      "hour": 28802,
+      "day": "1200.083333333333333333333333",
+      "cash_microUSD": 3477045919810,
+      "available_microUSD": 1692741119810,
+      "protected_microUSD": 1784304800000,
+      "tail_microUSD": 1116084800000,
+      "profit_microUSD": 3377045919810,
+      "revenue_microUSD": 6245500000000,
+      "expenses_microUSD": 2868454080190
+    },
+    {
+      "hour": 28803,
+      "day": "1200.125",
+      "cash_microUSD": 3477045919810,
+      "available_microUSD": 1692741119810,
+      "protected_microUSD": 1784304800000,
+      "tail_microUSD": 1116084800000,
+      "profit_microUSD": 3377045919810,
+      "revenue_microUSD": 6245500000000,
+      "expenses_microUSD": 2868454080190
+    },
+    {
+      "hour": 29161,
+      "day": "1215.041666666666666666666667",
+      "cash_microUSD": 4096464439810,
+      "available_microUSD": 2337022239810,
+      "protected_microUSD": 1759442200000,
+      "tail_microUSD": 1759442200000,
+      "profit_microUSD": 3996464439810,
+      "revenue_microUSD": 6886720000000,
+      "expenses_microUSD": 2890255560190
+    },
+    {
+      "hour": 29521,
+      "day": "1230.041666666666666666666667",
+      "cash_microUSD": 3824669107776,
+      "available_microUSD": 2588217107776,
+      "protected_microUSD": 1236452000000,
+      "tail_microUSD": 1236452000000,
+      "profit_microUSD": 3724669107776,
+      "revenue_microUSD": 6886720000000,
+      "expenses_microUSD": 3162050892224
+    },
+    {
+      "hour": 29522,
+      "day": "1230.083333333333333333333333",
+      "cash_microUSD": 3824669107776,
+      "available_microUSD": 1856337107776,
+      "protected_microUSD": 1968332000000,
+      "tail_microUSD": 1236452000000,
+      "profit_microUSD": 3724669107776,
+      "revenue_microUSD": 6886720000000,
+      "expenses_microUSD": 3162050892224
+    },
+    {
+      "hour": 29523,
+      "day": "1230.125",
+      "cash_microUSD": 3824669107776,
+      "available_microUSD": 1856337107776,
+      "protected_microUSD": 1968332000000,
+      "tail_microUSD": 1236452000000,
+      "profit_microUSD": 3724669107776,
+      "revenue_microUSD": 6886720000000,
+      "expenses_microUSD": 3162050892224
+    },
+    {
+      "hour": 29881,
+      "day": "1245.041666666666666666666667",
+      "cash_microUSD": 4504250107776,
+      "available_microUSD": 2561953107776,
+      "protected_microUSD": 1942297000000,
+      "tail_microUSD": 1942297000000,
+      "profit_microUSD": 4404250107776,
+      "revenue_microUSD": 7590220000000,
+      "expenses_microUSD": 3185969892224
+    },
+    {
+      "hour": 30241,
+      "day": "1260.041666666666666666666667",
+      "cash_microUSD": 4203701684229,
+      "available_microUSD": 2844074184229,
+      "protected_microUSD": 1359627500000,
+      "tail_microUSD": 1359627500000,
+      "profit_microUSD": 4103701684229,
+      "revenue_microUSD": 7590220000000,
+      "expenses_microUSD": 3486518315771
+    },
+    {
+      "hour": 30242,
+      "day": "1260.083333333333333333333333",
+      "cash_microUSD": 4203701684229,
+      "available_microUSD": 2036834184229,
+      "protected_microUSD": 2166867500000,
+      "tail_microUSD": 1359627500000,
+      "profit_microUSD": 4103701684229,
+      "revenue_microUSD": 7590220000000,
+      "expenses_microUSD": 3486518315771
+    },
+    {
+      "hour": 30243,
+      "day": "1260.125",
+      "cash_microUSD": 4203701684229,
+      "available_microUSD": 2036834184229,
+      "protected_microUSD": 2166867500000,
+      "tail_microUSD": 1359627500000,
+      "profit_microUSD": 4103701684229,
+      "revenue_microUSD": 7590220000000,
+      "expenses_microUSD": 3486518315771
+    },
+    {
+      "hour": 30601,
+      "day": "1275.041666666666666666666667",
+      "cash_microUSD": 4953588164229,
+      "available_microUSD": 2815093064229,
+      "protected_microUSD": 2138495100000,
+      "tail_microUSD": 2138495100000,
+      "profit_microUSD": 4853588164229,
+      "revenue_microUSD": 8366500000000,
+      "expenses_microUSD": 3512911835771
+    },
+    {
+      "hour": 30961,
+      "day": "1290.041666666666666666666667",
+      "cash_microUSD": 4624196853847,
+      "available_microUSD": 3127990453847,
+      "protected_microUSD": 1496206400000,
+      "tail_microUSD": 1496206400000,
+      "profit_microUSD": 4524196853847,
+      "revenue_microUSD": 8366500000000,
+      "expenses_microUSD": 3842303146153
+    },
+    {
+      "hour": 30962,
+      "day": "1290.083333333333333333333333",
+      "cash_microUSD": 4624196853847,
+      "available_microUSD": 2239630453847,
+      "protected_microUSD": 2384566400000,
+      "tail_microUSD": 1496206400000,
+      "profit_microUSD": 4524196853847,
+      "revenue_microUSD": 8366500000000,
+      "expenses_microUSD": 3842303146153
+    },
+    {
+      "hour": 30963,
+      "day": "1290.125",
+      "cash_microUSD": 4624196853847,
+      "available_microUSD": 2239630453847,
+      "protected_microUSD": 2384566400000,
+      "tail_microUSD": 1496206400000,
+      "profit_microUSD": 4524196853847,
+      "revenue_microUSD": 8366500000000,
+      "expenses_microUSD": 3842303146153
+    },
+    {
+      "hour": 31321,
+      "day": "1305.041666666666666666666667",
+      "cash_microUSD": 5447924373847,
+      "available_microUSD": 3096155573847,
+      "protected_microUSD": 2351768800000,
+      "tail_microUSD": 2351768800000,
+      "profit_microUSD": 5347924373847,
+      "revenue_microUSD": 9219220000000,
+      "expenses_microUSD": 3871295626153
+    },
+    {
+      "hour": 31681,
+      "day": "1320.041666666666666666666667",
+      "cash_microUSD": 5083597551460,
+      "available_microUSD": 3436501251460,
+      "protected_microUSD": 1647096300000,
+      "tail_microUSD": 1647096300000,
+      "profit_microUSD": 4983597551460,
+      "revenue_microUSD": 9219220000000,
+      "expenses_microUSD": 4235622448540
+    },
+    {
+      "hour": 31682,
+      "day": "1320.083333333333333333333333",
+      "cash_microUSD": 5083597551460,
+      "available_microUSD": 2463061251460,
+      "protected_microUSD": 2620536300000,
+      "tail_microUSD": 1647096300000,
+      "profit_microUSD": 4983597551460,
+      "revenue_microUSD": 9219220000000,
+      "expenses_microUSD": 4235622448540
+    },
+    {
+      "hour": 31683,
+      "day": "1320.125",
+      "cash_microUSD": 5083597551460,
+      "available_microUSD": 2463061251460,
+      "protected_microUSD": 2620536300000,
+      "tail_microUSD": 1647096300000,
+      "profit_microUSD": 4983597551460,
+      "revenue_microUSD": 9219220000000,
+      "expenses_microUSD": 4235622448540
+    },
+    {
+      "hour": 32041,
+      "day": "1335.041666666666666666666667",
+      "cash_microUSD": 5988295191460,
+      "available_microUSD": 3401537091460,
+      "protected_microUSD": 2586758100000,
+      "tail_microUSD": 2586758100000,
+      "profit_microUSD": 5888295191460,
+      "revenue_microUSD": 10155760000000,
+      "expenses_microUSD": 4267464808540
+    },
+    {
+      "hour": 32401,
+      "day": "1350.041666666666666666666667",
+      "cash_microUSD": 5587029242636,
+      "available_microUSD": 3777844942636,
+      "protected_microUSD": 1809184300000,
+      "tail_microUSD": 1809184300000,
+      "profit_microUSD": 5487029242636,
+      "revenue_microUSD": 10155760000000,
+      "expenses_microUSD": 4668730757364
+    },
+    {
+      "hour": 32402,
+      "day": "1350.083333333333333333333333",
+      "cash_microUSD": 5587029242636,
+      "available_microUSD": 2709304942636,
+      "protected_microUSD": 2877724300000,
+      "tail_microUSD": 1809184300000,
+      "profit_microUSD": 5487029242636,
+      "revenue_microUSD": 10155760000000,
+      "expenses_microUSD": 4668730757364
+    },
+    {
+      "hour": 32403,
+      "day": "1350.125",
+      "cash_microUSD": 5587029242636,
+      "available_microUSD": 2709304942636,
+      "protected_microUSD": 2877724300000,
+      "tail_microUSD": 1809184300000,
+      "profit_microUSD": 5487029242636,
+      "revenue_microUSD": 10155760000000,
+      "expenses_microUSD": 4668730757364
+    },
+    {
+      "hour": 32761,
+      "day": "1365.041666666666666666666667",
+      "cash_microUSD": 6582260402636,
+      "available_microUSD": 3739381902636,
+      "protected_microUSD": 2842878500000,
+      "tail_microUSD": 2842878500000,
+      "profit_microUSD": 6482260402636,
+      "revenue_microUSD": 11186020000000,
+      "expenses_microUSD": 4703759597364
+    },
+    {
+      "hour": 33121,
+      "day": "1380.041666666666666666666667",
+      "cash_microUSD": 6139888902571,
+      "available_microUSD": 4151151602571,
+      "protected_microUSD": 1988737300000,
+      "tail_microUSD": 1988737300000,
+      "profit_microUSD": 6039888902571,
+      "revenue_microUSD": 11186020000000,
+      "expenses_microUSD": 5146131097429
+    },
+    {
+      "hour": 33122,
+      "day": "1380.083333333333333333333333",
+      "cash_microUSD": 6139888902571,
+      "available_microUSD": 2971971602571,
+      "protected_microUSD": 3167917300000,
+      "tail_microUSD": 1988737300000,
+      "profit_microUSD": 6039888902571,
+      "revenue_microUSD": 11186020000000,
+      "expenses_microUSD": 5146131097429
+    },
+    {
+      "hour": 33123,
+      "day": "1380.125",
+      "cash_microUSD": 6139888902571,
+      "available_microUSD": 2971971602571,
+      "protected_microUSD": 3167917300000,
+      "tail_microUSD": 1988737300000,
+      "profit_microUSD": 6039888902571,
+      "revenue_microUSD": 11186020000000,
+      "expenses_microUSD": 5146131097429
+    },
+    {
+      "hour": 33481,
+      "day": "1395.041666666666666666666667",
+      "cash_microUSD": 7233825942571,
+      "available_microUSD": 4108873842571,
+      "protected_microUSD": 3124952100000,
+      "tail_microUSD": 3124952100000,
+      "profit_microUSD": 7133825942571,
+      "revenue_microUSD": 12318460000000,
+      "expenses_microUSD": 5184634057429
+    },
+    {
+      "hour": 33841,
+      "day": "1410.041666666666666666666667",
+      "cash_microUSD": 6748062996539,
+      "available_microUSD": 4561211796539,
+      "protected_microUSD": 2186851200000,
+      "tail_microUSD": 2186851200000,
+      "profit_microUSD": 6648062996539,
+      "revenue_microUSD": 12318460000000,
+      "expenses_microUSD": 5670397003461
+    },
+    {
+      "hour": 33842,
+      "day": "1410.083333333333333333333333",
+      "cash_microUSD": 6748062996539,
+      "available_microUSD": 3271151796539,
+      "protected_microUSD": 3476911200000,
+      "tail_microUSD": 2186851200000,
+      "profit_microUSD": 6648062996539,
+      "revenue_microUSD": 12318460000000,
+      "expenses_microUSD": 5670397003461
+    },
+    {
+      "hour": 33843,
+      "day": "1410.125",
+      "cash_microUSD": 6748062996539,
+      "available_microUSD": 3271151796539,
+      "protected_microUSD": 3476911200000,
+      "tail_microUSD": 2186851200000,
+      "profit_microUSD": 6648062996539,
+      "revenue_microUSD": 12318460000000,
+      "expenses_microUSD": 5670397003461
+    },
+    {
+      "hour": 34201,
+      "day": "1425.041666666666666666666667",
+      "cash_microUSD": 7946849676539,
+      "available_microUSD": 4514881876539,
+      "protected_microUSD": 3431967800000,
+      "tail_microUSD": 3431967800000,
+      "profit_microUSD": 7846849676539,
+      "revenue_microUSD": 13559440000000,
+      "expenses_microUSD": 5712590323461
+    },
+    {
+      "hour": 34561,
+      "day": "1440.041666666666666666666667",
+      "cash_microUSD": 7409208621352,
+      "available_microUSD": 5009217921352,
+      "protected_microUSD": 2399990700000,
+      "tail_microUSD": 2399990700000,
+      "profit_microUSD": 7309208621352,
+      "revenue_microUSD": 13559440000000,
+      "expenses_microUSD": 6250231378648
+    },
+    {
+      "hour": 34562,
+      "day": "1440.083333333333333333333333",
+      "cash_microUSD": 7409208621352,
+      "available_microUSD": 3596037921352,
+      "protected_microUSD": 3813170700000,
+      "tail_microUSD": 2399990700000,
+      "profit_microUSD": 7309208621352,
+      "revenue_microUSD": 13559440000000,
+      "expenses_microUSD": 6250231378648
+    },
+    {
+      "hour": 34563,
+      "day": "1440.125",
+      "cash_microUSD": 7409208621352,
+      "available_microUSD": 3596037921352,
+      "protected_microUSD": 3813170700000,
+      "tail_microUSD": 2399990700000,
+      "profit_microUSD": 7309208621352,
+      "revenue_microUSD": 13559440000000,
+      "expenses_microUSD": 6250231378648
+    },
+    {
+      "hour": 34921,
+      "day": "1455.041666666666666666666667",
+      "cash_microUSD": 8720089941352,
+      "available_microUSD": 4958555841352,
+      "protected_microUSD": 3761534100000,
+      "tail_microUSD": 3761534100000,
+      "profit_microUSD": 8620089941352,
+      "revenue_microUSD": 14916460000000,
+      "expenses_microUSD": 6296370058648
+    },
+    {
+      "hour": 35281,
+      "day": "1470.041666666666666666666667",
+      "cash_microUSD": 8127351463416,
+      "available_microUSD": 5500144763416,
+      "protected_microUSD": 2627206700000,
+      "tail_microUSD": 2627206700000,
+      "profit_microUSD": 8027351463416,
+      "revenue_microUSD": 14916460000000,
+      "expenses_microUSD": 6889108536584
+    },
+    {
+      "hour": 35282,
+      "day": "1470.083333333333333333333333",
+      "cash_microUSD": 8127351463416,
+      "available_microUSD": 3948124763416,
+      "protected_microUSD": 4179226700000,
+      "tail_microUSD": 2627206700000,
+      "profit_microUSD": 8027351463416,
+      "revenue_microUSD": 14916460000000,
+      "expenses_microUSD": 6889108536584
+    },
+    {
+      "hour": 35283,
+      "day": "1470.125",
+      "cash_microUSD": 8127351463416,
+      "available_microUSD": 3948124763416,
+      "protected_microUSD": 4179226700000,
+      "tail_microUSD": 2627206700000,
+      "profit_microUSD": 8027351463416,
+      "revenue_microUSD": 14916460000000,
+      "expenses_microUSD": 6889108536584
+    },
+    {
+      "hour": 35641,
+      "day": "1485.041666666666666666666667",
+      "cash_microUSD": 9568990543416,
+      "available_microUSD": 5444429243416,
+      "protected_microUSD": 4124561300000,
+      "tail_microUSD": 4124561300000,
+      "profit_microUSD": 9468990543416,
+      "revenue_microUSD": 16408840000000,
+      "expenses_microUSD": 6939849456584
+    },
+    {
+      "hour": 36001,
+      "day": "1500.041666666666666666666667",
+      "cash_microUSD": 8916276112686,
+      "available_microUSD": 6034763112686,
+      "protected_microUSD": 2881513000000,
+      "tail_microUSD": 2881513000000,
+      "profit_microUSD": 8816276112686,
+      "revenue_microUSD": 16408840000000,
+      "expenses_microUSD": 7592563887314
+    },
+    {
+      "hour": 36002,
+      "day": "1500.083333333333333333333333",
+      "cash_microUSD": 8916276112686,
+      "available_microUSD": 4328123112686,
+      "protected_microUSD": 4588153000000,
+      "tail_microUSD": 2881513000000,
+      "profit_microUSD": 8816276112686,
+      "revenue_microUSD": 16408840000000,
+      "expenses_microUSD": 7592563887314
+    },
+    {
+      "hour": 36003,
+      "day": "1500.125",
+      "cash_microUSD": 8916276112686,
+      "available_microUSD": 4328123112686,
+      "protected_microUSD": 4588153000000,
+      "tail_microUSD": 2881513000000,
+      "profit_microUSD": 8816276112686,
+      "revenue_microUSD": 16408840000000,
+      "expenses_microUSD": 7592563887314
+    },
+    {
+      "hour": 36361,
+      "day": "1515.041666666666666666666667",
+      "cash_microUSD": 10498294312686,
+      "available_microUSD": 5973622312686,
+      "protected_microUSD": 4524672000000,
+      "tail_microUSD": 4524672000000,
+      "profit_microUSD": 10398294312686,
+      "revenue_microUSD": 18046540000000,
+      "expenses_microUSD": 7648245687314
+    },
+    {
+      "hour": 36721,
+      "day": "1530.041666666666666666666667",
+      "cash_microUSD": 9783140627422,
+      "available_microUSD": 6617750327422,
+      "protected_microUSD": 3165390300000,
+      "tail_microUSD": 3165390300000,
+      "profit_microUSD": 9683140627422,
+      "revenue_microUSD": 18046540000000,
+      "expenses_microUSD": 8363399372578
+    },
+    {
+      "hour": 36722,
+      "day": "1530.083333333333333333333333",
+      "cash_microUSD": 9783140627422,
+      "available_microUSD": 4744070327422,
+      "protected_microUSD": 5039070300000,
+      "tail_microUSD": 3165390300000,
+      "profit_microUSD": 9683140627422,
+      "revenue_microUSD": 18046540000000,
+      "expenses_microUSD": 8363399372578
+    },
+    {
+      "hour": 36723,
+      "day": "1530.125",
+      "cash_microUSD": 9783140627422,
+      "available_microUSD": 4744070327422,
+      "protected_microUSD": 5039070300000,
+      "tail_microUSD": 3165390300000,
+      "profit_microUSD": 9683140627422,
+      "revenue_microUSD": 18046540000000,
+      "expenses_microUSD": 8363399372578
+    },
+    {
+      "hour": 37081,
+      "day": "1545.041666666666666666666667",
+      "cash_microUSD": 11521766747422,
+      "available_microUSD": 6550557047422,
+      "protected_microUSD": 4971209700000,
+      "tail_microUSD": 4971209700000,
+      "profit_microUSD": 11421766747422,
+      "revenue_microUSD": 19846360000000,
+      "expenses_microUSD": 8424593252578
+    },
+    {
+      "hour": 37441,
+      "day": "1560.041666666666666666666667",
+      "cash_microUSD": 10728797097315,
+      "available_microUSD": 7252454697315,
+      "protected_microUSD": 3476342400000,
+      "tail_microUSD": 3476342400000,
+      "profit_microUSD": 10628797097315,
+      "revenue_microUSD": 19846360000000,
+      "expenses_microUSD": 9217562902685
+    },
+    {
+      "hour": 37442,
+      "day": "1560.083333333333333333333333",
+      "cash_microUSD": 10728797097315,
+      "available_microUSD": 5202374697315,
+      "protected_microUSD": 5526422400000,
+      "tail_microUSD": 3476342400000,
+      "profit_microUSD": 10628797097315,
+      "revenue_microUSD": 19846360000000,
+      "expenses_microUSD": 9217562902685
+    },
+    {
+      "hour": 37443,
+      "day": "1560.125",
+      "cash_microUSD": 10728797097315,
+      "available_microUSD": 5202374697315,
+      "protected_microUSD": 5526422400000,
+      "tail_microUSD": 3476342400000,
+      "profit_microUSD": 10628797097315,
+      "revenue_microUSD": 19846360000000,
+      "expenses_microUSD": 9217562902685
+    },
+    {
+      "hour": 37801,
+      "day": "1575.041666666666666666666667",
+      "cash_microUSD": 12628204257315,
+      "available_microUSD": 7179047657315,
+      "protected_microUSD": 5449156600000,
+      "tail_microUSD": 5449156600000,
+      "profit_microUSD": 12528204257315,
+      "revenue_microUSD": 21812620000000,
+      "expenses_microUSD": 9284415742685
+    },
+    {
+      "hour": 38161,
+      "day": "1590.041666666666666666666667",
+      "cash_microUSD": 11758044103733,
+      "available_microUSD": 7949317003733,
+      "protected_microUSD": 3808727100000,
+      "tail_microUSD": 3808727100000,
+      "profit_microUSD": 11658044103733,
+      "revenue_microUSD": 21812620000000,
+      "expenses_microUSD": 10154575896267
+    },
+    {
+      "hour": 38162,
+      "day": "1590.083333333333333333333333",
+      "cash_microUSD": 11758044103733,
+      "available_microUSD": 5702377003733,
+      "protected_microUSD": 6055667100000,
+      "tail_microUSD": 3808727100000,
+      "profit_microUSD": 11658044103733,
+      "revenue_microUSD": 21812620000000,
+      "expenses_microUSD": 10154575896267
+    },
+    {
+      "hour": 38163,
+      "day": "1590.125",
+      "cash_microUSD": 11758044103733,
+      "available_microUSD": 5702377003733,
+      "protected_microUSD": 6055667100000,
+      "tail_microUSD": 3808727100000,
+      "profit_microUSD": 11658044103733,
+      "revenue_microUSD": 21812620000000,
+      "expenses_microUSD": 10154575896267
+    },
+    {
+      "hour": 38521,
+      "day": "1605.041666666666666666666667",
+      "cash_microUSD": 13842749383733,
+      "available_microUSD": 7868748683733,
+      "protected_microUSD": 5974000700000,
+      "tail_microUSD": 5974000700000,
+      "profit_microUSD": 13742749383733,
+      "revenue_microUSD": 23970700000000,
+      "expenses_microUSD": 10227950616267
+    },
+    {
+      "hour": 38881,
+      "day": "1620.041666666666666666666667",
+      "cash_microUSD": 12882503194040,
+      "available_microUSD": 8711322194040,
+      "protected_microUSD": 4171181000000,
+      "tail_microUSD": 4171181000000,
+      "profit_microUSD": 12782503194040,
+      "revenue_microUSD": 23970700000000,
+      "expenses_microUSD": 11188196805960
+    },
+    {
+      "hour": 38882,
+      "day": "1620.083333333333333333333333",
+      "cash_microUSD": 12882503194040,
+      "available_microUSD": 6245202194040,
+      "protected_microUSD": 6637301000000,
+      "tail_microUSD": 4171181000000,
+      "profit_microUSD": 12782503194040,
+      "revenue_microUSD": 23970700000000,
+      "expenses_microUSD": 11188196805960
+    },
+    {
+      "hour": 38883,
+      "day": "1620.125",
+      "cash_microUSD": 12882503194040,
+      "available_microUSD": 6245202194040,
+      "protected_microUSD": 6637301000000,
+      "tail_microUSD": 4171181000000,
+      "profit_microUSD": 12782503194040,
+      "revenue_microUSD": 23970700000000,
+      "expenses_microUSD": 11188196805960
+    },
+    {
+      "hour": 39241,
+      "day": "1635.041666666666666666666667",
+      "cash_microUSD": 15171807274040,
+      "available_microUSD": 8622846674040,
+      "protected_microUSD": 6548960600000,
+      "tail_microUSD": 6548960600000,
+      "profit_microUSD": 15071807274040,
+      "revenue_microUSD": 26340580000000,
+      "expenses_microUSD": 11268772725960
+    },
+    {
+      "hour": 39601,
+      "day": "1650.041666666666666666666667",
+      "cash_microUSD": 14118119737209,
+      "available_microUSD": 9538696237209,
+      "protected_microUSD": 4579423500000,
+      "tail_microUSD": 4579423500000,
+      "profit_microUSD": 14018119737209,
+      "revenue_microUSD": 26340580000000,
+      "expenses_microUSD": 12322460262791
+    },
+    {
+      "hour": 39602,
+      "day": "1650.083333333333333333333333",
+      "cash_microUSD": 14118119737209,
+      "available_microUSD": 6839656237209,
+      "protected_microUSD": 7278463500000,
+      "tail_microUSD": 4579423500000,
+      "profit_microUSD": 14018119737209,
+      "revenue_microUSD": 26340580000000,
+      "expenses_microUSD": 12322460262791
+    },
+    {
+      "hour": 39603,
+      "day": "1650.125",
+      "cash_microUSD": 14118119737209,
+      "available_microUSD": 6839656237209,
+      "protected_microUSD": 7278463500000,
+      "tail_microUSD": 4579423500000,
+      "profit_microUSD": 14018119737209,
+      "revenue_microUSD": 26340580000000,
+      "expenses_microUSD": 12322460262791
+    },
+    {
+      "hour": 39961,
+      "day": "1665.041666666666666666666667",
+      "cash_microUSD": 16623962377209,
+      "available_microUSD": 9441852077209,
+      "protected_microUSD": 7182110300000,
+      "tail_microUSD": 7182110300000,
+      "profit_microUSD": 16523962377209,
+      "revenue_microUSD": 28934620000000,
+      "expenses_microUSD": 12410657622791
+    },
+    {
+      "hour": 40321,
+      "day": "1680.041666666666666666666667",
+      "cash_microUSD": 15459694769920,
+      "available_microUSD": 10439261269920,
+      "protected_microUSD": 5020433500000,
+      "tail_microUSD": 5020433500000,
+      "profit_microUSD": 15359694769920,
+      "revenue_microUSD": 28934620000000,
+      "expenses_microUSD": 13574925230080
+    },
+    {
+      "hour": 40322,
+      "day": "1680.083333333333333333333333",
+      "cash_microUSD": 15459694769920,
+      "available_microUSD": 7498541269920,
+      "protected_microUSD": 7961153500000,
+      "tail_microUSD": 5020433500000,
+      "profit_microUSD": 15359694769920,
+      "revenue_microUSD": 28934620000000,
+      "expenses_microUSD": 13574925230080
+    },
+    {
+      "hour": 40323,
+      "day": "1680.125",
+      "cash_microUSD": 15459694769920,
+      "available_microUSD": 7498541269920,
+      "protected_microUSD": 7961153500000,
+      "tail_microUSD": 5020433500000,
+      "profit_microUSD": 15359694769920,
+      "revenue_microUSD": 28934620000000,
+      "expenses_microUSD": 13574925230080
+    },
+    {
+      "hour": 40681,
+      "day": "1695.041666666666666666666667",
+      "cash_microUSD": 18187234409920,
+      "available_microUSD": 10333849109920,
+      "protected_microUSD": 7853385300000,
+      "tail_microUSD": 7853385300000,
+      "profit_microUSD": 18087234409920,
+      "revenue_microUSD": 31758160000000,
+      "expenses_microUSD": 13670925590080
+    },
+    {
+      "hour": 41041,
+      "day": "1710.041666666666666666666667",
+      "cash_microUSD": 16903752912290,
+      "available_microUSD": 11424197412290,
+      "protected_microUSD": 5479555500000,
+      "tail_microUSD": 5479555500000,
+      "profit_microUSD": 16803752912290,
+      "revenue_microUSD": 31758160000000,
+      "expenses_microUSD": 14954407087710
+    },
+    {
+      "hour": 41042,
+      "day": "1710.083333333333333333333333",
+      "cash_microUSD": 16903752912290,
+      "available_microUSD": 8206457412290,
+      "protected_microUSD": 8697295500000,
+      "tail_microUSD": 5479555500000,
+      "profit_microUSD": 16803752912290,
+      "revenue_microUSD": 31758160000000,
+      "expenses_microUSD": 14954407087710
+    },
+    {
+      "hour": 41043,
+      "day": "1710.125",
+      "cash_microUSD": 16903752912290,
+      "available_microUSD": 8206457412290,
+      "protected_microUSD": 8697295500000,
+      "tail_microUSD": 5479555500000,
+      "profit_microUSD": 16803752912290,
+      "revenue_microUSD": 31758160000000,
+      "expenses_microUSD": 14954407087710
+    },
+    {
+      "hour": 41401,
+      "day": "1725.041666666666666666666667",
+      "cash_microUSD": 19887127992290,
+      "available_microUSD": 11308897892290,
+      "protected_microUSD": 8578230100000,
+      "tail_microUSD": 8578230100000,
+      "profit_microUSD": 19787127992290,
+      "revenue_microUSD": 34846540000000,
+      "expenses_microUSD": 15059412007710
+    },
+    {
+      "hour": 41761,
+      "day": "1740.041666666666666666666667",
+      "cash_microUSD": 18478439654936,
+      "available_microUSD": 12498572954936,
+      "protected_microUSD": 5979866700000,
+      "tail_microUSD": 5979866700000,
+      "profit_microUSD": 18378439654936,
+      "revenue_microUSD": 34846540000000,
+      "expenses_microUSD": 16468100345064
+    },
+    {
+      "hour": 41762,
+      "day": "1740.083333333333333333333333",
+      "cash_microUSD": 18478439654936,
+      "available_microUSD": 8994392954936,
+      "protected_microUSD": 9484046700000,
+      "tail_microUSD": 5979866700000,
+      "profit_microUSD": 18378439654936,
+      "revenue_microUSD": 34846540000000,
+      "expenses_microUSD": 16468100345064
+    },
+    {
+      "hour": 41763,
+      "day": "1740.125",
+      "cash_microUSD": 18478439654936,
+      "available_microUSD": 8994392954936,
+      "protected_microUSD": 9484046700000,
+      "tail_microUSD": 5979866700000,
+      "profit_microUSD": 18378439654936,
+      "revenue_microUSD": 34846540000000,
+      "expenses_microUSD": 16468100345064
+    },
+    {
+      "hour": 42121,
+      "day": "1755.041666666666666666666667",
+      "cash_microUSD": 21731444654936,
+      "available_microUSD": 12372852954936,
+      "protected_microUSD": 9358591700000,
+      "tail_microUSD": 9358591700000,
+      "profit_microUSD": 21631444654936,
+      "revenue_microUSD": 38214040000000,
+      "expenses_microUSD": 16582595345064
+    },
+    {
+      "hour": 42481,
+      "day": "1770.041666666666666666666667",
+      "cash_microUSD": 20178514856308,
+      "available_microUSD": 13648169056308,
+      "protected_microUSD": 6530345800000,
+      "tail_microUSD": 6530345800000,
+      "profit_microUSD": 20078514856308,
+      "revenue_microUSD": 38214040000000,
+      "expenses_microUSD": 18135525143692
+    },
+    {
+      "hour": 42482,
+      "day": "1770.083333333333333333333333",
+      "cash_microUSD": 20178514856308,
+      "available_microUSD": 9819749056308,
+      "protected_microUSD": 10358765800000,
+      "tail_microUSD": 6530345800000,
+      "profit_microUSD": 20078514856308,
+      "revenue_microUSD": 38214040000000,
+      "expenses_microUSD": 18135525143692
+    },
+    {
+      "hour": 42483,
+      "day": "1770.125",
+      "cash_microUSD": 20178514856308,
+      "available_microUSD": 9819749056308,
+      "protected_microUSD": 10358765800000,
+      "tail_microUSD": 6530345800000,
+      "profit_microUSD": 20078514856308,
+      "revenue_microUSD": 38214040000000,
+      "expenses_microUSD": 18135525143692
+    },
+    {
+      "hour": 42841,
+      "day": "1785.041666666666666666666667",
+      "cash_microUSD": 23725087256308,
+      "available_microUSD": 13511103456308,
+      "protected_microUSD": 10213983800000,
+      "tail_microUSD": 10213983800000,
+      "profit_microUSD": 23625087256308,
+      "revenue_microUSD": 41885440000000,
+      "expenses_microUSD": 18260352743692
+    },
+    {
+      "hour": 43201,
+      "day": "1800.041666666666666666666667",
+      "cash_microUSD": 22017837215871,
+      "available_microUSD": 14897380715871,
+      "protected_microUSD": 7120456500000,
+      "tail_microUSD": 7120456500000,
+      "profit_microUSD": 21917837215871,
+      "revenue_microUSD": 41885440000000,
+      "expenses_microUSD": 19967602784129
+    },
+    {
+      "hour": 43202,
+      "day": "1800.083333333333333333333333",
+      "cash_microUSD": 22017837215871,
+      "available_microUSD": 10719520715871,
+      "protected_microUSD": 11298316500000,
+      "tail_microUSD": 7120456500000,
+      "profit_microUSD": 21917837215871,
+      "revenue_microUSD": 41885440000000,
+      "expenses_microUSD": 19967602784129
+    },
+    {
+      "hour": 43203,
+      "day": "1800.125",
+      "cash_microUSD": 22017837215871,
+      "available_microUSD": 10719520715871,
+      "protected_microUSD": 11298316500000,
+      "tail_microUSD": 7120456500000,
+      "profit_microUSD": 21917837215871,
+      "revenue_microUSD": 41885440000000,
+      "expenses_microUSD": 19967602784129
+    },
+    {
+      "hour": 43561,
+      "day": "1815.041666666666666666666667",
+      "cash_microUSD": 25893274655871,
+      "available_microUSD": 14747605355871,
+      "protected_microUSD": 11145669300000,
+      "tail_microUSD": 11145669300000,
+      "profit_microUSD": 25793274655871,
+      "revenue_microUSD": 45897280000000,
+      "expenses_microUSD": 20104005344129
+    },
+    {
+      "hour": 43800,
+      "day": "1825",
+      "cash_microUSD": 25361803108132,
+      "available_microUSD": 17589246308132,
+      "protected_microUSD": 7772556800000,
+      "tail_microUSD": 7772556800000,
+      "profit_microUSD": 25261803108132,
+      "revenue_microUSD": 45897280000000,
+      "expenses_microUSD": 20635476891868
+    }
+  ],
+  "rolling365": [
+    {
+      "hour": 8760,
+      "day": "365",
+      "profit_microUSD": 139404858630
+    },
+    {
+      "hour": 8761,
+      "day": "365.0416666666666666666666667",
+      "profit_microUSD": 156034858630
+    },
+    {
+      "hour": 9001,
+      "day": "375.0416666666666666666666667",
+      "profit_microUSD": 194520298630
+    },
+    {
+      "hour": 9361,
+      "day": "390.0416666666666666666666667",
+      "profit_microUSD": 176069269222
+    },
+    {
+      "hour": 9362,
+      "day": "390.0833333333333333333333333",
+      "profit_microUSD": 176069269222
+    },
+    {
+      "hour": 9363,
+      "day": "390.125",
+      "profit_microUSD": 176069269222
+    },
+    {
+      "hour": 9481,
+      "day": "395.0416666666666666666666667",
+      "profit_microUSD": 184896057597
+    },
+    {
+      "hour": 9482,
+      "day": "395.0833333333333333333333333",
+      "profit_microUSD": 184896057597
+    },
+    {
+      "hour": 9483,
+      "day": "395.125",
+      "profit_microUSD": 184896057597
+    },
+    {
+      "hour": 9721,
+      "day": "405.0416666666666666666666667",
+      "profit_microUSD": 230974257597
+    },
+    {
+      "hour": 9841,
+      "day": "410.0416666666666666666666667",
+      "profit_microUSD": 212552137597
+    },
+    {
+      "hour": 10081,
+      "day": "420.0416666666666666666666667",
+      "profit_microUSD": 191932884556
+    },
+    {
+      "hour": 10082,
+      "day": "420.0833333333333333333333333",
+      "profit_microUSD": 191932884556
+    },
+    {
+      "hour": 10083,
+      "day": "420.125",
+      "profit_microUSD": 191932884556
+    },
+    {
+      "hour": 10201,
+      "day": "425.0416666666666666666666667",
+      "profit_microUSD": 196380847804
+    },
+    {
+      "hour": 10202,
+      "day": "425.0833333333333333333333333",
+      "profit_microUSD": 196380847804
+    },
+    {
+      "hour": 10203,
+      "day": "425.125",
+      "profit_microUSD": 196380847804
+    },
+    {
+      "hour": 10441,
+      "day": "435.0416666666666666666666667",
+      "profit_microUSD": 248602807804
+    },
+    {
+      "hour": 10561,
+      "day": "440.0416666666666666666666667",
+      "profit_microUSD": 229591927804
+    },
+    {
+      "hour": 10801,
+      "day": "450.0416666666666666666666667",
+      "profit_microUSD": 207598760479
+    },
+    {
+      "hour": 10802,
+      "day": "450.0833333333333333333333333",
+      "profit_microUSD": 207598760479
+    },
+    {
+      "hour": 10803,
+      "day": "450.125",
+      "profit_microUSD": 207598760479
+    },
+    {
+      "hour": 10921,
+      "day": "455.0416666666666666666666667",
+      "profit_microUSD": 213259410154
+    },
+    {
+      "hour": 10922,
+      "day": "455.0833333333333333333333333",
+      "profit_microUSD": 213259410154
+    },
+    {
+      "hour": 10923,
+      "day": "455.125",
+      "profit_microUSD": 213259410154
+    },
+    {
+      "hour": 11161,
+      "day": "465.0416666666666666666666667",
+      "profit_microUSD": 270755730154
+    },
+    {
+      "hour": 11281,
+      "day": "470.0416666666666666666666667",
+      "profit_microUSD": 251281170154
+    },
+    {
+      "hour": 11521,
+      "day": "480.0416666666666666666666667",
+      "profit_microUSD": 226685906621
+    },
+    {
+      "hour": 11522,
+      "day": "480.0833333333333333333333333",
+      "profit_microUSD": 226685906621
+    },
+    {
+      "hour": 11523,
+      "day": "480.125",
+      "profit_microUSD": 226685906621
+    },
+    {
+      "hour": 11641,
+      "day": "485.0416666666666666666666667",
+      "profit_microUSD": 234670685303
+    },
+    {
+      "hour": 11642,
+      "day": "485.0833333333333333333333333",
+      "profit_microUSD": 234670685303
+    },
+    {
+      "hour": 11643,
+      "day": "485.125",
+      "profit_microUSD": 234670685303
+    },
+    {
+      "hour": 11881,
+      "day": "495.0416666666666666666666667",
+      "profit_microUSD": 296108285303
+    },
+    {
+      "hour": 12001,
+      "day": "500.0416666666666666666666667",
+      "profit_microUSD": 276749645303
+    },
+    {
+      "hour": 12241,
+      "day": "510.0416666666666666666666667",
+      "profit_microUSD": 249703521477
+    },
+    {
+      "hour": 12242,
+      "day": "510.0833333333333333333333333",
+      "profit_microUSD": 249703521477
+    },
+    {
+      "hour": 12243,
+      "day": "510.125",
+      "profit_microUSD": 249703521477
+    },
+    {
+      "hour": 12361,
+      "day": "515.0416666666666666666666667",
+      "profit_microUSD": 258351672731
+    },
+    {
+      "hour": 12362,
+      "day": "515.0833333333333333333333333",
+      "profit_microUSD": 258351672731
+    },
+    {
+      "hour": 12363,
+      "day": "515.125",
+      "profit_microUSD": 258351672731
+    },
+    {
+      "hour": 12601,
+      "day": "525.0416666666666666666666667",
+      "profit_microUSD": 326454672731
+    },
+    {
+      "hour": 12721,
+      "day": "530.0416666666666666666666667",
+      "profit_microUSD": 306226632731
+    },
+    {
+      "hour": 12961,
+      "day": "540.0416666666666666666666667",
+      "profit_microUSD": 276087944631
+    },
+    {
+      "hour": 12962,
+      "day": "540.0833333333333333333333333",
+      "profit_microUSD": 276087944631
+    },
+    {
+      "hour": 12963,
+      "day": "540.125",
+      "profit_microUSD": 276087944631
+    },
+    {
+      "hour": 13081,
+      "day": "545.0416666666666666666666667",
+      "profit_microUSD": 285523542654
+    },
+    {
+      "hour": 13082,
+      "day": "545.0833333333333333333333333",
+      "profit_microUSD": 285523542654
+    },
+    {
+      "hour": 13083,
+      "day": "545.125",
+      "profit_microUSD": 285523542654
+    },
+    {
+      "hour": 13321,
+      "day": "555.0416666666666666666666667",
+      "profit_microUSD": 361451142654
+    },
+    {
+      "hour": 13441,
+      "day": "560.0416666666666666666666667",
+      "profit_microUSD": 337919382654
+    },
+    {
+      "hour": 13681,
+      "day": "570.0416666666666666666666667",
+      "profit_microUSD": 305333366364
+    },
+    {
+      "hour": 13682,
+      "day": "570.0833333333333333333333333",
+      "profit_microUSD": 305333366364
+    },
+    {
+      "hour": 13683,
+      "day": "570.125",
+      "profit_microUSD": 305333366364
+    },
+    {
+      "hour": 13801,
+      "day": "575.0416666666666666666666667",
+      "profit_microUSD": 315725609848
+    },
+    {
+      "hour": 13802,
+      "day": "575.0833333333333333333333333",
+      "profit_microUSD": 315725609848
+    },
+    {
+      "hour": 13803,
+      "day": "575.125",
+      "profit_microUSD": 315725609848
+    },
+    {
+      "hour": 14041,
+      "day": "585.0416666666666666666666667",
+      "profit_microUSD": 399303929848
+    },
+    {
+      "hour": 14161,
+      "day": "590.0416666666666666666666667",
+      "profit_microUSD": 372410489848
+    },
+    {
+      "hour": 14401,
+      "day": "600.0416666666666666666666667",
+      "profit_microUSD": 336190704715
+    },
+    {
+      "hour": 14402,
+      "day": "600.0833333333333333333333333",
+      "profit_microUSD": 336190704715
+    },
+    {
+      "hour": 14403,
+      "day": "600.125",
+      "profit_microUSD": 336190704715
+    },
+    {
+      "hour": 14521,
+      "day": "605.0416666666666666666666667",
+      "profit_microUSD": 347532532650
+    },
+    {
+      "hour": 14522,
+      "day": "605.0833333333333333333333333",
+      "profit_microUSD": 347532532650
+    },
+    {
+      "hour": 14523,
+      "day": "605.125",
+      "profit_microUSD": 347532532650
+    },
+    {
+      "hour": 14761,
+      "day": "615.0416666666666666666666667",
+      "profit_microUSD": 439457092650
+    },
+    {
+      "hour": 14881,
+      "day": "620.0416666666666666666666667",
+      "profit_microUSD": 410245252650
+    },
+    {
+      "hour": 15121,
+      "day": "630.0416666666666666666666667",
+      "profit_microUSD": 370566687578
+    },
+    {
+      "hour": 15122,
+      "day": "630.0833333333333333333333333",
+      "profit_microUSD": 370566687578
+    },
+    {
+      "hour": 15123,
+      "day": "630.125",
+      "profit_microUSD": 370566687578
+    },
+    {
+      "hour": 15241,
+      "day": "635.0416666666666666666666667",
+      "profit_microUSD": 383263915343
+    },
+    {
+      "hour": 15242,
+      "day": "635.0833333333333333333333333",
+      "profit_microUSD": 383263915343
+    },
+    {
+      "hour": 15243,
+      "day": "635.125",
+      "profit_microUSD": 383263915343
+    },
+    {
+      "hour": 15481,
+      "day": "645.0416666666666666666666667",
+      "profit_microUSD": 483071035343
+    },
+    {
+      "hour": 15601,
+      "day": "650.0416666666666666666666667",
+      "profit_microUSD": 450787315343
+    },
+    {
+      "hour": 15841,
+      "day": "660.0416666666666666666666667",
+      "profit_microUSD": 406969319265
+    },
+    {
+      "hour": 15842,
+      "day": "660.0833333333333333333333333",
+      "profit_microUSD": 406969319265
+    },
+    {
+      "hour": 15843,
+      "day": "660.125",
+      "profit_microUSD": 406969319265
+    },
+    {
+      "hour": 15961,
+      "day": "665.0416666666666666666666667",
+      "profit_microUSD": 420839099474
+    },
+    {
+      "hour": 15962,
+      "day": "665.0833333333333333333333333",
+      "profit_microUSD": 420839099474
+    },
+    {
+      "hour": 15963,
+      "day": "665.125",
+      "profit_microUSD": 420839099474
+    },
+    {
+      "hour": 16201,
+      "day": "675.0416666666666666666666667",
+      "profit_microUSD": 531079019474
+    },
+    {
+      "hour": 16321,
+      "day": "680.0416666666666666666666667",
+      "profit_microUSD": 495607499474
+    },
+    {
+      "hour": 16561,
+      "day": "690.0416666666666666666666667",
+      "profit_microUSD": 447563148139
+    },
+    {
+      "hour": 16562,
+      "day": "690.0833333333333333333333333",
+      "profit_microUSD": 447563148139
+    },
+    {
+      "hour": 16563,
+      "day": "690.125",
+      "profit_microUSD": 447563148139
+    },
+    {
+      "hour": 16681,
+      "day": "695.0416666666666666666666667",
+      "profit_microUSD": 462524657781
+    },
+    {
+      "hour": 16682,
+      "day": "695.0833333333333333333333333",
+      "profit_microUSD": 462524657781
+    },
+    {
+      "hour": 16683,
+      "day": "695.125",
+      "profit_microUSD": 462524657781
+    },
+    {
+      "hour": 16921,
+      "day": "705.0416666666666666666666667",
+      "profit_microUSD": 585168017781
+    },
+    {
+      "hour": 17041,
+      "day": "710.0416666666666666666666667",
+      "profit_microUSD": 547204217781
+    },
+    {
+      "hour": 17281,
+      "day": "720.0416666666666666666666667",
+      "profit_microUSD": 494270043714
+    },
+    {
+      "hour": 17282,
+      "day": "720.0833333333333333333333333",
+      "profit_microUSD": 494270043714
+    },
+    {
+      "hour": 17283,
+      "day": "720.125",
+      "profit_microUSD": 494270043714
+    },
+    {
+      "hour": 17401,
+      "day": "725.0416666666666666666666667",
+      "profit_microUSD": 511818986792
+    },
+    {
+      "hour": 17402,
+      "day": "725.0833333333333333333333333",
+      "profit_microUSD": 511818986792
+    },
+    {
+      "hour": 17403,
+      "day": "725.125",
+      "profit_microUSD": 511818986792
+    },
+    {
+      "hour": 17641,
+      "day": "735.0416666666666666666666667",
+      "profit_microUSD": 647503346792
+    },
+    {
+      "hour": 17761,
+      "day": "740.0416666666666666666666667",
+      "profit_microUSD": 609017906792
+    },
+    {
+      "hour": 18001,
+      "day": "750.0416666666666666666666667",
+      "profit_microUSD": 550549441027
+    },
+    {
+      "hour": 18002,
+      "day": "750.0833333333333333333333333",
+      "profit_microUSD": 550549441027
+    },
+    {
+      "hour": 18003,
+      "day": "750.125",
+      "profit_microUSD": 550549441027
+    },
+    {
+      "hour": 18121,
+      "day": "755.0416666666666666666666667",
+      "profit_microUSD": 569000470435
+    },
+    {
+      "hour": 18122,
+      "day": "755.0833333333333333333333333",
+      "profit_microUSD": 569000470435
+    },
+    {
+      "hour": 18123,
+      "day": "755.125",
+      "profit_microUSD": 569000470435
+    },
+    {
+      "hour": 18361,
+      "day": "765.0416666666666666666666667",
+      "profit_microUSD": 717146230435
+    },
+    {
+      "hour": 18481,
+      "day": "770.0416666666666666666666667",
+      "profit_microUSD": 671068030435
+    },
+    {
+      "hour": 18721,
+      "day": "780.0416666666666666666666667",
+      "profit_microUSD": 607144638394
+    },
+    {
+      "hour": 18722,
+      "day": "780.0833333333333333333333333",
+      "profit_microUSD": 607144638394
+    },
+    {
+      "hour": 18723,
+      "day": "780.125",
+      "profit_microUSD": 607144638394
+    },
+    {
+      "hour": 18841,
+      "day": "785.0416666666666666666666667",
+      "profit_microUSD": 627763891435
+    },
+    {
+      "hour": 18842,
+      "day": "785.0833333333333333333333333",
+      "profit_microUSD": 627763891435
+    },
+    {
+      "hour": 18843,
+      "day": "785.125",
+      "profit_microUSD": 627763891435
+    },
+    {
+      "hour": 19081,
+      "day": "795.0416666666666666666666667",
+      "profit_microUSD": 789646171435
+    },
+    {
+      "hour": 19201,
+      "day": "800.0416666666666666666666667",
+      "profit_microUSD": 737424211435
+    },
+    {
+      "hour": 19441,
+      "day": "810.0416666666666666666666667",
+      "profit_microUSD": 666477282087
+    },
+    {
+      "hour": 19442,
+      "day": "810.0833333333333333333333333",
+      "profit_microUSD": 666477282087
+    },
+    {
+      "hour": 19443,
+      "day": "810.125",
+      "profit_microUSD": 666477282087
+    },
+    {
+      "hour": 19561,
+      "day": "815.0416666666666666666666667",
+      "profit_microUSD": 688470449412
+    },
+    {
+      "hour": 19562,
+      "day": "815.0833333333333333333333333",
+      "profit_microUSD": 688470449412
+    },
+    {
+      "hour": 19563,
+      "day": "815.125",
+      "profit_microUSD": 688470449412
+    },
+    {
+      "hour": 19801,
+      "day": "825.0416666666666666666666667",
+      "profit_microUSD": 866987249412
+    },
+    {
+      "hour": 19921,
+      "day": "830.0416666666666666666666667",
+      "profit_microUSD": 809490929412
+    },
+    {
+      "hour": 20161,
+      "day": "840.0416666666666666666666667",
+      "profit_microUSD": 731651390717
+    },
+    {
+      "hour": 20162,
+      "day": "840.0833333333333333333333333",
+      "profit_microUSD": 731651390717
+    },
+    {
+      "hour": 20163,
+      "day": "840.125",
+      "profit_microUSD": 731651390717
+    },
+    {
+      "hour": 20281,
+      "day": "845.0416666666666666666666667",
+      "profit_microUSD": 756246654250
+    },
+    {
+      "hour": 20282,
+      "day": "845.0833333333333333333333333",
+      "profit_microUSD": 756246654250
+    },
+    {
+      "hour": 20283,
+      "day": "845.125",
+      "profit_microUSD": 756246654250
+    },
+    {
+      "hour": 20521,
+      "day": "855.0416666666666666666666667",
+      "profit_microUSD": 954469854250
+    },
+    {
+      "hour": 20641,
+      "day": "860.0416666666666666666666667",
+      "profit_microUSD": 893032254250
+    },
+    {
+      "hour": 20881,
+      "day": "870.0416666666666666666666667",
+      "profit_microUSD": 807140366881
+    },
+    {
+      "hour": 20882,
+      "day": "870.0833333333333333333333333",
+      "profit_microUSD": 807140366881
+    },
+    {
+      "hour": 20883,
+      "day": "870.125",
+      "profit_microUSD": 807140366881
+    },
+    {
+      "hour": 21001,
+      "day": "875.0416666666666666666666667",
+      "profit_microUSD": 834186490707
+    },
+    {
+      "hour": 21002,
+      "day": "875.0833333333333333333333333",
+      "profit_microUSD": 834186490707
+    },
+    {
+      "hour": 21003,
+      "day": "875.125",
+      "profit_microUSD": 834186490707
+    },
+    {
+      "hour": 21241,
+      "day": "885.0416666666666666666666667",
+      "profit_microUSD": 1052927530707
+    },
+    {
+      "hour": 21361,
+      "day": "890.0416666666666666666666667",
+      "profit_microUSD": 984824530707
+    },
+    {
+      "hour": 21601,
+      "day": "900.0416666666666666666666667",
+      "profit_microUSD": 890419848017
+    },
+    {
+      "hour": 21602,
+      "day": "900.0833333333333333333333333",
+      "profit_microUSD": 890419848017
+    },
+    {
+      "hour": 21603,
+      "day": "900.125",
+      "profit_microUSD": 890419848017
+    },
+    {
+      "hour": 21721,
+      "day": "905.0416666666666666666666667",
+      "profit_microUSD": 920558536117
+    },
+    {
+      "hour": 21722,
+      "day": "905.0833333333333333333333333",
+      "profit_microUSD": 920558536117
+    },
+    {
+      "hour": 21723,
+      "day": "905.125",
+      "profit_microUSD": 920558536117
+    },
+    {
+      "hour": 21961,
+      "day": "915.0416666666666666666666667",
+      "profit_microUSD": 1161961936117
+    },
+    {
+      "hour": 22081,
+      "day": "920.0416666666666666666666667",
+      "profit_microUSD": 1086034336117
+    },
+    {
+      "hour": 22321,
+      "day": "930.0416666666666666666666667",
+      "profit_microUSD": 982211602219
+    },
+    {
+      "hour": 22322,
+      "day": "930.0833333333333333333333333",
+      "profit_microUSD": 982211602219
+    },
+    {
+      "hour": 22323,
+      "day": "930.125",
+      "profit_microUSD": 982211602219
+    },
+    {
+      "hour": 22441,
+      "day": "935.0416666666666666666666667",
+      "profit_microUSD": 1014797618509
+    },
+    {
+      "hour": 22442,
+      "day": "935.0833333333333333333333333",
+      "profit_microUSD": 1014797618509
+    },
+    {
+      "hour": 22443,
+      "day": "935.125",
+      "profit_microUSD": 1014797618509
+    },
+    {
+      "hour": 22681,
+      "day": "945.0416666666666666666666667",
+      "profit_microUSD": 1277993978509
+    },
+    {
+      "hour": 22801,
+      "day": "950.0416666666666666666666667",
+      "profit_microUSD": 1194415658509
+    },
+    {
+      "hour": 23041,
+      "day": "960.0416666666666666666666667",
+      "profit_microUSD": 1080266555010
+    },
+    {
+      "hour": 23042,
+      "day": "960.0833333333333333333333333",
+      "profit_microUSD": 1080266555010
+    },
+    {
+      "hour": 23043,
+      "day": "960.125",
+      "profit_microUSD": 1080266555010
+    },
+    {
+      "hour": 23161,
+      "day": "965.0416666666666666666666667",
+      "profit_microUSD": 1116486340143
+    },
+    {
+      "hour": 23162,
+      "day": "965.0833333333333333333333333",
+      "profit_microUSD": 1116486340143
+    },
+    {
+      "hour": 23163,
+      "day": "965.125",
+      "profit_microUSD": 1116486340143
+    },
+    {
+      "hour": 23401,
+      "day": "975.0416666666666666666666667",
+      "profit_microUSD": 1402750780143
+    },
+    {
+      "hour": 23521,
+      "day": "980.0416666666666666666666667",
+      "profit_microUSD": 1310826220143
+    },
+    {
+      "hour": 23761,
+      "day": "990.0416666666666666666666667",
+      "profit_microUSD": 1184218703035
+    },
+    {
+      "hour": 23762,
+      "day": "990.0833333333333333333333333",
+      "profit_microUSD": 1184218703035
+    },
+    {
+      "hour": 23763,
+      "day": "990.125",
+      "profit_microUSD": 1184218703035
+    },
+    {
+      "hour": 23881,
+      "day": "995.0416666666666666666666667",
+      "profit_microUSD": 1223897268107
+    },
+    {
+      "hour": 23882,
+      "day": "995.0833333333333333333333333",
+      "profit_microUSD": 1223897268107
+    },
+    {
+      "hour": 23883,
+      "day": "995.125",
+      "profit_microUSD": 1223897268107
+    },
+    {
+      "hour": 24121,
+      "day": "1005.041666666666666666666667",
+      "profit_microUSD": 1540764588107
+    },
+    {
+      "hour": 24241,
+      "day": "1010.041666666666666666666667",
+      "profit_microUSD": 1440957468107
+    },
+    {
+      "hour": 24481,
+      "day": "1020.041666666666666666666667",
+      "profit_microUSD": 1302230683192
+    },
+    {
+      "hour": 24482,
+      "day": "1020.083333333333333333333333",
+      "profit_microUSD": 1302230683192
+    },
+    {
+      "hour": 24483,
+      "day": "1020.125",
+      "profit_microUSD": 1302230683192
+    },
+    {
+      "hour": 24601,
+      "day": "1025.041666666666666666666667",
+      "profit_microUSD": 1346048679270
+    },
+    {
+      "hour": 24602,
+      "day": "1025.083333333333333333333333",
+      "profit_microUSD": 1346048679270
+    },
+    {
+      "hour": 24603,
+      "day": "1025.125",
+      "profit_microUSD": 1346048679270
+    },
+    {
+      "hour": 24841,
+      "day": "1035.041666666666666666666667",
+      "profit_microUSD": 1696822599270
+    },
+    {
+      "hour": 24961,
+      "day": "1040.041666666666666666666667",
+      "profit_microUSD": 1586582679270
+    },
+    {
+      "hour": 25201,
+      "day": "1050.041666666666666666666667",
+      "profit_microUSD": 1433845563377
+    },
+    {
+      "hour": 25202,
+      "day": "1050.083333333333333333333333",
+      "profit_microUSD": 1433845563377
+    },
+    {
+      "hour": 25203,
+      "day": "1050.125",
+      "profit_microUSD": 1433845563377
+    },
+    {
+      "hour": 25321,
+      "day": "1055.041666666666666666666667",
+      "profit_microUSD": 1481889914712
+    },
+    {
+      "hour": 25322,
+      "day": "1055.083333333333333333333333",
+      "profit_microUSD": 1481889914712
+    },
+    {
+      "hour": 25323,
+      "day": "1055.125",
+      "profit_microUSD": 1481889914712
+    },
+    {
+      "hour": 25561,
+      "day": "1065.041666666666666666666667",
+      "profit_microUSD": 1867497794712
+    },
+    {
+      "hour": 25681,
+      "day": "1070.041666666666666666666667",
+      "profit_microUSD": 1744854434712
+    },
+    {
+      "hour": 25921,
+      "day": "1080.041666666666666666666667",
+      "profit_microUSD": 1576369770959
+    },
+    {
+      "hour": 25922,
+      "day": "1080.083333333333333333333333",
+      "profit_microUSD": 1576369770959
+    },
+    {
+      "hour": 25923,
+      "day": "1080.125",
+      "profit_microUSD": 1576369770959
+    },
+    {
+      "hour": 26041,
+      "day": "1085.041666666666666666666667",
+      "profit_microUSD": 1629303945026
+    },
+    {
+      "hour": 26042,
+      "day": "1085.083333333333333333333333",
+      "profit_microUSD": 1629303945026
+    },
+    {
+      "hour": 26043,
+      "day": "1085.125",
+      "profit_microUSD": 1629303945026
+    },
+    {
+      "hour": 26281,
+      "day": "1095.041666666666666666666667",
+      "profit_microUSD": 2057106705026
+    },
+    {
+      "hour": 26401,
+      "day": "1100.041666666666666666666667",
+      "profit_microUSD": 1921422345026
+    },
+    {
+      "hour": 26641,
+      "day": "1110.041666666666666666666667",
+      "profit_microUSD": 1736853599790
+    },
+    {
+      "hour": 26642,
+      "day": "1110.083333333333333333333333",
+      "profit_microUSD": 1736853599790
+    },
+    {
+      "hour": 26643,
+      "day": "1110.125",
+      "profit_microUSD": 1736853599790
+    },
+    {
+      "hour": 26761,
+      "day": "1115.041666666666666666666667",
+      "profit_microUSD": 1795322065555
+    },
+    {
+      "hour": 26762,
+      "day": "1115.083333333333333333333333",
+      "profit_microUSD": 1795322065555
+    },
+    {
+      "hour": 26763,
+      "day": "1115.125",
+      "profit_microUSD": 1795322065555
+    },
+    {
+      "hour": 27001,
+      "day": "1125.041666666666666666666667",
+      "profit_microUSD": 2259233905555
+    },
+    {
+      "hour": 27121,
+      "day": "1130.041666666666666666666667",
+      "profit_microUSD": 2111088145555
+    },
+    {
+      "hour": 27361,
+      "day": "1140.041666666666666666666667",
+      "profit_microUSD": 1906534383588
+    },
+    {
+      "hour": 27362,
+      "day": "1140.083333333333333333333333",
+      "profit_microUSD": 1906534383588
+    },
+    {
+      "hour": 27363,
+      "day": "1140.125",
+      "profit_microUSD": 1906534383588
+    },
+    {
+      "hour": 27481,
+      "day": "1145.041666666666666666666667",
+      "profit_microUSD": 1970457775629
+    },
+    {
+      "hour": 27482,
+      "day": "1145.083333333333333333333333",
+      "profit_microUSD": 1970457775629
+    },
+    {
+      "hour": 27483,
+      "day": "1145.125",
+      "profit_microUSD": 1970457775629
+    },
+    {
+      "hour": 27721,
+      "day": "1155.041666666666666666666667",
+      "profit_microUSD": 2474825695629
+    },
+    {
+      "hour": 27841,
+      "day": "1160.041666666666666666666667",
+      "profit_microUSD": 2312943415629
+    },
+    {
+      "hour": 28081,
+      "day": "1170.041666666666666666666667",
+      "profit_microUSD": 2087881657796
+    },
+    {
+      "hour": 28082,
+      "day": "1170.083333333333333333333333",
+      "profit_microUSD": 2087881657796
+    },
+    {
+      "hour": 28083,
+      "day": "1170.125",
+      "profit_microUSD": 2087881657796
+    },
+    {
+      "hour": 28201,
+      "day": "1175.041666666666666666666667",
+      "profit_microUSD": 2158828587144
+    },
+    {
+      "hour": 28202,
+      "day": "1175.083333333333333333333333",
+      "profit_microUSD": 2158828587144
+    },
+    {
+      "hour": 28203,
+      "day": "1175.125",
+      "profit_microUSD": 2158828587144
+    },
+    {
+      "hour": 28441,
+      "day": "1185.041666666666666666666667",
+      "profit_microUSD": 2720750787144
+    },
+    {
+      "hour": 28561,
+      "day": "1190.041666666666666666666667",
+      "profit_microUSD": 2542233987144
+    },
+    {
+      "hour": 28801,
+      "day": "1200.041666666666666666666667",
+      "profit_microUSD": 2294931661542
+    },
+    {
+      "hour": 28802,
+      "day": "1200.083333333333333333333333",
+      "profit_microUSD": 2294931661542
+    },
+    {
+      "hour": 28803,
+      "day": "1200.125",
+      "profit_microUSD": 2294931661542
+    },
+    {
+      "hour": 28921,
+      "day": "1205.041666666666666666666667",
+      "profit_microUSD": 2372771200237
+    },
+    {
+      "hour": 28922,
+      "day": "1205.083333333333333333333333",
+      "profit_microUSD": 2372771200237
+    },
+    {
+      "hour": 28923,
+      "day": "1205.125",
+      "profit_microUSD": 2372771200237
+    },
+    {
+      "hour": 29161,
+      "day": "1215.041666666666666666666667",
+      "profit_microUSD": 2992189720237
+    },
+    {
+      "hour": 29281,
+      "day": "1220.041666666666666666666667",
+      "profit_microUSD": 2793966520237
+    },
+    {
+      "hour": 29521,
+      "day": "1230.041666666666666666666667",
+      "profit_microUSD": 2522171188203
+    },
+    {
+      "hour": 29522,
+      "day": "1230.083333333333333333333333",
+      "profit_microUSD": 2522171188203
+    },
+    {
+      "hour": 29523,
+      "day": "1230.125",
+      "profit_microUSD": 2522171188203
+    },
+    {
+      "hour": 29641,
+      "day": "1235.041666666666666666666667",
+      "profit_microUSD": 2608063075572
+    },
+    {
+      "hour": 29642,
+      "day": "1235.083333333333333333333333",
+      "profit_microUSD": 2608063075572
+    },
+    {
+      "hour": 29643,
+      "day": "1235.125",
+      "profit_microUSD": 2608063075572
+    },
+    {
+      "hour": 29881,
+      "day": "1245.041666666666666666666667",
+      "profit_microUSD": 3287644075572
+    },
+    {
+      "hour": 30001,
+      "day": "1250.041666666666666666666667",
+      "profit_microUSD": 3068903035572
+    },
+    {
+      "hour": 30241,
+      "day": "1260.041666666666666666666667",
+      "profit_microUSD": 2768354612025
+    },
+    {
+      "hour": 30242,
+      "day": "1260.083333333333333333333333",
+      "profit_microUSD": 2768354612025
+    },
+    {
+      "hour": 30243,
+      "day": "1260.125",
+      "profit_microUSD": 2768354612025
+    },
+    {
+      "hour": 30361,
+      "day": "1265.041666666666666666666667",
+      "profit_microUSD": 2862759294715
+    },
+    {
+      "hour": 30362,
+      "day": "1265.083333333333333333333333",
+      "profit_microUSD": 2862759294715
+    },
+    {
+      "hour": 30363,
+      "day": "1265.125",
+      "profit_microUSD": 2862759294715
+    },
+    {
+      "hour": 30601,
+      "day": "1275.041666666666666666666667",
+      "profit_microUSD": 3612645774715
+    },
+    {
+      "hour": 30721,
+      "day": "1280.041666666666666666666667",
+      "profit_microUSD": 3371242374715
+    },
+    {
+      "hour": 30961,
+      "day": "1290.041666666666666666666667",
+      "profit_microUSD": 3041851064333
+    },
+    {
+      "hour": 30962,
+      "day": "1290.083333333333333333333333",
+      "profit_microUSD": 3041851064333
+    },
+    {
+      "hour": 30963,
+      "day": "1290.125",
+      "profit_microUSD": 3041851064333
+    },
+    {
+      "hour": 31081,
+      "day": "1295.041666666666666666666667",
+      "profit_microUSD": 3145673798231
+    },
+    {
+      "hour": 31082,
+      "day": "1295.083333333333333333333333",
+      "profit_microUSD": 3145673798231
+    },
+    {
+      "hour": 31083,
+      "day": "1295.125",
+      "profit_microUSD": 3145673798231
+    },
+    {
+      "hour": 31321,
+      "day": "1305.041666666666666666666667",
+      "profit_microUSD": 3969401318231
+    },
+    {
+      "hour": 31441,
+      "day": "1310.041666666666666666666667",
+      "profit_microUSD": 3706204958231
+    },
+    {
+      "hour": 31681,
+      "day": "1320.041666666666666666666667",
+      "profit_microUSD": 3341878135844
+    },
+    {
+      "hour": 31682,
+      "day": "1320.083333333333333333333333",
+      "profit_microUSD": 3341878135844
+    },
+    {
+      "hour": 31683,
+      "day": "1320.125",
+      "profit_microUSD": 3341878135844
+    },
+    {
+      "hour": 31801,
+      "day": "1325.041666666666666666666667",
+      "profit_microUSD": 3456027239343
+    },
+    {
+      "hour": 31802,
+      "day": "1325.083333333333333333333333",
+      "profit_microUSD": 3456027239343
+    },
+    {
+      "hour": 31803,
+      "day": "1325.125",
+      "profit_microUSD": 3456027239343
+    },
+    {
+      "hour": 32041,
+      "day": "1335.041666666666666666666667",
+      "profit_microUSD": 4360724879343
+    },
+    {
+      "hour": 32161,
+      "day": "1340.041666666666666666666667",
+      "profit_microUSD": 4074460439343
+    },
+    {
+      "hour": 32401,
+      "day": "1350.041666666666666666666667",
+      "profit_microUSD": 3673194490519
+    },
+    {
+      "hour": 32402,
+      "day": "1350.083333333333333333333333",
+      "profit_microUSD": 3673194490519
+    },
+    {
+      "hour": 32403,
+      "day": "1350.125",
+      "profit_microUSD": 3673194490519
+    },
+    {
+      "hour": 32521,
+      "day": "1355.041666666666666666666667",
+      "profit_microUSD": 3799802007627
+    },
+    {
+      "hour": 32522,
+      "day": "1355.083333333333333333333333",
+      "profit_microUSD": 3799802007627
+    },
+    {
+      "hour": 32523,
+      "day": "1355.125",
+      "profit_microUSD": 3799802007627
+    },
+    {
+      "hour": 32761,
+      "day": "1365.041666666666666666666667",
+      "profit_microUSD": 4795033167627
+    },
+    {
+      "hour": 32881,
+      "day": "1370.041666666666666666666667",
+      "profit_microUSD": 4478165847627
+    },
+    {
+      "hour": 33121,
+      "day": "1380.041666666666666666666667",
+      "profit_microUSD": 4035794347562
+    },
+    {
+      "hour": 33122,
+      "day": "1380.083333333333333333333333",
+      "profit_microUSD": 4035794347562
+    },
+    {
+      "hour": 33123,
+      "day": "1380.125",
+      "profit_microUSD": 4035794347562
+    },
+    {
+      "hour": 33241,
+      "day": "1385.041666666666666666666667",
+      "profit_microUSD": 4174521132477
+    },
+    {
+      "hour": 33242,
+      "day": "1385.083333333333333333333333",
+      "profit_microUSD": 4174521132477
+    },
+    {
+      "hour": 33243,
+      "day": "1385.125",
+      "profit_microUSD": 4174521132477
+    },
+    {
+      "hour": 33481,
+      "day": "1395.041666666666666666666667",
+      "profit_microUSD": 5268458172477
+    },
+    {
+      "hour": 33601,
+      "day": "1400.041666666666666666666667",
+      "profit_microUSD": 4917684252477
+    },
+    {
+      "hour": 33841,
+      "day": "1410.041666666666666666666667",
+      "profit_microUSD": 4431921306445
+    },
+    {
+      "hour": 33842,
+      "day": "1410.083333333333333333333333",
+      "profit_microUSD": 4431921306445
+    },
+    {
+      "hour": 33843,
+      "day": "1410.125",
+      "profit_microUSD": 4431921306445
+    },
+    {
+      "hour": 33961,
+      "day": "1415.041666666666666666666667",
+      "profit_microUSD": 4584658422338
+    },
+    {
+      "hour": 33962,
+      "day": "1415.083333333333333333333333",
+      "profit_microUSD": 4584658422338
+    },
+    {
+      "hour": 33963,
+      "day": "1415.125",
+      "profit_microUSD": 4584658422338
+    },
+    {
+      "hour": 34201,
+      "day": "1425.041666666666666666666667",
+      "profit_microUSD": 5783445102338
+    },
+    {
+      "hour": 34321,
+      "day": "1430.041666666666666666666667",
+      "profit_microUSD": 5397837222338
+    },
+    {
+      "hour": 34561,
+      "day": "1440.041666666666666666666667",
+      "profit_microUSD": 4860196167151
+    },
+    {
+      "hour": 34562,
+      "day": "1440.083333333333333333333333",
+      "profit_microUSD": 4860196167151
+    },
+    {
+      "hour": 34563,
+      "day": "1440.125",
+      "profit_microUSD": 4860196167151
+    },
+    {
+      "hour": 34681,
+      "day": "1445.041666666666666666666667",
+      "profit_microUSD": 5028680830904
+    },
+    {
+      "hour": 34682,
+      "day": "1445.083333333333333333333333",
+      "profit_microUSD": 5028680830904
+    },
+    {
+      "hour": 34683,
+      "day": "1445.125",
+      "profit_microUSD": 5028680830904
+    },
+    {
+      "hour": 34921,
+      "day": "1455.041666666666666666666667",
+      "profit_microUSD": 6339562150904
+    },
+    {
+      "hour": 35041,
+      "day": "1460.041666666666666666666667",
+      "profit_microUSD": 5911759390904
+    },
+    {
+      "hour": 35281,
+      "day": "1470.041666666666666666666667",
+      "profit_microUSD": 5319020912968
+    },
+    {
+      "hour": 35282,
+      "day": "1470.083333333333333333333333",
+      "profit_microUSD": 5319020912968
+    },
+    {
+      "hour": 35283,
+      "day": "1470.125",
+      "profit_microUSD": 5319020912968
+    },
+    {
+      "hour": 35401,
+      "day": "1475.041666666666666666666667",
+      "profit_microUSD": 5503589658204
+    },
+    {
+      "hour": 35402,
+      "day": "1475.083333333333333333333333",
+      "profit_microUSD": 5503589658204
+    },
+    {
+      "hour": 35403,
+      "day": "1475.125",
+      "profit_microUSD": 5503589658204
+    },
+    {
+      "hour": 35641,
+      "day": "1485.041666666666666666666667",
+      "profit_microUSD": 6945228738204
+    },
+    {
+      "hour": 35761,
+      "day": "1490.041666666666666666666667",
+      "profit_microUSD": 6481316898204
+    },
+    {
+      "hour": 36001,
+      "day": "1500.041666666666666666666667",
+      "profit_microUSD": 5828602467474
+    },
+    {
+      "hour": 36002,
+      "day": "1500.083333333333333333333333",
+      "profit_microUSD": 5828602467474
+    },
+    {
+      "hour": 36003,
+      "day": "1500.125",
+      "profit_microUSD": 5828602467474
+    },
+    {
+      "hour": 36121,
+      "day": "1505.041666666666666666666667",
+      "profit_microUSD": 6033156229441
+    },
+    {
+      "hour": 36122,
+      "day": "1505.083333333333333333333333",
+      "profit_microUSD": 6033156229441
+    },
+    {
+      "hour": 36123,
+      "day": "1505.125",
+      "profit_microUSD": 6033156229441
+    },
+    {
+      "hour": 36361,
+      "day": "1515.041666666666666666666667",
+      "profit_microUSD": 7615174429441
+    },
+    {
+      "hour": 36481,
+      "day": "1520.041666666666666666666667",
+      "profit_microUSD": 7110806509441
+    },
+    {
+      "hour": 36721,
+      "day": "1530.041666666666666666666667",
+      "profit_microUSD": 6395652824177
+    },
+    {
+      "hour": 36722,
+      "day": "1530.083333333333333333333333",
+      "profit_microUSD": 6395652824177
+    },
+    {
+      "hour": 36723,
+      "day": "1530.125",
+      "profit_microUSD": 6395652824177
+    },
+    {
+      "hour": 36841,
+      "day": "1535.041666666666666666666667",
+      "profit_microUSD": 6620714582010
+    },
+    {
+      "hour": 36842,
+      "day": "1535.083333333333333333333333",
+      "profit_microUSD": 6620714582010
+    },
+    {
+      "hour": 36843,
+      "day": "1535.125",
+      "profit_microUSD": 6620714582010
+    },
+    {
+      "hour": 37081,
+      "day": "1545.041666666666666666666667",
+      "profit_microUSD": 8359340702010
+    },
+    {
+      "hour": 37201,
+      "day": "1550.041666666666666666666667",
+      "profit_microUSD": 7797418502010
+    },
+    {
+      "hour": 37441,
+      "day": "1560.041666666666666666666667",
+      "profit_microUSD": 7004448851903
+    },
+    {
+      "hour": 37442,
+      "day": "1560.083333333333333333333333",
+      "profit_microUSD": 7004448851903
+    },
+    {
+      "hour": 37443,
+      "day": "1560.125",
+      "profit_microUSD": 7004448851903
+    },
+    {
+      "hour": 37561,
+      "day": "1565.041666666666666666666667",
+      "profit_microUSD": 7251751177505
+    },
+    {
+      "hour": 37562,
+      "day": "1565.083333333333333333333333",
+      "profit_microUSD": 7251751177505
+    },
+    {
+      "hour": 37563,
+      "day": "1565.125",
+      "profit_microUSD": 7251751177505
+    },
+    {
+      "hour": 37801,
+      "day": "1575.041666666666666666666667",
+      "profit_microUSD": 9151158337505
+    },
+    {
+      "hour": 37921,
+      "day": "1580.041666666666666666666667",
+      "profit_microUSD": 8531739817505
+    },
+    {
+      "hour": 38161,
+      "day": "1590.041666666666666666666667",
+      "profit_microUSD": 7661579663923
+    },
+    {
+      "hour": 38162,
+      "day": "1590.083333333333333333333333",
+      "profit_microUSD": 7661579663923
+    },
+    {
+      "hour": 38163,
+      "day": "1590.125",
+      "profit_microUSD": 7661579663923
+    },
+    {
+      "hour": 38281,
+      "day": "1595.041666666666666666666667",
+      "profit_microUSD": 7933374995957
+    },
+    {
+      "hour": 38282,
+      "day": "1595.083333333333333333333333",
+      "profit_microUSD": 7933374995957
+    },
+    {
+      "hour": 38283,
+      "day": "1595.125",
+      "profit_microUSD": 7933374995957
+    },
+    {
+      "hour": 38521,
+      "day": "1605.041666666666666666666667",
+      "profit_microUSD": 10018080275957
+    },
+    {
+      "hour": 38641,
+      "day": "1610.041666666666666666666667",
+      "profit_microUSD": 9338499275957
+    },
+    {
+      "hour": 38881,
+      "day": "1620.041666666666666666666667",
+      "profit_microUSD": 8378253086264
+    },
+    {
+      "hour": 38882,
+      "day": "1620.083333333333333333333333",
+      "profit_microUSD": 8378253086264
+    },
+    {
+      "hour": 38883,
+      "day": "1620.125",
+      "profit_microUSD": 8378253086264
+    },
+    {
+      "hour": 39001,
+      "day": "1625.041666666666666666666667",
+      "profit_microUSD": 8678801509811
+    },
+    {
+      "hour": 39002,
+      "day": "1625.083333333333333333333333",
+      "profit_microUSD": 8678801509811
+    },
+    {
+      "hour": 39003,
+      "day": "1625.125",
+      "profit_microUSD": 8678801509811
+    },
+    {
+      "hour": 39241,
+      "day": "1635.041666666666666666666667",
+      "profit_microUSD": 10968105589811
+    },
+    {
+      "hour": 39361,
+      "day": "1640.041666666666666666666667",
+      "profit_microUSD": 10218219109811
+    },
+    {
+      "hour": 39601,
+      "day": "1650.041666666666666666666667",
+      "profit_microUSD": 9164531572980
+    },
+    {
+      "hour": 39602,
+      "day": "1650.083333333333333333333333",
+      "profit_microUSD": 9164531572980
+    },
+    {
+      "hour": 39603,
+      "day": "1650.125",
+      "profit_microUSD": 9164531572980
+    },
+    {
+      "hour": 39721,
+      "day": "1655.041666666666666666666667",
+      "profit_microUSD": 9493922883362
+    },
+    {
+      "hour": 39722,
+      "day": "1655.083333333333333333333333",
+      "profit_microUSD": 9493922883362
+    },
+    {
+      "hour": 39723,
+      "day": "1655.125",
+      "profit_microUSD": 9493922883362
+    },
+    {
+      "hour": 39961,
+      "day": "1665.041666666666666666666667",
+      "profit_microUSD": 11999765523362
+    },
+    {
+      "hour": 40081,
+      "day": "1670.041666666666666666666667",
+      "profit_microUSD": 11176038003362
+    },
+    {
+      "hour": 40321,
+      "day": "1680.041666666666666666666667",
+      "profit_microUSD": 10011770396073
+    },
+    {
+      "hour": 40322,
+      "day": "1680.083333333333333333333333",
+      "profit_microUSD": 10011770396073
+    },
+    {
+      "hour": 40323,
+      "day": "1680.125",
+      "profit_microUSD": 10011770396073
+    },
+    {
+      "hour": 40441,
+      "day": "1685.041666666666666666666667",
+      "profit_microUSD": 10376097218460
+    },
+    {
+      "hour": 40442,
+      "day": "1685.083333333333333333333333",
+      "profit_microUSD": 10376097218460
+    },
+    {
+      "hour": 40443,
+      "day": "1685.125",
+      "profit_microUSD": 10376097218460
+    },
+    {
+      "hour": 40681,
+      "day": "1695.041666666666666666666667",
+      "profit_microUSD": 13103636858460
+    },
+    {
+      "hour": 40801,
+      "day": "1700.041666666666666666666667",
+      "profit_microUSD": 12198939218460
+    },
+    {
+      "hour": 41041,
+      "day": "1710.041666666666666666666667",
+      "profit_microUSD": 10915457720830
+    },
+    {
+      "hour": 41042,
+      "day": "1710.083333333333333333333333",
+      "profit_microUSD": 10915457720830
+    },
+    {
+      "hour": 41043,
+      "day": "1710.125",
+      "profit_microUSD": 10915457720830
+    },
+    {
+      "hour": 41161,
+      "day": "1715.041666666666666666666667",
+      "profit_microUSD": 11316723669654
+    },
+    {
+      "hour": 41162,
+      "day": "1715.083333333333333333333333",
+      "profit_microUSD": 11316723669654
+    },
+    {
+      "hour": 41163,
+      "day": "1715.125",
+      "profit_microUSD": 11316723669654
+    },
+    {
+      "hour": 41401,
+      "day": "1725.041666666666666666666667",
+      "profit_microUSD": 14300098749654
+    },
+    {
+      "hour": 41521,
+      "day": "1730.041666666666666666666667",
+      "profit_microUSD": 13304867589654
+    },
+    {
+      "hour": 41761,
+      "day": "1740.041666666666666666666667",
+      "profit_microUSD": 11896179252300
+    },
+    {
+      "hour": 41762,
+      "day": "1740.083333333333333333333333",
+      "profit_microUSD": 11896179252300
+    },
+    {
+      "hour": 41763,
+      "day": "1740.125",
+      "profit_microUSD": 11896179252300
+    },
+    {
+      "hour": 41881,
+      "day": "1745.041666666666666666666667",
+      "profit_microUSD": 12338550752365
+    },
+    {
+      "hour": 41882,
+      "day": "1745.083333333333333333333333",
+      "profit_microUSD": 12338550752365
+    },
+    {
+      "hour": 41883,
+      "day": "1745.125",
+      "profit_microUSD": 12338550752365
+    },
+    {
+      "hour": 42121,
+      "day": "1755.041666666666666666666667",
+      "profit_microUSD": 15591555752365
+    },
+    {
+      "hour": 42241,
+      "day": "1760.041666666666666666666667",
+      "profit_microUSD": 14497618712365
+    },
+    {
+      "hour": 42481,
+      "day": "1770.041666666666666666666667",
+      "profit_microUSD": 12944688913737
+    },
+    {
+      "hour": 42482,
+      "day": "1770.083333333333333333333333",
+      "profit_microUSD": 12944688913737
+    },
+    {
+      "hour": 42483,
+      "day": "1770.125",
+      "profit_microUSD": 12944688913737
+    },
+    {
+      "hour": 42601,
+      "day": "1775.041666666666666666666667",
+      "profit_microUSD": 13430451859769
+    },
+    {
+      "hour": 42602,
+      "day": "1775.083333333333333333333333",
+      "profit_microUSD": 13430451859769
+    },
+    {
+      "hour": 42603,
+      "day": "1775.125",
+      "profit_microUSD": 13430451859769
+    },
+    {
+      "hour": 42841,
+      "day": "1785.041666666666666666666667",
+      "profit_microUSD": 16977024259769
+    },
+    {
+      "hour": 42961,
+      "day": "1790.041666666666666666666667",
+      "profit_microUSD": 15778237579769
+    },
+    {
+      "hour": 43201,
+      "day": "1800.041666666666666666666667",
+      "profit_microUSD": 14070987539332
+    },
+    {
+      "hour": 43202,
+      "day": "1800.083333333333333333333333",
+      "profit_microUSD": 14070987539332
+    },
+    {
+      "hour": 43203,
+      "day": "1800.125",
+      "profit_microUSD": 14070987539332
+    },
+    {
+      "hour": 43321,
+      "day": "1805.041666666666666666666667",
+      "profit_microUSD": 14608628594519
+    },
+    {
+      "hour": 43322,
+      "day": "1805.083333333333333333333333",
+      "profit_microUSD": 14608628594519
+    },
+    {
+      "hour": 43323,
+      "day": "1805.125",
+      "profit_microUSD": 14608628594519
+    },
+    {
+      "hour": 43561,
+      "day": "1815.041666666666666666666667",
+      "profit_microUSD": 18484066034519
+    },
+    {
+      "hour": 43681,
+      "day": "1820.041666666666666666666667",
+      "profit_microUSD": 17173184714519
+    },
+    {
+      "hour": 43800,
+      "day": "1825",
+      "profit_microUSD": 16641713166780
+    }
+  ],
+  "volume": [
+    {
+      "month": 0,
+      "modeled_collected_units": 0,
+      "modeled_cumulative_units": 0,
+      "actual_template_productions": 0,
+      "actual_cumulative_productions": 0,
+      "quality_failed": 0,
+      "uncollected_units": 0,
+      "chosen_orders": 0,
+      "unit_price_usd": 40
+    },
+    {
+      "month": 1,
+      "modeled_collected_units": 478,
+      "modeled_cumulative_units": 478,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 1,
+      "quality_failed": 7,
+      "uncollected_units": 14,
+      "chosen_orders": 499,
+      "unit_price_usd": 40
+    },
+    {
+      "month": 2,
+      "modeled_collected_units": 328,
+      "modeled_cumulative_units": 806,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 2,
+      "quality_failed": 9,
+      "uncollected_units": 9,
+      "chosen_orders": 346,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 3,
+      "modeled_collected_units": 336,
+      "modeled_cumulative_units": 1142,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 3,
+      "quality_failed": 9,
+      "uncollected_units": 9,
+      "chosen_orders": 354,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 4,
+      "modeled_collected_units": 334,
+      "modeled_cumulative_units": 1476,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 4,
+      "quality_failed": 8,
+      "uncollected_units": 1,
+      "chosen_orders": 343,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 5,
+      "modeled_collected_units": 349,
+      "modeled_cumulative_units": 1825,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 5,
+      "quality_failed": 8,
+      "uncollected_units": 13,
+      "chosen_orders": 370,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 6,
+      "modeled_collected_units": 406,
+      "modeled_cumulative_units": 2231,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 6,
+      "quality_failed": 4,
+      "uncollected_units": 10,
+      "chosen_orders": 420,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 7,
+      "modeled_collected_units": 464,
+      "modeled_cumulative_units": 2695,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 7,
+      "quality_failed": 7,
+      "uncollected_units": 9,
+      "chosen_orders": 480,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 8,
+      "modeled_collected_units": 504,
+      "modeled_cumulative_units": 3199,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 8,
+      "quality_failed": 8,
+      "uncollected_units": 10,
+      "chosen_orders": 522,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 9,
+      "modeled_collected_units": 557,
+      "modeled_cumulative_units": 3756,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 9,
+      "quality_failed": 13,
+      "uncollected_units": 10,
+      "chosen_orders": 580,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 10,
+      "modeled_collected_units": 612,
+      "modeled_cumulative_units": 4368,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 10,
+      "quality_failed": 10,
+      "uncollected_units": 11,
+      "chosen_orders": 633,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 11,
+      "modeled_collected_units": 655,
+      "modeled_cumulative_units": 5023,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 11,
+      "quality_failed": 13,
+      "uncollected_units": 15,
+      "chosen_orders": 683,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 12,
+      "modeled_collected_units": 664,
+      "modeled_cumulative_units": 5687,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 12,
+      "quality_failed": 15,
+      "uncollected_units": 11,
+      "chosen_orders": 690,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 13,
+      "modeled_collected_units": 795,
+      "modeled_cumulative_units": 6482,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 13,
+      "quality_failed": 11,
+      "uncollected_units": 12,
+      "chosen_orders": 818,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 14,
+      "modeled_collected_units": 901,
+      "modeled_cumulative_units": 7383,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 14,
+      "quality_failed": 17,
+      "uncollected_units": 28,
+      "chosen_orders": 946,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 15,
+      "modeled_collected_units": 992,
+      "modeled_cumulative_units": 8375,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 15,
+      "quality_failed": 19,
+      "uncollected_units": 21,
+      "chosen_orders": 1032,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 16,
+      "modeled_collected_units": 1060,
+      "modeled_cumulative_units": 9435,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 16,
+      "quality_failed": 25,
+      "uncollected_units": 22,
+      "chosen_orders": 1107,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 17,
+      "modeled_collected_units": 1175,
+      "modeled_cumulative_units": 10610,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 17,
+      "quality_failed": 20,
+      "uncollected_units": 18,
+      "chosen_orders": 1213,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 18,
+      "modeled_collected_units": 1310,
+      "modeled_cumulative_units": 11920,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 18,
+      "quality_failed": 32,
+      "uncollected_units": 27,
+      "chosen_orders": 1369,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 19,
+      "modeled_collected_units": 1442,
+      "modeled_cumulative_units": 13362,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 19,
+      "quality_failed": 29,
+      "uncollected_units": 31,
+      "chosen_orders": 1502,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 20,
+      "modeled_collected_units": 1586,
+      "modeled_cumulative_units": 14948,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 20,
+      "quality_failed": 38,
+      "uncollected_units": 28,
+      "chosen_orders": 1652,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 21,
+      "modeled_collected_units": 1722,
+      "modeled_cumulative_units": 16670,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 21,
+      "quality_failed": 40,
+      "uncollected_units": 38,
+      "chosen_orders": 1800,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 22,
+      "modeled_collected_units": 1902,
+      "modeled_cumulative_units": 18572,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 22,
+      "quality_failed": 39,
+      "uncollected_units": 48,
+      "chosen_orders": 1989,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 23,
+      "modeled_collected_units": 2116,
+      "modeled_cumulative_units": 20688,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 23,
+      "quality_failed": 42,
+      "uncollected_units": 40,
+      "chosen_orders": 2198,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 24,
+      "modeled_collected_units": 2341,
+      "modeled_cumulative_units": 23029,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 24,
+      "quality_failed": 50,
+      "uncollected_units": 39,
+      "chosen_orders": 2430,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 25,
+      "modeled_collected_units": 2556,
+      "modeled_cumulative_units": 25585,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 25,
+      "quality_failed": 49,
+      "uncollected_units": 49,
+      "chosen_orders": 2654,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 26,
+      "modeled_collected_units": 2793,
+      "modeled_cumulative_units": 28378,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 26,
+      "quality_failed": 64,
+      "uncollected_units": 55,
+      "chosen_orders": 2912,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 27,
+      "modeled_collected_units": 3080,
+      "modeled_cumulative_units": 31458,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 27,
+      "quality_failed": 51,
+      "uncollected_units": 67,
+      "chosen_orders": 3198,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 28,
+      "modeled_collected_units": 3420,
+      "modeled_cumulative_units": 34878,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 28,
+      "quality_failed": 83,
+      "uncollected_units": 77,
+      "chosen_orders": 3580,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 29,
+      "modeled_collected_units": 3774,
+      "modeled_cumulative_units": 38652,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 29,
+      "quality_failed": 68,
+      "uncollected_units": 72,
+      "chosen_orders": 3914,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 30,
+      "modeled_collected_units": 4165,
+      "modeled_cumulative_units": 42817,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 30,
+      "quality_failed": 82,
+      "uncollected_units": 78,
+      "chosen_orders": 4325,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 31,
+      "modeled_collected_units": 4541,
+      "modeled_cumulative_units": 47358,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 31,
+      "quality_failed": 90,
+      "uncollected_units": 85,
+      "chosen_orders": 4716,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 32,
+      "modeled_collected_units": 4939,
+      "modeled_cumulative_units": 52297,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 32,
+      "quality_failed": 104,
+      "uncollected_units": 99,
+      "chosen_orders": 5142,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 33,
+      "modeled_collected_units": 5467,
+      "modeled_cumulative_units": 57764,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 33,
+      "quality_failed": 117,
+      "uncollected_units": 116,
+      "chosen_orders": 5700,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 34,
+      "modeled_collected_units": 6052,
+      "modeled_cumulative_units": 63816,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 34,
+      "quality_failed": 123,
+      "uncollected_units": 118,
+      "chosen_orders": 6293,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 35,
+      "modeled_collected_units": 6653,
+      "modeled_cumulative_units": 70469,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 35,
+      "quality_failed": 136,
+      "uncollected_units": 141,
+      "chosen_orders": 6930,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 36,
+      "modeled_collected_units": 7381,
+      "modeled_cumulative_units": 77850,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 36,
+      "quality_failed": 138,
+      "uncollected_units": 147,
+      "chosen_orders": 7666,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 37,
+      "modeled_collected_units": 8004,
+      "modeled_cumulative_units": 85854,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 37,
+      "quality_failed": 195,
+      "uncollected_units": 161,
+      "chosen_orders": 8360,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 38,
+      "modeled_collected_units": 8702,
+      "modeled_cumulative_units": 94556,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 38,
+      "quality_failed": 213,
+      "uncollected_units": 193,
+      "chosen_orders": 9108,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 39,
+      "modeled_collected_units": 9695,
+      "modeled_cumulative_units": 104251,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 39,
+      "quality_failed": 180,
+      "uncollected_units": 183,
+      "chosen_orders": 10058,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 40,
+      "modeled_collected_units": 10687,
+      "modeled_cumulative_units": 114938,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 40,
+      "quality_failed": 241,
+      "uncollected_units": 209,
+      "chosen_orders": 11137,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 41,
+      "modeled_collected_units": 11725,
+      "modeled_cumulative_units": 126663,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 41,
+      "quality_failed": 226,
+      "uncollected_units": 247,
+      "chosen_orders": 12198,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 42,
+      "modeled_collected_units": 12938,
+      "modeled_cumulative_units": 139601,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 42,
+      "quality_failed": 245,
+      "uncollected_units": 271,
+      "chosen_orders": 13454,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 43,
+      "modeled_collected_units": 14212,
+      "modeled_cumulative_units": 153813,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 43,
+      "quality_failed": 301,
+      "uncollected_units": 293,
+      "chosen_orders": 14806,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 44,
+      "modeled_collected_units": 15609,
+      "modeled_cumulative_units": 169422,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 44,
+      "quality_failed": 305,
+      "uncollected_units": 310,
+      "chosen_orders": 16224,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 45,
+      "modeled_collected_units": 17171,
+      "modeled_cumulative_units": 186593,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 45,
+      "quality_failed": 302,
+      "uncollected_units": 336,
+      "chosen_orders": 17809,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 46,
+      "modeled_collected_units": 18874,
+      "modeled_cumulative_units": 205467,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 46,
+      "quality_failed": 378,
+      "uncollected_units": 401,
+      "chosen_orders": 19653,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 47,
+      "modeled_collected_units": 20683,
+      "modeled_cumulative_units": 226150,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 47,
+      "quality_failed": 421,
+      "uncollected_units": 397,
+      "chosen_orders": 21501,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 48,
+      "modeled_collected_units": 22617,
+      "modeled_cumulative_units": 248767,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 48,
+      "quality_failed": 485,
+      "uncollected_units": 451,
+      "chosen_orders": 23553,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 49,
+      "modeled_collected_units": 24873,
+      "modeled_cumulative_units": 273640,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 49,
+      "quality_failed": 521,
+      "uncollected_units": 473,
+      "chosen_orders": 25867,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 50,
+      "modeled_collected_units": 27295,
+      "modeled_cumulative_units": 300935,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 50,
+      "quality_failed": 535,
+      "uncollected_units": 614,
+      "chosen_orders": 28444,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 51,
+      "modeled_collected_units": 29997,
+      "modeled_cumulative_units": 330932,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 51,
+      "quality_failed": 638,
+      "uncollected_units": 593,
+      "chosen_orders": 31228,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 52,
+      "modeled_collected_units": 32771,
+      "modeled_cumulative_units": 363703,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 52,
+      "quality_failed": 686,
+      "uncollected_units": 711,
+      "chosen_orders": 34168,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 53,
+      "modeled_collected_units": 35968,
+      "modeled_cumulative_units": 399671,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 53,
+      "quality_failed": 731,
+      "uncollected_units": 750,
+      "chosen_orders": 37449,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 54,
+      "modeled_collected_units": 39498,
+      "modeled_cumulative_units": 439169,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 54,
+      "quality_failed": 793,
+      "uncollected_units": 811,
+      "chosen_orders": 41102,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 55,
+      "modeled_collected_units": 43234,
+      "modeled_cumulative_units": 482403,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 55,
+      "quality_failed": 904,
+      "uncollected_units": 846,
+      "chosen_orders": 44984,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 56,
+      "modeled_collected_units": 47059,
+      "modeled_cumulative_units": 529462,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 56,
+      "quality_failed": 983,
+      "uncollected_units": 970,
+      "chosen_orders": 49012,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 57,
+      "modeled_collected_units": 51473,
+      "modeled_cumulative_units": 580935,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 57,
+      "quality_failed": 1107,
+      "uncollected_units": 1049,
+      "chosen_orders": 53629,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 58,
+      "modeled_collected_units": 56125,
+      "modeled_cumulative_units": 637060,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 58,
+      "quality_failed": 1144,
+      "uncollected_units": 1134,
+      "chosen_orders": 58403,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 59,
+      "modeled_collected_units": 61190,
+      "modeled_cumulative_units": 698250,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 59,
+      "quality_failed": 1341,
+      "uncollected_units": 1276,
+      "chosen_orders": 63807,
+      "unit_price_usd": 60
+    },
+    {
+      "month": 60,
+      "modeled_collected_units": 66864,
+      "modeled_cumulative_units": 765114,
+      "actual_template_productions": 1,
+      "actual_cumulative_productions": 60,
+      "quality_failed": 1373,
+      "uncollected_units": 1394,
+      "chosen_orders": 69631,
+      "unit_price_usd": 60
+    }
+  ],
+  "costs_microUSD": {
+    "acquisition": 4138406794836,
+    "capacity": 157964000000,
+    "maintenance": 30500000000,
+    "onboarding": 456690000000,
+    "resource": 7965910000000,
+    "setup": 10000000000,
+    "processing": 1560555320000,
+    "tax": 6315450777032
+  },
+  "operating_endpoint": {
+    "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+    "available": 17589246308132,
+    "cash": 25361803108132,
+    "collections": 45897280000000,
+    "conditionalEarned": 25261803108132,
+    "custodyReserve": 0,
+    "custodyRestricted": 0,
+    "earnedProtectionBacking": 7672556800000,
+    "equityProtectionBacking": 100000000000,
+    "expensePaid": 20635476891868,
+    "expenses": 20635476891868,
+    "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+    "investmentStopped": false,
+    "netEarnedAfterIncurredObligations": 25261803108132,
+    "payables": 0,
+    "profit": 25261803108132,
+    "recoveryIncome": 0,
+    "reservedInvestment": 0,
+    "revenue": 45897280000000,
+    "strictEarnedControl": 17489246308132,
+    "tailReserve": 7772556800000,
+    "unrestrictedEarned": 17589246308132,
+    "workingCapital": 0
+  },
+  "post_drain_endpoint": {
+    "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+    "available": 25285291708132,
+    "cash": 25361803108132,
+    "collections": 45897280000000,
+    "conditionalEarned": 25261803108132,
+    "custodyReserve": 0,
+    "custodyRestricted": 0,
+    "earnedProtectionBacking": 0,
+    "equityProtectionBacking": 76511400000,
+    "expensePaid": 20635476891868,
+    "expenses": 20635476891868,
+    "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+    "investmentStopped": false,
+    "netEarnedAfterIncurredObligations": 25261803108132,
+    "payables": 0,
+    "profit": 25261803108132,
+    "recoveryIncome": 0,
+    "reservedInvestment": 0,
+    "revenue": 45897280000000,
+    "strictEarnedControl": 25185291708132,
+    "tailReserve": 76511400000,
+    "unrestrictedEarned": 25261803108132,
+    "workingCapital": 0
+  },
+  "settlement_drain_hour": 44641,
+  "actual_template_productions": 60,
+  "unique_actual_input_hashes": 6,
+  "unique_actual_output_hashes": 6,
+  "modeled_collected_units": 765114,
+  "modeled_chosen_orders": 796591,
+  "modeled_quality_failed": 15826,
+  "modeled_uncollected": 15651,
+  "growth_funding": {
+    "SEED": {
+      "count": 5,
+      "microUSD": 7324751623
+    },
+    "EARNED": {
+      "count": 110,
+      "microUSD": 4289046043213
+    }
+  },
+  "attainment": {
+    "first_daily_attainment": null,
+    "observation": "fixed daily boundaries; not annualized exit rate",
+    "target_microUSD": 3000000000000000
+  },
+  "actual_model_billing": null,
+  "opportunity_cost_sensitivity": {
+    "0": 0.0,
+    "0.08": 40000.0,
+    "0.15": 75000.0
+  }
+}
