@@ -24,6 +24,8 @@ Keep private documents, customer data, credentials, signing material and interna
 
 ## Mission: construct economically reachable possibilities
 
+Apply the [uncompromising GENESIS target](../../AGENTS.md#the-uncompromising-target): build a self-sustaining enterprise that sees newly attainable possibilities, builds what is most valuable and improves its discovery of the next opportunity. Link implementation work to this target and report demonstrated progress separately from the ambition; the evidence and qualification requirements below remain unchanged.
+
 The active [064 charter](../../campaign/blue-sky-064/CHARTER.md) admits only consequential newly attainable productive possibilities as flagships. Read the [candidate evidence](../../campaign/blue-sky-064/CANDIDATES.md) and [mechanism discipline](../../campaign/blue-sky-064/MECHANISMS.md); all current cards remain HOLD. Conventional controls and historical operating reproductions remain evidence, not fallback mission selections. Current engineering uses actual platform windows rather than discretionary mission timers, with included ChatGPT/Codex and no paid model APIs or new paid services.
 
 ### Historical flexibility063: a bounded integrated experiment
