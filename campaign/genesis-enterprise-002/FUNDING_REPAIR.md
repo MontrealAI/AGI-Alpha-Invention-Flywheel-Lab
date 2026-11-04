@@ -63,3 +63,65 @@ python -m unittest discover -s tests -p 'test_connected_platform_runtime064.py' 
 
 Keep the original source-bound failure and independent strong ordinary alternative.
 Normal owner-controlled review/integration remains separate from this correction.
+
+## Independent audit and distribution follow-through
+
+Full-PR review of repaired head `19a30d8` identified two additional omissions:
+registered tax was not independently reconciled, and native offers/terms were
+not bound to selected prices and obligations. Real-artifact reproductions accepted
+tax suppression and native $50 orders reported as $60 selections. Both regression
+tests failed before the further correction and pass afterward.
+
+The audit now reconstructs each completed boundary's cumulative tax provision
+from native replay prefixes, checking exact increment, ID and timing. It separately
+binds each native offer, wallet and complete prospective contract to the registered
+choice, including active checkpoints. Native ledger/account/terms/policy controls
+are unchanged. Default modeled profit remains $135.90; a separately registered
+zero-tax test yields $181.20 and is not the default result.
+
+The canonical release inventory also omitted this package and its default
+protocol while shipping its shim. A sealed incomplete archive was accepted by the
+old archive validator and is rejected by the corrected closure guard. The existing
+release pipeline now requires a source-bound GENESIS qualification receipt from
+the clean archive and repeats pilot/resume/audit/key-free export from actual
+downloaded release bytes. Historical markerless archives retain their scope.
+
+Local source-matched checks: 97 tests passed, covering all 66 GENESIS enterprise
+tests, 29 new release-boundary/helper tests and two recovery-preflight tests.
+Another 25 original frontier tests and 29 privacy/platform/release-compatibility
+tests passed. The explicit upload allowlist retains its six existing entries and
+adds only the successful GENESIS receipt and key-free public copy, with negative
+tests rejecting private-account paths, logs and ungated uploads.
+The helper's lifecycle orchestration tests use explicit mocks; they are not a full
+clean-distribution execution receipt. Independent source review found no blocker.
+Local cryptography 50.0.0 and pycparser 3.0 differ from hosted pins 50.0.2 and 3.11.
+Exact-head hosted qualification, normal integration, immutable publication and
+actual downloaded operation must pass before reporting released completion.
+
+## Fixed-cost chronology correction
+
+The independent PR #235 falsifier against `895166b` demonstrated a real omission:
+the first acquisition charge could move from registered hour 24 to hour 23 while
+retaining its amount, and the old audit accepted the completed native simulation.
+The falsifier's green test alone is not evidence of rejection because it records
+either outcome. The strict regression failed before correction.
+
+The audit now reconciles each reached phase's development, acquisition and
+maintenance charges by exact ID, amount, hour and cardinality. It requires no
+action for a declared zero cost, rejects unreached/future charges, and includes
+the overhead-paid `choose` checkpoint before an active decision row exists.
+Native seed-production costs and independently reconciled taxes retain their
+existing separate checks; canonical ledger/account/terms controls are unchanged.
+
+A STOP after an expense commits but before the phase checkpoint is saved leaves
+an unreconciled checkpoint/tape and fails closed. It does not spend while stopped.
+Remove STOP to replay the same deterministic phase and reconcile it without
+duplicating the expense; do not reset or migrate the account.
+
+Chronology qualification: all 75 native, policy, frontier and recovery-preflight
+tests passed, followed by the added STOP-preservation regression (one test) on
+unchanged runtime bytes. This is 76 distinct tests, not a single 76-test run.
+The acquisition, maintenance and development timing regression failed before
+the audit correction and now rejects those real-account counterexamples.
+The prior `895166b` clean-archive GENESIS execution passed on hosted pinned
+dependencies; the changed chronology source requires fresh exact-head checks.

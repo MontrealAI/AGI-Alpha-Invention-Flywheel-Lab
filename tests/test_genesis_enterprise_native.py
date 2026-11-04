@@ -5,11 +5,80 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 from genesis_enterprise import native
 from genesis_enterprise.policy import canonical, digest
 
 ROOT = Path(__file__).resolve().parents[1]
 NATIVE_AVAILABLE = (ROOT / 'commercial/ledger.py').is_file()
+
+
+class FixedCostReconciliationTests(unittest.TestCase):
+    """Small action fixtures test cardinality without bypassing native guards.
+
+    These are unit inputs, never rewritten account exports or financial proof.
+    The integration tests below separately execute the real native account.
+    """
+    def setUp(self):
+        self.p = {'development': 30, 'acquisition': 2, 'maintenance': 1}
+        self.jobs = [{'id': 'one'}, {'id': 'two'}]
+
+    def action(self, ident, amount, day):
+        return {'op': 'cost', 'args': {'id': ident, 'amount': amount}, 'day': day}
+
+    def state(self, phase, index=0):
+        return {'phase': phase, 'index': index, 'rows': [{}] * index,
+                'active': {} if phase in {'order', 'fund', 'produce', 'release', 'refund', 'finish'} else None}
+
+    def costs(self, count, *, development=True):
+        result = [self.action('genesis-development', 30, 0)] if development else []
+        for i, job in enumerate(self.jobs[:count]):
+            result += [self.action('genesis-' + kind + '-' + job['id'], self.p[kind], 24 * (i + 1))
+                       for kind in ('acquisition', 'maintenance')]
+        return result
+
+    def test_all_valid_phase_boundaries(self):
+        native._audit_fixed_costs(self.p, self.jobs, self.state('setup'), [])
+        for index in range(3):
+            native._audit_fixed_costs(self.p, self.jobs, self.state('overhead', index), self.costs(index))
+        for phase in ('choose', 'order', 'fund', 'produce', 'release', 'refund', 'finish'):
+            for index in range(2):
+                native._audit_fixed_costs(self.p, self.jobs, self.state(phase, index), self.costs(index + 1))
+        native._audit_fixed_costs(self.p, self.jobs, self.state('complete', 2), self.costs(2))
+
+    def test_exact_cardinality_amount_and_reached_job_set(self):
+        original = self.costs(1)
+        mutations = [original[:-1], original + [original[-1]],
+                     original + [self.action('genesis-acquisition-two', 2, 48)],
+                     original + [self.action('genesis-acquisition-unknown', 1, 24)],
+                     original[:-1] + [self.action('genesis-maintenance-one', 2, 24)]]
+        for actions in mutations:
+            with self.subTest(actions=actions):
+                with self.assertRaisesRegex(ValueError, 'REGISTERED_FIXED_COST_CHANGED'):
+                    native._audit_fixed_costs(self.p, self.jobs, self.state('choose'), actions)
+        with self.assertRaisesRegex(ValueError, 'REGISTERED_FIXED_COST_CHANGED'):
+            native._audit_fixed_costs(self.p, self.jobs, self.state('overhead'), original)
+        with self.assertRaisesRegex(ValueError, 'REGISTERED_FIXED_COST_CHANGED'):
+            native._audit_fixed_costs(self.p, self.jobs, self.state('setup'), original[:1])
+
+    def test_zero_declared_cost_forbids_even_zero_amount_actions(self):
+        p = dict.fromkeys(self.p, 0)
+        state = self.state('complete', 2)
+        native._audit_fixed_costs(p, self.jobs, state, [])
+        for ident, day in (('genesis-development', 0), ('genesis-acquisition-one', 24),
+                           ('genesis-maintenance-one', 24)):
+            for amount in (0, 1):
+                with self.subTest(ident=ident, amount=amount):
+                    with self.assertRaisesRegex(ValueError, 'REGISTERED_FIXED_COST_CHANGED'):
+                        native._audit_fixed_costs(p, self.jobs, state, [self.action(ident, amount, day)])
+
+    def test_inconsistent_phase_cannot_hide_or_invent_paid_jobs(self):
+        for state in (self.state('unknown'), self.state('setup', 1), self.state('complete'),
+                      self.state('choose', 2), dict(self.state('choose'), active={}),
+                      dict(self.state('order'), active=None), dict(self.state('overhead'), index=True)):
+            with self.subTest(state=state):
+                with self.assertRaisesRegex(ValueError, 'REGISTERED_EXECUTION_PHASE_CHANGED'):
+                    native._audit_fixed_costs(self.p, self.jobs, state, [])
 
 
 @unittest.skipUnless(NATIVE_AVAILABLE, 'Full repository/native source required; no fake ledger fallback')
@@ -42,6 +111,129 @@ class NativeTests(unittest.TestCase):
         self.assertFalse((public / 'source/private-notes.txt').exists())
         self.assertFalse((public / 'public/access-token.txt').exists())
         self.assertEqual(native.audit(public), r)
+
+    def test_missing_tax_producer_is_rejected_with_real_deliveries(self):
+        self.register()
+        with patch.object(native, '_tax', lambda *args: None):
+            with self.assertRaisesRegex(ValueError, 'REGISTERED_TAX_PROVISION_CHANGED'):
+                native.operate(self.workspace)
+
+    def test_registered_fixed_cost_hours_are_independently_checked(self):
+        from flexibility063.native import BusinessAccount
+        original = BusinessAccount.cost
+        # Acquisition is the genuine native-valid 24 -> 23 counterexample.
+        # Maintenance can move later in a no-entry case without a subsequent
+        # order at hour 24 causing native time-regression rejection first.
+        for kind, shifted_hour in (('acquisition', 23), ('maintenance', 25), ('development', 1)):
+            with self.subTest(kind=kind):
+                self.workspace = self.base / kind
+                self.p['offer']['value'] = 0 if kind == 'maintenance' else 90000000
+                self.register()
+                changed = []
+                def shifted(account, ident, amount, day):
+                    if ident.startswith('genesis-' + kind) and not changed:
+                        changed.append(ident)
+                        day = shifted_hour
+                    return original(account, ident, amount, day)
+                with patch.object(BusinessAccount, 'cost', shifted):
+                    with self.assertRaisesRegex(ValueError, 'REGISTERED_FIXED_COST_CHANGED'):
+                        native.operate(self.workspace, max_steps=None if kind == 'acquisition' else 2)
+                self.assertEqual(len(changed), 1)
+                import shutil
+                shutil.rmtree(self.workspace)
+
+    def test_native_price_must_match_selected_price(self):
+        from flexibility063.native import BusinessAccount
+        begin = BusinessAccount.begin_order
+        def wrong_price(account, job, order, buyer, price, budget, day, deadline, terms):
+            terms = dict(terms, price_microUSD=50000000, exposure_microUSD=50200000)
+            return begin(account, job, order, buyer, 50000000, budget, day, deadline, terms)
+        self.register()
+        with patch.object(BusinessAccount, 'begin_order', wrong_price):
+            with self.assertRaisesRegex(ValueError, 'REGISTERED_NATIVE_OFFER_CHANGED'):
+                native.operate(self.workspace)
+
+    def test_tax_amount_timing_and_cumulative_provision_are_independent(self):
+        from flexibility063.native import BusinessAccount
+        cost = BusinessAccount.cost
+        for mutation in ('undercharge', 'early', 'cumulative'):
+            with self.subTest(mutation=mutation):
+                self.workspace = self.base / mutation
+                self.register()
+                def wrong_tax(account, ident, amount, day):
+                    if ident.startswith('genesis-tax-'):
+                        if mutation == 'undercharge':
+                            amount -= 1
+                        elif mutation == 'early':
+                            day -= 1
+                        else:
+                            amount += sum(a['args']['amount'] for a in account.export()['ledger']['actions']
+                                          if a['op'] == 'cost' and a['args']['id'].startswith('genesis-tax-'))
+                    return cost(account, ident, amount, day)
+                with patch.object(BusinessAccount, 'cost', wrong_tax):
+                    with self.assertRaisesRegex(ValueError, 'REGISTERED_TAX_PROVISION_CHANGED'):
+                        native.operate(self.workspace, max_steps=15 if mutation == 'cumulative' else 8)
+                # Each isolated account is a disposable fixture, not recovery state.
+                import shutil
+                shutil.rmtree(self.workspace)
+
+    def test_prospective_terms_must_match_registered_arrangement(self):
+        from flexibility063.native import BusinessAccount
+        begin = BusinessAccount.begin_order
+        mutations = {'fee_microUSD': 0, 'residual_microUSD': 0, 'maturity_day': 33,
+                     'expected_collection_day': 25, 'exposure_microUSD': 61000000,
+                     'counterparty_obligations': 'Different hypothetical obligations'}
+        for field, value in mutations.items():
+            with self.subTest(field=field):
+                self.workspace = self.base / field
+                self.register()
+                def wrong_terms(account, job, order, buyer, price, budget, day, deadline, terms):
+                    return begin(account, job, order, buyer, price, budget, day, deadline,
+                                 dict(terms, **{field: value}))
+                with patch.object(BusinessAccount, 'begin_order', wrong_terms):
+                    with self.assertRaisesRegex(ValueError, 'REGISTERED_NATIVE_TERMS_CHANGED'):
+                        native.operate(self.workspace, max_steps=8)
+                import shutil
+                shutil.rmtree(self.workspace)
+
+    def test_partial_offer_must_match_selected_price(self):
+        from flexibility063.native import BusinessAccount
+        begin = BusinessAccount.begin_order
+        def wrong_price(account, job, order, buyer, price, budget, day, deadline, terms):
+            return begin(account, job, order, buyer, 50000000, budget, day, deadline,
+                         dict(terms, price_microUSD=50000000, exposure_microUSD=50200000))
+        self.register()
+        with patch.object(BusinessAccount, 'begin_order', wrong_price):
+            with self.assertRaisesRegex(ValueError, 'REGISTERED_NATIVE_OFFER_CHANGED'):
+                native.operate(self.workspace, max_steps=4)
+
+    def test_zero_tax_and_every_first_job_checkpoint_remain_valid(self):
+        self.p['income_tax_numerator'] = 0
+        self.register()
+        for _ in range(8):
+            self.assertFalse(native.operate(self.workspace, max_steps=1)['complete'])
+        result = native.operate(self.workspace)
+        self.assertEqual(result['simulated_profit_microUSD'], 181200000)
+        tape = json.loads((self.workspace / 'public/native-export.json').read_text())['ledger']
+        self.assertFalse([a for a in tape['actions'] if a['op'] == 'cost'
+                          and a['args']['id'].startswith('genesis-tax-')])
+
+    def test_tax_commit_interruption_recovers_once(self):
+        self.register()
+        fired = []
+        def crash(phase, i):
+            if phase == 'finish' and not fired:
+                fired.append(True)
+                raise RuntimeError('INTERRUPTED_AFTER_TAX_COMMIT')
+        with self.assertRaisesRegex(RuntimeError, 'INTERRUPTED_AFTER_TAX_COMMIT'):
+            native.operate(self.workspace, fault=crash)
+        result = native.operate(self.workspace)
+        self.assertEqual(result['simulated_profit_microUSD'], 135900000)
+        tape = json.loads((self.workspace / 'public/native-export.json').read_text())['ledger']
+        taxes = [a['args']['id'] for a in tape['actions'] if a['op'] == 'cost'
+                 and a['args']['id'].startswith('genesis-tax-')]
+        self.assertEqual(len(taxes), len(set(taxes)))
+        self.assertEqual(native.operate(self.workspace), result)
 
     def test_checkpoint_resume_and_no_duplicate_settlement(self):
         self.register()
@@ -101,6 +293,64 @@ class NativeTests(unittest.TestCase):
         tape = json.loads(before)['ledger']
         maturities = [a['args']['event_id'] for a in tape['actions'] if a['op'] == 'mature']
         self.assertEqual(len(maturities), len(set(maturities)))
+
+    def test_zero_fixed_cost_checkpoints_and_completion(self):
+        self.p['development'] = self.p['acquisition'] = self.p['maintenance'] = 0
+        self.register()
+        for _ in range(3):
+            self.assertFalse(native.operate(self.workspace, max_steps=1)['complete'])
+        self.assertTrue(native.operate(self.workspace)['complete'])
+        tape = json.loads((self.workspace / 'public/native-export.json').read_text())['ledger']
+        self.assertFalse([a for a in tape['actions'] if a['op'] == 'cost'
+                          and (a['args']['id'] == 'genesis-development'
+                               or a['args']['id'].startswith(('genesis-acquisition-', 'genesis-maintenance-')))])
+
+    def test_fixed_cost_commit_interruption_recovers_once(self):
+        self.register()
+        fired = set()
+        def crash(phase, index):
+            if phase in {'setup', 'overhead'} and phase not in fired:
+                fired.add(phase)
+                raise RuntimeError('INTERRUPTED_AFTER_FIXED_COST_COMMIT')
+        for _ in range(2):
+            with self.assertRaisesRegex(RuntimeError, 'INTERRUPTED_AFTER_FIXED_COST_COMMIT'):
+                native.operate(self.workspace, fault=crash)
+        result = native.operate(self.workspace)
+        self.assertTrue(result['complete'])
+        self.assertEqual(result['simulated_profit_microUSD'], 135900000)
+        self.assertEqual(native.operate(self.workspace), result)
+
+    def test_stop_after_fixed_cost_commit_preserves_tape_until_resume(self):
+        self.register()
+        fired = set()
+        def crash(phase, index):
+            if phase in {'setup', 'overhead'} and phase not in fired:
+                fired.add(phase)
+                raise RuntimeError('INTERRUPTED_AFTER_FIXED_COST_COMMIT')
+        tape_path = self.workspace / 'private/account.actions.jsonl'
+        for _ in range(2):
+            with self.assertRaisesRegex(RuntimeError, 'INTERRUPTED_AFTER_FIXED_COST_COMMIT'):
+                native.operate(self.workspace, fault=crash)
+            before = tape_path.read_bytes()
+            checkpoint = (self.workspace / 'private/STATE.json').read_bytes()
+            (self.workspace / 'STOP').touch()
+            # A stopped stale checkpoint is not evidence that the committed
+            # phase completed. Reject without paying or advancing anything.
+            with self.assertRaisesRegex(ValueError, 'REGISTERED_FIXED_COST_CHANGED'):
+                native.operate(self.workspace)
+            self.assertEqual(tape_path.read_bytes(), before)
+            self.assertEqual((self.workspace / 'private/STATE.json').read_bytes(), checkpoint)
+            (self.workspace / 'STOP').unlink()
+        result = native.operate(self.workspace)
+        self.assertTrue(result['complete'])
+        self.assertEqual(result['simulated_profit_microUSD'], 135900000)
+        tape = json.loads((self.workspace / 'public/native-export.json').read_text())['ledger']
+        fixed = [a['args']['id'] for a in tape['actions'] if a['op'] == 'cost'
+                 and (a['args']['id'] == 'genesis-development'
+                      or a['args']['id'].startswith(('genesis-acquisition-', 'genesis-maintenance-')))]
+        self.assertEqual(len(fixed), 9)
+        self.assertEqual(len(fixed), len(set(fixed)))
+        self.assertEqual(native.operate(self.workspace), result)
 
     def test_exact_native_collateral_fee_and_production_boundary(self):
         self.p['offer']['prices'] = [30000000]

@@ -262,6 +262,117 @@ def operate(output, *, max_steps=None, fault=None):
     return audit(output)
 
 
+def _audit_fixed_costs(p, jobs, execution, actions):
+    # Reconcile the reached producer phases, not just selected/completed rows:
+    # choose has already paid overhead but has not created an active row yet.
+    phase, index = execution['phase'], execution['index']
+    active_phases = {'order', 'fund', 'produce', 'release', 'refund', 'finish'}
+    if (type(index) is not int or not 0 <= index <= len(jobs)
+            or index != len(execution['rows'])
+            or phase not in active_phases | {'setup', 'overhead', 'choose', 'complete'}
+            or (execution['active'] is not None) != (phase in active_phases)
+            or (phase == 'setup' and index != 0)
+            or (phase == 'complete' and index != len(jobs))
+            or (phase in active_phases | {'choose'} and index == len(jobs))):
+        raise ValueError('REGISTERED_EXECUTION_PHASE_CHANGED')
+    expected = {}
+    if phase != 'setup' and p['development']:
+        expected['genesis-development'] = (0, p['development'])
+    reached = index + int(phase in active_phases | {'choose'})
+    for i, job in enumerate(jobs[:reached]):
+        for kind in ('acquisition', 'maintenance'):
+            if p[kind]:
+                ident = 'genesis-' + kind + '-' + job['id']
+                if ident in expected:
+                    raise ValueError('REGISTERED_FIXED_COST_CHANGED')
+                expected[ident] = (24 * (i + 1), p[kind])
+    seen = set()
+    for action in actions:
+        if action['op'] != 'cost':
+            continue
+        ident = action['args']['id']
+        if (ident != 'genesis-development'
+                and not ident.startswith(('genesis-acquisition-', 'genesis-maintenance-'))):
+            # Native seed-production costs and tax provisions have their own
+            # journal/receipt and tax-prefix reconciliation, respectively.
+            continue
+        if (ident not in expected or ident in seen
+                or (action['day'], action['args']['amount']) != expected[ident]):
+            raise ValueError('REGISTERED_FIXED_COST_CHANGED')
+        seen.add(ident)
+    if seen != set(expected):
+        raise ValueError('REGISTERED_FIXED_COST_CHANGED')
+
+
+def _audit_tax_prefixes(p, jobs, rows, actions):
+    # Native replay has verified each before/after state. Reconstruct the
+    # provision at each completed job boundary, not from the final total or
+    # the producer's _tax helper. A later cost cannot erase an earlier debt.
+    taxes = [a for a in actions if a['op'] == 'cost'
+             and a['args']['id'].startswith('genesis-tax-')]
+    expected_ids = set()
+    provision = 0
+    for i, row in enumerate(rows):
+        hour = 24 * (i + 1) + 3
+        prefix = [a for a in actions if a['day'] <= hour]
+        charged = sum(a['args']['amount'] for a in taxes if a['day'] <= hour)
+        pretax = (prefix[-1]['after']['profit'] if prefix else 0) + charged
+        due = (max(0, pretax) * p['income_tax_numerator']
+               + p['income_tax_denominator'] - 1) // p['income_tax_denominator']
+        increment = max(0, due - provision)
+        ident = 'genesis-tax-' + jobs[i]['id']
+        actual = [a for a in taxes if a['args']['id'] == ident]
+        if increment:
+            expected_ids.add(ident)
+            if (len(actual) != 1 or actual[0]['day'] != hour
+                    or actual[0]['args']['amount'] != increment):
+                raise ValueError('REGISTERED_TAX_PROVISION_CHANGED')
+        elif actual:
+            raise ValueError('REGISTERED_TAX_PROVISION_CHANGED')
+        provision += increment
+    if {a['args']['id'] for a in taxes} != expected_ids:
+        raise ValueError('REGISTERED_TAX_PROVISION_CHANGED')
+
+
+def _audit_native_offer(p, ident, i, selected, actions, *, ordered):
+    order, hour = 'g002-' + ident, 24 * (i + 1)
+    offers = [a for a in actions if a['op'] == 'offer' and a['args']['id'] == order]
+    terms = [a for a in actions if a['op'] == 'register_terms' and a['args']['id'] == order + '-terms']
+    wallets = [a for a in actions if a['op'] == 'wallet' and a['args']['buyer'] == 'buyer-' + order]
+    if not ordered or selected is None:
+        if offers or terms or wallets:
+            raise ValueError('REGISTERED_NATIVE_OFFER_CHANGED')
+        return
+    expected_offer = {'id': order, 'buyer': 'buyer-' + order, 'price': selected['price'],
+                      'job_id': ident, 'deadline': hour + 3, 'terms_id': order + '-terms'}
+    if (len(offers) != 1 or offers[0]['day'] != hour or offers[0]['args'] != expected_offer
+            or len(wallets) != 1 or wallets[0]['day'] != hour
+            or wallets[0]['args'] != {'buyer': 'buyer-' + order, 'amount': p['offer']['budget']}):
+        raise ValueError('REGISTERED_NATIVE_OFFER_CHANGED')
+    # Deliberately spell out the registered contract independently of the
+    # prospective_terms producer. Native-valid terms alone do not establish
+    # that the buyer received the selected GENESIS arrangement.
+    expected_terms = {
+        'schema': 'agi-alpha/native-prospective-terms/v1', 'clock_unit': 'INTEGER_HOURS',
+        'version': 1, 'order_id': order, 'price_microUSD': selected['price'],
+        'payment_schedule': 'ON_NATIVE_ACCEPTED_RELEASE',
+        'expected_collection_day': hour + 2, 'exposure_microUSD': selected['price'] + 200000,
+        'maturity_day': hour + 10, 'residual_microUSD': p['offer']['reserve'] - p['offer']['fee'],
+        'acceptance_rule': 'INDEPENDENT_NATIVE_PREPARE_AND_RELEASE',
+        'dispute_rule': 'CLAIMS_THROUGH_MATURITY_INCLUSIVE',
+        'late_claim_rule': 'RETAIN_ALL_CLAIMS_EXCESS_OVER_RESIDUAL_STOPS_INVESTMENT',
+        'premium_microUSD': 0, 'fee_microUSD': p['offer']['fee'], 'coverage_limit_microUSD': 0,
+        'deductible_microUSD': 0, 'coverage_exclusions': [], 'payout_delay_hours': 0,
+        'default_rule': 'RETAIN_UNPAID_LIABILITY_AND_STOP_INVESTMENT',
+        'counterparty_obligations': 'Synthetic purchase of independently checked computational dispatch only. No physical energy delivery or real customer money.',
+        'jurisdiction': 'Authored synthetic jurisdiction; no legal finality established',
+        'legal_status': 'HYPOTHETICAL_SIMULATION_NO_ENFORCEABILITY_OR_PROVIDER_GUARANTEE',
+        'accounting_policy': 'INCURRED_COST_COLLECTED_RECOVERY_MATURITY_NOT_INCOME_V1'}
+    if (len(terms) != 1 or terms[0]['day'] != hour
+            or terms[0]['args'] != {'id': order + '-terms', 'terms': expected_terms}):
+        raise ValueError('REGISTERED_NATIVE_TERMS_CHANGED')
+
+
 def audit(output):
     """Independent native replay plus registered policy/cost/delivery reconciliation."""
     from connected_enterprise.finance import audit_journal
@@ -275,8 +386,13 @@ def audit(output):
     tape = exported['ledger']; actions = tape['actions']; summary = tape['summary']
     if execution['binding'] != reg['binding'] or execution['index'] != len(execution['rows']):
         raise ValueError('EXECUTION_BINDING_OR_COVERAGE_CHANGED')
-    allowed_orders = {'g002-' + job['id'] for job in manifest['jobs']}
+    rows = execution['rows'] + ([execution['active']] if execution['active'] is not None else [])
+    if len(rows) > len(manifest['jobs']):
+        raise ValueError('INCOMPLETE_JOB_COVERAGE')
+    allowed_orders = {'g002-' + job['id'] for job in manifest['jobs'][:len(rows)]}
     for a in actions:
+        if a['op'] == 'register_terms' and a['args']['id'] not in {k + '-terms' for k in allowed_orders}:
+            raise ValueError('UNREGISTERED_TERMS')
         if a['op'] == 'offer' and a['args']['id'] not in allowed_orders:
             raise ValueError('UNREGISTERED_ORDER')
         if a['op'] == 'wallet' and a['args']['buyer'] not in {'buyer-' + k for k in allowed_orders}:
@@ -293,17 +409,13 @@ def audit(output):
                     for kind in ('acquisition', 'maintenance', 'tax') for job in manifest['jobs']}:
                 raise ValueError('UNREGISTERED_COST')
     releases = [a for a in actions if a['op'] == 'event' and a['args']['action'] == 'release']
-    costs = {a['args']['id']: a['args']['amount'] for a in actions if a['op'] == 'cost'}
-    if execution['phase'] != 'setup' and p['development'] and costs.get('genesis-development') != p['development']:
-        raise ValueError('DEVELOPMENT_COST_MISSING')
-    for i, row in enumerate(execution['rows']):
+    _audit_fixed_costs(p, manifest['jobs'], execution, actions)
+    _audit_tax_prefixes(p, manifest['jobs'], execution['rows'], actions)
+    for i, row in enumerate(rows):
         job = manifest['jobs'][i]
         ident = job['id']; order = 'g002-' + ident
         if row['job_id'] != ident:
             raise ValueError('REGISTERED_JOB_ORDER_CHANGED')
-        for kind in ('acquisition', 'maintenance'):
-            if p[kind] and costs.get('genesis-' + kind + '-' + ident) != p[kind]:
-                raise ValueError('REGISTERED_FULL_COST_MISSING')
         # Reconstruct the snapshot at selection from the last overhead action.
         overhead = [a for a in actions if a['op'] == 'cost' and a['args']['id'] in
                     {'genesis-acquisition-' + ident, 'genesis-maintenance-' + ident}]
@@ -320,6 +432,10 @@ def audit(output):
                           seed_allowed=(i == 0 and p['first_delivery_may_use_seed']))
         if row['decision'] != expected:
             raise ValueError('REGISTERED_OPTIMAL_DECISION_CHANGED')
+        _audit_native_offer(p, ident, i, expected['selected'], actions,
+                            ordered=(i < len(execution['rows']) or execution['phase'] != 'order'))
+        if i == len(execution['rows']):
+            continue  # Active delivery/settlement is not yet a completed row.
         released = [a for a in releases if a['args']['id'] == order]
         if row['artifact_sha256'] is not None:
             from flexibility063.verify import verify
