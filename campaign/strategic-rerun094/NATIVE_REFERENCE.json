@@ -1,0 +1,523 @@
+{
+  "actual_complete_lifecycle_cost_usd": null,
+  "actual_revenue_usd": 0,
+  "archived_reference_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/4abbb85893c9c073ca092db4ad858f7bb156dc35/campaign/omega-paid-reach-20261104/PAIRED_EVIDENCE.json",
+  "commands": [
+    {
+      "arm": "organic",
+      "cpu_seconds": 346.774722,
+      "dependency_status": "recorded variance; see REPRODUCTION_REGISTRATION.json",
+      "operation": "run",
+      "returncode": 0,
+      "scenario": "central",
+      "source_revision": "4abbb85893c9c073ca092db4ad858f7bb156dc35",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "69149c8769e606a1bea7d74c28bb6e71c248521769754069668099e68d7e4e73",
+      "wall_seconds": 346.44684509397484
+    },
+    {
+      "arm": "organic",
+      "cpu_seconds": 13.873847999999981,
+      "dependency_status": "recorded variance; see REPRODUCTION_REGISTRATION.json",
+      "operation": "audit",
+      "returncode": 0,
+      "scenario": "central",
+      "source_revision": "4abbb85893c9c073ca092db4ad858f7bb156dc35",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "7b01cfbd869407db4c60705034cc32a02e32cb02412c14efe5da9909a976be5f",
+      "wall_seconds": 11.419608675059862
+    },
+    {
+      "arm": "organic",
+      "cpu_seconds": 19.346547999999984,
+      "dependency_status": "recorded variance; see REPRODUCTION_REGISTRATION.json",
+      "operation": "resume",
+      "public_bound_outputs_unchanged": true,
+      "returncode": 0,
+      "scenario": "central",
+      "source_revision": "4abbb85893c9c073ca092db4ad858f7bb156dc35",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "69149c8769e606a1bea7d74c28bb6e71c248521769754069668099e68d7e4e73",
+      "wall_seconds": 16.62368752702605
+    },
+    {
+      "arm": "pilot",
+      "cpu_seconds": 644.3975849999999,
+      "dependency_status": "recorded variance; see REPRODUCTION_REGISTRATION.json",
+      "operation": "run",
+      "returncode": 0,
+      "scenario": "central",
+      "source_revision": "4abbb85893c9c073ca092db4ad858f7bb156dc35",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "926048a57d951598abd0f58580ceabe8a7612a20680cbfabe490a55956cadfe9",
+      "wall_seconds": 646.4975412010681
+    },
+    {
+      "arm": "pilot",
+      "cpu_seconds": 26.138541999999845,
+      "dependency_status": "recorded variance; see REPRODUCTION_REGISTRATION.json",
+      "operation": "audit",
+      "returncode": 0,
+      "scenario": "central",
+      "source_revision": "4abbb85893c9c073ca092db4ad858f7bb156dc35",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "2f382823ef5d0daaa0a64cb3a6af76e84de9d83f897dae42a3bf12ae73002600",
+      "wall_seconds": 23.156839111004956
+    },
+    {
+      "arm": "pilot",
+      "cpu_seconds": 41.840665000000115,
+      "dependency_status": "recorded variance; see REPRODUCTION_REGISTRATION.json",
+      "operation": "resume",
+      "public_bound_outputs_unchanged": true,
+      "returncode": 0,
+      "scenario": "central",
+      "source_revision": "4abbb85893c9c073ca092db4ad858f7bb156dc35",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "926048a57d951598abd0f58580ceabe8a7612a20680cbfabe490a55956cadfe9",
+      "wall_seconds": 38.814339917036705
+    }
+  ],
+  "matches_archived_central_economics_and_work": {
+    "comparison": true,
+    "organic": {
+      "financial_microUSD": true,
+      "incurred_expense_breakdown_microUSD": true,
+      "reach_and_work": true
+    },
+    "pilot": {
+      "financial_microUSD": true,
+      "incurred_expense_breakdown_microUSD": true,
+      "reach_and_work": true
+    }
+  },
+  "opening_microUSD_each": 100000000000,
+  "pairs": {
+    "central": {
+      "comparison": {
+        "highest_annual_modeled_profit_including_nonentry": [
+          "pilot"
+        ],
+        "pilot_minus_organic_counts": {
+          "deduplicated_contacts": 43,
+          "repeat_settled_buyers": 7,
+          "settled_baskets": 17,
+          "settled_product_units": 34,
+          "unique_contacted_buyers": 11,
+          "unique_qualified_buyers": 13,
+          "unique_settled_buyers": 10
+        },
+        "pilot_minus_organic_expense_breakdown_microUSD": {
+          "acquisition": 4300000,
+          "discovery": 0,
+          "maintenance": 0,
+          "modeled_tax": 51278000,
+          "paid_reach": 12500000,
+          "payment_fees": 10030000,
+          "production_contract": 49300000,
+          "setup": 0
+        },
+        "pilot_minus_organic_financial_microUSD": {
+          "available_cash": -134208000,
+          "available_earned_cash": 205112000,
+          "cash": 205112000,
+          "cash_expenses_paid": 127408000,
+          "collections": 332520000,
+          "custody_reserve": 0,
+          "custody_restricted": 0,
+          "incurred_expenses_including_tax": 127408000,
+          "payables": 0,
+          "profit_after_modeled_tax": 205112000,
+          "recognized_revenue": 332520000,
+          "recovery_income": 0,
+          "reserved_investment": 0,
+          "tail_reserve": 339320000,
+          "working_capital": 0
+        },
+        "profit_and_settled_volume_both_increased": true
+      },
+      "organic": {
+        "artifact_file_sha256": {
+          "CHANNEL.json": "8307c02961ac5b1156a58ec7c2a980c07a4180f1d5912c2afc232e901628ec5f",
+          "CONTRACT.json": "f7608cfbfe7a50d9e2c3c4affcdf974f3fec21de4ea46ff7de4fae3cf73ba3b5",
+          "MANIFEST.json": "817fd49c2130c9327fa409b703bfad71c0ddfb425e0b903b661ee66bd4485687",
+          "NATIVE_EXPORT.json": "8baed91573dee693fba87aaa9cc1399134f45df0758237b67f49b37c2882ca68",
+          "ORDERS.json": "f589b1c6e8ca291a3f4799a48df242d48b43dc3b2ff68e8fdbbadf462f3dfee6",
+          "PLAN.json": "475397df51d65e9991d1281a2451a79cd97293c28cfd2d3f033b35f252028a6b",
+          "REPORT.json": "9699c39179da78cdd777b3a6062c793ff1296fa6f8f4fe9115dade2a800d9153",
+          "SOURCE.json": "d25dfc5e432ffe5e54726e62ac3bdede778dedc25bd7e1db66393b758a35d629",
+          "STUDY.json": "075111c7a9f011fd8ac214ea462c5884a15636b1ad23a05536e20789b0acd867"
+        },
+        "audit_receipt_sha256": "c562ba8413e8c66ea84c83ddc5a6517cf470b5c1a9f006a2580a3eb523f20e6d",
+        "audited_native_action_count": 428,
+        "financial_microUSD": {
+          "available_cash": 99791202000,
+          "available_earned_cash": 262792000,
+          "cash": 100262792000,
+          "cash_expenses_paid": 199198000,
+          "collections": 461990000,
+          "custody_reserve": 0,
+          "custody_restricted": 0,
+          "incurred_expenses_including_tax": 199198000,
+          "payables": 0,
+          "profit_after_modeled_tax": 262792000,
+          "recognized_revenue": 461990000,
+          "recovery_income": 0,
+          "reserved_investment": 0,
+          "tail_reserve": 471590000,
+          "working_capital": 0
+        },
+        "incurred_expense_breakdown_microUSD": {
+          "acquisition": 3900000,
+          "discovery": 15000000,
+          "maintenance": 12000000,
+          "modeled_tax": 65698000,
+          "payment_fees": 14000000,
+          "production_contract": 68600000,
+          "setup": 20000000
+        },
+        "measured_compute": {
+          "construction_cpu_ns_by_study_arm": {
+            "bundle": 141599380,
+            "cold": 1587167036,
+            "equal_content_reuse": 2019085331,
+            "full_control": 816694383,
+            "inherited": 1643059850,
+            "nonentry": 1149332,
+            "separate": 792230003
+          },
+          "independent_verification_cpu_ns": 6725454,
+          "retention_cpu_ns": 1818624,
+          "service_preparation_process_cpu_seconds": 1.4722900649999997
+        },
+        "native_audit_accepted": true,
+        "reach_and_work": {
+          "channel_attempted_slots": 0,
+          "channel_potential_slots": 0,
+          "channel_unattempted_slots": 0,
+          "channel_unfilled_attempted_slots": 0,
+          "deduplicated_contacts": 39,
+          "paid_exclusive_settled_baskets": 0,
+          "paid_exposures": 0,
+          "paid_routed_contacts_to_organic_roster": 0,
+          "post_warm_collections_microUSD": 176040000,
+          "post_warm_contacts": 12,
+          "post_warm_settled_baskets": 9,
+          "qualified_contacts": 36,
+          "refunded_baskets": 0,
+          "refunded_buyer_principal_microUSD": 0,
+          "repeat_settled_buyers": 0,
+          "same_day_organic_paid_overlaps": 0,
+          "service_capacity": {
+            "kpi_variance": {
+              "unused_annual_units": 22,
+              "used_units": 26
+            },
+            "reconciliation": {
+              "unused_annual_units": 26,
+              "used_units": 22
+            }
+          },
+          "settled_baskets": 28,
+          "settled_product_units": 48,
+          "settlements_after_first": 0,
+          "source_contact_counts": {
+            "organic": 12,
+            "warm": 27
+          },
+          "status_counts": {
+            "CAPACITY": 0,
+            "DECLINED": 6,
+            "ILLIQUID": 0,
+            "NONENTRY": 0,
+            "REFUNDED": 0,
+            "SETTLED": 28,
+            "UNQUALIFIED": 3,
+            "UNSUPPORTED": 2
+          },
+          "unique_contacted_buyers": 39,
+          "unique_paid_exposed_buyers": 0,
+          "unique_qualified_buyers": 36,
+          "unique_settled_buyers": 28
+        },
+        "tranches": [
+          {
+            "action": "SKIP",
+            "attributed_pretax_microUSD": 0,
+            "available_before_microUSD": 99905110000,
+            "day": 90,
+            "decision_observations": {
+              "first_exclusive_collections_microUSD": 0,
+              "first_exclusive_settled": 0,
+              "first_invoice_microUSD": 0,
+              "first_paid_variable_costs_microUSD": 0,
+              "warm_contribution_microUSD": 234760000,
+              "warm_settled": 19
+            },
+            "earned_before_microUSD": 197060000,
+            "expected_net_microUSD": 14261578,
+            "invoice_microUSD": 0,
+            "reason": "ORGANIC_CONTROL"
+          },
+          {
+            "action": "SKIP",
+            "attributed_pretax_microUSD": 0,
+            "available_before_microUSD": 99889150000,
+            "day": 118,
+            "decision_observations": {
+              "first_exclusive_collections_microUSD": 0,
+              "first_exclusive_settled": 0,
+              "first_invoice_microUSD": 0,
+              "first_paid_variable_costs_microUSD": 0,
+              "warm_contribution_microUSD": 234760000,
+              "warm_settled": 19
+            },
+            "earned_before_microUSD": 260940000,
+            "expected_net_microUSD": 0,
+            "invoice_microUSD": 0,
+            "reason": "ORGANIC_CONTROL"
+          }
+        ]
+      },
+      "pilot": {
+        "artifact_file_sha256": {
+          "CHANNEL.json": "f7b2be64a013e34d89a8ad9312b6d85774bd3a3bac7caca5f6ba21689a42a403",
+          "CONTRACT.json": "d5bf97360291755da3576ce1d3bb2e301135d0a98dce245facd573716246f45b",
+          "MANIFEST.json": "3ab517b977a6d0a5dcf76649982a185d2ffa889e14f79e0ef22291910006dade",
+          "NATIVE_EXPORT.json": "9cce292695bf07970f83a8c9957533d74d0f39e45c576d54c757bd264e2b6c01",
+          "ORDERS.json": "17bb3db07565d519bf17208407c32d5f61fe84d8c14b1b1ea22b0dee2d741bc5",
+          "PLAN.json": "38263f1821479505f0954cb2580f6cec41b003af7126e8e625024e6b9a871eb2",
+          "REPORT.json": "f5f0549fbb8bd8d918ad013169a9bea76f6b2b76bbded66d9dfcaa344e0e77d7",
+          "SOURCE.json": "d25dfc5e432ffe5e54726e62ac3bdede778dedc25bd7e1db66393b758a35d629",
+          "STUDY.json": "ca9333b0f18bf6f0ca72d0fb1700243817b616676d508425f76a03d78181beeb"
+        },
+        "audit_receipt_sha256": "c26a02cb06dbfc2308b5b80919bdaf003ae1f598c5cf13b70c4361e6a14ef756",
+        "audited_native_action_count": 749,
+        "financial_microUSD": {
+          "available_cash": 99656994000,
+          "available_earned_cash": 467904000,
+          "cash": 100467904000,
+          "cash_expenses_paid": 326606000,
+          "collections": 794510000,
+          "custody_reserve": 0,
+          "custody_restricted": 0,
+          "incurred_expenses_including_tax": 326606000,
+          "payables": 0,
+          "profit_after_modeled_tax": 467904000,
+          "recognized_revenue": 794510000,
+          "recovery_income": 0,
+          "reserved_investment": 0,
+          "tail_reserve": 810910000,
+          "working_capital": 0
+        },
+        "incurred_expense_breakdown_microUSD": {
+          "acquisition": 8200000,
+          "discovery": 15000000,
+          "maintenance": 12000000,
+          "modeled_tax": 116976000,
+          "paid_reach": 12500000,
+          "payment_fees": 24030000,
+          "production_contract": 117900000,
+          "setup": 20000000
+        },
+        "measured_compute": {
+          "construction_cpu_ns_by_study_arm": {
+            "bundle": 174182185,
+            "cold": 1750615469,
+            "equal_content_reuse": 2598213377,
+            "full_control": 942515344,
+            "inherited": 2125930322,
+            "nonentry": 3479955,
+            "separate": 1093886866
+          },
+          "independent_verification_cpu_ns": 13230357,
+          "retention_cpu_ns": 1640788,
+          "service_preparation_process_cpu_seconds": 0.9531369019999998
+        },
+        "native_audit_accepted": true,
+        "reach_and_work": {
+          "channel_attempted_slots": 84,
+          "channel_potential_slots": 84,
+          "channel_unattempted_slots": 0,
+          "channel_unfilled_attempted_slots": 39,
+          "deduplicated_contacts": 82,
+          "paid_exclusive_settled_baskets": 13,
+          "paid_exposures": 45,
+          "paid_routed_contacts_to_organic_roster": 15,
+          "post_warm_collections_microUSD": 508560000,
+          "post_warm_contacts": 55,
+          "post_warm_settled_baskets": 26,
+          "qualified_contacts": 64,
+          "refunded_baskets": 0,
+          "refunded_buyer_principal_microUSD": 0,
+          "repeat_settled_buyers": 7,
+          "same_day_organic_paid_overlaps": 2,
+          "service_capacity": {
+            "kpi_variance": {
+              "unused_annual_units": 5,
+              "used_units": 43
+            },
+            "reconciliation": {
+              "unused_annual_units": 9,
+              "used_units": 39
+            }
+          },
+          "settled_baskets": 45,
+          "settled_product_units": 82,
+          "settlements_after_first": 7,
+          "source_contact_counts": {
+            "organic": 12,
+            "paid": 43,
+            "warm": 27
+          },
+          "status_counts": {
+            "CAPACITY": 7,
+            "DECLINED": 7,
+            "ILLIQUID": 0,
+            "NONENTRY": 0,
+            "REFUNDED": 0,
+            "SETTLED": 45,
+            "UNQUALIFIED": 18,
+            "UNSUPPORTED": 5
+          },
+          "unique_contacted_buyers": 50,
+          "unique_paid_exposed_buyers": 18,
+          "unique_qualified_buyers": 49,
+          "unique_settled_buyers": 38
+        },
+        "tranches": [
+          {
+            "action": "BUY",
+            "activation_attempts": 1,
+            "activation_due_day": 92,
+            "attributed_pretax_microUSD": 0,
+            "available_before_microUSD": 99905110000,
+            "day": 90,
+            "decision_observations": {
+              "first_exclusive_collections_microUSD": 0,
+              "first_exclusive_settled": 0,
+              "first_invoice_microUSD": 0,
+              "first_paid_variable_costs_microUSD": 0,
+              "warm_contribution_microUSD": 234760000,
+              "warm_settled": 19
+            },
+            "earned_before_microUSD": 197060000,
+            "exclusive_settled_baskets": 7,
+            "expected_net_microUSD": 14261578,
+            "expiry_day": 113,
+            "failure_credit_due_microUSD": 0,
+            "funding": "EARNED",
+            "invoice_microUSD": 6250000,
+            "observed_attributable_pretax_microUSD": 86090000,
+            "paid_native_sequence": 277,
+            "realized_exposures": 27,
+            "reason": "FUNDED_TRIAL",
+            "routed_contacts": 27,
+            "supplier_final_state": "EXPIRED"
+          },
+          {
+            "action": "BUY",
+            "activation_attempts": 1,
+            "activation_due_day": 120,
+            "attributed_pretax_microUSD": 86090000,
+            "available_before_microUSD": 99833520000,
+            "day": 118,
+            "decision_observations": {
+              "first_exclusive_collections_microUSD": 136920000,
+              "first_exclusive_settled": 7,
+              "first_invoice_microUSD": 6250000,
+              "first_paid_variable_costs_microUSD": 44580000,
+              "warm_contribution_microUSD": 234760000,
+              "warm_settled": 19
+            },
+            "earned_before_microUSD": 444830000,
+            "exclusive_settled_baskets": 6,
+            "expected_net_microUSD": 86090000,
+            "expiry_day": 141,
+            "failure_credit_due_microUSD": 0,
+            "funding": "EARNED",
+            "invoice_microUSD": 6250000,
+            "observed_attributable_pretax_microUSD": 85080000,
+            "paid_native_sequence": 564,
+            "realized_exposures": 18,
+            "reason": "FUNDED_RENEWAL",
+            "routed_contacts": 16,
+            "supplier_final_state": "EXPIRED"
+          }
+        ]
+      }
+    }
+  },
+  "registration": {
+    "actual_dependencies": {
+      "cffi": "2.1.1",
+      "cryptography": "50.0.0",
+      "numpy": "2.3.5",
+      "pycparser": "3.0",
+      "scipy": "1.17.0"
+    },
+    "arms": [
+      "organic",
+      "pilot"
+    ],
+    "dependency_variance": {
+      "cryptography": {
+        "installed": "50.0.0",
+        "required": "50.0.2"
+      },
+      "pycparser": {
+        "installed": "3.0",
+        "required": "3.11"
+      }
+    },
+    "horizon_model_days": [
+      0,
+      365
+    ],
+    "limits": "Unchanged frozen paid-reach registration. No prospectively optimized capital or full lifecycle cost conclusion. Zero actual commerce. Private native authority retained locally; key-free aggregate results only.",
+    "opening_usd_per_independent_account": 100000,
+    "python": "3.12.14",
+    "registered_at_utc": "2026-11-04T13:30:34.751230+00:00",
+    "role": "source-exact engineering reproduction, not original authority or new independent cohort",
+    "routes": [
+      "mechanism_harness.reach_native run",
+      "mechanism_harness.reach_native audit",
+      "mechanism_harness.reach_native resume"
+    ],
+    "scenarios": [
+      "central"
+    ],
+    "source_revision": "4abbb85893c9c073ca092db4ad858f7bb156dc35"
+  },
+  "role": "Source-exact engineering reproduction with dependency variance, not original authority or a new independent cohort.",
+  "schema": "strategic094/source-exact-native-central-reference/v1",
+  "scope": "Two independent fresh native simulation accounts. Canonical run, independent audit, and completed resume passed separately for each. Only the central environment was reproduced; no new evidence for the other four registered environments. Declared simulated costs are not measured complete lifecycle costs, and this is not a strict autonomous-AI versus 100%-human productivity comparison. No paid calls, purchases, outreach, real customers, or revenue.",
+  "shared_design_and_prefix": {
+    "matched_job_manifest_sha256_excluding_cpu_seconds": "75df86a27767838333a275db5bc0a981f5b7062347780c0f477147a6d892baf2",
+    "matched_menu_study_sha256": "67a0e82ea7389ccae6723e5a3c21c68d5157f034401f79e0de680f80130cb63e",
+    "protocol_sha256": "2b6eef4a9535f6f626e2ca88fcc432c672f1b9cc45ec5bef868e3378d38f5277",
+    "source_sha256": "ace7d041a2cac9114ddac2bf685079d2b5d46a933f15c91ac50bc7c1a2a32cc4",
+    "warm_prefix": {
+      "before_day": 90,
+      "collections_microUSD": 285950000,
+      "contacts": 27,
+      "economic_actions_sha256": "14bea2efb93865423e5da02efee61bc0f3730cba0bddb28d750dc3b21ef690dc",
+      "first_collected_native_sequence": 15,
+      "native_actions": 276,
+      "orders_sha256": "f572f881af744d51a1f020babfe0922dbd1eb77f8d2fb67acb89aa0503c7936f",
+      "requests_and_funding_sha256": "9c76c318eee06fb6be8ec3b76bc617b2d088ed489e20cb9d52a3e787c01921f7",
+      "settled_baskets": 19
+    }
+  },
+  "source_files_verified_against_git": 134,
+  "source_revision": "4abbb85893c9c073ca092db4ad858f7bb156dc35",
+  "tests": {
+    "initial_preflight": "An incomplete copied source closure lacked vendor/__init__.py. Restoring its exact pinned bytes resolved five native test errors. No native comparison account had started.",
+    "paid_reach_tests_passed": 23,
+    "successful_log_sha256": "f822546759652b109afbf32325c7600bc750c4d6cfef3c38c1d2ff6cf6544844"
+  },
+  "window_days": [
+    0,
+    365
+  ]
+}

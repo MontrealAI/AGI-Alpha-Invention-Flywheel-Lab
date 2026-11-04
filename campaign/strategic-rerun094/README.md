@@ -31,7 +31,17 @@ The historical US population is a declared market domain, not a universal demand
 - Reproduce the fixed matrix with `python -m research.strategic094.model --output confirmation.json`, then `python -m research.strategic094.summarize confirmation.json campaign/strategic-rerun094`.
 - Verify retained rows without rerunning: `python -m research.strategic094.audit_csv campaign/strategic-rerun094`.
 
-Execution used included local capabilities. No paid API, new expenditure, outreach, live transaction or original account mutation occurred. Native reference reproduction is separate and cannot validate this projection's assumed volume or demand.
+Execution used included local capabilities. No paid API, new expenditure, outreach, live transaction or original account mutation occurred.
+
+## Separate native reference reproduction
+
+The unchanged central paid-reach benchmark was also rerun from source `4abbb85893c9c073ca092db4ad858f7bb156dc35`, using two fresh independent accounts. All 23 focused tests and both sets of run, independent audit and completed resume passed. Resumes preserved all nine bound output files. [Key-free reference record](NATIVE_REFERENCE.json).
+
+The pilot again delivers 45 settled baskets, $794.51 modeled collections and **$467.904 modeled after-tax profit**, including two earned-funded $6.25 reach tranches. Organic delivers 28 settlements and $262.792 profit. The matched difference remains **17 settlements and $205.112 profit**. This reproduces the prior conditional commercial success; it is not a new profit increase or evidence that the new projection is profitable.
+
+Pilot available cash is $134.208 lower because its protected tail reserve is $339.32 larger. Profit, restricted liquidity and unrestricted cash remain distinct. Each account starts with $100,000 and covers 365 model days; the accounts are never pooled.
+
+This is a source-exact engineering reproduction with disclosed dependency variance: cryptography 50.0.0 rather than 50.0.2, and pycparser 3.0 rather than 3.11. It is not a fully pinned-environment qualification. Only the central environment was repeated; no fresh independent cohort, measured complete-lifecycle economics, human-versus-AI productivity advantage or actual revenue is established. Private account authority remains local. The reproduction cannot validate the projection's assumed volume or demand.
 
 ## Distilled lesson and next action
 
