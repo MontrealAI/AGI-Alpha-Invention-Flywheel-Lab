@@ -1,0 +1,29 @@
+name: Genesis offline execution bridge
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Register platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Verify source and adversarial tests
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -B -m unittest research.genesis_bridge.test_bridge -v
+      - name: Execute fixed bridge and matched successors
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -B -m research.genesis_bridge demo --out "$RUNNER_TEMP/genesis-bridge-${GITHUB_RUN_ID}"
