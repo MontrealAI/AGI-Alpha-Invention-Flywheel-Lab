@@ -1,0 +1,32 @@
+{
+  "request_id": "N3B-independent-spatial-requests-001",
+  "scope": "Prospective authored engineering targets, not real customer demand. Select an exact historically printed heldout recipe using only its mask and frozen forward predictions, then evaluate actual withheld printed height. Separately generated new masks remain MODEL ONLY without manufactured truth.",
+  "source": "NIST10.18434/mds2-2950; same material, printer and5s exposure as source; no cross-machine or multilayer claim",
+  "grid": "Targets central8x8 native pattern,4-nativepixel zero border, nearest-neighbor expand16x16 to128x128. Confirmed active[32:96]\u00b2; native80um pitch, fullfield1280um square, active640um square.",
+  "target_rules": [
+    {
+      "id": "continuous_ridge50",
+      "height_um": "50 at all rows and columns3,4 (zero-based);0 elsewhere"
+    },
+    {
+      "id": "annular_wall100",
+      "height_um": "100 on boundary of central6x6 square: row1or6 with columns1..6, or column1or6 with rows1..6;0 elsewhere"
+    },
+    {
+      "id": "two_level_terrace",
+      "height_um": "50 for rows2..5,columns1..3;100 for rows2..5,columns4..6;0 elsewhere"
+    }
+  ],
+  "motivation": "Different spatial manufacturing requirements: continuous ridge, closed perimeter, and two-level height control. Heights50/100um are deliberately fixed before data outcomes;50um matches the source's separately discussed layer-height scale but does not transfer that multilayer qualification.",
+  "selection": "For each request choose minimum predicted active8x8-region mean squared height error among all300heldout source masks, including fiducials; ties resolve lexicographic member name. No testheight, testscore, or postselection replacement may influence choice. All requests and chosen recipes remain in denominator, even if poor.",
+  "evaluation": "Report achieved active-region RMSEum, fullfield RMSEum, target-feature absolute-height error, zero-target-region excess height and chosen-ID prediction error against withheld measuredheight. Also report hindsight best-achievable exact-library error as an explicitly unavailable-to-policy oracle diagnostic, never as our achieved result.",
+  "acceptance": "No arbitrary numerical physical acceptance threshold or superiority claim is introduced. This is a finite measured inverse-selection test. Report continuous errors and failure boundaries. Functional fabrication, actual new-mask output, mechanical properties and commercial acceptance remain unqualified.",
+  "controls": "Same target, library, observations and search rights for strongest runnable conventional forward model; no inherited model/fresh construction and equal-content ordinary reuse labeled separately. Published pix2pix/cGAN/U-Net are existing strong methods, not our invention; any omitted reproduction remains a baseline gap.",
+  "access": "Verifier read source protocol and directory metadata, not anyN3Bpairedimage outcomes or fittedmodel. Shared public pairedfiles are accessible, not secret truth. N3Arawtraining observation did not supply theseN3Btargets.",
+  "new_mask_construction": {
+    "required": true,
+    "output": "For each same independently fixedtarget, construct a genuinely new8x8 grayscalePNG and source-bound recipe, not only selectarchive inventory. Use fixed5s sourceexposure and integers0..255; surrounding4nativepixelborder fixed0. Record quantization, exactmodelidentity, sourcepixelcoordinates, optimizertermination and modeledresidual. Source nativepitch80um; sourcegeometry not new SI calibration.",
+    "acceptance": "Finite output/range/units/numericalobjective can pass. If no model-feasible design found reportHOLD with bestcandidate; never claim manufacturedacceptance from ownforwardmodel. Archivedselection provides independentphysicalcontrol but does not validate newmask.",
+    "controls": "Ordinaryexistingmethod gets samefrozenforwardmodel,target,initialization/searchbudget andmaskrights; sourcepublished200epochmodels fixed beforevalues. Do not choose model usingtesttarget errors."
+  }
+}
