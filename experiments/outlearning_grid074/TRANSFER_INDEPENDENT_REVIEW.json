@@ -1,0 +1,195 @@
+{
+  "status": "PASS_WITH_SCOPE_CAVEATS",
+  "candidate_executed_by_reviewer": false,
+  "independent_algorithms": [
+    "SymPy characteristic polynomial of A^T A (exact rational arithmetic)",
+    "NumPy SVD",
+    "direct signed branch residuals",
+    "numerical physical twins"
+  ],
+  "frozen_artifact_hash_checks": {
+    "retained_symmetry.py": true,
+    "k1_card.json": true,
+    "K1_OBSERVATIONS.json": true,
+    "K1_CONSTRUCTION.json": true
+  },
+  "physics_generator_hash_preserved": true,
+  "matrix_reviews": {
+    "K1": {
+      "rows": 6,
+      "columns": 7,
+      "exact_rank": 6,
+      "exact_nullity": 1,
+      "svd_rank": 6,
+      "singular_values": [
+        2.5029575574942156,
+        1.8477590650225728,
+        1.3401709145124039,
+        0.822396935328697,
+        0.7653668647301793,
+        0.5126486770094509
+      ],
+      "exact_method": "zero multiplicity of characteristic polynomial of A^T A",
+      "with_reference": {
+        "rows": 7,
+        "columns": 7,
+        "exact_rank": 7,
+        "exact_nullity": 0,
+        "svd_rank": 7,
+        "singular_values": [
+          2.541259017908909,
+          1.9136259796165735,
+          1.3594906440625807,
+          1.0,
+          0.7720180341484236,
+          0.5597141896993235,
+          0.350045116432584
+        ],
+        "exact_method": "zero multiplicity of characteristic polynomial of A^T A"
+      }
+    },
+    "K2_fixed_source": {
+      "rows": 17,
+      "columns": 12,
+      "exact_rank": 12,
+      "exact_nullity": 0,
+      "svd_rank": 12,
+      "singular_values": [
+        3.7665143800426173,
+        3.1556784446067048,
+        2.681899029338585,
+        2.4494897427831788,
+        1.978161976902915,
+        1.8175779451312575,
+        1.4647918410578844,
+        1.3444023194091668,
+        1.0250265973912578,
+        0.6043361208828956,
+        0.49557674216213377,
+        0.2850183648814801
+      ],
+      "exact_method": "zero multiplicity of characteristic polynomial of A^T A",
+      "with_reference": {
+        "rows": 18,
+        "columns": 12,
+        "exact_rank": 12,
+        "exact_nullity": 0,
+        "svd_rank": 12,
+        "singular_values": [
+          3.770553913306049,
+          3.1664189895833514,
+          2.681899029338588,
+          2.4494897427831774,
+          1.9826338107750054,
+          1.8256288224889643,
+          1.4696397787050934,
+          1.3444023194091674,
+          1.0274527020044093,
+          0.6583213954987888,
+          0.5046927883845984,
+          0.298922297094585
+        ],
+        "exact_method": "zero multiplicity of characteristic polynomial of A^T A"
+      }
+    },
+    "K2_unanchored_counterfactual": {
+      "rows": 16,
+      "columns": 12,
+      "exact_rank": 11,
+      "exact_nullity": 1,
+      "svd_rank": 11,
+      "singular_values": [
+        3.7576412189763313,
+        3.145939955318791,
+        2.6818990293385876,
+        2.4494897427831788,
+        1.962714490162042,
+        1.6652407719389335,
+        1.4622346335424992,
+        1.3444023194091668,
+        1.0080970687671729,
+        0.5294365187245282,
+        0.41620477845859943,
+        1.211080771079823e-16
+      ],
+      "exact_method": "zero multiplicity of characteristic polynomial of A^T A",
+      "with_reference": {
+        "rows": 17,
+        "columns": 12,
+        "exact_rank": 12,
+        "exact_nullity": 0,
+        "svd_rank": 12,
+        "singular_values": [
+          3.7618188125907324,
+          3.1566910640511137,
+          2.6818990293385867,
+          2.449489742783178,
+          1.9650957448549686,
+          1.682703785584738,
+          1.4651463651694636,
+          1.344402319409167,
+          1.0083508131570589,
+          0.5363416488441742,
+          0.4487384009982363,
+          0.19614708850973672
+        ],
+        "exact_method": "zero multiplicity of characteristic polynomial of A^T A"
+      }
+    }
+  },
+  "maximum_signed_branch_equation_residual": 2.1553939189011828e-16,
+  "K1_physical_twins": {
+    "fixed_requested_cap": 2.5,
+    "horizon": 120,
+    "temperature_rise_limit": 10,
+    "cases": [
+      {
+        "world_id": "thermal_calibrated",
+        "measured_temperature_at_power1_time60": 23.158697976283182,
+        "true_rise_at_cap_horizon": 10.808308959542341,
+        "unsafe_probes": 0,
+        "fixed_cap_safe": false,
+        "safety_gate_pass": false,
+        "accepted_cap": 0.0
+      },
+      {
+        "world_id": "thermal_exact_scale_twin",
+        "measured_temperature_at_power1_time60": 23.158697976283182,
+        "true_rise_at_cap_horizon": 7.205539306361561,
+        "unsafe_probes": 0,
+        "fixed_cap_safe": true,
+        "safety_gate_pass": true,
+        "accepted_cap": 2.5
+      }
+    ],
+    "meaning": "Identical safe ordinary observation, different physical acceptance of the same proposed heating cap."
+  },
+  "K2_counterfactual_numeric": {
+    "scale": 1.02,
+    "max_observation_invariance_error": 2.220446049250313e-16,
+    "max_voltage_scaling_error": 0.0,
+    "max_current_scaling_error": 1.1102230246251565e-16,
+    "observation_mismatch_if_source_is_held_fixed": 0.01606538324522533,
+    "fixed_cap": 0.5,
+    "slope": 0.0,
+    "base_safe": true,
+    "scaled_source_safe": false,
+    "base_max_voltage": 1.0376092818203224,
+    "scaled_max_voltage": 1.0583614674567288,
+    "actual_family_membership": "Counterfactual scaled source is excluded: actual source is anchored at 1 before any declared tap."
+  },
+  "domain_adapter_findings": [
+    "K2 monomials correctly encode P=-p+r*ell, Q=-q+x*ell, v=u-2(rP+xQ)+(r^2+x^2)ell, u*ell=P^2+Q^2 and reading=gain*sqrt(v)+offset.",
+    "Generic nonzero terms and varying real/reactive injections are required. At individual zero or special probes, extra degeneracy/poor conditioning may remain.",
+    "K1 C*theta/time is valid derivative homogeneity bookkeeping under scaling, NOT the literal transient equation. Interpret it as the weight of C*dtheta/dt.",
+    "K1 offset removal is assumed by its card. Unknown offsets and reference acquisition/noise must still be handled in any actual procedure.",
+    "The omitted common complex-phase rotation of voltages/currents preserves P,Q,p,q, voltage magnitude and current magnitude; it is not a target-affecting scale ambiguity. Relative phase is fixed by the one-branch phasor reconstruction on the chosen high-voltage branch.",
+    "Positive multiplicative symmetries do not exhaust affine/nonlinear/discrete ambiguities, special operating points, noise conditioning or low-voltage branches. No general identifiability or safe-control conclusion follows from nullity zero.",
+    "The card models constant-impedance fixed-source regimes. It does not validate unknown tap-transition detection, meter nonlinearities, full public-family qualification or behavior beyond tested assumptions.",
+    "Freezing source magnitude breaks the displayed global gauge; changing the physical family after seeing this rejection would be a separate experiment, not success on the frozen K2 task."
+  ],
+  "conclusion": "The actual unchanged retained artifact correctly rejects its target-affecting multiplicative scaling premise for this fixed-source K2 adapter. This is an implemented negative transfer test, not evidence that calibrated references are useless, that noisy K2 is globally identifiable, or that any method beats ordinary robust identification.",
+  "confirmation_worlds_drawn": false,
+  "baseline_superiority_claim": false,
+  "business_claim": false
+}
