@@ -1,0 +1,13 @@
+{
+  "retrieved_date":"2026-10-30",
+  "sources":[
+    {"id":"PAPER","type":"primary research","url":"https://www.nature.com/articles/s41467-026-69321-3","doi":"10.1038/s41467-026-69321-3","title":"Diffusion models enable high-fidelity prediction of fuel cell impedance spectrum from short time-domain profiles","date":"2026-02-10","access":"Primary abstract/method/release portions retrieved by search; direct full-article/SI routes unavailable in this run. No claim based on unread SI."},
+    {"id":"CODE","type":"primary released code/processed data","url":"https://github.com/yuanhao911/ISDiffM/tree/320ac4649a618c2d20b1009aa9dcc0a27d7664be","revision":"320ac4649a618c2d20b1009aa9dcc0a27d7664be","role":"Exact feature-window recipe, all9 retained predictor channels, X/Y indexing, public processed828-record dataset4 and MIT code license. Downloaded source was read, never executed."},
+    {"id":"RAW","type":"primary original data","url":"https://doi.org/10.5281/zenodo.15123604","api":"https://zenodo.org/api/records/15123604","license":"MIT as publisher metadata","role":"Original time/spectrum archive, author readmes, per-cell mapping, explicitly replicated incomplete dataset2 inputs, raw absolute/per-frequency timestamps and source units. Whole archive not downloaded; exact ranges/per-entry identities preserved."},
+    {"id":"FIGSHARE","type":"primary data mirror","url":"https://doi.org/10.6084/m9.figshare.28879097","access":"Public metadata attempt timed out; not read or used as a content source."},
+    {"id":"OPERANDO","type":"primary complete alternative","url":"https://doi.org/10.1016/j.jpowsour.2022.232005","title":"Operando electrochemical impedance spectroscopy and its application to commercial Li-ion batteries","role":"Existing actual measurement route; retained as a complete comparator rather than replacing it by a weak predictor or static FFT."},
+    {"id":"TREND","type":"primary complete alternative","url":"https://doi.org/10.1109/TIM.2022.3158378","title":"Trend Removal in Measurements of Best Linear Time-Varying Approximations – with Application to Operando Electrochemical Impedance Spectroscopy","role":"Existing active/LTV/differencing means remain available; a new active instrument requires a scope-specific unmet outcome, not broad unfamiliarity with this method."}
+  ],
+  "physical_claim_status":"No independent same-system repeatability/noise bound or per-processed-row acquisition-clock/site map established. Different cell spectra and replicated artificial input windows do not establish physical nonidentification.",
+  "commercial_status":"No demand, negative baseline profit, positive candidate profit, value capture or earned funding established; transactions not fabricated."
+}

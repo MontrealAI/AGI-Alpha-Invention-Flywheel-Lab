@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/557a27c9cfaf/verification_recovery/package-negative-bound/artifacts/missing_array/replay/work/separate_verifier.py", line 57, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/scratch/557a27c9cfaf/verification_recovery/package-negative-bound/artifacts/missing_array/replay/work/separate_verifier.py", line 30, in main
+    if not all(checks.values()):write(out/'REFUSAL.json',{'checks':checks,'reason':'incomplete or changed source/model/result'});raise ValueError('incomplete or changed source/model/result')
+                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: incomplete or changed source/model/result

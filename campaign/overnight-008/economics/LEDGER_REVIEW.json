@@ -1,0 +1,16 @@
+{
+  "schema": "agi-alpha/economic-ledger-review008/v1",
+  "source_path": "vendor/alpha_claim/protected_exchange.py",
+  "source_sha256": "7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272",
+  "review_scope": "Read-only accounting semantic review; source unchanged; no new runtime qualification claimed",
+  "findings": [
+    "cost() recognizes incurred expense and pays only available cash; unpaid amounts remain payables",
+    "snapshot() separates revenue/profit from cash, custody and liquidity protection; reserve release does not create income",
+    "reserve_investment() checks recorded unrestrictedEarned and stores caller expectedNetValue as an assumption, not demand evidence",
+    "finish_investment() charges actual construction expense once and releases unused commitment; artifact hash records identity, not correctness",
+    "Scope is local simulated provider, principal-plus-fee tail risk; arbitrary external liabilities/real procurement are outside qualification"
+  ],
+  "additional_gate_required": "A candidate adapter must refuse commercial earned-funding claims while actual complete costs or minimum positive participation remain unbounded. Engine balances alone cannot supply those facts.",
+  "actual_new_engine_run": false,
+  "no_new_ledger_implemented": true
+}

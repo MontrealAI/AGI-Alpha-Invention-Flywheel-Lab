@@ -1,0 +1,331 @@
+[
+  {
+    "source": "physics_gauge_reference",
+    "target": "elowitz",
+    "source_graph": {
+      "conditions": {
+        "linear_ambiguity_representation": true
+      },
+      "id": "physics_gauge_reference",
+      "nodes": [
+        {
+          "id": "amplitude",
+          "kind": "latent_state",
+          "unit": "log_scale"
+        },
+        {
+          "id": "instrument_gain",
+          "kind": "unknown_gain",
+          "unit": "log_scale"
+        },
+        {
+          "id": "signal",
+          "kind": "readout",
+          "unit": "log_scale"
+        },
+        {
+          "id": "standard",
+          "kind": "absolute_reference",
+          "unit": "log_scale"
+        }
+      ],
+      "relations": [
+        [
+          "amplitude",
+          "influences",
+          "signal"
+        ],
+        [
+          "instrument_gain",
+          "influences",
+          "signal"
+        ],
+        [
+          "standard",
+          "fixes",
+          "amplitude"
+        ]
+      ]
+    },
+    "donor_graph": {
+      "conditions": {
+        "linear_ambiguity_representation": true
+      },
+      "id": "physics_gauge_reference",
+      "nodes": [
+        {
+          "id": "amplitude",
+          "kind": "latent_state",
+          "unit": "log_scale"
+        },
+        {
+          "id": "instrument_gain",
+          "kind": "unknown_gain",
+          "unit": "log_scale"
+        },
+        {
+          "id": "signal",
+          "kind": "readout",
+          "unit": "log_scale"
+        },
+        {
+          "id": "standard",
+          "kind": "absolute_reference",
+          "unit": "log_scale"
+        }
+      ],
+      "relations": [
+        [
+          "amplitude",
+          "influences",
+          "signal"
+        ],
+        [
+          "instrument_gain",
+          "influences",
+          "signal"
+        ],
+        [
+          "standard",
+          "fixes",
+          "amplitude"
+        ]
+      ]
+    },
+    "target_graph": {
+      "conditions": {
+        "linear_ambiguity_representation": true
+      },
+      "id": "elowitz",
+      "nodes": [
+        {
+          "id": "biological_abundance",
+          "kind": "latent_state",
+          "unit": "log_scale"
+        },
+        {
+          "id": "reporter_gain",
+          "kind": "unknown_gain",
+          "unit": "log_scale"
+        },
+        {
+          "id": "fluorescence",
+          "kind": "readout",
+          "unit": "log_scale"
+        },
+        {
+          "id": "absolute_assay",
+          "kind": "absolute_reference",
+          "unit": "log_scale"
+        }
+      ],
+      "relations": [
+        [
+          "biological_abundance",
+          "influences",
+          "fluorescence"
+        ],
+        [
+          "reporter_gain",
+          "influences",
+          "fluorescence"
+        ],
+        [
+          "absolute_assay",
+          "fixes",
+          "biological_abundance"
+        ]
+      ]
+    },
+    "correspondences": [
+      {
+        "amplitude": "biological_abundance",
+        "instrument_gain": "reporter_gain",
+        "signal": "fluorescence",
+        "standard": "absolute_assay"
+      }
+    ],
+    "status": "unique",
+    "applicable": true,
+    "search_complete": true,
+    "search_nodes": 5,
+    "candidate_limit": 32,
+    "search_limit": 10000,
+    "unresolved_mismatches": [],
+    "typed_domain_failures": [],
+    "preserved_relations": [
+      [
+        "amplitude",
+        "influences",
+        "signal"
+      ],
+      [
+        "instrument_gain",
+        "influences",
+        "signal"
+      ],
+      [
+        "standard",
+        "fixes",
+        "amplitude"
+      ]
+    ],
+    "changed_assumptions": {},
+    "origin": "Developer supplied typed representations and role recipes; bounded search discovers correspondences, ignoring labels."
+  },
+  {
+    "source": "uncontrolled_reference_transfer",
+    "target": "elowitz",
+    "source_graph": {
+      "conditions": {
+        "linear_ambiguity_representation": true,
+        "unmeasured_gain_known": true
+      },
+      "id": "uncontrolled_reference_transfer",
+      "nodes": [
+        {
+          "id": "amplitude",
+          "kind": "latent_state",
+          "unit": "log_scale"
+        },
+        {
+          "id": "instrument_gain",
+          "kind": "unknown_gain",
+          "unit": "log_scale"
+        },
+        {
+          "id": "signal",
+          "kind": "readout",
+          "unit": "log_scale"
+        },
+        {
+          "id": "standard",
+          "kind": "absolute_reference",
+          "unit": "log_scale"
+        }
+      ],
+      "relations": [
+        [
+          "amplitude",
+          "influences",
+          "signal"
+        ],
+        [
+          "instrument_gain",
+          "influences",
+          "signal"
+        ],
+        [
+          "standard",
+          "fixes",
+          "amplitude"
+        ]
+      ]
+    },
+    "donor_graph": {
+      "conditions": {
+        "linear_ambiguity_representation": true,
+        "unmeasured_gain_known": true
+      },
+      "id": "uncontrolled_reference_transfer",
+      "nodes": [
+        {
+          "id": "amplitude",
+          "kind": "latent_state",
+          "unit": "log_scale"
+        },
+        {
+          "id": "instrument_gain",
+          "kind": "unknown_gain",
+          "unit": "log_scale"
+        },
+        {
+          "id": "signal",
+          "kind": "readout",
+          "unit": "log_scale"
+        },
+        {
+          "id": "standard",
+          "kind": "absolute_reference",
+          "unit": "log_scale"
+        }
+      ],
+      "relations": [
+        [
+          "amplitude",
+          "influences",
+          "signal"
+        ],
+        [
+          "instrument_gain",
+          "influences",
+          "signal"
+        ],
+        [
+          "standard",
+          "fixes",
+          "amplitude"
+        ]
+      ]
+    },
+    "target_graph": {
+      "conditions": {
+        "linear_ambiguity_representation": true
+      },
+      "id": "elowitz",
+      "nodes": [
+        {
+          "id": "biological_abundance",
+          "kind": "latent_state",
+          "unit": "log_scale"
+        },
+        {
+          "id": "reporter_gain",
+          "kind": "unknown_gain",
+          "unit": "log_scale"
+        },
+        {
+          "id": "fluorescence",
+          "kind": "readout",
+          "unit": "log_scale"
+        },
+        {
+          "id": "absolute_assay",
+          "kind": "absolute_reference",
+          "unit": "log_scale"
+        }
+      ],
+      "relations": [
+        [
+          "biological_abundance",
+          "influences",
+          "fluorescence"
+        ],
+        [
+          "reporter_gain",
+          "influences",
+          "fluorescence"
+        ],
+        [
+          "absolute_assay",
+          "fixes",
+          "biological_abundance"
+        ]
+      ]
+    },
+    "correspondences": [],
+    "status": "refused",
+    "applicable": false,
+    "search_complete": true,
+    "search_nodes": 0,
+    "candidate_limit": 32,
+    "search_limit": 10000,
+    "unresolved_mismatches": [
+      "unmeasured_gain_known"
+    ],
+    "typed_domain_failures": [],
+    "preserved_relations": [],
+    "changed_assumptions": {},
+    "origin": "Developer supplied typed representations and role recipes; bounded search discovers correspondences, ignoring labels."
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "schema": "agi-alpha/trusted-experiment-run006/v2",
+  "run_id": "sandbox",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-m",
+    "unittest",
+    "tests.test_sandbox",
+    "-v"
+  ],
+  "requested_command": [
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_sandbox",
+    "-v"
+  ],
+  "normalized_command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-m",
+    "unittest",
+    "tests.test_sandbox",
+    "-v"
+  ],
+  "reservation_created": true,
+  "cwd": "/workspace/scratch/557a27c9cfaf/downloaded-43fe-repaired/source",
+  "limits": {
+    "wall_seconds": 120,
+    "cpu_seconds": 60,
+    "memory_bytes": 2147483648,
+    "output_bytes": 33554432,
+    "storage_bytes": 67108864
+  },
+  "wrapper_sha256": "8a59559fd1d02af280719dabf6499295afd82f23a36a812d0d7c757dee82f6d5",
+  "state": "complete",
+  "exit_code": 0,
+  "reason": null,
+  "error": null,
+  "wall_seconds": 2.470942359000219,
+  "supervisor_cpu_seconds": 0.038017413000000166,
+  "waited_cpu_seconds": 2.4569780000000003,
+  "descendant_survivors": false,
+  "output_bytes": 3703,
+  "logs": {
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr.log": "206603d4cc2afee19d35f5de801ea3ff42ace4567c69901faaf7df61a98d64e6"
+  },
+  "scope": "Trusted commands only. Per-process CPU/AS/file limits plus process-group wall termination. Waited-child rusage may omit escaped/unwaited descendants; this is not a sandbox or exact full-group CPU meter.",
+  "aggregate_cpu_complete": false,
+  "complete_monetary_cost": null
+}

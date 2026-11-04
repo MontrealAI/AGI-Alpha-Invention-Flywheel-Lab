@@ -1,0 +1,81 @@
+{
+  "scope": "DEVELOPER_WRITTEN_COORDINATE_REPAIR_EXPOSED_DEVELOPMENT_ONLY",
+  "recorded_utc": "2026-10-30T08:08:50.935445+00:00",
+  "execution_requires_root_protocol_agreement": true,
+  "original_frozen_manifest_sha256": "60a275fcf18a4a01e44fed5ac12c6260052125bdc214eaa64f4818ee549b9033",
+  "original_protocol_sha256": "3aedc0a4c661c6ee3c03b2d58e398032d1149d3b985580e869dbd8212498e25e",
+  "verified_defect": "Default scipy.ndimage.zoom grid_modeFalse matches endpoint centers after output-count rounding, not requested nominal target spacing. Independent ramp witnesses show19.0504um and10.7108um endpoint discrepancies. This does not identify physical height error.",
+  "unchanged_obligation": "Registered opaque top-visible surface depth field versus independent exposed profilometry; primary all-valid-overlap mean absolute height disagreement with coverage/missingness; no buyer tolerance, physical guarantee or success threshold.",
+  "source_coordinates": {
+    "source_profile_spacing_mm": 0.0074,
+    "target_ct_spacing_mm": 0.0258478,
+    "profile_native_shape": [
+      3259,
+      3195
+    ],
+    "origin_convention": "First source sample center0mm on each axis; first target sample center0mm. Absolute instrument origin unavailable and remains a fitted registration translation, not physical alignment truth.",
+    "source_centers": "i*0.0074mm",
+    "target_centers": "j*0.0258478mm",
+    "target_counts": "floor((native_count-1)*source_spacing/target_spacing)+1; no extrapolated center",
+    "expected_target_shape": [
+      933,
+      915
+    ]
+  },
+  "repair": "Replace zoom with explicit target-to-native center coordinates j*target_spacing/source_spacing. Bilinear map_coordinates order1 on finite-filled values and finite mask separately; keep denominator>.999 and NaN unsupported points exactly as old policy. No inpainting.",
+  "ordinary_method_frozen": {
+    "threshold": 92,
+    "faces": [
+      "min",
+      "max"
+    ],
+    "extraction": "Reuse frozen refined_depth/valid/plane arrays; no new segmentation or threshold tuning.",
+    "registration": "Exact frozen ordinary_refined.register routine and parameters, deterministically refit on repaired exposed reference. Same author/library and reference-assisted fitting, no heldout.",
+    "include_fixed_transform_arm": "Also apply each frozen old refined transform to repaired reference to isolate processing-coordinate change without registration reoptimization. No selection of new variants."
+  },
+  "comparators_and_cohorts": {
+    "old_original": "Report original frozen refined results unchanged.",
+    "zero_plane": "Predict0 on all repaired-reference valid support and every identical overlap.",
+    "common_physical_grid": "Transport each frozen old reference/aligned prediction/overlap to repaired target centers using actual old endpoint-center spacing((N-1)*.0074/(nout-1)); bilinear field transport, mask>.999. Compare transported old and repaired predictions against identical repaired reference on common valid overlap. This is a re-expression diagnostic, not rewriting old results.",
+    "mask_changes": "Report old/new finite-reference validity plus per-arm overlap intersection/old-only/new-only/neither, on original index grid labeledindex-only and common physical target grid; no silent point dropping.",
+    "strata_mm": [
+      [
+        "-inf",
+        "-0.1"
+      ],
+      [
+        "-0.1",
+        "-0.03"
+      ],
+      [
+        "-0.03",
+        "-0.01"
+      ],
+      [
+        "-0.01",
+        "inf"
+      ]
+    ],
+    "strata_role": "Original diagnostic strata, never a new admitted customer cohort; denominators for all original/repaired reference pixels and common overlap reported."
+  },
+  "numerical_checks": {
+    "ramp": "Explicit coordinate resampling of each native linear physical-coordinate ramp must match target j*spacing within1e-12mm. Preserve original zoom-ramp counterexample.",
+    "frozen_sources": "Hash-check original manifest and consumed source/helpers/arrays; do not write original folder.",
+    "arithmetic": "Recompute saved-array MAE with math.fsum and finite-support checks; separate verifier may challenge results without candidate edits."
+  },
+  "limits": {
+    "deadline_utc": "2026-10-30T08:28:00Z",
+    "cpu_seconds": 160,
+    "memory_bytes": 2147483648,
+    "new_download_bytes": 0,
+    "new_spending": false
+  },
+  "stopping": "One coordinate intervention and fixed old/new/zero comparison; no threshold tuning, acceptance adjustment, new protected confirmation, novelty or physical qualification claim. Preserve exceptions and unfinished outputs.",
+  "claims_remaining_not_established": [
+    "physical calibration/repeatability or registration error guarantee",
+    "true pore mask or internal geometry",
+    "ordinary published complete-route superiority",
+    "autonomous invention",
+    "demand/profit/earnings/successor funding"
+  ]
+}

@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/557a27c9cfaf/lab/research/xct008/recovery/replay.py", line 91, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/scratch/557a27c9cfaf/lab/research/xct008/recovery/replay.py", line 78, in main
+    run([sys.executable,str(stage/'separate_verifier.py'),'--base',str(stage),'--records',str(records),'--output',str(check_output)],output,'verification',180,300)
+  File "/workspace/scratch/557a27c9cfaf/lab/research/xct008/recovery/replay.py", line 34, in run
+    if result.returncode:raise RuntimeError(f'{label} exited {result.returncode}; logs retained')
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: verification exited 1; logs retained

@@ -1,0 +1,14 @@
+{
+  "purpose":"Additional raw source facts found after protocol freeze; frozen828-record cohort/test unchanged",
+  "raw_dataset4_inventory":{"condition_folders":79,"spectral_csv_files":948,"locations_per_folder":12},
+  "released_dataset4":{"paired_records":828,"arithmetic_factorization":"69*12; exact raw-folder to released-row mapping not reconstructed"},
+  "source_exclusions":"Authors state that time-domain0.4A/cm2 humidity/coolant-temperature recordings were incomplete and not used. Do not infer exact per-row exclusions without a mapping.",
+  "location_confounds":"a00=whole stack; a01-a11 are specified different cell locations, not twelve repeat measurements of one physical system.",
+  "source_timing_example":{"file":"RAW_EIS_EXAMPLE.csv","source_date_text":"JUN;13.2024","sweep_time_text":"11:59:15 - 12:05:31","approximately_seconds":376,"row_fields":"Frequency/Hz, impedance/Ohm magnitude, Phase/deg, Significance, Time/s, Voltage/V, Current/A","scope":"One first-sorted whole-stack raw spectrum selected by inventory order for source-format audit; not an independently clock-matched processed record"},
+  "separate_raw_time_example":{"file":"RAW_TIME_EXAMPLE.csv","source_start_text":"06/17/24 10:09:31","nominal_log_rate":"500ms","scope":"Different raw recording selected by compressed size for format/timestamp audit. June17 record must NOT be paired to the June13 spectrum by assumption."},
+  "physical_gate":"BLOCKED: no independent per-row clock mapping or same-cell repeated-spectrum noise bounds established",
+  "record_alias_gate":"Root explicitly permitted the frozen exact released-record diagnostic despite blocked physical gate; output remains array-view description only",
+  "cohort_or_threshold_changed":false,
+  "new_candidate_executed":false,
+  "confirmation_alpha_spent":0
+}

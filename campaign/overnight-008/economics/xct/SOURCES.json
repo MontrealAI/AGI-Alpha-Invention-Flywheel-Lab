@@ -1,0 +1,199 @@
+{
+  "schema": "agi-alpha/xct008-economic-source-evidence/v1",
+  "observed_utc": "2026-10-30T05:49:43.397512+00:00",
+  "all_communications_are_read_only": true,
+  "prices": [
+    {
+      "id": "duke-fees",
+      "url": "https://smif.pratt.duke.edu/access-training/user-fees-and-billing",
+      "publisher": "Duke Shared Materials Instrumentation Facility",
+      "effective": "2026-07-01",
+      "access": "Full page read",
+      "currency": "USD",
+      "rates": {
+        "microct_industry_per_hour": 163.9,
+        "microct_external_academic_nonprofit_per_hour": 105.88,
+        "reconstruction_industry_per_hour": 66.33,
+        "reconstruction_external_academic_nonprofit_per_hour": 42.85
+      },
+      "terms": "Industry has no monthly cap; government-contract industry uses the external-university/nonprofit rate. Fees recover part of facility operating cost.",
+      "limit": "No scan duration, reconstruction duration, exact AGI ALPHA price or margin is inferred."
+    },
+    {
+      "id": "duke-procurement",
+      "url": "https://smif.pratt.duke.edu/access-training/external-users",
+      "publisher": "Duke Shared Materials Instrumentation Facility",
+      "effective": "not stated",
+      "access": "Full page read",
+      "currency": "USD",
+      "facts": {
+        "self_use_guest_account_annual_fee": 24
+      },
+      "terms": "Staff-service users submit a service request and select an approved purchase order. Self-use also requires setup, safety training, equipment certification and scheduling.",
+      "limit": "These are actual posted purchasing obligations, not AGI ALPHA orders or external-account authority."
+    },
+    {
+      "id": "stanford-mct",
+      "url": "https://mct.stanford.edu/equipment/fee-structure",
+      "publisher": "Stanford MicroCT Facility",
+      "effective": "FY26 as labeled; no FY27 verification",
+      "access": "Full page read",
+      "currency": "USD",
+      "rates": {
+        "commercial_scanning_per_hour": 160,
+        "commercial_staff_per_hour": 200,
+        "academic_government_scanning_per_hour": 40,
+        "academic_government_staff_per_hour": 100
+      },
+      "terms": "Scanning capped at ten charged hours/day. Staff covers preparation, calibration, optimization, reconstruction, transfer and archive; often at least one hour/day. Noncommercial image-processing workstation access is free; staff processing availability/usefulness is not guaranteed.",
+      "limit": "Not current-rate-certified and not a mandatory staffing assumption for our standalone software route."
+    },
+    {
+      "id": "cambridge-cbc",
+      "url": "https://www.cbc.zoo.cam.ac.uk/services-and-pricing",
+      "publisher": "Cambridge Biotomography Centre",
+      "effective": "not stated",
+      "access": "Primary search result text; full-page open returned403",
+      "currency": "GBP",
+      "rates": {
+        "commercial_scanning_per_hour": 160,
+        "external_academic_scanning_per_hour": 100,
+        "analysis_processing_per_hour_all_users": 40,
+        "minimum_booking_hours": 2
+      },
+      "terms": "Minimum booking applies to scanning or segmentation; operator-led service described.",
+      "limit": "Minimums can eliminate savings from fewer projections. Search-only facts remain a lower-confidence anchor; no exchange rate applied."
+    },
+    {
+      "id": "oregon-microct",
+      "url": "https://microct.oregonstate.edu/node/7",
+      "publisher": "Oregon State MicroCT Facility",
+      "effective": "updated2025-04",
+      "access": "Primary search result text; full-page open timed out",
+      "currency": "USD",
+      "rates": {
+        "commercial_scan_minimum_up_to4h": 900,
+        "commercial_extra_scan_hour": 225,
+        "commercial_scan_personnel_per_hour_minimum1h": 681,
+        "commercial_processing_compute_per_hour_minimum1h": 135,
+        "commercial_processing_personnel_per_hour_minimum1h": 681
+      },
+      "terms": "User agreement required. Personnel includes sample preparation, setup and reconstruction.",
+      "limit": "Outdated/partial-access comparison only. A reduction within the four-hour block need not change scanner charges; do not infer avoidable staff hours."
+    }
+  ],
+  "historical_procurement": [
+    {
+      "id": "edinburgh-award",
+      "url": "https://www.find-tender.service.gov.uk/Notice/006215-2024/PDF",
+      "publisher": "UK Find a Tender / University of Edinburgh",
+      "date": "2024-02-27",
+      "access": "Primary indexed award notice",
+      "currency": "GBP excluding VAT",
+      "value": 454700,
+      "scope": "MicroCT scanner supply, installation and five years maintenance",
+      "limit": "Actual infrastructure award; no independent purchase of our sparse-feature certificate, service price or repeated buyer count established."
+    },
+    {
+      "id": "drdc-ct-award",
+      "url": "https://canadabuys.canada.ca/en/tender-opportunities/contract-history/cw2433937-000",
+      "publisher": "CanadaBuys / PSPC / DRDC",
+      "date": "2026-07-15",
+      "access": "Primary contract-history text",
+      "currency": "CAD",
+      "total_contract_value": 768399.81,
+      "contract_number": "CW2433937",
+      "supplier": "Nikon Metrology, Inc",
+      "duration": "2026-07-15 through2031-07-14",
+      "scope": "CT Scan3D Imaging System including maintenance; Quebec delivery",
+      "limit": "Hardware-plus-maintenance procurement, not evidence that a buyer pays our certificate fee. No outreach or tender participation occurred."
+    },
+    {
+      "id": "britishmuseum-tender",
+      "url": "https://www.find-tender.service.gov.uk/Notice/040838-2024/PDF",
+      "publisher": "UK Find a Tender / Trustees of the British Museum",
+      "date": "2024-12-18",
+      "access": "Primary indexed tender notice",
+      "currency": "GBP excluding VAT",
+      "budget": 710000,
+      "scope": "MicroCT, supporting hardware/software, delivery, installation, functionality tests, training and five-year maintenance/service",
+      "limit": "Tender budget and requirements, not an observed award or nostro revenue. Shows ancillary obligations cannot be removed from complete-cost comparisons."
+    }
+  ],
+  "alternatives": [
+    {
+      "id": "scipy-highs",
+      "url": "https://docs.scipy.org/doc/scipy/reference/optimize.linprog-highs.html",
+      "publisher": "SciPy",
+      "access": "Full official documentation read",
+      "facts": "Free linprog HiGHS solves continuous linear objectives with inequality/equality/box constraints and returns primal residuals and inequality/equality/bound marginals.",
+      "comparison": "Natural complete mathematical comparator is direct LP min/max under the SAME forward model, error budget and conservative certificate checks. Do not deny ordinary users dual values or count library reuse as discovered science."
+    },
+    {
+      "id": "astra-sirt",
+      "url": "https://astra-toolbox.com/docs/algs/SIRT.html",
+      "publisher": "ASTRA Toolbox",
+      "access": "Official documentation search text",
+      "facts": "SIRT supports minimum/maximum constraints, projection masks and several2D geometries; FBP/CGLS/3D alternatives are also available.",
+      "comparison": "Point reconstructions are natural baselines, but point output is not automatically a guaranteed feature interval."
+    },
+    {
+      "id": "tigre",
+      "url": "https://github.com/CERN/TIGRE",
+      "publisher": "CERN/TIGRE developers",
+      "access": "Official repository search text",
+      "facts": "Free iterative CT toolbox includes algebraic, Krylov and total-variation methods; public code supports incomplete-data experiments.",
+      "comparison": "Give TV/iterative reconstruction its natural configuration; no arbitrary human staff cost. It does not automatically provide this exact worst-case admissible-support contract."
+    },
+    {
+      "id": "cuqipy",
+      "url": "https://cuqi-dtu.github.io/CUQI-Book/index-12/",
+      "publisher": "CUQI-DTU",
+      "access": "Full official chapter introduction read",
+      "facts": "CUQIpy-CIL interfaces with Core Imaging Library for Bayesian CT inverse problems and compares deterministic solutions.",
+      "comparison": "Free uncertainty quantification already exists. Prior/posterior credible intervals differ from worst-case set-membership support; neither claim may be substituted silently."
+    },
+    {
+      "id": "nist-bounds",
+      "url": "https://www.nist.gov/publications/practical-intrinsic-error-bounds-x-ray-computed-tomography",
+      "publisher": "NIST",
+      "date": "page states2017-02-19; original journal details not independently resolved",
+      "access": "Full primary abstract read",
+      "facts": "Describes upper/lower bounds on mean intrinsic error in a specified region using phase-composition information; keywords include linear inverse problem and linear program.",
+      "comparison": "Generic ROI-error bounds are established prior art. Exact equivalence with our instrument is unadjudicated without the full underlying derivation."
+    },
+    {
+      "id": "nist-mcr",
+      "url": "https://www.nist.gov/publications/monte-carlo-reconstruction-concept-propagating-uncertainty-computed-tomography",
+      "publisher": "NIST",
+      "date": "2021-07-19",
+      "access": "Full primary abstract read",
+      "facts": "Monte Carlo Reconstruction propagates sampled instrument-geometry uncertainty into voxel gray-value distributions and dimensional measurements.",
+      "comparison": "Geometry/calibration error cannot disappear because the candidate verifies floating-point algebra. A physical claim needs calibrated error coverage."
+    },
+    {
+      "id": "nikon-limitedangle",
+      "url": "https://industry.nikon.com/en-us/products/x-ray-ct/limited-angle-ct/",
+      "publisher": "Nikon Metrology",
+      "access": "Full primary product page read",
+      "facts": "Commercial limited-angle acquisition/reconstruction exists; example partial rotation270degrees improves magnification for constrained objects. Vendor claims high image quality and automated center-of-rotation handling.",
+      "comparison": "Vendor product claims are not independent qualification or our exact sparse-view support guarantee. Partial-angle imaging is not an unavailable capability in general; license/quote price unknown."
+    },
+    {
+      "id": "hexagon-vg",
+      "url": "https://volumegraphics.hexagon.com/en/products/software-features/ct-reconstruction.html",
+      "publisher": "Hexagon Volume Graphics",
+      "access": "Official product search text",
+      "facts": "Commercial reconstruction supports multiple geometries, artifact corrections and data-quality analysis per ASTM E1441/E1695. Related coordinate-measurement software includes locally adaptive surface determination.",
+      "comparison": "A complete industry route includes calibration, corrections, quality checks and automated reporting. Public price and equivalence with set-support intervals are unknown."
+    }
+  ],
+  "demand_status": {
+    "exact_offering_purchase_evidence": null,
+    "exact_offering_price": null,
+    "minimum_positive_participation": 0,
+    "actual_orders": 0,
+    "actual_revenue": 0,
+    "new_external_spending": 0
+  }
+}
