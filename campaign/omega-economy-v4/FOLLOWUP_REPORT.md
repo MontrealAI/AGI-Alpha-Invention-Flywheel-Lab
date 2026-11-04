@@ -1,5 +1,7 @@
 # FLYWHEEL Ω V4 — corrected operation and physical-data continuation
 
+**Edition note.** The account results below are preserved at the source versions that produced them. A later [review correction](review/LEGACY_NATIVE_AUTHORITY.json) reconciles older completed runs against live authority; the current operators also refuse to execute a later pending debit while checking a closed account. The [paid-reach continuation](../omega-paid-reach-20261104/README.md) uses separate matched accounts. New source fingerprints or engineering reproductions do not change the historical primary balance.
+
 The cart repair now connects to a verified operating decision: use a capable
 alternative when the public evidence supports it, and decline entry before
 acquisition when modeled contribution is nonpositive. Two further audit defects

@@ -33,8 +33,11 @@ def run(output, *, resume=False):
         n.save(output/'V2_SOURCE.json',source)
     elif not output.is_dir() or n.read(output/'V2_SOURCE.json')!=source:
         raise ValueError('SOURCE_MATCHED_EXISTING_RUN_REQUIRED')
-    if (output/'V2_REPORT.json').exists():
-        audit(output);return n.read(output/'V2_REPORT.json')
+    if resume:
+        n.require_resume_authority(output)
+        if (output/'V2_REPORT.json').exists():
+            return n.completed_resume(output, opening=n.OPENING, contract=n.CONTRACT,
+                                      report_name='V2_REPORT.json', public_audit=audit)
     session=n.begin(output,source)
     try:
         if (output/'V2_STUDY.json').exists():

@@ -112,10 +112,14 @@ def archive_manifest(path):
             raise ValueError('SOURCE_IDENTITY_DIGEST_CHANGED')
         if any(manifest['files'].get(name) != expected for name, expected in frozen['files'].items()):
             raise ValueError('EXECUTING_SOURCE_CLOSURE_CHANGED')
-        from connected_enterprise.runner import REACH_MARKERS
+        from connected_enterprise.runner import LEGACY_RELEASE_PATHS, OMEGA_V4_RELEASE_PATHS, REACH_MARKERS
         if 'omega_reach_native_source' in manifest or REACH_MARKERS.intersection(manifest['files']):
             from scripts.qualify_omega_release import reach_source
             reach_source(manifest)
+        members = set(manifest['files'])
+        if (members.intersection(LEGACY_RELEASE_PATHS)
+                and not members.issuperset((*OMEGA_V4_RELEASE_PATHS, *LEGACY_RELEASE_PATHS))):
+            raise ValueError('LEGACY_RESUME_RELEASE_DEPENDENCY_MISSING')
         return manifest
 
 def asset_names(directory):

@@ -26,6 +26,52 @@ def save(path,value):atomic_bytes(Path(path),canonical(value)+b'\n')
 def read(path):return strict_json(Path(path).read_bytes())
 
 
+def require_resume_authority(output):
+    """A prepared fixture may precede account creation. Operating receipts cannot."""
+    output = Path(output)
+    receipts = ('FROZEN_POLICY.json', 'CONFIRMATION.json', 'STUDY.json', 'V2_STUDY.json',
+                'SUCCESSOR.json', 'TAX.json', 'NATIVE_RESULT.json', 'NATIVE_EXPORT.json',
+                'REPORT.json', 'REPORT.html', 'V2_REPORT.json')
+    started = (any((output / name).exists() for name in receipts) or any(output.glob('order-*.json'))
+               or any(p.name != 'account.sqlite.writer.lock' for p in output.glob('account.sqlite*')))
+    if not started:
+        return
+    required = ('account.sqlite.actions.jsonl', 'account.sqlite.adaptive-simulation-key',
+                'account.sqlite.connected-journal.json', 'MANIFEST.json', 'runtime/services/MANIFEST.json')
+    for name in required:
+        path = output / name
+        if not path.is_file() or any(p.is_symlink() for p in (path, *path.parents)):
+            raise ValueError('EXISTING_NATIVE_AUTHORITY_REQUIRED_FOR_RESUME:' + name)
+
+
+class _CompletedJournalAccount(JournalAccount):
+    def _recover(self):
+        # A separate native writer may have committed a signed intent after the
+        # report closed. Under the canonical lease, decline to execute that intent.
+        if any(entry['status'] == 'PENDING' for entry in self._journal['entries']):
+            raise ValueError('COMPLETED_NATIVE_ACCOUNT_DIFFERS_FROM_RECORDED_EXPORT:PENDING_INTENT')
+        super()._recover()
+
+
+def completed_resume(output, *, opening, contract, report_name, public_audit):
+    """Compare the complete signed local history and validate the published economics."""
+    account = _CompletedJournalAccount(output / 'runtime', read(output / 'MANIFEST.json'),
+                                       output / 'account.sqlite', opening=opening, working=0, contract=contract)
+    try:
+        live_digest = digest(account.export())
+        if digest(read(output / 'NATIVE_EXPORT.json')) != live_digest:
+            raise ValueError('COMPLETED_NATIVE_ACCOUNT_DIFFERS_FROM_RECORDED_EXPORT')
+        checked = public_audit(output)
+        report = read(output / report_name)
+        if checked['accepted'] is not True or checked['report_sha256'] != digest(report):
+            raise ValueError('AUDITED_COMPLETED_REPORT_CHANGED')
+        if digest(read(output / 'NATIVE_EXPORT.json')) != live_digest:
+            raise ValueError('COMPLETED_NATIVE_ACCOUNT_DIFFERS_FROM_RECORDED_EXPORT')
+        return report
+    finally:
+        account.close()
+
+
 def begin(output,source):
     """Fixture admission precedes the account; its full modeled setup is charged."""
     root=Path(output)/'runtime'

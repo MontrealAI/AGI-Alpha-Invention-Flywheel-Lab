@@ -9,6 +9,7 @@ import unittest
 from unittest.mock import patch
 
 from connected_enterprise.channels import ChannelBook
+from connected_enterprise.finance import audit_journal
 from mechanism_harness import reach_native as native
 
 
@@ -155,16 +156,46 @@ class ReachNativeTests(unittest.TestCase):
         account = reopen()
         try:
             account.cost('development-completed-cost', 100_000, 4)
-            native.save(out / 'NATIVE_EXPORT.json', account.export())
-            native.save(out / 'REPORT.json', {'scope': 'explicit completion-boundary fixture'})
+            exported = account.export()
+            native.save(out / 'NATIVE_EXPORT.json', exported)
+            native.save(out / 'REPORT.json', {'scope': 'development ledger completion fixture',
+                                             'native_export_sha256': native.digest(exported),
+                                             'summary': exported['ledger']['summary']})
         finally:
             account.close()
+        def verify_development_ledger(path):
+            # This test exercises local custody only. Validate the actual ledger and
+            # the exact fixture report rather than claiming a registered reach audit.
+            exported = native.read(path / 'NATIVE_EXPORT.json')
+            checked = audit_journal(exported, root=path / 'runtime', manifest=self.manifest)
+            report = native.read(path / 'REPORT.json')
+            self.assertEqual(report, {'scope': 'development ledger completion fixture',
+                                     'native_export_sha256': native.digest(exported),
+                                     'summary': exported['ledger']['summary']})
+            return {'accepted': checked['accepted'], 'report_sha256': native.digest(report)}
         before = (out / 'NATIVE_EXPORT.json').read_bytes()
-        with patch.object(native, 'audit', return_value={'accepted': True}):
+        with patch.object(native, 'audit', side_effect=verify_development_ledger):
             self.assertEqual(native.run(out, resume=True), native.read(out / 'REPORT.json'))
             account = reopen()
             try:
-                account.cost('development-divergent-cost', 7, 5)
+                with (patch.object(account, '_attempt', side_effect=RuntimeError('durable intent')),
+                      self.assertRaisesRegex(RuntimeError, 'durable intent')):
+                    account.cost('development-divergent-cost', 7, 5)
+                self.assertEqual(account.export()['connected_journal']['entries'][-1]['status'], 'PENDING')
+            finally:
+                account.close()
+            tape_path = out / 'account.sqlite.actions.jsonl'
+            journal_path = out / 'account.sqlite.connected-journal.json'
+            before_tape, pending_journal = tape_path.read_bytes(), journal_path.read_bytes()
+            with self.assertRaisesRegex(ValueError, 'COMPLETED_NATIVE_ACCOUNT_DIFFERS'):
+                native.run(out, resume=True)
+            self.assertTrue(tape_path.read_bytes() == before_tape, 'completed resume executed the signed intent')
+            self.assertTrue(journal_path.read_bytes() == pending_journal, 'completed resume consumed the signed intent')
+            # The ordinary writer still recovers this legitimate request exactly once.
+            account = reopen()
+            try:
+                self.assertEqual(account.export()['connected_journal']['entries'][-1]['status'], 'COMPLETE')
+                self.assertEqual(account.snapshot()['summary']['expenses'], 100_007)
             finally:
                 account.close()
             tape = (out / 'account.sqlite.actions.jsonl').read_bytes()

@@ -18,6 +18,7 @@ from connected_enterprise.finance import JournalAccount,SOURCE_PATHS,audit_journ
 from adaptive_enterprise import instruments as substrate
 from adaptive_enterprise.checkers import audit_delivery
 from . import cart_program as v,cart_campaign as campaign,cooperative_construction as productive,cart_decision as decider
+from .inventor_native import completed_resume
 
 ROOT=Path(__file__).resolve().parents[1]
 CENT=10_000
@@ -39,7 +40,7 @@ def checked_path(output):
 
 
 def source_identity():
-    names=set(SOURCE_PATHS)|set(substrate.SOURCE_PATHS)|set(campaign.SOURCE_NAMES)|set(productive.source_identity())|{'mechanism_harness/cart_native.py','mechanism_harness/cart_decision.py','campaign/omega-economy-v4/SUCCESSOR_PROTOCOL.md','campaign/omega-economy-v4/REPAIR_PROTOCOL.md'}
+    names=set(SOURCE_PATHS)|set(substrate.SOURCE_PATHS)|set(campaign.SOURCE_NAMES)|set(productive.source_identity())|{'mechanism_harness/cart_native.py','mechanism_harness/cart_decision.py','mechanism_harness/inventor_native.py','campaign/omega-economy-v4/SUCCESSOR_PROTOCOL.md','campaign/omega-economy-v4/REPAIR_PROTOCOL.md'}
     result={}
     for name in sorted(names):
         p=ROOT/name
@@ -124,17 +125,9 @@ def run(output,*,arm='generated',stress='central',resume=False):
                  or any(p.name!='account.sqlite.writer.lock' for p in out.glob('account.sqlite*')))
         if history:require_existing_native_authority(out)
     if (out/'REPORT.json').exists():
-        # Public audit validates a portable export; local resume must also own
-        # and reconcile the current native history. Never seed from a report.
-        audit(out)
         require_existing_native_authority(out)
-        manifest=read(out/'MANIFEST.json')
-        account=JournalAccount(out/'runtime',manifest,out/'account.sqlite',opening=OPENING,working=0,contract=CONTRACT)
-        try:
-            if account.export()!=read(out/'NATIVE_EXPORT.json'):
-                raise ValueError('COMPLETED_NATIVE_ACCOUNT_DIFFERS_FROM_RECORDED_EXPORT')
-        finally:account.close()
-        return read(out/'REPORT.json')
+        return completed_resume(out, opening=OPENING, contract=CONTRACT,
+                                report_name='REPORT.json', public_audit=audit)
     runtime=out/'runtime'
     if not (out/'MANIFEST.json').exists():
         for name in set(SOURCE_PATHS)|set(substrate.SOURCE_PATHS):

@@ -15,9 +15,11 @@ from tests.test_connected_omega_release import COMMIT, qualification_fixture, sh
 class PaidReachRelease(unittest.TestCase):
     def setUp(self):
         self.payloads = v4_payloads()
-        self.payloads.update({name: b'synthetic pilot fixture\n' for name in runner.REACH_RELEASE_PATHS})
+        self.payloads.update({name: b'synthetic pilot fixture\n'
+                              for name in (*runner.REACH_RELEASE_PATHS, *runner.LEGACY_RELEASE_PATHS)})
         files = {name: sha(raw) for name, raw in self.payloads.items()}
         cart = {name: files[name] for name in v4_payloads() if name.startswith('mechanism_harness/')}
+        cart['mechanism_harness/inventor_native.py'] = files['mechanism_harness/inventor_native.py']
         self.native = {name: files[name] for name in set(cart) | set(runner.REACH_NATIVE_PATHS)}
         self.manifest = {'schema': 'agi-alpha/connected014-source-distribution/v1', 'files': files,
                          'executing_source': {'files': files, 'sha256': helper.digest(files)},
@@ -42,22 +44,51 @@ class PaidReachRelease(unittest.TestCase):
     def test_partial_checkout_fails_before_source_freeze(self):
         with tempfile.TemporaryDirectory() as tmp, patch.object(runner, 'inherited_paths', return_value=[]):
             root = Path(tmp)
-            for name in (*runner.OMEGA_V4_RELEASE_PATHS, *runner.REACH_RELEASE_PATHS):
+            for name in (*runner.OMEGA_V4_RELEASE_PATHS, *runner.REACH_RELEASE_PATHS, *runner.LEGACY_RELEASE_PATHS):
                 path = root / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.touch()
             self.assertTrue(set(runner.REACH_RELEASE_PATHS) <= set(runner.source_paths(root)))
+            self.assertTrue(set(runner.LEGACY_RELEASE_PATHS) <= set(runner.source_paths(root)))
+            test = root / runner.LEGACY_RESUME_TEST
+            test.unlink()
+            with self.assertRaisesRegex(ValueError, 'LEGACY_RESUME_RELEASE_DEPENDENCY_MISSING'):
+                runner.source_paths(root)
+            test.touch()
             (root/'mechanism_harness/reach_native.py').unlink()
             with self.assertRaisesRegex(ValueError, 'PAID_REACH_SOURCE_DEPENDENCY_MISSING'):
                 runner.source_paths(root)
 
+    def test_canonical_inventory_covers_every_live_resume_source_map(self):
+        from mechanism_harness import cart_native, economical_native, inventor, mechanism_native, reach_native
+        files = set(runner.source_paths(runner.ROOT))
+        for module in (inventor, economical_native, mechanism_native, cart_native, reach_native):
+            source = module.source_identity()
+            with self.subTest(module=module.__name__):
+                self.assertIn('mechanism_harness/inventor_native.py', source)
+                self.assertTrue(files.issuperset(source))
+
+    def test_resealed_archive_cannot_ship_partial_legacy_operators(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            raw = b'synthetic legacy member'
+            files = {runner.LEGACY_RESUME_TEST: sha(raw)}
+            manifest = {'schema': 'agi-alpha/connected014-source-distribution/v1', 'files': files,
+                        'executing_source': {'files': files, 'sha256': helper.digest(files)}}
+            archive = Path(tmp) / 'source.zip'
+            with zipfile.ZipFile(archive, 'w') as z:
+                z.writestr(runner.LEGACY_RESUME_TEST, raw)
+                z.writestr('SOURCE_MANIFEST.json', json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, 'LEGACY_RESUME_RELEASE_DEPENDENCY_MISSING'):
+                release.archive_manifest(archive)
+
     def test_resealed_archive_cannot_remove_parent_v4_or_independent_checker(self):
-        for missing in ('mechanism_harness/cart_native.py', 'mechanism_harness/reach_verify.py'):
+        for missing in ('mechanism_harness/cart_native.py', 'mechanism_harness/reach_verify.py',
+                        'mechanism_harness/inventor_native.py', runner.LEGACY_RESUME_TEST):
             with self.subTest(missing=missing), tempfile.TemporaryDirectory() as tmp:
                 manifest = copy.deepcopy(self.manifest)
                 del manifest['files'][missing]
                 manifest['omega_v4_native_source'].pop(missing, None)
-                manifest['omega_reach_native_source'].pop(missing)
+                manifest['omega_reach_native_source'].pop(missing, None)
                 manifest['executing_source']['sha256'] = helper.digest(manifest['files'])
                 archive = Path(tmp)/'source.zip'
                 with zipfile.ZipFile(archive, 'w') as z:

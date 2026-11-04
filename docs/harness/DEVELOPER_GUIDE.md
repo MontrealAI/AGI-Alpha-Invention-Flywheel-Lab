@@ -2,6 +2,8 @@
 
 Start with [AGENTS.md](../../AGENTS.md). Reuse the canonical enterprise and existing mechanisms; do not build a parallel framework or ledger. This map distinguishes executable code, qualified operation, economic advantage and the broader mission.
 
+For economic-game construction, start with the [cart operator and recovery guide](../../campaign/omega-economy-v4/README.md). It connects executable menus, an exhaustive buyer-choice check, independently accepted work, native collections and a funded successor. The [paid-reach study](../../campaign/omega-paid-reach-20261104/README.md) tests the next operating decision: whether earned cash can buy access to additional voluntary buyers at a profit after costs. Each comparison account has its own identity and liabilities. The [economic and physical-data verdicts](../../campaign/omega-economy-v4/FOLLOWUP_REPORT.md) explain where conventional methods tie or win.
+
 ### Read the current evidence before adopting
 
 Start each decision with exact current source, executed receipts and the responsible owner. The snapshots below are navigation, not authority over current evidence or permission. Evaluate consequential enabling opportunities beyond the current trace’s local bottleneck. Identify a constraint whose removal opens an important class of valuable work, then the decisive prototype needed to test that ambitious construction before expanding the mechanism map.

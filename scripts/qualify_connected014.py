@@ -16,7 +16,7 @@ import zipfile
 
 REPOSITORY=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(REPOSITORY))
-from connected_enterprise.runner import identity, source_paths
+from connected_enterprise.runner import LEGACY_RESUME_TEST, identity, source_paths
 from connected_enterprise.platform_runtime import command_budget
 
 LIMIT_BYTES=256_000_000
@@ -116,6 +116,12 @@ def qualify(output,smoke,timeout_seconds=None):
             if sum(len(v) for v in files.values())+len(raw)>LIMIT_BYTES:raise ValueError('BOUNDED_SOURCE_PACKAGE_REQUIRED')
             files[name]=raw
         manifest={'schema':'agi-alpha/connected014-source-distribution/v1','executing_source':frozen_source,'files':{k:sha(v) for k,v in files.items()},'git_required':False}
+        if LEGACY_RESUME_TEST in files:
+            from mechanism_harness import economical_native, inventor, mechanism_native
+            for module in (inventor, economical_native, mechanism_native):
+                for name, value in module.source_identity().items():
+                    if manifest['files'].get(name) != value:
+                        raise ValueError('LEGACY_NATIVE_SOURCE_CLOSURE_CHANGED:' + name)
         if 'mechanism_harness/cart_native.py' in files:
             from mechanism_harness.cart_native import source_identity as omega_identity
             omega_source=omega_identity()

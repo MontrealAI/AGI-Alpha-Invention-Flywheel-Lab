@@ -1,0 +1,84 @@
+{
+  "schema": "omega/legacy-resume-release-development/v1",
+  "checked_at_utc": "2026-11-04T00:58:37.740378+00:00",
+  "parent_commit": "736f0fe1a8b8dc895fdcff82e8d3a604ce8b494a",
+  "stage": "uncommitted integration engineering checks only",
+  "packaging_files": {
+    "connected_enterprise/runner.py": "e1bc6b3a3950131be73442e601aa15cbae3cca9f8bcbdcede21fcebdce76742d",
+    "scripts/qualify_connected014.py": "3afa124fa8a336ffc06db091026d7af3e0a75379f4d388085984d6dc3b6bf5b6",
+    "scripts/qualify_omega_release.py": "fde2cbb014d92d7e81424c816b45e47b2406c92134dcccbb94ff6dd48aae055c",
+    "scripts/release_connected014.py": "e4d5630dce9b83b2d2b00313ec4b3fe45a70860cae4012fe27d537bed459cf03",
+    "tests/test_connected_reach_release.py": "298b45d2214382474a8b44585ea041149e2b7d34bc697759ba17eb48ddbbdb19"
+  },
+  "packaging_fingerprint_sha256": "0ffa5986b4bb5105443085ee937c0d05498c538dd0a55b6c9a09e5a04a8a6639",
+  "native_identities_at_check": {
+    "mechanism_harness.inventor": {
+      "files": 51,
+      "sha256": "6ea489387591c80f4ff49bc360d6647d4451a75e901f1ae549ffa02ab16e791d",
+      "all_shipped": true,
+      "binds_shared_helper": true
+    },
+    "mechanism_harness.economical_native": {
+      "files": 53,
+      "sha256": "7ee3dcc5196f3620da5992d4c37138e0f6871dd5953923aabcbea50957276b24",
+      "all_shipped": true,
+      "binds_shared_helper": true
+    },
+    "mechanism_harness.mechanism_native": {
+      "files": 53,
+      "sha256": "efe36fabeaf1cfa408f211f6481697a8b9c292a352f19ccf5e2ee89f98273559",
+      "all_shipped": true,
+      "binds_shared_helper": true
+    },
+    "mechanism_harness.cart_native": {
+      "files": 63,
+      "sha256": "05594b2569b72362daec83b136e743da949ae384411dc05837981281eb44e3a6",
+      "all_shipped": true,
+      "binds_shared_helper": true
+    },
+    "mechanism_harness.reach_native": {
+      "files": 71,
+      "sha256": "72ce9400200c8201a5c60bb7a299b9206cf00d0ae70fa2baf36433ff5ac49010",
+      "all_shipped": true,
+      "binds_shared_helper": true
+    }
+  },
+  "extra_legacy_shipping_paths": [
+    "mechanism_harness/inventor_native.py",
+    "mechanism_harness/inventor_cost_audit.py",
+    "mechanism_harness/economical_learning.py",
+    "mechanism_harness/economical_native.py",
+    "mechanism_harness/mechanism_campaign.py",
+    "mechanism_harness/mechanism_native.py",
+    "campaign/omega-inventor/PROTOCOL.md",
+    "campaign/omega-inventor/PROTOCOL_V2.md",
+    "campaign/omega-inventor/PROTOCOL_V3.md",
+    "tests/test_omega_inventor.py",
+    "tests/test_omega_economical.py",
+    "tests/test_omega_mechanisms_v3.py",
+    "tests/test_omega_legacy_live_resume.py",
+    "mechanism_harness/game_maker.py",
+    "mechanism_harness/_game_maker_v1.py",
+    "mechanism_harness/game_input.py",
+    "mechanism_harness/game_maker_fixture.json",
+    "mechanism_harness/test_game_maker.py"
+  ],
+  "earlier_frozen_source": "736f0fe",
+  "earlier_paid_reach_registered_cells_executed": 0,
+  "historical_receipt": {
+    "source_commit": "bc8f1560dd1c1c90cdc246a8469a249024094fac",
+    "sha256": "20037efe68d2e21fe497b0b66f1e87e5447a7498b0bf3fb5c3e60f0614d7a20b",
+    "source_archive_sha256": "e98d7359968ddc0ae7506ef8db8cd2358ad59cc2abe4098712c10af66d6ed42d",
+    "commands": 4,
+    "actual_release_download": false,
+    "contains_new_shipping_paths": false
+  },
+  "tests": {
+    "count": 104,
+    "failed": 0,
+    "errors": 0,
+    "seconds": 4.096,
+    "command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m unittest tests.test_connected_reach_release tests.test_connected_omega_release tests.test_connected_release tests.test_connected_platform_runtime064 tests.test_compact_failure_export031 -q"
+  },
+  "privacy_and_scope": "No original account opened, registered pilot executed, private files exported, permission or asset added. Historical receipt revalidated against actual prepublication artifact bytes."
+}

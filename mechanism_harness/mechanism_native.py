@@ -18,6 +18,7 @@ from connected_enterprise.finance import JournalAccount,SOURCE_PATHS,audit_journ
 from adaptive_enterprise import instruments as substrate
 from adaptive_enterprise.checkers import audit_delivery
 from . import market_program as v,mechanism_campaign as campaign
+from .inventor_native import completed_resume, require_resume_authority
 
 ROOT=Path(__file__).resolve().parents[1]
 CENT=10_000
@@ -38,7 +39,7 @@ def checked_path(output):
 
 
 def source_identity():
-    names=set(SOURCE_PATHS)|set(substrate.SOURCE_PATHS)|set(campaign.SOURCE_NAMES)|{'mechanism_harness/mechanism_native.py'}
+    names=set(SOURCE_PATHS)|set(substrate.SOURCE_PATHS)|set(campaign.SOURCE_NAMES)|{'mechanism_harness/mechanism_native.py','mechanism_harness/inventor_native.py'}
     result={}
     for name in sorted(names):
         p=ROOT/name
@@ -110,7 +111,11 @@ def run(output,*,arm='generated',stress='central',resume=False):
         save(out/'SOURCE.json',source);save(out/'CONTRACT.json',{'arm':arm,'stress':stress,'tariff':TARIFF})
     elif not out.is_dir() or read(out/'SOURCE.json')!=source or read(out/'CONTRACT.json')!={'arm':arm,'stress':stress,'tariff':TARIFF}:
         raise ValueError('SOURCE_MATCHED_EXISTING_ACCOUNT_REQUIRED')
-    if (out/'REPORT.json').exists():audit(out);return read(out/'REPORT.json')
+    if resume:
+        require_resume_authority(out)
+        if (out/'REPORT.json').exists():
+            return completed_resume(out, opening=OPENING, contract=CONTRACT,
+                                    report_name='REPORT.json', public_audit=audit)
     runtime=out/'runtime'
     if not (out/'MANIFEST.json').exists():
         for name in set(SOURCE_PATHS)|set(substrate.SOURCE_PATHS):

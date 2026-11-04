@@ -16,6 +16,7 @@ from connected_enterprise.finance import JournalAccount, SOURCE_PATHS
 from . import cart_campaign as campaign, cart_decision, cart_native, cart_program
 from . import reach_policy as policy
 from .cart_native import CENT, OPENING, checked_path, fractions_of_price, read, save
+from .inventor_native import completed_resume
 
 ROOT = Path(__file__).resolve().parents[1]
 PROTOCOL = 'campaign/omega-paid-reach-20261104/PROTOCOL.md'
@@ -341,19 +342,13 @@ def run(output, *, arm='organic', scenario='central', resume=False):
         out.mkdir(parents=True, exist_ok=False)
         save(out / 'SOURCE.json', source)
         save(out / 'CONTRACT.json', terms)
-    completed = (out / 'REPORT.json').exists()
-    if completed:
-        audit(out)
-        runtime, manifest = out / 'runtime', read(out / 'MANIFEST.json')
-    else:
-        runtime, manifest = _prepare(out)
+    if (out / 'REPORT.json').exists():
+        return completed_resume(out, opening=OPENING, contract=native_contract(terms),
+                                report_name='REPORT.json', public_audit=audit)
+    runtime, manifest = _prepare(out)
     account = JournalAccount(runtime, manifest, out / 'account.sqlite', opening=OPENING, working=0,
                              contract=native_contract(terms))
     try:
-        if completed:
-            if account.export() != read(out / 'NATIVE_EXPORT.json'):
-                raise ValueError('COMPLETED_NATIVE_ACCOUNT_DIFFERS_FROM_RECORDED_EXPORT')
-            return read(out / 'REPORT.json')
         report = _operate(out, account, runtime, manifest, terms)
         audit(out)
         return report

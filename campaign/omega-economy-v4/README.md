@@ -24,6 +24,8 @@ Use a new directory for each independently funded counterfactual: `--arm generat
 
 ## Inputs, outputs and decisions
 
+To test paid distribution, use the [separate matched reach experiment](../omega-paid-reach-20261104/README.md). Its accounts reproduce a common organic starting period and may finance expiring access from their own collected earnings. The original primary is never reset, extended past its registered endpoint or combined with these comparisons.
+
 The fixed market generator provides services, outcome sets, resource-cost envelopes, private-value distribution, budgets, outside options and finite solver safeguards. The constructor sees the distribution, not a buyer's later private choice. Generated programs contain prices and allocation rules only: the bounded interpreter gives them no shell, credentials or network. A single checkout pays the chosen aggregate price and delivers the service union once. Fees apply once to that aggregate checkout. This does not model separate merchants, consumable quantities or cross-buyer coalitions.
 
 The runtime chooses baskets by dynamic programming; the independent oracle enumerates affordable offer subsets and reconstructs unions. Unknown unions fail closed. Numerical MILP status does not replace exact checking; the full solver is a strong eligible control, not a proof of unrestricted game-theoretic optimality.
@@ -41,6 +43,8 @@ Keep the entire original output directory, including native action tape, journal
 If construction or acceptance fails, retain its result and incurred costs. A component failure refunds the whole contracted union; an absent collection is not revenue. A positive profit cannot authorize investment when unrestricted cash is insufficient. The earned-only successor policy is tested, but does not prove that a capable seed-funded ordinary alternative could not have constructed the successor sooner.
 
 ## Interpretation
+
+**Historical source matters.** The original seven accounts, including the primary, belong to [`f1074b1`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/f1074b1e128069d5a4754b10955a73a3d95db7c5); the eight later engineering accounts match [`c6ddb25`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/c6ddb25f77c984a5be89196776dbaad1c5b79ce6). Their [recorded live reconciliation](review/PRIMARY_LIVE_RECONCILIATION.json) and [eight-account receipts](CORRECTED_NATIVE_EVIDENCE.json) refer to those source versions. A stored report or a successful portable audit alone does not establish current account state. Keep intact backups and an exclusive writer. Do not replace a stored source manifest to make a newer operator accept an older account.
 
 The annual schedule is a sparse complete 365-day synthetic account, not an annualization or market forecast. Dollar expenses are registered resource envelopes and declared modeled tax, not measured invoices or tax advice. Actual developer/model/infrastructure lifecycle cost, buyer willingness to pay, distribution, enforceability and scaling demand remain unknown. Resource telemetry does not fill those gaps. A mechanism repair, profitable simulation, retained knowledge and superior discovery are separate claims.
 

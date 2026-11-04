@@ -56,9 +56,29 @@ class CartNativeExecution(unittest.TestCase):
         with small_native_fixture(),patch.object(c,'execute',side_effect=lambda:self.original(PILOT)):
             original=n.run(out,stress='no_demand')
         saved_report=(out/'REPORT.json').read_bytes();saved_export=(out/'NATIVE_EXPORT.json').read_bytes()
-        account=n.JournalAccount(out/'runtime',n.read(out/'MANIFEST.json'),out/'account.sqlite',opening=n.OPENING,working=0,contract=n.CONTRACT)
+        def reopen():
+            return n.JournalAccount(out/'runtime', n.read(out/'MANIFEST.json'), out/'account.sqlite',
+                                    opening=n.OPENING, working=0, contract=n.CONTRACT)
+        account=reopen()
         try:
-            account.cost('independent-post-completion-cost',10000,364)
+            # The ordinary writer signs and persists the request before applying it.
+            with (patch.object(account, '_attempt', side_effect=RuntimeError('durable intent')),
+                  self.assertRaisesRegex(RuntimeError, 'durable intent')):
+                account.cost('independent-post-completion-cost',10000,364)
+            self.assertEqual(account.export()['connected_journal']['entries'][-1]['status'],'PENDING')
+        finally:account.close()
+        journal=out/'account.sqlite.connected-journal.json';tape_path=out/'account.sqlite.actions.jsonl'
+        pending_journal=journal.read_bytes();before_tape=tape_path.read_bytes()
+        with small_native_fixture(),self.assertRaisesRegex(ValueError,'COMPLETED_NATIVE_ACCOUNT_DIFFERS'):
+            n.run(out,stress='no_demand',resume=True)
+        self.assertTrue(tape_path.read_bytes() == before_tape, 'completed resume executed the signed intent')
+        self.assertTrue(journal.read_bytes() == pending_journal, 'completed resume consumed the signed intent')
+        self.assertEqual(saved_report,(out/'REPORT.json').read_bytes())
+        self.assertEqual(saved_export,(out/'NATIVE_EXPORT.json').read_bytes())
+        # Deliberately open the normal recovery writer on this separate fixture.
+        account=reopen()
+        try:
+            self.assertEqual(account.export()['connected_journal']['entries'][-1]['status'],'COMPLETE')
             self.assertTrue(account.audit()['accepted'])
             self.assertEqual(account.snapshot()['summary']['profit'],original['native_summary']['profit']-10000)
         finally:account.close()

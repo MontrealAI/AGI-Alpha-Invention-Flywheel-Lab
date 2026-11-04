@@ -217,15 +217,16 @@ def checked_output(output):
 
 
 def run(output, *, resume=False):
-    from .inventor_native import begin, operate
+    from .inventor_native import begin, operate, completed_resume, require_resume_authority, OPENING, CONTRACT
     output=checked_output(output)
     source=source_identity()
     if resume:
         if not output.is_dir() or strict_json((output/'SOURCE.json').read_bytes())!=source:
             raise ValueError('SOURCE_MATCHED_EXISTING_CAMPAIGN_REQUIRED')
+        require_resume_authority(output)
         if (output/'REPORT.json').exists():
-            audit(output)
-            return strict_json((output/'REPORT.json').read_bytes())
+            return completed_resume(output, opening=OPENING, contract=CONTRACT,
+                                    report_name='REPORT.json', public_audit=audit)
     else:
         output.mkdir(parents=True,exist_ok=True)
         if any(output.iterdir()):raise FileExistsError('NEW_CAMPAIGN_REQUIRED_USE_RESUME')
