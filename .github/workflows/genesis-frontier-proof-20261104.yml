@@ -1,0 +1,30 @@
+name: GENESIS Frontier 001 - Pinned Proof Verification
+on:
+  push:
+    branches:
+      - research/genesis-frontier-proof-20261104
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-public-research-example:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build verifier and run accepted and rejected examples
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "User $(id -un), compiler: $(g++ --version | head -1)"
+          bash research/frontier-20261104/probe_flashprove.sh "$RUNNER_TEMP/genesis-frontier-001-evidence"
+      - name: Publish source-bound synthetic-only evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genesis-frontier-001-synthetic-verification
+          path: ${{ runner.temp }}/genesis-frontier-001-evidence/
+          if-no-files-found: warn
+          retention-days: 30
