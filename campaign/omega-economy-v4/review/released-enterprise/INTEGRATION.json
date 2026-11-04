@@ -1,0 +1,112 @@
+{
+  "schema": "omega/prepublication-verification-record/v1",
+  "scope": "Records of prepublication observations. Original local receipt hashes refer to the bytes observed at the time. Local recovery later found some staging files unavailable. Current-source reruns and independent public metadata can be recorded separately without replacing these observations.",
+  "economic_pr": {
+    "number": 206,
+    "qualified_head": "dc038127cd62e67eba7d5b274338c858c0574c19",
+    "merge": "8fde634127d959cf93ad8abaa933ee6fb443abc9",
+    "merged_tree": "a32cb2c2bf0cf4d2f71465a045990a81edd3bfbb",
+    "workflows_passed": 23,
+    "aggregate": {
+      "run": 41760748816,
+      "tests": 1961,
+      "optional_ortools_skips": 2,
+      "elapsed_seconds": 2116.897
+    },
+    "exact_targeted": {
+      "tests": 342,
+      "errors": 0,
+      "failures": 0,
+      "skips": 0,
+      "elapsed_seconds": 888.1654446700013,
+      "log_sha256": "d58f1a4214c9e0a241d6f80922eb1c9def11eb0eda9d899d4512e9ae2c21654e"
+    },
+    "v4": {
+      "run": 41760748811,
+      "suites": [
+        200,
+        28,
+        16
+      ],
+      "skips": 0
+    },
+    "package": {
+      "run": 41760748766,
+      "tests": 540,
+      "skips": 0,
+      "asset_id": 13291083414,
+      "asset_zip_sha256": "1ede59f4d405bf6a16bd960a722aab0b14c9488713bf001cb496e15c747514de",
+      "source_zip_sha256": "225b34e726410979e1236db73bcc403d5739c9f822f875897e162383f8c4c4b3",
+      "actual_release_download": false
+    },
+    "original_full_workflow_receipt_sha256": "a68fb85313cbff61d5a269e751e05707354f0f3f9fb52ca4ef4792a7c587d290"
+  },
+  "independent_pr_fixtures_on_economic_head": [
+    {
+      "prs": [
+        204,
+        205,
+        209
+      ],
+      "passed": 6,
+      "skips": 0,
+      "receipt_sha256": "01ac6aefdfc5a83b21a2314933e4bb207da41727aad437c29d3bd38ae629dec6"
+    },
+    {
+      "prs": [
+        211
+      ],
+      "passed": 3,
+      "skips": 0,
+      "fixture": "585db8e8b0e83b228b2c5bf38c201926b723fe86",
+      "receipt_sha256": "8b1cfae9da275d8044c17b109ee64c2cb0a228817d20125e453837593311af26"
+    }
+  ],
+  "main_initial": {
+    "sha": "8fde634127d959cf93ad8abaa933ee6fb443abc9",
+    "exact_targeted": {
+      "tests": 342,
+      "skips": 0,
+      "failures": 0,
+      "errors": 0,
+      "elapsed_seconds": 617.5562994559987,
+      "log_sha256": "50243ac61abc69cdf855498312bd2311e6e2841875aa745fd2f4e5951633ce4c"
+    },
+    "full_campaign": 41765609897,
+    "aggregate_tests": 1961,
+    "optional_skips": 2,
+    "release": 41765609913,
+    "cancelled_runs": [
+      41765609936,
+      41765610024
+    ],
+    "publication_failure": "EXACT_MAIN_QUALIFICATION_FAILED:adaptive012.yml",
+    "actual_release_download": false
+  },
+  "superseding_paper": {
+    "pr": 212,
+    "sha": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+    "v4_failed_run": 41767140126,
+    "failed_job": 126368352564,
+    "qualified_workflows": 10,
+    "total_workflows": 13,
+    "exact_targeted": {
+      "tests": 342,
+      "skips": 0,
+      "failures": 1,
+      "errors": 0,
+      "elapsed_seconds": 571.7732212279989,
+      "log_sha256": "2a4f352100f433fbebb821103215b89d81203fa8db9589cdb4d72e481edcaf1b"
+    },
+    "reason": "A newly added paper workflow selected ubuntu-24.04 and omitted the standard first job-clock step. The original platform test failed in the full campaign, clean package and V4 gates.",
+    "actual_release_download": false
+  },
+  "repair": {
+    "pr": 213,
+    "qualified_head": "57c14ac20b8552720a54f7211ffcba432c14dc0b",
+    "merge": "4abbb85893c9c073ca092db4ad858f7bb156dc35",
+    "changed_file": ".github/workflows/successor-omega-paper.yml",
+    "passing_pr_workflows": 12,
+    "main_publication_run": 41771560549
+  }
+}
