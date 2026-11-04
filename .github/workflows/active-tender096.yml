@@ -26,7 +26,8 @@ jobs:
           python-version: '3.12'
       - name: Run 14 frozen adversarial scenarios and retain original 095 controls
         run: |
-          python -m unittest -v tests.test_active_tender096 tests.test_public_notice095
+          python -m unittest discover -s tests -p 'test_active_tender096.py' -v
+          python -m unittest discover -s tests -p 'test_public_notice095.py' -v
       - name: Execute exactly one fixed public OCDS search and five-or-fewer record GETs
         run: |
           python -m research.active_tender096 --out "$RUNNER_TEMP/active-tender096.json"
