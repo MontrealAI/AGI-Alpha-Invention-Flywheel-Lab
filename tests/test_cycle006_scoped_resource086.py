@@ -3,6 +3,7 @@ import errno
 import importlib.util
 from pathlib import Path
 import tempfile
+import sys
 import unittest
 from unittest.mock import patch
 
@@ -103,6 +104,27 @@ class ScopedResource(unittest.TestCase):
         self.assertEqual(result['state'], 'overrun')
         self.assertEqual(result['reason'], 'final-output-file-limit')
         self.assertGreater(result['output_bytes'], 4096)
+
+
+    def test_real_pinned_guard_run_and_receipt_settlement(self):
+        source_root = SOURCE.parents[1]
+        output = self.root / 'actual-prospective-run'
+        ledger = self.root / 'fixture-ledger.json'
+        limits = {'cpu_seconds': 5, 'wall_seconds': 10, 'memory_bytes': 256 * 1024**2,
+                  'output_bytes': 1024**2, 'storage_bytes': 8 * 1024**2}
+        outcome = m.prospective_run(
+            source_root, [sys.executable, '-c', "print('observer-086-executed')"],
+            output, ledger, m.RUN_ID, limits, cwd=source_root)
+        receipt = outcome['receipt']
+        self.assertEqual(receipt['state'], 'complete')
+        self.assertFalse(receipt['descendant_survivors'])
+        self.assertEqual(receipt['exit_code'], 0)
+        self.assertEqual(receipt['wrapper_sha256'], m.ORIGINAL_GUARD_SHA256)
+        self.assertEqual(receipt['observer086']['historical_guard_sha256'], m.ORIGINAL_GUARD_SHA256)
+        self.assertEqual(receipt['observer086']['vanished_journal_enoent_observations'], 0)
+        self.assertIn('observer-086-executed', (output / 'stdout.log').read_text())
+        self.assertEqual(outcome['settlement']['state'], 'settled')
+        self.assertEqual(len(__import__('json').loads(ledger.read_text())['runs']), 1)
 
     def test_wrong_run_id_refused_before_guard_import(self):
         with self.assertRaisesRegex(ValueError, 'UNREGISTERED_RUN_ID'):
