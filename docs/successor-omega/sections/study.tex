@@ -55,6 +55,8 @@ Ordinary equal-content & 456 & 226 & 330 & 230\\
 
 The nominal full-option policy builds P in period zero, delivers three times, then renews and delivers three times in each subsequent epoch. The no-portable optimum builds F at the start of each epoch and delivers three times. P has lower active-period contribution, yet retains 30 more cash units over the complete horizon. Its 230-unit surplus is 15\% higher than the 200-unit no-portable surplus, \emph{within this fixture}. This is not a measured business margin or an AI productivity estimate.
 
+The 30-unit difference is an ablation contrast against the supplied no-portable action set. Against the ordinary equal-content optimum, the measured Alpha is zero. Thus the result identifies the value of an option under its authored contract; it does not establish superiority over a complete competitor permitted to construct the same option.
+
 The result has a useful second interpretation. The winning route collects \emph{less} revenue: 456 rather than 504. It wins because it spends less on reconstructing the means of delivery. Maximizing transaction value, isolated performance, or gross collections would not by itself identify the better funded trajectory.
 
 \begin{figure}[htbp]
@@ -119,9 +121,13 @@ With no turnover, the higher-contribution F route wins. With opening cash equal 
 \subsection{Independent computation and its limits}
 The primary solver uses memoized backward induction. The second implementation enumerates all reachable states forward and re-specifies action effects independently, without calling the primary transition function. The two implementations agree on every registered grid comparison. They share the authored specification and constants; agreement cannot validate those economic assumptions.
 
-The companion also contains 35 unit tests covering planning and a local qualification/authority state machine. The latter preserves knowledge across export and restoration while rejecting inherited active proof or authority. Tests exercise changed context fields, expiry, revocation, unsupported actions, and missing owner approval. They establish behavior of this local software, not a hardened permission service or independent certification.
+The original companion contained 35 unit tests covering planning and a local qualification/authority state machine. The latter preserves knowledge across export and restoration while rejecting inherited active proof or authority. Tests exercise changed context fields, expiry, revocation, unsupported actions, and missing owner approval. They establish behavior of this local software, not a hardened permission service or independent certification.
+
+The reviewed edition contains 62 tests across the original model, strengthened warrant logic, and uncertainty extension. The additional state checks are described in Section~\ref{sec:evidence}; the independent uncertainty experiment follows below.
 
 The implementation limit of 32 periods is a declared finite test boundary, not a business-scale ceiling. No live frontier-model calls, real customer data, actual collections, or physical operations occur. CPU time spent on publication and software construction is not hidden inside the abstract model's cash values. The supplied build, renewal, and maintenance prices are model inputs, not measured complete costs of this research programme.
+
+\input{sections/review.tex}
 
 \section{What must remain renewable}
 \label{sec:renewal}

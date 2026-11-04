@@ -113,51 +113,7 @@ def forward_oracle(p: Spec, portable_allowed=True, legacy_only=False):
         layer=nxt
     return max(c for c,*_ in layer)
 
-@dataclass(frozen=True)
-class Context:
-    mission: str
-    source: str
-    supplier: str
-    environment: str
-    evaluator: str
-    policy: str
-    def digest(self):
-        return hashlib.sha256(json.dumps(asdict(self),sort_keys=True).encode()).hexdigest()
-
-class Institution:
-    """Local state-machine witness, not a hardened authorization service."""
-    def __init__(self, identity, knowledge=()):
-        self.identity=identity; self.knowledge=tuple(knowledge)
-        self.proof=None; self.authority=None; self.history=[]
-    def qualify(self,ctx,passed,producer,verifier,expires,supported_actions=('deliver',)):
-        if producer==verifier or passed is not True or expires<=0 or not supported_actions:
-            raise ValueError('Distinct role identifiers, passing evidence and positive expiry required')
-        self.proof=(ctx.digest(),expires,frozenset(supported_actions)); self.authority=None
-        self.history.append(('qualified',ctx.digest()))
-    def authorize(self,ctx,actions,owner_approval,now,expires):
-        if owner_approval is not True or not actions or self.proof is None:
-            raise ValueError('Explicit approval, action scope and proof required')
-        digest,proof_end,supported=self.proof
-        if digest!=ctx.digest() or not 0 <= now < expires <= proof_end or not set(actions)<=supported:
-            raise ValueError('Context or validity mismatch')
-        self.authority=(digest,frozenset(actions),expires)
-        self.history.append(('authorized',digest))
-    def permits(self,ctx,action,now):
-        return bool(now>=0 and self.proof and self.authority and self.proof[0]==ctx.digest()
-                    and self.authority[0]==ctx.digest() and now<self.proof[1]
-                    and now<self.authority[2] and action in self.authority[1])
-    def revoke(self):
-        self.authority=None; self.history.append(('revoked',self.identity))
-    def export(self):
-        return {'schema':1,'identity':self.identity,'knowledge':list(self.knowledge),
-                'history':[list(x) for x in self.history]}
-    @classmethod
-    def restore(cls,bundle):
-        if bundle.get('schema')!=1 or 'proof' in bundle or 'authority' in bundle:
-            raise ValueError('Invalid or privilege-bearing portable bundle')
-        out=cls(bundle['identity'],bundle['knowledge'])
-        out.history=[tuple(x) for x in bundle['history']]
-        return out
+from qualification import Context, Institution
 
 def fixed_portable(p: Spec):
     """Supplied always-retain policy; None if it cannot be prefunded."""

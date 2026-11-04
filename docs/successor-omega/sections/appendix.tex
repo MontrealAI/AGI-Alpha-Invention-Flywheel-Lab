@@ -74,7 +74,7 @@ The trace above is generated from the companion rather than copied from a plotte
 \subsection{Protocol history and stopping rule}
 The finite economic protocol fixed the primary fixture, comparator permissions, 162-case grid, and qualitative adverse cases before numerical evaluation in this authoring session. It was an internal prospective record, not a timestamped independent preregistration. The one-epoch and 40-unit opening-cash diagnostic traces were added as explanatory checks; the latter setting is already in the frozen grid. No selection claim is made from those additions. A planned additional-burden check is reported algebraically in Appendix~\ref{app:formal}, rather than represented as a separately executed market experiment.
 
-The stopping rule is completion of the registered grid, diagnostics, and regression suite. There is no search for a favorable random seed, no independent sample of businesses, and no confidence interval over an invented population. The final source is bound to its generated results and rerun during publication qualification. Source changes are visible in normal version control; the favourable nominal case is not relabeled as universal performance.
+The original stopping rule is completion of the registered grid, diagnostics, and regression suite. Edition 1.1.0 adds the separately recorded uncertainty extension and adversarial review in \texttt{REVIEW\_PROTOCOL.md}, including its disclosed 16-period post-result extension. The interruption of a local long-running command was an execution interruption, not a numerical outcome; the unchanged complete grid was rerun and retained. There is no search for a favorable random seed, no independent sample of businesses, and no confidence interval over an invented population. The final source is bound to its generated results and rerun during publication qualification. Source changes are visible in normal version control; the favourable nominal case is not relabeled as universal performance.
 
 \subsection{Cost scope and interpretation}
 The finite model includes exactly the listed payments, deterministic accepted collections, upkeep, and one-period construction and renewal delays. It excludes real customer acquisition, actual model-provider invoices, uncertainty in demand and qualification, tax and liability accounting, physical deployment, and the cost of creating this paper. Those exclusions are not estimates of zero. They prevent the experiment's cash surplus from being described as demonstrated complete-cost commercial profit.
@@ -89,9 +89,9 @@ Claim & Evidence in this edition & What it does not establish\\
 \midrule
 \endhead
 Lifecycle reversal & Exact nominal policies, cash traces, and crossover identity. & Measured demand, actual prices, or autonomous invention.\\[5pt]
-Finite optimality & Backward solver and independent forward enumeration agree on 324 grid comparisons. & Global optimality over unspecified strategies or markets.\\[5pt]
+Finite optimality & Original solvers agree on 324 deterministic comparisons; the uncertainty extension adds 192 exact comparisons. & Global optimality over unspecified strategies or markets.\\[5pt]
 Optional retention & 19 positive differences and 143 ties; forced retention often loses or cannot start. & A frequency estimate for real-world portability benefits.\\[5pt]
-Scoped action logic & Local tests of context, grant scope, expiry, revocation, and clean restoration. & Secure complete mediation, authentic identities, truthful evidence, or production certification.\\[5pt]
+Scoped action logic & Repaired start/expiry logic, failed-renewal withdrawal, scoped grants, and clean restoration; 671 interval assertions. & Secure complete mediation, authentic identities, truthful evidence, or production certification.\\[5pt]
 Institutional ownership & Export/restore semantics and proposed acceptance contract. & Legal rights to third-party assets or a deployed customer product.\\[5pt]
 Inventive succession & Fresh-successor and crossed-policy experimental designs. & Demonstrated improvement of a discovery procedure.\\[5pt]
 Commercial compounding & Explicit collection, obligations, and reinvestment requirements. & Actual customer profit or the programme's monetary milestone.\\[5pt]
@@ -104,8 +104,10 @@ Stellar-scale capability & A long-horizon research objective with physical quant
 \label{app:reproduce}
 The companion requires Python 3.10 or later and the standard library. From the source directory:
 \begin{verbatim}
-python3 -m unittest -v test_companion
+python3 -m unittest -v test_companion test_review test_uncertainty
 python3 companion.py --output results.json
+python3 uncertainty.py --horizon 8 --output uncertainty.json
+python3 uncertainty.py --horizon 16 --output uncertainty16.json
 python3 build.py --output /tmp/successor-publication
 \end{verbatim}
 The last command also needs a PDFLaTeX/BibTeX installation with the packages named in \texttt{paper.tex}, Poppler, and CairoSVG for the share image. It generates the cash data and trace table, compiles the paper, records tool versions and file hashes, and packages a deterministic source archive. The build uses a fixed source-date epoch and suppresses variable PDF metadata. Byte identity is checked in the recorded build environment; equivalent output across arbitrary TeX versions is not assumed.

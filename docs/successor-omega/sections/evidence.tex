@@ -6,7 +6,7 @@ Let a qualification context be
 \end{equation}
 where the entries identify the mission, source material, supplier configuration, environment, evaluator, and policy. A practical implementation must bind the complete executable dependency closure: prompts, adapters, libraries, tool versions, retrieval state, and relevant configuration, not only a short model name. The six strings in our local witness stand for that closure; they do not discover it.
 
-A current evidence record binds a context digest, supported actions, validity interval, test protocol, and outcome. An authority record additionally binds an owner decision, an allowed action set, and its own validity interval. A historical record says what was established under its original conditions. It is not rewritten when current qualification expires.
+A current evidence record binds a context digest, supported actions, explicit not-before and expiry times, test protocol, and outcome. An authority record additionally binds an owner decision, an allowed action set, and its own validity interval. A historical record says what was established under its original conditions. It is not rewritten when current qualification expires.
 
 \begin{definition}[Succession without privilege inheritance]
 A restoration or successor initialization may import authorized knowledge, executable artifacts, and historical records. It initializes current evidence and active authority to empty. New operation requires an accepted context-bound qualification and a separate explicit grant.
@@ -16,12 +16,23 @@ This conservative default does not prohibit efficient reuse. A validated generic
 
 \begin{proposition}[Context-bound action invariant]
 \label{prop:authority}
-Suppose every external action is mediated by a monitor that requires both a passing evidence record and an unexpired explicit grant, binds both to the current context, restricts the grant to the supported evidence scope, and clears the grant whenever qualification is replaced or revoked. If initialization and restoration create neither record, every permitted action is supported and authorized in its current recorded context and interval.
+Suppose every external action is mediated by a monitor that requires both a passing evidence record and an explicit grant whose validity has begun and not expired, binds both to the current context, restricts the grant to the supported evidence scope, and withdraws the previous warrant when current requalification begins or authority is revoked. If initialization and restoration create neither record, every permitted action is supported and authorized in its current recorded context and interval.
 \end{proposition}
 
 \begin{proof}
-Initialization permits no action. Qualification alone creates no grant. A valid authorization transition creates only a subset of the supported actions, in the same context and within the evidence interval. The action check requires those predicates at the time of use. Replacement clears the grant; a context change fails the identity check; expiry or revocation fails the temporal or grant check. Induction over the permitted transitions establishes the invariant. This is a property of the specified monitor, not a proof that its evidence is truthful or that an implementation cannot be bypassed.
+Initialization permits no action. Qualification alone creates no grant. A valid authorization transition creates only a subset of the supported actions, in the same context and within the evidence interval. The action check requires those predicates, including both interval endpoints, at the time of use. Requalification starts by clearing the prior proof and grant; a context change fails the identity check; expiry or revocation fails the temporal or grant check. Induction over the permitted transitions establishes the invariant. This is a property of the specified monitor, not a proof that its evidence is truthful or that an implementation cannot be bypassed.
 \end{proof}
+
+\subsection{Time is part of authority, not a decorative field}
+The executable acceptance condition for each active warrant $w$ is
+\begin{equation}
+ w.c=c_{\mathrm{current}},\qquad
+ w.t_{\mathrm{start}}\leq t<w.t_{\mathrm{end}},\qquad
+ a\in w.\mathcal A.
+\end{equation}
+Both the evidence and the owner's grant must pass. Explicit not-before and expiry checks are established engineering practice; RFC~7519 separates these temporal conditions for token processing \citep{jwt}. Our local witness uses integer logical ticks, not JWTs, and makes no standards-compliance claim.
+
+Adversarial review of edition 1.0.0 found that its code stored a grant's expiry but omitted its start: a grant issued at time 5 incorrectly permitted a query for time 1. It also retained an older active warrant after a failed requalification attempt. Edition 1.1.0 stores both endpoints, rejects backward state transitions and malformed times/scopes, and clears current proof and authority when requalification begins. The original release remains available as the defect's historical source. The strengthened suite includes 671 interval-boundary assertions; these checks do not establish a trusted clock, authenticated principals, or complete mediation outside the local process.
 
 \subsection{The assurance system is itself fallible}
 A hash establishes byte identity under its cryptographic assumptions; it does not establish that the bytes describe the right physical object. Distinct role names do not establish independent organizations, independent model errors, or uncompromised storage. A source can be consistently wrong. A test population can omit the failure that matters. An honest verifier can have an incomplete specification.
@@ -49,6 +60,9 @@ For a frozen family $\mathcal B$ of credible complete alternatives,
  \label{eq:alpha}
 \end{equation}
 We call this \emph{renewal-adjusted Alpha} when the policies and their costs explicitly include replacement, migration, requalification, downtime, maintenance, and retirement, as well as initial development and operation. The expression is a decision criterion. An estimate of it is not established advantage, and a maximum over a finite supplied family is not a global economic optimum.
+
+\subsection{Relationship to established lifecycle analysis}
+Lifecycle-cost comparison already accounts for initial investment, replacement, operations, maintenance, and residual value; NIST's lifecycle-costing manual provides an established treatment \citep{lcc}. We do not claim to invent lifecycle economics or finite planning. Renewal-adjusted Alpha specializes the comparison to \emph{currently usable mission capability}: source survival, technical applicability, present evidence, explicit authority, and financing can change separately. Its value is in making those distinctions operational and testable.
 
 \subsection{Renewal can reverse a local ranking}
 Suppose one specialist produces greater contribution on each active period but must be reconstructed whenever its supplier changes. A portable capability produces slightly less contribution but can be requalified at lower cost. A one-period comparison favors the specialist. A complete horizon may favor the portable capability. The decisive object is the supported productive trajectory, not the component's isolated score.

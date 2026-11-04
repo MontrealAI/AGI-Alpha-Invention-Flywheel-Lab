@@ -58,7 +58,7 @@ class ResearchSiteTests(unittest.TestCase):
         slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
-        self.assertEqual(len(site.PAPERS), 22)
+        self.assertEqual(len(site.PAPERS), 23)
         self.assertEqual(len(site.PAGES), 24)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:

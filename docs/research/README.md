@@ -2,13 +2,15 @@
 
 ## SUCCESSOR Ω — The Institution That Compounds
 
-Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Edition 1.0.0.
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Edition 1.1.0.
 
-[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/successor-omega.html) · [PDF](successor-omega.pdf) · [LaTeX, exact study and reproduction](../successor-omega/README.md).
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/successor-omega.html) · [PDF](successor-omega-v1.1.0.pdf) · [LaTeX, exact study and reproduction](../successor-omega/README.md).
 
 Own the institution. Replace the models. Preserve the mission. This paper formalizes renewal-adjusted Alpha and the separation of retained knowledge, current proof and bounded authority. Its authored exact study compares portability with reconstruction across 162 supplied environments and an ordinary equal-content control. The physical horizon uses explicit construction, energy, material and thermal requirements.
 
 **Scope:** Exact finite planning and local state-machine evidence, not autonomous invention, achieved general ASI, real demand or profit, production security, or installed physical capacity. Earlier papers retain their original roles and evidence.
+
+Reviewed edition 1.1.0 corrects a temporal authority defect and adds 96 exact unknown-schedule environments. Only one new case favors portability, with greater downside. The original [edition 1.0.0 PDF](successor-omega.pdf) and release are preserved.
 
 ## FLYWHEEL Ω — The Economy as an Output
 

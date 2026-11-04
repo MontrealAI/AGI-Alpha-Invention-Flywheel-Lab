@@ -2,23 +2,31 @@
 
 **Manufacturing mission advantage, preserving inventive capability, and financing the physical frontier.**
 
-Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Research edition 1.0.0
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Research edition 1.1.0
 
 > Own the institution. Replace the models. Preserve the mission.
 
-[Read online](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/successor-omega.html) · [PDF](../research/successor-omega.pdf) · [Versioned edition](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/successor-omega-v1.0.0)
+[Read online](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/successor-omega.html) · [PDF](../research/successor-omega-v1.1.0.pdf) · [Versioned edition](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/successor-omega-v1.1.0)
 
 ## The result
 A lower-contribution portable capability yields **230 units of modeled cash surplus** versus **200** for the best no-portable alternative in the declared 16-period environment. The ordinary equal-content planner ties the result. Across 162 supplied environments, adding the option helps 19 and ties 143. Forced retention is infeasible in 108, loses in 43 and wins in 11. These are exact conditional model results, not market frequencies or real profit.
 
 The paper formalizes renewal-adjusted Alpha, separates institutional knowledge from current proof and authority, derives a renewal crossover and throughput bound, and proposes an Industrial Requalification Foundry. Its physical horizon is expressed through explicit energy, material, heat and qualification requirements rather than extrapolated money.
 
+## Reviewed edition 1.1.0
+
+An adversarial audit repaired missing grant-start checks and withdrawal on failed current requalification. There are now **62 passing tests**, including **671 temporal interval assertions**. A separately specified stochastic extension adds **96 environments and 192 exact optimizer/oracle comparisons**. Portability helps none of 48 eight-period cases and one of 48 sixteen-period cases; in the positive case it has worse downside. All original deterministic economic results remain unchanged. See [REVIEW.md](REVIEW.md) and [REVIEW_PROTOCOL.md](REVIEW_PROTOCOL.md).
+
+The 30-unit original gain is an option ablation. Relative to the ordinary equal-content complete planner, measured Alpha is zero. The contribution is the scoped institutional synthesis and conditional evidence—not a new optimizer, proof of general ASI, or measured market economics.
+
+The original [version 1.0.0 release](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/successor-omega-v1.0.0) is preserved. Historical claims and the reproduced counterexample remain inspectable.
+
 ## Reproduce
 
 Python 3.10+ and standard library suffice for the numerical study:
 
 ```sh
-python3 -m unittest -v test_companion
+python3 -m unittest -v test_companion test_review test_uncertainty
 python3 companion.py --output results.json
 ```
 

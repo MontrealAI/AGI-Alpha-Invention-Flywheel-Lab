@@ -7,10 +7,12 @@ from pathlib import Path
 SOURCE_FILES = ['paper.tex','references.bib','companion.py','test_companion.py',
                 'PROTOCOL.md','README.md','CITATION.cff','reader.html','share.svg','build.py',
                 'sections/institution.tex','sections/evidence.tex','sections/study.tex',
-                'sections/frontier.tex','sections/appendix.tex']
+                'sections/frontier.tex','sections/appendix.tex','sections/review.tex',
+                'sections/thesis.tex','qualification.py','uncertainty.py','test_review.py',
+                'test_uncertainty.py','REVIEW_PROTOCOL.md','REVIEW.md']
 EPOCH='1793747522'
 REPO='https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
-TAG='successor-omega-v1.0.0'
+TAG='successor-omega-v1.1.0'
 
 def digest(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def write_json(path,value): Path(path).write_text(json.dumps(value,indent=2,sort_keys=True)+'\n')
@@ -47,39 +49,41 @@ def integrate_site(here,output,record,reader):
     root=here.parents[1]; site=root/'docs/research'
     manifest_path=site/'publication-manifest.json'
     manifest=json.loads(manifest_path.read_text())
-    old={p['file']:digest(site/p['file']) for p in manifest['papers'] if p['file']!='successor-omega.pdf'}
-    shutil.copyfile(output/'SUCCESSOR_OMEGA.pdf',site/'successor-omega.pdf')
-    shutil.copyfile(output/'successor-omega-social.png',site/'successor-omega-social.png')
-    shutil.copyfile(here/'share.svg',site/'successor-omega-card.svg')
+    old={p['file']:digest(site/p['file']) for p in manifest['papers'] if p['file']!='successor-omega-v1.1.0.pdf'}
+    shutil.copyfile(output/'SUCCESSOR_OMEGA.pdf',site/'successor-omega-v1.1.0.pdf')
+    shutil.copyfile(output/'successor-omega-social.png',site/'successor-omega-v1.1.0-social.png')
+    shutil.copyfile(here/'share.svg',site/'successor-omega-v1.1.0-card.svg')
     (site/'successor-omega.html').write_text(reader)
-    item={'file':'successor-omega.pdf','bytes':record['pdf_bytes'],'sha256':record['pdf_sha256']}
+    item={'file':'successor-omega-v1.1.0.pdf','bytes':record['pdf_bytes'],'sha256':record['pdf_sha256']}
     manifest['papers']=[p for p in manifest['papers'] if p['file']!=item['file']]+[item]
     write_json(manifest_path,manifest)
     script=root/'scripts/build_research_site.py'; text=script.read_text()
-    if "'successor-omega.pdf'" not in text:
-        text=text.replace('PAPERS = (',"PAPERS = (\n    'successor-omega.pdf',",1)
-        text=text.replace('PAGES = (',"PAGES = ('successor-omega.html', ",1)
-        text=text.replace('ASSETS = (',"ASSETS = ('successor-omega-card.svg', 'successor-omega-social.png', ",1)
+    if "'successor-omega-v1.1.0.pdf'" not in text:
+        text=text.replace('PAPERS = (',"PAPERS = (\n    'successor-omega-v1.1.0.pdf',",1)
+        if "'successor-omega.html'" not in text:
+            text=text.replace('PAGES = (',"PAGES = ('successor-omega.html', ",1)
+        text=text.replace('ASSETS = (',"ASSETS = ('successor-omega-v1.1.0-card.svg', 'successor-omega-v1.1.0-social.png', ",1)
         script.write_text(text)
     tests=root/'tests/test_research_site.py'; text=tests.read_text()
-    text=text.replace('self.assertEqual(len(site.PAPERS), 21)','self.assertEqual(len(site.PAPERS), 22)')
-    text=text.replace('self.assertEqual(len(site.PAGES), 23)','self.assertEqual(len(site.PAGES), 24)')
+    text=text.replace('self.assertEqual(len(site.PAPERS), 22)','self.assertEqual(len(site.PAPERS), 23)')
+    # The stable reader URL remains a single page.
     tests.write_text(text)
     index=site/'index.html'; text=index.read_text()
-    if 'id="successor-omega"' not in text:
-        start=text.rfind('<article', 0, text.index('id="flywheel-omega"'))
-        if start < 0: raise ValueError('Expected preceding publication card absent')
-        card='<article class="card featured" id="successor-omega"><div class="cover" aria-hidden="true"><span>New research / 1.0.0</span><strong>SUCCESSOR Ω</strong><div class="symbol">Ω</div><span>The Institution That Compounds</span></div><div class="paper-copy"><span class="tag">Renewal-adjusted Alpha · Exact study</span><h2>SUCCESSOR Ω</h2><p class="lead">The Institution That Compounds</p><p>Own the institution. Replace the models. Preserve the mission. A framework and exact conditional study of what survives replacement—and when preserving it earns its cost.</p><p class="meta">Vincent Boucher · MONTREAL.AI / QUEBEC.AI<br>3 November 2026 · Edition 1.0.0</p><div class="actions"><a class="button primary" href="successor-omega.html">Read SUCCESSOR Ω →</a><a class="button" href="successor-omega.pdf" download>Download PDF</a><a class="button" href="'+REPO+'/tree/main/docs/successor-omega">Source and reproduction</a></div></div></article>'
-        text=text[:start]+card+text[start:]; index.write_text(text)
+    card=re.search(r'<article[^>]*id="successor-omega".*?</article>',text,re.S)
+    if not card: raise ValueError('Existing SUCCESSOR reader card not found')
+    revised=card.group().replace('1.0.0','1.1.0').replace('successor-omega.pdf','successor-omega-v1.1.0.pdf')
+    text=text[:card.start()]+revised+text[card.end():];index.write_text(text)
     readme=site/'README.md'; text=readme.read_text()
-    if '## SUCCESSOR Ω — The Institution That Compounds' not in text:
-        section='## SUCCESSOR Ω — The Institution That Compounds\n\nVincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Edition 1.0.0.\n\n[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/successor-omega.html) · [PDF](successor-omega.pdf) · [LaTeX, exact study and reproduction](../successor-omega/README.md).\n\nOwn the institution. Replace the models. Preserve the mission. This paper formalizes renewal-adjusted Alpha and the separation of retained knowledge, current proof and bounded authority. Its authored exact study compares portability with reconstruction across 162 supplied environments and an ordinary equal-content control. The physical horizon uses explicit construction, energy, material and thermal requirements.\n\n**Scope:** Exact finite planning and local state-machine evidence, not autonomous invention, achieved general ASI, real demand or profit, production security, or installed physical capacity. Earlier papers retain their original roles and evidence.\n\n'
-        first, rest = text.split('\n', 1)
-        text = first+'\n\n'+section+rest.lstrip('\n'); readme.write_text(text)
+    start=text.index('## SUCCESSOR Ω — The Institution That Compounds')
+    end=text.find('\n## ',start+3)
+    if end<0:end=len(text)
+    part=text[start:end].replace('1.0.0','1.1.0').replace('successor-omega.pdf','successor-omega-v1.1.0.pdf')
+    part+='\nReviewed edition 1.1.0 corrects a temporal authority defect and adds 96 exact unknown-schedule environments. Only one new case favors portability, with greater downside. The original [edition 1.0.0 PDF](successor-omega.pdf) and release are preserved.\n'
+    readme.write_text(text[:start]+part+text[end:])
     for name,sha in old.items():
         if digest(site/name)!=sha:raise AssertionError('Earlier PDF changed: '+name)
     evidence=here/'evidence'; evidence.mkdir(exist_ok=True)
-    for name in ['results.json','physical.json','SOURCE_PDF_BINDING.json']:
+    for name in ['results.json','uncertainty.json','uncertainty16.json','physical.json','SOURCE_PDF_BINDING.json']:
         shutil.copyfile(output/'source'/name,evidence/name)
 
 def build(args):
@@ -90,8 +94,8 @@ def build(args):
         target=work/name;target.parent.mkdir(parents=True,exist_ok=True)
         shutil.copyfile(here/name,target)
     env=os.environ.copy();env.update(SOURCE_DATE_EPOCH=EPOCH,FORCE_SOURCE_DATE='1',TZ='UTC')
-    run([sys.executable,'-m','unittest','-v','test_companion'],work,output/'tests.log',env)
-    if not re.search(r'Ran 35 tests in', (output/'tests.log').read_text()):
+    run([sys.executable,'-m','unittest','-v','test_companion','test_review','test_uncertainty'],work,output/'tests.log',env)
+    if not re.search(r'Ran 62 tests in', (output/'tests.log').read_text()):
         raise AssertionError('Unexpected regression test count')
     run([sys.executable,'companion.py','--output','results.json'],work,output/'study.log',env)
     result=json.loads((work/'results.json').read_text()); main=result['main']; grid=result['grid_summary']
@@ -100,6 +104,19 @@ def build(args):
     for k,r in main.items():
         assert 100+r['collections']-r['outflows']==r['terminal_cash']
         assert all(x['pre_collection']>=20 for x in r['trace'])
+    for horizon,name in [(8,'uncertainty.json'),(16,'uncertainty16.json')]:
+        run([sys.executable,'uncertainty.py','--horizon',str(horizon),'--output',name],work,output/f'uncertainty-{horizon}.log',env)
+    u8=json.loads((work/'uncertainty.json').read_text())
+    u16=json.loads((work/'uncertainty16.json').read_text())
+    assert u8['summary']=={'cases':48,'oracle_comparisons':96,'positive':0,'ties':48,'max_gain':'0'}
+    assert u16['summary']=={'cases':48,'oracle_comparisons':96,'positive':1,'ties':47,'max_gain':'7468537859/536870912'}
+    from fractions import Fraction
+    riskrows=[]
+    for x in u16['rows']:
+        if x['opening_cash']==100 and x['failure']=='0':
+            full=x['full'];control=x['without_portable']
+            riskrows.append(f"{x['q']} & {float(Fraction(full['expected'])):.3f} & {float(Fraction(control['expected'])):.3f} & {float(Fraction(x['gain'])):.3f} & {full['min_terminal']} / {control['min_terminal']} "+r'\\')
+    (work/'uncertainty_rows.tex').write_text('\n'.join(riskrows)+'\n')
     write_json(work/'physical.json',physical())
     (work/'generated.tex').write_text('% Generated by build.py from the exact companion.\n')
     with (work/'cash.csv').open('w') as f:
@@ -113,7 +130,9 @@ def build(args):
     tex=r'\pdfinfoomitdate=1\pdftrailerid{}\pdfsuppressptexinfo=15\input{paper.tex}'
     command=['pdflatex','-interaction=nonstopmode','-halt-on-error','-no-shell-escape','-jobname=paper',tex]
     run(command,work,output/'latex-1.log',env)
-    run(['bibtex','paper'],work,output/'bibtex.log',env)
+    bibtex=shutil.which('bibtex') or shutil.which('bibtex.original')
+    if not bibtex:raise RuntimeError('BibTeX is required')
+    run([bibtex,'paper'],work,output/'bibtex.log',env)
     run(command,work,output/'latex-2.log',env);run(command,work,output/'latex-3.log',env)
     log=(work/'paper.log').read_text(errors='replace')
     bad=[line for line in log.splitlines() if any(x in line for x in ['Overfull \\hbox','Overfull \\vbox','undefined references','undefined citations','Missing character:'])]
@@ -122,11 +141,13 @@ def build(args):
     pdf=output/'SUCCESSOR_OMEGA.pdf';shutil.copyfile(work/'paper.pdf',pdf)
     info=subprocess.check_output(['pdfinfo',str(pdf)],text=True)
     pages=int(re.search(r'^Pages:\s+(\d+)',info,re.M).group(1))
-    record={'schema':1,'edition':'1.0.0','title':'SUCCESSOR Omega: The Institution That Compounds',
+    record={'schema':1,'edition':'1.1.0','title':'SUCCESSOR Omega: The Institution That Compounds',
             'pdf_sha256':digest(pdf),'pdf_bytes':pdf.stat().st_size,'pages':pages,
             'source_files':{n:digest(work/n) for n in sorted(SOURCE_FILES)},
-            'generated_files':{n:digest(work/n) for n in ['results.json','physical.json','cash.csv','trace_rows.tex','generated.tex']},
-            'tests':35,'grid_cases':162,'grid_oracle_comparisons':324,
+            'generated_files':{n:digest(work/n) for n in ['results.json','physical.json','cash.csv','trace_rows.tex','generated.tex','uncertainty.json','uncertainty16.json','uncertainty_rows.tex']},
+            'tests':62,'grid_cases':162,'grid_oracle_comparisons':324,
+            'uncertainty_cases':96,'uncertainty_oracle_comparisons':192,'interval_assertions':671,
+            'history_tree_comparisons':24,
             'scope':'Authored finite study and local logic witness; not market, ASI or physical evidence'}
     write_json(work/'SOURCE_PDF_BINDING.json',record);write_json(output/'SOURCE_PDF_BINDING.json',record)
     reader=(work/'reader.html').read_text().replace('@@PAGES@@',str(pages)).replace('@@SHA@@',record['pdf_sha256']).replace('@@BYTES@@',str(record['pdf_bytes']))
@@ -134,9 +155,9 @@ def build(args):
     (output/'successor-omega.html').write_text(reader)
     import cairosvg
     cairosvg.svg2png(url=str(work/'share.svg'),write_to=str(output/'successor-omega-social.png'))
-    extra=['results.json','physical.json','cash.csv','trace_rows.tex','generated.tex','SOURCE_PDF_BINDING.json']
+    extra=['results.json','physical.json','cash.csv','trace_rows.tex','generated.tex','SOURCE_PDF_BINDING.json','uncertainty.json','uncertainty16.json','uncertainty_rows.tex']
     source_zip(work,output/'SUCCESSOR_OMEGA_SOURCE.zip',extra)
-    write_json(output/'BUILD_ENVIRONMENT.json',{'python':platform.python_version(),'pdflatex':subprocess.check_output(['pdflatex','--version'],text=True).splitlines()[0],'bibtex':subprocess.check_output(['bibtex','--version'],text=True).splitlines()[0],'source_date_epoch':EPOCH})
+    write_json(output/'BUILD_ENVIRONMENT.json',{'python':platform.python_version(),'pdflatex':subprocess.check_output(['pdflatex','--version'],text=True).splitlines()[0],'bibtex':subprocess.check_output([bibtex,'--version'],text=True).splitlines()[0],'source_date_epoch':EPOCH})
     assets=['SUCCESSOR_OMEGA.pdf','SUCCESSOR_OMEGA_SOURCE.zip','SOURCE_PDF_BINDING.json']
     (output/'SHA256SUMS').write_text(''.join(digest(output/n)+'  '+n+'\n' for n in assets))
     if args.publish_site:integrate_site(here,output,record,reader)
