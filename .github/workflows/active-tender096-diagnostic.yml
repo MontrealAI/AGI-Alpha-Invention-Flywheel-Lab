@@ -1,0 +1,61 @@
+name: ActiveTender096 prospective single-record source diagnostic
+on:
+  pull_request:
+    paths:
+      - 'research/active_tender096_diagnostic.py'
+      - 'tests/test_active_tender096_diagnostic.py'
+      - 'campaign/omega-active-tender096-diagnostics/**'
+      - '.github/workflows/active-tender096-diagnostic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: active-tender096-diagnostic-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  diagnose-source-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Run fixed diagnostic synthetic tests and retained original control
+        run: |
+          python -m unittest discover -s tests -p 'test_active_tender096_diagnostic.py' -v
+          python -m unittest discover -s tests -p 'test_active_tender096.py' -v
+      # The one-request prospective diagnostic already completed at source 3d76d64f.
+      # Repeated PR checks validate deterministic controls only; subsequent live
+      # fetches require an explicit manual reproduction and do not upgrade proof.
+      - name: Reproduce single-record prospective diagnostic (manual only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          python -m research.active_tender096_diagnostic --out "$RUNNER_TEMP/active-tender096-diagnostic.json"
+          python - "$RUNNER_TEMP/active-tender096-diagnostic.json" <<'PY'
+          import json, sys
+          with open(sys.argv[1], encoding="utf-8") as f:
+              x=json.load(f)
+          assert x["fixed_ocid"]=="ocds-h6vhtk-0692e8"
+          assert x["requests_performed_max"]==1
+          assert x["original_096_live_result"]=="FAILED_UNCHANGED"
+          assert x["retrieval"]=="SUCCEEDED"
+          assert x["decision"]=="RESEARCH_ONLY_NO_BID"
+          assert x["native_account_operations"]==0
+          assert x["authorized_bid_or_purchase"] is False
+          print({"source_diagnostic":x.get("diagnostic"),"retrieved_bytes":x.get("source_bytes"),
+                 "historical_result":"FAILED_UNCHANGED","no_bid":True})
+          PY
+      - name: Preserve compact manual diagnostic including any failure
+        if: always() && github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: active-tender096-single-source-diagnostic-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/active-tender096-diagnostic.json
+          if-no-files-found: warn
