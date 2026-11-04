@@ -17,7 +17,6 @@ jobs:
       GRID_ENVELOPE_REQUIRE_WITNESS: '1'
       OPENBLAS_NUM_THREADS: '1'
       OMP_NUM_THREADS: '1'
-      GRID_ENVELOPE_REQUIRE_WITNESS: '1'
     steps:
       - name: Start platform clock
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
