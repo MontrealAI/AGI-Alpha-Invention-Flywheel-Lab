@@ -34,16 +34,21 @@ def audit_file(path,report):
     return rederive(spec,report,raw)
 
 
+def _check_output_path(path):
+    if path.is_symlink() or any(parent.is_symlink() for parent in path.parents):
+        raise ValueError('REGULAR_OUTPUT_REQUIRED')
+
+
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('spec',type=Path);p.add_argument('--output',required=True,type=Path)
     a=p.parse_args(argv)
+    _check_output_path(a.output)
     raw,spec=read_input(a.spec);result=invent(spec)
     result['input_binding']=binding(raw,spec)
     result['replay']=rederive(spec,result,raw)
     a.output.parent.mkdir(parents=True,exist_ok=True)
-    if a.output.is_symlink() or any(x.is_symlink() for x in a.output.parents):
-        raise ValueError('REGULAR_OUTPUT_REQUIRED')
+    _check_output_path(a.output)
     with a.output.open('xb') as stream:stream.write(canonical(result)+b'\n')
     print(json.dumps({'status':result['status'],'winner':result['winner'],'report':str(a.output)},indent=2))
 

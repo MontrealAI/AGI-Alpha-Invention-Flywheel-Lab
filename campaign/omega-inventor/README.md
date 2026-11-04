@@ -25,7 +25,7 @@ python -m unittest mechanism_harness.test_game_maker -v
 python -m mechanism_harness.game_maker mechanism_harness/game_maker_fixture.json --output /absolute/new/game.json
 ```
 
-Its protected file audit is `game_maker.audit_file(spec_path, report)`. Duplicate JSON members, nonfinite values, ambiguous input encodings and raw/executable source changes are rejected. The original numerical kernel is retained unchanged in `_game_maker_v1.py` for provenance and in-memory API compatibility; use the public `game_maker` entry point, not that internal historical module.
+Its protected file audit is `game_maker.audit_file(spec_path, report)`. Duplicate JSON members, nonfinite values, ambiguous input encodings and raw/executable source changes are rejected. Use the public `game_maker` entry point. Earlier file-bound reports can be replayed with the [preserved PR201 kernel](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/8cd375784c24b879ae1eb4835c6af4fb925cbf4c/mechanism_harness/_game_maker_v1.py). Current checkouts admit both the rival’s original method and optional imitation. [Current economic game and limits](../../docs/harness/ECONOMIC_GAME_MAKER.md).
 
 ## What the new loop actually does
 

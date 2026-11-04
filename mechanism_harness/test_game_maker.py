@@ -4,9 +4,10 @@ from fractions import Fraction
 import json
 from pathlib import Path
 import unittest
+from tempfile import TemporaryDirectory
 
 from mechanism_harness.game_maker import (
-    choices, evaluate, follower, invent, rederive, validate,
+    choices, evaluate, follower, invent, main, rederive, validate,
 )
 
 FIXTURE = Path(__file__).with_name('game_maker_fixture.json')
@@ -48,8 +49,79 @@ class GameMakerTests(unittest.TestCase):
         s=sample(); row=s['scenarios'][1]
         r=follower(s,('evidence_in_production','pooled_commissioning'),row,19)
         self.assertEqual(r['quote'],19)  # parity rival gets a conservative tie break
-        self.assertGreaterEqual(r['rival_profit'],0)
+        self.assertEqual((r['tactic'], r['rival_profit']), ('copy', 5))
         self.assertEqual(r['seller_buyers'],[])
+
+    def test_optional_copy_cannot_force_a_rival_to_pay_for_an_empty_build(self):
+        s = sample()
+        buyer = {'id': 'buyer', 'value': 100, 'budget': 100, 'outside_utility': 0}
+        build = {'id': 'empty-build', 'requires': [], 'exclusive': '',
+                 'fixed_delta': 0, 'unit_delta': 0, 'build': 20,
+                 'partner_payment': 0, 'partner_outside': 0}
+        scenario = dict(s['scenarios'][1], weight_bps=10000, active_buyers=['buyer'])
+        s.update(buyer_profiles=[buyer], operators=[build], scenarios=[scenario],
+                 production={'fixed': 0, 'unit': 0, 'quote': 0}, price_grid=[50],
+                 rival={'fixed': 0, 'unit': 0, 'quote': 0, 'price_grid': [10]})
+        response = follower(s, ('empty-build',), scenario, 50)
+        self.assertEqual((response['quote'], response['rival_profit'], response['rival_buyers']),
+                         (10, 10, ['buyer']))
+        self.assertEqual(response['tactic'], 'unchanged')
+        self.assertIsNone(invent(s)['winner']['quote'])
+        self.assertEqual(invent(s)['winner']['expected_profit'], '0')
+
+    def test_infeasible_copy_preserves_every_incumbent_price(self):
+        s = sample()
+        s['rival'].update(fixed=0, unit=0, quote=0, price_grid=[12, 17, 19, 20])
+        # This transformation is feasible for the seller. The rival's copied
+        # fixed cost would be negative, so that tactic must be excluded.
+        result = evaluate(s, ('pooled_commissioning',), 19)
+        case = result['scenarios'][1]
+        self.assertEqual((case['rival_quote'], case['rival_profit'], case['rival_tactic']),
+                         (19, 76, 'unchanged'))
+
+    def test_public_proposals_use_the_declared_seller_grammar(self):
+        ids = ('evidence_in_production', 'pooled_commissioning')
+        probes = []
+        probes.append((sample(), (*ids, ids[1]), 19))
+        limited = sample()
+        limited['limits']['max_operators'] = 0
+        probes.append((limited, ids, 19))
+        exclusive = sample()
+        for op in exclusive['operators']:
+            op['exclusive'] = 'shared'
+        probes.append((exclusive, ids, 19))
+        unpaid = sample()
+        unpaid['operators'][0]['partner_outside'] = 1
+        probes.append((unpaid, ids, 19))
+        dependency = sample()
+        dependency['operators'][0]['requires'] = [ids[1]]
+        probes.append((dependency, [ids[0]], 19))
+        probes.append((sample(), ids, 21))
+        bad_spec = sample()
+        bad_spec['protected_cash'] = bad_spec['opening_cash'] + 1
+        probes.append((bad_spec, ids, 19))
+        for spec, selected, price in probes:
+            with self.subTest(selected=selected, price=price, spec=spec):
+                with self.assertRaises(ValueError):
+                    evaluate(spec, selected, price)
+                with self.assertRaises(ValueError):
+                    follower(spec, selected, spec['scenarios'][0], price)
+        # Different order of the same constructible set has one canonical result.
+        self.assertEqual(evaluate(sample(), ids[::-1], 19), evaluate(sample(), ids, 19))
+        altered = dict(sample()['scenarios'][0], rival_can_copy=True)
+        with self.assertRaisesRegex(ValueError, 'DECLARED_RIVAL_SCENARIO'):
+            follower(sample(), ids, altered, 19)
+
+    def test_unsafe_output_cannot_create_directories_through_a_symlink(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / 'actual'
+            target.mkdir()
+            alias = root / 'alias'
+            alias.symlink_to(target, target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, 'REGULAR_OUTPUT_REQUIRED'):
+                main([str(FIXTURE), '--output', str(alias / 'unexpected-child' / 'report.json')])
+            self.assertEqual(list(target.iterdir()), [])
 
     def test_payment_delay_profit_is_not_cash(self):
         r=invent(sample()); delayed=r['winner']['scenarios'][2]

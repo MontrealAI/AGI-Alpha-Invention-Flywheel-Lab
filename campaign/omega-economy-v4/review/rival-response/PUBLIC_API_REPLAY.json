@@ -1,0 +1,195 @@
+{
+  "accepted": true,
+  "correction": {
+    "cases": {
+      "dependency missing": {
+        "evaluate": {
+          "accepted": false,
+          "error": "ADMISSIBLE_OPERATOR_SELECTION_REQUIRED"
+        },
+        "follower": {
+          "accepted": false,
+          "error": "ADMISSIBLE_OPERATOR_SELECTION_REQUIRED"
+        }
+      },
+      "duplicate operator": {
+        "evaluate": {
+          "accepted": false,
+          "error": "ADMISSIBLE_OPERATOR_SELECTION_REQUIRED"
+        },
+        "follower": {
+          "accepted": false,
+          "error": "ADMISSIBLE_OPERATOR_SELECTION_REQUIRED"
+        }
+      },
+      "exclusive": {
+        "evaluate": {
+          "accepted": false,
+          "error": "ADMISSIBLE_OPERATOR_SELECTION_REQUIRED"
+        },
+        "follower": {
+          "accepted": false,
+          "error": "ADMISSIBLE_OPERATOR_SELECTION_REQUIRED"
+        }
+      },
+      "operator count limit": {
+        "evaluate": {
+          "accepted": false,
+          "error": "ADMISSIBLE_OPERATOR_SELECTION_REQUIRED"
+        },
+        "follower": {
+          "accepted": false,
+          "error": "ADMISSIBLE_OPERATOR_SELECTION_REQUIRED"
+        }
+      },
+      "output_symlink": {
+        "created_descendant": false,
+        "error": "REGULAR_OUTPUT_REQUIRED",
+        "wrote_report": false
+      },
+      "outside quoted grid": {
+        "evaluate": {
+          "accepted": false,
+          "error": "DECLARED_SELLER_PRICE_REQUIRED"
+        },
+        "follower": {
+          "accepted": false,
+          "error": "DECLARED_SELLER_PRICE_REQUIRED"
+        }
+      },
+      "unpaid partner": {
+        "evaluate": {
+          "accepted": false,
+          "error": "ADMISSIBLE_OPERATOR_SELECTION_REQUIRED"
+        },
+        "follower": {
+          "accepted": false,
+          "error": "ADMISSIBLE_OPERATOR_SELECTION_REQUIRED"
+        }
+      }
+    },
+    "fixture_expected_profit": "41/10",
+    "source": {
+      "mechanism_harness/_game_maker_v1.py": "c2be19dcb7c7caaf95c03ddf8ab2dfa28583b8872817ce10385a1166872eaea6",
+      "mechanism_harness/core.py": "419c70f5d2dc6552902b8a53825d1c30ed197e3519b2113f9bac7daf3059940b",
+      "mechanism_harness/game_input.py": "cd9ad922fd2fda04d623a14705908224296fac4b35b0b8d5bf065415360ef639",
+      "mechanism_harness/game_maker.py": "ce1fa7234298349099fc9e019a07f0d73865c7a43732f115516e07aacaf6911d"
+    },
+    "source_map_sha256": "fe20112c499a3fd38ff28eb82a6397372adf9ee3fe861777cfa2e6374f57e2e3"
+  },
+  "historical_commit": "4c26d8468467090b4772cc207f9f291871fc4c71",
+  "provenance": {
+    "archived_blob_ids_independently_match_original_checked_out_sources": true,
+    "archived_legacy_blobs": {
+      "mechanism_harness/_game_maker_v1.py": "045b66f606e5d5e328e41ce7dd7e8695ad839721",
+      "mechanism_harness/game_input.py": "2a751dcbb8cb221be1ac60aa987deadeacc27815",
+      "mechanism_harness/game_maker.py": "5b8e455a903dfd1cf982fa1ec879a5e73edd6f80"
+    },
+    "cart": [
+      63,
+      "05594b2569b72362daec83b136e743da949ae384411dc05837981281eb44e3a6"
+    ],
+    "corrected_economics_with_old_source_hashes_on_corrected": {
+      "accepted": false,
+      "reason": "RAW_INPUT_OR_EXECUTABLE_SOURCE_CHANGED"
+    },
+    "corrected_on_corrected": {
+      "accepted": true
+    },
+    "corrected_on_old": {
+      "accepted": false,
+      "reason": "SOURCE_BOUND_COMPLETE_GAME_CERTIFICATE_CHANGED"
+    },
+    "economic_source_maps_equal_before_and_after": true,
+    "old_on_corrected": {
+      "accepted": false,
+      "reason": "SOURCE_BOUND_COMPLETE_GAME_CERTIFICATE_CHANGED"
+    },
+    "old_on_old": {
+      "accepted": true
+    },
+    "reach": [
+      71,
+      "72ce9400200c8201a5c60bb7a299b9206cf00d0ae70fa2baf36433ff5ac49010"
+    ]
+  },
+  "reproduced_before": {
+    "cases": {
+      "dependency missing": {
+        "evaluate": {
+          "accepted": true,
+          "reported_expected_profit": "-13"
+        },
+        "follower": {
+          "accepted": true,
+          "reported_expected_profit": null
+        }
+      },
+      "duplicate operator": {
+        "evaluate": {
+          "accepted": true,
+          "reported_expected_profit": "97/5"
+        },
+        "follower": {
+          "accepted": true,
+          "reported_expected_profit": null
+        }
+      },
+      "exclusive": {
+        "evaluate": {
+          "accepted": true,
+          "reported_expected_profit": "41/10"
+        },
+        "follower": {
+          "accepted": true,
+          "reported_expected_profit": null
+        }
+      },
+      "operator count limit": {
+        "evaluate": {
+          "accepted": true,
+          "reported_expected_profit": "41/10"
+        },
+        "follower": {
+          "accepted": true,
+          "reported_expected_profit": null
+        }
+      },
+      "output_symlink": {
+        "created_descendant": true,
+        "error": "REGULAR_OUTPUT_REQUIRED",
+        "wrote_report": false
+      },
+      "outside quoted grid": {
+        "evaluate": {
+          "accepted": true,
+          "reported_expected_profit": "41/10"
+        },
+        "follower": {
+          "accepted": true,
+          "reported_expected_profit": null
+        }
+      },
+      "unpaid partner": {
+        "evaluate": {
+          "accepted": true,
+          "reported_expected_profit": "41/10"
+        },
+        "follower": {
+          "accepted": true,
+          "reported_expected_profit": null
+        }
+      }
+    },
+    "fixture_expected_profit": "41/10",
+    "source": {
+      "mechanism_harness/_game_maker_v1.py": "9acb5f75a92ba7ca5496f8fc2a401296a7099e35c1c862406638575b45423d34",
+      "mechanism_harness/core.py": "419c70f5d2dc6552902b8a53825d1c30ed197e3519b2113f9bac7daf3059940b",
+      "mechanism_harness/game_input.py": "cd9ad922fd2fda04d623a14705908224296fac4b35b0b8d5bf065415360ef639",
+      "mechanism_harness/game_maker.py": "6ac09bdc7f3a7066bcd0918605c35fb9f3ddd2f8bc404aaf1207b9f798c53eea"
+    },
+    "source_map_sha256": "b69183969b5c3962e010a8ddbed71de377c883e355079cff7715cf2c32bc6578"
+  },
+  "schema": "omega/legacy-proposal-independent-public-admission-check/v1",
+  "scope": "Six fixed public admission deviations checked independently through both exposed evaluate and follower APIs, plus a rejected file-system destination and stable fixture score. No native writer or commercial account used."
+}

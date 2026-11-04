@@ -141,36 +141,76 @@ def choices(buyers,active,seller_price,rival_price):
     return ours,rivals,gain
 
 
-def follower(spec,ordered,s,quote):
-    buyers=spec['buyer_profiles']; active=set(s['active_buyers'])
-    r=spec['rival']; base={'fixed':r['fixed'],'unit':r['unit'],'quote':r['quote'],'build':0,'partner_payment':0}
-    if s['rival_can_copy']:
-        ops={o['id']:o for o in spec['operators']}
-        base={**base,'fixed':base['fixed']+sum(ops[k]['fixed_delta'] for k in ordered),
-              'unit':base['unit']+sum(ops[k]['unit_delta'] for k in ordered),
-              'build':sum(ops[k]['build'] for k in ordered),
-              'partner_payment':sum(ops[k]['partner_payment'] for k in ordered)}
-    responses=[]
-    for rival_price in [None,*r['price_grid']]:
-        ours,rivals,gain=choices(buyers,active,quote,rival_price)
-        if rival_price is None:
-            net=0
-        elif min(base['fixed'],base['unit'])<0:
-            continue
-        else:
-            net=len(rivals)*rival_price - (base['quote']+base['build']+ (base['fixed']+base['unit']*len(rivals)+base['partner_payment'] if rivals else 0))
-        responses.append((net, -len(ours), rival_price is not None, rival_price or 0, ours,rivals,gain,rival_price))
-    best=max(responses,key=lambda x:x[:4])
-    return {'quote':best[7], 'rival_profit':best[0], 'seller_buyers':best[4],
-            'rival_buyers':best[5], 'buyer_gain_over_outside':best[6]}
+def _admit_candidate(spec, ordered, quote):
+    """Normalize a public proposal to a state in the declared seller grammar."""
+    validate(spec)
+    operators = {op['id']: op for op in spec['operators']}
+    if (not isinstance(ordered, (list, tuple)) or
+            len(ordered) > spec['limits']['max_operators'] or
+            any(type(name) is not str or name not in operators for name in ordered) or
+            len(set(ordered)) != len(ordered)):
+        raise ValueError('ADMISSIBLE_OPERATOR_SELECTION_REQUIRED')
+    order = ordered_subset(operators, ordered)
+    if order is None:
+        raise ValueError('ADMISSIBLE_OPERATOR_SELECTION_REQUIRED')
+    if type(quote) is not int or quote not in spec['price_grid']:
+        raise ValueError('DECLARED_SELLER_PRICE_REQUIRED')
+    return order
 
 
-def evaluate(spec,ordered,price):
+def follower(spec, ordered, s, quote):
+    """Return the rival's best response conditional on an admitted seller proposal."""
+    order = _admit_candidate(spec, ordered, quote)
+    if not any(canonical(s) == canonical(scenario) for scenario in spec['scenarios']):
+        raise ValueError('DECLARED_RIVAL_SCENARIO_REQUIRED')
+    return _follower(spec, order, s, quote)
+
+
+def _follower(spec, ordered, s, quote):
+    buyers = spec['buyer_profiles']
+    active = set(s['active_buyers'])
+    rival = spec['rival']
+    # Each plan's costs are (fixed, unit, build, partner payment).
+    plans = [('unchanged', rival['fixed'], rival['unit'], 0, 0)]
+    if s['rival_can_copy'] and ordered:
+        selected = [op for op in spec['operators'] if op['id'] in ordered]
+        fixed = rival['fixed'] + sum(op['fixed_delta'] for op in selected)
+        unit = rival['unit'] + sum(op['unit_delta'] for op in selected)
+        if min(fixed, unit) >= 0:
+            plans.append(('copy', fixed, unit, sum(op['build'] for op in selected),
+                          sum(op['partner_payment'] for op in selected)))
+
+    ours, rivals, gain = choices(buyers, active, quote, None)
+    best = (0, -len(ours), False, 0)
+    response = {'quote': None, 'rival_profit': 0, 'tactic': 'nonentry',
+                'seller_buyers': ours, 'rival_buyers': rivals, 'buyer_gain_over_outside': gain}
+    for price in rival['price_grid']:
+        # Buyer allocation depends on prices and outside options. Both production
+        # plans deliver the same specified outcome, so they share this allocation.
+        ours, rivals, gain = choices(buyers, active, quote, price)
+        n = len(rivals)
+        for tactic, fixed, unit, build, partner in plans:
+            cost = rival['quote'] + build + (fixed + n * unit + partner if n else 0)
+            net = n * price - cost
+            rank = (net, -len(ours), True, price)
+            if rank > best:  # An exact same-price plan tie keeps the incumbent.
+                best = rank
+                response = {'quote': price, 'rival_profit': net, 'tactic': tactic,
+                            'seller_buyers': ours, 'rival_buyers': rivals, 'buyer_gain_over_outside': gain}
+    return response
+
+
+def evaluate(spec, ordered, price):
+    """Score one admitted candidate; invent separately screens its reported worst loss."""
+    return _evaluate(spec, _admit_candidate(spec, ordered, price), price)
+
+
+def _evaluate(spec,ordered,price):
     rows=[]
     for s in spec['scenarios']:
         terms=cost_terms(spec,ordered,s)
         if terms is None:return None
-        response=follower(spec,ordered,s,price)
+        response=_follower(spec,ordered,s,price)
         n=len(response['seller_buyers']); sunk=terms['quote']+terms['build']
         full_cost=sunk+(terms['fixed']+terms['unit']*n+terms['partner_payment'] if n else 0)
         opening=spec['opening_cash']; protected=spec['protected_cash']
@@ -182,7 +222,7 @@ def evaluate(spec,ordered,price):
         cash_end=opening-full_cost+collected
         if cash_end<protected: return None
         rows.append({'scenario':s['id'],'weight_bps':s['weight_bps'],'rival_quote':response['quote'],
-                     'rival_profit':response['rival_profit'],'won':response['seller_buyers'],
+                     'rival_profit':response['rival_profit'],'rival_tactic':response['tactic'],'won':response['seller_buyers'],
                      'rival_won':response['rival_buyers'],'buyer_gain_over_outside':response['buyer_gain_over_outside'] if delivered else 0,
                      'accepted':delivered,'recognized':recognized,'collected':collected,
                      'full_cost':full_cost,'profit':profit,'cash_end':cash_end,
@@ -207,7 +247,7 @@ def invent(spec):
                             'spec_sha256':digest(spec),'states_evaluated':enumerated,'winner':None,
                             'scope':'NO_OPTIMALITY_CERTIFICATE_AND_NO_FINANCIAL_AUTHORITY'}
                 enumerated+=1
-                result=evaluate(spec,ordered,quote)
+                result=_evaluate(spec,ordered,quote)
                 if result is None: continue
                 feasible+=1
                 if result['worst_loss'] <= spec['limits']['max_loss']:entries.append(result)
