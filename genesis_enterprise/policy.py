@@ -76,12 +76,18 @@ def choose(offer, tools, *, available, earned, seed_allowed):
         if cost + offer['reserve'] > available:
             excluded.append({'tool': tool['id'], 'reason': 'INSUFFICIENT_AVAILABLE_CASH'})
             continue
-        if not seed_allowed and cost > earned:
+        if not seed_allowed and cost + offer['fee'] > earned:
             excluded.append({'tool': tool['id'], 'reason': 'INSUFFICIENT_EARNED_FUNDS'})
             continue
         ceiling = min(offer['budget'], offer['value'] - offer['outside_utility'] - offer['friction'])
         for price in sorted(set(offer['prices'])):
             if price > ceiling or price >= offer['rival'] or price >= offer['self_service']:
+                continue
+            # Validated native terms require price >= 200,000 microUSD, so
+            # default pre-settlement collateral is the whole price. The fee
+            # is paid at offer time, before collateral and production. Existing
+            # tail obligations are already excluded from available cash.
+            if price + offer['fee'] + cost > available:
                 continue
             contribution = price - cost - offer['fee']
             if contribution > 0:
@@ -108,7 +114,8 @@ def independently_choose(offer, tools, *, available, earned, seed_allowed):
             c = t['production'] + t['maintenance']
             gain = price - c - offer['fee']
             if (t['access'] == 'qualified_local' and c + offer['reserve'] <= available
-                    and (seed_allowed or c <= earned) and gain > 0):
+                    and price + offer['fee'] + c <= available
+                    and (seed_allowed or c + offer['fee'] <= earned) and gain > 0):
                 rows.append((-gain, c, t['id'], price, t['mode']))
     if not rows:
         return None
