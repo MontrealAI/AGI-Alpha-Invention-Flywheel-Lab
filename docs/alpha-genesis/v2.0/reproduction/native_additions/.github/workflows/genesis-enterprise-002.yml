@@ -1,0 +1,57 @@
+name: GENESIS Omega native enterprise integration 002
+on:
+  pull_request:
+    paths:
+      - 'genesis002/**'
+      - 'campaign/genesis-enterprise-002/**'
+      - 'tests/test_genesis002_*.py'
+      - '.github/workflows/genesis-enterprise-002.yml'
+      - 'connected_enterprise/finance.py'
+      - 'adaptive_enterprise/**'
+      - 'commercial/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-account-qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install the existing canonical engine dependencies
+        run: python3 -m pip install -r requirements-commercial010.txt
+      - name: Refuse an absent canonical engine instead of silently skipping integration
+        run: test -f connected_enterprise/finance.py && test -f adaptive_enterprise/account.py
+      - name: Compile new source and run independent decision plus real native-account tests
+        run: |
+          python3 -m compileall -q genesis002
+          python3 -m unittest discover -s tests -p 'test_genesis002_*.py' -v
+          python3 -O -m unittest discover -s tests -p 'test_genesis002_decision.py' -v
+      - name: Execute, independently audit, and resume a source-matched new simulation
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/genesis002-private"
+          python3 -m genesis002 run --config campaign/genesis-enterprise-002/INPUT.json --output "$OUT" > "$RUNNER_TEMP/genesis002-summary.json"
+          python3 -m genesis002 audit --output "$OUT"
+          BEFORE=$(sha256sum "$OUT/NATIVE_EXPORT.json" | cut -d' ' -f1)
+          python3 -m genesis002 resume --output "$OUT" > /dev/null
+          AFTER=$(sha256sum "$OUT/NATIVE_EXPORT.json" | cut -d' ' -f1)
+          test "$BEFORE" = "$AFTER"
+          python3 - "$OUT" <<'PY'
+          import json,sys
+          from pathlib import Path
+          r=json.loads((Path(sys.argv[1])/'REPORT.json').read_text())
+          if r['settled'] != 6 or r['actual_revenue_usd'] != 0 or r['external_model_calls'] != 0:
+              raise SystemExit('Registered execution or claim boundary failed')
+          if r['research']['decision'] != 'RETAIN_DIRECT_CONVENTIONAL_TIE':
+              raise SystemExit('Strong conventional comparison was changed')
+          print({k:r[k] for k in ('scope','settled','modeled_profit_cents','actual_revenue_usd','meta_discovery_superiority')})
+          PY
+      # Deliberately no whole-account upload. Signing/recovery state remains private.

@@ -1,0 +1,60 @@
+{
+  "evidence_scope": "AUTHORED_SYNTHETIC",
+  "initial": ["source_records", "general_coding", "legacy_design_workflow"],
+  "events": [
+    {
+      "id": "public-codex-harness",
+      "published": "2026-11-04",
+      "source_url": "https://developers.openai.com/blog/codex-as-a-platform",
+      "access": "assumed_access_in_demo",
+      "provides": ["frontier_code_agent"],
+      "note": "Research game assumption only: publication does not prove connected model access, price, or fitness."
+    },
+    {
+      "id": "internal-integrated-engineering",
+      "published": "2026-11-03",
+      "source_url": "https://openai.com/index/accelerating-engineering-for-the-physical-world/",
+      "access": "restricted",
+      "provides": ["internal_integrated_engineer"],
+      "note": "A described internal result must not be treated as publicly accessible."
+    },
+    {
+      "id": "approved-science-mcp",
+      "published": "2026-11-03",
+      "source_url": "https://research.google/blog/empirical-research-assistance-era-from-nature-publication-to-catalyzing-computational-discovery/",
+      "access": "unverified",
+      "provides": ["computational_discovery_mcp"],
+      "note": "An approval-gated interface is not usable without separately confirmed access."
+    }
+  ],
+  "operations": [
+    {"id": "a_conventional_source_read", "kind": "existing", "requires": ["source_records"], "provides": ["reconciled_evidence"], "cost_cents": 2800},
+    {"id": "b_frontier_source_read", "kind": "frontier", "requires": ["source_records", "frontier_code_agent"], "provides": ["reconciled_evidence"], "cost_cents": 800},
+    {"id": "c_standard_code", "kind": "existing", "requires": ["general_coding"], "provides": ["software_artifact"], "cost_cents": 1900},
+    {"id": "d_frontier_code", "kind": "frontier", "requires": ["frontier_code_agent"], "provides": ["software_artifact"], "cost_cents": 700},
+    {"id": "e_ordinary_qualification", "kind": "existing", "requires": ["reconciled_evidence", "software_artifact"], "provides": ["verified_evidence_product"], "cost_cents": 1700},
+    {"id": "f_engineering_legacy", "kind": "existing", "requires": ["legacy_design_workflow"], "provides": ["engineering_design"], "cost_cents": 5900},
+    {"id": "g_engineering_internal", "kind": "frontier", "requires": ["internal_integrated_engineer"], "provides": ["engineering_design"], "cost_cents": 350},
+    {"id": "h_engineering_qualify", "kind": "existing", "requires": ["engineering_design", "verified_evidence_product"], "provides": ["qualified_engineering_package"], "cost_cents": 3100}
+  ],
+  "offers": [
+    {
+      "id": "verifiable_evidence_package", "requires": ["verified_evidence_product"],
+      "buyer_value_floor_cents": 16000, "outside_utility_cents": 4200, "buyer_friction_cents": 1200,
+      "prices_cents": [6500, 8500, 10500], "overhead_cents": 1800,
+      "demand_evidence": "hypothetical"
+    },
+    {
+      "id": "qualified_engineering_package", "requires": ["qualified_engineering_package"],
+      "buyer_value_floor_cents": 20000, "outside_utility_cents": 5500, "buyer_friction_cents": 1200,
+      "prices_cents": [7500, 11000, 13000], "overhead_cents": 2200,
+      "demand_evidence": "hypothetical"
+    },
+    {
+      "id": "no_buyer_case", "requires": ["verified_evidence_product"],
+      "buyer_value_floor_cents": 2000, "outside_utility_cents": 1500, "buyer_friction_cents": 1000,
+      "prices_cents": [2000, 4000], "overhead_cents": 2000,
+      "demand_evidence": "hypothetical"
+    }
+  ]
+}
