@@ -1,5 +1,19 @@
 # Research papers
 
+## 🌌♾️ ALPHA GENESIS FLYWHEEL Ω
+
+**Flagship programme and paper · Turn the next advance in AI into your next ability to autonomously discover at scale.**
+
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 4 November 2026 · Edition 1.1.0.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/alpha-genesis-flywheel-omega.html) · [PDF](alpha-genesis-flywheel-omega.pdf) · [Editable source and reproducible analysis](../alpha-genesis/README.md).
+
+Invent the means. Expand what becomes possible. Compound the ability to discover. GENESIS connects frontier awareness, construction of valuable possibilities and improvement of the methods used to discover them. Frontier Replay revisits consequential blocked opportunities when newly accessible capabilities could change what can be built. Its enterprise goal is sustainable useful delivery and stronger successors, using the best complete available means rather than privileging its own inventions.
+
+**Scope:** A research blueprint and reproducible analytical studies under stated models. Publication does not establish a deployed self-sustaining discovery enterprise, broad autonomous invention, new physical measurements, actual commercial revenue or a better discovery procedure on fresh independent campaigns. Supporting implementations and simulations keep their separate evidence. Flagship status identifies the programme's direction, not achieved qualification.
+
+**Research lineage:** Transformational Intelligence remains the conceptual foundation; AGI ALPHA remains the organizational foundation. The other papers and their original editions remain accessible below.
+
 ## SUCCESSOR Ω — The Institution That Compounds
 
 Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Edition 1.0.0.
@@ -24,7 +38,7 @@ The paper joins exact conditional constructions and an exhaustive authored study
 
 **Scope:** The analytical study and source-bound branch evidence are distinct. The original checks, historical capital, financial accounts and outcomes retain their original scope. This publication does not establish broad autonomous market creation, observed buyer demand or real commercial profit. The US$3 billion trailing-365-day complete-cost profit milestone remains unachieved. Financed succession, capability enablement and improved discovery require separate evidence.
 
-PDF SHA-256: `25672651b4d459264d46f0ae5a5156d7e123219a90b719c6a40efd8ba849890c`. The [publication manifest](publication-manifest.json) records this edition’s exact published bytes. The flagship and foundational papers below retain their established roles; all previous editions remain available.
+PDF SHA-256: `25672651b4d459264d46f0ae5a5156d7e123219a90b719c6a40efd8ba849890c`. The [publication manifest](publication-manifest.json) records this edition’s exact published bytes. The earlier papers retain their research contributions and original evidence; all previous editions remain available.
 
 ## SUPER ALPHA
 
@@ -72,11 +86,11 @@ The [publication manifest](publication-manifest.json) records the PDF’s exact 
 
 ## Flagship and foundational reading
 
-Read **Transformational Intelligence: Learning to Change the Game** first; it is our flagship paper. **AGI ALPHA: A Scalable Substrate for Intelligence Organizations** is our foundational paper. Use [the practical research guide](../harness/RESEARCH_FOUNDATIONS.md) to turn these ideas into construction, evaluation and operating decisions.
+Start with **ALPHA GENESIS FLYWHEEL Ω**, the flagship programme and paper above. **Transformational Intelligence: Learning to Change the Game** provides its conceptual foundation; **AGI ALPHA: A Scalable Substrate for Intelligence Organizations** provides its organizational foundation. Use [the practical research guide](../harness/RESEARCH_FOUNDATIONS.md) to turn these ideas into construction, evaluation and operating decisions.
 
 ### Transformational Intelligence: Learning to Change the Game
 
-**Flagship paper** · Vincent Boucher · October 2026 · 24 pages.
+**Conceptual foundation** · Vincent Boucher · October 2026 · 24 pages.
 
 [Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/transformational-intelligence.html) · [Original PDF](transformational-intelligence-202610.pdf)
 
