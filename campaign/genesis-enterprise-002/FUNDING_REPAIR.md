@@ -63,3 +63,37 @@ python -m unittest discover -s tests -p 'test_connected_platform_runtime064.py' 
 
 Keep the original source-bound failure and independent strong ordinary alternative.
 Normal owner-controlled review/integration remains separate from this correction.
+
+## Independent audit and distribution follow-through
+
+Full-PR review of repaired head `19a30d8` identified two additional omissions:
+registered tax was not independently reconciled, and native offers/terms were
+not bound to selected prices and obligations. Real-artifact reproductions accepted
+tax suppression and native $50 orders reported as $60 selections. Both regression
+tests failed before the further correction and pass afterward.
+
+The audit now reconstructs each completed boundary's cumulative tax provision
+from native replay prefixes, checking exact increment, ID and timing. It separately
+binds each native offer, wallet and complete prospective contract to the registered
+choice, including active checkpoints. Native ledger/account/terms/policy controls
+are unchanged. Default modeled profit remains $135.90; a separately registered
+zero-tax test yields $181.20 and is not the default result.
+
+The canonical release inventory also omitted this package and its default
+protocol while shipping its shim. A sealed incomplete archive was accepted by the
+old archive validator and is rejected by the corrected closure guard. The existing
+release pipeline now requires a source-bound GENESIS qualification receipt from
+the clean archive and repeats pilot/resume/audit/key-free export from actual
+downloaded release bytes. Historical markerless archives retain their scope.
+
+Local source-matched checks: 97 tests passed, covering all 66 GENESIS enterprise
+tests, 29 new release-boundary/helper tests and two recovery-preflight tests.
+Another 25 original frontier tests and 29 privacy/platform/release-compatibility
+tests passed. The explicit upload allowlist retains its six existing entries and
+adds only the successful GENESIS receipt and key-free public copy, with negative
+tests rejecting private-account paths, logs and ungated uploads.
+The helper's lifecycle orchestration tests use explicit mocks; they are not a full
+clean-distribution execution receipt. Independent source review found no blocker.
+Local cryptography 50.0.0 and pycparser 3.0 differ from hosted pins 50.0.2 and 3.11.
+Exact-head hosted qualification, normal integration, immutable publication and
+actual downloaded operation must pass before reporting released completion.

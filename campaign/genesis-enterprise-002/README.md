@@ -151,3 +151,23 @@ same-hour maturity reconstruction with zero overhead, and interruption recovery.
 Both GENESIS workflows use the existing standard runner, six-hour platform window
 and first-step job clock. See [repair qualification](FUNDING_REPAIR.md) for source,
 local evidence, dependency differences and the remaining hosted review gate.
+
+## Release boundary
+
+The canonical connected014 source archive now includes this complete optional
+package, its native dependencies, frozen protocol, tests and operating instructions.
+A partial marked GENESIS package is rejected rather than shipping an importable
+shim with missing implementation. Historical markerless archives retain their
+original scope; this does not retrofit their omitted optional entry point.
+
+The existing release workflow exercises the pilot, completed resume, unchanged
+native export, independent audit and key-free export from the exact extracted
+archive before publication. Its source-bound `GENESIS_QUALIFICATION.json` is an
+immutable release asset. The workflow repeats the same checks from the actual
+downloaded release and retains only the compact receipt and key-free public copy.
+Successful source-checkout CI alone is not released-operation evidence. Check the
+exact release workflow receipt before claiming either stage passed.
+
+The numerical runtime remains NumPy 2.3.5 and SciPy 1.17.0, alongside
+`requirements-commercial010.txt`. No native terms, frozen pilot amounts, funding
+guards, historical accounts or real-funds authority change at this boundary.

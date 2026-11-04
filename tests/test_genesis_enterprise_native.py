@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 from genesis_enterprise import native
 from genesis_enterprise.policy import canonical, digest
 
@@ -42,6 +43,105 @@ class NativeTests(unittest.TestCase):
         self.assertFalse((public / 'source/private-notes.txt').exists())
         self.assertFalse((public / 'public/access-token.txt').exists())
         self.assertEqual(native.audit(public), r)
+
+    def test_missing_tax_producer_is_rejected_with_real_deliveries(self):
+        self.register()
+        with patch.object(native, '_tax', lambda *args: None):
+            with self.assertRaisesRegex(ValueError, 'REGISTERED_TAX_PROVISION_CHANGED'):
+                native.operate(self.workspace)
+
+    def test_native_price_must_match_selected_price(self):
+        from flexibility063.native import BusinessAccount
+        begin = BusinessAccount.begin_order
+        def wrong_price(account, job, order, buyer, price, budget, day, deadline, terms):
+            terms = dict(terms, price_microUSD=50000000, exposure_microUSD=50200000)
+            return begin(account, job, order, buyer, 50000000, budget, day, deadline, terms)
+        self.register()
+        with patch.object(BusinessAccount, 'begin_order', wrong_price):
+            with self.assertRaisesRegex(ValueError, 'REGISTERED_NATIVE_OFFER_CHANGED'):
+                native.operate(self.workspace)
+
+    def test_tax_amount_timing_and_cumulative_provision_are_independent(self):
+        from flexibility063.native import BusinessAccount
+        cost = BusinessAccount.cost
+        for mutation in ('undercharge', 'early', 'cumulative'):
+            with self.subTest(mutation=mutation):
+                self.workspace = self.base / mutation
+                self.register()
+                def wrong_tax(account, ident, amount, day):
+                    if ident.startswith('genesis-tax-'):
+                        if mutation == 'undercharge':
+                            amount -= 1
+                        elif mutation == 'early':
+                            day -= 1
+                        else:
+                            amount += sum(a['args']['amount'] for a in account.export()['ledger']['actions']
+                                          if a['op'] == 'cost' and a['args']['id'].startswith('genesis-tax-'))
+                    return cost(account, ident, amount, day)
+                with patch.object(BusinessAccount, 'cost', wrong_tax):
+                    with self.assertRaisesRegex(ValueError, 'REGISTERED_TAX_PROVISION_CHANGED'):
+                        native.operate(self.workspace, max_steps=15 if mutation == 'cumulative' else 8)
+                # Each isolated account is a disposable fixture, not recovery state.
+                import shutil
+                shutil.rmtree(self.workspace)
+
+    def test_prospective_terms_must_match_registered_arrangement(self):
+        from flexibility063.native import BusinessAccount
+        begin = BusinessAccount.begin_order
+        mutations = {'fee_microUSD': 0, 'residual_microUSD': 0, 'maturity_day': 33,
+                     'expected_collection_day': 25, 'exposure_microUSD': 61000000,
+                     'counterparty_obligations': 'Different hypothetical obligations'}
+        for field, value in mutations.items():
+            with self.subTest(field=field):
+                self.workspace = self.base / field
+                self.register()
+                def wrong_terms(account, job, order, buyer, price, budget, day, deadline, terms):
+                    return begin(account, job, order, buyer, price, budget, day, deadline,
+                                 dict(terms, **{field: value}))
+                with patch.object(BusinessAccount, 'begin_order', wrong_terms):
+                    with self.assertRaisesRegex(ValueError, 'REGISTERED_NATIVE_TERMS_CHANGED'):
+                        native.operate(self.workspace, max_steps=8)
+                import shutil
+                shutil.rmtree(self.workspace)
+
+    def test_partial_offer_must_match_selected_price(self):
+        from flexibility063.native import BusinessAccount
+        begin = BusinessAccount.begin_order
+        def wrong_price(account, job, order, buyer, price, budget, day, deadline, terms):
+            return begin(account, job, order, buyer, 50000000, budget, day, deadline,
+                         dict(terms, price_microUSD=50000000, exposure_microUSD=50200000))
+        self.register()
+        with patch.object(BusinessAccount, 'begin_order', wrong_price):
+            with self.assertRaisesRegex(ValueError, 'REGISTERED_NATIVE_OFFER_CHANGED'):
+                native.operate(self.workspace, max_steps=4)
+
+    def test_zero_tax_and_every_first_job_checkpoint_remain_valid(self):
+        self.p['income_tax_numerator'] = 0
+        self.register()
+        for _ in range(8):
+            self.assertFalse(native.operate(self.workspace, max_steps=1)['complete'])
+        result = native.operate(self.workspace)
+        self.assertEqual(result['simulated_profit_microUSD'], 181200000)
+        tape = json.loads((self.workspace / 'public/native-export.json').read_text())['ledger']
+        self.assertFalse([a for a in tape['actions'] if a['op'] == 'cost'
+                          and a['args']['id'].startswith('genesis-tax-')])
+
+    def test_tax_commit_interruption_recovers_once(self):
+        self.register()
+        fired = []
+        def crash(phase, i):
+            if phase == 'finish' and not fired:
+                fired.append(True)
+                raise RuntimeError('INTERRUPTED_AFTER_TAX_COMMIT')
+        with self.assertRaisesRegex(RuntimeError, 'INTERRUPTED_AFTER_TAX_COMMIT'):
+            native.operate(self.workspace, fault=crash)
+        result = native.operate(self.workspace)
+        self.assertEqual(result['simulated_profit_microUSD'], 135900000)
+        tape = json.loads((self.workspace / 'public/native-export.json').read_text())['ledger']
+        taxes = [a['args']['id'] for a in tape['actions'] if a['op'] == 'cost'
+                 and a['args']['id'].startswith('genesis-tax-')]
+        self.assertEqual(len(taxes), len(set(taxes)))
+        self.assertEqual(native.operate(self.workspace), result)
 
     def test_checkpoint_resume_and_no_duplicate_settlement(self):
         self.register()
