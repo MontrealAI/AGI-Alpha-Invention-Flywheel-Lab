@@ -1,0 +1,37 @@
+name: PublicNotice095 official source chronology and no-bid construction
+on:
+  pull_request:
+    paths:
+      - 'research/public_notice095.py'
+      - 'tests/test_public_notice095.py'
+      - 'campaign/omega-public-notice095/**'
+      - '.github/workflows/public-notice095.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-three-public-records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start before checkout
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Test chronological, tamper, ID, leakage and no-bid controls
+        run: python -m unittest discover -s tests -p 'test_public_notice095.py' -v
+      - name: Fetch exactly three registered official UK OCDS records once and certify
+        shell: bash
+        run: python -m research.public_notice095 --out "$RUNNER_TEMP/PUBLIC_NOTICE095.json"
+      - name: Preserve source-pinned receipts even if official API unavailable
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-notice095-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/PUBLIC_NOTICE095.json
+          if-no-files-found: warn
