@@ -1,0 +1,36 @@
+name: Omega native account registered configuration 089 (independent red-first)
+on:
+  pull_request:
+    paths:
+      - 'tests/test_omega_native_account_registry089.py'
+      - 'campaign/omega-native-config089/**'
+      - '.github/workflows/omega-native-config089.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: omega-native-config089-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  registered-financial-identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install existing pinned Omega dependencies only
+        run: python -m pip install -r requirements-omega-mechanisms-v3.txt
+      - name: Execute frozen three-case signed native-account registration tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          python -m unittest discover -s tests -p 'test_omega_native_account_registry089.py' -v
