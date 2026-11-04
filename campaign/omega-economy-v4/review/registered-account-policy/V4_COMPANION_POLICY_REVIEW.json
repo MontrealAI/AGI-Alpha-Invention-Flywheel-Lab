@@ -1,0 +1,58 @@
+{
+  "base_commit": "68eef714f62fab64b04131377afd6ae2047358f9",
+  "before": {
+    "after_native_actions": 84,
+    "before_native_actions": 83,
+    "claimed_profit_microUSD": 27896000,
+    "eligible_cash_microUSD": {
+      "available": 99940326000,
+      "profit": 27896000,
+      "unrestrictedEarned": 27896000
+    },
+    "extra_day365_wallet_portable_audit_accepted": true,
+    "omitted_debit_microUSD": 5000000,
+    "omitted_mandatory_successor_portable_audit_accepted": true,
+    "outside_window_last_native_day": 365,
+    "unsupported_report_metadata_accepted": true
+  },
+  "candidate_files": {
+    "mechanism_harness/cart_native.py": "1b368911371f0d8c2a28524d35a2a5cf3e88a50e912853ab830fd4144b64eae6",
+    "tests/test_omega_cart_native.py": "d724c9ef2583fe31453792e8b4dff8a4cca3b0a2eb8f1962564913222a1555c8"
+  },
+  "candidate_patch_sha256": "e1cbe6f7de6aaeabc1e815adb6ca3dab3d7f4d2ecd5dba15a85444a19779d2b9",
+  "frozen_candidate_qualification": {
+    "command": "python -m unittest tests.test_omega_cart_native -v",
+    "errors": 0,
+    "failures": 0,
+    "log_sha256": "6633e9e894865280b205939130a410350f78c26672afbab4a9caae542eea925e",
+    "methods": 26,
+    "seconds": 174.166,
+    "skips": 0
+  },
+  "preliminary_diagnostics": [
+    {
+      "errors": 0,
+      "failures": 1,
+      "log_sha256": "218b69154a433af2bb224d46baf62ab2d606f39129292a89cd0dd20aa8b8e80a",
+      "methods": 5,
+      "reason": "Source was refactored while test was running; run rejected with SOURCE_CHANGED_DURING_RUN. Not qualification."
+    },
+    {
+      "errors": 4,
+      "failures": 3,
+      "log_sha256": "7e723f562c46ad08f65476cafb2334353e4c93d2037b08e0eac5b3789663e7f5",
+      "methods": 20,
+      "reason": "Overlapping source refactor changed the case-shared account source. Distinct refusal messages include SOURCE_CHANGED_DURING_RUN, SOURCE_MATCHED_EXISTING_ACCOUNT_REQUIRED and SOURCE_OR_CLAIM_CHANGED. Not qualification."
+    }
+  ],
+  "prior_trace_compatibility": {
+    "native_actions": 280,
+    "opportunities": 27,
+    "profit_microUSD": 143048000,
+    "schedule_accepted": true,
+    "scope": "Read-only evaluation of the new schedule for the earlier separate engineering account at synthetic prospective merge tree 733692d433e4a73fee686d6be3d98ba9e855592d. No rebinding of old accounts.",
+    "successor_required_and_present": true
+  },
+  "schema": "omega/cart-native-annual-schedule-review/v1",
+  "scope": "No primary or registered account was modified. The 9-type engineering witness used the existing public fixture with actual signed native spending and an isolated missing-debit fault. Paired distribution results and real demand are outside this regression."
+}

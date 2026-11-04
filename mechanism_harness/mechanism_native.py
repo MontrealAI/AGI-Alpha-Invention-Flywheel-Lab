@@ -14,11 +14,12 @@ import shutil
 
 from commercial.ledger import canonical,digest,strict_json
 from commercial.persistence import atomic_bytes
-from connected_enterprise.finance import JournalAccount,SOURCE_PATHS,audit_journal
+from connected_enterprise.finance import JournalAccount,SOURCE_PATHS
 from adaptive_enterprise import instruments as substrate
 from adaptive_enterprise.checkers import audit_delivery
 from . import market_program as v,mechanism_campaign as campaign
-from .inventor_native import completed_resume, require_resume_authority
+from .inventor_native import (audit_earned_successor, audit_registered_journal, audit_trade_operations,
+                              completed_resume, require_resume_authority, trade_operations)
 
 ROOT=Path(__file__).resolve().parents[1]
 CENT=10_000
@@ -242,9 +243,10 @@ def audit(output):
     campaign.audit_resources(study)
     if read(out/'CONTRACT.json')!={'arm':r['arm'],'stress':r['stress'],'tariff':TARIFF}:raise ValueError('REGISTERED_CONTRACT_CHANGED')
     manifest=read(out/'MANIFEST.json');runtime=out/'runtime';exp=read(out/'NATIVE_EXPORT.json')
-    audit_journal(exp,root=runtime,manifest=manifest)
-    if exp['ledger']['summary']!=r['native_summary']:raise ValueError('FINANCIAL_SUMMARY_CHANGED')
-    acts=exp['ledger']['actions'];journal=exp['connected_journal']['entries'];records=[];ordinal=0;native_ids=[]
+    checked=audit_registered_journal(exp, root=runtime, manifest=manifest, opening=OPENING, contract=CONTRACT)
+    if canonical(checked)!=canonical(r['native_audit']):raise ValueError('NATIVE_AUDIT_CHANGED')
+    if canonical(exp['ledger']['summary'])!=canonical(r['native_summary']):raise ValueError('FINANCIAL_SUMMARY_CHANGED')
+    acts=exp['ledger']['actions'];journal=exp['connected_journal']['entries'];records=[];ordinal=0;native_ids=[];expected_trades=[]
     for case,(seed,family) in zip(study['cases'],campaign.CASES):
         from .market_cases import market
         m=market(seed,family)
@@ -285,6 +287,10 @@ def audit(output):
             prod_work={'source':source,'program_sha256':digest(p),'request_sha256':digest({'market':digest(m),'buyer':f'SIM-v3-buyer-{ordinal}','choice':choice,'jobs':[j['job']['id'] for j in jobs]})}
             if len(production)!=1 or production[0]['request']['work']!=prod_work or production[0]['request']['day']!=rec['day'] or production[0]['receipt']!=rec['funding']:
                 raise ValueError('SOURCE_BOUND_PRODUCTION_REQUIRED')
+            buyer=f'SIM-v3-buyer-{ordinal}'
+            offers=[{'id':f'v3-trade-{ordinal}-{j}','buyer':buyer,'price':price*CENT,'job_id':jr['job']['id'],
+                     'deadline':rec['day']+5} for j,(jr,price) in enumerate(zip(jobs,prices))]
+            expected_trades.extend(trade_operations(buyer,private['budget_cents']*CENT,offers,rec['day'],settled=rec['status']=='SETTLED'))
             for j,(jr,price,saved) in enumerate(zip(jobs,prices,rec['artifacts'])):
                 artifact=substrate.produce(jr['raw'],'generated_schema',mode='conventional')
                 if r['stress']=='failed_acceptance':artifact['outcome_scope']='intake_readiness'
@@ -300,7 +306,13 @@ def audit(output):
             accepted=all(a['check']['accepted'] and a['admitted_outcome_equal'] and a['artifact']['outcome_scope']=='complete_outcome' for a in rec['artifacts'])
             if rec['status']!=('SETTLED' if accepted else 'REFUNDED'):raise ValueError('UNACCEPTED_REVENUE')
     if {a['args']['id'] for a in acts if a['op']=='offer'}!=set(native_ids):raise ValueError('UNREPORTED_ORDER')
+    audit_trade_operations(exp,expected_trades)
     successor=r['successor']
+    work={'source':source,'parent_memory_sha256':digest(study['cases'][-1]['memory_after']),
+          'purpose':'Construct and independently verify a fresh private-information mechanism'}
+    audit_earned_successor(exp, manifest, successor, out/'SUCCESSOR.json', ident='v3-successor',
+                           day=364, amount=TARIFF['successor_cents']*CENT, work=work, maintenance='v3-maintenance',
+                           tax='v3-modeled-tax', before_maintenance=False)
     if successor is not None:
         from .market_cases import market
         if successor['market']!=market(391104,'substitute'):raise ValueError('FRESH_SUCCESSOR_CHANGED')

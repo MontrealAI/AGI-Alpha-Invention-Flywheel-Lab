@@ -45,6 +45,8 @@ python -m mechanism_harness.reach_native audit "$run_root/central/pilot"
 
 If a source, journal, signer, artifact or cost fails verification, preserve the original files and diagnose the mismatch. Restore a matching complete backup at the same absolute account path used when the signer was initialized. A byte-identical copy under a different absolute path is rejected with `ADAPTIVE_ACCOUNT_NAMESPACE_CHANGED`. An offline public audit can still check exported history. Keep the original or a verified untouched backup while performing any restore. An unavailable authority leaves that cell unresolved. Keep the account tree private, including its signer, SQLite files, action tape, journal and order-level data. The summarizer writes a new aggregate JSON only after all ten independent audits pass. Choose a new evidence filename on a subsequent replay.
 
+Archived runs stay bound to the source that operated each account. A later verifier repair checks the registered opening, operating contract and decision rules against the ledger. Use the recorded revision for historical replay and a new directory for a current-source engineering run. [Financial audit and archived-account checks](../omega-economy-v4/review/registered-account-policy/README.md).
+
 ## Read the comparison
 
 Money is integer microUSD, with 1,000,000 microUSD per US dollar. Each pair covers model days [0,365). Positive differences favor the pilot for profit, settled volume or available cash. A positive expense difference reports additional costs.

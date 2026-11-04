@@ -247,4 +247,104 @@ class CartNativeExecution(unittest.TestCase):
         with small_native_fixture(),patch.object(c,'execute',side_effect=lambda:self.original(PILOT)),patch.object(n.JournalAccount,'cost',missing),self.assertRaisesRegex(ValueError,'MISSING_OR_EXTRA_REQUIRED_DEBIT'):
             n.run(out)
 
+
+class RegisteredCartTimetable(unittest.TestCase):
+    def test_positive_post_tax_cash_requires_actual_successor(self):
+        original_execute, original_spend = c.execute, n.JournalAccount.spend
+        observed = {}
+        def omit_eligible(account, ident, *args, **kwargs):
+            if ident == 'v4-successor':
+                observed.update(account.snapshot()['summary'])
+                return None
+            return original_spend(account, ident, *args, **kwargs)
+        with tempfile.TemporaryDirectory() as directory, patch.object(c, 'CASES', PILOT), patch.object(
+                c, 'execute', side_effect=lambda: original_execute(PILOT)):
+            out = Path(directory) / 'eligible'
+            with patch.object(n.JournalAccount, 'spend', omit_eligible), self.assertRaisesRegex(
+                    ValueError, 'POST_TAX_SUCCESSOR_DECISION_CHANGED'):
+                n.run(out)
+            self.assertGreaterEqual(min(observed['available'], observed['unrestrictedEarned']),
+                                    n.TARIFF['successor_cents'] * n.CENT)
+            self.assertIsNone(n.read(out/'REPORT.json')['successor'])
+            with self.assertRaisesRegex(ValueError, 'POST_TAX_SUCCESSOR_DECISION_CHANGED'):
+                n.audit(out)
+
+    def test_additional_wallet_after_year_does_not_belong_to_closed_account(self):
+        original = c.execute
+        with tempfile.TemporaryDirectory() as directory, small_native_fixture(), patch.object(
+                c, 'execute', side_effect=lambda: original(PILOT)):
+            out = Path(directory) / 'unearned'
+            report = n.run(out, stress='no_demand')
+            self.assertIsNone(report['successor'])
+            account = n.JournalAccount(out/'runtime', n.read(out/'MANIFEST.json'), out/'account.sqlite',
+                                       opening=n.OPENING, working=0, contract=n.CONTRACT)
+            try:
+                account.execute('wallet', {'buyer': 'unexpected-buyer', 'amount': 75_000_000}, 365)
+                export = account.export()
+                report['native_summary'] = account.snapshot()['summary']
+                report['native_audit'] = account.audit()
+            finally:
+                account.close()
+            self.assertTrue(report['native_audit']['accepted'])
+            n.save(out/'NATIVE_EXPORT.json', export)
+            n.save(out/'REPORT.json', report)
+            with self.assertRaisesRegex(ValueError, 'EXTRA_UNREGISTERED_NATIVE_ACTION'):
+                n.audit(out)
+
+    def test_available_cash_and_earned_cash_must_both_cover_successor(self):
+        charge = n.TARIFF['successor_cents'] * n.CENT
+        for available, earned, stopped, expected in (
+                (charge - 1, 2 * charge, False, None), (2 * charge, charge - 1, False, None),
+                (charge, charge, False, 'EARNED'), (2 * charge, 2 * charge, True, None)):
+            with self.subTest(available=available, earned=earned, stopped=stopped):
+                summary = dict(available=available, unrestrictedEarned=earned, investmentStopped=stopped)
+                self.assertEqual(n._permitted_funding(summary, charge, 1, False, True), expected)
+
+    def test_deferred_successor_and_report_bindings(self):
+        original = c.execute
+        with tempfile.TemporaryDirectory() as directory, small_native_fixture(), patch.object(
+                c, 'execute', side_effect=lambda: original(PILOT)):
+            out = Path(directory) / 'no-demand'
+            good = n.run(out, stress='no_demand')
+            self.assertTrue(n.audit(out)['accepted'])
+            n.save(out/'SUCCESSOR.json', {'pretended': True})
+            with self.assertRaisesRegex(ValueError, 'POST_TAX_SUCCESSOR_DECISION_CHANGED'):
+                n.audit(out)
+            (out/'SUCCESSOR.json').unlink()
+            for changes, error in (({'native_audit': {'accepted': True}}, 'REPORTED_NATIVE_AUDIT_CHANGED'),
+                                   ({'scope': 'real income'}, 'CLOSED_CART_REPORT_FIELDS_OR_SCOPE_CHANGED'),
+                                   ({'additional_revenue_usd': 100}, 'CLOSED_CART_REPORT_FIELDS_OR_SCOPE_CHANGED')):
+                with self.subTest(changes=changes):
+                    n.save(out/'REPORT.json', {**good, **changes})
+                    with self.assertRaisesRegex(ValueError, error):
+                        n.audit(out)
+
+    def test_same_day_tax_and_maintenance_cannot_be_interchanged(self):
+        original, charge = c.execute, n.JournalAccount.cost
+        delayed = {}
+        def swap(account, ident, amount, day):
+            if ident == 'v4-maintenance':
+                delayed['maintenance'] = (ident, amount, day)
+                return None
+            result = charge(account, ident, amount, day)
+            if ident == 'v4-modeled-tax':
+                charge(account, *delayed['maintenance'])
+            return result
+        with tempfile.TemporaryDirectory() as directory, small_native_fixture(), patch.object(
+                c, 'execute', side_effect=lambda: original(PILOT)), patch.object(n.JournalAccount, 'cost', swap):
+            with self.assertRaisesRegex(ValueError, 'REGISTERED_NATIVE_TIMETABLE_CHANGED'):
+                n.run(Path(directory)/'swapped', stress='no_demand')
+
+    def test_wrong_economic_return_cannot_relabel_an_acquisition(self):
+        original, spend = c.execute, n.JournalAccount.spend
+        def overstate(account, ident, kind, amount, day, work, expected_net, **kwargs):
+            if ident == 'v4-quote-1':
+                expected_net += 1
+            return spend(account, ident, kind, amount, day, work, expected_net, **kwargs)
+        with tempfile.TemporaryDirectory() as directory, small_native_fixture(), patch.object(
+                c, 'execute', side_effect=lambda: original(PILOT)), patch.object(n.JournalAccount, 'spend', overstate):
+            with self.assertRaisesRegex(ValueError, 'REGISTERED_NATIVE_FUNDING_CHANGED'):
+                n.run(Path(directory)/'relabelled', stress='no_demand')
+
+
 if __name__=='__main__':unittest.main()

@@ -14,11 +14,11 @@ import shutil
 
 from commercial.ledger import canonical,digest,strict_json
 from commercial.persistence import atomic_bytes
-from connected_enterprise.finance import JournalAccount,SOURCE_PATHS,audit_journal
+from connected_enterprise.finance import JournalAccount,SOURCE_PATHS
 from adaptive_enterprise import instruments as substrate
 from adaptive_enterprise.checkers import audit_delivery
 from . import cart_program as v,cart_campaign as campaign,cooperative_construction as productive,cart_decision as decider
-from .inventor_native import completed_resume
+from .inventor_native import audit_registered_journal, completed_resume
 
 ROOT=Path(__file__).resolve().parents[1]
 CENT=10_000
@@ -28,6 +28,13 @@ TARIFF={'setup_cents':2000,'discovery_per_market_cents':500,'quote_cents':10,
         'maintenance_cents':1200,'successor_cents':500,'tax_bps':2000}
 ARMS=('generated','standard','full_control','adaptive')
 STRESSES=('central','no_demand','copycat','failed_acceptance','payment_failure')
+
+
+REPORT_SCOPE = 'Generated private-information menus, executed source-bound outcomes, declared modeled costs and canonical native simulated commerce. No real buyers or complete-lifecycle superiority claim.'
+REPORT_FIELDS = {'schema', 'source', 'arm', 'stress', 'study_logical_sha256', 'records_sha256',
+                 'native_summary', 'native_audit', 'tariff', 'decision', 'opportunities', 'settled_buyers',
+                 'declined_buyers', 'nonentry_opportunities', 'refunded_buyers', 'successor',
+                 'opening_microUSD', 'clock', 'actual_revenue_usd', 'scope'}
 
 
 def save(path,value):atomic_bytes(Path(path),canonical(value)+b'\n')
@@ -98,6 +105,96 @@ def ledger_costs(study,records,successor):
     costs['v4-modeled-tax']=max(0,pretax)*TARIFF['tax_bps']//10000
     if successor is not None:spends['v4-successor']=TARIFF['successor_cents']*CENT
     return spends,costs,revenue
+
+
+def _registered_schedule(study, records):
+    """Ordered native journal keys, model days, and expected-net spend inputs."""
+    yield 'spend:v4-setup', 0, 1
+    yield 'spend:v4-discovery', 0, 1
+    yield 'native:cost:v4-freeze-' + digest(campaign.logical(study))[:24], 1, None
+    for row in records:
+        day, ordinal = row['day'], row['ordinal']
+        if row['status'] == 'NONENTRY':
+            continue
+        yield f'spend:v4-quote-{ordinal}', day, 1
+        if row['status'] == 'DECLINED':
+            continue
+        yield f'native:wallet:SIM-v4-buyer-{ordinal}', day, None
+        ids = [f'v4-trade-{ordinal}-{i}' for i in range(len(row['outcome']['services']))]
+        if row['native_order_ids'] != ids:
+            raise ValueError('REGISTERED_NATIVE_ORDER_IDS_CHANGED')
+        for ident in ids:
+            yield f'native:offer:{ident}', day, None
+            for action in ('consent', 'fund'):
+                yield f'native:event:{ident}:{ident}-{action}', day, None
+        expected_net = max(1, row['choice']['seller_contribution_cents'] * CENT)
+        yield f'spend:v4-production-{ordinal}', day, expected_net
+        if row['status'] == 'SETTLED':
+            yield f'native:cost:v4-fee-{ordinal}', day, None
+            actions = ('prepare', 'release')
+        else:
+            actions = ('refund',)
+        for ident in ids:
+            for action in actions:
+                yield f'native:event:{ident}:{ident}-{action}', day + 1, None
+    yield 'native:cost:v4-maintenance', 364, None
+    yield 'native:cost:v4-modeled-tax', 364, None
+
+
+def _permitted_funding(summary, amount, expected_net, allow_seed, prospective):
+    if amount <= 0 or summary['available'] < amount or (prospective and summary['investmentStopped']):
+        return None
+    if expected_net > 0 and summary['unrestrictedEarned'] >= amount:
+        return 'EARNED'
+    return 'SEED' if allow_seed else None
+
+
+def _verify_native_schedule(out, study, records, report, export, manifest):
+    """Consume the full year, then decide successor eligibility at its paid-tax prefix."""
+    entries = export['connected_journal']['entries']
+    actions = export['ledger']['actions']
+    index = 0
+    sequence = 0
+    prospective = manifest.get('native_engine') in {'prospective-v1', 'exact-prospective-v2'}
+
+    def consume(key, day, expected_net):
+        nonlocal index, sequence
+        if index >= len(entries):
+            raise ValueError('MISSING_REGISTERED_NATIVE_ACTION')
+        entry = entries[index]
+        request, receipt = entry['request'], entry['receipt']
+        if entry['status'] != 'COMPLETE' or entry['key'] != key or request['day'] != day:
+            raise ValueError('REGISTERED_NATIVE_TIMETABLE_CHANGED')
+        if expected_net is None:
+            next_sequence = receipt['sequence']
+        else:
+            before = actions[sequence]['before']
+            amount = request['amount']
+            funding = _permitted_funding(before, amount, expected_net, request['allow_seed'], prospective)
+            plan_id = 'connected014-resource-' + digest(request['id'])[:32] if funding == 'EARNED' else None
+            if (funding is None or type(request['expected_net']) is not int
+                    or request['expected_net'] != expected_net
+                    or (receipt['funding'], receipt['plan_id']) != (funding, plan_id)):
+                raise ValueError('REGISTERED_NATIVE_FUNDING_CHANGED')
+            next_sequence = receipt['native_event_sequence'] + 1
+        if not sequence < next_sequence <= len(actions):
+            raise ValueError('REGISTERED_NATIVE_SEQUENCE_CHANGED')
+        sequence = next_sequence
+        index += 1
+
+    for key, day, expected_net in _registered_schedule(study, records):
+        consume(key, day, expected_net)
+    post_tax = actions[sequence - 1]['after']
+    amount = TARIFF['successor_cents'] * CENT
+    eligible = _permitted_funding(post_tax, amount, 1, False, prospective) == 'EARNED'
+    successor_file = out / 'SUCCESSOR.json'
+    if ((report['successor'] is not None) != eligible or successor_file.exists() != eligible
+            or successor_file.is_symlink()):
+        raise ValueError('POST_TAX_SUCCESSOR_DECISION_CHANGED')
+    if eligible:
+        consume('spend:v4-successor', 364, 1)
+    if index != len(entries) or sequence != len(actions):
+        raise ValueError('EXTRA_UNREGISTERED_NATIVE_ACTION')
 
 
 def require_existing_native_authority(out):
@@ -251,7 +348,7 @@ def run(output,*,arm='generated',stress='central',resume=False):
                 'opportunities':len(records),'settled_buyers':sum(r['status']=='SETTLED' for r in records),
                 'declined_buyers':sum(r['status']=='DECLINED' for r in records),'nonentry_opportunities':sum(r['status']=='NONENTRY' for r in records),'refunded_buyers':sum(r['status']=='REFUNDED' for r in records),
                 'successor':successor,'opening_microUSD':OPENING,'clock':{'start_day':0,'end_day':364,'days':365},
-                'actual_revenue_usd':0,'scope':'Generated private-information menus, executed source-bound outcomes, declared modeled costs and canonical native simulated commerce. No real buyers or complete-lifecycle superiority claim.'}
+                'actual_revenue_usd':0,'scope':REPORT_SCOPE}
         if source!=source_identity():raise ValueError('SOURCE_CHANGED_DURING_RUN')
         save(out/'REPORT.json',result)
     finally:account.close()
@@ -261,6 +358,8 @@ def run(output,*,arm='generated',stress='central',resume=False):
 
 def audit(output):
     out=checked_path(output);r=read(out/'REPORT.json');study=read(out/'STUDY.json');source=source_identity()
+    if set(r) != REPORT_FIELDS or r['scope'] != REPORT_SCOPE:
+        raise ValueError('CLOSED_CART_REPORT_FIELDS_OR_SCOPE_CHANGED')
     if r.get('schema')!='omega/native-private-mechanisms/v4' or r.get('arm') not in ARMS or r.get('stress') not in STRESSES:
         raise ValueError('REGISTERED_REPORT_SCHEMA_AND_SCENARIO_REQUIRED')
     if (r['source']!=source or read(out/'SOURCE.json')!=source or r['actual_revenue_usd']!=0
@@ -275,7 +374,7 @@ def audit(output):
     elif decision is not None:raise ValueError('UNREGISTERED_OPERATING_DECISION')
     if read(out/'CONTRACT.json')!={'arm':r['arm'],'stress':r['stress'],'tariff':TARIFF}:raise ValueError('REGISTERED_CONTRACT_CHANGED')
     manifest=read(out/'MANIFEST.json');runtime=out/'runtime';exp=read(out/'NATIVE_EXPORT.json')
-    audit_journal(exp,root=runtime,manifest=manifest)
+    native_audit = audit_registered_journal(exp, root=runtime, manifest=manifest, opening=OPENING, contract=CONTRACT)
     if exp['ledger']['summary']!=r['native_summary']:raise ValueError('FINANCIAL_SUMMARY_CHANGED')
     acts=exp['ledger']['actions'];journal=exp['connected_journal']['entries'];records=[];ordinal=0;native_ids=[]
     for case_index,(case,(seed,family)) in enumerate(zip(study['cases'],campaign.CASES)):
@@ -387,6 +486,9 @@ def audit(output):
     if r['records_sha256']!=[digest(x) for x in records] or r['opportunities']!=ordinal:raise ValueError('DENOMINATORS_CHANGED')
     for field,status in (('settled_buyers','SETTLED'),('declined_buyers','DECLINED'),('refunded_buyers','REFUNDED'),('nonentry_opportunities','NONENTRY')):
         if r[field]!=sum(x['status']==status for x in records):raise ValueError('OPERATING_COUNTS_CHANGED')
+    _verify_native_schedule(out,study,records,r,exp,manifest)
+    if r['native_audit'] != native_audit:
+        raise ValueError('REPORTED_NATIVE_AUDIT_CHANGED')
     return {'accepted':True,'report_sha256':digest(r),'verified_expenses_microUSD':total,'verified_revenue_microUSD':revenue,
             'scope':'Canonical native financial audit plus independent complete outcome, buyer choice and contractual cost reconstruction.'}
 

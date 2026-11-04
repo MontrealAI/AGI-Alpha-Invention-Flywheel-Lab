@@ -50,6 +50,10 @@ The executed four-period central scenario delivers four accepted planning artifa
 
 </details>
 
+## FLYWHEEL Ω operating experiment
+
+The inventor found a 213-cent overcharge by testing purchases a buyer could combine. It repaired the offer, produced the chosen services and settled accepted deliveries on the simulated enterprise ledger. The designated $100,000 primary earned $143.048 over 365 modeled days. A conventional solver matched it. In a separate distribution experiment, paid reach added 17 settlements and $205.112 of after-tax profit in the central setting and lost money in the other four settings. [Seven verdicts and financial reconciliation](campaign/omega-economy-v4/OPERATING_RESULT.md) · [Run the inventor and enterprise](campaign/omega-economy-v4/README.md) · [Replay the five matched pairs](campaign/omega-paid-reach-20261104/REPLAY.md).
+
 ## Historical operating reproduction: connected enterprise completion015
 
 The retained engineering entry point reproduces eight **simulated** 70-day businesses: voluntary buyer choice, qualified orders, executed reconciliation/KPI/evidence work, separate artifact checking, collection, full modeled costs, native earnings reservations, acquisition/capacity and subsequent delivery. This is historical qualification, not selection of a new flagship. Use the [operator guide](docs/connected014/OPERATOR.md), [achieved-results report](docs/completion015/REPORT.md), [inspected PDF](docs/completion015/PAPER.pdf) and [full-record reconstruction commands](docs/completion015/ARTIFACTS.md) and [scale-model reconciliation](docs/completion015/SCALE_RECONCILIATION.md).

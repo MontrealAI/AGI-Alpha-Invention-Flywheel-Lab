@@ -12,8 +12,8 @@ import unittest
 from unittest.mock import patch
 
 from commercial.ledger import strict_json
-from connected_enterprise.finance import JournalAccount
-from mechanism_harness import economical_learning, economical_native
+from connected_enterprise.finance import JournalAccount, audit_journal
+from mechanism_harness import cart_campaign, cart_native, economical_learning, economical_native
 from mechanism_harness import inventor, inventor_native
 from mechanism_harness import market_cases, mechanism_campaign, mechanism_native
 
@@ -62,6 +62,103 @@ def hold_files(*files):
                 (Path(held) / path.name).replace(path)
 
 
+class RegisteredNativeTermsTests(unittest.TestCase):
+    def test_public_auditors_reject_replayable_alternate_accounts(self):
+        from tests.test_omega_cart_native import PILOT, small_native_fixture
+
+        for operator, native, field, value in [
+                (inventor, inventor_native, 'opening', 200_000_000_000),
+                (economical_native, inventor_native, 'working', 1_000_000),
+                (mechanism_native, mechanism_native, 'contract', 'alternate-fixture-contract'),
+                (cart_native, cart_native, 'opening', 200_000_000_000),
+                (cart_native, cart_native, 'working', 1_000_000),
+                (cart_native, cart_native, 'contract', 'alternate-fixture-contract')]:
+            with (self.subTest(operator=operator.__name__, field=field), TemporaryDirectory() as directory,
+                  small_workload(), ExitStack() as fixture):
+                out = Path(directory) / 'new'
+                if operator is cart_native:
+                    execute = cart_campaign.execute
+                    fixture.enter_context(small_native_fixture())
+                    fixture.enter_context(patch.object(cart_campaign, 'execute', lambda: execute(PILOT)))
+
+                def alternate_account(*args, **kwargs):
+                    return JournalAccount(*args, **{**kwargs, field: value})
+
+                # Model a producer supplying a coherent wrong account. Bypass its
+                # own publication check only while constructing hostile evidence.
+                with patch.object(native, 'JournalAccount', alternate_account), ExitStack() as producer:
+                    if operator is economical_native:
+                        producer.enter_context(patch.object(inventor_native, 'audit_operation'))
+                    elif operator in (mechanism_native, cart_native):
+                        producer.enter_context(patch.object(operator, 'audit'))
+                    report = operator.run(out)
+
+                exported = inventor_native.read(out / 'NATIVE_EXPORT.json')
+                self.assertEqual(report.get('native', report)['opening_microUSD'], native.OPENING)
+                self.assertEqual(exported['ledger']['config'][field], value)
+                checked = audit_journal(exported, root=out / 'runtime', manifest=inventor_native.read(out / 'MANIFEST.json'))
+                self.assertGreater(checked['connected_native_actions_covered'], 0)
+                with self.assertRaisesRegex(ValueError, 'REGISTERED_NATIVE_ACCOUNT_CONFIG_CHANGED'):
+                    operator.audit(out)
+
+
+class RegisteredOperatingPolicyTests(unittest.TestCase):
+    def test_replayable_omission_at_the_registered_investment_boundary(self):
+        for operator in (inventor, economical_native, mechanism_native):
+            with self.subTest(operator=operator.__name__), TemporaryDirectory() as directory, ExitStack() as fixture:
+                out = Path(directory) / 'new'
+                if operator is mechanism_native:
+                    cases = ((391101, 'complementary'),)
+                    execute = mechanism_campaign.execute
+                    fixture.enter_context(patch.object(mechanism_campaign, 'CASES', cases))
+                    fixture.enter_context(patch.object(mechanism_campaign, 'execute', lambda: execute(cases)))
+                else:
+                    fixture.enter_context(small_workload())
+                    fixture.enter_context(patch.object(inventor_native, 'INDEXES', tuple(range(8, 16))))
+
+                original_spend = JournalAccount.spend
+                eligible = []
+
+                def omit(account, ident, kind, amount, day, work, expected_net, allow_seed=False):
+                    if ident in ('omega-successor', 'v3-successor'):
+                        state = account.snapshot()['summary']
+                        eligible.append(min(state['available'], state['unrestrictedEarned']) >= amount)
+                        return None
+                    return original_spend(account, ident, kind, amount, day, work, expected_net, allow_seed)
+
+                with patch.object(JournalAccount, 'spend', omit), ExitStack() as producer:
+                    if operator is economical_native:
+                        producer.enter_context(patch.object(inventor_native, 'audit_operation'))
+                    elif operator is mechanism_native:
+                        producer.enter_context(patch.object(operator, 'audit'))
+                    operator.run(out)
+                self.assertEqual(eligible, [True])
+                self.assertFalse((out/'SUCCESSOR.json').exists())
+                with self.assertRaisesRegex(ValueError, 'REGISTERED_EARNED_SUCCESSOR_DECISION_CHANGED'):
+                    operator.audit(out)
+
+    def test_native_buyer_substitution_and_extra_wallet(self):
+        for operator in (inventor, mechanism_native):
+            with self.subTest(operator=operator.__name__), TemporaryDirectory() as directory, small_workload():
+                out = Path(directory) / 'new'
+                original_execute = JournalAccount.execute
+                mutations = []
+
+                def change(account, op, args, day):
+                    if operator is inventor and op in ('wallet', 'offer'):
+                        mutations.append(op)
+                        args = {**args, 'buyer': 'SIM-unregistered'}
+                    if operator is mechanism_native and op == 'wallet' and not mutations:
+                        mutations.append(op)
+                        original_execute(account, 'wallet', {'buyer': 'SIM-bystander', 'amount': 1}, day)
+                    return original_execute(account, op, args, day)
+
+                with patch.object(JournalAccount, 'execute', change), patch.object(operator, 'audit'):
+                    operator.run(out)
+                self.assertTrue(mutations)
+                with self.assertRaisesRegex(ValueError, 'REGISTERED_NATIVE_TRADE_OPERATIONS_CHANGED'):
+                    operator.audit(out)
+
 class LegacyLiveResumeTests(unittest.TestCase):
     def exercise(self, operator, native, report_name):
         with TemporaryDirectory(prefix='omega-legacy-resume-') as directory, small_workload():
@@ -73,6 +170,10 @@ class LegacyLiveResumeTests(unittest.TestCase):
             self.assertFalse((out / report_name).exists())
             self.assertEqual(list(out.glob('account.sqlite*')), [])
             result = operator.run(out, resume=True)
+            # None of these single-market recovery fixtures earns its registered
+            # successor price by the decision point. Deferral remains auditable.
+            self.assertIsNone(result.get('native', result)['successor'])
+            self.assertFalse((out / 'SUCCESSOR.json').exists())
             report_path = out / report_name
             export_path = out / 'NATIVE_EXPORT.json'
             manifest = strict_json((out / 'MANIFEST.json').read_bytes())

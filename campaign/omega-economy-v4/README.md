@@ -45,6 +45,8 @@ Keep the entire original output directory, including native action tape, journal
 
 If construction or acceptance fails, retain its result and incurred costs. A component failure refunds the whole contracted union; an absent collection is not revenue. A positive profit cannot authorize investment when unrestricted cash is insufficient. The earned-only successor policy is tested, but does not prove that a capable seed-funded ordinary alternative could not have constructed the successor sooner.
 
+Archived runs stay bound to the source that operated each account. A later verifier repair checks the registered opening, operating contract and decision rules against the ledger. Use the recorded revision for historical replay and a new directory for a current-source engineering run. [Financial audit and archived-account checks](review/registered-account-policy/README.md).
+
 ## Interpretation
 
 **Historical source matters.** The original seven accounts, including the primary, belong to [`f1074b1`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/f1074b1e128069d5a4754b10955a73a3d95db7c5); the eight later engineering accounts match [`c6ddb25`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/c6ddb25f77c984a5be89196776dbaad1c5b79ce6). Their [recorded live reconciliation](review/PRIMARY_LIVE_RECONCILIATION.json) and [eight-account receipts](CORRECTED_NATIVE_EVIDENCE.json) refer to those source versions. A stored report or a successful portable audit alone does not establish current account state. Keep intact backups and an exclusive writer. Do not replace a stored source manifest to make a newer operator accept an older account.

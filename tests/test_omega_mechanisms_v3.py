@@ -208,6 +208,16 @@ class NativeExecution(unittest.TestCase):
         try:
             with small_native_fixture(),self.assertRaisesRegex(ValueError,'SUMMARY'):n.audit(self.path)
         finally:n.save(self.path/'REPORT.json',old)
+    def test_embedded_native_audit_must_match_public_replay(self):
+        original=n.read(self.path/'REPORT.json')
+        altered=copy.deepcopy(original)
+        altered['native_audit']['accepted']=1
+        n.save(self.path/'REPORT.json',altered)
+        try:
+            with small_native_fixture(),self.assertRaisesRegex(ValueError,'NATIVE_AUDIT_CHANGED'):
+                n.audit(self.path)
+        finally:n.save(self.path/'REPORT.json',original)
+
     def test_refusal_cannot_be_faked_by_cash_flag(self):
         file=self.path/'order-001.json';old=n.read(file);r=copy.deepcopy(old);r['affordable']=not r['affordable'];n.save(file,r)
         try:

@@ -26,6 +26,67 @@ def save(path,value):atomic_bytes(Path(path),canonical(value)+b'\n')
 def read(path):return strict_json(Path(path).read_bytes())
 
 
+def audit_registered_journal(exported, *, root, manifest, opening, contract):
+    """Bind an internally replayable ledger to this operator's registered terms."""
+    config = exported['ledger']['config']
+    expected = {'opening': opening, 'working': 0, 'contract': contract}
+    # Canonical JSON keeps booleans and floats distinct from integer money.
+    if canonical({key: config.get(key) for key in expected}) != canonical(expected):
+        raise ValueError('REGISTERED_NATIVE_ACCOUNT_CONFIG_CHANGED')
+    return audit_journal(exported, root=root, manifest=manifest)
+
+
+def audit_earned_successor(exported, manifest, record, path, *, ident, day, amount, work,
+                           maintenance, tax, before_maintenance):
+    """Reconstruct the scheduled earned-only choice and the complete closing sequence."""
+    journal = exported['connected_journal']['entries']
+    actions = exported['ledger']['actions']
+    closing = [entry for entry in journal if entry['request']['day'] >= day]
+    closing_actions = [action for action in actions if action['day'] >= day]
+    tax_actions = [action for action in closing_actions if action['op'] == 'cost' and action['args']['id'] == tax]
+    if len(tax_actions) != 1:
+        raise ValueError('REGISTERED_CLOSING_TAX_REQUIRED')
+    state = closing_actions[0]['before'] if before_maintenance else tax_actions[0]['after']
+    stopped = manifest.get('native_engine') in ('prospective-v1', 'exact-prospective-v2') and state['investmentStopped']
+    eligible = not stopped and min(state['available'], state['unrestrictedEarned']) >= amount
+    if eligible != (record is not None) or eligible != path.is_file():
+        raise ValueError('REGISTERED_EARNED_SUCCESSOR_DECISION_CHANGED')
+    costs = [('execute', 'cost', maintenance), ('execute', 'cost', tax)]
+    funding = [('spend', None, ident)] if eligible else []
+    actual = [(req['operation'], req.get('op'), req.get('id', req.get('args', {}).get('id')))
+              for req in (entry['request'] for entry in closing)]
+    if actual != (funding + costs if before_maintenance else costs + funding):
+        raise ValueError('REGISTERED_YEAR_END_SEQUENCE_CHANGED')
+    if eligible:
+        payment = closing[0] if before_maintenance else closing[-1]
+        expected = {'operation': 'spend', 'id': ident, 'kind': 'instrument', 'amount': amount,
+                    'day': day, 'work': work, 'expected_net': 1, 'allow_seed': False}
+        if (canonical(payment['request']) != canonical(expected) or payment['status'] != 'COMPLETE'
+                or payment['funding'] != 'EARNED' or canonical(record['funding']) != canonical(payment['receipt'])):
+            raise ValueError('REGISTERED_SUCCESSOR_FUNDING_CHANGED')
+
+
+def trade_operations(buyer, budget, offers, day, *, settled):
+    """Build the registered non-cost native operations from a checked buyer decision."""
+    operations = [('wallet', {'buyer': buyer, 'amount': budget}, day)]
+    for offer in offers:
+        operations.append(('offer', offer, day))
+        for event in ('consent', 'fund'):
+            operations.append(('event', {'id': offer['id'], 'action': event, 'event_id': offer['id'] + '-' + event}, day))
+    for offer in offers:
+        for event in (('prepare', 'release') if settled else ('refund',)):
+            operations.append(('event', {'id': offer['id'], 'action': event, 'event_id': offer['id'] + '-' + event}, day + 1))
+    return operations
+
+
+def audit_trade_operations(exported, expected):
+    entries = [entry for entry in exported['connected_journal']['entries']
+               if entry['request']['operation'] == 'execute' and entry['request']['op'] != 'cost']
+    actual = [(req['op'], req['args'], req['day']) for req in (entry['request'] for entry in entries)]
+    if canonical(actual) != canonical(expected) or any(entry['status'] != 'COMPLETE' for entry in entries):
+        raise ValueError('REGISTERED_NATIVE_TRADE_OPERATIONS_CHANGED')
+
+
 def require_resume_authority(output):
     """A prepared fixture may precede account creation. Operating receipts cannot."""
     output = Path(output)
@@ -228,8 +289,8 @@ def audit_operation(output,result,source,expected_policy=None):
     from .inventor import execute
     output=Path(output);root=output/'runtime';manifest=read(output/'MANIFEST.json')
     exported=read(output/'NATIVE_EXPORT.json')
-    checked=audit_journal(exported,root=root,manifest=manifest)
-    if checked!=result['native_audit'] or result['native_summary']!=exported['ledger']['summary']:
+    checked=audit_registered_journal(exported, root=root, manifest=manifest, opening=OPENING, contract=CONTRACT)
+    if canonical(checked)!=canonical(result['native_audit']) or canonical(result['native_summary'])!=canonical(exported['ledger']['summary']):
         raise ValueError('NATIVE_AUDIT_OR_SUMMARY_CHANGED')
     if result['opening_microUSD']!=OPENING or result['contract']!=CONTRACT or result['tariff']!=TARIFF:
         raise ValueError('REGISTERED_FINANCIAL_CONTRACT_CHANGED')
@@ -243,7 +304,7 @@ def audit_operation(output,result,source,expected_policy=None):
         return e['receipt']
     for kind in ('setup','discovery'):
         expense('omega-'+kind,TARIFF[kind],0,{'source':source,'tariff':TARIFF,'scope':'AUTHORED_RESOURCE_ENVELOPE_NOT_ACTUAL_BILL'})
-    records=[];settled_ids=set();jobs=[j for j in manifest['jobs'] if j['service_id']=='reconciliation']
+    records=[];settled_ids=set();expected_trades=[];jobs=[j for j in manifest['jobs'] if j['service_id']=='reconciliation']
     for ordinal,index in enumerate(INDEXES):
         r=read(output/f'order-{index:03d}.json');records.append(r);day=1+ordinal*20;job=jobs[index]
         if (r['source']!=source or r['day']!=day or r['index']!=index or r['job_id']!=job['id']
@@ -281,15 +342,26 @@ def audit_operation(output,result,source,expected_policy=None):
         if (len(offers)!=1 or len(releases)!=1 or offers[0]['args']['price']!=r['price']
                 or offers[0]['args']['job_id']!=job['id'] or offers[0]['day']!=day or releases[0]['day']!=day+1):
             raise ValueError('NATIVE_TRADE_NOT_EXACTLY_ONCE')
+        buyer=f'SIM-omega-{index}'
+        offer={'id':order,'buyer':buyer,'price':r['price'],'job_id':job['id'],'deadline':day+10}
+        expected_trades.extend(trade_operations(buyer,decision['budget'],[offer],day,settled=True))
         settled_ids.add(order)
+    audit_trade_operations(exported,expected_trades)
     if {a['args']['id'] for a in acts if a['op']=='offer'}!=settled_ids:
         raise ValueError('UNREPORTED_NATIVE_TRADE')
     if result['settled']!=len(settled_ids) or result['refused']!=len(INDEXES)-len(settled_ids):
         raise ValueError('OPERATING_DENOMINATORS_CHANGED')
+    from .inventor_cost_audit import audit_costs
+    audit_costs(exported,result,records,TARIFF,read(output/'TAX.json'))
     successor=result['successor']
+    p=records[0]['policy']
+    work={'source':source,'parent_policy':digest(p),'purpose':'Fresh schema construction and independent validation'}
+    audit_earned_successor(exported, manifest, successor, output/'SUCCESSOR.json', ident='omega-successor',
+                           day=325, amount=TARIFF['successor'], work=work, maintenance='annual-maintenance',
+                           tax='modeled-tax', before_maintenance=True)
     if successor is not None:
         if successor!=read(output/'SUCCESSOR.json'):raise ValueError('SUCCESSOR_CHANGED')
-        p=records[0]['policy'];raw=substrate.synthetic_raw('reconciliation',26,99001)
+        raw=substrate.synthetic_raw('reconciliation',26,99001)
         artifact=execute(raw,p);check=audit_delivery('reconciliation',raw,artifact)
         receipt=expense('omega-successor',TARIFF['successor'],325,
                         {'source':source,'parent_policy':digest(p),'purpose':'Fresh schema construction and independent validation'})
@@ -301,6 +373,4 @@ def audit_operation(output,result,source,expected_policy=None):
         raise ValueError('COMPLETE_YEAR_CLOCK_CHANGED')
     if [digest(r) for r in records]!=result['record_sha256'] or result!=read(output/'NATIVE_RESULT.json'):
         raise ValueError('OPERATING_REPORT_CHANGED')
-    from .inventor_cost_audit import audit_costs
-    audit_costs(exported,result,records,TARIFF,read(output/'TAX.json'))
     return {'accepted':True}
