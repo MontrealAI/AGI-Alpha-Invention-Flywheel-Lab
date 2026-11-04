@@ -21,7 +21,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install fixed public conventional analysis dependencies
-        run: python -m pip install --only-binary=:all: -r research/battery_physical100/requirements.txt
+        run: |
+          python -m pip install --only-binary=:all: -r research/battery_physical100/requirements.txt
       - name: Test extraction, forecasting and prefix isolation
         run: python -B -m unittest research.battery_physical100.test_probe research.battery_physical100.test_measurement research.battery_physical100.test_prognosis research.battery_physical100.test_evaluate -v
       - name: Validate final extraction on exposed development cell only

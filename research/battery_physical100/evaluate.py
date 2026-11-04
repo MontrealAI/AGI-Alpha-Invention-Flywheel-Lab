@@ -35,7 +35,7 @@ def acquire(entry,manifest,path):
             with urllib.request.urlopen(url,timeout=120) as r:data=r.read(entry['bytes']+1)
             sha=hashlib.sha256(data).hexdigest()
             if len(data)!=entry['bytes'] or sha!=entry['sha256']:
-                raise ValueError('Publisher source identity mismatch')
+                raise AcquisitionError({'url':url,'status':'source_identity_mismatch','expected_bytes':entry['bytes'],'observed_bytes':len(data),'expected_sha256':entry['sha256'],'observed_sha256':sha,'attempts':attempts})
             path.write_bytes(data)
             attempts.append({'attempt':attempt+1,'status':'verified','seconds':time.perf_counter()-start})
             return {'url':url,'bytes':len(data),'sha256':sha,'attempts':attempts}
@@ -70,6 +70,7 @@ def measure_record(entry,path,full=False):
         record['unavailable_target_cycles']=[t for t in ENDPOINTS if t not in f.cycles]
         record['full_quality_flags']=f.flags
         record['accepted_full_cycles']=len(f.cycles)
+        record['cycle_capacities_ah']={str(c):e['capacity_ah'] for c,e in f.cycles.items() if c>=1}
         record['reference_checks']=reference_checks(path,entry['rated_capacity_ah'],f)
     return record
 
@@ -88,7 +89,7 @@ def run(out,development_only=False):
             entry=selected[0];path=temp/'dev.csv'
             receipt=acquire(entry,manifest,path)
             record=measure_record(entry,path,True)
-            compact={k:v for k,v in record.items() if k!='prefix'}
+            compact={k:v for k,v in record.items() if k not in {'prefix','cycle_capacities_ah'}}
             compact['prefix']={k:v for k,v in record['prefix'].items() if k!='curve'}
             compact['receipt']=receipt
             save(out/'development.json',compact)
@@ -185,6 +186,11 @@ def run(out,development_only=False):
                 'versions':{x:version(x) for x in ('numpy','scipy','PyProBE-Data','polars')},'python':platform.python_version(),
                 'wall_seconds':time.perf_counter()-start,'cpu_seconds':time.process_time()-cpu,
                 'costs':'Actual whole-development/model-session/billing/commercial costs unknown; no zero-cost/profit claim'}
+        with (out/'cycle_capacities.csv').open('w',newline='') as stream:
+            writer=csv.writer(stream);writer.writerow(['cell','group','role','cycle','accepted_capacity_ah'])
+            for record in records+tests:
+                for c in range(1,1001):
+                    writer.writerow([record['cell'],record['group'],record.get('role','test'),c,record.get('cycle_capacities_ah',{}).get(str(c),'')])
         save(out/'evaluation.json',report)
         lines=['# Physical battery laboratory screening result','',f"Finite pilot accepted: {report['accepted']}",
                'Nine untouched test cells, two protocol-specific endpoints each. Actual physical lab data; not field deployment.',
@@ -222,6 +228,10 @@ def run(out,development_only=False):
             save(out/'example_screen.json',demo);(out/'example_screen.txt').write_text(readable(demo))
         print('BATTERY100_RESULT='+json.dumps({'accepted':report['accepted'],'gates':gates,'seal':seal['prediction_sha256'],'rows':len(results),'wall_seconds':report['wall_seconds']},sort_keys=True),flush=True)
         print((out/'REPORT.md').read_text())
+        # Compact derived artifact transport, never raw publisher measurements.
+        import base64,gzip
+        bundle={p.name:p.read_text() for p in out.iterdir() if p.suffix in {'.json','.md','.txt'}}
+        print('BATTERY100_DERIVED_BUNDLE='+base64.b64encode(gzip.compress(canonical(bundle),mtime=0)).decode(),flush=True)
 
 
 def main():
