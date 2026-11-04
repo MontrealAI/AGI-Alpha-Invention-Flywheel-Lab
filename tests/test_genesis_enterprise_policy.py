@@ -83,6 +83,32 @@ class PolicyTests(unittest.TestCase):
             kw = {'available': available, 'earned': earned, 'seed_allowed': bool(rng.randrange(2))}
             self.assertEqual(choose(o, ts, **kw)['selected'], independently_choose(o, ts, **kw))
 
+    def test_full_funding_cash_threshold_and_lower_price(self):
+        self.p['offer']['prices'] = [30000000, 60000000]
+        kw = dict(earned=5200000, seed_allowed=False)
+        for available, expected in ((35200000, 30000000), (35199999, None),
+                                    (65200000, 60000000), (65199999, 30000000)):
+            with self.subTest(available=available):
+                decision = choose(self.p['offer'], self.p['tools'], available=available, **kw)
+                selected = decision['selected']
+                self.assertEqual(selected['price'] if selected else None, expected)
+                self.assertEqual(selected, independently_choose(self.p['offer'], self.p['tools'], available=available, **kw))
+
+    def test_earned_production_must_also_cover_upfront_fee(self):
+        for earned, trades in ((5000000, False), (5199999, False), (5200000, True)):
+            with self.subTest(earned=earned):
+                decision = choose(self.p['offer'], self.p['tools'], available=100000000,
+                                  earned=earned, seed_allowed=False)
+                self.assertEqual(decision['selected'] is not None, trades)
+
+    def test_protocol_rejects_native_ineligible_price_before_registration(self):
+        self.p['offer']['prices'] = [199999]
+        with self.assertRaises(ValueError): validate_protocol(self.p)
+
+    def test_protocol_rejects_residual_beyond_native_exposure(self):
+        self.p['offer']['reserve'] = 31000000
+        with self.assertRaises(ValueError): validate_protocol(self.p)
+
     def test_protocol_rejects_scope_inflation(self):
         self.p['boundaries']['real_transactions'] = True
         with self.assertRaises(ValueError): validate_protocol(self.p)

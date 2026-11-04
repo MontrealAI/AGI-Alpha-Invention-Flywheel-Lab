@@ -54,6 +54,13 @@ def validate_protocol(p):
     if p['offer']['reserve'] < p['offer']['fee']:
         raise ValueError('RESERVE_MUST_COVER_FEE')
     choose(p['offer'], p['tools'], available=p['opening'], earned=0, seed_allowed=p['first_delivery_may_use_seed'])
+    # Refuse unusable native terms before making a workspace or account. The
+    # policy's full-price collateral rule relies on this native price floor.
+    from commercial.terms_exact_v2 import prospective_terms
+    for price in p['offer']['prices']:
+        prospective_terms('genesis-registration-validation', price, 10, 2,
+                          residual=p['offer']['reserve'] - p['offer']['fee'],
+                          fee=p['offer']['fee'])
 
 
 def source_files(root):
@@ -177,6 +184,10 @@ def operate(output, *, max_steps=None, fault=None):
                     ident, hour = job['id'], 24 * (i + 1)
                     order = 'g002-' + ident
                     if phase == 'overhead':
+                        # Apply only the existing contract's eligible, dated
+                        # maturities. The native ledger keeps residual claims
+                        # protected; time passing does not create revenue.
+                        account.advance(hour)
                         if p['acquisition']:
                             account.cost('genesis-acquisition-' + ident, p['acquisition'], hour)
                         if p['maintenance']:
@@ -299,7 +310,8 @@ def audit(output):
         if overhead:
             observed = overhead[-1]['after']
         else:
-            prior = [a for a in actions if a['day'] < 24*(i+1)]
+            prior = [a for a in actions if a['day'] < 24*(i+1)
+                     or (a['day'] == 24*(i+1) and a['op'] == 'mature')]
             observed = prior[-1]['after'] if prior else {'available': p['opening'], 'unrestrictedEarned': 0}
         state = {k: observed[k] for k in ('available', 'unrestrictedEarned')}
         if row['decision_state'] != state:

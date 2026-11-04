@@ -128,3 +128,26 @@ MuZero-trained network; no exhaustive frontier awareness; no physical operation;
 no Blue Sky flagship; no US$3B result; no production deployment. The first genuine
 business milestone still requires authorized, accepted and paid delivery with
 observed complete economics. No new authority is granted by this README.
+
+## Funding and dated-maturity correction
+
+The original `0964ad2` hosted pilot failed six native tests before completing its
+operating comparison. The second quote ignored the first order's still-retained
+full exposure: the operator had only processed maturities at final completion.
+The selector also omitted the upfront fee and full custody collateral from its
+cash-before-production check. Those original failures remain failures.
+
+The corrected operator invokes the existing canonical maturity operation at each
+job's registered hour, before overhead and selection. It never matures at or before
+the inclusive claim boundary, shortens terms, removes residual claims, adds cash,
+or rewrites a historical account. A quote must leave enough available cash for its
+fee, full-price collateral and production, as well as the registered reserve.
+Non-seed production must also have earned funds covering the fee and production.
+Unfundable quotes are excluded; a lower feasible quote or no entry can win.
+Native-ineligible prices and residual terms are rejected during registration.
+
+Regression coverage includes exact cash/earned boundaries, buyer refusal/no entry,
+same-hour maturity reconstruction with zero overhead, and interruption recovery.
+Both GENESIS workflows use the existing standard runner, six-hour platform window
+and first-step job clock. See [repair qualification](FUNDING_REPAIR.md) for source,
+local evidence, dependency differences and the remaining hosted review gate.
