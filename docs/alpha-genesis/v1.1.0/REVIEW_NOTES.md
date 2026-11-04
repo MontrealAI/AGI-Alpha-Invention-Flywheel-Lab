@@ -33,3 +33,7 @@ No frontier-model discovery campaign, new sensor, physical experiment, installed
 ## Browser-validation scope
 
 Desktop and mobile layouts and arithmetic interactions passed an offline document-injection test with the exact CSS/JavaScript bytes. The fixture uses matching CSP hashes for those inlined assets. Direct file and loopback-HTTP navigation were blocked by the managed Chromium environment. Those whole-page navigation paths are not claimed as tested; the actual deployment must be checked on its destination host. The publication integrity checker separately tests served bytes, not browser policy or host security.
+
+## Public filename-redaction revision
+
+With author approval, the public publication replaces private input filenames with neutral source labels in the bibliography and provenance register. Attribution, source roles and hashes, analytical code, retained numerical results, and conceptual figures are preserved. The PDF is rebuilt from the revised LaTeX; the publication checksums identify this public revision rather than the originally supplied PDF. Earlier Git history is not claimed to be erased.

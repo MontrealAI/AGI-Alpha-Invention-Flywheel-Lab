@@ -106,3 +106,7 @@ The conceptual reference art is not experimental data. Private research dialogue
 Boucher, Vincent. *ALPHA GENESIS FLYWHEEL Ω: Riding the Exponential—From Frontier Intelligence to Compounding Discovery and Productive Power*. MONTREAL.AI / QUEBEC.AI, research release 1.1.0, 4 November 2026. See `CITATION.cff`.
 
 **Invent the means. Expand what becomes possible. Compound the ability to discover.**
+
+## Public filename-redaction revision
+
+This public revision of research edition 1.1.0 replaces private input filenames with neutral source labels, with author approval. The manuscript substance and analytical companion are unchanged. The PDF was rebuilt and package hashes refreshed; do not use original pre-redaction PDF or archive hashes to identify this revision. See `REVIEW_NOTES.md` and `source/BUILD_REPORT.json`.
