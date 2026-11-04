@@ -40,8 +40,12 @@
 \fancyfoot[L]{\footnotesize\sffamily Research edition 1.0.0 \;\textbullet\; 3 November 2026}
 \fancyfoot[R]{\footnotesize\sffamily\thepage\,/\,\pageref{LastPage}}
 \renewcommand{\headrulewidth}{.3pt}
+\makeatletter
+\newcommand{\inputrows}[1]{\@@input#1 }
+\makeatother
 \input{generated.tex}
 \begin{document}
+\hypersetup{pageanchor=false}
 \begin{titlepage}
 \color{ink}
 \vspace*{3mm}
@@ -51,7 +55,7 @@
 \vspace{5mm}
 {\fontsize{43}{47}\selectfont SUCCESSOR $\boldsymbol{\Omega}$}\par
 \vspace{5mm}
-{\fontsize{29}{34}\selectfont\bfseries The Institution\\That Compounds}\par
+{\fontsize{29}{35}\selectfont\bfseries The Institution\\That Compounds\par}
 \vspace{8mm}
 {\large Manufacturing mission advantage, preserving inventive capability, and financing the physical frontier}\par
 \vspace{10mm}
@@ -64,11 +68,11 @@
 \node[font=\sffamily\bfseries\small] at (\x,1.9) {\lab};
 \node[font=\sffamily\small,text=muted] at (\x,1.25) {\sub};
 }
-\foreach \x in {3.1,7.1,11.1}{\draw[-{Stealth},gold,thick] (\x,1.9)--(\x+.95,1.9);}
+\foreach \x in {3.25,7.25,11.45}{\draw[-{Stealth},gold,thick] (\x,1.9)--(\x+.6,1.9);}
 \node[font=\small,text=wine] at (7.9,.45) {Knowledge can persist. Proof must be current. Authority is granted.};
-\end{tikzpicture}
-\vspace{9mm}
-{\large\itshape The enduring advantage is not a model.\\It is the ability to make the next model useful.}\par
+\end{tikzpicture}\par
+\vspace{6mm}
+{\large\itshape The enduring advantage is not a model.\\[2pt]It is the ability to make the next model useful.\par}
 \vfill
 {\large\bfseries Vincent Boucher}\par
 {\sffamily MONTREAL.AI \;\textbullet\; QUEBEC.AI}\par
@@ -78,6 +82,7 @@
 \vspace{5mm}
 {\sffamily\bfseries\color{gold} OWN THE INSTITUTION. REPLACE THE MODELS. PRESERVE THE MISSION.}
 \end{titlepage}
+\hypersetup{pageanchor=true}
 \begin{abstract}
 A breakthrough can create a result while leaving its owner unable to reproduce, renew, or extend the capability that produced it. We study a different unit of value: a customer-owned mission institution whose methods, evidence, skills, and operating memory can survive changes in models and suppliers without inheriting stale proof or unauthorized powers. We formalize \emph{renewal-adjusted Alpha}: comparative mission advantage over a complete horizon, including construction, unsuccessful search, operation, maintenance, migration, requalification, and residual obligations. The Alpha--Gym--Specialist ASI--SUCCESSOR $\Omega$ progression becomes a set of distinct discovery, development, evidence, and authority transitions, not an automatic promotion ladder. An exact authored cash-constrained model exhibits a reversal: a portable capability with lower local operating contribution produces 230 units of horizon cash surplus versus 200 for repeated reconstruction. An independently implemented reachability oracle agrees on 324 optimization comparisons across 162 supplied environments. Only 19 environments favor the additional portability option; 143 tie, and forced retention is often infeasible or inferior. A conventional planner with the same choices ties the result. We derive the crossover condition, specify context-bound renewal and export invariants, and connect sustainable surplus to physical expansion through separately auditable investment and qualification contracts. The contribution is a testable theory of institutional continuity and a reproducible witness of when it matters, not evidence of autonomous discovery, real demand, general ASI, or a forecast of stellar-scale industrialization.
 \end{abstract}
@@ -86,6 +91,8 @@ Build advantages worth proving; preserve the machinery that makes them renewable
 \end{insight}
 \subsection*{Reader's map}
 Sections 1--3 explain the institution and its four public stages. Sections 4--6 define the evidence boundary, economic objective, and exact results. Sections 7--9 develop renewal, inventive succession, and physical expansion. Sections 10--12 give an actionable industrial research programme, limitations, and the conclusion. The appendices provide proofs, a complete numerical specification, an evidence ledger, and reproduction instructions.
+\clearpage
+\setcounter{tocdepth}{1}
 \tableofcontents
 \clearpage
 \input{sections/institution.tex}

@@ -67,13 +67,15 @@ def integrate_site(here,output,record,reader):
     tests.write_text(text)
     index=site/'index.html'; text=index.read_text()
     if 'id="successor-omega"' not in text:
-        start=text.index('<article',text.index('id="papers"'))
+        start=text.rfind('<article', 0, text.index('id="flywheel-omega"'))
+        if start < 0: raise ValueError('Expected preceding publication card absent')
         card='<article class="card featured" id="successor-omega"><div class="cover" aria-hidden="true"><span>New research / 1.0.0</span><strong>SUCCESSOR Ω</strong><div class="symbol">Ω</div><span>The Institution That Compounds</span></div><div class="paper-copy"><span class="tag">Renewal-adjusted Alpha · Exact study</span><h2>SUCCESSOR Ω</h2><p class="lead">The Institution That Compounds</p><p>Own the institution. Replace the models. Preserve the mission. A framework and exact conditional study of what survives replacement—and when preserving it earns its cost.</p><p class="meta">Vincent Boucher · MONTREAL.AI / QUEBEC.AI<br>3 November 2026 · Edition 1.0.0</p><div class="actions"><a class="button primary" href="successor-omega.html">Read SUCCESSOR Ω →</a><a class="button" href="successor-omega.pdf" download>Download PDF</a><a class="button" href="'+REPO+'/tree/main/docs/successor-omega">Source and reproduction</a></div></div></article>'
         text=text[:start]+card+text[start:]; index.write_text(text)
     readme=site/'README.md'; text=readme.read_text()
     if '## SUCCESSOR Ω — The Institution That Compounds' not in text:
         section='## SUCCESSOR Ω — The Institution That Compounds\n\nVincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Edition 1.0.0.\n\n[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/successor-omega.html) · [PDF](successor-omega.pdf) · [LaTeX, exact study and reproduction](../successor-omega/README.md).\n\nOwn the institution. Replace the models. Preserve the mission. This paper formalizes renewal-adjusted Alpha and the separation of retained knowledge, current proof and bounded authority. Its authored exact study compares portability with reconstruction across 162 supplied environments and an ordinary equal-content control. The physical horizon uses explicit construction, energy, material and thermal requirements.\n\n**Scope:** Exact finite planning and local state-machine evidence, not autonomous invention, achieved general ASI, real demand or profit, production security, or installed physical capacity. Earlier papers retain their original roles and evidence.\n\n'
-        text=text.replace('# Research papers\n','# Research papers\n\n'+section,1); readme.write_text(text)
+        first, rest = text.split('\n', 1)
+        text = first+'\n\n'+section+rest.lstrip('\n'); readme.write_text(text)
     for name,sha in old.items():
         if digest(site/name)!=sha:raise AssertionError('Earlier PDF changed: '+name)
     evidence=here/'evidence'; evidence.mkdir(exist_ok=True)
@@ -89,6 +91,8 @@ def build(args):
         shutil.copyfile(here/name,target)
     env=os.environ.copy();env.update(SOURCE_DATE_EPOCH=EPOCH,FORCE_SOURCE_DATE='1',TZ='UTC')
     run([sys.executable,'-m','unittest','-v','test_companion'],work,output/'tests.log',env)
+    if not re.search(r'Ran 35 tests in', (output/'tests.log').read_text()):
+        raise AssertionError('Unexpected regression test count')
     run([sys.executable,'companion.py','--output','results.json'],work,output/'study.log',env)
     result=json.loads((work/'results.json').read_text()); main=result['main']; grid=result['grid_summary']
     assert [main[k]['terminal_cash'] for k in ('portable','no_portable','legacy','ordinary_equal_content')]==[330,300,292,330]
