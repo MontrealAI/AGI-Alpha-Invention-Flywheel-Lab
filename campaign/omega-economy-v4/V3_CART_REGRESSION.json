@@ -1,0 +1,152 @@
+{
+  "deviators": [
+    {
+      "assigned_outcome": "joint",
+      "assigned_price_cents": 1554,
+      "basket": [
+        "first",
+        "second"
+      ],
+      "chosen_outcome": "joint",
+      "chosen_price_cents": 1341,
+      "gain_cents": 213,
+      "report_type": "cart",
+      "true_type": "type-004"
+    },
+    {
+      "assigned_outcome": "joint",
+      "assigned_price_cents": 1554,
+      "basket": [
+        "first",
+        "second"
+      ],
+      "chosen_outcome": "joint",
+      "chosen_price_cents": 1341,
+      "gain_cents": 213,
+      "report_type": "cart",
+      "true_type": "type-005"
+    },
+    {
+      "assigned_outcome": "joint",
+      "assigned_price_cents": 1554,
+      "basket": [
+        "first",
+        "second"
+      ],
+      "chosen_outcome": "joint",
+      "chosen_price_cents": 1341,
+      "gain_cents": 213,
+      "report_type": "cart",
+      "true_type": "type-007"
+    },
+    {
+      "assigned_outcome": "joint",
+      "assigned_price_cents": 1554,
+      "basket": [
+        "first",
+        "second"
+      ],
+      "chosen_outcome": "joint",
+      "chosen_price_cents": 1341,
+      "gain_cents": 213,
+      "report_type": "cart",
+      "true_type": "type-008"
+    }
+  ],
+  "evidence_role": "REPRODUCTION_OF_EXPOSED_HISTORICAL_CASE_NOT_FRESH_CONFIRMATION",
+  "evidence_sha256": "471422405df4575250b0d440e5e63fb06b1f3177c3df5daab7b0edbec20bd12c",
+  "expected_contribution_cents": {
+    "historical_standard_control": "29377/40",
+    "original_single_purchase": "6001/8",
+    "original_with_feasible_carts": "12829/20",
+    "repaired_cart_menu": "29377/40"
+  },
+  "market_id": "competitive-391103",
+  "market_sha256": "4dcd127cb69da4c6dd0b2fa588b06cc6d12c89428646ddc85648bd69da9cdd0d",
+  "original_cart_verification_accepted": false,
+  "original_posted_menu": [
+    {
+      "outcome_id": "first",
+      "price_cents": 518
+    },
+    {
+      "outcome_id": "joint",
+      "price_cents": 1554
+    },
+    {
+      "outcome_id": "outside",
+      "price_cents": 0
+    },
+    {
+      "outcome_id": "second",
+      "price_cents": 823
+    }
+  ],
+  "original_program_sha256": "1e47c52d237021c4f5674acf34d3c2897b575df2f3bc8253f055260f0e6f0b08",
+  "original_single_purchase_verification_accepted": true,
+  "original_v3_execution_commit": "870a4e8822c89583ca89b7cad729cb830237da53",
+  "parent_commit": "8cd375784c24b879ae1eb4835c6af4fb925cbf4c",
+  "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "repair_rounds": [
+    {
+      "candidate_sha256": "71389914859beec0a39bdb29ea2e7cef4a82058b746e6c8d01edb5e95f1437e0",
+      "composition_failures": [
+        [
+          "first",
+          "second"
+        ]
+      ],
+      "expected_contribution_cents": "12829/20",
+      "iteration": 0,
+      "verified_incentive_failures": 4
+    },
+    {
+      "candidate_sha256": "82b4d9a85bf33ad9516dc00a786d86a55e523c1821fe3c11246bfb21792b5081",
+      "composition_failures": [],
+      "expected_contribution_cents": "29377/40",
+      "iteration": 1,
+      "verified_incentive_failures": 0
+    }
+  ],
+  "repaired_cart_verification_accepted": true,
+  "repaired_menu": [
+    {
+      "outcome_id": "first",
+      "price_cents": 518
+    },
+    {
+      "outcome_id": "second",
+      "price_cents": 3327
+    },
+    {
+      "outcome_id": "joint",
+      "price_cents": 1554
+    }
+  ],
+  "repaired_program_sha256": "82b4d9a85bf33ad9516dc00a786d86a55e523c1821fe3c11246bfb21792b5081",
+  "schema": "omega/historical-v3-cart-regression/v4",
+  "scope": "Synthetic prior-weighted cents contribution, not annual profit, measured demand, account mutation or novel discovery advantage. V3 outputs and accounts unchanged; repair reconstructs a new finite menu.",
+  "source_files": {
+    "commercial/ledger.py": {
+      "sha256": "7febf3102ee931e686bdb71bef0cef3e0c43fa5e45ba8a194cf7f0e6833894c5"
+    },
+    "mechanism_harness/cart_program.py": {
+      "sha256": "f87257df348a8c32830eed885325e45d18aad2541e3c1e80c6c50c52bc7c36c5"
+    },
+    "mechanism_harness/cart_synthesis.py": {
+      "sha256": "bbb6d33af6f729d6782ca360726b3ce82a802bdbd2b6374d4789487f0df0a9c6"
+    },
+    "mechanism_harness/market_cases.py": {
+      "matches_parent_bytes": true,
+      "sha256": "a05861196f0a0c62c836e26b59e0d5592b656783b1a6f0a437d9fa9b374743af"
+    },
+    "mechanism_harness/market_program.py": {
+      "matches_parent_bytes": true,
+      "sha256": "a770083489c419758d827170ac3cb14993fb70b9c6c36798aef0bbe304e63e1f"
+    },
+    "mechanism_harness/mechanism_synthesis.py": {
+      "matches_parent_bytes": true,
+      "sha256": "a3faa1cdd02e55644b4ef1acb53d7f93d970c54c90d9b19adcbae72d7f264c16"
+    }
+  }
+}

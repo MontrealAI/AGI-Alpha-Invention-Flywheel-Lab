@@ -1,0 +1,100 @@
+{
+  "actual_full_lifecycle_cost_usd": null,
+  "actual_revenue_usd": 0,
+  "all_pass": true,
+  "billing": "In-process DB in memory, local CPU; no network or paid API requests in either production path.",
+  "bytes": {
+    "conventional_semantics_bytes": 325294,
+    "source_bytes": 131100,
+    "sqlite_semantics_bytes": 325294
+  },
+  "cases": 132,
+  "comparison_files_sha256": {
+    "PROTOCOL.md": "8ad228e8ca7b72b4315bf2cb01c7ac1d88af04e2d93d08d497601e3b259a058d",
+    "compare.py": "f7b4e6db878fb07dd018ac6196cec87736d2e8fd71324e4f22f0b34673f74df3",
+    "kpi.sql": "a1965cd1bffd4cd68d6e3a8e83d1ef5c72d7399084ed6d24f82bf8a92ed4b5dd"
+  },
+  "counts": {
+    "conventional_accepted": 132,
+    "matching_semantics": 132,
+    "metrics": 1320,
+    "sqlite_accepted": 132
+  },
+  "failures": [],
+  "fixed_cases_and_content_sha256": "4be91d7f25371790e34d46ebfc5175f15b344ec33c243c27a261c6ebf67d50dc",
+  "index_bounds_inclusive": true,
+  "indices": [
+    0,
+    131
+  ],
+  "negative_control": {
+    "accepted": false,
+    "artifact_content_sha256": "5f1bd3681f696c65eaeb1aa5fc24c498fa61e90896120f444042e1dbffc4ecda",
+    "errors": [
+      "KPI_ARITHMETIC_OR_COMPLETENESS"
+    ],
+    "independence": "Independent source-adaptation and outcome checker; shared agent family and host, not external certification.",
+    "input_content_sha256": "2ca568b36fe9ac143578b2a30b683e288f81ae3eef5acb54a40677fedead9d2e",
+    "order_id": "adaptive012-kpi_variance-c475806218-000",
+    "scope": "SYNTHETIC_PUBLIC_WORKLOAD",
+    "service_id": "kpi_variance"
+  },
+  "real_human_attention_minutes": null,
+  "repo_commit": "bc8f1560dd1c1c90cdc246a8469a249024094fac",
+  "repo_files_sha256": {
+    "adaptive_enterprise/checkers.py": "fe6bb58f94afafdc67a2c47a9dccedd42749dd653e885b4dabad82c9f74e913b",
+    "adaptive_enterprise/instruments.py": "86404ba03d1c3c242e743dbdadbf66cbc9b6c8019b304eb180b8fe87c5bd144e",
+    "commercial/ledger.py": "7febf3102ee931e686bdb71bef0cef3e0c43fa5e45ba8a194cf7f0e6833894c5",
+    "enterprise/checkers.py": "8685c3c9876815db2f2f5de6ba5954529f88cd7d4f95d7c1fa9aedc438cc0981",
+    "enterprise/services.py": "f3ff23509899180235436bffb8b7396092ff9ae881f622a386ba932ebaa045bc"
+  },
+  "schema": "omega/sqlite-kpi-self-service/v1",
+  "seed": 392900,
+  "software": {
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "python": "3.12.14",
+    "sqlite": "3.53.1"
+  },
+  "wall_and_process_cpu": {
+    "conventional_checking": {
+      "calls": 132,
+      "cpu_ns": 73745389,
+      "wall_ns": 74692751
+    },
+    "conventional_production": {
+      "calls": 132,
+      "cpu_ns": 12866118,
+      "wall_ns": 13129917
+    },
+    "fixture_generation": {
+      "calls": 132,
+      "cpu_ns": 7500876,
+      "wall_ns": 7700111
+    },
+    "negative_check": {
+      "calls": 1,
+      "cpu_ns": 483114,
+      "wall_ns": 486243
+    },
+    "sqlite_checking": {
+      "calls": 132,
+      "cpu_ns": 72778944,
+      "wall_ns": 73250729
+    },
+    "sqlite_close": {
+      "calls": 1,
+      "cpu_ns": 54147,
+      "wall_ns": 56017
+    },
+    "sqlite_open": {
+      "calls": 1,
+      "cpu_ns": 128898,
+      "wall_ns": 134462
+    },
+    "sqlite_production": {
+      "calls": 132,
+      "cpu_ns": 42795209,
+      "wall_ns": 43228648
+    }
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "schema": "omega/independent-review/v4",
+  "source_commit": "f1074b1e128069d5a4754b10955a73a3d95db7c5",
+  "source_tree_sha": "a184063e194dd7e396b2b382a82e2fc9d5bf45df",
+  "clean_worktree_after_tests": true,
+  "qualification": [
+    {
+      "scope": "Strategic cart, raw-menu independent oracle, tiny brute-force optimizer, campaign source/denominator, cooperative construction",
+      "tests": 46,
+      "failures": 0,
+      "errors": 0,
+      "elapsed_seconds": 19.435,
+      "exit_code": 0
+    },
+    {
+      "scope": "Same-account post-commit fault recovery and completed-resume byte identity",
+      "test_methods": 1,
+      "fault_points": [
+        "quote",
+        "wallet",
+        "fund",
+        "production",
+        "fee",
+        "release",
+        "second_release",
+        "maintenance"
+      ],
+      "fault_points_passed": 8,
+      "failures": 0,
+      "errors": 0,
+      "elapsed_seconds": 150.323,
+      "exit_code": 0
+    }
+  ],
+  "logs": {
+    "v4-final-independent-suite.log": {
+      "sha256": "9af8c2c5878a1adde490e3bf715ab9e7e97aebdb01d0a280b3a184071359091b",
+      "bytes": 6329
+    },
+    "v4-final-committed-crash.log": {
+      "sha256": "2694a9040f3f3893b2a4b3d7b9b1d71d60c7ae96165879d30a1cba898295ca84",
+      "bytes": 274
+    }
+  },
+  "test_source_sha256": {
+    "test_omega_carts.py": "550fd9d970e7986041e9807fd8056d88974d0b3b69d5d37148c2411dbdbbd9ed",
+    "test_omega_cart_review.py": "c42652e40552bca1e91f40f51e09466b6119faf05cf171e7ce7495ff21861fe6",
+    "test_omega_cart_campaign.py": "fc76f30adc65173e2a5d89272529e1b7e576803a3c1e74a14d175c9773f586ae",
+    "test_omega_cooperative.py": "d2ae9249464678eb61d6aa1fdfc59a6a2c11c1678e7959e5e41caf16d88c44ad",
+    "test_omega_cart_crash.py": "abbd38da027e8bcf0af50f15e6a6bfc23c26c1ed5987e6d782c2b01e23baec49"
+  },
+  "preserved_development_history": {
+    "scope": "Independent engineering review; not all final-source qualification",
+    "observations": [
+      {
+        "name": "Original V3 regression",
+        "tests": 33,
+        "status": "PASS",
+        "elapsed_seconds": 30.299
+      },
+      {
+        "name": "PR205 recovery reproduction",
+        "test_methods": 2,
+        "postcommit_fault_points": 7,
+        "cross_order_second_release": true,
+        "status": "PASS",
+        "elapsed_seconds": 69.305
+      },
+      {
+        "name": "V4 crash development pass1",
+        "test_methods": 1,
+        "fault_points": 8,
+        "source_change_rejections": 2,
+        "status": "FAILED_DUE_TO_CONCURRENT_SOURCE_EDITS",
+        "elapsed_seconds": 86.629
+      },
+      {
+        "name": "V4 crash development pass2",
+        "test_methods": 1,
+        "fault_points": 8,
+        "source_change_rejections": 1,
+        "status": "FAILED_DUE_TO_CONCURRENT_SOURCE_EDITS",
+        "elapsed_seconds": 114.854
+      },
+      {
+        "name": "Independent V4 strategic tests before zero-overlap addition",
+        "tests": 4,
+        "status": "PASS",
+        "elapsed_seconds": 1.239
+      },
+      {
+        "name": "Zero-price overlap regression pre-fix",
+        "tests": 5,
+        "passes": 4,
+        "failures": 1,
+        "status": "REPRODUCED_DEFECT",
+        "elapsed_seconds": 1.368
+      }
+    ],
+    "files": {
+      "original-v3-tests.log": {
+        "sha256": "3baf1e95a9f45f64a92556b9d424415af4a453a8336f3f1cc8bfb5aa61ff7e05",
+        "bytes": 4184
+      },
+      "pr205-tests.log": {
+        "sha256": "dbd5b1862d9ac89e9eb9ce268da10fb86ed400085771cad1761996484b08bf3b",
+        "bytes": 575
+      },
+      "v4-crash-tests.log": {
+        "sha256": "773259dead817e7e7e766e02a01cd6e0332c461e72f84e949659089eae71ba1c",
+        "bytes": 2438
+      },
+      "v4-crash-final-tests.log": {
+        "sha256": "f7953a97f6c3ba95329f0b6e52cd6833c14c057a4316394d811519f55cde2a25",
+        "bytes": 1441
+      },
+      "v4-independent-tests.log": {
+        "sha256": "8cedc5388568dc63db7eccdd35be6695a07b185a15cb266f23d4cf7c755d6561",
+        "bytes": 806
+      },
+      "v4-zero-price-review.log": {
+        "sha256": "14cb99f2e183e73a968ae7408d7b069a702692c31bfc93d881d061e96d773b65",
+        "bytes": 1957
+      }
+    },
+    "pending": "Final committed source eight-fault crash replay and strategic suite"
+  },
+  "review_findings": [
+    {
+      "finding": "Overlapping zero-price redundant offers made DP/exhaustive basket tie-breaking disagree despite equal economics",
+      "status": "Reproduced and repaired; independent regression passes",
+      "claim_boundary": "One additional finite-action correctness defect, not observed financial misposting"
+    },
+    {
+      "finding": "Two fresh output initializers could race before native writer lock",
+      "status": "Atomic new-directory claim implemented and reviewed; existing-empty-output regression owned by native suite"
+    },
+    {
+      "finding": "Unknown/stressed buyer settlement audit reused producer DP",
+      "status": "Native audit now uses exhaustive cart oracle"
+    }
+  ],
+  "limitations": [
+    "Does not certify all repository tests or hosted CI",
+    "No empirical buyer demand or complete lifecycle economic superiority",
+    "Finite single-checkout service-set union model; no coalition or separate-counterparty guarantee",
+    "Crash tests use deliberate exceptions after durable commits, not power-loss faults"
+  ]
+}

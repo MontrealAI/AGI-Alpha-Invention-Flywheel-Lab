@@ -1,0 +1,52 @@
+{
+  "base_commit": "68eef714f62fab64b04131377afd6ae2047358f9",
+  "diagnosis": "Four invalid V2 accounts were rejected with a different error than the established COST_CLOSURE diagnosis. The corrected source preserves the existing cost audit before independently checking successor eligibility. No evidence or registered protocol changed.",
+  "independent_replay_matched": 19,
+  "independent_replay_sha256": "512931aee8b931dfbce3753576a2ffa82421959ceb9bb9f01d6291fb05067b92",
+  "interrupted_source_bound_test": {
+    "errors": 1,
+    "failure_code": "SOURCE_CHANGED_DURING_RUN",
+    "log_sha256": "8d5869e7f2c8ff5c70a84e82fa63b86e79bc21dac9da2485465e465a38332a09",
+    "methods_attempted": 20,
+    "module": "tests.test_omega_cart_native",
+    "reason": "One test in an intermediate worktree correctly stopped when a dependency changed during its native run. Current-source qualifications use isolated frozen checkouts."
+  },
+  "repaired_native_manifests": {
+    "mechanism_harness.cart_native": {
+      "files": 63,
+      "sha256": "fbf47c714d550daaa2642a5bf12300e6d72f5a6ef93e4cc7902c946c24312462"
+    },
+    "mechanism_harness.economical_native": {
+      "files": 53,
+      "sha256": "5daf5a92edbf662ebe9a31a74b28db8f44a39c3c39f71ec96e872457f6cf93b9"
+    },
+    "mechanism_harness.inventor": {
+      "files": 51,
+      "sha256": "d8d468201890c6a95152605c68aa1c1258eeeb8b0e0f884a261a385742b5a032"
+    },
+    "mechanism_harness.mechanism_native": {
+      "files": 53,
+      "sha256": "f7ecedbe083ce06f62c827296398d3b6e11712a994ad2f99ee3e0afcfeaa0fc2"
+    },
+    "mechanism_harness.reach_native": {
+      "files": 71,
+      "sha256": "ace7d041a2cac9114ddac2bf685079d2b5d46a933f15c91ac50bc7c1a2a32cc4"
+    }
+  },
+  "schema": "omega/registered-policy-intermediate-check/v1",
+  "source_files_sha256": {
+    "mechanism_harness/cart_native.py": "15d96c9aaaed5cb28d720d6a5c3c270eb2722cc55261309a416e0fdef6d52ff1",
+    "mechanism_harness/inventor_native.py": "c827232dc8326113a2690e4222d3ac42cbdb6370734fcdab49225bfb4f06d673",
+    "mechanism_harness/mechanism_native.py": "331037966a86cd7e596300dc042cf4c4b1a1749cb1d63ef355d84cc2772ec50e"
+  },
+  "v2_original_suite": {
+    "failed_checks": [
+      "test_earned_successor_cannot_be_hidden_in_report (tests.test_omega_economical.CostCompleteness.test_earned_successor_cannot_be_hidden_in_report)",
+      "test_missing_required_costs_rejected (tests.test_omega_economical.CostCompleteness.test_missing_required_costs_rejected) (omitted='annual-maintenance')",
+      "test_missing_required_costs_rejected (tests.test_omega_economical.CostCompleteness.test_missing_required_costs_rejected) (omitted='modeled-tax')",
+      "test_positive_tax_cannot_be_omitted (tests.test_omega_economical.CostCompleteness.test_positive_tax_cannot_be_omitted)"
+    ],
+    "methods": 23,
+    "raw_log_sha256": "b6ee105360d8518c5021b4737a0150803706867e9affc258a2ec755e3b680683"
+  }
+}

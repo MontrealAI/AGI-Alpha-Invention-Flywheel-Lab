@@ -23,6 +23,53 @@ from .engine import default_config
 
 ROOT=Path(__file__).resolve().parents[1]
 
+# Additive release closure. Historical checkouts without V4 remain unchanged.
+OMEGA_V4_RELEASE_PATHS = (
+    'mechanism_harness/cart_campaign.py', 'mechanism_harness/cart_decision.py',
+    'mechanism_harness/cart_native.py', 'mechanism_harness/cart_program.py',
+    'mechanism_harness/cart_synthesis.py', 'mechanism_harness/cooperative_construction.py',
+    'mechanism_harness/inventor.py', 'mechanism_harness/market_cases.py',
+    'mechanism_harness/market_program.py', 'mechanism_harness/mechanism_synthesis.py',
+    'campaign/omega-inventor/PROTOCOL_V4.md',
+    'campaign/omega-economy-v4/PROTOCOL.md',
+    'campaign/omega-economy-v4/COOPERATIVE_PROTOCOL.md',
+    'campaign/omega-economy-v4/REPAIR_PROTOCOL.md',
+    'campaign/omega-economy-v4/SUCCESSOR_PROTOCOL.md',
+    'campaign/omega-economy-v4/README.md',
+    'requirements-omega-mechanisms-v3.txt', 'requirements-commercial010.txt',
+    'scripts/qualify_omega_release.py', 'tests/test_connected_omega_release.py',
+    'tests/test_omega_carts.py', 'tests/test_omega_cart_review.py',
+    'tests/test_omega_cart_campaign.py', 'tests/test_omega_cart_decision.py',
+    'tests/test_omega_cart_native.py', 'tests/test_omega_cart_crash.py',
+    'tests/test_omega_cooperative.py', '.github/workflows/omega-economy-v4.yml',
+)
+
+REACH_NATIVE_PATHS = (
+    'mechanism_harness/reach_native.py', 'mechanism_harness/reach_policy.py',
+    'mechanism_harness/reach_verify.py', 'campaign/omega-paid-reach-20261104/PROTOCOL.md',
+    'connected_enterprise/channels.py', 'tests/test_omega_reach_native.py',
+    'tests/test_omega_reach_policy.py', 'tests/test_omega_reach_verify.py',
+)
+REACH_RELEASE_PATHS = (*REACH_NATIVE_PATHS, 'tests/test_connected_reach_release.py',
+                       'scripts/summarize_omega_reach.py', 'campaign/omega-paid-reach-20261104/README.md')
+REACH_MARKERS = set(REACH_RELEASE_PATHS) - {'connected_enterprise/channels.py'}
+
+# These files are additional to the V4 release closure. Together they ship the
+# three original entrypoints, their authority regression, and the fixtures used
+# by their original test suites. None appeared in the previous V4 archive.
+LEGACY_RESUME_TEST = 'tests/test_omega_legacy_live_resume.py'
+LEGACY_RELEASE_PATHS = (
+    'mechanism_harness/inventor_native.py', 'mechanism_harness/inventor_cost_audit.py',
+    'mechanism_harness/economical_learning.py', 'mechanism_harness/economical_native.py',
+    'mechanism_harness/mechanism_campaign.py', 'mechanism_harness/mechanism_native.py',
+    'campaign/omega-inventor/PROTOCOL.md', 'campaign/omega-inventor/PROTOCOL_V2.md',
+    'campaign/omega-inventor/PROTOCOL_V3.md', 'tests/test_omega_inventor.py',
+    'tests/test_omega_economical.py', 'tests/test_omega_mechanisms_v3.py', LEGACY_RESUME_TEST,
+    'mechanism_harness/game_maker.py', 'mechanism_harness/_game_maker_v1.py',
+    'mechanism_harness/game_input.py', 'mechanism_harness/game_maker_fixture.json',
+    'mechanism_harness/test_game_maker.py',
+)
+
 def source_paths(root):
     names=set(inherited_paths(root))
     for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('campaign/connected-registrations','*.json')]:
@@ -204,6 +251,21 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in required):
             raise ValueError('PAIRED_ACQUISITION_SOURCE_DEPENDENCY_MISSING')
         names.update(required)
+    if any((root/name).exists() for name in (
+            'mechanism_harness/cart_native.py', 'mechanism_harness/cart_program.py',
+            'campaign/omega-economy-v4')):
+        if any(not (root/name).is_file() for name in OMEGA_V4_RELEASE_PATHS):
+            raise ValueError('OMEGA_V4_SOURCE_DEPENDENCY_MISSING')
+        names.update(OMEGA_V4_RELEASE_PATHS)
+    has_reach = any((root/name).exists() for name in REACH_MARKERS)
+    if has_reach:
+        if any(not (root/name).is_file() for name in (*OMEGA_V4_RELEASE_PATHS, *REACH_RELEASE_PATHS)):
+            raise ValueError('PAID_REACH_SOURCE_DEPENDENCY_MISSING')
+        names.update(REACH_RELEASE_PATHS)
+    if has_reach or (root/LEGACY_RESUME_TEST).exists():
+        if any(not (root/name).is_file() for name in (*OMEGA_V4_RELEASE_PATHS, *LEGACY_RELEASE_PATHS)):
+            raise ValueError('LEGACY_RESUME_RELEASE_DEPENDENCY_MISSING')
+        names.update(LEGACY_RELEASE_PATHS)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):

@@ -1,0 +1,19 @@
+# Cooperative construction — prospective decisive prototype
+
+## Claim to test
+
+A conditional joint commission can make an executable reconciliation adapter capability affordable when separate commissioning cannot. This is a model hypothesis, not a novelty, market, rights or physical Blue Sky claim. Ordinary shared commissioning receives the same opportunities and is the strongest alternative. The program will actually synthesize and execute source-grounded reconciliation procedures using existing bounded interpreters and independent delivery checking. Developer-authored primitive operators remain identified; no autonomous language-model discovery is claimed.
+
+## Registered finite design
+
+Development uses reconciliation seed 61011 index 8. Successor uses fresh schema/data seeds 61012 and 61013 indices 9 and 14, fixed before any run. Retain only a bounded discovery policy, not prior column mappings or outcomes. Full retained, cold no-retention, equal-content ordinary reuse, existing conventional inference and nonentry are all evaluated on exactly the same inputs and independent acceptance. Construction/check CPU and algorithm work counters are measured separately; counters with different meanings are never directly monetized.
+
+The development constructor tries the existing finite 32 permitted filter/cache policies. Every failed/rejected proposal and its resource work remains charged. The full system chooses the lowest measured-work policy compatible with the first accepted outcome. The successor must re-infer mappings and produce a checked reconciliation result; direct old-mapping reuse is a separate negative control. Stop after this finite policy/case set. Do not tune seeds, acceptance or tariffs after outcomes.
+
+The finite economic model searches every nonempty coalition among three hypothetical beneficiaries and fixed equal-cost shares. Acquisition/construction/verification/support/maintenance envelope is 900 cents in the base case, exclusive of unknown real developer/host/model cost. Value 800 cents each, budget 650 cents each, outside utility zero; margin 60 cents per commission. All values, envelopes and budgets are authored assumptions. Public benefit means every beneficiary can receive the artifact after construction, even a nonpayer. A coalition is feasible only if every payer prefers paying to unilateral withdrawal, with the resulting funding shortfall and provision failure explicitly evaluated. It must not rely on voluntary payment by a nonpivotal free rider.
+
+Cases: central, weak value (250 each), no demand (zero), copycat (outside utility equal to value), one withdrawal, delayed commitment (not yet spendable), failed verification, and overrun (cost 2000). Compare separate commissioning, generated assurance coalition, ordinary exhaustive shared commissioning and nonentry. Contributions are conditional proposed obligations, not received cash. Failed acceptance or incomplete funding produces no delivery or revenue. This prototype has no account balances and makes no native finance claim. Any subsequent native adapter must separately integrate JournalAccount with source-bound costs, acceptance and refund obligations.
+
+## Decision and falsification
+
+Retain a working capability only after independent source-bound acceptance. If equal-content reuse or ordinary commissioning ties, report the tie and reject proprietary/discovery-superiority claims. If the strong complete incumbent already attains the same outcome within the same assumed budget, reject the claim of newly attainable economic frontier relative to that incumbent. Synthetic free-rider stability is unilateral under a declared finite game, not coalition-proofness or truthful elicitation. Unknown actual costs, legal enforceability, participant valuations and real demand remain unknown. This decisive prototype cannot establish the $3B annual objective.

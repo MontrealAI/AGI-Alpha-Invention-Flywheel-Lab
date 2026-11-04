@@ -1,0 +1,26 @@
+{
+  "schema": "agi-alpha/economic-game-maker/v1",
+  "basis": "DECLARED_COMPLETE_INFORMATION_SYNTHETIC",
+  "outcome": "One independently accepted evidence-backed operational work package per participating buyer",
+  "opening_cash": 100,
+  "protected_cash": 10,
+  "buyer_profiles": [
+    {"id": "buyer01", "value": 30, "budget": 30, "outside_utility": 10},
+    {"id": "buyer02", "value": 30, "budget": 30, "outside_utility": 10},
+    {"id": "buyer03", "value": 30, "budget": 30, "outside_utility": 10},
+    {"id": "buyer04", "value": 30, "budget": 30, "outside_utility": 10}
+  ],
+  "production": {"fixed": 50, "unit": 12, "quote": 1},
+  "operators": [
+    {"id": "evidence_in_production", "requires": [], "exclusive": "", "fixed_delta": 18, "unit_delta": -7, "build": 0, "partner_payment": 0, "partner_outside": 0},
+    {"id": "pooled_commissioning", "requires": [], "exclusive": "", "fixed_delta": -22, "unit_delta": 1, "build": 0, "partner_payment": 0, "partner_outside": 0}
+  ],
+  "rival": {"fixed": 50, "unit": 12, "quote": 1, "price_grid": [16,17,18,19,20]},
+  "scenarios": [
+    {"id": "central", "weight_bps": 7500, "active_buyers": ["buyer01","buyer02","buyer03","buyer04"], "rival_can_copy": false, "accepted": true, "collected": true, "fixed_extra": 0, "unit_extra": 0},
+    {"id": "copycat", "weight_bps": 1500, "active_buyers": ["buyer01","buyer02","buyer03","buyer04"], "rival_can_copy": true, "accepted": true, "collected": true, "fixed_extra": 0, "unit_extra": 0},
+    {"id": "delayed_collection", "weight_bps": 1000, "active_buyers": ["buyer01","buyer02","buyer03","buyer04"], "rival_can_copy": false, "accepted": true, "collected": false, "fixed_extra": 0, "unit_extra": 0}
+  ],
+  "price_grid": [16,17,18,19,20],
+  "limits": {"max_operators": 2, "max_states": 100, "max_loss": 10, "downside_penalty_bps": 0}
+}

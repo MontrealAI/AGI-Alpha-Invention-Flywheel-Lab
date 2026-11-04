@@ -1,0 +1,47 @@
+{
+  "cart_native_runtime": {
+    "count": 63,
+    "sha256": "05594b2569b72362daec83b136e743da949ae384411dc05837981281eb44e3a6"
+  },
+  "checkout_parent": "736f0fe1a8b8dc895fdcff82e8d3a604ce8b494a",
+  "defect": "Both earlier completed paths opened the ordinary recovery writer. A legitimate signed cost intent appended after the saved report executed before stale history was rejected. Both failing cases observed a changed native action tape.",
+  "files_sha256": {
+    "mechanism_harness/cart_native.py": "bab130f23a82e02fa3204aca5f990a125798e68d4e4fcdeb8adf664ec2321871",
+    "mechanism_harness/inventor_native.py": "7e26250b682b36529790a62561c45c7071cd8c34b28e82c1ee95bda86de91dd5",
+    "mechanism_harness/reach_native.py": "8c625062380f8b51c3ced441bc0e66e45e3b28a140a07df017179c6188fd51f7",
+    "tests/test_omega_cart_native.py": "a7a6280b574a34a624a0ef6af3da0e3a29a54d12013d0a586b4718618e814f62",
+    "tests/test_omega_reach_native.py": "7e383fe4d72a156e222c266bf2c786e79f8e2bcf5f18090168b0480aa8243ef9"
+  },
+  "historical_evidence": "Raw diagnostic logs are local; this compact receipt contains no account authority or private journal records.",
+  "qualification_note": "The 25-test suite checked the final runtime. Two test assertion formatting changes landed during that process. The two affected regressions then passed again on the exact final files.",
+  "reach_native_runtime": {
+    "count": 71,
+    "sha256": "72ce9400200c8201a5c60bb7a299b9206cf00d0ae70fa2baf36433ff5ac49010"
+  },
+  "repair": "Both completed paths use the shared inventor_native completed-resume validator under the native writer lease. The new tests compare the tape and signed journal after refusal, then open the ordinary recovery writer to confirm the same pending debit executes exactly once.",
+  "schema": "omega/completed-native-pending-intent-repair/v1",
+  "scope": "Synthetic development accounts only; the paid-reach completion fixture independently verifies its native journal, summary and export-bound report. No registered pilot results.",
+  "tests": [
+    {
+      "failures": 2,
+      "private_log_sha256": "9a6889ec42d02ed80d83791034decefa73b3980b2415ec14e6ef3d3ac164070f",
+      "stage": "PRE_REPAIR_CART_REACH_PENDING",
+      "tests": 2,
+      "wall_seconds": 22.974
+    },
+    {
+      "failures": 0,
+      "private_log_sha256": "78322bdc9792c454fb36697842db326857d45cf8b506bc387d9da7470ed2d6f0",
+      "stage": "POST_REPAIR_CART_REACH_NATIVE",
+      "tests": 25,
+      "wall_seconds": 113.306
+    },
+    {
+      "failures": 0,
+      "private_log_sha256": "d10de50c4dfddea025c3471d1101baf425d6b9ff5bcfd941a9c3232832815938",
+      "stage": "FINAL_CART_REACH_PENDING",
+      "tests": 2,
+      "wall_seconds": 16.377
+    }
+  ]
+}

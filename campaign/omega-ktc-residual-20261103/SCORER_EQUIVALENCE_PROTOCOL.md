@@ -1,0 +1,9 @@
+# Independent scorer equivalence review — before comparisons
+
+The official `KTCScoring.py` source remains unchanged. Review only whether separable convolution preserves its finite-window Gaussian SSIM metric; no thresholds, labels, reconstruction outputs, truth, windows or normalization may change.
+
+Acceptance tolerance prospectively fixed at absolute score error <=1e-10 (float64). Record raw differences, not only pass/fail. Compare the original `ssim` against the proposed implementation on small 7x9 float64 arrays: both zero, both one, zero versus one, edge impulses on opposite corners, seeded Bernoulli masks (seed99117), and a seeded interior/edge mixed binary pair (seed99118). These are numerical controls, not reconstructed data. Independently check convolution moments on the same arrays against direct 2-D convolution, absolute error <=1e-10. Final score comparison also requires the unchanged official full 256x256 limited-level1 and limited-level4 results when completed, bound to identical truth/output hashes.
+
+Mathematical argument required: the odd321x321 official kernel equals a scalar times an outer product of the321-element Gaussian, on identical integer offsets -160..160 with sigma80. The shared scalar cancels only because every moment is divided by the same convolution of ones. Both implementations must use zero extension and same centered output cropping. Preserve official c1=1e-4,c2=9e-4, population moments, class masks(abs(label-i)<0.1), and arithmetic mean over all output pixels. No alternative SSIM library, adaptive window, sample covariance, clipping, mask, crop or boundary reflection is allowed.
+
+If any comparison exceeds tolerance or identity differs, fast scores remain unqualified. Do not adjust tolerance after results. A mathematical/numerical equivalence finding applies to this scorer/domain; it is not independent reconstruction acceptance or evidence of a new method.

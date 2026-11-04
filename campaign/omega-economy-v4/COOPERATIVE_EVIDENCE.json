@@ -1,0 +1,662 @@
+{
+  "schema": "omega/cooperative-compact-evidence/v1",
+  "source": {
+    "adaptive_enterprise/account.py": "c675fb699a662a1492004c2423f2cee5c5735726d4b226289584df95cfcaa235",
+    "adaptive_enterprise/allocation.py": "61a207557b08f34d627e4304ae56fdb2614ed6338458dbe258317abe4c5b0e90",
+    "adaptive_enterprise/bundles.py": "2b524e65ffdc2aec9eaf1755f3031c9e3a3c6b5dd07e611dd2a842845fba41ba",
+    "adaptive_enterprise/checkers.py": "fe6bb58f94afafdc67a2c47a9dccedd42749dd653e885b4dabad82c9f74e913b",
+    "adaptive_enterprise/instruments.py": "86404ba03d1c3c242e743dbdadbf66cbc9b6c8019b304eb180b8fe87c5bd144e",
+    "adaptive_enterprise/strategic_game.py": "efcaede01460ec4cc74be2249ab20168a010f532a2cb564e94a56b1a19ef2a27",
+    "adaptive_enterprise/strategies.py": "3ede6135723317cb8ace20f92b5e365d03b56c5a32a97a88b3d18572170def28",
+    "campaign/omega-economy-v4/COOPERATIVE_PROTOCOL.md": "f798f38b4e2b8ed64893626fff4a88ee9b2af0d5a74075f8a78e2c1dd676d975",
+    "commercial/ledger.py": "7febf3102ee931e686bdb71bef0cef3e0c43fa5e45ba8a194cf7f0e6833894c5",
+    "commercial/native_engine.py": "e5ca8f6a57672a07fd283eb7f8980c1d6cb35edb2719994561eb2c3431478223",
+    "commercial/persistence.py": "78c1eb1d82471843e32dd290ac3ea1b5b253d4edc1448cc954b5fafa5d6e0e15",
+    "commercial/service.py": "1604d20f5d9f54997eeceb971bc19af9a0c76cdcaf79ba74b9bbd80112c9c9a3",
+    "commercial/service_verifier.py": "ac79f1aa80fb5c2928827f08417a720cd041977df70e808860bc3dd4f5d61368",
+    "commercial/single_writer.py": "0d34de2e32dd2ad47b43c32edd4ccac01196c2858db7a32c7b7d2217ec2cf984",
+    "commercial/tape_lease.py": "854ad7c0341a94fbfcc0ed3f450ab9116bbaf9666e4f6d5f118397a19f7f575c",
+    "commercial/terms.py": "5ade1ed96b540663ee0826cf66686ce5bf2a571187e273bcf6106963f2a42eb9",
+    "commercial/terms_exact_v2.py": "1effcefceca21356642be0db14b7f3a381f887b816c45f050ef2293503162478",
+    "connected_enterprise/capacity_menu.py": "cadee3a9362e2c404a6df21cee8a0a72e6680a260a3b0d23b6fa73ed295b55e2",
+    "connected_enterprise/capacity_signal.py": "8888542cb3e40b547c1e86e8a189a805fec28544f6571eb5abb25dc776a4644f",
+    "connected_enterprise/capital_lifecycle.py": "9c71481317846d439cc3eb94b4dc8644bca111433863ad82d062d6ed64a63be2",
+    "connected_enterprise/channel_menu.py": "8b0b4dad25ce851cfb23ae794d836728dd5a9738a8b3906be054f3c1fc7d9152",
+    "connected_enterprise/complete_offer_audit.py": "5af359d50c9cf5aa47bb70e7161d2546ce27830e65b78f425a3e93bd9dc273eb",
+    "connected_enterprise/complete_offer_market.py": "8f9125a6b829513ecb46046bab0f14322df0e20aa235369d8a53d5c3476890e2",
+    "connected_enterprise/engine.py": "346795b4d24b07b54c0b3552f374816c5f6af817e19b5a24a54b5e827b7e68a5",
+    "connected_enterprise/finance.py": "15047f90e9ffb06b5c405d2cdc93facd040fd5c1dfc5b2aadf2abaafb81595e2",
+    "connected_enterprise/joint_planning.py": "a4d2df11d4b5214f823c4df8c60cf3c9e33455ec33dded835ffe633806ad7d03",
+    "connected_enterprise/mechanism_choice.py": "debd395980f06d72c1769ed2df1e2d1222e6ef083fa8b01399b50fa62e85d096",
+    "connected_enterprise/packet_contract.py": "df1541c868f164d55211a271f9f3e6e0cf43ce7f90719204db9ccbb0a102034e",
+    "connected_enterprise/receivables_packet.py": "3ca953b999b93bb7571afe33d04ee79fd1b944c8a79b9605eccc0bcf48bc20f2",
+    "connected_enterprise/receivables_packet_verify.py": "d5bca0970e3b5540e526e118cbd510f0b8b15c8a69cc4c30b94fcc04070e0db9",
+    "connected_enterprise/refusal_recourse.py": "b8b32ac9689ca0fa6466641955126e45fe60f0a872f752ce9ac84918e9938a8e",
+    "connected_enterprise/scale.py": "76644008b5a2fa25f4b44e42c0154e70ff7113cfb046f0eba5f7ed4fbaf9eebe",
+    "connected_enterprise/sequence_channels.py": "3d387723caa5b1a0463276f7e59db7b20f754785d8b78a3e7e62323b63874f21",
+    "connected_enterprise/sequence_planning.py": "b6d14036c00fe59d820bab44c75b973198c8545ea2ff51aa66786a5ef7b93eef",
+    "connected_enterprise/sequence_window.py": "f84298402a8bf2401418698fea92a500852d5280db67c21dacdbda774d64f485",
+    "connected_enterprise/startup_acquisition048.py": "3a31418520353b2acf77e4910a681249ea27bc877908d037f44d674073f479eb",
+    "connected_enterprise/strategic_audit.py": "e21244667a6e774d0f14575fcb762c99d18d07d6c92853b8067c174a48813af1",
+    "connected_enterprise/strategic_commerce.py": "88e34b6dc575a98caee9dd4ae988ceb202851648506907756e5343b582ef53d5",
+    "connected_enterprise/verify.py": "9fc576ffb0d9abdde44672e81d4fbc9a66a81fbb84674ca0090d6f7ce6e55541",
+    "enterprise/checkers.py": "8685c3c9876815db2f2f5de6ba5954529f88cd7d4f95d7c1fa9aedc438cc0981",
+    "enterprise/services.py": "f3ff23509899180235436bffb8b7396092ff9ae881f622a386ba932ebaa045bc",
+    "experiments/commerce006.py": "2fc529131885c75752dab8dbd77d85b5a36d4c0b43cb5e7e53286c997cc0a52f",
+    "mechanism_harness/cooperative_construction.py": "888434e5dcc10314c4fc6d2f387930959e7d950ccc086da651a4697e80d4a89b",
+    "mechanism_harness/inventor.py": "b35be1cd64a527a17b5ff401baed3576b3ffb3e4d0178428eb562b16e9ed1241",
+    "portfolio25/pricing.py": "b0a359619a02b6dcadd2af20b5683e4d84cb585841359b653579610ff1da568c",
+    "vendor/alpha_claim/contracts.py": "3536b96c4b7ee46f9af7d807e02685aa55e42daae7f7c56b7e9029ca2cde0964",
+    "vendor/alpha_claim/protected_exchange.py": "7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272",
+    "vendor/alpha_claim/protected_exchange_exact_v2.py": "04a790f7982bd9ac0569f4da0bd37910b623d4c7c6210cbce80d7fd5aeac92dd",
+    "vendor/alpha_claim/protected_exchange_prospective_exact_v2.py": "4ddf6e0ba78b7405f658dba8632e3a1304ac2f940b978e5315a454f43a911b30",
+    "vendor/alpha_claim/protected_exchange_prospective_v1.py": "cc23e6f064302b38750caa3d755345cb6318b524d3bbdc0f9b86e6f6a4be7565"
+  },
+  "full_result_sha256": "17a3e7ca1bcef6f073a8a4dbec854c79074b4d138c3c70931c838fc26ce0df3f",
+  "logical_result_sha256": "0b1a91fe107455ff62a598289a402a8787b2c98741b0d9c878a6c12b8b141043",
+  "tests": {
+    "passed": 10,
+    "command": "python -m unittest discover -s tests -p test_omega_cooperative.py -v"
+  },
+  "review_repairs": {
+    "prior_result_sha256": "ffa11fc6f0ebbb4bac47c584c731d564055930ff3ea3a5aec52a4bcb26b3d004",
+    "prior_local_tests": 9,
+    "findings": [
+      "Zero-cost/zero-demand proposals differed between constructors; now both reject no-payer phantom commission.",
+      "Failed-verification stress was a Boolean fixture; now real artifact corruption fails independent delivery check.",
+      "Old mapping ablation only checked execution; now reconstructs and independently checks any executable artifact."
+    ],
+    "status": "Corrected-source replay; original development outcome remains historical, not fresh confirmation.",
+    "fingerprint_extension": {
+      "previous_reviewed_result_sha256": "c04b3b1ac88b5fcdf6aad037e9cf645b4d62ebd6c86e2663904a4d72d97d8fd3",
+      "previous_logical_result_sha256": "27637be21c7a6d954756df5d787d0e277d6eb22d4c9eec27be7c57f96d57ca86",
+      "change": "Full shared financial SOURCE_PATHS added to standalone fingerprint for imported ledger/transitive dependencies. Corrected-source replay; no fresh confirmation claim."
+    }
+  },
+  "production": {
+    "acquisition_work": 12636,
+    "all_accepted_complete": true,
+    "candidate_count": 32,
+    "equal_content_reuse_ties": true,
+    "learned_policy": {
+      "cache_columns": true,
+      "filters": [
+        "unit",
+        "unique",
+        "text"
+      ],
+      "schema": "omega/discovery-policy/v1"
+    },
+    "learning_cpu_ns": 118655391,
+    "scope": "Existing finite developer-authored grammar; generated policy and freshly inferred mappings. CPU is measured separately when requested; lifecycle dollar costs unknown. Conventional counters have different scope.",
+    "strong_conventional_outcome_ties": true,
+    "successor_cold_work": 1808,
+    "successor_retained_work": 262,
+    "total_retained_work_including_acquisition": 13029
+  },
+  "first": {
+    "input": "0b436ea9179999ffd9c0e475e1649f9407d157de1daad4717e1cc4c12bf8b109",
+    "artifact": "3e7e4f27137b12e4560dc515249c930391cdc4277c566d08d899d84d066c690b",
+    "accepted": true,
+    "complete": true,
+    "work": 131
+  },
+  "successors": [
+    {
+      "seed": 61012,
+      "index": 9,
+      "source_sha256": "ff988e3f0dcddcc249c0c67e5c07d1818bffa96575f73309c07a2c611b688545",
+      "direct_predecessor_mapping_executes": false,
+      "direct_predecessor_mapping_accepted": false,
+      "direct_predecessor_mapping_failure": "KeyError:'field_8_432519ef64_a'",
+      "runs": {
+        "cold": {
+          "artifact_sha256": "bacd814201a2211d909d59eb8770ec57f54e6f2acfd1e69a3dcb60ad35a597fc",
+          "complete": true,
+          "construction_cpu_ns": 2659755,
+          "verification_cpu_ns": 2083652,
+          "work": 904
+        },
+        "conventional": {
+          "artifact_sha256": "828656dceeeb44f5f74011922a698cb503e91b998b820ae005b35491a98de290",
+          "complete": true,
+          "construction_cpu_ns": 851802,
+          "verification_cpu_ns": 2441059,
+          "work": 152
+        },
+        "equal_content_reuse": {
+          "artifact_sha256": "3dfef1e35e6f087643fa2d7d811f1635f25c66008bd3b5a663ecf25c6deab370",
+          "complete": true,
+          "construction_cpu_ns": 789246,
+          "verification_cpu_ns": 3094060,
+          "work": 131
+        },
+        "nonentry": {
+          "complete": false,
+          "work": 0
+        },
+        "retained": {
+          "artifact_sha256": "3dfef1e35e6f087643fa2d7d811f1635f25c66008bd3b5a663ecf25c6deab370",
+          "complete": true,
+          "construction_cpu_ns": 787504,
+          "verification_cpu_ns": 3241967,
+          "work": 131
+        }
+      }
+    },
+    {
+      "seed": 61013,
+      "index": 14,
+      "source_sha256": "6748cf043037ac9ef6a0ac29407cf59368b1fcac390bdb8845b88bb565dc2ebe",
+      "direct_predecessor_mapping_executes": false,
+      "direct_predecessor_mapping_accepted": false,
+      "direct_predecessor_mapping_failure": "KeyError:'field_8_432519ef64_a'",
+      "runs": {
+        "cold": {
+          "artifact_sha256": "7c6a76e9bf5533861288bd7746178e1665a8c2282e3b5c5d1ba5b9b00bad74ff",
+          "complete": true,
+          "construction_cpu_ns": 2945891,
+          "verification_cpu_ns": 2620913,
+          "work": 904
+        },
+        "conventional": {
+          "artifact_sha256": "fdc3c9ab7430905c479d39cf88e9e464c7e32ebd77918b5b9dfb938560ba70a6",
+          "complete": true,
+          "construction_cpu_ns": 1317888,
+          "verification_cpu_ns": 3233212,
+          "work": 152
+        },
+        "equal_content_reuse": {
+          "artifact_sha256": "c6d65fa77f7fef090751c6780b354d51d2ee91a6b433820bf259022ec5ac4868",
+          "complete": true,
+          "construction_cpu_ns": 628040,
+          "verification_cpu_ns": 2999282,
+          "work": 131
+        },
+        "nonentry": {
+          "complete": false,
+          "work": 0
+        },
+        "retained": {
+          "artifact_sha256": "c6d65fa77f7fef090751c6780b354d51d2ee91a6b433820bf259022ec5ac4868",
+          "complete": true,
+          "construction_cpu_ns": 685475,
+          "verification_cpu_ns": 2455852,
+          "work": 131
+        }
+      }
+    }
+  ],
+  "arrangements": [
+    {
+      "stress": "central",
+      "proposal": {
+        "contributions_cents": {
+          "beneficiary-0": 480,
+          "beneficiary-1": 0,
+          "beneficiary-2": 480
+        },
+        "delivery": "public_capability"
+      },
+      "attempted_contracts": 8,
+      "ordinary_ties": true,
+      "conditionally_feasible": true,
+      "separate_decisions": [
+        "NONENTRY",
+        "NONENTRY",
+        "NONENTRY"
+      ],
+      "criticisms": [
+        {
+          "program": {
+            "contributions_cents": {
+              "beneficiary-0": 650,
+              "beneficiary-1": 650,
+              "beneficiary-2": 650
+            },
+            "delivery": "public_capability"
+          },
+          "verification": {
+            "accepted": false,
+            "deviations": [
+              {
+                "participant": "beneficiary-0",
+                "pay_utility_cents": 150,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 800
+              },
+              {
+                "participant": "beneficiary-1",
+                "pay_utility_cents": 150,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 800
+              },
+              {
+                "participant": "beneficiary-2",
+                "pay_utility_cents": 150,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 800
+              }
+            ],
+            "errors": [
+              {
+                "gain_cents": 650,
+                "kind": "PROFITABLE_WITHDRAWAL",
+                "participant": "beneficiary-0"
+              },
+              {
+                "gain_cents": 650,
+                "kind": "PROFITABLE_WITHDRAWAL",
+                "participant": "beneficiary-1"
+              },
+              {
+                "gain_cents": 650,
+                "kind": "PROFITABLE_WITHDRAWAL",
+                "participant": "beneficiary-2"
+              }
+            ],
+            "proposed_cents": 1950,
+            "required_cents": 960,
+            "scope": "Finite binary public-good unilateral withdrawal; public assumed values, no truthful-elicitation or coalition-proofness claim."
+          }
+        }
+      ],
+      "blocking_reason": null,
+      "injected_delivery_check": null
+    },
+    {
+      "stress": "weak",
+      "proposal": null,
+      "attempted_contracts": 8,
+      "ordinary_ties": true,
+      "conditionally_feasible": false,
+      "separate_decisions": [
+        "NONENTRY",
+        "NONENTRY",
+        "NONENTRY"
+      ],
+      "criticisms": [
+        {
+          "program": {
+            "contributions_cents": {
+              "beneficiary-0": 249,
+              "beneficiary-1": 249,
+              "beneficiary-2": 249
+            },
+            "delivery": "public_capability"
+          },
+          "verification": {
+            "accepted": false,
+            "deviations": [
+              {
+                "participant": "beneficiary-0",
+                "pay_utility_cents": 0,
+                "remaining_cents": 498,
+                "withdraw_utility_cents": 0
+              },
+              {
+                "participant": "beneficiary-1",
+                "pay_utility_cents": 0,
+                "remaining_cents": 498,
+                "withdraw_utility_cents": 0
+              },
+              {
+                "participant": "beneficiary-2",
+                "pay_utility_cents": 0,
+                "remaining_cents": 498,
+                "withdraw_utility_cents": 0
+              }
+            ],
+            "errors": [
+              {
+                "kind": "UNDERFUNDED",
+                "proposed_cents": 747,
+                "required_cents": 960
+              }
+            ],
+            "proposed_cents": 747,
+            "required_cents": 960,
+            "scope": "Finite binary public-good unilateral withdrawal; public assumed values, no truthful-elicitation or coalition-proofness claim."
+          }
+        }
+      ],
+      "blocking_reason": null,
+      "injected_delivery_check": null
+    },
+    {
+      "stress": "no_demand",
+      "proposal": null,
+      "attempted_contracts": 8,
+      "ordinary_ties": true,
+      "conditionally_feasible": false,
+      "separate_decisions": [
+        "NONENTRY",
+        "NONENTRY",
+        "NONENTRY"
+      ],
+      "criticisms": [
+        {
+          "program": {
+            "contributions_cents": {
+              "beneficiary-0": 0,
+              "beneficiary-1": 0,
+              "beneficiary-2": 0
+            },
+            "delivery": "public_capability"
+          },
+          "verification": {
+            "accepted": false,
+            "deviations": [],
+            "errors": [
+              {
+                "kind": "NO_VOLUNTARY_PAYER"
+              },
+              {
+                "kind": "UNDERFUNDED",
+                "proposed_cents": 0,
+                "required_cents": 960
+              }
+            ],
+            "proposed_cents": 0,
+            "required_cents": 960,
+            "scope": "Finite binary public-good unilateral withdrawal; public assumed values, no truthful-elicitation or coalition-proofness claim."
+          }
+        }
+      ],
+      "blocking_reason": null,
+      "injected_delivery_check": null
+    },
+    {
+      "stress": "copycat",
+      "proposal": null,
+      "attempted_contracts": 8,
+      "ordinary_ties": true,
+      "conditionally_feasible": false,
+      "separate_decisions": [
+        "NONENTRY",
+        "NONENTRY",
+        "NONENTRY"
+      ],
+      "criticisms": [
+        {
+          "program": {
+            "contributions_cents": {
+              "beneficiary-0": 0,
+              "beneficiary-1": 0,
+              "beneficiary-2": 0
+            },
+            "delivery": "public_capability"
+          },
+          "verification": {
+            "accepted": false,
+            "deviations": [],
+            "errors": [
+              {
+                "kind": "NO_VOLUNTARY_PAYER"
+              },
+              {
+                "kind": "UNDERFUNDED",
+                "proposed_cents": 0,
+                "required_cents": 960
+              }
+            ],
+            "proposed_cents": 0,
+            "required_cents": 960,
+            "scope": "Finite binary public-good unilateral withdrawal; public assumed values, no truthful-elicitation or coalition-proofness claim."
+          }
+        }
+      ],
+      "blocking_reason": null,
+      "injected_delivery_check": null
+    },
+    {
+      "stress": "withdrawal",
+      "proposal": {
+        "contributions_cents": {
+          "beneficiary-0": 480,
+          "beneficiary-1": 480
+        },
+        "delivery": "public_capability"
+      },
+      "attempted_contracts": 4,
+      "ordinary_ties": true,
+      "conditionally_feasible": true,
+      "separate_decisions": [
+        "NONENTRY",
+        "NONENTRY"
+      ],
+      "criticisms": [],
+      "blocking_reason": null,
+      "injected_delivery_check": null
+    },
+    {
+      "stress": "delayed_commitment",
+      "proposal": {
+        "contributions_cents": {
+          "beneficiary-0": 480,
+          "beneficiary-1": 0,
+          "beneficiary-2": 480
+        },
+        "delivery": "public_capability"
+      },
+      "attempted_contracts": 8,
+      "ordinary_ties": true,
+      "conditionally_feasible": false,
+      "separate_decisions": [
+        "NONENTRY",
+        "NONENTRY",
+        "NONENTRY"
+      ],
+      "criticisms": [
+        {
+          "program": {
+            "contributions_cents": {
+              "beneficiary-0": 650,
+              "beneficiary-1": 650,
+              "beneficiary-2": 650
+            },
+            "delivery": "public_capability"
+          },
+          "verification": {
+            "accepted": false,
+            "deviations": [
+              {
+                "participant": "beneficiary-0",
+                "pay_utility_cents": 150,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 800
+              },
+              {
+                "participant": "beneficiary-1",
+                "pay_utility_cents": 150,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 800
+              },
+              {
+                "participant": "beneficiary-2",
+                "pay_utility_cents": 150,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 800
+              }
+            ],
+            "errors": [
+              {
+                "gain_cents": 650,
+                "kind": "PROFITABLE_WITHDRAWAL",
+                "participant": "beneficiary-0"
+              },
+              {
+                "gain_cents": 650,
+                "kind": "PROFITABLE_WITHDRAWAL",
+                "participant": "beneficiary-1"
+              },
+              {
+                "gain_cents": 650,
+                "kind": "PROFITABLE_WITHDRAWAL",
+                "participant": "beneficiary-2"
+              }
+            ],
+            "proposed_cents": 1950,
+            "required_cents": 960,
+            "scope": "Finite binary public-good unilateral withdrawal; public assumed values, no truthful-elicitation or coalition-proofness claim."
+          }
+        }
+      ],
+      "blocking_reason": "COMMITMENTS_NOT_RECEIVED",
+      "injected_delivery_check": null
+    },
+    {
+      "stress": "failed_verification",
+      "proposal": {
+        "contributions_cents": {
+          "beneficiary-0": 480,
+          "beneficiary-1": 0,
+          "beneficiary-2": 480
+        },
+        "delivery": "public_capability"
+      },
+      "attempted_contracts": 8,
+      "ordinary_ties": true,
+      "conditionally_feasible": false,
+      "separate_decisions": [
+        "NONENTRY",
+        "NONENTRY",
+        "NONENTRY"
+      ],
+      "criticisms": [
+        {
+          "program": {
+            "contributions_cents": {
+              "beneficiary-0": 650,
+              "beneficiary-1": 650,
+              "beneficiary-2": 650
+            },
+            "delivery": "public_capability"
+          },
+          "verification": {
+            "accepted": false,
+            "deviations": [
+              {
+                "participant": "beneficiary-0",
+                "pay_utility_cents": 150,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 800
+              },
+              {
+                "participant": "beneficiary-1",
+                "pay_utility_cents": 150,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 800
+              },
+              {
+                "participant": "beneficiary-2",
+                "pay_utility_cents": 150,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 800
+              }
+            ],
+            "errors": [
+              {
+                "gain_cents": 650,
+                "kind": "PROFITABLE_WITHDRAWAL",
+                "participant": "beneficiary-0"
+              },
+              {
+                "gain_cents": 650,
+                "kind": "PROFITABLE_WITHDRAWAL",
+                "participant": "beneficiary-1"
+              },
+              {
+                "gain_cents": 650,
+                "kind": "PROFITABLE_WITHDRAWAL",
+                "participant": "beneficiary-2"
+              }
+            ],
+            "proposed_cents": 1950,
+            "required_cents": 960,
+            "scope": "Finite binary public-good unilateral withdrawal; public assumed values, no truthful-elicitation or coalition-proofness claim."
+          }
+        }
+      ],
+      "blocking_reason": "INDEPENDENT_ACCEPTANCE_FAILED",
+      "injected_delivery_check": {
+        "accepted": false,
+        "artifact_content_sha256": "d4829e99aab0ee6ae4e3f8d808543f86fcd0b209001f8959e161dffde48b237a",
+        "errors": [
+          "INVALID_INPUT_OR_ARTIFACT: exact reconciliation input and output schema required"
+        ],
+        "independence": "Independent source-adaptation and outcome checker; shared agent family and host, not external certification.",
+        "input_content_sha256": "0b436ea9179999ffd9c0e475e1649f9407d157de1daad4717e1cc4c12bf8b109",
+        "order_id": "adaptive012-reconciliation-432519ef64-008",
+        "scope": "SYNTHETIC_PUBLIC_WORKLOAD",
+        "service_id": "reconciliation"
+      }
+    },
+    {
+      "stress": "overrun",
+      "proposal": null,
+      "attempted_contracts": 8,
+      "ordinary_ties": true,
+      "conditionally_feasible": false,
+      "separate_decisions": [
+        "NONENTRY",
+        "NONENTRY",
+        "NONENTRY"
+      ],
+      "criticisms": [
+        {
+          "program": {
+            "contributions_cents": {
+              "beneficiary-0": 650,
+              "beneficiary-1": 650,
+              "beneficiary-2": 650
+            },
+            "delivery": "public_capability"
+          },
+          "verification": {
+            "accepted": false,
+            "deviations": [
+              {
+                "participant": "beneficiary-0",
+                "pay_utility_cents": 0,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 0
+              },
+              {
+                "participant": "beneficiary-1",
+                "pay_utility_cents": 0,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 0
+              },
+              {
+                "participant": "beneficiary-2",
+                "pay_utility_cents": 0,
+                "remaining_cents": 1300,
+                "withdraw_utility_cents": 0
+              }
+            ],
+            "errors": [
+              {
+                "kind": "UNDERFUNDED",
+                "proposed_cents": 1950,
+                "required_cents": 2060
+              }
+            ],
+            "proposed_cents": 1950,
+            "required_cents": 2060,
+            "scope": "Finite binary public-good unilateral withdrawal; public assumed values, no truthful-elicitation or coalition-proofness claim."
+          }
+        }
+      ],
+      "blocking_reason": null,
+      "injected_delivery_check": null
+    }
+  ],
+  "verdict": {
+    "newly_attainable_vs_strong_incumbent": false,
+    "discovery_superiority_established": false,
+    "native_cooperative_settlement": false,
+    "actual_revenue_usd": 0,
+    "complete_lifecycle_cost_usd": null
+  }
+}

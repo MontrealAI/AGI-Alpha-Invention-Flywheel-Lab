@@ -1,0 +1,145 @@
+{
+  "schema": "connected-local-diagnostic-receipt/v1",
+  "reviewed_at_utc": "2026-11-03T23:58:54.294697+00:00",
+  "diagnostic_source_commit": "4c06a48e75b7010d99c2d4f78c9864517bf14b01",
+  "source_scope": "Historical immutable diagnostic source; not a qualification receipt for later c6ddb25 source.",
+  "canonical_source_changes_made": false,
+  "original_aggregate": {
+    "status": "COMPLETED_WITH_TWO_ERRORS",
+    "tests": 510,
+    "passes": 508,
+    "failures": 0,
+    "errors": 2,
+    "error_signatures": [
+      "JOURNALED_NATIVE_ACTION_NOT_COMMITTED",
+      "OPERATING_CHECKPOINT_NATIVE_PREFIX_MISMATCH"
+    ],
+    "cause": "UNEXPLAINED; original temporary account state was removed by ordinary test cleanup.",
+    "evidence": {
+      "path": "connected-tests.log",
+      "sha256": "36810af94620556ef9baa67d2147dbfa503e1f11a70dce483cc3ff0d799a29d4",
+      "bytes": 95802
+    },
+    "source_binding": "Original shared working tree; exact executing snapshot was not reconstructed from the retained failure log."
+  },
+  "immutable_repeat": {
+    "tool_session_id": 83903,
+    "final_tool_handle_observation": "Unknown process id",
+    "matching_process_observed_at_final_inspection": false,
+    "status": "COMPLETION_RECEIPT_REPORTS_PASS_BUT_TOOL_EXIT_UNAVAILABLE_AND_LOG_INCOMPLETE",
+    "runner_completion_receipt": {
+      "tests_run": 510,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "success": true,
+      "error_tests": [],
+      "failure_tests": [],
+      "preserved_failure_contexts": 0
+    },
+    "logged_completed_passes": 284,
+    "last_logged_test": "test_connected_prefix_replay037.AdaptivePrefixReplayTests.test_same_head_and_size_old_prefix_tamper_has_same_error",
+    "claim_limit": "Do not call this an active/stalled process or use the inconsistent local receipt/log pair as exact-final-source qualification.",
+    "evidence": [
+      {
+        "path": "diagnose_connected_suite.py",
+        "sha256": "371adb2dff3619cdb3ab915f38887f5388683055d5db9be6e884bb6887edaa6a",
+        "bytes": 2963
+      },
+      {
+        "path": "connected-repeat-private/identity.json",
+        "sha256": "9ed2e07a20e0d95a1d270943380665e4ca939611acff3244c658899a3197c7ff",
+        "bytes": 366
+      },
+      {
+        "path": "connected-repeat-private/summary.json",
+        "sha256": "75f3bdb78b56c2ead59c51951a34eafca8a3afaa94c5712df6b6e49ee256d315",
+        "bytes": 169
+      },
+      {
+        "path": "connected-repeat-tests.log",
+        "sha256": "f10788d01ee35a05d1a91aaebb43b4ebc9a21c99c0c061c4c59f8b83bc47735b",
+        "bytes": 50064
+      }
+    ]
+  },
+  "isolated_prefix_method": {
+    "status": "PASSED",
+    "tool_exit_code": 0,
+    "tests": 1,
+    "unittest_elapsed_seconds": 4.734,
+    "receipt": {
+      "test": "tests.test_connected_prefix_replay037.AdaptivePrefixReplayTests.test_same_head_and_size_old_prefix_tamper_has_same_error",
+      "source_commit": "4c06a48e75b7010d99c2d4f78c9864517bf14b01",
+      "test_source_sha256": "5c761761e2f35ab91ee1ba6cd7f875aaac5ead78eaa8241e0c5328a423077f23",
+      "elapsed_seconds": 4.793684246998964,
+      "process_cpu_seconds": 4.634240062,
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "success": true,
+      "instrumentation": "Plain unittest result; no preservation hook; one explicitly authorized isolated diagnostic after aggregate test stalled >10min."
+    },
+    "evidence": [
+      {
+        "path": "connected-prefix-isolated.json",
+        "sha256": "7d25e1f249ebca29a908f13919065a7f1c5d0e1c4a172af3f6f53b67463e7b8f",
+        "bytes": 587
+      },
+      {
+        "path": "connected-prefix-isolated.log",
+        "sha256": "0dbf0f604ceb53f72e2f7df6e30c466e9708de77cac8af0f58a8e888ba59c346",
+        "bytes": 849
+      }
+    ]
+  },
+  "bounded_original_order_prefix": {
+    "tool_session_id": 15505,
+    "final_tool_handle_observation": "Unknown process id",
+    "matching_process_observed_at_final_inspection": false,
+    "status": "INCOMPLETE",
+    "registered_prefix_tests": 285,
+    "logged_completed_passes": 162,
+    "target_start_evidenced": false,
+    "target_fixture_copy_present": false,
+    "stack_dump_bytes": 0,
+    "summary_present": false,
+    "diagnostic_stop_receipt_present": false,
+    "claim_limit": "The180-second target guard was not evidenced as reached. No stack, code stall, pass, or failure can be inferred for that target.",
+    "evidence": [
+      {
+        "path": "diagnose_connected_prefix.py",
+        "sha256": "c008a62ed42ea1263fe5163617efa15483b4d6302705e62e872871e31b948e10",
+        "bytes": 5588
+      },
+      {
+        "path": "connected-prefix-order-protocol.json",
+        "sha256": "46d0f070c49ada227861d6b412c931b63586dd54b03e3e88d864e2315d5ffb95",
+        "bytes": 34191
+      },
+      {
+        "path": "connected-prefix-order.log",
+        "sha256": "5cad02874517b2e1af700f51726bff3baef27b7d2be7d4fc07453758df13bfe3",
+        "bytes": 29346
+      },
+      {
+        "path": "connected-prefix-order-private/target-stacks.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    ],
+    "execution_limit": "No completion receipt or target-entry evidence survived; the reason for incomplete execution is not established."
+  },
+  "static_review": {
+    "evidence": {
+      "path": "connected-recovery-static-review.json",
+      "sha256": "5b4bbffd79e4f7aabaa3fe80ac657ff1c6ad97e8443fb7239272cfbc3a46fe12",
+      "bytes": 3012
+    },
+    "finding": "Reviewed canonical finance/persistence and two failing tests are identical to PR2018cd3757. Action indexes are call-local; prefix identity retains strong references. No concrete global-cache/id-recycling or leaked test-patch defect was found.",
+    "limit": "Absence of a located defect does not explain the original two errors."
+  },
+  "correction": "Earlier messages inferred an active long-running prefix method from an unchanged log and cross-call process observations. That code-stall inference is withdrawn: final actual handles are unavailable, no matching processes remain, and the repeat has a510-pass completion file inconsistent with its truncated log.",
+  "next_action": "No further aggregate rerun or speculative canonical change. Retain the original errors and these incomplete/contradictory execution receipts. Current exact-source hosted and focused qualification must be reported from their own verified receipts.",
+  "private_data": "No signing keys, journals, account authority or private fixture contents are included."
+}

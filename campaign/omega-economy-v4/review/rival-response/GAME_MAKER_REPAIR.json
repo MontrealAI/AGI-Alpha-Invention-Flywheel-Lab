@@ -1,0 +1,186 @@
+{
+  "checks": {
+    "development_diagnostics": [
+      "Two new focused methods on old source failed (one changed economic result, one absent response field).",
+      "One initial test command also requested an absent test-class alias. The subsequent complete modules above passed."
+    ],
+    "errors": 0,
+    "failures": 0,
+    "initial_bad_test_selector_log_sha256": "e55efeb1d7a2d96a1348090e3cacc769925ae1a321e146dcecaf4a6921e44e11",
+    "log_sha256": "70c55f2caca670cd5bb323aa49893202ad5a8bca8a59d68f32132449d786dabb",
+    "methods": 61,
+    "normal_cli_commands": [
+      "python -m mechanism_harness.game_maker INPUT --output NEW_REPORT",
+      "game_maker.audit_file(INPUT, json.loads(NEW_REPORT.read_bytes()))"
+    ],
+    "original_and_corrected_cli_and_matching_raw_audit_pass": true,
+    "original_failing_methods_log_sha256": "5e182c761a12d29647925a42a3c0110e675256be0c15d358097538940ffead93",
+    "registered_test_modules": "python -m unittest -v mechanism_harness.test_game_maker tests.test_omega_inventor",
+    "seconds": 13.196,
+    "skips": 0
+  },
+  "comparisons": {
+    "counter": {
+      "after": {
+        "report_sha256": "ca39fd06edc283043382f9cd53f4f30bdf9c37c7ceaece52f724b9a4abee3f75",
+        "states": 2,
+        "winner": {
+          "expected_profit": "0",
+          "operators": [],
+          "quote": null,
+          "worst_loss": 0
+        }
+      },
+      "after_cli_bound_audit": true,
+      "before": {
+        "report_sha256": "c9cb96ebdf3c739bf84865523eb60d1a0a41ca2cc7aa5f793a4d3d6794caedef",
+        "states": 2,
+        "winner": {
+          "expected_profit": "30",
+          "operators": [
+            "empty-build"
+          ],
+          "quote": 50,
+          "worst_loss": 0
+        }
+      },
+      "before_cli_bound_audit": true,
+      "copy_permitted_response": {
+        "buyer_gain_over_outside": 0,
+        "quote": 10,
+        "rival_buyers": [
+          "buyer"
+        ],
+        "rival_profit": 10,
+        "seller_buyers": [],
+        "tactic": "unchanged"
+      },
+      "old_bound_report_rejected_at_corrected_source": "SOURCE_BOUND_COMPLETE_GAME_CERTIFICATE_CHANGED",
+      "raw_input_sha256": "4ec12e9d6619a90cce9a9b488418c5904319ab4023f446ec209e7959fef05e8c"
+    },
+    "fixture": {
+      "after": {
+        "report_sha256": "a9d5936bdf2e05437d6af2bf66fa179b7fb8f238de33e5d0c42453e6f9b06610",
+        "states": 20,
+        "winner": {
+          "expected_profit": "41/10",
+          "operators": [
+            "evidence_in_production",
+            "pooled_commissioning"
+          ],
+          "quote": 19,
+          "worst_loss": 1
+        }
+      },
+      "after_cli_bound_audit": true,
+      "before": {
+        "report_sha256": "ef929ef05c0a008459a055e27895b59c048613725f0fcfb475a1381470ce7d3b",
+        "states": 20,
+        "winner": {
+          "expected_profit": "41/10",
+          "operators": [
+            "evidence_in_production",
+            "pooled_commissioning"
+          ],
+          "quote": 19,
+          "worst_loss": 1
+        }
+      },
+      "before_cli_bound_audit": true,
+      "copy_permitted_response": {
+        "buyer_gain_over_outside": 0,
+        "quote": 19,
+        "rival_buyers": [
+          "buyer01",
+          "buyer02",
+          "buyer03",
+          "buyer04"
+        ],
+        "rival_profit": 5,
+        "seller_buyers": [],
+        "tactic": "copy"
+      },
+      "old_bound_report_rejected_at_corrected_source": "SOURCE_BOUND_COMPLETE_GAME_CERTIFICATE_CHANGED",
+      "raw_input_sha256": "22d9807fc16ebbf595aa1dff23c5f1c4156deb33d98629273d11ecb595788b6f"
+    }
+  },
+  "corrected_files_sha256": {
+    "docs/harness/ECONOMIC_GAME_MAKER.md": "ac1f42e0357f22fff3989be52e1edf25da3e473cc2a8e43d9c89ba675d862229",
+    "mechanism_harness/_game_maker_v1.py": "c2be19dcb7c7caaf95c03ddf8ab2dfa28583b8872817ce10385a1166872eaea6",
+    "mechanism_harness/game_maker.py": "ce1fa7234298349099fc9e019a07f0d73865c7a43732f115516e07aacaf6911d",
+    "mechanism_harness/test_game_maker.py": "4d89dabb50b6f1acf9419fd773430f435aa0655f0a999a30990cc2eb2df7c4d3"
+  },
+  "counterexample_input": {
+    "basis": "DECLARED_COMPLETE_INFORMATION_SYNTHETIC",
+    "buyer_profiles": [
+      {
+        "budget": 100,
+        "id": "buyer",
+        "outside_utility": 0,
+        "value": 100
+      }
+    ],
+    "limits": {
+      "downside_penalty_bps": 0,
+      "max_loss": 10,
+      "max_operators": 2,
+      "max_states": 100
+    },
+    "opening_cash": 100,
+    "operators": [
+      {
+        "build": 20,
+        "exclusive": "",
+        "fixed_delta": 0,
+        "id": "empty-build",
+        "partner_outside": 0,
+        "partner_payment": 0,
+        "requires": [],
+        "unit_delta": 0
+      }
+    ],
+    "outcome": "One independently accepted evidence-backed operational work package per participating buyer",
+    "price_grid": [
+      50
+    ],
+    "production": {
+      "fixed": 0,
+      "quote": 0,
+      "unit": 0
+    },
+    "protected_cash": 10,
+    "rival": {
+      "fixed": 0,
+      "price_grid": [
+        10
+      ],
+      "quote": 0,
+      "unit": 0
+    },
+    "scenarios": [
+      {
+        "accepted": true,
+        "active_buyers": [
+          "buyer"
+        ],
+        "collected": true,
+        "fixed_extra": 0,
+        "id": "copy-permitted",
+        "rival_can_copy": true,
+        "unit_extra": 0,
+        "weight_bps": 10000
+      }
+    ],
+    "schema": "agi-alpha/economic-game-maker/v1"
+  },
+  "counterexample_raw_utf8_encoding": "json.dumps(counterexample_input, sort_keys=True, indent=2) + '\\n'",
+  "file_input_source_sha256": "fe20112c499a3fd38ff28eb82a6397372adf9ee3fe861777cfa2e6374f57e2e3",
+  "native_closures_unchanged": {
+    "reach_71_files": "72ce9400200c8201a5c60bb7a299b9206cf00d0ae70fa2baf36433ff5ac49010",
+    "v4_63_files": "05594b2569b72362daec83b136e743da949ae384411dc05837981281eb44e3a6"
+  },
+  "pre_fix_commit": "4c26d8468467090b4772cc207f9f291871fc4c71",
+  "review": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/206#discussion_r4462682900",
+  "schema": "omega/optional-rival-response-regression/v1",
+  "scope": "Finite complete-information research game over declared seller operator sets and seller/rival price grids. Both offered technologies provide the same buyer outcome. Only the entire seller arrangement may be copied. The seller-specific acceptance and collection rules do not specify a rival payment process. No new enterprise account or commercial revenue."
+}

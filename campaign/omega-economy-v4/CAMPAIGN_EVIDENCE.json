@@ -1,0 +1,376 @@
+{
+  "cases": [
+    {
+      "best_standard": "bundle",
+      "construction_attempts": [
+        {
+          "composition_failures": [],
+          "iteration": 0,
+          "rows": 180,
+          "verified_incentive_failures": 0
+        }
+      ],
+      "copycat_declines": 9,
+      "deviation_checks": {
+        "bundle": 17,
+        "cold": 17,
+        "equal_content_reuse": 17,
+        "full_control": 17,
+        "inherited": 17,
+        "nonentry": 9,
+        "separate": 31
+      },
+      "expected_contribution_cents": {
+        "bundle": "65887/43",
+        "cold": "65887/43",
+        "equal_content_reuse": "65887/43",
+        "full_control": "65887/43",
+        "inherited": "65887/43",
+        "nonentry": "0",
+        "separate": "63272/43"
+      },
+      "expected_gain_over_equal_content_reuse_cents": "0",
+      "expected_gain_over_full_control_cents": "0",
+      "expected_gain_over_standard_cents": "0",
+      "generated_menu": [
+        {
+          "outcome_id": "first",
+          "price_cents": 3594
+        },
+        {
+          "outcome_id": "second",
+          "price_cents": 3594
+        },
+        {
+          "outcome_id": "joint",
+          "price_cents": 1956
+        }
+      ],
+      "market_id": "complementary-392101",
+      "program_sha256": "55a2785f2a54db1f54ed844e6a0334ab1f2a79c5f9f3dab767b7a156494fc7ec",
+      "retained_pairs_after": [],
+      "retained_pairs_before": [],
+      "status": "VERIFIED",
+      "successor_ablation": {
+        "acquisition_plus_current_use_rows": 180,
+        "causally_required_for_output": false,
+        "cold_current_use_rows": 180,
+        "cold_expected_contribution_cents": "65887/43",
+        "cold_verified": true,
+        "equal_content_acquisition_plus_current_use_rows": 180,
+        "equal_content_acquisition_policy": "same substantive predecessor acquisition charged to both retained-content arms",
+        "inherited_expected_contribution_cents": "65887/43",
+        "interpretation": "Rows measure construction work only; they are not complete costs or money.",
+        "is_successor": false,
+        "ordinary_equal_content_verified": true,
+        "prior_acquisition_rows": 0,
+        "removed": "all transferred constraints; same market, solver and limits"
+      },
+      "total_rows_built": {
+        "bundle": 181,
+        "cold": 180,
+        "equal_content_reuse": 180,
+        "full_control": 181,
+        "inherited": 180,
+        "nonentry": 0,
+        "separate": 184
+      },
+      "type_count": 9
+    },
+    {
+      "best_standard": "separate",
+      "construction_attempts": [
+        {
+          "composition_failures": [],
+          "iteration": 0,
+          "rows": 180,
+          "verified_incentive_failures": 0
+        }
+      ],
+      "copycat_declines": 9,
+      "deviation_checks": {
+        "bundle": 14,
+        "cold": 26,
+        "equal_content_reuse": 26,
+        "full_control": 26,
+        "inherited": 26,
+        "nonentry": 9,
+        "separate": 22
+      },
+      "expected_contribution_cents": {
+        "bundle": "39463/55",
+        "cold": "47109/55",
+        "equal_content_reuse": "47109/55",
+        "full_control": "47109/55",
+        "inherited": "47109/55",
+        "nonentry": "0",
+        "separate": "46567/55"
+      },
+      "expected_gain_over_equal_content_reuse_cents": "0",
+      "expected_gain_over_full_control_cents": "0",
+      "expected_gain_over_standard_cents": "542/55",
+      "generated_menu": [
+        {
+          "outcome_id": "first",
+          "price_cents": 1045
+        },
+        {
+          "outcome_id": "second",
+          "price_cents": 1652
+        },
+        {
+          "outcome_id": "joint",
+          "price_cents": 1811
+        }
+      ],
+      "market_id": "substitute-392102",
+      "program_sha256": "59e52a3f68da5fc0b05b8b512ec6d183a2e9e3ec03ec409e2ab529b1a8ab7a37",
+      "retained_pairs_after": [],
+      "retained_pairs_before": [],
+      "status": "VERIFIED",
+      "successor_ablation": {
+        "acquisition_plus_current_use_rows": 360,
+        "causally_required_for_output": false,
+        "cold_current_use_rows": 180,
+        "cold_expected_contribution_cents": "47109/55",
+        "cold_verified": true,
+        "equal_content_acquisition_plus_current_use_rows": 360,
+        "equal_content_acquisition_policy": "same substantive predecessor acquisition charged to both retained-content arms",
+        "inherited_expected_contribution_cents": "47109/55",
+        "interpretation": "Rows measure construction work only; they are not complete costs or money.",
+        "is_successor": true,
+        "ordinary_equal_content_verified": true,
+        "prior_acquisition_rows": 180,
+        "removed": "all transferred constraints; same market, solver and limits"
+      },
+      "total_rows_built": {
+        "bundle": 181,
+        "cold": 180,
+        "equal_content_reuse": 180,
+        "full_control": 181,
+        "inherited": 180,
+        "nonentry": 0,
+        "separate": 184
+      },
+      "type_count": 9
+    },
+    {
+      "best_standard": "separate",
+      "construction_attempts": [
+        {
+          "composition_failures": [
+            [
+              "first",
+              "second"
+            ]
+          ],
+          "iteration": 0,
+          "rows": 180,
+          "verified_incentive_failures": 4
+        },
+        {
+          "composition_failures": [],
+          "iteration": 1,
+          "rows": 181,
+          "verified_incentive_failures": 0
+        }
+      ],
+      "copycat_declines": 9,
+      "deviation_checks": {
+        "bundle": 17,
+        "cold": 106,
+        "equal_content_reuse": 106,
+        "full_control": 48,
+        "inherited": 106,
+        "nonentry": 9,
+        "separate": 52
+      },
+      "expected_contribution_cents": {
+        "bundle": "10659/20",
+        "cold": "11787/20",
+        "equal_content_reuse": "11787/20",
+        "full_control": "11787/20",
+        "inherited": "11787/20",
+        "nonentry": "0",
+        "separate": "23467/40"
+      },
+      "expected_gain_over_equal_content_reuse_cents": "0",
+      "expected_gain_over_full_control_cents": "0",
+      "expected_gain_over_standard_cents": "107/40",
+      "generated_menu": [
+        {
+          "outcome_id": "first",
+          "price_cents": 802
+        },
+        {
+          "outcome_id": "second",
+          "price_cents": 805
+        },
+        {
+          "outcome_id": "joint",
+          "price_cents": 1536
+        }
+      ],
+      "market_id": "competitive-392103",
+      "program_sha256": "69688bdc3e9b02b58d81d2a31d612f7015ae600020c76bde5a57760833eafc66",
+      "retained_pairs_after": [
+        [
+          "first",
+          "second"
+        ]
+      ],
+      "retained_pairs_before": [],
+      "status": "VERIFIED",
+      "successor_ablation": {
+        "acquisition_plus_current_use_rows": 721,
+        "causally_required_for_output": false,
+        "cold_current_use_rows": 361,
+        "cold_expected_contribution_cents": "11787/20",
+        "cold_verified": true,
+        "equal_content_acquisition_plus_current_use_rows": 721,
+        "equal_content_acquisition_policy": "same substantive predecessor acquisition charged to both retained-content arms",
+        "inherited_expected_contribution_cents": "11787/20",
+        "interpretation": "Rows measure construction work only; they are not complete costs or money.",
+        "is_successor": true,
+        "ordinary_equal_content_verified": true,
+        "prior_acquisition_rows": 360,
+        "removed": "all transferred constraints; same market, solver and limits"
+      },
+      "total_rows_built": {
+        "bundle": 181,
+        "cold": 361,
+        "equal_content_reuse": 361,
+        "full_control": 181,
+        "inherited": 361,
+        "nonentry": 0,
+        "separate": 184
+      },
+      "type_count": 9
+    }
+  ],
+  "commands": [
+    "python -m mechanism_harness.cart_campaign --output /absolute/new/campaign.json",
+    "python -m mechanism_harness.cart_campaign --audit --output /absolute/new/campaign.json"
+  ],
+  "completed_cases": 3,
+  "construction_cpu_ns": {
+    "bundle": 269667863,
+    "cold": 6393738346,
+    "equal_content_reuse": 4094050736,
+    "full_control": 3597252207,
+    "inherited": 3034938996,
+    "nonentry": 5407045,
+    "separate": 4994707281
+  },
+  "corrected_source_preserves_registered_outcomes_and_counts": true,
+  "cost_boundary": {
+    "actual_model_developer_host_cost_usd": null,
+    "complete_lifecycle_superiority_established": false,
+    "construction_and_failed_attempts": "all solver histories included, including unresolved cases",
+    "operating_costs": "native accounts reported separately; these contribution values exclude fixed lifecycle costs",
+    "ordinary_reuse": "identical substantive memory and constructor; no exclusive-content advantage",
+    "retention_and_campaign_checks": "separately measured process CPU and exact check counts"
+  },
+  "current": {
+    "audit": {
+      "accepted": true,
+      "report_logical_sha256": "c0a2b310351ee537ca22eec59d832aa67ff87ee2be4d1c7114319d4d3105ea4e",
+      "scope": "Exact independent cart checks plus source-matched numerical replay; no external certification."
+    },
+    "audit_exit_status": 0,
+    "audit_sha256": "86741a818edc8851c6779f2ad0e7cdb580d14b0808e51565176f33b24a684ee1",
+    "execution_exit_status": 0,
+    "output_sha256": "68c80dcb1d4f8ea582ea13601f466263ff9e70dcccfc1d6a8ecd890922d3599f",
+    "source": {
+      "campaign/omega-economy-v4/PROTOCOL.md": "e6efa4bc0776a261b8cd37c6b155cfe978c41ed6c50e187ad3a57beeac4a12c0",
+      "campaign/omega-economy-v4/SUCCESSOR_PROTOCOL.md": "8580617df53efcb213e0fed3b7ad377e7147eee4990465182fdc9bafad77f156",
+      "campaign/omega-inventor/PROTOCOL_V4.md": "c47d2cf556c1c9eda183f72d7c7212ec3516bd16d2dc6c0f98564b9dc10867f7",
+      "commercial/ledger.py": "7febf3102ee931e686bdb71bef0cef3e0c43fa5e45ba8a194cf7f0e6833894c5",
+      "mechanism_harness/cart_campaign.py": "706e113d53ff6fe14b5fdd5cdca3d330427457df0a8b026b6bd5173952f761bb",
+      "mechanism_harness/cart_program.py": "96a715a5529e47acdc3f9d518c16c31823043f7660ec710c28198c9c02ac4b8c",
+      "mechanism_harness/cart_synthesis.py": "bbb6d33af6f729d6782ca360726b3ce82a802bdbd2b6374d4789487f0df0a9c6",
+      "mechanism_harness/market_cases.py": "a05861196f0a0c62c836e26b59e0d5592b656783b1a6f0a437d9fa9b374743af",
+      "mechanism_harness/market_program.py": "a770083489c419758d827170ac3cb14993fb70b9c6c36798aef0bbe304e63e1f",
+      "mechanism_harness/mechanism_synthesis.py": "a3faa1cdd02e55644b4ef1acb53d7f93d970c54c90d9b19adcbae72d7f264c16"
+    },
+    "source_commit": "f1074b1e128069d5a4754b10955a73a3d95db7c5"
+  },
+  "evidence_role": "corrected-source reproduction of the preregistered first confirmation; no fresh-seed claim",
+  "independent_verification_cpu_ns": 41765085,
+  "negative_results": {
+    "actual_revenue_usd": 0,
+    "beats_equal_content_reuse": false,
+    "beats_strong_full_solver": false,
+    "broad_objective_established": false,
+    "causally_required_for_successor_outputs": false,
+    "complete_lifecycle_superiority_established": false,
+    "retained_constraint_rows_saved": 0
+  },
+  "next_operating_choice": "Prefer full conventional construction within this finite tested model; fewer constructed rows/checks and equal verified outcomes. Generated search remains an experimental alternative.",
+  "original": {
+    "audit_sha256": "6b4ad443c0ad2ea1b75509f17961ca158d4ea41f955b3fa6c1626f1498328bfe",
+    "output_sha256": "2fcc28643712684a39e275aac596076ebe6cc70c3f51c4423b8bc3f92e011ed1",
+    "preserved": true,
+    "source": {
+      "campaign/omega-economy-v4/PROTOCOL.md": "e6efa4bc0776a261b8cd37c6b155cfe978c41ed6c50e187ad3a57beeac4a12c0",
+      "campaign/omega-economy-v4/SUCCESSOR_PROTOCOL.md": "8580617df53efcb213e0fed3b7ad377e7147eee4990465182fdc9bafad77f156",
+      "campaign/omega-inventor/PROTOCOL_V4.md": "c47d2cf556c1c9eda183f72d7c7212ec3516bd16d2dc6c0f98564b9dc10867f7",
+      "commercial/ledger.py": "7febf3102ee931e686bdb71bef0cef3e0c43fa5e45ba8a194cf7f0e6833894c5",
+      "mechanism_harness/cart_campaign.py": "706e113d53ff6fe14b5fdd5cdca3d330427457df0a8b026b6bd5173952f761bb",
+      "mechanism_harness/cart_program.py": "f87257df348a8c32830eed885325e45d18aad2541e3c1e80c6c50c52bc7c36c5",
+      "mechanism_harness/cart_synthesis.py": "bbb6d33af6f729d6782ca360726b3ce82a802bdbd2b6374d4789487f0df0a9c6",
+      "mechanism_harness/market_cases.py": "a05861196f0a0c62c836e26b59e0d5592b656783b1a6f0a437d9fa9b374743af",
+      "mechanism_harness/market_program.py": "a770083489c419758d827170ac3cb14993fb70b9c6c36798aef0bbe304e63e1f",
+      "mechanism_harness/mechanism_synthesis.py": "a3faa1cdd02e55644b4ef1acb53d7f93d970c54c90d9b19adcbae72d7f264c16"
+    },
+    "source_commit": "303ba5ab5150b4d241412ee3257bdf862b5ce12b"
+  },
+  "registered_arms": [
+    "inherited",
+    "cold",
+    "full_control",
+    "separate",
+    "bundle",
+    "equal_content_reuse",
+    "nonentry"
+  ],
+  "registered_cases": [
+    [
+      392101,
+      "complementary"
+    ],
+    [
+      392102,
+      "substitute"
+    ],
+    [
+      392103,
+      "competitive"
+    ]
+  ],
+  "retention_cpu_ns": 3148954,
+  "runtime": {
+    "python": "3.12.14",
+    "scipy": "1.17.0"
+  },
+  "schema": "omega/cart-campaign-public-evidence/v4",
+  "timing_interpretation": "Single observed process CPU measurements on a shared host; not a robust speed benchmark or actual dollar costs.",
+  "total_deviation_checks": {
+    "bundle": 48,
+    "cold": 149,
+    "equal_content_reuse": 149,
+    "full_control": 91,
+    "inherited": 149,
+    "nonentry": 27,
+    "separate": 105
+  },
+  "total_rows_built": {
+    "bundle": 543,
+    "cold": 721,
+    "equal_content_reuse": 721,
+    "full_control": 543,
+    "inherited": 721,
+    "nonentry": 0,
+    "separate": 552
+  }
+}

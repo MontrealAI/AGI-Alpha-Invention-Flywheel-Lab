@@ -1,0 +1,19 @@
+{
+  "schema": "omega/review-completed-resume-stale/v1",
+  "source_commit": "1565b480096a4e83f6d4d6b8abd64380d3433e2f",
+  "cart_native_sha256": "583c9ebd87fb60b1d3bd2240f70fb1709533e71ae1a2724496910b9a3d930a22",
+  "fixture": "tests.test_omega_cart_native.small_native_fixture; PILOT ((1337,substitute),); isolated temporary account",
+  "intervention": {
+    "method": "JournalAccount.cost",
+    "id": "independent-post-completion-cost",
+    "amount_microUSD": 10000,
+    "day": 364
+  },
+  "original_profit_microUSD": -10580000,
+  "authoritative_live_profit_microUSD": -10590000,
+  "completed_resume_returned_profit_microUSD": -10580000,
+  "live_native_audit_accepted": true,
+  "completed_resume_returned_stale": true,
+  "original_accounts_modified": false,
+  "scope": "Engineering regression, not commercial evidence; isolated account removed after test."
+}

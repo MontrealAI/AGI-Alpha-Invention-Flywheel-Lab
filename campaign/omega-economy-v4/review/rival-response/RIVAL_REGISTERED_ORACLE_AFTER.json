@@ -1,0 +1,73 @@
+{
+  "accepted": true,
+  "budget_excess_cases": 0,
+  "buyer_allocation_calls": 20736,
+  "end_to_end": {
+    "copy_disabled": {
+      "actual": [
+        [],
+        null,
+        "0"
+      ],
+      "bounded_stop": true,
+      "expected": [
+        [],
+        null,
+        "0"
+      ],
+      "matched": true,
+      "states": 2
+    },
+    "public_fixture": {
+      "actual": [
+        [
+          "evidence_in_production",
+          "pooled_commissioning"
+        ],
+        19,
+        "41/10"
+      ],
+      "bounded_stop": true,
+      "expected": [
+        [
+          "evidence_in_production",
+          "pooled_commissioning"
+        ],
+        19,
+        "41/10"
+      ],
+      "matched": true,
+      "states": 20
+    },
+    "wasteful_operator": {
+      "actual": [
+        [],
+        null,
+        "0"
+      ],
+      "bounded_stop": true,
+      "expected": [
+        [],
+        null,
+        "0"
+      ],
+      "matched": true,
+      "states": 2
+    }
+  },
+  "microcases": 5184,
+  "mismatch_examples": [],
+  "optimal_methods": {
+    "copy": 109,
+    "native": 3724,
+    "none": 1351
+  },
+  "oracle_sha256": "5bd56e1eb656ad8abad025eaa1dd58da272aa54f7556a1ef078b072c731cf730",
+  "response_disagreements": {},
+  "scope": "Declared perfect-information microgames; operating and financial accounts untouched. Buyer ties outside then rival; rival maximizing profit then fewest seller buyers, then entry and greatest price. Native-first for equally profitable technology at same price. Copied build paid at offer; partner/fixed/per-unit only on sale.",
+  "source_file_sha256": {
+    "_game_maker_v1.py": "c2be19dcb7c7caaf95c03ddf8ab2dfa28583b8872817ce10385a1166872eaea6",
+    "game_input.py": "cd9ad922fd2fda04d623a14705908224296fac4b35b0b8d5bf065415360ef639",
+    "game_maker.py": "ce1fa7234298349099fc9e019a07f0d73865c7a43732f115516e07aacaf6911d"
+  }
+}
