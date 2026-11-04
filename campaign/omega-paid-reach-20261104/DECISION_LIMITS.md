@@ -1,0 +1,21 @@
+# What can a paid order establish?
+
+**Funding.** A paid plan can be acquired only after a native `spend(..., allow_seed=False)` returns earned funding and a plan ID that the supplier grant must reference. The decision checks both unrestricted earnings of at least $6.25 and total available cash of at least $18.25; the latter protects $12 of upcoming maintenance. An independently accepted whole basket can produce the collection that enters those balances. A test holding $100,000 available while removing earned liquidity refuses the same invoice. This proves necessity under this funding rule. A supplier accepting seed-financed payment could sell the same $6.25 plan to a solvent incumbent. That alternative was not operated in the five pairs.
+
+**Who paid for renewal?** A day-118 renewal needs at least one completed first-tranche sale to a buyer outside the entire organic roster. Aggregate collections from all eligible exclusive settlements must exceed the first invoice and *all* variable costs routed through the paid plan, including unsuccessful quotes. Its positive signal is therefore evidence about first-tranche sales. The money for a new invoice comes from the whole available earned balance; accounting does not earmark it to one customer or tranche. The organic arm identifies the effect of the two-decision policy. Measuring the marginal effect of the second purchase alone would require a matched one-tranche control.
+
+**Incumbent and sunk costs.** Each entered account has already expensed $20 for setup plus three $5 market studies by day 90. Both must pay $12 maintenance at the close. These are real charges within the simulation; equal charges cancel only in paired differences. Nonentry's $0 is an outside option before launch. It cannot erase incurred costs. The market-study and operating tariffs are modeled envelopes, not a measurement of developer wages or all supporting infrastructure. Incurred dollar costs and CPU/check counts answer different questions.
+
+## How far can these inputs reach?
+
+There are 27 one-time warm buyers and 24 fresh prospects. For each warm buyer the most they could pay is the lesser of their budget and their best outcome value minus the outside option and one cent of required surplus. Summing these bounds gives $477.33. Four fresh buyers are reachable only once through the organic roster: they can spend at most $139.68 together. The other twenty have lifetime wallets of at most $71.86 apiece, giving $1,437.20. Even free production, perfect conversion and full collection could collect at most **$2,054.21 per account**. The calculation uses public type supports, not private draws, realized orders or the other arm's data. Capacity and refusals can reduce gross collections. Expenses and tax further reduce the profit those collections support. This is a statement about the specified customer population, not a limit on real demand or future inventions.
+
+As a necessary scale condition, suppose the current fresh-buyer maximum of $34.92 per basket, the 3% fee rounded up to the next cent, and the 20% tax on positive profit remained in force. At that price the fee is $1.05 and after-tax proceeds are at most $27.096 per basket. Even with zero production, acquisition and fixed costs, $3 billion in annual after-tax profit would require at least **110,717,450 fully collected baskets** in one year. This is a lower bound on required throughput for *that offer class*, not a market-size estimate or a forecast. No measurements in this experiment support that volume. Before acquiring additional capacity, the decisive inputs would be buyers' actual alternatives and willingness to pay, independently accepted work, paid-channel costs, and marginal net returns after displacement and full lifecycle costs. A more valuable service would need its own outcome and demand evidence.
+
+Reproduce the cohort bound from a checkout of this edition:
+
+```sh
+python campaign/omega-paid-reach-20261104/review/reproduction/scope_bound.py
+```
+
+Sources: [rule and private environment](../../mechanism_harness/reach_policy.py), [native spend and settlement](../../mechanism_harness/reach_native.py), [independent replay](../../mechanism_harness/reach_verify.py), [funding and refusal tests](../../tests/test_omega_reach_policy.py), [registered cost and comparison rules](PROTOCOL.md).

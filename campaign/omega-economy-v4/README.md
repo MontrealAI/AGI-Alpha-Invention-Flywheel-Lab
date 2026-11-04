@@ -1,5 +1,8 @@
 # FLYWHEEL Ω — cart-aware invention-to-enterprise continuation
 
+[Current operating result, including all five paid-reach comparisons](OPERATING_RESULT.md).
+
+
 This opt-in continuation constructs finite public economic menus, finds strategic composed-purchase counterexamples, repairs the menu, executes actual KPI/reconciliation procedures, independently accepts outputs, settles simulated payments through the existing native account, and uses unrestricted earnings for a checked productive successor. It preserves PR201's historical V1–V3 code and accounts.
 
 It is a bounded deterministic constructor over developer-authored primitives. It does not repeatedly call a language model, invent new primitives in the open world, establish observed demand or prove general economic superiority. The cooperative commissioning prototype changes the arrangement under test; ordinary shared commissioning remains an equal-permission alternative. See REPORT.md for executed verdicts and negative results.

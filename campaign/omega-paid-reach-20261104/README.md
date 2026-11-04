@@ -1,5 +1,8 @@
 # Can collected earnings buy profitable incremental reach?
 
+**Executed result.** Paid reach generated 17 additional settlements and $205.112 in additional after-tax profit in the central setting. It cost money in the other four settings. [Five matched pairs](REPORT.md) · [Machine-readable evidence](PAIRED_EVIDENCE.json) · [Reproduce the full comparison](REPLAY.md).
+
+
 A simulated seller offers checked KPI-variance and reconciliation work. The organic arm waits for its scheduled contacts. The pilot arm may spend earned cash on an expiring audience contract and may renew once. Each contacted buyer can refuse, buy a feasible basket, or buy a fresh job on a later visit within a persistent wallet. Only an independently accepted, settled basket can produce a collection. The experiment tests distribution for the existing cart service. The [frozen protocol](PROTOCOL.md) specifies the draws, costs, capacity and decision rules.
 
 Each of the five environments gets its own pair of accounts. The first 27 opportunities replay an already exposed favorable history, paying all costs again from a fresh US$100,000 simulated opening balance per account. The qualifying history ends before day 90. The remainder of the same 365-day window contains the fresh cohort. A pilot purchase on day 90 costs $6.25 including support. A renewal on day 118 uses only observed first-tranche collections, costs and current liquidity. The trial estimate must be positive, the invoice must fit current earned funds, and available cash must cover both the invoice and the $12 annual maintenance. The organic counterfactual is unavailable to either investment decision.
@@ -40,7 +43,7 @@ python -m mechanism_harness.reach_native resume "$run_root/central/pilot"
 python -m mechanism_harness.reach_native audit "$run_root/central/pilot"
 ```
 
-If a source, journal, signer, artifact or cost fails verification, preserve the original files and diagnose the mismatch. Restore a matching complete backup when one exists. An unavailable authority leaves that cell unresolved. Keep the account tree private, including its signer, SQLite files, action tape, journal and order-level data. The summarizer writes a new aggregate JSON only after all ten independent audits pass. Choose a new evidence filename on a subsequent replay.
+If a source, journal, signer, artifact or cost fails verification, preserve the original files and diagnose the mismatch. Restore a matching complete backup at the same absolute account path used when the signer was initialized. A byte-identical copy under a different absolute path is rejected with `ADAPTIVE_ACCOUNT_NAMESPACE_CHANGED`. An offline public audit can still check exported history. Keep the original or a verified untouched backup while performing any restore. An unavailable authority leaves that cell unresolved. Keep the account tree private, including its signer, SQLite files, action tape, journal and order-level data. The summarizer writes a new aggregate JSON only after all ten independent audits pass. Choose a new evidence filename on a subsequent replay.
 
 ## Read the comparison
 
