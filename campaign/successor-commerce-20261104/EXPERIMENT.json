@@ -1,0 +1,31 @@
+{
+  "schema": "successor-commerce-experiment/v1",
+  "foundation_commit": "4abbb85893c9c073ca092db4ad858f7bb156dc35",
+  "protocol_commit": "bf4cd5fe20d840fd1cd2b9cff4b0b748f783857f",
+  "primary": {"scenario":"central","policy":"adaptive","seed":2026110401},
+  "scenarios": ["central","weak","price_war","high_cost","payment_shock","no_demand"],
+  "policies": ["adaptive","ordinary","organic"],
+  "extra_central_policy": "half_earned",
+  "population": 64, "initial_reach": 8, "periods": 12, "period_days": 30, "horizon_days":365,
+  "packet_rows_per_kind":200, "cohort_seed":2026110407,
+  "opening_microUSD":100000000000, "working_microUSD":5000000000,
+  "price_grid_usd":[19,39,69,99,129],
+  "setup_usd":{"opportunity_research_and_failed_search":200,"construction_integration":420,"independent_qualification_and_security":340,"initial_eight_buyer_access":240},
+  "fixed_period_usd":30, "quote_usd":0.5, "onboarding_usd":4, "repeat_revalidation_usd":1,
+  "resource_usd":{"production":5,"compute_and_inference_envelope":2,"independent_verification":2,"delivery":0.5,"prepaid_support_and_maintenance":2,"residual_risk_handling":1},
+  "correction_usd":2, "fee_bps":290, "fee_fixed_usd":0.3, "tax_bps":2000,
+  "need_bps":8500, "retention_bps":9500, "initial_defect_bps":200,
+  "settlement_reversal_bps":300,"acceptance_delay_hours":2,"collection_delay_hours":48,
+  "channels":[{"slots":4,"invoice_usd":45},{"slots":8,"invoice_usd":75},{"slots":16,"invoice_usd":150}],
+  "activation_bps":9500,"realization_bps":6500,
+  "types":[{"weight_bps":2000,"budget_usd":180},{"weight_bps":2500,"budget_usd":900},{"weight_bps":3500,"budget_usd":2400},{"weight_bps":2000,"budget_usd":3600}],
+  "segments":{
+    "integrated":{"values_usd":[10,40,80,140],"human_usd":150,"hybrid_usd":75,"rival_usd":49,"self_cash_usd":12,"self_attention_usd":8,"outside_delay_usd":0},
+    "export_only":{"values_usd":[20,80,140,220],"human_usd":220,"hybrid_usd":130,"rival_usd":110,"self_cash_usd":20,"self_attention_usd":80,"outside_delay_usd":8},
+    "fragmented":{"values_usd":[30,100,180,300],"human_usd":300,"hybrid_usd":190,"rival_usd":159,"self_cash_usd":20,"self_attention_usd":160,"outside_delay_usd":10}
+  },
+  "buyer_first_friction_usd":3,"buyer_repeat_friction_usd":1,
+  "rival_grid_usd":[29,39,59,89,119,149],"rival_floor_usd":39,"rival_review_periods":3,
+  "human_hours_range":[0.25,3],"human_loaded_hour_range_usd":[35,90],
+  "claim_scope":"Finite synthetic backlog, fixed AI-authored automation, authored monetary and market assumptions. Actual billed costs, demand and human task times are unknown; no real revenue or general discovery claim."
+}
