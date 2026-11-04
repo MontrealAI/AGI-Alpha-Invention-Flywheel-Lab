@@ -1,0 +1,46 @@
+{
+  "additional_review_correction": {
+    "finding": "Initial qualification engineering artifact also included two new V4 raw stdout/stderr globs. Root review required all V4 logs remain local.",
+    "repair": "Removed both omega-v4-qualified raw-log globs; retained compact QUALIFICATION.json and existing canonical uploads. Helper documentation corrected. No native runtime changes."
+  },
+  "historical_failed_check": {
+    "command": "python -m unittest tests.test_connected_platform_runtime064 -v",
+    "failed": 1,
+    "failure": "Existing operating export privacy guard expected6 allowlisted publication uploads; an added seventh upload failed this check.",
+    "passed": 15,
+    "repair": "Removed additional upload and rawlogs from downloaded-operation path. Compact V4receipt is appended under a new key to already-allowlisted DOWNLOADED_RELEASE_RUN.json with commit/source checks. Existing privacy test and six upload allowlists unchanged."
+  },
+  "native62_unchanged_from_public_c6ddb25": true,
+  "native_source_sha256": "1c862f979deba90ce302f1aa8dcf781e75fc84fbac4be48236ca3d143cb1956e",
+  "post_repair_checks": [
+    {
+      "command": "python -m unittest tests.test_connected_platform_runtime064 tests.test_compact_failure_export031 -v",
+      "failed": 0,
+      "passed": 24
+    },
+    {
+      "command": "python -m unittest tests.test_connected_omega_release tests.test_connected_release -q",
+      "existing_release_tests": 50,
+      "failed": 0,
+      "new_tests": 19,
+      "passed": 69
+    },
+    {
+      "command": "python -m unittest tests.test_connected_platform_runtime064 tests.test_compact_failure_export031 tests.test_connected_omega_release tests.test_connected_release -q",
+      "failed": 0,
+      "passed": 93,
+      "scope": "Final seven-file freeze after removing both V4 raw-log globs."
+    }
+  ],
+  "schema": "omega/release-path-development-review/v1",
+  "scope": "Development review; not exact-final-public-source qualification or release publication.",
+  "stable_files_sha256": {
+    ".github/workflows/connected014-release.yml": "1e86b1b213f5705471a000673e0233b4a54fa4e682d8c6a021682d3077196fb9",
+    ".github/workflows/omega-economy-v4.yml": "49e5d14eec135938c7b14d17a90bf4f42a0a929b57a06b33677bafed596f579d",
+    "connected_enterprise/runner.py": "d2939e2bdd0bdc649461fd7a1dc87a51a3c9ea684b453cf9f3c62d59c1c702d9",
+    "scripts/qualify_connected014.py": "01ba11875b2d3912036d924134052e8d41e36589174615d7fb57707b27b9510e",
+    "scripts/qualify_omega_release.py": "11f58329dde3744564bd16b4163a08f904b29bd33bb41c2e0975396b33948ba7",
+    "scripts/release_connected014.py": "031c5e48792793154e9d007446861780afff518c37d72297a73f7ca2cc557f4f",
+    "tests/test_connected_omega_release.py": "f6d09ac8116790f285113f902c42955b4b1dc17ebbb3bd8804f6581950552bc8"
+  }
+}

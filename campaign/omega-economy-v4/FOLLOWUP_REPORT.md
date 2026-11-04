@@ -97,7 +97,7 @@ acceptance, collections, failures and post-crash live reconciliation.
 | Partial acceptance failure | $0 | $92.200 | −$92.200 |
 
 Each is a sparse simulated day-[0,365) schedule beginning with $100,000, with last
-fiscal actions on day364. For each positive $143.048 arm, recognized revenue
+fiscal actions on day 364. For each positive $143.048 arm, recognized revenue
 equals collections; cash is $100,143.048, unrestricted cash $99,851.098, protected
 tail obligations $291.950, and payables/reserved investment zero. Development is
 expensed, including the $5 successor. The 20% modeled positive-pretax provision
@@ -123,15 +123,15 @@ unchanged. Scores are not customer acceptance or physical certificates.
 
 | Physical case | Organizer, limited | Organizer, full | CUQI3, limited |
 | --- | ---: | ---: | ---: |
-| Level1 A | 0.921925 | 0.921925 | 0.947534 |
-| Level4 A | 0.541295 | 0.604323 | 0.644968 |
-| Level7 A | 0.028828 | 0.473773 | 0.229329 |
+| Level 1 A | 0.921925 | 0.921925 | 0.947534 |
+| Level 4 A | 0.541295 | 0.604323 | 0.644968 |
+| Level 7 A | 0.028828 | 0.473773 | 0.229329 |
 
 The registered all-three-strictly-improve hypothesis is rejected. The protocol
-mistakenly required improvement in level1 despite identical information; that
-design flaw is not repaired after seeing outcomes. Level4 also demonstrates why
+mistakenly required improvement in level 1 despite identical information; that
+design flaw is not repaired after seeing outcomes. Level 4 also demonstrates why
 the strongest available alternative matters: stronger reconstruction with fewer
-observations beats the weaker method with full observations. Level7 leaves a
+observations beats the weaker method with full observations. Level 7 leaves a
 descriptive gap, not proof of an irreducible information limit. The next decisive
 experiment must first specify a useful physical decision, acceptable error and
 cost, then compare strong methods and sensing on fresh measurements. No
@@ -140,17 +140,24 @@ economic claim.
 
 ## Qualification boundary and next work
 
-The corrected content passed twenty native tests in123.849 seconds, five decision
-tests, and one recovery test covering eight faults in117.866 seconds. Independent
+The corrected content passed twenty native tests in 123.849 seconds, five decision
+tests, and one recovery test covering eight faults in 117.866 seconds. Independent
 adversarial reproductions reject both formerly accepted defects. Exact public
 head tests and hosted checks are separate publication receipts on PR #206; an
 earlier-head pass is never relabeled as a later-head pass.
 
 The original aggregate failure remains two errors in510 methods. Two later
-[hosted canonical runs](review/HOSTED_CANONICAL_RECHECKS.json) passed510/510 on
+[hosted canonical runs](review/HOSTED_CANONICAL_RECHECKS.json) passed 510/510 on
 `1565b480096a4e83f6d4d6b8abd64380d3433e2f`, before the additional V4 corrections.
-Neither establishes the cause of the first failures. A separate unchanged local
-repeat preserves failure state before cleanup; its status is reported separately.
+Neither establishes the cause of the first failures. The later unchanged local repeat has a completion file reporting 510 passes,
+but its verbose log is incomplete. A separate bounded prefix diagnostic is
+incomplete and never evidenced reaching its target. Execution handles became
+unavailable; the earlier code-stall inference is withdrawn. The
+[diagnostic report](review/CONNECTED_LOCAL_DIAGNOSTIC_REPORT.md) preserves these
+discrepancies without inventing a cause. The monitored exact-c6ddb25 targeted
+run separately passed 202 methods, zero failures/skips; its
+[receipt](review/c6-final-head-receipt.json) retains earlier incomplete or
+incorrectly invoked attempts.
 No financial guard was weakened. The old clean package qualification applies to
 the existing canonical engine, not automatically to a released V4 package.
 
@@ -161,3 +168,21 @@ multi-beneficiary conditional settlement, and an online acquisition/capacity
 policy supported by demand evidence. Current strict source matching deliberately
 does not pretend that a fresh account continues the primary business. Setup,
 inputs, outputs, safety, reproduction and failure recovery are in [README](README.md).
+
+## Release-path correction
+
+The existing canonical publisher omitted fifteen files required by V4 and its
+requirements file. The additive release integration closes that inventory,
+requires a source-bound V4 packaged-operation receipt, and runs V4 from actual
+downloaded release bytes. It retains existing permission scopes, sealing checks,
+canonical qualification commands and the six compact downloaded-operation
+artifact paths. The V4 workflow also runs on main pushes so the release gate can
+require success on the exact merged head.
+
+Ninety-three focused release/privacy/platform checks pass on the candidate
+content. A proposed extra artifact upload failed an existing privacy check;
+that proposal and later raw-log upload globs were removed. Only the compact V4
+qualification receipt is added to public evidence. Source, dependency, archive,
+account and resume binding are tested; publication and actual downloaded-byte
+operation still require the exact-head release workflow receipts. The native
+62-file map and all original/corrected operating evidence remain unchanged.

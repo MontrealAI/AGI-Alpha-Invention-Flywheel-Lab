@@ -28,6 +28,10 @@ PAPERS = ('PAPER.pdf', 'PAPER.tex', 'index.html', 'REPORT.md', 'PUBLICATION.json
 REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.yml', 'adaptive012.yml', 'commercial010.yml')
 # Terminal measurement009 is manual-only; path changes never renew its expired allocation.
 CONDITIONAL_WORKFLOWS = {
+    'omega-economy-v4.yml': ('mechanism_harness/', 'campaign/omega-economy-v4/',
+                            'campaign/omega-inventor/', 'requirements-omega-mechanisms-v3.txt',
+                            'scripts/qualify_omega_release.py',
+                            '.github/workflows/omega-economy-v4.yml'),
     'public-portfolio-20261102.yml': ('experiments/public_portfolio_20261102/',
                                     'tests/test_public_portfolio_20261102.py',
                                     '.github/workflows/public-portfolio-20261102.yml'),
@@ -151,6 +155,12 @@ def verify_assets(directory, expected_commit):
             or qualification['source_archive']['sha256'] != digest(directory/'connected014-source.zip')
             or qualification['public_archive']['sha256'] != digest(directory/'connected014-keyfree.zip')):
         raise ValueError('QUALIFIED_ARCHIVE_BINDING_CHANGED')
+    if 'mechanism_harness/cart_native.py' in source['files']:
+        if 'OMEGA_V4_QUALIFICATION.json' not in names:
+            raise ValueError('SOURCE_BOUND_V4_QUALIFICATION_REQUIRED')
+        from scripts.qualify_omega_release import validate_receipt
+        validate_receipt(read(directory/'OMEGA_V4_QUALIFICATION.json'),source,
+                         digest(directory/'connected014-source.zip'),expected_commit)
     publication = read(directory/'PUBLICATION.json')
     if publication.get('source_sha256') != manifest['source_sha256'] and 'COMPOSED_PUBLICATION.json' not in names:
         raise ValueError('COMPOSED_PUBLICATION_REQUIRED')
@@ -169,6 +179,8 @@ def verify_assets(directory, expected_commit):
         applicability = gate.get('applicability', {})
         expected_runs = applicable_workflows(applicability.get('changed_paths', []), list(runs),
                                             applicability.get('conservative_all_conditionals', False))
+        if 'mechanism_harness/cart_native.py' in source['files']:
+            expected_runs.add('omega-economy-v4.yml')
         if (gate.get('source_commit') != expected_commit or gate.get('event') != 'push'
                 or gate.get('branch') != 'main' or set(runs) != expected_runs
                 or any(row.get('head_sha') != expected_commit or row.get('event') != 'push'
@@ -332,6 +344,15 @@ def prepare(qualification, output, source_commit, papers):
     output.mkdir(parents=True)
     for name in ('connected014-source.zip', 'connected014-keyfree.zip', 'QUALIFICATION.json'):
         shutil.copyfile(qualification/name, output/name)
+    omega_source=archive_manifest(qualification/'connected014-source.zip')
+    if 'mechanism_harness/cart_native.py' in omega_source['files']:
+        receipt_path=qualification/'OMEGA_V4_QUALIFICATION.json'
+        if not receipt_path.is_file() or receipt_path.is_symlink():
+            raise ValueError('SOURCE_BOUND_V4_QUALIFICATION_REQUIRED')
+        from scripts.qualify_omega_release import validate_receipt
+        validate_receipt(read(receipt_path),omega_source,
+                         digest(qualification/'connected014-source.zip'),source_commit)
+        shutil.copyfile(receipt_path,output/receipt_path.name)
     for name in PAPERS:
         shutil.copyfile(papers/name, output/name)
     if composed is not None:
@@ -442,6 +463,10 @@ def publish(directory, source_commit, repository, run_id, timeout=None):
                  if row.get('head_sha') == source_commit and row.get('event') == 'push'
                  and row.get('head_branch') == 'main' and row.get('path', '').startswith('.github/workflows/')]
         required = applicable_workflows(applicability['changed_paths'], names, applicability['conservative_all_conditionals'])
+        # Manifest presence makes this gate mandatory even before the new
+        # push workflow appears in GitHub's eventually consistent run listing.
+        if 'mechanism_harness/cart_native.py' in archive_manifest(directory/'connected014-source.zip')['files']:
+            required.add('omega-economy-v4.yml')
         runs = {name:gh(f'repos/{repository}/actions/workflows/{name}/runs?head_sha={source_commit}&event=push&branch=main&per_page=100')['workflow_runs'] for name in required}
         accepted = qualifying_runs(runs, source_commit)
         manual_runs = {name:gh(f'repos/{repository}/actions/workflows/{name}/runs?head_sha={source_commit}&event=workflow_dispatch&branch=main&per_page=100')['workflow_runs'] for name in RETIRED_MANUAL_WORKFLOWS}

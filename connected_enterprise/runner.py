@@ -23,6 +23,27 @@ from .engine import default_config
 
 ROOT=Path(__file__).resolve().parents[1]
 
+# Additive release closure. Historical checkouts without V4 remain unchanged.
+OMEGA_V4_RELEASE_PATHS = (
+    'mechanism_harness/cart_campaign.py', 'mechanism_harness/cart_decision.py',
+    'mechanism_harness/cart_native.py', 'mechanism_harness/cart_program.py',
+    'mechanism_harness/cart_synthesis.py', 'mechanism_harness/cooperative_construction.py',
+    'mechanism_harness/inventor.py', 'mechanism_harness/market_cases.py',
+    'mechanism_harness/market_program.py', 'mechanism_harness/mechanism_synthesis.py',
+    'campaign/omega-inventor/PROTOCOL_V4.md',
+    'campaign/omega-economy-v4/PROTOCOL.md',
+    'campaign/omega-economy-v4/COOPERATIVE_PROTOCOL.md',
+    'campaign/omega-economy-v4/REPAIR_PROTOCOL.md',
+    'campaign/omega-economy-v4/SUCCESSOR_PROTOCOL.md',
+    'campaign/omega-economy-v4/README.md',
+    'requirements-omega-mechanisms-v3.txt', 'requirements-commercial010.txt',
+    'scripts/qualify_omega_release.py', 'tests/test_connected_omega_release.py',
+    'tests/test_omega_carts.py', 'tests/test_omega_cart_review.py',
+    'tests/test_omega_cart_campaign.py', 'tests/test_omega_cart_decision.py',
+    'tests/test_omega_cart_native.py', 'tests/test_omega_cart_crash.py',
+    'tests/test_omega_cooperative.py', '.github/workflows/omega-economy-v4.yml',
+)
+
 def source_paths(root):
     names=set(inherited_paths(root))
     for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('campaign/connected-registrations','*.json')]:
@@ -204,6 +225,12 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in required):
             raise ValueError('PAIRED_ACQUISITION_SOURCE_DEPENDENCY_MISSING')
         names.update(required)
+    if any((root/name).exists() for name in (
+            'mechanism_harness/cart_native.py', 'mechanism_harness/cart_program.py',
+            'campaign/omega-economy-v4')):
+        if any(not (root/name).is_file() for name in OMEGA_V4_RELEASE_PATHS):
+            raise ValueError('OMEGA_V4_SOURCE_DEPENDENCY_MISSING')
+        names.update(OMEGA_V4_RELEASE_PATHS)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
