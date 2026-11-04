@@ -24,3 +24,5 @@ jobs:
         run: python -B -m unittest research.battery_physical100.test_probe -v
       - name: Inspect one hash-pinned physical development cell
         run: python -B -m research.battery_physical100.probe
+      - name: Inspect development discharge protocol
+        run: python -B -m research.battery_physical100.development
