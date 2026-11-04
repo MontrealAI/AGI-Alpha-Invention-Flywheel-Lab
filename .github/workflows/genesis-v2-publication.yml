@@ -1,0 +1,29 @@
+name: Materialize authorized GENESIS edition 2
+on:
+  push:
+    branches: ['publication/genesis-v2-20261104']
+    paths: ['docs/alpha-genesis/ALPHA_GENESIS_FLYWHEEL_OMEGA_v2_COMPLETE.zip']
+permissions:
+  contents: write
+concurrency:
+  group: genesis-v2-publication
+  cancel-in-progress: false
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.ref }}
+      - name: Verify exact edition and reproduce analytical studies
+        run: python3 _publication/genesis-v2/materialize.py
+      - name: Commit exact new edition without temporary transport
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          test "$(git ls-remote origin "${{ github.ref }}" | cut -f1)" = "${{ github.sha }}"
+          git add docs/alpha-genesis/v2.0 docs/research/alpha-genesis-flywheel-omega-v2.pdf _publication/genesis-v2 .github/workflows/genesis-v2-publication.yml
+          git diff --cached --name-only | python3 -c 'import sys; paths=sys.stdin.read().splitlines(); assert paths and all(p.startswith(("docs/alpha-genesis/v2.0/", "_publication/genesis-v2/")) or p in ("docs/research/alpha-genesis-flywheel-omega-v2.pdf", ".github/workflows/genesis-v2-publication.yml") for p in paths)'
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Publish byte-preserved GENESIS edition 2 and preserve prior edition'
+          git push origin HEAD:"${{ github.ref }}"
