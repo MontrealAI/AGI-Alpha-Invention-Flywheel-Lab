@@ -1,0 +1,135 @@
+{
+  "schema": "genesis002/config/v1",
+  "evidence_scope": "AUTHORED_SYNTHETIC",
+  "opening_cents": 50000,
+  "working_reserve_cents": 2500,
+  "setup_cents": 500,
+  "discovery_cents": 200,
+  "acquisition_cents": 50,
+  "fee_bps": 290,
+  "fee_fixed_cents": 30,
+  "tax_bps": 2000,
+  "cohort_seed": 40261104,
+  "cycles": 6,
+  "methods": [
+    {
+      "id": "direct-standard",
+      "adapter": "conventional",
+      "access": "local_public_code",
+      "supported_services": [
+        "reconciliation",
+        "kpi_variance",
+        "evidence_matrix"
+      ],
+      "construction_origin": "existing",
+      "costs": {
+        "production_cents": 400,
+        "verification_cents": 100,
+        "support_cents": 50,
+        "maintenance_cents": 50,
+        "integration_cents": 0
+      }
+    },
+    {
+      "id": "genesis-generated",
+      "adapter": "generated",
+      "access": "local_public_code",
+      "supported_services": [
+        "reconciliation",
+        "kpi_variance",
+        "evidence_matrix"
+      ],
+      "construction_origin": "inherited",
+      "costs": {
+        "production_cents": 800,
+        "verification_cents": 100,
+        "support_cents": 50,
+        "maintenance_cents": 100,
+        "integration_cents": 100
+      }
+    },
+    {
+      "id": "expensive-inherited",
+      "adapter": "ordinary_reuse",
+      "access": "local_public_code",
+      "supported_services": [
+        "reconciliation",
+        "kpi_variance",
+        "evidence_matrix"
+      ],
+      "construction_origin": "inherited",
+      "costs": {
+        "production_cents": 300,
+        "verification_cents": 100,
+        "support_cents": 50,
+        "maintenance_cents": 1000,
+        "integration_cents": 200
+      }
+    },
+    {
+      "id": "announced-frontier-tool",
+      "adapter": "generated",
+      "access": "unverified",
+      "supported_services": [
+        "reconciliation",
+        "kpi_variance",
+        "evidence_matrix"
+      ],
+      "construction_origin": "frontier_candidate",
+      "costs": {
+        "production_cents": 1,
+        "verification_cents": 1,
+        "support_cents": 0,
+        "maintenance_cents": 0,
+        "integration_cents": 0
+      }
+    }
+  ],
+  "offers": [
+    {
+      "id": "source-bound-reconciliation",
+      "service_id": "reconciliation",
+      "buyer_value_cents": 7500,
+      "outside_utility_cents": 2000,
+      "buyer_friction_cents": 1000,
+      "buyer_budget_cents": 5000,
+      "prices_cents": [
+        2500,
+        3500,
+        4000,
+        5000
+      ],
+      "demand_evidence": "hypothetical"
+    },
+    {
+      "id": "kpi-variance",
+      "service_id": "kpi_variance",
+      "buyer_value_cents": 6500,
+      "outside_utility_cents": 2500,
+      "buyer_friction_cents": 500,
+      "buyer_budget_cents": 4000,
+      "prices_cents": [
+        2000,
+        3000,
+        4000
+      ],
+      "demand_evidence": "hypothetical"
+    },
+    {
+      "id": "unattractive-evidence-offer",
+      "service_id": "evidence_matrix",
+      "buyer_value_cents": 8000,
+      "outside_utility_cents": 3500,
+      "buyer_friction_cents": 1000,
+      "buyer_budget_cents": 6500,
+      "prices_cents": [
+        6000,
+        6500
+      ],
+      "demand_evidence": "hypothetical"
+    }
+  ],
+  "successor_research_cents": 500,
+  "successor_expected_benefit_cents": 800,
+  "continuation_funding_policy": "EARNED_ONLY"
+}

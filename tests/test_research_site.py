@@ -37,6 +37,17 @@ class ResearchSiteTests(unittest.TestCase):
         entry = next(p for p in manifest['papers'] if p['file'] == 'alpha-genesis-flywheel-omega.pdf')
         self.assertIn('<code>' + entry['sha256'] + '</code>', reader)
 
+    def test_genesis_v2_preserves_prior_edition_and_evidence_scope(self):
+        import json
+        page = (self.source / 'alpha-genesis-flywheel-omega-v2.html').read_text()
+        home = (self.source / 'index.html').read_text()
+        for phrase in ('31-page', 'Three Orders of Intelligence', 'historical-source', 'does not rerun the native accounts', 'alpha-genesis-flywheel-omega.html', 'ALPHA_GENESIS_FLYWHEEL_OMEGA_v2_COMPLETE.zip'):
+            self.assertIn(phrase, page)
+        self.assertLess(home.index('id="alpha-genesis-v2"'), home.index('id="alpha-genesis"'))
+        entry = next(p for p in json.loads((self.source / 'publication-manifest.json').read_text())['papers'] if p['file'] == 'alpha-genesis-flywheel-omega-v2.pdf')
+        self.assertIn(entry['sha256'], page)
+        self.assertEqual(entry['sha256'], '4bd6400c247b5fea0d336e2cba11e69890b0596e24ebd51931ada257fe78414f')
+
     def test_changed_pdf_is_rejected(self):
         with (self.source / site.PAPERS[0]).open('ab') as stream:
             stream.write(b'changed')
@@ -68,8 +79,8 @@ class ResearchSiteTests(unittest.TestCase):
         slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
-        self.assertEqual(len(site.PAPERS), 23)
-        self.assertEqual(len(site.PAGES), 25)
+        self.assertEqual(len(site.PAPERS), 24)
+        self.assertEqual(len(site.PAGES), 26)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
             reader = 'out-' + slug + '.html'
@@ -91,7 +102,7 @@ class ResearchSiteTests(unittest.TestCase):
         slugs = ('transformational-intelligence', 'agi-alpha', 'invent-the-economy',
                  'the-world-as-an-output', 'beyond-the-production-frontier', 'beyond-the-original-problem')
         self.assertIn('<h1 id="hero-title">🌌♾️ ALPHA GENESIS', home)
-        self.assertIn('href="alpha-genesis-flywheel-omega.html">Read the flagship paper', home)
+        self.assertIn('href="alpha-genesis-flywheel-omega-v2.html">Read the flagship paper', home)
         self.assertLess(home.index('id="alpha-genesis"'), home.index('Conceptual foundation'))
         self.assertLess(home.index('Conceptual foundation'), home.index('Foundational paper'))
         self.assertIn('Flagship programme &amp; paper', home)
