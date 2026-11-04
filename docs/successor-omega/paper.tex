@@ -9,6 +9,7 @@
 \usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
 \pgfplotsset{compat=1.18}
 \usepackage{titlesec}
+\usepackage[section]{placeins}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{hyperref}
 \definecolor{ink}{HTML}{201B2B}
@@ -23,6 +24,9 @@
 \titleformat{\subsubsection}{\sffamily\bfseries\color{ink}}{\thesubsubsection}{.6em}{}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt}
+\widowpenalty=10000
+\clubpenalty=10000
+\displaywidowpenalty=10000
 \setlength{\emergencystretch}{2em}
 \setlist{nosep,leftmargin=1.4em}
 \newtheorem{proposition}{Proposition}
@@ -37,7 +41,7 @@
 \fancyhf{}
 \fancyhead[L]{\small\sffamily SUCCESSOR \Om}
 \fancyhead[R]{\small\sffamily The Institution That Compounds}
-\fancyfoot[L]{\footnotesize\sffamily Research edition 1.0.0 \;\textbullet\; 3 November 2026}
+\fancyfoot[L]{\footnotesize\sffamily Research edition 1.1.0 \;\textbullet\; 3 November 2026}
 \fancyfoot[R]{\footnotesize\sffamily\thepage\,/\,\pageref{LastPage}}
 \renewcommand{\headrulewidth}{.3pt}
 \makeatletter
@@ -49,7 +53,7 @@
 \begin{titlepage}
 \color{ink}
 \vspace*{3mm}
-{\sffamily\small\color{gold} MONTREAL.AI\quad /\quad QUEBEC.AI\hfill RESEARCH EDITION 1.0.0}\par
+{\sffamily\small\color{gold} MONTREAL.AI\quad /\quad QUEBEC.AI\hfill RESEARCH EDITION 1.1.0}\par
 \vspace{17mm}
 {\sffamily\small\bfseries\color{wine} TRANSFORMATIONAL INTELLIGENCE $\boldsymbol{\infty}$}\par
 \vspace{5mm}
@@ -84,7 +88,7 @@
 \end{titlepage}
 \hypersetup{pageanchor=true}
 \begin{abstract}
-A breakthrough can create a result while leaving its owner unable to reproduce, renew, or extend the capability that produced it. We study a different unit of value: a customer-owned mission institution whose methods, evidence, skills, and operating memory can survive changes in models and suppliers without inheriting stale proof or unauthorized powers. We formalize \emph{renewal-adjusted Alpha}: comparative mission advantage over a complete horizon, including construction, unsuccessful search, operation, maintenance, migration, requalification, and residual obligations. The Alpha--Gym--Specialist ASI--SUCCESSOR $\Omega$ progression becomes a set of distinct discovery, development, evidence, and authority transitions, not an automatic promotion ladder. An exact authored cash-constrained model exhibits a reversal: a portable capability with lower local operating contribution produces 230 units of horizon cash surplus versus 200 for repeated reconstruction. An independently implemented reachability oracle agrees on 324 optimization comparisons across 162 supplied environments. Only 19 environments favor the additional portability option; 143 tie, and forced retention is often infeasible or inferior. A conventional planner with the same choices ties the result. We derive the crossover condition, specify context-bound renewal and export invariants, and connect sustainable surplus to physical expansion through separately auditable investment and qualification contracts. The contribution is a testable theory of institutional continuity and a reproducible witness of when it matters, not evidence of autonomous discovery, real demand, general ASI, or a forecast of stellar-scale industrialization.
+A breakthrough can leave its owner with a result but without a renewable means of producing the next one. We propose a customer-owned mission institution that preserves methods, instruments, skills, and operating memory across model and supplier changes while renewing evidence and receiving authority separately. We define \emph{renewal-adjusted Alpha}: complete-horizon comparative mission advantage including construction, unsuccessful search, operation, replacement, requalification, and residual obligations. An exact authored cash-constrained example exhibits a lifecycle reversal: a lower-contribution portable capability yields 230 units of cash surplus versus 200 for repeated reconstruction. An ordinary planner with the same choices ties the result, so this is a mechanism contrast rather than demonstrated superiority over the strongest complete alternative. All 324 optimizer--oracle comparisons across 162 deterministic environments agree. A separately disclosed unknown-schedule extension adds 96 environments and 192 exact comparisons: portability helps none of 48 eight-period cases and one of 48 sixteen-period cases; that positive case also has worse downside. We correct a temporal defect in the local authorization witness and expand its accompanying regression suite. The resulting contribution is a scoped institutional framework, reproducible conditional studies, and a proposed Industrial Requalification Foundry. We connect useful inheritance and earned resources to qualified physical construction without equating financial accumulation with installed capacity. Autonomous discovery, real customer profitability, general ASI, and stellar-scale deployment remain unestablished by these studies.
 \end{abstract}
 \begin{insight}[The paper in one sentence]
 Build advantages worth proving; preserve the machinery that makes them renewable; spend only resources actually available; and make every transition into greater productive capacity earn its own evidence.
@@ -95,6 +99,7 @@ Sections 1--3 explain the institution and its four public stages. Sections 4--6 
 \setcounter{tocdepth}{1}
 \tableofcontents
 \clearpage
+\input{sections/thesis.tex}
 \input{sections/institution.tex}
 \input{sections/evidence.tex}
 \input{sections/study.tex}
