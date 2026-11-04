@@ -1,0 +1,17 @@
+{
+  "schema": "genesis/candidate-capability/v1",
+  "id": "joint-friction-surface-constructor",
+  "state": "RESEARCH_ONLY_NOT_ADMITTED_TO_TRADING",
+  "entrypoint": "python -m research.genesis_surface",
+  "input_schema": "genesis/surface-request/v1",
+  "output_schema": "genesis/surface-report/v1",
+  "actual_operations": ["build", "audit", "mesh"],
+  "side_effects": "Create explicitly named new local output directories only; no network, account or hardware actions",
+  "source_dependency": "campaign/blue-sky-064/friction-probe/PORTABLE_RESULT.json at 1626d46e1260dba686b866365cacfc4bddf971f0",
+  "acceptance": "Independent scalar feasibility and source/output binding only",
+  "physical_qualified": false,
+  "commercial_qualified": false,
+  "discovery_policy_improvement_established": false,
+  "invalidate_on": ["changed request", "changed source", "changed material/geometry", "new calibration", "unsupported contact regime"],
+  "economic_decision": "Do not infer demand or investable value from nominal feasibility. No registered offer or funded service is created."
+}
