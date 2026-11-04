@@ -1,0 +1,257 @@
+{
+  "schema": "reserve088-v1",
+  "source_sha256": "506b0866fa1a410e8ddda8380a3472b5f7fb5eb0812073b0e99d82211d290f66",
+  "protocol_sha256": "667bf649b57740fcdbc675df0dda024bd07b5d27ea32c957cd5cbe2e1daaf463",
+  "runner_sha256": "7f0d53f231fdb84b990d6ffdbd3b955e5f0e1f23c85dabb813a7ba0d776aa9e8",
+  "tests": {
+    "exhaustive_hall_assignment_checks": 1024,
+    "double_allocation_and_unreachable_rejected": true
+  },
+  "cases": [
+    {
+      "deadline_minutes": 5,
+      "instrument_sha256": "09c17a29f3999e7136caa6dabe5d9f60d7167d411d997dc4b3ee10dda0496c2c",
+      "compiled_cpu_s": 1.168821073,
+      "cold_rebuild_cpu_s": 1.1692809859999997,
+      "parent": {
+        "demand": [
+          1,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 3,
+        "enumerated_candidates": 256,
+        "enum_and_constraint_cpu_s": 0.01461412899999992,
+        "milp_cpu_s": 0.01835490800000006
+      },
+      "successor": {
+        "demand": [
+          2,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 4,
+        "enumerated_candidates": 625,
+        "enum_and_constraint_cpu_s": 0.04204089799999999,
+        "milp_cpu_s": 0.0011635839999999398
+      },
+      "equal_content_ordinary_reuse": {
+        "demand": [
+          2,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 4,
+        "enumerated_candidates": 625,
+        "enum_and_constraint_cpu_s": 0.013201256000000106,
+        "milp_cpu_s": 0.0011852960000000579
+      },
+      "cold_successor": {
+        "demand": [
+          2,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 4,
+        "enumerated_candidates": 625,
+        "enum_and_constraint_cpu_s": 0.01767127199999985,
+        "milp_cpu_s": 0.001507441999999859
+      },
+      "separate_reserve_cost": null,
+      "separate_participant_costs": [
+        null,
+        null,
+        null
+      ],
+      "max_extra_complete_cost_vs_separate": null,
+      "extra_value_vs_equal_joint_competitor": null,
+      "successor_superiority": false,
+      "source_or_contract_change_invalidates": true
+    },
+    {
+      "deadline_minutes": 10,
+      "instrument_sha256": "62ceee9152be99cdd400dcd2e2109ada39b1c8ceaff5d56206baaa0f1cdb5673",
+      "compiled_cpu_s": 1.1908638710000004,
+      "cold_rebuild_cpu_s": 1.1576164570000005,
+      "parent": {
+        "demand": [
+          1,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 3,
+        "enumerated_candidates": 256,
+        "enum_and_constraint_cpu_s": 0.01383500900000012,
+        "milp_cpu_s": 0.0013379709999998823
+      },
+      "successor": {
+        "demand": [
+          2,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 4,
+        "enumerated_candidates": 625,
+        "enum_and_constraint_cpu_s": 0.012969921999999912,
+        "milp_cpu_s": 0.0011444110000002894
+      },
+      "equal_content_ordinary_reuse": {
+        "demand": [
+          2,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 4,
+        "enumerated_candidates": 625,
+        "enum_and_constraint_cpu_s": 0.015767277000000135,
+        "milp_cpu_s": 0.0009285489999992791
+      },
+      "cold_successor": {
+        "demand": [
+          2,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 4,
+        "enumerated_candidates": 625,
+        "enum_and_constraint_cpu_s": 0.013593874999999755,
+        "milp_cpu_s": 0.0019051949999999707
+      },
+      "separate_reserve_cost": null,
+      "separate_participant_costs": [
+        null,
+        null,
+        null
+      ],
+      "max_extra_complete_cost_vs_separate": null,
+      "extra_value_vs_equal_joint_competitor": null,
+      "successor_superiority": false,
+      "source_or_contract_change_invalidates": true
+    },
+    {
+      "deadline_minutes": 15,
+      "instrument_sha256": "65d37879b0595fe98c657a93ca41fd864049f277d755630ad502b87aed47a050",
+      "compiled_cpu_s": 1.1896736269999995,
+      "cold_rebuild_cpu_s": 1.5400608729999998,
+      "parent": {
+        "demand": [
+          1,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 3,
+        "enumerated_candidates": 256,
+        "enum_and_constraint_cpu_s": 0.014035691000000128,
+        "milp_cpu_s": 0.0014804700000006221
+      },
+      "successor": {
+        "demand": [
+          2,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 4,
+        "enumerated_candidates": 625,
+        "enum_and_constraint_cpu_s": 0.013460907999999883,
+        "milp_cpu_s": 0.0010187049999998976
+      },
+      "equal_content_ordinary_reuse": {
+        "demand": [
+          2,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 4,
+        "enumerated_candidates": 625,
+        "enum_and_constraint_cpu_s": 0.014772169000000446,
+        "milp_cpu_s": 0.0010525160000005584
+      },
+      "cold_successor": {
+        "demand": [
+          2,
+          1,
+          1
+        ],
+        "cost": null,
+        "capacity": null,
+        "ordinary_cost": null,
+        "ordinary_capacity": null,
+        "accepted_scenarios": 0,
+        "unique_cuts": 4,
+        "enumerated_candidates": 625,
+        "enum_and_constraint_cpu_s": 0.015620918999999844,
+        "milp_cpu_s": 0.0029221150000005025
+      },
+      "separate_reserve_cost": null,
+      "separate_participant_costs": [
+        null,
+        null,
+        null
+      ],
+      "max_extra_complete_cost_vs_separate": null,
+      "extra_value_vs_equal_joint_competitor": null,
+      "successor_superiority": false,
+      "source_or_contract_change_invalidates": true
+    }
+  ],
+  "native_profit": null,
+  "actual_revenue": 0,
+  "all_unmeasured_lifecycle_costs": "unknown, not zero",
+  "process_cpu_s": 7.811181399999999,
+  "wall_s": 7.789547139080241
+}
