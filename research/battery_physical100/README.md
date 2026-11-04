@@ -1,8 +1,63 @@
-# Physical battery 100: measured-data construction
+# Physical battery 100: offline laboratory screening
 
-## Selected consequential outcome
+A usable command-line tool for audited discharge-capacity extraction and early screening from the first100 measured cycles. It forecasts exact laboratory endpoints500 and1000 using ordinary same-model peer transfer, reports small-sample empirical uncertainty, and explicitly continues testing when unsupported. It does not operate equipment or make safety/warranty decisions.
 
-Construct a usable cell-characterization and capacity-retention decision artifact from independently measured physical cycling, before proposing any commercial operation. This is a new additive study, not a rewrite of numerical battery PR84/147 or native GENESIS accounts. No physical equipment is operated.
+## Run it
+
+Use Python3.12 from the repository root. Install fixed dependencies:
+
+```sh
+python -m pip install --only-binary=:all: -r research/battery_physical100/requirements.txt
+python -B -m unittest research.battery_physical100.test_probe research.battery_physical100.test_measurement research.battery_physical100.test_prognosis research.battery_physical100.test_evaluate -v
+```
+
+The calibrated model is produced by the reproducible measured-data evaluation below. Once `model.json` is available, screening is entirely offline:
+
+```sh
+python -B -m research.battery_physical100.cli measured_cell.bdf.csv \
+  --group manufacturer1-endt44198-2024 \
+  --model battery100-results/model.json \
+  --confirm-matched-lab-protocol \
+  --json-output screening.json
+```
+
+The file may contain the whole measured history or end at cycle100. Features and data-quality decisions stop at the first row after cycle100. The flag confirms that the named model, nominal1C/35C conditions and publisher cycling/RPT schedule match. Temperature is not measured in the BDF columns, so software cannot check it. Without confirmation the tool returns CONTINUE_TESTING. Unknown models, deficient prefixes, unsupported endpoints or missing calibration remain explicit.
+
+Outputs include readable endpoint forecasts/intervals and screening labels, JSON quality flags, missing endpoints, reference capacity and model identity. SCREEN_PASS/SCREEN_FAIL are research triage only, not permission to end required tests or certify batteries.
+
+## Direct conventional alternatives
+
+The primary method is ordinary adjusted peer transfer, not a new learning algorithm. Run exactly the same offline path with `--method peer`, `persistence`, `recent_linear`, `sqrt_linear`, or `curve_ridge`. Each uses identical observed prefixes and its own nine-cell residual calibration, when available.
+
+For the separate conventional extraction check, invoke unmodified PyProBE-Data2.6.1 through the explicit BDF mapping:
+
+```sh
+python -B -m research.battery_physical100.pyprobe_reference measured_cell.bdf.csv \
+  --rated-capacity-ah 3.0 --cutoff 100 > conventional-extraction.json
+```
+
+This shares the declared contiguous-discharge selection, then uses PyProBE RawData.capacity for range calculation. It reports terminal capacity, first-sample offset, integrated current, duplicate timestamps, Q decreases and numerical disagreement. Agreement is cross-library arithmetic consistency on the same cycler quantities, not independent metrology or algorithmic advantage. Nested RPT steps make unqualified global cycle inference inappropriate.
+
+The curve control transparently adapts the known ΔQ100−10(V) variance idea from [Severson et al.](https://web.mit.edu/braatzgroup/Severson_NatureEnergy_2019.pdf), using fixed ridge regression and this dataset's endpoint-capacity target. No original LFP cycle-life accuracy is transferred.
+
+## Reproduce the measured study
+
+The exact sources, LFS SHA256/lengths, license/metadata identities and outcome-blind27-cell split are in `manifest.json`. [PROTOCOL.md](PROTOCOL.md) freezes extraction, targets, controls, uncertainty, abstention and acceptance. A0067 alone was used for development. The other26 measured payloads remained unopened through pre-freeze code review.
+
+```sh
+# Final-extractor development check only, never opens remaining cells:
+python -B -m research.battery_physical100.evaluate --development-only --output battery100-development
+# Frozen full study: nine train, nine calibration, nine untouched test cells:
+python -B -m research.battery_physical100.evaluate --output battery100-results
+```
+
+Use a new output directory for each run. The full study downloads229MB of publisher-hashed physical data, not upstream executable code. It fits/calibrates before test prefixes, writes/hash-seals all test forecasts before parsing their targets, then emits `model.json`, `sealed_predictions.json`, `evaluation.json`, `cycle_capacities.csv`, `REPORT.md`, and an actual offline screening example. All27 cells and missing endpoints remain in denominators. Test unit is nine cells, not millions of rows. Public Actions retains compact artifacts plus dependency versions; no raw measurements are republished.
+
+The authored pilot requires all18 endpoints scorable, maximum error≤5percentage points, all18 empirical ranges covering, at least three decisive cycle1000 screens, and no incorrect decisive screen. It is not a buyer contract. Failure remains a failed pilot, even when the CLI works. Same-model historical replicate performance cannot establish new chemistry/manufacturer/protocol or field reliability. No model or threshold is changed after test labels are opened.
+
+## Construction history and provenance
+
+The initial acquisition-only stage below preceded the current executable screening protocol. It is preserved as history, not the current product claim.
 
 Three alternatives were compared before this acquisition probe:
 
@@ -21,10 +76,7 @@ Three alternatives were compared before this acquisition probe:
 - Payload license verified in the upstream `Microsoft/LICENSE`: CDLA-Permissive-2.0, which permits analysis and results. Do not republish raw payloads; reference exact upstream URL/hash and retrieval.
 - Acquisition success establishes usable measured inputs only. Stop model design if the fields do not support the intended outcome. Preserve acquisition failure rather than replace measurements with simulation.
 
-## Next decision, contingent on observed schema
 
-If physical discharge-capacity and cycle measurements exist, preregister a concrete capacity-retention or design-screening deliverable and comparable manufacturer/protocol groups. Compare ordinary integration/curve fitting, competent BatteryML/PyProBE-style conventional analysis, and modern CPU-capable prediction. Time splits and disjoint-cell/manufacturer checks must prevent leakage. Report actual intervention, measured execution and complete-cost unknowns. Do not infer causality of tab design from unmatched cells or protocols; three replicates cannot support universal superiority.
+## What remains outside this artifact
 
-The frontier-AI versus 100%-human productivity benchmark requires separately grounded full-workflow costs and human effort. Numerical accuracy alone cannot establish it. Deployment, paid demand, customer contracts, validation against future cells, engineering/billing costs and profit remain open.
-
-Run `python -m unittest research.battery_physical100.test_probe -v`, then `python -m research.battery_physical100.probe` using standard Python 3.12. The public CPU workflow performs this exact one-source probe. No ledger, source inventory, native account, private input, paid API, external outreach, purchase, merge or release is changed.
+Future independent cells, actual users, customer acceptance, deployment, complete acquisition/support/model-session costs and paid demand remain unestablished. No actual laboratory cycles/time, money or sales have been saved. A passing historical screening pilot would only identify a bounded counterfactual testing opportunity. The frontier-AI versus human productivity comparison requires separately measured complete workflow costs; this study does not provide it.

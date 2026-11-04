@@ -225,13 +225,23 @@ def run(out,development_only=False):
         good=next((x for x in manifest['cells'] if x['role']=='test' and test_paths[x['cell']].exists()),None)
         if good:
             demo=screen(test_paths[good['cell']],good['group'],out/'model.json',protocol_confirmed=True)
+            truncated=temp/'example-prefix.csv'
+            from .measurement import FIELDS
+            with truncated.open('w',newline='') as stream:
+                writer=csv.writer(stream);writer.writerow(FIELDS)
+                writer.writerows(read_prefix(test_paths[good['cell']],100))
+            prefix_demo=screen(truncated,good['group'],out/'model.json',protocol_confirmed=True)
+            if demo!=prefix_demo:raise AssertionError('Real full-file versus observed-prefix screening differs')
+            save(out/'offline_journey.json',{'cell':good['cell'],'full_file_equals_observed_prefix':True,'model_identity':bank['model_identity']})
             save(out/'example_screen.json',demo);(out/'example_screen.txt').write_text(readable(demo))
         print('BATTERY100_RESULT='+json.dumps({'accepted':report['accepted'],'gates':gates,'seal':seal['prediction_sha256'],'rows':len(results),'wall_seconds':report['wall_seconds']},sort_keys=True),flush=True)
         print((out/'REPORT.md').read_text())
         # Compact derived artifact transport, never raw publisher measurements.
         import base64,gzip
         bundle={p.name:p.read_text() for p in out.iterdir() if p.suffix in {'.json','.md','.txt'}}
-        print('BATTERY100_DERIVED_BUNDLE='+base64.b64encode(gzip.compress(canonical(bundle),mtime=0)).decode(),flush=True)
+        encoded=base64.b64encode(gzip.compress(canonical(bundle),mtime=0)).decode()
+        chunks=[encoded[i:i+12000] for i in range(0,len(encoded),12000)]
+        for index,chunk in enumerate(chunks):print(f'BATTERY100_DERIVED_BUNDLE_PART={index+1}/{len(chunks)}:'+chunk,flush=True)
 
 
 def main():

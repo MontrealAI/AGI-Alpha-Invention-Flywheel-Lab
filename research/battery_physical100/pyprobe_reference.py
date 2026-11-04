@@ -53,3 +53,24 @@ def compare_episode(episode):
             'unobserved_initial_capacity_ah':float(episode[0][5]),
             'current_integral_delta_ah':integral,
             'absolute_delta_disagreement_ah':abs(reference-reported_delta)}
+
+
+def main():
+    """Direct conventional reference path, sharing only declared episode selection."""
+    import argparse,json
+    from pathlib import Path
+    from .measurement import episodes,extract,inspect_episode,read_prefix
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('input',type=Path)
+    parser.add_argument('--rated-capacity-ah',type=float,required=True)
+    parser.add_argument('--cutoff',type=int,default=100)
+    args=parser.parse_args()
+    measured=extract(args.input,args.rated_capacity_ah,args.cutoff)
+    checks=[]
+    for ep in episodes(read_prefix(args.input,args.cutoff)):
+        if ep[0][3] not in measured.cycles:continue
+        candidate=inspect_episode(ep,args.rated_capacity_ah)
+        if candidate and not candidate['errors']:checks.append(compare_episode(ep))
+    print(json.dumps({'reference':'PyProBE-Data 2.6.1 RawData.capacity','checks':checks,'selection_flags':measured.flags},indent=2,allow_nan=False))
+
+if __name__=='__main__':main()

@@ -1,4 +1,4 @@
-name: Physical battery measured-data acquisition
+name: Physical battery frozen measured-cell evaluation
 on:
   pull_request:
     paths:
@@ -7,7 +7,7 @@ on:
 permissions:
   contents: read
 jobs:
-  inspect-development-cell:
+  frozen-cell-evaluation:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
@@ -25,8 +25,8 @@ jobs:
           python -m pip install --only-binary=:all: -r research/battery_physical100/requirements.txt
       - name: Test extraction, forecasting and prefix isolation
         run: python -B -m unittest research.battery_physical100.test_probe research.battery_physical100.test_measurement research.battery_physical100.test_prognosis research.battery_physical100.test_evaluate -v
-      - name: Validate final extraction on exposed development cell only
-        run: python -B -m research.battery_physical100.evaluate --development-only --output battery100-results
+      - name: Execute locked measured train-calibration-test protocol
+        run: python -B -m research.battery_physical100.evaluate --output battery100-results
       - name: Record exact installed dependency versions
         if: always()
         run: |

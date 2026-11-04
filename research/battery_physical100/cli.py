@@ -36,6 +36,11 @@ def readable(report):
     for endpoint,e in report.get('endpoints',{}).items():
         interval=f" [{100*e['lower']:.2f}%, {100*e['upper']:.2f}%]" if 'lower' in e else ''
         lines.append(f"Cycle {endpoint}: {100*e['prediction']:.2f}% retention{interval}; {e['decision']}")
+    if report.get('unavailable_endpoints'):lines.append('Unavailable endpoints: '+', '.join(report['unavailable_endpoints']))
+    flags=report.get('data_quality_flags',[])
+    lines.append(f'Data-quality flags: {len(flags)}')
+    for flag in flags[:10]:lines.append('  '+json.dumps(flag,sort_keys=True))
+    if len(flags)>10:lines.append('  Additional flags are in the JSON report.')
     lines.extend(report.get('limits',[]))
     return '\n'.join(lines)+'\n'
 

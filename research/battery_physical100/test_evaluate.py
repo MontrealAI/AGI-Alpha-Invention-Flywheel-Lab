@@ -27,7 +27,7 @@ class EvaluationTests(unittest.TestCase):
                     if entry['role']=='test' and len(test_labels)==1:
                         del r['targets']['1000'];r['unavailable_target_cycles']=[1000]
                 return r
-            with patch.object(evaluate,'acquire',acquire),patch.object(evaluate,'measure_record',measure),patch.object(evaluate,'version',lambda x:'unit-fixture'),patch.object(evaluate,'screen',lambda *a,**k:{'status':'UNIT_FIXTURE','group':'g'}),redirect_stdout(StringIO()):
+            with patch.object(evaluate,'acquire',acquire),patch.object(evaluate,'measure_record',measure),patch.object(evaluate,'version',lambda x:'unit-fixture'),patch.object(evaluate,'screen',lambda *a,**k:{'status':'UNIT_FIXTURE','group':'g'}),patch.object(evaluate,'read_prefix',lambda *a:[]),redirect_stdout(StringIO()):
                 evaluate.run(out)
             result=json.loads((out/'evaluation.json').read_text())
             self.assertEqual(len(test_labels),9)
