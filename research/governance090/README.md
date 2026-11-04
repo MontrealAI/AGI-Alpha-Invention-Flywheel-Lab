@@ -18,7 +18,7 @@ Each explicit change to a requirement marks affected systems, invalidates prior 
 To exercise the eight frozen source-level development/confirmation/adversarial checks:
 
 ```sh
-python3 -m unittest tests.test_governance090 -v
+python3 -m unittest discover -s tests -p 'test_governance090.py' -v
 ```
 
 For a local, synthetic CLI experiment (no financial operation):
