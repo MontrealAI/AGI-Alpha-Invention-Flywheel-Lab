@@ -1,0 +1,97 @@
+{
+  "accepted": true,
+  "after_reported_and_recomputed": {
+    "construction_cpu_ns": {
+      "bundle": 37286152,
+      "cold": 204029262,
+      "full_control": 152891418,
+      "inherited": 206966238,
+      "separate": 190072773
+    },
+    "total_deviation_checks": {
+      "bundle": 144,
+      "cold": 288,
+      "full_control": 144,
+      "inherited": 288,
+      "separate": 144
+    },
+    "total_rows_built": {
+      "bundle": 666,
+      "cold": 424,
+      "full_control": 666,
+      "inherited": 424,
+      "separate": 810
+    }
+  },
+  "aggregate_cpu_tamper_rejection": "CAMPAIGN_RESOURCE_TOTAL_CHANGED",
+  "before_incurred_rows": {
+    "bundle": 666,
+    "cold": 424,
+    "full_control": 666,
+    "inherited": 424,
+    "separate": 810
+  },
+  "before_reported_rows": {
+    "bundle": 333,
+    "cold": 379,
+    "full_control": 333,
+    "inherited": 379,
+    "separate": 405
+  },
+  "before_successor_prior_rows": 0,
+  "completed_cases": 1,
+  "earlier_v4_control": {
+    "incurred_and_carried_rows": 180,
+    "retained_partial_work": true
+  },
+  "fixture": {
+    "market_cases": [
+      [
+        391101,
+        "complementary"
+      ],
+      [
+        391102,
+        "substitute"
+      ]
+    ],
+    "new_operating_accounts": 0,
+    "only_first_max_rounds": 1
+  },
+  "native_source_maps": {
+    "paid_reach": {
+      "digest": "72ce9400200c8201a5c60bb7a299b9206cf00d0ae70fa2baf36433ff5ac49010",
+      "files": 71
+    },
+    "v3": {
+      "digest": "a2c0ed3c50aa8a678faa51e71996090e29303faf7e10558ff104cbe93b8dd506",
+      "files": 53
+    },
+    "v4": {
+      "digest": "05594b2569b72362daec83b136e743da949ae384411dc05837981281eb44e3a6",
+      "files": 63
+    }
+  },
+  "pre_repair_file_sha256": "3f82979c857413de5cadace2db75de17d134efb96bcc622e9b2fa132ae2e85ca",
+  "prior_discovery_rows": [
+    0,
+    45
+  ],
+  "registered_cases": 2,
+  "review_script_sha256": "2715ffbaaaeb991e3b087615c88a313d836272aa11225eaae02e3dd9c457a941",
+  "reviewer_note": "Initial independent wrapper expected a truncated rejection code. The target correctly refused the mutation; the reviewer was corrected to the observed full code and rerun on identical source.",
+  "schema": "omega/independent-v3-unresolved-cost-replay/v1",
+  "source_checkout_head": "726a1dcfcdd7d5a16440fa62c24353b4d324097f",
+  "source_files_sha256": {
+    "mechanism_harness/mechanism_campaign.py": "3000260bde81be4fe58ec77963ad4e49eb0cb3c459207fa5c7db31f72c74f4c5",
+    "mechanism_harness/mechanism_native.py": "f8b9f4a6fc9dfeec7ec46ec397d3020cdf31dcd795c5df91a7b583f84c4fbdca",
+    "tests/test_omega_mechanisms_v3.py": "d835d9df623ce387389f81bf886f164c3650be731917b494c7933742b167f736"
+  },
+  "source_stable": true,
+  "status": [
+    "UNRESOLVED",
+    "VERIFIED"
+  ],
+  "unresolved_memory_transferred": false,
+  "v4_control_file_sha256": "62cf155a1bdb9b66ba7e700b49ea653d85230169e66fa54ef7b0c1af0bc942c5"
+}

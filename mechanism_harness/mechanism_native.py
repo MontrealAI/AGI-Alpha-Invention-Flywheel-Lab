@@ -239,6 +239,7 @@ def audit(output):
             or r['opening_microUSD']!=OPENING or r['tariff']!=TARIFF
             or r['clock']!={'start_day':0,'end_day':364,'days':365}):raise ValueError('SOURCE_OR_CLAIM_CHANGED')
     if r['study_logical_sha256']!=digest(campaign.logical(study)):raise ValueError('STUDY_CHANGED')
+    campaign.audit_resources(study)
     if read(out/'CONTRACT.json')!={'arm':r['arm'],'stress':r['stress'],'tariff':TARIFF}:raise ValueError('REGISTERED_CONTRACT_CHANGED')
     manifest=read(out/'MANIFEST.json');runtime=out/'runtime';exp=read(out/'NATIVE_EXPORT.json')
     audit_journal(exp,root=runtime,manifest=manifest)

@@ -16,6 +16,7 @@ from .mechanism_synthesis import synthesize,retain
 from .market_cases import market
 
 CASES=((391101,'complementary'),(391102,'substitute'),(391103,'competitive'))
+ARMS=('inherited','cold','full_control','separate','bundle')
 SOURCE_NAMES=('mechanism_harness/market_program.py','mechanism_harness/mechanism_synthesis.py',
               'mechanism_harness/market_cases.py','mechanism_harness/mechanism_campaign.py')
 
@@ -47,9 +48,12 @@ def execute(cases=CASES):
         separate=synthesize(m,mode='full',restriction='separate')
         bundle=synthesize(m,mode='full',restriction='bundle')
         runs={'inherited':inherited,'cold':cold,'full_control':full,'separate':separate,'bundle':bundle}
+        prior_discovery_rows = history_cost
+        history_cost += inherited['total_rows_built']
         all_valid=all(r['program'] is not None and v.verify(m,r['program'])['accepted'] for r in runs.values())
         if not all_valid:
-            rows.append({'market':m,'runs':runs,'status':'UNRESOLVED','memory_before':memory_before})
+            rows.append({'market':m,'runs':runs,'status':'UNRESOLVED','memory_before':memory_before,
+                         'prior_discovery_rows':prior_discovery_rows})
             # A failed game remains in the denominator; do not create false inheritance.
             continue
         contribution=lambda name:Fraction(runs[name]['verification']['expected_contribution_cents'])
@@ -74,13 +78,12 @@ def execute(cases=CASES):
                      'expected_gain_over_full_control_cents':str(contribution('inherited')-contribution('full_control')),
                      'actual_supported_buyer_choices':choices,'copycat_choices':copycat,
                      'all_exact_checks_pass':all_valid,'equal_optimum_to_full_control':contribution('inherited')==contribution('full_control'),
-                     'prior_discovery_rows':history_cost,
+                     'prior_discovery_rows':prior_discovery_rows,
                      'inherited_vs_cold_rows_saved':cold['total_rows_built']-inherited['total_rows_built']})
-        history_cost+=inherited['total_rows_built']
     valid=[r for r in rows if r['status']=='VERIFIED']
-    totals={key:sum(r['runs'][key]['total_rows_built'] for r in valid) for key in ('inherited','cold','full_control','separate','bundle')}
-    checks={key:sum(r['runs'][key]['deviation_checks'] for r in valid) for key in totals}
-    cpu={key:sum(r['runs'][key]['construction_cpu_ns'] for r in valid) for key in totals}
+    totals={key:sum(r['runs'][key]['total_rows_built'] for r in rows) for key in ARMS}
+    checks={key:sum(r['runs'][key]['deviation_checks'] for r in rows) for key in ARMS}
+    cpu={key:sum(r['runs'][key]['construction_cpu_ns'] for r in rows) for key in ARMS}
     return {'schema':'omega/private-mechanism-campaign/v3','cases':rows,
             'registered_cases':len(cases),'completed_cases':len(valid),'total_rows_built':totals,
             'total_deviation_checks':checks,'construction_cpu_ns':cpu,
@@ -92,9 +95,40 @@ def execute(cases=CASES):
             'runtime':{'python':platform.python_version(),'scipy':scipy.__version__}}
 
 
+def audit_resources(report):
+    """Reconcile each recorded work counter even if a sibling program failed."""
+    counters = {'total_rows_built': 'total_rows_built',
+                'total_deviation_checks': 'deviation_checks',
+                'construction_cpu_ns': 'construction_cpu_ns'}
+    expected = {field: dict.fromkeys(ARMS, 0) for field in counters}
+    for row in report['cases']:
+        runs = row['runs']
+        if set(runs) != set(ARMS):
+            raise ValueError('CAMPAIGN_RESOURCE_ARMS_CHANGED')
+        if row['prior_discovery_rows'] != expected['total_rows_built']['inherited']:
+            raise ValueError('CAMPAIGN_RESOURCE_PRIOR_CHANGED')
+        for arm, run in runs.items():
+            for field, counter in counters.items():
+                amount = run[counter]
+                if type(amount) is not int or amount < 0:
+                    raise ValueError('CAMPAIGN_RESOURCE_COUNTER_INVALID')
+                expected[field][arm] += amount
+            # Solver calls are sequential subintervals of construction CPU.
+            # Absolute clock measurements will differ across executions.
+            solver_cpu = [item['solver_cpu_ns'] for item in run['history']]
+            if (any(type(t) is not int or t < 0 for t in solver_cpu) or
+                    sum(solver_cpu) > run['construction_cpu_ns']):
+                raise ValueError('CAMPAIGN_RESOURCE_TIMING_INVALID')
+    for field, sums in expected.items():
+        if (report[field] != sums or
+                any(type(value) is not int for value in report[field].values())):
+            raise ValueError('CAMPAIGN_RESOURCE_TOTAL_CHANGED')
+
+
 def audit(report):
     if report.get('source')!=source_identity():raise ValueError('SOURCE_CHANGED')
     if report.get('actual_revenue_usd')!=0 or report['registered_cases']!=len(CASES):raise ValueError('UNSUPPORTED_CLAIM_OR_DENOMINATOR')
+    audit_resources(report)
     memory=None
     for row,(seed,family) in zip(report['cases'],CASES):
         m=market(seed,family)

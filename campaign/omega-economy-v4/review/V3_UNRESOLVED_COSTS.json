@@ -1,0 +1,178 @@
+{
+  "adversarial_comparison": {
+    "after_recorded_cpu_ns_all_attempts": {
+      "bundle": 103014157,
+      "cold": 250016975,
+      "full_control": 114411543,
+      "inherited": 178627744,
+      "separate": 241705611
+    },
+    "after_reported_cpu_ns": {
+      "bundle": 103014157,
+      "cold": 250016975,
+      "full_control": 114411543,
+      "inherited": 178627744,
+      "separate": 241705611
+    },
+    "before_recorded_cpu_ns_all_attempts": {
+      "bundle": 74668762,
+      "cold": 125242878,
+      "full_control": 69472849,
+      "inherited": 161007404,
+      "separate": 97498681
+    },
+    "before_reported_cpu_ns": {
+      "bundle": 61254149,
+      "cold": 118885947,
+      "full_control": 43485845,
+      "inherited": 145397755,
+      "separate": 69224888
+    },
+    "case_statuses": [
+      "VERIFIED",
+      "UNRESOLVED",
+      "VERIFIED"
+    ],
+    "corrected_audit_verified": true,
+    "fixture": "Same three seed/family specifications with four types per market (width=2). Only the second market has max_rounds=1. All five arms execute the real numerical constructor.",
+    "middle_case_arm_statuses": {
+      "bundle": "VERIFIED_FINITE_MECHANISM",
+      "cold": "UNRESOLVED",
+      "full_control": "VERIFIED_FINITE_MECHANISM",
+      "inherited": "VERIFIED_FINITE_MECHANISM",
+      "separate": "VERIFIED_FINITE_MECHANISM"
+    },
+    "old_audit_accepted_understated_campaign": true,
+    "prior_inherited_rows_after": [
+      0,
+      64,
+      100
+    ],
+    "prior_inherited_rows_before": [
+      0,
+      null,
+      64
+    ],
+    "recorded_checks_all_attempts": {
+      "bundle": 36,
+      "cold": 60,
+      "full_control": 36,
+      "inherited": 60,
+      "separate": 36
+    },
+    "recorded_rows_all_attempts": {
+      "bundle": 204,
+      "cold": 148,
+      "full_control": 204,
+      "inherited": 180,
+      "separate": 300
+    },
+    "reported_checks_after": {
+      "bundle": 36,
+      "cold": 60,
+      "full_control": 36,
+      "inherited": 60,
+      "separate": 36
+    },
+    "reported_checks_before": {
+      "bundle": 24,
+      "cold": 48,
+      "full_control": 24,
+      "inherited": 48,
+      "separate": 24
+    },
+    "reported_rows_after": {
+      "bundle": 204,
+      "cold": 148,
+      "full_control": 204,
+      "inherited": 180,
+      "separate": 300
+    },
+    "reported_rows_before": {
+      "bundle": 136,
+      "cold": 128,
+      "full_control": 136,
+      "inherited": 144,
+      "separate": 200
+    },
+    "transfer_rows_saved_after": -32,
+    "transfer_rows_saved_before": -16
+  },
+  "corrected_files_sha256": {
+    "mechanism_harness/mechanism_campaign.py": "3000260bde81be4fe58ec77963ad4e49eb0cb3c459207fa5c7db31f72c74f4c5",
+    "mechanism_harness/mechanism_native.py": "f8b9f4a6fc9dfeec7ec46ec397d3020cdf31dcd795c5df91a7b583f84c4fbdca",
+    "tests/test_omega_mechanisms_v3.py": "d835d9df623ce387389f81bf886f164c3650be731917b494c7933742b167f736"
+  },
+  "public_review": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/206#discussion_r4462603952",
+  "registered_comparison": {
+    "all_cases_verified": true,
+    "beats_strong_full_solver": false,
+    "before_after_full_logical_payload_identical_excluding_source_and_nondeterministic_cpu": true,
+    "case_seeds_and_families": [
+      [
+        391101,
+        "complementary"
+      ],
+      [
+        391102,
+        "substitute"
+      ],
+      [
+        391103,
+        "competitive"
+      ]
+    ],
+    "constraint_transfer_rows_saved": 113,
+    "deviation_checks_by_arm": {
+      "bundle": 216,
+      "cold": 648,
+      "full_control": 216,
+      "inherited": 576,
+      "separate": 216
+    },
+    "fixed_campaign_cli_audit": {
+      "accepted": true,
+      "report_logical_sha256": "496e8aa837a39e6752892fef9bd9a033c15aafb333438ad06294f9ad2b3230f8",
+      "scope": "Exact program checks and source-matched numerical replay; no external certification."
+    },
+    "logical_payload_sha256": "7d8fdfd2f056dc2acc56aae6b7cec42a5520c8b0ccc4cd3fa502aacaf2ed0a5f",
+    "original_published_evidence_sha256": "1436656732ec94869d41eccce3b9e7bbb9daed7665ed6febcea8d922b62eaa2d",
+    "row_check_and_advantage_summaries_match_original_published_evidence": true,
+    "rows_by_arm": {
+      "bundle": 999,
+      "cold": 1253,
+      "full_control": 999,
+      "inherited": 1140,
+      "separate": 1215
+    }
+  },
+  "reviewed_commit": "726a1dcfcdd7d5a16440fa62c24353b4d324097f",
+  "schema": "omega/v3-unresolved-resource-regression/v1",
+  "scope": "Resource accounting for V3 reported construction counters. A case with an unresolved arm cannot establish a five-way economic comparison or transfer memory. Recorded per-run CPU and nested solver CPU are checked for internal consistency, not independently timed or priced. No money, prior account, V4 model or 71-file paid-reach source identity changed.",
+  "source_compatibility": {
+    "new_v3_native_53": "a2c0ed3c50aa8a678faa51e71996090e29303faf7e10558ff104cbe93b8dd506",
+    "old_report_with_new_operator": "SOURCE_CHANGED",
+    "old_v3_native_53": "efe36fabeaf1cfa408f211f6481697a8b9c292a352f19ccf5e2ee89f98273559",
+    "unchanged_paid_reach_native_71": "72ce9400200c8201a5c60bb7a299b9206cf00d0ae70fa2baf36433ff5ac49010",
+    "unchanged_v4_native_63": "05594b2569b72362daec83b136e743da949ae384411dc05837981281eb44e3a6"
+  },
+  "tests": {
+    "corrected_complete_v3_module": {
+      "command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m unittest -v tests.test_omega_mechanisms_v3",
+      "elapsed_seconds": 38.034,
+      "errors": 0,
+      "failures": 0,
+      "log_sha256": "c4a99aa74ca896f6437feb244066b43b455da3eb26dbdfa89804cbc03f7b683b",
+      "new": 3,
+      "original": 33,
+      "skips": 0,
+      "tests": 36
+    },
+    "old_source_two_focused_methods": {
+      "accepted": false,
+      "log_sha256": "019974f440937b31e1fe5e31b6cdddfeeec63493cbee9d11d6904f7b43e7d09e",
+      "reported_assertion_failures_including_subtests": 5,
+      "tests": 2
+    }
+  }
+}

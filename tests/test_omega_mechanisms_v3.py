@@ -122,6 +122,69 @@ class CounterexampleLearning(unittest.TestCase):
         r=s.synthesize(m,mode='full')
         self.assertTrue(all(x['outcome_id']=='outside' for x in r['program']['rules']))
 
+class UnresolvedCampaignAccounting(unittest.TestCase):
+    @staticmethod
+    def bounded_market(seed, family):
+        result = ORIGINAL_MARKET(seed, family, width=2)
+        if seed == c.CASES[1][0]:
+            result['limits']['max_rounds'] = 1
+        return result
+
+    @classmethod
+    def setUpClass(cls):
+        with patch.object(c, 'market', cls.bounded_market):
+            cls.report = c.execute()
+        cls.report['source'] = c.source_identity()
+
+    def test_partial_case_charges_every_arm_without_transferring_unverified_work(self):
+        report = self.report
+        first, limited, final = report['cases']
+        self.assertEqual([row['status'] for row in report['cases']],
+                         ['VERIFIED', 'UNRESOLVED', 'VERIFIED'])
+        self.assertIsNone(limited['runs']['cold']['program'])
+        self.assertTrue(all(run['program'] is not None for name, run in limited['runs'].items()
+                            if name != 'cold'))
+        self.assertEqual(report['completed_cases'], 2)
+        self.assertNotIn('expected_gain_over_standard_cents', limited)
+        self.assertEqual(final['memory_before'], first['memory_after'])
+        expected = {}
+        for total, counter in [('total_rows_built', 'total_rows_built'),
+                               ('total_deviation_checks', 'deviation_checks'),
+                               ('construction_cpu_ns', 'construction_cpu_ns')]:
+            expected[total] = {arm: sum(row['runs'][arm][counter] for row in report['cases'])
+                               for arm in first['runs']}
+            self.assertEqual(report[total], expected[total])
+        inherited_prior = first['runs']['inherited']['total_rows_built']
+        self.assertEqual(limited['prior_discovery_rows'], inherited_prior)
+        self.assertEqual(final['prior_discovery_rows'],
+                         inherited_prior + limited['runs']['inherited']['total_rows_built'])
+        rows = expected['total_rows_built']
+        self.assertEqual(report['constraint_transfer_rows_saved'], rows['cold'] - rows['inherited'])
+        with patch.object(c, 'market', self.bounded_market):
+            self.assertTrue(c.audit(report)['accepted'])
+
+    def test_audit_rejects_omitted_work_and_inconsistent_recorded_timing(self):
+        for total, counter in [('total_rows_built', 'total_rows_built'),
+                               ('total_deviation_checks', 'deviation_checks'),
+                               ('construction_cpu_ns', 'construction_cpu_ns')]:
+            with self.subTest(total=total):
+                forged = copy.deepcopy(self.report)
+                forged[total]['cold'] -= forged['cases'][1]['runs']['cold'][counter]
+                with patch.object(c, 'market', self.bounded_market):
+                    with self.assertRaisesRegex(ValueError, 'CAMPAIGN_RESOURCE'):
+                        c.audit(forged)
+        forged = copy.deepcopy(self.report)
+        run = forged['cases'][1]['runs']['cold']
+        forged['construction_cpu_ns']['cold'] -= run['construction_cpu_ns'] + 1
+        run['construction_cpu_ns'] = -1
+        with self.assertRaisesRegex(ValueError, 'CAMPAIGN_RESOURCE'):
+            c.audit(forged)
+        forged = copy.deepcopy(self.report)
+        forged['cases'][1]['runs']['cold']['history'][0]['solver_cpu_ns'] = False
+        with self.assertRaisesRegex(ValueError, 'CAMPAIGN_RESOURCE'):
+            c.audit(forged)
+
+
 class NativeExecution(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -163,6 +226,18 @@ class NativeExecution(unittest.TestCase):
         with small_native_fixture(),patch.object(c,'execute',side_effect=lambda:self.original(PILOT)):
             r=n.run(out,stress='no_demand')
         self.assertEqual(r['settled_buyers'],0);self.assertLess(r['native_summary']['profit'],0)
+    def test_native_audit_checks_recorded_study_costs(self):
+        path = self.path / 'STUDY.json'
+        original = path.read_bytes()
+        study = n.read(path)
+        study['construction_cpu_ns']['inherited'] += 1
+        try:
+            n.save(path, study)
+            with small_native_fixture(), self.assertRaisesRegex(ValueError, 'CAMPAIGN_RESOURCE_TOTAL'):
+                n.audit(self.path)
+        finally:
+            path.write_bytes(original)
+
     def test_required_fee_omission_fails_independent_audit(self):
         original=n.JournalAccount.cost
         def missing(account,ident,amount,day):
