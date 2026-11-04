@@ -31,7 +31,11 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_active_tender096_diagnostic.py' -v
           python -m unittest discover -s tests -p 'test_active_tender096.py' -v
-      - name: Diagnose the one previously failed process WITHOUT rerunning the original experiment
+      # The one-request prospective diagnostic already completed at source 3d76d64f.
+      # Repeated PR checks validate deterministic controls only; subsequent live
+      # fetches require an explicit manual reproduction and do not upgrade proof.
+      - name: Reproduce single-record prospective diagnostic (manual only)
+        if: github.event_name == 'workflow_dispatch'
         run: |
           python -m research.active_tender096_diagnostic --out "$RUNNER_TEMP/active-tender096-diagnostic.json"
           python - "$RUNNER_TEMP/active-tender096-diagnostic.json" <<'PY'
@@ -48,8 +52,8 @@ jobs:
           print({"source_diagnostic":x.get("diagnostic"),"retrieved_bytes":x.get("source_bytes"),
                  "historical_result":"FAILED_UNCHANGED","no_bid":True})
           PY
-      - name: Preserve compact diagnostic including any failure
-        if: always()
+      - name: Preserve compact manual diagnostic including any failure
+        if: always() && github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: active-tender096-single-source-diagnostic-${{ github.event.pull_request.head.sha || github.sha }}-attempt-${{ github.run_attempt }}
