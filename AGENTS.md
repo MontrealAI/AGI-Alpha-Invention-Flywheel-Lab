@@ -16,6 +16,16 @@ Remove discretionary engineering mission timeouts and universal business-scale c
 
 ## Current mandate
 
+### The uncompromising target
+
+> The target remains uncompromising:
+>
+> A self-sustaining enterprise that becomes exceptionally effective at seeing what has just become possible, building what is most valuable, and improving its ability to discover the next extraordinary opportunity.
+>
+> That is the 10/10 standard.
+
+Use this standard to guide construction and evaluate progress; it is the target, not a claim of achieved capability. Existing evidence, accounting, permissions and normal qualification requirements remain unchanged.
+
 Build publicly in this repository: visible branches/PRs, GitHub Actions, qualified integration and releases, then an actual released-system run. Begin with current main, exact candidate source, executed evidence, current owner and existing work. Choose opportunities for consequential enabling potential, not only the latest trace’s local bottleneck. Name the constraint whose removal could open an important class of useful work and a decisive executable prototype before adding a framework; small prototypes need not imply small ambition. Historical discussion is context, not present authority; old completed assignments are not active ownership. Use the canonical `AGENTS.md`, not a competing `Agent.md`.
 
 Read [the developer/mechanism guide](docs/harness/DEVELOPER_GUIDE.md), [operator guide](docs/connected014/OPERATOR.md) and [resource policy](docs/harness/RESOURCE_POLICY.md). These current instructions supersede older blanket failure-file retention, stale campaign renewal gates and obsolete owner labels. Historical source snapshots, outcomes and permissions still describe their original scope.

@@ -1,5 +1,11 @@
 # Research papers
 
+## Research edition 2.0 · Riding the Exponential
+
+[Read the new paper](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/alpha-genesis-flywheel-omega-v2.html) · [PDF](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/alpha-genesis-flywheel-omega-v2.pdf) · [Complete companion](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/alpha-genesis/ALPHA_GENESIS_FLYWHEEL_OMEGA_v2_COMPLETE.zip) · [Editable source](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/alpha-genesis/v2.0).
+
+The 31-page edition develops three orders of intelligence and includes authored analytical models and historical-source native simulations, not actual commerce or demonstrated open-world discovery. The earlier edition and all its links remain intact below.
+
 ## 🌌♾️ ALPHA GENESIS FLYWHEEL Ω
 
 **Flagship programme and paper · Turn the next advance in AI into your next ability to autonomously discover at scale.**
