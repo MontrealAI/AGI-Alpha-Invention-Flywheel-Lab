@@ -1,0 +1,35 @@
+\subsection{Does the advantage survive an unknown replacement schedule?}
+\label{sec:uncertainty}
+The original example gives the planner the supplier schedule in advance. That is a consequential information advantage. A separate extension removes advance notice and allows renewal to fail. The controller observes the current configuration and previous outcomes; it does not see the next supplier change or the next renewal result.
+
+Between periods, a change independently occurs with supplied probability $q$, invalidating both qualifications but preserving P's source. After paying the full 11-unit renewal-and-upkeep cost, P's renewal independently fails with supplied probability $f$. Failure leaves the asset retained and unqualified; the payment is not refunded. Construction still succeeds deterministically. Every action must satisfy the reserve on every reachable branch, not merely in expectation. Expected terminal cash is the objective; a further downside constraint is not silently assumed.
+
+The decision-state recursion is
+\begin{equation}
+ V_t(s)=\max_{a\in\mathcal A(s)}\sum_{s'}p(s'\mid s,a)V_{t+1}(s'),
+ \qquad V_H(s)=\operatorname{cash}(s).
+ \label{eq:nonanticipating}
+\end{equation}
+The maximum is outside the next-outcome expectation: the action is chosen before that outcome is known. The state includes cash, ownership, and current qualification flags. Exact rational arithmetic is used throughout. A second implementation explicitly constructs reachable state layers and evaluates them backward, independently re-specifying transition effects. Small three-period cases additionally expand the complete decision-history tree without memoization.
+
+The prospectively recorded extension fixed $H=8$, opening cash in $\{40,100\}$, $q\in\{0,1/8,1/4,1/2,3/4,1\}$, and $f\in\{0,1/4,1/2,1\}$. All 48 environments tie the no-portable optimum. Because this shorter horizon differs from the original example, we then declared and executed the \emph{same complete grid at $H=16$}. This is a disclosed post-result extension, not part of the earlier prospective specification. The original prices and all negative results remain unchanged.
+
+At $H=16$, the extra option improves expected cash in \emph{one} environment and ties in 47. The one positive case has opening cash 100, $q=1/4$, and $f=0$. Expected terminal cash is approximately 307.544 with the option and 293.633 without it: a 13.911-unit difference. An ordinary planner with the same complete action set again ties. With the same settings except $f=1/4$, the advantage disappears.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Unknown-schedule extension at 16 periods, opening cash 100, and failure probability zero. Expected cash is rounded here; exact fractions are released. The final column is minimum terminal cash among positive-probability histories of each expectation-maximizing policy.}
+\begin{tabular}{@{}rrrrl@{}}
+\toprule
+$q$ & Full expected & Without P & Difference & Worst cash: full / without P\\
+\midrule
+\inputrows{uncertainty_rows.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{insight}[Expected advantage is not resilience]
+In the positive case, the full policy's worst terminal cash is 66, versus 188 without P. All branches preserve the 20-unit reserve, yet the expectation-maximizing portable policy can lose opening capital. A customer requiring capital preservation would need a separately declared risk constraint and a newly evaluated policy.
+\end{insight}
+
+Across both new grids, all 192 full/no-portable optimizer--oracle comparisons agree. The 24 small history-tree comparisons also agree. These are exact checks of supplied finite models, not independent samples of businesses. The eight-period ties, the 16-period conditional gain, and its downside jointly prevent a universal portability claim. The lesson is not that institutions cannot compound; it is that the horizon, frequency of change, reliability of renewal, financing, and risk tolerance determine which continuity is worth constructing.
