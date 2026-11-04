@@ -14,6 +14,8 @@
 
 The [integration record](INTEGRATION.json) preserves earlier source identities, timings and original evidence hashes. After some temporary staging files became unavailable, the final source and evidence were recovered from the public repository and provider. The frozen release verifier was recovered byte-for-byte, and the nine external tests were rerun on the final source. Engineering reproductions use separate accounts and add no profit to the designated primary.
 
+A second replay of the frozen verifier against the original gate and operation ZIPs produced the same [verification summary](VERIFIER_OUTPUT.json), SHA-256 `e6b338893d5f0547aa421faa1c59e841ce62194faef784cd2fd767d70df4d7e3`. After the 12 main-push workflows passed, the separate [paired-acquisition numerical follow-on](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41777651894) also completed successfully.
+
 ## Replay the independent verification
 
 Obtain the two original ZIP files from the [publication gate](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41771560549/artifacts/13296610775) and [downloaded operation](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41771560549/artifacts/13297368670). Save them as `gate.zip` and `operation.zip` in a new working directory. The provider may require a signed-in GitHub session for Actions artifacts. Published release assets and the compact verification receipts also have permanent repository links.
