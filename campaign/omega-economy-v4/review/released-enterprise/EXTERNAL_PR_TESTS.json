@@ -1,0 +1,288 @@
+{
+  "clean_checkout_after": true,
+  "clean_checkout_before": true,
+  "finished_utc": "2026-11-04T04:16:38.117625+00:00",
+  "historical_receipt_ids_separately_reported": {
+    "historical_bytes_reverified_here": false,
+    "pr204_205_209": "01ac6aefdfc5a83b21a2314933e4bb207da41727aad437c29d3bd38ae629dec6",
+    "pr211": "8b1cfae9da275d8044c17b109ee64c2cb0a228817d20125e453837593311af26",
+    "runtime_commit": "dc038127cd62e67eba7d5b274338c858c0574c19"
+  },
+  "job_elapsed_ms": 141657,
+  "owner_files": [
+    {
+      "blob": "fd61f0e9376d2f724911f2af8c5c85dec1a90bba",
+      "head": "a8ed1e55acaa7b247e41477584947b3c240dce2b",
+      "path": "tests/test_omega_native_cost_witness.py",
+      "pr": 204,
+      "sha256": "2084292abb7f4fbc37b5b8cf0311fd956e6068daadb201cb7f6286e8bc844d43"
+    },
+    {
+      "blob": "0bbfb1b622540239b054831c1de410414d01f1f2",
+      "head": "a8ed1e55acaa7b247e41477584947b3c240dce2b",
+      "path": "mechanism_harness/native_cost_witness.py",
+      "pr": 204,
+      "sha256": "3b0fafa78e0745efc6c2e79b8e49919feef71489cc768ca084964c9dcf285b0b"
+    },
+    {
+      "blob": "2b6432295a73d6458a9a55a3966579f8de1aae57",
+      "head": "6967ccf158daf8567f45180878029b8c2ac22bda",
+      "path": "tests/test_omega_crash_recovery_review.py",
+      "pr": 205,
+      "sha256": "6c2b2bf88eee8624ff50d5ac5d561a806577e10d8cf594b96548e8e6554907bb"
+    },
+    {
+      "blob": "b59a1b9e8b386d2c5f81e86fde3024e0ae7ba565",
+      "head": "2b81f42cdd546fa706fea22cbf10f400ca711ee9",
+      "path": "tests/test_omega_legacy_live_reconcile087.py",
+      "pr": 209,
+      "sha256": "95f73b8ec9776e8a2d7555a43d6df8507657feced607fea5ad4e9d4b2f983ca3"
+    },
+    {
+      "blob": "60790dc5fd674145f0aa0c6a35a54ced982096f1",
+      "head": "585db8e8b0e83b228b2c5bf38c201926b723fe86",
+      "path": "tests/test_omega_native_account_registry089.py",
+      "pr": 211,
+      "sha256": "3980b2da1ec5a586e41b5c8c3f3697ee2623389dda93056b59c0d4921d9ea116"
+    }
+  ],
+  "packages": {
+    "cryptography": "50.0.2",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "passed": true,
+  "pr204_fault_witness": [
+    {
+      "fault": "fee_absent",
+      "independent_witness_rejected": true,
+      "owner_audit_missed": false
+    },
+    {
+      "fault": "fee_undercharged",
+      "independent_witness_rejected": true,
+      "owner_audit_missed": false
+    },
+    {
+      "fault": "maintenance_absent",
+      "independent_witness_rejected": true,
+      "owner_audit_missed": false
+    },
+    {
+      "fault": "maintenance_undercharged",
+      "independent_witness_rejected": true,
+      "owner_audit_missed": false
+    },
+    {
+      "fault": "tax_absent",
+      "independent_witness_rejected": true,
+      "owner_audit_missed": false
+    },
+    {
+      "fault": "tax_undercharged",
+      "independent_witness_rejected": true,
+      "owner_audit_missed": false
+    }
+  ],
+  "python": "3.12.14",
+  "repository": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+  "runtime_commit": "4abbb85893c9c073ca092db4ad858f7bb156dc35",
+  "runtime_tree": "6006ea6b8cd4a35ad91a9c22aba8c091ee0d3e16",
+  "schema": "external-owner-regressions-v1",
+  "scope": "Fresh synthetic fixtures. All production imports from exact runtime checkout. External PR 204 also supplies its own independent verification helper. Suite times include setup. Subtests are nested, not additional methods.",
+  "started_utc": "2026-11-04T04:14:16.460967+00:00",
+  "suites": [
+    {
+      "errors": 0,
+      "failures": 0,
+      "import_sha256_map_hash": "e6cf508719e78488c2fff0e38ea79353a373d4cefb094fe7a28eb762cb493da6",
+      "methods": [
+        {
+          "elapsed_ms": 105626,
+          "method": "test_omega_native_cost_witness.CostWitnessQualification.test_all_six_preregistered_omission_or_undercharge_faults",
+          "result": "passed"
+        },
+        {
+          "elapsed_ms": 3323,
+          "method": "test_omega_native_cost_witness.CostWitnessQualification.test_original_native_contract_still_accepted",
+          "result": "passed"
+        }
+      ],
+      "passed": true,
+      "pr": 204,
+      "production_files_imported": 32,
+      "skips": 0,
+      "subtests": [
+        {
+          "method": "test_all_six_preregistered_omission_or_undercharge_faults",
+          "params": {
+            "label": "fee_absent"
+          },
+          "result": "passed"
+        },
+        {
+          "method": "test_all_six_preregistered_omission_or_undercharge_faults",
+          "params": {
+            "label": "fee_undercharged"
+          },
+          "result": "passed"
+        },
+        {
+          "method": "test_all_six_preregistered_omission_or_undercharge_faults",
+          "params": {
+            "label": "maintenance_absent"
+          },
+          "result": "passed"
+        },
+        {
+          "method": "test_all_six_preregistered_omission_or_undercharge_faults",
+          "params": {
+            "label": "maintenance_undercharged"
+          },
+          "result": "passed"
+        },
+        {
+          "method": "test_all_six_preregistered_omission_or_undercharge_faults",
+          "params": {
+            "label": "tax_absent"
+          },
+          "result": "passed"
+        },
+        {
+          "method": "test_all_six_preregistered_omission_or_undercharge_faults",
+          "params": {
+            "label": "tax_undercharged"
+          },
+          "result": "passed"
+        }
+      ],
+      "suite_elapsed_ms": 109069
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "import_sha256_map_hash": "e6cf508719e78488c2fff0e38ea79353a373d4cefb094fe7a28eb762cb493da6",
+      "methods": [
+        {
+          "elapsed_ms": 47950,
+          "method": "test_omega_crash_recovery_review.CommittedInterruptionReview.test_committed_crashes_keep_one_native_account_and_exactly_once_costs",
+          "result": "passed"
+        },
+        {
+          "elapsed_ms": 36460,
+          "method": "test_omega_crash_recovery_review.CommittedInterruptionReview.test_second_committed_release_reopens_multiorder_business_without_double_spend",
+          "result": "passed"
+        }
+      ],
+      "passed": true,
+      "pr": 205,
+      "production_files_imported": 32,
+      "skips": 0,
+      "subtests": [
+        {
+          "method": "test_committed_crashes_keep_one_native_account_and_exactly_once_costs",
+          "params": {
+            "postcommit": "quote"
+          },
+          "result": "passed"
+        },
+        {
+          "method": "test_committed_crashes_keep_one_native_account_and_exactly_once_costs",
+          "params": {
+            "postcommit": "wallet"
+          },
+          "result": "passed"
+        },
+        {
+          "method": "test_committed_crashes_keep_one_native_account_and_exactly_once_costs",
+          "params": {
+            "postcommit": "fund"
+          },
+          "result": "passed"
+        },
+        {
+          "method": "test_committed_crashes_keep_one_native_account_and_exactly_once_costs",
+          "params": {
+            "postcommit": "production"
+          },
+          "result": "passed"
+        },
+        {
+          "method": "test_committed_crashes_keep_one_native_account_and_exactly_once_costs",
+          "params": {
+            "postcommit": "fee"
+          },
+          "result": "passed"
+        },
+        {
+          "method": "test_committed_crashes_keep_one_native_account_and_exactly_once_costs",
+          "params": {
+            "postcommit": "release"
+          },
+          "result": "passed"
+        },
+        {
+          "method": "test_committed_crashes_keep_one_native_account_and_exactly_once_costs",
+          "params": {
+            "postcommit": "maintenance"
+          },
+          "result": "passed"
+        }
+      ],
+      "suite_elapsed_ms": 84576
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "import_sha256_map_hash": "54a5439b9e618ba04e767f44f6f2b880496a6ae1752d3bee69b3c299cd7d3e27",
+      "methods": [
+        {
+          "elapsed_ms": 264,
+          "method": "test_omega_legacy_live_reconcile087.CompletedV3NativeAuthority.test_01_completed_resume_requires_existing_private_authority",
+          "result": "passed"
+        },
+        {
+          "elapsed_ms": 1641,
+          "method": "test_omega_legacy_live_reconcile087.CompletedV3NativeAuthority.test_02_completed_resume_rejects_later_genuine_native_debit",
+          "result": "passed"
+        }
+      ],
+      "passed": true,
+      "pr": 209,
+      "production_files_imported": 35,
+      "skips": 0,
+      "subtests": [],
+      "suite_elapsed_ms": 11453
+    },
+    {
+      "errors": 0,
+      "failures": 0,
+      "import_sha256_map_hash": "70564da3270c5277ea2a9e33b685a209ff9a9f7ccc2dec393fbd2099fcb263d5",
+      "methods": [
+        {
+          "elapsed_ms": 3674,
+          "method": "test_omega_native_account_registry089.RegisteredNativeAccountConfiguration.test_01_alternate_opening_not_laundered_by_report_label",
+          "result": "passed"
+        },
+        {
+          "elapsed_ms": 11355,
+          "method": "test_omega_native_account_registry089.RegisteredNativeAccountConfiguration.test_02_alternate_working_reserve_must_not_audit_as_registered",
+          "result": "passed"
+        },
+        {
+          "elapsed_ms": 4830,
+          "method": "test_omega_native_account_registry089.RegisteredNativeAccountConfiguration.test_03_alternate_contract_must_not_audit_as_registered",
+          "result": "passed"
+        }
+      ],
+      "passed": true,
+      "pr": 211,
+      "production_files_imported": 39,
+      "skips": 0,
+      "subtests": [],
+      "suite_elapsed_ms": 20482
+    }
+  ],
+  "test_count": 9,
+  "workers": 2
+}
