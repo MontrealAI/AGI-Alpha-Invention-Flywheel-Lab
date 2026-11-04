@@ -27,6 +27,16 @@ class ResearchSiteTests(unittest.TestCase):
         for name in site.FILES:
             self.assertEqual((self.source / name).read_bytes(), (out / name).read_bytes())
 
+    def test_genesis_reader_preserves_scope_and_package_links(self):
+        import json
+        reader = (self.source / 'alpha-genesis-flywheel-omega.html').read_text()
+        self.assertIn('alpha-genesis-flywheel-omega.html', (self.source / 'index.html').read_text())
+        for phrase in ('Frontier Replay', '68 tests', 'Not established:', '32 pages', 'ALPHA_GENESIS_FLYWHEEL_OMEGA_v1.1.0_SOURCE.zip', 'source/CLAIM_REGISTER.md'):
+            self.assertIn(phrase, reader)
+        manifest = json.loads((self.source / 'publication-manifest.json').read_text())
+        entry = next(p for p in manifest['papers'] if p['file'] == 'alpha-genesis-flywheel-omega.pdf')
+        self.assertIn('<code>' + entry['sha256'] + '</code>', reader)
+
     def test_changed_pdf_is_rejected(self):
         with (self.source / site.PAPERS[0]).open('ab') as stream:
             stream.write(b'changed')
@@ -58,8 +68,8 @@ class ResearchSiteTests(unittest.TestCase):
         slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
-        self.assertEqual(len(site.PAPERS), 22)
-        self.assertEqual(len(site.PAGES), 24)
+        self.assertEqual(len(site.PAPERS), 23)
+        self.assertEqual(len(site.PAGES), 25)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
             reader = 'out-' + slug + '.html'
@@ -80,7 +90,12 @@ class ResearchSiteTests(unittest.TestCase):
         home = (self.source / 'index.html').read_text()
         slugs = ('transformational-intelligence', 'agi-alpha', 'invent-the-economy',
                  'the-world-as-an-output', 'beyond-the-production-frontier', 'beyond-the-original-problem')
-        self.assertLess(home.index('Flagship paper'), home.index('Foundational paper'))
+        self.assertIn('<h1 id="hero-title">🌌♾️ ALPHA GENESIS', home)
+        self.assertIn('href="alpha-genesis-flywheel-omega.html">Read the flagship paper', home)
+        self.assertLess(home.index('id="alpha-genesis"'), home.index('Conceptual foundation'))
+        self.assertLess(home.index('Conceptual foundation'), home.index('Foundational paper'))
+        self.assertIn('Flagship programme &amp; paper', home)
+        self.assertIn('Self-sustaining discovery, improved successors and actual commercial revenue remain to be demonstrated.', home)
         self.assertLess(home.index('Foundational paper'), home.index('out-collection'))
         self.assertNotIn('from exactly US$100,000', home)
         self.assertIn('jointly chosen', home)
@@ -186,7 +201,7 @@ class ResearchSiteTests(unittest.TestCase):
         home = (self.source / 'index.html').read_text()
         studio = (self.source / 'studio.html').read_text()
         self.assertIn('id="frontier"', home)
-        self.assertIn('Blue Sky flagship', home)
+        self.assertIn('GENESIS construction programme / Blue Sky evidence', home)
         self.assertNotIn('id="dispatch-form"', home)
         self.assertNotIn('src="alpha.js"', home)
         self.assertIn('Historical experiment / 063', home)

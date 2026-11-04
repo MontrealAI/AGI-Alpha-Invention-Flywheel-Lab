@@ -1,0 +1,100 @@
+name: Genesis bridge manually gated release and actual download
+on:
+  workflow_dispatch:
+    inputs:
+      source_commit:
+        description: Exact current-main commit with every push qualification successful
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: genesis-bridge-release-${{ inputs.source_commit }}
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+      actions: read
+    outputs:
+      archive_sha: ${{ steps.publish.outputs.archive_sha }}
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ inputs.source_commit }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Require exact current main and every broad push gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SOURCE_SHA: ${{ inputs.source_commit }}
+          DISPATCH_SHA: ${{ github.sha }}
+        run: |
+          test "$SOURCE_SHA" = "$DISPATCH_SHA"
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          python -B scripts/gate_genesis_bridge_release.py --repository "$GH_REPO" --source-commit "$SOURCE_SHA" > "$RUNNER_TEMP/BRIDGE_RELEASE_GATE.json"
+      - name: Build, qualify and publish distinct standalone release
+        id: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SOURCE_SHA: ${{ inputs.source_commit }}
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          python -B scripts/release_genesis_bridge.py build --source "$PWD" --out "$RUNNER_TEMP/bridge-release-assets" --source-commit "$SOURCE_SHA"
+          archive_sha=$(sha256sum "$RUNNER_TEMP/bridge-release-assets/genesis-bridge-source.zip" | cut -d' ' -f1)
+          python -B scripts/release_genesis_bridge.py qualify --archive "$RUNNER_TEMP/bridge-release-assets/genesis-bridge-source.zip" --out "$RUNNER_TEMP/bridge-release-qualification" --source-commit "$SOURCE_SHA" --expected-sha "$archive_sha"
+          cp "$RUNNER_TEMP/BRIDGE_RELEASE_GATE.json" "$RUNNER_TEMP/bridge-release-assets/RELEASE_GATE.json"
+          cp "$RUNNER_TEMP/bridge-release-qualification/QUALIFICATION.json" "$RUNNER_TEMP/bridge-release-assets/QUALIFICATION.json"
+          # Recheck after qualification; a moved main or new failed gate blocks publication.
+          python -B scripts/gate_genesis_bridge_release.py --repository "$GH_REPO" --source-commit "$SOURCE_SHA" > "$RUNNER_TEMP/bridge-release-assets/RELEASE_GATE.json"
+          # Atomic new-tag creation refuses preexisting tags, rather than silently reusing one.
+          gh api --method POST "repos/$GH_REPO/git/refs" -f "ref=refs/tags/genesis-bridge-$SOURCE_SHA" -f "sha=$SOURCE_SHA"
+          gh release create "genesis-bridge-$SOURCE_SHA" "$RUNNER_TEMP/bridge-release-assets/"* --verify-tag --title "GENESIS offline execution bridge $SOURCE_SHA" --notes "Source-pinned finite synthetic execution bridge. Qualified package; actual release download follows in this workflow. No commerce, physical validation or improved discovery claim. Hash binding does not establish platform immutability."
+          echo "archive_sha=$archive_sha" >> "$GITHUB_OUTPUT"
+  downloaded-release:
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ inputs.source_commit }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Download actual release and verify tag identity
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SOURCE_SHA: ${{ inputs.source_commit }}
+        run: |
+          test "$(gh api "repos/$GH_REPO/git/ref/tags/genesis-bridge-$SOURCE_SHA" --jq '.object.sha')" = "$SOURCE_SHA"
+          gh api "repos/$GH_REPO/releases/tags/genesis-bridge-$SOURCE_SHA" > "$RUNNER_TEMP/BRIDGE_RELEASE_DOWNLOAD.json"
+          gh release download "genesis-bridge-$SOURCE_SHA" --dir "$RUNNER_TEMP/actual-bridge-release"
+      - name: Execute actual downloaded release in clean isolation
+        env:
+          SOURCE_SHA: ${{ inputs.source_commit }}
+          ARCHIVE_SHA: ${{ needs.publish.outputs.archive_sha }}
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -B scripts/release_genesis_bridge.py qualify --archive "$RUNNER_TEMP/actual-bridge-release/genesis-bridge-source.zip" --out "$RUNNER_TEMP/actual-bridge-release-operation" --source-commit "$SOURCE_SHA" --expected-sha "$ARCHIVE_SHA"
+      - name: Retain actual downloaded-release provenance and outcome
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: genesis-bridge-released-operation-${{ inputs.source_commit }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/BRIDGE_RELEASE_DOWNLOAD.json
+            ${{ runner.temp }}/actual-bridge-release-operation/QUALIFICATION.json
+          if-no-files-found: error
