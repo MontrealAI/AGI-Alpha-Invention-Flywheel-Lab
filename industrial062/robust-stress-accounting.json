@@ -1,0 +1,74 @@
+{
+  "schema": "industrial062/robust-complete-source-sensitivity/v1",
+  "accepted": true,
+  "errors": [],
+  "scenario": "All used terminal distances AND terminal transit days increase10percent; other source costs/inputs unchanged. Authored deterministic stress, not calibrated uncertainty.",
+  "original_input_sha256": "de44431d708f695b3825efc5e372f7c15243313819a9fb42aabf73c0204be0f2",
+  "stressed_input_canonical_sha256": "cb5a063996de3c286df64dc5f313769ac21c15ef4c17926474aba5a3ca2d7477",
+  "metrics": {
+    "revenue": 1475936567.0,
+    "operating_cost": 15600000.0,
+    "production_cost": 138293015.0,
+    "freight_cost": 194402807.91996747,
+    "holding_cost": 1315508.421281365,
+    "total_cost": 349611331.3412488,
+    "profit": 1126325235.6587512,
+    "freight_by_leg": {
+      "supplier_to_factory": 152313142.9736139,
+      "factory_to_rdc": 21218036.18102462,
+      "node_to_customer": 20871628.765328974
+    },
+    "holding_by_component": {
+      "factory_material_cycle": 515333.9210005479,
+      "supplier_to_factory_in_transit": 185507.5366421918,
+      "regional_center_cycle": 231452.4634509589,
+      "factory_to_rdc_in_transit": 114323.79467011864,
+      "node_to_customer_in_transit": 268890.7055175477
+    },
+    "service_coverage": 0.7512369722096681,
+    "pieces_within_service_distance": 1532570,
+    "demand_pieces": 2040062,
+    "open_factories": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06"
+    ],
+    "open_warehouses": [
+      "R01",
+      "R02",
+      "R03",
+      "R04",
+      "R05",
+      "R06",
+      "R07",
+      "R08"
+    ],
+    "node_throughput": {
+      "R01": 86710,
+      "R02": 99999,
+      "R03": 146033,
+      "R04": 50314,
+      "R05": 281327,
+      "R06": 95925,
+      "R07": 99829,
+      "R08": 71997
+    },
+    "warehouse_operating_cost": {
+      "R01": 500000,
+      "R02": 500000,
+      "R03": 700000,
+      "R04": 500000,
+      "R05": 900000,
+      "R06": 500000,
+      "R07": 500000,
+      "R08": 500000
+    }
+  },
+  "nominal_robust_plan_cost_yuan": 347689465.93480825,
+  "cost_increase_in_stress_yuan": 1921865.406440556,
+  "conservative_annual_implementation_plus_fee_headroom_yuan": 24509413.13652432,
+  "comparison": "Worst-case direct-plan cost compared against lower bound for UNSTRESSED hierarchical cost; the latter also cannot attain75percent distance coverage underthis10percentstress. Source-model result only; no transition cost, actual road validation, agreement or vendor revenue."
+}
