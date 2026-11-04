@@ -174,6 +174,31 @@ class ImpactRegistry:
                       "evidence_sha256": evidence_sha256, "annotation": annotation})
 
     def evaluate(self) -> dict:
+        # A review is valid only within the uninterrupted policy revision epoch.
+        # A->B->A (or active->retired->active) must not resurrect a prior MET
+        # merely because the old content SHA-256 has reappeared.
+        latest_change_seq = {rid: -1 for rid in self.requirements}
+        for event in self.events:
+            payload = event["payload"]
+            if payload.get("kind") == "update":
+                for rid in payload["changed"]:
+                    latest_change_seq[rid] = event["seq"]
+
+        # A competent chronological replay control. Do not alter stored reviews:
+        # history is permanent; its past authorization is simply not current.
+        # Indexing reviews also avoids rescanning the full journal for every link.
+        current_reviews = {}
+        for event in self.events:
+            payload = event["payload"]
+            if payload.get("kind") != "review":
+                continue
+            rid = payload["requirement"]
+            if event["seq"] <= latest_change_seq[rid]:
+                continue
+            if payload["requirement_sha256"] != digest(self.requirements[rid]):
+                continue
+            current_reviews[(payload["system"], payload["control"], rid)] = event
+
         result = {}
         for sid, s in sorted(self.systems.items()):
             findings = []
@@ -183,10 +208,7 @@ class ImpactRegistry:
                     if req["status"] != "active":
                         findings.append({"control": cid, "requirement": rid, "status": "RETIRED_REVIEW_REQUIRED", "event_hash": None})
                         continue
-                    recent = next((e for e in reversed(self.events) if e["payload"].get("kind") == "review" and
-                                   e["payload"]["system"] == sid and e["payload"]["control"] == cid and
-                                   e["payload"]["requirement"] == rid and
-                                   e["payload"]["requirement_sha256"] == digest(req)), None)
+                    recent = current_reviews.get((sid, cid, rid))
                     findings.append({"control": cid, "requirement": rid,
                                      "status": recent["payload"]["verdict"] if recent else "UNDETERMINED",
                                      "event_hash": recent["hash"] if recent else None})
