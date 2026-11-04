@@ -1,0 +1,683 @@
+{
+  "schema": "omega/public-hosted-qualification/v1",
+  "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+  "source_tree": "433fc2caa1ff3a55e18dcaa1127681f5d1af7dce",
+  "parents": [
+    "8fde634127d959cf93ad8abaa933ee6fb443abc9"
+  ],
+  "event": "push",
+  "observed_utc": "2026-11-04T03:54:25.527Z",
+  "workflows": 13,
+  "counts": {
+    "success": 10,
+    "failure": 3
+  },
+  "scope": "Paper PR 212 (direct descendant of PR 206 merge) introduced a job using ubuntu-24.04 without the required first job-clock step. Three exact-main workflows each reported the same repository-standard-runner assertion. Publication and downloaded operation skipped.",
+  "all_observed_success": false,
+  "runs": [
+    {
+      "id": 41767140105,
+      "path": ".github/workflows/adaptive012.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140105",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 126368396794,
+          "name": "adaptive-current",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 10,
+              "seconds": 0.093,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 165,
+              "seconds": 154.144,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 53,
+              "seconds": 12.996,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 18,
+              "seconds": 0.13,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 3,
+              "seconds": 3.609,
+              "verdict": "OK",
+              "skipped": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 41767140162,
+      "path": ".github/workflows/campaign.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140162",
+      "status": "completed",
+      "conclusion": "failure",
+      "jobs": [
+        {
+          "id": 126368019309,
+          "name": "active-worker-bounds054",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 8,
+              "seconds": 4.231,
+              "verdict": "OK",
+              "skipped": 0
+            }
+          ]
+        },
+        {
+          "id": 126368019523,
+          "name": "phase-code-qualification",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ]
+        },
+        {
+          "id": 126368019712,
+          "name": "qualify",
+          "conclusion": "failure",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 27,
+              "seconds": 0.126,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 30,
+              "seconds": 2.76,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 1961,
+              "seconds": 1144.398,
+              "verdict": "FAILED (failures=1, skipped=2)",
+              "skipped": 2
+            }
+          ],
+          "failed_steps": [
+            "Source-matched tests and actual connected replay"
+          ]
+        },
+        {
+          "id": 126374400410,
+          "name": "publish-connected-checkpoint",
+          "conclusion": "skipped",
+          "checkout_commits": []
+        },
+        {
+          "id": 126374400422,
+          "name": "publish-mechanism-completion",
+          "conclusion": "skipped",
+          "checkout_commits": []
+        },
+        {
+          "id": 126374400706,
+          "name": "publish-research-edition",
+          "conclusion": "skipped",
+          "checkout_commits": []
+        },
+        {
+          "id": 126374400707,
+          "name": "publish-perturbation-construction",
+          "conclusion": "skipped",
+          "checkout_commits": []
+        }
+      ]
+    },
+    {
+      "id": 41767140281,
+      "path": ".github/workflows/commercial010.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140281",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 126368018838,
+          "name": "Immutable released 010 source, inputs, package and clean replay",
+          "conclusion": "success",
+          "checkout_commits": [
+            "710203eb128f1d03842a84822ee05517c1791080"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 66,
+              "seconds": 31.319,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 27,
+              "seconds": 2.275,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 30,
+              "seconds": 5.07,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 27,
+              "seconds": 0.211,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 66,
+              "seconds": 30.614,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 27,
+              "seconds": 2.239,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 30,
+              "seconds": 5.064,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 27,
+              "seconds": 0.215,
+              "verdict": "OK",
+              "skipped": 0
+            }
+          ]
+        },
+        {
+          "id": 126368019654,
+          "name": "current-compatibility",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 71,
+              "seconds": 31.779,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 35,
+              "seconds": 4.343,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 30,
+              "seconds": 5.033,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 27,
+              "seconds": 0.211,
+              "verdict": "OK",
+              "skipped": 0
+            }
+          ]
+        },
+        {
+          "id": 126369015737,
+          "name": "publish",
+          "conclusion": "skipped",
+          "checkout_commits": []
+        }
+      ]
+    },
+    {
+      "id": 41767140156,
+      "path": ".github/workflows/connected014-release.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140156",
+      "status": "completed",
+      "conclusion": "failure",
+      "jobs": [
+        {
+          "id": 126368849222,
+          "name": "release-qualification",
+          "conclusion": "failure",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 540,
+              "seconds": 955.528,
+              "verdict": "FAILED (failures=1)",
+              "skipped": 0
+            }
+          ],
+          "failed_steps": [
+            "Release integrity and source-bound finance/lifecycle regressions"
+          ]
+        },
+        {
+          "id": 126374176964,
+          "name": "publish-and-gate",
+          "conclusion": "skipped",
+          "checkout_commits": []
+        },
+        {
+          "id": 126374177281,
+          "name": "operate-published-release",
+          "conclusion": "skipped",
+          "checkout_commits": []
+        }
+      ]
+    },
+    {
+      "id": 41767140293,
+      "path": ".github/workflows/consequential007.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140293",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 126368019747,
+          "name": "reproduce",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ]
+        },
+        {
+          "id": 126368345017,
+          "name": "publish",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 41767140161,
+      "path": ".github/workflows/consequential009.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140161",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 126368018633,
+          "name": "qualify",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 23,
+              "seconds": 4.324,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 41,
+              "seconds": 28.353,
+              "verdict": "OK",
+              "skipped": 0
+            }
+          ]
+        },
+        {
+          "id": 126368406956,
+          "name": "publish",
+          "conclusion": "skipped",
+          "checkout_commits": []
+        }
+      ]
+    },
+    {
+      "id": 41767140175,
+      "path": ".github/workflows/engineering061.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140175",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 126368018685,
+          "name": "source-matched-qualification",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 68,
+              "seconds": 5.758,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 5,
+              "seconds": 4.537,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 25,
+              "seconds": 31.02,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 18,
+              "seconds": 4.449,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 4,
+              "seconds": 3.25,
+              "verdict": "OK",
+              "skipped": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 41767140126,
+      "path": ".github/workflows/omega-economy-v4.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140126",
+      "status": "completed",
+      "conclusion": "failure",
+      "jobs": [
+        {
+          "id": 126368352564,
+          "name": "qualify",
+          "conclusion": "failure",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 200,
+              "seconds": 348.623,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 28,
+              "seconds": 0.024,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 16,
+              "seconds": 0.705,
+              "verdict": "FAILED (failures=1)",
+              "skipped": 0
+            }
+          ],
+          "failed_steps": [
+            "Exact source and regression qualification"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 41767140197,
+      "path": ".github/workflows/paired-acquisition-20261102.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140197",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 126368018776,
+          "name": "qualify-paired-source",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 7,
+              "seconds": 0.111,
+              "verdict": "OK",
+              "skipped": 0
+            }
+          ]
+        },
+        {
+          "id": 126368020097,
+          "name": "reproduce-published-paired-source",
+          "conclusion": "skipped",
+          "checkout_commits": []
+        }
+      ]
+    },
+    {
+      "id": 41767140202,
+      "path": ".github/workflows/public-portfolio-20261102.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140202",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 126368130744,
+          "name": "qualify",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 6,
+              "seconds": 6.111,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 12,
+              "seconds": 182.396,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 6,
+              "seconds": 0.008,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 16,
+              "seconds": 157.387,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 5,
+              "seconds": 0.048,
+              "verdict": "OK",
+              "skipped": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 41767140179,
+      "path": ".github/workflows/research-pages.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140179",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 126368018779,
+          "name": "build",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 16,
+              "seconds": 0.323,
+              "verdict": "OK",
+              "skipped": 0
+            }
+          ]
+        },
+        {
+          "id": 126368079442,
+          "name": "deploy",
+          "conclusion": "success",
+          "checkout_commits": []
+        }
+      ]
+    },
+    {
+      "id": 41767140184,
+      "path": ".github/workflows/successor-omega-paper.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140184",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 126368018851,
+          "name": "build",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 16,
+              "seconds": 0.388,
+              "verdict": "OK",
+              "skipped": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 41767140124,
+      "path": ".github/workflows/transformational063.yml",
+      "attempt": 1,
+      "source_commit": "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41767140124",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 126368019089,
+          "name": "qualify",
+          "conclusion": "success",
+          "checkout_commits": [
+            "9d84beed0c8f3a3cf53bca3a48af690dc84fe3e1"
+          ],
+          "unittest_summaries": [
+            {
+              "tests": 8,
+              "seconds": 0.163,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 26,
+              "seconds": 43.694,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 6,
+              "seconds": 6.074,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 12,
+              "seconds": 184.012,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 6,
+              "seconds": 0.008,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 16,
+              "seconds": 158.016,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 5,
+              "seconds": 0.048,
+              "verdict": "OK",
+              "skipped": 0
+            },
+            {
+              "tests": 26,
+              "seconds": 8.563,
+              "verdict": "OK",
+              "skipped": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
