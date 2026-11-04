@@ -1,5 +1,15 @@
 # Research papers
 
+## SUCCESSOR Ω — The Institution That Compounds
+
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 3 November 2026 · Edition 1.0.0.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/successor-omega.html) · [PDF](successor-omega.pdf) · [LaTeX, exact study and reproduction](../successor-omega/README.md).
+
+Own the institution. Replace the models. Preserve the mission. This paper formalizes renewal-adjusted Alpha and the separation of retained knowledge, current proof and bounded authority. Its authored exact study compares portability with reconstruction across 162 supplied environments and an ordinary equal-content control. The physical horizon uses explicit construction, energy, material and thermal requirements.
+
+**Scope:** Exact finite planning and local state-machine evidence, not autonomous invention, achieved general ASI, real demand or profit, production security, or installed physical capacity. Earlier papers retain their original roles and evidence.
+
 ## FLYWHEEL Ω — The Economy as an Output
 
 **Constructing better economic games and the means of their successors.**
