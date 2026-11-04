@@ -55,6 +55,9 @@ python -m connected_enterprise.genesis export --output /absolute/new/genesis002 
 Create `STOP` in the workspace to pause before the next operating stage; remove
 it to resume. Reopening preserves the original account and signed state. An
 export is key-free and auditable, but cannot take over the original account.
+If an interruption committed a cost before its phase checkpoint was saved,
+STOP preserves that unreconciled state and audit fails closed. Remove STOP to
+replay the same deterministic phase without duplicating the expense.
 Never publish `private/`, simulation signing keys or a full working directory.
 
 ## Frontier and open proposal path

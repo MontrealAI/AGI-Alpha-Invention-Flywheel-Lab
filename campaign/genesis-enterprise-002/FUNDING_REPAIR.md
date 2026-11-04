@@ -97,3 +97,31 @@ clean-distribution execution receipt. Independent source review found no blocker
 Local cryptography 50.0.0 and pycparser 3.0 differ from hosted pins 50.0.2 and 3.11.
 Exact-head hosted qualification, normal integration, immutable publication and
 actual downloaded operation must pass before reporting released completion.
+
+## Fixed-cost chronology correction
+
+The independent PR #235 falsifier against `895166b` demonstrated a real omission:
+the first acquisition charge could move from registered hour 24 to hour 23 while
+retaining its amount, and the old audit accepted the completed native simulation.
+The falsifier's green test alone is not evidence of rejection because it records
+either outcome. The strict regression failed before correction.
+
+The audit now reconciles each reached phase's development, acquisition and
+maintenance charges by exact ID, amount, hour and cardinality. It requires no
+action for a declared zero cost, rejects unreached/future charges, and includes
+the overhead-paid `choose` checkpoint before an active decision row exists.
+Native seed-production costs and independently reconciled taxes retain their
+existing separate checks; canonical ledger/account/terms controls are unchanged.
+
+A STOP after an expense commits but before the phase checkpoint is saved leaves
+an unreconciled checkpoint/tape and fails closed. It does not spend while stopped.
+Remove STOP to replay the same deterministic phase and reconcile it without
+duplicating the expense; do not reset or migrate the account.
+
+Chronology qualification: all 75 native, policy, frontier and recovery-preflight
+tests passed, followed by the added STOP-preservation regression (one test) on
+unchanged runtime bytes. This is 76 distinct tests, not a single 76-test run.
+The acquisition, maintenance and development timing regression failed before
+the audit correction and now rejects those real-account counterexamples.
+The prior `895166b` clean-archive GENESIS execution passed on hosted pinned
+dependencies; the changed chronology source requires fresh exact-head checks.

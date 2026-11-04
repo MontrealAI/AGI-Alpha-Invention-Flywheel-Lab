@@ -262,6 +262,48 @@ def operate(output, *, max_steps=None, fault=None):
     return audit(output)
 
 
+def _audit_fixed_costs(p, jobs, execution, actions):
+    # Reconcile the reached producer phases, not just selected/completed rows:
+    # choose has already paid overhead but has not created an active row yet.
+    phase, index = execution['phase'], execution['index']
+    active_phases = {'order', 'fund', 'produce', 'release', 'refund', 'finish'}
+    if (type(index) is not int or not 0 <= index <= len(jobs)
+            or index != len(execution['rows'])
+            or phase not in active_phases | {'setup', 'overhead', 'choose', 'complete'}
+            or (execution['active'] is not None) != (phase in active_phases)
+            or (phase == 'setup' and index != 0)
+            or (phase == 'complete' and index != len(jobs))
+            or (phase in active_phases | {'choose'} and index == len(jobs))):
+        raise ValueError('REGISTERED_EXECUTION_PHASE_CHANGED')
+    expected = {}
+    if phase != 'setup' and p['development']:
+        expected['genesis-development'] = (0, p['development'])
+    reached = index + int(phase in active_phases | {'choose'})
+    for i, job in enumerate(jobs[:reached]):
+        for kind in ('acquisition', 'maintenance'):
+            if p[kind]:
+                ident = 'genesis-' + kind + '-' + job['id']
+                if ident in expected:
+                    raise ValueError('REGISTERED_FIXED_COST_CHANGED')
+                expected[ident] = (24 * (i + 1), p[kind])
+    seen = set()
+    for action in actions:
+        if action['op'] != 'cost':
+            continue
+        ident = action['args']['id']
+        if (ident != 'genesis-development'
+                and not ident.startswith(('genesis-acquisition-', 'genesis-maintenance-'))):
+            # Native seed-production costs and tax provisions have their own
+            # journal/receipt and tax-prefix reconciliation, respectively.
+            continue
+        if (ident not in expected or ident in seen
+                or (action['day'], action['args']['amount']) != expected[ident]):
+            raise ValueError('REGISTERED_FIXED_COST_CHANGED')
+        seen.add(ident)
+    if seen != set(expected):
+        raise ValueError('REGISTERED_FIXED_COST_CHANGED')
+
+
 def _audit_tax_prefixes(p, jobs, rows, actions):
     # Native replay has verified each before/after state. Reconstruct the
     # provision at each completed job boundary, not from the final total or
@@ -367,18 +409,13 @@ def audit(output):
                     for kind in ('acquisition', 'maintenance', 'tax') for job in manifest['jobs']}:
                 raise ValueError('UNREGISTERED_COST')
     releases = [a for a in actions if a['op'] == 'event' and a['args']['action'] == 'release']
-    costs = {a['args']['id']: a['args']['amount'] for a in actions if a['op'] == 'cost'}
-    if execution['phase'] != 'setup' and p['development'] and costs.get('genesis-development') != p['development']:
-        raise ValueError('DEVELOPMENT_COST_MISSING')
+    _audit_fixed_costs(p, manifest['jobs'], execution, actions)
     _audit_tax_prefixes(p, manifest['jobs'], execution['rows'], actions)
     for i, row in enumerate(rows):
         job = manifest['jobs'][i]
         ident = job['id']; order = 'g002-' + ident
         if row['job_id'] != ident:
             raise ValueError('REGISTERED_JOB_ORDER_CHANGED')
-        for kind in ('acquisition', 'maintenance'):
-            if p[kind] and costs.get('genesis-' + kind + '-' + ident) != p[kind]:
-                raise ValueError('REGISTERED_FULL_COST_MISSING')
         # Reconstruct the snapshot at selection from the last overhead action.
         overhead = [a for a in actions if a['op'] == 'cost' and a['args']['id'] in
                     {'genesis-acquisition-' + ident, 'genesis-maintenance-' + ident}]
