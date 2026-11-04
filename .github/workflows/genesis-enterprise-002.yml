@@ -1,0 +1,45 @@
+name: GENESIS 002 native enterprise loop
+on:
+  pull_request:
+    paths:
+      - 'genesis_enterprise/**'
+      - 'connected_enterprise/genesis.py'
+      - 'campaign/genesis-enterprise-002/**'
+      - 'tests/test_genesis_enterprise_*.py'
+      - '.github/workflows/genesis-enterprise-002.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install existing native dependencies and numerical instrument
+        run: python -m pip install -r requirements-commercial010.txt numpy==2.3.5 scipy==1.17.0
+      - name: Exact source identity
+        run: git rev-parse HEAD
+      - name: Unit and genuine native integration tests
+        run: python -m unittest discover -s tests -p 'test_genesis_enterprise_*.py' -v
+      - name: Original GENESIS compatibility
+        run: python -m unittest discover -s tests -p 'test_frontier_*001.py' -v
+      - name: Complete funded pilot, idempotent resume, independent audit, key-free export
+        run: |
+          python -m connected_enterprise.genesis pilot --output /tmp/genesis002-operation
+          cp /tmp/genesis002-operation/public/native-export.json /tmp/genesis002-before.json
+          python -m connected_enterprise.genesis resume --output /tmp/genesis002-operation
+          cmp /tmp/genesis002-before.json /tmp/genesis002-operation/public/native-export.json
+          python -m connected_enterprise.genesis audit --output /tmp/genesis002-operation
+          python -m connected_enterprise.genesis export --output /tmp/genesis002-operation --destination /tmp/genesis002-public
+      - name: Retain only key-free reproducible evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: genesis002-public-${{ github.event.pull_request.head.sha || github.sha }}
+          path: /tmp/genesis002-public
+          if-no-files-found: error
+          retention-days: 7
