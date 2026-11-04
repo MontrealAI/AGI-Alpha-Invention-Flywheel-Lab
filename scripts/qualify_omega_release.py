@@ -20,9 +20,12 @@ from commercial.ledger import canonical,digest,strict_json
 from scripts.release_connected014 import archive_manifest,commit
 from scripts.qualify_connected014 import run_command
 from connected_enterprise.platform_runtime import command_budget
+from connected_enterprise.runner import REACH_MARKERS, REACH_NATIVE_PATHS, REACH_RELEASE_PATHS
 
 SCHEMA='omega/packaged-v4-qualification/v1'
 PROBE="from mechanism_harness.cart_native import source_identity; import json; print(json.dumps(source_identity(),sort_keys=True))"
+REACH_PROBE = PROBE.replace('mechanism_harness.cart_native', 'mechanism_harness.reach_native')
+REACH_SCHEMA = 'omega/packaged-paid-reach-qualification/v1'
 AUTHORITY_SUFFIXES=('.actions.jsonl','.adaptive-simulation-key','.connected-journal.json','.adaptive-account.json','.adaptive-proofs.json','.adaptive-resolutions.json')
 
 
@@ -30,6 +33,89 @@ def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def read(path):return strict_json(Path(path).read_bytes())
 def write(path,value):Path(path).write_bytes(canonical(value)+b'\n')
 
+
+def reach_source(manifest):
+    """A partial pilot cannot fall back to the historical V4-only receipt."""
+    files = manifest.get('files', {})
+    if not REACH_MARKERS.intersection(files) and 'omega_reach_native_source' not in manifest:
+        return None
+    cart = manifest.get('omega_v4_native_source')
+    if (not isinstance(cart, dict) or 'mechanism_harness/cart_native.py' not in cart
+            or 'mechanism_harness/cart_decision.py' not in cart):
+        raise ValueError('PAID_REACH_REQUIRES_V4_NATIVE_SOURCE')
+    expected = set(cart) | set(REACH_NATIVE_PATHS)
+    native = manifest.get('omega_reach_native_source')
+    if (not isinstance(native, dict) or set(native) != expected
+            or not (expected | set(REACH_RELEASE_PATHS)) <= files.keys()
+            or any(native[name] != value for name, value in cart.items())
+            or any(files.get(name) != value for name, value in native.items())):
+        raise ValueError('PAID_REACH_EXACT_NATIVE_SOURCE_CLOSURE_REQUIRED')
+    return native
+
+
+def account_actions(target, reach=False):
+    if reach:
+        module = 'mechanism_harness.reach_native'
+        return [('source-identity', ['-c', REACH_PROBE]),
+                ('run', ['-m', module, 'run', target, '--arm', 'pilot', '--scenario', 'central']),
+                ('audit', ['-m', module, 'audit', target]),
+                ('resume', ['-m', module, 'resume', target])]
+    return [('source-identity', ['-c', PROBE])] + [
+        (stage, ['-m', 'mechanism_harness.cart_native', stage, '--arm', 'adaptive',
+                 '--stress', 'central', '--output', target]) for stage in ('run', 'audit', 'resume')]
+
+
+def checked_commands(rows, reach=False):
+    if (not isinstance(rows, list) or len(rows) != 4 or any(not isinstance(r, dict) for r in rows)
+            or not isinstance(rows[1].get('command'), list) or len(rows[1]['command']) < 5):
+        raise ValueError('COMPLETE_V4_COMMAND_SEQUENCE_REQUIRED')
+    target = rows[1]['command'][4 if reach else -1]
+    if not isinstance(target, str) or not Path(target).is_absolute() or (reach and '..' in Path(target).parts):
+        raise ValueError('ABSOLUTE_V4_ENGINEERING_ACCOUNT_REQUIRED')
+    for row, (stage, args) in zip(rows, account_actions(target, reach)):
+        command = row.get('command')
+        if (row.get('stage') != stage or not isinstance(command, list) or command[1:] != args
+                or type(row.get('returncode')) is not int or row['returncode'] != 0):
+            raise ValueError('DECLARED_SUCCESSFUL_V4_COMMAND_REQUIRED')
+        for stream in ('stdout_sha256', 'stderr_sha256'):
+            value = row.get(stream)
+            if not isinstance(value, str) or len(value) != 64 or any(c not in '0123456789abcdef' for c in value):
+                raise ValueError('V4_COMMAND_LOG_HASH_REQUIRED')
+    return Path(target)
+
+
+def validate_reach(receipt, manifest, cart_account):
+    native = reach_source(manifest)
+    if native is None:
+        if 'paid_reach' in receipt:
+            raise ValueError('UNREGISTERED_PAID_REACH_RECEIPT')
+        return
+    nested = receipt.get('paid_reach')
+    bound = ('source_commit', 'source_sha256', 'source_archive_sha256', 'actual_release_download')
+    keys = {'schema', 'primary', 'arm', 'scenario', 'native_source_sha256', 'commands',
+            'native_export_sha256', 'accepted', 'native_audit_accepted', 'completed_resume_export_unchanged',
+            'completed_resume_authority_unchanged', *bound}
+    if receipt['actual_release_download']:
+        keys.add('download_receipt_sha256')
+        bound += ('download_receipt_sha256',)
+    if (not isinstance(nested, dict) or set(nested) != keys or nested['schema'] != REACH_SCHEMA
+            or nested['primary'] is not False or nested['arm'] != 'pilot' or nested['scenario'] != 'central'
+            or type(nested['actual_release_download']) is not bool
+            or any(nested[key] != receipt[key] for key in bound)
+            or nested['native_source_sha256'] != digest(native)
+            or any(nested[key] is not True for key in ('accepted', 'native_audit_accepted',
+                   'completed_resume_export_unchanged', 'completed_resume_authority_unchanged'))):
+        raise ValueError('SOURCE_BOUND_PAID_REACH_RECEIPT_REQUIRED')
+    export = nested['native_export_sha256']
+    if not isinstance(export, str) or len(export) != 64 or any(c not in '0123456789abcdef' for c in export):
+        raise ValueError('PAID_REACH_NATIVE_EXPORT_REQUIRED')
+    reach_account = checked_commands(nested['commands'], reach=True)
+    fields = {'stage', 'command', 'returncode', 'stdout_sha256', 'stderr_sha256'}
+    interpreter = receipt['commands'][0]['command'][0]
+    if (not isinstance(interpreter, str) or any(set(row) != fields or row['command'][0] != interpreter
+            for row in nested['commands'])
+            or reach_account != cart_account.parent / 'paid-reach' / 'engineering-account'):
+        raise ValueError('SEPARATE_COMPACT_PAID_REACH_OPERATION_REQUIRED')
 
 def authority_hashes(account):
     """Hash actual authority internally; checkpoint/cache metadata is derived."""
@@ -82,33 +168,55 @@ def validate_receipt(receipt,source_manifest,archive_sha256,source_commit):
         raise ValueError('SOURCE_BOUND_V4_QUALIFICATION_REQUIRED')
     for key in ('accepted','no_git_execution','source_files_unchanged','completed_resume_export_unchanged','completed_resume_authority_unchanged','native_audit_accepted'):
         if receipt.get(key) is not True:raise ValueError('EXECUTED_V4_QUALIFICATION_REQUIRED:'+key)
-    rows=receipt.get('commands',[])
-    if not isinstance(rows,list) or [r.get('stage') for r in rows]!=['source-identity','run','audit','resume']:
-        raise ValueError('COMPLETE_V4_COMMAND_SEQUENCE_REQUIRED')
-    operating_output=None
     if receipt['actual_release_download']:
         value=receipt.get('download_receipt_sha256')
         if not isinstance(value,str) or len(value)!=64 or any(c not in '0123456789abcdef' for c in value):
             raise ValueError('ACTUAL_RELEASE_DOWNLOAD_RECEIPT_REQUIRED')
-    for row in rows:
-        if type(row.get('returncode')) is not int or row['returncode']!=0:
-            raise ValueError('SUCCESSFUL_V4_COMMAND_REQUIRED')
-        args=row.get('command',[])
-        expected=['-c',PROBE] if row['stage']=='source-identity' else ['-m','mechanism_harness.cart_native',row['stage'],'--arm','adaptive','--stress','central','--output']
-        size=1+len(expected)+(row['stage']!='source-identity')
-        if not isinstance(args,list) or len(args)!=size or args[1:1+len(expected)]!=expected:
-            raise ValueError('DECLARED_V4_COMMAND_REQUIRED')
-        if row['stage']!='source-identity':
-            target=args[-1]
-            if not isinstance(target,str) or not target or not Path(target).is_absolute():
-                raise ValueError('ABSOLUTE_V4_ENGINEERING_ACCOUNT_REQUIRED')
-            if operating_output is None:operating_output=target
-            elif target!=operating_output:raise ValueError('SAME_V4_ENGINEERING_ACCOUNT_REQUIRED')
-        for stream in ('stdout_sha256','stderr_sha256'):
-            value=row.get(stream)
-            if not isinstance(value,str) or len(value)!=64 or any(c not in '0123456789abcdef' for c in value):
-                raise ValueError('V4_COMMAND_LOG_HASH_REQUIRED')
+    validate_reach(receipt, source_manifest, checked_commands(receipt.get('commands')))
     return receipt
+
+
+def exercise_account(source, logs, operation, native, deadline, receipt, reach=False):
+    before_export = before_authority = None
+    for index, (stage, args) in enumerate(account_actions(str(operation), reach), 1):
+        log = logs / f'{index:02d}-{stage}'
+        commands = [] if reach else receipt['commands']
+        try:
+            row = run_command([sys.executable, *args], source, log, deadline, commands)
+        finally:
+            if reach and commands:
+                # Failed commands also export only the permitted fields.
+                item = commands[-1]
+                receipt['commands'].append({'stage': stage, 'command': item['command'],
+                    'returncode': item['returncode'], 'stdout_sha256': sha(log.with_suffix('.stdout')),
+                    'stderr_sha256': sha(log.with_suffix('.stderr'))})
+        if not reach:
+            row.update(stage=stage, stdout_sha256=sha(log.with_suffix('.stdout')),
+                       stderr_sha256=sha(log.with_suffix('.stderr')))
+        if stage == 'source-identity':
+            if read(log.with_suffix('.stdout')) != native:
+                raise ValueError('EXTRACTED_V4_NATIVE_IDENTITY_CHANGED')
+        elif stage == 'run':
+            before_export = (operation/'NATIVE_EXPORT.json').read_bytes()
+            before_authority = authority_hashes(operation)
+        elif stage == 'audit':
+            if read(log.with_suffix('.stdout')).get('accepted') is not True:
+                raise ValueError('PACKAGED_V4_AUDIT_REJECTED')
+            receipt['native_audit_accepted'] = True
+        elif stage == 'resume':
+            if (operation/'NATIVE_EXPORT.json').read_bytes() != before_export:
+                raise ValueError('PACKAGED_V4_RESUME_CHANGED_EXPORT')
+            if authority_hashes(operation) != before_authority:
+                raise ValueError('PACKAGED_V4_RESUME_CHANGED_AUTHORITY')
+            receipt.update(completed_resume_export_unchanged=True, completed_resume_authority_unchanged=True,
+                           native_export_sha256=hashlib.sha256(before_export).hexdigest())
+    if read(operation/'SOURCE.json') != native:
+        raise ValueError('ENGINEERING_ACCOUNT_SOURCE_CHANGED')
+    if reach:
+        contract = read(operation/'CONTRACT.json')
+        if (contract.get('arm') != 'pilot' or contract.get('scenario') != 'central'
+                or contract.get('source_sha256') != digest(native)):
+            raise ValueError('PAID_REACH_ENGINEERING_CONTRACT_CHANGED')
 
 
 def qualify(source,archive,output,source_commit,download_receipt=None):
@@ -144,26 +252,21 @@ def qualify(source,archive,output,source_commit,download_receipt=None):
         budget=command_budget(None);seconds=budget['timeout_seconds'];deadline=None if seconds is None else time.monotonic()+seconds
         receipt['runtime_budget']=budget
         operation=output/'engineering-account'
-        actions=[('source-identity',['-c',PROBE])]+[(action,['-m','mechanism_harness.cart_native',action,'--arm','adaptive','--stress','central','--output',str(operation)]) for action in ('run','audit','resume')]
-        before_export=None;before_authority=None
-        for index,(stage,args) in enumerate(actions,1):
-            log=output/(str(index).zfill(2)+'-'+stage)
-            row=run_command([sys.executable,*args],source,log,deadline,commands)
-            row.update(stage=stage,stdout_sha256=sha(log.with_suffix('.stdout')),stderr_sha256=sha(log.with_suffix('.stderr')))
-            if stage=='source-identity':
-                if read(log.with_suffix('.stdout'))!=native:raise ValueError('EXTRACTED_V4_NATIVE_IDENTITY_CHANGED')
-            elif stage=='run':
-                before_export=(operation/'NATIVE_EXPORT.json').read_bytes();before_authority=authority_hashes(operation)
-            elif stage=='audit':
-                if read(log.with_suffix('.stdout')).get('accepted') is not True:raise ValueError('PACKAGED_V4_AUDIT_REJECTED')
-                receipt['native_audit_accepted']=True
-            elif stage=='resume':
-                if (operation/'NATIVE_EXPORT.json').read_bytes()!=before_export:raise ValueError('PACKAGED_V4_RESUME_CHANGED_EXPORT')
-                if authority_hashes(operation)!=before_authority:raise ValueError('PACKAGED_V4_RESUME_CHANGED_AUTHORITY')
-                receipt.update(completed_resume_export_unchanged=True,completed_resume_authority_unchanged=True,native_export_sha256=hashlib.sha256(before_export).hexdigest())
+        exercise_account(source, output, operation, native, deadline, receipt)
+        pilot = reach_source(manifest)
+        if pilot is not None:
+            logs = output/'paid-reach'
+            logs.mkdir()
+            nested = {key: receipt[key] for key in ('source_commit', 'source_sha256', 'source_archive_sha256',
+                      'actual_release_download', 'download_receipt_sha256') if key in receipt}
+            nested.update(schema=REACH_SCHEMA, primary=False, arm='pilot', scenario='central',
+                          native_source_sha256=digest(pilot), commands=[], accepted=False)
+            receipt['paid_reach'] = nested
+            exercise_account(source, logs, logs/'engineering-account', pilot, deadline, nested, reach=True)
+            nested['accepted'] = True
         if verify_source(source,archive)!=manifest:raise ValueError('PACKAGED_V4_SOURCE_CHANGED')
         report=read(operation/'REPORT.json')
-        if report['source']!=native or read(operation/'SOURCE.json')!=native:raise ValueError('ENGINEERING_ACCOUNT_SOURCE_CHANGED')
+        if report['source']!=native:raise ValueError('ENGINEERING_ACCOUNT_SOURCE_CHANGED')
         receipt.update(accepted=True,source_files_unchanged=True,opportunities=report['opportunities'],settled_buyers=report['settled_buyers'],declined_buyers=report['declined_buyers'],actual_revenue_usd=0)
         validate_receipt(receipt,manifest,sha(archive),source_commit)
     except BaseException as exc:

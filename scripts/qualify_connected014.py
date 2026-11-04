@@ -122,6 +122,11 @@ def qualify(output,smoke,timeout_seconds=None):
             if any(manifest['files'].get(name)!=value for name,value in omega_source.items()):
                 raise ValueError('OMEGA_V4_NATIVE_SOURCE_CLOSURE_CHANGED')
             manifest['omega_v4_native_source']=omega_source
+        if 'mechanism_harness/reach_native.py' in files:
+            from mechanism_harness.reach_native import source_identity as reach_identity
+            from scripts.qualify_omega_release import reach_source
+            manifest['omega_reach_native_source'] = reach_identity()
+            reach_source(manifest)
         archive=output/'connected014-source.zip'
         with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as z:
             for name,raw in [*files.items(),('SOURCE_MANIFEST.json',(json.dumps(manifest,indent=2,sort_keys=True)+'\n').encode())]:

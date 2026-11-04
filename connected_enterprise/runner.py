@@ -44,6 +44,16 @@ OMEGA_V4_RELEASE_PATHS = (
     'tests/test_omega_cooperative.py', '.github/workflows/omega-economy-v4.yml',
 )
 
+REACH_NATIVE_PATHS = (
+    'mechanism_harness/reach_native.py', 'mechanism_harness/reach_policy.py',
+    'mechanism_harness/reach_verify.py', 'campaign/omega-paid-reach-20261104/PROTOCOL.md',
+    'connected_enterprise/channels.py', 'tests/test_omega_reach_native.py',
+    'tests/test_omega_reach_policy.py', 'tests/test_omega_reach_verify.py',
+)
+REACH_RELEASE_PATHS = (*REACH_NATIVE_PATHS, 'tests/test_connected_reach_release.py',
+                       'scripts/summarize_omega_reach.py', 'campaign/omega-paid-reach-20261104/README.md')
+REACH_MARKERS = set(REACH_RELEASE_PATHS) - {'connected_enterprise/channels.py'}
+
 def source_paths(root):
     names=set(inherited_paths(root))
     for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('campaign/connected-registrations','*.json')]:
@@ -231,6 +241,10 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in OMEGA_V4_RELEASE_PATHS):
             raise ValueError('OMEGA_V4_SOURCE_DEPENDENCY_MISSING')
         names.update(OMEGA_V4_RELEASE_PATHS)
+    if any((root/name).exists() for name in REACH_MARKERS):
+        if any(not (root/name).is_file() for name in (*OMEGA_V4_RELEASE_PATHS, *REACH_RELEASE_PATHS)):
+            raise ValueError('PAID_REACH_SOURCE_DEPENDENCY_MISSING')
+        names.update(REACH_RELEASE_PATHS)
     return sorted(name for name in names if (root/name).is_file())
 
 def identity(root):
