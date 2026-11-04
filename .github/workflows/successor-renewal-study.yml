@@ -1,0 +1,57 @@
+name: SUCCESSOR measured renewal
+on:
+  push:
+    branches: [paper/successor-omega-measured-renewal-20261103]
+    paths: ['docs/successor-omega/renewal/**', '.github/workflows/successor-renewal-study.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: successor-renewal-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: docs/successor-omega/renewal
+      - name: Fetch pinned public numerical benchmarks
+        run: |
+          mkdir -p "$RUNNER_TEMP/renewal/data"
+          python3 - <<'PY'
+          import hashlib,json,os,urllib.request
+          from pathlib import Path
+          out=Path(os.environ['RUNNER_TEMP'])/'renewal'/'data'
+          sha='1a828c7af590714499284e36ee9c81273388c594'
+          manifest={}
+          for name in ('case89pegase','case1354pegase','case2869pegase'):
+              url=f'https://raw.githubusercontent.com/MATPOWER/matpower/{sha}/data/{name}.m'
+              with urllib.request.urlopen(url,timeout=60) as response: data=response.read(2000000)
+              assert len(data)<2000000 and b'fictitious' in data[:6000]
+              assert b'Attribution 4.0' in data[:6000]
+              (out/(name+'.m')).write_bytes(data)
+              manifest[name]={'url':url,'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'upstream_commit':sha,'license':'CC-BY-4.0; see source header','data_status':'Public fictitious engineering benchmark; not observed grid data'}
+          (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          PY
+      - name: Execute registered study when implementation is present
+        run: |
+          cp docs/successor-omega/renewal/PROTOCOL.md "$RUNNER_TEMP/renewal/PROTOCOL.md"
+          if [ -f docs/successor-omega/renewal/run.py ]; then
+            python3 -m pip install 'numpy==2.3.5' 'scipy==1.17.0' 'threadpoolctl==3.6.0'
+            cp docs/successor-omega/renewal/*.py "$RUNNER_TEMP/renewal/"
+            cd "$RUNNER_TEMP/renewal"
+            OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python3 -m unittest discover -p 'test_*.py' -v
+            OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python3 run.py --data data --output measured.json
+          fi
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: successor-renewal-${{ github.run_id }}
+          path: ${{ runner.temp }}/renewal/
+          retention-days: 3
+          if-no-files-found: error
