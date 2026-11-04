@@ -1,0 +1,29 @@
+name: Governance092 explicit inventory and requirement migration review
+on:
+  pull_request:
+    paths:
+      - 'campaign/governance092/**'
+      - 'research/governance090/impact.py'
+      - 'tests/test_governance092.py'
+      - '.github/workflows/governance092.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fixed-graph-migration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Execute fixed M1-M8 without network, secrets, paid APIs or financial accounts
+        run: python -m unittest discover -s tests -p 'test_governance092.py' -v
+      - name: Preserve Governance090 and Governance091 source-fixed regressions
+        run: |
+          python -m unittest discover -s tests -p 'test_governance090.py' -v
+          python -m unittest discover -s tests -p 'test_governance091.py' -v
