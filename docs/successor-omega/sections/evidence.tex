@@ -1,0 +1,73 @@
+\section{Preserve the knowledge; renew the warrant}
+\label{sec:evidence}
+Let a qualification context be
+\begin{equation}
+ c=(m,s,v,e,q,p),
+\end{equation}
+where the entries identify the mission, source material, supplier configuration, environment, evaluator, and policy. A practical implementation must bind the complete executable dependency closure: prompts, adapters, libraries, tool versions, retrieval state, and relevant configuration, not only a short model name. The six strings in our local witness stand for that closure; they do not discover it.
+
+A current evidence record binds a context digest, supported actions, validity interval, test protocol, and outcome. An authority record additionally binds an owner decision, an allowed action set, and its own validity interval. A historical record says what was established under its original conditions. It is not rewritten when current qualification expires.
+
+\begin{definition}[Succession without privilege inheritance]
+A restoration or successor initialization may import authorized knowledge, executable artifacts, and historical records. It initializes current evidence and active authority to empty. New operation requires an accepted context-bound qualification and a separate explicit grant.
+\end{definition}
+
+This conservative default does not prohibit efficient reuse. A validated generic check may remain applicable when its artifact, dependencies, checker, and environmental assumptions are unchanged. Current mission inputs, outputs, and material acceptance requirements still require current checks. A justified equivalence relation can reduce redundant work; a cache key alone cannot establish semantic equivalence.
+
+\begin{proposition}[Context-bound action invariant]
+\label{prop:authority}
+Suppose every external action is mediated by a monitor that requires both a passing evidence record and an unexpired explicit grant, binds both to the current context, restricts the grant to the supported evidence scope, and clears the grant whenever qualification is replaced or revoked. If initialization and restoration create neither record, every permitted action is supported and authorized in its current recorded context and interval.
+\end{proposition}
+
+\begin{proof}
+Initialization permits no action. Qualification alone creates no grant. A valid authorization transition creates only a subset of the supported actions, in the same context and within the evidence interval. The action check requires those predicates at the time of use. Replacement clears the grant; a context change fails the identity check; expiry or revocation fails the temporal or grant check. Induction over the permitted transitions establishes the invariant. This is a property of the specified monitor, not a proof that its evidence is truthful or that an implementation cannot be bypassed.
+\end{proof}
+
+\subsection{The assurance system is itself fallible}
+A hash establishes byte identity under its cryptographic assumptions; it does not establish that the bytes describe the right physical object. Distinct role names do not establish independent organizations, independent model errors, or uncompromised storage. A source can be consistently wrong. A test population can omit the failure that matters. An honest verifier can have an incomplete specification.
+
+The production design therefore needs threat modeling, complete mediation, authenticated owner decisions, isolation of protected evaluations, dependency integrity, recovery tests, and independent validation of evidence semantics. These requirements belong in implementation qualification. The NIST AI Risk Management Framework provides a relevant governance and lifecycle precedent, without turning our local prototype into certified compliance \citep{nistRMF}.
+
+The same discipline applies to the Gym. Builder-generated tests can improve development. They cannot become the final judge merely because they favor the builder. Exposed confirmation cases become development material, not a fresh test set for the next renamed candidate. Repeated attempts consume a declared programme-wide error allocation when statistical claims are made.
+
+\subsection{Three records, three different questions}
+A useful implementation keeps a knowledge record, an evidence record, and an authority record conceptually separate. The first answers what the institution can legitimately reuse. The second answers what has been established for this context. The third answers what the owner has actually permitted. A fourth, financial record determines whether the action can be funded without consuming protected obligations.
+
+None is a substitute for another. Scientific correctness cannot create a customer contract. A customer contract cannot establish physical performance. A large balance cannot grant access. A successful delivery cannot retroactively erase an invalid experiment. Institutional continuity consists partly of retaining these distinctions when components and personnel change.
+
+\section{Renewal-adjusted Alpha}
+\label{sec:alpha}
+Let $\pi$ be a complete construction and operating policy over horizon $H$. Let $Y_t$ be accepted outcomes and $C_t$ the costs and losses actually incurred or explicitly modeled at time $t$. For a declared mission utility $U$ and discount factors $d_t$, define
+\begin{equation}
+ J_H(\pi)=\E\!\left[\sum_{t=0}^{H-1}d_t\{U(Y_t)-C_t\}-d_H O_H\right],
+\end{equation}
+where $O_H$ is the remaining terminal obligation under a stated valuation convention. Monetary costs and nonmonetary utility must be converted only through an explicit owner-approved decision model, or retained as separate constrained objectives.
+
+For a frozen family $\mathcal B$ of credible complete alternatives,
+\begin{equation}
+ \alpha_H(\pi)=J_H(\pi)-\sup_{b\in\mathcal B}J_H(b).
+ \label{eq:alpha}
+\end{equation}
+We call this \emph{renewal-adjusted Alpha} when the policies and their costs explicitly include replacement, migration, requalification, downtime, maintenance, and retirement, as well as initial development and operation. The expression is a decision criterion. An estimate of it is not established advantage, and a maximum over a finite supplied family is not a global economic optimum.
+
+\subsection{Renewal can reverse a local ranking}
+Suppose one specialist produces greater contribution on each active period but must be reconstructed whenever its supplier changes. A portable capability produces slightly less contribution but can be requalified at lower cost. A one-period comparison favors the specialist. A complete horizon may favor the portable capability. The decisive object is the supported productive trajectory, not the component's isolated score.
+
+Conversely, portability can be wasteful. Its setup cost may never be recovered. The environment may not change. Retained assets may demand expensive maintenance. A new supplier may be incompatible with the supposed abstraction. An ordinary direct method may dominate. The institution should discover when to build continuity and when not to pay for it.
+
+\subsection{Cash is a constraint, not a synonym for profit}
+Let $B_t$ be cash before a period, $u_t$ its upfront payment, $r_t$ a receipt collected only after accepted delivery, and $\rho_t$ a protected reserve. In the finite study,
+\begin{equation}
+ B_t-u_t\geq\rho_t,\qquad B_{t+1}=B_t-u_t+r_t.
+ \label{eq:cash}
+\end{equation}
+The first inequality is checked before collection. The second cannot make an unaffordable action valid retroactively. A positive horizon surplus does not establish that the policy can be started.
+
+The study reports \emph{net cash surplus}, not accounting profit. There is no debt, equity issuance, receivable, tax model, salvage value, or noncash asset valuation. All cash flows are supplied by the fixture. Actual enterprise reporting must additionally reconcile accrual profit, liabilities, taxes, capital expenditures, and unrestricted cash without double-counting them. Agent development consumes actual resources; the absence of a human employee is not the absence of cost. Human labor is charged when it occurs, not inserted as a universal requirement.
+
+\subsection{Value capture is a separate construction problem}
+An owner needs both a useful capability and a voluntary route to receiving enough value to sustain it. Buyers can decline, use another provider, or perform the work themselves. Suppliers can change terms. Competitors can imitate. Owning a portable institution may reduce switching exposure, but its commercial benefit must survive real prices and actual behavior.
+
+The appropriate contract might sell accepted outcomes, continuity of a bounded business function, a qualified instrument, or a separately priced renewal service. These are hypotheses, not measured demand. Customer data and methods do not become the provider's transferable property merely because they could improve another institution. A federation of institutions should exchange only permitted artifacts and evidence, with independent grants on each side.
+
+The durable advantage we seek is the ability to keep constructing worthwhile capabilities, not a permanent monopoly margin. The previous FLYWHEEL $\Omega$ counterexample already shows why pricing claims must follow the choices participants can actually compose \citep{boucherFlywheel}. Institutional ownership adds another strategic choice: the ability to leave a supplier without abandoning the mission.

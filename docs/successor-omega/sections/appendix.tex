@@ -1,0 +1,117 @@
+\clearpage
+\appendix
+\section{Formal details and boundary conditions}
+\label{app:formal}
+\subsection{Finite optimization}
+For state $s_t=(t,B_t,o_t,e_{P,t},e_{F,t})$, let $\mathcal A(s_t)$ be the legal supplied actions satisfying the pre-collection reserve. Each action has deterministic cost $u(s_t,a)$, collection $r(s_t,a)$, and successor state $T(s_t,a)$. The primary recursion is
+\begin{equation}
+ V_H(s_H)=B_H,\qquad V_t(s_t)=\max_{a\in\mathcal A(s_t)}V_{t+1}(T(s_t,a)).
+\end{equation}
+The implementation breaks equal terminal-cash outcomes by lexicographic action-sequence order. That affects the selected trace, not the optimal cash value. Idle is feasible when no portable asset is retained. When upkeep is unaffordable, retirement remains feasible and consumes the period. Thus an admitted state always has a continuation.
+
+\begin{proposition}[Exactness within the declared action set]
+For the finite deterministic model, backward induction returns the maximum terminal cash over all reserve-respecting action sequences. Independent forward enumeration returns the same maximum when it uses the same transition specification.
+\end{proposition}
+\begin{proof}
+At the terminal layer the value equals cash by definition. If continuation values at $t+1$ are exact, maximizing over every legal first action at $t$ examines every feasible sequence partitioned by that action. Induction proves the first statement. Forward enumeration starts from the admitted state and adds every legal successor at each period; induction identifies its layer with exactly the reachable state set. Taking maximum cash at the final layer proves the second. Agreement between implementations is a useful defect check, not evidence that the supplied model describes a market.
+\end{proof}
+
+\begin{corollary}[Option inclusion]
+If $\mathcal A_0$ is a subset of $\mathcal A_1$ at every state and all common action effects, endowments, and constraints agree, the optimum under $\mathcal A_1$ cannot be lower.
+\end{corollary}
+\begin{proof}
+Every feasible $\mathcal A_0$ action sequence is also feasible under $\mathcal A_1$. Maximization over the larger set contains the original maximum.
+\end{proof}
+This explains the absence of negative full-option differences. It does not protect the always-retain policy, which removes choices and pays costs even when they are not justified. Nor does it justify treating a preconstructed portability layer as free in a comparison of discovery systems.
+
+\subsection{The renewal crossover}
+If every epoch contains one construction or renewal period and $L-1$ active periods, F earns $(L-1)g_F-D$ per epoch. P earns $n(L-1)g_P$, pays its initial construction $B$, pays $n-1$ renewals, and pays $nL$ periods of upkeep. Subtraction gives Equation~\ref{eq:crossover}.
+
+When $\Delta=(L-1)(g_P-g_F)+D-R-Lm>0$ and $B>R$, P strictly wins those fixed sequences when
+\begin{equation}
+ n>\frac{B-R}{\Delta}.
+\end{equation}
+The first strictly winning integer is $\lfloor(B-R)/\Delta\rfloor+1$. If $\Delta\leq0$, additional epochs do not create the same amortization advantage. Other signs of $B-R$ must be evaluated directly from the inequality, rather than forcing this positive-threshold interpretation.
+
+Let $D_P^{\mathrm{extra}}$ and $D_F^{\mathrm{extra}}$ be additional total lifecycle burdens omitted from the toy contracts. Under a compatible monetary accounting convention, the nominal 30-unit difference survives only if $D_P^{\mathrm{extra}}-D_F^{\mathrm{extra}}<30$. Liquidity can fail even before that surplus threshold: the timing of an additional burden matters as well as its total. This sensitivity statement does not estimate those burdens.
+
+\subsection{Prefix financing}
+For an ordered cash sequence with constant reserve $\rho$, define the cumulative pre-collection deficit through action $j$ as
+\begin{equation}
+ D_j=\sum_{i=0}^{j}u_i-\sum_{i=0}^{j-1}r_i.
+\end{equation}
+The sequence is feasible exactly when its initial cash satisfies
+\begin{equation}
+ B_0\geq\rho+\max(0,\max_j D_j).
+ \label{eq:prefund}
+\end{equation}
+\begin{proof}
+Immediately before receipt $r_j$, cash equals $B_0-D_j$. Requiring this quantity to be at least $\rho$ for every $j$ is equivalent to the bound. The extra zero ensures the initial reserve itself is funded.
+\end{proof}
+For the nominal immediate P construction, the first payment is 61 including upkeep. Opening cash must therefore be at least 81 before this fixed route can begin. A different policy may first earn legacy receipts, delay construction, or choose F. Equation~\ref{eq:prefund} is a route-specific condition, not a universal minimum capital for the mission.
+
+\subsection{Renewal-throughput bound}
+Let certificates issued within $[0,T]$ each contribute at most $\tau$ authorized unit-time, and let at most $vT$ certificates be issued. Initial residual coverage is at most $B_0$. The union of covered productive unit-time cannot exceed the sum of these coverage budgets, yielding Equation~\ref{eq:renewal}. Overlap only makes the bound looser. Dividing by $T$ and taking a long horizon gives average active units at most $\tau v$ if $B_0/T\to0$.
+
+A certificate covering a fleet is not a unit-certificate under this assumption. A validated fleet-level qualification changes the model and may improve the bound; an unsupported fleet-level assertion does not. Hardware construction throughput, material availability, and repair constraints can impose additional tighter bounds.
+
+\section{The numerical record}
+\label{app:record}
+\subsection{Complete nominal route}
+\begin{center}
+\small
+\begin{tabular}{@{}rrrrrr@{}}
+\toprule
+Period & Action & Opening & Paid & Collected & Closing\\
+\midrule
+\input{trace_rows.tex}
+\bottomrule
+\end{tabular}
+\end{center}
+The trace above is generated from the companion rather than copied from a plotted image. The publication build checks the terminal balance, collections, outflows, reserve, grid counts, and physical arithmetic before typesetting.
+
+\subsection{Protocol history and stopping rule}
+The finite economic protocol fixed the primary fixture, comparator permissions, 162-case grid, and qualitative adverse cases before numerical evaluation in this authoring session. It was an internal prospective record, not a timestamped independent preregistration. The one-epoch and 40-unit opening-cash diagnostic traces were added as explanatory checks; the latter setting is already in the frozen grid. No selection claim is made from those additions. A planned additional-burden check is reported algebraically in Appendix~\ref{app:formal}, rather than represented as a separately executed market experiment.
+
+The stopping rule is completion of the registered grid, diagnostics, and regression suite. There is no search for a favorable random seed, no independent sample of businesses, and no confidence interval over an invented population. The final source is bound to its generated results and rerun during publication qualification. Source changes are visible in normal version control; the favourable nominal case is not relabeled as universal performance.
+
+\subsection{Cost scope and interpretation}
+The finite model includes exactly the listed payments, deterministic accepted collections, upkeep, and one-period construction and renewal delays. It excludes real customer acquisition, actual model-provider invoices, uncertainty in demand and qualification, tax and liability accounting, physical deployment, and the cost of creating this paper. Those exclusions are not estimates of zero. They prevent the experiment's cash surplus from being described as demonstrated complete-cost commercial profit.
+
+The nominal initial 100 units are a fixture, not a mandatory dollar capitalization for AGI ALPHA. The programme can compare different initial financing, staged construction, cooperation, and non-entry, subject to actual authority and voluntary participation. The separate US\$3 billion trailing-365-day complete-cost profit objective is not achieved by this paper. Multiplying abstract units by a currency scale would not achieve it either.
+
+\section{A claim ledger for the complete programme}
+\label{app:claims}
+\begin{longtable}{@{}p{.20\textwidth}p{.34\textwidth}p{.38\textwidth}@{}}
+\toprule
+Claim & Evidence in this edition & What it does not establish\\
+\midrule
+\endhead
+Lifecycle reversal & Exact nominal policies, cash traces, and crossover identity. & Measured demand, actual prices, or autonomous invention.\\[5pt]
+Finite optimality & Backward solver and independent forward enumeration agree on 324 grid comparisons. & Global optimality over unspecified strategies or markets.\\[5pt]
+Optional retention & 19 positive differences and 143 ties; forced retention often loses or cannot start. & A frequency estimate for real-world portability benefits.\\[5pt]
+Scoped action logic & Local tests of context, grant scope, expiry, revocation, and clean restoration. & Secure complete mediation, authentic identities, truthful evidence, or production certification.\\[5pt]
+Institutional ownership & Export/restore semantics and proposed acceptance contract. & Legal rights to third-party assets or a deployed customer product.\\[5pt]
+Inventive succession & Fresh-successor and crossed-policy experimental designs. & Demonstrated improvement of a discovery procedure.\\[5pt]
+Commercial compounding & Explicit collection, obligations, and reinvestment requirements. & Actual customer profit or the programme's monetary milestone.\\[5pt]
+Physical expansion & Conversion-contract framework, complementary-flow bounds, dimensional calculations. & A tested collector, radiator, factory, or industrial growth forecast.\\[5pt]
+Stellar-scale capability & A long-horizon research objective with physical quantities exposed. & An achieved civilization level, an investment return, or a timetable.\\
+\bottomrule
+\end{longtable}
+
+\section{Reproduce, inspect, extend}
+\label{app:reproduce}
+The companion requires Python 3.10 or later and the standard library. From the source directory:
+\begin{verbatim}
+python3 -m unittest -v test_companion
+python3 companion.py --output results.json
+python3 build.py --output /tmp/successor-publication
+\end{verbatim}
+The last command also needs a PDFLaTeX/BibTeX installation with the packages named in \texttt{paper.tex}, Poppler, and CairoSVG for the share image. It generates the cash data and trace table, compiles the paper, records tool versions and file hashes, and packages a deterministic source archive. The build uses a fixed source-date epoch and suppresses variable PDF metadata. Byte identity is checked in the recorded build environment; equivalent output across arbitrary TeX versions is not assumed.
+
+The archive contains the manuscript, bibliography, public reader template, original vector share artwork, exact model, tests, protocol, and build tooling. It contains no private conversation documents, customer data, credentials, or copied model weights. The versioned GitHub edition provides the released PDF, source ZIP, and checksums. A source/PDF manifest binds the artifact to the source files that generated it.
+
+To extend the study, create a new declared protocol rather than silently changing this edition's assumptions. Useful next variations include uncertain replacement time, qualification failure, delayed collection, multiple complementary capabilities, finite maintenance capacity, and actual measured migration costs. Any comparison claiming improved discovery must give conventional alternatives the same information and construction permissions.
+
+\subsection*{Authorship and research assistance}
+Vincent Boucher specifies the research direction and is the named author of this edition. AI-assisted synthesis, mathematical drafting, implementation, and publication tooling were used in its preparation. The finite model and its constants are authored inputs. Independent implementation of the reachability check is an algorithmic cross-check within this publication workflow, not independent external peer review or physical validation.

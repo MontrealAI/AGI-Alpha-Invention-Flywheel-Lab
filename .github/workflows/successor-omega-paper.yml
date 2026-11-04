@@ -1,0 +1,108 @@
+name: SUCCESSOR OMEGA publication
+on:
+  push:
+    branches: [main, paper/successor-omega-institution-20261103]
+    paths: ['docs/successor-omega/**', 'docs/research/successor-omega*', '.github/workflows/successor-omega-paper.yml']
+  pull_request:
+    paths: ['docs/successor-omega/**', 'docs/research/successor-omega*', '.github/workflows/successor-omega-paper.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: successor-omega-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            docs/successor-omega
+            docs/research
+            scripts/build_research_site.py
+            tests/test_research_site.py
+            tests/test_alpha_site.cjs
+          sparse-checkout-cone-mode: false
+      - name: Install standard publication toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended poppler-utils python3-cairosvg
+      - name: Build exact study and bound PDF
+        env:
+          PUBLICATION_BRANCH: ${{ github.ref }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = push ] && [ "$PUBLICATION_BRANCH" = refs/heads/paper/successor-omega-institution-20261103 ]; then
+            /usr/bin/python3 docs/successor-omega/build.py --output "$RUNNER_TEMP/successor-publication" --publish-site
+          else
+            /usr/bin/python3 docs/successor-omega/build.py --output "$RUNNER_TEMP/successor-publication"
+            cmp docs/research/successor-omega.pdf "$RUNNER_TEMP/successor-publication/SUCCESSOR_OMEGA.pdf"
+            cmp docs/successor-omega/evidence/SOURCE_PDF_BINDING.json "$RUNNER_TEMP/successor-publication/SOURCE_PDF_BINDING.json"
+          fi
+      - name: Validate all earlier papers and additive discovery links
+        run: |
+          python3 -m unittest discover -s tests -p test_research_site.py -v
+          node --test tests/test_alpha_site.cjs
+          python3 scripts/build_research_site.py --output "$RUNNER_TEMP/successor-site"
+      - name: Rebuild extracted source archive and compare exact bytes
+        run: |
+          mkdir "$RUNNER_TEMP/successor-extracted"
+          unzip -q "$RUNNER_TEMP/successor-publication/SUCCESSOR_OMEGA_SOURCE.zip" -d "$RUNNER_TEMP/successor-extracted"
+          /usr/bin/python3 "$RUNNER_TEMP/successor-extracted/build.py" --output "$RUNNER_TEMP/successor-rebuilt"
+          cmp "$RUNNER_TEMP/successor-publication/SUCCESSOR_OMEGA.pdf" "$RUNNER_TEMP/successor-rebuilt/SUCCESSOR_OMEGA.pdf"
+          cmp "$RUNNER_TEMP/successor-publication/SUCCESSOR_OMEGA_SOURCE.zip" "$RUNNER_TEMP/successor-rebuilt/SUCCESSOR_OMEGA_SOURCE.zip"
+      - name: Commit generated publication bytes only to the authoring branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/paper/successor-omega-institution-20261103'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          current="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/paper/successor-omega-institution-20261103" --jq .object.sha)"
+          [ "$current" = "$GITHUB_SHA" ] || { echo 'Authoring head changed; refusing stale publication write'; exit 1; }
+          git add docs/successor-omega/evidence docs/research/successor-omega.pdf docs/research/successor-omega.html docs/research/successor-omega-card.svg docs/research/successor-omega-social.png docs/research/index.html docs/research/README.md docs/research/publication-manifest.json scripts/build_research_site.py tests/test_research_site.py
+          if ! git diff --cached --quiet; then
+            git config user.name 'MONTREAL.AI publication build'
+            git config user.email '24208299+MontrealAI@users.noreply.github.com'
+            git commit -m 'Bind SUCCESSOR OMEGA source, PDF and additive research reader'
+            basic="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+            echo "::add-mask::$basic"
+            git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $basic" push origin HEAD:paper/successor-omega-institution-20261103
+          fi
+      - name: Publish or verify immutable edition
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag=successor-omega-v1.0.0
+          assets="$RUNNER_TEMP/successor-publication"
+          (cd "$assets" && sha256sum --check SHA256SUMS)
+          if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" > "$RUNNER_TEMP/successor-existing.json" 2> "$RUNNER_TEMP/successor-existing.err"; then
+            echo 'Existing immutable edition: verify without replacement.'
+          else
+            grep -q 'HTTP 404' "$RUNNER_TEMP/successor-existing.err" || { cat "$RUNNER_TEMP/successor-existing.err"; exit 1; }
+            if gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$tag" > /dev/null 2> "$RUNNER_TEMP/successor-tag.err"; then
+              [ "$(gh api "repos/$GITHUB_REPOSITORY/commits/$tag" --jq .sha)" = "$GITHUB_SHA" ] || exit 1
+            else
+              grep -q 'HTTP 404' "$RUNNER_TEMP/successor-tag.err" || exit 1
+              gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" -f "ref=refs/tags/$tag" -f "sha=$GITHUB_SHA"
+            fi
+            gh release create "$tag" "$assets/SUCCESSOR_OMEGA.pdf" "$assets/SUCCESSOR_OMEGA_SOURCE.zip" "$assets/SOURCE_PDF_BINDING.json" "$assets/SHA256SUMS" --repo "$GITHUB_REPOSITORY" --verify-tag --latest=false --title 'SUCCESSOR Ω — The Institution That Compounds' --notes 'Research edition 1.0.0 by Vincent Boucher. Renewal-adjusted Alpha, context-bound succession, an exact 162-case authored study, 35 local tests, and an explicit physical-expansion programme. Ordinary equal-content construction ties the numerical result. Not a claim of achieved ASI, real customer profit or installed physical capacity. Source/PDF binding and reproducible source archive included.'
+          fi
+          mkdir "$RUNNER_TEMP/successor-downloaded"
+          gh release download "$tag" --repo "$GITHUB_REPOSITORY" --dir "$RUNNER_TEMP/successor-downloaded"
+          for f in SUCCESSOR_OMEGA.pdf SUCCESSOR_OMEGA_SOURCE.zip SOURCE_PDF_BINDING.json SHA256SUMS; do cmp "$assets/$f" "$RUNNER_TEMP/successor-downloaded/$f"; done
+          (cd "$RUNNER_TEMP/successor-downloaded" && sha256sum --check SHA256SUMS)
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: successor-omega-publication-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/successor-publication/
+          if-no-files-found: error
+          retention-days: 7
