@@ -166,6 +166,14 @@ def operate(output, *, max_steps=None, fault=None):
                 _save(checkpoint, account.seal_checkpoint(state))
             if state['binding'] != reg['binding']:
                 raise ValueError('OPERATING_STATE_BINDING_CHANGED')
+            if state['active'] is not None:
+                # Authenticated checkpoint alone cannot certify chronology.
+                # Verify genuine native history and refuse *before* a resumed
+                # prepare/release/refund/finish makes another financial action.
+                account.audit()
+                verified_export = account.export()
+                _check_active_registered_selection(state, p, manifest, verified_export)
+                _check_active_production_phase(state, p, manifest, verified_export)
             steps = 0
             while state['phase'] != 'complete' and (max_steps is None or steps < max_steps):
                 if (output / 'STOP').exists():
@@ -339,16 +347,12 @@ def _audit_native_offer(p, ident, i, selected, actions, *, ordered):
     offers = [a for a in actions if a['op'] == 'offer' and a['args']['id'] == order]
     terms = [a for a in actions if a['op'] == 'register_terms' and a['args']['id'] == order + '-terms']
     wallets = [a for a in actions if a['op'] == 'wallet' and a['args']['buyer'] == 'buyer-' + order]
-    if not ordered or selected is None:
+    if selected is None:
         if offers or terms or wallets:
             raise ValueError('REGISTERED_NATIVE_OFFER_CHANGED')
         return
     expected_offer = {'id': order, 'buyer': 'buyer-' + order, 'price': selected['price'],
                       'job_id': ident, 'deadline': hour + 3, 'terms_id': order + '-terms'}
-    if (len(offers) != 1 or offers[0]['day'] != hour or offers[0]['args'] != expected_offer
-            or len(wallets) != 1 or wallets[0]['day'] != hour
-            or wallets[0]['args'] != {'buyer': 'buyer-' + order, 'amount': p['offer']['budget']}):
-        raise ValueError('REGISTERED_NATIVE_OFFER_CHANGED')
     # Deliberately spell out the registered contract independently of the
     # prospective_terms producer. Native-valid terms alone do not establish
     # that the buyer received the selected GENESIS arrangement.
@@ -368,9 +372,147 @@ def _audit_native_offer(p, ident, i, selected, actions, *, ordered):
         'jurisdiction': 'Authored synthetic jurisdiction; no legal finality established',
         'legal_status': 'HYPOTHETICAL_SIMULATION_NO_ENFORCEABILITY_OR_PROVIDER_GUARANTEE',
         'accounting_policy': 'INCURRED_COST_COLLECTED_RECOVERY_MATURITY_NOT_INCOME_V1'}
+    if not ordered:
+        # A signed checkpoint can precede an interrupted begin_order native
+        # prefix. Native replay authenticates each event, but the independently
+        # registered wallet, terms, offer and consent must still match *before*
+        # any resumed writer advances. Accept only a contiguous original
+        # prefix, including the empty or fully committed prefix. This preserves
+        # buyer custody while the original idempotent journal replays the rest.
+        expected_prefix = [
+            ('wallet', {'buyer': 'buyer-' + order, 'amount': p['offer']['budget']}, hour),
+            ('register_terms', {'id': order + '-terms', 'terms': expected_terms}, hour),
+            ('offer', expected_offer, hour),
+            ('event', {'id': order, 'action': 'consent',
+                       'event_id': order + '-consent'}, hour),
+            ('event', {'id': order, 'action': 'fund',
+                       'event_id': order + '-fund'}, hour),
+        ]
+        matching = [a for a in actions
+                    if (a['op'] == 'wallet' and a['args'].get('buyer') == 'buyer-' + order)
+                    or (a['op'] == 'register_terms'
+                        and a['args'].get('id') == order + '-terms')
+                    or (a['op'] == 'offer' and a['args'].get('id') == order)
+                    or (a['op'] == 'event' and a['args'].get('id') == order)]
+        if (len(matching) > len(expected_prefix)
+                or [(a['op'], a['args'], a['day']) for a in matching]
+                != expected_prefix[:len(matching)]):
+            raise ValueError('REGISTERED_NATIVE_OFFER_CHANGED')
+        return
+    # Completed or already-advanced orders require *all* registered events.
+    # The empty/partial native-prefix exception applies only to a signed
+    # phase=order checkpoint, not to ordinary completed financial audit.
+    if (len(offers) != 1 or offers[0]['day'] != hour or offers[0]['args'] != expected_offer
+            or len(wallets) != 1 or wallets[0]['day'] != hour
+            or wallets[0]['args'] != {'buyer': 'buyer-' + order, 'amount': p['offer']['budget']}):
+        raise ValueError('REGISTERED_NATIVE_OFFER_CHANGED')
     if (len(terms) != 1 or terms[0]['day'] != hour
             or terms[0]['args'] != {'id': order + '-terms', 'terms': expected_terms}):
         raise ValueError('REGISTERED_NATIVE_TERMS_CHANGED')
+
+
+def _check_active_registered_selection(state, p, manifest, exported):
+    """Independently reconstruct a signed active decision before resumed writes.
+
+    Native replay authenticates what was spent, not the offer/tool policy used
+    to calculate the reported resource cost. Always derive the candidate from
+    the frozen registration and replayed *selection-time* cash snapshot.
+    """
+    active = state['active']
+    if active is None:
+        return
+    i = state['index']
+    if type(i) is not int or not 0 <= i < len(manifest['jobs']):
+        raise ValueError('REGISTERED_JOB_ORDER_CHANGED')
+    ident = manifest['jobs'][i]['id']
+    if active['job_id'] != ident:
+        raise ValueError('REGISTERED_JOB_ORDER_CHANGED')
+    actions = exported['ledger']['actions']
+    hour = 24 * (i + 1)
+    overhead = [a for a in actions if a['op'] == 'cost' and
+                a['args']['id'] in {'genesis-acquisition-' + ident,
+                                    'genesis-maintenance-' + ident}]
+    if overhead:
+        observed = overhead[-1]['after']
+    else:
+        prior = [a for a in actions if a['day'] < hour or
+                 (a['day'] == hour and a['op'] == 'mature')]
+        observed = prior[-1]['after'] if prior else {
+            'available': p['opening'], 'unrestrictedEarned': 0}
+    at_choice = {k: observed[k] for k in ('available', 'unrestrictedEarned')}
+    if active['decision_state'] != at_choice:
+        raise ValueError('DECISION_SNAPSHOT_CHANGED')
+    selected = choose(p['offer'], p['tools'], available=at_choice['available'],
+                      earned=at_choice['unrestrictedEarned'],
+                      seed_allowed=(i == 0 and p['first_delivery_may_use_seed']))
+    if active['decision'] != selected:
+        raise ValueError('REGISTERED_OPTIMAL_DECISION_CHANGED')
+    _audit_native_offer(p, ident, i, selected['selected'], actions,
+                        ordered=state['phase'] != 'order')
+
+
+def _check_active_production_phase(state, p, manifest, exported):
+    """Guard a signed pending writer AND independently audited public active row.
+
+    The original native journal must already have passed its independent audit.
+    An incomplete order need not have paid production yet; a prepared/released
+    order must have paid first, even if all events share one registered hour.
+    """
+    active = state.get('active')
+    if active is None:
+        return
+    i = state['index']
+    if type(i) is not int or i < 0 or i >= len(manifest['jobs']):
+        raise ValueError('ACTIVE_PRODUCTION_MUST_PRECEDE_DELIVERY')
+    ident = manifest['jobs'][i]['id']
+    order = 'g002-' + ident
+    hour = 24 * (i + 1)
+    entries = [e for e in exported['connected_journal']['entries']
+               if e['request']['operation'] == 'spend'
+               and e['request']['id'] == 'genesis-production-' + ident]
+    actions = exported['ledger']['actions']
+    events = [a for a in actions if a['op'] == 'event'
+              and a['args']['id'] == order
+              and a['args']['action'] in ('prepare', 'release')]
+    picked = active['decision']['selected']
+    invalid = ValueError('ACTIVE_PRODUCTION_MUST_PRECEDE_DELIVERY')
+    if len(entries) > 1 or (picked is None and (entries or events)):
+        raise invalid
+    spent = entries[0] if entries else None
+    receipt = spent['receipt'] if spent is not None and spent['status'] == 'COMPLETE' else None
+    row_receipt = active['resource_receipt']
+    if spent is not None and spent['request']['day'] != hour:
+        raise invalid
+    if receipt is not None:
+        if (picked is None or spent['request']['amount'] != picked['resource_cost']
+                or receipt['day'] != hour
+                or receipt['funding'] not in ('SEED', 'EARNED')
+                or (receipt['funding'] == 'SEED'
+                    and (i != 0 or not p['first_delivery_may_use_seed']))
+                or type(receipt.get('native_event_sequence')) is not int):
+            raise invalid
+    if row_receipt is not None and (receipt is None or receipt != row_receipt):
+        raise invalid
+    if events and (receipt is None or any(
+            receipt['native_event_sequence'] >= a['seq'] for a in events)):
+        raise invalid
+    if state['phase'] in ('produce', 'release'):
+        if receipt is None or row_receipt is None:
+            raise invalid
+    if state['phase'] == 'release':
+        prepares = [a for a in events if a['args']['action'] == 'prepare']
+        if (len(prepares) != 1 or prepares[0]['day'] != hour + 1
+                or active['accepted'] is not True):
+            raise invalid
+    if state['phase'] == 'finish' and picked is not None:
+        completed = [a for a in actions if a['op'] == 'event'
+                     and a['args']['id'] == order
+                     and a['args']['action'] in ('refund', 'release')]
+        expected_action = 'release' if active['accepted'] else 'refund'
+        if (len(completed) != 1
+                or completed[0]['args']['action'] != expected_action
+                or completed[0]['day'] != hour + 2):
+            raise invalid
 
 
 def audit(output):
@@ -448,7 +590,8 @@ def audit(output):
         _audit_native_offer(p, ident, i, expected['selected'], actions,
                             ordered=(i < len(execution['rows']) or execution['phase'] != 'order'))
         if i == len(execution['rows']):
-            continue  # Active delivery/settlement is not yet a completed row.
+            _check_active_production_phase(execution, p, manifest, exported)
+            continue  # No completed-row settlement/refund obligation yet.
         released = [a for a in releases if a['args']['id'] == order]
         if row['artifact_sha256'] is not None:
             from flexibility063.verify import verify

@@ -6,6 +6,7 @@ on:
       - 'connected_enterprise/genesis.py'
       - 'campaign/genesis-enterprise-002/**'
       - 'tests/test_genesis_enterprise_*.py'
+      - 'tests/test_genesis_active_*.py'
       - '.github/workflows/genesis-enterprise-002.yml'
   workflow_dispatch:
 permissions:
@@ -29,6 +30,12 @@ jobs:
         run: git rev-parse HEAD
       - name: Unit and genuine native integration tests
         run: python -m unittest discover -s tests -p 'test_genesis_enterprise_*.py' -v
+      - name: Frozen GENESIS103 active chronology, restart, and selection regressions
+        run: |
+          for case in tests/test_genesis_active_chronology103.py tests/test_genesis_active_restart103.py tests/test_genesis_active_selection103.py tests/test_genesis_active_order_recovery104.py; do
+            test -f "$case" || { echo "::error::Required frozen GENESIS103 test missing: $case"; exit 1; }
+          done
+          python -m unittest discover -s tests -p 'test_genesis_active_*.py' -v
       - name: Original GENESIS compatibility
         run: python -m unittest discover -s tests -p 'test_frontier_*001.py' -v
       - name: Complete funded pilot, idempotent resume, independent audit, key-free export
