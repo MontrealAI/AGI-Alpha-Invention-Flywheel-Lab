@@ -353,10 +353,6 @@ def _audit_native_offer(p, ident, i, selected, actions, *, ordered):
         return
     expected_offer = {'id': order, 'buyer': 'buyer-' + order, 'price': selected['price'],
                       'job_id': ident, 'deadline': hour + 3, 'terms_id': order + '-terms'}
-    if (len(offers) != 1 or offers[0]['day'] != hour or offers[0]['args'] != expected_offer
-            or len(wallets) != 1 or wallets[0]['day'] != hour
-            or wallets[0]['args'] != {'buyer': 'buyer-' + order, 'amount': p['offer']['budget']}):
-        raise ValueError('REGISTERED_NATIVE_OFFER_CHANGED')
     # Deliberately spell out the registered contract independently of the
     # prospective_terms producer. Native-valid terms alone do not establish
     # that the buyer received the selected GENESIS arrangement.
@@ -403,6 +399,13 @@ def _audit_native_offer(p, ident, i, selected, actions, *, ordered):
                 != expected_prefix[:len(matching)]):
             raise ValueError('REGISTERED_NATIVE_OFFER_CHANGED')
         return
+    # Completed or already-advanced orders require *all* registered events.
+    # The empty/partial native-prefix exception applies only to a signed
+    # phase=order checkpoint, not to ordinary completed financial audit.
+    if (len(offers) != 1 or offers[0]['day'] != hour or offers[0]['args'] != expected_offer
+            or len(wallets) != 1 or wallets[0]['day'] != hour
+            or wallets[0]['args'] != {'buyer': 'buyer-' + order, 'amount': p['offer']['budget']}):
+        raise ValueError('REGISTERED_NATIVE_OFFER_CHANGED')
     if (len(terms) != 1 or terms[0]['day'] != hour
             or terms[0]['args'] != {'id': order + '-terms', 'terms': expected_terms}):
         raise ValueError('REGISTERED_NATIVE_TERMS_CHANGED')
