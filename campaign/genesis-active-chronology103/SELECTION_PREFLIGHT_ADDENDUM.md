@@ -1,0 +1,14 @@
+# GENESIS103 — source-bound active-selection preflight addendum
+
+Separate prospective amendment after independent exact-source code review **found P1** in [PR255 thread 4477732429](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/255#discussion_r4477732429), on candidate `18feeae3ab0751fc199238bef9c18fca3f4544cb`. Earlier GENESIS103 protocol, original tests, source and actual workflow/cancellation results remain unchanged historical records. A reviewer finding is not a passing candidate.
+
+## Frozen new C10-C11 controls, before implementation
+
+- **C10 selection understatement**: On a **fresh** canonical BusinessAccount/JournalAccount, make the genuine native production spend, prepared artifact and HMAC-sealed active `release` state, but modify the *reported selection* to understate `selected.resource_cost` and actually pay only that amount. The native journal and account audit must themselves pass. Confirm the remaining recorded selection, offer and prices are not sufficient to establish registration. `native.operate(output,max_steps=1)` must reject `REGISTERED_OPTIMAL_DECISION_CHANGED` **before release** or any other financial mutation; the native action tape and signed `STATE.json` must be byte-identical before/after. The independent canonical `native.audit` must reject the registration mismatch on the public copy.
+- **C11 honest selection**: A genuine original fully source-bound signed incomplete operation resumes and completes, with original summary and idempotent final resume unchanged; earlier GENESIS103 C0-C9 and completed GENESIS101/refund GENESIS102 controls retain their original verdicts.
+
+Implementation must independently reconstruct active selection from registered `p['offer']`, `p['tools']`, the genuine replayed overhead/maturity action prefix, expected seed permission and the active reported decision snapshot—*before* trusting the claimed production cost or allowing a resumed financial action. Do not use the tampered `decision.selected` as the source of expected cost. Reuse original canonical account/journal replay and source binding; no new ledger, key export, history rewrite, manually changed signed checkpoint on any preexisting account, future-income funding, or lowering existing guards.
+
+## Stopping and evidence
+
+One prospective implementation/confirmation cycle at new source. Retain the original `18fee...` CI and P1 failure unchanged. Run genuine cases and existing native/compatibility suites under exact source, then all triggered GitHub workflow families and independent review. No protected merge to owner PR229 or main until source-matched complete pass and no unresolved independent financial finding; release/download separate. Simulation-only engineering, no observed customer demand or actual profit, US$3B T365 milestone not achieved.
