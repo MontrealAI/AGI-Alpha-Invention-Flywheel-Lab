@@ -140,18 +140,96 @@ def run(out,stress='central'):
 
 
 def audit(out):
+    """Replay from original bytes plus native journal; do not trust report flags."""
     out=Path(out).absolute()
     report=json.loads((out/'REPORT.json').read_text())
     manifest=json.loads((out/'MANIFEST.json').read_text())
     exported=json.loads((out/'NATIVE_EXPORT.json').read_text())
-    checked=audit_journal(exported,root=out/'runtime',manifest=manifest)
-    if not checked:raise ValueError('NATIVE_JOURNAL_REJECTED')
-    if report['successor_plan']:
-        assert independent.accept_power(report['successor_source'],report['successor_plan'])
-        assert independent.accept_cents(report['modeled_cash'])
-        assert report['successor_funded_from']=='EARNED' and report['first_accepted']
-        assert report['pre_offer_unrestricted_earned_microUSD'] < SUCCESSOR*CENT
-        assert report['pre_successor_unrestricted_earned_microUSD'] >= SUCCESSOR*CENT
+    runtime=out/'runtime'
+    checked=audit_journal(exported,root=runtime,manifest=manifest)
+    independent.require(checked,'NATIVE_JOURNAL_REJECTED')
+    independent.require(report['schema']=='genesis-turn001/native/v1','SCHEMA_CHANGED')
+    stress=report['scenario']
+    independent.require(stress in ('central','no_demand','failed_acceptance'),'SCENARIO_CHANGED')
+    jobs=[j for j in manifest['jobs'] if j['service_id']=='reconciliation']
+    independent.require(bool(jobs),'SOURCE_JOB_MISSING')
+    job=jobs[0]
+    raw=json.loads((runtime/job['input']).read_text())
+    independent.require(report['source_sha256']==power.digest(raw),'SOURCE_CHANGED')
+    value=5000 if stress=='no_demand' else 9000
+    buyer=(value-PRICE)>1800 and PRICE<=10000
+    independent.require(report['model_buyer_value_cents']==value
+        and report['model_buyer_budget_cents']==10000
+        and report['model_buyer_outside_utility_cents']==1800
+        and report['model_buyer_would_accept']==buyer,'FALSE_BUYER_RESPONSE')
+    expected=substrate.produce(raw,'generated_schema',mode='conventional') if buyer else None
+    if stress=='failed_acceptance':expected['outcome_scope']='intake_readiness'
+    check=audit_delivery('reconciliation',raw,expected) if expected else None
+    reference=json.loads((runtime/job['artifact']).read_text()) if expected else None
+    equiv=substrate._semantics(expected)==substrate._semantics(reference) if expected else None
+    accepted=bool(check and check['accepted'] and equiv and expected['outcome_scope']=='complete_outcome')
+    independent.require(report['first_accepted']==accepted
+        and report['checker_acceptances']==([check['accepted']] if check else [])
+        and report['first_reference_equivalent']==equiv
+        and report['first_artifact_sha256']==(power.digest(expected) if expected else None),
+        'FIRST_ARTIFACT_OR_ACCEPTANCE_CHANGED')
+    actions=exported['ledger']['actions']
+    events=[a['args']['action'] for a in actions if a['op']=='event']
+    wanted=(['consent','fund','prepare','release'] if accepted else
+            ['consent','fund','refund'] if buyer else [])
+    independent.require(events==wanted,'NATIVE_SETTLEMENT_CHANGED')
+    entries=exported['connected_journal']['entries']
+    costs={}
+    for e in entries:
+        q=e['request']
+        if q['operation']=='spend':costs[q['id']]=q['amount']//CENT
+        elif q['operation']=='execute' and q['op']=='cost':costs[q['args']['id']]=q['args']['amount']//CENT
+    planned={'turn001-setup':1200,'turn001-maintenance':400}
+    if buyer:planned.update({'turn001-production':900,'turn001-verification':500})
+    if accepted:planned.update({'turn001-payment-fee':200,'turn001-model-tax':660,'turn001-successor':1800})
+    independent.require(costs==planned,'SIMULATED_COST_JOURNAL_CHANGED')
+    summary=exported['ledger']['summary']
+    profit=(840 if accepted else -3000 if buyer else -1600)*CENT
+    independent.require(summary==report['native_summary']
+        and summary['profit']==profit
+        and summary['cash']==OPENING+profit,'NATIVE_FINANCIAL_RESULT_CHANGED')
+    pre=2640*CENT if accepted else 0
+    independent.require(report['pre_offer_unrestricted_earned_microUSD']==0
+        and report['pre_successor_unrestricted_earned_microUSD']==pre
+        and report['native_audit_passed'] is True
+        and report['actual_customer_receipts_cents']==0
+        and report['real_buyer_acceptance'] is False
+        and report['physical_safety_qualified'] is False
+        and report['real_cross_domain_discovery_advantage'] is False,
+        'REALITY_OR_FUNDING_PREFIX_CHANGED')
+    if accepted:
+        money=report['modeled_cash']
+        independent.accept_cents(money)
+        independent.require(money['price_cents']==PRICE
+            and money['pre_successor_costs_cents']==list(PRE_COSTS.values())
+            and money['tax_rate_basis_points']==TAX_BPS
+            and money['tax_cents']==660
+            and money['successor_cost_cents']==SUCCESSOR
+            and money['earned_before_successor_cents']==2640
+            and money['net_after_successor_cents']==840,
+            'MODELED_TERMS_CHANGED')
+        independent.require(report['successor_source']==power.scenario()
+            and report['successor_plan'] is not None
+            and report['successor_funded_from']=='EARNED'
+            and report['simulated_profit_after_r_and_d_cents']==840,
+            'SUCCESSOR_CLAIM_CHANGED')
+        independent.accept_power(report['successor_source'],report['successor_plan'])
+        earned=[e for e in entries if e['request']['operation']=='spend'
+                and e['request']['id']=='turn001-successor']
+        independent.require(len(earned)==1 and earned[0]['funding']=='EARNED'
+             and earned[0]['request']['allow_seed'] is False,
+             'SUCCESSOR_WAS_NOT_EARNED_FUNDED')
+    else:
+        independent.require(report['modeled_cash'] is None
+            and report['successor_source'] is None and report['successor_plan'] is None
+            and report['successor_funded_from'] is None
+            and report['simulated_profit_after_r_and_d_cents'] is None,
+            'FALSE_SUCCESSOR_OR_EARNINGS')
     return True
 
 
