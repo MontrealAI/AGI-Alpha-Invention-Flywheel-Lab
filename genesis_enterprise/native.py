@@ -474,6 +474,33 @@ def audit(output):
                 raise ValueError('SUCCESSOR_NOT_FUNDED_FROM_EARNINGS')
             if spends[0]['request']['amount'] != expected['selected']['resource_cost']:
                 raise ValueError('COMPLETE_RESOURCE_COST_CHANGED')
+            # The replay-authenticated receipt is not proof that resources
+            # were purchased *before* the completed delivery. A producer could
+            # prepare/release first, spend collected proceeds afterwards, and
+            # still obtain a perfectly valid journal and a positive funding
+            # label. Bind both the registered production hour and native
+            # sequence to preparation and collection/refund.
+            commitment = spends[0]['request']
+            spend_seq = spends[0]['receipt']['native_event_sequence']
+            production_hour = 24 * (i + 1)
+            prepares = [a for a in actions if a['op'] == 'event'
+                        and a['args']['id'] == order and a['args']['action'] == 'prepare']
+            refunds = [a for a in actions if a['op'] == 'event'
+                       and a['args']['id'] == order and a['args']['action'] == 'refund']
+            settlement = released if row['accepted'] else refunds
+            if (type(spend_seq) is not int or commitment['day'] != production_hour
+                    or row['resource_receipt']['day'] != production_hour
+                    or len(settlement) != 1
+                    or settlement[0]['day'] != production_hour + 2
+                    or spend_seq >= settlement[0]['seq']):
+                raise ValueError('REGISTERED_PRODUCTION_COMMITMENT_ORDER_CHANGED')
+            if row['accepted']:
+                if (len(prepares) != 1 or prepares[0]['day'] != production_hour + 1
+                        or not spend_seq < prepares[0]['seq'] < settlement[0]['seq']
+                        or refunds):
+                    raise ValueError('REGISTERED_PRODUCTION_COMMITMENT_ORDER_CHANGED')
+            elif prepares or released:
+                raise ValueError('REGISTERED_PRODUCTION_COMMITMENT_ORDER_CHANGED')
     complete = execution['phase'] == 'complete'
     if complete and len(execution['rows']) != len(manifest['jobs']):
         raise ValueError('INCOMPLETE_JOB_COVERAGE')
