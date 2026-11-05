@@ -382,6 +382,19 @@ def audit(output):
     result = audit_journal(exported, root=output / 'source', manifest=manifest)
     if result['accepted'] is not True:
         raise ValueError('NATIVE_AUDIT_REJECTED')
+    # A correctly replayed native ledger and connected journal may agree with
+    # one another while both originate from an unauthorized opening balance,
+    # working-capital allocation, or contract. Neither is the GENESIS
+    # registration. Check the authenticated replayed account's configuration
+    # against its immutable source-bound registration before policy conclusions.
+    registered_native = {'opening': p['opening'], 'working': 0,
+                         'contract': reg['contract']}
+    actual_native = exported['ledger'].get('config')
+    if (not isinstance(actual_native, dict)
+            or any(type(actual_native.get(key)) is not type(value)
+                   or actual_native.get(key) != value
+                   for key, value in registered_native.items())):
+        raise ValueError('REGISTERED_NATIVE_ACCOUNT_CONFIGURATION_CHANGED')
     execution = _read(output / 'public/execution.json')
     tape = exported['ledger']; actions = tape['actions']; summary = tape['summary']
     if execution['binding'] != reg['binding'] or execution['index'] != len(execution['rows']):
