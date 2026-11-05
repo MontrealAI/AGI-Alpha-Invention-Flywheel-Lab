@@ -1,0 +1,126 @@
+{
+  "dimension_diagnosis": [
+    {
+      "accepted": true,
+      "count_model": {
+        "candidate_complete_proxy_units": 46224,
+        "cases": 8,
+        "common_inspection_scalar_ops": 6272,
+        "definition": "integer scalar-work proxy; rational and float operations are not equivalent hardware costs",
+        "dimensions": 16,
+        "direct_complete_proxy_units": 38032,
+        "direct_float_ops": 24768,
+        "execution_guard_scalar_ops": 0,
+        "production_float_ops": 24768,
+        "production_verify_rational_ops": 6992,
+        "qualification_float_ops": 155840,
+        "qualification_note": "separate direct reference solves and SVD condition diagnostics; SVD is a leading-order proxy",
+        "saved_proxy_units": -8192,
+        "selection_extra_scalar_ops": 8192,
+        "serialization_bytes": 65010
+      },
+      "method": "direct",
+      "n": 16
+    },
+    {
+      "accepted": true,
+      "count_model": {
+        "candidate_complete_proxy_units": 198600,
+        "cases": 8,
+        "common_inspection_scalar_ops": 24832,
+        "definition": "integer scalar-work proxy; rational and float operations are not equivalent hardware costs",
+        "dimensions": 32,
+        "direct_complete_proxy_units": 237776,
+        "direct_float_ops": 186752,
+        "execution_guard_scalar_ops": 40960,
+        "production_float_ops": 73848,
+        "production_verify_rational_ops": 26192,
+        "qualification_float_ops": 1235328,
+        "qualification_note": "separate direct reference solves and SVD condition diagnostics; SVD is a leading-order proxy",
+        "saved_proxy_units": 39176,
+        "selection_extra_scalar_ops": 32768,
+        "serialization_bytes": 228635
+      },
+      "method": "woodbury",
+      "n": 32
+    }
+  ],
+  "known_adaptation": {
+    "conventional_equal_content_tie": true,
+    "interpretation": "Finite known-adaptation replay installs an already available Woodbury template into a previously missing connector menu and generates executable source. Ordinary code with equal content performs the same adaptation. No autonomous numerical discovery or exclusive capability claim.",
+    "new_complete_proxy": 198600,
+    "new_method": "woodbury",
+    "new_program_sha256": "96fa7c1b5e62dbc69820b55e0c1b0b206824c004ca1b6b593b52d1273a30096b",
+    "observed_low_rank": true,
+    "old_complete_proxy": 270544,
+    "old_method": "direct",
+    "qualification_float_ops": {
+      "conventional": 1235328,
+      "new": 1235328,
+      "old": 1235328
+    },
+    "qualified": {
+      "conventional": true,
+      "new": true,
+      "old": true
+    },
+    "request_sha256": "7ae420ad9816ad3ae7872777c61040066d75b457b75ca7d71357b26785779a16",
+    "scope": "The old-menu arm is an installed-capability diagnostic, not the strongest incumbent.",
+    "seed": 11
+  },
+  "repeated_use": [
+    {
+      "accepted_repetitions": 10,
+      "all_reference_accepted": true,
+      "candidate_complete_proxy_per_batch": 104864,
+      "candidate_measured_wall_seconds": 1.2105294589564437,
+      "candidate_wins_observed_complete_wall": false,
+      "definition": "Smallest integer k with k*(direct-complete minus candidate-complete)>extra qualification proxy. Complete per-batch proxy conservatively charges construction again; no persistent numerical cache across program runs.",
+      "distinct_solution_hashes": 1,
+      "executed_repetitions": 10,
+      "extra_one_time_qualification_proxy": 1261520,
+      "family": "rhs",
+      "installed_direct_complete_proxy_per_batch": 237776,
+      "monetary_scope": "Analytic work-proxy threshold only; no revenue annualization, demand extrapolation or measured avoidable cash.",
+      "numpy_direct_plus_verifier_measured_wall_seconds": 0.6857412309473148,
+      "one_time_qualification_measured_wall_seconds": 0.07769698298943695,
+      "proxy_break_even_batches": 10,
+      "proxy_net_at_previous_batch": -65312,
+      "proxy_net_at_threshold": 67600,
+      "qualification_accepted": true,
+      "request_sha256": "c81171f2756a72a2c9518440ba3a35a3da945f6fa14733f10e907644749a040b",
+      "same_means_incumbent_break_even": null,
+      "same_means_note": "The strong conventional/equal-content route has the same methods and cost proxy; no incremental algorithmic saving over it.",
+      "seed": 11,
+      "timing_caution": "Observed single-host result only; exact rational checks and program overhead can outweigh floating-point work savings.",
+      "transcript_sha256": "7da1ea483857e50165d1f5efa4f40c4d8a645187a6ba869346e57c151b2e53fe"
+    },
+    {
+      "accepted_repetitions": 33,
+      "all_reference_accepted": true,
+      "candidate_complete_proxy_per_batch": 198600,
+      "candidate_measured_wall_seconds": 3.813413969022804,
+      "candidate_wins_observed_complete_wall": false,
+      "definition": "Smallest integer k with k*(direct-complete minus candidate-complete)>extra qualification proxy. Complete per-batch proxy conservatively charges construction again; no persistent numerical cache across program runs.",
+      "distinct_solution_hashes": 1,
+      "executed_repetitions": 33,
+      "extra_one_time_qualification_proxy": 1261520,
+      "family": "low_rank",
+      "installed_direct_complete_proxy_per_batch": 237776,
+      "monetary_scope": "Analytic work-proxy threshold only; no revenue annualization, demand extrapolation or measured avoidable cash.",
+      "numpy_direct_plus_verifier_measured_wall_seconds": 2.0226438841345953,
+      "one_time_qualification_measured_wall_seconds": 0.07180424600664992,
+      "proxy_break_even_batches": 33,
+      "proxy_net_at_previous_batch": -7888,
+      "proxy_net_at_threshold": 31288,
+      "qualification_accepted": true,
+      "request_sha256": "7ae420ad9816ad3ae7872777c61040066d75b457b75ca7d71357b26785779a16",
+      "same_means_incumbent_break_even": null,
+      "same_means_note": "The strong conventional/equal-content route has the same methods and cost proxy; no incremental algorithmic saving over it.",
+      "seed": 11,
+      "timing_caution": "Observed single-host result only; exact rational checks and program overhead can outweigh floating-point work savings.",
+      "transcript_sha256": "5f15bc1787d8eb3b52f8acee63d2aed8c217cccb96ab5c52555d1aa34c077527"
+    }
+  ],
+  "schema": "omega-savings/technical-diagnostics/v1"
+}

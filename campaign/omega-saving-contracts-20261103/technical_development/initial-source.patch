@@ -1,0 +1,43 @@
+--- a/omega_savings/experiment.py
++++ b/omega_savings/experiment.py
+@@ -42,7 +42,8 @@
+ 
+ def source_metadata():
+     root = Path(__file__).resolve().parents[1]
+-    paths = ["omega_savings/kernel.py", "omega_savings/verify.py", "omega_savings/experiment.py"]
++    paths = ["omega_savings/kernel.py", "omega_savings/verify.py", "omega_savings/experiment.py",
++             "omega_savings/interval.py", "omega_savings/interval.c"]
+     files = {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in paths}
+     try:
+         head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, check=True,
+@@ -57,8 +58,8 @@
+ 
+ 
+ def protocol(seeds, role):
+-    if role not in ("development", "confirmation"):
+-        raise ValueError("ROLE_MUST_BE_DEVELOPMENT_OR_CONFIRMATION")
++    if role not in ("development", "confirmation", "reproduction"):
++        raise ValueError("ROLE_MUST_BE_DEVELOPMENT_CONFIRMATION_OR_REPRODUCTION")
+     seeds = list(seeds)
+     if not seeds or any(type(s) is not int or s < 0 for s in seeds) or len(seeds) != len(set(seeds)):
+         raise ValueError("DISTINCT_NONNEGATIVE_INTEGER_SEEDS_REQUIRED")
+@@ -67,6 +68,10 @@
+     if role == "confirmation" and tuple(seeds) != CONFIRMATION_SEEDS:
+         raise ValueError("EXACT_REGISTERED_CONFIRMATION_SEEDS_REQUIRED")
+     return {"schema": "omega-savings/technical-protocol/v1", "role": role, "seeds": seeds,
++            "role_scope": ("Repeated or independently rerun known inputs; not fresh independent confirmation"
++                           if role == "reproduction" else
++                           "Development inputs only" if role == "development" else
++                           "Prospectively registered confirmation inputs; repetitions must use reproduction role"),
+             "families": list(FAMILIES), "policies": list(POLICIES),
+             "dimensions": DIMENSION, "cases": CASES, "rank": RANK,
+             "successor_cross": {"families": list(SUCCESSORS),
+@@ -365,7 +370,7 @@
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument("--output", required=True)
+     parser.add_argument("--seeds", required=True, help="Comma-separated explicit seeds")
+-    parser.add_argument("--role", required=True, choices=("development", "confirmation"))
++    parser.add_argument("--role", required=True, choices=("development", "confirmation", "reproduction"))
+     args = parser.parse_args()
+     summary = run(args.output, [int(s) for s in args.seeds.split(",")], args.role)
+     print(json.dumps(summary, sort_keys=True, indent=2))

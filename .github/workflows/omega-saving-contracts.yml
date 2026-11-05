@@ -1,0 +1,53 @@
+name: Omega saving contracts source and native qualification
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: omega-saving-contracts-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-and-native-qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Exact local numerical and native dependencies
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-omega-savings.txt
+      - name: Numerical, native, demand and independent operating regressions
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+        run: python -m unittest discover -s tests -p 'test_omega_savings*.py' -v
+      - name: Fresh development account, authenticated pause/resume, full year and public replay
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+        run: |
+          python -m omega_savings.runner register --output "$RUNNER_TEMP/omega-hosted" --role development --seeds 12 --worlds adverse --policies fixed_split --cadence-days 30 --fixed-fraction 0 --variant hosted
+          cd "$RUNNER_TEMP/omega-hosted/source"
+          python -m omega_savings.runner operate --output "$RUNNER_TEMP/omega-hosted" --case adverse-fixed_split-12-hosted --max-events 6
+          python -m omega_savings.runner operate --output "$RUNNER_TEMP/omega-hosted" --case adverse-fixed_split-12-hosted
+          python -m omega_savings.runner audit --output "$RUNNER_TEMP/omega-hosted" --case adverse-fixed_split-12-hosted
+          python -m omega_savings.runner summary --output "$RUNNER_TEMP/omega-hosted"
+      - name: Preserve compact public qualification receipts only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: omega-saving-contracts-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/omega-hosted/SOURCE.json
+            ${{ runner.temp }}/omega-hosted/REGISTRATION.json
+            ${{ runner.temp }}/omega-hosted/COMPARISON.json
+            ${{ runner.temp }}/omega-hosted/cases/*/RESULT.json
+            ${{ runner.temp }}/omega-hosted/cases/*/AUDIT.json
+          if-no-files-found: warn

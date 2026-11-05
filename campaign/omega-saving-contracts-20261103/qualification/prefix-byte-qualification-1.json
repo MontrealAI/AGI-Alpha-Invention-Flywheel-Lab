@@ -1,0 +1,61 @@
+{
+  "after_source": "00b8c5e229f342aff3afa990416b957b63b222e38586cd6f6f5f391e4bb5e082",
+  "before_source": "6aa604aec346668da62063b7d981a2af1c73f4e281d924c1e5f0601b1c85a792",
+  "comparability": {
+    "full_public_audits_accepted": true,
+    "same_benchmark_script": true,
+    "same_financial_summary": true,
+    "same_fixture": true,
+    "same_native_actions": true
+  },
+  "focused_regressions": {
+    "command": "TMPDIR=/var/tmp python3 -m unittest -v tests.test_omega_savings_native.SavingsNative.test_raw_prefix_binding_rejects_even_equivalent_json_byte_changes tests.test_omega_savings_native.SavingsNative.test_raw_prefix_reads_both_files_but_public_replay_requalifies_json tests.test_omega_savings_native.SavingsNative.test_raw_prefix_cache_cannot_authorize_changed_historical_actions tests.test_omega_savings_native.SavingsNative.test_native_prefix_reuse_rebinds_delivery_before_new_spending tests.test_omega_savings_native.SavingsNative.test_evicted_semantic_cache_does_not_force_old_prefix_reproof",
+    "errors": 0,
+    "exit_code": 0,
+    "failures": 0,
+    "reported_wall_seconds": 16.591,
+    "tests": 5
+  },
+  "invariants": [
+    "Every prepared input and delivered output is read and SHA-256 hashed on each reuse.",
+    "Bindings enter only after full native replay and source-bound semantic qualification of byte-stable artifacts.",
+    "Exact account/owner/source/manifest/configuration and complete prior action bytes must match before reuse.",
+    "Absent binding requalifies fully; failed replay resets the ephemeral map.",
+    "Public full replay uses no private prefix authority.",
+    "No maximum buyer/order/history count is introduced."
+  ],
+  "limits": [
+    "Eight-order fixed native engineering fixture; timing differences are not a forecast for an annual run.",
+    "Sample timing is process CPU and wall telemetry, not priced resource expenditure.",
+    "Full action serialization, account authentication and history scans remain; the complete run still has substantial history-dependent work.",
+    "This change improves execution cost only; it does not validate scalar-work proxy dollars, buyer cloud savings, demand or invention advantage."
+  ],
+  "schema": "omega-savings/prefix-byte-qualification/v1",
+  "scope": "Preconfirmation E2 engineering optimization; no policy, world, demand, cost, acceptance, financial rule, frozen account, or held-out outcome changed.",
+  "source_changes": {
+    "commercial/ledger.py": {
+      "after": "ed1084095932500c4ac2ed4a243061fc582fe70f79a7eee811e51e617e404b5c",
+      "before": "9a8197dd492ceb390f90f110280eb109634950e767187880276a973fc11e9386"
+    },
+    "omega_savings/service.py": {
+      "after": "37b429b09ca262e4b58118d7713e16bc0e31c7eba66a7f6e1a3cea76b1f1c443",
+      "before": "b865713aa5b1c005d1d22f90e9eb4c93d4269900a3808cbbb399096142ea7652"
+    }
+  },
+  "timing": {
+    "complete_private_audit": {
+      "after_median_cpu_seconds": 0.10722881999999956,
+      "before_median_cpu_seconds": 0.12808256099999937,
+      "cpu_reduction_fraction": 0.16281483472211267
+    },
+    "raw_rebind": {
+      "after_median_cpu_seconds": 0.01367295100000021,
+      "before_median_cpu_seconds": 0.0198650380000025,
+      "cpu_reduction_fraction": 0.31170778530609955
+    }
+  },
+  "timing_receipts": {
+    "prefix-byte-timing-after.json": "a140ee490688eb210d431e30090ba4ad8e57da28289d3ed16ae6e2fd7d81d35a",
+    "prefix-byte-timing-before.json": "d813870f82efac08deee92d559d8f9507081a2f0a1423ff9e03b956977996dd6"
+  }
+}

@@ -1,0 +1,236 @@
+{
+  "acceptance": {
+    "accepted": true,
+    "case_bounds": [
+      {
+        "absolute_error_bound": 3.236094031985324e-16,
+        "case": 0,
+        "condition_bound": 4.191345666651702,
+        "diagonal_margin": 1.944383480517692,
+        "relative_error_bound": 7.117609189545314e-16
+      },
+      {
+        "absolute_error_bound": 2.717964208182612e-16,
+        "case": 1,
+        "condition_bound": 4.115082117770792,
+        "diagonal_margin": 1.981787318951241,
+        "relative_error_bound": 5.4111520036247e-16
+      },
+      {
+        "absolute_error_bound": 3.687340958495886e-16,
+        "case": 2,
+        "condition_bound": 4.146702670123273,
+        "diagonal_margin": 1.9735231741128691,
+        "relative_error_bound": 6.768544697373023e-16
+      },
+      {
+        "absolute_error_bound": 6.114984933953251e-16,
+        "case": 3,
+        "condition_bound": 4.166093185057384,
+        "diagonal_margin": 1.9631830209505658,
+        "relative_error_bound": 1.0729166106773092e-15
+      },
+      {
+        "absolute_error_bound": 4.720914407759939e-16,
+        "case": 4,
+        "condition_bound": 4.132361861679312,
+        "diagonal_margin": 1.978066432574756,
+        "relative_error_bound": 8.038476777754381e-16
+      },
+      {
+        "absolute_error_bound": 4.2739730765532197e-16,
+        "case": 5,
+        "condition_bound": 4.191814855603738,
+        "diagonal_margin": 1.9472251359861819,
+        "relative_error_bound": 7.589526739423887e-16
+      },
+      {
+        "absolute_error_bound": 4.567711021518913e-16,
+        "case": 6,
+        "condition_bound": 4.135427173334618,
+        "diagonal_margin": 1.974897489666379,
+        "relative_error_bound": 8.652375301411959e-16
+      },
+      {
+        "absolute_error_bound": 7.022100213130282e-16,
+        "case": 7,
+        "condition_bound": 4.129326814864,
+        "diagonal_margin": 1.9759153729574221,
+        "relative_error_bound": 1.35937653918673e-15
+      }
+    ],
+    "independence": "separate exact residual and inverse-norm bound, same host; no producer solve or trust in plan",
+    "max_absolute_error_bound": 7.022100213130282e-16,
+    "max_condition_bound": 4.191814855603738,
+    "max_oracle_relative_error": null,
+    "max_relative_error_bound": 1.35937653918673e-15,
+    "max_scaled_residual": 2.0758720469909773e-16,
+    "operation_kind": "exact rational scalar proxy; bit complexity and hardware cost differ from float ops",
+    "reasons": [],
+    "scope": "supplied finite binary64 linear systems; mathematical output only",
+    "verification_ops": 26192,
+    "wall_seconds": 0.05097424999985378
+  },
+  "actual_external_spending_microUSD": 0,
+  "alternatives": [
+    "NumPy direct solve with identical independent acceptance",
+    "Competent SciPy LU/reuse/Woodbury implementation",
+    "Use existing solution and make no purchase"
+  ],
+  "ambition": {
+    "absolute_tolerance": 1e-10,
+    "allow_external_actions": false,
+    "allow_network": false,
+    "max_condition_bound": 10000000000.0,
+    "outcome": "solve_linear_responses",
+    "relative_tolerance": 1e-08
+  },
+  "constructed_capability": {
+    "method": "woodbury",
+    "program_sha256": "e757deaf4b731c15f7c7946e679cf3382849a7440746aca0cd17cb0d0f452e8f",
+    "scope": "finite developer-authored established-method compiler; no autonomous algorithm-invention claim"
+  },
+  "decisive_test": {
+    "all_deliveries_accepted": true,
+    "candidate_complete_median_seconds": 0.13826737699855585,
+    "note": "Single-host complete construction/execution/verification timing. First qualification is additional. No cloud-price conversion.",
+    "numpy_complete_median_seconds": 0.08286294899880886,
+    "order_rotated_repeats": 3,
+    "timings": [
+      {
+        "candidate": {
+          "accepted": true,
+          "wall_seconds": 0.13826737699855585
+        },
+        "numpy": {
+          "accepted": true,
+          "wall_seconds": 0.06976042099995539
+        }
+      },
+      {
+        "candidate": {
+          "accepted": true,
+          "wall_seconds": 0.1535479089943692
+        },
+        "numpy": {
+          "accepted": true,
+          "wall_seconds": 0.08286294899880886
+        }
+      },
+      {
+        "candidate": {
+          "accepted": true,
+          "wall_seconds": 0.13805208299891092
+        },
+        "numpy": {
+          "accepted": true,
+          "wall_seconds": 0.08286835100443568
+        }
+      }
+    ]
+  },
+  "hypotheses": {
+    "declared_low_rank_updates": true,
+    "neither_reuse_hypothesis": false,
+    "observed_update_ranks": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "same_matrix": false
+  },
+  "next_action": "USE_STRONG_DIRECT_ALTERNATIVE: measured complete candidate workflow is slower on this request.",
+  "permissions": {
+    "buyer_owns_input_and_output": true,
+    "external_actions": false,
+    "network": false
+  },
+  "product_vision_limit": "Finite numerical request interface; general natural-language autonomous business construction, paid onboarding and customer demand not demonstrated.",
+  "qualification": {
+    "accepted": true,
+    "case_bounds": [
+      {
+        "absolute_error_bound": 3.236094031985324e-16,
+        "case": 0,
+        "condition_bound": 4.191345666651702,
+        "diagonal_margin": 1.944383480517692,
+        "relative_error_bound": 7.117609189545314e-16
+      },
+      {
+        "absolute_error_bound": 2.717964208182612e-16,
+        "case": 1,
+        "condition_bound": 4.115082117770792,
+        "diagonal_margin": 1.981787318951241,
+        "relative_error_bound": 5.4111520036247e-16
+      },
+      {
+        "absolute_error_bound": 3.687340958495886e-16,
+        "case": 2,
+        "condition_bound": 4.146702670123273,
+        "diagonal_margin": 1.9735231741128691,
+        "relative_error_bound": 6.768544697373023e-16
+      },
+      {
+        "absolute_error_bound": 6.114984933953251e-16,
+        "case": 3,
+        "condition_bound": 4.166093185057384,
+        "diagonal_margin": 1.9631830209505658,
+        "relative_error_bound": 1.0729166106773092e-15
+      },
+      {
+        "absolute_error_bound": 4.720914407759939e-16,
+        "case": 4,
+        "condition_bound": 4.132361861679312,
+        "diagonal_margin": 1.978066432574756,
+        "relative_error_bound": 8.038476777754381e-16
+      },
+      {
+        "absolute_error_bound": 4.2739730765532197e-16,
+        "case": 5,
+        "condition_bound": 4.191814855603738,
+        "diagonal_margin": 1.9472251359861819,
+        "relative_error_bound": 7.589526739423887e-16
+      },
+      {
+        "absolute_error_bound": 4.567711021518913e-16,
+        "case": 6,
+        "condition_bound": 4.135427173334618,
+        "diagonal_margin": 1.974897489666379,
+        "relative_error_bound": 8.652375301411959e-16
+      },
+      {
+        "absolute_error_bound": 7.022100213130282e-16,
+        "case": 7,
+        "condition_bound": 4.129326814864,
+        "diagonal_margin": 1.9759153729574221,
+        "relative_error_bound": 1.35937653918673e-15
+      }
+    ],
+    "independence": "separate exact residual and inverse-norm bound, same host; no producer solve or trust in plan",
+    "max_absolute_error_bound": 7.022100213130282e-16,
+    "max_condition_bound": 4.191814855603738,
+    "max_oracle_relative_error": 1.074615205660528e-15,
+    "max_relative_error_bound": 1.35937653918673e-15,
+    "max_scaled_residual": 2.0758720469909773e-16,
+    "max_svd_condition_diagnostic": 1.4807127840994057,
+    "operation_kind": "exact rational scalar proxy; bit complexity and hardware cost differ from float ops",
+    "qualification_float_ops": 1235328,
+    "qualification_scope": "one-time NumPy direct-solve and SVD diagnostics in addition to production acceptance",
+    "reasons": [],
+    "scope": "supplied finite binary64 linear systems; mathematical output only",
+    "verification_ops": 26192,
+    "wall_seconds": 0.05107973799749743
+  },
+  "request_sha256": "459805f947fcbe52f664edab6214750598d39625b45849a30496268f65935671",
+  "schema": "omega-savings/buyer-workflow/v1",
+  "unmeasured_costs": [
+    "Buyer preparation and installation time",
+    "Actual host and included subscription resource bill",
+    "Representative workload transfer and cash avoidability"
+  ]
+}
