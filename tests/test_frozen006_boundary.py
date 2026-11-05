@@ -79,7 +79,7 @@ class Frozen006BoundaryTests(unittest.TestCase):
             'result["receipt"]["state"] != "complete"',
             'completed.get("state") != "COMPLETE"',
             'completed.get("report_sha256") != hashlib.sha256(report).hexdigest()',
-            '(output / "INTERRUPTED.json").write_text(',
+            'atomic_json(output / "INTERRUPTED.json", {',
             '"historical_v3_failure_repaired_retroactively": False',
             '"prior_v3_run": "42083204982"',
         ):
