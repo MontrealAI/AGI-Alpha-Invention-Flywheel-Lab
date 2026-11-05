@@ -1,0 +1,177 @@
+{
+  "schema": "enterprise078/executing-source-repair/v1",
+  "preregistration": "e571e36dfcd23f9529dd496695525afa22593b29",
+  "baseline_head": "1c0c2a61ba4218e38d143808bd404ac370ad2e12",
+  "baseline_catalog_sha256": "29cf3fca55ce1504988e3ac6bb4231959de501790e95825817bc45375f1157ad",
+  "counterexample": {
+    "exit_code": 1,
+    "result": "INVALID_PROPOSAL_ACCEPTED",
+    "description": "candidate catalog file modified before first prepare; old implementation signed proposal rather than refusing",
+    "scope": "disposable fresh test account only"
+  },
+  "repair_source_sha256": {
+    "enterprise078/transactional_admission/catalog.py": "2917b79fdba75924e29e3258e53aa1dae349314528260f59ed12524df678cbe3",
+    "enterprise078/transactional_admission/catalog_fixture.py": "df70b3a9514f8ee7abf9d74fb2d3ea2ee4c42248f1349373f0724e4c8bc79b38",
+    "enterprise078/transactional_admission/test_catalog.py": "ef94c5e4aec6d14953ff2161af06b6a2a1c6499991e07703e64440f71f67e99c"
+  },
+  "catalog_controls": 9,
+  "combined_tests": 48,
+  "original_account_audit": "accepted_unchanged",
+  "original_export": "66da91b5c4849a08d1e6b443202aaf81f8bf86a30bd2e392ec5feda5c6a9fc9f",
+  "original_mutations": 0,
+  "native_activation": false,
+  "updated_complete_cost_profit": null,
+  "scope": "exposed development; trusted local process, not remote attestation",
+  "prior_head_checks": [
+    {
+      "name": "publish-mechanism-completion",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393191/job/125842274911"
+    },
+    {
+      "name": "publish-perturbation-construction",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393191/job/125842274903"
+    },
+    {
+      "name": "publish-connected-checkpoint",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393191/job/125842274824"
+    },
+    {
+      "name": "publish-research-edition",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393191/job/125842274433"
+    },
+    {
+      "name": "publish-and-gate",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393177/job/125841453407"
+    },
+    {
+      "name": "operate-published-release",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393177/job/125841453024"
+    },
+    {
+      "name": "qualify",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393138/job/125840853457"
+    },
+    {
+      "name": "qualify",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393155/job/125840050029"
+    },
+    {
+      "name": "publish",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393217/job/125835000657"
+    },
+    {
+      "name": "adaptive-current",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393232/job/125834439341"
+    },
+    {
+      "name": "publish",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393145/job/125834434458"
+    },
+    {
+      "name": "release-qualification",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393177/job/125834355810"
+    },
+    {
+      "name": "publish",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393131/job/125834317884"
+    },
+    {
+      "name": "connected-qualification",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393178/job/125834169621"
+    },
+    {
+      "name": "reproduce-published-paired-source",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393193/job/125833902809"
+    },
+    {
+      "name": "qualify-paired-source",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393193/job/125833901202"
+    },
+    {
+      "name": "source-matched-qualification",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393229/job/125833896441"
+    },
+    {
+      "name": "public-replay",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393441/job/125833896179"
+    },
+    {
+      "name": "active-worker-bounds054",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393191/job/125833895249"
+    },
+    {
+      "name": "qualify",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393191/job/125833895160"
+    },
+    {
+      "name": "phase-code-qualification",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393191/job/125833894793"
+    },
+    {
+      "name": "Immutable released 010 source, inputs, package and clean replay",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393217/job/125833894638"
+    },
+    {
+      "name": "current-compatibility",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393217/job/125833894394"
+    },
+    {
+      "name": "reproduce",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393131/job/125833894258"
+    },
+    {
+      "name": "qualify",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41611393145/job/125833894138"
+    }
+  ]
+}
