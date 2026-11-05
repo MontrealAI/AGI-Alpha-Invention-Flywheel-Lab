@@ -410,17 +410,35 @@ def audit(output):
             raise ValueError('UNREGISTERED_ORDER')
         if a['op'] == 'wallet' and a['args']['buyer'] not in {'buyer-' + k for k in allowed_orders}:
             raise ValueError('UNREGISTERED_BUYER')
-    allowed_spends = {'genesis-production-' + job['id'] for job in manifest['jobs']}
+    allowed_spends = {'genesis-production-' + job['id']: (24 * (i + 1), 'g002-' + job['id'])
+                      for i, job in enumerate(manifest['jobs'])}
+    production = {}
     for e in exported['connected_journal']['entries']:
         r = e['request']
-        if r['operation'] == 'spend' and r['id'] not in allowed_spends:
-            raise ValueError('UNREGISTERED_RESOURCE_COMMITMENT')
+        if r['operation'] == 'spend':
+            if r['id'] not in allowed_spends:
+                raise ValueError('UNREGISTERED_RESOURCE_COMMITMENT')
+            hour, order = allowed_spends[r['id']]
+            # Native replay validates a spend at its recorded prefix, but does
+            # not impose this registered producer's phase ordering. Bind the
+            # production hour and require completed payment before preparation
+            # or collection, including actions at the same hour. Cover active
+            # checkpoints too, before the completed-row reconciliation below.
+            if r['day'] != hour:
+                raise ValueError('REGISTERED_PRODUCTION_HOUR_CHANGED')
+            production[order] = e
         if r['operation'] == 'execute' and r['op'] == 'cost':
             ident = r['args']['id']
             if ident != 'genesis-development' and ident not in {
                     'genesis-' + kind + '-' + job['id']
                     for kind in ('acquisition', 'maintenance', 'tax') for job in manifest['jobs']}:
                 raise ValueError('UNREGISTERED_COST')
+    for action in actions:
+        if action['op'] == 'event' and action['args']['action'] in {'prepare', 'release'}:
+            spend = production.get(action['args']['id'])
+            if (spend is None or spend['status'] != 'COMPLETE'
+                    or spend['receipt']['native_event_sequence'] >= action['seq']):
+                raise ValueError('PRODUCTION_MUST_PRECEDE_DELIVERY')
     releases = [a for a in actions if a['op'] == 'event' and a['args']['action'] == 'release']
     _audit_fixed_costs(p, manifest['jobs'], execution, actions)
     _audit_tax_prefixes(p, manifest['jobs'], execution['rows'], actions)
