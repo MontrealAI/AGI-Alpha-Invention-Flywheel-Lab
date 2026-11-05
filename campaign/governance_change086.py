@@ -117,13 +117,62 @@ def revise(data, proposed, *, expected_registration_hash):
     }
 
 
+def canonical_report(report):
+    """Deterministic JSON-compatible *whole report* including tuple-keyed cells.
+
+    This is local content integrity, NOT provenance or reviewer authentication.
+    Avoid silently hashing registration_after in place of actual assessments.
+    """
+    if type(report) is not dict:
+        raise ValueError('INVALID_REPORT')
+    converted = deepcopy(report)
+    for name in ('incremental', 'full_scan'):
+        cells = report.get(name)
+        if type(cells) is not dict:
+            raise ValueError('INVALID_REPORT_CELLS')
+        rows = []
+        for key, status in cells.items():
+            if (type(key) is not tuple or len(key) != 2
+                    or not all(type(part) is str and part for part in key)
+                    or status not in STATUS):
+                raise ValueError('INVALID_REPORT_CELLS')
+            rows.append(dict(system=key[0], requirement=key[1], status=status))
+        converted[name] = sorted(rows, key=lambda row: (row['system'], row['requirement']))
+    return converted
+
+
+def report_digest(report):
+    """Hash full revision/evidence assessment, not just its registration version."""
+    return digest(canonical_report(report))
+
+
 def review(report_hash, roles, history, *, actor, decision, expected_head):
-    """Trusted-role demonstration. NOT authentication, authorization or durable storage."""
+    """Trusted-role demonstration; not durable/authenticated or an actual approval.
+
+    Check all supplied predecessor links, not just the tail hash. A complete
+    rewritten self-consistent history still needs an *external* trusted anchor.
+    """
     if roles.get(actor) != 'reviewer':
         raise ValueError('UNAUTHORIZED_REVIEW')
     if decision not in ('APPROVE', 'REJECT', 'ANNOTATE'):
         raise ValueError('INVALID_REVIEW_DECISION')
-    head = digest(history[-1]) if history else 'GENESIS'
+    if (type(report_hash) is not str or len(report_hash) != 64
+            or any(ch not in '0123456789abcdef' for ch in report_hash)):
+        raise ValueError('INVALID_REPORT_HASH')
+    if type(history) is not list:
+        raise ValueError('INVALID_REVIEW_CHAIN')
+    head = 'GENESIS'
+    for expected_seq, row in enumerate(history, start=1):
+        if (type(row) is not dict
+                or set(row) != {'seq', 'previous', 'actor', 'report_hash', 'decision'}
+                or type(row['seq']) is not int or row['seq'] != expected_seq
+                or row['previous'] != head
+                or type(row['actor']) is not str or not row['actor']
+                or type(row['report_hash']) is not str or len(row['report_hash']) != 64
+                or any(ch not in '0123456789abcdef' for ch in row['report_hash'])
+                or row['decision'] not in ('APPROVE', 'REJECT', 'ANNOTATE')):
+            raise ValueError('INVALID_REVIEW_CHAIN')
+        head = digest(row)
     if expected_head != head:
         raise ValueError('STALE_REVIEW_LOG')
     if any(row['report_hash'] == report_hash and row['actor'] == actor
