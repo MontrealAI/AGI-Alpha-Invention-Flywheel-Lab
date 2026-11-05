@@ -27,15 +27,33 @@ class ResearchSiteTests(unittest.TestCase):
         for name in site.FILES:
             self.assertEqual((self.source / name).read_bytes(), (out / name).read_bytes())
 
-    def test_genesis_reader_preserves_scope_and_package_links(self):
+    def test_genesis_stable_reader_features_v2_and_preserves_prior_access(self):
         import json
         reader = (self.source / 'alpha-genesis-flywheel-omega.html').read_text()
         self.assertIn('alpha-genesis-flywheel-omega.html', (self.source / 'index.html').read_text())
-        for phrase in ('Frontier Replay', '68 tests', 'Not established:', '32 pages', 'ALPHA_GENESIS_FLYWHEEL_OMEGA_v1.1.0_SOURCE.zip', 'source/CLAIM_REGISTER.md'):
+        for phrase in ('Research edition 2.0', '31-page', 'Three Orders of Intelligence',
+                       'historical-source', 'does not rerun the native accounts',
+                       'id="reader"', 'id="previous-edition"', 'Previous edition 1.1.0',
+                       'Frontier Replay', '68-test', '32 pages',
+                       'ALPHA_GENESIS_FLYWHEEL_OMEGA_v2_COMPLETE.zip',
+                       'ALPHA_GENESIS_FLYWHEEL_OMEGA_v1.1.0_SOURCE.zip', 'source/CLAIM_REGISTER.md'):
             self.assertIn(phrase, reader)
         manifest = json.loads((self.source / 'publication-manifest.json').read_text())
-        entry = next(p for p in manifest['papers'] if p['file'] == 'alpha-genesis-flywheel-omega.pdf')
-        self.assertIn('<code>' + entry['sha256'] + '</code>', reader)
+        for filename in ('alpha-genesis-flywheel-omega-v2.pdf', 'alpha-genesis-flywheel-omega.pdf'):
+            entry = next(p for p in manifest['papers'] if p['file'] == filename)
+            self.assertIn('<code>' + entry['sha256'] + '</code>', reader)
+        self.assertIn('name="citation_pdf_url" content="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/alpha-genesis-flywheel-omega-v2.pdf"', reader)
+        self.assertIn('data="alpha-genesis-flywheel-omega-v2.pdf#view=FitH"', reader)
+        self.assertNotIn('data="alpha-genesis-flywheel-omega.pdf#view=FitH"', reader)
+        self.assertLess(reader.index('id="reader"'), reader.index('id="previous-edition"'))
+        self.assertIn('href="#previous-edition"', reader)
+        parser = site.Links()
+        parser.feed(reader)
+        self.assertTrue({'proposition', 'replay', 'product', 'scope', 'reproduce',
+                         'reader'}.issubset(parser.ids))
+        for filename in ('index.html', 'alpha-genesis-flywheel-omega-v2.html'):
+            self.assertIn('href="alpha-genesis-flywheel-omega.html#previous-edition"',
+                          (self.source / filename).read_text())
 
     def test_genesis_v2_preserves_prior_edition_and_evidence_scope(self):
         import json
