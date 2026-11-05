@@ -70,8 +70,49 @@ LEGACY_RELEASE_PATHS = (
     'mechanism_harness/test_game_maker.py',
 )
 
+# The old canonical archive contained the optional shim and workflow without
+# their package. Preserve those historical copies, but never publish a partial
+# GENESIS package once its implementation or protocol is present.
+GENESIS_RELEASE_PATHS = (
+    'connected_enterprise/genesis.py',
+    'genesis_enterprise/__init__.py', 'genesis_enterprise/__main__.py',
+    'genesis_enterprise/policy.py', 'genesis_enterprise/native.py',
+    'genesis_enterprise/frontier.py', 'genesis_enterprise/codex.py',
+    'genesis_enterprise/report.py',
+    'campaign/genesis-enterprise-002/PROTOCOL.json',
+    'campaign/genesis-enterprise-002/README.md',
+    'campaign/genesis-enterprise-002/FUNDING_REPAIR.md',
+    'tests/test_genesis_enterprise_policy.py',
+    'tests/test_genesis_enterprise_native.py',
+    'tests/test_genesis_enterprise_frontier.py',
+    'tests/test_connected_genesis_release.py',
+    'tests/test_genesis_release_qualification.py',
+    'scripts/qualify_genesis_release.py',
+    '.github/workflows/genesis-enterprise-002.yml',
+)
+GENESIS_RELEASE_MARKERS = {
+    name for name in GENESIS_RELEASE_PATHS
+    if name.startswith(('genesis_enterprise/', 'campaign/genesis-enterprise-002/'))
+}
+
+
+def genesis_release_paths(root):
+    root = Path(root)
+    if not any((root/name).exists() for name in GENESIS_RELEASE_MARKERS):
+        return set()
+    required = set(GENESIS_RELEASE_PATHS)
+    if any(not (root/name).is_file() or (root/name).is_symlink() for name in required):
+        raise ValueError('GENESIS_COMPLETE_RELEASE_SOURCE_REQUIRED')
+    from genesis_enterprise.native import source_files as native_sources
+    required.update(native_sources(root))
+    if any(not (root/name).is_file() or (root/name).is_symlink() for name in required):
+        raise ValueError('GENESIS_NATIVE_RELEASE_DEPENDENCY_MISSING')
+    return required
+
+
 def source_paths(root):
     names=set(inherited_paths(root))
+    names.update(genesis_release_paths(root))
     for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('campaign/connected-registrations','*.json')]:
         names.update(p.relative_to(root).as_posix() for p in (root/folder).glob(pattern) if p.is_file())
     names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','scripts/stage_cycle007_sources.py','verification/scan_adaptive_cancellation_history.py','evidence/cancellation-retirement/HISTORICAL_SCAN.json','evidence/cancellation-retirement/COUNTEREXAMPLE.before.json','docs/connected014/OPERATOR.md','AGENTS.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())

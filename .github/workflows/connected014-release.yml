@@ -13,6 +13,8 @@ jobs:
   release-qualification:
     runs-on: ubuntu-latest
     timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
     outputs:
       qualified_artifact_id: ${{ steps.release_assets.outputs.artifact-id }}
     steps:
@@ -27,15 +29,21 @@ jobs:
         with:
           python-version: '3.12'
       - run: |
-          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt numpy==2.3.5 scipy==1.17.0
       - name: Release integrity and source-bound finance/lifecycle regressions
         run: python -m unittest discover -s tests -p 'test_connected*.py' -v
+      - name: GENESIS native and release-boundary regressions
+        run: python -m unittest discover -s tests -p 'test_genesis*.py' -v
       - name: Operate exact clean package, resume and independently audit public copy
         run: python scripts/qualify_connected014.py --smoke --output "$RUNNER_TEMP/connected014-qualified"
       - name: Qualify V4 from the exact clean source archive
         run: |
           python "$RUNNER_TEMP/connected014-qualified/extracted-source/scripts/qualify_omega_release.py" --source "$RUNNER_TEMP/connected014-qualified/extracted-source" --archive "$RUNNER_TEMP/connected014-qualified/connected014-source.zip" --output "$RUNNER_TEMP/omega-v4-qualified" --source-commit "${{ github.event.pull_request.head.sha || github.sha }}"
           cp "$RUNNER_TEMP/omega-v4-qualified/QUALIFICATION.json" "$RUNNER_TEMP/connected014-qualified/OMEGA_V4_QUALIFICATION.json"
+      - name: Qualify GENESIS from the exact clean source archive
+        run: |
+          python "$RUNNER_TEMP/connected014-qualified/extracted-source/scripts/qualify_genesis_release.py" --source "$RUNNER_TEMP/connected014-qualified/extracted-source" --archive "$RUNNER_TEMP/connected014-qualified/connected014-source.zip" --output "$RUNNER_TEMP/genesis-qualified" --source-commit "${{ github.event.pull_request.head.sha || github.sha }}"
+          cp "$RUNNER_TEMP/genesis-qualified/QUALIFICATION.json" "$RUNNER_TEMP/connected014-qualified/GENESIS_QUALIFICATION.json"
       - name: Bind immutable release assets to exact qualified source and inspected research edition
         if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         run: python scripts/release_connected014.py prepare --qualification "$RUNNER_TEMP/connected014-qualified" --assets "$RUNNER_TEMP/connected014-release-assets" --source-commit "$GITHUB_SHA" --papers docs/completion015
@@ -55,6 +63,7 @@ jobs:
           path: |
             ${{ runner.temp }}/connected014-qualified/QUALIFICATION.json
             ${{ runner.temp }}/omega-v4-qualified/QUALIFICATION.json
+            ${{ runner.temp }}/genesis-qualified/QUALIFICATION.json
             ${{ runner.temp }}/connected014-qualified/*.stdout
             ${{ runner.temp }}/connected014-qualified/*.stderr
           if-no-files-found: warn
@@ -105,6 +114,8 @@ jobs:
     runs-on: ubuntu-latest
     # GitHub-hosted job ceiling; finite commands, not an experimental budget.
     timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - name: Record platform job execution start
         shell: bash
@@ -147,6 +158,20 @@ jobs:
         working-directory: ${{ runner.temp }}/downloaded-release-operation/source
         run: |
           python scripts/qualify_omega_release.py --source "$PWD" --archive "$RUNNER_TEMP/actual-release-download/connected014-source.zip" --output "$RUNNER_TEMP/released-omega-v4" --source-commit "$GITHUB_SHA" --download-receipt "$RUNNER_TEMP/RELEASE_DOWNLOAD.json"
+      - name: Operate and audit GENESIS from the actual downloaded release source
+        id: released_genesis
+        working-directory: ${{ runner.temp }}/downloaded-release-operation/source
+        run: |
+          python scripts/qualify_genesis_release.py --source "$PWD" --archive "$RUNNER_TEMP/actual-release-download/connected014-source.zip" --output "$RUNNER_TEMP/released-genesis" --source-commit "$GITHUB_SHA" --download-receipt "$RUNNER_TEMP/RELEASE_DOWNLOAD.json"
+      - name: Retain only key-free released GENESIS evidence
+        if: always() && steps.released_genesis.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: genesis002-released-operation-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/released-genesis/QUALIFICATION.json
+            ${{ runner.temp }}/released-genesis/public
+          if-no-files-found: error
       - name: Attach compact V4 receipt to existing downloaded-operation evidence
         if: always() && steps.released_omega_v4.outcome != 'skipped'
         run: |
@@ -242,3 +267,4 @@ jobs:
           name: connected014-failure-lesson-${{ github.sha }}-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/downloaded-release-operation/FAILURE_LESSON.json
           if-no-files-found: warn
+

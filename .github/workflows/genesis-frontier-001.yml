@@ -1,0 +1,46 @@
+name: GENESIS Omega finite frontier-to-possibility checks
+on:
+  pull_request:
+    paths:
+      - 'campaign/frontier-genesis-001/**'
+      - 'tests/test_frontier_genesis001.py'
+      - 'tests/test_frontier_watch001.py'
+      - '.github/workflows/genesis-frontier-001.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-frontier-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Validate finite planner, access exclusions and no-buy controls
+        run: python3 -m unittest discover -s tests -p 'test_frontier_*001.py' -v
+      - name: Execute research fixture without network or account actions
+        shell: bash
+        run: |
+          python3 campaign/frontier-genesis-001/genesis.py \
+            --scenario campaign/frontier-genesis-001/SCENARIO.json \
+            --out "$RUNNER_TEMP/genesis-study"
+          python3 - <<'PY'
+          import json, os, pathlib
+          r=json.loads((pathlib.Path(os.environ['RUNNER_TEMP'])/'genesis-study/result.json').read_text())
+          assert r['scope']=='AUTHORED_SYNTHETIC_FINITE_GAME'
+          assert r['model_best_offer']=='verifiable_evidence_package'
+          offers={o['id']:o for o in r['opportunities']}
+          assert offers['verifiable_evidence_package']['plan']['cost_cents']==3200
+          assert offers['verifiable_evidence_package']['no_frontier_plan']['cost_cents']==6400
+          assert offers['qualified_engineering_package']['decision']['status']=='NO_POSITIVE_COMPLETE_MARGIN'
+          assert offers['no_buyer_case']['decision']['status']=='NO_VOLUNTARY_BUYER'
+          assert all(o['commercial_readiness']=='NOT_ESTABLISHED' for o in offers.values())
+          print('Source-matched offline research verdict: PASS (no real-world qualification)')
+          PY

@@ -117,6 +117,12 @@ def archive_manifest(path):
             from scripts.qualify_omega_release import reach_source
             reach_source(manifest)
         members = set(manifest['files'])
+        from connected_enterprise.runner import GENESIS_RELEASE_MARKERS, GENESIS_RELEASE_PATHS
+        if GENESIS_RELEASE_MARKERS.intersection(members):
+            from genesis_enterprise.native import source_files as genesis_sources
+            required = set(GENESIS_RELEASE_PATHS) | set(genesis_sources(ROOT))
+            if not required <= members:
+                raise ValueError('GENESIS_EXACT_RELEASE_SOURCE_CLOSURE_REQUIRED')
         if (members.intersection(LEGACY_RELEASE_PATHS)
                 and not members.issuperset((*OMEGA_V4_RELEASE_PATHS, *LEGACY_RELEASE_PATHS))):
             raise ValueError('LEGACY_RESUME_RELEASE_DEPENDENCY_MISSING')
@@ -169,6 +175,15 @@ def verify_assets(directory, expected_commit):
         from scripts.qualify_omega_release import validate_receipt
         validate_receipt(read(directory/'OMEGA_V4_QUALIFICATION.json'),source,
                          digest(directory/'connected014-source.zip'),expected_commit)
+    from connected_enterprise.runner import GENESIS_RELEASE_MARKERS
+    if GENESIS_RELEASE_MARKERS.intersection(source['files']):
+        if 'GENESIS_QUALIFICATION.json' not in names:
+            raise ValueError('SOURCE_BOUND_GENESIS_QUALIFICATION_REQUIRED')
+        from scripts.qualify_genesis_release import validate_receipt as validate_genesis
+        genesis = read(directory/'GENESIS_QUALIFICATION.json')
+        validate_genesis(genesis, source, digest(directory/'connected014-source.zip'), expected_commit)
+        if genesis['actual_release_download'] is not False:
+            raise ValueError('GENESIS_PREPUBLICATION_QUALIFICATION_REQUIRED')
     publication = read(directory/'PUBLICATION.json')
     if publication.get('source_sha256') != manifest['source_sha256'] and 'COMPOSED_PUBLICATION.json' not in names:
         raise ValueError('COMPOSED_PUBLICATION_REQUIRED')
@@ -361,6 +376,17 @@ def prepare(qualification, output, source_commit, papers):
         validate_receipt(read(receipt_path),omega_source,
                          digest(qualification/'connected014-source.zip'),source_commit)
         shutil.copyfile(receipt_path,output/receipt_path.name)
+    from connected_enterprise.runner import GENESIS_RELEASE_MARKERS
+    if GENESIS_RELEASE_MARKERS.intersection(omega_source['files']):
+        receipt_path = qualification/'GENESIS_QUALIFICATION.json'
+        if not receipt_path.is_file() or receipt_path.is_symlink():
+            raise ValueError('SOURCE_BOUND_GENESIS_QUALIFICATION_REQUIRED')
+        from scripts.qualify_genesis_release import validate_receipt as validate_genesis
+        genesis = read(receipt_path)
+        validate_genesis(genesis, omega_source, digest(qualification/'connected014-source.zip'), source_commit)
+        if genesis['actual_release_download'] is not False:
+            raise ValueError('GENESIS_PREPUBLICATION_QUALIFICATION_REQUIRED')
+        shutil.copyfile(receipt_path, output/receipt_path.name)
     for name in PAPERS:
         shutil.copyfile(papers/name, output/name)
     if composed is not None:
