@@ -24,10 +24,11 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
-      - name: Verify published identities and preserve the reviewed PDF
+      - name: Verify published identities and the self-contained local reader
         run: |
           python3 - <<'PY'
           import pathlib,hashlib,json,shutil,os
+          from html.parser import HTMLParser
           r=pathlib.Path('docs/surf-constructive-challenge')
           p=json.loads((r/'PUBLICATION.json').read_text())
           info=p['source_and_evidence']
@@ -36,6 +37,15 @@ jobs:
               if hashlib.sha256((r/f'SURF_THE_EXPONENTIAL.{suffix}').read_bytes()).hexdigest()!=info[key]:raise SystemExit('Published identity mismatch')
           if hashlib.sha256((r/'evidence/exact-results.json').read_bytes()).hexdigest()!=info['result_sha256']:raise SystemExit('Result mismatch')
           if info['actual_customer_receipts']!=0 or info['separate_llm_reviewer'] is not False:raise SystemExit('Unsupported claim')
+          html=(r/'reader.html').read_text()
+          if 'PAPER_PAGES' in html or 'PAPER_SHA' in html or '23 pages' not in html or info['pdf_sha256'] not in html:raise SystemExit('Unresolved reader fields')
+          class CheckLinks(HTMLParser):
+              def handle_starttag(self,tag,attrs):
+                  for key,value in attrs:
+                      if key not in ('href','src','data') or not value or value.startswith(('https://','http://','#')):continue
+                      target=value.split('#')[0]
+                      if not (r/target).is_file():raise ValueError('Broken local reader link: '+target)
+          CheckLinks().feed(html)
           shutil.copyfile(r/'SURF_THE_EXPONENTIAL.pdf',pathlib.Path(os.environ['RUNNER_TEMP'])/'canonical.pdf')
           PY
       - name: Install the standard public manuscript toolchain
