@@ -30,8 +30,9 @@ def qualify(output, expected_source):
             raise ValueError('RELEASED_WHEEL_SOURCE_CHANGED')
         with tempfile.TemporaryDirectory(prefix='wheel-utility-') as temp:
             target = Path(temp) / 'precision'
-            # -I prevents ambient PYTHONPATH/user-site dependencies; cwd is exact extracted source.
-            result = subprocess.run([sys.executable, '-I', '-c',
+            # -I excludes ambient Python settings (including PYTHONDONTWRITEBYTECODE); -B
+            # explicitly prevents undeclared __pycache__ files in the exact extracted source.
+            result = subprocess.run([sys.executable, '-I', '-B', '-c',
                 "import sys;sys.path.insert(0,'.');from flywheel_wheel.__main__ import main;raise SystemExit(main(sys.argv[1:]))",
                 'precision', '--output', str(target)], cwd=ROOT, capture_output=True, timeout=60)
             if result.returncode:
