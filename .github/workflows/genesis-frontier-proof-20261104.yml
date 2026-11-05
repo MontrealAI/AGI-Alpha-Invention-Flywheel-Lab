@@ -20,6 +20,18 @@ jobs:
           set -euo pipefail
           echo "User $(id -un), compiler: $(g++ --version | head -1)"
           bash research/frontier-20261104/probe_flashprove.sh "$RUNNER_TEMP/genesis-frontier-001-evidence"
+      - name: Independently check exact sampling mathematics
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover \
+            -s research/frontier-20261104 -p 'test_audit_sampling.py' -v \
+            2>&1 | tee "$RUNNER_TEMP/genesis-audit-math-tests.log"
+          mkdir -p "$RUNNER_TEMP/genesis-frontier-001-evidence"
+          cp "$RUNNER_TEMP/genesis-audit-math-tests.log" "$RUNNER_TEMP/genesis-frontier-001-evidence/audit-math-tests.log"
+          python3 research/frontier-20261104/audit_sampling.py \
+            --out "$RUNNER_TEMP/genesis-frontier-001-evidence/audit_sampling.json"
       - name: Publish source-bound synthetic-only evidence
         if: always()
         uses: actions/upload-artifact@v4
