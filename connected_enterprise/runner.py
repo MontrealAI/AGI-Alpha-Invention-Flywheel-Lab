@@ -113,6 +113,22 @@ def genesis_release_paths(root):
 def source_paths(root):
     names=set(inherited_paths(root))
     names.update(genesis_release_paths(root))
+    # Optional offline governance086 research must ship as one complete unit.
+    # Never publish its tests without their implementation and review contract.
+    # This changes only prospective source inventory; historical signed accounts
+    # and their original source manifests are not migrated or re-signed here.
+    governance086 = {
+        'campaign/governance_change086.py',
+        'campaign/governance_change086/REVIEW_INTEGRITY_ADDENDUM.md',
+        'tests/test_connected_governance_change086.py',
+        'tests/test_connected_governance_review_integrity086.py',
+        'tests/test_connected_governance_archive086.py',
+        '.github/workflows/governance-change086.yml',
+    }
+    if any((root/name).exists() for name in governance086):
+        if any(not (root/name).is_file() or (root/name).is_symlink() for name in governance086):
+            raise ValueError('GOVERNANCE086_COMPLETE_RELEASE_SOURCE_REQUIRED')
+        names.update(governance086)
     for folder,pattern in [('connected_enterprise','*.py'),('tests','test_connected*.py'),('campaign/connected-014','*'),('campaign/completion-015','*'),('campaign/connected-registrations','*.json')]:
         names.update(p.relative_to(root).as_posix() for p in (root/folder).glob(pattern) if p.is_file())
     names.update(p for p in ['run_connected014.py','scripts/qualify_connected014.py','scripts/render_connected014_report.py','scripts/release_connected014.py','scripts/stage_cycle007_sources.py','verification/scan_adaptive_cancellation_history.py','evidence/cancellation-retirement/HISTORICAL_SCAN.json','evidence/cancellation-retirement/COUNTEREXAMPLE.before.json','docs/connected014/OPERATOR.md','AGENTS.md','.github/workflows/connected014.yml','.github/workflows/connected014-release.yml'] if (root/p).is_file())
