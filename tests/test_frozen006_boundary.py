@@ -53,7 +53,35 @@ class Frozen006BoundaryTests(unittest.TestCase):
             self.assertFalse(destination.exists())
 
     def test_hosted_replay_uses_materialized_original_runtime(self):
+        # Frozen source stays unchanged. A prospective supervisor may launch its
+        # authenticated --worker, but must not substitute the current worker.
         workflow=(ROOT/'.github/workflows/campaign.yml').read_text()
         self.assertIn('python -m flywheel.reproduction006 --root . --output "$RUNNER_TEMP/frozen-cycle-006"',workflow)
-        self.assertIn('python "$RUNNER_TEMP/frozen-cycle-006/run_cycle006.py" --output',workflow)
         self.assertNotIn('python run_cycle006.py --output',workflow)
+        self.assertNotIn('python "$RUNNER_TEMP/frozen-cycle-006/run_cycle006.py" --output',workflow)
+        self.assertIn('from flywheel.reproduction006 import FREEZE, FREEZE_SHA256',workflow)
+        self.assertIn('hashlib.sha256(freeze_raw).hexdigest() != FREEZE_SHA256',workflow)
+        self.assertIn('hashlib.sha256(runner_path.read_bytes()).hexdigest() != pins["run_cycle006.py"]',workflow)
+        self.assertIn('module.source_identity(root, freeze_path, FREEZE_SHA256)',workflow)
+        self.assertIn('len(frozen["sources"]) != 6363',workflow)
+        self.assertIn('from experiments import resource006_v4',workflow)
+        self.assertIn('resource006_v4.run(',workflow)
+        self.assertIn('"--worker",',workflow)
+        self.assertIn('str(runner_path), "--worker"',workflow)
+
+    def test_prospective_supervision_retains_bounds_receipts_and_failed_history(self):
+        workflow=(ROOT/'.github/workflows/campaign.yml').read_text()
+        for condition in (
+            '"wall_seconds": 360, "cpu_seconds": 240',
+            '"memory_bytes": 4 * 1024 ** 3',
+            '"output_bytes": 64 * 1024 ** 2',
+            '"storage_bytes": 512 * 1024 ** 2',
+            'result["receipt"]["state"] != "complete"',
+            'completed.get("state") != "COMPLETE"',
+            'completed.get("report_sha256") != hashlib.sha256(report).hexdigest()',
+            '(output / "INTERRUPTED.json").write_text(',
+            '"historical_v3_failure_repaired_retroactively": False',
+            '"prior_v3_run": "42083204982"',
+        ):
+            with self.subTest(condition=condition):
+                self.assertIn(condition,workflow)
