@@ -32,6 +32,12 @@ class CalibrationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             p.predict(self.I,self.M,changed,self.target[:,p.selected])
 
+    def test_acquired_data_is_preserved_despite_model_error(self):
+        p=compile_calibrated(self.I,self.M,self.ref,7)
+        noise=np.random.default_rng(33).normal(size=(6,7))
+        result=p.predict(self.I,self.M,self.ref,noise)
+        np.testing.assert_array_equal(result[:,p.selected],noise)
+
     def test_no_extra_mode_is_not_manufactured(self):
         with self.assertRaises(ValueError): compile_calibrated(self.I,self.M,self.V,7)
 

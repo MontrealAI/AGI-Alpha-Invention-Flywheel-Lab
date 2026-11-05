@@ -77,6 +77,11 @@ class BoundaryTests(unittest.TestCase):
         vector=np.concatenate([V[:,j] for j in range(V.shape[1])])
         np.testing.assert_array_equal(decode(vector,*V.shape),V)
 
+    def test_full_acquisition_preserves_even_out_of_model_observations(self):
+        I,M,V=fixture(False)
+        p=compile_plan(I,M,I.shape[1])
+        np.testing.assert_array_equal(p.predict(I,M,V[:,p.selected]),V)
+
     def test_invalid_geometry_and_voltage_fail_closed(self):
         I,M,V=fixture()
         bad=I.copy(); bad[0,0]=float('nan')

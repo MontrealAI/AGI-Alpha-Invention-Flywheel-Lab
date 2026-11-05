@@ -85,9 +85,14 @@ class Plan:
         if not np.isfinite(observed).all():
             raise ValueError('Nonfinite measurement')
         if self.mode == 'linear':
-            return observed @ self.operator
-        return (self.operator @ observed.T.ravel()).reshape(
-            self.n_patterns, self.n_measurements).T
+            result = observed @ self.operator
+        else:
+            result = (self.operator @ observed.T.ravel()).reshape(
+                self.n_patterns, self.n_measurements).T
+        # Recovery synthesizes only missing observations. Never replace actual
+        # acquired values by a model projection (especially at full acquisition).
+        result[:,self.selected] = observed
+        return result
 
 
 def compile_plan(currents, measurements, count, mode='reciprocal', order=None):

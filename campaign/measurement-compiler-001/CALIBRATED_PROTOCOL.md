@@ -48,3 +48,21 @@ Any subsequent image comparison remains separately labeled secondary evidence.
 This amendment responds to a disclosed development failure. It does not relabel
 the original model as correct or convert naturally measured modes into new physics.
 No evaluation target has been inspected at registration of this amendment.
+
+During unit testing, a guard incorrectly required enough voltage rows to identify
+the entire augmented basis from reference data alone. That is required by the
+pure SVD comparator, but not by the physics-plus-residual construction whose
+known input directions come from geometry. The guard was restricted to the SVD
+case before development scoring; the synthetic counterexample remains a test.
+
+## Development correction 2: preserve acquired observations
+
+Both first numerical implementations projected the acquired values as well as
+predicting missing ones. This was inappropriate for an observation-recovery claim:
+at full acquisition, real values are already available and must not be discarded.
+The projection residual is valid evidence of model mismatch, but is not an
+unavoidable full-acquisition error. Correct both families to copy acquired values
+unchanged into the output. Retain earlier development results as superseded
+implementation results. Add exact preservation tests. Rerun the same registered
+counts and criteria before opening any evaluation target. No scope, tolerance or
+confirmation denominator changes.

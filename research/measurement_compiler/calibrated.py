@@ -20,8 +20,8 @@ def response_basis(currents,measurements,reference,mode='physics_plus_one'):
     rank=np.linalg.matrix_rank(C)
     known=right[:rank]
     if mode=='current_only': return known
-    if rank+1>min(V.shape): raise ValueError('No extra calibrated mode available')
     if mode=='reference_svd':
+        if rank+1>min(V.shape): raise ValueError('Reference has insufficient rank capacity')
         return linalg.svd(V,full_matrices=False)[2][:rank+1]
     if mode!='physics_plus_one': raise ValueError('Unknown calibrated model')
     residual=V-(V@known.T)@known
@@ -52,7 +52,9 @@ class CalibratedPlan:
         v=np.asarray(acquired,dtype=np.float64)
         if v.shape!=(self.n_measurements,len(self.selected)) or not np.isfinite(v).all():
             raise ValueError('Incorrect or nonfinite acquired data')
-        return v@self.operator
+        result=v@self.operator
+        result[:,self.selected]=v
+        return result
 
 
 def compile_calibrated(currents,measurements,reference,count,mode='physics_plus_one',selected=None):
