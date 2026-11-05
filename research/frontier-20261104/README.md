@@ -1,6 +1,6 @@
 # GENESIS Frontier 001 — Discover the next possible enterprise
 
-**Evidence cutoff:** 4 November 2026. **Status:** exploratory, source-pinned execution in GitHub Actions; no achieved model-service attestation, breakthrough, production adoption, real revenue, or self-improved inventor.
+**Research source cutoff:** 4 November 2026. **Execution evidence:** updated 5 November 2026. **Status:** exploratory, source-pinned execution in GitHub Actions; no achieved model-service attestation, breakthrough, production adoption, real revenue, or self-improved inventor.
 
 ## The first frontier event and the second-order hypothesis
 
@@ -28,6 +28,36 @@ This branch intentionally uses the *best existing released verifier*, rather tha
 The synthetic example's commitment ID is packaged together with the proof. That is permitted for this self-test **only**. A real-world check requires the buyer to pin the trusted commitment from an independent channel *before* making the request and to bind the request/response bytes, token range and policy. Even a successful real model-origin proof would not establish the validity of a downstream physical or commercial claim.
 
 The workflow is the evidence source: no success is assumed from upstream documentation before the hosted run completes. If the hosted job fails or does not run, state that the attempted reproduction remains unresolved.
+
+## Verified result and exact audit sampling
+
+[Hosted run 41938562815](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41938562815) passed on 5 November 2026 at source commit [`ba3e92e25ca042159f81756ae05292d8b9371103`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/ba3e92e25ca042159f81756ae05292d8b9371103): the synthetic example returned exit 0 and final line `YES`, all ten altered examples were rejected, and all five sampling tests passed. The [11-file evidence artifact](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41938562815/artifacts/13374777814) includes verifier logs and the generated sampling result; its recorded expiry is 5 December 2026, 00:06:33 UTC. This confirms the reported outcomes for that finite synthetic experiment, not a live provider, real request or production service. It does not certify later commits or all repository checks.
+
+The standard finite-population model in [`audit_sampling.py`](audit_sampling.py) fixes `N` records with exactly `K` violations before choosing `q` uniformly random records without replacement. With `C(n,k)` denoting a binomial coefficient, for `0 <= q <= N-K`:
+
+`P(at least one violation sampled) = 1 - C(N-q, K) / C(N, K)`.
+
+For `K > 0` and `q > N-K`, the probability is 1; with `K = 0`, it is 0. Exact rational arithmetic gives the following minimum counts for `N = 10,000` and detection probability at least `99/100`:
+
+| Fixed violations | Rate | Minimum audits |
+| ---: | ---: | ---: |
+| 1 | 0.01% | 9,900 |
+| 10 | 0.1% | 3,689 |
+| 100 | 1% | 448 |
+| 500 | 5% | 90 |
+| 1,000 | 10% | 44 |
+
+The [tests](test_audit_sampling.py) compare the formula with exhaustive enumeration of all sample subsets for populations 1–8 and check minimum-count boundaries. These are mathematical checks, not live inference audits. Applying the probabilities to model substitution additionally requires a binding population and model commitment, sampling unpredictable to the provider until commitment, and reliable recognition of every sampled violation. Missing or refused proofs require a separate enforcement rule. Advance knowledge of the selection, mutable records or unrecognized violations invalidate the stated detection guarantee. This controls population-level sampling risk at the specified prevalence, not each job's integrity or outcome correctness.
+
+Reproduce the mathematics from the repository root with Python 3.10 or newer and its standard library; choose a new output filename:
+
+```sh
+python3 -m unittest discover -s research/frontier-20261104 -p 'test_audit_sampling.py' -v
+python3 -O -m unittest discover -s research/frontier-20261104 -p 'test_audit_sampling.py' -v
+python3 research/frontier-20261104/audit_sampling.py --out NEW_AUDIT_RESULT.json
+```
+
+Audit fractions alone establish no commercial savings. Proof generation, transfer, verification, failures, enforcement and outcome acceptance must be costed and compared with signed receipts, hardware attestation, direct provider use and conventional quality assurance. A permissioned live-model pilot with independently authenticated commitments and separately accepted useful work remains the next test; no customer, payment, profit or superior invention procedure has been demonstrated.
 
 ## Materially different second-order opportunities
 
