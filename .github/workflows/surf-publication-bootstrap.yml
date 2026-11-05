@@ -1,0 +1,89 @@
+name: Surf publication preparation
+on:
+  push:
+    branches: [paper/surf-the-exponential-20261105]
+    paths:
+      - '.publication/surf-source.xz.part*'
+      - '.github/workflows/surf-publication-bootstrap.yml'
+permissions:
+  contents: read
+concurrency:
+  group: surf-publication-preparation
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify and unpack only the new publication source
+        run: |
+          python3 - <<'PY'
+          import hashlib,io,tarfile,pathlib
+          archive=b''.join(pathlib.Path(f'.publication/surf-source.xz.part{i:02}').read_bytes() for i in range(4))
+          expected='6eb35d2d49bc342237f8704508d3dec950d27cb610e6d93ab1f9b7337b3593b0'
+          if len(archive)!=46624 or hashlib.sha256(archive).hexdigest()!=expected:
+              raise SystemExit('Publication transport identity mismatch')
+          dest=pathlib.Path('docs/surf-the-exponential')
+          if dest.exists():raise SystemExit('Refusing to overwrite existing publication')
+          with tarfile.open(fileobj=io.BytesIO(archive),mode='r:xz') as stream:
+              members=stream.getmembers()
+              if len(members)!=24 or sum(m.size for m in members)>2000000:
+                  raise SystemExit('Unexpected publication size')
+              for m in members:
+                  p=pathlib.PurePosixPath(m.name)
+                  if not m.isfile() or p.is_absolute() or '..' in p.parts or m.size>1000000:
+                      raise SystemExit('Unsafe publication member')
+              dest.mkdir(parents=True)
+              for m in members:
+                  target=dest/m.name
+                  target.parent.mkdir(parents=True,exist_ok=True)
+                  target.write_bytes(stream.extractfile(m).read())
+          print('Verified 24 source files; no original private documents or fonts included.')
+          PY
+      - name: Install the public LaTeX and PDF toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-extra texlive-science poppler-utils
+      - name: Reproduce the exact studies and compile the manuscript
+        run: python3 docs/surf-the-exponential/build.py
+      - name: Integrate only the new paper and preserve previous research editions
+        run: |
+          cp docs/surf-the-exponential/publication/test_surf_publication.py tests/test_surf_publication.py
+          cp docs/surf-the-exponential/publication/surf-the-exponential.yml .github/workflows/surf-the-exponential.yml
+          python3 docs/surf-the-exponential/publication/install_publication.py
+      - name: Test the publication and existing research website
+        run: |
+          python3 -B -m unittest discover -s tests -p 'test_surf_publication.py' -v
+          python3 -B -m unittest discover -s tests -p 'test_research_site.py' -v
+          node --test tests/test_alpha_site.cjs
+          python3 scripts/build_research_site.py --output "$RUNNER_TEMP/surf-research-site"
+          python3 docs/surf-the-exponential/package.py --output "$RUNNER_TEMP/surf-publication"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: surf-the-exponential-prepared-publication
+          path: ${{ runner.temp }}/surf-publication/
+          retention-days: 7
+      - name: Commit the verified publication on its dedicated branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          branch='paper/surf-the-exponential-20261105'
+          gh auth setup-git --hostname github.com
+          actual="$(git ls-remote origin "refs/heads/$branch" | cut -f1)"
+          test "$actual" = "$GITHUB_SHA" || { echo 'Branch changed; preserve concurrent work.' >&2; exit 1; }
+          git rm -- .publication/surf-source.xz.part00 .publication/surf-source.xz.part01 .publication/surf-source.xz.part02 .publication/surf-source.xz.part03 .github/workflows/surf-publication-bootstrap.yml
+          rm docs/surf-the-exponential/SURF_THE_EXPONENTIAL.pdf
+          git add docs/surf-the-exponential docs/research/surf-the-exponential.pdf docs/research/surf-the-exponential.html docs/research/publication-manifest.json docs/research/index.html docs/research/README.md README.md scripts/build_research_site.py tests/test_research_site.py tests/test_surf_publication.py .github/workflows/surf-the-exponential.yml
+          git config user.name 'MONTREAL.AI Research Publication'
+          git config user.email 'info@montreal.ai'
+          git commit -m 'Publish SURF THE EXPONENTIAL research edition 1.0.0 with exact study, qualified PDF and reader'
+          git push origin "HEAD:refs/heads/$branch"
+          git rev-parse HEAD
