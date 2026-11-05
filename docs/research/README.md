@@ -12,7 +12,7 @@ The 31-page edition develops three orders of intelligence and includes authored 
 
 Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 4 November 2026 · Edition 1.1.0.
 
-[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/alpha-genesis-flywheel-omega.html) · [PDF](alpha-genesis-flywheel-omega.pdf) · [Editable source and reproducible analysis](../alpha-genesis/README.md).
+[Earlier edition](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/alpha-genesis-flywheel-omega.html#previous-edition) · [PDF](alpha-genesis-flywheel-omega.pdf) · [Editable source and reproducible analysis](../alpha-genesis/README.md).
 
 Invent the means. Expand what becomes possible. Compound the ability to discover. GENESIS connects frontier awareness, construction of valuable possibilities and improvement of the methods used to discover them. Frontier Replay revisits consequential blocked opportunities when newly accessible capabilities could change what can be built. Its enterprise goal is sustainable useful delivery and stronger successors, using the best complete available means rather than privileging its own inventions.
 
