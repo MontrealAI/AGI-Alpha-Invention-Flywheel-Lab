@@ -113,6 +113,24 @@ def genesis_release_paths(root):
 def source_paths(root):
     names=set(inherited_paths(root))
     names.update(genesis_release_paths(root))
+    # Opt-in commitment campaign ships as a complete source-bound unit. This
+    # inventory changes no historical account or original source identity.
+    commitment = Path(root) / 'campaign/genesis_commitment001'
+    if commitment.exists():
+        from campaign.genesis_commitment001.service import source_paths as commitment_sources
+        required = set(commitment_sources(root)) | {
+            'campaign/genesis_commitment001/PROTOCOL.md',
+            'campaign/genesis_commitment001/README.md',
+            'campaign/genesis_commitment001/OPPORTUNITIES.md',
+            'campaign/genesis_commitment001/test_delivery.py',
+            'campaign/genesis_commitment001/test_native.py',
+            'tests/test_connected_commitment_release.py',
+            'tests/test_connected_commitment_independent.py',
+            '.github/workflows/genesis-commitment001.yml',
+        }
+        if any(not (Path(root)/name).is_file() or (Path(root)/name).is_symlink() for name in required):
+            raise ValueError('COMMITMENT001_COMPLETE_RELEASE_SOURCE_REQUIRED')
+        names.update(required)
     # Optional offline governance086 research must ship as one complete unit.
     # Never publish its tests without their implementation and review contract.
     # This changes only prospective source inventory; historical signed accounts

@@ -44,6 +44,15 @@ jobs:
         run: |
           python "$RUNNER_TEMP/connected014-qualified/extracted-source/scripts/qualify_genesis_release.py" --source "$RUNNER_TEMP/connected014-qualified/extracted-source" --archive "$RUNNER_TEMP/connected014-qualified/connected014-source.zip" --output "$RUNNER_TEMP/genesis-qualified" --source-commit "${{ github.event.pull_request.head.sha || github.sha }}"
           cp "$RUNNER_TEMP/genesis-qualified/QUALIFICATION.json" "$RUNNER_TEMP/connected014-qualified/GENESIS_QUALIFICATION.json"
+      - name: Qualify the capacity-backed turn from the clean source archive
+        working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
+        run: |
+          python -m unittest campaign.genesis_commitment001.test_delivery campaign.genesis_commitment001.test_native -v
+          python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/commitment-release-qualified" --scenario central --arm retained
+          python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/commitment-release-qualified"
+          python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/commitment-positive-qualified" --scenario favorable_envelope --arm retained
+          python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/commitment-positive-qualified"
+          python -m campaign.genesis_commitment001.runner package --output "$RUNNER_TEMP/commitment-positive-qualified" --archive "$RUNNER_TEMP/commitment-release-qualified-public.zip"
       - name: Bind immutable release assets to exact qualified source and inspected research edition
         if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         run: python scripts/release_connected014.py prepare --qualification "$RUNNER_TEMP/connected014-qualified" --assets "$RUNNER_TEMP/connected014-release-assets" --source-commit "$GITHUB_SHA" --papers docs/completion015
@@ -64,6 +73,10 @@ jobs:
             ${{ runner.temp }}/connected014-qualified/QUALIFICATION.json
             ${{ runner.temp }}/omega-v4-qualified/QUALIFICATION.json
             ${{ runner.temp }}/genesis-qualified/QUALIFICATION.json
+            ${{ runner.temp }}/commitment-release-qualified/REPORT.json
+            ${{ runner.temp }}/commitment-release-qualified/AUDIT.json
+            ${{ runner.temp }}/commitment-positive-qualified/REPORT.json
+            ${{ runner.temp }}/commitment-positive-qualified/AUDIT.json
             ${{ runner.temp }}/connected014-qualified/*.stdout
             ${{ runner.temp }}/connected014-qualified/*.stderr
           if-no-files-found: warn
@@ -207,6 +220,26 @@ jobs:
         run: |
           python -m connected_enterprise.transformational063 run --root "$PWD" --output "$RUNNER_TEMP/released-transformational063"
           python -m connected_enterprise.transformational063 audit --root "$PWD" --output "$RUNNER_TEMP/released-transformational063"
+      - name: Operate the capacity-backed turn from actual downloaded release bytes
+        working-directory: ${{ runner.temp }}/downloaded-release-operation/source
+        run: |
+          python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/released-commitment001" --scenario central --arm retained
+          python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/released-commitment001"
+          python -m campaign.genesis_commitment001.runner resume --output "$RUNNER_TEMP/released-commitment001" --scenario central --arm retained
+          python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/released-commitment001-positive" --scenario favorable_envelope --arm retained
+          python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/released-commitment001-positive"
+          python -m campaign.genesis_commitment001.runner resume --output "$RUNNER_TEMP/released-commitment001-positive" --scenario favorable_envelope --arm retained
+      - name: Retain key-free downloaded commitment receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: commitment001-released-operation-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/released-commitment001/REPORT.json
+            ${{ runner.temp }}/released-commitment001/AUDIT.json
+            ${{ runner.temp }}/released-commitment001-positive/REPORT.json
+            ${{ runner.temp }}/released-commitment001-positive/AUDIT.json
+          if-no-files-found: warn
       - name: Retain released flexibility evidence without recovery authority
         if: always() && steps.released_flexibility.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
