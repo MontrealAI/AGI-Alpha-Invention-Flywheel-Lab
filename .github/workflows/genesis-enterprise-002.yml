@@ -32,7 +32,7 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_genesis_enterprise_*.py' -v
       - name: Frozen GENESIS103 active chronology, restart, and selection regressions
         run: |
-          for case in tests/test_genesis_active_chronology103.py tests/test_genesis_active_restart103.py tests/test_genesis_active_selection103.py; do
+          for case in tests/test_genesis_active_chronology103.py tests/test_genesis_active_restart103.py tests/test_genesis_active_selection103.py tests/test_genesis_active_order_recovery104.py; do
             test -f "$case" || { echo "::error::Required frozen GENESIS103 test missing: $case"; exit 1; }
           done
           python -m unittest discover -s tests -p 'test_genesis_active_*.py' -v
