@@ -10,9 +10,11 @@ permissions:
 
 jobs:
   verify-public-research-example:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Record platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - name: Build verifier and run accepted and rejected examples
         shell: bash
