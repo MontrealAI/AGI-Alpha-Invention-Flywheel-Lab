@@ -448,7 +448,32 @@ def audit(output):
         _audit_native_offer(p, ident, i, expected['selected'], actions,
                             ordered=(i < len(execution['rows']) or execution['phase'] != 'order'))
         if i == len(execution['rows']):
-            continue  # Active delivery/settlement is not yet a completed row.
+            # Completed-row prepayment and refund guards below deliberately do
+            # not apply to unfinished work. Active preparation/collection still
+            # requires genuine, completed, native-replayed production payment.
+            # Unlike a day-only check, source-authenticated sequence forbids a
+            # same-hour payment from using collections it was meant to precede.
+            if expected['selected'] is not None:
+                entries = [e for e in exported['connected_journal']['entries']
+                           if e['request']['operation'] == 'spend'
+                           and e['request']['id'] == 'genesis-production-' + ident]
+                events = [a for a in actions if a['op'] == 'event'
+                          and a['args']['id'] == order
+                          and a['args']['action'] in ('prepare', 'release')]
+                if (len(entries) > 1
+                        or any(e['request']['day'] != 24 * (i + 1)
+                               for e in entries)
+                        or (row['resource_receipt'] is not None
+                            and (len(entries) != 1 or entries[0]['status'] != 'COMPLETE'
+                                 or entries[0]['receipt'] != row['resource_receipt']))):
+                    raise ValueError('ACTIVE_PRODUCTION_MUST_PRECEDE_DELIVERY')
+                if events:
+                    if (len(entries) != 1 or entries[0]['status'] != 'COMPLETE'
+                            or type(entries[0]['receipt'].get('native_event_sequence')) is not int
+                            or any(entries[0]['receipt']['native_event_sequence'] >= a['seq']
+                                   for a in events)):
+                        raise ValueError('ACTIVE_PRODUCTION_MUST_PRECEDE_DELIVERY')
+            continue  # Unfinished row: never book a completed delivery/refund.
         released = [a for a in releases if a['args']['id'] == order]
         if row['artifact_sha256'] is not None:
             from flexibility063.verify import verify
