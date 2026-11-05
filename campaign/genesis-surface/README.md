@@ -50,10 +50,29 @@ No changes to `JournalAccount`, adaptive `Account`, PR229/233/235, existing brid
 ## Test and reproduce
 
 ```sh
-python -m unittest discover -s tests -p test_genesis_surface.py -v
-python -O -m unittest discover -s tests -p test_genesis_surface.py -v
+python -B -m unittest discover -s tests -p 'test_genesis_surface*.py' -v
+python -B -O -m unittest discover -s tests -p 'test_genesis_surface*.py' -v
 python -m research.genesis_surface build --request campaign/genesis-surface/SUCCESSOR_REQUEST.json --out /absolute/new/reversed-surface
 python -m research.genesis_surface audit --out /absolute/new/reversed-surface
 ```
 
-36 tests passed locally in normal and optimized Python. The supplied primary mesh was separately checked with trimesh: watertight, consistent winding, Euler number 2 and positive volume. This checks geometry, not contact behavior. Two OpenSCAD-to-STL development attempts were interrupted by tool wall limits; they are not counted as successful rendering. The standard-library/NumPy mesh exporter is the working alternative. No new repository license is inferred or imposed. Source-bound CI and review are separate from these local checks.
+The complete surface suite contains 64 distinct tests covering construction, calibration and distribution. All 64 passed in normal and optimized Python; the earlier 36-test result covered only the original construction tests. The supplied primary mesh was separately checked with trimesh: watertight, consistent winding, Euler number 2 and positive volume. This checks geometry, not contact behavior. Two OpenSCAD-to-STL development attempts were interrupted by tool wall limits; they are not counted as successful rendering. The standard-library/NumPy mesh exporter is the working alternative. No new repository license is inferred or imposed. Source-bound CI and review are separate from these local checks.
+
+## Candidate download and source recovery
+
+The [verified candidate workflow](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41936197863) retains its artifacts for **7 days**. GitHub reports that its usable-package artifact expires on **2026-11-11 at 23:46:05 UTC**. This temporary Actions download is not a public release or a permanent distribution URL.
+
+The tested source remains available at [commit `9b8d6a25ce460f26a8adc30ce05686b150cb45ac`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/9b8d6a25ce460f26a8adc30ce05686b150cb45ac). From a checkout of that exact commit, using Python 3.12 and the declared dependencies, regenerate a usable package into a new absolute directory:
+
+```sh
+python -m pip install -r campaign/genesis-surface/requirements.txt
+python -B -m unittest discover -s tests -p 'test_genesis_surface*.py' -v
+python -B -O -m unittest discover -s tests -p 'test_genesis_surface*.py' -v
+python -B -m research.genesis_surface.distribution build --out /absolute/new/genesis-distribution --commit 9b8d6a25ce460f26a8adc30ce05686b150cb45ac
+```
+
+Open `/absolute/new/genesis-distribution/ALPHA_GENESIS_SURFACE/START_HERE.html`; the adjacent `ALPHA_GENESIS_SURFACE.zip` is the newly generated archive. The build checks a fresh extraction. A regenerated archive contains newly recorded timing values and is not expected to reproduce the original ZIP byte-for-byte.
+
+For an already retained copy of the original candidate ZIP, its SHA-256 is `b473182d37e1ec22844490e08e4e178182350cd783c20a83f2a3cd8cac8b4b54`. That hash binds the original bytes, not physical qualification. The package has 42 manifest-listed files plus `PACKAGE.json`; source changes need their own tests and package verification.
+
+This recovery path keeps the construction available for the next mixed-coupon calibration and physical-transfer test. It does not establish measured calibration, manufacturability, buyer demand, a merge, or a released-system qualification.
