@@ -28,14 +28,22 @@ class ReleasedWheel(unittest.TestCase):
             extracted = self.extracted(temp)
             expected = identity(ROOT)['sha256']
             self.assertEqual(identity(extracted)['sha256'], expected)
+            def exact_inventory():
+                return {p.relative_to(extracted).as_posix() for p in extracted.rglob('*') if p.is_file()}
+
+            original_inventory = set(source_paths(ROOT))
+            self.assertEqual(exact_inventory(), original_inventory)
             receipt = Path(temp) / 'receipt.json'
-            result = subprocess.run([sys.executable, '-I', str(extracted / 'scripts/qualify_released_wheel035.py'),
+            # Explicit -B is needed in an isolated interpreter (-I ignores PYTHON* env).
+            result = subprocess.run([sys.executable, '-I', '-B', str(extracted / 'scripts/qualify_released_wheel035.py'),
                 '--expected-source', expected, '--output', str(receipt)], cwd=temp, capture_output=True)
             self.assertEqual(result.returncode, 0, result.stderr.decode())
             proof = json.loads(receipt.read_text())
             self.assertTrue(proof['accepted'])
             self.assertEqual(proof['stage_count'], 48)
             self.assertFalse(proof['funding_authority'])
+            self.assertEqual(exact_inventory(), original_inventory,
+                             'Released wheel must not add bytecode or other undeclared source files')
 
     def test_missing_wheel_dependency_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
