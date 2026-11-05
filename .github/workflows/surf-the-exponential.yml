@@ -38,11 +38,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended poppler-utils
-      - name: Verify bound edition and exact reference study
+      - name: Verify bound edition and executable evidence
         run: |
           python3 docs/surf-the-exponential/package.py --verify
           python3 docs/surf-the-exponential/check_study.py
-          python3 -m unittest discover -s docs/surf-the-exponential -p test_study.py -v
+          python3 docs/surf-the-exponential/check_construct_case.py
+          python3 -m unittest discover -s docs/surf-the-exponential -p 'test_*.py' -v
       - name: Compile source and package reviewed canonical edition
         run: |
           python3 docs/surf-the-exponential/build.py --output "$RUNNER_TEMP/surf-rebuilt.pdf"
@@ -53,6 +54,8 @@ jobs:
           unzip -q "$RUNNER_TEMP/surf-publication/SURF_THE_EXPONENTIAL_SOURCE.zip" -d "$RUNNER_TEMP/surf-extracted"
           python3 "$RUNNER_TEMP/surf-extracted/package.py" --verify
           python3 "$RUNNER_TEMP/surf-extracted/check_study.py"
+          python3 "$RUNNER_TEMP/surf-extracted/check_construct_case.py"
+          python3 -m unittest discover -s "$RUNNER_TEMP/surf-extracted" -p 'test_*.py' -v
           python3 "$RUNNER_TEMP/surf-extracted/build.py" --output "$RUNNER_TEMP/surf-extracted-rebuilt.pdf"
           cmp "$RUNNER_TEMP/surf-rebuilt.pdf" "$RUNNER_TEMP/surf-extracted-rebuilt.pdf"
           cd "$RUNNER_TEMP/surf-publication"
@@ -82,7 +85,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          tag=surf-the-exponential-v1.0.0
+          tag=surf-the-exponential-v1.1.0
           assets="$RUNNER_TEMP/surf-publication"
           (cd "$assets" && sha256sum --check SHA256SUMS)
           if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" > "$RUNNER_TEMP/surf-existing.json" 2> "$RUNNER_TEMP/surf-existing.err"; then
@@ -100,13 +103,17 @@ jobs:
 
           **Find what the answer missed. Build what the world is missing.**
 
-          Research edition 1.0.0 by Vincent Boucher · MONTREAL.AI / QUEBEC.AI.
+          Research edition 1.1.0 by Vincent Boucher · MONTREAL.AI / QUEBEC.AI.
 
-          A 28-page synthesis of Transformational Intelligence, ALPHA GENESIS FLYWHEEL Ω, and Invent the Economy: turn evidence-grounded criticism into missing capabilities, viable productive arrangements, and better discovery on fresh work.
+          A research synthesis of Transformational Intelligence, ALPHA GENESIS FLYWHEEL Ω, and Invent the Economy: turn evidence-grounded criticism into missing capabilities, viable productive arrangements, and better discovery on fresh work.
 
-          Read the accessible [browser edition](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.html), download the PDF, or rebuild the complete editable LaTeX and exact reference study from the source archive.
+          Read the accessible [browser edition](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.html), download the PDF, or rebuild the complete editable LaTeX and executable evidence from the source archive.
 
-          The package includes an independently implemented arithmetic checker, 15 focused tests, 2,304 declared parameter combinations, adverse cases, and conventional comparators that tie or win. These are authored mathematical scenarios, not observed frontier-model performance or commercial outcomes. The empirical programme remains prospective.
+          Edition 1.1 adds an executable construction and changed-task successor: 36 initial and 54 successor checks, minimal representations of three and six labels, and independent enumeration of all 21,147 partitions. Conventional constructions tie. A full-refund counterexample shows why 50 units fund the successful deposit path but 90 are needed to protect the complete promised arrangement.
+
+          The source includes separate checkers, focused mutation tests, and the original 2,304-point review audit with adverse cases and conventional controls that tie or win. These are authored finite models, not observed frontier-model superiority or realized commerce. The stronger empirical programme remains prospective.
+
+          The [original edition 1.0.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.0.0) remains available with its original artifacts.
 
           `PUBLICATION.json` binds the reviewed PDF to its source inputs. `SHA256SUMS` verifies the release assets. The archive is self-contained; its README explains reproduction and the scope of byte reproducibility across TeX environments.
           NOTES
@@ -130,4 +137,5 @@ jobs:
           unzip -q "$RUNNER_TEMP/surf-downloaded/SURF_THE_EXPONENTIAL_SOURCE.zip" -d "$RUNNER_TEMP/surf-release-extracted"
           python3 "$RUNNER_TEMP/surf-release-extracted/package.py" --verify
           python3 "$RUNNER_TEMP/surf-release-extracted/check_study.py"
-          python3 -m unittest discover -s "$RUNNER_TEMP/surf-release-extracted" -p test_study.py -v
+          python3 "$RUNNER_TEMP/surf-release-extracted/check_construct_case.py"
+          python3 -m unittest discover -s "$RUNNER_TEMP/surf-release-extracted" -p 'test_*.py' -v

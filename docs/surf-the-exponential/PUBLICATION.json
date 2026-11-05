@@ -7,17 +7,17 @@
     "MONTREAL.AI",
     "QUEBEC.AI"
   ],
-  "edition": "1.0.0",
+  "edition": "1.1.0",
   "publication_date": "2026-11-05",
-  "release_tag": "surf-the-exponential-v1.0.0",
+  "release_tag": "surf-the-exponential-v1.1.0",
   "reader_url": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.html",
   "canonical_pdf": {
     "repository_path": "docs/research/surf-the-exponential.pdf",
     "repository_relative_to_source": "../research/surf-the-exponential.pdf",
     "bundle_path": "canonical/SURF_THE_EXPONENTIAL.pdf",
-    "bytes": 275414,
-    "sha256": "52b18b31eab0d2e124c6621a14e83c8fe2667a84724a31b282eb5dc1319d227b",
-    "pages": 28,
+    "bytes": 287078,
+    "sha256": "45b063750a325a4e94be45e7dd3ea1595cdf74c1e446496f50504e44028349a1",
+    "pages": 30,
     "pages_provenance": "Recorded from pdfinfo on the canonical PDF; its exact bytes are hash-bound."
   },
   "build": {
@@ -28,7 +28,7 @@
     "shell_escape": false,
     "reproducibility": "Compare clean builds on the same TeX toolchain. Different TeX/font versions can change PDF bytes; retain and verify the canonical PDF independently."
   },
-  "binding_scope": "Content identities for the source snapshot and canonical PDF. Hash binding alone is not scientific validation or proof of compilation; run the independent arithmetic checker and clean build separately.",
+  "binding_scope": "Content identities for the source snapshot and canonical PDF. Hash binding alone is not scientific validation or proof of compilation; run both separate evidence checkers and a clean build.",
   "source_inventory_rule": "Root publication .py, .md, .tex, .bib and .json files except this manifest; .gitignore; all evidence and figure files. Generated build output, caches and the bundled canonical PDF are excluded from source inputs.",
   "manifest_exclusion": "PUBLICATION.json excludes itself from source_files and source-tree hashing to avoid a circular digest. The canonical PDF has its separate identity above.",
   "source_files": [
@@ -39,13 +39,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 10699,
-      "sha256": "c43ae7674b5b7b2d76403e691f3a676f873cfc79d797582c50d35a1a02926415"
+      "bytes": 13648,
+      "sha256": "9228e5af6346b0c412ca11ecf224e0a5db54009dbc7435d1502efc6287dfa842"
     },
     {
       "path": "REVIEW.md",
-      "bytes": 4238,
-      "sha256": "ccc5a5376b88cb6cf6d1d72fcb7eb628fc970a3b154fbd1253824f72df4b4395"
+      "bytes": 7033,
+      "sha256": "6336e7a28248d072f2a6418370059c082788cae6f4fd903d9ed38aef2e38157d"
     },
     {
       "path": "SOURCE_LINEAGE.json",
@@ -58,9 +58,29 @@
       "sha256": "c66e0ee6c32791cd1e0d348aa1ddddeb9ad1e6e0a61cb6728cb74f53b0728e75"
     },
     {
+      "path": "check_construct_case.py",
+      "bytes": 21847,
+      "sha256": "c8fd78ba8599fd7bc224211f696c9c045655cfd580c16f162f4685f6848bef7e"
+    },
+    {
       "path": "check_study.py",
       "bytes": 14131,
       "sha256": "23185a5425bc577de3bbf7ab9a6aafc58dabd4b1e737b6201a78f109496bff53"
+    },
+    {
+      "path": "construct_case.py",
+      "bytes": 17360,
+      "sha256": "f3a37c18fa07f7712d03cc8a51850cc190b05c5f886b657ee4b211387c7b51ca"
+    },
+    {
+      "path": "construct_protocol.json",
+      "bytes": 3884,
+      "sha256": "c9620c0c6793242b3857c6cda701c2dc38b9eca014953c0989e3571d61fa8f2c"
+    },
+    {
+      "path": "evidence/construct_results.json",
+      "bytes": 16084,
+      "sha256": "f1ca19390e8f997fd35f537e9a50656e79dd72ee776cf57b7f7c9fa9f3b21e44"
     },
     {
       "path": "evidence/results.csv",
@@ -84,8 +104,8 @@
     },
     {
       "path": "paper.tex",
-      "bytes": 13946,
-      "sha256": "545d261c84b56583bed90ec74baa2dd297ddc32a680315248376c3efc0a4a843"
+      "bytes": 13805,
+      "sha256": "ed9080751adc6b18386efd16351eeac35fc0f1eb19ab7b88cd370c1dad6711be"
     },
     {
       "path": "protocol.json",
@@ -99,23 +119,23 @@
     },
     {
       "path": "sections-appendix.tex",
-      "bytes": 11371,
-      "sha256": "16879d85ff452afefdd60411c0d58511ba720d023bf6398071c817d4feca525f"
+      "bytes": 11990,
+      "sha256": "335d8e0aec456b6f95d0c9b369f148b8bd1c467d27827c39149e80fabf414e7f"
     },
     {
       "path": "sections-construction.tex",
-      "bytes": 15322,
-      "sha256": "72183d2e50be01106ea58e363426f90b17175f0824be9495b4ee7d279f3298dd"
+      "bytes": 20592,
+      "sha256": "ff813af97a6dcae1bcb5c23aa875e41c2afd9853dfba015f581a3c4a330c85a7"
     },
     {
       "path": "sections-evidence.tex",
-      "bytes": 21392,
-      "sha256": "d2daefd50c7876d9e482f9e593b5464a7134bfaa972c13f6e3279fd8c44f65f5"
+      "bytes": 22113,
+      "sha256": "9b67acfb5db94e8e334b249e0a760cd125d287c78ba2269a4fae230847cc8805"
     },
     {
       "path": "sections-foundation.tex",
-      "bytes": 26419,
-      "sha256": "09723d1e4259812c78f62b03e6db395ef63ccf62e43d199a5975f958f8e31bf0"
+      "bytes": 26846,
+      "sha256": "540193516c58bbe5025020963ca005b96753a92a6029af5ab7fa3453323e8d10"
     },
     {
       "path": "study.py",
@@ -123,12 +143,17 @@
       "sha256": "7d8af5ac45c5543f76dba3f0c85b45d7180c8d465b6a6b83c0f279f995f1fa56"
     },
     {
+      "path": "test_construct_case.py",
+      "bytes": 9029,
+      "sha256": "66397ad9c991fba1b597511df7a33594d11919649f3cf7f5c0f43544b449667d"
+    },
+    {
       "path": "test_study.py",
       "bytes": 8911,
       "sha256": "eff7f92a36c10de4271f5438de8fed3a2c991d68e552fbbb07f8831ff4fbb1e9"
     }
   ],
-  "source_tree_sha256": "cf5c36c1b55186b2ac586a88d555dc3ba9da22de8ff5ed62086eb306cc6ed15f",
+  "source_tree_sha256": "962d97ab97637d7e8a87d10e94e93d92af06a2fb168fcfebffeea9bfca0b3970",
   "compiled_inputs": [
     {
       "path": "evidence/results_table.tex",
@@ -137,8 +162,8 @@
     },
     {
       "path": "paper.tex",
-      "bytes": 13946,
-      "sha256": "545d261c84b56583bed90ec74baa2dd297ddc32a680315248376c3efc0a4a843"
+      "bytes": 13805,
+      "sha256": "ed9080751adc6b18386efd16351eeac35fc0f1eb19ab7b88cd370c1dad6711be"
     },
     {
       "path": "references.bib",
@@ -147,26 +172,26 @@
     },
     {
       "path": "sections-appendix.tex",
-      "bytes": 11371,
-      "sha256": "16879d85ff452afefdd60411c0d58511ba720d023bf6398071c817d4feca525f"
+      "bytes": 11990,
+      "sha256": "335d8e0aec456b6f95d0c9b369f148b8bd1c467d27827c39149e80fabf414e7f"
     },
     {
       "path": "sections-construction.tex",
-      "bytes": 15322,
-      "sha256": "72183d2e50be01106ea58e363426f90b17175f0824be9495b4ee7d279f3298dd"
+      "bytes": 20592,
+      "sha256": "ff813af97a6dcae1bcb5c23aa875e41c2afd9853dfba015f581a3c4a330c85a7"
     },
     {
       "path": "sections-evidence.tex",
-      "bytes": 21392,
-      "sha256": "d2daefd50c7876d9e482f9e593b5464a7134bfaa972c13f6e3279fd8c44f65f5"
+      "bytes": 22113,
+      "sha256": "9b67acfb5db94e8e334b249e0a760cd125d287c78ba2269a4fae230847cc8805"
     },
     {
       "path": "sections-foundation.tex",
-      "bytes": 26419,
-      "sha256": "09723d1e4259812c78f62b03e6db395ef63ccf62e43d199a5975f958f8e31bf0"
+      "bytes": 26846,
+      "sha256": "540193516c58bbe5025020963ca005b96753a92a6029af5ab7fa3453323e8d10"
     }
   ],
-  "compiled_input_tree_sha256": "825d3236a0ed134813dc5402dbf8977c0e38252182e06fe007dbff566caa9ee2",
+  "compiled_input_tree_sha256": "660536da35e76e406a0b5d6ca449758a951b4c3745b979c410c51e2f79330c2e",
   "release_assets": {
     "pdf": "SURF_THE_EXPONENTIAL.pdf",
     "source_archive": "SURF_THE_EXPONENTIAL_SOURCE.zip",
@@ -180,5 +205,5 @@
     "permissions": "Regular files, mode 0644",
     "timestamp_epoch": 1793836800
   },
-  "evidence_scope": "Original research synthesis, conditional results, authored exact arithmetic and proposed empirical evaluation. No empirical frontier-model superiority, observed buyer acceptance, actual revenue or general recursive self-improvement is established."
+  "evidence_scope": "Research synthesis, conditional results, independently checked finite construction and changed-task successor, authored review and cash models, and proposed empirical evaluation. Conventional constructions tie. No empirical frontier-model superiority, observed buyer acceptance, actual revenue or general recursive self-improvement is established."
 }

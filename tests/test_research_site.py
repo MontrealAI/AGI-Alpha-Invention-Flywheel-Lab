@@ -197,11 +197,11 @@ class ResearchSiteTests(unittest.TestCase):
         home = (self.source / 'index.html').read_text()
         manifest = json.loads((self.source / 'publication-manifest.json').read_text())
         entry = next(p for p in manifest['papers'] if p['file'] == 'surf-the-exponential.pdf')
-        self.assertEqual(entry['sha256'], '52b18b31eab0d2e124c6621a14e83c8fe2667a84724a31b282eb5dc1319d227b')
-        self.assertEqual(entry['bytes'], 275414)
+        self.assertEqual(entry['sha256'], '45b063750a325a4e94be45e7dd3ea1595cdf74c1e446496f50504e44028349a1')
+        self.assertEqual(entry['bytes'], 287078)
         self.assertIn('<code>' + entry['sha256'] + '</code>', reader)
         self.assertIn(str(entry['bytes']) + ' bytes', reader)
-        self.assertIn('28 pages', reader)
+        self.assertIn('30 pages', reader)
         parser = site.Links()
         parser.feed(reader)
         for link in ('surf-the-exponential.pdf', 'surf-the-exponential.pdf#view=FitH',
@@ -209,10 +209,12 @@ class ResearchSiteTests(unittest.TestCase):
                      'invent-the-economy.html',
                      'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/surf-the-exponential/paper.tex',
                      'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/surf-the-exponential/README.md',
-                     'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/surf-the-exponential/evidence/results.json'):
+                     'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/surf-the-exponential/evidence/results.json',
+                     'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/surf-the-exponential/evidence/construct_results.json'):
             self.assertIn(link, parser.links)
         self.assertIn('name="citation_pdf_url" content="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.pdf"', reader)
-        self.assertIn('Measured frontier-LLM improvement and real commercial results remain to be established.', reader)
+        self.assertIn('Measured improvement from this architecture using frontier LLMs on fresh, independent campaigns.', reader)
+        self.assertIn('Actual customer acceptance, collected revenue, and sustained commercial profitability.', reader)
         self.assertLess(home.index('id="alpha-genesis-v2"'), home.index('id="surf-the-exponential"'))
         self.assertLess(home.index('id="alpha-genesis"'), home.index('id="surf-the-exponential"'))
         self.assertIn('href="surf-the-exponential.html"', home)
