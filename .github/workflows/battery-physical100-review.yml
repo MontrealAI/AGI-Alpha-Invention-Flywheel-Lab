@@ -1,0 +1,27 @@
+name: PhysicalBattery100 post-hoc evidence review
+on:
+  pull_request:
+    paths:
+      - 'research/battery_physical100_review/**'
+      - '.github/workflows/battery-physical100-review.yml'
+permissions:
+  contents: read
+jobs:
+  arithmetic-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Register platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Check fixed historical evidence and reject malformed inputs
+        run: |
+          python -B -m unittest research.battery_physical100_review.test_review -v
+          python -O -B -m unittest research.battery_physical100_review.test_review -v
+          python -B -m research.battery_physical100_review.review --check research/battery_physical100_review/result.json

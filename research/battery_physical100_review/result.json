@@ -1,0 +1,109 @@
+{
+  "always_pass_correct_on_exposed_test_cells": 9,
+  "comparison": [
+    {
+      "cycle1000_abstentions": 0,
+      "cycle1000_screen_passes": 9,
+      "intervals_covering_observation": 16,
+      "maximum_absolute_error_pp": 0.8833886136416891,
+      "mean_absolute_error_pp": 0.18213100374632135,
+      "mean_interval_width_pp": 1.0814044137235634,
+      "method": "adjusted_peer",
+      "n_endpoints": 18
+    },
+    {
+      "cycle1000_abstentions": 0,
+      "cycle1000_screen_passes": 9,
+      "intervals_covering_observation": 14,
+      "maximum_absolute_error_pp": 0.6139738537665584,
+      "mean_absolute_error_pp": 0.164464051461403,
+      "mean_interval_width_pp": 0.7253517294382616,
+      "method": "peer",
+      "n_endpoints": 18
+    },
+    {
+      "cycle1000_abstentions": 0,
+      "cycle1000_screen_passes": 9,
+      "intervals_covering_observation": 18,
+      "maximum_absolute_error_pp": 8.696837836876503,
+      "mean_absolute_error_pp": 5.586835862142254,
+      "mean_interval_width_pp": 13.410368768577738,
+      "method": "persistence",
+      "n_endpoints": 18
+    },
+    {
+      "cycle1000_abstentions": 9,
+      "cycle1000_screen_passes": 0,
+      "intervals_covering_observation": 18,
+      "maximum_absolute_error_pp": 14.266449184435615,
+      "mean_absolute_error_pp": 7.646482529070479,
+      "mean_interval_width_pp": 20.738099485315175,
+      "method": "recent_linear",
+      "n_endpoints": 18
+    },
+    {
+      "cycle1000_abstentions": 9,
+      "cycle1000_screen_passes": 0,
+      "intervals_covering_observation": 18,
+      "maximum_absolute_error_pp": 9.537987865251162,
+      "mean_absolute_error_pp": 5.058323646628682,
+      "mean_interval_width_pp": 14.06677761894849,
+      "method": "sqrt_linear",
+      "n_endpoints": 18
+    },
+    {
+      "cycle1000_abstentions": 0,
+      "cycle1000_screen_passes": 9,
+      "intervals_covering_observation": 18,
+      "maximum_absolute_error_pp": 1.5183385536204463,
+      "mean_absolute_error_pp": 0.6489828060312841,
+      "mean_interval_width_pp": 2.3805222784650804,
+      "method": "curve_ridge",
+      "n_endpoints": 18
+    }
+  ],
+  "cycle1000_below_threshold": 0,
+  "cycle1000_observed_range": [
+    0.8922350932523919,
+    0.9227844694165939
+  ],
+  "endpoint_count_per_method": 18,
+  "kind": "POST_HOC_REANALYSIS_NOT_FRESH_CONFIRMATION",
+  "original_acceptance": false,
+  "original_acceptance_conditions": {
+    "all_18_endpoint_intervals_cover": false,
+    "all_nine_cells_and_two_endpoints": true,
+    "at_least_three_decisive_cycle1000": true,
+    "maximum_error_at_most_five_percentage_points": true,
+    "no_wrong_decisive_cycle1000": true
+  },
+  "original_primary": "adjusted_peer",
+  "prediction_rows": 54,
+  "primary_interval_misses": [
+    {
+      "cell": "A1003",
+      "endpoint": "1000",
+      "lower": 0.89870562853317,
+      "observed": 0.8964477619198132,
+      "upper": 0.9118576675792902
+    },
+    {
+      "cell": "A1003",
+      "endpoint": "500",
+      "lower": 0.9313226245522034,
+      "observed": 0.9298791606895378,
+      "upper": 0.9397986737805545
+    }
+  ],
+  "registered_threshold": 0.8,
+  "represented_groups": 9,
+  "source": {
+    "artifact_id": 13370954244,
+    "pull_request": 238,
+    "repository": "MontrealAI/AGI-Alpha-Invention-Flywheel-Lab",
+    "run_id": 41931850452,
+    "sha256": "e347f626c423a620e937e49405d5483d15413f33a2c1f65c9af989a518a89095",
+    "source_commit": "67644b8519d510188ab7f64e1679f78e3266371c"
+  },
+  "unique_test_cells": 9
+}
