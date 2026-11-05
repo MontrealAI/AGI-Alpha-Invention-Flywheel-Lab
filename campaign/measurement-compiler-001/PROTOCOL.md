@@ -114,3 +114,18 @@ Do not broaden to indefinite parameter search or reset a failed denominator.
 
 The public code and report use original explanations and public source references;
 private source documents and conversation material are excluded.
+
+## Development correction 1, before confirmation
+
+The first implementation refused the training geometry before numerical scoring:
+the dataset has 32 voltage electrodes but injects through 16 of them, so the
+current-pattern matrix has rank 15, not 31. The original source/metadata assumption
+was too restrictive. This failure is retained; it is not a scored physical pass.
+
+Generalize compilation to the *observed excitation subspace*. The requested 76
+patterns must lie in the selected span; the full arbitrary 32-electrode response
+operator is not identified. For reciprocity, check rank against the complete
+requested-response design, not against unobservable coefficients. Add the more
+ambitious 15, 20 and 24 pattern candidates prospectively. Keep all original counts
+and acceptance thresholds. The ordinary adjacent control uses neighbors among
+the actual injection electrodes. Evaluation targets remain unopened.
