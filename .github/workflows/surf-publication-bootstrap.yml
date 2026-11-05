@@ -50,18 +50,18 @@ jobs:
           new='    if completed.returncode:\n        details=output.read_text(errors="replace")\n        print(details[-24000:], file=sys.stderr)\n        (ROOT/"evidence/failed-build-command.txt").write_text(details)\n        raise RuntimeError'
           if text.count(old)!=1:raise SystemExit('Inspect changed build function')
           p.write_text(text.replace(old,new))
+          deps='texlive-latex-extra texlive-fonts-extra texlive-fonts-extra-links texlive-science texlive-plain-generic tex-gyre lmodern'
           for name in ('README.md','publication/surf-the-exponential.yml'):
-              p=dest/name;text=p.read_text()
-              text=text.replace('texlive-latex-extra texlive-fonts-extra texlive-science','texlive-latex-extra texlive-fonts-extra texlive-fonts-extra-links texlive-science tex-gyre lmodern')
+              p=dest/name;text=p.read_text().replace('texlive-latex-extra texlive-fonts-extra texlive-science',deps)
               p.write_text(text)
           p=dest/'evidence/development-review.md'
-          p.write_text(p.read_text()+'\nHosted publication preparation run 42128880244 failed on the first pdflatex pass after passing numerical checks. The original temporary log was unavailable after cleanup. The build now retains and prints failed command output, and the standard Ubuntu font dependencies are explicit. This changes build diagnostics, not the manuscript or numerical model. Workflow-file installation is performed through the authorized repository connector, not an expanded Actions token.\n')
-          print('Source identity verified; hosted build diagnostics retained.')
+          p.write_text(p.read_text()+'\nHosted preparation runs 42128880244 and 42129174379 passed numerical checks but failed on the first pdflatex pass. Retained diagnostic artifact 13462486729 identifies the exact cause: newtxtext requires binhex.tex, supplied by texlive-plain-generic, omitted under --no-install-recommends. The dependency is now explicit; failed command output is printed and retained. No manuscript, numerical model, threshold or test result changed. Publication workflow installation is through the authorized repository connector; the Actions token writes only documents.\n')
+          print('Verified source; corrected diagnosed standard TeX dependency.')
           PY
       - name: Install the public LaTeX and PDF toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-extra texlive-fonts-extra-links texlive-science tex-gyre lmodern poppler-utils
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-extra texlive-fonts-extra-links texlive-science texlive-plain-generic tex-gyre lmodern poppler-utils
       - name: Reproduce the exact studies and compile the manuscript
         run: python3 docs/surf-the-exponential/build.py
       - name: Integrate only the new paper and preserve previous research editions
