@@ -31,7 +31,7 @@ jobs:
           python -B -m campaign.genesis_turn001.native_turn audit --output "$RUNNER_TEMP/genesis-no-demand"
           python -B -m campaign.genesis_turn001.native_turn run --stress failed_acceptance --output "$RUNNER_TEMP/genesis-failed-acceptance"
           python -B -m campaign.genesis_turn001.native_turn audit --output "$RUNNER_TEMP/genesis-failed-acceptance"
-      - name: Adversarial audit: reject changed financial report without changing native authority
+      - name: Adversarial audit rejects changed financial report without changing native authority
         run: |
           cp "$RUNNER_TEMP/genesis-central/REPORT.json" "$RUNNER_TEMP/genesis-central/REPORT.backup.json"
           python - "$RUNNER_TEMP/genesis-central/REPORT.json" <<'PY'
