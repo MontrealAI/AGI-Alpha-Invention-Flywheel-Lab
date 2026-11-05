@@ -467,6 +467,22 @@ def audit(output):
         if row['resource_receipt'] is None:
             if spends or row['accepted']:
                 raise ValueError('UNFUNDED_DELIVERY_OR_MISSING_RECEIPT')
+            # A selected order whose production commitment failed still holds
+            # actual buyer custody until a native refund. Finishing a row must
+            # not erase that obligation or certify a complete operating run
+            # while the replayed account remains funded and unresolved.
+            # Only finished rows are checked: the active refund phase legitimately
+            # precedes the scheduled financial event.
+            if expected['selected'] is not None:
+                refunds = [a for a in actions if a['op'] == 'event'
+                           and a['args']['id'] == order and a['args']['action'] == 'refund']
+                prepares = [a for a in actions if a['op'] == 'event'
+                            and a['args']['id'] == order and a['args']['action'] == 'prepare']
+                if (len(refunds) != 1 or refunds[0]['day'] != 24 * (i + 1) + 2
+                        or prepares or released
+                        or row['artifact_sha256'] is not None
+                        or row['ordinary_accepted'] is not None):
+                    raise ValueError('REGISTERED_UNREFUNDED_SELECTED_ORDER')
         else:
             if len(spends) != 1 or spends[0]['receipt'] != row['resource_receipt']:
                 raise ValueError('RESOURCE_RECEIPT_CHANGED')
