@@ -31,6 +31,24 @@ jobs:
           python -B -m campaign.genesis_turn001.native_turn audit --output "$RUNNER_TEMP/genesis-no-demand"
           python -B -m campaign.genesis_turn001.native_turn run --stress failed_acceptance --output "$RUNNER_TEMP/genesis-failed-acceptance"
           python -B -m campaign.genesis_turn001.native_turn audit --output "$RUNNER_TEMP/genesis-failed-acceptance"
+      - name: Adversarial audit: reject changed financial report without changing native authority
+        run: |
+          cp "$RUNNER_TEMP/genesis-central/REPORT.json" "$RUNNER_TEMP/genesis-central/REPORT.backup.json"
+          python - "$RUNNER_TEMP/genesis-central/REPORT.json" <<'PY'
+          import json, pathlib, sys
+          p=pathlib.Path(sys.argv[1])
+          record=json.loads(p.read_text())
+          record['simulated_profit_after_r_and_d_cents'] += 100
+          p.write_text(json.dumps(record))
+          PY
+          if python -B -m campaign.genesis_turn001.native_turn audit --output "$RUNNER_TEMP/genesis-central"; then
+            echo "FAIL: tampered report was accepted" >&2
+            exit 1
+          fi
+          mv "$RUNNER_TEMP/genesis-central/REPORT.backup.json" "$RUNNER_TEMP/genesis-central/REPORT.json"
+          python -B -m campaign.genesis_turn001.native_turn audit --output "$RUNNER_TEMP/genesis-central"
+      - name: Recheck independent tests with Python assertions disabled
+        run: python -O -B -m unittest campaign.genesis_turn001.test_turn -v
       - name: Retain only public-safe reports, never account recovery authority
         if: always()
         run: |
