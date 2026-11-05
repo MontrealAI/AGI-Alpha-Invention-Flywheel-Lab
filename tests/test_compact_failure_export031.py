@@ -52,7 +52,7 @@ class CompactFailureTests(unittest.TestCase):
   self.assertEqual(len(operation),1)
   steps=re.split(r'(?m)^      - ',operation[0])
   uploads=[step for step in steps if re.search(r'(?m)^        uses: actions/upload-artifact@',step)]
-  self.assertEqual(len(uploads),7)
+  self.assertEqual(len(uploads),8)
   failure=[step for step in uploads if re.search(r'(?m)^        if: failure\(\)',step)]
   self.assertEqual(len(failure),1)
   self.assertIn("        if: failure() && steps.operation.outcome != 'success' && steps.compact_failure.outcome == 'success'\n",failure[0])
@@ -88,6 +88,7 @@ class CompactFailureTests(unittest.TestCase):
   self.assertIn("        if: always() && steps.released_portfolio.outcome == 'success'\n",portfolio[0])
   self.assertEqual(re.findall(r'(?m)^            (.+)$',portfolio[0]),[
    '${{ runner.temp }}/released-portfolio-guards.json',
+   '${{ runner.temp }}/historical-portfolio-source.json',
    '${{ runner.temp }}/released-portfolio-artifacts.json',
    '${{ runner.temp }}/released-portfolio-finance.json',
    '${{ runner.temp }}/released-portfolio-recovered-four.json',
@@ -98,6 +99,37 @@ class CompactFailureTests(unittest.TestCase):
   self.assertEqual(re.findall(r'(?m)^            (.+)$',genesis[0]),[
    '${{ runner.temp }}/released-genesis/QUALIFICATION.json',
    '${{ runner.temp }}/released-genesis/public'])
+  commitment=[step for step in uploads if 'name: commitment001-released-operation-' in step]
+  self.assertEqual(len(commitment),1)
+  self.assertIn('        if: always()\n',commitment[0])
+  self.assertIn('          if-no-files-found: error\n',commitment[0])
+  self.assertEqual(re.findall(r'(?m)^            (.+)$',commitment[0]),[
+   '${{ runner.temp }}/released-commitment001/REPORT.json',
+   '${{ runner.temp }}/released-commitment001/AUDIT.json',
+   '${{ runner.temp }}/released-commitment001-positive/REPORT.json',
+   '${{ runner.temp }}/released-commitment001-positive/AUDIT.json',
+   '${{ runner.temp }}/released-commitment001-public.zip',
+   '${{ runner.temp }}/released-commitment001-positive-public.zip'])
+  # The account directories contain private recovery authority. Only the
+  # package command's audited exact allowlist may produce these uploaded ZIPs;
+  # a generic archive of the operating directory is not an equivalent export.
+  producers=[step for step in steps if step.startswith('name: Operate the capacity-backed turn from actual downloaded release bytes\n')]
+  self.assertEqual(len(producers),1)
+  producer=producers[0]
+  self.assertIn('        working-directory: ${{ runner.temp }}/downloaded-release-operation/source\n',producer)
+  self.assertIn('        run: |\n',producer)
+  self.assertEqual(re.findall(r'(?m)^          (.+)$',producer),[
+   'python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/released-commitment001" --scenario central --arm retained',
+   'python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/released-commitment001"',
+   'python -m campaign.genesis_commitment001.runner resume --output "$RUNNER_TEMP/released-commitment001" --scenario central --arm retained',
+   'python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/released-commitment001-positive" --scenario favorable_envelope --arm retained',
+   'python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/released-commitment001-positive"',
+   'python -m campaign.genesis_commitment001.runner resume --output "$RUNNER_TEMP/released-commitment001-positive" --scenario favorable_envelope --arm retained',
+   'python -m campaign.genesis_commitment001.runner package --output "$RUNNER_TEMP/released-commitment001" --archive "$RUNNER_TEMP/released-commitment001-public.zip"',
+   'python -m campaign.genesis_commitment001.runner package --output "$RUNNER_TEMP/released-commitment001-positive" --archive "$RUNNER_TEMP/released-commitment001-positive-public.zip"',
+   'python -m zipfile -e "$RUNNER_TEMP/released-commitment001-positive-public.zip" "$RUNNER_TEMP/released-commitment001-positive-public"',
+   'cd "$RUNNER_TEMP/released-commitment001-positive-public/source"',
+   'python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/released-commitment001-positive-public"'])
   self.assertFalse(any('*.stdout' in step or '*.stderr' in step or 'failed-operation-keyfree' in step for step in uploads))
  def test_workflow_exports_only_compact_failure(self):
   text=(P.parents[1]/'.github/workflows/connected014-release.yml').read_text()
@@ -116,4 +148,17 @@ class CompactFailureTests(unittest.TestCase):
                   text.replace('/released-genesis/QUALIFICATION.json','/released-genesis/*.stderr'),
                   text.replace("always() && steps.operation.outcome == 'success'",'always()'),
                   text.replace('downloaded-operation-keyfree.zip','failed-operation-keyfree.zip')):
+   with self.assertRaises(AssertionError): self.assert_workflow_upload_contract(changed)
+ def test_commitment_upload_refuses_private_paths_and_unchecked_archives(self):
+  text=(P.parents[1]/'.github/workflows/connected014-release.yml').read_text()
+  self.assert_workflow_upload_contract(text)
+  package='python -m campaign.genesis_commitment001.runner package --output "$RUNNER_TEMP/released-commitment001" --archive "$RUNNER_TEMP/released-commitment001-public.zip"'
+  for changed in (
+    text.replace('${{ runner.temp }}/released-commitment001/REPORT.json','${{ runner.temp }}/released-commitment001/private'),
+    text.replace('${{ runner.temp }}/released-commitment001-positive-public.zip','${{ runner.temp }}/released-commitment001-positive/*'),
+    text.replace(package,''),
+    text.replace(package,'python -m zipfile -c "$RUNNER_TEMP/released-commitment001-public.zip" "$RUNNER_TEMP/released-commitment001/private"'),
+    text.replace('working-directory: ${{ runner.temp }}/downloaded-release-operation/source\n        run: |\n          python -m campaign.genesis_commitment001.runner','working-directory: ${{ github.workspace }}\n        run: |\n          python -m campaign.genesis_commitment001.runner'),
+    text.replace('${{ runner.temp }}/historical-portfolio-source.json','${{ runner.temp }}/historical-portfolio-source/private')):
+   self.assertNotEqual(changed,text)
    with self.assertRaises(AssertionError): self.assert_workflow_upload_contract(changed)

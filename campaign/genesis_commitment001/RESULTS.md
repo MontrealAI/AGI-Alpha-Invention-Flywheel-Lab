@@ -68,6 +68,10 @@ The first candidate's [Blue Sky check](https://github.com/MontrealAI/AGI-Alpha-I
 
 Review also repaired missing dependency/test workflow triggers and incomplete released-record retention. The matrix now exports every counterfactual through the strict key-free packager; downloaded-release central and favorable runs export their own original records. A copied retained record with profit changed by one unit was rejected by the historical auditor, while the ten unchanged candidate records passed. These are qualification repairs, not additional commercial outcomes.
 
+The subsequent [candidate release check](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/42130360377) ran 576 tests and exposed two integration defects: the new operating workflow lacked the required platform job-start receipt, and its public export was absent from the existing privacy-test allowlist. The prospective repair supplies the receipt and extends the privacy contract with exact paths, strict producer checks and negative mutation probes; it does not disable the guards. The newly published paper's analogous workflow maintenance is separately owned in PR #268. An overlapping unpublished local edit was held when that ownership was discovered; this change neither adopts that branch nor changes the paper's tag or assets.
+
+The separately owned [SURF THE EXPONENTIAL study](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/8d76b999914e26532bcbd2aff2af79843fe23668/docs/surf-the-exponential/README.md) became available during integration. Its exact checker and 15 tests were reproduced, while its paper bytes were preserved. Its authored cases support preserving ties, adjudicating specific criticism and distinguishing useful repair from discovery improvement; they do not supply observed demand or commercial income for this campaign.
+
 ## Replay and provenance
 
 Use the exact commit above, Python 3.12, the pinned dependency file and the local POSIX boundary in [README.md](README.md). Choose new absolute output paths; retain the original private directory for same-identity continuation. Never publish its signing authority.
