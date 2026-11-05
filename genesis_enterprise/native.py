@@ -166,6 +166,12 @@ def operate(output, *, max_steps=None, fault=None):
                 _save(checkpoint, account.seal_checkpoint(state))
             if state['binding'] != reg['binding']:
                 raise ValueError('OPERATING_STATE_BINDING_CHANGED')
+            if state['active'] is not None:
+                # Authenticated checkpoint alone cannot certify chronology.
+                # Verify genuine native history and refuse *before* a resumed
+                # prepare/release/refund/finish makes another financial action.
+                account.audit()
+                _check_active_production_phase(state, p, manifest, account.export())
             steps = 0
             while state['phase'] != 'complete' and (max_steps is None or steps < max_steps):
                 if (output / 'STOP').exists():
@@ -373,6 +379,70 @@ def _audit_native_offer(p, ident, i, selected, actions, *, ordered):
         raise ValueError('REGISTERED_NATIVE_TERMS_CHANGED')
 
 
+def _check_active_production_phase(state, p, manifest, exported):
+    """Guard a signed pending writer AND independently audited public active row.
+
+    The original native journal must already have passed its independent audit.
+    An incomplete order need not have paid production yet; a prepared/released
+    order must have paid first, even if all events share one registered hour.
+    """
+    active = state.get('active')
+    if active is None:
+        return
+    i = state['index']
+    if type(i) is not int or i < 0 or i >= len(manifest['jobs']):
+        raise ValueError('ACTIVE_PRODUCTION_MUST_PRECEDE_DELIVERY')
+    ident = manifest['jobs'][i]['id']
+    order = 'g002-' + ident
+    hour = 24 * (i + 1)
+    entries = [e for e in exported['connected_journal']['entries']
+               if e['request']['operation'] == 'spend'
+               and e['request']['id'] == 'genesis-production-' + ident]
+    actions = exported['ledger']['actions']
+    events = [a for a in actions if a['op'] == 'event'
+              and a['args']['id'] == order
+              and a['args']['action'] in ('prepare', 'release')]
+    picked = active['decision']['selected']
+    invalid = ValueError('ACTIVE_PRODUCTION_MUST_PRECEDE_DELIVERY')
+    if len(entries) > 1 or (picked is None and (entries or events)):
+        raise invalid
+    spent = entries[0] if entries else None
+    receipt = spent['receipt'] if spent is not None and spent['status'] == 'COMPLETE' else None
+    row_receipt = active['resource_receipt']
+    if spent is not None and spent['request']['day'] != hour:
+        raise invalid
+    if receipt is not None:
+        if (picked is None or spent['request']['amount'] != picked['resource_cost']
+                or receipt['day'] != hour
+                or receipt['funding'] not in ('SEED', 'EARNED')
+                or (receipt['funding'] == 'SEED'
+                    and (i != 0 or not p['first_delivery_may_use_seed']))
+                or type(receipt.get('native_event_sequence')) is not int):
+            raise invalid
+    if row_receipt is not None and (receipt is None or receipt != row_receipt):
+        raise invalid
+    if events and (receipt is None or any(
+            receipt['native_event_sequence'] >= a['seq'] for a in events)):
+        raise invalid
+    if state['phase'] in ('produce', 'release'):
+        if receipt is None or row_receipt is None:
+            raise invalid
+    if state['phase'] == 'release':
+        prepares = [a for a in events if a['args']['action'] == 'prepare']
+        if (len(prepares) != 1 or prepares[0]['day'] != hour + 1
+                or active['accepted'] is not True):
+            raise invalid
+    if state['phase'] == 'finish' and picked is not None:
+        completed = [a for a in actions if a['op'] == 'event'
+                     and a['args']['id'] == order
+                     and a['args']['action'] in ('refund', 'release')]
+        expected_action = 'release' if active['accepted'] else 'refund'
+        if (len(completed) != 1
+                or completed[0]['args']['action'] != expected_action
+                or completed[0]['day'] != hour + 2):
+            raise invalid
+
+
 def audit(output):
     """Independent native replay plus registered policy/cost/delivery reconciliation."""
     from connected_enterprise.finance import audit_journal
@@ -448,32 +518,8 @@ def audit(output):
         _audit_native_offer(p, ident, i, expected['selected'], actions,
                             ordered=(i < len(execution['rows']) or execution['phase'] != 'order'))
         if i == len(execution['rows']):
-            # Completed-row prepayment and refund guards below deliberately do
-            # not apply to unfinished work. Active preparation/collection still
-            # requires genuine, completed, native-replayed production payment.
-            # Unlike a day-only check, source-authenticated sequence forbids a
-            # same-hour payment from using collections it was meant to precede.
-            if expected['selected'] is not None:
-                entries = [e for e in exported['connected_journal']['entries']
-                           if e['request']['operation'] == 'spend'
-                           and e['request']['id'] == 'genesis-production-' + ident]
-                events = [a for a in actions if a['op'] == 'event'
-                          and a['args']['id'] == order
-                          and a['args']['action'] in ('prepare', 'release')]
-                if (len(entries) > 1
-                        or any(e['request']['day'] != 24 * (i + 1)
-                               for e in entries)
-                        or (row['resource_receipt'] is not None
-                            and (len(entries) != 1 or entries[0]['status'] != 'COMPLETE'
-                                 or entries[0]['receipt'] != row['resource_receipt']))):
-                    raise ValueError('ACTIVE_PRODUCTION_MUST_PRECEDE_DELIVERY')
-                if events:
-                    if (len(entries) != 1 or entries[0]['status'] != 'COMPLETE'
-                            or type(entries[0]['receipt'].get('native_event_sequence')) is not int
-                            or any(entries[0]['receipt']['native_event_sequence'] >= a['seq']
-                                   for a in events)):
-                        raise ValueError('ACTIVE_PRODUCTION_MUST_PRECEDE_DELIVERY')
-            continue  # Unfinished row: never book a completed delivery/refund.
+            _check_active_production_phase(execution, p, manifest, exported)
+            continue  # No completed-row settlement/refund obligation yet.
         released = [a for a in releases if a['args']['id'] == order]
         if row['artifact_sha256'] is not None:
             from flexibility063.verify import verify
