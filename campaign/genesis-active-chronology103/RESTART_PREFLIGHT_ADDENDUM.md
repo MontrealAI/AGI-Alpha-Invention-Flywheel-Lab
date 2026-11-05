@@ -1,0 +1,15 @@
+# GENESIS103 additive restart-preflight extension — frozen before source change
+
+This **prospective addendum** addresses an exact-current-owner independent P1 review finding at [PR229, thread 4477263127](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/pull/229#discussion_r4477263127). The finding correctly distinguishes a read-only public post-operation audit from the preflight that must block a *resuming* native writer before it collects customer funds or incurs new financial commitments.
+
+Prior protocol is unchanged at `367642799d9cde8d067c2c3ee37c9f8b71012b32`. Initial implementation `74da82386e377226a83acf36db6c28073cf1dc70` and its original run history remain immutable; later confirmation is a new source and new check, never a retroactive pass.
+
+## Additional precommitted tests and stopping condition
+
+- **C7:** Create a genuinely fresh disposable original `BusinessAccount`, with original HMAC-signed `STATE.json` in **its own fresh** private workspace and genuine native replay-valid preparatory output, but no production commitment. At `phase='release'`, `operate --max-steps 1` must reject **before** native `release` or later tax/cost and leave the original native journal and signed checkpoint **byte-identical**. The original `BusinessAccount.audit()` succeeds to show this is an application-phase chronology gap, not a forged journal.
+- **C8:** Same genuinely signed active checkpoint, but actual production expense occurs after preparation within the registered hour. Resume must reject before release or new financial events, preserving journal/checkpoint bytes. No re-signing any historical account.
+- **C9:** Genuine normal signed funded active state, paused by the canonical operating loop at a safe phase, resumes and finishes; final financial audit and completed idempotent replay match the existing original pilot. No future maturity or legacy transition claim.
+
+Implement a single shared active replay/phase predicate used by **both** public canonical `audit` and private writer `operate` preflight, preserving completed-row GENESIS101 error codes, GENESIS102 due refunds and native HMAC authority. It must reconcile active receipt to the actual journal, original source-bound production hour, selected resource cost, funding label and registered order, and strict replay sequence. Genuine pre-commitment `order/fund` checkpoints remain valid and do not acquire a fictitious completed delivery. The predicate is invoked **before** irreversible resume side effects, not just on the final public export.
+
+**Exit and resource rule:** One source-repair pass, frozen original C0–C6 + additional C7–C9, native compatibility and exact-head source-bound CI, external code review, then protected owner integration only if qualified. Preserve original pending 14-run outcomes at `74da823...` whatever they become. No paid APIs, actual external money, credentials, outreach, or operating-account replacement. Original account source migration remains a separate P0 blocker; all costs/commerce beyond conditional engineering are UNKNOWN or unqualified.
