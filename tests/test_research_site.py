@@ -97,8 +97,8 @@ class ResearchSiteTests(unittest.TestCase):
         slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
-        self.assertEqual(len(site.PAPERS), 24)
-        self.assertEqual(len(site.PAGES), 26)
+        self.assertEqual(len(site.PAPERS), 25)
+        self.assertEqual(len(site.PAGES), 27)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
             reader = 'out-' + slug + '.html'
@@ -183,9 +183,56 @@ class ResearchSiteTests(unittest.TestCase):
 
     def test_unresolved_publication_metadata_is_rejected(self):
         page = self.source / 'agi-alpha-flywheel.html'
-        page.write_text(page.read_text() + '<p>PAPER_SHA256_PLACEHOLDER</p>')
-        with self.assertRaisesRegex(ValueError, 'Unresolved publication metadata'):
-            site.validate(self.source)
+        original = page.read_text()
+        for token in ('PAPER_SHA256_PLACEHOLDER', 'SURF_PAGE_COUNT', 'SURF_SHA256', 'SURF_PDF_BYTES'):
+            with self.subTest(token=token):
+                page.write_text(original + '<p>' + token + '</p>')
+                with self.assertRaisesRegex(ValueError, 'Unresolved publication metadata'):
+                    site.validate(self.source)
+        page.write_text(original)
+
+    def test_surf_reader_matches_published_pdf_and_preserves_flagship(self):
+        import json
+        reader = (self.source / 'surf-the-exponential.html').read_text()
+        home = (self.source / 'index.html').read_text()
+        manifest = json.loads((self.source / 'publication-manifest.json').read_text())
+        entry = next(p for p in manifest['papers'] if p['file'] == 'surf-the-exponential.pdf')
+        self.assertEqual(entry['sha256'], '52b18b31eab0d2e124c6621a14e83c8fe2667a84724a31b282eb5dc1319d227b')
+        self.assertEqual(entry['bytes'], 275414)
+        self.assertIn('<code>' + entry['sha256'] + '</code>', reader)
+        self.assertIn(str(entry['bytes']) + ' bytes', reader)
+        self.assertIn('28 pages', reader)
+        parser = site.Links()
+        parser.feed(reader)
+        for link in ('surf-the-exponential.pdf', 'surf-the-exponential.pdf#view=FitH',
+                     'transformational-intelligence.html', 'alpha-genesis-flywheel-omega-v2.html',
+                     'invent-the-economy.html',
+                     'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/surf-the-exponential/paper.tex',
+                     'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/surf-the-exponential/README.md',
+                     'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/surf-the-exponential/evidence/results.json'):
+            self.assertIn(link, parser.links)
+        self.assertIn('name="citation_pdf_url" content="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.pdf"', reader)
+        self.assertIn('Measured frontier-LLM improvement and real commercial results remain to be established.', reader)
+        self.assertLess(home.index('id="alpha-genesis-v2"'), home.index('id="surf-the-exponential"'))
+        self.assertLess(home.index('id="alpha-genesis"'), home.index('id="surf-the-exponential"'))
+        self.assertIn('href="surf-the-exponential.html"', home)
+        self.assertEqual(parser.canonical_urls, [site.PUBLIC_SITE + 'surf-the-exponential.html'])
+        for asset in ('surf-the-exponential-social.png', 'surf-the-exponential-card.svg'):
+            self.assertIn(asset, site.ASSETS)
+            self.assertIn(asset, parser.links)
+        self.assertIn('name="twitter:card" content="summary_large_image"', reader)
+
+    def test_canonical_url_must_name_the_same_published_page(self):
+        page = self.source / 'surf-the-exponential.html'
+        original = page.read_text()
+        expected = 'rel="canonical" href="' + site.PUBLIC_SITE + page.name + '"'
+        for target in ('https://example.com/tracker', site.PUBLIC_SITE + 'index.html',
+                       site.PUBLIC_SITE + page.name + '?tracking=1'):
+            with self.subTest(target=target):
+                page.write_text(original.replace(expected, 'rel="canonical" href="' + target + '"'))
+                with self.assertRaisesRegex(ValueError, 'Canonical URL'):
+                    site.validate(self.source)
+        page.write_text(original)
 
     def test_manifest_cannot_repeat_or_omit_a_paper(self):
         import json
