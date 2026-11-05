@@ -1,4 +1,4 @@
-name: Surf publication preparation
+name: Surf constructive challenge preparation
 on:
   push:
     branches: [paper/surf-the-exponential-20261105]
@@ -22,69 +22,80 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - name: Verify and unpack only the new publication source
+      - name: Unpack the verified source into an isolated companion namespace
         run: |
           python3 - <<'PY'
-          import hashlib,io,tarfile,pathlib
+          import hashlib,io,tarfile,pathlib,shutil
           archive=b''.join(pathlib.Path(f'.publication/surf-source.xz.part{i:02}').read_bytes() for i in range(4))
           expected='6eb35d2d49bc342237f8704508d3dec950d27cb610e6d93ab1f9b7337b3593b0'
-          if len(archive)!=46624 or hashlib.sha256(archive).hexdigest()!=expected:
-              raise SystemExit('Publication transport identity mismatch')
-          dest=pathlib.Path('docs/surf-the-exponential')
-          if dest.exists():raise SystemExit('Refusing to overwrite existing publication')
+          if len(archive)!=46624 or hashlib.sha256(archive).hexdigest()!=expected:raise SystemExit('Source identity mismatch')
+          dest=pathlib.Path('docs/surf-constructive-challenge')
+          if dest.exists():raise SystemExit('Refusing to overwrite any existing publication')
           with tarfile.open(fileobj=io.BytesIO(archive),mode='r:xz') as stream:
               members=stream.getmembers()
-              if len(members)!=24 or sum(m.size for m in members)>2000000:
-                  raise SystemExit('Unexpected publication size')
+              if len(members)!=24 or sum(m.size for m in members)>2000000:raise SystemExit('Unexpected source size')
               for m in members:
                   p=pathlib.PurePosixPath(m.name)
-                  if not m.isfile() or p.is_absolute() or '..' in p.parts or m.size>1000000:
-                      raise SystemExit('Unsafe publication member')
+                  if not m.isfile() or p.is_absolute() or '..' in p.parts or m.size>1000000:raise SystemExit('Unsafe member')
               dest.mkdir(parents=True)
               for m in members:
-                  target=dest/m.name
-                  target.parent.mkdir(parents=True,exist_ok=True)
+                  target=dest/m.name;target.parent.mkdir(parents=True,exist_ok=True)
                   target.write_bytes(stream.extractfile(m).read())
           p=dest/'build.py';text=p.read_text()
           old='    if completed.returncode:\n        raise RuntimeError'
           new='    if completed.returncode:\n        details=output.read_text(errors="replace")\n        print(details[-24000:], file=sys.stderr)\n        (ROOT/"evidence/failed-build-command.txt").write_text(details)\n        raise RuntimeError'
-          if text.count(old)!=1:raise SystemExit('Inspect changed build function')
+          if text.count(old)!=1:raise SystemExit('Changed build code requires review')
           p.write_text(text.replace(old,new))
-          deps='texlive-latex-extra texlive-fonts-extra texlive-fonts-extra-links texlive-science texlive-plain-generic tex-gyre lmodern'
-          for name in ('README.md','publication/surf-the-exponential.yml'):
-              p=dest/name;text=p.read_text().replace('texlive-latex-extra texlive-fonts-extra texlive-science',deps)
-              p.write_text(text)
+          reader=(dest/'publication/reader.html').read_text()
+          reader=reader.replace('surf-the-exponential.pdf','SURF_THE_EXPONENTIAL.pdf').replace('/tree/main/docs/surf-the-exponential','/tree/main/docs/surf-constructive-challenge').replace('/blob/main/docs/surf-the-exponential','/blob/main/docs/surf-constructive-challenge')
+          (dest/'reader.html').write_text(reader)
+          shutil.rmtree(dest/'publication')
+          p=dest/'README.md';text=p.read_text()
+          text=text.replace('../research/surf-the-exponential.pdf','SURF_THE_EXPONENTIAL.pdf').replace('https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.html','reader.html')
+          text=text.replace('texlive-latex-extra texlive-fonts-extra texlive-science','texlive-latex-extra texlive-fonts-extra texlive-fonts-extra-links texlive-science texlive-plain-generic tex-gyre lmodern')
+          note='> **Constructive-challenge technical companion, 23 pages.** This manuscript has the subtitle *From Counterexamples to New Capabilities, Viable Markets, and Better Discovery*. It contains a separate 192-case exact study and 38 tests. The concurrently published 28-page [The Missing Move](../surf-the-exponential/README.md), its 2,304-case study, reader, release tag and canonical PDF are preserved unchanged. Neither edition\'s test counts or results should be attributed to the other. This folder and its local reader are self-contained; the reader is not a separately deployed Pages URL.\n\n'
+          p.write_text(note+text)
+          p=dest/'LAUNCH_POST.md';text=p.read_text().replace('https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.html','https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/surf-constructive-challenge')
+          p.write_text(text)
           p=dest/'evidence/development-review.md'
-          p.write_text(p.read_text()+'\nHosted preparation runs 42128880244 and 42129174379 passed numerical checks but failed on the first pdflatex pass. Retained diagnostic artifact 13462486729 identifies the exact cause: newtxtext requires binhex.tex, supplied by texlive-plain-generic, omitted under --no-install-recommends. The dependency is now explicit; failed command output is printed and retained. No manuscript, numerical model, threshold or test result changed. Publication workflow installation is through the authorized repository connector; the Actions token writes only documents.\n')
-          print('Verified source; corrected diagnosed standard TeX dependency.')
+          p.write_text(p.read_text()+'\nHosted preparation runs 42128880244 and 42129174379 failed because the standard newtx dependency binhex.tex was absent. Diagnostic artifact 13462486729 identified texlive-plain-generic; the explicit dependency fixed compilation. Run 42129906875 then compiled the 23-page PDF and passed all 38 numerical tests; a reader test failed because it expected the literal phrase actual customer demand while the reader said real customer demand. Before further integration, main published a different same-title 28-page paper in PR266. This companion therefore uses its own directory, reader and source identity and does not modify the published edition, site, manifest or release. The old competing site installer and workflow were removed from this new package. No scientific thresholds or numerical outcomes changed.\n')
+          (dest/'.gitignore').write_text('__pycache__/\n*.aux\n*.log\n*.out\n*.toc\n')
+          print('Verified source, isolated companion, preserved all existing publications.')
           PY
-      - name: Install the public LaTeX and PDF toolchain
+      - name: Install standard public manuscript tools
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-extra texlive-fonts-extra-links texlive-science texlive-plain-generic tex-gyre lmodern poppler-utils
-      - name: Reproduce the exact studies and compile the manuscript
-        run: python3 docs/surf-the-exponential/build.py
-      - name: Integrate only the new paper and preserve previous research editions
+      - name: Reproduce numerical evidence and compile the manuscript
+        run: python3 docs/surf-constructive-challenge/build.py
+      - name: Bind the hosted PDF to source and package it before publication
         run: |
-          cp docs/surf-the-exponential/publication/test_surf_publication.py tests/test_surf_publication.py
-          python3 docs/surf-the-exponential/publication/install_publication.py
-      - name: Test the publication and existing research website
-        run: |
-          python3 -B -m unittest discover -s tests -p 'test_surf_publication.py' -v
-          python3 -B -m unittest discover -s tests -p 'test_research_site.py' -v
-          node --test tests/test_alpha_site.cjs
-          python3 scripts/build_research_site.py --output "$RUNNER_TEMP/surf-research-site"
-          python3 docs/surf-the-exponential/package.py --output "$RUNNER_TEMP/surf-publication"
+          python3 - <<'PY'
+          import pathlib,hashlib,json,re,subprocess
+          root=pathlib.Path('docs/surf-constructive-challenge')
+          info=json.loads((root/'evidence/build-check.json').read_text())
+          pages=int(re.search(r'^Pages:\s+(\d+)',subprocess.check_output(['pdfinfo',str(root/'SURF_THE_EXPONENTIAL.pdf')],text=True),re.M)[1])
+          if pages!=23 or info['tests']!=38 or info['parameter_cases']!=192:raise SystemExit('Scope mismatch')
+          for suffix,key in (('pdf','pdf_sha256'),('tex','tex_sha256')):
+              if hashlib.sha256((root/f'SURF_THE_EXPONENTIAL.{suffix}').read_bytes()).hexdigest()!=info[key]:raise SystemExit('Artifact mismatch')
+          reader=root/'reader.html';html=reader.read_text()
+          html=re.sub(r'(?<=<code>)[0-9a-f]{64}(?=</code>)',info['pdf_sha256'],html)
+          reader.write_text(html)
+          manifest={'edition':'surf-constructive-challenge-1.0.0','pages':pages,'source_and_evidence':info,'primary_edition_unchanged':'surf-the-exponential-v1.0.0','status':'authored finite study; no real revenue or separate frontier-model review'}
+          (root/'PUBLICATION.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(manifest,sort_keys=True))
+          PY
+          python3 docs/surf-constructive-challenge/package.py --output "$RUNNER_TEMP/surf-companion"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: surf-the-exponential-preparation-evidence
+          name: surf-constructive-challenge-publication
           path: |
-            ${{ runner.temp }}/surf-publication/
-            docs/surf-the-exponential/evidence/failed-build-command.txt
+            ${{ runner.temp }}/surf-companion/
+            docs/surf-constructive-challenge/evidence/failed-build-command.txt
           retention-days: 7
           if-no-files-found: warn
-      - name: Commit the verified documents on their dedicated branch
+      - name: Commit only the isolated companion on its dedicated branch
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -92,12 +103,11 @@ jobs:
           branch='paper/surf-the-exponential-20261105'
           gh auth setup-git --hostname github.com
           actual="$(git ls-remote origin "refs/heads/$branch" | cut -f1)"
-          test "$actual" = "$GITHUB_SHA" || { echo 'Branch changed; preserve concurrent work.' >&2; exit 1; }
+          test "$actual" = "$GITHUB_SHA" || { echo 'Concurrent work preserved; refusing changed branch.' >&2; exit 1; }
           git rm -- .publication/surf-source.xz.part00 .publication/surf-source.xz.part01 .publication/surf-source.xz.part02 .publication/surf-source.xz.part03
-          rm docs/surf-the-exponential/SURF_THE_EXPONENTIAL.pdf
-          git add docs/surf-the-exponential docs/research/surf-the-exponential.pdf docs/research/surf-the-exponential.html docs/research/publication-manifest.json docs/research/index.html docs/research/README.md README.md scripts/build_research_site.py tests/test_research_site.py tests/test_surf_publication.py
+          git add docs/surf-constructive-challenge
           git config user.name 'MONTREAL.AI Research Publication'
           git config user.email 'info@montreal.ai'
-          git commit -m 'Publish SURF THE EXPONENTIAL research edition 1.0.0 with exact study, qualified PDF and reader'
+          git commit -m 'Publish qualified constructive-challenge companion without modifying The Missing Move edition'
           git push origin "HEAD:refs/heads/$branch"
           git rev-parse HEAD
