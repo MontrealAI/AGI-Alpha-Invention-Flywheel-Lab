@@ -1,0 +1,355 @@
+{
+  "acceptance": {
+    "each_substrate_accuracy_at_least_0_80": false,
+    "loss_vs_selected_reference_at_most_0_03": true,
+    "overall_balanced_accuracy_at_least_0_90": false
+  },
+  "artifact_file_sha256": {
+    "BAND_PLAN.json": "a6eef1205e0d2d042255ca30f87d583c380ca4a15e626d92414b3c5fea01bf49",
+    "FROZEN_PLAN.json": "462cb4d8aa8e42f58e521c894cbc306c9bf7bc19787b031d41134cbcc33fe696",
+    "PREDICTIONS.csv": "ed33635e1ba2a94daa2f6775477bf8b1a54bd4b0386048eb330e97711f8a55e6",
+    "PROTOCOL.json": "cc0305238725f4a357239f17909a03204dcbd4ecf99ba2d1f026225f83e2c9a7",
+    "REPORT.json": "78797eb209b456af725e77408314b3acb2072698dd1089d08c10ab0482111a95"
+  },
+  "artifact_id": 13376087275,
+  "artifact_sha256": "9b824cb792b0a2ae35606906c5d5b28d0f6615e034d3cb0589f775d8b6492055",
+  "band_plan": {
+    "centers_nm": [
+      1650,
+      1700,
+      1750,
+      2050,
+      2100,
+      2150
+    ],
+    "commercial_qualified": false,
+    "ideal_band_half_width_nm": 10,
+    "measurement_model": "Uniform averages of raw instrument reflectance at recorded wavelengths. No detector response, noise or optical feasibility calibration.",
+    "method": "rbf_svc_C100",
+    "physical_qualified": false,
+    "schema": "genesis/spectral-band-plan/v1",
+    "status": "REJECTED_BY_REGISTERED_COMPUTATIONAL_TEST"
+  },
+  "data": {
+    "asd_members": 8240,
+    "excluded": {
+      "outside_registered_population": 4039,
+      "unparsed_asd": 30
+    },
+    "group_count": 108,
+    "included_replicates": 4171,
+    "note": "Instrumental replicate means, not independent biological or industrial specimens.",
+    "replicate_count_max": 60,
+    "replicate_count_min": 11
+  },
+  "interpretation": "The registered computational target failed. No physical qualification, commercial qualification, hardware savings, AI superiority or improved discovery method is established. This summary audits the existing hosted result; it is not a fresh empirical experiment.",
+  "job_id": 126957505128,
+  "protocol_freeze_commit": "5e1bf15a7fdf21a9afb83bd1bdb846042b982d06",
+  "recorded_date_utc": "2026-11-05",
+  "registered_test_pass": false,
+  "resources": {
+    "billing": null,
+    "process_cpu_seconds": 18.321401232,
+    "wall_seconds": 135.99622910099998
+  },
+  "results": {
+    "all_bands": {
+      "balanced_accuracy": 0.27777777777777773,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 7,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C100",
+      "correct": 10,
+      "inputs": 22,
+      "n": 36
+    },
+    "anova6": {
+      "balanced_accuracy": 0.27777777777777773,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 7,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C100",
+      "correct": 10,
+      "inputs": 6,
+      "n": 36
+    },
+    "full_spectrum": {
+      "balanced_accuracy": 0.3055555555555555,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 8,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C10",
+      "correct": 11,
+      "inputs": 1551,
+      "n": 36
+    },
+    "group_forward6": {
+      "balanced_accuracy": 0.3333333333333333,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 9,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C10",
+      "correct": 12,
+      "inputs": 6,
+      "n": 36
+    },
+    "random6_00": {
+      "balanced_accuracy": 0.27777777777777773,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 7,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C100",
+      "correct": 10,
+      "inputs": 6,
+      "n": 36
+    },
+    "random6_01": {
+      "balanced_accuracy": 0.2222222222222222,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 5,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C100",
+      "correct": 8,
+      "inputs": 6,
+      "n": 36
+    },
+    "random6_02": {
+      "balanced_accuracy": 0.2222222222222222,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 5,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C100",
+      "correct": 8,
+      "inputs": 6,
+      "n": 36
+    },
+    "random6_03": {
+      "balanced_accuracy": 0.27777777777777773,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 7,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C100",
+      "correct": 10,
+      "inputs": 6,
+      "n": 36
+    },
+    "random6_04": {
+      "balanced_accuracy": 0.27777777777777773,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 7,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C10",
+      "correct": 10,
+      "inputs": 6,
+      "n": 36
+    },
+    "random6_05": {
+      "balanced_accuracy": 0.2222222222222222,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 5,
+          "n": 18
+        }
+      },
+      "classifier": "extratrees_leaf1",
+      "correct": 8,
+      "inputs": 6,
+      "n": 36
+    },
+    "random6_06": {
+      "balanced_accuracy": 0.2222222222222222,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 5,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C10",
+      "correct": 8,
+      "inputs": 6,
+      "n": 36
+    },
+    "random6_07": {
+      "balanced_accuracy": 0.25,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 6,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C10",
+      "correct": 9,
+      "inputs": 6,
+      "n": 36
+    },
+    "random6_08": {
+      "balanced_accuracy": 0.2222222222222222,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 5,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C10",
+      "correct": 8,
+      "inputs": 6,
+      "n": 36
+    },
+    "random6_09": {
+      "balanced_accuracy": 0.2222222222222222,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 5,
+          "n": 18
+        }
+      },
+      "classifier": "extratrees_leaf3",
+      "correct": 8,
+      "inputs": 6,
+      "n": 36
+    },
+    "uniform6": {
+      "balanced_accuracy": 0.25,
+      "by_substrate": {
+        "DIW": {
+          "correct": 3,
+          "n": 18
+        },
+        "V": {
+          "correct": 6,
+          "n": 18
+        }
+      },
+      "classifier": "rbf_svc_C100",
+      "correct": 9,
+      "inputs": 6,
+      "n": 36
+    }
+  },
+  "run_url": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/41939835460",
+  "runtime": {
+    "numpy": "2.3.5",
+    "python": "3.12.15",
+    "scipy": "1.17.0",
+    "sklearn": "1.8.0"
+  },
+  "schema": "genesis/spectral-result-summary/v1",
+  "search": {
+    "classifier_fit_count": 75,
+    "forward_fit_count": 351
+  },
+  "selected_reference": "all_bands",
+  "selected_sparse": "anova6",
+  "software_execution": "success",
+  "source": {
+    "bytes": 269149782,
+    "publisher_md5": "22b9ea6d1da22df688b4cc2bbff3cff3",
+    "sha256": "df41b3afbeac129f9c79e78fbf57f0b8e284512daa77b3b6d625e6ceb36f1521",
+    "url": "https://zenodo.org/records/14419753/files/NIR_spectra_plastic_mixtures_ASD.zip?download=1"
+  },
+  "source_git_blobs": {
+    "PROTOCOL.json": "f4af704d41df5473e73c5eeb11c3ae52085446e5",
+    "study.py": "14102a67d55660d839d94464b73e9b29d09b064d",
+    "test_study.py": "67344c74403315c5e8971fd0ed92b7a49ab84ff4"
+  },
+  "split_counts": {
+    "test": 36,
+    "training": 54,
+    "validation": 18
+  },
+  "study_commit": "f9978202a765e235dd92f6d940661233306677f5",
+  "verification": {
+    "confusion_matrices_recounted": 15,
+    "independent_raw_data_rerun": false,
+    "local_review_python": "3.12.14",
+    "normal_tests_passed": 28,
+    "optimized_tests_passed": 28,
+    "prediction_rows_recounted": 540,
+    "protocol_unchanged_from_freeze": true,
+    "split_memberships_disjoint": true,
+    "substrate_counts_recounted": 30
+  }
+}
