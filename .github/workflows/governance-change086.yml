@@ -36,6 +36,19 @@ jobs:
           test -f tests/test_connected_governance_change086.py
           test -f tests/test_connected_governance_review_integrity086.py
           test -f campaign/governance_change086/REVIEW_INTEGRITY_ADDENDUM.md
-      - name: Execute all C0-C11 synthetic cases, no external service
+      - name: Execute all C0-C13 synthetic and inventory cases, no external service
         run: |
           python -m unittest discover -s tests -p 'test_connected_governance*086.py' -v
+      - name: Install exact ordinary release qualifier dependencies
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt numpy==2.3.5 scipy==1.17.0
+      - name: Require real canonical extracted archive to execute all research regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/qualify_connected014.py --smoke --output "$RUNNER_TEMP/governance086-clean-source"
+          source="$RUNNER_TEMP/governance086-clean-source/extracted-source"
+          test -f "$source/campaign/governance_change086.py"
+          test -f "$source/campaign/governance_change086/REVIEW_INTEGRITY_ADDENDUM.md"
+          test -f "$source/tests/test_connected_governance_archive086.py"
+          (cd "$source" && python -B -m unittest discover -s tests -p 'test_connected_governance*086.py' -v)
