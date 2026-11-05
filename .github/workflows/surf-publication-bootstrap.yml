@@ -45,18 +45,28 @@ jobs:
                   target=dest/m.name
                   target.parent.mkdir(parents=True,exist_ok=True)
                   target.write_bytes(stream.extractfile(m).read())
-          print('Verified 24 source files; no original private documents or fonts included.')
+          p=dest/'build.py';text=p.read_text()
+          old='    if completed.returncode:\n        raise RuntimeError'
+          new='    if completed.returncode:\n        details=output.read_text(errors="replace")\n        print(details[-24000:], file=sys.stderr)\n        (ROOT/"evidence/failed-build-command.txt").write_text(details)\n        raise RuntimeError'
+          if text.count(old)!=1:raise SystemExit('Inspect changed build function')
+          p.write_text(text.replace(old,new))
+          for name in ('README.md','publication/surf-the-exponential.yml'):
+              p=dest/name;text=p.read_text()
+              text=text.replace('texlive-latex-extra texlive-fonts-extra texlive-science','texlive-latex-extra texlive-fonts-extra texlive-fonts-extra-links texlive-science tex-gyre lmodern')
+              p.write_text(text)
+          p=dest/'evidence/development-review.md'
+          p.write_text(p.read_text()+'\nHosted publication preparation run 42128880244 failed on the first pdflatex pass after passing numerical checks. The original temporary log was unavailable after cleanup. The build now retains and prints failed command output, and the standard Ubuntu font dependencies are explicit. This changes build diagnostics, not the manuscript or numerical model. Workflow-file installation is performed through the authorized repository connector, not an expanded Actions token.\n')
+          print('Source identity verified; hosted build diagnostics retained.')
           PY
       - name: Install the public LaTeX and PDF toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-extra texlive-science poppler-utils
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-extra texlive-fonts-extra-links texlive-science tex-gyre lmodern poppler-utils
       - name: Reproduce the exact studies and compile the manuscript
         run: python3 docs/surf-the-exponential/build.py
       - name: Integrate only the new paper and preserve previous research editions
         run: |
           cp docs/surf-the-exponential/publication/test_surf_publication.py tests/test_surf_publication.py
-          cp docs/surf-the-exponential/publication/surf-the-exponential.yml .github/workflows/surf-the-exponential.yml
           python3 docs/surf-the-exponential/publication/install_publication.py
       - name: Test the publication and existing research website
         run: |
@@ -66,11 +76,15 @@ jobs:
           python3 scripts/build_research_site.py --output "$RUNNER_TEMP/surf-research-site"
           python3 docs/surf-the-exponential/package.py --output "$RUNNER_TEMP/surf-publication"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
         with:
-          name: surf-the-exponential-prepared-publication
-          path: ${{ runner.temp }}/surf-publication/
+          name: surf-the-exponential-preparation-evidence
+          path: |
+            ${{ runner.temp }}/surf-publication/
+            docs/surf-the-exponential/evidence/failed-build-command.txt
           retention-days: 7
-      - name: Commit the verified publication on its dedicated branch
+          if-no-files-found: warn
+      - name: Commit the verified documents on their dedicated branch
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -79,9 +93,9 @@ jobs:
           gh auth setup-git --hostname github.com
           actual="$(git ls-remote origin "refs/heads/$branch" | cut -f1)"
           test "$actual" = "$GITHUB_SHA" || { echo 'Branch changed; preserve concurrent work.' >&2; exit 1; }
-          git rm -- .publication/surf-source.xz.part00 .publication/surf-source.xz.part01 .publication/surf-source.xz.part02 .publication/surf-source.xz.part03 .github/workflows/surf-publication-bootstrap.yml
+          git rm -- .publication/surf-source.xz.part00 .publication/surf-source.xz.part01 .publication/surf-source.xz.part02 .publication/surf-source.xz.part03
           rm docs/surf-the-exponential/SURF_THE_EXPONENTIAL.pdf
-          git add docs/surf-the-exponential docs/research/surf-the-exponential.pdf docs/research/surf-the-exponential.html docs/research/publication-manifest.json docs/research/index.html docs/research/README.md README.md scripts/build_research_site.py tests/test_research_site.py tests/test_surf_publication.py .github/workflows/surf-the-exponential.yml
+          git add docs/surf-the-exponential docs/research/surf-the-exponential.pdf docs/research/surf-the-exponential.html docs/research/publication-manifest.json docs/research/index.html docs/research/README.md README.md scripts/build_research_site.py tests/test_research_site.py tests/test_surf_publication.py
           git config user.name 'MONTREAL.AI Research Publication'
           git config user.email 'info@montreal.ai'
           git commit -m 'Publish SURF THE EXPONENTIAL research edition 1.0.0 with exact study, qualified PDF and reader'
