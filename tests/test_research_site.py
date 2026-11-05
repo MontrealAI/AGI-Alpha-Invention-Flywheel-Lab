@@ -47,6 +47,10 @@ class ResearchSiteTests(unittest.TestCase):
         self.assertNotIn('data="alpha-genesis-flywheel-omega.pdf#view=FitH"', reader)
         self.assertLess(reader.index('id="reader"'), reader.index('id="previous-edition"'))
         self.assertIn('href="#previous-edition"', reader)
+        parser = site.Links()
+        parser.feed(reader)
+        self.assertTrue({'proposition', 'replay', 'product', 'scope', 'reproduce',
+                         'reader'}.issubset(parser.ids))
         for filename in ('index.html', 'alpha-genesis-flywheel-omega-v2.html'):
             self.assertIn('href="alpha-genesis-flywheel-omega.html#previous-edition"',
                           (self.source / filename).read_text())
