@@ -347,7 +347,7 @@ def _audit_native_offer(p, ident, i, selected, actions, *, ordered):
     offers = [a for a in actions if a['op'] == 'offer' and a['args']['id'] == order]
     terms = [a for a in actions if a['op'] == 'register_terms' and a['args']['id'] == order + '-terms']
     wallets = [a for a in actions if a['op'] == 'wallet' and a['args']['buyer'] == 'buyer-' + order]
-    if not ordered or selected is None:
+    if selected is None:
         if offers or terms or wallets:
             raise ValueError('REGISTERED_NATIVE_OFFER_CHANGED')
         return
@@ -376,6 +376,33 @@ def _audit_native_offer(p, ident, i, selected, actions, *, ordered):
         'jurisdiction': 'Authored synthetic jurisdiction; no legal finality established',
         'legal_status': 'HYPOTHETICAL_SIMULATION_NO_ENFORCEABILITY_OR_PROVIDER_GUARANTEE',
         'accounting_policy': 'INCURRED_COST_COLLECTED_RECOVERY_MATURITY_NOT_INCOME_V1'}
+    if not ordered:
+        # A signed checkpoint can precede an interrupted begin_order native
+        # prefix. Native replay authenticates each event, but the independently
+        # registered wallet, terms, offer and consent must still match *before*
+        # any resumed writer advances. Accept only a contiguous original
+        # prefix, including the empty or fully committed prefix. This preserves
+        # buyer custody while the original idempotent journal replays the rest.
+        expected_prefix = [
+            ('wallet', {'buyer': 'buyer-' + order, 'amount': p['offer']['budget']}, hour),
+            ('register_terms', {'id': order + '-terms', 'terms': expected_terms}, hour),
+            ('offer', expected_offer, hour),
+            ('event', {'id': order, 'action': 'consent',
+                       'event_id': order + '-consent'}, hour),
+            ('event', {'id': order, 'action': 'fund',
+                       'event_id': order + '-fund'}, hour),
+        ]
+        matching = [a for a in actions
+                    if (a['op'] == 'wallet' and a['args'].get('buyer') == 'buyer-' + order)
+                    or (a['op'] == 'register_terms'
+                        and a['args'].get('id') == order + '-terms')
+                    or (a['op'] == 'offer' and a['args'].get('id') == order)
+                    or (a['op'] == 'event' and a['args'].get('id') == order)]
+        if (len(matching) > len(expected_prefix)
+                or [(a['op'], a['args'], a['day']) for a in matching]
+                != expected_prefix[:len(matching)]):
+            raise ValueError('REGISTERED_NATIVE_OFFER_CHANGED')
+        return
     if (len(terms) != 1 or terms[0]['day'] != hour
             or terms[0]['args'] != {'id': order + '-terms', 'terms': expected_terms}):
         raise ValueError('REGISTERED_NATIVE_TERMS_CHANGED')
