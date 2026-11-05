@@ -1,0 +1,156 @@
+\newcommand{\DoNotLoadEpstopdf}{}
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=.86in,top=.82in,bottom=.84in,headheight=24pt,headsep=.21in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathpazo,helvet,microtype}
+\usepackage{booktabs,tabularx,array,longtable,multirow}
+\usepackage{graphicx,xcolor,tikz,pgfplots}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds,decorations.pathmorphing}
+\pgfplotsset{compat=1.18}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem,needspace,fancyhdr,titlesec,caption,float,placeins}
+\usepackage{listings,xurl,upquote}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[unicode,bookmarksnumbered]{hyperref}
+\usepackage{bookmark}
+\definecolor{Ink}{HTML}{231629}
+\definecolor{Plum}{HTML}{482847}
+\definecolor{Wine}{HTML}{742E50}
+\definecolor{Gold}{HTML}{A7792E}
+\definecolor{LightGold}{HTML}{E9C882}
+\definecolor{Ivory}{HTML}{FCF9F2}
+\definecolor{Sea}{HTML}{1D786F}
+\definecolor{SeaLight}{HTML}{A0E1CE}
+\definecolor{Muted}{HTML}{655E6A}
+\definecolor{Rule}{HTML}{DACFBD}
+\definecolor{Pale}{HTML}{F3EEF5}
+\hypersetup{pdftitle={SURF THE EXPONENTIAL: The Missing Move},pdfauthor={Vincent Boucher},pdfsubject={From verified criticism to new capabilities, viable markets, and better inventors},pdfkeywords={Transformational Intelligence, Alpha Genesis Flywheel Omega, frontier replay, counterexamples, invention, evidence, market construction},colorlinks=true,linkcolor=Plum,citecolor=Plum,urlcolor=Sea}
+\ifdefined\pdfinfoomitdate\pdfinfoomitdate=1\fi
+\ifdefined\pdftrailerid\pdftrailerid{}\fi
+\ifdefined\pdfsuppressptexinfo\pdfsuppressptexinfo=15\fi
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\footnotesize\sffamily\color{Muted}SURF THE EXPONENTIAL}
+\fancyhead[R]{\footnotesize\sffamily\color{Muted}The Missing Move \;|\; Boucher}
+\fancyfoot[L]{\scriptsize\sffamily\color{Muted}ALPHA GENESIS FLYWHEEL $\Omega$}
+\fancyfoot[R]{\small\color{Gold}\thepage}
+\renewcommand{\headrulewidth}{.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{Rule}\leaders\hrule height \headrulewidth\hfill}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{.47em plus .06em minus .04em}
+\setlength{\emergencystretch}{2.6em}\linespread{1.035}\raggedbottom
+\widowpenalty=10000\clubpenalty=10000
+\titleformat{\section}{\Large\bfseries\color{Plum}}{\color{Gold}\thesection}{.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{Ink}}{\thesubsection}{.7em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{Ink}}{\thesubsubsection}{.7em}{}
+\titlespacing*{\section}{0pt}{2.2ex plus .5ex minus .2ex}{.8ex}
+\titlespacing*{\subsection}{0pt}{1.6ex plus .4ex minus .2ex}{.5ex}
+\captionsetup{font=small,labelfont={bf,color=Plum},textfont={color=Muted},skip=7pt}
+\setlist{leftmargin=1.45em,itemsep=.14em,topsep=.2em,parsep=0pt}
+\renewcommand{\arraystretch}{1.16}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\E}{\mathbb{E}}\newcommand{\Prob}{\mathbb{P}}\newcommand{\I}{\mathcal{I}}
+\newcommand{\F}{\mathcal{F}}\newcommand{\B}{\mathcal{B}}\newcommand{\D}{\mathcal{D}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\theoremstyle{remark}\newtheorem{remark}{Remark}[section]
+\newtcolorbox{thesisbox}{enhanced,breakable,colback=Ivory,colframe=Gold,boxrule=.5pt,arc=1.4mm,left=12pt,right=12pt,top=9pt,bottom=9pt,before skip=10pt,after skip=10pt}
+\newtcolorbox{statusbox}{enhanced,breakable,colback=Pale,colframe=Plum,boxrule=0pt,borderline west={2.5pt}{0pt}{Plum},arc=0mm,left=11pt,right=11pt,top=8pt,bottom=8pt,before skip=9pt,after skip=9pt}
+\newtcolorbox{seabox}{enhanced,breakable,colback=Sea!5,colframe=Sea,boxrule=0pt,borderline west={2.5pt}{0pt}{Sea},arc=0mm,left=11pt,right=11pt,top=8pt,bottom=8pt,before skip=9pt,after skip=9pt}
+\newcommand{\smallhead}[1]{\par\smallskip{\sffamily\bfseries\color{Gold}#1}\par\smallskip}
+\lstset{upquote=true,basicstyle=\small\ttfamily,breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,frame=single,rulecolor=\color{Rule},backgroundcolor=\color{Ivory},framesep=7pt}
+\setcounter{tocdepth}{1}
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+\fill[Ink] (current page.south west) rectangle (current page.north east);
+\fill[Plum] ([yshift=2.2in]current page.south west) rectangle ([yshift=-4.0in]current page.north east);
+\draw[LightGold,opacity=.75,line width=.6pt] ([xshift=.36in,yshift=.36in]current page.south west) rectangle ([xshift=-.36in,yshift=-.36in]current page.north east);
+\node[anchor=north west,text=LightGold,font=\sffamily\small] at ([xshift=.73in,yshift=-.65in]current page.north west) {MONTREAL.AI\quad /\quad QUEBEC.AI};
+\node[anchor=north east,text=LightGold,font=\sffamily\small] at ([xshift=-.73in,yshift=-.65in]current page.north east) {RESEARCH 1.0.0};
+\node[anchor=north,text=Ivory,font=\sffamily\fontsize{19}{23}\selectfont] at ([yshift=-1.28in]current page.north) {SURF THE};
+\node[anchor=north,text=LightGold,font=\fontsize{43}{48}\selectfont\bfseries] at ([yshift=-1.78in]current page.north) {EXPONENTIAL};
+\node[anchor=north,text=Ivory,font=\fontsize{28}{34}\selectfont] at ([yshift=-2.65in]current page.north) {The Missing Move};
+\node[anchor=north,align=center,text=Ivory,text width=6.7in,font=\fontsize{14}{19}\selectfont] at ([yshift=-3.36in]current page.north) {From Verified Criticism to New Capabilities,\\Viable Markets, and Better Inventors};
+\begin{scope}[shift={([xshift=.72in,yshift=3.12in]current page.south west)},x=1in,y=1in]
+\foreach \i in {0,...,14}{
+  \pgfmathsetmacro{\off}{\i*.057}
+  \draw[SeaLight,opacity=.16,line width=.45pt] (0,\off) .. controls (1.3,.05+\off) and (1.9,.18+\off) .. (2.7,.55+\off) .. controls (3.4,.90+\off) and (4.4,1.93+\off) .. (5.08,1.74+\off) .. controls (5.5,1.62+\off) and (5.72,.92+\off) .. (6.93,1.09+\off);
+}
+\draw[LightGold,line width=1.5pt] (0,.4) .. controls (1.3,.4) and (1.9,.58) .. (2.7,.95) .. controls (3.35,1.28) and (3.83,1.77) .. (4.15,1.98);
+\draw[LightGold,densely dashed,line width=1pt] (4.15,1.98) .. controls (4.6,2.25) and (4.92,2.17) .. (5.22,1.94);
+\draw[LightGold,line width=1.5pt] (5.22,1.94) .. controls (5.65,1.58) and (5.7,1.2) .. (6.93,1.49);
+\fill[LightGold] (4.15,1.98) circle (2.5pt);\fill[SeaLight] (5.22,1.94) circle (2.5pt);
+\node[text=LightGold,font=\sffamily\scriptsize,align=center] at (4.65,2.66) {THE MISSING MOVE};
+\draw[LightGold,opacity=.55] (4.65,2.49)--(4.65,2.23);
+\node[text=Ivory,font=\fontsize{56}{60}\selectfont] at (1.05,1.76) {$\infty$};
+\end{scope}
+\node[anchor=north,align=center,text=Ivory,text width=6.6in,font=\fontsize{18}{23}\selectfont] at ([yshift=-8.12in]current page.north) {Find what the answer missed.\\\textcolor{LightGold}{Build what the world is missing.}};
+\node[anchor=south west,text=Ivory,align=left,font=\normalsize] at ([xshift=.73in,yshift=.78in]current page.south west) {\textbf{Vincent Boucher}\\Montr\'{e}al, Qu\'{e}bec, Canada};
+\node[anchor=south east,text=LightGold,align=right,font=\small] at ([xshift=-.73in,yshift=.78in]current page.south east) {TRANSFORMATIONAL INTELLIGENCE $\infty$\\5 November 2026};
+\end{tikzpicture}
+\null
+\end{titlepage}
+\setcounter{page}{1}
+\begin{center}
+{\small\sffamily\bfseries\color{Gold}ALPHA GENESIS FLYWHEEL $\Omega$}\par\vspace{.12in}
+{\LARGE\bfseries\color{Plum}SURF THE EXPONENTIAL}\par\vspace{.07in}
+{\Large The Missing Move}\par\vspace{.1in}
+{\large From Verified Criticism to New Capabilities,\\Viable Markets, and Better Inventors}\par\vspace{.16in}
+\textbf{Vincent Boucher}\quad$\cdot$\quad MONTREAL.AI / QUEBEC.AI\\
+{\small Montr\'{e}al, Qu\'{e}bec, Canada\quad$\cdot$\quad 5 November 2026}
+\end{center}
+\smallhead{ABSTRACT}
+A fluent answer can conceal a consequential omission. Asking another model to locate a specific, source-grounded failure can make that omission easier to inspect, but neither disagreement nor agreement establishes truth. We develop this observation into a research architecture for \emph{constructive challenge}: use independently adjudicated criticisms to discover what must be learned, built, coordinated, or changed for a valuable outcome to become attainable. Building on \emph{Transformational Intelligence}, \emph{ALPHA GENESIS FLYWHEEL $\Omega$}, and \emph{Invent the Economy}, the object of challenge expands from a candidate answer to its opportunity set and its means of obtaining evidence. A challenge carries a scoped witness; a proposed response carries a construction and a discriminating test; an economic claim additionally requires voluntary participation, complete costs, and a feasible cash path. We distinguish correction from capability construction, capability construction from market realization, and inherited capability from improved discovery. Conditional analysis shows how false criticism, shared blind spots, adjudication quality, and verification costs determine whether an additional critic is useful. A compact executable reference study checks these relationships and preserves cases in which a stipulated conventional-review comparator ties or wins and retaining the incumbent has greater modeled value. These are authored finite-model results, not measurements of frontier-model discovery or real commercial performance. The empirical programme compares direct execution, self-review, independent challenge, evidence-preserving production, and competent conventional construction on fresh complete campaigns. The ambition is an enterprise that turns the accelerating frontier into newly verified productive possibilities, while making every claimed step of that transformation independently testable.
+\begin{statusbox}
+\textbf{Research status.} An original synthesis, conditional propositions, executable authored reference models, and a prospective evaluation protocol. Model rates, utilities, prices and costs in the reference study are stipulated inputs. Assisted adversarial review of this manuscript is editorial quality control, not an independent scientific experiment. Exponential enterprise growth, autonomous market invention, actual revenue and improved discovery remain hypotheses requiring their own evidence.
+\end{statusbox}
+{\small\textbf{Keywords:} transformational intelligence; consequential omissions; counterexamples; constructive challenge; frontier replay; market formation; discovery methods.}
+\clearpage
+\smallhead{THE PAPER AT A GLANCE}
+\begin{thesisbox}
+\Large\bfseries\raggedright A verified criticism can expose\\the missing means of a valuable possibility.
+\end{thesisbox}
+Imagine that an AI summarizes a book beautifully. Another AI finds a passage that changes the meaning of its conclusion. You now have something concrete to inspect. The useful object is the \emph{evidence-backed discrepancy}, not the fact that two systems disagree.
+
+Now apply the same question to an invention or an enterprise. What important condition has the proposal missed? Which useful route did it never consider? What new instrument would let us find out? An answer can be correct within its assumptions while those assumptions exclude the most valuable possibility.
+\begin{seabox}
+\textbf{The missing move may be a fact to recover, an experiment to run, a capability to construct, or an arrangement that makes voluntary cooperation worthwhile.}\par
+The central job is to establish which one it is, build the appropriate response, and test the complete consequence.
+\end{seabox}
+\begin{center}
+\begin{tikzpicture}[node distance=.36in and .24in, every node/.style={font=\small,align=center},box/.style={draw=Rule,fill=Ivory,rounded corners=3pt,text width=1.75in,minimum height=.64in,inner sep=6pt},arr/.style={-{Latex[length=2.3mm]},line width=.8pt,color=Sea}]
+\node[box] (a) {\textbf{1. PROPOSE}\\A useful complete route};
+\node[box,right=of a] (b) {\textbf{2. CHALLENGE}\\Find a consequential gap};
+\node[box,right=of b] (c) {\textbf{3. VERIFY}\\Check the witness};
+\node[box,below=of c] (d) {\textbf{4. CONSTRUCT}\\Build the missing means};
+\node[box,left=of d] (e) {\textbf{5. DELIVER}\\Test and realize the value};
+\node[box,left=of e] (f) {\textbf{6. COMPOUND}\\Test what helps next};
+\draw[arr] (a)--(b);\draw[arr] (b)--(c);\draw[arr] (c)--(d);\draw[arr] (d)--(e);\draw[arr] (e)--(f);\draw[arr] (f.west)--++(-.18,0)|-(a.west);
+\end{tikzpicture}
+\end{center}
+{\small\color{Muted}A useful organizing loop, not a mandatory ceremony. At any stage the best response may be an existing solution, a cheaper test, a simpler formulation, a deferred decision, or stopping.}
+
+\smallhead{THREE QUESTIONS THAT REACH BEYOND DEBATE}
+\textbf{Challenge the answer.} What would make this claim wrong or incomplete in a way that matters?\par
+\textbf{Challenge the possibilities.} What valuable route is absent from the choices we are comparing?\par
+\textbf{Challenge the instrument.} What prevents us from finding out, and can we construct better evidence?
+
+\textbf{What would count as progress?} More accepted value after complete costs; fewer consequential missed opportunities and invalid promotions; a specific successor helped by what was retained; and, separately, better discovery on fresh work under matched resources.
+
+\textbf{Read by purpose.} Sections 1--2 give the intuition and construction protocol. Sections 3--4 explain when criticism helps and how evidence can fail. Sections 5--6 connect frontier change to viable productive arrangements. Sections 7--9 supply the exact study, empirical programme and compounding contract. The appendices provide practical templates, proofs and claim boundaries.
+\clearpage
+\tableofcontents
+\clearpage
+\input{sections-foundation.tex}
+\input{sections-construction.tex}
+\input{sections-evidence.tex}
+\input{sections-appendix.tex}
+\clearpage
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+\end{document}

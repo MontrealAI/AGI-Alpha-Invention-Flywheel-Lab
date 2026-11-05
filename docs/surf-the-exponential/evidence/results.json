@@ -1,0 +1,410 @@
+{
+  "schema": "missing-move-arithmetic-audit/v1",
+  "evidence_status": "Prospectively specified authored arithmetic audit, not an empirical preregistration, a frontier-model benchmark, or an observation of business performance.",
+  "units": "authored utility units; no conversion to money or measured model accuracy",
+  "event_scope": {
+    "F": "One prespecified, decision-material defect proposition about the incumbent is true.",
+    "D": "A critic alleges that exact prespecified defect proposition, not an unrelated flaw.",
+    "A": "That same allegation is accepted for a revision targeting the proposition; A implies D."
+  },
+  "source_sha256": {
+    "protocol.json": "9c4c525d75e4cd9d3221b9ca1f3ced610515020ce1957b14f8285609731502e1",
+    "study.py": "7d8af5ac45c5543f76dba3f0c85b45d7180c8d465b6a6b83c0f279f995f1fa56",
+    "check_study.py": "23185a5425bc577de3bbf7ab9a6aafc58dabd4b1e737b6201a78f109496bff53",
+    "test_study.py": "eff7f92a36c10de4271f5438de8fed3a2c991d68e552fbbb07f8831ff4fbb1e9"
+  },
+  "profile_count": 11,
+  "profiles": [
+    {
+      "id": "grounded_challenge",
+      "label": "Grounded challenge",
+      "kind": "scenario",
+      "parameters": {
+        "pi": "1/4",
+        "d": "4/5",
+        "a": "9/10",
+        "f": "1/10",
+        "b": "1/20",
+        "G": "100",
+        "H": "30",
+        "K": "8"
+      },
+      "metrics": {
+        "true_accept_probability": "9/50",
+        "false_accept_probability": "3/800",
+        "unaddressed_flaw_probability": "7/100",
+        "benefit_contribution": "18",
+        "harm_contribution": "9/80",
+        "review_cost": "8",
+        "delta": "791/80",
+        "value_with_stop": "791/80"
+      },
+      "decision_vs_incumbent": "review"
+    },
+    {
+      "id": "shared_blind_spot",
+      "label": "Shared discovery blind spot",
+      "kind": "scenario",
+      "parameters": {
+        "pi": "1/4",
+        "d": "1/10",
+        "a": "9/10",
+        "f": "1/10",
+        "b": "1/20",
+        "G": "100",
+        "H": "30",
+        "K": "8"
+      },
+      "metrics": {
+        "true_accept_probability": "9/400",
+        "false_accept_probability": "3/800",
+        "unaddressed_flaw_probability": "91/400",
+        "benefit_contribution": "9/4",
+        "harm_contribution": "9/80",
+        "review_cost": "8",
+        "delta": "-469/80",
+        "value_with_stop": "0"
+      },
+      "decision_vs_incumbent": "incumbent"
+    },
+    {
+      "id": "weak_adjudication",
+      "label": "Weak adjudication",
+      "kind": "scenario",
+      "parameters": {
+        "pi": "1/20",
+        "d": "4/5",
+        "a": "4/5",
+        "f": "2/5",
+        "b": "3/4",
+        "G": "100",
+        "H": "60",
+        "K": "8"
+      },
+      "metrics": {
+        "true_accept_probability": "4/125",
+        "false_accept_probability": "57/200",
+        "unaddressed_flaw_probability": "9/500",
+        "benefit_contribution": "16/5",
+        "harm_contribution": "171/10",
+        "review_cost": "8",
+        "delta": "-219/10",
+        "value_with_stop": "0"
+      },
+      "decision_vs_incumbent": "incumbent"
+    },
+    {
+      "id": "expensive_review",
+      "label": "Review too expensive",
+      "kind": "scenario",
+      "parameters": {
+        "pi": "1/4",
+        "d": "4/5",
+        "a": "9/10",
+        "f": "1/10",
+        "b": "1/20",
+        "G": "100",
+        "H": "30",
+        "K": "20"
+      },
+      "metrics": {
+        "true_accept_probability": "9/50",
+        "false_accept_probability": "3/800",
+        "unaddressed_flaw_probability": "7/100",
+        "benefit_contribution": "18",
+        "harm_contribution": "9/80",
+        "review_cost": "20",
+        "delta": "-169/80",
+        "value_with_stop": "0"
+      },
+      "decision_vs_incumbent": "incumbent"
+    },
+    {
+      "id": "small_stakes",
+      "label": "Low consequence of the omission",
+      "kind": "scenario",
+      "parameters": {
+        "pi": "1/4",
+        "d": "4/5",
+        "a": "9/10",
+        "f": "1/10",
+        "b": "1/20",
+        "G": "10",
+        "H": "30",
+        "K": "8"
+      },
+      "metrics": {
+        "true_accept_probability": "9/50",
+        "false_accept_probability": "3/800",
+        "unaddressed_flaw_probability": "7/100",
+        "benefit_contribution": "9/5",
+        "harm_contribution": "9/80",
+        "review_cost": "8",
+        "delta": "-101/16",
+        "value_with_stop": "0"
+      },
+      "decision_vs_incumbent": "incumbent"
+    },
+    {
+      "id": "perfect_checker_poor_discovery",
+      "label": "Perfect checker, poor discovery",
+      "kind": "scenario",
+      "parameters": {
+        "pi": "1/4",
+        "d": "1/10",
+        "a": "1",
+        "f": "1/10",
+        "b": "0",
+        "G": "100",
+        "H": "30",
+        "K": "8"
+      },
+      "metrics": {
+        "true_accept_probability": "1/40",
+        "false_accept_probability": "0",
+        "unaddressed_flaw_probability": "9/40",
+        "benefit_contribution": "5/2",
+        "harm_contribution": "0",
+        "review_cost": "8",
+        "delta": "-11/2",
+        "value_with_stop": "0"
+      },
+      "decision_vs_incumbent": "incumbent"
+    },
+    {
+      "id": "no_review",
+      "label": "No additional review",
+      "kind": "control",
+      "parameters": {
+        "pi": "1/4",
+        "d": "0",
+        "a": "0",
+        "f": "0",
+        "b": "0",
+        "G": "100",
+        "H": "30",
+        "K": "0"
+      },
+      "metrics": {
+        "true_accept_probability": "0",
+        "false_accept_probability": "0",
+        "unaddressed_flaw_probability": "1/4",
+        "benefit_contribution": "0",
+        "harm_contribution": "0",
+        "review_cost": "0",
+        "delta": "0",
+        "value_with_stop": "0"
+      },
+      "decision_vs_incumbent": "tie"
+    },
+    {
+      "id": "accept_all_criticisms",
+      "label": "Accept every criticism",
+      "kind": "control",
+      "parameters": {
+        "pi": "1/4",
+        "d": "4/5",
+        "a": "1",
+        "f": "1/10",
+        "b": "1",
+        "G": "100",
+        "H": "30",
+        "K": "8"
+      },
+      "metrics": {
+        "true_accept_probability": "1/5",
+        "false_accept_probability": "3/40",
+        "unaddressed_flaw_probability": "1/20",
+        "benefit_contribution": "20",
+        "harm_contribution": "9/4",
+        "review_cost": "8",
+        "delta": "39/4",
+        "value_with_stop": "39/4"
+      },
+      "decision_vs_incumbent": "review"
+    },
+    {
+      "id": "matched_conventional",
+      "label": "Equally equipped conventional review",
+      "kind": "control",
+      "parameters": {
+        "pi": "1/4",
+        "d": "4/5",
+        "a": "9/10",
+        "f": "1/10",
+        "b": "1/20",
+        "G": "100",
+        "H": "30",
+        "K": "8"
+      },
+      "metrics": {
+        "true_accept_probability": "9/50",
+        "false_accept_probability": "3/800",
+        "unaddressed_flaw_probability": "7/100",
+        "benefit_contribution": "18",
+        "harm_contribution": "9/80",
+        "review_cost": "8",
+        "delta": "791/80",
+        "value_with_stop": "791/80"
+      },
+      "decision_vs_incumbent": "review"
+    },
+    {
+      "id": "cheaper_conventional",
+      "label": "Conventional review, one unit cheaper",
+      "kind": "control",
+      "parameters": {
+        "pi": "1/4",
+        "d": "4/5",
+        "a": "9/10",
+        "f": "1/10",
+        "b": "1/20",
+        "G": "100",
+        "H": "30",
+        "K": "7"
+      },
+      "metrics": {
+        "true_accept_probability": "9/50",
+        "false_accept_probability": "3/800",
+        "unaddressed_flaw_probability": "7/100",
+        "benefit_contribution": "18",
+        "harm_contribution": "9/80",
+        "review_cost": "7",
+        "delta": "871/80",
+        "value_with_stop": "871/80"
+      },
+      "decision_vs_incumbent": "review"
+    },
+    {
+      "id": "perfect_information_bound",
+      "label": "Perfect-information upper bound",
+      "kind": "unavailable_bound",
+      "parameters": {
+        "pi": "1/4",
+        "d": "1",
+        "a": "1",
+        "f": "0",
+        "b": "0",
+        "G": "100",
+        "H": "30",
+        "K": "0"
+      },
+      "metrics": {
+        "true_accept_probability": "1/4",
+        "false_accept_probability": "0",
+        "unaddressed_flaw_probability": "0",
+        "benefit_contribution": "25",
+        "harm_contribution": "0",
+        "review_cost": "0",
+        "delta": "25",
+        "value_with_stop": "25"
+      },
+      "decision_vs_incumbent": "bound_only"
+    }
+  ],
+  "grid": {
+    "count": 2304,
+    "sign_counts": {
+      "positive": 431,
+      "zero": 224,
+      "negative": 1649
+    },
+    "minimum_delta": "-50",
+    "maximum_delta": "50",
+    "canonical_rows_sha256": "cad15c551a8a81da31117e425fe9636d01d5436da26897f22ef49fc44c1c6c46",
+    "interpretation": "The distribution of grid signs is a property of this authored Cartesian product, not a frequency estimate for real tasks."
+  },
+  "critic_pair": [
+    {
+      "id": "conditional_independence",
+      "marginal_detection": "7/10",
+      "rho": "0",
+      "both_detect": "49/100",
+      "at_least_one_detects": "91/100",
+      "neither_detects": "9/100",
+      "union_lower_bound": "7/10",
+      "union_upper_bound": "1"
+    },
+    {
+      "id": "strong_shared_error",
+      "marginal_detection": "7/10",
+      "rho": "4/5",
+      "both_detect": "329/500",
+      "at_least_one_detects": "371/500",
+      "neither_detects": "129/500",
+      "union_lower_bound": "7/10",
+      "union_upper_bound": "1"
+    },
+    {
+      "id": "identical_detection",
+      "marginal_detection": "7/10",
+      "rho": "1",
+      "both_detect": "7/10",
+      "at_least_one_detects": "7/10",
+      "neither_detects": "3/10",
+      "union_lower_bound": "7/10",
+      "union_upper_bound": "1"
+    }
+  ],
+  "cash_illustrations": {
+    "scope": "Deterministic successful-delivery cash-path illustration in authored units. The deposit is assumed authorized and usable for the stated production costs, with acceptance and final payment as specified. This is not a native account, executed contract, consent check, revenue observation, failure-path reserve calculation or insolvency-risk estimate. Advance cash remains an obligation until earned.",
+    "cases": [
+      {
+        "id": "successful_delivery_without_deposit",
+        "label": "Successful delivery without a deposit",
+        "flows": [
+          "-60",
+          "-30",
+          "120"
+        ],
+        "metrics": {
+          "cumulative_flows": [
+            "-60",
+            "-90",
+            "30"
+          ],
+          "total_inflows": "120",
+          "total_outflows": "90",
+          "net_contribution": "30",
+          "minimum_starting_cash": "90"
+        }
+      },
+      {
+        "id": "successful_delivery_with_deposit",
+        "label": "Successful delivery with an authorized deposit",
+        "flows": [
+          "40",
+          "-60",
+          "-30",
+          "80"
+        ],
+        "metrics": {
+          "cumulative_flows": [
+            "40",
+            "-20",
+            "-50",
+            "30"
+          ],
+          "total_inflows": "120",
+          "total_outflows": "90",
+          "net_contribution": "30",
+          "minimum_starting_cash": "50"
+        }
+      }
+    ]
+  },
+  "claims_supported": [
+    "The supplied utility identity has the reported exact values.",
+    "The authored examples include five adverse scenarios, a conventional tie and a cheaper conventional winner.",
+    "Critic dependence can change coverage under specified joint distributions.",
+    "Two supplied successful cash paths require starting cash 90 and 50 while retaining net contribution 30."
+  ],
+  "claims_not_supported": [
+    "Measured model accuracy or superiority",
+    "Whole-artifact or mixed-batch criticism coverage",
+    "Empirical discovery or market invention",
+    "Cash adequacy under failure or unobserved consent",
+    "Real demand, revenue or profit",
+    "General self-improvement or exponential growth"
+  ]
+}
