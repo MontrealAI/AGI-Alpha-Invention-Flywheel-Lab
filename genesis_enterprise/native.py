@@ -171,7 +171,9 @@ def operate(output, *, max_steps=None, fault=None):
                 # Verify genuine native history and refuse *before* a resumed
                 # prepare/release/refund/finish makes another financial action.
                 account.audit()
-                _check_active_production_phase(state, p, manifest, account.export())
+                verified_export = account.export()
+                _check_active_registered_selection(state, p, manifest, verified_export)
+                _check_active_production_phase(state, p, manifest, verified_export)
             steps = 0
             while state['phase'] != 'complete' and (max_steps is None or steps < max_steps):
                 if (output / 'STOP').exists():
@@ -377,6 +379,46 @@ def _audit_native_offer(p, ident, i, selected, actions, *, ordered):
     if (len(terms) != 1 or terms[0]['day'] != hour
             or terms[0]['args'] != {'id': order + '-terms', 'terms': expected_terms}):
         raise ValueError('REGISTERED_NATIVE_TERMS_CHANGED')
+
+
+def _check_active_registered_selection(state, p, manifest, exported):
+    """Independently reconstruct a signed active decision before resumed writes.
+
+    Native replay authenticates what was spent, not the offer/tool policy used
+    to calculate the reported resource cost. Always derive the candidate from
+    the frozen registration and replayed *selection-time* cash snapshot.
+    """
+    active = state['active']
+    if active is None:
+        return
+    i = state['index']
+    if type(i) is not int or not 0 <= i < len(manifest['jobs']):
+        raise ValueError('REGISTERED_JOB_ORDER_CHANGED')
+    ident = manifest['jobs'][i]['id']
+    if active['job_id'] != ident:
+        raise ValueError('REGISTERED_JOB_ORDER_CHANGED')
+    actions = exported['ledger']['actions']
+    hour = 24 * (i + 1)
+    overhead = [a for a in actions if a['op'] == 'cost' and
+                a['args']['id'] in {'genesis-acquisition-' + ident,
+                                    'genesis-maintenance-' + ident}]
+    if overhead:
+        observed = overhead[-1]['after']
+    else:
+        prior = [a for a in actions if a['day'] < hour or
+                 (a['day'] == hour and a['op'] == 'mature')]
+        observed = prior[-1]['after'] if prior else {
+            'available': p['opening'], 'unrestrictedEarned': 0}
+    at_choice = {k: observed[k] for k in ('available', 'unrestrictedEarned')}
+    if active['decision_state'] != at_choice:
+        raise ValueError('DECISION_SNAPSHOT_CHANGED')
+    selected = choose(p['offer'], p['tools'], available=at_choice['available'],
+                      earned=at_choice['unrestrictedEarned'],
+                      seed_allowed=(i == 0 and p['first_delivery_may_use_seed']))
+    if active['decision'] != selected:
+        raise ValueError('REGISTERED_OPTIMAL_DECISION_CHANGED')
+    _audit_native_offer(p, ident, i, selected['selected'], actions,
+                        ordered=state['phase'] != 'order')
 
 
 def _check_active_production_phase(state, p, manifest, exported):
