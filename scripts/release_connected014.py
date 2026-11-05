@@ -29,10 +29,12 @@ REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.
 # Terminal measurement009 is manual-only; path changes never renew its expired allocation.
 CONDITIONAL_WORKFLOWS = {
     'genesis-commitment001.yml': ('campaign/genesis_commitment001/',
+                                'tests/fixtures/genesis_commitment001_failures/',
                                 'tests/test_connected_commitment_release.py',
                                 'tests/test_connected_commitment_independent.py',
-                                'commercial/ledger.py', 'connected_enterprise/finance.py',
-                                'connected_enterprise/runner.py',
+                                'commercial/', 'connected_enterprise/', 'adaptive_enterprise/',
+                                'vendor/', 'portfolio25/pricing.py', 'experiments/commerce006.py',
+                                'requirements-commercial010.txt',
                                 '.github/workflows/genesis-commitment001.yml'),
     'omega-economy-v4.yml': ('mechanism_harness/', 'campaign/omega-economy-v4/',
                             'campaign/omega-inventor/', 'requirements-omega-mechanisms-v3.txt',

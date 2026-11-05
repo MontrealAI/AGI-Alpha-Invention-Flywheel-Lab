@@ -23,7 +23,7 @@ After extracting the public package, audit from its `source/` directory using th
 
 ## Evidence boundaries
 
-[Protocol and threat model](PROTOCOL.md) · [opportunities and primary sources](OPPORTUNITIES.md).
+[Executed results and adjudication](RESULTS.md) · [protocol and threat model](PROTOCOL.md) · [opportunities and primary sources](OPPORTUNITIES.md).
 
 Accounting uses exact integer micro-USD, immediate expense recognition for modeled development and prepaid delivery resources, and native payment/reserve/obligation records. Seed, collections, recognized revenue, earned available cash and accounting profit remain separate. Unknown actual bills are not assigned zero. No short result is annualized.
 

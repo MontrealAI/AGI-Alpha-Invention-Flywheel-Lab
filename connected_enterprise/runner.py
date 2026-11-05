@@ -122,10 +122,16 @@ def source_paths(root):
             'campaign/genesis_commitment001/PROTOCOL.md',
             'campaign/genesis_commitment001/README.md',
             'campaign/genesis_commitment001/OPPORTUNITIES.md',
+            'campaign/genesis_commitment001/RESULTS.md',
             'campaign/genesis_commitment001/test_delivery.py',
             'campaign/genesis_commitment001/test_native.py',
             'tests/test_connected_commitment_release.py',
             'tests/test_connected_commitment_independent.py',
+            'tests/fixtures/genesis_commitment001_failures/F01_native.py.original',
+            'tests/fixtures/genesis_commitment001_failures/F02_runner.py.original',
+            'tests/fixtures/genesis_commitment001_failures/README.md',
+            'tests/fixtures/genesis_commitment001_failures/reproduce.py',
+            'tests/fixtures/genesis_commitment001_failures/RESULT.json',
             '.github/workflows/genesis-commitment001.yml',
         }
         if any(not (Path(root)/name).is_file() or (Path(root)/name).is_symlink() for name in required):
