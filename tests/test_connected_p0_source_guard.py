@@ -15,9 +15,9 @@ class JoinPreflightTests(unittest.TestCase):
         self.files(self.a, {'a.py': 'a', 'shared.py': 'old', 'production.py': 'p', 'inventory.py': 'i'})
         self.files(self.b, {'b.py': 'b', 'shared.py': 'new'})
         self.files(self.c, {'a.py': 'a', 'b.py': 'b', 'shared.py': 'resolved', 'production.py': 'p', 'inventory.py': 'i'})
-        self.registry(self.a, "SOURCE_PATHS = ('a.py', 'shared.py')\nPRODUCTION_SOURCE_PATHS = ('production.py',)\nINVENTORY_SOURCE_PATHS = ('inventory.py',)\ndef source_paths_for_manifest(x):\n return 'flexibility063/native-services/v1'\n")
+        self.registry(self.a, "SOURCE_PATHS = ('a.py', 'shared.py')\nPRODUCTION_SOURCE_PATHS = ('production.py',)\nINVENTORY_SOURCE_PATHS = ('inventory.py',)\ndef source_paths_for_manifest(manifest):\n schema = manifest.get('schema') if isinstance(manifest, dict) else None\n if schema == 'flexibility063/native-services/v1':\n  return SOURCE_PATHS\n if schema == 'public-portfolio-20261102/native-services/v2':\n  return SOURCE_PATHS\n return SOURCE_PATHS\n")
         self.registry(self.b, "SOURCE_PATHS = ('b.py', 'shared.py')\n")
-        self.registry(self.c, "SOURCE_PATHS = ('a.py', 'b.py', 'shared.py')\nPRODUCTION_SOURCE_PATHS = ('production.py',)\nINVENTORY_SOURCE_PATHS = ('inventory.py',)\ndef source_paths_for_manifest(x):\n return 'flexibility063/native-services/v1'\n")
+        self.registry(self.c, "SOURCE_PATHS = ('a.py', 'b.py', 'shared.py')\nPRODUCTION_SOURCE_PATHS = ('production.py',)\nINVENTORY_SOURCE_PATHS = ('inventory.py',)\ndef source_paths_for_manifest(manifest):\n schema = manifest.get('schema') if isinstance(manifest, dict) else None\n if schema == 'flexibility063/native-services/v1':\n  return SOURCE_PATHS\n if schema == 'public-portfolio-20261102/native-services/v2':\n  return SOURCE_PATHS\n return SOURCE_PATHS\n")
 
     def tearDown(self):
         self.tmp.cleanup()
@@ -48,7 +48,27 @@ class JoinPreflightTests(unittest.TestCase):
         self.assertFalse(v['registry_complete'])
         self.assertEqual(v['missing_main_optional_service_paths']['INVENTORY_SOURCE_PATHS'], ['inventory.py'])
         self.assertEqual(v['missing_main_optional_service_paths']['PRODUCTION_SOURCE_PATHS'], ['production.py'])
-        self.assertEqual(v['missing_main_manifest_routes'], ['flexibility063/native-services/v1'])
+        self.assertEqual(v['missing_main_manifest_routes'], ['flexibility063/native-services/v1', 'public-portfolio-20261102/native-services/v2'])
+
+    def test_v2_route_loss_rejected_despite_complete_static_source_lists(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n  return SOURCE_PATHS\n", ""))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertEqual(result['missing_main_manifest_routes'],
+                         ['public-portfolio-20261102/native-services/v2'])
+        self.assertEqual(result['missing_main_or_transition_financial_paths'], [])
+
+    def test_inert_v2_literal_cannot_masquerade_as_dispatch(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n  return SOURCE_PATHS\n",
+            " documentation = 'public-portfolio-20261102/native-services/v2'\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
 
     def test_symlink_and_traversal_refused(self):
         (self.c / 'bad.py').symlink_to(self.c / 'a.py')
