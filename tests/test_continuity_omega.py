@@ -48,6 +48,23 @@ class ContinuityTests(unittest.TestCase):
         self.assertEqual(r['verdict'],'FAIL')
         self.assertIn('HANDOFF_DOES_NOT_MATCH_ORIGINAL_COMMITMENTS',r['failures'])
 
+    def test_checker_never_turns_negative_reservations_into_free_capacity(self):
+        c=case_for();h,p=construct(c)
+        c['suppliers'][0]['capacity_units']=1800
+        c['suppliers'][0]['existing_reservations'][0]['units']=-100
+        h['supplier_available_units_in_window']=1900
+        p['handoff_sha256']=digest(h)
+        result=audit(c,h,p)
+        self.assertEqual(result['verdict'],'FAIL')
+        self.assertIn('SUPPLIER_RESERVATION_INVALID',result['failures'])
+
+    def test_checker_requires_buyer_eligibility_even_after_preparation(self):
+        c=case_for();h,p=construct(c)
+        c['buyer']['simulated_eligibility']=False
+        result=audit(c,h,p)
+        self.assertEqual(result['verdict'],'FAIL')
+        self.assertIn('BUYER_SYNTHETIC_ELIGIBILITY_MISSING',result['failures'])
+
     def test_supplier_overbooking_in_frozen_source_rejected(self):
         c=case_for();h,p=construct(c)
         c['suppliers'][0]['existing_reservations'][0]['units']=1500

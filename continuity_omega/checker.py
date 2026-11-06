@@ -84,6 +84,24 @@ def audit(case, handoff, passport):
     for oid in sorted(set(observed)-set(state)):
         anomalies.append({'order_id':oid,'issue':'UNSUPPORTED_RESTORED_ORDER'})
     check(passport.get('restoration_findings')==anomalies,'RESTORE_CHALLENGE_FINDINGS')
+    # Challenge the full declared reservation book independently of the builder.
+    # Negative, fractional and malformed claims must never manufacture headroom.
+    all_suppliers=case.get('suppliers',[])
+    for supplier in all_suppliers:
+        if not isinstance(supplier,dict):
+            check(False,'SUPPLIER_RECORD_INVALID');continue
+        for field in ('capacity_units','quoted_cost','lead_hours'):
+            value=supplier.get(field)
+            check(type(value) is int and value >= (1 if field=='capacity_units' else 0),'SUPPLIER_RESOURCE_INVALID')
+        reservations=supplier.get('existing_reservations')
+        if not isinstance(reservations,list):
+            check(False,'SUPPLIER_RESERVATION_INVALID');continue
+        for reservation in reservations:
+            if not isinstance(reservation,dict):
+                check(False,'SUPPLIER_RESERVATION_INVALID');continue
+            start=reservation.get('start_hour');end=reservation.get('end_hour');units=reservation.get('units')
+            check(type(start) is int and start>=0 and type(end) is int and end>start
+                  and type(units) is int and units>0,'SUPPLIER_RESERVATION_INVALID')
     supplier_id=handoff.get('supplier_id')
     selected=[s for s in case.get('suppliers',[]) if isinstance(s,dict) and s.get('supplier_id')==supplier_id]
     check(len(selected)==1,'SELECTED_SUPPLIER_IDENTITY')
@@ -127,6 +145,7 @@ def audit(case, handoff, passport):
         check(econ.get('offer',0)>=total_cost and econ.get('offer',10**9)<=case.get('buyer',{}).get('maximum_offer',0),'UNVIABLE_OR_UNAFFORDABLE_OFFER')
         check(p.get('customer_budget')==case.get('buyer',{}).get('maximum_offer'),'BUYER_BUDGET')
     check(case.get('scope_rights_declared') is True,'PERMITTED_DATA_SCOPE_ABSENT')
+    check(case.get('buyer',{}).get('simulated_eligibility') is True,'BUYER_SYNTHETIC_ELIGIBILITY_MISSING')
     expected_key=_hash([case.get('exercise_id'),_hash(events),supplier_id,total])
     check(handoff.get('idempotency_key')==expected_key,'IDEMPOTENCY_BINDING')
     check(passport.get('handoff_sha256')==_hash(handoff),'PASSPORT_HANDOFF_BINDING')

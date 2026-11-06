@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-      - name: Independently replay 23 synthetic cases
+      - name: Independently replay 25 synthetic cases
         run: python3 -m unittest discover -s tests -p 'test_continuity_omega.py' -v
       - name: Construct and audit the nominal synthetic handoff
         run: |
