@@ -186,6 +186,49 @@ class JoinPreflightTests(unittest.TestCase):
         self.assertIn('public-portfolio-20261102/native-services/v2',
                       result['missing_main_manifest_routes'])
 
+    def test_preselector_manifest_rebinding_cannot_simulate_live_dispatch(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        text = path.read_text()
+        selector = " schema = manifest.get('schema') if isinstance(manifest, dict) else None"
+        self.assertIn(selector, text)
+        path.write_text(text.replace(selector, " manifest = {}\n" + selector))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_local_source_producer_shadow_cannot_certify_route(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        text = path.read_text()
+        selector = " schema = manifest.get('schema') if isinstance(manifest, dict) else None"
+        self.assertIn(selector, text)
+        path.write_text(text.replace(selector, selector + "\n def source_paths(_):\n  return ()"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_decorator_replacing_dispatcher_cannot_certify_route(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        text = path.read_text()
+        original = 'def source_paths_for_manifest(manifest):'
+        self.assertIn(original, text)
+        path.write_text(text.replace(
+            original, "@(lambda f: (lambda manifest: SOURCE_PATHS))\n" + original))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_module_level_dispatch_rebinding_cannot_certify_route(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text() +
+                        "\nsource_paths_for_manifest = lambda manifest: SOURCE_PATHS\n")
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
     def test_symlink_and_traversal_refused(self):
         (self.c / 'bad.py').symlink_to(self.c / 'a.py')
         with self.assertRaisesRegex(ValueError, 'P0_SYMLINK_SOURCE_REFUSED'):
