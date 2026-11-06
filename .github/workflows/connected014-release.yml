@@ -44,6 +44,15 @@ jobs:
         run: |
           python "$RUNNER_TEMP/connected014-qualified/extracted-source/scripts/qualify_genesis_release.py" --source "$RUNNER_TEMP/connected014-qualified/extracted-source" --archive "$RUNNER_TEMP/connected014-qualified/connected014-source.zip" --output "$RUNNER_TEMP/genesis-qualified" --source-commit "${{ github.event.pull_request.head.sha || github.sha }}"
           cp "$RUNNER_TEMP/genesis-qualified/QUALIFICATION.json" "$RUNNER_TEMP/connected014-qualified/GENESIS_QUALIFICATION.json"
+      - name: Qualify the capacity-backed turn from the clean source archive
+        working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
+        run: |
+          python -m unittest campaign.genesis_commitment001.test_delivery campaign.genesis_commitment001.test_native -v
+          python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/commitment-release-qualified" --scenario central --arm retained
+          python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/commitment-release-qualified"
+          python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/commitment-positive-qualified" --scenario favorable_envelope --arm retained
+          python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/commitment-positive-qualified"
+          python -m campaign.genesis_commitment001.runner package --output "$RUNNER_TEMP/commitment-positive-qualified" --archive "$RUNNER_TEMP/commitment-release-qualified-public.zip"
       - name: Bind immutable release assets to exact qualified source and inspected research edition
         if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         run: python scripts/release_connected014.py prepare --qualification "$RUNNER_TEMP/connected014-qualified" --assets "$RUNNER_TEMP/connected014-release-assets" --source-commit "$GITHUB_SHA" --papers docs/completion015
@@ -64,6 +73,10 @@ jobs:
             ${{ runner.temp }}/connected014-qualified/QUALIFICATION.json
             ${{ runner.temp }}/omega-v4-qualified/QUALIFICATION.json
             ${{ runner.temp }}/genesis-qualified/QUALIFICATION.json
+            ${{ runner.temp }}/commitment-release-qualified/REPORT.json
+            ${{ runner.temp }}/commitment-release-qualified/AUDIT.json
+            ${{ runner.temp }}/commitment-positive-qualified/REPORT.json
+            ${{ runner.temp }}/commitment-positive-qualified/AUDIT.json
             ${{ runner.temp }}/connected014-qualified/*.stdout
             ${{ runner.temp }}/connected014-qualified/*.stderr
           if-no-files-found: warn
@@ -124,6 +137,7 @@ jobs:
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
@@ -207,6 +221,33 @@ jobs:
         run: |
           python -m connected_enterprise.transformational063 run --root "$PWD" --output "$RUNNER_TEMP/released-transformational063"
           python -m connected_enterprise.transformational063 audit --root "$PWD" --output "$RUNNER_TEMP/released-transformational063"
+      - name: Operate the capacity-backed turn from actual downloaded release bytes
+        working-directory: ${{ runner.temp }}/downloaded-release-operation/source
+        run: |
+          python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/released-commitment001" --scenario central --arm retained
+          python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/released-commitment001"
+          python -m campaign.genesis_commitment001.runner resume --output "$RUNNER_TEMP/released-commitment001" --scenario central --arm retained
+          python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/released-commitment001-positive" --scenario favorable_envelope --arm retained
+          python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/released-commitment001-positive"
+          python -m campaign.genesis_commitment001.runner resume --output "$RUNNER_TEMP/released-commitment001-positive" --scenario favorable_envelope --arm retained
+          python -m campaign.genesis_commitment001.runner package --output "$RUNNER_TEMP/released-commitment001" --archive "$RUNNER_TEMP/released-commitment001-public.zip"
+          python -m campaign.genesis_commitment001.runner package --output "$RUNNER_TEMP/released-commitment001-positive" --archive "$RUNNER_TEMP/released-commitment001-positive-public.zip"
+          python -m zipfile -e "$RUNNER_TEMP/released-commitment001-positive-public.zip" "$RUNNER_TEMP/released-commitment001-positive-public"
+          cd "$RUNNER_TEMP/released-commitment001-positive-public/source"
+          python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/released-commitment001-positive-public"
+      - name: Retain key-free downloaded commitment receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: commitment001-released-operation-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/released-commitment001/REPORT.json
+            ${{ runner.temp }}/released-commitment001/AUDIT.json
+            ${{ runner.temp }}/released-commitment001-positive/REPORT.json
+            ${{ runner.temp }}/released-commitment001-positive/AUDIT.json
+            ${{ runner.temp }}/released-commitment001-public.zip
+            ${{ runner.temp }}/released-commitment001-positive-public.zip
+          if-no-files-found: error
       - name: Retain released flexibility evidence without recovery authority
         if: always() && steps.released_flexibility.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -225,15 +266,66 @@ jobs:
         working-directory: ${{ runner.temp }}/downloaded-release-operation/source
         run: |
           python -m unittest tests.test_public_portfolio_20261102 -v
+          python -m unittest experiments.public_portfolio_20261102.verification.test_dispatch_case experiments.public_portfolio_20261102.verification.test_finalize_run -v
           python experiments/public_portfolio_20261102/verification/r2_guard_tests_002.py --output "$RUNNER_TEMP/released-portfolio-guards.json"
-          python -m unittest experiments.public_portfolio_20261102.verification.test_recovery -v
-          python -m unittest experiments.public_portfolio_20261102.verification.test_dispatch_case -v
-          python -m unittest experiments.public_portfolio_20261102.verification.test_recovery_fast -v
-          python -m unittest experiments.public_portfolio_20261102.verification.test_finalize_run -v
           python experiments/public_portfolio_20261102/verification/verify_artifacts.py --output "$RUNNER_TEMP/released-portfolio-artifacts.json"
-          python experiments/public_portfolio_20261102/verification/r2_recheck_retained.py --public-root experiments/public_portfolio_20261102/evidence/economics-r2/public --audit-receipts experiments/public_portfolio_20261102/evidence/economics-r2/audit-receipts --output "$RUNNER_TEMP/released-portfolio-finance.json"
-          python experiments/public_portfolio_20261102/verification/r2_recheck_recovered_retained.py --public-root experiments/public_portfolio_20261102/evidence/economics-r2/public --original-four-report experiments/public_portfolio_20261102/verification/r2_actual_recovery_audit_001.json --output "$RUNNER_TEMP/released-portfolio-recovered-four.json"
-          python experiments/public_portfolio_20261102/verification/r2_additional_recovery_replay.py --public-root experiments/public_portfolio_20261102/evidence/economics-r2/public --output "$RUNNER_TEMP/released-portfolio-recovered-two.json"
+      - name: Stage exact historical R2 recovery source without changing candidate source
+        run: |
+          mkdir "$RUNNER_TEMP/historical-portfolio-source"
+          git archive 8144ece4906b994a6957694e5469c67ab4d0ceb6 | tar -x -C "$RUNNER_TEMP/historical-portfolio-source"
+          cd "$RUNNER_TEMP/historical-portfolio-source"
+          python - <<'PYH'
+          import json, os
+          from pathlib import Path
+          from connected_enterprise.finance import source_identity
+          from experiments.public_portfolio_20261102 import recovery_run, service
+          root = Path.cwd()
+          products = json.loads((root / service.PREFIX / 'PRODUCTS.json').read_text())
+          if isinstance(products, dict):
+              products = products['products']
+          manifest = service.prepare_manifest(root, products, 'historical-source-preflight')
+          identity = source_identity(root, manifest)
+          expected = 'bb74d40f7a84ca155189f908c091db32b27093e203e0d63696f327a9a2492901'
+          if identity['sha256'] != expected or recovery_run.EXPECTED_NATIVE_SOURCE != expected:
+              raise ValueError('EXACT_HISTORICAL_R2_NATIVE_SOURCE_REQUIRED')
+          import hashlib
+          candidate = Path(os.environ['RUNNER_TEMP']) / 'downloaded-release-operation/source'
+          helpers = (
+              'experiments/public_portfolio_20261102/recovery_run.py',
+              'experiments/public_portfolio_20261102/recovery_fast.py',
+              'experiments/public_portfolio_20261102/verification/test_recovery.py',
+              'experiments/public_portfolio_20261102/verification/test_recovery_fast.py',
+              'experiments/public_portfolio_20261102/verification/r2_recheck_retained.py',
+              'experiments/public_portfolio_20261102/verification/r2_recheck_recovered_retained.py',
+              'experiments/public_portfolio_20261102/verification/r2_additional_recovery_replay.py',
+              'experiments/public_portfolio_20261102/verification/r2_recovery_actual_audit.py',
+              'experiments/public_portfolio_20261102/verification/r2_stream_audit.py',
+              'experiments/public_portfolio_20261102/verification/verify_finance.py',
+              'experiments/public_portfolio_20261102/verification/verify_science.py',
+          )
+          helper_hashes = {}
+          for relative in helpers:
+              shipped, frozen = candidate / relative, root / relative
+              if shipped.is_symlink() or not shipped.is_file() or shipped.read_bytes() != frozen.read_bytes():
+                  raise ValueError('FROZEN_HISTORICAL_HELPER_CHANGED:' + relative)
+              helper_hashes[relative] = hashlib.sha256(shipped.read_bytes()).hexdigest()
+          receipt = {'source_commit': '8144ece4906b994a6957694e5469c67ab4d0ceb6',
+                     'native_source_sha256': expected,
+                     'shipped_historical_helper_hashes': helper_hashes,
+                     'scope': 'Frozen historical recovery and retained-account controls only; separate from candidate and downloaded-release operation.'}
+          (Path(os.environ['RUNNER_TEMP']) / 'historical-portfolio-source.json').write_text(json.dumps(receipt, indent=2) + '\n')
+          PYH
+      - name: Qualify historical recovery against its unchanged source identity
+        working-directory: ${{ runner.temp }}/historical-portfolio-source
+        run: |
+          python -m unittest experiments.public_portfolio_20261102.verification.test_recovery -v
+          python -m unittest experiments.public_portfolio_20261102.verification.test_recovery_fast -v
+      - name: Recheck retained historical accounts with the exact pinned original source
+        working-directory: ${{ runner.temp }}/historical-portfolio-source
+        run: |
+          python experiments/public_portfolio_20261102/verification/r2_recheck_retained.py --public-root "$RUNNER_TEMP/downloaded-release-operation/source/experiments/public_portfolio_20261102/evidence/economics-r2/public" --audit-receipts "$RUNNER_TEMP/downloaded-release-operation/source/experiments/public_portfolio_20261102/evidence/economics-r2/audit-receipts" --output "$RUNNER_TEMP/released-portfolio-finance.json"
+          python experiments/public_portfolio_20261102/verification/r2_recheck_recovered_retained.py --public-root "$RUNNER_TEMP/downloaded-release-operation/source/experiments/public_portfolio_20261102/evidence/economics-r2/public" --original-four-report "$RUNNER_TEMP/downloaded-release-operation/source/experiments/public_portfolio_20261102/verification/r2_actual_recovery_audit_001.json" --output "$RUNNER_TEMP/released-portfolio-recovered-four.json"
+          python experiments/public_portfolio_20261102/verification/r2_additional_recovery_replay.py --public-root "$RUNNER_TEMP/downloaded-release-operation/source/experiments/public_portfolio_20261102/evidence/economics-r2/public" --output "$RUNNER_TEMP/released-portfolio-recovered-two.json"
       - name: Retain released portfolio computational qualification
         if: always() && steps.released_portfolio.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -241,6 +333,7 @@ jobs:
           name: public-portfolio-released-operation-${{ github.sha }}-attempt-${{ github.run_attempt }}
           path: |
             ${{ runner.temp }}/released-portfolio-guards.json
+            ${{ runner.temp }}/historical-portfolio-source.json
             ${{ runner.temp }}/released-portfolio-artifacts.json
             ${{ runner.temp }}/released-portfolio-finance.json
             ${{ runner.temp }}/released-portfolio-recovered-four.json

@@ -50,6 +50,9 @@ INVENTORY_SOURCE_PATHS = ('inventory061/__init__.py', 'inventory061/service.py',
 
 def source_paths_for_manifest(manifest=None):
     schema = manifest.get('schema') if isinstance(manifest, dict) else None
+    if schema == 'genesis-commitment001/native-services/v1':
+        from campaign.genesis_commitment001.service import source_paths
+        return tuple(dict.fromkeys(SOURCE_PATHS + tuple(source_paths(Path(__file__).resolve().parents[1]))))
     if schema == 'public-portfolio-20261102/native-services/v2':
         from experiments.public_portfolio_20261102.service import source_paths
         return tuple(dict.fromkeys(SOURCE_PATHS + tuple(source_paths(Path(__file__).resolve().parents[1]))))
@@ -126,7 +129,7 @@ def _seed_id(request, source_sha256):
 
 
 class JournalAccount:
-    def __init__(self, root, manifest, path, *, opening, working, contract):
+    def __init__(self, root, manifest, path, *, opening, working, contract, require_pristine=False):
         self.root, self.path = Path(root).absolute(), Path(path).absolute()
         self.manifest = copy.deepcopy(manifest)
         self._mutex, self._closed, self._journal_failed = threading.RLock(), False, False
@@ -142,6 +145,14 @@ class JournalAccount:
             self._account = Account(self.root, manifest, self.path, opening=opening,
                                     working=working, contract=contract)
             self._journal = self._load()
+            # A missing first operating checkpoint can be initialized only for
+            # authenticated empty history. Check under the native writer lease
+            # before _recover can execute any previously journaled intent.
+            if require_pristine:
+                record = self._account.export()
+                if (self._journal['entries'] or record['ledger']['actions']
+                        or record['action_proofs'] or record['obligation_resolutions']):
+                    raise ValueError('SIGNED_CHECKPOINT_REQUIRED')
             self._recover()
         except BaseException:
             self.close()

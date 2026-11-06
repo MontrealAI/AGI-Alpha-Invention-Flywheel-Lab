@@ -1,0 +1,133 @@
+{
+  "schema": "genesis-commitment001/protocol/v1",
+  "scope": "AUTHORED_SIMULATED_COMMERCE_EXECUTABLE_SQLITE_DELIVERIES",
+  "opening_microUSD": 100000000000,
+  "scenarios": [
+    "central",
+    "no_demand",
+    "payment_delay",
+    "bad_output",
+    "shared_shock",
+    "cost_stress",
+    "rival_response",
+    "commodity_pressure",
+    "favorable_envelope",
+    "demand_only"
+  ],
+  "arms": [
+    "retained",
+    "direct"
+  ],
+  "cost_multiplier": {
+    "cost_stress": 4
+  },
+  "tax_numerator": 1,
+  "tax_denominator": 5,
+  "setup_costs_usd": {
+    "research": 200,
+    "development": 400,
+    "failed_search": 100,
+    "maintenance": 40,
+    "human_supervision": 100,
+    "tools": 40
+  },
+  "acquisition_costs_usd": {
+    "failed_and_successful_acquisition": 100
+  },
+  "first_costs_usd": {
+    "onboarding": 60,
+    "capacity_reservation": 150,
+    "production": 180,
+    "inference": 40,
+    "infrastructure": 30,
+    "verification": 100,
+    "expert_review": 80,
+    "support": 60,
+    "failure_retry_reservation": 40
+  },
+  "successor_development_usd": 400,
+  "successor_acquisition_usd": 80,
+  "successor_costs_usd": {
+    "onboarding": 40,
+    "capacity_reservation": 100,
+    "production": 120,
+    "inference": 20,
+    "infrastructure": 20,
+    "verification": 80,
+    "expert_review": 40,
+    "support": 40,
+    "failure_retry_reservation": 20
+  },
+  "payment_fee_usd": 30,
+  "closing_maintenance_usd": 100,
+  "buyer": {
+    "first": {
+      "value_usd": 4300,
+      "budget_usd": 3500,
+      "friction_usd": 100,
+      "outside_utility_usd": 900,
+      "price_usd": 3000
+    },
+    "successor": {
+      "value_usd": 3400,
+      "budget_usd": 3000,
+      "friction_usd": 100,
+      "outside_utility_usd": 800,
+      "price_usd": 2200
+    }
+  },
+  "alternatives_usd": {
+    "competent_human": 4000,
+    "human_plus_ai": 3300,
+    "autonomous_provider": 3200,
+    "self_service_total": 3100
+  },
+  "suppliers": {
+    "shared-worker": {
+      "units": 1,
+      "consent": "AUTHORED_SIMULATED_ACCEPTANCE",
+      "common_dependency": "local-simulation-host"
+    }
+  },
+  "supplier_terms": "Nonrefundable prepaid execution slot includes labor, retries and support amounts. No actual provider consent, external capacity or legal enforceability is asserted. Overlapping active intervals share one indivisible worker.",
+  "cost_basis": "Every USD amount is an explicit authored sensitivity parameter, not a quote, wage survey, measured invoice or inferred market demand. The human supervision and expert line items make this a modeled hybrid, not strict 100 percent autonomous commerce. Resource reservations are fully incurred prepaid costs; unused slots are not silently refunded.",
+  "unknown_actual_costs": [
+    "developer_time",
+    "ChatGPT_resource_allocation",
+    "host_compute",
+    "real_acquisition",
+    "legal_contracting",
+    "real_supplier_capacity",
+    "actual_tax_liability"
+  ],
+  "zero_cost_explanations": {
+    "borrowed_funds": "No debt or financing contract is permitted in this fixture; no interest or funding proceeds.",
+    "actual_revenue": "No real buyer, real acceptance or real payment; actual revenue is zero by scope."
+  },
+  "horizon": "Integer hours 0 through 120 inclusive; no annualization or 365-day profit claim.",
+  "successor_policy": "Spend development, acquisition and production only from native unrestricted collected earnings after first maturity and declared tax provision. Seed remains available but excluded by this registered policy; causal necessity of first earnings is not claimed.",
+  "threat_model": "Trusted local POSIX storage, one account and mandatory native exclusive writer lease; accidental malformed data, overlap, replay, crashes and tampering are tested. No Byzantine supplier, remote multi-account allocator, host compromise or disaster recovery guarantee. Native signatures authenticate local simulation authority, not real counterparties.",
+  "scenario_economics": {
+    "favorable_envelope": {
+      "first_buyer": {
+        "value_usd": 6000,
+        "budget_usd": 4500,
+        "friction_usd": 100,
+        "outside_utility_usd": 1500,
+        "price_usd": 4000
+      },
+      "all_alternative_prices_usd": 5000,
+      "purpose": "UNCALIBRATED_POSITIVE_BRANCH_ENGINEERING_CONTROL_NOT_REALISTIC_DEMAND"
+    },
+    "demand_only": {
+      "all_alternative_prices_usd": 3200,
+      "purpose": "FIRST_PURCHASE_WITH_UNAFFORDABLE_COMPLETE_SUCCESSOR_EXPECT_DEFER"
+    },
+    "favorable_inherited_by": [
+      "payment_delay",
+      "bad_output",
+      "shared_shock",
+      "cost_stress"
+    ]
+  }
+}

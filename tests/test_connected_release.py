@@ -298,7 +298,9 @@ class ReleaseIntegrityTests(unittest.TestCase):
                 release.verify_assets(self.assets,COMMIT)
 
     def test_moved_main_and_wrong_existing_tag_never_create_release(self):
-        gate = {name:{'head_sha':COMMIT} for name in release.REQUIRED_WORKFLOWS}
+        # A financial-source change also requires the new opt-in campaign's
+        # same-head gate before this test reaches its tag/main identity checks.
+        gate = {name:{'head_sha':COMMIT} for name in (*release.REQUIRED_WORKFLOWS, 'genesis-commitment001.yml')}
         applicability = {'changed_paths':['connected_enterprise/finance.py'], 'base_commit':'c'*40, 'conservative_all_conditionals':False}
         with patch.object(release, 'qualifying_runs', return_value=gate), patch.object(release, 'push_applicability', return_value=applicability), patch.object(release.subprocess, 'run') as command:
             def moved(endpoint, optional=False):

@@ -26,6 +26,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -75,6 +78,9 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: surf-publication-${{ github.sha }}
@@ -120,7 +126,10 @@ jobs:
             gh release create "$tag" "$assets/SURF_THE_EXPONENTIAL.pdf" "$assets/SURF_THE_EXPONENTIAL_SOURCE.zip" "$assets/PUBLICATION.json" "$assets/SHA256SUMS" --repo "$GITHUB_REPOSITORY" --verify-tag --latest=false --title 'SURF THE EXPONENTIAL — The Missing Move' --notes-file "$RUNNER_TEMP/surf-release-notes.md"
           fi
           tag_commit="$(gh api "repos/$GITHUB_REPOSITORY/commits/$tag" --jq .sha)"
-          [ "$tag_commit" = "$GITHUB_SHA" ] || { echo 'Edition tag differs from this publication commit; use its original run or an explicitly new edition.'; exit 1; }
+          if [ "$tag_commit" != "$GITHUB_SHA" ]; then
+            echo "SURF_EXISTING_IMMUTABLE_EDITION: original tag $tag_commit; verify public assets byte-for-byte on this maintenance commit, never retag or republish."
+            [ "$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" --jq .draft)" = false ] || { echo 'SURF_EXISTING_TAG_DRAFT_MISMATCH'; exit 1; }
+          fi
           mkdir "$RUNNER_TEMP/surf-downloaded"
           gh release download "$tag" --repo "$GITHUB_REPOSITORY" --dir "$RUNNER_TEMP/surf-downloaded"
           for f in SURF_THE_EXPONENTIAL.pdf SURF_THE_EXPONENTIAL_SOURCE.zip PUBLICATION.json SHA256SUMS; do

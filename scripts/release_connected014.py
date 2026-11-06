@@ -28,6 +28,17 @@ PAPERS = ('PAPER.pdf', 'PAPER.tex', 'index.html', 'REPORT.md', 'PUBLICATION.json
 REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.yml', 'adaptive012.yml', 'commercial010.yml')
 # Terminal measurement009 is manual-only; path changes never renew its expired allocation.
 CONDITIONAL_WORKFLOWS = {
+    'genesis-commitment001.yml': ('campaign/genesis_commitment001/',
+                                'tests/fixtures/genesis_commitment001_failures/',
+                                'tests/test_connected_commitment_release.py',
+                                'tests/test_connected_commitment_independent.py',
+                                'tests/test_connected_commitment_public_receipts.py',
+                                'tests/test_connected_commitment_startup.py',
+                                'tests/test_connected_commitment_registration.py',
+                                'commercial/', 'connected_enterprise/', 'adaptive_enterprise/',
+                                'vendor/', 'portfolio25/pricing.py', 'experiments/commerce006.py',
+                                'requirements-commercial010.txt',
+                                '.github/workflows/genesis-commitment001.yml'),
     'omega-economy-v4.yml': ('mechanism_harness/', 'campaign/omega-economy-v4/',
                             'campaign/omega-inventor/', 'requirements-omega-mechanisms-v3.txt',
                             'scripts/qualify_omega_release.py',
@@ -117,6 +128,10 @@ def archive_manifest(path):
             from scripts.qualify_omega_release import reach_source
             reach_source(manifest)
         members = set(manifest['files'])
+        if any(name.startswith('campaign/genesis_commitment001/') for name in members):
+            from campaign.genesis_commitment001.service import source_paths as commitment_sources
+            if not set(commitment_sources(ROOT)) <= members:
+                raise ValueError('COMMITMENT001_EXACT_RELEASE_SOURCE_CLOSURE_REQUIRED')
         from connected_enterprise.runner import GENESIS_RELEASE_MARKERS, GENESIS_RELEASE_PATHS
         if GENESIS_RELEASE_MARKERS.intersection(members):
             from genesis_enterprise.native import source_files as genesis_sources
