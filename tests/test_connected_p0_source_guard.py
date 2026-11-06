@@ -181,6 +181,19 @@ class JoinPreflightTests(unittest.TestCase):
         self.assertTrue(inspect(self.a, self.b, self.c)['registry_complete'])
 
 
+    def test_actual_main_source_dispatches_all_five_service_manifest_versions(self):
+        root = Path(__file__).resolve().parents[1]
+        _, routes = load_registry(root)
+        required = {
+            'genesis-commitment001/native-services/v1',
+            'public-portfolio-20261102/native-services/v2',
+            'flexibility063/native-services/v1',
+            'production060/native-services/v1',
+            'inventory061/native-services/v1',
+        }
+        self.assertTrue(required <= routes, sorted(required - routes))
+
+
 class PairedAcquisitionReleaseClosureTests(unittest.TestCase):
     def registered(self):
         import json
