@@ -1,0 +1,99 @@
+name: Publish direct SURF manuscript downloads
+on:
+  push:
+    branches: [publication/surf-direct-downloads-20261105]
+    paths: ['.github/workflows/surf-direct-downloads.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: surf-constructive-challenge-direct-downloads-v1
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    env:
+      SOURCE_SHA: b947de420025a18f17d5b3b723ae615168d5016f
+      RELEASE_TAG: surf-constructive-challenge-v1.0.0
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: b947de420025a18f17d5b3b723ae615168d5016f
+          persist-credentials: false
+          sparse-checkout: docs/surf-constructive-challenge
+      - name: Verify original manuscript identities and build the download bundle
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,shutil,zipfile
+          root=pathlib.Path('docs/surf-constructive-challenge')
+          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'surf-downloads'
+          out.mkdir()
+          expected={'SURF_THE_EXPONENTIAL.pdf':'131ab0ef0f7798e0aece32393f0d07f1d90b3439c43fa81655b7fb692714f03f','SURF_THE_EXPONENTIAL.tex':'bff769439ef6c9b20d6c871c6301a557240efbcc0c1ef764603181dcdf9224e2'}
+          manifest=json.loads((root/'PUBLICATION.json').read_text())
+          if manifest['pages']!=23 or manifest['edition']!='surf-constructive-challenge-1.0.0':raise SystemExit('Wrong edition')
+          for name,digest in expected.items():
+              data=(root/name).read_bytes()
+              if hashlib.sha256(data).hexdigest()!=digest:raise SystemExit('Source identity mismatch: '+name)
+          if not (root/'SURF_THE_EXPONENTIAL.pdf').read_bytes().startswith(b'%PDF-'):raise SystemExit('Not a PDF')
+          shutil.copyfile(root/'SURF_THE_EXPONENTIAL.pdf',out/'SURF_THE_EXPONENTIAL_23_PAGES.pdf')
+          shutil.copyfile(root/'SURF_THE_EXPONENTIAL.tex',out/'SURF_THE_EXPONENTIAL.tex')
+          files=sorted(p for p in root.rglob('*') if p.is_file())
+          allowed={'.pdf','.tex','.md','.json','.py','.txt','.html','.bib','.csv'}
+          if len(files)>100 or sum(p.stat().st_size for p in files)>5000000:raise SystemExit('Unexpected source package size')
+          for p in files:
+              if p.is_symlink() or (p.suffix not in allowed and p.name not in ('.gitignore','VERSION')):raise SystemExit('Unexpected package file: '+str(p))
+          readme='SURF THE EXPONENTIAL — 23-page constructive-challenge companion\n\nPDF: SURF_THE_EXPONENTIAL.pdf\nEditable manuscript: SURF_THE_EXPONENTIAL.tex\nLocal reader: reader.html\nReproduction instructions: README.md\n\nOriginal source snapshot: '+os.environ['SOURCE_SHA']+'\nThe manuscript and source files are unchanged. This ZIP is a download-only repackaging of the published directory, with this additional guide. It is distinct from the 28-page The Missing Move edition. No font files or private source documents are included.\n'
+          with zipfile.ZipFile(out/'SURF_THE_EXPONENTIAL_COMPLETE.zip','w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              for p in files:
+                  info=zipfile.ZipInfo('Surf_the_Exponential/'+p.relative_to(root).as_posix(),date_time=(2026,11,5,0,0,0))
+                  info.compress_type=zipfile.ZIP_DEFLATED
+                  info.external_attr=0o100644<<16
+                  z.writestr(info,p.read_bytes())
+              info=zipfile.ZipInfo('Surf_the_Exponential/DOWNLOAD_README.txt',date_time=(2026,11,5,0,0,0))
+              info.compress_type=zipfile.ZIP_DEFLATED
+              info.external_attr=0o100644<<16
+              z.writestr(info,readme.encode())
+          with zipfile.ZipFile(out/'SURF_THE_EXPONENTIAL_COMPLETE.zip') as z:
+              if z.testzip() is not None:raise SystemExit('ZIP integrity failed')
+              for name,digest in expected.items():
+                  if hashlib.sha256(z.read('Surf_the_Exponential/'+name)).hexdigest()!=digest:raise SystemExit('Bundled identity mismatch')
+          names=['SURF_THE_EXPONENTIAL_23_PAGES.pdf','SURF_THE_EXPONENTIAL.tex','SURF_THE_EXPONENTIAL_COMPLETE.zip']
+          sums=''.join(hashlib.sha256((out/name).read_bytes()).hexdigest()+'  '+name+'\n' for name in names)
+          (out/'SHA256SUMS').write_text(sums)
+          (out/'RELEASE_NOTES.md').write_text('# SURF THE EXPONENTIAL — Direct downloads\n\n**23-page constructive-challenge companion** by Vincent Boucher, MONTREAL.AI / QUEBEC.AI.\n\nThe PDF and editable LaTeX are unchanged from the published manuscript at commit `'+os.environ['SOURCE_SHA']+'`. The complete ZIP contains the PDF, editable source, local reader, experiments and retained evidence. Download the files below under **Assets**; these links do not depend on chat attachments.\n\nThis is not the separate 28-page *The Missing Move* edition. `SHA256SUMS` verifies the exact download bytes. This release changes delivery packaging only, not research claims, source tests, production systems or account authority.\n')
+          print(sums)
+          print('Packaged',len(files),'original public files and one download guide.')
+          PY
+      - name: Publish a separate edition without overwriting previous assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          assets="$RUNNER_TEMP/surf-downloads"
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo 'Release already exists; refusing to overwrite, checking existing assets below.'
+          else
+            gh release create "$RELEASE_TAG" "$assets/SURF_THE_EXPONENTIAL_23_PAGES.pdf" "$assets/SURF_THE_EXPONENTIAL.tex" "$assets/SURF_THE_EXPONENTIAL_COMPLETE.zip" "$assets/SHA256SUMS" --repo "$GITHUB_REPOSITORY" --target "$SOURCE_SHA" --title 'SURF THE EXPONENTIAL — 23-page companion downloads' --notes-file "$assets/RELEASE_NOTES.md" --latest=false
+          fi
+      - name: Download all assets without authentication and verify exact bytes
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/surf-public-download-check"
+          cd "$RUNNER_TEMP/surf-public-download-check"
+          base="https://github.com/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG"
+          for file in SURF_THE_EXPONENTIAL_23_PAGES.pdf SURF_THE_EXPONENTIAL.tex SURF_THE_EXPONENTIAL_COMPLETE.zip SHA256SUMS; do
+            curl --fail --location --silent --show-error --retry 3 "$base/$file" --output "$file"
+            cmp "$RUNNER_TEMP/surf-downloads/$file" "$file"
+          done
+          sha256sum --check SHA256SUMS
+          python3 - <<'PY'
+          import zipfile
+          with zipfile.ZipFile('SURF_THE_EXPONENTIAL_COMPLETE.zip') as z:
+              if z.testzip() is not None:raise SystemExit('Downloaded ZIP failed integrity check')
+          print('Anonymous public downloads and all checksums verified.')
+          PY
+          printf '## Direct downloads verified\n\nAll three public release downloads were fetched without authentication and matched the published bytes.\n' >> "$GITHUB_STEP_SUMMARY"
