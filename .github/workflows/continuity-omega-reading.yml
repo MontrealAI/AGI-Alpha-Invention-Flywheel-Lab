@@ -1,0 +1,235 @@
+name: CONTINUITY OMEGA · Reading companion / Compagnon de lecture
+
+on:
+  pull_request:
+    paths:
+      - 'continuity_omega/**'
+      - 'tests/test_continuity_omega.py'
+      - 'docs/continuity-omega-paper/**'
+      - 'scripts/continuity_passport.py'
+      - 'scripts/package_continuity_reading.py'
+      - 'tests/test_continuity_passport.py'
+      - 'docs/continuity-omega/**'
+      - '.github/workflows/continuity-omega-reading.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'continuity_omega/**'
+      - 'tests/test_continuity_omega.py'
+      - 'docs/continuity-omega-paper/**'
+      - 'scripts/continuity_passport.py'
+      - 'scripts/package_continuity_reading.py'
+      - 'tests/test_continuity_passport.py'
+      - 'docs/continuity-omega/**'
+      - '.github/workflows/continuity-omega-reading.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: continuity-omega-reading-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    name: Qualify both reading paths / Qualifier les deux parcours de lecture
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    outputs:
+      bundle_sha256: ${{ steps.bundle.outputs.sha256 }}
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record job start / Consigner le début
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+
+      - name: Check out candidate / Extraire le commit candidat
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Confirm source identity / Confirmer l’identité des sources
+        env:
+          CONTINUITY_READING_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$CONTINUITY_READING_HEAD"
+
+      - name: Test both languages and package / Tester les deux langues et assembler
+        id: bundle
+        run: |
+          python3 -B scripts/package_continuity_reading.py --output "$RUNNER_TEMP/continuity-reading-qualified"
+          python3 -B -m zipfile -e "$RUNNER_TEMP/continuity-reading-qualified/CONTINUITY_OMEGA_BILINGUAL_COMPANION.zip" "$RUNNER_TEMP/continuity-reading-extracted"
+          python3 -B scripts/package_continuity_reading.py --check "$RUNNER_TEMP/continuity-reading-extracted"
+          python3 - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          path = Path(os.environ['RUNNER_TEMP']) / 'continuity-reading-qualified' / 'CONTINUITY_OMEGA_BILINGUAL_COMPANION.zip'
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write('sha256=' + hashlib.sha256(path.read_bytes()).hexdigest() + '\n')
+          PY
+
+      - name: Retain qualified companion / Conserver le compagnon qualifié
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: continuity-reading-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/continuity-reading-qualified/
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    name: Publish and run released reader / Publier et exécuter le lecteur publié
+    needs: qualify
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record job start / Consigner le début
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+
+      - name: Check out qualified main / Extraire le commit main qualifié
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Rebuild exact companion / Réassembler le compagnon exact
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 -B scripts/package_continuity_reading.py --output "$RUNNER_TEMP/continuity-reading-release"
+
+      - name: Publish, download and execute / Publier, télécharger et exécuter
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CONTINUITY_READING_SHA256: ${{ needs.qualify.outputs.bundle_sha256 }}
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import subprocess
+          import sys
+          import zipfile
+
+          repository = os.environ['GITHUB_REPOSITORY']
+          qualified_sha = os.environ['GITHUB_SHA']
+          tag = 'continuity-omega-reading-v1.0.0'
+          asset = 'CONTINUITY_OMEGA_BILINGUAL_COMPANION.zip'
+          folder = Path(os.environ['RUNNER_TEMP']) / 'continuity-reading-release'
+          notes = Path('docs/continuity-omega/READING_RELEASE.md').read_text(encoding='utf-8')
+          expected = os.environ['CONTINUITY_READING_SHA256']
+
+          def require(condition, en, fr):
+              if not condition:
+                  raise SystemExit(en + ' / ' + fr)
+
+          def digest(path):
+              return hashlib.sha256(path.read_bytes()).hexdigest()
+
+          def gh(*arguments):
+              return subprocess.run(['gh', *arguments], capture_output=True, text=True)
+
+          def api(path, missing=False):
+              result = gh('api', '--method', 'GET', path)
+              if result.returncode:
+                  if missing and '(HTTP 404)' in result.stderr:
+                      return None
+                  raise SystemExit('GitHub read failed / Lecture GitHub impossible: ' + result.stderr.strip())
+              return json.loads(result.stdout)
+
+          def tag_commit():
+              ref = api(f'repos/{repository}/git/ref/tags/{tag}', missing=True)
+              if ref is None:
+                  return None
+              obj = ref['object']
+              seen = set()
+              while obj['type'] == 'tag':
+                  require(obj['sha'] not in seen, 'Cyclic tag; preserved', 'Étiquette cyclique ; conservée')
+                  seen.add(obj['sha'])
+                  obj = api(f"repos/{repository}/git/tags/{obj['sha']}")['object']
+              require(obj['type'] == 'commit', 'Tag must identify a commit', 'L’étiquette doit désigner un commit')
+              return obj['sha']
+
+          require(re.fullmatch(r'[0-9a-f]{64}', expected) is not None,
+                  'Missing qualification hash', 'Empreinte de qualification absente')
+          require(digest(folder / asset) == expected,
+                  'Package differs from qualification', 'Le paquet diffère de la qualification')
+          endpoint = f'repos/{repository}/releases/tags/{tag}'
+          release = api(endpoint, missing=True)
+          tagged_sha = tag_commit()
+          created = release is None
+          if created:
+              require(tagged_sha is None or tagged_sha == qualified_sha,
+                      'Existing tag points elsewhere; preserved', 'L’étiquette existante vise un autre commit ; conservée')
+              args = ['release', 'create', tag, str(folder / asset), '--repo', repository,
+                      '--target', qualified_sha, '--title', 'CONTINUITY Ω — Reading companion / Compagnon de lecture 1.0.0',
+                      '--notes-file', 'docs/continuity-omega/READING_RELEASE.md', '--latest=false']
+              if tagged_sha is not None:
+                  args.append('--verify-tag')
+              result = gh(*args)
+              require(result.returncode == 0,
+                      'Release creation failed; no overwrite: ' + result.stderr.strip(),
+                      'Publication impossible ; aucun remplacement')
+              release = api(endpoint)
+              tagged_sha = tag_commit()
+              require(tagged_sha == qualified_sha,
+                      'New tag differs from qualified source', 'La nouvelle étiquette diffère de la source qualifiée')
+
+          require(release['tag_name'] == tag and tagged_sha is not None,
+                  'Incomplete release identity', 'Identité de publication incomplète')
+          require(not release['draft'] and not release['prerelease'],
+                  'Existing release is not a normal published edition; preserved',
+                  'La publication existante n’est pas une édition normale publiée ; conservée')
+          require((release.get('body') or '').strip() == notes.strip(),
+                  'Existing release notes differ; use a new version',
+                  'Les notes existantes diffèrent ; utiliser une nouvelle version')
+          assets = release.get('assets', [])
+          require(len(assets) == 1 and assets[0].get('name') == asset and assets[0].get('state') == 'uploaded',
+                  'Unexpected release assets; preserved', 'Fichiers de publication inattendus ; conservés')
+          downloaded = Path(os.environ['RUNNER_TEMP']) / 'continuity-reading-downloaded'
+          downloaded.mkdir()
+          result = gh('release', 'download', tag, '--repo', repository, '--dir', str(downloaded), '--pattern', asset)
+          require(result.returncode == 0,
+                  'Download failed: ' + result.stderr.strip(), 'Téléchargement impossible')
+          require(digest(downloaded / asset) == expected,
+                  'Downloaded bytes differ; release preserved', 'Les octets téléchargés diffèrent ; publication conservée')
+          require(tag_commit() == tagged_sha,
+                  'Tag changed during verification', 'Étiquette modifiée pendant la vérification')
+          extracted = downloaded / 'extracted'
+          with zipfile.ZipFile(downloaded / asset) as bundle:
+              bundle.extractall(extracted)
+          # The complete ZIP hash was checked against this job's qualified source before execution.
+          result = subprocess.run([sys.executable, '-B', str(extracted / 'scripts/package_continuity_reading.py'),
+                                   '--check', str(extracted)], capture_output=True, text=True)
+          require(result.returncode == 0,
+                  'Released reader operation failed: ' + result.stdout + result.stderr,
+                  'L’exécution du lecteur publié a échoué')
+          print(result.stdout)
+          receipt = {'operation': 'created' if created else 'preserved-and-verified', 'tag': tag,
+                     'qualified_commit': qualified_sha, 'release_commit': tagged_sha,
+                     'release_url': release['html_url'], 'downloaded_sha256': expected,
+                     'scope_en': 'Bilingual presentation of recorded synthetic evidence; no fresh audit or operational certification.',
+                     'scope_fr': 'Présentation bilingue d’éléments probants synthétiques consignés ; aucun nouvel audit ni certification opérationnelle.'}
+          print(json.dumps(receipt, ensure_ascii=False, indent=2))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as summary:
+              summary.write('## CONTINUITY Ω — Reading companion / Compagnon de lecture 1.0.0\n\n')
+              summary.write(f"[Release / Publication]({release['html_url']})\n\n")
+              summary.write(f'Qualified commit / Commit qualifié: `{qualified_sha}`\n\n')
+              summary.write(f'Release commit / Commit de publication: `{tagged_sha}`\n\n')
+              summary.write('### English\n\nThe downloaded archive matches the qualified SHA-256. '
+                            'Its extracted reader reproduced both example reports in both languages. '
+                            'This verifies presentation and packaging, not current evidence, authenticity or operational resilience.\n\n')
+              summary.write('### Français\n\nL’archive téléchargée correspond à l’empreinte SHA-256 qualifiée. '
+                            'Son lecteur extrait a reproduit les deux rapports d’exemple dans les deux langues. '
+                            'Cette vérification porte sur la présentation et le paquet, et non sur l’actualité des éléments probants, '
+                            'leur authenticité ou la résilience opérationnelle.\n')
+          PY

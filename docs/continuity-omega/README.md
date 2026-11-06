@@ -27,10 +27,13 @@ At repository root:
 ```bash
 python3 -m continuity_omega demo --case nominal --out /tmp/continuity-omega-demo-001
 python3 -m continuity_omega verify --in-dir /tmp/continuity-omega-demo-001
+python3 scripts/continuity_passport.py --in-dir /tmp/continuity-omega-demo-001 --language en
 python3 -m unittest discover -s tests -p 'test_continuity_omega.py' -v
 ```
 
 Use a **new** output directory; the CLI refuses to overwrite prior evidence.
+
+The companion reads the saved records in English; choose `--language fr` for French. It performs **no fresh audit** and never changes the evidence. The separate `verify` command prints a new check without replacing the saved `AUDIT.json`. See [Read the outputs](OUTPUTS.md) for localized refusals, shareable reports, exact status meanings and the focused reader tests.
 
 Files created:
 
@@ -38,7 +41,7 @@ Files created:
 - `HANDOFF.json` — currently outstanding commitments, requirements, provenance, capacity check, modeled completion window, and idempotency binding.
 - `PASSPORT.json` — restoration discrepancies, model economics, explicit evidence boundaries, and successor hypothesis.
 - `AUDIT.json` — separately implemented exact replay; `PASS_SYNTHETIC_ONLY` or `FAIL`.
-- `PASSPORT.md` — readable Continuity Passport.
+- `PASSPORT.md` — original English Continuity Passport; the companion provides a complete English or French reading from the JSON records.
 
 For safe negative controls, create a new directory and replace `nominal` with `tampered_source`, `overbooked`, `correlated_outage`, `unqualified`, `late`, `buyer_declines`, `uneconomic`, `unapproved_sharing`, or `no_order_source`. These cases return code 2 and produce `REJECTION.json` rather than an authorized handoff. `missing_from_restored` and `extra_restored` show how protected source evidence can expose a defective restoration while still enabling a separate proposed handoff. A mismatch in a restored database is **not** evidence that that database was safely recovered.
 

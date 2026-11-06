@@ -27,10 +27,13 @@ Le prototype construit un dossier transférable vers une solution de repli à pa
 ```bash
 python3 -m continuity_omega demo --case nominal --out /tmp/continuity-omega-demo-001
 python3 -m continuity_omega verify --in-dir /tmp/continuity-omega-demo-001
+python3 scripts/continuity_passport.py --in-dir /tmp/continuity-omega-demo-001 --language fr
 python3 -m unittest discover -s tests -p 'test_continuity_omega.py' -v
 ```
 
 Utiliser un **nouveau** dossier de sortie ; l’interface en ligne de commande refuse d’écraser les éléments déjà consignés.
+
+Le compagnon lit les enregistrements sauvegardés en français ; choisir `--language en` pour l’anglais. Il n’exécute **aucun nouvel audit** et ne modifie jamais les éléments probants. La commande distincte `verify` affiche un nouveau contrôle sans remplacer le fichier `AUDIT.json` enregistré. Voir [Lire les sorties](OUTPUTS.fr.md) pour les refus localisés, les rapports à partager, la signification exacte des statuts et les tests ciblés du lecteur.
 
 Fichiers créés :
 
@@ -38,7 +41,7 @@ Fichiers créés :
 - `HANDOFF.json` — engagements restant à exécuter, exigences, provenance, contrôle de capacité, fenêtre d’achèvement modélisée et liaison d’idempotence.
 - `PASSPORT.json` — divergences de la restauration, économie du modèle, limites explicites des éléments probants et hypothèse concernant l’occasion suivante.
 - `AUDIT.json` — réexécution exacte implémentée séparément ; `PASS_SYNTHETIC_ONLY` (« validation limitée au synthétique ») ou `FAIL` (« échec »).
-- `PASSPORT.md` — Passeport de continuité lisible.
+- `PASSPORT.md` — Passeport de continuité d’origine en anglais ; le compagnon fournit une lecture complète en français ou en anglais à partir des enregistrements JSON.
 
 Pour des témoins négatifs sans action réelle, créer un nouveau dossier et remplacer `nominal` par `tampered_source`, `overbooked`, `correlated_outage`, `unqualified`, `late`, `buyer_declines`, `uneconomic`, `unapproved_sharing` ou `no_order_source`. Ces cas renvoient le code 2 et produisent `REJECTION.json` au lieu d’un transfert autorisé. `missing_from_restored` et `extra_restored` montrent comment des éléments sources protégés peuvent révéler une restauration défectueuse tout en permettant de proposer un transfert distinct. Une divergence dans une base de données restaurée **ne prouve pas** que cette base a été reprise de manière sûre.
 
@@ -48,7 +51,7 @@ La source construite pour le scénario accepte 1 000 unités de `LBL-100`, 800
 
 Un imprimeur simulé dispose d’une capacité de 3 200 unités, dont 1 100 sont déjà réservées : il reste 2 100 unités selon une règle prudente de chevauchement des intervalles. Un fournisseur concurrent dispose de 1 800 unités, ce qui est insuffisant. Le transfert sélectionne l’imprimeur simulé ayant la capacité nécessaire ; son délai annoncé de 22 heures respecte la limite fixée à 48 heures. Le coût complet modélisé est de 5 050 $ US, le prix proposé de 5 700 $ US, le budget hypothétique de l’acheteur de 5 800 $ US et la contribution modélisée de 650 $ US. **Aucun achat, aucune acceptation, aucune réservation de capacité, aucune livraison réelle et aucune recette n’ont eu lieu.**
 
-Le vérificateur implémenté séparément réexécute la source déclarée et contrôle les contraintes couvertes par son code sans appeler le producteur. Il ne rejette pas toutes les entrées invalides ; voir la note de portée ci-dessus. Il ne peut pas établir indépendamment l’origine de la source, la véracité des déclarations du fournisseur, les habilitations, les droits juridiques, la production physique ou l’acceptation de l’acheteur. Son « indépendance » désigne des **chemins de code distincts dans le cadre d’un même travail de recherche**, jamais une certification externe.
+Le vérificateur implémenté séparément réexécute la source déclarée et contrôle les contraintes couvertes par son code sans appeler le producteur. Il ne rejette pas toutes les entrées invalides ; voir la note de portée ci-dessus. Il ne peut pas établir indépendamment l’origine de la source, la véracité des déclarations du fournisseur, les habilitations, les droits juridiques, la production physique ou l’acceptation de l’acheteur. Son « indépendance » désigne des **chemins de code distincts produits par les mêmes auteurs**, jamais une certification externe.
 
 ## Limites déterminantes
 

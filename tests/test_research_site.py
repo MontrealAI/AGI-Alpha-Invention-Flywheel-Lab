@@ -271,9 +271,15 @@ class ResearchSiteTests(unittest.TestCase):
                 self.assertIn('releases/tag/continuity-omega-v1.0.0', reader)
                 suffix = '.fr' if lang == 'fr-CA' else ''
                 for file in ('README' + suffix + '.md', 'REVIEW' + suffix + '.md',
-                             'SOURCE_MAP' + suffix + '.md', 'CLAIMS' + suffix + '.json'):
+                             'SOURCE_MAP' + suffix + '.md', 'CLAIMS' + suffix + '.json',
+                             'EVIDENCE' + suffix + '.md'):
                     self.assertIn('docs/continuity-omega-paper/' + file, reader)
                 self.assertIn('https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/continuity-omega-paper/CITATION' + suffix + '.cff', parser.links)
+                self.assertIn('https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/continuity-omega/OUTPUTS' + suffix + '.md', parser.links)
+                evidence_base = 'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/continuity-omega-paper/'
+                self.assertIn('<a class="btn primary" href="' + evidence_base + 'EVIDENCE' + suffix + '.md">', reader)
+                for record in ('REPRODUCTION.json', 'COUNTEREXAMPLES.json'):
+                    self.assertIn(evidence_base + 'evidence/' + record, parser.links)
                 structured = json.loads(re.search(
                     r'<script type="application/ld\+json">(.*?)</script>', reader, re.S).group(1))
                 self.assertEqual(structured['inLanguage'], lang)
@@ -292,6 +298,7 @@ class ResearchSiteTests(unittest.TestCase):
         french = (self.source / 'continuity-omega-fr.html').read_text()
         for phrase in ('Tenir parole.', 'Aucun groupe viable.', '3 acheteurs',
                        'Ce qui reste non établi', 'ne constitue', 'Aller au contenu',
+                       'produites par les mêmes auteurs',
                        'Votre navigateur n’affiche pas les PDF intégrés.'):
             self.assertIn(phrase, french)
         # Language alternates cannot become an exception for arbitrary external URLs.
