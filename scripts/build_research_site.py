@@ -9,6 +9,7 @@ import shutil
 from urllib.parse import unquote, urlsplit
 
 PAPERS = (
+    'surf-the-exponential.pdf',
     'alpha-genesis-flywheel-omega-v2.pdf',
     'alpha-genesis-flywheel-omega.pdf',
     'successor-omega.pdf',
@@ -35,16 +36,18 @@ PAPERS = (
     'out-execute-20261021.pdf',
     'out-evolve-20261020.pdf',
 )
-PAGES = ('alpha-genesis-flywheel-omega-v2.html', 'alpha-genesis-flywheel-omega.html', 'successor-omega.html', 'flywheel-omega.html', 'super-alpha.html', 'agi-alpha-flywheel-report-20261102.html', 'out-accelerate.html', 'transformational-intelligence.html', 'agi-alpha.html', 'agi-alpha-flywheel.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
+PAGES = ('surf-the-exponential.html', 'alpha-genesis-flywheel-omega-v2.html', 'alpha-genesis-flywheel-omega.html', 'successor-omega.html', 'flywheel-omega.html', 'super-alpha.html', 'agi-alpha-flywheel-report-20261102.html', 'out-accelerate.html', 'transformational-intelligence.html', 'agi-alpha.html', 'agi-alpha-flywheel.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
          'out-series.html', 'out-learn.html', 'out-think.html', 'out-design.html', 'out-strategise.html', 'out-execute.html', 'out-evolve.html')
-ASSETS = ('successor-omega-card.svg', 'successor-omega-social.png', 'flywheel-omega-card.svg', 'flywheel-omega-social.png', 'super-alpha-card.svg', 'super-alpha-social.png', 'alpha.css', 'alpha.js', 'alpha-mark.svg')
+ASSETS = ('surf-the-exponential-card.svg', 'surf-the-exponential-social.png', 'successor-omega-card.svg', 'successor-omega-social.png', 'flywheel-omega-card.svg', 'flywheel-omega-social.png', 'super-alpha-card.svg', 'super-alpha-social.png', 'alpha.css', 'alpha.js', 'alpha-mark.svg')
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
+PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
 
 
 class Links(HTMLParser):
     def __init__(self):
         super().__init__()
         self.links = []
+        self.canonical_urls = []
         self.ids = set()
 
     def handle_starttag(self, tag, attrs):
@@ -53,7 +56,10 @@ class Links(HTMLParser):
             self.ids.add(attrs['id'])
         for key in ('href', 'src', 'data'):
             if key in attrs:
-                self.links.append(attrs[key])
+                if tag == 'link' and key == 'href' and 'canonical' in attrs.get('rel', '').split():
+                    self.canonical_urls.append(attrs[key])
+                else:
+                    self.links.append(attrs[key])
 
 
 def validate(source):
@@ -75,9 +81,11 @@ def validate(source):
     for name in PAGES:
         parser = Links()
         page = (source / name).read_text()
-        if any(token in page for token in ('PAPER_SHA256_PLACEHOLDER', 'PAPER_PAGECOUNT_PLACEHOLDER', 'TODO_RESULT_', 'SUPER_ALPHA_PAGE_COUNT', 'SUPER_ALPHA_PDF_SHA', 'FLYWHEEL_OMEGA_PAGE_COUNT', 'FLYWHEEL_OMEGA_PDF_SHA')):
+        if any(token in page for token in ('PAPER_SHA256_PLACEHOLDER', 'PAPER_PAGECOUNT_PLACEHOLDER', 'TODO_RESULT_', 'SUPER_ALPHA_PAGE_COUNT', 'SUPER_ALPHA_PDF_SHA', 'FLYWHEEL_OMEGA_PAGE_COUNT', 'FLYWHEEL_OMEGA_PDF_SHA', 'SURF_PAGE_COUNT', 'SURF_SHA256', 'SURF_PDF_BYTES')):
             raise ValueError(f'Unresolved publication metadata: {name}')
         parser.feed(page)
+        if parser.canonical_urls and parser.canonical_urls != [PUBLIC_SITE + name]:
+            raise ValueError(f'Canonical URL must identify this published page: {name}')
         parsed[name] = parser
     for name, parser in parsed.items():
         for link in parser.links:

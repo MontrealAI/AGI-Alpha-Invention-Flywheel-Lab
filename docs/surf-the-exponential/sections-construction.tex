@@ -1,0 +1,160 @@
+\section{Frontier Replay: reopen the reason an opportunity failed}
+\label{sec:replay}
+\subsection{A release is a trigger to investigate}
+The three operational orders of GENESIS are to see the frontier, see its consequences, and improve the machinery that discovers those consequences \citep[\S3]{boucher_genesis}. Constructive challenge supplies a concrete question at each order. What changed in usable capability? Which previously binding condition might that change affect? How should the discovery process itself change when the answer is known?
+
+A capability delta should identify a specific difference: a permitted task now succeeds more reliably, a measurement becomes affordable, a tool gains a necessary interface, or a complete construction requires fewer resources. A product announcement or model label is insufficient. Verify access and test the relevant behavior. The same advance may also strengthen competitors or customer self-service, so a technical gain can coincide with a smaller commercial margin.
+
+A compact Frontier Replay record retains the valuable intended outcome; the best complete route previously considered; the decisive unresolved condition or supported failure; the evidence and source versions; the missing means; and what new observation would justify reopening the decision. It stores the \emph{reason} for the outcome rather than a large transcript of the attempt. Repeated failures should consolidate into applicability rules, tests or useful instruments.
+
+\subsection{Two searches must meet}
+Forward search begins with a verified capability change and asks what it could enable. Backward search begins with consequential unmet outcomes and asks what means are missing. Their meeting point is a candidate construction whose dependencies can be checked. Joint dependencies matter: an inexpensive diagnostic might be useless without an acceptable sharing arrangement, while a sharing arrangement is useless without a valid diagnostic.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=.26in and .22in,every node/.style={font=\small,align=center},box/.style={draw=Rule,rounded corners=3pt,fill=Ivory,text width=2.0in,minimum height=.62in,inner sep=7pt},arr/.style={-{Latex[length=2.4mm]},line width=.85pt,color=Sea}]
+\node[box] (front) {\textbf{Changed usable capability}\\What became accessible?};
+\node[box,right=1.05in of front] (need) {\textbf{Consequential blocked outcome}\\What still prevents it?};
+\node[box,below right=.45in and -.1in of front,text width=2.8in] (move) {\textbf{Candidate missing move}\\An executable means and a decisive test};
+\node[box,below=.35in of move,text width=2.8in] (whole) {\textbf{Complete productive arrangement}\\Acceptance, participants, resources and timing};
+\draw[arr] (front.south)--(move.north west);\draw[arr] (need.south)--(move.north east);\draw[arr] (move)--(whole);
+\end{tikzpicture}
+\caption{Frontier Replay connects a measured capability delta to a specific obstacle. An attractive dependency diagram is a hypothesis until the interfaces, construction and complete outcome are tested.}
+\end{figure}
+
+Replay cannot be the entire discovery system. A backlog encodes yesterday's imagination. A possibility challenger must also search for valuable outcomes that were never represented in it, including new beneficiaries, ways to combine capabilities, and ways to remove a presumed task altogether. Allocate investigation by expected information and construction value; do not impose an arbitrary fixed fraction on every mission.
+
+\subsection{Use the strongest old and new alternatives}
+For a claim that a frontier change enabled the new route, compare old and new capability access while holding the intended outcome, permissions and evaluation contract fixed. Allow the old-capability comparator to use its strongest feasible alternative. Otherwise the study shows only that one old implementation fails, not that the new capability removed a genuine barrier.
+
+For an institutional contribution, compare the proposed machinery with direct use of the same frontier model and tools. For improved discovery, compare old and new discovery procedures with the same starting information and stock of capabilities. These are separate questions. A general form is
+\begin{equation}
+Y_{m,p,s}=\text{complete outcome under model }m,\ \text{procedure }p,\ \text{stock }s.
+\end{equation}
+A crossed design can vary old/new $m$, old/new $p$, and old/new $s$. At fixed model and stock, $Y_{m,p_1,s}-Y_{m,p_0,s}$ estimates a procedure effect under the experiment. At fixed procedure and model, a stock difference concerns inheritance. Interactions are informative and should be reported rather than assigned arbitrarily to the most attractive story \citep[\S12]{boucher_genesis}.
+
+A useful frontier-adaptive institution may win through integration, acceptance or opportunity selection even when its model components are publicly available. That contribution has to pay for its overhead. If direct use of an existing agent is the strongest complete route, adopting it is operationally successful and does not establish superiority of the added discovery mechanism.
+
+\Needspace{7\baselineskip}
+\section{An executable Missing Move: build the missing distinction}
+\label{sec:construction}
+\subsection{A small world with an exact purpose}
+The central transition should be inspectable in an actual artifact. Consider the nine ordered traces $X=\{60,80,100\}^{2}$. Before the question is known, an encoder must retain one observation from which a decoder can answer \emph{every} query in the declared family. Initially, for each $t\in Q_1=\{60,80,90,100\}$, the query asks whether both readings are at most $t$. There are $9\times4=36$ state--query checks. A single fixed Boolean question would require only two answer labels; our three-label result concerns the shared observation serving the whole family.
+
+The incumbent retains the mean. The companion program searches pairs of source states and finds $(60,100)$ and $(80,80)$: the same retained mean, opposite answers at thresholds 80 and 90. A separately implemented checker evaluates the raw inequalities and verifies the contradiction. No decoder receiving only that mean can answer every required query correctly. The information loss, rather than insufficient confidence in the report, is the diagnosed restriction.
+
+\subsection{Construct the instrument and its certificate}
+The constructor receives the finite source domain and executable query semantics. For each state $x$, it computes the answer signature
+\begin{equation}
+\sigma_Q(x)=\big(q(x)\big)_{q\in Q},\qquad
+x\sim_Q y\ \Longleftrightarrow\ \sigma_Q(x)=\sigma_Q(y).
+\end{equation}
+It groups equal signatures, assigns canonical labels and emits an encoder, a decoder table, and separating-query witnesses between distinct classes. This is ordinary task-relative quotient construction, not a new synthesis algorithm. The output carries the exact domain and query family under which it is valid.
+
+\begin{proposition}[Minimum retained labels for the declared family]
+For a finite deterministic domain and query family, the number of distinct answer signatures is the minimum number of observation labels permitting every query to be answered without error.
+\end{proposition}
+\begin{proof}
+States with different signatures differ on at least one query. An exact decoder cannot receive the same observation for both, so each distinct signature requires its own label. Encoding the signature class and looking up the requested coordinate attains that bound.
+\end{proof}
+
+For $Q_1$, the program constructs three classes, equivalent to retaining the maximum. All 36 checks pass. The independent checker evaluates the emitted artifact and its pairwise separation witnesses. It also enumerates all 21,147 partitions of the nine states: 260 support the first query family, with a unique three-class minimum up to relabeling. The lower bound is about observation labels, not total bytes, tokens, computation or engineering cost. The encoder and decoder have their own implementation costs.
+
+\subsection{Change the question, then test inheritance}
+The successor asks whether both readings lie within a specified interval. Its family $Q_2$ consists of all six intervals $[l,u]$ with $l,u\in\{60,80,100\}$ and $l\leq u$, producing 54 checks. The inherited maximum fails: $(60,80)$ and $(80,80)$ share maximum 80, but only the latter satisfies $[80,80]$.
+
+The retained generic constructor is rerun with the successor semantics. It emits six classes, equivalent to retaining $(\min,\max)$, and passes all 54 checks. Of the 21,147 partitions, eight support this family; its six-class minimum is again unique up to relabeling. This is a constructed successor representation, not recovery of discarded minima from maximum-only archives. The raw readings must still be available before compression, or be obtained again with appropriate authority and cost. Every comparator receives the same source access and query semantics.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{Yrrr}
+\toprule
+\textbf{Retained observation} & \textbf{Labels} & \textbf{All $Q_1$?} & \textbf{All $Q_2$?}\\
+\midrule
+Incumbent mean & 5 & No & No\\
+Constructed initial representation & 3 & Yes & No\\
+Conventional maximum & 3 & Yes & No\\
+Mean plus ``both readings $\leq90$'' & 6 & Yes & Yes\\
+Constructed successor representation & 6 & Yes & Yes\\
+Conventional minimum and maximum & 6 & Yes & Yes\\
+Original ordered pair & 9 & Yes & Yes\\
+\bottomrule
+\end{tabularx}
+\caption{Exhaustive results on the declared finite domain. Conventional maximum/minimum routines and ordinary partition construction tie the corresponding constructed instrument. No superiority in model ability, runtime, storage bytes or economic cost is established.}
+\label{tab:construction}
+\end{table}
+
+\begin{thesisbox}
+\textbf{The smallest sufficient representation today need not be the best retained asset for tomorrow.}
+\end{thesisbox}
+The six-label local patch---the mean plus one threshold flag---happens to answer both families on this domain. The minimal three-label initial representation cannot. Selection therefore depends on the current purpose and justified expectations about reuse, not a universal command to compress as far as possible. A retained constructor can adapt when its input contract still holds; it cannot repair missing source access by intention alone.
+
+\subsection{What the executed construction establishes}
+The companion actually finds a collision, emits an alternative, checks it, defeats naive reuse and constructs the scoped successor. The query functions, finite domain and economic inputs are authored. Exhaustive calculation was examined during design; this is an exact demonstrator, not a held-out discovery experiment. It does not observe a new frontier-model capability or demonstrate that a learned inventor found the algorithm. Its value is to expose every link from a supported objection to a usable artifact and an applicability boundary. Frontier Replay would need an additional measured change---for example, a newly available pre-compression interface---before claiming that this route had just become accessible.
+
+\section{Invent the complete productive arrangement}
+\label{sec:economy}
+\subsection{The criticism may be economic or institutional}
+A technical design can be correct yet lack a willing beneficiary. A set of beneficiaries can have positive aggregate surplus while one required participant rationally refuses. A profitable projection can fail before the first receipt because the construction must be paid for earlier. A new capability can eliminate the very recurring operation on which a proposed revenue mechanism depends. These are distinct constraints, developed in \emph{Invent the Economy} \citep[\S2--9]{boucher_economy}.
+
+Market design has long treated implementation details, experimentation and computation as complements to abstract incentives \citep{marketdesign}. The present architecture applies the same discipline to a proposed inventive enterprise. The output is a complete arrangement, not a persuasive description of a business. It names the useful outcome, technical means, actual or hypothetical counterparties, responsibilities, information, risk allocation, rights, payment conditions, failure handling and time-dependent resources.
+
+A possibility challenger asks a constructive economic question: which capability \emph{and} voluntary arrangement could make this valuable work worth undertaking? It does not fabricate buyers or turn assumed willingness to pay into acceptance. Public evidence can motivate an offer; only a counterparty's authorized action can accept it.
+
+\subsection{Participation, profit and cash are different tests}
+For participant $i$, let $U_i(P)$ be expected utility from arrangement $P$ and $U_i^{\mathrm{out}}$ the best relevant outside option. A necessary modeled participation condition is
+\begin{equation}
+U_i(P)\geq U_i^{\mathrm{out}}\quad\text{for every required participant }i.
+\end{equation}
+This does not prove actual consent, truthful reporting or equilibrium. If claims depend on strategic incentives, identify feasible deviations, information and enforcement assumptions, then test or derive the specific incentive claim. New capabilities can create new deviations, including combinations of individually permitted actions.
+
+For a finite project and declared horizon, define expected project cash contribution using all lifecycle receipts and outflows, with any residual obligations covered by explicitly specified provisions:
+\begin{equation}
+\Pi_{\mathrm{cash}}=\E[\text{project cash receipts}-\text{project cash outflows}-\text{residual provisions}],
+\end{equation}
+This is a project cash measure, not accounting profit, available cash at every date, or social welfare. State the treatment of financing inflows, principal repayment, taxes and residual value; exclude financing inflows from operating receipts and report funding separately. Set provisions only for obligations not already paid or included elsewhere, and reconcile them when settled. Include acquisition, evidence access, generation, criticism, adjudication, failed exploration, construction, production, acceptance, support, maintenance and financing where applicable. Do not count a cost twice by including it in both a branch payoff and a global charge. Funding is not customer revenue. Unknown actual billing is not zero.
+
+For a known ordered cash path with net events $x_1,\ldots,x_n$ before initial unrestricted cash, the minimum starting cash that keeps every prefix nonnegative is
+\begin{equation}
+B_{\min}=\max\left\{0,\ -\min_{0\leq k\leq n}\sum_{j=1}^{k}x_j\right\}.
+\label{eq:cash}
+\end{equation}
+This elementary deterministic bound assumes the event path is fixed and that reserved obligations have already been accounted for. A contingent project needs a policy and liquidity checks on the relevant branches. A hoped-for receipt is not an observed receipt; future upside does not become available funds merely because it appears in a plan.
+
+\subsection{The missing obligation: execute the refund counterexample}
+To connect the technical artifact to the next question, consider offering trace qualification to two modeled buyers. The following arbitrary currency amounts are stipulated, not measured costs of running the constructor. Shared construction costs 60; delivery costs 15 per buyer; each buyer values accepted delivery at 70 relative to a zero outside option and pays 60. With all declared costs included, successful shared delivery contributes $120-60-30=30$ to the operator and 10 to each buyer. Separate construction would cost 75 per buyer, exceeding its value of 70. An ordinary provider allowed the same sharing arrangement ties exactly.
+
+This finite illustration assumes no further taxes, financing charges, delay costs, maintenance or residual service obligations; adding any requires extending the model. It does not measure willingness to pay or secure consent. On failure, buyers receive no accepted service, owe no remaining payment and receive their entire advance back. The program and separate checker evaluate the complete stipulated paths:
+
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\textwidth}{YP{1.66in}rr}
+\toprule
+\textbf{Path} & \textbf{Ordered cash events} & \textbf{$B_{\min}$} & \textbf{Contribution}\\
+\midrule
+Success, no advance & $-60,-30,+120$ & 90 & $+30$\\
+Success, refundable advance & $+40,-60,-30,+80$ & 50 & $+30$\\
+Failure, full advance refund & $+40,-60,-30,-40$ & 90 & $-90$\\
+\bottomrule
+\end{tabularx}
+\caption{An authored arrangement model, not an executed business. A 40-unit advance lowers the successful path's opening cash requirement to 50, but honoring the full-refund branch still requires 90. The refund is a repayment of the advance, not an additional production cost.}
+\label{tab:refund}
+\end{table}
+
+\textbf{The apparent financing solution misses a liability.} With opening cash 50, the deposit funds production on success but leaves insufficient cash for the promised refund after failure. Taking the maximum prefix requirement across the two stipulated branches restores the requirement to 90. Protected cash is not reduced merely because an expected receipt arrives earlier. These are mathematical cash-path checks, not a substitute for the repository's native operating ledger or an executed financing agreement.
+
+Even fully funded delivery does not establish worthwhile entry. If success probability is $p$, the risk-neutral operator's expected contribution in this model is $30p-90(1-p)=120p-90$; a zero outside option requires $p\geq3/4$, and positive expected contribution requires strict inequality. No empirical $p$ is supplied. Each buyer's modeled expected surplus is $10p$, assuming full refunds and no delay or risk costs. Different outside options, risk preferences or obligations change participation.
+
+The result also exposes a constructive target. If shared construction costs $F\geq0$, successful contribution is $90-F$ and required cash across these two branches is $F+30$. At opening cash 50, full funding requires $F\leq20$, whereas positive successful contribution requires only $F<90$. For $20<F<90$, an attractive success margin coexists with an unfunded promise. A frontier advance that actually lowers $F$, a differently funded contract or a smaller feasible route could change the decision. Naming the advance earns none of those changes.
+
+\subsection{Joint construction may be the actual object of invention}
+A useful transformation may require several mutually supporting changes. More accurate testing can lower counterparties' uncertainty; agreed participation can justify constructing the test; a feasible stage can establish the first required resource. The resulting plan must have a real bootstrap. Drawing arrows in a cycle does not finance or construct its first step.
+
+Represent a candidate dependency as a conditional operation: specified inputs, resources and permissions produce an output and evidence under named assumptions. Combine operations only when interface meaning, capacity, timing and obligations are compatible. A hypothesis of shared structure becomes reusable only after the actual common construction works and the exceptions are understood.
+
+This perspective permits an ambitious outcome without manufacturing dependence on a proprietary apparatus or settlement token. The customer benefits from accepted productive capability. The institution should earn from useful construction and service that survives alternatives. It should not preserve unnecessary steps merely because those steps are billable. If a simpler ordinary route delivers more value, it belongs in the institution's repertoire.
+
+\subsection{Value creation does not guarantee value capture}
+The frontier moves for everyone. A construction that creates substantial value may be copied, commoditized, or bypassed. A buyer may perform the work directly. A partner may capture the margin because it supplies a scarce complement. Evaluate price, defensibility and timing against those responses instead of treating a productivity improvement as guaranteed profit.
+
+The practical commercial target is a complete, repeatable offer with identifiable acceptance, credible obligations, real counterparties and supported economics. The stronger research target is to discover such arrangements more effectively than capable alternatives. These objectives can reinforce one another, but neither is established by naming a promising industry or publishing this paper.
