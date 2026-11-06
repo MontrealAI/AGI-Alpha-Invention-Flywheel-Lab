@@ -115,7 +115,9 @@ def load_registry(root):
                  and n.name == 'source_paths_for_manifest']
     if len(functions) > 1:
         raise ValueError('P0_DUPLICATE_MANIFEST_DISPATCH')
-    routes = set()
+    # Compare not just route names but also the active producer binding. A
+    # v2 branch importing a v1 or unrelated producer is not the same closure.
+    routes = {}
     if functions:
         fn = functions[0]
         args = fn.args
@@ -170,17 +172,46 @@ def load_registry(root):
             seen.add(route)
             first_return = None
             valid_body = True
+            imports = []
             for statement in node.body:
                 if isinstance(statement, ast.Return):
                     first_return = statement.value
                     break
-                if not isinstance(statement, (ast.Import, ast.ImportFrom, ast.Pass)):
+                if isinstance(statement, ast.Pass):
+                    continue
+                if isinstance(statement, ast.ImportFrom):
+                    # Accept only one direct, non-aliased producer binding.
+                    # Additional imports can shadow source_paths at runtime.
+                    if (statement.level or not statement.module
+                            or len(statement.names) != 1
+                            or statement.names[0].name != 'source_paths'
+                            or statement.names[0].asname is not None):
+                        valid_body = False
+                        break
+                    imports.append(statement.module)
+                else:
                     valid_body = False
                     break
             if not valid_body or first_return is None:
                 continue
-            if _active_service_closure(first_return):
-                routes.add(route)
+            if not _active_service_closure(first_return):
+                continue
+            dynamic = any(_call(child, 'source_paths', 1)
+                          for child in ast.walk(first_return))
+            if dynamic:
+                if len(imports) > 1:
+                    continue
+                # An unbound producer is retained only as an explicitly
+                # unverified structural identity for legacy synthetic inputs;
+                # it can never equal a baseline with a bound producer.
+                binding = ('source_paths', imports[0] if imports else None)
+            else:
+                if imports:
+                    continue
+                # Direct static service inventories have their own registry
+                # source identity (including the chosen effective suffix).
+                binding = ('static', ast.dump(first_return, include_attributes=False))
+            routes[route] = binding
     return found, routes
 
 
@@ -193,7 +224,8 @@ def inspect(main_root, transition_root, composed_root):
     current = set(target['SOURCE_PATHS'])
     missing_finance = sorted(must_keep - current)
     missing_optional = {name: sorted(set(main.get(name, ())) - set(target.get(name, ()))) for name in REGISTRIES[1:]}
-    missing_routes = sorted(main_routes - target_routes)
+    missing_routes = sorted(route for route, binding in main_routes.items()
+                            if target_routes.get(route) != binding)
     common = sorted(set(main['SOURCE_PATHS']) & set(prior['SOURCE_PATHS']))
     changed = []
     for path in common:
