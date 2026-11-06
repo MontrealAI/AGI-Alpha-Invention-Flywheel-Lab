@@ -1,0 +1,3848 @@
+{
+  "actual_customer_receipts": 0,
+  "construction_cases": {
+    "additional_supplier_failure": {
+      "cash_path": null,
+      "full_conventional_oracle": null,
+      "input": {
+        "adapter_available": true,
+        "adapter_cost": 2,
+        "cash": 30,
+        "include_q_failure": true,
+        "pooled_q_cost": 2,
+        "pooling_available": true,
+        "price_per_buyer": 8,
+        "supplier_q_accepted": true
+      },
+      "least_technical_cost": 17,
+      "result": {
+        "cost": null,
+        "decision": "DECLINE",
+        "history": [
+          {
+            "candidate": {
+              "adapter": false,
+              "pooling": false,
+              "reserved": [
+                "P"
+              ]
+            },
+            "cost": 8,
+            "counterexample": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": []
+            }
+          },
+          {
+            "candidate": {
+              "adapter": true,
+              "pooling": true,
+              "reserved": [
+                "P",
+                "Q"
+              ]
+            },
+            "cost": 13,
+            "counterexample": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": [
+                "Q"
+              ]
+            }
+          }
+        ],
+        "strategy": null,
+        "surplus": null,
+        "witnesses": []
+      }
+    },
+    "arrangement_only": {
+      "cash_path": null,
+      "full_conventional_oracle": null,
+      "input": {
+        "adapter_available": false,
+        "adapter_cost": 2,
+        "cash": 30,
+        "include_q_failure": false,
+        "pooled_q_cost": 2,
+        "pooling_available": true,
+        "price_per_buyer": 8,
+        "supplier_q_accepted": true
+      },
+      "least_technical_cost": 17,
+      "result": {
+        "cost": null,
+        "decision": "DECLINE",
+        "history": [
+          {
+            "candidate": {
+              "adapter": false,
+              "pooling": false,
+              "reserved": [
+                "P"
+              ]
+            },
+            "cost": 8,
+            "counterexample": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": []
+            }
+          }
+        ],
+        "strategy": null,
+        "surplus": null,
+        "witnesses": []
+      }
+    },
+    "higher_price_selects_existing_route": {
+      "cash_path": {
+        "actual_receipts": 0,
+        "before_receipts": 13,
+        "complete_modeled_cost": 17,
+        "kind": "ANALYTICAL_CONDITIONAL_PATH",
+        "modeled_surplus": 7,
+        "opening": 30,
+        "receipts_if_all_accepted": 24,
+        "terminal": 37
+      },
+      "full_conventional_oracle": {
+        "cost": 17,
+        "key": [
+          0,
+          0,
+          [
+            "P",
+            "R"
+          ]
+        ],
+        "surplus": 7
+      },
+      "input": {
+        "adapter_available": true,
+        "adapter_cost": 2,
+        "cash": 30,
+        "include_q_failure": true,
+        "pooled_q_cost": 2,
+        "pooling_available": true,
+        "price_per_buyer": 12,
+        "supplier_q_accepted": true
+      },
+      "least_technical_cost": 17,
+      "result": {
+        "cost": 17,
+        "decision": "ADMIT_MODEL",
+        "history": [
+          {
+            "candidate": {
+              "adapter": false,
+              "pooling": false,
+              "reserved": [
+                "P"
+              ]
+            },
+            "cost": 8,
+            "counterexample": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": []
+            }
+          },
+          {
+            "candidate": {
+              "adapter": true,
+              "pooling": true,
+              "reserved": [
+                "P",
+                "Q"
+              ]
+            },
+            "cost": 13,
+            "counterexample": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": [
+                "Q"
+              ]
+            }
+          },
+          {
+            "candidate": {
+              "adapter": false,
+              "pooling": false,
+              "reserved": [
+                "P",
+                "R"
+              ]
+            },
+            "cost": 17,
+            "counterexample": null
+          }
+        ],
+        "strategy": {
+          "adapter": false,
+          "pooling": false,
+          "reserved": [
+            "P",
+            "R"
+          ]
+        },
+        "surplus": 7,
+        "witnesses": [
+          {
+            "allocation": [],
+            "delivered_units": 0,
+            "feasible": true,
+            "required_units": 0,
+            "world": {
+              "active": [],
+              "failed": []
+            }
+          },
+          {
+            "allocation": [
+              {
+                "client": "A",
+                "supplier": "P",
+                "units": 4
+              }
+            ],
+            "delivered_units": 4,
+            "feasible": true,
+            "required_units": 4,
+            "world": {
+              "active": [
+                "A"
+              ],
+              "failed": []
+            }
+          },
+          {
+            "allocation": [
+              {
+                "client": "B",
+                "supplier": "P",
+                "units": 4
+              }
+            ],
+            "delivered_units": 4,
+            "feasible": true,
+            "required_units": 4,
+            "world": {
+              "active": [
+                "B"
+              ],
+              "failed": []
+            }
+          },
+          {
+            "allocation": [
+              {
+                "client": "A",
+                "supplier": "P",
+                "units": 4
+              },
+              {
+                "client": "B",
+                "supplier": "R",
+                "units": 4
+              }
+            ],
+            "delivered_units": 8,
+            "feasible": true,
+            "required_units": 8,
+            "world": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": []
+            }
+          },
+          {
+            "allocation": [
+              {
+                "client": "A",
+                "supplier": "P",
+                "units": 4
+              },
+              {
+                "client": "B",
+                "supplier": "R",
+                "units": 4
+              }
+            ],
+            "delivered_units": 8,
+            "feasible": true,
+            "required_units": 8,
+            "world": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": [
+                "Q"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "new_frontier": {
+      "cash_path": {
+        "actual_receipts": 0,
+        "before_receipts": 0,
+        "complete_modeled_cost": 13,
+        "kind": "ANALYTICAL_CONDITIONAL_PATH",
+        "modeled_surplus": 3,
+        "opening": 13,
+        "receipts_if_all_accepted": 16,
+        "terminal": 16
+      },
+      "full_conventional_oracle": {
+        "cost": 13,
+        "key": [
+          1,
+          1,
+          [
+            "P",
+            "Q"
+          ]
+        ],
+        "surplus": 3
+      },
+      "input": {
+        "adapter_available": true,
+        "adapter_cost": 2,
+        "cash": 13,
+        "include_q_failure": false,
+        "pooled_q_cost": 2,
+        "pooling_available": true,
+        "price_per_buyer": 8,
+        "supplier_q_accepted": true
+      },
+      "least_technical_cost": 13,
+      "result": {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "history": [
+          {
+            "candidate": {
+              "adapter": false,
+              "pooling": false,
+              "reserved": [
+                "P"
+              ]
+            },
+            "cost": 8,
+            "counterexample": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": []
+            }
+          },
+          {
+            "candidate": {
+              "adapter": true,
+              "pooling": true,
+              "reserved": [
+                "P",
+                "Q"
+              ]
+            },
+            "cost": 13,
+            "counterexample": null
+          }
+        ],
+        "strategy": {
+          "adapter": true,
+          "pooling": true,
+          "reserved": [
+            "P",
+            "Q"
+          ]
+        },
+        "surplus": 3,
+        "witnesses": [
+          {
+            "allocation": [],
+            "delivered_units": 0,
+            "feasible": true,
+            "required_units": 0,
+            "world": {
+              "active": [],
+              "failed": []
+            }
+          },
+          {
+            "allocation": [
+              {
+                "client": "A",
+                "supplier": "P",
+                "units": 4
+              }
+            ],
+            "delivered_units": 4,
+            "feasible": true,
+            "required_units": 4,
+            "world": {
+              "active": [
+                "A"
+              ],
+              "failed": []
+            }
+          },
+          {
+            "allocation": [
+              {
+                "client": "B",
+                "supplier": "P",
+                "units": 4
+              }
+            ],
+            "delivered_units": 4,
+            "feasible": true,
+            "required_units": 4,
+            "world": {
+              "active": [
+                "B"
+              ],
+              "failed": []
+            }
+          },
+          {
+            "allocation": [
+              {
+                "client": "A",
+                "supplier": "P",
+                "units": 4
+              },
+              {
+                "client": "B",
+                "supplier": "Q",
+                "units": 4
+              }
+            ],
+            "delivered_units": 8,
+            "feasible": true,
+            "required_units": 8,
+            "world": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": []
+            }
+          }
+        ]
+      }
+    },
+    "no_supplier_acceptance": {
+      "cash_path": null,
+      "full_conventional_oracle": null,
+      "input": {
+        "adapter_available": true,
+        "adapter_cost": 2,
+        "cash": 30,
+        "include_q_failure": false,
+        "pooled_q_cost": 2,
+        "pooling_available": true,
+        "price_per_buyer": 8,
+        "supplier_q_accepted": false
+      },
+      "least_technical_cost": 17,
+      "result": {
+        "cost": null,
+        "decision": "DECLINE",
+        "history": [
+          {
+            "candidate": {
+              "adapter": false,
+              "pooling": false,
+              "reserved": [
+                "P"
+              ]
+            },
+            "cost": 8,
+            "counterexample": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": []
+            }
+          }
+        ],
+        "strategy": null,
+        "surplus": null,
+        "witnesses": []
+      }
+    },
+    "pre_frontier": {
+      "cash_path": null,
+      "full_conventional_oracle": null,
+      "input": {
+        "adapter_available": true,
+        "adapter_cost": 6,
+        "cash": 30,
+        "include_q_failure": false,
+        "pooled_q_cost": 2,
+        "pooling_available": true,
+        "price_per_buyer": 8,
+        "supplier_q_accepted": true
+      },
+      "least_technical_cost": 17,
+      "result": {
+        "cost": null,
+        "decision": "DECLINE",
+        "history": [
+          {
+            "candidate": {
+              "adapter": false,
+              "pooling": false,
+              "reserved": [
+                "P"
+              ]
+            },
+            "cost": 8,
+            "counterexample": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": []
+            }
+          }
+        ],
+        "strategy": null,
+        "surplus": null,
+        "witnesses": []
+      }
+    },
+    "profitable_but_unfunded": {
+      "cash_path": null,
+      "full_conventional_oracle": null,
+      "input": {
+        "adapter_available": true,
+        "adapter_cost": 2,
+        "cash": 12,
+        "include_q_failure": false,
+        "pooled_q_cost": 2,
+        "pooling_available": true,
+        "price_per_buyer": 8,
+        "supplier_q_accepted": true
+      },
+      "least_technical_cost": 13,
+      "result": {
+        "cost": null,
+        "decision": "DECLINE",
+        "history": [
+          {
+            "candidate": {
+              "adapter": false,
+              "pooling": false,
+              "reserved": [
+                "P"
+              ]
+            },
+            "cost": 8,
+            "counterexample": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": []
+            }
+          }
+        ],
+        "strategy": null,
+        "surplus": null,
+        "witnesses": []
+      }
+    },
+    "quote_at_break_even": {
+      "cash_path": null,
+      "full_conventional_oracle": null,
+      "input": {
+        "adapter_available": true,
+        "adapter_cost": 2,
+        "cash": 30,
+        "include_q_failure": false,
+        "pooled_q_cost": 5,
+        "pooling_available": true,
+        "price_per_buyer": 8,
+        "supplier_q_accepted": true
+      },
+      "least_technical_cost": 16,
+      "result": {
+        "cost": null,
+        "decision": "DECLINE",
+        "history": [
+          {
+            "candidate": {
+              "adapter": false,
+              "pooling": false,
+              "reserved": [
+                "P"
+              ]
+            },
+            "cost": 8,
+            "counterexample": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": []
+            }
+          }
+        ],
+        "strategy": null,
+        "surplus": null,
+        "witnesses": []
+      }
+    },
+    "technical_only": {
+      "cash_path": null,
+      "full_conventional_oracle": null,
+      "input": {
+        "adapter_available": true,
+        "adapter_cost": 2,
+        "cash": 30,
+        "include_q_failure": false,
+        "pooled_q_cost": 2,
+        "pooling_available": false,
+        "price_per_buyer": 8,
+        "supplier_q_accepted": true
+      },
+      "least_technical_cost": 17,
+      "result": {
+        "cost": null,
+        "decision": "DECLINE",
+        "history": [
+          {
+            "candidate": {
+              "adapter": false,
+              "pooling": false,
+              "reserved": [
+                "P"
+              ]
+            },
+            "cost": 8,
+            "counterexample": {
+              "active": [
+                "A",
+                "B"
+              ],
+              "failed": []
+            }
+          }
+        ],
+        "strategy": null,
+        "surplus": null,
+        "witnesses": []
+      }
+    }
+  },
+  "critic_dependence": {
+    "critics": 3,
+    "independent_remaining_error": "1/320",
+    "miss_rate": "1/4",
+    "perfectly_correlated_remaining_error": "1/20",
+    "wrong_prior": "1/5"
+  },
+  "frontier_model_calls": 0,
+  "grid": {
+    "admitted": 63,
+    "all_oracle_checks_passed": true,
+    "cases": 192,
+    "declined": 129,
+    "rows": [
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 2
+      },
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 6
+      },
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 10
+      },
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 2
+      },
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 6
+      },
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 10
+      },
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 2
+      },
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 6
+      },
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 10
+      },
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 2
+      },
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 6
+      },
+      {
+        "cost": 10,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 10,
+        "surplus": 10
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 11,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 11,
+        "surplus": 1
+      },
+      {
+        "cost": 11,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 11,
+        "surplus": 5
+      },
+      {
+        "cost": 11,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 11,
+        "surplus": 9
+      },
+      {
+        "cost": 11,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 11,
+        "surplus": 1
+      },
+      {
+        "cost": 11,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 11,
+        "surplus": 5
+      },
+      {
+        "cost": 11,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 11,
+        "surplus": 9
+      },
+      {
+        "cost": 11,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 11,
+        "surplus": 1
+      },
+      {
+        "cost": 11,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 11,
+        "surplus": 5
+      },
+      {
+        "cost": 11,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 11,
+        "surplus": 9
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 3
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 7
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 3
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 7
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 3
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 7
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 1
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 5
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 1
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 0,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 5
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 12,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 12,
+        "surplus": 4
+      },
+      {
+        "cost": 12,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 12,
+        "surplus": 8
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 12,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 12,
+        "surplus": 4
+      },
+      {
+        "cost": 12,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 12,
+        "surplus": 8
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 12,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 12,
+        "surplus": 4
+      },
+      {
+        "cost": 12,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 12,
+        "surplus": 8
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 3
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 7
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 3
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 7
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 3
+      },
+      {
+        "cost": 13,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 13,
+        "surplus": 7
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 1
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 5
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 1
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 5
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 17,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 2,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 17,
+        "surplus": 3
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 14,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 14,
+        "surplus": 2
+      },
+      {
+        "cost": 14,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 14,
+        "surplus": 6
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 14,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 14,
+        "surplus": 2
+      },
+      {
+        "cost": 14,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 14,
+        "surplus": 6
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 1
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 5
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 1
+      },
+      {
+        "cost": 15,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 15,
+        "surplus": 5
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 17,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 17,
+        "surplus": 3
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 17,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 4,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 17,
+        "surplus": 3
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 16,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 16,
+        "surplus": 4
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 16,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 1,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 16,
+        "surplus": 4
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 17,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 2,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 17,
+        "surplus": 3
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 17,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 4,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 17,
+        "surplus": 3
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 10,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 13,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 16,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 6,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": null,
+        "decision": "DECLINE",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 8,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": null,
+        "surplus": null
+      },
+      {
+        "cost": 17,
+        "decision": "ADMIT_MODEL",
+        "input": {
+          "adapter_available": true,
+          "adapter_cost": 6,
+          "cash": 20,
+          "include_q_failure": false,
+          "pooled_q_cost": 6,
+          "pooling_available": true,
+          "price_per_buyer": 10,
+          "supplier_q_accepted": true
+        },
+        "oracle_cost": 17,
+        "surplus": 3
+      }
+    ]
+  },
+  "inheritance_accounting": {
+    "acquisition_cost": 2,
+    "control_can_reconstruct_same_asset": true,
+    "empirical_successor_advantage_established": false,
+    "gross_savings_per_use": 2,
+    "maintenance_cost": 1,
+    "prospective_value": 4,
+    "remaining_uses": 4,
+    "short_horizon_lifecycle_value": -4,
+    "transfer_cost": 3,
+    "whole_lifecycle_value": 2
+  },
+  "kind": "AUTHORED_FINITE_MODEL",
+  "noncomposition": {
+    "cut": {
+      "clients": [
+        "A",
+        "B"
+      ],
+      "deficit": 4,
+      "demand": 8,
+      "reachable_capacity": 4
+    },
+    "joint": {
+      "allocation": [
+        {
+          "client": "A",
+          "supplier": "P",
+          "units": 4
+        }
+      ],
+      "delivered_units": 4,
+      "feasible": false,
+      "required_units": 8
+    },
+    "local": [
+      {
+        "allocation": [
+          {
+            "client": "A",
+            "supplier": "P",
+            "units": 4
+          }
+        ],
+        "delivered_units": 4,
+        "feasible": true,
+        "required_units": 4
+      },
+      {
+        "allocation": [
+          {
+            "client": "B",
+            "supplier": "P",
+            "units": 4
+          }
+        ],
+        "delivered_units": 4,
+        "feasible": true,
+        "required_units": 4
+      }
+    ]
+  },
+  "schema": "surf-exponential/exact-study/v1",
+  "separate_llm_reviewer_invoked": false,
+  "source_omission": {
+    "fabricated_criticism": "UNSUPPORTED",
+    "false_criticism": "FALSE_CRITICISM",
+    "fulfilled": [
+      "q1",
+      "q2",
+      "q4"
+    ],
+    "irrelevant_criticism": "IMMATERIAL_TO_THIS_CHARTER",
+    "legitimate_compression": {
+      "accepted": true,
+      "missing_from_outcome": [],
+      "missing_from_summary": []
+    },
+    "required": [
+      "q1",
+      "q2",
+      "q3",
+      "q4"
+    ],
+    "source_check": {
+      "accepted": false,
+      "missing_from_outcome": [
+        "q3"
+      ],
+      "missing_from_summary": [
+        "q3"
+      ]
+    },
+    "summary": [
+      "q1",
+      "q2",
+      "q4"
+    ],
+    "summary_only_accepts": true
+  }
+}

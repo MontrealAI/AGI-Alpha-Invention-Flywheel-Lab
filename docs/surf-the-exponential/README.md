@@ -3,9 +3,9 @@
 **Find what the answer missed. Build what the world is missing.**
 
 Vincent Boucher · MONTREAL.AI / QUEBEC.AI  
-Research edition 1.0.0 · 5 November 2026
+Research edition 1.1.0 · 5 November 2026
 
-This 28-page paper develops an evidence-grounded path from consequential
+This 30-page paper develops an evidence-grounded path from consequential
 criticism to new capabilities, viable productive arrangements, and better
 methods of discovery. It builds on **Transformational Intelligence**, **ALPHA
 GENESIS FLYWHEEL Ω**, and **Invent the Economy**. The three source editions and
@@ -14,7 +14,7 @@ their public content identities are recorded in
 
 - [Read the paper in your browser](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.html)
 - [Read the canonical PDF](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.pdf)
-- [Versioned release and complete source package](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.0.0)
+- [Versioned release and complete source package](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.1.0)
 
 ## What the paper contributes
 
@@ -34,47 +34,72 @@ incumbent can legitimately win.
 
 ## Evidence in this edition
 
-The executable evidence is an **authored exact arithmetic audit**. Its
-probabilities, utility values, and cash paths are stipulated. It is not an
-empirical frontier-model benchmark, observed market demand, accepted buyer
-terms, realized revenue, or a demonstration of general self-improvement.
+The revised edition executes the transition from a supported criticism to a
+constructed artifact and a changed-task successor. All finite task domains,
+probabilities, values and cash paths are stated inputs. This is reproducible
+construction and calculation, not an empirical frontier-model benchmark,
+observed market demand, accepted buyer terms, realized revenue or general
+self-improvement.
 
-| Check | Scope |
+| Check | Scope and result |
 | --- | --- |
-| Six named scenarios and five controls | Exact values for useful criticism, adverse conditions, conventional ties and wins, and a separately labelled unavailable information bound |
-| 2,304-point Cartesian grid | All declared points are checked by explicit eight-branch probability enumeration |
-| Three dependent-critic cases | Detection 0.7 per critic; combined miss probabilities 0.09, 0.258, and 0.3 under specified joint distributions |
-| Two successful cash paths | Minimum additional starting cash 90 or 50, with the same stipulated net contribution 30 |
-| 15 focused tests | Mathematical boundaries, exact inputs, changed-source rejection, output tampering, byte-identical regeneration, and publication consistency |
+| Initial representation | Nine ordered pairs from {60, 80, 100}; four threshold queries; 36 exact checks; a constructed three-label minimum |
+| Changed successor | Six interval queries; 54 exact checks; maximum-only reuse fails and a constructed six-label minimum succeeds |
+| Independent partition enumeration | All 21,147 partitions; 260 support the initial family and eight support the successor; pairwise witnesses certify the lower bounds |
+| Seven representation controls | Mean-only fails; conventional maximum and minimum/maximum tie their respective constructions; a six-label mean-plus-flag patch supports both families |
+| Full refund obligations | 50 funds deposit-assisted success; 90 is required across both success and full-refund failure; positive successful contribution is not sufficient funding |
+| Conditional participation and cost sensitivity | Expected operator contribution 120p−90; no empirical p; all 121 stated construction-cost values checked |
+| Six review scenarios and five controls | Exact utility values for useful criticism, adverse conditions, conventional ties and wins, and a separately labeled unavailable information bound |
+| 2,304-point review grid | Every declared point checked by a separate eight-branch probability enumeration; 431 positive, 224 zero and 1,649 negative |
+| Three dependent-critic cases | Detection 0.7 per critic; joint miss probabilities 0.09, 0.258 and 0.3 under the specified joint distributions |
+| 29 focused tests | Fourteen construction tests and fifteen original review-audit tests, including independently checked material output mutations, exact regeneration and source identity checks |
 
-The fixed-target model concerns **one prespecified material-defect proposition
-per episode**. The truth event, allegation, and accepted revision refer to
-that same target. Mixed true/false allegation batches and adaptive target
-selection are outside this finite audit. A true target without an accepted
-challenge is not a measurement of post-repair error or whole-artifact coverage.
+The representation is chosen **before** the query and must support the entire
+specified query family. Three and six are counts of distinguishable labels,
+not bytes, tokens or complete engineering costs. Construction requires access
+to raw readings before compression; it cannot recover discarded information
+from archived means or maxima. Conventional controls receive identical access.
+The domain and calculations were examined during design; no untouched
+confirmation dataset or newly invented synthesis algorithm is claimed.
 
-The grounded-challenge scenario has incremental utility **9.8875**. An equally
-equipped conventional review ties it; conventional review with identical
-conditional rates and a cost one unit lower obtains **10.8875**. Five adverse
-scenarios select the incumbent. These are consequences of the declared model,
-not measured rankings of real workflows.
+**The smallest sufficient representation today need not be the best retained
+asset for tomorrow.** The minimal initial representation fails the changed task,
+while the larger local patch happens to preserve the needed distinction. The
+retained generic constructor can rebuild for the successor when its source and
+semantic inputs remain available. This demonstrates scoped adaptation, not an
+advantage over equally informed conventional construction.
 
-The cash examples assume successful delivery and an authorized deposit usable
-for the stated production costs. Advance cash remains an obligation until
-earned. Their arithmetic does not establish consent, failure reserves, contract
-execution, or actual business profit.
+The economic illustration specifies two buyers, construction cost 60, delivery
+cost 30 and successful receipts 120. Successful contribution is 30; failure after
+all costs and a full advance refund contributes −90. Each buyer values success
+at 70 and pays 60. Ordinary shared provision ties. These stipulated costs are
+separate from measured code performance. Failure probability, real demand,
+consent and actual commerce are unobserved. At opening cash 50, full-obligation
+funding requires construction cost at most 20, even though positive successful
+contribution permits a cost below 90.
 
-See [`REVIEW.md`](REVIEW.md) for substantive methodological corrections and
-[`protocol.json`](protocol.json) for the complete assumptions, scenario inputs,
-grid, acceptance checks, and stopping rule. The protocol discloses that the
-illustrative arithmetic was examined during design; no untouched empirical
-confirmation set is claimed.
+The original fixed-target review model concerns **one prespecified material
+defect proposition per episode**. Truth, allegation and accepted revision refer
+to that same target; mixed allegation batches and adaptive target selection are
+outside the audit. The grounded-challenge scenario yields utility 9.8875. An
+equally equipped conventional review ties; an otherwise identical conventional
+review costing one unit less obtains 10.8875. Five adverse scenarios select the
+incumbent. These are implications of supplied inputs, not measured workflow
+rankings.
+
+See [`construct_protocol.json`](construct_protocol.json),
+[`protocol.json`](protocol.json) and [`REVIEW.md`](REVIEW.md) for complete
+assumptions and the substantive changes. The original edition remains available
+with its original source and PDF in the
+[1.0.0 release](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.0.0).
 
 ## Package contents
 
 | Files | Purpose |
 | --- | --- |
 | `paper.tex`, `sections-*.tex`, `references.bib` | Complete editable manuscript, vector diagrams, and bibliography |
+| `construct_case.py`, `check_construct_case.py`, `test_construct_case.py`, `construct_protocol.json` | Finite constructor, separate artifact/partition/cash checker, focused tests and declared inputs |
+| `evidence/construct_results.json` | Constructed encoders/decoders, witnesses, controls, exhaustive counts and economic paths |
 | `study.py`, `check_study.py`, `test_study.py`, `protocol.json` | Exact computation, separate branch enumeration, focused tests, and specification |
 | `evidence/results.json`, `results.csv`, `results_table.tex` | Compact evidence and the table consumed by the manuscript |
 | `build.py` | Clean temporary-directory pdfLaTeX/BibTeX build without shell escape |
@@ -89,7 +114,7 @@ access only if you choose to retrieve and inspect those references.
 
 ## Verify and reproduce
 
-Python 3.10 or newer is sufficient for the arithmetic, tests, package creation,
+Python 3.10 or newer is sufficient for the computations, tests, package creation,
 and identity checks; they use only the standard library. PDF generation also
 requires `pdflatex`, `bibtex`, and the TeX packages declared in `paper.tex`.
 The reference build used pdfTeX 1.40.25 and BibTeX 0.99d from TeX Live
@@ -112,18 +137,23 @@ From this source directory, or the root of an extracted source archive:
 
 ```bash
 python3 package.py --verify
+python3 check_construct_case.py
 python3 check_study.py
-python3 -m unittest -v test_study
+python3 -m unittest -v test_construct_case test_study
 ```
 
-The checker does not import the producer's utility formula. It enumerates the
-logical event branches and independently recomputes the cash-path prefixes.
+Neither checker imports its producer. The construction checker evaluates raw
+inequalities, checks emitted encoders and decoders, enumerates set partitions
+using a different procedure, and simulates the cash paths. The review checker
+enumerates the logical event branches instead of importing the utility formula.
 This is independence of implementation, not external scientific replication,
 an independently sampled empirical dataset, or a controlled multi-model trial.
 
 To regenerate evidence in a separate directory and check its values:
 
 ```bash
+python3 construct_case.py --output /tmp/surf-recomputed-evidence
+python3 check_construct_case.py --evidence /tmp/surf-recomputed-evidence
 python3 study.py --output /tmp/surf-recomputed-evidence
 python3 check_study.py --evidence /tmp/surf-recomputed-evidence
 ```
@@ -194,8 +224,9 @@ sha256sum -c SHA256SUMS
 python3 -m zipfile -e SURF_THE_EXPONENTIAL_SOURCE.zip /tmp/surf-extracted
 cd /tmp/surf-extracted
 python3 package.py --verify
+python3 check_construct_case.py
 python3 check_study.py
-python3 -m unittest -v test_study
+python3 -m unittest -v test_construct_case test_study
 python3 build.py --output /tmp/surf-extracted-rebuilt.pdf
 ```
 
@@ -214,7 +245,7 @@ evidence retain their own identities and scope.
   institution = {MONTREAL.AI and QUEBEC.AI},
   year        = {2026},
   month       = nov,
-  number      = {Research edition 1.0.0},
-  url         = {https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.0.0}
+  number      = {Research edition 1.1.0},
+  url         = {https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.1.0}
 }
 ```
