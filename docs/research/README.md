@@ -20,6 +20,20 @@ Invent the means. Expand what becomes possible. Compound the ability to discover
 
 **Research lineage:** Transformational Intelligence remains the conceptual foundation; AGI ALPHA remains the organizational foundation. The other papers and their original editions remain accessible below.
 
+## CONTINUITY Ω — Keep the promise.
+
+**Cybersecurity Resilience — Invent the Economy of Continuity.**
+
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 6 November 2026 · Research edition 1.0.0.
+
+[Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega.html) · [Complete PDF](continuity-omega.pdf) · [Editable LaTeX](../continuity-omega-paper/CONTINUITY_OMEGA.tex) · [Build and reproduce](../continuity-omega-paper/README.md) · [Reproduction evidence](../continuity-omega-paper/evidence/REPRODUCTION.json) · [Review](../continuity-omega-paper/REVIEW.md).
+
+*The server is back. Is the business?* A missing customer obligation, shared dependency or overbooked fallback can defeat an otherwise convincing recovery plan. CONTINUITY Ω connects a checkable objection to a permitted alternative route, separate acceptance and a viable commercial arrangement. Its proposed first user is the operations director of a regional packaging-label printer. The reader includes an interactive, explicitly hypothetical pooling example: costs can require more buyers than the fallback capacity can serve.
+
+**Scope:** A research architecture, elementary conditional results and local reproduction of two pinned synthetic prototypes: 29 and 9 implementation tests, 12 supplied handoff cases, and a four-case competent-conventional tie. Five additional probes preserve a positive control, reproduce three verifier/inspection weaknesses and demonstrate a known source-trust limit; the original passing suites do not erase these counterexamples. These are not real incidents or a frontier-model benchmark. Actual reserved capacity, physical delivery, customer payment, repeatable demand and successor advantage remain unestablished. The existing flagship and earlier papers retain their roles and evidence.
+
+The [publication manifest](publication-manifest.json) records the canonical PDF's exact bytes and SHA-256. [Source and claim records](../continuity-omega-paper/README.md) preserve the distinction between authored arithmetic, reproduced engineering and proposed field work.
+
 ## SURF THE EXPONENTIAL — The Missing Move
 
 **From Verified Criticism to New Capabilities, Viable Markets, and Better Inventors.**

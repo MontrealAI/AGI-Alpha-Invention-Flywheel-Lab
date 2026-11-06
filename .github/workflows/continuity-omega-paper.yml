@@ -1,0 +1,285 @@
+name: CONTINUITY OMEGA research publication
+
+on:
+  pull_request:
+    paths:
+      - 'docs/continuity-omega-paper/**'
+      - 'docs/research/continuity-omega*'
+      - '.github/workflows/continuity-omega-paper.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/continuity-omega-paper/**'
+      - 'docs/research/continuity-omega*'
+      - '.github/workflows/continuity-omega-paper.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: continuity-omega-paper-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    name: Qualify the exact publication source
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    outputs:
+      pdf_sha256: ${{ steps.bundle.outputs.pdf_sha256 }}
+      source_sha256: ${{ steps.bundle.outputs.source_sha256 }}
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+
+      - name: Check out the exact candidate commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Confirm the checked-out source identity
+        env:
+          CONTINUITY_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$CONTINUITY_EXPECTED_HEAD"
+
+      - name: Install the standard public manuscript toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended texlive-science texlive-plain-generic lmodern poppler-utils
+
+      - name: Verify canonical identities, recorded scope and the public PDF copy
+        run: |
+          python3 -B docs/continuity-omega-paper/verify.py
+          cmp docs/continuity-omega-paper/CONTINUITY_OMEGA.pdf docs/research/continuity-omega.pdf
+
+      - name: Reproduce both pinned public synthetic sources
+        run: |
+          python3 -B docs/continuity-omega-paper/reproduce.py --output "$RUNNER_TEMP/continuity-omega-reproduction-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+
+      - name: Rebuild without replacing the reviewed canonical PDF
+        run: |
+          python3 -B docs/continuity-omega-paper/build.py
+          python3 -B docs/continuity-omega-paper/verify.py --check-build
+
+      - name: Reproduce the verifier counterexamples without repairing the pinned source
+        run: |
+          python3 -B docs/continuity-omega-paper/counterexamples.py --source278 "$RUNNER_TEMP/continuity-omega-reproduction-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/source278" --output "$RUNNER_TEMP/continuity-omega-counterexamples-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+
+      - name: Package the qualified PDF and complete source
+        id: bundle
+        run: |
+          python3 -B docs/continuity-omega-paper/package.py --output "$RUNNER_TEMP/continuity-omega-qualified"
+          python3 - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          package = Path(os.environ['RUNNER_TEMP']) / 'continuity-omega-qualified'
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              for key, name in (
+                  ('pdf_sha256', 'CONTINUITY_OMEGA.pdf'),
+                  ('source_sha256', 'CONTINUITY_OMEGA_SOURCE.zip'),
+              ):
+                  value = hashlib.sha256((package / name).read_bytes()).hexdigest()
+                  output.write(f'{key}={value}\n')
+          PY
+
+      - name: Retain the reviewable publication bundle
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: continuity-omega-paper-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/continuity-omega-qualified/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Retain the compact fresh reproduction receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: continuity-omega-reproduction-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/continuity-omega-reproduction-${{ github.run_id }}-${{ github.run_attempt }}/RESULT.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Retain the compact counterexample receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: continuity-omega-counterexamples-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/continuity-omega-counterexamples-${{ github.run_id }}-${{ github.run_attempt }}/RESULT.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+  release:
+    name: Publish or verify the preserved research edition
+    needs: qualify
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+
+      - name: Check out the qualified main commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Install the publication inspection tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends poppler-utils
+
+      - name: Repackage the exact qualified publication
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 -B docs/continuity-omega-paper/package.py --output "$RUNNER_TEMP/continuity-omega-release"
+
+      - name: Create the edition once and verify the released assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CONTINUITY_QUALIFIED_PDF_SHA256: ${{ needs.qualify.outputs.pdf_sha256 }}
+          CONTINUITY_QUALIFIED_SOURCE_SHA256: ${{ needs.qualify.outputs.source_sha256 }}
+        run: |
+          python3 - <<'PY'
+          import base64
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import subprocess
+
+          repository = os.environ['GITHUB_REPOSITORY']
+          qualified_sha = os.environ['GITHUB_SHA']
+          tag = 'continuity-omega-v1.0.0'
+          paper = Path('docs/continuity-omega-paper')
+          package = Path(os.environ['RUNNER_TEMP']) / 'continuity-omega-release'
+          notes = paper / 'RELEASE_NOTES.md'
+          assets = {
+              'CONTINUITY_OMEGA.pdf': os.environ['CONTINUITY_QUALIFIED_PDF_SHA256'],
+              'CONTINUITY_OMEGA_SOURCE.zip': os.environ['CONTINUITY_QUALIFIED_SOURCE_SHA256'],
+          }
+
+          def require(condition, message):
+              if not condition:
+                  raise SystemExit(message)
+
+          def digest(path):
+              return hashlib.sha256(path.read_bytes()).hexdigest()
+
+          def gh(*arguments):
+              return subprocess.run(['gh', *arguments], capture_output=True, text=True)
+
+          def api(path, missing=False):
+              result = gh('api', '--method', 'GET', path)
+              if result.returncode:
+                  if missing and '(HTTP 404)' in result.stderr:
+                      return None
+                  raise SystemExit(f'GitHub read failed for {path}: {result.stderr.strip()}')
+              return json.loads(result.stdout)
+
+          def tag_commit():
+              reference = api(f'repos/{repository}/git/ref/tags/{tag}', missing=True)
+              if reference is None:
+                  return None
+              obj = reference['object']
+              visited = set()
+              while obj['type'] == 'tag':
+                  require(obj['sha'] not in visited, 'Cyclic annotated tag; existing tag preserved')
+                  visited.add(obj['sha'])
+                  obj = api(f"repos/{repository}/git/tags/{obj['sha']}")['object']
+              require(obj['type'] == 'commit', 'Edition tag does not identify a commit; preserved')
+              return obj['sha']
+
+          for name, expected in assets.items():
+              require(re.fullmatch(r'[0-9a-f]{64}', expected) is not None,
+                      f'Missing qualification identity for {name}')
+              require(digest(package / name) == expected,
+                      f'Release package differs from the qualified asset: {name}')
+
+          endpoint = f'repos/{repository}/releases/tags/{tag}'
+          release = api(endpoint, missing=True)
+          tagged_sha = tag_commit()
+          created = release is None
+          if created:
+              require(tagged_sha is None or tagged_sha == qualified_sha,
+                      'The existing tag points to another commit; it was not moved')
+              arguments = [
+                  'release', 'create', tag,
+                  *[str(package / name) for name in assets],
+                  '--repo', repository, '--target', qualified_sha,
+                  '--title', 'CONTINUITY Ω — Research edition 1.0.0',
+                  '--notes-file', str(notes), '--latest=false',
+              ]
+              if tagged_sha is not None:
+                  arguments.append('--verify-tag')
+              result = gh(*arguments)
+              require(result.returncode == 0,
+                      'Release creation failed; existing tags and assets were not overwritten: '
+                      + result.stderr.strip())
+              release = api(endpoint)
+              tagged_sha = tag_commit()
+              require(tagged_sha == qualified_sha,
+                      'New release tag does not match the qualified main commit; review required')
+
+          require(release['tag_name'] == tag and tagged_sha is not None,
+                  'Release/tag identity is incomplete; existing edition preserved')
+          require(not release['draft'] and not release['prerelease'],
+                  'Existing release is not a published normal research edition; preserved')
+          require((release.get('body') or '').strip() == notes.read_text(encoding='utf-8').strip(),
+                  'Existing release notes differ from this edition; no notes or assets were replaced')
+
+          # An existing edition may precede unrelated main commits. Its own tag
+          # must still carry exactly this reviewed publication manifest.
+          tagged_manifest = api(
+              f'repos/{repository}/contents/docs/continuity-omega-paper/PUBLICATION.json?ref={tagged_sha}'
+          )
+          require(tagged_manifest.get('encoding') == 'base64',
+                  'Cannot verify the publication manifest at the release tag')
+          manifest_bytes = base64.b64decode(''.join(tagged_manifest['content'].split()), validate=True)
+          require(manifest_bytes == (paper / 'PUBLICATION.json').read_bytes(),
+                  'Tagged publication manifest differs; preserve this edition and use a new version')
+
+          remote_assets = release.get('assets', [])
+          for name in assets:
+              matches = [item for item in remote_assets if item.get('name') == name]
+              require(len(matches) == 1 and matches[0].get('state') == 'uploaded',
+                      f'Released asset is absent or incomplete: {name}; no existing asset was replaced')
+          downloaded = Path(os.environ['RUNNER_TEMP']) / 'continuity-omega-downloaded-release'
+          downloaded.mkdir()
+          arguments = ['release', 'download', tag, '--repo', repository, '--dir', str(downloaded)]
+          for name in assets:
+              arguments.extend(['--pattern', name])
+          result = gh(*arguments)
+          require(result.returncode == 0, 'Released-asset download failed: ' + result.stderr.strip())
+          for name, expected in assets.items():
+              require(digest(downloaded / name) == expected,
+                      f'Released bytes differ for {name}; existing asset preserved without clobbering')
+          require(tag_commit() == tagged_sha, 'Release tag changed during verification; review required')
+
+          result = {
+              'operation': 'created' if created else 'preserved-and-verified',
+              'edition': '1.0.0', 'tag': tag, 'release_url': release['html_url'],
+              'qualified_commit': qualified_sha, 'release_commit': tagged_sha,
+              'downloaded_asset_sha256': assets,
+              'scope': 'Research publication and pinned synthetic evidence; not operational or economic certification.',
+          }
+          print(json.dumps(result, ensure_ascii=False, indent=2))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as summary:
+              summary.write('## CONTINUITY Ω research edition 1.0.0\n\n')
+              summary.write(f"Operation: **{result['operation']}**. [Release]({release['html_url']}).\n\n")
+              summary.write(f'Qualified commit: `{qualified_sha}`. Release commit: `{tagged_sha}`.\n\n')
+              summary.write('Both downloaded assets match the qualified identities. '
+                            'This publishes research and synthetic evidence, not a field or commercial certification.\n')
+          PY

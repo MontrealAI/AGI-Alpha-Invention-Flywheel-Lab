@@ -1,0 +1,59 @@
+{
+  "expected_observations_matched": true,
+  "historical_suite": {
+    "recorded_test_passes": 29,
+    "rerun_by_this_command": false
+  },
+  "observations": {
+    "boolean_currency": {
+      "audit_failure_count": 0,
+      "audit_verdict": "PASS_SYNTHETIC_ONLY",
+      "cli_verify_exit": 0,
+      "cli_verify_verdict": "PASS_SYNTHETIC_ONLY",
+      "constructor_exception": "DrillRejected",
+      "constructor_rejected": true,
+      "offer_json_type": "boolean"
+    },
+    "coherent_reseal": {
+      "audit_verdict": "PASS_SYNTHETIC_ONLY",
+      "event_digest_changed": true,
+      "interpretation": "Previously disclosed trust limitation; internal consistency does not bind an externally held original scenario.",
+      "original_units": 1900,
+      "rewritten_units": 2000
+    },
+    "malformed_top_level": {
+      "exception": "AttributeError",
+      "input": "JSON null",
+      "structured_result_returned": false
+    },
+    "positive_control": {
+      "orders": 2,
+      "units": 1900,
+      "verdict": "PASS_SYNTHETIC_ONLY"
+    },
+    "stale_inspection": {
+      "changed_required_units": 1,
+      "fresh_verify_exit": 3,
+      "fresh_verify_failures": [
+        "PASSPORT_HANDOFF_BINDING",
+        "REQUIRED_UNITS"
+      ],
+      "fresh_verify_verdict": "FAIL",
+      "inspect_exit": 0,
+      "inspect_has_fresh_audit": false,
+      "inspect_returned_stored_passport": true,
+      "inspect_technical_verdict": "READY_FOR_INDEPENDENT_SYNTHETIC_AUDIT",
+      "stored_audit_verdict": "PASS_SYNTHETIC_ONLY"
+    }
+  },
+  "probe_count": 5,
+  "reporting_head_observed": "6cd7e1bb7197cabdf8f3d093eead662cde5351f4",
+  "reporting_pr": 279,
+  "reporting_source": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/6cd7e1bb7197cabdf8f3d093eead662cde5351f4/docs/continuity-omega/HARDENING.md",
+  "schema": "continuity-omega-paper/counterexamples/v1",
+  "scope": "Five authored observations against the historical checker, including one positive control. Counterexample reproduction is NOT checker qualification; no live operations, payments, or PR279 repair qualification.",
+  "source_bytes_unchanged": true,
+  "source_commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+  "source_identity_verified": true,
+  "status": "COUNTEREXAMPLES_REPRODUCED_NOT_CHECKER_QUALIFICATION"
+}
