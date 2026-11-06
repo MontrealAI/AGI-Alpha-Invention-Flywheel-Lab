@@ -49,7 +49,7 @@ def probability(value: object) -> Fraction:
 
 
 def validate_protocol(p: dict) -> None:
-    if p["schema_version"] != "1.0.0":
+    if p["schema_version"] != "1.1.0":
         raise ValueError("Unsupported protocol schema")
     if (p["domain"]["state_order"] != "lexicographic_ordered_pairs"
             or p["primary"]["predicate"] != "every_reading_at_most_threshold"
@@ -276,6 +276,84 @@ def finance_case(f: dict) -> dict:
     }
 
 
+def nonnegative_rational(value: object, name: str) -> Fraction:
+    if isinstance(value, bool) or not isinstance(value, (str, int, Fraction)):
+        raise ValueError(f"{name} must be an exact rational string or integer")
+    try:
+        result = Fraction(value)
+    except (ValueError, ZeroDivisionError) as exc:
+        raise ValueError(f"Invalid rational {name}") from exc
+    if result < 0:
+        raise ValueError(f"{name} must be nonnegative")
+    return result
+
+
+def retention_decision(parameters: dict, deferred_access_available: bool) -> dict:
+    """Value a fixed pre-expiry policy menu; conditional exercise may be declined.
+
+    p concerns an opportunity needing a missing distinction, not arbitrary future
+    queries. Values are incremental decision values, never advance cash. Gross
+    bounds must be funded separately even when an expected value is favorable.
+    """
+    names = ("p", "q", "v", "c", "a", "r", "resource_allowance")
+    if set(parameters) != set(names) or type(deferred_access_available) is not bool:
+        raise ValueError("Declare exactly p,q,v,c,a,r,resource_allowance and a Boolean timing control")
+    x = {name: probability(parameters[name]) if name in ("p", "q")
+         else nonnegative_rational(parameters[name], name) for name in names}
+    p, q, v, c, a, r = (x[name] for name in names[:-1])
+    exercise = max(v - r, Fraction(0))
+    values = {
+        "ordinary_access": p * q * exercise,
+        "retain_sufficient": p * v - c,
+        "secure_access": p * exercise - a,
+    }
+    bounds = {"ordinary_access": r, "retain_sufficient": c, "secure_access": a + r}
+    if deferred_access_available:
+        # A capable late route uses ordinary access before buying anything.
+        values["deferred_access"] = p * (q * exercise + (1 - q) * max(v - r - a, Fraction(0)))
+        bounds["deferred_access"] = a + r
+    required = max(bounds.values())
+    if x["resource_allowance"] < required:
+        raise ValueError("Current resource allowance must cover complete route costs before any benefit")
+    best = max(values.values())
+    return {
+        "parameters": {name: str(x[name]) for name in names},
+        "deferred_access_available": deferred_access_available,
+        "policy_values": {name: str(value) for name, value in values.items()},
+        "best_policies": [name for name, value in values.items() if value == best],
+        "best_value": str(best),
+        "policy_cost_bounds": {name: str(value) for name, value in bounds.items()},
+        "required_resource_allowance": str(required), "all_policy_costs_funded": True,
+    }
+
+
+def retention_case(option: dict) -> dict:
+    witness = option["gap_witness"]
+    left, right = witness["left_source"], witness["right_source"]
+    lo, hi = witness["future_interval"]
+    left_answer = all(lo <= value <= hi for value in left)
+    right_answer = all(lo <= value <= hi for value in right)
+    if (witness["compact_representation"] != "maximum" or max(left) != max(right)
+            or left_answer == right_answer):
+        raise ValueError("The retention opportunity must require a genuinely missing distinction")
+
+    def scenario(item: dict) -> dict:
+        parameters = {**option["common_parameters"], "p": item["p"], "r": item["r"]}
+        return {"id": item["id"], **retention_decision(parameters, item["deferred_access_available"])}
+
+    return {
+        "assumptions": option,
+        "gap_witness": {
+            "left_source": left, "right_source": right, "future_interval": [lo, hi],
+            "compact_label_left": max(left), "compact_label_right": max(right),
+            "left_answer": left_answer, "right_answer": right_answer,
+        },
+        "primary_scenarios": [scenario(item) for item in option["primary_scenarios"]],
+        "switch_witness": scenario(option["switch_witness"]),
+        "deferred_control": scenario(option["deferred_control"]),
+    }
+
+
 def build_results(protocol: dict) -> dict:
     validate_protocol(protocol)
     states = list(itertools.product(protocol["domain"]["reading_values"], repeat=2))
@@ -310,6 +388,7 @@ def build_results(protocol: dict) -> dict:
         "successor": {"query_parameters": protocol["successor"]["intervals"], "state_query_checks": len(states) * len(successor[0]), "artifact": second},
         "representations": controls, "partition_enumeration": enumerate_partitions(primary, successor),
         "finance": finance_case(protocol["finance"]),
+        "retention_option": retention_case(protocol["retention_option"]),
     }
 
 
@@ -329,6 +408,9 @@ def main() -> None:
     finance = results["finance"]
     print(f"Refund-protected cash: {finance['all_declared_advance_paths']['minimum_opening_cash']}; "
           f"successful advance path alone: {finance['cash_paths']['success_with_advance']['minimum_opening_cash']}.")
+    option = results["retention_option"]
+    print("Retention policy winners: " + ", ".join("/".join(row["best_policies"]) for row in option["primary_scenarios"]) + ".")
+    print(f"Deferred-access control: {option['deferred_control']['best_value']} incremental decision value.")
 
 
 if __name__ == "__main__":

@@ -3,9 +3,9 @@
 **Find what the answer missed. Build what the world is missing.**
 
 Vincent Boucher · MONTREAL.AI / QUEBEC.AI  
-Research edition 1.1.0 · 5 November 2026
+Research edition 1.2.0 · 6 November 2026
 
-This 30-page paper develops an evidence-grounded path from consequential
+This 32-page paper develops an evidence-grounded path from consequential
 criticism to new capabilities, viable productive arrangements, and better
 methods of discovery. It builds on **Transformational Intelligence**, **ALPHA
 GENESIS FLYWHEEL Ω**, and **Invent the Economy**. The three source editions and
@@ -14,7 +14,7 @@ their public content identities are recorded in
 
 - [Read the paper in your browser](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.html)
 - [Read the canonical PDF](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.pdf)
-- [Versioned release and complete source package](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.1.0)
+- [Versioned release and complete source package](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.2.0)
 
 ## What the paper contributes
 
@@ -49,10 +49,12 @@ self-improvement.
 | Seven representation controls | Mean-only fails; conventional maximum and minimum/maximum tie their respective constructions; a six-label mean-plus-flag patch supports both families |
 | Full refund obligations | 50 funds deposit-assisted success; 90 is required across both success and full-refund failure; positive successful contribution is not sufficient funding |
 | Conditional participation and cost sensitivity | Expected operator contribution 120p−90; no empirical p; all 121 stated construction-cost values checked |
+| What should survive the answer? | Three supplied cases choose a richer record, preserved source access or ordinary access; the cost-4 switch retains both tied optima |
+| Strong deferred-access control | When identical access can be bought later, first use ordinary access if present; otherwise buy it. This route returns 8.75 and wins in the specified changed-timing case |
 | Six review scenarios and five controls | Exact utility values for useful criticism, adverse conditions, conventional ties and wins, and a separately labeled unavailable information bound |
 | 2,304-point review grid | Every declared point checked by a separate eight-branch probability enumeration; 431 positive, 224 zero and 1,649 negative |
 | Three dependent-critic cases | Detection 0.7 per critic; joint miss probabilities 0.09, 0.258 and 0.3 under the specified joint distributions |
-| 29 focused tests | Fourteen construction tests and fifteen original review-audit tests, including independently checked material output mutations, exact regeneration and source identity checks |
+| 35 focused tests | Twenty construction/retention tests and fifteen original review-audit tests, including material output mutations, exact regeneration and source identity checks |
 
 The representation is chosen **before** the query and must support the entire
 specified query family. Three and six are counts of distinguishable labels,
@@ -68,6 +70,33 @@ while the larger local patch happens to preserve the needed distinction. The
 retained generic constructor can rebuild for the successor when its source and
 semantic inputs remain available. This demonstrates scoped adaptation, not an
 advantage over equally informed conventional construction.
+
+### New in 1.2: preserve a useful path to the next answer
+
+A verified reduction in reconstruction cost can change **what is worth
+keeping**. In the authored one-period model, all routes meet today's purpose;
+the future opportunity requires a distinction missing from the compact record.
+Ordinary access is observed before any reconstruction spend. The future value
+is net of common fulfillment costs; fixed shared costs cancel, and all remaining
+incremental costs are explicitly funded before any benefit.
+
+With future value 20, record-preservation cost 4, source-preservation cost 2,
+and ordinary source availability 25%:
+
+| Future opportunity | Reconstruction cost | Ordinary access | Preserve record | Preserve access | Best declared route |
+| --- | ---: | ---: | ---: | ---: | --- |
+| 50% | 6 | 1.75 | 6 | 5 | Preserve record |
+| 50% | 1 | 2.375 | 6 | 7.5 | Preserve access |
+| 5% | 6 | 0.175 | −3 | −1.3 | Ordinary access |
+
+The primary scenarios require source preservation before a loss deadline. If
+the same guarantee can be bought after arrival, the stronger adaptive deferred
+route is admitted and wins at **8.75** in the cheap-reconstruction case. The
+reader lets you change the assumptions, includes this alternative, and shows
+exact ties. The five published cases contain **16 policy outcomes**, separately
+verified through branch/action enumeration. These are conditional decisions
+within a declared menu, not measured probabilities, market returns or a
+universal optimal archive. Costs are not inferred from representation labels.
 
 The economic illustration specifies two buyers, construction cost 60, delivery
 cost 30 and successful receipts 120. Successful contribution is 30; failure after
@@ -89,17 +118,17 @@ rankings.
 
 See [`construct_protocol.json`](construct_protocol.json),
 [`protocol.json`](protocol.json) and [`REVIEW.md`](REVIEW.md) for complete
-assumptions and the substantive changes. The original edition remains available
-with its original source and PDF in the
-[1.0.0 release](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.0.0).
+assumptions and the substantive changes. Earlier editions retain their original
+source and PDF in the [1.0.0 release](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.0.0)
+and [1.1.0 release](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.1.0).
 
 ## Package contents
 
 | Files | Purpose |
 | --- | --- |
 | `paper.tex`, `sections-*.tex`, `references.bib` | Complete editable manuscript, vector diagrams, and bibliography |
-| `construct_case.py`, `check_construct_case.py`, `test_construct_case.py`, `construct_protocol.json` | Finite constructor, separate artifact/partition/cash checker, focused tests and declared inputs |
-| `evidence/construct_results.json` | Constructed encoders/decoders, witnesses, controls, exhaustive counts and economic paths |
+| `construct_case.py`, `check_construct_case.py`, `test_construct_case.py`, `construct_protocol.json` | Finite constructor, separate artifact/partition/cash/retention checker, focused tests and declared inputs |
+| `evidence/construct_results.json` | Encoders/decoders, witnesses, controls, exhaustive counts, cash paths and retention decisions |
 | `study.py`, `check_study.py`, `test_study.py`, `protocol.json` | Exact computation, separate branch enumeration, focused tests, and specification |
 | `evidence/results.json`, `results.csv`, `results_table.tex` | Compact evidence and the table consumed by the manuscript |
 | `build.py` | Clean temporary-directory pdfLaTeX/BibTeX build without shell escape |
@@ -144,7 +173,8 @@ python3 -m unittest -v test_construct_case test_study
 
 Neither checker imports its producer. The construction checker evaluates raw
 inequalities, checks emitted encoders and decoders, enumerates set partitions
-using a different procedure, and simulates the cash paths. The review checker
+using a different procedure, simulates the cash paths, and enumerates retention
+decisions under arrival, availability and permitted actions. The review checker
 enumerates the logical event branches instead of importing the utility formula.
 This is independence of implementation, not external scientific replication,
 an independently sampled empirical dataset, or a controlled multi-model trial.
@@ -164,7 +194,7 @@ To rebuild the paper:
 python3 build.py --output /tmp/surf-rebuilt.pdf
 ```
 
-The build fixes `SOURCE_DATE_EPOCH=1793836800` (5 November 2026, 00:00 UTC),
+The build fixes `SOURCE_DATE_EPOCH=1793923200` (6 November 2026, 00:00 UTC),
 suppresses variable PDF metadata, disables shell escape, and resolves the
 bibliography and references. It reports the output digest and any overfull
 boxes, and rejects missing characters or undefined references.
@@ -235,6 +265,10 @@ new manuscript build, review, and identity manifest; packaging does not rewrite
 the recorded hashes to make a mismatch pass. Historical papers and their
 evidence retain their own identities and scope.
 
+The distinct [constructive-challenge companion](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/surf-constructive-challenge)
+presents a separate capacity-composition study. Its results and test counts are
+not those of this edition.
+
 ## Cite this edition
 
 ```bibtex
@@ -245,7 +279,7 @@ evidence retain their own identities and scope.
   institution = {MONTREAL.AI and QUEBEC.AI},
   year        = {2026},
   month       = nov,
-  number      = {Research edition 1.1.0},
-  url         = {https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.1.0}
+  number      = {Research edition 1.2.0},
+  url         = {https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.2.0}
 }
 ```

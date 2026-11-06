@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Independently check the authored construction and refundable-cash case.
+"""Independently check construction, refund funding and retention options.
 
 This file never imports the producer. It checks task answers directly from the
 source states, enumerates set partitions as blocks rather than restricted-growth
 strings, validates distinguishing witnesses, and simulates complete cash paths.
+The retention comparison enumerates arrival, availability and permitted actions
+instead of importing or evaluating the producer's closed-form policy equations.
 Independence means a separate implementation, not external scientific replication.
 """
 
@@ -280,12 +282,120 @@ def finance_expectations(spec: dict) -> dict:
     }
 
 
+def read_option_rational(value: object, name: str) -> Fraction:
+    ensure(isinstance(value, str), f"Retention parameter {name} must be an exact rational string")
+    try:
+        return Fraction(value)
+    except (ValueError, ZeroDivisionError) as exc:
+        raise ValueError(f"Malformed retention parameter {name}") from exc
+
+
+def enumerate_retention_scenario(spec: dict, scenario: dict) -> dict:
+    """Select a policy now, then maximize allowed actions in each later branch."""
+    parameters = {**spec["common_parameters"], "p": scenario["p"], "r": scenario["r"]}
+    same(sorted(parameters), sorted(("p", "q", "v", "c", "a", "r", "resource_allowance")),
+         "Retention parameter set differs")
+    values = {name: read_option_rational(value, name) for name, value in parameters.items()}
+    ensure(all(values[name] >= 0 for name in values), "Negative retention parameter")
+    ensure(values["p"] <= 1 and values["q"] <= 1, "Retention probability exceeds one")
+    deferred = scenario["deferred_access_available"]
+    ensure(type(deferred) is bool, "Deferred-access permission must be Boolean")
+    # Availability is conditional on arrival. There is no independent source
+    # signal in the no-opportunity branch, and the source state is never an input
+    # to the policy or its choice of acquisition action.
+    branches = (
+        (False, False, 1 - values["p"]),
+        (True, False, values["p"] * (1 - values["q"])),
+        (True, True, values["p"] * values["q"]),
+    )
+    ensure(sum(probability for _, _, probability in branches) == 1, "Retention branches do not conserve probability")
+    policies = ["ordinary_access", "retain_sufficient", "secure_access"]
+    if deferred:
+        policies.append("deferred_access")
+    initial_outlays = {"ordinary_access": Fraction(0), "retain_sufficient": values["c"],
+                      "secure_access": values["a"], "deferred_access": Fraction(0)}
+    expected_values = {}
+    cost_bounds = {}
+    for policy in policies:
+        initial = initial_outlays[policy]
+        expected = -initial
+        largest_total_outlay = initial
+        for arrived, ordinary_available, probability in branches:
+            # An action is (accepted decision benefit, incremental future outlay).
+            actions = [(Fraction(0), Fraction(0))]  # Decline; no promised delivery.
+            if arrived:
+                if policy == "retain_sufficient":
+                    actions.append((values["v"], Fraction(0)))
+                elif policy == "secure_access":
+                    actions.append((values["v"], values["r"]))
+                else:
+                    if ordinary_available:
+                        actions.append((values["v"], values["r"]))
+                    if policy == "deferred_access":
+                        actions.append((values["v"], values["a"] + values["r"]))
+            for _, outlay in actions:
+                largest_total_outlay = max(largest_total_outlay, initial + outlay)
+            # Costs must be fundable before any accepted benefit. This deliberately
+            # checks all declared full routes, not merely expected or chosen costs.
+            ensure(all(initial + outlay <= values["resource_allowance"] for _, outlay in actions),
+                   f"Retention allowance does not fund {policy}'s complete route")
+            expected += probability * max(benefit - outlay for benefit, outlay in actions)
+        expected_values[policy] = expected
+        cost_bounds[policy] = largest_total_outlay
+    best_value = max(expected_values.values())
+    return {
+        "id": scenario["id"], "parameters": parameters, "deferred_access_available": deferred,
+        "policy_values": {name: str(value) for name, value in expected_values.items()},
+        "best_policies": [name for name, value in expected_values.items() if value == best_value],
+        "best_value": str(best_value),
+        "policy_cost_bounds": {name: str(value) for name, value in cost_bounds.items()},
+        "required_resource_allowance": str(max(cost_bounds.values())),
+        "all_policy_costs_funded": all(value <= values["resource_allowance"] for value in cost_bounds.values()),
+    }
+
+
+def retention_expectations(spec: dict) -> dict:
+    same(spec["status"], "authored_one_period_optional_opportunity", "Retention scope changed")
+    source = spec["gap_witness"]
+    same(source["compact_representation"], "maximum", "Unexpected compact representation")
+    left, right = source["left_source"], source["right_source"]
+    ensure(left != right, "The retention witness must contain different source states")
+    ensure(all(type(value) is int and value in (60, 80, 100) for state in (left, right) for value in state),
+           "Retention source state outside the declared finite domain")
+    ensure(len(left) == len(right) == 2, "Retention source trace must contain two readings")
+    low, high = source["future_interval"]
+    ensure(low <= high, "Reversed retention interval")
+    left_label, right_label = sorted(left)[-1], sorted(right)[-1]
+    left_answer = not any(reading < low or reading > high for reading in left)
+    right_answer = not any(reading < low or reading > high for reading in right)
+    ensure(left_label == right_label, "The compact record already distinguishes the retention witnesses")
+    ensure(left_answer != right_answer, "The future task does not require the missing distinction")
+    ensure(len(spec["primary_scenarios"]) == 3, "Expected three primary retention scenarios")
+    ensure(all(row["deferred_access_available"] is False for row in spec["primary_scenarios"]),
+           "A primary case silently permits after-expiry purchase")
+    ensure(spec["switch_witness"]["deferred_access_available"] is False,
+           "Switch witness silently changes preservation timing")
+    ensure(spec["deferred_control"]["deferred_access_available"] is True,
+           "The changed-timing control must permit deferred access")
+    return {
+        "assumptions": spec,
+        "gap_witness": {
+            "left_source": left, "right_source": right, "future_interval": source["future_interval"],
+            "compact_label_left": left_label, "compact_label_right": right_label,
+            "left_answer": left_answer, "right_answer": right_answer,
+        },
+        "primary_scenarios": [enumerate_retention_scenario(spec, scenario) for scenario in spec["primary_scenarios"]],
+        "switch_witness": enumerate_retention_scenario(spec, spec["switch_witness"]),
+        "deferred_control": enumerate_retention_scenario(spec, spec["deferred_control"]),
+    }
+
+
 def check_publication(evidence: Path | None = None, protocol_path: Path | None = None) -> dict:
     evidence = Path(evidence) if evidence is not None else ROOT / "evidence"
     protocol_path = Path(protocol_path) if protocol_path is not None else ROOT / "construct_protocol.json"
     protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
     observed = json.loads((evidence / "construct_results.json").read_text(encoding="utf-8"))
-    same(protocol["schema_version"], "1.0.0", "Unsupported protocol schema")
+    same(protocol["schema_version"], "1.1.0", "Unsupported protocol schema")
     same(protocol["case_id"], "task-relative-construction-and-refundable-cash", "Unexpected case")
     same(protocol["status"], "authored_finite_demonstration", "Case status changed")
     same(protocol["domain"], {"reading_values": [60, 80, 100], "readings_per_state": 2,
@@ -296,7 +406,7 @@ def check_publication(evidence: Path | None = None, protocol_path: Path | None =
                                  "intervals": [[60, 60], [60, 80], [60, 100], [80, 80], [80, 100], [100, 100]]},
          "Successor task contract changed")
     same(sorted(observed), sorted(("schema_version", "case_id", "source_sha256", "scope", "states", "primary",
-                                  "successor", "representations", "partition_enumeration", "finance")),
+                                  "successor", "representations", "partition_enumeration", "finance", "retention_option")),
          "Unexpected top-level result fields")
     same(observed["schema_version"], protocol["schema_version"], "Output schema changed")
     same(observed["case_id"], protocol["case_id"], "Output case identifier changed")
@@ -341,6 +451,10 @@ def check_publication(evidence: Path | None = None, protocol_path: Path | None =
     same(observed["finance"], expected_finance, "Participation, cash, probability or sensitivity result differs")
     same(expected_finance["all_declared_advance_paths"]["minimum_opening_cash"], 90, "Full-refund requirement must remain 90")
     same(expected_finance["probability_analysis"]["operator_nonnegative_at_or_above"], "3/4", "Conditional participation boundary changed")
+    expected_retention = retention_expectations(protocol["retention_option"])
+    same(observed["retention_option"], expected_retention, "Retention timing, action, value, witness or funding result differs")
+    retention_cases = [*expected_retention["primary_scenarios"], expected_retention["switch_witness"],
+                       expected_retention["deferred_control"]]
     return {
         "status": "PASS", "source_states_checked": len(states),
         "primary_state_query_checks": sum(len(row) for row in answers["primary"]),
@@ -350,6 +464,8 @@ def check_publication(evidence: Path | None = None, protocol_path: Path | None =
         "representations_checked": len(keys), "cash_paths_checked": len(expected_finance["cash_paths"]),
         "complete_advance_outcome_paths_checked": len(expected_finance["all_declared_advance_paths"]["path_ids"]),
         "construction_costs_checked": expected_finance["sweep"]["point_count"], "source_files_bound": len(SOURCE_NAMES),
+        "retention_scenarios_checked": len(retention_cases),
+        "retention_policy_outcomes_checked": sum(len(row["policy_values"]) for row in retention_cases),
         "scope": "Separate exhaustive finite implementation; no measured model, market, consent, or discovery advantage.",
     }
 

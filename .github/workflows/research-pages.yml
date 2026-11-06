@@ -6,6 +6,7 @@ on:
       - 'scripts/build_research_site.py'
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
+      - 'tests/test_surf_reader.cjs'
       - '.github/workflows/research-pages.yml'
   push:
     branches: [main]
@@ -14,6 +15,7 @@ on:
       - 'scripts/build_research_site.py'
       - 'tests/test_research_site.py'
       - 'tests/test_alpha_site.cjs'
+      - 'tests/test_surf_reader.cjs'
       - '.github/workflows/research-pages.yml'
   workflow_dispatch:
 permissions:
@@ -37,11 +39,12 @@ jobs:
             scripts/build_research_site.py
             tests/test_research_site.py
             tests/test_alpha_site.cjs
+            tests/test_surf_reader.cjs
           sparse-checkout-cone-mode: false
       - name: Validate original PDFs, links and publication boundary
         run: python3 -m unittest discover -s tests -p 'test_research_site.py' -v
-      - name: Check exact dispatch, acceptance and financial distinctions
-        run: node --test tests/test_alpha_site.cjs
+      - name: Check interactive research calculations and decisions
+        run: node --test tests/test_alpha_site.cjs tests/test_surf_reader.cjs
       - name: Reproduce OUT-ACCELERATE exact worked example
         run: |
           python3 docs/research/out-accelerate/acceleration_witness.py --output-dir "$RUNNER_TEMP/out-accelerate-replay"
