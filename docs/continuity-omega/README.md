@@ -1,5 +1,11 @@
 # CONTINUITY Ω — Keep the promise, prove the recovery
 
+**English** · [Français](README.fr.md) · [Research paper, edition 1.1.0](../continuity-omega-paper/README.md)
+
+## Qualification note: the historical v0.1 source
+
+The paper's reproduction is pinned to commit [`a755d0375693465f8f31c0c919cc186eae74bbcc`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/a755d0375693465f8f31c0c919cc186eae74bbcc/continuity_omega). Its **29 authored implementation tests pass**, but a separate five-probe examination reproduces one nominal positive control, acceptance of Boolean-valued money, an uncaught exception for malformed structure, an `inspect` view that returns the saved passport without a fresh audit after evidence is changed, and a coherently rewritten input accepted after its editable digest is recomputed. The last case illustrates the already disclosed source-authenticity boundary. These observations are evidence of weaknesses and a trust limit, **not qualification of the checker, real recovery or customer delivery**. The separately owned PR 279 hardening candidate is not integrated or qualified by this publication. See the [complete evidence guide](../continuity-omega-paper/EVIDENCE.md) and [recorded counterexamples](../continuity-omega-paper/evidence/COUNTEREXAMPLES.json). Commands below exercise the checked-out code; reproducing these historical observations requires the paper's pinned-source procedure.
+
 **The real product:** a business-continuity rehearsal that shows whether a defined customer promise can still be honored when normal IT is unavailable, and tests the missing means that could make an alternative fulfillment arrangement economically workable.
 
 **This released prototype:** an entirely offline, source-bound **SYNTHETIC** order-handoff drill. It is not a production security product, not a penetration test, not a functioning multi-supplier reservation system, and not a certification. Its arithmetic is exact within declared inputs, while its supplier permissions, source history and demand are authored. It does not touch real customer data, infrastructure, contracts, or money.
@@ -12,7 +18,7 @@ Initial buyer hypothesis: **operations director of a 5–50-person regional B2B 
 
 The obvious first test asks: *Does the restored application start?* The stronger test asks: **What customer commitments did the restoration miss?** The next change is structural: *Why must the original business's systems be fully restored before an already accepted order can be fulfilled?*
 
-The prototype constructs a portable fallback handoff from a separately sealed pre-disruption event history, not from the potentially incomplete restored snapshot. Its independent code checker reconstructs the obligations again, checks supplier availability and cost consistency, and rejects falsified output.
+The prototype constructs a portable fallback handoff from a separately sealed pre-disruption event history, not from the potentially incomplete restored snapshot. Its separately implemented checker reconstructs the obligations again, checks the implemented supplier-availability and cost constraints, and rejects the falsifications covered by those checks. The historical source has the weaknesses documented above.
 
 ## Run in one minute (Python 3.10+; no packages, network or API keys)
 
@@ -42,7 +48,7 @@ The authored source accepts 1,000 units of `LBL-100`, 800 of `LBL-200`, and 600 
 
 A simulated printer has 3,200 units of capacity but 1,100 already reserved, leaving 2,100 under a conservative overlapping-interval rule; a competing supplier has 1,800 and is insufficient. The handoff chooses the capable simulated printer, whose quoted lead time is 22 hours against a frozen 48-hour limit. The modeled complete cost is USD 5,050, proposed price USD 5,700, hypothetical buyer budget USD 5,800 and modeled contribution USD 650. **No purchase, acceptance, capacity reservation, real delivery, or revenue has occurred.**
 
-The independently reimplemented checker challenges all fields with a fresh source replay rather than calling the producer. It cannot independently establish the origin of the source, actual supplier truth, entitlement, legal rights, physical output, or buyer acceptance. Its "independence" is **separate code paths under shared research authorship**, never external certification.
+The separately implemented checker replays the declared source and checks the constraints covered by its code without calling the producer. It does not reject every invalid input; see the qualification note above. It cannot independently establish the origin of the source, actual supplier truth, entitlement, legal rights, physical output, or buyer acceptance. Its "independence" is **separate code paths under shared research authorship**, never external certification.
 
 ## Limits that matter
 
@@ -69,3 +75,4 @@ Neither standard certifies this product. Existing managed recovery, backup-resto
 A successfully tested, legally reusable handoff representation could support another product family or an independent manufacturer. The next campaign must **freeze fresh acceptance criteria first**, build the new adapter, verify it, include full acquisition/transfer costs, and compare against a competent team using the same source, tools and permissions. Success on a later task alone is not evidence that the earlier retained method caused it.
 
 **Research state:** local executable synthetic prototype. **Market state:** not established. **Independent third-party assurance:** not established. **Authorized next action:** recruit one willing customer/backup provider for an explicitly permissioned, non-destructive drill; never activate an external action from these synthetic flags.
+

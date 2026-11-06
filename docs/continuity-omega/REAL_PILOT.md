@@ -1,5 +1,11 @@
 # CONTINUITY Ω — First paid-pilot acceptance contract (proposed; no real approvals)
 
+**English** · [Français](REAL_PILOT.fr.md) · [Research paper, edition 1.1.0](../continuity-omega-paper/README.md)
+
+## Qualification note: the historical v0.1 source
+
+The paper's reproduction is pinned to commit [`a755d0375693465f8f31c0c919cc186eae74bbcc`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/a755d0375693465f8f31c0c919cc186eae74bbcc/continuity_omega). Its **29 authored implementation tests pass**, but a separate five-probe examination reproduces one nominal positive control, acceptance of Boolean-valued money, an uncaught exception for malformed structure, an `inspect` view that returns the saved passport without a fresh audit after evidence is changed, and a coherently rewritten input accepted after its editable digest is recomputed. The last case illustrates the already disclosed source-authenticity boundary. These observations are evidence of weaknesses and a trust limit, **not qualification of the checker, real recovery or customer delivery**. The separately owned PR 279 hardening candidate is not integrated or qualified by this publication. See the [complete evidence guide](../continuity-omega-paper/EVIDENCE.md) and [recorded counterexamples](../continuity-omega-paper/evidence/COUNTEREXAMPLES.json). Commands below exercise the checked-out code; reproducing these historical observations requires the paper's pinned-source procedure.
+
 ## The one falsifiable business claim
 
 **Can a trusted, auditable business-commitment handoff make a scoped fallback fulfillment promise cheaper or more reliable than the strongest already available solution, and attractive enough that a real business accepts and pays at a price covering its complete cost?** A conventional winner or no-buy decision is a valid answer. Discovery of a missed recovery obligation is not by itself commercial success.
@@ -51,3 +57,4 @@ The current prototype has reached **only the first row**.
 ### Next opportunity—not yet an achieved product
 
 If a paid drill demonstrates the handoff, test whether a network of backup producers can offer verified continuity slots for companies that cannot afford dedicated second sites. The missing means might be interoperable customer-commitment semantics, authenticated shared reservations, a capacity/priority contract, or a verification and reconciliation layer. Each must be built, negotiated and independently checked. A supplier already selling an equivalent offer at lower complete cost wins.
+

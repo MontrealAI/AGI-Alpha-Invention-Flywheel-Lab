@@ -14,6 +14,16 @@ The intended loop connects three capabilities: **see the frontier**, **construct
 
 The programme builds on [Transformational Intelligence: Learning to Change the Game](docs/research/transformational-intelligence.html) as its conceptual foundation and [AGI ALPHA: A Scalable Substrate for Intelligence Organizations](docs/research/agi-alpha.html) as its organizational foundation. Earlier manuscripts and experiments remain available below with their original scope.
 
+## CONTINUITY Ω · Français / English
+
+**[Français — Tenir parole.](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega-fr.html)** · **[English — Keep the promise.](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega.html)**
+
+**FR — Cyberrésilience vérifiée de manière indépendante.** L’article intégral, le lecteur web, les résultats et leurs limites, les guides de reproduction et la documentation du prototype sont disponibles en français et en anglais. [PDF français](docs/research/continuity-omega-fr.pdf) · [Documentation française](docs/continuity-omega-paper/README.fr.md) · [Prototype et démarrage rapide](docs/continuity-omega/README.fr.md) · [Animations en français](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega-media-fr.html).
+
+**EN — Independently verified cyber resilience.** The complete paper, web reader, results and limitations, reproduction guides, and prototype documentation are available in French and English. [English PDF](docs/research/continuity-omega.pdf) · [English documentation](docs/continuity-omega-paper/README.md) · [Prototype and quick start](docs/continuity-omega/README.md) · [English animations](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega-media.html).
+
+[Édition bilingue / Bilingual edition 1.1.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.0). Résultats synthétiques; qualification opérationnelle et commerciale à établir. / Synthetic evidence; operational and commercial qualification remain to be established.
+
 **Research edition 1.2 · 6 November 2026: [🌊 SURF THE EXPONENTIAL — The Missing Move](docs/research/surf-the-exponential.pdf).** *Find what the answer missed. Build what the world is missing.* Connect Transformational Intelligence, ALPHA GENESIS FLYWHEEL Ω, and Invent the Economy through verified criticism and construction. **What should survive the answer?** The revised paper shows how cheaper reconstruction can change the best retained asset, and lets you explore the decision interactively. It preserves the exact construction, successor, refund counterexample and adverse review cases. [Read and explore](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.html) · [Editable LaTeX and evidence](docs/surf-the-exponential/) · [Versioned publication](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.2.0). Authored conditional results; measured frontier-model and commercial evaluation remain prospective.
 
 **New paper · 3 November 2026: [FLYWHEEL Ω — The Economy as an Output](docs/research/flywheel-omega.pdf).** *The next breakthrough may be the game that makes it possible.* Construct productive means and the choices they enable together, then connect actual delivery and collections to useful successors. The exact authored witness makes the same nine units of work reachable with five units upfront, with capable conventional controls. [Read in your browser](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/flywheel-omega.html) · [LaTeX, proofs and reproducible study](docs/flywheel-omega/) · [Versioned publication](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/flywheel-omega-v1.0.0).
@@ -109,5 +119,6 @@ The exact former 250 MiB `archive_v2.py` is preserved under
 those original bytes against its unchanged hash; current cap qualification does
 not relabel altered current source as a historical reproduction. This transport
 repair changes no commercial policy, seed, cost, financial method or verdict.
+
 
 

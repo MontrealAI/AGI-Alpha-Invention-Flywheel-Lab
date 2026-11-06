@@ -21,6 +21,10 @@ import unicodedata
 
 ROOT = Path(__file__).resolve().parent
 CANONICAL_PDF = "CONTINUITY_OMEGA.pdf"
+LANGUAGE_FILES = {
+    "en": ("CONTINUITY_OMEGA.pdf", "CONTINUITY_OMEGA.tex"),
+    "fr": ("CONTINUITY_OMEGA_FR.pdf", "CONTINUITY_OMEGA_FR.tex"),
+}
 SOURCE_COMMITS = {
     "pr277": "84c4288b4726a17a90f8462d1d6faf8b5f8f00b5",
     "pr278": "a755d0375693465f8f31c0c919cc186eae74bbcc",
@@ -64,7 +68,7 @@ def excluded(relative):
 
 
 def check_manifest(manifest):
-    require(manifest.get("edition") == "1.0.0", "Expected publication edition 1.0.0")
+    require(manifest.get("edition") == "1.1.0", "Expected bilingual publication edition 1.1.0 / édition bilingue attendue: 1.1.0")
     pages = manifest.get("pages")
     require(type(pages) is int and pages > 0, "Manifest pages must be a positive integer")
     files = manifest.get("files")
@@ -72,6 +76,9 @@ def check_manifest(manifest):
     required = {
         CANONICAL_PDF, "CONTINUITY_OMEGA.tex", "verify.py", "pooling_example.py",
         "evidence/REPRODUCTION.json", "evidence/POOLING.json",
+        "CONTINUITY_OMEGA_FR.pdf", "CONTINUITY_OMEGA_FR.tex", "check_translations.py",
+        "README.fr.md", "REVIEW.fr.md", "SOURCE_MAP.fr.md", "CLAIMS.fr.json", "TRANSLATION.md",
+        "EVIDENCE.md", "EVIDENCE.fr.md", "CITATION.fr.cff",
     }
     require(required <= files.keys(), f"Manifest omits required files: {sorted(required - files.keys())}")
     for relative, expected in files.items():
@@ -105,7 +112,18 @@ def check_manifest(manifest):
         manifest.get("pdf_sha256") == files[CANONICAL_PDF],
         "Manifest pdf_sha256 does not match its canonical PDF file entry",
     )
-    return len(files), pages
+    languages = manifest.get("languages")
+    require(isinstance(languages, dict) and set(languages) == set(LANGUAGE_FILES), "Expected complete en/fr language inventory")
+    for language, (pdf_name, source_name) in LANGUAGE_FILES.items():
+        entry = languages[language]
+        require(isinstance(entry, dict), f"Missing language metadata: {language}")
+        require(entry.get("pdf") == pdf_name and entry.get("source") == source_name, f"Wrong language filenames: {language}")
+        require(type(entry.get("pages")) is int and entry["pages"] > 0, f"Invalid page count: {language}")
+        require(entry.get("pdf_sha256") == files[pdf_name], f"Language PDF hash differs: {language}")
+        require(type(entry.get("pdf_bytes")) is int and entry["pdf_bytes"] == (ROOT / pdf_name).stat().st_size, f"Language PDF size differs: {language}")
+    require(manifest["pages"] == languages["en"]["pages"] and manifest["pdf_sha256"] == languages["en"]["pdf_sha256"]
+            and manifest["pdf_bytes"] == languages["en"]["pdf_bytes"], "English compatibility metadata differs")
+    return len(files), languages
 
 
 def run_tool(program, arguments):
@@ -122,8 +140,8 @@ def run_tool(program, arguments):
     return result.stdout
 
 
-def check_pdf_pages(expected_pages):
-    info = run_tool("pdfinfo", [str(ROOT / CANONICAL_PDF)])
+def check_pdf_pages(pdf_name, expected_pages):
+    info = run_tool("pdfinfo", [str(ROOT / pdf_name)])
     match = re.search(r"^Pages:\s+(\d+)\s*$", info, re.MULTILINE)
     require(match is not None, "pdfinfo did not report the canonical PDF page count")
     require(int(match.group(1)) == expected_pages, "Canonical PDF page count differs from the manifest")
@@ -196,8 +214,8 @@ def check_pooling(record):
     )
 
 
-def check_tex_references():
-    source = (ROOT / "CONTINUITY_OMEGA.tex").read_text(encoding="utf-8")
+def check_tex_references(source_name):
+    source = (ROOT / source_name).read_text(encoding="utf-8")
     citations = {
         key.strip()
         for group in re.findall(r"\\cite(?:\[[^\]]*\])*\{([^}]+)\}", source)
@@ -210,11 +228,11 @@ def check_tex_references():
     require(references <= labels, f"Undefined local reference keys: {sorted(references - labels)}")
 
 
-def check_build_text():
-    rebuilt = ROOT / "build" / CANONICAL_PDF
+def check_build_text(pdf_name):
+    rebuilt = ROOT / "build" / pdf_name
     require(rebuilt.is_file(), "Rebuilt PDF is missing; run python3 build.py first")
     texts = []
-    for pdf in (ROOT / CANONICAL_PDF, rebuilt):
+    for pdf in (ROOT / pdf_name, rebuilt):
         text = run_tool("pdftotext", ["-layout", "-enc", "UTF-8", str(pdf), "-"])
         require(bool(text.strip()), f"No manuscript text extracted from {pdf}")
         texts.append(" ".join(unicodedata.normalize("NFKC", text).split()))
@@ -223,21 +241,26 @@ def check_build_text():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check-build", action="store_true", help="Compare extracted text with build/CONTINUITY_OMEGA.pdf; do not require identical PDF bytes")
+    parser.add_argument("--check-build", action="store_true", help="Compare rebuilt text for both languages / comparer le texte des deux PDF reconstruits")
     args = parser.parse_args()
-    count, pages = check_manifest(read_object(ROOT / "PUBLICATION.json"))
-    check_pdf_pages(pages)
+    count, languages = check_manifest(read_object(ROOT / "PUBLICATION.json"))
     check_reproduction(read_object(ROOT / "evidence" / "REPRODUCTION.json"))
     check_pooling(read_object(ROOT / "evidence" / "POOLING.json"))
-    check_tex_references()
-    if args.check_build:
-        check_build_text()
-    print(f"Publication consistency passed: edition 1.0.0, {pages} PDF pages, {count} file hashes.")
+    for language, (pdf_name, source_name) in LANGUAGE_FILES.items():
+        check_pdf_pages(pdf_name, languages[language]["pages"])
+        check_tex_references(source_name)
+        if args.check_build:
+            check_build_text(pdf_name)
+    from check_translations import check as check_translations
+    parity = check_translations(ROOT)
+    print(f"Publication consistency passed / cohérence vérifiée: edition 1.1.0, EN {languages['en']['pages']} pages, FR {languages['fr']['pages']} pages, {count} file hashes / empreintes.")
+    print("Structural language parity / parité structurelle:", json.dumps(parity, sort_keys=True))
     print("Recorded evidence agrees: 29 + 9 implementation tests; four-case conventional tie; 12 supplied CLI cases (3 passes, 9 refusals).")
     print("Authored pooling arithmetic matches its record; local citation and reference keys resolve.")
     if args.check_build:
         print("Rebuilt and canonical PDF text agree after Unicode/whitespace normalization.")
     print("These are local consistency checks, not a source-prototype rerun, an external truth check, operational certification, or evidence of real commerce.")
+    print("Ces contrôles établissent la cohérence locale, sans certifier la vérité externe, la résilience opérationnelle ou une activité commerciale réelle.")
 
 
 if __name__ == "__main__":

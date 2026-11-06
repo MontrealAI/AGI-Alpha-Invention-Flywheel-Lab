@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "title": "CONTINUITY Ω : registre des affirmations et des éléments probants",
+  "edition": "1.1.0",
+  "reviewed_on": "2026-11-06",
+  "scope": "Architecture de recherche, analyse conditionnelle et deux reproductions synthétiques à partir de révisions figées. Ce registre ne confère aucune autorité opérationnelle et ne certifie aucune entreprise.",
+  "status_definitions": {
+    "formal-conditional": "Conclusion mathématique ou issue d’un modèle sous les hypothèses indiquées ; comprend les calculs de simulations historiques explicitement identifiés, et non des échanges commerciaux observés.",
+    "reproduced-synthetic": "Observé lors de la présente exécution d’un code figé sur des entrées construites pour l’étude ; il ne s’agit ni d’un résultat de terrain ni d’une mesure de performance de modèles.",
+    "proposed": "Spécification, exigence de conception ou expérience prospective dans l’attente des éléments probants indiqués.",
+    "not-established": "Les éléments actuels n’établissent pas la capacité ou le résultat nommé ; cela ne prouve pas son impossibilité."
+  },
+  "sources": {
+    "manuscript": "CONTINUITY_OMEGA.tex",
+    "reproduction": "evidence/REPRODUCTION.json",
+    "handoff": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/a755d0375693465f8f31c0c919cc186eae74bbcc/continuity_omega",
+    "handoff_tests": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/a755d0375693465f8f31c0c919cc186eae74bbcc/tests/test_continuity_omega.py",
+    "recovery": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/84c4288b4726a17a90f8462d1d6faf8b5f8f00b5/campaign/continuity_omega_20261106",
+    "recovery_tests": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/84c4288b4726a17a90f8462d1d6faf8b5f8f00b5/tests/test_connected_continuity_omega.py",
+    "pilot_specification": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/a755d0375693465f8f31c0c919cc186eae74bbcc/docs/continuity-omega/REAL_PILOT.md",
+    "historical_genesis": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/607c18854db04dc3aa4adf242a4e3d1d9c629880/campaign/genesis_commitment001/RESULTS.md",
+    "correlated_errors": "https://doi.org/10.48550/arXiv.2506.07962",
+    "counterexamples": "evidence/COUNTEREXAMPLES.json",
+    "hardening_review": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/6cd7e1bb7197cabdf8f3d093eead662cde5351f4/docs/continuity-omega/HARDENING.md"
+  },
+  "claims": [
+    {
+      "id": "F01",
+      "text": "Des évaluateurs limités à des éléments disponibles identiques ne peuvent pas distinguer parfaitement deux historiques dans lesquels une affirmation importante a des valeurs de vérité différentes.",
+      "status": "formal-conditional",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Proposition de la section sur les éléments manquants ; des entrées identiques impliquent des sorties ou des distributions de sorties identiques.",
+      "limits": "S’applique au périmètre d’observation indiqué. De nouvelles observations authentifiées ou un changement admissible de voie peuvent modifier le problème. Il ne s’agit pas d’un nouveau théorème général sur l’intelligence."
+    },
+    {
+      "id": "F02",
+      "text": "Si toutes les voies autorisées respectant le délai exigent le même prérequis indisponible, des fournisseurs nominalement différents ne peuvent pas satisfaire l’engagement sans solution de remplacement qualifiée ou rétablissement dans les délais.",
+      "status": "formal-conditional",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Proposition relative au prérequis commun.",
+      "limits": "Résultat conditionnel à l’identification correcte du prérequis et de l’ensemble des voies ; il ne prouve pas l’absence d’une solution admissible encore inconnue."
+    },
+    {
+      "id": "F03",
+      "text": "La demande totale activée, augmentée des engagements antérieurs protégés, doit respecter la capacité utilisable pour chaque scénario, ressource et intervalle de temps déclarés.",
+      "status": "formal-conditional",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Inégalité de capacité, équation portant l’étiquette eq:capacity.",
+      "limits": "Condition nécessaire, mais non suffisante : l’ordonnancement, la préparation, les matériaux, le personnel, la qualité, les permissions et le transport doivent encore être validés. Elle ne réserve aucune capacité réelle."
+    },
+    {
+      "id": "F04",
+      "text": "Dans le regroupement indiqué d’acheteurs identiques, une contribution non négative et le respect de la capacité simultanée peuvent coexister si et seulement si ceil(K/(B-c)) <= floor(C/q).",
+      "status": "formal-conditional",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Proposition de mutualisation et démonstration, équation portant l’étiquette eq:pool.",
+      "limits": "Suppose K > 0, q > 0, B > c, que tous les acheteurs peuvent activer leur engagement ensemble, que p = B est admissible, que le nombre entier d’acheteurs retenu correspond à des acheteurs disponibles et volontaires, et que tous les coûts de la période sont inclus. Le calendrier de trésorerie et la faisabilité opérationnelle complète restent distincts. Une contribution positive exige n(B-c) > K."
+    },
+    {
+      "id": "F05",
+      "text": "Avec K=900, c=100, B=400, C=2000 et q=750, les conditions économiques exigent au moins trois acheteurs, alors que la capacité en autorise au plus deux ; aucun regroupement réalisable n’existe dans ce modèle.",
+      "status": "formal-conditional",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Illustration de mutualisation construite pour l’étude : n_min=3, n_max=2 ; deux acheteurs donnent une contribution de -300 unités monétaires hypothétiques ; trois atteignent l’équilibre, mais exigent 2250 unités de capacité.",
+      "limits": "Unités monétaires et de capacité hypothétiques ; il ne s’agit ni de prix observés, ni de production observée, ni d’un marché observé. Toute modification des coûts, de la capacité ou des conditions du service exige une nouvelle évaluation de l’arrangement."
+    },
+    {
+      "id": "R01",
+      "text": "Les 29 tests de la suite de transfert de la PR 278, dans sa révision figée, ont tous réussi.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "handoff_tests",
+        "reproduction"
+      ],
+      "evidence": "Commit a755d0375693465f8f31c0c919cc186eae74bbcc ; reproduction.tests.pr278 : 29 réussites, 0 échec.",
+      "limits": "Vérifications d’implémentation sur des cas construits, et non 29 clients, incidents ou essais indépendants de modèles. L’ancienne description de 23 tests ne désigne pas la suite exécutée ici."
+    },
+    {
+      "id": "R02",
+      "text": "Les 9 tests de la suite de reprise de la PR 277, dans sa révision figée, ont tous réussi.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "recovery_tests",
+        "reproduction"
+      ],
+      "evidence": "Commit 84c4288b4726a17a90f8462d1d6faf8b5f8f00b5 ; reproduction.tests.pr277 : 9 réussites, 0 échec.",
+      "limits": "Suite distincte de celle de la PR 278. Additionner les nombres de tests ne crée ni un échantillon statistique ni une évaluation empirique de l’IA."
+    },
+    {
+      "id": "R03",
+      "text": "Le scénario synthétique de transfert reconstruit deux engagements en attente totalisant 1900 unités et détecte trois divergences dans l’instantané restauré.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "handoff",
+        "reproduction"
+      ],
+      "evidence": "L’historique fourni met en évidence une quantité périmée, une commande acceptée manquante et une commande annulée qui réapparaît ; reproduction.pr278 consigne les quantités et les constats.",
+      "limits": "Ces quantités correspondent à des obligations synthétiques, et non à des unités fabriquées ou livrées. La réussite de la vérification du transfert ne corrige pas l’instantané restauré d’origine et n’authentifie pas l’historique fourni."
+    },
+    {
+      "id": "R04",
+      "text": "Les 12 cas documentés du transfert en ligne de commande ont tous produit le résultat attendu : 3 validations synthétiques du transfert et 9 refus avant transfert ; la vérification des fichiers du cas nominal a également réussi.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "handoff",
+        "reproduction"
+      ],
+      "evidence": "Cas validés : nominal, missing_from_restored, extra_restored. Le compte rendu de reproduction consigne neuf cas rejetés et PASS_SYNTHETIC_ONLY pour la vérification du cas nominal en ligne de commande.",
+      "limits": "La validation concerne le transfert reconstruit sous les contraintes du scénario, et non la réussite d’une reprise de production. Des refus corrects ne sont pas des livraisons acceptées ; le nombre de cas ne mesure pas la fréquence des incidents."
+    },
+    {
+      "id": "R05",
+      "text": "Un comparateur classique compétent de rapprochement des données obtient les mêmes décisions que le candidat de reprise sur les quatre cas construits : [PASS, FAIL, FAIL, FAIL].",
+      "status": "reproduced-synthetic",
+      "source": [
+        "recovery",
+        "reproduction"
+      ],
+      "evidence": "reproduction.pr277.candidate_verdicts et competent_comparator_verdicts valent tous deux [true, false, false, false].",
+      "limits": "Cette égalité empêche de conclure à une supériorité à partir de ces cas. Les échecs d’un contrôle limité au bon fonctionnement apparent ne démontrent aucun avantage sur un rapprochement classique compétent. Cela ne prouve pas une équivalence universelle."
+    },
+    {
+      "id": "R06",
+      "text": "Le scénario synthétique de transfert donne une contribution modélisée de 650 $ US : un devis de 5700 $ US moins 5050 $ US de coûts fournis.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "handoff",
+        "reproduction"
+      ],
+      "evidence": "reproduction.pr278 consigne modeled_offer_usd=5700, modeled_cost_usd=5050 et modeled_contribution_usd=650.",
+      "limits": "Calcul construit pour l’étude, et non recettes encaissées ou profit réalisé. Les coûts réels d’acquisition, d’implémentation, de modèle, d’hébergement, de vérification, de responsabilités et les autres coûts restent à mesurer ; les libellés du scénario ne démontrent pas une comptabilisation complète des coûts réels."
+    },
+    {
+      "id": "H01",
+      "text": "Le scénario central historique et distinct GENESIS Commitment 001 rapporte un refus de l’acheteur et une perte modélisée de 1080 $ US.",
+      "status": "formal-conditional",
+      "source": [
+        "historical_genesis",
+        "manuscript"
+      ],
+      "evidence": "Simulation historique construite pour l’étude, citée à la révision 607c18854db04dc3aa4adf242a4e3d1d9c629880 ; cette édition conserve le résultat négatif rapporté.",
+      "limits": "Il ne s’agit ni d’une nouvelle reproduction de cette campagne, ni d’une perte commerciale réelle, ni d’une composante du scénario actuel de transfert à 650 $ US. Les comptes, scénarios et résultats ne sont ni regroupés, ni réinitialisés, ni rebaptisés."
+    },
+    {
+      "id": "P01",
+      "text": "Le premier service proposé est un exercice de continuité autorisé pour un imprimeur régional d’étiquettes d’emballage interentreprises (B2B), avec un produit approuvé et un fournisseur de repli qualifié.",
+      "status": "proposed",
+      "source": [
+        "pilot_specification",
+        "manuscript"
+      ],
+      "evidence": "L’acheteur envisagé est le directeur ou la directrice des opérations ; il faut obtenir l’autorisation commerciale du propriétaire ou de la direction générale, l’acceptation du client et la participation du fournisseur.",
+      "limits": "Les travaux exécutables démontrent actuellement un rapprochement synthétique hors ligne et des vérifications sur des contraintes fournies. Ils n’établissent ni un service opérationnel, ni des permissions réelles, ni une réservation fournisseur, ni une exécution physique."
+    },
+    {
+      "id": "P02",
+      "text": "La livraison de 20000 unités acceptées au plus dans un délai de 48 heures ouvrées convenues est une cible proposée de pilote qui reste à qualifier.",
+      "status": "proposed",
+      "source": [
+        "pilot_specification",
+        "manuscript"
+      ],
+      "evidence": "Le contrat d’acceptation proposé exige que le fournisseur réel justifie la capacité et le délai spécifiés ; l’activation, le calendrier, le fuseau horaire et l’acceptation doivent faire l’objet d’un accord.",
+      "limits": "L’historique synthétique de 1900 unités et le délai stipulé de 22 heures ne prouvent pas la faisabilité physique de cette cible. Les heures ouvrées ne correspondent pas automatiquement aux heures effectivement écoulées."
+    },
+    {
+      "id": "P03",
+      "text": "L’indépendance de la vérification devrait être explicitée selon le comportement des modèles, l’acquisition des sources, l’implémentation du vérificateur, le contrôle de l’exécution, l’autorité d’acceptation et les incitations commerciales.",
+      "status": "proposed",
+      "source": [
+        "manuscript",
+        "correlated_errors"
+      ],
+      "evidence": "La section consacrée au Passeport nomme ces dimensions ; la recherche sur les erreurs des modèles justifie la prudence lorsqu’on assimile la diversité des fournisseurs à des éléments probants indépendants.",
+      "limits": "Des tâches distinctes et des codes de vérification séparés peuvent partager des hypothèses et des omissions dans leurs sources. Les revues du manuscrit ont eu lieu au sein d’un même processus d’assistance, et non dans le cadre d’une certification institutionnelle indépendante ou d’une comparaison entre deux modèles de pointe."
+    },
+    {
+      "id": "P04",
+      "text": "Un Passeport de continuité devrait préciser l’engagement soumis à l’exercice, le périmètre des éléments probants, la voie utilisée, les observations, les relations entre les parties chargées de vérifier, l’état commercial et les conditions d’invalidation, avec un verdict propre à chaque étape.",
+      "status": "proposed",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Les verdicts spécifiés sont DEMONSTRATED, FAILED et NOT ESTABLISHED pour l’étape et les conditions concernées.",
+      "limits": "Un résultat de rapprochement des données ne peut pas être promu en acceptation d’une livraison physique. Le Passeport n’est ni une assurance, ni une accréditation, ni un certificat universel de sécurité."
+    },
+    {
+      "id": "P05",
+      "text": "L’hypothèse commerciale est qu’un acheteur cible accepte et finance l’offre complète qualifiée de réservation et d’activation à un prix couvrant tous ses coûts, malgré l’existence d’une autre solution complète crédible.",
+      "status": "proposed",
+      "source": [
+        "pilot_specification",
+        "manuscript"
+      ],
+      "evidence": "L’expérience prospective compare des solutions complètes compétentes disposant d’éléments probants, de permissions, de ressources et de critères d’acceptation équivalents.",
+      "limits": "Un entretien ou le paiement d’une préparation ne teste que cette étape. L’acceptation de l’offre complète, l’exécution réelle, les recettes encaissées et le rapprochement des obligations sont des observations distinctes ; un seul acheteur ne peut pas établir l’existence d’un marché répétable."
+    },
+    {
+      "id": "N01",
+      "text": "Un avantage des modèles de pointe en matière de découverte, ou une supériorité obtenue par l’emploi de deux modèles, n’est pas établi.",
+      "status": "not-established",
+      "source": [
+        "manuscript",
+        "reproduction"
+      ],
+      "evidence": "Les prototypes reproduits n’effectuent aucun appel à une API de modèle et ne comportent aucune évaluation comparative entre modèles ; le comparateur classique obtient les mêmes décisions sur les quatre cas de reprise.",
+      "limits": "Exige une comparaison prospective des constats importants supplémentaires, des fausses objections, des abstentions, des coûts complets et des résultats de construction, face à des solutions compétentes disposant de ressources comparables."
+    },
+    {
+      "id": "N02",
+      "text": "L’exhaustivité authentifiée des données réelles, une reprise opérationnelle sûre, une capacité réellement réservée et une fabrication de remplacement acceptée ne sont pas établies.",
+      "status": "not-established",
+      "source": [
+        "manuscript",
+        "reproduction"
+      ],
+      "evidence": "Les entrées, capacités, approbations et délais proviennent de scénarios fournis. La publication ne réalise aucune cyberattaque réelle, remise en service d’usine, réservation fournisseur ou livraison physique.",
+      "limits": "Les empreintes ne prouvent pas l’exhaustivité des sources. La garde réelle des éléments probants, les permissions, la sûreté de la reprise, les communications, l’ensemble des réservations et l’acceptation finale exigent des preuves distinctes. Une réussite sur un cas soumis à un exercice resterait limitée à ses conditions."
+    },
+    {
+      "id": "N03",
+      "text": "Des recettes clients réelles, un profit réalisé durable et un marché répétable de la continuité ne sont pas établis.",
+      "status": "not-established",
+      "source": [
+        "manuscript",
+        "reproduction"
+      ],
+      "evidence": "Aucun paiement client ni aucune acceptation commerciale externe n’a eu lieu lors de ces reproductions ; les 650 $ US représentent une contribution modélisée dans un scénario construit pour l’étude.",
+      "limits": "Exige une participation réelle et volontaire, une livraison, des recettes encaissées, ainsi qu’une comptabilisation complète des coûts du cycle de vie et des obligations. Un profit attendu, un devis et des promesses de financement ne sont pas un excédent acquis disponible à la dépense."
+    },
+    {
+      "id": "N04",
+      "text": "Le financement d’une occasion suivante par les excédents gagnés, un avantage causal dû à une capacité conservée et l’amélioration du dispositif de découverte ne sont pas établis.",
+      "status": "not-established",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "La section consacrée au cycle de développement spécifie des tests futurs proposés ; aucun nouveau résultat accepté pour une occasion suivante et aucune campagne comparative de découverte ne sont rapportés.",
+      "limits": "Être financé par les excédents gagnés, être rendu possible par une capacité conservée et survenir plus tard sont des propriétés distinctes. Un deuxième acheteur de la même offre teste la répétabilité ; une nouvelle occasion rendue possible exige une catégorie d’obligations ou un processus de travail réellement différent, ainsi que des comparaisons solides à contenu équivalent et ressources comparables."
+    },
+    {
+      "id": "R09",
+      "text": "Cinq sondes distinctes appliquées à la source de transfert figée et inchangée conservent un témoin positif, reproduisent trois faiblesses du vérificateur ou de l’inspection et démontrent une limite de confiance dans la source déjà déclarée.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "handoff",
+        "counterexamples",
+        "hardening_review"
+      ],
+      "evidence": "Une offre monétaire booléenne réussit la vérification dans un scénario à coût nul ajusté de façon cohérente ; une entrée mal formée au niveau supérieur provoque AttributeError ; inspect retourne un ancien Passeport indiquant un état de préparation après modification du transfert alors qu’une nouvelle exécution de verify échoue ; un scénario cohérent de 2000 unités associé à une nouvelle empreinte réussit ; le témoin positif nominal réussit.",
+      "limits": "Contre-exemples ciblés, et non estimation d’un taux d’échec, nouvelle évaluation de modèles ou qualification de la correction ultérieure proposée. La réussite des 29 tests d’origine ne démontre pas que ces cas sont traités de manière sûre."
+    }
+  ],
+  "language": "fr"
+}
