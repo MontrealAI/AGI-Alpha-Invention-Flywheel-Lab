@@ -67,6 +67,8 @@ jobs:
           PYTHONOPTIMIZE=1 python -O -m unittest discover -s tests -p 'test_connected_commitment_*.py' -v
       - name: Reproduce preserved original defects on disposable fresh accounts
         run: python tests/fixtures/genesis_commitment001_failures/reproduce.py --source "$PWD"
+      - name: Challenge public receipts with fresh coherent and adverse mutations
+        run: python tests/fixtures/genesis_commitment001_failures/challenge_public_receipts.py --source "$PWD" --output "$RUNNER_TEMP/commitment-public-receipt-challenge"
       - name: Execute every registered case and both complete conventional routes
         shell: bash
         run: |

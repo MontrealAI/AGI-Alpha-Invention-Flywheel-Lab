@@ -11,6 +11,7 @@ Use Python 3.12 and a local POSIX filesystem. From the exact source root:
 ```sh
 python -m pip install -r requirements-commercial010.txt
 python -m unittest campaign.genesis_commitment001.test_delivery campaign.genesis_commitment001.test_native -v
+python -m unittest discover -s tests -p 'test_connected_commitment_*.py' -v
 python -m campaign.genesis_commitment001.runner run --output /absolute/new/commitment-central --scenario central --arm retained
 python -m campaign.genesis_commitment001.runner audit --output /absolute/new/commitment-central
 python -m campaign.genesis_commitment001.runner resume --output /absolute/new/commitment-central --scenario central --arm retained
@@ -19,7 +20,7 @@ python -m campaign.genesis_commitment001.runner package --output /absolute/new/c
 
 Run all `scenarios` and `arms` declared in [PROTOCOL.json](PROTOCOL.json), using a new output directory for each independently funded counterfactual. Never combine their profits or reseed a continuing account. `direct` receives the same information, ordinary reuse and acceptance; it is a strong conventional implementation, not a measured human productivity study.
 
-After extracting the public package, audit from its `source/` directory using the extracted package root as `--output`. The public package has no private recovery authority. Keep the complete original operating directory privately if continuation is needed. Resume must use the original frozen source and identity; changing source is a new experiment, never permission to rewrite past accounts.
+After extracting the public package, audit from its `source/` directory using the extracted package root as `--output`. The public package has no private recovery authority. Keep the complete original operating directory privately if continuation is needed. After an abrupt exit before the first operating checkpoint, resume is allowed only for authenticated empty history under the native writer lease. Any operation or pending intent requires the original checkpoint. Resume must use the original frozen source and identity; changing source is a new experiment, never permission to rewrite past accounts.
 
 ## Evidence boundaries
 

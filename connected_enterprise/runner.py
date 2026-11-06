@@ -134,6 +134,8 @@ def source_paths(root):
             'tests/fixtures/genesis_commitment001_failures/README.md',
             'tests/fixtures/genesis_commitment001_failures/reproduce.py',
             'tests/fixtures/genesis_commitment001_failures/RESULT.json',
+            'tests/fixtures/genesis_commitment001_failures/challenge_public_receipts.py',
+            'tests/fixtures/genesis_commitment001_failures/F03_FRESH_RESULT.json',
             '.github/workflows/genesis-commitment001.yml',
         }
         if any(not (Path(root)/name).is_file() or (Path(root)/name).is_symlink() for name in required):
