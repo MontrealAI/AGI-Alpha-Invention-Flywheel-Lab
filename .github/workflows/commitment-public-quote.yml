@@ -6,12 +6,17 @@ on:
       - 'research/commitment_quote_policy.py'
       - 'scripts/qualify_commitment_quote.py'
       - 'tests/test_commitment_quote_policy.py'
+      - 'tests/test_connected_quote_release.py'
+      - 'scripts/release_connected014.py'
+      - 'experiments/commerce006.py'
+      - 'portfolio25/pricing.py'
+      - 'requirements-commercial010.txt'
       - 'campaign/commitment-quote-20261106/**'
       - 'campaign/genesis_commitment001/**'
       - 'connected_enterprise/**'
       - 'adaptive_enterprise/**'
       - 'commercial/**'
-      - 'vendor/alpha_claim/**'
+      - 'vendor/**'
   push:
     branches: [main]
     paths:
@@ -19,12 +24,17 @@ on:
       - 'research/commitment_quote_policy.py'
       - 'scripts/qualify_commitment_quote.py'
       - 'tests/test_commitment_quote_policy.py'
+      - 'tests/test_connected_quote_release.py'
+      - 'scripts/release_connected014.py'
+      - 'experiments/commerce006.py'
+      - 'portfolio25/pricing.py'
+      - 'requirements-commercial010.txt'
       - 'campaign/commitment-quote-20261106/**'
       - 'campaign/genesis_commitment001/**'
       - 'connected_enterprise/**'
       - 'adaptive_enterprise/**'
       - 'commercial/**'
-      - 'vendor/alpha_claim/**'
+      - 'vendor/**'
 permissions:
   contents: read
 jobs:
@@ -46,7 +56,7 @@ jobs:
           python -m pip install --only-binary=:all: -r requirements-commercial010.txt
       - name: Exact-price oracle, information boundary and native acceptance
         run: |
-          python -B -m unittest tests.test_commitment_quote_policy -v
+          python -B -m unittest tests.test_commitment_quote_policy tests.test_connected_quote_release -v
           python -B scripts/qualify_commitment_quote.py run --output "$RUNNER_TEMP/quote-evidence"
           python -B scripts/qualify_commitment_quote.py audit --output "$RUNNER_TEMP/quote-evidence"
       - name: Retain key-free native records

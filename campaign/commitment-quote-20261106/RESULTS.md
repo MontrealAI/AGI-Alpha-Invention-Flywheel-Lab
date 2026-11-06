@@ -110,3 +110,11 @@ There is no actual demand/collection, 365-day operation or US$3B result. The
 existing primary loss and favorable-case result retain their original verdicts.
 Hosted qualification, adoption, merge, release and operation of downloaded
 released bytes require their own receipts.
+
+Release review also found that the initial branch's explicit distribution
+inventory omitted the new opt-in module. The follow-up adds a complete optional
+package, rejects partially omitted or symlinked members, requires the quote
+workflow for its executable dependencies, and runs the actual extracted and
+downloaded implementation. This packaging correction changes no native financial
+authority or original service source. F03 retains the separate initial YAML
+rejection and its corrected command; neither failure becomes a prior pass.

@@ -52,7 +52,16 @@ class CompactFailureTests(unittest.TestCase):
   self.assertEqual(len(operation),1)
   steps=re.split(r'(?m)^      - ',operation[0])
   uploads=[step for step in steps if re.search(r'(?m)^        uses: actions/upload-artifact@',step)]
-  self.assertEqual(len(uploads),8)
+  self.assertEqual(len(uploads),9)
+  quote=[step for step in uploads if 'name: public-quote-released-operation-' in step]
+  self.assertEqual(len(quote),1)
+  self.assertIn("        if: always() && steps.released_public_quote.outcome == 'success'\n",quote[0])
+  self.assertEqual(re.findall(r'(?m)^            (.+)$',quote[0]),[
+   '${{ runner.temp }}/released-public-quote/RESULT.json',
+   '${{ runner.temp }}/released-public-quote/AUDIT.json',
+   '${{ runner.temp }}/released-public-quote/fixed/PUBLIC.json.gz',
+   '${{ runner.temp }}/released-public-quote/ordinary/PUBLIC.json.gz',
+   '${{ runner.temp }}/released-public-quote/constructor/PUBLIC.json.gz'])
   failure=[step for step in uploads if re.search(r'(?m)^        if: failure\(\)',step)]
   self.assertEqual(len(failure),1)
   self.assertIn("        if: failure() && steps.operation.outcome != 'success' && steps.compact_failure.outcome == 'success'\n",failure[0])

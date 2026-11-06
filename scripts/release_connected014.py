@@ -28,6 +28,14 @@ PAPERS = ('PAPER.pdf', 'PAPER.tex', 'index.html', 'REPORT.md', 'PUBLICATION.json
 REQUIRED_WORKFLOWS = ('campaign.yml', 'consequential007.yml', 'consequential009.yml', 'adaptive012.yml', 'commercial010.yml')
 # Terminal measurement009 is manual-only; path changes never renew its expired allocation.
 CONDITIONAL_WORKFLOWS = {
+    'commitment-public-quote.yml': (
+        'research/commitment_quote_policy.py', 'scripts/qualify_commitment_quote.py',
+        'tests/test_commitment_quote_policy.py', 'tests/test_connected_quote_release.py',
+        'campaign/commitment-quote-20261106/', 'campaign/genesis_commitment001/',
+        'commercial/', 'connected_enterprise/', 'adaptive_enterprise/',
+        'vendor/', 'portfolio25/pricing.py', 'experiments/commerce006.py',
+        'requirements-commercial010.txt', 'scripts/release_connected014.py',
+        '.github/workflows/commitment-public-quote.yml'),
     'genesis-commitment001.yml': ('campaign/genesis_commitment001/',
                                 'tests/fixtures/genesis_commitment001_failures/',
                                 'tests/test_connected_commitment_release.py',
@@ -128,6 +136,9 @@ def archive_manifest(path):
             from scripts.qualify_omega_release import reach_source
             reach_source(manifest)
         members = set(manifest['files'])
+        from connected_enterprise.runner import QUOTE_RELEASE_PATHS
+        if members.intersection(QUOTE_RELEASE_PATHS) and not set(QUOTE_RELEASE_PATHS) <= members:
+            raise ValueError('PUBLIC_QUOTE_EXACT_RELEASE_SOURCE_CLOSURE_REQUIRED')
         if any(name.startswith('campaign/genesis_commitment001/') for name in members):
             from campaign.genesis_commitment001.service import source_paths as commitment_sources
             if not set(commitment_sources(ROOT)) <= members:
