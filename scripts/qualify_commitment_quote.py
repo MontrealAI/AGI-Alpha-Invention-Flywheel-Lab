@@ -24,6 +24,15 @@ def audit_packet(path):
         raw=stream.read(8_000_001)
     if len(raw)>8_000_000:raise ValueError('BOUNDED_ENGINEERING_PACKET_REQUIRED')
     p=strict_json(raw)
+    from tests.test_commitment_quote_policy import public_observation
+    from research.commitment_quote_policy import decide
+    from campaign.genesis_commitment001.delivery import default_requests
+    obs=public_observation()
+    if p['public_observation']!=obs:raise ValueError('FROZEN_PUBLIC_OBSERVATION_CHANGED')
+    arm=p['result']['arm']
+    if arm not in ('fixed','ordinary','constructor'):raise ValueError('REGISTERED_ARM_REQUIRED')
+    price=3_000_000_000 if arm=='fixed' else decide(obs)['price_microUSD']
+    if p['result']['price_microUSD']!=price:raise ValueError('DISPLAYED_QUOTE_CHANGED')
     with tempfile.TemporaryDirectory(prefix='quote-public-audit-') as temp:
         source=Path(temp)
         expected=set(service.source_paths(ROOT))
@@ -35,6 +44,12 @@ def audit_packet(path):
             if current.is_symlink() or hashlib.sha256(current.read_bytes()).hexdigest()!=sha:
                 raise ValueError('SOURCE_CHANGED')
             dest=source/name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(current,dest)
+        requests=default_requests()
+        requests[0]['records']=[{'account_id':'fresh-'+str(i),'name':'Synthetic '+str(i),
+                                'balance_cents':1700+i*137} for i in range(17)]
+        expected_manifest=service.prepare_manifest(source,[{'id':r['id'],'request':r,
+            'delivery_path':service.DELIVERIES+r['id']+'.json'} for r in requests])
+        if p['manifest']!=expected_manifest:raise ValueError('FROZEN_NATIVE_REQUEST_CHANGED')
         allowed={r['delivery_path'] for r in p['manifest']['jobs']}
         for name,artifact in p['delivered'].items():
             if name not in allowed or not name.startswith(service.DELIVERIES):
@@ -47,12 +62,32 @@ def audit_packet(path):
             raise ValueError('SUMMARY_NOT_NATIVE_BOUND')
         if p['native_export']['ledger']['config']['opening']!=100_000_000_000:
             raise ValueError('EXACT_DISPOSABLE_SEED_REQUIRED')
+        if p['native_export']['ledger']['config']['contract']!='public-quote-fixture-'+arm:
+            raise ValueError('ACCOUNT_ARM_BINDING_CHANGED')
         # Result booleans are a presentation, not independent authority.
         releases=[r for r in p['native_export']['ledger']['actions']
                   if r['op']=='event' and r['args']['action']=='release']
         accepted=bool(releases)
         if accepted!=p['result']['accepted'] or accepted!=p['result']['buyer_buys']:
             raise ValueError('RELEASE_PRESENTATION_CHANGED')
+        if accepted!=(arm!='fixed'):raise ValueError('FROZEN_BUYER_DECISION_CHANGED')
+        actions=p['native_export']['ledger']['actions']
+        offers=[a for a in actions if a['op']=='offer']
+        if accepted and (len(offers)!=1 or offers[0]['args']['price']!=price):
+            raise ValueError('NATIVE_QUOTE_CHANGED')
+        prior=[a['after'] for a in actions if a['day']==19]
+        before=prior[-1] if prior else None
+        if p['result']['before_successor']!=before:raise ValueError('SUCCESSOR_SNAPSHOT_CHANGED')
+        seed_possible=bool(before and before['available']>=990_000_000)
+        if p['result']['seed_can_fund_successor']!=seed_possible:
+            raise ValueError('SEED_COUNTERFACTUAL_CHANGED')
+        if p['result']['successor_budget_microUSD']!=990_000_000:
+            raise ValueError('SUCCESSOR_FULL_BUDGET_CHANGED')
+        if before and min(before['available'],before['unrestrictedEarned'])>=990_000_000:
+            raise ValueError('DEFERRAL_CLAIM_CONTRADICTED')
+        if (p['result']['actual_revenue_microUSD']!=0 or p['result']['trailing_365_profit'] is not None
+                or p['result']['scope']!='DISPOSABLE_AUTHORED_ENGINEERING_FIXTURE'):
+            raise ValueError('SIMULATION_SCOPE_CHANGED')
         if p['result']['successor_funded'] is not False or any(
             r['id']!='first' for r in p['native_export']['ledger']['orders']):
             raise ValueError('UNREGISTERED_SUCCESSOR_CLAIM')

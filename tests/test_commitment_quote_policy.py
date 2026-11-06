@@ -177,5 +177,27 @@ class NativeQuoteTests(unittest.TestCase):
             self.assertTrue(result['seed_can_fund_successor'])
         self.assertEqual(ordinary['summary'],constructed['summary'])
 
+    def test_public_replay_rejects_native_and_presentation_mutations(self):
+        from scripts.qualify_commitment_quote import audit_packet
+        with tempfile.TemporaryDirectory(prefix='quote-evidence-mutations-') as temp:
+            dest=Path(temp)/'honest';execute_native_arm('constructor',dest)
+            file=dest/'PUBLIC.json.gz'
+            self.assertTrue(audit_packet(file)['accepted'])
+            original=json.loads(gzip.decompress(file.read_bytes()))
+            mutations=[('result','price_microUSD',1),('result','arm','ordinary'),
+                       ('result','successor_budget_microUSD',1),('result','seed_can_fund_successor',False),
+                       ('result','actual_revenue_microUSD',1),('result','trailing_365_profit',1),
+                       ('result','before_successor',None),('result','successor_funded',True),
+                       ('public_observation','friction_microUSD',1)]
+            for section,key,value in mutations:
+                bad=copy.deepcopy(original);bad[section][key]=value
+                mutant=Path(temp)/'mutant.json.gz'
+                mutant.write_bytes(gzip.compress(json.dumps(bad).encode(),mtime=0))
+                with self.assertRaises(ValueError,msg=(section,key)):audit_packet(mutant)
+            bad=copy.deepcopy(original)
+            bad['native_export']['ledger']['summary']['profit']+=1
+            mutant.write_bytes(gzip.compress(json.dumps(bad).encode(),mtime=0))
+            with self.assertRaises(ValueError):audit_packet(mutant)
+
 
 if __name__=='__main__':unittest.main()
