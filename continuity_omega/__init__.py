@@ -2,4 +2,4 @@
 
 This package never touches production systems, suppliers, buyers, or money.
 """
-__version__ = '0.1.0'
+__version__ = '0.2.0'
