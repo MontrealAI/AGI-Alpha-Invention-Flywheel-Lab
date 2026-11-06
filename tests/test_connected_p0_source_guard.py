@@ -320,7 +320,9 @@ class JoinPreflightTests(unittest.TestCase):
             'production060/native-services/v1',
             'inventory061/native-services/v1',
         }
-        self.assertTrue(required <= routes, sorted(required - routes))
+        # load_registry returns a route-to-producer map; compare key sets.
+        route_names = set(routes)
+        self.assertTrue(required <= route_names, sorted(required - route_names))
 
 
 class PairedAcquisitionReleaseClosureTests(unittest.TestCase):
