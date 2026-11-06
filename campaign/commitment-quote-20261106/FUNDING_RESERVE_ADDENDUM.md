@@ -1,0 +1,9 @@
+# Known closing work must remain funded
+
+Prospective repair registration against `8b676ced70e33b2f86584c72765a7e9399735272`, before implementing or executing the repaired decision. Preserve its source, native packets, original gap and F01/F02/F03 findings.
+
+The displayed native snapshot at hour 19 has $919.992 unrestricted earnings, but the frozen operation still owes its planned $100 closing-maintenance expenditure. The $990 successor already defers. Nevertheless, describing the raw snapshot as the complete available successor budget omits a known remaining cost: the conservative available amount is $819.992 and the gap is $170.008. A hypothetical $850 successor would expose the incorrect admission of the raw-only test. This is a reporting/admission counterexample; no successor was actually funded or performed.
+
+Repair only the read-only funding decision: subtract declared known unpaid work from the smaller of native available cash and settled unrestricted earnings; floor at zero. A sufficient amount means eligible for a later atomic native reservation, never permission to spend from an old snapshot. Retain native cash, recognized profit and original event order. Unknown costs remain unknown. The seeded direct-construction affordability check must subtract the same unpaid work.
+
+Freeze new boundary cases `(available, earned, unpaid, budget)` in integer units: `(2000, 900, 120, 850)`, `(100, 80, 20, 60)`, `(100, 80, 20, 61)`, `(50, 80, 60, 1)`. Test negative, Boolean and floating inputs. Independently recompute max(0,min(available,earned)-unpaid). Bind displayed unpaid amount, available earned budget, gap and seed counterfactual in public replay. Preserve the original central native records and financial result: this is a correction to known-cost reservation, not fresh economic confirmation, primary-account continuation or a superior-invention claim.
