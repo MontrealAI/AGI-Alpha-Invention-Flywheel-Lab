@@ -1,0 +1,30 @@
+name: CONTINUITY Omega independent restoration reference review
+on:
+  pull_request:
+    paths:
+      - 'reviews/continuity-restored-obligations-20261106/**'
+      - 'tests/test_continuity_reference_oracle_review.py'
+      - '.github/workflows/continuity-reference-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Source-bound independent reference review
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          sha256sum reviews/continuity-restored-obligations-20261106/reference_oracle.py tests/test_continuity_reference_oracle_review.py
+          python3 -m py_compile reviews/continuity-restored-obligations-20261106/reference_oracle.py
+          python3 -m unittest discover -s tests -p 'test_continuity_reference_oracle_review.py' -v
+          echo "Reference oracle accepted only as SYNTHETIC research; owner PR #279 red findings and full commercial gates unchanged."
