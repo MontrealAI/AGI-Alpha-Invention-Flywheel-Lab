@@ -91,9 +91,49 @@ def make_proof(events: list[dict[str, Any]], restored: dict[str, Any], pinned_an
     }
 
 
+def ordinary_independent_reconciliation(events: list[dict[str, Any]], restored: dict[str, Any], anchor: str, duration: int, deadline: int) -> bool:
+    """Separate competent ordinary auditor: reconstruct directly, no shared replay/check_restore.
+
+    This finite comparator has the *same* event access, anchor, RTO, software
+    capability and recovery rights as the proposed portable proof. Its result
+    is computed independently rather than obtained by calling our challenger.
+    """
+    if type(events) is not list or not events or type(restored) is not dict:
+        return False
+    if type(anchor) is not str or not re.fullmatch(r"[0-9a-f]{64}", anchor):
+        return False
+    if digest(events) != anchor:
+        return False
+    if type(duration) is not int or type(deadline) is not int or not 0 <= duration <= deadline:
+        return False
+    obligations: dict[str, dict[str, Any]] = {}
+    for index, row in enumerate(events):
+        if type(row) is not dict or type(row.get("seq")) is not int or row["seq"] != index + 1:
+            return False
+        key = row.get("order")
+        action = row.get("kind")
+        if type(key) is not str or not ORDER.fullmatch(key):
+            return False
+        if action == "commit":
+            value = row.get("cents")
+            if set(row) != {"seq", "kind", "order", "cents"} or type(value) is not int or not 0 < value < 10**12 or key in obligations:
+                return False
+            obligations[key] = {"cents": value, "status": "pending"}
+        elif action in ("deliver", "refund"):
+            if set(row) != {"seq", "kind", "order"} or key not in obligations or obligations[key]["status"] != "pending":
+                return False
+            obligations[key]["status"] = "delivered" if action == "deliver" else "refunded"
+        else:
+            return False
+    return obligations == restored
+
+
 def verify_proof(proof: dict[str, Any], events: list[dict[str, Any]], restored: dict[str, Any], pinned_anchor: str, measured_seconds: int, rto_seconds: int) -> bool:
     """Reject a forged, partial, or stale proof; recompute each field."""
-    return type(proof) is dict and proof == make_proof(events, restored, pinned_anchor, measured_seconds, rto_seconds)
+    return (type(proof) is dict
+            and proof == make_proof(events, restored, pinned_anchor, measured_seconds, rto_seconds)
+            and proof["accepted"] == ordinary_independent_reconciliation(
+                events, restored, pinned_anchor, measured_seconds, rto_seconds))
 
 
 def benchmark() -> dict[str, Any]:
@@ -115,7 +155,7 @@ def benchmark() -> dict[str, Any]:
         proof = make_proof(actual_tape, recovered, anchor, duration, 120)
         # Competent ordinary route gets the identical externally retained
         # event tape, replay rules, and anchor; it is NOT a health-only straw man.
-        conventional = not check_restore(actual_tape, recovered, anchor, duration, 120)
+        conventional = ordinary_independent_reconciliation(actual_tape, recovered, anchor, duration, 120)
         # Weak health-only control disclosed, never called a competent incumbent.
         health_only = type(recovered) is dict and bool(recovered)
         rows.append({"case": name, "registered_expected": expected,
