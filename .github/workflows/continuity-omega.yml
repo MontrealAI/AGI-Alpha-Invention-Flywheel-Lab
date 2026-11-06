@@ -3,14 +3,14 @@ on:
   pull_request:
     paths:
       - 'continuity_omega/**'
-      - 'tests/test_continuity_omega.py'
+      - 'tests/test_continuity*.py'
       - 'docs/continuity-omega/**'
       - '.github/workflows/continuity-omega.yml'
   push:
     branches: [main]
     paths:
       - 'continuity_omega/**'
-      - 'tests/test_continuity_omega.py'
+      - 'tests/test_continuity*.py'
       - 'docs/continuity-omega/**'
       - '.github/workflows/continuity-omega.yml'
 permissions:
@@ -19,18 +19,25 @@ jobs:
   synthetic-drill:
     runs-on: ubuntu-24.04
     steps:
+      - name: Record platform job execution start
+        run: echo "JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-      - name: Independently replay 29 synthetic cases
-        run: python3 -m unittest discover -s tests -p 'test_continuity_omega.py' -v
-      - name: Construct and audit the nominal synthetic handoff
+      - name: Replay original and adversarial verification tests
+        run: python3 -m unittest discover -s tests -p 'test_continuity*.py' -v
+      - name: Construct and review exact pinned synthetic scenario
         run: |
           python3 -m continuity_omega demo --out "$RUNNER_TEMP/continuity-demo"
-          python3 -m continuity_omega verify --in-dir "$RUNNER_TEMP/continuity-demo"
-      - name: Negative control must reject overbooked capacity
+          python3 -m continuity_omega verify --in-dir "$RUNNER_TEMP/continuity-demo" --expected-case-sha256 65ddee00ca5fa0a64817ffcb3a052da189594d2b3988b10671772460c8293ed8
+          python3 -m continuity_omega.review --in-dir "$RUNNER_TEMP/continuity-demo" --expected-case-sha256 65ddee00ca5fa0a64817ffcb3a052da189594d2b3988b10671772460c8293ed8 --report-dir "$RUNNER_TEMP/continuity-review"
+      - name: Negative control must reject overbooked capacity specifically
+        shell: bash
         run: |
-          if python3 -m continuity_omega demo --case overbooked --out "$RUNNER_TEMP/overbooked"; then
-            echo 'An unsafe supplier promise was accepted.'
-            exit 1
-          fi
+          set +e
+          python3 -m continuity_omega demo --case overbooked --out "$RUNNER_TEMP/overbooked"
+          status=$?
+          set -e
+          test "$status" = 2
+          test -f "$RUNNER_TEMP/overbooked/REJECTION.json"
+          test ! -f "$RUNNER_TEMP/overbooked/HANDOFF.json"
