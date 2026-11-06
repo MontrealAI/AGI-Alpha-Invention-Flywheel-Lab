@@ -1,0 +1,1038 @@
+{
+  "accepted": true,
+  "active_command": null,
+  "actual_release_download": true,
+  "commands": [
+    {
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+        "-m",
+        "connected_enterprise",
+        "run",
+        "--output",
+        "/home/runner/work/_temp/downloaded-release-operation/operation"
+      ],
+      "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+      "returncode": 0,
+      "stderr": "01-run.stderr",
+      "stdout": "01-run.stdout",
+      "wall_seconds": 318.240658062
+    },
+    {
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+        "-m",
+        "connected_enterprise",
+        "resume",
+        "--output",
+        "/home/runner/work/_temp/downloaded-release-operation/operation"
+      ],
+      "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+      "returncode": 0,
+      "stderr": "02-resume.stderr",
+      "stdout": "02-resume.stdout",
+      "wall_seconds": 18.61519595499999
+    },
+    {
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+        "-m",
+        "connected_enterprise",
+        "audit",
+        "--output",
+        "/home/runner/work/_temp/downloaded-release-operation/operation"
+      ],
+      "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+      "returncode": 0,
+      "stderr": "03-audit.stderr",
+      "stdout": "03-audit.stdout",
+      "wall_seconds": 9.687547588999962
+    },
+    {
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+        "-m",
+        "connected_enterprise",
+        "package",
+        "--output",
+        "/home/runner/work/_temp/downloaded-release-operation/operation",
+        "--archive",
+        "/home/runner/work/_temp/downloaded-release-operation/.downloaded-operation-candidate.zip"
+      ],
+      "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+      "returncode": 0,
+      "stderr": "04-package-actual-operation.stderr",
+      "stdout": "04-package-actual-operation.stdout",
+      "wall_seconds": 10.389909104000026
+    },
+    {
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+        "-m",
+        "connected_enterprise",
+        "audit",
+        "--output",
+        "/home/runner/work/_temp/downloaded-release-operation/downloaded-operation-public"
+      ],
+      "cwd": "/home/runner/work/_temp/downloaded-release-operation/downloaded-operation-public/source",
+      "returncode": 0,
+      "stderr": "05-actual-operation-public-audit.stderr",
+      "stdout": "05-actual-operation-public-audit.stdout",
+      "wall_seconds": 9.686321927999984
+    },
+    {
+      "command": [
+        "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+        "-m",
+        "connected_enterprise",
+        "audit",
+        "--output",
+        "/home/runner/work/_temp/downloaded-release-operation/published-keyfree"
+      ],
+      "cwd": "/home/runner/work/_temp/downloaded-release-operation/published-keyfree/source",
+      "returncode": 0,
+      "stderr": "06-released-public-audit.stderr",
+      "stdout": "06-released-public-audit.stdout",
+      "wall_seconds": 2.3191835190000347
+    }
+  ],
+  "completed_resume_financially_unchanged": true,
+  "downloaded_operation_package": {
+    "bytes": 9448170,
+    "path": "downloaded-operation-keyfree.zip",
+    "scope": "ACTUAL_DOWNLOADED_IMPLEMENTATION_RUN_KEY_FREE_AUDIT_AND_REPRODUCTION_NOT_ACCOUNT_TAKEOVER",
+    "sha256": "86755c7c0cb30858d734678b60276fad82b7c10d52b9ed9b4a41d06f0c6d44b1"
+  },
+  "downloaded_operation_public_audit": {
+    "accepted": true,
+    "resource_cpu_metadata": "Command resource observations retained, not independently reproduced timing measurements",
+    "schema": "agi-alpha/connected014-package-audit/v1",
+    "scope": "NATIVE_FINANCE_AND_OPERATING_SEMANTICS_WITH_ARTIFACT_REEXECUTION_AND_REPORT_REDERIVATION",
+    "service_cohort": {
+      "registered_jobs_rederived": 104
+    },
+    "simulation_keys_required": false,
+    "source_sha256": "af27e5bbb7bfc0fb500321f38ece0f6dc34193927742a0dd90ea175e23efe320",
+    "worlds": 8
+  },
+  "native_and_operating_audit": {
+    "accepted": true,
+    "resource_cpu_metadata": "Command resource observations retained, not independently reproduced timing measurements",
+    "schema": "agi-alpha/connected014-package-audit/v1",
+    "scope": "NATIVE_FINANCE_AND_OPERATING_SEMANTICS_WITH_ARTIFACT_REEXECUTION_AND_REPORT_REDERIVATION",
+    "service_cohort": {
+      "registered_jobs_rederived": 104
+    },
+    "simulation_keys_required": false,
+    "source_sha256": "af27e5bbb7bfc0fb500321f38ece0f6dc34193927742a0dd90ea175e23efe320",
+    "worlds": 8
+  },
+  "omega_v4_engineering_qualification": {
+    "accepted": true,
+    "actual_release_download": true,
+    "actual_revenue_usd": 0,
+    "commands": [
+      {
+        "command": [
+          "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+          "-c",
+          "from mechanism_harness.cart_native import source_identity; import json; print(json.dumps(source_identity(),sort_keys=True))"
+        ],
+        "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+        "returncode": 0,
+        "stage": "source-identity",
+        "stderr": "01-source-identity.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout": "01-source-identity.stdout",
+        "stdout_sha256": "51fb8fa9199f3f5f4ff4bbafcdefd2ea37dd9da935ff398e499fca0fe3d6da4e",
+        "wall_seconds": 0.7157339880000109
+      },
+      {
+        "command": [
+          "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+          "-m",
+          "mechanism_harness.cart_native",
+          "run",
+          "--arm",
+          "adaptive",
+          "--stress",
+          "central",
+          "--output",
+          "/home/runner/work/_temp/released-omega-v4/engineering-account"
+        ],
+        "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+        "returncode": 0,
+        "stage": "run",
+        "stderr": "02-run.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout": "02-run.stdout",
+        "stdout_sha256": "6dd5cc5742cc7ca8ff4e80b9e4aca3469eed4f0cdc1801fafbbc13160f290739",
+        "wall_seconds": 82.00117917799997
+      },
+      {
+        "command": [
+          "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+          "-m",
+          "mechanism_harness.cart_native",
+          "audit",
+          "--arm",
+          "adaptive",
+          "--stress",
+          "central",
+          "--output",
+          "/home/runner/work/_temp/released-omega-v4/engineering-account"
+        ],
+        "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+        "returncode": 0,
+        "stage": "audit",
+        "stderr": "03-audit.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout": "03-audit.stdout",
+        "stdout_sha256": "6e291061bf8e59298a4c97bd8de446ee81629eba08b277ef170ed167d5996ef7",
+        "wall_seconds": 10.336992541999962
+      },
+      {
+        "command": [
+          "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+          "-m",
+          "mechanism_harness.cart_native",
+          "resume",
+          "--arm",
+          "adaptive",
+          "--stress",
+          "central",
+          "--output",
+          "/home/runner/work/_temp/released-omega-v4/engineering-account"
+        ],
+        "cwd": "/home/runner/work/_temp/downloaded-release-operation/source",
+        "returncode": 0,
+        "stage": "resume",
+        "stderr": "04-resume.stderr",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout": "04-resume.stdout",
+        "stdout_sha256": "9a779c00cc177adecdea42d00603e3d11d334525ab915b63b84cf46fe6c29f78",
+        "wall_seconds": 13.094447095000078
+      }
+    ],
+    "completed_resume_authority_unchanged": true,
+    "completed_resume_export_unchanged": true,
+    "declined_buyers": 8,
+    "download_receipt_sha256": "0327fb02d59c5d90f72b5328044366c670e7e90d617fd611c0c7764483b6a070",
+    "mode": "SEPARATE_ENGINEERING_REPRODUCTION",
+    "native_audit_accepted": true,
+    "native_export_sha256": "1c22de3d963c8ead1c1de4c1dc62d6581bffe7ed99a2738fe0e78dbb60f1ba4f",
+    "native_source": {
+      "adaptive_enterprise/account.py": "c675fb699a662a1492004c2423f2cee5c5735726d4b226289584df95cfcaa235",
+      "adaptive_enterprise/allocation.py": "61a207557b08f34d627e4304ae56fdb2614ed6338458dbe258317abe4c5b0e90",
+      "adaptive_enterprise/bundles.py": "2b524e65ffdc2aec9eaf1755f3031c9e3a3c6b5dd07e611dd2a842845fba41ba",
+      "adaptive_enterprise/checkers.py": "fe6bb58f94afafdc67a2c47a9dccedd42749dd653e885b4dabad82c9f74e913b",
+      "adaptive_enterprise/instruments.py": "86404ba03d1c3c242e743dbdadbf66cbc9b6c8019b304eb180b8fe87c5bd144e",
+      "adaptive_enterprise/strategic_game.py": "efcaede01460ec4cc74be2249ab20168a010f532a2cb564e94a56b1a19ef2a27",
+      "adaptive_enterprise/strategies.py": "3ede6135723317cb8ace20f92b5e365d03b56c5a32a97a88b3d18572170def28",
+      "campaign/omega-economy-v4/COOPERATIVE_PROTOCOL.md": "f798f38b4e2b8ed64893626fff4a88ee9b2af0d5a74075f8a78e2c1dd676d975",
+      "campaign/omega-economy-v4/PROTOCOL.md": "e6efa4bc0776a261b8cd37c6b155cfe978c41ed6c50e187ad3a57beeac4a12c0",
+      "campaign/omega-economy-v4/REPAIR_PROTOCOL.md": "21fe34b2e42c9efa479ca261706d48cade02abf73edacafbdc5b28f482522685",
+      "campaign/omega-economy-v4/SUCCESSOR_PROTOCOL.md": "8580617df53efcb213e0fed3b7ad377e7147eee4990465182fdc9bafad77f156",
+      "campaign/omega-inventor/PROTOCOL_V4.md": "c47d2cf556c1c9eda183f72d7c7212ec3516bd16d2dc6c0f98564b9dc10867f7",
+      "commercial/ledger.py": "978b69f210de19302beb702c89ac2b6aa54d12ceb83520df5f36a83da384c7e6",
+      "commercial/native_engine.py": "e5ca8f6a57672a07fd283eb7f8980c1d6cb35edb2719994561eb2c3431478223",
+      "commercial/persistence.py": "78c1eb1d82471843e32dd290ac3ea1b5b253d4edc1448cc954b5fafa5d6e0e15",
+      "commercial/service.py": "1604d20f5d9f54997eeceb971bc19af9a0c76cdcaf79ba74b9bbd80112c9c9a3",
+      "commercial/service_verifier.py": "ac79f1aa80fb5c2928827f08417a720cd041977df70e808860bc3dd4f5d61368",
+      "commercial/single_writer.py": "0d34de2e32dd2ad47b43c32edd4ccac01196c2858db7a32c7b7d2217ec2cf984",
+      "commercial/tape_lease.py": "854ad7c0341a94fbfcc0ed3f450ab9116bbaf9666e4f6d5f118397a19f7f575c",
+      "commercial/terms.py": "5ade1ed96b540663ee0826cf66686ce5bf2a571187e273bcf6106963f2a42eb9",
+      "commercial/terms_exact_v2.py": "1effcefceca21356642be0db14b7f3a381f887b816c45f050ef2293503162478",
+      "connected_enterprise/capacity_menu.py": "cadee3a9362e2c404a6df21cee8a0a72e6680a260a3b0d23b6fa73ed295b55e2",
+      "connected_enterprise/capacity_signal.py": "8888542cb3e40b547c1e86e8a189a805fec28544f6571eb5abb25dc776a4644f",
+      "connected_enterprise/capital_lifecycle.py": "9c71481317846d439cc3eb94b4dc8644bca111433863ad82d062d6ed64a63be2",
+      "connected_enterprise/channel_menu.py": "8b0b4dad25ce851cfb23ae794d836728dd5a9738a8b3906be054f3c1fc7d9152",
+      "connected_enterprise/complete_offer_audit.py": "5af359d50c9cf5aa47bb70e7161d2546ce27830e65b78f425a3e93bd9dc273eb",
+      "connected_enterprise/complete_offer_market.py": "8f9125a6b829513ecb46046bab0f14322df0e20aa235369d8a53d5c3476890e2",
+      "connected_enterprise/engine.py": "346795b4d24b07b54c0b3552f374816c5f6af817e19b5a24a54b5e827b7e68a5",
+      "connected_enterprise/finance.py": "83085c409a1b6e05d9d31958b7a24d2c9a713ce51f1b7bd0c8a37eefd2bc3721",
+      "connected_enterprise/joint_planning.py": "a4d2df11d4b5214f823c4df8c60cf3c9e33455ec33dded835ffe633806ad7d03",
+      "connected_enterprise/mechanism_choice.py": "debd395980f06d72c1769ed2df1e2d1222e6ef083fa8b01399b50fa62e85d096",
+      "connected_enterprise/packet_contract.py": "df1541c868f164d55211a271f9f3e6e0cf43ce7f90719204db9ccbb0a102034e",
+      "connected_enterprise/receivables_packet.py": "3ca953b999b93bb7571afe33d04ee79fd1b944c8a79b9605eccc0bcf48bc20f2",
+      "connected_enterprise/receivables_packet_verify.py": "d5bca0970e3b5540e526e118cbd510f0b8b15c8a69cc4c30b94fcc04070e0db9",
+      "connected_enterprise/refusal_recourse.py": "b8b32ac9689ca0fa6466641955126e45fe60f0a872f752ce9ac84918e9938a8e",
+      "connected_enterprise/scale.py": "76644008b5a2fa25f4b44e42c0154e70ff7113cfb046f0eba5f7ed4fbaf9eebe",
+      "connected_enterprise/sequence_channels.py": "3d387723caa5b1a0463276f7e59db7b20f754785d8b78a3e7e62323b63874f21",
+      "connected_enterprise/sequence_planning.py": "b6d14036c00fe59d820bab44c75b973198c8545ea2ff51aa66786a5ef7b93eef",
+      "connected_enterprise/sequence_window.py": "f84298402a8bf2401418698fea92a500852d5280db67c21dacdbda774d64f485",
+      "connected_enterprise/startup_acquisition048.py": "3a31418520353b2acf77e4910a681249ea27bc877908d037f44d674073f479eb",
+      "connected_enterprise/strategic_audit.py": "e21244667a6e774d0f14575fcb762c99d18d07d6c92853b8067c174a48813af1",
+      "connected_enterprise/strategic_commerce.py": "88e34b6dc575a98caee9dd4ae988ceb202851648506907756e5343b582ef53d5",
+      "connected_enterprise/verify.py": "9fc576ffb0d9abdde44672e81d4fbc9a66a81fbb84674ca0090d6f7ce6e55541",
+      "enterprise/checkers.py": "8685c3c9876815db2f2f5de6ba5954529f88cd7d4f95d7c1fa9aedc438cc0981",
+      "enterprise/services.py": "f3ff23509899180235436bffb8b7396092ff9ae881f622a386ba932ebaa045bc",
+      "experiments/commerce006.py": "2fc529131885c75752dab8dbd77d85b5a36d4c0b43cb5e7e53286c997cc0a52f",
+      "mechanism_harness/cart_campaign.py": "706e113d53ff6fe14b5fdd5cdca3d330427457df0a8b026b6bd5173952f761bb",
+      "mechanism_harness/cart_decision.py": "c681f5f490e04e538be956118d3c9e638c0e54b4dec3474752ccdfcdc1f34925",
+      "mechanism_harness/cart_native.py": "15d96c9aaaed5cb28d720d6a5c3c270eb2722cc55261309a416e0fdef6d52ff1",
+      "mechanism_harness/cart_program.py": "96a715a5529e47acdc3f9d518c16c31823043f7660ec710c28198c9c02ac4b8c",
+      "mechanism_harness/cart_synthesis.py": "bbb6d33af6f729d6782ca360726b3ce82a802bdbd2b6374d4789487f0df0a9c6",
+      "mechanism_harness/cooperative_construction.py": "888434e5dcc10314c4fc6d2f387930959e7d950ccc086da651a4697e80d4a89b",
+      "mechanism_harness/inventor.py": "a60b0a6152286bf56bda6591e389b119ea51020666e122ad5c35dc9ba3fd6207",
+      "mechanism_harness/inventor_native.py": "5b99c2d0665d3ba78876e8b47f2fd4440968f0c76cc2663fa577e3a9e3c77128",
+      "mechanism_harness/market_cases.py": "a05861196f0a0c62c836e26b59e0d5592b656783b1a6f0a437d9fa9b374743af",
+      "mechanism_harness/market_program.py": "a770083489c419758d827170ac3cb14993fb70b9c6c36798aef0bbe304e63e1f",
+      "mechanism_harness/mechanism_synthesis.py": "a3faa1cdd02e55644b4ef1acb53d7f93d970c54c90d9b19adcbae72d7f264c16",
+      "portfolio25/pricing.py": "b0a359619a02b6dcadd2af20b5683e4d84cb585841359b653579610ff1da568c",
+      "vendor/alpha_claim/contracts.py": "3536b96c4b7ee46f9af7d807e02685aa55e42daae7f7c56b7e9029ca2cde0964",
+      "vendor/alpha_claim/protected_exchange.py": "7b72c911d99a9aa12dc1f412d3b66f69ba58f3d4f2f50291310a7fd849df5272",
+      "vendor/alpha_claim/protected_exchange_exact_v2.py": "04a790f7982bd9ac0569f4da0bd37910b623d4c7c6210cbce80d7fd5aeac92dd",
+      "vendor/alpha_claim/protected_exchange_prospective_exact_v2.py": "4ddf6e0ba78b7405f658dba8632e3a1304ac2f940b978e5315a454f43a911b30",
+      "vendor/alpha_claim/protected_exchange_prospective_v1.py": "cc23e6f064302b38750caa3d755345cb6318b524d3bbdc0f9b86e6f6a4be7565"
+    },
+    "native_source_sha256": "e3061f37dd5c51e6f72c269b1236f0bc0323e39d760156d8ecda09b3076452e3",
+    "no_git_execution": true,
+    "opportunities": 27,
+    "paid_reach": {
+      "accepted": true,
+      "actual_release_download": true,
+      "arm": "pilot",
+      "commands": [
+        {
+          "command": [
+            "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+            "-c",
+            "from mechanism_harness.reach_native import source_identity; import json; print(json.dumps(source_identity(),sort_keys=True))"
+          ],
+          "returncode": 0,
+          "stage": "source-identity",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout_sha256": "ad3db5350fe2ec08fe74ca6d17fe429e7c688f1b7f5826d572c34074e49f40f1"
+        },
+        {
+          "command": [
+            "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+            "-m",
+            "mechanism_harness.reach_native",
+            "run",
+            "/home/runner/work/_temp/released-omega-v4/paid-reach/engineering-account",
+            "--arm",
+            "pilot",
+            "--scenario",
+            "central"
+          ],
+          "returncode": 0,
+          "stage": "run",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout_sha256": "926048a57d951598abd0f58580ceabe8a7612a20680cbfabe490a55956cadfe9"
+        },
+        {
+          "command": [
+            "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+            "-m",
+            "mechanism_harness.reach_native",
+            "audit",
+            "/home/runner/work/_temp/released-omega-v4/paid-reach/engineering-account"
+          ],
+          "returncode": 0,
+          "stage": "audit",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout_sha256": "e5bdb9b651b2fbb5934c4fcefb175c5d2f5ed52966f482bf8c39325cc530966c"
+        },
+        {
+          "command": [
+            "/opt/hostedtoolcache/Python/3.12.16/x64/bin/python",
+            "-m",
+            "mechanism_harness.reach_native",
+            "resume",
+            "/home/runner/work/_temp/released-omega-v4/paid-reach/engineering-account"
+          ],
+          "returncode": 0,
+          "stage": "resume",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout_sha256": "926048a57d951598abd0f58580ceabe8a7612a20680cbfabe490a55956cadfe9"
+        }
+      ],
+      "completed_resume_authority_unchanged": true,
+      "completed_resume_export_unchanged": true,
+      "download_receipt_sha256": "0327fb02d59c5d90f72b5328044366c670e7e90d617fd611c0c7764483b6a070",
+      "native_audit_accepted": true,
+      "native_export_sha256": "464cb234e468c74acb0d6092f2aba956799e134f7a9f83919eebbe9dd3f6ef9c",
+      "native_source_sha256": "40e2e5214f4ab0983903f3d3d33b7ab6aafb0ddf751e85d89830a01e62442061",
+      "primary": false,
+      "scenario": "central",
+      "schema": "omega/packaged-paid-reach-qualification/v1",
+      "source_archive_sha256": "084af62bfd4384b75d02dcbf23f18168e5599f573c630e1adf276777b9697bd9",
+      "source_commit": "67f04da69d034156b525f2c4ffeae07d74601345",
+      "source_sha256": "af27e5bbb7bfc0fb500321f38ece0f6dc34193927742a0dd90ea175e23efe320"
+    },
+    "primary": false,
+    "runtime": {
+      "dependencies": {
+        "cffi": "2.1.1",
+        "cryptography": "50.0.2",
+        "numpy": "2.3.5",
+        "pycparser": "3.11",
+        "scipy": "1.17.0"
+      },
+      "installation": "Exact available pins checked; no dependency installation performed by this command.",
+      "python": "3.12.16 (main, Oct 26 2026, 02:50:49) [GCC 13.3.0]"
+    },
+    "runtime_budget": {
+      "clock_source": "github-job-first-step",
+      "elapsed_job_seconds": 402.1870756149292,
+      "platform_limit_seconds": 21600,
+      "receipt_reserve_seconds": 300,
+      "requested_timeout_seconds": null,
+      "scope": "Engineering execution window only; not a business-scale or profit ceiling.",
+      "timeout_seconds": 20897
+    },
+    "schema": "omega/packaged-v4-qualification/v1",
+    "scope": "Sealed-source V4 engineering reproduction in a separate simulated account; original primary unchanged. No new demand, profit confirmation or release publication.",
+    "settled_buyers": 19,
+    "source_archive_sha256": "084af62bfd4384b75d02dcbf23f18168e5599f573c630e1adf276777b9697bd9",
+    "source_commit": "67f04da69d034156b525f2c4ffeae07d74601345",
+    "source_files_unchanged": true,
+    "source_sha256": "af27e5bbb7bfc0fb500321f38ece0f6dc34193927742a0dd90ea175e23efe320",
+    "wall_seconds": 604.947873392
+  },
+  "operating_report": {
+    "actual_commerce": {
+      "collections": 0,
+      "customers": 0,
+      "profit": null
+    },
+    "all_independent_audits_passed": true,
+    "central": {
+      "cash_survival_fraction": 1.0,
+      "commercial_successes": 2,
+      "fraction": 1.0,
+      "maximum_paid_jobs": 39,
+      "maximum_profit": 804394816,
+      "minimum_paid_jobs": 36,
+      "minimum_profit": 699912828,
+      "runs": 2
+    },
+    "comparisons": {
+      "pairs": [
+        {
+          "baseline_arm": "baseline",
+          "baseline_obligation_covered": true,
+          "candidate_arm": "growth",
+          "candidate_obligation_covered": true,
+          "collected_delivery_delta": 24,
+          "collections_delta_microUSD": 755819375,
+          "identity": [
+            2610301901,
+            "central",
+            36
+          ],
+          "opening_microUSD": 5000000000,
+          "profit_delta_microUSD": 486138512,
+          "unrestricted_earned_delta_microUSD": 486138512
+        },
+        {
+          "baseline_arm": "baseline",
+          "baseline_obligation_covered": true,
+          "candidate_arm": "growth",
+          "candidate_obligation_covered": true,
+          "collected_delivery_delta": 29,
+          "collections_delta_microUSD": 976300500,
+          "identity": [
+            2610301902,
+            "central",
+            36
+          ],
+          "opening_microUSD": 5000000000,
+          "profit_delta_microUSD": 648490228,
+          "unrestricted_earned_delta_microUSD": 648490228
+        },
+        {
+          "baseline_arm": "baseline",
+          "baseline_obligation_covered": true,
+          "candidate_arm": "growth",
+          "candidate_obligation_covered": true,
+          "collected_delivery_delta": 0,
+          "collections_delta_microUSD": 0,
+          "identity": [
+            2610301903,
+            "delayed_and_expensive",
+            36
+          ],
+          "opening_microUSD": 5000000000,
+          "profit_delta_microUSD": 0,
+          "unrestricted_earned_delta_microUSD": 0
+        },
+        {
+          "baseline_arm": "baseline",
+          "baseline_obligation_covered": true,
+          "candidate_arm": "growth",
+          "candidate_obligation_covered": true,
+          "collected_delivery_delta": 0,
+          "collections_delta_microUSD": 0,
+          "identity": [
+            2610301903,
+            "weak_channel",
+            36
+          ],
+          "opening_microUSD": 5000000000,
+          "profit_delta_microUSD": 0,
+          "unrestricted_earned_delta_microUSD": 0
+        }
+      ],
+      "schema": "agi-alpha/connected014-matched-growth/v1",
+      "scope": "Exact separate-business paired outcomes; no accounts pooled and no universal market probability inferred."
+    },
+    "frontier": {
+      "commercial_completion_limit": "Positive profit/available earnings and covered obligations are necessary financial conditions. Useful acceptance, customer breadth, repeat delivery and earned-funded investment require the independent operating completion verdict.",
+      "regions": [
+        {
+          "arm": "baseline",
+          "businesses": 2,
+          "case": "central",
+          "collected_delivery_range": [
+            10,
+            12
+          ],
+          "collections_range_microUSD": [
+            316586750,
+            397546750
+          ],
+          "covered_businesses": 2,
+          "customer_pool": 36,
+          "loss_businesses": 0,
+          "opening_microUSD": 5000000000,
+          "positive_profit_available_earnings_and_covered": 2,
+          "profit_range_microUSD": [
+            155904588,
+            213774316
+          ],
+          "seeds": [
+            2610301901,
+            2610301902
+          ],
+          "terminal_stops": [
+            null,
+            null
+          ]
+        },
+        {
+          "arm": "growth",
+          "businesses": 2,
+          "case": "central",
+          "collected_delivery_range": [
+            36,
+            39
+          ],
+          "collections_range_microUSD": [
+            1153366125,
+            1292887250
+          ],
+          "covered_businesses": 2,
+          "customer_pool": 36,
+          "loss_businesses": 0,
+          "opening_microUSD": 5000000000,
+          "positive_profit_available_earnings_and_covered": 2,
+          "profit_range_microUSD": [
+            699912828,
+            804394816
+          ],
+          "seeds": [
+            2610301901,
+            2610301902
+          ],
+          "terminal_stops": [
+            null,
+            null
+          ]
+        },
+        {
+          "arm": "baseline",
+          "businesses": 1,
+          "case": "delayed_and_expensive",
+          "collected_delivery_range": [
+            7,
+            7
+          ],
+          "collections_range_microUSD": [
+            234524000,
+            234524000
+          ],
+          "covered_businesses": 1,
+          "customer_pool": 36,
+          "loss_businesses": 1,
+          "opening_microUSD": 5000000000,
+          "positive_profit_available_earnings_and_covered": 0,
+          "profit_range_microUSD": [
+            -331051116,
+            -331051116
+          ],
+          "seeds": [
+            2610301903
+          ],
+          "terminal_stops": [
+            null
+          ]
+        },
+        {
+          "arm": "growth",
+          "businesses": 1,
+          "case": "delayed_and_expensive",
+          "collected_delivery_range": [
+            7,
+            7
+          ],
+          "collections_range_microUSD": [
+            234524000,
+            234524000
+          ],
+          "covered_businesses": 1,
+          "customer_pool": 36,
+          "loss_businesses": 1,
+          "opening_microUSD": 5000000000,
+          "positive_profit_available_earnings_and_covered": 0,
+          "profit_range_microUSD": [
+            -331051116,
+            -331051116
+          ],
+          "seeds": [
+            2610301903
+          ],
+          "terminal_stops": [
+            null
+          ]
+        },
+        {
+          "arm": "baseline",
+          "businesses": 1,
+          "case": "weak_channel",
+          "collected_delivery_range": [
+            5,
+            5
+          ],
+          "collections_range_microUSD": [
+            155914000,
+            155914000
+          ],
+          "covered_businesses": 1,
+          "customer_pool": 36,
+          "loss_businesses": 0,
+          "opening_microUSD": 5000000000,
+          "positive_profit_available_earnings_and_covered": 1,
+          "profit_range_microUSD": [
+            38774860,
+            38774860
+          ],
+          "seeds": [
+            2610301903
+          ],
+          "terminal_stops": [
+            null
+          ]
+        },
+        {
+          "arm": "growth",
+          "businesses": 1,
+          "case": "weak_channel",
+          "collected_delivery_range": [
+            5,
+            5
+          ],
+          "collections_range_microUSD": [
+            155914000,
+            155914000
+          ],
+          "covered_businesses": 1,
+          "customer_pool": 36,
+          "loss_businesses": 0,
+          "opening_microUSD": 5000000000,
+          "positive_profit_available_earnings_and_covered": 1,
+          "profit_range_microUSD": [
+            38774860,
+            38774860
+          ],
+          "seeds": [
+            2610301903
+          ],
+          "terminal_stops": [
+            null
+          ]
+        }
+      ],
+      "schema": "agi-alpha/connected014-executed-frontier/v1",
+      "scope": "Finite executed design regions, not calibrated market probabilities or a universal viability boundary."
+    },
+    "frozen_sha256": "d46090fd2b606108120c8972343f21ff0b12a5f53a43a364d35c7d6b059be298",
+    "growth_criterion": {
+      "central_pairs": 2,
+      "fraction": 1.0,
+      "minimum_registered_fraction": 0.75,
+      "positive_delivery_and_profit_pairs": 2
+    },
+    "limits": [
+      "Synthetic non-personal work only; no actual customers or payments.",
+      "Finite authored buyer/channel/supplier contracts, no empirical conversion calibration.",
+      "Permanent native principal/fee protection tails remain; seed may back reserves.",
+      "No paid inference: capable-frontier AI economics represented by disclosed envelopes; actual executors are deterministic.",
+      "Finite frozen service inventory is an edition resource, not a universal market ceiling."
+    ],
+    "next_action": "Use matched realized incremental contribution to retain/renew channels and capacity; close finite artifact/audience/working-capital constraints with a new costed qualified capability before claiming a native scale bridge. Historical aggregate billion projections remain separate hypotheses.",
+    "outcomes": {
+      "billion_native_scale": "NOT_ESTABLISHED",
+      "commercial_result": "CONDITIONAL_SUCCESS",
+      "growth_result": "CONDITIONAL_INCREASE_IN_PROFITABLE_DELIVERY",
+      "operating_implementation": "EXECUTED_WITH_INDEPENDENT_FINANCIAL_AND_OPERATING_SEMANTIC_AUDIT"
+    },
+    "protocol": {
+      "adverse_seeds": [
+        2610301903
+      ],
+      "arms": [
+        "baseline",
+        "growth"
+      ],
+      "candidate_arm": "growth",
+      "case_design": "Two fresh central matched pairs; one fresh matched pair in each of weak-channel and delayed/high-complete-cost conditions. Eight separately funded businesses. Fixed sample; no optional stopping. Same public information, starting capital, services and buyer incentives in each pair; investment options differ by retained policy.",
+      "cases": [
+        "central",
+        "weak_channel",
+        "delayed_and_expensive"
+      ],
+      "central_seeds": [
+        2610301901,
+        2610301902
+      ],
+      "channel_control_seeds": [],
+      "clock": "Integerhours/native dayfield; production2hours, acceptance1hour, clearing48hours baseline. Expiry/reinvestment eventcausal; tailobligations retained. Calendar epoch2026-11-01T00Z. Seventy days cover three21daychannel/capacityterms plus clearing/renewal and repeatedpurchasecycles; a reportingbin nevergrantsactionauthority.",
+      "comparison": "Retained earned-financed growth versus owned fixed-capacity baseline. No algorithm superiority required. Native financing and later asset use plus matched collected-delivery and full-cost-profit differences establish only conditional finite-world incremental growth.",
+      "completion": {
+        "minimum_collected_deliveries": 12,
+        "minimum_paying_customers": 3,
+        "minimum_profitable_earned_continuations": 2,
+        "minimum_repeat_customers": 2,
+        "obligations_covered": true,
+        "positive_available_earnings": true,
+        "positive_complete_cost_profit": true
+      },
+      "control_arm": "baseline",
+      "development_excluded": [
+        14001,
+        14002,
+        14003,
+        14004,
+        14005,
+        14006,
+        2610301401,
+        2610301402,
+        2610301403,
+        2610301404,
+        2610301501,
+        2610301502,
+        2610301601,
+        2610301602,
+        2610301603,
+        2610301604,
+        2610301701,
+        2610301702,
+        2610301801,
+        2610301802,
+        2610301803,
+        2610301804,
+        9915014,
+        9915017
+      ],
+      "edition": "completion015-confirmation-001",
+      "inference": "Finite authored worlds, not calibrated real success probabilities. Historical economic results never relabeled. Native record aggregation is exact accounting, not validated forward-demand aggregation.",
+      "pricing_extension_per_quote_microUSD": 50000,
+      "pricing_extension_setup_microUSD": 5000000,
+      "recovery": "Live-state event intent persisted before mutations; signed command WAL/native CAS recovers exact commitments. Reopen requires retained local simulation key. Public copies support audit/reproduction, not takeover.",
+      "resource_billing": "Actual deterministic executors/checkers, no paidmodelcalls. Modeled completecost envelopes; host/modelbilling unavailable. Sensitivities do not turn assumptions into calibration.",
+      "risk": {
+        "central_maximum_loss_microUSD": 750000000,
+        "central_minimum_cash_survival_fraction": 1.0,
+        "central_minimum_commercial_fraction": 0.75,
+        "growth_minimum_positive_paired_fraction": 0.75,
+        "hard_native_and_semantic_integrity": true
+      },
+      "schema": "agi-alpha/connected014-protocol/v1",
+      "scope": "CONDITIONAL_SIMULATION",
+      "selection": "Ordinary observed-contribution heuristic, frozen before confirmation; no hidden buyer values, future shocks or evaluator case labels in seller policy. Decline/retaincash allowed. No developmentcontroller tournament.",
+      "service_cohort_seed": 14043026,
+      "workers": 4
+    },
+    "representative": {
+      "accepted_jobs": 37,
+      "arm": "growth",
+      "case": "central",
+      "complete": true,
+      "conditional_simulated_commercial_success": true,
+      "customers": 13,
+      "paid_jobs": 36,
+      "processed_events": 182,
+      "productive_expansion": [
+        {
+          "cost": 6250000,
+          "funding": "EARNED",
+          "kind": "acquisition",
+          "later_settled_order_ids": [
+            "order-0003",
+            "order-0004",
+            "order-0005",
+            "order-0007",
+            "order-0010",
+            "order-0012",
+            "order-0014",
+            "order-0015",
+            "order-0016",
+            "order-0019",
+            "order-0020",
+            "order-0021",
+            "order-0022",
+            "order-0026",
+            "order-0027",
+            "order-0029",
+            "order-0030",
+            "order-0031",
+            "order-0032"
+          ],
+          "plan_id": "connected014-resource-491add036795fb9064dd393a271f7aea",
+          "scoped_collections": 632320750
+        },
+        {
+          "cost": 8000000,
+          "funding": "EARNED",
+          "kind": "capacity",
+          "later_settled_order_ids": [
+            "order-0010",
+            "order-0013",
+            "order-0019"
+          ],
+          "plan_id": "connected014-resource-a00ab4b0678133c5d60acca58d390375",
+          "scoped_collections": 104897000
+        },
+        {
+          "cost": 8000000,
+          "funding": "EARNED",
+          "kind": "capacity",
+          "later_settled_order_ids": [
+            "order-0011"
+          ],
+          "plan_id": "connected014-resource-0ffb4e9a77ddaad303693c16807831c7",
+          "scoped_collections": 40480000
+        },
+        {
+          "cost": 6250000,
+          "funding": "EARNED",
+          "kind": "acquisition",
+          "later_settled_order_ids": [
+            "order-0017",
+            "order-0023",
+            "order-0024",
+            "order-0028"
+          ],
+          "plan_id": "connected014-resource-c1d34ca97424ffc02e96f83659f61430",
+          "scoped_collections": 119834000
+        },
+        {
+          "cost": 8000000,
+          "funding": "EARNED",
+          "kind": "capacity",
+          "later_settled_order_ids": [
+            "order-0022",
+            "order-0025",
+            "order-0029",
+            "order-0033"
+          ],
+          "plan_id": "connected014-resource-3f4ba97d387b149cad77c25cd32cf6cd",
+          "scoped_collections": 134277000
+        },
+        {
+          "cost": 8000000,
+          "funding": "EARNED",
+          "kind": "capacity",
+          "later_settled_order_ids": [
+            "order-0026",
+            "order-0030"
+          ],
+          "plan_id": "connected014-resource-d5c3039825bb5fe44635fcb45a8aef62",
+          "scoped_collections": 62117000
+        },
+        {
+          "cost": 6250000,
+          "funding": "EARNED",
+          "kind": "acquisition",
+          "later_settled_order_ids": [
+            "order-0034",
+            "order-0036"
+          ],
+          "plan_id": "connected014-resource-25373637bc791e16251ff5bd0d52fd57",
+          "scoped_collections": 62117000
+        }
+      ],
+      "profitable_earned_continuations": 32,
+      "repeat_customers": 10,
+      "seed": 2610301901,
+      "summary": {
+        "assuranceScope": "Local provider assumption only; full late-debit reserve retained for conservative investment",
+        "available": 4439346703,
+        "cash": 5699912828,
+        "collections": 1153366125,
+        "conditionalEarned": 599912828,
+        "custodyReserve": 0,
+        "custodyRestricted": 0,
+        "earnedProtectionBacking": 0,
+        "equityProtectionBacking": 1260566125,
+        "expensePaid": 453453297,
+        "expenses": 453453297,
+        "fundingScope": "Bounded principal-plus-fee exposure; arbitrary additional debits are not guaranteed",
+        "investmentStopped": false,
+        "netEarnedAfterIncurredObligations": 699912828,
+        "payables": 0,
+        "profit": 699912828,
+        "recoveryIncome": 0,
+        "reservedInvestment": 0,
+        "revenue": 1153366125,
+        "strictEarnedControl": 0,
+        "tailReserve": 1160566125,
+        "unrestrictedEarned": 699912828,
+        "workingCapital": 100000000
+      }
+    },
+    "schema": "agi-alpha/connected014-report/v1",
+    "scope": "CONDITIONAL_SIMULATION",
+    "source_sha256": "af27e5bbb7bfc0fb500321f38ece0f6dc34193927742a0dd90ea175e23efe320",
+    "worlds": 8,
+    "worlds_index": [
+      {
+        "cpu_seconds": 7.139580097,
+        "result_sha256": "691564d60420d4fa0a8ef4aca0ade486c8619e026add57f62c6424d6d387c72f",
+        "task": {
+          "arm": "baseline",
+          "case": "central",
+          "id": "2610301901-central-baseline",
+          "seed": 2610301901
+        }
+      },
+      {
+        "cpu_seconds": 16.756243422,
+        "result_sha256": "a8cbc67d2b47cf873ae4410f7bdaaf77ec1d8fa54591817d524435e2009bd25c",
+        "task": {
+          "arm": "growth",
+          "case": "central",
+          "id": "2610301901-central-growth",
+          "seed": 2610301901
+        }
+      },
+      {
+        "cpu_seconds": 6.2063925069999994,
+        "result_sha256": "bbc25e431ef8d5d2e9feb180d09412202e1fe6da37a599d4c67021674f0ddcee",
+        "task": {
+          "arm": "baseline",
+          "case": "central",
+          "id": "2610301902-central-baseline",
+          "seed": 2610301902
+        }
+      },
+      {
+        "cpu_seconds": 17.141229914,
+        "result_sha256": "1a7ac8b47a433be157ce70c4d2951acf301f258dcadba8c24333e28b60bb8766",
+        "task": {
+          "arm": "growth",
+          "case": "central",
+          "id": "2610301902-central-growth",
+          "seed": 2610301902
+        }
+      },
+      {
+        "cpu_seconds": 4.6366826109999995,
+        "result_sha256": "650db1b4166fc5102a72473f4d9c593245615f81e11b837ef5da32246d6a2674",
+        "task": {
+          "arm": "baseline",
+          "case": "weak_channel",
+          "id": "2610301903-weak_channel-baseline",
+          "seed": 2610301903
+        }
+      },
+      {
+        "cpu_seconds": 4.622916880000001,
+        "result_sha256": "478ec6443f1a32407b9ceb037c26adbc89beb6336d15532cae41151cfb1adaf9",
+        "task": {
+          "arm": "growth",
+          "case": "weak_channel",
+          "id": "2610301903-weak_channel-growth",
+          "seed": 2610301903
+        }
+      },
+      {
+        "cpu_seconds": 4.6335544340000006,
+        "result_sha256": "f05dc3d9b8c828f626ad4357f2e2024952f5bd35c9301d58dd4c0431fa20bfdc",
+        "task": {
+          "arm": "baseline",
+          "case": "delayed_and_expensive",
+          "id": "2610301903-delayed_and_expensive-baseline",
+          "seed": 2610301903
+        }
+      },
+      {
+        "cpu_seconds": 4.166859317000002,
+        "result_sha256": "d2dcd2323deae150f630611f9860707078e69098c7846a9279236ee1a0fd7b01",
+        "task": {
+          "arm": "growth",
+          "case": "delayed_and_expensive",
+          "id": "2610301903-delayed_and_expensive-growth",
+          "seed": 2610301903
+        }
+      }
+    ]
+  },
+  "released_public_audit": {
+    "accepted": true,
+    "resource_cpu_metadata": "Command resource observations retained, not independently reproduced timing measurements",
+    "schema": "agi-alpha/connected014-package-audit/v1",
+    "scope": "NATIVE_FINANCE_AND_OPERATING_SEMANTICS_WITH_ARTIFACT_REEXECUTION_AND_REPORT_REDERIVATION",
+    "service_cohort": {
+      "registered_jobs_rederived": 104
+    },
+    "simulation_keys_required": false,
+    "source_sha256": "af27e5bbb7bfc0fb500321f38ece0f6dc34193927742a0dd90ea175e23efe320",
+    "worlds": 2
+  },
+  "resource_policy": {
+    "active_platform_limit_seconds": 21600,
+    "cpu_acceptance_gate": false,
+    "cpu_limit_seconds": null,
+    "enforcement": "CPU is telemetry, never an acceptance or spending gate. The hosted-job window deducts setup/work and leaves receipt/shutdown time; no retry or extra experiment is authorized.",
+    "historical_cpu_reference_seconds": 2400,
+    "hosted_job_limit_seconds": 21600,
+    "measurement": "POSIX kernel RUSAGE_SELF plus RUSAGE_CHILDREN deltas; includes waited descendants.",
+    "policy_version": "platform-aligned-telemetry-v2",
+    "receipt_shutdown_reserve_seconds": 300,
+    "scope": "Run, resume, native/operating audits, key-free packaging, public-copy audit and wrapper work after verified-asset/output-root admission. Initial asset verification and unavailable host/model billing are excluded.",
+    "supported_hosted_job_limit_seconds": 21600,
+    "wall_limit_seconds": 21283
+  },
+  "resources": {
+    "children_cpu_seconds": 1190.8318809999998,
+    "coverage": "COMPLETED_WAITED_PROCESS_TREE",
+    "historical_cpu_reference_exceeded": false,
+    "kernel_cpu_deltas_seconds": {
+      "children_system": 47.687133,
+      "children_user": 1143.144748,
+      "self_system": 0.214984,
+      "self_user": 1.159337
+    },
+    "self_cpu_seconds": 1.3743210000000001,
+    "total_measured_cpu_seconds": 1192.2062019999998,
+    "wall_seconds": 369.991629079
+  },
+  "runtime_budget": {
+    "clock_source": "github-job-first-step",
+    "elapsed_job_seconds": 16.946160078048706,
+    "platform_limit_seconds": 21600,
+    "receipt_reserve_seconds": 300,
+    "requested_timeout_seconds": 21283,
+    "scope": "Engineering execution window only; not a business-scale or profit ceiling.",
+    "timeout_seconds": 21283
+  },
+  "schema": "agi-alpha/connected014-downloaded-release-operation/v1",
+  "scope": "SIMULATED_RELEASED_DEFAULT_EXPERIMENT_REPRODUCTION_NOT_UNTOUCHED_CONFIRMATION",
+  "source_commit": "67f04da69d034156b525f2c4ffeae07d74601345",
+  "source_sha256": "af27e5bbb7bfc0fb500321f38ece0f6dc34193927742a0dd90ea175e23efe320",
+  "tag": "connected014-67f04da69d034156b525f2c4ffeae07d74601345"
+}
