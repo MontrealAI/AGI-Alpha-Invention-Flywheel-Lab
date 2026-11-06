@@ -67,29 +67,62 @@ def load_registry(root):
         raise ValueError('P0_DUPLICATE_MANIFEST_DISPATCH')
     routes = set()
     if functions:
-        for node in ast.walk(functions[0]):
-            if not isinstance(node, ast.If) or not isinstance(node.test, ast.Compare):
+        # Only direct, reachable branches in the outer dispatcher can qualify.
+        # A nested def or an if after an unconditional return is not a route.
+        seen = set()
+        schema_bound = False
+        for node in functions[0].body:
+            if isinstance(node, ast.Return):
+                break
+            if isinstance(node, ast.Assign):
+                targets = [target.id for target in node.targets if isinstance(target, ast.Name)]
+                if 'schema' in targets:
+                    if schema_bound or len(targets) != 1:
+                        break  # Changed selector: no later branch is authoritative.
+                    schema_bound = True
                 continue
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue  # Nested lexical scope is never called by this scan.
+            if not isinstance(node, ast.If):
+                if isinstance(node, (ast.Import, ast.ImportFrom, ast.Expr, ast.Pass)):
+                    continue
+                break  # Unknown control flow: fail closed on subsequent routes.
+            if not schema_bound or node.orelse:
+                break
             comparison = node.test
-            if len(comparison.ops) != 1 or not isinstance(comparison.ops[0], ast.Eq) or len(comparison.comparators) != 1:
+            if (not isinstance(comparison, ast.Compare) or len(comparison.ops) != 1
+                    or not isinstance(comparison.ops[0], ast.Eq)
+                    or len(comparison.comparators) != 1):
+                break
+            left, right = comparison.left, comparison.comparators[0]
+            if isinstance(left, ast.Name) and left.id == 'schema':
+                literal = right
+            elif isinstance(right, ast.Name) and right.id == 'schema':
+                literal = left
+            else:
+                break
+            if not (isinstance(literal, ast.Constant) and isinstance(literal.value, str)
+                    and re.fullmatch(r'[A-Za-z0-9_-]+/native-services/v[1-9][0-9]*', literal.value)):
+                break
+            route = literal.value
+            if route in seen:
+                continue  # First matching branch wins, including a base-only one.
+            seen.add(route)
+            first_return = None
+            valid_body = True
+            for statement in node.body:
+                if isinstance(statement, ast.Return):
+                    first_return = statement.value
+                    break
+                if not isinstance(statement, (ast.Import, ast.ImportFrom, ast.Pass)):
+                    valid_body = False
+                    break
+            if not valid_body or first_return is None:
                 continue
-            operands = (comparison.left, comparison.comparators[0])
-            if not any(isinstance(part, ast.Name) and part.id == 'schema' for part in operands):
-                continue
-            returned = [statement.value for statement in node.body
-                        if isinstance(statement, ast.Return) and statement.value is not None]
-            # A branch that returns only SOURCE_PATHS loses the active producer,
-            # despite still naming the manifest schema in an equality check.
             required_sources = {'source_paths', 'PRODUCTION_SOURCE_PATHS', 'INVENTORY_SOURCE_PATHS'}
-            if not any(required_sources & {value.id for value in ast.walk(expression)
-                                            if isinstance(value, ast.Name)}
-                       for expression in returned):
-                continue
-            for part in operands:
-                if isinstance(part, ast.Constant) and isinstance(part.value, str) and re.fullmatch(
-                    r'[A-Za-z0-9_-]+/native-services/v[1-9][0-9]*', part.value
-                ):
-                    routes.add(part.value)
+            if required_sources & {value.id for value in ast.walk(first_return)
+                                   if isinstance(value, ast.Name)}:
+                routes.add(route)
     return found, routes
 
 
