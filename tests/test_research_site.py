@@ -98,8 +98,8 @@ class ResearchSiteTests(unittest.TestCase):
         slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
-        self.assertEqual(len(site.PAPERS), 26)
-        self.assertEqual(len(site.PAGES), 28)
+        self.assertEqual(len(site.PAPERS), 27)
+        self.assertEqual(len(site.PAGES), 31)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
             reader = 'out-' + slug + '.html'
@@ -185,7 +185,7 @@ class ResearchSiteTests(unittest.TestCase):
     def test_unresolved_publication_metadata_is_rejected(self):
         page = self.source / 'agi-alpha-flywheel.html'
         original = page.read_text()
-        for token in ('PAPER_SHA256_PLACEHOLDER', 'SURF_PAGE_COUNT', 'SURF_SHA256', 'SURF_PDF_BYTES', 'CONTINUITY_PAGE_COUNT', 'CONTINUITY_SHA256', 'CONTINUITY_PDF_BYTES'):
+        for token in ('PAPER_SHA256_PLACEHOLDER', 'SURF_PAGE_COUNT', 'SURF_SHA256', 'SURF_PDF_BYTES', 'CONTINUITY_PAGE_COUNT', 'CONTINUITY_SHA256', 'CONTINUITY_PDF_BYTES', 'CONTINUITY_EN_PAGE_COUNT', 'CONTINUITY_EN_SHA256', 'CONTINUITY_EN_PDF_BYTES', 'CONTINUITY_FR_PAGE_COUNT', 'CONTINUITY_FR_SHA256', 'CONTINUITY_FR_PDF_BYTES'):
             with self.subTest(token=token):
                 page.write_text(original + '<p>' + token + '</p>')
                 with self.assertRaisesRegex(ValueError, 'Unresolved publication metadata'):
@@ -228,6 +228,119 @@ class ResearchSiteTests(unittest.TestCase):
             self.assertIn(asset, site.ASSETS)
         self.assertIn('property="og:image" content="' + site.PUBLIC_SITE + 'continuity-omega-social.png"', reader)
         self.assertIn('name="twitter:card" content="summary_large_image"', reader)
+
+    def test_continuity_languages_preserve_sources_controls_and_reciprocal_access(self):
+        """Localization must retain the same evidence, computation and direct access."""
+        import json
+        import re
+        manifest = json.loads((self.source / 'publication-manifest.json').read_text())
+        expected_alternates = {
+            ('en', site.PUBLIC_SITE + 'continuity-omega.html'),
+            ('fr-CA', site.PUBLIC_SITE + 'continuity-omega-fr.html'),
+            ('x-default', site.PUBLIC_SITE + 'continuity-omega.html'),
+        }
+        controls, scripts, anchors = [], [], []
+        home = (self.source / 'index.html').read_text()
+        for lang, slug, other, og_locale, unit in (
+                ('en', 'continuity-omega', 'continuity-omega-fr', 'en_US', 'bytes'),
+                ('fr-CA', 'continuity-omega-fr', 'continuity-omega', 'fr_CA', 'octets')):
+            with self.subTest(language=lang):
+                reader = (self.source / (slug + '.html')).read_text()
+                parser = site.Links()
+                parser.feed(reader)
+                entry = next(p for p in manifest['papers'] if p['file'] == slug + '.pdf')
+                self.assertIn('<html lang="' + lang + '">', reader)
+                self.assertEqual(parser.canonical_urls, [site.PUBLIC_SITE + slug + '.html'])
+                self.assertEqual(set(parser.alternate_urls), expected_alternates)
+                self.assertIn('name="citation_language" content="' + lang + '"', reader)
+                self.assertIn('property="og:locale" content="' + og_locale + '"', reader)
+                self.assertIn('property="og:locale:alternate"', reader)
+                self.assertIn('name="twitter:image:alt"', reader)
+                self.assertIn('property="og:image:alt"', reader)
+                self.assertIn('href="' + other + '.html"', reader)
+                self.assertIn('data-language-switch="' + other + '.html"', reader)
+                self.assertIn('href="' + slug + '.html"', home)
+                for link in (slug + '.pdf', slug + '.pdf#view=FitH',
+                             slug + '-card.svg', slug + '-social.png'):
+                    self.assertIn(link, parser.links)
+                self.assertIn('<code>' + entry['sha256'] + '</code>', reader)
+                self.assertIn(str(entry['bytes']) + ' ' + unit, reader)
+                self.assertIn('29 + 9', reader)
+                self.assertIn('4 / 4', reader)
+                self.assertIn('1.1.0', reader)
+                self.assertIn('releases/tag/continuity-omega-v1.0.0', reader)
+                suffix = '.fr' if lang == 'fr-CA' else ''
+                for file in ('README' + suffix + '.md', 'REVIEW' + suffix + '.md',
+                             'SOURCE_MAP' + suffix + '.md', 'CLAIMS' + suffix + '.json'):
+                    self.assertIn('docs/continuity-omega-paper/' + file, reader)
+                self.assertIn('https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/continuity-omega-paper/CITATION' + suffix + '.cff', parser.links)
+                structured = json.loads(re.search(
+                    r'<script type="application/ld\+json">(.*?)</script>', reader, re.S).group(1))
+                self.assertEqual(structured['inLanguage'], lang)
+                self.assertEqual(structured['version'], '1.1.0')
+                self.assertEqual(structured['encoding']['contentUrl'], site.PUBLIC_SITE + slug + '.pdf')
+                fields = ('id', 'name', 'type', 'min', 'max', 'step', 'value')
+                inputs = [dict(re.findall(r'([\w-]+)="([^"]*)"', tag))
+                          for tag in re.findall(r'<input\b[^>]*>', reader)]
+                controls.append([tuple(item.get(key) for key in fields) for item in inputs])
+                scripts.append(re.search(r'<script>(.*?)</script>', reader, re.S).group(1))
+                anchors.append(parser.ids)
+        self.assertEqual(controls[0], controls[1])
+        self.assertEqual(scripts[0], scripts[1])
+        self.assertEqual(anchors[0], anchors[1])
+        self.assertNotIn('navigator.language', scripts[0])
+        french = (self.source / 'continuity-omega-fr.html').read_text()
+        for phrase in ('Tenir parole.', 'Aucun groupe viable.', '3 acheteurs',
+                       'Ce qui reste non établi', 'ne constitue', 'Aller au contenu',
+                       'Votre navigateur n’affiche pas les PDF intégrés.'):
+            self.assertIn(phrase, french)
+        # Language alternates cannot become an exception for arbitrary external URLs.
+        page = self.source / 'continuity-omega-fr.html'
+        page.write_text(french.replace(
+            'hreflang="en" href="' + site.PUBLIC_SITE + 'continuity-omega.html"',
+            'hreflang="en" href="https://example.com/unpublished"'))
+        with self.assertRaisesRegex(ValueError, 'Alternate language URL'):
+            site.validate(self.source)
+        page.write_text(french)
+        media_manifest = json.loads((self.source / 'continuity-omega-media-manifest.json').read_text())
+        gallery_scripts, gallery_ids = [], []
+        for lang, suffix, locale, scope in (
+                ('en', '', 'en', 'conceptual marketing illustrations'),
+                ('fr-CA', '-fr', 'fr', 'illustrations conceptuelles de communication')):
+            with self.subTest(gallery_language=lang):
+                name = 'continuity-omega-media' + suffix + '.html'
+                gallery = (self.source / name).read_text()
+                parser = site.Links()
+                parser.feed(gallery)
+                self.assertIn('<html lang="' + lang + '">', gallery)
+                self.assertEqual(parser.canonical_urls, [site.PUBLIC_SITE + name])
+                self.assertEqual(set(parser.alternate_urls), {
+                    ('en', site.PUBLIC_SITE + 'continuity-omega-media.html'),
+                    ('fr-CA', site.PUBLIC_SITE + 'continuity-omega-media-fr.html'),
+                    ('x-default', site.PUBLIC_SITE + 'continuity-omega-media.html'),
+                })
+                self.assertIn(scope, gallery)
+                self.assertEqual(gallery.count('<details>'), 4)
+                self.assertEqual(gallery.count('data-animation-control='), 4)
+                self.assertNotRegex(gallery, r'<img\b[^>]*\bsrc="[^"]+\.gif"')
+                for scene in ('ascent', 'reveal', 'journey', 'motion'):
+                    media_entry = next(item for item in media_manifest['animations'] if item['id'] == scene)
+                    for ending in ('.gif', '-poster.png'):
+                        asset = f'continuity-omega-{scene}-{locale}{ending}'
+                        self.assertIn(asset, parser.links)
+                        self.assertIn(asset, site.ASSETS)
+                        contents = (self.source / asset).read_bytes()
+                        self.assertEqual(len(contents), media_entry['files'][asset]['bytes'])
+                        self.assertEqual(hashlib.sha256(contents).hexdigest(), media_entry['files'][asset]['sha256'])
+                    self.assertEqual(media_entry['english_original_sha256'],
+                                     media_entry['files'][f'continuity-omega-{scene}-en.gif']['sha256'])
+                    gif = (self.source / f'continuity-omega-{scene}-{locale}.gif').read_bytes()
+                    self.assertIn(gif[:6], (b'GIF87a', b'GIF89a'))
+                gallery_ids.append(parser.ids)
+                gallery_scripts.append(re.search(r'<script>(.*?)</script>', gallery, re.S).group(1))
+                self.assertIn('href="' + name + '"', (self.source / ('continuity-omega' + suffix + '.html')).read_text())
+        self.assertEqual(gallery_ids[0], gallery_ids[1])
+        self.assertEqual(gallery_scripts[0], gallery_scripts[1])
 
     def test_surf_reader_matches_published_pdf_and_preserves_flagship(self):
         import json
@@ -287,15 +400,16 @@ class ResearchSiteTests(unittest.TestCase):
         for name in site.PAGES:
             text = (self.source / name).read_text()
             self.assertIn('name="viewport"', text)
-            self.assertIn('Skip to content', text)
+            french = name in ('continuity-omega-fr.html', 'continuity-omega-media-fr.html')
+            self.assertIn('Aller au contenu' if french else 'Skip to content', text)
             styles = text if name != 'studio.html' else (self.source / 'alpha.css').read_text()
             self.assertIn('prefers-reduced-motion', styles)
             self.assertIn('@media(max-width:', styles)
             self.assertNotIn('↗', text)
-            if name not in ('index.html', 'out-series.html', 'studio.html'):
+            if name not in ('index.html', 'out-series.html', 'studio.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html'):
                 self.assertIn('type="application/pdf"', text)
                 self.assertIn('download>', text)
-                self.assertIn('Your browser does not display embedded PDFs', text)
+                self.assertIn('Votre navigateur n’affiche pas les PDF intégrés' if french else 'Your browser does not display embedded PDFs', text)
 
     def test_preferred_home_design_keeps_studio_and_published_anchors(self):
         home = (self.source / 'index.html').read_text()

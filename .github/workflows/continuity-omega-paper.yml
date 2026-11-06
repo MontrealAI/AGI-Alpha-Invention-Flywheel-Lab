@@ -1,4 +1,4 @@
-name: CONTINUITY OMEGA research publication
+name: CONTINUITY OMEGA · English / Français
 
 on:
   pull_request:
@@ -23,54 +23,57 @@ concurrency:
 
 jobs:
   qualify:
-    name: Qualify the exact publication source
+    name: Qualify bilingual publication / Qualifier la publication bilingue
     runs-on: ubuntu-latest
     timeout-minutes: 360
     outputs:
       pdf_sha256: ${{ steps.bundle.outputs.pdf_sha256 }}
+      fr_pdf_sha256: ${{ steps.bundle.outputs.fr_pdf_sha256 }}
       source_sha256: ${{ steps.bundle.outputs.source_sha256 }}
     env:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
-      - name: Record platform job execution start
+      - name: Record job start / Consigner le début
         shell: bash
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
 
-      - name: Check out the exact candidate commit
+      - name: Check out candidate / Extraire le commit candidat
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
 
-      - name: Confirm the checked-out source identity
+      - name: Confirm source identity / Confirmer l’identité des sources
         env:
           CONTINUITY_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
         run: test "$(git rev-parse HEAD)" = "$CONTINUITY_EXPECTED_HEAD"
 
-      - name: Install the standard public manuscript toolchain
+      - name: Install manuscript tools / Installer les outils de composition
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended texlive-science texlive-plain-generic lmodern poppler-utils
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended texlive-science texlive-plain-generic texlive-lang-french lmodern poppler-utils
 
-      - name: Verify canonical identities, recorded scope and the public PDF copy
+      - name: Verify identities and scope / Vérifier les identités et la portée
         run: |
           python3 -B docs/continuity-omega-paper/verify.py
           cmp docs/continuity-omega-paper/CONTINUITY_OMEGA.pdf docs/research/continuity-omega.pdf
+          cmp docs/continuity-omega-paper/CONTINUITY_OMEGA_FR.pdf docs/research/continuity-omega-fr.pdf
+          python3 -B docs/continuity-omega-paper/check_translations.py --self-test
 
-      - name: Reproduce both pinned public synthetic sources
+      - name: Reproduce pinned sources / Reproduire les sources figées
         run: |
           python3 -B docs/continuity-omega-paper/reproduce.py --output "$RUNNER_TEMP/continuity-omega-reproduction-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
 
-      - name: Rebuild without replacing the reviewed canonical PDF
+      - name: Rebuild both languages / Recompiler les deux langues
         run: |
           python3 -B docs/continuity-omega-paper/build.py
           python3 -B docs/continuity-omega-paper/verify.py --check-build
 
-      - name: Reproduce the verifier counterexamples without repairing the pinned source
+      - name: Replay counterexamples / Réexécuter les contre-exemples
         run: |
           python3 -B docs/continuity-omega-paper/counterexamples.py --source278 "$RUNNER_TEMP/continuity-omega-reproduction-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT/source278" --output "$RUNNER_TEMP/continuity-omega-counterexamples-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
 
-      - name: Package the qualified PDF and complete source
+      - name: Package PDFs and sources / Assembler les PDF et les sources
         id: bundle
         run: |
           python3 -B docs/continuity-omega-paper/package.py --output "$RUNNER_TEMP/continuity-omega-qualified"
@@ -82,13 +85,14 @@ jobs:
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
               for key, name in (
                   ('pdf_sha256', 'CONTINUITY_OMEGA.pdf'),
+                  ('fr_pdf_sha256', 'CONTINUITY_OMEGA_FR.pdf'),
                   ('source_sha256', 'CONTINUITY_OMEGA_SOURCE.zip'),
               ):
                   value = hashlib.sha256((package / name).read_bytes()).hexdigest()
                   output.write(f'{key}={value}\n')
           PY
 
-      - name: Retain the reviewable publication bundle
+      - name: Retain publication bundle / Conserver la publication vérifiable
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: continuity-omega-paper-${{ github.event.pull_request.head.sha || github.sha }}
@@ -96,7 +100,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-      - name: Retain the compact fresh reproduction receipt
+      - name: Retain reproduction receipt / Conserver le relevé de reproduction
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -105,7 +109,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-      - name: Retain the compact counterexample receipt
+      - name: Retain counterexample receipt / Conserver le relevé des contre-exemples
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -115,7 +119,7 @@ jobs:
           retention-days: 7
 
   release:
-    name: Publish or verify the preserved research edition
+    name: Publish or verify / Publier ou vérifier
     needs: qualify
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
     runs-on: ubuntu-latest
@@ -125,30 +129,31 @@ jobs:
     env:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
-      - name: Record platform job execution start
+      - name: Record job start / Consigner le début
         shell: bash
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
 
-      - name: Check out the qualified main commit
+      - name: Check out qualified main / Extraire le commit main qualifié
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
 
-      - name: Install the publication inspection tools
+      - name: Install inspection tools / Installer les outils de vérification
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends poppler-utils
 
-      - name: Repackage the exact qualified publication
+      - name: Repackage qualified edition / Réassembler l’édition qualifiée
         run: |
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           python3 -B docs/continuity-omega-paper/package.py --output "$RUNNER_TEMP/continuity-omega-release"
 
-      - name: Create the edition once and verify the released assets
+      - name: Publish and verify assets / Publier et vérifier les fichiers
         env:
           GH_TOKEN: ${{ github.token }}
           CONTINUITY_QUALIFIED_PDF_SHA256: ${{ needs.qualify.outputs.pdf_sha256 }}
+          CONTINUITY_QUALIFIED_FR_PDF_SHA256: ${{ needs.qualify.outputs.fr_pdf_sha256 }}
           CONTINUITY_QUALIFIED_SOURCE_SHA256: ${{ needs.qualify.outputs.source_sha256 }}
         run: |
           python3 - <<'PY'
@@ -162,12 +167,13 @@ jobs:
 
           repository = os.environ['GITHUB_REPOSITORY']
           qualified_sha = os.environ['GITHUB_SHA']
-          tag = 'continuity-omega-v1.0.0'
+          tag = 'continuity-omega-v1.1.0'
           paper = Path('docs/continuity-omega-paper')
           package = Path(os.environ['RUNNER_TEMP']) / 'continuity-omega-release'
           notes = paper / 'RELEASE_NOTES.md'
           assets = {
               'CONTINUITY_OMEGA.pdf': os.environ['CONTINUITY_QUALIFIED_PDF_SHA256'],
+              'CONTINUITY_OMEGA_FR.pdf': os.environ['CONTINUITY_QUALIFIED_FR_PDF_SHA256'],
               'CONTINUITY_OMEGA_SOURCE.zip': os.environ['CONTINUITY_QUALIFIED_SOURCE_SHA256'],
           }
 
@@ -219,7 +225,7 @@ jobs:
                   'release', 'create', tag,
                   *[str(package / name) for name in assets],
                   '--repo', repository, '--target', qualified_sha,
-                  '--title', 'CONTINUITY Ω — Research edition 1.0.0',
+                  '--title', 'CONTINUITY Ω — Édition bilingue / Bilingual edition 1.1.0',
                   '--notes-file', str(notes), '--latest=false',
               ]
               if tagged_sha is not None:
@@ -270,16 +276,16 @@ jobs:
 
           result = {
               'operation': 'created' if created else 'preserved-and-verified',
-              'edition': '1.0.0', 'tag': tag, 'release_url': release['html_url'],
+              'edition': '1.1.0', 'tag': tag, 'release_url': release['html_url'],
               'qualified_commit': qualified_sha, 'release_commit': tagged_sha,
               'downloaded_asset_sha256': assets,
               'scope': 'Research publication and pinned synthetic evidence; not operational or economic certification.',
           }
           print(json.dumps(result, ensure_ascii=False, indent=2))
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as summary:
-              summary.write('## CONTINUITY Ω research edition 1.0.0\n\n')
+              summary.write('## CONTINUITY Ω research edition 1.1.0\n\n')
               summary.write(f"Operation: **{result['operation']}**. [Release]({release['html_url']}).\n\n")
               summary.write(f'Qualified commit: `{qualified_sha}`. Release commit: `{tagged_sha}`.\n\n')
-              summary.write('Both downloaded assets match the qualified identities. '
+              summary.write('All three downloaded assets match the qualified identities. Les trois fichiers téléchargés correspondent aux identités qualifiées. '
                             'This publishes research and synthetic evidence, not a field or commercial certification.\n')
           PY

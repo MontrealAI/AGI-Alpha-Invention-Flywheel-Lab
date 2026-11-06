@@ -1,0 +1,170 @@
+{
+  "schema": "continuity-omega-paper/bilingual-publication-checks/v1",
+  "edition": "1.1.0",
+  "reviewed_on": "2026-11-06",
+  "scope_en": "Local bilingual publication checks. Structural parity, separate AI editorial reviews, selected rendered pages and actual embedded JavaScript execution are recorded; this receipt does not assert live deployment, universal accessibility, external certification or new operational or commercial results.",
+  "scope_fr": "Contrôles locaux de la publication bilingue. La parité structurelle, les révisions éditoriales par tâches IA distinctes, des pages rendues sélectionnées et l’exécution réelle du JavaScript intégré sont consignées ; ce relevé n’affirme ni un déploiement en ligne, ni une accessibilité universelle, ni une certification externe, ni de nouveaux résultats opérationnels ou commerciaux.",
+  "historical_record": "evidence/QA.json preserves the 1.0.0 publication checks / conserve les contrôles de publication de la version 1.0.0.",
+  "pdfs": {
+    "en": {
+      "pdf": "CONTINUITY_OMEGA.pdf",
+      "source": "CONTINUITY_OMEGA.tex",
+      "pages": 27,
+      "pdf_bytes": 292789,
+      "pdf_sha256": "49d0c6a51e99b97bb4a4467908b89c8e6743f8c9831fe34443f7f515133de71b",
+      "reader": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega.html"
+    },
+    "fr": {
+      "pdf": "CONTINUITY_OMEGA_FR.pdf",
+      "source": "CONTINUITY_OMEGA_FR.tex",
+      "pages": 29,
+      "pdf_bytes": 307183,
+      "pdf_sha256": "6866e9c997ecfdf81eff7fbe0552f60fa8769eef2efa497828111b0dc62082d2",
+      "reader": "https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega-fr.html"
+    }
+  },
+  "structure": {
+    "status": "STRUCTURAL_LANGUAGE_PARITY_PASSED",
+    "labels": 20,
+    "references": 18,
+    "display_equations": 6,
+    "inline_math": 81,
+    "source_urls": 18,
+    "code_identifiers": 19,
+    "list_items": 28,
+    "table_rows": 52,
+    "propositions": 3,
+    "claims": 22,
+    "documentation_pairs": 4,
+    "scope_en": "Structural checks preserve mathematical expressions, evidence identities, claim statuses and claim numeric literals. Editorial review is still needed for meaning.",
+    "scope_fr": "Les contrôles structurels préservent les expressions mathématiques, les identités des preuves, les statuts et les valeurs numériques des affirmations. Le sens exige une révision éditoriale.",
+    "rejected_mutations": [
+      "missing French proposition",
+      "altered capacity inequality",
+      "altered claim status",
+      "altered claim numeric literal"
+    ]
+  },
+  "editorial_review": {
+    "method_en": "Separate AI tasks reviewed complete EN/FR manuscripts and documentation within the same assistant workflow; no separate-model benchmark or institutional independence is implied.",
+    "method_fr": "Des tâches IA distinctes ont revu les articles et la documentation EN/FR intégraux dans un même processus d’assistance ; aucune comparaison entre modèles ni indépendance institutionnelle n’est implicite.",
+    "reviewed": [
+      "complete manuscripts / articles intégraux",
+      "22 claims / 22 affirmations",
+      "four paper documentation pairs / quatre paires de guides de l’article",
+      "three prototype guide pairs / trois paires de guides du prototype",
+      "18 bibliography explanations / 18 explications bibliographiques",
+      "release notes and translation contract / notes de publication et contrat de traduction",
+      "readers and media transcripts / lecteurs web et transcriptions multimédias"
+    ],
+    "resolved_en": [
+      "French Babel dependency documented.",
+      "Scheduled capacity interval and earned-surplus wording clarified.",
+      "Exact commitment reconciliation and historical test-count wording clarified.",
+      "Numeric claim mutation now rejected by the structural checker."
+    ],
+    "resolved_fr": [
+      "Dépendance Babel française documentée.",
+      "Sens de l’intervalle de capacité et des excédents gagnés précisé.",
+      "Rapprochement exact des engagements et décompte historique des tests précisés.",
+      "Altération numérique d’une affirmation désormais rejetée par le contrôle structurel."
+    ],
+    "remaining_consequential_translation_mismatches_found": []
+  },
+  "layout": {
+    "en_selected_pdf_pages_checked": [
+      1,
+      4
+    ],
+    "fr_selected_pdf_pages_checked": [
+      1,
+      2,
+      4,
+      10,
+      16,
+      17,
+      19,
+      24,
+      25,
+      29
+    ],
+    "both_three_pass_builds_clean": true,
+    "tagged_pdf_accessibility_not_claimed": true
+  },
+  "reader_javascript": {
+    "languages": 2,
+    "initialAndThreePresets": "pass",
+    "inputEvents": "pass",
+    "singularAndPlural": "pass",
+    "localizedAccessibleValues": "pass",
+    "stateRestorationAndSwitching": "pass",
+    "duplicateMalformedOutOfRangeAndUnknownParameters": "refused",
+    "knownAndMalformedHash": "pass",
+    "scope": "Actual inline JavaScript executed with a minimal DOM; not browser keyboard/layout certification."
+  },
+  "media_javascript": [
+    {
+      "language": "en",
+      "staticInitialState": "pass",
+      "playStopEveryAnimation": "pass",
+      "singleActiveAnimation": "pass",
+      "stopOnHiddenOrReducedMotion": "pass",
+      "languageAnchors": "pass",
+      "scope": "Actual inline JavaScript with a minimal DOM; live browser QA remains separate."
+    },
+    {
+      "language": "fr",
+      "staticInitialState": "pass",
+      "playStopEveryAnimation": "pass",
+      "singleActiveAnimation": "pass",
+      "stopOnHiddenOrReducedMotion": "pass",
+      "languageAnchors": "pass",
+      "scope": "Actual inline JavaScript with a minimal DOM; live browser QA remains separate."
+    }
+  ],
+  "site_static_checks": {
+    "readers_and_galleries": [
+      {
+        "page": "continuity-omega.html",
+        "lang": "en",
+        "canonical_and_reciprocal_hreflang": "pass",
+        "unique_anchors": 22,
+        "structured_metadata": "pass"
+      },
+      {
+        "page": "continuity-omega-fr.html",
+        "lang": "fr-CA",
+        "canonical_and_reciprocal_hreflang": "pass",
+        "unique_anchors": 22,
+        "structured_metadata": "pass"
+      },
+      {
+        "page": "continuity-omega-media.html",
+        "lang": "en",
+        "canonical_and_reciprocal_hreflang": "pass",
+        "unique_anchors": 18,
+        "structured_metadata": "pass"
+      },
+      {
+        "page": "continuity-omega-media-fr.html",
+        "lang": "fr-CA",
+        "canonical_and_reciprocal_hreflang": "pass",
+        "unique_anchors": 18,
+        "structured_metadata": "pass"
+      }
+    ],
+    "pdf_identities": "pass",
+    "media_file_identities": 16,
+    "gif_counts_dimensions_timing_loops": "pass",
+    "english_originals_byte_preserved": "pass",
+    "allowlist": {
+      "pdfs": 27,
+      "pages": 31,
+      "assets": 32
+    },
+    "scope": "Focused checks on materialized CONTINUITY files. Full research-site unittest suite is deferred to a source-complete GitHub PR checkout; unrelated existing PDFs are absent locally."
+  },
+  "live_browser_verification_included": false,
+  "full_site_suite_en": "Deferred locally to a complete repository checkout; unrelated existing publication files are absent from this staging workspace.",
+  "full_site_suite_fr": "Différée localement vers une copie complète du dépôt ; des publications existantes sans rapport avec cette édition sont absentes de cet espace de préparation."
+}

@@ -7,7 +7,8 @@ Usage:
 The output must be a new absolute directory outside this paper's source
 directory. The command runs verify.py before producing either deliverable.
 It then snapshots the exact manifest-listed bytes, checks their identities
-again, and emits CONTINUITY_OMEGA.pdf and CONTINUITY_OMEGA_SOURCE.zip.
+again, and emits both complete language PDFs and CONTINUITY_OMEGA_SOURCE.zip.
+Le paquet contient les deux articles intégraux et toutes les sources bilingues.
 
 The ZIP contains the complete PUBLICATION.json inventory plus the manifest
 under CONTINUITY_OMEGA/. It includes the canonical PDF. File ordering,
@@ -36,6 +37,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parent
 MANIFEST_NAME = "PUBLICATION.json"
 PDF_NAME = "CONTINUITY_OMEGA.pdf"
+PDF_NAMES = (PDF_NAME, "CONTINUITY_OMEGA_FR.pdf")
 ZIP_NAME = "CONTINUITY_OMEGA_SOURCE.zip"
 ZIP_PREFIX = "CONTINUITY_OMEGA/"
 ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
@@ -99,7 +101,7 @@ def snapshot(manifest_bytes: bytes) -> tuple[dict, dict[str, bytes]]:
     files = manifest.get("files")
     require(isinstance(files, dict) and bool(files), "Missing manifest file inventory")
     require(MANIFEST_NAME not in files, "PUBLICATION.json must not hash itself")
-    require(PDF_NAME in files, "Manifest omits the canonical PDF")
+    require(set(PDF_NAMES) <= files.keys(), "Manifest omits a canonical language PDF / PDF linguistique manquant")
     require(manifest.get("pdf_sha256") == files[PDF_NAME], "Canonical PDF identity is inconsistent")
     contents = {}
     for relative in sorted(files):
@@ -147,26 +149,30 @@ def main() -> int:
     manifest_bytes = verify_publication()
     manifest, contents = snapshot(manifest_bytes)
     output.mkdir(parents=True)
-    pdf_partial = output / (PDF_NAME + ".partial")
     zip_partial = output / (ZIP_NAME + ".partial")
-    pdf_partial.write_bytes(contents[PDF_NAME])
+    pdf_paths = []
+    for name in PDF_NAMES:
+        partial = output / (name + ".partial")
+        partial.write_bytes(contents[name])
+        require(digest(partial.read_bytes()) == manifest["files"][name],
+                f"Output PDF differs from canonical identity / identité PDF différente: {name}")
+        pdf_paths.append((partial, output / name))
     write_archive(zip_partial, contents)
-    require(digest(pdf_partial.read_bytes()) == manifest["pdf_sha256"],
-            "Output PDF differs from the canonical identity")
-    pdf_path = output / PDF_NAME
     zip_path = output / ZIP_NAME
-    pdf_partial.rename(pdf_path)
+    for partial, final in pdf_paths:
+        partial.rename(final)
     zip_partial.rename(zip_path)
     result = {
         "status": "PACKAGED_VERIFIED_PUBLICATION",
         "edition": manifest["edition"],
         "pages": manifest["pages"],
+        "languages": manifest["languages"],
         "verification": "verify.py passed; manifest and file hashes checked again before packaging",
         "manifest_sha256": digest(manifest_bytes),
         "zip_entries": len(contents),
         "artifacts": [
             {"path": str(path), "bytes": path.stat().st_size, "sha256": digest(path.read_bytes())}
-            for path in (pdf_path, zip_path)
+            for path in (*(final for _, final in pdf_paths), zip_path)
         ],
     }
     print(json.dumps(result, sort_keys=True, indent=2))

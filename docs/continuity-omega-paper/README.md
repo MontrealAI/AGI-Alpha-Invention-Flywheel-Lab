@@ -1,13 +1,19 @@
 # CONTINUITY Ω
 
+**English** · [Français](README.fr.md)
+
 ## Keep the promise.
 
 **Independently verified cyber resilience**  
 **Cybersecurity Resilience — Invent the Economy of Continuity**
 
-Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 6 November 2026 · Research edition 1.0.0.
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 6 November 2026 · Bilingual research edition 1.1.0.
 
-**Read:** [Versioned release](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.0.0) · [Complete paper](CONTINUITY_OMEGA.pdf) · [Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega.html) · [Editable LaTeX](CONTINUITY_OMEGA.tex) · [Evidence](evidence/REPRODUCTION.json) · [Review](REVIEW.md).
+**Read:** [Versioned release 1.1.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.0) · [Complete English paper](CONTINUITY_OMEGA.pdf) · [Article intégral en français](CONTINUITY_OMEGA_FR.pdf) · [English browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega.html) · [Lecture française dans le navigateur](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega-fr.html) · [English LaTeX](CONTINUITY_OMEGA.tex) · [LaTeX français](CONTINUITY_OMEGA_FR.tex) · [Evidence guide](EVIDENCE.md) · [Review](REVIEW.md).
+
+**Visual collection:** [English animation gallery](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega-media.html) · [Galerie d’animations en français](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega-media-fr.html). Four English/French animation pairs have still previews, play/stop controls and complete transcripts; they are conceptual illustrations, not operational evidence. **Citation metadata:** [English](CITATION.cff) · [Français](CITATION.fr.cff).
+
+Edition 1.1.0 supplies complete English and French reading paths over the same scientific claims and evidence. The [language contract and glossary](TRANSLATION.md) define what is translated and what remains byte-identical. The [original 1.0.0 release](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.0.0) retains its own tag, notes and assets. This bilingual publication does not qualify a new prototype revision.
 
 > AI that finds the vulnerability is a breakthrough. Intelligence that helps businesses survive the vulnerability—and invents a viable market for continuity—is a different game.
 
@@ -50,15 +56,17 @@ No frontier-model benchmark, real cyberattack, production recovery, supplier boo
 
 ## Build and verify
 
-Requirements: Python 3.10+, `pdflatex`, `pdftotext`, `pdfinfo`, and a standard TeX Live installation with `texlive-latex-extra`, `texlive-fonts-recommended`, `texlive-science`, `texlive-plain-generic`, and `lmodern`. No model API, key, paid service or shell escape is needed.
+Requirements: Python 3.10+, `pdflatex`, `pdftotext`, `pdfinfo`, and a standard TeX Live installation with `texlive-latex-extra`, `texlive-fonts-recommended`, `texlive-science`, `texlive-plain-generic`, `texlive-lang-french` (for French Babel), and `lmodern`. No model API, key, paid service or shell escape is needed.
 
 ```sh
-python3 build.py
+python3 build.py --language all
 python3 verify.py --check-build
 python3 pooling_example.py
 ```
 
-The canonical PDF is identity-bound by [PUBLICATION.json](PUBLICATION.json). A different TeX distribution can change PDF bytes; the build check compares extracted manuscript text. To intentionally update the canonical manuscript after review, use `python3 build.py --publish` and regenerate the publication manifest and reader metadata as a new reviewed edition.
+`python3 build.py` also builds both languages by default. Use `--language en` or `--language fr` for an individual manuscript; `verify.py --check-build` checks both rebuilt language versions, so build both before that verification.
+
+The two canonical PDFs are identity-bound by [PUBLICATION.json](PUBLICATION.json). A different TeX distribution can change PDF bytes; the build check compares each rebuilt manuscript's extracted text with its own canonical language version. To intentionally update the canonical manuscripts after review, use `python3 build.py --language all --publish` and regenerate the publication manifest and reader metadata as a new reviewed edition.
 
 ## Reproduce the original engineering
 
@@ -87,7 +95,7 @@ A successful counterexample replay means the stated observations and weaknesses 
 
 ## Downloadable source package
 
-The release provides the PDF and `CONTINUITY_OMEGA_SOURCE.zip`. The ZIP includes the editable manuscript, canonical PDF, bibliography, claim register, compact evidence, review and all build/reproduction scripts. The bibliography is inside the LaTeX source; no separate `.bib` file is required.
+The release provides `CONTINUITY_OMEGA.pdf`, `CONTINUITY_OMEGA_FR.pdf` and `CONTINUITY_OMEGA_SOURCE.zip`. The ZIP includes both complete editable manuscripts and canonical PDFs, bibliographies, bilingual claim registers and documentation, shared compact evidence, and all build/reproduction scripts. Each bibliography is inside its LaTeX source; no separate `.bib` file is required.
 
 ```sh
 python3 package.py --output /absolute/new/continuity-publication
@@ -97,6 +105,6 @@ Packaging checks the complete publication inventory and refuses to overwrite an 
 
 ## Publication and reuse
 
-[Source lineage](SOURCE_MAP.md) identifies the foundation pages and [CLAIMS.json](CLAIMS.json) distinguishes formal, reproduced, proposed and unestablished claims. Separate AI workstreams challenged sources, theory and the manuscript within one assistant workflow. This is not an independently certified field result or a two-model comparative experiment.
+[Source lineage](SOURCE_MAP.md) identifies the foundation pages. [CLAIMS.json](CLAIMS.json) and its [complete French translation](CLAIMS.fr.json) distinguish formal, reproduced, proposed and unestablished claims using identical claim IDs, status tokens, source anchors and measurements. The [evidence guide](EVIDENCE.md) explains the shared machine-readable records; those records are not translated into different experimental results. Separate AI workstreams challenged sources, theory and the manuscript within one assistant workflow. This is not an independently certified field result or a two-model comparative experiment.
 
 The user-supplied source documents and private conversation records are not redistributed. Public source links are provided for attribution. Earlier papers, prototype branches, historical failures and financial authority are preserved.
