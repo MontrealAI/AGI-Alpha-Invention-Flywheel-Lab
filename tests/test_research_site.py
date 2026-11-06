@@ -273,6 +273,7 @@ class ResearchSiteTests(unittest.TestCase):
                 for file in ('README' + suffix + '.md', 'REVIEW' + suffix + '.md',
                              'SOURCE_MAP' + suffix + '.md', 'CLAIMS' + suffix + '.json'):
                     self.assertIn('docs/continuity-omega-paper/' + file, reader)
+                self.assertIn('https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/continuity-omega-paper/CITATION' + suffix + '.cff', parser.links)
                 structured = json.loads(re.search(
                     r'<script type="application/ld\+json">(.*?)</script>', reader, re.S).group(1))
                 self.assertEqual(structured['inLanguage'], lang)
