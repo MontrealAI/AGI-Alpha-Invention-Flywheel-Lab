@@ -21,7 +21,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def public_observation():
     return {'schema': SCHEMA, 'now_hour': 1, 'acceptance_id': 'restore-17-v1',
-            'friction_microUSD': 100*USD, 'complete_cost_microUSD': 1950*USD,
+            'friction_microUSD': 100*USD, 'non_tax_cost_microUSD': 1950*USD,
+            'tax_numerator':1,'tax_denominator':5,'tax_deduction_before_closing_microUSD':1850*USD,
             'minimum_contribution_microUSD': 1, 'tick_microUSD': 10_000,
             'alternatives': [
                 {'source_id': 'AUTHORED-'+name, 'acceptance_id': 'restore-17-v1',
@@ -38,14 +39,15 @@ class QuotePolicyTests(unittest.TestCase):
         direct = min(q['price_microUSD'] for q in obs['alternatives']) - 100*USD - 10_000
         self.assertEqual(result['price_microUSD'], direct)
         self.assertEqual(direct, 2_999_990_000)
-        self.assertEqual(result['planned_contribution_microUSD'], 1_049_990_000)
+        self.assertEqual(result['planned_contribution_microUSD'], 819_992_000)
         self.assertFalse(result['spend_authorized'])
         self.assertEqual(obs, before)
 
     def test_exhaustive_independent_integer_oracle(self):
         for outside, friction, cost, tick in itertools.product(range(1,41),range(6),range(36),(1,2,3,5)):
             obs = public_observation()
-            obs.update(friction_microUSD=friction, complete_cost_microUSD=cost, tick_microUSD=tick)
+            obs.update(friction_microUSD=friction, non_tax_cost_microUSD=cost, tick_microUSD=tick,
+                       tax_numerator=0,tax_deduction_before_closing_microUSD=0)
             obs['alternatives'] = [obs['alternatives'][0]]
             obs['alternatives'][0]['price_microUSD'] = outside
             feasible = [p for p in range(tick,outside+1,tick) if p+friction<outside and p-cost>=1]
@@ -56,7 +58,7 @@ class QuotePolicyTests(unittest.TestCase):
     def test_no_economic_universal_integer_ceiling(self):
         obs=public_observation(); obs['alternatives']=[obs['alternatives'][0]]
         obs['alternatives'][0]['price_microUSD']=10**60+3
-        obs.update(friction_microUSD=0,tick_microUSD=7,complete_cost_microUSD=10**40)
+        obs.update(friction_microUSD=0,tick_microUSD=7,non_tax_cost_microUSD=10**40)
         result=decide(obs); price=result['price_microUSD']
         self.assertEqual(price % 7,0)
         self.assertLess(price,10**60+3)
@@ -72,7 +74,7 @@ class QuotePolicyTests(unittest.TestCase):
             self.assertEqual(decide(obs)['action'],'ABSTAIN')
 
     def test_unprofitable_quote_abstains(self):
-        obs=public_observation();obs['complete_cost_microUSD']=3000*USD
+        obs=public_observation();obs['non_tax_cost_microUSD']=3000*USD
         self.assertEqual(decide(obs)['action'],'ABSTAIN')
 
     def test_hidden_fields_and_invalid_exact_inputs_refused(self):
@@ -80,13 +82,29 @@ class QuotePolicyTests(unittest.TestCase):
             obs=public_observation();obs[key]='PRIVATE'
             with self.assertRaisesRegex(ValueError,'PUBLIC_OBSERVATION_FIELDS'):decide(obs)
         for value in (True,-1,1.5,'1'):
-            obs=public_observation();obs['complete_cost_microUSD']=value
+            obs=public_observation();obs['non_tax_cost_microUSD']=value
             with self.assertRaises(ValueError):decide(obs)
         for field in ('tick_microUSD','minimum_contribution_microUSD'):
             obs=public_observation();obs[field]=0
             with self.assertRaises(ValueError):decide(obs)
         obs=public_observation();obs['alternatives'].append(copy.deepcopy(obs['alternatives'][0]))
         with self.assertRaisesRegex(ValueError,'UNIQUE_QUOTE'):decide(obs)
+
+    def test_provisional_tax_prevents_false_break_even_admission(self):
+        obs=public_observation();obs['alternatives'][-1]['price_microUSD']=2050_020000
+        self.assertEqual(decide(obs)['action'],'ABSTAIN')
+
+    def test_fresh_tax_confirmation_matches_exhaustive_ordinary_pricing(self):
+        # Prospectively fixed in F02_ADDENDUM.md, not selected by outcome.
+        for outside,numerator,denominator in [(205543,1,4),(270717,2,5),(361286,1,3)]:
+            obs=public_observation();obs['alternatives']=[obs['alternatives'][0]]
+            obs['alternatives'][0]['price_microUSD']=outside
+            obs.update(friction_microUSD=10000,non_tax_cost_microUSD=195000,
+                       tax_deduction_before_closing_microUSD=185000,
+                       tax_numerator=numerator,tax_denominator=denominator,tick_microUSD=1)
+            feasible=[p for p in range(1,outside) if p+10000<outside and
+                      p-195000-max(0,p-185000)*numerator//denominator>=1]
+            self.assertEqual(decide(obs)['price_microUSD'],max(feasible) if feasible else None)
 
 
 def execute_native_arm(arm, evidence_dir=None):

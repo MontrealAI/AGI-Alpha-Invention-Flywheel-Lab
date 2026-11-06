@@ -39,11 +39,12 @@ reserve or debit funds.
 
 The protocol was publicly registered at
 [`4354fbe49d634de8a9244c7f4aa51eae001607a3`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/4354fbe49d634de8a9244c7f4aa51eae001607a3)
-before implementation/execution. Eight focused tests pass, including an
+before implementation/execution. Ten focused tests pass, including an
 independently enumerated 34,560-grid price oracle, a strong direct tie,
 no-feasible-price/no-entry cases, missing/stale/incomparable source abstention,
 strict rejection of scenario/private fields, large integer arithmetic, actual
-native delivery and ten public-record tamper checks. Equal-content additional
+native delivery, three fresh tax-arithmetic checks and ten public-record tamper
+checks. All 16 existing workflow-platform checks also pass. Equal-content additional
 inspection supplies no new information and is not a measured agent study.
 
 Local adversarial review found F01: the initial public auditor verified native
@@ -52,10 +53,17 @@ mutation was accepted. The original auditor is retained at
 [`a79bf48ca244799ef6082b402aae96fb31fac203`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/a79bf48ca244799ef6082b402aae96fb31fac203),
 with the compact failure in `F01.json`. The repair binds price, public input,
 arm, frozen requests, native offer, successor snapshot/budget and claim scope.
-All ten predeclared mutation checks now reject, and all three original honest
-packets re-audit. This is shared-author local procedural challenge, not an
+All ten mutation regressions now reject, and all three honest packets re-audit.
+F02 subsequently exposed an omitted contingent-tax provision in the planning
+input. A borderline quote appeared profitable before provision but lost
+$19.992 after it. Version 2 explicitly subtracts the provision before admission;
+three newly fixed arithmetic cases agree with exhaustive ordinary pricing.
+The initial source and original v1 packets remain at
+[`dd818794f9c0987c106c9095ce09aefd33b4e92c`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/dd818794f9c0987c106c9095ce09aefd33b4e92c).
+Current packets are v2 exposed engineering reproductions, not new primary accounts.
+This is shared-author local procedural challenge, not an
 independent model/institution trial or fresh economic confirmation. No native
-record or economic result was rewritten after the verifier repair.
+historical account or economic verdict was overwritten after either repair.
 
 The current research shortlist still compares scoped recovery, jointly
 committed recovery capacity, qualified second-life batteries and pooled

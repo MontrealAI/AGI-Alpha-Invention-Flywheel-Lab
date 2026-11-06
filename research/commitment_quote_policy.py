@@ -10,10 +10,11 @@ from __future__ import annotations
 import hashlib
 import json
 
-SCHEMA = 'genesis-public-quote/v1'
+SCHEMA = 'genesis-public-quote/v2'
 FIELDS = {'schema', 'now_hour', 'acceptance_id', 'friction_microUSD',
-          'complete_cost_microUSD', 'minimum_contribution_microUSD',
-          'tick_microUSD', 'alternatives'}
+          'non_tax_cost_microUSD', 'minimum_contribution_microUSD',
+          'tick_microUSD', 'alternatives', 'tax_numerator', 'tax_denominator',
+          'tax_deduction_before_closing_microUSD'}
 QUOTE_FIELDS = {'source_id', 'acceptance_id', 'price_microUSD',
                 'observed_hour', 'valid_until_hour', 'complete'}
 
@@ -39,11 +40,15 @@ def decide(observation):
         raise ValueError('PUBLIC_OBSERVATION_FIELDS_REQUIRED')
     if observation['schema'] != SCHEMA:
         raise ValueError('PUBLIC_OBSERVATION_SCHEMA_REQUIRED')
-    for key in ('now_hour', 'friction_microUSD', 'complete_cost_microUSD'):
+    for key in ('now_hour', 'friction_microUSD', 'non_tax_cost_microUSD',
+                'tax_numerator', 'tax_deduction_before_closing_microUSD'):
         _integer(observation[key])
-    for key in ('tick_microUSD', 'minimum_contribution_microUSD'):
+    for key in ('tick_microUSD', 'minimum_contribution_microUSD', 'tax_denominator'):
         _integer(observation[key], positive=True)
     _text(observation['acceptance_id'])
+    if (observation['tax_numerator']>observation['tax_denominator'] or
+            observation['tax_deduction_before_closing_microUSD']>observation['non_tax_cost_microUSD']):
+        raise ValueError('SUPPORTED_TAX_PROVISION_REQUIRED')
     alternatives = observation['alternatives']
     if type(alternatives) is not list:
         raise ValueError('PUBLIC_ALTERNATIVES_REQUIRED')
@@ -76,7 +81,8 @@ def decide(observation):
     ceiling = min(q['price_microUSD'] for q in alternatives) - observation['friction_microUSD']
     tick = observation['tick_microUSD']
     price = ((ceiling - 1) // tick) * tick
-    contribution = price - observation['complete_cost_microUSD']
+    provision = max(0,price-observation['tax_deduction_before_closing_microUSD']) * observation['tax_numerator']//observation['tax_denominator']
+    contribution = price - observation['non_tax_cost_microUSD'] - provision
     if price <= 0 or contribution < observation['minimum_contribution_microUSD']:
         result['reason'] = 'NO_COMPLETE_COST_PRICE_IN_DECLARED_FEASIBLE_SET'
         return result
