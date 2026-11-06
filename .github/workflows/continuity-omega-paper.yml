@@ -1,4 +1,4 @@
-name: CONTINUITY OMEGA · English / Français
+name: CONTINUITY Ω / CONTINUITÉ Ω · English / Français
 
 on:
   pull_request:
@@ -167,7 +167,7 @@ jobs:
 
           repository = os.environ['GITHUB_REPOSITORY']
           qualified_sha = os.environ['GITHUB_SHA']
-          tag = 'continuity-omega-v1.1.0'
+          tag = 'continuity-omega-v1.1.1'
           paper = Path('docs/continuity-omega-paper')
           package = Path(os.environ['RUNNER_TEMP']) / 'continuity-omega-release'
           notes = paper / 'RELEASE_NOTES.md'
@@ -225,7 +225,7 @@ jobs:
                   'release', 'create', tag,
                   *[str(package / name) for name in assets],
                   '--repo', repository, '--target', qualified_sha,
-                  '--title', 'CONTINUITY Ω — Édition bilingue / Bilingual edition 1.1.0',
+                  '--title', 'CONTINUITY Ω / CONTINUITÉ Ω — Bilingual edition / Édition bilingue 1.1.1',
                   '--notes-file', str(notes), '--latest=false',
               ]
               if tagged_sha is not None:
@@ -276,7 +276,7 @@ jobs:
 
           result = {
               'operation': 'created' if created else 'preserved-and-verified',
-              'edition': '1.1.0', 'tag': tag, 'release_url': release['html_url'],
+              'edition': '1.1.1', 'tag': tag, 'release_url': release['html_url'],
               'qualified_commit': qualified_sha, 'release_commit': tagged_sha,
               'downloaded_asset_sha256': assets,
               'scope': 'Research publication and pinned synthetic evidence; not operational or economic certification.',
@@ -284,7 +284,7 @@ jobs:
           }
           print(json.dumps(result, ensure_ascii=False, indent=2))
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as summary:
-              summary.write('## CONTINUITY Ω — Research edition / Édition de recherche 1.1.0\n\n')
+              summary.write('## CONTINUITY Ω / CONTINUITÉ Ω — Research edition / Édition de recherche 1.1.1\n\n')
               operation_en = 'Created and verified' if created else 'Preserved and verified'
               operation_fr = 'Créée et vérifiée' if created else 'Conservée et vérifiée'
               summary.write('### English\n\n')

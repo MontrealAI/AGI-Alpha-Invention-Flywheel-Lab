@@ -68,7 +68,9 @@ def excluded(relative):
 
 
 def check_manifest(manifest):
-    require(manifest.get("edition") == "1.1.0", "Expected bilingual publication edition 1.1.0 / édition bilingue attendue: 1.1.0")
+    require(manifest.get("edition") == "1.1.1", "Expected bilingual publication edition 1.1.1 / édition bilingue attendue: 1.1.1")
+    require(manifest.get("title", "").startswith("CONTINUITY Ω") and manifest.get("title_fr", "").startswith("CONTINUITÉ Ω"),
+            "Localized publication titles required / titres localisés de publication requis")
     pages = manifest.get("pages")
     require(type(pages) is int and pages > 0, "Manifest pages must be a positive integer")
     files = manifest.get("files")
@@ -138,6 +140,59 @@ def run_tool(program, arguments):
         raise ValueError(f"Cannot run {program}: {error}") from error
     require(result.returncode == 0, f"{program} failed: {result.stderr.strip()}")
     return result.stdout
+
+
+def check_pdf_title(pdf_name, language, expected_pages):
+    title = "CONTINUITÉ" if language == "fr" else "CONTINUITY"
+    series_label = "INTELLIGENCE TRANSFORMATIONNELLE ∞" if language == "fr" else "TRANSFORMATIONAL INTELLIGENCE ∞"
+    info = unicodedata.normalize("NFKC", run_tool("pdfinfo", [str(ROOT / pdf_name)]))
+    require(re.search(r"^Title:\s+" + re.escape(title + " Ω"), info, re.M) is not None,
+            "Canonical PDF metadata title is not localized / titre PDF non localisé: " + language)
+    extracted = unicodedata.normalize("NFKC", run_tool("pdftotext", ["-layout", "-enc", "UTF-8", str(ROOT / pdf_name), "-"]))
+    pages = extracted.split("\f")
+    if not pages[-1].strip():
+        pages.pop()
+    require(len(pages) == expected_pages, "Extracted PDF page inventory differs / nombre de pages extraites différent")
+    require(re.search(r"\b" + title + r"\b", pages[0]) is not None and "Ω" in pages[0],
+            "Canonical cover title is absent / titre de couverture absent: " + language)
+    require(re.search(r"(?<![\d.])1\.1\.1(?![\d.])", pages[0]) is not None,
+            "Canonical cover edition is stale / édition de couverture périmée: " + language)
+    require(series_label in pages[0],
+            "Canonical cover series label is not localized / libellé de série non localisé sur la couverture: " + language)
+    if language == "fr":
+        require(re.search(r"\bCONTINUITY\b", pages[0]) is None,
+                "English main title on French cover / titre anglais sur la couverture française")
+    for page_number, page in enumerate(pages[1:], 2):
+        first_line = next((line.strip() for line in page.splitlines() if line.strip()), "")
+        require(first_line.startswith(title + " Ω"),
+                f"Running title is not localized / en-tête non localisé: {language}, PDF page {page_number}")
+        require(first_line.endswith("1.1.1"),
+                f"Running edition is stale / édition d’en-tête périmée: {language}, PDF page {page_number}")
+        last_line = next((line.strip() for line in reversed(page.splitlines()) if line.strip()), "")
+        require(last_line.startswith(series_label),
+                f"Running footer label is not localized / libellé de pied de page non localisé: {language}, PDF page {page_number}")
+
+
+def check_title_qa(manifest):
+    record = manifest.get("title_correction_qa")
+    require(isinstance(record, dict) and record.get("schema") == "continuity-omega-paper/title-correction-checks/v1"
+            and record.get("edition") == "1.1.1", "Current title-correction QA missing / contrôle courant du titre absent")
+    require(record.get("titles") == {"en": "CONTINUITY Ω", "fr": "CONTINUITÉ Ω"},
+            "Current localized QA titles differ / titres localisés du contrôle différents")
+    require(record.get("pdfs") == manifest["languages"], "Title QA PDF identities differ / identités PDF du contrôle différentes")
+    historical = {
+        "evidence/QA.json": "7b597bce9a04c5cc8c6fa0279cac7ec9b7d0655c2417ac3b351fffa866e9776d",
+        "evidence/TRANSLATION_QA.json": "68779584c43a1c6972908d0fb01e4364b30b92a6144fdda9248a1de8bb236ac1",
+        "evidence/REPRODUCTION.json": "ab0bf43dc3a08f8c343f847b2c2174b0a82fdc5655b5873d20cd7763c144184b",
+        "evidence/COUNTEREXAMPLES.json": "2b62c84eb324dc4e2c60403be10d3b5c63c5324ff7622e74ce859663e64d1729",
+        "evidence/POOLING.json": "29a181652556fa9461a82ece3e7fe7b2e5d33e643ff79dfd3f80ee0070ae023b",
+    }
+    require(record.get("preserved_historical_evidence") == historical,
+            "Historical QA/evidence identity list differs / liste des identités historiques différente")
+    require(all(manifest["files"].get(name) == expected for name, expected in historical.items()),
+            "Historical QA/evidence bytes changed / octets des preuves historiques modifiés")
+    require(record.get("live_deployment_verified") is False,
+            "Local title QA must not claim live deployment / aucun déploiement ne doit être affirmé par ce contrôle local")
 
 
 def check_pdf_pages(pdf_name, expected_pages):
@@ -243,17 +298,20 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check-build", action="store_true", help="Compare rebuilt text for both languages / comparer le texte des deux PDF reconstruits")
     args = parser.parse_args()
-    count, languages = check_manifest(read_object(ROOT / "PUBLICATION.json"))
+    manifest = read_object(ROOT / "PUBLICATION.json")
+    count, languages = check_manifest(manifest)
+    check_title_qa(manifest)
     check_reproduction(read_object(ROOT / "evidence" / "REPRODUCTION.json"))
     check_pooling(read_object(ROOT / "evidence" / "POOLING.json"))
     for language, (pdf_name, source_name) in LANGUAGE_FILES.items():
         check_pdf_pages(pdf_name, languages[language]["pages"])
+        check_pdf_title(pdf_name, language, languages[language]["pages"])
         check_tex_references(source_name)
         if args.check_build:
             check_build_text(pdf_name)
     from check_translations import check as check_translations
     parity = check_translations(ROOT)
-    print(f"Publication consistency passed / cohérence vérifiée: edition 1.1.0, EN {languages['en']['pages']} pages, FR {languages['fr']['pages']} pages, {count} file hashes / empreintes.")
+    print(f"Publication consistency passed / cohérence vérifiée: edition 1.1.1, EN {languages['en']['pages']} pages, FR {languages['fr']['pages']} pages, {count} file hashes / empreintes.")
     print("Structural language parity / parité structurelle:", json.dumps(parity, sort_keys=True))
     print("Recorded evidence agrees: 29 + 9 implementation tests; four-case conventional tie; 12 supplied CLI cases (3 passes, 9 refusals).")
     print("Authored pooling arithmetic matches its record; local citation and reference keys resolve.")

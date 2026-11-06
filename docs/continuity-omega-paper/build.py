@@ -22,6 +22,9 @@ def main():
                         help="Manuscript language / langue de l'article (default / défaut: all)")
     parser.add_argument("--publish", action="store_true", help="Update canonical PDF copies / mettre à jour les PDF canoniques")
     args = parser.parse_args()
+    from check_translations import check_source_pair
+    check_source_pair((ROOT / "CONTINUITY_OMEGA.tex").read_text(encoding="utf-8"),
+                      (ROOT / "CONTINUITY_OMEGA_FR.tex").read_text(encoding="utf-8"))
     build = ROOT / "build"
     build.mkdir(exist_ok=True)
     selected = LANGUAGES if args.language == "all" else {args.language: LANGUAGES[args.language]}

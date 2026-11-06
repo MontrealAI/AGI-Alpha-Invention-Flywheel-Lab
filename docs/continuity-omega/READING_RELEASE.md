@@ -1,18 +1,20 @@
-# CONTINUITY Ω — Reading companion / Compagnon de lecture 1.0.0
+# CONTINUITY Ω / CONTINUITÉ Ω — Reading companion / Compagnon de lecture 1.0.1
 
-**Release tag / Étiquette :** `continuity-omega-reading-v1.0.0`  
+**Release tag / Étiquette :** `continuity-omega-reading-v1.0.1`  
 **Download / Téléchargement :** `CONTINUITY_OMEGA_BILINGUAL_COMPANION.zip`  
-**Included paper / Article inclus :** immutable edition / édition immuable **1.1.0**
+**Included paper / Article inclus :** immutable edition / édition immuable **1.1.1**
 
-[Download the companion / Télécharger le compagnon](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/download/continuity-omega-reading-v1.0.0/CONTINUITY_OMEGA_BILINGUAL_COMPANION.zip) · [English reading guide](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/continuity-omega/OUTPUTS.md) · [Guide de lecture français](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/continuity-omega/OUTPUTS.fr.md) · [Paper release / Publication de l’article](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.0)
+[Download the companion / Télécharger le compagnon](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/download/continuity-omega-reading-v1.0.1/CONTINUITY_OMEGA_BILINGUAL_COMPANION.zip) · [English reading guide](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/continuity-omega/OUTPUTS.md) · [Guide de lecture français](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/continuity-omega/OUTPUTS.fr.md) · [Paper release / Publication de l’article](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.1)
 
-## English
+## English — CONTINUITY Ω
 
 ### A complete offline reading path in both languages
 
-This separate companion brings the prototype’s English and French guides, a display-only passport reader, representative raw synthetic records, and the complete paper edition 1.1.0 into one archive. Open **`START_HERE.md`** after extraction. The nominal example and the overbooked refusal each have an English and a French report beside the original JSON records.
+Edition **1.0.1** corrects the displayed French title to **CONTINUITÉ Ω**, including the guides, help and generated reports. The English title remains **CONTINUITY Ω**. Technical identifiers, paths, filenames and historical source records retain their original forms.
 
-The companion preserves the six prototype source files, the original 29-test file and all paper files byte for byte. The paper’s existing `continuity-omega-v1.1.0` release, PDFs and source archive remain unchanged. This reading release does not integrate the separately owned checker-hardening work or claim that the historical checker’s known weaknesses have been repaired.
+This separate companion brings the prototype’s English and French guides, a display-only passport reader, representative raw synthetic records, and the complete paper edition 1.1.1 into one archive. Open **`START_HERE.md`** after extraction. The nominal example and the overbooked refusal each have an English and a French report beside the original JSON records.
+
+The companion preserves the six prototype source files, the original 29-test file and all paper files byte for byte. The earlier paper release `continuity-omega-v1.1.0` and companion release `continuity-omega-reading-v1.0.0` remain unchanged; this new companion includes the corrected paper edition 1.1.1. This reading release does not integrate the separately owned checker-hardening work or claim that the historical checker’s known weaknesses have been repaired.
 
 ### Run from the downloaded archive
 
@@ -50,13 +52,15 @@ python3 -B scripts/package_continuity_reading.py --output /tmp/continuity-readin
 
 `MANIFEST.json` covers every archive file except itself. The extracted check rejects missing files, additional paths, symbolic links and changed contents. These are local consistency checks; a manifest cannot authenticate its own origin. Keep the extracted archive unchanged for checking, and write any new demos or exported reports outside it.
 
-## Français
+## Français — CONTINUITÉ Ω
 
 ### Un parcours de lecture complet hors ligne dans les deux langues
 
-Ce compagnon distinct réunit les guides du prototype en français et en anglais, un lecteur de passeport limité à la présentation, des données synthétiques brutes représentatives et l’édition complète 1.1.0 de l’article dans une seule archive. Après extraction, ouvrez **`START_HERE.md`**. L’exemple nominal et le refus pour capacité déjà réservée disposent chacun d’un rapport français et d’un rapport anglais, à côté des fichiers JSON d’origine.
+L’édition **1.0.1** corrige le titre affiché en français pour utiliser **CONTINUITÉ Ω**, dans les guides, l’aide et les rapports générés. Le titre anglais demeure **CONTINUITY Ω**. Les identifiants techniques, chemins, noms de fichiers et enregistrements sources historiques conservent leur forme d’origine.
 
-Le compagnon conserve, octet par octet, les six fichiers sources du prototype, le fichier des 29 tests originaux et tous les fichiers de l’article. La publication existante `continuity-omega-v1.1.0`, ses PDF et son archive de sources demeurent inchangés. Cette publication de lecture n’intègre pas les travaux de renforcement du vérificateur qui relèvent d’une initiative distincte et ne prétend pas corriger les faiblesses connues du vérificateur historique.
+Ce compagnon distinct réunit les guides du prototype en français et en anglais, un lecteur de passeport limité à la présentation, des données synthétiques brutes représentatives et l’édition complète 1.1.1 de l’article dans une seule archive. Après extraction, ouvrez **`START_HERE.md`**. L’exemple nominal et le refus pour capacité déjà réservée disposent chacun d’un rapport français et d’un rapport anglais, à côté des fichiers JSON d’origine.
+
+Le compagnon conserve, octet par octet, les six fichiers sources du prototype, le fichier des 29 tests originaux et tous les fichiers de l’article. Les publications antérieures de l’article `continuity-omega-v1.1.0` et du compagnon `continuity-omega-reading-v1.0.0` demeurent inchangées ; ce nouveau compagnon inclut l’édition corrigée 1.1.1 de l’article. Cette publication de lecture n’intègre pas les travaux de renforcement du vérificateur qui relèvent d’une initiative distincte et ne prétend pas corriger les faiblesses connues du vérificateur historique.
 
 ### Exécuter le lecteur depuis l’archive téléchargée
 

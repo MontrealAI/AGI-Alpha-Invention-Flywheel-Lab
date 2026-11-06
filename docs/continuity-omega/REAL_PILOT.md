@@ -1,6 +1,6 @@
 # CONTINUITY Ω — First paid-pilot acceptance contract (proposed; no real approvals)
 
-**English** · [Français](REAL_PILOT.fr.md) · [Research paper, edition 1.1.0](../continuity-omega-paper/README.md)
+**English** · [Français](REAL_PILOT.fr.md) · [Research paper, edition 1.1.1](../continuity-omega-paper/README.md)
 
 ## Qualification note: the historical v0.1 source
 

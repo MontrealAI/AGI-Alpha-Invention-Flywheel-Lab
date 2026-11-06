@@ -1,6 +1,6 @@
-# CONTINUITY Ω · un engagement vérifié séparément dans un exercice synthétique
+# CONTINUITÉ Ω · un engagement vérifié séparément dans un exercice synthétique
 
-[English](QUICKSTART.md) · **Français** · [Article de recherche, édition 1.1.0](../continuity-omega-paper/README.fr.md)
+[English](QUICKSTART.md) · **Français** · [Article de recherche, édition 1.1.1](../continuity-omega-paper/README.fr.md)
 
 ## Note de portée : la source historique v0.1
 

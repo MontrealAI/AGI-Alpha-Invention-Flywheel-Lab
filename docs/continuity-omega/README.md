@@ -1,6 +1,6 @@
 # CONTINUITY Ω — Keep the promise, prove the recovery
 
-**English** · [Français](README.fr.md) · [Research paper, edition 1.1.0](../continuity-omega-paper/README.md)
+**English** · [Français](README.fr.md) · [Research paper, edition 1.1.1](../continuity-omega-paper/README.md)
 
 ## Qualification note: the historical v0.1 source
 

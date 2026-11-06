@@ -1,4 +1,4 @@
-name: CONTINUITY OMEGA · Reading companion / Compagnon de lecture
+name: CONTINUITY Ω / CONTINUITÉ Ω · Reading companion / Compagnon de lecture
 
 on:
   pull_request:
@@ -122,7 +122,7 @@ jobs:
 
           repository = os.environ['GITHUB_REPOSITORY']
           qualified_sha = os.environ['GITHUB_SHA']
-          tag = 'continuity-omega-reading-v1.0.0'
+          tag = 'continuity-omega-reading-v1.0.1'
           asset = 'CONTINUITY_OMEGA_BILINGUAL_COMPANION.zip'
           folder = Path(os.environ['RUNNER_TEMP']) / 'continuity-reading-release'
           notes = Path('docs/continuity-omega/READING_RELEASE.md').read_text(encoding='utf-8')
@@ -171,7 +171,7 @@ jobs:
               require(tagged_sha is None or tagged_sha == qualified_sha,
                       'Existing tag points elsewhere; preserved', 'L’étiquette existante vise un autre commit ; conservée')
               args = ['release', 'create', tag, str(folder / asset), '--repo', repository,
-                      '--target', qualified_sha, '--title', 'CONTINUITY Ω — Reading companion / Compagnon de lecture 1.0.0',
+                      '--target', qualified_sha, '--title', 'CONTINUITY Ω / CONTINUITÉ Ω — Reading companion / Compagnon de lecture 1.0.1',
                       '--notes-file', 'docs/continuity-omega/READING_RELEASE.md', '--latest=false']
               if tagged_sha is not None:
                   args.append('--verify-tag')
@@ -221,7 +221,7 @@ jobs:
                      'scope_fr': 'Présentation bilingue d’éléments probants synthétiques consignés ; aucun nouvel audit ni certification opérationnelle.'}
           print(json.dumps(receipt, ensure_ascii=False, indent=2))
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as summary:
-              summary.write('## CONTINUITY Ω — Reading companion / Compagnon de lecture 1.0.0\n\n')
+              summary.write('## CONTINUITY Ω / CONTINUITÉ Ω — Reading companion / Compagnon de lecture 1.0.1\n\n')
               summary.write(f"[Release / Publication]({release['html_url']})\n\n")
               summary.write(f'Qualified commit / Commit qualifié: `{qualified_sha}`\n\n')
               summary.write(f'Release commit / Commit de publication: `{tagged_sha}`\n\n')

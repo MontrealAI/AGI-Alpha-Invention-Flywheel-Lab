@@ -1,10 +1,10 @@
-# CONTINUITY Ω — Lire le résultat consigné en français ou en anglais
+# CONTINUITÉ Ω — Lire le résultat consigné en français ou en anglais
 
 [English](OUTPUTS.md) · **Français** · [Démarrage rapide](QUICKSTART.fr.md) · [Guide du prototype](README.fr.md)
 
 Le compagnon de lecture présente les artefacts de transfert, d’audit et de refus consignés par le prototype dans la langue choisie. Il conserve les identifiants bruts, les codes de statut, les quantités, les montants et les empreintes des fichiers. **Un rapport lisible ne constitue ni un nouvel audit, ni une certification, ni la preuve qu’un engagement envers un client a été tenu.**
 
-Le prototype d’origine demeure inchangé. Ses messages au terminal et son `PASSPORT.md` d’origine utilisent l’anglais ; le compagnon fournit une lecture complète en français ou en anglais des sorties JSON prises en charge, avec des explications, une aide et des erreurs localisées. L’édition bilingue **1.1.0** de l’article reste une publication distincte.
+Le prototype d’origine demeure inchangé. Ses messages au terminal et son `PASSPORT.md` d’origine utilisent l’anglais ; le compagnon fournit une lecture complète en français ou en anglais des sorties JSON prises en charge, avec des explications, une aide et des erreurs localisées. L’édition bilingue **1.1.1** de l’article reste une publication distincte.
 
 ## Lire un exercice nominal
 

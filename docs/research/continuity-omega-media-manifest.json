@@ -1,21 +1,21 @@
 {
   "schema_version": 1,
-  "edition": "1.1.0",
+  "edition": "1.1.1",
   "scope": {
     "en": "Conceptual marketing illustrations. They do not establish operational recovery, accepted delivery, independent certification, revenue or a working market.",
     "fr-CA": "Illustrations conceptuelles de communication. Elles ne démontrent ni reprise opérationnelle, ni livraison acceptée, ni certification indépendante, ni revenus, ni marché opérationnel."
   },
   "provenance": {
-    "en": "Existing supplied English CONTINUITY Ω GIFs are preserved byte for byte. French counterparts were created with the built-in image-generation tool by text-localization edits of complete frame sheets, then assembled as GIFs.",
-    "fr-CA": "Les GIF anglais CONTINUITY Ω fournis sont conservés octet pour octet. Les versions françaises ont été créées avec l’outil intégré de génération d’images par localisation du texte de planches complètes, puis assemblées en GIF."
+    "en": "Existing supplied English CONTINUITY Ω GIFs remain byte-identical. French counterparts were initially created with the built-in image-generation tool by text-localization edits of complete frame sheets. Edition 1.1.1 applies a further title-only edit to those French sheets, replacing every existing project title with CONTINUITÉ Ω, then slices, resizes and assembles the generated frames as GIFs.",
+    "fr-CA": "Les GIF anglais CONTINUITY Ω fournis restent identiques, octet pour octet. Les versions françaises ont d’abord été créées avec l’outil intégré de génération d’images par localisation du texte de planches complètes. L’édition 1.1.1 applique à ces planches françaises une nouvelle retouche limitée au titre pour remplacer chaque titre de projet existant par CONTINUITÉ Ω, puis découpe, redimensionne et assemble les images générées en GIF."
   },
   "visual_identity": {
     "en": "French frames are generated adaptations: fine artwork details differ. Story order, dimensions, frame counts, timing and loop settings are preserved.",
     "fr-CA": "Les images françaises sont des adaptations générées : certains détails du dessin diffèrent. L’ordre du récit, les dimensions, le nombre d’images, leur durée et le réglage de répétition sont conservés."
   },
   "prompt_summary": {
-    "en": "Translate every visible English phrase into idiomatic Canadian French, retain CONTINUITY Ω as the brand, preserve the complete grid, frame order, scenes, symbols and blue/gold palette, fit complete wording within existing text areas, and add no scenes or claims.",
-    "fr-CA": "Traduire chaque expression anglaise visible en français canadien idiomatique, conserver la marque CONTINUITY Ω, la grille complète, l’ordre des images, les scènes, les symboles et la palette bleu et or, faire tenir le texte complet dans les zones existantes, sans ajouter de scène ni d’affirmation."
+    "en": "The initial localization translated visible English phrases into Canadian French. The edition 1.1.1 edit requests only the replacement of each visible main title CONTINUITY Ω with the exact accented CONTINUITÉ Ω; title-free frames stay title-free. It requests preservation of other French wording, grid, frame order, scenes, symbols and blue/gold palette, without new scenes or claims.",
+    "fr-CA": "La localisation initiale traduisait les expressions anglaises visibles en français canadien. La retouche de l’édition 1.1.1 demande uniquement de remplacer chaque titre principal visible CONTINUITY Ω par CONTINUITÉ Ω, avec l’accent exact ; les images sans titre le restent. Elle demande de conserver les autres textes français, la grille, l’ordre des images, les scènes, les symboles et la palette bleu et or, sans nouvelle scène ni affirmation."
   },
   "playback": {
     "en": "Gallery previews are static. Playback starts only after a user action. Stop returns to the final-frame preview.",
@@ -49,15 +49,32 @@
           "sha256": "657f3b1d208e1726f13349d51ecf8d7d4d41bdb269580090256dd9351cfcce7a"
         },
         "continuity-omega-ascent-fr.gif": {
-          "bytes": 1018354,
-          "sha256": "fa856284e8f439cd9ff7c7f11396e1ecaff24805f0840d6ed1b92dc88e464cb9"
+          "bytes": 988893,
+          "sha256": "c5cd792cd687e1697d73b4cd7a9a1b6153213392560633b6fb4e8107d2a4ec0d"
         },
         "continuity-omega-ascent-fr-poster.png": {
-          "bytes": 183309,
-          "sha256": "b20fb62640bac53306f93d71d9de91d0c8f9e0ec777f25903bffc54f0e0c58ef"
+          "bytes": 173295,
+          "sha256": "f7ae208f96cb5bbf58d7c66b3f364327c49ef64bc607006520d24aa68537d0c3"
         }
       },
-      "english_original_sha256": "8707bb01ef3abc9e7f89c0ab1ad415bd6fbfa32987467cd0408fc2b61b0faabe"
+      "english_original_sha256": "8707bb01ef3abc9e7f89c0ab1ad415bd6fbfa32987467cd0408fc2b61b0faabe",
+      "french_title_edit": {
+        "edition": "1.1.1",
+        "title_before": "CONTINUITY Ω",
+        "title_after": "CONTINUITÉ Ω",
+        "title_bearing_frames_1_based": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "previous_french_gif_sha256": "fa856284e8f439cd9ff7c7f11396e1ecaff24805f0840d6ed1b92dc88e464cb9",
+        "input_sheet_sha256": "f44a16b4ca5d8e1aaf11b19d0b0504ab4c7764a11db0ec171baccbdfeb9df53d",
+        "generated_sheet_sha256": "66500a01ce28877e394bed16a25437f5de129d9b0cdfd9247365a9b14a5c5c6a",
+        "prompt_sha256": "48ba571839bc7162fe0daaa35b114a2ff5de53edc9f02931726298527de4cec4"
+      }
     },
     {
       "id": "reveal",
@@ -86,15 +103,32 @@
           "sha256": "9d574a628d8ed3207479d71fe6e9f3702386d0c38224f02fd215d647a1d3e1a8"
         },
         "continuity-omega-reveal-fr.gif": {
-          "bytes": 1100134,
-          "sha256": "876aebf7c293158c1f57348dbfc11e5dd12ffeebec097ef6d008280945a42947"
+          "bytes": 1053886,
+          "sha256": "f66b14ddff8be4518826269585b7789dc08373eb4893a1296850fcb21945a123"
         },
         "continuity-omega-reveal-fr-poster.png": {
-          "bytes": 203579,
-          "sha256": "845963564bc10cd7e67516f27e320354e90e426b31fa60b8ad8824387f7248af"
+          "bytes": 195592,
+          "sha256": "d6181391b25a7a4fc80cf9e11ddb1508e1285425e57402b84545f441b89804b4"
         }
       },
-      "english_original_sha256": "b9b5a2599613965380bdc583360b8e0da0a8b9d0dc85ab3df8a614af0743534f"
+      "english_original_sha256": "b9b5a2599613965380bdc583360b8e0da0a8b9d0dc85ab3df8a614af0743534f",
+      "french_title_edit": {
+        "edition": "1.1.1",
+        "title_before": "CONTINUITY Ω",
+        "title_after": "CONTINUITÉ Ω",
+        "title_bearing_frames_1_based": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "previous_french_gif_sha256": "876aebf7c293158c1f57348dbfc11e5dd12ffeebec097ef6d008280945a42947",
+        "input_sheet_sha256": "21e62c5a8cb95646d643e67542be49aeaad1712c12b2eb9ff71c48f64b874ff4",
+        "generated_sheet_sha256": "aa093a4b43743ab511cce0c7ef136d5ed77a3843be449bcc94829506fb48be39",
+        "prompt_sha256": "48ba571839bc7162fe0daaa35b114a2ff5de53edc9f02931726298527de4cec4"
+      }
     },
     {
       "id": "journey",
@@ -120,15 +154,32 @@
           "sha256": "01a731fd49c620bb98de4aefed6b5904be3e6b5a82033907858f86cd85a71d19"
         },
         "continuity-omega-journey-fr.gif": {
-          "bytes": 1085230,
-          "sha256": "b87af06f9ae9e4348205dc7ea6b5ad7113e2769d2f43569a82cff796ed716014"
+          "bytes": 1036290,
+          "sha256": "567d2dea495030a7ccbcd13cd38fbe6e7d21e520940a6e7c378adf6e74a96324"
         },
         "continuity-omega-journey-fr-poster.png": {
-          "bytes": 357215,
-          "sha256": "12fd2841dafcb8d7f6120c801e9930bc73bdaca972051c5c57fe6d9e8830fac8"
+          "bytes": 335214,
+          "sha256": "1c97208d21c9b942e7e2cb8ccb89d74c52893901cb1aebb5753aa468c746130e"
         }
       },
-      "english_original_sha256": "986ebcf23ac12d9ac7fa9ddb4ad72c20e68a462128374064fecba0069099a534"
+      "english_original_sha256": "986ebcf23ac12d9ac7fa9ddb4ad72c20e68a462128374064fecba0069099a534",
+      "french_title_edit": {
+        "edition": "1.1.1",
+        "title_before": "CONTINUITY Ω",
+        "title_after": "CONTINUITÉ Ω",
+        "title_bearing_frames_1_based": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "previous_french_gif_sha256": "b87af06f9ae9e4348205dc7ea6b5ad7113e2769d2f43569a82cff796ed716014",
+        "input_sheet_sha256": "bec5fa159e875b704ae0bca73bfdb131b62f7516d2170c8337483ee805b99120",
+        "generated_sheet_sha256": "bfec3200c79ff22a86dc8b4cc68628b5ec1635a82e4e57f345d217e522dec4f4",
+        "prompt_sha256": "8a4ba742e1b8708ab2da676d72b6ca342bc535c802a81627e63461cd8320943b"
+      }
     },
     {
       "id": "motion",
@@ -157,15 +208,28 @@
           "sha256": "d76af33d2265393dd4cbb2d7228b4feb3a0b9238ba0713bddac0db4140dbec37"
         },
         "continuity-omega-motion-fr.gif": {
-          "bytes": 1044574,
-          "sha256": "92554a62ab807a191641f3b0bf9f996129c59135c36d745cecd89ea57d6eb665"
+          "bytes": 1007309,
+          "sha256": "79e7e886673156ac71a8f29e049c37affe460b92ecae1e794feafaa342b1a9c7"
         },
         "continuity-omega-motion-fr-poster.png": {
-          "bytes": 216978,
-          "sha256": "97ef56b4213a0cf9841c0e98149a7cc9a272df0f3fca062d837f2fd99478ccd4"
+          "bytes": 209271,
+          "sha256": "c2e0f5d4f0faa9110033b5619a6823c0ba849d180cb44703b974855727e6fb99"
         }
       },
-      "english_original_sha256": "c19307447a1084d1c30d24f8f1e074bb879cb410b8e4e37dda19d16d2691d372"
+      "english_original_sha256": "c19307447a1084d1c30d24f8f1e074bb879cb410b8e4e37dda19d16d2691d372",
+      "french_title_edit": {
+        "edition": "1.1.1",
+        "title_before": "CONTINUITY Ω",
+        "title_after": "CONTINUITÉ Ω",
+        "title_bearing_frames_1_based": [
+          3,
+          9
+        ],
+        "previous_french_gif_sha256": "92554a62ab807a191641f3b0bf9f996129c59135c36d745cecd89ea57d6eb665",
+        "input_sheet_sha256": "f9b058a361ded2d250855247a39ba5c4cd28fd9804284c2922d4192e564f88c9",
+        "generated_sheet_sha256": "effdf703e276619f8c42ffa64b5caed4ab1a43e638692eb1408882a7b7e6ecf1",
+        "prompt_sha256": "8042e176f9e6a9931371d6a4b76806ed4815b1475b0c4bb464b0e460c9120a64"
+      }
     }
   ]
 }

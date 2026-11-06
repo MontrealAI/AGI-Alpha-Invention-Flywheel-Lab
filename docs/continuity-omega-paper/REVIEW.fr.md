@@ -2,7 +2,7 @@
 
 [English](REVIEW.md) · **Français** · [Article et parcours de lecture](README.fr.md)
 
-Édition de recherche 1.1.0 · [Publication versionnée](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.0). L’édition bilingue conserve les éléments probants et les contre-exemples ci-dessous ; une traduction ne constitue ni une expérience supplémentaire ni une nouvelle revue indépendante.
+Édition de recherche 1.1.1 · [Publication versionnée](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.1). L’édition bilingue conserve les éléments probants et les contre-exemples ci-dessous ; une traduction ne constitue ni une expérience supplémentaire ni une nouvelle revue indépendante.
 
 Trois tâches d’IA attribuées séparément ont examiné la fidélité aux travaux fondateurs, les éléments issus de sources primaires, ainsi que les affirmations relatives à la théorie, au produit et aux reproductions. Elles font partie d’un même processus d’assistance : il s’agit d’un contrôle de qualité du manuscrit, et non d’une évaluation externe par les pairs, d’une certification institutionnelle indépendante ou d’une comparaison entre modèles de pointe.
 

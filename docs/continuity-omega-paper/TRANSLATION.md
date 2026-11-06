@@ -1,6 +1,6 @@
-# CONTINUITY Ω — Language contract / Contrat de traduction
+# CONTINUITY Ω / CONTINUITÉ Ω — Language contract / Contrat de traduction
 
-Research edition / Édition de recherche **1.1.0** · [English reading path](README.md) · [Parcours de lecture français](README.fr.md)
+Research edition / Édition de recherche **1.1.1** · [English reading path](README.md) · [Parcours de lecture français](README.fr.md)
 
 ## English
 
@@ -8,13 +8,15 @@ Research edition / Édition de recherche **1.1.0** · [English reading path](REA
 
 The English and French editions express the same scientific and commercial claims, assumptions, observations, failures and limits. French is a complete reading edition, not an executive summary. The bilingual release adds access in another language; it does not report a new model experiment, field exercise, certification, commercial transaction or qualified prototype repair.
 
-The release provides `CONTINUITY_OMEGA.pdf`, `CONTINUITY_OMEGA_FR.pdf` and one `CONTINUITY_OMEGA_SOURCE.zip` containing both complete manuscripts and their supporting material. The original 1.0.0 release keeps its own tag, notes and assets. Edition 1.1.0 has its own identities in `PUBLICATION.json`.
+The release provides `CONTINUITY_OMEGA.pdf`, `CONTINUITY_OMEGA_FR.pdf` and one `CONTINUITY_OMEGA_SOURCE.zip` containing both complete manuscripts and their supporting material. The original 1.0.0 release keeps its own tag, notes and assets. Edition 1.1.1 has its own identities in `PUBLICATION.json`.
 
 ### What changes with language
 
+The current main title is **CONTINUITY Ω** in English and **CONTINUITÉ Ω** in French, including the cover, running headers, body references, PDF metadata, citation metadata and current reading guides. Edition 1.1.1 corrects this title translation. Earlier releases 1.0.0 and 1.1.0, their records and assets remain unchanged. The current French cover series label and running footer read **INTELLIGENCE TRANSFORMATIONNELLE ∞**; authentic titles of cited source papers keep their originally published form.
+
 Explanatory prose, headings, captions, diagram labels, table explanations and human-readable claim descriptions are translated. French uses professional French terminology and appropriate typography; for example, `1,900 units` becomes `1 900 unités` in prose and `US$650` becomes `650 $ US`. The quantities and currency remain the same. The claim register retains numeric literals without typographic regrouping so they remain directly comparable.
 
-Official source titles, author names, product names, DOI strings and exact source URLs remain retrievable in their original form. Their role and limitations are explained in the reader's language. Keeping an official title does not leave its scientific significance unexplained or imply an endorsement.
+Official source titles, author names, product names, DOI strings and exact source URLs remain retrievable in their original form. Their role and limitations are explained in the reader's language. Keeping an official title does not leave its scientific significance unexplained or imply an endorsement. The four cited historical CONTINUITY prototype titles remain in their originally published English form in the French bibliography and source map; they identify earlier works, not the current French title. Stable filenames, URLs, release tags and schema identifiers such as `CONTINUITY_OMEGA_FR.pdf` and `continuity-omega` are not renamed.
 
 ### What remains immutable
 
@@ -36,7 +38,7 @@ The recorded evidence JSON and executable source are not duplicated into languag
 
 ### Build, verification and correction
 
-`python3 build.py --language all` builds both manuscripts; `python3 build.py` has the same language default. `--language en` and `--language fr` select an individual manuscript. `python3 verify.py --check-build` checks both rebuilt language versions against their respective canonical texts. PDF bytes can differ between languages and TeX installations; their publication identities remain explicit.
+`python3 build.py --language all` builds both manuscripts; `python3 build.py` has the same language default. `--language en` and `--language fr` select an individual manuscript. `python3 verify.py --check-build` checks both rebuilt language versions against their respective canonical texts. PDF bytes can differ between languages and TeX installations; their publication identities remain explicit. `check_translations.py --self-test` also rejects untranslated cover, running-header, body-macro and PDF-metadata titles, while retaining the existing mathematical and evidence checks. Current title QA is recorded in `PUBLICATION.json`; `evidence/QA.json` and `evidence/TRANSLATION_QA.json` remain historical records for editions 1.0.0 and 1.1.0.
 
 If a material discrepancy is found, compare the two statements, their common claim ID and the cited source. Correct the affected reading paths and metadata through a reviewed edition. Do not silently select a more favorable language, rewrite historical evidence, or overwrite an earlier release. The translation is part of this research publication's quality process; it is not a certified legal translation.
 
@@ -46,13 +48,15 @@ If a material discrepancy is found, compare the two statements, their common cla
 
 Les éditions anglaise et française expriment les mêmes affirmations scientifiques et commerciales, hypothèses, observations, échecs et limites. La version française est une édition de lecture complète, et non un résumé destiné à la direction. La publication bilingue donne accès au contenu dans une autre langue ; elle ne rapporte aucune nouvelle expérience de modèles, aucun exercice de terrain, aucune certification, aucune transaction commerciale et aucune qualification d’une correction du prototype.
 
-La publication fournit `CONTINUITY_OMEGA.pdf`, `CONTINUITY_OMEGA_FR.pdf` et une archive `CONTINUITY_OMEGA_SOURCE.zip` contenant les deux manuscrits complets et les documents associés. La publication originale 1.0.0 conserve sa propre étiquette de version, ses notes et ses fichiers. L’édition 1.1.0 possède ses propres identités dans `PUBLICATION.json`.
+La publication fournit `CONTINUITY_OMEGA.pdf`, `CONTINUITY_OMEGA_FR.pdf` et une archive `CONTINUITY_OMEGA_SOURCE.zip` contenant les deux manuscrits complets et les documents associés. La publication originale 1.0.0 conserve sa propre étiquette de version, ses notes et ses fichiers. L’édition 1.1.1 possède ses propres identités dans `PUBLICATION.json`.
 
 ### Ce qui change avec la langue
 
+Le titre principal courant est **CONTINUITÉ Ω** en français et **CONTINUITY Ω** en anglais, y compris sur la couverture, dans les en-têtes, les mentions du texte, les métadonnées PDF, les métadonnées de citation et les guides de lecture courants. L’édition 1.1.1 corrige cette traduction du titre. Les publications antérieures 1.0.0 et 1.1.0, leurs relevés et leurs fichiers demeurent inchangés. Le libellé de série sur la couverture française courante et le pied de page indiquent **INTELLIGENCE TRANSFORMATIONNELLE ∞** ; les titres authentiques des articles sources cités conservent leur forme de publication d’origine.
+
 Les explications, titres, légendes, libellés de schémas, descriptions de tableaux et descriptions d’affirmations destinées aux lecteurs sont traduits. Le français emploie une terminologie professionnelle et une typographie appropriée ; par exemple, `1,900 units` devient `1 900 unités` dans le texte courant, et `US$650` devient `650 $ US`. Les quantités et la devise restent identiques. Le registre des affirmations conserve les valeurs numériques littérales sans regroupement typographique pour permettre leur comparaison directe.
 
-Les titres officiels des sources, noms d’auteurs, noms de produits, DOI et URL exactes restent accessibles dans leur forme originale. Leur rôle et leurs limites sont expliqués dans la langue de lecture. Le maintien d’un titre officiel ne dispense pas d’en expliquer la portée scientifique et ne signifie pas que son auteur approuve le projet.
+Les titres officiels des sources, noms d’auteurs, noms de produits, DOI et URL exactes restent accessibles dans leur forme originale. Leur rôle et leurs limites sont expliqués dans la langue de lecture. Le maintien d’un titre officiel ne dispense pas d’en expliquer la portée scientifique et ne signifie pas que son auteur approuve le projet. Les quatre titres historiques cités des prototypes CONTINUITY conservent leur forme anglaise publiée dans la bibliographie française et la filiation des sources : ils identifient des travaux antérieurs, et non le titre français courant. Les noms de fichiers, URL, étiquettes de publication et identifiants de schéma stables, comme `CONTINUITY_OMEGA_FR.pdf` et `continuity-omega`, ne sont pas renommés.
 
 ### Ce qui reste inchangé
 
@@ -74,7 +78,7 @@ Les fichiers JSON consignés et le code exécutable ne sont pas dupliqués en do
 
 ### Compilation, vérification et correction
 
-`python3 build.py --language all` compile les deux manuscrits ; `python3 build.py` utilise le même choix de langues par défaut. `--language en` et `--language fr` sélectionnent un seul manuscrit. `python3 verify.py --check-build` vérifie les deux versions recompilées par rapport à leurs textes canoniques respectifs. Les octets des PDF peuvent différer selon les langues et les installations de TeX ; les identités de publication restent explicites.
+`python3 build.py --language all` compile les deux manuscrits ; `python3 build.py` utilise le même choix de langues par défaut. `--language en` et `--language fr` sélectionnent un seul manuscrit. `python3 verify.py --check-build` vérifie les deux versions recompilées par rapport à leurs textes canoniques respectifs. Les octets des PDF peuvent différer selon les langues et les installations de TeX ; les identités de publication restent explicites. `check_translations.py --self-test` rejette aussi les titres non traduits sur la couverture, dans les en-têtes, dans la macro du texte et dans les métadonnées PDF, en maintenant les contrôles des mathématiques et des éléments probants. Les contrôles actuels du titre figurent dans `PUBLICATION.json` ; `evidence/QA.json` et `evidence/TRANSLATION_QA.json` restent les relevés historiques des éditions 1.0.0 et 1.1.0.
 
 Si une divergence importante apparaît, comparer les deux énoncés, leur identifiant d’affirmation commun et la source citée. Corriger les parcours de lecture et les métadonnées concernés dans une édition révisée. Ne pas retenir silencieusement la langue la plus favorable, réécrire les éléments historiques ou écraser une publication antérieure. La traduction fait partie du contrôle de qualité de cette publication de recherche ; elle ne constitue pas une traduction juridique certifiée.
 
@@ -82,6 +86,7 @@ Si une divergence importante apparaît, comparer les deux énoncés, leur identi
 
 | English term | Français | Shared meaning / Sens commun |
 | --- | --- | --- |
+| CONTINUITY Ω | CONTINUITÉ Ω | Main title of the same research in each language. / Titre principal de la même recherche dans chaque langue. |
 | Keep the promise. | Tenir parole. | Preserve the authorized customer outcome. / Préserver le résultat autorisé attendu par le client. |
 | Independently verified cyber resilience | Cyberrésilience vérifiée de manière indépendante | Research ambition; disclose the independence actually present. / Ambition de recherche ; préciser l’indépendance effectivement présente. |
 | Business commitment | Engagement envers le client | Agreed quantity, quality, integrity, timing and acceptance. / Quantité, qualité, intégrité, délai et acceptation convenus. |
@@ -120,9 +125,9 @@ Si une divergence importante apparaît, comparer les deux énoncés, leur identi
 | Evidence guide / Guide probant | [EVIDENCE.md](EVIDENCE.md) | [EVIDENCE.fr.md](EVIDENCE.fr.md) | Human explanation of shared records. / Explication des fichiers communs pour les lecteurs. |
 | Claim register / Registre d’affirmations | [CLAIMS.json](CLAIMS.json) | [CLAIMS.fr.json](CLAIMS.fr.json) | Same 22 claim IDs, statuses, source anchors and measurements. / Mêmes 22 identifiants, statuts, ancrages de sources et mesures. |
 | Citation metadata / Métadonnées de citation | [CITATION.cff](CITATION.cff) | [CITATION.fr.cff](CITATION.fr.cff) | Language-specific reading edition, shared research provenance. / Édition de lecture propre à chaque langue, même provenance scientifique. |
-| Prototype guide / Guide du prototype | [README.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.0/docs/continuity-omega/README.md) | [README.fr.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.0/docs/continuity-omega/README.fr.md) | Full current guide with the same qualification note. / Guide courant complet avec la même note de portée. |
-| Prototype quick start / Démarrage rapide | [QUICKSTART.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.0/docs/continuity-omega/QUICKSTART.md) | [QUICKSTART.fr.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.0/docs/continuity-omega/QUICKSTART.fr.md) | Same commands and synthetic-only scope. / Mêmes commandes et portée limitée au synthétique. |
-| Proposed pilot / Pilote proposé | [REAL_PILOT.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.0/docs/continuity-omega/REAL_PILOT.md) | [REAL_PILOT.fr.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.0/docs/continuity-omega/REAL_PILOT.fr.md) | Same proposed obligations and acceptance gates. / Mêmes obligations proposées et conditions d’acceptation. |
+| Prototype guide / Guide du prototype | [README.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.1/docs/continuity-omega/README.md) | [README.fr.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.1/docs/continuity-omega/README.fr.md) | Full current guide with the same qualification note. / Guide courant complet avec la même note de portée. |
+| Prototype quick start / Démarrage rapide | [QUICKSTART.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.1/docs/continuity-omega/QUICKSTART.md) | [QUICKSTART.fr.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.1/docs/continuity-omega/QUICKSTART.fr.md) | Same commands and synthetic-only scope. / Mêmes commandes et portée limitée au synthétique. |
+| Proposed pilot / Pilote proposé | [REAL_PILOT.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.1/docs/continuity-omega/REAL_PILOT.md) | [REAL_PILOT.fr.md](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/continuity-omega-v1.1.1/docs/continuity-omega/REAL_PILOT.fr.md) | Same proposed obligations and acceptance gates. / Mêmes obligations proposées et conditions d’acceptation. |
 | Release body / Notes de publication | [RELEASE_NOTES.md](RELEASE_NOTES.md) | [RELEASE_NOTES.md](RELEASE_NOTES.md) | Complete EN and FR sections in one file. / Sections EN et FR complètes dans un seul fichier. |
 | Language contract / Contrat de traduction | This file. | Ce fichier. | Complete bilingual contract, glossary and inventory. / Contrat, glossaire et inventaire bilingues complets. |
 | Evidence JSON, manifest and code / JSON probants, manifeste et code | Shared immutable records and executable identifiers. | Fichiers immuables et identifiants exécutables communs. | Explained in both evidence guides; no translated experimental record. / Expliqués dans les deux guides probants ; aucun dossier expérimental traduit distinct. |

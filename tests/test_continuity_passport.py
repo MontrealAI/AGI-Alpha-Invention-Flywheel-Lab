@@ -87,6 +87,10 @@ class PassportReadingTests(unittest.TestCase):
     def test_both_languages_preserve_tokens_amounts_and_recorded_status(self):
         en = reader.present(self.inputs, 'en')
         fr = reader.present(self.inputs, 'fr')
+        self.assertEqual('# CONTINUITY Ω — Recorded Passport reader', en.splitlines()[0])
+        self.assertEqual('# CONTINUITÉ Ω — Lecture du Passeport consigné', fr.splitlines()[0])
+        self.assertNotIn('CONTINUITÉ Ω', en)
+        self.assertNotIn('CONTINUITY Ω', fr)
         for token in ('1900', '1100', '800', '2100', '22', '48', '5700', '5050', '650', '5800',
                       'LBL-100', 'LBL-200', 'PRINTER-02', 'REGION-B', 'PASS_SYNTHETIC_ONLY',
                       'READY_FOR_INDEPENDENT_SYNTHETIC_AUDIT', 'MISSING_FROM_RESTORED_SNAPSHOT',
@@ -280,11 +284,19 @@ class PassportReadingTests(unittest.TestCase):
         self.assertEqual(0, code)
         self.assertIn('Read recorded', stdout)
         self.assertIn('Lire les artefacts', stdout)
+        self.assertIn('CONTINUITY Ω', stdout)
+        self.assertIn('CONTINUITÉ Ω', stdout)
         code, stdout, stderr = self.invoke('--help', '--language', 'fr')
         self.assertEqual(0, code)
         self.assertIn('utilisation :', stdout)
         self.assertNotIn('usage:', stdout)
         self.assertNotIn('Read recorded', stdout)
+        self.assertIn('CONTINUITÉ Ω', stdout)
+        self.assertNotIn('CONTINUITY Ω', stdout)
+        code, stdout, stderr = self.invoke('--help', '--language', 'en')
+        self.assertEqual(0, code)
+        self.assertIn('CONTINUITY Ω', stdout)
+        self.assertNotIn('CONTINUITÉ Ω', stdout)
         for args in (('--language', 'fr', '--unknown'), ('--language', 'fr'),
                      ('--language', 'fr', '--in-dir'), ('--language', 'fr', '--in-dir', str(self.root / 'absent'))):
             code, stdout, stderr = self.invoke(*args)

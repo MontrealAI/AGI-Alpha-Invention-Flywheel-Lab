@@ -1,4 +1,4 @@
-# CONTINUITY Ω
+# CONTINUITÉ Ω
 
 [English](README.md) · **Français**
 
@@ -7,17 +7,17 @@
 **Cyberrésilience vérifiée de manière indépendante**  
 **Résilience en cybersécurité — Inventer l’économie de la continuité**
 
-Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 6 novembre 2026 · Édition de recherche bilingue 1.1.0.
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 6 novembre 2026 · Édition de recherche bilingue 1.1.1.
 
-**Lire :** [Publication versionnée 1.1.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.0) · [Article intégral en français](CONTINUITY_OMEGA_FR.pdf) · [Complete English paper](CONTINUITY_OMEGA.pdf) · [Lecture française dans le navigateur](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega-fr.html) · [English browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega.html) · [LaTeX français](CONTINUITY_OMEGA_FR.tex) · [English LaTeX](CONTINUITY_OMEGA.tex) · [Guide des éléments probants](EVIDENCE.fr.md) · [Revue critique](REVIEW.fr.md).
+**Lire :** [Publication versionnée 1.1.1](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.1) · [Article intégral en français](CONTINUITY_OMEGA_FR.pdf) · [Complete English paper](CONTINUITY_OMEGA.pdf) · [Lecture française dans le navigateur](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega-fr.html) · [English browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega.html) · [LaTeX français](CONTINUITY_OMEGA_FR.tex) · [English LaTeX](CONTINUITY_OMEGA.tex) · [Guide des éléments probants](EVIDENCE.fr.md) · [Revue critique](REVIEW.fr.md).
 
 **Collection visuelle :** [Galerie d’animations en français](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega-media-fr.html) · [English animation gallery](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega-media.html). Quatre paires d’animations anglaises et françaises disposent d’aperçus fixes, de commandes de lecture et d’arrêt ainsi que de transcriptions complètes ; il s’agit d’illustrations conceptuelles, et non d’éléments probants opérationnels. **Métadonnées de citation :** [Français](CITATION.fr.cff) · [English](CITATION.cff).
 
-L’édition 1.1.0 propose des parcours de lecture complets en français et en anglais, fondés sur les mêmes affirmations scientifiques et les mêmes éléments probants. Le [contrat de traduction et le glossaire](TRANSLATION.md) précisent ce qui est traduit et ce qui reste identique octet pour octet. La [publication originale 1.0.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.0.0) conserve sa propre étiquette de version, ses notes et ses fichiers. Cette publication bilingue ne qualifie aucune nouvelle révision du prototype.
+L’édition 1.1.1 propose des parcours de lecture complets en français et en anglais, fondés sur les mêmes affirmations scientifiques et les mêmes éléments probants. Le [contrat de traduction et le glossaire](TRANSLATION.md) précisent ce qui est traduit et ce qui reste identique octet pour octet. La [publication originale 1.0.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.0.0) conserve sa propre étiquette de version, ses notes et ses fichiers. Cette publication bilingue ne qualifie aucune nouvelle révision du prototype. L’édition 1.1.1 corrige le titre principal français en **CONTINUITÉ Ω** ; le titre anglais reste **CONTINUITY Ω**. L’[édition bilingue précédente 1.1.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.0) demeure inchangée. Le contenu scientifique et les éléments probants historiques sont préservés.
 
 > Une IA qui découvre la vulnérabilité représente une percée. Une intelligence qui aide les entreprises à y survivre — et qui invente un marché viable de la continuité — change la nature du jeu.
 
-Un système restauré peut encore laisser l’entreprise en difficulté : une commande acceptée a disparu, une modification a été annulée, une commande annulée réapparaît ou le créneau de production de secours a déjà été promis à quelqu’un d’autre. CONTINUITY Ω transforme ces omissions en une question constructive : **que faut-il désormais rendre possible pour que l’entreprise puisse encore tenir parole ?**
+Un système restauré peut encore laisser l’entreprise en difficulté : une commande acceptée a disparu, une modification a été annulée, une commande annulée réapparaît ou le créneau de production de secours a déjà été promis à quelqu’un d’autre. CONTINUITÉ Ω transforme ces omissions en une question constructive : **que faut-il désormais rendre possible pour que l’entreprise puisse encore tenir parole ?**
 
 ## La contribution de l’article
 
