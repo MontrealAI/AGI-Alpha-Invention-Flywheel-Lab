@@ -1,5 +1,9 @@
 # Adversarial review and corrections
 
+**English** · [Français](REVIEW.fr.md) · [Paper and reading paths](README.md)
+
+Research edition 1.1.0 · [Versioned release](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.0). The bilingual edition retains the evidence and counterexamples below; a translation is not an additional experiment or a new independent review.
+
 Three separately assigned AI workstreams reviewed foundational fidelity, primary-source evidence, and theory/product/reproduction claims. They share one assistant workflow; this is manuscript quality control, not external peer review, independent institutional certification or a frontier-model comparison.
 
 | Challenge | Evidence or reasoning | Correction adopted |

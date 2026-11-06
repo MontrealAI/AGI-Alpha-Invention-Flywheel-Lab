@@ -1,0 +1,728 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\frenchsetup{StandardLists=true}
+\usepackage{lmodern}
+\usepackage[sc]{mathpazo}
+\usepackage[scaled=.94]{helvet}
+\usepackage{microtype}
+\usepackage[a4paper,top=23mm,bottom=23mm,left=23mm,right=23mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx,xcolor,tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds,babel}
+\usepackage[most]{tcolorbox}
+\usepackage{booktabs,tabularx,longtable,array}
+\usepackage{enumitem,fancyhdr,titlesec,caption,needspace}
+\usepackage{xurl}
+\usepackage{hyperref,bookmark}
+\definecolor{ink}{HTML}{182237}
+\definecolor{night}{HTML}{111629}
+\definecolor{violet}{HTML}{59439B}
+\definecolor{gold}{HTML}{B48A47}
+\definecolor{teal}{HTML}{276A67}
+\definecolor{wine}{HTML}{7C3E54}
+\definecolor{mist}{HTML}{F3F1F7}
+\definecolor{sand}{HTML}{F8F5EE}
+\definecolor{muted}{HTML}{526077}
+\hypersetup{colorlinks=true,linkcolor=violet,citecolor=teal,urlcolor=teal,
+  pdftitle={CONTINUITY OMEGA : Cyberrésilience vérifiée de manière indépendante},
+  pdfauthor={Vincent Boucher},
+  pdflang={fr-CA},
+  pdfsubject={Résilience en cybersécurité : Inventer l’économie de la continuité},
+  pdfkeywords={intelligence transformationnelle, cyberrésilience, continuité des activités, vérification contradictoire, formation de marchés}}
+\urlstyle{same}
+\color{ink}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 1pt minus 1pt}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\linespread{1.055}
+\setlist[itemize]{leftmargin=1.4em,itemsep=3pt,topsep=4pt}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=4pt,topsep=4pt}
+\setcounter{tocdepth}{1}
+\titleformat{\section}{\sffamily\Large\bfseries\color{violet}}{\thesection}{.65em}{}
+\titleformat{\subsection}{\sffamily\large\bfseries\color{ink}}{\thesubsection}{.6em}{}
+\titleformat{\subsubsection}{\sffamily\normalsize\bfseries\color{teal}}{\thesubsubsection}{.6em}{}
+\titlespacing*{\section}{0pt}{16pt}{8pt}
+\titlespacing*{\subsection}{0pt}{10pt}{4pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily\small\color{muted}CONTINUITY $\Omega$}
+\fancyhead[R]{\sffamily\small\color{muted}Boucher\enspace |\enspace Édition de recherche 1.1.0}
+\fancyfoot[L]{\sffamily\scriptsize\color{muted}TRANSFORMATIONAL INTELLIGENCE $\infty$}
+\fancyfoot[R]{\sffamily\small\thepage}
+\renewcommand{\headrulewidth}{.35pt}
+\renewcommand{\footrulewidth}{0pt}
+\captionsetup{font=small,labelfont=bf,justification=raggedright,singlelinecheck=false}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.2}
+\newtcolorbox{insight}[1][]{enhanced,colback=mist,colframe=violet,boxrule=0pt,
+  borderline west={2.4pt}{0pt}{violet},arc=0pt,left=11pt,right=11pt,top=9pt,bottom=9pt,#1}
+\newtcolorbox{scopebox}[1][]{enhanced,colback=sand,colframe=gold,boxrule=.45pt,
+  arc=1pt,left=10pt,right=10pt,top=8pt,bottom=8pt,#1}
+\newcommand{\kicker}[1]{{\sffamily\small\bfseries\color{gold}\MakeUppercase{#1}}}
+\newcommand{\om}{CONTINUITY $\Omega$}
+\newcommand{\ti}{Transformational Intelligence}
+\newcommand{\genesis}{ALPHA GENESIS FLYWHEEL $\Omega$}
+\newcommand{\status}[1]{\textsf{\textbf{#1}}}
+\newcommand{\repo}{https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Définition}
+\AtBeginDocument{\renewcommand{\proofname}{Démonstration}}
+\newcommand{\chapterpage}{\clearpage}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+\fill[night] (current page.south west) rectangle (current page.north east);
+\fill[violet!32!night] ([xshift=80mm,yshift=-58mm]current page.north west) circle (72mm);
+\draw[gold!60,line width=.5pt] ([xshift=23mm,yshift=-24mm]current page.north west)--([xshift=-23mm,yshift=-24mm]current page.north east);
+\draw[white!15,line width=.5pt] ([xshift=23mm,yshift=20mm]current page.south west)--([xshift=-23mm,yshift=20mm]current page.south east);
+\end{tikzpicture}
+\color{white}
+{\sffamily\small MONTREAL.AI\enspace /\enspace QUEBEC.AI\hfill ÉDITION DE RECHERCHE 1.1.0}\par
+\vspace{26mm}
+{\sffamily\fontsize{39}{44}\selectfont\bfseries CONTINUITY}\par
+\vspace{2mm}
+{\fontsize{90}{94}\selectfont\color{gold}$\Omega$}\par
+\vspace{7mm}
+{\sffamily\fontsize{25}{30}\selectfont\bfseries Tenir parole.}\par
+\vspace{5mm}
+{\sffamily\Large Cyberrésilience vérifiée de manière indépendante}\par
+\vspace{13mm}
+\begin{minipage}{.90\textwidth}
+\large
+Une IA qui découvre la vulnérabilité constitue une percée.\par
+\vspace{3mm}
+Une intelligence qui aide les entreprises à y survivre---et invente un marché viable de la continuité---change la donne.
+\end{minipage}
+\vfill
+{\sffamily\large\bfseries Résilience en cybersécurité}\par
+{\sffamily\large Inventer l’économie de la continuité}\par
+\vspace{7mm}
+{\sffamily Vincent Boucher\hfill 6 novembre 2026}\par
+{\sffamily\small Montréal, Québec, Canada\hfill TRANSFORMATIONAL INTELLIGENCE $\infty$}\par
+\vspace{9mm}
+{\sffamily\footnotesize Une architecture de recherche, des limites formelles, des résultats synthétiques reproduits et un premier produit à mettre à l’épreuve.}
+\end{titlepage}
+\setcounter{page}{1}
+\hypersetup{pageanchor=true}
+
+\kicker{L’article en une minute}
+\section*{Le serveur est de retour. Et l’entreprise~?}
+\addcontentsline{toc}{section}{L’article en une minute}
+Un tableau de bord de reprise peut passer au vert alors qu’une commande client acceptée a disparu. Un fournisseur de relève peut exister alors que son créneau de production est déjà promis à quelqu’un d’autre. Un rapport convaincant peut décrire chaque composant examiné tout en omettant la dépendance qui détermine si le client recevra quoi que ce soit.
+
+\begin{insight}
+\large\textbf{La seconde intelligence cherche ce que la première a omis.}\par
+\textbf{\om\ cherche ce qu’il faut maintenant construire pour que cette lacune ne bloque plus l’entreprise.}
+\end{insight}
+
+\textbf{Le premier utilisateur.} La personne qui dirige les opérations d’un imprimeur régional d’étiquettes d’emballage destinées aux entreprises, sans second site de production. Le propriétaire ou la direction générale approuve les engagements commerciaux.
+
+\textbf{Service proposé, première version.} Un exercice contrôlé de continuité pour un produit approuvé~: reconstituer l’engagement client restant à honorer, révéler les omissions de la reprise, préparer un dossier de production de relève autorisé, vérifier la capacité réelle et le délai du prestataire alternatif, puis produire un Passeport de continuité à la portée délimitée. La livraison physique, son acceptation indépendante et le paiement constituent des étapes probatoires distinctes.
+
+\textbf{L’unique hypothèse commerciale.} Au moins un acheteur cible accorde suffisamment de valeur à cette solution de relève réservée et éprouvée de manière indépendante pour payer un prix couvrant son coût complet, malgré une solution crédible déjà offerte ou réalisable à l’interne.
+
+\textbf{La transformation.} Préserver le résultat initialement promis au client tout en changeant les moyens. Une entreprise pourrait honorer une commande approuvée par une autre voie qualifiée avant la restauration complète de son environnement informatique et de production d’origine.
+
+\textbf{L’hypothèse de marché.} Des obligations de production transférables et vérifiables, associées à une capacité réservée vérifiable, pourraient rendre une continuité utile abordable pour les entreprises qui ne peuvent justifier une installation en double. Chaque complément technique ou contractuel manquant doit effectivement être fourni.
+
+\begin{scopebox}
+\textbf{Ce que cette édition établit.} Une synthèse ancrée dans les sources~; des résultats conditionnels élémentaires sur l’information manquante, les dépendances communes et la capacité~; ainsi que la reproduction locale de deux prototypes synthétiques existants, à des révisions sources précisément identifiées. L’un comporte 29 tests~; l’autre, 9 tests et une égalité avec un témoin conventionnel compétent sur quatre cas. Cinq vérifications supplémentaires conservent un témoin positif, révèlent trois faiblesses de vérification ou d’inspection et démontrent une limite connue de la confiance accordée à la source. La réussite des suites initiales n’efface pas ces contre-exemples.\par
+\textbf{Ce qui reste à établir.} Un avantage mesuré des modèles de pointe, l’exhaustivité authentifiée de données réelles, une reprise opérationnelle sûre, une fabrication de relève acceptée, des revenus clients réels, un marché reproductible et une amélioration de la découverte sur de nouveaux successeurs.
+\end{scopebox}
+
+\chapterpage
+\kicker{Résumé}
+\section*{D’un fait manquant à une capacité nouvelle}
+\addcontentsline{toc}{section}{Résumé et contributions}
+La critique contradictoire par l’IA peut révéler des omissions importantes dans une réponse convaincante. En cyberrésilience, un engagement client manquant, une dépendance commune ou une revendication concurrente sur une capacité peut invalider une reprise apparemment saine. Nous proposons \om~: une architecture de recherche qui transforme ces omissions en capacités de continuité construites, testables et économiquement viables. Son objet d’évaluation est un engagement commercial autorisé dans des conditions de perturbation déclarées. Les éléments probants permettent de trancher une objection~; la construction modifie la voie autorisée~; une acceptation distincte vérifie le résultat initial. Fondée sur \ti, \genesis\ et \emph{Invent the Economy}, l’architecture relie des éléments probants protégés, des obligations transférables, une production alternative qualifiée, le respect de la capacité disponible, les coûts complets et l’évaluation causale de l’apport aux successeurs.
+
+Trois résultats conditionnels exposent les limites liées à des informations indiscernables, à des prérequis communs et à des seuils incompatibles de coût et de capacité. Nous reproduisons deux implémentations synthétiques à des révisions fixées. L’une reconstitue deux engagements totalisant 1\,900 unités et détecte trois écarts de reprise~; l’autre égale un rapprochement conventionnel compétent sur quatre cas. Des vérifications supplémentaires reproduisent, dans le premier prototype, une acceptation monétaire erronée, un échec sur entrée mal formée et un affichage périmé des éléments probants. Les suites réussies et les contre-exemples sont conservés ensemble. Aucun comparatif entre modèles ni aucune livraison sur le terrain n’est réalisé. Un premier service proposé et une expérience prospective précisent l’acheteur, l’hypothèse commerciale, les solutions concurrentes solides, l’acceptation distincte et les conditions d’arrêt. L’objectif de recherche est une intelligence qui découvre de quoi dépend la promesse d’une entreprise, construit les moyens manquants et démontre à la fois la continuité obtenue et la viabilité de la succession.
+
+\textbf{Mots-clés~:} cyberrésilience~; continuité des activités~; intelligence transformationnelle~; vérification contradictoire~; sémantique de la reprise~; capacités complémentaires~; formation de marchés.
+
+\subsection*{Contributions}
+\begin{enumerate}
+\item \textbf{Un objet d’évaluation à l’échelle de l’activité~:} préserver et honorer les engagements autorisés, y compris leurs modifications, annulations, exigences de qualité et échéances.
+\item \textbf{Un protocole constructif de mise à l’épreuve~:} distinguer l’allégation, les éléments probants, la décision, la correction, la livraison acceptée et la réutilisation qualifiée.
+\item \textbf{Des limites explicites~:} des informations communes peuvent masquer des omissions communes~; des voies de relève peuvent partager une dépendance décisive~; une capacité conditionnelle ne peut être promise plusieurs fois sans politique d’activation réalisable.
+\item \textbf{Un lien probatoire honnête~:} reproduire une ingénierie existante utile, mettre aussi le vérificateur à l’épreuve, conserver son égalité conventionnelle et ses échecs économiques, puis préciser l’expérience réelle susceptible d’établir sa valeur.
+\end{enumerate}
+Il s’agit d’une synthèse opérationnelle et d’un programme de recherche réfutable. Ils ne prétendent pas être à l’origine de la critique contradictoire, de la planification de la continuité, de la production de relève, des contrats conditionnels ou de l’assurance indépendante.
+
+\chapterpage
+\begingroup
+\small
+\setlength{\parskip}{2pt}
+\tableofcontents
+\endgroup
+\vspace{5mm}
+\noindent\textbf{Édition bilingue 1.1.0.} Cet article intégral en français et sa version anglaise présentent le même contenu scientifique, les mêmes éléments probants et les mêmes limites. La traduction ne constitue pas une nouvelle qualification opérationnelle ou commerciale. \href{https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/continuity-omega.html}{Lire l’édition anglaise intégrale.}
+
+\begin{scopebox}
+\textbf{Lire selon son objectif.}\enspace Pour le produit et son illustration, lire les sections~\ref{sec:promise} à~\ref{sec:v1}. Pour l’architecture et les limites formelles, lire les sections~\ref{sec:contract} à~\ref{sec:passport}. Pour les éléments probants, l’économie et la prochaine expérience décisive, lire les sections~\ref{sec:evidence} à~\ref{sec:flywheel}. Les annexes présentent la filiation des sources et les instructions de reproduction.
+\end{scopebox}
+
+\chapterpage
+\section{Tenir parole}\label{sec:promise}
+Supposons qu’un modèle de langage résume un livre. Sa prose est élégante, ses affirmations semblent plausibles, et la personne qui le lit ne connaît pas assez le livre pour déterminer ce qui compte. On demande à un second modèle de trouver une omission importante. Avec accès à la source et un objectif de lecture clair, il peut désigner l’argument qui change l’interprétation de tout le reste.
+
+Le résultat utile n’est pas l’assurance du second modèle. C’est l’\emph{écart que l’on peut examiner}~: où la source dit quelque chose d’important, en quoi le résumé ne le restitue pas et pourquoi cette lacune compte pour l’objectif de lecture. Un détail omis ne rend pas automatiquement un résumé mauvais. Une objection fabriquée n’est pas une correction. Cet exemple introductif et son exigence de pertinence substantielle figurent déjà dans \ti\ \cite{boucherTI}.
+
+Changeons maintenant de document. Le premier modèle produit un plan rassurant de continuité des activités. Il énumère les sauvegardes, un imprimeur de relève et une procédure de reprise. Le second modèle demande~: \emph{Où est la commande acceptée après la sauvegarde~? L’imprimeur de relève peut-il utiliser le visuel approuvé sans le service d’identité indisponible~? Qui a effectivement réservé son créneau de production~?}
+
+L’élément important qui manque n’est plus un paragraphe. C’est une obligation ou un prérequis. Une entreprise peut restaurer ce dont elle se souvient tout en faisant défaut au client dont elle a oublié l’engagement.
+
+\begin{insight}
+\textbf{Un plan de reprise est une affirmation. Un exercice est un élément probant. La continuité est le résultat accepté.}
+\end{insight}
+
+\subsection{Ce qui mérite d’être construit}
+Le produit proposé aide une entreprise à répondre à une question opérationnelle~: \emph{Sous cette perturbation déclarée, pouvons-nous encore livrer ce résultat convenu, à ce client, selon cette qualité et avant cette échéance~?} La réponse peut exiger de corriger un logiciel. Elle peut aussi nécessiter un enregistrement protégé, un dossier de production interopérable, une voie d’approbation autorisée, une capacité externe réservée ou un autre ordre de livraison.
+
+La transformation centrale consiste à séparer la finalité de la voie héritée. Si le client exige des étiquettes conformes pour jeudi, restaurer chaque composant de l’infrastructure du lundi est un moyen possible. Un fabricant alternatif qualifié peut en être un autre. Aucune voie n’est admissible si elle modifie le produit exigé, contourne une approbation ou transfère discrètement un risque inacceptable.
+
+L’architecture explore donc conjointement les résultats et leurs moyens~: ce qui mérite d’être préservé, ses dépendances, ce qui peut être construit, les parties qui doivent consentir, la manière de vérifier le résultat et le financement de l’ensemble. L’effet recherché est une activité utile rendue accessible par un nouvel arrangement construit. Un document d’assurance plus élaboré n’a de valeur que s’il aide à établir ou à réaliser cette activité.
+
+\section{La frontière change l’occasion, pas l’exigence de preuve}\label{sec:frontier}
+Des rapports officiels de recherche décrivent désormais la découverte de vulnérabilités assistée par l’IA et assortie d’une validation exécutable. L’annonce de Codex Security par OpenAI en mars 2026 décrit une modélisation des menaces propre au projet, l’analyse des vulnérabilités, leur validation en environnement isolé lorsque c’est possible et des correctifs proposés \cite{codexSecurity}. Le rapport d’Anthropic d’octobre 2026 décrit un modèle de recherche interne non publié qui découvre des vulnérabilités et construit cinq chaînes d’attaque, suivies d’une divulgation coordonnée \cite{anthropicCyber}. Il s’agit de rapports de fournisseurs sur des systèmes et des évaluations particuliers. Un modèle interne indisponible n’est pas une dépendance produit accessible.
+
+L’occasion envisagée pour \om\ est une inférence de recherche~: si les modèles peuvent examiner des éléments techniques de plus en plus complexes, ils pourraient aider à repérer les liens moins visibles entre une défaillance technique et un engagement commercial. Cette inférence exige sa propre évaluation. Un modèle qui trouve un défaut de code n’a pas, par ce seul fait, démontré qu’un imprimeur peut fabriquer, expédier et faire accepter une commande pendant une panne.
+
+\subsection{Ce que font déjà les meilleurs travaux existants}
+La cyberrésilience traite déjà de la capacité d’anticiper des conditions cyberdéfavorables, d’y résister, de s’en remettre et de s’y adapter. Le NIST relie explicitement cette discipline d’ingénierie aux risques de mission et d’activité \cite{nist160}. Ses recommandations de reprise après un événement de cybersécurité mettent déjà l’accent sur les scénarios réalistes, les guides d’intervention, les essais, les mesures et les enseignements tirés \cite{nist184}. Les recommandations du Centre canadien pour la cybersécurité sur les rançongiciels préconisent également des sauvegardes protégées et des tests de reprise \cite{canadaRansomware}.
+
+Ce sont des fondements à adopter. La contribution proposée consiste à tenter d’automatiser et d’intégrer la \emph{découverte, la construction, les éléments probants, l’échange volontaire et la réutilisation} autour d’une capacité de continuité manquante. Elle doit améliorer une voie complète ou permettre un arrangement utile que la meilleure solution complète disponible ne peut pas déjà fournir sous les mêmes contraintes.
+
+\subsection{Pourquoi la critique a besoin d’un arbitre capable de vérifier}
+CriticGPT apporte des éléments montrant que la critique par l’IA peut aider les humains à trouver des erreurs, tout en documentant des critiques hallucinées et les limites des tâches évaluées \cite{criticGPT}. Des études sur le débat constatent des effets utiles dans certains contextes, mais des résultats contrastés par rapport à la réponse directe pour d’autres types de tâches \cite{kenton}. Une recherche couvrant de nombreux modèles observe une corrélation importante des erreurs, même entre fournisseurs et architectures différents \cite{correlated}.
+
+La conséquence pour la conception est précise~: diversifier les modèles est une technique de recherche, pas une attestation d’indépendance. Un agent qui met la continuité à l’épreuve justifie son utilité en découvrant des défaillances importantes supplémentaires à un coût total acceptable. La décision doit pouvoir rejeter la critique aussi bien que le plan initial. Une conclusion valide est \emph{aucun défaut important établi}~; une autre est \emph{éléments insuffisants pour trancher}.
+
+\chapterpage
+\section{Un acheteur. Une promesse. Un premier produit décisif.}\label{sec:v1}
+\subsection{L’utilisateur et son travail}
+L’hypothèse initiale d’acheteur est la personne qui dirige les opérations d’un imprimeur régional d’étiquettes d’emballage destinées aux entreprises, sans second site de production. Elle coordonne la livraison, connaît les contraintes pratiques et peut préciser le processus perturbé. Le propriétaire ou la direction générale autorise les conditions commerciales. Le client final fournit ou confirme les exigences pertinentes d’acceptation du produit. Un imprimeur de relève qualifié constitue une contrepartie distincte dont il faut obtenir la participation.
+
+L’offre envisagée est un exercice contrôlé portant sur un produit et une voie de relève. Un exemple de cible, issu du pilote déjà proposé, est \textbf{jusqu’à 20\,000 unités acceptées dans un délai de 48 heures ouvrables convenues} après une activation autorisée et définie \cite{handoffPilot}. C’est une hypothèse à qualifier, pas une capacité démontrée par l’exemple synthétique de 1\,900 unités. Le calendrier, le fuseau horaire, l’événement de départ, les jours fériés, l’heure limite d’expédition et les règles de livraison partielle doivent être explicites.
+
+\subsection{Ce que ferait le premier service proposé}
+La partie actuellement exécutable est un rapprochement synthétique hors ligne et une vérification de contraintes de transfert fournies. Le service opérationnel proposé comporte cinq étapes visibles. Chacune présente la décision suivante dans un langage courant.
+\begin{enumerate}
+\item \textbf{Choisir la promesse.} Définir la famille de commandes, la spécification exacte du résultat, l’autorité d’acceptation, l’échéance et l’exercice de perturbation autorisé.
+\item \textbf{Trouver ce que la reprise a omis.} Rapprocher la vue restaurée d’enregistrements d’engagements protégés séparément et authentifiés de manière appropriée. Afficher les quantités périmées, les commandes manquantes, les annulations incorrectes et les lacunes probatoires non résolues.
+\item \textbf{Préparer la relève.} Produire le dossier minimal autorisé dont un autre prestataire qualifié a besoin~: spécification actuelle, droits, quantités, autorité de lancement, règles d’acceptation et identifiants de rapprochement.
+\item \textbf{Mettre la voie complète à l’épreuve.} Vérifier la capacité actuelle, les réservations antérieures, les dépendances communes, les matériaux, la qualité, le transport, les autorisations, les coûts et les délais. Lorsqu’un élément probant manque, nommer l’observation nécessaire.
+\item \textbf{Exercer et rendre compte.} Exécuter l’exercice autorisé, obtenir une acceptation distincte et remettre un Passeport de continuité précisant exactement ce qui a été démontré, ce qui a échoué et ce qui reste non établi.
+\end{enumerate}
+Une première version du produit n’a pas besoin d’analyser indistinctement toute une entreprise ni de prétendre prévenir toutes les attaques. Sa valeur dépend de l’obtention d’un résultat défendable sur un processus important. Un exercice purement documentaire terminé doit être présenté comme tel~; il ne compte pas comme une fabrication de relève réelle.
+
+\subsection{L’unique hypothèse commerciale risquée}
+\begin{insight}
+\textbf{Au moins un acheteur cible accorde suffisamment de valeur à une relève réservée et éprouvée de manière indépendante pour cet engagement précis pour payer un prix couvrant son coût complet, malgré une solution crédible déjà offerte ou réalisable à l’interne.}
+\end{insight}
+L’admissibilité technique, les droits sur les données et un prestataire qualifié sont des prérequis. Ils ne répondent pas à la question commerciale. Un entretien positif est un premier indice. Payer la préparation ou un exercice établit une demande pour cette seule étape. L’hypothèse reçoit un appui direct lorsque l’acheteur accepte et finance l’offre complète et qualifiée de réservation et d’activation à des conditions qui couvrent ses coûts complets. Une prestation acceptée, des encaissements reçus et des obligations rapprochées établissent ensuite le résultat pour cet acheteur. La formation d’un marché reproductible exige d’autres transactions indépendantes, de la maintenance et des renouvellements.
+
+\section{Définir le contrat de continuité avant de l’évaluer}\label{sec:contract}
+Soit l’engagement autorisé
+\begin{equation}
+\mathcal C=(O,Q,D,\mathcal S,L,A,V,X),
+\end{equation}
+où $O$ désigne le résultat destiné au bénéficiaire~; $Q$ précise la quantité, la qualité et l’intégrité~; $D$ est l’échéance et l’horloge qui la régit~; $\mathcal S$ est l’ensemble déclaré des perturbations~; $L$ borne la dégradation du service et la perte de données tolérées~; $A$ précise les autorisations et l’autorité d’activation~; $V$ définit l’acceptation~; et $X$ énumère les exclusions et les conditions d’invalidation. Il s’agit des conditions convenues de la tâche, pas de nombres que le candidat peut modifier après un échec.
+
+Les recommandations du NIST sur la planification des mesures de secours fournissent des concepts établis, dont l’analyse des répercussions sur les activités, l’objectif de temps de reprise et l’objectif de point de reprise \cite{nist34}. \om\ utilise ces concepts tout en explicitant le résultat commercial promis. Le temps nécessaire pour restaurer un service, l’ancienneté des données récupérables et le temps nécessaire pour livrer un résultat accepté par le client sont des mesures différentes.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{P{.22\textwidth}YY}
+\toprule
+\textbf{Question} & \textbf{Mesure} & \textbf{Ce qu’elle ne peut établir seule}\\
+\midrule
+L’application fonctionne-t-elle~? & Service restauré et opérations autorisées fonctionnelles. & Tous les engagements acceptés ont été préservés.\\
+Les enregistrements sont-ils complets~? & Rapprochement avec la source faisant autorité, dans le périmètre et jusqu’à l’heure limite convenus. & L’usine de relève peut les exécuter.\\
+La relève est-elle prête~? & Intrants compatibles, droits, capacité, personnel et transport. & Le client a accepté la production physique.\\
+La promesse a-t-elle été tenue~? & Quantité et qualité convenues acceptées avant l’échéance. & Le prochain incident ou une charge simultanée accrue sera maîtrisé.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Pour une politique $\pi$, un environnement particulier $s$ et des éléments observés $e$, l’expression
+\begin{equation}
+\Phi(\pi,\mathcal C,s,e)=1
+\end{equation}
+signifie que les prédicats d’acceptation déclarés ont été satisfaits. Un exercice établit une observation de $\Phi$ dans un périmètre donné, sous réserve de la frontière de confiance des éléments probants. Il n’établit pas que $\Phi=1$ pour toutes les attaques futures possibles. Une affirmation de robustesse du modèle sur $\mathcal S$ exige aussi de justifier le modèle, l’ensemble des dépendances et la couverture des scénarios.
+
+L’unité de preuve est donc \emph{cet engagement, cette voie, ces conditions, ces versions, cet exercice}. L’unité de réutilisation peut être plus large~: un adaptateur testé, un schéma d’obligations, une procédure de réservation ou une méthode de construction. La réutilisation s’accompagne de conditions et d’exigences de requalification, pas d’une autorisation permanente ni d’une acceptation universelle.
+
+\section{La limite des éléments probants manquants}\label{sec:evidenceLimit}
+Un évaluateur contradictoire ne peut retrouver des faits qu’aucune source disponible ne permet de distinguer. Voilà précisément pourquoi il faut donner le livre au second modèle, et non seulement le résumé du premier. L’équivalent pour l’entreprise consiste à préserver la preuve de ce qui a été promis en dehors de la vue restaurée faisant l’objet de l’évaluation.
+
+\begin{proposition}[Une omission peut être invisible à tous les évaluateurs]
+Soient $h_0$ et $h_1$ deux historiques possibles qui présentent les mêmes éléments disponibles, $E(h_0)=E(h_1)$, mais pour lesquels une affirmation importante de continuité possède des valeurs de vérité différentes. Supposons que l’information initiale et l’aléa de l’évaluateur n’apportent aucune information propre à l’historique au-delà de $E$. Tout évaluateur déterministe limité à $E$ fournit la même réponse pour les deux historiques. Tout évaluateur aléatoire limité à $E$, dont l’aléa interne est indépendant de l’historique, présente la même distribution de sorties pour les deux. Il ne peut donc être à la fois correct et complet sur ces deux historiques.
+\end{proposition}
+\begin{proof}
+L’entrée de l’évaluateur est identique. Sa sortie déterministe, ou sa distribution conditionnelle à l’aléa interne, est donc identique. L’étiquette correcte de l’affirmation diffère~; cette sortie ne peut donc distinguer correctement les deux historiques. Ajouter des évaluateurs ayant accès aux seuls mêmes éléments ne change pas la fonction d’observation.\end{proof}
+Il s’agit d’une application directe de l’argument sur les limites informationnelles de \ti\ \cite[théorème 3.1]{boucherTI}, et non d’un nouveau théorème général sur l’intelligence.
+
+\subsection{La commande qui n’atteint jamais la sauvegarde}
+Dans $h_0$, l’entreprise a accepté 100 commandes et les a toutes restaurées. Dans $h_1$, elle a accepté ces mêmes 100 commandes, plus une commande supplémentaire après le dernier point de contrôle protégé~; cette dernière est absente de tous les enregistrements disponibles. Les deux bases de données restaurées paraissent identiques. Un vérificateur qui observe ces seules bases ne peut établir si l’entreprise a perdu une obligation acceptée.
+
+Un accusé de réception préservé à l’extérieur, un reçu conservé indépendamment par le client ou un journal d’engagements contrôlé de manière appropriée peut modifier la fonction d’observation. Il peut rendre les deux historiques distinguables. La construction est un \emph{canal d’information}, pas une consigne plus insistante.
+
+\subsection{L’intégrité ne garantit pas l’exhaustivité}
+Une empreinte cryptographique peut lier les octets présentés. Une signature peut lier une déclaration à une clé sous les hypothèses d’authentification correspondantes. Ni l’une ni l’autre ne prouve que l’auteur a inclus toutes les obligations ou dit la vérité. Un journal placé à côté de son empreinte modifiable ne peut établir une origine indépendante. Un préfixe intact ne peut, à lui seul, établir qu’aucun événement ultérieur n’a été accepté.
+
+Un mécanisme proposé pour établir l’exhaustivité devrait lier une identité de source, une plage d’événements, une séquence ou un dernier événement confirmé, une politique d’accusé de réception, une heure limite, le périmètre des clients concernés et un dispositif de garde. Il doit traiter les enregistrements retardés, les commandes reçues par d’autres canaux et la compromission de l’autorité de signature. Un accusé de réception ne devrait pas promettre un niveau de récupérabilité que la protection de l’enregistrement ne peut garantir. Une protection asynchrone peut être légitime, mais la fenêtre de perte permise et ses éventuelles conséquences visibles pour le client doivent être explicites.
+
+\begin{scopebox}
+\textbf{L’abstention est une information.} Si les éléments disponibles sont compatibles aussi bien avec un engagement honoré qu’avec un engagement non honoré, le résultat est \status{NON ÉTABLI}. Il se distingue d’un exercice dont l’\status{ÉCHEC} a été observé. Il désigne une cible de construction~: obtenir les éléments manquants, modifier la voie pour que l’incertitude ne soit plus déterminante, accepter une affirmation plus étroite autorisée séparément, ou s’arrêter.
+\end{scopebox}
+
+\section{De la critique à la construction}\label{sec:protocol}
+Le protocole proposé compte six étapes. Ce sont des responsabilités décisionnelles, pas une exigence de déployer six modèles ou un nombre fixe d’agents.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[node distance=9mm and 9mm,
+stage/.style={draw=violet!35,fill=mist,rounded corners=2pt,text width=42mm,minimum height=17mm,align=center,font=\sffamily\small},
+arr/.style={-{Stealth[length=2mm]},thick,draw=teal}]
+\node[stage] (claim) {\textbf{1. Énoncer la promesse}\\Résultat et autorité};
+\node[stage,right=of claim] (challenge) {\textbf{2. La mettre à l’épreuve}\\Contre-exemple important};
+\node[stage,right=of challenge] (test) {\textbf{3. Trancher l’objection}\\Preuve ou test décisif};
+\node[stage,below=of test] (build) {\textbf{4. Construire les moyens}\\Voie autorisée et viable};
+\node[stage,left=of build] (accept) {\textbf{5. Accepter le résultat}\\Vérification distincte\\Coûts complets};
+\node[stage,left=of accept] (retain) {\textbf{6. Qualifier la réutilisation}\\Un successeur différent};
+\draw[arr] (claim)--(challenge);\draw[arr] (challenge)--(test);
+\draw[arr] (test)--(build);\draw[arr] (build)--(accept);\draw[arr] (accept)--(retain);
+\draw[arr,dashed] (retain.west) -- ++(-5mm,0) |- (claim.west);
+\end{tikzpicture}
+\caption{La mise à l’épreuve devient utile lorsqu’elle modifie un résultat accepté ou les moyens d’un nouveau successeur. Chaque transition peut aussi mener à un résultat non résolu ou à un refus.}
+\end{figure}
+
+\subsection{Exiger une objection utile}
+Un dossier d’objection contient l’affirmation contestée, la source et la version pertinentes, le mécanisme de défaillance, son importance, les conditions d’applicabilité et un test ou une observation permettant de trancher. L’agent contradicteur peut relever une contradiction, une dépendance omise, une ressource indisponible, une inférence invalide ou une incertitude empêchant une décision responsable. La défaillance alléguée doit pouvoir être réfutée.
+
+Un arbitre distingue une \emph{objection retenue}, une \emph{objection rejetée} et une \emph{objection non résolue}. La clé de transfert stable du prototype lie un artefact~; elle ne constitue pas un verrou d’activation durable empêchant une double exécution physique. Un candidat peut réussir une vérification particulière sans recevoir une approbation universelle. Les sorties du candidat et de son contradicteur sont des entrées non fiables~: ni l’un ni l’autre ne peut réécrire le contrat initial, remplacer les éléments probants ou déclencher une reprise privilégiée simplement en affirmant que l’urgence l’exige.
+
+\subsection{Construire le plus petit changement qui compte}
+Une objection retenue pose une question de conception précise. Si le visuel approuvé est indisponible, peut-on préparer une copie actuelle protégée séparément~? Si le prestataire de relève ne peut interpréter la commande, un adaptateur peut-il en préserver le sens~? Si plusieurs acheteurs se disputent le même créneau, une politique fidèle de réservation et d’activation peut-elle rendre l’offre réalisable~? Si la restauration est trop lente, une autre voie autorisée peut-elle éviter cette dépendance~?
+
+La construction doit préciser ce qui change, ce qui reste fixe dans le résultat destiné au client, les éléments montrant que les nouveaux moyens fonctionnent, leurs coûts complets et ce qui les invaliderait. Les corrections sont réévaluées selon le contrat d’acceptation initial. Un système ne peut transformer une livraison tardive en succès en modifiant l’horloge ou en redéfinissant la qualité exigée par le client.
+
+\subsection{Mettre à l’épreuve le pessimisme comme l’optimisme}
+La méthode conteste aussi les conclusions prématurées d’impossibilité. «~Nous ne pouvons pas remettre l’usine d’origine en service en deux jours~» peut être vrai alors que «~nous ne pouvons pas honorer la commande approuvée en deux jours~» est faux. Le contradicteur peut chercher une autre voie de production autorisée. Une voie trouvée doit encore être qualifiée~; une solution générée ne constitue ni un consentement ni une capacité. Cette recherche dans les deux sens transforme la critique en construction utile, au lieu d’en faire un catalogue de raisons de s’arrêter.
+
+\section{Rendre l’obligation commerciale transférable}\label{sec:portable}
+La transférabilité consiste à préserver l’information et les autorisations nécessaires pour satisfaire la même obligation par une autre voie qualifiée. Elle ne consiste pas à copier tout un environnement compromis ni à transférer indistinctement les données des clients.
+
+Pour l’imprimeur, le dossier minimal de production peut contenir l’identifiant actuel du produit, la version approuvée du visuel, le support et la finition, les tolérances dimensionnelles, la référence de couleur, la quantité, le lieu de livraison, l’échéance, les droits d’utilisation licites et l’autorité de lancement. Il lui faut aussi des identifiants d’engagement stables, les modifications, les annulations et des règles de rapprochement afin que la reprise de la voie principale ne crée pas de doubles productions ou facturations.
+
+\subsection{Trois formes de continuité}
+\begin{itemize}
+\item \textbf{Continuité des enregistrements~:} préserver ce qui a été accepté et ce qui a changé, avec une frontière d’exhaustivité explicite.
+\item \textbf{Continuité opérationnelle~:} préserver ou restaurer les moyens d’effectuer le travail pertinent de façon sûre et correcte.
+\item \textbf{Continuité des engagements~:} livrer le résultat auquel le client accorde de la valeur par une voie acceptée, en respectant la qualité, les délais et le rapprochement.
+\end{itemize}
+Ces formes se renforcent mutuellement sans être équivalentes. Un journal complet ne fabrique pas d’étiquettes. Une usine fonctionnelle peut fabriquer la mauvaise version. Une seule commande livrée n’établit ni une reprise complète de l’entreprise ni la confidentialité des données exposées pendant l’incident.
+
+\subsection{Une solution de relève qualifiée doit éviter la défaillance réelle}
+Deux fournisseurs peuvent dépendre du même service d’identité, de la même source de support, du même équipement de finition, de la même autorité de lancement ou du même itinéraire de transport. Compter les solutions de rechange peut masquer leurs dépendances.
+
+\begin{proposition}[Un prérequis commun neutralise une redondance nominale]
+Considérons toutes les voies autorisées capables de satisfaire un contrat de continuité donné. Si chacune exige le prérequis $d$, et si $d$ est indisponible pendant l’intervalle pertinent sans substitut admissible ni restauration à temps, aucune de ces voies ne peut satisfaire le contrat pendant cet intervalle.
+\end{proposition}
+Le résultat découle immédiatement de la relation de prérequis. Son importance pratique ne tient pas à sa nouveauté mathématique. Les difficultés consistent à découvrir que $d$ est commun, à vérifier que l’ensemble des voies n’est pas artificiellement restreint et à construire une voie qualifiée qui évite ou rétablit cette dépendance.
+
+\begin{insight}
+\textbf{La relève utile est une autre voie vers le résultat promis.}\par
+Une machine, un fournisseur ou un modèle supplémentaire n’aide que si la voie complète reste utilisable sous la perturbation visée par l’affirmation.
+\end{insight}
+
+\subsection{Une reprise sûre reste une condition d’acceptation}
+Une voie qui honore une commande en propageant un artefact compromis ou en utilisant des justificatifs d’accès révoqués peut enfreindre les exigences d’intégrité et d’autorisation du contrat. Le dossier de production devrait prévoir une divulgation minimale, une garde séparée, des accès bornés, des versions validées et une procédure de révocation. Les opérateurs autorisés doivent déterminer quand les systèmes et les artefacts touchés peuvent être utilisés sans danger. L’exercice doit aussi établir une voie de communication et d’activation authentifiée, accessible séparément, pour l’acheteur, le prestataire et l’autorité d’acceptation, avec des responsables nommément désignés pour arrêter l’exercice et autoriser la reconnexion. Les artefacts synthétiques de cette édition ne mettent en œuvre ni l’éradication de logiciels malveillants, ni le rétablissement de l’identité d’entreprise, ni la réponse à un incident en production.
+
+\section{La capacité doit résister à une demande simultanée}\label{sec:capacity}
+Un créneau de production de relève est une ressource rare. La réussite d’un exercice pour chaque acheteur séparément n’établit pas que tous pourront être servis si le même incident active leurs promesses en même temps. La mutualisation peut réduire les coûts fixes tout en concentrant le risque de cause commune, une limite déjà relevée dans \emph{Invent the Economy} \cite[section 12.2]{boucherEconomy}.
+
+Soit $t$ l’indice des intervalles d’ordonnancement déclarés. Soit $q_{ij}(s,t)$ la capacité de la ressource $j$ nécessaire à l’obligation proposée $i$ pendant l’intervalle $t$ dans le scénario $s$, dans les mêmes unités que la capacité utilisable $C_j(s,t)$. Soit $a_i(s)$ l’indicateur d’activation. Soit $r_j(s,t)$ la capacité consacrée aux engagements protégés existants qui ne figurent pas dans la somme des obligations proposées. Une condition nécessaire d’admission est
+\begin{equation}
+\sum_i a_i(s)q_{ij}(s,t)+r_j(s,t)\leq C_j(s,t)
+\quad\text{pour tout triplet déclaré }(s,j,t).
+\label{eq:capacity}
+\end{equation}
+Cette condition ne suffit pas~: la préparation, l’enchaînement, la compatibilité, les matériaux, la qualité, le personnel et le transport doivent aussi convenir. La vérification finale de faisabilité doit valider l’ordonnancement complet et le contrat.
+
+\subsection{Deux promesses valables prises séparément}
+Dans une illustration définie pour l’étude, supposons qu’un créneau de relève permette de produire 2\,000 unités acceptables avant une heure limite fixe d’expédition. Deux entreprises réservent chacune 1\,500 unités pour le même scénario d’activation. Chaque promesse est réalisable isolément, mais la demande conjointe atteint 3\,000 unités. Un service fidèle à ses engagements doit réduire la demande admise, obtenir une capacité supplémentaire qualifiée ou divulguer un mécanisme de priorité ou de rationnement et en obtenir l’acceptation. Il ne peut vendre les deux engagements comme des garanties inconditionnelles de 1\,500 unités pour ce scénario.
+
+Si le produit offre plutôt une disponibilité probabiliste, ses conditions doivent préciser le modèle de probabilité, les activations corrélées, les règles de priorité et les conséquences d’un échec. Un calcul de charge moyenne ne démontre pas une promesse déterministe. Modifier le produit peut constituer un nouvel arrangement légitimement convenu~; cela ne peut corriger rétroactivement la garantie initiale.
+
+\subsection{Une réservation est une obligation à maintenir}
+Une réservation crédible précise la ressource et le périmètre du produit, la quantité, la plage horaire, les conditions d’activation, les droits déjà engagés, l’accusé de réception du prestataire et les conséquences de l’expiration ou du retrait. L’admission et l’annulation exigent une gestion cohérente des accès concurrents~: deux demandes simultanées ne doivent pas chacune constater la même capacité libre puis toutes deux la consommer. Un rapport qui se contente de lire la capacité ne peut garantir qu’un autre processus ne l’aura pas réservée avant l’activation.
+
+L’admission atomique ne préserve que les réservations visibles de cette autorité. Elle ne peut établir que le prestataire a divulgué toutes les obligations concurrentes ou qu’il peut livrer. Une offre réelle exige un périmètre documenté du registre des réservations, des droits de vérification des engagements concurrents importants, une capacité et une qualification observables, des conditions explicites de priorité et d’échec, ainsi qu’une requalification lorsque ces conditions changent.
+
+Il s’agit d’une exigence proposée pour la production, et non d’une affirmation selon laquelle le transfert synthétique actuel est une place de marché opérationnelle de capacité. Le prototype vérifie la capacité et les réservations antérieures fournies. Il ne contacte pas de prestataire externe et ne réserve pas atomiquement son calendrier réel de production. L’article maintient cette frontière au lieu de transformer un booléen modélisé en engagement commercial.
+
+\section{Ce qu’un Passeport de continuité peut honnêtement affirmer}\label{sec:passport}
+Le Passeport est un dossier probatoire compact associé à un engagement précis soumis à un exercice. Il vise à aider l’acheteur, l’opérateur et le vérificateur à parvenir à la même conclusion circonscrite, sans se fier au seul récit d’un modèle. Il ne constitue ni une police d’assurance, ni une accréditation, ni un certificat universel de sécurité.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{P{.25\textwidth}Y}
+\toprule
+\textbf{Champ} & \textbf{Sens requis}\\
+\midrule
+Promesse et autorité & Bénéficiaire, produit, quantité, qualité, échéance, autorisations et responsable de la décision d’acceptation.\\
+Périmètre et conditions & Perturbation exercée, environnement, exclusions, dépendances communes connues et demande simultanée.\\
+Frontière probatoire & Versions des sources, garde, borne d’exhaustivité, horodatages et enregistrements non résolus.\\
+Voie opérationnelle & Intrants actuels, étapes de production qualifiées, réservations, transport et procédures de restauration et de rapprochement.\\
+Résultat observé & Ce qui s’est réellement produit, les mesures effectuées, les éléments contradictoires, les échecs et les limites.\\
+Vérification & Identité et procédure du vérificateur, relation organisationnelle, instructions de réexécution et hypothèses de confiance restantes.\\
+Situation commerciale & Conditions proposées ou acceptées~; capacité réservée ou non~; paiement facturé ou encaissé~; coûts et obligations.\\
+Validité & Date de l’exercice, expiration, changements imposant une nouvelle vérification, lieu de publication des révocations et statut actuel.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Employer des verdicts explicites}
+\status{DÉMONTRÉ} signifie que le résultat déclaré a satisfait les conditions d’acceptation déclarées dans l’exercice indiqué. \status{ÉCHEC} signifie qu’une condition d’acceptation applicable a été enfreinte. \status{NON ÉTABLI} signifie que des éléments décisifs manquent, sortent du périmètre ou sont insuffisants. Un Passeport peut démontrer le rapprochement des enregistrements tout en laissant la fabrication physique non établie. Il ne devrait jamais réduire toutes les étapes à un voyant vert.
+
+\subsection{Préciser l’indépendance effectivement obtenue}
+L’indépendance comporte plusieurs dimensions~: comportements distincts des modèles, acquisition séparée des sources, implémentation différente du vérificateur, contrôle d’exécution séparé, autorité d’acceptation indépendante et incitations commerciales distinctes. Un second agent n’est pas automatiquement une seconde source. Du code distinct produit par le même auteur est utile, mais peut partager les mêmes hypothèses et erreurs. Un évaluateur externe peut encore dépendre d’enregistrements incomplets qui lui sont fournis. Chaque dimension devrait être divulguée au lieu d’être agrégée en une note non étayée.
+
+Pour cet article, des agents d’IA affectés à des tâches distinctes ont examiné la synthèse, les sources et les éléments issus des prototypes. Ils ont travaillé dans un même processus d’assistance. Il ne s’agit ni d’un banc d’essai de deux modèles de pointe sélectionnés indépendamment ni d’une certification par un tiers. Les implémentations des vérificateurs des prototypes sont inspectables~; leur autorité dans le monde réel, l’exhaustivité de leurs sources et leur indépendance opérationnelle demeurent des questions distinctes.
+
+\subsection{Faire expirer l’applicabilité des preuves lorsque l’affirmation change}
+Un changement de version du visuel, d’autorité de signature, de procédé du produit, de créneau de production, de règle d’acceptation du client ou de fournisseur de matériaux peut invalider une partie des éléments probants. Les dépendances déterminent la nouvelle vérification requise. Le compte rendu d’un ancien exercice reste historiquement vrai, tandis que son applicabilité à une nouvelle promesse peut expirer. Cette distinction évite à la fois une assurance trompeuse permanente et la répétition inutile de toutes les vérifications inchangées.
+
+\section{Éléments exécutables existants, reproduits sans en changer le sens}\label{sec:evidence}
+Cette édition s’appuie sur des travaux existants du dépôt. Elle ne crée pas d’autre autorité financière, ne modifie pas les deux prototypes et ne remplace pas les branches qui en ont la responsabilité. Les reproductions locales utilisent les révisions publiques exactes identifiées ci-dessous. Elles établissent l’exécution des vérifications synthétiques précisées dans cet environnement~; elles n’établissent ni l’adoption opérationnelle de ces branches ni l’état actuel de publication de travaux sans rapport.
+
+\subsection{Prototype A~: reconstruire et mettre le transfert à l’épreuve}
+La source de la PR~278 du dépôt, à la révision \texttt{a755d0375693}, fournit un exemple synthétique d’imprimeur d’étiquettes et un vérificateur distinct \cite{handoffSource}. Son historique d’événements contient trois commandes initiales, une modification et une annulation. La réexécution de l’historique fourni laisse \textbf{deux engagements à honorer, totalisant 1\,900 unités}.
+
+L’instantané restauré présente trois écarts~: une quantité périmée, une commande acceptée manquante et une commande annulée encore présente. Le producteur construit un dossier de relève~; le vérificateur rejoue indépendamment les événements fournis et valide les obligations résultantes et les contraintes modélisées. La suite de tests de la source comprend \textbf{29 tests}. La reproduction exécute également les 12 cas en ligne de commande fournis~: trois réussissent la vérification du transfert synthétique et neuf sont correctement refusés avant transfert. La vérification distincte en ligne de commande des artefacts nominaux réussit. La réussite d’un transfert ne corrige ni ne valide l’instantané restauré incorrect~; elle vérifie le dossier de relève reconstruit séparément. Ces tests vérifient une implémentation sur des données conçues pour l’étude~; ils ne représentent ni 29 clients, ni 29 pannes, ni 29 essais indépendants d’un système d’IA.
+
+Le prestataire fourni dispose d’une capacité nominale de 3\,200 unités, dont 1\,100 déjà réservées, soit un solde de 2\,100. Le dossier de 1\,900 unités respecte cette disponibilité modélisée. Le délai stipulé est de 22 heures pour une exigence de 48 heures. Il s’agit de valeurs du jeu d’essai~: le temps d’exécution du programme Python ne mesure ni une durée de fabrication ni une durée de panne.
+
+Le même exemple conçu pour l’étude utilise un devis de 5\,700~\$~US et un coût complet modélisé de 5\,050~\$~US, soit une contribution modélisée de 650~\$~US, sous un plafond hypothétique d’acheteur de 5\,800~\$~US. Ce ne sont ni des prix de marché observés ni des encaissements réels. Les coûts externes d’acquisition, d’implémentation, de modèle, d’hébergement, de vérification et de responsabilité doivent être mesurés lors d’une campagne réelle~; les champs de coûts complets d’un jeu d’essai ne démontrent pas l’exhaustivité économique réelle.
+
+\subsection{Prototype B~: un témoin conventionnel compétent fait jeu égal}
+La source de la PR~277 à l’état de brouillon, à la révision \texttt{84c4288b4726}, vérifie les engagements à travers une reprise synthétique \cite{recoverySource}. Ses \textbf{9 tests} couvrent notamment les obligations manquantes, les éléments probants altérés et des vérifications liées à la réexécution. Son vecteur de décision sur quatre cas conçus pour l’étude est \texttt{[PASS, FAIL, FAIL, FAIL]}~: le cas sain réussit, tandis que les trois cas défectueux fournis échouent.
+
+Une voie de rapprochement conventionnelle compétente produit le même vecteur pour les quatre cas. Une voie ne vérifiant que l’état de fonctionnement accepte des cas défectueux, mais ce témoin faible ne constitue pas une base pertinente pour affirmer la supériorité de l’IA. L’égalité avec la méthode conventionnelle est un résultat à préserver~: la vérification du sens commercial compte~; cette comparaison ne démontre pas que la méthode proposée en a l’exclusivité.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{P{.25\textwidth}YY}
+\toprule
+\textbf{Élément probant} & \textbf{Conclusion étayée} & \textbf{Extension non étayée}\\
+\midrule
+29 tests de transfert & Les cas fournis exercent le rapprochement et les contraintes de transfert modélisées. & Préparation réelle d’un prestataire ou cyberrésilience effective.\\
+9 tests de reprise & Le vérificateur de reprise fourni rejette certains enregistrements et certaines affirmations erronés. & Capacité mesurée de découverte d’un modèle de pointe.\\
+Égalité sur quatre cas & Le rapprochement conventionnel compétent donne les mêmes décisions pour ces cas. & Infériorité ou supériorité générale dans tous les processus.\\
+Jeu d’essai de 1\,900 unités & Le rapprochement des obligations à honorer définies pour l’étude donne exactement cette quantité. & Capacité de livraison physique de 20\,000 unités.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Mettre aussi le vérificateur à l’épreuve}\label{sec:checkerChallenge}
+Une suite de tests réussie peut elle-même devenir un résumé rassurant mais incomplet. Une revue ultérieure de durcissement du dépôt a signalé des faiblesses d’entrée et d’affichage des éléments probants dans la source de transfert figée \cite{handoffHardening}. Nous avons réexécuté indépendamment cinq vérifications ciblées contre les octets inchangés de \texttt{a755d0375693}. Il s’agit de contre-exemples techniques ciblés, distincts de la suite de 29 tests et non d’un échantillon permettant d’estimer des taux de défaillance réels.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{P{.24\textwidth}YY}
+\toprule
+\textbf{Vérification ciblée} & \textbf{Résultat observé} & \textbf{Signification}\\
+\midrule
+Témoin positif nominal & Le transfert synthétique initial réussit. & La préparation de la vérification préserve le cas de référence prévu.\\
+Offre monétaire booléenne & Un cas à coût nul ajusté de façon cohérente réussit avec une offre JSON \texttt{true}~; le constructeur rejette cette valeur. & Le vérificateur n’applique pas indépendamment la règle de type monétaire du constructeur.\\
+Cas de premier niveau mal formé & Appeler l’audit avec \texttt{None} déclenche \texttt{AttributeError}. & Cette entrée reçoit une exception, et non un refus structuré.\\
+Transfert modifié après l’audit & \texttt{inspect} renvoie l’ancien Passeport de préparation~; un nouveau \texttt{verify} se termine avec le code~3 et \status{FAIL}. & Lire un statut conservé ne réétablit pas la validité de l’artefact actuel.\\
+Source réécrite de façon cohérente & Une modification scellée de nouveau porte le total de 1\,900 à 2\,000 unités et réussit. & La cohérence interne ne peut authentifier le scénario fourni~; cette frontière de confiance avait déjà été divulguée.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Les octets de la source restent inchangés. Le dossier complémentaire conserve la construction des vérifications ciblées, les observations et la commande de réexécution. Il ne qualifie pas la correction proposée ultérieurement et ne remplace pas silencieusement le décompte historique des tests par celui de cette correction. Le résultat est plus circonscrit et plus utile~: les suites initiales réussissent, et le vérificateur initial présente encore des faiblesses démontrées. L’acceptation en production exige une validation indépendante de la structure et des types, une référence de scénario protégée et une vérification nouvelle des artefacts réellement présentés. Même la concordance avec une empreinte externe établit l’égalité avec sa référence, pas la véracité ni l’exhaustivité de cette référence.
+
+\begin{insight}
+\textbf{Le vérificateur fait partie de l’affirmation. Lui aussi doit résister à la mise à l’épreuve.}
+\end{insight}
+
+\subsection{L’échec économique antérieur reste un échec}
+La simulation antérieure GENESIS Commitment~001 rapporte qu’un acheteur central refuse une offre qui ne fait qu’égaler sa solution de rechange définie pour l’étude, avec une perte modélisée de 1\,080~\$~US \cite{genesisResults}. Les scénarios favorables de ce travail reposent sur d’autres hypothèses définies pour l’étude. Cet article n’agrège pas ces scénarios, ne réinterprète pas leur simulation comme une demande payante et ne les utilise pas pour financer une nouvelle entreprise. Le cas négatif est directement pertinent~: une construction utile pour la reprise peut tout de même ne pas justifier l’achat.
+
+\subsection{Ce que la reproduction ne teste pas}
+Les historiques, les capacités, les indicateurs de consentement, les coûts et les temps de reprise sont des données d’essai fournies. La cohérence locale des empreintes n’authentifie ni leur origine ni leur exhaustivité. Les exécutions n’injectent pas de cyberattaque, ne restaurent pas d’usine réelle, ne fabriquent pas d’étiquettes, n’obtiennent pas d’acceptation externe et n’encaissent aucun paiement. Les prototypes reproduits n’appellent aucune API de modèle. L’étude ne peut donc estimer la fréquence à laquelle les modèles de pointe découvrent des omissions nouvelles, la corrélation de leurs erreurs dans ce contexte ni leur performance face à des solutions humaines et d’IA compétentes.
+
+\chapterpage
+\section{Inventer l’économie de la continuité}\label{sec:economy}
+L’unité économique est l’arrangement complet. Un imprimeur de relève disposant de machines libres, un client inquiet des interruptions et un excellent script de vérification ne forment pas automatiquement un marché. Le produit doit relier une capacité utilisable, des contreparties consentantes, des engagements opérationnels exécutoires, une acceptation et un calendrier de trésorerie réalisable \cite{boucherEconomy}.
+
+\subsection{Qui contribue, qui décide, qui paie}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{P{.21\textwidth}YY}
+\toprule
+\textbf{Participant} & \textbf{Contribution} & \textbf{Motif de participation à tester}\\
+\midrule
+Entreprise acheteuse & Exigences, enregistrements autorisés, activation et paiement. & Une amélioration crédible par rapport à sa solution de rechange complète.\\
+Prestataire de relève & Capacité qualifiée, personnel, procédé et livraison. & La rémunération de la réservation et de la production couvre les obligations et le coût d’opportunité.\\
+Vérificateur & Vérifications indépendantes des éléments probants et compte rendu d’acceptation circonscrit. & Des honoraires pour une évaluation compétente, sans récompense liée à un verdict favorable.\\
+Intégrateur & Préparation, coordination, maintien des interfaces et exercice. & Les encaissements couvrent l’ensemble du service et ses obligations résiduelles.\\
+Client final & Acceptation du produit et autorisations nécessaires. & La continuité préserve la valeur promise sans substitution inacceptable.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+Certains rôles peuvent être réunis si leurs conflits et leurs hypothèses de confiance sont divulgués. Un plus grand nombre d’organisations ne garantit pas une meilleure assurance. L’arrangement devrait être aussi simple que le résultat le permet.
+
+\subsection{Une fourchette de prix est une condition, pas une prévision de ventes}
+Soit $p$ le paiement à la coalition de prestataires, et $B$ le paiement maximal justifié de l’acheteur après prise en compte de sa propre charge d’implémentation et de sa meilleure solution de rechange complète. Soit $C$ le coût économique complet et les obligations de la coalition pour le même périmètre et le même horizon, incluant la construction, les tentatives échouées, l’acquisition, la préparation des données, la réservation, l’exercice, la production, le transport, la vérification, la maintenance, le financement et les obligations conservées, sans double comptage. Un prix permettant une contribution non négative ne peut exister que si
+\begin{equation}
+C\leq p\leq B.
+\end{equation}
+Une contribution positive exige une marge stricte après les coûts pertinents. Ni $B$ ni le $C$ réel ne sont établis par un modèle qui en invente les valeurs. La préférence du client peut dépendre de la confiance, de la charge causée par la perturbation, de la qualité, du risque contractuel et de sa capacité continue à fournir lui-même le service. Une offre complexe peut perdre même si son tableur paraît attrayant.
+
+\subsection{La complémentarité peut modifier la faisabilité}
+Soit $x\in\{0,1\}$ l’indicateur d’un dossier de production transférable qualifié, et $y\in\{0,1\}$ celui d’un arrangement compatible de capacité réservée. Définissons $F(x,y)$ comme la satisfaction, par l’offre complète, du contrat et des contraintes de participation volontaire, de capacité et de trésorerie.
+
+Le schéma diagnostique $F(0,0)=F(1,0)=F(0,1)=0$ et $F(1,1)=1$ désigne une suffisance conjointe dans le modèle fourni~: aucune intervention seule ne comble la lacune indiquée. C’est un contraste expérimental à tester, pas un nouveau théorème.
+Il s’agit d’une affirmation conditionnelle de complémentarité, et non d’une preuve que ces conditions existent sur un marché. Elle devient utile lorsque les prédicats non satisfaits sont nommés~: une capacité réservée peut être inutilisable sans spécifications approuvées, tandis que des spécifications transférables peuvent être sans valeur lors d’une demande simultanée en l’absence d’un créneau réservé. Un prestataire conventionnel compétent doit pouvoir construire les deux. Si un tel prestataire fournit déjà le même résultat à des conditions tout aussi acceptables et à un coût complet égal ou inférieur, cette comparaison n’établit aucun avantage supplémentaire pour la construction proposée. L’offre peut néanmoins être viable, et la voie conventionnelle devrait être utilisée lorsqu’elle constitue le meilleur moyen complet.
+
+\subsection{La mutualisation doit satisfaire le coût et la capacité}
+Partager les coûts de préparation peut rendre une offre moins chère tout en rendant ses promesses mutuellement incompatibles. Considérons un modèle volontairement simple à période fixe. Il y a $n$ acheteurs identiques~; chacun exige $q>0$ unités si la perturbation commune déclarée survient. Tous peuvent activer leur engagement simultanément. La capacité compatible disponible après les engagements antérieurs est $C\geq0$. Le coût commun de qualification et de réservation est $K>0$~; le coût supplémentaire dans le pire cas est $c\geq0$ par acheteur. Chacun paie un tarif unique $p\leq B$, où $B>c$ est un plafond fourni de consentement à payer. Il n’y a pas d’encaissements supplémentaires à l’activation. Tous les coûts pertinents de la période sont supposés inclus, et le calendrier de trésorerie est vérifié séparément.
+
+\begin{proposition}[Une mutualisation réalisable exige un chevauchement]
+Dans ce modèle, un nombre d’acheteurs permettant à la fois une contribution non négative et toutes les activations admises existe si et seulement si
+\begin{equation}
+\left\lceil\frac{K}{B-c}\right\rceil
+\leq
+\left\lfloor\frac{C}{q}\right\rfloor.
+\label{eq:pool}
+\end{equation}
+Cet énoncé autorise le tarif plafond fourni $p=B$ et suppose que chaque nombre entier d’acheteurs dans l’intervalle est disponible et consentant selon le modèle. Une contribution positive exige en outre $n(B-c)>K$.
+\end{proposition}
+\begin{proof}
+Pour tout tarif admissible, la contribution est au plus $n(B-c)-K$~; une contribution non négative exige donc $n\geq\lceil K/(B-c)\rceil$. L’activation simultanée exige $nq\leq C$, donc $n\leq\lfloor C/q\rfloor$. Ces conditions sont nécessaires. Si l’intervalle contient un entier $n$, choisir $p=B$ satisfait les deux inégalités sous les hypothèses énoncées.\end{proof}
+
+\textbf{Illustration définie pour l’étude.} Soient $K=900$, $c=100$ et $B=400$ en unités monétaires hypothétiques, avec $C=2\,000$ unités de capacité et $q=750$ par acheteur. L’équilibre économique exige au moins trois acheteurs~; la capacité en permet au plus deux. Deux acheteurs laissent un manque de 300 unités monétaires. Trois atteignent le seuil de rentabilité, mais promettent 2\,250 unités de capacité. Aucun groupe ne fonctionne sous ces hypothèses. Plus de clients ne résolvent pas le problème.
+
+Les moyens manquants pourraient réduire le coût commun de qualification, obtenir une capacité réellement indépendante, modifier le procédé de production ou permettre une conception du service acceptée séparément. La capacité ajoutée entraîne ses propres coûts de réservation et de livraison. Modifier ces paramètres exige un nouvel arrangement évalué. L’équation~\eqref{eq:pool} est une application transparente de l’économie des coûts partagés et de la conservation de la capacité, pas une prévision de marché ni un ordonnanceur de production.
+
+\subsection{Les fonds doivent précéder l’action qu’ils financent}
+Soit $K_0$ la trésorerie initiale autorisée affectée à cet arrangement, avant déduction des montants protégés. Soit $I_{\leq t}$ les encaissements reçus et $O_{\leq t}$ les décaissements jusqu’à l’étape $t$ d’une séquence d’actions proposée. Soit $R_t$ la trésorerie devant rester protégée pour les réserves et les obligations qui ne sont pas déjà acquittées dans ces décaissements. Après inclusion de chaque dépense proposée, la finançabilité exige
+\begin{equation}
+K_0+I_{\leq t}-O_{\leq t}-R_t\geq 0.
+\end{equation}
+La condition s’applique à chaque trajectoire pertinente de financement et de défaillance. Les obligations payées ne doivent pas rester dans $R_t$, et les recettes prévues ne peuvent entrer dans les encaissements reçus. Un contrat dont le résultat attendu est rentable peut enfreindre cette condition si la capacité et l’exercice doivent être payés avant le paiement de l’acheteur. Des recettes prévues ne sont pas des liquidités. Un financement exige des conditions réellement acceptées et une comptabilité étayée~; ce n’est ni un revenu ni un excédent gagné. Cet article précise des contraintes et ne crée aucun nouveau grand livre, compte ou pouvoir.
+
+\subsection{Une offre concrète proposée}
+Une première offre peut facturer un service autorisé de préparation et d’exercice dans un périmètre donné, suivi, seulement après qualification, d’un arrangement de réservation et d’activation accepté séparément. Les frais devraient correspondre à la préparation livrée, à la disponibilité maintenue et à la production acceptée, avec un traitement explicite des annulations, des reprises de travail et des remboursements. L’offre par étapes réduit le coût d’apprentissage, mais l’acceptation d’une étape payante antérieure ne doit pas être présentée comme l’acceptation de l’arrangement complet de continuité. Le vérificateur ne devrait pas être mieux rémunéré pour un verdict favorable. L’assurance, si elle intervient ultérieurement, relève d’une relation souscrite séparément~; le Passeport n’accorde pas lui-même une couverture et ne prédit pas de prime.
+
+L’arrangement devrait rester utile lorsque l’IA réduit le coût de préparation. Facturer un nombre croissant de critiques récompenserait du travail évitable. La rémunération devrait suivre les résultats utiles et les obligations réelles. Un prix moindre ou moins de vérifications répétées peut constituer un progrès si le service reste viable et si le client en bénéficie.
+
+\section{L’expérience qui pourrait justifier l’affirmation}\label{sec:experiment}
+La prochaine étape décisive est un exercice réel autorisé avec un acheteur cible réel et un prestataire qualifié, comparé à une solution de rechange complète et compétente. Il devrait être conçu avant l’observation des résultats. L’expérience peut établir un cas circonscrit tout en laissant ouvertes les affirmations générales sur le marché et les modèles. Avant la prospection, consigner les cibles admissibles, la méthode de prise de contact, la période de recrutement, le budget de campagne, le prix accepté requis et les conditions de paiement. L’absence d’achat admissible dans ces conditions rejette cette offre dans cette campagne~; elle n’établit pas qu’aucun marché de la continuité ne peut exister.
+
+\subsection{Figer la promesse et la frontière probatoire}
+Avant l’exécution, préciser la commande initiale et son acceptation, la perturbation et la procédure sûre pour l’exercer, la source protégée, la garde externe et la politique d’exhaustivité, les droits sur le produit, la capacité du prestataire et les réservations concurrentes, les échéances de transport, les coûts, les étapes de trésorerie et les interventions permises. Convenir de ce qui constitue un exercice de production, un test de substitution ou un exercice sur table. Conserver les exécutions échouées et les changements importants.
+
+L’étude exige une distinction nette entre l’acceptation d’un exercice et celle d’une livraison fabriquée. Si l’acheteur n’autorise qu’une substitution hors production, rapporter ce résultat. Aucun test logiciel ne peut fournir implicitement l’observation physique qu’il n’était pas autorisé à réaliser.
+
+\subsection{Comparer des solutions complètes et compétentes}
+Pour la question de productivité du programme, le témoin principal est constitué de professionnels humains compétents utilisant des logiciels conventionnels, sans assistance d’un modèle de pointe. Les logiciels conventionnels conservent leur automatisation et leur vitesse réelles. Les opérations d’IA entièrement autonomes et hybrides sont rapportées séparément, en divulguant les interventions humaines internes et leurs coûts réels. Ce témoin exclusivement humain mesure la question choisie de productivité du travail. Les affirmations de valeur transformationnelle supplémentaire exigent une comparaison avec la meilleure solution complète permise, assistée par l’IA ou autonome.
+
+Pour la décision commerciale, les autres solutions complètes comprennent le prestataire actuel, un service associant humains et IA, un modèle unique performant doté d’outils, d’autres services autonomes, la prestation à l’interne et l’absence d’achat. Fournir au système proposé et aux témoins des enregistrements, des autorisations, des possibilités de capacité, des conditions d’acceptation et des budgets totaux de ressources équivalents. Ne pas réserver le meilleur fournisseur ou des sources plus riches au groupe expérimental proposé.
+
+\subsection{Distinguer la découverte, la construction et la vente}
+\begin{enumerate}
+\item \textbf{Trouver l’obstacle.} Utiliser des cas admissibles évalués à l’aveugle et un accès aux sources pour mesurer les omissions importantes trouvées, les allégations fausses, les cas non résolus et le coût total d’examen. Comparer un processus contradictoire à un raisonnement direct supplémentaire de coût équivalent et à un rapprochement conventionnel.
+\item \textbf{Lever l’obstacle.} Donner à chaque groupe le même contre-exemple arbitré. Comparer les voies complètes jusqu’au résultat accepté. Cela évite d’attribuer à une meilleure construction ce qui relève d’une meilleure information initiale.
+\item \textbf{Rendre l’offre viable.} Mesurer la transférabilité technique seule, les changements de capacité ou de contrat seuls, puis leur construction conjointe, comme ablations explicatives. Comparer ensuite la voie conjointe à la meilleure solution complète sans restriction. Obtenir une acceptation volontaire réelle et comptabiliser les fonds encaissés ainsi que tous les coûts de campagne.
+\end{enumerate}
+Les ablations limitées servent à diagnostiquer la complémentarité. Elles ne sont pas le concurrent principal et ne peuvent établir une supériorité en privant le témoin d’une intervention utile.
+
+\subsection{Mesurer les résultats qui comptent}
+Les mesures principales comprennent les engagements corrects acceptés et livrés avant l’échéance~; les unités manquantes, dupliquées ou incorrectes~; les affirmations de continuité non étayées acceptées~; les omissions critiques valides détectées~; les abstentions correctes~; les refus inutiles~; et le coût complet réel par résultat accepté. Consigner le temps écoulé, les frictions pour le client, l’effort des opérateurs, les manquements à la confidentialité ou aux autorisations, les reprises de travail, les remboursements et les responsabilités persistantes. Compter tous les cas admissibles tentés, pas uniquement les démonstrations réussies.
+
+Le test de défaillance critique est une fausse assurance de continuité~: un succès déclaré alors qu’un engagement initial applicable n’est pas honoré. La mesurer séparément des fausses alertes. Un système qui rejette tout présente un faible taux de fausses assurances, mais ne fournit aucun service de continuité utile.
+
+\subsection{Règles de décision et d’arrêt}
+Ne pas passer à une affirmation plus forte si l’exhaustivité exigée par le contrat circonscrit ne peut être établie, si les autorisations manquent, si le prestataire ne peut étayer sa capacité actuelle, si l’acceptation du résultat échoue ou si l’arrangement proposé ne respecte pas ses contraintes de trésorerie et d’obligations. Si une solution compétente livre le même résultat à un coût complet moindre, l’utiliser. Si aucun acheteur réel n’accepte à un prix viable, conserver les travaux techniques utiles et consigner que l’offre n’a pas justifié d’affirmation commerciale.
+
+Une réussite unique étaye ce cas exercé. Il faut d’autres acheteurs, prestataires, familles de commandes et conditions de perturbation avant d’inférer la reproductibilité. La taille de l’échantillon et l’analyse statistique devraient découler d’un effet déclaré, de la variance de référence et des coûts d’erreur~; cet article n’invente pas de taux empiriques pour fabriquer un calcul de puissance.
+
+\chapterpage
+\section{Le volant d’inertie~: conserver ce qui rend une autre promesse possible}\label{sec:flywheel}
+\genesis\ distingue la perception d’une capacité de pointe, la découverte de ses conséquences utiles et l’amélioration des mécanismes qui découvrent ces conséquences \cite{boucherGenesis}. \om\ fournit une voie candidate précise à travers ces trois fonctions.
+
+\textbf{Premier tour proposé.} Un exercice payé et accepté identifie une dépendance manquante, construit un dossier qualifié d’obligations transférables et valide une relève. Il conserve l’adaptateur utilisable, les conditions d’échec, la procédure de vérification et les coûts mesurés. Tout gain encaissé libre d’affectation demeure distinct des réserves, des passifs et des revenus prévus.
+
+\textbf{Successeur différent proposé.} Une classe d’obligations ou un processus réellement différent exige une nouvelle construction~: par exemple, un procédé de production différent avec d’autres prérequis et exigences d’acceptation. Un second acheteur qui achète sensiblement la même offre teste la reproductibilité~; il n’établit pas à lui seul une nouvelle possibilité rendue accessible. Le dossier conservé peut réduire les coûts de transfert des spécifications, de rapprochement ou de qualification. Il peut aussi être incompatible, périmé ou plus coûteux à adapter qu’une nouvelle solution conventionnelle. L’un comme l’autre résultat est instructif.
+
+\textbf{Possibilité suivante éventuelle.} Si le transfert fonctionne et si les contreparties l’acceptent, plusieurs prestataires qualifiés pourraient offrir aux petites entreprises des créneaux de continuité standardisés et sans conflit. Un autre successeur pourrait viser l’interopérabilité pour les achats d’urgence plutôt qu’un autre imprimeur. Ce sont des possibilités proposées, pas de nouveaux marchés établis.
+
+\subsection{Trois tests pour que le volant d’inertie dépasse l’image}
+\begin{enumerate}
+\item \textbf{Financement par les gains.} L’excédent encaissé libre d’affectation de la première activité acceptée a-t-il réellement payé les coûts du successeur tout en préservant les obligations antérieures~?
+\item \textbf{Possibilité rendue accessible par la capacité conservée.} À ressources initiales équivalentes, retirer cette capacité rend-il le successeur moins réalisable ou plus coûteux que la meilleure voie qui ne l’utilise pas~? Une réutilisation ordinaire à contenu égal est une comparaison requise.
+\item \textbf{Un meilleur processus de découverte.} À outils et informations initiaux comparables, la procédure de découverte modifiée fait-elle mieux sur de nouvelles campagnes sélectionnées indépendamment, après les coûts d’acquisition et de vérification~?
+\end{enumerate}
+Ces tests répondent à des questions différentes. Un successeur peut être financé par les gains même si le capital initial aurait aussi pu le financer. De meilleurs outils peuvent améliorer la production sans améliorer l’invention. Une tâche ultérieure ne prouve pas que la tâche antérieure l’a rendue possible.
+
+\begin{insight}
+\textbf{L’actif durable n’est pas l’argumentation entre les agents.}\par
+C’est la capacité qualifiée, les conditions dans lesquelles elle fonctionne et---lorsque cela est démontré séparément---une meilleure façon de construire la suivante.
+\end{insight}
+
+Conserver des enseignements d’échec compacts et utiles autant que les réussites~: une borne temporelle non fiable, une dépendance commune au support, un vérificateur ayant accepté un dossier falsifié ou un acheteur ayant rationnellement refusé. Préserver les sources essentielles et les pièces financières~; retirer les transcriptions redondantes et les mécanismes obsolètes. L’apprentissage devrait améliorer la prochaine décision, et non simplement agrandir l’archive.
+
+\section{Les modes de défaillance auxquels l’architecture doit faire face}\label{sec:failures}
+\begingroup
+\small
+\begin{longtable}{P{.25\textwidth}P{.68\textwidth}}
+\toprule
+\textbf{Mode de défaillance} & \textbf{Réponse requise et limite restante}\\
+\midrule
+\endhead
+Angle mort commun aux modèles & Utiliser les sources originales, des vérifications distinctes et la mesure des défaillances supplémentaires trouvées. Des fournisseurs différents peuvent encore partager des erreurs.\\
+Critique inventée & Exiger une importance démontrée et une base reproductible~; arbitrer à l’aide de témoins positifs aussi bien que d’échecs. L’assurance du contradicteur n’est pas une preuve.\\
+Univers de sources incomplet & Établir une frontière externe d’exhaustivité dans le périmètre convenu, ou s’abstenir. Une empreinte bien formée ne peut prouver l’inexistence d’événements absents.\\
+Autorité compromise & Vérifier la garde des clés et des approbations, la révocation et l’activation permise. Une signature valide faite avec une clé compromise ne rétablit pas la confiance.\\
+Dépendance commune & Examiner les voies complètes des fournisseurs et des services, y compris les dépendances aux matériaux et au transport. La couverture des scénarios reste bornée.\\
+Relève surréservée & Vérifier les obligations conditionnelles agrégées et l’admission concurrente, pas seulement les exercices isolés des acheteurs. Le prestataire réel doit effectivement réserver.\\
+Résultat tardif ou inadéquat & Tester la qualité finale et l’acceptation de la livraison. Temps de démarrage, heure d’expédition et réception par le client sont distincts.\\
+Acceptation biaisée & Séparer le contrôle de la production et celui de l’acceptation, et divulguer les relations de l’évaluateur. L’indépendance organisationnelle exige encore des éléments probants de qualité.\\
+Passeport périmé & Lier les dépendances, les versions et les fenêtres temporelles~; invalider les affirmations touchées lorsqu’elles changent. Les preuves historiques restent historiques.\\
+Sauvetage financièrement irréalisable & Compter le préfinancement, les échecs, les remboursements et les obligations protégées. Une contribution attendue positive n’est pas de la trésorerie disponible.\\
+Produit non désiré & Comparer les solutions de rechange complètes et observer l’achat volontaire. La justesse technique ne peut imposer la demande.\\
+Généralisation non étayée & Préserver le périmètre exact testé. Une réussite synthétique locale ne peut certifier une opération sur le terrain ni toutes les attaques futures.\\
+\bottomrule
+\end{longtable}
+\endgroup
+
+\subsection{Sécurité du processus d’intelligence}
+Les documents, les journaux et les sorties d’outils peuvent contenir des instructions malveillantes. Ce sont des éléments à examiner, pas une autorité permettant de changer la tâche. Le contradicteur devrait disposer du minimum d’accès requis, et tout test exécutable devrait se dérouler dans un environnement isolé expressément autorisé. La minimisation des données, le contrôle des secrets, la séparation de la signature et de l’acceptation ainsi qu’une voie de reprise réversible relèvent de la conception de l’implémentation. L’article et les reproductions locales ne démontrent pas ces contrôles dans un déploiement en production.
+
+\subsection{Limites de la contribution de recherche}
+Les observations formelles sont élémentaires et conditionnelles. Les prototypes utilisent des cas conçus pour l’étude. La revue du manuscrit par l’IA s’inscrit dans un même processus et ne constitue pas une évaluation institutionnelle indépendante. L’article n’affirme aucune nouvelle performance comparative de modèles de pointe, aucune reprise réelle, aucun résultat de production physique, aucun prix réel, aucun revenu encaissé ni aucun avantage de successeur. La thèse peut échouer~: des services existants compétents peuvent déjà fournir l’offre complète~; les éléments manquants peuvent être impossibles à obtenir~; la demande corrélée peut rendre la réservation trop coûteuse~; ou les acheteurs peuvent rationnellement préférer la prestation à l’interne.
+
+Ce sont des possibilités décisives à examiner. Elles n’exigent pas d’abandonner la finalité utile. Elles exigent de modifier ou de retirer un moyen inadéquat tout en préservant ce que les éléments probants ont réellement établi.
+
+\section{Conclusion~: l’économie des promesses tenues}
+Trouver une vulnérabilité peut révéler comment un système risque d’échouer. La continuité demande quelle activité utile peut encore être livrée lorsque cet échec compte. L’intelligence transformationnelle rend la voie elle-même modifiable~: l’enregistrement, le canal d’information, le procédé de production, la méthode de vérification, les participants et l’arrangement qui rend leur coopération avantageuse.
+
+La version la plus forte de l’IA contradictoire est constructive. Elle ne s’arrête pas à la victoire d’un modèle sur un autre dans une argumentation. Elle produit une objection vérifiable, un moyen manquant qui peut être construit, un résultat que quelqu’un peut accepter et un coût que l’entreprise peut réellement supporter.
+
+\om\ propose un premier pas concret~: une entreprise, un engagement client, une relève qualifiée, une perturbation autorisée et un résultat arbitré indépendamment. Les prototypes synthétiques existants rendent certaines parties de cette voie exécutables. Les contre-exemples du vérificateur de transfert, l’égalité du vérificateur de reprise avec le témoin conventionnel et l’échec commercial modélisé de la simulation GENESIS antérieure indiquent exactement ce que le prochain test doit résoudre.
+
+Si ce test réussit, le résultat réutilisable pourra aider une autre entreprise à préserver une autre promesse. Si l’excédent encaissé finance cette étape suivante, l’entreprise dispose d’une continuation financée. Si une méthode de construction conservée améliore la découverte nouvelle face à des témoins compétents, le volant d’inertie justifie une affirmation plus profonde. Chaque lien exige ses propres éléments probants.
+
+\begin{insight}
+\large\textbf{Trouver ce que le plan a omis.}\par
+\textbf{Construire ce qu’exige la promesse.}\par
+\textbf{Prouver le résultat dans son périmètre.}\par
+\textbf{Utiliser ce qui résiste pour rendre la prochaine promesse possible.}
+\end{insight}
+
+\chapterpage
+\appendix
+\section{Filiation des sources et apport de cet article}\label{app:lineage}
+Les trois articles de recherche fournis sont traités comme des fondements distincts, dont les hypothèses et les éléments probants d’origine restent intacts. Les éditions publiques sont liées dans les références. Les numéros ci-dessous sont ceux des pages imprimées~; \genesis\ v2 comporte une couverture, donc son numéro de page imprimé est inférieur d’une unité au numéro de page PDF.
+
+\begin{longtable}{P{.28\textwidth}P{.24\textwidth}P{.40\textwidth}}
+\toprule
+\textbf{Fondement} & \textbf{Passage pertinent} & \textbf{Application ici}\\
+\midrule
+\endhead
+\ti & p.~1~; annexe C, p.~22--23 & L’exemple du résumé~; l’importance fondée sur la source~; une critique n’est pas automatiquement correcte.\\
+\ti & p.~3~; théorème 3.1, p.~4 & Séparation de la finalité, de la formulation et de l’évaluateur~; limite des éléments probants manquants.\\
+\ti & p.~7--8, 10--12 & Transformation exécutable, production préservant les preuves, comparaisons exigeantes et évaluation autorisée séparément.\\
+\emph{Invent the Economy} & p.~3~; théorème 3.1, p.~5 & Capacité technique et arrangement volontaire comme construction unique~; étapes probatoires distinctes et complémentarité.\\
+\emph{Invent the Economy} & p.~9--10, 17 & Contraintes de préfinancement et de succession~; obstacles comme cibles de construction~; défaillances communes et indépendance réelle.\\
+\genesis\ v2 & p.~6--8 & Connaissance des avancées de pointe, découverte de leurs conséquences et amélioration des mécanismes comme affirmations distinctes~; moyens conjointement habilitants.\\
+\genesis\ v2 & p.~12--13, 16--18 & Coûts complets, solutions de rechange des clients, trésorerie native, égalités conventionnelles et limites de l’opération simulée.\\
+\bottomrule
+\end{longtable}
+
+\textbf{Synthèse propre à cet article.} Cet article applique ces fondements à la préservation et à l’exécution des engagements clients pendant une perturbation cyber. Il relie l’exhaustivité des éléments externes, le sens transférable des obligations, les dépendances communes, les engagements simultanés de capacité, un dossier probatoire révocable, un premier acheteur précis et un test commercial prospectif.
+
+\textbf{Relation avec les recherches antérieures sur la critique dans le dépôt.}\par
+\emph{SURF THE EXPONENTIAL---The Missing Move} développe déjà la critique constructive et les moyens réutilisables \cite{boucherSurf}. Le présent article est une application distincte à la continuité, avec son propre périmètre, ses identités de sources et son dossier probatoire. Ses nombres de tests ne s’ajoutent pas aux études de cet article antérieur et ne les remplacent pas.
+
+\chapterpage
+\section{Reproduction et identité des éléments probants}\label{app:reproduction}
+Le dossier complémentaire conserve un compte rendu compact de reproduction, les identités des sources, un registre des affirmations et les instructions de compilation. Les sources des prototypes restent à leurs révisions publiques d’origine figées~; cet article n’intègre pas de copie de leur implémentation. Vérifier les identifiants d’objets Git indiqués avant d’interpréter une reproduction.
+
+\begin{scopebox}
+\textbf{Source du transfert, PR 278~:}\par
+\texttt{a755d0375693465f8f31c0c919cc186eae74bbcc}\par
+\textbf{Source de la reprise, PR 277~:}\par
+\texttt{84c4288b4726a17a90f8462d1d6faf8b5f8f00b5}\par
+\textbf{Révision initiale de main examinée~:}\par
+\texttt{48be73cd1259b9c212431b0fa1594a6c87698372}
+\end{scopebox}
+La révision de source est l’identité scientifique. Les descriptions des PR et les têtes de branche ultérieures peuvent changer. Ces reproductions sont de nouvelles exécutions synthétiques isolées, pas la migration ni la reprise d’un compte financier existant. Aucun point de contrôle privé, pouvoir de signature ou enregistrement client ne fait partie de la publication.
+
+Pour la source du transfert, exécuter les commandes suivantes dans une copie de travail propre de la première révision, avec un nouveau répertoire de sortie. La barre oblique inverse joint la première commande sur deux lignes~:
+\begin{quote}\small\ttfamily
+python3 -m unittest discover -s tests \textbackslash{}\par
+\hspace*{1em}-p 'test\_continuity\_omega.py' -v\par
+python3 -m continuity\_omega demo --out /tmp/continuity-NEW\par
+python3 -m continuity\_omega verify --in-dir /tmp/continuity-NEW
+\end{quote}
+Pour la source de la reprise, exécuter son fichier de tests et la commande de démonstration documentée dans son README figé. Le compte rendu complémentaire de reproduction consigne les commandes effectivement utilisées, les codes de sortie, le vecteur des cas et les empreintes des sources. Les suites de 29 et 9 tests sont des vérifications techniques distinctes conçues manuellement. Les réunir ne crée ni un échantillon statistique ni un banc d’essai empirique de l’IA.
+
+Le script \texttt{counterexamples.py} du dossier complémentaire reproduit séparément les cinq vérifications ciblées de la section~\ref{sec:checkerChallenge} contre la même source de transfert figée. Sa réussite signifie que les faiblesses décrites et les observations de contrôle ont été reproduites~; elle ne signifie pas que le vérificateur a réussi une qualification en production. Le compte rendu compact se trouve dans \texttt{evidence/COUNTEREXAMPLES.json}.
+
+Le manuscrit se compile avec une installation TeX Live standard, sans autoriser l’exécution de commandes système. Le manifeste de publication identifie les octets du PDF canonique. Une recompilation avec une autre distribution TeX peut produire des métadonnées ou des octets PDF différents~; comparer le contenu textuel et la source, et conserver la somme de contrôle canonique. Les sommes de contrôle établissent l’identité des fichiers, pas la vérité des affirmations.
+
+\chapterpage
+\section{Un compte rendu minimal et utile d’exercice}\label{app:record}
+Pour un pilote réel, le compte rendu suivant est proposé. Il s’agit d’une spécification opérationnelle exigeant des contreparties et des autorisations réelles, pas d’un accord exécuté.
+\begin{enumerate}
+\item \textbf{Promesse~:} identifiant de commande, bénéficiaire, spécification, quantité, qualité, échéance de livraison et autorité d’acceptation.
+\item \textbf{Perturbation~:} défaillance exercée, événement d’activation, actions permises, isolation et procédure d’arrêt.
+\item \textbf{Éléments probants~:} garde externe de la source, intervalle d’exhaustivité, accusés de réception, liaison aux versions, obligations non résolues reçues par d’autres canaux et enregistrements manquants.
+\item \textbf{Solution de relève~:} prestataire, intrants approuvés, matériaux, autorisations, personnel responsable, intervalle de capacité, autres réservations, dépendances communes et transport.
+\item \textbf{Objection~:} allégation exacte, référence à la source, importance, vérification discriminante proposée et arbitrage.
+\item \textbf{Exécution~:} observations réelles, temps écoulés, erreurs, tentatives échouées, corrections, interventions des opérateurs et écarts contrôlés.
+\item \textbf{Acceptation~:} qui a vérifié quoi, avec quelle indépendance et ce que le client a réellement accepté.
+\item \textbf{Économie~:} paiements encaissés, tous les coûts, financement, remboursements, passifs, capacité réservée et obligations restantes.
+\item \textbf{Passeport~:} verdicts distincts pour le rapprochement, la préparation, la livraison physique et le résultat commercial~; exclusions, expiration et révocation.
+\item \textbf{Successeur~:} actif conservé, applicabilité, nouvelle tâche, meilleur comparateur complet, réutilisation à contenu égal et tous les coûts de requalification.
+\end{enumerate}
+
+\subsection*{Revue et divulgation}
+Le manuscrit a été préparé avec une assistance d’IA et des critiques distinctes par tâche au sein d’un même processus d’assistance. La revue a mis à l’épreuve l’indépendance non étayée, l’exhaustivité des sources, la capacité agrégée, l’acceptation physique, l’inférence commerciale et la causalité du successeur. Le dossier complémentaire consigne les corrections qui en résultent et les limites restantes. Ce processus est un contrôle de qualité du manuscrit, pas une évaluation externe par les pairs, une certification ni la preuve d’un avantage de performance de deux modèles de pointe.
+
+\chapterpage
+\begingroup
+\setlength{\parskip}{2pt}
+\begin{thebibliography}{99}
+\footnotesize
+\setlength{\itemsep}{3pt}
+\bibitem{boucherTI} Vincent Boucher. \emph{Transformational Intelligence: Learning to Change the Game}. Manuscrit de recherche, octobre 2026. \url{https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/transformational-intelligence.html}.
+\bibitem{boucherGenesis} Vincent Boucher. \emph{ALPHA GENESIS FLYWHEEL $\Omega$: Riding the Exponential---Three Orders of Intelligence for an Enterprise That Discovers What Becomes Possible}. Édition de recherche 2.0, 4 novembre 2026. \url{https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/alpha-genesis-flywheel-omega-v2.html}.
+\bibitem{boucherEconomy} Vincent Boucher. \emph{Invent the Economy: Transformational Intelligence for Creating Viable Markets}. Manuscrit de recherche, octobre 2026. \url{https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/invent-the-economy.html}.
+\bibitem{codexSecurity} OpenAI. \emph{Codex Security: now in research preview}. 6 mars 2026. Rapport du fournisseur. \url{https://openai.com/index/codex-security-now-in-research-preview/}.
+\bibitem{anthropicCyber} Nicholas Carlini, David Dworken, Xinyang Ge, Ben Morris, Milad Nasr, Chris Rohlf et Luna Tong. \emph{Discovering and exploiting vulnerabilities in critical, real-world software with Claude}. Anthropic, 27 octobre 2026. Rapport du fournisseur. \url{https://www.anthropic.com/research/discovering-vulnerabilities-with-claude}.
+\bibitem{criticGPT} OpenAI. \emph{Finding GPT-4's mistakes with GPT-4}. 27 juin 2024. \url{https://openai.com/index/finding-gpt4s-mistakes-with-gpt-4/}.
+\bibitem{kenton} Zachary Kenton et al. \emph{On scalable oversight with weak LLMs judging strong LLMs}. arXiv:2407.04622, 2024. \url{https://doi.org/10.48550/arXiv.2407.04622}.
+\bibitem{correlated} Elliot Kim, Avi Garg, Kenny Peng et Nikhil Garg. \emph{Correlated Errors in Large Language Models}. ICML 2025~; arXiv:2506.07962. \url{https://doi.org/10.48550/arXiv.2506.07962}.
+\bibitem{nist160} Ron Ross, Victoria Pillitteri, Richard Graubart, Deborah Bodeau et Rosalie McQuaid. \emph{Developing Cyber-Resilient Systems: A Systems Security Engineering Approach}. NIST SP 800-160 vol.~2 rév.~1, décembre 2021. \url{https://doi.org/10.6028/NIST.SP.800-160v2r1}.
+\bibitem{nist184} Michael Bartock, Jeffrey Cichonski, Murugiah Souppaya, Matthew Smith, Gregory Witte et Karen Scarfone. \emph{Guide for Cybersecurity Event Recovery}. NIST SP 800-184, décembre 2016. \url{https://doi.org/10.6028/NIST.SP.800-184}.
+\bibitem{nist34} Marianne Swanson, Pauline Bowen, Amy Wohl Phillips, Dean Gallup et David Lynes. \emph{Contingency Planning Guide for Federal Information Systems}. NIST SP 800-34 rév.~1, mise à jour du 11 novembre 2010. \url{https://doi.org/10.6028/NIST.SP.800-34r1}.
+\bibitem{canadaRansomware} Centre canadien pour la cybersécurité. \emph{Ransomware playbook (ITSM.00.099)}. Deuxième édition, 28 janvier 2026. \url{https://www.cyber.gc.ca/en/guidance/ransomware-playbook-itsm00099}.
+\bibitem{handoffSource} MONTREAL.AI. \emph{CONTINUITY $\Omega$: synthetic commitment handoff prototype}. Source publique à \texttt{a755d0375693}, examinée et reproduite le 6 novembre 2026. \url{https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/a755d0375693465f8f31c0c919cc186eae74bbcc/continuity_omega}.
+\bibitem{handoffPilot} MONTREAL.AI. \emph{CONTINUITY $\Omega$: First paid-pilot acceptance contract}. Spécification proposée, sans approbations réelles~; source à \texttt{a755d0375693}. \url{https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/a755d0375693465f8f31c0c919cc186eae74bbcc/docs/continuity-omega/REAL_PILOT.md}.
+\bibitem{recoverySource} MONTREAL.AI. \emph{CONTINUITY $\Omega$: verify obligations across recovery}. Source de recherche publique à \texttt{84c4288b4726}, examinée et reproduite le 6 novembre 2026. \url{https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/84c4288b4726a17a90f8462d1d6faf8b5f8f00b5/campaign/continuity_omega_20261106}.
+\bibitem{genesisResults} MONTREAL.AI. \emph{GENESIS Commitment 001: results, costs and adjudication}. Simulation historique à \texttt{607c18854db0}. \url{https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/607c18854db04dc3aa4adf242a4e3d1d9c629880/campaign/genesis_commitment001/RESULTS.md}.
+\bibitem{boucherSurf} Vincent Boucher. \emph{SURF THE EXPONENTIAL---The Missing Move}. Édition de recherche 1.2.0, 6 novembre 2026. \url{https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.html}.
+\bibitem{handoffHardening} MONTREAL.AI. \emph{CONTINUITY $\Omega$ 0.2: reproduced failures and evidence-boundary hardening}. Source proposée à \texttt{6cd7e1bb7197}, examinée le 6 novembre 2026~; non qualifiée par cet article. \url{https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/6cd7e1bb7197cabdf8f3d093eead662cde5351f4/docs/continuity-omega/HARDENING.md}.
+\end{thebibliography}
+\endgroup
+\end{document}
