@@ -82,6 +82,67 @@ class JoinPreflightTests(unittest.TestCase):
         self.assertEqual(result['missing_main_manifest_routes'],
                          ['public-portfolio-20261102/native-services/v2'])
 
+    def test_uncalled_nested_function_is_not_an_active_manifest_route(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\\n"
+            "  return SOURCE_PATHS + tuple(source_paths(None))\\n",
+            " def unused():\\n"
+            "  if schema == 'public-portfolio-20261102/native-services/v2':\\n"
+            "   return SOURCE_PATHS + tuple(source_paths(None))\\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertEqual(result['missing_main_manifest_routes'],
+                         ['public-portfolio-20261102/native-services/v2'])
+
+    def test_unreachable_route_after_unconditional_return_is_not_credited(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\\n",
+            " return SOURCE_PATHS\\n"
+            " if schema == 'public-portfolio-20261102/native-services/v2':\\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_unconditional_non_schema_branch_shadows_v2(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\\n",
+            " if True:\\n  return SOURCE_PATHS\\n"
+            " if schema == 'public-portfolio-20261102/native-services/v2':\\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_base_only_first_v2_branch_shadows_later_producer_route(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\\n",
+            " if schema == 'public-portfolio-20261102/native-services/v2':\\n"
+            "  return SOURCE_PATHS\\n"
+            " if schema == 'public-portfolio-20261102/native-services/v2':\\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_nested_source_return_in_v2_branch_cannot_masquerade_as_return(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\\n"
+            "  return SOURCE_PATHS + tuple(source_paths(None))\\n",
+            " if schema == 'public-portfolio-20261102/native-services/v2':\\n"
+            "  def unused():\\n"
+            "   return SOURCE_PATHS + tuple(source_paths(None))\\n"
+            "  return SOURCE_PATHS\\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
     def test_symlink_and_traversal_refused(self):
         (self.c / 'bad.py').symlink_to(self.c / 'a.py')
         with self.assertRaisesRegex(ValueError, 'P0_SYMLINK_SOURCE_REFUSED'):
