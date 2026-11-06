@@ -134,3 +134,20 @@ missing-quote-CI refusal test pass with the real gate selector; 91 local
 release, policy, package and privacy tests pass. No production guard or timeout
 was relaxed. The original hosted failure and local fixture metadata error are
 retained in `PACKAGING.json`; new source requires fresh hosted qualification.
+
+Independent automated review of `08fb5558` then found F05: a legitimately
+generated native history with zero closing cost was internally consistent, so
+the public auditor incorrectly accepted a fixed-arm loss of $980 rather than
+the registered $1,080. The original passing CI therefore did not establish
+complete registered costs. The merge was held. The repaired auditor derives
+the exact cost schedule independently of the producer, including the prepaid
+production request, tax amount, zero working reserve and closing charge at
+hour 120. Eleven coherent adverse histories and six different prospectively
+registered cost/time perturbations reject; honest packets remain unchanged.
+After correcting the debit-ID error, four additional cases were registered
+before execution and rejected. All 94 local policy/release/package/privacy
+tests pass in 18.021 seconds. The original three packets still audit and their
+bytes are unchanged; new hosted review and qualification remain required.
+The first local repair also rejected honest selling packets because its
+expected production debit ID was wrong; that error is preserved in `F05.json`.
+This independent review improves evidence integrity, not the economic result.

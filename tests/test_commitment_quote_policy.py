@@ -8,6 +8,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from research.commitment_quote_policy import decide, SCHEMA, successor_funding_decision
 from campaign.genesis_commitment001 import service
@@ -196,6 +197,67 @@ def execute_native_arm(arm, evidence_dir=None):
 
 
 class NativeQuoteTests(unittest.TestCase):
+    def test_registered_cost_schedule_rejects_coherent_native_histories(self):
+        # F05 cases registered in PR274 review reply4489234961 before repair.
+        cases=[('fixed','closing',0,None),('fixed','closing',None,None),
+               ('fixed','closing',100*USD,119),('fixed','closing',100*USD,121),
+               ('fixed','quote-setup',879*USD,None),
+               ('fixed','quote-acquisition',99*USD,None),
+               ('ordinary','closing',0,None),('ordinary','payment',29*USD,None),
+               ('ordinary','tax-first',229_997_999,None),
+               ('ordinary','production',839*USD,None),('fixed','extra',USD,None)]
+        self._reject_coherent_cost_cases(cases)
+
+    def test_fresh_registered_cost_confirmation(self):
+        # Different predeclared perturbations, not new economic confirmation.
+        self._reject_coherent_cost_cases([
+            ('fixed','quote-setup',881*USD,None),
+            ('fixed','quote-acquisition',101*USD,None),
+            ('ordinary','closing',101*USD,None),
+            ('ordinary','payment',31*USD,None),
+            ('constructor','production',841*USD,None),
+            ('fixed','quote-acquisition',100*USD,2)])
+
+    def test_post_repair_cost_confirmation(self):
+        # Registered in review reply4489247646 after the debit-ID repair.
+        self._reject_coherent_cost_cases([
+            ('fixed','quote-setup',880_000_001,None),
+            ('fixed','quote-acquisition',100*USD,3),
+            ('ordinary','closing',100_000_001,None),
+            ('constructor','production',840_000_001,None)])
+
+    def _reject_coherent_cost_cases(self,cases):
+        from connected_enterprise.finance import JournalAccount
+        from scripts.qualify_commitment_quote import audit_packet
+        original_cost=JournalAccount.cost
+        original_reserve=BusinessAccount.reserve_delivery
+        with tempfile.TemporaryDirectory(prefix='quote-cost-adjudication-') as temp:
+            for index,(arm,target,value,shifted_hour) in enumerate(cases):
+                with self.subTest(arm=arm,target=target,value=value,hour=shifted_hour):
+                    def altered_cost(account,ident,amount,day):
+                        if ident==target:
+                            if value is None:return None
+                            amount=value
+                            if shifted_hour is not None:day=shifted_hour
+                        result=original_cost(account,ident,amount,day)
+                        if target=='extra' and ident=='closing':
+                            original_cost(account,'unregistered-extra',value,day)
+                        return result
+                    def altered_reserve(business,ident,amount,hour,work,*,allow_seed):
+                        if target=='production':
+                            amount=value;work=copy.deepcopy(work)
+                            work['costs']={'complete-first-production':value}
+                        return original_reserve(business,ident,amount,hour,work,allow_seed=allow_seed)
+                    dest=Path(temp)/str(index)
+                    with patch.object(JournalAccount,'cost',altered_cost), \
+                            patch.object(BusinessAccount,'reserve_delivery',altered_reserve):
+                        result=execute_native_arm(arm,dest)
+                    self.assertTrue(result['audit_accepted'])
+                    before=(dest/'PUBLIC.json.gz').read_bytes()
+                    with self.assertRaisesRegex(ValueError,'REGISTERED_.*COST'):
+                        audit_packet(dest/'PUBLIC.json.gz')
+                    self.assertEqual((dest/'PUBLIC.json.gz').read_bytes(),before)
+
     def test_all_frozen_arms_and_complete_successor_deferral(self):
         results=[execute_native_arm(arm) for arm in ('fixed','ordinary','constructor')]
         fixed,ordinary,constructed=results

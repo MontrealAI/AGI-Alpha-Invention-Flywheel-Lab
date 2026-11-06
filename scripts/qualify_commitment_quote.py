@@ -14,6 +14,45 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 
 
+def audit_registered_costs(export, arm, price):
+    """Bind a coherent native history to this experiment's frozen cost schedule.
+
+    Native replay proves accounting consistency, not that an experiment paid all
+    registered costs. Derive the required schedule independently of the producer
+    and compare exact native amounts, identifiers, ordering and integer hours.
+    """
+    from commercial.ledger import digest
+    actions=export['ledger']['actions']
+    costs=[(a['day'],a['args']['id'],a['args']['amount'])
+           for a in actions if a['op']=='cost']
+    expected=[(0,'quote-setup',880_000_000),(1,'quote-acquisition',100_000_000)]
+    sequence=[('cost',0),('cost',1)]
+    spends=[e for e in export['connected_journal']['entries']
+            if e['request']['operation']=='spend']
+    if arm!='fixed':
+        sequence.extend([('cost',3),('wallet',3),('register_terms',3),('offer',3),
+                         ('event',3),('event',3),('event',7),('event',10),
+                         ('cost',10),('cost',10),('mature',19)])
+        required={'operation':'spend','id':'capacity-first','kind':'committed_delivery',
+                  'amount':840_000_000,'day':3,'expected_net':1,'allow_seed':True,
+                  'work':{'buyer':'buyer-first','order':'first','job':'restore-first',
+                          'capacity':{'supplier':'shared-worker','start':4,'end':8,'units':1},
+                          'costs':{'complete-first-production':840_000_000},'expected_net':1}}
+        if (len(spends)!=1 or spends[0]['request']!=required or
+                spends[0]['status']!='COMPLETE' or spends[0]['funding']!='SEED' or
+                spends[0]['receipt']['native_event_sequence']!=2):
+            raise ValueError('REGISTERED_PREPAID_COST_CHANGED')
+        seed_id='connected014-seed-'+digest({'request':required,
+            'source_sha256':spends[0]['receipt']['source_sha256']})[:32]
+        expected.extend([(3,seed_id,840_000_000),(10,'payment',30_000_000),
+                         (10,'tax-first',max(0,price-1_850_000_000)//5)])
+    elif spends:
+        raise ValueError('UNREGISTERED_FIXED_ARM_SPEND')
+    expected.append((120,'closing',100_000_000));sequence.append(('cost',120))
+    if costs!=expected or [(a['op'],a['day']) for a in actions]!=sequence:
+        raise ValueError('REGISTERED_COST_SCHEDULE_CHANGED')
+
+
 def audit_packet(path):
     # Only native canonical auditor and bound acceptance decide delivery/finance.
     from connected_enterprise.finance import audit_journal
@@ -64,6 +103,9 @@ def audit_packet(path):
             raise ValueError('EXACT_DISPOSABLE_SEED_REQUIRED')
         if p['native_export']['ledger']['config']['contract']!='public-quote-fixture-'+arm:
             raise ValueError('ACCOUNT_ARM_BINDING_CHANGED')
+        if p['native_export']['ledger']['config']['working']!=0:
+            raise ValueError('REGISTERED_WORKING_RESERVE_CHANGED')
+        audit_registered_costs(p['native_export'],arm,price)
         # Result booleans are a presentation, not independent authority.
         releases=[r for r in p['native_export']['ledger']['actions']
                   if r['op']=='event' and r['args']['action']=='release']
