@@ -267,6 +267,49 @@ class JoinPreflightTests(unittest.TestCase):
         self.assertTrue(inspect(self.a, self.b, self.c)['registry_complete'])
 
 
+    def test_v2_route_must_keep_original_service_producer(self):
+        """A live-looking branch may call a completely different producer."""
+        needle = (" if schema == 'public-portfolio-20261102/native-services/v2':\n"
+                  "  return SOURCE_PATHS + tuple(source_paths(None))\n")
+        replacement = (" if schema == 'public-portfolio-20261102/native-services/v2':\n"
+                       "  from expected.service import source_paths\n"
+                       "  return SOURCE_PATHS + tuple(source_paths(None))\n")
+        for root in (self.a, self.c):
+            path = root / 'connected_enterprise/finance.py'
+            original = path.read_text()
+            self.assertIn(needle, original)
+            path.write_text(original.replace(needle, replacement))
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            'from expected.service import source_paths',
+            'from substitute.service import source_paths'))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertEqual(result['missing_main_manifest_routes'],
+                         ['public-portfolio-20261102/native-services/v2'])
+
+    def test_later_import_must_not_shadow_original_service_producer(self):
+        """A second import just before the return changes its live binding."""
+        needle = (" if schema == 'public-portfolio-20261102/native-services/v2':\n"
+                  "  return SOURCE_PATHS + tuple(source_paths(None))\n")
+        original_route = (" if schema == 'public-portfolio-20261102/native-services/v2':\n"
+                          "  from expected.service import source_paths\n"
+                          "  return SOURCE_PATHS + tuple(source_paths(None))\n")
+        for root in (self.a, self.c):
+            path = root / 'connected_enterprise/finance.py'
+            original = path.read_text()
+            self.assertIn(needle, original)
+            path.write_text(original.replace(needle, original_route))
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            '  from expected.service import source_paths\n',
+            '  from expected.service import source_paths\n'
+            '  from substitute.service import source_paths\n'))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertEqual(result['missing_main_manifest_routes'],
+                         ['public-portfolio-20261102/native-services/v2'])
+
     def test_actual_main_source_dispatches_all_five_service_manifest_versions(self):
         root = Path(__file__).resolve().parents[1]
         _, routes = load_registry(root)
