@@ -377,6 +377,8 @@ def _audit_public_deliveries(out, reg, manifest, first_bought, successor):
 def audit(output):
     out=safe_output(output);reg,manifest=_bound(out);p=reg['protocol'];scenario=reg['scenario']
     record=read(out/'NATIVE_EXPORT.json')
+    if record['ledger']['config']['contract'] != 'commitment001-'+reg['binding'][:20]:
+        raise ValueError('REGISTERED_NATIVE_CONTRACT_CHANGED')
     native=audit_journal(record,root=out/'source',manifest=manifest)
     if not native['accepted']:raise ValueError('NATIVE_REPLAY_REJECTED')
     if record['ledger']['config']['opening']!=OPENING:raise ValueError('EXACT_SEED_REQUIRED')

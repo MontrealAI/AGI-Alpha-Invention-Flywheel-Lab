@@ -15,6 +15,7 @@ on:
       - 'tests/test_connected_commitment_independent.py'
       - 'tests/test_connected_commitment_public_receipts.py'
       - 'tests/test_connected_commitment_startup.py'
+      - 'tests/test_connected_commitment_registration.py'
       - '.github/workflows/genesis-commitment001.yml'
   push:
     branches: [main]
@@ -32,6 +33,7 @@ on:
       - 'tests/test_connected_commitment_independent.py'
       - 'tests/test_connected_commitment_public_receipts.py'
       - 'tests/test_connected_commitment_startup.py'
+      - 'tests/test_connected_commitment_registration.py'
       - '.github/workflows/genesis-commitment001.yml'
   workflow_dispatch:
 permissions:
@@ -63,6 +65,7 @@ jobs:
           test -f tests/test_connected_commitment_independent.py
           test -f tests/test_connected_commitment_public_receipts.py
           test -f tests/test_connected_commitment_startup.py
+          test -f tests/test_connected_commitment_registration.py
           python -m unittest discover -s tests -p 'test_connected_commitment_*.py' -v
           PYTHONOPTIMIZE=1 python -O -m unittest discover -s tests -p 'test_connected_commitment_*.py' -v
       - name: Reproduce preserved original defects on disposable fresh accounts

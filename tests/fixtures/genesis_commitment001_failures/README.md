@@ -33,3 +33,5 @@ python tests/fixtures/genesis_commitment001_failures/challenge_public_receipts.p
 ```
 
 It snapshots the runtime closure before creating six fresh accounts, checks honest exported copies, and challenges 28 new coherent/adverse mutations. It never copies an existing account or recovery authority. `F03_FRESH_RESULT.json` records the preserved original challenge and the portable replay, with their source hashes and declared boundaries.
+
+F05 adds a later frozen Git counterexample: checkout `9c2c075b576fc8c27553ac8922b9692ce8748371` and run `python -m unittest discover -s tests -p 'test_connected_commitment_registration.py' -v`. Honest cases pass, but two coherent scenario/arm relabels incorrectly pass audit and package (four failed rejection checks). Native history, source and signing authority stay unchanged. The prospective repair explicitly binds the native contract to the registration; run the unchanged test on repaired source to check both refusals.
