@@ -13,7 +13,7 @@ import unittest
 
 from continuity_omega.demo import case_for
 from continuity_omega.engine import (
-    DrillRejected, construct, digest, restored_anomalies,
+    DrillRejected, construct, digest, outstanding, restored_anomalies,
 )
 from continuity_omega.checker import audit
 
@@ -70,10 +70,15 @@ class RestoredObligationStateReview(unittest.TestCase):
         # Correct source replay owes 1000 + 800, not the snapshot's 1900.
         self.assertEqual(handoff["required_units"], 1800)
         result = audit(case, handoff, passport)
+        active, replayed = outstanding(case["source_events"], case["objective"]["product"])
+        self.assertEqual(sum(row["units"] for row in active), 1800)
+        # A generic audit failure (for an unrelated reason) does NOT prove
+        # that the restored snapshot revealed missing fulfillment state.
         self.assertTrue(
-            passport["restoration_findings"] or result["verdict"] == "FAIL",
-            "Missing fulfillment provenance produced no restoration finding "
-            "and still passed the synthetic independent audit.",
+            restored_anomalies(replayed, case["restored_snapshot"]),
+            "The restoration comparator silently accepted gross-only rows "
+            "without a fulfillment-state witness; independent auditor: "
+            + repr(result),
         )
 
 
