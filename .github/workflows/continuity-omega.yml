@@ -1,0 +1,36 @@
+name: CONTINUITY Omega synthetic evidence
+on:
+  pull_request:
+    paths:
+      - 'continuity_omega/**'
+      - 'tests/test_continuity_omega.py'
+      - 'docs/continuity-omega/**'
+      - '.github/workflows/continuity-omega.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'continuity_omega/**'
+      - 'tests/test_continuity_omega.py'
+      - 'docs/continuity-omega/**'
+      - '.github/workflows/continuity-omega.yml'
+permissions:
+  contents: read
+jobs:
+  synthetic-drill:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Independently replay 23 synthetic cases
+        run: python3 -m unittest discover -s tests -p 'test_continuity_omega.py' -v
+      - name: Construct and audit the nominal synthetic handoff
+        run: |
+          python3 -m continuity_omega demo --out "$RUNNER_TEMP/continuity-demo"
+          python3 -m continuity_omega verify --in-dir "$RUNNER_TEMP/continuity-demo"
+      - name: Negative control must reject overbooked capacity
+        run: |
+          if python3 -m continuity_omega demo --case overbooked --out "$RUNNER_TEMP/overbooked"; then
+            echo 'An unsafe supplier promise was accepted.'
+            exit 1
+          fi
