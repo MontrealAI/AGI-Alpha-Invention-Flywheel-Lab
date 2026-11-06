@@ -9,6 +9,10 @@
 1. **Correctly absent cancellation.** A historical order for 600 units is `CANCELLED`; the restored **outstanding** view contains no entry. There is no missing active obligation. Existing `restored_anomalies` reports `MISSING_FROM_RESTORED_SNAPSHOT`, a false positive that could trigger unneeded work.
 2. **Unobservable fulfillment progress.** The source events accept 1,000 and 800 units, amend the first to 1,100, then fulfill 100. The true outstanding requirement is **1,800** units. A restored snapshot containing only gross quantities 1,100 and 800 (total **1,900**) has no fulfillment state/IDs. The prototype constructs the correct 1,800-unit handoff from the separate source history, but the snapshot comparison returns an empty diagnostic, so this *restoration check* cannot establish that completed work is preserved. This is a **missing proof boundary**, not evidence of a real duplicate delivery or false native account balance.
 
+## Executed red-run receipt (retained, not revised into a pass)
+
+The first exact-head review workflow [42296081697](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/42296081697) completed **FAILURE** on review head `60a796dd4d716614215edf168f016b0e4212998f`. It ran 48 tests (46 pre-existing plus two new), with **one** failed assertion: the correctly absent cancellation was reported `MISSING_FROM_RESTORED_SNAPSHOT`. The gross-only fulfillment test unexpectedly passed because its condition also accepted an unspecified independent-audit failure. That was an insufficient *test oracle*, not evidence that restoration provenance was established. The second assertion has now been tightened prospectively on `0fd3c1d613333f052a81912515b0d5ad5240ae8f` to require an actual restoration-comparator finding; the first failed run stays failed. A new exact-head workflow outcome, if any, must be reported separately.
+
 ## Frozen acceptance / expected initial outcome
 
 Run on the exact stacked source:
