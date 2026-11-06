@@ -127,7 +127,7 @@ jobs:
           fi
           tag_commit="$(gh api "repos/$GITHUB_REPOSITORY/commits/$tag" --jq .sha)"
           if [ "$tag_commit" != "$GITHUB_SHA" ]; then
-            echo "SURF_EXISTING_IMMUTABLE_EDITION: original tag $tag_commit; compare immutable assets byte-for-byte on this maintenance commit, never retag or republish."
+            echo "SURF_EXISTING_IMMUTABLE_EDITION: original tag $tag_commit; verify public assets byte-for-byte on this maintenance commit, never retag or republish."
             [ "$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" --jq .draft)" = false ] || { echo 'SURF_EXISTING_TAG_DRAFT_MISMATCH'; exit 1; }
           fi
           mkdir "$RUNNER_TEMP/surf-downloaded"
