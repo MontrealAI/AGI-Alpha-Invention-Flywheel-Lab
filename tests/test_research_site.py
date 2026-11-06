@@ -1,3 +1,4 @@
+import hashlib
 import importlib.util
 from pathlib import Path
 import shutil
@@ -97,8 +98,8 @@ class ResearchSiteTests(unittest.TestCase):
         slugs = ('learn', 'think', 'design', 'strategise', 'execute', 'evolve')
         collection = (self.source / 'out-series.html').read_text()
         homepage = (self.source / 'index.html').read_text()
-        self.assertEqual(len(site.PAPERS), 25)
-        self.assertEqual(len(site.PAGES), 27)
+        self.assertEqual(len(site.PAPERS), 26)
+        self.assertEqual(len(site.PAGES), 28)
         self.assertIn('out-series.html', homepage)
         for slug in slugs:
             reader = 'out-' + slug + '.html'
@@ -184,12 +185,49 @@ class ResearchSiteTests(unittest.TestCase):
     def test_unresolved_publication_metadata_is_rejected(self):
         page = self.source / 'agi-alpha-flywheel.html'
         original = page.read_text()
-        for token in ('PAPER_SHA256_PLACEHOLDER', 'SURF_PAGE_COUNT', 'SURF_SHA256', 'SURF_PDF_BYTES'):
+        for token in ('PAPER_SHA256_PLACEHOLDER', 'SURF_PAGE_COUNT', 'SURF_SHA256', 'SURF_PDF_BYTES', 'CONTINUITY_PAGE_COUNT', 'CONTINUITY_SHA256', 'CONTINUITY_PDF_BYTES'):
             with self.subTest(token=token):
                 page.write_text(original + '<p>' + token + '</p>')
                 with self.assertRaisesRegex(ValueError, 'Unresolved publication metadata'):
                     site.validate(self.source)
         page.write_text(original)
+
+    def test_continuity_reader_matches_pdf_scope_and_preserves_flagship(self):
+        import json
+        reader = (self.source / 'continuity-omega.html').read_text()
+        home = (self.source / 'index.html').read_text()
+        manifest = json.loads((self.source / 'publication-manifest.json').read_text())
+        entry = next(p for p in manifest['papers'] if p['file'] == 'continuity-omega.pdf')
+        pdf = (self.source / entry['file']).read_bytes()
+        self.assertEqual(entry['sha256'], hashlib.sha256(pdf).hexdigest())
+        self.assertEqual(entry['bytes'], len(pdf))
+        self.assertIn('<code>' + entry['sha256'] + '</code>', reader)
+        self.assertIn(str(entry['bytes']) + ' bytes', reader)
+        parser = site.Links()
+        parser.feed(reader)
+        for link in ('continuity-omega.pdf', 'continuity-omega.pdf#view=FitH',
+                     'transformational-intelligence.html', 'alpha-genesis-flywheel-omega-v2.html',
+                     'invent-the-economy.html',
+                     'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/continuity-omega-paper',
+                     'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/continuity-omega-paper/evidence/REPRODUCTION.json',
+                     'https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/continuity-omega-paper/REVIEW.md'):
+            self.assertIn(link, parser.links)
+        self.assertEqual(parser.canonical_urls, [site.PUBLIC_SITE + 'continuity-omega.html'])
+        self.assertIn('name="citation_pdf_url" content="' + site.PUBLIC_SITE + 'continuity-omega.pdf"', reader)
+        for phrase in ('29 + 9', 'not a statistical sample of real incidents',
+                       'Competent conventional reconciliation', 'What remains unestablished:',
+                       'No feasible pool.'):
+            self.assertIn(phrase, reader)
+        self.assertTrue({'idea', 'first-service', 'pooling', 'evidence', 'reader'}.issubset(parser.ids))
+        self.assertLess(home.index('id="alpha-genesis-v2"'), home.index('id="alpha-genesis"'))
+        self.assertLess(home.index('id="alpha-genesis"'), home.index('id="continuity-omega"'))
+        self.assertLess(home.index('id="continuity-omega"'), home.index('id="surf-the-exponential"'))
+        self.assertIn('href="continuity-omega.html"', home)
+        self.assertIn('href="continuity-omega.pdf"', home)
+        for asset in ('continuity-omega-social.png', 'continuity-omega-card.svg'):
+            self.assertIn(asset, site.ASSETS)
+        self.assertIn('property="og:image" content="' + site.PUBLIC_SITE + 'continuity-omega-social.png"', reader)
+        self.assertIn('name="twitter:card" content="summary_large_image"', reader)
 
     def test_surf_reader_matches_published_pdf_and_preserves_flagship(self):
         import json

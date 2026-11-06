@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "title": "CONTINUITY Ω: claim and evidence register",
+  "edition": "1.0.0",
+  "reviewed_on": "2026-11-06",
+  "scope": "Research architecture, conditional analysis and two pinned synthetic reproductions. This register does not confer operating authority or certify a business.",
+  "status_definitions": {
+    "formal-conditional": "A mathematical or modeled conclusion under stated assumptions; includes explicitly identified historical simulation arithmetic, not observed commerce.",
+    "reproduced-synthetic": "Observed in the present execution of pinned code on authored inputs; not a field or model-performance result.",
+    "proposed": "A specification, design requirement or prospective experiment awaiting the stated evidence.",
+    "not-established": "The current evidence does not establish the named capability or outcome; this is not proof of impossibility."
+  },
+  "sources": {
+    "manuscript": "CONTINUITY_OMEGA.tex",
+    "reproduction": "evidence/REPRODUCTION.json",
+    "handoff": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/a755d0375693465f8f31c0c919cc186eae74bbcc/continuity_omega",
+    "handoff_tests": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/a755d0375693465f8f31c0c919cc186eae74bbcc/tests/test_continuity_omega.py",
+    "recovery": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/84c4288b4726a17a90f8462d1d6faf8b5f8f00b5/campaign/continuity_omega_20261106",
+    "recovery_tests": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/84c4288b4726a17a90f8462d1d6faf8b5f8f00b5/tests/test_connected_continuity_omega.py",
+    "pilot_specification": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/a755d0375693465f8f31c0c919cc186eae74bbcc/docs/continuity-omega/REAL_PILOT.md",
+    "historical_genesis": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/607c18854db04dc3aa4adf242a4e3d1d9c629880/campaign/genesis_commitment001/RESULTS.md",
+    "correlated_errors": "https://doi.org/10.48550/arXiv.2506.07962",
+    "counterexamples": "evidence/COUNTEREXAMPLES.json",
+    "hardening_review": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/6cd7e1bb7197cabdf8f3d093eead662cde5351f4/docs/continuity-omega/HARDENING.md"
+  },
+  "claims": [
+    {
+      "id": "F01",
+      "text": "Reviewers restricted to identical available evidence cannot perfectly distinguish two histories with different truth values for a material claim.",
+      "status": "formal-conditional",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Proposition in the missing-evidence section; identical inputs imply identical outputs or output distributions.",
+      "limits": "Applies to the stated observation boundary. New authenticated observations or an admissible change of route can change the problem. It is not a new general theorem about intelligence."
+    },
+    {
+      "id": "F02",
+      "text": "If every permitted timely route requires the same unavailable prerequisite, nominally different suppliers cannot fulfill the commitment without a qualified substitute or timely restoration.",
+      "status": "formal-conditional",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Shared-prerequisite proposition.",
+      "limits": "Conditional on a correctly identified prerequisite and route set; it does not prove that no undiscovered admissible alternative exists."
+    },
+    {
+      "id": "F03",
+      "text": "Aggregate activated demand plus prior protected commitments must fit usable capacity for each declared scenario, resource and time.",
+      "status": "formal-conditional",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Capacity inequality, equation labelled eq:capacity.",
+      "limits": "Necessary rather than sufficient: scheduling, setup, materials, people, quality, permissions and transport still require validation. It does not reserve real capacity."
+    },
+    {
+      "id": "F04",
+      "text": "In the stated equal-buyer pool, nonnegative contribution and simultaneous capacity can coexist exactly when ceil(K/(B-c)) <= floor(C/q).",
+      "status": "formal-conditional",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Pooling proposition and proof, equation labelled eq:pool.",
+      "limits": "Assumes K > 0, q > 0, B > c, all buyers may activate together, p = B is admissible, the selected integer number of buyers is available and willing, and all period costs are included. Cash timing and complete operational feasibility remain separate. Positive contribution requires n(B-c) > K."
+    },
+    {
+      "id": "F05",
+      "text": "With K=900, c=100, B=400, C=2000 and q=750, economics requires at least three buyers while capacity permits at most two; no feasible pool exists in that model.",
+      "status": "formal-conditional",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Authored pooling illustration: n_min=3, n_max=2; two buyers have contribution -300 in hypothetical monetary units; three break even but require 2250 capacity units.",
+      "limits": "Hypothetical monetary and capacity units, not observed prices, production or a market. Changed costs, capacity or service terms require a newly evaluated arrangement."
+    },
+    {
+      "id": "R01",
+      "text": "All 29 tests in the pinned PR 278 handoff suite passed.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "handoff_tests",
+        "reproduction"
+      ],
+      "evidence": "Commit a755d0375693465f8f31c0c919cc186eae74bbcc; reproduction.tests.pr278: 29 passed, 0 failed.",
+      "limits": "Authored implementation checks, not 29 customers, incidents or independent model trials. The older 23-test description does not identify this executed suite."
+    },
+    {
+      "id": "R02",
+      "text": "All 9 tests in the pinned PR 277 recovery suite passed.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "recovery_tests",
+        "reproduction"
+      ],
+      "evidence": "Commit 84c4288b4726a17a90f8462d1d6faf8b5f8f00b5; reproduction.tests.pr277: 9 passed, 0 failed.",
+      "limits": "A separate suite from PR 278. Adding test counts does not create a statistical sample or an empirical AI benchmark."
+    },
+    {
+      "id": "R03",
+      "text": "The handoff fixture reconstructs two outstanding commitments totaling 1900 units and detects three discrepancies in the recovered snapshot.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "handoff",
+        "reproduction"
+      ],
+      "evidence": "The supplied history produces a stale quantity, a missing accepted order and a cancelled order that reappeared; reproduction.pr278 records the quantities and findings.",
+      "limits": "These are synthetic obligation quantities, not manufactured or delivered units. Successful handoff checking does not repair the original recovered snapshot or authenticate the supplied history."
+    },
+    {
+      "id": "R04",
+      "text": "All 12 documented handoff CLI cases produced their expected outcome: 3 synthetic handoff passes and 9 pre-handoff refusals; nominal artifact verification also passed.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "handoff",
+        "reproduction"
+      ],
+      "evidence": "Pass cases: nominal, missing_from_restored, extra_restored. The reproduction records nine rejected cases and PASS_SYNTHETIC_ONLY for nominal CLI verification.",
+      "limits": "Pass refers to the reconstructed handoff under fixture constraints, not successful production recovery. Correct refusals are not accepted deliveries; case counts are not incident prevalence."
+    },
+    {
+      "id": "R05",
+      "text": "A competent conventional reconciliation control ties the recovery candidate on all four authored decisions: [PASS, FAIL, FAIL, FAIL].",
+      "status": "reproduced-synthetic",
+      "source": [
+        "recovery",
+        "reproduction"
+      ],
+      "evidence": "reproduction.pr277.candidate_verdicts and competent_comparator_verdicts are both [true, false, false, false].",
+      "limits": "The tie defeats a superiority claim based on these cases. A health-only control's failures do not establish an advantage over competent conventional reconciliation. This is not evidence of universal equivalence."
+    },
+    {
+      "id": "R06",
+      "text": "The handoff fixture has modeled contribution of US$650: a US$5700 quote less US$5050 of supplied cost.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "handoff",
+        "reproduction"
+      ],
+      "evidence": "reproduction.pr278 records modeled_offer_usd=5700, modeled_cost_usd=5050 and modeled_contribution_usd=650.",
+      "limits": "Authored arithmetic, not collected revenue or realized profit. Actual acquisition, implementation, model, host, verification, liability and other costs remain to be measured; fixture labels do not establish complete real-world cost accounting."
+    },
+    {
+      "id": "H01",
+      "text": "The separate historical GENESIS Commitment 001 central scenario reports buyer refusal and a modeled US$1080 loss.",
+      "status": "formal-conditional",
+      "source": [
+        "historical_genesis",
+        "manuscript"
+      ],
+      "evidence": "Cited historical authored simulation at 607c18854db04dc3aa4adf242a4e3d1d9c629880; this edition preserves its reported negative result.",
+      "limits": "Not a fresh reproduction of that campaign, actual commercial loss, or part of the present US$650 handoff fixture. The accounts, scenarios and results are not pooled, reset or relabeled."
+    },
+    {
+      "id": "P01",
+      "text": "The first proposed service is one authorized continuity rehearsal for a regional B2B packaging-label printer, one approved product and one qualified fallback provider.",
+      "status": "proposed",
+      "source": [
+        "pilot_specification",
+        "manuscript"
+      ],
+      "evidence": "The proposed buyer is the operations director; owner/GM commercial authorization, customer acceptance and provider participation must be obtained.",
+      "limits": "The executable work currently demonstrates offline synthetic reconciliation and supplied-constraint checks. It does not establish an operational service, real permissions, supplier booking or physical fulfillment."
+    },
+    {
+      "id": "P02",
+      "text": "Up to 20000 accepted units within 48 agreed business hours is a proposed pilot target to qualify.",
+      "status": "proposed",
+      "source": [
+        "pilot_specification",
+        "manuscript"
+      ],
+      "evidence": "The proposed acceptance contract requires the actual provider to substantiate the specified capacity and deadline; activation, calendar, time zone and acceptance must be agreed.",
+      "limits": "The 1900-unit synthetic history and stipulated 22-hour lead time are not evidence of this target's physical feasibility. Business hours are not automatically elapsed clock hours."
+    },
+    {
+      "id": "P03",
+      "text": "Verification independence should be disclosed across model behavior, source acquisition, checker implementation, execution control, acceptance authority and commercial incentives.",
+      "status": "proposed",
+      "source": [
+        "manuscript",
+        "correlated_errors"
+      ],
+      "evidence": "The Passport section names these dimensions; model-error research supports caution about treating provider diversity as independent evidence.",
+      "limits": "Separate tasks and checker code can share assumptions and source omissions. Manuscript reviews occurred within one assistant workflow, not independent institutional certification or a two-frontier-model comparison."
+    },
+    {
+      "id": "P04",
+      "text": "A Continuity Passport should state the exercised promise, evidence boundary, route, observations, verification relationships, commercial state and invalidation conditions, with stage-specific verdicts.",
+      "status": "proposed",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "Specified verdicts are DEMONSTRATED, FAILED and NOT ESTABLISHED for the particular stage and conditions.",
+      "limits": "A record-reconciliation result cannot be promoted to physical-delivery acceptance. The Passport is not insurance, accreditation or a universal security certificate."
+    },
+    {
+      "id": "P05",
+      "text": "The commercial hypothesis is that a target buyer accepts and funds the complete qualified reservation and activation offer at a price covering its complete costs despite a credible complete alternative.",
+      "status": "proposed",
+      "source": [
+        "pilot_specification",
+        "manuscript"
+      ],
+      "evidence": "Prospective experiment compares capable complete alternatives with equivalent evidence, permissions, resources and acceptance requirements.",
+      "limits": "An interview or payment for preparation tests that stage only. Complete-offer acceptance, actual performance, collected receipts and reconciled obligations are separate observations; one buyer cannot establish a repeatable market."
+    },
+    {
+      "id": "N01",
+      "text": "A frontier-model discovery advantage or two-model superiority result is not established.",
+      "status": "not-established",
+      "source": [
+        "manuscript",
+        "reproduction"
+      ],
+      "evidence": "The reproduced prototypes make no model API calls and contain no model-versus-model benchmark; the conventional control ties the four recovery cases.",
+      "limits": "Requires a prospective comparison of incremental material findings, false allegations, abstentions, complete costs and construction outcomes against capable matched-resource alternatives."
+    },
+    {
+      "id": "N02",
+      "text": "Authenticated real-world completeness, safe operational recovery, live reserved capacity and accepted alternate manufacturing are not established.",
+      "status": "not-established",
+      "source": [
+        "manuscript",
+        "reproduction"
+      ],
+      "evidence": "Inputs, capacities, approvals and lead times are supplied fixtures. The publication performs no real cyberattack, plant restoration, provider booking or physical delivery.",
+      "limits": "Hashes do not prove source completeness. Real custody, permissions, safe recovery, communications, aggregate reservations and final acceptance require separate evidence. Success on one exercised case would remain bounded to its conditions."
+    },
+    {
+      "id": "N03",
+      "text": "Actual customer revenue, sustainable realized profit and a repeatable continuity market are not established.",
+      "status": "not-established",
+      "source": [
+        "manuscript",
+        "reproduction"
+      ],
+      "evidence": "No customer payment or external commercial acceptance occurred in these reproductions; US$650 is modeled contribution in one authored fixture.",
+      "limits": "Requires real voluntary participation, delivery, collected receipts and complete lifecycle cost and obligation accounting. Expected profit, a quote and financing promises are not spendable earned surplus."
+    },
+    {
+      "id": "N04",
+      "text": "An earnings-financed successor, causal retained-capability advantage and improved discovery machinery are not established.",
+      "status": "not-established",
+      "source": [
+        "manuscript"
+      ],
+      "evidence": "The flywheel section specifies proposed future tests; no accepted fresh successor or comparative discovery campaign is reported.",
+      "limits": "Financed by earnings, enabled by a retained capability and occurring later are distinct. A second buyer of the same offering tests repeatability; a new enabling opportunity requires a genuinely different obligation class or workflow and strong equal-content, matched-resource comparisons."
+    },
+    {
+      "id": "R09",
+      "text": "Five separate probes against the unchanged pinned handoff source preserve a positive control, reproduce three verifier or inspection weaknesses, and demonstrate an already-disclosed source-trust boundary.",
+      "status": "reproduced-synthetic",
+      "source": [
+        "handoff",
+        "counterexamples",
+        "hardening_review"
+      ],
+      "evidence": "A Boolean monetary offer passes in a coherently adjusted zero-cost case; malformed top-level input raises AttributeError; inspect returns an old readiness Passport after handoff mutation while fresh verify fails; a coherently resealed 2000-unit scenario passes; the nominal positive control passes.",
+      "limits": "Targeted counterexamples, not a failure-rate estimate, new model benchmark, or qualification of the later proposed repair. Passing the original 29 tests does not establish that these cases are safe."
+    }
+  ]
+}
