@@ -221,7 +221,11 @@ class SyntheticObligationReferenceTests(unittest.TestCase):
     def test_noncanonical_floats_refused(self):
         events, snapshot = example()
         events[0]["quantity"] = float("nan")
-        self.assertEqual(evaluate(events, snapshot)["verdict"], "INVALID")
+        result = reference.reconcile(
+            events, snapshot, expected_source_sha256="a" * 64,
+            expected_restored_sha256=reference.digest(snapshot),
+        )
+        self.assertEqual(result["verdict"], "INVALID")
 
     def test_no_mutation_on_reconciliation(self):
         events, snapshot = example()
