@@ -1,0 +1,86 @@
+{
+  "schema": "continuity-omega-paper/publication-checks/v1",
+  "reviewed_on": "2026-11-06",
+  "pdf": {
+    "pages": 27,
+    "sha256": "9e8945817b5a363363cb5b5ae114a48dff8e31e9ef78cc28fa2b83dec73ca4bb",
+    "rendered_all_pages": true,
+    "visually_inspected_all_contact_sheets": true,
+    "selected_full_pages_inspected": [
+      "cover",
+      "one-minute overview",
+      "abstract",
+      "protocol diagram",
+      "counterexample table",
+      "pooling proof",
+      "references"
+    ],
+    "build_has_no_reported_overfull_boxes_or_unresolved_references": true,
+    "tagged_pdf_accessibility_not_claimed": true
+  },
+  "reader": {
+    "embedded_script_sha256": "7b779b724d1116aa382a143f374b92eff03d2c60051091a875ae87487b0b096c",
+    "javascript_cases": [
+      {
+        "label": "Initial authored case",
+        "minimum": 3,
+        "maximum": 2,
+        "arithmetic_overlap": false
+      },
+      {
+        "label": "Preset 0",
+        "minimum": 3,
+        "maximum": 2,
+        "arithmetic_overlap": false
+      },
+      {
+        "label": "Preset 1",
+        "minimum": 2,
+        "maximum": 2,
+        "arithmetic_overlap": true
+      },
+      {
+        "label": "Preset 2",
+        "minimum": 5,
+        "maximum": 4,
+        "arithmetic_overlap": false
+      },
+      {
+        "label": "Slider inputs K=100, capacity=750",
+        "minimum": 1,
+        "maximum": 1,
+        "arithmetic_overlap": true
+      },
+      {
+        "label": "Slider inputs K=600, capacity=2000",
+        "minimum": 2,
+        "maximum": 2,
+        "arithmetic_overlap": true
+      },
+      {
+        "label": "Slider inputs K=650, capacity=2000",
+        "minimum": 3,
+        "maximum": 2,
+        "arithmetic_overlap": false
+      },
+      {
+        "label": "Slider inputs K=1800, capacity=4500",
+        "minimum": 6,
+        "maximum": 6,
+        "arithmetic_overlap": true
+      }
+    ],
+    "javascript_errors": [],
+    "scope": "Actual embedded JavaScript executed against a minimal DOM adapter. This does not test a real browser, layout, screenshots, network loading, or accessibility-tree behavior.",
+    "visual_browser_qa_included_in_this_record": false
+  },
+  "evidence_review": {
+    "implementation_suites": {
+      "pr278": 29,
+      "pr277": 9
+    },
+    "separate_counterexample_probes": 5,
+    "conventional_control": "ties four supplied decisions",
+    "review_independence": "Separate AI tasks within one assistant workflow; no third-party certification or comparative two-model benchmark."
+  }
+}

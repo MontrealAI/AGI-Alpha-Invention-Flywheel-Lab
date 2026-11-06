@@ -1,0 +1,197 @@
+{
+  "claim_corrections": [
+    "At PR278 a755d037 the executed suite has 29 tests, not 23.",
+    "At PR277 84c4288b the executed suite and README both have 9 tests.",
+    "PASS_SYNTHETIC_ONLY on PR278 refers to proposed handoff integrity, not successful original-system restoration.",
+    "The 22-hour value is a declared simulated supplier lead time, not a measured recovery or manufacturing time.",
+    "The 1900 units are outstanding records reconstructed, not units printed or delivered.",
+    "The nominal 650 USD is authored modeled contribution; no revenue or payment occurred.",
+    "The PR278 idempotency key does not implement cross-request activation exclusion or an atomic capacity reservation.",
+    "Neither checker can detect a liability absent from all supplied event evidence; the real source and completeness anchor remain assumptions."
+  ],
+  "commands": {
+    "pr277": [
+      "python3 -m unittest discover -s tests -p test_connected_continuity_omega.py -v",
+      "python3 campaign/continuity_omega_20261106/continuity_proof.py"
+    ],
+    "pr278": [
+      "python3 -m unittest discover -s tests -p test_continuity_omega.py -v",
+      "python3 -m continuity_omega demo --out NEW_DIRECTORY",
+      "python3 -m continuity_omega verify --in-dir NEW_DIRECTORY"
+    ]
+  },
+  "pr277": {
+    "candidate_verdicts": [
+      true,
+      false,
+      false,
+      false
+    ],
+    "competent_comparator_verdicts": [
+      true,
+      false,
+      false,
+      false
+    ],
+    "fixture_count": 4,
+    "health_only_verdicts": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "receipt_verification": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "result": "TIE; HOLD / NO DEPLOY"
+  },
+  "pr278": {
+    "declared_capacity_units": 3200,
+    "declared_deadline_hours": 48,
+    "declared_free_units": 2100,
+    "declared_lead_hours": 22,
+    "declared_reserved_units": 1100,
+    "demo_cases": 12,
+    "modeled_contribution_usd": 650,
+    "modeled_cost_usd": 5050,
+    "modeled_offer_usd": 5700,
+    "nominal_and_cli_verification": "PASS_SYNTHETIC_ONLY",
+    "nominal_orders": 2,
+    "nominal_outstanding_units": 1900,
+    "pass_cases": [
+      "nominal",
+      "missing_from_restored",
+      "extra_restored"
+    ],
+    "rejected_cases": [
+      "tampered_source",
+      "overbooked",
+      "correlated_outage",
+      "unqualified",
+      "late",
+      "buyer_declines",
+      "uneconomic",
+      "unapproved_sharing",
+      "no_order_source"
+    ],
+    "restoration_findings": [
+      "STALE_OR_CHANGED_RESTORED_QUANTITY",
+      "MISSING_FROM_RESTORED_SNAPSHOT",
+      "CANCELLED_ORDER_REAPPEARED"
+    ],
+    "simulated_supplier": "PRINTER-P"
+  },
+  "reproduced_on": "2026-11-06",
+  "reproduction_scope": "Pinned, supplied Git source bytes; offline and synthetic only; separate checker code under shared authorship; no LLM invocation, production recovery, physical output, commerce, or third-party certification.",
+  "review_conclusion": "No failure of declared suites or documented synthetic demonstrations was observed. These results support the limited engineering-reproduction claim only. The paper must retain all evidence boundaries and the competent comparator tie.",
+  "schema": "continuity-omega-paper/reproduction/v1",
+  "source_bytes_unchanged": true,
+  "source_files": [
+    {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "git_blob": "da7c57267728264f5a522cf058a4ee228684cb35",
+      "path": ".github/workflows/continuity-omega.yml"
+    },
+    {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "git_blob": "cb5e5e7e42464372b3dbaceba800b848e66f05e2",
+      "path": "continuity_omega/__init__.py"
+    },
+    {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "git_blob": "13be635566e79adccc98892cc67a44e636908b35",
+      "path": "continuity_omega/__main__.py"
+    },
+    {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "git_blob": "0f0bbd32000b35453958f31b18bbf868c7ce1ad5",
+      "path": "continuity_omega/checker.py"
+    },
+    {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "git_blob": "8b6efcb1c041663a3078f6a1bbf2c35aa8b2bf4f",
+      "path": "continuity_omega/cli.py"
+    },
+    {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "git_blob": "f1e057d76f182d4bf731125d2a7ab8350dbdceed",
+      "path": "continuity_omega/demo.py"
+    },
+    {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "git_blob": "d0609357a5f8f0508b0d6e6a200b97e45be203e3",
+      "path": "continuity_omega/engine.py"
+    },
+    {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "git_blob": "8c0aafee92286afbc7734c9457ae91dc4c45a9c5",
+      "path": "docs/continuity-omega/QUICKSTART.md"
+    },
+    {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "git_blob": "7fe2b70f2129b88e6f39f04b41d5dda001f1c227",
+      "path": "docs/continuity-omega/README.md"
+    },
+    {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "git_blob": "a541b33651ef6b9e39c85f0048329fb4c3573cf9",
+      "path": "docs/continuity-omega/REAL_PILOT.md"
+    },
+    {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "git_blob": "3a854c7a663036153f38b95b381f4efb8053c5d3",
+      "path": "tests/test_continuity_omega.py"
+    },
+    {
+      "commit": "84c4288b4726a17a90f8462d1d6faf8b5f8f00b5",
+      "git_blob": "c6de18362b5aae1c0be31cce26ec7ba0a9ce5e4f",
+      "path": "campaign/continuity_omega_20261106/README.md"
+    },
+    {
+      "commit": "84c4288b4726a17a90f8462d1d6faf8b5f8f00b5",
+      "git_blob": "d90f422e704201793f9a38f8df5b4de95587adc2",
+      "path": "campaign/continuity_omega_20261106/continuity_proof.py"
+    },
+    {
+      "commit": "84c4288b4726a17a90f8462d1d6faf8b5f8f00b5",
+      "git_blob": "5fb36501d5280dbc4ece34b8f839350173e94c55",
+      "path": "tests/test_connected_continuity_omega.py"
+    }
+  ],
+  "source_sha256": {
+    "pr277": {
+      "campaign/continuity_omega_20261106/README.md": "9b142a1f881275d0f14cd27c8da0ec8f4651565f34af5ef0efd59c7cab3c55d9",
+      "campaign/continuity_omega_20261106/continuity_proof.py": "0f889a5dcaf3a4fa5483b42f38fa0cfd92ce7a64a2f467039cebb2dae166ae61",
+      "tests/test_connected_continuity_omega.py": "39c35a0e76578f938cbae6fdbb7bb7073c839db606d77d70ce917232b09b13b7"
+    },
+    "pr278": {
+      ".github/workflows/continuity-omega.yml": "c25c7803804d9c8159e25c63fd06ef44785d7ce7365c5eee724cf86e55f2e880",
+      "continuity_omega/__init__.py": "b7de658c6d80c49338fc65f066461a59688fa26acf61569930ee1dd553d53a14",
+      "continuity_omega/__main__.py": "79ee6f134c5c5193377cf9b189cbdcc3e2095e49ba9cec310114441c15a917c4",
+      "continuity_omega/checker.py": "860e4725f61ef7489ca89d210a42447f48d9ef4f27ea002b631ad9c81fe1d277",
+      "continuity_omega/cli.py": "d665f47e19e4c4b4391f54196cefa4004478af7b601a0ed7ff23e4abe3cdfb1d",
+      "continuity_omega/demo.py": "4fe75e34c600efe11cd5477afc18a2de09e51dc173a017f5f8e63a6da9b5e576",
+      "continuity_omega/engine.py": "8629ded8485ec16166fd16bb31eb96bddd7c64896a562e9ccd45a7d7c70fcf62",
+      "docs/continuity-omega/QUICKSTART.md": "9d8c57772fdaab2ea02ae340f00e7cfae61edff19dafdec688cc9dc98569f8bf",
+      "docs/continuity-omega/README.md": "b9ace3c100c664ab6943ca52e99cc25ffbfa174254a153d33a4ad2b8b3b878f4",
+      "docs/continuity-omega/REAL_PILOT.md": "b2aa52425bff6b2526a1051da72a41286df6e445a23e23f5a775d4ea58cec18f",
+      "tests/test_continuity_omega.py": "c94754ce00f90e0314f519186b8557021f9b2adc91a7c12b70b356d0a57eca5b"
+    }
+  },
+  "tests": {
+    "pr277": {
+      "commit": "84c4288b4726a17a90f8462d1d6faf8b5f8f00b5",
+      "failed": 0,
+      "passed": 9
+    },
+    "pr278": {
+      "commit": "a755d0375693465f8f31c0c919cc186eae74bbcc",
+      "failed": 0,
+      "passed": 29
+    },
+    "total_passed": 38
+  }
+}

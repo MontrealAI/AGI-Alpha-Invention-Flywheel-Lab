@@ -9,6 +9,7 @@ import shutil
 from urllib.parse import unquote, urlsplit
 
 PAPERS = (
+    'continuity-omega.pdf',
     'surf-the-exponential.pdf',
     'alpha-genesis-flywheel-omega-v2.pdf',
     'alpha-genesis-flywheel-omega.pdf',
@@ -36,9 +37,9 @@ PAPERS = (
     'out-execute-20261021.pdf',
     'out-evolve-20261020.pdf',
 )
-PAGES = ('surf-the-exponential.html', 'alpha-genesis-flywheel-omega-v2.html', 'alpha-genesis-flywheel-omega.html', 'successor-omega.html', 'flywheel-omega.html', 'super-alpha.html', 'agi-alpha-flywheel-report-20261102.html', 'out-accelerate.html', 'transformational-intelligence.html', 'agi-alpha.html', 'agi-alpha-flywheel.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
+PAGES = ('continuity-omega.html', 'surf-the-exponential.html', 'alpha-genesis-flywheel-omega-v2.html', 'alpha-genesis-flywheel-omega.html', 'successor-omega.html', 'flywheel-omega.html', 'super-alpha.html', 'agi-alpha-flywheel-report-20261102.html', 'out-accelerate.html', 'transformational-intelligence.html', 'agi-alpha.html', 'agi-alpha-flywheel.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
          'out-series.html', 'out-learn.html', 'out-think.html', 'out-design.html', 'out-strategise.html', 'out-execute.html', 'out-evolve.html')
-ASSETS = ('surf-the-exponential-card.svg', 'surf-the-exponential-social.png', 'successor-omega-card.svg', 'successor-omega-social.png', 'flywheel-omega-card.svg', 'flywheel-omega-social.png', 'super-alpha-card.svg', 'super-alpha-social.png', 'alpha.css', 'alpha.js', 'alpha-mark.svg')
+ASSETS = ('continuity-omega-card.svg', 'continuity-omega-social.png', 'surf-the-exponential-card.svg', 'surf-the-exponential-social.png', 'successor-omega-card.svg', 'successor-omega-social.png', 'flywheel-omega-card.svg', 'flywheel-omega-social.png', 'super-alpha-card.svg', 'super-alpha-social.png', 'alpha.css', 'alpha.js', 'alpha-mark.svg')
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
 
@@ -81,7 +82,7 @@ def validate(source):
     for name in PAGES:
         parser = Links()
         page = (source / name).read_text()
-        if any(token in page for token in ('PAPER_SHA256_PLACEHOLDER', 'PAPER_PAGECOUNT_PLACEHOLDER', 'TODO_RESULT_', 'SUPER_ALPHA_PAGE_COUNT', 'SUPER_ALPHA_PDF_SHA', 'FLYWHEEL_OMEGA_PAGE_COUNT', 'FLYWHEEL_OMEGA_PDF_SHA', 'SURF_PAGE_COUNT', 'SURF_SHA256', 'SURF_PDF_BYTES')):
+        if any(token in page for token in ('PAPER_SHA256_PLACEHOLDER', 'PAPER_PAGECOUNT_PLACEHOLDER', 'TODO_RESULT_', 'SUPER_ALPHA_PAGE_COUNT', 'SUPER_ALPHA_PDF_SHA', 'FLYWHEEL_OMEGA_PAGE_COUNT', 'FLYWHEEL_OMEGA_PDF_SHA', 'SURF_PAGE_COUNT', 'SURF_SHA256', 'SURF_PDF_BYTES', 'CONTINUITY_PAGE_COUNT', 'CONTINUITY_SHA256', 'CONTINUITY_PDF_BYTES')):
             raise ValueError(f'Unresolved publication metadata: {name}')
         parser.feed(page)
         if parser.canonical_urls and parser.canonical_urls != [PUBLIC_SITE + name]:
