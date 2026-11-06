@@ -29,7 +29,7 @@ The executable has **no demand function, price calibration, native financial acc
 From the repository root with Python 3.12, standard library only:
 
 ```sh
-python3 -m unittest tests.test_connected_continuity_omega -v
+python3 -m unittest discover -s tests -p 'test_connected_continuity_omega.py' -v
 python3 -m campaign.continuity_omega_20261106.continuity_proof
 ```
 
