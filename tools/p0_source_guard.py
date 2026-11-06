@@ -60,7 +60,7 @@ def load_registry(root):
     if 'SOURCE_PATHS' not in found:
         raise ValueError('P0_BASE_FINANCIAL_REGISTRY_MISSING')
     # Static guard only: name a dispatched manifest version through an actual
-    # conditional branch with a return; unexecuted literals are not routes.
+    # conditional branch retaining producer closure; inert or base-only routes fail.
     functions = [n for n in program.body if isinstance(n, ast.FunctionDef)
                  and n.name == 'source_paths_for_manifest']
     if len(functions) > 1:
@@ -76,7 +76,14 @@ def load_registry(root):
             operands = (comparison.left, comparison.comparators[0])
             if not any(isinstance(part, ast.Name) and part.id == 'schema' for part in operands):
                 continue
-            if not any(isinstance(statement, ast.Return) for statement in node.body):
+            returned = [statement.value for statement in node.body
+                        if isinstance(statement, ast.Return) and statement.value is not None]
+            # A branch that returns only SOURCE_PATHS loses the active producer,
+            # despite still naming the manifest schema in an equality check.
+            required_sources = {'source_paths', 'PRODUCTION_SOURCE_PATHS', 'INVENTORY_SOURCE_PATHS'}
+            if not any(required_sources & {value.id for value in ast.walk(expression)
+                                            if isinstance(value, ast.Name)}
+                       for expression in returned):
                 continue
             for part in operands:
                 if isinstance(part, ast.Constant) and isinstance(part.value, str) and re.fullmatch(
