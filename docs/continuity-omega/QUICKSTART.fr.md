@@ -15,8 +15,12 @@ La reproduction présentée dans l’article est figée au commit [`a755d0375693
 ```sh
 python3 -m continuity_omega demo --out /tmp/continuity-omega-demo-001
 python3 -m continuity_omega verify --in-dir /tmp/continuity-omega-demo-001
-python3 -m unittest discover -s tests -v
+python3 scripts/continuity_passport.py --in-dir /tmp/continuity-omega-demo-001 --language fr
+python3 -m unittest discover -s tests -p 'test_continuity_omega.py' -v
+python3 -m unittest discover -s tests -p 'test_continuity_passport.py' -v
 ```
+
+Choisir un nouveau dossier probant. Le compagnon de lecture affiche le résultat enregistré en français ; utiliser `--language en` pour l’anglais. Il n’exécute **aucun nouvel audit**. La commande distincte `verify` affiche un nouveau résultat, mais ne met pas à jour le fichier `AUDIT.json` enregistré. Voir [Lire les sorties](OUTPUTS.fr.md) pour enregistrer un rapport localisé complet, lire un refus et comprendre chaque statut consigné. La sortie anglaise d’origine du prototype demeure inchangée.
 
 Lire [le guide du prototype](README.fr.md) pour la définition du produit, l’exemple synthétique détaillé de 1 900 unités, les témoins négatifs, les limites et les références du NIST. Lire [le pilote proposé](REAL_PILOT.fr.md) pour les conditions exactes de la prochaine acceptation client et l’épreuve économique complète.
 

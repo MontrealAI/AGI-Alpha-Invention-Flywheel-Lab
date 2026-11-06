@@ -15,8 +15,12 @@ The paper's reproduction is pinned to commit [`a755d0375693465f8f31c0c919cc186ea
 ```sh
 python3 -m continuity_omega demo --out /tmp/continuity-omega-demo-001
 python3 -m continuity_omega verify --in-dir /tmp/continuity-omega-demo-001
-python3 -m unittest discover -s tests -v
+python3 scripts/continuity_passport.py --in-dir /tmp/continuity-omega-demo-001 --language en
+python3 -m unittest discover -s tests -p 'test_continuity_omega.py' -v
+python3 -m unittest discover -s tests -p 'test_continuity_passport.py' -v
 ```
+
+Choose a new evidence directory. The reading companion displays the saved result in English; use `--language fr` for French. It performs **no fresh audit**. The separate `verify` command prints a new result but does not update the stored `AUDIT.json`. See [Read the outputs](OUTPUTS.md) to save a complete localized report, read a refusal and understand every recorded status. The prototype’s original English output remains unchanged.
 
 Read [the prototype guide](README.md) for product framing, the 1,900-unit synthetic worked example, negative controls, limitations and NIST references. Read [the proposed pilot](REAL_PILOT.md) for the exact next customer acceptance gates and full economic challenge.
 
