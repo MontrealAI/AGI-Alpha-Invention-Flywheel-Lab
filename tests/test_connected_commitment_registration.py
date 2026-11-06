@@ -179,6 +179,73 @@ class RegistrationContractChallenge(unittest.TestCase):
     def test_no_order_account_cannot_be_relabeled_as_other_arm(self):
         self.reject_coherent_relabel('central', 'direct', 'arm-relabel')
 
+    def test_native_working_reserve_must_match_registered_initialization(self):
+        original = self.home/'working-reserve-original'
+        # Construct a genuine alternative ledger in a child process. Only the
+        # constructor argument changes in memory; source, inputs, records and
+        # signatures stay authentic. $1 is reserved, not spent or reseeded.
+        producer = r'''
+from pathlib import Path
+import sys
+from campaign.genesis_commitment001 import native, runner
+output = Path(sys.argv[1])
+actual = native.JournalAccount
+def reserve(*args, **kwargs):
+    if kwargs['working'] != 0:
+        raise ValueError('CONTROL_WORKING_ARGUMENT_CHANGED')
+    kwargs['working'] = 1_000_000
+    return actual(*args, **kwargs)
+native.JournalAccount = reserve
+try:
+    runner.run(output, scenario='central', arm='retained')
+except ValueError as exc:
+    if str(exc) != 'REGISTERED_WORKING_CAPITAL_CHANGED' or not all(
+            (output/name).is_file() for name in
+            ('REGISTRATION.json', 'MANIFEST.json', 'NATIVE_EXPORT.json', 'REPORT.json')):
+        raise
+'''
+        env = {**os.environ, 'PYTHONPATH': str(self.source),
+               'PYTHONDONTWRITEBYTECODE': '1'}
+        produced = subprocess.run([sys.executable, '-c', producer, str(original)],
+                                  cwd=self.source, env=env, text=True, capture_output=True)
+        self.assertEqual(produced.returncode, 0, produced.stdout+produced.stderr)
+        output = self.home/'working-reserve-public'
+        public_copy(original, output)
+        self.assertFalse((output/'private').exists())
+        record = read(output/'NATIVE_EXPORT.json')
+        registration = read(output/'REGISTRATION.json')
+        self.assertEqual(record['ledger']['config']['working'], 1_000_000)
+        self.assertEqual(record['ledger']['config']['opening'], 100_000_000_000)
+        self.assertEqual(record['ledger']['config']['contract'],
+                         'commitment001-'+registration['binding'][:20])
+        before = protected_public(output)
+        # A clean native checker must accept this legitimate alternative before
+        # the campaign checker rejects its undeclared initialization policy.
+        native_check = r'''
+from pathlib import Path
+import json, sys
+from connected_enterprise.finance import audit_journal
+output = Path(sys.argv[1])
+read = lambda name: json.loads((output/name).read_text())
+print(json.dumps(audit_journal(read('NATIVE_EXPORT.json'),
+    root=output/'source', manifest=read('MANIFEST.json'))))
+'''
+        checked = subprocess.run([sys.executable, '-c', native_check, str(output)],
+                                 cwd=self.source, env=env, text=True, capture_output=True)
+        self.assertEqual(checked.returncode, 0, checked.stderr)
+        self.assertTrue(json.loads(checked.stdout)['accepted'])
+        audit = command(self.source, 'audit', '--output', output)
+        archive = self.home/'working-reserve-public.zip'
+        package = command(self.source, 'package', '--output', output, '--archive', archive)
+        self.assertEqual(protected_public(output), before)
+        for operation, result in [('audit', audit), ('package', package)]:
+            with self.subTest(operation=operation):
+                self.assertNotEqual(result.returncode, 0,
+                                    'Undeclared native working reserve was accepted')
+                self.assertIn('REGISTERED_WORKING_CAPITAL_CHANGED', result.stderr)
+                if operation == 'package':
+                    self.assertFalse(archive.exists(), 'Undeclared reserve evidence was exported')
+
 
 if __name__ == '__main__':
     unittest.main()
