@@ -116,6 +116,75 @@ class ConstructiveCaseTests(unittest.TestCase):
         self.assertEqual(sweep["positive_success_but_insufficient_cash"], {"minimum": 21, "maximum": 89, "count": 69})
         self.assertEqual(sweep["zero_success_contribution_costs"], [90])
 
+    def test_retention_policy_changes_across_the_three_declared_scenarios(self):
+        rows = self.result["retention_option"]["primary_scenarios"]
+        expected = [
+            ({"ordinary_access": "7/4", "retain_sufficient": "6", "secure_access": "5"}, ["retain_sufficient"]),
+            ({"ordinary_access": "19/8", "retain_sufficient": "6", "secure_access": "15/2"}, ["secure_access"]),
+            ({"ordinary_access": "7/40", "retain_sufficient": "-3", "secure_access": "-13/10"}, ["ordinary_access"]),
+        ]
+        self.assertEqual(len(rows), len(expected))
+        for row, (values, winners) in zip(rows, expected):
+            self.assertEqual(row["policy_values"], values)
+            self.assertEqual(row["best_policies"], winners)
+            self.assertNotIn("deferred_access", row["policy_values"])
+
+    def test_retention_opportunity_really_needs_a_lost_distinction(self):
+        witness = self.result["retention_option"]["gap_witness"]
+        self.assertEqual(witness["left_source"], [60, 80])
+        self.assertEqual(witness["right_source"], [80, 80])
+        self.assertEqual(witness["compact_label_left"], witness["compact_label_right"])
+        self.assertFalse(witness["left_answer"])
+        self.assertTrue(witness["right_answer"])
+        invalid = copy.deepcopy(self.protocol["retention_option"])
+        invalid["gap_witness"]["future_interval"] = [60, 80]
+        with self.assertRaises(ValueError):
+            case.retention_case(invalid)
+
+    def test_retention_switch_preserves_both_optimal_policies(self):
+        row = self.result["retention_option"]["switch_witness"]
+        self.assertEqual(row["parameters"]["r"], "4")
+        self.assertEqual(row["best_value"], "6")
+        self.assertEqual(row["best_policies"], ["retain_sufficient", "secure_access"])
+        for cost, winner in (("3", "secure_access"), ("5", "retain_sufficient")):
+            parameters = {**row["parameters"], "r": cost}
+            self.assertEqual(case.retention_decision(parameters, False)["best_policies"], [winner])
+
+    def test_deferred_control_uses_ordinary_access_before_buying(self):
+        row = self.result["retention_option"]["deferred_control"]
+        self.assertEqual(row["best_policies"], ["deferred_access"])
+        self.assertEqual(row["best_value"], "35/4")
+        self.assertGreater(Fraction(row["best_value"]), Fraction(17, 2))
+        parameters = {**row["parameters"], "q": "1"}
+        certain_access = case.retention_decision(parameters, True)
+        self.assertEqual(certain_access["policy_values"]["deferred_access"], "19/2")
+        self.assertEqual(certain_access["best_policies"], ["ordinary_access", "deferred_access"])
+
+    def test_optional_reconstruction_can_be_declined_without_erasing_upfront_costs(self):
+        parameters = self.result["retention_option"]["deferred_control"]["parameters"]
+        no_arrival = case.retention_decision({**parameters, "p": "0"}, True)
+        self.assertEqual(no_arrival["policy_values"], {
+            "ordinary_access": "0", "retain_sufficient": "-4",
+            "secure_access": "-2", "deferred_access": "0",
+        })
+        expensive = case.retention_decision({**parameters, "r": "30"}, True)
+        self.assertEqual(expensive["policy_values"]["ordinary_access"], "0")
+        self.assertEqual(expensive["policy_values"]["secure_access"], "-2")
+        self.assertEqual(expensive["policy_values"]["deferred_access"], "0")
+        self.assertEqual(expensive["best_policies"], ["retain_sufficient"])
+
+    def test_retention_costs_are_exact_and_funded_before_any_benefit(self):
+        row = self.result["retention_option"]["primary_scenarios"][0]
+        self.assertEqual(row["required_resource_allowance"], "8")
+        self.assertEqual(row["policy_cost_bounds"], {
+            "ordinary_access": "6", "retain_sufficient": "4", "secure_access": "8",
+        })
+        for changes in ({"resource_allowance": "7", "v": "1000"}, {"c": "-1"},
+                        {"r": 0.5}, {"q": True}, {"p": "3/2"}):
+            with self.subTest(changes=changes):
+                with self.assertRaises(ValueError):
+                    case.retention_decision({**row["parameters"], **changes}, False)
+
     def test_invalid_inputs_cannot_silently_change_the_model(self):
         for value in (True, 0.75, "-1/10", "11/10", "1/0"):
             with self.assertRaises(ValueError):
@@ -149,6 +218,21 @@ class ConstructiveCaseTests(unittest.TestCase):
         damaged = copy.deepcopy(self.result)
         damaged["source_sha256"]["construct_protocol.json"] = "0" * 64
         mutations.append(("source hash", damaged))
+        damaged = copy.deepcopy(self.result)
+        damaged["retention_option"]["primary_scenarios"][0]["policy_values"]["ordinary_access"] = "6"
+        mutations.append(("retention policy value", damaged))
+        damaged = copy.deepcopy(self.result)
+        damaged["retention_option"]["switch_witness"]["best_policies"].pop()
+        mutations.append(("discarded retention tie", damaged))
+        damaged = copy.deepcopy(self.result)
+        damaged["retention_option"]["deferred_control"]["policy_values"]["deferred_access"] = "17/2"
+        mutations.append(("weakened deferred comparator", damaged))
+        damaged = copy.deepcopy(self.result)
+        damaged["retention_option"]["deferred_control"]["policy_cost_bounds"]["deferred_access"] = "0"
+        mutations.append(("unfunded late-route outlay", damaged))
+        damaged = copy.deepcopy(self.result)
+        damaged["retention_option"]["gap_witness"]["left_answer"] = True
+        mutations.append(("missing-distinction witness", damaged))
         with tempfile.TemporaryDirectory() as temporary:
             evidence = Path(temporary)
             path = evidence / "construct_results.json"

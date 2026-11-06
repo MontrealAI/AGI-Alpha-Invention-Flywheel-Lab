@@ -1,18 +1,19 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "case_id": "task-relative-construction-and-refundable-cash",
   "source_sha256": {
-    "construct_protocol.json": "c9620c0c6793242b3857c6cda701c2dc38b9eca014953c0989e3571d61fa8f2c",
-    "construct_case.py": "f3a37c18fa07f7712d03cc8a51850cc190b05c5f886b657ee4b211387c7b51ca",
-    "check_construct_case.py": "c8fd78ba8599fd7bc224211f696c9c045655cfd580c16f162f4685f6848bef7e",
-    "test_construct_case.py": "66397ad9c991fba1b597511df7a33594d11919649f3cf7f5c0f43544b449667d"
+    "construct_protocol.json": "341ee7d3735a3e85f067395c94a1cd6657a9c909e425e7f59a25cc94ddf4e7c9",
+    "construct_case.py": "acb89d1a76c9c5d308adb0d8616620ef36e22bfbd6cfab2ef50cc6252301389f",
+    "check_construct_case.py": "a73fbad3eb6a74d6bcea7172e0c51766d08b58c37f2cbc1f3078cc913225d602",
+    "test_construct_case.py": "ad4ab2e83a41dc135dea0fef3fe767f7efc8ca3afdc60e92af8bb275ecba2413"
   },
   "scope": [
     "An authored deterministic finite example, not measured model performance, physical measurement, or an executed commercial transaction.",
     "The constructor uses ordinary task-relative partition construction; conventional maximum and minimum/maximum controls match the appropriate label counts.",
     "No empirical improvement in invention ability, total cost, or business value is claimed.",
     "Financial amounts, participant values, timing, and the two outcome paths are stipulated assumptions, not observed market evidence or probabilities.",
-    "Cash sufficiency covers the two declared complete paths only; no expected return, other outcome distribution, or broader risk model is inferred."
+    "Cash sufficiency covers the two declared complete paths only; no empirical expected return, other outcome distribution, or broader risk model is inferred.",
+    "Retention results are conditional expected incremental decision values for five declared cases with funded costs, correct historical-source access, and an optional gap-dependent opportunity; they do not establish a universal retention policy."
   ],
   "states": [
     [
@@ -729,6 +730,254 @@
       "separate_construction_value_feasible_up_to": 55,
       "shared_positive_contribution_below": 90,
       "full_refund_cash_feasible_up_to": 20
+    }
+  },
+  "retention_option": {
+    "assumptions": {
+      "status": "authored_one_period_optional_opportunity",
+      "gap_witness": {
+        "left_source": [
+          60,
+          80
+        ],
+        "right_source": [
+          80,
+          80
+        ],
+        "compact_representation": "maximum",
+        "future_interval": [
+          80,
+          80
+        ]
+      },
+      "common_parameters": {
+        "v": "20",
+        "c": "4",
+        "a": "2",
+        "q": "1/4",
+        "resource_allowance": "50"
+      },
+      "parameter_meanings": {
+        "p": "Probability within the horizon of an optional opportunity requiring a distinction missing from the compact record, not the probability of an arbitrary interval query.",
+        "q": "Probability that the correct original source is ordinarily available, conditional on opportunity arrival.",
+        "v": "Incremental decision benefit of either correctly certified answer, net of any common fulfillment costs and before additional reconstruction costs; it is not an advance cash receipt.",
+        "c": "Complete remaining incremental outlay to retain and qualify the sufficient representation.",
+        "a": "Complete remaining incremental outlay for preservation, rights, and qualification of the guaranteed source-access route.",
+        "r": "Complete remaining incremental outlay for the strongest permitted reconstruction route, including selective source access and qualification.",
+        "resource_allowance": "Current resources reserved to cover every declared route's incremental outlays before any benefit; common implementation resources are separately provided by the task contract."
+      },
+      "decision_contract": {
+        "timing": "Choose the policy before source expiry and opportunity arrival. Policy choice, arrival, and observed availability carry no signal about the source state or its missing answer.",
+        "information": "Ordinary source availability is observed before reconstruction outlay. The lost distinction cannot be inferred from a second decoder of the same compact record; unsupported guessing is inadmissible.",
+        "historical_source": "Reacquisition must recover the exact authorized source/version required by the task. A new measurement of a changed world is not recovery of the historical trace.",
+        "preservation_window": "In the three primary scenarios and switch witness, guaranteed access must be secured before source expiry; an identical arrangement cannot be purchased after that deadline. Ordinary availability remains as specified by q.",
+        "deferred_control": "In the separately declared changed-timing control only, identical guaranteed access can be bought after arrival. The strongest deferred route uses ordinary access when available and pays a only otherwise; it declines uneconomic exercise.",
+        "optional_exercise": "No unconditional future delivery obligation is assumed. After an opportunity arrives, decline or fulfill it when the required source is available; the upfront c or a remains paid even without arrival.",
+        "cost_scope": "These are expected incremental decision values, not cash-profit claims. Only fixed costs common to every route cancel. Any common per-fulfillment economic costs are already deducted in v; c and a are separate upfront outlays, and r includes all additional reconstruction costs. Common implementation resources are already funded under the task contract, but funding does not remove their economic costs from net v. The separate resource allowance covers the remaining incremental outlays c, a, and r in the same illustrative units. No further outlay or obligation is modeled. Costs, including historical sunk costs, are not counted twice, and no cost is inferred from label counts.",
+        "funding": "The stipulated current resource allowance covers r for ordinary reconstruction, c for retained sufficiency, and a+r for secured or deferred access. Future benefit v is never used to fund an earlier outlay.",
+        "comparison": "An ordinary decision-tree calculation receives identical information, timing, permissions, source routes, and costs. Optimality is conditional on this declared finite action menu, not all possible encodings or contracts.",
+        "empirical_scope": "All probabilities, values, costs, source-access terms, and resource allowances are authored assumptions; no model performance, actual transaction, empirical expected return, or consent is established."
+      },
+      "primary_scenarios": [
+        {
+          "id": "retain_representation",
+          "p": "1/2",
+          "r": "6",
+          "deferred_access_available": false
+        },
+        {
+          "id": "secure_source_access",
+          "p": "1/2",
+          "r": "1",
+          "deferred_access_available": false
+        },
+        {
+          "id": "low_arrival_probability",
+          "p": "1/20",
+          "r": "6",
+          "deferred_access_available": false
+        }
+      ],
+      "switch_witness": {
+        "id": "reconstruction_switch",
+        "p": "1/2",
+        "r": "4",
+        "deferred_access_available": false
+      },
+      "deferred_control": {
+        "id": "deferred_access_control",
+        "p": "1/2",
+        "r": "1",
+        "deferred_access_available": true
+      }
+    },
+    "gap_witness": {
+      "left_source": [
+        60,
+        80
+      ],
+      "right_source": [
+        80,
+        80
+      ],
+      "future_interval": [
+        80,
+        80
+      ],
+      "compact_label_left": 80,
+      "compact_label_right": 80,
+      "left_answer": false,
+      "right_answer": true
+    },
+    "primary_scenarios": [
+      {
+        "id": "retain_representation",
+        "parameters": {
+          "p": "1/2",
+          "q": "1/4",
+          "v": "20",
+          "c": "4",
+          "a": "2",
+          "r": "6",
+          "resource_allowance": "50"
+        },
+        "deferred_access_available": false,
+        "policy_values": {
+          "ordinary_access": "7/4",
+          "retain_sufficient": "6",
+          "secure_access": "5"
+        },
+        "best_policies": [
+          "retain_sufficient"
+        ],
+        "best_value": "6",
+        "policy_cost_bounds": {
+          "ordinary_access": "6",
+          "retain_sufficient": "4",
+          "secure_access": "8"
+        },
+        "required_resource_allowance": "8",
+        "all_policy_costs_funded": true
+      },
+      {
+        "id": "secure_source_access",
+        "parameters": {
+          "p": "1/2",
+          "q": "1/4",
+          "v": "20",
+          "c": "4",
+          "a": "2",
+          "r": "1",
+          "resource_allowance": "50"
+        },
+        "deferred_access_available": false,
+        "policy_values": {
+          "ordinary_access": "19/8",
+          "retain_sufficient": "6",
+          "secure_access": "15/2"
+        },
+        "best_policies": [
+          "secure_access"
+        ],
+        "best_value": "15/2",
+        "policy_cost_bounds": {
+          "ordinary_access": "1",
+          "retain_sufficient": "4",
+          "secure_access": "3"
+        },
+        "required_resource_allowance": "4",
+        "all_policy_costs_funded": true
+      },
+      {
+        "id": "low_arrival_probability",
+        "parameters": {
+          "p": "1/20",
+          "q": "1/4",
+          "v": "20",
+          "c": "4",
+          "a": "2",
+          "r": "6",
+          "resource_allowance": "50"
+        },
+        "deferred_access_available": false,
+        "policy_values": {
+          "ordinary_access": "7/40",
+          "retain_sufficient": "-3",
+          "secure_access": "-13/10"
+        },
+        "best_policies": [
+          "ordinary_access"
+        ],
+        "best_value": "7/40",
+        "policy_cost_bounds": {
+          "ordinary_access": "6",
+          "retain_sufficient": "4",
+          "secure_access": "8"
+        },
+        "required_resource_allowance": "8",
+        "all_policy_costs_funded": true
+      }
+    ],
+    "switch_witness": {
+      "id": "reconstruction_switch",
+      "parameters": {
+        "p": "1/2",
+        "q": "1/4",
+        "v": "20",
+        "c": "4",
+        "a": "2",
+        "r": "4",
+        "resource_allowance": "50"
+      },
+      "deferred_access_available": false,
+      "policy_values": {
+        "ordinary_access": "2",
+        "retain_sufficient": "6",
+        "secure_access": "6"
+      },
+      "best_policies": [
+        "retain_sufficient",
+        "secure_access"
+      ],
+      "best_value": "6",
+      "policy_cost_bounds": {
+        "ordinary_access": "4",
+        "retain_sufficient": "4",
+        "secure_access": "6"
+      },
+      "required_resource_allowance": "6",
+      "all_policy_costs_funded": true
+    },
+    "deferred_control": {
+      "id": "deferred_access_control",
+      "parameters": {
+        "p": "1/2",
+        "q": "1/4",
+        "v": "20",
+        "c": "4",
+        "a": "2",
+        "r": "1",
+        "resource_allowance": "50"
+      },
+      "deferred_access_available": true,
+      "policy_values": {
+        "ordinary_access": "19/8",
+        "retain_sufficient": "6",
+        "secure_access": "15/2",
+        "deferred_access": "35/4"
+      },
+      "best_policies": [
+        "deferred_access"
+      ],
+      "best_value": "35/4",
+      "policy_cost_bounds": {
+        "ordinary_access": "1",
+        "retain_sufficient": "4",
+        "secure_access": "3",
+        "deferred_access": "3"
+      },
+      "required_resource_allowance": "4",
+      "all_policy_costs_funded": true
     }
   }
 }

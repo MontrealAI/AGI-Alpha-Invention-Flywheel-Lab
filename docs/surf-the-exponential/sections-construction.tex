@@ -87,10 +87,100 @@ Original ordered pair & 9 & Yes & Yes\\
 \begin{thesisbox}
 \textbf{The smallest sufficient representation today need not be the best retained asset for tomorrow.}
 \end{thesisbox}
-The six-label local patch---the mean plus one threshold flag---happens to answer both families on this domain. The minimal three-label initial representation cannot. Selection therefore depends on the current purpose and justified expectations about reuse, not a universal command to compress as far as possible. A retained constructor can adapt when its input contract still holds; it cannot repair missing source access by intention alone.
+The six-label local patch---the mean plus one threshold flag---happens to answer both families on this domain. The minimal three-label initial representation cannot. A retained constructor can adapt when its input contract still holds; it cannot repair missing source access by intention alone. Related work in \emph{Out-Think} makes answer preservation, permitted updates and source access explicit parts of a reasoning interface \citep[\S2--3]{boucher_think}. Here the next question is economic: which usable path to a future answer is worth preserving?
+
+\subsection{What should survive the answer?}
+\label{sec:preservation}
+Consider a known class of optional future requests that needs a distinction absent from the compact record. For example, maximum 80 cannot distinguish $(60,80)$ from $(80,80)$ when the request asks whether both readings lie in $[80,80]$. Let $p$ be the probability that such an opportunity arrives within one specified horizon. It is \emph{not} the probability of an arbitrary interval query: some queries are already answerable from the maximum and would not require reconstruction.
+
+Before the source can be lost, choose one of three routes. All fulfill the current purpose. \textbf{Ordinary access} ($D$) keeps the compact record and relies on later access to the original source. \textbf{Preserve the distinction} ($R$) pays incremental cost $c$ to retain a sufficient record. \textbf{Preserve source access} ($A$) pays $a$ to keep a qualified route to the exact original source/version available throughout the horizon. That route must be established before loss; the identical guarantee is unavailable afterward in this first comparison. Policy choice is made before the source instance is observed. Conditional on the compact record, neither opportunity arrival nor observed source availability reveals the missing answer.
+
+Let $q$ be ordinary source availability conditional on opportunity arrival, observed before reconstruction spending. Use an additive expected-value objective: either correctly established answer has value $v\geq0$, net of common fulfillment costs. Fixed costs shared by every route cancel. The strongest permitted reconstruction route has additional complete cost $r\geq0$; $a$ and $c$ include complete incremental preservation and qualification. None is inferred from label counts. The task contract provides resources for common work and every possible incremental outlay before its benefit arrives. This is an optional opportunity, with no promise to deliver when declined. Unsupported guessing is inadmissible.
+
+\Needspace{7\baselineskip}
+\begin{proposition}[A costed choice of what to preserve]
+\label{prop:preservation}
+Under these conditions, write $h=\max\{v-r,0\}$. The three expected incremental values are
+\begin{equation}
+\boxed{V_D=pqh,\qquad V_R=pv-c,\qquad V_A=ph-a.}
+\label{eq:preservation}
+\end{equation}
+\end{proposition}
+\begin{proof}
+After arrival, reconstruct only when the source is available and $v-r>0$; at equality, exercising and declining tie. Ordinary access permits this branch with probability $pq$; preserved access permits it with probability $p$. The sufficient record permits the answer whenever the opportunity arrives. Subtract each route's upfront cost, including when no request arrives, then compare. Conditioning $q$ on arrival requires no independence assumption.
+\end{proof}
+
+Choose the largest among the feasible routes, retaining all ties. Subtraction gives their strict pairwise boundaries:
+\begin{align}
+R>D&\ \Longleftrightarrow\ c<p(v-qh),\nonumber\\
+A>D&\ \Longleftrightarrow\ a<p(1-q)h,\label{eq:preservation-boundaries}\\
+R>A&\ \Longleftrightarrow\ c-a<p\min\{r,v\}.\nonumber
+\end{align}
+
+These are ordinary decision-tree calculations. More information cannot reduce attainable \emph{gross} decision value when one may ignore it; this is the elementary deterministic case of the classical comparison of experiments \citep{blackwell}. Costs can reverse the \emph{net} choice. No new information theorem, optimality over every possible contract, or frontier-model advantage is claimed.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\textwidth}{YrrrrrP{1.23in}}
+\toprule
+\textbf{Authored circumstance} & $p$ & $r$ & $V_D$ & $V_R$ & $V_A$ & \textbf{Best route}\\
+\midrule
+Reconstruction is costly & $.50$ & $6$ & $1.75$ & $6$ & $5$ & Richer record\\
+Reconstruction becomes cheap & $.50$ & $1$ & $2.375$ & $6$ & $7.5$ & Source access\\
+The opportunity is rare & $.05$ & $6$ & $.175$ & $-3$ & $-1.3$ & Ordinary access\\
+\bottomrule
+\end{tabularx}
+\caption{Exact values with $v=20$, $c=4$, $a=2$, $q=1/4$. The probabilities and costs are supplied illustrative inputs, not observations. All three primary strategies can win; ordinary decision analysis ties the calculation.}
+\label{tab:preservation}
+\end{table}
+
+At $p=1/2$, the record/access switch occurs at $r=4$: both return 6, above ordinary access at 2. Reducing reconstruction cost from 6 to 1 changes the best declared retained asset while leaving the future purpose fixed. This is a specific Frontier Replay trigger: re-evaluate what to preserve when a \emph{verified} capability change alters reconstruction cost. The numbers illustrate the mechanism; they do not establish that such a frontier change has occurred.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=.91\textwidth,height=2.45in,xmin=0,xmax=8,ymin=0,ymax=9,
+  xlabel={Complete reconstruction cost $r$},ylabel={Expected incremental value},
+  xtick={0,1,2,4,6,8},ytick={0,2,4,6,8},tick label style={font=\small},
+  label style={font=\small},axis line style={color=Rule},tick style={color=Rule},
+  grid=major,grid style={color=Rule!45},
+  legend style={at={(.5,1.06)},anchor=south,draw=none,font=\footnotesize,legend columns=3},
+  clip=false]
+\path[fill=Sea!5] (axis cs:0,0) rectangle (axis cs:4,9);
+\path[fill=Gold!7] (axis cs:4,0) rectangle (axis cs:8,9);
+\addplot[color=Muted,line width=1pt,dashed,domain=0:8]{2.5-.125*x};
+\addlegendentry{Ordinary access}
+\addplot[color=Gold,line width=1.4pt,domain=0:8]{6};
+\addlegendentry{Preserve distinction}
+\addplot[color=Sea,line width=1.4pt,domain=0:8]{8-.5*x};
+\addlegendentry{Preserve access}
+\draw[densely dotted,color=Plum] (axis cs:4,0)--(axis cs:4,6);
+\node[circle,fill=Plum,inner sep=2.2pt] at (axis cs:4,6) {};
+\node[font=\small,text=Sea,align=center] at (axis cs:1.7,8.5) {Preserve access};
+\node[font=\small,text=Gold,align=center] at (axis cs:6.3,8.5) {Preserve distinction};
+\end{axis}
+\end{tikzpicture}
+\caption{Cheaper reconstruction changes what is worth keeping. This is a plot of Equation~\eqref{eq:preservation}, with the table's fixed inputs and $p=1/2$, not empirical measurements. The shaded regions identify the best of the three declared routes; they meet at $r=4$.}
+\label{fig:preservation}
+\end{figure}
+
+\Needspace{9\baselineskip}
+\textbf{Challenge the access assumption.} If identical guaranteed access can instead be bought after arrival, a competent alternative first uses ordinary access when present and buys the guarantee only when absent. Its value is
+\begin{equation}
+V_L=p\left[q\max\{v-r,0\}+(1-q)\max\{v-r-a,0\}\right].
+\label{eq:late-access}
+\end{equation}
+In the cheap-reconstruction row, this route returns $8.75$, beating upfront preservation at $7.5$. The separate checker enumerates these decision branches and preserves this ordinary winner. An early access arrangement earns its place only when the actual timing and availability make the alternative unavailable or inferior. A purported guarantee also needs its real costs and supporting mechanism; it is not created by naming a contract.
+
+\textbf{There is no universally sufficient lossy archive.} If an encoding maps distinct states $x$ and $y$ to the same label, a Boolean question distinguishing $x$ from $y$ defeats any decoder restricted to that label. Thus, without outside information, exact support for \emph{every} possible future Boolean question requires an injective encoding. A richer lossy record may cover a declared family; it does not establish universal sufficiency for unspecified future questions. The useful design choice is a scoped record, a qualified source-access route, or a consciously accepted loss of optional opportunities, with their costs visible.
+
+\begin{thesisbox}
+\textbf{Preserve a useful path to the next answer.}\par
+As construction becomes easier, what is worth keeping can change. A record, a constructor and access to the source are different assets; their value depends on the future purpose and the complete cost of reaching it.
+\end{thesisbox}
 
 \subsection{What the executed construction establishes}
-The companion actually finds a collision, emits an alternative, checks it, defeats naive reuse and constructs the scoped successor. The query functions, finite domain and economic inputs are authored. Exhaustive calculation was examined during design; this is an exact demonstrator, not a held-out discovery experiment. It does not observe a new frontier-model capability or demonstrate that a learned inventor found the algorithm. Its value is to expose every link from a supported objection to a usable artifact and an applicability boundary. Frontier Replay would need an additional measured change---for example, a newly available pre-compression interface---before claiming that this route had just become accessible.
+The companion finds a collision, emits an alternative, checks it, defeats naive reuse and constructs the scoped successor. It also evaluates the preservation choices, ties and stronger late-access control above. The query functions, finite domain, opportunities and economic inputs are authored; calculation was examined during design. This is an exact demonstrator, not a held-out discovery experiment. It establishes neither a new frontier-model capability nor autonomous discovery of the algorithms. Frontier Replay needs an additional measured change---such as newly available source access or lower complete reconstruction cost---before claiming that a valuable route has just become accessible.
 
 \section{Invent the complete productive arrangement}
 \label{sec:economy}
