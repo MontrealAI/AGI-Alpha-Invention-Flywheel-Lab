@@ -1,0 +1,17 @@
+# GENESIS Turn 001 — frozen operating protocol
+
+**Class:** bounded synthetic, cross-domain engineering continuation, not a qualified Blue Sky flagship or live business.
+
+**First problem and acceptance:** An SMB needs an exact invoice/payment reconciliation. Use the repository's already available conventional producer and unchanged `adaptive_enterprise.checkers.audit_delivery`, then match an existing source-bound reference outcome. A simulated buyer has value $90, budget $100 and outside utility $18, facing a $65 offer. The buyer only buys if resulting utility exceeds outside utility. No actual person buys.
+
+**Native authority:** Initialize an entirely fresh `JournalAccount` with the mandatory `Account`, $500 synthetic opening capital and no migration or top-up. The authored all-in *modeled* initial costs are $12 setup, $9 production, $2 payment fee, $5 checking, $4 maintenance and a 20% positive pre-tax provision ($6.60 in central). No actual invoices establish those figures. Collection, financial events, and the first independent accepted artifact must precede any successor investment.
+
+**Earned successor rule:** The $18 successor expense must be `account.spend(..., allow_seed=False)` and receipt funding **EARNED**, after the first settled order and tax. Pre-sale unrestricted earnings must be below $18, and pre-successor unrestricted earnings at least $18. A capable seed-funded competitor could fund it differently: this only proves enabling **under the declared earned-only policy**.
+
+**Different successor outcome:** Solve a synthetic concurrent energy allocation for two buildings: clinic 7,000 Wh and library 3,000 Wh. Fictional qualified packs: SPARKY-A 4,100 Wh (assignment cost 1,400 cents); SPARKY-B 3,300 Wh (1,200); SPARKY-C 3,200 Wh (1,100); SPARKY-D 5,100 Wh (2,000). A fake, unverified 10,000-Wh pack at cost 1 cent is **ineligible**. Every pack can serve at most one load. Use exhaustive enumeration; select minimum cost, then minimum count, then lexical assignment. An independently written exhaustive checker must recompute the optimum and reject double allocation, missing capacity, source tampering and unverified packs. This computes **research-only numerical feasibility**: no battery safety, discharge-power/thermal limits, electrical installation, warranty, field measurement or market qualification.
+
+**Transferred method:** source-bound exact units, preservation of IDs and obligations, and independent artifact checking are carried from reconciliation to energy-capacity allocation. The mechanism is explicitly author-designed and strong conventional exhaustive controls are eligible: no superior self-improving discovery policy or newly invented market is claimed.
+
+**Registered three cases:** central (delivery accepts and fund successor), no_demand (buyer refuses and no funds), failed_acceptance (damaged deliverable refunds and no funds). Preserve all costs incurred in failed arms; do not invent a buyer, allow missing funds, bypass reserve, or promote an invalid output. Independent local test suite and current-source native audits are necessary; unknown complete actual lifecycle costs remain unknown.
+
+**Commercial boundary:** zero real customers, zero real collections, no physical deployment. The runnable turn can establish only source-matched simulated commerce plus a different tested successor calculation, not an independently accepted natural market or real self-sustaining enterprise.
