@@ -101,40 +101,97 @@ jobs:
           # All five historical limits, source pins, output checks, and failure
           # receipts remain binding. Prior failed run 42083204982 stays failed.
           python - "$RUNNER_TEMP/frozen-cycle-006" "$RUNNER_TEMP/consequential-cycle-006" <<'PY'
+          import contextlib
           import hashlib
           import importlib.util
           import json
+          import os
           from pathlib import Path
+          import signal
           import sys
+          import tempfile
 
-          from experiments import resource006_v4
-          from flywheel.reproduction006 import FREEZE, FREEZE_SHA256
+          @contextlib.contextmanager
+          def blocked_signals():
+              previous = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGINT, signal.SIGTERM})
+              try:
+                  yield
+              finally:
+                  signal.pthread_sigmask(signal.SIG_SETMASK, previous)
+
+          cancellation_requested = False
+          def interrupted(signum, frame):
+              global cancellation_requested
+              # The first cancellation must fail the run. Later wrapper signals must
+              # not abandon that failure's cleanup before its signal mask is installed.
+              if not cancellation_requested:
+                  cancellation_requested = True
+                  raise KeyboardInterrupt("CONNECTED_SIGNAL_" + str(signum))
+
+          def sync_directory(directory):
+              descriptor = os.open(directory, os.O_RDONLY | os.O_DIRECTORY)
+              try:
+                  os.fsync(descriptor)
+              finally:
+                  os.close(descriptor)
+
+          def atomic_write(path, data):
+              descriptor, temporary = tempfile.mkstemp(prefix="." + path.name + ".", suffix=".tmp", dir=path.parent)
+              try:
+                  with os.fdopen(descriptor, "wb") as stream:
+                      stream.write(data)
+                      stream.flush()
+                      os.fsync(stream.fileno())
+                  os.replace(temporary, path)
+                  sync_directory(path.parent)
+              finally:
+                  Path(temporary).unlink(missing_ok=True)
+
+          def atomic_json(path, value):
+              atomic_write(path, (json.dumps(value, sort_keys=True, allow_nan=False) + "\n").encode())
 
           root, output = (Path(a).absolute() for a in sys.argv[1:])
-          freeze_path = root / FREEZE
-          freeze_raw = freeze_path.read_bytes()
-          if hashlib.sha256(freeze_raw).hexdigest() != FREEZE_SHA256:
-              raise ValueError("FROZEN006_FREEZE_IDENTITY_MISMATCH")
-          pins = json.loads(freeze_raw)["sources"]
-          runner_path = root / "run_cycle006.py"
-          if (runner_path.is_symlink()
-                  or hashlib.sha256(runner_path.read_bytes()).hexdigest() != pins["run_cycle006.py"]):
-              raise ValueError("FROZEN006_RUNNER_IDENTITY_MISMATCH")
-          # Authenticated module defines the original closure validator and
-          # worker. It does not import application logic before identity check.
-          spec = importlib.util.spec_from_file_location("_frozen_cycle006_v4", runner_path)
-          module = importlib.util.module_from_spec(spec)
-          spec.loader.exec_module(module)
-          frozen, freeze_sha = module.source_identity(root, freeze_path, FREEZE_SHA256)
-          if freeze_sha != FREEZE_SHA256 or len(frozen["sources"]) != 6363:
-              raise ValueError("FROZEN006_SOURCE_CLOSURE_CHANGED")
-          if output.exists() or output.is_symlink() or any(p.is_symlink() for p in output.parents):
-              raise FileExistsError(output)
-          output.mkdir(parents=True)
-          (output / "SOURCE_IDENTITY.json").write_text(
-              json.dumps({"freeze_sha256": freeze_sha, "sources_checked": len(frozen["sources"]),
-                          "monitor": "CURRENT_V4_PROSPECTIVE_NOT_HISTORICAL_V3"}) + "\n")
+          owned = False
+          phase = "claim-output"
+          previous_handlers = {s: signal.getsignal(s) for s in (signal.SIGINT, signal.SIGTERM)}
           try:
+              for signum in previous_handlers:
+                  signal.signal(signum, interrupted)
+              # Claim only a new output. Signal delivery cannot fall between mkdir and
+              # ownership/PENDING. A refusal must never write into another run's output.
+              with blocked_signals():
+                  if output.exists() or output.is_symlink() or any(p.is_symlink() for p in output.parents):
+                      raise FileExistsError(output)
+                  output.mkdir(parents=True)
+                  owned = True
+                  atomic_json(output / "PENDING.json", {
+                      "state": "PENDING", "prior_v3_run": "42083204982",
+                      "recovery": "Preserve receipts; new exclusive output required"})
+              phase = "source-authentication"
+              from experiments import resource006_v4
+              from flywheel.reproduction006 import FREEZE, FREEZE_SHA256
+
+              freeze_path = root / FREEZE
+              freeze_raw = freeze_path.read_bytes()
+              if hashlib.sha256(freeze_raw).hexdigest() != FREEZE_SHA256:
+                  raise ValueError("FROZEN006_FREEZE_IDENTITY_MISMATCH")
+              pins = json.loads(freeze_raw)["sources"]
+              runner_path = root / "run_cycle006.py"
+              if (runner_path.is_symlink()
+                      or hashlib.sha256(runner_path.read_bytes()).hexdigest() != pins["run_cycle006.py"]):
+                  raise ValueError("FROZEN006_RUNNER_IDENTITY_MISMATCH")
+              # Authenticated module defines the original closure validator and
+              # worker. It does not import application logic before identity check.
+              spec = importlib.util.spec_from_file_location("_frozen_cycle006_v4", runner_path)
+              module = importlib.util.module_from_spec(spec)
+              spec.loader.exec_module(module)
+              frozen, freeze_sha = module.source_identity(root, freeze_path, FREEZE_SHA256)
+              if freeze_sha != FREEZE_SHA256 or len(frozen["sources"]) != 6363:
+                  raise ValueError("FROZEN006_SOURCE_CLOSURE_CHANGED")
+              atomic_json(output / "SOURCE_IDENTITY.json", {
+                  "freeze_sha256": freeze_sha, "sources_checked": len(frozen["sources"]),
+                  "monitor": "CURRENT_V4_PROSPECTIVE_NOT_HISTORICAL_V3"})
+              phase = "bounded-worker"
               result = resource006_v4.run(
                   [sys.executable, "-I", str(runner_path), "--worker",
                    "--output", str(output / "bounded" / "artifacts"),
@@ -148,23 +205,48 @@ jobs:
                   cwd=root)
               if result["receipt"]["state"] != "complete":
                   raise RuntimeError("CONNECTED_WORKER_INCOMPLETE_V4; retain bounded/RECEIPT.json")
+              phase = "worker-verification"
               worker = output / "bounded" / "artifacts"
               report = (worker / "REPORT.json").read_bytes()
               completed = json.loads((worker / "COMPLETE.json").read_text())
               if completed.get("state") != "COMPLETE" or completed.get("report_sha256") != hashlib.sha256(report).hexdigest():
                   raise ValueError("FROZEN006_WORKER_COMPLETION_MISMATCH")
-              (output / "REPORT.json").write_bytes(report)
-              (output / "COMPLETE.json").write_text(json.dumps({
-                  "state": "COMPLETE", "report_sha256": hashlib.sha256(report).hexdigest(),
-                  "freeze_sha256": freeze_sha, "monitor": "CURRENT_V4_PROSPECTIVE",
-                  "historical_v3_failure_repaired_retroactively": False}, sort_keys=True) + "\n")
+              phase = "completion-promotion"
+              atomic_write(output / "REPORT.json", report)
+              # COMPLETE is promoted only after the verified report is durable. Defer
+              # catchable signals across rename/fsync or rollback, so a second signal
+              # cannot strand a marker from an unfinished promotion transaction.
+              with blocked_signals():
+                  try:
+                      atomic_json(output / "COMPLETE.json", {
+                          "state": "COMPLETE", "report_sha256": hashlib.sha256(report).hexdigest(),
+                          "freeze_sha256": freeze_sha, "monitor": "CURRENT_V4_PROSPECTIVE",
+                          "historical_v3_failure_repaired_retroactively": False})
+                  except BaseException:
+                      (output / "COMPLETE.json").unlink(missing_ok=True)
+                      sync_directory(output)
+                      raise
           except BaseException as error:
-              (output / "INTERRUPTED.json").write_text(json.dumps({
-                  "state": "INCOMPLETE", "reason": type(error).__name__,
-                  "detail": str(error)[:500],
-                  "prior_v3_run": "42083204982",
-                  "recovery": "Preserve receipts; new exclusive output required"}) + "\n")
+              if owned:
+                  try:
+                      # Preserve v4's own cleanup and receipts. Repeated catchable
+                      # signals cannot tear this outer failure receipt.
+                      with blocked_signals():
+                          (output / "COMPLETE.json").unlink(missing_ok=True)
+                          atomic_json(output / "INTERRUPTED.json", {
+                              "state": "INCOMPLETE", "reason": type(error).__name__,
+                              "detail": str(error)[:500], "phase": phase,
+                              "prior_v3_run": "42083204982",
+                              "recovery": "Preserve receipts; new exclusive output required"})
+                  except BaseException as receipt_error:
+                      print("CONNECTED_FAILURE_RECEIPT_ERROR: " + repr(receipt_error), file=sys.stderr)
               raise
+          finally:
+              # After durable completion, a later cancellation can still make the shell
+              # fail. COMPLETE proves artifact completion, not wrapper/CI exit success.
+              with blocked_signals():
+                  for signum, handler in previous_handlers.items():
+                      signal.signal(signum, handler)
           PY
           python scripts/check_cycle006_paper.py --output "$RUNNER_TEMP/cycle006-paper-identity.json"
       - name: Retain executed qualification evidence including incomplete runs
