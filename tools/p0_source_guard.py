@@ -28,6 +28,56 @@ def sha256(root, name):
     return hashlib.sha256(checked_path(root, name).read_bytes()).hexdigest()
 
 
+# Deliberately narrow static grammar. The preflight does not execute finance.py;
+# accepting a referenced name in a dead operand is not a live service route.
+_SCHEMA_SELECTOR = ast.parse(
+    "manifest.get('schema') if isinstance(manifest, dict) else None",
+    mode='eval').body
+_SOURCE_ROOT = ast.parse("Path(__file__).resolve().parents[1]", mode='eval').body
+
+
+def _same_ast(node, reference):
+    return ast.dump(node, include_attributes=False) == ast.dump(reference, include_attributes=False)
+
+
+def _named(node, name):
+    return isinstance(node, ast.Name) and node.id == name
+
+
+def _call(node, name, count):
+    return (isinstance(node, ast.Call) and _named(node.func, name)
+            and len(node.args) == count and not node.keywords)
+
+
+def _active_service_closure(value):
+    """Accept only a live, direct source union, optionally deduplicated.
+
+    This checks structural dispatch, not imported producer semantics or all
+    transitive dependencies. Unsupported expressions fail closed.
+    """
+    if (_call(value, 'tuple', 1) and _call(value.args[0], 'fromkeys', 1)):
+        return False  # fromkeys must be qualified by dict, never a bare alias.
+    if _call(value, 'tuple', 1):
+        inner = value.args[0]
+        if (isinstance(inner, ast.Call) and isinstance(inner.func, ast.Attribute)
+                and _named(inner.func.value, 'dict') and inner.func.attr == 'fromkeys'
+                and len(inner.args) == 1 and not inner.keywords):
+            value = inner.args[0]
+    if not (isinstance(value, ast.BinOp) and isinstance(value.op, ast.Add)
+            and _named(value.left, 'SOURCE_PATHS')):
+        return False
+    right = value.right
+    if _named(right, 'PRODUCTION_SOURCE_PATHS') or _named(right, 'INVENTORY_SOURCE_PATHS'):
+        return True
+    if not _call(right, 'tuple', 1):
+        return False
+    producer = right.args[0]
+    if not _call(producer, 'source_paths', 1):
+        return False
+    root = producer.args[0]
+    return (isinstance(root, ast.Constant) and root.value is None) or _same_ast(root, _SOURCE_ROOT)
+
+
 def load_registry(root):
     source = checked_path(root, 'connected_enterprise/finance.py').read_text(encoding='utf-8')
     program = ast.parse(source)
@@ -77,8 +127,9 @@ def load_registry(root):
             if isinstance(node, ast.Assign):
                 targets = [target.id for target in node.targets if isinstance(target, ast.Name)]
                 if 'schema' in targets:
-                    if schema_bound or len(targets) != 1:
-                        break  # Changed selector: no later branch is authoritative.
+                    if (schema_bound or len(targets) != 1
+                            or not _same_ast(node.value, _SCHEMA_SELECTOR)):
+                        break  # Unsupported selector: never credit later branches.
                     schema_bound = True
                 continue
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -119,9 +170,7 @@ def load_registry(root):
                     break
             if not valid_body or first_return is None:
                 continue
-            required_sources = {'source_paths', 'PRODUCTION_SOURCE_PATHS', 'INVENTORY_SOURCE_PATHS'}
-            if required_sources & {value.id for value in ast.walk(first_return)
-                                   if isinstance(value, ast.Name)}:
+            if _active_service_closure(first_return):
                 routes.add(route)
     return found, routes
 
