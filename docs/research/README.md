@@ -24,19 +24,19 @@ Invent the means. Expand what becomes possible. Compound the ability to discover
 
 **From Verified Criticism to New Capabilities, Viable Markets, and Better Inventors.**
 
-Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 5 November 2026 · Research edition 1.1.0 · 30 pages.
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 6 November 2026 · Research edition 1.2.0 · 32 pages.
 
 [Browser reader](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.html) · [Complete PDF](surf-the-exponential.pdf) · [Editable LaTeX](../surf-the-exponential/paper.tex) · [Build and reproduce](../surf-the-exponential/README.md) · [Construction evidence](../surf-the-exponential/evidence/construct_results.json) · [Review audit](../surf-the-exponential/evidence/results.json).
 
 *Find what the answer missed. Build what the world is missing.* A source-grounded criticism can expose more than a mistaken answer: it can identify a missing measurement, capability, or voluntary arrangement. This synthesis connects three challenger functions—failure, possibility, and instrument—to executable construction, Frontier Replay, complete economics, and separately tested successor contributions. It builds on **Transformational Intelligence**, **ALPHA GENESIS FLYWHEEL Ω**, and **Invent the Economy**.
 
-**New in 1.1:** An executable finite constructor passes 36 initial checks with three labels, then 54 successor checks with six labels. Separate enumeration of all 21,147 partitions confirms the minima; conventional constructions tie. A full-refund counterexample shows why opening cash 50 funds success while 90 is required across both promised outcomes. The revised reader includes a practical six-step record.
+**New in 1.2:** A costed continuation model asks what should survive the answer: a richer record, preserved source access, or ordinary reconstruction. Cheaper reconstruction can change the best retained asset. Five exact cases include a tie and a stronger deferred-access control; separate branch/action enumeration checks all 16 policy outcomes. The reader includes an accessible interactive exploration and the practical six-step record. The verified three/six-label construction, full-refund counterexample and original review audit remain.
 
 **Scope:** Conditional analysis, a verified finite construction and successor, authored arithmetic, and a prospective evaluation programme. The finite study preserves conventional ties and wins, false-criticism harm, shared blind spots, and cases where additional review loses value. Its supplied rates and utilities are not measurements of frontier LLMs. Actual customer revenue, autonomous market invention, and improved discovery on fresh campaigns remain to be established. The programme's existing flagship and historical papers retain their roles and evidence.
 
-PDF SHA-256: `45b063750a325a4e94be45e7dd3ea1595cdf74c1e446496f50504e44028349a1`. The [publication manifest](publication-manifest.json) binds the 287,078-byte PDF.
+PDF SHA-256: `90d57364e265744c443a18349d0abc35fff37eac2896ca98198eed695dda8fe9`. The [publication manifest](publication-manifest.json) binds the 297,488-byte PDF.
 
-**Preserved original edition:** [1.0.0 release, PDF and complete source](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.0.0).
+**Preserved earlier editions:** [1.0.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.0.0) and [1.1.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.1.0), each with its original PDF and complete source.
 
 ## SUCCESSOR Ω — The Institution That Compounds
 
