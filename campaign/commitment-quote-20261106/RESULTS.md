@@ -126,3 +126,11 @@ workflow for its executable dependencies, and runs the actual extracted and
 downloaded implementation. This packaging correction changes no native financial
 authority or original service source. F03 retains the separate initial YAML
 rejection and its corrected command; neither failure becomes a prior pass.
+
+The broader hosted release suite at `1b87c75` ran 599 checks and correctly
+blocked on one outdated mocked workflow inventory. Its main/tag identity test
+had omitted the new mandatory quote gate. The repaired fixture and a new
+missing-quote-CI refusal test pass with the real gate selector; 91 local
+release, policy, package and privacy tests pass. No production guard or timeout
+was relaxed. The original hosted failure and local fixture metadata error are
+retained in `PACKAGING.json`; new source requires fresh hosted qualification.

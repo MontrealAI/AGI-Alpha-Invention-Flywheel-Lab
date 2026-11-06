@@ -41,5 +41,20 @@
     "log": "quote-funding-tests.log",
     "four_new_arithmetic_cases": true,
     "eleven_tamper_cases": true
+  },
+  "hosted_gate_fixture_failure": {
+    "commit": "1b87c75ba98ea6f342fddebfb7a416fe6a109a18",
+    "workflow_run": 42160028703,
+    "job": 127703373030,
+    "tests_run": 599,
+    "errors": 1,
+    "exception": "EXACT_MAIN_WORKFLOW_GATE_TIMEOUT",
+    "cause": "Older moved-main fixture supplied the genesis gate but omitted the newly mandatory quote gate. Production gate correctly refused to advance.",
+    "repair": "Supply the new gate in the identity-test fixture; independently test missing quote CI with the real qualifying_runs function. No production gate or timeout changed.",
+    "local_negative_test_draft": "Two local draft runs omitted required GitHub run metadata (first run_number/id, then html_url), raising KeyError before the refusal check. Both are retained in the local qualification logs; the final fixture includes complete metadata.",
+    "final_local_tests": 91,
+    "final_local_errors": 0,
+    "test_sha256": "d335eb5e4e792aa7f8cb1f93bba267b086d4d52bfc2a6664fc71de950af8b415",
+    "final_local_wall_seconds": 7.447
   }
 }
