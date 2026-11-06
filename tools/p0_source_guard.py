@@ -4,6 +4,7 @@ import argparse
 import ast
 import hashlib
 import json
+import re
 from pathlib import Path, PurePosixPath
 
 REGISTRIES = ('SOURCE_PATHS', 'PRODUCTION_SOURCE_PATHS', 'INVENTORY_SOURCE_PATHS')
@@ -58,9 +59,30 @@ def load_registry(root):
             raise ValueError('P0_REGISTRY_REBIND_OR_DYNAMIC_WRITE:' + name)
     if 'SOURCE_PATHS' not in found:
         raise ValueError('P0_BASE_FINANCIAL_REGISTRY_MISSING')
-    routes = {s for node in ast.walk(program) if isinstance(node, ast.FunctionDef) and node.name == 'source_paths_for_manifest'
-              for child in ast.walk(node) if isinstance(child, ast.Constant) and isinstance(child.value, str)
-              for s in [child.value] if s.endswith('/native-services/v1')}
+    # Static guard only: name a dispatched manifest version through an actual
+    # conditional branch with a return; unexecuted literals are not routes.
+    functions = [n for n in program.body if isinstance(n, ast.FunctionDef)
+                 and n.name == 'source_paths_for_manifest']
+    if len(functions) > 1:
+        raise ValueError('P0_DUPLICATE_MANIFEST_DISPATCH')
+    routes = set()
+    if functions:
+        for node in ast.walk(functions[0]):
+            if not isinstance(node, ast.If) or not isinstance(node.test, ast.Compare):
+                continue
+            comparison = node.test
+            if len(comparison.ops) != 1 or not isinstance(comparison.ops[0], ast.Eq) or len(comparison.comparators) != 1:
+                continue
+            operands = (comparison.left, comparison.comparators[0])
+            if not any(isinstance(part, ast.Name) and part.id == 'schema' for part in operands):
+                continue
+            if not any(isinstance(statement, ast.Return) for statement in node.body):
+                continue
+            for part in operands:
+                if isinstance(part, ast.Constant) and isinstance(part.value, str) and re.fullmatch(
+                    r'[A-Za-z0-9_-]+/native-services/v[1-9][0-9]*', part.value
+                ):
+                    routes.add(part.value)
     return found, routes
 
 
