@@ -2,7 +2,7 @@
 
 **English** · [Français](EVIDENCE.fr.md) · [Paper](README.md) · [Language contract](TRANSLATION.md)
 
-Research edition 1.1.0 uses one shared set of evidence identities for both languages. This guide explains the records in ordinary language. It does not replace the records, turn them into field observations, or qualify a later prototype revision.
+Research edition 1.1.1 uses one shared set of evidence identities for both languages. This guide explains the records in ordinary language. It does not replace the records, turn them into field observations, or qualify a later prototype revision.
 
 ## What each record means
 
@@ -11,9 +11,9 @@ Research edition 1.1.0 uses one shared set of evidence identities for both langu
 | [REPRODUCTION.json](evidence/REPRODUCTION.json) | Execution of two existing source-pinned synthetic implementations, their test counts, fixture decisions and exact source identities. | Complete checker soundness, authentic customer history, actual recovery, physical delivery or commerce. |
 | [COUNTEREXAMPLES.json](evidence/COUNTEREXAMPLES.json) | Five bounded observations against the same historical handoff source: one positive control, three weaknesses and an already-disclosed source-trust boundary. | A failure-rate estimate, an AI comparison or qualification of the proposed later repair. |
 | [POOLING.json](evidence/POOLING.json) | Exact arithmetic for a deliberately authored shared-cost and simultaneous-capacity illustration. | Observed market prices, actual buyer willingness, a production schedule or a commercial transaction. |
-| [QA.json](evidence/QA.json) | The preserved historical publication checks for edition 1.0.0, including that edition’s PDF identity and reader JavaScript checks. | Quality checks for the changed 1.1.0 files, current deployment, universal accessibility, or a new cyber-resilience experiment. |
-| [TRANSLATION_QA.json](evidence/TRANSLATION_QA.json) | The actual local edition 1.1.0 checks recorded for bilingual structural parity, semantic review, layout and reader JavaScript. | Checks not recorded there, a verified live deployment, independent translation certification, or new operational or commercial evidence. |
-| [PUBLICATION.json](PUBLICATION.json) | Canonical publication identities and the complete file inventory for this edition. | The truth of a scientific claim or authenticity of an external business record. |
+| [QA.json](evidence/QA.json) | The preserved historical publication checks for edition 1.0.0, including that edition’s PDF identity and reader JavaScript checks. | Quality checks for the changed 1.1.1 files, current deployment, universal accessibility, or a new cyber-resilience experiment. |
+| [TRANSLATION_QA.json](evidence/TRANSLATION_QA.json) | The preserved historical local edition 1.1.0 checks for bilingual structural parity, semantic review, layout and reader JavaScript; that edition’s PDF identities remain unchanged in this record. | Checks for the corrected 1.1.1 files, a verified live deployment, independent translation certification, or new operational or commercial evidence. |
+| [PUBLICATION.json](PUBLICATION.json) | Canonical publication identities, the complete file inventory and the separately scoped title-correction QA for edition 1.1.1. | The truth of a scientific claim or authenticity of an external business record. |
 | [CLAIMS.json](CLAIMS.json) / [CLAIMS.fr.json](CLAIMS.fr.json) | The same claim IDs, classifications, evidence anchors and limitations in English and French. | New evidence created by translation or a stronger claim in either language. |
 
 Fresh reproduction commands also create local `RESULT.json` receipts and detailed logs. Those receipts document that execution; they do not silently replace the published historical record. A new run, a corrected source and a new publication edition have different identities.

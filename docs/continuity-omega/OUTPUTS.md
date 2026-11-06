@@ -4,7 +4,7 @@
 
 The reading companion presents the prototype’s recorded handoff, audit and refusal artifacts in your chosen language. It preserves the raw identifiers, status codes, quantities, amounts and file fingerprints. **A readable report is not a fresh audit, a certification or proof that a customer promise was fulfilled.**
 
-The original prototype remains unchanged. Its terminal messages and original `PASSPORT.md` use English; the companion supplies a complete English or French reading of the supported JSON outputs, with localized explanations, help and errors. The paper’s bilingual edition **1.1.0** remains a separate publication.
+The original prototype remains unchanged. Its terminal messages and original `PASSPORT.md` use English; the companion supplies a complete English or French reading of the supported JSON outputs, with localized explanations, help and errors. The paper’s bilingual edition **1.1.1** remains a separate publication.
 
 ## Read a nominal exercise
 

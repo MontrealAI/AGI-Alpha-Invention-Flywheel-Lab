@@ -2,7 +2,7 @@
 
 **English** · [Français](SOURCE_MAP.fr.md) · [Paper and reading paths](README.md)
 
-Research edition 1.1.0 · [Versioned release](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.0). Both language versions retain the same source identities and evidence boundaries.
+Research edition 1.1.1 · [Versioned release](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/continuity-omega-v1.1.1). Both language versions retain the same source identities and evidence boundaries.
 
 Printed page numbers are used. ALPHA GENESIS v2 has a cover, so its printed page is PDF page minus one. The supplied files were read locally; public editions are cited without republishing private uploads.
 

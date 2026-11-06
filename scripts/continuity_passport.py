@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read recorded CONTINUITY Ω v1 artifacts in English or French, without auditing.
 
-Lire les artefacts CONTINUITY Ω v1 consignés en anglais ou en français, sans audit.
+Lire les artefacts CONTINUITÉ Ω v1 consignés en anglais ou en français, sans audit.
 No core imports, subprocesses, network calls, financial actions, or input writes.
 """
 from __future__ import annotations
@@ -400,7 +400,7 @@ def literal(value):
 def render(records, identities, language):
     validate(records)
     say = lambda en, fr: choice(language, en, fr)
-    lines = ['# CONTINUITY Ω — ' + say('Recorded Passport reader', 'Lecture du Passeport consigné'), '',
+    lines = ['# ' + say('CONTINUITY Ω', 'CONTINUITÉ Ω') + ' — ' + say('Recorded Passport reader', 'Lecture du Passeport consigné'), '',
         '**' + say('Recorded information only. No fresh audit was performed.', 'Informations consignées uniquement. Aucun nouvel audit n’a été exécuté.') + '**', '',
         say('This reader translates stored declarations. It does not establish their current validity, completeness, authenticity, real recovery, delivery, payment or independent certification. A stored pass remains a stored software decision.',
             'Ce lecteur traduit des déclarations enregistrées. Il n’établit ni leur validité actuelle, ni leur exhaustivité, ni leur authenticité, ni une reprise réelle, une livraison, un paiement ou une certification indépendante. Une validation enregistrée reste une décision logicielle consignée.'), '',
@@ -534,7 +534,7 @@ def main(argv=None):
     try:
         parser = LocalizedParser(add_help=False, description=choice(language,
             'Read recorded CONTINUITY Ω v1 artifacts. No fresh audit, input changes or real-world authority.',
-            'Lire les artefacts CONTINUITY Ω v1 consignés. Aucun nouvel audit, changement des entrées ou pouvoir réel.'),
+            'Lire les artefacts CONTINUITÉ Ω v1 consignés. Aucun nouvel audit, changement des entrées ou pouvoir réel.'),
             usage='%(prog)s --in-dir PATH --language {en,fr} [--out NEW_FILE]')
         parser.language = language
         parser._optionals.title = choice(language, 'Options', 'Options')

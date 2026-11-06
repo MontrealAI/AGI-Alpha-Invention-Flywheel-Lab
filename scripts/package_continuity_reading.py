@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Package and check the bilingual reading companion using the standard library.
+"""Package and check the CONTINUITY Ω reading companion using the standard library.
 
-Assemble et contrôle le compagnon de lecture bilingue avec la bibliothèque standard.
+Assemble et contrôle le compagnon de lecture CONTINUITÉ Ω avec la bibliothèque standard.
 This is presentation qualification, not a new audit or authenticity guarantee.
 Il s’agit d’un contrôle de présentation, sans nouvel audit ni garantie d’authenticité.
 """
@@ -21,13 +21,14 @@ import tempfile
 import zipfile
 
 
-VERSION = "1.0.0"
-TAG = "continuity-omega-reading-v1.0.0"
+VERSION = "1.0.1"
+TAG = "continuity-omega-reading-v1.0.1"
 ASSET = "CONTINUITY_OMEGA_BILINGUAL_COMPANION.zip"
 SOURCE_COMMIT = "17bb5ee4678e59df5c8c271a435426b686210e4f"
 PAPER = "docs/continuity-omega-paper/"
 PAPER_MANIFEST = PAPER + "PUBLICATION.json"
-PAPER_MANIFEST_SHA256 = "96e372d2a667a2e5b43260e1ffc9b2bf71cef1294f236e726658a5e1a6deeb62"
+PAPER_EDITION = "1.1.1"
+PAPER_MANIFEST_SHA256 = "ae291ff6971ead62de9b4bac0fa724f2b593ffa052abb0893a6e56e50f2cd910"
 PRESENTER = "scripts/continuity_passport.py"
 PACKAGER = "scripts/package_continuity_reading.py"
 LANGUAGES = ("en", "fr")
@@ -159,7 +160,7 @@ def validate_source(files: dict[str, bytes]) -> None:
     require(sha256(files[PAPER_MANIFEST]) == PAPER_MANIFEST_SHA256,
             "Immutable paper manifest changed", "Manifeste immuable de l’article modifié")
     publication = read_json(files[PAPER_MANIFEST], PAPER_MANIFEST)
-    require(publication.get("edition") == "1.1.0"
+    require(publication.get("edition") == PAPER_EDITION
             and publication.get("schema") == "continuity-omega-paper/publication/v2"
             and set(publication.get("files", {})) == set(PAPER_FILES),
             "Unexpected paper inventory", "Inventaire de l’article inattendu")
@@ -277,14 +278,14 @@ def exercise(source: dict[str, bytes]) -> tuple[dict[str, bytes], dict]:
 
 
 def start_here() -> bytes:
-    return f"""# CONTINUITY Ω — Reading companion / Compagnon de lecture
+    return f"""# CONTINUITY Ω / CONTINUITÉ Ω — Reading companion / Compagnon de lecture
 
-**Companion / Compagnon {VERSION}** · **Paper / Article 1.1.0**
+**Companion / Compagnon {VERSION}** · **Paper / Article {PAPER_EDITION}**
 
-## English — Read the record; understand its limits
+## English — CONTINUITY Ω: read the record; understand its limits
 
 This archive provides the offline English and French reading paths, the unchanged synthetic
-prototype, and the complete immutable paper edition 1.1.0. It is a separate reading release;
+prototype, and the complete immutable paper edition {PAPER_EDITION}. It is a separate reading release;
 it does not replace or revise the paper release. Start with a human-readable example:
 
 | Reading path / Parcours de lecture | English | Français |
@@ -343,10 +344,10 @@ The historical checker’s known weaknesses and source-authenticity limits remai
 hash manifest can detect inconsistent bytes; it cannot authenticate its own source.
 See [bilingual release notes](docs/continuity-omega/READING_RELEASE.md) for the release boundary.
 
-## Français — Lire les données consignées et comprendre leurs limites
+## Français — CONTINUITÉ Ω : lire les données consignées et comprendre leurs limites
 
 Cette archive réunit les parcours de lecture hors ligne en français et en anglais, le prototype
-synthétique inchangé et l’édition immuable 1.1.0 de l’article au complet. Il s’agit d’une
+synthétique inchangé et l’édition immuable {PAPER_EDITION} de l’article au complet. Il s’agit d’une
 publication de lecture distincte : elle ne remplace ni ne révise la publication de l’article.
 Le tableau ci-dessus donne accès aux deux exemples lisibles, aux guides et aux PDF dans
 chaque langue. Les identifiants techniques conservent leur forme d’origine.
@@ -405,7 +406,7 @@ il ne peut pas authentifier sa propre origine. Consultez les
 
 def manifest_header() -> dict:
     return {"schema": "continuity-omega-reading/manifest/v1", "edition": VERSION,
-            "release_tag": TAG, "languages": list(LANGUAGES), "paper_edition": "1.1.0",
+            "release_tag": TAG, "languages": list(LANGUAGES), "paper_edition": PAPER_EDITION,
             "unchanged_core_source_commit": SOURCE_COMMIT,
             "paper_manifest_sha256": PAPER_MANIFEST_SHA256,
             "scope_en": SCOPE_EN, "scope_fr": SCOPE_FR}
@@ -565,8 +566,8 @@ class CompanionParser(argparse.ArgumentParser):
 
 def main() -> int:
     parser = CompanionParser(add_help=False, allow_abbrev=False, description=(
-        "Build or check the offline bilingual reading companion. / "
-        "Assembler ou contrôler le compagnon de lecture bilingue hors ligne."))
+        "Build or check the offline bilingual CONTINUITY Ω reading companion. / "
+        "Assembler ou contrôler le compagnon de lecture bilingue CONTINUITÉ Ω hors ligne."))
     parser._optionals.title = "Options / Options"
     parser.add_argument("-h", "--help", action="help",
                         help="Show help and exit / Afficher l’aide et quitter")

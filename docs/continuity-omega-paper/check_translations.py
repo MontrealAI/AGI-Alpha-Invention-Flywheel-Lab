@@ -15,6 +15,8 @@ import re
 
 ROOT = Path(__file__).resolve().parent
 PAIRS = ("README", "REVIEW", "SOURCE_MAP", "EVIDENCE")
+EDITION = "1.1.1"
+TITLES = {"en": "CONTINUITY", "fr": "CONTINUITÉ"}
 
 
 def require(condition, message):
@@ -47,7 +49,41 @@ def structural_signature(source):
     }
 
 
+def check_current_title(source, language):
+    """Guard the current title while preserving authentic cited historical titles."""
+    title = TITLES[language]
+    slots = {
+        "cover": r"\bfseries " + title + r"}\par",
+        "running header": r"\fancyhead[L]{\sffamily\small\color{muted}" + title + r" $\Omega$}",
+        "body macro": r"\newcommand{\om}{" + title + r" $\Omega$}",
+        "PDF metadata": r"pdftitle={" + title + r" \unichar{937}",
+    }
+    for label, expected in slots.items():
+        require(expected in source, f"Localized {language} title missing in {label} / titre localisé absent: {label}")
+    series_label = "INTELLIGENCE TRANSFORMATIONNELLE" if language == "fr" else "TRANSFORMATIONAL INTELLIGENCE"
+    series_slots = {
+        "cover series label": r"\hfill " + series_label + r" $\infty$}\par",
+        "running footer label": r"\fancyfoot[L]{\sffamily\scriptsize\color{muted}" + series_label + r" $\infty$}",
+    }
+    for label, expected in series_slots.items():
+        require(expected in source, f"Localized {language} display label missing in {label} / libellé localisé absent: {label}")
+    edition_labels = {
+        "en": ("RESEARCH EDITION ", "Research edition ", "Bilingual edition "),
+        "fr": ("ÉDITION DE RECHERCHE ", "Édition de recherche ", "Édition bilingue "),
+    }
+    for label in edition_labels[language]:
+        require(re.search(re.escape(label + EDITION) + r"(?=[}.])", source) is not None,
+                "Exact current edition missing / édition courante exacte absente: " + label)
+    if language == "fr":
+        current = source.split(r"\begin{thebibliography}", 1)[0]
+        require(re.search(r"\bCONTINUITY\b", current) is None,
+                "English title remains in current French manuscript / titre anglais restant dans l’article français courant")
+    return len(slots)
+
+
 def check_source_pair(english, french):
+    check_current_title(english, "en")
+    check_current_title(french, "fr")
     en, fr = structural_signature(english), structural_signature(french)
     for key in en:
         require(en[key] == fr[key], f"EN/FR manuscript mismatch / écart entre les articles: {key}")
@@ -58,10 +94,17 @@ def check_source_pair(english, french):
             "display_equations": len(en["equations"]), "inline_math": len(en["inline_math"]),
             "source_urls": len(en["source_urls"]), "code_identifiers": len(en["code_identifiers"]),
             "list_items": en["list_items"], "table_rows": sum(en["table_rows"]),
-            "propositions": en["environments"]["proposition"]}
+            "propositions": en["environments"]["proposition"], "localized_title_slots": 8,
+            "localized_series_label_slots": 4,
+            "current_edition_slots": 6}
 
 
 def check_claim_pair(english, french):
+    require(english.get("edition") == EDITION and french.get("edition") == EDITION,
+            "Current claim-register edition required / édition courante des registres requise")
+    for language, record in (("en", english), ("fr", french)):
+        require(isinstance(record.get("title"), str) and record["title"].startswith(TITLES[language] + " Ω"),
+                "Localized claim-register title required / titre localisé du registre requis: " + language)
     for key in ("schema_version", "edition", "reviewed_on", "sources"):
         require(english.get(key) == french.get(key), f"Claim-register identity mismatch / écart du registre: {key}")
     require(english.get("language") == "en" and french.get("language") == "fr",
@@ -96,7 +139,15 @@ def check(root=ROOT):
         for suffix, other in ((".md", ".fr.md"), (".fr.md", ".md")):
             body = (root / (stem + suffix)).read_text(encoding="utf-8")
             require(stem + other in body, f"Missing reciprocal language link / lien réciproque absent: {stem + suffix}")
+    for language, suffix in (("en", ""), ("fr", ".fr")):
+        guide = (root / ("README" + suffix + ".md")).read_text(encoding="utf-8")
+        citation = (root / ("CITATION" + suffix + ".cff")).read_text(encoding="utf-8")
+        require(guide.startswith("# " + TITLES[language] + " Ω\n"),
+                "Localized entry-guide title required / titre localisé du guide requis: " + language)
+        require('title: "' + TITLES[language] + " Ω" in citation and "version: " + EDITION in citation,
+                "Localized citation title/current edition required / titre de citation localisé et édition courante requis: " + language)
     counts["documentation_pairs"] = len(PAIRS)
+    counts["localized_metadata_titles"] = 6
     return counts
 
 
@@ -113,7 +164,18 @@ def self_test():
     claim = next(item for item in altered_number["claims"] if item["id"] == "R01")
     require("29" in claim["text"], "Numeric mutation target missing / cible numérique absente")
     claim["text"] = claim["text"].replace("29", "290", 1)
+    altered_title = json.loads(json.dumps(fr))
+    altered_title["title"] = altered_title["title"].replace("CONTINUITÉ", "CONTINUITY", 1)
     probes = (
+        ("untranslated French cover title", lambda: check_source_pair(english, french.replace(r"\bfseries CONTINUITÉ}\par", r"\bfseries CONTINUITY}\par", 1))),
+        ("untranslated French running title", lambda: check_source_pair(english, french.replace(r"\color{muted}CONTINUITÉ $\Omega$", r"\color{muted}CONTINUITY $\Omega$", 1))),
+        ("untranslated French body title", lambda: check_source_pair(english, french.replace(r"\newcommand{\om}{CONTINUITÉ", r"\newcommand{\om}{CONTINUITY", 1))),
+        ("untranslated French PDF title", lambda: check_source_pair(english, french.replace(r"pdftitle={CONTINUITÉ", r"pdftitle={CONTINUITY", 1))),
+        ("untranslated French claim title", lambda: check_claim_pair(en, altered_title)),
+        ("untranslated French cover series label", lambda: check_source_pair(english, french.replace(r"\hfill INTELLIGENCE TRANSFORMATIONNELLE", r"\hfill TRANSFORMATIONAL INTELLIGENCE", 1))),
+        ("untranslated French running footer label", lambda: check_source_pair(english, french.replace(r"\color{muted}INTELLIGENCE TRANSFORMATIONNELLE", r"\color{muted}TRANSFORMATIONAL INTELLIGENCE", 1))),
+        ("stale English cover edition", lambda: check_source_pair(english.replace("RESEARCH EDITION " + EDITION, "RESEARCH EDITION 1.1", 1), french)),
+        ("stale French running edition", lambda: check_source_pair(english, french.replace("Édition de recherche " + EDITION, "Édition de recherche 1.1.0", 1))),
         ("missing French proposition", lambda: check_source_pair(english, french.replace("\\begin{proposition}", "\\begin{definition}", 1))),
         ("altered capacity inequality", lambda: check_source_pair(english, french.replace("\\left\\lfloor\\frac{C}{q}\\right\\rfloor", "\\left\\lfloor\\frac{C}{q+1}\\right\\rfloor", 1))),
         ("altered claim status", lambda: check_claim_pair(en, altered)),
@@ -130,11 +192,11 @@ def self_test():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--self-test", action="store_true", help="Check four deliberate translation regressions / tester quatre altérations volontaires")
+    parser.add_argument("--self-test", action="store_true", help="Reject title, mathematics and evidence regressions / rejeter les régressions de titre, mathématiques et preuves")
     args = parser.parse_args()
     result = {"status": "STRUCTURAL_LANGUAGE_PARITY_PASSED", **check(),
-              "scope_en": "Structural checks preserve mathematical expressions, evidence identities, claim statuses and claim numeric literals. Editorial review is still needed for meaning.",
-              "scope_fr": "Les contrôles structurels préservent les expressions mathématiques, les identités des preuves, les statuts et les valeurs numériques des affirmations. Le sens exige une révision éditoriale."}
+              "scope_en": "Structural checks enforce localized current titles and preserve mathematical expressions, evidence identities, claim statuses and claim numeric literals. Editorial review is still needed for meaning.",
+              "scope_fr": "Les contrôles structurels imposent les titres courants localisés et préservent les expressions mathématiques, les identités des preuves, les statuts et les valeurs numériques des affirmations. Le sens exige une révision éditoriale."}
     if args.self_test:
         result["rejected_mutations"] = self_test()
     print(json.dumps(result, ensure_ascii=False, indent=2))

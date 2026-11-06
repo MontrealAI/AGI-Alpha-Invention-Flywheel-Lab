@@ -1,6 +1,6 @@
-# CONTINUITY Ω — Tenir parole, démontrer la reprise
+# CONTINUITÉ Ω — Tenir parole, démontrer la reprise
 
-[English](README.md) · **Français** · [Article de recherche, édition 1.1.0](../continuity-omega-paper/README.fr.md)
+[English](README.md) · **Français** · [Article de recherche, édition 1.1.1](../continuity-omega-paper/README.fr.md)
 
 ## Note de portée : la source historique v0.1
 

@@ -267,7 +267,7 @@ class ResearchSiteTests(unittest.TestCase):
                 self.assertIn(str(entry['bytes']) + ' ' + unit, reader)
                 self.assertIn('29 + 9', reader)
                 self.assertIn('4 / 4', reader)
-                self.assertIn('1.1.0', reader)
+                self.assertIn('1.1.1', reader)
                 self.assertIn('releases/tag/continuity-omega-v1.0.0', reader)
                 suffix = '.fr' if lang == 'fr-CA' else ''
                 for file in ('README' + suffix + '.md', 'REVIEW' + suffix + '.md',
@@ -283,7 +283,13 @@ class ResearchSiteTests(unittest.TestCase):
                 structured = json.loads(re.search(
                     r'<script type="application/ld\+json">(.*?)</script>', reader, re.S).group(1))
                 self.assertEqual(structured['inLanguage'], lang)
-                self.assertEqual(structured['version'], '1.1.0')
+                title = 'CONTINUITÉ Ω' if lang == 'fr-CA' else 'CONTINUITY Ω'
+                self.assertTrue(structured['name'].startswith(title))
+                self.assertIn(title, re.search(r'<title>(.*?)</title>', reader, re.S).group(1))
+                for attribute in ('citation_title', 'og:title', 'twitter:title'):
+                    self.assertRegex(reader, r'(?:name|property)="' + attribute + r'" content="' + title)
+                self.assertIn('<h2 id="read-title">' + title + '</h2>', reader)
+                self.assertEqual(structured['version'], '1.1.1')
                 self.assertEqual(structured['encoding']['contentUrl'], site.PUBLIC_SITE + slug + '.pdf')
                 fields = ('id', 'name', 'type', 'min', 'max', 'step', 'value')
                 inputs = [dict(re.findall(r'([\w-]+)="([^"]*)"', tag))
@@ -327,6 +333,8 @@ class ResearchSiteTests(unittest.TestCase):
                     ('x-default', site.PUBLIC_SITE + 'continuity-omega-media.html'),
                 })
                 self.assertIn(scope, gallery)
+                title = 'CONTINUITÉ Ω' if lang == 'fr-CA' else 'CONTINUITY Ω'
+                self.assertIn(title, re.search(r'<title>(.*?)</title>', gallery, re.S).group(1))
                 self.assertEqual(gallery.count('<details>'), 4)
                 self.assertEqual(gallery.count('data-animation-control='), 4)
                 self.assertNotRegex(gallery, r'<img\b[^>]*\bsrc="[^"]+\.gif"')

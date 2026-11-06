@@ -1,6 +1,6 @@
-# CONTINUITY Ω — Contrat d’acceptation du premier pilote payant (proposé ; aucune approbation réelle)
+# CONTINUITÉ Ω — Contrat d’acceptation du premier pilote payant (proposé ; aucune approbation réelle)
 
-[English](REAL_PILOT.md) · **Français** · [Article de recherche, édition 1.1.0](../continuity-omega-paper/README.fr.md)
+[English](REAL_PILOT.md) · **Français** · [Article de recherche, édition 1.1.1](../continuity-omega-paper/README.fr.md)
 
 ## Note de portée : la source historique v0.1
 
@@ -25,7 +25,7 @@ La reproduction présentée dans l’article est figée au commit [`a755d0375693
 3. Autorisations : champs de données précis pouvant être partagés, parties et juridictions, conservation, restrictions et autorité d’activation d’urgence. Aucun document client n’entre dans un dépôt public.
 4. Fournisseur : produit qualifié, créneau et quantité réellement réservés, capacité démontrée après déduction des autres engagements, domaines de défaillance communs, politique d’annulation et de remboursement, assurance, canal de réponse effectif et solution si la capacité devient indisponible.
 5. Économie : plafond de l’acheteur, meilleures solutions existantes, coûts complets d’acquisition, de mise en œuvre, d’exercice, de production, de transport, de vérification, de soutien, d’assurance, de financement et de traitement juridique, obligations de remboursement et réserves de protection ; chaque étape de trésorerie est financée par les mécanismes de comptes autorisés existants.
-6. Comparaison : (A) reprise compétente par le prestataire existant et fournisseur de secours ; (B) même fournisseur, mêmes enregistrements et mêmes ressources avec utilisation directe d’une IA de pointe ; (C) mise à l’épreuve et transfert CONTINUITY Ω ; (D) absence d’achat ou organisation de la solution par le client lui-même. Comptabiliser les coûts complets du cycle de vie et toutes les interventions humaines séparément.
+6. Comparaison : (A) reprise compétente par le prestataire existant et fournisseur de secours ; (B) même fournisseur, mêmes enregistrements et mêmes ressources avec utilisation directe d’une IA de pointe ; (C) mise à l’épreuve et transfert CONTINUITÉ Ω ; (D) absence d’achat ou organisation de la solution par le client lui-même. Comptabiliser les coûts complets du cycle de vie et toutes les interventions humaines séparément.
 7. Tests : commandes perdues, modifications périmées, commandes annulées, doublons, nouvelles commandes tardives, restauration à partir d’un historique incomplet, surréservation du fournisseur, défaillance corrélée, refus, production défectueuse, paiement retardé et échec de la reprise.
 
 ### Évaluation du résultat
