@@ -11,6 +11,7 @@ jobs:
     timeout-minutes: 360
     permissions:
       contents: write
+      actions: read
     env:
       GH_TOKEN: ${{ github.token }}
       EDITION: docs/surf-the-exponential/editions/1.2.0
