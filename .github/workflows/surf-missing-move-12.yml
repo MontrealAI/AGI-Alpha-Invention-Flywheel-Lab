@@ -3,7 +3,6 @@ on:
   push:
     branches: ['paper/surf-missing-move-1-2']
     paths:
-      - '.github/surf-1.2-request.json'
       - '.github/surf-1.2-publish.json'
       - '.github/workflows/surf-missing-move-12.yml'
       - 'docs/surf-the-exponential/editions/1.2.0/**'
@@ -20,6 +19,73 @@ jobs:
   qualify:
     runs-on: ubuntu-latest
     timeout-minutes: 360
+    env:
+      EDITION: docs/surf-the-exponential/editions/1.2.0
+    steps:
+      - name: Register actual platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Verify tracked canonical PDF and all evidence families
+        run: |
+          git ls-files --error-unmatch "$EDITION/canonical/SURF_THE_EXPONENTIAL.pdf"
+          cd "$EDITION"
+          python3 package.py --verify
+          python3 check_construct_case.py
+          python3 check_study.py
+          python3 check_decision_case.py
+          python3 -m unittest -v test_construct_case test_study test_decision_case
+          python3 -O -m unittest -v test_construct_case test_study test_decision_case
+      - name: Install standard public publication toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended poppler-utils
+      - name: Rebuild and package reviewed canonical edition
+        run: |
+          python3 "$EDITION/build.py" --output "$RUNNER_TEMP/surf12-first.pdf"
+          python3 "$EDITION/package.py" --output-dir "$RUNNER_TEMP/surf12-publication"
+          python3 "$EDITION/package.py" --verify --output-dir "$RUNNER_TEMP/surf12-publication"
+          pdftotext -layout "$EDITION/canonical/SURF_THE_EXPONENTIAL.pdf" "$RUNNER_TEMP/canonical-text.txt"
+          pdftotext -layout "$RUNNER_TEMP/surf12-first.pdf" "$RUNNER_TEMP/rebuilt-text.txt"
+          cmp "$RUNNER_TEMP/canonical-text.txt" "$RUNNER_TEMP/rebuilt-text.txt"
+      - name: Execute and rebuild from a fresh Git source archive
+        run: |
+          mkdir "$RUNNER_TEMP/surf12-git"
+          git archive HEAD "$EDITION" | tar -x -C "$RUNNER_TEMP/surf12-git"
+          cd "$RUNNER_TEMP/surf12-git/$EDITION"
+          python3 package.py --verify
+          python3 check_construct_case.py
+          python3 check_study.py
+          python3 check_decision_case.py
+          python3 -m unittest -v test_construct_case test_study test_decision_case
+          python3 build.py --output "$RUNNER_TEMP/surf12-git.pdf"
+          cmp "$RUNNER_TEMP/surf12-first.pdf" "$RUNNER_TEMP/surf12-git.pdf"
+      - name: Execute the extracted downloadable source archive
+        run: |
+          mkdir "$RUNNER_TEMP/surf12-extracted"
+          unzip -q "$RUNNER_TEMP/surf12-publication/SURF_THE_EXPONENTIAL_SOURCE.zip" -d "$RUNNER_TEMP/surf12-extracted"
+          cd "$RUNNER_TEMP/surf12-extracted"
+          python3 package.py --verify
+          python3 check_construct_case.py
+          python3 check_study.py
+          python3 check_decision_case.py
+          python3 -m unittest -v test_construct_case test_study test_decision_case
+          cd "$RUNNER_TEMP/surf12-publication"
+          sha256sum -c SHA256SUMS
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: surf12-publication-${{ github.sha }}
+          path: ${{ runner.temp }}/surf12-publication/
+          if-no-files-found: error
+          retention-days: 7
+  release:
+    needs: qualify
+    if: github.event_name == 'push' && github.ref == 'refs/heads/paper/surf-missing-move-1-2'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
     permissions:
       contents: write
     env:
@@ -30,150 +96,42 @@ jobs:
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.sha }}
+          fetch-depth: 2
           persist-credentials: false
-      - name: Construct the reviewed versioned source without modifying prior editions
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: surf12-publication-${{ github.sha }}
+          path: ${{ runner.temp }}/surf12-publication
+      - name: Verify exact reviewed assets and their source commit
         run: |
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,sys
-          base=pathlib.Path('docs/surf-the-exponential')
-          target=pathlib.Path(os.environ['EDITION'])
-          request=pathlib.Path('.github/surf-1.2-request.json')
-          if not request.exists():
-              if not (target/'PUBLICATION.json').is_file():
-                  raise SystemExit('No source request or established edition manifest')
-              raise SystemExit(0)
-          spec=json.loads(request.read_text())
-          parent=(base/'PUBLICATION.json').read_bytes()
-          if hashlib.sha256(parent).hexdigest()!=spec['parent_manifest_sha256']:
-              raise SystemExit('Parent edition changed; refusing to rebase patches silently')
-          original=json.loads(parent)
-          for row in original['source_files']:
-              name=row['path']; source=base/name; destination=target/name
-              if pathlib.PurePosixPath(name).is_absolute() or '..' in pathlib.PurePosixPath(name).parts:
-                  raise SystemExit('Unsafe source path')
-              data=source.read_bytes()
-              if hashlib.sha256(data).hexdigest()!=row['sha256']:
-                  raise SystemExit('Parent source identity mismatch: '+name)
-              destination.parent.mkdir(parents=True,exist_ok=True)
-              if destination.exists():
-                  raise SystemExit('Would overwrite an independently supplied file: '+name)
-              text=data.decode('utf-8')
-              if name in spec['operations']:
-                  lines=text.splitlines(keepends=True)
-                  edits=spec['operations'][name]['edits']
-                  for change in reversed(edits):
-                      lines[change['start']:change['end']]=change['text'].splitlines(keepends=True)
-                  data=''.join(lines).encode('utf-8')
-              destination.write_bytes(data)
-          sys.path.insert(0,str(target.resolve()))
-          import decision_case
-          (target/'decision_protocol.json').write_text(json.dumps(decision_case.PROTOCOL,indent=2,sort_keys=True)+'\n')
-          (target/'evidence/decision_results.json').write_text(json.dumps(decision_case.study(),indent=2,sort_keys=True)+'\n')
-          for name,expected in spec['expected'].items():
-              data=(target/name).read_bytes()
-              if hashlib.sha256(data).hexdigest()!=expected:
-                  raise SystemExit('Reviewed revision identity mismatch: '+name)
-          print('All',len(spec['expected']),'reviewed source files match.')
-          PY
-      - name: Check every evidence family and both Python modes
-        run: |
-          cd "$EDITION"
-          python3 check_construct_case.py
-          python3 check_study.py
-          python3 check_decision_case.py
-          python3 -m unittest -v test_construct_case test_study test_decision_case
-          python3 -O -m unittest -v test_construct_case test_study test_decision_case
-      - name: Install the standard public publication toolchain
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended poppler-utils
-      - name: Compile twice and bind only a new edition
-        run: |
-          python3 "$EDITION/build.py" --output "$RUNNER_TEMP/surf12-first.pdf"
-          python3 "$EDITION/build.py" --output "$RUNNER_TEMP/surf12-second.pdf"
-          cmp "$RUNNER_TEMP/surf12-first.pdf" "$RUNNER_TEMP/surf12-second.pdf"
-          if test -f "$EDITION/PUBLICATION.json"; then
-            python3 "$EDITION/package.py" --verify
-          else
-            mkdir -p "$EDITION/canonical"
-            cp "$RUNNER_TEMP/surf12-first.pdf" "$EDITION/canonical/SURF_THE_EXPONENTIAL.pdf"
-            python3 "$EDITION/make_publication.py"
-          fi
-          python3 "$EDITION/package.py" --verify
-          python3 "$EDITION/package.py" --output-dir "$RUNNER_TEMP/surf12-publication"
-          python3 "$EDITION/package.py" --verify --output-dir "$RUNNER_TEMP/surf12-publication"
-          pdftotext -layout "$EDITION/canonical/SURF_THE_EXPONENTIAL.pdf" "$RUNNER_TEMP/canonical-text.txt"
-          pdftotext -layout "$RUNNER_TEMP/surf12-first.pdf" "$RUNNER_TEMP/rebuilt-text.txt"
-          cmp "$RUNNER_TEMP/canonical-text.txt" "$RUNNER_TEMP/rebuilt-text.txt"
-      - name: Execute the clean extracted source package
-        run: |
-          mkdir "$RUNNER_TEMP/surf12-extracted"
-          unzip -q "$RUNNER_TEMP/surf12-publication/SURF_THE_EXPONENTIAL_SOURCE.zip" -d "$RUNNER_TEMP/surf12-extracted"
-          cd "$RUNNER_TEMP/surf12-extracted"
-          python3 package.py --verify
-          python3 check_construct_case.py
-          python3 check_study.py
-          python3 check_decision_case.py
-          python3 -m unittest -v test_construct_case test_study test_decision_case
-          python3 build.py --output "$RUNNER_TEMP/surf12-extracted.pdf"
-          cmp "$RUNNER_TEMP/surf12-first.pdf" "$RUNNER_TEMP/surf12-extracted.pdf"
-          cd "$RUNNER_TEMP/surf12-publication"
-          sha256sum -c SHA256SUMS
-      - name: Record the qualified source on the owned publication branch
-        if: github.event_name == 'push'
-        shell: bash
-        run: |
-          set -euo pipefail
-          if test -f .github/surf-1.2-request.json; then
-            test "$GITHUB_REF" = refs/heads/paper/surf-missing-move-1-2
-            remote=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/paper/surf-missing-move-1-2" --jq .object.sha)
-            test "$remote" = "$GITHUB_SHA"
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add -- "$EDITION"
-            git rm -- .github/surf-1.2-request.json
-            python3 - <<'PY'
-          import os,subprocess
-          paths=subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines()
-          prefix=os.environ['EDITION']+'/'
-          if not paths or any(not p.startswith(prefix) and p!='.github/surf-1.2-request.json' for p in paths):
-              raise SystemExit('Unrelated staged path; refusing publication commit')
-          PY
-            git commit -m 'Build and qualify SURF 1.2 from reviewed sources; preserve prior editions'
-            auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
-            git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin HEAD:refs/heads/paper/surf-missing-move-1-2
-          fi
-          git rev-parse HEAD > "$RUNNER_TEMP/surf12-publication/SOURCE_COMMIT.txt"
-      - name: Publish only the explicitly reviewed artifact identities
-        if: github.event_name == 'push'
-        shell: bash
-        run: |
-          set -euo pipefail
-          approval=.github/surf-1.2-publish.json
-          if ! test -f "$approval"; then
-            echo 'Build complete. Release awaits exact-artifact visual review.'
-            exit 0
-          fi
-          test "$GITHUB_REF" = refs/heads/paper/surf-missing-move-1-2
           python3 - <<'PY'
           import hashlib,json,os,pathlib,subprocess
           a=json.loads(pathlib.Path('.github/surf-1.2-publish.json').read_text())
           if a['tag']!='surf-the-exponential-v1.2.0' or a['reviewed_pages']!=35:
-              raise SystemExit('Wrong publication authorization')
+              raise SystemExit('Wrong versioned publication review')
           assets=pathlib.Path(os.environ['RUNNER_TEMP'])/'surf12-publication'
           for name,h in a['asset_sha256'].items():
               if hashlib.sha256((assets/name).read_bytes()).hexdigest()!=h:
                   raise SystemExit('Reviewed asset changed: '+name)
           source=a['source_commit']
+          subprocess.run(['git','fetch','--no-tags','--depth=1','origin',source],check=True)
+          for suffix,expected in [('PUBLICATION.json',a['asset_sha256']['PUBLICATION.json']),('canonical/SURF_THE_EXPONENTIAL.pdf',a['asset_sha256']['SURF_THE_EXPONENTIAL.pdf'])]:
+              data=subprocess.check_output(['git','show',source+':'+os.environ['EDITION']+'/'+suffix])
+              if hashlib.sha256(data).hexdigest()!=expected:
+                  raise SystemExit('Approved canonical source mismatch: '+suffix)
           for row in json.loads((assets/'PUBLICATION.json').read_text())['source_files']:
-              path=os.environ['EDITION']+'/'+row['path']
-              data=subprocess.check_output(['git','show',source+':'+path])
+              data=subprocess.check_output(['git','show',source+':'+os.environ['EDITION']+'/'+row['path']])
               if hashlib.sha256(data).hexdigest()!=row['sha256']:
-                  raise SystemExit('Approved source commit mismatch: '+path)
+                  raise SystemExit('Approved source commit mismatch: '+row['path'])
+          print('Verified 35-page canonical PDF, all 32 source files and four release assets.')
           PY
+      - name: Publish or verify the new version without replacing prior editions
+        shell: bash
+        run: |
+          set -euo pipefail
           tag=surf-the-exponential-v1.2.0
-          source=$(python3 -c "import json; print(json.load(open('$approval'))['source_commit'])")
+          source=$(python3 -c "import json; print(json.load(open('.github/surf-1.2-publish.json'))['source_commit'])")
           assets="$RUNNER_TEMP/surf12-publication"
           if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" > "$RUNNER_TEMP/existing12.json" 2> "$RUNNER_TEMP/existing12.err"; then
             test "$(gh api "repos/$GITHUB_REPOSITORY/commits/$tag" --jq .sha)" = "$source"
@@ -197,12 +155,15 @@ jobs:
 
           Verified finite evidence: 2,560 relation–partition checks, 840 cost/funding cases, nine named cases and 58 regression/adversarial tests. A separately coded complete-policy oracle ties the constructor. Prices, access and world semantics are authored assumptions, not real customers, measured frontier-model superiority, or an achieved economic flywheel.
 
-          The PDF, complete editable LaTeX/HTML/code package, publication identity manifest and SHA256SUMS are provided below. The extracted source rebuilds and runs all three checkers. Previous 1.0 and 1.1 releases are unchanged. This versioned research publication does not promote the operating enterprise or replace its native accounts. Canonical website promotion is a separate integration step.
+          The PDF, complete editable LaTeX/HTML/code package, publication identity manifest and SHA256SUMS are provided below. The extracted source runs all three checkers. Previous 1.0 and 1.1 releases are unchanged. This versioned research publication does not promote the operating enterprise or replace its native accounts. Canonical website promotion is a separate integration step.
           NOTES
             gh release create "$tag" "$assets/SURF_THE_EXPONENTIAL.pdf" "$assets/SURF_THE_EXPONENTIAL_SOURCE.zip" "$assets/PUBLICATION.json" "$assets/SHA256SUMS" --repo "$GITHUB_REPOSITORY" --verify-tag --latest=false --title 'SURF THE EXPONENTIAL — The Missing Move · 1.2' --notes-file "$RUNNER_TEMP/notes12.md"
           fi
+      - name: Independently retrieve and execute the published release
+        run: |
+          assets="$RUNNER_TEMP/surf12-publication"
           mkdir "$RUNNER_TEMP/downloaded12"
-          gh release download "$tag" --repo "$GITHUB_REPOSITORY" --dir "$RUNNER_TEMP/downloaded12"
+          gh release download surf-the-exponential-v1.2.0 --repo "$GITHUB_REPOSITORY" --dir "$RUNNER_TEMP/downloaded12"
           for f in SURF_THE_EXPONENTIAL.pdf SURF_THE_EXPONENTIAL_SOURCE.zip PUBLICATION.json SHA256SUMS; do
             cmp "$assets/$f" "$RUNNER_TEMP/downloaded12/$f"
           done
@@ -215,10 +176,4 @@ jobs:
           python3 check_study.py
           python3 check_decision_case.py
           python3 -m unittest -v test_construct_case test_study test_decision_case
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        if: always()
-        with:
-          name: surf12-publication-${{ github.sha }}
-          path: ${{ runner.temp }}/surf12-publication/
-          if-no-files-found: warn
-          retention-days: 7
+          python3 -O -m unittest -v test_construct_case test_study test_decision_case
