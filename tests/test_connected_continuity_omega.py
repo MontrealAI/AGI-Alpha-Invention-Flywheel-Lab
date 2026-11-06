@@ -2,7 +2,7 @@
 import copy
 import unittest
 
-from campaign.continuity_omega_20261106.continuity_proof import benchmark, check_restore, digest, make_proof, replay, verify_proof
+from campaign.continuity_omega_20261106.continuity_proof import benchmark, check_restore, digest, make_proof, ordinary_independent_reconciliation, replay, verify_proof
 
 
 class ContinuityProofTests(unittest.TestCase):
@@ -58,6 +58,12 @@ class ContinuityProofTests(unittest.TestCase):
         bad = self.events + [{"seq": 4, "kind": "refund", "order": "b"}]
         self.assertNotEqual(replay(bad), self.restore)
         self.assertIn("RESTORED_OBLIGATIONS_DIFFER", check_restore(bad, self.restore, digest(bad), 1, 5))
+
+    def test_competent_comparator_is_independent_replay(self):
+        self.assertTrue(ordinary_independent_reconciliation(self.events, self.restore, self.anchor, 1, 5))
+        self.assertFalse(ordinary_independent_reconciliation(self.events, {"a": self.restore["a"]}, self.anchor, 1, 5))
+        self.assertFalse(ordinary_independent_reconciliation(self.events, self.restore, "0" * 64, 1, 5))
+        self.assertFalse(ordinary_independent_reconciliation(self.events, self.restore, self.anchor, 6, 5))
 
     def test_predeclared_fixture_tie_and_no_deploy(self):
         result = benchmark()
