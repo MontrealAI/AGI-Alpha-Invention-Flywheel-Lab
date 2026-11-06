@@ -117,27 +117,36 @@ def load_registry(root):
         raise ValueError('P0_DUPLICATE_MANIFEST_DISPATCH')
     routes = set()
     if functions:
+        fn = functions[0]
+        args = fn.args
+        # A replaced/decorated dispatcher or an arbitrary earlier assignment
+        # cannot certify the active function. Accept only the observed direct
+        # manifest argument and a manifest-derived first selector statement.
+        direct_parameter = (not fn.decorator_list and not args.posonlyargs
+                            and len(args.args) == 1 and args.args[0].arg == 'manifest'
+                            and not args.vararg and not args.kwarg and not args.kwonlyargs)
+        rebound = any(isinstance(n, ast.Name) and n.id == 'source_paths_for_manifest'
+                      and isinstance(n.ctx, (ast.Store, ast.Del))
+                      for n in ast.walk(program))
+        if not direct_parameter or rebound:
+            return found, routes
         # Only direct, reachable branches in the outer dispatcher can qualify.
-        # A nested def or an if after an unconditional return is not a route.
+        # Nested functions, arbitrary statements and reassignments of producer
+        # symbols before dispatch fail closed, instead of asserting semantics.
         seen = set()
         schema_bound = False
-        for node in functions[0].body:
+        for node in fn.body:
             if isinstance(node, ast.Return):
                 break
             if isinstance(node, ast.Assign):
-                targets = [target.id for target in node.targets if isinstance(target, ast.Name)]
-                if 'schema' in targets:
-                    if (schema_bound or len(targets) != 1
-                            or not _same_ast(node.value, _SCHEMA_SELECTOR)):
-                        break  # Unsupported selector: never credit later branches.
-                    schema_bound = True
+                if (schema_bound or len(node.targets) != 1
+                        or not _named(node.targets[0], 'schema')
+                        or not _same_ast(node.value, _SCHEMA_SELECTOR)):
+                    break
+                schema_bound = True
                 continue
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                continue  # Nested lexical scope is never called by this scan.
             if not isinstance(node, ast.If):
-                if isinstance(node, (ast.Import, ast.ImportFrom, ast.Expr, ast.Pass)):
-                    continue
-                break  # Unknown control flow: fail closed on subsequent routes.
+                break  # Unknown control flow or shadowing: no later route counts.
             if not schema_bound or node.orelse:
                 break
             comparison = node.test
