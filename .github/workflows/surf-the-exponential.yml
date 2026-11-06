@@ -91,7 +91,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          tag=surf-the-exponential-v1.1.0
+          tag=surf-the-exponential-v1.2.0
           assets="$RUNNER_TEMP/surf-publication"
           (cd "$assets" && sha256sum --check SHA256SUMS)
           if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" > "$RUNNER_TEMP/surf-existing.json" 2> "$RUNNER_TEMP/surf-existing.err"; then
@@ -109,17 +109,17 @@ jobs:
 
           **Find what the answer missed. Build what the world is missing.**
 
-          Research edition 1.1.0 by Vincent Boucher · MONTREAL.AI / QUEBEC.AI.
+          Research edition 1.2.0 by Vincent Boucher · MONTREAL.AI / QUEBEC.AI.
 
           A research synthesis of Transformational Intelligence, ALPHA GENESIS FLYWHEEL Ω, and Invent the Economy: turn evidence-grounded criticism into missing capabilities, viable productive arrangements, and better discovery on fresh work.
 
           Read the accessible [browser edition](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/surf-the-exponential.html), download the PDF, or rebuild the complete editable LaTeX and executable evidence from the source archive.
 
-          Edition 1.1 adds an executable construction and changed-task successor: 36 initial and 54 successor checks, minimal representations of three and six labels, and independent enumeration of all 21,147 partitions. Conventional constructions tie. A full-refund counterexample shows why 50 units fund the successful deposit path but 90 are needed to protect the complete promised arrangement.
+          **What should survive the answer?** Edition 1.2 adds a costed choice among preserving a sufficient record, preserving access to its source, and relying on ordinary reconstruction. Cheaper reconstruction can reverse the best retained asset; rare opportunities can favor ordinary access. A stronger deferred-access control wins when identical access can be bought later. The browser edition includes an accessible interactive exploration with exact ties and an explicit late-access alternative.
 
-          The source includes separate checkers, focused mutation tests, and the original 2,304-point review audit with adverse cases and conventional controls that tie or win. These are authored finite models, not observed frontier-model superiority or realized commerce. The stronger empirical programme remains prospective.
+          The 32-page manuscript retains the verified three/six-label construction, changed-task successor, full-refund counterexample and 2,304-point review audit. Five new retention cases contain 16 policy outcomes. Separate checkers and 35 focused tests verify the finite models, including conventional ties and wins. These are authored conditional calculations, not observed frontier-model superiority or realized commerce. The stronger empirical programme remains prospective.
 
-          The [original edition 1.0.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.0.0) remains available with its original artifacts.
+          Earlier [edition 1.0.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.0.0) and [edition 1.1.0](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/surf-the-exponential-v1.1.0) remain available with their original artifacts.
 
           `PUBLICATION.json` binds the reviewed PDF to its source inputs. `SHA256SUMS` verifies the release assets. The archive is self-contained; its README explains reproduction and the scope of byte reproducibility across TeX environments.
           NOTES

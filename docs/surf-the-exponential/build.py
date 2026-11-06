@@ -11,7 +11,7 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parent
-EPOCH = "1793836800"  # Fixed source epoch: 5 November 2026, 00:00:00 UTC.
+EPOCH = "1793923200"  # Fixed source epoch: 6 November 2026, 00:00:00 UTC.
 
 def build(output: Path) -> dict:
     for binary in ("pdflatex", "bibtex"):
