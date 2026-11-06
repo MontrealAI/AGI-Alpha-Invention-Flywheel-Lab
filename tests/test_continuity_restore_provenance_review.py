@@ -63,10 +63,20 @@ class RestoredObligationStateReview(unittest.TestCase):
             {"order_id": "LBL-100", "quantity": 1100},
             {"order_id": "LBL-200", "quantity": 800},
         ]
+        # Under the reduced 1800-unit load the original 1800-unit supplier Q
+        # becomes eligible and wins the normal lowest-quote selector. The
+        # original fixture's supplier-cost line is bound to P, so prevent an
+        # UNRELATED quote mismatch from masking this provenance test.
+        case["suppliers"][1]["capacity_units"] = 1700
         try:
             handoff, passport = construct(case)
-        except DrillRejected:
-            return  # Fail-closed uncertainty is permitted.
+        except DrillRejected as exc:
+            self.assertRegex(
+                str(exc).lower(), r"restor|fulfill|provenance|snapshot",
+                "Only a specific restoration/fulfillment refusal counts "
+                "as safe fail-closed behavior, not arbitrary input rejection.",
+            )
+            return
         # Correct source replay owes 1000 + 800, not the snapshot's 1900.
         self.assertEqual(handoff["required_units"], 1800)
         result = audit(case, handoff, passport)
