@@ -143,6 +143,49 @@ class JoinPreflightTests(unittest.TestCase):
         self.assertIn('public-portfolio-20261102/native-services/v2',
                       result['missing_main_manifest_routes'])
 
+    def test_dead_producer_operand_cannot_qualify_v2(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        source = path.read_text()
+        needle = "  return SOURCE_PATHS + tuple(source_paths(None))"
+        # The first occurrence is v1; change only the v2 branch.
+        v2 = " if schema == 'public-portfolio-20261102/native-services/v2':\\n" + needle
+        replacement = (" if schema == 'public-portfolio-20261102/native-services/v2':\\n"
+                       "  return SOURCE_PATHS if True else SOURCE_PATHS + tuple(source_paths(None))")
+        self.assertIn(v2.replace('\\n', '\n'), source)
+        path.write_text(source.replace(v2.replace('\\n', '\n'),
+                                       replacement.replace('\\n', '\n')))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_wrong_selector_binding_cannot_qualify_v2(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        text = path.read_text()
+        self.assertIn(" schema = manifest.get('schema') if isinstance(manifest, dict) else None", text)
+        path.write_text(text.replace(
+            " schema = manifest.get('schema') if isinstance(manifest, dict) else None",
+            " schema = None"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_dead_producer_inside_actual_return_wrapper_is_not_credited(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        text = path.read_text()
+        original = (" if schema == 'public-portfolio-20261102/native-services/v2':\n"
+                    "  return SOURCE_PATHS + tuple(source_paths(None))")
+        injected = (" if schema == 'public-portfolio-20261102/native-services/v2':\n"
+                    "  return tuple(dict.fromkeys(SOURCE_PATHS if True else "
+                    "SOURCE_PATHS + tuple(source_paths(None))))")
+        self.assertIn(original, text)
+        path.write_text(text.replace(original, injected))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
     def test_symlink_and_traversal_refused(self):
         (self.c / 'bad.py').symlink_to(self.c / 'a.py')
         with self.assertRaisesRegex(ValueError, 'P0_SYMLINK_SOURCE_REFUSED'):
