@@ -13,6 +13,50 @@ import time
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 
+PACKET_FIELDS={'result','public_observation','manifest','native_export','source_hashes','delivered'}
+RESULT_FIELDS={'accepted','actual_revenue_microUSD','arm','audit_accepted','before_successor',
+               'buyer_buys','funding_decision','prepaid','price_microUSD','scope',
+               'seed_can_fund_successor','successor_budget_microUSD','successor_funded',
+               'summary','tamper_rejected','tax_basis','trailing_365_profit'}
+
+
+def audit_registered_trade(packet, source):
+    """Require the frozen contract, buyer budget, lifecycle and evidence scope."""
+    from commercial.ledger import digest
+    from commercial.terms_exact_v2 import prospective_terms
+    from campaign.genesis_commitment001 import service
+    r=packet['result'];selling=r['arm']!='fixed'
+    name=service.DELIVERIES+'restore-first.json'
+    if set(packet['delivered'])!=({name} if selling else set()):
+        raise ValueError('REGISTERED_DELIVERY_INVENTORY_CHANGED')
+    expected=[]
+    if selling:
+        artifact=packet['delivered'][name]
+        terms=prospective_terms('first',r['price_microUSD'],18,10,residual=50_000_000)
+        expected=[('wallet',{'buyer':'buyer-first','amount':3_500_000_000}),
+                  ('register_terms',{'id':'first-terms','terms':terms}),
+                  ('offer',{'buyer':'buyer-first','deadline':11,'id':'first',
+                            'job_id':'restore-first','price':r['price_microUSD'],
+                            'terms_id':'first-terms'})]
+        for action in ('consent','fund','prepare','release'):
+            args={'id':'first','action':action,'event_id':'first-'+action}
+            if action=='prepare':args['artifact_sha256']=digest(artifact)
+            expected.append(('event',args))
+        expected.append(('mature',{'id':'first','event_id':'maturity:first:'+digest(terms)[:20]}))
+        broken=dict(artifact);broken['request_id']='wrong'
+        if service.verify_delivery(source,packet['manifest'],'restore-first',broken)['accepted']:
+            raise ValueError('REGISTERED_TAMPER_PROBE_NOT_REJECTED')
+    actual=[(a['op'],a['args']) for a in packet['native_export']['ledger']['actions'] if a['op']!='cost']
+    if actual!=expected:raise ValueError('REGISTERED_TRADE_CONTRACT_CHANGED')
+    if (r['prepaid'] is not selling or r['audit_accepted'] is not True or
+            r['accepted'] is not selling or r['buyer_buys'] is not selling or
+            r['tamper_rejected'] is not (True if selling else None) or
+            r['successor_funded'] is not False or
+            type(r['seed_can_fund_successor']) is not bool or
+            type(r['actual_revenue_microUSD']) is not int or
+            r['tax_basis']!='20 percent provision at first collection; no subsequent negative-tax credit assumed'):
+        raise ValueError('REGISTERED_RESULT_PRESENTATION_CHANGED')
+
 
 def audit_registered_costs(export, arm, price):
     """Bind a coherent native history to this experiment's frozen cost schedule.
@@ -56,13 +100,18 @@ def audit_registered_costs(export, arm, price):
 def audit_packet(path):
     # Only native canonical auditor and bound acceptance decide delivery/finance.
     from connected_enterprise.finance import audit_journal
-    from commercial.ledger import strict_json
+    from commercial.ledger import strict_json, digest
     from campaign.genesis_commitment001 import service
     path=Path(path)
     with gzip.open(path,'rb') as stream:
         raw=stream.read(8_000_001)
     if len(raw)>8_000_000:raise ValueError('BOUNDED_ENGINEERING_PACKET_REQUIRED')
     p=strict_json(raw)
+    if type(p) is not dict or set(p)!=PACKET_FIELDS or type(p['result']) is not dict or set(p['result'])!=RESULT_FIELDS:
+        raise ValueError('EXACT_REGISTERED_PUBLIC_PACKET_REQUIRED')
+    if any(type(p['result'][name]) is not int for name in
+           ('price_microUSD','successor_budget_microUSD','actual_revenue_microUSD')):
+        raise ValueError('EXACT_RESULT_MONEY_REQUIRED')
     from tests.test_commitment_quote_policy import public_observation
     from research.commitment_quote_policy import decide, successor_funding_decision
     from campaign.genesis_commitment001.delivery import default_requests
@@ -97,15 +146,16 @@ def audit_packet(path):
             dest.write_text(json.dumps(artifact,sort_keys=True,allow_nan=False))
         result=audit_journal(p['native_export'],root=source,manifest=p['manifest'])
         if result['accepted'] is not True:raise ValueError('NATIVE_REPLAY_REJECTED')
-        if p['result']['summary']!=p['native_export']['ledger']['summary']:
+        if digest(p['result']['summary'])!=digest(p['native_export']['ledger']['summary']):
             raise ValueError('SUMMARY_NOT_NATIVE_BOUND')
         if p['native_export']['ledger']['config']['opening']!=100_000_000_000:
             raise ValueError('EXACT_DISPOSABLE_SEED_REQUIRED')
         if p['native_export']['ledger']['config']['contract']!='public-quote-fixture-'+arm:
             raise ValueError('ACCOUNT_ARM_BINDING_CHANGED')
-        if p['native_export']['ledger']['config']['working']!=0:
+        if type(p['native_export']['ledger']['config']['working']) is not int or p['native_export']['ledger']['config']['working']!=0:
             raise ValueError('REGISTERED_WORKING_RESERVE_CHANGED')
         audit_registered_costs(p['native_export'],arm,price)
+        audit_registered_trade(p,source)
         # Result booleans are a presentation, not independent authority.
         releases=[r for r in p['native_export']['ledger']['actions']
                   if r['op']=='event' and r['args']['action']=='release']
@@ -119,7 +169,7 @@ def audit_packet(path):
             raise ValueError('NATIVE_QUOTE_CHANGED')
         prior=[a['after'] for a in actions if a['day']==19]
         before=prior[-1] if prior else None
-        if p['result']['before_successor']!=before:raise ValueError('SUCCESSOR_SNAPSHOT_CHANGED')
+        if digest(p['result']['before_successor'])!=digest(before):raise ValueError('SUCCESSOR_SNAPSHOT_CHANGED')
         seed_possible=bool(before and before['available']-100_000_000>=990_000_000)
         if p['result']['seed_can_fund_successor']!=seed_possible:
             raise ValueError('SEED_COUNTERFACTUAL_CHANGED')

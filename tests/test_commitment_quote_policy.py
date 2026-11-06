@@ -197,6 +197,45 @@ def execute_native_arm(arm, evidence_dir=None):
 
 
 class NativeQuoteTests(unittest.TestCase):
+    def test_registered_trade_terms_reject_coherent_native_variations(self):
+        self._reject_coherent_trade_cases([
+            ('residual',0),('residual',1_000_000),('maturity',17),
+            ('obligations','Changed authored obligations'),('wallet',3_500_000_001),('deadline',12)])
+
+    def test_post_repair_registered_trade_confirmation(self):
+        # Registered in review reply4489286781 before implementation/execution.
+        self._reject_coherent_trade_cases([
+            ('residual',50_000_001),('maturity',16),('wallet',3_499_999_999),('deadline',13)])
+
+    def _reject_coherent_trade_cases(self,cases):
+        from campaign.genesis_commitment001 import native
+        from connected_enterprise.finance import JournalAccount
+        from scripts.qualify_commitment_quote import audit_packet
+        original_terms=native.prospective_terms;original_execute=JournalAccount.execute
+        with tempfile.TemporaryDirectory(prefix='quote-contract-adjudication-') as temp:
+            for index,(target,value) in enumerate(cases):
+                with self.subTest(target=target,value=value):
+                    def altered_terms(order,price,maturity,collect,**kwargs):
+                        if target=='residual':kwargs['residual']=value
+                        if target=='maturity':maturity=value
+                        result=original_terms(order,price,maturity,collect,**kwargs)
+                        if target=='obligations':result['counterparty_obligations']=value
+                        return result
+                    def altered_execute(account,op,args,day):
+                        args=copy.deepcopy(args)
+                        if op=='wallet' and target=='wallet':args['amount']=value
+                        if op=='offer' and target=='deadline':args['deadline']=value
+                        return original_execute(account,op,args,day)
+                    dest=Path(temp)/str(index)
+                    with patch.object(native,'prospective_terms',altered_terms), \
+                            patch.object(JournalAccount,'execute',altered_execute):
+                        result=execute_native_arm('ordinary',dest)
+                    self.assertTrue(result['audit_accepted'])
+                    before=(dest/'PUBLIC.json.gz').read_bytes()
+                    with self.assertRaisesRegex(ValueError,'REGISTERED_TRADE_CONTRACT'):
+                        audit_packet(dest/'PUBLIC.json.gz')
+                    self.assertEqual((dest/'PUBLIC.json.gz').read_bytes(),before)
+
     def test_registered_cost_schedule_rejects_coherent_native_histories(self):
         # F05 cases registered in PR274 review reply4489234961 before repair.
         cases=[('fixed','closing',0,None),('fixed','closing',None,None),
@@ -287,6 +326,9 @@ class NativeQuoteTests(unittest.TestCase):
                        ('result','actual_revenue_microUSD',1),('result','trailing_365_profit',1),
                        ('result','before_successor',None),('result','successor_funded',True),
                        ('result','funding_decision',None),
+                       ('result','prepaid',False),('result','tamper_rejected',False),
+                       ('result','audit_accepted',False),('result','tax_basis','unregistered'),
+                       ('result','accepted',1),('result','unsupported_commerce_claim',True),
                        ('public_observation','friction_microUSD',1)]
             for section,key,value in mutations:
                 bad=copy.deepcopy(original);bad[section][key]=value

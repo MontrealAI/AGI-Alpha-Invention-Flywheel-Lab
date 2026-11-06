@@ -151,3 +151,19 @@ bytes are unchanged; new hosted review and qualification remain required.
 The first local repair also rejected honest selling packets because its
 expected production debit ID was wrong; that error is preserved in `F05.json`.
 This independent review improves evidence integrity, not the economic result.
+
+The next independent review found F06: a coherent ordinary-arm contract with
+zero residual reserve passed, overstating unrestricted cash by $50 while
+retaining the correct costs. The failure was reproduced before repair. The
+auditor now binds the complete registered trade payload, including its $50
+reserve, maturity, buyer budget, offer, lifecycle IDs and delivered artifacts;
+it also closes the result schema and independently repeats the declared tamper
+probe. Six registered coherent contract variations and four different
+post-repair confirmation histories reject. Original packets and native financial
+code remain unchanged. This is stronger experiment-admission evidence, not
+real supplier consent or general verification of arbitrary commercial contracts.
+
+Final local policy/release/package/privacy qualification after F06: **96 tests
+pass in 27.300 seconds**. All 17 presentation mutations reject; all three
+original native evidence packets re-audit unchanged. New exact-head hosted
+qualification and independent rereview are pending.
