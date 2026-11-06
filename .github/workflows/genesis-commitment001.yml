@@ -13,6 +13,8 @@ on:
       - 'tests/fixtures/genesis_commitment001_failures/**'
       - 'tests/test_connected_commitment_release.py'
       - 'tests/test_connected_commitment_independent.py'
+      - 'tests/test_connected_commitment_public_receipts.py'
+      - 'tests/test_connected_commitment_startup.py'
       - '.github/workflows/genesis-commitment001.yml'
   push:
     branches: [main]
@@ -28,6 +30,8 @@ on:
       - 'tests/fixtures/genesis_commitment001_failures/**'
       - 'tests/test_connected_commitment_release.py'
       - 'tests/test_connected_commitment_independent.py'
+      - 'tests/test_connected_commitment_public_receipts.py'
+      - 'tests/test_connected_commitment_startup.py'
       - '.github/workflows/genesis-commitment001.yml'
   workflow_dispatch:
 permissions:
@@ -55,10 +59,12 @@ jobs:
       - name: Source-matched delivery and native adversarial tests
         run: |
           python -m unittest campaign.genesis_commitment001.test_delivery campaign.genesis_commitment001.test_native -v
-          python -O -m unittest campaign.genesis_commitment001.test_delivery campaign.genesis_commitment001.test_native -v
+          PYTHONOPTIMIZE=1 python -O -m unittest campaign.genesis_commitment001.test_delivery campaign.genesis_commitment001.test_native -v
           test -f tests/test_connected_commitment_independent.py
-          python -m unittest discover -s tests -p 'test_connected_commitment_independent.py' -v
-          python -O -m unittest discover -s tests -p 'test_connected_commitment_independent.py' -v
+          test -f tests/test_connected_commitment_public_receipts.py
+          test -f tests/test_connected_commitment_startup.py
+          python -m unittest discover -s tests -p 'test_connected_commitment_*.py' -v
+          PYTHONOPTIMIZE=1 python -O -m unittest discover -s tests -p 'test_connected_commitment_*.py' -v
       - name: Reproduce preserved original defects on disposable fresh accounts
         run: python tests/fixtures/genesis_commitment001_failures/reproduce.py --source "$PWD"
       - name: Execute every registered case and both complete conventional routes

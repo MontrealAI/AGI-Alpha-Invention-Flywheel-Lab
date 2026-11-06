@@ -127,6 +127,8 @@ def source_paths(root):
             'campaign/genesis_commitment001/test_native.py',
             'tests/test_connected_commitment_release.py',
             'tests/test_connected_commitment_independent.py',
+            'tests/test_connected_commitment_public_receipts.py',
+            'tests/test_connected_commitment_startup.py',
             'tests/fixtures/genesis_commitment001_failures/F01_native.py.original',
             'tests/fixtures/genesis_commitment001_failures/F02_runner.py.original',
             'tests/fixtures/genesis_commitment001_failures/README.md',

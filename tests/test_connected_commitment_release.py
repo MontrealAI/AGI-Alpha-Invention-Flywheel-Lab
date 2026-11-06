@@ -19,7 +19,9 @@ class CommitmentReleaseTest(unittest.TestCase):
         paths = set(source_paths_for_manifest({'schema': 'genesis-commitment001/native-services/v1'}))
         paths.update(('requirements-commercial010.txt',
                       'tests/test_connected_commitment_release.py',
-                      'tests/test_connected_commitment_independent.py'))
+                      'tests/test_connected_commitment_independent.py',
+                      'tests/test_connected_commitment_public_receipts.py',
+                      'tests/test_connected_commitment_startup.py'))
         triggers = [line.strip()[3:-1] for line in
                     (ROOT / '.github/workflows/genesis-commitment001.yml').read_text().splitlines()
                     if line.strip().startswith("- '")]

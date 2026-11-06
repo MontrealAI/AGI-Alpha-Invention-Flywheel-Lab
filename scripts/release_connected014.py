@@ -32,6 +32,8 @@ CONDITIONAL_WORKFLOWS = {
                                 'tests/fixtures/genesis_commitment001_failures/',
                                 'tests/test_connected_commitment_release.py',
                                 'tests/test_connected_commitment_independent.py',
+                                'tests/test_connected_commitment_public_receipts.py',
+                                'tests/test_connected_commitment_startup.py',
                                 'commercial/', 'connected_enterprise/', 'adaptive_enterprise/',
                                 'vendor/', 'portfolio25/pricing.py', 'experiments/commerce006.py',
                                 'requirements-commercial010.txt',

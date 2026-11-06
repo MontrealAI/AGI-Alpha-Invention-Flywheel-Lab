@@ -129,7 +129,7 @@ def _seed_id(request, source_sha256):
 
 
 class JournalAccount:
-    def __init__(self, root, manifest, path, *, opening, working, contract):
+    def __init__(self, root, manifest, path, *, opening, working, contract, require_pristine=False):
         self.root, self.path = Path(root).absolute(), Path(path).absolute()
         self.manifest = copy.deepcopy(manifest)
         self._mutex, self._closed, self._journal_failed = threading.RLock(), False, False
@@ -145,6 +145,14 @@ class JournalAccount:
             self._account = Account(self.root, manifest, self.path, opening=opening,
                                     working=working, contract=contract)
             self._journal = self._load()
+            # A missing first operating checkpoint can be initialized only for
+            # authenticated empty history. Check under the native writer lease
+            # before _recover can execute any previously journaled intent.
+            if require_pristine:
+                record = self._account.export()
+                if (self._journal['entries'] or record['ledger']['actions']
+                        or record['action_proofs'] or record['obligation_resolutions']):
+                    raise ValueError('SIGNED_CHECKPOINT_REQUIRED')
             self._recover()
         except BaseException:
             self.close()

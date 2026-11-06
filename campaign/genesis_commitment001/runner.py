@@ -205,12 +205,10 @@ def run(output, *, scenario='central', arm='retained', resume=False, max_steps=N
         for suffix in ('.adaptive-simulation-key','.actions.jsonl','.connected-journal.json'):
             if not account_path.with_name(account_path.name+suffix).is_file():
                 raise ValueError('EXISTING_ACCOUNT_AUTHORITY_REQUIRED')
-    if not state_path.exists() and account_path.with_name(account_path.name+'.actions.jsonl').exists():
-        raise ValueError('SIGNED_CHECKPOINT_REQUIRED')
     collect=80 if scenario=='payment_delay' else 10
     next_hour=collect+12
     steps=0
-    with BusinessAccount(out/'source',manifest,account_path,contract='commitment001-'+reg['binding'][:20],suppliers=p['suppliers']) as business:
+    with BusinessAccount(out/'source',manifest,account_path,contract='commitment001-'+reg['binding'][:20],suppliers=p['suppliers'],require_pristine=not state_path.exists()) as business:
         account=business.account
         state=account.verify_checkpoint(read(state_path)) if state_path.exists() else {'binding':reg['binding'],'phase':'setup','first_choice':None,'first_funding':None,'successor_funding':None,'successor_enabled':False,'contention_rejected':None,'pending_collection_observed':False}
         if state['binding']!=reg['binding']:raise ValueError('CHECKPOINT_BINDING_CHANGED')
@@ -333,6 +331,49 @@ def _completed(out,reg,manifest):
     return read(out/'REPORT.json')
 
 
+def _audit_public_deliveries(out, reg, manifest, first_bought, successor):
+    """Bind exported duplicates to the checked delivery and registered outcome.
+
+    Shared-shock production was never delivered; its valid output is evidence of
+    production only. The bad-output specimen is the registered rejected delivery,
+    never a prepared native claim or an acceptance by a real participant.
+    """
+    scenario = reg['scenario']
+    for stage, job, produced in (('FIRST', 'restore-first', first_bought),
+                                 ('SUCCESSOR', 'migration-next', successor)):
+        delivered = produced and not (stage == 'FIRST' and scenario == 'shared_shock')
+        row = next(row for row in manifest['jobs'] if row['id'] == job)
+        artifact_path = out/(stage+'_ARTIFACT.json')
+        receipt_path = out/(stage+'_ACCEPTANCE.json')
+        source_path = out/'source'/row['delivery_path']
+        for path, expected in ((artifact_path, produced), (receipt_path, delivered),
+                               (source_path, delivered)):
+            if not expected and (path.exists() or path.is_symlink()):
+                raise ValueError('UNPRODUCED_PUBLIC_DELIVERY_RECORD')
+            if expected and (path.is_symlink() or not path.is_file()):
+                raise ValueError('REGULAR_EXPECTED_DELIVERY_RECORD_REQUIRED')
+        if not produced:
+            continue
+        artifact = read(artifact_path)
+        if not isinstance(artifact, dict) or artifact.get('method') != reg['arm']:
+            raise ValueError('REGISTERED_DELIVERY_METHOD_CHANGED')
+        checked = service.verify_delivery(out/'source', manifest, job, artifact)
+        rejected = stage == 'FIRST' and scenario == 'bad_output'
+        if rejected:
+            repaired = copy.deepcopy(artifact)
+            if repaired.pop('request_id', None) != 'wrong-delivery':
+                raise ValueError('REGISTERED_REJECTED_SPECIMEN_CHANGED')
+            if not service.verify_delivery(out/'source', manifest, job, repaired)['accepted']:
+                raise ValueError('REGISTERED_REJECTION_CAUSE_CHANGED')
+        if checked['accepted'] is not (not rejected):
+            raise ValueError('REGISTERED_DELIVERY_ACCEPTANCE_CHANGED')
+        if delivered:
+            if digest(artifact) != digest(service.delivery(out/'source', manifest, job)):
+                raise ValueError('PUBLIC_DELIVERY_DIFFERS_FROM_NATIVE_SOURCE')
+            if canonical(read(receipt_path)) != canonical(checked):
+                raise ValueError('PUBLIC_ACCEPTANCE_DIFFERS_FROM_CHECKER')
+
+
 def audit(output):
     out=safe_output(output);reg,manifest=_bound(out);p=reg['protocol'];scenario=reg['scenario']
     record=read(out/'NATIVE_EXPORT.json')
@@ -383,6 +424,7 @@ def audit(output):
             kind='committed_delivery';work=delivery_work(p,'first' if q['id']=='capacity-turn-first' else 'successor',scenario,4 if q['id']=='capacity-turn-first' else nh+2)
         if q['kind']!=kind or q['work']!=work:raise ValueError('REGISTERED_EXPENSE_SCOPE_CHANGED')
     if set(orders)!=expected_orders:raise ValueError('REGISTERED_ORDER_SET_CHANGED')
+    _audit_public_deliveries(out, reg, manifest, first_bought, successor)
     # Every promise follows its prepaid production/resource commitment.
     for order,row in orders.items():
         stage='first' if order=='turn-first' else 'successor';q=bykey['spend:capacity-'+order]['request']
@@ -447,7 +489,7 @@ def audit(output):
     report=read(out/'REPORT.json')
     if report!=_summary(out,reg,record):raise ValueError('REPORT_CLAIM_CHANGED')
     if sum(c['amount_microUSD'] for c in report['cost_items'])!=ledger['summary']['expenses']:raise ValueError('COST_RECONCILIATION_FAILED')
-    receipt={'accepted':True,'binding':reg['binding'],'native_replay':True,'capacity_replay':True,'complete_cost_replay':True,'complete_simulated_turn':report['complete_simulated_turn'],'scope':'AUTHORED_SIMULATION_ONLY'}
+    receipt={'accepted':True,'binding':reg['binding'],'native_replay':True,'capacity_replay':True,'complete_cost_replay':True,'public_delivery_replay':True,'complete_simulated_turn':report['complete_simulated_turn'],'scope':'AUTHORED_SIMULATION_ONLY'}
     save(out/'AUDIT.json',receipt)
     return receipt
 

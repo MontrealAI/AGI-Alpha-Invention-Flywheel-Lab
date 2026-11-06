@@ -59,10 +59,11 @@ def capacity_available(export, ident, capacity, suppliers):
 
 
 class BusinessAccount:
-    def __init__(self, root, manifest, path, *, contract, suppliers):
+    def __init__(self, root, manifest, path, *, contract, suppliers, require_pristine=False):
         self.root, self.manifest, self.suppliers = Path(root), manifest, suppliers
         service.load_contracts(root, manifest)
-        self.account = JournalAccount(root, manifest, path, opening=OPENING, working=0, contract=contract)
+        self.account = JournalAccount(root, manifest, path, opening=OPENING, working=0,
+                                      contract=contract, require_pristine=require_pristine)
         try:
             rows=capacity_rows(self.account.export())
             for row in rows:
