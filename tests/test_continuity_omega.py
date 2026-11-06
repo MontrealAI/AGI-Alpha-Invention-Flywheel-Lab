@@ -22,6 +22,40 @@ class ContinuityTests(unittest.TestCase):
         self.assertEqual(handoff['supplier_available_units_in_window'],2100)
         self.assertFalse(passport['evidence_boundary']['real_customer_acceptance'])
 
+    def test_checker_requires_actual_lowercase_sha256_specification_digest(self):
+        c=case_for();h,p=construct(c)
+        c['source_events'][0]['spec_sha256']='x'*64  # correct length, never hex
+        c['source_seal']=digest(c['source_events'])  # forged source seal
+        h['source_events_sha256']=c['source_seal']
+        h['orders'][0]['spec_sha256']='x'*64
+        h['idempotency_key']=digest([c['exercise_id'],c['source_seal'],h['supplier_id'],h['required_units']])
+        p['source_events_sha256']=c['source_seal']
+        p['handoff_sha256']=digest(h)
+        result=audit(c,h,p)
+        self.assertEqual(result['verdict'],'FAIL')
+        self.assertIn('SPEC_PROVENANCE_MISSING',result['failures'])
+
+    def test_checker_preserves_required_original_business_promise(self):
+        c=case_for();h,p=construct(c)
+        c['objective']['no_lost_orders']=False
+        r=audit(c,h,p)
+        self.assertEqual(r['verdict'],'FAIL')
+        self.assertIn('OUTCOME_CHARTER_RELAXED',r['failures'])
+
+    def test_checker_does_not_accept_wrong_source_schema(self):
+        c=case_for();h,p=construct(c)
+        c['schema']='continuity-omega/unspecified'
+        r=audit(c,h,p)
+        self.assertEqual(r['verdict'],'FAIL')
+        self.assertIn('INPUT_SCHEMA',r['failures'])
+
+    def test_checker_detects_duplicate_supplier_identity(self):
+        c=case_for();h,p=construct(c)
+        c['suppliers'][1]['supplier_id']=c['suppliers'][0]['supplier_id']
+        r=audit(c,h,p)
+        self.assertEqual(r['verdict'],'FAIL')
+        self.assertIn('DUPLICATE_SUPPLIER_IDENTITY',r['failures'])
+
     def test_source_changes_do_not_silently_pass(self):
         c=case_for('tampered_source')
         with self.assertRaisesRegex(DrillRejected,'seal'):construct(c)

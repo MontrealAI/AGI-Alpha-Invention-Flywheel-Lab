@@ -5,17 +5,23 @@ Does not call the constructor. Same authorship is NOT third-party independence.
 from __future__ import annotations
 import hashlib
 import json
+import re
 
 
 def _hash(data):
     return hashlib.sha256(json.dumps(data,sort_keys=True,separators=(',', ':'),ensure_ascii=True).encode()).hexdigest()
 
 
+ID_RE = re.compile(r'^[A-Z0-9][A-Z0-9._-]{0,63}$')
+HEX64_RE = re.compile(r'^[a-f0-9]{64}$')
+
 def audit(case, handoff, passport):
     findings=[]
     def check(ok,label):
         if not ok:findings.append(label)
     check(isinstance(case,dict) and case.get('mode')=='SYNTHETIC' and case.get('real_authority') is False,'SYNTHETIC_ONLY_REQUIRED')
+    check(case.get('schema')=='continuity-omega/synthetic-drill-v1','INPUT_SCHEMA')
+    check(isinstance(case.get('exercise_id'),str) and bool(ID_RE.fullmatch(case['exercise_id'])),'EXERCISE_ID_INVALID')
     events=case.get('source_events',[])
     check(isinstance(events,list) and len(events)>0 and _hash(events)==case.get('source_seal'),'SOURCE_SEAL_INVALID')
     if not isinstance(events,list):events=[]
@@ -23,11 +29,15 @@ def audit(case, handoff, passport):
     for i,event in enumerate(events,1):
         if not isinstance(event,dict):check(False,'EVENT_MALFORMED');continue
         oid=event.get('order_id');act=event.get('type')
+        check(isinstance(oid,str) and bool(ID_RE.fullmatch(oid)),'INVALID_EVENT_ORDER_ID')
         check(type(event.get('sequence')) is int and event['sequence']==i,'EVENT_PROVENANCE_MISSING')
         if act=='ACCEPT':
             if oid in state:check(False,'DUPLICATE_ACCEPTANCE');continue
             if type(event.get('quantity')) is not int or event['quantity']<=0:check(False,'INVALID_ACCEPT_QUANTITY');continue
-            if not isinstance(event.get('spec_sha256'),str) or len(event['spec_sha256'])!=64:check(False,'SPEC_PROVENANCE_MISSING')
+            spec=event.get('spec_sha256')
+            if not isinstance(spec,str) or not HEX64_RE.fullmatch(spec):check(False,'SPEC_PROVENANCE_MISSING')
+            product=event.get('product')
+            check(isinstance(product,str) and bool(ID_RE.fullmatch(product)),'EVENT_PRODUCT_INVALID')
             if type(event.get('deadline_hours')) is not int or event['deadline_hours']<=0:check(False,'DEADLINE_INVALID')
             state[oid]={'order_id':oid,'product':event.get('product'),'quantity':event['quantity'],
                 'fulfilled':0,'cancelled':False,'spec_sha256':event.get('spec_sha256'),
@@ -48,6 +58,10 @@ def audit(case, handoff, passport):
         else:check(False,'UNRECOGNIZED_EVENT')
     objective=case.get('objective') or {}
     prod=objective.get('product')
+    check(isinstance(prod,str) and bool(ID_RE.fullmatch(prod)),'OBJECTIVE_PRODUCT_INVALID')
+    horizon=objective.get('deadline_hours')
+    check(type(horizon) is int and 0<horizon<=10000,'OBJECTIVE_HORIZON_INVALID')
+    check(objective.get('no_lost_orders') is True and objective.get('no_duplicates') is True,'OUTCOME_CHARTER_RELAXED')
     orders=[]
     for row in state.values():
         units=row['quantity']-row['fulfilled']
@@ -87,9 +101,18 @@ def audit(case, handoff, passport):
     # Challenge the full declared reservation book independently of the builder.
     # Negative, fractional and malformed claims must never manufacture headroom.
     all_suppliers=case.get('suppliers',[])
+    supplier_ids=[]
     for supplier in all_suppliers:
         if not isinstance(supplier,dict):
             check(False,'SUPPLIER_RECORD_INVALID');continue
+        sid=supplier.get('supplier_id')
+        check(isinstance(sid,str) and bool(ID_RE.fullmatch(sid)),'SUPPLIER_ID_INVALID')
+        supplier_ids.append(sid)
+        for key in ('product','failure_domain'):
+            val=supplier.get(key)
+            check(isinstance(val,str) and bool(ID_RE.fullmatch(val)),'SUPPLIER_ID_INVALID')
+        for key in ('available','simulated_qualification','simulated_commitment'):
+            check(type(supplier.get(key)) is bool,'SUPPLIER_QUALIFICATION_FLAG_INVALID')
         for field in ('capacity_units','quoted_cost','lead_hours'):
             value=supplier.get(field)
             check(type(value) is int and value >= (1 if field=='capacity_units' else 0),'SUPPLIER_RESOURCE_INVALID')
@@ -102,6 +125,11 @@ def audit(case, handoff, passport):
             start=reservation.get('start_hour');end=reservation.get('end_hour');units=reservation.get('units')
             check(type(start) is int and start>=0 and type(end) is int and end>start
                   and type(units) is int and units>0,'SUPPLIER_RESERVATION_INVALID')
+    check(len(supplier_ids)==len(set(supplier_ids)),'DUPLICATE_SUPPLIER_IDENTITY')
+    buyer=case.get('buyer',{})
+    check(type(buyer.get('maximum_offer')) is int and buyer.get('maximum_offer',0)>0,'BUYER_BUDGET_INVALID')
+    blocked=case.get('blocked_failure_domains',[])
+    check(isinstance(blocked,list) and all(isinstance(x,str) and ID_RE.fullmatch(x) for x in blocked),'BLOCKED_DOMAINS_INVALID')
     supplier_id=handoff.get('supplier_id')
     selected=[s for s in case.get('suppliers',[]) if isinstance(s,dict) and s.get('supplier_id')==supplier_id]
     check(len(selected)==1,'SELECTED_SUPPLIER_IDENTITY')
