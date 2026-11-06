@@ -379,6 +379,8 @@ def audit(output):
     record=read(out/'NATIVE_EXPORT.json')
     if record['ledger']['config']['contract'] != 'commitment001-'+reg['binding'][:20]:
         raise ValueError('REGISTERED_NATIVE_CONTRACT_CHANGED')
+    if record['ledger']['config']['working'] != 0:
+        raise ValueError('REGISTERED_WORKING_CAPITAL_CHANGED')
     native=audit_journal(record,root=out/'source',manifest=manifest)
     if not native['accepted']:raise ValueError('NATIVE_REPLAY_REJECTED')
     if record['ledger']['config']['opening']!=OPENING:raise ValueError('EXACT_SEED_REQUIRED')
