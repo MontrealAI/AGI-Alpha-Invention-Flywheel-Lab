@@ -1,0 +1,31 @@
+{
+  "schema": "public-quote-independent-review-failure/v1",
+  "reviewed_commit": "9354ce0f180e5a59fc4e85a350f30e5fcae7b8b1",
+  "independent_review_comment": 4489275387,
+  "prospective_cases_registration_comment": 4489286781,
+  "finding": "Native replay accepted a coherent changed contract with zero residual reserve; the experimental auditor did not bind the complete registered trade terms.",
+  "executed_before_repair": {
+    "arm": "ordinary",
+    "residual_microUSD": 0,
+    "required_residual_microUSD": 50000000,
+    "available_microUSD": 100819992000,
+    "required_available_microUSD": 100769992000,
+    "incorrectly_accepted": true,
+    "costs_and_source_hashes_unchanged": true
+  },
+  "repair": "Bind exact prospective terms, residual/maturity, wallet budget, offer/deadline, lifecycle identifiers, delivered artifact inventory and closed result schema. Recompute the declared tamper rejection; require exact integer presentation money and canonical summary equality.",
+  "registered_adversarial_histories": 6,
+  "post_repair_registered_confirmation_histories": 4,
+  "all_ten_canonical_valid_and_experimental_rejected": true,
+  "honest_packets_changed": false,
+  "underlying_native_source_changed": false,
+  "historical_account_writes": 0,
+  "scope": "Independent automated code-review criticism with local native-history adjudication. No new economic confirmation, real consent or primary account continuation.",
+  "final_local_qualification": {
+    "tests": 96,
+    "errors": 0,
+    "wall_seconds": 27.3,
+    "honest_public_packets_accepted": 3,
+    "presentation_mutations_rejected": 17
+  }
+}
