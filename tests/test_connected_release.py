@@ -300,7 +300,8 @@ class ReleaseIntegrityTests(unittest.TestCase):
     def test_moved_main_and_wrong_existing_tag_never_create_release(self):
         # A financial-source change also requires the new opt-in campaign's
         # same-head gate before this test reaches its tag/main identity checks.
-        gate = {name:{'head_sha':COMMIT} for name in (*release.REQUIRED_WORKFLOWS, 'genesis-commitment001.yml')}
+        gate = {name:{'head_sha':COMMIT} for name in (*release.REQUIRED_WORKFLOWS,
+                'genesis-commitment001.yml', 'commitment-public-quote.yml')}
         applicability = {'changed_paths':['connected_enterprise/finance.py'], 'base_commit':'c'*40, 'conservative_all_conditionals':False}
         with patch.object(release, 'qualifying_runs', return_value=gate), patch.object(release, 'push_applicability', return_value=applicability), patch.object(release.subprocess, 'run') as command:
             def moved(endpoint, optional=False):
@@ -322,6 +323,30 @@ class ReleaseIntegrityTests(unittest.TestCase):
             with patch.object(release, 'gh', side_effect=wrong_tag):
                 with self.assertRaisesRegex(ValueError, 'TAG_SOURCE'):
                     release.publish(self.assets, COMMIT, 'owner/repo', 7, 1)
+            command.assert_not_called()
+
+    def test_missing_quote_workflow_blocks_publication_before_main_or_tag_checks(self):
+        applicability = {'changed_paths':['connected_enterprise/finance.py'],
+                         'base_commit':'c'*40, 'conservative_all_conditionals':False}
+        workflows = (*release.REQUIRED_WORKFLOWS, 'genesis-commitment001.yml')
+        def row(name):
+            return {'head_sha':COMMIT, 'event':'push', 'head_branch':'main',
+                    'id':1, 'run_number':1, 'run_attempt':1, 'status':'completed',
+                    'html_url':'https://github.com/owner/repo/actions/runs/1',
+                    'conclusion':'success', 'path':'.github/workflows/'+name}
+        def observed(endpoint, optional=False):
+            if '/actions/workflows/' in endpoint:
+                name=endpoint.split('/actions/workflows/',1)[1].split('/',1)[0]
+                return {'workflow_runs':[row(name)] if name in workflows else []}
+            if '/actions/runs?' in endpoint:
+                return {'workflow_runs':[row(name) for name in workflows]}
+            self.fail('Publication reached main/tag mutation before required quote CI: '+endpoint)
+        with patch.object(release, 'push_applicability', return_value=applicability), \
+                patch.object(release, 'gh', side_effect=observed), \
+                patch.object(release.time, 'monotonic', side_effect=[0,2]), \
+                patch.object(release.subprocess, 'run') as command:
+            with self.assertRaisesRegex(TimeoutError, 'EXACT_MAIN_WORKFLOW_GATE_TIMEOUT'):
+                release.publish(self.assets, COMMIT, 'owner/repo', 7, 1)
             command.assert_not_called()
 
     def test_download_rejects_retargeted_tag_before_fetching_assets(self):

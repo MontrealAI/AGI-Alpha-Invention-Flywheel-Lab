@@ -1,0 +1,9 @@
+{
+  "schema": "retained-engineering-failure/v1",
+  "source_commit": "d7634a1ca1976d915d9a3a583121247c4eba9398",
+  "workflow_run": "https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/actions/runs/42157062287",
+  "observed_failure": "GitHub rejected the workflow YAML at line 45 before any job ran.",
+  "cause": "The unquoted run scalar contained the colon-space sequence in --only-binary=:all: -r.",
+  "repair": "Use a YAML block scalar for the unchanged pip command.",
+  "qualification": "Parse the repaired workflow locally and require a new exact-source hosted result. The failed run remains failed; no economics or acceptance criteria changed."
+}

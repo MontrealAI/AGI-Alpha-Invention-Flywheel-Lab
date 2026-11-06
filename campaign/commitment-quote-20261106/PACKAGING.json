@@ -1,0 +1,62 @@
+{
+  "schema": "public-quote-package-qualification/v1",
+  "original_branch": "89c0096f44a78d1409045c9b3ffb9f34a0457874",
+  "original_inventory_omitted_quote_files": true,
+  "initial_local_packaging_result": {
+    "tests": 33,
+    "failed": 2,
+    "wall_seconds": 6.875,
+    "findings": [
+      "vendor/__init__.py did not require the new qualification workflow",
+      "existing privacy contract admitted eight exports; new export needed an explicit five-file allowlist"
+    ]
+  },
+  "repaired_local_result": {
+    "tests": 42,
+    "failed": 0,
+    "wall_seconds": 6.671,
+    "command": "python3 -B -m unittest tests.test_commitment_quote_policy tests.test_connected_quote_release tests.test_connected_commitment_release tests.test_connected_platform_runtime064 tests.test_compact_failure_export031 -v"
+  },
+  "coverage": [
+    "complete optional distribution",
+    "missing and symlinked members refused",
+    "resealed partial archive refused",
+    "all native executed dependencies trigger same-head workflow",
+    "actual no-Git source inventory run and public replay",
+    "explicit key-free download receipt export allowlist"
+  ],
+  "source_sha256": {
+    "connected_enterprise/runner.py": "c37858259b2e51e154df02c0fa90f05c2e83fa078f48034ffd4bca79cf80ce2e",
+    "scripts/release_connected014.py": "ad1f241e5ed855b609e156f99cc0f4ae40b41015df054e1db397c100bd9373ff",
+    ".github/workflows/connected014-release.yml": "c00cecd47c56634c833f377600b6f6f98c5716013c83290e3195de1a07470955",
+    ".github/workflows/commitment-public-quote.yml": "6924db5c9ffbc011a2638b2641365adc5ee06aedd8da77bb67ce69abd549eef4",
+    "tests/test_connected_quote_release.py": "51d72d68a857d8d5e2b8f09ce445dffa505b4755affb504c745bd6e797528751",
+    "tests/test_compact_failure_export031.py": "3a892f10174e06f8da3fa1a46321c1117cc950342f92347d4c72ce7c70897a91"
+  },
+  "actual_release_download": "NOT_YET_OBSERVED",
+  "native_financial_authority_changed": false,
+  "funding_boundary_followup": {
+    "tests": 43,
+    "failed": 0,
+    "log": "quote-funding-tests.log",
+    "four_new_arithmetic_cases": true,
+    "eleven_tamper_cases": true
+  },
+  "hosted_gate_fixture_failure": {
+    "commit": "1b87c75ba98ea6f342fddebfb7a416fe6a109a18",
+    "workflow_run": 42160028703,
+    "job": 127703373030,
+    "tests_run": 599,
+    "errors": 1,
+    "exception": "EXACT_MAIN_WORKFLOW_GATE_TIMEOUT",
+    "cause": "Older moved-main fixture supplied the genesis gate but omitted the newly mandatory quote gate. Production gate correctly refused to advance.",
+    "repair": "Supply the new gate in the identity-test fixture; independently test missing quote CI with the real qualifying_runs function. No production gate or timeout changed.",
+    "local_negative_test_draft": "Two local draft runs omitted required GitHub run metadata (first run_number/id, then html_url), raising KeyError before the refusal check. Both are retained in the local qualification logs; the final fixture includes complete metadata.",
+    "final_local_tests": 91,
+    "final_local_errors": 0,
+    "test_sha256": "d335eb5e4e792aa7f8cb1f93bba267b086d4d52bfc2a6664fc71de950af8b415",
+    "final_local_wall_seconds": 7.447
+  },
+  "F05_distribution": "Include independent review failure and confirmation receipt in the complete optional package.",
+  "F06_distribution": "Include contract-binding review failure and confirmation receipt in the complete optional package."
+}

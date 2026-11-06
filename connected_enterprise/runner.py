@@ -110,9 +110,37 @@ def genesis_release_paths(root):
     return required
 
 
+QUOTE_RELEASE_PATHS = (
+    'research/commitment_quote_policy.py',
+    'scripts/qualify_commitment_quote.py',
+    'tests/test_commitment_quote_policy.py',
+    'tests/test_connected_quote_release.py',
+    '.github/workflows/commitment-public-quote.yml',
+) + tuple('campaign/commitment-quote-20261106/' + name for name in (
+    'PROTOCOL.md', 'F01.json', 'F02.json', 'F02_ADDENDUM.md', 'F03.json',
+    'F04.json', 'FUNDING_RESERVE_ADDENDUM.md', 'F05.json', 'F06.json',
+    'SOURCE.json', 'QUALIFICATION.json', 'PACKAGING.json', 'RESULTS.md',
+    'evidence/RESULT.json', 'evidence/AUDIT.json', 'evidence/FINAL_AUDIT.json',
+    'evidence/fixed/PUBLIC.json.gz', 'evidence/ordinary/PUBLIC.json.gz',
+    'evidence/constructor/PUBLIC.json.gz',
+))
+
+
+def quote_release_paths(root):
+    root = Path(root)
+    if not any((root/name).exists() or (root/name).is_symlink()
+               for name in QUOTE_RELEASE_PATHS):
+        return set()
+    if any(not (root/name).is_file() or (root/name).is_symlink()
+           for name in QUOTE_RELEASE_PATHS):
+        raise ValueError('PUBLIC_QUOTE_COMPLETE_RELEASE_SOURCE_REQUIRED')
+    return set(QUOTE_RELEASE_PATHS)
+
+
 def source_paths(root):
     names=set(inherited_paths(root))
     names.update(genesis_release_paths(root))
+    names.update(quote_release_paths(root))
     # Opt-in commitment campaign ships as a complete source-bound unit. This
     # inventory changes no historical account or original source identity.
     commitment = Path(root) / 'campaign/genesis_commitment001'

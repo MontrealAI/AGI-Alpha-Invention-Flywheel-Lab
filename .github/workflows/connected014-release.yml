@@ -53,6 +53,12 @@ jobs:
           python -m campaign.genesis_commitment001.runner run --output "$RUNNER_TEMP/commitment-positive-qualified" --scenario favorable_envelope --arm retained
           python -m campaign.genesis_commitment001.runner audit --output "$RUNNER_TEMP/commitment-positive-qualified"
           python -m campaign.genesis_commitment001.runner package --output "$RUNNER_TEMP/commitment-positive-qualified" --archive "$RUNNER_TEMP/commitment-release-qualified-public.zip"
+      - name: Qualify public quote admission from the exact clean source archive
+        working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
+        run: |
+          python -B -m unittest tests.test_commitment_quote_policy tests.test_connected_quote_release -v
+          python -B scripts/qualify_commitment_quote.py run --output "$RUNNER_TEMP/quote-release-qualified"
+          python -B scripts/qualify_commitment_quote.py audit --output "$RUNNER_TEMP/quote-release-qualified"
       - name: Bind immutable release assets to exact qualified source and inspected research edition
         if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         run: python scripts/release_connected014.py prepare --qualification "$RUNNER_TEMP/connected014-qualified" --assets "$RUNNER_TEMP/connected014-release-assets" --source-commit "$GITHUB_SHA" --papers docs/completion015
@@ -77,6 +83,8 @@ jobs:
             ${{ runner.temp }}/commitment-release-qualified/AUDIT.json
             ${{ runner.temp }}/commitment-positive-qualified/REPORT.json
             ${{ runner.temp }}/commitment-positive-qualified/AUDIT.json
+            ${{ runner.temp }}/quote-release-qualified/RESULT.json
+            ${{ runner.temp }}/quote-release-qualified/AUDIT.json
             ${{ runner.temp }}/connected014-qualified/*.stdout
             ${{ runner.temp }}/connected014-qualified/*.stderr
           if-no-files-found: warn
@@ -152,6 +160,24 @@ jobs:
         id: operation
         run: |
           python scripts/release_connected014.py operate-download --assets "$RUNNER_TEMP/actual-release-download" --source-commit "$GITHUB_SHA" --output "$RUNNER_TEMP/downloaded-release-operation" --actual-release-download
+      - name: Operate public quote admission from the actual downloaded source
+        id: released_public_quote
+        working-directory: ${{ runner.temp }}/downloaded-release-operation/source
+        run: |
+          python -B scripts/qualify_commitment_quote.py run --output "$RUNNER_TEMP/released-public-quote"
+          python -B scripts/qualify_commitment_quote.py audit --output "$RUNNER_TEMP/released-public-quote"
+      - name: Retain only key-free released public quote evidence
+        if: always() && steps.released_public_quote.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-quote-released-operation-${{ github.sha }}-attempt-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/released-public-quote/RESULT.json
+            ${{ runner.temp }}/released-public-quote/AUDIT.json
+            ${{ runner.temp }}/released-public-quote/fixed/PUBLIC.json.gz
+            ${{ runner.temp }}/released-public-quote/ordinary/PUBLIC.json.gz
+            ${{ runner.temp }}/released-public-quote/constructor/PUBLIC.json.gz
+          if-no-files-found: error
       - name: Qualify wheel utility from the actual downloaded source
         id: released_wheel
         run: |
