@@ -26,7 +26,7 @@
     "explicit key-free download receipt export allowlist"
   ],
   "source_sha256": {
-    "connected_enterprise/runner.py": "373330a450d2956b4c02bbce17132f92b3151bc5a8d96e23d604c3cbf4b6ea6d",
+    "connected_enterprise/runner.py": "0a0c48f31358dc01ca0dbb38f8d2381cfee867bb43cb18be1f935d7cbe67fcef",
     "scripts/release_connected014.py": "ad1f241e5ed855b609e156f99cc0f4ae40b41015df054e1db397c100bd9373ff",
     ".github/workflows/connected014-release.yml": "c00cecd47c56634c833f377600b6f6f98c5716013c83290e3195de1a07470955",
     ".github/workflows/commitment-public-quote.yml": "6924db5c9ffbc011a2638b2641365adc5ee06aedd8da77bb67ce69abd549eef4",
@@ -34,5 +34,12 @@
     "tests/test_compact_failure_export031.py": "3a892f10174e06f8da3fa1a46321c1117cc950342f92347d4c72ce7c70897a91"
   },
   "actual_release_download": "NOT_YET_OBSERVED",
-  "native_financial_authority_changed": false
+  "native_financial_authority_changed": false,
+  "funding_boundary_followup": {
+    "tests": 43,
+    "failed": 0,
+    "log": "quote-funding-tests.log",
+    "four_new_arithmetic_cases": true,
+    "eleven_tamper_cases": true
+  }
 }

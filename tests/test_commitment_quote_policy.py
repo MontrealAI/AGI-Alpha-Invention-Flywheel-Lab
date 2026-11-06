@@ -9,7 +9,7 @@ import shutil
 import tempfile
 import unittest
 
-from research.commitment_quote_policy import decide, SCHEMA
+from research.commitment_quote_policy import decide, SCHEMA, successor_funding_decision
 from campaign.genesis_commitment001 import service
 from campaign.genesis_commitment001.delivery import default_requests, produce
 from campaign.genesis_commitment001.native import BusinessAccount
@@ -33,6 +33,18 @@ def public_observation():
 
 
 class QuotePolicyTests(unittest.TestCase):
+    def test_fresh_known_unpaid_work_boundaries(self):
+        for available,earned,unpaid,budget in [(2000,900,120,850),(100,80,20,60),
+                                               (100,80,20,61),(50,80,60,1)]:
+            result=successor_funding_decision(available,earned,unpaid,budget)
+            expected=max(0,min(available,earned)-unpaid)
+            self.assertEqual(result['spendable_earned_microUSD'],expected)
+            self.assertEqual(result['gap_microUSD'],max(0,budget-expected))
+            self.assertEqual(result['decision']=='DEFER',expected<budget)
+            self.assertFalse(result['spend_authorized'])
+        for invalid in (-1,True,1.5):
+            with self.assertRaises(ValueError):successor_funding_decision(100,80,invalid,60)
+
     def test_central_public_quote_and_strong_direct_tie(self):
         obs = public_observation(); before = copy.deepcopy(obs)
         result = decide(obs)
@@ -153,7 +165,9 @@ def execute_native_arm(arm, evidence_dir=None):
                 before_successor=copy.deepcopy(account.snapshot()['summary'])
                 original=account.export()
                 # This is a decision, never an attempted partial commission.
-                if min(before_successor['available'],before_successor['unrestrictedEarned'])>=990*USD:
+                funding=successor_funding_decision(before_successor['available'],
+                    before_successor['unrestrictedEarned'],100*USD,990*USD)
+                if funding['decision']!='DEFER':
                     raise AssertionError('registered expected deferral contradicted')
                 if account.export()!=original:raise AssertionError('decision wrote financial state')
             account.cost('closing',100*USD,120)
@@ -162,7 +176,9 @@ def execute_native_arm(arm, evidence_dir=None):
                     'tamper_rejected':tamper_rejected,'prepaid':prepaid is not None,
                     'summary':record['ledger']['summary'],'before_successor':before_successor,
                     'successor_budget_microUSD':990*USD,'successor_funded':False,
-                    'seed_can_fund_successor':bool(before_successor and before_successor['available']>=990*USD),
+                    'seed_can_fund_successor':bool(before_successor and before_successor['available']-100*USD>=990*USD),
+                    'funding_decision':successor_funding_decision(before_successor['available'],
+                        before_successor['unrestrictedEarned'],100*USD,990*USD) if before_successor else None,
                     'audit_accepted':audit['accepted'],'scope':'DISPOSABLE_AUTHORED_ENGINEERING_FIXTURE',
                     'actual_revenue_microUSD':0,'trailing_365_profit':None,
                     'tax_basis':'20 percent provision at first collection; no subsequent negative-tax credit assumed'}
@@ -191,6 +207,8 @@ class NativeQuoteTests(unittest.TestCase):
             self.assertEqual(result['before_successor']['profit'],919_992_000)
             self.assertEqual(result['before_successor']['unrestrictedEarned'],919_992_000)
             self.assertEqual(result['summary']['profit'],819_992_000)
+            self.assertEqual(result['funding_decision']['spendable_earned_microUSD'],819_992_000)
+            self.assertEqual(result['funding_decision']['gap_microUSD'],170_008_000)
             self.assertFalse(result['successor_funded'])
             self.assertTrue(result['seed_can_fund_successor'])
         self.assertEqual(ordinary['summary'],constructed['summary'])
@@ -206,6 +224,7 @@ class NativeQuoteTests(unittest.TestCase):
                        ('result','successor_budget_microUSD',1),('result','seed_can_fund_successor',False),
                        ('result','actual_revenue_microUSD',1),('result','trailing_365_profit',1),
                        ('result','before_successor',None),('result','successor_funded',True),
+                       ('result','funding_decision',None),
                        ('public_observation','friction_microUSD',1)]
             for section,key,value in mutations:
                 bad=copy.deepcopy(original);bad[section][key]=value

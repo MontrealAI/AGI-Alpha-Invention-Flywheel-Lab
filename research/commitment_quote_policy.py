@@ -90,3 +90,20 @@ def decide(observation):
                   planned_contribution_microUSD=contribution,
                   reason='STRICT_PUBLIC_OUTSIDE_OPTION_WITH_COMPLETE_PLANNED_COST')
     return result
+
+
+def successor_funding_decision(available, settled_earned, known_unpaid, budget):
+    """Read-only admission after known work; a native atomic reserve must follow.
+
+    Native balances protect already-recorded liabilities. Explicit unpaid work
+    here covers known costs not yet charged or reserved in that snapshot.
+    """
+    for value in (available, settled_earned, known_unpaid):
+        _integer(value)
+    _integer(budget, positive=True)
+    spendable = max(0, min(available, settled_earned) - known_unpaid)
+    return {'known_unpaid_microUSD': known_unpaid,
+            'spendable_earned_microUSD': spendable,
+            'gap_microUSD': max(0, budget - spendable),
+            'decision': 'ELIGIBLE_FOR_ATOMIC_RESERVATION' if spendable >= budget else 'DEFER',
+            'spend_authorized': False}

@@ -27,8 +27,10 @@ refund. The displayed fractional dollars retain exact micro-USD accounting.
 Actual developer, model, host, real acquisition, legal and supplier costs are
 unknown. No measured complete-cost real-profit claim follows.
 
-At the actual successor decision, native settled unrestricted earnings are
-$919.992; the complete registered successor budget is $990. The $70.008 gap
+At the actual successor decision, the native snapshot reports $919.992 of
+settled unrestricted earnings. A further $100 is earmarked for known unpaid
+closing maintenance, leaving **$819.992** available for the complete $990
+successor budget. The **$170.008** gap
 requires **DEFER**, and the decision creates no expense or commitment. Closing
 maintenance subsequently reduces profit to $819.992. Seed could fund the
 successor; exclusive necessity of earned funds is not established. Future
@@ -39,11 +41,11 @@ reserve or debit funds.
 
 The protocol was publicly registered at
 [`4354fbe49d634de8a9244c7f4aa51eae001607a3`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/4354fbe49d634de8a9244c7f4aa51eae001607a3)
-before implementation/execution. Ten focused tests pass, including an
+before implementation/execution. Eleven focused tests pass, including an
 independently enumerated 34,560-grid price oracle, a strong direct tie,
 no-feasible-price/no-entry cases, missing/stale/incomparable source abstention,
 strict rejection of scenario/private fields, large integer arithmetic, actual
-native delivery, three fresh tax-arithmetic checks and ten public-record tamper
+native delivery, three fresh tax-arithmetic checks and eleven public-record tamper
 checks. All 16 existing workflow-platform checks also pass. Equal-content additional
 inspection supplies no new information and is not a measured agent study.
 
@@ -61,6 +63,12 @@ three newly fixed arithmetic cases agree with exhaustive ordinary pricing.
 The initial source and original v1 packets remain at
 [`dd818794f9c0987c106c9095ce09aefd33b4e92c`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/dd818794f9c0987c106c9095ce09aefd33b4e92c).
 Current packets are v2 exposed engineering reproductions, not new primary accounts.
+F04 corrected the successor admission/display to set aside the known $100
+closing cost. Its boundary cases were registered at
+[`4762ad75ad15f3c91a168d296bb10b8492b6e8a7`](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/commit/4762ad75ad15f3c91a168d296bb10b8492b6e8a7)
+before implementation. The current public packets keep the exact same native
+financial records and add the corrected read-only funding decision. The
+previous display and packets remain at `8b676ced70e33b2f86584c72765a7e9399735272`.
 This is shared-author local procedural challenge, not an
 independent model/institution trial or fresh economic confirmation. No native
 historical account or economic verdict was overwritten after either repair.

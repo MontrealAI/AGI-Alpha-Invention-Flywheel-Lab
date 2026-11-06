@@ -118,6 +118,7 @@ QUOTE_RELEASE_PATHS = (
     '.github/workflows/commitment-public-quote.yml',
 ) + tuple('campaign/commitment-quote-20261106/' + name for name in (
     'PROTOCOL.md', 'F01.json', 'F02.json', 'F02_ADDENDUM.md', 'F03.json',
+    'F04.json', 'FUNDING_RESERVE_ADDENDUM.md',
     'SOURCE.json', 'QUALIFICATION.json', 'PACKAGING.json', 'RESULTS.md',
     'evidence/RESULT.json', 'evidence/AUDIT.json', 'evidence/FINAL_AUDIT.json',
     'evidence/fixed/PUBLIC.json.gz', 'evidence/ordinary/PUBLIC.json.gz',

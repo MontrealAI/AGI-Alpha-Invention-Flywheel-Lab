@@ -25,7 +25,7 @@ def audit_packet(path):
     if len(raw)>8_000_000:raise ValueError('BOUNDED_ENGINEERING_PACKET_REQUIRED')
     p=strict_json(raw)
     from tests.test_commitment_quote_policy import public_observation
-    from research.commitment_quote_policy import decide
+    from research.commitment_quote_policy import decide, successor_funding_decision
     from campaign.genesis_commitment001.delivery import default_requests
     obs=public_observation()
     if p['public_observation']!=obs:raise ValueError('FROZEN_PUBLIC_OBSERVATION_CHANGED')
@@ -78,12 +78,16 @@ def audit_packet(path):
         prior=[a['after'] for a in actions if a['day']==19]
         before=prior[-1] if prior else None
         if p['result']['before_successor']!=before:raise ValueError('SUCCESSOR_SNAPSHOT_CHANGED')
-        seed_possible=bool(before and before['available']>=990_000_000)
+        seed_possible=bool(before and before['available']-100_000_000>=990_000_000)
         if p['result']['seed_can_fund_successor']!=seed_possible:
             raise ValueError('SEED_COUNTERFACTUAL_CHANGED')
         if p['result']['successor_budget_microUSD']!=990_000_000:
             raise ValueError('SUCCESSOR_FULL_BUDGET_CHANGED')
-        if before and min(before['available'],before['unrestrictedEarned'])>=990_000_000:
+        funding=successor_funding_decision(before['available'],before['unrestrictedEarned'],
+                    100_000_000,990_000_000) if before else None
+        if p['result']['funding_decision']!=funding:
+            raise ValueError('KNOWN_UNPAID_WORK_OR_FUNDING_PRESENTATION_CHANGED')
+        if funding and funding['decision']!='DEFER':
             raise ValueError('DEFERRAL_CLAIM_CONTRADICTED')
         if (p['result']['actual_revenue_microUSD']!=0 or p['result']['trailing_365_profit'] is not None
                 or p['result']['scope']!='DISPOSABLE_AUTHORED_ENGINEERING_FIXTURE'):
