@@ -15,9 +15,9 @@ class JoinPreflightTests(unittest.TestCase):
         self.files(self.a, {'a.py': 'a', 'shared.py': 'old', 'production.py': 'p', 'inventory.py': 'i'})
         self.files(self.b, {'b.py': 'b', 'shared.py': 'new'})
         self.files(self.c, {'a.py': 'a', 'b.py': 'b', 'shared.py': 'resolved', 'production.py': 'p', 'inventory.py': 'i'})
-        self.registry(self.a, "SOURCE_PATHS = ('a.py', 'shared.py')\nPRODUCTION_SOURCE_PATHS = ('production.py',)\nINVENTORY_SOURCE_PATHS = ('inventory.py',)\ndef source_paths_for_manifest(x):\n return 'flexibility063/native-services/v1'\n")
+        self.registry(self.a, "SOURCE_PATHS = ('a.py', 'shared.py')\nPRODUCTION_SOURCE_PATHS = ('production.py',)\nINVENTORY_SOURCE_PATHS = ('inventory.py',)\ndef source_paths_for_manifest(manifest):\n schema = manifest.get('schema') if isinstance(manifest, dict) else None\n if schema == 'flexibility063/native-services/v1':\n  return SOURCE_PATHS + tuple(source_paths(None))\n if schema == 'public-portfolio-20261102/native-services/v2':\n  return SOURCE_PATHS + tuple(source_paths(None))\n return SOURCE_PATHS\n")
         self.registry(self.b, "SOURCE_PATHS = ('b.py', 'shared.py')\n")
-        self.registry(self.c, "SOURCE_PATHS = ('a.py', 'b.py', 'shared.py')\nPRODUCTION_SOURCE_PATHS = ('production.py',)\nINVENTORY_SOURCE_PATHS = ('inventory.py',)\ndef source_paths_for_manifest(x):\n return 'flexibility063/native-services/v1'\n")
+        self.registry(self.c, "SOURCE_PATHS = ('a.py', 'b.py', 'shared.py')\nPRODUCTION_SOURCE_PATHS = ('production.py',)\nINVENTORY_SOURCE_PATHS = ('inventory.py',)\ndef source_paths_for_manifest(manifest):\n schema = manifest.get('schema') if isinstance(manifest, dict) else None\n if schema == 'flexibility063/native-services/v1':\n  return SOURCE_PATHS + tuple(source_paths(None))\n if schema == 'public-portfolio-20261102/native-services/v2':\n  return SOURCE_PATHS + tuple(source_paths(None))\n return SOURCE_PATHS\n")
 
     def tearDown(self):
         self.tmp.cleanup()
@@ -48,7 +48,186 @@ class JoinPreflightTests(unittest.TestCase):
         self.assertFalse(v['registry_complete'])
         self.assertEqual(v['missing_main_optional_service_paths']['INVENTORY_SOURCE_PATHS'], ['inventory.py'])
         self.assertEqual(v['missing_main_optional_service_paths']['PRODUCTION_SOURCE_PATHS'], ['production.py'])
-        self.assertEqual(v['missing_main_manifest_routes'], ['flexibility063/native-services/v1'])
+        self.assertEqual(v['missing_main_manifest_routes'], ['flexibility063/native-services/v1', 'public-portfolio-20261102/native-services/v2'])
+
+    def test_v2_route_loss_rejected_despite_complete_static_source_lists(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n  return SOURCE_PATHS + tuple(source_paths(None))\n", ""))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertEqual(result['missing_main_manifest_routes'],
+                         ['public-portfolio-20261102/native-services/v2'])
+        self.assertEqual(result['missing_main_or_transition_financial_paths'], [])
+
+    def test_inert_v2_literal_cannot_masquerade_as_dispatch(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n  return SOURCE_PATHS + tuple(source_paths(None))\n",
+            " documentation = 'public-portfolio-20261102/native-services/v2'\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_v2_base_only_placeholder_is_not_a_service_route(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n"
+            "  return SOURCE_PATHS + tuple(source_paths(None))\n",
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n"
+            "  return SOURCE_PATHS\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertEqual(result['missing_main_manifest_routes'],
+                         ['public-portfolio-20261102/native-services/v2'])
+
+    def test_uncalled_nested_function_is_not_an_active_manifest_route(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n"
+            "  return SOURCE_PATHS + tuple(source_paths(None))\n",
+            " def unused():\n"
+            "  if schema == 'public-portfolio-20261102/native-services/v2':\n"
+            "   return SOURCE_PATHS + tuple(source_paths(None))\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertEqual(result['missing_main_manifest_routes'],
+                         ['public-portfolio-20261102/native-services/v2'])
+
+    def test_unreachable_route_after_unconditional_return_is_not_credited(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n",
+            " return SOURCE_PATHS\n"
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_unconditional_non_schema_branch_shadows_v2(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n",
+            " if True:\n  return SOURCE_PATHS\n"
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_base_only_first_v2_branch_shadows_later_producer_route(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n",
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n"
+            "  return SOURCE_PATHS\n"
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_nested_source_return_in_v2_branch_cannot_masquerade_as_return(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text().replace(
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n"
+            "  return SOURCE_PATHS + tuple(source_paths(None))\n",
+            " if schema == 'public-portfolio-20261102/native-services/v2':\n"
+            "  def unused():\n"
+            "   return SOURCE_PATHS + tuple(source_paths(None))\n"
+            "  return SOURCE_PATHS\n"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_dead_producer_operand_cannot_qualify_v2(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        source = path.read_text()
+        needle = "  return SOURCE_PATHS + tuple(source_paths(None))"
+        # The first occurrence is v1; change only the v2 branch.
+        v2 = " if schema == 'public-portfolio-20261102/native-services/v2':\\n" + needle
+        replacement = (" if schema == 'public-portfolio-20261102/native-services/v2':\\n"
+                       "  return SOURCE_PATHS if True else SOURCE_PATHS + tuple(source_paths(None))")
+        self.assertIn(v2.replace('\\n', '\n'), source)
+        path.write_text(source.replace(v2.replace('\\n', '\n'),
+                                       replacement.replace('\\n', '\n')))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_wrong_selector_binding_cannot_qualify_v2(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        text = path.read_text()
+        self.assertIn(" schema = manifest.get('schema') if isinstance(manifest, dict) else None", text)
+        path.write_text(text.replace(
+            " schema = manifest.get('schema') if isinstance(manifest, dict) else None",
+            " schema = None"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_dead_producer_inside_actual_return_wrapper_is_not_credited(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        text = path.read_text()
+        original = (" if schema == 'public-portfolio-20261102/native-services/v2':\n"
+                    "  return SOURCE_PATHS + tuple(source_paths(None))")
+        injected = (" if schema == 'public-portfolio-20261102/native-services/v2':\n"
+                    "  return tuple(dict.fromkeys(SOURCE_PATHS if True else "
+                    "SOURCE_PATHS + tuple(source_paths(None))))")
+        self.assertIn(original, text)
+        path.write_text(text.replace(original, injected))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_preselector_manifest_rebinding_cannot_simulate_live_dispatch(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        text = path.read_text()
+        selector = " schema = manifest.get('schema') if isinstance(manifest, dict) else None"
+        self.assertIn(selector, text)
+        path.write_text(text.replace(selector, " manifest = {}\n" + selector))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_local_source_producer_shadow_cannot_certify_route(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        text = path.read_text()
+        selector = " schema = manifest.get('schema') if isinstance(manifest, dict) else None"
+        self.assertIn(selector, text)
+        path.write_text(text.replace(selector, selector + "\n def source_paths(_):\n  return ()"))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_decorator_replacing_dispatcher_cannot_certify_route(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        text = path.read_text()
+        original = 'def source_paths_for_manifest(manifest):'
+        self.assertIn(original, text)
+        path.write_text(text.replace(
+            original, "@(lambda f: (lambda manifest: SOURCE_PATHS))\n" + original))
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
+
+    def test_module_level_dispatch_rebinding_cannot_certify_route(self):
+        path = self.c / 'connected_enterprise/finance.py'
+        path.write_text(path.read_text() +
+                        "\nsource_paths_for_manifest = lambda manifest: SOURCE_PATHS\n")
+        result = inspect(self.a, self.b, self.c)
+        self.assertFalse(result['registry_complete'])
+        self.assertIn('public-portfolio-20261102/native-services/v2',
+                      result['missing_main_manifest_routes'])
 
     def test_symlink_and_traversal_refused(self):
         (self.c / 'bad.py').symlink_to(self.c / 'a.py')
@@ -86,6 +265,19 @@ class JoinPreflightTests(unittest.TestCase):
                     inspect(self.a, self.b, self.c)
         self.registry(self.c, baseline)
         self.assertTrue(inspect(self.a, self.b, self.c)['registry_complete'])
+
+
+    def test_actual_main_source_dispatches_all_five_service_manifest_versions(self):
+        root = Path(__file__).resolve().parents[1]
+        _, routes = load_registry(root)
+        required = {
+            'genesis-commitment001/native-services/v1',
+            'public-portfolio-20261102/native-services/v2',
+            'flexibility063/native-services/v1',
+            'production060/native-services/v1',
+            'inventory061/native-services/v1',
+        }
+        self.assertTrue(required <= routes, sorted(required - routes))
 
 
 class PairedAcquisitionReleaseClosureTests(unittest.TestCase):

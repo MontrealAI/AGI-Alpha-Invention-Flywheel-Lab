@@ -4,6 +4,7 @@ import argparse
 import ast
 import hashlib
 import json
+import re
 from pathlib import Path, PurePosixPath
 
 REGISTRIES = ('SOURCE_PATHS', 'PRODUCTION_SOURCE_PATHS', 'INVENTORY_SOURCE_PATHS')
@@ -25,6 +26,56 @@ def checked_path(root, name):
 
 def sha256(root, name):
     return hashlib.sha256(checked_path(root, name).read_bytes()).hexdigest()
+
+
+# Deliberately narrow static grammar. The preflight does not execute finance.py;
+# accepting a referenced name in a dead operand is not a live service route.
+_SCHEMA_SELECTOR = ast.parse(
+    "manifest.get('schema') if isinstance(manifest, dict) else None",
+    mode='eval').body
+_SOURCE_ROOT = ast.parse("Path(__file__).resolve().parents[1]", mode='eval').body
+
+
+def _same_ast(node, reference):
+    return ast.dump(node, include_attributes=False) == ast.dump(reference, include_attributes=False)
+
+
+def _named(node, name):
+    return isinstance(node, ast.Name) and node.id == name
+
+
+def _call(node, name, count):
+    return (isinstance(node, ast.Call) and _named(node.func, name)
+            and len(node.args) == count and not node.keywords)
+
+
+def _active_service_closure(value):
+    """Accept only a live, direct source union, optionally deduplicated.
+
+    This checks structural dispatch, not imported producer semantics or all
+    transitive dependencies. Unsupported expressions fail closed.
+    """
+    if (_call(value, 'tuple', 1) and _call(value.args[0], 'fromkeys', 1)):
+        return False  # fromkeys must be qualified by dict, never a bare alias.
+    if _call(value, 'tuple', 1):
+        inner = value.args[0]
+        if (isinstance(inner, ast.Call) and isinstance(inner.func, ast.Attribute)
+                and _named(inner.func.value, 'dict') and inner.func.attr == 'fromkeys'
+                and len(inner.args) == 1 and not inner.keywords):
+            value = inner.args[0]
+    if not (isinstance(value, ast.BinOp) and isinstance(value.op, ast.Add)
+            and _named(value.left, 'SOURCE_PATHS')):
+        return False
+    right = value.right
+    if _named(right, 'PRODUCTION_SOURCE_PATHS') or _named(right, 'INVENTORY_SOURCE_PATHS'):
+        return True
+    if not _call(right, 'tuple', 1):
+        return False
+    producer = right.args[0]
+    if not _call(producer, 'source_paths', 1):
+        return False
+    root = producer.args[0]
+    return (isinstance(root, ast.Constant) and root.value is None) or _same_ast(root, _SOURCE_ROOT)
 
 
 def load_registry(root):
@@ -58,9 +109,78 @@ def load_registry(root):
             raise ValueError('P0_REGISTRY_REBIND_OR_DYNAMIC_WRITE:' + name)
     if 'SOURCE_PATHS' not in found:
         raise ValueError('P0_BASE_FINANCIAL_REGISTRY_MISSING')
-    routes = {s for node in ast.walk(program) if isinstance(node, ast.FunctionDef) and node.name == 'source_paths_for_manifest'
-              for child in ast.walk(node) if isinstance(child, ast.Constant) and isinstance(child.value, str)
-              for s in [child.value] if s.endswith('/native-services/v1')}
+    # Static guard only: name a dispatched manifest version through an actual
+    # conditional branch retaining producer closure; inert or base-only routes fail.
+    functions = [n for n in program.body if isinstance(n, ast.FunctionDef)
+                 and n.name == 'source_paths_for_manifest']
+    if len(functions) > 1:
+        raise ValueError('P0_DUPLICATE_MANIFEST_DISPATCH')
+    routes = set()
+    if functions:
+        fn = functions[0]
+        args = fn.args
+        # A replaced/decorated dispatcher or an arbitrary earlier assignment
+        # cannot certify the active function. Accept only the observed direct
+        # manifest argument and a manifest-derived first selector statement.
+        direct_parameter = (not fn.decorator_list and not args.posonlyargs
+                            and len(args.args) == 1 and args.args[0].arg == 'manifest'
+                            and not args.vararg and not args.kwarg and not args.kwonlyargs)
+        rebound = any(isinstance(n, ast.Name) and n.id == 'source_paths_for_manifest'
+                      and isinstance(n.ctx, (ast.Store, ast.Del))
+                      for n in ast.walk(program))
+        if not direct_parameter or rebound:
+            return found, routes
+        # Only direct, reachable branches in the outer dispatcher can qualify.
+        # Nested functions, arbitrary statements and reassignments of producer
+        # symbols before dispatch fail closed, instead of asserting semantics.
+        seen = set()
+        schema_bound = False
+        for node in fn.body:
+            if isinstance(node, ast.Return):
+                break
+            if isinstance(node, ast.Assign):
+                if (schema_bound or len(node.targets) != 1
+                        or not _named(node.targets[0], 'schema')
+                        or not _same_ast(node.value, _SCHEMA_SELECTOR)):
+                    break
+                schema_bound = True
+                continue
+            if not isinstance(node, ast.If):
+                break  # Unknown control flow or shadowing: no later route counts.
+            if not schema_bound or node.orelse:
+                break
+            comparison = node.test
+            if (not isinstance(comparison, ast.Compare) or len(comparison.ops) != 1
+                    or not isinstance(comparison.ops[0], ast.Eq)
+                    or len(comparison.comparators) != 1):
+                break
+            left, right = comparison.left, comparison.comparators[0]
+            if isinstance(left, ast.Name) and left.id == 'schema':
+                literal = right
+            elif isinstance(right, ast.Name) and right.id == 'schema':
+                literal = left
+            else:
+                break
+            if not (isinstance(literal, ast.Constant) and isinstance(literal.value, str)
+                    and re.fullmatch(r'[A-Za-z0-9_-]+/native-services/v[1-9][0-9]*', literal.value)):
+                break
+            route = literal.value
+            if route in seen:
+                continue  # First matching branch wins, including a base-only one.
+            seen.add(route)
+            first_return = None
+            valid_body = True
+            for statement in node.body:
+                if isinstance(statement, ast.Return):
+                    first_return = statement.value
+                    break
+                if not isinstance(statement, (ast.Import, ast.ImportFrom, ast.Pass)):
+                    valid_body = False
+                    break
+            if not valid_body or first_return is None:
+                continue
+            if _active_service_closure(first_return):
+                routes.add(route)
     return found, routes
 
 
