@@ -184,7 +184,7 @@ def _verify(events, snapshot, bundle, pinned, expected_hash, min_sequence, repor
         raise WitnessRefused("ANCHOR_SOURCE_OR_SNAPSHOT_CHANGED")
     _check_signature(keys["AUDITOR"], body, anchor["signature"], "ANCHOR_SIGNATURE_INVALID")
     anchor_hash = digest(anchor)
-    report["latest_anchor_sha256"] = anchor_hash
+    # Never publish a candidate anchor as trusted latest when any gate fails.
     if anchor_hash != expected_hash:
         raise WitnessRefused("EXTERNAL_LATEST_ANCHOR_MISMATCH")
     if body["last_sequence"] < min_sequence:
@@ -194,3 +194,4 @@ def _verify(events, snapshot, bundle, pinned, expected_hash, min_sequence, repor
     report["replay_verdict"] = replay["verdict"]
     if replay["verdict"] != "RECONCILED_SYNTHETIC":
         raise WitnessRefused("INDEPENDENT_REPLAY_OR_RESTORATION_DISCREPANCY")
+    report["latest_anchor_sha256"] = anchor_hash

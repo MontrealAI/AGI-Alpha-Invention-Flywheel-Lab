@@ -59,6 +59,7 @@ class SyntheticWitnessTests(unittest.TestCase):
         result = run(items)
         self.assertEqual(result["verdict"], "VERIFIED_SYNTHETIC_CUSTODY_ONLY", result)
         self.assertEqual(result["replay_verdict"], "RECONCILED_SYNTHETIC")
+        self.assertEqual(result["latest_anchor_sha256"], items[4])
         self.assertFalse(result["real_delivery"])
         self.assertFalse(result["financial_authority"])
         self.assertFalse(result["buyer_acceptance"])
@@ -216,6 +217,27 @@ class SyntheticWitnessTests(unittest.TestCase):
         old = copy.deepcopy(items[:5])
         self.assertEqual(run(items)["verdict"], "VERIFIED_SYNTHETIC_CUSTODY_ONLY")
         self.assertEqual(items[:5], old)
+
+
+    def test_23_rejected_external_anchor_cannot_be_reused_as_verified_latest(self):
+        items = fixture()
+        wrong = "0" * 64 if items[4] != "0" * 64 else "1" * 64
+        result = run(items, external=wrong)
+        self.assertEqual(result["reason"], "EXTERNAL_LATEST_ANCHOR_MISMATCH")
+        self.assertEqual(result["verdict"], "FAIL")
+        self.assertIsNone(result["latest_anchor_sha256"])
+
+    def test_24_signed_but_replay_invalid_chain_cannot_issue_verified_latest(self):
+        items = fixture()
+        items[0][3]["quantity"] = 1101  # Must fail independent overfulfillment.
+        items[1]["source_events_sha256"] = digest(items[0])
+        updated = make_demo_bundle(items[0], items[1], "LAB-001", items[5])
+        items[2].clear()
+        items[2].update(updated)
+        result = run(items, external=digest(updated["anchor"]))
+        self.assertEqual(result["reason"], "INDEPENDENT_REPLAY_OR_RESTORATION_DISCREPANCY")
+        self.assertEqual(result["verdict"], "FAIL")
+        self.assertIsNone(result["latest_anchor_sha256"])
 
 
 if __name__ == "__main__":
