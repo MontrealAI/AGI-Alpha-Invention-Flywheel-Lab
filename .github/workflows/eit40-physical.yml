@@ -1,0 +1,47 @@
+name: EIT40 physical response research
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research/eit40/**'
+      - '.github/workflows/eit40-physical.yml'
+permissions:
+  contents: read
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run exact source tests and frozen experiment
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          sha256sum research/eit40/PREREGISTRATION.md research/eit40/model.py research/eit40/run.py research/eit40/test_model.py
+          python -m pip install -r campaign/measurement-compiler-001/requirements.txt
+          OPENBLAS_NUM_THREADS=1 python -m unittest research.eit40.test_model -v
+          OPENBLAS_NUM_THREADS=1 python -O -m unittest research.eit40.test_model -v
+          python campaign/measurement-compiler-001/fetch_data.py --output /tmp/eit40-data
+          OPENBLAS_NUM_THREADS=1 python -m research.eit40.run develop --data /tmp/eit40-data --output /tmp/eit40-dev
+          if grep -q '"all_four_within_five_percent": true' /tmp/eit40-dev/DEVELOPMENT.json; then
+            OPENBLAS_NUM_THREADS=1 python -m research.eit40.run confirm --data /tmp/eit40-data --freeze /tmp/eit40-dev/DEVELOPMENT.json --output /tmp/eit40-retrospective
+          else
+            echo "Scientific stop: original confirmation archive not opened"
+          fi
+      - name: Preserve all registered outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eit40-evidence
+          path: |
+            /tmp/eit40-dev/DEVELOPMENT.json
+            /tmp/eit40-retrospective/RETROSPECTIVE.json
+          if-no-files-found: warn
