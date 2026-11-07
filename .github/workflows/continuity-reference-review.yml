@@ -18,13 +18,15 @@ jobs:
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
       - name: Source-bound independent reference review
         shell: bash
         run: |
           set -euo pipefail
           git rev-parse HEAD
-          sha256sum reviews/continuity-restored-obligations-20261106/reference_oracle.py tests/test_continuity_reference_oracle_review.py
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          sha256sum reviews/continuity-restored-obligations-20261106/reference_oracle.py tests/test_continuity_reference_oracle_review.py reviews/continuity-restored-obligations-20261106/witness_chain.py tests/test_continuity_witness_custody_review.py
           python3 -m py_compile reviews/continuity-restored-obligations-20261106/reference_oracle.py
           python3 -m unittest discover -s tests -p 'test_continuity_reference_oracle_review.py' -v
           python3 -m pip install --only-binary=:all: cryptography==46.0.4

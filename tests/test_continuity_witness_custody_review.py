@@ -239,6 +239,15 @@ class SyntheticWitnessTests(unittest.TestCase):
         self.assertEqual(result["verdict"], "FAIL")
         self.assertIsNone(result["latest_anchor_sha256"])
 
+    def test_25_hosted_workflow_checks_out_and_asserts_exact_requested_head(self):
+        workflow = (Path(__file__).resolve().parents[1] / ".github" /
+                    "workflows" / "continuity-reference-review.yml").read_text()
+        pin = "github.event.pull_request.head.sha || github.sha"
+        self.assertIn("ref: ${{ " + pin + " }}", workflow)
+        self.assertIn('test "$(git rev-parse HEAD)" = "${{ ' + pin + ' }}"', workflow)
+        self.assertIn("sha256sum reviews/continuity-restored-obligations-20261106/reference_oracle.py", workflow)
+        self.assertIn("tests/test_continuity_witness_custody_review.py", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()
