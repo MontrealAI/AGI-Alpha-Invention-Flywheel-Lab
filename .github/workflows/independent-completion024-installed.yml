@@ -85,8 +85,8 @@ jobs:
             'keyfree_archive_sha256':record['public_archive_sha256'],
             'source':'${{ github.sha }}','real_commerce':False,'historical_original_recovered':False},sort_keys=True))
           PY
-      - name: Upload only known key-free public proof and resource telemetry
-        if: always()
+      - name: Upload only fully qualified key-free public proof and resource telemetry
+        if: success()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: completion024-installed-keyfree-${{ github.run_id }}
@@ -95,6 +95,5 @@ jobs:
           path: |
             ${{ runner.temp }}/completion024-installed/PROFILE.json
             ${{ runner.temp }}/completion024-installed/public.zip
-            ${{ runner.temp }}/completion024-installed/failed-keyfree.zip
             ${{ runner.temp }}/CAS_TEST_RESOURCE.txt
             ${{ runner.temp }}/NATIVE_RESOURCE.txt
