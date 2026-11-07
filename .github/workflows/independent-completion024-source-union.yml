@@ -1,0 +1,151 @@
+name: Independent P0 current-main and owner source-union preflight
+on:
+  push:
+    branches:
+      - qualification/completion024-installed-cas-independent-20261107
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-three-tree-static-qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Read exact qualified-main source and the unchanged guard
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 2d1b3a2c1dab8235f2c7bef40bf9a36da1d62d7d
+          path: main-tree
+          persist-credentials: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            connected_enterprise
+            adaptive_enterprise
+            commercial
+            experiments
+            portfolio25
+            vendor
+            production060
+            inventory061
+            flexibility063
+            tools
+      - name: Read exact separate native-capital owner's source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ced6c1cb004887dcdafaea59a2976020be649f8e
+          path: transition-tree
+          persist-credentials: false
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            connected_enterprise
+            adaptive_enterprise
+            commercial
+            experiments
+            portfolio25
+            vendor
+            production060
+            inventory061
+            flexibility063
+      - name: Read literal independent candidate and frozen preregistration
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: candidate-tree
+          persist-credentials: false
+          fetch-depth: 0
+          filter: blob:none
+          sparse-checkout: |
+            connected_enterprise
+            adaptive_enterprise
+            commercial
+            experiments
+            portfolio25
+            vendor
+            production060
+            inventory061
+            flexibility063
+            qualification/completion024-independent
+      - name: Pin all three commits, frozen protocol, unchanged candidate finance source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C main-tree rev-parse HEAD)" = 2d1b3a2c1dab8235f2c7bef40bf9a36da1d62d7d
+          test "$(git -C transition-tree rev-parse HEAD)" = ced6c1cb004887dcdafaea59a2976020be649f8e
+          test "$(git -C candidate-tree rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          git -C candidate-tree merge-base --is-ancestor df1f6896b4537f29531d40a6cf7c31d9b18f754d HEAD
+          git -C candidate-tree merge-base --is-ancestor b0bac29b2306810c345801ac4df37ffdd9f3f52c HEAD
+          git -C candidate-tree show b0bac29b2306810c345801ac4df37ffdd9f3f52c:qualification/completion024-independent/SOURCE_COMPOSITION_PROTOCOL.md > "$RUNNER_TEMP/P0_FROZEN_PROTOCOL.md"
+          cmp "$RUNNER_TEMP/P0_FROZEN_PROTOCOL.md" candidate-tree/qualification/completion024-independent/SOURCE_COMPOSITION_PROTOCOL.md
+          git -C candidate-tree show df1f6896b4537f29531d40a6cf7c31d9b18f754d:connected_enterprise/finance.py > "$RUNNER_TEMP/P0_PINNED_CANDIDATE_FINANCE.py"
+          cmp "$RUNNER_TEMP/P0_PINNED_CANDIDATE_FINANCE.py" candidate-tree/connected_enterprise/finance.py
+      - name: Execute unchanged main guard, preserve explicit current NO-GO evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import importlib.util
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+
+          workspace = Path(os.environ['GITHUB_WORKSPACE'])
+          root = {k: workspace / v for k, v in (
+              ('main', 'main-tree'), ('transition', 'transition-tree'),
+              ('candidate', 'candidate-tree'))}
+          guard_path = root['main'] / 'tools/p0_source_guard.py'
+          spec = importlib.util.spec_from_file_location('p0_read_only_guard', guard_path)
+          guard = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(guard)
+          verdict = guard.inspect(root['main'], root['transition'], root['candidate'])
+          if verdict['scope'] != 'READ_ONLY_STATIC_SOURCE_CHECK_NOT_ACCOUNT_AUTHORITY_OR_SEMANTIC_QUALIFICATION':
+              raise AssertionError('P0_STATIC_SCOPE_CHANGED')
+          if verdict['semantic_review_and_authenticated_account_migration_required'] is not True:
+              raise AssertionError('P0_OWNER_AND_SEMANTIC_GATES_CHANGED')
+          if verdict['union_source_count'] < max(verdict['main_source_count'],
+                                                   verdict['transition_source_count']):
+              raise AssertionError('P0_SOURCE_UNION_UNDERCOUNT')
+          expected_complete = not (verdict['missing_main_or_transition_financial_paths'] or
+                                   any(verdict['missing_main_optional_service_paths'].values()) or
+                                   verdict['missing_main_manifest_routes'])
+          if verdict['registry_complete'] != expected_complete:
+              raise AssertionError('P0_REGISTRY_VERDICT_INCONSISTENT')
+          receipt = {
+              'schema': 'agi-alpha/independent-p0-frozen-source-union/1',
+              'source_owners': {k: subprocess.check_output(
+                  ['git', '-C', str(p), 'rev-parse', 'HEAD'], text=True).strip()
+                  for k, p in root.items()},
+              'guard_sha256': hashlib.sha256(guard_path.read_bytes()).hexdigest(),
+              'finance_sha256': {k: hashlib.sha256(
+                  (p / 'connected_enterprise/finance.py').read_bytes()).hexdigest()
+                  for k, p in root.items()},
+              'frozen_protocol_sha256': hashlib.sha256(
+                  (root['candidate'] / 'qualification/completion024-independent/SOURCE_COMPOSITION_PROTOCOL.md').read_bytes()
+              ).hexdigest(),
+              'preflight': verdict,
+              'diagnostic_execution': 'PASSED',
+              'financial_source_composition': 'STATIC_ONLY_' + ('REGISTRY_COMPLETE' if verdict['registry_complete'] else 'INCOMPLETE'),
+              'original_signed_account_migration': 'NOT_PERFORMED',
+              'original_owner_exclusive_checkpoint': 'UNAVAILABLE',
+              'release_or_commercial_go': False,
+          }
+          output = Path(os.environ['RUNNER_TEMP']) / 'P0_SOURCE_PREFLIGHT.json'
+          output.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+          print(json.dumps(receipt, indent=2, sort_keys=True))
+          PY
+      - name: Upload only successfully checked public static result
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p0-frozen-three-tree-source-diagnostic-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/P0_SOURCE_PREFLIGHT.json
+          if-no-files-found: error
