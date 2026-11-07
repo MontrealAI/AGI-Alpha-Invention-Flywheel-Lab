@@ -1,0 +1,305 @@
+{
+  "archive_sha256": "6a5246f9a9d743d22eafdb409fae638a8461af97e9ff9c4a92f25eba236224d3",
+  "finding": "All eight inspected outline files are binary Pillow mode 1 rasters returned as NumPy bool arrays. Their two pixel values already satisfy binary geometry; the frozen integer-dtype guard rejected kind b.",
+  "minimal_repair": "Convert bool reference rasters losslessly to uint8 (False to 0; True to 1) before applying the otherwise unchanged decoder. No threshold, geometry, calibration split, metric, acceptance rule or recipe changes.",
+  "records": [
+    {
+      "dtype": "bool",
+      "frame_levels": [
+        [
+          0,
+          16
+        ],
+        [
+          1,
+          1784
+        ]
+      ],
+      "levels": [
+        [
+          0,
+          13563
+        ],
+        [
+          1,
+          188937
+        ]
+      ],
+      "member": "BBBC007_v1_outlines/A9/A9 p10d.tif",
+      "member_sha256": "c96f5f2e01746d4ce4fe6abff50d370c70abc65e94a5dbf3605c72774945d0d1",
+      "mode": "1",
+      "selected_tiff_tags": {
+        "bits_per_sample": "(1,)",
+        "compression": "1",
+        "photometric_interpretation": "0",
+        "samples_per_pixel": "1"
+      },
+      "shape": [
+        450,
+        450
+      ],
+      "unique_count": 2
+    },
+    {
+      "dtype": "bool",
+      "frame_levels": [
+        [
+          0,
+          121
+        ],
+        [
+          1,
+          1679
+        ]
+      ],
+      "levels": [
+        [
+          0,
+          22911
+        ],
+        [
+          1,
+          179589
+        ]
+      ],
+      "member": "BBBC007_v1_outlines/A9/A9 p10f.tif",
+      "member_sha256": "f49ebad42056494a7358641413497af2ff304d63bf4c53bfa3fcdee96999b0ea",
+      "mode": "1",
+      "selected_tiff_tags": {
+        "bits_per_sample": "(1,)",
+        "compression": "1",
+        "photometric_interpretation": "0",
+        "samples_per_pixel": "1"
+      },
+      "shape": [
+        450,
+        450
+      ],
+      "unique_count": 2
+    },
+    {
+      "dtype": "bool",
+      "frame_levels": [
+        [
+          0,
+          20
+        ],
+        [
+          1,
+          1780
+        ]
+      ],
+      "levels": [
+        [
+          0,
+          10801
+        ],
+        [
+          1,
+          191699
+        ]
+      ],
+      "member": "BBBC007_v1_outlines/A9/A9 p5d.tif",
+      "member_sha256": "dfaac0b8c8eaf086fe63df750b47ae46af793fef22e857ae5eafbd4343da7564",
+      "mode": "1",
+      "selected_tiff_tags": {
+        "bits_per_sample": "(1,)",
+        "compression": "1",
+        "photometric_interpretation": "0",
+        "samples_per_pixel": "1"
+      },
+      "shape": [
+        450,
+        450
+      ],
+      "unique_count": 2
+    },
+    {
+      "dtype": "bool",
+      "frame_levels": [
+        [
+          0,
+          399
+        ],
+        [
+          1,
+          1401
+        ]
+      ],
+      "levels": [
+        [
+          0,
+          18260
+        ],
+        [
+          1,
+          184240
+        ]
+      ],
+      "member": "BBBC007_v1_outlines/A9/A9 p5f.tif",
+      "member_sha256": "6605863307476bc00290b4d4dcca3c43e04770a09217bad4f3594b653b63232f",
+      "mode": "1",
+      "selected_tiff_tags": {
+        "bits_per_sample": "(1,)",
+        "compression": "1",
+        "photometric_interpretation": "0",
+        "samples_per_pixel": "1"
+      },
+      "shape": [
+        450,
+        450
+      ],
+      "unique_count": 2
+    },
+    {
+      "dtype": "bool",
+      "frame_levels": [
+        [
+          0,
+          24
+        ],
+        [
+          1,
+          1776
+        ]
+      ],
+      "levels": [
+        [
+          0,
+          19883
+        ],
+        [
+          1,
+          182617
+        ]
+      ],
+      "member": "BBBC007_v1_outlines/A9/A9 p7d.tif",
+      "member_sha256": "6d5a61e1567a6bcbb70b016297acd061ab430f827a7e9fb1e95b0b2c9e172f75",
+      "mode": "1",
+      "selected_tiff_tags": {
+        "bits_per_sample": "(1,)",
+        "compression": "1",
+        "photometric_interpretation": "0",
+        "samples_per_pixel": "1"
+      },
+      "shape": [
+        450,
+        450
+      ],
+      "unique_count": 2
+    },
+    {
+      "dtype": "bool",
+      "frame_levels": [
+        [
+          0,
+          133
+        ],
+        [
+          1,
+          1667
+        ]
+      ],
+      "levels": [
+        [
+          0,
+          32677
+        ],
+        [
+          1,
+          169823
+        ]
+      ],
+      "member": "BBBC007_v1_outlines/A9/A9 p7f.tif",
+      "member_sha256": "6bc50b640c5c1eaaf70d85f3ff8ad3f122bf54009ebd61a5b600bb61d34257a4",
+      "mode": "1",
+      "selected_tiff_tags": {
+        "bits_per_sample": "(1,)",
+        "compression": "1",
+        "photometric_interpretation": "0",
+        "samples_per_pixel": "1"
+      },
+      "shape": [
+        450,
+        450
+      ],
+      "unique_count": 2
+    },
+    {
+      "dtype": "bool",
+      "frame_levels": [
+        [
+          0,
+          6
+        ],
+        [
+          1,
+          1794
+        ]
+      ],
+      "levels": [
+        [
+          0,
+          22151
+        ],
+        [
+          1,
+          180349
+        ]
+      ],
+      "member": "BBBC007_v1_outlines/A9/A9 p9d.tif",
+      "member_sha256": "8f3bba495fd11ad81dba6eec666bb8c809957fee8ada7bc0c52460ff409282c6",
+      "mode": "1",
+      "selected_tiff_tags": {
+        "bits_per_sample": "(1,)",
+        "compression": "1",
+        "photometric_interpretation": "0",
+        "samples_per_pixel": "1"
+      },
+      "shape": [
+        450,
+        450
+      ],
+      "unique_count": 2
+    },
+    {
+      "dtype": "bool",
+      "frame_levels": [
+        [
+          0,
+          273
+        ],
+        [
+          1,
+          1527
+        ]
+      ],
+      "levels": [
+        [
+          0,
+          35317
+        ],
+        [
+          1,
+          167183
+        ]
+      ],
+      "member": "BBBC007_v1_outlines/A9/A9 p9f.tif",
+      "member_sha256": "1020af806cd80310ab4ef6e21b39a28c3fb5b9e310a06098418cd3975f302a69",
+      "mode": "1",
+      "selected_tiff_tags": {
+        "bits_per_sample": "(1,)",
+        "compression": "1",
+        "photometric_interpretation": "0",
+        "samples_per_pixel": "1"
+      },
+      "shape": [
+        450,
+        450
+      ],
+      "unique_count": 2
+    }
+  ],
+  "schema": "learning-to-build/reference-format-diagnosis/v1",
+  "scope": "The four registered BBBC007 calibration fields only; no prediction scoring and no target test pixels decoded for this diagnosis."
+}

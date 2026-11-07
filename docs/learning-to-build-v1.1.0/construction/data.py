@@ -261,6 +261,10 @@ def decode_outline(value):
     from scipy import ndimage as ndi
     from skimage.segmentation import relabel_sequential
     array = np.asarray(value)
+    # Format amendment 1: Pillow mode-1 TIFFs are Boolean, not integer arrays.
+    # Preserve their exact two-valued geometry with a lossless representation.
+    if array.dtype.kind == "b":
+        array = array.astype(np.uint8)
     unique = np.unique(array)
     if array.ndim != 2 or min(array.shape, default=0) < 3 or array.dtype.kind not in "iu" or len(unique) > 2:
         raise ValueError("Manual outlines must be two-dimensional monochrome rasters with <=2 values")
