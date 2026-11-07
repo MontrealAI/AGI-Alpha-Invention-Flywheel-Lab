@@ -91,10 +91,26 @@ def audit(case, handoff, passport):
         if not isinstance(r,dict) or 'order_id' not in r or 'quantity' not in r:check(False,'BAD_RESTORED_RECORD');continue
         if r['order_id'] in observed:check(False,'DUPLICATE_RESTORED_RECORD')
         observed[r['order_id']]=r['quantity']
+    # Independent v1 compatibility rule: gross-only recovered records cannot
+    # prove preservation of previously fulfilled units. Never accept a
+    # substitute producer assertion or a matching superficial source hash.
+    if any(row['fulfilled']>0 and not row['cancelled'] for row in state.values()):
+        check(False,'RESTORED_FULFILLMENT_PROVENANCE_UNPROVEN_V1')
     for oid,row in sorted(state.items()):
-        if oid not in observed:anomalies.append({'order_id':oid,'issue':'MISSING_FROM_RESTORED_SNAPSHOT'})
-        elif observed[oid]!=row['quantity']:anomalies.append({'order_id':oid,'issue':'STALE_OR_CHANGED_RESTORED_QUANTITY'})
-        elif row['cancelled']:anomalies.append({'order_id':oid,'issue':'CANCELLED_ORDER_REAPPEARED'})
+        if row['cancelled']:
+            if oid in observed:
+                anomalies.append({'order_id':oid,'issue':'CANCELLED_ORDER_REAPPEARED'})
+            continue
+        if row['quantity']==row['fulfilled']:
+            if oid in observed:
+                anomalies.append({'order_id':oid,'issue':'COMPLETED_ORDER_REAPPEARED'})
+            continue
+        if oid not in observed:
+            anomalies.append({'order_id':oid,'issue':'MISSING_FROM_RESTORED_SNAPSHOT'})
+        elif observed[oid]!=row['quantity']:
+            anomalies.append({'order_id':oid,'issue':'STALE_OR_CHANGED_RESTORED_QUANTITY'})
+        elif row['fulfilled']>0:
+            anomalies.append({'order_id':oid,'issue':'FULFILLMENT_PROVENANCE_UNSUPPORTED_V1'})
     for oid in sorted(set(observed)-set(state)):
         anomalies.append({'order_id':oid,'issue':'UNSUPPORTED_RESTORED_ORDER'})
     check(passport.get('restoration_findings')==anomalies,'RESTORE_CHALLENGE_FINDINGS')
