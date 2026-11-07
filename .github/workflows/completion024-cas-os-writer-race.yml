@@ -1,0 +1,44 @@
+name: Independent CAS simultaneous native OS writers
+on:
+  push:
+    branches:
+      - qualification/completion024-installed-cas-independent-20261107
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-account-safe-simulated-race:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record actual job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Bind frozen protocol to exact source head
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git merge-base --is-ancestor f378a89368001b6c1203e18cdc1e84f180fab455 HEAD
+          git show f378a89368001b6c1203e18cdc1e84f180fab455:qualification/completion024-independent/RACING_WRITER_PROTOCOL.md > "$RUNNER_TEMP/FROZEN_PROTOCOL.md"
+          cmp "$RUNNER_TEMP/FROZEN_PROTOCOL.md" qualification/completion024-independent/RACING_WRITER_PROTOCOL.md
+          sha256sum qualification/completion024-independent/RACING_WRITER_PROTOCOL.md tests/test_completion024_competing_os_writers_independent.py
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install existing supported dependencies
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt numpy==2.3.5 scipy==1.17.0
+      - name: Challenge two simultaneous OS writers on one ephemeral simulated account
+        run: |
+          /usr/bin/time -v python -B -m unittest tests.test_completion024_competing_os_writers_independent -v
+      - name: Print exact tested commit on full success
+        if: success()
+        run: git rev-parse HEAD

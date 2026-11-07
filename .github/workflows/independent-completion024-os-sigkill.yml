@@ -1,0 +1,47 @@
+name: Independent P0 CAS fatal-after-native-commit recovery
+on:
+  push:
+    branches:
+      - qualification/completion024-installed-cas-independent-20261107
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-bound-fatal-crash-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record bounded platform wall start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Bind fatal-crash protocol and exact executing commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git merge-base --is-ancestor 76b729da56ef2b29c4b4dd800515e25ef595b4b8 HEAD
+          git show 76b729da56ef2b29c4b4dd800515e25ef595b4b8:qualification/completion024-independent/OS_KILL_AFTER_NATIVE_COMMIT_PROTOCOL.md > "$RUNNER_TEMP/FROZEN_PROTOCOL.md"
+          cmp "$RUNNER_TEMP/FROZEN_PROTOCOL.md" qualification/completion024-independent/OS_KILL_AFTER_NATIVE_COMMIT_PROTOCOL.md
+          git merge-base --is-ancestor 3d405bd414ff138192d620a65861c3ca2914017e HEAD
+          git show 3d405bd414ff138192d620a65861c3ca2914017e:qualification/completion024-independent/OS_KILL_AMENDMENT.md > "$RUNNER_TEMP/FROZEN_AMENDMENT.md"
+          cmp "$RUNNER_TEMP/FROZEN_AMENDMENT.md" qualification/completion024-independent/OS_KILL_AMENDMENT.md
+          sha256sum qualification/completion024-independent/OS_KILL_AFTER_NATIVE_COMMIT_PROTOCOL.md qualification/completion024-independent/OS_KILL_AMENDMENT.md tests/test_completion024_sigkill_after_commit_independent.py
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install existing supported dependencies
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt numpy==2.3.5 scipy==1.17.0
+      - name: Challenge real native commit then force fatal OS process death
+        run: |
+          /usr/bin/time -v python -B -m unittest tests.test_completion024_sigkill_after_commit_independent -v
+      - name: Print qualified source only on success
+        if: success()
+        run: git rev-parse HEAD
