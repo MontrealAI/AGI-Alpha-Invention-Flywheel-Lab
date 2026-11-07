@@ -190,7 +190,7 @@ def construct(case):
     # A v1 gross-only restored snapshot cannot distinguish already fulfilled
     # units from unshipped work. Do not issue an executable-looking handoff.
     # No v1 source, event, or financial history is reinterpreted or rewritten.
-    if any(o['status']=='ACTIVE' and o['fulfilled']>0 for o in orders.values()):
+    if any(o['status']=='ACTIVE' and 0<o['fulfilled']<o['quantity'] for o in orders.values()):
         raise DrillRejected('restoration fulfillment provenance unsupported in v1 gross-only snapshot')
     if not active:raise DrillRejected('no outstanding eligible commitment')
     if any(o['deadline_hours'] > obj['deadline_hours'] for o in active):
