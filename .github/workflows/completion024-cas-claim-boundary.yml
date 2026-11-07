@@ -26,15 +26,16 @@ jobs:
         run: |
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git merge-base --is-ancestor 45478d33ef376a21e99b3907971fea8e1a90d942 HEAD
+          git merge-base --is-ancestor f8bded51cd34e6a188d8e196b71b0f7b6802da1e HEAD
           git show 45478d33ef376a21e99b3907971fea8e1a90d942:qualification/completion024-independent/CLAIM_MATURITY_PROTOCOL.md >/dev/null
-          sha256sum qualification/completion024-independent/CLAIM_MATURITY_PROTOCOL.md tests/test_completion024_cas_claim_boundary_independent.py
+          sha256sum qualification/completion024-independent/CLAIM_MATURITY_PROTOCOL.md qualification/completion024-independent/CLAIM_MATURITY_AMENDMENT.md tests/test_completion024_cas_claim_boundary_independent.py
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
       - name: Install existing project dependencies only
         run: |
           python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt numpy==2.3.5 scipy==1.17.0
-      - name: Execute frozen three-arm independent native CAS boundary challenge
+      - name: Execute registered four-case independent native CAS boundary challenge
         run: python -B -m unittest tests.test_completion024_cas_claim_boundary_independent -v
       - name: Record successful exact-head source
         if: success()
