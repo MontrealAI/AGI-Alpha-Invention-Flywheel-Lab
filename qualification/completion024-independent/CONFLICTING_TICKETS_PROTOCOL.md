@@ -1,0 +1,19 @@
+# Independent v2-CAS conflicting signed writer protocol — 7 November 2026
+
+**Prospective freeze before executable test or evaluation.** Source: `qualification/completion024-installed-cas-independent-20261107` at `96f5e80d51e8de9a55b2a1037fbf11fb51e695ae`. Scope: one **new ephemeral synthetic** account; existing P0 owner remains exclusive integration owner. This research branch must not modify `JournalAccount`, `Account`, signing/authority code, archive guards, main or any original account.
+
+## Problem and stronger comparator
+
+The previously successful two-process test sends the **same** signed authorization to both writers. It does not challenge a more difficult attempt to fork one genuinely authorized old signed ledger into **two distinct valid forward source versions**, with independently signed tickets issued against the same original historical state and account path. This case must not allow two logically valid but incompatible native descendants, duplicate transitions, revoked residual tails or replacement of the original signing key.
+
+Use the actual `authorize_upgrade`, existing `JournalAccount.upgrade_source`, canonical signed account and explicit CAS directory. Prepare one nonempty prospective-claim ledger. Derive two different authenticated target source hashes by changing only a benign source-version fixture marker in each otherwise identical target copy. Sign two different tickets against the **same** old native journal/actions/state digest, with different unique IDs. No source-target file, other than its fixture marker, may influence a customer, financial rule or test oracle. Start two separate Python OS processes on one barrier. Each process attempts one corresponding valid upgrade, with the same old account path and separately supplied signed ticket. Protect signed synthetic ticket material: pass via stdin only; do not print, archive, log or publish any key or recovery file.
+
+## Frozen acceptance
+
+1. The two tickets have different authenticated `to_source` SHA-256 identities, but identical original `from_source` and expected state. Both were constructed with the original owner-facing native authorization path, not a test-only bypass.
+2. Two processes start on a shared barrier, finish within a finite bound, and **exactly one** enters an auditable forward source. The other refuses with a closed error; it must not create another native history, sign a fork or overwrite the winner. No fatal unexpected exit and no private stderr/stdout.
+3. Independently reopen the winning canonical account through the chosen source. Audit accepts, exactly one `source_transition` action exists, and the entire prior action prefix, customer claim, payable, key inode and authority remain unchanged. The losing source, including attempted replay of its originally valid ticket, is refused. The old version is refused. Every losing attempt must leave the winning signed journal and key unchanged.
+4. All evidence must be small, key-free and exact-source matched. Use no reset, top-up, second operating facade or separate ledger. Expose only the symbolic subprocess outcomes, hashes of public source and anonymous nonsecret pass/fail receipts.
+5. One fixed test attempt; no resampling to get a favorable process ordering. If a failure is observed, retain it as failed, identify the unsafe boundary and report to the current P0 integration owner; do not secretly weaken verification or amend this threshold. A later repair requires a separately recorded amendment.
+
+**Decision rules:** PASS establishes only this one synthetic concurrent-fork rejection case, not universal filesystem safety, original-account custody, commercial benefit or release suitability. FAIL/HANG is a finding, never a permission to re-sign old history. No deploy/merge of the stacked financial branch; current released main remains champion. No spending, paid inference, outreach or real transactions.
