@@ -118,8 +118,9 @@ class IndependentCASClaimBoundaryTests(unittest.TestCase):
                 self.assertTrue(reopened.audit()['accepted'])
         self.assertEqual(self.keypath.stat().st_ino, inode)
 
-    def test_unclaimed_expiry_is_cash_profit_neutral_and_late_claim_refused(self):
-        prior, ticket, inode, before = self._prepare(claim=False)
+    def test_unclaimed_expiry_preserves_large_late_claim_as_breach_and_payable(self):
+        # New amendment explicitly replaces original failed blanket-refusal hypothesis.
+        prior, ticket, inode, _ = self._prepare(claim=False)
         with evidence_directory(self.store):
             with self._open_forward(ticket) as a:
                 early = a.snapshot()['summary'].copy()
@@ -127,14 +128,36 @@ class IndependentCASClaimBoundaryTests(unittest.TestCase):
                 mature = a.advance_financial(21)['summary']
                 self.assertEqual(mature['cash'], early['cash'])
                 self.assertEqual(mature['profit'], early['profit'])
-                self.assertLessEqual(mature['tailReserve'], early['tailReserve'])
+                self.assertEqual(mature['tailReserve'], RESIDUAL)
                 self.assertEqual(a.advance_financial(21)['summary'], mature)
-                actions = a.export()['ledger']['actions']
-                with self.assertRaises(ValueError):
-                    a.execute('claim', {'id': 'cas-boundary-order', 'claim_id': 'late-claim',
-                                        'amount': CLAIM, 'kind': 'covered'}, 21)
-                self.assertEqual(a.export()['ledger']['actions'], actions)
-                self.assertEqual(a.snapshot()['summary']['recoveryIncome'], 0)
+                a.execute('claim', {'id': 'cas-boundary-order', 'claim_id': 'large-late-claim',
+                                    'amount': CLAIM, 'kind': 'covered'}, 21)
+                after = a.snapshot()['summary']
+                self.assertEqual(after['cash'], mature['cash'])
+                self.assertEqual(after['profit'], mature['profit'] - CLAIM)
+                self.assertEqual(after['payables'], mature['payables'] + CLAIM)
+                self.assertTrue(after['investmentStopped'])
+                self.assertEqual(after['recoveryIncome'], 0)
+                self.assertTrue(a.audit()['accepted'])
+                self.assertEqual(a.export()['ledger']['actions'][:len(prior['ledger']['actions'])],
+                                 prior['ledger']['actions'])
+        self.assertEqual(self.keypath.stat().st_ino, inode)
+
+    def test_late_claim_within_permanent_residual_is_payable_not_refused(self):
+        prior, ticket, inode, _ = self._prepare(claim=False)
+        with evidence_directory(self.store):
+            with self._open_forward(ticket) as a:
+                mature = a.advance_financial(21)['summary']
+                self.assertEqual(mature['tailReserve'], RESIDUAL)
+                a.execute('claim', {'id': 'cas-boundary-order', 'claim_id': 'covered-residual',
+                                    'amount': 3_000_000, 'kind': 'covered'}, 21)
+                after = a.snapshot()['summary']
+                self.assertEqual(after['cash'], mature['cash'])
+                self.assertEqual(after['profit'], mature['profit'] - 3_000_000)
+                self.assertEqual(after['payables'], mature['payables'] + 3_000_000)
+                self.assertEqual(after['tailReserve'], mature['tailReserve'] - 3_000_000)
+                self.assertFalse(after['investmentStopped'])
+                self.assertEqual(after['recoveryIncome'], 0)
                 self.assertTrue(a.audit()['accepted'])
                 self.assertEqual(a.export()['ledger']['actions'][:len(prior['ledger']['actions'])],
                                  prior['ledger']['actions'])
