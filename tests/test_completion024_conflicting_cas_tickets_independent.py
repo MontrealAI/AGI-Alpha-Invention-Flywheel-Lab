@@ -17,8 +17,8 @@ import unittest
 
 from connected_enterprise.finance import JournalAccount
 from connected_enterprise.operations import _copy_source, _copy_inputs
-from connected_enterprise.transition_evidence import evidence_directory, ticket_body
-from connected_enterprise.upgrades import authorize_upgrade
+from connected_enterprise.transition_evidence import evidence_directory
+from connected_enterprise.upgrades import authorize_upgrade, validate_ticket
 import tests.test_completion024_cas_claim_boundary_independent as fixture
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -88,8 +88,19 @@ class ConflictingSignedCASWriters(unittest.TestCase):
             ident="boundary-cas-conflicting-alternative", day=20,
             transition_format="v2-cas", evidence_root=self.case.store)
 
-        with evidence_directory(self.case.store):
-            a, b = ticket_body(first), ticket_body(second)
+        # Independent pre-race eligibility check. Both *different* tickets
+        # must be cryptographically valid for the same original signed
+        # account and for their respective intended forward-source roots.
+        # The ephemeral simulation key stays entirely inside this process.
+        with JournalAccount(self.case.old, self.case.manifest, self.case.path,
+                            opening=fixture.OPENING, working=fixture.WORKING,
+                            contract=fixture.CONTRACT) as original:
+            with evidence_directory(self.case.store):
+                a = validate_ticket(first, key=original._account._key,
+                                    root=self.case.new, path=self.case.path)
+                b = validate_ticket(second, key=original._account._key,
+                                    root=self.alt, path=self.case.path)
+            self.assertTrue(original.audit()["accepted"])
         self.assertEqual(a["from_source"], b["from_source"])
         self.assertEqual(a["expected_state_digest"], b["expected_state_digest"])
         self.assertNotEqual(a["to_source"]["sha256"], b["to_source"]["sha256"])
@@ -191,6 +202,7 @@ class ConflictingSignedCASWriters(unittest.TestCase):
         print(json.dumps({
             "schema": "agi-alpha/independent-conflicting-cas-tickets/v1",
             "distinct_authentic_forward_source_versions": True,
+            "both_pre_race_tickets_hmac_and_source_validated": True,
             "one_winner_one_refusal": True,
             "native_transition_count": 1,
             "original_native_prefix_and_claim_preserved": True,
