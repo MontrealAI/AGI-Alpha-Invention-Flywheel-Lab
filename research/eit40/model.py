@@ -14,6 +14,13 @@ EXTRAS = 4
 COUNT = 40
 
 
+def selection_hash(selected):
+    """Pin the *ordered* physical acquisition indices, not just their count."""
+    if type(selected) is not tuple or any(type(j) is not int for j in selected):
+        raise ValueError("ACQUISITION_PLAN_CHANGED")
+    return sha256(",".join(str(j) for j in selected).encode("ascii")).hexdigest()
+
+
 def matrix_hash(*matrices):
     h = sha256()
     for x in matrices:
@@ -81,6 +88,8 @@ class Plan:
     basis_sha256: str
     basis: np.ndarray
     operator: np.ndarray
+    operator_sha256: str
+    selection_sha256: str
     mode: str
     patterns: int
     measurements: int
@@ -94,6 +103,10 @@ class Plan:
             raise ValueError("CALIBRATION_SOURCE_CHANGED")
         if matrix_hash(self.basis) != self.basis_sha256:
             raise ValueError("BASIS_CHANGED")
+        if selection_hash(self.selected) != self.selection_sha256:
+            raise ValueError("ACQUISITION_PLAN_CHANGED")
+        if matrix_hash(self.operator) != self.operator_sha256:
+            raise ValueError("OPERATOR_CHANGED")
         V = np.asarray(acquired, dtype=np.float64)
         if V.shape != (self.measurements, len(self.selected)) or not np.isfinite(V).all():
             raise ValueError("INVALID_ACQUIRED_OBSERVATIONS")
@@ -113,7 +126,8 @@ def compile_plan(currents, measurements, reference, calibrations, mode="physical
     operator = linalg.pinv(B[:, selected], rtol=1e-11) @ B
     return Plan(
         selected, signature(I, M), matrix_hash(reference, *calibrations),
-        matrix_hash(B), B, operator, mode, I.shape[1], M.shape[1],
+        matrix_hash(B), B, operator, matrix_hash(operator),
+        selection_hash(selected), mode, I.shape[1], M.shape[1],
         len(calibrations),
     )
 

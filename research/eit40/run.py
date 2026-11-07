@@ -55,7 +55,8 @@ def plan_receipt(plan):
         "basis_sha256": plan.basis_sha256,
         "geometry_sha256": plan.geometry_sha256,
         "calibration_sha256": plan.calibration_sha256,
-        "operator_sha256": matrix_hash(plan.operator),
+        "operator_sha256": plan.operator_sha256,
+        "selection_sha256": plan.selection_sha256,
         "operator_bytes": int(plan.operator.nbytes),
         "number_of_full_calibration_specimens": plan.calibration_specimens,
     }
