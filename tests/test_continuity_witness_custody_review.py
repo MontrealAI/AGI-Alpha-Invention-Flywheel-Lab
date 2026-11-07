@@ -182,6 +182,35 @@ class SyntheticWitnessTests(unittest.TestCase):
         self.assertEqual(run(items, min_sequence=True)["reason"],
                          "EXTERNAL_MIN_SEQUENCE_REQUIRED")
 
+    def test_21_signed_boolean_receipt_counter_is_not_canonical_integer(self):
+        items = fixture()
+        # A signer that emits JSON true instead of 1 cannot exploit Python's
+        # True == 1 equality. Rebuild every later chain link honestly so this
+        # is an isolated canonical-shape test, not a hash-chain break.
+        from witness_chain import _encode
+        prev = "0" * 64
+        for i, (event, receipt) in enumerate(zip(items[0], items[2]["receipts"]), 1):
+            body = receipt["body"]
+            body["sequence"] = True if i == 1 else i
+            body["previous_receipt_sha256"] = prev
+            for role in receipt["signatures"]:
+                receipt["signatures"][role] = items[5][role].sign(_encode(body)).hex()
+            prev = digest(receipt)
+        anchor_body = items[2]["anchor"]["body"]
+        anchor_body["head_receipt_sha256"] = prev
+        items[2]["anchor"]["signature"] = items[5]["AUDITOR"].sign(_encode(anchor_body)).hex()
+        result = run(items, external=digest(items[2]["anchor"]))
+        self.assertEqual(result["reason"], "CHAIN_EVENT_OR_PREDECESSOR_CHANGED")
+
+    def test_22_signed_float_anchor_counter_is_not_canonical_integer(self):
+        items = fixture()
+        from witness_chain import _encode
+        body = items[2]["anchor"]["body"]
+        body["last_sequence"] = float(len(items[0]))
+        items[2]["anchor"]["signature"] = items[5]["AUDITOR"].sign(_encode(body)).hex()
+        result = run(items, external=digest(items[2]["anchor"]))
+        self.assertEqual(result["reason"], "ANCHOR_SOURCE_OR_SNAPSHOT_CHANGED")
+
     def test_20_unchanged_inputs_and_identity_after_verification(self):
         items = fixture()
         old = copy.deepcopy(items[:5])
