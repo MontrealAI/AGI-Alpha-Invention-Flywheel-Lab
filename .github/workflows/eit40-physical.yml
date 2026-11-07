@@ -1,0 +1,98 @@
+name: EIT40 frozen physical response construction
+on:
+  pull_request:
+    paths:
+      - 'research/eit40/**'
+      - '.github/workflows/eit40-physical.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preregistered-eit40:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - name: Checkout literal proposal head (not synthetic PR merge)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Assert exact executing source and preregistration hashes
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          paths = [
+              'research/eit40/PREREGISTRATION.md',
+              'research/eit40/model.py',
+              'research/eit40/run.py',
+              'research/eit40/test_model.py',
+              'research/measurement_compiler/core.py',
+              'research/measurement_compiler/calibrated.py',
+              'research/measurement_compiler/run.py',
+              'campaign/measurement-compiler-001/fetch_data.py',
+          ]
+          for p in paths:
+              print('EXECUTING_SHA256', p, hashlib.sha256(Path(p).read_bytes()).hexdigest())
+          PY
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install only declared scientific dependencies
+        run: python -m pip install --only-binary=:all: -r campaign/measurement-compiler-001/requirements.txt
+      - name: Run independent regression and adversarial boundary cases
+        run: |
+          python -m unittest research.eit40.test_model -v
+          python -O -m unittest research.eit40.test_model -v
+      - name: Obtain and verify original public calibration and exposed evaluation archives
+        run: python campaign/measurement-compiler-001/fetch_data.py --output "$RUNNER_TEMP/eit40-data"
+      - name: Execute exactly four registered calibration transfer folds
+        run: |
+          python -m research.eit40.run develop --data "$RUNNER_TEMP/eit40-data" --output "$RUNNER_TEMP/eit40-development"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path(__import__('os').environ['RUNNER_TEMP'])/'eit40-development'/'DEVELOPMENT.json'
+          d=json.loads(p.read_text())
+          assert d['schema']=='agi-alpha/eit40/v1'
+          assert len(d['development_folds'])==4
+          assert d['fixed_acquisitions']==40
+          assert d['historical_48_pattern_failure_preserved']
+          print('FROZEN_DEVELOPMENT_DECISION',d['decision'])
+          PY
+      - name: Exposed retrospective only if all preregistered development folds qualify
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import os,subprocess,sys
+          t=Path(os.environ['RUNNER_TEMP'])
+          freeze=t/'eit40-development'/'DEVELOPMENT.json'
+          result=json.loads(freeze.read_text())
+          if result['decision']=='STOP_DEVELOPMENT_FAILED':
+              print('SCIENTIFIC_STOP: at least one leave-one-out transfer failed. No evaluation opened; original REJECT preserved.')
+              sys.exit(0)
+          if result['decision']!='ELIGIBLE_FOR_EXPOSED_RETROSPECTIVE':
+              raise SystemExit('INVALID_DEVELOPMENT_DECISION')
+          subprocess.run([sys.executable,'-m','research.eit40.run','confirm',
+              '--data',str(t/'eit40-data'),
+              '--freeze',str(freeze),
+              '--output',str(t/'eit40-retrospective')],check=True)
+          print('Retrospective data are ALREADY EXPOSED; never count as fresh physical confirmation.')
+          PY
+      - name: Preserve exact independent result and negative outcomes
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: eit40-exact-head-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/eit40-development/DEVELOPMENT.json
+            ${{ runner.temp }}/eit40-retrospective/RETROSPECTIVE.json
+          if-no-files-found: warn
