@@ -74,6 +74,14 @@ def ratio_delta(values, families, registration):
     indentation = registration["test_indentation_mm"]
     if len(indentation) != 2 or indentation[0] >= indentation[1]:
         raise ValueError("ORDERED_TWO_INDENTATIONS_REQUIRED")
+    # Formal endpoint-minimum proof requires the early indentation to load
+    # only family A and the later one to load both positive families.
+    onset = geometry["family_A_height_mm"] - geometry["family_B_height_mm"]
+    if not (0 < indentation[0] < onset < indentation[1] and
+            geometry["family_A_count"] > 0 and
+            geometry["family_B_count"] > 0 and
+            all(float(f["radius_mm"]) > 0 for f in families)):
+        raise ValueError("ENDPOINT_MINIMUM_PROOF_GEOMETRY_NOT_APPLICABLE")
     ratios = []
     for depth_setting in indentation:
         fs = 0.0
@@ -99,7 +107,12 @@ def ratio_delta(values, families, registration):
 
 
 def enumerate_worst(intervals, families, registration):
-    """All 2^8 *shared* corner assignments; never optimize states separately."""
+    """Global box *minimum* via 256 corners and positive two-family proof.
+
+    The largest returned corner value is only a corner maximum: an
+    interior maximum can exist (see PROOF.md). Never label it a box upper
+    bound. The minimum is guaranteed for the validated geometry.
+    """
     worst = math.inf
     best = -math.inf
     worst_corner = None
@@ -194,6 +207,8 @@ def experiment():
             "preregistration_sha256": probe.checksum(REGISTRATION),
         },
         "target_ratio_increase": target,
+        "endpoint_minimum_proof": "PROOF.md: early family-B inactive; each one-coordinate minimum is at an endpoint; dynamic family-A stationary point is a maximum",
+        "reported_best_delta_scope": "MAXIMUM_OVER_FINITE_ENDPOINT_CORNERS_ONLY_NOT_BOX_MAXIMUM",
         "nominal_fitted_delta": nominal,
         "no_measure_registered_worst": registered_control[
             "independent_interval_worst_ratio_increase"
