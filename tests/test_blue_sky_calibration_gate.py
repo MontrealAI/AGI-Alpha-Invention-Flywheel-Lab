@@ -2,6 +2,7 @@
 import copy
 import json
 import math
+import random
 from pathlib import Path
 import tempfile
 import unittest
@@ -174,6 +175,35 @@ class CalibrationGateTests(unittest.TestCase):
                             row[larger]["worst_delta"] + 1e-12,
                             row[mask]["worst_delta"]
                         )
+
+    def test_endpoint_proof_rejects_other_contact_grammars(self):
+        altered = copy.deepcopy(self.registration)
+        # B is also active at the early indentation, invalidating the
+        # qualified endpoint-minimum theorem. Fail closed, do not silently
+        # reuse this special-case proof for a new physical geometry.
+        altered["geometry"]["family_B_height_mm"] = 0.117
+        with self.assertRaisesRegex(ValueError,
+                                    "ENDPOINT_MINIMUM_PROOF_GEOMETRY"):
+            plan.ratio_delta([p["estimate"] for p in self.params],
+                             self.families, altered)
+
+    def test_interior_coefficient_falsifiers_cannot_beat_box_corner_minimum(self):
+        rng = random.Random(640114)
+        # These samples are regressions, not the proof: PROOF.md proves all
+        # continuous positive coefficient-box minima occur at corners.
+        for q in plan.QS:
+            for mask in (0, 15, 85, 170, 240, 255):
+                box = plan.intervals_for_mask(self.params, mask, q)
+                low, upper_corner, _ = plan.enumerate_worst(
+                    box, self.families, self.registration
+                )
+                for _ in range(128):
+                    values = [rng.uniform(lo, hi) for lo, hi in box]
+                    interior = plan.ratio_delta(
+                        values, self.families, self.registration
+                    )
+                    self.assertGreaterEqual(interior + 1e-12, low)
+                self.assertLessEqual(low, upper_corner)
 
     def test_finite_output_and_strict_no_deploy_scope(self):
         output = plan.experiment()
