@@ -1,0 +1,1114 @@
+{
+  "stage": "calibrated_physical_data_confirmation",
+  "verdict": "REJECT",
+  "scope": "offline recovery of measured boundary responses; not tomography or industrial qualification",
+  "count": 48,
+  "original_patterns": 76,
+  "pattern_reduction_fraction": 0.368421052631579,
+  "targets": 21,
+  "within_5_percent": 20,
+  "worst_relative_rms": 0.06059927967902498,
+  "median_relative_rms": 0.037401845551274106,
+  "rows": [
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level1/data1.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level1/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.03688073404428502,
+          "unacquired_relative_rms": 0.06055492140846222,
+          "raw_voltage_relative_rms": 0.003537962008503852,
+          "prediction_wall_seconds": 0.0004640489999019337,
+          "prediction_cpu_seconds": 0.0004633199999999893,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.042618524290411124,
+          "unacquired_relative_rms": 0.07174853755256407,
+          "raw_voltage_relative_rms": 0.004088387167590509,
+          "prediction_wall_seconds": 0.0003092460001425934,
+          "prediction_cpu_seconds": 0.0003097620000000467,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.0414570776117791,
+          "unacquired_relative_rms": 0.06806887502812094,
+          "raw_voltage_relative_rms": 0.003976969802118094,
+          "prediction_wall_seconds": 0.00038292599992928444,
+          "prediction_cpu_seconds": 0.00038386099999998535,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.1666130575927473
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 3.885780586188048e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level1/data2.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level1/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.03564596178776372,
+          "unacquired_relative_rms": 0.05691537330316393,
+          "raw_voltage_relative_rms": 0.0026273076863498235,
+          "prediction_wall_seconds": 0.00038860500012560806,
+          "prediction_cpu_seconds": 0.0003882290000000177,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.030694729772194375,
+          "unacquired_relative_rms": 0.05421067694921752,
+          "raw_voltage_relative_rms": 0.002262374064727862,
+          "prediction_wall_seconds": 0.0002920500000982429,
+          "prediction_cpu_seconds": 0.0002924349999999798,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.043464301416063375,
+          "unacquired_relative_rms": 0.06939879908937306,
+          "raw_voltage_relative_rms": 0.003203563249945706,
+          "prediction_wall_seconds": 0.00038906600002519554,
+          "prediction_cpu_seconds": 0.00038946000000000813,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.12598138993444133
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 2.1510571102112408e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level1/data3.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level1/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.026917764540287888,
+          "unacquired_relative_rms": 0.04513857775261921,
+          "raw_voltage_relative_rms": 0.0030954295371393844,
+          "prediction_wall_seconds": 0.00036127400016994216,
+          "prediction_cpu_seconds": 0.00033107299999995954,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.028031954714285354,
+          "unacquired_relative_rms": 0.04722206712798871,
+          "raw_voltage_relative_rms": 0.0032235567138750414,
+          "prediction_wall_seconds": 0.0002865110000129789,
+          "prediction_cpu_seconds": 0.0002868770000000187,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.02660827145189898,
+          "unacquired_relative_rms": 0.04461958674156285,
+          "raw_voltage_relative_rms": 0.0030598391356442805,
+          "prediction_wall_seconds": 0.0003961159998198127,
+          "prediction_cpu_seconds": 0.0003970809999999658,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.16448240257243596
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 3.174543961037557e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level2/data1.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level2/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.037401845551274106,
+          "unacquired_relative_rms": 0.06133816976106796,
+          "raw_voltage_relative_rms": 0.002089602799251957,
+          "prediction_wall_seconds": 0.0003841579998606903,
+          "prediction_cpu_seconds": 0.0003839519999999652,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.035826490875292244,
+          "unacquired_relative_rms": 0.06015820590970676,
+          "raw_voltage_relative_rms": 0.0020015893471822294,
+          "prediction_wall_seconds": 0.00044128399986220757,
+          "prediction_cpu_seconds": 0.00044229899999997935,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.04639477588060396,
+          "unacquired_relative_rms": 0.07608636945708805,
+          "raw_voltage_relative_rms": 0.0025920286050556828,
+          "prediction_wall_seconds": 0.00042596100001901505,
+          "prediction_cpu_seconds": 0.0004270459999999865,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.14607701067493573
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 1.5265566588595902e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level2/data2.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level2/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.022010162552096507,
+          "unacquired_relative_rms": 0.03626422493919408,
+          "raw_voltage_relative_rms": 0.001995407166281912,
+          "prediction_wall_seconds": 0.0005010039999433502,
+          "prediction_cpu_seconds": 0.0005005950000000481,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.02266697190537862,
+          "unacquired_relative_rms": 0.03911123111195085,
+          "raw_voltage_relative_rms": 0.0020549524825565196,
+          "prediction_wall_seconds": 0.00041627600012361654,
+          "prediction_cpu_seconds": 0.0004173319999999925,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.022556904677381046,
+          "unacquired_relative_rms": 0.037165044247916675,
+          "raw_voltage_relative_rms": 0.0020449739585451992,
+          "prediction_wall_seconds": 0.002061002000118606,
+          "prediction_cpu_seconds": 0.002062381000000002,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.15178465338431024
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 2.0816681711721685e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level2/data3.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level2/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.033003688961074064,
+          "unacquired_relative_rms": 0.05670790428771621,
+          "raw_voltage_relative_rms": 0.002708705079697989,
+          "prediction_wall_seconds": 0.0003201619999799732,
+          "prediction_cpu_seconds": 0.0003188350000000173,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.02947641450288992,
+          "unacquired_relative_rms": 0.050155521535241894,
+          "raw_voltage_relative_rms": 0.0024192117974881984,
+          "prediction_wall_seconds": 0.0002836270000443619,
+          "prediction_cpu_seconds": 0.0002839719999999657,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.04367109271269188,
+          "unacquired_relative_rms": 0.07503694961530498,
+          "raw_voltage_relative_rms": 0.0035842087472812236,
+          "prediction_wall_seconds": 0.00031497400004809606,
+          "prediction_cpu_seconds": 0.0003157200000000193,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.15060436203776084
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 2.8449465006019636e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level3/data1.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level3/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.06059927967902498,
+          "unacquired_relative_rms": 0.09854462159652118,
+          "raw_voltage_relative_rms": 0.009779593366423037,
+          "prediction_wall_seconds": 0.0003684450000491779,
+          "prediction_cpu_seconds": 0.00036778800000003553,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.063043137893531,
+          "unacquired_relative_rms": 0.10146808977348679,
+          "raw_voltage_relative_rms": 0.01017398649633567,
+          "prediction_wall_seconds": 0.00030164400004650815,
+          "prediction_cpu_seconds": 0.0003018999999999661,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.06558539413980144,
+          "unacquired_relative_rms": 0.10665288237745305,
+          "raw_voltage_relative_rms": 0.010584259233131572,
+          "prediction_wall_seconds": 0.00027588499983721704,
+          "prediction_cpu_seconds": 0.00027620099999997594,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.16773088715709092
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 4.440892098500626e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level3/data2.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level3/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.04870969572531011,
+          "unacquired_relative_rms": 0.07976529275307045,
+          "raw_voltage_relative_rms": 0.006550623167220309,
+          "prediction_wall_seconds": 0.00031537399991066195,
+          "prediction_cpu_seconds": 0.0003142170000000055,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.043081667914170084,
+          "unacquired_relative_rms": 0.07342288197787131,
+          "raw_voltage_relative_rms": 0.005793749431582143,
+          "prediction_wall_seconds": 0.0003219640000224899,
+          "prediction_cpu_seconds": 0.0003226709999999966,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.056003156432554775,
+          "unacquired_relative_rms": 0.0917088087170615,
+          "raw_voltage_relative_rms": 0.007531469217820103,
+          "prediction_wall_seconds": 0.00044105400002081296,
+          "prediction_cpu_seconds": 0.00044205800000002293,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.14614877664981013
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 4.440892098500626e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level3/data3.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level3/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.03619971606700225,
+          "unacquired_relative_rms": 0.059191958788916796,
+          "raw_voltage_relative_rms": 0.0007908753664393548,
+          "prediction_wall_seconds": 0.00033067800018216076,
+          "prediction_cpu_seconds": 0.000329760999999984,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.03265573417095034,
+          "unacquired_relative_rms": 0.05682134727895547,
+          "raw_voltage_relative_rms": 0.000713448019343409,
+          "prediction_wall_seconds": 0.00034755400020003435,
+          "prediction_cpu_seconds": 0.00034845900000002317,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.04910295725843859,
+          "unacquired_relative_rms": 0.08029069115005719,
+          "raw_voltage_relative_rms": 0.0010727796660930974,
+          "prediction_wall_seconds": 0.0002884040000026289,
+          "prediction_cpu_seconds": 0.00028881099999999993,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.2400790782019965
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 4.336808689942018e-17
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level4/data1.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level4/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.04878499623739816,
+          "unacquired_relative_rms": 0.08328958369205643,
+          "raw_voltage_relative_rms": 0.0059979609738495514,
+          "prediction_wall_seconds": 0.0003133109998998407,
+          "prediction_cpu_seconds": 0.00031237499999997587,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.04901342858811354,
+          "unacquired_relative_rms": 0.08106845846810162,
+          "raw_voltage_relative_rms": 0.006026046008807594,
+          "prediction_wall_seconds": 0.0003166160001910612,
+          "prediction_cpu_seconds": 0.0003173329999999752,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.048779066483574114,
+          "unacquired_relative_rms": 0.08327945994981,
+          "raw_voltage_relative_rms": 0.005997231929373498,
+          "prediction_wall_seconds": 0.0002777080001123977,
+          "prediction_cpu_seconds": 0.0002780940000000065,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.15017864078008503
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 3.0531133177191805e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level4/data2.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level4/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.04475548970247877,
+          "unacquired_relative_rms": 0.07226603655013047,
+          "raw_voltage_relative_rms": 0.003628735003323356,
+          "prediction_wall_seconds": 0.0004664319999392319,
+          "prediction_cpu_seconds": 0.0004660140000000146,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.05191685339134157,
+          "unacquired_relative_rms": 0.08922954790983288,
+          "raw_voltage_relative_rms": 0.004209371954500903,
+          "prediction_wall_seconds": 0.00031189899982564384,
+          "prediction_cpu_seconds": 0.0003121750000000256,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.04758472135756088,
+          "unacquired_relative_rms": 0.07683435564470681,
+          "raw_voltage_relative_rms": 0.0038581265708730766,
+          "prediction_wall_seconds": 0.0002787690000332077,
+          "prediction_cpu_seconds": 0.0002795760000000036,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.14591042101469828
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 2.7755575615628914e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level4/data3.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level4/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.034955259411323686,
+          "unacquired_relative_rms": 0.05377830229720071,
+          "raw_voltage_relative_rms": 0.009672943972538988,
+          "prediction_wall_seconds": 0.0007359280000400759,
+          "prediction_cpu_seconds": 0.000736196999999994,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.04321285563690586,
+          "unacquired_relative_rms": 0.06675208818424057,
+          "raw_voltage_relative_rms": 0.011958015431972367,
+          "prediction_wall_seconds": 0.00047773899996172986,
+          "prediction_cpu_seconds": 0.00047873300000000896,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.03574515806866552,
+          "unacquired_relative_rms": 0.05499355314912031,
+          "raw_voltage_relative_rms": 0.009891527544371278,
+          "prediction_wall_seconds": 0.0003944439999941096,
+          "prediction_cpu_seconds": 0.00039535899999998403,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.10212154390584696
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 1.0824674490095276e-15
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level5/data1.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level5/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.04209453783440921,
+          "unacquired_relative_rms": 0.0695997227200927,
+          "raw_voltage_relative_rms": 0.0052613231094131305,
+          "prediction_wall_seconds": 0.0003266319999966072,
+          "prediction_cpu_seconds": 0.00032568500000002,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.05828061322218014,
+          "unacquired_relative_rms": 0.0987298715518299,
+          "raw_voltage_relative_rms": 0.00728439253527033,
+          "prediction_wall_seconds": 0.0006742549999216862,
+          "prediction_cpu_seconds": 0.000675806000000001,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.046289741025616137,
+          "unacquired_relative_rms": 0.07653613285508587,
+          "raw_voltage_relative_rms": 0.005785674263603456,
+          "prediction_wall_seconds": 0.0003617739998844627,
+          "prediction_cpu_seconds": 0.000362360000000006,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.1565738231456439
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 3.885780586188048e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level5/data2.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level5/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.045494821791196384,
+          "unacquired_relative_rms": 0.0750413010795226,
+          "raw_voltage_relative_rms": 0.006381459120002181,
+          "prediction_wall_seconds": 0.00047558599999319995,
+          "prediction_cpu_seconds": 0.0004758579999999957,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.06295054662151242,
+          "unacquired_relative_rms": 0.11181543880666985,
+          "raw_voltage_relative_rms": 0.008829935452669652,
+          "prediction_wall_seconds": 0.0006049700000403391,
+          "prediction_cpu_seconds": 0.0006058620000000126,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.0496245369740326,
+          "unacquired_relative_rms": 0.08185304774005915,
+          "raw_voltage_relative_rms": 0.00696072523379145,
+          "prediction_wall_seconds": 0.00038618100006715395,
+          "prediction_cpu_seconds": 0.0003861949999999781,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.201345287663739
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 3.3306690738754696e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level5/data3.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level5/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.03179569385104191,
+          "unacquired_relative_rms": 0.05343997270647146,
+          "raw_voltage_relative_rms": 0.00209620475563671,
+          "prediction_wall_seconds": 0.00048455000001013104,
+          "prediction_cpu_seconds": 0.0004835899999999782,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.028231915169429855,
+          "unacquired_relative_rms": 0.04824131988299584,
+          "raw_voltage_relative_rms": 0.0018612543923758962,
+          "prediction_wall_seconds": 0.00035565500002121553,
+          "prediction_cpu_seconds": 0.0003564910000000143,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.04471123782825863,
+          "unacquired_relative_rms": 0.07514751338368411,
+          "raw_voltage_relative_rms": 0.002947691904604512,
+          "prediction_wall_seconds": 0.0002854199999546836,
+          "prediction_cpu_seconds": 0.0002858459999999785,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.19096196579552907
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 1.5265566588595902e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level6/data1.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level6/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.031261391709735006,
+          "unacquired_relative_rms": 0.050512074576237825,
+          "raw_voltage_relative_rms": 0.004480535326948332,
+          "prediction_wall_seconds": 0.0003176679999796761,
+          "prediction_cpu_seconds": 0.00031662199999998863,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.024932957779208207,
+          "unacquired_relative_rms": 0.04061667602887245,
+          "raw_voltage_relative_rms": 0.00357351327069247,
+          "prediction_wall_seconds": 0.00028739199979099794,
+          "prediction_cpu_seconds": 0.0002878590000000014,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.04597834284324791,
+          "unacquired_relative_rms": 0.07429168554472061,
+          "raw_voltage_relative_rms": 0.006589840634624148,
+          "prediction_wall_seconds": 0.0003088050000314979,
+          "prediction_cpu_seconds": 0.00030967100000001135,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.18223708500906888
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 3.3306690738754696e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level6/data2.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level6/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.0486130642789508,
+          "unacquired_relative_rms": 0.07807003535107511,
+          "raw_voltage_relative_rms": 0.006910707596456519,
+          "prediction_wall_seconds": 0.0006094280001889274,
+          "prediction_cpu_seconds": 0.000479273999999974,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.047516350161697876,
+          "unacquired_relative_rms": 0.08394087045700273,
+          "raw_voltage_relative_rms": 0.006754801551576262,
+          "prediction_wall_seconds": 0.0003168270000060147,
+          "prediction_cpu_seconds": 0.00031686199999997333,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.052593775586784235,
+          "unacquired_relative_rms": 0.08446284924039714,
+          "raw_voltage_relative_rms": 0.007476595229387663,
+          "prediction_wall_seconds": 0.0002805220001391717,
+          "prediction_cpu_seconds": 0.0002809180000000189,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.15993510809634096
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 3.608224830031759e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level6/data3.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level6/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.03266004579700049,
+          "unacquired_relative_rms": 0.055467164634045364,
+          "raw_voltage_relative_rms": 0.005849685556505139,
+          "prediction_wall_seconds": 0.00045201100010672235,
+          "prediction_cpu_seconds": 0.00045167199999995855,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.03748170102193653,
+          "unacquired_relative_rms": 0.06308361830289942,
+          "raw_voltage_relative_rms": 0.00671328406775849,
+          "prediction_wall_seconds": 0.0006370290000177192,
+          "prediction_cpu_seconds": 0.0006382610000000288,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.033712596700424674,
+          "unacquired_relative_rms": 0.05725473145525613,
+          "raw_voltage_relative_rms": 0.006038206168371896,
+          "prediction_wall_seconds": 0.0008530439999958617,
+          "prediction_cpu_seconds": 0.0008540119999999596,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.10730695441795676
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 4.753142324176451e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level7/data1.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level7/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.0391465684119817,
+          "unacquired_relative_rms": 0.0639873094895274,
+          "raw_voltage_relative_rms": 0.006825583232185194,
+          "prediction_wall_seconds": 0.0005814950000058161,
+          "prediction_cpu_seconds": 0.0005799840000000334,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.05445211877817717,
+          "unacquired_relative_rms": 0.09026490178268341,
+          "raw_voltage_relative_rms": 0.009494254131749778,
+          "prediction_wall_seconds": 0.00032294699985868647,
+          "prediction_cpu_seconds": 0.00032322100000004017,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.03899244174973715,
+          "unacquired_relative_rms": 0.06373538062736406,
+          "raw_voltage_relative_rms": 0.006798709756319369,
+          "prediction_wall_seconds": 0.00037803899999744317,
+          "prediction_cpu_seconds": 0.00037919499999999884,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.1565452899357795
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 3.469446951953614e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level7/data2.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level7/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.04599683143545426,
+          "unacquired_relative_rms": 0.07581370964097241,
+          "raw_voltage_relative_rms": 0.01202512312476965,
+          "prediction_wall_seconds": 0.00036870500002805784,
+          "prediction_cpu_seconds": 0.00036769700000000016,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.04405507185094581,
+          "unacquired_relative_rms": 0.07112515652817918,
+          "raw_voltage_relative_rms": 0.011517481677441222,
+          "prediction_wall_seconds": 0.00040765299991107895,
+          "prediction_cpu_seconds": 0.0004085079999999741,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.05311571410642114,
+          "unacquired_relative_rms": 0.0875473201298207,
+          "raw_voltage_relative_rms": 0.013886239161627381,
+          "prediction_wall_seconds": 0.00046628200016129995,
+          "prediction_cpu_seconds": 0.0004671259999999844,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.14250279815136077
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 6.973588373426765e-16
+    },
+    {
+      "target": "EvaluationData_full/evaluation_datasets/level7/data3.mat",
+      "reference": "EvaluationData_full/evaluation_datasets/level7/ref.mat",
+      "arms": {
+        "physics_plus_one": {
+          "contrast_relative_rms": 0.047446001785177896,
+          "unacquired_relative_rms": 0.07905288326055823,
+          "raw_voltage_relative_rms": 0.008336127431159494,
+          "prediction_wall_seconds": 0.0006556470000305126,
+          "prediction_cpu_seconds": 0.0006547250000000226,
+          "within_5_percent": true,
+          "within_10_percent": true
+        },
+        "reference_svd": {
+          "contrast_relative_rms": 0.05974967249045241,
+          "unacquired_relative_rms": 0.10474475620388998,
+          "raw_voltage_relative_rms": 0.010497847344558681,
+          "prediction_wall_seconds": 0.00032296599988512753,
+          "prediction_cpu_seconds": 0.00032340200000002817,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "current_only": {
+          "contrast_relative_rms": 0.05321112800121859,
+          "unacquired_relative_rms": 0.08865853668953537,
+          "raw_voltage_relative_rms": 0.00934904369355038,
+          "prediction_wall_seconds": 0.0009915930002080131,
+          "prediction_cpu_seconds": 0.0009914159999999672,
+          "within_5_percent": false,
+          "within_10_percent": true
+        },
+        "adjacent_linear": {
+          "count": 15,
+          "contrast_relative_rms": 0.15186467696613198
+        },
+        "full_direct": {
+          "count": 76,
+          "contrast_relative_rms": 0.0,
+          "scope": "measurement reference, not independent physical truth"
+        }
+      },
+      "ordinary_same_algebra_max_difference": 7.494005416219807e-16
+    }
+  ],
+  "compilation": [
+    {
+      "arm": "physics_plus_one",
+      "selected": [
+        5,
+        1,
+        13,
+        9,
+        14,
+        10,
+        2,
+        6,
+        12,
+        4,
+        0,
+        8,
+        60,
+        64,
+        26,
+        50,
+        22,
+        42,
+        71,
+        15,
+        32,
+        67,
+        49,
+        44,
+        24,
+        20,
+        7,
+        41,
+        63,
+        28,
+        75,
+        47,
+        18,
+        39,
+        58,
+        68,
+        55,
+        51,
+        33,
+        11,
+        29,
+        36,
+        45,
+        62,
+        25,
+        66,
+        59,
+        17
+      ],
+      "count": 48,
+      "compile_wall_seconds": 0.008138259999896036,
+      "compile_cpu_seconds": 0.00813862000000004,
+      "operator_bytes": 29184
+    },
+    {
+      "arm": "reference_svd",
+      "selected": [
+        13,
+        9,
+        1,
+        5,
+        14,
+        6,
+        10,
+        2,
+        12,
+        8,
+        0,
+        4,
+        49,
+        22,
+        41,
+        30,
+        70,
+        44,
+        52,
+        63,
+        26,
+        34,
+        68,
+        60,
+        66,
+        28,
+        47,
+        40,
+        37,
+        24,
+        56,
+        75,
+        32,
+        58,
+        20,
+        71,
+        18,
+        67,
+        33,
+        59,
+        64,
+        43,
+        7,
+        21,
+        39,
+        48,
+        25,
+        74
+      ],
+      "count": 48,
+      "compile_wall_seconds": 0.006123437000042031,
+      "compile_cpu_seconds": 0.006125553000000006,
+      "operator_bytes": 29184
+    },
+    {
+      "arm": "current_only",
+      "selected": [
+        5,
+        1,
+        13,
+        9,
+        14,
+        10,
+        2,
+        6,
+        12,
+        4,
+        0,
+        8,
+        60,
+        64,
+        26,
+        50,
+        22,
+        42,
+        71,
+        15,
+        32,
+        67,
+        49,
+        44,
+        24,
+        20,
+        7,
+        41,
+        63,
+        28,
+        75,
+        47,
+        18,
+        39,
+        58,
+        68,
+        55,
+        51,
+        33,
+        11,
+        29,
+        36,
+        45,
+        62,
+        25,
+        66,
+        59,
+        17
+      ],
+      "count": 48,
+      "compile_wall_seconds": 0.00129749300003823,
+      "compile_cpu_seconds": 0.0012986029999999538,
+      "operator_bytes": 29184
+    }
+  ],
+  "full_reference_patterns_per_setup": 76,
+  "check_requires_full_measurements": true,
+  "calibration_reused_without_target_retraining": true,
+  "source_hashes": {
+    "__init__.py": "a13c9be6eba38eaa299f5278684119573d720b7a0f0ef3011ba70484ad84e6b1",
+    "calibrated.py": "75ae38420b91133b70cb5edb5f235878a3d8bd82e89d3630caa377783340e9bb",
+    "calibrated_run.py": "e2dd5df9e64430611b5cdf2c04adc7f62bb2de00145ec53eeac1e757c137066c",
+    "core.py": "9a28ddc36dcac1f2e61e061fcbdb48c118a8aaaf8e977057fbbf4fe3aaecacb6",
+    "run.py": "5a3120cefbd108e09a317bcfce57846ad88f8ef639ce7473d18272064a4b445b",
+    "test_calibrated.py": "da3cb3ad2760da5a263b99b8978aad1f5cc196591c853a507490d9a56bc00daf",
+    "test_core.py": "ccffa1b88ba49756e8a891e4e6cb23dd12afc05492afcc5e991c623ffe71dc3c"
+  },
+  "data_sha256": {
+    "Codes_Python.zip": "330d76f3c7148d2840f7f207cd90d7a98eb1d972867b70188096043c9e3261a2",
+    "EvaluationData_full.zip": "85c47f91c0cd15889a96108b389550edafd8bba46b40fd84447e63a62534ce42"
+  },
+  "frozen_development_sha256": "305df1e22c279f84a20bf7daccf7346a3057d5c961cb1d4f41cac3f0386de17d",
+  "wall_seconds": 0.1305584369999906,
+  "cpu_seconds": 0.130531601,
+  "actual_customers": 0,
+  "actual_receipts": 0,
+  "native_account_operations": 0,
+  "human_productivity_comparison": "unmeasured",
+  "external_review": false
+}
