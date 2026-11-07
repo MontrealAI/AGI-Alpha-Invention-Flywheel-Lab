@@ -118,11 +118,12 @@ def make_demo_bundle(events, snapshot, case_id, private_keys):
 
 
 def verify(events, snapshot, bundle, *, pinned_public_keys,
-           expected_latest_anchor_sha256, expected_min_sequence):
+           expected_latest_anchor_sha256, expected_min_sequence,
+           expected_case_id=None):
     """Fail closed on forged, stale, forked or incomplete *synthetic* evidence.
 
-    Both caller-held latest anchor SHA256 and minimum counter are mandatory and
-    must be supplied outside the received payload. Neither proves true custody.
+    Caller-held case identity, latest anchor SHA256 and minimum counter must be
+    supplied outside the received payload. None proves true physical custody.
     """
     report = {"schema": "continuity-omega/witness-review-result-v1",
               "verdict": "FAIL", "scope": "SIMULATED_SIGNERS_NO_REAL_AUTHORITY",
@@ -131,15 +132,21 @@ def verify(events, snapshot, bundle, *, pinned_public_keys,
               "buyer_acceptance": False}
     try:
         _verify(events, snapshot, bundle, pinned_public_keys,
-                expected_latest_anchor_sha256, expected_min_sequence, report)
+                expected_latest_anchor_sha256, expected_min_sequence,
+                expected_case_id, report)
         report["verdict"] = "VERIFIED_SYNTHETIC_CUSTODY_ONLY"
     except (WitnessRefused, ValueError, TypeError, RecursionError, OverflowError) as exc:
         report["reason"] = str(exc) if isinstance(exc, WitnessRefused) else "INVALID_EVIDENCE"
     return report
 
 
-def _verify(events, snapshot, bundle, pinned, expected_hash, min_sequence, report):
+def _verify(events, snapshot, bundle, pinned, expected_hash, min_sequence,
+            expected_case_id, report):
     keys = _public_keys(pinned)
+    # A latest-anchor pin for a *different* subject must never authenticate
+    # this subject. Context comes from outside the potentially swapped bundle.
+    if not _valid_id(expected_case_id):
+        raise WitnessRefused("EXTERNAL_CASE_ID_REQUIRED")
     if type(expected_hash) is not str or len(expected_hash) != 64 or any(
             c not in "0123456789abcdef" for c in expected_hash):
         raise WitnessRefused("EXTERNAL_LATEST_ANCHOR_REQUIRED")
@@ -150,6 +157,8 @@ def _verify(events, snapshot, bundle, pinned, expected_hash, min_sequence, repor
     case_id = bundle["case_id"]
     if not _valid_id(case_id):
         raise WitnessRefused("CASE_ID_INVALID")
+    if case_id != expected_case_id:
+        raise WitnessRefused("EXTERNAL_CASE_ID_MISMATCH")
     receipts = bundle["receipts"]
     if type(events) is not list or type(receipts) is not list or len(events) != len(receipts) or not 1 <= len(receipts) <= 20000:
         raise WitnessRefused("CHAIN_LENGTH_OR_SOURCE_INVALID")

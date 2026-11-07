@@ -46,11 +46,12 @@ def fixture():
     return events, snapshot, bundle, public, external_latest, keys
 
 
-def run(items, *, min_sequence=None, external=None):
+def run(items, *, min_sequence=None, external=None, case_id="LAB-001"):
     events, snapshot, bundle, public, latest, _ = items
     return verify(events, snapshot, bundle, pinned_public_keys=public,
                   expected_latest_anchor_sha256=latest if external is None else external,
-                  expected_min_sequence=len(events) if min_sequence is None else min_sequence)
+                  expected_min_sequence=len(events) if min_sequence is None else min_sequence,
+                  expected_case_id=case_id)
 
 
 class SyntheticWitnessTests(unittest.TestCase):
@@ -248,6 +249,36 @@ class SyntheticWitnessTests(unittest.TestCase):
         self.assertIn("sha256sum reviews/continuity-restored-obligations-20261106/reference_oracle.py", workflow)
         self.assertIn("tests/test_continuity_witness_custody_review.py", workflow)
         self.assertIn("      - 'tests/test_continuity_witness_custody_review.py'", workflow)
+
+
+    def test_26_properly_resigned_other_case_cannot_rebind_this_business(self):
+        # This would pass without an out-of-band expected case identifier:
+        # every signature, snapshot, event and external latest hash is valid,
+        # but belongs to LAB-002, not the requested LAB-001.
+        items = fixture()
+        alternate = make_demo_bundle(items[0], items[1], "LAB-002", items[5])
+        items[2].clear(); items[2].update(alternate)
+        matching_alternate_anchor = digest(alternate["anchor"])
+        refused = run(items, external=matching_alternate_anchor)
+        self.assertEqual(refused["reason"], "EXTERNAL_CASE_ID_MISMATCH")
+        self.assertEqual(refused["verdict"], "FAIL")
+        self.assertIsNone(refused["latest_anchor_sha256"])
+        authorized = run(items, external=matching_alternate_anchor, case_id="LAB-002")
+        self.assertEqual(authorized["verdict"], "VERIFIED_SYNTHETIC_CUSTODY_ONLY")
+
+    def test_27_missing_external_case_id_never_trusts_pinned_anchor(self):
+        items = fixture()
+        result = run(items, case_id=None)
+        self.assertEqual(result["reason"], "EXTERNAL_CASE_ID_REQUIRED")
+        self.assertIsNone(result["latest_anchor_sha256"])
+
+    def test_28_invalid_external_case_id_type_is_not_coerced(self):
+        items = fixture()
+        for invalid in (True, 1, 1.0, "lower-case", ""):
+            with self.subTest(invalid=invalid):
+                result = run(items, case_id=invalid)
+                self.assertEqual(result["reason"], "EXTERNAL_CASE_ID_REQUIRED")
+                self.assertIsNone(result["latest_anchor_sha256"])
 
 
 if __name__ == "__main__":
