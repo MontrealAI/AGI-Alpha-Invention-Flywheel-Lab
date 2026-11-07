@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - qualification/completion024-installed-cas-independent-20261107
+  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
@@ -18,14 +19,14 @@ jobs:
         run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           fetch-depth: 0
       - name: Verify literal tested commit and pre-execution protocol freeze
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
           git merge-base --is-ancestor 79e2860dd1bf865918a21fe8e66d07aed63a90ed HEAD
           git show 79e2860dd1bf865918a21fe8e66d07aed63a90ed:qualification/completion024-independent/CONFLICTING_TICKETS_PROTOCOL.md > "$RUNNER_TEMP/FROZEN_PROTOCOL.md"
           cmp "$RUNNER_TEMP/FROZEN_PROTOCOL.md" qualification/completion024-independent/CONFLICTING_TICKETS_PROTOCOL.md
