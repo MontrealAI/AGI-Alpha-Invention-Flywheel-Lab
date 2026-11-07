@@ -247,6 +247,7 @@ class SyntheticWitnessTests(unittest.TestCase):
         self.assertIn('test "$(git rev-parse HEAD)" = "${{ ' + pin + ' }}"', workflow)
         self.assertIn("sha256sum reviews/continuity-restored-obligations-20261106/reference_oracle.py", workflow)
         self.assertIn("tests/test_continuity_witness_custody_review.py", workflow)
+        self.assertIn("      - 'tests/test_continuity_witness_custody_review.py'", workflow)
 
 
 if __name__ == "__main__":
