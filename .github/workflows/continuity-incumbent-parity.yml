@@ -37,7 +37,8 @@ jobs:
             reviews/continuity-restored-obligations-20261106/witness_chain.py \
             tests/test_continuity_strong_incumbent_parity.py
       - name: Use exact pinned binary-only public dependency
-        run: python3 -m pip install --only-binary=:all: cryptography==46.0.4
+        run: |
+          python3 -m pip install --only-binary=:all: cryptography==46.0.4
       - name: Exercise frozen strong-incumbent and adversarial cases
         run: python3 -B -m unittest discover -s tests -p 'test_continuity_strong_incumbent_parity.py' -v
       - name: Preserve conservative evidence tier
