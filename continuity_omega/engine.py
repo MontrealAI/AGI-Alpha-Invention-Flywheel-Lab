@@ -147,14 +147,29 @@ def outstanding(events, product):
     return sorted(active,key=lambda x:x['order_id']),orders
 
 def restored_anomalies(orders, snapshot):
+    """Compare the v1 *outstanding-work* snapshot, not the whole order history.
+
+    v1 records only gross quantity. They cannot attest to already completed
+    units; an active partially fulfilled order must fail closed until a
+    separately versioned, independently witnessed snapshot exists.
+    """
     got={r['order_id']:r['quantity'] for r in snapshot}
     anomalies=[]
     for oid,o in sorted(orders.items()):
-        if oid not in got:anomalies.append({'order_id':oid,'issue':'MISSING_FROM_RESTORED_SNAPSHOT'})
+        if o['status']=='CANCELLED':
+            if oid in got:
+                anomalies.append({'order_id':oid,'issue':'CANCELLED_ORDER_REAPPEARED'})
+            continue
+        if o['quantity']==o['fulfilled']:
+            if oid in got:
+                anomalies.append({'order_id':oid,'issue':'COMPLETED_ORDER_REAPPEARED'})
+            continue
+        if oid not in got:
+            anomalies.append({'order_id':oid,'issue':'MISSING_FROM_RESTORED_SNAPSHOT'})
         elif got[oid]!=o['quantity']:
             anomalies.append({'order_id':oid,'issue':'STALE_OR_CHANGED_RESTORED_QUANTITY'})
-        elif o['status']=='CANCELLED':
-            anomalies.append({'order_id':oid,'issue':'CANCELLED_ORDER_REAPPEARED'})
+        elif o['fulfilled']>0:
+            anomalies.append({'order_id':oid,'issue':'FULFILLMENT_PROVENANCE_UNSUPPORTED_V1'})
     for oid in sorted(set(got)-set(orders)):
         anomalies.append({'order_id':oid,'issue':'UNSUPPORTED_RESTORED_ORDER'})
     return anomalies
@@ -172,6 +187,11 @@ def construct(case):
     guarded_case(case)
     obj=case['objective'];events=case['source_events']
     active,orders=outstanding(events,obj['product'])
+    # A v1 gross-only restored snapshot cannot distinguish already fulfilled
+    # units from unshipped work. Do not issue an executable-looking handoff.
+    # No v1 source, event, or financial history is reinterpreted or rewritten.
+    if any(o['status']=='ACTIVE' and o['fulfilled']>0 for o in orders.values()):
+        raise DrillRejected('restoration fulfillment provenance unsupported in v1 gross-only snapshot')
     if not active:raise DrillRejected('no outstanding eligible commitment')
     if any(o['deadline_hours'] > obj['deadline_hours'] for o in active):
         raise DrillRejected('order falls outside frozen deadline horizon')
