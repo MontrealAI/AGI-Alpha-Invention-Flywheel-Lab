@@ -163,7 +163,7 @@ def _verify(events, snapshot, bundle, pinned, expected_hash, min_sequence, repor
         expected_body = {"schema": RECEIPT_SCHEMA, "case_id": case_id,
                          "sequence": i, "source_event_sha256": digest(event),
                          "previous_receipt_sha256": prev}
-        if type(body) is not dict or body != expected_body:
+        if type(body) is not dict or _encode(body) != _encode(expected_body):
             raise WitnessRefused("CHAIN_EVENT_OR_PREDECESSOR_CHANGED")
         signatures = receipt["signatures"]
         expected_roles = {"ERP", "FULFILLMENT"} if event.get("type") == "FULFILL" else {"ERP"}
@@ -180,7 +180,7 @@ def _verify(events, snapshot, bundle, pinned, expected_hash, min_sequence, repor
                      "last_sequence": len(events), "head_receipt_sha256": prev,
                      "source_events_sha256": digest(events),
                      "restored_snapshot_sha256": digest(snapshot)}
-    if type(body) is not dict or body != expected_body:
+    if type(body) is not dict or _encode(body) != _encode(expected_body):
         raise WitnessRefused("ANCHOR_SOURCE_OR_SNAPSHOT_CHANGED")
     _check_signature(keys["AUDITOR"], body, anchor["signature"], "ANCHOR_SIGNATURE_INVALID")
     anchor_hash = digest(anchor)
