@@ -135,7 +135,12 @@ class SyntheticWitnessTests(unittest.TestCase):
     def test_12_cross_case_receipt_replay_refused(self):
         items = fixture()
         items[2]["case_id"] = "OTHER-001"
-        self.assertEqual(run(items)["reason"], "CHAIN_EVENT_OR_PREDECESSOR_CHANGED")
+        # The external subject pin now rejects the swapped envelope first.
+        self.assertEqual(run(items)["reason"], "EXTERNAL_CASE_ID_MISMATCH")
+        # Even when the outside subject is deliberately switched, the old
+        # receipt signatures remain bound to LAB-001 and independently fail.
+        self.assertEqual(run(items, case_id="OTHER-001")["reason"],
+                         "CHAIN_EVENT_OR_PREDECESSOR_CHANGED")
 
     def test_13_missing_or_reordered_receipt_refused(self):
         for mutate in (lambda a: a.pop(), lambda a: a.reverse()):
