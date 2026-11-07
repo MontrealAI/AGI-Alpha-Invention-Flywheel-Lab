@@ -1,0 +1,15 @@
+{
+  "registered_utc": "2026-11-04T14:01:56.731239+00:00",
+  "before_any_confirmation": true,
+  "reason": "January development all-on baseline oversupply, preserved in DEVELOPMENT_FAILURE.json",
+  "overrides": {
+    "network": {
+      "thermal": "Optimize binary on/off commitment held constant for24h and common across scenarios. Enforce PMin/PMax conditional on commitment and source hourly ramp. Fault unit may drop at8. Initial commitment assumed already established; no startup trajectory or prehorizon minup/down qualification.",
+      "commitment_scope": "One common fixed commitment chosen against all seven stress cases before fault identity, same for ordinary and proposed routes. Conservative restriction relative to time-varying unit commitment; not an infeasibility proof for the real grid."
+    },
+    "acceptance": {
+      "optimality": "HiGHS mixed-integer primal objective, dual bound and reported MIP gap within registered fixed-commitment/common-work policy class only; independent witness feasibility is separate."
+    },
+    "cost_evidence": "All monetary coefficients uncalibrated assumptions, not vendor quotes/tariffs. Utility incremental redispatch, startup and no-load costs; tax, permitting, interconnection, backup emissions permission, curtailment compensation and jurisdiction-specific residuals are additive unknown U. Optimization is only over declared equipment-plus-operating subtotal, not complete system cost optimality."
+  }
+}

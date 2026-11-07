@@ -1,0 +1,16 @@
+{
+  "observed_utc": "2026-11-04T14:01:56.730989+00:00",
+  "role": "January development, before confirmation",
+  "failed_command": "construct all-on source PMin thermal case",
+  "solver_status": 2,
+  "all_seven_scenarios_infeasible": true,
+  "hour0_total_load_mw": 3337.33188,
+  "hour0_must_run_minimum_mw": 3929.2,
+  "cause": "All thermal units assumed committed; even existing system fails energy balance. Not evidence against connection feasibility.",
+  "lesson": "Do not confuse invalid baseline commitment assumptions with infeasible new service. Optimize one fixed horizon commitment; preserve original registration and this failure.",
+  "additional_development_failure": {
+    "event": "First amended solver succeeded but serialization failed while registration loader changed during development",
+    "exception": "AttributeError: str object has no attribute update",
+    "outcome": "No success receipt or confirmation output emitted; rerun on stable amended source passed. All further confirmation execution binds immutable source closure."
+  }
+}
