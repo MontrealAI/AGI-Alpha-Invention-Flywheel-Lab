@@ -15,10 +15,8 @@ import unittest
 
 from connected_enterprise.finance import JournalAccount
 from connected_enterprise.transition_evidence import evidence_directory
-from connected_enterprise.upgrades import validate_ticket
-from tests.test_completion024_cas_claim_boundary_independent import (
-    IndependentCASClaimBoundaryTests, OPENING, WORKING, CONTRACT,
-)
+from connected_enterprise.upgrades import authorize_upgrade, validate_ticket
+import tests.test_completion024_cas_claim_boundary_independent as fixture
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKER = "NATIVE_COMMIT_BEFORE_SIGKILL"
@@ -54,14 +52,14 @@ sys.exit(56)
 class IndependentCASAfterNativeSIGKILL(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        IndependentCASClaimBoundaryTests.setUpClass()
+        fixture.IndependentCASClaimBoundaryTests.setUpClass()
 
     @classmethod
     def tearDownClass(cls):
-        IndependentCASClaimBoundaryTests.tearDownClass()
+        fixture.IndependentCASClaimBoundaryTests.tearDownClass()
 
     def setUp(self):
-        self.case = IndependentCASClaimBoundaryTests(
+        self.case = fixture.IndependentCASClaimBoundaryTests(
             "test_missing_cas_scope_cannot_change_signed_history")
         self.case.setUp()
 
@@ -69,7 +67,17 @@ class IndependentCASAfterNativeSIGKILL(unittest.TestCase):
         self.case.tearDown()
 
     def test_native_committed_os_kill_reopens_exactly_once_without_liability_loss(self):
-        prior, ticket, inode, _ = self.case._prepare(claim=True)
+        prior, _unused_v1_ticket, inode, _ = self.case._prepare(claim=True)
+        ticket = authorize_upgrade(
+            historical_root=self.case.old, target_root=self.case.new,
+            manifest=self.case.manifest, path=self.case.path,
+            opening=fixture.OPENING, working=fixture.WORKING, contract=fixture.CONTRACT,
+            expected_state_digest=prior["snapshot"]["state_digest"],
+            ident="fatal-after-native-forward", day=20,
+            transition_format="v2-cas", evidence_root=self.case.store,
+        )
+        self.assertEqual(ticket["body"]["schema"],
+                         "agi-alpha/native-source-transition/v2-cas")
         original_actions = prior["ledger"]["actions"]
         original_summary = prior["ledger"]["summary"]
         self.assertTrue(prior["ledger"]["prospective_claims"])
@@ -79,11 +87,11 @@ class IndependentCASAfterNativeSIGKILL(unittest.TestCase):
                 ticket, key=self.case.keypath.read_bytes(),
                 root=self.case.new, path=self.case.path
             )
-        self.assertEqual(validated["schema"], "agi-alpha/native-source-transition/v2-cas")
+        self.assertEqual(validated["schema"], "agi-alpha/native-source-transition/v1")
         payload = {
             "source": str(self.case.new), "path": str(self.case.path),
             "store": str(self.case.store), "manifest": self.case.manifest,
-            "opening": OPENING, "working": WORKING, "contract": CONTRACT,
+            "opening": fixture.OPENING, "working": fixture.WORKING, "contract": fixture.CONTRACT,
             "ticket": ticket,
         }
         proc = subprocess.Popen(
@@ -111,7 +119,7 @@ class IndependentCASAfterNativeSIGKILL(unittest.TestCase):
         with evidence_directory(self.case.store):
             with JournalAccount.upgrade_source(
                 self.case.new, self.case.manifest, self.case.path,
-                opening=OPENING, working=WORKING, contract=CONTRACT,
+                opening=fixture.OPENING, working=fixture.WORKING, contract=fixture.CONTRACT,
                 authorization=ticket,
             ) as recovered:
                 first = recovered.export()
@@ -128,7 +136,7 @@ class IndependentCASAfterNativeSIGKILL(unittest.TestCase):
                 self.assertEqual(tape["summary"]["collections"], original_summary["collections"])
             with JournalAccount(
                 self.case.new, self.case.manifest, self.case.path,
-                opening=OPENING, working=WORKING, contract=CONTRACT,
+                opening=fixture.OPENING, working=fixture.WORKING, contract=fixture.CONTRACT,
             ) as ordinary_reopen:
                 self.assertEqual(ordinary_reopen.export(), first)
                 self.assertTrue(ordinary_reopen.audit()["accepted"])
@@ -137,7 +145,7 @@ class IndependentCASAfterNativeSIGKILL(unittest.TestCase):
             with self.assertRaises(ValueError):
                 with JournalAccount(
                     self.case.old, self.case.manifest, self.case.path,
-                    opening=OPENING, working=WORKING, contract=CONTRACT,
+                    opening=fixture.OPENING, working=fixture.WORKING, contract=fixture.CONTRACT,
                 ):
                     self.fail("UNAUTHORIZED_DOWNGRADE_OPENED")
             self.assertEqual(signed_journal.read_bytes(), before_rejection)
