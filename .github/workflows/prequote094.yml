@@ -1,0 +1,40 @@
+name: Prequote094 source-bound value of information and refusal controls
+on:
+  pull_request:
+    paths:
+      - 'research/prequote094.py'
+      - 'tests/test_prequote094.py'
+      - 'campaign/omega-prequote094/**'
+      - '.github/workflows/prequote094.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  finite-precommit-information:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job start before checkout
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Check frozen historical evidence, uncertainty and decision regressions
+        run: python -m unittest discover -s tests -p 'test_prequote094.py' -v
+      - name: Produce exact source-pinned 108-cell conditional certificate
+        shell: bash
+        run: |
+          python -m research.prequote094 --out "$RUNNER_TEMP/PREQUOTE094.json"
+          python -c 'import json,sys; d=json.load(open(sys.argv[1])); assert d["registered_grid_size"]==108 and d["new_native_account_count"]==0 and d["decision"]=="NO_NEW_CHANNEL_COMMITMENT" and d["signal_quality_measurements"] is None and d["actual_annual_profit_usd"] is None' "$RUNNER_TEMP/PREQUOTE094.json"
+      - name: Preserve new compact source-bound certificate
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: prequote094-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/PREQUOTE094.json
+          if-no-files-found: warn
