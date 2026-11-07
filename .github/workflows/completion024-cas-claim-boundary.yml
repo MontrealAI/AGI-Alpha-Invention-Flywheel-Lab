@@ -32,7 +32,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install existing project dependencies only
-        run: python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt numpy==2.3.5 scipy==1.17.0
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt numpy==2.3.5 scipy==1.17.0
       - name: Execute frozen three-arm independent native CAS boundary challenge
         run: python -B -m unittest tests.test_completion024_cas_claim_boundary_independent -v
       - name: Record successful exact-head source
