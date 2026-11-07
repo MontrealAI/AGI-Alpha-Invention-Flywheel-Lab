@@ -1,0 +1,114 @@
+name: Independent P0 seven-file API collision diagnosis
+on:
+  push:
+    branches:
+      - qualification/completion024-installed-cas-independent-20261107
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-main-owner-interface-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record actual hosted start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout immutable main contract
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 2d1b3a2c1dab8235f2c7bef40bf9a36da1d62d7d
+          path: main-tree
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout: |
+            adaptive_enterprise
+            commercial
+            connected_enterprise
+            vendor
+      - name: Checkout immutable owner transition
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ced6c1cb004887dcdafaea59a2976020be649f8e
+          path: owner-tree
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout: |
+            adaptive_enterprise
+            commercial
+            connected_enterprise
+            vendor
+      - name: Checkout exact independent research source and preregistration
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: independent-tree
+          persist-credentials: false
+          fetch-depth: 0
+          sparse-checkout: |
+            connected_enterprise
+            qualification/completion024-independent
+      - name: Assert source identities and frozen protocol unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C main-tree rev-parse HEAD)" = 2d1b3a2c1dab8235f2c7bef40bf9a36da1d62d7d
+          test "$(git -C owner-tree rev-parse HEAD)" = ced6c1cb004887dcdafaea59a2976020be649f8e
+          test "$(git -C independent-tree rev-parse HEAD)" = ${{ github.event.pull_request.head.sha || github.sha }}
+          git -C independent-tree merge-base --is-ancestor fb3b1365cf126d4b62c1323739163a701332ebd5 HEAD
+          git -C independent-tree merge-base --is-ancestor 72b1eed0d140f948c67d656c640f46ba9345790a HEAD
+          git -C independent-tree show fb3b1365cf126d4b62c1323739163a701332ebd5:qualification/completion024-independent/API_COMPAT_PROTOCOL.md > "$RUNNER_TEMP/FROZEN_API_PROTOCOL.md"
+          cmp "$RUNNER_TEMP/FROZEN_API_PROTOCOL.md" independent-tree/qualification/completion024-independent/API_COMPAT_PROTOCOL.md
+          git -C independent-tree show df1f6896b4537f29531d40a6cf7c31d9b18f754d:connected_enterprise/finance.py > "$RUNNER_TEMP/PINNED_CANDIDATE_FINANCE.py"
+          cmp "$RUNNER_TEMP/PINNED_CANDIDATE_FINANCE.py" independent-tree/connected_enterprise/finance.py
+          python3 -m py_compile independent-tree/qualification/completion024-independent/api_compat_probe.py
+      - name: Self-test static symbol/signature extraction without importing financial code
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import ast
+          import importlib.util
+          spec=importlib.util.spec_from_file_location('api_probe','independent-tree/qualification/completion024-independent/api_compat_probe.py')
+          probe=importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(probe)
+          a=probe._symbols(ast.parse('class X:\n    def f(self, a, *, safety=True): return a\n'))
+          assert a['X.f']['call']['keyword_only']==['safety']
+          assert 'a' in a['X.f']['call']['required']
+          assert a['X.f']['call']['var_keyword'] is None
+          print('STATIC_SELFTEST_PASS')
+          PY
+      - name: Diagnose exact seven collisions, never execute financial modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 independent-tree/qualification/completion024-independent/api_compat_probe.py --main-root main-tree --owner-root owner-tree --output "$RUNNER_TEMP/API_COLLISIONS.json"
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, subprocess
+          p=Path(os.environ['RUNNER_TEMP'])/'API_COLLISIONS.json'
+          report=json.loads(p.read_text())
+          assert report['file_count']==7
+          assert report['scope']=='READ_ONLY_AST_DEVELOPMENT_DIAGNOSTIC_NOT_SEMANTIC_QUALIFICATION'
+          assert report['main_only_symbol_count']>0 and report['changed_shared_symbol_count']>0
+          assert report['qualified_release'] is False and report['safe_integration'] is False
+          report['git_sources']={k: subprocess.check_output(['git','-C',k+'-tree','rev-parse','HEAD'],text=True).strip() for k in ('main','owner')}
+          report['git_sources']['independent']=subprocess.check_output(['git','-C','independent-tree','rev-parse','HEAD'],text=True).strip()
+          file='independent-tree/qualification/completion024-independent/'
+          report['protocol_sha256']=hashlib.sha256(Path(file+'API_COMPAT_PROTOCOL.md').read_bytes()).hexdigest()
+          report['probe_sha256']=hashlib.sha256(Path(file+'api_compat_probe.py').read_bytes()).hexdigest()
+          report['identity_conclusion']='EXACT_PINNED_TREES_ONLY'
+          report['owner_decision']='P0_SOURCE_UNION_AND_SEMANTIC_INTEGRATION_REQUIRED_NO_GO'
+          p.write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
+          print('P0_API_DIAGNOSIS_COMPLETE_NONQUALIFYING')
+          PY
+      - name: Publish key-free source-contract diagnostic only
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p0-api-collision-map-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/API_COLLISIONS.json
+          if-no-files-found: error
