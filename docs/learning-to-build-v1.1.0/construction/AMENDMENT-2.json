@@ -1,0 +1,67 @@
+{
+  "decision": "Add the documented fixed Pillow RGB-to-L convention as an explicit supplied observation adapter. It is generally lossy and not justified as recovery of physical fluorescence. Do not silently collapse, crop, resize, or remove fields.",
+  "diagnosis": "All16field spatial grids agree. Twelve raw TIFFs from six test fields are RGB; the others are scalar. None of those RGB rasters has three identical planes. The source page describes grayscale channels, but the supplied storage does not satisfy the former scalar-only input assumption.",
+  "execution": "Run fresh final-run003 under the new protocol/receipt, retain and charge both previous attempts. Re-execution cannot turn source/calibration exposure into new hidden data. Re-freeze the separately registered incumbent against this same common representation before its first image inference.",
+  "id": "AMENDMENT-2",
+  "implementation": {
+    "builder.py": "9665f8f9e3013e54b9d065765c0fd5478940bd8d8bfcfa5eb8a7b0135b309dee",
+    "data.py": "e2ba268405723a1ba997af11b25fbb67b610b04394ee7910d4ebb1e812d1bea3",
+    "instrument.py": "36248b79130e5b1835da55302efe63432c013b8aaac5ce5b8253a6b243f7c265"
+  },
+  "knowledge_at_amendment": {
+    "first_target_reference_arrays_loaded_before_shape_failure": true,
+    "neural_predictions_or_inference_inputs_used": false,
+    "six_original_choices_sealed": true,
+    "source_and_calibration_scores_seen": true,
+    "target_predictions_or_scores_seen": false,
+    "target_raw_RGB_pixels_inspected_for_encoding": true
+  },
+  "new_protocol": {
+    "path": "PROTOCOL-amendment-2.json",
+    "sha256": "20d28a2fffbb3189ef14492a46853e5711e03d5f94c64b9f0aeb0e934a3367ae"
+  },
+  "observed_failure": {
+    "all_choices_before_test_sha256": "42425db7a726125e54b2a0cac0548872377cab09800027fd6d7ed687c168dffc",
+    "completed_stages": [
+      "donor",
+      "source"
+    ],
+    "completed_successor_calibration_arms": 6,
+    "error": "ValueError: BBBC007 channel/reference shape mismatch: f113/AS_09125_040701150004_A02f00",
+    "every_arm_candidates_executed": 24,
+    "every_selected_recipe": "r12",
+    "run": "amended-run002",
+    "run_state_sha256": "0af5c238de48eabe50b8b32c74a07fd574568564976e2ec4514b08a03ba73b24",
+    "selected_calibration_boundary_f1": 0.25039834937865246,
+    "selected_calibration_qualified": false,
+    "status": "FAILED",
+    "status_sha256": "4dce92c588cea45f59bfc060d1135d9bbe734ee6d70f0c30151ae0dcd819ef97"
+  },
+  "parent_amendment_sha256": "4f343ddc237fdf480050c58e6f9b342b2aea760a4307256f1e5cd57bff4dcfe3",
+  "parent_registration_sha256": "69985fb0cee36f85bc2595147d34450c1683eeb9bceb99fb155acc040b0e65f4",
+  "preservation": "Original-run001 and amended-run002, all costs and selected instruments/traces remain retained. First-amendment source is preserved in registrations/amendment-1/. Original protocol and both earlier receipts remain unchanged.",
+  "registered_at_utc": "2026-11-07T15:52:19Z",
+  "review": {
+    "conversion_mismatches": 0,
+    "independent_rgb_triplets": 16777216,
+    "review_path": "review/RGB_ADAPTER_INDEPENDENT_REVIEW.json",
+    "review_sha256": "600f1bec2462764b1929ba1015a1f306f181de712dea675f2397bdd874405fd7",
+    "scalar_arrays_unchanged": true,
+    "scope": "Shared Pillow dependency and independent fixed-point arithmetic; not physical calibration or external certification."
+  },
+  "schema": "learning-to-build/microscopy-representation-amendment/v1",
+  "status": "FROZEN_BEFORE_TARGET_TEST_PREDICTION_OR_SCORING",
+  "unchanged": [
+    "original archive bytes",
+    "all field cohorts",
+    "source raw scalar values",
+    "calibration raw scalar values",
+    "manual reference decoder and geometry",
+    "criteria and minimum denominators",
+    "24recipegrammar",
+    "donor selection and update",
+    "all six comparison arms",
+    "target calibration stopping and selection",
+    "pretrained weights and inference configuration"
+  ]
+}

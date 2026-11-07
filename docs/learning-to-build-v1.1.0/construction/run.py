@@ -33,8 +33,8 @@ import instrument
 
 
 BASE = Path(__file__).resolve().parent
-EXPECTED_PROTOCOL_SHA256 = "76b37f0c1a2c951ed42e53d383063ce5b30c4dda5500665f63d3fa6831adb7ce"
-EXPECTED_REGISTRATION_SHA256 = "69985fb0cee36f85bc2595147d34450c1683eeb9bceb99fb155acc040b0e65f4"
+EXPECTED_PROTOCOL_SHA256 = "20d28a2fffbb3189ef14492a46853e5711e03d5f94c64b9f0aeb0e934a3367ae"
+EXPECTED_REGISTRATION_SHA256 = "aae0fdb9c485c6abba2139c15ca08db7d8ce0962af1336fa20dd5be0edfe5b05"
 IMPLEMENTATION_FILES = ("instrument.py", "builder.py", "data.py", "run.py", "requirements.txt")
 STAGES = ("donor", "source", "successor")
 
@@ -76,7 +76,7 @@ def preflight(protocol_path: Path, registration_path: Path, supplied_hash: str |
     if supplied_hash is not None and protocol_hash != supplied_hash:
         raise ValueError("Protocol does not match --protocol-sha256")
     protocol = read_json(protocol_path)
-    if protocol.get("status") != "REGISTERED_BEFORE_SCORING" or not protocol.get("registered_at_utc"):
+    if protocol.get("status") != "AMENDED_BEFORE_TARGET_TEST_SCORING" or not protocol.get("registered_at_utc"):
         raise ValueError("The protocol is not registered; no public pixels may be decoded")
     core = registration.get("implementation_files", {})
     if set(core) != {"instrument.py", "builder.py", "data.py"}:
@@ -317,8 +317,8 @@ def fixture(output: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--fixture", action="store_true")
-    parser.add_argument("--protocol", type=Path, default=BASE / "PROTOCOL.json")
-    parser.add_argument("--registration", type=Path, default=BASE / "REGISTRATION-amendment-1.json")
+    parser.add_argument("--protocol", type=Path, default=BASE / "PROTOCOL-amendment-2.json")
+    parser.add_argument("--registration", type=Path, default=BASE / "REGISTRATION-amendment-2.json")
     parser.add_argument("--protocol-sha256")
     parser.add_argument("--cache", type=Path)
     parser.add_argument("--output", type=Path, required=True)

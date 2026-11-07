@@ -166,14 +166,59 @@ class Case:
     decoder_diagnostics: dict = field(default_factory=dict)
 
 
-def _pixels(archive: zipfile.ZipFile, member: str):
+def _pixels(archive: zipfile.ZipFile, member: str, include_mode: bool = False):
     import numpy as np
     from PIL import Image
     raw = archive.read(member)
     with Image.open(io.BytesIO(raw)) as image:
         value = np.asarray(image).copy()
-    return value, {"member": member, "sha256": hashlib.sha256(raw).hexdigest(),
-                   "shape": list(value.shape), "dtype": str(value.dtype)}
+        mode = image.mode
+    source = {"member": member, "sha256": hashlib.sha256(raw).hexdigest(),
+              "shape": list(value.shape), "dtype": str(value.dtype)}
+    if include_mode:
+        source["mode"] = mode
+    return value, source
+
+
+def canonicalize_raw_pixels(array, *, mode: str):
+    """Apply the declared scalar-observation convention to RAW channels only.
+
+    RGB-to-L is the supplied Pillow 13 luma projection. It is generally lossy
+    and does not recover original radiometric fluorescence. This function
+    must never be applied to reference masks, RGB instance encodings or
+    annotation outlines. No spatial transformation is performed.
+    """
+    import numpy as np
+    import PIL
+    from PIL import Image
+    value = np.asarray(array)
+    if value.dtype.kind not in "uif" or not np.isfinite(value).all() or np.any(value < 0):
+        raise ValueError("Raw observation pixels must be finite nonnegative numeric values")
+    if mode == "RGB":
+        if value.ndim != 3 or value.shape[2] != 3 or value.dtype != np.uint8:
+            raise ValueError("The registered RGB adapter accepts only 8-bit three-channel RGB arrays")
+        if PIL.__version__ != "13.0.0":
+            raise ValueError("The registered RGB observation adapter requires Pillow 13.0.0")
+        canonical = np.asarray(Image.fromarray(value).convert("L")).copy()
+        conversion = "Pillow.Image.convert(L)"
+        lossy = True
+    elif value.ndim == 2:
+        canonical = value
+        conversion = "none_scalar"
+        lossy = False
+    else:
+        raise ValueError("Unsupported raw observation encoding; no implicit color or geometry conversion")
+    def pixel_hash(pixels):
+        header = json.dumps({"shape": list(pixels.shape), "dtype": str(pixels.dtype)},
+                            sort_keys=True, separators=(",", ":")).encode()
+        return hashlib.sha256(header + b"\n" + pixels.tobytes(order="C")).hexdigest()
+    receipt = {"schema": "learning-to-build/raw-observation-adapter/v1",
+               "input_mode": mode, "input_shape": list(value.shape), "input_dtype": str(value.dtype),
+               "output_shape": list(canonical.shape), "output_dtype": str(canonical.dtype),
+               "conversion": conversion, "lossy_color_projection": lossy,
+               "spatial_transform": "none", "library_version": PIL.__version__,
+               "original_pixel_sha256": pixel_hash(value), "canonical_pixel_sha256": pixel_hash(canonical)}
+    return canonical, receipt
 
 
 def load039(cache: Path, split: str, names: list[str] | None = None) -> list[Case]:
@@ -312,8 +357,10 @@ def load007(cache: Path, names: list[str] | None = None) -> list[Case]:
             zipfile.ZipFile(archive_path(cache, "bbbc007_outlines")) as outlines:
         for name in chosen:
             row = mapping[name]
-            dna, dna_source = _pixels(images, row["dna"])
-            actin, actin_source = _pixels(images, row["actin"])
+            dna, dna_source = _pixels(images, row["dna"], include_mode=True)
+            actin, actin_source = _pixels(images, row["actin"], include_mode=True)
+            dna, dna_source["observation_adapter"] = canonicalize_raw_pixels(dna, mode=dna_source["mode"])
+            actin, actin_source["observation_adapter"] = canonicalize_raw_pixels(actin, mode=actin_source["mode"])
             nucleus_outline, nucleus_source = _pixels(outlines, row["nucleus_outline"])
             cell_outline, cell_source = _pixels(outlines, row["cell_outline"])
             if dna.ndim != 2 or any(value.shape != dna.shape for value in
@@ -332,10 +379,33 @@ def load007(cache: Path, names: list[str] | None = None) -> list[Case]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("fetch", "inspect"))
-    parser.add_argument("--cache", type=Path, required=True)
+    parser.add_argument("command", choices=("fetch", "inspect", "canonicalize"))
+    parser.add_argument("--cache", type=Path)
+    parser.add_argument("--input", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
+    if args.command == "canonicalize":
+        if args.input is None or args.output is None:
+            parser.error("canonicalize requires --input RAW_TIFF --output SCALAR_TIFF")
+        receipt_path = args.output.with_name(args.output.name + ".json")
+        if args.output.exists() or receipt_path.exists():
+            raise ValueError("Canonicalized outputs must use a fresh destination")
+        import numpy as np
+        from PIL import Image
+        with Image.open(args.input) as image:
+            value = np.asarray(image).copy()
+            mode = image.mode
+        canonical, receipt = canonicalize_raw_pixels(value, mode=mode)
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        Image.fromarray(canonical).save(args.output, format="TIFF")
+        result = {"input_path": str(args.input), "input_file_sha256": sha256(args.input),
+                  "output_path": str(args.output), "output_file_sha256": sha256(args.output),
+                  "observation_adapter": receipt}
+        receipt_path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+        print(json.dumps(result, sort_keys=True))
+        return
+    if args.cache is None:
+        parser.error("fetch and inspect require --cache PATH")
     result = acquire(args.cache) if args.command == "fetch" else inspect_archives(args.cache)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

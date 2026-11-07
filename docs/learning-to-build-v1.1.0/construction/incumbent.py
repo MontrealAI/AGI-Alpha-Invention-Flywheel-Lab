@@ -2,7 +2,7 @@
 """Operate a separately registered, pretrained CellposeDINO practical alternative.
 
 This is an external stock of learned weights, not one of the six causal recipe
-arms. The predictor receives only raw DNA/actin channels. Reference annotations
+arms. The predictor receives only canonicalized DNA/actin observations. Reference annotations
 are used afterward for the same registered measurement and acceptance criteria.
 No third-party weights or source code are redistributed by this module.
 """
@@ -22,7 +22,9 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parent
-PRIMARY_REGISTRATION = "REGISTRATION-amendment-1.json"
+PRIMARY_PROTOCOL = "PROTOCOL-amendment-2.json"
+PRIMARY_REGISTRATION = "REGISTRATION-amendment-2.json"
+PRIMARY_AMENDMENT = "AMENDMENT-2.json"
 MODEL = {
     "name": "cpdino-vitb",
     "repository": "mouseland/cellpose-sam",
@@ -221,7 +223,7 @@ def preflight(weights):
             "runtime_versions": runtime_versions(),
             "upstream_python_sha256": upstream_python_bindings(),
             "implementation_files": implementation_bindings(),
-            "primary_protocol_sha256": digest(ROOT / "PROTOCOL.json"),
+            "primary_protocol_sha256": digest(ROOT / PRIMARY_PROTOCOL),
             "primary_registration": {"file": PRIMARY_REGISTRATION, "sha256": digest(ROOT / PRIMARY_REGISTRATION)},
             "loading": loading, "pixels_decoded": 0, "predictions_performed": 0,
             "peak_rss_kib": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}
@@ -234,7 +236,7 @@ def contract(protocol_path, registration_path, cache=None):
     require(digest(protocol_path) == registration["protocol_sha256"], "Incumbent protocol is not registered")
     for key, value in (("model", MODEL), ("upstream", UPSTREAM), ("configuration", CONFIGURATION)):
         require(canonical(protocol[key]) == canonical(value), "Changed incumbent " + key)
-    primary_path = ROOT / "PROTOCOL.json"
+    primary_path = ROOT / PRIMARY_PROTOCOL
     require(digest(primary_path) == protocol["primary_protocol_sha256"], "Primary protocol identity changed")
     primary = read_json(primary_path)
     primary_registration_path = ROOT / PRIMARY_REGISTRATION
@@ -243,7 +245,7 @@ def contract(protocol_path, registration_path, cache=None):
     primary_registration = read_json(primary_registration_path)
     require(primary_registration["protocol_sha256"] == digest(primary_path), "Primary registration protocol differs")
     amendment = primary_registration["amendment"]
-    require(amendment["path"] == "AMENDMENT-1.json" and digest(ROOT / amendment["path"]) == amendment["sha256"],
+    require(amendment["path"] == PRIMARY_AMENDMENT and digest(ROOT / amendment["path"]) == amendment["sha256"],
             "Primary format amendment identity changed")
     cohorts = protocol["cohorts"]
     require(set(cohorts) == set(COHORTS), "Unknown or missing incumbent cohort")
@@ -426,7 +428,7 @@ def run(args):
                   "identity": identity, "model_loading": loading, "splits": split_results,
                   "sessions": sessions, "peak_rss_kib": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
                   "comparison_role": "Pretrained practical alternative with different learned stock; outside the six equal-content causal arms.",
-                  "comparison_selection_timing": "Selected after the classical source validation/test outcomes were observed, before any neural input decoding or predictions. No parameters were selected using these cohorts.",
+                  "comparison_selection_timing": "The pretrained comparison was selected after classical source outcomes. Its RGB observation adapter was separately registered after classical calibration outcomes and RGB-format inspection, before any target-test prediction/score or neural inference. Model weights, channels, numerical hyperparameters and gates were unchanged.",
                   "pretraining_overlap_with_evaluation_data": "Unknown; not excluded.",
                   "cost_scope": "Measured process CPU/wall and published model bytes. Upstream training, authoring, development, host/inference billing and unrecorded interruption intervals are unknown, not zero. No financial transactions.",
                   "rights_scope": "Research operation only. Cellpose code is BSD-3-Clause; model-card metadata says BSD-3-Clause, its documented training data are CC-BY-NC, and DINOv3 has separate custom terms. Commercial permissions are not established. No upstream source or weights redistributed.",
@@ -455,6 +457,7 @@ def operate(args):
     import numpy as np
     from PIL import Image
     import builder
+    import data
     import instrument
     require(args.output.is_absolute(), "Output must be an absolute path")
     output = args.output.resolve()
@@ -471,10 +474,13 @@ def operate(args):
                 continue
             require(path.is_file(), "Missing image file: " + str(path))
             with Image.open(path) as image:
-                channels[name] = np.asarray(image).copy()
+                raw_pixels = np.asarray(image).copy()
+                mode = image.mode
+            channels[name], adapter = data.canonicalize_raw_pixels(raw_pixels, mode=mode)
             inputs[name] = {"file": path.name, "bytes": path.stat().st_size,
-                            "sha256": digest(path), "shape": list(channels[name].shape),
-                            "dtype": str(channels[name].dtype)}
+                            "sha256": digest(path), "shape": list(raw_pixels.shape),
+                            "dtype": str(raw_pixels.dtype), "mode": mode,
+                            "observation_adapter": adapter}
         model, loading = load_model(args.weights)
         raw = predict(model, channels["dna"], channels.get("actin"), args.task)
         labels = instrument.exclude_frame_objects(raw) if args.task == "cells" else raw
@@ -520,8 +526,8 @@ def main():
     execute.add_argument("--weights", required=True, type=Path)
     execute.add_argument("--cache", required=True, type=Path)
     execute.add_argument("--output", required=True, type=Path)
-    execute.add_argument("--protocol", type=Path, default=ROOT / "INCUMBENT_PROTOCOL.json")
-    execute.add_argument("--registration", type=Path, default=ROOT / "INCUMBENT_REGISTRATION.json")
+    execute.add_argument("--protocol", type=Path, default=ROOT / "INCUMBENT_PROTOCOL-amendment-2.json")
+    execute.add_argument("--registration", type=Path, default=ROOT / "INCUMBENT_REGISTRATION-amendment-2.json")
     execute.add_argument("--resume", action="store_true")
     apply = sub.add_parser("operate", help="Apply the registered fixed instrument to supplied raw image channels")
     apply.add_argument("--weights", required=True, type=Path)
@@ -529,8 +535,8 @@ def main():
     apply.add_argument("--dna", required=True, type=Path)
     apply.add_argument("--actin", type=Path)
     apply.add_argument("--output", required=True, type=Path)
-    apply.add_argument("--protocol", type=Path, default=ROOT / "INCUMBENT_PROTOCOL.json")
-    apply.add_argument("--registration", type=Path, default=ROOT / "INCUMBENT_REGISTRATION.json")
+    apply.add_argument("--protocol", type=Path, default=ROOT / "INCUMBENT_PROTOCOL-amendment-2.json")
+    apply.add_argument("--registration", type=Path, default=ROOT / "INCUMBENT_REGISTRATION-amendment-2.json")
     args = parser.parse_args()
     result = preflight(args.weights) if args.command == "preflight" else operate(args) if args.command == "operate" else run(args)
     if args.command == "preflight" and args.output:
