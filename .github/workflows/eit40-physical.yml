@@ -1,4 +1,4 @@
-name: EIT40 registered physical response experiment
+name: EIT40 physical response research
 on:
   workflow_dispatch:
   pull_request:
@@ -10,48 +10,34 @@ permissions:
 jobs:
   reproduce:
     runs-on: ubuntu-latest
-    timeout-minutes: 360
-    env:
-      OPENBLAS_NUM_THREADS: '1'
-      OMP_NUM_THREADS: '1'
-      PYTHONDONTWRITEBYTECODE: '1'
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
-      - name: Check literal source SHA and hashes
-        env:
-          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: |
-          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
-          sha256sum research/eit40/PREREGISTRATION.md research/eit40/model.py research/eit40/run.py research/eit40/test_model.py
-          sha256sum research/measurement_compiler/core.py research/measurement_compiler/calibrated.py research/measurement_compiler/run.py
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install scientific dependency wheels
-        run: python -m pip install --only-binary=:all: -r campaign/measurement-compiler-001/requirements.txt
-      - name: Adversarial boundary unit tests
+      - name: Run exact source tests and frozen experiment
         run: |
-          python -m unittest research.eit40.test_model -v
-          python -O -m unittest research.eit40.test_model -v
-      - name: Download two SHA256-pinned original physical data archives
-        run: python campaign/measurement-compiler-001/fetch_data.py --output "$RUNNER_TEMP/eit40-data"
-      - name: Execute only the frozen four-fold development, then obey its stop
-        run: |
-          python -m research.eit40.run develop --data "$RUNNER_TEMP/eit40-data" --output "$RUNNER_TEMP/eit40-development"
-          if grep -q '"all_four_within_five_percent": true' "$RUNNER_TEMP/eit40-development/DEVELOPMENT.json"; then
-            python -m research.eit40.run confirm --data "$RUNNER_TEMP/eit40-data" --freeze "$RUNNER_TEMP/eit40-development/DEVELOPMENT.json" --output "$RUNNER_TEMP/eit40-retrospective"
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          sha256sum research/eit40/PREREGISTRATION.md research/eit40/model.py research/eit40/run.py research/eit40/test_model.py
+          python -m pip install -r campaign/measurement-compiler-001/requirements.txt
+          OPENBLAS_NUM_THREADS=1 python -m unittest research.eit40.test_model -v
+          OPENBLAS_NUM_THREADS=1 python -O -m unittest research.eit40.test_model -v
+          python campaign/measurement-compiler-001/fetch_data.py --output /tmp/eit40-data
+          OPENBLAS_NUM_THREADS=1 python -m research.eit40.run develop --data /tmp/eit40-data --output /tmp/eit40-dev
+          if grep -q '"all_four_within_five_percent": true' /tmp/eit40-dev/DEVELOPMENT.json; then
+            OPENBLAS_NUM_THREADS=1 python -m research.eit40.run confirm --data /tmp/eit40-data --freeze /tmp/eit40-dev/DEVELOPMENT.json --output /tmp/eit40-retrospective
           else
-            echo "REGISTERED_SCIENTIFIC_STOP: development failed; do not open prior exposed evaluation data"
+            echo "Scientific stop: original confirmation archive not opened"
           fi
-      - name: Retain pass and failure research receipts
+      - name: Preserve all registered outcomes
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@v4
         with:
-          name: eit40-scientific-evidence
+          name: eit40-evidence
           path: |
-            ${{ runner.temp }}/eit40-development/DEVELOPMENT.json
-            ${{ runner.temp }}/eit40-retrospective/RETROSPECTIVE.json
+            /tmp/eit40-dev/DEVELOPMENT.json
+            /tmp/eit40-retrospective/RETROSPECTIVE.json
           if-no-files-found: warn
