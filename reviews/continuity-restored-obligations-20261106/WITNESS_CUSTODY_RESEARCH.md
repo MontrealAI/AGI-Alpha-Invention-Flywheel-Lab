@@ -17,7 +17,7 @@ Install only a public open-source dependency (cryptography==46.0.4; no paid serv
     python3 -m pip install --only-binary=:all: cryptography==46.0.4
     python3 -m unittest discover -s tests -p 'test_continuity_witness_custody_review.py' -v
 
-Twenty synthetic adversarial cases require the two independent event signers, correct case identity, distinct pinned keys, signed external anchor and monotonicity, and refuse missing/reordered receipts, forged data, recovered fulfillment counter resets, fully re-signed forks when the original anchor is retained externally, v1 gross-only snapshots, invalid source replay, and unsupported real-world claims. A correctly reconstructed source with 100 previously fulfilled units and an absent canceled order is accepted **only as simulated custody**.
+Twenty-two synthetic adversarial cases require the two independent event signers, correct case identity, distinct pinned keys, signed external anchor and monotonicity, and refuse missing/reordered receipts, forged data, recovered fulfillment counter resets, fully re-signed forks when the original anchor is retained externally, v1 gross-only snapshots, invalid source replay, strict canonical integer typing even for correctly signed boolean/float counters, and unsupported real-world claims. A correctly reconstructed source with 100 previously fulfilled units and an absent canceled order is accepted **only as simulated custody**.
 
 The dedicated GitHub Actions job uses ubuntu-latest, the standard six-hour job window, an execution-start receipt, and a pinned checkout action. Treat any failed hosted run as failed. Independent hosted qualification, owner adoption, main merge and downloaded release proof remain separate stages.
 
