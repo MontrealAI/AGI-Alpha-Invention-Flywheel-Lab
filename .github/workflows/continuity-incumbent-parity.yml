@@ -4,7 +4,10 @@ on:
     paths:
       - 'reviews/continuity-restored-obligations-20261106/strong_incumbent.py'
       - 'tests/test_continuity_strong_incumbent_parity.py'
+      - 'tests/test_continuity_conventional_rebuilder.py'
+      - 'reviews/continuity-restored-obligations-20261106/conventional_rebuilder.py'
       - 'docs/continuity-omega/INCUMBENT_PARITY_PREREG_20261107.md'
+      - 'docs/continuity-omega/CONVENTIONAL_REPLAY_CONSTRUCTION_PROTOCOL_20261107.md'
       - '.github/workflows/continuity-incumbent-parity.yml'
   workflow_dispatch:
 permissions:
@@ -32,15 +35,20 @@ jobs:
           git rev-parse HEAD
           sha256sum \
             docs/continuity-omega/INCUMBENT_PARITY_PREREG_20261107.md \
+            docs/continuity-omega/CONVENTIONAL_REPLAY_CONSTRUCTION_PROTOCOL_20261107.md \
             reviews/continuity-restored-obligations-20261106/strong_incumbent.py \
+            reviews/continuity-restored-obligations-20261106/conventional_rebuilder.py \
             reviews/continuity-restored-obligations-20261106/reference_oracle.py \
             reviews/continuity-restored-obligations-20261106/witness_chain.py \
-            tests/test_continuity_strong_incumbent_parity.py
+            tests/test_continuity_strong_incumbent_parity.py \
+            tests/test_continuity_conventional_rebuilder.py
       - name: Use exact pinned binary-only public dependency
         run: |
           python3 -m pip install --only-binary=:all: cryptography==46.0.4
       - name: Exercise frozen strong-incumbent and adversarial cases
         run: python3 -B -m unittest discover -s tests -p 'test_continuity_strong_incumbent_parity.py' -v
+      - name: Execute additional separately preregistered conventional construction
+        run: python3 -B -m unittest discover -s tests -p 'test_continuity_conventional_rebuilder.py' -v
       - name: Preserve conservative evidence tier
         run: |
           echo "COMPARISON_ENGINEERING_ONLY; functional parity does not prove equivalent custody, real delivery, buyer demand, external collections, cost, or profit."
