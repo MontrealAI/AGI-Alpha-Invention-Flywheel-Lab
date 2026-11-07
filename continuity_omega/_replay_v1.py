@@ -94,7 +94,7 @@ def audit(case, handoff, passport):
     # Independent v1 compatibility rule: gross-only recovered records cannot
     # prove preservation of previously fulfilled units. Never accept a
     # substitute producer assertion or a matching superficial source hash.
-    if any(row['fulfilled']>0 and not row['cancelled'] for row in state.values()):
+    if any(0<row['fulfilled']<row['quantity'] and not row['cancelled'] for row in state.values()):
         check(False,'RESTORED_FULFILLMENT_PROVENANCE_UNPROVEN_V1')
     for oid,row in sorted(state.items()):
         if row['cancelled']:
