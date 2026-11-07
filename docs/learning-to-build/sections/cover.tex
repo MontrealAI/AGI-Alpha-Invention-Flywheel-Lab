@@ -1,0 +1,38 @@
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+\fill[Ink] (current page.south west) rectangle (current page.north east);
+\fill[Plum,opacity=.6] ([yshift=2.45in]current page.south west) rectangle ([yshift=-4.45in]current page.north east);
+\draw[LightGold,opacity=.65,line width=.6pt] ([xshift=.34in,yshift=.34in]current page.south west) rectangle ([xshift=-.34in,yshift=-.34in]current page.north east);
+\node[anchor=north west,text=LightGold,font=\sffamily\small] at ([xshift=.72in,yshift=-.64in]current page.north west) {MONTREAL.AI\quad /\quad QUEBEC.AI};
+\node[anchor=north east,text=LightGold,font=\sffamily\small] at ([xshift=-.72in,yshift=-.64in]current page.north east) {RESEARCH 1.0.0};
+\node[anchor=north,text=Ivory,font=\sffamily\fontsize{14}{19}\selectfont] at ([yshift=-1.33in]current page.north) {TRANSFORMATIONAL INTELLIGENCE $\infty$};
+\node[anchor=north,text=Ivory,font=\fontsize{43}{48}\selectfont\bfseries] at ([yshift=-1.94in]current page.north) {LEARNING};
+\node[anchor=north,text=LightGold,font=\fontsize{58}{64}\selectfont\bfseries] at ([yshift=-2.66in]current page.north) {TO BUILD};
+\node[anchor=north,align=center,text=Ivory,text width=6.6in,font=\fontsize{16}{22}\selectfont] at ([yshift=-3.81in]current page.north) {How Intelligence Learns to Create\\What Makes New Possibilities Real};
+\begin{scope}[shift={([xshift=.93in,yshift=3.32in]current page.south west)},x=1in,y=1in]
+% An original vector construction: each platform supports a further platform.
+\foreach \y in {0,.2,.4,.6,.8,1,1.2,1.4,1.6,1.8,2}{\draw[Mint,opacity=.06,line width=.3pt] (0,\y)--(6.6,\y);}
+\foreach \x in {0,.3,...,6.6}{\draw[Mint,opacity=.05,line width=.3pt] (\x,-.1)--(\x,2.2);}
+\draw[LightGold,opacity=.75,line width=1.1pt] (.2,0)--(6.4,0);
+\foreach \x/\h in {.55/.45,1.55/.8,2.55/1.15,3.55/1.5,4.55/1.85}{
+ \draw[LightGold,line width=.9pt] (\x,0)--(\x,\h)--++(.8,0);
+ \draw[LightGold,opacity=.45,line width=.6pt] (\x,0)--(\x+.8,\h);
+ \draw[LightGold,opacity=.45,line width=.6pt] (\x+.8,0)--(\x,\h);
+ \draw[LightGold,line width=.6pt] (\x+.8,0)--(\x+.8,\h);
+ \fill[LightGold] (\x,\h) circle(1.9pt);
+}
+\draw[Mint,line width=1.1pt,-{Latex[length=2.5mm]}] (1.16,.57) .. controls (2.0,1.3) and (4.0,1.58) .. (5.77,2.28);
+\draw[LightGold,line width=.8pt] (5.7,1.85)--(5.7,2.6)--(4.55,2.6)--(6.33,2.6);
+\draw[LightGold,line width=.5pt] (5.7,2.9)--(4.55,2.6) (5.7,2.9)--(6.33,2.6) (5.7,2.9)--(5.7,2.6);
+\draw[LightGold,line width=.5pt] (6.12,2.6)--(6.12,2.12);
+\draw[Mint,line width=1.1pt] (5.98,2.1)--(6.26,2.1)--(6.26,1.93)--(5.98,1.93)--cycle;
+\node[text=Mint,font=\fontsize{39}{43}\selectfont] at (1.15,1.95) {$\infty$};
+\fill[LightGold] (3.55,2.45)--(3.59,2.57)--(3.63,2.45)--(3.75,2.41)--(3.63,2.37)--(3.59,2.25)--(3.55,2.37)--(3.43,2.41)--cycle;
+\end{scope}
+\node[anchor=north,align=center,text=Ivory,text width=6.7in,font=\fontsize{17}{23}\selectfont] at ([yshift=-8.05in]current page.north) {When we build something new,\\\textcolor{LightGold}{we change what can be built next.}};
+\node[anchor=south west,text=Ivory,align=left,font=\normalsize] at ([xshift=.72in,yshift=.76in]current page.south west) {\textbf{Vincent Boucher}\\Montr\'{e}al, Qu\'{e}bec, Canada};
+\node[anchor=south east,text=LightGold,align=right,font=\small] at ([xshift=-.72in,yshift=.76in]current page.south east) {ALPHA GENESIS FLYWHEEL $\Omega$\\7 November 2026};
+\end{tikzpicture}
+\null
+\end{titlepage}

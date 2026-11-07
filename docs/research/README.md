@@ -20,6 +20,20 @@ Invent the means. Expand what becomes possible. Compound the ability to discover
 
 **Research lineage:** Transformational Intelligence remains the conceptual foundation; AGI ALPHA remains the organizational foundation. The other papers and their original editions remain accessible below.
 
+## 🏗️♾️ LEARNING TO BUILD ✨
+
+**How Intelligence Learns to Create What Makes New Possibilities Real.**
+
+Vincent Boucher · MONTREAL.AI / QUEBEC.AI · 7 November 2026 · Research edition 1.0.0.
+
+[Browser companion and full paper](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/learning-to-build.html) · [Complete PDF](learning-to-build.pdf) · [Editable LaTeX and reproducible companion](../learning-to-build/README.md) · [Versioned release and downloads](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/learning-to-build-v1.0.0) · [Résumé en français](https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/learning-to-build.html#francais).
+
+*Build what makes the next breakthrough buildable.* A worthwhile possibility can require knowledge, instruments, processes, resources and voluntary arrangements that do not yet exist together. This paper connects **Transformational Intelligence**, **Invent the Economy** and **ALPHA GENESIS FLYWHEEL Ω** around constructing those complete means, distinguishing current from construction frontiers and separating useful inheritance, fresh construction and improvement of the constructor.
+
+**Scope:** A research synthesis, elementary conditional results, a finite executable construction illustration and a prospective empirical programme. Four emitted programs are checked over 4,000 finite input cases; an equally informed conventional control ties all 288 corresponding constructor-state decisions. Supplied maintenance obligations can contract the feasible frontier. The constructor, specifications, costs and participation conditions are authored; autonomous discovery, empirical constructor learning, real customer acceptance, actual receipts and physical deployment remain unestablished. The existing flagship and historical evidence retain their roles.
+
+The [publication manifest](publication-manifest.json) binds the PDF's exact bytes and SHA-256. The [source publication](../learning-to-build/README.md) includes the editable manuscript, source map, compact evidence, review and reproduction commands. [Sharing image](learning-to-build-social.png) · [Editable SVG](learning-to-build-card.svg).
+
 ## CONTINUITY Ω / CONTINUITÉ Ω — Keep the promise. / Tenir parole.
 
 ### English
