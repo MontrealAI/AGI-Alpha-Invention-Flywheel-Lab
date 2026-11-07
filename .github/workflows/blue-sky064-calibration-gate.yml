@@ -32,7 +32,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install established published scientific dependencies from wheels only
-        run: python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
       - name: Source SHA-256 receipt for all bound execution files
         run: |
           sha256sum research/blue_sky064/calibration_gate/PREREGISTRATION.md research/blue_sky064/calibration_gate/plan.py research/blue_sky064/probe.py research/blue_sky064/public_calibration.json campaign/blue-sky-064/friction-probe/MIXED_REGISTRATION.json tests/test_blue_sky_calibration_gate.py
