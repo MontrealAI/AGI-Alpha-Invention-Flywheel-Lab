@@ -119,6 +119,21 @@ class EIT40Tests(unittest.TestCase):
         self.assertEqual(len(p.selected), 12)
         self.assertEqual(p.basis.shape[0], self.plan.basis.shape[0])
 
+    def test_in_place_operator_corruption_must_fail_closed(self):
+        # Compile once, then mutate only the supposedly frozen derived operator.
+        acquired = self.target[:, self.plan.selected].copy()
+        self.plan.operator[0, 0] += 10.0
+        with self.assertRaisesRegex(ValueError, "OPERATOR_CHANGED"):
+            self.plan.predict(self.I, self.M, self.ref, self.cal, acquired)
+
+    def test_selected_column_substitution_must_fail_closed(self):
+        # A frozen dataclass can still be reconstructed or changed by hostile
+        # deserialization; acquired values cannot be silently relabeled.
+        acquired = self.target[:, self.plan.selected].copy()
+        object.__setattr__(self.plan, "selected", tuple(reversed(self.plan.selected)))
+        with self.assertRaisesRegex(ValueError, "ACQUISITION_PLAN_CHANGED"):
+            self.plan.predict(self.I, self.M, self.ref, self.cal, acquired)
+
     def test_rejected_malformed_acquired(self):
         with self.assertRaisesRegex(ValueError, "INVALID_ACQUIRED_OBSERVATIONS"):
             self.plan.predict(self.I, self.M, self.ref, self.cal, np.zeros((1, 12)))
