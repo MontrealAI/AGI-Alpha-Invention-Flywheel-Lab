@@ -1,0 +1,90 @@
+\clearpage
+\appendix
+\section{A one-page construction brief}
+\label{app:brief}
+
+Use this brief to turn an attractive possibility into a concrete construction decision. Answers can be short; unresolved items remain explicitly unresolved.
+
+\begin{longtable}{@{}P{1.55in}P{4.95in}@{}}
+\toprule
+\textbf{Question} & \textbf{What to write}\\
+\midrule
+\endhead
+Worthwhile outcome & Who should be able to do what? State acceptance, deadline, essential quality, and the material consequences of failure.\\[.4em]
+Best complete route & What can a competent existing provider, engineer, or frontier agent already deliver under the same permissions and resources? Include self-service and non-entry.\\[.4em]
+Missing means & Which precise observation, instrument, representation, process, resource, interface, or arrangement prevents the outcome? Is this proved, measured, or only suspected?\\[.4em]
+Smallest decisive build & What executable artifact, experiment, or arrangement would test that diagnosis and connect back to the useful outcome? What finding would refute it?\\[.4em]
+Bootstrap and integration & Where do the initial prerequisites come from? Which interfaces, shared resources, environment conditions, and temporary means must work together?\\[.4em]
+Complete resource path & Count discovery, failed attempts, construction, checking, production, transition, maintenance, financing, and remaining obligations. Verify each prefix, not only the final total.\\[.4em]
+Participation and authority & Who must agree, what can they choose instead, and what evidence establishes their actual permission? Which conditions are only modeled?\\[.4em]
+Useful inheritance & What working means, validity conditions, and construction procedure should survive? What should be retired?\\[.4em]
+Fresh successor test & Name a different useful output. Remove the finished donor artifact where appropriate. Compare equal-content construction and charge adaptation and requalification.\\[.4em]
+Decision and learning & Build, adopt, test, defer, or decline. Record tried $\rightarrow$ outcome $\rightarrow$ reason or uncertainty $\rightarrow$ next use or avoidance.\\
+\bottomrule
+\end{longtable}
+
+The brief is useful only when it changes a construction or operating decision. It is not an admission badge and does not establish demand, physical feasibility, or learning by itself.
+
+\section{Formal details and interpretation}
+\label{app:formal}
+
+\subsection{A qualified dominance statement}
+
+Let $\F(x)$ be the accepted outcomes reachable in a finite transition model from state $x$. Suppose state $x_B$ preserves every $x_A$-feasible action sequence and its acceptance and authority conditions; supplies at least the required resources at every corresponding prefix; has no greater relevant obligations; and permits completion no later. Then
+\begin{equation}
+\F(x_A)\subseteq\F(x_B).
+\end{equation}
+Replay any valid $x_A$ sequence in $x_B$. Each transition remains permitted and feasible by the assumptions, so its accepted outcome remains reachable. The conclusion is a simulation argument over the stated transition systems. Adding an asset does not, by itself, establish the assumptions. Maintenance-driven contraction in the finite study violates them.
+
+\subsection{Why generic diminishing returns need not hold}
+
+Let $i$ be an instrument and $q$ its necessary current qualification, with $V(S)=1$ exactly when $\{i,q\}\subseteq S$, and $V(S)=0$ otherwise. Then
+\begin{equation}
+V(\{q\})-V(\varnothing)=0
+<V(\{i,q\})-V(\{i\})=1.
+\end{equation}
+The marginal contribution of qualification is larger when the instrument is present. The usual submodular diminishing-returns inequality therefore fails. A generic guarantee for a submodular selection algorithm cannot be borrowed without checking its assumptions. The example supports joint reasoning about prerequisites; it supplies no algorithmic advantage over ordinary joint optimization.
+
+\subsection{Three cost boundaries for a successor claim}
+
+\textbf{Current-state boundary:} the inherited assets and obligations are specified inputs; the test asks what the successor can do now. \textbf{Acquisition boundary:} the decision to obtain the assets is included, with its cost and time. \textbf{Whole-lineage boundary:} source construction, failed development, preservation, all successors, and residual obligations enter the accounting.
+
+All three can be informative. In the study, the 33-unit affordability witness is a current-state result, while Equation~\ref{eq:retention} includes the 9-unit acquisition cost and common source cost. Neither is a measurement of the research effort required to invent the supplied compiler. Switching boundaries after seeing results would change the question.
+
+\section{Reproduction and source lineage}
+\label{app:reproduction}
+
+The publication includes editable \LaTeX, a bibliography, the frozen study specification, generated standalone programs, compact results, and a separately implemented checker. From the paper directory, the core numerical reproduction is:
+\begin{lstlisting}
+python3 study/study.py --output /absolute/new/replay
+python3 study/check.py --evidence /absolute/new/replay
+python3 build.py
+\end{lstlisting}
+
+The source archive provides a short start guide and the same commands. Study computations use Python's standard library. Typesetting uses \texttt{pdflatex}, BibTeX, and the packages listed in the source, with shell escape disabled. The canonical PDF's SHA-256 identifies the published bytes. Recompilation on a different TeX distribution may change bytes while preserving content; byte equality is checked only within a common toolchain.
+
+\textbf{Protocol status.} The supplied finite protocol was written and locally frozen before its first generated-program run in this preparation workflow. That is an author-controlled registration, not an externally timestamped preregistration or independent task selection. All registered grid cells are retained. Reproduction binds the protocol and the resulting claims to the actual checked source.
+
+\textbf{Source editions.} The three supplied foundations are byte-identical to the public repository editions inspected at revision \texttt{22678d629d986572c50891b60455911978789da5}. Their exact SHA-256 identities and section/page map are recorded in \texttt{SOURCE\_MAP.md}. For the GENESIS PDF, the physical page index is one greater than its printed page after the cover. No source upload or private conversation transcript is included in the publication.
+
+\textbf{Review.} AI-assisted drafting, coding, literature checks, and separate adversarial review were used under the author's direction. Review corrected a missing multi-prerequisite condition in the complementarity statement and strengthened the study's binding between declared inputs, recomputed results, and reported claims. This is editorial and engineering quality control, not external peer review, independent institutional certification, or an empirical benchmark of frontier models.
+
+\section{Claim and evidence map}
+\label{app:claims}
+
+\begin{longtable}{@{}P{1.53in}P{2.51in}P{2.43in}@{}}
+\toprule
+\textbf{Claim} & \textbf{Evidence in this edition} & \textbf{Boundary}\\
+\midrule
+\endhead
+Complete means are a useful unit of construction & Definition, witness, interfaces, bootstrap, prefix resources, and acceptance. & Operational synthesis; no exhaustive world model.\\[.35em]
+Complementarity can defeat local additions & Proposition~\ref{prop:complementarity} and explicit assumptions. & Particular local rule; ordinary joint planning can succeed.\\[.35em]
+Unseeded cycles cannot initialize & Proposition~\ref{prop:bootstrap}. & Stated action model; exogenous supply or a new operation can change it.\\[.35em]
+Fresh executable instruments are constructed & Four emitted Python programs; 4,000 finite input cases; independent interpretation. & Authored arithmetic tasks; supplied compiler; no physical sensing.\\[.35em]
+Retained means can expand or contract modeled reachability & 288 supplied cells, 864 decisions, favorable and maintenance-adverse slices. & Assumed costs, timing, consent, and acceptance; not probabilities.\\[.35em]
+Conventional equal-content method matches & 288/288 route ties and equal finite program answers. & No measured proprietary method or learning advantage.\\[.35em]
+Learning improves construction & Prospective artifact-excluded and factorial tests. & Unestablished in this edition.\\[.35em]
+Accepted commerce funds a successor & Cash conditions and illustrative continuation arithmetic. & No real customer receipts or native enterprise operation here.\\[.35em]
+Construction can support much larger productive capacity & Dependency-based scientific and industrial research programme. & No achieved physical scale, expansion rate, or wealth forecast.\\
+\bottomrule
+\end{longtable}

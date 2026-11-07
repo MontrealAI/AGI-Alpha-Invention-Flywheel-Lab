@@ -1,0 +1,105 @@
+\newcommand{\DoNotLoadEpstopdf}{}
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=.83in,top=.82in,bottom=.83in,headheight=23pt,headsep=.19in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{mathpazo,helvet,microtype}
+\usepackage{booktabs,tabularx,array,longtable}
+\usepackage{graphicx,xcolor,tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem,needspace,fancyhdr,titlesec,caption,float,placeins}
+\usepackage{etoolbox}
+\usepackage{listings,xurl,upquote}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[unicode,bookmarksnumbered]{hyperref}
+\usepackage{bookmark}
+\definecolor{Ink}{HTML}{201529}
+\definecolor{Plum}{HTML}{482A50}
+\definecolor{Wine}{HTML}{772F52}
+\definecolor{Gold}{HTML}{A5772D}
+\definecolor{LightGold}{HTML}{EDCE8B}
+\definecolor{Ivory}{HTML}{FCF9F2}
+\definecolor{Teal}{HTML}{146D68}
+\definecolor{Mint}{HTML}{B6E6D7}
+\definecolor{Muted}{HTML}{655F6A}
+\definecolor{Rule}{HTML}{D9CFC1}
+\definecolor{Pale}{HTML}{F3EEF5}
+\hypersetup{pdftitle={LEARNING TO BUILD: How Intelligence Learns to Create What Makes New Possibilities Real},pdfauthor={Vincent Boucher},pdfsubject={Complete productive means, construction learning, and the expansion of attainable possibilities},pdfkeywords={Transformational Intelligence, Learning to Build, Alpha Genesis Flywheel, construction frontier, capability construction, learning, productive capacity},colorlinks=true,linkcolor=Plum,citecolor=Plum,urlcolor=Teal}
+\ifdefined\pdfinfoomitdate\pdfinfoomitdate=1\fi
+\ifdefined\pdftrailerid\pdftrailerid{}\fi
+\ifdefined\pdfsuppressptexinfo\pdfsuppressptexinfo=15\fi
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\footnotesize\sffamily\color{Muted}LEARNING TO BUILD}
+\fancyhead[R]{\footnotesize\sffamily\color{Muted}Boucher\;|\;Research edition 1.0.0}
+\fancyfoot[L]{\scriptsize\sffamily\color{Muted}TRANSFORMATIONAL INTELLIGENCE $\infty$}
+\fancyfoot[R]{\small\color{Gold}\thepage}
+\renewcommand{\headrulewidth}{.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{Rule}\leaders\hrule height \headrulewidth\hfill}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{.46em plus .07em minus .04em}
+\setlength{\emergencystretch}{2.8em}\linespread{1.035}\raggedbottom
+\widowpenalty=10000\clubpenalty=10000
+\titleformat{\section}{\Large\bfseries\color{Plum}}{\color{Gold}\thesection}{.65em}{}
+\titleformat{\subsection}{\large\bfseries\color{Ink}}{\thesubsection}{.65em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{Ink}}{\thesubsubsection}{.65em}{}
+\titlespacing*{\section}{0pt}{2.2ex plus .4ex minus .2ex}{.8ex}
+\titlespacing*{\subsection}{0pt}{1.6ex plus .3ex minus .2ex}{.5ex}
+\preto\section{\Needspace{7\baselineskip}}
+\preto\subsection{\Needspace{5\baselineskip}}
+\captionsetup{font=small,labelfont={bf,color=Plum},textfont={color=Muted},skip=7pt}
+\setlist{leftmargin=1.45em,itemsep=.18em,topsep=.25em,parsep=0pt}
+\renewcommand{\arraystretch}{1.15}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\E}{\mathbb{E}}\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\I}{\mathcal{I}}\newcommand{\M}{\mathcal{M}}\newcommand{\K}{\mathcal{K}}
+\newcommand{\R}{\mathcal{R}}\newcommand{\C}{\mathcal{C}}\newcommand{\F}{\mathcal{F}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\theoremstyle{remark}\newtheorem{remark}{Remark}[section]
+\newtcolorbox{thesisbox}{enhanced,breakable,colback=Ivory,colframe=Gold,boxrule=.5pt,arc=1.3mm,left=12pt,right=12pt,top=10pt,bottom=10pt,before skip=10pt,after skip=10pt}
+\newtcolorbox{statusbox}{enhanced,breakable,colback=Pale,colframe=Plum,boxrule=0pt,borderline west={2.5pt}{0pt}{Plum},arc=0mm,left=11pt,right=11pt,top=8pt,bottom=8pt,before skip=9pt,after skip=9pt}
+\newtcolorbox{practicebox}{enhanced,breakable,colback=Teal!5,colframe=Teal,boxrule=0pt,borderline west={2.5pt}{0pt}{Teal},arc=0mm,left=11pt,right=11pt,top=8pt,bottom=8pt,before skip=9pt,after skip=9pt}
+\newcommand{\smallhead}[1]{\par\smallskip{\sffamily\bfseries\color{Gold}#1}\par\smallskip}
+\lstset{upquote=true,basicstyle=\small\ttfamily,breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,frame=single,rulecolor=\color{Rule},backgroundcolor=\color{Ivory},framesep=7pt}
+\setcounter{tocdepth}{1}
+\begin{document}
+\input{sections/cover.tex}
+\setcounter{page}{1}
+\begin{center}
+{\small\sffamily\bfseries\color{Gold}ALPHA GENESIS FLYWHEEL $\Omega$}\par\vspace{.12in}
+{\LARGE\bfseries\color{Plum}LEARNING TO BUILD}\par\vspace{.1in}
+{\Large How Intelligence Learns to Create\\What Makes New Possibilities Real}\par\vspace{.16in}
+\textbf{Vincent Boucher}\quad$\cdot$\quad MONTREAL.AI / QUEBEC.AI\\
+{\small Montr\'{e}al, Qu\'{e}bec, Canada\quad$\cdot$\quad 7 November 2026}
+\end{center}
+\smallhead{ABSTRACT}
+Intelligence can propose a valuable possibility without possessing the means to realize it. The missing construction may include knowledge, an instrument, a process, resources, and an arrangement that makes their coordinated use worthwhile. We develop \emph{learning to build}: improving the ability to discover and construct these complete, purpose-relative means, then using the evidence to improve fresh construction. The framework extends \emph{Transformational Intelligence}, \emph{Invent the Economy}, and \emph{ALPHA GENESIS FLYWHEEL $\Omega$} to an explicit account of how productive means become executable, maintainable, and reusable. We distinguish the installed frontier from the construction frontier; formalize conditional completeness, complementary prerequisites, and bootstrap obstructions; and separate artifact inheritance from constructor improvement. An executable finite study emits four measurement programs that pass 4,000 input checks. Across 288 supplied resource scenarios, retention can expand or contract the set of attainable deliveries; an equal-content conventional planner ties in every case. These are authored-model results, not measured learning or commerce. A prospective evaluation design isolates retained content, construction procedures, model upgrades, and capital, including tests that remove the donor's finished artifact. The long horizon is a cumulative ability to build scientific instruments, production systems, useful energy capacity, and the means of further construction. Such expansion must earn its physical, economic, and institutional bridges. The central thesis is simple: when intelligence learns to build what a new possibility requires, what it builds can change what becomes possible next.
+\begin{statusbox}
+\textbf{Research status.} An operational synthesis, elementary conditional results, an executable finite construction study, and a falsifiable research programme. The study uses authored tasks and assumptions; its generated artifacts and exact checks are real computational outputs. General construction learning, physical deployment, customer acceptance, earned commercial continuation, and civilization-scale expansion require further evidence.
+\end{statusbox}
+{\small\textbf{Keywords:} transformational intelligence; complete means; capability construction; construction learning; complementary capabilities; successor evaluation; productive capacity.}
+\clearpage
+\input{sections/at-a-glance.tex}
+\clearpage
+\tableofcontents
+\clearpage
+\input{sections/foundations.tex}
+\input{sections/construction.tex}
+\input{sections/learning.tex}
+\input{sections/study.tex}
+\input{sections/economy.tex}
+\input{sections/evaluation.tex}
+\input{sections/horizon.tex}
+\input{sections/appendix.tex}
+\clearpage
+\begingroup\small
+\setlength{\bibsep}{5pt}
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+\endgroup
+\end{document}

@@ -1,0 +1,219 @@
+name: LEARNING TO BUILD publication
+
+on:
+  pull_request:
+    paths:
+      - 'docs/learning-to-build/**'
+      - 'docs/research/learning-to-build*'
+      - '.github/workflows/learning-to-build.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/learning-to-build/**'
+      - 'docs/research/learning-to-build*'
+      - '.github/workflows/learning-to-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: learning-to-build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    name: Qualify paper and executable companion
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Check out exact candidate source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            docs/learning-to-build
+            docs/research/learning-to-build.pdf
+            docs/research/learning-to-build.html
+          sparse-checkout-cone-mode: false
+      - name: Confirm source identity
+        env:
+          LEARNING_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$LEARNING_EXPECTED_HEAD"
+      - name: Install the standard manuscript toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended texlive-science texlive-plain-generic poppler-utils
+      - name: Verify recorded source and independently check finite evidence
+        run: |
+          python3 -B docs/learning-to-build/verify.py
+          python3 -B docs/learning-to-build/study/check.py
+          python3 -B docs/learning-to-build/study/test_integrity.py -v
+          python3 -O -B docs/learning-to-build/study/test_integrity.py -v
+          python3 -B docs/learning-to-build/study/study.py --output "$RUNNER_TEMP/learning-to-build-replay"
+          python3 -B docs/learning-to-build/study/check.py --evidence "$RUNNER_TEMP/learning-to-build-replay"
+          diff -r docs/learning-to-build/study/evidence "$RUNNER_TEMP/learning-to-build-replay"
+      - name: Recompile and compare the reviewed manuscript
+        run: |
+          python3 -B docs/learning-to-build/build.py --output "$RUNNER_TEMP/learning-to-build-rebuilt.pdf"
+          python3 -B docs/learning-to-build/verify.py --check-build "$RUNNER_TEMP/learning-to-build-rebuilt.pdf"
+      - name: Package the bound edition and operate the extracted source
+        run: |
+          python3 -B docs/learning-to-build/package.py --output "$RUNNER_TEMP/learning-to-build-publication"
+          mkdir "$RUNNER_TEMP/learning-to-build-extracted"
+          unzip -q "$RUNNER_TEMP/learning-to-build-publication/LEARNING_TO_BUILD_SOURCE.zip" -d "$RUNNER_TEMP/learning-to-build-extracted"
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/verify.py"
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/study/check.py"
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/study/test_integrity.py" -v
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/study/study.py" --output "$RUNNER_TEMP/learning-to-build-extracted-replay"
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/study/check.py" --evidence "$RUNNER_TEMP/learning-to-build-extracted-replay"
+          diff -r "$RUNNER_TEMP/learning-to-build-extracted/study/evidence" "$RUNNER_TEMP/learning-to-build-extracted-replay"
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/build.py" --output "$RUNNER_TEMP/learning-to-build-extracted.pdf"
+          cmp "$RUNNER_TEMP/learning-to-build-rebuilt.pdf" "$RUNNER_TEMP/learning-to-build-extracted.pdf"
+          cd "$RUNNER_TEMP/learning-to-build-publication"
+          sha256sum --check SHA256SUMS
+      - name: Retain qualified publication assets
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: learning-to-build-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/learning-to-build-publication/
+          if-no-files-found: error
+          retention-days: 7
+
+  release:
+    name: Publish immutable edition and verify downloaded source
+    needs: qualify
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Download this commit's qualified package
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: learning-to-build-${{ github.sha }}
+          path: ${{ runner.temp }}/learning-to-build-publication
+      - name: Publish or verify without replacing an existing edition
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import base64
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+          import zipfile
+
+          package = Path(os.environ['RUNNER_TEMP']) / 'learning-to-build-publication'
+          publication = json.loads((package / 'PUBLICATION.json').read_text())
+          repository = os.environ['GITHUB_REPOSITORY']
+          qualified_sha = os.environ['GITHUB_SHA']
+          tag = publication['release_tag']
+          names = ['LEARNING_TO_BUILD.pdf', 'LEARNING_TO_BUILD_SOURCE.zip', 'PUBLICATION.json', 'SHA256SUMS']
+
+          def require(condition, message):
+              if not condition:
+                  raise SystemExit(message)
+
+          def digest(path):
+              return hashlib.sha256(path.read_bytes()).hexdigest()
+
+          def gh(*arguments):
+              return subprocess.run(['gh', *arguments], capture_output=True, text=True)
+
+          def api(endpoint, missing=False):
+              result = gh('api', endpoint)
+              if result.returncode:
+                  if missing and 'HTTP 404' in result.stderr:
+                      return None
+                  raise SystemExit(result.stderr.strip())
+              return json.loads(result.stdout)
+
+          def tagged_commit():
+              ref = api(f'repos/{repository}/git/ref/tags/{tag}', missing=True)
+              if ref is None:
+                  return None
+              return api(f'repos/{repository}/commits/{tag}')['sha']
+
+          require(tag == 'learning-to-build-v1.0.0' and publication['edition'] == '1.0.0', 'Unexpected edition')
+          for line in (package / 'SHA256SUMS').read_text().splitlines():
+              expected, name = line.split('  ', 1)
+              require(name in names and digest(package / name) == expected, f'Qualified asset mismatch: {name}')
+          assets = {name: digest(package / name) for name in names}
+          with zipfile.ZipFile(package / 'LEARNING_TO_BUILD_SOURCE.zip') as archive:
+              notes_text = archive.read('RELEASE_NOTES.md').decode('utf-8')
+          notes = Path(os.environ['RUNNER_TEMP']) / 'learning-to-build-release-notes.md'
+          notes.write_text(notes_text)
+          release = api(f'repos/{repository}/releases/tags/{tag}', missing=True)
+          original_tag = tagged_commit()
+          created = release is None
+          if created:
+              require(original_tag is None or original_tag == qualified_sha, 'Existing tag points to another commit; preserved without modification')
+              arguments = ['release', 'create', tag, *[str(package / name) for name in names],
+                           '--repo', repository, '--target', qualified_sha,
+                           '--title', 'LEARNING TO BUILD — Research edition 1.0.0',
+                           '--notes-file', str(notes), '--latest=false']
+              if original_tag is not None:
+                  arguments.append('--verify-tag')
+              result = gh(*arguments)
+              require(result.returncode == 0, 'Release creation failed; existing assets were not replaced: ' + result.stderr)
+              release = api(f'repos/{repository}/releases/tags/{tag}')
+              require(tagged_commit() == qualified_sha, 'New release tag differs from qualified source')
+
+          release_sha = tagged_commit()
+          require(release_sha is not None and not release['draft'] and not release['prerelease'], 'Release is not a published research edition')
+          require((release.get('body') or '').strip() == notes_text.strip(), 'Existing release notes differ; preserve that edition and publish a new version')
+          tagged_manifest = api(f'repos/{repository}/contents/docs/learning-to-build/PUBLICATION.json?ref={release_sha}')
+          require(tagged_manifest.get('encoding') == 'base64', 'Cannot verify manifest at release tag')
+          require(base64.b64decode(''.join(tagged_manifest['content'].split()), validate=True) == (package / 'PUBLICATION.json').read_bytes(), 'Release source binding differs; no existing edition was changed')
+          for name in names:
+              matches = [item for item in release.get('assets', []) if item['name'] == name]
+              require(len(matches) == 1 and matches[0].get('state') == 'uploaded', f'Released asset missing or incomplete: {name}')
+          downloaded = Path(os.environ['RUNNER_TEMP']) / 'learning-to-build-downloaded'
+          downloaded.mkdir()
+          arguments = ['release', 'download', tag, '--repo', repository, '--dir', str(downloaded)]
+          for name in names:
+              arguments.extend(['--pattern', name])
+          result = gh(*arguments)
+          require(result.returncode == 0, 'Release download failed: ' + result.stderr)
+          for name, expected in assets.items():
+              require(digest(downloaded / name) == expected, f'Downloaded asset identity differs: {name}')
+          require(tagged_commit() == release_sha, 'Release tag changed during verification')
+          receipt = {'operation': 'created-and-downloaded' if created else 'preserved-and-downloaded',
+                     'edition': publication['edition'], 'release_url': release['html_url'],
+                     'qualified_commit': qualified_sha, 'release_commit': release_sha,
+                     'downloaded_asset_sha256': assets,
+                     'scope': 'Research publication and finite authored evidence; no field or commercial certification.'}
+          print(json.dumps(receipt, indent=2))
+          (downloaded / 'PUBLICATION_RECEIPT.json').write_text(json.dumps(receipt, indent=2) + '\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('## LEARNING TO BUILD · Research edition 1.0.0\n\n')
+              summary.write(f"[{receipt['operation']}]({release['html_url']}). All four downloaded assets match the qualified package.\n\n")
+              summary.write(f'Qualified commit: `{qualified_sha}`. Release commit: `{release_sha}`.\n\n')
+              summary.write(receipt['scope'] + '\n')
+          PY
+      - name: Operate the source downloaded from the published release
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends poppler-utils
+          mkdir "$RUNNER_TEMP/learning-to-build-released-source"
+          unzip -q "$RUNNER_TEMP/learning-to-build-downloaded/LEARNING_TO_BUILD_SOURCE.zip" -d "$RUNNER_TEMP/learning-to-build-released-source"
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/package.py" --verify
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/study/check.py"
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/study/test_integrity.py" -v
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/study/study.py" --output "$RUNNER_TEMP/learning-to-build-released-replay"
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/study/check.py" --evidence "$RUNNER_TEMP/learning-to-build-released-replay"
+          diff -r "$RUNNER_TEMP/learning-to-build-released-source/study/evidence" "$RUNNER_TEMP/learning-to-build-released-replay"
+          echo 'Downloaded release source reproduced the retained finite study.' >> "$GITHUB_STEP_SUMMARY"
