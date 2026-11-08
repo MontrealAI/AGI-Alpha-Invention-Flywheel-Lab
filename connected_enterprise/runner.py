@@ -56,6 +56,7 @@ REACH_NATIVE_PATHS = (
 TRIAL_REACH_RELEASE_PATHS = (
     'campaign/omega-trial-once-20261107/PROTOCOL.md',
     'campaign/omega-trial-once-20261107/RELEASE_CLOSURE_PROTOCOL.md',
+    'campaign/omega-trial-once-20261107/RELEASE_CLOSURE_AMENDMENT_A.md',
     'tests/test_omega_trial_once_20261107.py',
     'tests/test_omega_reach_release_closure_20261108.py',
     'scripts/omega_trial_once_matrix.py',
@@ -389,10 +390,19 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in (*OMEGA_V4_RELEASE_PATHS, *REACH_RELEASE_PATHS)):
             raise ValueError('PAID_REACH_SOURCE_DEPENDENCY_MISSING')
         names.update(REACH_RELEASE_PATHS)
-    # Explicit opt-in: older paid-reach source distributions remain usable.
-    # Even a single research source marker requires the entire trial closure.
-    if any((root/name).exists() or (root/name).is_symlink()
-           for name in TRIAL_REACH_MARKERS):
+    # Older paid-reach sources without the trial remain valid. Detect both
+    # present trial files AND a newer native module advertising a trial source
+    # even if an entire trial subtree was deleted from a copied distribution.
+    native_reach = root / 'mechanism_harness/reach_native.py'
+    advertised_trial = False
+    if native_reach.is_file():
+        if native_reach.is_symlink():
+            raise ValueError('TRIAL_REACH_NATIVE_SYMLINK_REFUSED')
+        native_source = native_reach.read_bytes()
+        advertised_trial = (b'campaign/omega-trial-once-20261107/PROTOCOL.md' in native_source
+                            or b'tests/test_omega_trial_once_20261107.py' in native_source)
+    if advertised_trial or any((root/name).exists() or (root/name).is_symlink()
+                               for name in TRIAL_REACH_MARKERS):
         if not has_reach or any(
                 not (root/name).is_file() or (root/name).is_symlink()
                 for name in TRIAL_REACH_RELEASE_PATHS):
