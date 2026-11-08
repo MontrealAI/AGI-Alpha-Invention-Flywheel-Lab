@@ -38,8 +38,11 @@ jobs:
           git cat-file -e 71c9a2c96e351c2eaa3b1ffecec654422ce91cfa:campaign/regulatory-citation097/PROTOCOL.md
           git show 71c9a2c96e351c2eaa3b1ffecec654422ce91cfa:campaign/regulatory-citation097/PROTOCOL.md | cmp - campaign/regulatory-citation097/PROTOCOL.md
           git merge-base --is-ancestor 71c9a2c96e351c2eaa3b1ffecec654422ce91cfa HEAD
-      - name: Execute all preregistered C0-C9 adversarial synthetic cases
-        run: python -B -m unittest tests.test_regulatory_citation097 -v
+          git cat-file -e b16fcf244800ea8a2e0b1ac42aaf74c805b7b677:campaign/regulatory-citation097/VISIBILITY_AMENDMENT.md
+          git show b16fcf244800ea8a2e0b1ac42aaf74c805b7b677:campaign/regulatory-citation097/VISIBILITY_AMENDMENT.md | cmp - campaign/regulatory-citation097/VISIBILITY_AMENDMENT.md
+          git merge-base --is-ancestor b16fcf244800ea8a2e0b1ac42aaf74c805b7b677 HEAD
+      - name: Execute frozen C0-C13 and separately preregistered H0-H9 visibility cases
+        run: python -B -m unittest tests.test_regulatory_citation097 tests.test_regulatory_visibility097 -v
       - name: Attempt each frozen official public source once and independently check claimed passages
         shell: bash
         run: |
