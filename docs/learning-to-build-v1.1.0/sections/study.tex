@@ -1,0 +1,191 @@
+\section{An executable witness: constructing what the successor needs}\label{sec:study}
+
+\begin{statusbox}
+\textbf{Preserved 1.0.0 illustration.} This section carries forward the authored finite study from the published first edition \citep{learningBuildOriginal}. Its evidence remains in the original source tree. The microscopy continuation in Section~\ref{sec:continuation} is a separate empirical construction with a different protocol and acceptance boundary.
+\end{statusbox}
+
+The framework should produce something that works. We therefore accompany the
+paper with a finite study that constructs new executable instruments, checks their
+outputs, and asks when the complete means of using them are affordable and
+available. Its purpose is to expose distinctions that a compelling diagram could
+hide: a finished instrument can fail on a successor; a reusable constructor can
+build a valid replacement; current rights and qualification remain necessary; and
+retention can impose obligations that make the next outcome harder to reach.
+
+\begin{statusbox}
+\textbf{What is supplied and what is executed.} The task language, compiler,
+specifications, alternative routes, rights scenarios, and planning costs are
+authored. The generated programs and their output checks are executed. The
+constructor is \emph{supplied, not learned}. No physical sensor, customer,
+transaction, model call, or autonomous discovery is represented.
+\end{statusbox}
+
+\subsection{Constructing a fresh instrument}
+
+A task specifies named integer input fields $f_j$, affine calibration coefficients
+$a_j,b_j$, aggregation weights $w_j$, and a threshold $\theta$. Its required
+measurement and decision are
+\begin{equation}
+ z(x)=\sum_{j=1}^{d}w_j\bigl(a_jx_{f_j}+b_j\bigr),
+ \qquad d(x)=\mathbf 1\{z(x)\geq\theta\}.
+ \label{eq:study-instrument}
+\end{equation}
+The compiler combines these terms into a standalone Python program. It consumes
+JSON records, requires the exact integer schema, computes the measurement and
+Boolean decision, and emits a specification hash. This is actual source
+generation from a supplied specification, using ordinary algebra. It is not a
+discovery of a new measurement law.
+
+The source instrument computes $2a+2b+c+1$. The first successor instead requires
+$2q-p+6r+1$, with different field names, coefficients, and threshold. Further
+successors require four and five fields. The finished source program cannot
+consume these schemas. Keeping that program alone therefore does not solve the
+successors. The retained generic compiler creates three fresh programs from their
+specifications; their correctness does not depend on executing the finished donor
+program.
+
+For each task we enumerate every vector in
+$\{-2,-1,0,1,2\}^{d}$. A separate calculation checks both the numerical result and
+the decision. A strong ordinary control directly interprets the same declarative
+specification, without needing to generate a program. Table~\ref{tab:study-programs}
+reports all cases. The output field named \texttt{accepted} denotes the
+per-record threshold decision; commercial acceptance is not implied. Program
+qualification means matching the specified result on the entire declared test
+domain, including correctly negative decisions.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{YrrP{1.58in}}
+\toprule
+Task & Input cases & Both methods correct & Finished source program\\
+\midrule
+Source: three fields & 125 & 125 & Same task\\
+Successor 1: three fields & 125 & 125 & Schema rejection\\
+Successor 2: four fields & 625 & 625 & Schema rejection\\
+Successor 3: five fields & 3,125 & 3,125 & Schema rejection\\
+\midrule
+Total & \textbf{4,000} & \textbf{4,000} & Three incompatible successors\\
+\bottomrule
+\end{tabularx}
+\caption{Actual generated programs and the ordinary interpreter agree with the
+specifications on the complete stated finite domain. These authored fresh tasks
+are not independently selected natural tasks. No runtime or learning advantage is
+claimed.}
+\label{tab:study-programs}
+\end{table}
+
+\subsection{Completing the means of delivery}
+
+Correct output is one component of the modeled outcome. An internal delivery
+also requires a reusable testing fixture, current access terms, fresh
+qualification, and production resources. An external complete service is a
+separately available conventional route under its own supplied standard terms.
+Missing internal consent does not disable that external alternative.
+
+The fresh internal route costs 54 planning units and takes eight time units:
+18 for construction, 10 for the fixture, 6 for current terms, 8 for qualification,
+and 12 for production. Inheriting the fixture removes its repeated cost and time,
+giving 44 units and six time units. Inheriting the supplied constructor additionally
+changes assumed fresh construction cost from 18 to 7 and its duration from three
+to one, giving 33 units and four time units. The complete external service costs
+58 units and takes four time units. These are \emph{synthetic planning
+assumptions}, not measured savings from compilation, labor estimates, currency, or
+market quotations.
+
+The constructor state also carries a current maintenance obligation $m$. This
+must be paid even if the external service or nonentry is selected. Every delivery
+expense precedes its modeled receipt of 80 units. A route is feasible only if
+every cash prefix remains nonnegative, the deadline is met, and its current
+rights and qualification conditions hold. Constructor acquisition and full
+continuation costs are accounted for separately in the economic analysis; the
+state comparison here conditions on what has already been retained.
+
+\subsection{The frontier expands---and can contract}
+
+Before execution, the protocol fixed cash values
+$\{32,33,43,44,53,54,57,58\}$, deadlines $\{3,4,5,6,7,8\}$, two internal-consent
+settings, and maintenance values $\{0,12,26\}$. Their Cartesian product contains
+288 cells. Evaluating the three inherited states gives 864 complete-route
+decisions. Each decision selects the least-cost feasible supplied route, or
+nonentry when none qualifies. This is exact only within the declared catalogue.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{P{.92in}rYYY}
+\toprule
+Maintenance $m$ & Cells & Fresh state & Fixture-only & Constructor state\\
+\midrule
+0 & 96 & 12 & 22 & \textbf{40}\\
+12 & 96 & 12 & \textbf{22} & 20\\
+26 & 96 & 12 & \textbf{22} & 0\\
+\bottomrule
+\end{tabularx}
+\caption{Number of cells admitting an accepted modeled delivery. The selected
+grid is a finite comparison, not a probability distribution. Fresh and fixture-only
+counts repeat because the maintenance obligation belongs only to the constructor
+state. These unequal-state counts are not a ranking of learning algorithms.}
+\label{tab:study-frontier}
+\end{table}
+
+The positive witness is transparent. With cash 33, deadline four, current internal
+consent, fresh qualification, and zero maintenance, the constructor route delivers.
+The fresh, fixture-only, and external routes do not fit those resources. Remove
+current rights or qualification and the internal result becomes infeasible.
+
+The adverse witness is equally consequential. With cash 58, deadline four, and
+no internal consent, the fixture-only state can buy the external complete service.
+Retaining a constructor with maintenance 12 leaves insufficient cash for that
+same service. The additional asset has contracted the reachable set. This does
+not contradict conditional state dominance: its no-greater-obligations premise
+has failed. A useful retained object is not automatically a better productive
+state.
+
+\subsection{What the strong control establishes}
+
+An ordinary analytical planner receives the same specifications, constructor
+recipe, retained fixture, resource limits, rights, costs, and complete routes. It
+agrees with the constructor-state planner in \textbf{all 288 decisions}. Its
+ordinary interpreter also matches every generated instrument's required output.
+The control is therefore not deprived of the very content responsible for the
+conditional gain. Compilation is not technically necessary for these arithmetic
+tasks: the interpreter already supplies the required answers. The emitted
+programs demonstrate portable construction, not the uniquely necessary or
+empirically cheapest implementation.
+
+The study establishes a finite example of \emph{fresh construction using retained
+means}. It does not establish that experience improved the constructor, that a
+special discovery policy outperformed ordinary engineering, or that the supplied
+cost advantage would occur in practice. The conventional tie is a substantive
+result: productive value and proprietary methodological superiority are different
+claims. The three fresh schemas demonstrate donor-artifact incompatibility; they
+do not establish open-ended transfer outside the supplied language.
+
+\subsection{Reproduction and claim boundaries}
+
+From the versioned source package root, reproduce the preserved 1.0.0 study into a new directory:
+\begin{lstlisting}
+python3 -B study/study.py --output /absolute/new/replay
+python3 -B study/check.py --evidence /absolute/new/replay
+\end{lstlisting}
+The first command generates the instruments, compact results, and all grid cells.
+The second imports no producer code: it separately executes the instruments and
+replays route costs and cash prefixes. This is a separate-source engineering
+cross-check, not an independent institutional evaluation. The retained protocol
+and result hashes bind the task definitions and implementation. Both entry
+points pin the exact registered protocol; this reproduction is not a general
+configurable simulator. The checker recomputes the complete reported record,
+including all counts, hashes, flags, and row cardinalities. Normal and
+optimized Python execution produced byte-identical reported results.
+
+Adverse checks reject incompatible schemas, a tampered task contract, missing
+current qualification, and absent internal rights, while preserving the
+maintenance counterexample. Exact checking covers the authored domain and
+assumptions. It does not establish real demand, observed consent, physical
+qualification, measured economic productivity, or construction learning. The
+next experiment must earn those stronger bridges rather than rename this witness.
+
+\begin{thesisbox}
+\textbf{The lesson.} Keeping a finished object and keeping a means of building
+the next object are different achievements. Either becomes productive only when
+the complete current means of accepted use are available.
+\end{thesisbox}

@@ -1,0 +1,112 @@
+\clearpage
+\appendix
+\section{One-page construction brief}
+\label{app:brief}
+
+Use this brief to turn an attractive possibility into a concrete construction decision. Answers can be short; unresolved items remain explicitly unresolved.
+
+\begin{longtable}{@{}P{1.55in}P{4.95in}@{}}
+\toprule
+\textbf{Question} & \textbf{What to write}\\
+\midrule
+\endhead
+Worthwhile outcome & Who should be able to do what? State acceptance, deadline, essential quality, and the material consequences of failure.\\[.4em]
+Best complete route & What can a competent existing provider, engineer, or frontier agent already deliver under the same permissions and resources? Include self-service and non-entry.\\[.4em]
+Missing means & Which precise observation, instrument, representation, process, resource, interface, or arrangement prevents the outcome? Is this proved, measured, or only suspected?\\[.4em]
+Smallest decisive build & What executable artifact, experiment, or arrangement would test that diagnosis and connect back to the useful outcome? What finding would refute it?\\[.4em]
+Bootstrap and integration & Where do the initial prerequisites come from? Which interfaces, shared resources, environment conditions, and temporary means must work together?\\[.4em]
+Complete resource path & Count discovery, failed attempts, construction, checking, production, transition, maintenance, financing, and remaining obligations. Verify each prefix, not only the final total.\\[.4em]
+Participation and authority & Who must agree, what can they choose instead, and what evidence establishes their actual permission? Which conditions are only modeled?\\[.4em]
+Useful inheritance & What working means, validity conditions, and construction procedure should survive? What should be retired?\\[.4em]
+Fresh successor test & Name a different useful output. Remove the finished donor artifact where appropriate. Compare equal-content construction and charge adaptation and requalification.\\[.4em]
+Decision and learning & Build, adopt, test, defer, or decline. Record tried $\rightarrow$ outcome $\rightarrow$ reason or uncertainty $\rightarrow$ next use or avoidance.\\
+\bottomrule
+\end{longtable}
+
+The brief is useful only when it changes a construction or operating decision. It is not an admission badge and does not establish demand, physical feasibility, or learning by itself.
+
+\clearpage
+\section{Formal details and interpretation}
+\label{app:formal}
+
+\subsection{A qualified dominance statement}
+
+Let $\F(x)$ be the accepted outcomes reachable in a finite transition model from state $x$. Suppose state $x_B$ preserves every $x_A$-feasible action sequence and its acceptance and authority conditions; supplies at least the required resources at every corresponding prefix; has no greater relevant obligations; and permits completion no later. Then
+\begin{equation}
+\F(x_A)\subseteq\F(x_B).
+\end{equation}
+Replay any valid $x_A$ sequence in $x_B$. Each transition remains permitted and feasible by the assumptions, so its accepted outcome remains reachable. The conclusion is a simulation argument over the stated transition systems. Adding an asset does not, by itself, establish the assumptions. Maintenance-driven contraction in the finite study violates them.
+
+\subsection{Why generic diminishing returns need not hold}
+
+Let $i$ be an instrument and $q$ its necessary current qualification, with $V(S)=1$ exactly when $\{i,q\}\subseteq S$, and $V(S)=0$ otherwise. Then
+\begin{equation}
+V(\{q\})-V(\varnothing)=0
+<V(\{i,q\})-V(\{i\})=1.
+\end{equation}
+The marginal contribution of qualification is larger when the instrument is present. The usual submodular diminishing-returns inequality therefore fails. A generic guarantee for a submodular selection algorithm cannot be borrowed without checking its assumptions. The example supports joint reasoning about prerequisites; it supplies no algorithmic advantage over ordinary joint optimization.
+
+\subsection{Three cost boundaries for a successor claim}
+
+\textbf{Current-state boundary:} the inherited assets and obligations are specified inputs; the test asks what the successor can do now. \textbf{Acquisition boundary:} the decision to obtain the assets is included, with its cost and time. \textbf{Whole-lineage boundary:} source construction, failed development, preservation, all successors, and residual obligations enter the accounting.
+
+All three can be informative. In the study, the 33-unit affordability witness is a current-state result, while Equation~\ref{eq:retention} includes the 9-unit acquisition cost and common source cost. Neither is a measurement of the research effort required to invent the supplied compiler. Switching boundaries after seeing results would change the question.
+
+\section{Reproduction and source lineage}
+\label{app:reproduction}
+
+\subsection{Two editions, two evidence boundaries}
+
+The published research edition 1.0.0 remains a separate source and evidence tree \citep{learningBuildOriginal}. Its four emitted instruments, 4,000 input checks, 288 authored scenarios, and 864 route decisions retain their original scope. The versioned source package includes a convenience copy of that preserved study. From the package root, its numerical reproduction is:
+\begin{lstlisting}
+python3 -B study/check.py
+python3 -B study/study.py --output /absolute/new/finite-replay
+python3 -B study/check.py --evidence /absolute/new/finite-replay
+\end{lstlisting}
+
+This study uses only Python's standard library. Its author-controlled protocol freeze is not an independent task registration or external validation.
+
+The 1.1.0 microscopy work lives in the separate directory \texttt{docs/learning-to-build-v1.1.0}. The versioned README and construction brief identify installation, acquisition, operation, checking, interruption recovery, and the exact evidence paths. The comparison preserves the published preregistration lineage and frozen source at commit \texttt{64d6d30da4a5da7c8905d9a106d9e2a996a29e4d}. The effective classical comparison is \texttt{PROTOCOL-amendment-2.json}; the specialist has its own corresponding amended protocol and registration. Their source identities, splits, metrics, and thresholds are explicit.
+
+\textbf{Data availability and execution status.} The final raw output package described in the earlier preparation history was not present in the public continuation branch or accessible for byte verification in this execution. It is not treated as recovered evidence. This edition reports a new execution of the frozen comparison against reacquired, hash-verified public archives and the pinned specialist. Prior outcome summaries were already known. Consequently, neither the source fields nor the successor test set is newly hidden evidence in this reproduction. Public preregistration commits and compact failure records establish the historical design and amendments; new masks, measurements, timing records, and checks establish the reproduction's actual outputs.
+
+\textbf{Observed files and publication projection.} The raw classical output contained 416 files and was rejected by the strict checker because 138 residual attempt-file copies remained alongside the 278 canonical files. Every residual was byte-identical to its canonical counterpart; the cause is unknown. A separately identified projection retains the 278 canonical files unchanged. All 138 residual files are also retained, with a complete reconstruction mapping in \path{classical-residuals/PROJECTION.json}. No numerical values or recorded costs were removed or changed. \path{PROJECTION_IDEMPOTENT_RESUME.json} records that resuming the projected tree performed no new predictions and left all bytes unchanged. This packaging projection does not turn the rejected raw tree into a raw-check pass.
+
+The portable \path{construction/projection.py} verifies the complete mapping and optionally reconstructs every original relative path and byte into a new destination. Separate review compared all 416 reconstructed files with the preserved original, with zero mismatches, and confirmed the original strict-inventory rejection remains. The utility verifies content, not historical creation provenance or cost completeness. Its focused tests reject omitted or duplicate paths, changed bytes, traversal, symlinks, incorrect counterparts and unsafe destinations.
+
+\textbf{Follow-up evidence.} The original reproduction archive remains byte-identical. Separate packets in \path{construction/diagnostics/}, \path{construction/repair/}, and \path{qualification/} retain the prospectively frozen exposed-data diagnostics, failed ordinary composition, installer failure and repair, and continuation review. \path{EVIDENCE_INDEX.md} maps consequential claims to their sources and receipts; \path{COST_LEDGER.md} separates measured boundaries, nested timings and unknown costs. The diagnostic uses four calibration fields only. The failed composition's stop rule leaves all twelve test fields unscored by that candidate. Neither creates a fresh confirmation cohort.
+
+\textbf{Runtime boundary.} The reported microscopy reproduction used a dedicated Python 3.12.14 virtual environment with the registered package versions and upstream Python source checks. That virtual environment enabled \texttt{--system-site-packages}; it was not fully isolated. The checks do not freeze every transitive binary, compiler, operating-system component, or processor implementation. Exact registered versions and source identities describe the supported environment; they are not a claim of a wholly hermetic runtime or guaranteed bitwise output across all machines. Setup receipts retain the actual environment configuration. The default isolated installer was checked separately; it did not replace the environment that produced the reported 116-field run.
+
+\textbf{Costs and missing history.} Measured costs belong to the execution whose receipts report them. Preserved historical records may document failed attempts, but absence of a historical detailed receipt is not a zero cost. Upstream pretraining, total authoring effort, included-model and host billing, unavailable historical execution costs, and any extra work associated with the unexplained residuals remain unknown. No inferred total or retrospective reconstruction is presented as measured. There are no actual customers, commercial transactions, or receipts in this construction.
+
+\textbf{Foundational source lineage.} The 1.0.0 source map records the public editions of the three foundational papers inspected at repository revision \texttt{22678d629d986572c50891b60455911978789da5}, including their SHA-256 identities and section/page relationships. The present revision develops that lineage openly; it does not include private source uploads or conversation records.
+
+\textbf{Typesetting and identity.} The source includes editable \LaTeX{} and BibTeX. A normal TeX distribution supplies \texttt{pdflatex}, BibTeX, and the declared packages, with shell escape disabled. The recorded PDF digest identifies the distributed bytes. Recompilation on a different TeX distribution can change bytes while preserving content. A successful build establishes document integrity, not scientific qualification.
+
+\textbf{Checker repair history.} An initial independent audit rescored the 116 saved specialist fields, then failed at a preparation-record lookup: the loading record was nested under \texttt{preflight.loading}, while the additive checker looked for top-level \texttt{loading}. The correction changes that provenance lookup only. The earlier checker and failed audit are retained; producer code, criteria, predictions, and recorded metrics are unchanged. Final audit receipts bind their verdicts to the corrected checker source.
+
+\textbf{Review.} AI-assisted drafting, coding, literature checks, and separate adversarial review were used under the author's direction. Source-separated metric checks and adversarial probes provide engineering evidence under common authorship. They are not independent institutional evaluation, external peer review, or field certification. Scientific claims remain limited by the declared data, operators, source identities, controls, and acceptance boundary.
+
+\section{Claim and evidence map}
+\label{app:claims}
+
+\begingroup\small
+\begin{longtable}{@{}P{1.53in}P{2.51in}P{2.43in}@{}}
+\toprule
+\textbf{Claim} & \textbf{Evidence in this edition} & \textbf{Boundary}\\
+\midrule
+\endhead
+Complete means are a useful unit of construction & Definition, witness, interfaces, bootstrap, prefix resources, and acceptance. & Operational synthesis; no exhaustive world model.\\[.35em]
+Complementarity can defeat local additions & Proposition~\ref{prop:complementarity} and explicit assumptions. & Particular local rule; ordinary joint planning can succeed.\\[.35em]
+Unseeded cycles cannot initialize & Proposition~\ref{prop:bootstrap}. & Stated action model; exogenous supply or a new operation can change it.\\[.35em]
+Fresh executable instruments are constructed & Four emitted Python programs; 4,000 finite input cases; independent interpretation. & Authored arithmetic tasks; supplied compiler; no physical sensing.\\[.35em]
+Retained means can expand or contract modeled reachability & 288 supplied cells, 864 decisions, favorable and maintenance-adverse slices. & Assumed costs, timing, consent, and acceptance; not probabilities.\\[.35em]
+Conventional equal-content method matches & 288/288 route ties and equal finite program answers. & No measured proprietary method or learning advantage.\\[.35em]
+Constructor improvement from a local ordering update & All six arms exhaust the 24-recipe bank; the primary pair ties and fails successor acceptance. & No accepted method advantage; no general learning claim.\\[.35em]
+A public-image instrument operates & The pretrained nucleus route passes both source cohorts; emitted masks and measurement records; Section~\ref{sec:continuation}. & Source research contract only; successor fails; pretraining overlap unknown.\\[.35em]
+Accepted commerce funds a successor & Cash conditions and illustrative continuation arithmetic. & No real customer receipts or native enterprise operation here.\\[.35em]
+Construction can support much larger productive capacity & Dependency-based scientific and industrial research programme. & No achieved physical scale, expansion rate, or wealth forecast.\\
+\bottomrule
+\end{longtable}
+\endgroup

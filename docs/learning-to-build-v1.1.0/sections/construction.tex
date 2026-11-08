@@ -1,0 +1,73 @@
+\section{From available tools to a construction frontier}
+\label{sec:frontier}
+
+\subsection{A capability is an operation with conditions}
+
+Represent the current productive state as
+\begin{equation}
+x=(\K,\mathcal J,\mathcal P,r,a,e,o),
+\end{equation}
+comprising knowledge, instruments, procedures, resources, authority/arrangements, evidence, and obligations. These categories can overlap in implementation; the notation prevents a useful file from being confused with usable equipment, accepted permission, or spendable funds.
+
+A capability is a conditional operation: given specified inputs and a valid state, it produces an output and a changed state while consuming resources. Construction adds or changes such an operation. Requalification may remove its usable scope. Retirement may reduce obligations. A useful policy must be able to do all three.
+
+For a declared model and horizon, define
+\begin{align}
+\R_{\mathrm{use}}(\I,x)&=\{y:\text{a valid policy delivers $y$ using the installed repertoire}\},\\
+\R_{\mathrm{build}}(\I,x)&=\{y:\text{a valid policy delivers $y$ and may construct new means}\}.
+\label{eq:frontiers}
+\end{align}
+The repertoire and the distinction between use and construction must be stated for the comparison. If every use-policy is also allowed in the second set, then $\R_{\mathrm{use}}\subseteq\R_{\mathrm{build}}$. The useful question is whether an accepted outcome lies in the difference under the same initial resources, authority, and horizon.
+
+This is not evidence that an incumbent could never have built the same means. A competent comparator must receive the same construction and procurement options when the claim concerns builder quality. An example can demonstrate a limitation of an installed arrangement while a conventional constructor fully matches the proposed solution.
+
+\subsection{Three boundaries that a build can move}
+
+\textbf{The physical or logical boundary.} A new observation can distinguish states that old observations cannot distinguish. A new manufacturing operation can change the realizable geometry. Proof requires an appropriate model or independent physical evidence.
+
+\textbf{The resource boundary.} The outcome was possible but not within the available money, time, energy, capacity, or risk allowance. A complete lower-cost route can make it reachable. The claim depends on the stated threshold and a fair complete alternative.
+
+\textbf{The discovery boundary.} An adequate route was feasible, but the procedure did not find it. A better representation, search method, experiment, or construction heuristic can help. This is a gain in finding and realizing possibilities, not necessarily an enlargement of the mathematical feasible set.
+
+The distinctions matter commercially and scientifically. A conventional solution can remove a real obstruction for a particular organization. That does not make the solution new to science. Conversely, a novel algorithm may fail to change any worthwhile outcome after integration costs.
+
+\subsection{Complementary prerequisites and the first viable whole}
+
+The GENESIS capability hypergraph expresses jointly necessary means \citep{boucherGenesis}. An edge $\{m_1,\ldots,m_k\}\rightarrow m'$ is useful only if there is a supported realization, a feasible resource schedule, and conditions under which it remains valid. A hypergraph can summarize the construction; labeling the edge does not construct it.
+
+\begin{proposition}[An elementary complementarity barrier]
+\label{prop:complementarity}
+Suppose $|M|\ge2$, no member of $M$ is initially available, and a useful outcome has value $v>0$ only when all members are available. Each member has positive construction cost $c_i$, and no proper subset has other value in this example. A procedure restricted to single-member additions that accepts only nonnegative immediate increments builds nothing. A complete construction is beneficial when $v>\sum_{i\in M}c_i$, provided its path is feasible.
+\end{proposition}
+
+\begin{proof}
+Because $|M|\ge2$, every first single-member addition leaves an incomplete set, produces no outcome value, and incurs positive cost. Starting from no members, the stated local rule therefore refuses every first addition. The complete set has net value $v-\sum_i c_i$. Feasibility is a separate condition because a positive terminal balance need not fund the earlier steps.
+\end{proof}
+
+The result is intentionally elementary. It identifies the failure of a particular local rule, not the superiority of a new planner. Ordinary joint optimization can select the same bundle. In practical construction, complementarity suggests testing a small viable whole rather than demanding that each enabling component be independently profitable.
+
+\subsection{A loop in the diagram is not a bootstrap sequence}
+
+A proposed factory may need a calibration instrument that it is supposed to manufacture. A calibration method may require a reference that the new process is supposed to establish. Circularity is not inherently fatal: an external seed, a temporary method, or a joint operation can start a genuine cycle. The seed and transition must appear in the witness.
+
+\begin{proposition}[Unseeded prerequisite obstruction]
+\label{prop:bootstrap}
+In a discrete action model, let $U$ be a set of capabilities absent initially. If every permitted action that can create any member of $U$ requires at least one member of $U$ to be present before that action, and no exogenous event supplies one, no finite action sequence creates a member of $U$.
+\end{proposition}
+
+\begin{proof}
+Assume a sequence creates a first member of $U$. Immediately before that action, no member is present, contradicting the action's required prerequisite. Equivalently, absence of every member is preserved by induction over the sequence.
+\end{proof}
+
+This result makes the first construction unusually important. It may require purchased equipment, external expertise, a coarse temporary instrument, a validated reference, or a simpler process. Access to those means must be real at the evidential level claimed. Once initialized, the cycle still needs maintenance, material and energy flows, acceptance, and replacement of its own critical dependencies.
+
+\subsection{Building changes possibility; it need not improve it}
+
+Let a completed build transform $x$ into $x'=T(x,w)$. The new state includes its outputs \emph{and} its consumed resources, remaining liabilities, and evidence. Comparing $\R(\I,x)$ with $\R(\I,x')$ without accounting for those changes can exaggerate progress. A machine may add useful capacity while tying up all available cash. A library may accelerate one task while making another difficult to maintain.
+
+\begin{proposition}[Optional capability is weakly valuable under specific conditions]
+\label{prop:optional}
+With the same remaining resources, obligations, environment, and horizon, adding an optional operation cannot reduce optimal attainable value if every old policy remains feasible and the addition imposes no unavoidable cost. Strict improvement requires a newly feasible policy with strictly greater value.
+\end{proposition}
+
+The proof is feasible-set inclusion. Actual building usually changes resources and can create carrying costs, so the proposition does not say that every construction pays. Nor does a larger feasible set guarantee that a bounded search procedure finds a better policy. This is why \emph{learning to build} includes learning what to retire, what to buy, and what to avoid building.

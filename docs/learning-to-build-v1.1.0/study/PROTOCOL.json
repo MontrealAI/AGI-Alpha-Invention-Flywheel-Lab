@@ -1,0 +1,224 @@
+{
+  "study": "learning-to-build finite construction illustration",
+  "version": "1.0.0",
+  "kind": "author-specified executable illustration; no model call, learned-policy claim, actual customer, actual payment, or physical sensor",
+  "artifact": "a standalone Python program compiled from an authored affine measurement specification",
+  "domain": {
+    "raw_values": [
+      -2,
+      -1,
+      0,
+      1,
+      2
+    ],
+    "specs": [
+      {
+        "id": "source",
+        "fields": [
+          "a",
+          "b",
+          "c"
+        ],
+        "scales": [
+          1,
+          2,
+          1
+        ],
+        "offsets": [
+          0,
+          0,
+          1
+        ],
+        "weights": [
+          2,
+          1,
+          1
+        ],
+        "threshold": 2
+      },
+      {
+        "id": "successor_1",
+        "fields": [
+          "q",
+          "p",
+          "r"
+        ],
+        "scales": [
+          2,
+          -1,
+          3
+        ],
+        "offsets": [
+          -1,
+          2,
+          0
+        ],
+        "weights": [
+          1,
+          1,
+          2
+        ],
+        "threshold": 7
+      },
+      {
+        "id": "successor_2",
+        "fields": [
+          "m0",
+          "m1",
+          "m2",
+          "m3"
+        ],
+        "scales": [
+          1,
+          2,
+          -1,
+          3
+        ],
+        "offsets": [
+          2,
+          -2,
+          1,
+          0
+        ],
+        "weights": [
+          3,
+          1,
+          2,
+          1
+        ],
+        "threshold": 10
+      },
+      {
+        "id": "successor_3",
+        "fields": [
+          "z4",
+          "z0",
+          "z2",
+          "z1",
+          "z3"
+        ],
+        "scales": [
+          2,
+          1,
+          -2,
+          3,
+          1
+        ],
+        "offsets": [
+          1,
+          -1,
+          2,
+          0,
+          3
+        ],
+        "weights": [
+          1,
+          2,
+          1,
+          1,
+          2
+        ],
+        "threshold": 6
+      }
+    ]
+  },
+  "technical_contract": {
+    "all_finite_inputs": true,
+    "output": [
+      "weighted_measurement",
+      "accepted"
+    ],
+    "predicate": "exact weighted calibrated integer sum >= task threshold; fresh task binds exact schema and qualification"
+  },
+  "financial_model": {
+    "unit": "synthetic cost units; not dollars or observed labor/inference costs",
+    "incumbent_service": {
+      "cost": 58,
+      "duration": 4,
+      "payment": "all cost before accepted receipt",
+      "consent": "standard service consent supplied true"
+    },
+    "fresh_internal": {
+      "construction": 18,
+      "fixture": 10,
+      "rights": 6,
+      "qualification": 8,
+      "production": 12,
+      "duration": 8
+    },
+    "artifact_inheritance": {
+      "fresh_construction": 18,
+      "fixture": 0,
+      "rights": 6,
+      "qualification": 8,
+      "production": 12,
+      "duration": 6
+    },
+    "constructor_replay": {
+      "fresh_construction": 7,
+      "fixture": 0,
+      "rights": 6,
+      "qualification": 8,
+      "production": 12,
+      "duration": 4
+    },
+    "constructor_acquisition": {
+      "cost": 9,
+      "duration": 1,
+      "source_cost_included_in_lifecycle": true
+    },
+    "receipt": 80,
+    "current_rights": [
+      false,
+      true
+    ],
+    "cash": [
+      32,
+      33,
+      43,
+      44,
+      53,
+      54,
+      57,
+      58
+    ],
+    "deadline": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "maintenance": [
+      0,
+      12,
+      26
+    ],
+    "costs_due": "Every route cost is prepaid. In the retained-constructor state, maintenance m is an unavoidable current-episode obligation paid before any route, including external service or nonentry. Nonentry is checked after preserving that obligation.",
+    "objective": "minimize full incremental cost among feasible routes, else nonentry",
+    "capital": "variable finite grid; not universal floor/ceiling; no external finance in this illustration",
+    "rights_scope": "current_internal consent controls internal routes; standard external route uses separate supplied standard terms",
+    "equal_content_control": "ordinary exact planner and ordinary interpreter receive same specifications, recipe, retained fixture, resources, cost schedule and action catalogue",
+    "retention_break_even": "Against fixture-only continuation, n*(44-33-m)-9 = n*(11-m)-9, for n fresh successors, common source construction cost54 and source receipt80; acquisition9 is paid after source collection, not counted twice."
+  },
+  "comparisons": [
+    "source artifact reuse on fresh schema",
+    "new standalone compilation and independent interpretation",
+    "fresh/fixture-only/constructor route frontier",
+    "equal-content exact-planner tie",
+    "mandatory current rights/qualification",
+    "maintenance obligation shrinkage",
+    "retention break-even including acquisition cost"
+  ],
+  "summary_denominator": 288,
+  "report_all_grid_cells": true,
+  "claim_limits": [
+    "semantic closure only over stated affine language and finite domain",
+    "constructor supplied by authors; no discovery or constructor learning measured",
+    "cost parameters selected for illustration; not fit to measured runtime",
+    "rights are scenario flags, not consent obtained",
+    "accepted means model predicate, not real buyer acceptance"
+  ],
+  "freeze_rule": "This protocol and all specs are written before the first generated-program run; preserve hash in results."
+}

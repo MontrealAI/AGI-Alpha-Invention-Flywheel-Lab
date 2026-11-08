@@ -1,0 +1,58 @@
+{
+  "cause": "The first BBBC007 reference is a valid binary mode-1 TIFF. Pillow returns a NumPy bool array. The original decoder admitted signed/unsigned integers but rejected bool before geometry or successor scoring.",
+  "execution": "Run a new complete operation under the amended receipt; do not mutate or resume original-run001 across changed code. Charge the repeated donor/source work in lineage totals.",
+  "id": "AMENDMENT-1",
+  "knowledge_at_amendment": {
+    "donor_and_source_scores_seen": true,
+    "source_test_qualified": true,
+    "source_validation_mean_relative_count_error": 0.21617345615131536,
+    "source_validation_qualified": false,
+    "successor_calibration_encoding_inspected": "Eight binary outline TIFFs from the four registered A9 calibration fields; types, shapes and value counts only.",
+    "successor_predictions_or_scores_seen": false,
+    "successor_test_pixels_decoded": false
+  },
+  "observed_failure": {
+    "completed_stages": [
+      "donor",
+      "source"
+    ],
+    "error": "ValueError: Manual outlines must be two-dimensional monochrome rasters with <=2 values",
+    "run": "original-run001",
+    "run_state_sha256": "96eed37e84c260d1007ae29f4c6b72c821040d3920200c7a7822f1689bf9f092",
+    "status": "FAILED",
+    "status_sha256": "ca5e7f12b2784b9234892348078fc7570e0a86577185f03def1f88c12ecc583c"
+  },
+  "original_public_commit": "4a7ffbcd44b790d0e68ad58f4074831524f1b533",
+  "original_registration_sha256": "fe2dd115a259605d2166fd21cb83a2dc4e4667531d2fe76209fac6d543a447d8",
+  "preservation": "Original core, runner, dependencies, protocol and registration remain byte-identical in registrations/original/. The failed run and all its costs are retained in the evidence bundle.",
+  "registered_at_utc": "2026-11-07T15:26:01Z",
+  "review": {
+    "boolean_equivalence": "review/BOOLEAN_FORMAT_EQUIVALENCE.json",
+    "boolean_equivalence_sha256": "7bbc1f63f8ac4fe0498a0d7c3709298b7e8098788dfcd86e7700a96875fd12c1",
+    "encoding_diagnosis": "review/OUTLINE_ENCODING_DIAGNOSIS.json",
+    "encoding_diagnosis_sha256": "59bc565bf86bb4fdc1f87f04c33d0f73178b5570ddc779e2a3d3f1094cb00fbc",
+    "scope": "Separate AI-assisted reviewers within the same preparation workflow; no external certification."
+  },
+  "schema": "learning-to-build/microscopy-format-amendment/v1",
+  "sole_core_change": {
+    "file": "data.py",
+    "new_sha256": "fd77721d21f183021a646f1448397b14e4c75fb4762abb277547a630a7f68e17",
+    "old_sha256": "1f13417035bbc0ea2167ee8b859b8d5f2e88a4eaafee9d2e3c3aad9f24879875",
+    "operation": "If array.dtype.kind == b, cast losslessly to uint8 (False=0, True=1) before the unchanged guard and decoder."
+  },
+  "status": "FROZEN_BEFORE_SUCCESSOR_SCORING",
+  "unchanged": [
+    "data archive bytes",
+    "field splits",
+    "geometry and border interpretation",
+    "recipe grammar",
+    "algorithm operators",
+    "donor selection",
+    "all six arms and orders",
+    "calibration stopping and selection",
+    "acceptance thresholds",
+    "primary comparison",
+    "cost definitions"
+  ],
+  "unchanged_protocol_sha256": "76b37f0c1a2c951ed42e53d383063ce5b30c4dda5500665f63d3fa6831adb7ce"
+}

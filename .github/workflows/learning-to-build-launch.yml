@@ -1,0 +1,424 @@
+name: LEARNING TO BUILD 1.1 publication
+
+on:
+  pull_request:
+    paths:
+      - 'docs/learning-to-build-v1.1.0/**'
+      - 'docs/research/learning-to-build*'
+      - '.github/workflows/learning-to-build-launch.yml'
+      - 'scripts/verify_learning_reader.cjs'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/learning-to-build-v1.1.0/**'
+      - 'docs/research/learning-to-build*'
+      - '.github/workflows/learning-to-build-launch.yml'
+      - 'scripts/verify_learning_reader.cjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: learning-to-build-v1-1-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    name: Qualify research edition 1.1 and microscopy companion
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Check out exact candidate source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            docs/learning-to-build-v1.1.0
+            docs/research/learning-to-build-v1.1.0.pdf
+            docs/research/learning-to-build-v1.1.0.html
+            docs/research/learning-to-build-v1.1.0-example.png
+            scripts/verify_learning_reader.cjs
+          sparse-checkout-cone-mode: false
+      - name: Confirm source identity
+        env:
+          LEARNING_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$LEARNING_EXPECTED_HEAD"
+      - name: Inspect the reader at desktop and mobile widths
+        run: node scripts/verify_learning_reader.cjs --site "$GITHUB_WORKSPACE/docs/research" --output "$RUNNER_TEMP/learning-reader-browser-qa"
+      - name: Retain reader screenshots and inspection receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: learning-reader-browser-qa-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/learning-reader-browser-qa/
+          if-no-files-found: error
+          retention-days: 7
+      - name: Set up the registered Python runtime
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12.14'
+      - name: Install the standard manuscript toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended texlive-science texlive-plain-generic poppler-utils
+      - name: Verify recorded source and independently check finite evidence
+        run: |
+          python3 -B docs/learning-to-build-v1.1.0/verify.py
+          python3 -B docs/learning-to-build-v1.1.0/study/check.py
+          python3 -B docs/learning-to-build-v1.1.0/study/test_integrity.py -v
+          python3 -O -B docs/learning-to-build-v1.1.0/study/test_integrity.py -v
+          python3 -B docs/learning-to-build-v1.1.0/study/study.py --output "$RUNNER_TEMP/learning-to-build-replay"
+          python3 -B docs/learning-to-build-v1.1.0/study/check.py --evidence "$RUNNER_TEMP/learning-to-build-replay"
+          diff -r docs/learning-to-build-v1.1.0/study/evidence "$RUNNER_TEMP/learning-to-build-replay"
+      - name: Verify the registered microscopy reproduction independently
+        run: |
+          set -o pipefail
+          python3 -m venv "$RUNNER_TEMP/microscopy-venv"
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -m pip install --disable-pip-version-check -r docs/learning-to-build-v1.1.0/construction/requirements.txt
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/evidence.py --extract "$RUNNER_TEMP/microscopy-evidence"
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/data.py fetch --cache "$RUNNER_TEMP/microscopy-data" --output "$RUNNER_TEMP/microscopy-fetch.json" 2>&1 | tee "$RUNNER_TEMP/microscopy-fetch.log"
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/test_integrity.py -v
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -O -B docs/learning-to-build-v1.1.0/construction/test_integrity.py -v
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/test_evidence.py -v
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -O -B docs/learning-to-build-v1.1.0/construction/test_evidence.py -v
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/test_setup.py -v
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -O -B docs/learning-to-build-v1.1.0/construction/test_setup.py -v
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/test_projection.py -v
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -O -B docs/learning-to-build-v1.1.0/construction/test_projection.py -v
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/projection.py --evidence "$RUNNER_TEMP/microscopy-evidence" --reconstruct "$RUNNER_TEMP/microscopy-original-raw" > "$RUNNER_TEMP/microscopy-projection-check.json"
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/check.py --cache "$RUNNER_TEMP/microscopy-data" --classical "$RUNNER_TEMP/microscopy-evidence/classical" --incumbent "$RUNNER_TEMP/microscopy-evidence/incumbent" --output "$RUNNER_TEMP/microscopy-independent-check.json" 2>&1 | tee "$RUNNER_TEMP/microscopy-independent-check.log"
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/diagnostics/run.py --cache "$RUNNER_TEMP/microscopy-data" --classical "$RUNNER_TEMP/microscopy-evidence/classical" --output "$RUNNER_TEMP/microscopy-diagnostics" --verify --expected docs/learning-to-build-v1.1.0/construction/diagnostics/RESULTS.json
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/repair/evaluate.py --cache "$RUNNER_TEMP/microscopy-data" --incumbent "$RUNNER_TEMP/microscopy-evidence/incumbent" --output "$RUNNER_TEMP/microscopy-repair" --verify --expected docs/learning-to-build-v1.1.0/construction/repair/RESULTS.json
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/replay_historical_failures.py --cache "$RUNNER_TEMP/microscopy-data" --output "$RUNNER_TEMP/microscopy-historical-failures.json"
+          "$RUNNER_TEMP/microscopy-venv/bin/python" -B docs/learning-to-build-v1.1.0/construction/run.py --fixture --output "$RUNNER_TEMP/microscopy-fixture"
+      - name: Recompile and compare the reviewed manuscript
+        run: |
+          python3 -B docs/learning-to-build-v1.1.0/build.py --output "$RUNNER_TEMP/learning-to-build-rebuilt.pdf"
+          python3 -B docs/learning-to-build-v1.1.0/verify.py --check-build "$RUNNER_TEMP/learning-to-build-rebuilt.pdf"
+      - name: Package the bound edition and operate the extracted source
+        run: |
+          python3 -B docs/learning-to-build-v1.1.0/package.py --output "$RUNNER_TEMP/learning-to-build-publication"
+          mkdir "$RUNNER_TEMP/learning-to-build-extracted"
+          unzip -q "$RUNNER_TEMP/learning-to-build-publication/LEARNING_TO_BUILD_SOURCE.zip" -d "$RUNNER_TEMP/learning-to-build-extracted"
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/verify.py"
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/study/check.py"
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/study/test_integrity.py" -v
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/study/study.py" --output "$RUNNER_TEMP/learning-to-build-extracted-replay"
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/study/check.py" --evidence "$RUNNER_TEMP/learning-to-build-extracted-replay"
+          diff -r "$RUNNER_TEMP/learning-to-build-extracted/study/evidence" "$RUNNER_TEMP/learning-to-build-extracted-replay"
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/build.py" --output "$RUNNER_TEMP/learning-to-build-extracted.pdf"
+          cmp "$RUNNER_TEMP/learning-to-build-rebuilt.pdf" "$RUNNER_TEMP/learning-to-build-extracted.pdf"
+          cd "$RUNNER_TEMP/learning-to-build-publication"
+          sha256sum --check SHA256SUMS
+      - name: Qualify exact specialist setup and operation from the candidate package
+        run: |
+          python3 -B "$RUNNER_TEMP/learning-to-build-extracted/construction/setup_incumbent.py" --venv "$RUNNER_TEMP/candidate-incumbent-venv" --cache "$RUNNER_TEMP/candidate-incumbent-model" --data-cache "$RUNNER_TEMP/microscopy-data" --output "$RUNNER_TEMP/candidate-incumbent-setup"
+          "$RUNNER_TEMP/candidate-incumbent-venv/bin/python" -B "$RUNNER_TEMP/learning-to-build-extracted/construction/release_operate.py" --origin candidate --cache "$RUNNER_TEMP/microscopy-data" --weights "$RUNNER_TEMP/candidate-incumbent-model/cpdino-vitb" --incumbent-evidence "$RUNNER_TEMP/microscopy-evidence/incumbent" --output "$RUNNER_TEMP/candidate-incumbent-operation"
+      - name: Retain the source-matched scientific verification receipt
+        run: |
+          cp "$RUNNER_TEMP/microscopy-independent-check.json" "$RUNNER_TEMP/learning-to-build-publication/SCIENTIFIC_CHECK.json"
+          cp "$RUNNER_TEMP/learning-reader-browser-qa/READER_QA.json" "$RUNNER_TEMP/learning-to-build-publication/READER_QA.json"
+          cp "$RUNNER_TEMP/candidate-incumbent-setup/SETUP.json" "$RUNNER_TEMP/learning-to-build-publication/CANDIDATE_SETUP.json"
+          cp "$RUNNER_TEMP/candidate-incumbent-operation/RELEASE_OPERATION.json" "$RUNNER_TEMP/learning-to-build-publication/CANDIDATE_OPERATION.json"
+          cp "$RUNNER_TEMP/candidate-incumbent-operation/operation/OPERATION.json" "$RUNNER_TEMP/learning-to-build-publication/CANDIDATE_INSTRUMENT.json"
+          cp "$RUNNER_TEMP/microscopy-diagnostics/PROCESS_COST.json" "$RUNNER_TEMP/learning-to-build-publication/DIAGNOSTIC_COST.json"
+          cp "$RUNNER_TEMP/microscopy-repair/PROCESS_COST.json" "$RUNNER_TEMP/learning-to-build-publication/REPAIR_COST.json"
+          cp "$RUNNER_TEMP/microscopy-projection-check.json" "$RUNNER_TEMP/learning-to-build-publication/PROJECTION_CHECK.json"
+          cp "$RUNNER_TEMP/microscopy-historical-failures.json" "$RUNNER_TEMP/learning-to-build-publication/HISTORICAL_FAILURES.json"
+      - name: Retain qualified publication assets
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: learning-to-build-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/learning-to-build-publication/
+          if-no-files-found: error
+          retention-days: 7
+      - name: Retain candidate setup and operation diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: learning-to-build-v1-1-candidate-operation-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/microscopy-fetch.json
+            ${{ runner.temp }}/microscopy-fetch.log
+            ${{ runner.temp }}/microscopy-data/*_FETCH_FAILURE.json
+            ${{ runner.temp }}/microscopy-data/FETCH.json
+            ${{ runner.temp }}/microscopy-independent-check.json
+            ${{ runner.temp }}/microscopy-independent-check.log
+            ${{ runner.temp }}/microscopy-projection-check.json
+            ${{ runner.temp }}/microscopy-diagnostics/RESULTS.json
+            ${{ runner.temp }}/microscopy-diagnostics/PROCESS_COST.json
+            ${{ runner.temp }}/microscopy-diagnostics/FAILURE.json
+            ${{ runner.temp }}/microscopy-repair/RESULTS.json
+            ${{ runner.temp }}/microscopy-repair/PROCESS_COST.json
+            ${{ runner.temp }}/microscopy-repair/FAILURE.json
+            ${{ runner.temp }}/microscopy-historical-failures.json
+            ${{ runner.temp }}/candidate-incumbent-setup/
+            ${{ runner.temp }}/candidate-incumbent-operation/RELEASE_OPERATION.json
+            ${{ runner.temp }}/candidate-incumbent-operation/operation.log
+            ${{ runner.temp }}/candidate-incumbent-operation/operation/OPERATION.json
+            ${{ runner.temp }}/candidate-incumbent-operation/operation/OPERATION_FAILED.json
+          if-no-files-found: warn
+          retention-days: 7
+
+  release:
+    name: Publish versioned edition and verify downloaded source
+    needs: qualify
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.repository == 'MontrealAI/AGI-Alpha-Invention-Flywheel-Lab'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Set up the registered Python runtime
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12.14'
+      - name: Download this commit's qualified package
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: learning-to-build-${{ github.sha }}
+          path: ${{ runner.temp }}/learning-to-build-publication
+      - name: Publish or verify without replacing an existing edition
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import base64
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+          import zipfile
+
+          package = Path(os.environ['RUNNER_TEMP']) / 'learning-to-build-publication'
+          publication = json.loads((package / 'PUBLICATION.json').read_text())
+          repository = os.environ['GITHUB_REPOSITORY']
+          qualified_sha = os.environ['GITHUB_SHA']
+          tag = publication['release_tag']
+          names = ['LEARNING_TO_BUILD.pdf', 'LEARNING_TO_BUILD_SOURCE.zip', 'PUBLICATION.json', 'SHA256SUMS']
+
+          def require(condition, message):
+              if not condition:
+                  raise SystemExit(message)
+
+          def digest(path):
+              return hashlib.sha256(path.read_bytes()).hexdigest()
+
+          def gh(*arguments):
+              return subprocess.run(['gh', *arguments], capture_output=True, text=True)
+
+          def api(endpoint, missing=False):
+              result = gh('api', endpoint)
+              if result.returncode:
+                  if missing and 'HTTP 404' in result.stderr:
+                      return None
+                  raise SystemExit(result.stderr.strip())
+              return json.loads(result.stdout)
+
+          def tagged_commit():
+              ref = api(f'repos/{repository}/git/ref/tags/{tag}', missing=True)
+              if ref is None:
+                  return None
+              return api(f'repos/{repository}/commits/{tag}')['sha']
+
+          require(tag == 'learning-to-build-v1.1.0' and publication['edition'] == '1.1.0', 'Unexpected edition')
+          for line in (package / 'SHA256SUMS').read_text().splitlines():
+              expected, name = line.split('  ', 1)
+              require(name in names and digest(package / name) == expected, f'Qualified asset mismatch: {name}')
+          assets = {name: digest(package / name) for name in names}
+          with zipfile.ZipFile(package / 'LEARNING_TO_BUILD_SOURCE.zip') as archive:
+              notes_text = archive.read('RELEASE_NOTES.md').decode('utf-8')
+          notes = Path(os.environ['RUNNER_TEMP']) / 'learning-to-build-release-notes.md'
+          notes.write_text(notes_text)
+          release = api(f'repos/{repository}/releases/tags/{tag}', missing=True)
+          original_tag = tagged_commit()
+          created = release is None
+          if created:
+              require(original_tag is None or original_tag == qualified_sha, 'Existing tag points to another commit; preserved without modification')
+              arguments = ['release', 'create', tag, *[str(package / name) for name in names],
+                           '--repo', repository, '--target', qualified_sha,
+                           '--title', 'LEARNING TO BUILD — Research edition 1.1.0',
+                           '--notes-file', str(notes), '--latest=false']
+              if original_tag is not None:
+                  arguments.append('--verify-tag')
+              result = gh(*arguments)
+              require(result.returncode == 0, 'Release creation failed; existing assets were not replaced: ' + result.stderr)
+              release = api(f'repos/{repository}/releases/tags/{tag}')
+              require(tagged_commit() == qualified_sha, 'New release tag differs from qualified source')
+
+          release_sha = tagged_commit()
+          require(release_sha is not None and not release['draft'] and not release['prerelease'], 'Release is not a published research edition')
+          require((release.get('body') or '').strip() == notes_text.strip(), 'Existing release notes differ; preserve that edition and publish a new version')
+          tagged_manifest = api(f'repos/{repository}/contents/docs/learning-to-build-v1.1.0/PUBLICATION.json?ref={release_sha}')
+          require(tagged_manifest.get('encoding') == 'base64', 'Cannot verify manifest at release tag')
+          require(base64.b64decode(''.join(tagged_manifest['content'].split()), validate=True) == (package / 'PUBLICATION.json').read_bytes(), 'Release source binding differs; no existing edition was changed')
+          for name in names:
+              matches = [item for item in release.get('assets', []) if item['name'] == name]
+              require(len(matches) == 1 and matches[0].get('state') == 'uploaded', f'Released asset missing or incomplete: {name}')
+          downloaded = Path(os.environ['RUNNER_TEMP']) / 'learning-to-build-downloaded'
+          downloaded.mkdir()
+          arguments = ['release', 'download', tag, '--repo', repository, '--dir', str(downloaded)]
+          for name in names:
+              arguments.extend(['--pattern', name])
+          result = gh(*arguments)
+          require(result.returncode == 0, 'Release download failed: ' + result.stderr)
+          for name, expected in assets.items():
+              require(digest(downloaded / name) == expected, f'Downloaded asset identity differs: {name}')
+          require(tagged_commit() == release_sha, 'Release tag changed during verification')
+          receipt = {'operation': 'created-and-downloaded' if created else 'preserved-and-downloaded',
+                     'edition': publication['edition'], 'release_url': release['html_url'],
+                     'qualified_commit': qualified_sha, 'release_commit': release_sha,
+                     'downloaded_asset_sha256': assets,
+                     'scope': 'Versioned research publication, public-data reproduction and separate claim verdicts; no external laboratory or commercial certification.'}
+          print(json.dumps(receipt, indent=2))
+          (downloaded / 'PUBLICATION_RECEIPT.json').write_text(json.dumps(receipt, indent=2) + '\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('## LEARNING TO BUILD · Research edition 1.1.0\n\n')
+              summary.write(f"[{receipt['operation']}]({release['html_url']}). All four downloaded assets match the qualified package.\n\n")
+              summary.write(f'Qualified commit: `{qualified_sha}`. Release commit: `{release_sha}`.\n\n')
+              summary.write(receipt['scope'] + '\n')
+          PY
+      - name: Operate the source downloaded from the published release
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends poppler-utils
+          mkdir "$RUNNER_TEMP/learning-to-build-released-source"
+          unzip -q "$RUNNER_TEMP/learning-to-build-downloaded/LEARNING_TO_BUILD_SOURCE.zip" -d "$RUNNER_TEMP/learning-to-build-released-source"
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/package.py" --verify
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/study/check.py"
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/study/test_integrity.py" -v
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/study/study.py" --output "$RUNNER_TEMP/learning-to-build-released-replay"
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/study/check.py" --evidence "$RUNNER_TEMP/learning-to-build-released-replay"
+          diff -r "$RUNNER_TEMP/learning-to-build-released-source/study/evidence" "$RUNNER_TEMP/learning-to-build-released-replay"
+          echo 'Downloaded release source reproduced the retained finite study.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Operate the fixed research instrument from downloaded source
+        run: |
+          set -o pipefail
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/construction/data.py" fetch --cache "$RUNNER_TEMP/released-microscopy-data" --output "$RUNNER_TEMP/released-microscopy-fetch.json" 2>&1 | tee "$RUNNER_TEMP/released-microscopy-fetch.log"
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/construction/evidence.py" --extract "$RUNNER_TEMP/released-microscopy-evidence"
+          python3 -B "$RUNNER_TEMP/learning-to-build-released-source/construction/setup_incumbent.py" --venv "$RUNNER_TEMP/released-incumbent-venv" --cache "$RUNNER_TEMP/released-incumbent-model" --data-cache "$RUNNER_TEMP/released-microscopy-data" --output "$RUNNER_TEMP/released-incumbent-setup"
+          "$RUNNER_TEMP/released-incumbent-venv/bin/python" -B "$RUNNER_TEMP/learning-to-build-released-source/construction/release_operate.py" --origin downloaded-release --cache "$RUNNER_TEMP/released-microscopy-data" --weights "$RUNNER_TEMP/released-incumbent-model/cpdino-vitb" --incumbent-evidence "$RUNNER_TEMP/released-microscopy-evidence/incumbent" --output "$RUNNER_TEMP/released-incumbent-operation"
+          echo 'Downloaded release source operated the first registered raw test field and reproduced its retained prediction. This is exposed-field reproduction, not fresh confirmation.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve the verified downloaded-operation receipt with the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          from datetime import datetime, timezone
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+
+          root = Path(os.environ['RUNNER_TEMP'])
+          downloaded = root / 'learning-to-build-downloaded'
+          publication = json.loads((downloaded / 'PUBLICATION_RECEIPT.json').read_text())
+          operation = json.loads((root / 'released-incumbent-operation/RELEASE_OPERATION.json').read_text())
+          setup = json.loads((root / 'released-incumbent-setup/SETUP.json').read_text())
+          instrument = json.loads((root / 'released-incumbent-operation/operation/OPERATION.json').read_text())
+          qualified = root / 'learning-to-build-publication'
+          candidate_receipts = {name: json.loads((qualified / filename).read_text()) for name, filename in {
+              'scientific_check': 'SCIENTIFIC_CHECK.json', 'reader_qa': 'READER_QA.json',
+              'setup': 'CANDIDATE_SETUP.json', 'operation': 'CANDIDATE_OPERATION.json',
+              'instrument': 'CANDIDATE_INSTRUMENT.json', 'diagnostic_cost': 'DIAGNOSTIC_COST.json',
+              'repair_cost': 'REPAIR_COST.json', 'projection_check': 'PROJECTION_CHECK.json',
+              'historical_failures': 'HISTORICAL_FAILURES.json'}.items()}
+          repository = os.environ['GITHUB_REPOSITORY']
+          tag = 'learning-to-build-v1.1.0'
+          name = 'OPERATION_RECEIPT.json'
+
+          def require(condition, message):
+              if not condition:
+                  raise SystemExit(message)
+
+          def gh(*arguments):
+              process = subprocess.run(['gh', *arguments], capture_output=True, text=True)
+              require(process.returncode == 0, process.stderr.strip())
+              return process.stdout
+
+          require(operation['status'] == 'PASS' and operation['source_origin'] == 'downloaded-release', 'Downloaded operation did not pass')
+          require(operation['prediction_matches_retained_bytes'] is True and type(operation['fields_operated']) is int and operation['fields_operated'] == 1, 'Unexpected operation scope')
+          require(operation['reference_inputs_to_instrument'] is False and operation['fresh_scientific_confirmation'] is False, 'Unexpected raw-input or confirmation scope')
+          require(setup['status'] == 'READY_FOR_REPRODUCTION', 'Exact specialist setup did not pass')
+          receipt = {
+              'schema': 'learning-to-build/downloaded-release-operation/v1',
+              'status': 'VERIFIED',
+              'checked_at_utc': datetime.now(timezone.utc).isoformat(),
+              'workflow_run': f"https://github.com/{repository}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
+              'publication': publication,
+              'operation': operation,
+              'instrument_operation': instrument,
+              'setup': setup,
+              'candidate_qualification': candidate_receipts,
+              'subsequent_cost_boundary': 'These candidate and downloaded-release receipts record additional qualification work after the bound cost-ledger snapshot. Inner instrument and enclosing operation intervals overlap. Setup parent and child costs have their recorded boundaries. Workflow installation, unmetered authoring and monetary billing remain outside these measured intervals; no complete total or savings is asserted.',
+              'setup_receipt_sha256': hashlib.sha256((root / 'released-incumbent-setup/SETUP.json').read_bytes()).hexdigest(),
+              'runtime_verified': setup['runtime_verified'],
+              'finite_companion_reproduced': True,
+              'scope': 'Verified public asset download and actual one-field raw-image operation from the downloaded source. Already exposed input; no fresh scientific confirmation or external acceptance.'
+          }
+          receipt_path = downloaded / name
+          receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+          require(json.loads(gh('api', f'repos/{repository}/commits/{tag}'))['sha'] == publication['release_commit'], 'Release tag changed before operation receipt publication')
+          release = json.loads(gh('api', f'repos/{repository}/releases/tags/{tag}'))
+          existing = [asset for asset in release['assets'] if asset['name'] == name]
+          require(len(existing) <= 1, 'Duplicate operation receipt assets; preserved without modification')
+          if existing:
+              previous = root / 'learning-to-build-existing-operation-receipt'
+              previous.mkdir()
+              gh('release', 'download', tag, '--repo', repository, '--pattern', name, '--dir', str(previous))
+              old = json.loads((previous / name).read_text())
+              require(old['schema'] == receipt['schema'] and old['status'] == 'VERIFIED', 'Existing operation receipt has a different contract; no replacement')
+              require(old['publication']['downloaded_asset_sha256'] == publication['downloaded_asset_sha256'], 'Existing operation receipt binds different assets; no replacement')
+              require(old['operation']['status'] == 'PASS' and old['operation']['source_origin'] == 'downloaded-release', 'Existing receipt does not record a passing downloaded operation')
+              require(old['operation']['prediction_matches_retained_bytes'] is True and type(old['operation']['fields_operated']) is int, 'Existing receipt has a different operation contract')
+              for key in ('field', 'selection', 'prediction_sha256', 'raw_input_sha256', 'fields_operated', 'reference_inputs_to_instrument', 'fresh_scientific_confirmation'):
+                  require(old['operation'][key] == operation[key], 'Existing receipt binds a different operation scope: ' + key)
+              require(old['operation']['reference_inputs_to_instrument'] is False and old['operation']['fresh_scientific_confirmation'] is False, 'Existing receipt has a different input/confirmation scope')
+              require(old['runtime_verified'] == receipt['runtime_verified'], 'Existing receipt binds a different runtime; no replacement')
+              require(old['finite_companion_reproduced'] is True, 'Existing receipt does not bind finite reproduction')
+              action = 'preserved-existing'
+          else:
+              gh('release', 'upload', tag, str(receipt_path), '--repo', repository)
+              readback = root / 'learning-to-build-published-operation-readback'
+              readback.mkdir()
+              gh('release', 'download', tag, '--repo', repository, '--pattern', name, '--dir', str(readback))
+              require(hashlib.sha256((readback / name).read_bytes()).digest() == hashlib.sha256(receipt_path.read_bytes()).digest(), 'Published operation receipt differs from the verified local receipt')
+              action = 'published-new'
+          require(json.loads(gh('api', f'repos/{repository}/commits/{tag}'))['sha'] == publication['release_commit'], 'Release tag changed during operation receipt publication')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              url = f'https://github.com/{repository}/releases/download/{tag}/{name}'
+              summary.write(f'\nDownloaded-operation receipt: [{action}]({url}). Existing release assets were not overwritten.\n')
+          print(json.dumps({'status': 'VERIFIED', 'operation_receipt': action, 'release': release['html_url']}, indent=2))
+          PY
+      - name: Retain downloaded-release operation receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: learning-to-build-v1-1-release-operation-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/learning-to-build-downloaded/PUBLICATION_RECEIPT.json
+            ${{ runner.temp }}/learning-to-build-downloaded/OPERATION_RECEIPT.json
+            ${{ runner.temp }}/released-microscopy-fetch.json
+            ${{ runner.temp }}/released-microscopy-fetch.log
+            ${{ runner.temp }}/released-microscopy-data/*_FETCH_FAILURE.json
+            ${{ runner.temp }}/released-microscopy-data/FETCH.json
+            ${{ runner.temp }}/released-incumbent-setup/
+            ${{ runner.temp }}/released-incumbent-operation/RELEASE_OPERATION.json
+            ${{ runner.temp }}/released-incumbent-operation/operation.log
+            ${{ runner.temp }}/released-incumbent-operation/operation/OPERATION.json
+            ${{ runner.temp }}/released-incumbent-operation/operation/OPERATION_FAILED.json
+          if-no-files-found: error
+          retention-days: 7

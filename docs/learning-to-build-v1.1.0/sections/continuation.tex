@@ -1,0 +1,96 @@
+\section{Versioned continuation: from nuclei to cell bodies}
+\label{sec:continuation}
+
+\subsection{The useful outcome and the missing means}
+
+The beneficiary is a researcher evaluating reproducible offline image measurements. The intended ability is to run an analysis instrument, inspect the objects it predicts, obtain counts and segmentation-derived pixel areas, and determine where it meets a declared reference standard. No laboratory was recruited; these are author-defined research gates, not external laboratory or clinical certification.
+
+The first construction concerns nucleus instances in BBBC039v1. The successor concerns whole-cell instances from the DNA and actin channels of BBBC007v1. Nucleus masks alone do not supply cell-body boundaries. The successor changes the assay, cell line, observation channels, annotation format, and required output. It therefore asks for a different instrument rather than a relabelled first run \citep{bbbc039,bbbc007}.
+
+The initial missing means are deliberately concrete: supported data acquisition, an explicit decoder for reference annotations, an executable analysis recipe, compatible inputs and outputs, independent recomputation of acceptance, and an operating procedure. The recipe operators themselves are established morphology and watershed methods supplied by the authors. Whether that finite grammar contains a qualifying successor is an empirical question; improved ordering cannot manufacture a candidate absent from the grammar.
+
+\begin{practicebox}
+\textbf{What a usable first instrument delivers.} A researcher supplies an image within the declared input contract and receives an instance mask, object count, pixel-area records, and inspectable diagnostics. A benchmark qualification supports that contract only. Physical areas require an independently justified pixel scale; a new assay requires its own evidence and acceptance.
+\end{practicebox}
+
+\subsection{Frozen data, fields, and acceptance}
+
+The source uses the official BBBC039v1 split: 100 training, 50 validation, and 50 test fields. The 100 training fields supply donor experience and the recipe-selection history; the 50-field validation and test sets assess the emitted source instrument. All 18 test plates also occur in training, so this is not a cross-plate transfer result. The successor uses all 16 complete BBBC007v1 fields: four lexicographically first A9 fields for calibration and twelve remaining fields for test. That structured split is not a random sample of construction tasks. One public successor assay cannot estimate general construction-learning performance.
+
+Both datasets provide public reference annotations and state CC0 terms \citep{bbbc039,bbbc007}. The five compressed archives total 87,775,682 bytes and are identified by hashes in the acquisition and protocol records. Neither a successful download nor a matching hash establishes the scientific adequacy of the labels.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}P{1.22in}YY@{}}
+\toprule
+\textbf{Contract} & \textbf{Required quality} & \textbf{Required coverage}\\
+\midrule
+Nucleus instrument & Mean instance F1 $\geq .70$ under matching with IoU $>0.5$; mean relative count error $\leq .20$; mean foreground Dice $\geq .85$. & Every gate holds separately on the 50 validation and 50 test fields.\\
+Whole-cell successor & Mean internal-boundary F1 within 2 pixels $\geq .60$, both over all fields and over reference-boundary-bearing fields; mean count error $\leq .25$; foreground Dice $\geq .80$. & Every gate holds on both four-field calibration and twelve-field test; at least one calibration and two test fields carry reference internal boundaries.\\
+\bottomrule
+\end{tabularx}
+\caption{Acceptance fixed in the registered research comparison. Quality in one column or cohort does not waive another requirement. Area estimates are reported as diagnostics; these gates do not establish biological area accuracy.}
+\label{tab:microscopy-contracts}
+\end{table}
+
+Instance matching is one-to-one maximum-cardinality matching with IoU strictly greater than $0.5$. Relative count error is $|n_{\rm pred}-n_{\rm ref}|/\max(1,n_{\rm ref})$. The internal-boundary metric uses four-connected inner label boundaries within an eroded foreground, then symmetric precision and recall for boundary pixels within Euclidean distance two. It excludes boundaries adjacent to the background. Reporting a separate mean over fields with true internal boundaries prevents empty-boundary fields from obscuring failure on the actual separation task. Reference regions reconstructed from manual outlines remain conditional on the explicit decoder and border policy in the protocol.
+
+The original BBBC007 boundary-focused setup permits manually outlined nuclei and foreground as inputs, following the work of Jones and colleagues \citep{bbbc007,jones2005}. Our primary contract instead requires both to be constructed from the raw channels; manual inputs appear only in the labelled diagnostic. The collection's historical one-direction boundary percentage and this protocol's symmetric F1 are also different metrics. The reported numbers therefore do not constitute a head-to-head comparison with that historical result.
+
+\subsection{What the constructor can learn in this experiment}
+
+Each classical constructor receives the same 24 supplied recipes, interpreter, target raw channels, four calibration references, and permitted CPU environment. Its adjustable object is the order in which those recipes are evaluated. Greedy coverage of donor performance supplies one revised order; conventional empirical ranking over exactly the same donor table supplies the primary matched comparison. This is an update to a parameter of a supplied finite constructor. It is not discovery of the recipe operators or an autonomous revision of the construction language.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}P{1.55in}Y@{}}
+\toprule
+\textbf{Arm} & \textbf{Method and retained means}\\
+\midrule
+Fixed, no history & A frozen expert-informed order; no donor history or privileged donor recipe.\\
+Ordinary reuse & Execute the donor recipe first, then the fixed order without duplicates.\\
+Updated, no artifact & Donor-derived greedy-coverage ordering, without privileged donor-artifact execution.\\
+Updated with artifact & Execute the donor recipe first, then the greedy order without duplicates.\\
+Same-content empirical & Conventional ranking by aggregate donor quality, with the full identical donor table.\\
+Full enumeration & Execute all 24 recipes and select with the same calibration quality ordering.\\
+\bottomrule
+\end{tabularx}
+\caption{Six separately executed arms. ``No artifact'' removes privileged donor placement, not the corresponding recipe from the shared bank. The primary contrast is greedy coverage versus same-content empirical ranking.}
+\label{tab:six-arms}
+\end{table}
+
+Ranked arms stop only at the first candidate satisfying every calibration gate. Each may execute all 24 candidates; a restricted search budget is not used to manufacture an advantage. If none qualifies, the best calibration candidate is retained and labelled unqualified. Full enumeration always evaluates the complete bank. Target scores are not shared across arms. Each selected instrument and its order are sealed before its test stage.
+
+The primary work endpoint is a candidate execution across all four calibration fields. A local advantage requires accepted held-out functionality and a strict reduction in those executions against the same-content empirical arm, without loss of acceptance. CPU time, wall time, checking, donor acquisition, maintenance, and total lineage costs are separate outcomes. Faster prefix search alone cannot establish an overall advantage. The present reproduction uses already exposed data and outcomes; it measures reproducibility rather than producing a new hidden confirmation sample.
+
+\subsection{The practical specialist alternative}
+
+A separately registered CellposeDINO \texttt{cpdino-vitb} route supplies a strong existing specialist. The fixed implementation uses Cellpose 4.2.1.1, pinned DINOv3 source, and a pinned 343,599,997-byte model. It runs on CPU with the frozen inference configuration, without fine-tuning or calibration-based parameter selection. Manual references are excluded from predictor inputs. The upstream documentation identifies this model as the smaller DINOv3-ViT-B member of the CellposeDINO family \citep{cellposeModels}.
+
+The extra pretrained stock is part of the explanation and the cost boundary. Its operation must not be credited to local donor experience or folded into the matched six-arm comparison. Pretraining overlap with the evaluation images is unknown. The code, weights, training-data terms, and DINOv3 terms are distinct rights questions; the recorded scope is research operation, with no established commercial entitlement and no redistribution of upstream source or weights. A working specialist route can be adopted without claiming that it is a newly invented algorithm or an exclusively enabled successor.
+
+\subsection{Preserved failures and representation amendments}
+
+The published preregistration lineage records two failed constructions before target test prediction or scoring. The first encountered Boolean outline storage that violated an integer-only loader assumption. A lossless Boolean-to-integer conversion was registered as a narrow repair. The second encountered RGB raw TIFFs while the observation contract required scalar channels. Its calibration had already exhausted all 24 recipes in every arm, selecting the same unqualified recipe.
+
+The next amendment introduced one common, supplied RGB-to-L convention from Pillow 13, while leaving scalar arrays unchanged. This conversion is generally lossy. It does not recover physical fluorescence or justify a radiometric claim; it changes the represented observation contract explicitly. It applies to raw DNA and actin only, preserves spatial geometry and field membership, and uses the same convention for the classical and specialist routes. The frozen review checked all $2^{24}$ RGB triples against independent fixed-point arithmetic, with a shared Pillow dependency. That is an implementation check, not scientific calibration or external certification.
+
+The specialist preparation also required a narrowly recorded state-loading exception for two nonlearned diameter scalars; trained tensors remained subject to the declared audit. These failures identify integration assumptions, not an opportunity to lower acceptance thresholds. The historical sources and compact review records survive at their published commits. The appendix distinguishes those records from the artifacts produced by the new reproduction and from historical costs that cannot be reconstructed.
+
+\subsection{Results and decision}
+\input{sections/continuation-results.tex}
+
+\subsection{What the continuation can establish}
+
+A qualifying first instrument establishes a bounded computational capability on the recorded data and input contract. A successor failure localizes a remaining requirement; it must remain a failure even when foreground or count diagnostics look favorable. A tie against same-content empirical ranking supplies no evidence of a better constructor. Failure to qualify from a finite recipe bank does not prove that no segmentation method can qualify.
+
+The observed classical failure directs the next experiment toward the means of producing adequate boundaries, including reliable seed nuclei and foreground. The rational next experiment therefore follows the diagnosed missing means. If the bank is exhausted, another ordering of the same bank has no acceptance gain to discover. A boundary-specific representation, observation, algorithm, or licensed specialist is a candidate next construction. It must be frozen and compared on a new confirmation cohort, with strong complete alternatives and the costs of acquiring that capability. The current result motivates that question; it does not answer it by proposing the remedy.
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{construction/figures/protocol-first-fields.png}
+\caption{Two test fields selected by declared order, without using their scores: the first official BBBC039 test field and the first registered BBBC007 test field. Columns show the canonical observation, registered decoded reference, classical prediction (\texttt{r17} for nuclei; \texttt{r12} for cells), and fixed pretrained prediction. Full fields are shown without cropping. Each observation channel uses linear clipping at its first and ninety-ninth percentiles \emph{for display only}; inference and scoring inputs are unchanged. Colors distinguish instances within a panel and do not imply correspondence across panels. White inner edges aid visibility. The BBBC007 masks retain the registered complete-in-frame convention. These examples illustrate outputs; they do not replace the cohort results. Exact field identities, input and mask hashes, display ranges, and rendering source are retained in the accompanying figure receipt.}
+\label{fig:microscopy-examples}
+\end{figure}
+\FloatBarrier

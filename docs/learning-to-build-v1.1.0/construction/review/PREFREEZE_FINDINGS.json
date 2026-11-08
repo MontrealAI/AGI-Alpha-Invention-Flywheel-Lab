@@ -1,0 +1,62 @@
+{
+  "findings": [
+    {
+      "after": "tp=1, instance_f1=1.0; synthetic test core_numpy_inverse_shape passes.",
+      "before": "ValueError: object too deep for desired array",
+      "id": "SYN-01",
+      "impact": "Every ordinary 2D segmentation score raised ValueError before producing metrics.",
+      "problem": "2D np.unique inverse arrays passed unflattened to np.bincount under pinned NumPy 2.3.5",
+      "repair": "Flatten the combined inverse-index array before bincount.",
+      "reproduction": "5x5 integer zeros with labels[1:4,1:4]=1; score_masks(labels,labels)."
+    },
+    {
+      "after": "Reference and matching prediction both count0; core_reference_frame_symmetry passes.",
+      "before": "Reference count1 with four row0 pixels; matching prediction count0.",
+      "id": "SYN-02",
+      "impact": "An identical reference/prediction mask could be scored asymmetrically under the declared border policy.",
+      "problem": "Reference contour assignment could reintroduce a frame-touching object excluded from predictions",
+      "repair": "Exclude and relabel complete reconstructed reference objects touching the frame after contour-pixel assignment; retain exclusion diagnostics.",
+      "reproduction": "10x10 uint8 zeros; outline[0,3:7]=outline[4,3:7]=255; outline[0:5,3]=outline[0:5,6]=255; decode then exclude_frame_objects."
+    },
+    {
+      "after": "Same synthetic cohort is rejected; core_nonvacuous_boundary_gate passes.",
+      "before": {
+        "accepted": true,
+        "boundary_bearing_fields": 2,
+        "boundary_f1_on_bearing_fields": 0.0,
+        "foreground_dice": 1.0,
+        "mean_boundary_f1_all_fields": 0.8333333333333334,
+        "mean_count_error": 0.08333333333333333
+      },
+      "id": "SYN-03",
+      "impact": "An instrument finding none of the relevant internal boundaries could still qualify.",
+      "problem": "Boundary-free fields could dilute complete failure on all boundary-bearing fields",
+      "repair": "Keep original all-field mean and add a boundary-bearing-only mean gate at0.60; require at least one bearing calibration field and two bearing heldout fields; update selection ordering before scoring.",
+      "reproduction": "12 fields: ten isolated correctly segmented objects; two adjacent-cell pairs each merged into a single object."
+    }
+  ],
+  "review_role": "separate collaborating agent; procedural separation, not external institutional audit",
+  "reviewed_at_utc": "2026-11-07T15:05:36.807141+00:00",
+  "schema": "learning-to-build/independent-synthetic-review/v1",
+  "scope": "Synthetic inputs only. No public microscopy pixels decoded or prediction scores inspected.",
+  "source_sha256": {
+    "PROTOCOL.json": "d0a50f0d849024f41fee72c1d50fb78d76f94ef1a8d5005e98a4fbc024ef01e9",
+    "builder.py": "9665f8f9e3013e54b9d065765c0fd5478940bd8d8bfcfa5eb8a7b0135b309dee",
+    "data.py": "1f13417035bbc0ea2167ee8b859b8d5f2e88a4eaafee9d2e3c3aad9f24879875",
+    "instrument.py": "36248b79130e5b1835da55302efe63432c013b8aaac5ce5b8253a6b243f7c265"
+  },
+  "status": "three pre-scoring defects fixed and exact reproductions passed; runner binding and resume review pending",
+  "verification": {
+    "artifacts": [
+      "synthetic_review.py",
+      "SYNTHETIC_REVIEW.json",
+      "SYNTHETIC_REVIEW_OPTIMIZED.json"
+    ],
+    "emitted_binding_mutations_rejected": 5,
+    "independent_mask_pairs": 52,
+    "normal_python": true,
+    "optimized_python": true,
+    "prediction_reference_independence_recipe_task_pairs": 48,
+    "test_groups": 10
+  }
+}

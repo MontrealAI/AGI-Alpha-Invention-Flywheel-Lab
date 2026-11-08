@@ -1,0 +1,248 @@
+{
+  "archives": {
+    "bbbc007_images": {
+      "bytes": 6435776,
+      "sha256": "b7009e2fce0a3152a5c9adda916eaa699d09696f4bd02a7d05d12d041e30c6d1",
+      "url": "https://data.broadinstitute.org/bbbc/BBBC007/BBBC007_v1_images.zip"
+    },
+    "bbbc007_outlines": {
+      "bytes": 652531,
+      "sha256": "6a5246f9a9d743d22eafdb409fae638a8461af97e9ff9c4a92f25eba236224d3",
+      "url": "https://data.broadinstitute.org/bbbc/BBBC007/BBBC007_v1_outlines.zip"
+    },
+    "bbbc039_images": {
+      "bytes": 77915748,
+      "sha256": "6f30a5d4fe38c928ded972704f085975f8dc0d65d9aa366df00e5a9d449fddd7",
+      "url": "https://data.broadinstitute.org/bbbc/BBBC039/images.zip"
+    },
+    "bbbc039_masks": {
+      "bytes": 2753811,
+      "sha256": "f9e6043d8ca56344a4886f96a700d804d6ee982f31e2b2cd3194af2a053c2710",
+      "url": "https://data.broadinstitute.org/bbbc/BBBC039/masks.zip"
+    },
+    "bbbc039_metadata": {
+      "bytes": 17816,
+      "sha256": "a2c1f900bed9ba92a99553efd4c2ae98598433691c7401d818653ab61110deb2",
+      "url": "https://data.broadinstitute.org/bbbc/BBBC039/metadata.zip"
+    }
+  },
+  "authoring_source_sha256": "43f8cdac67757ce9061f308ca8fe2d5c016779d53289e134c7c7992e6902f337",
+  "display_scope": {
+    "borders": "white inner instance boundaries for visibility; recorded masks remain unchanged",
+    "contrast": "1st to 99th percentile independently per channel; linear, clipped; display only",
+    "geometry": "full field, no crop; equal aspect; nearest display sampling",
+    "instance_colors": "SHA-256-derived categorical colors per panel; no label correspondence implied",
+    "interpretation": "two ordered examples, not cohort evidence or a qualification decision",
+    "raw_observations": "frozen data.load039/load007 and registered scalar adapter",
+    "reference": "registered decoded masks, including the BBBC007 complete-in-frame convention"
+  },
+  "fields": [
+    {
+      "classical": {
+        "cohort": "source/test",
+        "label_array_sha256": "da980f98e4835eee830997489ca6f0345e1e40ef1b458856d7e91b66631d27ac",
+        "manifest_sha256": "2c5fdcafe534a30cdce3b21f2fde03e6f4099cd5c1fb3cddba7e58bac05a2fbb",
+        "mask_path": "masks/IXMtest_A09_s1_w1CE70AD49-290D-4312-82E6-CDC717F32637_082744ff.png",
+        "mask_sha256": "b3fa89b46c88ca115998dd4b3d5a4074fd3238e4ae1f3fb034d505872b91b1c3"
+      },
+      "display": {
+        "dna": {
+          "applied_to": "display only; never instrument input or scoring",
+          "gamma": 1.0,
+          "lower_percentile": 1,
+          "lower_value": 134.0,
+          "percentile_method": "linear",
+          "upper_percentile": 99,
+          "upper_value": 873.0
+        }
+      },
+      "field": "IXMtest_A09_s1_w1CE70AD49-290D-4312-82E6-CDC717F32637",
+      "pretrained": {
+        "cohort": "source/test",
+        "label_array_sha256": "1440fc0ca0bfc113f41614f9fb76a9ba7562ba0a2469f154903cac2ad7cae426",
+        "manifest_sha256": "8b8d56ac69bd4eb235db24b86b3b2b53d6a9f2c0aae6cf97d4baaeddd0918b8c",
+        "mask_path": "masks/IXMtest_A09_s1_w1CE70AD49-290D-4312-82E6-CDC717F32637_082744ff.png",
+        "mask_sha256": "0229f3b91d2f208d52fd499323de76afe533de5b813183d78c6efb2e1647ca89"
+      },
+      "reference_label_array_sha256": "3f931fe98227ecfdb9e5cfb4bf2f83cbb35ba242dcb3567b29a19be98caaaab4",
+      "selection": "first in declared test order, without using scores",
+      "shape": [
+        520,
+        696
+      ],
+      "sources": {
+        "dna": {
+          "dtype": "uint16",
+          "member": "images/IXMtest_A09_s1_w1CE70AD49-290D-4312-82E6-CDC717F32637.tif",
+          "sha256": "51787b533f38efc0d934a9cc0f760e704ef5fca97d561aa868f2099f2e6bb1ce",
+          "shape": [
+            520,
+            696
+          ]
+        },
+        "official_split": "test",
+        "plate": "20630",
+        "truth": {
+          "dtype": "uint8",
+          "member": "masks/IXMtest_A09_s1_w1CE70AD49-290D-4312-82E6-CDC717F32637.png",
+          "sha256": "bf9897059aa3c4de8ce94b583eee7285dc9f9f90fc7848cf9a4b5f74ba4e2471",
+          "shape": [
+            520,
+            696,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "classical": {
+        "cohort": "successor/updated_no_artifact/holdout",
+        "label_array_sha256": "94d41b287a4cf28c69030811c904d8f36c2a639f657a5cc0321420a0c2b03a09",
+        "manifest_sha256": "65439efc364976bf9ac56ba47a07591047b4bbe63f65cb9ed92289a88e5353ac",
+        "mask_path": "masks/f113_AS_09125_040701150004_A02f00_4ed4e189.png",
+        "mask_sha256": "763b6486ca2d30c6e44d5bd560489bf4cf7eef6866d1dcc15663bfb0485629a9"
+      },
+      "display": {
+        "actin": {
+          "applied_to": "display only; never instrument input or scoring",
+          "gamma": 1.0,
+          "lower_percentile": 1,
+          "lower_value": 0.0,
+          "percentile_method": "linear",
+          "upper_percentile": 99,
+          "upper_value": 239.0
+        },
+        "dna": {
+          "applied_to": "display only; never instrument input or scoring",
+          "gamma": 1.0,
+          "lower_percentile": 1,
+          "lower_value": 7.0,
+          "percentile_method": "linear",
+          "upper_percentile": 99,
+          "upper_value": 161.0
+        }
+      },
+      "field": "f113/AS_09125_040701150004_A02f00",
+      "pretrained": {
+        "cohort": "successor/test",
+        "label_array_sha256": "8fbc1530b059738dae3480e00acb7bc9652606f1a1db2ad81e368c3ffdda98ab",
+        "manifest_sha256": "96bdaca953b2dd5509fcbc04707bb6dab4b629dd521830ab0b62b3d1393579a2",
+        "mask_path": "masks/f113_AS_09125_040701150004_A02f00_4ed4e189.png",
+        "mask_sha256": "12d20c1121b4a77eb14824ba411171447201202f69572907ca7b9c63bc35e0ae"
+      },
+      "reference_label_array_sha256": "c2e6702bd94e6955c593b6221560e6e9d0c8898af35a897ebf0b6c0e022176ff",
+      "selection": "first in declared test order, without using scores",
+      "shape": [
+        512,
+        512
+      ],
+      "sources": {
+        "actin": {
+          "dtype": "uint8",
+          "member": "BBBC007_v1_images/f113/AS_09125_040701150004_A02f00d1.tif",
+          "mode": "RGB",
+          "observation_adapter": {
+            "canonical_pixel_sha256": "8e840ba9e156b4313e44ae7dde492ac79d9d9902feb182c50886fcee17c5e193",
+            "conversion": "Pillow.Image.convert(L)",
+            "input_dtype": "uint8",
+            "input_mode": "RGB",
+            "input_shape": [
+              512,
+              512,
+              3
+            ],
+            "library_version": "13.0.0",
+            "lossy_color_projection": true,
+            "original_pixel_sha256": "af69087b5457cdda7d70fb526fc2256170fbf7305743695166d9c5968b23b063",
+            "output_dtype": "uint8",
+            "output_shape": [
+              512,
+              512
+            ],
+            "schema": "learning-to-build/raw-observation-adapter/v1",
+            "spatial_transform": "none"
+          },
+          "sha256": "47a90d4cf95e437c24af391e22d4918fa27f0e6acef94668140f28e2cb3c96fb",
+          "shape": [
+            512,
+            512,
+            3
+          ]
+        },
+        "cell_outline": {
+          "dtype": "bool",
+          "member": "BBBC007_v1_outlines/f113/AS_09125_040701150004_A02f00d1.tif",
+          "sha256": "d0c336e8eb8e73c6c7564560ac44d85f17675e3b9a947b26c31f5c8cb875d42d",
+          "shape": [
+            512,
+            512
+          ]
+        },
+        "dna": {
+          "dtype": "uint8",
+          "member": "BBBC007_v1_images/f113/AS_09125_040701150004_A02f00d0.tif",
+          "mode": "RGB",
+          "observation_adapter": {
+            "canonical_pixel_sha256": "ff865454301d76b962574a16e920e4e2e5f8e1bc08417f20f39369b5422783cd",
+            "conversion": "Pillow.Image.convert(L)",
+            "input_dtype": "uint8",
+            "input_mode": "RGB",
+            "input_shape": [
+              512,
+              512,
+              3
+            ],
+            "library_version": "13.0.0",
+            "lossy_color_projection": true,
+            "original_pixel_sha256": "810f30f08c2efff446ce18e56c3d87e3393d133dbd72623e490d919b91529d6f",
+            "output_dtype": "uint8",
+            "output_shape": [
+              512,
+              512
+            ],
+            "schema": "learning-to-build/raw-observation-adapter/v1",
+            "spatial_transform": "none"
+          },
+          "sha256": "05d00426bbfac73cb747611e8a45199679bb2f94bef7fb1147357647d783106b",
+          "shape": [
+            512,
+            512,
+            3
+          ]
+        },
+        "nucleus_outline": {
+          "dtype": "bool",
+          "member": "BBBC007_v1_outlines/f113/AS_09125_040701150004_A02f00d0.tif",
+          "sha256": "00e08ce95b1b69d6161b3f8bdb958aa43aa94d7b424d0838c2d8a21f60cef9b1",
+          "shape": [
+            512,
+            512
+          ]
+        }
+      }
+    }
+  ],
+  "figure": {
+    "path": "protocol-first-fields.png",
+    "sha256": "c3f55dbbde6f4b9352b212963ce3612cc3aac55ee21e803aaec322b22bc41f78"
+  },
+  "registered_protocol_sha256": "20d28a2fffbb3189ef14492a46853e5711e03d5f94c64b9f0aeb0e934a3367ae",
+  "results": {
+    "classical": {
+      "results_sha256": "4ebb7c0f7cae90f7e1333f8fbf15e776854126cd601f287bad31c7d2c2c2c1cb"
+    },
+    "pretrained": {
+      "results_sha256": "4f6bda21acfb1b90496ede9b0081ade783abea12e274448601c4e866698d82f3"
+    }
+  },
+  "runtime": {
+    "Pillow": "13.0.0",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "python": "3.12.14",
+    "scikit-image": "0.25.2",
+    "scipy": "1.17.0"
+  },
+  "schema": "learning-to-build/scientific-figure/v1",
+  "status": "RENDERED_FROM_RETAINED_MASKS"
+}

@@ -1,0 +1,151 @@
+{
+  "actual_customer_receipts": 0,
+  "actual_external_resource_bills": "not measured",
+  "adversarial_checks": {
+    "absent_current_rights_rejected": true,
+    "maintenance_can_shrink_frontier": true,
+    "missing_current_qualification_rejected": true,
+    "tampered_contract_rejected": true,
+    "wrong_schema_rejected": true
+  },
+  "break_even": "n*(11-m) > 9, conditional on same acceptance, fixture availability, rights, deadlines and prefix liquidity",
+  "equal_content_decision_ties": 288,
+  "fresh_successor_tasks": 3,
+  "implementation_sha256": "6495a45403a3febf7381875adecc4f006eba0c8a088ac28c7488feeb66f7f365",
+  "limitations": [
+    "semantic closure only over stated affine language and finite domain",
+    "constructor supplied by authors; no discovery or constructor learning measured",
+    "cost parameters selected for illustration; not fit to measured runtime",
+    "rights are scenario flags, not consent obtained",
+    "accepted means model predicate, not real buyer acceptance"
+  ],
+  "protocol_sha256": "38a4ef8101139270a903525bc75f6ce13890828eeac645e586472b7c6503e820",
+  "retention": [
+    {
+      "maintenance_per_successor": 0,
+      "net_saving_after_acquisition": 2,
+      "successors": 1
+    },
+    {
+      "maintenance_per_successor": 12,
+      "net_saving_after_acquisition": -10,
+      "successors": 1
+    },
+    {
+      "maintenance_per_successor": 26,
+      "net_saving_after_acquisition": -24,
+      "successors": 1
+    },
+    {
+      "maintenance_per_successor": 0,
+      "net_saving_after_acquisition": 13,
+      "successors": 2
+    },
+    {
+      "maintenance_per_successor": 12,
+      "net_saving_after_acquisition": -11,
+      "successors": 2
+    },
+    {
+      "maintenance_per_successor": 26,
+      "net_saving_after_acquisition": -39,
+      "successors": 2
+    },
+    {
+      "maintenance_per_successor": 0,
+      "net_saving_after_acquisition": 24,
+      "successors": 3
+    },
+    {
+      "maintenance_per_successor": 12,
+      "net_saving_after_acquisition": -12,
+      "successors": 3
+    },
+    {
+      "maintenance_per_successor": 26,
+      "net_saving_after_acquisition": -54,
+      "successors": 3
+    },
+    {
+      "maintenance_per_successor": 0,
+      "net_saving_after_acquisition": 101,
+      "successors": 10
+    },
+    {
+      "maintenance_per_successor": 12,
+      "net_saving_after_acquisition": -19,
+      "successors": 10
+    },
+    {
+      "maintenance_per_successor": 26,
+      "net_saving_after_acquisition": -159,
+      "successors": 10
+    }
+  ],
+  "route_decisions": 864,
+  "route_grid_cells": 288,
+  "route_summary": {
+    "artifact": {
+      "external": 21,
+      "internal": 45,
+      "nonentry": 222,
+      "obligation_shortfall": 0
+    },
+    "constructor": {
+      "external": 5,
+      "internal": 55,
+      "nonentry": 228,
+      "obligation_shortfall": 0
+    },
+    "fresh": {
+      "external": 27,
+      "internal": 9,
+      "nonentry": 252,
+      "obligation_shortfall": 0
+    }
+  },
+  "status": "finite authored illustration reproduced",
+  "technical": [
+    {
+      "compiled_matches": 125,
+      "fields": 3,
+      "input_cases": 125,
+      "ordinary_matches": 125,
+      "program_sha256": "adc0d471ea14e0d226d77d18053ac2d0eee90e3e0c597a6e388488915fc38059",
+      "source_artifact_reuse": "same task",
+      "spec_sha256": "130687c6e35546b1f0b9da23b53c8adf8860a367b653f56a931194556a5cda80",
+      "task": "source"
+    },
+    {
+      "compiled_matches": 125,
+      "fields": 3,
+      "input_cases": 125,
+      "ordinary_matches": 125,
+      "program_sha256": "0db613e93b8d7a5ae974c6ac84ba99298d0a94969b89a141a2b87f737fad7e32",
+      "source_artifact_reuse": "rejected by schema",
+      "spec_sha256": "505f0c24781e510faa087e47c21e7d3f7552e7ee33de060cdda5d0d8b40fd8e3",
+      "task": "successor_1"
+    },
+    {
+      "compiled_matches": 625,
+      "fields": 4,
+      "input_cases": 625,
+      "ordinary_matches": 625,
+      "program_sha256": "47d6ce0aa4ccdda5769bb157a26d91f909460e22f51068bd7283f57ec464cf9f",
+      "source_artifact_reuse": "rejected by schema",
+      "spec_sha256": "6a5894d62352d70062b92e6b2174ebc83db317ab2fb1437fc035152a428a2396",
+      "task": "successor_2"
+    },
+    {
+      "compiled_matches": 3125,
+      "fields": 5,
+      "input_cases": 3125,
+      "ordinary_matches": 3125,
+      "program_sha256": "d0e3aae2a53e1fa543a1bac9507d465fae4999efb47bb4231d8a53723c779ca2",
+      "source_artifact_reuse": "rejected by schema",
+      "spec_sha256": "dc9266889697342409a6ef878b757c15fad6cbbb2bdce793c878f876248fa4af",
+      "task": "successor_3"
+    }
+  ],
+  "total_input_cases": 4000
+}

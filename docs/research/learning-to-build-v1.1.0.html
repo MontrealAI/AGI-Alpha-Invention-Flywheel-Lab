@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#211522">
+  <meta name="description" content="How Intelligence Learns to Create What Makes New Possibilities Real. Research edition 1.1.0: complete means, a reproducible microscopy instrument, and separate tests of successor capability and constructor improvement.">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="LEARNING TO BUILD — How Intelligence Learns to Create What Makes New Possibilities Real">
+  <meta property="og:description" content="Change the game. Build what the new game requires. Learn to build better. When we build something new, we change what can be built next.">
+  <meta property="og:url" content="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/learning-to-build-v1.1.0.html">
+  <meta property="og:image" content="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/learning-to-build-social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LEARNING TO BUILD. Build what makes the next breakthrough buildable. A plum and gold research cover with an ascending construction motif.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="🏗️♾️ LEARNING TO BUILD ✨">
+  <meta name="twitter:description" content="When we build something new, we change what can be built next. A research paper by Vincent Boucher, MONTREAL.AI / QUEBEC.AI.">
+  <meta name="twitter:image" content="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/learning-to-build-social.png">
+  <meta name="twitter:image:alt" content="LEARNING TO BUILD — How Intelligence Learns to Create What Makes New Possibilities Real.">
+  <meta name="citation_title" content="Learning to Build: How Intelligence Learns to Create What Makes New Possibilities Real">
+  <meta name="citation_author" content="Vincent Boucher">
+  <meta name="citation_publication_date" content="2026/11/07">
+  <meta name="citation_pdf_url" content="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/learning-to-build-v1.1.0.pdf">
+  <link rel="canonical" href="https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/learning-to-build-v1.1.0.html">
+  <title>LEARNING TO BUILD | Vincent Boucher · MONTREAL.AI</title>
+  <style>
+    :root{--plum:#211522;--wine:#512b43;--gold:#e9c788;--gold-ink:#815a20;--ivory:#faf6ee;--paper:#fffdf8;--ink:#2b222b;--muted:#645961;--line:#e0d6c8;--mint:#b9dfce;--radius:14px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:1.5rem}body{margin:0;background:var(--ivory);color:var(--ink);font:17px/1.7 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:var(--wine);text-underline-offset:.2em;text-decoration-thickness:1px}a:hover{text-decoration-thickness:2px}a:focus-visible,summary:focus-visible,button:focus-visible{outline:3px solid #408372;outline-offset:5px;border-radius:3px}p{margin:0 0 1.2rem}h1,h2,h3{margin:0;text-wrap:balance}h2{font:500 clamp(2rem,4vw,3rem)/1.14 Georgia,"Times New Roman",serif;letter-spacing:-.035em}h3{font-size:1.16rem;line-height:1.35;letter-spacing:-.02em}strong{font-weight:700}.wrap{width:min(1140px,calc(100% - 3rem));margin-inline:auto}.skip{position:absolute;left:1rem;top:-8rem;z-index:9;background:var(--gold);padding:.7rem 1rem;color:var(--plum)}.skip:focus{top:1rem}.masthead{background:var(--plum);color:var(--ivory);border-bottom:1px solid #ffffff16}.masthead .wrap{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:1.5rem}.brand{color:var(--ivory);font-size:.76rem;font-weight:750;letter-spacing:.11em;text-decoration:none}.brand span{color:var(--gold);padding-inline:.3rem}.masthead nav{display:flex;gap:1.3rem;align-items:center;flex-wrap:wrap}.masthead nav a{color:#dfd2de;font-size:.78rem;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}.masthead a:focus-visible,.hero a:focus-visible{outline-color:var(--mint)}.hero{position:relative;overflow:hidden;isolation:isolate;color:var(--ivory);background:radial-gradient(ellipse at 92% 46%,#593048 0,#302034 40%,var(--plum) 77%);border-bottom:3px solid var(--gold)}.hero .wrap{padding-block:clamp(3rem,7vw,6rem) 2.6rem}.hero-grid{display:grid;grid-template-columns:1.48fr 1fr;align-items:center;gap:1rem}.eyebrow{display:block;margin:0 0 1.2rem;font-size:.7rem;font-weight:750;line-height:1.5;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-ink)}.hero .eyebrow{color:var(--gold)}.hero h1{font-size:clamp(3rem,7.4vw,6.5rem);line-height:.99;letter-spacing:-.065em;font-weight:800}.hero h1 span{display:block}.hero h1 .gold{color:var(--gold)}.hero .subtitle{max-width:36rem;margin:1.45rem 0 1.6rem;color:#f0e6e8;font:400 clamp(1.35rem,2.5vw,1.85rem)/1.4 Georgia,"Times New Roman",serif;letter-spacing:-.015em}.hero .thesis{max-width:35rem;margin-bottom:0;color:#d4c4cf;font-size:.95rem;line-height:1.7}.hero-art{width:100%;max-width:410px;justify-self:end;overflow:visible}.hero-art .fine{stroke:#d5b47e;stroke-opacity:.3;stroke-width:1;fill:none}.hero-art .edge{stroke:#f2d9a5;stroke-width:1.4;fill:none}.hero-art .thread{stroke:var(--mint);stroke-width:2;fill:none;stroke-linecap:round}.hero-art text{font-family:system-ui,sans-serif;fill:#e8d5df}.actions{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;margin:1.9rem 0 1.2rem}.button{display:inline-flex;justify-content:center;align-items:center;gap:.65rem;min-height:47px;padding:.75rem 1.1rem;border:1px solid var(--wine);border-radius:5px;color:var(--wine);background:transparent;font-size:.85rem;line-height:1.45;font-weight:700;text-decoration:none}.button:hover{text-decoration:none;box-shadow:0 3px 12px #21152216}.button.primary{background:var(--gold);color:var(--plum);border-color:var(--gold)}.hero .button.secondary{color:var(--ivory);border-color:#b08b9e;background:#21152220}.hero .release-link{color:#dac8d3;font-size:.78rem;padding:.6rem .15rem}.byline{color:#d3c4d0;font-size:.77rem;line-height:1.8;margin:0}.hero-bottom{margin-top:2.7rem;display:flex;justify-content:space-between;align-items:center;gap:1.3rem;border-top:1px solid #ffffff25;padding-top:1.2rem}.hero-bottom p{margin:0;color:#f0dfca;font:italic 400 clamp(1.02rem,1.7vw,1.2rem)/1.5 Georgia,serif}.edition{flex-shrink:0;color:#c4b4c0;font-size:.69rem;letter-spacing:.08em;text-transform:uppercase}.section-nav{border-bottom:1px solid var(--line);background:var(--paper)}.section-nav .wrap{display:flex;gap:1.65rem;align-items:center;flex-wrap:wrap;padding-block:.8rem}.section-nav a{display:inline-flex;align-items:center;min-height:35px;color:var(--muted);font-size:.77rem;text-decoration:none}.section-nav a:last-child{margin-left:auto;color:var(--wine);font-weight:700}main>section{padding-block:clamp(2.8rem,6vw,4.8rem)}main>section+section{border-top:1px solid var(--line)}.intro-grid{display:grid;grid-template-columns:1.2fr .75fr;align-items:center;gap:clamp(2rem,7vw,6rem)}.intro-copy h2{margin-bottom:1.5rem}.intro-copy p{max-width:42rem;color:var(--muted)}.intro-copy p:last-child{margin-bottom:0}.intro-copy strong{color:var(--wine)}.pullquote{padding:1.7rem 0 1.7rem 1.7rem;border-left:2px solid var(--gold);margin:0}.pullquote p{font:400 clamp(1.7rem,3vw,2.4rem)/1.35 Georgia,serif;letter-spacing:-.025em;color:var(--wine);margin:0}.pullquote figcaption{font-size:.74rem;color:var(--muted);line-height:1.65;margin-top:1.1rem}.section-intro{max-width:46rem;margin-bottom:2rem}.section-intro h2{margin-bottom:1.1rem}.section-intro p{color:var(--muted);margin-bottom:0}.means{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.8rem;margin:0;padding:0;list-style:none}.means li{padding:1.4rem 1.15rem 1.35rem;background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 10px 10px;min-width:0}.means .number{font:400 1.5rem/1 Georgia,serif;color:var(--gold-ink);display:block;margin-bottom:1.1rem}.means h3{font-size:1rem;margin-bottom:.65rem}.means p{font-size:.8rem;line-height:1.6;color:var(--muted);margin:0}.completion-line{display:flex;gap:1rem;align-items:center;margin:1.2rem 0 0;padding:1rem 1.3rem;border:1px solid #d5dfd6;border-radius:7px;background:#edf2e9;color:#405c4f;font-size:.82rem;line-height:1.6}.completion-line strong{flex-shrink:0}.loop-section{background:var(--paper)}.loop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;padding:0;list-style:none;counter-reset:step}.loop li{position:relative;border:1px solid var(--line);padding:1.7rem 1.6rem;border-radius:var(--radius);counter-increment:step;background:var(--ivory)}.loop li::before{content:"0" counter(step);display:block;color:var(--gold-ink);font:400 2rem/1 Georgia,serif;margin-bottom:1.2rem}.loop li+li::after{content:"→";position:absolute;left:-1.25rem;top:2rem;z-index:1;background:var(--paper);color:var(--wine);width:1.5rem;text-align:center;line-height:1.5rem}.loop h3{margin-bottom:.65rem}.loop p{font-size:.86rem;color:var(--muted);margin:0}.loop-return{margin:1.2rem 0 0;font-size:.82rem;color:var(--muted);max-width:50rem}.frontiers{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem}.frontier{border:1px solid var(--line);border-radius:var(--radius);padding:1.7rem;background:var(--paper)}.frontier:first-child{border-top:3px solid #7c647a}.frontier:last-child{border-top:3px solid #ad8641}.frontier h3{margin-bottom:.9rem}.frontier .question{font:italic 400 1.3rem/1.45 Georgia,serif;color:var(--wine);margin-bottom:.8rem}.frontier p:last-child{font-size:.85rem;color:var(--muted);margin:0}.scope-note{margin-top:1.1rem;color:var(--muted);font-size:.78rem;max-width:55rem}.learning{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.learning article{padding:1.65rem 1.5rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper)}.learning .level{color:var(--gold-ink);font-size:.66rem;letter-spacing:.13em;font-weight:750;text-transform:uppercase}.learning h3{margin:.6rem 0 .85rem}.learning p{font-size:.86rem;color:var(--muted);margin-bottom:1.1rem}.learning .test{border-top:1px solid var(--line);padding-top:.9rem;font-size:.78rem;color:var(--wine);margin:0}.evidence-section{background:#efe9e0}.evidence-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:2.7rem;align-items:start}.evidence-copy h2{margin-bottom:1.3rem}.evidence-copy p{color:var(--muted)}.evidence-copy p:last-child{margin-bottom:0}.evidence-card{background:var(--paper);border:1px solid #d8ccb9;border-top:3px solid #a88141;padding:1.65rem;border-radius:0 0 var(--radius) var(--radius)}.evidence-card h3{font-size:1.12rem;margin-bottom:1rem}.evidence-card ul{list-style:none;margin:0;padding:0}.evidence-card li{font-size:.81rem;line-height:1.6;padding:.75rem 0;border-top:1px solid var(--line);color:var(--muted)}.evidence-card li:first-child{padding-top:0;border-top:0}.evidence-card strong{display:block;color:var(--wine);margin-bottom:.25rem}.evidence-links{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.3rem;font-size:.76rem}.horizon{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(2rem,6vw,5rem)}.horizon h2{margin-bottom:1.2rem}.horizon p{color:var(--muted)}.horizon-steps{list-style:none;margin:0;padding:0;border-left:2px solid var(--gold);counter-reset:horizon}.horizon-steps li{position:relative;padding:0 0 1.4rem 1.7rem;counter-increment:horizon}.horizon-steps li:last-child{padding-bottom:0}.horizon-steps li::before{content:"";position:absolute;left:-6px;top:.5rem;width:10px;height:10px;border-radius:50%;background:var(--gold-ink);border:2px solid var(--ivory)}.horizon-steps strong{display:block;color:var(--wine);font-size:.92rem;margin-bottom:.25rem}.horizon-steps span{display:block;color:var(--muted);font-size:.82rem}.foundations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.foundation{display:flex;flex-direction:column;background:var(--paper);padding:1.55rem;border:1px solid var(--line);border-radius:var(--radius)}.foundation .role{font-size:.65rem;font-weight:750;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-ink)}.foundation h3{font:500 1.3rem/1.3 Georgia,serif;margin:.6rem 0 .85rem}.foundation p{font-size:.83rem;color:var(--muted);margin-bottom:1.3rem}.foundation a{font-size:.78rem;font-weight:700;margin-top:auto}.french{margin-top:2rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);padding:1.35rem 1.55rem}.french summary{font-weight:700;font-size:.9rem;color:var(--wine);cursor:pointer;min-height:32px}.french h3{margin:1.2rem 0 .8rem;font:500 1.45rem/1.3 Georgia,serif}.french p{font-size:.9rem;color:var(--muted);max-width:58rem}.french p:last-child{margin-bottom:.1rem}.reading{background:var(--paper)}.reading-head{display:flex;justify-content:space-between;align-items:end;gap:2rem;margin-bottom:1.8rem}.reading-head h2{margin-bottom:.8rem}.reading-head p{color:var(--muted);font-size:.86rem;margin:0}.reading-head .actions{flex-shrink:0;margin:0;flex-direction:column;align-items:stretch}.reading-head .button{font-size:.79rem}.paper-window{border:1px solid #d5cbbf;border-radius:8px;overflow:hidden;background:#ece7df}.paper-bar{display:flex;justify-content:space-between;gap:1rem;align-items:center;background:#efe9e0;padding:.65rem 1rem;color:var(--muted);font-size:.72rem;border-bottom:1px solid #d5cbbf}.paper-bar a{font-weight:700}.reader{display:block;width:100%;height:82vh;min-height:510px;border:0;background:white}.reader-fallback{padding:2rem;background:white;font-size:.95rem}.download-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:2rem;margin-top:2rem}.download-grid h3{font-size:1rem;margin-bottom:.8rem}.download-grid p{font-size:.82rem;color:var(--muted)}.download-grid .actions{margin:1.1rem 0 0}.file-details{font-size:.72rem;display:grid;grid-template-columns:5rem 1fr;gap:.55rem .8rem;margin:0}.file-details dt{font-weight:700;color:var(--wine)}.file-details dd{margin:0;color:var(--muted);min-width:0;overflow-wrap:anywhere}.file-details code{font-size:.69rem;word-break:break-all}.citation{border-top:1px solid var(--line);padding-top:1.2rem;margin-top:1.5rem}.citation summary{cursor:pointer;font-size:.85rem;font-weight:700;color:var(--wine)}.citation pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.75rem;line-height:1.7;background:var(--ivory);border:1px solid var(--line);border-radius:6px;padding:1.2rem;margin:.9rem 0}.closing{background:var(--plum);color:var(--ivory);text-align:center;padding-block:4rem!important}.closing .eyebrow{color:var(--gold)}.closing h2{max-width:48rem;margin:auto;color:var(--gold);font-size:clamp(2.2rem,4.6vw,3.8rem);line-height:1.16}.closing p{color:#d5c6d1;max-width:39rem;margin:1.3rem auto 0;font-size:.9rem}.closing .actions{justify-content:center;margin-bottom:0}footer{background:#1c121d;color:#baabb8;font-size:.72rem;padding-block:1.5rem}footer .wrap{display:flex;justify-content:space-between;gap:1rem;align-items:center}footer p{margin:0}footer a{color:#e2c58d}.print-note{display:none}
+    @media(min-width:1450px){.hero-art{max-width:430px}}
+    @media(max-width:950px){.hero-grid{grid-template-columns:1.5fr .85fr}.hero h1{font-size:clamp(3rem,8vw,5.2rem)}.hero-art{opacity:.8}.means{grid-template-columns:repeat(3,minmax(0,1fr))}.means li:nth-last-child(-n+2){grid-column:auto}.intro-grid{gap:2.5rem}.evidence-grid{gap:1.8rem}.reading-head{align-items:start}}
+    @media(max-width:740px){.hero-grid{grid-template-columns:1fr}.hero-art{display:none}.hero h1{font-size:clamp(3.4rem,12vw,5.6rem)}.hero .subtitle{max-width:34rem}.hero .wrap{padding-block:3.2rem 2rem}.hero-bottom{display:block;margin-top:2rem}.edition{display:block;margin-top:.7rem}.intro-grid,.evidence-grid,.horizon{grid-template-columns:1fr}.pullquote{padding-block:.4rem;margin-top:.2rem}.means{grid-template-columns:repeat(2,minmax(0,1fr))}.means li:last-child{grid-column:1/-1}.loop,.learning,.foundations{grid-template-columns:1fr}.loop li+li::after{display:none}.loop li{display:grid;grid-template-columns:2.5rem 1fr;column-gap:1rem;align-items:start}.loop li::before{grid-row:1/3;margin:.2rem 0 0}.loop p{grid-column:2}.completion-line{display:block}.completion-line strong{display:block;margin-bottom:.3rem}.frontiers{grid-template-columns:1fr}.reading-head{display:block}.reading-head .actions{margin-top:1.2rem;flex-direction:row}.download-grid{grid-template-columns:1fr;gap:1.5rem}.reader{height:68vh;min-height:420px}.section-nav .wrap{gap:.55rem 1.35rem}.section-nav a:last-child{margin-left:0}.masthead nav{gap:.9rem}.masthead nav a:first-child{display:none}footer .wrap{display:block}footer p+p{margin-top:.5rem}}
+    @media(max-width:440px){.wrap{width:calc(100% - 2rem)}.brand{font-size:.65rem;letter-spacing:.06em}.masthead .wrap{gap:.6rem;min-height:65px}.masthead nav a{font-size:.7rem}.hero h1{font-size:clamp(2.9rem,12vw,4.5rem)}.hero .subtitle{font-size:1.32rem}.hero .actions .button{width:100%}.hero .release-link{padding-top:.2rem}.hero .eyebrow{font-size:.64rem;letter-spacing:.09em}.means li{padding:1.1rem 1rem}.means h3{font-size:.95rem}.paper-bar{flex-wrap:wrap;gap:.35rem}.reading-head .button{width:100%}.file-details{grid-template-columns:4.2rem 1fr}.reader{min-height:350px}.closing{padding-block:3rem!important}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+    @media print{body{background:white;color:#111;font-size:11pt}.wrap{width:100%}.masthead,.section-nav,.hero-art,.actions,.paper-window,footer,.closing,.french,.citation{display:none!important}.hero{color:#111;background:none;border-bottom:2pt solid #987335}.hero .wrap{padding-block:1rem}.hero h1{font-size:36pt}.hero h1 .gold,.hero .eyebrow,.hero .subtitle,.hero .thesis,.byline,.hero-bottom p,.edition{color:#111}.hero-bottom{border-top:1pt solid #aaa;margin-top:1rem}main>section{padding-block:1.4rem}.intro-grid,.evidence-grid,.horizon,.download-grid{display:block}.means,.loop,.learning,.foundations,.frontiers{break-inside:avoid}.reading{display:none}.scope-note{font-size:9pt}.print-note{display:block!important;margin-top:1rem;font-size:9pt}}
+
+    .edition-note{color:#b9dfce;font-size:.78rem;letter-spacing:.06em;margin-top:1.4rem}
+    .contribution-panel{padding:2rem;border:1px solid #d5c5ad;background:#fbf7ef;border-radius:12px;max-width:65rem}
+    .contribution-panel strong{color:#52334b}.contribution-panel p:last-child{margin-bottom:0}
+    .study-tags{display:flex;flex-wrap:wrap;gap:.6rem;margin:1.5rem 0}.study-tags span{border:1px solid #d8c9b6;padding:.35rem .7rem;border-radius:30px;font-size:.76rem;background:#fffaf1}
+    .verdict-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.15rem;margin:2rem 0}
+    .verdict{background:#fffaf1;border:1px solid #d8c9b6;border-radius:10px;padding:1.4rem}
+    .verdict h3{font-size:1.12rem;margin:.7rem 0}.verdict p{font-size:.9rem;line-height:1.65;margin:.65rem 0}.verdict .label{font:700 .66rem/1.5 Arial,sans-serif;text-transform:uppercase;letter-spacing:.12em;color:#665d67}
+    .verdict .result{font-size:2.4rem;line-height:1.2;color:#482a50;margin:.9rem 0;font-weight:700}.verdict .result small{font-size:.85rem;font-weight:400}
+    .verdict .status{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;padding:.2rem .5rem;border-radius:3px;background:#eee7db;color:#51433e}
+    .verdict.qualified{border-top:4px solid #2c7065}.verdict.negative{border-top:4px solid #a15b39}.verdict.tie{border-top:4px solid #6e5976}
+    .science-note{font-size:.88rem;background:#f2ecef;border-left:3px solid #765572;padding:1rem 1.2rem;color:#514550;margin:1.5rem 0}
+    .example-figure{margin:2rem 0;padding:1rem;border:1px solid #d8c9b6;border-radius:10px;background:white}.example-figure img{display:block;width:100%;height:auto}.example-figure figcaption{margin-top:1rem;font-size:.84rem;line-height:1.65;color:#655f6a}.example-figure figcaption strong{color:#482a50}
+    .evidence-table-wrap{overflow-x:auto;margin:.7rem 0 1.5rem}.evidence-table-wrap:focus-visible{outline:3px solid #408372;outline-offset:4px}.evidence-table{border-collapse:collapse;min-width:650px;width:100%;font-size:.88rem}.evidence-table th,.evidence-table td{text-align:left;border-bottom:1px solid #d9cfc1;padding:.85rem .75rem;vertical-align:top}.evidence-table th{color:#482a50;font-weight:700;background:#f8f2e8}.evidence-caption{text-align:left;margin:1.5rem 0 .7rem;color:#655f6a;font-size:.85rem}
+    .start-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem}.start-card{border:1px solid #d8c9b6;border-radius:10px;padding:1.5rem;background:#fffdf8}.start-card .step{font:700 .72rem Arial,sans-serif;color:#8b6528;letter-spacing:.1em}.start-card h3{font-size:1.25rem;margin:.8rem 0}.start-card p{font-size:.9rem}.start-card a{display:block;margin-top:1rem;font-weight:700}.start-card ul{padding-left:1.15rem;font-size:.9rem}
+    details.method{border:1px solid #d8c9b6;border-radius:8px;margin:1rem 0;padding:1rem 1.2rem;background:#fffdf8}details.method summary{cursor:pointer;font-weight:700;color:#482a50}details.method[open] summary{margin-bottom:1rem}.quick-command{margin:1.5rem 0;padding:1rem 1.2rem;white-space:pre-wrap;overflow-wrap:anywhere;background:#211522;color:#fcf9f2;border-radius:8px;font-size:.82rem;line-height:1.7}.route-note{margin-top:1rem;font-size:.86rem;color:#655f6a}
+    .reading-paths{display:flex;gap:.75rem;flex-wrap:wrap;margin:1.2rem 0}.reading-paths a{border:1px solid #d8c9b6;border-radius:5px;padding:.55rem .8rem;font-size:.82rem}
+    @media(max-width:740px){.verdict-grid,.start-grid{grid-template-columns:1fr}.verdict .result{font-size:2rem}.contribution-panel{padding:1.4rem}.edition-note{font-size:.71rem}.reading-paths a{flex:1 1 auto}.section-nav .wrap{flex-wrap:wrap;gap:.4rem .85rem}.science-note{padding:.9rem}.quick-command{font-size:.75rem}}
+    @media print{.verdict-grid,.start-grid{grid-template-columns:repeat(3,1fr)}details.method{display:block}.quick-command{background:#eee;color:#111}.evidence-table{min-width:0}.edition-note{color:#333}.reading-paths{display:none}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="masthead">
+    <div class="wrap">
+      <a class="brand" href="index.html">MONTREAL.AI <span>/</span> QUEBEC.AI</a>
+      <nav aria-label="Publication navigation">
+        <a href="index.html">Research library</a>
+        <a href="#francais" lang="fr">Résumé français</a>
+        <a href="#reader">Read the paper ↓</a>
+      </nav>
+    </div>
+  </header>
+  <section class="hero" aria-labelledby="paper-title">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">🏗️♾️ Transformational Intelligence ∞ ✨</p>
+          <h1 id="paper-title"><span>LEARNING</span><span class="gold">TO BUILD</span></h1>
+          <p class="subtitle">How Intelligence Learns to Create What Makes New Possibilities Real</p>
+          <p class="thesis">Build an ability worth having. Then test whether the experience makes you better at building a different one.</p>
+          <div class="actions">
+            <a class="button primary" href="#reader">Read the paper <span aria-hidden="true">↓</span></a>
+            <a class="button secondary" href="learning-to-build-v1.1.0.pdf" download>Download PDF <span aria-hidden="true">→</span></a>
+            <a class="release-link" href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/learning-to-build-v1.1.0">Source &amp; evidence →</a>
+          </div>
+          <p class="edition-note">Versioned continuation · Public-image microscopy · Reproducible comparison</p>
+          <p class="byline">Vincent Boucher · MONTREAL.AI / QUEBEC.AI<br>7 November 2026 · Research edition 1.1.0</p>
+        </div>
+        <svg class="hero-art" viewBox="0 0 430 440" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="block-top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ead2a5" stop-opacity=".24"/><stop offset="1" stop-color="#b68d50" stop-opacity=".05"/></linearGradient>
+            <linearGradient id="block-front" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d8b47a" stop-opacity=".12"/><stop offset="1" stop-color="#d8b47a" stop-opacity=".02"/></linearGradient>
+          </defs>
+          <g class="fine"><path d="M32 352L217 246L408 352L224 458Z"/><path d="M52 340L243 446M83 321L275 428M114 303L305 410M145 285L337 392M177 267L367 374M63 370L249 264M95 388L280 282M127 406L312 300M159 424L343 318M191 442L375 336"/></g>
+          <g transform="translate(2 -34)">
+            <path d="M45 340L122 296L198 340L121 385Z" fill="url(#block-top)" stroke="#d3af77" stroke-width="1.2"/>
+            <path d="M45 340L121 385L121 417L45 372ZM121 385L198 340L198 372L121 417Z" fill="url(#block-front)" stroke="#c4a06a" stroke-opacity=".7"/>
+            <path d="M137 262L214 218L290 262L213 307Z" fill="url(#block-top)" stroke="#e0bd85" stroke-width="1.2"/>
+            <path d="M137 262L213 307L213 385L137 341ZM213 307L290 262L290 340L213 385Z" fill="url(#block-front)" stroke="#d0aa74" stroke-opacity=".7"/>
+            <path d="M229 172L306 128L382 172L305 217Z" fill="url(#block-top)" stroke="#f2d49d" stroke-width="1.4"/>
+            <path d="M229 172L305 217L305 353L229 309ZM305 217L382 172L382 308L305 353Z" fill="url(#block-front)" stroke="#d8b57c" stroke-opacity=".8"/>
+            <path class="thread" d="M121 339C122 289 166 309 178 273C188 243 214 251 216 220C217 179 257 197 268 169C281 135 306 143 307 102"/>
+            <circle cx="121" cy="339" r="4" fill="#b9dfce"/><circle cx="214" cy="261" r="4" fill="#b9dfce"/><circle cx="306" cy="172" r="4" fill="#b9dfce"/>
+            <path d="M282 79C297 56 317 56 334 79C352 103 371 103 384 79C370 55 350 55 333 79C317 102 297 102 282 79Z" stroke="#edd0a0" stroke-width="2.2" fill="none"/>
+          </g>
+          <text x="80" y="415" font-size="11" letter-spacing="1.5">MEANS THAT ENABLE</text>
+          <text x="80" y="433" font-size="11" letter-spacing="1.5">FURTHER MEANS</text>
+        </svg>
+      </div>
+      <div class="hero-bottom">
+        <p>“When we build something new, we change what can be built next.”</p>
+        <a class="edition" href="learning-to-build.html">Preserved first edition →</a>
+      </div>
+      <p class="print-note">Full paper and editable sources: https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/learning-to-build-v1.1.0.html</p>
+    </div>
+  </section>
+  <nav class="section-nav" aria-label="On this page">
+    <div class="wrap">
+      <a href="#idea">The idea</a><a href="#contribution">Contribution</a><a href="#evidence">Results</a><a href="#begin">Begin here</a><a href="#foundations">Foundations</a><a href="#reader">Full paper ↓</a>
+    </div>
+  </nav>
+  <main id="main">
+    <section id="idea">
+      <div class="wrap intro-grid">
+        <div class="intro-copy">
+          <span class="eyebrow">The idea in one minute</span>
+          <h2>Make the possibility buildable.</h2>
+          <p>A valuable outcome may be out of reach because its necessary means do not yet exist together. A new instrument might need a measurement method. A working prototype might need a reliable process. A useful service might need an arrangement that people can willingly support.</p>
+          <p><strong>Learning to build means learning to find and construct that missing combination.</strong> The result is tested against the purpose it was meant to serve. What survives—an instrument, a method, an applicable lesson, productive capacity or available surplus—can help make a different construction possible.</p>
+          <p>The deeper question is whether experience improves the ability to construct the next set of means.</p>
+        </div>
+        <figure class="pullquote">
+          <blockquote style="margin:0"><p>Build what makes the next breakthrough buildable.</p></blockquote>
+          <figcaption>A research direction with three distinct tests: useful construction, useful inheritance, and a better constructor.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="contribution">
+      <div class="wrap">
+        <div class="section-intro"><span class="eyebrow">The contribution, stated precisely</span><h2>A complete route.<br>A fair test of what improved.</h2></div>
+        <div class="contribution-panel">
+          <p><strong>The proposed contribution is a connection between representation and evaluation.</strong> A construction witness links an executable policy to its dependencies, resource schedule, authority, evidence and continuing obligations. It makes the route from a changed idea to an accepted ability inspectable.</p>
+          <p>The evaluation then asks a harder question: <strong>with the same legitimate knowledge, tools and resources, does an experience-revised construction procedure build a different accepted capability better?</strong></p>
+          <p>Systems integration, program learning and economic complementarity are established fields. This work builds on them. It contributes an operational synthesis, elementary conditional results, and executable comparisons that keep useful artifacts, successor acceptance and constructor improvement distinct.</p>
+          <p>Complete bioimage-agent evaluation also has precedents, including <a href="https://github.com/BIABench/BIABench">BIABench</a>. This continuation makes a narrower comparison within a supplied recipe bank and separately tests a strong specialist. It makes no claim of a new general benchmark or superiority over those systems.</p>
+        </div>
+        <div class="reading-paths"><a href="#foundations">How it connects to earlier research</a><a href="#evidence">What the experiments establish</a><a href="#begin">How to begin</a></div>
+      </div>
+    </section>
+    <section id="complete-means">
+      <div class="wrap">
+        <div class="section-intro">
+          <span class="eyebrow">The object of invention</span>
+          <h2>The complete means.</h2>
+          <p>Completeness is relative to a particular purpose and its conditions. The necessary pieces must work together well enough to deliver the accepted outcome.</p>
+        </div>
+        <ol class="means">
+          <li><span class="number" aria-hidden="true">01</span><h3>Knowledge</h3><p>What must be understood, measured or learned?</p></li>
+          <li><span class="number" aria-hidden="true">02</span><h3>Instruments</h3><p>What tools or interfaces make the work possible?</p></li>
+          <li><span class="number" aria-hidden="true">03</span><h3>Processes</h3><p>How are the pieces constructed, tested and operated?</p></li>
+          <li><span class="number" aria-hidden="true">04</span><h3>Resources</h3><p>What capacity, time, materials and funding are available?</p></li>
+          <li><span class="number" aria-hidden="true">05</span><h3>Arrangements</h3><p>Who participates, under which rights, incentives and commitments?</p></li>
+        </ol>
+        <p class="completion-line"><strong>The completion test</strong> Can these means jointly deliver the required result, under the actual constraints, with evidence that the result was accepted?</p>
+      </div>
+    </section>
+    <section class="loop-section" id="loop">
+      <div class="wrap">
+        <div class="section-intro">
+          <span class="eyebrow">The constructive loop</span>
+          <h2>Change the game.<br>Build what it requires.<br>Learn to build better.</h2>
+        </div>
+        <ol class="loop">
+          <li><h3>Change the game</h3><p>Separate the valuable purpose from inherited methods. Search for a different route, representation or cooperative arrangement.</p></li>
+          <li><h3>Build the means</h3><p>Construct the missing pieces and their connections. Count the complete work, verify the dependencies and test the delivered result.</p></li>
+          <li><h3>Improve the builder</h3><p>Retain what transfers, including useful failures. Test whether it improves fresh construction against capable alternatives.</p></li>
+        </ol>
+        <p class="loop-return">The return path matters: each verified construction can change the starting conditions of the next. Continued improvement must be demonstrated on new work.</p>
+        <div class="frontiers" aria-label="Two kinds of possibility">
+          <article class="frontier"><h3>The current frontier</h3><p class="question">What can we deliver with the means available now?</p><p>Existing tools, knowledge, capacity, rights and funding determine the currently feasible outcomes.</p></article>
+          <article class="frontier"><h3>The construction frontier</h3><p class="question">What could become deliverable if we built the missing means?</p><p>A feasible construction path can change what is subsequently possible. Its costs, prerequisites and transition conditions belong in the comparison.</p></article>
+        </div>
+        <p class="scope-note">Expansion is conditional. Maintenance, obsolete methods, depleted resources or new obligations can also make the feasible set smaller.</p>
+      </div>
+    </section>
+    <section id="learning">
+      <div class="wrap">
+        <div class="section-intro">
+          <span class="eyebrow">Three achievements. Three different claims.</span>
+          <h2>What, exactly, gets better?</h2>
+          <p>A larger collection of tools can be valuable. Stronger claims ask whether the system can build a different tool—and whether experience makes that construction process better.</p>
+        </div>
+        <div class="learning">
+          <article><span class="level">Level 01 · Retained means</span><h3>Use what was built.</h3><p>An existing instrument or method helps with a new accepted task.</p><p class="test"><strong>Test:</strong> Does fresh use remain valid after qualification, adaptation and maintenance costs?</p></article>
+          <article><span class="level">Level 02 · New construction</span><h3>Build what is now needed.</h3><p>Available means support the construction of a different working capability.</p><p class="test"><strong>Test:</strong> Is there an executable new artifact and an accepted result under the new task’s conditions?</p></article>
+          <article><span class="level">Level 03 · Better constructor</span><h3>Learn to build better.</h3><p>Experience improves the procedure that finds and constructs useful means.</p><p class="test"><strong>Test:</strong> Does it outperform strong controls on fresh tasks with matched information and complete resources?</p></article>
+        </div>
+      </div>
+    </section>
+    <section class="evidence-section" id="evidence">
+      <div class="wrap">
+        <div class="section-intro"><span class="eyebrow">Research edition 1.1.0 · Microscopy continuation</span><h2>A qualified first route.<br>Three separate verdicts.</h2><p>The practical construction turns public microscope images into inspectable instance masks, counts and pixel-area records. A different successor asks for cell-body boundaries from DNA and actin.</p></div>
+        <div class="study-tags"><span>BBBC039v1 · nucleus instances</span><span>BBBC007v1 · whole-cell successor</span><span>6 matched classical arms</span><span>1 separate pretrained specialist</span></div>
+        <!-- BEGIN REPRODUCTION RESULTS -->
+        <div class="verdict-grid" id="measured-results">
+          <article class="verdict qualified"><span class="label">Pretrained source · nucleus measurement</span><h3>The first research contract is met.</h3><p class="result">0.949 <small>test instance F1</small></p><span class="status">SOURCE QUALIFIED</span><p>The fixed CellposeDINO route passes all three gates on both official 50-field cohorts. This qualifies the recorded computational research use; it does not establish external laboratory acceptance.</p></article>
+          <article class="verdict negative"><span class="label">Pretrained successor · whole-cell boundaries</span><h3>The different output remains unqualified.</h3><p class="result">0.506 <small>test boundary F1</small></p><span class="status">REQUIRED ≥ 0.60</span><p>The specialist fails the boundary gate on calibration and test, despite meeting foreground and count gates. The selected classical route also fails, with test boundary F1 of 0.310.</p></article>
+          <article class="verdict tie"><span class="label">Constructor comparison · identical donor history</span><h3>No candidate executions saved.</h3><p class="result">24 / 24 <small>recipes</small></p><span class="status">OBSERVED TIE</span><p>Every classical arm exhausts the bank. Greedy coverage and ordinary empirical ranking select the same unqualified instrument. No accepted construction-method advantage is established.</p></article>
+        </div>
+        <h3>Pretrained specialist: all 116 registered fields</h3>
+        <p class="evidence-caption" id="specialist-table-caption">Field means, rounded to six decimals. Nucleus rows use instance F1; cell rows use internal-boundary F1. Qualification requires both relevant cohorts.</p><div class="evidence-table-wrap" tabindex="0" role="region" aria-label="Specialist results; scroll horizontally for all columns"><table class="evidence-table" aria-labelledby="specialist-table-caption"><thead><tr><th scope="col">Specialist / cohort</th><th scope="col">Fields</th><th scope="col">Primary F1</th><th scope="col">Foreground Dice</th><th scope="col">Count error</th><th scope="col">Verdict</th></tr></thead><tbody>
+          <tr><th scope="row">Nuclei · validation</th><td>50</td><td>0.953878 instance</td><td>0.967388</td><td>0.066573</td><td>All source gates pass</td></tr>
+          <tr><th scope="row">Nuclei · test</th><td>50</td><td>0.949103 instance</td><td>0.967232</td><td>0.070837</td><td>All source gates pass</td></tr>
+          <tr><th scope="row">Cells · calibration</th><td>4</td><td>0.386561 boundary</td><td>0.860566</td><td>0.130928</td><td>Boundary gate fails</td></tr>
+          <tr><th scope="row">Cells · test</th><td>12</td><td>0.505568 boundary</td><td>0.886682</td><td>0.200904</td><td>Boundary gate fails</td></tr>
+        </tbody></table></div>
+        <p>The useful source route integrates an existing specialist. Its pretrained competence was not learned by the local constructor. The specialist was selected after classical source outcomes and registered before its own inference. Possible pretraining overlap with these public images is unknown; this reproduction does not establish unseen-data generalization.</p>
+        <h3>The classical findings remain part of the result</h3>
+        <p>Source recipe <code>r17</code> passes the test cohort but misses the validation count-error limit of 0.20, so its complete source contract fails. All six successor arms select <code>r12</code> and fail the boundary gate on both cohorts.</p>
+        <p class="evidence-caption" id="classical-table-caption">Classical reproduction under the same source and successor acceptance contracts. The source and successor use different primary F1 metrics.</p><div class="evidence-table-wrap" tabindex="0" role="region" aria-label="Classical results; scroll horizontally for all columns"><table class="evidence-table" aria-labelledby="classical-table-caption"><thead><tr><th scope="col">Instrument / cohort</th><th scope="col">Fields</th><th scope="col">Primary F1</th><th scope="col">Foreground Dice</th><th scope="col">Count error</th><th scope="col">Verdict</th></tr></thead><tbody>
+          <tr><th scope="row">Nuclei · validation</th><td>50</td><td>0.884357 instance</td><td>0.910637</td><td>0.216173</td><td>Count gate fails</td></tr>
+          <tr><th scope="row">Nuclei · test</th><td>50</td><td>0.897397 instance</td><td>0.931317</td><td>0.088311</td><td>Cohort gates pass</td></tr>
+          <tr><th scope="row">Cells · calibration</th><td>4</td><td>0.250398 boundary</td><td>0.850357</td><td>0.086298</td><td>Boundary gate fails</td></tr>
+          <tr><th scope="row">Cells · test</th><td>12</td><td>0.309897 boundary</td><td>0.861007</td><td>0.104715</td><td>Boundary gate fails</td></tr>
+        </tbody></table></div>
+        <p>All 16 successor fields have reference internal boundaries. The specialist has higher test boundary F1 than the classical recipe, but also higher count error; neither qualifies. The six-arm tie concerns selected instrument, quality and candidate count, while measured runtimes can differ. It does not establish statistical equivalence across independent construction tasks.</p>
+        <figure class="example-figure" aria-labelledby="example-caption">
+          <a href="learning-to-build-v1.1.0-example.png" aria-label="Open the microscopy comparison at full size"><img src="learning-to-build-v1.1.0-example.png" width="2100" height="1395" loading="lazy" alt="Two full microscope fields compared across observation, decoded reference, classical prediction, and pretrained prediction. Top: nuclei. Bottom: cell bodies, with visible differences in object extent and splitting."></a>
+          <figcaption id="example-caption"><strong>Actual outputs, selected by test order.</strong> The first official BBBC039 test field and first registered BBBC007 test field were selected without using their scores. Full fields are shown without cropping. Each observation channel uses first-to-ninety-ninth-percentile linear contrast <strong>for display only</strong>; inference and scoring inputs are unchanged. Colors distinguish instances within a panel and do not imply matching identities across panels. The registered reference and border conventions apply. Complete cohort measurements determine qualification. <a href="learning-to-build-v1.1.0-example.png">Open the full-size image →</a> · <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/learning-to-build-v1.1.0/construction/figures/protocol-first-fields.json">Inspect field identities and display provenance →</a></figcaption>
+        </figure>
+        <!-- END REPRODUCTION RESULTS -->
+        <p class="science-note"><strong>Read the evidence at its actual scope.</strong> This execution reproduces an already exposed registered comparison. It is not a new blinded confirmation. Acceptance thresholds are author-defined research gates. No laboratory acceptance, clinical use, commercial demand or earned funding is established.</p>
+        <details class="method"><summary>What the six-arm comparison actually tests</summary><p>All six classical builders receive the same 24 recipes, target channels, calibration references and permitted environment. They can all search the complete bank. The proposed update changes candidate order using donor experience; it does not discover new segmentation operators.</p><p>The six policies used four distinct orders. A separately frozen cached-score replay tested 33 order/settings interventions (30 unique orders): all exhausted the same 24 failing candidates and selected r12. This explains convergence through the shared recipe bank and fallback rule; it is not agreement among independently prompted models or fresh image inference.</p><p>The primary contrast is a supplied greedy-coverage order versus conventional empirical ranking from the same donor table. A local advantage requires an accepted successor and fewer candidate executions without losing acceptance. Full enumeration is a complete conventional control. The CellposeDINO specialist brings additional pretrained stock and is assessed separately.</p><p class="evidence-caption" id="construction-table-caption">Each arm is executed separately; target scores are not shared.</p><div class="evidence-table-wrap" tabindex="0" role="region" aria-label="Construction comparison; scroll horizontally for all columns"><table class="evidence-table" aria-labelledby="construction-table-caption"><thead><tr><th scope="col">Arm</th><th scope="col">What carries forward</th></tr></thead><tbody><tr><td>Fixed, no history</td><td>Frozen expert-informed order</td></tr><tr><td>Ordinary reuse</td><td>Donor recipe first, then the fixed order</td></tr><tr><td>Updated, no artifact</td><td>Donor-derived greedy coverage; no privileged donor placement</td></tr><tr><td>Updated with artifact</td><td>Donor recipe first, then the greedy order</td></tr><tr><td>Same-content empirical</td><td>Ordinary ranking over the identical donor table</td></tr><tr><td>Full enumeration</td><td>All 24 recipes; the same calibration selection rule</td></tr></tbody></table></div></details>
+        <details class="method"><summary>Why nuclei and cell bodies have different acceptance contracts</summary><p>The first instrument must meet instance F1, foreground Dice and count-error gates on both the official 50-field validation and 50-field test sets. The successor must also recover internal boundaries, with F1 of at least 0.60 both across all fields and across fields containing true internal boundaries, on calibration and test separately.</p><p>High foreground overlap or an adequate count cannot replace the missing boundaries between cells. Area values are segmentation-derived pixel estimates; these gates do not establish biological area accuracy or physical units.</p></details>
+        <details class="method"><summary>What the reference-assisted diagnostic tells us</summary><p>Applying the unchanged nucleus artifact to the successor gives boundary F1 0.072995. Supplying manual nuclei and foreground to the selected cell recipe gives boundary F1 0.671256, Dice 0.999933 and count error 0.159935 on the twelve test fields.</p><p>The latter uses privileged reference-derived inputs and is not a qualified raw-channel instrument. A follow-up fixed-r12 diagnostic separated the branches on only the four already exposed calibration fields. Raw inputs gave boundary F1 0.250398; reference nuclei alone gave 0.195353; reference foreground alone gave 0.615828; both reference inputs gave 0.714909. Separate scoring implementations agreed on every component mask. The seed branch also contributes to foreground, so these are software-branch interventions, not isolated biological causal effects.</p><p>Foreground recovery was the better next lead. One separately frozen ordinary composition used the specialist’s actual retained mask union as foreground for the original watershed. It reached boundary F1 0.296809, below the required 0.60 and below the unchanged specialist’s calibration score. The stop rule halted it with zero test fields scored, no tuning and no new neural inference. The failure is retained; an unexecuted complete raw-input command is not claimed as a demonstrated capability.</p><p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/learning-to-build-v1.1.0/construction/diagnostics">Inspect the frozen diagnostics</a> · <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/learning-to-build-v1.1.0/construction/repair">Inspect the failed practical composition</a>. All cases remain exposed, and reference-assisted passes do not establish a deployable raw-input solution.</p><p>The <a href="https://bbbc.broadinstitute.org/BBBC007">original BBBC007 boundary benchmark</a> permits manual inputs and reports a different proximity measure. Its historical percentage is not directly comparable to this raw-input symmetric F1.</p></details>
+        <details class="method"><summary>Measured work and the exact-version environment</summary><p>The completed classical phases record 696.935 CPU seconds and 696.703 wall seconds, including donor construction and the labelled diagnostics. The completed 116-field specialist session records 4,969.507 CPU seconds and 4,970.035 wall seconds. These stage or session measurements exclude dependency setup, acquisition, independent verification, authoring, upstream pretraining, unavailable historical costs and economic costs. The classical ledger records no interrupted attempt, but the origin of 138 residual files remains unknown. Byte identity cannot distinguish copying from additional execution; any associated unrecorded work and cost remain unknown.</p><p>The reported local reproduction uses a dedicated Python 3.12.14 virtual environment with registered package versions and source hashes checked. It enables <code>--system-site-packages</code>, so it is not fully isolated and does not freeze every transitive binary or host component. The default isolated installer was checked separately; it did not replace the environment that produced these results. Setup receipts preserve the actual configurations.</p></details>
+        <details class="method"><summary>What failed before this reproduction</summary><p>The published history records a Boolean-outline decoding failure and a scalar/RGB observation mismatch. Narrow, versioned amendments repaired the interfaces before target test prediction or scoring. The shared RGB-to-L convention is generally lossy; it does not recover physical fluorescence.</p><p>The source and compact preregistration records were preserved. The original final raw-output package was not available for byte verification, so this edition uses new execution outputs. Historical costs that cannot be recovered remain unknown. The reproduction does not convert the exposed comparison into fresh hidden evidence.</p></details>
+        <details class="method"><summary>How the reproduction’s files are preserved</summary><p>The raw classical tree contained 416 files and failed the strict file-set check because 138 residual attempt-file copies remained alongside 278 canonical files. Every residual matched its canonical counterpart byte for byte; the cause is unknown.</p><p>The publication projection retains the 278 canonical files unchanged. All residual files and the reconstruction mapping are also retained, with no changes to reported metrics or costs. The manuscript appendix and construction guide explain the rejected raw tree and the separate checked projection.</p></details>
+        <details class="method"><summary>The preserved 1.0.0 illustration</summary><p>Four programs generated from supplied arithmetic specifications pass 4,000 finite input checks. Across 288 authored resource conditions, the conventional equal-content planner ties every corresponding constructor-state decision. Retention can expand or contract attainable delivery once maintenance is charged.</p><p>Those are exact results in an authored finite model, not empirical success probabilities or evidence of learned-constructor superiority. <a href="learning-to-build.html">Read the unchanged first edition →</a></p></details>
+        <div class="evidence-links"><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/learning-to-build-v1.1.0/construction/RESULTS.md">Read the complete measured report →</a><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/learning-to-build-v1.1.0/construction">Inspect protocol, source and evidence →</a></div>
+      </div>
+    </section>
+
+    <section id="begin">
+      <div class="wrap">
+        <div class="section-intro"><span class="eyebrow">Begin with something available</span><h2>Read it. Run it.<br>Challenge the next link.</h2><p>Choose the entry that matches your purpose. The source package includes the manuscript, the preserved finite study, construction protocols, operation instructions, compact reproducible evidence and checks.</p></div>
+        <div class="start-grid">
+          <article class="start-card"><span class="step">01 · UNDERSTAND</span><h3>Find the research question.</h3><p>Start with the one-minute overview and the precise contribution. The microscope example shows why useful construction and improved construction methods need separate evidence.</p><a href="#reader">Read the full manuscript →</a><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/learning-to-build-v1.1.0/construction/CONSTRUCTION_BRIEF.md">Open the practical brief →</a></article>
+          <article class="start-card"><span class="step">02 · OPERATE</span><h3>Use the research instrument.</h3><p>Follow the pinned setup, verify public input hashes, reproduce the comparison, or run an image through the emitted instrument. Inspect masks and measurements alongside the acceptance report.</p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/learning-to-build-v1.1.0/construction/README.md">Setup and operation guide →</a><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/download/learning-to-build-v1.1.0/LEARNING_TO_BUILD_SOURCE.zip">Download source and evidence ↓</a></article>
+          <article class="start-card"><span class="step">03 · EXTEND</span><h3>Bring a decisive dependency.</h3><p>Contribute a clear measurement requirement, an authorized reference cohort, an independent check, or a stronger complete alternative. State what result would resolve the missing means.</p><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/learning-to-build-v1.1.0/sections/programme.tex">Read the research programme →</a><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues">Discuss a reproducible finding →</a></article>
+        </div>
+        <p class="route-note">After the downloaded-release reproduction and raw-image operation pass, the release receives an <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/download/learning-to-build-v1.1.0/OPERATION_RECEIPT.json">operation receipt</a>. It records operation of the released package; scientific qualification remains a separate verdict.</p>
+        <p class="route-note"><strong>A quick start after extracting the source package:</strong> run <code>python3 -B study/check.py</code> to check the preserved finite study. The microscopy guide explains the additional scientific dependencies, public inputs and specialist setup; it also distinguishes rechecking retained outputs from performing new inference.</p>
+        <p class="science-note">The next research target is a qualified successor with a demonstrated contribution from retained means. A better ordering of an exhausted candidate bank cannot supply a missing boundary-recovery method. Reliable seed and foreground construction, a new representation or a different boundary method each needs a separately registered comparison on a new confirmation cohort.</p>
+      </div>
+    </section>
+    <section id="horizon">
+      <div class="wrap horizon">
+        <div>
+          <span class="eyebrow">An open horizon</span>
+          <h2>Build the means of greater possibility.</h2>
+          <p>The long-term ambition is an intelligence-enabled enterprise whose useful work improves both what it can produce and how it discovers the next consequential construction.</p>
+          <p>Progress toward large physical systems still requires energy, materials, throughput, reliability, voluntary cooperation and time. Financial value, usable cash, installed capacity and human benefit must each be established.</p>
+        </div>
+        <ol class="horizon-steps">
+          <li><strong>Accepted value</strong><span>Deliver something worthwhile under a clear purpose and acceptance contract.</span></li>
+          <li><strong>Reusable productive means</strong><span>Leave behind applicable knowledge, instruments, processes or capacity.</span></li>
+          <li><strong>Funded next construction</strong><span>Use available resources and permissible financing while preserving existing obligations.</span></li>
+          <li><strong>Better discovery and construction</strong><span>Demonstrate improvement on fresh opportunities against capable complete alternatives.</span></li>
+        </ol>
+      </div>
+    </section>
+    <section id="foundations">
+      <div class="wrap">
+        <div class="section-intro">
+          <span class="eyebrow">Built on three foundations</span>
+          <h2>One connected research direction.</h2>
+          <p>This paper joins purpose-preserving transformation, viable productive arrangements and cumulative discovery around the construction of complete means.</p>
+        </div>
+        <div class="foundations">
+          <article class="foundation"><span class="role">Change what is possible</span><h3>Transformational Intelligence</h3><p>Learning to change the game: examine the formulation and construct a better route to the authorized purpose.</p><a href="transformational-intelligence.html">Read the foundation →</a></article>
+          <article class="foundation"><span class="role">Make participation viable</span><h3>Invent the Economy</h3><p>Discover productive capabilities and voluntary arrangements together, including complete costs and outside options.</p><a href="invent-the-economy.html">Read the foundation →</a></article>
+          <article class="foundation"><span class="role">Connect successive advances</span><h3>ALPHA GENESIS FLYWHEEL Ω</h3><p>Couple frontier knowledge, useful construction and qualified successor benefit while keeping the claims distinct.</p><a href="alpha-genesis-flywheel-omega-v2.html">Read the flagship →</a></article>
+        </div>
+        <details class="french" id="francais" lang="fr">
+          <summary>Résumé en français · APPRENDRE À CONSTRUIRE</summary>
+          <h3>Comment l’intelligence apprend à créer ce qui rend de nouvelles possibilités réelles</h3>
+          <p>Une possibilité utile peut rester inaccessible parce que les moyens nécessaires n’existent pas encore ensemble. <strong>Apprendre à construire</strong>, c’est apprendre à découvrir et à créer cette combinaison : connaissances, instruments, processus, ressources et arrangements entre participants volontaires.</p>
+          <p><strong>Changer la donne → construire les moyens nécessaires → apprendre à mieux construire.</strong> Chaque construction doit répondre à sa finalité et faire l’objet d’une vérification. Les moyens conservés peuvent ensuite faciliter une autre construction. Réutiliser un outil, produire une nouvelle capacité et améliorer le constructeur constituent trois résultats distincts.</p>
+          <p>La version 1.1.0 conserve la première édition et ajoute une construction de recherche en microscopie : mesurer les noyaux, puis tenter une mesure différente des cellules entières. Le résultat utile, la qualification du successeur et l’avantage éventuel de la méthode de construction sont évalués séparément. La nouvelle exécution reproduit une comparaison déjà exposée; elle ne constitue pas une nouvelle confirmation à l’aveugle.</p><p>La méthode préentraînée satisfait les critères de recherche pour les noyaux sur les deux ensembles officiels. Son successeur pour les cellules entières échoue au critère de frontière. Les six stratégies classiques explorent toutes les recettes et aboutissent au même instrument non qualifié : aucun avantage de la méthode de construction n’est établi.</p><p>Les seuils sont des critères de recherche définis par les auteurs. Ils ne démontrent ni validation externe en laboratoire, ni découverte autonome, ni revenus réels, ni déploiement physique.</p>
+          <p><em>Quand nous construisons quelque chose de nouveau, nous changeons ce qu’il devient possible de construire ensuite.</em></p>
+          <p><a href="learning-to-build-v1.1.0.pdf">Lire l’article intégral en anglais</a> · <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/learning-to-build-v1.1.0">Télécharger les sources et les éléments probants</a></p>
+        </details>
+      </div>
+    </section>
+    <section class="reading" id="reader" aria-labelledby="reading-title">
+      <div class="wrap">
+        <div class="reading-head">
+          <div><span class="eyebrow">The complete research paper</span><h2 id="reading-title">Read. Question. Reproduce.</h2><p>English manuscript · Research edition 1.1.0 · Editable LaTeX and executable companion included.</p></div>
+          <div class="actions"><a class="button primary" href="learning-to-build-v1.1.0.pdf">Open the full paper →</a><a class="button" href="learning-to-build-v1.1.0.pdf" download>Download PDF ↓</a></div>
+        </div>
+        <div class="paper-window">
+          <div class="paper-bar"><span>LEARNING TO BUILD · v1.1.0</span><a href="learning-to-build-v1.1.0.pdf">Open in your PDF reader →</a></div>
+          <object class="reader" data="learning-to-build-v1.1.0.pdf#view=FitH" type="application/pdf" aria-label="Full Learning to Build research paper, English PDF">
+            <div class="reader-fallback"><p>Your browser does not display embedded PDFs. Open the full paper below.</p><p><a class="button primary" href="learning-to-build-v1.1.0.pdf">Open the PDF</a></p><p>For an offline copy, choose Download PDF above.</p></div>
+          </object>
+        </div>
+        <div class="download-grid" id="downloads">
+          <div>
+            <h3>Everything needed to inspect the work.</h3>
+            <p>The package includes the editable manuscript, bibliography, build instructions, preserved finite companion, microscopy source, registered comparisons, compact evidence and review. External datasets and pretrained weights are acquired separately under their recorded terms.</p>
+            <div class="actions"><a class="button" href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/download/learning-to-build-v1.1.0/LEARNING_TO_BUILD_SOURCE.zip">Download source package ↓</a><a class="button" href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/releases/tag/learning-to-build-v1.1.0">View release</a></div>
+          </div>
+          <div>
+            <h3>Publication identity</h3>
+            <dl class="file-details">
+              <dt>Edition</dt><dd>1.1.0 · 7 November 2026</dd>
+              <dt>Format</dt><dd><span data-pdf-pages>39 pages</span> · PDF · <span data-pdf-bytes>1094784 bytes</span></dd>
+              <dt>SHA-256</dt><dd><code data-pdf-sha>127888a4586f33066608cf9408f692edb2d3b8ea4d1fb9d8dc9a63ccd9355754</code></dd>
+              <dt>Sources</dt><dd><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/learning-to-build-v1.1.0">Editable LaTeX, evidence and reproduction</a></dd>
+            </dl>
+          </div>
+        </div>
+        <details class="citation"><summary>Cite this paper</summary><pre>Boucher, Vincent. (2026). Learning to Build:
+How Intelligence Learns to Create What Makes New Possibilities Real.
+Research edition 1.1.0. MONTREAL.AI / QUEBEC.AI.
+https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/learning-to-build-v1.1.0.html</pre><a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/blob/main/docs/learning-to-build-v1.1.0/CITATION.cff">Machine-readable citation</a></details>
+      </div>
+    </section>
+    <section class="closing">
+      <div class="wrap"><span class="eyebrow">🏗️♾️ LEARNING TO BUILD ✨</span><h2>Build what makes the next breakthrough buildable.</h2><p>Change the game. Build what the new game requires. Learn to build better.</p><div class="actions"><a class="button primary" href="learning-to-build-v1.1.0.pdf">Read the full paper →</a></div></div>
+    </section>
+  </main>
+  <footer><div class="wrap"><p>Vincent Boucher · MONTREAL.AI / QUEBEC.AI<br>Transformational Intelligence ∞ · Research edition 1.1.0</p><p><a href="index.html">Research library</a> · <a href="https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/tree/main/docs/learning-to-build-v1.1.0">Source &amp; evidence</a></p></div></footer>
+</body>
+</html>

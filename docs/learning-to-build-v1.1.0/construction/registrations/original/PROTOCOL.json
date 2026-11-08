@@ -1,0 +1,321 @@
+{
+  "schema": "learning-to-build/microscopy-protocol/v1",
+  "id": "ltb-microscopy-001",
+  "edition": "1.1.0",
+  "status": "REGISTERED_BEFORE_SCORING",
+  "registered_at_utc": "2026-11-07T15:06:02Z",
+  "purpose": "Construct and operate a reproducible nucleus measurement instrument, then attempt a whole-cell instrument on a different assay; distinguish artifact reuse from an experience-updated finite construction policy.",
+  "beneficiary": "Researchers evaluating reproducible offline bioimage measurements. No recruited laboratory, customer or external acceptance is claimed.",
+  "scope": "Real computation on public, previously acquired microscopy data; no new physical acquisition, biological discovery, clinical use or commercial transaction.",
+  "data": {
+    "bbbc039": {
+      "version": "1",
+      "source": "https://bbbc.broadinstitute.org/BBBC039",
+      "license": "CC0",
+      "training": "official training.txt (100 fields)",
+      "validation": "official validation.txt (50 fields)",
+      "test": "official test.txt (50 fields)",
+      "domain_limit": "All 18 test plates also occur in training; the split is not cross-plate transfer."
+    },
+    "bbbc007": {
+      "version": "1",
+      "source": "https://bbbc.broadinstitute.org/BBBC007",
+      "license": "CC0",
+      "calibration_rule": "First four lexicographically sorted complete DNA/actin/nucleus-outline/cell-outline field IDs.",
+      "test_rule": "Every remaining complete field ID; require at least four test fields.",
+      "calibration_ids": [
+        "A9/A9 p10",
+        "A9/A9 p5",
+        "A9/A9 p7",
+        "A9/A9 p9"
+      ],
+      "test_ids": [
+        "f113/AS_09125_040701150004_A02f00",
+        "f96 (17)/17P1_POS0006",
+        "f96 (17)/17P1_POS0007",
+        "f96 (17)/17P1_POS0011",
+        "f96 (17)/17P1_POS0013",
+        "f96 (17)/17P1_POS0014",
+        "f9620/20P1_POS0002",
+        "f9620/20P1_POS0005",
+        "f9620/20P1_POS0007",
+        "f9620/20P1_POS0008",
+        "f9620/20P1_POS0010",
+        "f9620/20P1_POS0011"
+      ],
+      "domain_limit": "Different cell line, image channels, reference format and output requirement. A single publicly known assay is not an independent population of construction tasks.",
+      "split_limit": "The prespecified source-order split puts the four A9 fields in calibration and all 12 fields from the other folders in test. It is structured, not random or a sampled task population.",
+      "reference_decode": "Require a binary monochrome outline raster (at most two unique intensities; a constant image yields no enclosed objects). Background is the most frequent frame pixel. Label four-connected non-line regions, discard frame-touching regions, assign outline pixels to their nearest enclosed region only within sqrt(2) pixels; no size filtering or smoothing. Reference counts and areas are conditional on this explicit reconstruction of manual outlines. After outline assignment, discard any complete reconstructed object that now touches the image frame, relabel, and report the excluded count.",
+      "border_policy": "Exclude frame-touching predicted objects and relabel before scoring, matching the complete enclosed-reference-region target. BBBC039 keeps border objects.",
+      "reference_diagnostics": [
+        "raster dimensions",
+        "unique outline intensities",
+        "decoded nucleus count",
+        "decoded cell count",
+        "assigned outline fraction",
+        "reference boundary pixel count",
+        "post-assignment frame-object exclusions"
+      ]
+    },
+    "archives": {
+      "bbbc007_images": {
+        "bytes": 6435776,
+        "sha256": "b7009e2fce0a3152a5c9adda916eaa699d09696f4bd02a7d05d12d041e30c6d1",
+        "url": "https://data.broadinstitute.org/bbbc/BBBC007/BBBC007_v1_images.zip"
+      },
+      "bbbc007_outlines": {
+        "bytes": 652531,
+        "sha256": "6a5246f9a9d743d22eafdb409fae638a8461af97e9ff9c4a92f25eba236224d3",
+        "url": "https://data.broadinstitute.org/bbbc/BBBC007/BBBC007_v1_outlines.zip"
+      },
+      "bbbc039_images": {
+        "bytes": 77915748,
+        "sha256": "6f30a5d4fe38c928ded972704f085975f8dc0d65d9aa366df00e5a9d449fddd7",
+        "url": "https://data.broadinstitute.org/bbbc/BBBC039/images.zip"
+      },
+      "bbbc039_masks": {
+        "bytes": 2753811,
+        "sha256": "f9e6043d8ca56344a4886f96a700d804d6ee982f31e2b2cd3194af2a053c2710",
+        "url": "https://data.broadinstitute.org/bbbc/BBBC039/masks.zip"
+      },
+      "bbbc039_metadata": {
+        "bytes": 17816,
+        "sha256": "a2c1f900bed9ba92a99553efd4c2ae98598433691c7401d818653ab61110deb2",
+        "url": "https://data.broadinstitute.org/bbbc/BBBC039/metadata.zip"
+      }
+    }
+  },
+  "recipe_grammar": {
+    "background": [
+      "none",
+      "opening"
+    ],
+    "threshold": [
+      "li",
+      "otsu"
+    ],
+    "seed_distance": [
+      4,
+      7,
+      10
+    ],
+    "watershed_surface": [
+      "distance",
+      "intensity"
+    ],
+    "candidate_count": 24,
+    "gaussian_sigma": 1.0,
+    "minimum_object_area_pixels": 20,
+    "fill_holes": true,
+    "implementation_parameters": "Must be frozen in instrument.py before scoring. These are supplied classical operators, not invented algorithms.",
+    "fixed_expert_order": "Lexicographic priorities: opening before none; Li before Otsu; intensity surface before distance; seed spacing 10 before 7 before 4. This is informed by the released CellProfiler pipeline, not execution of that pipeline.",
+    "opening": "Square grey opening, size 31 by 31, reflected boundary; subtract and clip below zero. Image normalization and all other operator details frozen in instrument.py before scoring.",
+    "fixed_parameters": {
+      "normalization_percentiles": [
+        1.0,
+        99.8
+      ],
+      "opening_size_pixels": 31,
+      "opening_mode": "reflect",
+      "gaussian_sigma": 1.0,
+      "gaussian_mode": "reflect",
+      "minimum_object_area_pixels": 20,
+      "cell_mask_closing_pixels": 3,
+      "fill_holes": true,
+      "seed_source": "distance transform local maxima, spacing from recipe; at least one distance maximum per disconnected foreground component",
+      "raw_channel_interface": "nuclei uses DNA only; cells uses DNA plus actin only; reference labels are never prediction inputs in primary arms"
+    },
+    "recipe_ids": [
+      "r00",
+      "r01",
+      "r02",
+      "r03",
+      "r04",
+      "r05",
+      "r06",
+      "r07",
+      "r08",
+      "r09",
+      "r10",
+      "r11",
+      "r12",
+      "r13",
+      "r14",
+      "r15",
+      "r16",
+      "r17",
+      "r18",
+      "r19",
+      "r20",
+      "r21",
+      "r22",
+      "r23"
+    ],
+    "fixed_expert_order_ids": [
+      "r17",
+      "r15",
+      "r13",
+      "r16",
+      "r14",
+      "r12",
+      "r23",
+      "r21",
+      "r19",
+      "r22",
+      "r20",
+      "r18",
+      "r05",
+      "r03",
+      "r01",
+      "r04",
+      "r02",
+      "r00",
+      "r11",
+      "r09",
+      "r07",
+      "r10",
+      "r08",
+      "r06"
+    ]
+  },
+  "donor": {
+    "task": "nucleus instances, counts and pixel-area measurements",
+    "calibration_split": "training",
+    "validation_split": "validation",
+    "test_split": "test",
+    "selection": "Minimize mean relative count error on training; tie by higher mean instance F1, then higher mean foreground Dice, then recipe identifier.",
+    "retained_content": "All 24 per-image recipe evaluation records from the 100 training images, recipe grammar, source identity, and data references.",
+    "retained_artifact": "Selected donor recipe plus the common executable interpreter.",
+    "policy_update": "Greedy uncovered-training-image coverage. A donor image is covered if every per-image nuclei criterion holds. Choose largest uncovered count; break ties by higher mean instance F1, higher mean foreground Dice, lower mean relative count error, then recipe identifier. Remove covered images; retain every remaining candidate in that same deterministic rule. This learns an ordering parameter of a supplied policy.",
+    "failed_donor_rule": "Continue the registered successor comparison even if the donor fails its qualification. Record that failure; do not claim an accepted first instrument enabled an accepted successor."
+  },
+  "criteria": {
+    "nuclei": {
+      "mean_instance_f1_at_iou_strictly_greater_than_0_5_min": 0.7,
+      "mean_relative_count_error_max": 0.2,
+      "mean_foreground_dice_min": 0.85
+    },
+    "cells": {
+      "mean_internal_boundary_f1_within_2_pixels_min": 0.6,
+      "mean_relative_count_error_max": 0.25,
+      "mean_foreground_dice_min": 0.8,
+      "minimum_boundary_bearing_test_fields": 2,
+      "mean_boundary_f1_on_reference_boundary_bearing_fields_min": 0.6,
+      "minimum_boundary_bearing_calibration_fields": 1
+    },
+    "empty_sets": "Both empty foregrounds or both empty object sets score one; one empty side scores zero. Boundary F1 is one only if both internal-boundary sets are empty; other one-sided emptiness scores zero. Report boundary-bearing field count.",
+    "relative_count_error": "abs(predicted_count - reference_count) / max(1, reference_count)",
+    "instance_matching": "Maximum-cardinality one-to-one matches with IoU > 0.5. Report TP, FP, FN; F1 = 2TP/(2TP+FP+FN).",
+    "boundary_metric": "Four-connected inner label boundaries, restricted to a 3x3 binary erosion of foreground; symmetric precision/recall harmonic mean for boundary pixels within Euclidean distance <=2 of the other set. This excludes boundaries adjacent to background. Report both directed scores and boundary counts. Also report and gate the mean internal-boundary F1 on fields with at least one reference internal-boundary pixel; empty-boundary fields cannot dilute failure of the actual boundary task. The all-field mean remains a separate gate and retains false internal-boundary penalties.",
+    "target_basis": "Author-defined research qualification criteria fixed before scores, not external laboratory certification or biological-effect validation.",
+    "area_diagnostic": "Report mean absolute relative pixel-area error over matched pairs with IoU>0.5 and the number/fraction of matched reference instances. Unmatched objects remain represented by TP/FP/FN and count/instance metrics. Pixel areas are segmentation-derived estimates; the registered gates do not establish accurate individual biological areas or physical units."
+  },
+  "arms": [
+    {
+      "id": "fixed_no_history",
+      "method": "Frozen expert-informed order; no inherited donor history or recipe."
+    },
+    {
+      "id": "ordinary_reuse",
+      "method": "Donor recipe first, then frozen order without duplication; ordinary artifact reuse."
+    },
+    {
+      "id": "updated_no_artifact",
+      "method": "Greedy coverage order learned from donor evaluations; no privileged execution of the donor artifact."
+    },
+    {
+      "id": "updated_with_artifact",
+      "method": "Donor recipe first, then learned order without duplication."
+    },
+    {
+      "id": "same_content_empirical",
+      "method": "Conventional empirical order: higher mean donor instance F1, then higher mean foreground Dice, then lower mean relative count error, then recipe identifier; full identical donor table."
+    },
+    {
+      "id": "full_enumeration",
+      "method": "Evaluate all 24 candidates and select by the same target calibration quality ordering."
+    }
+  ],
+  "construction_rule": {
+    "ranked_arms": "Execute the proposed order until the first recipe satisfies every target calibration criterion. Every arm may evaluate all 24; no artificially tight search cap. If no candidate qualifies, retain the best calibration candidate and mark calibration qualification false.",
+    "full_enumeration": "Always execute all 24 and choose the best target calibration candidate. Report whether it satisfies the same calibration criteria.",
+    "target_selection_order": "Among candidates meeting all calibration criteria, maximize mean internal-boundary F1 on reference-boundary-bearing fields, then mean all-field internal-boundary F1, then mean foreground Dice, then minimize mean relative count error, then recipe identifier. A missing bearing-field mean ranks below any numeric value and never qualifies. If none meet all, use the same ordering and report unqualified.",
+    "evaluation_isolation": "Run each arm separately. Do not reuse another arm's computed target calibration scores or holdout outputs. Charge actual search, execution and verification; retained history is the same for the primary matched contrast.",
+    "shared_resources": "Same 24 recipes, raw target channels, calibration labels, interpreter, validation rules and available CPU environment. No model weights, paid APIs or extra privileged labels.",
+    "manual_reference_inputs": "Manual target nuclei and foreground may be used only in a separately labelled diagnostic oracle route, never a primary raw-channel arm.",
+    "scope_of_acceptance": "An arm is accepted only when calibration and heldout criteria both hold, with at least two boundary-bearing test fields. Source instrument must meet nuclei criteria on both validation and test. Every numerical failure remains in the results."
+  },
+  "primary_comparison": {
+    "contrast": [
+      "updated_no_artifact",
+      "same_content_empirical"
+    ],
+    "outcomes": [
+      "heldout_complete_qualification",
+      "calibration_candidates_executed",
+      "actual_CPU_seconds",
+      "actual_wall_seconds",
+      "complete_donor_and_construction_costs",
+      "heldout_boundary_F1",
+      "heldout_foreground_Dice",
+      "heldout_count_error"
+    ],
+    "decision": "A local method advantage requires accepted heldout functionality and a strict reduction in construction work without a loss of accepted functionality against the same-content conventional arm. Report continuous quality and costs even when both qualify. Ties and adverse cases remain results. One task supplies no estimate of general improvement.",
+    "full_search_guard": "If ordinary full enumeration delivers a more reliable or practical route, retain it. Prefix savings do not establish end-to-end advantage after donor acquisition and maintenance.",
+    "primary_work_endpoint": "Number of target calibration candidate executions (one candidate evaluated on all four calibration fields). A smaller count alone is a prefix-efficiency result. CPU, wall time, verification, donor acquisition and lineage costs remain separate outcomes; do not call contradictory resource tradeoffs an overall gain.",
+    "contrast_scope": "Both primary arms use donor experience. The contrast is a supplied greedy-coverage update versus conventional empirical ranking, not experience versus no experience. No-artifact means no privileged donor placement, not exclusion of the corresponding recipe from the shared candidate bank."
+  },
+  "successor": {
+    "task": "whole-cell instance masks and cell-body pixel-area measurements from BBBC007 DNA plus actin",
+    "strong_practical_control": "Direct conventional construction with the shared operators and all target calibration permissions; full enumeration is eligible.",
+    "enabled_claim": "Report whether inherited means were actually used and whether the successor met acceptance. A direct route succeeding under the same conditions defeats an exclusive enabling claim. Later-than is not enabled-by."
+  },
+  "operation": {
+    "outputs": [
+      "runnable recipe and source binding",
+      "instance masks",
+      "per-instance pixel measurements",
+      "per-field comparison rows",
+      "complete candidate-search costs",
+      "retained construction policy",
+      "source/data/protocol receipts"
+    ],
+    "recovery": "Checkpoint at natural completed stages; resume only with matching source, data and protocol; retain interrupted work and original costs.",
+    "maintenance_tests": [
+      "missing channel",
+      "shape mismatch",
+      "invalid pixel values or types",
+      "stale recipe binding",
+      "changed input/protocol identity",
+      "corrupted reported metrics",
+      "interrupted and resumed run",
+      "idempotent complete resume"
+    ]
+  },
+  "economics": {
+    "actual_customers": 0,
+    "actual_transactions": 0,
+    "actual_revenue": 0,
+    "funding_arrangement": "No financial arrangement executed. Existing authorized computation and public data only.",
+    "billing": "No new purchases or paid model API calls; actual included model/host billing and total authoring cost are unmeasured, not zero.",
+    "human_comparator": "No measured human-worker productivity comparison.",
+    "future_dependency": "External laboratory validation, participation and any commercial delivery would need their own evidence and authorization.",
+    "cost_accounting": "Report current-state construction costs and lineage costs separately. Donor search is charged to inherited-history arms and to the matched same-content contrast. No-history arm does not receive or pay for donor history. Verification, acquisition, failed attempts and resume costs are recorded; unmetered authoring effort remains unknown."
+  },
+  "stopping_and_changes": "Evaluate every registered arm on the fixed cohorts. Preserve failed attempts and negative outcomes. Do not relax acceptance or tune using test results. Repairs to defects are disclosed and source-versioned; a repaired evaluation is not a fresh confirmation on already exposed data.",
+  "freshness": "No pixels decoded and no prediction scores inspected before registration. Public source metadata, literature and supplied CellProfiler pipeline were inspected. Data is publicly available and not guaranteed unseen by pretraining or prior literature.",
+  "claims_not_tested": [
+    "open-ended invention",
+    "autonomous discovery of a new algorithm",
+    "improved learning rule across independent campaigns",
+    "external scientific validation",
+    "biological or clinical conclusions",
+    "real demand or earnings",
+    "physical productive expansion"
+  ],
+  "diagnostics": {
+    "old_artifact": "Execute the unchanged donor nucleus program on target DNA, apply the shared complete-in-frame border rule, and score its output for the whole-cell purpose. This is a mechanistic artifact ablation, not a capable conventional control.",
+    "oracle_input": "Use the full-enumeration arm's calibration-selected recipe on target test fields with manual target nucleus seeds and reference foreground. Do not select a diagnostic recipe on test. Report separately as a privileged-reference-input diagnostic; its results cannot qualify a raw-channel instrument.",
+    "selection_scope": "Both diagnostic choices and interpretation fixed before target scoring. Preserve all diagnostic failures and source/reference differences."
+  }
+}
