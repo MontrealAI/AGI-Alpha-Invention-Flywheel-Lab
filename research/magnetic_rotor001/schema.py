@@ -11,6 +11,7 @@ from zipfile import ZipFile
 import numpy
 import scipy
 from scipy.io import whosmat
+from scipy.io.matlab import MatReadError
 
 from research.magnetic_rotor001 import gate
 
@@ -66,7 +67,7 @@ def inspect_mat_schema(data: bytes, *, require_original: bool = True) -> dict:
                     "height_label_unverified_units": label,
                     "top_level_variables": public_fields,
                 })
-    except (ValueError, TypeError, IndexError, OSError, NotImplementedError) as exc:
+    except (MatReadError, ValueError, TypeError, IndexError, OSError, NotImplementedError) as exc:
         if isinstance(exc, SchemaError):
             raise
         raise SchemaError("MAT_DIRECTORY_PARSE_FAILED") from exc
