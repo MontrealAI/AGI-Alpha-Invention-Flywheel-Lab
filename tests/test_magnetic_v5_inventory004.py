@@ -40,7 +40,7 @@ class IndependentDirectory004(unittest.TestCase):
     def test_empty_matrix_is_still_structural_metadata(self):
         r = inv.inventory_mat_v5(mat_bytes({"empty": np.array([[]])}))
         self.assertEqual(r[0]["name"], "empty")
-        self.assertEqual(r[0]["shape"], [0, 0])
+        self.assertEqual(r[0]["shape"], [1, 0])
 
     def test_ten_source_shape_and_shared_field_can_pass_independently(self):
         r = inv.inspect_original_archive(archive(), require_original=False)

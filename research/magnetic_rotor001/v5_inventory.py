@@ -38,7 +38,7 @@ def _tag(blob: bytes, offset: int, endian: str) -> tuple[int, bytes, int]:
     data_type = word
     length = struct.unpack_from(endian + "I", blob, offset + 4)[0]
     padded = (length + 7) // 8 * 8
-    end = offset + 8 + padded
+    end = offset + 8 + (length if data_type == MI_COMPRESSED else padded)
     if end > len(blob):
         raise DirectoryError("MAT_ELEMENT_LENGTH_OUT_OF_BOUNDS")
     return data_type, blob[offset + 8:offset + 8 + length], end
@@ -78,6 +78,8 @@ def _bounded_inflate(data: bytes) -> bytes:
         if len(out) > MAX_INFLATED or decomp.unconsumed_tail or not decomp.eof or decomp.unused_data:
             raise DirectoryError("MAT_COMPRESSED_STREAM_UNBOUNDED_OR_INVALID")
         out += decomp.flush(MAX_INFLATED + 1 - len(out))
+    except DirectoryError:
+        raise
     except (zlib.error, ValueError) as exc:
         raise DirectoryError("MAT_COMPRESSED_STREAM_INVALID") from exc
     if len(out) > MAX_INFLATED or not out:
