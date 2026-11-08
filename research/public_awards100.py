@@ -43,7 +43,7 @@ def _fields(names: list[str]) -> dict[str, str | None]:
     for field in ("title", "tenderDescription"):
         en = _column(names, field, lang="eng")
         fr = _column(names, field, lang="fra")
-        plain = _column(names, field)
+        plain = next((n for n in names if n.casefold() == field.casefold()), None)
         if en is None and fr is None:
             en = plain
         if en is None:
