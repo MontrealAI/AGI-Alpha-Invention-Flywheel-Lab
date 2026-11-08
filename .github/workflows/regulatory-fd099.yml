@@ -1,0 +1,32 @@
+name: Regulatory offline fd custody099 — fixed adversarial regression
+on:
+  push:
+    branches: [qualification/regulatory-offline-fd-custody099-20261108]
+  pull_request:
+    paths:
+      - 'research/regulatory_portable_audit098.py'
+      - 'tests/test_regulatory_offline_fd099.py'
+      - 'campaign/regulatory-citation099/**'
+      - '.github/workflows/regulatory-fd099.yml'
+permissions:
+  contents: read
+jobs:
+  fd-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Frozen F0–F4 file-descriptor cases
+        run: python -B -m unittest tests.test_regulatory_offline_fd099 -v
+      - name: Historical underlying source and offline controls
+        run: python -B -m unittest tests.test_regulatory_citation097 tests.test_regulatory_portable_audit098 -v
