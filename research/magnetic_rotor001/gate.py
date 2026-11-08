@@ -73,7 +73,7 @@ def _safe_name(name: str) -> str:
     if "\\" in name or name.startswith("/") or ":" in name:
         raise SourceGateError("UNSAFE_ZIP_MEMBER_NAME")
     parts = PurePosixPath(name).parts
-    if not parts or any(part in (".", "..") for part in name.split("/")):
+    if not parts or any(part in (".", "..") for part in name.split("/")) or any(part == "" for part in name.split("/")[:-1]):
         raise SourceGateError("UNSAFE_ZIP_MEMBER_NAME")
     return "/".join(parts)
 
