@@ -57,6 +57,7 @@ TRIAL_REACH_RELEASE_PATHS = (
     'campaign/omega-trial-once-20261107/PROTOCOL.md',
     'campaign/omega-trial-once-20261107/RELEASE_CLOSURE_PROTOCOL.md',
     'campaign/omega-trial-once-20261107/RELEASE_CLOSURE_AMENDMENT_A.md',
+    'campaign/omega-trial-once-20261107/RELEASE_CLOSURE_AMENDMENT_B.md',
     'tests/test_omega_trial_once_20261107.py',
     'tests/test_omega_reach_release_closure_20261108.py',
     'scripts/omega_trial_once_matrix.py',
