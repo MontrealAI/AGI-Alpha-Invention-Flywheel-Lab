@@ -29,4 +29,4 @@ jobs:
       - name: Frozen F0–F4 file-descriptor cases
         run: python -B -m unittest tests.test_regulatory_offline_fd099 -v
       - name: Historical underlying source and offline controls
-        run: python -B -m unittest tests.test_regulatory_citation097 tests.test_regulatory_portable_audit098 -v
+        run: python -B -m unittest tests.test_regulatory_citation097 tests.test_regulatory_visibility097 tests.test_regulatory_token_boundary097 tests.test_regulatory_portable_audit098 -v
