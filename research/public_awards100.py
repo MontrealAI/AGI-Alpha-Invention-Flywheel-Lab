@@ -67,7 +67,7 @@ def _amount(raw: str) -> str:
     if raw.strip() == "":
         return "unknown"
     try:
-        number = Decimal(raw.strip().replace(",", ""))
+        number = Decimal(re.sub(r"[\\s$,]", "", raw.strip()))
         if not number.is_finite() or number < 0:
             raise ValueError("UNUSABLE_OFFICIAL_AMOUNT")
     except InvalidOperation as exc:
