@@ -97,8 +97,10 @@ class VisibleHTML(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         attrs_map = dict(attrs)
+        duplicate_attributes = len(attrs_map) != len(attrs)
         suppressed = (
-            tag in SUPPRESSED_TAGS
+            duplicate_attributes  # ambiguous CSS/ARIA precedence is never assumed visible
+            or tag in SUPPRESSED_TAGS
             or "hidden" in attrs_map  # Boolean attribute, even hidden="false"
             or (attrs_map.get("aria-hidden") or "").strip().casefold() == "true"
             or inline_presentation_hidden(attrs_map.get("style") or "")
