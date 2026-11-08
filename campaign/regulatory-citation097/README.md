@@ -1,15 +1,17 @@
 # Regulatory citation097 — source-bound public passage witness
 
-**Decision: research instrument only; NO BID / NO DEPLOY.** This is the smallest independently falsifiable building block for one candidate in [public buyer-need dossier #258](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues/258) and the [federal governance need #259](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues/259). This prototype checks the presence of three precommitted factual passages in exact downloaded public pages, within registered visible section anchors. It does **not** interpret law, authenticate government origin cryptographically, establish eligibility or TRL, collect a paid contract, implement a complete regulatory research service or outperform strong specialist search.
+**Decision: research instrument only; NO BID / NO DEPLOY.** This is the smallest independently falsifiable building block for one candidate in [public buyer-need dossier #258](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues/258) and the [federal governance need #259](https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab/issues/259). This prototype checks the presence of three precommitted factual passages in exact downloaded public pages, within registered text-section anchors. The repaired parser excludes explicitly hidden HTML ancestors and ambiguous inline display/visibility declarations; it **does not compute browser rendering, external CSS, script-modified DOM or accessibility semantics**. It does **not** interpret law, authenticate government origin cryptographically, establish eligibility or TRL, collect a paid contract, implement a complete regulatory research service or outperform strong specialist search.
 
 ## Fixed inputs and checks
 
-The [preregistered protocol](PROTOCOL.md) freezes two exact public official page URLs, their published date labels, three bounded passages A0–A2, ten adversarial fixture tests C0–C9, one fetch attempt per URL, standard-library-only Python 3.12, host/HTTPS restrictions and one immutable output file. The saved source SHA-256 identifies bytes returned **at observation time**. Neither a source hash nor the issuer's claimed last-modified date establishes historical content integrity, digital signature, copyright license, legal scope or real-world accuracy.
+The original [preregistered protocol](PROTOCOL.md) freezes two exact public official page URLs, their published date labels, three bounded passages A0–A2, ten adversarial fixture tests C0–C9, one fetch attempt per URL, standard-library-only Python 3.12, host/HTTPS restrictions and one immutable output file. The saved source SHA-256 identifies bytes returned **at observation time**. Neither a source hash nor the issuer's claimed last-modified date establishes historical content integrity, digital signature, copyright license, legal scope or real-world accuracy.
+
+The independent [visibility amendment](VISIBILITY_AMENDMENT.md), committed before its parser correction, adds H0–H9 adversarial controls for hidden/ARIA/inline-style ancestry; C0–C13 and the earlier original public-source failure are preserved. The actual A0–A2 passages observed under the new extraction logic are a **reproduction on exposed sources**, not new independent confirmations. A strong conventional browser/specialist remains the complete comparator.
 
 To run deterministic synthetic acceptance checks from this exact repository source:
 
 ```sh
-python3 -B -m unittest tests.test_regulatory_citation097 -v
+python3 -B -m unittest tests.test_regulatory_citation097 tests.test_regulatory_visibility097 -v
 ```
 
 To make the preregistered public observation **once**, from an environment with outbound public HTTPS access:
