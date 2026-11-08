@@ -11,6 +11,7 @@ from mechanism_harness import reach_native
 EXPECTED_NEW = {
     "campaign/omega-trial-once-20261107/PROTOCOL.md",
     "campaign/omega-trial-once-20261107/RELEASE_CLOSURE_PROTOCOL.md",
+    "campaign/omega-trial-once-20261107/RELEASE_CLOSURE_AMENDMENT_A.md",
     "tests/test_omega_trial_once_20261107.py",
     "tests/test_omega_reach_release_closure_20261108.py",
     "scripts/omega_trial_once_matrix.py",
@@ -40,6 +41,13 @@ class ProspectiveReachReleaseClosure(unittest.TestCase):
             for name in runner.TRIAL_REACH_RELEASE_PATHS:
                 (root / name).unlink()
             self.assertTrue(set(runner.REACH_RELEASE_PATHS) <= set(runner.source_paths(root)))
+            # A newer native source cannot lie about being an older complete
+            # distribution simply by omitting every trial-only file.
+            native = root / "mechanism_harness/reach_native.py"
+            native.write_bytes(b"source_identity advertises campaign/omega-trial-once-20261107/PROTOCOL.md\\n")
+            with self.assertRaisesRegex(ValueError, "TRIAL_REACH_SOURCE_DEPENDENCY_MISSING"):
+                runner.source_paths(root)
+            native.write_bytes(b"synthetic historical native without trial\\n")
             for name in runner.TRIAL_REACH_RELEASE_PATHS:
                 path = root / name
                 path.parent.mkdir(parents=True, exist_ok=True)
