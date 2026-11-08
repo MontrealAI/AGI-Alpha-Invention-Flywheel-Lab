@@ -54,7 +54,7 @@ class ProspectiveReachReleaseClosure(unittest.TestCase):
             outside.write_bytes(content)
             target.unlink()
             target.symlink_to(outside)
-            with self.assertRaisesRegex(ValueError, "SOURCE_SYMLINK_REFUSED"):
+            with self.assertRaisesRegex(ValueError, "TRIAL_REACH_SOURCE_DEPENDENCY_MISSING"):
                 runner.identity(root)
 
 
