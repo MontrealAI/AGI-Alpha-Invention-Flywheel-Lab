@@ -39,7 +39,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install public standard pinned binary reader
-        run: python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
+        run: |
+          python -m pip install --only-binary=:all: numpy==2.3.5 scipy==1.17.0
       - name: Check diagnostic source without network
         run: |
           python -m unittest tests.test_magnetic_mat_format003 -v
