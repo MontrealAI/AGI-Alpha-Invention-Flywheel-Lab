@@ -1,0 +1,72 @@
+name: Blue Sky 101 source-bound two-family geometry no-go
+on:
+  pull_request:
+    paths:
+      - 'research/blue_sky064/geometry_boundary101/**'
+      - 'tests/test_geometry_boundary101.py'
+      - '.github/workflows/blue-sky064-geometry-boundary101.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: blue-sky-geometry101-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+jobs:
+  model-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Save platform start
+        shell: bash
+        run: echo "AGI_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Assert literal executing commit and source ownership boundary
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          test -f research/blue_sky064/geometry_boundary101/PROTOCOL.md
+          test -f research/blue_sky064/geometry_boundary101/boundary.py
+          python3 - <<'PY'
+          from pathlib import Path
+          from research.blue_sky064.geometry_boundary101 import boundary as b
+          import hashlib
+          assert hashlib.sha256(b.FIXTURE.read_bytes()).hexdigest() == b.FIXTURE_HASH
+          assert hashlib.sha256(b.REGISTRATION.read_bytes()).hexdigest() == b.REGISTRATION_HASH
+          assert b.FIXTURE_HASH == '7aedc8e4c3e7181e381055d3815378b3f5bfe7b5b9386fd5748803d495ab1ced'
+          assert b.REGISTRATION_HASH == '6eece869fb53ed7d6977a88b01ce0ba78af6a5d6931aea9df99c51b4c6f348fa'
+          PY
+      - name: Run all predeclared pure-standard-library regressions in both modes
+        run: |
+          python3 -B -m unittest discover -s tests -p 'test_geometry_boundary101.py' -v
+          python3 -O -B -m unittest discover -s tests -p 'test_geometry_boundary101.py' -v
+      - name: Produce deterministic source-bound negative result
+        shell: bash
+        run: |
+          python3 -B research/blue_sky064/geometry_boundary101/boundary.py --output "$RUNNER_TEMP/geometry101"
+          python3 - <<'PY'
+          import json,os,subprocess,hashlib,pathlib,time
+          r=pathlib.Path(os.environ['RUNNER_TEMP'])/'geometry101'
+          doc=json.loads((r/'RESULT.json').read_text())
+          assert doc['all_geometry_verdict']=='CONDITIONAL_NO_GO_ALL_FIXED_TWO_FAMILY_GEOMETRIES'
+          assert doc['decision'].endswith('NO_BID_NO_DEPLOY')
+          assert doc['target_3b_qualified'] is False and doc['native_account_actions']==0
+          assert doc['nominal']['B_minus_A_gap']>0 and doc['q_contractions']['1.0']['B_minus_A_min_gap']<0
+          repo_sha=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          obj={'schema':'agi-alpha/geometry101-exact-checkout/v1','git_head':repo_sha,
+               'result_sha256':hashlib.sha256((r/'RESULT.json').read_bytes()).hexdigest(),
+               'source_manifest':doc['source_sha256'],
+               'start_epoch':int(os.environ['AGI_START_EPOCH']),
+               'end_epoch':int(time.time()),
+               'historical_outcomes_modified':False,'physical_claim':False,'commercial_claim':False}
+          (r/'SOURCE_RECEIPT.json').write_text(json.dumps(obj,indent=2,sort_keys=True)+'\n')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: blue-sky064-geometry101-source-bound-no-go
+          path: ${{ runner.temp }}/geometry101/
+          retention-days: 7
