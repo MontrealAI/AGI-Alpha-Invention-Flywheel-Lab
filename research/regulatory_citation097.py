@@ -46,24 +46,82 @@ def sha(data):
     return sha256(data).hexdigest()
 
 
+# Only explicit HTML attributes and inline declarations are inspected. A Python
+# HTMLParser is NOT a browser renderer or external CSS/JavaScript evaluator.
+SUPPRESSED_TAGS = {"script", "style", "noscript", "svg", "template"}
+VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input",
+             "link", "meta", "param", "source", "track", "wbr"}
+KNOWN_VISIBLE_DISPLAY = {
+    "block", "inline", "inline-block", "flex", "inline-flex", "grid",
+    "inline-grid", "table", "table-row", "table-cell", "table-caption",
+    "table-column", "table-column-group", "table-footer-group",
+    "table-header-group", "table-row-group", "list-item", "contents", "flow-root",
+}
+
+
+def inline_presentation_hidden(style):
+    """Conservatively exclude explicit/uncertain inline visibility declarations.
+
+    A CSS cascade, external stylesheet, class or dynamic DOM is not evaluated.
+    Ambiguous inline visibility values are excluded, not assumed visible.
+    """
+    if not style:
+        return False
+    css = style.casefold()
+    if "/*" in css or "*/" in css:
+        return True
+    for declaration in css.split(";"):
+        name, separator, raw_value = declaration.partition(":")
+        prop = name.strip()
+        if prop not in {"display", "visibility", "content-visibility"}:
+            continue
+        if not separator:
+            return True
+        value = raw_value.strip().replace("!important", "").strip()
+        if prop == "display" and value not in KNOWN_VISIBLE_DISPLAY:
+            return True
+        if prop in {"visibility", "content-visibility"} and value != "visible":
+            return True
+    return False
+
+
 class VisibleHTML(HTMLParser):
+    """Extract body text excluding supported explicit hidden ancestor scopes.
+
+    This name is historical: it does NOT establish computed browser visibility.
+    """
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.parts = []
-        self.body = False
-        self.suppression = []
+        self.nodes = []  # (element tag, explicit or inline suppressed), including ancestors
+
     def handle_starttag(self, tag, attrs):
-        if tag == "body":
-            self.body = True
-        if tag in ("script", "style", "noscript", "svg", "template"):
-            self.suppression.append(tag)
+        attrs_map = dict(attrs)
+        suppressed = (
+            tag in SUPPRESSED_TAGS
+            or "hidden" in attrs_map  # Boolean attribute, even hidden="false"
+            or (attrs_map.get("aria-hidden") or "").strip().casefold() == "true"
+            or inline_presentation_hidden(attrs_map.get("style") or "")
+        )
+        if tag not in VOID_TAGS:
+            self.nodes.append((tag, suppressed))
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        if tag not in VOID_TAGS:
+            self.handle_endtag(tag)
+
     def handle_endtag(self, tag):
-        if self.suppression and tag == self.suppression[-1]:
-            self.suppression.pop()
-        if tag == "body":
-            self.body = False
+        # Close through the nearest matching ancestor conservatively. Orphan
+        # closing tags are ignored rather than clearing suppressed ancestors.
+        for index in range(len(self.nodes) - 1, -1, -1):
+            if self.nodes[index][0] == tag:
+                del self.nodes[index:]
+                return
+
     def handle_data(self, data):
-        if self.body and not self.suppression:
+        if (any(tag == "body" for tag, _ in self.nodes)
+                and not any(hidden for _, hidden in self.nodes)):
             self.parts.append(data)
 
 
