@@ -11,7 +11,11 @@ permissions:
 jobs:
   reproduce:
     runs-on: ubuntu-latest
+    timeout-minutes: 360
     steps:
+      - name: Record platform job start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
