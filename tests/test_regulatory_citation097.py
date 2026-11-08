@@ -101,6 +101,34 @@ class ExactPassageWitness(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "DUPLICATE_CLAIM_ID"):
             r.packet({d["id"]: d}, [a, a])
 
+    def test_C10_prior_cross_reference_must_not_invalidate_unique_section(self):
+        d = fixture("Intro mentions SEC-A as a cross reference. SEC-A Signed control assertion. SEC-B")
+        out = r.packet({d["id"]: d}, [claim(d)])
+        self.assertEqual(out["accepted"], 1)
+
+    def test_C11_duplicate_inside_candidate_and_missing_stop_rejected(self):
+        duplicate = fixture("SEC-A Signed control assertion. SEC-A SEC-B")
+        with self.assertRaisesRegex(ValueError, "MISSING_OR_DUPLICATE_ANCHOR"):
+            r.packet({duplicate["id"]: duplicate}, [claim(duplicate)])
+        absent_stop = fixture("SEC-A Signed control assertion.")
+        with self.assertRaisesRegex(ValueError, "MISSING_OR_DUPLICATE_ANCHOR"):
+            r.packet({absent_stop["id"]: absent_stop}, [claim(absent_stop)])
+
+    def test_C12_two_independent_valid_windows_are_ambiguous(self):
+        d = fixture("SEC-A Signed control assertion. SEC-B other text SEC-A Signed control assertion. SEC-B")
+        with self.assertRaisesRegex(ValueError, "MULTIPLE_VALID_WINDOWS"):
+            r.packet({d["id"]: d}, [claim(d)])
+
+    def test_C13_quote_outside_local_window_or_hidden_refused(self):
+        d = fixture("SEC-A different text. SEC-B Signed control assertion.")
+        with self.assertRaisesRegex(ValueError, "QUOTE_NOT_IN_BOUND_SECTION"):
+            r.packet({d["id"]: d}, [claim(d)])
+        blob = (b"<html><body>SEC-A other. <script>Signed control assertion.</script>"
+                b" SEC-B</body></html>")
+        hidden = r.document("tbs-directive-2025", r.ALLOWED["tbs-directive-2025"][0], blob)
+        with self.assertRaisesRegex(ValueError, "QUOTE_NOT_IN_BOUND_SECTION"):
+            r.packet({hidden["id"]: hidden}, [claim(hidden)])
+
 
 if __name__ == "__main__":
     unittest.main()
