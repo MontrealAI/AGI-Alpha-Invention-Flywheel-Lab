@@ -72,6 +72,8 @@ class ExplicitHiddenExclusion(unittest.TestCase):
             '<div style="display:/*untrusted*/block">' + QUOTE + '</div>',
             '<div style="visibility:var(--state)">' + QUOTE + '</div>',
             '<div style="content-visibility:auto">' + QUOTE + '</div>',
+            '<div style="display:none" style="display:block">' + QUOTE + '</div>',
+            '<div aria-hidden="true" aria-hidden="false">' + QUOTE + '</div>',
         ):
             self.refused(markup)
 
