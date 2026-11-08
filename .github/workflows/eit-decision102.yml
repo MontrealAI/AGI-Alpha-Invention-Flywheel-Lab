@@ -1,0 +1,110 @@
+name: EIT102 source-bound physical downstream decision
+on:
+  push:
+    branches: ['research/eit-physical-decision102-20261108']
+  pull_request:
+    paths:
+      - 'research/eit_decision102/**'
+      - 'tests/test_eit_decision102.py'
+      - '.github/workflows/eit-decision102.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: eit102-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  physical-proxy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MPLBACKEND: 'Agg'
+    steps:
+      - name: Record platform start
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+
+      - name: Checkout exact research commit with immutable owner history
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Check exact source and original independent owner boundaries
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          git cat-file -e a5859d378ca6298d1ae22e45dc6c083b060103ff^{commit}
+          git diff --exit-code a5859d378ca6298d1ae22e45dc6c083b060103ff HEAD -- \
+            research/measurement_compiler/ campaign/measurement-compiler-001/ \
+            .github/workflows/measurement-compiler.yml
+          test -f research/eit_decision102/PROTOCOL.md
+          test -f research/eit_decision102/decision.py
+          test -f tests/test_eit_decision102.py
+
+      - name: Install original owner's scientific dependency pins
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install pinned NumPy SciPy and Matplotlib
+        run: |
+          python -m pip install --only-binary=:all: -r campaign/measurement-compiler-001/requirements.txt
+
+      - name: Freeze-check the eight decision cells and fail-closed rules in both modes
+        run: |
+          python -B -m unittest discover -s tests -p 'test_eit_decision102.py' -v
+          python -O -B -m unittest discover -s tests -p 'test_eit_decision102.py' -v
+
+      - name: Retrieve exactly registered KTC physical archives
+        run: python campaign/measurement-compiler-001/fetch_data.py --output "$RUNNER_TEMP/ktc-physical"
+
+      - name: Run one frozen exposed-physical evaluation with all 21 original targets
+        run: |
+          python -B -m research.eit_decision102.decision \
+            --data "$RUNNER_TEMP/ktc-physical" \
+            --output "$RUNNER_TEMP/eit102-result"
+
+      - name: Independently check result denominator, source and noncommerce boundary
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'eit102-result'/'RESULT.json'
+          result=json.loads(p.read_bytes())
+          assert result['source_commit_executing']==os.environ['EXPECTED_HEAD']
+          assert result['original_targets']==21 and result['decisions_total']==168
+          assert len(result['per_target_proxy'])==21
+          assert set(result['statistics'])=={
+            'full76','direct40','impute40','no_measure_absent','no_measure_present'}
+          assert all(s['denominator']==168 for s in result['statistics'].values())
+          assert result['original_owner_48_pattern_reject_preserved']
+          assert result['other_owner_40_pattern_experiment_unchanged']
+          assert result['recorded_physical_target_acquisitions_performed_here']==0
+          assert result['native_account_actions']==0 and result['actual_paid_customers']==0
+          assert result['target_3b_qualified'] is False
+          assert result['no_bid_no_deploy'] is True
+          print('Exact frozen physical proxy is bounded; research verdict:', result['decision'])
+          receipt={'schema':'agi-alpha/eit102-ci-receipt/v1',
+                   'executing_commit':result['source_commit_executing'],
+                   'result_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),
+                   'protocol_sha256':result['source_sha256']['protocol'],
+                   'owner_source_commit':result['source_owner_commit'],
+                   'platform_start_epoch':int(os.environ['AGI_JOB_START_EPOCH']),
+                   'scope':'EXPOSED_PHYSICAL_PROXY_NOT_PROSPECTIVE',
+                   'financial_state_changed':False,'historical_failures_reclassified':False}
+          (p.parent/'SOURCE_RECEIPT.json').write_text(json.dumps(receipt,sort_keys=True,indent=2)+'\n')
+          PY
+
+      - name: Retain source-bound exact result without bulk measurement copies
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: eit102-source-bound-physical-proxy
+          path: ${{ runner.temp }}/eit102-result/
+          retention-days: 7
