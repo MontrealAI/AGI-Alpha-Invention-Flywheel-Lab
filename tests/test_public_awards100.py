@@ -12,8 +12,8 @@ from research import public_awards100 as a
 
 COLUMNS = [
     "title-titre-eng", "title-titre-fra",
-    "tenderDescription-descriptionAppelOffres-eng",
-    "tenderDescription-descriptionAppelOffres-fra",
+    "awardDescription-descriptionAppelOffres-eng",
+    "awardDescription-descriptionAppelOffres-fra",
     "contractAmount", "totalContractValue", "contractCurrency",
     "procurementCategory-categorieApprovisionnement",
 ]
@@ -72,7 +72,7 @@ class RegisteredAwardTests(unittest.TestCase):
 
     def test_m5_missing_currency_description_or_amount_fails(self):
         for prefixes in (("contractAmount", "totalContractValue"),
-                         ("contractCurrency",), ("tenderDescription",)):
+                         ("contractCurrency",), ("awardDescription",)):
             names = [n for n in COLUMNS if not any(n.startswith(p) for p in prefixes)]
             with self.subTest(prefixes=prefixes), self.assertRaises(ValueError):
                 a.aggregate(fixture([[""] * len(names)], names))
@@ -96,6 +96,30 @@ class RegisteredAwardTests(unittest.TestCase):
                 a.run(out)
             self.assertNotIn("supplierLegalName", out.read_text())
             self.assertNotIn("contactInfoEmail", out.read_text())
+
+    def test_m8_award_description_is_required_tender_only_is_not_accepted(self):
+        columns = [n.replace("awardDescription", "tenderDescription") for n in COLUMNS]
+        with self.assertRaisesRegex(ValueError, "ENGLISH_OFFICIAL_TITLE_OR_DESCRIPTION_MISSING"):
+            a.aggregate(fixture([[""] * len(columns)], columns))
+        self.assertEqual(a.aggregate(fixture(self.rows()))["rows_observed"], 5)
+
+    def test_m9_failed_schema_preserves_actual_source_hash_and_byte_count(self):
+        raw = fixture([["title", "", "description", "", "1", "1", "CAD", "*SRV"]],
+                      [x.replace("awardDescription", "tenderDescription") for x in COLUMNS])
+        class Response:
+            status = 200
+            headers = {"Last-Modified": "Sun, 08 Nov 2026 00:00:00 GMT"}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def geturl(self): return a.URL
+            def read(self, length): return raw
+        with patch.object(a, "urlopen", return_value=Response()):
+            observed = a.observe()
+        self.assertEqual(observed["source_sha256"], hashlib.sha256(raw).hexdigest())
+        self.assertEqual(observed["source_bytes"], len(raw))
+        self.assertEqual(observed["parse_error_code"],
+                         "ENGLISH_OFFICIAL_TITLE_OR_DESCRIPTION_MISSING")
+        self.assertNotIn("title", json.dumps(observed))
 
 
 if __name__ == "__main__":
