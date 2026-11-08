@@ -84,7 +84,7 @@ class ExplicitHiddenExclusion(unittest.TestCase):
 
     def test_H8_visible_quote_outside_hidden_anchor_is_still_refused(self):
         d = doc('different <div hidden>' + QUOTE + '</div>')
-        assert QUOTE not in d["text"]
+        self.assertNotIn(QUOTE, d["text"])
         with self.assertRaisesRegex(ValueError, "QUOTE_NOT_IN_BOUND_SECTION"):
             r.packet({d["id"]: d}, [r.make_claim("H", d, "SEC-A", "SEC-B", QUOTE)])
 
