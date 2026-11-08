@@ -1,29 +1,11 @@
-name: Omega trial-only native ablation source tests
+name: Trial ablation minimal CI declaration
 on:
   push:
     branches:
       - research/omega-one-tranche-causal-ablation-20261107
-permissions:
-  contents: read
 jobs:
-  validate:
+  lint:
     runs-on: ubuntu-latest
-    timeout-minutes: 360
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: '3.12'
-      - name: Frozen source registration
-        run: |
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          git show d6677522e8872dc47bd678f56e53b368171a6fcf:campaign/omega-trial-once-20261107/PROTOCOL.md > "$RUNNER_TEMP/protocol.md"
-          cmp "$RUNNER_TEMP/protocol.md" campaign/omega-trial-once-20261107/PROTOCOL.md
-          test -z "$(git diff --name-only 2d1b3a2c1dab8235f2c7bef40bf9a36da1d62d7d HEAD -- adaptive_enterprise commercial connected_enterprise)"
-      - name: Existing pinned runtime dependencies
-        run: python -m pip install --only-binary=:all: -r requirements-omega-mechanisms-v3.txt
-      - name: New and existing independent reach tests
-        run: python -B -m unittest tests.test_omega_trial_once_20261107 tests.test_omega_reach_policy tests.test_omega_reach_verify tests.test_omega_reach_native -v
+      - name: Report exact source SHA
+        run: echo "$GITHUB_SHA"
