@@ -70,52 +70,11 @@ jobs:
             /usr/bin/time -v python -B -m mechanism_harness.reach_native audit "$output_root/$arm"
             /usr/bin/time -v python -B -m mechanism_harness.reach_native resume "$output_root/$arm"
           done
-          export PUBLIC_EVIDENCE="$RUNNER_TEMP/public-ablation-$MATRIX_SCENARIO.json"
-          export PRIVATE_ROOT="$output_root"
-          python -B - <<'PY'
-          import hashlib, json, os
-          from pathlib import Path
-          root=Path(os.environ['PRIVATE_ROOT'])
-          arms=('organic','trial_once','pilot')
-          reports={a:json.loads((root/a/'REPORT.json').read_text()) for a in arms}
-          decisions={a:json.loads((root/a/'PLAN.json').read_text())['decisions'] for a in arms}
-          orders={a:json.loads((root/a/'ORDERS.json').read_text()) for a in arms}
-          for a in arms:
-              assert reports[a]['arm']==a
-              assert reports[a]['scenario']==os.environ['MATRIX_SCENARIO']
-              assert len(decisions[a])==2
-          assert decisions['trial_once'][0]['policy']['action']==decisions['pilot'][0]['policy']['action']
-          assert decisions['trial_once'][1]['policy']['action']=='SKIP'
-          assert decisions['trial_once'][1]['policy']['reason']=='REGISTERED_ONE_TRANCHE'
-          assert all(d['policy']['action']=='SKIP' for d in decisions['organic'])
-          assert [o for o in orders['trial_once'] if o['day']<118]==[o for o in orders['pilot'] if o['day']<118]
-          def select(a):
-              s=reports[a]['native_summary']
-              return {'modeled_aftertax_profit_microUSD':s['profit'],
-                      'collections_microUSD':s['collections'],'revenue_microUSD':s['revenue'],
-                      'expenses_microUSD':s['expenses'],'cash_microUSD':s['cash'],
-                      'available_microUSD':s['available'],'earned_available_microUSD':s['unrestrictedEarned'],
-                      'tail_reserve_microUSD':s['tailReserve'],'payables_microUSD':s['payables'],
-                      'settled_baskets':reports[a]['settled'],'paid_invoices_microUSD':reports[a]['invoice_microUSD'],
-                      'contacts':reports[a]['contacts'],
-                      'first_action':decisions[a][0]['policy']['action'],
-                      'renewal_action':decisions[a][1]['policy']['action']}
-          results={a:select(a) for a in arms}
-          pairs={}
-          for a,c in (('trial_once','organic'),('pilot','trial_once'),('pilot','organic')):
-              pairs[a+'_minus_'+c]={'profit_microUSD':results[a]['modeled_aftertax_profit_microUSD']-results[c]['modeled_aftertax_profit_microUSD'],
-                                   'settled_baskets':results[a]['settled_baskets']-results[c]['settled_baskets'],
-                                   'available_microUSD':results[a]['available_microUSD']-results[c]['available_microUSD']}
-          doc={'schema':'agi-alpha/omega-trial-once-keyfree-matched-ablation/v1',
-               'source_commit':os.environ['GITHUB_SHA'],
-               'scenario':os.environ['MATRIX_SCENARIO'],
-               'seed_scope':'EXPOSED_ENGINEERING_REPRODUCTION_NOT_NEW_DEMAND',
-               'native_accounts_executed':3,'matched':True,'three_arms':results,'paired_differences':pairs,
-               'status':'EXECUTED_AUDITED_RESUMED','real_paid_customers':0,
-               'US3B_target_established':False,'model_host_billing_USD':None}
-          Path(os.environ['PUBLIC_EVIDENCE']).write_text(json.dumps(doc,sort_keys=True,indent=2)+'\n')
-          print(json.dumps({'scenario':doc['scenario'],'paired_differences':pairs,'no_real_commerce':True},sort_keys=True))
-          PY
+          python -B scripts/omega_trial_once_matrix.py \
+            --private-root "$output_root" \
+            --scenario "$MATRIX_SCENARIO" \
+            --source-commit "$GITHUB_SHA" \
+            --public-output "$RUNNER_TEMP/public-ablation-$MATRIX_SCENARIO.json"
       - name: Upload key-free allowlisted comparison only, never private accounts
         if: success()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
