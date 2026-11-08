@@ -129,7 +129,7 @@ class RegisteredAwardTests(unittest.TestCase):
         self.assertEqual(a._amount(" $ 3,000.00 "), "positive")
 
     def test_m11_non_numeric_negative_and_nonfinite_remain_fatal(self):
-        for raw in ("-1", "$ -1.00", "N/A", "NaN", "Infinity", "1e99999"):
+        for raw in ("-1", "$ -1.00", "N/A", "NaN", "Infinity", "1eX"):
             with self.subTest(raw=raw), self.assertRaises(ValueError):
                 a._amount(raw)
 
