@@ -9,6 +9,7 @@ import shutil
 from urllib.parse import unquote, urlsplit
 
 PAPERS = (
+    'learning-to-build-v1.1.0.pdf',
     'learning-to-build.pdf',
     'continuity-omega.pdf',
     'continuity-omega-fr.pdf',
@@ -39,10 +40,11 @@ PAPERS = (
     'out-execute-20261021.pdf',
     'out-evolve-20261020.pdf',
 )
-PAGES = ('learning-to-build.html', 'continuity-omega.html', 'continuity-omega-fr.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'surf-the-exponential.html', 'alpha-genesis-flywheel-omega-v2.html', 'alpha-genesis-flywheel-omega.html', 'successor-omega.html', 'flywheel-omega.html', 'super-alpha.html', 'agi-alpha-flywheel-report-20261102.html', 'out-accelerate.html', 'transformational-intelligence.html', 'agi-alpha.html', 'agi-alpha-flywheel.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
+PAGES = ('learning-to-build-v1.1.0.html', 'learning-to-build.html', 'continuity-omega.html', 'continuity-omega-fr.html', 'continuity-omega-media.html', 'continuity-omega-media-fr.html', 'surf-the-exponential.html', 'alpha-genesis-flywheel-omega-v2.html', 'alpha-genesis-flywheel-omega.html', 'successor-omega.html', 'flywheel-omega.html', 'super-alpha.html', 'agi-alpha-flywheel-report-20261102.html', 'out-accelerate.html', 'transformational-intelligence.html', 'agi-alpha.html', 'agi-alpha-flywheel.html', 'invent-the-economy.html', 'the-world-as-an-output.html', 'beyond-the-production-frontier.html', 'beyond-the-original-problem.html', 'index.html', 'studio.html', 'foundry-v2.html', 'transformational-enterprises.html', 'out-reflect.html',
          'out-series.html', 'out-learn.html', 'out-think.html', 'out-design.html', 'out-strategise.html', 'out-execute.html', 'out-evolve.html')
 ASSETS = ('continuity-omega-card.svg', 'continuity-omega-social.png', 'continuity-omega-fr-card.svg', 'continuity-omega-fr-social.png', 'surf-the-exponential-card.svg', 'surf-the-exponential-social.png', 'successor-omega-card.svg', 'successor-omega-social.png', 'flywheel-omega-card.svg', 'flywheel-omega-social.png', 'super-alpha-card.svg', 'super-alpha-social.png', 'alpha.css', 'alpha.js', 'alpha-mark.svg')
 ASSETS += ('learning-to-build-card.svg', 'learning-to-build-social.png')
+ASSETS += ('learning-to-build-v1.1.0-example.png',)
 CONTINUITY_MEDIA = tuple(
     f'continuity-omega-{scene}-{language}{suffix}'
     for scene in ('ascent', 'reveal', 'journey', 'motion')
@@ -52,6 +54,9 @@ CONTINUITY_MEDIA = tuple(
 ASSETS += CONTINUITY_MEDIA + ('continuity-omega-media-manifest.json',)
 FILES = PAPERS + PAGES + ASSETS + ('publication-manifest.json',)
 PUBLIC_SITE = 'https://montrealai.github.io/AGI-Alpha-Invention-Flywheel-Lab/'
+EXTERNAL_RESEARCH_REFERENCES = frozenset({
+    'https://bbbc.broadinstitute.org/BBBC007',
+})
 
 
 class Links(HTMLParser):
@@ -108,7 +113,7 @@ def validate(source):
         for link in parser.links:
             url = urlsplit(link)
             if url.scheme:
-                if url.scheme != 'https' or url.netloc != 'github.com':
+                if link not in EXTERNAL_RESEARCH_REFERENCES and (url.scheme != 'https' or url.netloc != 'github.com'):
                     raise ValueError(f'Unexpected external link: {link}')
                 continue
             if url.netloc or url.query:

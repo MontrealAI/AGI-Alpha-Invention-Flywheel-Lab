@@ -51,11 +51,27 @@ def write_json(path, value):
     pending.replace(path)
 
 
+def source_boundary():
+    """Protect the owning checkout, or just the extracted source edition.
+
+    An extracted distribution can live inside an unrelated enclosing Git
+    repository (for example a managed /workspace). Only the canonical repository
+    layout identifies this edition's own checkout; an ambient .git marker does
+    not make every sibling working directory part of the publication source.
+    Git worktrees use a .git file and receive the same protection as clones.
+    """
+    relative = Path("docs/learning-to-build-v1.1.0/construction")
+    for parent in ROOT.parents:
+        if (parent / ".git").exists() and ROOT == parent / relative:
+            return parent
+    return ROOT.parent
+
+
 def outside_edition(path):
     require(path.is_absolute(), "Paths must be absolute")
     path = path.resolve()
-    boundary = next((p for p in ROOT.parents if (p / ".git").exists()), ROOT.parent)
-    require(not path.is_relative_to(boundary), "Keep setup outside the repository/source edition")
+    require(not path.is_relative_to(source_boundary()),
+            "Keep setup outside the repository/source edition")
     return path
 
 

@@ -1,0 +1,384 @@
+{
+  "acceptance": {
+    "criteria": {
+      "mean_boundary_f1_on_reference_boundary_bearing_fields_min": 0.6,
+      "mean_foreground_dice_min": 0.8,
+      "mean_internal_boundary_f1_within_2_pixels_min": 0.6,
+      "mean_relative_count_error_max": 0.25,
+      "minimum_boundary_bearing_calibration_fields": 1,
+      "minimum_boundary_bearing_test_fields": 2
+    },
+    "protocol": "PROTOCOL-amendment-2.json",
+    "scope": "All calibration criteria first; test criteria including minimum two boundary-bearing fields only if calibration passes. Complete numerical acceptance requires both. No criteria or field exclusions may change."
+  },
+  "archive_files": {
+    "bbbc007_images.zip": {
+      "bytes": 6435776,
+      "sha256": "b7009e2fce0a3152a5c9adda916eaa699d09696f4bd02a7d05d12d041e30c6d1"
+    },
+    "bbbc007_outlines.zip": {
+      "bytes": 652531,
+      "sha256": "6a5246f9a9d743d22eafdb409fae638a8461af97e9ff9c4a92f25eba236224d3"
+    }
+  },
+  "authorship": "Assistant-authored ordinary composition selected in response to exposed diagnostic results. The six registered constructor policies did not discover or generate it.",
+  "cached_evaluation_runtime": {
+    "Pillow": "13.0.0",
+    "numpy": "2.3.5",
+    "python": "3.12.14",
+    "scikit-image": "0.25.2",
+    "scipy": "1.17.0"
+  },
+  "calibration_fields": [
+    "A9/A9 p10",
+    "A9/A9 p5",
+    "A9/A9 p7",
+    "A9/A9 p9"
+  ],
+  "candidate_count": 1,
+  "candidate_id": "cpdino-final-foreground-plus-r12",
+  "claims_excluded": [
+    "Fresh independent confirmation",
+    "Six-policy construction-learning advantage",
+    "Novel algorithm discovery",
+    "External laboratory acceptance",
+    "Commercial license clearance",
+    "Complete economic saving"
+  ],
+  "comparators": "Retain the previously executed classical r12 and fixed specialist outcomes. Rescore each used cached specialist mask with the independent checker before composition and verify its recorded field metrics/source binding. No new claim of equal-content learning advantage.",
+  "conditionally_eligible_exposed_test_fields": [
+    "f113/AS_09125_040701150004_A02f00",
+    "f96 (17)/17P1_POS0006",
+    "f96 (17)/17P1_POS0007",
+    "f96 (17)/17P1_POS0011",
+    "f96 (17)/17P1_POS0013",
+    "f96 (17)/17P1_POS0014",
+    "f9620/20P1_POS0002",
+    "f9620/20P1_POS0005",
+    "f9620/20P1_POS0007",
+    "f9620/20P1_POS0008",
+    "f9620/20P1_POS0010",
+    "f9620/20P1_POS0011"
+  ],
+  "cost_scope": {
+    "complete_cost_savings_established": false,
+    "historical_constituent": "Report original measured specialist field segmentation CPU, field CPU and field wall from bound receipts. These costs are part of candidate lineage and a complete production comparison; they were already charged in the original run, so do not add them again to incremental edition totals.",
+    "incremental": "Current cached-constituent process CPU/wall, hashes/imports, four-field decoding, reused-mask verification/rescore, actual composition, independent scoring and output writes. If the calibration gate passes, include twelve test fields; if complete qualification passes, charge the separate real neural operation including waited child process.",
+    "new_purchases": false,
+    "paid_model_apis": false,
+    "unknown": [
+      "Complete allocation of model setup/acquisition/pretraining",
+      "Assistant engineering and human work",
+      "Account billing and economic opportunity cost"
+    ]
+  },
+  "end_to_end_operation_field": "A9/A9 p10",
+  "exposure": "All four calibration and twelve test fields were already exposed in the original experiment. No fresh confirmation or prospective generalization claim. Candidate definition is frozen before computing any new composition scores.",
+  "failure_handling": "Fresh output directory per attempt. Retain errors and process costs; do not overwrite any attempt. A source correction needs its own explicit amended registration; failed scientific calibration is a completed negative result, not an execution error to retry until success.",
+  "model": {
+    "bytes": 343599997,
+    "name": "cpdino-vitb",
+    "repository": "mouseland/cellpose-sam",
+    "revision": "7c61431b5fbb078f3296754bd15d9f51b320f837",
+    "sha256": "3ed4c06a3963ab13ff377d4e2957174aaaf637434eb031ae9931fcbfaf9a217f"
+  },
+  "model_configuration": {
+    "allowed_missing_nonlearned_state": {
+      "diam_labels": 30.0,
+      "diam_mean": 30.0
+    },
+    "border_policy": {
+      "cells": "Exclude complete predicted objects touching the image frame, then relabel, as in the primary BBBC007 protocol.",
+      "nuclei": "Keep border objects, as in the primary BBBC039 protocol."
+    },
+    "calibration_parameter_selection": false,
+    "device": "cpu",
+    "evaluation": {
+      "anisotropy": null,
+      "augment": false,
+      "batch_size": 1,
+      "bsize": 384,
+      "cellprob_threshold": 0.0,
+      "channel_axis": -1,
+      "channels": null,
+      "compute_masks": true,
+      "diameter": null,
+      "do_3D": false,
+      "flow3D_smooth": 0,
+      "flow_threshold": 0.4,
+      "max_size_fraction": 0.4,
+      "min_size": 15,
+      "niter": null,
+      "normalize": true,
+      "resample": true,
+      "rescale": null,
+      "stitch_threshold": 0.0,
+      "tile_overlap": 0.1,
+      "z_axis": null
+    },
+    "fine_tuning": false,
+    "input_channels": {
+      "cells": [
+        "actin",
+        "DNA",
+        "zero"
+      ],
+      "nuclei": [
+        "DNA",
+        "zero",
+        "zero"
+      ]
+    },
+    "reference_inputs_to_predictor": false,
+    "torch_interop_threads": 1,
+    "torch_seed": 0,
+    "torch_threads": 1,
+    "use_bfloat16": false
+  },
+  "motivation": "The fixed-r12 four-field component diagnostic improved boundary F1 from 0.25039834937865246 to 0.6158282807957147 with reference foreground, while reference seeds alone worsened it to 0.19535339607018862. Test whether the already available raw-input specialist can supply useful foreground without reference assistance.",
+  "numerical_tolerance": {
+    "absolute": 1e-12,
+    "relative": 1e-10
+  },
+  "prediction_definition": {
+    "actual_call_paths": [
+      "Cached evaluation: data.load007(exact cohort) -> retained hash-bound final specialist labels -> composition.compose(raw DNA, raw actin, labels) -> instrument.segment_cells -> builder.score_masks + check.score.",
+      "Raw operation CLI: composition.py -> subprocess incumbent.py operate --task cells -> real fixed model inference and final border exclusion -> composition.compose(raw channels, newly produced final labels) -> output masks and pixel measurements."
+    ],
+    "composition": "instrument.segment_cells(dna, actin, instrument.RECIPE_MAP[r12], nucleus_labels=None, foreground_override=specialist_labels > 0)",
+    "constituent": "Exact registered cpdino-vitb cells prediction, unchanged actin/DNA/zero channel order, weights, source, CPU settings and numerical hyperparameters.",
+    "foreground": "Union of final post-border-exclusion specialist masks: specialist_labels > 0. Do not substitute pre-border labels, fill holes, dilate, tune or choose among foreground variants.",
+    "nuclei": "Unchanged r12 segmentation of measured DNA; no specialist nuclei substitution or reference nuclei.",
+    "reference_inputs_to_predictor": false,
+    "watershed": "Unchanged r12 distance-surface watershed and shared complete-in-frame exclusion."
+  },
+  "raw_operation_runtime": "Exact incumbent registration/runtime enforced by unchanged incumbent.py contract; requires existing pinned neural environment, no new model or purchase.",
+  "registered_at_utc": "2026-11-08T00:15:43+00:00",
+  "registration_reads": "Source/protocol files, existing specialist manifests and byte hashes are read to bind all conditional inputs. No candidate predictions or image-pixel decoding occurs during registration. Existing constituent test mask files are hashed, not decoded or rescored.",
+  "retained_files_by_cohort": {
+    "calibration": {
+      "successor/calibration/MASKS.json": {
+        "bytes": 18240,
+        "sha256": "2e6179f6698e6d40167392623c2f522148307959b65f39c2353f45bfc73dacf1"
+      },
+      "successor/calibration/fields/A9_A9_p10_c6bdc0cb.json": {
+        "bytes": 44710,
+        "sha256": "601cd339ab2410b48e48862d0220615bc1627ca0b8d17a26e6987e4d9a82d27f"
+      },
+      "successor/calibration/fields/A9_A9_p5_ccb6636d.json": {
+        "bytes": 40851,
+        "sha256": "e507575236c8087cffd87a72d697b9380d34dfb6e9a46865ab560acba3ae6780"
+      },
+      "successor/calibration/fields/A9_A9_p7_5d7916d1.json": {
+        "bytes": 57716,
+        "sha256": "5258a83092b5bb5d984c8b44d904c92c022f5299a896d27fa2bd1e5f3a8b07eb"
+      },
+      "successor/calibration/fields/A9_A9_p9_04d7fc7d.json": {
+        "bytes": 63499,
+        "sha256": "f3c664e629183f09b2ecbe51f0cb5a639e83aaebb93dae2e06fb73fabf99c6ee"
+      },
+      "successor/calibration/masks/A9_A9_p10_c6bdc0cb.png": {
+        "bytes": 11798,
+        "sha256": "1883ddc8ac3f2014ff9e264609b600f01b00fac677419453ac0c5e91d40b66ea"
+      },
+      "successor/calibration/masks/A9_A9_p5_ccb6636d.png": {
+        "bytes": 10551,
+        "sha256": "7acbe46969b44a71f21c8b12cace00ac40abeac777e4ba7e259de81525fc32c5"
+      },
+      "successor/calibration/masks/A9_A9_p7_5d7916d1.png": {
+        "bytes": 14854,
+        "sha256": "465bef109b7ce549435743095fa7b18933635bbb2f94f7661a179a261361e679"
+      },
+      "successor/calibration/masks/A9_A9_p9_04d7fc7d.png": {
+        "bytes": 15842,
+        "sha256": "08bc92ea1f7538c0b7310e407f9dac4f3c00ba7430325efd271d88dfd04e5e17"
+      }
+    },
+    "test": {
+      "successor/test/MASKS.json": {
+        "bytes": 56414,
+        "sha256": "96bdaca953b2dd5509fcbc04707bb6dab4b629dd521830ab0b62b3d1393579a2"
+      },
+      "successor/test/fields/f113_AS_09125_040701150004_A02f00_4ed4e189.json": {
+        "bytes": 38753,
+        "sha256": "371fd8a82d4ad724ed99a8124f533e1e8d7a7c804c7fbf9296968cae63a971e5"
+      },
+      "successor/test/fields/f9620_20P1_POS0002_84690c16.json": {
+        "bytes": 44791,
+        "sha256": "339c328383f239f6f886dffa55c5dedd96b2feff4a356639b4d699e83e11b392"
+      },
+      "successor/test/fields/f9620_20P1_POS0005_f779fe4f.json": {
+        "bytes": 24276,
+        "sha256": "4f7d6c055b92b54fd1c31e5a5654f88852edf54810e657596f0c73b1e3d1c717"
+      },
+      "successor/test/fields/f9620_20P1_POS0007_7b092cf9.json": {
+        "bytes": 37073,
+        "sha256": "fa0e776edf489d6218877ffb82b4ccee6b6128851556b21d1790abcc3ad11268"
+      },
+      "successor/test/fields/f9620_20P1_POS0008_9b58bc90.json": {
+        "bytes": 28074,
+        "sha256": "148db4456531111f2f32f8927ceb2f608557b582ee52cb0fba4109081cda8539"
+      },
+      "successor/test/fields/f9620_20P1_POS0010_c78edc80.json": {
+        "bytes": 29790,
+        "sha256": "c0e4aa4606d26585c062fbad25f6436cd1e4d6425515ee6d1d53f9f5bc3778a3"
+      },
+      "successor/test/fields/f9620_20P1_POS0011_6e15c239.json": {
+        "bytes": 35023,
+        "sha256": "719a23e934b93010ab69128ce8da3514d06d2c15cafe230beec64c776bd3a68a"
+      },
+      "successor/test/fields/f96_17_17P1_POS0006_1f4e0307.json": {
+        "bytes": 16631,
+        "sha256": "023d97bb0e066321c6a969a7cfd5644c4518f9238bbd97416a0b34f525492431"
+      },
+      "successor/test/fields/f96_17_17P1_POS0007_1fdfd875.json": {
+        "bytes": 39058,
+        "sha256": "9e70b60bc7c543a2f18f9ceeffebf54cce65e14dbe8019976a0b431eb73e08f2"
+      },
+      "successor/test/fields/f96_17_17P1_POS0011_7beeacb4.json": {
+        "bytes": 51107,
+        "sha256": "995e9d9d9bd707dd50d5c6f7b45a9576ad24602efcbbbe2a8ae31a2233866b2d"
+      },
+      "successor/test/fields/f96_17_17P1_POS0013_ce576a61.json": {
+        "bytes": 26027,
+        "sha256": "8935dc1d7e591deb95d59c4bc38d1573b3d074a34e2f32bae4b6c20e0614a23f"
+      },
+      "successor/test/fields/f96_17_17P1_POS0014_fe29bc40.json": {
+        "bytes": 34307,
+        "sha256": "ff2b400601ba0ad7fe626888fe48009d7de51c7fb5f99ad4bea7286b28910fce"
+      },
+      "successor/test/masks/f113_AS_09125_040701150004_A02f00_4ed4e189.png": {
+        "bytes": 7661,
+        "sha256": "12d20c1121b4a77eb14824ba411171447201202f69572907ca7b9c63bc35e0ae"
+      },
+      "successor/test/masks/f9620_20P1_POS0002_84690c16.png": {
+        "bytes": 10418,
+        "sha256": "2ec5dd00e110dcc640f3875df1da683c5ad5f559a237a17018d14d3612732eeb"
+      },
+      "successor/test/masks/f9620_20P1_POS0005_f779fe4f.png": {
+        "bytes": 5825,
+        "sha256": "c5a4f1b3ca8649f7ae045f51c8657e9f6f5c1d8daf28481be591edc98c202efe"
+      },
+      "successor/test/masks/f9620_20P1_POS0007_7b092cf9.png": {
+        "bytes": 10244,
+        "sha256": "26b31130cb3003472438ab5ef16eebfc55dbdce95ab91a0f1bb945a8a3658ae5"
+      },
+      "successor/test/masks/f9620_20P1_POS0008_9b58bc90.png": {
+        "bytes": 7456,
+        "sha256": "e813c0d871551e5edfa42ea329cc6180ae459597972127a945b694e7a6b9a564"
+      },
+      "successor/test/masks/f9620_20P1_POS0010_c78edc80.png": {
+        "bytes": 7831,
+        "sha256": "f43ba74d03ab5bb1d7bc1de843e84216957e31370914be19a0b9dfb327ae34e4"
+      },
+      "successor/test/masks/f9620_20P1_POS0011_6e15c239.png": {
+        "bytes": 8644,
+        "sha256": "33bb3a56606157b0b76d1695f122183de5186a01d4bc432a608df27b2c0215c6"
+      },
+      "successor/test/masks/f96_17_17P1_POS0006_1f4e0307.png": {
+        "bytes": 4408,
+        "sha256": "961ab944aa913d88bf9eac69cada7ac75f0764a82ace02e5853b8866044e9513"
+      },
+      "successor/test/masks/f96_17_17P1_POS0007_1fdfd875.png": {
+        "bytes": 10363,
+        "sha256": "e23d1f72c950bdff6e9bcac869f93e28f67203f8163ea1801382ff29f161e920"
+      },
+      "successor/test/masks/f96_17_17P1_POS0011_7beeacb4.png": {
+        "bytes": 12237,
+        "sha256": "01cc5954efc490e5191d1dece4f2c589f55639ae2a72523b1b3478b0da5896ef"
+      },
+      "successor/test/masks/f96_17_17P1_POS0013_ce576a61.png": {
+        "bytes": 6386,
+        "sha256": "9e2e4532ed06c36fbb2d5eb92984c10fa396bbf04d324c95f677831564f5a28e"
+      },
+      "successor/test/masks/f96_17_17P1_POS0014_fe29bc40.png": {
+        "bytes": 8350,
+        "sha256": "25fdd51e742bc76c6d0bc884f255991ec4a1fde247efc6bf89f0cb181ab37fba"
+      }
+    }
+  },
+  "schema": "learning-to-build/ordinary-composition-repair-registration/v1",
+  "scientific_endpoints": [
+    "Per-field predicted mask, canonical label hash, source/prediction binding and frozen metric vector",
+    "Separate scorer agreement",
+    "Cohort metrics and acceptance gates",
+    "Test fields scored or explicit gate-stop reason",
+    "Historical constituent inference cost attribution",
+    "Current incremental CPU/wall",
+    "Real raw-field operation receipt only if complete numerical acceptance"
+  ],
+  "source_files": {
+    "INCUMBENT_PROTOCOL-amendment-2.json": {
+      "bytes": 12692,
+      "sha256": "957931af9c647d23f3bb2b20940bc121894c10e0dbc8cce6ddd0575cf780d8be"
+    },
+    "INCUMBENT_REGISTRATION-amendment-2.json": {
+      "bytes": 1872,
+      "sha256": "a0ff81e25aa9782921a04f58b6062ec7be86a4538156ad6f3dee77945a17764f"
+    },
+    "PROTOCOL-amendment-2.json": {
+      "bytes": 20381,
+      "sha256": "20d28a2fffbb3189ef14492a46853e5711e03d5f94c64b9f0aeb0e934a3367ae"
+    },
+    "REGISTRATION-amendment-2.json": {
+      "bytes": 1855,
+      "sha256": "aae0fdb9c485c6abba2139c15ca08db7d8ce0962af1336fa20dd5be0edfe5b05"
+    },
+    "builder.py": {
+      "bytes": 21049,
+      "sha256": "9665f8f9e3013e54b9d065765c0fd5478940bd8d8bfcfa5eb8a7b0135b309dee"
+    },
+    "check.py": {
+      "bytes": 76059,
+      "sha256": "612c35cb00c22fd88ef1db1b6cda5ed49596f21dd171335f4c1be36e89afd7d4"
+    },
+    "data.py": {
+      "bytes": 20700,
+      "sha256": "e2ba268405723a1ba997af11b25fbb67b610b04394ee7910d4ebb1e812d1bea3"
+    },
+    "diagnostics/PREREGISTRATION.json": {
+      "bytes": 13705,
+      "sha256": "649a924df296f419a02a64d5e49d2aecce63ac94bef1a9484f372d6ac38e72f4"
+    },
+    "diagnostics/RESULTS.json": {
+      "bytes": 169524,
+      "sha256": "555d9e01a3e7655835139497b1c0b2c05f5cdb0fc86463aef5846c525687ca8b"
+    },
+    "diagnostics/run.py": {
+      "bytes": 24994,
+      "sha256": "b440e0e3eb0e47c51d30e319aeaf8fb90235726886c33c03c76f5f22107bfd52"
+    },
+    "incumbent.py": {
+      "bytes": 31448,
+      "sha256": "58dd9055aa89aa91df41336f07c639ab9ec5019c48f2d42dea4ed08ee35cce6d"
+    },
+    "instrument.py": {
+      "bytes": 16073,
+      "sha256": "36248b79130e5b1835da55302efe63432c013b8aaac5ce5b8253a6b243f7c265"
+    },
+    "repair/composition.py": {
+      "bytes": 6615,
+      "sha256": "b386b1d88be9e20b8ad85419f9b280eb9e229bfec64eb8efd84600f2e1bbfbb9"
+    },
+    "repair/evaluate.py": {
+      "bytes": 12227,
+      "sha256": "b2eb55f445dfd714272aa5a9eb30c00d73c29ae27759838bef0a64029b53dcf4"
+    },
+    "requirements-incumbent.txt": {
+      "bytes": 961,
+      "sha256": "37415d588ab2d17e94960563ac3a76d1d2175597d088249054b1cbb789015226"
+    },
+    "requirements.txt": {
+      "bytes": 142,
+      "sha256": "513e6f534053e4aa9c46e5e5de6fe3b02dd2842d7c866dbdd9199bca78ef01f0"
+    }
+  },
+  "status": "FROZEN_BEFORE_CANDIDATE_SCORING",
+  "stopping_rules": [
+    "Evaluate exactly one fixed candidate on all four calibration fields using the actual retained specialist masks as a cached constituent, with its original nonzero inference cost separately attributed.",
+    "If any aggregate calibration criterion fails, stop: do not score test fields, alter parameters, switch foreground definitions or try another candidate in this registration.",
+    "If every calibration criterion passes, score the same fixed candidate on all twelve already exposed test fields; preserve failures and label the confirmation exposed.",
+    "If both cohorts pass, perform a real new end-to-end raw-field operation on the first calibration field, compare its constituent and composite output bytes with the retained candidate, and retain the operation costs. Do not claim executable success solely from cached-constituent demonstration.",
+    "A replay may reproduce this fixed candidate and its gate; it is not a new search trial."
+  ]
+}

@@ -1,8 +1,9 @@
 # Restore and operate the fixed pretrained alternative
 
 This is the separately registered **CellposeDINO practical alternative**, using
-the existing `cpdino-vitb` learned weights. It is outside the six equal-content
-recipe arms. Successful operation does not demonstrate that the local
+the existing `cpdino-vitb` learned weights. It is outside the six classical
+recipe arms; their primary comparison uses the same donor records. Successful
+operation does not demonstrate that the local
 construction procedure learned a superior method.
 
 ## Install the exact registered CPU environment
@@ -56,6 +57,20 @@ and Pillow packages. Its actual `pyvenv.cfg` and pip report are retained. That
 environment was not isolated from system packages. These checks establish the
 stated versions and Python-source subset, not identity of every transitive
 dependency, binary build or host toolchain.
+
+A separate installer validation also created a new environment with
+`include-system-site-packages = false` and passed the same exact-version,
+source/model and no-inference contract checks. That validates the installer's
+default isolated route. The 116-field reproduction retains its own original
+environment identity; the separate setup check does not relabel that run.
+
+Keep the environment, model cache and setup receipts outside the source edition.
+When run from this repository's canonical `docs/learning-to-build-v1.1.0`
+checkout, the installer protects the entire repository. For an extracted source
+package, it protects the extracted edition even if that directory happens to
+sit inside an unrelated enclosing Git workspace. Resolved symlinks into the
+protected source are rejected. `test_setup.py` checks these boundaries without
+installing packages or performing inference.
 
 To recheck a completed environment, use `--skip-install` with a **new** setup
 output directory. Verified cached downloads are reused. A failed attempt keeps

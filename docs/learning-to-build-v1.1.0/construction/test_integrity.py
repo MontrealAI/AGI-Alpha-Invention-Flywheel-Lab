@@ -28,6 +28,18 @@ def write_csv(path, rows, fields=None):
 
 
 class ParsingAndCoverage(unittest.TestCase):
+    def test_pinned_incumbent_preparation_loading_contract(self):
+        protocol = check.load_json(check.BASE / "INCUMBENT_PROTOCOL-amendment-2.json")
+        registration = check.load_json(check.BASE / "INCUMBENT_REGISTRATION-amendment-2.json")
+        loading = check.prepared_incumbent_loading(protocol, registration)
+        self.assertEqual(loading["backbone"], "dino_vitb")
+        self.assertEqual(loading["device"], protocol["configuration"]["device"])
+        self.assertEqual(loading["missing_nonlearned_scalars"],
+                         protocol["configuration"]["allowed_missing_nonlearned_state"])
+        self.assertIs(loading["all_learned_tensors_loaded"], True)
+        self.assertEqual(loading["parameters"], 85_854_146)
+        self.assertEqual(loading["unexpected_keys"], [])
+
     def test_duplicate_json_keys_rejected(self):
         with self.assertRaises(check.VerificationError):
             check.json_text('{"accepted":false,"accepted":true}')

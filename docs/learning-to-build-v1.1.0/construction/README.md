@@ -4,6 +4,8 @@ This companion turns public microscopy images into inspectable instance masks,
 counts and measurements in pixels. It also tests whether one supplied way of
 using construction experience beats an ordinary method given the same records.
 The [results](RESULTS.md) report those as separate questions.
+The [claim verdicts](CLAIMS.json) provide a compact machine-readable map bound
+to the complete measured report.
 
 Start with the [practical brief](CONSTRUCTION_BRIEF.md) for the purpose and
 acceptance contract, or the [opportunity comparison](OPPORTUNITY.md) for the
@@ -18,7 +20,7 @@ reproduction. New images require their own suitability and acceptance evidence.
 | Inspect the released evidence | Archive identity check and extraction | The complete retained file inventory matches its manifest. |
 | Verify the scientific report | Independent reference decoding, scoring and full classical replay | The reported predictions, denominators, recipe selections and acceptance decisions follow from the specified inputs. Neural inference is not rerun by this checker. |
 | Reproduce the classical comparison | 2,400 donor recipe-field evaluations, six calibration searches and saved predictions | A new execution of the already exposed frozen comparison. |
-| Reproduce the pretrained alternative | The fixed CellposeDINO model on all 116 registered fields | A separate execution of an established learned model; it is outside the six equal-content arms. |
+| Reproduce the pretrained alternative | The fixed CellposeDINO model on all 116 registered fields | A separate execution of an established learned model; it is outside the six classical arms and their equal-content primary comparison. |
 | Use an instrument on your images | Raw-channel segmentation and pixel measurements | Actual operation and inspectable outputs; accuracy on a new assay is not inferred. |
 
 ## 1. Prepare the classical environment
@@ -52,8 +54,11 @@ the command explicitly supports resuming an identified run.
 ```
 
 The five public archives total **87,775,682 bytes**. Their SHA-256 identities,
-source URLs and cohort rules are fixed in the effective protocol. Acquisition
-reuses matching bytes and rejects mismatches. The evidence archive contains
+source URLs and cohort rules are fixed in the effective protocol. `data.py fetch`
+downloads or reuses ZIP files, checks ZIP structure and records their actual
+hashes. The subsequent runner, independent checker and specialist setup contract
+compare them with the frozen expected hashes and reject mismatches; a successful
+fetch alone does not establish that identity. The evidence archive contains
 generated masks, measurements, choices, source identities, failure records and
 execution receipts. It does not redistribute those public input archives or
 third-party learned weights.
@@ -99,6 +104,46 @@ after completion. The original observed files and their mapping are preserved,
 their matching bytes are checked, and their cause is not asserted. No scores or
 measured costs are edited to make the checkpoint pass. The raw-tree inventory
 rejection is retained alongside the projected-tree verification.
+
+The portable projection utility verifies every canonical and residual byte,
+checks the complete 416-path partition, and can reconstruct the original raw
+tree into a new directory:
+
+```sh
+"$LTB_WORK/classical-venv/bin/python" -B projection.py \
+  --evidence "$LTB_WORK/retained" \
+  --reconstruct "$LTB_WORK/original-raw"
+```
+
+The reconstructed raw tree is expected to fail the strict scientific inventory
+because it includes all 138 residuals. Reconstruction does not make that tree
+valid. Use `retained/classical` for the explicitly qualified canonical replay.
+The original ledger's absence of recorded interruptions does not establish the
+absence of unrecorded work; residual-origin execution and cost remain unknown.
+
+### Reproduce the separately frozen follow-up work
+
+The [order and component diagnostics](diagnostics/README.md) use the four already
+exposed calibration fields. They distinguish shared-bank exhaustion from shared
+search order, and compare the foreground and seed branches with explicitly
+privileged reference inputs. The [single repair](repair/README.md) composes
+actual retained specialist masks with classical seeds. It failed calibration
+and stopped before the test cohort. Their registrations, masks, results and
+separate replay checks are retained; none creates fresh confirmation data.
+
+```sh
+"$LTB_WORK/classical-venv/bin/python" -B diagnostics/run.py \
+  --cache "$LTB_WORK/data" --classical "$LTB_WORK/retained/classical" \
+  --output "$LTB_WORK/diagnostics" --verify --expected diagnostics/RESULTS.json
+"$LTB_WORK/classical-venv/bin/python" -B repair/evaluate.py \
+  --cache "$LTB_WORK/data" --incumbent "$LTB_WORK/retained/incumbent" \
+  --output "$LTB_WORK/repair" --verify --expected repair/RESULTS.json
+```
+
+Both commands should exit zero when they reproduce the recorded outcomes,
+including the repair's negative scientific verdict. A replay pass must not be
+reported as a passing repair. See the [evidence index](../EVIDENCE_INDEX.md) and
+[cost ledger](../COST_LEDGER.md) for exact boundaries and qualifications.
 
 ## 4. Run the classical comparison yourself
 

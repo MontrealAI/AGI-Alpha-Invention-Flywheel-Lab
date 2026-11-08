@@ -1,0 +1,1959 @@
+{
+  "assembled_at_utc": "2026-11-08T00:26:54.412601+00:00",
+  "cached_specialist_constituent_attribution": {
+    "accounting_relation": "Already included in specialist-116 and its inner session. Attribution only: never add these costs again to the reproduction total.",
+    "amounts": {
+      "actual_field_cpu_seconds": 122.63709349899909,
+      "actual_field_wall_seconds": 122.65006389700102,
+      "scoring_cpu_seconds": 0.31410444900211587,
+      "segmentation_cpu_seconds": 122.03669503299989
+    },
+    "fields": 4,
+    "json_pointer": "/historical_constituent_cost_totals",
+    "not_full_standalone_cost": "These field intervals do not allocate all model loading, environment setup, data acquisition, upstream training or human work.",
+    "source": "review:MECHANISM_AND_REPAIR_REVIEW.json",
+    "use": "The failed repair reused the actual retained specialist masks; it executed four new classical compositions, not four new neural inferences. Cached masks do not have zero lineage cost."
+  },
+  "classical_recorded_stage_sum": {
+    "cpu_seconds": {
+      "json_pointer": "/all_measured_attempt_cpu_seconds",
+      "source": "original:classical/RESULTS.json",
+      "value": 696.9352592319999
+    },
+    "flag_limit": "The flag describes recorded attempts only; it cannot rule out unrecorded work or establish residual provenance.",
+    "recorded_interruption_flag": false,
+    "relation": "sum of the three stages above; not additional work",
+    "wall_seconds": {
+      "json_pointer": "/all_measured_attempt_wall_seconds",
+      "source": "original:classical/RESULTS.json",
+      "value": 696.703083758
+    }
+  },
+  "edition": "1.1.0",
+  "events": [
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/invocations/0/actual_cpu_seconds",
+        "source": "original:classical/RUN_STATE.json",
+        "value": 545.537421478
+      },
+      "id": "classical-invocation-1",
+      "label": "Classical run invocation 1",
+      "outcome": "PARTIAL",
+      "scope": "Recorded producer invocation interval. Stage work below is nested. Includes source/import/setup overhead measured by the producer, not all historical or authoring work.",
+      "sources": [
+        "original:classical/RUN_STATE.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/invocations/0/actual_wall_seconds",
+        "source": "original:classical/RUN_STATE.json",
+        "value": 544.0437417930002
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/invocations/1/actual_cpu_seconds",
+        "source": "original:classical/RUN_STATE.json",
+        "value": 156.129275755
+      },
+      "id": "classical-invocation-2",
+      "label": "Classical run invocation 2",
+      "outcome": "COMPLETE",
+      "scope": "Recorded producer invocation interval. Stage work below is nested. Includes source/import/setup overhead measured by the producer, not all historical or authoring work.",
+      "sources": [
+        "original:classical/RUN_STATE.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/invocations/1/actual_wall_seconds",
+        "source": "original:classical/RUN_STATE.json",
+        "value": 154.1241089060004
+      }
+    },
+    {
+      "accounting_relation": "nested_attribution",
+      "contained_by": "classical-invocation-1",
+      "cpu_seconds": {
+        "json_pointer": "/attempts/0/actual_cpu_seconds",
+        "source": "original:classical/RUN_STATE.json",
+        "value": 542.976102959
+      },
+      "id": "classical-stage-donor",
+      "label": "Classical donor stage",
+      "outcome": "COMPLETE",
+      "scope": "Completed registered stage interval; not additional to its enclosing invocation. Residual-origin work remains unknown.",
+      "sources": [
+        "original:classical/RUN_STATE.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/attempts/0/actual_wall_seconds",
+        "source": "original:classical/RUN_STATE.json",
+        "value": 543.098095414
+      }
+    },
+    {
+      "accounting_relation": "nested_attribution",
+      "contained_by": "classical-invocation-2",
+      "cpu_seconds": {
+        "json_pointer": "/attempts/1/actual_cpu_seconds",
+        "source": "original:classical/RUN_STATE.json",
+        "value": 28.601031011
+      },
+      "id": "classical-stage-source",
+      "label": "Classical source stage",
+      "outcome": "COMPLETE",
+      "scope": "Completed registered stage interval; not additional to its enclosing invocation. Residual-origin work remains unknown.",
+      "sources": [
+        "original:classical/RUN_STATE.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/attempts/1/actual_wall_seconds",
+        "source": "original:classical/RUN_STATE.json",
+        "value": 28.187763970000105
+      }
+    },
+    {
+      "accounting_relation": "nested_attribution",
+      "contained_by": "classical-invocation-2",
+      "cpu_seconds": {
+        "json_pointer": "/attempts/2/actual_cpu_seconds",
+        "source": "original:classical/RUN_STATE.json",
+        "value": 125.35812526200002
+      },
+      "id": "classical-stage-successor",
+      "label": "Classical successor stage",
+      "outcome": "COMPLETE",
+      "scope": "Completed registered stage interval; not additional to its enclosing invocation. Residual-origin work remains unknown.",
+      "sources": [
+        "original:classical/RUN_STATE.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/attempts/2/actual_wall_seconds",
+        "source": "original:classical/RUN_STATE.json",
+        "value": 125.41722437399994
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/total_measured_command_cpu_seconds",
+        "source": "original:incumbent-command-001.json",
+        "value": 4970.459513
+      },
+      "id": "specialist-116",
+      "label": "Specialist 116-field command",
+      "outcome": "COMPLETE",
+      "scope": "Reaped command and descendants. Excludes assistant inference, tool transport, prior setup, external CI, authoring and host billing.",
+      "sources": [
+        "original:incumbent-command-001.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/wall_seconds",
+        "source": "original:incumbent-command-001.json",
+        "value": 4970.989784685
+      }
+    },
+    {
+      "accounting_relation": "nested_attribution",
+      "contained_by": "specialist-116",
+      "cpu_seconds": {
+        "json_pointer": "/sessions/0/actual_cpu_seconds",
+        "source": "original:incumbent/RESULTS.json",
+        "value": 4969.50658597
+      },
+      "id": "specialist-116-session",
+      "label": "Inner 116-field specialist session",
+      "outcome": "COMPLETE",
+      "scope": "50 source validation +50 source test +4 successor calibration +12 successor test fields. This is nested within the command; not an additional run.",
+      "sources": [
+        "original:incumbent/RESULTS.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/sessions/0/actual_wall_seconds",
+        "source": "original:incumbent/RESULTS.json",
+        "value": 4970.035403462
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/total_measured_command_cpu_seconds",
+        "source": "original:incumbent-resume-001.json",
+        "value": 1.91453
+      },
+      "id": "specialist-resume",
+      "label": "Specialist idempotent resume",
+      "outcome": "COMPLETE",
+      "scope": "Additional command execution on existing data; not fresh scientific confirmation.",
+      "sources": [
+        "original:incumbent-resume-001.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/wall_seconds",
+        "source": "original:incumbent-resume-001.json",
+        "value": 1.9175432869997167
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/total_measured_command_cpu_seconds",
+        "source": "original:incumbent-operator-command-001.json",
+        "value": 49.609667
+      },
+      "id": "specialist-raw-operation",
+      "label": "Original raw nucleus-image operation",
+      "outcome": "COMPLETE",
+      "scope": "Additional command execution on existing data; not fresh scientific confirmation.",
+      "sources": [
+        "original:incumbent-operator-command-001.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/wall_seconds",
+        "source": "original:incumbent-operator-command-001.json",
+        "value": 49.62010169399946
+      }
+    },
+    {
+      "accounting_relation": "nested_attribution",
+      "contained_by": "specialist-raw-operation",
+      "cpu_seconds": {
+        "json_pointer": "/actual_cpu_seconds",
+        "source": "original:incumbent-operator/OPERATION.json",
+        "value": 48.696983579000005
+      },
+      "id": "specialist-raw-operation-inner",
+      "label": "Inner raw nucleus operation",
+      "outcome": "OPERATED",
+      "scope": "Instrument interval nested inside specialist-raw-operation.",
+      "sources": [
+        "original:incumbent-operator/OPERATION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "original:incumbent-operator/OPERATION.json",
+        "value": 48.706636659999276
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_cpu_seconds",
+        "source": "original:CLASSICAL_INDEPENDENT_CHECK.json",
+        "value": 606.770207659
+      },
+      "id": "original-raw-check-rejected",
+      "label": "CLASSICAL_INDEPENDENT_CHECK",
+      "outcome": "REJECTED",
+      "scope": "Separate checking process. A rejection is retained work. Classical full replay regenerates frozen predictions; saved-neural checking rescored outputs without rerunning neural inference.",
+      "sources": [
+        "original:CLASSICAL_INDEPENDENT_CHECK.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "original:CLASSICAL_INDEPENDENT_CHECK.json",
+        "value": 606.6246961510005
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_cpu_seconds",
+        "source": "original:PROJECTED_CLASSICAL_INDEPENDENT_CHECK.json",
+        "value": 605.296402735
+      },
+      "id": "projection-full-replay-001",
+      "label": "PROJECTED_CLASSICAL_INDEPENDENT_CHECK",
+      "outcome": "VERIFIED",
+      "scope": "Separate checking process. A rejection is retained work. Classical full replay regenerates frozen predictions; saved-neural checking rescored outputs without rerunning neural inference.",
+      "sources": [
+        "original:PROJECTED_CLASSICAL_INDEPENDENT_CHECK.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "original:PROJECTED_CLASSICAL_INDEPENDENT_CHECK.json",
+        "value": 604.9374717119999
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_cpu_seconds",
+        "source": "original:PROJECTED_CLASSICAL_INDEPENDENT_CHECK-002.json",
+        "value": 589.95829425
+      },
+      "id": "projection-full-replay-002",
+      "label": "PROJECTED_CLASSICAL_INDEPENDENT_CHECK-002",
+      "outcome": "VERIFIED",
+      "scope": "Separate checking process. A rejection is retained work. Classical full replay regenerates frozen predictions; saved-neural checking rescored outputs without rerunning neural inference.",
+      "sources": [
+        "original:PROJECTED_CLASSICAL_INDEPENDENT_CHECK-002.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "original:PROJECTED_CLASSICAL_INDEPENDENT_CHECK-002.json",
+        "value": 590.0381757100004
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_cpu_seconds",
+        "source": "original:INCUMBENT_INDEPENDENT_CHECK.REJECTED-001.json",
+        "value": 17.652201474
+      },
+      "id": "saved-specialist-audit-rejected",
+      "label": "INCUMBENT_INDEPENDENT_CHECK.REJECTED-001",
+      "outcome": "REJECTED",
+      "scope": "Separate checking process. A rejection is retained work. Classical full replay regenerates frozen predictions; saved-neural checking rescored outputs without rerunning neural inference.",
+      "sources": [
+        "original:INCUMBENT_INDEPENDENT_CHECK.REJECTED-001.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "original:INCUMBENT_INDEPENDENT_CHECK.REJECTED-001.json",
+        "value": 16.002155115000278
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_cpu_seconds",
+        "source": "original:INCUMBENT_INDEPENDENT_CHECK.json",
+        "value": 16.288997434
+      },
+      "id": "saved-specialist-audit-corrected",
+      "label": "INCUMBENT_INDEPENDENT_CHECK",
+      "outcome": "VERIFIED",
+      "scope": "Separate checking process. A rejection is retained work. Classical full replay regenerates frozen predictions; saved-neural checking rescored outputs without rerunning neural inference.",
+      "sources": [
+        "original:INCUMBENT_INDEPENDENT_CHECK.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "original:INCUMBENT_INDEPENDENT_CHECK.json",
+        "value": 16.2917460209992
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/cpu_seconds",
+        "source": "original:PROJECTION_IDEMPOTENT_RESUME.json",
+        "value": 1.864356
+      },
+      "id": "projection-resume",
+      "label": "Projected-tree idempotent resume",
+      "outcome": "PASS",
+      "scope": "Additional successful resume after the separately disclosed receipt-writing failure.",
+      "sources": [
+        "original:PROJECTION_IDEMPOTENT_RESUME.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/wall_seconds",
+        "source": "original:PROJECTION_IDEMPOTENT_RESUME.json",
+        "value": 0.6033603830001084
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/cases/0/cpu_seconds",
+        "source": "original:HISTORICAL_FAILURE_REPLAY.json",
+        "value": 1.78486332
+      },
+      "id": "historical-failure-replay-1",
+      "label": "Focused replay of original input failure",
+      "outcome": "EXPECTED_FAILURE_REPRODUCED",
+      "scope": "New focused failure replay; does not recover the cost of historical full runs. No prediction executed.",
+      "sources": [
+        "original:HISTORICAL_FAILURE_REPLAY.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/cases/0/wall_seconds",
+        "source": "original:HISTORICAL_FAILURE_REPLAY.json",
+        "value": 0.4305199860000357
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/cases/1/cpu_seconds",
+        "source": "original:HISTORICAL_FAILURE_REPLAY.json",
+        "value": 0.015925250000000002
+      },
+      "id": "historical-failure-replay-2",
+      "label": "Focused replay of amendment-1 input failure",
+      "outcome": "EXPECTED_FAILURE_REPRODUCED",
+      "scope": "New focused failure replay; does not recover the cost of historical full runs. No prediction executed.",
+      "sources": [
+        "original:HISTORICAL_FAILURE_REPLAY.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/cases/1/wall_seconds",
+        "source": "original:HISTORICAL_FAILURE_REPLAY.json",
+        "value": 0.015936305000195716
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_child_cpu_seconds",
+        "source": "original:INTEGRITY_TESTS_OPTIMIZED.json",
+        "value": 2.4380939999999995
+      },
+      "id": "original-optimized-integrity",
+      "label": "INTEGRITY_TESTS_OPTIMIZED",
+      "outcome": "PASS",
+      "scope": "Separate recorded verification process.",
+      "sources": [
+        "original:INTEGRITY_TESTS_OPTIMIZED.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "original:INTEGRITY_TESTS_OPTIMIZED.json",
+        "value": 1.201934865000112
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/stability_check_cpu_seconds",
+        "source": "original:OBSERVATION_STABILITY_AFTER_RECHECKS.json",
+        "value": 0.181061794
+      },
+      "id": "observation-stability",
+      "label": "OBSERVATION_STABILITY_AFTER_RECHECKS",
+      "outcome": "STABLE_HANDOFF",
+      "scope": "Separate recorded verification process.",
+      "sources": [
+        "original:OBSERVATION_STABILITY_AFTER_RECHECKS.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/stability_check_wall_seconds",
+        "source": "original:OBSERVATION_STABILITY_AFTER_RECHECKS.json",
+        "value": 0.18108431899963762
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/tests/0/actual_child_cpu_seconds",
+        "source": "original:CHECKER_PREPARATION_SCHEMA_FIX.json",
+        "value": 2.03822
+      },
+      "id": "checker-fix-test-normal",
+      "label": "Checker correction regression test normal",
+      "outcome": "PASS",
+      "scope": "Separate focused test command after a checker schema error. Scientific outputs and thresholds unchanged.",
+      "sources": [
+        "original:CHECKER_PREPARATION_SCHEMA_FIX.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/tests/0/actual_wall_seconds",
+        "source": "original:CHECKER_PREPARATION_SCHEMA_FIX.json",
+        "value": 0.5184076569985336
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/tests/1/actual_child_cpu_seconds",
+        "source": "original:CHECKER_PREPARATION_SCHEMA_FIX.json",
+        "value": 2.8486580000000004
+      },
+      "id": "checker-fix-test-optimized",
+      "label": "Checker correction regression test optimized",
+      "outcome": "PASS",
+      "scope": "Separate focused test command after a checker schema error. Scientific outputs and thresholds unchanged.",
+      "sources": [
+        "original:CHECKER_PREPARATION_SCHEMA_FIX.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/tests/1/actual_wall_seconds",
+        "source": "original:CHECKER_PREPARATION_SCHEMA_FIX.json",
+        "value": 1.194770415999301
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/commands/0/child_cpu_seconds",
+        "source": "original:finite-companion/FINITE_REPRODUCTION.json",
+        "value": 0.348453
+      },
+      "id": "finite-retained-check",
+      "label": "finite-retained-check",
+      "outcome": "PASS",
+      "scope": "Finite illustration reproduction/checking command; not microscopy construction or fresh transfer.",
+      "sources": [
+        "original:finite-companion/FINITE_REPRODUCTION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/commands/0/wall_seconds",
+        "source": "original:finite-companion/FINITE_REPRODUCTION.json",
+        "value": 0.3472953740001685
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/commands/1/child_cpu_seconds",
+        "source": "original:finite-companion/FINITE_REPRODUCTION.json",
+        "value": 5.1446499999999995
+      },
+      "id": "finite-integrity-normal",
+      "label": "finite-integrity-normal",
+      "outcome": "PASS",
+      "scope": "Finite illustration reproduction/checking command; not microscopy construction or fresh transfer.",
+      "sources": [
+        "original:finite-companion/FINITE_REPRODUCTION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/commands/1/wall_seconds",
+        "source": "original:finite-companion/FINITE_REPRODUCTION.json",
+        "value": 5.118149271999755
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/commands/2/child_cpu_seconds",
+        "source": "original:finite-companion/FINITE_REPRODUCTION.json",
+        "value": 7.887334
+      },
+      "id": "finite-integrity-optimized",
+      "label": "finite-integrity-optimized",
+      "outcome": "PASS",
+      "scope": "Finite illustration reproduction/checking command; not microscopy construction or fresh transfer.",
+      "sources": [
+        "original:finite-companion/FINITE_REPRODUCTION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/commands/2/wall_seconds",
+        "source": "original:finite-companion/FINITE_REPRODUCTION.json",
+        "value": 7.852279130999705
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/commands/3/child_cpu_seconds",
+        "source": "original:finite-companion/FINITE_REPRODUCTION.json",
+        "value": 0.30852600000000185
+      },
+      "id": "finite-replay",
+      "label": "finite-replay",
+      "outcome": "PASS",
+      "scope": "Finite illustration reproduction/checking command; not microscopy construction or fresh transfer.",
+      "sources": [
+        "original:finite-companion/FINITE_REPRODUCTION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/commands/3/wall_seconds",
+        "source": "original:finite-companion/FINITE_REPRODUCTION.json",
+        "value": 0.30696142300075735
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/commands/4/child_cpu_seconds",
+        "source": "original:finite-companion/FINITE_REPRODUCTION.json",
+        "value": 0.3716150000000009
+      },
+      "id": "finite-replay-check",
+      "label": "finite-replay-check",
+      "outcome": "PASS",
+      "scope": "Finite illustration reproduction/checking command; not microscopy construction or fresh transfer.",
+      "sources": [
+        "original:finite-companion/FINITE_REPRODUCTION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/commands/4/wall_seconds",
+        "source": "original:finite-companion/FINITE_REPRODUCTION.json",
+        "value": 0.36987397099983355
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "child_commands": [],
+      "cpu_seconds": {
+        "components": [
+          0.056826386
+        ],
+        "formula": "setup_process_cpu_seconds + sum(commands[*].cpu_seconds)",
+        "source": "original:incumbent-setup-001/SETUP.json",
+        "value": 0.056826386
+      },
+      "id": "setup-001-failed",
+      "label": "setup-001-failed",
+      "outcome": "FAILED",
+      "parent_cpu_seconds": {
+        "json_pointer": "/setup_process_cpu_seconds",
+        "source": "original:incumbent-setup-001/SETUP.json",
+        "value": 0.056826386
+      },
+      "scope": "Installer parent process plus reaped child commands. Downloads and preflight/model loading are nested, not additional. The supplied child CPU sum is separate from parent process CPU.",
+      "sources": [
+        "original:incumbent-setup-001/SETUP.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/wall_seconds",
+        "source": "original:incumbent-setup-001/SETUP.json",
+        "value": 14.916355846999977
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "child_commands": [
+        {
+          "command": [
+            "/workspace/scratch/fad12dbaa4fb/ltb-incumbent-venv/bin/python",
+            "-m",
+            "pip",
+            "install",
+            "--disable-pip-version-check",
+            "--no-input",
+            "--report",
+            "/workspace/scratch/fad12dbaa4fb/ltb-reproduction-20261107/incumbent-setup-002/pip-report.json",
+            "-r",
+            "/workspace/scratch/fad12dbaa4fb/ltb-reproduction-20261107/incumbent-setup-002/requirements-local.txt"
+          ],
+          "cpu_seconds": 25.238026,
+          "exit_code": 0,
+          "log": "install-runtime.log",
+          "log_sha256": "0b14b6040a9d2b162f6ca7dfe5acee2e12d2d2f413887d3f21288068cc991c2b",
+          "wall_seconds": 62.99282888500011
+        },
+        {
+          "command": [
+            "/workspace/scratch/fad12dbaa4fb/ltb-incumbent-venv/bin/python",
+            "/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction/incumbent.py",
+            "preflight",
+            "--weights",
+            "/workspace/scratch/fad12dbaa4fb/ltb-incumbent-assets/cpdino-vitb",
+            "--output",
+            "/workspace/scratch/fad12dbaa4fb/ltb-reproduction-20261107/incumbent-setup-002/PREFLIGHT.json"
+          ],
+          "cpu_seconds": 8.753085000000002,
+          "exit_code": 0,
+          "log": "preflight.log",
+          "log_sha256": "e00d6d32177dc29b3435f39348c25b8767e69dc55f6585af096b3beb79382c7d",
+          "wall_seconds": 8.912678005000089
+        },
+        {
+          "command": [
+            "/workspace/scratch/fad12dbaa4fb/ltb-incumbent-venv/bin/python",
+            "-c",
+            "import json, pathlib, sys\nsys.path.insert(0, sys.argv[1])\nimport incumbent\nregistration = incumbent.read_json(incumbent.ROOT / 'INCUMBENT_REGISTRATION-amendment-2.json')\nincumbent.require(incumbent.canonical(incumbent.runtime_versions()) == incumbent.canonical(registration['runtime_versions']), 'Exact registered runtime differs')\ncache = pathlib.Path(sys.argv[3]) if sys.argv[3] else None\n_, _, identity = incumbent.contract(incumbent.ROOT / 'INCUMBENT_PROTOCOL-amendment-2.json', incumbent.ROOT / 'INCUMBENT_REGISTRATION-amendment-2.json', cache)\nif cache is not None:\n    import data\n    primary = incumbent.read_json(incumbent.ROOT / incumbent.PRIMARY_PROTOCOL)\n    incumbent.require(incumbent.canonical(data.archive_manifest(cache)) == incumbent.canonical(primary['data']['archives']), 'Data archives differ')\nincumbent.write_json(pathlib.Path(sys.argv[2]), {'status': 'PASS', 'identity': identity, 'pixels_decoded': 0, 'predictions_performed': 0})\nprint('Exact frozen contract verified; no public image pixels decoded or predictions performed')\n",
+            "/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction",
+            "/workspace/scratch/fad12dbaa4fb/ltb-reproduction-20261107/incumbent-setup-002/CONTRACT.json",
+            "/workspace/scratch/fad12dbaa4fb/ltb-data-cache"
+          ],
+          "cpu_seconds": 2.0235640000000013,
+          "exit_code": 0,
+          "log": "verify-contract.log",
+          "log_sha256": "7845666e4e0060ea109faf5529711c751dfe790c30dad749817f248dc586905a",
+          "wall_seconds": 2.0487002109998684
+        }
+      ],
+      "cpu_seconds": {
+        "components": [
+          1.10942079,
+          25.238026,
+          8.753085000000002,
+          2.0235640000000013
+        ],
+        "formula": "setup_process_cpu_seconds + sum(commands[*].cpu_seconds)",
+        "source": "original:incumbent-setup-002/SETUP.json",
+        "value": 37.124095790000005
+      },
+      "id": "setup-002",
+      "label": "setup-002",
+      "outcome": "READY_FOR_REPRODUCTION",
+      "parent_cpu_seconds": {
+        "json_pointer": "/setup_process_cpu_seconds",
+        "source": "original:incumbent-setup-002/SETUP.json",
+        "value": 1.10942079
+      },
+      "scope": "Installer parent process plus reaped child commands. Downloads and preflight/model loading are nested, not additional. The supplied child CPU sum is separate from parent process CPU.",
+      "sources": [
+        "original:incumbent-setup-002/SETUP.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/wall_seconds",
+        "source": "original:incumbent-setup-002/SETUP.json",
+        "value": 97.49082610200003
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "child_commands": [
+        {
+          "command": [
+            "/workspace/scratch/fad12dbaa4fb/ltb-incumbent-venv/bin/python",
+            "/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction/incumbent.py",
+            "preflight",
+            "--weights",
+            "/workspace/scratch/fad12dbaa4fb/ltb-incumbent-assets/cpdino-vitb",
+            "--output",
+            "/workspace/scratch/fad12dbaa4fb/ltb-reproduction-20261107/incumbent-setup-003/PREFLIGHT.json"
+          ],
+          "cpu_seconds": 5.194886,
+          "exit_code": 0,
+          "log": "preflight.log",
+          "log_sha256": "794f976c263d3dac1b97fc4133fbf9c3f710e4f4da0b8e08a357e3607017d187",
+          "wall_seconds": 5.20023029999993
+        },
+        {
+          "command": [
+            "/workspace/scratch/fad12dbaa4fb/ltb-incumbent-venv/bin/python",
+            "-c",
+            "import json, pathlib, sys\nsys.path.insert(0, sys.argv[1])\nimport incumbent\nregistration = incumbent.read_json(incumbent.ROOT / 'INCUMBENT_REGISTRATION-amendment-2.json')\nincumbent.require(incumbent.canonical(incumbent.runtime_versions()) == incumbent.canonical(registration['runtime_versions']), 'Exact registered runtime differs')\ncache = pathlib.Path(sys.argv[3]) if sys.argv[3] else None\n_, _, identity = incumbent.contract(incumbent.ROOT / 'INCUMBENT_PROTOCOL-amendment-2.json', incumbent.ROOT / 'INCUMBENT_REGISTRATION-amendment-2.json', cache)\nif cache is not None:\n    import data\n    primary = incumbent.read_json(incumbent.ROOT / incumbent.PRIMARY_PROTOCOL)\n    incumbent.require(incumbent.canonical(data.archive_manifest(cache)) == incumbent.canonical(primary['data']['archives']), 'Data archives differ')\nincumbent.write_json(pathlib.Path(sys.argv[2]), {'status': 'PASS', 'identity': identity, 'pixels_decoded': 0, 'predictions_performed': 0})\nprint('Exact frozen contract verified; no public image pixels decoded or predictions performed')\n",
+            "/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction",
+            "/workspace/scratch/fad12dbaa4fb/ltb-reproduction-20261107/incumbent-setup-003/CONTRACT.json",
+            "/workspace/scratch/fad12dbaa4fb/ltb-data-cache"
+          ],
+          "cpu_seconds": 1.3823359999999996,
+          "exit_code": 0,
+          "log": "verify-contract.log",
+          "log_sha256": "7845666e4e0060ea109faf5529711c751dfe790c30dad749817f248dc586905a",
+          "wall_seconds": 1.384853364999799
+        }
+      ],
+      "cpu_seconds": {
+        "components": [
+          0.253974223,
+          5.194886,
+          1.3823359999999996
+        ],
+        "formula": "setup_process_cpu_seconds + sum(commands[*].cpu_seconds)",
+        "source": "original:incumbent-setup-003/SETUP.json",
+        "value": 6.831196223
+      },
+      "id": "setup-003",
+      "label": "setup-003",
+      "outcome": "READY_FOR_REPRODUCTION",
+      "parent_cpu_seconds": {
+        "json_pointer": "/setup_process_cpu_seconds",
+        "source": "original:incumbent-setup-003/SETUP.json",
+        "value": 0.253974223
+      },
+      "scope": "Installer parent process plus reaped child commands. Downloads and preflight/model loading are nested, not additional. The supplied child CPU sum is separate from parent process CPU.",
+      "sources": [
+        "original:incumbent-setup-003/SETUP.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/wall_seconds",
+        "source": "original:incumbent-setup-003/SETUP.json",
+        "value": 6.837838774999909
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "child_commands": [
+        {
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+            "-m",
+            "venv",
+            "/workspace/scratch/fad12dbaa4fb/ltb-standalone-venv"
+          ],
+          "cpu_seconds": 1.9314989999999999,
+          "exit_code": 0,
+          "log": "create-venv.log",
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "wall_seconds": 1.9370773500004361
+        },
+        {
+          "command": [
+            "/workspace/scratch/fad12dbaa4fb/ltb-standalone-venv/bin/python",
+            "-m",
+            "pip",
+            "install",
+            "--disable-pip-version-check",
+            "--no-input",
+            "--report",
+            "/workspace/scratch/fad12dbaa4fb/ltb-reproduction-20261107/incumbent-setup-standalone-004/pip-report.json",
+            "-r",
+            "/workspace/scratch/fad12dbaa4fb/ltb-reproduction-20261107/incumbent-setup-standalone-004/requirements-local.txt"
+          ],
+          "cpu_seconds": 33.072481,
+          "exit_code": 0,
+          "log": "install-runtime.log",
+          "log_sha256": "3ea7b15a15119a15becb9effac5bdf0d92e7c2351f058b45318fd81dbf3beed0",
+          "wall_seconds": 53.5407316360006
+        },
+        {
+          "command": [
+            "/workspace/scratch/fad12dbaa4fb/ltb-standalone-venv/bin/python",
+            "/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction/incumbent.py",
+            "preflight",
+            "--weights",
+            "/workspace/scratch/fad12dbaa4fb/ltb-incumbent-assets/cpdino-vitb",
+            "--output",
+            "/workspace/scratch/fad12dbaa4fb/ltb-reproduction-20261107/incumbent-setup-standalone-004/PREFLIGHT.json"
+          ],
+          "cpu_seconds": 4.648314999999998,
+          "exit_code": 0,
+          "log": "preflight.log",
+          "log_sha256": "6e681abfd369881f4baaa8e2e5e786595fef64fa5a1289ca4d24840b43b0b106",
+          "wall_seconds": 4.66384442799972
+        },
+        {
+          "command": [
+            "/workspace/scratch/fad12dbaa4fb/ltb-standalone-venv/bin/python",
+            "-c",
+            "import json, pathlib, sys\nsys.path.insert(0, sys.argv[1])\nimport incumbent\nregistration = incumbent.read_json(incumbent.ROOT / 'INCUMBENT_REGISTRATION-amendment-2.json')\nincumbent.require(incumbent.canonical(incumbent.runtime_versions()) == incumbent.canonical(registration['runtime_versions']), 'Exact registered runtime differs')\ncache = pathlib.Path(sys.argv[3]) if sys.argv[3] else None\n_, _, identity = incumbent.contract(incumbent.ROOT / 'INCUMBENT_PROTOCOL-amendment-2.json', incumbent.ROOT / 'INCUMBENT_REGISTRATION-amendment-2.json', cache)\nif cache is not None:\n    import data\n    primary = incumbent.read_json(incumbent.ROOT / incumbent.PRIMARY_PROTOCOL)\n    incumbent.require(incumbent.canonical(data.archive_manifest(cache)) == incumbent.canonical(primary['data']['archives']), 'Data archives differ')\nincumbent.write_json(pathlib.Path(sys.argv[2]), {'status': 'PASS', 'identity': identity, 'pixels_decoded': 0, 'predictions_performed': 0})\nprint('Exact frozen contract verified; no public image pixels decoded or predictions performed')\n",
+            "/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction",
+            "/workspace/scratch/fad12dbaa4fb/ltb-reproduction-20261107/incumbent-setup-standalone-004/CONTRACT.json",
+            "/workspace/scratch/fad12dbaa4fb/ltb-data-cache"
+          ],
+          "cpu_seconds": 1.2992149999999976,
+          "exit_code": 0,
+          "log": "verify-contract.log",
+          "log_sha256": "7845666e4e0060ea109faf5529711c751dfe790c30dad749817f248dc586905a",
+          "wall_seconds": 1.300492080999902
+        }
+      ],
+      "cpu_seconds": {
+        "components": [
+          0.240536692,
+          1.9314989999999999,
+          33.072481,
+          4.648314999999998,
+          1.2992149999999976
+        ],
+        "formula": "setup_process_cpu_seconds + sum(commands[*].cpu_seconds)",
+        "source": "original:incumbent-setup-standalone-004/SETUP.json",
+        "value": 41.192046692
+      },
+      "id": "setup-004-standalone",
+      "label": "setup-004-standalone",
+      "outcome": "READY_FOR_REPRODUCTION",
+      "parent_cpu_seconds": {
+        "json_pointer": "/setup_process_cpu_seconds",
+        "source": "original:incumbent-setup-standalone-004/SETUP.json",
+        "value": 0.240536692
+      },
+      "scope": "Installer parent process plus reaped child commands. Downloads and preflight/model loading are nested, not additional. The supplied child CPU sum is separate from parent process CPU.",
+      "sources": [
+        "original:incumbent-setup-standalone-004/SETUP.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/wall_seconds",
+        "source": "original:incumbent-setup-standalone-004/SETUP.json",
+        "value": 61.67997952699989
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/attempts/1/cpu_seconds",
+        "source": "original:incumbent-setup-001/DOWNLOAD_DIAGNOSIS.json",
+        "value": 0.057071882000000004
+      },
+      "id": "upstream-targz-diagnosis",
+      "label": "Separate corrected DINOv3 archive acquisition diagnosis",
+      "outcome": "HASH_MATCHED",
+      "scope": "Separate acquisition attempt after the failed ZIP hash check; no inference.",
+      "sources": [
+        "original:incumbent-setup-001/DOWNLOAD_DIAGNOSIS.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/attempts/1/wall_seconds",
+        "source": "original:incumbent-setup-001/DOWNLOAD_DIAGNOSIS.json",
+        "value": 5.582090548999986
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "id": "data-download-bbbc039_images",
+      "label": "Download bbbc039_images",
+      "outcome": "HASH_VERIFIED",
+      "scope": "Recorded transfer wall only; CPU and total network traffic unknown. Partial download residual is separately disclosed.",
+      "sources": [
+        "original:input-acquisition/FETCH.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/new_downloads/0/wall_seconds",
+        "source": "original:input-acquisition/FETCH.json",
+        "value": 8.715618757999891
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "id": "data-download-bbbc039_masks",
+      "label": "Download bbbc039_masks",
+      "outcome": "HASH_VERIFIED",
+      "scope": "Recorded transfer wall only; CPU and total network traffic unknown. Partial download residual is separately disclosed.",
+      "sources": [
+        "original:input-acquisition/FETCH.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/new_downloads/1/wall_seconds",
+        "source": "original:input-acquisition/FETCH.json",
+        "value": 4.3757286889999705
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "id": "data-download-bbbc039_metadata",
+      "label": "Download bbbc039_metadata",
+      "outcome": "HASH_VERIFIED",
+      "scope": "Recorded transfer wall only; CPU and total network traffic unknown. Partial download residual is separately disclosed.",
+      "sources": [
+        "original:input-acquisition/FETCH.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/new_downloads/2/wall_seconds",
+        "source": "original:input-acquisition/FETCH.json",
+        "value": 3.5650983909999923
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "id": "data-download-bbbc007_images",
+      "label": "Download bbbc007_images",
+      "outcome": "HASH_VERIFIED",
+      "scope": "Recorded transfer wall only; CPU and total network traffic unknown. Partial download residual is separately disclosed.",
+      "sources": [
+        "original:input-acquisition/FETCH.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/new_downloads/3/wall_seconds",
+        "source": "original:input-acquisition/FETCH.json",
+        "value": 4.157030992000273
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "id": "data-download-bbbc007_outlines",
+      "label": "Download bbbc007_outlines",
+      "outcome": "HASH_VERIFIED",
+      "scope": "Recorded transfer wall only; CPU and total network traffic unknown. Partial download residual is separately disclosed.",
+      "sources": [
+        "original:input-acquisition/FETCH.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/new_downloads/4/wall_seconds",
+        "source": "original:input-acquisition/FETCH.json",
+        "value": 4.159950393000145
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/instrumented_process/cpu_seconds",
+        "source": "repo:construction/diagnostics/PROCESS_COST.json",
+        "value": 8.465147912
+      },
+      "id": "diagnostics-initial",
+      "label": "diagnostics-initial",
+      "new_classical_segmentation_calls": 24,
+      "new_neural_inference_calls": 0,
+      "outcome": "COMPLETE",
+      "overlap_rule": "CPU-including-startup is a wider measurement of the same run, not additional to instrumented CPU. No outer command receipt was retained for this author run.",
+      "process_cpu_including_startup_seconds": {
+        "json_pointer": "/process_cpu_seconds_including_startup",
+        "source": "repo:construction/diagnostics/PROCESS_COST.json",
+        "value": 8.48164995
+      },
+      "scope": "Instrumented interval including imports, hashes, decoding, segmentation and scoring. Script-start wall excludes interpreter startup and final receipt serialization. First scientific execution under the frozen registration.",
+      "sources": [
+        "repo:construction/diagnostics/PROCESS_COST.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/instrumented_process/wall_seconds",
+        "source": "repo:construction/diagnostics/PROCESS_COST.json",
+        "value": 7.058457713999815
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/process_cost/instrumented_process/cpu_seconds",
+        "source": "repo:construction/diagnostics/REPLAY_VERIFICATION.json",
+        "value": 8.895571806
+      },
+      "id": "diagnostics-author-verification",
+      "label": "diagnostics-author-verification",
+      "new_classical_segmentation_calls": 24,
+      "new_neural_inference_calls": 0,
+      "outcome": "COMPLETE",
+      "overlap_rule": "CPU-including-startup is a wider measurement of the same run, not additional to instrumented CPU. No outer command receipt was retained for this author run.",
+      "process_cpu_including_startup_seconds": {
+        "json_pointer": "/process_cost/process_cpu_seconds_including_startup",
+        "source": "repo:construction/diagnostics/REPLAY_VERIFICATION.json",
+        "value": 8.915195968
+      },
+      "scope": "Instrumented interval including imports, hashes, decoding, segmentation and scoring. Script-start wall excludes interpreter startup and final receipt serialization. Same-author verification is additional work, not independent confirmation.",
+      "sources": [
+        "repo:construction/diagnostics/REPLAY_VERIFICATION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/process_cost/instrumented_process/wall_seconds",
+        "source": "repo:construction/diagnostics/REPLAY_VERIFICATION.json",
+        "value": 7.2778998560006585
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/instrumented_process/cpu_seconds",
+        "source": "repo:construction/repair/PROCESS_COST.json",
+        "value": 3.262927199
+      },
+      "id": "repair-initial",
+      "label": "repair-initial",
+      "new_classical_segmentation_calls": 4,
+      "new_neural_inference_calls": 0,
+      "outcome": "COMPLETED_NEGATIVE_CALIBRATION_STOP",
+      "overlap_rule": "CPU-including-startup is a wider measurement of the same run, not additional to instrumented CPU. No outer command receipt was retained for this author run.",
+      "process_cpu_including_startup_seconds": {
+        "json_pointer": "/process_cpu_seconds_including_startup",
+        "source": "repo:construction/repair/PROCESS_COST.json",
+        "value": 3.276743222
+      },
+      "scope": "Instrumented interval including imports, hashes, decoding, segmentation and scoring. Script-start wall excludes interpreter startup and final receipt serialization. First scientific execution under the frozen registration.",
+      "sources": [
+        "repo:construction/repair/PROCESS_COST.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/instrumented_process/wall_seconds",
+        "source": "repo:construction/repair/PROCESS_COST.json",
+        "value": 1.7550295180008106
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/process_cost/instrumented_process/cpu_seconds",
+        "source": "repo:construction/repair/REPLAY_VERIFICATION.json",
+        "value": 3.407851832
+      },
+      "id": "repair-author-verification",
+      "label": "repair-author-verification",
+      "new_classical_segmentation_calls": 4,
+      "new_neural_inference_calls": 0,
+      "outcome": "COMPLETED_NEGATIVE_CALIBRATION_STOP",
+      "overlap_rule": "CPU-including-startup is a wider measurement of the same run, not additional to instrumented CPU. No outer command receipt was retained for this author run.",
+      "process_cpu_including_startup_seconds": {
+        "json_pointer": "/process_cost/process_cpu_seconds_including_startup",
+        "source": "repo:construction/repair/REPLAY_VERIFICATION.json",
+        "value": 3.420141447
+      },
+      "scope": "Instrumented interval including imports, hashes, decoding, segmentation and scoring. Script-start wall excludes interpreter startup and final receipt serialization. Same-author verification is additional work, not independent confirmation.",
+      "sources": [
+        "repo:construction/repair/REPLAY_VERIFICATION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/process_cost/instrumented_process/wall_seconds",
+        "source": "repo:construction/repair/REPLAY_VERIFICATION.json",
+        "value": 1.756552561000717
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "status": "UNKNOWN",
+        "value": null
+      },
+      "id": "setup-boundary-failed",
+      "label": "Original extracted installer failure",
+      "outcome": "FAILED",
+      "scope": "Wall-only failed installer gate retained. Other prior candidate commands are listed separately from their original gate receipt.",
+      "sources": [
+        "setup:QUALIFICATION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/prior_failure_wall_seconds",
+        "source": "setup:QUALIFICATION.json",
+        "value": 0.04804976000013994
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/setup_total_recorded_cpu_seconds",
+        "source": "setup:QUALIFICATION.json",
+        "value": 7.362654912
+      },
+      "id": "setup-boundary-repaired",
+      "label": "Exact cached setup after installer-boundary repair",
+      "outcome": "READY_FOR_REPRODUCTION",
+      "scope": "Parent process + child commands; no new dependency installation. Model loading/preflight nested.",
+      "sources": [
+        "setup:QUALIFICATION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/setup_wall_seconds",
+        "source": "setup:QUALIFICATION.json",
+        "value": 7.4250138369989145
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/instrument_operation_cpu_seconds",
+        "source": "setup:QUALIFICATION.json",
+        "value": 52.247691249999995
+      },
+      "enclosing_operation_wall_seconds": {
+        "json_pointer": "/operation_wall_seconds",
+        "source": "setup:QUALIFICATION.json",
+        "value": 53.123837127001025
+      },
+      "id": "setup-boundary-raw-operation",
+      "label": "Copied repaired edition raw nucleus operation",
+      "outcome": "PASS",
+      "overlap_rule": "Do not add instrument and enclosing wrapper wall time. Wrapper CPU is not retained.",
+      "scope": "Instrument interval; its enclosing operation wall interval is recorded separately in this same row. Exposed field, not fresh scientific confirmation.",
+      "sources": [
+        "setup:QUALIFICATION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/instrument_operation_wall_seconds",
+        "source": "setup:QUALIFICATION.json",
+        "value": 52.27731458500057
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/focused_test_runs/0/cpu_seconds",
+        "source": "setup:QUALIFICATION.json",
+        "value": 0.08806499999999999
+      },
+      "id": "setup-boundary-tests-normal",
+      "label": "Setup boundary regression normal",
+      "outcome": "PASS",
+      "scope": "Separate focused test command.",
+      "sources": [
+        "setup:QUALIFICATION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/focused_test_runs/0/wall_seconds",
+        "source": "setup:QUALIFICATION.json",
+        "value": 0.08842821500002174
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/focused_test_runs/1/cpu_seconds",
+        "source": "setup:QUALIFICATION.json",
+        "value": 0.447282
+      },
+      "id": "setup-boundary-tests-optimized",
+      "label": "Setup boundary regression optimized",
+      "outcome": "PASS",
+      "scope": "Separate focused test command.",
+      "sources": [
+        "setup:QUALIFICATION.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/focused_test_runs/1/wall_seconds",
+        "source": "setup:QUALIFICATION.json",
+        "value": 0.44761301699873
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_child_cpu_seconds",
+        "source": "review:evidence-extract.command.json",
+        "value": 0.309122
+      },
+      "id": "review-evidence-extract",
+      "label": "evidence-extract",
+      "outcome": "PASS",
+      "scope": "Separate same-session internal reviewer command; any inner PROCESS_COST is nested, not additional.",
+      "sources": [
+        "review:evidence-extract.command.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "review:evidence-extract.command.json",
+        "value": 0.31011276800018095
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_child_cpu_seconds",
+        "source": "review:projection-verify.command.json",
+        "value": 0.16335600000000008
+      },
+      "id": "review-projection-verify",
+      "label": "projection-verify",
+      "outcome": "PASS",
+      "scope": "Separate same-session internal reviewer command; any inner PROCESS_COST is nested, not additional.",
+      "sources": [
+        "review:projection-verify.command.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "review:projection-verify.command.json",
+        "value": 0.1635937089995423
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_child_cpu_seconds",
+        "source": "review:projection-reconstruct.command.json",
+        "value": 0.32618199999999997
+      },
+      "id": "review-projection-reconstruct",
+      "label": "projection-reconstruct",
+      "outcome": "PASS",
+      "scope": "Separate same-session internal reviewer command; any inner PROCESS_COST is nested, not additional.",
+      "sources": [
+        "review:projection-reconstruct.command.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "review:projection-reconstruct.command.json",
+        "value": 0.3269509340007062
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_child_cpu_seconds",
+        "source": "review:projection-tests.command.json",
+        "value": 0.08508800000000001
+      },
+      "id": "review-projection-tests",
+      "label": "projection-tests",
+      "outcome": "PASS",
+      "scope": "Separate same-session internal reviewer command; any inner PROCESS_COST is nested, not additional.",
+      "sources": [
+        "review:projection-tests.command.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "review:projection-tests.command.json",
+        "value": 0.0887026420004986
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_child_cpu_seconds",
+        "source": "review:setup-review-tests.command.json",
+        "value": 0.08161599999999997
+      },
+      "id": "review-setup-review-tests",
+      "label": "setup-review-tests",
+      "outcome": "PASS",
+      "scope": "Separate same-session internal reviewer command; any inner PROCESS_COST is nested, not additional.",
+      "sources": [
+        "review:setup-review-tests.command.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "review:setup-review-tests.command.json",
+        "value": 0.08199042299929715
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_child_cpu_seconds",
+        "source": "review:diagnostic-independent-replay.command.json",
+        "value": 8.665957
+      },
+      "id": "review-diagnostic-independent-replay",
+      "label": "diagnostic-independent-replay",
+      "outcome": "PASS",
+      "scope": "Separate same-session internal reviewer command; any inner PROCESS_COST is nested, not additional.",
+      "sources": [
+        "review:diagnostic-independent-replay.command.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "review:diagnostic-independent-replay.command.json",
+        "value": 7.0259072270000615
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_child_cpu_seconds",
+        "source": "review:repair-independent-replay.command.json",
+        "value": 3.379151
+      },
+      "id": "review-repair-independent-replay",
+      "label": "repair-independent-replay",
+      "outcome": "PASS",
+      "scope": "Separate same-session internal reviewer command; any inner PROCESS_COST is nested, not additional.",
+      "sources": [
+        "review:repair-independent-replay.command.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "review:repair-independent-replay.command.json",
+        "value": 1.805588893001186
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_cpu_seconds",
+        "source": "review:RAW_RECONSTRUCTION_INDEPENDENT_CHECK.json",
+        "value": 2.0883043779999997
+      },
+      "id": "review-raw-inventory",
+      "label": "RAW_RECONSTRUCTION_INDEPENDENT_CHECK",
+      "outcome": "VERIFIED_BYTE_RECONSTRUCTION",
+      "scope": "Independent byte comparison to preserved original rawtree and actual check.Evidence.inventory gate. Canonical used-file set derived from retained RUN_STATE stage inventories, not from projection utility. This is inventory-component verification, not a new complete scientific replay.",
+      "sources": [
+        "review:RAW_RECONSTRUCTION_INDEPENDENT_CHECK.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "review:RAW_RECONSTRUCTION_INDEPENDENT_CHECK.json",
+        "value": 0.43394529499892087
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_cpu_seconds",
+        "source": "review:LIMITED_SAVED_OUTPUT_AUDIT.stdout.json",
+        "value": 449.190953561
+      },
+      "id": "review-limited-saved-audit",
+      "label": "LIMITED_SAVED_OUTPUT_AUDIT.stdout",
+      "outcome": "LIMITED",
+      "scope": "LIMITED saved-output audit:312 saved fields rescored;136 unique classical predictions regenerated. Does not repeat donor/calibration prediction generation or neural inference. These are checker-reported inner timings.",
+      "sources": [
+        "review:LIMITED_SAVED_OUTPUT_AUDIT.stdout.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "review:LIMITED_SAVED_OUTPUT_AUDIT.stdout.json",
+        "value": 448.8616471389996
+      }
+    },
+    {
+      "accounting_relation": "additional_observed_work",
+      "cpu_seconds": {
+        "json_pointer": "/actual_cpu_seconds",
+        "source": "review:MECHANISM_AND_REPAIR_REVIEW.json",
+        "value": 3.213029056
+      },
+      "id": "review-mechanism-mask-rescore",
+      "label": "MECHANISM_AND_REPAIR_REVIEW",
+      "outcome": "ACCEPTED_WITH_STATED_LIMITS",
+      "scope": "This archive/independent-reference rescoring process only; source reading/reasoning and earlier interactive checks are unmeasured. No prediction generation in this pass.",
+      "sources": [
+        "review:MECHANISM_AND_REPAIR_REVIEW.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/actual_wall_seconds",
+        "source": "review:MECHANISM_AND_REPAIR_REVIEW.json",
+        "value": 1.5602009249996627
+      }
+    },
+    {
+      "accounting_relation": "nested_attribution",
+      "contained_by": "review-diagnostic-independent-replay",
+      "cpu_seconds": {
+        "json_pointer": "/instrumented_process/cpu_seconds",
+        "source": "review:diagnostic-replay/PROCESS_COST.json",
+        "value": 8.576159534999999
+      },
+      "id": "review-diagnostics-inner",
+      "label": "Reviewer diagnostics instrumented interval",
+      "outcome": "COMPLETE",
+      "process_cpu_including_startup_seconds": {
+        "json_pointer": "/process_cpu_seconds_including_startup",
+        "source": "review:diagnostic-replay/PROCESS_COST.json",
+        "value": 8.59248104
+      },
+      "scope": "Same physical execution as the enclosing reviewer command. Startup-inclusive CPU is also nested.",
+      "sources": [
+        "review:diagnostic-replay/PROCESS_COST.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/instrumented_process/wall_seconds",
+        "source": "review:diagnostic-replay/PROCESS_COST.json",
+        "value": 6.934219638000286
+      }
+    },
+    {
+      "accounting_relation": "nested_attribution",
+      "contained_by": "review-repair-independent-replay",
+      "cpu_seconds": {
+        "json_pointer": "/instrumented_process/cpu_seconds",
+        "source": "review:repair-replay/PROCESS_COST.json",
+        "value": 3.309142164
+      },
+      "id": "review-repair-inner",
+      "label": "Reviewer repair instrumented interval",
+      "outcome": "COMPLETED_NEGATIVE_CALIBRATION_STOP",
+      "process_cpu_including_startup_seconds": {
+        "json_pointer": "/process_cpu_seconds_including_startup",
+        "source": "review:repair-replay/PROCESS_COST.json",
+        "value": 3.320948764
+      },
+      "scope": "Same physical execution as the enclosing reviewer command. Startup-inclusive CPU is also nested.",
+      "sources": [
+        "review:repair-replay/PROCESS_COST.json"
+      ],
+      "wall_seconds": {
+        "json_pointer": "/instrumented_process/wall_seconds",
+        "source": "review:repair-replay/PROCESS_COST.json",
+        "value": 1.7353955210001004
+      }
+    }
+  ],
+  "independence": "Reviewer runs are from a separate assistant role in the same session, not an external audit. Same-author verification is labeled separately. Neither makes exposed data fresh.",
+  "measurement_policy": {
+    "complete_total": "No complete-cost or monetary grand total is computed.",
+    "cpu": "Measured CPU is process consumption, not purchased compute or a dollar bill. Parent process CPU and explicitly reaped child CPU may be summed only when nonoverlapping; nested scientific/command boundaries are alternatives.",
+    "lineage": "Retained information and masks carry historical cost; reuse attribution does not create a second historical charge.",
+    "repeated_runs": "A genuinely repeated verification consumes additional work; a summary or copied receipt of the same run does not.",
+    "unit": "seconds",
+    "unknown": "null with UNKNOWN means unavailable, not zero.",
+    "wall": "Wall intervals are observed local durations. Parallel/overlapping work makes their sum unsuitable as project elapsed duration."
+  },
+  "prior_failed_candidate_timing_observations": {
+    "measurements": [
+      {
+        "json_pointer": "/commands/0/wall_seconds",
+        "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json",
+        "value": 0.28186162400015746
+      },
+      {
+        "json_pointer": "/commands/1/wall_seconds",
+        "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json",
+        "value": 1.3392311080006039
+      },
+      {
+        "json_pointer": "/commands/2/wall_seconds",
+        "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json",
+        "value": 0.15862733999892953
+      },
+      {
+        "json_pointer": "/commands/3/wall_seconds",
+        "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json",
+        "value": 0.46289270899978874
+      },
+      {
+        "json_pointer": "/commands/4/wall_seconds",
+        "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json",
+        "value": 0.18233371600035753
+      },
+      {
+        "json_pointer": "/commands/5/wall_seconds",
+        "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json",
+        "value": 0.30671964199973445
+      },
+      {
+        "json_pointer": "/commands/6/wall_seconds",
+        "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json",
+        "value": 0.2845255720003479
+      },
+      {
+        "json_pointer": "/commands/7/wall_seconds",
+        "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json",
+        "value": 0.3118196249997709
+      },
+      {
+        "json_pointer": "/commands/8/wall_seconds",
+        "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json",
+        "value": 6.204481196000415
+      },
+      {
+        "json_pointer": "/commands/9/wall_seconds",
+        "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json",
+        "value": 0.2551366150000831
+      },
+      {
+        "json_pointer": "/commands/10/wall_seconds",
+        "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json",
+        "value": 0.04804976000013994
+      }
+    ],
+    "scope": "Retained engineering gate timings, with no inferred missing CPU. The original failed installer row is also shown above and must not be charged again.",
+    "source": "setup:prior-failed/CANDIDATE_VERIFICATION.json"
+  },
+  "schema": "learning-to-build/cost-ledger/v1",
+  "scope": "Recorded reproduction, failed attempts, checks, diagnostics, one stopped composition and internal-review/setup qualification work through these bound receipts. Later exact-package gates, hosted CI, integration and released-download operations are additional qualification work documented by their own receipts. This is not a total of complete project or accepted-outcome cost.",
+  "six_arm_nested_costs": {
+    "fixed_no_history": {
+      "accounting_relation": "nested within classical successor stage; do not add again",
+      "calibration_candidates_executed": 24,
+      "complete_qualification": false,
+      "construction_cpu_seconds": 18.53623867,
+      "construction_wall_seconds": 18.548016368999924,
+      "holdout_cpu_seconds": 2.435565123999993,
+      "holdout_wall_seconds": 2.435721749000095,
+      "json_pointer": "/successor/arms/fixed_no_history",
+      "lineage_donor_cost": "For inherited-history/artifact and matched same-content arms, the existing donor stage is an upstream attribution, not a newly executed donor run per arm. No-history did not receive donor history.",
+      "source": "original:classical/RESULTS.json"
+    },
+    "full_enumeration": {
+      "accounting_relation": "nested within classical successor stage; do not add again",
+      "calibration_candidates_executed": 24,
+      "complete_qualification": false,
+      "construction_cpu_seconds": 17.913764592999996,
+      "construction_wall_seconds": 17.927244622000217,
+      "holdout_cpu_seconds": 2.2306013740000026,
+      "holdout_wall_seconds": 2.23076668900012,
+      "json_pointer": "/successor/arms/full_enumeration",
+      "lineage_donor_cost": "For inherited-history/artifact and matched same-content arms, the existing donor stage is an upstream attribution, not a newly executed donor run per arm. No-history did not receive donor history.",
+      "source": "original:classical/RESULTS.json"
+    },
+    "ordinary_reuse": {
+      "accounting_relation": "nested within classical successor stage; do not add again",
+      "calibration_candidates_executed": 24,
+      "complete_qualification": false,
+      "construction_cpu_seconds": 18.060737014999994,
+      "construction_wall_seconds": 18.070657200999904,
+      "holdout_cpu_seconds": 2.391502422000002,
+      "holdout_wall_seconds": 2.3916681089999656,
+      "json_pointer": "/successor/arms/ordinary_reuse",
+      "lineage_donor_cost": "For inherited-history/artifact and matched same-content arms, the existing donor stage is an upstream attribution, not a newly executed donor run per arm. No-history did not receive donor history.",
+      "source": "original:classical/RESULTS.json"
+    },
+    "same_content_empirical": {
+      "accounting_relation": "nested within classical successor stage; do not add again",
+      "calibration_candidates_executed": 24,
+      "complete_qualification": false,
+      "construction_cpu_seconds": 17.773488682999997,
+      "construction_wall_seconds": 17.77711308300013,
+      "holdout_cpu_seconds": 2.2384008040000083,
+      "holdout_wall_seconds": 2.2387320369998633,
+      "json_pointer": "/successor/arms/same_content_empirical",
+      "lineage_donor_cost": "For inherited-history/artifact and matched same-content arms, the existing donor stage is an upstream attribution, not a newly executed donor run per arm. No-history did not receive donor history.",
+      "source": "original:classical/RESULTS.json"
+    },
+    "updated_no_artifact": {
+      "accounting_relation": "nested within classical successor stage; do not add again",
+      "calibration_candidates_executed": 24,
+      "complete_qualification": false,
+      "construction_cpu_seconds": 17.794733181000012,
+      "construction_wall_seconds": 17.802831812000022,
+      "holdout_cpu_seconds": 2.4254434989999822,
+      "holdout_wall_seconds": 2.433446500000173,
+      "json_pointer": "/successor/arms/updated_no_artifact",
+      "lineage_donor_cost": "For inherited-history/artifact and matched same-content arms, the existing donor stage is an upstream attribution, not a newly executed donor run per arm. No-history did not receive donor history.",
+      "source": "original:classical/RESULTS.json"
+    },
+    "updated_with_artifact": {
+      "accounting_relation": "nested within classical successor stage; do not add again",
+      "calibration_candidates_executed": 24,
+      "complete_qualification": false,
+      "construction_cpu_seconds": 17.67526589100001,
+      "construction_wall_seconds": 17.677995738999925,
+      "holdout_cpu_seconds": 2.353333321000008,
+      "holdout_wall_seconds": 2.3535862290000296,
+      "json_pointer": "/successor/arms/updated_with_artifact",
+      "lineage_donor_cost": "For inherited-history/artifact and matched same-content arms, the existing donor stage is an upstream attribution, not a newly executed donor run per arm. No-history did not receive donor history.",
+      "source": "original:classical/RESULTS.json"
+    }
+  },
+  "source_containers": {
+    "construction/evidence/REPRODUCTION.tar.gz": {
+      "bytes": 9801703,
+      "sha256": "f397d7d49e2a11ab82a6bcc759d866bc56cdcad7de5a82eb57cd91f0d61dadfb"
+    },
+    "qualification/setup-boundary-evidence.tar.gz": {
+      "bytes": 27022,
+      "sha256": "adbb74a42d609185675c4463e8204653c9e97dc7248ec16d89ce1ea6f0136933"
+    }
+  },
+  "sources": {
+    "original:CHECKER_PREPARATION_SCHEMA_FIX.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 4980,
+      "member": "CHECKER_PREPARATION_SCHEMA_FIX.json",
+      "sha256": "33353367ebddc9c285a948a51c2195a17ef7743fddeb42792bba55a1b644028a"
+    },
+    "original:CHECKER_RECHECK_LAUNCH_FAILURE_001.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 1045,
+      "member": "CHECKER_RECHECK_LAUNCH_FAILURE_001.json",
+      "sha256": "27eb31ba54c1e16869691a8cee5ab5e9b7ba98dad76128c6bb79e90abc1e40e7"
+    },
+    "original:CLASSICAL_INDEPENDENT_CHECK.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 928,
+      "member": "CLASSICAL_INDEPENDENT_CHECK.json",
+      "sha256": "e13c43173a98db635f2903b06e880857e7c59614b5c2cf3e0d7f0171e5b413e9"
+    },
+    "original:DATA_ACQUISITION_OBSERVATION.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 3282,
+      "member": "DATA_ACQUISITION_OBSERVATION.json",
+      "sha256": "b781f3d7ee851b8cc72a8bce7142a42a91bcdaf05e542402e19d1793744f5782"
+    },
+    "original:HISTORICAL_FAILURE_REPLAY.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 1308,
+      "member": "HISTORICAL_FAILURE_REPLAY.json",
+      "sha256": "893dffc73f39777ba381942290a402556de0c39bff675912ea61b0c1e6dffb20"
+    },
+    "original:IDEMPOTENT_RESUME_RECEIPT_FAILURE_001.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 792,
+      "member": "IDEMPOTENT_RESUME_RECEIPT_FAILURE_001.json",
+      "sha256": "286a63eec88df9545dae323e14c80445f8035618245fd0145e5c856cfdce9615"
+    },
+    "original:INCUMBENT_INDEPENDENT_CHECK.REJECTED-001.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 530,
+      "member": "INCUMBENT_INDEPENDENT_CHECK.REJECTED-001.json",
+      "sha256": "599e5d8e279efba9b1f7c077850e804c309629abc25b5494bd3ee3e00fa52ac6"
+    },
+    "original:INCUMBENT_INDEPENDENT_CHECK.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 9234,
+      "member": "INCUMBENT_INDEPENDENT_CHECK.json",
+      "sha256": "794f9332ecfc67ad8b3dab40f4e4f1a2091a23a41a35d7b6f0e8cfc66451843d"
+    },
+    "original:INTEGRITY_TESTS_OPTIMIZED.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 1055,
+      "member": "INTEGRITY_TESTS_OPTIMIZED.json",
+      "sha256": "474087a0ab77b960e7d93597f1cf38521c24821ce3783fdb8c11dcc55cf14a29"
+    },
+    "original:OBSERVATION_STABILITY_AFTER_RECHECKS.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 1139,
+      "member": "OBSERVATION_STABILITY_AFTER_RECHECKS.json",
+      "sha256": "92318dc2a7aa987f686f74fde333ca0b3d553061414c2c152be3428716bb8ec2"
+    },
+    "original:PROJECTED_CLASSICAL_INDEPENDENT_CHECK-002.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 4757,
+      "member": "PROJECTED_CLASSICAL_INDEPENDENT_CHECK-002.json",
+      "sha256": "0fe59a6a20b3fec6db02b27931acab133d8115d09befa63f46d6f17fbdf3bdd3"
+    },
+    "original:PROJECTED_CLASSICAL_INDEPENDENT_CHECK.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 4758,
+      "member": "PROJECTED_CLASSICAL_INDEPENDENT_CHECK.json",
+      "sha256": "2c3952f6f616200bb390b5d4a2de72601bab37a5f69f24c3d38f9849c1a522db"
+    },
+    "original:PROJECTION_IDEMPOTENT_RESUME.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 1104,
+      "member": "PROJECTION_IDEMPOTENT_RESUME.json",
+      "sha256": "7dd98d4b02d653350edcdc9f5f4cdfc874c086b01c6c33402462ded98d7cdb5c"
+    },
+    "original:REPRODUCTION.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 26301,
+      "member": "REPRODUCTION.json",
+      "sha256": "a2aa90baa8563d6e95f90942072fe9a6762edcb5da4a3e9d8a89698fa475a5b1"
+    },
+    "original:classical-residuals/PROJECTION.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 423911,
+      "member": "classical-residuals/PROJECTION.json",
+      "sha256": "c2efaf11f071ea02c17732d3262cc02e18d1cae82231e01ff80c6809b839f984"
+    },
+    "original:classical/RESULTS.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 51300,
+      "member": "classical/RESULTS.json",
+      "sha256": "4ebb7c0f7cae90f7e1333f8fbf15e776854126cd601f287bad31c7d2c2c2c1cb"
+    },
+    "original:classical/RUN_STATE.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 43035,
+      "member": "classical/RUN_STATE.json",
+      "sha256": "89f68a96bc7c34bc619ef1c0b87dadfaa28dd58481cb1b601e8ffb4fc5229753"
+    },
+    "original:finite-companion/FINITE_REPRODUCTION.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 3127,
+      "member": "finite-companion/FINITE_REPRODUCTION.json",
+      "sha256": "e5e0279c8e97bbb30a4ecf298649f6bbaa7cc0e37acc0bde293c28ce74423f78"
+    },
+    "original:incumbent-command-001.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 1199,
+      "member": "incumbent-command-001.json",
+      "sha256": "52481ff55dfb6852edbc78e2e83037c9f3de28c88d830e8dc6d14828ecbdc6b9"
+    },
+    "original:incumbent-operator-command-001.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 1288,
+      "member": "incumbent-operator-command-001.json",
+      "sha256": "dff0b1288e7fe795aeeb7075726dadbe8b29506f59cdb8a1d99256bbcb01b928"
+    },
+    "original:incumbent-operator/OPERATION.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 13973,
+      "member": "incumbent-operator/OPERATION.json",
+      "sha256": "7a5bfa0dfb109207d900cb2ac93d8d4308ce3e1bbe3c7d79c214ed22e4efeabe"
+    },
+    "original:incumbent-resume-001.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 1207,
+      "member": "incumbent-resume-001.json",
+      "sha256": "2bffb6854a8597bbedc10ddb352713a47f005df837405a92beae05de0b532be7"
+    },
+    "original:incumbent-setup-001/BOOTSTRAP_OBSERVATIONS.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 1267,
+      "member": "incumbent-setup-001/BOOTSTRAP_OBSERVATIONS.json",
+      "sha256": "ef5ecae0c68a24dbdec695b2fdf2dc614b277475a17819d09f299d18365210ef"
+    },
+    "original:incumbent-setup-001/DOWNLOAD_DIAGNOSIS.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 818,
+      "member": "incumbent-setup-001/DOWNLOAD_DIAGNOSIS.json",
+      "sha256": "ed19014b7135e3f62deaf9c01ad545ae72bab342dd65648fd058b4c1e0df6f72"
+    },
+    "original:incumbent-setup-001/SETUP.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 3426,
+      "member": "incumbent-setup-001/SETUP.json",
+      "sha256": "66aa88aa37b416e41a187d8ba0c4b0a15da9975a638cde0be4c09cd1ff4980aa"
+    },
+    "original:incumbent-setup-002/SETUP.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 7687,
+      "member": "incumbent-setup-002/SETUP.json",
+      "sha256": "2d5931f37d86b1ee658080e9b20fdf275129c86a68510c3b4afa6359ccb3995b"
+    },
+    "original:incumbent-setup-003/SETUP.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 6979,
+      "member": "incumbent-setup-003/SETUP.json",
+      "sha256": "9821b0fd1a7c7cc8e5afa3db7cf11a12224a5844e72bee56a57560a5b03de8f0"
+    },
+    "original:incumbent-setup-standalone-004/SETUP.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 8146,
+      "member": "incumbent-setup-standalone-004/SETUP.json",
+      "sha256": "5a0613b19ee262e04e7c6e732191af8c6ea3d99a06e02b40e8bd996522796716"
+    },
+    "original:incumbent/RESULTS.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 25521,
+      "member": "incumbent/RESULTS.json",
+      "sha256": "4f6bda21acfb1b90496ede9b0081ade783abea12e274448601c4e866698d82f3"
+    },
+    "original:input-acquisition/FETCH.json": {
+      "archive": "construction/evidence/REPRODUCTION.tar.gz",
+      "bytes": 2274,
+      "member": "input-acquisition/FETCH.json",
+      "sha256": "b4dde02519a5b70e670b16725c1bcc7c20a30204ba21dc16f9a79b44f5f82c66"
+    },
+    "repo:construction/diagnostics/PROCESS_COST.json": {
+      "bytes": 650,
+      "path": "construction/diagnostics/PROCESS_COST.json",
+      "sha256": "c7c38f5dc6a5cc0ea225ba6059abb20ad15b03203ed61a3674811cb5acc485ef"
+    },
+    "repo:construction/diagnostics/REPLAY_VERIFICATION.json": {
+      "bytes": 1450,
+      "path": "construction/diagnostics/REPLAY_VERIFICATION.json",
+      "sha256": "4ec2d165bd8ab1aa8a31f733fca8d98bb86d2d4578341d050c15062e3e72eba4"
+    },
+    "repo:construction/repair/PROCESS_COST.json": {
+      "bytes": 640,
+      "path": "construction/repair/PROCESS_COST.json",
+      "sha256": "85ab67c2b0276585a9a901dd31c8b88a4a06c41f2c5187d7ffd84093daa50db0"
+    },
+    "repo:construction/repair/REPLAY_VERIFICATION.json": {
+      "bytes": 1284,
+      "path": "construction/repair/REPLAY_VERIFICATION.json",
+      "sha256": "3166867eac15ce85b9a576f8d8d4e1912e07eb548acf4346994ff2817dc6300c"
+    },
+    "repo:construction/repair/RESULTS.json": {
+      "bytes": 15211,
+      "path": "construction/repair/RESULTS.json",
+      "sha256": "0b93da63217fbae6e97229974263b7bc0e2d37f0f4d9593f711dc3092bbfb3c6"
+    },
+    "review:LIMITED_SAVED_OUTPUT_AUDIT.stdout.json": {
+      "bytes": 4998,
+      "embedded_utf8": "{\"actual_cpu_seconds\":449.190953561,\"actual_wall_seconds\":448.8616471389996,\"classical\":{\"donor_calibration_predictions_regenerated\":false,\"inventory\":{\"entry_and_exit_inventory_identical\":true,\"files\":278,\"tree_sha256\":\"553199481cd9982d028925d0bc0c056e84430a8a9230009887d7edbd9cac48fa\"},\"primary_comparison\":{\"candidate_evaluations_saved\":0,\"conventional_arm\":\"same_content_empirical\",\"conventional_qualified\":false,\"general_constructor_improvement_established\":false,\"local_accepted_prefix_advantage\":false,\"total_lifecycle_advantage_established\":false,\"updated_arm\":\"updated_no_artifact\",\"updated_qualified\":false},\"registered_cohorts\":{\"diagnostics\":2,\"donor_training\":100,\"primary_arms\":6,\"source_test\":50,\"source_validation\":50,\"successor_calibration_per_arm\":4,\"successor_test_per_arm\":12},\"results_sha256\":\"4ebb7c0f7cae90f7e1333f8fbf15e776854126cd601f287bad31c7d2c2c2c1cb\",\"scope\":\"Reproduction and independent rescoring of exposed registered data; not fresh scientific confirmation or independent historical timing evidence.\",\"source_and_successor_saved_predictions_regenerated\":true,\"source_qualified\":false,\"status\":\"LIMITED_SAVED_MASK_AUDIT\",\"successor_any_primary_qualified\":false},\"incumbent\":{\"all_saved_masks_independently_rescored\":true,\"fields_without_completed_session_attribution\":0,\"inventory\":{\"entry_and_exit_inventory_identical\":true,\"files\":265,\"tree_sha256\":\"8388f739de46fa521a2845c02a6cb3d1d05e5745cbd0eb06c848edb1de9fbbee\"},\"measured_session_new_fields\":116,\"neural_predictor_reexecuted_by_this_check\":false,\"original_reference_archives_independently_decoded\":true,\"registered_fields\":116,\"results_sha256\":\"4f6bda21acfb1b90496ede9b0081ade783abea12e274448601c4e866698d82f3\",\"scope\":\"Verifies scores, masks, source identity, border policy, coverage and reported verdicts. It does not establish model generation from hashes; retain the separately observed source-matched model operation/replay.\",\"source_qualified\":true,\"status\":\"VERIFIED_SAVED_PREDICTIONS\",\"successor_qualified\":false},\"incumbent_coverage\":\"ALL_116_SAVED_PREDICTIONS\",\"independence\":\"Separate reference decoder, scorer, coverage/selection verifier. Classical prediction replay uses the frozen generator. Common project authorship; no external laboratory certification.\",\"limits\":[\"Runtime and historical execution are recorded claims, not recoverable from hashes.\",\"Neural saved-mask scores are verified; generating-model inference is separately operated.\",\"No biological, clinical, commercial, general learning or novel task-population claim is established.\"],\"protocol_sha256\":\"20d28a2fffbb3189ef14492a46853e5711e03d5f94c64b9f0aeb0e934a3367ae\",\"public_archives\":{\"bbbc007_images\":{\"bytes\":6435776,\"sha256\":\"b7009e2fce0a3152a5c9adda916eaa699d09696f4bd02a7d05d12d041e30c6d1\",\"url\":\"https://data.broadinstitute.org/bbbc/BBBC007/BBBC007_v1_images.zip\"},\"bbbc007_outlines\":{\"bytes\":652531,\"sha256\":\"6a5246f9a9d743d22eafdb409fae638a8461af97e9ff9c4a92f25eba236224d3\",\"url\":\"https://data.broadinstitute.org/bbbc/BBBC007/BBBC007_v1_outlines.zip\"},\"bbbc039_images\":{\"bytes\":77915748,\"sha256\":\"6f30a5d4fe38c928ded972704f085975f8dc0d65d9aa366df00e5a9d449fddd7\",\"url\":\"https://data.broadinstitute.org/bbbc/BBBC039/images.zip\"},\"bbbc039_masks\":{\"bytes\":2753811,\"sha256\":\"f9e6043d8ca56344a4886f96a700d804d6ee982f31e2b2cd3194af2a053c2710\",\"url\":\"https://data.broadinstitute.org/bbbc/BBBC039/masks.zip\"},\"bbbc039_metadata\":{\"bytes\":17816,\"sha256\":\"a2c1f900bed9ba92a99553efd4c2ae98598433691c7401d818653ab61110deb2\",\"url\":\"https://data.broadinstitute.org/bbbc/BBBC039/metadata.zip\"}},\"runtime_versions\":{\"Pillow\":\"13.0.0\",\"numpy\":\"2.3.5\",\"python\":\"3.12.14\",\"scikit-image\":\"0.25.2\",\"scipy\":\"1.17.0\"},\"saved_prediction_fields_rescored\":312,\"schema\":\"learning-to-build/independent-evidence-check/v1\",\"scientific_confirmation\":\"EXPOSED_DATA_REPRODUCTION_NOT_NEW_CONFIRMATION\",\"source_bindings\":{\"AMENDMENT-2.json\":\"a42c99ed6057e10aa61dc87dd50d950a789de105c89b6ddfb282175deaac822a\",\"INCUMBENT_PROTOCOL-amendment-2.json\":\"957931af9c647d23f3bb2b20940bc121894c10e0dbc8cce6ddd0575cf780d8be\",\"INCUMBENT_REGISTRATION-amendment-2.json\":\"a0ff81e25aa9782921a04f58b6062ec7be86a4538156ad6f3dee77945a17764f\",\"PROTOCOL-amendment-2.json\":\"20d28a2fffbb3189ef14492a46853e5711e03d5f94c64b9f0aeb0e934a3367ae\",\"REGISTRATION-amendment-2.json\":\"aae0fdb9c485c6abba2139c15ca08db7d8ce0962af1336fa20dd5be0edfe5b05\",\"builder.py\":\"9665f8f9e3013e54b9d065765c0fd5478940bd8d8bfcfa5eb8a7b0135b309dee\",\"data.py\":\"e2ba268405723a1ba997af11b25fbb67b610b04394ee7910d4ebb1e812d1bea3\",\"incumbent.py\":\"58dd9055aa89aa91df41336f07c639ab9ec5019c48f2d42dea4ed08ee35cce6d\",\"instrument.py\":\"36248b79130e5b1835da55302efe63432c013b8aaac5ce5b8253a6b243f7c265\",\"requirements.txt\":\"513e6f534053e4aa9c46e5e5de6fe3b02dd2842d7c866dbdd9199bca78ef01f0\",\"run.py\":\"137d6ac9e4ecb9ea902f27d92c71b7d2e104fbbe87405f1aa4d2fbc04926f543\"},\"status\":\"LIMITED\",\"unique_classical_predictions_regenerated\":136,\"verifier_sha256\":\"612c35cb00c22fd88ef1db1b6cda5ed49596f21dd171335f4c1be36e89afd7d4\"}\n",
+      "original_receipt_name": "LIMITED_SAVED_OUTPUT_AUDIT.stdout.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "e8b78bddb20a2d6f2259170717e63b8ea8ffd16796d925cd031b77fa644441c1"
+    },
+    "review:MECHANISM_AND_REPAIR_REVIEW.json": {
+      "bytes": 6921,
+      "embedded_utf8": "{\n  \"actual_cpu_seconds\": 3.213029056,\n  \"actual_wall_seconds\": 1.5602009249996627,\n  \"archive_members_verified\": {\n    \"diagnostics\": 137,\n    \"repair\": 8\n  },\n  \"archived_predictions_independently_rescored\": 20,\n  \"checker_sha256\": \"612c35cb00c22fd88ef1db1b6cda5ed49596f21dd171335f4c1be36e89afd7d4\",\n  \"condition_results\": [\n    {\n      \"condition\": \"raw_raw\",\n      \"kind\": \"diagnostics\",\n      \"masks_rescored\": 4,\n      \"mean_foreground_dice\": 0.8503569244923149,\n      \"mean_internal_boundary_f1\": 0.2503983493786524,\n      \"mean_relative_count_error\": 0.08629835418695016,\n      \"numerical_calibration_gate_met\": false\n    },\n    {\n      \"condition\": \"reference_both\",\n      \"kind\": \"diagnostics\",\n      \"masks_rescored\": 4,\n      \"mean_foreground_dice\": 0.9999025207068335,\n      \"mean_internal_boundary_f1\": 0.7149089490671408,\n      \"mean_relative_count_error\": 0.1650641929271248,\n      \"numerical_calibration_gate_met\": true\n    },\n    {\n      \"condition\": \"reference_foreground\",\n      \"kind\": \"diagnostics\",\n      \"masks_rescored\": 4,\n      \"mean_foreground_dice\": 0.9999025207068335,\n      \"mean_internal_boundary_f1\": 0.6158282807957147,\n      \"mean_relative_count_error\": 0.09019387018944619,\n      \"numerical_calibration_gate_met\": true\n    },\n    {\n      \"condition\": \"reference_seeds\",\n      \"kind\": \"diagnostics\",\n      \"masks_rescored\": 4,\n      \"mean_foreground_dice\": 0.8297973027254768,\n      \"mean_internal_boundary_f1\": 0.19535339607018865,\n      \"mean_relative_count_error\": 0.11139891407382625,\n      \"numerical_calibration_gate_met\": false\n    },\n    {\n      \"condition\": \"calibration\",\n      \"kind\": \"repair\",\n      \"masks_rescored\": 4,\n      \"mean_foreground_dice\": 0.8610571831711469,\n      \"mean_internal_boundary_f1\": 0.29680902283470273,\n      \"mean_relative_count_error\": 0.08111180210710182,\n      \"numerical_calibration_gate_met\": false\n    }\n  ],\n  \"cost_scope\": \"This archive/independent-reference rescoring process only; source reading/reasoning and earlier interactive checks are unmeasured. No prediction generation in this pass.\",\n  \"historical_constituent_cost_totals\": {\n    \"actual_field_cpu_seconds\": 122.63709349899909,\n    \"actual_field_wall_seconds\": 122.65006389700102,\n    \"scoring_cpu_seconds\": 0.31410444900211587,\n    \"segmentation_cpu_seconds\": 122.03669503299989\n  },\n  \"independence\": \"Separate same-session internal assistant reviewer did not author either candidate, diagnostic, registration, evaluator or checker. Reviewer inspected source and rescored archived masks using the separately implemented check.PublicData reference decoder and check.score. Not an external audit or fresh scientific confirmation.\",\n  \"independent_reference_fields\": [\n    \"A9/A9 p10\",\n    \"A9/A9 p5\",\n    \"A9/A9 p7\",\n    \"A9/A9 p9\"\n  ],\n  \"pixel_members_decoded\": [\n    {\n      \"archive\": \"bbbc007_images\",\n      \"member\": \"BBBC007_v1_images/A9/A9 p10d.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_outlines\",\n      \"member\": \"BBBC007_v1_outlines/A9/A9 p10d.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_images\",\n      \"member\": \"BBBC007_v1_images/A9/A9 p10f.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_outlines\",\n      \"member\": \"BBBC007_v1_outlines/A9/A9 p10f.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_images\",\n      \"member\": \"BBBC007_v1_images/A9/A9 p5d.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_outlines\",\n      \"member\": \"BBBC007_v1_outlines/A9/A9 p5d.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_images\",\n      \"member\": \"BBBC007_v1_images/A9/A9 p5f.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_outlines\",\n      \"member\": \"BBBC007_v1_outlines/A9/A9 p5f.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_images\",\n      \"member\": \"BBBC007_v1_images/A9/A9 p7d.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_outlines\",\n      \"member\": \"BBBC007_v1_outlines/A9/A9 p7d.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_images\",\n      \"member\": \"BBBC007_v1_images/A9/A9 p7f.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_outlines\",\n      \"member\": \"BBBC007_v1_outlines/A9/A9 p7f.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_images\",\n      \"member\": \"BBBC007_v1_images/A9/A9 p9d.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_outlines\",\n      \"member\": \"BBBC007_v1_outlines/A9/A9 p9d.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_images\",\n      \"member\": \"BBBC007_v1_images/A9/A9 p9f.tif\"\n    },\n    {\n      \"archive\": \"bbbc007_outlines\",\n      \"member\": \"BBBC007_v1_outlines/A9/A9 p9f.tif\"\n    }\n  ],\n  \"required_qualifications\": [\n    \"Order replay executes actual builder.construct but replaces score acquisition with a cached adapter:792 cached evaluator calls are not792 fresh image-inference calls.\",\n    \"The four calibration fields and all original outcomes were already exposed before these diagnostics; prospective code freezing does not make them untouched.\",\n    \"The reference-foreground numerical pass is a reference-assisted diagnostic, not an accepted raw-input method.\",\n    \"Changing seed input also changes the raw foreground branch through its seed union; contrasts identify software branch effects, not isolated biological causal effects.\",\n    \"The single assistant-authored ordinary repair failed the frozen calibration boundary gate and correctly stopped without test scoring or a new full raw-neural operation.\",\n    \"Cached constituent inference has nonzero original cost; attributed field times are nested original work and must not be recharged as incremental execution.\",\n    \"Neither result demonstrates fresh transfer, retained-method learning advantage or complete-cost savings.\"\n  ],\n  \"review_driver_sha256\": \"a8a6a2c3912faf863d8fb00873282a7be26697da30ec247d704fabbfa043b150\",\n  \"schema\": \"learning-to-build/internal-mechanism-review/v1\",\n  \"source_bindings\": {\n    \"diagnostics/EVIDENCE.json\": \"a93468d5d8028ea358580e778e5edd5a961976565ab22879fbd4dafc72e27dc2\",\n    \"diagnostics/FREEZE.json\": \"e41935967c95f248ad0995f6ff5dfee226cf99dc1797c5ba5453a711311bb416\",\n    \"diagnostics/PREREGISTRATION.json\": \"649a924df296f419a02a64d5e49d2aecce63ac94bef1a9484f372d6ac38e72f4\",\n    \"diagnostics/RESULTS.json\": \"555d9e01a3e7655835139497b1c0b2c05f5cdb0fc86463aef5846c525687ca8b\",\n    \"diagnostics/run.py\": \"b440e0e3eb0e47c51d30e319aeaf8fb90235726886c33c03c76f5f22107bfd52\",\n    \"repair/EVIDENCE.json\": \"c91294b2a9c449f4419ca9c8b4257c3f51e0ec9c0e731029f8962a455ee8cc28\",\n    \"repair/FREEZE.json\": \"c2745f34713dc26be55b44d3f630985aada2036c25cef6c020ac747a1157282b\",\n    \"repair/PREREGISTRATION.json\": \"e315d050faa5515a222bf01d696ff90ba29554b69df8ed978be5a2ee29ff5b64\",\n    \"repair/RESULTS.json\": \"0b93da63217fbae6e97229974263b7bc0e2d37f0f4d9593f711dc3092bbfb3c6\",\n    \"repair/composition.py\": \"b386b1d88be9e20b8ad85419f9b280eb9e229bfec64eb8efd84600f2e1bbfbb9\",\n    \"repair/evaluate.py\": \"b2eb55f445dfd714272aa5a9eb30c00d73c29ae27759838bef0a64029b53dcf4\"\n  },\n  \"status\": \"ACCEPTED_WITH_STATED_LIMITS\",\n  \"substantive_findings\": [],\n  \"successor_test_pixel_decoding_performed\": false\n}\n",
+      "original_receipt_name": "MECHANISM_AND_REPAIR_REVIEW.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "b2bfbd4ead35effb84dd2e9bd637d5b8fb34960fc662e252e0fdba0a88b04d06"
+    },
+    "review:RAW_RECONSTRUCTION_INDEPENDENT_CHECK.json": {
+      "bytes": 13516,
+      "embedded_utf8": "{\n  \"actual_cpu_seconds\": 2.0883043779999997,\n  \"actual_wall_seconds\": 0.43394529499892087,\n  \"canonical_files_derived_from_run_state\": 278,\n  \"checker_sha256\": \"612c35cb00c22fd88ef1db1b6cda5ed49596f21dd171335f4c1be36e89afd7d4\",\n  \"numerical_replay_performed_this_check\": false,\n  \"original_and_reconstructed_relative_paths_and_bytes_equal\": true,\n  \"original_raw_files\": 416,\n  \"reconstructed_raw_files\": 416,\n  \"schema\": \"learning-to-build/raw-reconstruction-review/v1\",\n  \"scope\": \"Independent byte comparison to preserved original rawtree and actual check.Evidence.inventory gate. Canonical used-file set derived from retained RUN_STATE stage inventories, not from projection utility. This is inventory-component verification, not a new complete scientific replay.\",\n  \"source_utility_sha256\": \"bf8c818974c5d246fd0be0c339090c645a0899f2574009eb81bb5aaa4d2dbed5\",\n  \"status\": \"VERIFIED_BYTE_RECONSTRUCTION\",\n  \"strict_inventory_error\": \"Unaccounted evidence files: attempts/successor-001/SELECTIONS_BEFORE_TEST.json, attempts/successor-001/diagnostics/old_artifact/masks/f113_AS_09125_040701150004_A02f00_4ed4e189.png, attempts/successor-001/diagnostics/old_artifact/masks/f9620_20P1_POS0002_84690c16.png, attempts/successor-001/diagnostics/old_artifact/masks/f9620_20P1_POS0005_f779fe4f.png, attempts/successor-001/diagnostics/old_artifact/masks/f9620_20P1_POS0007_7b092cf9.png, attempts/successor-001/diagnostics/old_artifact/masks/f9620_20P1_POS0008_9b58bc90.png, attempts/successor-001/diagnostics/old_artifact/masks/f9620_20P1_POS0010_c78edc80.png, attempts/successor-001/diagnostics/old_artifact/masks/f96_17_17P1_POS0006_1f4e0307.png\",\n  \"strict_inventory_status\": \"REJECTED_EXPECTED\",\n  \"unaccounted_relative_paths\": [\n    \"attempts/successor-001/SELECTIONS_BEFORE_TEST.json\",\n    \"attempts/successor-001/diagnostics/old_artifact/masks/f113_AS_09125_040701150004_A02f00_4ed4e189.png\",\n    \"attempts/successor-001/diagnostics/old_artifact/masks/f9620_20P1_POS0002_84690c16.png\",\n    \"attempts/successor-001/diagnostics/old_artifact/masks/f9620_20P1_POS0005_f779fe4f.png\",\n    \"attempts/successor-001/diagnostics/old_artifact/masks/f9620_20P1_POS0007_7b092cf9.png\",\n    \"attempts/successor-001/diagnostics/old_artifact/masks/f9620_20P1_POS0008_9b58bc90.png\",\n    \"attempts/successor-001/diagnostics/old_artifact/masks/f9620_20P1_POS0010_c78edc80.png\",\n    \"attempts/successor-001/diagnostics/old_artifact/masks/f96_17_17P1_POS0006_1f4e0307.png\",\n    \"attempts/successor-001/diagnostics/old_artifact/masks/f96_17_17P1_POS0007_1fdfd875.png\",\n    \"attempts/successor-001/diagnostics/old_artifact/masks/f96_17_17P1_POS0011_7beeacb4.png\",\n    \"attempts/successor-001/diagnostics/old_artifact/masks/f96_17_17P1_POS0013_ce576a61.png\",\n    \"attempts/successor-001/diagnostics/old_artifact/masks/f96_17_17P1_POS0014_fe29bc40.png\",\n    \"attempts/successor-001/fixed_no_history/calibration.csv\",\n    \"attempts/successor-001/fixed_no_history/construction.json\",\n    \"attempts/successor-001/fixed_no_history/holdout/MASKS.json\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f113_AS_09125_040701150004_A02f00_4ed4e189.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f9620_20P1_POS0002_84690c16.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f9620_20P1_POS0005_f779fe4f.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f9620_20P1_POS0007_7b092cf9.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f9620_20P1_POS0008_9b58bc90.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f9620_20P1_POS0010_c78edc80.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f9620_20P1_POS0011_6e15c239.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f96_17_17P1_POS0006_1f4e0307.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f96_17_17P1_POS0007_1fdfd875.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f96_17_17P1_POS0011_7beeacb4.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f96_17_17P1_POS0013_ce576a61.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/masks/f96_17_17P1_POS0014_fe29bc40.png\",\n    \"attempts/successor-001/fixed_no_history/holdout/measurements.csv\",\n    \"attempts/successor-001/fixed_no_history/holdout/metrics.csv\",\n    \"attempts/successor-001/fixed_no_history/instrument/instrument.json\",\n    \"attempts/successor-001/fixed_no_history/instrument/instrument.py\",\n    \"attempts/successor-001/fixed_no_history/summary.json\",\n    \"attempts/successor-001/fixed_no_history/trace.csv\",\n    \"attempts/successor-001/full_enumeration/calibration.csv\",\n    \"attempts/successor-001/full_enumeration/construction.json\",\n    \"attempts/successor-001/full_enumeration/holdout/MASKS.json\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f113_AS_09125_040701150004_A02f00_4ed4e189.png\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f9620_20P1_POS0002_84690c16.png\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f9620_20P1_POS0005_f779fe4f.png\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f9620_20P1_POS0007_7b092cf9.png\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f9620_20P1_POS0008_9b58bc90.png\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f9620_20P1_POS0010_c78edc80.png\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f9620_20P1_POS0011_6e15c239.png\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f96_17_17P1_POS0006_1f4e0307.png\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f96_17_17P1_POS0007_1fdfd875.png\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f96_17_17P1_POS0011_7beeacb4.png\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f96_17_17P1_POS0013_ce576a61.png\",\n    \"attempts/successor-001/full_enumeration/holdout/masks/f96_17_17P1_POS0014_fe29bc40.png\",\n    \"attempts/successor-001/full_enumeration/holdout/measurements.csv\",\n    \"attempts/successor-001/full_enumeration/holdout/metrics.csv\",\n    \"attempts/successor-001/full_enumeration/instrument/instrument.json\",\n    \"attempts/successor-001/full_enumeration/instrument/instrument.py\",\n    \"attempts/successor-001/full_enumeration/summary.json\",\n    \"attempts/successor-001/full_enumeration/trace.csv\",\n    \"attempts/successor-001/ordinary_reuse/calibration.csv\",\n    \"attempts/successor-001/ordinary_reuse/construction.json\",\n    \"attempts/successor-001/ordinary_reuse/holdout/MASKS.json\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f113_AS_09125_040701150004_A02f00_4ed4e189.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f9620_20P1_POS0002_84690c16.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f9620_20P1_POS0005_f779fe4f.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f9620_20P1_POS0007_7b092cf9.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f9620_20P1_POS0008_9b58bc90.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f9620_20P1_POS0010_c78edc80.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f9620_20P1_POS0011_6e15c239.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f96_17_17P1_POS0006_1f4e0307.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f96_17_17P1_POS0007_1fdfd875.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f96_17_17P1_POS0011_7beeacb4.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f96_17_17P1_POS0013_ce576a61.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/masks/f96_17_17P1_POS0014_fe29bc40.png\",\n    \"attempts/successor-001/ordinary_reuse/holdout/measurements.csv\",\n    \"attempts/successor-001/ordinary_reuse/holdout/metrics.csv\",\n    \"attempts/successor-001/ordinary_reuse/instrument/instrument.json\",\n    \"attempts/successor-001/ordinary_reuse/instrument/instrument.py\",\n    \"attempts/successor-001/ordinary_reuse/summary.json\",\n    \"attempts/successor-001/ordinary_reuse/trace.csv\",\n    \"attempts/successor-001/same_content_empirical/calibration.csv\",\n    \"attempts/successor-001/same_content_empirical/construction.json\",\n    \"attempts/successor-001/same_content_empirical/holdout/MASKS.json\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f113_AS_09125_040701150004_A02f00_4ed4e189.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f9620_20P1_POS0002_84690c16.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f9620_20P1_POS0005_f779fe4f.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f9620_20P1_POS0007_7b092cf9.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f9620_20P1_POS0008_9b58bc90.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f9620_20P1_POS0010_c78edc80.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f9620_20P1_POS0011_6e15c239.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f96_17_17P1_POS0006_1f4e0307.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f96_17_17P1_POS0007_1fdfd875.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f96_17_17P1_POS0011_7beeacb4.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f96_17_17P1_POS0013_ce576a61.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/masks/f96_17_17P1_POS0014_fe29bc40.png\",\n    \"attempts/successor-001/same_content_empirical/holdout/measurements.csv\",\n    \"attempts/successor-001/same_content_empirical/holdout/metrics.csv\",\n    \"attempts/successor-001/same_content_empirical/instrument/instrument.json\",\n    \"attempts/successor-001/same_content_empirical/instrument/instrument.py\",\n    \"attempts/successor-001/same_content_empirical/summary.json\",\n    \"attempts/successor-001/same_content_empirical/trace.csv\",\n    \"attempts/successor-001/updated_no_artifact/calibration.csv\",\n    \"attempts/successor-001/updated_no_artifact/construction.json\",\n    \"attempts/successor-001/updated_no_artifact/holdout/MASKS.json\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f113_AS_09125_040701150004_A02f00_4ed4e189.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f9620_20P1_POS0002_84690c16.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f9620_20P1_POS0005_f779fe4f.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f9620_20P1_POS0007_7b092cf9.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f9620_20P1_POS0008_9b58bc90.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f9620_20P1_POS0010_c78edc80.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f9620_20P1_POS0011_6e15c239.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f96_17_17P1_POS0006_1f4e0307.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f96_17_17P1_POS0007_1fdfd875.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f96_17_17P1_POS0011_7beeacb4.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f96_17_17P1_POS0013_ce576a61.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/masks/f96_17_17P1_POS0014_fe29bc40.png\",\n    \"attempts/successor-001/updated_no_artifact/holdout/measurements.csv\",\n    \"attempts/successor-001/updated_no_artifact/holdout/metrics.csv\",\n    \"attempts/successor-001/updated_no_artifact/instrument/instrument.json\",\n    \"attempts/successor-001/updated_no_artifact/instrument/instrument.py\",\n    \"attempts/successor-001/updated_no_artifact/summary.json\",\n    \"attempts/successor-001/updated_no_artifact/trace.csv\",\n    \"attempts/successor-001/updated_with_artifact/calibration.csv\",\n    \"attempts/successor-001/updated_with_artifact/construction.json\",\n    \"attempts/successor-001/updated_with_artifact/holdout/MASKS.json\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f113_AS_09125_040701150004_A02f00_4ed4e189.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f9620_20P1_POS0002_84690c16.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f9620_20P1_POS0005_f779fe4f.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f9620_20P1_POS0007_7b092cf9.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f9620_20P1_POS0008_9b58bc90.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f9620_20P1_POS0010_c78edc80.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f9620_20P1_POS0011_6e15c239.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f96_17_17P1_POS0006_1f4e0307.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f96_17_17P1_POS0007_1fdfd875.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f96_17_17P1_POS0011_7beeacb4.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f96_17_17P1_POS0013_ce576a61.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/masks/f96_17_17P1_POS0014_fe29bc40.png\",\n    \"attempts/successor-001/updated_with_artifact/holdout/measurements.csv\",\n    \"attempts/successor-001/updated_with_artifact/holdout/metrics.csv\",\n    \"attempts/successor-001/updated_with_artifact/instrument/instrument.json\",\n    \"attempts/successor-001/updated_with_artifact/instrument/instrument.py\",\n    \"attempts/successor-001/updated_with_artifact/summary.json\",\n    \"attempts/successor-001/updated_with_artifact/trace.csv\"\n  ],\n  \"unaccounted_residual_files\": 138\n}\n",
+      "original_receipt_name": "RAW_RECONSTRUCTION_INDEPENDENT_CHECK.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "6c23b7ae19f908ac97c928237e57190e69f306ddc301d447a69dcc766835dc6a"
+    },
+    "review:diagnostic-independent-replay.command.json": {
+      "bytes": 1126,
+      "embedded_utf8": "{\n  \"actual_child_cpu_seconds\": 8.665957,\n  \"actual_wall_seconds\": 7.0259072270000615,\n  \"command\": [\n    \"/workspace/scratch/fad12dbaa4fb/ltb-venv/bin/python\",\n    \"-B\",\n    \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction/diagnostics/run.py\",\n    \"--cache\",\n    \"/workspace/scratch/fad12dbaa4fb/ltb-data-cache\",\n    \"--classical\",\n    \"/workspace/scratch/5970a1b7b3a2/evidence-review-20261108/extracted/classical\",\n    \"--output\",\n    \"/workspace/scratch/5970a1b7b3a2/evidence-review-20261108/diagnostic-replay\",\n    \"--verify\",\n    \"--expected\",\n    \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction/diagnostics/RESULTS.json\"\n  ],\n  \"cwd\": \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction\",\n  \"exit_code\": 0,\n  \"scope\": \"Command boundary; inner process timings are nested and must not be added to this boundary.\",\n  \"stderr_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stdout_sha256\": \"3e942dc95f811e7023f7c53497fb7aa16b6841bd61aadc9791008d95561a479f\"\n}\n",
+      "original_receipt_name": "diagnostic-independent-replay.command.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "147316f1193d08c690ca3b921d2f7370e7ae38f798ee9f27c4106070bd983796"
+    },
+    "review:diagnostic-replay/PROCESS_COST.json": {
+      "bytes": 656,
+      "embedded_utf8": "{\n  \"billing_usd\": null,\n  \"does_not_replace_original_experiment_costs\": true,\n  \"ended_at_utc\": \"2026-11-08T00:15:51+00:00\",\n  \"human_seconds\": null,\n  \"instrumented_process\": {\n    \"cpu_seconds\": 8.576159534999999,\n    \"wall_seconds\": 6.934219638000286\n  },\n  \"measurement_scope\": \"Current process including numerical imports, source/input hashing, cached replay, image decoding, all segmentation/control/scoring calls, and output preparation. Wall timing starts inside the script. Final receipt serialization is excluded.\",\n  \"process_cpu_seconds_including_startup\": 8.59248104,\n  \"started_at_utc\": \"2026-11-08T00:15:44+00:00\",\n  \"status\": \"COMPLETE\"\n}\n",
+      "original_receipt_name": "diagnostic-replay/PROCESS_COST.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "cf21a94f89e7d52aa8f2313de89d0469d65f9a0bf348e84015ef2dac7a4ee21a"
+    },
+    "review:evidence-extract.command.json": {
+      "bytes": 782,
+      "embedded_utf8": "{\n  \"actual_child_cpu_seconds\": 0.309122,\n  \"actual_wall_seconds\": 0.31011276800018095,\n  \"command\": [\n    \"/workspace/scratch/fad12dbaa4fb/ltb-venv/bin/python\",\n    \"-B\",\n    \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction/evidence.py\",\n    \"--extract\",\n    \"/workspace/scratch/5970a1b7b3a2/evidence-review-20261108/extracted\"\n  ],\n  \"cwd\": \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction\",\n  \"exit_code\": 0,\n  \"scope\": \"Command boundary; inner process timings are nested and must not be added to this boundary.\",\n  \"stderr_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stdout_sha256\": \"407ebe8c0395993a61791ba6f154864ab69ef20bc99c68f4a760da93dad3c654\"\n}\n",
+      "original_receipt_name": "evidence-extract.command.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "2a0e13a5ede8a57532844ebe417cb8bbe77c6abe4a5d8f68180487c1747b1518"
+    },
+    "review:projection-reconstruct.command.json": {
+      "bytes": 898,
+      "embedded_utf8": "{\n  \"actual_child_cpu_seconds\": 0.32618199999999997,\n  \"actual_wall_seconds\": 0.3269509340007062,\n  \"command\": [\n    \"/workspace/scratch/fad12dbaa4fb/ltb-venv/bin/python\",\n    \"-B\",\n    \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction/projection.py\",\n    \"--evidence\",\n    \"/workspace/scratch/5970a1b7b3a2/evidence-review-20261108/extracted\",\n    \"--reconstruct\",\n    \"/workspace/scratch/5970a1b7b3a2/evidence-review-20261108/raw-reconstructed\"\n  ],\n  \"cwd\": \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction\",\n  \"exit_code\": 0,\n  \"scope\": \"Command boundary; inner process timings are nested and must not be added to this boundary.\",\n  \"stderr_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stdout_sha256\": \"83fdbcdc2931e91041ebee33570f5ea5c2edfc2c805f3cc9c62193b6c84e717d\"\n}\n",
+      "original_receipt_name": "projection-reconstruct.command.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "76ce007cd02c2d8faae76917be0c1241d136e69d53afb2404e3327c13afc6870"
+    },
+    "review:projection-tests.command.json": {
+      "bytes": 648,
+      "embedded_utf8": "{\n  \"actual_child_cpu_seconds\": 0.08508800000000001,\n  \"actual_wall_seconds\": 0.0887026420004986,\n  \"command\": [\n    \"/workspace/scratch/fad12dbaa4fb/ltb-venv/bin/python\",\n    \"-B\",\n    \"-m\",\n    \"unittest\",\n    \"test_projection\",\n    \"-v\"\n  ],\n  \"cwd\": \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction\",\n  \"exit_code\": 0,\n  \"scope\": \"Command boundary; inner process timings are nested and must not be added to this boundary.\",\n  \"stderr_sha256\": \"cb066c4ac8efb363d0a3ef1750bc78b55ebc2718b7125ea8a1bf1c372c4075f5\",\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n}\n",
+      "original_receipt_name": "projection-tests.command.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "55f79dfaa4e68c33112d3c34c99820091b09b688b9d0f220a5c258ed4de40d4f"
+    },
+    "review:projection-verify.command.json": {
+      "bytes": 795,
+      "embedded_utf8": "{\n  \"actual_child_cpu_seconds\": 0.16335600000000008,\n  \"actual_wall_seconds\": 0.1635937089995423,\n  \"command\": [\n    \"/workspace/scratch/fad12dbaa4fb/ltb-venv/bin/python\",\n    \"-B\",\n    \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction/projection.py\",\n    \"--evidence\",\n    \"/workspace/scratch/5970a1b7b3a2/evidence-review-20261108/extracted\"\n  ],\n  \"cwd\": \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction\",\n  \"exit_code\": 0,\n  \"scope\": \"Command boundary; inner process timings are nested and must not be added to this boundary.\",\n  \"stderr_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stdout_sha256\": \"b72599d0dfb6f6ed68b159ac99811a7e50f57c33fba70b152009a52c659e498f\"\n}\n",
+      "original_receipt_name": "projection-verify.command.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "bd85f60fe4b5bf83e854cda83fe76b5f42590755ed18973cd2c3646d40aca81b"
+    },
+    "review:repair-independent-replay.command.json": {
+      "bytes": 1116,
+      "embedded_utf8": "{\n  \"actual_child_cpu_seconds\": 3.379151,\n  \"actual_wall_seconds\": 1.805588893001186,\n  \"command\": [\n    \"/workspace/scratch/fad12dbaa4fb/ltb-venv/bin/python\",\n    \"-B\",\n    \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction/repair/evaluate.py\",\n    \"--cache\",\n    \"/workspace/scratch/fad12dbaa4fb/ltb-data-cache\",\n    \"--incumbent\",\n    \"/workspace/scratch/5970a1b7b3a2/evidence-review-20261108/extracted/incumbent\",\n    \"--output\",\n    \"/workspace/scratch/5970a1b7b3a2/evidence-review-20261108/repair-replay\",\n    \"--verify\",\n    \"--expected\",\n    \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction/repair/RESULTS.json\"\n  ],\n  \"cwd\": \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction\",\n  \"exit_code\": 0,\n  \"scope\": \"Command boundary; inner process timings are nested and must not be added to this boundary.\",\n  \"stderr_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stdout_sha256\": \"834df24583aeb5100e1b9e5ec23a90ac5f07856fb80fe5af24b9a92c1709ce4e\"\n}\n",
+      "original_receipt_name": "repair-independent-replay.command.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "b224a2ac78abff519b1f50159cb165e892e954d9a47c7bbc2617666b4573de81"
+    },
+    "review:repair-replay/PROCESS_COST.json": {
+      "bytes": 640,
+      "embedded_utf8": "{\n  \"billing_usd\": null,\n  \"ended_at_utc\": \"2026-11-08T00:20:16+00:00\",\n  \"human_seconds\": null,\n  \"instrumented_process\": {\n    \"cpu_seconds\": 3.309142164,\n    \"wall_seconds\": 1.7353955210001004\n  },\n  \"process_cpu_seconds_including_startup\": 3.320948764,\n  \"scope\": \"Current cached-constituent candidate evaluation, including source/input hashing, imports, decoding, constituent rescore, actual classical composition and separate score implementation. Historical neural inference is attributed separately, not rerun or double-counted.\",\n  \"started_at_utc\": \"2026-11-08T00:20:14+00:00\",\n  \"status\": \"COMPLETED_NEGATIVE_CALIBRATION_STOP\"\n}\n",
+      "original_receipt_name": "repair-replay/PROCESS_COST.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "2b421bcab501f78209eafafd250da30325ba71357e2fb9246fb37ec7130f9860"
+    },
+    "review:setup-review-tests.command.json": {
+      "bytes": 644,
+      "embedded_utf8": "{\n  \"actual_child_cpu_seconds\": 0.08161599999999997,\n  \"actual_wall_seconds\": 0.08199042299929715,\n  \"command\": [\n    \"/workspace/scratch/fad12dbaa4fb/ltb-venv/bin/python\",\n    \"-B\",\n    \"-m\",\n    \"unittest\",\n    \"test_setup\",\n    \"-v\"\n  ],\n  \"cwd\": \"/workspace/scratch/fad12dbaa4fb/learning-to-build/docs/learning-to-build-v1.1.0/construction\",\n  \"exit_code\": 0,\n  \"scope\": \"Command boundary; inner process timings are nested and must not be added to this boundary.\",\n  \"stderr_sha256\": \"8e7eb482b757186d5ee55138f32f87dde64349b2d329c423ad3fccaaca2b5950\",\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n}\n",
+      "original_receipt_name": "setup-review-tests.command.json",
+      "retention": "Exact receipt bytes embedded here; also retained by the internal reviewer. Any reviewer evidence packet is a duplicate source, not additional execution.",
+      "sha256": "85bf5a2d3014f241af592e0f69a3c93d77ec949454e7b12f7168de5eba510384"
+    },
+    "setup:QUALIFICATION.json": {
+      "archive": "qualification/setup-boundary-evidence.tar.gz",
+      "bytes": 9517,
+      "member": "QUALIFICATION.json",
+      "sha256": "23ec9e6b8e7f5bbeb01e2a168dc7f7b604180937dd67db91d4803ba7cf82d5d5"
+    },
+    "setup:prior-failed/CANDIDATE_VERIFICATION.json": {
+      "archive": "qualification/setup-boundary-evidence.tar.gz",
+      "bytes": 7786,
+      "member": "prior-failed/CANDIDATE_VERIFICATION.json",
+      "sha256": "dc4798b41549da3089e059f4ab7ec1224a28a55e7b7b814204484690a8ec63c6"
+    }
+  },
+  "status": "RECORDED_BOUNDARIES_WITH_MATERIAL_UNKNOWNS",
+  "unknown_costs": [
+    {
+      "billing_usd": null,
+      "category": "original classical residual provenance",
+      "cpu_seconds": null,
+      "reason": "Byte-identical residuals can be mapped and strict projected replay verified, but their origin and any unrecorded extra execution cost are unresolved. Original raw tree remains strict-inventory rejected.",
+      "sources": [
+        "original:CHECKER_RECHECK_LAUNCH_FAILURE_001.json",
+        "original:IDEMPOTENT_RESUME_RECEIPT_FAILURE_001.json",
+        "original:DATA_ACQUISITION_OBSERVATION.json",
+        "original:incumbent-setup-001/BOOTSTRAP_OBSERVATIONS.json",
+        "original:REPRODUCTION.json",
+        "original:classical-residuals/PROJECTION.json"
+      ],
+      "status": "UNKNOWN",
+      "wall_seconds": null
+    },
+    {
+      "category": "historical runs and interrupted/acquisition work not recovered",
+      "reason": "Focused failure replays and current reproductions do not recover prior full-run cost. Recorded attempt flags cannot establish absence of unrecorded work. A 59,768,832-byte partial data-download residual has unidentified execution cost.",
+      "status": "UNKNOWN"
+    },
+    {
+      "category": "recorded launcher and receipt-writing failures with missing telemetry",
+      "reason": "Classical recheck launch failed before checker execution; one idempotent-resume receipt failed after operation. Their missing CPU/wall telemetry is not zero.",
+      "sources": [
+        "original:CHECKER_RECHECK_LAUNCH_FAILURE_001.json",
+        "original:IDEMPOTENT_RESUME_RECEIPT_FAILURE_001.json"
+      ],
+      "status": "UNKNOWN"
+    },
+    {
+      "category": "initial bootstrap, investigation, authoring, review and human intervention",
+      "reason": "Initial environment creation/source probes, engineering preflights, assistant reasoning/authoring, manual investigation, manuscript work and human effort lack complete measurements. Work assigned to a human has not been eliminated.",
+      "status": "UNKNOWN"
+    },
+    {
+      "billing_usd": null,
+      "category": "included assistant/model/host billing, storage and network",
+      "reason": "No measured billing invoice or comprehensive resource-to-price conversion is provided. No new purchases or paid model API calls does not mean zero economic cost.",
+      "status": "UNKNOWN"
+    },
+    {
+      "category": "upstream specialist and foundation-model training",
+      "reason": "Supplied pretrained stock differs from finite constructor information. Pretraining cost and data overlap are not controlled or fully known.",
+      "status": "UNKNOWN"
+    },
+    {
+      "category": "later qualification and publication",
+      "reason": "Sealed/extracted source ZIP checks, hosted workflow runs, merge, release and operation from downloaded release artifacts add work. Their later receipts supplement this ledger; no cost has been invented for unfinished steps.",
+      "status": "OUTSIDE_THIS_SNAPSHOT"
+    }
+  ],
+  "verdicts": {
+    "accepted_whole_cell_equivalent_outcome": false,
+    "complete_cost_savings_established": false,
+    "construction_cycle_accepted": false,
+    "demonstrated_primary_candidate_evaluations_saved": 0,
+    "fresh_matched_retained_method_advantage_demonstrated": false,
+    "monetary_savings_usd": null,
+    "qualification": "A fixed pretrained specialist qualified on the stated nucleus source task. All six constructor successor arms, the specialist whole-cell comparison, and the single composed repair fail the applicable whole-cell gate. Numerical reference-assisted passes are not raw-input accepted outcomes."
+  }
+}

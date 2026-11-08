@@ -1121,6 +1121,14 @@ def validate_attempts(e, state):
                 "Invalid invocation completed-stage list")
 
 
+def prepared_incumbent_loading(protocol, registration):
+    """Read the loading contract from the hash-pinned preparation preflight."""
+    preparation = protocol["preparation_receipt"]
+    require(file_hash(BASE / preparation["path"]) == preparation["sha256"]
+            == registration["preparation_sha256"], "Incumbent preparation binding differs")
+    return load_json(BASE / preparation["path"])["preflight"]["loading"]
+
+
 def verify_incumbent(verifier, root):
     """All stored neural predictions are rescored; neural inference is not hidden."""
     e = Evidence(root)
@@ -1180,10 +1188,7 @@ def verify_incumbent(verifier, root):
     same(result["sessions"], sessions, "incumbent session reconciliation")
     same(e.json("STATUS.json"), dict(status="COMPLETE", fields=fields), "incumbent completed denominator")
     loading = result["model_loading"]
-    preparation = protocol["preparation_receipt"]
-    require(file_hash(BASE / preparation["path"]) == preparation["sha256"]
-            == registration["preparation_sha256"], "Incumbent preparation binding differs")
-    expected_loading = load_json(BASE / preparation["path"])["loading"]
+    expected_loading = prepared_incumbent_loading(protocol, registration)
     nonnegative_times(loading, ("load_cpu_seconds", "load_wall_seconds"), "incumbent loading")
     for key in ("load_cpu_seconds", "load_wall_seconds"):
         expected_loading[key] = loading[key]
