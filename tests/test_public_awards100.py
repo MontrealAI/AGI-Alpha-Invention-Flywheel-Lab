@@ -71,14 +71,11 @@ class RegisteredAwardTests(unittest.TestCase):
             a.aggregate(fixture(self.rows(), COLUMNS[:-1] + [COLUMNS[-2]]))
 
     def test_m5_missing_currency_description_or_amount_fails(self):
-        for prefix in ("contractAmount", "totalContractValue", "contractCurrency",
-                       "tenderDescription"):
-            names = [n for n in COLUMNS if not n.startswith(prefix)]
-            with self.subTest(prefix=prefix):
-                if prefix == "contractAmount":
-                    continue  # one published amount field is sufficient
-                with self.assertRaises(ValueError):
-                    a.aggregate(fixture([[""] * len(names)], names))
+        for prefixes in (("contractAmount", "totalContractValue"),
+                         ("contractCurrency",), ("tenderDescription",)):
+            names = [n for n in COLUMNS if not any(n.startswith(p) for p in prefixes)]
+            with self.subTest(prefixes=prefixes), self.assertRaises(ValueError):
+                a.aggregate(fixture([[""] * len(names)], names))
 
     def test_m6_source_hash_changes_on_one_byte(self):
         data = fixture(self.rows())
