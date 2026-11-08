@@ -20,13 +20,19 @@ from commercial.ledger import canonical,digest,strict_json
 from scripts.release_connected014 import archive_manifest,commit
 from scripts.qualify_connected014 import run_command
 from connected_enterprise.platform_runtime import command_budget
-from connected_enterprise.runner import LEGACY_RELEASE_PATHS, REACH_MARKERS, REACH_NATIVE_PATHS, REACH_RELEASE_PATHS
+from connected_enterprise.runner import LEGACY_RELEASE_PATHS, REACH_MARKERS, REACH_NATIVE_PATHS, REACH_RELEASE_PATHS, TRIAL_REACH_RELEASE_PATHS
 
 SCHEMA='omega/packaged-v4-qualification/v1'
 PROBE="from mechanism_harness.cart_native import source_identity; import json; print(json.dumps(source_identity(),sort_keys=True))"
 REACH_PROBE = PROBE.replace('mechanism_harness.cart_native', 'mechanism_harness.reach_native')
 REACH_SCHEMA = 'omega/packaged-paid-reach-qualification/v1'
 AUTHORITY_SUFFIXES=('.actions.jsonl','.adaptive-simulation-key','.connected-journal.json','.adaptive-account.json','.adaptive-proofs.json','.adaptive-resolutions.json')
+# Only these two immutable trial paths are added to the native source map.
+# The rest of the trial closure is mandatory in a packaged trial edition.
+TRIAL_NATIVE_SOURCE_PATHS = frozenset({
+    'campaign/omega-trial-once-20261107/PROTOCOL.md',
+    'tests/test_omega_trial_once_20261107.py',
+})
 
 
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -44,10 +50,20 @@ def reach_source(manifest):
             'mechanism_harness/cart_native.py', 'mechanism_harness/cart_decision.py',
             'mechanism_harness/inventor_native.py'})):
         raise ValueError('PAID_REACH_REQUIRES_V4_NATIVE_SOURCE')
-    expected = set(cart) | set(REACH_NATIVE_PATHS)
     native = manifest.get('omega_reach_native_source')
+    # A trial edition is required whenever its file closure is advertised OR
+    # its native source map refers to a trial file. No manifest downgrade by
+    # dropping all trial files while retaining the new native source map.
+    trial = bool(set(TRIAL_REACH_RELEASE_PATHS).intersection(files)
+                 or (isinstance(native, dict)
+                     and TRIAL_NATIVE_SOURCE_PATHS.intersection(native)))
+    expected = set(cart) | set(REACH_NATIVE_PATHS)
+    required = expected | set(REACH_RELEASE_PATHS) | set(LEGACY_RELEASE_PATHS)
+    if trial:
+        expected |= TRIAL_NATIVE_SOURCE_PATHS
+        required |= set(TRIAL_REACH_RELEASE_PATHS)
     if (not isinstance(native, dict) or set(native) != expected
-            or not (expected | set(REACH_RELEASE_PATHS) | set(LEGACY_RELEASE_PATHS)) <= files.keys()
+            or not required <= files.keys()
             or any(native[name] != value for name, value in cart.items())
             or any(files.get(name) != value for name, value in native.items())):
         raise ValueError('PAID_REACH_EXACT_NATIVE_SOURCE_CLOSURE_REQUIRED')

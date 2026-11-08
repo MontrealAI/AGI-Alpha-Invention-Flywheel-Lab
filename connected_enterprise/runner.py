@@ -50,9 +50,24 @@ REACH_NATIVE_PATHS = (
     'connected_enterprise/channels.py', 'tests/test_omega_reach_native.py',
     'tests/test_omega_reach_policy.py', 'tests/test_omega_reach_verify.py',
 )
+# Research policy is optional for an older historical source, but cannot be
+# distributed partially on a new source that advertises this trial variant.
+# Native identities already contain its protocol and adversarial regression.
+TRIAL_REACH_RELEASE_PATHS = (
+    'campaign/omega-trial-once-20261107/PROTOCOL.md',
+    'campaign/omega-trial-once-20261107/RELEASE_CLOSURE_PROTOCOL.md',
+    'campaign/omega-trial-once-20261107/RELEASE_CLOSURE_AMENDMENT_A.md',
+    'campaign/omega-trial-once-20261107/RELEASE_CLOSURE_AMENDMENT_B.md',
+    'tests/test_omega_trial_once_20261107.py',
+    'tests/test_omega_reach_release_closure_20261108.py',
+    'scripts/omega_trial_once_matrix.py',
+    '.github/workflows/omega-trial-once-20261107.yml',
+    '.github/workflows/omega-reach-closure-20261108.yml',
+)
 REACH_RELEASE_PATHS = (*REACH_NATIVE_PATHS, 'tests/test_connected_reach_release.py',
                        'scripts/summarize_omega_reach.py', 'campaign/omega-paid-reach-20261104/README.md')
 REACH_MARKERS = set(REACH_RELEASE_PATHS) - {'connected_enterprise/channels.py'}
+TRIAL_REACH_MARKERS = set(TRIAL_REACH_RELEASE_PATHS)
 
 # These files are additional to the V4 release closure. Together they ship the
 # three original entrypoints, their authority regression, and the fixtures used
@@ -376,6 +391,24 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in (*OMEGA_V4_RELEASE_PATHS, *REACH_RELEASE_PATHS)):
             raise ValueError('PAID_REACH_SOURCE_DEPENDENCY_MISSING')
         names.update(REACH_RELEASE_PATHS)
+    # Older paid-reach sources without the trial remain valid. Detect both
+    # present trial files AND a newer native module advertising a trial source
+    # even if an entire trial subtree was deleted from a copied distribution.
+    native_reach = root / 'mechanism_harness/reach_native.py'
+    advertised_trial = False
+    if native_reach.is_file():
+        if native_reach.is_symlink():
+            raise ValueError('TRIAL_REACH_NATIVE_SYMLINK_REFUSED')
+        native_source = native_reach.read_bytes()
+        advertised_trial = (b'campaign/omega-trial-once-20261107/PROTOCOL.md' in native_source
+                            or b'tests/test_omega_trial_once_20261107.py' in native_source)
+    if advertised_trial or any((root/name).exists() or (root/name).is_symlink()
+                               for name in TRIAL_REACH_MARKERS):
+        if not has_reach or any(
+                not (root/name).is_file() or (root/name).is_symlink()
+                for name in TRIAL_REACH_RELEASE_PATHS):
+            raise ValueError('TRIAL_REACH_SOURCE_DEPENDENCY_MISSING')
+        names.update(TRIAL_REACH_RELEASE_PATHS)
     if has_reach or (root/LEGACY_RESUME_TEST).exists():
         if any(not (root/name).is_file() for name in (*OMEGA_V4_RELEASE_PATHS, *LEGACY_RELEASE_PATHS)):
             raise ValueError('LEGACY_RESUME_RELEASE_DEPENDENCY_MISSING')
