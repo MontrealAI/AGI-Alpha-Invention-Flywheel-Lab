@@ -115,7 +115,8 @@ class AlgebraTests(unittest.TestCase):
             self.assertAlmostEqual(direct, identity, places=12)
 
     def test_two_worlds_disallow_positive_target_for_any_tested_geometry(self):
-        f = SourceAndIntervalTests.families
+        f = b.source_families(b.load_verified(b.FIXTURE, b.FIXTURE_HASH),
+                              b.load_verified(b.REGISTRATION, b.REGISTRATION_HASH))
         n = b.nominal_world(f)["shared_world_coefficients"]
         a = b.endpoint_world(f, 1.)["shared_world_coefficients"]
         def pair(c):
