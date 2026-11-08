@@ -63,9 +63,9 @@ TRIAL_REACH_RELEASE_PATHS = (
     '.github/workflows/omega-reach-closure-20261108.yml',
 )
 REACH_RELEASE_PATHS = (*REACH_NATIVE_PATHS, 'tests/test_connected_reach_release.py',
-                       'scripts/summarize_omega_reach.py', 'campaign/omega-paid-reach-20261104/README.md',
-                       *TRIAL_REACH_RELEASE_PATHS)
+                       'scripts/summarize_omega_reach.py', 'campaign/omega-paid-reach-20261104/README.md')
 REACH_MARKERS = set(REACH_RELEASE_PATHS) - {'connected_enterprise/channels.py'}
+TRIAL_REACH_MARKERS = set(TRIAL_REACH_RELEASE_PATHS)
 
 # These files are additional to the V4 release closure. Together they ship the
 # three original entrypoints, their authority regression, and the fixtures used
@@ -389,6 +389,15 @@ def source_paths(root):
         if any(not (root/name).is_file() for name in (*OMEGA_V4_RELEASE_PATHS, *REACH_RELEASE_PATHS)):
             raise ValueError('PAID_REACH_SOURCE_DEPENDENCY_MISSING')
         names.update(REACH_RELEASE_PATHS)
+    # Explicit opt-in: older paid-reach source distributions remain usable.
+    # Even a single research source marker requires the entire trial closure.
+    if any((root/name).exists() or (root/name).is_symlink()
+           for name in TRIAL_REACH_MARKERS):
+        if not has_reach or any(
+                not (root/name).is_file() or (root/name).is_symlink()
+                for name in TRIAL_REACH_RELEASE_PATHS):
+            raise ValueError('TRIAL_REACH_SOURCE_DEPENDENCY_MISSING')
+        names.update(TRIAL_REACH_RELEASE_PATHS)
     if has_reach or (root/LEGACY_RESUME_TEST).exists():
         if any(not (root/name).is_file() for name in (*OMEGA_V4_RELEASE_PATHS, *LEGACY_RELEASE_PATHS)):
             raise ValueError('LEGACY_RESUME_RELEASE_DEPENDENCY_MISSING')
