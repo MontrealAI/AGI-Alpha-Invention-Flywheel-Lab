@@ -83,13 +83,43 @@ def visible(blob):
 
 
 def bounded_quote(text, anchor, stop, quote):
+    """One unique quote-bearing local window, even with cross-references elsewhere.
+
+    Registered A3–A5 correction: original globally unique-anchor A0–A2 failed.
+    All earlier and later candidate sections are examined; none is selected by
+    hidden source label, favorable outcome, seed or undocumented priority.
+    """
     a, b, q = norm(anchor), norm(stop), norm(quote)
-    if any(text.count(item) != 1 for item in (a, b)):
-        raise ValueError("MISSING_OR_DUPLICATE_ANCHOR")
-    start, end = text.find(a) + len(a), text.find(b)
-    if end <= start or q not in text[start:end]:
+    starts = []
+    offset = 0
+    while True:
+        pos = text.find(a, offset)
+        if pos < 0:
+            break
+        starts.append(pos)
+        offset = pos + len(a)
+    candidates = []
+    nested_start = False
+    missing_stop = False
+    for pos in starts:
+        begin = pos + len(a)
+        end = text.find(b, begin)
+        if end < 0:
+            missing_stop = True
+            continue
+        span = text[begin:end]
+        if a in span:
+            nested_start = True
+            continue
+        if q in span:
+            candidates.append(dict(start=begin, end=end, quote=q))
+    if len(candidates) > 1:
+        raise ValueError("MULTIPLE_VALID_WINDOWS")
+    if not candidates:
+        if not starts or missing_stop or nested_start:
+            raise ValueError("MISSING_OR_DUPLICATE_ANCHOR")
         raise ValueError("QUOTE_NOT_IN_BOUND_SECTION")
-    return dict(start=start, end=end, quote=q)
+    return candidates[0]
 
 
 def document(ident, url, blob):
