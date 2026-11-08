@@ -50,8 +50,21 @@ REACH_NATIVE_PATHS = (
     'connected_enterprise/channels.py', 'tests/test_omega_reach_native.py',
     'tests/test_omega_reach_policy.py', 'tests/test_omega_reach_verify.py',
 )
+# Research policy is optional for an older historical source, but cannot be
+# distributed partially on a new source that advertises this trial variant.
+# Native identities already contain its protocol and adversarial regression.
+TRIAL_REACH_RELEASE_PATHS = (
+    'campaign/omega-trial-once-20261107/PROTOCOL.md',
+    'campaign/omega-trial-once-20261107/RELEASE_CLOSURE_PROTOCOL.md',
+    'tests/test_omega_trial_once_20261107.py',
+    'tests/test_omega_reach_release_closure_20261108.py',
+    'scripts/omega_trial_once_matrix.py',
+    '.github/workflows/omega-trial-once-20261107.yml',
+    '.github/workflows/omega-reach-closure-20261108.yml',
+)
 REACH_RELEASE_PATHS = (*REACH_NATIVE_PATHS, 'tests/test_connected_reach_release.py',
-                       'scripts/summarize_omega_reach.py', 'campaign/omega-paid-reach-20261104/README.md')
+                       'scripts/summarize_omega_reach.py', 'campaign/omega-paid-reach-20261104/README.md',
+                       *TRIAL_REACH_RELEASE_PATHS)
 REACH_MARKERS = set(REACH_RELEASE_PATHS) - {'connected_enterprise/channels.py'}
 
 # These files are additional to the V4 release closure. Together they ship the
