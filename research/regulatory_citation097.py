@@ -142,36 +142,58 @@ def visible(blob):
     return norm(" ".join(parser.parts))
 
 
-def bounded_quote(text, anchor, stop, quote):
-    """One unique quote-bearing local window, even with cross-references elsewhere.
+def _boundary_positions(text, token):
+    """Exact lexical token spans; reject substring-only citation boundaries.
 
-    Registered A3–A5 correction: original globally unique-anchor A0–A2 failed.
-    All earlier and later candidate sections are examined; none is selected by
-    hidden source label, favorable outcome, seed or undocumented priority.
+    This is NOT semantic HTML-heading verification or issuer authentication.
+    Dots/hyphens are continuations only when followed/preceded by a word char.
     """
-    a, b, q = norm(anchor), norm(stop), norm(quote)
-    starts = []
+    positions = []
     offset = 0
     while True:
-        pos = text.find(a, offset)
+        pos = text.find(token, offset)
         if pos < 0:
-            break
-        starts.append(pos)
-        offset = pos + len(a)
+            return positions
+        end = pos + len(token)
+        left = text[pos - 1] if pos else ""
+        right = text[end] if end < len(text) else ""
+        left_joined = bool(left and (left.isalnum() or left == "_"
+                            or (left in ".-" and pos > 1
+                                and (text[pos - 2].isalnum() or text[pos - 2] == "_"))))
+        right_joined = bool(right and (right.isalnum() or right == "_"
+                             or (right in ".-" and end + 1 < len(text)
+                                 and (text[end + 1].isalnum() or text[end + 1] == "_"))))
+        if not left_joined and not right_joined:
+            positions.append(pos)
+        offset = end
+
+
+def bounded_quote(text, anchor, stop, quote):
+    """One token-bounded quote-bearing section, including external cross-references.
+
+    Original global-uniqueness A0–A2 remains historically FAILED. This
+    prospectively strengthens A3–A5's local-window rule under N0–N6.
+    """
+    from bisect import bisect_left
+
+    a, b, q = norm(anchor), norm(stop), norm(quote)
+    starts = _boundary_positions(text, a)
+    stops = _boundary_positions(text, b)
     candidates = []
     nested_start = False
     missing_stop = False
-    for pos in starts:
+    for index, pos in enumerate(starts):
         begin = pos + len(a)
-        end = text.find(b, begin)
-        if end < 0:
+        stop_index = bisect_left(stops, begin)
+        if stop_index == len(stops):
             missing_stop = True
             continue
-        span = text[begin:end]
-        if a in span:
+        end = stops[stop_index]
+        if index + 1 < len(starts) and starts[index + 1] < end:
             nested_start = True
             continue
-        if q in span:
+        span = text[begin:end]
+        if _boundary_positions(span, q):
             candidates.append(dict(start=begin, end=end, quote=q))
     if len(candidates) > 1:
         raise ValueError("MULTIPLE_VALID_WINDOWS")

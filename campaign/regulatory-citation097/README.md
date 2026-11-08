@@ -6,12 +6,12 @@
 
 The original [preregistered protocol](PROTOCOL.md) freezes two exact public official page URLs, their published date labels, three bounded passages A0–A2, ten adversarial fixture tests C0–C9, one fetch attempt per URL, standard-library-only Python 3.12, host/HTTPS restrictions and one immutable output file. The saved source SHA-256 identifies bytes returned **at observation time**. Neither a source hash nor the issuer's claimed last-modified date establishes historical content integrity, digital signature, copyright license, legal scope or real-world accuracy.
 
-The independent [visibility amendment](VISIBILITY_AMENDMENT.md), committed before its parser correction, adds H0–H9 adversarial controls for hidden/ARIA/inline-style ancestry; C0–C13 and the earlier original public-source failure are preserved. The actual A0–A2 passages observed under the new extraction logic are a **reproduction on exposed sources**, not new independent confirmations. A strong conventional browser/specialist remains the complete comparator.
+The prospective [anchor token-boundary amendment](ANCHOR_TOKEN_BOUNDARY_AMENDMENT.md) adds N0–N6 tests rejecting substring-only section boundaries and adjacent-word pseudoquotes. This is lexical matching, not structural HTML-heading validation.\n\nThe independent [visibility amendment](VISIBILITY_AMENDMENT.md), committed before its parser correction, adds H0–H9 adversarial controls for hidden/ARIA/inline-style ancestry; C0–C13 and the earlier original public-source failure are preserved. The actual A0–A2 passages observed under the new extraction logic are a **reproduction on exposed sources**, not new independent confirmations. A strong conventional browser/specialist remains the complete comparator.
 
 To run deterministic synthetic acceptance checks from this exact repository source:
 
 ```sh
-python3 -B -m unittest tests.test_regulatory_citation097 tests.test_regulatory_visibility097 -v
+python3 -B -m unittest tests.test_regulatory_citation097 tests.test_regulatory_visibility097 tests.test_regulatory_token_boundary097 -v
 ```
 
 To make the preregistered public observation **once**, from an environment with outbound public HTTPS access:
