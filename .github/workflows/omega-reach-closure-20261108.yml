@@ -1,0 +1,40 @@
+name: Omega native paid-reach closure-only qualification
+on:
+  push:
+    branches:
+      - qualification/omega-reach-closure-20261108
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qualify-closure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Check frozen repair protocol and original finance invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git show e696e5e208bbf5ed1b9f0dfd738cc03c7e50b747:campaign/omega-trial-once-20261107/RELEASE_CLOSURE_PROTOCOL.md > "$RUNNER_TEMP/registered-repair.md"
+          cmp "$RUNNER_TEMP/registered-repair.md" campaign/omega-trial-once-20261107/RELEASE_CLOSURE_PROTOCOL.md
+          test -z "$(git diff --name-only d42e88aec9fd78f9cd01bd69a6d284dae6c6dc3c HEAD -- adaptive_enterprise commercial)"
+          test -z "$(git diff --name-only d42e88aec9fd78f9cd01bd69a6d284dae6c6dc3c HEAD -- connected_enterprise/finance.py connected_enterprise/engine.py connected_enterprise/verify.py)"
+      - name: Install inherited dependency constraints
+        run: 'python -m pip install --only-binary=:all: -r requirements-omega-mechanisms-v3.txt'
+      - name: Independently verify original native and new release closure
+        run: python -B -m unittest tests.test_omega_reach_release_closure_20261108 tests.test_connected_reach_release tests.test_omega_trial_once_20261107 -v
+      - name: Source inventory and exact application import
+        run: |
+          python -B -c 'from connected_enterprise import runner; from mechanism_harness import reach_native; assert set(runner.source_paths(runner.ROOT)).issuperset(reach_native.source_identity())'
+          python -B -c 'from scripts.omega_trial_once_matrix import main; assert callable(main)'
