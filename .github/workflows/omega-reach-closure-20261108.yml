@@ -28,6 +28,8 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git show e696e5e208bbf5ed1b9f0dfd738cc03c7e50b747:campaign/omega-trial-once-20261107/RELEASE_CLOSURE_PROTOCOL.md > "$RUNNER_TEMP/registered-repair.md"
           cmp "$RUNNER_TEMP/registered-repair.md" campaign/omega-trial-once-20261107/RELEASE_CLOSURE_PROTOCOL.md
+          git show a5edbd2506bbb71b76a67e1ed3833f33f43e8897:campaign/omega-trial-once-20261107/RELEASE_CLOSURE_AMENDMENT_A.md > "$RUNNER_TEMP/registered-amendment.md"
+          cmp "$RUNNER_TEMP/registered-amendment.md" campaign/omega-trial-once-20261107/RELEASE_CLOSURE_AMENDMENT_A.md
           test -z "$(git diff --name-only d42e88aec9fd78f9cd01bd69a6d284dae6c6dc3c HEAD -- adaptive_enterprise commercial)"
           test -z "$(git diff --name-only d42e88aec9fd78f9cd01bd69a6d284dae6c6dc3c HEAD -- connected_enterprise/finance.py connected_enterprise/engine.py connected_enterprise/verify.py)"
       - name: Install inherited dependency constraints
