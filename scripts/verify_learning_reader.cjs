@@ -194,6 +194,9 @@ async function captionGeometry(cdp, session) {
   return cdp.evaluate(session, () => {
     const viewportWidth = document.documentElement.clientWidth;
     const captions = [...document.querySelectorAll('.evidence-caption')].flatMap(node => {
+      // Chrome can retain layout boxes for content in a closed disclosure.
+      // These caption paragraphs are in disclosure content, not its summary.
+      if (node.closest('details:not([open])')) return [];
       const rect = node.getBoundingClientRect(), style = getComputedStyle(node);
       if (!node.getClientRects().length || rect.height === 0 || style.visibility === 'hidden') return [];
       return [{ id: node.id, left: rect.left, right: rect.right, width: rect.width,
