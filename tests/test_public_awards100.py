@@ -121,6 +121,18 @@ class RegisteredAwardTests(unittest.TestCase):
                          "ENGLISH_OFFICIAL_TITLE_OR_DESCRIPTION_MISSING")
         self.assertNotIn("title", json.dumps(observed))
 
+    def test_m10_official_currency_display_format_is_still_exact_decimal(self):
+        v = a.aggregate(fixture([["AI governance", "", "compliance", "",
+                                  "$ 1,200.50", "$1,200.50", "CAD", "*SRV"]]))
+        self.assertEqual(v["award_value_disclosure"]["at_least_one_positive_disclosed_field"], 1)
+        self.assertEqual(v["lexical_classes"]["joint_signal"], 1)
+        self.assertEqual(a._amount(" $ 3,000.00 "), "positive")
+
+    def test_m11_non_numeric_negative_and_nonfinite_remain_fatal(self):
+        for raw in ("-1", "$ -1.00", "N/A", "NaN", "Infinity", "1e99999"):
+            with self.subTest(raw=raw), self.assertRaises(ValueError):
+                a._amount(raw)
+
 
 if __name__ == "__main__":
     unittest.main()
