@@ -43,8 +43,9 @@ class MagneticSchemaTests(unittest.TestCase):
         with self.assertRaisesRegex(schema.SchemaError, "PINNED_ARCHIVE_SHA256_MISMATCH"):
             # Original MD5 is unavailable for synthetic file, but SHA remains independent.
             from unittest.mock import patch
-            with patch.object(schema.gate, "EXPECTED_MD5", schema.gate.md5(files()).hexdigest()):
-                schema.inspect_mat_schema(files(), require_original=True)
+            fixture_bytes = files()
+            with patch.object(schema.gate, "EXPECTED_MD5", schema.gate.md5(fixture_bytes).hexdigest()):
+                schema.inspect_mat_schema(fixture_bytes, require_original=True)
 
     def test_missing_height_fails(self):
         with self.assertRaisesRegex(schema.SchemaError, "TEN_FROZEN_HEIGHT"):
@@ -59,7 +60,7 @@ class MagneticSchemaTests(unittest.TestCase):
             schema.inspect_mat_schema(files(malformed=True), require_original=False)
 
     def test_no_common_variable_fails_closed(self):
-        byheight = {h: {f"value_{h}": np.array([3.0])} for h in schema.HEIGHT_LABELS}
+        byheight = {h: {f"value_{h.replace('.', '_')}": np.array([3.0])} for h in schema.HEIGHT_LABELS}
         with self.assertRaisesRegex(schema.SchemaError, "NO_SHARED_VARIABLE"):
             schema.inspect_mat_schema(files(fields_by_height=byheight), require_original=False)
 
