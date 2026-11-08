@@ -1,0 +1,78 @@
+name: Offline regulatory evidence098 — independent pinned-byte replay (synthetic only)
+on:
+  push:
+    branches: [qualification/regulatory-portable-offline-audit098-20261108]
+  pull_request:
+    paths:
+      - "campaign/regulatory-citation098/**"
+      - "research/regulatory_portable_audit098.py"
+      - "tests/test_regulatory_portable_audit098.py"
+      - ".github/workflows/regulatory-portable-audit098.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-offline-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONNOUSERSITE: "1"
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Check exact head and frozen prior-protocol ancestry
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          git merge-base --is-ancestor 5af8415ef3996b3f7cb095082660bbc9a56d0b30 HEAD
+          git show 5af8415ef3996b3f7cb095082660bbc9a56d0b30:campaign/regulatory-citation098/PROTOCOL.md | cmp - campaign/regulatory-citation098/PROTOCOL.md
+          git merge-base --is-ancestor d33d7e74d5b65413daddc3994877657871fb582d HEAD
+          git merge-base --is-ancestor 7a46f6e24df6d651a3ca8252039d0e484e26dccc HEAD
+      - name: Execute offline replay and all original source integrity regression suites
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest -v tests.test_regulatory_citation097 tests.test_regulatory_visibility097 tests.test_regulatory_token_boundary097 tests.test_regulatory_portable_audit098
+      - name: Generate bounded key-free qualification receipt, NOT a real-source audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B - <<'PY'
+          import json, os
+          from pathlib import Path
+          from research.regulatory_portable_audit098 import TRUSTED
+          result = {
+              "schema": "agi-alpha/regulatory-offline-replay098/hosted-test-receipt-v1",
+              "source_commit": os.environ.get("GITHUB_SHA"),
+              "synthetic_regressions": "PASSED_IF_STEP_FINISHED",
+              "real_original_public_bytes_supplied": False,
+              "actual_original_source_replay": "NOT_EXECUTED",
+              "source_pins": {k: {"sha256": v["sha256"], "bytes": v["bytes"]} for k, v in sorted(TRUSTED.items())},
+              "issuer_signature_verified": False,
+              "legal_or_commercial_outcome_qualified": False,
+              "p0_financial_state_touched": False,
+          }
+          out = Path(os.environ["RUNNER_TEMP"]) / "OFFLINE_REPLAY098_RESULT.json"
+          out.write_text(json.dumps(result, sort_keys=True, separators=(",", ":"))+"\n")
+          PY
+          sha256sum "$RUNNER_TEMP/OFFLINE_REPLAY098_RESULT.json" > "$RUNNER_TEMP/OFFLINE_REPLAY098_SHA256.txt"
+      - name: Publish bounded, key-free positive OR negative engineering result
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: regulatory-offline-replay098-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/OFFLINE_REPLAY098_RESULT.json
+            ${{ runner.temp }}/OFFLINE_REPLAY098_SHA256.txt
+          if-no-files-found: warn
