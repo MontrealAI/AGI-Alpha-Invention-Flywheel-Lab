@@ -8,6 +8,7 @@ exposed hosted public-source observation, NOT an issuer signature.
 import argparse
 from hashlib import sha256
 import json
+import os
 from pathlib import Path
 import stat
 import sys
@@ -54,13 +55,35 @@ def _nonfinite(_value):
 
 
 def _read_regular(path, maximum):
-    """Reject links/irregular files; verify the *read bytes* independently."""
+    """Read one regular file via one no-follow descriptor with identity checks.
+
+    The named final component must stay the same regular inode across the
+    finite read. This defends against final-component pre-open/post-open
+    substitution, not hostile mutable *parent* directories or post-return
+    path mutation; exact external SHA256 pins remain the content authority.
+    """
     path = Path(path)
-    mode = path.lstat().st_mode
-    if not stat.S_ISREG(mode):
+    initial = path.lstat()  # path identity before the descriptor acquisition
+    if not stat.S_ISREG(initial.st_mode):
         raise ValueError("NOT_A_REGULAR_INPUT_FILE")
-    with path.open("rb") as handle:
-        blob = handle.read(maximum + 1)
+    if not hasattr(os, "O_NOFOLLOW") or not hasattr(os, "O_NONBLOCK"):
+        raise ValueError("POSIX_SAFE_OPEN_UNAVAILABLE")
+    flags = os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK
+    flags |= getattr(os, "O_CLOEXEC", 0)
+    fd = os.open(path, flags)
+    try:
+        opened = os.fstat(fd)
+        if (not stat.S_ISREG(opened.st_mode)
+                or (opened.st_dev, opened.st_ino) != (initial.st_dev, initial.st_ino)):
+            raise ValueError("INPUT_CHANGED_BEFORE_READ")
+        with os.fdopen(fd, "rb", closefd=False) as handle:
+            blob = handle.read(maximum + 1)
+        final = path.lstat()
+        if (not stat.S_ISREG(final.st_mode)
+                or (final.st_dev, final.st_ino) != (opened.st_dev, opened.st_ino)):
+            raise ValueError("INPUT_CHANGED_DURING_READ")
+    finally:
+        os.close(fd)
     if not blob or len(blob) > maximum:
         raise ValueError("INVALID_INPUT_SIZE")
     return blob
