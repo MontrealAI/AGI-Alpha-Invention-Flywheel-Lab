@@ -26,7 +26,8 @@ SCHEMA = 'omega/earned-paid-reach/v1'
 
 
 def source_identity():
-    names = {PROTOCOL, 'connected_enterprise/channels.py'}
+    names = {PROTOCOL, 'connected_enterprise/channels.py',
+             'campaign/omega-trial-once-20261107/PROTOCOL.md'}
     for suffix in ('native', 'policy', 'verify'):
         names.update((f'mechanism_harness/reach_{suffix}.py', f'tests/test_omega_reach_{suffix}.py'))
     files = cart_native.source_identity()
