@@ -36,6 +36,8 @@ jobs:
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
           git merge-base --is-ancestor 5af8415ef3996b3f7cb095082660bbc9a56d0b30 HEAD
+          git merge-base --is-ancestor 8c5debf52dc3d22b16cdccbdc89ca8c9bb9d70fb HEAD
+          git show 8c5debf52dc3d22b16cdccbdc89ca8c9bb9d70fb:campaign/regulatory-citation098/SOURCE_HEAD_AMENDMENT.md | cmp - campaign/regulatory-citation098/SOURCE_HEAD_AMENDMENT.md
           git show 5af8415ef3996b3f7cb095082660bbc9a56d0b30:campaign/regulatory-citation098/PROTOCOL.md | cmp - campaign/regulatory-citation098/PROTOCOL.md
           git merge-base --is-ancestor d33d7e74d5b65413daddc3994877657871fb582d HEAD
           git merge-base --is-ancestor 7a46f6e24df6d651a3ca8252039d0e484e26dccc HEAD
@@ -49,12 +51,12 @@ jobs:
         run: |
           set -euo pipefail
           python -B - <<'PY'
-          import json, os
+          import json, os, subprocess
           from pathlib import Path
           from research.regulatory_portable_audit098 import TRUSTED
           result = {
               "schema": "agi-alpha/regulatory-offline-replay098/hosted-test-receipt-v1",
-              "source_commit": os.environ.get("GITHUB_SHA"),
+              "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
               "synthetic_regressions": "PASSED_IF_STEP_FINISHED",
               "real_original_public_bytes_supplied": False,
               "actual_original_source_replay": "NOT_EXECUTED",
@@ -65,6 +67,12 @@ jobs:
           }
           out = Path(os.environ["RUNNER_TEMP"]) / "OFFLINE_REPLAY098_RESULT.json"
           out.write_text(json.dumps(result, sort_keys=True, separators=(",", ":"))+"\n")
+          PY
+          python -B - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          receipt = json.loads((Path(os.environ["RUNNER_TEMP"]) / "OFFLINE_REPLAY098_RESULT.json").read_text())
+          assert receipt["source_commit"] == subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(), "MISMATCHED_EXECUTING_HEAD"
           PY
           sha256sum "$RUNNER_TEMP/OFFLINE_REPLAY098_RESULT.json" > "$RUNNER_TEMP/OFFLINE_REPLAY098_SHA256.txt"
       - name: Publish bounded, key-free positive OR negative engineering result
