@@ -40,7 +40,7 @@ def _fields(names: list[str]) -> dict[str, str | None]:
         raise ValueError("DUPLICATE_OR_EMPTY_CSV_HEADER")
     mapped = {}
     # Do not conflate a French translation with an English body.
-    for field in ("title", "tenderDescription"):
+    for field in ("title", "awardDescription"):
         en = _column(names, field, lang="eng")
         fr = _column(names, field, lang="fra")
         plain = next((n for n in names if n.casefold() == field.casefold()), None)
@@ -101,7 +101,7 @@ def aggregate(raw: bytes) -> dict:
                 col = mapping[field]
                 return row[idx[col]] if col else ""
             title = get("title") or get("title_fra")
-            description = get("tenderDescription") or get("tenderDescription_fra")
+            description = get("awardDescription") or get("awardDescription_fra")
             text = title + "\n" + description
             a, g = bool(AI.search(text)), bool(GOV.search(text))
             classification = "joint_signal" if a and g else "ai_only" if a else "governance_only" if g else "neither"
@@ -157,10 +157,15 @@ def observe() -> dict:
         payload = response.read(MAX_SOURCE_BYTES + 1)
         if len(payload) > MAX_SOURCE_BYTES:
             raise ValueError("OFFICIAL_SOURCE_EXCEEDS_SCOPED_BYTE_GUARD")
-        return {"source_sha256": hashlib.sha256(payload).hexdigest(),
-                "source_bytes": len(payload),
-                "response_last_modified_unverified": response.headers.get("Last-Modified"),
-                **aggregate(payload)}
+        observed = {"source_sha256": hashlib.sha256(payload).hexdigest(),
+                    "source_bytes": len(payload),
+                    "response_last_modified_unverified": response.headers.get("Last-Modified")}
+        try:
+            return {**observed, **aggregate(payload)}
+        except ValueError as exc:
+            # An acquired real snapshot still has an immutable byte identity
+            # even when a schema or content check fails. Failures stay failures.
+            return {**observed, "parse_error_code": str(exc)[:140]}
 
 
 def run(path: Path) -> dict:
@@ -182,8 +187,13 @@ def run(path: Path) -> dict:
         "commercial_decision": "NO_BID_NO_DEPLOY",
     }
     try:
-        report.update(observe())
-        report["status"] = "ACCEPTED_OBSERVATIONAL_MEASUREMENT"
+        observation = observe()
+        parse_failure = observation.pop("parse_error_code", None)
+        report.update(observation)
+        if parse_failure is not None:
+            report["error_code"] = parse_failure
+        else:
+            report["status"] = "ACCEPTED_OBSERVATIONAL_MEASUREMENT"
     except (ValueError, OSError, UnicodeError) as exc:
         report["error_class"] = type(exc).__name__
         report["error_code"] = str(exc)[:140] if isinstance(exc, ValueError) else "OFFICIAL_PUBLIC_GET_UNAVAILABLE"
