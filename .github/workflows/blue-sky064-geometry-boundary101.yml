@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Save platform start
         shell: bash
-        run: echo "AGI_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -60,7 +60,7 @@ jobs:
           obj={'schema':'agi-alpha/geometry101-exact-checkout/v1','git_head':repo_sha,
                'result_sha256':hashlib.sha256((r/'RESULT.json').read_bytes()).hexdigest(),
                'source_manifest':doc['source_sha256'],
-               'start_epoch':int(os.environ['AGI_START_EPOCH']),
+               'start_epoch':int(os.environ['AGI_JOB_START_EPOCH']),
                'end_epoch':int(time.time()),
                'historical_outcomes_modified':False,'physical_claim':False,'commercial_claim':False}
           (r/'SOURCE_RECEIPT.json').write_text(json.dumps(obj,indent=2,sort_keys=True)+'\n')
