@@ -190,6 +190,20 @@ async function overflow(cdp, session) {
   });
 }
 
+async function captionGeometry(cdp, session) {
+  return cdp.evaluate(session, () => {
+    const viewportWidth = document.documentElement.clientWidth;
+    const captions = [...document.querySelectorAll('.evidence-caption')].flatMap(node => {
+      const rect = node.getBoundingClientRect(), style = getComputedStyle(node);
+      if (!node.getClientRects().length || rect.height === 0 || style.visibility === 'hidden') return [];
+      return [{ id: node.id, left: rect.left, right: rect.right, width: rect.width,
+        client_width: node.clientWidth, scroll_width: node.scrollWidth,
+        fits: rect.width > 0 && rect.left >= 0 && rect.right <= viewportWidth && node.scrollWidth <= node.clientWidth }];
+    });
+    return { viewport_width: viewportWidth, visible_count: captions.length, captions };
+  });
+}
+
 async function screenshot(cdp, session, selector, name, output) {
   await cdp.evaluate(session, selector => {
     const element = document.querySelector(selector);
@@ -255,6 +269,8 @@ async function inspectViewport(cdp, viewport, context, receipt) {
     const initial = await overflow(cdp, session);
     check('requested layout viewport', Math.abs(initial.viewport_width - viewport.width) <= 1 && Math.abs(initial.viewport_height - viewport.height) <= 1, initial);
     check('no horizontal document overflow', initial.overflow_px === 0, initial);
+    const initialCaptions = await captionGeometry(cdp, session);
+    check('two initial table captions fit the visible width', initialCaptions.visible_count === 2 && initialCaptions.captions.every(caption => caption.fits), initialCaptions);
 
     for (let index = 0; index < identity.image_count; index++) {
       const image = await cdp.evaluate(session, async index => {
@@ -293,6 +309,10 @@ async function inspectViewport(cdp, viewport, context, receipt) {
           return { open: details.open, content_visible: [...details.children].filter(node => node.tagName !== 'SUMMARY')
             .some(node => node.getClientRects().length && node.getBoundingClientRect().height > 0) };
         }, index));
+        if (index === 0 && states[attempt].open) {
+          const openCaptions = await captionGeometry(cdp, session);
+          check('three table captions fit with the first disclosure open', openCaptions.visible_count === 3 && openCaptions.captions.every(caption => caption.fits), openCaptions);
+        }
         const measured = await overflow(cdp, session);
         check(`no document overflow after disclosure ${index + 1}, toggle ${attempt + 1}`, measured.overflow_px === 0,
           measured.overflow_px > 0 ? measured : undefined);
