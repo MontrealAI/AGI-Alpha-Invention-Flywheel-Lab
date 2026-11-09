@@ -44,8 +44,21 @@ def metadata(data):
     obj = json.loads(data)
     if not isinstance(obj, dict) or obj.get("license") != ["CC BY 4.0"]:
         raise ValueError("UNEXPECTED_LICENSE")
-    declared = {v.get("identifier") for v in obj.get("variableMeasured", [])
-                if isinstance(v, dict)}
+    identifiers = []
+    for field in obj.get("variableMeasured", []):
+        if not isinstance(field, dict):
+            raise ValueError("INVALID_METADATA_FIELD")
+        identifier = field.get("identifier")
+        if isinstance(identifier, list):
+            if len(identifier) != 1:
+                raise ValueError("AMBIGUOUS_METADATA_IDENTIFIER")
+            identifier = identifier[0]
+        if not isinstance(identifier, str) or not identifier:
+            raise ValueError("INVALID_METADATA_IDENTIFIER")
+        identifiers.append(identifier)
+    if len(identifiers) != len(set(identifiers)):
+        raise ValueError("DUPLICATE_METADATA_IDENTIFIER")
+    declared = set(identifiers)
     if not set(FIELDS + VOLTAGES).issubset(declared):
         raise ValueError("SOURCE_METADATA_SCHEMA_CHANGED")
     return {"declared_fields": len(declared), "license": obj["license"],
