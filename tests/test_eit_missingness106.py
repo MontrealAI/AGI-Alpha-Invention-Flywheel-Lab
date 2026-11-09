@@ -69,7 +69,7 @@ class IndependentTokenInventoryTests(unittest.TestCase):
         self.assertEqual(s["on_injection_category_counts"]["whitespace_only"], 1)
         self.assertEqual(s["invalid_or_unrepresented_rows"], 1)
         self.assertFalse(s["unknown_tokens_accepted_as_voltage"])
-        self.assertNotIn("other", str(s))
+        self.assertEqual(s["channel_category_counts"]["E_07"]["other_text"], 1)
 
     def test_literal_na_count_separate_from_invalid(self):
         s = d.diagnostic(fixture({"E_16": "NA"}))
