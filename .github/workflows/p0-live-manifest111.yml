@@ -30,7 +30,8 @@ jobs:
           git show -s --format='protocol ancestor %H %cI' 5640ec69e3faedd39886707abf368c9fb7192012
           git show -s --format='executing source %H %cI' HEAD
       - name: Install standard qualified public dependencies
-        run: python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt numpy==2.3.5 scipy==1.17.0
+        run: |
+          python -m pip install --only-binary=:all: -r requirements-commercial010.txt -r requirements-cycle004.txt numpy==2.3.5 scipy==1.17.0
       - name: Exercise five actual production dispatchers and mutation refusals
         shell: bash
         run: |
