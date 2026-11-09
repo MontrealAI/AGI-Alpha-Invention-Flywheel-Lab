@@ -25,9 +25,20 @@ jobs:
       - name: Verify the immutable before-code protocol
         shell: bash
         run: |
-          git merge-base --is-ancestor 5640ec69e3faedd39886707abf368c9fb7192012 HEAD
-          git cat-file -e 5640ec69e3faedd39886707abf368c9fb7192012:campaign/p0-live-manifest111/PROTOCOL.md
-          git show -s --format='protocol ancestor %H %cI' 5640ec69e3faedd39886707abf368c9fb7192012
+          set -euo pipefail
+          # The pre-code registration is an immutable sibling commit of the
+          # implemented branch, NOT an ancestor. Never assert false ancestry.
+          registration=5640ec69e3faedd39886707abf368c9fb7192012
+          expected_blob=215191e0789cf584bf8e5acc01da9c9aba676054
+          protocol=campaign/p0-live-manifest111/PROTOCOL.md
+          if ! git cat-file -e "$registration^{commit}" 2>/dev/null; then
+            git -c protocol.version=2 fetch --no-tags --depth=1 origin "$registration"
+          fi
+          test "$(git cat-file -p "$registration" | sed -n 's/^parent //p' | head -1)" = de9546ef9083f64a25186f1c5163e3a3a4eaeae5
+          test "$(git rev-parse "$registration:$protocol")" = "$expected_blob"
+          test "$(git hash-object "$protocol")" = "$expected_blob"
+          echo "Immutable registration content and declared parent verified; no ancestry claimed."
+          git show -s --format='registration commit %H %cI' "$registration"
           git show -s --format='executing source %H %cI' HEAD
       - name: Install standard qualified public dependencies
         run: |
