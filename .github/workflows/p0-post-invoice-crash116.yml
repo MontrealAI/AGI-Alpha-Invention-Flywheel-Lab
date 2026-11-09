@@ -1,0 +1,54 @@
+name: P0 116 pinned post-invoice interruption and restart (owner source unchanged)
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/p0-post-invoice-crash116.yml'
+      - 'campaign/p0-post-invoice-crash116/**'
+      - 'research/p0-post-invoice-crash116/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  post-invoice-crash:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify immutable pre-implementation protocol
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object campaign/p0-post-invoice-crash116/PROTOCOL.md)" = "e6450ce8c81949af44244e9d92acf7a178944993"
+          echo "Protocol 116 is byte-identical to pre-code commit a59518979ce5ac035b2b5e43f829d559fc9c7ba2."
+      - name: Retrieve exact independent PR40 source, detached and read-only to this PR
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init -q "$GITHUB_WORKSPACE/owner"
+          git -C "$GITHUB_WORKSPACE/owner" remote add origin https://github.com/MontrealAI/AGI-Alpha-Invention-Flywheel-Lab.git
+          git -C "$GITHUB_WORKSPACE/owner" fetch --no-tags --depth=1 origin ced6c1cb004887dcdafaea59a2976020be649f8e
+          git -C "$GITHUB_WORKSPACE/owner" checkout --detach -q FETCH_HEAD
+          test "$(git -C "$GITHUB_WORKSPACE/owner" rev-parse HEAD)" = "ced6c1cb004887dcdafaea59a2976020be649f8e"
+          git -C "$GITHUB_WORKSPACE/owner" status --porcelain
+      - name: Execute both frozen crash/restart routes on disposable local native accounts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE/owner"
+          PYTHONPATH="$GITHUB_WORKSPACE/owner" P0_CRASH116_RECEIPT="$GITHUB_WORKSPACE/evidence116/RESULT.json" \
+            python3 "$GITHUB_WORKSPACE/research/p0-post-invoice-crash116/probe.py" 2>&1 \
+            | tee "$GITHUB_WORKSPACE/TEST_TRANSCRIPT116.txt"
+          test "$(git -C "$GITHUB_WORKSPACE/owner" rev-parse HEAD)" = "ced6c1cb004887dcdafaea59a2976020be649f8e"
+          test -z "$(git -C "$GITHUB_WORKSPACE/owner" status --porcelain --untracked-files=no)"
+      - name: Upload key-free success and failure traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-post-invoice-crash116-keyfree
+          path: |
+            TEST_TRANSCRIPT116.txt
+            evidence116/RESULT.json
+          if-no-files-found: warn
+          retention-days: 30
