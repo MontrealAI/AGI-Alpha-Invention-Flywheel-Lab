@@ -75,6 +75,25 @@ class ExternalPreflightTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "UNEXPECTED_LICENSE"):
             p.metadata(json.dumps({"license": ["CC BY-NC"]}).encode())
 
+    def test_documented_singleton_list_identifiers_are_explicitly_valid(self):
+        payload = {"license": ["CC BY 4.0"],
+                   "variableMeasured": [{"identifier": [key]}
+                                        for key in p.FIELDS + p.VOLTAGES]}
+        result = p.metadata(json.dumps(payload).encode())
+        self.assertEqual(result["declared_fields"], 24)
+
+    def test_ambiguous_multi_identifier_refused(self):
+        payload = {"license": ["CC BY 4.0"],
+                   "variableMeasured": [{"identifier": ["object", "material"]}]}
+        with self.assertRaisesRegex(ValueError, "AMBIGUOUS_METADATA_IDENTIFIER"):
+            p.metadata(json.dumps(payload).encode())
+
+    def test_duplicate_identifier_refused(self):
+        payload = {"license": ["CC BY 4.0"],
+                   "variableMeasured": [{"identifier": "object"}, {"identifier": ["object"]}]}
+        with self.assertRaisesRegex(ValueError, "DUPLICATE_METADATA_IDENTIFIER"):
+            p.metadata(json.dumps(payload).encode())
+
     def test_missing_metadata_fields_refused(self):
         with self.assertRaisesRegex(ValueError, "SOURCE_METADATA_SCHEMA_CHANGED"):
             p.metadata(json.dumps({"license": ["CC BY 4.0"],
