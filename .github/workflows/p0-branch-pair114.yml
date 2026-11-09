@@ -1,0 +1,56 @@
+name: P0 pinned owner/main branch-pair witness114 (read-only)
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fixed-negative-pair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Record platform job execution start
+        shell: bash
+        run: echo "AGI_JOB_START_EPOCH=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Checkout this preregistered source (not the financial owner)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Checkout actual qualified released main to isolated source folder
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ada84f88d0c852609087fdc838c071917c8a02b8
+          path: .p0-main114
+          persist-credentials: false
+      - name: Checkout independently owned PR40 exact proposal to isolated source folder
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ced6c1cb004887dcdafaea59a2976020be649f8e
+          path: .p0-owner114
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Assert actual immutable checkout identities
+        shell: bash
+        run: |
+          test "$(git -C .p0-main114 rev-parse HEAD)" = "ada84f88d0c852609087fdc838c071917c8a02b8"
+          test "$(git -C .p0-owner114 rev-parse HEAD)" = "ced6c1cb004887dcdafaea59a2976020be649f8e"
+      - name: Run existing source-registry adversarial regression unchanged
+        run: python -B -m unittest tests.test_connected_p0_source_guard -v
+      - name: Execute the two preregistered actual owner/main source comparisons
+        run: |
+          python -B scripts/qualify_p0_branch_pair114.py \
+            --main-root "$GITHUB_WORKSPACE/.p0-main114" \
+            --transition-root "$GITHUB_WORKSPACE/.p0-owner114" \
+            --receipt "$RUNNER_TEMP/P0_BRANCH_PAIR114.json"
+      - name: Preserve key-free diagnostic result (including failed experiment receipts)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: p0-branch-pair114-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/P0_BRANCH_PAIR114.json
+          if-no-files-found: warn
