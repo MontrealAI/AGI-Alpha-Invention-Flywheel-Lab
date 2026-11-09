@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m research.eit_external105.preflight > "$RUNNER_TEMP/EIT105_PREFLIGHT.json"
+          python3 -m research.eit_external105.preflight --masked > "$RUNNER_TEMP/EIT105_PREFLIGHT.json"
           python3 - "$RUNNER_TEMP/EIT105_PREFLIGHT.json" "$(git rev-parse HEAD)" <<'PY'
           import json, sys
           obj=json.load(open(sys.argv[1],encoding='utf-8'))
@@ -43,8 +43,12 @@ jobs:
           assert obj['new_physical_acquisitions']==0
           assert obj['real_collections_usd']==0
           assert obj['decision']=='HOLD_NO_BID_NO_DEPLOY'
-          assert obj['acquisition_contract']['measurement_rows']>0
-          print("EIT105_EXTERNAL_PHYSICAL_SOURCE_CONTRACT_PASSED")
+          assert obj['prospective_amendment2_sha']=='676c26fd002e0c939ec305e98a57cc97169ec3bc'
+          assert obj['original_strict_contract_status']=='FAILED_EXPLICIT_NA'
+          assert obj['masked_contract_status']=='SOURCE_INVENTORY_ONLY'
+          assert obj['masked_acquisition_inventory']['measurement_rows']>0
+          assert obj['masked_acquisition_inventory']['no_imputation']
+          print("EIT105_MASKED_SOURCE_INVENTORY_ONLY_ORIGINAL_STRICT_FAILURE_PRESERVED")
           PY
           sha256sum "$RUNNER_TEMP/EIT105_PREFLIGHT.json"
           cat "$RUNNER_TEMP/EIT105_PREFLIGHT.json"
