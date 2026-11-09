@@ -112,6 +112,115 @@ def describe_csv(data):
         "categories": {k: dict(sorted(v.items())) for k, v in categories.items()},
     }
 
+
+def describe_masked_csv(data):
+    """Amendment 2: inventory explicit missing voltages without imputation.
+
+    This is NOT the original strict full-channel acquisition contract.
+    The original describe_csv and run retain their actual failure.
+    """
+    body = data.decode("utf-8-sig")
+    header = body.split("\n", 1)[0]
+    delimiter = ";" if header.count(";") > header.count(",") else ","
+    reader = csv.DictReader(io.StringIO(body), delimiter=delimiter)
+    cols = tuple(reader.fieldnames or ())
+    if not cols or len(cols) != len(set(cols)):
+        raise ValueError("INVALID_CSV_HEADER")
+    missing = set(FIELDS + VOLTAGES).difference(cols)
+    if missing:
+        raise ValueError("MISSING_ACQUISITION_FIELDS:" + ",".join(sorted(missing)))
+
+    group, categories = Counter(), {k: Counter() for k in ("object", "material", "value_desc")}
+    masks, finite_histogram = Counter(), Counter()
+    missing_channel_counts, pairs = Counter(), Counter()
+    n = measurements = injected_missing = noninjected_missing = 0
+    mask_stream = sha256()
+    for row in reader:
+        n += 1
+        if n > 250_000:
+            raise ValueError("REGISTERED_ROW_BOUND")
+        if None in row or any(value is None for value in row.values()):
+            raise ValueError("RAGGED_CSV_ROW")
+        for key in categories:
+            categories[key][row[key]] += 1
+        group[tuple(row[k] for k in ("object", "material", "r", "phi", "meas_num", "value_desc"))] += 1
+        if row["value_desc"] != "measurement":
+            continue
+        measurements += 1
+        try:
+            a,b=int(row["ex_mat_0"]),int(row["ex_mat_1"])
+        except (TypeError, ValueError) as exc:
+            raise ValueError("INVALID_EXCITATION_FORMAT") from exc
+        if not 0 <= a < 16 or not 0 <= b < 16 or a == b:
+            raise ValueError("INVALID_EXCITATION")
+        pairs[(a,b)] += 1
+        absent = []
+        for index,key in enumerate(VOLTAGES):
+            value=row[key]
+            if value == "NA":
+                absent.append(index)
+                missing_channel_counts[key] += 1
+                if index in (a,b):
+                    injected_missing += 1
+                else:
+                    noninjected_missing += 1
+                continue
+            if not isinstance(value,str) or not value or value.strip()!=value:
+                raise ValueError("INVALID_OR_EMPTY_MEASUREMENT")
+            try:
+                finite=math.isfinite(float(value))
+            except (TypeError,ValueError) as exc:
+                raise ValueError("UNKNOWN_MISSING_TOKEN_OR_MEASUREMENT") from exc
+            if not finite:
+                raise ValueError("NONFINITE_MEASUREMENT")
+        finite_count=len(VOLTAGES)-len(absent)
+        if finite_count < 8:
+            raise ValueError("INSUFFICIENT_FINITE_CHANNELS")
+        finite_histogram[finite_count] += 1
+        signature="".join("1" if i in absent else "0" for i in range(16))
+        masks[signature] += 1
+        mask_stream.update((signature+"\n").encode("ascii"))
+    if n < 1 or measurements < 1:
+        raise ValueError("NO_PHYSICAL_MEASUREMENTS")
+    return {
+        "rows":n,"measurement_rows":measurements,"columns":cols,
+        "physical_group_count":len(group),
+        "group_size_histogram":dict(sorted(Counter(group.values()).items())),
+        "distinct_excitation_pairs":len(pairs),
+        "excitation_pair_row_count":sum(pairs.values()),
+        "explicit_NA":True,"no_imputation":True,
+        "finite_channel_count_histogram":dict(sorted(finite_histogram.items())),
+        "missing_channels_per_index":dict(sorted(missing_channel_counts.items())),
+        "missing_on_injection_electrodes":injected_missing,
+        "missing_on_other_electrodes":noninjected_missing,
+        "distinct_observed_missing_masks":len(masks),
+        "most_common_missing_masks":[{"mask":mask,"rows":qty} for mask,qty in masks.most_common(8)],
+        "ordered_measurement_mask_sha256":mask_stream.hexdigest(),
+        "categories":{k:dict(sorted(v.items())) for k,v in categories.items()},
+    }
+
+
+def run_masked():
+    """Independent Phase 0b. NEVER reclassify strict finite-only preflight as pass."""
+    result = {
+        "schema":"eit105/external-masked-preflight/v1",
+        "frozen_protocol_sha":"21c2b7972f4c73e27d1255b0186d530297b55826",
+        "prospective_amendment2_sha":"676c26fd002e0c939ec305e98a57cc97169ec3bc",
+        "original_strict_contract_status":"FAILED_EXPLICIT_NA",
+        "masked_contract_status":"SOURCE_INVENTORY_ONLY",
+        "origin":ROOT,"inputs":[],
+        "new_physical_acquisitions":0,"commercial_buyer_acceptances":0,
+        "real_collections_usd":0,"native_financial_accounts_operated":0,
+        "trailing_365_profit_usd":None,"qualified_physical_product":False,
+        "decision":"HOLD_NO_BID_NO_DEPLOY",
+    }
+    for name in SOURCES:
+        data=fetch_source(name)
+        result["inputs"].append(check_source(name,data))
+        result["metadata" if name.endswith(".JSON") else "masked_acquisition_inventory"] = (
+            metadata(data) if name.endswith(".JSON") else describe_masked_csv(data))
+    return result
+
 def run():
     result = {
         "schema": "eit105/external-preflight/v1",
@@ -132,4 +241,11 @@ def run():
     return result
 
 if __name__ == "__main__":
-    print(json.dumps(run(), indent=2, sort_keys=True))
+    import sys
+    if sys.argv[1:] == ["--masked"]:
+        report=run_masked()
+    elif not sys.argv[1:]:
+        report=run()
+    else:
+        raise SystemExit("ONLY_DEFAULT_STRICT_OR_AMENDED_MASKED")
+    print(json.dumps(report, indent=2, sort_keys=True))
