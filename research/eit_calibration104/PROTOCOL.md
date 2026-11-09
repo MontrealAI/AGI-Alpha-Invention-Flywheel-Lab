@@ -1,0 +1,29 @@
+# EIT104 preregistration — source-bound leave-LEVEL-out decision recalibration
+Status: **FROZEN BEFORE ANALYSIS CODE AND EVALUATION**. This commit is the timestamped design freeze; later source commits must not rewrite it. 2026-11-08 UTC.
+
+## The productive question
+Can a **simple, executable, trained correction** of already available 40-acquisition physical EIT binary outputs improve material-presence decisions more than an honest conventional adaptive choice among ordinary recalibrations, and more than the original 76-acquisition method? This tests one possible software/uncertainty means for an interior-property decision; it **does not add a physical observation or build a new instrument**.
+
+This is **retrospective reanalysis** of all 21 already exposed physical specimens. Outer holdout groups are deterministic leave-one-*level*-out evaluation folds, not genuine undisclosed holdout experiments or future-case acceptance. The user, experiment developer, and source history already know aggregate original results. Never upgrade this to fresh independent physical confirmation.
+
+## Fixed data and boundaries
+Read only the exact 21-row eight-bit truth/full76/direct40/impute40 projection from EIT103 `research/eit_select103/analysis.py` at Git SHA `10b25ce984c22aff861da3d295f5b5d3b8d7299c`, projection SHA256 `3717c65a9f1c1a8fd2171ac83307aadd8bc60e84f7f2a8391062d1f181f8d22c`. That projection claims origin in original EIT102 artifact13632633072, ZIP SHA256 `8efee93d9e4b142907bea786701c6b78047b68a51e248b498c3df9e9c01e37b2`, source `e1493a8d71abcad67a6e26d043ce05cec71a7d4d`, original owner `a5859d378ca6298d1ae22e45dc6c083b060103ff`. Read the data exactly as publicly exposed; missing or tampered data fail closed. All labels are author-derived material/quadrant occupancy proxies, not separately independently certified physical properties.
+
+Seven outer folds: withhold all three physical specimens for one `level1` ... `level7`; train on the other 18. Predict each of eight binary material/quadrant decisions for each heldout specimen, for exactly 168 out-of-fold outcomes. No target truth or full76 output from the withheld group may be used by a 40-acquisition policy. Use exact integer counts; deterministic decision thresholds and tie rules. No randomness, hyperparameter tuning or favorable-seed sampling.
+
+## Frozen policies
+A. **Direct40**, unmodified competent ordinary 40-pattern inverse output.
+B. **Full76**, unchanged conventional 76-pattern inverse output; it pays for 76 acquisitions, not 40. This is a reference baseline, not a legal 40-input selector.
+C. **Material-pooled correction**: learn for each material (first/last four bits) and direct40 predicted bit b, Laplace-smoothed conditional class rate (positive labels+1)/(same-bit observations+2) on TRAINING groups only; output 1 when rate >1/2, 0 when <1/2, tie: retain direct40 bit.
+D. **Position-wise correction**: same closed-form rule for each of eight material/quadrant slots and predicted bit b; 18 training observations per slot.
+E. **Nested ordinary chooser (stronger deployable comparator)**: inside each outer training set, leave one training level out at a time and score A, C, D by balanced accuracy, using only the other five levels to fit C/D. Choose the winning policy, tie by higher accuracy, final tie A then C then D. Fit the chosen policy on the entire six-level outer training set; apply to the outer heldout level. No outer heldout truth or full76 output can enter selection. This is a resource-aware conventional benchmark, not an oracle.
+
+Include the always-absent no-acquisition option as a reference. Impute40 and majority on EIT103 bits can be reported as additional unchanged baselines, not tuned. This tests SOFTWARE postprocessing only and confers no permission to price or sell physical sensing.
+
+## Fixed outcomes / success logic
+Report fixed-arm accuracy / 168 and pooled binary balanced accuracy (mean true-positive and true-negative recall), each separately by material as well; class denominators and all seven per-level results. If any category lacks positives or negatives in a reported subset, label its balanced accuracy undefined, never as a success. No manufactured uncertainty interval or trial count. Exact primary gate for D (position-wise): balanced accuracy >= E + 0.05 and >= B + 0.05, total accuracy >= E and >= B, and each material balanced accuracy no worse than E by 0.05. All calculations on seven out-of-fold groups. Full76 not reduced to 40 acquisitions. The strongest comparator E must be kept even if it defeats D. C can win technically but is not retroactively redefined as the registered challenger. If gate fails, preserve rejection; do not change folds, labels, smoothing, classes or price/demand assumptions.
+
+Report error asymmetry, proxy-label limitations, physical new acquisitions=0, actual verified beneficiary acceptance=0, collected revenue=0, no simulated native account, unknown host/model/human lifecycle costs and NO BID / NO DEPLOY. Passing a retrospective software threshold would at most authorize separately registered prospective physical validation, not a deployment/profit claim. There is no real customer, purchaser, supplier, financing or actual monetization in this experiment.
+
+## Governance
+Branch is an **independent additive research branch from main de9546ef9083f64a25186f1c5163e3a3a4eaeae5**. Do not touch EIT102/103 or owner PR262/305, financial P0 source, original account, credentials, permanent liabilities, protected main or release. Preserve all historic negative observations and failed jobs unchanged. Run local tests, CI, independent exact-source review, then publish a draft PR only; integration/release needs actual guards and independent qualification. Authorize no paid APIs, purchases, outreach, private data, transactions or production deployment.
