@@ -94,6 +94,57 @@ class ExternalPreflightTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "DUPLICATE_METADATA_IDENTIFIER"):
             p.metadata(json.dumps(payload).encode())
 
+    def masked_sample(self, changes):
+        rows=list(csv.DictReader(io.StringIO(self.sample().decode())))
+        rows[0].update(changes)
+        out=io.StringIO()
+        writer=csv.DictWriter(out,fieldnames=p.FIELDS+p.VOLTAGES)
+        writer.writeheader()
+        writer.writerows(rows)
+        return out.getvalue().encode()
+
+    def test_masked_inventory_preserves_real_missing_electrodes(self):
+        s=self.masked_sample({"E_02":"NA", "E_09":"NA"})
+        with self.assertRaisesRegex(ValueError, "INVALID_MEASUREMENT"):
+            p.describe_csv(s)  # frozen original full-channel validator stays FAILED
+        summary=p.describe_masked_csv(s)
+        self.assertEqual(summary["measurement_rows"],1)
+        self.assertEqual(summary["finite_channel_count_histogram"],{14:1})
+        self.assertEqual(summary["missing_on_injection_electrodes"],1)
+        self.assertEqual(summary["missing_on_other_electrodes"],1)
+        self.assertEqual(summary["distinct_observed_missing_masks"],1)
+        self.assertTrue(summary["no_imputation"])
+
+    def test_masked_inventory_refuses_unknown_missing_codes(self):
+        with self.assertRaisesRegex(ValueError, "UNKNOWN_MISSING_TOKEN"):
+            p.describe_masked_csv(self.masked_sample({"E_08":"missing"}))
+
+    def test_masked_inventory_refuses_nonfinite_float(self):
+        with self.assertRaisesRegex(ValueError, "NONFINITE_MEASUREMENT"):
+            p.describe_masked_csv(self.masked_sample({"E_08":"inf"}))
+
+    def test_masked_inventory_refuses_empty_voltage(self):
+        with self.assertRaisesRegex(ValueError, "INVALID_OR_EMPTY_MEASUREMENT"):
+            p.describe_masked_csv(self.masked_sample({"E_08":""}))
+
+    def test_masked_inventory_refuses_fewer_than_eight_measured(self):
+        insufficient={f"E_{j:02d}":"NA" for j in range(1,10)}
+        with self.assertRaisesRegex(ValueError, "INSUFFICIENT_FINITE_CHANNELS"):
+            p.describe_masked_csv(self.masked_sample(insufficient))
+
+    def test_masked_inventory_refuses_invalid_injection(self):
+        with self.assertRaisesRegex(ValueError, "INVALID_EXCITATION"):
+            p.describe_masked_csv(self.masked_sample({"ex_mat_0":"1","ex_mat_1":"1"}))
+
+    def test_masked_inventory_refuses_missing_header(self):
+        s=self.masked_sample({"E_02":"NA"}).replace(b"E_16",b"OMITTED",1)
+        with self.assertRaisesRegex(ValueError, "MISSING_ACQUISITION_FIELDS"):
+            p.describe_masked_csv(s)
+
+    def test_masked_inventory_refuses_ragged_rows(self):
+        with self.assertRaisesRegex(ValueError, "RAGGED_CSV_ROW"):
+            p.describe_masked_csv(self.sample()+b"bad,more,rows\\n")
+
     def test_missing_metadata_fields_refused(self):
         with self.assertRaisesRegex(ValueError, "SOURCE_METADATA_SCHEMA_CHANGED"):
             p.metadata(json.dumps({"license": ["CC BY 4.0"],
