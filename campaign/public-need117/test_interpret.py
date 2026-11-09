@@ -44,6 +44,28 @@ class InterpreterTests(unittest.TestCase):
             badcsv=Path(td)/'f.csv';badcsv.write_text(FIXTURE.read_text().replace('region-b','region-c'))
             with self.assertRaisesRegex(ValueError,'ORIGINAL_INPUT_CHANGED'):verify(badcsv,p)
 
+    def test_rejects_forged_wilson_and_scoring_denominator(self):
+        r=build(FIXTURE,sample_role='EXPOSED_DEMO',review_status='UNVERIFIED',population_frame='UNKNOWN')
+        with TemporaryDirectory() as td:
+            p=Path(td)/'receipt.json'
+            forged=copy.deepcopy(r);forged['groups']['region-a']['observed_error_wilson95']=[0.0,0.0]
+            p.write_text(json.dumps(forged))
+            with self.assertRaisesRegex(ValueError,'INTERVAL_CHANGED'): verify(FIXTURE,p)
+            forged=copy.deepcopy(r);forged['groups']['region-b']['scored_fraction']=1.0
+            p.write_text(json.dumps(forged))
+            with self.assertRaisesRegex(ValueError,'DENOMINATOR_CHANGED'): verify(FIXTURE,p)
+
+    def test_rejects_receipt_status_promotion_and_duplicate_keys(self):
+        r=build(FIXTURE,sample_role='EXPOSED_DEMO',review_status='UNVERIFIED',population_frame='UNKNOWN')
+        with TemporaryDirectory() as td:
+            p=Path(td)/'receipt.json'
+            forged=copy.deepcopy(r);forged['status']='BOUNDED_HELDOUT_DIAGNOSTIC'
+            p.write_text(json.dumps(forged))
+            with self.assertRaisesRegex(ValueError,'UNSUPPORTED_EVIDENCE_PROMOTION'):verify(FIXTURE,p)
+            raw=json.dumps(r)
+            p.write_text(raw[:-1]+',"rows": 8}')
+            with self.assertRaisesRegex(ValueError,'DUPLICATE_RECEIPT_FIELD'):verify(FIXTURE,p)
+
     def test_no_certification_without_label_review_and_heldout_role(self):
         with self.assertRaisesRegex(ValueError,'EXACT_EVIDENCE_ROLE'):
             build(FIXTURE,sample_role='ASSUMED_WIN',review_status='UNVERIFIED',population_frame='UNKNOWN')
