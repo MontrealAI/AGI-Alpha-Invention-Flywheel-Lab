@@ -43,7 +43,7 @@ jobs:
         run: python -B -m unittest tests.test_connected_p0_source_guard -v
       - name: Execute the two preregistered actual owner/main source comparisons
         run: |
-          python -B scripts/qualify_p0_branch_pair114.py \
+          python -B -m scripts.qualify_p0_branch_pair114 \
             --main-root "$GITHUB_WORKSPACE/.p0-main114" \
             --transition-root "$GITHUB_WORKSPACE/.p0-owner114" \
             --receipt "$RUNNER_TEMP/P0_BRANCH_PAIR114.json"
