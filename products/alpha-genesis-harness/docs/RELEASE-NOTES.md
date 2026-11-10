@@ -10,6 +10,7 @@ This edition continues the existing HARNESS 0.2 branch and its persistent model-
 - A separate model-driven Upgrade Foundry permits new edits to one isolated interpreter module, with native-sandbox evaluation, independent host adjudication, exact-hash research selection and rollback. Authenticated live construction and sandbox operation require their own evidence.
 - The interface exposes authorization, evidence, costs, limitations, lineage and export. Persistent workspace data stays outside the distributed source.
 - Exact-archive qualification includes the Ω experiment and its interface replay. Source identities, negative outcomes and unknown costs remain explicit.
+- The Ω workspace waits for connector initialization before its first load, repairing the startup race observed on Windows. Native qualification resolves its own macOS temporary-path alias while preserving customer-workspace symbolic-link guards. Native retesting remains pending; these fixes do not predeclare a platform PASS.
 
 See [Ω GENESIS NEXT](OMEGA-GENESIS-NEXT.md) for operation and [the qualification matrix](../evidence/QUALIFICATION-MATRIX.md) for the tested boundaries. The experiment uses an authored bounded construction recipe. It does not prove general autonomous invention, an independent scientific breakthrough or a financial return. A result tied with ordinary reuse is not a discovery advantage.
 
@@ -34,5 +35,7 @@ La version 0.3.0 prolonge le HARNESS 0.2. Elle ajoute Ω GENESIS NEXT : inspecti
 L'expérience applique une recette de construction préparée au vérificateur réel du HARNESS, puis mesure son transfert à une tâche différente. Une égalité avec la réutilisation ordinaire demeure une égalité. Ce résultat ne prouve ni invention générale autonome, ni percée scientifique, ni rentabilité.
 
 Le dernier essai local présente un **échec global** : le constructeur seul a épuisé trois tentatives avec un artefact invalide; le parcours constructeur–critique a réussi en deux appels, export et réutilisation compris. La réussite antérieure conserve son identité source. Les reçus hébergés et multiplateformes sont fournis séparément après le gel du code.
+
+Le chargement initial de Ω attend maintenant l’initialisation du connecteur. Le qualificateur résout son propre chemin temporaire macOS sans affaiblir les protections des espaces clients. Ces correctifs exigent encore leurs nouveaux essais natifs.
 
 Les connexions authentifiées, l'autorisation commerciale OpenAI et les plateformes non exercées restent des critères distincts. Conservez l'ancienne édition et vos exports, extrayez cette version dans un nouveau dossier et vérifiez l'archive exacte. Aucune action Squarespace n'est effectuée.

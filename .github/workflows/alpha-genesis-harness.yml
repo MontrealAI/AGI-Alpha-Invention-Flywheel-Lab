@@ -180,6 +180,22 @@ jobs:
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
         run: |
           python -B products/alpha-genesis-harness/scripts/qualify_platform.py "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-native-operation" --visual-modules "$HARNESS_VISUAL_MODULES" --browser-executable "$HARNESS_NATIVE_BROWSER"
+      - name: Probe native macOS Codex isolation without credentials
+        if: ${{ always() && !cancelled() && matrix.os == 'macos-latest' }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/harness-codex" "$RUNNER_TEMP/harness-native-operation/sandbox-probes"
+          cp products/alpha-genesis-harness/tests/codex/package*.json "$RUNNER_TEMP/harness-codex/"
+          npm ci --prefix "$RUNNER_TEMP/harness-codex" --ignore-scripts --no-audit --no-fund
+          set +e
+          python products/alpha-genesis-harness/scripts/probe_codex_sandbox.py --executable "$RUNNER_TEMP/harness-codex/node_modules/.bin/codex" --work-root "$GITHUB_WORKSPACE/harness-sandbox-probe" > "$RUNNER_TEMP/harness-native-operation/sandbox-probes/CODEX-HOST-VERIFICATION.json"
+          boundary_status=$?
+          python products/alpha-genesis-harness/scripts/probe_upgrade_foundry.py --executable "$RUNNER_TEMP/harness-codex/node_modules/.bin/codex" --output "$RUNNER_TEMP/harness-native-operation/sandbox-probes/UPGRADE-FOUNDRY-HOST-VERIFICATION.json"
+          foundry_status=$?
+          set -e
+          test "$boundary_status" -eq 0 || test "$boundary_status" -eq 2
+          test "$foundry_status" -eq 0 || test "$foundry_status" -eq 2
+          # Use the native Seatbelt boundary unchanged. BLOCKED stays BLOCKED;
+          # neither credential-free probe establishes model-written construction.
       - name: Preserve native platform scope and results
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -253,6 +269,15 @@ jobs:
                   data = (directory / 'browser' / name).read_bytes()
                   assert data and len(data) == exported['bytes'] and hashlib.sha256(data).hexdigest() == exported['sha256']
                   selected.append('browser/' + name)
+              if runner == 'macos-latest':
+                  for name in ('CODEX-HOST-VERIFICATION.json', 'UPGRADE-FOUNDRY-HOST-VERIFICATION.json'):
+                      probe = json.loads((directory / 'sandbox-probes' / name).read_text())
+                      assert probe['status'] in {'PASS', 'BLOCKED'}
+                      if name.startswith('CODEX'):
+                          assert probe['inference_calls'] == 0 and probe['real_credentials_used'] is False
+                      else:
+                          assert probe['live_model_construction'] == 'NOT_TESTED' and probe['generated_code_executed'] is False
+                      selected.append('sandbox-probes/' + name)
               for name in selected:
                   included[runner + '/' + name] = (directory / name).read_bytes()
           included['NATIVE-EVIDENCE-PROVENANCE.json'] = (json.dumps({'source_revision': source, 'archive_sha256': archive, 'producer_artifacts': origins}, indent=2) + '\n').encode()
@@ -314,6 +339,11 @@ jobs:
               for runner in ('windows-latest', 'macos-latest'):
                   receipt = json.loads(native.read(runner + '/PLATFORM-QUALIFICATION.json'))
                   assert receipt['status'] == 'PASS' and receipt['archive_sha256'] == archive and receipt['source_revision'] == source
+              for name in ('CODEX-HOST-VERIFICATION.json', 'UPGRADE-FOUNDRY-HOST-VERIFICATION.json'):
+                  (assets / ('MACOS-' + name)).write_bytes(native.read('macos-latest/sandbox-probes/' + name))
+          mac_boundary = evidence('MACOS-CODEX-HOST-VERIFICATION.json')
+          mac_foundry = evidence('MACOS-UPGRADE-FOUNDRY-HOST-VERIFICATION.json')
+          assert mac_boundary['status'] in {'PASS', 'BLOCKED'} and mac_foundry['status'] in {'PASS', 'BLOCKED'}
           frontier = evidence('FRONTIER-MONITOR-VERIFICATION.json')
           assert frontier['status'] in {'PASS', 'BLOCKED'}
           for name, digest in frontier['source_sha256'].items():
@@ -335,9 +365,10 @@ jobs:
           for key, (status, scope) in updates.items():
               rows[key].update(status=status, actual_test_or_required_procedure=scope,
                                remaining_dependency_or_scope='See hashed input receipts and their stated limits.', evidence_location='Release input receipts listed in this report')
-          rows['O11']['remaining_dependency_or_scope'] += ' Hosted credential-free original-interpreter probe: ' + foundry['status'] + '; no authenticated model construction was tested.'
+          rows['O11']['remaining_dependency_or_scope'] += ' Hosted credential-free original-interpreter probe: Linux ' + foundry['status'] + ', macOS ' + mac_foundry['status'] + '; no authenticated model construction was tested.'
           report.update(schema='alpha-genesis-harness-release-qualification/v1', source_revision=source, archive_sha256=archive,
                         commercial_mandate_satisfied=False, commercially_validated=False, input_receipts=inputs,
+                        native_sandbox_probes={'linux_foundry': foundry['status'], 'macos_boundary': mac_boundary['status'], 'macos_foundry': mac_foundry['status'], 'scope': 'Credential-free actual native sandbox and original interpreter only; no model-written candidate or authenticated construction.'},
                         scope='External post-freeze supplement. PASS applies only to each named engineering scope; inherited failures, unknown costs and commercial/authentication blockers remain unchanged.')
           (assets / 'RELEASE-QUALIFICATION.json').write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n')
           lines = ['# Exact release qualification', '', 'Source: `' + source + '`', '', 'Customer ZIP SHA-256: `' + archive + '`', '',

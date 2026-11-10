@@ -17,14 +17,19 @@ const crypto = require('node:crypto');
   const base = new URL(external || 'http://127.0.0.1:18765');
   assert.ok(base.protocol === 'http:' && base.hostname === '127.0.0.1' && !base.username && !base.password && base.pathname === '/' && !base.search && !base.hash, 'Browser qualification accepts only the exact loopback application');
   const server = external ? null : spawn(process.env.PYTHON || 'python3', [path.join(product, 'bridge/server.py'), '--port', base.port, '--no-browser', '--workspace', path.join(temporary, 'work')], { stdio: 'ignore' });
-  let browser;
-  const errors = [], checks = [], screenshots = [], exports = [];
+  let browser, page;
+  const errors = [], checks = [], screenshots = [], exports = [], http_failures = [];
   try {
     const executablePath = process.env.CHROME_BIN || (process.platform === 'linux' ? execFileSync('which', ['google-chrome']).toString().trim() : chromium.executablePath());
     assert.ok(fs.existsSync(executablePath), 'Set CHROME_BIN to the installed native Chromium executable');
     browser = await chromium.launch({ executablePath, headless: true, args: process.platform === 'linux' ? ['--no-sandbox'] : [] });
-    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     page.on('pageerror', error => errors.push(error.message));
+    page.on('response', response => {
+      const url = new URL(response.url());
+      if (url.origin === base.origin && url.pathname.startsWith('/api/') && response.status() >= 400)
+        http_failures.push({ path: url.pathname, status: response.status() });
+    });
     for (let i = 0; ; i++) {
       try { await page.goto(base.href); break; }
       catch (error) { if (i >= 20) throw error; await new Promise(resolve => setTimeout(resolve, 100)); }
@@ -33,7 +38,13 @@ const crypto = require('node:crypto');
     await page.locator('#start-mission').waitFor();
     await shot('HARNESS-01-start-en.png');
     checks.push('first-run rendered');
+    await page.waitForFunction(() => !document.querySelector('#bridge-controls').classList.contains('hidden'));
+    checks.push('browser completed authenticated local connection');
+    const genesisStatusResponse = page.waitForResponse(response => response.url().endsWith('/api/genesis-next/status'));
     await page.locator('#start-genesis-next').click();
+    const genesisStatus = await genesisStatusResponse;
+    const genesisState = await genesisStatus.json();
+    assert.equal(genesisStatus.status(), 200, 'GENESIS status rejected: ' + JSON.stringify(genesisState.error || {}));
     await page.waitForFunction(() => document.querySelector('#omega-capabilities')?.textContent?.includes('bounded-verification'));
     assert.equal(await page.locator('#omega-run').isEnabled(), false);
     await shot('HARNESS-07-genesis-next-en.png');
@@ -121,10 +132,13 @@ const crypto = require('node:crypto');
 
 
     assert.deepEqual(errors, []);
-    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'PASS', source_revision: process.env.EXPECTED_SOURCE || null, browser: await browser.version(), platform: process.platform, architecture: process.arch, headless: true, server_mode: external ? 'external-native-launcher' : 'direct-python', checks, screenshots, exports, errors, scope: 'Headless native-OS Chromium checks only; no Finder/Explorer double-click, signing, notarization, live model or other OS qualification.' }, null, 2));
+    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'PASS', source_revision: process.env.EXPECTED_SOURCE || null, browser: await browser.version(), platform: process.platform, architecture: process.arch, headless: true, server_mode: external ? 'external-native-launcher' : 'direct-python', checks, screenshots, exports, errors, http_failures, scope: 'Headless native-OS Chromium checks only; no Finder/Explorer double-click, signing, notarization, live model or other OS qualification.' }, null, 2));
     console.log(JSON.stringify({ status: 'PASS', platform: process.platform, checks, screenshots, exports }));
   } catch (error) {
-    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'FAIL', platform: process.platform, checks, screenshots, exports, errors, failure: error.message }, null, 2));
+    if (page) {
+      try { await page.screenshot({ path: path.join(output, 'HARNESS-failure.png'), fullPage: true }); screenshots.push('HARNESS-failure.png'); } catch (_) {}
+    }
+    fs.writeFileSync(path.join(output, 'BROWSER-VERIFICATION.json'), JSON.stringify({ status: 'FAIL', source_revision: process.env.EXPECTED_SOURCE || null, platform: process.platform, server_mode: external ? 'external-native-launcher' : 'direct-python', checks, screenshots, exports, errors, http_failures, failure: error.message, failure_stack: error.stack }, null, 2));
     throw error;
   } finally {
     if (browser) await browser.close();

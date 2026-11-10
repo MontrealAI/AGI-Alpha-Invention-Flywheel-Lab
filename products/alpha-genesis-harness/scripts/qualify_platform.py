@@ -119,7 +119,9 @@ def authenticate(port: int, process: subprocess.Popen) -> dict:
         raise ValueError("Unauthenticated status request was not refused")
     authorized, status = request(port, "/api/status", {"X-Harness-Token": session["token"]})
     if authorized != 200 or not isinstance(status, dict):
-        raise ValueError("Authenticated local status was unavailable")
+        code = status.get("error", {}).get("code") if isinstance(status, dict) else None
+        diagnostic = code if isinstance(code, str) and re.fullmatch(r"[A-Z0-9_]{1,80}", code) else "UNKNOWN"
+        raise ValueError(f"Authenticated local status was unavailable (HTTP {authorized}; {diagnostic})")
     # Never retain the token. Record only minimal observable readiness.
     return {"bootstrap": "PASS", "unauthenticated_status": denied, "authenticated_status": authorized,
             "configured_providers": len(status.get("providers", [])),
@@ -175,7 +177,10 @@ def qualify(archive: Path, expected_sha256: str, expected_source_revision: str, 
     process = None
     try:
         with tempfile.TemporaryDirectory(prefix="harness-native-") as temporary:
-            root = Path(temporary)
+            # macOS exposes its temporary directory through /var -> /private/var.
+            # Canonicalize only our newly created directory; product workspace
+            # validation continues to refuse symlink paths supplied by callers.
+            root = Path(temporary).resolve(strict=True)
             with zipfile.ZipFile(io.BytesIO(raw)) as bundle:
                 bundle.extractall(root / "extracted")
             roots = list((root / "extracted").iterdir())

@@ -2,6 +2,7 @@
 """Platform qualifier boundary tests. Fixtures are not native-platform qualification."""
 from __future__ import annotations
 
+from contextlib import nullcontext
 import hashlib
 import json
 import os
@@ -73,7 +74,24 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
                     q.qualify(archive, "a" * 64, SOURCE, Path(root) / "result", Path(root), Path(root))
                 start.assert_not_called()
 
+    def test_authentication_failure_retains_http_code_without_response_payload(self):
+        process = Mock()
+        process.poll.return_value = None
+        responses = [(200, {"token": "private-token-must-not-be-reported"}), (403, {}),
+                     (400, {"error": {"code": "LOCAL_SETUP_INPUT", "message": "do not retain arbitrary response"}})]
+        with patch.object(q, "request", side_effect=responses):
+            with self.assertRaisesRegex(ValueError, "HTTP 400; LOCAL_SETUP_INPUT") as caught:
+                q.authenticate(8765, process)
+        self.assertNotIn("private-token", str(caught.exception))
+        self.assertNotIn("arbitrary response", str(caught.exception))
+
     def test_zero_exit_does_not_convert_wrong_platform_receipt_to_pass(self):
+        self._wrong_receipt_case()
+
+    def test_generated_temp_directory_is_canonical_before_workspace_validation(self):
+        self._wrong_receipt_case(symbolic_parent=True)
+
+    def _wrong_receipt_case(self, symbolic_parent=False):
         with tempfile.TemporaryDirectory() as root:
             root = Path(root)
             package = archive_fixture(extra_files={
@@ -89,12 +107,26 @@ class NativeQualificationBoundaryTests(unittest.TestCase):
             browser = root / "browser"
             browser.write_text("inert executable fixture")
             output = root / "result"
+            temporary_override = nullcontext()
+            if symbolic_parent:
+                (root / "real-temporary").mkdir()
+                alias = root / "temporary-alias"
+                try:
+                    alias.symlink_to(root / "real-temporary", target_is_directory=True)
+                except OSError:
+                    self.skipTest("This host cannot create the symlink-parent fixture")
+                temporary_override = patch.object(q.tempfile, "TemporaryDirectory", return_value=nullcontext(str(alias)))
+            original_launcher = q.native_launcher
+            def checked_launcher(product, workspace, port):
+                self.assertFalse(any(item.is_symlink() for item in [workspace, *workspace.parents]),
+                                 "Generated private workspace must reach the unchanged product guard canonically")
+                return original_launcher(product, workspace, port)
             def wrong_receipt(command, **kwargs):
                 (output / "browser").mkdir()
                 (output / "browser/BROWSER-VERIFICATION.json").write_text(json.dumps({"status": "PASS", "platform": "invented", "source_revision": SOURCE,
                     "server_mode": "external-native-launcher", "exports": [{"file": "fixture.json"}]}))
                 return subprocess.CompletedProcess(command, 0, "fixture", "")
-            with patch.object(q.platform, "platform", return_value="platform-fixture"), patch.object(q.platform, "machine", return_value="fixture"), \
+            with temporary_override, patch.object(q, "native_launcher", side_effect=checked_launcher), patch.object(q.platform, "platform", return_value="platform-fixture"), patch.object(q.platform, "machine", return_value="fixture"), \
                  patch.object(q, "free_port", return_value=8765), patch.object(q, "authenticate", return_value={"fixture": True}), \
                  patch.object(q, "launcher_interpreter", return_value={"fixture": True}), patch.object(q, "stop_owned_process"), \
                  patch.object(q.subprocess, "Popen", return_value=Mock()), patch.object(q.subprocess, "run", side_effect=wrong_receipt):
