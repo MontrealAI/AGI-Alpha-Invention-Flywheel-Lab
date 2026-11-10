@@ -155,5 +155,51 @@
       "app/index.html": "84fb6b8c8048d7296bbccda17ca2544c4bf3f6d8b272fa44d584fe5ed9867369",
       "tests/acceptance.test.cjs": "a936981898ff276b2f59e486c309e5de59d9763bb8109dc302d488f7d9f860a0"
     }
+  },
+  "pr320_connected_import_review": {
+    "baseline_revision": "04fa5adffb60d6611a8b4f9da7bcf337d664a766",
+    "baseline_app_sha256": "6ee08d391e3755ce77df99d8f7fcd956a7c9cc071d358f5600ae472c80b9ee0e",
+    "original_finding_reproduced": {
+      "cause": "Comma-expression branch always took the parallel path and reassigned the destination project",
+      "modes": [
+        "direct",
+        "transformational"
+      ],
+      "observed_per_mode": {
+        "successful_contributions": 1,
+        "parallel_candidates": 1,
+        "active_proposed_artifacts": 0
+      }
+    },
+    "additional_related_finding": {
+      "intermediate_app_sha256": "27d95c4ef62db52b9c4233a92fbcab16d68438c5cd3b8eff3f621b48dfc0fa45",
+      "observed": "Summary-only direct response deleted an edited workflowSpec and workflowInputs because imported project clones have new object identities",
+      "repair": "Manual and connected cleanup requires an actually supplied, engine-accepted workflow"
+    },
+    "independently_authored_dom_scenarios": {
+      "passed": 15,
+      "failed": 0,
+      "coverage": [
+        "Direct and transformational imports activate instrument, workflow and arrangement with zero candidates",
+        "Parallel artifacts remain candidates until explicit selection",
+        "Direct and transformational replacement workflows clear stale aliases and inputs, execute11 and save/reopen",
+        "Nine manual/direct/transformational commentary, prose and unrelated-instrument cases preserve edited workflow/inputs, execute104 and save/reopen",
+        "Manual replacement workflow clears stale aliases and executes11"
+      ],
+      "replay_source": "evidence/UI_CONNECTED_ACCEPTANCE.cjs"
+    },
+    "maintained_parallel_dom_replay_rerun": {
+      "declared_check_groups_passed": 14,
+      "failed": 0,
+      "coverage": "Individual artifact kinds, concurrency, failed providers, cancellation, deferred replacement and originating-project ownership"
+    },
+    "source_sha256": {
+      "app/app.js": "01ada3f96f8881c02b7cd4f6b66c57ba7e8b00f08a4c926f8c7ac7ee3be93ad9",
+      "app/engine.js": "42600100d8a61e3623db8e1a66645b417ca0c139b0814597219d68069412ded8",
+      "evidence/UI_PARALLEL_REPLAY.cjs": "7ea46495cb83ce9f96f41f903e27d8ce2212cff3e657485a91112223e2e6f691",
+      "evidence/UI_CONNECTED_ACCEPTANCE.cjs": "b6a7eef0e9ea7546a2508d0307182845fbd3fc0acf5686d1c6606bf80a419baf"
+    },
+    "verdict": "PASSED IN SCOPE",
+    "scope": "Actual UI controller in jsdom26.1.0 with in-memory bridge responses; no network, graphical browser or authenticated vendor/model calls. Prior failure records and commercial-release limitations retained."
   }
 }

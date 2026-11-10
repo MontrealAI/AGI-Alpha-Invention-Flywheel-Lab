@@ -38,6 +38,16 @@ jobs:
         run: |
           node --test tests/*.test.cjs
           python -B -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Execute locked DOM customer and connected-model regressions
+        env:
+          NODE_PATH: ${{ runner.temp }}/harness-dom/node_modules
+        run: |
+          mkdir -p "$RUNNER_TEMP/harness-dom"
+          cp products/alpha-genesis-harness/tests/dom/package*.json "$RUNNER_TEMP/harness-dom/"
+          npm ci --prefix "$RUNNER_TEMP/harness-dom" --ignore-scripts --no-audit --no-fund
+          node products/alpha-genesis-harness/evidence/UI_REPLAY.cjs
+          node products/alpha-genesis-harness/evidence/UI_PARALLEL_REPLAY.cjs
+          node products/alpha-genesis-harness/evidence/UI_CONNECTED_ACCEPTANCE.cjs
       - name: Preserve canonical mechanism and platform contracts
         run: |
           python -B -m unittest discover -s tests -p 'test_mechanism_harness_0*.py' -v

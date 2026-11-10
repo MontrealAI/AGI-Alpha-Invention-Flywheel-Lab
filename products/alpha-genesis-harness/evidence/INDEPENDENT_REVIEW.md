@@ -61,3 +61,18 @@ Related artifact-selection review exposed one additional failure: after running 
 A separate mocked parallel replay selected an arithmetic proposal, ran its default workflow, then selected the competing arrangement-only proposal. The prior active instrument, workflow and workflow inputs were absent afterward; both rival contributions and artifact candidates remained retained, and the selected project exported and reopened successfully. These tests used jsdom 26.1.0 and in-memory responses, with no network, graphical browser or authenticated vendor calls.
 
 The updated independent engine acceptance suite is **34 passed / 0 failed**. The expanded serialized-envelope tests use the shared exported limit rather than the obsolete 5,000,000 encoded-character policy. The earlier failure and scope remain recorded above. Root integration records the final broader suite and publication state separately.
+
+## Connected import mode and preservation review
+
+The later PR #320 finding was independently reproduced on `04fa5adffb60d6611a8b4f9da7bcf337d664a766` (app SHA-256 `6ee08d391e3755ce77df99d8f7fcd956a7c9cc071d358f5600ae472c80b9ee0e`). The comma expression `if(keepSeparate,target=project)` made both direct and transformational imports take the parallel branch. Each fixture recorded one successful contribution and one candidate while leaving its proposed instrument, workflow and arrangement inactive. The corrected branch tests only `keepSeparate` and preserves the originating project argument.
+
+Review of the first correction found another preservation defect: the engine clones project objects on every successful import, so comparing workflow object identity cleared saved `workflowSpec` and `workflowInputs` even for a summary-only response. This was observed on intermediate app SHA-256 `27d95c4ef62db52b9c4233a92fbcab16d68438c5cd3b8eff3f621b48dfc0fa45`: the edited workflow and `{data:{x:99}}` inputs disappeared. Connected and manual cleanup now occurs only when the accepted response actually supplies a workflow.
+
+On final app SHA-256 `01ada3f96f8881c02b7cd4f6b66c57ba7e8b00f08a4c926f8c7ac7ee3be93ad9`, **15 independently authored DOM scenarios passed**. The reproducible source is `evidence/UI_CONNECTED_ACCEPTANCE.cjs`; it loads the current app by relative path and uses the development-only jsdom dependency:
+
+- Direct and transformational imports activate supplied artifacts without a candidate-selection step. Parallel imports retain candidates and leave active artifacts unchanged until selection.
+- Replacing a previous workflow clears its stale active alias and inputs; the replacement executes `4 + 7 = 11` and survives save/reopen.
+- JSON commentary, plain prose and unrelated instrument responses preserve an edited workflow and its inputs in manual, direct and transformational routes. All nine cases execute `99 + 5 = 104` and preserve that workflow/input pair after save/reopen.
+- A manual response containing a replacement workflow clears the stale aliases and executes 11.
+
+The reviewer also reran the maintained `UI_PARALLEL_REPLAY.cjs`: all **14 declared check groups passed**, including per-artifact activation, failed-provider records, cancellation, deferred project replacement and originating-project ownership. These are jsdom 26.1.0 runs of the actual UI controller with in-memory bridge fixtures, not graphical-browser or authenticated-provider qualification. No network or real model calls were made; previous failures and commercial-release limitations remain applicable.
