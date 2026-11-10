@@ -36,6 +36,14 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_genesis*.py' -v
       - name: Operate exact clean package, resume and independently audit public copy
         run: python scripts/qualify_connected014.py --smoke --output "$RUNNER_TEMP/connected014-qualified"
+      - name: Verify bundled developer regressions from exact clean source (closure 123)
+        working-directory: ${{ runner.temp }}/connected014-qualified/extracted-source
+        run: |
+          python -B -m unittest \
+            tests.test_connected_p0_source_guard \
+            tests.test_connected_lifecycle \
+            tests.test_connected_recovery_preflight \
+            tests.test_connected_release -v
       - name: Qualify V4 from the exact clean source archive
         run: |
           python "$RUNNER_TEMP/connected014-qualified/extracted-source/scripts/qualify_omega_release.py" --source "$RUNNER_TEMP/connected014-qualified/extracted-source" --archive "$RUNNER_TEMP/connected014-qualified/connected014-source.zip" --output "$RUNNER_TEMP/omega-v4-qualified" --source-commit "${{ github.event.pull_request.head.sha || github.sha }}"
