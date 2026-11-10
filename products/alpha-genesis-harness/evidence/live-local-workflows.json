@@ -1,0 +1,715 @@
+{
+  "schema": "alpha-genesis-live-local-workflow/v1",
+  "scope": "Actual local CPU inference against two frozen arithmetic cases. This establishes narrow construction behavior, not frontier reasoning or general invention superiority.",
+  "model": {
+    "configured_alias": "Qwen3-1.7B-Q4_K_M",
+    "weights_sha256": "d2387ca2dbfee2ffabce7120d3770dadca0b293052bc2f0e138fdc940d9bc7b5",
+    "server_sha256": "fe211d00c4754aa67aaa492d2c755ab0f6ef60bf30eee3c0c74a3496189cde17",
+    "provenance": {
+      "url": "https://huggingface.co/ggml-org/Qwen3-1.7B-GGUF/resolve/daeb8e2d528a760970442092f6bf1e55c3b659eb/Qwen3-1.7B-Q4_K_M.gguf",
+      "bytes": 1282439264,
+      "sha256": "d2387ca2dbfee2ffabce7120d3770dadca0b293052bc2f0e138fdc940d9bc7b5",
+      "model_license": "Apache-2.0",
+      "original_model": "https://huggingface.co/Qwen/Qwen3-1.7B",
+      "quantization_source": "ggml-org/Qwen3-1.7B-GGUF",
+      "upstream_lfs": {
+        "sha256": "d2387ca2dbfee2ffabce7120d3770dadca0b293052bc2f0e138fdc940d9bc7b5",
+        "size": 1282439264,
+        "pointerSize": 135
+      },
+      "upstream_digest_matches": true
+    }
+  },
+  "source_sha256": {
+    "bridge/workflows.py": "9c40337f4a0e61bea5f5a5bdefe77602cc3021339782f7c0fc5aa806142f9bd6",
+    "bridge/instruments.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3",
+    "bridge/adapters.py": "8955636c4f062a31ba6202fdb8caa96486c3d60bc9126d4b20f2e23707b0b8a7",
+    "scripts/probe_local_workflows.py": "ed5e4c0a498ea906b6a30c8b80475543d2ea48604636319939af2d1685419765"
+  },
+  "runs": [
+    {
+      "policy": "single-model",
+      "status": "complete",
+      "wall_seconds": 11.491430562000005,
+      "model_calls": 1,
+      "iterations": 1,
+      "actions": 1,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "artifact": "calculator.json",
+            "kind": "instrument",
+            "passed": true,
+            "actual": {
+              "result": 6
+            },
+            "expected": {
+              "result": 6
+            },
+            "operations": 3
+          },
+          {
+            "artifact": "calculator.json",
+            "kind": "instrument",
+            "passed": true,
+            "actual": {
+              "result": 0
+            },
+            "expected": {
+              "result": 0
+            },
+            "operations": 3
+          }
+        ],
+        "spec_hash": "f2c527fb20cccac795f31104ce6104fc32f130d5e842b1318eae7ad04fe67a2b",
+        "artifact_hashes": {
+          "calculator.json": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4",
+          "RUN_INSTRUMENT.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3"
+        },
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+      },
+      "events": [
+        {
+          "at": "2026-11-10T04:24:17.551113+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "f2c527fb20cccac795f31104ce6104fc32f130d5e842b1318eae7ad04fe67a2b"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "1cbf71deb7b25cbf1f75b71dc450c968996e2abca18c17152979babd0b18f597"
+        },
+        {
+          "at": "2026-11-10T04:24:17.555124+00:00",
+          "detail": {
+            "model": "Qwen3-1.7B-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_d7f9f8be388ae4a724d08f49_cacb337ebc1d2611"
+          },
+          "index": 1,
+          "kind": "model_started",
+          "previous": "1cbf71deb7b25cbf1f75b71dc450c968996e2abca18c17152979babd0b18f597",
+          "sha256": "8afa01c7d86bacd36317da6871c585a3eba79ef5e21ae7d14dbcd9d9bfac0cd0"
+        },
+        {
+          "index": 2,
+          "at": "2026-11-10T04:24:29.041218+00:00",
+          "kind": "model_completed",
+          "detail": {
+            "role": "builder",
+            "provider": "local",
+            "model": "Qwen3-1.7B-Q4_K_M",
+            "requested_model": "Qwen3-1.7B-Q4_K_M",
+            "reported_model": "Qwen3-1.7B-Q4_K_M",
+            "run_id": "wf_d7f9f8be388ae4a724d08f49_cacb337ebc1d2611",
+            "usage": {
+              "input_tokens": 516,
+              "output_tokens": 115
+            },
+            "cost": {
+              "currency": "USD",
+              "amount": 0.0,
+              "accounted": 0.0,
+              "basis": "reported_usage_at_user_rates",
+              "attempts": 1,
+              "complete_cost_known": false
+            },
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "response_sha256": "6cddd573055a46d50f4c155ef6d90712c784370ed3023adf1bfb75dba4c2d8e5"
+          },
+          "previous": "8afa01c7d86bacd36317da6871c585a3eba79ef5e21ae7d14dbcd9d9bfac0cd0",
+          "sha256": "214f0750c42c217ca223c0699cc9c63dafbb7cb1e0ad5862fa71e695b653b435"
+        },
+        {
+          "index": 3,
+          "at": "2026-11-10T04:24:29.043902+00:00",
+          "kind": "tool_completed",
+          "detail": {
+            "tool": "construct_instrument",
+            "outcome": {
+              "artifact": "calculator.json",
+              "sha256": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4",
+              "bytes": 190,
+              "kind": "instrument",
+              "run": "python3 RUN_INSTRUMENT.py calculator.json input.json"
+            }
+          },
+          "previous": "214f0750c42c217ca223c0699cc9c63dafbb7cb1e0ad5862fa71e695b653b435",
+          "sha256": "98fdb37a6b96537cde15c3ea228dd38f18964cb67b281a52d4992cbd3dad9587"
+        },
+        {
+          "index": 4,
+          "at": "2026-11-10T04:24:29.045127+00:00",
+          "kind": "verification",
+          "detail": {
+            "passed": true,
+            "checks": [
+              {
+                "artifact": "calculator.json",
+                "kind": "instrument",
+                "passed": true,
+                "actual": {
+                  "result": 6
+                },
+                "expected": {
+                  "result": 6
+                },
+                "operations": 3
+              },
+              {
+                "artifact": "calculator.json",
+                "kind": "instrument",
+                "passed": true,
+                "actual": {
+                  "result": 0
+                },
+                "expected": {
+                  "result": 0
+                },
+                "operations": 3
+              }
+            ],
+            "spec_hash": "f2c527fb20cccac795f31104ce6104fc32f130d5e842b1318eae7ad04fe67a2b",
+            "artifact_hashes": {
+              "calculator.json": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4",
+              "RUN_INSTRUMENT.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3"
+            },
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "98fdb37a6b96537cde15c3ea228dd38f18964cb67b281a52d4992cbd3dad9587",
+          "sha256": "8c2d70a71bd433909739a997ef0b7a8b7fef9a75aa76fce6686e24751d3ac757"
+        },
+        {
+          "index": 5,
+          "at": "2026-11-10T04:24:29.045332+00:00",
+          "kind": "verification",
+          "detail": {
+            "passed": true,
+            "checks": [
+              {
+                "artifact": "calculator.json",
+                "kind": "instrument",
+                "passed": true,
+                "actual": {
+                  "result": 6
+                },
+                "expected": {
+                  "result": 6
+                },
+                "operations": 3
+              },
+              {
+                "artifact": "calculator.json",
+                "kind": "instrument",
+                "passed": true,
+                "actual": {
+                  "result": 0
+                },
+                "expected": {
+                  "result": 0
+                },
+                "operations": 3
+              }
+            ],
+            "spec_hash": "f2c527fb20cccac795f31104ce6104fc32f130d5e842b1318eae7ad04fe67a2b",
+            "artifact_hashes": {
+              "calculator.json": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4",
+              "RUN_INSTRUMENT.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3"
+            },
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "8c2d70a71bd433909739a997ef0b7a8b7fef9a75aa76fce6686e24751d3ac757",
+          "sha256": "15c3dfa2eb6994f660ea944304108800dfe0e64e363c4022c44c84e227767aed"
+        },
+        {
+          "index": 6,
+          "at": "2026-11-10T04:24:29.045352+00:00",
+          "kind": "finished",
+          "detail": {
+            "status": "complete",
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "15c3dfa2eb6994f660ea944304108800dfe0e64e363c4022c44c84e227767aed",
+          "sha256": "e50ec25f45d8b659416ba282839319fc9349a13b41e26c2d3e859e2dc5a21aeb"
+        }
+      ],
+      "artifacts": {
+        "calculator.json": {
+          "sha256": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4",
+          "bytes": 190,
+          "kind": "instrument"
+        },
+        "RUN_INSTRUMENT.py": {
+          "sha256": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3",
+          "bytes": 6462,
+          "kind": "trusted_runner"
+        }
+      },
+      "external_execution": {
+        "returncode": 0,
+        "result": {
+          "output": {
+            "result": 34
+          },
+          "operations": 3,
+          "scope": "Bounded declarative execution; acceptance must be checked separately."
+        }
+      },
+      "reuse": {
+        "capability_id": "wf_d7f9f8be388ae4a724d08f49",
+        "outputs": {
+          "calculator.json": {
+            "output": {
+              "result": 82
+            },
+            "operations": 3,
+            "scope": "Bounded declarative execution; acceptance must be checked separately."
+          }
+        },
+        "verification": "EXECUTED_NOT_SUCCESSOR_ACCEPTED",
+        "scope": "Original acceptance does not verify this new input's real-world meaning or applicability."
+      },
+      "strong_control": {
+        "direct_arithmetic_result": 82,
+        "accepted": true,
+        "advantage": "NOT_ESTABLISHED; direct arithmetic and equal-content ordinary reuse remain competent controls."
+      },
+      "constructed_instrument": {
+        "name": "Multiply",
+        "inputs": [
+          "x"
+        ],
+        "outputs": {
+          "result": {
+            "op": "mul",
+            "args": [
+              {
+                "field": "x"
+              },
+              2
+            ]
+          }
+        }
+      },
+      "archive_sha256": "2071ad5394a7377e83c9ca02de6d22d053a753189858f3fc681eb4765fda4a02",
+      "export_integrity": "Verified artifact identities before external execution."
+    },
+    {
+      "policy": "actor-critic",
+      "status": "complete",
+      "wall_seconds": 15.43805661600004,
+      "model_calls": 2,
+      "iterations": 1,
+      "actions": 1,
+      "verification": {
+        "passed": true,
+        "checks": [
+          {
+            "artifact": "calculator.json",
+            "kind": "instrument",
+            "passed": true,
+            "actual": {
+              "result": 6
+            },
+            "expected": {
+              "result": 6
+            },
+            "operations": 3
+          },
+          {
+            "artifact": "calculator.json",
+            "kind": "instrument",
+            "passed": true,
+            "actual": {
+              "result": 0
+            },
+            "expected": {
+              "result": 0
+            },
+            "operations": 3
+          }
+        ],
+        "spec_hash": "310080d1c7994542e033c3a5a0053c80e94e9f86c4ea472425fec555916db896",
+        "artifact_hashes": {
+          "RUN_INSTRUMENT.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3",
+          "calculator.json": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4"
+        },
+        "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+      },
+      "events": [
+        {
+          "at": "2026-11-10T04:24:29.074253+00:00",
+          "detail": {
+            "acceptance_source": "Operator-frozen conditions; independence is not inferred.",
+            "spec_hash": "310080d1c7994542e033c3a5a0053c80e94e9f86c4ea472425fec555916db896"
+          },
+          "index": 0,
+          "kind": "created",
+          "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+          "sha256": "ebddd8fe4917b53931e3dc03df88930c64c1c70c07088a4094fe27d67bb450b1"
+        },
+        {
+          "at": "2026-11-10T04:24:29.075735+00:00",
+          "detail": {
+            "model": "Qwen3-1.7B-Q4_K_M",
+            "provider": "local",
+            "role": "builder",
+            "run_id": "wf_946a3a860e736bebd75d80fb_bae62ba22a6303a7"
+          },
+          "index": 1,
+          "kind": "model_started",
+          "previous": "ebddd8fe4917b53931e3dc03df88930c64c1c70c07088a4094fe27d67bb450b1",
+          "sha256": "5b7ed57fecd7be92345ac5f44de69e60ed68d98a8e53f6b685511e9fa3efc7a6"
+        },
+        {
+          "at": "2026-11-10T04:24:35.210801+00:00",
+          "detail": {
+            "cost": {
+              "accounted": 0.0,
+              "amount": 0.0,
+              "attempts": 1,
+              "basis": "reported_usage_at_user_rates",
+              "complete_cost_known": false,
+              "currency": "USD"
+            },
+            "model": "Qwen3-1.7B-Q4_K_M",
+            "provider": "local",
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "reported_model": "Qwen3-1.7B-Q4_K_M",
+            "requested_model": "Qwen3-1.7B-Q4_K_M",
+            "response_sha256": "6cddd573055a46d50f4c155ef6d90712c784370ed3023adf1bfb75dba4c2d8e5",
+            "role": "builder",
+            "run_id": "wf_946a3a860e736bebd75d80fb_bae62ba22a6303a7",
+            "usage": {
+              "input_tokens": 516,
+              "output_tokens": 115
+            }
+          },
+          "index": 2,
+          "kind": "model_completed",
+          "previous": "5b7ed57fecd7be92345ac5f44de69e60ed68d98a8e53f6b685511e9fa3efc7a6",
+          "sha256": "0b46eb6101b1b6686de71431d7a14881cdb3fbd23390d4e46bce3fa943c43191"
+        },
+        {
+          "at": "2026-11-10T04:24:35.213532+00:00",
+          "detail": {
+            "outcome": {
+              "artifact": "calculator.json",
+              "bytes": 190,
+              "kind": "instrument",
+              "run": "python3 RUN_INSTRUMENT.py calculator.json input.json",
+              "sha256": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4"
+            },
+            "tool": "construct_instrument"
+          },
+          "index": 3,
+          "kind": "tool_completed",
+          "previous": "0b46eb6101b1b6686de71431d7a14881cdb3fbd23390d4e46bce3fa943c43191",
+          "sha256": "b14ca596b8d2bd8f9ee71fda3d4157bfbf168ca8ff442676d47e7d981fb43c21"
+        },
+        {
+          "at": "2026-11-10T04:24:35.214677+00:00",
+          "detail": {
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3",
+              "calculator.json": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4"
+            },
+            "checks": [
+              {
+                "actual": {
+                  "result": 6
+                },
+                "artifact": "calculator.json",
+                "expected": {
+                  "result": 6
+                },
+                "kind": "instrument",
+                "operations": 3,
+                "passed": true
+              },
+              {
+                "actual": {
+                  "result": 0
+                },
+                "artifact": "calculator.json",
+                "expected": {
+                  "result": 0
+                },
+                "kind": "instrument",
+                "operations": 3,
+                "passed": true
+              }
+            ],
+            "passed": true,
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification.",
+            "spec_hash": "310080d1c7994542e033c3a5a0053c80e94e9f86c4ea472425fec555916db896"
+          },
+          "index": 4,
+          "kind": "verification",
+          "previous": "b14ca596b8d2bd8f9ee71fda3d4157bfbf168ca8ff442676d47e7d981fb43c21",
+          "sha256": "248c1f75289b5c636180684115576825f58527c047adfefda48105b350c49f89"
+        },
+        {
+          "at": "2026-11-10T04:24:35.217757+00:00",
+          "detail": {
+            "model": "Qwen3-1.7B-Q4_K_M",
+            "provider": "local",
+            "role": "critic",
+            "run_id": "wf_946a3a860e736bebd75d80fb_1489b62c11d8ae64"
+          },
+          "index": 5,
+          "kind": "model_started",
+          "previous": "248c1f75289b5c636180684115576825f58527c047adfefda48105b350c49f89",
+          "sha256": "53c263b6bf180a884f2aba016365825bd5f306f2fda84278f2e9dfc33fb5f71b"
+        },
+        {
+          "index": 6,
+          "at": "2026-11-10T04:24:44.509587+00:00",
+          "kind": "model_completed",
+          "detail": {
+            "role": "critic",
+            "provider": "local",
+            "model": "Qwen3-1.7B-Q4_K_M",
+            "requested_model": "Qwen3-1.7B-Q4_K_M",
+            "reported_model": "Qwen3-1.7B-Q4_K_M",
+            "run_id": "wf_946a3a860e736bebd75d80fb_1489b62c11d8ae64",
+            "usage": {
+              "input_tokens": 640,
+              "output_tokens": 49
+            },
+            "cost": {
+              "currency": "USD",
+              "amount": 0.0,
+              "accounted": 0.0,
+              "basis": "reported_usage_at_user_rates",
+              "attempts": 1,
+              "complete_cost_known": false
+            },
+            "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION",
+            "response_sha256": "97109dfb4890c2cfff1fa9f47edae397e028c1a7167a61b6ee32d53cb39f3003"
+          },
+          "previous": "53c263b6bf180a884f2aba016365825bd5f306f2fda84278f2e9dfc33fb5f71b",
+          "sha256": "25e337bd55ab3be86ea1e5269b9a9b45aa1b59353f6077af7a4cadfc03198d1f"
+        },
+        {
+          "index": 7,
+          "at": "2026-11-10T04:24:44.509630+00:00",
+          "kind": "critique",
+          "detail": {
+            "verdict": "accept",
+            "feedback": "The artifact meets the deterministic checks against operator-frozen cases. The calculator.json is correctly instrumented with x * 2, and both test cases pass as expected.",
+            "independence": "Separate model invocation; model agreement is not independent verification."
+          },
+          "previous": "25e337bd55ab3be86ea1e5269b9a9b45aa1b59353f6077af7a4cadfc03198d1f",
+          "sha256": "2a617350c87ff4d38f79977a8e86ab2e006113ab81d6fcbba6de75491e7cf218"
+        },
+        {
+          "index": 8,
+          "at": "2026-11-10T04:24:44.509783+00:00",
+          "kind": "verification",
+          "detail": {
+            "passed": true,
+            "checks": [
+              {
+                "artifact": "calculator.json",
+                "kind": "instrument",
+                "passed": true,
+                "actual": {
+                  "result": 6
+                },
+                "expected": {
+                  "result": 6
+                },
+                "operations": 3
+              },
+              {
+                "artifact": "calculator.json",
+                "kind": "instrument",
+                "passed": true,
+                "actual": {
+                  "result": 0
+                },
+                "expected": {
+                  "result": 0
+                },
+                "operations": 3
+              }
+            ],
+            "spec_hash": "310080d1c7994542e033c3a5a0053c80e94e9f86c4ea472425fec555916db896",
+            "artifact_hashes": {
+              "RUN_INSTRUMENT.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3",
+              "calculator.json": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4"
+            },
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "2a617350c87ff4d38f79977a8e86ab2e006113ab81d6fcbba6de75491e7cf218",
+          "sha256": "05a2462d61e56bbdfc1673c972443a64d7794af66d1f0e2f862747729609ffd2"
+        },
+        {
+          "index": 9,
+          "at": "2026-11-10T04:24:44.509826+00:00",
+          "kind": "finished",
+          "detail": {
+            "status": "complete",
+            "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+          },
+          "previous": "05a2462d61e56bbdfc1673c972443a64d7794af66d1f0e2f862747729609ffd2",
+          "sha256": "adb1901c8cc6aa919bc89e8223f022c0b6b6b908bddc0f0e7f554c7ea167b885"
+        }
+      ],
+      "artifacts": {
+        "RUN_INSTRUMENT.py": {
+          "bytes": 6462,
+          "kind": "trusted_runner",
+          "sha256": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3"
+        },
+        "calculator.json": {
+          "bytes": 190,
+          "kind": "instrument",
+          "sha256": "415205a99a1b6906dd10c055f9ff5a2d3cc171f7af73791df03323af66e888e4"
+        }
+      },
+      "external_execution": {
+        "returncode": 0,
+        "result": {
+          "output": {
+            "result": 34
+          },
+          "operations": 3,
+          "scope": "Bounded declarative execution; acceptance must be checked separately."
+        }
+      },
+      "reuse": {
+        "capability_id": "wf_946a3a860e736bebd75d80fb",
+        "outputs": {
+          "calculator.json": {
+            "output": {
+              "result": 82
+            },
+            "operations": 3,
+            "scope": "Bounded declarative execution; acceptance must be checked separately."
+          }
+        },
+        "verification": "EXECUTED_NOT_SUCCESSOR_ACCEPTED",
+        "scope": "Original acceptance does not verify this new input's real-world meaning or applicability."
+      },
+      "strong_control": {
+        "direct_arithmetic_result": 82,
+        "accepted": true,
+        "advantage": "NOT_ESTABLISHED; direct arithmetic and equal-content ordinary reuse remain competent controls."
+      },
+      "constructed_instrument": {
+        "name": "Multiply",
+        "inputs": [
+          "x"
+        ],
+        "outputs": {
+          "result": {
+            "op": "mul",
+            "args": [
+              {
+                "field": "x"
+              },
+              2
+            ]
+          }
+        }
+      },
+      "archive_sha256": "ecff20da629d0679cbfda8710ca9d3a36a29e967132935d3e4d89682efe797ed",
+      "export_integrity": "Verified artifact identities before external execution."
+    }
+  ],
+  "reproduce": "python3 scripts/probe_local_workflows.py --server /path/to/llama-server --model /path/to/Qwen3-1.7B-Q4_K_M.gguf --alias Qwen3-1.7B-Q4_K_M --output /absolute/new/proof",
+  "retained_negative_attempts": [
+    {
+      "model": "SmolLM2-135M-Instruct Q4_K_M",
+      "status": "exhausted",
+      "model_calls": 3,
+      "actions": 0,
+      "source_sha256": {
+        "bridge/adapters.py": "8955636c4f062a31ba6202fdb8caa96486c3d60bc9126d4b20f2e23707b0b8a7",
+        "bridge/workflows.py": "5cf669d2170b87d876109f1003c660927138e6c1c7636ea804a503537066b3dc",
+        "bridge/instruments.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3"
+      },
+      "lesson": "135M model failed the strict JSON action contract; no artifact or verification claimed."
+    },
+    {
+      "attempt": "initial_action_format",
+      "source_sha256": {
+        "bridge/workflows.py": "9a12c430cc98e78da05dfd75df04c3d3a0feb2f44aa7cb25480e87eaec29f6bb",
+        "bridge/instruments.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3",
+        "bridge/adapters.py": "8955636c4f062a31ba6202fdb8caa96486c3d60bc9126d4b20f2e23707b0b8a7",
+        "scripts/probe_local_workflows.py": "ed5e4c0a498ea906b6a30c8b80475543d2ea48604636319939af2d1685419765"
+      },
+      "runs": [
+        {
+          "policy": "single-model",
+          "status": "exhausted",
+          "model_calls": 3,
+          "actions": 3,
+          "refused_tools": 3
+        },
+        {
+          "policy": "actor-critic",
+          "status": "exhausted",
+          "model_calls": 6,
+          "actions": 3,
+          "refused_tools": 3
+        }
+      ],
+      "lesson": "Initial ambiguous top-level action shape led to safe tool refusal; explicit complete schema example and field diagnostics repaired interoperability. Acceptance and permissions unchanged."
+    },
+    {
+      "attempt": "explicit_action_format_repair",
+      "source_sha256": {
+        "bridge/workflows.py": "362208d9530481bf8b4df4638b2ef1281543690adb0842a63b98de77b4530051",
+        "bridge/instruments.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3",
+        "bridge/adapters.py": "8955636c4f062a31ba6202fdb8caa96486c3d60bc9126d4b20f2e23707b0b8a7",
+        "scripts/probe_local_workflows.py": "ed5e4c0a498ea906b6a30c8b80475543d2ea48604636319939af2d1685419765"
+      },
+      "runs": [
+        {
+          "policy": "single-model",
+          "status": "complete",
+          "model_calls": 1,
+          "actions": 1,
+          "refused_tools": 0
+        },
+        {
+          "policy": "actor-critic",
+          "status": "complete",
+          "model_calls": 2,
+          "actions": 1,
+          "refused_tools": 0
+        }
+      ],
+      "lesson": "Initial ambiguous top-level action shape led to safe tool refusal; explicit complete schema example and field diagnostics repaired interoperability. Acceptance and permissions unchanged."
+    }
+  ],
+  "prior_qualified_source": {
+    "source_sha256": {
+      "bridge/workflows.py": "ef8225d9f0245d87bb671fe058817a080996ab7f0935972d3cb6dc0f463bd9bb",
+      "bridge/instruments.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3",
+      "bridge/adapters.py": "8955636c4f062a31ba6202fdb8caa96486c3d60bc9126d4b20f2e23707b0b8a7",
+      "scripts/probe_local_workflows.py": "ed5e4c0a498ea906b6a30c8b80475543d2ea48604636319939af2d1685419765"
+    },
+    "runs": [
+      {
+        "policy": "single-model",
+        "status": "complete",
+        "model_calls": 1,
+        "actions": 1
+      },
+      {
+        "policy": "actor-critic",
+        "status": "complete",
+        "model_calls": 2,
+        "actions": 1
+      }
+    ],
+    "new_source_reason": "Expose worker_active during persisted ready interstage status so browser polling continues; deterministic live-worker regression added. Acceptance, prompts, model and tool permissions unchanged."
+  }
+}

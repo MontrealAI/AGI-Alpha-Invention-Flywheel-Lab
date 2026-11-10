@@ -2,7 +2,7 @@
 
 **Turn an ambition into alternatives, a testable instrument and inspectable evidence.**
 
-Version **0.1.0 — release candidate**. The intended Official Edition price is **CAD $299, one-time, bring your own AI models**. This candidate is not a claim of a completed commercial deployment. Read the current [qualification record](evidence/INDEPENDENT_REVIEW.md) before relying on a release claim.
+Version **0.2.0 — release candidate**. The intended Official Edition price is **CAD $299, one-time, bring your own AI models**. This candidate is not a claim of a completed commercial deployment. Read the current [qualification matrix](evidence/QUALIFICATION-MATRIX.md) before relying on a release claim.
 
 ## Open the application
 
@@ -14,6 +14,8 @@ For a second complete example, use **Open** in the application to select `exampl
 
 The application is intended for current desktop browsers on Windows, macOS and Linux. A responsive layout is not proof of every device/browser combination. The release evidence records the combinations actually exercised. There are no bundled native executables, code-signing certificates or macOS notarization claims.
 
+For model connections and persistent agentic construction, use the source launcher for your operating system, or run `python3 launch.py` (Windows: `py -3 launch.py`). The offline core remains available without Python. Start with the [installation guide](docs/INSTALLATION.md) and [first complete workflow](docs/QUICKSTART.md).
+
 ## What this version provides
 
 - A bilingual English/French workspace for a mission, sources, competing contributions, experiments, evidence and retained capabilities.
@@ -21,9 +23,26 @@ The application is intended for current desktop browsers on Windows, macOS and L
 - A bounded declarative interpreter and inspectable instruments; generated arbitrary code is not executed.
 - Explicit economic assumptions, participant outside options and complete-cost fields, without moving money or creating a second enterprise ledger.
 - Versioned project export/import, a capability record and scope-limited comparison procedures.
-- An optional local bridge for configured provider APIs or local inference. See [model connections](docs/MODEL-CONNECTIONS.md); real authenticated integrations remain unqualified unless the release evidence specifically says otherwise.
+- A local connector for configured provider APIs/local inference, bounded persistent agentic construction and official eligible ChatGPT/Codex pathways. See [model connections](docs/MODEL-CONNECTIONS.md); real authenticated integrations remain unqualified unless the release evidence specifically says otherwise.
 
 The synthetic example demonstrates software behavior. It does not establish a new invention, actual market demand, customers, profitability or generally improved inventive intelligence. A model-generated idea is a hypothesis until independently tested. A recorded source URL alone does not verify its content or freshness.
+
+## Complete operating documentation
+
+- [Installation and platforms](docs/INSTALLATION.md)
+- [Quick start and constructed output](docs/QUICKSTART.md)
+- [Model access and eligibility](docs/MODEL-CONNECTIONS.md)
+- [Provider protocols and local-only configuration](docs/PROVIDER-PROTOCOLS.md)
+- [Official ChatGPT-plan and Codex setup](docs/CHATGPT-PLAN.md)
+- [Agentic workflow specifications](docs/AGENTIC-WORKFLOWS.md)
+- [Advanced operators, verification and inheritance](docs/OPERATOR.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md) and [FAQ](docs/FAQ.md)
+- [Exact requirement matrix](evidence/QUALIFICATION-MATRIX.md)
+- [Owner's manual commercial handoff](commercial/storefront-checklist.md)
+
+## Actual local-model evidence
+
+The [local workflow receipt](evidence/live-local-workflows.json) records real Qwen3-1.7B inference through llama.cpp on Linux CPU, single-model and builder–critic construction, independent acceptance, an externally executed artifact and successor reuse. It includes exact source/runtime/weight identities and earlier negative attempts. This is bounded local execution evidence; ordinary reuse ties, and cloud APIs/ChatGPT-plan access retain their separate live gates.
 
 ## Privacy and permissions
 
@@ -72,4 +91,4 @@ Storefront: https://www.quebecartificialintelligence.com/shop
 
 Décompressez le fichier ZIP au complet, puis ouvrez **START-HERE.html**. Le parcours principal fonctionne dans un navigateur, sans terminal ni clé API. Choisissez le français dans l'application, ouvrez la démonstration synthétique, examinez les hypothèses, exécutez l'instrument et exportez votre projet.
 
-Cette version 0.1.0 est une **candidate à la publication**. Les idées produites restent des hypothèses; les exemples synthétiques ne prouvent ni une percée, ni une demande réelle, ni une rentabilité. L'édition officielle envisagée coûte 299 $ CA, en un seul paiement. Les frais de modèles externes, les futures éditions et la consultation personnelle sont distincts. Les droits accordés par Apache 2.0 restent accessibles sans achat.
+Cette version 0.2.0 est une **candidate à la publication**. Les idées produites restent des hypothèses; les exemples synthétiques ne prouvent ni une percée, ni une demande réelle, ni une rentabilité. L'édition officielle envisagée coûte 299 $ CA, en un seul paiement. Les frais de modèles externes, les futures éditions et la consultation personnelle sont distincts. Les droits accordés par Apache 2.0 restent accessibles sans achat.

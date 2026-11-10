@@ -1,0 +1,195 @@
+{
+  "schema": "alpha-genesis-harness-qualification/v1",
+  "product_version": "0.2.0",
+  "status": "CANDIDATE_NOT_COMMERCIALLY_QUALIFIED",
+  "source_revision": null,
+  "scope": "The distribution manifest binds this record to packaged source. Local tests and authored protocol fixtures do not replace live authenticated provider, Pro, Codex, graphical OS or commercial authorization gates. Hosted exact-source receipts are reported separately.",
+  "squarespace_execution": "EXCLUDED_BY_OWNER",
+  "commercially_validated": false,
+  "criteria": [
+    {
+      "id": "A1",
+      "requirement": "Install, launch, run, export and reopen the browser core",
+      "status": "NOT TESTED",
+      "actual_test_or_required_procedure": "node --test tests/*.test.cjs; graphical first-use test",
+      "evidence_location": "tests/acceptance.test.cjs",
+      "remaining_dependency_or_scope": "Final 0.2.0 source and graphical evidence"
+    },
+    {
+      "id": "A2",
+      "requirement": "Start the shipped Python connector from a clean extracted archive",
+      "status": "NOT TESTED",
+      "actual_test_or_required_procedure": "python3 scripts/qualify_archive.py ARCHIVE --expected-sha256 SHA --expected-source-revision COMMIT --output NEW_DIR",
+      "evidence_location": "scripts/qualify_archive.py",
+      "remaining_dependency_or_scope": "Exact committed archive"
+    },
+    {
+      "id": "B1",
+      "requirement": "Authenticated frontier API inference",
+      "status": "BLOCKED",
+      "actual_test_or_required_procedure": "Customer-authorized authenticated completion with provider/model identity and usage receipt",
+      "evidence_location": "tests/test_bridge.py",
+      "remaining_dependency_or_scope": "Approved credentials and authority for separately billed inference; fixtures are not a live pass"
+    },
+    {
+      "id": "B2",
+      "requirement": "Actual local LLM inference",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Real llama.cpp CPU model discovery, buffered completion and SSE completion without API credentials.",
+      "evidence_location": "scripts/qualify_local_model.py; evidence/LOCAL-MODEL-VERIFICATION.json",
+      "remaining_dependency_or_scope": "Linux llama.cpp with pinned SmolLM2-135M protocol checks and Qwen3-1.7B construction. Other local runtimes are contract-configurable, not separately live-qualified. Preserved factual/malformed-output failures limit quality claims."
+    },
+    {
+      "id": "B3",
+      "requirement": "Eligible live ChatGPT Pro plan inference",
+      "status": "BLOCKED",
+      "actual_test_or_required_procedure": "Official sign-in, model discovery, completed Responses stream, disconnect",
+      "evidence_location": "bridge/chatgpt.py",
+      "remaining_dependency_or_scope": "Eligible account consent and approved external authentication route; no password/cookie workaround"
+    },
+    {
+      "id": "B4",
+      "requirement": "Paid-edition ChatGPT-plan authorization",
+      "status": "BLOCKED",
+      "actual_test_or_required_procedure": "Record OpenAI authorization applicable to this commercial distribution",
+      "evidence_location": "docs/MODEL-CONNECTIONS.md",
+      "remaining_dependency_or_scope": "OpenAI commercial eligibility/partner approval; open-source eligibility is insufficient"
+    },
+    {
+      "id": "B5",
+      "requirement": "Official Codex authenticated construction",
+      "status": "BLOCKED",
+      "actual_test_or_required_procedure": "Current official Codex 0.167.0 and 0.169.0-alpha.7 schema/profile checks; credential-free native sandbox probe; independent authority/resume tests. Authenticated construction remains pending.",
+      "evidence_location": "bridge/codex.py; bridge/codex_permissions.py; evidence/CODEX-CLI-COMPATIBILITY.json; scripts/probe_codex_sandbox.py",
+      "remaining_dependency_or_scope": "Eligible SIWC consent and a host permitting native sandbox setup. Named permission profiles are supported by current CLI releases; this container denies the required namespace operation. No authenticated turn claimed."
+    },
+    {
+      "id": "C1",
+      "requirement": "Actual single-model and multi-agent orchestration",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Actual local Qwen3-1.7B single-builder (one inference call) and builder/critic (two distinct inference calls) completed frozen arithmetic construction.",
+      "evidence_location": "evidence/live-local-workflows.json",
+      "remaining_dependency_or_scope": "Separate roles share one local model; multi-provider combinations are contract-tested. Narrow arithmetic task, not general reasoning or invention superiority."
+    },
+    {
+      "id": "D1",
+      "requirement": "Construct and independently check a usable artifact",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Live local model constructed calculator.json; frozen checks passed; exported RUN_INSTRUMENT.py executed outside HARNESS and returned 34 for x=17.",
+      "evidence_location": "evidence/live-local-workflows.json; evidence/workflow-qualification.json",
+      "remaining_dependency_or_scope": "Bounded arithmetic grammar. A useful executable construction, not arbitrary-code or open-world scientific validation."
+    },
+    {
+      "id": "E1",
+      "requirement": "Retain, reopen and reuse on a different successor",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Close/reopen integrity-protected state; inherit artifact onto distinct successor inputs; rerun frozen successor acceptance.",
+      "evidence_location": "evidence/workflow-qualification.json; tests/test_workflows.py",
+      "remaining_dependency_or_scope": "Finite numerical transfer only; current acceptance and authority are not inherited."
+    },
+    {
+      "id": "E2",
+      "requirement": "Measure successor advantage against competent ordinary reuse",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Compare retained execution against competent equal-content ordinary reuse, counting construction/verification/maintenance declarations.",
+      "evidence_location": "evidence/workflow-qualification.json",
+      "remaining_dependency_or_scope": "Ordinary reuse ties. No successor performance or discovery advantage established; unknown economic costs remain unknown."
+    },
+    {
+      "id": "F1",
+      "requirement": "Independent mechanism comparison and negative result preservation",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Independent evaluator and conventional comparator; preserve initial failed checks and negative/tied result.",
+      "evidence_location": "evidence/workflow-qualification.json; tests/test_independent_security.py",
+      "remaining_dependency_or_scope": "Bounded computational mechanism; no general invention superiority or empirical economic validation."
+    },
+    {
+      "id": "G1",
+      "requirement": "Credential, permission, protocol, quota and malformed-output failures",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Execute invalid credentials, consent, protocol, budget, missing usage, malformed response and interrupted stream regressions.",
+      "evidence_location": "tests/test_bridge.py; tests/test_providers.py",
+      "remaining_dependency_or_scope": "Transport fixtures plus actual local model; remote account-specific behavior remains live-unverified."
+    },
+    {
+      "id": "G2",
+      "requirement": "OAuth refusal, expiry, revocation and plan exhaustion",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Validate OIDC signature/claims and refusal/expiry/revocation/quota/account-race fixtures.",
+      "evidence_location": "tests/test_chatgpt.py; tests/test_independent_security.py",
+      "remaining_dependency_or_scope": "Contract and cryptographic tests; no real Pro sign-in or revocation completed."
+    },
+    {
+      "id": "G3",
+      "requirement": "Cancellation, persistence, recovery and failed tool execution",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Cancel stale model output; fail unauthorized tools; persist and resume after actual subprocess crash during repair; round-trip browser JSON.",
+      "evidence_location": "tests/test_workflows.py; tests/test_independent_security.py; evidence/UI_HTTP_WORKFLOW_REPLAY.cjs",
+      "remaining_dependency_or_scope": "No externally executed consequential actions; uncertain upstream requests remain charged/recorded."
+    },
+    {
+      "id": "G4",
+      "requirement": "Untrusted input, filesystem isolation and secret exclusion",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Reject foreign origin and unsafe files/imported runners; enforce local-only before dispatch; redact fragmented credentials.",
+      "evidence_location": "tests/test_server_integrations.py; tests/test_independent_security.py",
+      "remaining_dependency_or_scope": "Tested Linux private workspace boundary. Windows protection code remains platform-unverified."
+    },
+    {
+      "id": "G5",
+      "requirement": "Archive corruption and identity substitution",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Reject corrupt, traversal, symlink, substituted-source and forged-manifest archive cases.",
+      "evidence_location": "tests/test_release.py; tests/test_qualification.py",
+      "remaining_dependency_or_scope": "Integrity requires an independently trusted published checksum; self-consistency is not authenticity."
+    },
+    {
+      "id": "H1",
+      "requirement": "Exact archive inventory, hashes and clean operation",
+      "status": "NOT TESTED",
+      "actual_test_or_required_procedure": "package_release.py build/verify then qualify_archive.py on same immutable bytes",
+      "evidence_location": "scripts/package_release.py",
+      "remaining_dependency_or_scope": "Exact committed package and external digest"
+    },
+    {
+      "id": "H2",
+      "requirement": "Bilingual guides, launchers, examples, notices and owner materials",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Checked bilingual documentation links, launcher syntax/help, scoped license and required file inventory.",
+      "evidence_location": "docs/INSTALLATION.md; docs/QUICKSTART.md; docs/OPERATOR.md; commercial/storefront-checklist.md",
+      "remaining_dependency_or_scope": "macOS/Windows launcher execution untested. Commercial integration approval and final listing activation remain separate."
+    },
+    {
+      "id": "H3",
+      "requirement": "Current Squarespace single-file size constraint",
+      "status": "PASS",
+      "actual_test_or_required_procedure": "Official public Download-products documentation inspection, 2026-11-09",
+      "evidence_location": "https://support.squarespace.com/hc/en-us/articles/206540787-Download-products",
+      "remaining_dependency_or_scope": "One file under 300 MB; packager conservatively enforces <300000000 bytes; no account activity"
+    },
+    {
+      "id": "I1",
+      "requirement": "Linux graphical first use and accessibility checks",
+      "status": "NOT TESTED",
+      "actual_test_or_required_procedure": "Actual browser, keyboard, responsive layout and export/reopen test",
+      "evidence_location": "app/index.html",
+      "remaining_dependency_or_scope": "Observed screenshots and operation receipt"
+    },
+    {
+      "id": "I2",
+      "requirement": "macOS and Windows native graphical launch",
+      "status": "NOT TESTED",
+      "actual_test_or_required_procedure": "Launch extracted package on each OS and complete first use",
+      "evidence_location": "docs/INSTALLATION.md",
+      "remaining_dependency_or_scope": "Access to each actual operating system; supplied scripts are not verification"
+    },
+    {
+      "id": "J1",
+      "requirement": "Machine-readable and human-readable exact-source qualification",
+      "status": "NOT TESTED",
+      "actual_test_or_required_procedure": "Reconcile this matrix, final report and exact source/archive identity",
+      "evidence_location": "evidence/QUALIFICATION-MATRIX.json",
+      "remaining_dependency_or_scope": "Final acceptance evidence"
+    }
+  ]
+}

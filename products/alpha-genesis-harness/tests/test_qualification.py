@@ -25,14 +25,14 @@ import package_release as packaging
 import qualify_archive as qualification
 
 SOURCE = "a" * 40
-ROOT = "ALPHA_GENESIS_HARNESS_0.1.0"
+ROOT = "ALPHA_GENESIS_HARNESS_0.2.0"
 FAKE_SECRET_NAMES = ["GH_TOKEN", "GITHUB_TOKEN", "HARNESS_OPENAI_API_KEY", "AWS_SECRET_ACCESS_KEY", "OPENAI_API_KEY"]
 
 
-def archive_fixture(marker="VERIFIED_SNAPSHOT", *, should_fail=False):
+def archive_fixture(marker="VERIFIED_SNAPSHOT", *, should_fail=False, extra_test_failure=False):
     """A separately authored tiny archive satisfying the integrity schema only."""
     files = {name: b"synthetic release-boundary fixture\n" for name in packaging.REQUIRED}
-    files["VERSION.json"] = b'{"version":"0.1.0"}\n'
+    files["VERSION.json"] = b'{"version":"0.2.0"}\n'
     if should_fail:
         node = "throw new Error('REPLACEMENT_MUST_NOT_EXECUTE');\n"
         python = "raise AssertionError('REPLACEMENT_MUST_NOT_EXECUTE')\n"
@@ -48,7 +48,9 @@ def archive_fixture(marker="VERIFIED_SNAPSHOT", *, should_fail=False):
                   f"        print('{marker}')\n")
     files["tests/sentinel.test.cjs"] = node.encode()
     files["tests/test_bridge.py"] = python.encode()
-    manifest = {"schema": "alpha-genesis-harness-release/v1", "version": "0.1.0", "build_mode": "source-bound",
+    if extra_test_failure:
+        files["tests/test_new_service.py"] = b"import unittest\nclass NewService(unittest.TestCase):\n    def test_required_component(self):\n        self.fail('NEW_SERVICE_MUST_BE_CHECKED')\n"
+    manifest = {"schema": "alpha-genesis-harness-release/v1", "version": "0.2.0", "build_mode": "source-bound",
                 "source_revision": SOURCE, "source_product_tree": "b" * 40, "source_matches_commit": True,
                 "files": [{"path": name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
                           for name, data in sorted(files.items())]}
@@ -61,6 +63,35 @@ def archive_fixture(marker="VERIFIED_SNAPSHOT", *, should_fail=False):
 
 
 class ArchiveQualificationBoundaryTests(unittest.TestCase):
+    def test_explicit_dom_qualification_cannot_silently_skip_missing_packaged_suite(self):
+        with tempfile.TemporaryDirectory() as folder:
+            archive, output = Path(folder) / "download.zip", Path(folder) / "receipt"
+            raw = archive_fixture()
+            archive.write_bytes(raw)
+            modules = Path(folder) / "node_modules"
+            (modules / "jsdom").mkdir(parents=True)
+            (modules / "jsdom/package.json").write_text('{"version":"26.1.0"}')
+            with patch.object(qualification.subprocess, "run") as run:
+                with self.assertRaises((FileNotFoundError, ValueError)):
+                    qualification.qualify(archive, hashlib.sha256(raw).hexdigest(), SOURCE, output, modules)
+                run.assert_not_called()
+            receipt = json.loads((output / "QUALIFICATION.json").read_text())
+            self.assertEqual(receipt["verdict"], "INVALID")
+            self.assertEqual(receipt["dom_qualification"], "REQUESTED")
+
+    def test_new_component_tests_cannot_be_omitted_from_extracted_qualification(self):
+        if shutil.which("node") is None:
+            self.skipTest("Node is required for the extracted-byte operation")
+        with tempfile.TemporaryDirectory() as folder:
+            archive, output = Path(folder) / "download.zip", Path(folder) / "receipt"
+            raw = archive_fixture(extra_test_failure=True)
+            archive.write_bytes(raw)
+            with self.assertRaisesRegex(ValueError, "Extracted operation 2 failed"):
+                qualification.qualify(archive, hashlib.sha256(raw).hexdigest(), SOURCE, output)
+            receipt = json.loads((output / "QUALIFICATION.json").read_text())
+            self.assertEqual(receipt["verdict"], "INVALID")
+            self.assertIn("NEW_SERVICE_MUST_BE_CHECKED", (output / "operation-2.stderr.txt").read_text())
+
     def test_verified_snapshot_is_executed_even_if_path_is_replaced(self):
         if shutil.which("node") is None:
             self.skipTest("Node is required for the extracted-byte operation")

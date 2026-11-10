@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-"""Text-only protocol adapters. No tools, automatic actions, credentials on disk or billing setup."""
+"""Protocol adapters with explicit capabilities; tool calls are data, never execution authority."""
 from __future__ import annotations
 
 import hashlib
@@ -24,7 +24,8 @@ MAX_RESPONSE = 4_194_304
 ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.:/-]{0,199}\Z")
 RUN_ID = re.compile(r"[A-Za-z0-9_-]{1,128}\Z")
 ENV_ID = re.compile(r"[A-Z][A-Z0-9_]{0,127}\Z")
-KINDS = {"openai", "anthropic", "gemini", "ollama"}
+KINDS = {"openai", "responses", "anthropic", "gemini", "ollama"}
+CAPABILITIES = {"text", "json", "streaming", "tool_calling"}
 DEFAULT_HOSTS = ["arxiv.org", "www.nature.com", "www.science.org", "docs.ollama.com",
                  "ai.google.dev", "developers.openai.com", "platform.claude.com",
                  "montrealai.github.io"]
@@ -87,6 +88,13 @@ class Model:
     json_mode: bool
     max_output_tokens: int
     input_token_overhead: int
+    streaming: bool = False
+    tool_calling: bool = False
+    context_window: int | None = None
+
+    def supports(self, name):
+        return {"text": True, "json": self.json_mode, "streaming": self.streaming,
+                "tool_calling": self.tool_calling}.get(name, False)
 
 
 class Provider:
@@ -119,7 +127,12 @@ class Provider:
                 raise BridgeError("CONFIG", "Declare positive output and nonnegative input-overhead token bounds.")
             self.models[name] = Model(name, decimal(model["input_per_million"], "input price"),
                                       decimal(model["output_per_million"], "output price"),
-                                      model.get("json_mode") is True, bound, overhead)
+                                      model.get("json_mode") is True, bound, overhead,
+                                      model.get("streaming") is True, model.get("tool_calling") is True,
+                                      model.get("context_window"))
+            context = self.models[name].context_window
+            if context is not None and (type(context) is not int or context < bound):
+                raise BridgeError("CONFIG", "context_window must be an integer at least as large as max_output_tokens.")
 
     @property
     def remote(self):
@@ -140,38 +153,78 @@ class Provider:
             result["Authorization"] = "Bearer " + self.key
         return result
 
-    def request(self, model, prompt, limit, json_mode=False):
+    def request(self, model, prompt, limit, json_mode=False, *, stream=False, tools=None):
         if json_mode and not self.models[model].json_mode:
             raise BridgeError("CAPABILITY", "JSON output is not enabled for this model.")
+        tools = validate_tools(tools)
+        if stream and not self.models[model].streaming:
+            raise BridgeError("CAPABILITY", "Streaming is not enabled for this model.")
+        if tools and not self.models[model].tool_calling:
+            raise BridgeError("CAPABILITY", "Tool calling is not enabled for this model.")
         message = [{"role": "user", "content": prompt}]
+        if self.kind == "responses":
+            body = {"model": model, "input": message, "max_output_tokens": limit, "store": False, "stream": stream}
+            if json_mode:
+                body["text"] = {"format": {"type": "json_object"}}
+            if tools:
+                body["tools"] = [dict(type="function", strict=False, **t) for t in tools]
+            return self.base + "/responses", body
         if self.kind == "openai":
-            body = {"model": model, "messages": message, self.limit_field: limit, "stream": False}
+            body = {"model": model, "messages": message, self.limit_field: limit, "stream": stream}
             if json_mode:
                 body["response_format"] = {"type": "json_object"}
+            if stream:
+                body["stream_options"] = {"include_usage": True}
+            if tools:
+                body["tools"] = [{"type": "function", "function": t} for t in tools]
             return self.base + "/chat/completions", body
         if self.kind == "anthropic":
             # JSON is prompt-constrained; no universal structured-output capability is asserted.
             if json_mode:
                 raise BridgeError("CAPABILITY", "Use text output for this Anthropic adapter; validate imported JSON locally.")
-            return self.base + "/messages", {"model": model, "messages": message, "max_tokens": limit, "stream": False}
+            body = {"model": model, "messages": message, "max_tokens": limit, "stream": stream}
+            if tools:
+                body["tools"] = [{"name": t["name"], "description": t["description"], "input_schema": t["parameters"]} for t in tools]
+            return self.base + "/messages", body
         if self.kind == "gemini":
             config = {"maxOutputTokens": limit, "candidateCount": 1}
             if json_mode:
                 config["responseMimeType"] = "application/json"
-            return self.base + "/models/" + quote(model.removeprefix("models/"), safe="") + ":generateContent", {
-                "contents": [{"role": "user", "parts": [{"text": prompt}]}], "generationConfig": config}
-        body = {"model": model, "messages": message, "stream": False, "options": {"num_predict": limit}}
+            body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}], "generationConfig": config}
+            if tools:
+                body["tools"] = [{"functionDeclarations": tools}]
+            method = ":streamGenerateContent?alt=sse" if stream else ":generateContent"
+            return self.base + "/models/" + quote(model.removeprefix("models/"), safe="") + method, body
+        body = {"model": model, "messages": message, "stream": stream, "options": {"num_predict": limit}}
+        if tools:
+            body["tools"] = [{"type": "function", "function": t} for t in tools]
         if json_mode:
             body["format"] = "json"
         return self.base + "/api/chat", body
 
     def parse(self, response):
+        text, usage, _ = self.parse_result(response)
+        return text, usage
+
+    def parse_result(self, response):
         try:
-            if self.kind == "openai":
-                text = response["choices"][0]["message"]["content"]
+            calls = self.tool_calls(response)
+            if self.kind == "responses":
+                if response.get("status") != "completed":
+                    raise ValueError()
+                text = "\n".join(c["text"] for item in response.get("output", []) if item.get("type") == "message"
+                                 for c in item.get("content", []) if c.get("type") == "output_text")
+                usage = response.get("usage", {})
+                counts = usage.get("input_tokens"), usage.get("output_tokens")
+            elif self.kind == "openai":
+                if response["choices"][0].get("finish_reason") not in {None, "stop", "tool_calls"}:
+                    raise ValueError()
+                text = response["choices"][0]["message"].get("content") or ""
                 usage = response.get("usage", {})
                 counts = usage.get("prompt_tokens"), usage.get("completion_tokens")
             elif self.kind == "anthropic":
+                if response.get("stop_reason") not in {None, "end_turn", "stop_sequence", "tool_use"}:
+                    raise ValueError()
                 text = "\n".join(v["text"] for v in response["content"] if v.get("type") == "text")
                 usage = response.get("usage", {})
                 # No explicit cache is requested. Still account cache input if returned.
@@ -180,22 +233,58 @@ class Provider:
                     inp += usage.get("cache_creation_input_tokens", 0) + usage.get("cache_read_input_tokens", 0)
                 counts = inp, usage.get("output_tokens")
             elif self.kind == "gemini":
-                text = "\n".join(p["text"] for p in response["candidates"][0]["content"]["parts"] if "text" in p)
+                if response["candidates"][0].get("finishReason") not in {None, "STOP"}:
+                    raise ValueError()
+                text = "\n".join(p["text"] for p in response["candidates"][0]["content"]["parts"] if "text" in p and not p.get("thought"))
                 usage = response.get("usageMetadata", {})
                 output = usage.get("candidatesTokenCount")
                 if type(output) is int:
                     output += usage.get("thoughtsTokenCount", 0)
                 counts = usage.get("promptTokenCount"), output
             else:
-                text = response["message"]["content"]
+                if response.get("done_reason") not in {None, "stop", "tool_calls"}:
+                    raise ValueError()
+                text = response["message"].get("content", "")
                 counts = response.get("prompt_eval_count"), response.get("eval_count")
-            if not isinstance(text, str) or not text.strip():
+            if not isinstance(text, str) or (not text.strip() and not calls):
                 raise ValueError()
             known = all(type(v) is int and v >= 0 for v in counts)
             return text, {"input_tokens": counts[0] if known else None,
-                          "output_tokens": counts[1] if known else None}
+                          "output_tokens": counts[1] if known else None}, calls
         except (KeyError, IndexError, TypeError, ValueError, AttributeError):
             raise BridgeError("PROVIDER_RESPONSE", "Provider returned no usable text. Its full reservation remains accounted.", 502) from None
+
+    def tool_calls(self, response):
+        """Normalize requested functions; do not execute or infer permission."""
+        if self.kind == "responses":
+            rows = [{"id": r.get("call_id"), "name": r.get("name"), "arguments": r.get("arguments")}
+                    for r in response.get("output", []) if r.get("type") == "function_call"]
+        elif self.kind == "anthropic":
+            rows = [{"id": r.get("id"), "name": r.get("name"), "arguments": r.get("input")}
+                    for r in response.get("content", []) if r.get("type") == "tool_use"]
+        elif self.kind == "gemini":
+            parts = response.get("candidates", [{}])[0].get("content", {}).get("parts", [])
+            rows = [{"id": str(i), "name": r["functionCall"].get("name"), "arguments": r["functionCall"].get("args")}
+                    for i, r in enumerate(parts) if "functionCall" in r]
+        else:
+            message = response.get("message", {}) if self.kind == "ollama" else response.get("choices", [{}])[0].get("message", {})
+            rows = [{"id": r.get("id", str(i)), "name": r.get("function", {}).get("name"),
+                     "arguments": r.get("function", {}).get("arguments")}
+                    for i, r in enumerate(message.get("tool_calls", []))]
+        result, call_ids = [], set()
+        if len(rows) > 64:
+            raise ValueError()
+        for row in rows:
+            if not isinstance(row["name"], str) or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_-]{0,63}", row["name"]):
+                raise ValueError()
+            args = strict_json(row["arguments"]) if isinstance(row["arguments"], str) else row["arguments"]
+            if not isinstance(args, dict) or not isinstance(row["id"], str) or len(row["id"]) > 256:
+                raise ValueError()
+            if row["id"] in call_ids:
+                raise ValueError()
+            call_ids.add(row["id"])
+            result.append(dict(row, arguments=args))
+        return result
 
     def models_request(self):
         return self.base + ("/api/tags" if self.kind == "ollama" else "/models")
@@ -212,6 +301,30 @@ class Provider:
                                "configured": ident in self.models or ident.removeprefix("models/") in self.models})
         return {"models": result, "scope": "Provider-reported first page; listing does not prove generation access or model capability.",
                 "has_more": bool(response.get("has_more") or response.get("nextPageToken"))}
+
+
+def validate_tools(tools):
+    if tools is None:
+        return []
+    if not isinstance(tools, list) or len(tools) > 64:
+        raise BridgeError("TOOLS", "Use at most 64 explicit function declarations.")
+    result, names = [], set()
+    for tool in tools:
+        if not isinstance(tool, dict) or set(tool) - {"name", "description", "parameters"}:
+            raise BridgeError("TOOLS", "Only name, description and parameters are accepted for function tools.")
+        name, parameters = tool.get("name"), tool.get("parameters")
+        if (not isinstance(name, str) or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_-]{0,63}", name)
+                or name in names or not isinstance(parameters, dict) or parameters.get("type") != "object"
+                or not isinstance(tool.get("description", ""), str)):
+            raise BridgeError("TOOLS", "Function names must be unique and parameters must be an object schema.")
+        names.add(name)
+        result.append({"name": name, "description": tool.get("description", ""), "parameters": parameters})
+    try:
+        if len(json.dumps(result, allow_nan=False).encode()) > MAX_BODY // 4:
+            raise ValueError()
+    except (ValueError, TypeError):
+        raise BridgeError("TOOLS", "Tool declarations must be finite JSON under 256 KiB.") from None
+    return result
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -232,7 +345,8 @@ def transport(url, headers, body=None, timeout=60):
     except HTTPError as error:
         status = error.code
         error.close()
-        raise BridgeError("PROVIDER_HTTP", f"Provider HTTP {status}. Check the selected model, access and configuration.", 502) from None
+        code = {401: "PROVIDER_AUTH", 403: "PROVIDER_AUTH", 429: "PROVIDER_QUOTA"}.get(status, "PROVIDER_HTTP")
+        raise BridgeError(code, f"Provider HTTP {status}. Check the selected model, access and configuration.", 502) from None
     except (URLError, TimeoutError, OSError, http.client.HTTPException):
         raise BridgeError("PROVIDER_CONNECTION", "Provider connection failed or timed out. Any sent attempt retains its cost reservation.", 502) from None
 
@@ -265,13 +379,19 @@ class Budget:
 
 
 class Runtime:
-    def __init__(self, config=None, sender=transport):
+    def __init__(self, config=None, sender=transport, streamer=None):
         config = config or {}
         if not isinstance(config, dict):
             raise BridgeError("CONFIG", "Configuration must be an object.")
         self.providers = {key: Provider(key, raw) for key, raw in config.get("providers", {}).items()}
         self.budget = Budget(config.get("session_budget_usd", 0))
         self.allow_paid = config.get("allow_paid_requests") is True
+        self.local_only = config.get("local_only") is True
+        self.stage_routes = config.get("stage_routes", {})
+        if not isinstance(self.stage_routes, dict):
+            raise BridgeError("CONFIG", "stage_routes must be an object of explicitly chosen provider/model pairs.")
+        if self.local_only and any(p.remote for p in self.providers.values()):
+            raise BridgeError("LOCAL_ONLY", "Local-only configuration cannot contain remote providers.")
         self.timeout = config.get("timeout_seconds", 60)
         self.attempts = config.get("max_attempts", 1)
         self.max_concurrent = config.get("max_concurrent_requests", 2)
@@ -284,8 +404,15 @@ class Runtime:
         hosts = config.get("source_hosts", DEFAULT_HOSTS)
         if not isinstance(hosts, list) or any(not isinstance(h, str) or not re.fullmatch(r"[a-z0-9.-]+", h) for h in hosts):
             raise BridgeError("CONFIG", "source_hosts must be exact lowercase domain names.")
-        self.source_hosts = frozenset(hosts)
+        self.source_hosts = frozenset() if self.local_only else frozenset(hosts)
         self.sender = sender
+        if streamer is None:
+            if __package__:
+                from .streaming import stream_transport
+            else:
+                from streaming import stream_transport
+            streamer = stream_transport
+        self.streamer = streamer
         self._runs, self._active, self._lock = {}, set(), threading.RLock()
 
     def redact(self, text):
@@ -303,15 +430,31 @@ class Runtime:
             rows.append({"id": p.id, "label": p.label, "kind": p.kind, "models": list(p.models),
                          "ready": p.ready and (self.allow_paid or not p.remote), "reason": reason,
                          "capabilities": {"text": True, "json": p.kind != "anthropic" and any(m.json_mode for m in p.models.values()),
-                                          "streaming": False, "discovery": True},
+                                          "streaming": any(m.streaming for m in p.models.values()),
+                                          "tool_calling": any(m.tool_calling for m in p.models.values()), "discovery": True},
+                         "model_capabilities": {m.id: {c: m.supports(c) for c in sorted(CAPABILITIES)} for m in p.models.values()},
+                         "local": not p.remote, "remote": p.remote, "category": "api" if p.remote else "local", "usage_class": "api_billed" if p.remote else "local_compute",
                          "qualification": "CONTRACT_TESTED_ONLY"})
-        return {"providers": rows, "budget": self.budget.view(), "source_hosts": sorted(self.source_hosts),
+        return {"providers": rows, "budget": self.budget.view(), "source_hosts": sorted(self.source_hosts), "local_only": self.local_only,
                 "cost_notice": "User-declared token rates and conservative reservations are estimates, not a provider billing cap. Unknown compute, maintenance and external bills are not zero."}
 
     def provider(self, ident):
         if not isinstance(ident, str) or ident not in self.providers:
             raise BridgeError("PROVIDER", "Choose a configured provider.")
         return self.providers[ident]
+
+    def route(self, stage, required_capabilities=()):
+        """Only explicit assignments; never silently switch providers or enable spending."""
+        route = self.stage_routes.get(stage)
+        if not isinstance(route, dict) or set(route) != {"provider", "model"}:
+            raise BridgeError("ROUTE", "Configure this stage's provider and model explicitly.")
+        provider = self.provider(route["provider"])
+        model = provider.models.get(route["model"])
+        if model is None or any(not model.supports(c) for c in required_capabilities):
+            raise BridgeError("CAPABILITY", "The selected stage model does not support its required operations.")
+        if not provider.ready or (provider.remote and not self.allow_paid):
+            raise BridgeError("PERMISSION", "The stage's configured provider is not authorized and ready.", 403)
+        return dict(route)
 
     def discover(self, ident):
         p = self.provider(ident)
@@ -335,9 +478,9 @@ class Runtime:
             return {"run_id": ident, "cancelled": event is not None,
                     "notice": "Cancellation stops retries and result acceptance; an upstream request may continue and incur charges."}
 
-    def generate(self, data):
-        if not isinstance(data, dict) or set(data) - {"provider", "model", "prompt", "max_output_tokens", "run_id", "json_mode"}:
-            raise BridgeError("INPUT", "Unsupported generation fields; only text generation is permitted.")
+    def generate(self, data, on_event=None):
+        if not isinstance(data, dict) or set(data) - {"provider", "model", "prompt", "max_output_tokens", "run_id", "json_mode", "stream", "tools", "required_capabilities"}:
+            raise BridgeError("INPUT", "Unsupported generation fields; only text and explicit function declarations are permitted.")
         p = self.provider(data.get("provider"))
         model = data.get("model")
         prompt, run_id = data.get("prompt"), data.get("run_id")
@@ -353,10 +496,19 @@ class Runtime:
             raise BridgeError("CREDENTIAL", "Provider credentials or models are missing.")
         if p.remote and not self.allow_paid:
             raise BridgeError("PERMISSION", "Remote inference is disabled until the customer explicitly authorizes it in local configuration.", 403)
-        url, body = p.request(model, prompt, limit, data.get("json_mode") is True)
+        required = data.get("required_capabilities", [])
+        if not isinstance(required, list) or any(c not in CAPABILITIES or not m.supports(c) for c in required):
+            raise BridgeError("CAPABILITY", "Selected model lacks a required capability.")
+        streaming = data.get("stream") is True
+        tools = validate_tools(data.get("tools"))
+        url, body = p.request(model, prompt, limit, data.get("json_mode") is True, stream=streaming, tools=tools)
         # One token per UTF-8 byte plus declared framing overhead is conservative for
         # ordinary text tokenizers. Not a vendor-enforced billing guarantee.
         input_bound = len(prompt.encode("utf-8")) + m.input_token_overhead
+        if tools:
+            input_bound += len(json.dumps(tools, ensure_ascii=False).encode())
+        if m.context_window is not None and input_bound + limit > m.context_window:
+            raise BridgeError("CONTEXT", "Conservative input plus output estimate exceeds the configured context window; reduce or explicitly summarize the input.")
         one = (Decimal(input_bound)*m.input_price + Decimal(limit)*m.output_price) / 1_000_000
         reserved = one*self.attempts
         with self._lock:
@@ -374,9 +526,27 @@ class Runtime:
                 if cancel.is_set():
                     raise BridgeError("CANCELLED", "Run cancelled. Completed or sent attempts remain accounted.", 409)
                 attempts += 1
+                attempt_accounted = False
                 try:
-                    response = self.sender(url, p.headers(), body, timeout=self.timeout)
-                    text, usage = p.parse(response)
+                    if streaming:
+                        # Hold text until any credential spanning fragments can be redacted.
+                        pending = ""
+                        keep = max([len(q.key) for q in self.providers.values()] + [0])
+                        def progress(fragment):
+                            nonlocal pending
+                            pending += fragment
+                            pending = self.redact(pending)
+                            if on_event and len(pending) > keep:
+                                cut = len(pending) - keep
+                                on_event({"type": "text_delta", "run_id": run_id, "text": pending[:cut]})
+                                pending = pending[cut:]
+                        response = self.streamer(url, p.headers(), body, kind=p.kind, timeout=self.timeout,
+                                                 cancel=cancel, on_text=progress)
+                    else:
+                        response = self.sender(url, p.headers(), body, timeout=self.timeout)
+                    text, usage, calls = p.parse_result(response)
+                    if any(call["name"] not in {t["name"] for t in tools} for call in calls):
+                        raise BridgeError("TOOL_REFUSED", "Provider requested a function outside the explicit declarations.", 502)
                     if usage["input_tokens"] is None:
                         amount, basis = one, "reserved_unknown"
                     else:
@@ -385,9 +555,19 @@ class Runtime:
                         if amount > one:
                             self.budget.locked = True
                     accounted += amount
+                    attempt_accounted = True
                     if cancel.is_set():
                         raise BridgeError("CANCELLED_ACCOUNTED", "Run cancelled; the completed response was discarded and its cost accounted.", 409)
-                    return {"run_id": run_id, "provider": p.id, "model": model, "text": self.redact(text), "usage": usage,
+                    if streaming and on_event and pending:
+                        on_event({"type": "text_delta", "run_id": run_id, "text": self.redact(pending)})
+                    reported_model = response.get("modelVersion") if p.kind == "gemini" else response.get("model")
+                    if not isinstance(reported_model, str) or len(reported_model) > 512:
+                        reported_model = None
+                    return {"run_id": run_id, "provider": p.id, "model": model, "requested_model": model,
+                            "reported_model": self.redact(reported_model) if reported_model else None,
+                            "text": self.redact(text), "usage": usage,
+                            "tool_calls": strict_json(self.redact(json.dumps(calls))),
+                            "usage_class": "api_billed" if p.remote else "local_compute",
                             "cost": {"currency": "USD", "amount": float(amount), "accounted": float(accounted), "basis": basis,
                                      "attempts": attempts, "complete_cost_known": False},
                             "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION"}
@@ -395,7 +575,8 @@ class Runtime:
                     if error.code == "CANCELLED_ACCOUNTED":
                         raise
                     # A missing response never makes a possibly dispatched request free.
-                    accounted += one
+                    if not attempt_accounted:
+                        accounted += one
                     last_error = error
                     if error.code not in {"PROVIDER_HTTP", "PROVIDER_CONNECTION"} or attempt + 1 == self.attempts:
                         raise
@@ -404,7 +585,8 @@ class Runtime:
                 except Exception:
                     # An unexpected parser/transport failure is not proof that dispatch
                     # was free. Charge the complete attempt reservation before refusing.
-                    accounted += one
+                    if not attempt_accounted:
+                        accounted += one
                     raise BridgeError("PROVIDER_RESPONSE", "The provider response could not be safely processed; its full reservation remains accounted.", 502) from None
             raise last_error or BridgeError("UNKNOWN", "No result.", 502)
         finally:

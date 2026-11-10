@@ -8,7 +8,7 @@
   else root.HarnessEngine = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
-  const VERSION = '0.1.0';
+  const VERSION = '0.2.0';
   // Encoded JSON can expand each decoded UTF-16 unit to six ASCII bytes,
   // plus pretty-print indentation for at most 100,000 nodes at depth 64.
   // Keep this transport envelope separate from the decoded processing limits.

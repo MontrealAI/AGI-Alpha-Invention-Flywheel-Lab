@@ -1,0 +1,69 @@
+{
+  "schema": "alpha-harness/codex-cli-compatibility/v1",
+  "observed_session_date": "2026-11-09 America/Toronto",
+  "commands": [
+    "codex --version",
+    "codex app-server generate-json-schema --out <temporary directory>",
+    "codex app-server generate-json-schema --experimental --out <temporary directory>",
+    "python3 scripts/probe_codex_sandbox.py --executable <official binary> --work-root <private local directory>"
+  ],
+  "source": "Official npm @openai/codex registry metadata; tarball integrity checked before isolated execution. No login, credentials, inference or paid calls.",
+  "preinstalled_cli": "0.167.0-alpha.4",
+  "checked_releases": [
+    {
+      "channel": "stable",
+      "package_version": "0.167.0-linux-x64",
+      "tarball_url": "https://registry.npmjs.org/@openai/codex/-/codex-0.167.0-linux-x64.tgz",
+      "npm_integrity_verified": true,
+      "npm_integrity": "sha512-FNc7danfUng9Sp6w+Fh7kofNHHZpA6VMyNKWsWrS3OwHly69gywTWeiuwrUPXpJSho8Df4xqRsHfHRPzj7zYQg==",
+      "binary_sha256": "cdcb45aaa01d0f14e298985e09465aebccd47f64ecd298aea44814af7b62bbda",
+      "turn_start_schema_sha256": "4e25cd48986f73e600d9949a055ddb994a75b4a38790e935274646f0fece00ad",
+      "read_only_access_field": false,
+      "workspace_write_read_only_access_field": false,
+      "legacy_rpc_result": "BLOCKED_FOR_THIS_RESTRICTED_READ_ADAPTER",
+      "named_permission_profile_protocol": "PASS",
+      "result": "SUPPORTED_OFFICIAL_NAMED_PROFILE_PATH"
+    },
+    {
+      "channel": "preview",
+      "package_version": "0.169.0-alpha.7-linux-x64",
+      "tarball_url": "https://registry.npmjs.org/@openai/codex/-/codex-0.169.0-alpha.7-linux-x64.tgz",
+      "npm_integrity_verified": true,
+      "npm_integrity": "sha512-0LhpoPUWFVel+XJfBc3K0mmboDkdQO5GtEdcGTBEVxGlbyAR6xPnDAyGi+1WRpRhPgbIyQZ2FhyMNG5eGa8NyA==",
+      "binary_sha256": "b20e3a2f9a25ae9e4b29bfe68ef337757d818f85087ac701d745833894f04c7d",
+      "turn_start_schema_sha256": "4e25cd48986f73e600d9949a055ddb994a75b4a38790e935274646f0fece00ad",
+      "read_only_access_field": false,
+      "workspace_write_read_only_access_field": false,
+      "legacy_rpc_result": "BLOCKED_FOR_THIS_RESTRICTED_READ_ADAPTER",
+      "named_permission_profile_protocol": "PASS",
+      "result": "SUPPORTED_OFFICIAL_NAMED_PROFILE_PATH"
+    }
+  ],
+  "scope": "Offline CLI protocol compatibility only; not authentication, model inference, actual sandbox enforcement or commercial qualification.",
+  "limitation": "Current official named permission profiles replace the unsupported legacy RPC fields. An actual local no-inference probe must pass before any OAuth-backed child starts. This engineering container refuses native sandbox setup; a compatible host and authenticated live qualification remain required. This is not a universal Codex version blocker.",
+  "actual_local_profile_probe": {
+    "cli": "0.167.0",
+    "initialize": "PASS",
+    "permission_profile_list_custom_profile_allowed": "PASS",
+    "command_exec": "BLOCKED",
+    "reason": "host_sandbox_operation_not_permitted",
+    "native_diagnostic": "bwrap: loopback: Failed to create NETLINK_ROUTE socket: Operation not permitted",
+    "model_inference_calls": 0,
+    "real_credentials_used": false
+  },
+  "profile_contract": {
+    "explicit_experimental_api_opt_in": true,
+    "default_filesystem": "deny",
+    "platform_minimum": "read",
+    "workspace": "explicit read or write",
+    "network": false,
+    "runtime_and_checkpoint_outside_writable_root": true,
+    "token_free_preflight_checks": [
+      "workspace_read",
+      "configured_write_policy",
+      "separate_private_file_denied",
+      "network_denied",
+      "credential_environment_hidden"
+    ]
+  }
+}

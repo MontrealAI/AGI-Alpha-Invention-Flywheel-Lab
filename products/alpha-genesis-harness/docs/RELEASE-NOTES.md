@@ -1,28 +1,24 @@
-# 0.1.0 — HARNESS release candidate
+# 0.2.0 — HARNESS integration candidate
 
-This candidate introduces a standalone English/French browser workspace connecting a mission, manually supplied model contributions, structured opportunities, a bounded experiment, inspectable evidence and retained capabilities. The application is distributed as ordinary source files and opens locally without installation or an API key.
+This edition extends the existing 0.1.0 HARNESS rather than replacing its browser engine or canonical research/financial runtime. It remains a candidate until its recorded release gates pass.
 
-The initial instrument evaluates a synthetic shared-resource arrangement using declared participant costs and outside options. The application supports changing assumptions, comparing alternatives, saving/reopening project files and exporting a dossier. Its workflow interpreter accepts a bounded declarative language. It does not execute arbitrary generated scripts, payments, contracts or outreach.
+## Scope of this integration
 
-An optional loopback Python bridge implements provider protocol adapters for OpenAI-compatible endpoints, Anthropic, Gemini and Ollama. Configuration, model availability, pricing and credential authority remain customer responsibilities. Protocol fixture tests are not real authenticated provider qualification.
+- Official ChatGPT-plan and Codex pathway engineering, with eligibility and commercial authorization kept explicit.
+- Expanded local/API protocol handling and capability-aware execution.
+- Persistent bounded agentic construction, critique, verification and retained artifacts.
+- English/French connection and operating experience.
+- Source launchers and expanded installation, quick-start, operator, troubleshooting, FAQ and owner handoff materials.
+- Full extracted-archive Python and JavaScript acceptance testing; Windows-compatible qualifier import and Python invocation.
 
-The source package includes scoped Apache-2.0 licensing, an external dependency inventory, privacy and model-connection guidance, release verification tools and separately prepared acceptance tests. Archive checks bind included file bytes to the release manifest; the public digest and selected source commit provide the independent identity anchors.
+The exact implemented and tested behavior is determined by the source and requirement matrix, not this feature summary. Live API/local LLM/Pro inference, cross-OS graphical launch and any external commercial approval require separately recorded evidence. No paid service, customer transaction or Squarespace activity is performed by this release process.
 
-## Claim limits
+## Upgrade and evidence
 
-- The bundled mission is synthetic and developer-prepared. It is not autonomous open-world opportunity discovery or evidence of a commercially superior game.
-- A manual model contribution has declared attribution, not independently proven model identity or independence.
-- Economic feasibility is conditional on supplied values. There are no real participant commitments, financing, customers, payments or verified demand.
-- Retention and matched comparison procedures do not establish general recursive superiority. A conventional alternative can tie or win.
-- No live authenticated model call, account-wide billing audit or included API allowance is claimed by this release note.
-- Desktop-browser portability is a design target. Actual browser/OS combinations and limitations belong in the executed evidence; no signed native installer or notarization is included.
-- The wider research programme remains broader than this candidate. Mechanism names, presets and a working interface are not proof that every research mechanism is fully implemented.
-- The QUÉBEC.AI store administration route presented a login screen in the available browser. No authenticated draft, delivery upload, checkout test or publication was completed through that session.
+Keep the prior version and private exports. Install into a new folder and inspect work before continuing. Historical 0.1.0 results remain evidence for their original source only. Candidate integrity checks do not establish general invention superiority or commercial demand. A tied or losing conventional comparison remains a valid result.
 
-The version remains a **release candidate**. Read `evidence/INDEPENDENT_REVIEW.md` and the test receipts for actual observed results and unresolved findings. The intended CAD $299 Official Edition must not be represented as fully qualified merely because this archive can be downloaded.
+## Français
 
-## Packaging lessons retained
+Cette édition prolonge le HARNESS 0.1.0 existant. Elle ajoute des parcours d'intégration officiels, des connexions modèles, une construction agentique persistante et une documentation bilingue. La portée exacte dépend du code et de la matrice de qualification.
 
-The first working-tree package attempt was correctly stopped by the private-key marker check because a security test contained an intentionally fake PEM marker. The fixture now constructs the marker at test runtime; the distribution scanner remains strict and the malicious-archive test still rejects it. No actual credential was present in that fixture.
-
-Independent review also found that a separate digest read and ZIP open could refer to different files after a path replacement. The verifier now hashes and parses the same bounded immutable byte snapshot. A deterministic path-swap regression checks that external digest verification cannot be rebound to a replacement archive. An archive's own source claim is also reported separately from actual Git-byte comparison.
+Les connexions réelles, les lancements graphiques sur d'autres systèmes et les autorisations commerciales restent des preuves distinctes. Aucune action Squarespace, transaction client ou activation de service payant n'est effectuée. Conservez votre ancienne version et vos exports avant la mise à niveau.

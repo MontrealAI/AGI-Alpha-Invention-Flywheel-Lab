@@ -1,6 +1,6 @@
 # Storefront listing — prepared copy, not published
 
-This copy describes the 0.1.0 candidate's actual scope. Keep the product in draft until the release and merchant checklist is satisfied. Do not label it as fully qualified while acceptance gaps remain. Provider connection claims must follow the exact release evidence.
+This copy describes the 0.2.0 candidate's actual scope. These are owner-only prepared listing materials. Vincent performs any eventual upload and commercial activation himself after the release and merchant checks are satisfied. Do not label it as fully qualified while acceptance gaps remain. Provider connection claims must follow the exact release evidence.
 
 ## English
 
@@ -30,13 +30,14 @@ Build an inspectable opportunity dossier: objective, source references, alternat
 
 The initial executable instrument checks a declared shared-resource arrangement. You can change the inputs, examine outside options and compare complete alternatives. It is a practical way to make an idea testable; it is not a promise that every idea is new, feasible or profitable.
 
-Optional developer-oriented connections provide protocol adapters for OpenAI-compatible APIs, Anthropic, Google Gemini and Ollama. Read the release's live-test status before relying on an integration. API accounts, local models and third-party usage charges are separate; a chat subscription does not automatically include API access.
+The optional local connector adds protocol-aware API and local-model connections, bounded agentic construction, durable execution records and official ChatGPT-plan/Codex pathway engineering. Read the release's live-test status before relying on an integration. API accounts, local models and third-party usage charges are separate. ChatGPT-plan use requires eligible official consent; paid-edition use remains blocked pending applicable commercial approval and live verification. No ChatGPT Pro entitlement is bundled.
 
 **Included in the identified download**
 
 - Browser application with English/French interface and a simple START HERE guide.
 - Synthetic sample mission and guided manual-model workflow.
 - Bounded instrument, assumption and economics inspection, project and dossier export.
+- Source launchers, English/French installation, operator, troubleshooting and FAQ guides.
 - Source code, Apache-2.0 licence notices, privacy and connection guides.
 - Version manifest, file-integrity information and reproducible checks.
 
@@ -80,13 +81,14 @@ Constituez un dossier examinable : objectif, références, stratégies concurren
 
 L'instrument initial vérifie un arrangement de ressources partagées à partir de valeurs déclarées. Modifiez les entrées, examinez les autres options des participants et comparez les solutions complètes. Il rend une idée testable, sans promettre que chaque idée sera nouvelle, réalisable ou rentable.
 
-Des connexions facultatives destinées aux utilisateurs techniques proposent des adaptateurs de protocole pour les API compatibles OpenAI, Anthropic, Google Gemini et Ollama. Consultez les résultats réels d'intégration de la version. Les comptes API, modèles locaux et frais des fournisseurs sont distincts. Un abonnement de clavardage ne comprend pas automatiquement l'accès API.
+Le connecteur local facultatif ajoute des connexions API et modèles locaux, une construction agentique limitée à un cadre précis, des traces persistantes et l’ingénierie des parcours officiels ChatGPT/Codex. Consultez les résultats réels d'intégration de la version. Les comptes API, modèles locaux et frais des fournisseurs sont distincts. L’accès au forfait ChatGPT exige le consentement officiel admissible. Son usage dans l’édition payante reste bloqué avant l’autorisation commerciale applicable et une vérification réelle. Aucun abonnement ChatGPT Pro n’est inclus.
 
 **Contenu du téléchargement identifié**
 
 - Application de navigateur en français et en anglais, avec guide START HERE.
 - Mission synthétique et parcours guidé avec votre service d'IA.
 - Instrument à exécution limitée, examen des hypothèses et des coûts, exportation du projet et du dossier.
+- Lanceurs source, guides bilingues d’installation, d’exploitation, de dépannage et FAQ.
 - Sources, avis Apache 2.0, guides de confidentialité et de connexion.
 - Manifeste de version, informations d'intégrité et vérifications reproductibles.
 

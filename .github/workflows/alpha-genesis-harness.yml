@@ -36,6 +36,7 @@ jobs:
       - name: Execute product and independent adversarial tests
         working-directory: products/alpha-genesis-harness
         run: |
+          python -m pip install -r requirements-chatgpt.txt
           node --test tests/*.test.cjs
           python -B -m unittest discover -s tests -p 'test_*.py' -v
       - name: Execute locked DOM customer and connected-model regressions
@@ -48,6 +49,30 @@ jobs:
           node products/alpha-genesis-harness/evidence/UI_REPLAY.cjs
           node products/alpha-genesis-harness/evidence/UI_PARALLEL_REPLAY.cjs
           node products/alpha-genesis-harness/evidence/UI_CONNECTED_ACCEPTANCE.cjs
+          node products/alpha-genesis-harness/evidence/UI_AGENTIC_REPLAY.cjs
+          node products/alpha-genesis-harness/evidence/UI_HTTP_WORKFLOW_REPLAY.cjs
+      - name: Record official Codex sandbox operation without model authentication
+        run: |
+          mkdir -p "$RUNNER_TEMP/harness-codex" "$RUNNER_TEMP/harness-assets"
+          cp products/alpha-genesis-harness/tests/codex/package*.json "$RUNNER_TEMP/harness-codex/"
+          npm ci --prefix "$RUNNER_TEMP/harness-codex" --ignore-scripts --no-audit --no-fund
+          set +e
+          python products/alpha-genesis-harness/scripts/probe_codex_sandbox.py --executable "$RUNNER_TEMP/harness-codex/node_modules/.bin/codex" --work-root "$GITHUB_WORKSPACE/harness-sandbox-probe" > "$RUNNER_TEMP/harness-assets/CODEX-HOST-VERIFICATION.json"
+          probe_status=$?
+          set -e
+          test "$probe_status" -eq 0 || test "$probe_status" -eq 2
+          cat "$RUNNER_TEMP/harness-assets/CODEX-HOST-VERIFICATION.json"
+          # Exit 2 is recorded BLOCKED, never authenticated or sandbox-qualified PASS.
+      - name: Render and exercise the customer interface in Chromium
+        env:
+          NODE_PATH: ${{ runner.temp }}/harness-visual/node_modules
+          HARNESS_SCREENSHOT_DIR: ${{ runner.temp }}/harness-assets
+          EXPECTED_SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/harness-visual"
+          cp products/alpha-genesis-harness/tests/visual/package*.json "$RUNNER_TEMP/harness-visual/"
+          npm ci --prefix "$RUNNER_TEMP/harness-visual" --ignore-scripts --no-audit --no-fund
+          node products/alpha-genesis-harness/evidence/UI_BROWSER_REPLAY.cjs
       - name: Preserve canonical mechanism and platform contracts
         run: |
           python -B -m unittest discover -s tests -p 'test_mechanism_harness_0*.py' -v
@@ -71,7 +96,7 @@ jobs:
           PY
           archive=$(find "$RUNNER_TEMP/harness-assets" -name '*.zip' -type f)
           archive_sha=$(sha256sum "$archive" | cut -d' ' -f1)
-          python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$archive" --expected-sha256 "$archive_sha" --expected-source-revision "$EXPECTED_SOURCE" --output "$RUNNER_TEMP/harness-operation"
+          python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$archive" --expected-sha256 "$archive_sha" --expected-source-revision "$EXPECTED_SOURCE" --output "$RUNNER_TEMP/harness-operation" --dom-modules "$RUNNER_TEMP/harness-dom/node_modules"
       - name: Preserve immutable candidate package
         id: upload
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -111,6 +136,12 @@ jobs:
           artifact-ids: ${{ needs.qualify.outputs.artifact_id }}
           path: ${{ runner.temp }}/harness-received
           merge-multiple: true
+      - name: Prepare pinned optional identity and extracted UI verification dependencies
+        run: |
+          python -m pip install -r products/alpha-genesis-harness/requirements-chatgpt.txt
+          mkdir -p "$RUNNER_TEMP/harness-dom"
+          cp products/alpha-genesis-harness/tests/dom/package*.json "$RUNNER_TEMP/harness-dom/"
+          npm ci --prefix "$RUNNER_TEMP/harness-dom" --ignore-scripts --no-audit --no-fund
       - name: Verify exact immutable artifact before publication
         env:
           ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
@@ -118,15 +149,15 @@ jobs:
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
         run: |
           python -B products/alpha-genesis-harness/scripts/package_release.py verify "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --compare-source-revision "$SOURCE_SHA"
-          python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-received-operation"
+          python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$RUNNER_TEMP/harness-received/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-received-operation" --dom-modules "$RUNNER_TEMP/harness-dom/node_modules"
       - name: Publish source-specific prerelease without replacing prior releases
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           SOURCE_SHA: ${{ needs.qualify.outputs.source_sha }}
         run: |
-          tag="alpha-genesis-harness-v0.1.0-rc-${SOURCE_SHA:0:12}"
-          gh release create "$tag" "$RUNNER_TEMP/harness-received/"* --target "$SOURCE_SHA" --prerelease --latest=false --title "ALPHA GENESIS HARNESS 0.1.0 — release candidate" --notes-file products/alpha-genesis-harness/docs/RELEASE-NOTES.md
+          tag="alpha-genesis-harness-v0.2.0-rc-${SOURCE_SHA:0:12}"
+          gh release create "$tag" "$RUNNER_TEMP/harness-received/"* --target "$SOURCE_SHA" --prerelease --latest=false --title "ALPHA GENESIS HARNESS 0.2.0 — release candidate" --notes-file products/alpha-genesis-harness/docs/RELEASE-NOTES.md
       - name: Download the published archive
         env:
           GH_TOKEN: ${{ github.token }}
@@ -135,7 +166,7 @@ jobs:
           ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
           ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
         run: |
-          tag="alpha-genesis-harness-v0.1.0-rc-${SOURCE_SHA:0:12}"
+          tag="alpha-genesis-harness-v0.2.0-rc-${SOURCE_SHA:0:12}"
           gh release download "$tag" --pattern "$ARCHIVE_NAME" --dir "$RUNNER_TEMP/harness-published"
       - name: Operate the published archive without publication credentials
         env:
@@ -143,7 +174,7 @@ jobs:
           ARCHIVE_NAME: ${{ needs.qualify.outputs.archive_name }}
           ARCHIVE_SHA: ${{ needs.qualify.outputs.archive_sha }}
         run: |
-          python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$RUNNER_TEMP/harness-published/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-published-operation"
+          python -B products/alpha-genesis-harness/scripts/qualify_archive.py "$RUNNER_TEMP/harness-published/$ARCHIVE_NAME" --expected-sha256 "$ARCHIVE_SHA" --expected-source-revision "$SOURCE_SHA" --output "$RUNNER_TEMP/harness-published-operation" --dom-modules "$RUNNER_TEMP/harness-dom/node_modules"
       - name: Preserve released-byte operation evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

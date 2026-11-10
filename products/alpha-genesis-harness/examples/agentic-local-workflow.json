@@ -1,0 +1,20 @@
+{
+  "objective": "Build an inspectable production estimate instrument that computes quantity times unit cost plus setup. Compare the result with direct arithmetic and explain the narrow applicability.",
+  "context": "These are synthetic engineering fixtures. Monetary values are integer minor units. Do not infer customer demand, profitability or actual transactions. The operator prepared the expected results before construction.",
+  "roles": {
+    "builder": {"provider": "local-compatible", "model": "YOUR_INSTALLED_MODEL"},
+    "critic": {"provider": "local-compatible", "model": "YOUR_INSTALLED_MODEL"}
+  },
+  "strategy": "actor-critic",
+  "acceptance": [
+    {"kind": "instrument", "artifact": "production-estimate.json", "input": {"quantity": 3, "unit_cost": 127, "setup": 29}, "expected": {"total": 410}},
+    {"kind": "instrument", "artifact": "production-estimate.json", "input": {"quantity": 0, "unit_cost": 41, "setup": 101}, "expected": {"total": 101}},
+    {"kind": "instrument", "artifact": "production-estimate.json", "input": {"quantity": 17, "unit_cost": 41, "setup": 101}, "expected": {"total": 798}}
+  ],
+  "tool_permissions": ["construct_instrument", "run_instrument", "write_document", "read_artifact"],
+  "max_iterations": 3,
+  "max_actions": 20,
+  "max_operations": 10000,
+  "max_output_tokens": 2048,
+  "local_only": true
+}

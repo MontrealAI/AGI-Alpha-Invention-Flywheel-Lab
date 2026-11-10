@@ -33,6 +33,59 @@
       "base_url": "https://generativelanguage.googleapis.com/v1beta",
       "key_env": "HARNESS_GEMINI_API_KEY",
       "models": {}
+    },
+    "openai-responses": {
+      "kind": "responses",
+      "label": "OpenAI Responses API",
+      "base_url": "https://api.openai.com/v1",
+      "key_env": "HARNESS_OPENAI_API_KEY",
+      "models": {}
+    },
+    "lm-studio": {
+      "kind": "openai",
+      "label": "lm-studio (local compatible server)",
+      "base_url": "http://127.0.0.1:1234/v1",
+      "output_limit_field": "max_tokens",
+      "models": {}
+    },
+    "llama-cpp": {
+      "kind": "openai",
+      "label": "llama-cpp (local compatible server)",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "output_limit_field": "max_tokens",
+      "models": {}
+    },
+    "vllm": {
+      "kind": "openai",
+      "label": "vllm (local compatible server)",
+      "base_url": "http://127.0.0.1:8000/v1",
+      "output_limit_field": "max_tokens",
+      "models": {}
+    },
+    "mlx": {
+      "kind": "openai",
+      "label": "mlx (local compatible server)",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "output_limit_field": "max_tokens",
+      "models": {}
+    },
+    "xai": {
+      "kind": "openai",
+      "label": "xai API (compatible protocol)",
+      "base_url": "https://api.x.ai/v1",
+      "key_env": "HARNESS_XAI_API_KEY",
+      "output_limit_field": "max_tokens",
+      "models": {}
+    },
+    "mistral": {
+      "kind": "openai",
+      "label": "mistral API (compatible protocol)",
+      "base_url": "https://api.mistral.ai/v1",
+      "key_env": "HARNESS_MISTRAL_API_KEY",
+      "output_limit_field": "max_tokens",
+      "models": {}
     }
-  }
+  },
+  "local_only": false,
+  "stage_routes": {}
 }

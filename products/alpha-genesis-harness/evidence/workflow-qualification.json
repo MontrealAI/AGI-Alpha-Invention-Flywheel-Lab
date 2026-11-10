@@ -1,0 +1,75 @@
+{
+  "schema": "alpha-genesis-workflow-demo/v1",
+  "scope": "Authored offline protocol qualification. No live inference, empirical novelty, commercial demand or general discovery advantage.",
+  "construction_run": "wf_66b3c760105344532fe3d9f4",
+  "construction_status": "complete",
+  "construction_model_calls": 4,
+  "failed_checks_preserved": 1,
+  "reopened_integrity": true,
+  "successor_run": "wf_d4808e5c2e57bd8f77084eb3",
+  "successor_revalidation": {
+    "passed": true,
+    "checks": [
+      {
+        "artifact": "affine.json",
+        "kind": "instrument",
+        "passed": true,
+        "actual": {
+          "result": 798
+        },
+        "expected": {
+          "result": 798
+        },
+        "operations": 5
+      },
+      {
+        "artifact": "affine.json",
+        "kind": "instrument",
+        "passed": true,
+        "actual": {
+          "result": 410
+        },
+        "expected": {
+          "result": 410
+        },
+        "operations": 5
+      }
+    ],
+    "spec_hash": "6f0ee8b92d1f3cb8a6999643a1febeeef98ed17895bcb95e0d1e6ba9e7ee2db2",
+    "artifact_hashes": {
+      "RUN_INSTRUMENT.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3",
+      "affine.json": "d22d059e01e3ed0ceee6d2a8367bf0137cff3efade552a45433a56ec7f891ecd"
+    },
+    "scope": "Deterministic checks against operator-frozen cases. Document checks are structural. Model critique is not independent empirical verification."
+  },
+  "inherited_output": {
+    "result": 798
+  },
+  "strong_ordinary_output": {
+    "result": 798
+  },
+  "fresh_control_status": "complete",
+  "fresh_control_model_calls": 2,
+  "inherited_additional_model_calls": 0,
+  "ordinary_equal_content_reuse_model_calls": 0,
+  "total_inherited_construction_model_calls": 4,
+  "unknown_costs": [
+    "human authored fixtures",
+    "compute",
+    "development",
+    "maintenance",
+    "validation"
+  ],
+  "successor_advantage": "NOT_ESTABLISHED: equal-content ordinary reuse ties; full inherited construction used more authored calls than the fresh control. A narrow reduction versus fresh reconstruction excludes sunk construction cost and is not compounding proof.",
+  "reproduce": "python3 -m bridge.workflows demo --workspace /absolute/new/workflow-demo --output /absolute/new/evidence.json",
+  "tests": {
+    "command": "python3 -m unittest discover -s tests -p 'test_workflows.py' -v",
+    "passed": 21
+  },
+  "source_sha256": {
+    "bridge/workflows.py": "9c40337f4a0e61bea5f5a5bdefe77602cc3021339782f7c0fc5aa806142f9bd6",
+    "bridge/instruments.py": "6107ec204b7067e07a88b29845bed442ce60bf0432ddcc1008ba50b544758ff3",
+    "bridge/workflow_demo.py": "218a085688e26ef60ae8ac7033a9ab08bc81bc2c65335a46c2302f8889590d1c",
+    "tests/test_workflows.py": "a9569c1b34a3ac0c2bc1b5edafd4da5ddd320ea1dcfb1d20e6dcf2f9926d8e0e"
+  }
+}

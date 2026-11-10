@@ -1,0 +1,45 @@
+{
+  "schema": "alpha-harness/optional-dependency-verification/v1",
+  "status": "PASS_IN_SCOPE",
+  "environment": {
+    "os": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "python": "3.12.14",
+    "venv": "fresh isolated virtual environment installed during this qualification; retained for final source rerun",
+    "installed": {
+      "cryptography": "50.0.2",
+      "cffi": "2.1.1",
+      "pycparser": "3.11"
+    }
+  },
+  "installation": {
+    "command": "python -m pip --disable-pip-version-check --no-input install -r requirements-chatgpt.txt",
+    "returncode": 0
+  },
+  "suites": [
+    {
+      "command": "python -B -m unittest discover -s tests -p test_chatgpt.py -v",
+      "tests": 12,
+      "returncode": 0
+    },
+    {
+      "command": "python -B -m unittest discover -s tests -p test_codex.py -v",
+      "tests": 9,
+      "returncode": 0
+    },
+    {
+      "command": "python -B -m unittest discover -s tests -p test_independent_codex_resume.py -v",
+      "tests": 15,
+      "returncode": 0
+    }
+  ],
+  "source_sha256": {
+    "requirements-chatgpt.txt": "d19910ffb1de682f6e02553b050b5bfd8b9989e55c97e8147db1d09cb7c5c199",
+    "bridge/chatgpt.py": "27a87761be91843462173edcf2914fe9296a4709097f410929fc5c46bd9f4145",
+    "bridge/codex.py": "37ed92af69ea0458321d64d851659113402f11a61880e120f52e79d903ff2ca7",
+    "tests/test_chatgpt.py": "7346efd953bc421763521e0de6b1734031e561f83b1447e14b3647e321bf9683",
+    "tests/test_codex.py": "4562aed01756fe6f5ad0f9a1d972426ad1315871796930d3278ac42910119a66",
+    "tests/test_independent_codex_resume.py": "14f6b50a757238705b2ce2a8c9b294189ca9bf3ae421d3ff5b0ccd8eff2efd10"
+  },
+  "scope": "Exact optional pins installed in a fresh Linux Python environment. 36 authored transport/security/resume/profile tests passed on the recorded current source. No live ChatGPT account, paid model request, real authenticated Codex turn or Windows DPAPI execution. This is package installation and protocol-test evidence, not commercial authorization.",
+  "network": "Package registry downloads during initial installation only; final source rerun makes no model inference request."
+}

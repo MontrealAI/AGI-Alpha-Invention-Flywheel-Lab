@@ -1,0 +1,45 @@
+{
+  "session_budget_usd": 0,
+  "allow_paid_requests": false,
+  "timeout_seconds": 60,
+  "max_attempts": 1,
+  "max_concurrent_requests": 2,
+  "local_only": true,
+  "stage_routes": {},
+  "providers": {
+    "ollama": {
+      "kind": "ollama",
+      "label": "Local Ollama",
+      "base_url": "http://127.0.0.1:11434",
+      "models": {}
+    },
+    "lm-studio": {
+      "kind": "openai",
+      "label": "lm-studio (local compatible server)",
+      "base_url": "http://127.0.0.1:1234/v1",
+      "output_limit_field": "max_tokens",
+      "models": {}
+    },
+    "llama-cpp": {
+      "kind": "openai",
+      "label": "llama-cpp (local compatible server)",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "output_limit_field": "max_tokens",
+      "models": {}
+    },
+    "vllm": {
+      "kind": "openai",
+      "label": "vllm (local compatible server)",
+      "base_url": "http://127.0.0.1:8000/v1",
+      "output_limit_field": "max_tokens",
+      "models": {}
+    },
+    "mlx": {
+      "kind": "openai",
+      "label": "mlx (local compatible server)",
+      "base_url": "http://127.0.0.1:8080/v1",
+      "output_limit_field": "max_tokens",
+      "models": {}
+    }
+  }
+}

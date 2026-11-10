@@ -1,0 +1,228 @@
+{
+  "schema": "alpha-harness/local-live/v1",
+  "status": "PASS",
+  "runtime": "llama.cpp build 12242 commit 3b4d6ab3f; SmolLM2-135M-Instruct Q4_K_M CPU, 2 threads",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "model": "smollm2-135m-instruct-q4-k-m",
+  "discovery": {
+    "models": [
+      {
+        "id": "smollm2-135m-instruct-q4-k-m",
+        "configured": true
+      }
+    ],
+    "scope": "Provider-reported first page; listing does not prove generation access or model capability.",
+    "has_more": false
+  },
+  "runs": [
+    {
+      "stream": false,
+      "wall_seconds": 0.28982225899994773,
+      "event_count": 0,
+      "result": {
+        "run_id": "local-qualification-0",
+        "provider": "local",
+        "model": "smollm2-135m-instruct-q4-k-m",
+        "requested_model": "smollm2-135m-instruct-q4-k-m",
+        "reported_model": "smollm2-135m-instruct-q4-k-m",
+        "text": "A thermometer measures temperature, typically expressed in degrees Celsius or Fahrenheit, using a thermometer's needle to read the level of change in temperature.",
+        "usage": {
+          "input_tokens": 40,
+          "output_tokens": 28
+        },
+        "tool_calls": [],
+        "usage_class": "local_compute",
+        "cost": {
+          "currency": "USD",
+          "amount": 0.0,
+          "accounted": 0.0,
+          "basis": "reported_usage_at_user_rates",
+          "attempts": 1,
+          "complete_cost_known": false
+        },
+        "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION"
+      }
+    },
+    {
+      "stream": true,
+      "wall_seconds": 0.26044119599998794,
+      "event_count": 35,
+      "result": {
+        "run_id": "local-qualification-1",
+        "provider": "local",
+        "model": "smollm2-135m-instruct-q4-k-m",
+        "requested_model": "smollm2-135m-instruct-q4-k-m",
+        "reported_model": "smollm2-135m-instruct-q4-k-m",
+        "text": "A thermometer measures the temperature of a substance using the principle that a certain amount of heat is required to increase the temperature of a substance from its freezing point to its boiling point.",
+        "usage": {
+          "input_tokens": 40,
+          "output_tokens": 36
+        },
+        "tool_calls": [],
+        "usage_class": "local_compute",
+        "cost": {
+          "currency": "USD",
+          "amount": 0.0,
+          "accounted": 0.0,
+          "basis": "reported_usage_at_user_rates",
+          "attempts": 1,
+          "complete_cost_known": false
+        },
+        "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION"
+      }
+    }
+  ],
+  "config": {
+    "local_only": true,
+    "session_budget_usd": 0,
+    "allow_paid_requests": false,
+    "timeout_seconds": 60,
+    "providers": {
+      "local": {
+        "kind": "openai",
+        "base_url": "http://127.0.0.1:18766/v1",
+        "output_limit_field": "max_tokens",
+        "models": {
+          "smollm2-135m-instruct-q4-k-m": {
+            "input_per_million": 0,
+            "output_per_million": 0,
+            "streaming": true,
+            "tool_calling": false,
+            "json_mode": false,
+            "max_output_tokens": 256,
+            "input_token_overhead": 4096
+          }
+        }
+      }
+    }
+  },
+  "scope": "Actual local model request/response operation only. Not frontier reasoning, tool calling or general agent quality. Runtime description is operator supplied; attach installation identities separately. No cloud API fallback or billed API request.",
+  "source_sha256": {
+    "bridge/adapters.py": "8955636c4f062a31ba6202fdb8caa96486c3d60bc9126d4b20f2e23707b0b8a7",
+    "bridge/streaming.py": "dd4cd766fb911e350358d4f31f7053b4d6847b189243cf1ce1108ebc834b21ec",
+    "scripts/qualify_local_model.py": "210e30bf36b6700b3c9eef6d46834fd9e9b3edff17b61c20b5308544ed90d792"
+  },
+  "downloads": [
+    {
+      "name": "llama.tar.gz",
+      "url": "https://github.com/ggml-org/llama.cpp/releases/download/b12242/llama-b12242-bin-ubuntu-x64.tar.gz",
+      "bytes": 23158635,
+      "sha256": "909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62"
+    },
+    {
+      "name": "model.gguf",
+      "url": "https://huggingface.co/QuantFactory/SmolLM2-135M-Instruct-GGUF/resolve/476854d00ede130660aba430d15f9347ad2e7d0e/SmolLM2-135M-Instruct.Q4_K_M.gguf",
+      "bytes": 105454144,
+      "sha256": "8030f04528538d47bda434f6f0bdf3952c40a58123e4d5e755332f23731a8684"
+    }
+  ],
+  "model_license_metadata": "Apache-2.0 from quantization repository metadata",
+  "model_original": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "server_command": [
+    "LOCAL_PROOF_DIRECTORY/runtime/llama-b12242/llama-server",
+    "-m",
+    "LOCAL_PROOF_DIRECTORY/model.gguf",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "18766",
+    "-c",
+    "8192",
+    "-t",
+    "2",
+    "--n-gpu-layers",
+    "0",
+    "--no-webui",
+    "--alias",
+    "smollm2-135m-instruct-q4-k-m"
+  ],
+  "prior_attempts": [
+    {
+      "stage": "readiness/model discovery",
+      "outcome": "CONNECTION_REFUSED",
+      "reason": "Long-running server and client used separate tool-call network namespaces; no inference was dispatched. Resolved by starting and exercising server in the same process namespace."
+    }
+  ],
+  "resource": {
+    "child_cpu_seconds": 1.429412
+  },
+  "prior_source_execution": {
+    "source_sha256": {
+      "bridge/adapters.py": "5ca53866d0b4ad8144b5e8dce607e34580524c1ec4a3ced591b0af797faa35c8",
+      "bridge/streaming.py": "eddaf37fd9bdcf08cf5d8ae4feb4281ed0408073ccfd541fb20b1201b22e1a7e",
+      "scripts/qualify_local_model.py": "210e30bf36b6700b3c9eef6d46834fd9e9b3edff17b61c20b5308544ed90d792"
+    },
+    "runs": [
+      {
+        "stream": false,
+        "wall_seconds": 0.32036780099997486,
+        "event_count": 0,
+        "result": {
+          "run_id": "local-qualification-0",
+          "provider": "local",
+          "model": "smollm2-135m-instruct-q4-k-m",
+          "text": "A thermometer measures the temperature of a substance, typically water, using a liquid scale that is submerged in the substance and then gently lifted to measure the temperature of the liquid.",
+          "usage": {
+            "input_tokens": 40,
+            "output_tokens": 35
+          },
+          "tool_calls": [],
+          "usage_class": "local_compute",
+          "cost": {
+            "currency": "USD",
+            "amount": 0.0,
+            "accounted": 0.0,
+            "basis": "reported_usage_at_user_rates",
+            "attempts": 1,
+            "complete_cost_known": false
+          },
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION"
+        }
+      },
+      {
+        "stream": true,
+        "wall_seconds": 0.18456958000001578,
+        "event_count": 22,
+        "result": {
+          "run_id": "local-qualification-1",
+          "provider": "local",
+          "model": "smollm2-135m-instruct-q4-k-m",
+          "text": "A thermometer measures the amount of heat released by a substance as it passes from its heated surface to its surroundings.",
+          "usage": {
+            "input_tokens": 40,
+            "output_tokens": 23
+          },
+          "tool_calls": [],
+          "usage_class": "local_compute",
+          "cost": {
+            "currency": "USD",
+            "amount": 0.0,
+            "accounted": 0.0,
+            "basis": "reported_usage_at_user_rates",
+            "attempts": 1,
+            "complete_cost_known": false
+          },
+          "qualification": "LIVE_RESPONSE_NOT_INDEPENDENT_VERIFICATION"
+        }
+      }
+    ],
+    "reason": "Re-executed after adding distinct requested and provider-reported model identities; initial inaccurate model output retained as negative quality evidence."
+  },
+  "upstream_integrity": {
+    "runtime_release_digest": {
+      "name": "llama-b12242-bin-ubuntu-x64.tar.gz",
+      "digest": "sha256:909eef25cd53e6601c8a07c866d8dbb2983e74177088d55182137a8fb8255d62"
+    },
+    "model_lfs": {
+      "rfilename": "SmolLM2-135M-Instruct.Q4_K_M.gguf",
+      "blobId": "87631356704696e38e38332f51ec7a6ff9cd298b",
+      "size": 105454144,
+      "lfs": {
+        "sha256": "8030f04528538d47bda434f6f0bdf3952c40a58123e4d5e755332f23731a8684",
+        "size": 105454144,
+        "pointerSize": 134
+      }
+    },
+    "matches": true
+  }
+}

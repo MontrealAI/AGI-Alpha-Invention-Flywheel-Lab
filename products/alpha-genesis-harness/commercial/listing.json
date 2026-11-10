@@ -1,6 +1,6 @@
 {
   "schema": "alpha-genesis-harness-storefront-draft/v1",
-  "status": "prepared-offline-not-created-in-store",
+  "status": "prepared-offline-owner-upload-only",
   "storefront": "https://www.quebecartificialintelligence.com/shop",
   "platform": "Squarespace",
   "product_type": "Download",
@@ -8,21 +8,45 @@
   "title_en": "🌌♾️ ALPHA GENESIS FLYWHEEL Ω HARNESS — Official Edition",
   "title_fr": "🌌♾️ ALPHA GENESIS FLYWHEEL Ω HARNESS — Édition officielle",
   "suggested_slug": "alpha-genesis-flywheel-omega-harness",
-  "price": {"currency": "CAD", "amount": "299.00", "recurrence": null, "on_sale": false},
-  "version": "0.1.0",
+  "price": {
+    "currency": "CAD",
+    "amount": "299.00",
+    "recurrence": null,
+    "on_sale": false
+  },
+  "version": "0.2.0",
   "release_status": "release-candidate",
   "copy_source": "commercial/listing.md",
   "archive_source": "Exact source-bound ZIP identified in the qualified release receipt; do not select a working-tree candidate",
   "maximum_file_bytes_exclusive": 300000000,
   "image_requirements": [
-    {"view": "Mission and discovery workspace", "alt_en": "The HARNESS mission workspace using synthetic demonstration data", "alt_fr": "L'espace de mission HARNESS avec des données de démonstration synthétiques"},
-    {"view": "Experiment and participant economics", "alt_en": "A bounded shared-resource experiment with declared costs and participant outside options", "alt_fr": "Une expérience de ressources partagées avec coûts déclarés et autres options des participants"},
-    {"view": "Evidence and verification scope", "alt_en": "The evidence view showing a scoped verification result and its limitations", "alt_fr": "La vue des preuves montrant un résultat vérifié dans un cadre précis et ses limites"}
+    {
+      "view": "Mission and discovery workspace",
+      "alt_en": "The HARNESS mission workspace using synthetic demonstration data",
+      "alt_fr": "L'espace de mission HARNESS avec des données de démonstration synthétiques"
+    },
+    {
+      "view": "Experiment and participant economics",
+      "alt_en": "A bounded shared-resource experiment with declared costs and participant outside options",
+      "alt_fr": "Une expérience de ressources partagées avec coûts déclarés et autres options des participants"
+    },
+    {
+      "view": "Evidence and verification scope",
+      "alt_en": "The evidence view showing a scoped verification result and its limitations",
+      "alt_fr": "La vue des preuves montrant un résultat vérifié dans un cadre précis et ses limites"
+    }
   ],
-  "merchant_confirmation_required": ["CAD store currency", "Actual tax display", "Existing refund and cancellation policy", "Seller and customer-contact details", "Privacy notice", "Non-charging checkout-test route"],
-  "observed_external_blocker": "Store administration opened a login page; no authenticated Squarespace session was available.",
+  "merchant_confirmation_required": [
+    "CAD store currency",
+    "Actual tax display",
+    "Existing refund and cancellation policy",
+    "Seller and customer-contact details",
+    "Privacy notice"
+  ],
+  "observed_external_blocker": "Squarespace execution is explicitly excluded by the owner. No account access is sought.",
   "draft_created": false,
   "delivery_uploaded": false,
   "checkout_tested": false,
-  "published": false
+  "published": false,
+  "commercial_chatgpt_plan_status": "BLOCKED pending applicable OpenAI approval and completed live verification"
 }

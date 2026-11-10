@@ -2,6 +2,12 @@
 
 Start with [AGENTS.md](../../AGENTS.md). Reuse the canonical enterprise and existing mechanisms; do not build a parallel framework or ledger. This map distinguishes executable code, qualified operation, economic advantage and the broader mission.
 
+### Customer HARNESS application
+
+The scoped [ALPHA GENESIS HARNESS](../../products/alpha-genesis-harness/README.md) continues the existing browser application with private model adapters, explicit ChatGPT-plan authorization, a separate Codex engineering path, and persistent bounded construction workflows. Its [operator guide](../../products/alpha-genesis-harness/docs/OPERATOR.md) and [workflow guide](../../products/alpha-genesis-harness/docs/AGENTIC-WORKFLOWS.md) document the actual call paths. It does not replace the native enterprise account or grant financial authority.
+
+Run the product's Python, Node and HTTP/DOM tests, then qualify the exact extracted archive; the product workflow also renders the browser interface. [Local-model evidence](../../products/alpha-genesis-harness/evidence/live-local-workflows.json) records actual single-model and builder/critic arithmetic construction, with earlier failures and a tied ordinary-reuse control. This narrow result does not establish general invention or commercial advantage. Consult the [qualification matrix](../../products/alpha-genesis-harness/evidence/QUALIFICATION-MATRIX.md) for live provider, Pro, Codex, platform and commercial authorization dependencies. Squarespace publication remains the owner's manual action.
+
 For economic-game construction, start with the [cart operator and recovery guide](../../campaign/omega-economy-v4/README.md). It connects executable menus, an exhaustive buyer-choice check, independently accepted work, native collections and a funded successor. The [paid-reach study](../../campaign/omega-paid-reach-20261104/README.md) tests the next operating decision: whether earned cash can buy access to additional voluntary buyers at a profit after costs. Each comparison account has its own identity and liabilities. The [economic and physical-data verdicts](../../campaign/omega-economy-v4/OPERATING_RESULT.md) explain where conventional methods tie or win.
 
 ### Read the current evidence before adopting

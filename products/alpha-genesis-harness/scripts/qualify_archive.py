@@ -12,17 +12,23 @@ import io
 import json
 import os
 from pathlib import Path
+import platform
 import re
-import resource
 import subprocess
+import sys
 import tempfile
 import time
 import zipfile
 
 from package_release import MAX_ARCHIVE, verify_snapshot
 
+try:
+    import resource
+except ImportError:  # Windows has no Unix getrusage; never invent a CPU reading.
+    resource = None
 
-def qualify(archive: Path, expected_sha256: str, expected_revision: str, output: Path) -> dict:
+
+def qualify(archive: Path, expected_sha256: str, expected_revision: str, output: Path, dom_modules: Path | None = None) -> dict:
     if not re.fullmatch(r"[a-f0-9]{64}", expected_sha256):
         raise ValueError("An externally supplied SHA-256 is required")
     if not re.fullmatch(r"[a-f0-9]{40}", expected_revision):
@@ -40,8 +46,11 @@ def qualify(archive: Path, expected_sha256: str, expected_revision: str, output:
     receipt = {"schema": "alpha-genesis-harness-downloaded-operation/v1", "verdict": "INVALID",
                "archive_sha256": expected_sha256, "source_revision": expected_revision,
                "operations": [], "scope": "Extracted-byte automated operation on this host; not cross-platform, authenticated-provider or commercial qualification.",
-               "actual_inference_cost": "No provider requests", "actual_host_cost": "Unknown"}
+               "actual_inference_cost": "No provider requests", "actual_host_cost": "Unknown",
+               "host": {"platform": platform.platform(), "python": platform.python_version()},
+               "dom_qualification": "REQUESTED" if dom_modules else "NOT TESTED: no explicit DOM dependency directory supplied"}
     start = time.monotonic()
+    initial_usage = resource.getrusage(resource.RUSAGE_CHILDREN) if resource else None
     try:
         with tempfile.TemporaryDirectory(prefix="harness-clean-") as folder:
             # verify() rejects traversal, aliases, symlinks, oversize and unlisted members.
@@ -55,13 +64,41 @@ def qualify(archive: Path, expected_sha256: str, expected_revision: str, output:
             if not tests:
                 raise ValueError("Archive contains no executable engine acceptance suite")
             commands = [["node", "--test", *tests],
-                        ["python3", "-B", "-m", "unittest", "discover", "-s", "tests", "-p", "test_bridge.py", "-v"]]
+                        [sys.executable, "-B", "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py", "-v"]]
             if not (product / "tests/test_bridge.py").is_file():
                 raise ValueError("Archive contains no provider fixture regression suite")
+            if (product / "launch.py").is_file():
+                commands.append([sys.executable, "-B", "launch.py", "--help"])
+            if (product / "bridge/workflows.py").is_file():
+                commands.append([sys.executable, "-B", "-m", "bridge.workflows", "demo",
+                                 "--workspace", str(Path(folder) / "private-demo"),
+                                 "--output", str(output.resolve() / "WORKFLOW-DEMONSTRATION.json")])
+            if dom_modules is not None:
+                dom_modules = dom_modules.resolve(strict=True)
+                expected = json.loads((product / "tests/dom/package.json").read_text())["dependencies"]["jsdom"]
+                actual = json.loads((dom_modules / "jsdom/package.json").read_text())["version"]
+                if actual != expected:
+                    raise ValueError("DOM dependency version differs from the packaged exact requirement")
+                replays = ["UI_REPLAY.cjs", "UI_PARALLEL_REPLAY.cjs", "UI_CONNECTED_ACCEPTANCE.cjs",
+                           "UI_AGENTIC_REPLAY.cjs", "UI_HTTP_WORKFLOW_REPLAY.cjs"]
+                for replay in replays:
+                    path = product / "evidence" / replay
+                    if not path.is_file() or path.is_symlink():
+                        raise ValueError("Archive lacks a requested DOM acceptance replay: " + replay)
+                    commands.append(["node", "evidence/" + replay])
+                receipt["dom_dependency"] = {"name": "jsdom", "version": actual, "bundled": False,
+                                              "scope": "Explicit development dependency; extracted application and replay bytes"}
             for index, command in enumerate(commands, 1):
                 phase = time.monotonic()
                 # Extracted tests never inherit GitHub tokens or caller credentials.
                 environment = {"PATH": os.environ.get("PATH", os.defpath), "LANG": "C.UTF-8", "PYTHONDONTWRITEBYTECODE": "1"}
+                # These are OS/runtime paths, not arbitrary inherited credentials.
+                for name in ("SYSTEMROOT", "WINDIR", "TEMP", "TMP"):
+                    if name in os.environ:
+                        environment[name] = os.environ[name]
+                if dom_modules is not None:
+                    environment["NODE_PATH"] = str(dom_modules)
+                    environment["PYTHON"] = sys.executable
                 process = subprocess.run(command, cwd=product, env=environment, capture_output=True, text=True)
                 (output / f"operation-{index}.stdout.txt").write_text(process.stdout, encoding="utf-8")
                 (output / f"operation-{index}.stderr.txt").write_text(process.stderr, encoding="utf-8")
@@ -70,13 +107,15 @@ def qualify(archive: Path, expected_sha256: str, expected_revision: str, output:
                 if process.returncode:
                     raise ValueError(f"Extracted operation {index} failed; preserved logs identify the failure")
             receipt["verdict"] = "PASSED IN SCOPE"
+            if dom_modules is not None:
+                receipt["dom_qualification"] = "PASS: extracted-byte DOM and actual loopback HTTP replays; authored model fixtures, not graphical or live-provider qualification"
     except BaseException as exc:
         receipt["error"] = str(exc)
         raise
     finally:
         receipt["wall_seconds"] = round(time.monotonic()-start, 6)
-        usage = resource.getrusage(resource.RUSAGE_CHILDREN)
-        receipt["child_cpu_seconds"] = round(usage.ru_utime + usage.ru_stime, 6)
+        usage = resource.getrusage(resource.RUSAGE_CHILDREN) if resource else None
+        receipt["child_cpu_seconds"] = round(usage.ru_utime + usage.ru_stime - initial_usage.ru_utime - initial_usage.ru_stime, 6) if usage else None
         (output / "QUALIFICATION.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     return receipt
 
@@ -87,8 +126,9 @@ def main() -> None:
     parser.add_argument("--expected-sha256", required=True)
     parser.add_argument("--expected-source-revision", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--dom-modules", type=Path, help="Explicit pinned development node_modules directory; runs all packaged DOM/HTTP replays without inheriting other environment variables")
     args = parser.parse_args()
-    print(json.dumps(qualify(args.archive, args.expected_sha256, args.expected_source_revision, args.output), indent=2))
+    print(json.dumps(qualify(args.archive, args.expected_sha256, args.expected_source_revision, args.output, args.dom_modules), indent=2))
 
 
 if __name__ == "__main__":

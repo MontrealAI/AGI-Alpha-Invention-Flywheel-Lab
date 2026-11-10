@@ -19,10 +19,11 @@ from pathlib import Path, PurePosixPath
 PRODUCT = Path(__file__).resolve().parents[1]
 REPOSITORY = PRODUCT.parents[1]
 PREFIX = "products/alpha-genesis-harness/"
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 MAX_ARCHIVE = 300_000_000
 ALLOWED_DIRS = {"app", "bridge", "docs", "scripts", "tests", "evidence", "commercial", "examples"}
-ALLOWED_ROOT = {"LICENSE", "NOTICE", "README.md", "SECURITY.md", "CONTRIBUTING.md", "START-HERE.html", "GUIDE.html", "VERSION.json", "THIRD-PARTY.json"}
+ALLOWED_ROOT = {"LICENSE", "NOTICE", "README.md", "SECURITY.md", "CONTRIBUTING.md", "START-HERE.html", "GUIDE.html", "VERSION.json", "THIRD-PARTY.json", "launch.py", "Launch-HARNESS.command", "Launch-HARNESS.sh", "Launch-HARNESS.cmd", "requirements-chatgpt.txt"}
+EXECUTABLE_FILES = {"Launch-HARNESS.command", "Launch-HARNESS.sh"}
 SUFFIXES = {".py", ".js", ".cjs", ".mjs", ".html", ".css", ".md", ".txt", ".json", ".csv", ".svg", ".png", ".jpg", ".yml", ".yaml", ".sh", ".cmd", ".command"}
 REQUIRED = {"LICENSE", "NOTICE", "README.md", "START-HERE.html", "VERSION.json", "THIRD-PARTY.json", "app/index.html", "app/app.js", "app/engine.js", "app/styles.css"}
 BLOCKED_PARTS = {"__pycache__", "node_modules", ".git", ".venv", "venv", "private", "credentials", "dist"}
@@ -123,7 +124,7 @@ def build(output: Path, revision: str, candidate: bool = False) -> dict:
         for name, data in sorted(files.items()):
             info = zipfile.ZipInfo(root + "/" + name, date_time=(2026, 1, 1, 0, 0, 0))
             info.create_system = 3
-            info.external_attr = 0o100644 << 16
+            info.external_attr = (0o100755 if name in EXECUTABLE_FILES else 0o100644) << 16
             info.compress_type = zipfile.ZIP_DEFLATED
             bundle.writestr(info, data, compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
     if archive.stat().st_size >= MAX_ARCHIVE:
