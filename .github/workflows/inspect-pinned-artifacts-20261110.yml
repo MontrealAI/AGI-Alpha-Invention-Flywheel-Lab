@@ -1,4 +1,4 @@
-name: Inspect two pinned public failure artifacts
+name: Inspect four pinned public artifacts
 on:
   pull_request:
     paths:
@@ -27,7 +27,7 @@ jobs:
           python-version: '3.12'
       - name: Check transport, archive and output boundaries without network
         run: python -B diagnostics/artifact-inspection-20261110/inspect_pinned.py --self-test
-      - name: Verify and inspect only two pinned existing artifacts
+      - name: Verify and inspect only four pinned existing artifacts
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python -B diagnostics/artifact-inspection-20261110/inspect_pinned.py

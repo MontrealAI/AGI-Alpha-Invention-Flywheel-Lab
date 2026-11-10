@@ -1,4 +1,4 @@
-"""Read only two pinned same-repository artifacts; never execute archive contents.
+"""Read only four pinned same-repository artifacts; never execute archive contents.
 
 Official artifact transport allowlist:
 https://docs.github.com/en/actions/reference/runners/github-hosted-runners
@@ -33,6 +33,15 @@ PINS = (
     {'kind': 'model', 'id': 13749851820, 'bytes': 74907,
      'sha256': 'aefe68874e689cebd3cb0581d9b20d07e90b0d51c33c41119836ba6719f183eb',
      'head': '323ee38c25b1a0194c343bad9d6ee5757b827a53', 'run': 42783849641,
+     'members': ('HOSTED-LOCAL-QUALIFICATION.json',
+                 'LOCAL-QUOTE-QUALIFICATION-006.json', 'LOCAL-WORKFLOWS-HOSTED.json')},
+    {'kind': 'wasi', 'id': 13753096712, 'bytes': 524172,
+     'sha256': 'c91e992672ab5eae45d6b65bdf74a4d105defbce5818d4af8ad174122f8e68e5',
+     'head': '103c3b49694b98d152b023d3e886e7a17742de4c', 'run': 42792098988,
+     'members': ('RESULT.json', 'worker-001.json', 'worker-002.json', 'worker-003.json')},
+    {'kind': 'model', 'id': 13751912486, 'bytes': 67212,
+     'sha256': 'ac763610c0a651e449ca6dbcdbb32d1c3e59a470eb52d9376e9143d1c9a39e64',
+     'head': '68c2c1a00c78579b76788955a87f74dace8cc404', 'run': 42786474290,
      'members': ('HOSTED-LOCAL-QUALIFICATION.json',
                  'LOCAL-QUOTE-QUALIFICATION-006.json', 'LOCAL-WORKFLOWS-HOSTED.json')},
 )
@@ -335,6 +344,27 @@ class PreparationTests(unittest.TestCase):
         result = read_selected(buffer.getvalue(), PINS[0])
         self.assertEqual(set(result), set(PINS[0]['members']))
 
+    def test_current_wasi_receipts_are_exact_and_all_required(self):
+        pin = PINS[2]
+        expected = ('RESULT.json', 'worker-001.json', 'worker-002.json', 'worker-003.json')
+        self.assertEqual(pin['id'], 13753096712)
+        self.assertEqual(pin['members'], expected)
+        for missing in (None, *expected):
+            buffer = io.BytesIO()
+            with zipfile.ZipFile(buffer, 'w') as archive:
+                for name in expected:
+                    if name != missing:
+                        archive.writestr(name, json.dumps({'receipt': name}))
+                archive.writestr('worker-004.json', '{"unselected":true}')
+                archive.writestr('never-executed.py', 'raise RuntimeError("DO NOT EXECUTE")')
+            if missing is None:
+                result = read_selected(buffer.getvalue(), pin)
+                self.assertEqual(set(result), set(expected))
+                self.assertEqual(result['worker-003.json']['receipt'], 'worker-003.json')
+            else:
+                with self.subTest(missing=missing), self.assertRaisesRegex(Refusal, 'required_receipt_missing'):
+                    read_selected(buffer.getvalue(), pin)
+
     def test_bounded_projection_and_log_redaction(self):
         projected = compact_model({'runs': [{'status': 'failed', 'prompt': 'not published',
                        'observations': [{'response': {'text': 'x' * 6000}, 'prompt': 'not published'}]}]})
@@ -353,14 +383,14 @@ class PreparationTests(unittest.TestCase):
         self.assertEqual(len(diagnostics(nested)), 24)
 
     def test_metadata_refuses_identity_drift(self):
-        pin = PINS[0]
-        value = {'id': pin['id'], 'size_in_bytes': pin['bytes'], 'digest': 'sha256:' + pin['sha256'],
-                 'expired': False, 'workflow_run': {'id': pin['run'], 'head_sha': pin['head'],
-                 'repository_id': 1438763186, 'head_repository_id': 1438763186}}
-        validate_metadata(value, pin)
-        value['workflow_run']['head_sha'] = '0' * 40
-        with self.assertRaises(Refusal):
+        for pin in PINS:
+            value = {'id': pin['id'], 'size_in_bytes': pin['bytes'], 'digest': 'sha256:' + pin['sha256'],
+                     'expired': False, 'workflow_run': {'id': pin['run'], 'head_sha': pin['head'],
+                     'repository_id': 1438763186, 'head_repository_id': 1438763186}}
             validate_metadata(value, pin)
+            value['workflow_run']['head_sha'] = '0' * 40
+            with self.assertRaises(Refusal):
+                validate_metadata(value, pin)
 
 
 def main():
@@ -384,13 +414,16 @@ def main():
                                   'wrapper_sha256_verified': pin['sha256'], 'wrapper_bytes': pin['bytes'],
                                   'source_revision': pin['head'], 'run_id': pin['run']}, token), flush=True)
             for name, value in values.items():
-                print(sanitized_line({'kind': pin['kind'], 'member': name,
+                print(sanitized_line({'kind': pin['kind'], 'artifact_id': pin['id'],
+                                      'source_revision': pin['head'], 'run_id': pin['run'], 'member': name,
                                       'data': value if pin['kind'] == 'wasi' else compact_model(value)}, token), flush=True)
         except Exception as error:
             failed = True
             # Never stringify network exceptions; they can embed signed URLs.
             detail = str(error) if isinstance(error, Refusal) else type(error).__name__
-            print(sanitized_line({'kind': pin['kind'], 'inspection': 'FAIL', 'error': detail}, token), flush=True)
+            print(sanitized_line({'kind': pin['kind'], 'artifact_id': pin['id'],
+                                  'source_revision': pin['head'], 'run_id': pin['run'],
+                                  'inspection': 'FAIL', 'error': detail}, token), flush=True)
     return 1 if failed else 0
 
 
