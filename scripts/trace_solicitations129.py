@@ -99,6 +99,8 @@ def rows(path, required, receipt):
                 indices = {key: headers.index(key) for key in required}
                 for i, row in enumerate(reader, 2):
                     if len(row) != len(headers):
+                        if _file_identity(os.fstat(raw.fileno())) != initial:
+                            raise SourceRejected("SOURCE_CHANGED_DURING_PARSE")
                         raise SourceRejected(f"ROW_WIDTH_MISMATCH_AT_{i}")
                     yield i, {key: row[n] for key, n in indices.items()}
                 if not counted.eof:
