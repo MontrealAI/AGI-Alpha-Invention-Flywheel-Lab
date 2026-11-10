@@ -1,5 +1,5 @@
 {
-  "schema": "harness-wasi-baseline-preregistration/v1",
+  "schema": "harness-wasi-baseline-preregistration/v2",
   "execution_status": "NOT_EXECUTED",
   "objective": "Test whether a separately isolated WASI evaluator can preserve the unchanged HARNESS interpreter contract with no Codex authentication, before any model-written candidate is admitted.",
   "baseline_revision": "48d3f80781d1f2d732d0cc5e6cbab0dbc6a387d8",
@@ -57,14 +57,61 @@
     "watchdog_probe_seconds": 3
   },
   "limit_scope": "Prospective per-invocation security envelopes, not mission deadlines or measured sufficient startup budgets. No automatic increases/retries. Failure remains failure and any adjusted envelope needs a new protocol.",
-  "required_capability_checks": ["public_read","create_file","overwrite_file","append_file","create_directory","rename","delete","absolute_outside_read","traversal_read","symlink_escape_read","symlink_escape_write","create_symlink","environment_not_inherited","loopback_network","process_spawn"],
+  "required_capability_checks": [
+    "public_read",
+    "create_file",
+    "overwrite_file",
+    "append_file",
+    "create_directory",
+    "rename",
+    "delete",
+    "absolute_outside_read",
+    "traversal_read",
+    "symlink_escape_read",
+    "symlink_escape_write",
+    "create_symlink",
+    "environment_not_inherited",
+    "loopback_network",
+    "process_spawn"
+  ],
   "resource_checks": "Fuel trap,epoch trap,memory.grow succeeds up to the registered256MiB limit then refuses one additional64KiB page (well below the wasm32 architectural limit), via small trusted Wasm probes under the same engine controls; real Python output overflow; external watchdog kills a worker confirmed entering a trusted infinite Wasm loop.",
-  "execution_order": ["Verify public clean source and protocol identity","Download/hash pinned public build inputs","Build trusted unchanged CPython WASIp1","Install exact Wasmtime wheel in isolated venv","Capability negatives and positive public read","Resource negatives","Unchanged64-case oracle replay in fresh processes","Check source and staging identities; export compact receipts"],
+  "execution_order": [
+    "Verify public clean source and protocol identity",
+    "Download/hash pinned public build inputs",
+    "Build trusted unchanged CPython WASIp1",
+    "Install exact Wasmtime wheel in isolated venv",
+    "Capability negatives and positive public read",
+    "Resource negatives",
+    "Unchanged64-case oracle replay in fresh processes",
+    "Check source and staging identities; export compact receipts"
+  ],
   "acceptance": "All15 capability checks true with zero listener connections and unchanged staging/outside sentinel; all5 resource checks true; all64 baseline cases accepted by host-owned oracle with exact source hash; source unchanged; no model/candidate execution. Exit0 only on all conditions.",
   "attempts": "One registered invocation, no automatic retries or result-driven case/prompt/limit edits. Preserve build failure stage,command exit,full log hash/size and final128KiB log excerpt. A separately registered reproduction must retain prior outcomes.",
   "platform": "Linux x86_64,standard public GitHub ubuntu-latest;360min hard platform limit from first-step AGI_JOB_START_EPOCH with300s receipt/upload reserve. No containers,services,sudo,paid runner or GPU.",
   "model_calls": 0,
   "current_codex_controls": "Untouched and still independently gated; this experiment is not a bypass,fallback or qualification of the native Codex adapter.",
-  "claims_excluded": ["Model-authored source improvement","General sandbox proof","Novelty","Performance or economic superiority","Native Codex qualification","Current product release qualification"],
-  "costs": "Record wall time,child CPU,worker peak RSS and download sizes. No paid API calls. Host/electricity/engineering/maintenance/opportunity costs remain unknown; public runner policy does not establish zero complete economic cost."
+  "claims_excluded": [
+    "Model-authored source improvement",
+    "General sandbox proof",
+    "Novelty",
+    "Performance or economic superiority",
+    "Native Codex qualification",
+    "Current product release qualification"
+  ],
+  "costs": "Record wall time,child CPU,worker peak RSS and download sizes. No paid API calls. Host/electricity/engineering/maintenance/opportunity costs remain unknown; public runner policy does not establish zero complete economic cost.",
+  "attempt_id": "wasi-baseline-002",
+  "previous_attempt": {
+    "source_revision": "95f7d2705335de7f9fe3e43d4376d290462369aa",
+    "protocol_sha256": "dbb270d343a2ff0fb0615721d577bf3b282e0ff3e1feac9943b1b63cf4e51108",
+    "status": "FAIL",
+    "stage": "trusted_build",
+    "baseline_cases_executed": 0,
+    "summary": "evidence/attempt001/SUMMARY.json",
+    "artifact_sha256": "880cffa52fb35738b99b57ba7ef71e79da40a6296d5cfc10f73f8f20665921fc"
+  },
+  "changes_from_previous": [
+    "Replace Platforms/WASI make-host with its equivalent make --jobs cpu_count all in cross-build/wasm32-wasip1. Retain configure-host --host-runner false. Omit only the official helper's automatic python.sh --version launch, which returned1 with the deliberately disabled launcher in attempt001.",
+    "Assign a fresh attempt identity and retain the actual prior build failure. Original baseline source,64 cases,capability/resource acceptance,bounds,download pins,model_calls0 and native Codex controls remain unchanged.",
+    "Recover this prospective preregistration from public95 and the recorded narrow patch after local environment loss. Earlier uncommitted draft digest c0cf885765d4f41bb545c792ae80442ba5ba67630c445fd68b2587e3cfcca218 was never published or executed; this replacement is reviewed and pinned independently."
+  ]
 }

@@ -1,8 +1,18 @@
-# WASI interpreter baseline experiment v1
+# WASI interpreter baseline experiment: attempt002
 
-**Prepared, not executed.** Publish and review this preregistration before running
-the pull-request workflow. There are no model calls or candidate-source execution in
-this experiment. Frozen product source48 and its release are unchanged.
+**Attempt002 is prospectively registered, not executed.** The first actual attempt
+at public source `95f7d2705335de7f9fe3e43d4376d290462369aa` failed during trusted
+build plumbing before any capability check, resource check or baseline case ran.
+Its original protocol is preserved in [evidence/attempt001/PROTOCOL.json](evidence/attempt001/PROTOCOL.json).
+[The historical summary](evidence/attempt001/SUMMARY.json) records the verified
+artifact identity and original failure without inventing missing raw output.
+The eight raw files remain in the linked GitHub artifact, subject to its retention.
+
+Publish and review this new preregistration before one fresh pull-request run.
+There are no model calls or candidate-source execution. Frozen product source48
+and its release are unchanged. Earlier uncommitted attempt002 draft bytes became
+unavailable during a local environment outage; the recovered protocol has a new
+explicit digest and receives its own review before any attempt002 execution.
 
 The enabling question is whether a separately isolated interpreter evaluator can
 make future local-model source construction testable when official Codex
@@ -52,9 +62,22 @@ ordinary CPython build dependencies supplied by that runner, and network access
 to the three official pinned artifacts in [PROTOCOL.json](PROTOCOL.json).
 No apt/sudo, new privilege, container, Rust compiler, model weights or GPU is used.
 Downloads total about 230 MB compressed; extraction has a 4 GiB per-archive envelope.
-Actual build disk/memory/time are unmeasured. The WASI SDK carries its own Clang
-and sysroot. The upstream CPython helper builds native build-Python and WASIp1
-Python; no upstream broad-preopen convenience launcher is executed.
+The first failed attempt recorded 232.72 seconds wall time and 651.16 seconds
+child CPU for the supervisor through its failure; build disk/peak memory and the
+guest startup budgets remain unmeasured. The WASI SDK carries its own Clang and
+sysroot. The official helper builds native build-Python and configures WASIp1.
+The configured launcher remains disabled by `--host-runner false`.
+
+Attempt001 used upstream `make-host`, which first completed `make all` then
+unconditionally invoked `python.sh --version`. That second command returned1
+because the launcher deliberately executes `false`. Attempt002 executes the
+same first command directly: `make --jobs cpu_count all` in
+`cross-build/wasm32-wasip1`. It omits the automatic launcher, without adding any
+guest capability. The helper's optional `SOURCE_DATE_EPOCH` lookup finds no Git
+checkout in the extracted source under RUNNER_TEMP; this correction does not
+claim universally byte-identical builds in arbitrary checkout layouts.
+The 64 cases, download pins, acceptance, boundaries and resource envelopes are
+unchanged; guest capacity and enforcement still require actual qualification.
 
 The same driver stages the public stdlib and unchanged module, checks capability
 and resource negatives, then invokes 64 cases in fresh worker processes. Expected

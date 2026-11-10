@@ -124,6 +124,13 @@ def extract(archive, destination):
         tar.extractall(destination, filter='data')
 
 
+def build_wasi_all(source, command, environment):
+    """Equivalent to upstream make_wasi_python's make step, without its launcher."""
+    cpu_count = getattr(os, 'process_cpu_count', os.cpu_count)
+    command(['make', '--jobs', str(cpu_count() or 1), 'all'],
+            source / 'cross-build/wasm32-wasip1', environment)
+
+
 def main(args):
     work = args.work.resolve()
     work.mkdir(parents=True, exist_ok=False)
@@ -181,6 +188,7 @@ def main(args):
         if sha(protocol_path) != args.protocol_sha256:
             raise ValueError('Protocol differs from explicitly selected public preregistration')
         protocol = strict_json(protocol_path.read_text())
+        record['attempt_id'] = protocol['attempt_id']
         revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=REPO, text=True).strip()
         if revision != args.source_sha or len(revision) != 40:
             raise ValueError('Checkout differs from selected public source revision')
@@ -216,13 +224,13 @@ def main(args):
         build_env['PYTHONDONTWRITEBYTECODE'] = '1'
         command(['cc', '--version'], work, build_env)
         command([sdk / 'bin/clang', '--version'], work, build_env)
-        # Official configure/make helpers; avoid upstream convenience launcher,
+        # Official configuration and build steps; avoid upstream convenience launcher,
         # which preopens its full source checkout. No WASI guest runs during build.
         command([sys.executable, 'Platforms/WASI', 'build-python', '--', '--without-ensurepip'], source, build_env)
         command([sys.executable, 'Platforms/WASI', 'configure-host', '--wasi-sdk', sdk,
                  '--host-runner', 'false', '--', '--prefix=/sandbox/python',
                  '--without-ensurepip', '--disable-test-modules'], source, build_env)
-        command([sys.executable, 'Platforms/WASI', 'make-host'], source, build_env)
+        build_wasi_all(source, command, build_env)
         wasm = source / 'cross-build/wasm32-wasip1/python.wasm'
         if not wasm.is_file():
             raise ValueError('Official build did not produce expected WASIp1 interpreter')

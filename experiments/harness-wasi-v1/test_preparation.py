@@ -84,6 +84,44 @@ class Preparation(unittest.TestCase):
             kill.assert_called_once_with(54321, runner.signal.SIGKILL)
             child.wait.assert_called_once_with()
 
+    def test_attempt002_preserves_previous_protocol_and_actual_failure(self):
+        history = HERE / 'evidence/attempt001'
+        previous = json.loads((history / 'PROTOCOL.json').read_text())
+        current = json.loads((HERE / 'PROTOCOL.json').read_text())
+        self.assertEqual(runner.sha(history / 'PROTOCOL.json'),
+                         'dbb270d343a2ff0fb0615721d577bf3b282e0ff3e1feac9943b1b63cf4e51108')
+        self.assertEqual(current['schema'], 'harness-wasi-baseline-preregistration/v2')
+        self.assertEqual(current['attempt_id'], 'wasi-baseline-002')
+        for key, value in previous.items():
+            if key != 'schema':
+                self.assertEqual(current[key], value, key)
+        summary = json.loads((history / 'SUMMARY.json').read_text())
+        self.assertEqual(summary['status'], 'FAIL')
+        self.assertEqual(summary['stage'], 'trusted_build')
+        self.assertEqual(summary['source_revision'], current['previous_attempt']['source_revision'])
+        self.assertEqual(summary['protocol_sha256'], current['previous_attempt']['protocol_sha256'])
+        self.assertEqual(summary['artifact']['sha256'], current['previous_attempt']['artifact_sha256'])
+        self.assertEqual(summary['artifact']['raw_member_count'], 8)
+        self.assertEqual(summary['baseline_cases_executed'], 0)
+        self.assertEqual(summary['model_calls'], 0)
+        self.assertFalse(summary['candidate_execution'])
+        workflow = (REPO / '.github/workflows/harness-wasi-v1.yml').read_text()
+        self.assertIn('PROTOCOL_SHA256: ' + runner.sha(HERE / 'PROTOCOL.json'), workflow)
+
+    def test_direct_make_matches_upstream_build_without_launcher(self):
+        command = Mock()
+        environment = {'PATH': '/public/bin', 'PYTHONDONTWRITEBYTECODE': '1'}
+        source = Path('/synthetic-public-source/Python-3.15.2')
+        with patch.object(runner.os, 'process_cpu_count', return_value=2, create=True):
+            runner.build_wasi_all(source, command, environment)
+        command.assert_called_once_with(
+            ['make', '--jobs', '2', 'all'],
+            source / 'cross-build/wasm32-wasip1', environment)
+        self.assertIs(command.call_args.args[2], environment)
+        text = (HERE / 'run.py').read_text()
+        self.assertNotIn("'make-host'", text)
+        self.assertIn("'--host-runner', 'false'", text)
+
 
 if __name__ == '__main__':
     unittest.main()
